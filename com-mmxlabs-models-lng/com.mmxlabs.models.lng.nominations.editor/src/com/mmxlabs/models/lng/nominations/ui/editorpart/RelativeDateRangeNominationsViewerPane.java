@@ -82,6 +82,8 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 	@NonNull 
 	private final IScenarioEditingLocation jointModelEditor;
 	
+	private NominationDatesToolbarEditor nominationDatesToolbarEditor;
+	
 	private RelativeDateRangeToolbarEditor relativeDateToolbarEditor;
 	
 	private boolean includeDone = false;
@@ -109,6 +111,10 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 
 		final ToolBarManager toolbar = getToolBarManager();
 
+		nominationDatesToolbarEditor = new NominationDatesToolbarEditor("nomination_dates_toolbar",
+				scenarioEditingLocation.getEditingDomain(), jointModelEditor);
+		toolbar.appendToGroup(EDIT_GROUP, nominationDatesToolbarEditor);
+		
 		relativeDateToolbarEditor = new RelativeDateRangeToolbarEditor(this, "nomination_relative_date_toolbar", jointModelEditor);
 		toolbar.appendToGroup(EDIT_GROUP, relativeDateToolbarEditor);
 		
@@ -365,11 +371,11 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 	}
 	
 	public LocalDate getStartDate() {
-		return relativeDateToolbarEditor.getStartDate();
+		return this.nominationDatesToolbarEditor.getStartDate();
 	}
 	
 	public LocalDate getEndDate() {
-		return relativeDateToolbarEditor.getEndDate();
+		return this.nominationDatesToolbarEditor.getEndDate();
 	}
 	
 	@Override
@@ -489,7 +495,7 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 			this.selectedSlots.clear();
 			for (final Object o : s.toArray()) {
 				if (o instanceof Slot) {
-					final Slot slot = (Slot)o;
+					final Slot<?> slot = (Slot<?>)o;
 					if (slot != null) {
 						this.selectedSlots.add(slot);
 					}

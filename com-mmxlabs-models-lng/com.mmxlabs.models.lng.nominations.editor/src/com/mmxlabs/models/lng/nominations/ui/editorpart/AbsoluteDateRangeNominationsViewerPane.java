@@ -4,14 +4,68 @@
  */
 package com.mmxlabs.models.lng.nominations.ui.editorpart;
 
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
+import org.eclipse.e4.ui.workbench.modeling.ISelectionListener;
+import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.notify.AdapterFactory;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.ETypedElement;
+import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.ToolBarManager;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.jface.viewers.ViewerFilter;
+import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
+
+import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.nominations.AbstractNomination;
+import com.mmxlabs.models.lng.nominations.NominationsModel;
+import com.mmxlabs.models.lng.nominations.NominationsPackage;
+import com.mmxlabs.models.lng.nominations.SlotNomination;
+import com.mmxlabs.models.lng.nominations.utils.NominationsModelUtils;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
+import com.mmxlabs.models.ui.date.LocalDateTextFormatter;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
+import com.mmxlabs.models.ui.tabular.EObjectTableViewerColumnProvider;
+import com.mmxlabs.models.ui.tabular.ICellManipulator;
+import com.mmxlabs.models.ui.tabular.ICellRenderer;
+import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.BooleanFlagAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.DateTimeAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.ReadOnlyManipulatorWrapper;
+import com.mmxlabs.models.ui.tabular.manipulators.StringAttributeManipulator;
+import com.mmxlabs.models.util.emfpath.EMFPath;
+import com.mmxlabs.rcp.common.ViewerHelper;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+
 /**
  * This nominations viewer pane allows an absolute date range to be specified via two date formatted text boxes which allow a
  * start date and an end date to be specified. 
- * 
- * At the time of writing it is envisaged that this version will not be released, but have left this here, in case the unlikely
- * scenario occurs, that it is requested back or some variation is requested by users in the future.
  */
-/*public class AbsoluteDateRangeNominationsViewerPane extends AbstractNominationsViewerPane implements ISelectionListener {
+public class AbsoluteDateRangeNominationsViewerPane extends AbstractNominationsViewerPane implements ISelectionListener {
 
 	private static final String PLUGIN_ID = "com.mmxlabs.models.lng.nominations.editor";
 	private final IScenarioEditingLocation jointModelEditor;
@@ -266,8 +320,8 @@ package com.mmxlabs.models.lng.nominations.ui.editorpart;
 				final EditingDomain ed = scenarioEditingLocation.getEditingDomain();
 				final NominationsModel nominationsModel = AbsoluteDateRangeNominationsViewerPane.this.getNominationsModel();
 				final SlotNomination sn = (SlotNomination) ((IStructuredSelection) selection).getFirstElement();
-				if (!nominationsModel.getSlotNominations().contains(sn)) {
-					final Command cmd = AddCommand.create(ed, nominationsModel, NominationsPackage.Literals.NOMINATIONS_MODEL__SLOT_NOMINATIONS, sn);
+				if (!nominationsModel.getNominations().contains(sn)) {
+					final Command cmd = AddCommand.create(ed, nominationsModel, NominationsPackage.Literals.NOMINATIONS_MODEL__NOMINATIONS, sn);
 					if (cmd.canExecute()) {
 						jointModelEditor.getDefaultCommandHandler().handleCommand(cmd, null, null);
 					}
@@ -304,12 +358,14 @@ package com.mmxlabs.models.lng.nominations.ui.editorpart;
 							final LNGScenarioModel scenarioModel = (LNGScenarioModel) inputElement;
 							final NominationsModel nominationsModel = scenarioModel.getNominationsModel();
 							if (nominationsModel != null) {
-								elements.addAll(nominationsModel.getSlotNominations());
+								elements.addAll(nominationsModel.getNominations());
 							}
 							setCurrentContainerAndContainment(nominationsModel, null);
 						}
 						// Add in extra generated nominations
-						elements.addAll(NominationsModelUtils.generateNominations(jointModelEditor));
+						final LocalDate startDate = AbsoluteDateRangeNominationsViewerPane.this.nominationDatesToolbarEditor.getStartDate();
+						final LocalDate endDate = AbsoluteDateRangeNominationsViewerPane.this.nominationDatesToolbarEditor.getEndDate();
+						elements.addAll(NominationsModelUtils.generateNominations(jointModelEditor, startDate, endDate));
 						if (AbsoluteDateRangeNominationsViewerPane.this.viewSelected && !AbsoluteDateRangeNominationsViewerPane.this.selectedSlots.isEmpty()) {
 							return elements.stream().filter(n -> n.getNomineeId() != null && AbsoluteDateRangeNominationsViewerPane.this.selectedSlots.contains(n.getNomineeId())).toArray();
 						}
@@ -365,4 +421,3 @@ package com.mmxlabs.models.lng.nominations.ui.editorpart;
 		}
 	}
 }
-*/

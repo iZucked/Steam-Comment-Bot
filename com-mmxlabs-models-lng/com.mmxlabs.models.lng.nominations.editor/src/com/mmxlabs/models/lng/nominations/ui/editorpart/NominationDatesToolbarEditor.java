@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.nominations.ui.editorpart;
 
-/*
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -25,6 +24,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 
+import com.mmxlabs.models.lng.nominations.NominationsFactory;
 import com.mmxlabs.models.lng.nominations.NominationsModel;
 import com.mmxlabs.models.lng.nominations.NominationsPackage;
 import com.mmxlabs.models.lng.nominations.NominationsParameters;
@@ -32,10 +32,10 @@ import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.ui.date.LocalDateTextFormatter;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 
-//
-// Displays a start + end date formatted text box on the tool bar, so that the start date and end date used to generate nominations
-// can be set by the user. 
-//
+/**
+ * Displays a start + end date formatted text box on the tool bar, so that the start date and end date used to generate nominations
+ * can be set by the user. 
+ */
 public class NominationDatesToolbarEditor extends ControlContribution {
 	
 	private interface DateGetter {
@@ -52,22 +52,20 @@ public class NominationDatesToolbarEditor extends ControlContribution {
 	private final LocalDateTextFormatter endDateFormatter = new LocalDateTextFormatter(true);
 	private FormattedText startDateText;
 	private FormattedText endDateText;
-
+	
 	private boolean locked = false;
 	
 	private final @NonNull AdapterImpl adapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			final Object newValue = notification.getNewValue();
-			if (newValue != null) {
-				if(notification.isTouch()) {
-					return;
-				}
-				if (notification.getFeature() == NominationsPackage.eINSTANCE.getNominationsParameters_StartDate()) {
-					startDateText.setValue(newValue);
-				} else if(notification.getFeature() == NominationsPackage.eINSTANCE.getNominationsParameters_EndDate()) {
-					endDateText.setValue(newValue);
-				}
+			if(notification.isTouch()) {
+				return;
+			}
+			if (notification.getFeature() == NominationsPackage.eINSTANCE.getNominationsParameters_StartDate()) {
+				startDateText.setValue(newValue);
+			} else if(notification.getFeature() == NominationsPackage.eINSTANCE.getNominationsParameters_EndDate()) {
+				endDateText.setValue(newValue);
 			}
 		}
 	};	
@@ -77,7 +75,15 @@ public class NominationDatesToolbarEditor extends ControlContribution {
 		this.editingDomain = editingDomain;
 		this.jointModelEditor = jointModelEditor;
 		final NominationsModel nominationsModel = ScenarioModelUtil.getNominationsModel(jointModelEditor.getScenarioDataProvider());
-		this.nominationsParameters = nominationsModel.getNominationParameters();
+		
+		if (nominationsModel.getNominationParameters() == null) {
+			this.nominationsParameters = NominationsFactory.eINSTANCE.createNominationsParameters();
+			nominationsModel.setNominationParameters(this.nominationsParameters);
+		}
+		else {
+			this.nominationsParameters = nominationsModel.getNominationParameters(); 
+		}
+		
 	}
 
 	@Override
@@ -193,4 +199,4 @@ public class NominationDatesToolbarEditor extends ControlContribution {
 	public LocalDate getEndDate() {
 		return getDate(endDateText);
 	}
-}*/
+}

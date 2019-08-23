@@ -3,7 +3,7 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.nominations.ui.views;
-/*
+
 import java.util.Arrays;
 
 import org.eclipse.emf.ecore.EReference;
@@ -32,10 +32,9 @@ public class AbsoluteDateRangeNominationsView extends ScenarioTableViewerView<Ab
 		if (domain != null) {
 			pane.init(Arrays.asList(new EReference[] { 
 					LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_NominationsModel(), 
-					NominationsPackage.eINSTANCE.getNominationsModel_SlotNominations() }),
+					NominationsPackage.eINSTANCE.getNominationsModel_Nominations() }),
 					getAdapterFactory(), getModelReference());
 			pane.getViewer().setInput(getRootObject());
 		}
 	}
 }
-*/
