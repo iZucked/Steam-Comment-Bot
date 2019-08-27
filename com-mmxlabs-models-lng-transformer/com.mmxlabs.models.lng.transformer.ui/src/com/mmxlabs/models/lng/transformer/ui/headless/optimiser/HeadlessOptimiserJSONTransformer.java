@@ -13,7 +13,7 @@ public class HeadlessOptimiserJSONTransformer {
 		HeadlessOptimiserJSON result = new HeadlessOptimiserJSON();
 		result.setType("optimiser");
 		addMetaDataToResult(result);
-//		addParamsToResult(result);
+		addParamsToResult(result);
 		addMetricsToResult(result);
 //		addOptioniserParamsToResult(result);
 		return result;
@@ -61,10 +61,10 @@ public class HeadlessOptimiserJSONTransformer {
 //		result.setParams(params);
 //	}
 
-	private static HeadlessOptimiserJSON.Params addParamsToResult() {
+	private static HeadlessOptimiserJSON.Params addParamsToResult(HeadlessOptimiserJSON result) {
 		HeadlessOptimiserJSON.Params params = new HeadlessOptimiserJSON.Params();
 		params.setCores(0);
-//		result.setParams(params);
+		result.setParams(params);
 		return params;
 	}
 

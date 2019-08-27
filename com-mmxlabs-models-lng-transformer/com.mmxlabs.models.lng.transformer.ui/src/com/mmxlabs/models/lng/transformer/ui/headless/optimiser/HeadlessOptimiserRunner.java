@@ -249,6 +249,8 @@ public class HeadlessOptimiserRunner {
 				}
 
 				System.out.println("\truntime=" + runTime + ",");
+				
+				jsonOutput.getMetrics().setRuntime(runTime);
 
 				System.err.println("Optimised!");
 

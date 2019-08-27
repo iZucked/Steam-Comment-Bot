@@ -38,12 +38,10 @@ public class FitnessAnnotationLogger {
 		fitnessComponentTrace.put(iteration, new LinkedHashMap<String, Long>(componentValues));
 	}
 
-	public void exportData(JSONObject node) {
-		if (node == null) {
+	public void exportData(JSONArray array) {
+		if (array == null) {
 			return;
 		}
-
-		JSONArray array = new JSONArray();
 
 		// Print Data rows.
 		for (final Integer key : fitnessComponentTrace.keySet()) {
@@ -56,8 +54,6 @@ public class FitnessAnnotationLogger {
 			m2.put("iteration", key);
 			array.add(m2);
 		}
-
-		node.put("a", array);
 	}
 
 }

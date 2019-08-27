@@ -23,7 +23,7 @@ public class LSOLoggingExporter {
 
 	private final LSOLogger lsoLogger;
 
-	public LSOLoggingExporter(JSONArray nodes, final String phase, final LSOLogger lsoLogger) {
+	public LSOLoggingExporter(final JSONArray nodes, final String phase, final LSOLogger lsoLogger) {
 		this.phase = phase;
 		this.lsoLogger = lsoLogger;
 		root = new JSONObject();
@@ -31,18 +31,12 @@ public class LSOLoggingExporter {
 		root.put("name", phase);
 	}
 
-	private JSONObject getWriter(final String filename) {
-		return (JSONObject) root.computeIfAbsent(filename, k -> new JSONObject());
-		// PrintWriter out = null;
-		//// try {
-		//// // clear file
-		//// final FileWriter fw = new FileWriter(filename, false);
-		//// fw.close();
-		//// out = new PrintWriter(new BufferedWriter(new FileWriter(filename, true)));
-		//// } catch (final IOException e) {
-		//// System.out.println(e);
-		//// }
-		// return out;
+	private JSONObject getJSONObject(final String nodeName) {
+		return (JSONObject) root.computeIfAbsent(nodeName, k -> new JSONObject());
+	}
+
+	private JSONArray getJSONArray(final String nodeName) {
+		return (JSONArray) root.computeIfAbsent(nodeName, k -> new JSONArray());
 	}
 
 	public void close() {
@@ -64,7 +58,7 @@ public class LSOLoggingExporter {
 
 	private void writeEndData() {
 		// final Path newPath = getPath("results");
-		JSONObject node = getWriter("results");
+		final JSONObject node = getJSONObject("results");
 		writeEndData(node);
 	}
 
@@ -87,7 +81,7 @@ public class LSOLoggingExporter {
 	}
 
 	private void writeDataTypeOverCourseOfRun(final List<EvaluationNumberKey> evaluations, final String key) {
-		JSONObject node = getWriter(key);
+		final JSONObject node = getJSONObject(key);
 		for (final EvaluationNumberKey evaluationNumberKey : evaluations) {
 			node.put(evaluationNumberKey.getNumber(), lsoLogger.getProgressValue(evaluationNumberKey, key));
 		}
@@ -97,18 +91,16 @@ public class LSOLoggingExporter {
 		writeFitnessAnnotations(lsoLogger.getFitnessAnnotationLogger());
 	}
 
-	private void writeFitnessAnnotations(FitnessAnnotationLogger fitnessAnnotationLogger) {
-		JSONObject node = getWriter("fitnessAnnotations");
-		fitnessAnnotationLogger.exportData(node);
+	private void writeFitnessAnnotations(final FitnessAnnotationLogger fitnessAnnotationLogger) {
+		fitnessAnnotationLogger.exportData(getJSONArray("fitnessAnnotations"));
 	}
 
 	private void exportGeneralAnnotations() {
 		writeGeneralAnnotations(lsoLogger.getGeneralAnnotationLogger());
 	}
 
-	private void writeGeneralAnnotations(GeneralAnnotationLogger generalAnnotationLogger) {
-		JSONObject node = getWriter("generalAnnotations");
-		generalAnnotationLogger.exportData(node);
+	private void writeGeneralAnnotations(final GeneralAnnotationLogger generalAnnotationLogger) {
+		generalAnnotationLogger.exportData(getJSONArray("generalAnnotations"));
 	}
 
 	public void exportData(final String... keys) {
@@ -130,33 +122,33 @@ public class LSOLoggingExporter {
 	}
 
 	public void exportMovesData() {
-		JSONObject node = getWriter("moves");
+		final JSONObject node = getJSONObject("moves");
 		writeMoveData(node);
 	}
 
 	private void exportSequencesData() {
-		JSONObject node = getWriter("sequences");
+		final JSONObject node = getJSONObject("sequences");
 		writeSequencesData(node, lsoLogger.getSequenceFrequencyCounts());
 	}
 
 	private void exportConstraintFailedSequences() {
-		JSONObject node = getWriter("constraintFailedSequences");
+		final JSONObject node = getJSONObject("constraintFailedSequences");
 		writeSequencesData(node, lsoLogger.getSequenceCountFailedConstraint());
 	}
 
 	private void exportAcceptedSequences() {
-		JSONObject node = getWriter("acceptedSequences");
+		final JSONObject node = getJSONObject("acceptedSequences");
 		writeSequencesData(node, lsoLogger.getSequenceCountAccepted());
 	}
 
 	private void exportRejectedSequences() {
-		JSONObject node = getWriter("rejectedSequences");
+		final JSONObject node = getJSONObject("rejectedSequences");
 		writeSequencesData(node, lsoLogger.getSequenceCountRejected());
 	}
 
 	private void exportIterationsList(final List<Pair<Integer, Long>> iterations, final JSONArray array) {
 		for (final Pair<Integer, Long> i : iterations) {
-			JSONObject obj = new JSONObject();
+			final JSONObject obj = new JSONObject();
 			obj.put("iteration", i.getFirst());
 			obj.put("fitness", i.getSecond());
 			array.add(obj);
@@ -164,18 +156,13 @@ public class LSOLoggingExporter {
 	}
 
 	private void exportAcceptedFitnesses() {
-		JSONObject node = getWriter("acceptedFitnesses");
-		JSONArray array = new JSONArray();
+		final JSONArray array = getJSONArray("acceptedFitnesses");
 		exportIterationsList(lsoLogger.getAcceptedFitnesses(), array);
-		node.put("entries", array);
 	}
 
 	private void exportRejectedFitnesses() {
-		JSONObject node = getWriter("rejectedFitnesses");
-		JSONArray array = new JSONArray();
-
+		final JSONArray array = getJSONArray("rejectedFitnesses");
 		exportIterationsList(lsoLogger.getRejectedFitnesses(), array);
-		node.put("entries", array);
 	}
 
 	// private void exportAcceptedFitnesses() {
@@ -193,7 +180,7 @@ public class LSOLoggingExporter {
 	// }
 
 	private void writeSequencesData(final JSONObject node, final List<Integer> frequencies) {
-		JSONArray array = new JSONArray();
+		final JSONArray array = new JSONArray();
 		for (final int i : frequencies) {
 			array.add(i);
 		}
@@ -203,7 +190,7 @@ public class LSOLoggingExporter {
 	private void writeSequencesDataFitnessStatistics(final JSONObject node, final Map<Integer, Double[]> frequencies) {
 
 		for (int i : frequencies.keySet()) {
-			JSONArray row = new JSONArray();
+			final JSONArray row = new JSONArray();
 			for (final int di = 0; i < frequencies.get(i).length; i++) {
 				row.add(frequencies.get(i)[di]);
 			}
@@ -218,7 +205,7 @@ public class LSOLoggingExporter {
 
 	private void writeMoveData(final JSONObject node) {
 		{
-			JSONObject m = new JSONObject();
+			final JSONObject m = new JSONObject();
 
 			for (final String move : lsoLogger.getMovesList()) {
 				m.put(move, lsoLogger.getMoveCount(move));
@@ -227,11 +214,11 @@ public class LSOLoggingExporter {
 		}
 
 		{
-			JSONObject m = new JSONObject();
+			final JSONObject m = new JSONObject();
 
 			// NullMoves
 			for (final String move : lsoLogger.getNullMovesList()) {
-				JSONObject m2 = new JSONObject();
+				final JSONObject m2 = new JSONObject();
 
 				m.put(move, m2);
 
@@ -244,7 +231,7 @@ public class LSOLoggingExporter {
 		}
 		{
 
-			JSONObject m = new JSONObject();
+			final JSONObject m = new JSONObject();
 
 			// SuccessfulMoves
 			for (final String move : lsoLogger.getSuccessfulMovesList()) {
@@ -257,7 +244,7 @@ public class LSOLoggingExporter {
 		// FailedToValidate
 		{
 
-			JSONObject m = new JSONObject();
+			final JSONObject m = new JSONObject();
 			for (final String move : lsoLogger.getFailedToValidateMovesList()) {
 				m.put(move, lsoLogger.getFailedToValidateMoveCount(move));
 
@@ -267,11 +254,11 @@ public class LSOLoggingExporter {
 		}
 
 		{
-			JSONObject m = new JSONObject();
+			final JSONObject m = new JSONObject();
 			// FailedConstraints
 			for (final String move : lsoLogger.getFailedConstraints()) {
 
-				JSONObject m2 = new JSONObject();
+				final JSONObject m2 = new JSONObject();
 				m.put(move, m2);
 
 				for (final String failure : lsoLogger.getFailedConstraintsMoves(move)) {
@@ -283,11 +270,11 @@ public class LSOLoggingExporter {
 
 		}
 		{
-			JSONObject m = new JSONObject();
+			final JSONObject m = new JSONObject();
 			// FailedEvaluatedConstraints
 			for (final String move : lsoLogger.getFailedEvaluatedConstraints()) {
 
-				JSONObject m2 = new JSONObject();
+				final JSONObject m2 = new JSONObject();
 				m.put(move, m2);
 
 				for (final String failure : lsoLogger.getFailedEvaluatedConstraintsMoves(move)) {
