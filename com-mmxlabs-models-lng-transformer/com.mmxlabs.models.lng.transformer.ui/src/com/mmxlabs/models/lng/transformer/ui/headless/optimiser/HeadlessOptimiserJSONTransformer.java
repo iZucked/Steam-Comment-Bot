@@ -4,9 +4,6 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.headless.optimiser;
 
-import java.util.LinkedList;
-import java.util.List;
-
 public class HeadlessOptimiserJSONTransformer {
 
 	public static HeadlessOptimiserJSON createJSONResultObject() {
