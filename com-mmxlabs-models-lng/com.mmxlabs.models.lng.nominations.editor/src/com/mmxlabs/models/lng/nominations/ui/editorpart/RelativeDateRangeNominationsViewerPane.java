@@ -40,6 +40,7 @@ import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.window.Window;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IActionBars;
@@ -88,6 +89,9 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 	private boolean viewSelected = false;
 	private final List<Slot> selectedSlots = new ArrayList<>();
 	private final HashSet<String> previousNominations = new HashSet<>();
+	private final Color colourPink = new Color(Display.getDefault(), 254, 127, 156);
+	private final Color colourGreen = new Color(Display.getDefault(), 80, 220, 100);
+	private final Color colourLightYellow = new Color(Display.getDefault(), 254, 254, 200);
 	
 	public RelativeDateRangeNominationsViewerPane(final IWorkbenchPage page, final IWorkbenchPart part, @NonNull final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);
@@ -325,11 +329,14 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 					final LocalDate now = LocalDate.now();
 					final LocalDate dueDate = NominationsModelUtils.getDueDate(scenarioModel, nomination);
 					final LocalDate alertDate = NominationsModelUtils.getAlertDate(scenarioModel, nomination);
-					if ((alertDate != null && !now.isBefore(alertDate))) {
-						cell.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_YELLOW));
-					}
-					if ((dueDate != null && !now.isBefore(dueDate))) {
-						cell.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_RED));
+					if (nomination.isDone()) {
+						cell.setBackground(colourGreen);
+					} else if ((dueDate != null && !now.isBefore(dueDate))) {
+						cell.setBackground(colourPink);
+					} else if ((alertDate != null && !now.isBefore(alertDate))) {
+						cell.setBackground(colourLightYellow);
+					} else {
+						cell.setBackground(null);
 					}
 				}
 			}
@@ -502,5 +509,13 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 	@Override
 	public void refresh() {
 		ViewerHelper.refresh(this.getViewer(), true);	
+	}
+	
+	@Override
+	public void dispose() {
+		colourGreen.dispose();
+		colourLightYellow.dispose();
+		colourPink.dispose();
+		super.dispose();
 	}
 }
