@@ -276,6 +276,10 @@ public class HeadlessApplication implements IApplication {
 	}
 
 	private void renameInvalidBsonFields(JSONObject object) {
+		if (object == null) {
+			return;
+		}
+		
 		Set keys = object.keySet();
 
 		List<Object> badNames = new LinkedList<>();
