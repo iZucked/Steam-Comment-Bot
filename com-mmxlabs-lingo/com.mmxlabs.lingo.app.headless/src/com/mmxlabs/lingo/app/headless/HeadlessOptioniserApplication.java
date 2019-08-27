@@ -178,7 +178,7 @@ public class HeadlessOptioniserApplication implements IApplication {
 		SlotInsertionOptimiserLogger logger = new SlotInsertionOptimiserLogger();
 		
 		HeadlessOptioniserRunner runner = new HeadlessOptioniserRunner();
-		runner.run(1, scenarioFile, logger, options, null);
+		runner.run(startTry, scenarioFile, logger, options, null);
 		
 		HeadlessOptioniserJSONTransformer.addRunResult(startTry, logger, json);
 
@@ -289,5 +289,4 @@ public class HeadlessOptioniserApplication implements IApplication {
 		String machInfo = "AvailableProcessors:" + Integer.toString(Runtime.getRuntime().availableProcessors());
 		return machInfo;
 	}
-
 }
