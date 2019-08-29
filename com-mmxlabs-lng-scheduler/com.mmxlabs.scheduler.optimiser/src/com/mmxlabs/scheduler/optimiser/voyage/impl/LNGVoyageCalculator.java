@@ -1304,7 +1304,9 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 				final VoyageDetails details = (VoyageDetails) sequence[i];
 
-				if (details.getIdleTime() <= hoursBeforeCooldownsNoLongerForced) {
+				if (details.getIdleTime() <= hoursBeforeCooldownsNoLongerForced //
+						 || details.getOptions().getToPortSlot().getPortType() == PortType.End //
+						) {
 					// TODO: Original check also looked at the should be cold requirement - not really needed?
 					if (!details.getOptions().getAllowCooldown() && details.isCooldownPerformed()) {
 						++cooldownViolations;
