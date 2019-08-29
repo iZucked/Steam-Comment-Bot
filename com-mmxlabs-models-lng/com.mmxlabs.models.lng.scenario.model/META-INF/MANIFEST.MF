@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: com.mmxlabs.models.lng.scenario.model;singleton:=true
 Automatic-Module-Name: com.mmxlabs.models.lng.scenario.model
-Bundle-Version: 4.7.8.RELEASE
+Bundle-Version: 4.7.9.qualifier
 Bundle-ClassPath: .
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
