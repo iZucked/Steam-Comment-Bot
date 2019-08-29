@@ -106,7 +106,7 @@ public class StandardPNLCalcRowFactory extends AbstractPNLCalcRowFactory {
 
 		rows.add(createRow(200, "Real shipping cost", false, "$", "", true, createBasicFormatter(options, true, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, func2))));
 		rows.add(createRow(205, "PNL", false, "$", "", false,
-				createBasicFormatter(options, true, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, StandardPNLCalcRowFactory::getPNLValue))));
+				createBasicFormatter(options, false, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, StandardPNLCalcRowFactory::getPNLValue))));
 
 		// Spacer
 		rows.add(createRow(210, "", false, "", "", false, createEmptyFormatter()));
