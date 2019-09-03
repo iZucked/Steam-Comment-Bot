@@ -361,22 +361,40 @@ public interface FleetPackage extends EPackage {
 	int VESSEL__SAFETY_HEEL = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 12;
 
 	/**
-	 * The feature id for the '<em><b>Cooling Volume</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL__COOLING_VOLUME = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 13;
-
-	/**
 	 * The feature id for the '<em><b>Warming Time</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__WARMING_TIME = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 14;
+	int VESSEL__WARMING_TIME = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 13;
+
+	/**
+	 * The feature id for the '<em><b>Cooling Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__COOLING_VOLUME = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 14;
+
+	/**
+	 * The feature id for the '<em><b>Cooling Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__COOLING_TIME = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 15;
+
+	/**
+	 * The feature id for the '<em><b>Purge Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__PURGE_VOLUME = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 16;
 
 	/**
 	 * The feature id for the '<em><b>Purge Time</b></em>' attribute.
@@ -385,7 +403,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__PURGE_TIME = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 15;
+	int VESSEL__PURGE_TIME = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 17;
 
 	/**
 	 * The feature id for the '<em><b>Laden Attributes</b></em>' containment reference.
@@ -394,7 +412,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__LADEN_ATTRIBUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 16;
+	int VESSEL__LADEN_ATTRIBUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 18;
 
 	/**
 	 * The feature id for the '<em><b>Ballast Attributes</b></em>' containment reference.
@@ -403,7 +421,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__BALLAST_ATTRIBUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 17;
+	int VESSEL__BALLAST_ATTRIBUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 19;
 
 	/**
 	 * The feature id for the '<em><b>Min Speed</b></em>' attribute.
@@ -412,7 +430,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__MIN_SPEED = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 18;
+	int VESSEL__MIN_SPEED = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 20;
 
 	/**
 	 * The feature id for the '<em><b>Max Speed</b></em>' attribute.
@@ -421,7 +439,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__MAX_SPEED = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 19;
+	int VESSEL__MAX_SPEED = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 21;
 
 	/**
 	 * The feature id for the '<em><b>Inaccessible Ports Override</b></em>' attribute.
@@ -430,7 +448,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__INACCESSIBLE_PORTS_OVERRIDE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 20;
+	int VESSEL__INACCESSIBLE_PORTS_OVERRIDE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 22;
 
 	/**
 	 * The feature id for the '<em><b>Inaccessible Ports</b></em>' reference list.
@@ -439,7 +457,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__INACCESSIBLE_PORTS = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 21;
+	int VESSEL__INACCESSIBLE_PORTS = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 23;
 
 	/**
 	 * The feature id for the '<em><b>Inaccessible Routes Override</b></em>' attribute.
@@ -448,7 +466,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__INACCESSIBLE_ROUTES_OVERRIDE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 22;
+	int VESSEL__INACCESSIBLE_ROUTES_OVERRIDE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 24;
 
 	/**
 	 * The feature id for the '<em><b>Inaccessible Routes</b></em>' attribute list.
@@ -457,7 +475,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__INACCESSIBLE_ROUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 23;
+	int VESSEL__INACCESSIBLE_ROUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 25;
 
 	/**
 	 * The feature id for the '<em><b>Route Parameters Override</b></em>' attribute.
@@ -466,7 +484,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__ROUTE_PARAMETERS_OVERRIDE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 24;
+	int VESSEL__ROUTE_PARAMETERS_OVERRIDE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 26;
 
 	/**
 	 * The feature id for the '<em><b>Route Parameters</b></em>' containment reference list.
@@ -475,7 +493,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__ROUTE_PARAMETERS = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 25;
+	int VESSEL__ROUTE_PARAMETERS = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 27;
 
 	/**
 	 * The feature id for the '<em><b>Min Base Fuel Consumption</b></em>' attribute.
@@ -484,7 +502,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__MIN_BASE_FUEL_CONSUMPTION = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 26;
+	int VESSEL__MIN_BASE_FUEL_CONSUMPTION = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 28;
 
 	/**
 	 * The feature id for the '<em><b>Has Reliq Capability Override</b></em>' attribute.
@@ -493,7 +511,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__HAS_RELIQ_CAPABILITY_OVERRIDE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 27;
+	int VESSEL__HAS_RELIQ_CAPABILITY_OVERRIDE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 29;
 
 	/**
 	 * The feature id for the '<em><b>Has Reliq Capability</b></em>' attribute.
@@ -502,7 +520,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__HAS_RELIQ_CAPABILITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 28;
+	int VESSEL__HAS_RELIQ_CAPABILITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 30;
 
 	/**
 	 * The feature id for the '<em><b>Notes</b></em>' attribute.
@@ -511,7 +529,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__NOTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 29;
+	int VESSEL__NOTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 31;
 
 	/**
 	 * The feature id for the '<em><b>Mmx Id</b></em>' attribute.
@@ -520,7 +538,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__MMX_ID = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 30;
+	int VESSEL__MMX_ID = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 32;
 
 	/**
 	 * The number of structural features of the '<em>Vessel</em>' class.
@@ -529,7 +547,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 31;
+	int VESSEL_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 33;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselStateAttributesImpl <em>Vessel State Attributes</em>}' class.
@@ -991,6 +1009,28 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getVessel_CoolingVolume();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#getCoolingTime <em>Cooling Time</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Cooling Time</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#getCoolingTime()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EAttribute getVessel_CoolingTime();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#getPurgeVolume <em>Purge Volume</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Purge Volume</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#getPurgeVolume()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EAttribute getVessel_PurgeVolume();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#isRouteParametersOverride <em>Route Parameters Override</em>}'.
@@ -1640,6 +1680,22 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute VESSEL__COOLING_VOLUME = eINSTANCE.getVessel_CoolingVolume();
+
+		/**
+		 * The meta object literal for the '<em><b>Cooling Time</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL__COOLING_TIME = eINSTANCE.getVessel_CoolingTime();
+
+		/**
+		 * The meta object literal for the '<em><b>Purge Volume</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL__PURGE_VOLUME = eINSTANCE.getVessel_PurgeVolume();
 
 		/**
 		 * The meta object literal for the '<em><b>Route Parameters Override</b></em>' attribute feature.

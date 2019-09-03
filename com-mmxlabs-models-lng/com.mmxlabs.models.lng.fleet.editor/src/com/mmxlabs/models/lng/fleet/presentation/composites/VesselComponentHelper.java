@@ -82,8 +82,10 @@ public class VesselComponentHelper extends BaseComponentHelper {
 		add_idleBaseFuelEditor(detailComposite, topClass);
 		add_pilotLightRateEditor(detailComposite, topClass);
 		add_safetyHeelEditor(detailComposite, topClass);
-		add_coolingVolumeEditor(detailComposite, topClass);
 		add_warmingTimeEditor(detailComposite, topClass);
+		add_coolingVolumeEditor(detailComposite, topClass);
+		add_coolingTimeEditor(detailComposite, topClass);
+		add_purgeVolumeEditor(detailComposite, topClass);
 		add_purgeTimeEditor(detailComposite, topClass);
 		add_ladenAttributesEditor(detailComposite, topClass);
 		add_ballastAttributesEditor(detailComposite, topClass);
@@ -244,6 +246,28 @@ public class VesselComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_coolingVolumeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL__COOLING_VOLUME));
+	}
+
+	/**
+	 * Create the editor for the coolingTime feature on Vessel
+	 *
+	 * @generated NOT
+	 */
+	protected void add_coolingTimeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PURGE)) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL__COOLING_TIME));
+		}
+	}
+
+	/**
+	 * Create the editor for the purgeVolume feature on Vessel
+	 *
+	 * @generated NOT
+	 */
+	protected void add_purgeVolumeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PURGE)) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL__PURGE_VOLUME));
+		}
 	}
 
 	/**
