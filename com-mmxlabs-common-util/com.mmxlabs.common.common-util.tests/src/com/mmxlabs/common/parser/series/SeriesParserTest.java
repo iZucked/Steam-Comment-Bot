@@ -75,14 +75,10 @@ public class SeriesParserTest {
 	}
 
 	double parse(String expression) {
-		SeriesParser parser = new SeriesParser();
-		parser.addSeriesExpression("HH", "1.0");
-		parser.addSeriesExpression("HH2", "2.0");
-		parser.addSeriesExpression("HH3", "3.0");
-		parser.addSeriesExpression("HH4", "4.0");
 
-		parser.setShiftMapper((a, b) -> a);
-		parser.setCalendarMonthMapper(new CalendarMonthMapper() {
+		SeriesParserData data = new SeriesParserData();
+		data.setShiftMapper((a, b) -> a);
+		data.setCalendarMonthMapper(new CalendarMonthMapper() {
 
 			@Override
 			public int mapMonthToChangePoint(int currentChangePoint) {
@@ -94,6 +90,12 @@ public class SeriesParserTest {
 				return currentChangePoint;
 			}
 		});
+
+		SeriesParser parser = new SeriesParser(data);
+		parser.addSeriesExpression("HH", "1.0");
+		parser.addSeriesExpression("HH2", "2.0");
+		parser.addSeriesExpression("HH3", "3.0");
+		parser.addSeriesExpression("HH4", "4.0");
 
 		IExpression<ISeries> parsed = parser.parse(expression);
 

@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.transformer;
 
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -129,7 +128,6 @@ import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.transformer.util.IntegerIntervalCurveHelper;
-import com.mmxlabs.models.lng.transformer.util.LNGScenarioUtils;
 import com.mmxlabs.models.lng.transformer.util.TransformerHelper;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.AVesselSet;
@@ -1394,7 +1392,7 @@ public class LNGScenarioTransformer {
 			final DischargeSlot slot = (DischargeSlot) modelSlot;
 			if (slot.isFOBSale()) {
 				if (slot.getSlotOrDelegateFOBSaleDealType() == FOBSaleDealType.DIVERT_TO_DEST) {
-//					return getTimewindowAsUTCWithFlex(slot);
+					// return getTimewindowAsUTCWithFlex(slot);
 				} else if (slot.getSlotOrDelegateFOBSaleDealType() == FOBSaleDealType.SOURCE_WITH_DEST) {
 					extendWindows = true;
 				}
@@ -1420,73 +1418,73 @@ public class LNGScenarioTransformer {
 		}
 	}
 
-//	/**
-//	 * Return a time window (with flex) in UTC rather than translated to the port local timezone.
-//	 * 
-//	 * @param slot
-//	 * @return
-//	 */
-//	private ITimeWindow getTimewindowAsUTCWithFlex(final Slot<?> slot) {
-//		LocalDateTime wStart = slot.getWindowStart().atStartOfDay();
-//		if (slot.isSetWindowStartTime()) {
-//			wStart = wStart.withHour(slot.getWindowStartTime());
-//		} else {
-//			wStart = wStart.withHour(slot.getPort().getDefaultStartTime());
-//		}
-//
-//		final int slotFlex = slot.getWindowFlex();
-//
-//		final TimePeriod p = slot.getWindowFlexUnits();
-//		LocalDateTime startTime = wStart;
-//		// Probably considering too much here, maybe a days/2 would be better estimate?
-//		// Should probably try to update the matching windows code instead to compute travel time...
-//		if (slot instanceof DischargeSlot) {
-//			startTime = startTime.minusDays(slot.getSlotOrDelegateShippingDaysRestriction());
-//		}
-//		{
-//			if (slotFlex < 0) {
-//				switch (p) {
-//				case DAYS:
-//					startTime = startTime.minusDays(slotFlex).plusHours(1);
-//					break;
-//				case HOURS:
-//					startTime = startTime.minusHours(slotFlex);
-//					break;
-//				case MONTHS:
-//					startTime = startTime.minusMonths(slotFlex).plusHours(1);
-//					break;
-//				default:
-//					break;
-//				}
-//			}
-//		}
-//		LocalDateTime endTime = wStart.plusHours(slot.getWindowSizeInHours());
-//		{
-//			if (slotFlex > 0) {
-//
-//				switch (p) {
-//				case DAYS:
-//					endTime = endTime.plusDays(slotFlex).minusHours(1);
-//					break;
-//				case HOURS:
-//					endTime = endTime.plusHours(slotFlex);
-//					break;
-//				case MONTHS:
-//					endTime = endTime.plusMonths(slotFlex).minusHours(1);
-//					break;
-//				default:
-//					break;
-//				}
-//			}
-//		}
-//
-//		// if (slot instanceof LoadSlot) {
-//		// endTime = endTime.plusDays(slot.getSlotOrDelegateShippingDaysRestriction());
-//		// }
-//		//
-//		return TimeWindowMaker.createInclusiveInclusive(dateHelper.convertTime(startTime.atZone(ZoneId.of("Etc/UTC"))), dateHelper.convertTime(endTime.atZone(ZoneId.of("Etc/UTC"))),
-//				slot.getWindowFlex(), false);
-//	}
+	// /**
+	// * Return a time window (with flex) in UTC rather than translated to the port local timezone.
+	// *
+	// * @param slot
+	// * @return
+	// */
+	// private ITimeWindow getTimewindowAsUTCWithFlex(final Slot<?> slot) {
+	// LocalDateTime wStart = slot.getWindowStart().atStartOfDay();
+	// if (slot.isSetWindowStartTime()) {
+	// wStart = wStart.withHour(slot.getWindowStartTime());
+	// } else {
+	// wStart = wStart.withHour(slot.getPort().getDefaultStartTime());
+	// }
+	//
+	// final int slotFlex = slot.getWindowFlex();
+	//
+	// final TimePeriod p = slot.getWindowFlexUnits();
+	// LocalDateTime startTime = wStart;
+	// // Probably considering too much here, maybe a days/2 would be better estimate?
+	// // Should probably try to update the matching windows code instead to compute travel time...
+	// if (slot instanceof DischargeSlot) {
+	// startTime = startTime.minusDays(slot.getSlotOrDelegateShippingDaysRestriction());
+	// }
+	// {
+	// if (slotFlex < 0) {
+	// switch (p) {
+	// case DAYS:
+	// startTime = startTime.minusDays(slotFlex).plusHours(1);
+	// break;
+	// case HOURS:
+	// startTime = startTime.minusHours(slotFlex);
+	// break;
+	// case MONTHS:
+	// startTime = startTime.minusMonths(slotFlex).plusHours(1);
+	// break;
+	// default:
+	// break;
+	// }
+	// }
+	// }
+	// LocalDateTime endTime = wStart.plusHours(slot.getWindowSizeInHours());
+	// {
+	// if (slotFlex > 0) {
+	//
+	// switch (p) {
+	// case DAYS:
+	// endTime = endTime.plusDays(slotFlex).minusHours(1);
+	// break;
+	// case HOURS:
+	// endTime = endTime.plusHours(slotFlex);
+	// break;
+	// case MONTHS:
+	// endTime = endTime.plusMonths(slotFlex).minusHours(1);
+	// break;
+	// default:
+	// break;
+	// }
+	// }
+	// }
+	//
+	// // if (slot instanceof LoadSlot) {
+	// // endTime = endTime.plusDays(slot.getSlotOrDelegateShippingDaysRestriction());
+	// // }
+	// //
+	// return TimeWindowMaker.createInclusiveInclusive(dateHelper.convertTime(startTime.atZone(ZoneId.of("Etc/UTC"))), dateHelper.convertTime(endTime.atZone(ZoneId.of("Etc/UTC"))),
+	// slot.getWindowFlex(), false);
+	// }
 
 	public void configureDischargeSlotRestrictions(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation, @NonNull final Set<IPort> allLoadPorts,
 			@NonNull final DischargeSlot dischargeSlot, @NonNull final IDischargeOption discharge) {
@@ -1769,12 +1767,12 @@ public class LNGScenarioTransformer {
 				} else {
 
 					if (dischargeSlot.getSlotOrDelegateFOBSaleDealType() == FOBSaleDealType.DIVERT_TO_DEST) {
-//						final ITimeWindow utcWindow = getTimewindowAsUTCWithFlex(dischargeSlot);
-//						localTimeWindow = TimeWindowMaker.createInclusiveExclusive(utcWindow.getInclusiveStart() - 12, utcWindow.getExclusiveEnd(), dischargeSlot.getWindowFlex(), false);
-//						
-						localTimeWindow = TimeWindowMaker.createInclusiveExclusive(dischargeWindow.getInclusiveStart() - dischargeSlot.getSlotOrDelegateShippingDaysRestriction() * 24, dischargeWindow.getExclusiveEnd()   , 0,
-								false);
-						
+						// final ITimeWindow utcWindow = getTimewindowAsUTCWithFlex(dischargeSlot);
+						// localTimeWindow = TimeWindowMaker.createInclusiveExclusive(utcWindow.getInclusiveStart() - 12, utcWindow.getExclusiveEnd(), dischargeSlot.getWindowFlex(), false);
+						//
+						localTimeWindow = TimeWindowMaker.createInclusiveExclusive(dischargeWindow.getInclusiveStart() - dischargeSlot.getSlotOrDelegateShippingDaysRestriction() * 24,
+								dischargeWindow.getExclusiveEnd(), 0, false);
+
 					} else {
 						localTimeWindow = dischargeWindow;
 					}
@@ -1786,16 +1784,17 @@ public class LNGScenarioTransformer {
 					port = portAssociation.lookup(dischargeSlot.getPort());
 				}
 
-				discharge = builder.createFOBSaleDischargeSlot(name, port, localTimeWindow, minVolume, maxVolume, minCv, maxCv, dischargePriceCalculator, dischargeSlot.getSchedulingTimeWindow().getDuration(),
-						pricingDate, transformPricingEvent(dischargeSlot.getSlotOrDelegatePricingEvent()), dischargeSlot.isOptional(), slotLocked, isSpot, isVolumeLimitInM3, slotCancelled);
+				discharge = builder.createFOBSaleDischargeSlot(name, port, localTimeWindow, minVolume, maxVolume, minCv, maxCv, dischargePriceCalculator,
+						dischargeSlot.getSchedulingTimeWindow().getDuration(), pricingDate, transformPricingEvent(dischargeSlot.getSlotOrDelegatePricingEvent()), dischargeSlot.isOptional(),
+						slotLocked, isSpot, isVolumeLimitInM3, slotCancelled);
 
 				if (dischargeSlot.getSlotOrDelegateFOBSaleDealType() == FOBSaleDealType.DIVERT_TO_DEST) {
 					builder.setShippingHoursRestriction(discharge, dischargeWindow, dischargeSlot.getSlotOrDelegateShippingDaysRestriction() * 24);
 				}
 			} else {
 				discharge = builder.createDischargeSlot(name, portAssociation.lookupNullChecked(dischargeSlot.getPort()), dischargeWindow, minVolume, maxVolume, minCv, maxCv, dischargePriceCalculator,
-						dischargeSlot.getSchedulingTimeWindow().getDuration(), pricingDate, transformPricingEvent(dischargeSlot.getSlotOrDelegatePricingEvent()), dischargeSlot.isOptional(), slotLocked, isSpot,
-						isVolumeLimitInM3, slotCancelled);
+						dischargeSlot.getSchedulingTimeWindow().getDuration(), pricingDate, transformPricingEvent(dischargeSlot.getSlotOrDelegatePricingEvent()), dischargeSlot.isOptional(),
+						slotLocked, isSpot, isVolumeLimitInM3, slotCancelled);
 			}
 		}
 
@@ -1853,8 +1852,7 @@ public class LNGScenarioTransformer {
 				}
 			} else {
 				final IExpression<ISeries> expression = commodityIndices.parse(priceExpression);
-				final Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTime = LNGScenarioUtils.findEarliestAndLatestTimes(rootObject);
-				final ISeries parsed = expression.evaluate(earliestAndLatestTime);
+				final ISeries parsed = expression.evaluate();
 
 				final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
 				if (parsed.getChangePoints().length == 0) {
@@ -1959,9 +1957,9 @@ public class LNGScenarioTransformer {
 			}
 		} else {
 			load = builder.createLoadSlot(elementName, portAssociation.lookupNullChecked(loadSlot.getPort()), loadWindow, minVolume, maxVolume, loadPriceCalculator,
-					OptimiserUnitConvertor.convertToInternalConversionFactor(loadSlot.getSlotOrDelegateCV()), loadSlot.getSchedulingTimeWindow().getDuration(), loadSlot.isSetArriveCold(), loadSlot.isArriveCold(),
-					loadSlot.isSchedulePurge(), slotPricingDate, transformPricingEvent(loadSlot.getSlotOrDelegatePricingEvent()), loadSlot.isOptional(), slotLocked, isSpot, isVolumeLimitInM3,
-					slotCancelled);
+					OptimiserUnitConvertor.convertToInternalConversionFactor(loadSlot.getSlotOrDelegateCV()), loadSlot.getSchedulingTimeWindow().getDuration(), loadSlot.isSetArriveCold(),
+					loadSlot.isArriveCold(), loadSlot.isSchedulePurge(), slotPricingDate, transformPricingEvent(loadSlot.getSlotOrDelegatePricingEvent()), loadSlot.isOptional(), slotLocked, isSpot,
+					isVolumeLimitInM3, slotCancelled);
 		}
 		// Store market slots for lookup when building spot markets.
 		modelEntityMap.addModelObject(loadSlot, load);

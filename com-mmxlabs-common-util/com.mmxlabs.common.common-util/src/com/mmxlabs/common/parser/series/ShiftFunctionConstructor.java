@@ -4,55 +4,39 @@
  */
 package com.mmxlabs.common.parser.series;
 
-import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.functions.ShiftedSeries;
 
 public class ShiftFunctionConstructor implements IExpression<ISeries> {
 
-	private ShiftFunctionMapper shiftMapper;
+	private SeriesParserData seriesParserData;
 	private IExpression<ISeries> toShift;
 	private int shiftBy;
 
-	public ShiftFunctionConstructor(ShiftFunctionMapper shiftMapper, final List<IExpression<ISeries>> arguments) {
-		if (shiftMapper == null) {
-			throw new IllegalStateException("No shift mapper function defined");
-		}
-		this.shiftMapper = shiftMapper;
+	public ShiftFunctionConstructor(@NonNull SeriesParserData seriesParserData, final List<IExpression<ISeries>> arguments) {
+		this.seriesParserData = seriesParserData;
 		this.toShift = arguments.get(0);
 		this.shiftBy = arguments.get(1).evaluate().evaluate(0).intValue();
 	}
 
-	public ShiftFunctionConstructor(ShiftFunctionMapper shiftMapper, final IExpression<ISeries> expr, IExpression<ISeries> shiftBy) {
-		if (shiftMapper == null) {
-			throw new IllegalStateException("No shift mapper function defined");
-		}
-		this.shiftMapper = shiftMapper;
+	public ShiftFunctionConstructor(@NonNull SeriesParserData seriesParserData, final IExpression<ISeries> expr, IExpression<ISeries> shiftBy) {
+		this.seriesParserData = seriesParserData;
 		this.toShift = expr;
 		this.shiftBy = shiftBy.evaluate().evaluate(0).intValue();
 	}
 
-	public ShiftFunctionConstructor(ShiftFunctionMapper shiftMapper, IExpression<ISeries> expr, final Integer shiftBy) {
-		if (shiftMapper == null) {
-			throw new IllegalStateException("No shift mapper function defined");
-		}
-		this.shiftMapper = shiftMapper;
+	public ShiftFunctionConstructor(@NonNull SeriesParserData seriesParserData, IExpression<ISeries> expr, final Integer shiftBy) {
+		this.seriesParserData = seriesParserData;
 		this.shiftBy = shiftBy.intValue();
 		this.toShift = expr;
 	}
 
 	@Override
 	public @NonNull ISeries evaluate() {
-		return new ShiftedSeries(toShift.evaluate(), shiftBy, shiftMapper);
-	}
-	
-	@Override
-	public @NonNull ISeries evaluate(Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTime) {
-		return new ShiftedSeries(toShift.evaluate(), shiftBy, shiftMapper);
+		return new ShiftedSeries(seriesParserData, toShift.evaluate(), shiftBy);
 	}
 }

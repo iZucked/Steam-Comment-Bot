@@ -39,12 +39,10 @@ public class SeriesParserChangePointsTests {
 	}
 
 	List<Integer> parse(final String expression) {
-		final SeriesParser parser = new SeriesParser();
-		parser.addSeriesExpression("HH", "1.0");
-		parser.addSeriesExpression("HH2", "2.0");
+		final SeriesParserData data = new SeriesParserData();
 
-		parser.setShiftMapper((a, b) -> a);
-		parser.setCalendarMonthMapper(new CalendarMonthMapper() {
+		data.setShiftMapper((a, b) -> a);
+		data.setCalendarMonthMapper(new CalendarMonthMapper() {
 
 			@Override
 			public int mapMonthToChangePoint(final int currentChangePoint) {
@@ -57,12 +55,18 @@ public class SeriesParserChangePointsTests {
 			}
 		});
 
-		final IExpression<ISeries> parsed = parser.parse(expression);
 		final ZonedDateTime start = ZonedDateTime.of(LocalDateTime.of(2018, 1, 1, 0, 0), ZoneOffset.UTC);
 		final ZonedDateTime end = ZonedDateTime.of(LocalDateTime.of(2018, 3, 1, 0, 0), ZoneOffset.UTC);
 		final Pair<ZonedDateTime, ZonedDateTime> timebox = new Pair<>(start, end);
+		data.setEarliestAndLatestTime(timebox);
 
-		final int[] changePoints = parsed.evaluate(timebox).getChangePoints();
+		final SeriesParser parser = new SeriesParser(data);
+		parser.addSeriesExpression("HH", "1.0");
+		parser.addSeriesExpression("HH2", "2.0");
+
+		final IExpression<ISeries> parsed = parser.parse(expression);
+
+		final int[] changePoints = parsed.evaluate().getChangePoints();
 
 		return Arrays.stream(changePoints).boxed().collect(Collectors.toList());
 	}

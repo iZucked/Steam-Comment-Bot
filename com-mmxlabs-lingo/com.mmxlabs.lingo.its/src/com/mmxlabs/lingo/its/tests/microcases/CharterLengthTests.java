@@ -6,6 +6,7 @@ package com.mmxlabs.lingo.its.tests.microcases;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +22,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import com.google.common.collect.Lists;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lngdataserver.data.distances.DataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.EVesselTankState;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -30,6 +32,7 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
@@ -39,9 +42,11 @@ import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
+import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
+import com.mmxlabs.models.lng.types.TimePeriod;
 
 @SuppressWarnings("unused")
 @ExtendWith(value = ShiroRunner.class)
@@ -174,6 +179,181 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 		Assertions.assertEquals(500, idle.getHeelAtEnd());
 	}
 
+	/**
+	 * Construct a test case where cargoes spanning the period backend are late. Removing cargoes to fix lateness will introduce charter length, but this conflicts with end heel changes. Regression
+	 * test for P!
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testWithLateCargoesAfterPeriod() throws Exception {
+		updateDistanceData(scenarioDataProvider, DataConstants.DISTANCES_LATEST_JSON);
+		updatePortsData(scenarioDataProvider, DataConstants.PORTS_LATEST_JSON);
+
+		// Create the required basic elements
+		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
+		vessel1.setSafetyHeel(500);
+		final Vessel vessel2 = fleetModelFinder.findVessel("STEAM-138");
+		vessel2.setSafetyHeel(500);
+
+		final VesselAvailability charter_1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
+				.withCharterRate("80000") //
+				.withEndHeel(0, 0, EVesselTankState.EITHER, "") //
+				.build();
+		final VesselAvailability charter_2 = cargoModelBuilder.makeVesselAvailability(vessel2, entity) //
+				.withCharterRate("80000") //
+				.withEndHeel(0, 0, EVesselTankState.EITHER, "") //
+				.build();
+
+		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2019, 8, 14), LocalDate.of(2019, 10, 23));
+		scenarioModelBuilder.setScheduleHorizon(LocalDate.of(2020, 4, 1));
+
+		Port loadPort = portFinder.findPort("Onslow");
+		Port dischargePort = portFinder.findPort("Futtsu");
+
+		final Cargo cargoa1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("La1", LocalDate.of(2019, 11, 5), loadPort, null, entity, "5") //
+				.withWindowSize(0, TimePeriod.DAYS) //
+				.build() //
+				.makeDESSale("Da1", LocalDate.of(2019, 11, 24), dischargePort, null, entity, "7") //
+				.withWindowSize(0, TimePeriod.DAYS) //
+
+				.build() //
+				.withVesselAssignment(charter_1, 1) //
+				.withAssignmentFlags(false, true) //
+				.build();
+		final Cargo cargoa2 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("La2", LocalDate.of(2020, 1, 8), loadPort, null, entity, "5") //
+				.withWindowSize(0, TimePeriod.DAYS) //
+
+				.build() //
+				.makeDESSale("Da2", LocalDate.of(2020, 1, 22), dischargePort, null, entity, "7") //
+				.withWindowSize(0, TimePeriod.DAYS) //
+
+				.build() //
+				.withVesselAssignment(charter_1, 2) //
+				.withAssignmentFlags(false, true) //
+				.build();
+		final Cargo cargoa3 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("La3", LocalDate.of(2020, 2, 2), loadPort, null, entity, "5") //
+				.withWindowSize(0, TimePeriod.DAYS) //
+
+				.build() //
+				.makeDESSale("Da3", LocalDate.of(2020, 2, 1), dischargePort, null, entity, "7") //
+				.withWindowSize(1, TimePeriod.MONTHS) //
+				.build() //
+				.withVesselAssignment(charter_1, 3) //
+				.withAssignmentFlags(false, true) //
+				.build();
+		final Cargo cargoa4 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("La4", LocalDate.of(2020, 2, 27), loadPort, null, entity, "5") //
+				.withWindowSize(0, TimePeriod.DAYS) //
+
+				.build() //
+				.makeDESSale("Da4", LocalDate.of(2020, 3, 12), dischargePort, null, entity, "7") //
+				.withWindowSize(0, TimePeriod.DAYS) //
+
+				.build() //
+				.withVesselAssignment(charter_1, 4) //
+				.withAssignmentFlags(false, true) //
+				.build();
+
+		final Cargo cargob1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("Lb1", LocalDate.of(2019, 11, 27), loadPort, null, entity, "5") //
+				.withWindowSize(0, TimePeriod.DAYS) //
+
+				.build() //
+				.makeDESSale("Db1", LocalDate.of(2019, 12, 11), dischargePort, null, entity, "7") //
+				.withWindowSize(0, TimePeriod.DAYS) //
+
+				.build() //
+				.withVesselAssignment(charter_2, 1) //
+				.withAssignmentFlags(false, true) //
+				.build();
+		final Cargo cargob2 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("Lb2", LocalDate.of(2019, 12, 6), loadPort, null, entity, "5") //
+				.withWindowSize(0, TimePeriod.DAYS) //
+
+				.build() //
+				.makeDESSale("Db2", LocalDate.of(2020, 12, 01), dischargePort, null, entity, "7") //
+				.withWindowSize(1, TimePeriod.MONTHS) //
+
+				.build() //
+				.withVesselAssignment(charter_2, 2) //
+				.withAssignmentFlags(false, false) //
+				.build();
+		final Cargo cargob3 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("Lb3", LocalDate.of(2019, 12, 12), loadPort, null, entity, "5") //
+				.withWindowSize(0, TimePeriod.DAYS) //
+
+				.build() //
+				.makeDESSale("Db3", LocalDate.of(2019, 12, 1), dischargePort, null, entity, "7") //
+				.withWindowSize(1, TimePeriod.MONTHS) //
+				.build() //
+				.withVesselAssignment(charter_2, 3) //
+				.withAssignmentFlags(false, true) //
+				.build();
+		final Cargo cargob4 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("Lb4", LocalDate.of(2020, 1, 10), loadPort, null, entity, "5") //
+				.withWindowSize(0, TimePeriod.DAYS) //
+
+				.build() //
+				.makeDESSale("Db4", LocalDate.of(2020, 1, 1), dischargePort, null, entity, "7") //
+				.withWindowSize(1, TimePeriod.MONTHS) //
+
+				.build() //
+				.withVesselAssignment(charter_2, 4) //
+				.withAssignmentFlags(false, true) //
+				.build();
+		final Cargo cargob5 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("Lb5", LocalDate.of(2020, 2, 9), loadPort, null, entity, "5") //
+				.withWindowSize(0, TimePeriod.DAYS) //
+
+				.build() //
+				.makeDESSale("Db5", LocalDate.of(2020, 2, 23), dischargePort, null, entity, "7") //
+				.withWindowSize(0, TimePeriod.DAYS) //
+
+				.build() //
+				.withVesselAssignment(charter_2, 5) //
+				.withAssignmentFlags(false, true) //
+				.build();
+		final Cargo cargob6 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("Lb6", LocalDate.of(2020, 3, 4), loadPort, null, entity, "5") //
+				.withWindowSize(0, TimePeriod.DAYS) //
+
+				.build() //
+				.makeDESSale("Db6", LocalDate.of(2020, 3, 18), dischargePort, null, entity, "7") //
+				.withWindowSize(0, TimePeriod.DAYS) //
+
+				.build() //
+				.withVesselAssignment(charter_2, 6) //
+				.withAssignmentFlags(false, true) //
+				.build();
+
+		final Slot<?> load1 = cargob1.getSlots().get(0);
+		final Slot<?> load2 = cargob2.getSlots().get(0);
+		// Without charter length, all ok
+		{
+			final Schedule schedule = optimise(false, null, YearMonth.of(2020, 1));
+			Assertions.assertNotNull(schedule);
+			final CargoAllocation ca = findCargoAllocation(load2, schedule);
+			Assertions.assertSame(charter_1, ca.getSequence().getVesselAvailability());
+		}
+		// With charter length, cannot move
+		{
+			final Schedule schedule = optimise(true, null, YearMonth.of(2020, 1));
+			Assertions.assertNotNull(schedule);
+			final CargoAllocation ca = findCargoAllocation(load2, schedule);
+			Assertions.assertSame(charter_2, ca.getSequence().getVesselAvailability());
+
+		}
+
+		// Pull in all late cargoes
+		// OR charter lenth should NOT permit empty heel in this case.
+
+	}
+
 	private @NonNull CharterLengthEvent findCharterLengthEvent(final Slot<?> slot, final Schedule schedule) {
 		final Optional<Event> discharge = schedule.getSequences().stream() //
 				.flatMap(s -> s.getEvents().stream()) //
@@ -246,6 +426,40 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 				.buildDefaultRunner();
 		try {
 			runnerBuilder.evaluateInitialState();
+		} finally {
+			runnerBuilder.dispose();
+		}
+	}
+
+	private Schedule optimise(final boolean withCharterLength, LocalDate periodStart, YearMonth periodEnd) {
+		// Create UserSettings
+		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
+		userSettings.setBuildActionSets(false);
+		userSettings.setGenerateCharterOuts(false);
+		userSettings.setShippingOnly(false);
+		userSettings.setWithSpotCargoMarkets(false);
+		userSettings.setSimilarityMode(SimilarityMode.OFF);
+
+		userSettings.setWithCharterLength(withCharterLength);
+
+		if (periodStart != null) {
+			userSettings.setPeriodStartDate(periodStart);
+		}
+		if (periodEnd != null) {
+			userSettings.setPeriodEnd(periodEnd);
+		}
+
+		final LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null) //
+				.withUserSettings(userSettings) //
+				.withThreadCount(1) //
+				.withOptimiseHint() //
+				.withOptimisationPlanCustomiser(plan -> {
+					ScenarioUtils.setLSOStageIterations(plan, 400_000);
+					ScenarioUtils.setHillClimbStageIterations(plan, 30_000);
+				}).buildDefaultRunner();
+		try {
+			runnerBuilder.evaluateInitialState();
+			return runnerBuilder.runAndReturnSchedule();
 		} finally {
 			runnerBuilder.dispose();
 		}

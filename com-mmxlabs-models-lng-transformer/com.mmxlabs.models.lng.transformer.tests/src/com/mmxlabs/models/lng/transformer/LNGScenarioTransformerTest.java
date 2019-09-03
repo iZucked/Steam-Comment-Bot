@@ -21,6 +21,8 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ConstantValueLongCurve;
 import com.mmxlabs.common.curves.ILongCurve;
 import com.mmxlabs.common.parser.series.SeriesParser;
+import com.mmxlabs.common.parser.series.SeriesParserData;
+import com.mmxlabs.common.parser.series.SeriesParserData;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -360,11 +362,14 @@ public class LNGScenarioTransformerTest {
 		vesselAssociation.add(eVessel4, oVessel4);
 
 		final List<IVessel> vesselAvailabilities = Lists.newArrayList(oVessel1, oVessel2, oVessel3, oVessel4);
-		final SeriesParser currencyIndices = new SeriesParser();
 		final DateAndCurveHelper dateHelper = new DateAndCurveHelper(
 				new Pair<>(ZonedDateTime.of(LocalDateTime.of(2000, 1, 1, 0, 0, 0), ZoneId.of("UTC")), ZonedDateTime.of(LocalDateTime.of(2020, 1, 1, 0, 0, 0), ZoneId.of("UTC"))));
-		LNGScenarioTransformer.buildSuezCosts(builder, vesselAssociation, vesselAvailabilities, suezCanalTariff, currencyIndices, dateHelper);
 
+		SeriesParserData data = new SeriesParserData();
+		data.earliestAndLatestTime = dateHelper.getEarliestAndLatestTimes();
+		final SeriesParser currencyIndices = new SeriesParser(data);
+
+		LNGScenarioTransformer.buildSuezCosts(builder, vesselAssociation, vesselAvailabilities, suezCanalTariff, currencyIndices, dateHelper);
 		Mockito.verify(builder).setVesselRouteCost(ArgumentMatchers.eq(ERouteOption.SUEZ), ArgumentMatchers.eq(oVessel1), ArgumentMatchers.eq(IRouteCostProvider.CostType.Laden),
 				MyMatcher.eq(expectedSuezCost(suezCanalTariff, 1, IRouteCostProvider.CostType.Laden, 5_000, 0, 0, 0, 0, 0, 0)));
 

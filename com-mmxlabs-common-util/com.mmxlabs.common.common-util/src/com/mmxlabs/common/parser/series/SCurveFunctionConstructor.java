@@ -4,11 +4,8 @@
  */
 package com.mmxlabs.common.parser.series;
 
-import java.time.ZonedDateTime;
-
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.functions.SCurveSeries;
 
@@ -21,12 +18,12 @@ public class SCurveFunctionConstructor implements IExpression<ISeries> {
 	private final IExpression<ISeries> series;
 	private final IExpression<ISeries> higherSeries;
 
-	public SCurveFunctionConstructor(IExpression<ISeries> base, final double lowerThan, final double higherThan, final double a1, final double b1, final double a2, final double b2, final double a3,
-			final double b3) {
+	public SCurveFunctionConstructor(final SeriesParserData seriesParserData, final IExpression<ISeries> base, final double lowerThan, final double higherThan, final double a1, final double b1,
+			final double a2, final double b2, final double a3, final double b3) {
 		this(base, lowerThan, higherThan, makeExpression(base, a1, b1), makeExpression(base, a2, b2), makeExpression(base, a3, b3));
 	}
 
-	public SCurveFunctionConstructor(IExpression<ISeries> base, final double lowerThan, final double higherThan, final IExpression<ISeries> lowerSeries, final IExpression<ISeries> series,
+	public SCurveFunctionConstructor(final IExpression<ISeries> base, final double lowerThan, final double higherThan, final IExpression<ISeries> lowerSeries, final IExpression<ISeries> series,
 			final IExpression<ISeries> higherSeries) {
 		this.base = base;
 		this.lowerThan = lowerThan;
@@ -41,14 +38,10 @@ public class SCurveFunctionConstructor implements IExpression<ISeries> {
 		return new SCurveSeries(base.evaluate(), lowerThan, higherThan, lowerSeries.evaluate(), series.evaluate(), higherSeries.evaluate());
 	}
 
-	@Override
-	public @NonNull ISeries evaluate(Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTime) {
-		return new SCurveSeries(base.evaluate(earliestAndLatestTime), lowerThan, higherThan, lowerSeries.evaluate(earliestAndLatestTime), series.evaluate(earliestAndLatestTime),
-				higherSeries.evaluate(earliestAndLatestTime));
-	}
-
-	private static IExpression<ISeries> makeExpression(IExpression<ISeries> x, double a, double b) {
+	private static IExpression<ISeries> makeExpression(final IExpression<ISeries> x, final double a, final double b) {
 		return new SeriesOperatorExpression('+', //
-				new SeriesOperatorExpression('*', x, new ConstantSeriesExpression(Double.valueOf(a))), new ConstantSeriesExpression(Double.valueOf(b)));
+				new SeriesOperatorExpression('*', //
+						x, new ConstantSeriesExpression(Double.valueOf(a))), //
+				new ConstantSeriesExpression(Double.valueOf(b)));
 	}
 }

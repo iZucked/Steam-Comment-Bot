@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.SetCommand;
@@ -26,6 +27,7 @@ import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.chain.IChainRunner;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
@@ -283,6 +285,23 @@ public class LNGOptimisationBuilder {
 			} finally {
 				executorService.shutdownNow();
 			}
+		}
+
+		/**
+		 * Run the optimisation and return the exported Schedule
+		 */
+		public Schedule runAndReturnSchedule() {
+			final CleanableExecutorService executorService = scenarioRunner.getExecutorService();
+			try {
+
+				IMultiStateResult result = scenarioRunner.runWithProgress(new NullProgressMonitor());
+				if (result != null) {
+					return scenarioRunner.getScenarioToOptimiserBridge().createSchedule(result.getBestSolution().getFirst(), result.getBestSolution().getSecond());
+				}
+			} finally {
+				executorService.shutdownNow();
+			}
+			return null;
 		}
 
 		@Override

@@ -19,6 +19,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.series.CalendarMonthMapper;
 import com.mmxlabs.common.parser.series.SeriesParser;
+import com.mmxlabs.common.parser.series.SeriesParserData;
 import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.common.time.Months;
 import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
@@ -49,16 +50,17 @@ public class PriceIndexUtils {
 	 * @return A {@link SeriesParser} object for use in validating price expressions.
 	 */
 	private static @NonNull SeriesParser getParserFor(final @NonNull PricingModel pricingModel, final @NonNull EReference reference) {
-
-		final SeriesParser indices = new SeriesParser();
-		indices.setShiftMapper((date, shift) -> {
+		SeriesParserData seriesParserData = new SeriesParserData();
+		
+		seriesParserData.setShiftMapper((date, shift) -> {
 			// Get input as local date time and shift.
 			@NonNull
 			final LocalDateTime plusMonths = dateTimeZero.plusHours(date).minusMonths(shift);
 			// Convert back to internal time units.
 			return Hours.between(dateTimeZero, plusMonths);
 		});
-		indices.setCalendarMonthMapper(new CalendarMonthMapper() {
+		
+		seriesParserData.setCalendarMonthMapper(new CalendarMonthMapper() {
 
 			@Override
 			public int mapMonthToChangePoint(int months) {
@@ -85,6 +87,7 @@ public class PriceIndexUtils {
 				return m;
 			}
 		});
+		final SeriesParser indices = new SeriesParser(seriesParserData);
 
 		{
 			final List<AbstractYearMonthCurve> curves = (List<AbstractYearMonthCurve>) pricingModel.eGet(reference);

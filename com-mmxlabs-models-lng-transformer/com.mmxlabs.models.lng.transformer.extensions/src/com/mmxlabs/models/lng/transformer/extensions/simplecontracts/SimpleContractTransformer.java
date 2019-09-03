@@ -16,7 +16,6 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Injector;
 import com.google.inject.name.Named;
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.common.parser.IExpression;
@@ -35,7 +34,6 @@ import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.transformer.util.IntegerIntervalCurveHelper;
-import com.mmxlabs.models.lng.transformer.util.LNGScenarioUtils;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -95,7 +93,12 @@ public class SimpleContractTransformer implements IContractTransformer {
 			return createPriceExpressionContract(expressionPriceInfo.getPriceExpression());
 		} else if (priceInfo instanceof DateShiftExpressionPriceParameters) {
 			final DateShiftExpressionPriceParameters expressionPriceInfo = (DateShiftExpressionPriceParameters) priceInfo;
-			return createDateShiftExpressionContract(expressionPriceInfo.getPriceExpression(), expressionPriceInfo.isSpecificDay(), expressionPriceInfo.getValue());
+			if (expressionPriceInfo.getValue() == 0) {
+				// No shift set, return simple variant.
+				return createPriceExpressionContract(expressionPriceInfo.getPriceExpression());
+			} else {
+				return createDateShiftExpressionContract(expressionPriceInfo.getPriceExpression(), expressionPriceInfo.isSpecificDay(), expressionPriceInfo.getValue());
+			}
 		}
 
 		return null;
@@ -145,7 +148,7 @@ public class SimpleContractTransformer implements IContractTransformer {
 		final IExpression<ISeries> expression = indices.parse(priceExpression);
 
 		if (isSplitMonth) {
-			final ISeries parsed = expression.evaluate(dateHelper.getEarliestAndLatestTimes());
+			final ISeries parsed = expression.evaluate();
 			curve = generateExpressionCurve(priceExpression, parsed);
 			priceIntervals = integerIntervalCurveHelper.getSplitMonthDatesForChangePoint(parsed.getChangePoints());
 		} else {
@@ -174,7 +177,7 @@ public class SimpleContractTransformer implements IContractTransformer {
 
 			{
 				final IExpression<ISeries> expression = indices.parse(priceExpression);
-				final ISeries parsed = expression.evaluate(dateHelper.getEarliestAndLatestTimes());
+				final ISeries parsed = expression.evaluate();
 
 				final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
 				if (parsed.getChangePoints().length == 0) {
@@ -195,7 +198,7 @@ public class SimpleContractTransformer implements IContractTransformer {
 					integerIntervalCurveHelper.getNextMonth(dateHelper.convertTime(dateHelper.getLatestTime())), shift * 24 * -1);
 			{
 				final IExpression<ISeries> expression = indices.parse(priceExpression);
-				final ISeries parsed = expression.evaluate(dateHelper.getEarliestAndLatestTimes());
+				final ISeries parsed = expression.evaluate();
 
 				final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
 				if (parsed.getChangePoints().length == 0) {

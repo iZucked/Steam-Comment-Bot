@@ -7,17 +7,18 @@ package com.mmxlabs.common.parser.series.functions;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.parser.series.ISeries;
+import com.mmxlabs.common.parser.series.SeriesParserData;
 import com.mmxlabs.common.parser.series.ShiftFunctionMapper;
 
 public class ShiftedSeries implements ISeries {
 	private int shift;
 	private ISeries shiftee;
-	private @NonNull ShiftFunctionMapper shiftMapper;
+	private ShiftFunctionMapper shiftMapper;
 
-	public ShiftedSeries(final ISeries shiftee, int shift, @NonNull ShiftFunctionMapper shiftMapper) {
+	public ShiftedSeries(@NonNull SeriesParserData seriesParserData, final ISeries shiftee, int shift) {
 		this.shiftee = shiftee;
 		this.shift = shift;
-		this.shiftMapper = shiftMapper;
+		this.shiftMapper = seriesParserData.shiftMapper;
 	}
 
 	@Override
