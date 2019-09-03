@@ -63,8 +63,10 @@ public class VesselItemProvider
 			addIdleBaseFuelPropertyDescriptor(object);
 			addPilotLightRatePropertyDescriptor(object);
 			addSafetyHeelPropertyDescriptor(object);
-			addCoolingVolumePropertyDescriptor(object);
 			addWarmingTimePropertyDescriptor(object);
+			addCoolingVolumePropertyDescriptor(object);
+			addCoolingTimePropertyDescriptor(object);
+			addPurgeVolumePropertyDescriptor(object);
 			addPurgeTimePropertyDescriptor(object);
 			addMinSpeedPropertyDescriptor(object);
 			addMaxSpeedPropertyDescriptor(object);
@@ -383,6 +385,50 @@ public class VesselItemProvider
 				 getString("_UI_Vessel_coolingVolume_feature"),
 				 getString("_UI_Vessel_coolingVolume_description"),
 				 FleetPackage.Literals.VESSEL__COOLING_VOLUME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Cooling Time feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCoolingTimePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Vessel_coolingTime_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Vessel_coolingTime_feature", "_UI_Vessel_type"),
+				 FleetPackage.Literals.VESSEL__COOLING_TIME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Purge Volume feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPurgeVolumePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Vessel_purgeVolume_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Vessel_purgeVolume_feature", "_UI_Vessel_type"),
+				 FleetPackage.Literals.VESSEL__PURGE_VOLUME,
 				 true,
 				 false,
 				 false,
@@ -798,8 +844,10 @@ public class VesselItemProvider
 			case FleetPackage.VESSEL__SCNT:
 			case FleetPackage.VESSEL__PILOT_LIGHT_RATE:
 			case FleetPackage.VESSEL__SAFETY_HEEL:
-			case FleetPackage.VESSEL__COOLING_VOLUME:
 			case FleetPackage.VESSEL__WARMING_TIME:
+			case FleetPackage.VESSEL__COOLING_VOLUME:
+			case FleetPackage.VESSEL__COOLING_TIME:
+			case FleetPackage.VESSEL__PURGE_VOLUME:
 			case FleetPackage.VESSEL__PURGE_TIME:
 			case FleetPackage.VESSEL__MIN_SPEED:
 			case FleetPackage.VESSEL__MAX_SPEED:
