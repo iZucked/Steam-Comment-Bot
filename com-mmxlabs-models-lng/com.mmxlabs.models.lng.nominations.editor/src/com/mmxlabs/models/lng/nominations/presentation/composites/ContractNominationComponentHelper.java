@@ -49,7 +49,7 @@ public class ContractNominationComponentHelper extends BaseComponentHelper {
 	/**
 	 * Construct a new instance of this helper
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	public ContractNominationComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
