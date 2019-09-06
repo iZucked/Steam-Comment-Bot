@@ -12,6 +12,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.series.CalendarMonthMapper;
 import com.mmxlabs.common.parser.series.ISeries;
+import com.mmxlabs.common.parser.series.SeriesParserData;
 
 public class SplitMonthSeries implements ISeries {
 	protected static final int[] NONE = new int[0];
@@ -22,14 +23,13 @@ public class SplitMonthSeries implements ISeries {
 	private int splitPoint;
 	private Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTime;
 
-	public SplitMonthSeries(final ISeries series1, final ISeries series2, final int splitPoint, //
-			@NonNull CalendarMonthMapper mapper, Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTime) {
+	public SplitMonthSeries(@NonNull SeriesParserData seriesParserData, final ISeries series1, final ISeries series2, final int splitPoint) {
 		this.series1 = series1;
 		this.series2 = series2;
 
 		this.splitPoint = splitPoint;
-		this.mapper = mapper;
-		this.earliestAndLatestTime = earliestAndLatestTime;
+		this.mapper = seriesParserData.calendarMonthMapper;
+		this.earliestAndLatestTime = seriesParserData.earliestAndLatestTime;
 	}
 
 	private int daysToPoint(int days) {

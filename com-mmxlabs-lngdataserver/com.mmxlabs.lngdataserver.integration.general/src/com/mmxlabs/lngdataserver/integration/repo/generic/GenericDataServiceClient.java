@@ -56,7 +56,7 @@ public class GenericDataServiceClient {
 				.addFormDataPart("contentType", contentType) //
 				.build();
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
+		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
 		if (progressListener != null) {
 			requestBody = new ProgressRequestBody(requestBody, progressListener);
 		}
@@ -97,7 +97,7 @@ public class GenericDataServiceClient {
 		final OkHttpClient localHttpClient = clientBuilder //
 				.build();
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
+		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
 		final String requestURL = String.format("%s%s/%s/%s", upstreamURL, SCENARIO_DOWNLOAD_URL, type, uuid);
 
 		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
@@ -124,7 +124,7 @@ public class GenericDataServiceClient {
 			return null;
 		}
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
+		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
 		if (upstreamURL == null || upstreamURL.isEmpty()) {
 			return null;
 		}
@@ -152,7 +152,7 @@ public class GenericDataServiceClient {
 
 	public void deleteData(final String type, final String uuid) throws IOException {
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
+		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
 		if (upstreamURL == null || upstreamURL.isEmpty()) {
 			return;
 		}
@@ -171,7 +171,7 @@ public class GenericDataServiceClient {
 
 	public Instant getLastModified() {
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
+		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
 		if (upstreamURL == null || upstreamURL.isEmpty()) {
 			return null;
 		}

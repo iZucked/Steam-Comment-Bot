@@ -55,7 +55,7 @@ public class BaseCaseServiceClient {
 			requestBody = new ProgressRequestBody(requestBody, progressListener);
 		}
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
+		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
 
 		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
 				.url(upstreamURL + BASECASE_UPLOAD_URL) //
@@ -86,7 +86,7 @@ public class BaseCaseServiceClient {
 		final OkHttpClient localHttpClient = clientBuilder //
 				.build();
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
+		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
 
 		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest().url(String.format("%s%s%s", upstreamURL, BASECASE_DOWNLOAD_URL, uuid)) //
 				.build();
@@ -106,7 +106,7 @@ public class BaseCaseServiceClient {
 	}
 
 	public String getCurrentBaseCase() throws IOException {
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
+		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
 
 		if (upstreamURL == null || upstreamURL.isEmpty()) {
 			return null;
@@ -135,7 +135,7 @@ public class BaseCaseServiceClient {
 
 	public String setCurrentBaseCase(final String uuid) throws IOException {
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
+		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
 		if (upstreamURL == null || upstreamURL.isEmpty()) {
 			return null;
 		}
@@ -154,7 +154,7 @@ public class BaseCaseServiceClient {
 
 	public String getBaseCaseDetails(final String uuid) throws IOException {
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
+		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
 		if (upstreamURL == null || upstreamURL.isEmpty()) {
 			return null;
 		}

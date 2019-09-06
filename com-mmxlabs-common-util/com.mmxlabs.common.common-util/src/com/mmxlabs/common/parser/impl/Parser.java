@@ -11,8 +11,6 @@ package com.mmxlabs.common.parser.impl;
 
 import java_cup.runtime.*;
 import java.util.*;
-import java.time.ZonedDateTime;
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.*;
 import com.mmxlabs.common.parser.series.*;
 import com.mmxlabs.common.parser.series.functions.*;
@@ -246,13 +244,9 @@ public class Parser extends java_cup.runtime.lr_parser {
     private Lexer s;
    public Parser(Lexer s){super(s,s.symbolFactory); this.s=s; }
     
-    private ShiftFunctionMapper shiftMapper;
-    public ShiftFunctionMapper getShiftFunctionMapper() { return shiftMapper; }
-    public void setShiftFunctionMapper(ShiftFunctionMapper shiftMapper) { this.shiftMapper = shiftMapper; }
-    
-    private CalendarMonthMapper calendarMonthMapper;
-	public void setCalendarMonthMapper(CalendarMonthMapper calendarMonthMapper) {	this.calendarMonthMapper = calendarMonthMapper;	}
-	public CalendarMonthMapper getCalendarMonthMapper() { return calendarMonthMapper; }
+    private SeriesParserData seriesParserData;
+    public SeriesParserData getSeriesParserData() { return seriesParserData; }
+    public void setSeriesParserData(SeriesParserData seriesParserData) { this.seriesParserData = seriesParserData; }
     
     private SeriesParser seriesParser;
     public SeriesParser getSeriesParser() { return seriesParser; }
@@ -432,7 +426,7 @@ class CUP$Parser$actions {
 		int i1left = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
 		int i1right = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		Integer i1 = (Integer)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
-		 RESULT = new ShiftFunctionConstructor(shiftMapper, e1, i1);       
+		 RESULT = new ShiftFunctionConstructor(seriesParserData, e1, i1);       
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("expr",0, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-5)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -447,7 +441,7 @@ class CUP$Parser$actions {
 		int i1left = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
 		int i1right = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		Integer i1 = (Integer)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
-		 RESULT = new ShiftFunctionConstructor(shiftMapper,e1,  -i1);       
+		 RESULT = new ShiftFunctionConstructor(seriesParserData,e1,  -i1);       
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("expr",0, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-6)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -468,7 +462,7 @@ class CUP$Parser$actions {
 		int n3left = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
 		int n3right = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		Integer n3 = (Integer)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
-		 RESULT =  new DatedAvgFunctionConstructor(calendarMonthMapper, lhs, n1, n2, n3); 
+		 RESULT =  new DatedAvgFunctionConstructor(seriesParserData, lhs, n1, n2, n3); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("expr",0, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-9)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -486,7 +480,7 @@ class CUP$Parser$actions {
 		int sleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
 		int sright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		Integer s = (Integer)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
-		 RESULT =  new SplitMonthFunctionConstructor(calendarMonthMapper, e1, e2, s); 
+		 RESULT =  new SplitMonthFunctionConstructor(seriesParserData, e1, e2, s); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("expr",0, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-7)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -522,7 +516,7 @@ class CUP$Parser$actions {
 		int b3left = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
 		int b3right = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		Double b3 = (Double)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
-		 RESULT =  new SCurveFunctionConstructor(base, lower, higher, a1,b1,a2,b2,a3,b3); 
+		 RESULT =  new SCurveFunctionConstructor(seriesParserData, base, lower, higher, a1,b1,a2,b2,a3,b3); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("expr",0, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-19)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -538,11 +532,6 @@ class CUP$Parser$actions {
 						@Override
 						public ISeries evaluate() {
 							return new Minus(e.evaluate());
-						}
-						
-						@Override
-						public ISeries evaluate(Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTime) {
-							return evaluate();
 						}
 					};         
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("expr",0, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);

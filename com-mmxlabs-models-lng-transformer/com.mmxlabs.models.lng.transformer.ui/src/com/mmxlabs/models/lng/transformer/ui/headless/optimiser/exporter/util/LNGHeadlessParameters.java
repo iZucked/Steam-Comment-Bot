@@ -13,8 +13,8 @@ public class LNGHeadlessParameters extends HeadlessParameters {
 	public LNGHeadlessParameters() {
 
 		// Scenario parameters
-		setParameter("scenario", "XX", String.class, true);
-		setParameter("scenario-path", "", String.class, true);
+		setParameter("scenario", "XX", String.class, false);
+		setParameter("scenario-path", "", String.class, false);
 
 		// Search Parameters
 		setParameter("seed", 0, Integer.class, true);

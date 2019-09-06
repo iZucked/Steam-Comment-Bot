@@ -19,6 +19,7 @@ import com.google.inject.name.Names;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.series.CalendarMonthMapper;
 import com.mmxlabs.common.parser.series.SeriesParser;
+import com.mmxlabs.common.parser.series.SeriesParserData;
 import com.mmxlabs.common.parser.series.ShiftFunctionMapper;
 import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.common.time.Months;
@@ -190,7 +191,7 @@ public class LNGTransformerModule extends AbstractModule {
 
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UsePriceBasedWindowTrimming)).toInstance(Boolean.TRUE);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UseCanalSlotBasedWindowTrimming)).toInstance(Boolean.FALSE);
-		
+
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_SchedulePurges)).toInstance(Boolean.FALSE);
 
 		bind(PriceIntervalProviderHelper.class);
@@ -400,42 +401,45 @@ public class LNGTransformerModule extends AbstractModule {
 	}
 
 	@Provides
+	@Singleton
+	private SeriesParserData provideSeriesParserData(final ShiftFunctionMapper shiftMapper, CalendarMonthMapper monthMapper,
+			@Named(EARLIEST_AND_LATEST_TIMES) Pair<ZonedDateTime, ZonedDateTime> dates) {
+		final SeriesParserData data = new SeriesParserData();
+		data.setShiftMapper(shiftMapper);
+		data.setCalendarMonthMapper(monthMapper);
+		data.earliestAndLatestTime = dates;
+		return data;
+	}
+
+	@Provides
 	@Named(Parser_Commodity)
 	@Singleton
-	private SeriesParser provideCommodityParser(final ShiftFunctionMapper shiftMapper, CalendarMonthMapper monthMapper) {
-		final SeriesParser parser = new SeriesParser();
-		parser.setShiftMapper(shiftMapper);
-		parser.setCalendarMonthMapper(monthMapper);
+	private SeriesParser provideCommodityParser(final SeriesParserData seriesParserData) {
+		final SeriesParser parser = new SeriesParser(seriesParserData);
 		return parser;
 	}
 
 	@Provides
 	@Named(Parser_Charter)
 	@Singleton
-	private SeriesParser provideCharterParser(final ShiftFunctionMapper shiftMapper, CalendarMonthMapper monthMapper) {
-		final SeriesParser parser = new SeriesParser();
-		parser.setShiftMapper(shiftMapper);
-		parser.setCalendarMonthMapper(monthMapper);
+	private SeriesParser provideCharterParser(final SeriesParserData seriesParserData) {
+		final SeriesParser parser = new SeriesParser(seriesParserData);
 		return parser;
 	}
 
 	@Provides
 	@Named(Parser_BaseFuel)
 	@Singleton
-	private SeriesParser provideBaseFuelParser(final ShiftFunctionMapper shiftMapper, CalendarMonthMapper monthMapper) {
-		final SeriesParser parser = new SeriesParser();
-		parser.setShiftMapper(shiftMapper);
-		parser.setCalendarMonthMapper(monthMapper);
+	private SeriesParser provideBaseFuelParser(final SeriesParserData seriesParserData) {
+		final SeriesParser parser = new SeriesParser(seriesParserData);
 		return parser;
 	}
 
 	@Provides
 	@Named(Parser_Currency)
 	@Singleton
-	private SeriesParser provideCurrencyParser(final ShiftFunctionMapper shiftMapper, CalendarMonthMapper monthMapper) {
-		final SeriesParser parser = new SeriesParser();
-		parser.setShiftMapper(shiftMapper);
-		parser.setCalendarMonthMapper(monthMapper);
+	private SeriesParser provideCurrencyParser(final SeriesParserData seriesParserData) {
+		final SeriesParser parser = new SeriesParser(seriesParserData);
 		return parser;
 	}
 }

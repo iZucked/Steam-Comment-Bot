@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.transformer.ui.headless.optimiser;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Paths;
@@ -24,6 +25,8 @@ import java.util.function.BiConsumer;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import com.google.inject.Injector;
 import com.google.inject.Module;
@@ -80,15 +83,15 @@ public class HeadlessOptimiserRunner {
 		public boolean turnPerfOptsOn = true;
 	}
 
-	public void run(final File lingoFile, final Options options, IProgressMonitor monitor, final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook) throws Exception {
+	public void run(final File lingoFile, final Options options, IProgressMonitor monitor, final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook, HeadlessOptimiserJSON jsonOutput) throws Exception {
 		// Get the root object
 		ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(lingoFile.toURI().toURL(), (modelRecord, scenarioDataProvider) -> {
-			run(options, modelRecord, scenarioDataProvider, monitor, completedHook);
+			run(options, modelRecord, scenarioDataProvider, monitor, completedHook, jsonOutput);
 		});
 	}
 
 	public boolean run(final Options options, final ScenarioModelRecord scenarioModelRecord, @NonNull final IScenarioDataProvider sdp, IProgressMonitor monitor,
-			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook) {
+			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook, HeadlessOptimiserJSON jsonOutput) {
 		final SettingsOverride overrideSettings = new SettingsOverride(); // ?some settings for the optimiser?
 
 		final String jsonFilePath = options.jsonFile;
@@ -146,6 +149,15 @@ public class HeadlessOptimiserRunner {
 			new File(options.outputLoggingFolder).mkdirs();
 		}
 
+		final JSONObject outputNodeRoot = new JSONObject(); // root for output data at present, want to insert into 
+		final JSONArray stages = new JSONArray();
+		
+		if (jsonOutput != null) {
+			jsonOutput.getMetrics().setStages(outputNodeRoot);
+		}
+		
+		outputNodeRoot.put("stages", stages);
+
 		// Create logging module
 		final int num_threads = getNumThreads(headlessParameters);
 		final @NonNull CleanableExecutorService executorService = new SimpleCleanableExecutorService(Executors.newFixedThreadPool(num_threads), num_threads);
@@ -163,7 +175,7 @@ public class HeadlessOptimiserRunner {
 					final String stageAndJobID = getStageAndJobID();
 					final LSOLogger logger = phaseToLoggerMap.remove(stageAndJobID);
 					if (logger != null) {
-						final LSOLoggingExporter lsoLoggingExporter = new LSOLoggingExporter(options.outputLoggingFolder, stageAndJobID, logger);
+						final LSOLoggingExporter lsoLoggingExporter = new LSOLoggingExporter(stages, stageAndJobID, logger);
 						lsoLoggingExporter.exportData("best-fitness", "current-fitness");
 					}
 				}
@@ -237,6 +249,8 @@ public class HeadlessOptimiserRunner {
 				}
 
 				System.out.println("\truntime=" + runTime + ",");
+				
+				jsonOutput.getMetrics().setRuntime(runTime);
 
 				System.err.println("Optimised!");
 
@@ -483,7 +497,7 @@ public class HeadlessOptimiserRunner {
 			else
 				actionSetLogger.export(Paths.get(path).toString(), "action");
 		}
-		HeadlessJSONParser.copyJSONFile(jsonFilePath, Paths.get(path, "parameters.json").toString());
+		// HeadlessJSONParser.copyJSONFile(jsonFilePath, Paths.get(path, "parameters.json").toString());
 
 		final PrintWriter writer = WriterFactory.getWriter(Paths.get(path, "machineData.txt").toString());
 		writer.write(String.format("maxCPUs,%s", Runtime.getRuntime().availableProcessors()));

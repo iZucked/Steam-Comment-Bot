@@ -41,6 +41,11 @@ import com.mmxlabs.models.lng.pricing.BunkerFuelCurve;
 import com.mmxlabs.models.lng.pricing.CharterCurve;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.CurrencyCurve;
+import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.pricing.parser.Node;
+import com.mmxlabs.models.lng.pricing.parser.RawTreeParser;
+import com.mmxlabs.models.lng.pricing.parseutils.LookupData;
+import com.mmxlabs.models.lng.pricing.parseutils.Nodes;
 import com.mmxlabs.models.lng.pricing.ui.autocomplete.ExpressionAnnotationConstants;
 import com.mmxlabs.models.lng.pricing.util.ModelMarketCurveProvider;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
@@ -127,7 +132,7 @@ public class PriceExpressionUtils {
 		}
 		return priceIndexType;
 	}
-	
+
 	public static void validatePriceExpression(final @NonNull IValidationContext ctx, final @NonNull List<IStatus> failures, final @NonNull DetailConstraintStatusFactory factory,
 			final @NonNull EObject target, EAttribute feature, final @NonNull PriceIndexType priceIndexType, boolean missingIsOk, Pair<EObject, EStructuralFeature>... otherFeatures) {
 		String expression = (String) target.eGet(feature);
@@ -162,7 +167,7 @@ public class PriceExpressionUtils {
 			final @Nullable String priceExpression, @NonNull final PriceIndexType priceIndexType) {
 		return validatePriceExpression(ctx, object, feature, priceExpression, getIndexParser(priceIndexType));
 	}
-	
+
 	/**
 	 * @author Simon McGregor
 	 * 
@@ -397,7 +402,7 @@ public class PriceExpressionUtils {
 
 	}
 
-	public static void checkExpressionAgainstPricingDate(IValidationContext ctx, String priceExpression, Slot slot, LocalDate pricingDate,  EStructuralFeature feature, final List<IStatus> failures) {
+	public static void checkExpressionAgainstPricingDate(IValidationContext ctx, String priceExpression, Slot slot, LocalDate pricingDate, EStructuralFeature feature, final List<IStatus> failures) {
 		final ModelMarketCurveProvider marketCurveProvider = PriceExpressionUtils.getMarketCurveProvider();
 		final List<Pair<AbstractYearMonthCurve, LocalDate>> linkedCurvesAndDate = marketCurveProvider.getLinkedCurvesAndDate(priceExpression, pricingDate);
 
@@ -428,5 +433,19 @@ public class PriceExpressionUtils {
 				failures.add(dcsd);
 			}
 		}
+	}
+
+	public static Node convertCommodityToExpandedNodes(String expression) {
+
+		final ModelMarketCurveProvider marketCurveProvider = PriceExpressionUtils.getMarketCurveProvider();
+		PricingModel pricingModel = marketCurveProvider.getPricingModel();
+ 
+
+		LookupData lookupData =  LookupData.createLookupData(pricingModel);
+		final IExpression<Node> parse = new RawTreeParser().parse(expression);
+		final Node p = parse.evaluate();
+		final Node node = Nodes.expandNode(p, lookupData);
+		
+		return node;
 	}
 }

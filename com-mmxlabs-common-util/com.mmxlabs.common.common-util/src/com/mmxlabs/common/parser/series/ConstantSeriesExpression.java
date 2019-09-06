@@ -33,9 +33,4 @@ public class ConstantSeriesExpression implements IExpression<ISeries> {
 			}
 		};
 	}
-
-	@Override
-	public @NonNull ISeries evaluate(Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTime) {
-		return evaluate();
-	}
 }

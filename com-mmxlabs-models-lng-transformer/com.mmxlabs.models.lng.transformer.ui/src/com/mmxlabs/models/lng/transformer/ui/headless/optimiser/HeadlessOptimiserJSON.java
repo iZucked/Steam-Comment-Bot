@@ -4,93 +4,74 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.headless.optimiser;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.json.simple.JSONObject;
 
 public class HeadlessOptimiserJSON {
 
 	private String type;
 	private Meta meta;
 	private Params params;
-	private List<Metrics> runs;
+	private Metrics metrics;
+
+	public Metrics getMetrics() {
+		return metrics;
+	}
+
+	public void setMetrics(Metrics metrics) {
+		this.metrics = metrics;
+	}
 
 	public HeadlessOptimiserJSON() {
-		this.runs = new ArrayList<Metrics>();
+//		this.runs = new ArrayList<>();
 	}
-	
-	public static class OptioniserMetrics {
-		private int solutionsFound;
-		private int solutionsReturned;
-
-		public int getSolutionsFound() {
-			return solutionsFound;
-		}
-
-		public void setSolutionsFound(int solutionsFound) {
-			this.solutionsFound = solutionsFound;
-		}
-
-		public int getSolutionsReturned() {
-			return solutionsReturned;
-		}
-
-		public void setSolutionsReturned(int solutionsReturned) {
-			this.solutionsReturned = solutionsReturned;
-		}
-	}
-
-	public static class OptioniserProperties {
-		private int iterations;
-		private String options;
-		
-		public String getOptions() {
-			return options;
-		}
-
-		public void setOptions(String options) {
-			this.options = options;
-		}
-
-		public int getIterations() {
-			return iterations;
-		}
-
-		public void setIterations(int iterations) {
-			this.iterations = iterations;
-		}
-
-		public String[] getLoadIds() {
-			return loadIds;
-		}
-
-		public void setLoadIds(String[] loadIds) {
-			this.loadIds = loadIds;
-		}
-
-		public String[] getDischargeIds() {
-			return dischargeIds;
-		}
-
-		public void setDischargeIds(String[] dischargeIds) {
-			this.dischargeIds = dischargeIds;
-		}
-
-		public String[] getEventIds() {
-			return eventIds;
-		}
-
-		public void setEventIds(String[] eventIds) {
-			this.eventIds = eventIds;
-		}
-
-		private String[] loadIds;
-		private String[] dischargeIds;
-		private String[] eventIds;
-	}
+//
+//	public static class OptioniserMetrics {
+//		private int solutionsFound;
+//		private int solutionsReturned;
+//
+//		public int getSolutionsFound() {
+//			return solutionsFound;
+//		}
+//
+//		public void setSolutionsFound(int solutionsFound) {
+//			this.solutionsFound = solutionsFound;
+//		}
+//
+//		public int getSolutionsReturned() {
+//			return solutionsReturned;
+//		}
+//
+//		public void setSolutionsReturned(int solutionsReturned) {
+//			this.solutionsReturned = solutionsReturned;
+//		}
+//	}
+//
+//	public static class OptioniserProperties {
+//		private int iterations;
+//		private String options;
+//
+//		public String getOptions() {
+//			return options;
+//		}
+//
+//		public void setOptions(String options) {
+//			this.options = options;
+//		}
+//
+//		public int getIterations() {
+//			return iterations;
+//		}
+//
+//		public void setIterations(int iterations) {
+//			this.iterations = iterations;
+//		}
+//
+//	 
+//	}
 
 	public static class Metrics {
 		private long runtime;
-		private OptioniserMetrics optioniserMetrics;
+//		private OptioniserMetrics optioniserMetrics;
 
 		public long getRuntime() {
 			return runtime;
@@ -99,15 +80,16 @@ public class HeadlessOptimiserJSON {
 		public void setRuntime(long runtime) {
 			this.runtime = runtime;
 		}
+//
+//		public OptioniserMetrics getOptioniserMetrics() {
+//			return optioniserMetrics;
+//		}
+//
+//		public void setOptioniserMetrics(OptioniserMetrics optioniserMetrics) {
+//			this.optioniserMetrics = optioniserMetrics;
+//		}
 
-		public OptioniserMetrics getOptioniserMetrics() {
-			return optioniserMetrics;
-		}
-
-		public void setOptioniserMetrics(OptioniserMetrics optioniserMetrics) {
-			this.optioniserMetrics = optioniserMetrics;
-		}
-
+		/*
 		public List<Stage> getStages() {
 			return stages;
 		}
@@ -117,6 +99,16 @@ public class HeadlessOptimiserJSON {
 		}
 
 		private List<Stage> stages;
+		*/
+		private JSONObject stages;
+
+		public JSONObject getStages() {
+			return stages;
+		}
+
+		public void setStages(JSONObject stages) {
+			this.stages = stages;
+		}
 	}
 
 	public static class Stage {
@@ -140,6 +132,15 @@ public class HeadlessOptimiserJSON {
 
 		private long runtime;
 
+		private String details;
+
+		public String getDetails() {
+			return details;
+		}
+
+		public void setDetails(String details) {
+			this.details = details;
+		}
 	}
 
 	public static class Meta {
@@ -184,7 +185,7 @@ public class HeadlessOptimiserJSON {
 
 	public static class Params {
 		private int cores;
-		private OptioniserProperties optioniserProperties;
+//		private OptioniserProperties optioniserProperties;
 
 		public int getCores() {
 			return cores;
@@ -194,13 +195,13 @@ public class HeadlessOptimiserJSON {
 			this.cores = cores;
 		}
 
-		public OptioniserProperties getOptioniserProperties() {
-			return optioniserProperties;
-		}
-
-		public void setOptioniserProperties(OptioniserProperties optioniserProperties) {
-			this.optioniserProperties = optioniserProperties;
-		}
+//		public OptioniserProperties getOptioniserProperties() {
+//			return optioniserProperties;
+//		}
+//
+//		public void setOptioniserProperties(OptioniserProperties optioniserProperties) {
+//			this.optioniserProperties = optioniserProperties;
+//		}
 	}
 
 	public String getType() {
@@ -226,16 +227,16 @@ public class HeadlessOptimiserJSON {
 	public void setParams(Params params) {
 		this.params = params;
 	}
-
-	public List<Metrics> getRuns() {
-		return runs;
-	}
-
-	public void clearRuns() {
-		runs.clear();
-	}
-	
-	public void addRun(Metrics metrics) {
-		runs.add(metrics);
-	}
+//
+//	public List<Metrics> getRuns() {
+//		return runs;
+//	}
+//
+//	public void clearRuns() {
+//		runs.clear();
+//	}
+//
+//	public void addRun(Metrics metrics) {
+//		runs.add(metrics);
+//	}
 }

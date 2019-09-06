@@ -11,6 +11,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -2343,25 +2344,80 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		protected void populate(final Menu menu) {
 			// Get the labels to populate the menu from the source object in the EMF model
 			final EList<NamedObject> values = (EList<NamedObject>) sourceObject.eGet(sourceFeature);
+			final List<NamedObject> copiedValues = new LinkedList(values);
+			Collections.sort(copiedValues, (a,b) -> {
+				if (a != null && a.getName() != null && b != null) {
+					return a.getName().compareTo(b.getName());
+				}
+				return 0;
+			});
 
-			// Show the list of labels (one for each item in the source object feature)
-			for (final NamedObject value : values) {
-				// WEIRD: action returns wrong value from isChecked() so set the checked value here
-				// A label is checked if it is the value already selected in the trades filter
-				final boolean checked = tradesFilter.getFilterValue(filterPath) == value;
-				final Action action = new Action(value.getName(), IAction.AS_RADIO_BUTTON) {
-					@Override
-					public void run() {
-						// When we select a checked option, we want to turn the filter off
-						final EObject newValue = (checked) ? null : value;
-						tradesFilter.setFilterValue(filterPath, newValue);
-						scenarioViewer.refresh(false);
+			if (copiedValues.size() > 15) {
+				int counter = 0;
+				String firstEntry = "";
+				String lastEntry = "";
+				final List<Action> collection = new LinkedList<Action>();
+				for (final NamedObject value : copiedValues) {
+					if (counter == 0) {
+						firstEntry = value.getName();
+					} else {
+						lastEntry = value.getName();
 					}
-				};
-				addActionToMenu(action, menu);
-				action.setChecked(checked);
+					final Action action = createAction(value);
+					collection.add(action);
+					counter++;
+					
+					if (counter == 15) {
+						addListOfActionsToMenu(menu, firstEntry, lastEntry, collection);
+						counter = 0;
+					}
+				}
+				if (counter > 0) {
+					addListOfActionsToMenu(menu, firstEntry, lastEntry, collection);
+				}
+			} else {
+				// Show the list of labels (one for each item in the source object feature)
+				for (final NamedObject value : copiedValues) {
+					
+					final Action action = createAction(value);
+					addActionToMenu(action, menu);
+				}
 			}
 
+		}
+
+		private Action createAction(final NamedObject value) {
+			// WEIRD: action returns wrong value from isChecked() so set the checked value here
+			// A label is checked if it is the value already selected in the trades filter
+			final boolean checked = tradesFilter.getFilterValue(filterPath) == value;
+			final Action action = new Action(value.getName(), IAction.AS_RADIO_BUTTON) {
+				@Override
+				public void run() {
+					// When we select a checked option, we want to turn the filter off
+					final EObject newValue = (checked) ? null : value;
+					tradesFilter.setFilterValue(filterPath, newValue);
+					scenarioViewer.refresh(false);
+				}
+			};
+			action.setChecked(checked);
+			return action;
+		}
+
+		private void addListOfActionsToMenu(final Menu menu, String firstEntry, String lastEntry, final List<Action> collection) {
+			final String title = String.format("%s ... %s", firstEntry, lastEntry);
+			
+			final DefaultMenuCreatorAction dmca = new DefaultMenuCreatorAction(title) {
+				final List<Action> local = new LinkedList<>(collection);
+				
+				@Override
+				protected void populate(Menu menu) {
+					for (final Action a : this.local) {
+						addActionToMenu(a, menu);
+					}
+				}
+			};
+			addActionToMenu(dmca, menu);
+			collection.clear();
 		}
 
 	}

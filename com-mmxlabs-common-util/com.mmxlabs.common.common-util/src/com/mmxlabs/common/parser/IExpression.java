@@ -14,6 +14,6 @@ public interface IExpression<T> {
 	@NonNull
 	T evaluate();
 
-	@NonNull
-	T evaluate(Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTime);
+//	@NonNull
+//	T evaluate(Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTime);
 }

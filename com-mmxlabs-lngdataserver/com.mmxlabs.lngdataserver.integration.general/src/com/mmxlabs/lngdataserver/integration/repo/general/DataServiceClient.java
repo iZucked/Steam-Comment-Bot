@@ -59,7 +59,7 @@ public class DataServiceClient {
 		mapper.registerModule(new Jdk8Module());
 		RequestBody requestBody = RequestBody.create(HttpClientUtil.MEDIA_TYPE_JSON, json);
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
+		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
 		if (progressListener != null) {
 			requestBody = new ProgressRequestBody(requestBody, progressListener);
 		}
@@ -93,7 +93,7 @@ public class DataServiceClient {
 		final OkHttpClient localHttpClient = clientBuilder //
 				.build();
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
+		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
 		final String requestURL = String.format("%s%s", upstreamURL, typeRecord.getDownloadURL(uuid));
 
 		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
@@ -120,7 +120,7 @@ public class DataServiceClient {
 
 	public Pair<String, Instant> getRecords(TypeRecord typeRecord) throws IOException {
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
+		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
 		if (upstreamURL == null || upstreamURL.isEmpty()) {
 			return null;
 		}
@@ -142,7 +142,7 @@ public class DataServiceClient {
 
 	public void deleteData(TypeRecord typeRecord, final String uuid) throws IOException {
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
+		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
 		if (upstreamURL == null || upstreamURL.isEmpty()) {
 			return;
 		}
@@ -178,7 +178,7 @@ public class DataServiceClient {
 	}
 
 	protected CompletableFuture<Boolean> notifyOnNewVersion(TypeRecord typeRecord) {
-		final String baseUrl = UpstreamUrlProvider.INSTANCE.getBaseURL();
+		final String baseUrl = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
 
 		if (baseUrl == null || baseUrl.isEmpty()) {
 			return null;

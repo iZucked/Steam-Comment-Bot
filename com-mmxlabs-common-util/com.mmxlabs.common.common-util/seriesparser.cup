@@ -1,8 +1,6 @@
 /* // Originally based on example from http://www2.cs.tum.edu/projekte/cup/examples.php */
 import java_cup.runtime.*;
 import java.util.*;
-import java.time.ZonedDateTime;
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.*;
 import com.mmxlabs.common.parser.series.*;
 import com.mmxlabs.common.parser.series.functions.*;
@@ -12,13 +10,9 @@ parser code {:
     private Lexer s;
    public Parser(Lexer s){super(s,s.symbolFactory); this.s=s; }
     
-    private ShiftFunctionMapper shiftMapper;
-    public ShiftFunctionMapper getShiftFunctionMapper() { return shiftMapper; }
-    public void setShiftFunctionMapper(ShiftFunctionMapper shiftMapper) { this.shiftMapper = shiftMapper; }
-    
-    private CalendarMonthMapper calendarMonthMapper;
-	public void setCalendarMonthMapper(CalendarMonthMapper calendarMonthMapper) {	this.calendarMonthMapper = calendarMonthMapper;	}
-	public CalendarMonthMapper getCalendarMonthMapper() { return calendarMonthMapper; }
+    private SeriesParserData seriesParserData;
+    public SeriesParserData getSeriesParserData() { return seriesParserData; }
+    public void setSeriesParserData(SeriesParserData seriesParserData) { this.seriesParserData = seriesParserData; }
     
     private SeriesParser seriesParser;
     public SeriesParser getSeriesParser() { return seriesParser; }
@@ -68,20 +62,15 @@ expr      ::= expr:lhs PLUS expr:rhs         {: RESULT =new SeriesOperatorExpres
              | INTEGER:lhs PERCENT expr:rhs                 {: RESULT = new SeriesOperatorExpression('%',    new ConstantSeriesExpression(lhs), rhs); :}
              | NUMBER:lhs PERCENT expr:rhs                 {: RESULT = new SeriesOperatorExpression('%',    new ConstantSeriesExpression(lhs), rhs); :}
              %prec PERCENT
-             | SHIFT LPAREN expr:e1 COMMA INTEGER:i1 RPAREN       {: RESULT = new ShiftFunctionConstructor(shiftMapper, e1, i1);       :}
-             | SHIFT LPAREN expr:e1 COMMA MINUS INTEGER:i1 RPAREN       {: RESULT = new ShiftFunctionConstructor(shiftMapper,e1,  -i1);       :}
-             | DATEDAVG LPAREN expr:lhs COMMA INTEGER:n1 COMMA INTEGER:n2 COMMA INTEGER:n3 RPAREN  {: RESULT =  new DatedAvgFunctionConstructor(calendarMonthMapper, lhs, n1, n2, n3); :}
-             | SPLITMONTH LPAREN expr:e1 COMMA expr:e2 COMMA INTEGER:s RPAREN  {: RESULT =  new SplitMonthFunctionConstructor(calendarMonthMapper, e1, e2, s); :}
-             | S LPAREN expr:base COMMA NUMBER:lower COMMA NUMBER:higher COMMA NUMBER:a1 COMMA NUMBER:b1 COMMA NUMBER:a2 COMMA NUMBER:b2 COMMA NUMBER:a3 COMMA NUMBER:b3 RPAREN  {: RESULT =  new SCurveFunctionConstructor(base, lower, higher, a1,b1,a2,b2,a3,b3); :}             
+             | SHIFT LPAREN expr:e1 COMMA INTEGER:i1 RPAREN       {: RESULT = new ShiftFunctionConstructor(seriesParserData, e1, i1);       :}
+             | SHIFT LPAREN expr:e1 COMMA MINUS INTEGER:i1 RPAREN       {: RESULT = new ShiftFunctionConstructor(seriesParserData,e1,  -i1);       :}
+             | DATEDAVG LPAREN expr:lhs COMMA INTEGER:n1 COMMA INTEGER:n2 COMMA INTEGER:n3 RPAREN  {: RESULT =  new DatedAvgFunctionConstructor(seriesParserData, lhs, n1, n2, n3); :}
+             | SPLITMONTH LPAREN expr:e1 COMMA expr:e2 COMMA INTEGER:s RPAREN  {: RESULT =  new SplitMonthFunctionConstructor(seriesParserData, e1, e2, s); :}
+             | S LPAREN expr:base COMMA NUMBER:lower COMMA NUMBER:higher COMMA NUMBER:a1 COMMA NUMBER:b1 COMMA NUMBER:a2 COMMA NUMBER:b2 COMMA NUMBER:a3 COMMA NUMBER:b3 RPAREN  {: RESULT =  new SCurveFunctionConstructor(seriesParserData, base, lower, higher, a1,b1,a2,b2,a3,b3); :}             
              | MINUS expr:e                 {: RESULT = new IExpression<ISeries>() {
 						@Override
 						public ISeries evaluate() {
 							return new Minus(e.evaluate());
-						}
-						
-						@Override
-						public ISeries evaluate(Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTime) {
-							return evaluate();
 						}
 					};         :}
   	     %prec UMINUS

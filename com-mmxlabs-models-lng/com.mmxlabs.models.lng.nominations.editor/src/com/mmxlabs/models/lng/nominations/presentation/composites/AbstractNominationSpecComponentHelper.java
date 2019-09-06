@@ -24,6 +24,7 @@ import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.editors.impl.MultiTextInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.TextualSuggestionInlineEditor;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
@@ -110,10 +111,10 @@ public class AbstractNominationSpecComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the remark feature on AbstractNominationSpec
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_remarkEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, NominationsPackage.Literals.ABSTRACT_NOMINATION_SPEC__REMARK));
+		detailComposite.addInlineEditor(new MultiTextInlineEditor(NominationsPackage.Literals.ABSTRACT_NOMINATION_SPEC__REMARK));
 	}
 
 	/**

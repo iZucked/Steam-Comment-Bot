@@ -54,7 +54,7 @@ public class SharedWorkspaceServiceClient {
 				.addFormDataPart("path", path) //
 				.build();
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
+		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
 		if (progressListener != null) {
 			requestBody = new ProgressRequestBody(requestBody, progressListener);
 		}
@@ -94,7 +94,7 @@ public class SharedWorkspaceServiceClient {
 		final OkHttpClient localHttpClient = clientBuilder //
 				.build();
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
+		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
 
 		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
 				.url(String.format("%s%s%s", upstreamURL, SCENARIO_DOWNLOAD_URL, uuid)) //
@@ -116,7 +116,7 @@ public class SharedWorkspaceServiceClient {
 
 	public String getBaseCaseDetails(final String uuid) throws IOException {
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
+		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
 		if (upstreamURL == null || upstreamURL.isEmpty()) {
 			return null;
 		}
@@ -137,7 +137,7 @@ public class SharedWorkspaceServiceClient {
 
 	public Pair<String, Instant> getScenarios() throws IOException {
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
+		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
 		if (upstreamURL == null || upstreamURL.isEmpty()) {
 			return null;
 		}
@@ -161,7 +161,7 @@ public class SharedWorkspaceServiceClient {
 
 	public void deleteScenario(final String uuid) throws IOException {
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
+		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
 		if (upstreamURL == null || upstreamURL.isEmpty()) {
 			return;
 		}
@@ -179,7 +179,7 @@ public class SharedWorkspaceServiceClient {
 
 	public Instant getLastModified() {
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
+		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
 		if (upstreamURL == null || upstreamURL.isEmpty()) {
 			return null;
 		}
@@ -202,7 +202,7 @@ public class SharedWorkspaceServiceClient {
 
 	public void rename(final String uuid, final String newPath) throws IOException {
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
+		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
 		if (upstreamURL == null || upstreamURL.isEmpty()) {
 			return;
 		}

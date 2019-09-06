@@ -51,8 +51,10 @@ import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getIdleBaseFuel <em>Idle Base Fuel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getPilotLightRate <em>Pilot Light Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getSafetyHeel <em>Safety Heel</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getCoolingVolume <em>Cooling Volume</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getWarmingTime <em>Warming Time</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getCoolingVolume <em>Cooling Volume</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getCoolingTime <em>Cooling Time</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getPurgeVolume <em>Purge Volume</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getPurgeTime <em>Purge Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getLadenAttributes <em>Laden Attributes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getBallastAttributes <em>Ballast Attributes</em>}</li>
@@ -366,6 +368,35 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	protected boolean safetyHeelESet;
 
 	/**
+	 * The default value of the '{@link #getWarmingTime() <em>Warming Time</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getWarmingTime()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int WARMING_TIME_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getWarmingTime() <em>Warming Time</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getWarmingTime()
+	 * @generated
+	 * @ordered
+	 */
+	protected int warmingTime = WARMING_TIME_EDEFAULT;
+
+	/**
+	 * This is true if the Warming Time attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean warmingTimeESet;
+
+	/**
 	 * The default value of the '{@link #getCoolingVolume() <em>Cooling Volume</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -395,33 +426,62 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	protected boolean coolingVolumeESet;
 
 	/**
-	 * The default value of the '{@link #getWarmingTime() <em>Warming Time</em>}' attribute.
+	 * The default value of the '{@link #getCoolingTime() <em>Cooling Time</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getWarmingTime()
+	 * @see #getCoolingTime()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int WARMING_TIME_EDEFAULT = 0;
+	protected static final int COOLING_TIME_EDEFAULT = 0;
 
 	/**
-	 * The cached value of the '{@link #getWarmingTime() <em>Warming Time</em>}' attribute.
+	 * The cached value of the '{@link #getCoolingTime() <em>Cooling Time</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getWarmingTime()
+	 * @see #getCoolingTime()
 	 * @generated
 	 * @ordered
 	 */
-	protected int warmingTime = WARMING_TIME_EDEFAULT;
+	protected int coolingTime = COOLING_TIME_EDEFAULT;
 
 	/**
-	 * This is true if the Warming Time attribute has been set.
+	 * This is true if the Cooling Time attribute has been set.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	protected boolean warmingTimeESet;
+	protected boolean coolingTimeESet;
+
+	/**
+	 * The default value of the '{@link #getPurgeVolume() <em>Purge Volume</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPurgeVolume()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int PURGE_VOLUME_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getPurgeVolume() <em>Purge Volume</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPurgeVolume()
+	 * @generated
+	 * @ordered
+	 */
+	protected int purgeVolume = PURGE_VOLUME_EDEFAULT;
+
+	/**
+	 * This is true if the Purge Volume attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean purgeVolumeESet;
 
 	/**
 	 * The default value of the '{@link #getPurgeTime() <em>Purge Time</em>}' attribute.
@@ -1286,6 +1346,19 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public int getVesselOrDelegatePurgeVolume() {
+		if (getReference() != null && !isSetPurgeVolume()) {
+			return getReference().getPurgeVolume();
+		}
+		return getPurgeVolume();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -1343,6 +1416,19 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 			return getReference().getWarmingTime();
 		}
 		return getWarmingTime();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public int getVesselOrDelegateCoolingTime() {
+		if (getReference() != null && isSetCoolingTime()) {
+			return getReference().getCoolingTime();
+		}
+		return getCoolingTime();
 	}
 
 	/**
@@ -1495,6 +1581,106 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	@Override
 	public boolean isSetCoolingVolume() {
 		return coolingVolumeESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int getCoolingTime() {
+		return coolingTime;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setCoolingTime(int newCoolingTime) {
+		int oldCoolingTime = coolingTime;
+		coolingTime = newCoolingTime;
+		boolean oldCoolingTimeESet = coolingTimeESet;
+		coolingTimeESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__COOLING_TIME, oldCoolingTime, coolingTime, !oldCoolingTimeESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetCoolingTime() {
+		int oldCoolingTime = coolingTime;
+		boolean oldCoolingTimeESet = coolingTimeESet;
+		coolingTime = COOLING_TIME_EDEFAULT;
+		coolingTimeESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.VESSEL__COOLING_TIME, oldCoolingTime, COOLING_TIME_EDEFAULT, oldCoolingTimeESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetCoolingTime() {
+		return coolingTimeESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int getPurgeVolume() {
+		return purgeVolume;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setPurgeVolume(int newPurgeVolume) {
+		int oldPurgeVolume = purgeVolume;
+		purgeVolume = newPurgeVolume;
+		boolean oldPurgeVolumeESet = purgeVolumeESet;
+		purgeVolumeESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__PURGE_VOLUME, oldPurgeVolume, purgeVolume, !oldPurgeVolumeESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetPurgeVolume() {
+		int oldPurgeVolume = purgeVolume;
+		boolean oldPurgeVolumeESet = purgeVolumeESet;
+		purgeVolume = PURGE_VOLUME_EDEFAULT;
+		purgeVolumeESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.VESSEL__PURGE_VOLUME, oldPurgeVolume, PURGE_VOLUME_EDEFAULT, oldPurgeVolumeESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetPurgeVolume() {
+		return purgeVolumeESet;
 	}
 
 	/**
@@ -2295,10 +2481,14 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				return getPilotLightRate();
 			case FleetPackage.VESSEL__SAFETY_HEEL:
 				return getSafetyHeel();
-			case FleetPackage.VESSEL__COOLING_VOLUME:
-				return getCoolingVolume();
 			case FleetPackage.VESSEL__WARMING_TIME:
 				return getWarmingTime();
+			case FleetPackage.VESSEL__COOLING_VOLUME:
+				return getCoolingVolume();
+			case FleetPackage.VESSEL__COOLING_TIME:
+				return getCoolingTime();
+			case FleetPackage.VESSEL__PURGE_VOLUME:
+				return getPurgeVolume();
 			case FleetPackage.VESSEL__PURGE_TIME:
 				return getPurgeTime();
 			case FleetPackage.VESSEL__LADEN_ATTRIBUTES:
@@ -2382,11 +2572,17 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 			case FleetPackage.VESSEL__SAFETY_HEEL:
 				setSafetyHeel((Integer)newValue);
 				return;
+			case FleetPackage.VESSEL__WARMING_TIME:
+				setWarmingTime((Integer)newValue);
+				return;
 			case FleetPackage.VESSEL__COOLING_VOLUME:
 				setCoolingVolume((Integer)newValue);
 				return;
-			case FleetPackage.VESSEL__WARMING_TIME:
-				setWarmingTime((Integer)newValue);
+			case FleetPackage.VESSEL__COOLING_TIME:
+				setCoolingTime((Integer)newValue);
+				return;
+			case FleetPackage.VESSEL__PURGE_VOLUME:
+				setPurgeVolume((Integer)newValue);
 				return;
 			case FleetPackage.VESSEL__PURGE_TIME:
 				setPurgeTime((Integer)newValue);
@@ -2489,11 +2685,17 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 			case FleetPackage.VESSEL__SAFETY_HEEL:
 				unsetSafetyHeel();
 				return;
+			case FleetPackage.VESSEL__WARMING_TIME:
+				unsetWarmingTime();
+				return;
 			case FleetPackage.VESSEL__COOLING_VOLUME:
 				unsetCoolingVolume();
 				return;
-			case FleetPackage.VESSEL__WARMING_TIME:
-				unsetWarmingTime();
+			case FleetPackage.VESSEL__COOLING_TIME:
+				unsetCoolingTime();
+				return;
+			case FleetPackage.VESSEL__PURGE_VOLUME:
+				unsetPurgeVolume();
 				return;
 			case FleetPackage.VESSEL__PURGE_TIME:
 				unsetPurgeTime();
@@ -2580,10 +2782,14 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				return isSetPilotLightRate();
 			case FleetPackage.VESSEL__SAFETY_HEEL:
 				return isSetSafetyHeel();
-			case FleetPackage.VESSEL__COOLING_VOLUME:
-				return isSetCoolingVolume();
 			case FleetPackage.VESSEL__WARMING_TIME:
 				return isSetWarmingTime();
+			case FleetPackage.VESSEL__COOLING_VOLUME:
+				return isSetCoolingVolume();
+			case FleetPackage.VESSEL__COOLING_TIME:
+				return isSetCoolingTime();
+			case FleetPackage.VESSEL__PURGE_VOLUME:
+				return isSetPurgeVolume();
 			case FleetPackage.VESSEL__PURGE_TIME:
 				return isSetPurgeTime();
 			case FleetPackage.VESSEL__LADEN_ATTRIBUTES:
@@ -2645,10 +2851,14 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 		if (pilotLightRateESet) result.append(pilotLightRate); else result.append("<unset>");
 		result.append(", safetyHeel: ");
 		if (safetyHeelESet) result.append(safetyHeel); else result.append("<unset>");
-		result.append(", coolingVolume: ");
-		if (coolingVolumeESet) result.append(coolingVolume); else result.append("<unset>");
 		result.append(", warmingTime: ");
 		if (warmingTimeESet) result.append(warmingTime); else result.append("<unset>");
+		result.append(", coolingVolume: ");
+		if (coolingVolumeESet) result.append(coolingVolume); else result.append("<unset>");
+		result.append(", coolingTime: ");
+		if (coolingTimeESet) result.append(coolingTime); else result.append("<unset>");
+		result.append(", purgeVolume: ");
+		if (purgeVolumeESet) result.append(purgeVolume); else result.append("<unset>");
 		result.append(", purgeTime: ");
 		if (purgeTimeESet) result.append(purgeTime); else result.append("<unset>");
 		result.append(", minSpeed: ");

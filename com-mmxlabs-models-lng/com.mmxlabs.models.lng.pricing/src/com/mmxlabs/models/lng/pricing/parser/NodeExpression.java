@@ -29,9 +29,4 @@ public final class NodeExpression implements IExpression<Node> {
 	public @NonNull Node evaluate() {
 		return node;
 	}
-	
-	@Override
-	public @NonNull Node evaluate(Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTime) {
-		return evaluate();
-	}
 }

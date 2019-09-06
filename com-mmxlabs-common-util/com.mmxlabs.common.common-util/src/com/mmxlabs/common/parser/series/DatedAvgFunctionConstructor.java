@@ -21,22 +21,22 @@ public class DatedAvgFunctionConstructor implements IExpression<ISeries> {
 	private final int lag;
 	private final int reset;
 
-	public DatedAvgFunctionConstructor(final CalendarMonthMapper calendarMonthMapper, final List<IExpression<ISeries>> arguments) {
+	public DatedAvgFunctionConstructor(final SeriesParserData seriesParserData, final List<IExpression<ISeries>> arguments) {
+		this.calendarMonthMapper = seriesParserData.calendarMonthMapper;
 		if (calendarMonthMapper == null) {
 			throw new IllegalStateException("No calender mapper function defined");
 		}
-		this.calendarMonthMapper = calendarMonthMapper;
 		this.series = arguments.get(0);
 		this.months = arguments.get(1).evaluate().evaluate(0).intValue();
 		this.lag = arguments.get(2).evaluate().evaluate(0).intValue();
 		this.reset = arguments.get(3).evaluate().evaluate(0).intValue();
 	}
 
-	public DatedAvgFunctionConstructor(final CalendarMonthMapper calendarMonthMapper, IExpression<ISeries> series, final Integer months, final Integer lag, final Integer reset) {
+	public DatedAvgFunctionConstructor(final SeriesParserData seriesParserData, IExpression<ISeries> series, final Integer months, final Integer lag, final Integer reset) {
+		this.calendarMonthMapper = seriesParserData.calendarMonthMapper;
 		if (calendarMonthMapper == null) {
 			throw new IllegalStateException("No calender mapper function defined");
 		}
-		this.calendarMonthMapper = calendarMonthMapper;
 		this.series = series;
 		this.months = months.intValue();
 		this.lag = lag.intValue();
@@ -45,11 +45,6 @@ public class DatedAvgFunctionConstructor implements IExpression<ISeries> {
 
 	@Override
 	public @NonNull ISeries evaluate() {
-		return new DatedAverageSeries(series.evaluate(), months, lag, reset, calendarMonthMapper);
-	}
-
-	@Override
-	public @NonNull ISeries evaluate(Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTime) {
 		return new DatedAverageSeries(series.evaluate(), months, lag, reset, calendarMonthMapper);
 	}
 }

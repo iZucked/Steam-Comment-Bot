@@ -26,23 +26,10 @@ public class SeriesParser {
 	private final @NonNull Map<@NonNull String, @NonNull String> unevaluatedSeries = new HashMap<>();
 	private final @NonNull Set<@NonNull String> expressionCurves = new HashSet<>();
 
-	private @Nullable ShiftFunctionMapper shiftMapper;
-	private @Nullable CalendarMonthMapper calendarMonthMapper;
+	private final @NonNull SeriesParserData seriesParserData;
 
-	public CalendarMonthMapper getCalendarMonthMapper() {
-		return calendarMonthMapper;
-	}
-
-	public void setCalendarMonthMapper(CalendarMonthMapper calendarMonthMapper) {
-		this.calendarMonthMapper = calendarMonthMapper;
-	}
-
-	public ShiftFunctionMapper getShiftMapper() {
-		return shiftMapper;
-	}
-
-	public void setShiftMapper(ShiftFunctionMapper shiftMapper) {
-		this.shiftMapper = shiftMapper;
+	public SeriesParser(@NonNull SeriesParserData seriesParserData) {
+		this.seriesParserData = seriesParserData;
 	}
 
 	public @NonNull ISeries getSeries(final @NonNull String name) {
@@ -63,8 +50,7 @@ public class SeriesParser {
 		Parser parser = new Parser(new Lexer(new StringReader(expression), symbolFactory));
 		try {
 			parser.setSeriesParser(this);
-			parser.setShiftFunctionMapper(shiftMapper);
-			parser.setCalendarMonthMapper(calendarMonthMapper);
+			parser.setSeriesParserData(seriesParserData);
 
 			Symbol parse = parser.parse();
 			if (parse == null || parse.value == null) {
@@ -148,5 +134,9 @@ public class SeriesParser {
 			}
 		}
 		unevaluatedSeries.put(name.toLowerCase(), expression);
+	}
+
+	public SeriesParserData getSeriesParserData() {
+		return seriesParserData;
 	}
 }

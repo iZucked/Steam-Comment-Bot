@@ -82,8 +82,8 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 	private ArrayList<EStructuralFeature[]> pricingFeatures;
 	private HashSet<EStructuralFeature> pricingTitleFeatures;
 	private ArrayList<EStructuralFeature[]> mainFeatures;
-	private ArrayList<EStructuralFeature[]> windowFeatures;
-	private HashSet<EStructuralFeature> windowTitleFeatures;
+	private ArrayList<EStructuralFeature[]> shippedWindowFeatures;
+	private HashSet<EStructuralFeature> shippedWindowTitleFeatures;
 	private ArrayList<EStructuralFeature[]> unshippedWindowFeatures;
 	private HashSet<EStructuralFeature> unshippedWindowTitleFeatures;
 	
@@ -119,14 +119,14 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		pricingTitleFeatures = Sets.newHashSet(Contract, PriceExpression);
 		allFeatures.addAll(getAllFeatures(pricingFeatures));
 
-		windowFeatures = new ArrayList<>();
-		windowFeatures.add(new EStructuralFeature[] { WindowStart, WindowStartTime });
-		windowFeatures.add(new EStructuralFeature[] { WindowSize, WindowSizeUnits,  WindowCounterParty });
-		windowFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Duration() });
-		windowFeatures.add(new EStructuralFeature[] { WindowFlex, WindowFlexUnits });
-		windowFeatures.add(new EStructuralFeature[] {});
-		windowTitleFeatures = Sets.newHashSet(WindowStart, WindowStartTime, WindowSize, WindowSizeUnits, WindowCounterParty);
-		allFeatures.addAll(getAllFeatures(windowFeatures));
+		shippedWindowFeatures = new ArrayList<>();
+		shippedWindowFeatures.add(new EStructuralFeature[] { WindowStart, WindowStartTime });
+		shippedWindowFeatures.add(new EStructuralFeature[] { WindowSize, WindowSizeUnits,  WindowCounterParty });
+		shippedWindowFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Duration() });
+		shippedWindowFeatures.add(new EStructuralFeature[] { WindowFlex, WindowFlexUnits });
+		shippedWindowFeatures.add(new EStructuralFeature[] {});
+		shippedWindowTitleFeatures = Sets.newHashSet(WindowStart, WindowStartTime, WindowSize, WindowSizeUnits, WindowCounterParty);
+		allFeatures.addAll(getAllFeatures(shippedWindowFeatures));
 
 		unshippedWindowFeatures = new ArrayList<>();
 		unshippedWindowFeatures.add(new EStructuralFeature[] { WindowStart, WindowStartTime });
@@ -460,7 +460,8 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 					dischargeTermsFeatures.add(new EStructuralFeature[] { f });
 					break;
 				case WINDOW:
-					windowFeatures.add(new EStructuralFeature[] { f });
+					unshippedWindowFeatures.add(new EStructuralFeature[] { f });
+					shippedWindowFeatures.add(new EStructuralFeature[] { f });
 					break;
 				case OTHER:
 				default:
@@ -551,7 +552,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 			makeExpandable(dialogContext, root, object, dbc, esWindow, unshippedWindowFeatures, unshippedWindowTitleFeatures, true);
 		}
 		else {
-			makeExpandable(dialogContext, root, object, dbc, esWindow, windowFeatures, windowTitleFeatures, true);
+			makeExpandable(dialogContext, root, object, dbc, esWindow, shippedWindowFeatures, shippedWindowTitleFeatures, true);
 		}
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(esWindow.ec, "com.mmxlabs.lingo.doc.DataModel_lng_cargo_Slot_Window");
 

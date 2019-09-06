@@ -50,13 +50,13 @@ import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 public class ModelMarketCurveProvider extends EContentAdapter {
 
 	private final @NonNull PricingModel pricingModel;
-	
+
 	private static Map<String, String> marketIndexNames;
 
 	private SoftReference<Map<@NonNull PriceIndexType, @NonNull SeriesParser>> cache = new SoftReference<>(null);
 
 	private SoftReference<Map<@NonNull String, Map<@NonNull LocalDate, Double>>> settledPriceCache = new SoftReference<>(null);
-	
+
 	private SoftReference<Map<@NonNull String, Map<@NonNull LocalDate, String>>> holidayCalendarCache = new SoftReference<>(null);
 
 	private SoftReference<Map<@NonNull AbstractYearMonthCurve, @Nullable YearMonth>> earlyDateCache = new SoftReference<>(null);
@@ -124,12 +124,11 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 
 		return settledPrices;
 	}
-	
 
 	private Map<String, Map<LocalDate, String>> buildindexHolidaysCache() {
 		final Map<String, Map<LocalDate, String>> indexHolidays = new HashMap<>();
 		for (final HolidayCalendar hc : pricingModel.getHolidayCalendars()) {
-			for(final HolidayCalendarEntry entry : hc.getEntries()) {
+			for (final HolidayCalendarEntry entry : hc.getEntries()) {
 				final Map<LocalDate, String> m = new HashMap<>();
 				m.put(entry.getDate(), entry.getComment());
 				indexHolidays.put(hc.getName().toLowerCase(), m);
@@ -213,7 +212,7 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 		return map.get(indexName.toLowerCase());
 
 	}
-	
+
 	public @Nullable Map<LocalDate, String> getIndexHolidays(final String indexName) {
 		Map<String, Map<LocalDate, String>> map = holidayCalendarCache.get();
 		if (map == null) {
@@ -434,7 +433,7 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 		}
 		return null;
 	}
-	
+
 	public static String getMarketIndexName(final PricingModel pm, final String curveName) {
 		if (marketIndexNames == null) {
 			marketIndexNames = new HashMap<>();
@@ -444,12 +443,10 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 			return result;
 		}
 		final EList<CommodityCurve> indices = pm.getCommodityCurves();
-		
-		List<CommodityCurve> inc = indices.stream()
-				.filter(e -> e.getName().equals(curveName))
-				.collect(Collectors.toList());
-		
-		if(inc.isEmpty() || inc.size() > 1) {
+
+		List<CommodityCurve> inc = indices.stream().filter(e -> e.getName().equals(curveName)).collect(Collectors.toList());
+
+		if (inc.isEmpty() || inc.size() > 1) {
 			return null;
 		}
 		if (inc.get(0).getMarketIndex() == null) {
@@ -458,6 +455,10 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 		result = inc.get(0).getMarketIndex().getName();
 		marketIndexNames.put(curveName, result);
 		return result;
+	}
+
+	public PricingModel getPricingModel() {
+		return pricingModel;
 	}
 
 }

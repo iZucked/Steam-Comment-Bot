@@ -48,7 +48,7 @@ public class ReportsServiceClient {
 				.addFormDataPart("report", type + ".json", RequestBody.create(mediaType, data))//
 				.build();
 		// String upstreamURL = "http://"
-		String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
+		String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
 
 		Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
 				.url(upstreamURL + REPORT_UPLOAD_URL + "/" + uuid + "/" + type) //
@@ -68,7 +68,7 @@ public class ReportsServiceClient {
 
 	public boolean downloadTo(String uuid, File file, BiConsumer<File, Instant> callback) throws IOException {
 
-		String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
+		String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
 
 		Request request =UpstreamUrlProvider.INSTANCE.makeRequest() //
 				.url(String.format("%s%s/%s", upstreamURL, REPORT_GET_URL, uuid)) //

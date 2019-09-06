@@ -15,6 +15,7 @@ import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.DateShiftExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.validation.internal.Activator;
+import com.mmxlabs.models.lng.pricing.parser.Node;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils.ValidationResult;
@@ -61,7 +62,20 @@ public class DateShiftExpressionPriceParametersConstraint extends AbstractModelM
 				dsd.addEObjectAndFeature(pricingParams, CommercialPackage.Literals.DATE_SHIFT_EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION);
 				failures.add(dsd);
 			}
+			if (pricingParams.getValue() != 0) {
+				if (checkNodeForSplitMonth(PriceExpressionUtils.convertCommodityToExpandedNodes(pricingParams.getPriceExpression()))) {
+					final String message = String.format("%s%s", prefix, "Cannot use SPLITMONTH with a date shift");
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 
+					if (eContainer instanceof Contract) {
+						dsd.addEObjectAndFeature(eContainer, CommercialPackage.Literals.CONTRACT__PRICE_INFO);
+					}
+
+					dsd.addEObjectAndFeature(pricingParams, CommercialPackage.Literals.DATE_SHIFT_EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION);
+					dsd.addEObjectAndFeature(pricingParams, CommercialPackage.Literals.DATE_SHIFT_EXPRESSION_PRICE_PARAMETERS__VALUE);
+					failures.add(dsd);
+				}
+			}
 			if (pricingParams.isSpecificDay()) {
 				if (pricingParams.getValue() == 0 || pricingParams.getValue() > 28) {
 					final String message = String.format("%sDay should be between 1 and 28", prefix);
@@ -90,5 +104,20 @@ public class DateShiftExpressionPriceParametersConstraint extends AbstractModelM
 		}
 
 		return Activator.PLUGIN_ID;
+	}
+
+	private static boolean checkNodeForSplitMonth(Node node) {
+		if (node.token.toLowerCase().equals("splitmonth")) {
+			return true;
+		}
+		if (node.children != null) {
+			for (Node c : node.children) {
+				if (checkNodeForSplitMonth(c)) {
+					return true;
+				}
+			}
+		}
+		return false;
+
 	}
 }

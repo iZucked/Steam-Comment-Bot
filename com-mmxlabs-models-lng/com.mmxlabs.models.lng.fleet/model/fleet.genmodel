@@ -41,10 +41,12 @@
           ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/pilotLightRate"/>
       <genFeatures createChild="false" propertyDescription="The safety heel is typically the quantity of LNG needed at the start of port operations unless heeled out or cooling down."
           ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/safetyHeel"/>
-      <genFeatures createChild="false" propertyDescription="The volume of LNG required to cool the tanks to operating temperature"
-          ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/coolingVolume"/>
       <genFeatures createChild="false" propertyDescription="The number of hours the vessel has to sit empty to require a cooldow"
           ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/warmingTime"/>
+      <genFeatures createChild="false" propertyDescription="The volume of LNG required to cool the tanks to operating temperature"
+          ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/coolingVolume"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/coolingTime"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/purgeVolume"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/purgeTime"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference fleet.ecore#//Vessel/ladenAttributes"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference fleet.ecore#//Vessel/ballastAttributes"/>
@@ -80,7 +82,9 @@
       <genOperations ecoreOperation="fleet.ecore#//Vessel/getVesselOrDelegateMaxSpeed"/>
       <genOperations ecoreOperation="fleet.ecore#//Vessel/getVesselOrDelegateSafetyHeel"/>
       <genOperations ecoreOperation="fleet.ecore#//Vessel/getVesselOrDelegatePurgeTime"/>
+      <genOperations ecoreOperation="fleet.ecore#//Vessel/getVesselOrDelegatePurgeVolume"/>
       <genOperations ecoreOperation="fleet.ecore#//Vessel/getVesselOrDelegateWarmingTime"/>
+      <genOperations ecoreOperation="fleet.ecore#//Vessel/getVesselOrDelegateCoolingTime"/>
       <genOperations ecoreOperation="fleet.ecore#//Vessel/getVesselOrDelegateCoolingVolume"/>
       <genOperations ecoreOperation="fleet.ecore#//Vessel/getVesselOrDelegateRouteParameters"/>
       <genOperations ecoreOperation="fleet.ecore#//Vessel/getVesselOrDelegatePilotLightRate"/>
