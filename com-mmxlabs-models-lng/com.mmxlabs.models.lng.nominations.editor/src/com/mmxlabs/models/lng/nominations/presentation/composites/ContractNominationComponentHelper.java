@@ -6,26 +6,23 @@
  */
 package com.mmxlabs.models.lng.nominations.presentation.composites;
 
-import com.mmxlabs.models.lng.nominations.AbstractNomination;
-import com.mmxlabs.models.lng.nominations.AbstractNominationSpec;
-import com.mmxlabs.models.lng.nominations.NominationsPackage;
-import com.mmxlabs.models.lng.nominations.utils.NominationsModelUtils;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.ui.BaseComponentHelper;
-import com.mmxlabs.models.ui.ComponentHelperUtils;
-import com.mmxlabs.models.ui.IComponentHelper;
-import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.editors.impl.TextualSuggestionInlineEditor;
-import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
-
 import org.eclipse.emf.ecore.EClass;
+
+import com.mmxlabs.models.lng.nominations.AbstractNominationSpec;
+import com.mmxlabs.models.lng.nominations.NominationsPackage;
+import com.mmxlabs.models.lng.nominations.utils.NominationsModelUtils;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.ui.BaseComponentHelper;
+import com.mmxlabs.models.ui.IComponentHelper;
+import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.editors.impl.TextualSuggestionInlineEditor;
+import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
  * A component helper for ContractNomination instances
@@ -49,11 +46,17 @@ public class ContractNominationComponentHelper extends BaseComponentHelper {
 	/**
 	 * Construct a new instance of this helper
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	public ContractNominationComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
 		superClassesHelpers.addAll(registry.getComponentHelpers(NominationsPackage.Literals.ABSTRACT_NOMINATION));
+		for (final IComponentHelper ch : superClassesHelpers) {
+			if (ch instanceof AbstractNominationComponentHelper) {
+				this.abstractComponentHelper = (AbstractNominationComponentHelper) ch;
+				this.specComponentHelper = this.abstractComponentHelper.specComponentHelper;
+			}
+		}
 	}
 	
 	/**
