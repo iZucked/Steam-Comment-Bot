@@ -84,8 +84,9 @@ public class AbstractNominationComponentHelper extends BaseComponentHelper {
 			specComponentHelper.add_typeEditor(detailComposite, topClass);
 			specComponentHelper.add_sideEditor(detailComposite, topClass);
 			add_nomineeIdEditor(detailComposite, topClass);
-			specComponentHelper.add_alertSizeEditor(detailComposite, topClass);
-			specComponentHelper.add_alertSizeUnitsEditor(detailComposite, topClass);
+			add_nomineeDateEditor(detailComposite, topClass);
+			specComponentHelper.add_sizeEditor(detailComposite, topClass);
+			specComponentHelper.add_sizeUnitsEditor(detailComposite, topClass);
 			add_dueDateEditor(detailComposite, topClass);
 			add_alertDateEditor(detailComposite, topClass);
 			specComponentHelper.add_counterpartyEditor(detailComposite, topClass);
@@ -111,6 +112,15 @@ public class AbstractNominationComponentHelper extends BaseComponentHelper {
 			}}));
 	}
 
+	/**
+	 * Create the editor for the window start for a slot nomination.
+	 *
+	 * @generated NOT
+	 */
+	protected void add_nomineeDateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(new NomineeDateInlineEditor(NominationsPackage.Literals.ABSTRACT_NOMINATION__NOMINEE_ID));
+	}
+	
 	/**
 	 * Create the editor for the dueDate feature on AbstractNomination
 	 *
