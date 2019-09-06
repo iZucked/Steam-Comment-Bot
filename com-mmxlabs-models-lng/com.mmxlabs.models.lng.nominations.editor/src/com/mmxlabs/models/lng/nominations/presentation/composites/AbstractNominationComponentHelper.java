@@ -84,6 +84,8 @@ public class AbstractNominationComponentHelper extends BaseComponentHelper {
 			specComponentHelper.add_typeEditor(detailComposite, topClass);
 			specComponentHelper.add_sideEditor(detailComposite, topClass);
 			add_nomineeIdEditor(detailComposite, topClass);
+			specComponentHelper.add_alertSizeEditor(detailComposite, topClass);
+			specComponentHelper.add_alertSizeUnitsEditor(detailComposite, topClass);
 			add_dueDateEditor(detailComposite, topClass);
 			add_alertDateEditor(detailComposite, topClass);
 			specComponentHelper.add_counterpartyEditor(detailComposite, topClass);
