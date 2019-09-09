@@ -4,12 +4,15 @@
  */
 package com.mmxlabs.scenario.service.model.provider;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.edit.EMFEditPlugin;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
+import org.eclipse.emf.edit.provider.ComposedImage;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
@@ -53,6 +56,8 @@ public class ScenarioServiceItemProvider extends ContainerItemProvider {
 			addLocalPropertyDescriptor(object);
 			addServiceIDPropertyDescriptor(object);
 			addOfflinePropertyDescriptor(object);
+			addLockedByPropertyDescriptor(object);
+			addLockedPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -154,6 +159,30 @@ public class ScenarioServiceItemProvider extends ContainerItemProvider {
 	}
 
 	/**
+	 * This adds a property descriptor for the Locked By feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addLockedByPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+				getString("_UI_ScenarioService_lockedBy_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioService_lockedBy_feature", "_UI_ScenarioService_type"),
+				ScenarioServicePackage.eINSTANCE.getScenarioService_LockedBy(), true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Locked feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addLockedPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+				getString("_UI_ScenarioService_locked_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioService_locked_feature", "_UI_ScenarioService_type"),
+				ScenarioServicePackage.eINSTANCE.getScenarioService_Locked(), true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
+	}
+
+	/**
 	 * This returns ScenarioService.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -178,8 +207,13 @@ public class ScenarioServiceItemProvider extends ContainerItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((ScenarioService) object).getName();
-		return label == null ? "(untitled)" : label;
+		ScenarioService scenarioService = (ScenarioService)object;
+		String label = scenarioService.getName();
+		String fullLabel = label == null ? "(untitled)" : label;
+		if (scenarioService.isLocked())  {
+			fullLabel += " (locked by " + scenarioService.getLockedBy() + ")";
+		}
+		return fullLabel;
 	}
 
 	/**
@@ -201,6 +235,8 @@ public class ScenarioServiceItemProvider extends ContainerItemProvider {
 		case ScenarioServicePackage.SCENARIO_SERVICE__LOCAL:
 		case ScenarioServicePackage.SCENARIO_SERVICE__SERVICE_ID:
 		case ScenarioServicePackage.SCENARIO_SERVICE__OFFLINE:
+		case ScenarioServicePackage.SCENARIO_SERVICE__LOCKED_BY:
+		case ScenarioServicePackage.SCENARIO_SERVICE__LOCKED:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
 		}

@@ -10,6 +10,7 @@ import java.time.Instant;
 
 import org.json.JSONObject;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmxlabs.lngdataserver.commons.http.IProgressListener;
 import com.mmxlabs.lngdataserver.commons.http.ProgressRequestBody;
 import com.mmxlabs.lngdataserver.commons.http.ProgressResponseBody;
@@ -34,10 +35,27 @@ public class BaseCaseServiceClient {
 	private static final String BASECASE_DOWNLOAD_URL = "/scenarios/v1/basecase/";
 	private static final String BASECASE_CURRENT_URL = "/scenarios/v1/basecase/current";
 
+	private static final String LOCK_CHECK_URL = "/scenarios/v1/basecase/islocked";
+	private static final String LOCK_BY_URL = "/scenarios/v1/basecase/lockedby";
+	private static final String LOCK_URL = "/scenarios/v1/basecase/lock";
+	private static final String LOCK_STATE_URL = "/scenarios/v1/basecase/lockState";
+	private static final String UNLOCK_URL = "/scenarios/v1/basecase/unlock";
+
 	private final OkHttpClient httpClient = HttpClientUtil.basicBuilder()//
 			.build();
 
 	private final okhttp3.MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
+
+	private boolean needsLocking = false;
+	private boolean isLocked = false;
+	private boolean lockedByMe = false;
+	private String lockedBy = null;
+
+	public static BaseCaseServiceClient INSTANCE = new BaseCaseServiceClient();
+
+	private BaseCaseServiceClient() {
+
+	}
 
 	public String uploadBaseCase(final File file, //
 			final String scenarioName, ///
@@ -65,6 +83,9 @@ public class BaseCaseServiceClient {
 		try (Response response = httpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
 				response.body().close();
+				if (response.code() == 409) {
+					throw new BasecaseServiceLockedException();
+				}
 				throw new IOException("Unexpected code " + response);
 			}
 
@@ -184,6 +205,115 @@ public class BaseCaseServiceClient {
 		final String creationDate = versionObject.getString("creationDate");
 		record.creationDate = Instant.parse(creationDate);
 		return record;
+	}
+
+	public boolean isServiceLocked() {
+		return isLocked;
+	}
+
+	public boolean isServiceLockedByMe() {
+		return lockedByMe;
+	}
+
+	public String getLockedBy() {
+		return lockedBy;
+	}
+
+	public synchronized void updateLockedState() throws IOException {
+
+		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
+		if (upstreamURL == null || upstreamURL.isEmpty()) {
+			return;
+		}
+		needsLocking = true;
+		{
+			final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
+					.url(upstreamURL + LOCK_STATE_URL) //
+					.build();
+
+			try (Response response = httpClient.newCall(request).execute()) {
+				if (!response.isSuccessful()) {
+					response.body().close();
+					if (response.code() == 404) {
+						needsLocking = false;
+						isLocked = false;
+						lockedByMe = false;
+						lockedBy = null;
+						return;
+						// Unsupported API
+					}
+					throw new IOException(UNEXPECTED_CODE + response);
+				}
+
+				LockResult lockResult = new ObjectMapper().readValue(response.body().string(), LockResult.class);
+
+				isLocked = lockResult.isLocked;
+				lockedBy = lockResult.lockedBy;
+				lockedByMe = lockResult.lockedByMe;
+			}
+		}
+	}
+
+	public boolean canPublish() {
+		return lockedByMe || !isLocked;
+	}
+
+	public synchronized boolean lock() throws IOException {
+
+		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
+		if (upstreamURL == null || upstreamURL.isEmpty()) {
+			return false;
+		}
+		{
+			final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
+					.url(upstreamURL + LOCK_URL) //
+					.build();
+
+			try (Response response = httpClient.newCall(request).execute()) {
+				if (!response.isSuccessful()) {
+					response.body().close();
+					if (response.code() == 404) {
+						return true;
+						// Unsupported API
+					}
+					throw new IOException(UNEXPECTED_CODE + response);
+				}
+				return true;
+			} finally {
+				updateLockedState();
+			}
+		}
+	}
+
+	public synchronized boolean unlock() throws IOException {
+
+		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
+		if (upstreamURL == null || upstreamURL.isEmpty()) {
+			return false;
+		}
+		{
+			final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
+					.url(upstreamURL + UNEXPECTED_CODE) //
+					.build();
+
+			try (Response response = httpClient.newCall(request).execute()) {
+				if (!response.isSuccessful()) {
+					response.body().close();
+					if (response.code() == 404) {
+						return true;
+						// Unsupported API
+					}
+					throw new IOException(UNEXPECTED_CODE + response);
+				}
+				return true;
+			} finally {
+				updateLockedState();
+			}
+		}
+	}
+
+	public boolean needsLocking() {
+		return needsLocking;
 	}
 
 }
