@@ -38,6 +38,8 @@ public class NominationsView extends ScenarioTableViewerView<ScenarioTableViewer
 					getAdapterFactory(), getModelReference());
 			pane.getViewer().setInput(getRootObject());
 		}
+		
+		getSite().setSelectionProvider(pane.getScenarioViewer());
 	}
 	
 	@Override

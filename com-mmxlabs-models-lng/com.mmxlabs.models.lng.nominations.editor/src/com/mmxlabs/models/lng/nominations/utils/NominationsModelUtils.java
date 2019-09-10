@@ -92,6 +92,40 @@ public class NominationsModelUtils {
 		return null;
 	}
 	
+	public static List<AbstractNomination> findNominationsForSlot(final LNGScenarioModel sm, final Slot slot) {
+		if (slot != null && slot.getName() != null) {
+			final String name = slot.getName();
+			final NominationsModel nm = sm.getNominationsModel();
+			final List<AbstractNomination> nominations = new ArrayList<AbstractNomination>();
+			
+			//Check specific slot nominations.
+			for (final AbstractNomination nomination : nm.getNominations()) {
+				if (nomination.getSide() == Side.BUY && slot instanceof LoadSlot && Objects.equals(nomination.getNomineeId(),name)) {
+					nominations.add(nomination);
+				}
+				if (nomination.getSide() == Side.SELL && slot instanceof DischargeSlot && Objects.equals(nomination.getNomineeId(),name)) {
+					nominations.add(nomination);
+				}
+			}
+
+			//If none there, check nominations generated from specifications.
+			final List<AbstractNomination> generatedNominations = generateNominationsForAllDates(sm);
+			for (final AbstractNomination nomination : generatedNominations) {
+				if (nomination.getSide() == Side.BUY && slot instanceof LoadSlot && Objects.equals(nomination.getNomineeId(),name)) {
+					nominations.add(nomination);
+				}
+				if (nomination.getSide() == Side.SELL && slot instanceof DischargeSlot && Objects.equals(nomination.getNomineeId(),name)) {
+					nominations.add(nomination);
+				}
+			}
+			
+			return nominations;
+		}
+
+		//None found.
+		return Collections.emptyList();
+	}
+	
 	public static String mapName(final com.mmxlabs.models.lng.nominations.Side e) {
 		return e.getName();
 	}
@@ -292,7 +326,7 @@ public class NominationsModelUtils {
 		sn.setDone(false);
 	}
 
-	public static Slot findSlot(@NonNull final LNGScenarioModel scenarioModel, @NonNull final AbstractNomination nomination) {
+	public static Slot<?> findSlot(@NonNull final LNGScenarioModel scenarioModel, @NonNull final AbstractNomination nomination) {
 		if (nomination.getNomineeId() != null) {
 			if (nomination.getSide() == Side.SELL) {
 				final DischargeSlot ds = findDischargeSlot(scenarioModel, nomination);

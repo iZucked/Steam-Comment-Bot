@@ -7,12 +7,17 @@ package com.mmxlabs.models.lng.nominations.ui.editorpart;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
 
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.e4.ui.workbench.modeling.ISelectionListener;
@@ -27,10 +32,12 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.viewers.ViewerFilter;
@@ -39,20 +46,33 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Item;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import com.mmxlabs.common.Equality;
+import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.nominations.AbstractNomination;
+import com.mmxlabs.models.lng.nominations.ContractNomination;
 import com.mmxlabs.models.lng.nominations.NominationsModel;
 import com.mmxlabs.models.lng.nominations.NominationsPackage;
+import com.mmxlabs.models.lng.nominations.SlotNomination;
 import com.mmxlabs.models.lng.nominations.utils.NominationsModelUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.schedule.PortVisit;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
+import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.date.LocalDateTextFormatter;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
@@ -86,6 +106,9 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 	private final Color colourPink = new Color(Display.getDefault(), 254, 127, 156);
 	private final Color colourGreen = new Color(Display.getDefault(), 80, 220, 100);
 	private final Color colourLightYellow = new Color(Display.getDefault(), 254, 254, 200);
+	
+	private final Map<Object, HashSet<Object>> equivalents = new HashMap<>();
+	private final Set<Object> contents = new HashSet<>();
 	
 	public RelativeDateRangeNominationsViewerPane(final IWorkbenchPage page, final IWorkbenchPart part, @NonNull final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);
@@ -341,10 +364,75 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 		});
 		return gvColumn;
 	}
+	
+	public void setInputEquivalents(final Object input, final Collection<? extends Object> objectEquivalents) {
+		for (final Object o : objectEquivalents) {
+			HashSet<Object> inputs = equivalents.get(o);
+			if (inputs == null) {
+				inputs = new HashSet<>();
+				equivalents.put(o, inputs);
+			}
+			inputs.add(input);
+		}
+		contents.add(input);
+	}
+
+	protected void clearInputEquivalents() {
+		equivalents.clear();
+		contents.clear();
+	}
 
 	@Override
 	public ScenarioTableViewer createViewer(final Composite parent) {
 		final ScenarioTableViewer viewer = super.createViewer(parent);
+		
+		//Partially selects nominations (first nomination) associated with a selected cargo, however not all nominations.
+		viewer.setComparer(new IElementComparer() {
+			@Override
+			public int hashCode(final Object element) {
+				return element.hashCode();
+			}
+
+			@Override
+			public boolean equals(Object a, Object b) {
+//				HashSet<Object> aEquivs = null;
+//				HashSet<Object> bEquivs = null;
+//				if (!contents.contains(a) && equivalents.containsKey(a)) {
+//					aEquivs = equivalents.get(a);
+//				}
+//				if (!contents.contains(b) && equivalents.containsKey(b)) {
+//					bEquivs = equivalents.get(b);
+//				}
+//				if (aEquivs != null && bEquivs != null) {
+//					return aEquivs.containsAll(bEquivs);
+//				}
+//				else if (aEquivs != null) {
+//					return aEquivs.contains(b);
+//				}
+//				else if (bEquivs != null) {
+//					return bEquivs.contains(a);
+//				}
+//				else {
+//					return Equality.isEqual(a, b);
+//				}
+				String nameA = getName(a);
+				String nameB = getName(b);
+				return nameA.equals(nameB);
+			}
+
+			private String getName(Object x) {
+				if (x instanceof AbstractNomination) {
+					return ((AbstractNomination)x).getNomineeId();
+				}
+				else if (x instanceof Slot<?>) {
+					return ((Slot<?>)x).getName();
+				}
+				else {
+					return "";
+				}
+			}
+		});
+	
 		viewer.addFilter(new ViewerFilter() {
 			/**
 			 * @return true, if we wish to display, false, otherwise.
@@ -365,7 +453,7 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 				return true;
 			}
 		});
-
+				
 		return viewer;
 	}
 	
@@ -414,6 +502,80 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 
 		return new ScenarioTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, scenarioEditingLocation) {
 
+			/**
+			 * Callback to convert the raw data coming out of the table into something usable externally. 
+			 * This is useful when the table data model is custom for the table rather from the real data model.
+			 */
+			protected List<?> adaptSelectionFromWidget(final List<?> selection) {
+				//Ensures Cargo in Trades view gets selected when relevant nomination is selected.
+				List<Object> equivalentObjects = new LinkedList<>();
+				
+				final LNGScenarioModel scenarioModel = ScenarioModelUtil.findScenarioModel(jointModelEditor.getScenarioDataProvider());
+				
+				if (scenarioModel != null) {
+					for (final Object e : selection) {
+
+						equivalentObjects.add(e);
+						if (e instanceof SlotNomination) {
+							Slot<?> slot = NominationsModelUtils.findSlot(scenarioModel, (SlotNomination)e);
+							equivalentObjects.add(slot);
+						}
+						else if (e instanceof ContractNomination) {
+							Contract contract = NominationsModelUtils.findContract(scenarioModel, (ContractNomination)e);
+							equivalentObjects.add(contract);
+						}
+					}
+				}
+				
+				return equivalentObjects;
+			}
+			
+			@Override
+			protected List<?> getSelectionFromWidget() {
+				
+				//Doesn't seem to get called.
+				final List<?> list = super.getSelectionFromWidget();
+
+				return adaptSelectionFromWidget(list);
+			}
+
+/* Does not work at all. After adding on own, cannot select any nomination.
+			@Override
+			protected void setSelectionToWidget(List l, boolean reveal) {
+				final LNGScenarioModel sm = ScenarioModelUtil.findScenarioModel(jointModelEditor.getScenarioDataProvider());
+				
+				if (l != null && sm != null) {
+					List<Object> newSelection = new ArrayList<>(l.size());
+					for (Object o : l) {
+						if (o instanceof Slot) {
+							List<AbstractNomination> nominationsForSlot = NominationsModelUtils.findNominationsForSlot(sm, (Slot<?>)o);
+							newSelection.addAll(nominationsForSlot);
+						}
+					}
+					super.setSelectionToWidget(newSelection, reveal);
+				}
+				else {
+					super.setSelectionToWidget(l, reveal);
+				}
+			}
+	*/		
+			/**
+			 * Modify @link {AbstractTreeViewer#getTreePathFromItem(Item)} to adapt items before returning selection object.
+			 */
+			@Override
+			protected TreePath getTreePathFromItem(Item item) {
+				final LinkedList<Object> segments = new LinkedList<>();
+				while (item != null) {
+					final Object segment = item.getData();
+					Assert.isNotNull(segment);
+					segments.addFirst(segment);
+					item = getParentItem(item);
+				}
+				final List<?> l = adaptSelectionFromWidget(segments);
+
+				return new TreePath(l.toArray());
+			}		
+			
 			@Override
 			public void init(final AdapterFactory adapterFactory, final ModelReference modelReference, final EReference... path) {
 				super.init(adapterFactory, modelReference, path);
@@ -424,10 +586,13 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 					public void dispose() {
 						// Nothing special to do here
 					}
-
+					
 					@Override
 					public Object[] getElements(final Object inputElement) {
 						final List<AbstractNomination> elements = new LinkedList<>();
+						
+						clearInputEquivalents();
+
 						if (inputElement instanceof LNGScenarioModel) {
 							final LNGScenarioModel scenarioModel = (LNGScenarioModel) inputElement;
 							final NominationsModel nominationsModel = scenarioModel.getNominationsModel();
@@ -436,16 +601,39 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 							}
 							setCurrentContainerAndContainment(nominationsModel, null);
 						}
+						
 						// Add in extra generated nominations
 						final LocalDate startDate = getStartDate();
 						final LocalDate endDate = getEndDate();
+						final Object[] result;
+						
 						elements.addAll(NominationsModelUtils.generateNominations(jointModelEditor, startDate, endDate));
 						if (RelativeDateRangeNominationsViewerPane.this.viewSelected && !RelativeDateRangeNominationsViewerPane.this.selectedSlots.isEmpty()) {
-							return elements.stream().filter(n -> n.getNomineeId() != null && isSelectedSlot(n.getNomineeId())).toArray();
+							result = elements.stream().filter(n -> n.getNomineeId() != null && isSelectedSlot(n.getNomineeId())).toArray();
 						}
 						else {
-							return elements.toArray();
+							result = elements.toArray();
 						}
+						
+						final LNGScenarioModel scenarioModel = ScenarioModelUtil.findScenarioModel(jointModelEditor.getScenarioDataProvider());
+						
+						if (scenarioModel != null) {
+							for (final Object e : result) {
+
+								if (e instanceof SlotNomination) {
+									Slot<?> slot = NominationsModelUtils.findSlot(scenarioModel, (SlotNomination)e);
+									setInputEquivalents(e, Collections.singleton(slot));
+									//setInputEquivalents(slot, Collections.singleton(e));
+								}
+								else if (e instanceof ContractNomination) {
+									Contract contract = NominationsModelUtils.findContract(scenarioModel, (ContractNomination)e);
+									setInputEquivalents(e, Collections.singleton(contract));
+									//setInputEquivalents(contract, Collections.singleton(e));
+								}
+							}
+						}
+
+						return result;						
 					}
 
 					private boolean isSelectedSlot(String nomineeId) {
