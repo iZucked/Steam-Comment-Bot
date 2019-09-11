@@ -386,57 +386,6 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 	public ScenarioTableViewer createViewer(final Composite parent) {
 		final ScenarioTableViewer viewer = super.createViewer(parent);
 		
-		//Partially selects nominations (first nomination) associated with a selected cargo, however not all nominations.
-		viewer.setComparer(new IElementComparer() {
-			@Override
-			public int hashCode(final Object element) {
-				return element.hashCode();
-			}
-
-			@Override
-			public boolean equals(Object a, Object b) {
-//				HashSet<Object> aEquivs = null;
-//				HashSet<Object> bEquivs = null;
-//				if (!contents.contains(a) && equivalents.containsKey(a)) {
-//					aEquivs = equivalents.get(a);
-//				}
-//				if (!contents.contains(b) && equivalents.containsKey(b)) {
-//					bEquivs = equivalents.get(b);
-//				}
-//				if (aEquivs != null && bEquivs != null) {
-//					return aEquivs.containsAll(bEquivs);
-//				}
-//				else if (aEquivs != null) {
-//					return aEquivs.contains(b);
-//				}
-//				else if (bEquivs != null) {
-//					return bEquivs.contains(a);
-//				}
-//				else {
-//					return Equality.isEqual(a, b);
-//				}
-				String nameA = getName(a);
-				String nameB = getName(b);
-				return nameA.equals(nameB);
-			}
-
-			private String getName(Object x) {
-				String name = "";
-				if (x instanceof AbstractNomination) {
-					name = ((AbstractNomination)x).getNomineeId();
-				}
-				else if (x instanceof Slot<?>) {
-					name = ((Slot<?>)x).getName();
-				}
-				if (name == null) {
-					return "";
-				}
-				else {
-					return name;
-				}
-			}
-		});
-	
 		viewer.addFilter(new ViewerFilter() {
 			/**
 			 * @return true, if we wish to display, false, otherwise.
@@ -543,34 +492,27 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 			}
 			
 			@Override
-			protected List<?> getSelectionFromWidget() {
-				
-				//Doesn't seem to get called.
-				final List<?> list = super.getSelectionFromWidget();
+			public void setSelection(ISelection selection, boolean reveal) {
 
-				return adaptSelectionFromWidget(list);
-			}
-
-/* Does not work at all. After adding on own, cannot select any nomination.
-			@Override
-			protected void setSelectionToWidget(List l, boolean reveal) {
 				final LNGScenarioModel sm = ScenarioModelUtil.findScenarioModel(jointModelEditor.getScenarioDataProvider());
-				
-				if (l != null && sm != null) {
-					List<Object> newSelection = new ArrayList<>(l.size());
+				if (selection instanceof IStructuredSelection && sm != null) {
+					List<?> l = ((IStructuredSelection) selection).toList();
+					Set<Object> newSelection = new HashSet<>();
 					for (Object o : l) {
-						if (o instanceof Slot) {
-							List<AbstractNomination> nominationsForSlot = NominationsModelUtils.findNominationsForSlot(sm, (Slot<?>)o);
-							newSelection.addAll(nominationsForSlot);
+						for (var e : equivalents.entrySet()) {
+							if (Objects.equals(o, e.getKey())) {
+								newSelection.addAll(e.getValue());
+							}
 						}
 					}
-					super.setSelectionToWidget(newSelection, reveal);
+					newSelection.remove(null);
+					StructuredSelection s = new StructuredSelection(new ArrayList<>(newSelection));
+					super.setSelection(s, reveal);
+				} else {
+					super.setSelection(selection, reveal);
 				}
-				else {
-					super.setSelectionToWidget(l, reveal);
-				}
+
 			}
-	*/		
 			/**
 			 * Modify @link {AbstractTreeViewer#getTreePathFromItem(Item)} to adapt items before returning selection object.
 			 */
@@ -645,7 +587,7 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 							}
 						}
 
-						return result;						
+						return result;
 					}
 
 					private boolean isSelectedSlot(String nomineeId) {
@@ -694,10 +636,8 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 			this.selectedSlots.clear();
 			for (final Object o : s.toArray()) {
 				if (o instanceof Slot) {
-					final Slot<?> slot = (Slot<?>)o;
-					if (slot != null) {
-						this.selectedSlots.add(slot);
-					}
+					final Slot<?> slot = (Slot<?>) o;
+					this.selectedSlots.add(slot);
 				}
 			}
 			ViewerHelper.refresh(this.getViewer(), true);
