@@ -43,14 +43,14 @@ public class SlotPermissiveVesselListVolumeConstraint extends AbstractModelMulti
 			}
 			
 			//Check permitted vessels list.
-			if (slot.isRestrictedVesselsArePermissive()) {
-				EList<AVesselSet<Vessel>> permittedVessels = slot.getRestrictedVessels();
+			if (slot.getSlotOrDelegateVesselRestrictionsArePermissive()) {
+				EList<AVesselSet<Vessel>> permittedVessels = slot.getSlotOrDelegateVesselRestrictions();
 				
 				for (final Vessel vessel : SetUtils.getObjects(permittedVessels)) {
 					
 					//Capacity is always in m^3
-					double capacityInM3 = vessel.getCapacity();
-					double fillCapacity = (vessel.getFillCapacity() > 0.0 ? vessel.getFillCapacity() : 1.0);
+					double capacityInM3 = vessel.getVesselOrDelegateCapacity();
+					double fillCapacity = (vessel.getVesselOrDelegateFillCapacity() > 0.0 ? vessel.getVesselOrDelegateFillCapacity() : 1.0);
 					double minQuantity = slot.getSlotOrDelegateMinQuantity();
 
 					//Convert minQuantity to m^3 if neccessary.
@@ -89,9 +89,10 @@ public class SlotPermissiveVesselListVolumeConstraint extends AbstractModelMulti
 	private DetailConstraintStatusDecorator createInvalidPermittedVesselStatus(final IValidationContext ctx, final Vessel vessel, final Slot slot, int minRequiredVolumeM3) {
 		final String slotType = (slot instanceof LoadSlot) ? "load" : "discharge";
 		final String message = String.format("Permitted vessel %s can not service %s slot %s as vessel capacity %d m3 is less than required min volume for slot of %d m3", 
-				vessel.getName(), slotType, slot.getName(), vessel.getCapacity(), minRequiredVolumeM3);
+				vessel.getName(), slotType, slot.getName(), vessel.getVesselOrDelegateCapacity(), minRequiredVolumeM3);
 		final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
-		dcsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_Port());
+		dcsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_RestrictedVessels());
+		dcsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
 		return dcsd;
 	}
 }
