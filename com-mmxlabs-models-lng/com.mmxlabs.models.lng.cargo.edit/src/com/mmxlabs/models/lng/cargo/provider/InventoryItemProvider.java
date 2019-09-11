@@ -64,6 +64,7 @@ public class InventoryItemProvider
 			super.getPropertyDescriptors(object);
 
 			addPortPropertyDescriptor(object);
+			addFacilityTypePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -86,6 +87,28 @@ public class InventoryItemProvider
 				 false,
 				 true,
 				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Facility Type feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addFacilityTypePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Inventory_facilityType_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Inventory_facilityType_feature", "_UI_Inventory_type"),
+				 CargoPackage.Literals.INVENTORY__FACILITY_TYPE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -160,6 +183,9 @@ public class InventoryItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Inventory.class)) {
+			case CargoPackage.INVENTORY__FACILITY_TYPE:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
 			case CargoPackage.INVENTORY__FEEDS:
 			case CargoPackage.INVENTORY__OFFTAKES:
 			case CargoPackage.INVENTORY__CAPACITIES:

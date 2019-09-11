@@ -36,6 +36,7 @@ import com.mmxlabs.models.lng.cargo.EndHeelOptions;
 import com.mmxlabs.models.lng.cargo.Inventory;
 import com.mmxlabs.models.lng.cargo.InventoryCapacityRow;
 import com.mmxlabs.models.lng.cargo.InventoryEventRow;
+import com.mmxlabs.models.lng.cargo.InventoryFacilityType;
 import com.mmxlabs.models.lng.cargo.InventoryFrequency;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
@@ -339,6 +340,13 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	private EEnum eVesselTankStateEEnum = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum inventoryFacilityTypeEEnum = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -2401,6 +2409,16 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getInventory_FacilityType() {
+		return (EAttribute)inventoryEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EReference getInventory_Port() {
 		return (EReference)inventoryEClass.getEStructuralFeatures().get(0);
 	}
@@ -3041,6 +3059,16 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
+	public EEnum getInventoryFacilityType() {
+		return inventoryFacilityTypeEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EEnum getInventoryFrequency() {
 		return inventoryFrequencyEEnum;
 	}
@@ -3303,6 +3331,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEReference(inventoryEClass, INVENTORY__FEEDS);
 		createEReference(inventoryEClass, INVENTORY__OFFTAKES);
 		createEReference(inventoryEClass, INVENTORY__CAPACITIES);
+		createEAttribute(inventoryEClass, INVENTORY__FACILITY_TYPE);
 
 		canalBookingSlotEClass = createEClass(CANAL_BOOKING_SLOT);
 		createEAttribute(canalBookingSlotEClass, CANAL_BOOKING_SLOT__ROUTE_OPTION);
@@ -3382,6 +3411,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		cargoTypeEEnum = createEEnum(CARGO_TYPE);
 		vesselTypeEEnum = createEEnum(VESSEL_TYPE);
 		eVesselTankStateEEnum = createEEnum(EVESSEL_TANK_STATE);
+		inventoryFacilityTypeEEnum = createEEnum(INVENTORY_FACILITY_TYPE);
 		inventoryFrequencyEEnum = createEEnum(INVENTORY_FREQUENCY);
 
 		// Create data types
@@ -3772,6 +3802,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEReference(getInventory_Feeds(), this.getInventoryEventRow(), null, "feeds", null, 0, -1, Inventory.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getInventory_Offtakes(), this.getInventoryEventRow(), null, "offtakes", null, 0, -1, Inventory.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getInventory_Capacities(), this.getInventoryCapacityRow(), null, "capacities", null, 0, -1, Inventory.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getInventory_FacilityType(), this.getInventoryFacilityType(), "facilityType", null, 0, 1, Inventory.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(canalBookingSlotEClass, CanalBookingSlot.class, "CanalBookingSlot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCanalBookingSlot_RouteOption(), thePortPackage.getRouteOption(), "routeOption", null, 1, 1, CanalBookingSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3868,6 +3899,11 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		addEEnumLiteral(eVesselTankStateEEnum, EVesselTankState.EITHER);
 		addEEnumLiteral(eVesselTankStateEEnum, EVesselTankState.MUST_BE_COLD);
 		addEEnumLiteral(eVesselTankStateEEnum, EVesselTankState.MUST_BE_WARM);
+
+		initEEnum(inventoryFacilityTypeEEnum, InventoryFacilityType.class, "InventoryFacilityType");
+		addEEnumLiteral(inventoryFacilityTypeEEnum, InventoryFacilityType.UPSTREAM);
+		addEEnumLiteral(inventoryFacilityTypeEEnum, InventoryFacilityType.HUB);
+		addEEnumLiteral(inventoryFacilityTypeEEnum, InventoryFacilityType.DOWNSTREAM);
 
 		initEEnum(inventoryFrequencyEEnum, InventoryFrequency.class, "InventoryFrequency");
 		addEEnumLiteral(inventoryFrequencyEEnum, InventoryFrequency.CARGO);

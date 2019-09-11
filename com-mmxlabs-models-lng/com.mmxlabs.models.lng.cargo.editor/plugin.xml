@@ -545,6 +545,16 @@
           </EDataTypeIs>
        </FeatureAnyOf>
     </editorFactory>
+    <editorFactory
+          factoryClass="com.mmxlabs.models.lng.cargo.editor.editors.InventoryFacilityTypeInlineEditorFactory"
+          id="com.mmxlabs.models.lng.cargo.editor.editors.InventoryFacilityTypeInlineEditorFactory">
+       <FeatureAnyOf>
+          <EDataTypeIs
+                EDataTypeName="InventoryFacilityType"
+                EDataTypeURI="http://www.mmxlabs.com/models/lng/cargo/1/">
+          </EDataTypeIs>
+       </FeatureAnyOf>
+    </editorFactory>
  </extension>
  <extension
        point="com.mmxlabs.models.common.modelcommandprovider">
@@ -591,6 +601,10 @@
          </dataType>
          <dataType
                attributeTypeName="InventoryFrequency"
+               attributeTypeURI="http://www.mmxlabs.com/models/lng/cargo/1/">
+         </dataType>
+         <dataType
+               attributeTypeName="InventoryFacilityType"
                attributeTypeURI="http://www.mmxlabs.com/models/lng/cargo/1/">
          </dataType>
       </attributeImporter>

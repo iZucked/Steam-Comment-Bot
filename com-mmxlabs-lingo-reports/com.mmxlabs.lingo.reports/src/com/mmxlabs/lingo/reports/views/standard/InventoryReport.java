@@ -72,7 +72,9 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.Inventory;
 import com.mmxlabs.models.lng.cargo.InventoryEventRow;
+import com.mmxlabs.models.lng.cargo.InventoryFacilityType;
 import com.mmxlabs.models.lng.cargo.InventoryFrequency;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -323,6 +325,7 @@ public class InventoryReport extends ViewPart {
 				if (schedule != null) {
 					for (final InventoryEvents inventoryEvents : schedule.getInventoryLevels()) {
 						final Inventory inventory = inventoryEvents.getFacility();
+						boolean cargoIn = inventory.getFacilityType() != InventoryFacilityType.UPSTREAM;
 
 						// Find the date of the latest position/cargo
 						final Optional<LocalDateTime> latestLoad = inventoryEvents.getEvents().stream() //
@@ -360,10 +363,12 @@ public class InventoryReport extends ViewPart {
 									.entrySet().stream() //
 									.filter(x -> {
 										if (latestLoad.isPresent() && firstInventoryDataFinal.isPresent()) {
-											return x.getKey().isBefore(latestLoad.get()) && x.getKey().isAfter(firstInventoryDataFinal.get().getDate());
+											boolean res = !x.getKey().isAfter(latestLoad.get()) && x.getKey().isAfter(firstInventoryDataFinal.get().getDate());
+											return res;
 										}
 										return false;
-									}).map(e -> new Pair<>(e.getKey(), e.getValue())) //
+									})//
+									.map(e -> new Pair<>(e.getKey(), e.getValue())) //
 									.collect(Collectors.toList());
 							if (!inventoryLevels.isEmpty()) {
 								final ILineSeries series = createSmoothLineSeries(seriesSet, "Inventory", inventoryLevels);
@@ -378,32 +383,49 @@ public class InventoryReport extends ViewPart {
 									if (e.getSlotAllocation() != null) {
 										type = "Cargo";
 										final String vessel = e.getSlotAllocation().getCargoAllocation().getEvents().get(0).getSequence().getName();
-										SlotAllocation allocation = e.getSlotAllocation().getCargoAllocation().getSlotAllocations().stream().filter(x -> x.getSlot() instanceof DischargeSlot)
+										final SlotAllocation dischargeAllocation = e.getSlotAllocation().getCargoAllocation().getSlotAllocations().stream().filter(x -> x.getSlot() instanceof DischargeSlot)
 												.findFirst().get();
-										final String dischargeId = e.getSlotAllocation().getCargoAllocation().getSlotAllocations().stream().filter(x -> x.getSlot() instanceof DischargeSlot)
-												.findFirst().get().getName();
-										final String dischargePort = e.getSlotAllocation().getCargoAllocation().getSlotAllocations().stream().filter(x -> x.getSlot() instanceof DischargeSlot)
-												.findFirst().get().getPort().getName();
-										Contract contract = e.getSlotAllocation().getCargoAllocation().getSlotAllocations().stream().filter(x -> x.getSlot() instanceof DischargeSlot).findFirst().get()
-												.getContract();
+										final SlotAllocation loadAllocation = e.getSlotAllocation().getCargoAllocation().getSlotAllocations().stream().filter(x -> x.getSlot() instanceof LoadSlot)
+												.findFirst().get();
+										final String dischargeId = dischargeAllocation.getName();
+										final String dischargePort = dischargeAllocation.getPort().getName();
+										final String loadId = loadAllocation.getName();
+										final String loadPort = loadAllocation.getPort().getName();
+										Contract contract = dischargeAllocation.getContract();
 										String salesContract = "";
 										if (contract != null) {
 											salesContract = contract.getName();
 										}
-										ZonedDateTime time = allocation.getSlotVisit().getStart();
-										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), type, e.getChangeQuantity(), vessel, dischargeId, dischargePort, salesContract,
-												time == null ? null : time.toLocalDate());
+										contract = loadAllocation.getContract();
+										String purchaseContract = "";
+										if (contract != null) {
+											purchaseContract = contract.getName();
+										}
+										
+										ZonedDateTime dischargeTime = dischargeAllocation.getSlotVisit().getStart();
+										ZonedDateTime loadTime = loadAllocation.getSlotVisit().getStart();
+										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), type, e.getChangeQuantity(), vessel, //
+												dischargeId, dischargePort, salesContract, loadId, loadPort, purchaseContract, //
+												dischargeTime == null ? null : dischargeTime.toLocalDate(), //
+												loadTime == null ? null : loadTime.toLocalDate());
 										lvl.breach = e.isBreachedMin() || e.isBreachedMax();
 										if (e.getEvent() != null) {
 											lvl.volumeLow = e.getEvent().getVolumeLow();
 											lvl.volumeHigh = e.getEvent().getVolumeHigh();
 										}
-										// FM cargo out happens only when there's a vessel
-										lvl.cargoOut = lvl.changeInM3;
+										// FM cargo out and in happens only when there's a vessel
+										if (inventory.getFacilityType() == InventoryFacilityType.DOWNSTREAM 
+												|| inventory.getFacilityType() == InventoryFacilityType.HUB) {
+											lvl.cargoIn = lvl.changeInM3;
+										}
+										if (inventory.getFacilityType() == InventoryFacilityType.UPSTREAM 
+												|| inventory.getFacilityType() == InventoryFacilityType.HUB){
+											lvl.cargoOut = lvl.changeInM3;
+										}
 										addToInventoryLevelList(tableLevels, lvl);
 									} else if (e.getOpenSlotAllocation() != null) {
 										type = "Open";
-										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), type, e.getChangeQuantity(), null, null, null, null, null);
+										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), type, e.getChangeQuantity(), null, null, null, null, null, null, null, null, null);
 										lvl.breach = e.isBreachedMin() || e.isBreachedMax();
 										if (e.getEvent() != null) {
 											lvl.volumeLow = e.getEvent().getVolumeLow();
@@ -413,7 +435,7 @@ public class InventoryReport extends ViewPart {
 										setInventoryLevelFeed(lvl);
 										addToInventoryLevelList(tableLevels, lvl);
 									} else if (e.getEvent() != null) {
-										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), e.getEvent().getPeriod(), e.getChangeQuantity(), null, null, null, null, null);
+										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), e.getEvent().getPeriod(), e.getChangeQuantity(), null, null, null, null, null, null, null, null, null);
 										lvl.breach = e.isBreachedMin() || e.isBreachedMax();
 										if (e.getEvent() != null) {
 											lvl.volumeLow = e.getEvent().getVolumeLow();
@@ -558,10 +580,12 @@ public class InventoryReport extends ViewPart {
 			 * In the case, when the low/high forecast value is zero , we assume that's a wrong data! Hence we use the feedIn (actual volume) if it's also not zero. Maybe we need to fix that!
 			 */
 			final int vl = lvl.volumeLow == 0 ? lvl.feedIn == 0 ? 0 : lvl.feedIn : lvl.volumeLow;
-			totalLow += vl - Math.abs(lvl.feedOut) - Math.abs(lvl.cargoOut);
+			
+			totalLow += vl - Math.abs(lvl.feedOut) - Math.abs(lvl.cargoOut) + Math.abs(lvl.cargoIn);
 			lvl.ttlLow = totalLow;
+			
 			final int vh = lvl.volumeHigh == 0 ? lvl.feedIn == 0 ? 0 : lvl.feedIn : lvl.volumeHigh;
-			totalHigh += vh - Math.abs(lvl.feedOut) - Math.abs(lvl.cargoOut);
+			totalHigh += vh - Math.abs(lvl.feedOut) - Math.abs(lvl.cargoOut) + Math.abs(lvl.cargoIn);
 			lvl.ttlHigh = totalHigh;
 
 		}
