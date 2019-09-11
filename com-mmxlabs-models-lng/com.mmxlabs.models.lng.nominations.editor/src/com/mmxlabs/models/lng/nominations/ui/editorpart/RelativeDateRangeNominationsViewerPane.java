@@ -32,12 +32,12 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreePath;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.viewers.ViewerFilter;
@@ -45,18 +45,16 @@ import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Item;
+import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
-import com.mmxlabs.common.Equality;
-import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.nominations.AbstractNomination;
@@ -67,12 +65,8 @@ import com.mmxlabs.models.lng.nominations.SlotNomination;
 import com.mmxlabs.models.lng.nominations.utils.NominationsModelUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
-import com.mmxlabs.models.lng.schedule.PortVisit;
-import com.mmxlabs.models.lng.schedule.SlotVisit;
-import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
-import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.date.LocalDateTextFormatter;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
@@ -90,6 +84,192 @@ import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsViewerPane implements ISelectionListener {
 
+	final class NominationsScenarioTableViewer extends ScenarioTableViewer {
+		NominationsScenarioTableViewer(Composite parent, int style, IScenarioEditingLocation part) {
+			super(parent, style, part);
+		}
+
+		/**
+		 * Callback to convert the raw data coming out of the table into something usable externally. 
+		 * This is useful when the table data model is custom for the table rather from the real data model.
+		 */
+		protected List<?> adaptSelectionFromWidget(final List<?> selection) {
+			//Ensures Cargo in Trades view gets selected when relevant nomination is selected.
+			List<Object> equivalentObjects = new LinkedList<>();
+
+			final LNGScenarioModel scenarioModel = ScenarioModelUtil.findScenarioModel(jointModelEditor.getScenarioDataProvider());
+
+			if (scenarioModel != null) {
+				for (final Object e : selection) {
+					equivalentObjects.add(e);
+					if (e instanceof SlotNomination) {
+						Slot<?> slot = NominationsModelUtils.findSlot(scenarioModel, (SlotNomination)e);
+						if (slot != null) {
+							equivalentObjects.add(slot);
+						}
+					}
+					else if (e instanceof ContractNomination) {
+						Contract contract = NominationsModelUtils.findContract(scenarioModel, (ContractNomination)e);
+						if (contract != null) {
+							equivalentObjects.add(contract);
+						}
+					}
+				}
+			}
+
+			return equivalentObjects;
+		}
+
+		@Override
+		public void setSelection(ISelection selection, boolean reveal) {
+			if (selection instanceof IStructuredSelection) {
+				List<?> l = ((IStructuredSelection) selection).toList();
+				Set<Object> newSelection = new HashSet<>();
+				for (Object o : l) {
+					for (var e : equivalents.entrySet()) {
+						if (Objects.equals(o, e.getKey())) {
+							newSelection.addAll(e.getValue());
+						}
+					}
+				}
+				newSelection.remove(null);
+				StructuredSelection s = new StructuredSelection(new ArrayList<>(newSelection));
+				super.setSelection(s, reveal);
+			} else {
+				super.setSelection(selection, reveal);
+			}
+		}
+
+		/**
+		 * Modify @link {AbstractTreeViewer#getTreePathFromItem(Item)} to adapt items before returning selection object.
+		 */
+		@Override
+		protected TreePath getTreePathFromItem(Item item) {
+			final LinkedList<Object> segments = new LinkedList<>();
+			while (item != null) {
+				final Object segment = item.getData();
+				Assert.isNotNull(segment);
+				segments.addFirst(segment);
+				item = getParentItem(item);
+			}
+			final List<?> l = adaptSelectionFromWidget(segments);
+
+			return new TreePath(l.toArray());
+		}
+
+		public ISelection getOriginalSelection() {
+			Control control = getControl();
+			if (control == null || control.isDisposed()) {
+				return TreeSelection.EMPTY;
+			}
+			Widget[] items = getSelection(getControl());
+			ArrayList<TreePath> list = new ArrayList<>(items.length);
+			for (Widget item : items) {
+				if (item.getData() != null) {
+					list.add(super.getTreePathFromItem((Item) item));
+				}
+			}
+			return new TreeSelection(list.toArray(new TreePath[list.size()]), getComparer());
+		}
+
+		@Override
+		public void init(final AdapterFactory adapterFactory, final ModelReference modelReference, final EReference... path) {
+			super.init(adapterFactory, modelReference, path);
+
+			init(new ITreeContentProvider() {
+
+				@Override
+				public void dispose() {
+					// Nothing special to do here
+				}
+
+				@Override
+				public Object[] getElements(final Object inputElement) {
+					final List<AbstractNomination> elements = new LinkedList<>();
+
+					clearInputEquivalents();
+
+					if (inputElement instanceof LNGScenarioModel) {
+						final LNGScenarioModel scenarioModel = (LNGScenarioModel) inputElement;
+						final NominationsModel nominationsModel = scenarioModel.getNominationsModel();
+						if (nominationsModel != null) {
+							elements.addAll(nominationsModel.getNominations());
+						}
+						setCurrentContainerAndContainment(nominationsModel, null);
+					}
+
+					// Add in extra generated nominations
+					final LocalDate startDate = getStartDate();
+					final LocalDate endDate = getEndDate();
+					final Object[] result;
+
+					elements.addAll(NominationsModelUtils.generateNominations(jointModelEditor, startDate, endDate));
+					if (RelativeDateRangeNominationsViewerPane.this.viewSelected && !RelativeDateRangeNominationsViewerPane.this.selectedSlots.isEmpty()) {
+						result = elements.stream().filter(n -> n.getNomineeId() != null && isSelectedSlot(n.getNomineeId())).toArray();
+					}
+					else {
+						result = elements.toArray();
+					}
+
+					final LNGScenarioModel scenarioModel = ScenarioModelUtil.findScenarioModel(jointModelEditor.getScenarioDataProvider());
+
+					if (scenarioModel != null) {
+						for (final Object e : result) {
+
+							if (e instanceof SlotNomination) {
+								Slot<?> slot = NominationsModelUtils.findSlot(scenarioModel, (SlotNomination)e);
+								setInputEquivalents(e, Collections.singleton(slot));
+							}
+							else if (e instanceof ContractNomination) {
+								Contract contract = NominationsModelUtils.findContract(scenarioModel, (ContractNomination)e);
+								setInputEquivalents(e, Collections.singleton(contract));
+							}
+						}
+					}
+
+					return result;
+				}
+
+				private boolean isSelectedSlot(String nomineeId) {
+					for (Slot<?> slot : RelativeDateRangeNominationsViewerPane.this.selectedSlots) {
+						if (Objects.equals(slot.getName(), nomineeId)) {
+							return true;
+						}
+					}
+					return false;
+				}
+
+				@Override
+				public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
+
+				}
+
+				@Override
+				public Object[] getChildren(final Object parentElement) {
+					return null;
+					//Below fixes the NullPointerExceptions, but everything else to do with the selection then breaks.
+					//return new Object[0];
+				}
+
+				@Override
+				public Object getParent(final Object element) {
+					return null;
+				}
+
+				@Override
+				public boolean hasChildren(final Object element) {
+					return false;
+				}
+
+			}, modelReference);
+		}
+
+		@Override
+		protected void doCommandStackChanged() {
+			ViewerHelper.refresh(this, true);
+		}
+	}
+	
 	private static final String PLUGIN_ID = "com.mmxlabs.models.lng.nominations.editor";
 	
 	@NonNull 
@@ -417,13 +597,14 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 	public LocalDate getEndDate() {
 		return this.nominationDatesToolbarEditor.getEndDate();
 	}
-	
+		
 	@Override
 	protected void enableOpenListener() {
 		scenarioViewer.addOpenListener(event -> {
-			final ISelection selection = scenarioViewer.getSelection();
+			final ISelection selection = ((NominationsScenarioTableViewer)scenarioViewer).getOriginalSelection();
 			if (selection instanceof IStructuredSelection) {
-				final IStructuredSelection structuredSelection = (IStructuredSelection) selection;
+				IStructuredSelection structuredSelection = (IStructuredSelection) selection;
+				
 				DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, structuredSelection);
 
 				//Add the edited slot nomination to the nominations model. 
@@ -455,178 +636,7 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 	@Override
 	protected ScenarioTableViewer constructViewer(final Composite parent) {
 
-		return new ScenarioTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, scenarioEditingLocation) {
-
-			/**
-			 * Callback to convert the raw data coming out of the table into something usable externally. 
-			 * This is useful when the table data model is custom for the table rather from the real data model.
-			 */
-			protected List<?> adaptSelectionFromWidget(final List<?> selection) {
-				//Ensures Cargo in Trades view gets selected when relevant nomination is selected.
-				List<Object> equivalentObjects = new LinkedList<>();
-				
-				final LNGScenarioModel scenarioModel = ScenarioModelUtil.findScenarioModel(jointModelEditor.getScenarioDataProvider());
-				
-				if (scenarioModel != null) {
-					for (final Object e : selection) {
-
-						if (e != null) {
-							equivalentObjects.add(e);
-						}
-						if (e instanceof SlotNomination) {
-							Slot<?> slot = NominationsModelUtils.findSlot(scenarioModel, (SlotNomination)e);
-							if (slot != null) {
-								equivalentObjects.add(slot);
-							}
-						}
-						else if (e instanceof ContractNomination) {
-							Contract contract = NominationsModelUtils.findContract(scenarioModel, (ContractNomination)e);
-							if (contract != null) {
-								equivalentObjects.add(contract);
-							}
-						}
-					}
-				}
-				
-				return equivalentObjects;
-			}
-			
-			@Override
-			public void setSelection(ISelection selection, boolean reveal) {
-
-				final LNGScenarioModel sm = ScenarioModelUtil.findScenarioModel(jointModelEditor.getScenarioDataProvider());
-				if (selection instanceof IStructuredSelection && sm != null) {
-					List<?> l = ((IStructuredSelection) selection).toList();
-					Set<Object> newSelection = new HashSet<>();
-					for (Object o : l) {
-						for (var e : equivalents.entrySet()) {
-							if (Objects.equals(o, e.getKey())) {
-								newSelection.addAll(e.getValue());
-							}
-						}
-					}
-					newSelection.remove(null);
-					StructuredSelection s = new StructuredSelection(new ArrayList<>(newSelection));
-					super.setSelection(s, reveal);
-				} else {
-					super.setSelection(selection, reveal);
-				}
-
-			}
-			/**
-			 * Modify @link {AbstractTreeViewer#getTreePathFromItem(Item)} to adapt items before returning selection object.
-			 */
-			@Override
-			protected TreePath getTreePathFromItem(Item item) {
-				final LinkedList<Object> segments = new LinkedList<>();
-				while (item != null) {
-					final Object segment = item.getData();
-					Assert.isNotNull(segment);
-					segments.addFirst(segment);
-					item = getParentItem(item);
-				}
-				final List<?> l = adaptSelectionFromWidget(segments);
-
-				return new TreePath(l.toArray());
-			}		
-			
-			@Override
-			public void init(final AdapterFactory adapterFactory, final ModelReference modelReference, final EReference... path) {
-				super.init(adapterFactory, modelReference, path);
-
-				init(new ITreeContentProvider() {
-
-					@Override
-					public void dispose() {
-						// Nothing special to do here
-					}
-					
-					@Override
-					public Object[] getElements(final Object inputElement) {
-						final List<AbstractNomination> elements = new LinkedList<>();
-						
-						clearInputEquivalents();
-
-						if (inputElement instanceof LNGScenarioModel) {
-							final LNGScenarioModel scenarioModel = (LNGScenarioModel) inputElement;
-							final NominationsModel nominationsModel = scenarioModel.getNominationsModel();
-							if (nominationsModel != null) {
-								elements.addAll(nominationsModel.getNominations());
-							}
-							setCurrentContainerAndContainment(nominationsModel, null);
-						}
-						
-						// Add in extra generated nominations
-						final LocalDate startDate = getStartDate();
-						final LocalDate endDate = getEndDate();
-						final Object[] result;
-						
-						elements.addAll(NominationsModelUtils.generateNominations(jointModelEditor, startDate, endDate));
-						if (RelativeDateRangeNominationsViewerPane.this.viewSelected && !RelativeDateRangeNominationsViewerPane.this.selectedSlots.isEmpty()) {
-							result = elements.stream().filter(n -> n.getNomineeId() != null && isSelectedSlot(n.getNomineeId())).toArray();
-						}
-						else {
-							result = elements.toArray();
-						}
-						
-						final LNGScenarioModel scenarioModel = ScenarioModelUtil.findScenarioModel(jointModelEditor.getScenarioDataProvider());
-						
-						if (scenarioModel != null) {
-							for (final Object e : result) {
-
-								if (e instanceof SlotNomination) {
-									Slot<?> slot = NominationsModelUtils.findSlot(scenarioModel, (SlotNomination)e);
-									setInputEquivalents(e, Collections.singleton(slot));
-									//setInputEquivalents(slot, Collections.singleton(e));
-								}
-								else if (e instanceof ContractNomination) {
-									Contract contract = NominationsModelUtils.findContract(scenarioModel, (ContractNomination)e);
-									setInputEquivalents(e, Collections.singleton(contract));
-									//setInputEquivalents(contract, Collections.singleton(e));
-								}
-							}
-						}
-
-						return result;
-					}
-
-					private boolean isSelectedSlot(String nomineeId) {
-						for (Slot<?> slot : RelativeDateRangeNominationsViewerPane.this.selectedSlots) {
-							if (Objects.equals(slot.getName(), nomineeId)) {
-								return true;
-							}
-						}
-						return false;
-					}
-					
-					@Override
-					public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-
-					}
-
-					@Override
-					public Object[] getChildren(final Object parentElement) {
-						return null;
-					}
-
-					@Override
-					public Object getParent(final Object element) {
-						return null;
-					}
-
-					@Override
-					public boolean hasChildren(final Object element) {
-						return false;
-					}
-
-				}, modelReference);
-			}
-
-			@Override
-			protected void doCommandStackChanged() {
-				ViewerHelper.refresh(this, true);
-			}
-		};
+		return new NominationsScenarioTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, scenarioEditingLocation);
 	}
 
 	@Override
