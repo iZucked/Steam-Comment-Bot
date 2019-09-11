@@ -519,14 +519,20 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 				if (scenarioModel != null) {
 					for (final Object e : selection) {
 
-						equivalentObjects.add(e);
+						if (e != null) {
+							equivalentObjects.add(e);
+						}
 						if (e instanceof SlotNomination) {
 							Slot<?> slot = NominationsModelUtils.findSlot(scenarioModel, (SlotNomination)e);
-							equivalentObjects.add(slot);
+							if (slot != null) {
+								equivalentObjects.add(slot);
+							}
 						}
 						else if (e instanceof ContractNomination) {
 							Contract contract = NominationsModelUtils.findContract(scenarioModel, (ContractNomination)e);
-							equivalentObjects.add(contract);
+							if (contract != null) {
+								equivalentObjects.add(contract);
+							}
 						}
 					}
 				}
