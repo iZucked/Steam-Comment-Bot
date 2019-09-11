@@ -421,14 +421,18 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 			}
 
 			private String getName(Object x) {
+				String name = "";
 				if (x instanceof AbstractNomination) {
-					return ((AbstractNomination)x).getNomineeId();
+					name = ((AbstractNomination)x).getNomineeId();
 				}
 				else if (x instanceof Slot<?>) {
-					return ((Slot<?>)x).getName();
+					name = ((Slot<?>)x).getName();
+				}
+				if (name == null) {
+					return "";
 				}
 				else {
-					return "";
+					return name;
 				}
 			}
 		});
