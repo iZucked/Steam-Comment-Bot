@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Tests
 Bundle-SymbolicName: com.mmxlabs.rcp.common.tests
 Automatic-Module-Name: com.mmxlabs.rcp.common.tests
-Bundle-Version: 4.7.11.qualifier
+Bundle-Version: 4.7.11.RELEASE
 Bundle-Activator: com.mmxlabs.rcp.common.tests.internal.Activator
 Bundle-Vendor: Minimaxlabs Ltd.
 Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
