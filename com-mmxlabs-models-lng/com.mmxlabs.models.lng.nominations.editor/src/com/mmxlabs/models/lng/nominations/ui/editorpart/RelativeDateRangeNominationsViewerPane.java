@@ -478,8 +478,10 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 				DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, structuredSelection);
 
 				//Add the edited slot nomination to the nominations model. 
-				final AbstractNomination sn = (AbstractNomination) ((IStructuredSelection) selection).getFirstElement();
-				addNomination(sn);
+				if (((IStructuredSelection) selection).getFirstElement() instanceof AbstractNomination) {
+					final AbstractNomination sn = (AbstractNomination) ((IStructuredSelection) selection).getFirstElement();
+					addNomination(sn);
+				}
 			}
 		});
 	}
