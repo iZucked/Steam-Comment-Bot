@@ -48,19 +48,20 @@ public class SlotPermissiveVesselListVolumeConstraint extends AbstractModelMulti
 				
 				for (final Vessel vessel : SetUtils.getObjects(permittedVessels)) {
 					
-					//Capacity is in m^3
-					double capacity = vessel.getVesselOrDelegateFillCapacity() * vessel.getCapacity();
-					
+					//Capacity is always in m^3
+					double capacityInM3 = vessel.getCapacity();
+					double fillCapacity = (vessel.getFillCapacity() > 0.0 ? vessel.getFillCapacity() : 1.0);
 					double minQuantity = slot.getSlotOrDelegateMinQuantity();
-					
-					if (slot.getVolumeLimitsUnit() != VolumeUnits.MMBTU) {
-						minQuantity = this.convertToMMBTU(minQuantity, (cv > 0 ? cv : maxDefaultCV));
+
+					//Convert minQuantity to m^3 if neccessary.
+					if (slot.getVolumeLimitsUnit() == VolumeUnits.MMBTU) {
+						minQuantity = this.convertToM3(minQuantity, (cv > 0.0 ? cv : maxDefaultCV));
 					}
 					
-					capacity = this.convertToMMBTU(capacity, (cv > 0 ? cv : minDefaultCV));
-					
-					if (capacity < minQuantity) {
-						IStatus status = createInvalidPermittedVesselStatus(ctx, vessel, slot, minQuantity, capacity);
+					int minCapacityReqInM3 = (int)Math.floor(minQuantity / fillCapacity);
+										
+					if (capacityInM3 < minCapacityReqInM3) {
+						IStatus status = createInvalidPermittedVesselStatus(ctx, vessel, slot, minCapacityReqInM3);
 						statuses.add(status);
 					}
 				}
@@ -70,15 +71,25 @@ public class SlotPermissiveVesselListVolumeConstraint extends AbstractModelMulti
 		return Activator.PLUGIN_ID;
 	}
 
+	private double convertToM3(double volumeInMMBTU, double cv) {
+		if (cv > 0.0) {
+			return volumeInMMBTU / cv;
+		}
+		else {
+			//Shouldn't happen, but just to be safe.
+			return 0.0;
+		}
+	}
+	
 	private double convertToMMBTU(double volumeInM3, double cv) {
 		return volumeInM3 * cv;
 	}
 	
 	@NonNull
-	private DetailConstraintStatusDecorator createInvalidPermittedVesselStatus(final IValidationContext ctx, final Vessel vessel, final Slot slot, double minRequiredVolume, double fillCapacity) {
+	private DetailConstraintStatusDecorator createInvalidPermittedVesselStatus(final IValidationContext ctx, final Vessel vessel, final Slot slot, int minRequiredVolumeM3) {
 		final String slotType = (slot instanceof LoadSlot) ? "load" : "discharge";
-		final String message = String.format("Permitted vessel %s can not service %s slot %s as vessel capacity (%d mmbtu) is less than min volume for slot (%d mmbtu).", 
-				vessel.getName(), slotType, slot.getName(), Math.round(fillCapacity), Math.round(minRequiredVolume));
+		final String message = String.format("Permitted vessel %s can not service %s slot %s as vessel capacity %d m3 is less than required min volume for slot of %d m3", 
+				vessel.getName(), slotType, slot.getName(), vessel.getCapacity(), minRequiredVolumeM3);
 		final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 		dcsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_Port());
 		return dcsd;
