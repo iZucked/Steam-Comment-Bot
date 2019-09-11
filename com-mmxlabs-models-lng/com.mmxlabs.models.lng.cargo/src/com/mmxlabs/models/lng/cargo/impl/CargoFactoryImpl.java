@@ -123,6 +123,8 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 				return createVesselTypeFromString(eDataType, initialValue);
 			case CargoPackage.EVESSEL_TANK_STATE:
 				return createEVesselTankStateFromString(eDataType, initialValue);
+			case CargoPackage.INVENTORY_FACILITY_TYPE:
+				return createInventoryFacilityTypeFromString(eDataType, initialValue);
 			case CargoPackage.INVENTORY_FREQUENCY:
 				return createInventoryFrequencyFromString(eDataType, initialValue);
 			case CargoPackage.SCHEDULING_TIME_WINDOW:
@@ -146,6 +148,8 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 				return convertVesselTypeToString(eDataType, instanceValue);
 			case CargoPackage.EVESSEL_TANK_STATE:
 				return convertEVesselTankStateToString(eDataType, instanceValue);
+			case CargoPackage.INVENTORY_FACILITY_TYPE:
+				return convertInventoryFacilityTypeToString(eDataType, instanceValue);
 			case CargoPackage.INVENTORY_FREQUENCY:
 				return convertInventoryFrequencyToString(eDataType, instanceValue);
 			case CargoPackage.SCHEDULING_TIME_WINDOW:
@@ -542,6 +546,26 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * @generated
 	 */
 	public String convertEVesselTankStateToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public InventoryFacilityType createInventoryFacilityTypeFromString(EDataType eDataType, String initialValue) {
+		InventoryFacilityType result = InventoryFacilityType.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertInventoryFacilityTypeToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 

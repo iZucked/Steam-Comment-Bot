@@ -15,6 +15,8 @@ import java.util.stream.Collectors;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.Inventory;
+import com.mmxlabs.models.lng.cargo.InventoryFacilityType;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.InventoryChangeEvent;
@@ -49,7 +51,7 @@ public class InventoryUtils {
 	
 	public static List<InventoryLevel> createInventoryLevels(final ScheduleModel scheduleModel, final Port port) {
 		
-		final List<InventoryLevel> invLevels = new LinkedList<>();
+		final List<InventoryLevel> invLevels = new LinkedList<>();  
 		Optional<InventoryChangeEvent> firstInventoryData = Optional.empty();
 
 			if (scheduleModel != null) {
@@ -94,32 +96,58 @@ public class InventoryUtils {
 									if (e.getSlotAllocation() != null) {
 										type = "Cargo";
 										final String vessel = e.getSlotAllocation().getCargoAllocation().getEvents().get(0).getSequence().getName();
-										SlotAllocation allocation = e.getSlotAllocation().getCargoAllocation().getSlotAllocations().stream().filter(x -> x.getSlot() instanceof DischargeSlot).findFirst().get();
-										final String dischargeId = e.getSlotAllocation().getCargoAllocation().getSlotAllocations().stream().filter(x -> x.getSlot() instanceof DischargeSlot).findFirst().get().getName();
-										final String dischargePort = e.getSlotAllocation().getCargoAllocation().getSlotAllocations().stream().filter(x -> x.getSlot() instanceof DischargeSlot).findFirst().get().getPort().getName();
-										Contract contract = e.getSlotAllocation().getCargoAllocation().getSlotAllocations().stream().filter(x -> x.getSlot() instanceof DischargeSlot).findFirst().get().getContract();
+										final SlotAllocation dischargeAllocation = e.getSlotAllocation().getCargoAllocation().getSlotAllocations().stream().filter(x -> x.getSlot() instanceof DischargeSlot)
+												.findFirst().get();
+										final SlotAllocation loadAllocation = e.getSlotAllocation().getCargoAllocation().getSlotAllocations().stream().filter(x -> x.getSlot() instanceof LoadSlot)
+												.findFirst().get();
+										final String dischargeId = dischargeAllocation.getName();
+										final String dischargePort = dischargeAllocation.getPort().getName();
+										final String loadId = loadAllocation.getName();
+										final String loadPort = loadAllocation.getPort().getName();
+										Contract contract = dischargeAllocation.getContract();
 										String salesContract = "";
 										if (contract != null) {
 											salesContract = contract.getName();
 										}
-										ZonedDateTime time = allocation.getSlotVisit().getStart();
-										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), type, e.getChangeQuantity(), vessel, dischargeId,
-												dischargePort, salesContract, time == null ? null : time.toLocalDate());
-										lvl.breach = e.isBreachedMin() || e.isBreachedMax();
+										contract = loadAllocation.getContract();
+										String purchaseContract = "";
+										if (contract != null) {
+											purchaseContract = contract.getName();
+										}
 										
-										// FM cargo out happens only when there's a vessel
-										lvl.cargoOut = lvl.changeInM3;
+										ZonedDateTime dischargeTime = dischargeAllocation.getSlotVisit().getStart();
+										ZonedDateTime loadTime = loadAllocation.getSlotVisit().getStart();
+										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), type, e.getChangeQuantity(), vessel, //
+												dischargeId, dischargePort, salesContract, loadId, loadPort, purchaseContract, //
+												dischargeTime == null ? null : dischargeTime.toLocalDate(), //
+												loadTime == null ? null : loadTime.toLocalDate());
+										lvl.breach = e.isBreachedMin() || e.isBreachedMax();
+										if (e.getEvent() != null) {
+											lvl.volumeLow = e.getEvent().getVolumeLow();
+											lvl.volumeHigh = e.getEvent().getVolumeHigh();
+										}
+										// FM cargo out and in happens only when there's a vessel
+										if (inventory.getFacilityType() == InventoryFacilityType.DOWNSTREAM 
+												|| inventory.getFacilityType() == InventoryFacilityType.HUB) {
+											lvl.cargoIn = lvl.changeInM3;
+										}
+										if (inventory.getFacilityType() == InventoryFacilityType.UPSTREAM 
+												|| inventory.getFacilityType() == InventoryFacilityType.HUB){
+											lvl.cargoOut = lvl.changeInM3;
+										}
 										InventoryUtils.addToInventoryLevelList(invLevels, lvl);
 									} else if (e.getOpenSlotAllocation() != null) {
 										type = "Open";
-										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), type, e.getChangeQuantity(), null, null, null, null, null);
+										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), type, e.getChangeQuantity(), //
+												null, null, null, null, null, null, null, null, null);
 										lvl.breach = e.isBreachedMin() || e.isBreachedMax();
 										
 										// FM
 										InventoryUtils.setInventoryLevelFeed(lvl);
 										InventoryUtils.addToInventoryLevelList(invLevels, lvl);
 									} else if (e.getEvent() != null) {
-										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), e.getEvent().getPeriod(), e.getChangeQuantity(), null, null, null, null, null);
+										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), e.getEvent().getPeriod(), e.getChangeQuantity(), //
+												null, null, null, null, null, null, null, null, null);
 										lvl.breach = e.isBreachedMin() || e.isBreachedMax();
 										
 										// FM

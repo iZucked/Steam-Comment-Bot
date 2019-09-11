@@ -24,6 +24,11 @@
       <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//EVesselTankState/MUST_BE_COLD"/>
       <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//EVesselTankState/MUST_BE_WARM"/>
     </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="cargo.ecore#//InventoryFacilityType">
+      <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//InventoryFacilityType/Upstream"/>
+      <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//InventoryFacilityType/Hub"/>
+      <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//InventoryFacilityType/Downstream"/>
+    </genEnums>
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="cargo.ecore#//InventoryFrequency">
       <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//InventoryFrequency/Cargo"/>
       <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//InventoryFrequency/Hourly"/>
@@ -315,6 +320,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//Inventory/feeds"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//Inventory/offtakes"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//Inventory/capacities"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Inventory/facilityType"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//CanalBookingSlot">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CanalBookingSlot/routeOption"/>

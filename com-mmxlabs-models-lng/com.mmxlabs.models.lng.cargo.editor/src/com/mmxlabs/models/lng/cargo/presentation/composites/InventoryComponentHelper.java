@@ -73,6 +73,7 @@ public class InventoryComponentHelper extends BaseComponentHelper {
 		add_feedsEditor(detailComposite, topClass);
 		add_offtakesEditor(detailComposite, topClass);
 		add_capacitiesEditor(detailComposite, topClass);
+		add_facilityTypeEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the feeds feature on Inventory
@@ -98,6 +99,15 @@ public class InventoryComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_capacitiesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.INVENTORY__CAPACITIES));
+	}
+
+	/**
+	 * Create the editor for the facilityType feature on Inventory
+	 *
+	 * @generated
+	 */
+	protected void add_facilityTypeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.INVENTORY__FACILITY_TYPE));
 	}
 
 	/**
