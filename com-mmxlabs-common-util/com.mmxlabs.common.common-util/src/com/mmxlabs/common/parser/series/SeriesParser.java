@@ -57,6 +57,8 @@ public class SeriesParser {
 				if (!parser.errors.isEmpty()) {
 					Symbol s = parser.errors.get(0);
 					throw new RuntimeException("Syntax error after: " + expression.substring(0, s.right - 1));
+				} else {
+					throw new RuntimeException("Syntax error: " + expression);
 				}
 			}
 
@@ -64,12 +66,10 @@ public class SeriesParser {
 		} catch (final UnknownSeriesException e) {
 			throw e;
 		} catch (final ClassCastException e) {
-			List<Symbol> errors = parser.errors;
 			throw new RuntimeException("Syntax error ", e);
 		} catch (final RuntimeException e) {
 			throw e;
 		} catch (final Exception e) {
-			List<Symbol> errors = parser.errors;
 			throw new RuntimeException("Error parsing expression", e);
 		}
 	}
