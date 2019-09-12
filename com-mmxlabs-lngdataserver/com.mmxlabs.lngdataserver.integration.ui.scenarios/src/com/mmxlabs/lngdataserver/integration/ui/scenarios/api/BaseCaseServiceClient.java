@@ -59,10 +59,11 @@ public class BaseCaseServiceClient {
 
 	public String uploadBaseCase(final File file, //
 			final String scenarioName, ///
+			String pricingVersion,
 			final IProgressListener progressListener) throws IOException {
 		RequestBody requestBody = new MultipartBody.Builder() //
 				.setType(MultipartBody.FORM) //
-				.addFormDataPart("pricingVersionUUID", "") //
+				.addFormDataPart("pricingVersionUUID", pricingVersion) //
 				.addFormDataPart("portsVersionUUID", "") //
 				.addFormDataPart("vesselsVersionUUID", "") //
 				.addFormDataPart("distancesVersionUUID", "") //
@@ -293,7 +294,7 @@ public class BaseCaseServiceClient {
 		}
 		{
 			final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
-					.url(upstreamURL + UNEXPECTED_CODE) //
+					.url(upstreamURL + UNLOCK_URL) //
 					.build();
 
 			try (Response response = httpClient.newCall(request).execute()) {

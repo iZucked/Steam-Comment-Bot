@@ -131,9 +131,16 @@ public class ScenarioServicePublishAction {
 
 		boolean doUnlock = false;
 		try {
-			if (BaseCaseServiceClient.INSTANCE.needsLocking() && !BaseCaseServiceClient.INSTANCE.isServiceLockedByMe() && BaseCaseServiceClient.INSTANCE.lock()) {
-				doUnlock = true;
-				throw new PublishBasecaseException("Error publishing scenario.", Type.FAILED_SERVICE_LOCKED, new RuntimeException());
+			if (BaseCaseServiceClient.INSTANCE.needsLocking()) {
+				if (BaseCaseServiceClient.INSTANCE.isServiceLockedByMe()) {
+					// Pre-locked
+				} else if (BaseCaseServiceClient.INSTANCE.lock()) {
+					// Lock for publish an unlock
+					doUnlock = true;
+				} else {
+					// Else locked by someone else
+					throw new PublishBasecaseException("Error publishing scenario.", Type.FAILED_SERVICE_LOCKED, new RuntimeException());
+				}
 			}
 		} catch (IOException e1) {
 			throw new PublishBasecaseException("Error publishing scenario.", Type.FAILED_SERVICE_LOCKED, new RuntimeException());
@@ -235,7 +242,11 @@ public class ScenarioServicePublishAction {
 			String response = null;
 			final SubMonitor uploadMonitor = progressMonitor.split(500);
 			try {
+
+				String pricingVersion = ScenarioModelUtil.getPricingModel(scenarioDataProvider).getMarketCurvesVersionRecord().getVersion();
+
 				response = BaseCaseServiceClient.INSTANCE.uploadBaseCase(tmpScenarioFile, scenarioInstance.getName(), //
+						pricingVersion, //
 						WrappedProgressMonitor.wrapMonitor(uploadMonitor));
 			} catch (final BasecaseServiceLockedException e) {
 				throw new PublishBasecaseException("Error uploading scenario.", Type.FAILED_SERVICE_LOCKED, e);
