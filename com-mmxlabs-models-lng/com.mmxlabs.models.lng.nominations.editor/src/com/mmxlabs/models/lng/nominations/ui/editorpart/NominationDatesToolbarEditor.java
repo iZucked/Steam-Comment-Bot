@@ -120,7 +120,7 @@ public class NominationDatesToolbarEditor extends ControlContribution {
 		pparent.setLayout(GridLayoutFactory.fillDefaults().numColumns(10).equalWidth(false).spacing(3, 0).margins(0, 7).create());
 
 		final Label lbl = new Label(pparent, SWT.NONE);
-		lbl.setText("Nominations due date range. From:");
+		lbl.setText("From:");
 		lbl.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).minSize(1000, -1).create());
 
 		startDateText = createDateEditorControl(pparent, startDateFormatter, nominationsParameters::getStartDate, NominationsPackage.eINSTANCE.getNominationsParameters_StartDate());
@@ -130,7 +130,7 @@ public class NominationDatesToolbarEditor extends ControlContribution {
 		}
 
 		final Label lbl2 = new Label(pparent, SWT.NONE);
-		lbl2.setText(" to ");
+		lbl2.setText(" To: ");
 		lbl2.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).create());
 
 		endDateText = createDateEditorControl(pparent, endDateFormatter, nominationsParameters::getEndDate, NominationsPackage.eINSTANCE.getNominationsParameters_EndDate());
