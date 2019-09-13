@@ -60,7 +60,6 @@ public class ScenarioModelImpl extends EObjectImpl implements ScenarioModel {
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
-	@Override
 	public EList<ScenarioService> getScenarioServices() {
 		return (EList<ScenarioService>) eGet(ScenarioServicePackage.eINSTANCE.getScenarioModel_ScenarioServices(), true);
 	}

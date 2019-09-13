@@ -29,8 +29,6 @@ public class ServiceCapabilitiesFlagsPropertyTester extends PropertyTester {
 					return scenarioService.isLocal();
 				} else if (property.equals("offline")) {
 					return scenarioService.isOffline();
-				} else if (property.equals("locked")) {
-					return scenarioService.isLocked();
 				}
 			}
 		}

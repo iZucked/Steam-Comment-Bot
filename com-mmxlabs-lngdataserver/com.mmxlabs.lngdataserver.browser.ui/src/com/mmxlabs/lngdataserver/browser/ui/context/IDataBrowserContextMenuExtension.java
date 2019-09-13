@@ -20,5 +20,4 @@ public interface IDataBrowserContextMenuExtension {
 	 */
 	boolean contributeToDataMenu(TreeSelection selection, MenuManager menuManager);
 	boolean contributeToScenarioMenu(TreeSelection selection, MenuManager menuManager);
-	boolean contributeToBaseCaseMenu(MenuManager scenarioMgr);
 }

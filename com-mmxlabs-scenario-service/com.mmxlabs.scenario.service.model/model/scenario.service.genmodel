@@ -39,8 +39,6 @@
           ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioService/local"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioService/serviceID"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioService/offline"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioService/lockedBy"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioService/locked"/>
     </genClasses>
     <genClasses ecoreClass="scenario.service.ecore#//ScenarioInstance">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioInstance/uuid"/>

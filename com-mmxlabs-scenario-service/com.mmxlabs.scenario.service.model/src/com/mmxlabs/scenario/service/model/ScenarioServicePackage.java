@@ -361,31 +361,13 @@ public interface ScenarioServicePackage extends EPackage {
 	int SCENARIO_SERVICE__OFFLINE = CONTAINER_FEATURE_COUNT + 7;
 
 	/**
-	 * The feature id for the '<em><b>Locked By</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCENARIO_SERVICE__LOCKED_BY = CONTAINER_FEATURE_COUNT + 8;
-
-	/**
-	 * The feature id for the '<em><b>Locked</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCENARIO_SERVICE__LOCKED = CONTAINER_FEATURE_COUNT + 9;
-
-	/**
 	 * The number of structural features of the '<em>Scenario Service</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_SERVICE_FEATURE_COUNT = CONTAINER_FEATURE_COUNT + 10;
+	int SCENARIO_SERVICE_FEATURE_COUNT = CONTAINER_FEATURE_COUNT + 8;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl <em>Scenario Instance</em>}' class.
@@ -923,28 +905,6 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getScenarioService_Offline();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioService#getLockedBy <em>Locked By</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Locked By</em>'.
-	 * @see com.mmxlabs.scenario.service.model.ScenarioService#getLockedBy()
-	 * @see #getScenarioService()
-	 * @generated
-	 */
-	EAttribute getScenarioService_LockedBy();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioService#isLocked <em>Locked</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Locked</em>'.
-	 * @see com.mmxlabs.scenario.service.model.ScenarioService#isLocked()
-	 * @see #getScenarioService()
-	 * @generated
-	 */
-	EAttribute getScenarioService_Locked();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.scenario.service.model.ScenarioInstance <em>Scenario Instance</em>}'.

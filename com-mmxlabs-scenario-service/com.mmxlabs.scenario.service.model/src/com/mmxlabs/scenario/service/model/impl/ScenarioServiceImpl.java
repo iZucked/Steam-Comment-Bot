@@ -26,8 +26,6 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioServiceImpl#isLocal <em>Local</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioServiceImpl#getServiceID <em>Service ID</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioServiceImpl#isOffline <em>Offline</em>}</li>
- *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioServiceImpl#getLockedBy <em>Locked By</em>}</li>
- *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioServiceImpl#isLocked <em>Locked</em>}</li>
  * </ul>
  *
  * @generated
@@ -57,7 +55,6 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public String getDescription() {
 		return (String) eGet(ScenarioServicePackage.eINSTANCE.getScenarioService_Description(), true);
 	}
@@ -67,7 +64,6 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setDescription(String newDescription) {
 		eSet(ScenarioServicePackage.eINSTANCE.getScenarioService_Description(), newDescription);
 	}
@@ -77,7 +73,6 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public IScenarioService getServiceRef() {
 		return (IScenarioService) eGet(ScenarioServicePackage.eINSTANCE.getScenarioService_ServiceRef(), true);
 	}
@@ -87,7 +82,6 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setServiceRef(IScenarioService newServiceRef) {
 		eSet(ScenarioServicePackage.eINSTANCE.getScenarioService_ServiceRef(), newServiceRef);
 	}
@@ -97,7 +91,6 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public boolean isSupportsForking() {
 		return (Boolean) eGet(ScenarioServicePackage.eINSTANCE.getScenarioService_SupportsForking(), true);
 	}
@@ -107,7 +100,6 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setSupportsForking(boolean newSupportsForking) {
 		eSet(ScenarioServicePackage.eINSTANCE.getScenarioService_SupportsForking(), newSupportsForking);
 	}
@@ -117,7 +109,6 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public boolean isSupportsImport() {
 		return (Boolean) eGet(ScenarioServicePackage.eINSTANCE.getScenarioService_SupportsImport(), true);
 	}
@@ -127,7 +118,6 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setSupportsImport(boolean newSupportsImport) {
 		eSet(ScenarioServicePackage.eINSTANCE.getScenarioService_SupportsImport(), newSupportsImport);
 	}
@@ -137,7 +127,6 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public ScenarioModel getScenarioModel() {
 		return (ScenarioModel) eGet(ScenarioServicePackage.eINSTANCE.getScenarioService_ScenarioModel(), true);
 	}
@@ -147,7 +136,6 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setScenarioModel(ScenarioModel newScenarioModel) {
 		eSet(ScenarioServicePackage.eINSTANCE.getScenarioService_ScenarioModel(), newScenarioModel);
 	}
@@ -157,7 +145,6 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public boolean isLocal() {
 		return (Boolean) eGet(ScenarioServicePackage.eINSTANCE.getScenarioService_Local(), true);
 	}
@@ -167,7 +154,6 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setLocal(boolean newLocal) {
 		eSet(ScenarioServicePackage.eINSTANCE.getScenarioService_Local(), newLocal);
 	}
@@ -177,7 +163,6 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public String getServiceID() {
 		return (String) eGet(ScenarioServicePackage.eINSTANCE.getScenarioService_ServiceID(), true);
 	}
@@ -187,7 +172,6 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setServiceID(String newServiceID) {
 		eSet(ScenarioServicePackage.eINSTANCE.getScenarioService_ServiceID(), newServiceID);
 	}
@@ -197,7 +181,6 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public boolean isOffline() {
 		return (Boolean) eGet(ScenarioServicePackage.eINSTANCE.getScenarioService_Offline(), true);
 	}
@@ -207,49 +190,8 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setOffline(boolean newOffline) {
 		eSet(ScenarioServicePackage.eINSTANCE.getScenarioService_Offline(), newOffline);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getLockedBy() {
-		return (String) eGet(ScenarioServicePackage.eINSTANCE.getScenarioService_LockedBy(), true);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setLockedBy(String newLockedBy) {
-		eSet(ScenarioServicePackage.eINSTANCE.getScenarioService_LockedBy(), newLockedBy);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isLocked() {
-		return (Boolean) eGet(ScenarioServicePackage.eINSTANCE.getScenarioService_Locked(), true);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setLocked(boolean newLocked) {
-		eSet(ScenarioServicePackage.eINSTANCE.getScenarioService_Locked(), newLocked);
 	}
 
 } //ScenarioServiceImpl

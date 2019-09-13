@@ -48,7 +48,6 @@ public class FolderImpl extends ContainerImpl implements Folder {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Metadata getMetadata() {
 		return (Metadata) eGet(ScenarioServicePackage.eINSTANCE.getFolder_Metadata(), true);
 	}
@@ -58,7 +57,6 @@ public class FolderImpl extends ContainerImpl implements Folder {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setMetadata(Metadata newMetadata) {
 		eSet(ScenarioServicePackage.eINSTANCE.getFolder_Metadata(), newMetadata);
 	}
@@ -68,7 +66,6 @@ public class FolderImpl extends ContainerImpl implements Folder {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public boolean isManaged() {
 		return (Boolean) eGet(ScenarioServicePackage.eINSTANCE.getFolder_Managed(), true);
 	}
@@ -78,7 +75,6 @@ public class FolderImpl extends ContainerImpl implements Folder {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setManaged(boolean newManaged) {
 		eSet(ScenarioServicePackage.eINSTANCE.getFolder_Managed(), newManaged);
 	}

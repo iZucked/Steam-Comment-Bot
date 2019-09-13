@@ -13,7 +13,6 @@ public class PublishBasecaseException extends RuntimeException {
 
 	public enum Type {
 		FAILED_UNKNOWN_ERROR, //
-		FAILED_SERVICE_LOCKED, //
 		FAILED_TO_MIGRATE, //
 		FAILED_TO_EVALUATE, //
 		FAILED_TO_SAVE, //

@@ -63,7 +63,6 @@ public class ScenarioFragmentImpl extends EObjectImpl implements ScenarioFragmen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public ScenarioInstance getScenarioInstance() {
 		return (ScenarioInstance) eGet(ScenarioServicePackage.eINSTANCE.getScenarioFragment_ScenarioInstance(), true);
 	}
@@ -73,7 +72,6 @@ public class ScenarioFragmentImpl extends EObjectImpl implements ScenarioFragmen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setScenarioInstance(ScenarioInstance newScenarioInstance) {
 		eSet(ScenarioServicePackage.eINSTANCE.getScenarioFragment_ScenarioInstance(), newScenarioInstance);
 	}
@@ -83,7 +81,6 @@ public class ScenarioFragmentImpl extends EObjectImpl implements ScenarioFragmen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public String getName() {
 		return (String) eGet(ScenarioServicePackage.eINSTANCE.getScenarioFragment_Name(), true);
 	}
@@ -93,7 +90,6 @@ public class ScenarioFragmentImpl extends EObjectImpl implements ScenarioFragmen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setName(String newName) {
 		eSet(ScenarioServicePackage.eINSTANCE.getScenarioFragment_Name(), newName);
 	}
@@ -103,7 +99,6 @@ public class ScenarioFragmentImpl extends EObjectImpl implements ScenarioFragmen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public EObject getFragment() {
 		return (EObject) eGet(ScenarioServicePackage.eINSTANCE.getScenarioFragment_Fragment(), true);
 	}
@@ -113,7 +108,6 @@ public class ScenarioFragmentImpl extends EObjectImpl implements ScenarioFragmen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setFragment(EObject newFragment) {
 		eSet(ScenarioServicePackage.eINSTANCE.getScenarioFragment_Fragment(), newFragment);
 	}
@@ -123,7 +117,6 @@ public class ScenarioFragmentImpl extends EObjectImpl implements ScenarioFragmen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public String getContentType() {
 		return (String) eGet(ScenarioServicePackage.eINSTANCE.getScenarioFragment_ContentType(), true);
 	}
@@ -133,7 +126,6 @@ public class ScenarioFragmentImpl extends EObjectImpl implements ScenarioFragmen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setContentType(String newContentType) {
 		eSet(ScenarioServicePackage.eINSTANCE.getScenarioFragment_ContentType(), newContentType);
 	}
@@ -143,7 +135,6 @@ public class ScenarioFragmentImpl extends EObjectImpl implements ScenarioFragmen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public boolean isUseCommandStack() {
 		return (Boolean) eGet(ScenarioServicePackage.eINSTANCE.getScenarioFragment_UseCommandStack(), true);
 	}
@@ -153,7 +144,6 @@ public class ScenarioFragmentImpl extends EObjectImpl implements ScenarioFragmen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setUseCommandStack(boolean newUseCommandStack) {
 		eSet(ScenarioServicePackage.eINSTANCE.getScenarioFragment_UseCommandStack(), newUseCommandStack);
 	}

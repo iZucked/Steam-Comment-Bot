@@ -65,7 +65,6 @@ public class MetadataImpl extends EObjectImpl implements Metadata {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public String getCreator() {
 		return (String) eGet(ScenarioServicePackage.eINSTANCE.getMetadata_Creator(), true);
 	}
@@ -75,7 +74,6 @@ public class MetadataImpl extends EObjectImpl implements Metadata {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setCreator(String newCreator) {
 		eSet(ScenarioServicePackage.eINSTANCE.getMetadata_Creator(), newCreator);
 	}
@@ -85,7 +83,6 @@ public class MetadataImpl extends EObjectImpl implements Metadata {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Date getCreated() {
 		return (Date) eGet(ScenarioServicePackage.eINSTANCE.getMetadata_Created(), true);
 	}
@@ -95,7 +92,6 @@ public class MetadataImpl extends EObjectImpl implements Metadata {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setCreated(Date newCreated) {
 		eSet(ScenarioServicePackage.eINSTANCE.getMetadata_Created(), newCreated);
 	}
@@ -105,7 +101,6 @@ public class MetadataImpl extends EObjectImpl implements Metadata {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Date getLastModified() {
 		return (Date) eGet(ScenarioServicePackage.eINSTANCE.getMetadata_LastModified(), true);
 	}
@@ -115,7 +110,6 @@ public class MetadataImpl extends EObjectImpl implements Metadata {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setLastModified(Date newLastModified) {
 		eSet(ScenarioServicePackage.eINSTANCE.getMetadata_LastModified(), newLastModified);
 	}
@@ -125,7 +119,6 @@ public class MetadataImpl extends EObjectImpl implements Metadata {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public String getComment() {
 		return (String) eGet(ScenarioServicePackage.eINSTANCE.getMetadata_Comment(), true);
 	}
@@ -135,7 +128,6 @@ public class MetadataImpl extends EObjectImpl implements Metadata {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setComment(String newComment) {
 		eSet(ScenarioServicePackage.eINSTANCE.getMetadata_Comment(), newComment);
 	}
@@ -145,7 +137,6 @@ public class MetadataImpl extends EObjectImpl implements Metadata {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public String getLastModifiedBy() {
 		return (String) eGet(ScenarioServicePackage.eINSTANCE.getMetadata_LastModifiedBy(), true);
 	}
@@ -155,7 +146,6 @@ public class MetadataImpl extends EObjectImpl implements Metadata {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setLastModifiedBy(String newLastModifiedBy) {
 		eSet(ScenarioServicePackage.eINSTANCE.getMetadata_LastModifiedBy(), newLastModifiedBy);
 	}
@@ -165,7 +155,6 @@ public class MetadataImpl extends EObjectImpl implements Metadata {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public String getContentType() {
 		return (String) eGet(ScenarioServicePackage.eINSTANCE.getMetadata_ContentType(), true);
 	}
@@ -175,7 +164,6 @@ public class MetadataImpl extends EObjectImpl implements Metadata {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setContentType(String newContentType) {
 		eSet(ScenarioServicePackage.eINSTANCE.getMetadata_ContentType(), newContentType);
 	}

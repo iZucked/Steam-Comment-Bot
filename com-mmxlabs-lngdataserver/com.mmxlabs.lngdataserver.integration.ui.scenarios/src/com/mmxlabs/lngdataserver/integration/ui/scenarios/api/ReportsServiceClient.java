@@ -37,6 +37,8 @@ public class ReportsServiceClient {
 	private final OkHttpClient httpClient = HttpClientUtil.basicBuilder() //
 			.build();
 
+	private final BaseCaseServiceClient baseCaseClient = new BaseCaseServiceClient();
+
 	private final okhttp3.MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
 
 	public String uploadReport(String data, String type, String uuid) throws IOException {
@@ -68,7 +70,7 @@ public class ReportsServiceClient {
 
 		String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
 
-		Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
+		Request request =UpstreamUrlProvider.INSTANCE.makeRequest() //
 				.url(String.format("%s%s/%s", upstreamURL, REPORT_GET_URL, uuid)) //
 				.build();
 
@@ -106,7 +108,7 @@ public class ReportsServiceClient {
 			try {
 				// Connect to service.
 				// Does the current match known current?
-				String uuid = BaseCaseServiceClient.INSTANCE.getCurrentBaseCase();
+				String uuid = baseCaseClient.getCurrentBaseCase();
 				{
 					File target = new File(baseCaseFolder.getAbsolutePath() + File.separator + uuid + ".lingo");
 					if (!target.exists()) {
