@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mmxlabs.scheduler</groupId>
 	<artifactId>com.mmxlabs.scheduler.parent</artifactId>
-	<version>4.7.12.RELEASE</version>
+	<version>4.7.13-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Scheduler - Parent</name>
