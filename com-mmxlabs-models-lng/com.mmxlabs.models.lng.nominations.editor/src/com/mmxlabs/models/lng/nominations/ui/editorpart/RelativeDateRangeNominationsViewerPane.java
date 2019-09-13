@@ -32,9 +32,11 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
@@ -43,6 +45,7 @@ import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -67,6 +70,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
+import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane.ScenarioTableViewerDeleteAction;
 import com.mmxlabs.models.ui.date.LocalDateTextFormatter;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
@@ -88,44 +92,64 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 		NominationsScenarioTableViewer(Composite parent, int style, IScenarioEditingLocation part) {
 			super(parent, style, part);
 		}
+		
+		/**
+		 * @param Set
+		 *            to true if editing should be disabled on this table.
+		 */
+		public void setLocked(final boolean lockedForEditing) {
+			this.lockedForEditing = lockedForEditing;
+			//Refreshing at this point, seems to cause issues when deleting a nomination, with selection not being set correctly in preserveSelection.
+			//if (!getControl().isDisposed()) {
+			//	refresh(true);
+			//}
+		}
 
 		/**
 		 * Callback to convert the raw data coming out of the table into something usable externally. 
 		 * This is useful when the table data model is custom for the table rather from the real data model.
 		 */
 		protected List<?> adaptSelectionFromWidget(final List<?> selection) {
-			//Ensures Cargo in Trades view gets selected when relevant nomination is selected.
-			List<Object> equivalentObjects = new LinkedList<>();
+			
+			if (!RelativeDateRangeNominationsViewerPane.this.viewSelected) {
 
-			final LNGScenarioModel scenarioModel = ScenarioModelUtil.findScenarioModel(jointModelEditor.getScenarioDataProvider());
+				//Ensures Cargo in Trades view gets selected when relevant nomination is selected.
+				List<Object> equivalentObjects = new LinkedList<>();
 
-			if (scenarioModel != null) {
-				for (final Object e : selection) {
-					equivalentObjects.add(e);
-					if (e instanceof SlotNomination) {
-						Slot<?> slot = NominationsModelUtils.findSlot(scenarioModel, (SlotNomination)e);
-						if (slot != null) {
-							equivalentObjects.add(slot);
+				final LNGScenarioModel scenarioModel = ScenarioModelUtil.findScenarioModel(jointModelEditor.getScenarioDataProvider());
+
+				if (scenarioModel != null) {
+					for (final Object e : selection) {
+						equivalentObjects.add(e);
+						if (e instanceof SlotNomination) {
+							Slot<?> slot = NominationsModelUtils.findSlot(scenarioModel, (SlotNomination)e);
+							if (slot != null) {
+								equivalentObjects.add(slot);
+							}
 						}
-					}
-					else if (e instanceof ContractNomination) {
-						Contract contract = NominationsModelUtils.findContract(scenarioModel, (ContractNomination)e);
-						if (contract != null) {
-							equivalentObjects.add(contract);
+						else if (e instanceof ContractNomination) {
+							Contract contract = NominationsModelUtils.findContract(scenarioModel, (ContractNomination)e);
+							if (contract != null) {
+								equivalentObjects.add(contract);
+							}
 						}
 					}
 				}
+
+				return equivalentObjects;
 			}
-
-			return equivalentObjects;
+			else {
+				return selection;
+			}
 		}
-
+	
 		@Override
 		public void setSelection(ISelection selection, boolean reveal) {
-			if (selection instanceof IStructuredSelection) {
+			if (selection instanceof IStructuredSelection && !RelativeDateRangeNominationsViewerPane.this.viewSelected) {
 				List<?> l = ((IStructuredSelection) selection).toList();
 				Set<Object> newSelection = new HashSet<>();
 				for (Object o : l) {
+					newSelection.add(o);
 					for (var e : equivalents.entrySet()) {
 						if (Objects.equals(o, e.getKey())) {
 							newSelection.addAll(e.getValue());
@@ -139,11 +163,10 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 				super.setSelection(selection, reveal);
 			}
 		}
-
+		
 		/**
 		 * Modify @link {AbstractTreeViewer#getTreePathFromItem(Item)} to adapt items before returning selection object.
 		 */
-		@Override
 		protected TreePath getTreePathFromItem(Item item) {
 			final LinkedList<Object> segments = new LinkedList<>();
 			while (item != null) {
@@ -156,7 +179,7 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 
 			return new TreePath(l.toArray());
 		}
-
+	
 		public ISelection getOriginalSelection() {
 			Control control = getControl();
 			if (control == null || control.isDisposed()) {
@@ -246,9 +269,7 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 
 				@Override
 				public Object[] getChildren(final Object parentElement) {
-					return null;
-					//Below fixes the NullPointerExceptions, but everything else to do with the selection then breaks.
-					//return new Object[0];
+					return new Object[0];
 				}
 
 				@Override
@@ -269,7 +290,7 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 			ViewerHelper.refresh(this, true);
 		}
 	}
-	
+		
 	private static final String PLUGIN_ID = "com.mmxlabs.models.lng.nominations.editor";
 	
 	@NonNull 
@@ -303,7 +324,7 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 		final Action[] extraActions = duplicateAction == null ? new Action[0] : new Action[] { duplicateAction };
 		return AddModelAction.create(containment.getEReferenceType(), getAddContext(containment), extraActions, this.getViewer());
 	}
-	
+		
 	@Override
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final ModelReference modelReference) {
 		super.init(path, adapterFactory, modelReference);
@@ -505,6 +526,11 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 //				}
 				return selection.isEmpty() == false && selection instanceof IStructuredSelection;
 			}
+			
+			@Override
+			protected ISelection getLastSelection() {
+				return ((NominationsScenarioTableViewer)RelativeDateRangeNominationsViewerPane.this.viewer).getOriginalSelection();
+			}
 		};
 	}
 	
@@ -635,7 +661,6 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 
 	@Override
 	protected ScenarioTableViewer constructViewer(final Composite parent) {
-
 		return new NominationsScenarioTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, scenarioEditingLocation);
 	}
 
@@ -650,7 +675,10 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 					this.selectedSlots.add(slot);
 				}
 			}
-			ViewerHelper.refresh(this.getViewer(), true);
+			if (this.viewSelected) {
+				//Only refresh if viewSelected on.
+				refresh();
+			}
 		}
 	}
 	
