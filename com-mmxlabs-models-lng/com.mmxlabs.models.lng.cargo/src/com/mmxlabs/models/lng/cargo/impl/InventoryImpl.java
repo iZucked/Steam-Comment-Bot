@@ -11,6 +11,7 @@ import com.mmxlabs.models.lng.cargo.Inventory;
 import com.mmxlabs.models.lng.cargo.InventoryCapacityRow;
 import com.mmxlabs.models.lng.cargo.InventoryEventRow;
 
+import com.mmxlabs.models.lng.cargo.InventoryFacilityType;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
 import java.time.LocalDate;
@@ -43,6 +44,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.InventoryImpl#getFeeds <em>Feeds</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.InventoryImpl#getOfftakes <em>Offtakes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.InventoryImpl#getCapacities <em>Capacities</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.InventoryImpl#getFacilityType <em>Facility Type</em>}</li>
  * </ul>
  *
  * @generated
@@ -87,6 +89,26 @@ public class InventoryImpl extends NamedObjectImpl implements Inventory {
 	 * @ordered
 	 */
 	protected EList<InventoryCapacityRow> capacities;
+
+	/**
+	 * The default value of the '{@link #getFacilityType() <em>Facility Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFacilityType()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final InventoryFacilityType FACILITY_TYPE_EDEFAULT = InventoryFacilityType.UPSTREAM;
+
+	/**
+	 * The cached value of the '{@link #getFacilityType() <em>Facility Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFacilityType()
+	 * @generated
+	 * @ordered
+	 */
+	protected InventoryFacilityType facilityType = FACILITY_TYPE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -144,6 +166,29 @@ public class InventoryImpl extends NamedObjectImpl implements Inventory {
 			capacities = new EObjectContainmentEList.Resolving<InventoryCapacityRow>(InventoryCapacityRow.class, this, CargoPackage.INVENTORY__CAPACITIES);
 		}
 		return capacities;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public InventoryFacilityType getFacilityType() {
+		return facilityType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setFacilityType(InventoryFacilityType newFacilityType) {
+		InventoryFacilityType oldFacilityType = facilityType;
+		facilityType = newFacilityType == null ? FACILITY_TYPE_EDEFAULT : newFacilityType;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.INVENTORY__FACILITY_TYPE, oldFacilityType, facilityType));
 	}
 
 	/**
@@ -221,6 +266,8 @@ public class InventoryImpl extends NamedObjectImpl implements Inventory {
 				return getOfftakes();
 			case CargoPackage.INVENTORY__CAPACITIES:
 				return getCapacities();
+			case CargoPackage.INVENTORY__FACILITY_TYPE:
+				return getFacilityType();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -249,6 +296,9 @@ public class InventoryImpl extends NamedObjectImpl implements Inventory {
 				getCapacities().clear();
 				getCapacities().addAll((Collection<? extends InventoryCapacityRow>)newValue);
 				return;
+			case CargoPackage.INVENTORY__FACILITY_TYPE:
+				setFacilityType((InventoryFacilityType)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -273,6 +323,9 @@ public class InventoryImpl extends NamedObjectImpl implements Inventory {
 			case CargoPackage.INVENTORY__CAPACITIES:
 				getCapacities().clear();
 				return;
+			case CargoPackage.INVENTORY__FACILITY_TYPE:
+				setFacilityType(FACILITY_TYPE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -293,8 +346,26 @@ public class InventoryImpl extends NamedObjectImpl implements Inventory {
 				return offtakes != null && !offtakes.isEmpty();
 			case CargoPackage.INVENTORY__CAPACITIES:
 				return capacities != null && !capacities.isEmpty();
+			case CargoPackage.INVENTORY__FACILITY_TYPE:
+				return facilityType != FACILITY_TYPE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (facilityType: ");
+		result.append(facilityType);
+		result.append(')');
+		return result.toString();
 	}
 
 } //InventoryImpl

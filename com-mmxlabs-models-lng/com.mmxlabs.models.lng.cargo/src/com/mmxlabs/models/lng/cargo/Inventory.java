@@ -27,6 +27,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Inventory#getFeeds <em>Feeds</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Inventory#getOfftakes <em>Offtakes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Inventory#getCapacities <em>Capacities</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Inventory#getFacilityType <em>Facility Type</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getInventory()
@@ -81,6 +82,35 @@ public interface Inventory extends NamedObject {
 	 * @generated
 	 */
 	EList<InventoryCapacityRow> getCapacities();
+
+	/**
+	 * Returns the value of the '<em><b>Facility Type</b></em>' attribute.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.cargo.InventoryFacilityType}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Facility Type</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Facility Type</em>' attribute.
+	 * @see com.mmxlabs.models.lng.cargo.InventoryFacilityType
+	 * @see #setFacilityType(InventoryFacilityType)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getInventory_FacilityType()
+	 * @model
+	 * @generated
+	 */
+	InventoryFacilityType getFacilityType();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Inventory#getFacilityType <em>Facility Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Facility Type</em>' attribute.
+	 * @see com.mmxlabs.models.lng.cargo.InventoryFacilityType
+	 * @see #getFacilityType()
+	 * @generated
+	 */
+	void setFacilityType(InventoryFacilityType value);
 
 	/**
 	 * Returns the value of the '<em><b>Port</b></em>' reference.

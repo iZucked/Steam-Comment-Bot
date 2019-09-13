@@ -322,7 +322,7 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 				// Filter InventoryChangeEvent given the effective bounds of the inventory scenario
 				final List<InventoryChangeEvent> res = events.stream().filter(x -> {
 					final LocalDate eventDate = x.getDate().toLocalDate();
-					return eventDate.isAfter(startOfInventoryData) && (latestLoadFinal == null || eventDate.isBefore(latestLoadFinal));
+					return eventDate.isAfter(startOfInventoryData) && (latestLoadFinal == null || !eventDate.isAfter(latestLoadFinal));
 				}).collect(Collectors.toList());
 
 				inventoryChangeEvents.getEvents().addAll(res);

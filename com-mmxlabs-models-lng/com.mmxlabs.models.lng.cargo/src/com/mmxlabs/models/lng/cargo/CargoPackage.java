@@ -5971,13 +5971,22 @@ public interface CargoPackage extends EPackage {
 	int INVENTORY__CAPACITIES = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Facility Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY__FACILITY_TYPE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
+
+	/**
 	 * The number of structural features of the '<em>Inventory</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int INVENTORY_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
+	int INVENTORY_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -7305,6 +7314,16 @@ public interface CargoPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.InventoryFacilityType <em>Inventory Facility Type</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.InventoryFacilityType
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getInventoryFacilityType()
+	 * @generated
+	 */
+	int INVENTORY_FACILITY_TYPE = 38;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.InventoryFrequency <em>Inventory Frequency</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7312,7 +7331,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getInventoryFrequency()
 	 * @generated
 	 */
-	int INVENTORY_FREQUENCY = 38;
+	int INVENTORY_FREQUENCY = 39;
 
 
 	/**
@@ -7323,7 +7342,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getSchedulingTimeWindow()
 	 * @generated
 	 */
-	int SCHEDULING_TIME_WINDOW = 39;
+	int SCHEDULING_TIME_WINDOW = 40;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.Cargo <em>Cargo</em>}'.
@@ -9448,6 +9467,17 @@ public interface CargoPackage extends EPackage {
 	EReference getInventory_Capacities();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Inventory#getFacilityType <em>Facility Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Facility Type</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Inventory#getFacilityType()
+	 * @see #getInventory()
+	 * @generated
+	 */
+	EAttribute getInventory_FacilityType();
+
+	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.Inventory#getPort <em>Port</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -10129,6 +10159,16 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EEnum getEVesselTankState();
+
+	/**
+	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.cargo.InventoryFacilityType <em>Inventory Facility Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Inventory Facility Type</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.InventoryFacilityType
+	 * @generated
+	 */
+	EEnum getInventoryFacilityType();
 
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.cargo.InventoryFrequency <em>Inventory Frequency</em>}'.
@@ -11800,6 +11840,14 @@ public interface CargoPackage extends EPackage {
 		EReference INVENTORY__CAPACITIES = eINSTANCE.getInventory_Capacities();
 
 		/**
+		 * The meta object literal for the '<em><b>Facility Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INVENTORY__FACILITY_TYPE = eINSTANCE.getInventory_FacilityType();
+
+		/**
 		 * The meta object literal for the '<em><b>Port</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -12344,6 +12392,16 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EEnum EVESSEL_TANK_STATE = eINSTANCE.getEVesselTankState();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.InventoryFacilityType <em>Inventory Facility Type</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.InventoryFacilityType
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getInventoryFacilityType()
+		 * @generated
+		 */
+		EEnum INVENTORY_FACILITY_TYPE = eINSTANCE.getInventoryFacilityType();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.InventoryFrequency <em>Inventory Frequency</em>}' enum.

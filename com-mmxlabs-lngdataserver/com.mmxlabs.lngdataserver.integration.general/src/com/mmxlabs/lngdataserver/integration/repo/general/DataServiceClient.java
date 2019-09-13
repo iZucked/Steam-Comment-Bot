@@ -72,7 +72,9 @@ public class DataServiceClient {
 		try (Response response = httpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
 				if (response.code() == 409) {
-					throw new IOException("Data already exists");
+					// Data version already exists, we didn't need to upload again....
+					// throw new IOException("Data already exists");
+					return;
 				}
 				throw new IOException("Unexpected code " + response);
 			}
