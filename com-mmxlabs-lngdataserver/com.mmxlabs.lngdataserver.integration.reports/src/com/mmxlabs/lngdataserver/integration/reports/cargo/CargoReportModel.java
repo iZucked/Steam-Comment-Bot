@@ -12,7 +12,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 public class CargoReportModel {
 	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm")
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	public LocalDateTime loadScheduledDate;
 	
@@ -24,7 +24,7 @@ public class CargoReportModel {
 	public String purchaseContract;
 	public String purchaseCounterparty; 
 	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm")
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	public LocalDateTime dischargeScheduledDate;
 	
