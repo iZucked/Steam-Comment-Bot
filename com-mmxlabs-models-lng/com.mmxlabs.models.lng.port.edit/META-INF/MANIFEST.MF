@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: com.mmxlabs.models.lng.port.edit;singleton:=true
 Automatic-Module-Name: com.mmxlabs.models.lng.port.edit
-Bundle-Version: 4.7.15.qualifier
+Bundle-Version: 4.7.15.RELEASE
 Bundle-ClassPath: .
 Bundle-Activator: com.mmxlabs.models.lng.port.provider.PortEditPlugin$Implementation
 Bundle-Vendor: %providerName
