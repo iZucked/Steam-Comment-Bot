@@ -263,11 +263,8 @@ public class CopyGridToHtmlStringUtil {
 			} else {
 				rowOffsets[colIdx] = rowOffsets[colIdx] - 1;
 			}
-			// end row
-			if ((i + 1) >= numColumns) {
-				sw.write("</tr>" + EOL);
-			}
 		}
+		sw.write("</tr>" + EOL);
 	}
 
 	private String[] combineAttributes(final String[] strings, final String[] additionalAttributes) {
