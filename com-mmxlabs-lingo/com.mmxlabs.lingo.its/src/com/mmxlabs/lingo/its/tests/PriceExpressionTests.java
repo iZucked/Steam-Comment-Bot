@@ -24,7 +24,15 @@ import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 
 public class PriceExpressionTests {
 	@NonNull
-	private static final CommodityCurve[] indicies = new CommodityCurve[] { makeBrent(), makeJKM_H1(), makeJKM_H2() };
+	private static final CommodityCurve[] indicies = { //
+			makeBrent(), //
+			makeJKM_H1(), //
+			makeJKM_H2(), //
+			makeWeekly_W1(), //
+			makeWeekly_W2(), //
+			makeWeekly_W3(), //
+			makeWeekly_W4() //
+	};
 
 	private static CommodityCurve makeBrent() {
 		return makeIndex("Brent", "$", "mmBtu", YearMonth.of(2017, 3), /* 2017 */ 54.89, 55.47, 55.76, 56.01, 56.16, 56.26, 56.23, 56.28, 56.23, 56.17, //
@@ -42,6 +50,22 @@ public class PriceExpressionTests {
 		return makeIndex("JKM_H2", "$", "mmBtu", YearMonth.of(2017, 3), /* 2017 */ 10, 20.47, 30.76, 40.01, 50.16, 60.26, 70.23, 80.28, 90.23, 100.17, //
 				/* 2018 */ 110.2, 120.14, 130.04, 140.95, 150.86, 160.76, 170.67, 180.56, 190.46, 200.39, 210.34, 220.3 //
 		);
+	}
+
+	private static CommodityCurve makeWeekly_W1() {
+		return makeIndex("WEEK_W1", "$", "mmBtu", YearMonth.of(2017, 3), /* 2017 */ 10);
+	}
+
+	private static CommodityCurve makeWeekly_W2() {
+		return makeIndex("WEEK_W2", "$", "mmBtu", YearMonth.of(2017, 3), /* 2017 */ 20);
+	}
+
+	private static CommodityCurve makeWeekly_W3() {
+		return makeIndex("WEEK_W3", "$", "mmBtu", YearMonth.of(2017, 3), /* 2017 */ 30);
+	}
+
+	private static CommodityCurve makeWeekly_W4() {
+		return makeIndex("WEEK_W4", "$", "mmBtu", YearMonth.of(2017, 3), /* 2017 */ 40);
 	}
 
 	@Test
@@ -109,6 +133,15 @@ public class PriceExpressionTests {
 
 		Assertions.assertEquals(40.01, parseExpression("SPLITMONTH(JKM_H1,JKM_H2,15)", LocalDateTime.of(2017, 6, 24, 0, 0, 0)), 0.001);
 		Assertions.assertEquals(56.01, parseExpression("SPLITMONTH(JKM_H1,JKM_H2,15)", LocalDateTime.of(2017, 6, 14, 23, 59, 0)), 0.001);
+	}
+
+	@Test
+	public void test_nestedsplitmonth() {
+		String expression = "SPLITMONTH(SPLITMONTH(WEEK_W1,WEEK_W2,7),SPLITMONTH(WEEK_W3,WEEK_W4,21),14)";
+		Assertions.assertEquals(10.0, parseExpression(expression, LocalDateTime.of(2017, 3, 1, 0, 0, 0)), 0.001);
+		Assertions.assertEquals(20.0, parseExpression(expression, LocalDateTime.of(2017, 3, 7, 0, 0, 0)), 0.001);
+		Assertions.assertEquals(30.0, parseExpression(expression, LocalDateTime.of(2017, 3, 14, 0, 0, 0)), 0.001);
+		Assertions.assertEquals(40.0, parseExpression(expression, LocalDateTime.of(2017, 3, 21, 0, 0, 0)), 0.001);
 	}
 
 	private double parseExpression(final String expression, LocalDateTime time) {

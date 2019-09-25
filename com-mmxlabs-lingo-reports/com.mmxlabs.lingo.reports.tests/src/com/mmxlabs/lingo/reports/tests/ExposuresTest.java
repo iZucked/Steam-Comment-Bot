@@ -258,6 +258,55 @@ public class ExposuresTest {
 		});
 	}
 
+	public static Collection generateTestsWithDay() {
+		return Arrays.asList(new Object[][] { //
+
+			{ "Nested SplitMonth Exposure (w1)", "SPLITMONTH(SPLITMONTH(WEEK_W1,WEEK_W2,7),SPLITMONTH(WEEK_W3,WEEK_W4,21),14)", "WEEK_W1", 1, single(//
+					calcExpected("WEEK_W1", YearMonth.of(2016, 4), 10, 1.0, LocalDate.of(2016, 4, 1)) //
+			), //
+					indiciesOf(//
+							makeIndex("WEEK_W1", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 10),
+							makeIndex("WEEK_W2", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 20),
+							makeIndex("WEEK_W3", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 30),
+							makeIndex("WEEK_W4", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 40) 
+					)
+			}, //
+			
+			{ "Nested SplitMonth Exposure (w2)", "SPLITMONTH(SPLITMONTH(WEEK_W1,WEEK_W2,7),SPLITMONTH(WEEK_W3,WEEK_W4,21),14)", "WEEK_W2", 7, single(//
+					calcExpected("WEEK_W2", YearMonth.of(2016, 4), 20, 1.0, LocalDate.of(2016, 4, 7)) //
+					), //
+				indiciesOf(//
+						makeIndex("WEEK_W1", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 10),
+						makeIndex("WEEK_W2", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 20),
+						makeIndex("WEEK_W3", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 30),
+						makeIndex("WEEK_W4", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 40) 
+						)
+			}, //
+			
+			{ "Nested SplitMonth Exposure (w3)", "SPLITMONTH(SPLITMONTH(WEEK_W1,WEEK_W2,7),SPLITMONTH(WEEK_W3,WEEK_W4,21),14)", "WEEK_W3",14, single(//
+					calcExpected("WEEK_W3", YearMonth.of(2016, 4), 30, 1.0, LocalDate.of(2016, 4, 14)) //
+					), //
+				indiciesOf(//
+						makeIndex("WEEK_W1", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 10),
+						makeIndex("WEEK_W2", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 20),
+						makeIndex("WEEK_W3", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 30),
+						makeIndex("WEEK_W4", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 40) 
+						)
+			}, //
+			
+			{ "Nested SplitMonth Exposure (w4)", "SPLITMONTH(SPLITMONTH(WEEK_W1,WEEK_W2,7),SPLITMONTH(WEEK_W3,WEEK_W4,21),14)", "WEEK_W4",21, single(//
+					calcExpected("WEEK_W4", YearMonth.of(2016, 4), 40, 1.0, LocalDate.of(2016, 4, 21)) //
+					), //
+				indiciesOf(//
+						makeIndex("WEEK_W1", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 10),
+						makeIndex("WEEK_W2", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 20),
+						makeIndex("WEEK_W3", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 30),
+						makeIndex("WEEK_W4", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 40) 
+						)
+			} //
+		});
+	};
+
 	private static CommodityCurve makeBrent() {
 		return makeIndex("Brent", "$", "bbl", YearMonth.of(2000, 1), 90);
 	}
@@ -270,7 +319,6 @@ public class ExposuresTest {
 		return makeIndex("A", "$", "mmBtu", YearMonth.of(2000, 1), value);
 	}
 
-	 
 	@ParameterizedTest(name = "{0}")
 	@MethodSource("generateTests")
 	public void testPriceExpressionExposureCoefficient(final String name, final String expression, final String indexName, final @NonNull ResultChecker checker,
@@ -307,6 +355,45 @@ public class ExposuresTest {
 		final @NonNull LookupData lookupData = LookupData.createLookupData(pricingModel);
 
 		final Collection<ExposureDetail> details = Exposures.calculateExposure(expression, pricingDate, volume, isPurchase, lookupData, pricingDay);
+		checker.validate(details, expression, lookupData);
+	}
+
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("generateTestsWithDay")
+	public void testPriceExpressionNestedSplitMonths(final String name, final String expression, final String indexName, int dayOfMonth, final @NonNull ResultChecker checker,
+			final AbstractYearMonthCurve[] indicies) {
+
+		final PricingModel pricingModel = PricingFactory.eINSTANCE.createPricingModel();
+
+		for (final AbstractYearMonthCurve idx : indicies) {
+			if (idx instanceof CommodityCurve) {
+				pricingModel.getCommodityCurves().add((CommodityCurve) idx);
+			} else if (idx instanceof CurrencyCurve) {
+				pricingModel.getCurrencyCurves().add((CurrencyCurve) idx);
+			} else if (idx instanceof CharterCurve) {
+				pricingModel.getCharterCurves().add((CharterCurve) idx);
+			} else if (idx instanceof BunkerFuelCurve) {
+				pricingModel.getBunkerFuelCurves().add((BunkerFuelCurve) idx);
+			} else {
+				Assertions.fail("Unknown index type");
+			}
+		}
+
+		makeConversionFactor("therm", "mmbtu", 10, pricingModel);
+		makeConversionFactor("bbl", "mmbtu", 0.180136, pricingModel);
+		makeConversionFactor("mwh", "mmbtu", 0.293297, pricingModel);
+
+		makeFXCurve("p", "USD", 1.3 / 100.0, pricingModel);
+		makeFXCurve("EURO", "USD", 1.111, pricingModel);
+
+		final double volume = defaultVolumeInMMBTU;
+
+		// Sale
+		final boolean isPurchase = false;
+
+		final @NonNull LookupData lookupData = LookupData.createLookupData(pricingModel);
+
+		final Collection<ExposureDetail> details = Exposures.calculateExposure(expression, pricingDate, volume, isPurchase, lookupData, dayOfMonth);
 		checker.validate(details, expression, lookupData);
 	}
 
