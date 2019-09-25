@@ -86,9 +86,9 @@ public class ShippingTypeRequirementTransformer implements IContractTransformer 
 
 			// Set the slot type
 			if (dischargeSlot.isFOBSale()) {
-				shippingTypeProviderEditor.setPurchaseSlotDeliveryType(sequenceElement, CargoDeliveryType.NOT_SHIPPED);
+				shippingTypeProviderEditor.setSalesSlotDeliveryType(sequenceElement, CargoDeliveryType.NOT_SHIPPED);
 			} else {
-				shippingTypeProviderEditor.setPurchaseSlotDeliveryType(sequenceElement, CargoDeliveryType.SHIPPED);
+				shippingTypeProviderEditor.setSalesSlotDeliveryType(sequenceElement, CargoDeliveryType.SHIPPED);
 			}
 			// Set the required match type
 			final CargoDeliveryType cargoType = dischargeSlot.getSlotOrDelegateDeliveryType();
