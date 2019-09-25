@@ -166,10 +166,19 @@ public final class OptimisationHelper {
 	public static final String SWTBOT_DUAL_MODE_ON = SWTBOT_DUAL_MODE_PREFIX + ".On";
 	public static final String SWTBOT_DUAL_MODE_OFF = SWTBOT_DUAL_MODE_PREFIX + ".Off";
 
-	public static final String SWTBOT_SIMILARITY_PREFIX = "swtbot.similaritymode";
+	public static final String SWTBOT_SIMILARITY_PREFIX = "swtbot.similaritymode";	
 	public static final String SWTBOT_SIMILARITY_PREFIX_OFF = SWTBOT_SIMILARITY_PREFIX + ".Off";
+	/**
+	 * @deprecated
+	 */
 	public static final String SWTBOT_SIMILARITY_PREFIX_LOW = SWTBOT_SIMILARITY_PREFIX + ".Low";
+	/**
+	 * @deprecated
+	 */
 	public static final String SWTBOT_SIMILARITY_PREFIX_MEDIUM = SWTBOT_SIMILARITY_PREFIX + ".Med";
+	/**
+	 * @deprecated
+	 */
 	public static final String SWTBOT_SIMILARITY_PREFIX_HIGH = SWTBOT_SIMILARITY_PREFIX + ".High";
 
 	public static final String SWTBOT_PERIOD_START = "swtbot.period.start";
@@ -669,9 +678,9 @@ public final class OptimisationHelper {
 
 				final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
 				choiceData.addChoice("Off", SimilarityMode.OFF);
-				choiceData.addChoice("Low", SimilarityMode.LOW);
-				choiceData.addChoice("Med", SimilarityMode.MEDIUM);
-				choiceData.addChoice("High", SimilarityMode.HIGH);
+//				choiceData.addChoice("Low", SimilarityMode.LOW);
+//				choiceData.addChoice("Med", SimilarityMode.MEDIUM);
+//				choiceData.addChoice("High", SimilarityMode.HIGH);
 				choiceData.addChoice("All", SimilarityMode.ALL);
 
 				choiceData.enabled = LicenseFeatures.isPermitted("features:optimisation-similarity");
