@@ -71,7 +71,7 @@ public class StandardPNLCalcRowFactory extends AbstractPNLCalcRowFactory {
 		rows.add(createRow(40, "Buy volume (mmBtu)", false, "", "", false,
 				createBasicFormatter(options, false, Integer.class, VolumeMMBtuFormat::format, createFirstPurchaseTransformer(Integer.class, SlotAllocation::getEnergyTransferred))));
 		//CV should have units: mmbtu/m^3, although since not shown in slot editor, will not show here?
-		rows.add(createRow(41, "Buy cv", false, "", "", false, createBasicFormatter(options, true, Double.class, CVFormat::format,
+		rows.add(createRow(41, "Buy CV (mmBtu/m3)", false, "", "", false, createBasicFormatter(options, true, Double.class, CVFormat::format,
 					createFullLegTransformer2(Double.class, 0, (visit, travel, idle) -> {
 						if (visit != null && visit.getSlotAllocation() != null) {
 							return visit.getSlotAllocation().getCv();
