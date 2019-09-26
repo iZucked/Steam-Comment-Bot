@@ -681,7 +681,7 @@ public final class OptimisationHelper {
 //				choiceData.addChoice("Low", SimilarityMode.LOW);
 //				choiceData.addChoice("Med", SimilarityMode.MEDIUM);
 //				choiceData.addChoice("High", SimilarityMode.HIGH);
-				choiceData.addChoice("All", SimilarityMode.ALL);
+				choiceData.addChoice("On", SimilarityMode.ALL);
 
 				choiceData.enabled = LicenseFeatures.isPermitted("features:optimisation-similarity");
 
