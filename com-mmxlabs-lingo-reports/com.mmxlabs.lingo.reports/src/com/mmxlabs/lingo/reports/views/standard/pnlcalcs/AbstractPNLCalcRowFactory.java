@@ -71,7 +71,8 @@ public abstract class AbstractPNLCalcRowFactory implements IPNLCalcsRowFactory {
 	public static final DecimalFormat DollarsPerMMBtuFormat = new DecimalFormat("###.###");
 	public static final DecimalFormat DaysFormat = new DecimalFormat("##.#");
 	public static final DecimalFormat SpeedFormat = new DecimalFormat("##.#");
-
+	public static final DecimalFormat CVFormat = new DecimalFormat("##.#");
+	
 	protected AbstractPNLCalcRowFactory() {
 		cellImageSteadyArrow = createImage("icons/steady_arrow.png");
 		cellImageGreenArrowDown = createImage("icons/green_arrow_down.png");
