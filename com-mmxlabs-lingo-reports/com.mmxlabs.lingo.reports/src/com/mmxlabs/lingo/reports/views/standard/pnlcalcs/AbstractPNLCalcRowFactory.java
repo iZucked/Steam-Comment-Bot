@@ -121,6 +121,17 @@ public abstract class AbstractPNLCalcRowFactory implements IPNLCalcsRowFactory {
 		}
 	}
 
+	/**
+	 * 
+	 * @param order
+	 * @param name
+	 * @param includeUnits
+	 * @param prefixUnit
+	 * @param suffixUnit
+	 * @param isCost
+	 * @param renderer
+	 * @return
+	 */
 	public static PNLCalcsReportRow createRow(final int order, final @NonNull String name, final boolean includeUnits, final @NonNull String prefixUnit, final String suffixUnit, final boolean isCost,
 			final @NonNull ICellRenderer renderer) {
 		return createRow(order, name, true, prefixUnit, suffixUnit, isCost, renderer, null);
@@ -358,6 +369,15 @@ public abstract class AbstractPNLCalcRowFactory implements IPNLCalcsRowFactory {
 		});
 	}
 
+	/**
+	 * 
+	 * @param options
+	 * @param isCost
+	 * @param type
+	 * @param formatter
+	 * @param transformer
+	 * @return
+	 */
 	protected <T> @NonNull ICellRenderer createBasicFormatter(final PNLCalcsOptions options, final boolean isCost, final Class<T> type, final Function<T, String> formatter,
 			final Function<Object, @Nullable T> transformer) {
 		return new EconsFormatter() {
