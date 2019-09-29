@@ -14,6 +14,8 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
@@ -26,9 +28,9 @@ import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
+import com.mmxlabs.models.lng.types.CargoDeliveryType;
 import com.mmxlabs.models.lng.types.DESPurchaseDealType;
 import com.mmxlabs.models.lng.types.FOBSaleDealType;
-import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketMaker.DESSaleSpotMarketMaker;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 
 public class CargoMaker {
@@ -54,6 +56,28 @@ public class CargoMaker {
 		
 		public CargoMakerSlotMaker withWindowCounterParty(boolean counterPartyWindow) {
 			this.slot.setWindowCounterParty(counterPartyWindow);
+			return this;
+		}
+		
+		public CargoMakerSlotMaker withSalesDeliveryType(CargoDeliveryType sdt) {
+			if (this.slot instanceof LoadSlot) {
+				LoadSlot ls = (LoadSlot)slot;
+				ls.setSalesDeliveryType(sdt);
+			}
+			else {
+				throw new IllegalArgumentException("Slot is not a load slot, so cannot set salesDeliveryType");
+			}
+			return this;
+		}
+		
+		public CargoMakerSlotMaker withPurchaseDeliveryType(CargoDeliveryType sdt) {
+			if (this.slot instanceof DischargeSlot) {
+				DischargeSlot ds = (DischargeSlot)slot;
+				ds.setPurchaseDeliveryType(sdt);
+			}
+			else {
+				throw new IllegalArgumentException("Slot is not a discharge slot, so cannot set purchaseDeliveryType");
+			}
 			return this;
 		}
 	}
