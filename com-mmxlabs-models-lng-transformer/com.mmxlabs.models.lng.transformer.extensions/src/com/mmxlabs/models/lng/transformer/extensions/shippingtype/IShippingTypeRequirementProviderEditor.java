@@ -13,30 +13,18 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
  * @author Simon Goodall
  */
 public interface IShippingTypeRequirementProviderEditor extends IShippingTypeRequirementProvider {
-	/**
-	 * Sets the shipping type of a purchase slot.
-	 * @param element
-	 * @param cargoType TODO
-	 */
-	void setPurchaseSlotDeliveryType(ISequenceElement element, CargoDeliveryType cargoType);
+
 	/**
 	 * Sets the required shipping type for a sales slot.
 	 * @param element
-	 * @param cargoType TODO
+	 * @param cargoType
 	 */
 	void setSalesSlotRequiredDeliveryType(ISequenceElement element, CargoDeliveryType cargoType);
 	
 	/**
 	 * Sets the shipping type of a purchase slot.
 	 * @param element
-	 * @param cargoType TODO
+	 * @param cargoType
 	 */
 	void setPurchaseSlotRequiredDeliveryType(ISequenceElement element, CargoDeliveryType cargoType);
-	/**
-	 * Sets the required shipping type for a sales slot.
-	 * @param element
-	 * @param cargoType TODO
-	 */
-	void setSalesSlotDeliveryType(ISequenceElement element, CargoDeliveryType cargoType);
-	
 }
