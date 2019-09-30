@@ -24,6 +24,7 @@ import org.eclipse.swt.widgets.Widget;
 
 import com.google.common.collect.Sets;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.Triple;
 import com.mmxlabs.lingo.reports.modelbased.annotations.ColumnName;
 import com.mmxlabs.lingo.reports.modelbased.annotations.ColumnSortFunction;
 import com.mmxlabs.lingo.reports.modelbased.annotations.ColumnSortOrder;
@@ -45,7 +46,7 @@ public class ColumnGenerator {
 	public static void createColumns(final GridTableViewer viewer, @Nullable final EObjectTableViewerSortingSupport sortingSupport, @Nullable final EObjectTableViewerFilterSupport filterSupport,
 			final Class<?> cls, final BiConsumer<ViewerCell, Field> styler) {
 
-		List<Pair<Integer, GridViewerColumn>> defaultSortColumns = new LinkedList<>();
+		List<Triple<Integer, GridViewerColumn, Boolean>> defaultSortColumns = new LinkedList<>();
 
 		for (final Field f : cls.getFields()) {
 
@@ -165,7 +166,7 @@ public class ColumnGenerator {
 
 				ColumnSortOrder sortOrder = f.getAnnotation(ColumnSortOrder.class);
 				if (sortOrder != null) {
-					defaultSortColumns.add(Pair.of(sortOrder.index(), col));
+					defaultSortColumns.add(new Triple<>(sortOrder.value(), col, sortOrder.ascending()));
 				}
 			}
 			if (filterSupport != null) {
@@ -201,7 +202,10 @@ public class ColumnGenerator {
 				// Reverse sort.
 				Collections.sort(defaultSortColumns, (a, b) -> b.getFirst() - a.getFirst());
 				// Set initial sort order
-				defaultSortColumns.forEach(p -> sortingSupport.sortColumnsBy(p.getSecond().getColumn()));
+				defaultSortColumns.forEach(p -> {
+					sortingSupport.setSortDescending(!p.getThird());
+					sortingSupport.sortColumnsBy(p.getSecond().getColumn());
+				});
 			}
 		}
 	}

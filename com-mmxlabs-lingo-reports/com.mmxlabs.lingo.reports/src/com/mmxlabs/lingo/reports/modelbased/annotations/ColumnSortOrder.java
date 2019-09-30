@@ -12,5 +12,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface ColumnSortOrder {
-	public int index();
+	public int value();
+	boolean ascending() default true;
 }
