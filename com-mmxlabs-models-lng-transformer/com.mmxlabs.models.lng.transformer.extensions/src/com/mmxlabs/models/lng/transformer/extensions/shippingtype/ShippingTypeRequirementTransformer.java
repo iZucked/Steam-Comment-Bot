@@ -67,11 +67,11 @@ public class ShippingTypeRequirementTransformer implements IContractTransformer 
 		if (modelSlot instanceof LoadSlot) {
 			final LoadSlot loadSlot = (LoadSlot) modelSlot;
 			// Set the slot type
-			if (loadSlot.isDESPurchase()) {
-				shippingTypeProviderEditor.setPurchaseSlotDeliveryType(sequenceElement, CargoDeliveryType.NOT_SHIPPED);
-			} else {
-				shippingTypeProviderEditor.setPurchaseSlotDeliveryType(sequenceElement, CargoDeliveryType.SHIPPED);
-			}
+//			if (loadSlot.isDESPurchase()) {
+//				shippingTypeProviderEditor.setPurchaseSlotDeliveryType(sequenceElement, CargoDeliveryType.NOT_SHIPPED);
+//			} else {
+//				shippingTypeProviderEditor.setPurchaseSlotDeliveryType(sequenceElement, CargoDeliveryType.SHIPPED);
+//			}
 
 			// Set the required match type
 			final CargoDeliveryType cargoType = loadSlot.getSlotOrDelegateDeliveryType();
@@ -84,12 +84,12 @@ public class ShippingTypeRequirementTransformer implements IContractTransformer 
 		else if (modelSlot instanceof DischargeSlot) {
 			final DischargeSlot dischargeSlot = (DischargeSlot) modelSlot;
 
-			// Set the slot type
-			if (dischargeSlot.isFOBSale()) {
-				shippingTypeProviderEditor.setSalesSlotDeliveryType(sequenceElement, CargoDeliveryType.NOT_SHIPPED);
-			} else {
-				shippingTypeProviderEditor.setSalesSlotDeliveryType(sequenceElement, CargoDeliveryType.SHIPPED);
-			}
+//			// Set the slot type
+//			if (dischargeSlot.isFOBSale()) {
+//				shippingTypeProviderEditor.setSalesSlotDeliveryType(sequenceElement, CargoDeliveryType.NOT_SHIPPED);
+//			} else {
+//				shippingTypeProviderEditor.setSalesSlotDeliveryType(sequenceElement, CargoDeliveryType.SHIPPED);
+//			}
 			// Set the required match type
 			final CargoDeliveryType cargoType = dischargeSlot.getSlotOrDelegateDeliveryType();
 			if (cargoType != CargoDeliveryType.ANY) {
