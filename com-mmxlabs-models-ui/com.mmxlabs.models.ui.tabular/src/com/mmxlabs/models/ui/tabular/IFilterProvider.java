@@ -18,7 +18,7 @@ import com.mmxlabs.common.Pair;
  * @author hinton
  * 
  */
-public interface ICellRenderer extends IComparableProvider, IFilterProvider {
+public interface IFilterProvider  {
 	/**
 	 * Render the given object for viewing in a table cell.
 	 * 
@@ -28,22 +28,12 @@ public interface ICellRenderer extends IComparableProvider, IFilterProvider {
 	@Nullable
 	String render(Object object);
 
-	// /**
-	// * Get a comparable representation of the object, for sorting
-	// *
-	// * @param object
-	// * @return comparable for sorting object by this cell.
-	// */
-	// Comparable getComparable(Object object);
-
-	boolean isValueUnset(Object object);
-
 	/**
-	 * Get any non-contained notifiers which should be listened to for triggering a refresh on the given object. We could use a modified EContentAdapter to track non-containment references, but that
-	 * leads to refreshing every table whenever anything is changed.
+	 * Get a representation useful for filtering.
 	 * 
+	 * @param object
 	 * @return
 	 */
 	@Nullable
-	Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(Object object);
+	Object getFilterValue(Object object);
 }
