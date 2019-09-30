@@ -301,6 +301,7 @@ public final class SharedScenarioDataUtils {
 						pm.getPorts().forEach(ctx::registerType);
 						pm.getPortGroups().forEach(ctx::registerType);
 						pm.getPortCountryGroups().forEach(ctx::registerType);
+						pm.getSpecialPortGroups().forEach(ctx::registerType);
 
 						final FleetModel fm = ScenarioModelUtil.getFleetModel(target);
 						fm.getVessels().forEach(ctx::registerType);
@@ -345,6 +346,7 @@ public final class SharedScenarioDataUtils {
 						pm.getPorts().forEach(ctx::registerType);
 						pm.getPortGroups().forEach(ctx::registerType);
 						pm.getPortCountryGroups().forEach(ctx::registerType);
+						pm.getSpecialPortGroups().forEach(ctx::registerType);
 
 						final FleetModel fm = ScenarioModelUtil.getFleetModel(target);
 						fm.getVessels().forEach(ctx::registerType);
@@ -426,6 +428,7 @@ public final class SharedScenarioDataUtils {
 						pm.getPorts().forEach(ctx::registerType);
 						pm.getPortGroups().forEach(ctx::registerType);
 						pm.getPortCountryGroups().forEach(ctx::registerType);
+						pm.getSpecialPortGroups().forEach(ctx::registerType);
 
 						final CostModel costModel = ScenarioModelUtil.getCostModel(target);
 
@@ -468,6 +471,7 @@ public final class SharedScenarioDataUtils {
 						pm.getPorts().forEach(ctx::registerType);
 						pm.getPortGroups().forEach(ctx::registerType);
 						pm.getPortCountryGroups().forEach(ctx::registerType);
+						pm.getSpecialPortGroups().forEach(ctx::registerType);
 
 						final CostModel costModel = ScenarioModelUtil.getCostModel(target);
 
@@ -592,6 +596,7 @@ public final class SharedScenarioDataUtils {
 						pm.getPorts().forEach(ctx::registerType);
 						pm.getPortGroups().forEach(ctx::registerType);
 						pm.getPortCountryGroups().forEach(ctx::registerType);
+						pm.getSpecialPortGroups().forEach(ctx::registerType);
 
 						final FleetModel fm = ScenarioModelUtil.getFleetModel(target);
 						fm.getVessels().forEach(ctx::registerType);
@@ -653,6 +658,7 @@ public final class SharedScenarioDataUtils {
 						pm.getPorts().forEach(ctx::registerType);
 						pm.getPortGroups().forEach(ctx::registerType);
 						pm.getPortCountryGroups().forEach(ctx::registerType);
+						pm.getSpecialPortGroups().forEach(ctx::registerType);
 
 						final FleetModel fm = ScenarioModelUtil.getFleetModel(target);
 						fm.getVessels().forEach(ctx::registerType);
@@ -717,6 +723,7 @@ public final class SharedScenarioDataUtils {
 						pm.getPorts().forEach(ctx::registerType);
 						pm.getPortGroups().forEach(ctx::registerType);
 						pm.getPortCountryGroups().forEach(ctx::registerType);
+						pm.getSpecialPortGroups().forEach(ctx::registerType);
 
 						final FleetModel fm = ScenarioModelUtil.getFleetModel(target);
 						fm.getVessels().forEach(ctx::registerType);
@@ -1064,6 +1071,7 @@ public final class SharedScenarioDataUtils {
 					pm.getPorts().forEach(ctx::registerType);
 					pm.getPortGroups().forEach(ctx::registerType);
 					pm.getPortCountryGroups().forEach(ctx::registerType);
+					pm.getSpecialPortGroups().forEach(ctx::registerType);
 
 					final FleetModel fm = ScenarioModelUtil.getFleetModel(target);
 					fm.getVessels().forEach(ctx::registerType);
@@ -1235,6 +1243,7 @@ public final class SharedScenarioDataUtils {
 					pm.getPorts().forEach(ctx::registerType);
 					pm.getPortGroups().forEach(ctx::registerType);
 					pm.getPortCountryGroups().forEach(ctx::registerType);
+					pm.getSpecialPortGroups().forEach(ctx::registerType);
 
 					final FleetModel fm = ScenarioModelUtil.getFleetModel(target);
 					fm.getVessels().forEach(ctx::registerType);
@@ -1325,6 +1334,7 @@ public final class SharedScenarioDataUtils {
 					pm.getPorts().forEach(ctx::registerType);
 					pm.getPortGroups().forEach(ctx::registerType);
 					pm.getPortCountryGroups().forEach(ctx::registerType);
+					pm.getSpecialPortGroups().forEach(ctx::registerType);
 
 					final FleetModel fm = ScenarioModelUtil.getFleetModel(target);
 					fm.getVessels().forEach(ctx::registerType);
