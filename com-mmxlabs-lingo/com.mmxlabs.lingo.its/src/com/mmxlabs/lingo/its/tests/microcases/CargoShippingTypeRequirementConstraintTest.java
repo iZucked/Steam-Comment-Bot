@@ -18,20 +18,23 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.util.PortModelBuilder;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
 import com.mmxlabs.models.lng.transformer.extensions.shippingtype.ShippingTypeRequirementConstraintChecker;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
 import com.mmxlabs.models.lng.types.DESPurchaseDealType;
+import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 
 @ExtendWith(ShiroRunner.class)
 public class CargoShippingTypeRequirementConstraintTest extends AbstractMicroTestCase {
 
-	
 	private static Stream<Arguments> provideCargoDeliveryTypeCombinations() {
 		return Stream.of(
 				Arguments.of(CargoDeliveryType.ANY, CargoDeliveryType.ANY),
@@ -71,7 +74,7 @@ public class CargoShippingTypeRequirementConstraintTest extends AbstractMicroTes
 	@MethodSource("provideCargoDeliveryTypeCombinations")
 	@Tag(TestCategories.MICRO_TEST)
 	@Tag(TestCategories.REGRESSION_TEST)
-	public void tesShippedFOBDESCargo(CargoDeliveryType sdt, CargoDeliveryType pdt) throws Exception {
+	public void testShippedFOBDESCargo(CargoDeliveryType sdt, CargoDeliveryType pdt) throws Exception {
 		setupFOBDESCargoPair(sdt, pdt);
 		//FOB-DES is by definition shipped, so if either sdt or pdt is set to not shipped, we expect the constraint checker to fail.
 		validateConstraintCheckers(!(sdt.equals(CargoDeliveryType.NOT_SHIPPED) || pdt.equals(CargoDeliveryType.NOT_SHIPPED)));
@@ -108,6 +111,9 @@ public class CargoShippingTypeRequirementConstraintTest extends AbstractMicroTes
 			purchaseDeliveryType = CargoDeliveryType.ANY;
 		}
 		
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final CharterInMarket charterInMarket1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 1);
+			
 		cargoModelBuilder.makeCargo()//
 				.makeFOBPurchase("L1", LocalDate.of(2015, 6, 1), portFinder.findPort("Point Fortin"), null, entity, "5") //
 				.withSalesDeliveryType(salesDeliveryType)
@@ -115,6 +121,7 @@ public class CargoShippingTypeRequirementConstraintTest extends AbstractMicroTes
 				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
 				.withPurchaseDeliveryType(purchaseDeliveryType)//
 				.build() //
+				.withVesselAssignment(charterInMarket1, 0, 1)
 				.build();
 	}
 	
@@ -137,7 +144,7 @@ public class CargoShippingTypeRequirementConstraintTest extends AbstractMicroTes
 				.build();
 	}
 
-	private void validateConstraintCheckers(boolean valid) {
+	private void validateConstraintCheckers(boolean expectedConstraintCheckResult) {
 		evaluateWithLSOTest(scenarioRunner -> {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
@@ -145,7 +152,7 @@ public class CargoShippingTypeRequirementConstraintTest extends AbstractMicroTes
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 			// Validate the initial sequences are invalid
 			final List<IConstraintChecker> violatedConstraints = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences);
-			if (!valid) {
+			if (!expectedConstraintCheckResult) {
 				Assertions.assertNotNull(violatedConstraints);
 				Assertions.assertTrue(violatedConstraints.size() == 1);
 				Assertions.assertTrue(violatedConstraints.get(0) instanceof ShippingTypeRequirementConstraintChecker);
