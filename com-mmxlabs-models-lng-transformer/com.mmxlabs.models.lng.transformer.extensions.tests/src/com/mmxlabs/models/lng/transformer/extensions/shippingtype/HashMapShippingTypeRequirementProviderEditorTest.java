@@ -23,10 +23,10 @@ public class HashMapShippingTypeRequirementProviderEditorTest {
 		final CargoDeliveryType cargoType1 = CargoDeliveryType.NOT_SHIPPED;
 		final CargoDeliveryType cargoType2 = CargoDeliveryType.SHIPPED;
 
-		provider.setPurchaseSlotDeliveryType(element1, cargoType1);
-		provider.setPurchaseSlotDeliveryType(element2, cargoType2);
+		provider.setPurchaseSlotRequiredDeliveryType(element1, cargoType1);
+		provider.setSalesSlotRequiredDeliveryType(element2, cargoType2);
 
-		Assertions.assertEquals(provider.getPurchaseSlotDeliveryType(element1), cargoType1);
-		Assertions.assertEquals(provider.getPurchaseSlotDeliveryType(element2), cargoType2);
+		Assertions.assertEquals(provider.getPurchaseSlotRequiredDeliveryType(element1), cargoType1);
+		Assertions.assertEquals(provider.getSalesSlotRequiredDeliveryType(element2), cargoType2);
 	}
 }

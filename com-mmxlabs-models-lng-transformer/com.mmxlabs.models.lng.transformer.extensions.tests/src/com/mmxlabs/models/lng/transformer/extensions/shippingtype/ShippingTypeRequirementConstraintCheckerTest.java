@@ -15,31 +15,41 @@ import com.google.inject.Provides;
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVesselEditor;
 
 public class ShippingTypeRequirementConstraintCheckerTest {
 	public void testPurchaseConstraints(CargoDeliveryType cargoType, CargoDeliveryType requiredType) {
 
 		final String name = "name";
 		final IShippingTypeRequirementProviderEditor shippingTypeRequirementProviderEditor = Mockito.mock(IShippingTypeRequirementProviderEditor.class);
-		final ShippingTypeRequirementConstraintChecker checker = createChecker(name, shippingTypeRequirementProviderEditor);
+		final IResource resource1 = Mockito.mock(IResource.class);
+		final IVesselProvider vesselProvider = Mockito.mock(IVesselProvider.class);
+		final IVesselAvailability vesselAvailability = Mockito.mock(IVesselAvailability.class);
+		if (cargoType == CargoDeliveryType.SHIPPED) {
+			Mockito.when(vesselAvailability.getVesselInstanceType()).thenReturn(VesselInstanceType.SPOT_CHARTER);
+		}
+		else {
+			Mockito.when(vesselAvailability.getVesselInstanceType()).thenReturn(VesselInstanceType.DES_PURCHASE);
+		}
+		Mockito.when(vesselProvider.getVesselAvailability(resource1)).thenReturn(vesselAvailability);
+		final ShippingTypeRequirementConstraintChecker checker = createChecker(name, shippingTypeRequirementProviderEditor, vesselProvider);
 
 		final ISequenceElement element1 = Mockito.mock(ISequenceElement.class);
 		final ISequenceElement element2 = Mockito.mock(ISequenceElement.class);
-		final IResource resource1 = Mockito.mock(IResource.class);
-
-		Mockito.when(shippingTypeRequirementProviderEditor.getPurchaseSlotDeliveryType(element1)).thenReturn(cargoType);
+		
 		Mockito.when(shippingTypeRequirementProviderEditor.getSalesSlotRequiredDeliveryType(element2)).thenReturn(requiredType);
 
-		Mockito.when(shippingTypeRequirementProviderEditor.getSalesSlotDeliveryType(element1)).thenReturn(CargoDeliveryType.ANY);
 		Mockito.when(shippingTypeRequirementProviderEditor.getPurchaseSlotRequiredDeliveryType(element2)).thenReturn(CargoDeliveryType.ANY);
 
 		boolean expectedResult = (requiredType == CargoDeliveryType.ANY || requiredType == cargoType);
 		Assertions.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource1) == expectedResult);
 
 		Mockito.verify(shippingTypeRequirementProviderEditor).getSalesSlotRequiredDeliveryType(element2);
-		if (requiredType != CargoDeliveryType.ANY) {
-			Mockito.verify(shippingTypeRequirementProviderEditor).getPurchaseSlotDeliveryType(element1);
-		}
+		
 		if (expectedResult == true) {
 			Mockito.verify(shippingTypeRequirementProviderEditor).getPurchaseSlotRequiredDeliveryType(element1);
 		}
@@ -51,25 +61,29 @@ public class ShippingTypeRequirementConstraintCheckerTest {
 
 		final String name = "name";
 		final IShippingTypeRequirementProviderEditor shippingTypeRequirementProviderEditor = Mockito.mock(IShippingTypeRequirementProviderEditor.class);
-		final ShippingTypeRequirementConstraintChecker checker = createChecker(name, shippingTypeRequirementProviderEditor);
-
+		final IResource resource1 = Mockito.mock(IResource.class);
+		final IVesselProvider vesselProvider = Mockito.mock(IVesselProvider.class);
+		final IVesselAvailability vesselAvailability = Mockito.mock(IVesselAvailability.class);
+		if (cargoType == CargoDeliveryType.SHIPPED) {
+			Mockito.when(vesselAvailability.getVesselInstanceType()).thenReturn(VesselInstanceType.SPOT_CHARTER);
+		}
+		else {
+			Mockito.when(vesselAvailability.getVesselInstanceType()).thenReturn(VesselInstanceType.DES_PURCHASE);
+		}
+		Mockito.when(vesselProvider.getVesselAvailability(resource1)).thenReturn(vesselAvailability);
+		final ShippingTypeRequirementConstraintChecker checker = createChecker(name, shippingTypeRequirementProviderEditor, vesselProvider);
 		final ISequenceElement element1 = Mockito.mock(ISequenceElement.class);
 		final ISequenceElement element2 = Mockito.mock(ISequenceElement.class);
-		final IResource resource1 = Mockito.mock(IResource.class);
 
-		Mockito.when(shippingTypeRequirementProviderEditor.getPurchaseSlotDeliveryType(element1)).thenReturn(CargoDeliveryType.ANY);
 		Mockito.when(shippingTypeRequirementProviderEditor.getSalesSlotRequiredDeliveryType(element2)).thenReturn(CargoDeliveryType.ANY);
 
 		Mockito.when(shippingTypeRequirementProviderEditor.getPurchaseSlotRequiredDeliveryType(element1)).thenReturn(requiredType);
-		Mockito.when(shippingTypeRequirementProviderEditor.getSalesSlotDeliveryType(element2)).thenReturn(cargoType);
 
 		boolean expectedResult = (requiredType == CargoDeliveryType.ANY || requiredType == cargoType);
 		Assertions.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource1) == expectedResult);
 
 		Mockito.verify(shippingTypeRequirementProviderEditor).getPurchaseSlotRequiredDeliveryType(element1);
-		if (requiredType != CargoDeliveryType.ANY) {
-			Mockito.verify(shippingTypeRequirementProviderEditor).getSalesSlotDeliveryType(element2);
-		}
+
 		
 		Mockito.verify(shippingTypeRequirementProviderEditor).getSalesSlotRequiredDeliveryType(element2);
 
@@ -117,13 +131,15 @@ public class ShippingTypeRequirementConstraintCheckerTest {
 		testSalesConstraints(CargoDeliveryType.NOT_SHIPPED, CargoDeliveryType.SHIPPED);
 	}
 
-	private ShippingTypeRequirementConstraintChecker createChecker(final String name, final IShippingTypeRequirementProviderEditor restrictedElementsProvider) {
+	private ShippingTypeRequirementConstraintChecker createChecker(final String name, final IShippingTypeRequirementProviderEditor restrictedElementsProvider,
+			IVesselProvider vesselProvider) {
 
 		final AbstractModule module = new AbstractModule() {
 
 			@Override
 			protected void configure() {
 				bind(IShippingTypeRequirementProvider.class).toInstance(restrictedElementsProvider);
+				bind(IVesselProvider.class).toInstance(vesselProvider);
 			}
 
 			@Provides
