@@ -706,7 +706,6 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			final LNGScenarioModel lngScenarioModel = sdp.getTypedScenario(LNGScenarioModel.class);
 			final IMapperClass mapper = new Mapper(lngScenarioModel, false);
 			ScheduleSpecification baseScheduleSpecification = createBaseScheduleSpecification(sdp, model, mapper);
-			final ExtraDataProvider extraDataProvider = mapper.getExtraDataProvider();
 
 			SandboxJob sandboxJob = jobAction.apply(mapper, baseScheduleSpecification);
 
@@ -759,6 +758,9 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			sandboxResult.setName("SandboxResult");
 			sandboxResult.setHasDualModeSolutions(dualPNLMode);
 			sandboxResult.setUserSettings(EcoreUtil.copy(userSettings));
+			
+			// Request this now one all other parts have run to get correct data.
+			final ExtraDataProvider extraDataProvider = mapper.getExtraDataProvider();
 
 			sandboxResult.getCharterInMarketOverrides().addAll(extraDataProvider.extraCharterInMarketOverrides);
 			sandboxResult.getExtraCharterInMarkets().addAll(extraDataProvider.extraCharterInMarkets);
