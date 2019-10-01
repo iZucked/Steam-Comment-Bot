@@ -40,7 +40,7 @@ public class EMFDeserializationContext extends DefaultDeserializationContext {
 		state.ignoredFeatures.add(feature);
 	}
 
-	public void setMissingFeatureHandler(ToBooleanFunction<JSONReference> missingReferenceHandler) {
+	public void setMissingFeatureHandler(final ToBooleanFunction<JSONReference> missingReferenceHandler) {
 		state.missingReferenceHandler = missingReferenceHandler;
 	}
 
@@ -49,7 +49,7 @@ public class EMFDeserializationContext extends DefaultDeserializationContext {
 		if (value instanceof EObject) {
 			final EObject eObject = (EObject) value;
 
-			JSONReference ref = JSONReference.of(eObject);
+			final JSONReference ref = JSONReference.of(eObject);
 
 			registerType(ref.getClassType(), ref.getGlobalId(), ref.getName(), eObject);
 		}
@@ -85,24 +85,37 @@ public class EMFDeserializationContext extends DefaultDeserializationContext {
 			return;
 		}
 
-		Object referenceObject = lookupType(ref);
-		if (referenceObject == null) {
-			if (state.missingReferenceHandler.accept(ref)) {
-				throw new IllegalArgumentException();
-			}
-			// if (true) {
-			// } else {
-			// System.out.println("Unknown reference " + ref.getName() + " " + ref.getGlobalId() + " " + ref.getClassType());
-			// }
-		} else {
+		if (feature.isMany()) {
+			state.actions.add(() -> {
+				final Object referenceObject = lookupType(ref);
+				if (referenceObject == null) {
+					if (state.missingReferenceHandler.accept(ref)) {
+						throw new IllegalArgumentException();
+					}
+					// if (true) {
+					// } else {
+					// System.out.println("Unknown reference " + ref.getName() + " " + ref.getGlobalId() + " " + ref.getClassType());
+					// }
+				}
 
-			if (feature.isMany()) {
-				state.actions.add(() -> ((List) owner.eGet(feature)).add(referenceObject));
-			} else {
-				state.actions.add(() -> {
-					owner.eSet(feature, referenceObject);
-				});
-			}
+				((List) owner.eGet(feature)).add(referenceObject);
+			});
+		} else {
+			state.actions.add(() -> {
+
+				final Object referenceObject = lookupType(ref);
+				if (referenceObject == null) {
+					if (state.missingReferenceHandler.accept(ref)) {
+						throw new IllegalArgumentException();
+					}
+					// if (true) {
+					// } else {
+					// System.out.println("Unknown reference " + ref.getName() + " " + ref.getGlobalId() + " " + ref.getClassType());
+					// }
+				}
+
+				owner.eSet(feature, referenceObject);
+			});
 		}
 	}
 
