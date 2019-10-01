@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
+import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
@@ -26,10 +27,14 @@ public class SlotDateConstraint extends AbstractModelMultiConstraint {
 	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject object = ctx.getTarget();
 
+		if (!(extraContext.getContainer(object) instanceof CargoModel)) {
+			return Activator.PLUGIN_ID;
+		}
+		
 		if (object instanceof Slot) {
-			final Slot slot = (Slot) object;
-			LocalDate windowStart = slot.getWindowStart();
-			DetailConstraintStatusFactory factory = DetailConstraintStatusFactory.makeStatus() //
+			final Slot<?> slot = (Slot<?>) object;
+			final LocalDate windowStart = slot.getWindowStart();
+			final DetailConstraintStatusFactory factory = DetailConstraintStatusFactory.makeStatus() //
 					.withTypedName("Slot", slot.getName() == null ? "(no ID)" : slot.getName());
 
 			if (windowStart == null) {
