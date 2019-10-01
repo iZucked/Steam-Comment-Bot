@@ -96,6 +96,9 @@ public class DataServiceClient {
 				.build();
 
 		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
+		if (upstreamURL == null || upstreamURL.isEmpty()) {
+			return;
+		}
 		final String requestURL = String.format("%s%s", upstreamURL, typeRecord.getDownloadURL(uuid));
 
 		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
