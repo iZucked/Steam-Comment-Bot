@@ -11,6 +11,7 @@ Export-Package: com.mmxlabs.models.lng.scenario.exportWizards,
  com.mmxlabs.models.lng.scenario.importWizards,
  com.mmxlabs.models.lng.scenario.mergeWizards,
  com.mmxlabs.models.lng.scenario.ui.importers,
+ com.mmxlabs.models.lng.scenario.utils,
  com.mmxlabs.models.lng.scenario.wizards
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  org.eclipse.ui.ide;bundle-version="3.7.0",
