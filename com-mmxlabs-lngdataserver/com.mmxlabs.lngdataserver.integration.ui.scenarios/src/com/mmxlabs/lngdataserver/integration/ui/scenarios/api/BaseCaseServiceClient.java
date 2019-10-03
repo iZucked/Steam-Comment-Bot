@@ -31,6 +31,7 @@ public class BaseCaseServiceClient {
 
 	private static final String UNEXPECTED_CODE = "Unexpected code: ";
 	private static final String BASECASE_UPLOAD_URL = "/scenarios/v1/basecase/upload";
+	private static final String BASECASE_UPLOAD_ARCHIVE_URL = "/scenarios/v1/basecase/uploadarchive";
 	private static final String BASECASE_DOWNLOAD_URL = "/scenarios/v1/basecase/";
 	private static final String BASECASE_CURRENT_URL = "/scenarios/v1/basecase/current";
 
@@ -69,6 +70,42 @@ public class BaseCaseServiceClient {
 			}
 
 			return response.body().string();
+		}
+	}
+
+	public void uploadBaseCaseArchive(final File file, //
+			final String uuid, ///
+			final IProgressListener progressListener) throws IOException {
+		RequestBody requestBody = new MultipartBody.Builder() //
+				.setType(MultipartBody.FORM) //
+				.addFormDataPart("uuid", uuid) //
+				.addFormDataPart("archive", uuid + ".zip", RequestBody.create(mediaType, file)) //
+				.build();
+
+		if (progressListener != null) {
+			requestBody = new ProgressRequestBody(requestBody, progressListener);
+		}
+
+		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
+
+		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
+				.url(upstreamURL + BASECASE_UPLOAD_ARCHIVE_URL) //
+				.post(requestBody).build();
+
+		// Check the response
+		try (Response response = httpClient.newCall(request).execute()) {
+			if (!response.isSuccessful()) {
+				if (response.code() == 404) {
+					// 404: Endpoint not defined - old server version
+					return;
+				}
+				if (response.code() == 503) {
+					// 503: Service unavailable - not configured on server, so do not report an error for this code.
+					return;
+
+				}
+				throw new IOException("Unexpected code " + response);
+			}
 		}
 	}
 

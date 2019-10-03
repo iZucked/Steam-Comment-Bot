@@ -8,6 +8,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,6 +26,8 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
+import com.mmxlabs.common.io.FileDeleter;
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lngdataserver.commons.http.WrappedProgressMonitor;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.BaseCaseServiceClient;
@@ -37,6 +40,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.scenario.utils.ExportCSVBundleUtil;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
@@ -271,8 +275,27 @@ public class ScenarioServicePublishAction {
 				System.out.println("Error while setting the new baseCase as current");
 				e.printStackTrace();
 				throw new PublishBasecaseException("Error marking base case current", Type.FAILED_TO_MAKE_CURRENT, e);
-
 			}
+
+			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_DATAHUB_BASECASE_ARCHIVE)) {
+				try {
+					File tempFile = Files.createTempFile(uuid, ".zip").toFile();
+					try {
+						ExportCSVBundleUtil.exportScenarioToZip(scenarioDataProvider, tempFile);
+						baseCaseServiceClient.uploadBaseCaseArchive(tempFile, uuid, null);
+					} finally {
+						// Delete temporary file
+						final boolean secureDelete = LicenseFeatures.isPermitted(FileDeleter.LICENSE_FEATURE__SECURE_DELETE);
+						FileDeleter.delete(tempFile, secureDelete);
+					}
+
+				} catch (final IOException e) {
+					System.out.println("Error while setting the new baseCase as current");
+					e.printStackTrace();
+					throw new PublishBasecaseException("Error marking base case current", Type.FAILED_TO_MAKE_CURRENT, e);
+				}
+			}
+
 		} finally {
 			progressMonitor.done();
 		}
