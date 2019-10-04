@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>com.mmxlabs.common</groupId>
 		<artifactId>common-util-parent</artifactId>
-		<version>4.7.17.RELEASE</version>
+		<version>4.7.18-SNAPSHOT</version>
 	</parent>
 	<properties>
 		<sonar.junit.reportPaths>
