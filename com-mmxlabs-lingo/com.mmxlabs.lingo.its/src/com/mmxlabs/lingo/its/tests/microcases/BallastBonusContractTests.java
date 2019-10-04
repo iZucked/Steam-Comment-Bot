@@ -32,10 +32,14 @@ import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.port.CapabilityGroup;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.pricing.CharterCurve;
+import com.mmxlabs.models.lng.schedule.BallastBonusFeeDetails;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.GeneralPNLDetails;
+import com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
@@ -52,7 +56,7 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 public class BallastBonusContractTests extends AbstractMicroTestCase {
 
 	private static final String TEST_CHARTER_CURVE_NAME = "TestCharterCurve";
-
+	
 	@Override
 	protected int getThreadCount() {
 		return 4;
@@ -259,6 +263,93 @@ public class BallastBonusContractTests extends AbstractMicroTestCase {
 		});
 	}
 
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testNotionalJourneyBallastBonusOn_SuezCanal() throws Exception {
+
+		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
+		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
+
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+
+		final VesselStateAttributes ballastAttributes = vessel.getBallastAttributes();
+		final EList<FuelConsumption> fuelConsumption = ballastAttributes.getVesselOrDelegateFuelConsumption();
+		fuelConsumption.clear();
+		final FuelConsumption fc1 = FleetFactory.eINSTANCE.createFuelConsumption();
+		fc1.setSpeed(10);
+		fc1.setConsumption(50);
+		final FuelConsumption fc2 = FleetFactory.eINSTANCE.createFuelConsumption();
+		fc2.setSpeed(15);
+		fc2.setConsumption(80);
+		final FuelConsumption fc3 = FleetFactory.eINSTANCE.createFuelConsumption();
+		fc3.setSpeed(20);
+		fc3.setConsumption(100);
+
+		fuelConsumption.add(fc1);
+		fuelConsumption.add(fc2);
+		fuelConsumption.add(fc3);
+		vessel.setMaxSpeed(20);
+
+		distanceModelBuilder.setPortToPortDistance(portFinder.findPort("Sakai"), portFinder.findPort("Bonny Nigeria"), RouteOption.DIRECT, 1008, true);
+		distanceModelBuilder.setPortToPortDistance(portFinder.findPort("Sakai"), portFinder.findPort("Bonny Nigeria"), RouteOption.SUEZ, 96, true);
+		distanceModelBuilder.setPortToPortDistance(portFinder.findPort("Sakai"), portFinder.findPort("Bonny Nigeria"), RouteOption.PANAMA, 800, true);
+
+		this.fleetModelBuilder.setRouteParameters(vessel, RouteOption.SUEZ, 90, 90, 90, 90, 36);
+		this.fleetModelBuilder.setRouteParameters(vessel, RouteOption.PANAMA, 90, 90, 90, 90, 36);
+		vessel.setRouteParametersOverride(true);
+
+		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+				.withStartWindow(LocalDateTime.of(2015, 12, 2, 0, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0, 0))//
+				.withEndWindow(LocalDateTime.of(2016, 2, 6, 0, 0, 0, 0))//
+				.build();
+
+		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", 22.8)//
+				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
+				.build();
+		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 1, 5), portFinder.findPort("Sakai"), null, entity, "7").build();
+		final CapabilityGroup allDischarge = portFinder.getPortModel().getSpecialPortGroups().stream().filter(p -> p.getName().equals("All DISCHARGE Ports")).findFirst().get();
+		portFinder.getPortModel().getPorts().forEach(p -> System.out.println(p.getName()));
+		vesselAvailability.getEndAt().add(allDischarge);
+		@NonNull
+		final Cargo cargo = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
+		cargo.setVesselAssignmentType(vesselAvailability);
+		final BallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleNotionalJourneyBallastBonusContract(Lists.newLinkedList(Lists.newArrayList(portFinder.findPort("Sakai"))),
+				20.0, "20000", "100", false, Lists.newArrayList(portFinder.findPort("Bonny Nigeria")));
+		vesselAvailability.setBallastBonusContract(ballastBonusContract);
+		evaluateTest(null, null, scenarioRunner -> {
+
+			final EndEvent end = getEndEvent(vesselAvailability);
+			
+			for (GeneralPNLDetails details : end.getGeneralPNLDetails()) {
+				if (details instanceof BallastBonusFeeDetails) {
+					
+					BallastBonusFeeDetails bbDetails = (BallastBonusFeeDetails)details;
+					NotionalJourneyContractDetails cDetails = (NotionalJourneyContractDetails)bbDetails.getMatchingBallastBonusContractDetails();
+					
+					int totalFuelCost = cDetails.getTotalFuelCost();
+					Assertions.assertEquals(15166, totalFuelCost);
+				}
+			}
+
+			
+			final @Nullable Schedule schedule = scenarioRunner.getSchedule();
+			assert schedule != null;
+
+			final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(cargo.getLoadName(), schedule);
+			Assertions.assertNotNull(cargoAllocation);
+
+			final long cargoPNL = cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
+
+			final List<SlotAllocation> slotAllocations = scenarioRunner.getSchedule().getSlotAllocations();
+			long endEventPNL = -48_499;
+			Assertions.assertEquals(endEventPNL, end.getGroupProfitAndLoss().getProfitAndLoss());
+			Assertions.assertEquals(cargoPNL + endEventPNL, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));			
+			
+		});
+	}
+
+	
+	
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testNotionalJourneyBallastBonusOn_Matching_FindBestOption() throws Exception {

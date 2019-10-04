@@ -57,7 +57,8 @@ public class DefaultNotionalJourneyBallastBonusContractRule extends BallastBonus
 			ERouteOption route = quickestTravelTime.getFirst();
 			long fuelUsedJourney = Calculator.quantityFromRateTime(vesselAvailability.getVessel().getConsumptionRate(VesselState.Ballast).getRate(speedInKnots),
 					(quickestTravelTime.getSecond() - routeCostProvider.getRouteTransitTime(route, vesselAvailability.getVessel()))) / 24L;
-			long fuelUsedCanal = routeCostProvider.getRouteFuelUsage(route, vesselAvailability.getVessel(), VesselState.Ballast);
+			long fuelUsedCanal = Calculator.quantityFromRateTime(routeCostProvider.getRouteFuelUsage(route, vesselAvailability.getVessel(), VesselState.Ballast),
+					routeCostProvider.getRouteTransitTime(route, vesselAvailability.getVessel())) / 24L;
 			long canalCost = routeCostProvider.getRouteCost(route, vesselAvailability.getVessel(), voyageStartTime, CostType.Ballast);
 			long hireCost = (charterRateCurve.getValueAtPoint(voyageStartTime) * quickestTravelTime.getSecond()) / 24L;
 			long fuelCost = Calculator.costFromConsumption(fuelUsedJourney + fuelUsedCanal, fuelPriceCurve.getValueAtPoint(voyageStartTime));
@@ -83,7 +84,8 @@ public class DefaultNotionalJourneyBallastBonusContractRule extends BallastBonus
 			ERouteOption route = quickestTravelTime.getFirst();
 			long fuelUsedJourney = Calculator.quantityFromRateTime(vesselAvailability.getVessel().getConsumptionRate(VesselState.Ballast).getRate(speedInKnots),
 					(quickestTravelTime.getSecond() - routeCostProvider.getRouteTransitTime(route, vesselAvailability.getVessel()))) / 24L;
-			long fuelUsedCanal = routeCostProvider.getRouteFuelUsage(route, vesselAvailability.getVessel(), VesselState.Ballast);
+			long fuelUsedCanal = Calculator.quantityFromRateTime(routeCostProvider.getRouteFuelUsage(route, vesselAvailability.getVessel(), VesselState.Ballast),
+					routeCostProvider.getRouteTransitTime(route, vesselAvailability.getVessel())) / 24L;
 			long canalCost = routeCostProvider.getRouteCost(route, vesselAvailability.getVessel(), voyageStartTime, CostType.Ballast);
 			long hireCost = (charterRateCurve.getValueAtPoint(voyageStartTime) * quickestTravelTime.getSecond()) / 24L;
 			long fuelCost = Calculator.costFromConsumption(fuelUsedJourney + fuelUsedCanal, fuelPriceCurve.getValueAtPoint(voyageStartTime));
