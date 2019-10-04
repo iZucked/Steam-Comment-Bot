@@ -42,6 +42,16 @@
          name="Publish scenario as base case">
    </command>
    <command
+         defaultHandler="com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard.LockBaseCaseCommandHandler"
+         id="com.mmxlabs.datahub.basecase.lock"
+         name="Lock base case">
+   </command>
+   <command
+         defaultHandler="com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard.UnlockBaseCaseCommandHandler"
+         id="com.mmxlabs.datahub.basecase.unlock"
+         name="Unlock base case">
+   </command>
+   <command
          defaultHandler="com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard.CopyFromBaseCaseCommandHandler"
          id="com.mmxlabs.datahub.basecase.syncwith"
          name="Sync data with base case">
@@ -80,6 +90,78 @@
             </and>
          </visibleWhen>
       </command>
+       <command
+            commandId="com.mmxlabs.datahub.basecase.lock"
+            style="push"
+            tooltip="Lock base case">
+         <visibleWhen
+               checkEnabled="false">
+            <and>
+               <with
+                     variable="selection">
+                  <iterate
+                        ifEmpty="false">
+                     <instanceof
+                           value="com.mmxlabs.scenario.service.model.ScenarioService">
+                     </instanceof>
+                     <and>
+                       <test
+                              forcePluginActivation="true"
+                              property="com.mmxlabs.datahub.basecase.service.needslocking">
+                        </test>
+                          <test
+                              forcePluginActivation="true"
+                              property="com.mmxlabs.datahub.basecase.service.isservice">
+                        </test>
+                        <test
+                              forcePluginActivation="true"
+                              property="com.mmxlabs.datahub.basecase.service.unlocked">
+                        </test>
+                     </and>
+                  </iterate>
+               </with>
+               <count
+                     value="1">
+               </count>
+            </and>
+         </visibleWhen>
+      </command>
+      <command
+            commandId="com.mmxlabs.datahub.basecase.unlock"
+            style="push"
+            tooltip="Unlock base case">
+         <visibleWhen
+               checkEnabled="false">
+            <and>
+               <with
+                     variable="selection">
+                  <iterate
+                        ifEmpty="false">
+                     <instanceof
+                           value="com.mmxlabs.scenario.service.model.ScenarioService">
+                     </instanceof>
+                     <and>
+                       <test
+                              forcePluginActivation="true"
+                              property="com.mmxlabs.datahub.basecase.service.needslocking">
+                        </test>
+                          <test
+                              forcePluginActivation="true"
+                              property="com.mmxlabs.datahub.basecase.service.isservice">
+                        </test>
+                        <test
+                              forcePluginActivation="true"
+                              property="com.mmxlabs.datahub.basecase.service.lockedbyme">
+                        </test>
+                     </and>
+                  </iterate>
+               </with>
+               <count
+                     value="1">
+               </count>
+            </and>
+         </visibleWhen>
+      </command>
       <command
             commandId="com.mmxlabs.datahub.basecase.syncwith"
             style="push"
@@ -109,5 +191,15 @@
          </visibleWhen>
       </command>
    </menuContribution>
+</extension>
+<extension
+      point="org.eclipse.core.expressions.propertyTesters">
+   <propertyTester
+         class="com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard.BaseCaseFlagsPropertyTester"
+         id="com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard.BaseCaseFlagsPropertyTester"
+         namespace="com.mmxlabs.datahub.basecase.service"
+         properties="locked,unlocked,lockedbyme,needslocking,isservice"
+         type="com.mmxlabs.scenario.service.model.ScenarioService">
+   </propertyTester>
 </extension>
 </plugin>

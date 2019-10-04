@@ -156,6 +156,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getScenarioModel() {
 		return scenarioModelEClass;
 	}
@@ -165,6 +166,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getScenarioModel_ScenarioServices() {
 		return (EReference) scenarioModelEClass.getEStructuralFeatures().get(0);
 	}
@@ -174,6 +176,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getContainer() {
 		return containerEClass;
 	}
@@ -183,6 +186,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getContainer_Parent() {
 		return (EReference) containerEClass.getEStructuralFeatures().get(0);
 	}
@@ -192,6 +196,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getContainer_Elements() {
 		return (EReference) containerEClass.getEStructuralFeatures().get(1);
 	}
@@ -201,6 +206,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getContainer_Archived() {
 		return (EAttribute) containerEClass.getEStructuralFeatures().get(2);
 	}
@@ -210,6 +216,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getContainer_Name() {
 		return (EAttribute) containerEClass.getEStructuralFeatures().get(3);
 	}
@@ -219,6 +226,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getContainer_Hidden() {
 		return (EAttribute) containerEClass.getEStructuralFeatures().get(4);
 	}
@@ -228,6 +236,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getFolder() {
 		return folderEClass;
 	}
@@ -237,6 +246,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getFolder_Metadata() {
 		return (EReference) folderEClass.getEStructuralFeatures().get(0);
 	}
@@ -246,6 +256,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getFolder_Managed() {
 		return (EAttribute) folderEClass.getEStructuralFeatures().get(1);
 	}
@@ -255,6 +266,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getScenarioService() {
 		return scenarioServiceEClass;
 	}
@@ -264,6 +276,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getScenarioService_Description() {
 		return (EAttribute) scenarioServiceEClass.getEStructuralFeatures().get(0);
 	}
@@ -273,6 +286,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getScenarioService_ServiceRef() {
 		return (EAttribute) scenarioServiceEClass.getEStructuralFeatures().get(1);
 	}
@@ -282,6 +296,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getScenarioService_SupportsForking() {
 		return (EAttribute) scenarioServiceEClass.getEStructuralFeatures().get(2);
 	}
@@ -291,6 +306,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getScenarioService_SupportsImport() {
 		return (EAttribute) scenarioServiceEClass.getEStructuralFeatures().get(3);
 	}
@@ -300,6 +316,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getScenarioService_ScenarioModel() {
 		return (EReference) scenarioServiceEClass.getEStructuralFeatures().get(4);
 	}
@@ -309,6 +326,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getScenarioService_Local() {
 		return (EAttribute) scenarioServiceEClass.getEStructuralFeatures().get(5);
 	}
@@ -318,6 +336,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getScenarioService_ServiceID() {
 		return (EAttribute) scenarioServiceEClass.getEStructuralFeatures().get(6);
 	}
@@ -327,6 +346,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getScenarioService_Offline() {
 		return (EAttribute) scenarioServiceEClass.getEStructuralFeatures().get(7);
 	}
@@ -336,6 +356,27 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public EAttribute getScenarioService_LockedBy() {
+		return (EAttribute) scenarioServiceEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getScenarioService_Locked() {
+		return (EAttribute) scenarioServiceEClass.getEStructuralFeatures().get(9);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getScenarioInstance() {
 		return scenarioInstanceEClass;
 	}
@@ -345,6 +386,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getScenarioInstance_Uuid() {
 		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(0);
 	}
@@ -354,6 +396,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getScenarioInstance_Metadata() {
 		return (EReference) scenarioInstanceEClass.getEStructuralFeatures().get(2);
 	}
@@ -363,6 +406,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getScenarioInstance_RootObjectURI() {
 		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(1);
 	}
@@ -372,6 +416,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getScenarioInstance_ScenarioVersion() {
 		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(3);
 	}
@@ -381,6 +426,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getScenarioInstance_VersionContext() {
 		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(4);
 	}
@@ -390,6 +436,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getScenarioInstance_Fragments() {
 		return (EReference) scenarioInstanceEClass.getEStructuralFeatures().get(7);
 	}
@@ -399,6 +446,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getScenarioInstance_Readonly() {
 		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(8);
 	}
@@ -408,6 +456,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getScenarioInstance_ValidationStatusCode() {
 		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(9);
 	}
@@ -417,6 +466,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getScenarioInstance_Manifest() {
 		return (EReference) scenarioInstanceEClass.getEStructuralFeatures().get(10);
 	}
@@ -426,6 +476,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getScenarioInstance_ExternalID() {
 		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(11);
 	}
@@ -435,6 +486,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getScenarioInstance_ClientScenarioVersion() {
 		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(5);
 	}
@@ -444,6 +496,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getScenarioInstance_ClientVersionContext() {
 		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(6);
 	}
@@ -453,6 +506,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getMetadata() {
 		return metadataEClass;
 	}
@@ -462,6 +516,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getMetadata_Creator() {
 		return (EAttribute) metadataEClass.getEStructuralFeatures().get(0);
 	}
@@ -471,6 +526,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getMetadata_Created() {
 		return (EAttribute) metadataEClass.getEStructuralFeatures().get(1);
 	}
@@ -480,6 +536,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getMetadata_LastModified() {
 		return (EAttribute) metadataEClass.getEStructuralFeatures().get(2);
 	}
@@ -489,6 +546,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getMetadata_Comment() {
 		return (EAttribute) metadataEClass.getEStructuralFeatures().get(3);
 	}
@@ -498,6 +556,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getMetadata_LastModifiedBy() {
 		return (EAttribute) metadataEClass.getEStructuralFeatures().get(4);
 	}
@@ -507,6 +566,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getMetadata_ContentType() {
 		return (EAttribute) metadataEClass.getEStructuralFeatures().get(5);
 	}
@@ -516,6 +576,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getScenarioFragment() {
 		return scenarioFragmentEClass;
 	}
@@ -525,6 +586,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getScenarioFragment_ScenarioInstance() {
 		return (EReference) scenarioFragmentEClass.getEStructuralFeatures().get(0);
 	}
@@ -534,6 +596,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getScenarioFragment_Name() {
 		return (EAttribute) scenarioFragmentEClass.getEStructuralFeatures().get(1);
 	}
@@ -543,6 +606,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getScenarioFragment_Fragment() {
 		return (EReference) scenarioFragmentEClass.getEStructuralFeatures().get(2);
 	}
@@ -552,6 +616,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getScenarioFragment_ContentType() {
 		return (EAttribute) scenarioFragmentEClass.getEStructuralFeatures().get(3);
 	}
@@ -561,6 +626,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getScenarioFragment_UseCommandStack() {
 		return (EAttribute) scenarioFragmentEClass.getEStructuralFeatures().get(4);
 	}
@@ -570,6 +636,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EDataType getIScenarioService() {
 		return iScenarioServiceEDataType;
 	}
@@ -579,6 +646,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ScenarioServiceFactory getScenarioServiceFactory() {
 		return (ScenarioServiceFactory) getEFactoryInstance();
 	}
@@ -626,6 +694,8 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 		createEAttribute(scenarioServiceEClass, SCENARIO_SERVICE__LOCAL);
 		createEAttribute(scenarioServiceEClass, SCENARIO_SERVICE__SERVICE_ID);
 		createEAttribute(scenarioServiceEClass, SCENARIO_SERVICE__OFFLINE);
+		createEAttribute(scenarioServiceEClass, SCENARIO_SERVICE__LOCKED_BY);
+		createEAttribute(scenarioServiceEClass, SCENARIO_SERVICE__LOCKED);
 
 		scenarioInstanceEClass = createEClass(SCENARIO_INSTANCE);
 		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__UUID);
@@ -737,6 +807,10 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 		initEAttribute(getScenarioService_ServiceID(), ecorePackage.getEString(), "serviceID", null, 0, 1, ScenarioService.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
 				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getScenarioService_Offline(), ecorePackage.getEBoolean(), "offline", null, 0, 1, ScenarioService.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
+				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getScenarioService_LockedBy(), ecorePackage.getEString(), "lockedBy", null, 0, 1, ScenarioService.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
+				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getScenarioService_Locked(), ecorePackage.getEBoolean(), "locked", null, 0, 1, ScenarioService.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
 				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(scenarioInstanceEClass, ScenarioInstance.class, "ScenarioInstance", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

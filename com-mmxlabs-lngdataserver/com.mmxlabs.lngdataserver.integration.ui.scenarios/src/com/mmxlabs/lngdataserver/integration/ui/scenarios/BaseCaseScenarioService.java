@@ -90,14 +90,12 @@ public class BaseCaseScenarioService extends AbstractScenarioService {
 			baseCaseFolder.mkdirs();
 		}
 
-		final BaseCaseServiceClient client = new BaseCaseServiceClient();
-
 		// Initial model load
 		new Thread(() -> {
 
 			getServiceModel();
 			setReady();
-			this.updater = new BaseCaseScenarioUpdater(serviceModel, baseCaseFolder, client, versionsProviderService);
+			this.updater = new BaseCaseScenarioUpdater(serviceModel, baseCaseFolder, BaseCaseServiceClient.INSTANCE, versionsProviderService);
 			updater.start();
 		}).start();
 	}

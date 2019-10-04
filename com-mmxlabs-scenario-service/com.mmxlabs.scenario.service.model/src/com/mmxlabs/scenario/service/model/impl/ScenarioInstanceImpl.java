@@ -66,6 +66,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getUuid() {
 		return (String) eGet(ScenarioServicePackage.eINSTANCE.getScenarioInstance_Uuid(), true);
 	}
@@ -75,6 +76,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setUuid(String newUuid) {
 		eSet(ScenarioServicePackage.eINSTANCE.getScenarioInstance_Uuid(), newUuid);
 	}
@@ -84,6 +86,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Metadata getMetadata() {
 		return (Metadata) eGet(ScenarioServicePackage.eINSTANCE.getScenarioInstance_Metadata(), true);
 	}
@@ -93,6 +96,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMetadata(Metadata newMetadata) {
 		eSet(ScenarioServicePackage.eINSTANCE.getScenarioInstance_Metadata(), newMetadata);
 	}
@@ -102,6 +106,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getRootObjectURI() {
 		return (String) eGet(ScenarioServicePackage.eINSTANCE.getScenarioInstance_RootObjectURI(), true);
 	}
@@ -111,6 +116,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setRootObjectURI(String newRootObjectURI) {
 		eSet(ScenarioServicePackage.eINSTANCE.getScenarioInstance_RootObjectURI(), newRootObjectURI);
 	}
@@ -120,6 +126,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getScenarioVersion() {
 		return (Integer) eGet(ScenarioServicePackage.eINSTANCE.getScenarioInstance_ScenarioVersion(), true);
 	}
@@ -129,6 +136,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setScenarioVersion(int newScenarioVersion) {
 		eSet(ScenarioServicePackage.eINSTANCE.getScenarioInstance_ScenarioVersion(), newScenarioVersion);
 	}
@@ -138,6 +146,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getVersionContext() {
 		return (String) eGet(ScenarioServicePackage.eINSTANCE.getScenarioInstance_VersionContext(), true);
 	}
@@ -147,6 +156,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVersionContext(String newVersionContext) {
 		eSet(ScenarioServicePackage.eINSTANCE.getScenarioInstance_VersionContext(), newVersionContext);
 	}
@@ -157,6 +167,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public EList<ScenarioFragment> getFragments() {
 		return (EList<ScenarioFragment>) eGet(ScenarioServicePackage.eINSTANCE.getScenarioInstance_Fragments(), true);
 	}
@@ -166,6 +177,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isReadonly() {
 		return (Boolean) eGet(ScenarioServicePackage.eINSTANCE.getScenarioInstance_Readonly(), true);
 	}
@@ -175,6 +187,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setReadonly(boolean newReadonly) {
 		eSet(ScenarioServicePackage.eINSTANCE.getScenarioInstance_Readonly(), newReadonly);
 	}
@@ -184,6 +197,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getValidationStatusCode() {
 		return (Integer) eGet(ScenarioServicePackage.eINSTANCE.getScenarioInstance_ValidationStatusCode(), true);
 	}
@@ -193,6 +207,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setValidationStatusCode(int newValidationStatusCode) {
 		eSet(ScenarioServicePackage.eINSTANCE.getScenarioInstance_ValidationStatusCode(), newValidationStatusCode);
 	}
@@ -202,6 +217,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Manifest getManifest() {
 		return (Manifest) eGet(ScenarioServicePackage.eINSTANCE.getScenarioInstance_Manifest(), true);
 	}
@@ -211,6 +227,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setManifest(Manifest newManifest) {
 		eSet(ScenarioServicePackage.eINSTANCE.getScenarioInstance_Manifest(), newManifest);
 	}
@@ -220,6 +237,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getExternalID() {
 		return (String) eGet(ScenarioServicePackage.eINSTANCE.getScenarioInstance_ExternalID(), true);
 	}
@@ -229,6 +247,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setExternalID(String newExternalID) {
 		eSet(ScenarioServicePackage.eINSTANCE.getScenarioInstance_ExternalID(), newExternalID);
 	}
@@ -238,6 +257,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getClientScenarioVersion() {
 		return (Integer) eGet(ScenarioServicePackage.eINSTANCE.getScenarioInstance_ClientScenarioVersion(), true);
 	}
@@ -247,6 +267,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setClientScenarioVersion(int newClientScenarioVersion) {
 		eSet(ScenarioServicePackage.eINSTANCE.getScenarioInstance_ClientScenarioVersion(), newClientScenarioVersion);
 	}
@@ -256,6 +277,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getClientVersionContext() {
 		return (String) eGet(ScenarioServicePackage.eINSTANCE.getScenarioInstance_ClientVersionContext(), true);
 	}
@@ -265,6 +287,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setClientVersionContext(String newClientVersionContext) {
 		eSet(ScenarioServicePackage.eINSTANCE.getScenarioInstance_ClientVersionContext(), newClientVersionContext);
 	}
@@ -274,6 +297,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getContainedInstanceCount() {
 		return super.getContainedInstanceCount() + 1;
 	}

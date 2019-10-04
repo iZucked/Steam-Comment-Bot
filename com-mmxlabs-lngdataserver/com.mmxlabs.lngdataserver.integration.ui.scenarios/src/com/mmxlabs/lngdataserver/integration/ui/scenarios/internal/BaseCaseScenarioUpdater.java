@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
@@ -329,6 +330,17 @@ public class BaseCaseScenarioUpdater {
 		}
 
 		if (available) {
+			client.updateLockedState();
+			
+			boolean isLocked = client.isServiceLocked();
+			String lockedBy = client.getLockedBy();
+			if (modelRoot.isLocked() != isLocked || !Objects.equals(lockedBy, modelRoot.getLockedBy())) {
+				RunnerHelper.syncExecDisplayOptional(() -> {
+					baseCaseVersionsProviderService.setLockedBy(client.getLockedBy());
+					modelRoot.setLockedBy(lockedBy);
+					modelRoot.setLocked(isLocked);
+				});
+			}
 			final String currentUUID = client.getCurrentBaseCase();
 			if (currentUUID != null) {
 				if (currentUUID.isEmpty()) {

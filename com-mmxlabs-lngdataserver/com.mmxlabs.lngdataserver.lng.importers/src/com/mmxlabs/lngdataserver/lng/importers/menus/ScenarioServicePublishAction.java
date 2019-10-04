@@ -17,9 +17,11 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
+import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,6 +33,7 @@ import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lngdataserver.commons.http.WrappedProgressMonitor;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.BaseCaseServiceClient;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.BasecaseServiceLockedException;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.ReportsServiceClient;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.IReportPublisherExtension;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.ReportPublisherExtensionUtil;
@@ -58,16 +61,37 @@ public class ScenarioServicePublishAction {
 	private static final Logger LOG = LoggerFactory.getLogger(ScenarioServicePublishAction.class);
 
 	private static final String MSG_ERROR_PUBLISHING = "Error publishing";
+	private static final String MSG_FAILED_PUBLISHING = "Failed to publish base case";
 
 	private ScenarioServicePublishAction() {
 
 	}
 
 	public static void publishScenario(final ScenarioInstance scenarioInstance) {
+		boolean doPublish = false;
+		String notes = null;
+
+		final Shell activeShell = Display.getDefault().getActiveShell();
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_DATAHUB_BASECASE_NOTES)) {
+			final InputDialog dialog = new InputDialog(activeShell, "Confirm base case publish", String.format("Publish scenario %s as base case? Please enter notes.", scenarioInstance.getName()), "",
+					null);
+			doPublish = dialog.open() == InputDialog.OK;
+			if (doPublish) {
+				notes = dialog.getValue();
+			}
+		} else {
+			doPublish = MessageDialog.openQuestion(activeShell, "Confirm base case publish", String.format("Publish scenario %s as base case?", scenarioInstance.getName()));
+		}
+		if (doPublish) {
+			ScenarioServicePublishAction.publishScenario(scenarioInstance, notes);
+		}
+	}
+
+	public static void publishScenario(final ScenarioInstance scenarioInstance, final String notes) {
 		final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
 
 		try {
-			dialog.run(true, false, m -> publishScenario(scenarioInstance, m));
+			dialog.run(true, false, m -> publishScenario(scenarioInstance, notes, m));
 		} catch (final InvocationTargetException e) {
 			LOG.error(e.getMessage(), e);
 			final Throwable cause = e.getCause();
@@ -87,6 +111,9 @@ public class ScenarioServicePublishAction {
 					break;
 				case FAILED_TO_SAVE:
 					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUBLISHING, "Failed to save the base case scenario to a temporary file. Unable to publish as base case.");
+					break;
+				case FAILED_SERVICE_LOCKED:
+					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_FAILED_PUBLISHING, "Base case locked by locked by another user.");
 					break;
 				case FAILED_TO_UPLOAD_BASECASE:
 					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUBLISHING, "Failed to upload the base case scenario. Unable to publish as base case.");
@@ -114,7 +141,35 @@ public class ScenarioServicePublishAction {
 
 	}
 
-	public static void publishScenario(final ScenarioInstance scenarioInstance, final IProgressMonitor parentProgressMonitor) {
+	public static void publishScenario(final ScenarioInstance scenarioInstance, final String notes, final IProgressMonitor parentProgressMonitor) {
+		{ // Early locked base case service check
+			Boolean serviceLocked;
+			try {
+				serviceLocked = BaseCaseServiceClient.INSTANCE.isServiceLocked() && !BaseCaseServiceClient.INSTANCE.isServiceLockedByMe();
+			} catch (final Exception ee) {
+				throw new PublishBasecaseException("Error publishing scenario.", Type.FAILED_UNKNOWN_ERROR, ee);
+			}
+			if (serviceLocked == Boolean.TRUE) {
+				throw new PublishBasecaseException("Error publishing scenario.", Type.FAILED_SERVICE_LOCKED, new RuntimeException());
+			}
+		}
+
+		boolean doUnlock = false;
+		try {
+			if (BaseCaseServiceClient.INSTANCE.needsLocking()) {
+				if (BaseCaseServiceClient.INSTANCE.isServiceLockedByMe()) {
+					// Pre-locked
+				} else if (BaseCaseServiceClient.INSTANCE.lock()) {
+					// Lock for publish an unlock
+					doUnlock = true;
+				} else {
+					// Else locked by someone else
+					throw new PublishBasecaseException("Error publishing scenario.", Type.FAILED_SERVICE_LOCKED, new RuntimeException());
+				}
+			}
+		} catch (final IOException e1) {
+			throw new PublishBasecaseException("Error publishing scenario.", Type.FAILED_SERVICE_LOCKED, new RuntimeException());
+		}
 
 		parentProgressMonitor.beginTask("Publish base case", 1000);
 		final SubMonitor progressMonitor = SubMonitor.convert(parentProgressMonitor, 1000);
@@ -186,7 +241,6 @@ public class ScenarioServicePublishAction {
 
 			progressMonitor.worked(200);
 
-			final BaseCaseServiceClient baseCaseServiceClient = new BaseCaseServiceClient();
 			progressMonitor.subTask("Upload base case");
 
 			final List<DataOptions> dataTypesToUpload = new LinkedList<>();
@@ -212,8 +266,13 @@ public class ScenarioServicePublishAction {
 			String response = null;
 			final SubMonitor uploadMonitor = progressMonitor.split(500);
 			try {
-				response = baseCaseServiceClient.uploadBaseCase(tmpScenarioFile, scenarioInstance.getName(), //
+				final String pricingVersion = ScenarioModelUtil.getPricingModel(scenarioDataProvider).getMarketCurvesVersionRecord().getVersion();
+
+				response = BaseCaseServiceClient.INSTANCE.uploadBaseCase(tmpScenarioFile, scenarioInstance.getName(), notes, //
+						pricingVersion, //
 						WrappedProgressMonitor.wrapMonitor(uploadMonitor));
+			} catch (final BasecaseServiceLockedException e) {
+				throw new PublishBasecaseException("Error uploading scenario.", Type.FAILED_SERVICE_LOCKED, e);
 			} catch (final IOException e) {
 				System.out.println("Error uploading the basecase scenario");
 				e.printStackTrace();
@@ -270,7 +329,7 @@ public class ScenarioServicePublishAction {
 			}
 
 			try {
-				baseCaseServiceClient.setCurrentBaseCase(uuid);
+				BaseCaseServiceClient.INSTANCE.setCurrentBaseCase(uuid);
 			} catch (final IOException e) {
 				System.out.println("Error while setting the new baseCase as current");
 				e.printStackTrace();
@@ -279,25 +338,33 @@ public class ScenarioServicePublishAction {
 
 			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_DATAHUB_BASECASE_ARCHIVE)) {
 				try {
-					File tempFile = Files.createTempFile(uuid, ".zip").toFile();
+					final File tempFile = Files.createTempFile(uuid, ".zip").toFile();
 					try {
 						ExportCSVBundleUtil.exportScenarioToZip(scenarioDataProvider, tempFile);
-						baseCaseServiceClient.uploadBaseCaseArchive(tempFile, uuid, null);
+						BaseCaseServiceClient.INSTANCE.uploadBaseCaseArchive(tempFile, uuid, null);
 					} finally {
 						// Delete temporary file
 						final boolean secureDelete = LicenseFeatures.isPermitted(FileDeleter.LICENSE_FEATURE__SECURE_DELETE);
 						FileDeleter.delete(tempFile, secureDelete);
 					}
 
-				} catch (final IOException e) {
-					System.out.println("Error while setting the new baseCase as current");
-					e.printStackTrace();
-					throw new PublishBasecaseException("Error marking base case current", Type.FAILED_TO_MAKE_CURRENT, e);
+				} catch (final IOException ex) {
+					System.out.println("Error while uploading base case archive");
+					ex.printStackTrace();
+					throw new PublishBasecaseException("Error while uploading base case archive", Type.FAILED_TO_MAKE_CURRENT, ex);
 				}
 			}
 
 		} finally {
 			progressMonitor.done();
+			if (doUnlock) {
+				try {
+					BaseCaseServiceClient.INSTANCE.unlock();
+				} catch (final IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 

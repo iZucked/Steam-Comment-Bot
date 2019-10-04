@@ -4,13 +4,16 @@
  */
 package com.mmxlabs.lngdataserver.lng.importers.menus;
 
+import java.io.IOException;
 import java.util.Objects;
 import java.util.function.Function;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -25,6 +28,7 @@ import com.mmxlabs.lngdataserver.browser.ui.context.IDataBrowserContextMenuExten
 import com.mmxlabs.lngdataserver.integration.ports.model.PortsVersion;
 import com.mmxlabs.lngdataserver.integration.pricing.PricingRepository;
 import com.mmxlabs.lngdataserver.integration.pricing.model.PricingVersion;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.BaseCaseServiceClient;
 import com.mmxlabs.lngdataserver.lng.io.distances.ui.DistancesToScenarioImportWizard;
 import com.mmxlabs.lngdataserver.lng.io.port.PortFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.io.port.ui.PortsToScenarioImportWizard;
@@ -59,32 +63,64 @@ public class DataBrowserContentMenuContribution implements IDataBrowserContextMe
 				final CompositeNode parentNode = (CompositeNode) node.eContainer();
 				if (parentNode != null) {
 					final String versionIdentifier = node.getVersionIdentifier();
-//					if (Objects.equals(LNGScenarioSharedModelTypes.DISTANCES.getID(), parentNode.getType())) {
-//						menuManager.add(new RunnableAction("Update scenario(s)", () -> {
-//							openWizard((currentInstance) -> new DistancesToScenarioImportWizard(versionIdentifier, currentInstance, true));
-//						}));
-//						itemsAdded = true;
-//					} else
-						if (Objects.equals(LNGScenarioSharedModelTypes.MARKET_CURVES.getID(), parentNode.getType())) {
+					// if (Objects.equals(LNGScenarioSharedModelTypes.DISTANCES.getID(), parentNode.getType())) {
+					// menuManager.add(new RunnableAction("Update scenario(s)", () -> {
+					// openWizard((currentInstance) -> new DistancesToScenarioImportWizard(versionIdentifier, currentInstance, true));
+					// }));
+					// itemsAdded = true;
+					// } else
+					if (Objects.equals(LNGScenarioSharedModelTypes.MARKET_CURVES.getID(), parentNode.getType())) {
 						menuManager.add(new RunnableAction("Update scenario(s)", () -> {
 							openWizard((currentInstance) -> new PricingToScenarioImportWizard(versionIdentifier, currentInstance, true));
 						}));
 						itemsAdded = true;
-//					} else if (Objects.equals(LNGScenarioSharedModelTypes.FLEET.getID(), parentNode.getType())) {
-//						menuManager.add(new RunnableAction("Update scenario(s)", () -> {
-//							openWizard((currentInstance) -> new VesselsToScenarioImportWizard(versionIdentifier, currentInstance, true));
-//						}));
-//						itemsAdded = true;
-//					} else if (Objects.equals(LNGScenarioSharedModelTypes.LOCATIONS.getID(), parentNode.getType())) {
-//						menuManager.add(new RunnableAction("Update scenario(s)", () -> {
-//							openWizard((currentInstance) -> new PortsToScenarioImportWizard(versionIdentifier, currentInstance, true));
-//						}));
-//						itemsAdded = true;
+						// } else if (Objects.equals(LNGScenarioSharedModelTypes.FLEET.getID(), parentNode.getType())) {
+						// menuManager.add(new RunnableAction("Update scenario(s)", () -> {
+						// openWizard((currentInstance) -> new VesselsToScenarioImportWizard(versionIdentifier, currentInstance, true));
+						// }));
+						// itemsAdded = true;
+						// } else if (Objects.equals(LNGScenarioSharedModelTypes.LOCATIONS.getID(), parentNode.getType())) {
+						// menuManager.add(new RunnableAction("Update scenario(s)", () -> {
+						// openWizard((currentInstance) -> new PortsToScenarioImportWizard(versionIdentifier, currentInstance, true));
+						// }));
+						// itemsAdded = true;
 					}
 				}
 			}
 
 		}
+		return itemsAdded;
+
+	}
+
+	@Override
+	public boolean contributeToBaseCaseMenu(@NonNull final MenuManager menuManager) {
+		boolean itemsAdded = false;
+		if (UpstreamUrlProvider.INSTANCE.isAvailable() && BaseCaseServiceClient.INSTANCE.needsLocking()) {
+			if (BaseCaseServiceClient.INSTANCE.isServiceLockedByMe()) {
+
+				menuManager.add(new RunnableAction("Unlock base case", () -> {
+					try {
+						BaseCaseServiceClient.INSTANCE.unlock();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}));
+				itemsAdded = true;
+			} else if (!BaseCaseServiceClient.INSTANCE.isServiceLocked()) {
+				menuManager.add(new RunnableAction("Lock base case", () -> {
+					try {
+						BaseCaseServiceClient.INSTANCE.lock();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}));
+				itemsAdded = true;
+			}
+		}
+
 		return itemsAdded;
 
 	}
@@ -97,7 +133,7 @@ public class DataBrowserContentMenuContribution implements IDataBrowserContextMe
 			if (firstElement instanceof ScenarioInstance) {
 				final ScenarioInstance scenarioInstance = (ScenarioInstance) firstElement;
 				final Manifest manifest = scenarioInstance.getManifest();
-				if (UpstreamUrlProvider.INSTANCE.isAvailable()) {
+				if (UpstreamUrlProvider.INSTANCE.isAvailable() && BaseCaseServiceClient.INSTANCE.canPublish()) {
 					menuManager.add(new RunnableAction("Publish scenario as current base case", () -> {
 						ScenarioServicePublishAction.publishScenario(scenarioInstance);
 					}));
@@ -112,12 +148,12 @@ public class DataBrowserContentMenuContribution implements IDataBrowserContextMe
 						// }));
 						// itemsAdded = true;
 						// }
-//						if (Objects.equals(LNGScenarioSharedModelTypes.MARKET_CURVES.getID(), modelArtifact.getKey())) {
-//							menuManager.add(new RunnableAction("Export pricing data", () -> {
-//								exportPricing(scenarioInstance);
-//							}));
-//							itemsAdded = true;
-//						}
+						// if (Objects.equals(LNGScenarioSharedModelTypes.MARKET_CURVES.getID(), modelArtifact.getKey())) {
+						// menuManager.add(new RunnableAction("Export pricing data", () -> {
+						// exportPricing(scenarioInstance);
+						// }));
+						// itemsAdded = true;
+						// }
 						// if (Objects.equals(LNGScenarioSharedModelTypes.LOCATIONS.getID(), modelArtifact.getKey())) {
 						// menuManager.add(new RunnableAction("Export ports data", () -> {
 						// exportPorts(scenarioInstance);
@@ -135,7 +171,7 @@ public class DataBrowserContentMenuContribution implements IDataBrowserContextMe
 				}
 			}
 		}
-		if (!itemsAdded) {
+		if (!itemsAdded && !UpstreamUrlProvider.INSTANCE.isAvailable()) {
 			final RunnableAction action = new RunnableAction("Please wait...", () -> {
 			});
 			action.setEnabled(false);

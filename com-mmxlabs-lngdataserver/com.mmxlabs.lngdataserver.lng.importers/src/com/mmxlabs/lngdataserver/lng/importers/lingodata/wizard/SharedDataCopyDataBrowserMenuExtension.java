@@ -105,4 +105,10 @@ public class SharedDataCopyDataBrowserMenuExtension implements IDataBrowserConte
 		return false;
 	}
 
+	@Override
+	public boolean contributeToBaseCaseMenu(@NonNull MenuManager scenarioMgr) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
