@@ -96,6 +96,7 @@ public class BallastBonusContractExtensionExporter implements IExporterExtension
 									notionalJourneyContractDetails.setReturnPort(ruleA.returnPort.getName());
 									notionalJourneyContractDetails.setDistance(ruleA.distance);
 
+									notionalJourneyContractDetails.setLumpSum((int) OptimiserUnitConvertor.convertToExternalFixedCost(ruleA.lumpSum));
 									notionalJourneyContractDetails.setFuelPrice(OptimiserUnitConvertor.convertToExternalPrice(ruleA.fuelPrice));
 									notionalJourneyContractDetails.setTotalFuelUsed(OptimiserUnitConvertor.convertToExternalVolume(ruleA.totalFuelUsed));
 									notionalJourneyContractDetails.setTotalFuelCost(OptimiserUnitConvertor.convertToExternalFixedCost(ruleA.totalFuelCost));

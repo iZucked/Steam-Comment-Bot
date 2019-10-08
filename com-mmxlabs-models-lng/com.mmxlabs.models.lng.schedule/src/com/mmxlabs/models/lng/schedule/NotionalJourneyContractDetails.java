@@ -26,6 +26,7 @@ package com.mmxlabs.models.lng.schedule;
  *   <li>{@link com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails#getHireCost <em>Hire Cost</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails#getRouteTaken <em>Route Taken</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails#getCanalCost <em>Canal Cost</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails#getLumpSum <em>Lump Sum</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getNotionalJourneyContractDetails()
@@ -304,5 +305,32 @@ public interface NotionalJourneyContractDetails extends MatchingContractDetails 
 	 * @generated
 	 */
 	void setCanalCost(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Lump Sum</b></em>' attribute.
+	 * The default value is <code>"0"</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Lump Sum</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Lump Sum</em>' attribute.
+	 * @see #setLumpSum(int)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getNotionalJourneyContractDetails_LumpSum()
+	 * @model default="0" required="true"
+	 * @generated
+	 */
+	int getLumpSum();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails#getLumpSum <em>Lump Sum</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Lump Sum</em>' attribute.
+	 * @see #getLumpSum()
+	 * @generated
+	 */
+	void setLumpSum(int value);
 
 } // NotionalJourneyContractDetails

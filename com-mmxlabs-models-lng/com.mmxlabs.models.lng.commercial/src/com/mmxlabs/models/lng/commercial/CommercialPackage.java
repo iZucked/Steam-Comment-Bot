@@ -1782,13 +1782,31 @@ public interface CommercialPackage extends EPackage {
 	int NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__INCLUDE_CANAL = BALLAST_BONUS_CONTRACT_LINE_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Include Canal Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__INCLUDE_CANAL_TIME = BALLAST_BONUS_CONTRACT_LINE_FEATURE_COUNT + 5;
+
+	/**
+	 * The feature id for the '<em><b>Lump Sum Price Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__LUMP_SUM_PRICE_EXPRESSION = BALLAST_BONUS_CONTRACT_LINE_FEATURE_COUNT + 6;
+
+	/**
 	 * The number of structural features of the '<em>Notional Journey Ballast Bonus Contract Line</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE_FEATURE_COUNT = BALLAST_BONUS_CONTRACT_LINE_FEATURE_COUNT + 5;
+	int NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE_FEATURE_COUNT = BALLAST_BONUS_CONTRACT_LINE_FEATURE_COUNT + 7;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.CharterContract <em>Charter Contract</em>}' class.
@@ -2923,6 +2941,28 @@ public interface CommercialPackage extends EPackage {
 	EAttribute getNotionalJourneyBallastBonusContractLine_IncludeCanal();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine#isIncludeCanalTime <em>Include Canal Time</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Include Canal Time</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine#isIncludeCanalTime()
+	 * @see #getNotionalJourneyBallastBonusContractLine()
+	 * @generated
+	 */
+	EAttribute getNotionalJourneyBallastBonusContractLine_IncludeCanalTime();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine#getLumpSumPriceExpression <em>Lump Sum Price Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Lump Sum Price Expression</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine#getLumpSumPriceExpression()
+	 * @see #getNotionalJourneyBallastBonusContractLine()
+	 * @generated
+	 */
+	EAttribute getNotionalJourneyBallastBonusContractLine_LumpSumPriceExpression();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.CharterContract <em>Charter Contract</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3722,6 +3762,22 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__INCLUDE_CANAL = eINSTANCE.getNotionalJourneyBallastBonusContractLine_IncludeCanal();
+
+		/**
+		 * The meta object literal for the '<em><b>Include Canal Time</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__INCLUDE_CANAL_TIME = eINSTANCE.getNotionalJourneyBallastBonusContractLine_IncludeCanalTime();
+
+		/**
+		 * The meta object literal for the '<em><b>Lump Sum Price Expression</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__LUMP_SUM_PRICE_EXPRESSION = eINSTANCE.getNotionalJourneyBallastBonusContractLine_LumpSumPriceExpression();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.CharterContract <em>Charter Contract</em>}' class.

@@ -59,6 +59,7 @@ public class NotionalJourneyContractDetailsItemProvider extends MatchingContract
 			addHireCostPropertyDescriptor(object);
 			addRouteTakenPropertyDescriptor(object);
 			addCanalCostPropertyDescriptor(object);
+			addLumpSumPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -284,6 +285,28 @@ public class NotionalJourneyContractDetailsItemProvider extends MatchingContract
 	}
 
 	/**
+	 * This adds a property descriptor for the Lump Sum feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addLumpSumPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_NotionalJourneyContractDetails_lumpSum_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_NotionalJourneyContractDetails_lumpSum_feature", "_UI_NotionalJourneyContractDetails_type"),
+				 SchedulePackage.Literals.NOTIONAL_JOURNEY_CONTRACT_DETAILS__LUMP_SUM,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns NotionalJourneyContractDetails.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -331,6 +354,7 @@ public class NotionalJourneyContractDetailsItemProvider extends MatchingContract
 			case SchedulePackage.NOTIONAL_JOURNEY_CONTRACT_DETAILS__HIRE_COST:
 			case SchedulePackage.NOTIONAL_JOURNEY_CONTRACT_DETAILS__ROUTE_TAKEN:
 			case SchedulePackage.NOTIONAL_JOURNEY_CONTRACT_DETAILS__CANAL_COST:
+			case SchedulePackage.NOTIONAL_JOURNEY_CONTRACT_DETAILS__LUMP_SUM:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

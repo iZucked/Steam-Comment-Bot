@@ -2545,6 +2545,16 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	@Override
+	public EAttribute getNotionalJourneyContractDetails_LumpSum() {
+		return (EAttribute)notionalJourneyContractDetailsEClass.getEStructuralFeatures().get(10);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getCharterAvailableToEvent() {
 		return charterAvailableToEventEClass;
 	}
@@ -3234,6 +3244,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEAttribute(notionalJourneyContractDetailsEClass, NOTIONAL_JOURNEY_CONTRACT_DETAILS__HIRE_COST);
 		createEAttribute(notionalJourneyContractDetailsEClass, NOTIONAL_JOURNEY_CONTRACT_DETAILS__ROUTE_TAKEN);
 		createEAttribute(notionalJourneyContractDetailsEClass, NOTIONAL_JOURNEY_CONTRACT_DETAILS__CANAL_COST);
+		createEAttribute(notionalJourneyContractDetailsEClass, NOTIONAL_JOURNEY_CONTRACT_DETAILS__LUMP_SUM);
 
 		charterAvailableToEventEClass = createEClass(CHARTER_AVAILABLE_TO_EVENT);
 		createEReference(charterAvailableToEventEClass, CHARTER_AVAILABLE_TO_EVENT__LINKED_SEQUENCE);
@@ -3645,6 +3656,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEAttribute(getNotionalJourneyContractDetails_HireCost(), ecorePackage.getEInt(), "hireCost", "0", 1, 1, NotionalJourneyContractDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getNotionalJourneyContractDetails_RouteTaken(), ecorePackage.getEString(), "routeTaken", "", 1, 1, NotionalJourneyContractDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getNotionalJourneyContractDetails_CanalCost(), ecorePackage.getEInt(), "canalCost", "0", 1, 1, NotionalJourneyContractDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getNotionalJourneyContractDetails_LumpSum(), ecorePackage.getEInt(), "lumpSum", "0", 1, 1, NotionalJourneyContractDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(charterAvailableToEventEClass, CharterAvailableToEvent.class, "CharterAvailableToEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCharterAvailableToEvent_LinkedSequence(), this.getSequence(), null, "linkedSequence", null, 0, 1, CharterAvailableToEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
