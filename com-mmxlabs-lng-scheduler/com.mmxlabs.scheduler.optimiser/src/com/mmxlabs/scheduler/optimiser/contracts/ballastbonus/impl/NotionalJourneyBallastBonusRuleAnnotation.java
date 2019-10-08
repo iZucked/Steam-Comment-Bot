@@ -9,6 +9,7 @@ import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 
 public class NotionalJourneyBallastBonusRuleAnnotation implements IBallastBonusRuleAnnotation {
 	public IPort returnPort = null;
+	public long lumpSum = 0;
 	public int distance = 0;
 	public int totalTimeInHours = 0;
 	public long totalFuelUsed = 0;

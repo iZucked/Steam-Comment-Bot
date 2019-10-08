@@ -37,6 +37,8 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.NotionalJourneyBallastBonusContractLineImpl#getHirePriceExpression <em>Hire Price Expression</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.NotionalJourneyBallastBonusContractLineImpl#getReturnPorts <em>Return Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.NotionalJourneyBallastBonusContractLineImpl#isIncludeCanal <em>Include Canal</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.NotionalJourneyBallastBonusContractLineImpl#isIncludeCanalTime <em>Include Canal Time</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.NotionalJourneyBallastBonusContractLineImpl#getLumpSumPriceExpression <em>Lump Sum Price Expression</em>}</li>
  * </ul>
  *
  * @generated
@@ -131,6 +133,46 @@ public class NotionalJourneyBallastBonusContractLineImpl extends BallastBonusCon
 	 * @ordered
 	 */
 	protected boolean includeCanal = INCLUDE_CANAL_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isIncludeCanalTime() <em>Include Canal Time</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isIncludeCanalTime()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean INCLUDE_CANAL_TIME_EDEFAULT = true;
+
+	/**
+	 * The cached value of the '{@link #isIncludeCanalTime() <em>Include Canal Time</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isIncludeCanalTime()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean includeCanalTime = INCLUDE_CANAL_TIME_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getLumpSumPriceExpression() <em>Lump Sum Price Expression</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLumpSumPriceExpression()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String LUMP_SUM_PRICE_EXPRESSION_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getLumpSumPriceExpression() <em>Lump Sum Price Expression</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLumpSumPriceExpression()
+	 * @generated
+	 * @ordered
+	 */
+	protected String lumpSumPriceExpression = LUMP_SUM_PRICE_EXPRESSION_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -262,6 +304,52 @@ public class NotionalJourneyBallastBonusContractLineImpl extends BallastBonusCon
 	 * @generated
 	 */
 	@Override
+	public boolean isIncludeCanalTime() {
+		return includeCanalTime;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setIncludeCanalTime(boolean newIncludeCanalTime) {
+		boolean oldIncludeCanalTime = includeCanalTime;
+		includeCanalTime = newIncludeCanalTime;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__INCLUDE_CANAL_TIME, oldIncludeCanalTime, includeCanalTime));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getLumpSumPriceExpression() {
+		return lumpSumPriceExpression;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setLumpSumPriceExpression(String newLumpSumPriceExpression) {
+		String oldLumpSumPriceExpression = lumpSumPriceExpression;
+		lumpSumPriceExpression = newLumpSumPriceExpression;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__LUMP_SUM_PRICE_EXPRESSION, oldLumpSumPriceExpression, lumpSumPriceExpression));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__SPEED:
@@ -274,6 +362,10 @@ public class NotionalJourneyBallastBonusContractLineImpl extends BallastBonusCon
 				return getReturnPorts();
 			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__INCLUDE_CANAL:
 				return isIncludeCanal();
+			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__INCLUDE_CANAL_TIME:
+				return isIncludeCanalTime();
+			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__LUMP_SUM_PRICE_EXPRESSION:
+				return getLumpSumPriceExpression();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -303,6 +395,12 @@ public class NotionalJourneyBallastBonusContractLineImpl extends BallastBonusCon
 			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__INCLUDE_CANAL:
 				setIncludeCanal((Boolean)newValue);
 				return;
+			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__INCLUDE_CANAL_TIME:
+				setIncludeCanalTime((Boolean)newValue);
+				return;
+			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__LUMP_SUM_PRICE_EXPRESSION:
+				setLumpSumPriceExpression((String)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -330,6 +428,12 @@ public class NotionalJourneyBallastBonusContractLineImpl extends BallastBonusCon
 			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__INCLUDE_CANAL:
 				setIncludeCanal(INCLUDE_CANAL_EDEFAULT);
 				return;
+			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__INCLUDE_CANAL_TIME:
+				setIncludeCanalTime(INCLUDE_CANAL_TIME_EDEFAULT);
+				return;
+			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__LUMP_SUM_PRICE_EXPRESSION:
+				setLumpSumPriceExpression(LUMP_SUM_PRICE_EXPRESSION_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -352,6 +456,10 @@ public class NotionalJourneyBallastBonusContractLineImpl extends BallastBonusCon
 				return returnPorts != null && !returnPorts.isEmpty();
 			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__INCLUDE_CANAL:
 				return includeCanal != INCLUDE_CANAL_EDEFAULT;
+			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__INCLUDE_CANAL_TIME:
+				return includeCanalTime != INCLUDE_CANAL_TIME_EDEFAULT;
+			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__LUMP_SUM_PRICE_EXPRESSION:
+				return LUMP_SUM_PRICE_EXPRESSION_EDEFAULT == null ? lumpSumPriceExpression != null : !LUMP_SUM_PRICE_EXPRESSION_EDEFAULT.equals(lumpSumPriceExpression);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -374,6 +482,10 @@ public class NotionalJourneyBallastBonusContractLineImpl extends BallastBonusCon
 		result.append(hirePriceExpression);
 		result.append(", includeCanal: ");
 		result.append(includeCanal);
+		result.append(", includeCanalTime: ");
+		result.append(includeCanalTime);
+		result.append(", lumpSumPriceExpression: ");
+		result.append(lumpSumPriceExpression);
 		result.append(')');
 		return result.toString();
 	}

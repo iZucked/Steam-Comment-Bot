@@ -33,6 +33,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.NotionalJourneyContractDetailsImpl#getHireCost <em>Hire Cost</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.NotionalJourneyContractDetailsImpl#getRouteTaken <em>Route Taken</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.NotionalJourneyContractDetailsImpl#getCanalCost <em>Canal Cost</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.NotionalJourneyContractDetailsImpl#getLumpSum <em>Lump Sum</em>}</li>
  * </ul>
  *
  * @generated
@@ -237,6 +238,26 @@ public class NotionalJourneyContractDetailsImpl extends MatchingContractDetailsI
 	 * @ordered
 	 */
 	protected int canalCost = CANAL_COST_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getLumpSum() <em>Lump Sum</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLumpSum()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int LUMP_SUM_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getLumpSum() <em>Lump Sum</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLumpSum()
+	 * @generated
+	 * @ordered
+	 */
+	protected int lumpSum = LUMP_SUM_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -493,6 +514,29 @@ public class NotionalJourneyContractDetailsImpl extends MatchingContractDetailsI
 	 * @generated
 	 */
 	@Override
+	public int getLumpSum() {
+		return lumpSum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setLumpSum(int newLumpSum) {
+		int oldLumpSum = lumpSum;
+		lumpSum = newLumpSum;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.NOTIONAL_JOURNEY_CONTRACT_DETAILS__LUMP_SUM, oldLumpSum, lumpSum));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case SchedulePackage.NOTIONAL_JOURNEY_CONTRACT_DETAILS__RETURN_PORT:
@@ -515,6 +559,8 @@ public class NotionalJourneyContractDetailsImpl extends MatchingContractDetailsI
 				return getRouteTaken();
 			case SchedulePackage.NOTIONAL_JOURNEY_CONTRACT_DETAILS__CANAL_COST:
 				return getCanalCost();
+			case SchedulePackage.NOTIONAL_JOURNEY_CONTRACT_DETAILS__LUMP_SUM:
+				return getLumpSum();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -556,6 +602,9 @@ public class NotionalJourneyContractDetailsImpl extends MatchingContractDetailsI
 				return;
 			case SchedulePackage.NOTIONAL_JOURNEY_CONTRACT_DETAILS__CANAL_COST:
 				setCanalCost((Integer)newValue);
+				return;
+			case SchedulePackage.NOTIONAL_JOURNEY_CONTRACT_DETAILS__LUMP_SUM:
+				setLumpSum((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -599,6 +648,9 @@ public class NotionalJourneyContractDetailsImpl extends MatchingContractDetailsI
 			case SchedulePackage.NOTIONAL_JOURNEY_CONTRACT_DETAILS__CANAL_COST:
 				setCanalCost(CANAL_COST_EDEFAULT);
 				return;
+			case SchedulePackage.NOTIONAL_JOURNEY_CONTRACT_DETAILS__LUMP_SUM:
+				setLumpSum(LUMP_SUM_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -631,6 +683,8 @@ public class NotionalJourneyContractDetailsImpl extends MatchingContractDetailsI
 				return ROUTE_TAKEN_EDEFAULT == null ? routeTaken != null : !ROUTE_TAKEN_EDEFAULT.equals(routeTaken);
 			case SchedulePackage.NOTIONAL_JOURNEY_CONTRACT_DETAILS__CANAL_COST:
 				return canalCost != CANAL_COST_EDEFAULT;
+			case SchedulePackage.NOTIONAL_JOURNEY_CONTRACT_DETAILS__LUMP_SUM:
+				return lumpSum != LUMP_SUM_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -665,6 +719,8 @@ public class NotionalJourneyContractDetailsImpl extends MatchingContractDetailsI
 		result.append(routeTaken);
 		result.append(", canalCost: ");
 		result.append(canalCost);
+		result.append(", lumpSum: ");
+		result.append(lumpSum);
 		result.append(')');
 		return result.toString();
 	}

@@ -86,7 +86,7 @@ public class VesselViewerPane_View extends ScenarioTableViewerPane {
 		addTypicalColumn("Reference vessel", new SingleReferenceManipulator(FleetPackage.eINSTANCE.getVessel_Reference(), scenarioEditingLocation.getReferenceValueProviderCache(), editingDomain));
 		addTypicalColumn("Inaccessible Ports", new MultipleReferenceManipulator(FleetPackage.eINSTANCE.getVessel_InaccessiblePorts(), scenarioEditingLocation.getReferenceValueProviderCache(),
 				editingDomain, MMXCorePackage.eINSTANCE.getNamedObject_Name()));
-
+		addTypicalColumn("Max Speed", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVessel_MaxSpeed(), editingDomain));
 		// getToolBarManager().appendToGroup(EDIT_GROUP, new BaseFuelEditorAction());
 		/*
 		 * getToolBarManager().appendToGroup(EDIT_GROUP, new Action("VC") {

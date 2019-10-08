@@ -78,6 +78,7 @@ public class NotionalJourneyContractDetailsComponentHelper extends BaseComponent
 		add_hireCostEditor(detailComposite, topClass);
 		add_routeTakenEditor(detailComposite, topClass);
 		add_canalCostEditor(detailComposite, topClass);
+		add_lumpSumEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the returnPort feature on NotionalJourneyContractDetails
@@ -158,5 +159,14 @@ public class NotionalJourneyContractDetailsComponentHelper extends BaseComponent
 	 */
 	protected void add_canalCostEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.NOTIONAL_JOURNEY_CONTRACT_DETAILS__CANAL_COST));
+	}
+
+	/**
+	 * Create the editor for the lumpSum feature on NotionalJourneyContractDetails
+	 *
+	 * @generated
+	 */
+	protected void add_lumpSumEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.NOTIONAL_JOURNEY_CONTRACT_DETAILS__LUMP_SUM));
 	}
 }

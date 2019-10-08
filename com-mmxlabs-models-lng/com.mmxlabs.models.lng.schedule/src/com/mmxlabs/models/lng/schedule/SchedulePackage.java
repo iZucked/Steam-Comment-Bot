@@ -5647,13 +5647,22 @@ public interface SchedulePackage extends EPackage {
 	int NOTIONAL_JOURNEY_CONTRACT_DETAILS__CANAL_COST = MATCHING_CONTRACT_DETAILS_FEATURE_COUNT + 9;
 
 	/**
+	 * The feature id for the '<em><b>Lump Sum</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOTIONAL_JOURNEY_CONTRACT_DETAILS__LUMP_SUM = MATCHING_CONTRACT_DETAILS_FEATURE_COUNT + 10;
+
+	/**
 	 * The number of structural features of the '<em>Notional Journey Contract Details</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int NOTIONAL_JOURNEY_CONTRACT_DETAILS_FEATURE_COUNT = MATCHING_CONTRACT_DETAILS_FEATURE_COUNT + 10;
+	int NOTIONAL_JOURNEY_CONTRACT_DETAILS_FEATURE_COUNT = MATCHING_CONTRACT_DETAILS_FEATURE_COUNT + 11;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -9001,6 +9010,17 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getNotionalJourneyContractDetails_CanalCost();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails#getLumpSum <em>Lump Sum</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Lump Sum</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails#getLumpSum()
+	 * @see #getNotionalJourneyContractDetails()
+	 * @generated
+	 */
+	EAttribute getNotionalJourneyContractDetails_LumpSum();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.CharterAvailableToEvent <em>Charter Available To Event</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -11135,6 +11155,14 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute NOTIONAL_JOURNEY_CONTRACT_DETAILS__CANAL_COST = eINSTANCE.getNotionalJourneyContractDetails_CanalCost();
+
+		/**
+		 * The meta object literal for the '<em><b>Lump Sum</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute NOTIONAL_JOURNEY_CONTRACT_DETAILS__LUMP_SUM = eINSTANCE.getNotionalJourneyContractDetails_LumpSum();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.CharterAvailableToEventImpl <em>Charter Available To Event</em>}' class.

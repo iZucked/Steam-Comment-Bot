@@ -113,13 +113,16 @@ public class BallastBonusContractTransformer implements IBallastBonusContractTra
 					ILongCurve lumpSumCurve = getPriceCurveFromExpression(priceExpression, charterIndices);
 					oRule = new DefaultLumpSumBallastBonusContractRule(redeliveryPorts, lumpSumCurve);
 				} else if (ballastBonusContractLine instanceof NotionalJourneyBallastBonusContractLine) {
+					String priceExpression = ((NotionalJourneyBallastBonusContractLine) ballastBonusContractLine).getLumpSumPriceExpression();
+					ILongCurve lumpSumCurve = getPriceCurveFromExpression(priceExpression, charterIndices);
 					String fuelPriceExpression = ((NotionalJourneyBallastBonusContractLine) ballastBonusContractLine).getFuelPriceExpression();
 					ICurve fuelCurve = getBaseFuelPriceCurveFromExpression(fuelPriceExpression, fuelIndices);
 					String charterPriceExpression = ((NotionalJourneyBallastBonusContractLine) ballastBonusContractLine).getHirePriceExpression();
 					ILongCurve charterCurve = getPriceCurveFromExpression(charterPriceExpression, charterIndices);
 					Set<IPort> returnPorts = transformPorts(((NotionalJourneyBallastBonusContractLine) ballastBonusContractLine).getReturnPorts());
 					int speed = OptimiserUnitConvertor.convertToInternalSpeed(((NotionalJourneyBallastBonusContractLine) ballastBonusContractLine).getSpeed());
-					oRule = new DefaultNotionalJourneyBallastBonusContractRule(redeliveryPorts, fuelCurve, charterCurve, returnPorts, ((NotionalJourneyBallastBonusContractLine) ballastBonusContractLine).isIncludeCanal(), speed);
+					boolean includeCanalTime = ((NotionalJourneyBallastBonusContractLine) ballastBonusContractLine).isIncludeCanalTime();
+					oRule = new DefaultNotionalJourneyBallastBonusContractRule(redeliveryPorts, lumpSumCurve, fuelCurve, charterCurve, returnPorts, ((NotionalJourneyBallastBonusContractLine) ballastBonusContractLine).isIncludeCanal(), includeCanalTime, speed);
 				} else {
 				}
 				assert oRule != null;

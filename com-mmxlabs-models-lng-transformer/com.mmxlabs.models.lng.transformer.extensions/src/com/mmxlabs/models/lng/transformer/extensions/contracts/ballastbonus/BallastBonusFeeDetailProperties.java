@@ -43,6 +43,7 @@ public class BallastBonusFeeDetailProperties extends AbstractDetailPropertyFacto
 				} else if (ballastBonusFeeDetails.getMatchingBallastBonusContractDetails() instanceof NotionalJourneyContractDetails) {
 					NotionalJourneyContractDetails rule = (NotionalJourneyContractDetails) ballastBonusFeeDetails.getMatchingBallastBonusContractDetails();
 					addDetailProperty("Type", "", "", "", "Notional journey", new StringFormatLabelProvider("%s"), details);
+					addDetailProperty("Lump sum", "", "$", "", rule.getLumpSum(), new StringFormatLabelProvider("%,d"), details);
 					addDetailProperty("Matching port", "", "", "", rule.getMatchedPort(), new StringFormatLabelProvider("%s"), details);
 					addDetailProperty("Return port", "", "", "", rule.getReturnPort(), new StringFormatLabelProvider("%s"), details);
 					addDetailProperty("Distance", "", "NM", "", rule.getDistance(), new StringFormatLabelProvider("%,d"), details);
