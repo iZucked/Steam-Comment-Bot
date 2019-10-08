@@ -40,7 +40,7 @@ public class GroupedElementProvider implements ITreeContentProvider {
 	}
 
 	// Tree node grouping?
-	class G {
+	public class G {
 		public final String name;
 		public final Object[] children;
 		public Object parent;
