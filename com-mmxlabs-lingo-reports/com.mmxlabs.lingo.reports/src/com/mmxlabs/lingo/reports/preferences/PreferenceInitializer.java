@@ -23,6 +23,6 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	@Override
 	public void initializeDefaultPreferences() {
 		DefaultScope.INSTANCE.getNode(Activator.PLUGIN_ID).put(PreferenceConstants.P_LEEWAY_DAYS, "1");
-		DefaultScope.INSTANCE.getNode(Activator.PLUGIN_ID).put(PreferenceConstants.P_REPORT_DURATION_FORMAT, Formatters.DurationMode.DAYS_HOURS.name());
+		DefaultScope.INSTANCE.getNode(Activator.PLUGIN_ID).put(PreferenceConstants.P_REPORT_DURATION_FORMAT, Formatters.DurationMode.DAYS_HOURS_COLON.name());
 	}
 }

@@ -165,6 +165,9 @@ public class PortGroupContentsEditor extends BasicAttributeInlineEditor {
 
 		viewer.addCheckStateListener(event -> {
 			Object element = event.getElement();
+			if (GroupedElementProvider.G.class.isInstance(element)) {
+				return;
+			}
 			if (GroupedElementProvider.E.class.isInstance(element)) {
 				element = GroupedElementProvider.E.class.cast(element).value;
 			}
