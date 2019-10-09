@@ -63,6 +63,7 @@ public class EObjectTableViewer extends GridTreeViewer {
 
 	public static final String COLUMN_PATH = "COLUMN_PATH";
 	public static final String COLUMN_RENDERER = "COLUMN_RENDERER";
+	public static final String COLUMN_FILTER = "COLUMN_FILTER";
 	public static final String COLUMN_COMPARABLE_PROVIDER = "COLUMN_COMPARABLE_PROVIDER";
 	public static final String COLUMN_MANIPULATOR = "COLUMN_MANIPULATOR";
 	public static final String COLUMN_RENDERER_AND_PATH = "COLUMN_RENDERER_AND_PATH";

@@ -73,6 +73,8 @@ public class NotionalJourneyBallastBonusContractLineComponentHelper extends Base
 		add_hirePriceExpressionEditor(detailComposite, topClass);
 		add_returnPortsEditor(detailComposite, topClass);
 		add_includeCanalEditor(detailComposite, topClass);
+		add_includeCanalTimeEditor(detailComposite, topClass);
+		add_lumpSumPriceExpressionEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the speed feature on NotionalJourneyBallastBonusContractLine
@@ -114,5 +116,23 @@ public class NotionalJourneyBallastBonusContractLineComponentHelper extends Base
 	 */
 	protected void add_includeCanalEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__INCLUDE_CANAL));
+	}
+
+	/**
+	 * Create the editor for the includeCanalTime feature on NotionalJourneyBallastBonusContractLine
+	 *
+	 * @generated
+	 */
+	protected void add_includeCanalTimeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__INCLUDE_CANAL_TIME));
+	}
+
+	/**
+	 * Create the editor for the lumpSumPriceExpression feature on NotionalJourneyBallastBonusContractLine
+	 *
+	 * @generated
+	 */
+	protected void add_lumpSumPriceExpressionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__LUMP_SUM_PRICE_EXPRESSION));
 	}
 }

@@ -62,6 +62,7 @@ public abstract class ContainerImpl extends EObjectImpl implements Container {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Container getParent() {
 		return (Container) eGet(ScenarioServicePackage.eINSTANCE.getContainer_Parent(), true);
 	}
@@ -71,6 +72,7 @@ public abstract class ContainerImpl extends EObjectImpl implements Container {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setParent(Container newParent) {
 		eSet(ScenarioServicePackage.eINSTANCE.getContainer_Parent(), newParent);
 	}
@@ -81,6 +83,7 @@ public abstract class ContainerImpl extends EObjectImpl implements Container {
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public EList<Container> getElements() {
 		return (EList<Container>) eGet(ScenarioServicePackage.eINSTANCE.getContainer_Elements(), true);
 	}
@@ -90,6 +93,7 @@ public abstract class ContainerImpl extends EObjectImpl implements Container {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isArchived() {
 		return (Boolean) eGet(ScenarioServicePackage.eINSTANCE.getContainer_Archived(), true);
 	}
@@ -99,6 +103,7 @@ public abstract class ContainerImpl extends EObjectImpl implements Container {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setArchived(boolean newArchived) {
 		eSet(ScenarioServicePackage.eINSTANCE.getContainer_Archived(), newArchived);
 	}
@@ -108,6 +113,7 @@ public abstract class ContainerImpl extends EObjectImpl implements Container {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return (String) eGet(ScenarioServicePackage.eINSTANCE.getContainer_Name(), true);
 	}
@@ -117,6 +123,7 @@ public abstract class ContainerImpl extends EObjectImpl implements Container {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		eSet(ScenarioServicePackage.eINSTANCE.getContainer_Name(), newName);
 	}
@@ -126,6 +133,7 @@ public abstract class ContainerImpl extends EObjectImpl implements Container {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isHidden() {
 		return (Boolean) eGet(ScenarioServicePackage.eINSTANCE.getContainer_Hidden(), true);
 	}
@@ -135,6 +143,7 @@ public abstract class ContainerImpl extends EObjectImpl implements Container {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setHidden(boolean newHidden) {
 		eSet(ScenarioServicePackage.eINSTANCE.getContainer_Hidden(), newHidden);
 	}
@@ -144,6 +153,7 @@ public abstract class ContainerImpl extends EObjectImpl implements Container {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getContainedInstanceCount() {
 		int accumulator = 0;
 		for (final Container container : getElements()) {

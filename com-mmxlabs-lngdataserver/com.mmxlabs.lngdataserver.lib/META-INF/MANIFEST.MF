@@ -2,12 +2,12 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: LNG Dataserver Libraries
 Bundle-SymbolicName: com.mmxlabs.lngdataserver.lib;singleton:=true
-Bundle-Version: 4.7.12.qualifier
+Bundle-Version: 4.7.19.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-10
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
- lib/okhttp-3.8.1.jar,
- lib/okio-1.13.0.jar,
+ lib/okhttp-3.14.2.jar,
+ lib/okio-1.17.4.jar,
  lib/json-20140107.jar 
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.12.0",
  org.eclipse.equinox.registry,
@@ -17,20 +17,20 @@ Import-Package: org.slf4j,
  org.slf4j.spi
 Eclipse-BuddyPolicy: registered
 Bundle-Vendor: Minimax Labs Ltd.
-Export-Package: okhttp3;version=3.8.1,
- okhttp3.internal;version=3.8.1,
- okhttp3.internal.cache;version=3.8.1,
- okhttp3.internal.cache2;version=3.8.1,
- okhttp3.internal.connection;version=3.8.1,
- okhttp3.internal.http;version=3.8.1,
- okhttp3.internal.http1;version=3.8.1,
- okhttp3.internal.http2;version=3.8.1,
- okhttp3.internal.io;version=3.8.1,
- okhttp3.internal.platform;version=3.8.1,
- okhttp3.internal.publicsuffix;version=3.8.1,
- okhttp3.internal.tls;version=3.8.1,
- okhttp3.internal.ws;version=3.8.1,
+Export-Package: okhttp3;version="3.14.2",
+ okhttp3.internal;version="3.14.2",
+ okhttp3.internal.cache;version="3.14.2",
+ okhttp3.internal.cache2;version="3.14.2",
+ okhttp3.internal.connection;version="3.14.2",
+ okhttp3.internal.http;version="3.14.2",
+ okhttp3.internal.http1;version="3.14.2",
+ okhttp3.internal.http2;version="3.14.2",
+ okhttp3.internal.io;version="3.14.2",
+ okhttp3.internal.platform;version="3.14.2",
+ okhttp3.internal.publicsuffix;version="3.14.2",
+ okhttp3.internal.tls;version="3.14.2",
+ okhttp3.internal.ws;version="3.14.2",
  okio,
  org.json,
- org.json.zip 
+ org.json.zip
 Automatic-Module-Name: com.mmxlabs.lngdataserver.lib

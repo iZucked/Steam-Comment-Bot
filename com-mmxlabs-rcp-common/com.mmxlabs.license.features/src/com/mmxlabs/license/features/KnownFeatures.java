@@ -90,4 +90,8 @@ public final class KnownFeatures {
 	public static final String FEATURE_OPEN_SLOT_EXPOSURE = "features:open-slot-exposure";
 	
 	public static final String FEATURE_PURGE = "features:purge";
+	
+	public static final String FEATURE_DATAHUB_BASECASE_ARCHIVE = "features:datahub-basecase-archive";
+	
+	public static final String FEATURE_DATAHUB_BASECASE_NOTES = "features:datahub-basecase-notes";
 }

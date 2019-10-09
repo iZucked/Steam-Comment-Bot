@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.displaycomposites;
 
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.jdt.annotation.Nullable;
@@ -22,7 +23,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-import com.mmxlabs.models.lng.cargo.ui.editorpart.ContractManipulator;
 import com.mmxlabs.models.lng.commercial.BallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
@@ -69,43 +69,35 @@ public class BallastBonusContractTableCreator {
 				CommercialPackage.eINSTANCE.getLumpSumBallastBonusContractLine_PriceExpression(),
 				sel.getEditingDomain()) {
 
+			protected EAttribute getAttribute(Object object) {
+				if (object instanceof LumpSumBallastBonusContractLine) {
+					return CommercialPackage.eINSTANCE.getLumpSumBallastBonusContractLine_PriceExpression();
+				}
+				if (object instanceof NotionalJourneyBallastBonusContractLine) {
+					return CommercialPackage.eINSTANCE.getNotionalJourneyBallastBonusContractLine_LumpSumPriceExpression();
+				}
+				return super.getAttribute(object);
+			}
+			
 			@Override
 			public void runSetCommand(final Object object, final String value) {
-				if (object instanceof LumpSumBallastBonusContractLine) {
-					super.runSetCommand(object, value);
-
-					dialogContext.getDialogController().validate();
-					eViewer.refresh();
-				}
-			}
-
-			@Override
-			public boolean canEdit(final Object object) {
-				if (object instanceof LumpSumBallastBonusContractLine) {
-					return super.canEdit(object);
-				} else {
-					return false;
-				}
+				super.runSetCommand(object, value);
+				dialogContext.getDialogController().validate();
+				eViewer.refresh();
 			}
 
 			@Override
 			public @Nullable String render(final Object object) {
 				if (object instanceof LumpSumBallastBonusContractLine) {
 					return super.render(object);
-				} else {
+				} 
+				else if (object instanceof NotionalJourneyBallastBonusContractLine) {
+					return super.render(object);
+				}
+				else {
 					return "-";
 				}
 			}
-
-			@Override
-			public Object getValue(final Object object) {
-				if (object instanceof LumpSumBallastBonusContractLine) {
-					return super.getValue(object);
-				} else {
-					return null;
-				}
-			}
-
 		});
 
 		eViewer.addTypicalColumn("Speed", new NumericAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyBallastBonusContractLine_Speed(), sel.getEditingDomain()) {
@@ -324,6 +316,48 @@ public class BallastBonusContractTableCreator {
 
 		});
 
+
+		eViewer.addTypicalColumn("Include canal time", new BooleanAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyBallastBonusContractLine_IncludeCanalTime(), sel.getEditingDomain()) {
+
+			@Override
+			public void runSetCommand(final Object object, final Object value) {
+				if (object instanceof NotionalJourneyBallastBonusContractLine) {
+					super.runSetCommand(object, value);
+
+					dialogContext.getDialogController().validate();
+					eViewer.refresh();
+				}
+			}
+
+			@Override
+			public boolean canEdit(final Object object) {
+				if (object instanceof NotionalJourneyBallastBonusContractLine) {
+					return super.canEdit(object);
+				} else {
+					return false;
+				}
+			}
+
+			@Override
+			public Object getValue(final Object object) {
+				if (object instanceof NotionalJourneyBallastBonusContractLine) {
+					return super.getValue(object);
+				} else {
+					return "";
+				}
+			}
+
+			@Override
+			public @Nullable String render(final Object object) {
+				if (object instanceof NotionalJourneyBallastBonusContractLine) {
+					return super.render(object);
+				} else {
+					return "-";
+				}
+			}
+		});
+
+		
 		eViewer.addTypicalColumn("Type", new BasicAttributeManipulator(null, sel.getEditingDomain()) {
 
 			@Override

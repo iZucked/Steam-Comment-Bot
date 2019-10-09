@@ -18,7 +18,7 @@ import com.mmxlabs.common.Pair;
  * @author hinton
  * 
  */
-public interface ICellRenderer extends IComparableProvider {
+public interface ICellRenderer extends IComparableProvider, IFilterProvider {
 	/**
 	 * Render the given object for viewing in a table cell.
 	 * 
@@ -37,15 +37,6 @@ public interface ICellRenderer extends IComparableProvider {
 	// Comparable getComparable(Object object);
 
 	boolean isValueUnset(Object object);
-	
-	/**
-	 * Get a representation useful for filtering.
-	 * 
-	 * @param object
-	 * @return
-	 */
-	@Nullable
-	Object getFilterValue(Object object);
 
 	/**
 	 * Get any non-contained notifiers which should be listened to for triggering a refresh on the given object. We could use a modified EContentAdapter to track non-containment references, but that

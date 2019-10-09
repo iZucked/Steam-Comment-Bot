@@ -112,6 +112,7 @@ public class ScenarioServiceFactoryImpl extends EFactoryImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ScenarioModel createScenarioModel() {
 		ScenarioModelImpl scenarioModel = new ScenarioModelImpl();
 		return scenarioModel;
@@ -122,6 +123,7 @@ public class ScenarioServiceFactoryImpl extends EFactoryImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Folder createFolder() {
 		FolderImpl folder = new FolderImpl();
 		return folder;
@@ -132,6 +134,7 @@ public class ScenarioServiceFactoryImpl extends EFactoryImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ScenarioService createScenarioService() {
 		ScenarioServiceImpl scenarioService = new ScenarioServiceImpl();
 		return scenarioService;
@@ -142,6 +145,7 @@ public class ScenarioServiceFactoryImpl extends EFactoryImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ScenarioInstance createScenarioInstance() {
 		ScenarioInstanceImpl scenarioInstance = new ScenarioInstanceImpl();
 		return scenarioInstance;
@@ -152,6 +156,7 @@ public class ScenarioServiceFactoryImpl extends EFactoryImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Metadata createMetadata() {
 		MetadataImpl metadata = new MetadataImpl();
 		return metadata;
@@ -162,6 +167,7 @@ public class ScenarioServiceFactoryImpl extends EFactoryImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ScenarioFragment createScenarioFragment() {
 		ScenarioFragmentImpl scenarioFragment = new ScenarioFragmentImpl();
 		return scenarioFragment;
@@ -172,6 +178,7 @@ public class ScenarioServiceFactoryImpl extends EFactoryImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ScenarioServicePackage getScenarioServicePackage() {
 		return (ScenarioServicePackage) getEPackage();
 	}

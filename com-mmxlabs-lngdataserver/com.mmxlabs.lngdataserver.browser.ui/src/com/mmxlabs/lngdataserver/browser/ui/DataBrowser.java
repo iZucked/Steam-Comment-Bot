@@ -102,12 +102,19 @@ public class DataBrowser extends ViewPart {
 	private ServiceTracker<DataExtension, DataExtension> dataExtensionTracker;
 
 	private Iterable<IDataBrowserContextMenuExtension> contextMenuExtensions;
+	private GridViewerColumn dataViewerColumn1;
 
 	private final IBaseCaseVersionsProvider.IBaseCaseChanged baseChangedListener = () -> {
 
 		ViewerHelper.setInput(baseCaseViewer, false, getBaseCaseList(baseCaseVersionsTracker.getService()));
 		ViewerHelper.refresh(dataViewer, false);
 		ViewerHelper.refresh(scenarioViewer, false);
+		String lockedBy = baseCaseVersionsTracker.getService().getLockedBy();
+		if (lockedBy == null) {
+			dataViewerColumn1.getColumn().setText("not locked");
+		} else {
+			dataViewerColumn1.getColumn().setText("  locked by " + lockedBy);
+		}
 	};
 
 	private final IScenarioVersionService.IChangedListener scenarioVersionsChangedListener = () -> {
@@ -187,6 +194,7 @@ public class DataBrowser extends ViewPart {
 	};
 
 	private DataBrowserLabelProvider dataLabelProvider;
+
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -387,7 +395,7 @@ public class DataBrowser extends ViewPart {
 
 				if (contextMenuExtensions != null) {
 					for (final IDataBrowserContextMenuExtension ext : contextMenuExtensions) {
-						// itemsAdded |= ext.contributeToBaseCaseMenu(treeSelection, scenarioMgr);
+						 itemsAdded |= ext.contributeToBaseCaseMenu(scenarioMgr);
 					}
 				}
 
@@ -488,14 +496,14 @@ public class DataBrowser extends ViewPart {
 		dataViewer.setAutoExpandLevel(GridTreeViewer.ALL_LEVELS);
 		dataViewer.getGrid().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
 
-		final GridViewerColumn dataCol1 = new GridViewerColumn(dataViewer, SWT.NONE);
-		dataCol1.getColumn().setTree(true);
-		dataCol1.getColumn().setWidth(300);
+		dataViewerColumn1 = new GridViewerColumn(dataViewer, SWT.NONE);
+		dataViewerColumn1.getColumn().setTree(true);
+		dataViewerColumn1.getColumn().setWidth(300);
 
 		dataLabelProvider = new DataBrowserLabelProvider(createNewAdapterFactory(), selectedNodes);
-		dataCol1.setLabelProvider(dataLabelProvider);
+		dataViewerColumn1.setLabelProvider(dataLabelProvider);
 		dataLabelProvider.setBaseCaseProvider(baseCaseVersionsTracker.getService());
-		GridViewerHelper.configureLookAndFeel(dataCol1);
+		GridViewerHelper.configureLookAndFeel(dataViewerColumn1);
 
 		GridViewerHelper.configureLookAndFeel(dataViewer);
 

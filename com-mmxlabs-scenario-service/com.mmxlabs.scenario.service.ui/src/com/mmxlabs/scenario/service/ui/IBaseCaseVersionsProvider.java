@@ -19,8 +19,11 @@ public interface IBaseCaseVersionsProvider {
 
 	@Nullable
 	ScenarioInstance getBaseCase();
+	
+	@Nullable String getLockedBy();
 
 	void addChangedListener(IBaseCaseChanged listener);
 
 	void removeChangedListener(IBaseCaseChanged listener);
+	
 }

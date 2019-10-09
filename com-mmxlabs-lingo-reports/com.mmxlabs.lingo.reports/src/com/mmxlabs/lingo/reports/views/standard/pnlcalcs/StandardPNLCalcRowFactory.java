@@ -63,13 +63,23 @@ public class StandardPNLCalcRowFactory extends AbstractPNLCalcRowFactory {
 
 		final List<PNLCalcsReportRow> rows = new LinkedList<>();
 
-		rows.add(createRow(10, "Buy port", false, "", "", false, createFirstPurchaseFormatter(sa -> sa.getPort().getName())));
+		rows.add(createRow(10, "Buy port", false, "", "", false, createFirstPurchaseFormatter(sa -> sa.getPort() != null ? sa.getPort().getName() : "")));
 		rows.add(createRow(20, "Buy date", false, "", "", false,
 				createFirstPurchaseFormatter(sa -> sa.getSlotVisit().getStart().format(DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter()))));
 		rows.add(createRow(30, "Buy volume (m3)", false, "", "", false,
 				createBasicFormatter(options, false, Integer.class, VolumeM3Format::format, createFirstPurchaseTransformer(Integer.class, SlotAllocation::getVolumeTransferred))));
 		rows.add(createRow(40, "Buy volume (mmBtu)", false, "", "", false,
 				createBasicFormatter(options, false, Integer.class, VolumeMMBtuFormat::format, createFirstPurchaseTransformer(Integer.class, SlotAllocation::getEnergyTransferred))));
+		//CV should have units: mmbtu/m^3, although since not shown in slot editor, will not show here?
+		rows.add(createRow(45, "Buy CV (mmBtu/m3)", false, "", "", false, createBasicFormatter(options, false, Double.class, CVFormat::format,
+					createFullLegTransformer2(Double.class, 0, (visit, travel, idle) -> {
+						if (visit != null && visit.getSlotAllocation() != null) {
+							return visit.getSlotAllocation().getCv();
+						}
+						else {
+							return 0.0;
+						}
+					}))));
 		rows.add(createRow(50, "Buy price($/mmBtu)", false, "", "", false,
 				createBasicFormatter(options, false, Double.class, DollarsPerMMBtuFormat::format, createFirstPurchaseTransformer(Double.class, SlotAllocation::getPrice))));
 
@@ -127,7 +137,7 @@ public class StandardPNLCalcRowFactory extends AbstractPNLCalcRowFactory {
 
 			// rows.add(createRow(base + 20, " Speed", false, "", "", false, createFullLegFormatter2(legIdx, Double.class, SpeedFormat::format, (visit, travel, idle) -> travel.getSpeed())));
 			rows.add(createRow(base + 20, "    Speed", false, "", "", false,
-					createBasicFormatter(options, true, Double.class, SpeedFormat::format, createFullLegTransformer2(Double.class, legIdx, (visit, travel, idle) -> travel.getSpeed()))));
+					createBasicFormatter(options, true, Double.class, SpeedFormat::format, createFullLegTransformer2(Double.class, legIdx, (visit, travel, idle) -> travel == null ? 0 : travel.getSpeed()))));
 			rows.add(createRow(base + 30, "    Days", false, "", "", false, createBasicFormatter(options, true, Double.class, DaysFormat::format, createFullLegTransformer2(Double.class, legIdx,
 					(visit, travel, idle) -> ((getOrZero(visit, Event::getDuration) + getOrZero(travel, Event::getDuration) + getOrZero(idle, Event::getDuration)) / 24.0)))));
 
@@ -153,7 +163,7 @@ public class StandardPNLCalcRowFactory extends AbstractPNLCalcRowFactory {
 			rows.add(createRow(base + 80, "    Port Costs ", false, "", "", false,
 					createBasicFormatter(options, true, Integer.class, DollarsFormat::format, createFullLegTransformer2(Integer.class, legIdx, (visit, travel, idle) -> (visit.getPortCost())))));
 			rows.add(createRow(base + 90, "    Route", false, "", "", false,
-					createBasicFormatter(options, false, String.class, Object::toString, createFullLegTransformer(String.class, legIdx, (travel, idle) -> getRoute(travel.getRouteOption())))));
+					createBasicFormatter(options, false, String.class, Object::toString, createFullLegTransformer(String.class, legIdx, (travel, idle) -> travel == null ? "" : getRoute(travel.getRouteOption())))));
 			rows.add(createRow(base + 100, "    Canal Cost", true, "$", "", true, createBasicFormatter(options, true, Integer.class, DollarsFormat::format,
 					createFullLegTransformer2(Integer.class, legIdx, (visit, travel, idle) -> (getOrZero(travel, Journey::getToll))))));
 

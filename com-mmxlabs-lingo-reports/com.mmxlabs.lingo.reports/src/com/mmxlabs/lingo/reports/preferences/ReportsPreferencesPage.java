@@ -56,8 +56,9 @@ public class ReportsPreferencesPage extends FieldEditorPreferencePage implements
 			label.setLayoutData(labelLayoutData.create());
 
 			final String[][] durationValues = new String[][] { //
-					{ "Days and hours", Formatters.DurationMode.DAYS_HOURS.name() }, //
-					{ "Days to 1 d.p.", Formatters.DurationMode.DECIMAL.name() } };
+					{ "Days and  hours (1:12)", Formatters.DurationMode.DAYS_HOURS_COLON.name() }, //
+					{ "Days and hours (1d 12h)", Formatters.DurationMode.DAYS_HOURS_HUMAN.name() }, //
+					{ "Days to 1 d.p. (1.5)", Formatters.DurationMode.DECIMAL.name() } };
 			addField(new ComboFieldEditor(PreferenceConstants.P_REPORT_DURATION_FORMAT, "&Duration format:", durationValues, getFieldEditorParent()));
 		}
 	}

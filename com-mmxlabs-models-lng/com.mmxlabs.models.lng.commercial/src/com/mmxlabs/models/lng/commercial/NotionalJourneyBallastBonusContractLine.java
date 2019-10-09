@@ -25,6 +25,8 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine#getHirePriceExpression <em>Hire Price Expression</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine#getReturnPorts <em>Return Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine#isIncludeCanal <em>Include Canal</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine#isIncludeCanalTime <em>Include Canal Time</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine#getLumpSumPriceExpression <em>Lump Sum Price Expression</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getNotionalJourneyBallastBonusContractLine()
@@ -158,5 +160,59 @@ public interface NotionalJourneyBallastBonusContractLine extends BallastBonusCon
 	 * @generated
 	 */
 	void setIncludeCanal(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Include Canal Time</b></em>' attribute.
+	 * The default value is <code>"true"</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Include Canal Time</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Include Canal Time</em>' attribute.
+	 * @see #setIncludeCanalTime(boolean)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getNotionalJourneyBallastBonusContractLine_IncludeCanalTime()
+	 * @model default="true"
+	 * @generated
+	 */
+	boolean isIncludeCanalTime();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine#isIncludeCanalTime <em>Include Canal Time</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Include Canal Time</em>' attribute.
+	 * @see #isIncludeCanalTime()
+	 * @generated
+	 */
+	void setIncludeCanalTime(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Lump Sum Price Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Lump Sum Price Expression</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Lump Sum Price Expression</em>' attribute.
+	 * @see #setLumpSumPriceExpression(String)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getNotionalJourneyBallastBonusContractLine_LumpSumPriceExpression()
+	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/pricing/expressionType type='charter'"
+	 * @generated
+	 */
+	String getLumpSumPriceExpression();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine#getLumpSumPriceExpression <em>Lump Sum Price Expression</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Lump Sum Price Expression</em>' attribute.
+	 * @see #getLumpSumPriceExpression()
+	 * @generated
+	 */
+	void setLumpSumPriceExpression(String value);
 
 } // NotionalJourneyBallastBonusContractLine

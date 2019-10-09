@@ -85,12 +85,14 @@ public class FragmentCopyHandler implements IScenarioFragmentCopyHandler {
 
 						try {
 							OptionAnalysisModel model = copySandboxModelWithJSON(sourceSDP, sourceModel, targetSDP);
-							EvaluateSolutionSetHelper.recomputeSolution(targetRecord, targetRecord.getScenarioInstance(), model.getResults(), true, true);
-							return true;
+							if (model != null) {
+								EvaluateSolutionSetHelper.recomputeSolution(targetRecord, targetRecord.getScenarioInstance(), model.getResults(), true, true);
+								return true;
+							}
 						} catch (final JsonProcessingException e) {
 							e.printStackTrace();
-							return false;
 						}
+						return false;
 					}
 				}
 			}

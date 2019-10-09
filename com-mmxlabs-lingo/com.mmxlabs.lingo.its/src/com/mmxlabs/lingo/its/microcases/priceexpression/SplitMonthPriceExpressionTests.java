@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lingo.its.microcases.priceexpression;
 
-import java.net.MalformedURLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
@@ -14,13 +13,14 @@ import java.util.List;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.license.features.LicenseFeatures;
@@ -30,13 +30,16 @@ import com.mmxlabs.lingo.its.tests.microcases.MicroCaseUtils;
 import com.mmxlabs.lingo.its.tests.microcases.TimeWindowsTestsUtils;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.EVesselTankState;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelBuilder;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelFinder;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScheduleTools;
@@ -82,40 +85,10 @@ public class SplitMonthPriceExpressionTests extends AbstractMicroTestCase {
 	@BeforeEach
 	public void constructor() throws Exception {
 
-		scenarioDataProvider = importReferenceData();
-		lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-
-		scenarioModelFinder = new ScenarioModelFinder(scenarioDataProvider);
-		scenarioModelBuilder = new ScenarioModelBuilder(scenarioDataProvider);
-
-		commercialModelFinder = scenarioModelFinder.getCommercialModelFinder();
-		fleetModelFinder = scenarioModelFinder.getFleetModelFinder();
-		portFinder = scenarioModelFinder.getPortModelFinder();
-
-		pricingModelBuilder = scenarioModelBuilder.getPricingModelBuilder();
-		cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
-		fleetModelBuilder = scenarioModelBuilder.getFleetModelBuilder();
-		spotMarketsModelBuilder = scenarioModelBuilder.getSpotMarketsModelBuilder();
-
-		entity = commercialModelFinder.findEntity("Shipping");
+		super.constructor();
 
 		// Set a default prompt in the past
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2014, 1, 1), LocalDate.of(2014, 3, 1));
-	}
-
-	@AfterEach
-	public void destructor() {
-		lngScenarioModel = null;
-		scenarioModelFinder = null;
-		scenarioModelBuilder = null;
-		commercialModelFinder = null;
-		fleetModelFinder = null;
-		portFinder = null;
-		cargoModelBuilder = null;
-		fleetModelBuilder = null;
-		spotMarketsModelBuilder = null;
-		pricingModelBuilder = null;
-		entity = null;
 	}
 
 	private int daysToHours(int days) {
@@ -320,6 +293,73 @@ public class SplitMonthPriceExpressionTests extends AbstractMicroTestCase {
 
 	public @NonNull LoadSlot getDefaultEMFLoadSlot() {
 		return scenarioModelFinder.getCargoModelFinder().findLoadSlot(loadName);
+	}
+
+	/**
+	 * Test: Simple price expression with two index. Vessel Availability lasting a month. Load and Discharge are unbounded during that period. Price in the first half negligible and really high in the
+	 * second half. Expected result: Load during the first half and discharge during the second half
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testNestedSplitMonth() throws Exception {
+		portModelBuilder.setAllExistingPortsToUTC();
+		// Create the required basic elements
+		final VesselAvailability vesselAvailability = createTestVesselAvailability(LocalDateTime.of(2018, 6, 1, 0, 0, 0), LocalDateTime.of(2018, 6, 1, 0, 0, 0),
+				LocalDateTime.of(2018, 11, 1, 0, 0, 0));
+		vesselAvailability.getStartHeel().setCvValue(22.3);
+		vesselAvailability.getStartHeel().setPriceExpression("0");
+		vesselAvailability.getStartHeel().setMaxVolumeAvailable(100000);
+		vesselAvailability.getEndHeel().setPriceExpression("0");
+		vesselAvailability.getEndHeel().setMinimumEndHeel(300);
+		vesselAvailability.getEndHeel().setMaximumEndHeel(300);
+		vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
+
+		// Construct the cargo scenario
+		// Create cargo 1, cargo 2
+		CommodityCurve[] wc = new CommodityCurve[4];
+		wc[0] = pricingModelBuilder.makeCommodityDataCurve("WEEK_W1", "$", "mmBtu").build();
+		wc[1] = pricingModelBuilder.makeCommodityDataCurve("WEEK_W2", "$", "mmBtu").build();
+		wc[2] = pricingModelBuilder.makeCommodityDataCurve("WEEK_W3", "$", "mmBtu").build();
+		wc[3] = pricingModelBuilder.makeCommodityDataCurve("WEEK_W4", "$", "mmBtu").build();
+
+		String expression = "SPLITMONTH(SPLITMONTH(WEEK_W1,WEEK_W2,8),SPLITMONTH(WEEK_W3,WEEK_W4,22),15)";
+
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase(loadName, LocalDate.of(2018, 6, 1), portFinder.findPort("Bonny Nigeria"), null, entity, "5", 23.4) //
+				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
+				.withWindowStartTime(0) //
+				.withVisitDuration(24) //
+				.withWindowSize(0, TimePeriod.DAYS) //
+				.build() //
+				.makeDESSale(dischargeName, LocalDate.of(2018, 8, 1), portFinder.findPort("Dragon LNG"), null, entity, expression) //
+				.withWindowStartTime(0) //
+				.withWindowSize(30, TimePeriod.DAYS).build() //
+				.withVesselAssignment(vesselAvailability, 1).build();
+
+		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
+
+		// Loop over each of the weeks in the month and make sure we pick the best price as we shift the high price through the month.
+		for (int i = 0; i < 4; ++i) {
+			// reset expression
+			for (int j = 0; j < 4; ++j) {
+				wc[j].setExpression("10");
+			}
+			wc[i].setExpression("40");
+
+			evaluateWithLSOTest(scenarioRunner -> {
+			});
+
+			// Should be the same as the updateScenario as we have only called ScenarioRunner#init()
+			final Schedule schedule = ScenarioModelUtil.findSchedule(scenarioDataProvider);
+			Assertions.assertNotNull(schedule);
+
+			final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(loadName, schedule);
+			SlotAllocation sa = cargoAllocation.getSlotAllocations().get(1);
+			Assertions.assertEquals(40.0, sa.getPrice());
+			Assertions.assertEquals(LocalDate.of(2018, 8, 1 + 7 * i), sa.getSlotVisit().getStart().toLocalDate());
+		}
 	}
 
 }

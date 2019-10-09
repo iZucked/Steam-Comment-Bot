@@ -54,6 +54,8 @@ public class NotionalJourneyBallastBonusContractLineItemProvider extends Ballast
 			addHirePriceExpressionPropertyDescriptor(object);
 			addReturnPortsPropertyDescriptor(object);
 			addIncludeCanalPropertyDescriptor(object);
+			addIncludeCanalTimePropertyDescriptor(object);
+			addLumpSumPriceExpressionPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -169,6 +171,50 @@ public class NotionalJourneyBallastBonusContractLineItemProvider extends Ballast
 	}
 
 	/**
+	 * This adds a property descriptor for the Include Canal Time feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addIncludeCanalTimePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_NotionalJourneyBallastBonusContractLine_includeCanalTime_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_NotionalJourneyBallastBonusContractLine_includeCanalTime_feature", "_UI_NotionalJourneyBallastBonusContractLine_type"),
+				 CommercialPackage.Literals.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__INCLUDE_CANAL_TIME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Lump Sum Price Expression feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addLumpSumPriceExpressionPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_NotionalJourneyBallastBonusContractLine_lumpSumPriceExpression_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_NotionalJourneyBallastBonusContractLine_lumpSumPriceExpression_feature", "_UI_NotionalJourneyBallastBonusContractLine_type"),
+				 CommercialPackage.Literals.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__LUMP_SUM_PRICE_EXPRESSION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns NotionalJourneyBallastBonusContractLine.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -208,6 +254,8 @@ public class NotionalJourneyBallastBonusContractLineItemProvider extends Ballast
 			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__FUEL_PRICE_EXPRESSION:
 			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__HIRE_PRICE_EXPRESSION:
 			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__INCLUDE_CANAL:
+			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__INCLUDE_CANAL_TIME:
+			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__LUMP_SUM_PRICE_EXPRESSION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

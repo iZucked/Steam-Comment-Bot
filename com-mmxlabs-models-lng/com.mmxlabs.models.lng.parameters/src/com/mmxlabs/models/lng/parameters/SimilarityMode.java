@@ -47,8 +47,9 @@ public enum SimilarityMode implements Enumerator {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #LOW_VALUE
-	 * @generated
+	 * @generated NOT
 	 * @ordered
+	 * @deprecated
 	 */
 	LOW(2, "LOW", "LOW"),
 
@@ -57,8 +58,9 @@ public enum SimilarityMode implements Enumerator {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #MEDIUM_VALUE
-	 * @generated
+	 * @generated NOT
 	 * @ordered
+	 * @deprecated
 	 */
 	MEDIUM(3, "MEDIUM", "MEDIUM"),
 
@@ -67,8 +69,9 @@ public enum SimilarityMode implements Enumerator {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #HIGH_VALUE
-	 * @generated
+	 * @generated NOT
 	 * @ordered
+	 * @deprecated
 	 */
 	HIGH(4, "HIGH", "HIGH");
 

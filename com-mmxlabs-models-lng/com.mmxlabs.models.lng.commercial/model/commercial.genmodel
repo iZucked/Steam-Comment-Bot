@@ -127,6 +127,8 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//NotionalJourneyBallastBonusContractLine/hirePriceExpression"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//NotionalJourneyBallastBonusContractLine/returnPorts"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//NotionalJourneyBallastBonusContractLine/includeCanal"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//NotionalJourneyBallastBonusContractLine/includeCanalTime"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//NotionalJourneyBallastBonusContractLine/lumpSumPriceExpression"/>
     </genClasses>
     <genClasses image="false" ecoreClass="commercial.ecore#//CharterContract">
       <genFeatures createChild="false" propertyDescription="Minimum duration in days charters must be taken on for"

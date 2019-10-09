@@ -78,7 +78,7 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 				mItem.dispose();
 			}
 		}
-		
+
 		if (scenarioEditingLocation.isLocked()) {
 			return;
 		}
@@ -131,7 +131,7 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 		}
 		if (items.length == 1) {
 			if (column != null) {
-				if (column.getText().equals("Buy")) {
+				if (column.getText().equals("Buy") || column.getText().equals("Buy/Event")) {
 					final Object ed = items[0].getData();
 					final BaseCaseRow row = (BaseCaseRow) ed;
 					if (row.getBuyOption() != null) {
@@ -166,7 +166,8 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 								if (vessel != null && fromPort != null && toPort != null && sellDate != null) {
 									final MenuManager dateMenu = new MenuManager("Set date using");
 									dateMenu.add(new RunnableAction("max speed", () -> {
-										final int travelHours = TravelTimeUtils.getTimeForRoute(vessel, vessel.getVesselOrDelegateMaxSpeed(), RouteOption.DIRECT, fromPort, toPort, portModel, modelDistanceProvider);
+										final int travelHours = TravelTimeUtils.getTimeForRoute(vessel, vessel.getVesselOrDelegateMaxSpeed(), RouteOption.DIRECT, fromPort, toPort, portModel,
+												modelDistanceProvider);
 
 										final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
 										final LocalDate newDate = sellDate.minusDays(travelDays).toLocalDate();
@@ -179,8 +180,8 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 									if (vessel.getLadenAttributes().getVesselOrDelegateServiceSpeed() > 0.0) {
 
 										dateMenu.add(new RunnableAction("service speed", () -> {
-											final int travelHours = TravelTimeUtils.getTimeForRoute(vessel, vessel.getLadenAttributes().getVesselOrDelegateServiceSpeed(), RouteOption.DIRECT, fromPort, toPort,
-													portModel, modelDistanceProvider);
+											final int travelHours = TravelTimeUtils.getTimeForRoute(vessel, vessel.getLadenAttributes().getVesselOrDelegateServiceSpeed(), RouteOption.DIRECT, fromPort,
+													toPort, portModel, modelDistanceProvider);
 
 											final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
 											final LocalDate newDate = sellDate.minusDays(travelDays).toLocalDate();
@@ -255,7 +256,8 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 								if (vessel != null && fromPort != null && toPort != null && buyDate != null) {
 									final MenuManager dateMenu = new MenuManager("Set date using");
 									dateMenu.add(new RunnableAction("max speed", () -> {
-										final int travelHours = TravelTimeUtils.getTimeForRoute(vessel, vessel.getVesselOrDelegateMaxSpeed(), RouteOption.DIRECT, fromPort, toPort, portModel, modelDistanceProvider);
+										final int travelHours = TravelTimeUtils.getTimeForRoute(vessel, vessel.getVesselOrDelegateMaxSpeed(), RouteOption.DIRECT, fromPort, toPort, portModel,
+												modelDistanceProvider);
 
 										final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
 										final LocalDate newDate = buyDate.plusDays(travelDays).toLocalDate();
@@ -268,8 +270,8 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 									if (vessel.getLadenAttributes().getVesselOrDelegateServiceSpeed() > 0.0) {
 
 										dateMenu.add(new RunnableAction("service speed", () -> {
-											final int travelHours = TravelTimeUtils.getTimeForRoute(vessel, vessel.getLadenAttributes().getVesselOrDelegateServiceSpeed(), RouteOption.DIRECT, fromPort, toPort,
-													portModel, modelDistanceProvider);
+											final int travelHours = TravelTimeUtils.getTimeForRoute(vessel, vessel.getLadenAttributes().getVesselOrDelegateServiceSpeed(), RouteOption.DIRECT, fromPort,
+													toPort, portModel, modelDistanceProvider);
 
 											final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
 											final LocalDate newDate = buyDate.plusDays(travelDays).toLocalDate();

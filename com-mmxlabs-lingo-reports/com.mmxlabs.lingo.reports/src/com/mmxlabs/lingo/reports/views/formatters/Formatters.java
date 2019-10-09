@@ -42,10 +42,10 @@ public final class Formatters {
 	public static final IntegerFormatter integerFormatter = new IntegerFormatter();
 
 	public enum DurationMode {
-		DAYS_HOURS, DECIMAL
+		DAYS_HOURS_COLON, DAYS_HOURS_HUMAN, DECIMAL,
 	}
 
-	private static DurationMode durationMode = DurationMode.DAYS_HOURS;
+	private static DurationMode durationMode = DurationMode.DAYS_HOURS_COLON;
 
 	public static DurationMode getDurationMode() {
 		return durationMode;
@@ -57,8 +57,14 @@ public final class Formatters {
 
 	public static @NonNull String formatAsDays(final int hours) {
 		switch (durationMode) {
-		case DAYS_HOURS:
+		case DAYS_HOURS_COLON:
 			return String.format("%02d:%02d", hours / 24, hours % 24);
+		case DAYS_HOURS_HUMAN:
+			if ((hours / 24) > 0) {
+				return String.format("%dd %dh", hours / 24, hours % 24);
+			} else {
+				return String.format("%dh", hours);
+			}
 		case DECIMAL:
 			return String.format("%.01f", (double) hours / 24.0);
 		}

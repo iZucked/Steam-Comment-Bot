@@ -268,13 +268,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				GridDataFactory.generate(c, 1, 1);
 				c.setLayout(new GridLayout(7, false));
 
-				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_BREAK_EVENS)) {
-					/*
-					 * toggle for target pnl
-					 */
-					final Composite targetPNLToggle = createUseTargetPNLToggleComposite(c);
-					GridDataFactory.generate(targetPNLToggle, 1, 1);
-				}
+			
 				/*
 				 * toggle for portfolio mode
 				 */
@@ -284,6 +278,12 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				final Composite optioniseModeToggle = createOptioniseToggleComposite(c);
 				GridDataFactory.generate(optioniseModeToggle, 1, 1);
 
+				
+				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_BREAK_EVENS)) {
+					beModeToggle = createUseTargetPNLToggleComposite(c);
+					GridDataFactory.generate(beModeToggle, 1, 1);
+				}
+				
 				final Composite generateButton = createRunButton(c);
 				GridDataFactory.generate(generateButton, 1, 1);
 
@@ -555,6 +555,8 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	private Composite centralComposite;
 
 	private boolean partialCaseValid;
+
+	private Composite beModeToggle;
 
 	public void setInput(final @Nullable OptionAnalysisModel model) {
 
@@ -1007,6 +1009,9 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 					int mode = combo.getSelectionIndex();
 					// boolean selection = matchingButton.getSelection();
 					partialCaseComponent.setVisible(mode == 0);
+					if (beModeToggle != null) {
+						beModeToggle.setVisible(mode != 1);
+					}
 					getDefaultCommandHandler().handleCommand(SetCommand.create(getEditingDomain(), m, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__MODE, mode), m,
 							AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__MODE);
 					refreshSections(true, EnumSet.of(SectionType.MIDDLE));
@@ -1038,7 +1043,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		final GridData gdM = new GridData(SWT.LEFT, SWT.BEGINNING, false, false);
 		gdM.horizontalSpan = 2;
 		matching.setLayoutData(gdM);
-		new Label(matching, SWT.NONE).setText("Portfolio Mode");
+		new Label(matching, SWT.NONE).setText("Portfolio link");
 		final Button matchingButton = new Button(matching, SWT.CHECK | SWT.LEFT);
 		matchingButton.setSelection(false);
 		matchingButton.addSelectionListener(new SelectionAdapter() {
@@ -1079,7 +1084,9 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		final GridData gdM = new GridData(SWT.LEFT, SWT.BEGINNING, false, false);
 		gdM.horizontalSpan = 2;
 		matching.setLayoutData(gdM);
-		new Label(matching, SWT.NONE).setText("B/E with target P&&L");
+		Label l = new Label(matching, SWT.NONE);
+		l.setText("Starting point P&&L B/E");
+		l.setToolTipText("When checked use the portfolio P&&L from the starting point scenario to calculate the B/E prices. Otherwise a point-to-point B/E is calculated. Does not apply when optimising.");
 		final Button matchingButton = new Button(matching, SWT.CHECK | SWT.LEFT);
 		matchingButton.setSelection(false);
 		matchingButton.addSelectionListener(new SelectionAdapter() {

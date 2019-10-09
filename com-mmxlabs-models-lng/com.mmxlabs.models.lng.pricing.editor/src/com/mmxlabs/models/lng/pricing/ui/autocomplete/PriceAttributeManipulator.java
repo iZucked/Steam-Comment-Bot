@@ -76,6 +76,10 @@ public class PriceAttributeManipulator implements ICellManipulator, ICellRendere
 		};
 	}
 
+	protected EAttribute getAttribute(final Object object) {
+		return this.attribute;
+	}
+	
 	@Override
 	public String render(final Object object) {
 		if (object == null) {
@@ -107,7 +111,7 @@ public class PriceAttributeManipulator implements ICellManipulator, ICellRendere
 			@Override
 			protected Control createControl(Composite parent) {
 				Control control = super.createControl(parent);
-				this.proposalHelper = AutoCompleteHelper.createControlProposalAdapter(control, attribute);
+				this.proposalHelper = AutoCompleteHelper.createControlProposalAdapter(control, getAttribute(object));
 				for (Resource r : editingDomain.getResourceSet().getResources()) {
 					for (EObject o : r.getContents()) {
 						if (o instanceof MMXRootObject) {
@@ -156,8 +160,8 @@ public class PriceAttributeManipulator implements ICellManipulator, ICellRendere
 		if (object instanceof EObject) {
 			final EObject eObject = (EObject) object;
 
-			if (eObject.eIsSet(attribute)) {
-				return eObject.eGet(attribute);
+			if (eObject.eIsSet(getAttribute(object))) {
+				return eObject.eGet(getAttribute(object));
 			} else {
 				return "";
 			}
@@ -196,7 +200,7 @@ public class PriceAttributeManipulator implements ICellManipulator, ICellRendere
 		if (object == null) {
 			return false;
 		}
-		if (attribute.isUnsettable() && ((EObject) object).eIsSet(attribute) == false) {
+		if (getAttribute(object).isUnsettable() && ((EObject) object).eIsSet(getAttribute(object)) == false) {
 			return true;
 		}
 		return false;
@@ -209,9 +213,9 @@ public class PriceAttributeManipulator implements ICellManipulator, ICellRendere
 		}
 		final Command command;
 		if (value != null && !value.isEmpty()) {
-			command = editingDomain.createCommand(SetCommand.class, new CommandParameter(object, attribute, value));
+			command = editingDomain.createCommand(SetCommand.class, new CommandParameter(object, getAttribute(object), value));
 		} else {
-			command = editingDomain.createCommand(SetCommand.class, new CommandParameter(object, attribute, SetCommand.UNSET_VALUE));
+			command = editingDomain.createCommand(SetCommand.class, new CommandParameter(object, getAttribute(object), SetCommand.UNSET_VALUE));
 
 		}
 		CompoundCommand cmd = new CompoundCommand();
@@ -237,8 +241,8 @@ public class PriceAttributeManipulator implements ICellManipulator, ICellRendere
 		
 		if (object instanceof EObject) {
 			final EObject eObject = (EObject) object;
-			if (eObject.eIsSet(this.attribute)) {
-				v = eObject.eGet(this.attribute);
+			if (eObject.eIsSet(this.getAttribute(object))) {
+				v = eObject.eGet(this.getAttribute(object));
 			}
 		}
 		if (v == null || v == SetCommand.UNSET_VALUE) {
@@ -267,7 +271,7 @@ public class PriceAttributeManipulator implements ICellManipulator, ICellRendere
 
 	@Override
 	public final void setValue(final Object object, final Object value) {
-		if (value == SetCommand.UNSET_VALUE && attribute.isUnsettable()) {
+		if (value == SetCommand.UNSET_VALUE && getAttribute(object).isUnsettable()) {
 			runSetCommand(object, (String)value);
 		} else {
 			doSetValue(object, value);

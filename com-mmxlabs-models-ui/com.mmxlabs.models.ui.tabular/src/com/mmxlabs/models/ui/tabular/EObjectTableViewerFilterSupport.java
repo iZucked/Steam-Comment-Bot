@@ -42,7 +42,7 @@ public class EObjectTableViewerFilterSupport {
 
 	/**
 	 */
-	protected final Set<String> allMnemonics = new HashSet<String>();
+	protected final Set<String> allMnemonics = new HashSet<>();
 
 	public EObjectTableViewerFilterSupport(final ColumnViewer viewer, final Grid grid) {
 		this.viewer = viewer;
@@ -65,7 +65,7 @@ public class EObjectTableViewerFilterSupport {
 	 * @return
 	 */
 	public Set<String> getDistinctValues(final String columnName) {
-		final TreeSet<String> result = new TreeSet<String>();
+		final TreeSet<String> result = new TreeSet<>();
 
 		for (final GridColumn column : grid.getColumns()) {
 			if (column.getText().equals(columnName)) {
@@ -75,7 +75,7 @@ public class EObjectTableViewerFilterSupport {
 				if (pathData instanceof EMFPath) {
 					final EMFPath path = (EMFPath) pathData;
 					final Object[] elements = ((IStructuredContentProvider) viewer.getContentProvider()).getElements(viewer.getInput());
-					for (final Object element : elements) { // viewer.getCurrentElements()) {
+					for (final Object element : elements) {
 						if (element instanceof EObject) {
 							result.add(renderer.render(path.get((EObject) element)));
 						}
@@ -92,7 +92,7 @@ public class EObjectTableViewerFilterSupport {
 	 * @return names that can be used in the filter (see {@link #setFilterString(String)})
 	 */
 	public Map<String, List<String>> getColumnMnemonics() {
-		final Map<String, List<String>> ms = new TreeMap<String, List<String>>();
+		final Map<String, List<String>> ms = new TreeMap<>();
 
 		for (final GridColumn column : grid.getColumns()) {
 			final List<String> mnemonics = (List<String>) column.getData(COLUMN_MNEMONICS);
@@ -113,10 +113,13 @@ public class EObjectTableViewerFilterSupport {
 				/**
 				 * This map contains representations of each column for this object, both the real value and the display value.
 				 */
-				final Map<String, Pair<?, ?>> attributes = new HashMap<String, Pair<?, ?>>();
+				final Map<String, Pair<?, ?>> attributes = new HashMap<>();
 				// this could probably be much faster
 				for (final GridColumn column : grid.getColumns()) {
-					final ICellRenderer renderer = (ICellRenderer) column.getData(EObjectTableViewer.COLUMN_RENDERER);
+					IFilterProvider filterProvider = (IFilterProvider) column.getData(EObjectTableViewer.COLUMN_FILTER);
+					if (filterProvider == null) {
+						filterProvider = (IFilterProvider) column.getData(EObjectTableViewer.COLUMN_RENDERER);
+					}
 					final Object columnPath = column.getData(EObjectTableViewer.COLUMN_PATH);
 
 					Object fieldValue = element;
@@ -147,12 +150,12 @@ public class EObjectTableViewerFilterSupport {
 					if (fieldValue == null) {
 						continue;
 					}
-					if (renderer == null) {
+					if (filterProvider == null) {
 						continue;
 					}
 
-					final Object filterValue = renderer.getFilterValue(fieldValue);
-					final Object renderValue = renderer.render(fieldValue);
+					final Object filterValue = filterProvider.getFilterValue(fieldValue);
+					final Object renderValue = filterProvider.render(fieldValue);
 
 					final List<String> mnemonics = (List<String>) column.getData(COLUMN_MNEMONICS);
 					for (final String m : mnemonics) {
@@ -200,7 +203,7 @@ public class EObjectTableViewerFilterSupport {
 	/**
 	 */
 	protected List<String> makeMnemonics(final String columnName) {
-		final LinkedList<String> result = new LinkedList<String>();
+		final LinkedList<String> result = new LinkedList<>();
 
 		result.add(uniqueMnemonic(columnName.toLowerCase().replace(" ", "")));
 		String initials = "";

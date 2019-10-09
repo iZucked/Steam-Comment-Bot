@@ -855,6 +855,13 @@
              from="114"
              id="com.mmxlabs.models.lng.migration.units.MigrateToV115"
              to="115">
-       </MigrationUnit>     
+       </MigrationUnit>
+       <MigrationUnit
+             class="com.mmxlabs.models.lng.migration.units.MigrateToV115"
+             context="com.mmxlabs.lingo"
+             from="115"
+             id="com.mmxlabs.models.lng.migration.units.MigrateToV115"
+             to="116">
+       </MigrationUnit>         
    </extension>
 </plugin>

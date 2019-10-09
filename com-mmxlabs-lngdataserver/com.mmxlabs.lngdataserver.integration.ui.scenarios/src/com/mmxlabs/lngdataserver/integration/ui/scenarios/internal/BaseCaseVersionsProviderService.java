@@ -27,6 +27,7 @@ public class BaseCaseVersionsProviderService implements IBaseCaseVersionsProvide
 
 	private final Set<IBaseCaseChanged> changeListeners = Sets.newConcurrentHashSet();
 	private @Nullable ScenarioInstance baseCase;
+	private @Nullable String lockedBy;
 
 	@Override
 	public String getVersion(final String typeId) {
@@ -65,5 +66,19 @@ public class BaseCaseVersionsProviderService implements IBaseCaseVersionsProvide
 		} catch (final Exception e) {
 			LOGGER.error(e.getMessage(), e);
 		}
+	}
+
+	public void setLockedBy(final String lockedBy) {
+		this.lockedBy = lockedBy;
+		try {
+			changeListeners.forEach(IBaseCaseChanged::changed);
+		} catch (final Exception e) {
+			LOGGER.error(e.getMessage(), e);
+		}
+	}
+
+	@Override
+	public @Nullable String getLockedBy() {
+		return lockedBy;
 	}
 }

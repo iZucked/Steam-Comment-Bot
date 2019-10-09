@@ -26,6 +26,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
@@ -342,6 +343,40 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 		for (final Map.Entry<Pair<EObject, EStructuralFeature>, SetMode> featureToSet : featuresToSet.entrySet()) {
 			final EObject proxy = featureToSet.getKey().getFirst();
 			final EStructuralFeature feature = featureToSet.getKey().getSecond();
+
+			// Handle custom extensions. These are typically contained in the MMX extensions feature list and may be dynamically created
+			if (!proxies.contains(proxy)) {
+				// It is an unknown object
+				final EObject eContainer = proxy.eContainer();
+				// Is the owner a known object and is it a list?
+				// As proxy is an EObject, we by definition are dealing with a EReference.
+				if (proxies.contains(eContainer) && proxy.eContainingFeature().isMany()) {
+					// Find all equivalent owners...
+					for (final EObject original : proxyCounterparts.get(eContainer)) {
+						// ... see if there is an existing match and register as a counterpart...
+						final List<EObject> l = (List<EObject>) original.eGet(proxy.eContainingFeature());
+						boolean foundExisting = false;
+						if (l != null) {
+							for (final EObject eo : l) {
+								if (eo.eClass() == proxy.eClass()) {
+									foundExisting = true;
+									proxyCounterparts.computeIfAbsent(proxy, e -> new LinkedList<>()).add(eo);
+								}
+							}
+						}
+						// ... otherwise copy the proxy and register that as a counterpart
+						if (!foundExisting) {
+
+							final EObject copy = EcoreUtil.copy(proxy);
+							command.append(AddCommand.create(commandHandler.getEditingDomain(), //
+									original, proxy.eContainingFeature(), copy));
+
+							proxyCounterparts.computeIfAbsent(proxy, e -> new LinkedList<>()).add(copy);
+						}
+					}
+				}
+			}
+
 			final SetMode mode = feature.isMany() ? featureToSet.getValue() : SetMode.REPLACE;
 			switch (mode) {
 			case REPLACE:

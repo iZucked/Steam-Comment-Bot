@@ -1091,6 +1091,26 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	@Override
+	public EAttribute getNotionalJourneyBallastBonusContractLine_IncludeCanalTime() {
+		return (EAttribute)notionalJourneyBallastBonusContractLineEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getNotionalJourneyBallastBonusContractLine_LumpSumPriceExpression() {
+		return (EAttribute)notionalJourneyBallastBonusContractLineEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getCharterContract() {
 		return charterContractEClass;
 	}
@@ -1321,6 +1341,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		createEAttribute(notionalJourneyBallastBonusContractLineEClass, NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__HIRE_PRICE_EXPRESSION);
 		createEReference(notionalJourneyBallastBonusContractLineEClass, NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__RETURN_PORTS);
 		createEAttribute(notionalJourneyBallastBonusContractLineEClass, NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__INCLUDE_CANAL);
+		createEAttribute(notionalJourneyBallastBonusContractLineEClass, NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__INCLUDE_CANAL_TIME);
+		createEAttribute(notionalJourneyBallastBonusContractLineEClass, NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__LUMP_SUM_PRICE_EXPRESSION);
 
 		charterContractEClass = createEClass(CHARTER_CONTRACT);
 		createEAttribute(charterContractEClass, CHARTER_CONTRACT__MIN_DURATION);
@@ -1511,6 +1533,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		g1.getETypeArguments().add(g2);
 		initEReference(getNotionalJourneyBallastBonusContractLine_ReturnPorts(), g1, null, "returnPorts", null, 0, -1, NotionalJourneyBallastBonusContractLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getNotionalJourneyBallastBonusContractLine_IncludeCanal(), ecorePackage.getEBoolean(), "includeCanal", null, 0, 1, NotionalJourneyBallastBonusContractLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getNotionalJourneyBallastBonusContractLine_IncludeCanalTime(), ecorePackage.getEBoolean(), "includeCanalTime", "true", 0, 1, NotionalJourneyBallastBonusContractLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getNotionalJourneyBallastBonusContractLine_LumpSumPriceExpression(), ecorePackage.getEString(), "lumpSumPriceExpression", null, 1, 1, NotionalJourneyBallastBonusContractLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(charterContractEClass, CharterContract.class, "CharterContract", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCharterContract_MinDuration(), ecorePackage.getEInt(), "minDuration", null, 1, 1, CharterContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1694,6 +1718,12 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		   });
 		addAnnotation
 		  (getNotionalJourneyBallastBonusContractLine_HirePriceExpression(),
+		   source,
+		   new String[] {
+			   "type", "charter"
+		   });
+		addAnnotation
+		  (getNotionalJourneyBallastBonusContractLine_LumpSumPriceExpression(),
 		   source,
 		   new String[] {
 			   "type", "charter"

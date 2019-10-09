@@ -9,11 +9,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import org.eclipse.emf.common.util.EList;
 
@@ -27,7 +29,6 @@ import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
 import com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption;
-import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.FullVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.OpenBuy;
 import com.mmxlabs.models.lng.analytics.OpenSell;
@@ -38,6 +39,7 @@ import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
+import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.VesselEventOption;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.ShippingType;
@@ -54,6 +56,7 @@ import com.mmxlabs.models.lng.cargo.NonShippedCargoSpecification;
 import com.mmxlabs.models.lng.cargo.ScheduleSpecification;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SlotSpecification;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.VesselEventSpecification;
@@ -79,9 +82,9 @@ public class ExistingBaseCaseToScheduleSpecification {
 
 	private final LNGScenarioModel scenarioModel;
 	private final IMapperClass mapper;
-	private IScenarioDataProvider scenarioDataProvider;
+	private final IScenarioDataProvider scenarioDataProvider;
 
-	public ExistingBaseCaseToScheduleSpecification(IScenarioDataProvider scenarioDataProvider, final IMapperClass mapper) {
+	public ExistingBaseCaseToScheduleSpecification(final IScenarioDataProvider scenarioDataProvider, final IMapperClass mapper) {
 		this.scenarioDataProvider = scenarioDataProvider;
 		this.scenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 		this.mapper = mapper;
@@ -92,23 +95,23 @@ public class ExistingBaseCaseToScheduleSpecification {
 		/////////////////////////////////////////////////// public ScheduleSpecification buildScheduleSpecification(final IScenarioDataProvider scenarioDataProvider,
 		// @Nullable final IAssignableElementDateProviderFactory assignableElementDateProviderFactory) {
 
-		ModelDistanceProvider modelDistanceProvider = scenarioDataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
+		final ModelDistanceProvider modelDistanceProvider = scenarioDataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
 
-		CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioDataProvider);
+		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioDataProvider);
 
-		Map<Slot<?>, AssignableElement> slotToCargoMap = new HashMap<>();
-		Collection<LoadSlot> unusedLoads = new LinkedHashSet<>();
-		Collection<DischargeSlot> unusedDischarges = new LinkedHashSet<>();
-		for (LoadSlot s : cargoModel.getLoadSlots()) {
-			Cargo c = s.getCargo();
+		final Map<Slot<?>, AssignableElement> slotToCargoMap = new HashMap<>();
+		final Collection<LoadSlot> unusedLoads = new LinkedHashSet<>();
+		final Collection<DischargeSlot> unusedDischarges = new LinkedHashSet<>();
+		for (final LoadSlot s : cargoModel.getLoadSlots()) {
+			final Cargo c = s.getCargo();
 			if (c == null) {
 				unusedLoads.add(s);
 			} else {
 				slotToCargoMap.put(s, c);
 			}
 		}
-		for (DischargeSlot s : cargoModel.getDischargeSlots()) {
-			Cargo c = s.getCargo();
+		for (final DischargeSlot s : cargoModel.getDischargeSlots()) {
+			final Cargo c = s.getCargo();
 			if (c == null) {
 				unusedDischarges.add(s);
 			} else {
@@ -116,13 +119,13 @@ public class ExistingBaseCaseToScheduleSpecification {
 			}
 		}
 
-		PortModel portModel = ScenarioModelUtil.getPortModel(scenarioDataProvider);
-		SpotMarketsModel spotMarketsModel = ScenarioModelUtil.getSpotMarketsModel(scenarioDataProvider);
+		final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioDataProvider);
+		final SpotMarketsModel spotMarketsModel = ScenarioModelUtil.getSpotMarketsModel(scenarioDataProvider);
 
-		Map<VesselAvailability, CollectedAssignment> vaMap = new HashMap<>();
-		Map<Pair<CharterInMarket, Integer>, CollectedAssignment> mktMap = new HashMap<>();
+		final Map<VesselAvailability, CollectedAssignment> vaMap = new HashMap<>();
+		final Map<Pair<CharterInMarket, Integer>, CollectedAssignment> mktMap = new HashMap<>();
 
-		Map<AssignableElement, CollectedAssignment> cargoToCollectedAssignmentMap = new HashMap<>();
+		final Map<AssignableElement, CollectedAssignment> cargoToCollectedAssignmentMap = new HashMap<>();
 		final List<CollectedAssignment> assignments = AssignmentEditorHelper.collectAssignments(cargoModel, portModel, spotMarketsModel, modelDistanceProvider);
 
 		for (final CollectedAssignment seq : assignments) {
@@ -142,8 +145,18 @@ public class ExistingBaseCaseToScheduleSpecification {
 			}
 		}
 		{
-			// //
-			// final ScheduleSpecification specification = CargoFactory.eINSTANCE.createScheduleSpecification();
+			// Function to clean up an existing allocation
+			Consumer<Slot<?>> removeExistingAssignment = slot -> {
+				if (slotToCargoMap.containsKey(slot)) {
+					final Cargo cargo = (Cargo) slotToCargoMap.get(slot);
+					cargo.getSortedSlots().forEach(slotToCargoMap::remove);
+					final CollectedAssignment collectedAssignment = cargoToCollectedAssignmentMap.get(cargo);
+					if (collectedAssignment != null) {
+						collectedAssignment.getAssignedObjects().remove(cargo);
+						cargoToCollectedAssignmentMap.remove(cargo);
+					}
+				}
+			};
 
 			for (final BaseCaseRow row : baseCase.getBaseCase()) {
 				if (row.getVesselEventOption() == null
@@ -161,15 +174,7 @@ public class ExistingBaseCaseToScheduleSpecification {
 							unusedDischarges.add((DischargeSlot) slot);
 						}
 
-						if (slotToCargoMap.containsKey(slot)) {
-							Cargo cargo = (Cargo) slotToCargoMap.get(slot);
-							cargo.getSortedSlots().forEach(slotToCargoMap::remove);
-							CollectedAssignment collectedAssignment = cargoToCollectedAssignmentMap.get(cargo);
-							if (collectedAssignment != null) {
-								collectedAssignment.getAssignedObjects().remove(cargo);
-								cargoToCollectedAssignmentMap.remove(cargo);
-							}
-						}
+						removeExistingAssignment.accept(slot);
 					}
 					continue;
 				}
@@ -193,28 +198,10 @@ public class ExistingBaseCaseToScheduleSpecification {
 					unusedLoads.remove(loadSlot);
 					unusedDischarges.remove(dischargeSlot);
 
-					if (slotToCargoMap.containsKey(loadSlot)) {
-						Cargo cargo = (Cargo) slotToCargoMap.get(loadSlot);
-						if (cargo != null && !cargo.getSlots().contains(dischargeSlot)) {
-							cargo.getSlots().forEach(slotToCargoMap::remove);
-							CollectedAssignment collectedAssignment = cargoToCollectedAssignmentMap.get(cargo);
-							if (collectedAssignment != null) {
-								collectedAssignment.getAssignedObjects().remove(cargo);
-								cargoToCollectedAssignmentMap.remove(cargo);
+					removeExistingAssignment.accept(loadSlot);
+					removeExistingAssignment.accept(dischargeSlot);
 
-							}
-						} else if (cargo != null) {
-							CollectedAssignment collectedAssignment = cargoToCollectedAssignmentMap.get(cargo);
-							if (collectedAssignment != null) {
-								collectedAssignment.getAssignedObjects().remove(cargo);
-								cargoToCollectedAssignmentMap.remove(cargo);
-
-							}
-							continue;
-						}
-					}
-
-					FakeCargo cargo = new FakeCargo(loadSlot, dischargeSlot);
+					final FakeCargo cargo = new FakeCargo(loadSlot, dischargeSlot);
 					slotToCargoMap.put(loadSlot, cargo);
 					slotToCargoMap.put(dischargeSlot, cargo);
 					cargoToCollectedAssignmentMap.put(cargo, null);
@@ -223,7 +210,7 @@ public class ExistingBaseCaseToScheduleSpecification {
 
 					if (row.getVesselEventOption() != null) {
 						assignableElement = getOrCreate(row.getVesselEventOption());
-						CollectedAssignment collectedAssignment = cargoToCollectedAssignmentMap.get(assignableElement);
+						final CollectedAssignment collectedAssignment = cargoToCollectedAssignmentMap.get(assignableElement);
 						if (collectedAssignment != null) {
 							collectedAssignment.getAssignedObjects().remove(assignableElement);
 							cargoToCollectedAssignmentMap.remove(assignableElement);
@@ -247,52 +234,13 @@ public class ExistingBaseCaseToScheduleSpecification {
 						unusedLoads.remove(loadSlot);
 						unusedDischarges.remove(dischargeSlot);
 
-						if (slotToCargoMap.containsKey(loadSlot)) {
-							Cargo c = (Cargo) slotToCargoMap.get(loadSlot);
-							if (c != null && !c.getSlots().contains(dischargeSlot)) {
-								c.getSlots().forEach(slotToCargoMap::remove);
-								CollectedAssignment collectedAssignment = cargoToCollectedAssignmentMap.get(c);
-								if (collectedAssignment != null) {
-									collectedAssignment.getAssignedObjects().remove(c);
-									cargoToCollectedAssignmentMap.remove(assignableElement);
+						// Note: The original code would re-use the Cargo if possible, but this probably breaks if we change vessel
+						removeExistingAssignment.accept(loadSlot);
+						removeExistingAssignment.accept(dischargeSlot);
 
-								}
-							} else if (c != null) {
-								assignableElement = c;
-								CollectedAssignment collectedAssignment = cargoToCollectedAssignmentMap.get(c);
-								if (collectedAssignment != null) {
-									collectedAssignment.getAssignedObjects().remove(c);
-									cargoToCollectedAssignmentMap.remove(assignableElement);
-
-								}
-
-							}
-						}
-
-						if (slotToCargoMap.containsKey(dischargeSlot)) {
-							Cargo c = (Cargo) slotToCargoMap.get(dischargeSlot);
-							if (c != null && !c.getSlots().contains(loadSlot)) {
-								c.getSlots().forEach(slotToCargoMap::remove);
-								CollectedAssignment collectedAssignment = cargoToCollectedAssignmentMap.get(c);
-								if (collectedAssignment != null) {
-									collectedAssignment.getAssignedObjects().remove(c);
-									cargoToCollectedAssignmentMap.remove(assignableElement);
-
-								}
-							} else if (c != null) {
-								// assignableElement = c;
-								CollectedAssignment collectedAssignment = cargoToCollectedAssignmentMap.get(c);
-								if (collectedAssignment != null) {
-									collectedAssignment.getAssignedObjects().remove(c);
-									cargoToCollectedAssignmentMap.remove(assignableElement);
-
-								}
-
-							}
-						}
-						// NO
+						//
 						if (assignableElement == null) {
-							FakeCargo c = new FakeCargo(loadSlot, dischargeSlot);
+							final FakeCargo c = new FakeCargo(loadSlot, dischargeSlot);
 							slotToCargoMap.put(loadSlot, c);
 							slotToCargoMap.put(dischargeSlot, c);
 							assignableElement = c;
@@ -320,13 +268,13 @@ public class ExistingBaseCaseToScheduleSpecification {
 
 							mapper.addMapping(roundTripShippingOption, newMarket);
 						}
-						CollectedAssignment ca = new CollectedAssignment(Collections.singletonList(assignableElement), newMarket, -1, portModel, modelDistanceProvider, null);
+						final CollectedAssignment ca = new CollectedAssignment(Collections.singletonList(assignableElement), newMarket, -1, portModel, modelDistanceProvider, null);
 						mktMap.put(new Pair<>(newMarket, -1), ca);
 						cargoToCollectedAssignmentMap.put(assignableElement, ca);
 
 					} else if (shipping instanceof ExistingCharterMarketOption) {
-						ExistingCharterMarketOption option = (ExistingCharterMarketOption) shipping;
-						CollectedAssignment ca = mktMap.get(new Pair<>(option.getCharterInMarket(), option.getSpotIndex()));
+						final ExistingCharterMarketOption option = (ExistingCharterMarketOption) shipping;
+						final CollectedAssignment ca = mktMap.get(new Pair<>(option.getCharterInMarket(), option.getSpotIndex()));
 						ca.getAssignedObjects().add(assignableElement);
 						cargoToCollectedAssignmentMap.put(assignableElement, ca);
 
@@ -363,19 +311,19 @@ public class ExistingBaseCaseToScheduleSpecification {
 								vesselAvailability.setStartAt(optionalAvailabilityShippingOption.getStartPort());
 							}
 							if (optionalAvailabilityShippingOption.getEndPort() != null) {
-								EList<APortSet<Port>> endAt = vesselAvailability.getEndAt();
+								final EList<APortSet<Port>> endAt = vesselAvailability.getEndAt();
 								endAt.clear();
 								endAt.add(optionalAvailabilityShippingOption.getEndPort());
 							}
 
 							mapper.addMapping(optionalAvailabilityShippingOption, vesselAvailability);
 
-							CollectedAssignment ca = new CollectedAssignment(Collections.singletonList(assignableElement), vesselAvailability, portModel, modelDistanceProvider, null);
+							final CollectedAssignment ca = new CollectedAssignment(Collections.singletonList(assignableElement), vesselAvailability, portModel, modelDistanceProvider, null);
 							vaMap.put(vesselAvailability, ca);
 							cargoToCollectedAssignmentMap.put(assignableElement, ca);
 
 						} else {
-							CollectedAssignment ca = vaMap.get(vesselAvailability);
+							final CollectedAssignment ca = vaMap.get(vesselAvailability);
 							ca.getAssignedObjects().add(assignableElement);
 							cargoToCollectedAssignmentMap.put(assignableElement, ca);
 						}
@@ -407,25 +355,25 @@ public class ExistingBaseCaseToScheduleSpecification {
 
 							mapper.addMapping(fleetShippingOption, vesselAvailability);
 
-							CollectedAssignment ca = new CollectedAssignment(Collections.singletonList(assignableElement), vesselAvailability, portModel, modelDistanceProvider, null);
+							final CollectedAssignment ca = new CollectedAssignment(Collections.singletonList(assignableElement), vesselAvailability, portModel, modelDistanceProvider, null);
 							vaMap.put(vesselAvailability, ca);
 							cargoToCollectedAssignmentMap.put(assignableElement, ca);
 						} else {
-							CollectedAssignment ca = vaMap.get(vesselAvailability);
+							final CollectedAssignment ca = vaMap.get(vesselAvailability);
 							ca.getAssignedObjects().add(assignableElement);
 							cargoToCollectedAssignmentMap.put(assignableElement, ca);
 						}
 
 					} else if (shipping instanceof ExistingVesselCharterOption) {
 						final ExistingVesselCharterOption fleetShippingOption = (ExistingVesselCharterOption) shipping;
-						VesselAvailability vesselAvailability = fleetShippingOption.getVesselCharter();
+						final VesselAvailability vesselAvailability = fleetShippingOption.getVesselCharter();
 						mapper.addMapping(fleetShippingOption, vesselAvailability);
-						CollectedAssignment ca = vaMap.get(vesselAvailability);
+						final CollectedAssignment ca = vaMap.get(vesselAvailability);
 						ca.getAssignedObjects().add(assignableElement);
 						cargoToCollectedAssignmentMap.put(assignableElement, ca);
 					} else if (shipping instanceof FullVesselCharterOption) {
 						final FullVesselCharterOption fleetShippingOption = (FullVesselCharterOption) shipping;
-						VesselAvailability vesselAvailability = fleetShippingOption.getVesselCharter();
+						final VesselAvailability vesselAvailability = fleetShippingOption.getVesselCharter();
 						mapper.addMapping(fleetShippingOption, vesselAvailability);
 
 						CollectedAssignment ca = vaMap.get(vesselAvailability);
@@ -455,7 +403,7 @@ public class ExistingBaseCaseToScheduleSpecification {
 			final Set<AssignableElement> seenCargoes = new HashSet<>();
 			final Set<VesselEvent> seenEvents = new HashSet<>();
 
-			BiConsumer<CollectedAssignment, VesselScheduleSpecification> action = (seq, vesselScheduleSpecification) -> {
+			final BiConsumer<CollectedAssignment, VesselScheduleSpecification> action = (seq, vesselScheduleSpecification) -> {
 				seq.resort(portModel, modelDistanceProvider, null);
 
 				for (final AssignableElement assignedObject : seq.getAssignedObjects()) {
@@ -463,7 +411,7 @@ public class ExistingBaseCaseToScheduleSpecification {
 						final Cargo cargo = (Cargo) assignedObject;
 						assert cargo.getCargoType() == CargoType.FLEET;
 
-						for (final Slot slot : cargo.getSortedSlots()) {
+						for (final Slot<?> slot : cargo.getSortedSlots()) {
 							final SlotSpecification eventSpecification = CargoFactory.eINSTANCE.createSlotSpecification();
 							eventSpecification.setSlot(slot);
 							vesselScheduleSpecification.getEvents().add(eventSpecification);
@@ -474,7 +422,7 @@ public class ExistingBaseCaseToScheduleSpecification {
 					} else if (assignedObject instanceof FakeCargo) {
 						final FakeCargo cargo = (FakeCargo) assignedObject;
 
-						for (final Slot slot : cargo.getSlots()) {
+						for (final Slot<?> slot : cargo.getSlots()) {
 							final SlotSpecification eventSpecification = CargoFactory.eINSTANCE.createSlotSpecification();
 							eventSpecification.setSlot(slot);
 							vesselScheduleSpecification.getEvents().add(eventSpecification);
@@ -495,7 +443,7 @@ public class ExistingBaseCaseToScheduleSpecification {
 				}
 			};
 
-			Collection<CollectedAssignment> mergedAssignments = new LinkedHashSet<>(assignments);
+			final Collection<CollectedAssignment> mergedAssignments = new LinkedHashSet<>(assignments);
 			mergedAssignments.addAll(vaMap.values());
 			mergedAssignments.addAll(mktMap.values());
 			for (final CollectedAssignment seq : mergedAssignments) {
@@ -515,45 +463,64 @@ public class ExistingBaseCaseToScheduleSpecification {
 
 			}
 
-			Set<AssignableElement> elements = new LinkedHashSet<>();
+			final Set<AssignableElement> elements = new LinkedHashSet<>();
 			elements.addAll(cargoModel.getCargoes());
 			elements.addAll(cargoToCollectedAssignmentMap.keySet());
 			elements.removeAll(seenCargoes);
 
-			for (AssignableElement assignedObject : elements) {
+			// final Iterator<AssignableElement> itr = elements.iterator();
+			// while (itr.hasNext()) {
+			// final AssignableElement element = itr.next();
+			// if (seenCargoes.contains(element)) {
+			// itr.remove();
+			// continue;
+			// }
+			// if (element instanceof Cargo) {
+			// final Cargo cargo = (Cargo) element;
+			// for (final Slot<?> s : cargo.getSlots()) {
+			// if (seenSlots.contains(s)) {
+			// itr.remove();
+			// continue;
+			// }
+			// }
+			//
+			// }
+			// }
+
+			for (final AssignableElement assignedObject : elements) {
 				if (seenCargoes.contains(assignedObject)) {
 					continue;
 				}
-
 				if (assignedObject instanceof Cargo) {
 					final Cargo cargo = (Cargo) assignedObject;
-					if (cargo.getCargoType() == CargoType.FOB || cargo.getCargoType() == CargoType.DES) {
-						NonShippedCargoSpecification nonShipedCargoSpecification = CargoFactory.eINSTANCE.createNonShippedCargoSpecification();
-						for (final Slot slot : cargo.getSortedSlots()) {
-							final SlotSpecification eventSpecification = CargoFactory.eINSTANCE.createSlotSpecification();
-							eventSpecification.setSlot(slot);
-							nonShipedCargoSpecification.getSlotSpecifications().add(eventSpecification);
-							seenSlots.add(slot);
-						}
-						seenCargoes.add(cargo);
-						scheduleSpecification.getNonShippedCargoSpecifications().add(nonShipedCargoSpecification);
-						// Create non-shipped spec.
-					} else {
 
-						// Fleet cargo with no vessel allocation....
-						// two open positions - covered below
-						for (Slot slot : cargo.getSlots()) {
-							if (slot instanceof LoadSlot) {
-								unusedLoads.add((LoadSlot) slot);
-							} else {
-								unusedDischarges.add((DischargeSlot) slot);
-							}
+					// if (cargo.getCargoType() == CargoType.FOB || cargo.getCargoType() == CargoType.DES) {
+					// final NonShippedCargoSpecification nonShipedCargoSpecification = CargoFactory.eINSTANCE.createNonShippedCargoSpecification();
+					// for (final Slot<?> slot : cargo.getSortedSlots()) {
+					// final SlotSpecification eventSpecification = CargoFactory.eINSTANCE.createSlotSpecification();
+					// eventSpecification.setSlot(slot);
+					// nonShipedCargoSpecification.getSlotSpecifications().add(eventSpecification);
+					// seenSlots.add(slot);
+					// }
+					// seenCargoes.add(cargo);
+					// scheduleSpecification.getNonShippedCargoSpecifications().add(nonShipedCargoSpecification);
+					// // Create non-shipped spec.
+					// } else {
+
+					// Fleet cargo with no vessel allocation....
+					// two open positions - covered below
+					for (final Slot<?> slot : cargo.getSlots()) {
+						if (slot instanceof LoadSlot) {
+							unusedLoads.add((LoadSlot) slot);
+						} else {
+							unusedDischarges.add((DischargeSlot) slot);
 						}
 					}
+					// }
 				} else if (assignedObject instanceof FakeCargo) {
 					final FakeCargo cargo = (FakeCargo) assignedObject;
 
-					NonShippedCargoSpecification nonShipedCargoSpecification = CargoFactory.eINSTANCE.createNonShippedCargoSpecification();
+					final NonShippedCargoSpecification nonShipedCargoSpecification = CargoFactory.eINSTANCE.createNonShippedCargoSpecification();
 					for (final Slot slot : cargo.getSlots()) {
 						final SlotSpecification eventSpecification = CargoFactory.eINSTANCE.createSlotSpecification();
 						eventSpecification.setSlot(slot);
@@ -572,12 +539,18 @@ public class ExistingBaseCaseToScheduleSpecification {
 				if (seenSlots.contains(loadSlot)) {
 					continue;
 				}
+				if (loadSlot instanceof SpotSlot) {
+					continue;
+				}
 				final SlotSpecification eventSpecification = CargoFactory.eINSTANCE.createSlotSpecification();
 				eventSpecification.setSlot(loadSlot);
 				scheduleSpecification.getOpenEvents().add(eventSpecification);
 			}
 			for (final DischargeSlot dischargeSlot : unusedDischarges) {
 				if (seenSlots.contains(dischargeSlot)) {
+					continue;
+				}
+				if (dischargeSlot instanceof SpotSlot) {
 					continue;
 				}
 				final SlotSpecification eventSpecification = CargoFactory.eINSTANCE.createSlotSpecification();
