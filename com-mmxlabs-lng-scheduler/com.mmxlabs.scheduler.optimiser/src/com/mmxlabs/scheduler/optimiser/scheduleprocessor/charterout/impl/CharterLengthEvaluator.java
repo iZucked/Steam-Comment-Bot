@@ -73,7 +73,9 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 	@Override
 	public List<Pair<VoyagePlan, IPortTimesRecord>> processSchedule(final int vesselStartTime, final long[] startHeelVolumeRangeInM3, final IVesselAvailability vesselAvailability, final VoyagePlan vp,
 			final IPortTimesRecord portTimesRecord) {
-		if (!(vesselAvailability.getVesselInstanceType() == VesselInstanceType.FLEET || vesselAvailability.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER)) {
+		if (!(vesselAvailability.getVesselInstanceType() == VesselInstanceType.FLEET //
+				|| vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER //
+				|| vesselAvailability.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER)) {
 			return null;
 		}
 
@@ -165,7 +167,7 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 
 		// (3) ballast to return port
 		final VoyageOptions charterToReturnPortVoyageOptions = originalBallast.getOptions().clone();
-		charterToReturnPortVoyageOptions.setAvailableTime(originalBallast.getIdleTime()+ originalBallast.getPurgeDuration());
+		charterToReturnPortVoyageOptions.setAvailableTime(originalBallast.getIdleTime() + originalBallast.getPurgeDuration());
 		charterToReturnPortVoyageOptions.setFromPortSlot(charterLengthPortSlot);
 		charterToReturnPortVoyageOptions.setRoute(originalBallast.getOptions().getRoute(), 0, 0);
 
