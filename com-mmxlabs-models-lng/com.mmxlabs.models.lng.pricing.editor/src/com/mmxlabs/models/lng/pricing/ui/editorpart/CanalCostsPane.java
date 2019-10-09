@@ -78,6 +78,7 @@ import com.mmxlabs.scenario.service.model.manager.ModelReference;
  */
 public class CanalCostsPane extends ScenarioTableViewerPane {
 
+	private static final String DOUBLE_FORMAT_MAX_1DP = "#0.#";
 	private FormattedText panama_MarkupEditor;
 	private FormattedText suez_TugCostEditor;
 	private FormattedText suez_FixedCostsEditor;
@@ -223,7 +224,7 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 			strictParent.setLayout(GridLayoutFactory.fillDefaults().numColumns(5).equalWidth(false).spacing(3, 0).margins(0, 7).create());
 
 			panama_MarkupEditor = new FormattedText(strictParent);
-			panama_MarkupEditor.setFormatter(new IntegerFormatter());
+			panama_MarkupEditor.setFormatter(new DoubleFormatter(DOUBLE_FORMAT_MAX_1DP));
 			panama_MarkupEditor.getControl().setLayoutData(GridDataFactory.swtDefaults().hint(30, SWT.DEFAULT).create());
 
 			panama_MarkupEditor.getControl().addModifyListener(new ModifyListener() {
@@ -398,7 +399,7 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 			strictParent.setLayout(GridLayoutFactory.fillDefaults().numColumns(5).equalWidth(false).spacing(3, 0).margins(0, 7).create());
 
 			suez_DiscountFactorEditor = new FormattedText(strictParent);
-			suez_DiscountFactorEditor.setFormatter(new IntegerFormatter());
+			suez_DiscountFactorEditor.setFormatter(new DoubleFormatter(DOUBLE_FORMAT_MAX_1DP));
 			suez_DiscountFactorEditor.getControl().setLayoutData(GridDataFactory.swtDefaults().hint(30, SWT.DEFAULT).create());
 			suez_DiscountFactorEditor.getControl().addModifyListener(new ModifyListener() {
 
