@@ -27,6 +27,7 @@ import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
+import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.models.lng.transformer.util.SequencesSerialiser;
@@ -51,9 +52,8 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 	private static final ImageDescriptor imgOpti = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/elcl16/resume_co.gif");
 	private static final ImageDescriptor imgEval = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/evaluate_schedule.gif");
 
+	private final LNGOptimisationRunnerBuilder builder;
 	private final LNGScenarioRunner scenarioRunner;
-
-	private CleanableExecutorService executorService;
 
 	public LNGSchedulerOptimiserJobControl(final LNGSchedulerJobDescriptor jobDescriptor) {
 		super((jobDescriptor.isOptimising() ? "Optimise " : "Evaluate ") + jobDescriptor.getJobName(),
@@ -82,9 +82,6 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 				throw new RuntimeException("Full optimisation is disabled during the P&L testing phase.");
 			}
 		}
-
-		// TODO: This should be static / central service?
-		executorService = LNGScenarioChainBuilder.createExecutorService();
 
 		@Nullable
 		IRunnerHook runnerHook = null;
@@ -152,12 +149,13 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 			};
 		}
 
-		scenarioRunner = LNGOptimisationBuilder.begin(originalScenarioDataProvider, scenarioInstance) //
+		builder = LNGOptimisationBuilder.begin(originalScenarioDataProvider, scenarioInstance) //
 				.withOptimisationPlan(jobDescriptor.getOptimisationPlan()) //
 				.withRunnerHook(runnerHook) //
 				.withOptimiseHint() //
-				.buildDefaultRunner() //
-				.getScenarioRunner();
+				.buildDefaultRunner();
+
+		scenarioRunner = builder.getScenarioRunner();
 
 		setRule(new ScenarioInstanceSchedulingRule(scenarioInstance));
 	}
@@ -200,7 +198,10 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 
 	@Override
 	public void dispose() {
-		executorService.shutdownNow();
+
+		if (builder != null) {
+			builder.dispose();
+		}
 
 		if (originalScenarioDataProvider != null) {
 			originalScenarioDataProvider.close();
