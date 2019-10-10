@@ -80,33 +80,6 @@ public interface NominationsFactory extends EFactory {
 	NominationsParameters createNominationsParameters();
 
 	/**
-	 * Returns a new object of class '<em>Nomination Audit Item</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Nomination Audit Item</em>'.
-	 * @generated
-	 */
-	NominationAuditItem createNominationAuditItem();
-
-	/**
-	 * Returns a new object of class '<em>Nomination Spec Audit Item</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Nomination Spec Audit Item</em>'.
-	 * @generated
-	 */
-	NominationSpecAuditItem createNominationSpecAuditItem();
-
-	/**
-	 * Returns a new object of class '<em>Abstract Audit Item</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Abstract Audit Item</em>'.
-	 * @generated
-	 */
-	AbstractAuditItem createAbstractAuditItem();
-
-	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

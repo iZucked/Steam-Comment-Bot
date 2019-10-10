@@ -23,7 +23,6 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.nominations.NominationsModel#getNominationSpecs <em>Nomination Specs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.nominations.NominationsModel#getNominations <em>Nominations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.nominations.NominationsModel#getNominationParameters <em>Nomination Parameters</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.nominations.NominationsModel#getAuditLog <em>Audit Log</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.nominations.NominationsPackage#getNominationsModel()
@@ -88,21 +87,5 @@ public interface NominationsModel extends UUIDObject {
 	 * @generated
 	 */
 	void setNominationParameters(NominationsParameters value);
-
-	/**
-	 * Returns the value of the '<em><b>Audit Log</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.nominations.AbstractAuditItem}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Audit Log</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Audit Log</em>' containment reference list.
-	 * @see com.mmxlabs.models.lng.nominations.NominationsPackage#getNominationsModel_AuditLog()
-	 * @model containment="true"
-	 * @generated
-	 */
-	EList<AbstractAuditItem> getAuditLog();
 
 } // NominationsModel

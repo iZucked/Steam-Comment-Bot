@@ -81,7 +81,6 @@ public class NominationsModelItemProvider
 			childrenFeatures.add(NominationsPackage.Literals.NOMINATIONS_MODEL__NOMINATION_SPECS);
 			childrenFeatures.add(NominationsPackage.Literals.NOMINATIONS_MODEL__NOMINATIONS);
 			childrenFeatures.add(NominationsPackage.Literals.NOMINATIONS_MODEL__NOMINATION_PARAMETERS);
-			childrenFeatures.add(NominationsPackage.Literals.NOMINATIONS_MODEL__AUDIT_LOG);
 		}
 		return childrenFeatures;
 	}
@@ -140,7 +139,6 @@ public class NominationsModelItemProvider
 			case NominationsPackage.NOMINATIONS_MODEL__NOMINATION_SPECS:
 			case NominationsPackage.NOMINATIONS_MODEL__NOMINATIONS:
 			case NominationsPackage.NOMINATIONS_MODEL__NOMINATION_PARAMETERS:
-			case NominationsPackage.NOMINATIONS_MODEL__AUDIT_LOG:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -192,21 +190,6 @@ public class NominationsModelItemProvider
 			(createChildParameter
 				(NominationsPackage.Literals.NOMINATIONS_MODEL__NOMINATION_PARAMETERS,
 				 NominationsFactory.eINSTANCE.createNominationsParameters()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NominationsPackage.Literals.NOMINATIONS_MODEL__AUDIT_LOG,
-				 NominationsFactory.eINSTANCE.createAbstractAuditItem()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NominationsPackage.Literals.NOMINATIONS_MODEL__AUDIT_LOG,
-				 NominationsFactory.eINSTANCE.createNominationAuditItem()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NominationsPackage.Literals.NOMINATIONS_MODEL__AUDIT_LOG,
-				 NominationsFactory.eINSTANCE.createNominationSpecAuditItem()));
 	}
 
 	/**

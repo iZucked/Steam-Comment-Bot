@@ -16,16 +16,10 @@
       <genEnumLiterals ecoreEnumLiteral="nominations.ecore#//Side/Buy"/>
       <genEnumLiterals ecoreEnumLiteral="nominations.ecore#//Side/Sell"/>
     </genEnums>
-    <genEnums typeSafeEnumCompatible="false" ecoreEnum="nominations.ecore#//AuditItemType">
-      <genEnumLiterals ecoreEnumLiteral="nominations.ecore#//AuditItemType/Delete"/>
-      <genEnumLiterals ecoreEnumLiteral="nominations.ecore#//AuditItemType/Create"/>
-      <genEnumLiterals ecoreEnumLiteral="nominations.ecore#//AuditItemType/Modify"/>
-    </genEnums>
     <genClasses ecoreClass="nominations.ecore#//NominationsModel">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference nominations.ecore#//NominationsModel/nominationSpecs"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference nominations.ecore#//NominationsModel/nominations"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference nominations.ecore#//NominationsModel/nominationParameters"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference nominations.ecore#//NominationsModel/auditLog"/>
     </genClasses>
     <genClasses image="false" ecoreClass="nominations.ecore#//AbstractNominationSpec">
       <genFeatures createChild="false" propertyDescription="The type of nomination."
@@ -68,15 +62,6 @@
     <genClasses ecoreClass="nominations.ecore#//NominationsParameters">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute nominations.ecore#//NominationsParameters/startDate"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute nominations.ecore#//NominationsParameters/endDate"/>
-    </genClasses>
-    <genClasses ecoreClass="nominations.ecore#//NominationAuditItem">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference nominations.ecore#//NominationAuditItem/nomination"/>
-    </genClasses>
-    <genClasses ecoreClass="nominations.ecore#//NominationSpecAuditItem">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference nominations.ecore#//NominationSpecAuditItem/nominationSpec"/>
-    </genClasses>
-    <genClasses ecoreClass="nominations.ecore#//AbstractAuditItem">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute nominations.ecore#//AbstractAuditItem/auditItemType"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

@@ -118,22 +118,13 @@ public interface NominationsPackage extends EPackage {
 	int NOMINATIONS_MODEL__NOMINATION_PARAMETERS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Audit Log</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NOMINATIONS_MODEL__AUDIT_LOG = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
-
-	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int NOMINATIONS_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int NOMINATIONS_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.nominations.impl.AbstractNominationSpecImpl <em>Abstract Nomination Spec</em>}' class.
@@ -1098,162 +1089,6 @@ public interface NominationsPackage extends EPackage {
 	int NOMINATIONS_PARAMETERS_FEATURE_COUNT = 2;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.nominations.impl.AbstractAuditItemImpl <em>Abstract Audit Item</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.nominations.impl.AbstractAuditItemImpl
-	 * @see com.mmxlabs.models.lng.nominations.impl.NominationsPackageImpl#getAbstractAuditItem()
-	 * @generated
-	 */
-	int ABSTRACT_AUDIT_ITEM = 10;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ABSTRACT_AUDIT_ITEM__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ABSTRACT_AUDIT_ITEM__UUID = MMXCorePackage.UUID_OBJECT__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Audit Item Type</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ABSTRACT_AUDIT_ITEM__AUDIT_ITEM_TYPE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The number of structural features of the '<em>Abstract Audit Item</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ABSTRACT_AUDIT_ITEM_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.nominations.impl.NominationAuditItemImpl <em>Nomination Audit Item</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.nominations.impl.NominationAuditItemImpl
-	 * @see com.mmxlabs.models.lng.nominations.impl.NominationsPackageImpl#getNominationAuditItem()
-	 * @generated
-	 */
-	int NOMINATION_AUDIT_ITEM = 8;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NOMINATION_AUDIT_ITEM__EXTENSIONS = ABSTRACT_AUDIT_ITEM__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NOMINATION_AUDIT_ITEM__UUID = ABSTRACT_AUDIT_ITEM__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Audit Item Type</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NOMINATION_AUDIT_ITEM__AUDIT_ITEM_TYPE = ABSTRACT_AUDIT_ITEM__AUDIT_ITEM_TYPE;
-
-	/**
-	 * The feature id for the '<em><b>Nomination</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NOMINATION_AUDIT_ITEM__NOMINATION = ABSTRACT_AUDIT_ITEM_FEATURE_COUNT + 0;
-
-	/**
-	 * The number of structural features of the '<em>Nomination Audit Item</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NOMINATION_AUDIT_ITEM_FEATURE_COUNT = ABSTRACT_AUDIT_ITEM_FEATURE_COUNT + 1;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.nominations.impl.NominationSpecAuditItemImpl <em>Nomination Spec Audit Item</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.nominations.impl.NominationSpecAuditItemImpl
-	 * @see com.mmxlabs.models.lng.nominations.impl.NominationsPackageImpl#getNominationSpecAuditItem()
-	 * @generated
-	 */
-	int NOMINATION_SPEC_AUDIT_ITEM = 9;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NOMINATION_SPEC_AUDIT_ITEM__EXTENSIONS = ABSTRACT_AUDIT_ITEM__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NOMINATION_SPEC_AUDIT_ITEM__UUID = ABSTRACT_AUDIT_ITEM__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Audit Item Type</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NOMINATION_SPEC_AUDIT_ITEM__AUDIT_ITEM_TYPE = ABSTRACT_AUDIT_ITEM__AUDIT_ITEM_TYPE;
-
-	/**
-	 * The feature id for the '<em><b>Nomination Spec</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NOMINATION_SPEC_AUDIT_ITEM__NOMINATION_SPEC = ABSTRACT_AUDIT_ITEM_FEATURE_COUNT + 0;
-
-	/**
-	 * The number of structural features of the '<em>Nomination Spec Audit Item</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NOMINATION_SPEC_AUDIT_ITEM_FEATURE_COUNT = ABSTRACT_AUDIT_ITEM_FEATURE_COUNT + 1;
-
-	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.nominations.DatePeriodPrior <em>Date Period Prior</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1261,7 +1096,7 @@ public interface NominationsPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.nominations.impl.NominationsPackageImpl#getDatePeriodPrior()
 	 * @generated
 	 */
-	int DATE_PERIOD_PRIOR = 11;
+	int DATE_PERIOD_PRIOR = 8;
 
 
 	/**
@@ -1272,18 +1107,7 @@ public interface NominationsPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.nominations.impl.NominationsPackageImpl#getSide()
 	 * @generated
 	 */
-	int SIDE = 12;
-
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.nominations.AuditItemType <em>Audit Item Type</em>}' enum.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.nominations.AuditItemType
-	 * @see com.mmxlabs.models.lng.nominations.impl.NominationsPackageImpl#getAuditItemType()
-	 * @generated
-	 */
-	int AUDIT_ITEM_TYPE = 13;
+	int SIDE = 9;
 
 
 	/**
@@ -1328,17 +1152,6 @@ public interface NominationsPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getNominationsModel_NominationParameters();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.nominations.NominationsModel#getAuditLog <em>Audit Log</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Audit Log</em>'.
-	 * @see com.mmxlabs.models.lng.nominations.NominationsModel#getAuditLog()
-	 * @see #getNominationsModel()
-	 * @generated
-	 */
-	EReference getNominationsModel_AuditLog();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.nominations.AbstractNominationSpec <em>Abstract Nomination Spec</em>}'.
@@ -1609,69 +1422,6 @@ public interface NominationsPackage extends EPackage {
 	EAttribute getNominationsParameters_EndDate();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.nominations.NominationAuditItem <em>Nomination Audit Item</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Nomination Audit Item</em>'.
-	 * @see com.mmxlabs.models.lng.nominations.NominationAuditItem
-	 * @generated
-	 */
-	EClass getNominationAuditItem();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.nominations.NominationAuditItem#getNomination <em>Nomination</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Nomination</em>'.
-	 * @see com.mmxlabs.models.lng.nominations.NominationAuditItem#getNomination()
-	 * @see #getNominationAuditItem()
-	 * @generated
-	 */
-	EReference getNominationAuditItem_Nomination();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.nominations.NominationSpecAuditItem <em>Nomination Spec Audit Item</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Nomination Spec Audit Item</em>'.
-	 * @see com.mmxlabs.models.lng.nominations.NominationSpecAuditItem
-	 * @generated
-	 */
-	EClass getNominationSpecAuditItem();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.nominations.NominationSpecAuditItem#getNominationSpec <em>Nomination Spec</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Nomination Spec</em>'.
-	 * @see com.mmxlabs.models.lng.nominations.NominationSpecAuditItem#getNominationSpec()
-	 * @see #getNominationSpecAuditItem()
-	 * @generated
-	 */
-	EReference getNominationSpecAuditItem_NominationSpec();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.nominations.AbstractAuditItem <em>Abstract Audit Item</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Abstract Audit Item</em>'.
-	 * @see com.mmxlabs.models.lng.nominations.AbstractAuditItem
-	 * @generated
-	 */
-	EClass getAbstractAuditItem();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.nominations.AbstractAuditItem#getAuditItemType <em>Audit Item Type</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Audit Item Type</em>'.
-	 * @see com.mmxlabs.models.lng.nominations.AbstractAuditItem#getAuditItemType()
-	 * @see #getAbstractAuditItem()
-	 * @generated
-	 */
-	EAttribute getAbstractAuditItem_AuditItemType();
-
-	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.nominations.DatePeriodPrior <em>Date Period Prior</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1690,16 +1440,6 @@ public interface NominationsPackage extends EPackage {
 	 * @generated
 	 */
 	EEnum getSide();
-
-	/**
-	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.nominations.AuditItemType <em>Audit Item Type</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for enum '<em>Audit Item Type</em>'.
-	 * @see com.mmxlabs.models.lng.nominations.AuditItemType
-	 * @generated
-	 */
-	EEnum getAuditItemType();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -1756,14 +1496,6 @@ public interface NominationsPackage extends EPackage {
 		 * @generated
 		 */
 		EReference NOMINATIONS_MODEL__NOMINATION_PARAMETERS = eINSTANCE.getNominationsModel_NominationParameters();
-
-		/**
-		 * The meta object literal for the '<em><b>Audit Log</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference NOMINATIONS_MODEL__AUDIT_LOG = eINSTANCE.getNominationsModel_AuditLog();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.nominations.impl.AbstractNominationSpecImpl <em>Abstract Nomination Spec</em>}' class.
@@ -1980,60 +1712,6 @@ public interface NominationsPackage extends EPackage {
 		EAttribute NOMINATIONS_PARAMETERS__END_DATE = eINSTANCE.getNominationsParameters_EndDate();
 
 		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.nominations.impl.NominationAuditItemImpl <em>Nomination Audit Item</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.nominations.impl.NominationAuditItemImpl
-		 * @see com.mmxlabs.models.lng.nominations.impl.NominationsPackageImpl#getNominationAuditItem()
-		 * @generated
-		 */
-		EClass NOMINATION_AUDIT_ITEM = eINSTANCE.getNominationAuditItem();
-
-		/**
-		 * The meta object literal for the '<em><b>Nomination</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference NOMINATION_AUDIT_ITEM__NOMINATION = eINSTANCE.getNominationAuditItem_Nomination();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.nominations.impl.NominationSpecAuditItemImpl <em>Nomination Spec Audit Item</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.nominations.impl.NominationSpecAuditItemImpl
-		 * @see com.mmxlabs.models.lng.nominations.impl.NominationsPackageImpl#getNominationSpecAuditItem()
-		 * @generated
-		 */
-		EClass NOMINATION_SPEC_AUDIT_ITEM = eINSTANCE.getNominationSpecAuditItem();
-
-		/**
-		 * The meta object literal for the '<em><b>Nomination Spec</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference NOMINATION_SPEC_AUDIT_ITEM__NOMINATION_SPEC = eINSTANCE.getNominationSpecAuditItem_NominationSpec();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.nominations.impl.AbstractAuditItemImpl <em>Abstract Audit Item</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.nominations.impl.AbstractAuditItemImpl
-		 * @see com.mmxlabs.models.lng.nominations.impl.NominationsPackageImpl#getAbstractAuditItem()
-		 * @generated
-		 */
-		EClass ABSTRACT_AUDIT_ITEM = eINSTANCE.getAbstractAuditItem();
-
-		/**
-		 * The meta object literal for the '<em><b>Audit Item Type</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute ABSTRACT_AUDIT_ITEM__AUDIT_ITEM_TYPE = eINSTANCE.getAbstractAuditItem_AuditItemType();
-
-		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.nominations.DatePeriodPrior <em>Date Period Prior</em>}' enum.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2052,16 +1730,6 @@ public interface NominationsPackage extends EPackage {
 		 * @generated
 		 */
 		EEnum SIDE = eINSTANCE.getSide();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.nominations.AuditItemType <em>Audit Item Type</em>}' enum.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.nominations.AuditItemType
-		 * @see com.mmxlabs.models.lng.nominations.impl.NominationsPackageImpl#getAuditItemType()
-		 * @generated
-		 */
-		EEnum AUDIT_ITEM_TYPE = eINSTANCE.getAuditItemType();
 
 	}
 

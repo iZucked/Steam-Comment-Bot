@@ -67,9 +67,6 @@ public class NominationsFactoryImpl extends EFactoryImpl implements NominationsF
 			case NominationsPackage.CONTRACT_NOMINATION: return createContractNomination();
 			case NominationsPackage.CONTRACT_NOMINATION_SPEC: return createContractNominationSpec();
 			case NominationsPackage.NOMINATIONS_PARAMETERS: return createNominationsParameters();
-			case NominationsPackage.NOMINATION_AUDIT_ITEM: return createNominationAuditItem();
-			case NominationsPackage.NOMINATION_SPEC_AUDIT_ITEM: return createNominationSpecAuditItem();
-			case NominationsPackage.ABSTRACT_AUDIT_ITEM: return createAbstractAuditItem();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -87,8 +84,6 @@ public class NominationsFactoryImpl extends EFactoryImpl implements NominationsF
 				return createDatePeriodPriorFromString(eDataType, initialValue);
 			case NominationsPackage.SIDE:
 				return createSideFromString(eDataType, initialValue);
-			case NominationsPackage.AUDIT_ITEM_TYPE:
-				return createAuditItemTypeFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -106,8 +101,6 @@ public class NominationsFactoryImpl extends EFactoryImpl implements NominationsF
 				return convertDatePeriodPriorToString(eDataType, instanceValue);
 			case NominationsPackage.SIDE:
 				return convertSideToString(eDataType, instanceValue);
-			case NominationsPackage.AUDIT_ITEM_TYPE:
-				return convertAuditItemTypeToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -184,39 +177,6 @@ public class NominationsFactoryImpl extends EFactoryImpl implements NominationsF
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public NominationAuditItem createNominationAuditItem() {
-		NominationAuditItemImpl nominationAuditItem = new NominationAuditItemImpl();
-		return nominationAuditItem;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public NominationSpecAuditItem createNominationSpecAuditItem() {
-		NominationSpecAuditItemImpl nominationSpecAuditItem = new NominationSpecAuditItemImpl();
-		return nominationSpecAuditItem;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public AbstractAuditItem createAbstractAuditItem() {
-		AbstractAuditItemImpl abstractAuditItem = new AbstractAuditItemImpl();
-		return abstractAuditItem;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public DatePeriodPrior createDatePeriodPriorFromString(EDataType eDataType, String initialValue) {
 		DatePeriodPrior result = DatePeriodPrior.get(initialValue);
 		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
@@ -249,26 +209,6 @@ public class NominationsFactoryImpl extends EFactoryImpl implements NominationsF
 	 * @generated
 	 */
 	public String convertSideToString(EDataType eDataType, Object instanceValue) {
-		return instanceValue == null ? null : instanceValue.toString();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public AuditItemType createAuditItemTypeFromString(EDataType eDataType, String initialValue) {
-		AuditItemType result = AuditItemType.get(initialValue);
-		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
-		return result;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String convertAuditItemTypeToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 

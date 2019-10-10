@@ -41,7 +41,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.nominations.impl.NominationsModelImpl#getNominationSpecs <em>Nomination Specs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.nominations.impl.NominationsModelImpl#getNominations <em>Nominations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.nominations.impl.NominationsModelImpl#getNominationParameters <em>Nomination Parameters</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.nominations.impl.NominationsModelImpl#getAuditLog <em>Audit Log</em>}</li>
  * </ul>
  *
  * @generated
@@ -76,16 +75,6 @@ public class NominationsModelImpl extends UUIDObjectImpl implements NominationsM
 	 * @ordered
 	 */
 	protected NominationsParameters nominationParameters;
-
-	/**
-	 * The cached value of the '{@link #getAuditLog() <em>Audit Log</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getAuditLog()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<AbstractAuditItem> auditLog;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -183,19 +172,6 @@ public class NominationsModelImpl extends UUIDObjectImpl implements NominationsM
 	 * @generated
 	 */
 	@Override
-	public EList<AbstractAuditItem> getAuditLog() {
-		if (auditLog == null) {
-			auditLog = new EObjectContainmentEList<AbstractAuditItem>(AbstractAuditItem.class, this, NominationsPackage.NOMINATIONS_MODEL__AUDIT_LOG);
-		}
-		return auditLog;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case NominationsPackage.NOMINATIONS_MODEL__NOMINATION_SPECS:
@@ -204,8 +180,6 @@ public class NominationsModelImpl extends UUIDObjectImpl implements NominationsM
 				return ((InternalEList<?>)getNominations()).basicRemove(otherEnd, msgs);
 			case NominationsPackage.NOMINATIONS_MODEL__NOMINATION_PARAMETERS:
 				return basicSetNominationParameters(null, msgs);
-			case NominationsPackage.NOMINATIONS_MODEL__AUDIT_LOG:
-				return ((InternalEList<?>)getAuditLog()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -224,8 +198,6 @@ public class NominationsModelImpl extends UUIDObjectImpl implements NominationsM
 				return getNominations();
 			case NominationsPackage.NOMINATIONS_MODEL__NOMINATION_PARAMETERS:
 				return getNominationParameters();
-			case NominationsPackage.NOMINATIONS_MODEL__AUDIT_LOG:
-				return getAuditLog();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -250,10 +222,6 @@ public class NominationsModelImpl extends UUIDObjectImpl implements NominationsM
 			case NominationsPackage.NOMINATIONS_MODEL__NOMINATION_PARAMETERS:
 				setNominationParameters((NominationsParameters)newValue);
 				return;
-			case NominationsPackage.NOMINATIONS_MODEL__AUDIT_LOG:
-				getAuditLog().clear();
-				getAuditLog().addAll((Collection<? extends AbstractAuditItem>)newValue);
-				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -275,9 +243,6 @@ public class NominationsModelImpl extends UUIDObjectImpl implements NominationsM
 			case NominationsPackage.NOMINATIONS_MODEL__NOMINATION_PARAMETERS:
 				setNominationParameters((NominationsParameters)null);
 				return;
-			case NominationsPackage.NOMINATIONS_MODEL__AUDIT_LOG:
-				getAuditLog().clear();
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -296,8 +261,6 @@ public class NominationsModelImpl extends UUIDObjectImpl implements NominationsM
 				return nominations != null && !nominations.isEmpty();
 			case NominationsPackage.NOMINATIONS_MODEL__NOMINATION_PARAMETERS:
 				return nominationParameters != null;
-			case NominationsPackage.NOMINATIONS_MODEL__AUDIT_LOG:
-				return auditLog != null && !auditLog.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
