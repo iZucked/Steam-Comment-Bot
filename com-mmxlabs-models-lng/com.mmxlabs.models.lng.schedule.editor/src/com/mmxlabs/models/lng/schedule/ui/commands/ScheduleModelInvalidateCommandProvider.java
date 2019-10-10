@@ -79,12 +79,8 @@ public class ScheduleModelInvalidateCommandProvider extends BaseModelCommandProv
 								|| analyticsModel.getViabilityModel() != null 
 								|| analyticsModel.getMtmModel() != null) {
 
-							boolean result[] = new boolean[1];
-							RunnerHelper.syncExec((display) -> {
-								result[0] = MessageDialog.openConfirm(display.getActiveShell(), "Scenario edit",
-										"This change will remove all results. Press OK to continue, otherwise press cancel and fork the scenario.");
-							});
-							if (!result[0]) {
+							boolean result = promptClearModels();
+							if (!result) {
 								return CancelledCommand.INSTANCE;
 							}
 							setContext(Boolean.TRUE);
@@ -93,30 +89,44 @@ public class ScheduleModelInvalidateCommandProvider extends BaseModelCommandProv
 				}
 			}
 
-			final List<EObject> delete = new LinkedList<>();
-
-			final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(scenarioModel);
-			if (scheduleModel.getSchedule() != null) {
-				delete.add(scheduleModel.getSchedule());
-			}
-			if (analyticsModel.getViabilityModel() != null) {
-				delete.add(analyticsModel.getViabilityModel());
-			}
-			if (analyticsModel.getMtmModel() != null) {
-				delete.add(analyticsModel.getMtmModel());
-			}
-			if (!analyticsModel.getOptimisations().isEmpty()) {
-				delete.addAll(analyticsModel.getOptimisations());
-			}
-			if (!analyticsModel.getBreakevenModels().isEmpty()) {
-				delete.addAll(analyticsModel.getBreakevenModels());
-			}
-
-			if (delete.isEmpty()) {
-				return null;
-			}
-			return DeleteCommand.create(domain, delete);
+			return createClearModelsCommand(domain, scenarioModel, analyticsModel);
 		}
 		return null;
+	}
+
+	//TODO: keep updates in-line with MtMScenarioEditorActionDelegate
+	private static Command createClearModelsCommand(final EditingDomain domain, final LNGScenarioModel scenarioModel, final AnalyticsModel analyticsModel) {
+		final List<EObject> delete = new LinkedList<>();
+
+		final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(scenarioModel);
+		if (scheduleModel.getSchedule() != null) {
+			delete.add(scheduleModel.getSchedule());
+		}
+		if (analyticsModel.getViabilityModel() != null) {
+			delete.add(analyticsModel.getViabilityModel());
+		}
+		if (analyticsModel.getMtmModel() != null) {
+			delete.add(analyticsModel.getMtmModel());
+		}
+		if (!analyticsModel.getOptimisations().isEmpty()) {
+			delete.addAll(analyticsModel.getOptimisations());
+		}
+		if (!analyticsModel.getBreakevenModels().isEmpty()) {
+			delete.addAll(analyticsModel.getBreakevenModels());
+		}
+
+		if (delete.isEmpty()) {
+			return null;
+		}
+		return DeleteCommand.create(domain, delete);
+	}
+
+	private static boolean promptClearModels() {
+		boolean result[] = new boolean[1];
+		RunnerHelper.syncExec((display) -> {
+			result[0] = MessageDialog.openConfirm(display.getActiveShell(), "Scenario edit",
+					"This change will remove all results. Press OK to continue, otherwise press cancel and fork the scenario.");
+		});
+		return result[0];
 	}
 }

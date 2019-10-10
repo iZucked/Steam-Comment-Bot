@@ -12,8 +12,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -47,20 +49,22 @@ public class ColumnGenerator {
 			Number.class);
 	private static Set<Class<?>> dateTypes = Sets.newHashSet(LocalDate.class, LocalDateTime.class);
 
-	public static void createColumns(final GridTableViewer viewer, @Nullable final EObjectTableViewerSortingSupport sortingSupport, @Nullable final EObjectTableViewerFilterSupport filterSupport,
+	public static Map<Integer, Field> createColumns(final GridTableViewer viewer, @Nullable final EObjectTableViewerSortingSupport sortingSupport, @Nullable final EObjectTableViewerFilterSupport filterSupport,
 			final Class<?> cls, final BiConsumer<ViewerCell, Field> styler) {
 
 		List<Triple<Integer, GridViewerColumn, Boolean>> defaultSortColumns = new LinkedList<>();
 
+		final Map<Integer, Field> mapOfFields = new HashMap<>();
+		int counter = -1;
+		
 		for (final Field f : cls.getFields()) {
-
 			if (f.getAnnotation(LingoIgnore.class) != null) {
 				continue;
 			}
 
 			final ColumnName columnName = f.getAnnotation(ColumnName.class);
-
 			final GridViewerColumn col;
+			
 			if (columnName != null) {
 				col = new GridViewerColumn(viewer, SWT.NONE);
 				if (!columnName.lingo().isEmpty()) {
@@ -72,6 +76,7 @@ public class ColumnGenerator {
 				continue;
 			}
 			GridViewerHelper.configureLookAndFeel(col);
+			mapOfFields.put(++counter, f);
 
 			final Function<Object, String> formatter;
 			Function<Object, Comparable> sortFunction;
@@ -212,5 +217,7 @@ public class ColumnGenerator {
 				});
 			}
 		}
+		
+		return mapOfFields;
 	}
 }
