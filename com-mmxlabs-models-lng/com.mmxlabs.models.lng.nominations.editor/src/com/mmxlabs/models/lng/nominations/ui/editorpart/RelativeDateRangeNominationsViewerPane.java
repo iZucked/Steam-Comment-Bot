@@ -62,7 +62,6 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.nominations.AbstractNomination;
 import com.mmxlabs.models.lng.nominations.ContractNomination;
-import com.mmxlabs.models.lng.nominations.NominationsFactory;
 import com.mmxlabs.models.lng.nominations.NominationsModel;
 import com.mmxlabs.models.lng.nominations.NominationsPackage;
 import com.mmxlabs.models.lng.nominations.SlotNomination;

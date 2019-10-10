@@ -75,15 +75,7 @@ public class NominationDatesToolbarEditor extends ControlContribution {
 		this.editingDomain = editingDomain;
 		this.jointModelEditor = jointModelEditor;
 		final NominationsModel nominationsModel = ScenarioModelUtil.getNominationsModel(jointModelEditor.getScenarioDataProvider());
-		
-		if (nominationsModel.getNominationParameters() == null) {
-			this.nominationsParameters = NominationsFactory.eINSTANCE.createNominationsParameters();
-			nominationsModel.setNominationParameters(this.nominationsParameters);
-		}
-		else {
-			this.nominationsParameters = nominationsModel.getNominationParameters(); 
-		}
-		
+		this.nominationsParameters = nominationsModel.getNominationParameters(); 
 	}
 
 	@Override
