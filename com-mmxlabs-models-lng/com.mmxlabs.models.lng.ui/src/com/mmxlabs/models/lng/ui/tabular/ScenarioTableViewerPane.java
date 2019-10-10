@@ -116,9 +116,11 @@ public class ScenarioTableViewerPane extends ScenarioViewerPane {
 							// Clear current selection
 							selectionChanged(new SelectionChangedEvent(viewer, StructuredSelection.EMPTY));
 
-							// Execute command
-							final Command deleteCommand = DeleteCommand.create(ed, uniqueObjects);
-							ed.getCommandStack().execute(deleteCommand);
+							if (!uniqueObjects.isEmpty()) {
+								// Execute command
+								final Command deleteCommand = DeleteCommand.create(ed, uniqueObjects);
+								ed.getCommandStack().execute(deleteCommand);
+							}
 						}
 					} finally {
 						editorLock.unlock();
