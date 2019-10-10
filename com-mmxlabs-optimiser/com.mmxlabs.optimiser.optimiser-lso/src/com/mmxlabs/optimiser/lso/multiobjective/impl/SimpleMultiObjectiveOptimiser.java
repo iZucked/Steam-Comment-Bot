@@ -187,12 +187,9 @@ public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 	 * @return
 	 */
 	protected List<NonDominatedSolution> getSortedArchiveWithEpsilonDominance(final List<NonDominatedSolution> archive, final int objectiveIndex) {
-		final List<NonDominatedSolution> sortedValues = archive.stream().sorted((a, b) -> Long.compare(a.getFitnesses()[objectiveIndex], b.getFitnesses()[objectiveIndex]))
-				.collect(Collectors.toList());
 		return MultiObjectiveUtils.filterArchive(archive, objectiveIndex, epsilonDominanceValues);
 	}
 
-	
 	long[] addSequenceToArchiveIfNonDominated(final ModifiableSequences pinnedPotentialRawSequences, final IMove move, final IModifiableSequences potentialFullSequences,
 			final IEvaluationState evaluationState) {
 		final long[] fitnesses = getMultiObjectiveFitnessEvaluator().getCombinedFitnessAndObjectiveValuesForComponentClasses(pinnedPotentialRawSequences, potentialFullSequences, evaluationState,
