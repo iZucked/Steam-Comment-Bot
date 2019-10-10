@@ -478,6 +478,16 @@ public class NominationsPackageImpl extends EPackageImpl implements NominationsP
 	 * @generated
 	 */
 	@Override
+	public EAttribute getAbstractNomination_Deleted() {
+		return (EAttribute)abstractNominationEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getNominationsParameters() {
 		return nominationsParametersEClass;
 	}
@@ -653,6 +663,7 @@ public class NominationsPackageImpl extends EPackageImpl implements NominationsP
 		createEAttribute(abstractNominationEClass, ABSTRACT_NOMINATION__DONE);
 		createEAttribute(abstractNominationEClass, ABSTRACT_NOMINATION__ALERT_DATE);
 		createEAttribute(abstractNominationEClass, ABSTRACT_NOMINATION__SPEC_UUID);
+		createEAttribute(abstractNominationEClass, ABSTRACT_NOMINATION__DELETED);
 
 		nominationsParametersEClass = createEClass(NOMINATIONS_PARAMETERS);
 		createEAttribute(nominationsParametersEClass, NOMINATIONS_PARAMETERS__START_DATE);
@@ -749,6 +760,7 @@ public class NominationsPackageImpl extends EPackageImpl implements NominationsP
 		initEAttribute(getAbstractNomination_Done(), ecorePackage.getEBoolean(), "done", null, 0, 1, AbstractNomination.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getAbstractNomination_AlertDate(), theDateTimePackage.getLocalDate(), "alertDate", null, 0, 1, AbstractNomination.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getAbstractNomination_SpecUuid(), ecorePackage.getEString(), "specUuid", null, 0, 1, AbstractNomination.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAbstractNomination_Deleted(), ecorePackage.getEBoolean(), "deleted", "false", 0, 1, AbstractNomination.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(nominationsParametersEClass, NominationsParameters.class, "NominationsParameters", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getNominationsParameters_StartDate(), theDateTimePackage.getLocalDate(), "startDate", null, 0, 1, NominationsParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

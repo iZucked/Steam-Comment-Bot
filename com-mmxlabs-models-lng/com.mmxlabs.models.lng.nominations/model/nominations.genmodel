@@ -63,6 +63,7 @@
           ecoreFeature="ecore:EAttribute nominations.ecore#//AbstractNomination/alertDate"/>
       <genFeatures createChild="false" propertyDescription="The nomination specification that this nomination was generated from."
           ecoreFeature="ecore:EAttribute nominations.ecore#//AbstractNomination/specUuid"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute nominations.ecore#//AbstractNomination/deleted"/>
     </genClasses>
     <genClasses ecoreClass="nominations.ecore#//NominationsParameters">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute nominations.ecore#//NominationsParameters/startDate"/>

@@ -553,13 +553,22 @@ public interface NominationsPackage extends EPackage {
 	int ABSTRACT_NOMINATION__SPEC_UUID = ABSTRACT_NOMINATION_SPEC_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Deleted</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_NOMINATION__DELETED = ABSTRACT_NOMINATION_SPEC_FEATURE_COUNT + 5;
+
+	/**
 	 * The number of structural features of the '<em>Abstract Nomination</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ABSTRACT_NOMINATION_FEATURE_COUNT = ABSTRACT_NOMINATION_SPEC_FEATURE_COUNT + 5;
+	int ABSTRACT_NOMINATION_FEATURE_COUNT = ABSTRACT_NOMINATION_SPEC_FEATURE_COUNT + 6;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.nominations.impl.SlotNominationImpl <em>Slot Nomination</em>}' class.
@@ -745,6 +754,15 @@ public interface NominationsPackage extends EPackage {
 	int SLOT_NOMINATION__SPEC_UUID = ABSTRACT_NOMINATION__SPEC_UUID;
 
 	/**
+	 * The feature id for the '<em><b>Deleted</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_NOMINATION__DELETED = ABSTRACT_NOMINATION__DELETED;
+
+	/**
 	 * The number of structural features of the '<em>Slot Nomination</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -905,6 +923,15 @@ public interface NominationsPackage extends EPackage {
 	 * @ordered
 	 */
 	int CONTRACT_NOMINATION__SPEC_UUID = ABSTRACT_NOMINATION__SPEC_UUID;
+
+	/**
+	 * The feature id for the '<em><b>Deleted</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_NOMINATION__DELETED = ABSTRACT_NOMINATION__DELETED;
 
 	/**
 	 * The number of structural features of the '<em>Contract Nomination</em>' class.
@@ -1539,6 +1566,17 @@ public interface NominationsPackage extends EPackage {
 	EAttribute getAbstractNomination_SpecUuid();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.nominations.AbstractNomination#isDeleted <em>Deleted</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Deleted</em>'.
+	 * @see com.mmxlabs.models.lng.nominations.AbstractNomination#isDeleted()
+	 * @see #getAbstractNomination()
+	 * @generated
+	 */
+	EAttribute getAbstractNomination_Deleted();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.nominations.NominationsParameters <em>Parameters</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1906,6 +1944,14 @@ public interface NominationsPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute ABSTRACT_NOMINATION__SPEC_UUID = eINSTANCE.getAbstractNomination_SpecUuid();
+
+		/**
+		 * The meta object literal for the '<em><b>Deleted</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ABSTRACT_NOMINATION__DELETED = eINSTANCE.getAbstractNomination_Deleted();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.nominations.impl.NominationsParametersImpl <em>Parameters</em>}' class.

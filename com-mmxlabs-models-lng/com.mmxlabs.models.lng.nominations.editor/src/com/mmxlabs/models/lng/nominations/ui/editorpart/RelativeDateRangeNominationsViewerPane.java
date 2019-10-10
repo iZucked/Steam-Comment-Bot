@@ -22,21 +22,22 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.e4.ui.workbench.modeling.ISelectionListener;
 import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.CommandParameter;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
@@ -45,7 +46,6 @@ import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -62,6 +62,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.nominations.AbstractNomination;
 import com.mmxlabs.models.lng.nominations.ContractNomination;
+import com.mmxlabs.models.lng.nominations.NominationsFactory;
 import com.mmxlabs.models.lng.nominations.NominationsModel;
 import com.mmxlabs.models.lng.nominations.NominationsPackage;
 import com.mmxlabs.models.lng.nominations.SlotNomination;
@@ -70,7 +71,6 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
-import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane.ScenarioTableViewerDeleteAction;
 import com.mmxlabs.models.ui.date.LocalDateTextFormatter;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
@@ -534,6 +534,48 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 		};
 	}
 	
+	/**
+	 * Subclasses can override this to filter out object from deletion. Each dummmy UI objects that are in the selection.
+	 * 
+	 * @param uniqueObjects
+	 */
+	protected void filterObjectsToDelete(Set<Object> uniqueObjects) {
+		List<AbstractNomination> toFilter = new ArrayList<>();
+		for (Object o : uniqueObjects) {
+			if (o instanceof AbstractNomination) {
+				final AbstractNomination n = (AbstractNomination)o;
+				if (n.isSetSpecUuid()) {
+					toFilter.add(n);
+				}
+			}
+		}
+		
+		if (!toFilter.isEmpty()) {
+			CompoundCommand cmd = new CompoundCommand();
+			EditingDomain editingDomain = jointModelEditor.getEditingDomain();
+
+			for (AbstractNomination n : toFilter) {
+				if (n.isSetSpecUuid()) {
+					uniqueObjects.remove(n);
+					if (n.eContainer() == null) {
+						addNomination(n);	
+					}
+					final Command set = createSetCommand(editingDomain, n, NominationsPackage.eINSTANCE.getAbstractNomination_Deleted(), Boolean.TRUE);
+					cmd.append(set);
+				}	
+			}
+			
+			if (!cmd.isEmpty()) {
+				editingDomain.getCommandStack().execute(cmd);
+			}
+		}
+	}
+
+	public Command createSetCommand(final EditingDomain editingDomain, final Object object, final Object field, final Object value) {
+		final Command command = editingDomain.createCommand(SetCommand.class, new CommandParameter(object, field, value));
+		return command;
+	}
+	
 	protected LNGScenarioModel getScenarioModel() {
 		return (LNGScenarioModel)this.jointModelEditor.getRootObject();
 	}
@@ -604,6 +646,9 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 					final LocalDate startDate = getStartDate();
 					final LocalDate endDate = getEndDate();
 					final LocalDate dueDate = NominationsModelUtils.getDueDate(scenarioModel, sn);
+					if (sn.isDeleted()) {
+						return false;
+					}
 					if ((startDate != null && dueDate != null && dueDate.isBefore(startDate)) || (endDate != null && dueDate != null && dueDate.isAfter(endDate))
 							|| (!RelativeDateRangeNominationsViewerPane.this.includeDone && sn.isDone() && !previousNominations.contains(sn.getUuid()))) {
 						return false;

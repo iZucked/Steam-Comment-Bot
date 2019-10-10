@@ -156,4 +156,13 @@ public class AbstractNominationComponentHelper extends BaseComponentHelper {
 	protected void add_specUuidEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, NominationsPackage.Literals.ABSTRACT_NOMINATION__SPEC_UUID));
 	}
+
+	/**
+	 * Create the editor for the deleted feature on AbstractNomination
+	 *
+	 * @generated
+	 */
+	protected void add_deletedEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, NominationsPackage.Literals.ABSTRACT_NOMINATION__DELETED));
+	}
 }
