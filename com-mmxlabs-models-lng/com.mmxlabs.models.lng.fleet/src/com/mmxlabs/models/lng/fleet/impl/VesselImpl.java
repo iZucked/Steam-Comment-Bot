@@ -1425,7 +1425,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 */
 	@Override
 	public int getVesselOrDelegateCoolingTime() {
-		if (getReference() != null && isSetCoolingTime()) {
+		if (getReference() != null && !isSetCoolingTime()) {
 			return getReference().getCoolingTime();
 		}
 		return getCoolingTime();

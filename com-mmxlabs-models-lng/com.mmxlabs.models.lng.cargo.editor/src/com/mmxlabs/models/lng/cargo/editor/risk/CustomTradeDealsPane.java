@@ -108,7 +108,7 @@ public class CustomTradeDealsPane extends ScenarioTableViewerPane {
 		addReadOnlyColumn("Contract", new ContractManipulator(provider, jointModelEditor.getEditingDomain()));
 		addReadOnlyColumn("Conterparty", new BasicAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Counterparty(), jointModelEditor.getEditingDomain()));
 
-		setTitle("Trades", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
+		setTitle("Physical", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 		
 		{
 			final DragSource source = new DragSource(getScenarioViewer().getControl(), DND.DROP_MOVE);

@@ -105,7 +105,7 @@ public class CustomPaperDealsPane extends ScenarioTableViewerPane {
 		addTypicalColumn("Index", new StringAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_Index(), jointModelEditor.getEditingDomain()));
 		addTypicalColumn("Quantity", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_Quantity(), jointModelEditor.getEditingDomain()));
 
-		setTitle("Papers", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
+		setTitle("Paper", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 		
 		final DragSource source = new DragSource(getScenarioViewer().getControl(), DND.DROP_MOVE);
 		final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
