@@ -72,6 +72,8 @@ public abstract class AbstractSimpleModelBasedReportView<M> extends ViewPart imp
 
 	private EObjectTableViewerFilterSupport filterSupport;
 	private FilterField filterField;
+	
+	protected Map<Integer, Field> mapOfFields;
 
 	public AbstractSimpleModelBasedReportView(final Class<M> modelClass) {
 		this.modelClass = modelClass;
@@ -116,7 +118,7 @@ public abstract class AbstractSimpleModelBasedReportView<M> extends ViewPart imp
 			filterField.setFilterSupport(filterSupport);
 		}
 		final BiConsumer<ViewerCell, Field> styler = createStyler();
-		ColumnGenerator.createColumns(viewer, sortingSupport, filterSupport, modelClass, styler);
+		mapOfFields = ColumnGenerator.createColumns(viewer, sortingSupport, filterSupport, modelClass, styler);
 
 		makeActions();
 
