@@ -9,6 +9,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 /**
@@ -48,6 +51,19 @@ public class FileCSVReader extends CSVReader {
 		super(separator, url.openStream());
 		this.fileName = url.toString();
 	}
+	
+	public FileCSVReader(final @NonNull URI uri) throws IOException {
+		this(uri, ',');
+	}
+
+	/**
+	 */
+	public FileCSVReader(final @NonNull URI uri, final char separator) throws IOException {
+		super(separator, new ExtensibleURIConverterImpl().createInputStream(uri));
+		this.fileName = uri.toString();
+	}
+
+
 
 	@Nullable
 	public String getFileName() {

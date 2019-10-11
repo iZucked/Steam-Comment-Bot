@@ -32,11 +32,19 @@ public class LSOLoggingExporter {
 	}
 
 	private JSONObject getJSONObject(final String nodeName) {
-		return (JSONObject) root.computeIfAbsent(nodeName, k -> new JSONObject());
+		return getJSONObject(root, nodeName);
+	}
+
+	private JSONObject getJSONObject(final JSONObject parent, final String nodeName) {
+		return (JSONObject) parent.computeIfAbsent(nodeName, k -> new JSONObject());
 	}
 
 	private JSONArray getJSONArray(final String nodeName) {
-		return (JSONArray) root.computeIfAbsent(nodeName, k -> new JSONArray());
+		return getJSONArray(root, nodeName);
+	}
+
+	private JSONArray getJSONArray(final JSONObject parent, final String nodeName) {
+		return (JSONArray) parent.computeIfAbsent(nodeName, k -> new JSONArray());
 	}
 
 	public void close() {
@@ -155,14 +163,27 @@ public class LSOLoggingExporter {
 		}
 	}
 
+	private void exportIterationsList(final List<Pair<Integer, Long>> iterations, final JSONObject parent) {
+		JSONArray iterationsJson = getJSONArray(parent, "iteration");
+		JSONArray fitnessJson = getJSONArray(parent, "fitness");
+		for (final Pair<Integer, Long> i : iterations) {
+			iterationsJson.add(i.getFirst());
+			fitnessJson.add(i.getSecond());
+		}
+	}
+
 	private void exportAcceptedFitnesses() {
-		final JSONArray array = getJSONArray("acceptedFitnesses");
-		exportIterationsList(lsoLogger.getAcceptedFitnesses(), array);
+		if (lsoLogger.getLoggingParameters().doLogAcceptedFitnesses) {
+			final JSONObject object = getJSONObject("acceptedFitnesses");
+			exportIterationsList(lsoLogger.getAcceptedFitnesses(), object);
+		}
 	}
 
 	private void exportRejectedFitnesses() {
-		final JSONArray array = getJSONArray("rejectedFitnesses");
-		exportIterationsList(lsoLogger.getRejectedFitnesses(), array);
+		if (lsoLogger.getLoggingParameters().doLogRejectedFitnesses) {
+			final JSONObject object = getJSONObject("rejectedFitnesses");
+			exportIterationsList(lsoLogger.getRejectedFitnesses(), object);
+		}
 	}
 
 	// private void exportAcceptedFitnesses() {

@@ -27,9 +27,13 @@ public class LoggingProvider implements ILoggingProvider {
 	@Named("RUNNER_HOOK")
 	AbstractRunnerHook runnerHook;
 
+	/*
 	@Inject
 	@Named("REPORTING_INTERVAL")
 	int reportingInterval;
+	*/
+	@Inject
+	LSOLogger.LoggingParameters loggingParameters;
 
 	@Inject
 	@NonNull
@@ -42,7 +46,7 @@ public class LoggingProvider implements ILoggingProvider {
 		if (phaseToLoggerMap.containsKey(stageAndID)) {
 			return phaseToLoggerMap.get(stageAndID);
 		}
-		final LSOLogger logger = new LSOLogger(reportingInterval, fitnessEvaluator, context);
+		final LSOLogger logger = new LSOLogger(loggingParameters, fitnessEvaluator, context);
 		injector.injectMembers(logger);
 
 		phaseToLoggerMap.put(stageAndID, logger);

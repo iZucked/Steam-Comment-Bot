@@ -13,30 +13,24 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-import java.util.concurrent.Semaphore;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.osgi.framework.console.CommandInterpreter;
 import org.eclipse.osgi.framework.console.CommandProvider;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.concurrent.CleanableExecutorService;
-import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
-import com.mmxlabs.models.lng.transformer.ui.analytics.SlotInsertionOptimiserUnit;
-import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiserLogger;
 import com.mmxlabs.scheduler.optimiser.utils.GCStats;
 
 //From OSGI prompt, run e.g. 
 //osgi> optionise C:/dev/bm/bm.lingo C:/dev/bm/options.json
-public class HeadessOptioniserRunnerConsoleCommand implements CommandProvider {
+public class HeadlessOptioniserRunnerConsoleCommand implements CommandProvider {
+	public static class Options {
+	   int numRuns;
+	   HeadlessOptioniserRunner.Options options;		
+	}
 
 	private static SimpleDateFormat sdfTimestamp = new SimpleDateFormat("yyyyMMdd_HHmmss");
 	
@@ -64,7 +58,8 @@ public class HeadessOptioniserRunnerConsoleCommand implements CommandProvider {
 		mapper.registerModule(new JavaTimeModule());
 		mapper.registerModule(new Jdk8Module());
 
-		HeadlessOptioniserRunner.Options options = mapper.readValue(new File(paramsFileName), HeadlessOptioniserRunner.Options.class);
+		Options topOptions = mapper.readValue(new File(paramsFileName), Options.class);
+		HeadlessOptioniserRunner.Options options = topOptions.options;
 		final int minThreads = options.minWorkerThreads;
 		final int maxThreads = options.maxWorkerThreads;
 		if (options.turnPerfOptsOn) {
@@ -98,9 +93,9 @@ public class HeadessOptioniserRunnerConsoleCommand implements CommandProvider {
 			//}
 			
 			//Do the runs with this set of parameters.
-			for (int run = 1; run <= options.numRuns; run++) {
+			for (int run = 1; run <= topOptions.numRuns; run++) {
 				
-				HeadlessOptioniserJSON json = setOptionParamsInJSONOutputObject(options, scenarioFile, threads);
+				HeadlessOptioniserJSON json = (new HeadlessOptioniserJSONTransformer()).createJSONResultObject(getMachineInfo(), options, scenarioFile, threads);
 		
 				List<Future<SlotInsertionOptimiserLogger>> futures = new ArrayList<>();
 				List<SlotInsertionOptimiserLogger> results = new ArrayList<>();
@@ -157,7 +152,7 @@ public class HeadessOptioniserRunnerConsoleCommand implements CommandProvider {
 				pst.printf("%d,%d,%d,%d\n",run,threads,logger.getRuntime(),GCStats.getGCTimeInMillis());
 		
 				if (options.outputToJSON) {
-					HeadlessOptioniserJSONTransformer.addRunResult(startTry, logger, json);
+					(new HeadlessOptioniserJSONTransformer()).addRunResult(startTry, logger, json);  
 
 					//Write out the result of all runs.
 					try {
@@ -180,23 +175,6 @@ public class HeadessOptioniserRunnerConsoleCommand implements CommandProvider {
 		}
 	}
 	
-	private HeadlessOptioniserJSON setOptionParamsInJSONOutputObject(HeadlessOptioniserRunner.Options options, File scenarioFile, int threads) {
-		//Set up JSON object to write all results out with.
-		HeadlessOptioniserJSON json = HeadlessOptioniserJSONTransformer.createJSONResultObject();
-		json.getMeta().setClient("V");
-		json.getMeta().setScenario(scenarioFile.getName());
-		json.getMeta().setMachineType(getMachineInfo());
-		json.getMeta().setVersion("Dev");
-
-		json.getParams().setCores(threads);
-//		json.getParams().getOptioniserProperties().setOptions(OptOptions.getInstance().toString());
-		json.getParams().getOptioniserProperties().setIterations(options.iterations);
-		json.getParams().getOptioniserProperties().setLoadIds(options.loadIds.toArray(new String[0]));
-		json.getParams().getOptioniserProperties().setDischargeIds(options.dischargeIds.toArray(new String[0]));
-		json.getParams().getOptioniserProperties().setEventIds(options.eventsIds.toArray(new String[0]));
-		return json;
-	}
-
 	private Runnable createNewOptimiserThread(final int startTry, HeadlessOptioniserRunner.Options options, File scenarioFile, SlotInsertionOptimiserLogger logger,
 			CountDownLatch start, CountDownLatch finished) {
 		return new Runnable() {

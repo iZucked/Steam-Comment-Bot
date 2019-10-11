@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.transformer.ui.AbstractRunnerHook;
 import com.mmxlabs.optimiser.common.logging.ILoggingDataStore;
 import com.mmxlabs.optimiser.lso.logging.ILoggingProvider;
 import com.mmxlabs.optimiser.lso.logging.LSOLogger;
+import com.mmxlabs.optimiser.lso.logging.LSOLogger.LoggingParameters;
 import com.mmxlabs.scheduler.optimiser.actionplan.BagOptimiser;
 
 /**
@@ -30,13 +31,15 @@ public class LoggingModule extends AbstractModule {
 
 	private final Map<String, LSOLogger> phaseToLoggerMap;
 	private final AbstractRunnerHook runnerHook;
-	private final int reportingInterval;
 	private final ActionSetLogger actionSetLogger;
+	private final LSOLogger.LoggingParameters loggingParameters;
 
-	public LoggingModule(final Map<String, LSOLogger> phaseToLoggerMap, final ActionSetLogger actionSetLogger, final AbstractRunnerHook runnerHook, final int reportingInterval) {
+	public LoggingModule(final Map<String, LSOLogger> phaseToLoggerMap, final ActionSetLogger actionSetLogger, final AbstractRunnerHook runnerHook, final LoggingParameters loggingParameters) {
 		this.phaseToLoggerMap = phaseToLoggerMap;
 		this.runnerHook = runnerHook;
-		this.reportingInterval = reportingInterval;
+		
+		this.loggingParameters = loggingParameters;
+		
 		this.actionSetLogger = actionSetLogger;
 	}
 
@@ -62,12 +65,19 @@ public class LoggingModule extends AbstractModule {
 		return runnerHook;
 	}
 
+	/*
 	@Provides
 	@Named("REPORTING_INTERVAL")
 	private int provideReportingInterval() {
 		return reportingInterval;
 	}
+	*/
 
+	
+	@Provides
+	private LSOLogger.LoggingParameters provideLoggingParameters() {
+		return loggingParameters;
+	}
 	// @Provides
 	// private LSOLogger providerLSOLogger(@NonNull final Injector injector) {
 	// final String phase = runnerHook.getPhase();

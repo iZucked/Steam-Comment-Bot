@@ -4,23 +4,25 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.headless;
 
-import java.time.LocalDateTime;
+import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessOptioniserRunner.Options;
 import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiserLogger;
 
-public class HeadlessOptioniserJSONTransformer {
+public class HeadlessOptioniserJSONTransformer extends HeadlessGenericJSONTransformer<HeadlessOptioniserJSON.Params, HeadlessOptioniserJSON.Metrics, HeadlessOptioniserJSON>{
 
-	public static HeadlessOptioniserJSON createJSONResultObject() {
-		HeadlessOptioniserJSON result = new HeadlessOptioniserJSON();
+	public HeadlessOptioniserJSON createJSONResultObject(String machineType, Options options, File scenarioFile, int threads) {
+		HeadlessOptioniserJSON result = createJSONResultObject(HeadlessOptioniserJSON.Params.class, HeadlessOptioniserJSON.Metrics.class, HeadlessOptioniserJSON.class);
 		result.setType("optioniser");
-		addMetaDataToResult(result);
-		addOptioniserParamsToResult(result);
-		return result;
-	}
+		setBasicProperties(result, machineType, scenarioFile.getName(), threads);		
+		result.getParams().setOptioniserProperties(createOptioniserProperties(options));
 
-	public static void addRunResult(int startTry, SlotInsertionOptimiserLogger logger, HeadlessOptioniserJSON result) {
+		return result;		
+	}
+	
+	public void addRunResult(int startTry, SlotInsertionOptimiserLogger logger, HeadlessOptioniserJSON result) {
 		HeadlessOptioniserJSON.Metrics metrics = new HeadlessOptioniserJSON.Metrics();
 		metrics.setSeed(startTry);
 		metrics.setRuntime(logger.getRuntime());
@@ -41,37 +43,18 @@ public class HeadlessOptioniserJSONTransformer {
 
 		metrics.setStages(stages);
 
-		result.addRun(metrics);
+		result.setMetrics(metrics);
 	}
 	
-	private static void addOptioniserParamsToResult(HeadlessOptioniserJSON result) {
-		HeadlessOptioniserJSON.Params params = addParamsToResult();
-
+	private HeadlessOptioniserJSON.OptioniserProperties createOptioniserProperties(Options options) {
 		HeadlessOptioniserJSON.OptioniserProperties op = new HeadlessOptioniserJSON.OptioniserProperties();
-		op.setLoadIds(new String[0]);
-		op.setDischargeIds(new String[0]);
-		op.setEventIds(new String[0]);
-		op.setIterations(0);
 
-		params.setOptioniserProperties(op);
-
-		result.setParams(params);
+		op.setLoadIds(options.loadIds.toArray(new String[0]));
+		op.setDischargeIds(options.dischargeIds.toArray(new String[0]));
+		op.setEventIds(options.eventsIds.toArray(new String[0]));
+		op.setIterations(options.iterations);
+		
+		return op;
 	}
 
-	private static HeadlessOptioniserJSON.Params addParamsToResult() {
-		HeadlessOptioniserJSON.Params params = new HeadlessOptioniserJSON.Params();
-		params.setCores(0);
-		return params;
-	}
-
-	private static void addMetaDataToResult(HeadlessOptioniserJSON result) {
-		HeadlessOptioniserJSON.Meta meta = new HeadlessOptioniserJSON.Meta();
-		meta.setMachineType("");
-		meta.setVersion("");
-		meta.setScenario("");
-		meta.setClient("");
-		meta.setDate(LocalDateTime.now());
-
-		result.setMeta(meta);
-	}
 }

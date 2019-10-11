@@ -37,6 +37,9 @@ import com.mmxlabs.license.ssl.internal.Activator;
  */
 public final class LicenseChecker {
 
+	@SuppressWarnings("serial")
+	public static class InvalidLicenseException extends Exception { }
+	
 	private static final Logger log = LoggerFactory.getLogger(LicenseChecker.class);
 
 	/**

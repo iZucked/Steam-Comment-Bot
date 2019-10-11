@@ -30,6 +30,13 @@ import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.optimiser.lso.INullMove;
 
 public class LSOLogger implements ILoggingDataStore {
+	
+	public static class LoggingParameters {
+		public int loggingInterval;
+		public boolean doLogAcceptedFitnesses;
+		public boolean doLogRejectedFitnesses;
+	}
+	
 	private Map<String, AtomicInteger> moveMap = new HashMap<>();
 	private Map<String, AtomicInteger> successfulMoveMap = new HashMap<>();
 	private Map<String, Map<String, AtomicInteger>> nullMovesMap = new HashMap<>();
@@ -49,7 +56,7 @@ public class LSOLogger implements ILoggingDataStore {
 
 	private List<IResource> resourceList = null;
 
-	private int reportingInterval;
+	// private int reportingInterval;
 	private int numberOfMovesTried;
 	private int numberOfMovesAccepted;
 	private int numberOfRejectedMoves;
@@ -59,11 +66,13 @@ public class LSOLogger implements ILoggingDataStore {
 	private IFitnessEvaluator lsafe;
 	private FitnessAnnotationLogger fitnessAnnotationLogger;
 	private GeneralAnnotationLogger generalAnnotationLogger;
+	
+	private LoggingParameters loggingParameters;
 
-	public LSOLogger(int reportingInterval, IFitnessEvaluator lsafe, IOptimisationContext context) {
+	public LSOLogger(LoggingParameters parameters, IFitnessEvaluator lsafe, IOptimisationContext context) {
 //		nullMovesMap.put("null", new AtomicInteger(0));
 		progressKeys = getProgressKeysMap();
-		this.reportingInterval = reportingInterval;
+		this.loggingParameters = parameters;
 		this.fitnessAnnotationLogger = new FitnessAnnotationLogger(lsafe);
 		this.generalAnnotationLogger = new GeneralAnnotationLogger(lsafe, context);
 	}
@@ -131,11 +140,15 @@ public class LSOLogger implements ILoggingDataStore {
 	public void logSuccessfulMove(IMove move, int numberOfMovesTried, long fitness) {
 		String moveName = move.getClass().getName();
 		logSuccessfulMove(moveName);
-		addFitnessIterationPoint(acceptedSolutionFitnesses, numberOfMovesTried, fitness);
+		if (loggingParameters.doLogAcceptedFitnesses) {
+			addFitnessIterationPoint(acceptedSolutionFitnesses, numberOfMovesTried, fitness);
+		}
 	}
 
 	public void logRejectedMove(IMove move, int numberOfMovesTried, long fitness) {
-		addFitnessIterationPoint(rejectedSolutionFitnesses, numberOfMovesTried, fitness);
+		if (loggingParameters.doLogRejectedFitnesses) {
+			addFitnessIterationPoint(rejectedSolutionFitnesses, numberOfMovesTried, fitness);
+		}
 	}
 
 	private void addFitnessIterationPoint(List<Pair<Integer, Long>> log, int iteration, long fitness) {
@@ -242,7 +255,7 @@ public class LSOLogger implements ILoggingDataStore {
 	}
 
 	public int getReportingInterval() {
-		return reportingInterval;
+		return loggingParameters.loggingInterval;
 	}
 
 	public Map<String, Long> getEndProgressResults() {
@@ -515,6 +528,10 @@ public class LSOLogger implements ILoggingDataStore {
 
 	private enum SequenceCountType {
 		TOTAL, ACCEPTED, REJECTED, CONSTRAINTS
+	}
+
+	public LoggingParameters getLoggingParameters() {
+		return loggingParameters;
 	}
 
 }

@@ -26,55 +26,55 @@ public class LSOMover extends AbstractLSOMover {
 
 	public LSOJobState search(@NonNull IModifiableSequences rawSequences, @NonNull ILookupManager stateManager, @NonNull Random random, @NonNull IMoveGenerator moveGenerator, long seed, boolean failedInitialConstraintCheckers) {
 		final IMove move = moveGenerator.generateMove(rawSequences, stateManager, random);
-		String note = null;
+		
 		// Make sure the generator was able to generate a move
 		if (move == null || move instanceof INullMove) {
-			return new LSOJobState(rawSequences, null, Long.MAX_VALUE, LSOJobStatus.Fail, null, seed, note);
+			return new LSOJobState(rawSequences, null, Long.MAX_VALUE, LSOJobStatus.NullMoveFail, null, seed, move, null);
 		}
 
 		// Test move is valid against data.
 		if (!move.validate(rawSequences)) {
-			return new LSOJobState(rawSequences, null, Long.MAX_VALUE, LSOJobStatus.Fail, null, seed, note);
+			return new LSOJobState(rawSequences, null, Long.MAX_VALUE, LSOJobStatus.CannotValidateFail, null, seed, move, null);
 		}
-
-		// Update potential sequences
+		
 		move.apply(rawSequences);
-		final String moveName = move.getClass().getName();
 
 		// Apply sequence manipulators
 		final IModifiableSequences potentialFullSequences = new ModifiableSequences(rawSequences);
 		sequencesManipulator.manipulate(potentialFullSequences);
 
-		// Apply hard constraint checkers
+		// check hard constraints
 		for (final IConstraintChecker checker : constraintCheckers) {
 			// For constraint checker changed resources functions, if initial solution is invalid, we want to always perform a full constraint checker set of checks until we accept a valid
 			// solution
 			final Collection<@NonNull IResource> changedResources = failedInitialConstraintCheckers ? null : move.getAffectedResources();
+			
 			if (checker.checkConstraints(potentialFullSequences, changedResources) == false) {
-				// Break out
-				return new LSOJobState(rawSequences, null, Long.MAX_VALUE, LSOJobStatus.Fail, null, seed, note);
-			}
-		}
-
-		final IEvaluationState evaluationState = new EvaluationState();
-		for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
-			if (!evaluationProcess.evaluate(potentialFullSequences, evaluationState)) {
-				return new LSOJobState(rawSequences, null, Long.MAX_VALUE, LSOJobStatus.Fail, null, seed, note);
+				return new LSOJobState(rawSequences, null, Long.MAX_VALUE, LSOJobStatus.ConstraintFail, null, seed, move, checker);
 			}
 		}
 		
-		// Apply hard constraint checkers
-		for (final IEvaluatedStateConstraintChecker checker : evaluatedStateConstraintCheckers) {
-			if (checker.checkConstraints(rawSequences, potentialFullSequences, evaluationState) == false) {
-				return new LSOJobState(rawSequences, null, Long.MAX_VALUE, LSOJobStatus.Fail, null, seed, note);
+		final IEvaluationState evaluationState = new EvaluationState();
+	
+		// check against evaluation processes
+		for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
+			if (!evaluationProcess.evaluate(potentialFullSequences, evaluationState)) {
+				return new LSOJobState(rawSequences, null, Long.MAX_VALUE, LSOJobStatus.EvaluationProcessFail, null, seed, move, evaluationProcess);
 			}
 		}
-
+		
+		// check against evaluated constraints
+		for (final IEvaluatedStateConstraintChecker checker : evaluatedStateConstraintCheckers) {
+			if (checker.checkConstraints(rawSequences, potentialFullSequences, evaluationState) == false) {
+				return new LSOJobState(rawSequences, null, Long.MAX_VALUE, LSOJobStatus.EvaluatedConstraintFail, null, seed, move, checker);
+			}
+		}
 		
 		// now evaluate
 		long fitness = evaluateSequencesInTurn(potentialFullSequences, evaluationState, move.getAffectedResources());
 
-		return new LSOJobState(rawSequences, potentialFullSequences, fitness, LSOJobStatus.Pass, evaluationState, seed, note);
+		return new LSOJobState(rawSequences, potentialFullSequences, fitness, LSOJobStatus.Pass, evaluationState, seed, move, null);
+		
 	}
 	
 }

@@ -16,11 +16,11 @@ import com.mmxlabs.scheduler.optimiser.lso.RouletteWheelMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.lso.moves.MoveMapper;
 import com.mmxlabs.scheduler.optimiser.moves.util.MoveHelper;
 
-public class LNGOptimsationOverrideModule extends AbstractModule {
+public class OldLNGOptimsationOverrideModule extends AbstractModule {
 
 	private final SettingsOverride settings;
 
-	public LNGOptimsationOverrideModule(final SettingsOverride settings) {
+	public OldLNGOptimsationOverrideModule(final SettingsOverride settings) {
 		this.settings = settings;
 	}
 

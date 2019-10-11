@@ -22,11 +22,13 @@ import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
-import com.mmxlabs.models.lng.transformer.ui.headless.HeadessOptioniserRunnerConsoleCommand;
+import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessOptioniserRunnerConsoleCommand;
 import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.HeadessOptimiserRunnerConsoleCommand;
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModesRegistry;
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.impl.ParameterModesExtensionModule;
 import com.mmxlabs.models.ui.validation.ValidationPlugin;
+import com.mmxlabs.models.util.importer.registry.ExtensionConfigurationModule;
+import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionChangedListener;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
@@ -48,6 +50,9 @@ public class Activator extends ValidationPlugin {
 
 	@Inject
 	private Export<IParameterModesRegistry> parameterModesRegistry;
+
+	@Inject
+	private IImporterRegistry importerRegistry;
 
 	private final IScenarioServiceSelectionChangedListener scenarioServiceSelectionChangedListener = new IScenarioServiceSelectionChangedListener() {
 
@@ -103,7 +108,7 @@ public class Activator extends ValidationPlugin {
 	public Activator() {
 	}
 
-	private HeadessOptioniserRunnerConsoleCommand optioniserConsole = new HeadessOptioniserRunnerConsoleCommand();
+	private HeadlessOptioniserRunnerConsoleCommand optioniserConsole = new HeadlessOptioniserRunnerConsoleCommand();
 	private HeadessOptimiserRunnerConsoleCommand optimiserConsole = new HeadessOptimiserRunnerConsoleCommand();
 
 	private ServiceRegistration<CommandProvider> optioniserConsoleService;
@@ -132,7 +137,7 @@ public class Activator extends ValidationPlugin {
 		}
 
 		// Bind our module together with the hooks to the eclipse registry to get plugin extensions.
-		final Injector inj = Guice.createInjector(Peaberry.osgiModule(context, EclipseRegistry.eclipseRegistry()), new ParameterModesExtensionModule());
+		final Injector inj = Guice.createInjector(Peaberry.osgiModule(context, EclipseRegistry.eclipseRegistry()), new ParameterModesExtensionModule(), new ExtensionConfigurationModule(null));
 		inj.injectMembers(this);
 
 		// optioniserConsoleService = context.registerService(CommandProvider.class, optioniserConsole, null);
@@ -191,4 +196,9 @@ public class Activator extends ValidationPlugin {
 	public IParameterModesRegistry getParameterModesRegistry() {
 		return parameterModesRegistry.get();
 	}
+
+	public IImporterRegistry getImporterRegistry() {
+		return importerRegistry;
+	}
+
 }

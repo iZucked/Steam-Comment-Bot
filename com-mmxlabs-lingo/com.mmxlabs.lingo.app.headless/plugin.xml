@@ -9,7 +9,7 @@
 <plugin>
 
    <extension
-         id="com.mmxlabs.lingo.app.headless.HeadlessApplication"
+         id="com.mmxlabs.lingo.app.headless.HeadlessOptimiserApplication"
          name="Headless Scenario Runner"
          point="org.eclipse.core.runtime.applications">
       <application
@@ -17,12 +17,12 @@
             thread="main"
             visible="true">
          <run
-               class="com.mmxlabs.lingo.app.headless.HeadlessApplication">
+               class="com.mmxlabs.lingo.app.headless.HeadlessOptimiserApplication">
          </run>
       </application>
    </extension>
    <extension
-         id="com.mmxlabs.lingo.app.headless.HeadlessOptioniser"
+         id="com.mmxlabs.lingo.app.headless.HeadlessOptioniserApplication"
          name="Headless Optioniser"
          point="org.eclipse.core.runtime.applications">
       <application

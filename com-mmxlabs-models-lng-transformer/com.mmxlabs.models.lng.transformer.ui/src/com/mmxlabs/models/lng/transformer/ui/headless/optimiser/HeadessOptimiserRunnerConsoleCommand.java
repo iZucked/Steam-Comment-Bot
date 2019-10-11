@@ -14,6 +14,7 @@ import org.eclipse.osgi.framework.console.CommandInterpreter;
 import org.eclipse.osgi.framework.console.CommandProvider;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessApplicationOptions;
 
 //From OSGI prompt, run e.g. 
 //osgi> optimise C:/dev/bm/bm.lingo C:/dev/bm/options.json
@@ -46,8 +47,8 @@ public class HeadessOptimiserRunnerConsoleCommand implements CommandProvider {
 		// mapper.registerModule(new JavaTimeModule());
 		// mapper.registerModule(new Jdk8Module());
 		//
-		HeadlessOptimiserRunner.Options options = new HeadlessOptimiserRunner.Options();
-		options.jsonFile = paramsFileName;
+		HeadlessApplicationOptions options = new HeadlessApplicationOptions();
+		options.algorithmConfigFile = paramsFileName;
 		options.scenarioFileName = scenarioFileName;
 		options.outputScenarioFileName = outputName;
 		options.outputLoggingFolder = outputPath;

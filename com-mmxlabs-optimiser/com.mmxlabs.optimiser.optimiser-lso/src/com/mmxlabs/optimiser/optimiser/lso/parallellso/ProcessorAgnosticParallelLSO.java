@@ -15,7 +15,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.name.Named;
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.common.components.impl.IncrementingRandomSeed;
@@ -25,6 +24,7 @@ import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
+import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IInitialSequencesConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IReducingConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
@@ -51,8 +51,6 @@ public class ProcessorAgnosticParallelLSO extends LocalSearchOptimiser {
 
 	@Inject
 	private CleanableExecutorService executorService;
-
-	protected Pair<Integer, Long> best = new Pair<>(0, Long.MAX_VALUE);
 
 	@Inject
 	@Named(LocalSearchOptimiserModule.RANDOM_SEED)
@@ -161,31 +159,34 @@ public class ProcessorAgnosticParallelLSO extends LocalSearchOptimiser {
 			for (int futureIdx = 0; futureIdx < futures.size(); futureIdx++) {
 				LSOJobState state;
 				Future<LSOJobState> f = futures.get(futureIdx);
+				
 				try {
 					state = f.get();
 				} catch (final ExecutionException | InterruptedException e) {
 					throw new RuntimeException(e);
 				}
+				
 				getFitnessEvaluator().step();
 				++numberOfMovesTried;
 				++iterationsCompletedThisStep;
+				
+				logJobState(state);
+				
 				boolean accepted = getFitnessEvaluator().evaluateSequencesFromFitnessOnly(state.rawSequences, state.evaluationState, state.fullSequences, state.fitness);
+				
 				if (loggingDataStore != null && (numberOfMovesTried % loggingDataStore.getReportingInterval()) == 0) {
-					loggingDataStore.logProgress(numberOfMovesTried, numberOfMovesAccepted, 0, 0, 0, getFitnessEvaluator().getBestFitness(), getFitnessEvaluator().getCurrentFitness(),
+					loggingDataStore.logProgress(numberOfMovesTried, numberOfMovesAccepted, numberOfMovesRejected, 0, 0, getFitnessEvaluator().getBestFitness(), getFitnessEvaluator().getCurrentFitness(),
 							new Date().getTime());
 				}
+				
 				if (accepted) {
 					numberOfMovesAccepted++;
 					sequenceWasAccepted = true;
 					// save state for new sequences
 					stateToUpdateTo = state.rawSequences;
-					if (getFitnessEvaluator().getBestFitness() < best.getSecond()) {
-						best.setFirst(numberOfMovesTried);
-						best.setSecond(getFitnessEvaluator().getBestFitness());
-						if (DEBUG) {
-							System.out.println(best.getFirst() + ":" + best.getSecond());
-						}
-					}
+					
+					loggingDataStore.logSuccessfulMove(state.getMove(), numberOfMovesTried, getFitnessEvaluator().getLastFitness());
+					
 					failedInitialConstraintCheckers = false;
 					acceptedSeed = state.getSeed();
 					for (int cancelIdx = futureIdx + 1; cancelIdx < futures.size(); cancelIdx++) {
@@ -195,7 +196,10 @@ public class ProcessorAgnosticParallelLSO extends LocalSearchOptimiser {
 					break;
 				} else {
 					numberOfMovesRejected++;
+
+					loggingDataStore.logRejectedMove(state.getMove(), numberOfMovesTried, getFitnessEvaluator().getLastFitness());
 				}
+				
 				if (iterationsCompletedThisStep >= iterationsThisStep) {
 					incrementingRandomSeed.setSeed(state.getSeed());
 					break;
@@ -217,6 +221,37 @@ public class ProcessorAgnosticParallelLSO extends LocalSearchOptimiser {
 		}
 
 		return iterationsThisStep;
+	}
+
+	private void logJobState(LSOJobState state) {
+		if (loggingDataStore != null) {
+			switch (state.getStatus()) {
+				case NullMoveFail: {
+					loggingDataStore.logNullMove(state.getMove());
+					break;
+				}
+				case CannotValidateFail: {
+					loggingDataStore.logFailedToValidateMove(state.getMove());
+					break;
+				}
+				case ConstraintFail: {
+					loggingDataStore.logFailedConstraints((IConstraintChecker) state.getFailedChecker(), state.getMove());
+					break;
+				}
+				case EvaluationProcessFail: {
+					break;
+				}
+				case EvaluatedConstraintFail: {
+					loggingDataStore.logFailedEvaluatedStateConstraints((IEvaluatedStateConstraintChecker) state.getFailedChecker(), state.getMove());
+					break;					
+				}
+				case Pass: {
+					loggingDataStore.logAppliedMove(state.getMove().getClass().getName());
+					break;
+				}
+			}
+		}
+		
 	}
 
 	protected void initProgressLog() {

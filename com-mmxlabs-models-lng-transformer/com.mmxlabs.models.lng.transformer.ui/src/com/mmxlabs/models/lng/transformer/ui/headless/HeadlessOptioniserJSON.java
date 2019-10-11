@@ -4,19 +4,12 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.headless;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
-public class HeadlessOptioniserJSON {
+public class HeadlessOptioniserJSON extends HeadlessGenericJSON<HeadlessOptioniserJSON.Params, HeadlessOptioniserJSON.Metrics>{
 
-	private String type;
-	private Meta meta;
-	private Params params;
-	private List<Metrics> runs;
 
 	public HeadlessOptioniserJSON() {
-		this.runs = new ArrayList<Metrics>();
 	}
 	
 	public static class OptioniserMetrics {
@@ -89,27 +82,9 @@ public class HeadlessOptioniserJSON {
 		private String[] eventIds;
 	}
 
-	public static class Metrics {
-		private long runtime;
-		private long seed;
-		
-		public long getSeed() {
-			return seed;
-		}
-
-		public void setSeed(long seed) {
-			this.seed = seed;
-		}
-
+	public static class Metrics extends HeadlessGenericJSON.Metrics {
 		private OptioniserMetrics optioniserMetrics;
-
-		public long getRuntime() {
-			return runtime;
-		}
-
-		public void setRuntime(long runtime) {
-			this.runtime = runtime;
-		}
+		private List<Stage> stages;
 
 		public OptioniserMetrics getOptioniserMetrics() {
 			return optioniserMetrics;
@@ -127,7 +102,6 @@ public class HeadlessOptioniserJSON {
 			this.stages = stages;
 		}
 
-		private List<Stage> stages;
 	}
 
 	public static class Stage {
@@ -153,67 +127,9 @@ public class HeadlessOptioniserJSON {
 
 	}
 
-	public static class Meta {
-		private String machineType;
-		private String scenario;
-		private LocalDateTime date;
-
-
-		public LocalDateTime getDate() {
-			return date;
-		}
-
-		public void setDate(LocalDateTime date) {
-			this.date = date;
-		}
-
-		public String getScenario() {
-			return scenario;
-		}
-
-		public void setScenario(String scenario) {
-			this.scenario = scenario;
-		}
-
-		public String getMachineType() {
-			return machineType;
-		}
-
-		public void setMachineType(String machineType) {
-			this.machineType = machineType;
-		}
-
-		public String getVersion() {
-			return version;
-		}
-
-		public void setVersion(String version) {
-			this.version = version;
-		}
-
-		public String getClient() {
-			return client;
-		}
-
-		public void setClient(String client) {
-			this.client = client;
-		}
-
-		private String version;
-		private String client;
-	}
-
-	public static class Params {
-		private int cores;
+	public static class Params extends HeadlessGenericJSON.Params {
 		private OptioniserProperties optioniserProperties;
 
-		public int getCores() {
-			return cores;
-		}
-
-		public void setCores(int cores) {
-			this.cores = cores;
-		}
 
 		public OptioniserProperties getOptioniserProperties() {
 			return optioniserProperties;
@@ -224,39 +140,6 @@ public class HeadlessOptioniserJSON {
 		}
 	}
 
-	public String getType() {
-		return type;
-	}
 
-	public void setType(String type) {
-		this.type = type;
-	}
 
-	public Meta getMeta() {
-		return meta;
-	}
-
-	public void setMeta(Meta meta) {
-		this.meta = meta;
-	}
-
-	public Params getParams() {
-		return params;
-	}
-
-	public void setParams(Params params) {
-		this.params = params;
-	}
-
-	public List<Metrics> getRuns() {
-		return runs;
-	}
-
-	public void clearRuns() {
-		runs.clear();
-	}
-	
-	public void addRun(Metrics metrics) {
-		runs.add(metrics);
-	}
 }

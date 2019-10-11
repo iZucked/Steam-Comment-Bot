@@ -33,15 +33,15 @@ public class SimpleMultiObjectiveLSOMover extends AbstractLSOMover {
 	public MultiObjectiveJobState search(@NonNull IModifiableSequences rawSequences, @NonNull ILookupManager stateManager, @NonNull Random random, @NonNull IMoveGenerator moveGenerator, long seed,
 			boolean failedInitialConstraintCheckers) {
 		final IMove move = moveGenerator.generateMove(rawSequences, stateManager, random);
-		String note = null;
+
 		// Make sure the generator was able to generate a move
 		if (move == null || move instanceof INullMove) {
-			return new MultiObjectiveJobState(rawSequences, null, null, LSOJobStatus.Fail, null, seed, note);
+			return new MultiObjectiveJobState(rawSequences, null, null, LSOJobStatus.NullMoveFail, null, seed, move, null);
 		}
 
 		// Test move is valid against data.
 		if (!move.validate(rawSequences)) {
-			return new MultiObjectiveJobState(rawSequences, null, null, LSOJobStatus.Fail, null, seed, note);
+			return new MultiObjectiveJobState(rawSequences, null, null, LSOJobStatus.CannotValidateFail, null, seed, move, null);
 		}
 
 		// Update potential sequences
@@ -58,21 +58,21 @@ public class SimpleMultiObjectiveLSOMover extends AbstractLSOMover {
 			final Collection<@NonNull IResource> changedResources = failedInitialConstraintCheckers ? null : move.getAffectedResources();
 			if (checker.checkConstraints(potentialFullSequences, changedResources) == false) {
 				// Break out
-				return new MultiObjectiveJobState(rawSequences, null, null, LSOJobStatus.Fail, null, seed, note);
+				return new MultiObjectiveJobState(rawSequences, null, null, LSOJobStatus.ConstraintFail, null, seed, move, checker);
 			}
 		}
 
 		final IEvaluationState evaluationState = new EvaluationState();
 		for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
 			if (!evaluationProcess.evaluate(potentialFullSequences, evaluationState)) {
-				return new MultiObjectiveJobState(rawSequences, null, null, LSOJobStatus.Fail, null, seed, note);
+				return new MultiObjectiveJobState(rawSequences, null, null, LSOJobStatus.EvaluationProcessFail, null, seed, move, null);
 			}
 		}
 		
 		// Apply hard constraint checkers
 		for (final IEvaluatedStateConstraintChecker checker : evaluatedStateConstraintCheckers) {
 			if (checker.checkConstraints(rawSequences, potentialFullSequences, evaluationState) == false) {
-				return new MultiObjectiveJobState(rawSequences, null, null, LSOJobStatus.Fail, null, seed, note);
+				return new MultiObjectiveJobState(rawSequences, null, null, LSOJobStatus.EvaluatedConstraintFail, null, seed, move, checker);
 			}
 		}
 
@@ -81,7 +81,7 @@ public class SimpleMultiObjectiveLSOMover extends AbstractLSOMover {
 		long[] fitnesses = getMultiObjectiveFitnessEvaluator().getCombinedFitnessAndObjectiveValuesForComponentClasses(rawSequences, potentialFullSequences, evaluationState,
 				move.getAffectedResources(), getFitnessComponents());
 
-		return new MultiObjectiveJobState(rawSequences, potentialFullSequences, fitnesses, LSOJobStatus.Pass, evaluationState, seed, note);
+		return new MultiObjectiveJobState(rawSequences, potentialFullSequences, fitnesses, LSOJobStatus.Pass, evaluationState, seed, move, null);
 	}
 	
 	public IMultiObjectiveFitnessEvaluator getMultiObjectiveFitnessEvaluator() {

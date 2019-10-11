@@ -5,6 +5,9 @@
 package com.mmxlabs.optimiser.optimiser.lso.parallellso;
 
 public enum LSOJobStatus {
-	Fail,
-	Pass
+	NullMoveFail, CannotValidateFail, ConstraintFail, EvaluationProcessFail, EvaluatedConstraintFail, Pass;
+	
+	public boolean isSuccess() {
+		return this == Pass;
+	}
 }

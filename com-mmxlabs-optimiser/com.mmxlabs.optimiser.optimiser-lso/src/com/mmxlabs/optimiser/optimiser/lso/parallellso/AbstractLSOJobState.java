@@ -6,6 +6,7 @@ package com.mmxlabs.optimiser.optimiser.lso.parallellso;
 
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
+import com.mmxlabs.optimiser.core.moves.IMove;
 
 public class AbstractLSOJobState implements ILSOJobState{
 	
@@ -15,6 +16,8 @@ public class AbstractLSOJobState implements ILSOJobState{
 	protected IEvaluationState evaluationState;
 	private LSOJobStatus status;
 	private String note;
+	private IMove move;
+	private Object failedChecker;
 	
 	public ISequences getRawSequences() {
 		return rawSequences;
@@ -48,6 +51,22 @@ public class AbstractLSOJobState implements ILSOJobState{
 
 	public void setStatus(LSOJobStatus status) {
 		this.status = status;
+	}
+
+	public IMove getMove() {
+		return move;
+	}
+
+	public void setMove(IMove move) {
+		this.move = move;
+	}
+
+	public Object getFailedChecker() {
+		return failedChecker;
+	}
+
+	public void setFailedChecker(Object failedChecker) {
+		this.failedChecker = failedChecker;
 	}
 
 }

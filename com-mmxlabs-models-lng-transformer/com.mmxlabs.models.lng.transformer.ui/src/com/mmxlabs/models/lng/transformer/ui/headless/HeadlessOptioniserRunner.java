@@ -5,6 +5,8 @@
 package com.mmxlabs.models.lng.transformer.ui.headless;
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.LinkedList;
@@ -23,10 +25,13 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.ui.analytics.LNGSchedulerInsertSlotJobRunner;
+import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.CopiedCSVImporter;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
+import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
+import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvider;
 import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiserLogger;
 
 public class HeadlessOptioniserRunner {
@@ -41,7 +46,6 @@ public class HeadlessOptioniserRunner {
 		public List<String> eventsIds = new LinkedList<>();
 
 		public String filename;
-		public int numRuns = 1;
 		public int minOptioniserThreads = 1;
 		public int maxOptioniserThreads = 1;
 		public int minWorkerThreads = 1;
@@ -54,6 +58,17 @@ public class HeadlessOptioniserRunner {
 		public boolean outputToJSON = true;
 	}
 
+	/**
+	 * Runs the optioniser on the specified scenario, using the specified starting seed, with the specified options. 
+	 * The optioniser output is logged to the logger, which can then be used to extract information about the optioniser run.
+	 * 
+	 * @param startTry
+	 * @param lingoFile
+	 * @param logger
+	 * @param options
+	 * @param completedHook
+	 * @throws Exception
+	 */
 	public void run(final int startTry, final File lingoFile, final SlotInsertionOptimiserLogger logger, final Options options, final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook)
 			throws Exception {
 		// Get the root object
@@ -61,6 +76,26 @@ public class HeadlessOptioniserRunner {
 			run(startTry, logger, options, modelRecord, scenarioDataProvider, completedHook);
 		});
 	}
+	
+	
+	public void runFromCSVDirectory(final int startTry, final File csvDirectory, final SlotInsertionOptimiserLogger logger, final Options options, 
+			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook) {
+				
+		try {
+			URL urlRoot = csvDirectory.toURI().toURL();
+			ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, scenarioCipherProvider -> {
+				try (IScenarioDataProvider scenarioDataProvider = CopiedCSVImporter.importCSVScenario(urlRoot.toString())) {
+					run(startTry, logger, options, null, scenarioDataProvider, completedHook);
+				}
+			});
+		} catch (MalformedURLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return;
+		}
+		
+		
+	}	
 
 	public void run(final int startTry, final SlotInsertionOptimiserLogger logger, final Options options, final ScenarioModelRecord scenarioModelRecord, @NonNull final IScenarioDataProvider sdp,
 			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook) {

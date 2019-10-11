@@ -138,5 +138,11 @@ public class LNGHeadlessParameters extends HeadlessParameters {
 
 		// Similarity class
 		setParameter("similarity-mode", null, String.class, false);
+		
+		Map<String, Object> loggingParameters = new HashMap<>();
+		loggingParameters.put("loggingInterval", 10_000);
+		loggingParameters.put("doLogAcceptedFitnesses", true);
+		loggingParameters.put("doLogRejectedFitnesses", true);
+		setParameter("logging-parameters", new JMap(loggingParameters), JMap.class, false);
 	}
 }

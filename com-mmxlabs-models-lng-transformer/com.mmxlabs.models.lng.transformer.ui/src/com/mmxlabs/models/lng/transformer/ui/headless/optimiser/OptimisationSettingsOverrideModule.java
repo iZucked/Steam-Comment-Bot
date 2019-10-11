@@ -19,10 +19,10 @@ import com.mmxlabs.scheduler.optimiser.lso.SequencesConstrainedMoveGeneratorUnit
  */
 public class OptimisationSettingsOverrideModule extends AbstractModule {
 
-	private final SettingsOverride settings;
+	//private final SettingsOverride settings;
 
-	public OptimisationSettingsOverrideModule(final SettingsOverride settings) {
-		this.settings = settings;
+	public OptimisationSettingsOverrideModule() {
+		//this.settings = settings;
 	}
 
 	@Override

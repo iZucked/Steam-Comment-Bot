@@ -4,99 +4,72 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.headless.optimiser;
 
-import java.util.Map;
+import org.eclipse.jdt.annotation.NonNull;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Injector;
-import com.google.inject.Module;
-import com.google.inject.Provides;
-import com.google.inject.Singleton;
-import com.google.inject.name.Named;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ExcessIdleTimeComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters;
-import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
 import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponentParameters;
 
-/**
- * A {@link Module} providing the data from {@link SettingsOverride} to the {@link Injector} framework.
- * 
- * @author Simon Goodall
- * 
- */
-public class EvaluationSettingsOverrideModule extends AbstractModule {
+public class EvaluationSettingsOverrideModule extends JsonConfiguredModule {
 
-	private final SettingsOverride settings;
-
-	public EvaluationSettingsOverrideModule(final SettingsOverride settings) {
-		this.settings = settings;
-	}
-
-	@Override
-	protected void configure() {
-
-	}
-
-	@Provides
-	@Named(LNGParameters_EvaluationSettingsModule.OPTIMISER_REEVALUATE)
-	private boolean isOptimiserReevaluating() {
-		return false;
-	}
-
-	@Provides
-	@Singleton
-	private ILatenessComponentParameters provideLatenessComponentParameters() {
-		Map<String, Integer> latenessParameterMap = settings.getlatenessMap();
-		final LatenessComponentParameters lcp = new LatenessComponentParameters();
-
-		lcp.setThreshold(Interval.PROMPT, latenessParameterMap.get("prompt-period"));
-		lcp.setLowWeight(Interval.PROMPT, latenessParameterMap.get("prompt-low"));
-		lcp.setHighWeight(Interval.PROMPT, latenessParameterMap.get("prompt-high"));
-
-		lcp.setThreshold(Interval.MID_TERM, latenessParameterMap.get("mid-term-period"));
-		lcp.setLowWeight(Interval.MID_TERM, latenessParameterMap.get("mid-term-low"));
-		lcp.setHighWeight(Interval.MID_TERM, latenessParameterMap.get("mid-term-high"));
-
-		lcp.setThreshold(Interval.BEYOND, latenessParameterMap.get("beyond-period"));
-		lcp.setLowWeight(Interval.BEYOND, latenessParameterMap.get("beyond-low"));
-		lcp.setHighWeight(Interval.BEYOND, latenessParameterMap.get("beyond-high"));
-
-
-		return lcp;
-	}
-
-//	@Provides
-//	@Singleton
-//	private ISimilarityComponentParameters provideSimilarityComponentParameters() {
-//		Map<String, Integer> scpm = settings.getSimilarityMap();
-//		final SimilarityComponentParameters scp = new SimilarityComponentParameters();
-//
-//		scp.setThreshold(SimilarityComponentParameters.Interval.LOW, scpm.get("low-thresh"));
-//		scp.setWeight(SimilarityComponentParameters.Interval.LOW, scpm.get("low-weight"));
-//
-//		scp.setThreshold(SimilarityComponentParameters.Interval.MEDIUM, scpm.get("med-thresh"));
-//		scp.setWeight(SimilarityComponentParameters.Interval.MEDIUM, scpm.get("med-weight"));
-//
-//		scp.setThreshold(SimilarityComponentParameters.Interval.HIGH, scpm.get("high-thresh"));
-//		scp.setWeight(SimilarityComponentParameters.Interval.HIGH, scpm.get("high-weight"));
-//
-//		scp.setOutOfBoundsWeight(scpm.get("out-of-bounds-weight"));
-//
-//		return scp;
-//	}
-	
-	@Provides
-	@Singleton
-	private IExcessIdleTimeComponentParameters provideIdleComponentParameters() {
-		final ExcessIdleTimeComponentParameters idleParams = new ExcessIdleTimeComponentParameters();
-		idleParams.setThreshold(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.LOW, 13 * 24);
-		idleParams.setThreshold(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.HIGH, 15 * 24);
-		idleParams.setWeight(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.LOW, settings.getIdleTimeLow());
-		idleParams.setWeight(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.HIGH, settings.getIdleTimeHigh());
-		idleParams.setEndWeight(settings.getIdleTimeEnd());
+	public EvaluationSettingsOverrideModule(JsonNode data) {
+		super(data);
+		// bind the "latenessComponentParameters" import using a custom method
+		importers.put("latenessComponentParameters", (name, value) -> bind(ILatenessComponentParameters.class).toInstance(parseLatenessComponentParameters(value)));
 		
-		return idleParams;
+		// bind the "latenessComponentParameters" import using a custom method
+		importers.put("excessIdleTimeComponentParameters", (name, value) -> bind(IExcessIdleTimeComponentParameters.class).toInstance(parseExcessIdleTimeComponentParameters(value)));
+		
+		// bind the "latenessComponentParameters" import using a default binding (but a custom name)		
+		importers.put("optimiserReevaluate", (name, value) -> this.bindFromJsonNode(value, LNGParameters_EvaluationSettingsModule.OPTIMISER_REEVALUATE));
 	}
+
+	/**
+	 * Returns an {@link IExcessIdleTimeComponentParameters} object created from a {@link JsonNode} object using custom code.
+	 * @param node
+	 * @return
+	 */
+	private @NonNull IExcessIdleTimeComponentParameters parseExcessIdleTimeComponentParameters(JsonNode node) {
+		ExcessIdleTimeComponentParameters result = new ExcessIdleTimeComponentParameters();
+
+		IExcessIdleTimeComponentParameters.Interval[] intervals = IExcessIdleTimeComponentParameters.Interval.values();
+		
+		for (IExcessIdleTimeComponentParameters.Interval interval: intervals) {
+			String name = interval.toString();
+			result.setWeight(interval, node.get(name).get("weight").asInt());
+			result.setThreshold(interval, node.get(name).get("threshold").asInt());
+		}
+		
+		result.setEndWeight(node.get("endWeight").asInt());
+		
+		return result;
+	}
+
+	/**
+	 * Returns an {@link LatenessComponentParameters} object created from a {@link JsonNode} object using custom code.
+	 * @param node
+	 * @return
+	 */
+	private @NonNull LatenessComponentParameters parseLatenessComponentParameters(JsonNode node) {
+		LatenessComponentParameters result = new LatenessComponentParameters();
+		
+		LatenessComponentParameters.Interval[] intervals = ILatenessComponentParameters.Interval.values();
+		
+		for (LatenessComponentParameters.Interval interval: intervals) {
+			String name = interval.toString();
+			
+			result.setHighWeight(interval, node.get(name).get("highWeight").asInt());
+			result.setLowWeight(interval, node.get(name).get("lowWeight").asInt());
+			result.setThreshold(interval, node.get(name).get("threshold").asInt());
+			
+		}
+		return result;
+		
+	}
+
+
 
 }

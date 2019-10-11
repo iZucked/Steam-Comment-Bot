@@ -8,7 +8,7 @@ import java.util.Map;
 
 
 /**
- * Simple class to pass into {@link HeadlessOptions#parseAndSet(String[], Object)}
+ * Simple class to pass into {@link HeadlessApplicationOptions#parseAndSet(String[], Object)}
  * 
  * @author Simon Goodall
  * 
