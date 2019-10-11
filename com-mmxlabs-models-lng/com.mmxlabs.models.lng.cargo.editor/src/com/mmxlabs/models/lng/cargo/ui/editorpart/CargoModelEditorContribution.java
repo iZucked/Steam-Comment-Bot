@@ -129,68 +129,35 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 	@Override
 	public void addPages(final Composite parent) {
 		initialiseExtensions();
-		if (!extensions.isEmpty()) {
-			{
-				IAlternativeEditorProvider provider = extensions.get(0);
-				this.tradesViewer = provider.init(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars(), parent, modelObject);
-			}
-			tradesViewerPageNumber = editorPart.addPage(tradesViewer.getControl());
-			editorPart.setPageText(tradesViewerPageNumber, "Trades");
-			currentEditorIndex = 0;
-			if (extensions.size() > 1) {
-				toggleAction = new RunnableAction("Toggle editor mode", () -> {
-					editorPart.setControl(tradesViewerPageNumber, null);
+		initialialiseTradesViewer(parent);
+		initialiseFleetPage(parent);
+		initialiseCharterMaketOverridesPage(parent);
+		initialiseInventoryViewer(parent);
+		initialisePaperDealsPage(parent);		
+		initialiseCargoModelEditorHelpPages();
+	}
 
-					tradesViewer.getControl().dispose();
-					++currentEditorIndex;
-					if (currentEditorIndex >= extensions.size()) {
-						currentEditorIndex = 0;
-					}
-					IAlternativeEditorProvider provider = extensions.get(currentEditorIndex);
-					this.tradesViewer = provider.init(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars(), parent, modelObject);
+	private void initialiseCargoModelEditorHelpPages() {
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(tradesViewer.getControl(), "com.mmxlabs.lingo.doc.Editor_Trades");
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(vesselViewerPane.getControl(), "com.mmxlabs.lingo.doc.Editor_Fleet");
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(eventViewerPane.getControl(), "com.mmxlabs.lingo.doc.Editor_Fleet");
+	}
 
-					editorPart.setControl(tradesViewerPageNumber, tradesViewer.getControl());
+	private void initialisePaperDealsPage(final Composite parent) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PAPER_DEALS)) {
+			paperDealsPane = new PaperDealsPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+			paperDealsPane.createControl(parent);
+			paperDealsPane.init(Lists.newArrayList(CargoPackage.eINSTANCE.getCargoModel_PaperDeals()), editorPart.getAdapterFactory(), editorPart.getModelReference());
 
-					tradesViewer.getToolBarManager().add(toggleAction);
-					tradesViewer.getToolBarManager().update(true);
+			paperDealsPane.getViewer().setInput(modelObject);
 
-				});
-				toggleAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.cargo.editor", "/icons/editormode.gif"));
-				tradesViewer.getToolBarManager().add(toggleAction);
-				tradesViewer.getToolBarManager().update(true);
-			}
-		}
-		{
-
-			final SashForm sash = new SashForm(parent, SWT.VERTICAL);
-
-			vesselViewerPane = new VesselViewerPane_Editor(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
-			vesselViewerPane.createControl(sash);
-			vesselViewerPane.init(Lists.newArrayList(CargoPackage.eINSTANCE.getCargoModel_VesselAvailabilities()), editorPart.getAdapterFactory(), editorPart.getModelReference());
-
-			eventViewerPane = new VesselEventViewerPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
-			eventViewerPane.createControl(sash);
-			eventViewerPane.init(Lists.newArrayList(CargoPackage.eINSTANCE.getCargoModel_VesselEvents()), editorPart.getAdapterFactory(), editorPart.getModelReference());
-
-			vesselViewerPane.getViewer().setInput(modelObject);
-			eventViewerPane.getViewer().setInput(modelObject);
-
-			eventPage = editorPart.addPage(sash);
-			editorPart.setPageText(eventPage, "Fleet");
+			paperDealsPage = editorPart.addPage(paperDealsPane.getControl());
+			editorPart.setPageText(paperDealsPage, "Paper");
 
 		}
-		if (!modelObject.getCharterInMarketOverrides().isEmpty()) {
+	}
 
-			marketOverrideViewerPane = new MarketOverrideViewerPane_Editor(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
-			marketOverrideViewerPane.createControl(parent);
-			marketOverrideViewerPane.init(Lists.newArrayList(CargoPackage.eINSTANCE.getCargoModel_CharterInMarketOverrides()), editorPart.getAdapterFactory(), editorPart.getModelReference());
-
-			marketOverrideViewerPane.getViewer().setInput(modelObject);
-
-			overridePage = editorPart.addPage(marketOverrideViewerPane.getControl());
-			editorPart.setPageText(overridePage, "Overrides");
-		}
-
+	private void initialiseInventoryViewer(final Composite parent) {
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_INVENTORY_MODEL)) {
 
 			// TODO: Add/Remove facilities
@@ -311,22 +278,71 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			modelObject.eAdapters().add(inventoryListener);
 
 		}
+	}
 
-		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PAPER_DEALS)) {
-			paperDealsPane = new PaperDealsPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
-			paperDealsPane.createControl(parent);
-			paperDealsPane.init(Lists.newArrayList(CargoPackage.eINSTANCE.getCargoModel_PaperDeals()), editorPart.getAdapterFactory(), editorPart.getModelReference());
+	private void initialiseCharterMaketOverridesPage(final Composite parent) {
+		if (!modelObject.getCharterInMarketOverrides().isEmpty()) {
 
-			paperDealsPane.getViewer().setInput(modelObject);
+			marketOverrideViewerPane = new MarketOverrideViewerPane_Editor(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+			marketOverrideViewerPane.createControl(parent);
+			marketOverrideViewerPane.init(Lists.newArrayList(CargoPackage.eINSTANCE.getCargoModel_CharterInMarketOverrides()), editorPart.getAdapterFactory(), editorPart.getModelReference());
 
-			paperDealsPage = editorPart.addPage(paperDealsPane.getControl());
-			editorPart.setPageText(paperDealsPage, "Paper");
+			marketOverrideViewerPane.getViewer().setInput(modelObject);
 
+			overridePage = editorPart.addPage(marketOverrideViewerPane.getControl());
+			editorPart.setPageText(overridePage, "Overrides");
 		}
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(tradesViewer.getControl(), "com.mmxlabs.lingo.doc.Editor_Trades");
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(vesselViewerPane.getControl(), "com.mmxlabs.lingo.doc.Editor_Fleet");
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(eventViewerPane.getControl(), "com.mmxlabs.lingo.doc.Editor_Fleet");
+	}
 
+	private void initialiseFleetPage(final Composite parent) {
+		final SashForm sash = new SashForm(parent, SWT.VERTICAL);
+
+		vesselViewerPane = new VesselViewerPane_Editor(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+		vesselViewerPane.createControl(sash);
+		vesselViewerPane.init(Lists.newArrayList(CargoPackage.eINSTANCE.getCargoModel_VesselAvailabilities()), editorPart.getAdapterFactory(), editorPart.getModelReference());
+
+		eventViewerPane = new VesselEventViewerPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+		eventViewerPane.createControl(sash);
+		eventViewerPane.init(Lists.newArrayList(CargoPackage.eINSTANCE.getCargoModel_VesselEvents()), editorPart.getAdapterFactory(), editorPart.getModelReference());
+
+		vesselViewerPane.getViewer().setInput(modelObject);
+		eventViewerPane.getViewer().setInput(modelObject);
+
+		eventPage = editorPart.addPage(sash);
+		editorPart.setPageText(eventPage, "Fleet");
+	}
+
+	private void initialialiseTradesViewer(final Composite parent) {
+		if (!extensions.isEmpty()) {
+			IAlternativeEditorProvider provider = extensions.get(0);
+			this.tradesViewer = provider.init(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars(), parent, modelObject);
+			tradesViewerPageNumber = editorPart.addPage(tradesViewer.getControl());
+			editorPart.setPageText(tradesViewerPageNumber, "Trades");
+			currentEditorIndex = 0;
+			if (extensions.size() > 1) {
+				toggleAction = new RunnableAction("Toggle editor mode", () -> {
+					editorPart.setControl(tradesViewerPageNumber, null);
+
+					tradesViewer.getControl().dispose();
+					++currentEditorIndex;
+					if (currentEditorIndex >= extensions.size()) {
+						currentEditorIndex = 0;
+					}
+					IAlternativeEditorProvider provider2 = extensions.get(currentEditorIndex);
+					this.tradesViewer = provider2.init(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars(), parent, modelObject);
+
+					editorPart.setControl(tradesViewerPageNumber, tradesViewer.getControl());
+
+					tradesViewer.getToolBarManager().add(toggleAction);
+					tradesViewer.getToolBarManager().update(true);
+					tradesViewer.pack();
+				});
+				toggleAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.cargo.editor", "/icons/editormode.gif"));
+				tradesViewer.getToolBarManager().add(toggleAction);
+				tradesViewer.getToolBarManager().update(true);
+			}
+			this.tradesViewer.pack();
+		}
 	}
 
 	private void initialiseExtensions() {

@@ -65,6 +65,7 @@ import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyToClipboardActionFactory;
 import com.mmxlabs.rcp.common.actions.CopyTreeToClipboardAction;
+import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.rcp.common.actions.PackGridTreeColumnsAction;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
@@ -257,7 +258,6 @@ public class ScenarioTableViewerPane extends ScenarioViewerPane {
 	 */
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final ModelReference modelReference) {
 		scenarioViewer.init(adapterFactory, modelReference, path.toArray(new EReference[path.size()]));
-
 		scenarioViewer.setStatusProvider(getJointModelEditorPart().getStatusProvider());
 
 		final Grid table = scenarioViewer.getGrid();
@@ -358,5 +358,9 @@ public class ScenarioTableViewerPane extends ScenarioViewerPane {
 	public void refresh() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public void pack() {
+		PackActionFactory.createPackColumnsAction(scenarioViewer).run();
 	}
 }
