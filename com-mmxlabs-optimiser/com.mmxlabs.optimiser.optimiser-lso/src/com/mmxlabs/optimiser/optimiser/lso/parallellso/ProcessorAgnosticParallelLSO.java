@@ -159,34 +159,36 @@ public class ProcessorAgnosticParallelLSO extends LocalSearchOptimiser {
 			for (int futureIdx = 0; futureIdx < futures.size(); futureIdx++) {
 				LSOJobState state;
 				Future<LSOJobState> f = futures.get(futureIdx);
-				
+
 				try {
 					state = f.get();
 				} catch (final ExecutionException | InterruptedException e) {
 					throw new RuntimeException(e);
 				}
-				
+
 				getFitnessEvaluator().step();
 				++numberOfMovesTried;
 				++iterationsCompletedThisStep;
-				
+
 				logJobState(state);
-				
+
 				boolean accepted = getFitnessEvaluator().evaluateSequencesFromFitnessOnly(state.rawSequences, state.evaluationState, state.fullSequences, state.fitness);
-				
+
 				if (loggingDataStore != null && (numberOfMovesTried % loggingDataStore.getReportingInterval()) == 0) {
-					loggingDataStore.logProgress(numberOfMovesTried, numberOfMovesAccepted, numberOfMovesRejected, 0, 0, getFitnessEvaluator().getBestFitness(), getFitnessEvaluator().getCurrentFitness(),
-							new Date().getTime());
+					loggingDataStore.logProgress(numberOfMovesTried, numberOfMovesAccepted, numberOfMovesRejected, 0, 0, getFitnessEvaluator().getBestFitness(),
+							getFitnessEvaluator().getCurrentFitness(), new Date().getTime());
 				}
-				
+
 				if (accepted) {
 					numberOfMovesAccepted++;
 					sequenceWasAccepted = true;
 					// save state for new sequences
 					stateToUpdateTo = state.rawSequences;
-					
-					loggingDataStore.logSuccessfulMove(state.getMove(), numberOfMovesTried, getFitnessEvaluator().getLastFitness());
-					
+
+					if (loggingDataStore != null) {
+						loggingDataStore.logSuccessfulMove(state.getMove(), numberOfMovesTried, getFitnessEvaluator().getLastFitness());
+					}
+
 					failedInitialConstraintCheckers = false;
 					acceptedSeed = state.getSeed();
 					for (int cancelIdx = futureIdx + 1; cancelIdx < futures.size(); cancelIdx++) {
@@ -196,10 +198,11 @@ public class ProcessorAgnosticParallelLSO extends LocalSearchOptimiser {
 					break;
 				} else {
 					numberOfMovesRejected++;
-
-					loggingDataStore.logRejectedMove(state.getMove(), numberOfMovesTried, getFitnessEvaluator().getLastFitness());
+					if (loggingDataStore != null) {
+						loggingDataStore.logRejectedMove(state.getMove(), numberOfMovesTried, getFitnessEvaluator().getLastFitness());
+					}
 				}
-				
+
 				if (iterationsCompletedThisStep >= iterationsThisStep) {
 					incrementingRandomSeed.setSeed(state.getSeed());
 					break;
@@ -226,32 +229,32 @@ public class ProcessorAgnosticParallelLSO extends LocalSearchOptimiser {
 	private void logJobState(LSOJobState state) {
 		if (loggingDataStore != null) {
 			switch (state.getStatus()) {
-				case NullMoveFail: {
-					loggingDataStore.logNullMove(state.getMove());
-					break;
-				}
-				case CannotValidateFail: {
-					loggingDataStore.logFailedToValidateMove(state.getMove());
-					break;
-				}
-				case ConstraintFail: {
-					loggingDataStore.logFailedConstraints((IConstraintChecker) state.getFailedChecker(), state.getMove());
-					break;
-				}
-				case EvaluationProcessFail: {
-					break;
-				}
-				case EvaluatedConstraintFail: {
-					loggingDataStore.logFailedEvaluatedStateConstraints((IEvaluatedStateConstraintChecker) state.getFailedChecker(), state.getMove());
-					break;					
-				}
-				case Pass: {
-					loggingDataStore.logAppliedMove(state.getMove().getClass().getName());
-					break;
-				}
+			case NullMoveFail: {
+				loggingDataStore.logNullMove(state.getMove());
+				break;
+			}
+			case CannotValidateFail: {
+				loggingDataStore.logFailedToValidateMove(state.getMove());
+				break;
+			}
+			case ConstraintFail: {
+				loggingDataStore.logFailedConstraints((IConstraintChecker) state.getFailedChecker(), state.getMove());
+				break;
+			}
+			case EvaluationProcessFail: {
+				break;
+			}
+			case EvaluatedConstraintFail: {
+				loggingDataStore.logFailedEvaluatedStateConstraints((IEvaluatedStateConstraintChecker) state.getFailedChecker(), state.getMove());
+				break;
+			}
+			case Pass: {
+				loggingDataStore.logAppliedMove(state.getMove().getClass().getName());
+				break;
+			}
 			}
 		}
-		
+
 	}
 
 	protected void initProgressLog() {
