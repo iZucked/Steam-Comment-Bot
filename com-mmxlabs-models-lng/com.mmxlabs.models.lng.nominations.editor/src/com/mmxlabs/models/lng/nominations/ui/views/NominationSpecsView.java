@@ -36,6 +36,7 @@ public class NominationSpecsView extends ScenarioTableViewerView<NominationSpecs
 					NominationsPackage.eINSTANCE.getNominationsModel_NominationSpecs() }),
 					getAdapterFactory(), getModelReference());
 			pane.getViewer().setInput(getRootObject());
+			pane.pack();
 		}	
 	}
 	
