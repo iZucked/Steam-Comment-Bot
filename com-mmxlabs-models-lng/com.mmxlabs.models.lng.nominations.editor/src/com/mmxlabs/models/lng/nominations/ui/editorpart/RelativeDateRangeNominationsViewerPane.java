@@ -74,8 +74,11 @@ import com.mmxlabs.models.ui.date.LocalDateTextFormatter;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerColumnProvider;
+import com.mmxlabs.models.ui.tabular.EObjectTableViewerSortingSupport;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
+import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
+import com.mmxlabs.models.ui.tabular.columngeneration.ColumnHandler;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.BooleanFlagAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.DateTimeAttributeManipulator;
@@ -297,8 +300,6 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 	
 	private NominationDatesToolbarEditor nominationDatesToolbarEditor;
 	
-	private RelativeDateRangeToolbarEditor relativeDateToolbarEditor;
-	
 	private boolean includeDone = false;
 	private boolean viewSelected = false;
 	private final List<Slot<?>> selectedSlots = new ArrayList<>();
@@ -309,6 +310,9 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 	
 	private final Map<Object, HashSet<Object>> equivalents = new HashMap<>();
 	private final Set<Object> contents = new HashSet<>();
+	
+	private GridViewerColumn nomineeIdColumn;
+	private GridViewerColumn dueDateColumn;
 	
 	public RelativeDateRangeNominationsViewerPane(final IWorkbenchPage page, final IWorkbenchPart part, @NonNull final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);
@@ -334,7 +338,7 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 				scenarioEditingLocation.getEditingDomain(), jointModelEditor);
 		toolbar.appendToGroup(EDIT_GROUP, nominationDatesToolbarEditor);
 		
-		relativeDateToolbarEditor = new RelativeDateRangeToolbarEditor(this, "nomination_relative_date_toolbar", jointModelEditor);
+		RelativeDateRangeToolbarEditor relativeDateToolbarEditor = new RelativeDateRangeToolbarEditor(this, "nomination_relative_date_toolbar", jointModelEditor);
 		toolbar.appendToGroup(EDIT_GROUP, relativeDateToolbarEditor);
 		
 		final Action refreshButton = new Action("Refresh", Action.AS_PUSH_BUTTON) {
@@ -374,7 +378,7 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 
 		this.getMenuManager().update(true);
 		
-		addTypicalColumn("Nominee Id", new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(
+		nomineeIdColumn = addTypicalColumn("Nominee Id", new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(
 				new BasicAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNomination_NomineeId(), jointModelEditor.getEditingDomain())));
 		addTypicalColumn("From", new StringAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNomination_NomineeId(), jointModelEditor.getEditingDomain()) {
 			@Override
@@ -446,7 +450,7 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 		});
 		addTypicalColumn("Nomination Type", new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(
 				new BasicAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNominationSpec_Type(), jointModelEditor.getEditingDomain())));
-		addTypicalColumn("Due Date", new DateTimeAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNomination_DueDate(), jointModelEditor.getEditingDomain()) {
+		dueDateColumn = addTypicalColumn("Due Date", new DateTimeAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNomination_DueDate(), jointModelEditor.getEditingDomain()) {
 			@Override
 			public boolean canEdit(final Object object) {
 				return false;
@@ -498,6 +502,10 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 				return NominationsModelUtils.getRemark(getScenarioModel(), (AbstractNomination) object);
 			}
 		});
+		
+		ScenarioTableViewer stv = this.getScenarioViewer();
+		stv.getSortingSupport().sortColumnsBy(nomineeIdColumn.getColumn());
+		stv.getSortingSupport().sortColumnsBy(dueDateColumn.getColumn());
 	}
 
 	/**
@@ -656,7 +664,7 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 				return true;
 			}
 		});
-				
+						
 		return viewer;
 	}
 	
