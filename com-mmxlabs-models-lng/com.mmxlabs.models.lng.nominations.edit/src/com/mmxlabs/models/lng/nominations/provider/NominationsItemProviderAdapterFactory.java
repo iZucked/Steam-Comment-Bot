@@ -211,6 +211,29 @@ public class NominationsItemProviderAdapterFactory extends NominationsAdapterFac
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.nominations.NominationsParameters} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected NominationsParametersItemProvider nominationsParametersItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.nominations.NominationsParameters}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createNominationsParametersAdapter() {
+		if (nominationsParametersItemProvider == null) {
+			nominationsParametersItemProvider = new NominationsParametersItemProvider(this);
+		}
+
+		return nominationsParametersItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -341,6 +364,7 @@ public class NominationsItemProviderAdapterFactory extends NominationsAdapterFac
 		if (slotNominationItemProvider != null) slotNominationItemProvider.dispose();
 		if (contractNominationItemProvider != null) contractNominationItemProvider.dispose();
 		if (contractNominationSpecItemProvider != null) contractNominationSpecItemProvider.dispose();
+		if (nominationsParametersItemProvider != null) nominationsParametersItemProvider.dispose();
 	}
 
 }

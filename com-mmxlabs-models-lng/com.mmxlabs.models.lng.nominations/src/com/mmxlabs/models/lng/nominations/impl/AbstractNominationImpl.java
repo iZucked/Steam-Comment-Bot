@@ -38,6 +38,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *   <li>{@link com.mmxlabs.models.lng.nominations.impl.AbstractNominationImpl#isDone <em>Done</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.nominations.impl.AbstractNominationImpl#getAlertDate <em>Alert Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.nominations.impl.AbstractNominationImpl#getSpecUuid <em>Spec Uuid</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.nominations.impl.AbstractNominationImpl#isDeleted <em>Deleted</em>}</li>
  * </ul>
  *
  * @generated
@@ -169,6 +170,26 @@ public abstract class AbstractNominationImpl extends AbstractNominationSpecImpl 
 	 * @ordered
 	 */
 	protected boolean specUuidESet;
+
+	/**
+	 * The default value of the '{@link #isDeleted() <em>Deleted</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isDeleted()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean DELETED_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isDeleted() <em>Deleted</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isDeleted()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean deleted = DELETED_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -391,6 +412,29 @@ public abstract class AbstractNominationImpl extends AbstractNominationSpecImpl 
 	 * @generated
 	 */
 	@Override
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setDeleted(boolean newDeleted) {
+		boolean oldDeleted = deleted;
+		deleted = newDeleted;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, NominationsPackage.ABSTRACT_NOMINATION__DELETED, oldDeleted, deleted));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case NominationsPackage.ABSTRACT_NOMINATION__NOMINEE_ID:
@@ -403,6 +447,8 @@ public abstract class AbstractNominationImpl extends AbstractNominationSpecImpl 
 				return getAlertDate();
 			case NominationsPackage.ABSTRACT_NOMINATION__SPEC_UUID:
 				return getSpecUuid();
+			case NominationsPackage.ABSTRACT_NOMINATION__DELETED:
+				return isDeleted();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -429,6 +475,9 @@ public abstract class AbstractNominationImpl extends AbstractNominationSpecImpl 
 				return;
 			case NominationsPackage.ABSTRACT_NOMINATION__SPEC_UUID:
 				setSpecUuid((String)newValue);
+				return;
+			case NominationsPackage.ABSTRACT_NOMINATION__DELETED:
+				setDeleted((Boolean)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -457,6 +506,9 @@ public abstract class AbstractNominationImpl extends AbstractNominationSpecImpl 
 			case NominationsPackage.ABSTRACT_NOMINATION__SPEC_UUID:
 				unsetSpecUuid();
 				return;
+			case NominationsPackage.ABSTRACT_NOMINATION__DELETED:
+				setDeleted(DELETED_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -479,6 +531,8 @@ public abstract class AbstractNominationImpl extends AbstractNominationSpecImpl 
 				return isSetAlertDate();
 			case NominationsPackage.ABSTRACT_NOMINATION__SPEC_UUID:
 				return isSetSpecUuid();
+			case NominationsPackage.ABSTRACT_NOMINATION__DELETED:
+				return deleted != DELETED_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -543,6 +597,8 @@ public abstract class AbstractNominationImpl extends AbstractNominationSpecImpl 
 		if (alertDateESet) result.append(alertDate); else result.append("<unset>");
 		result.append(", specUuid: ");
 		if (specUuidESet) result.append(specUuid); else result.append("<unset>");
+		result.append(", deleted: ");
+		result.append(deleted);
 		result.append(')');
 		return result.toString();
 	}

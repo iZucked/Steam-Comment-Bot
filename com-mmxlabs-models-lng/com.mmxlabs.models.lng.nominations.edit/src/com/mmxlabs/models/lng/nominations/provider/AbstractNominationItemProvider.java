@@ -54,6 +54,7 @@ public class AbstractNominationItemProvider extends AbstractNominationSpecItemPr
 			addDonePropertyDescriptor(object);
 			addAlertDatePropertyDescriptor(object);
 			addSpecUuidPropertyDescriptor(object);
+			addDeletedPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -169,6 +170,28 @@ public class AbstractNominationItemProvider extends AbstractNominationSpecItemPr
 	}
 
 	/**
+	 * This adds a property descriptor for the Deleted feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDeletedPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_AbstractNomination_deleted_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AbstractNomination_deleted_feature", "_UI_AbstractNomination_type"),
+				 NominationsPackage.Literals.ABSTRACT_NOMINATION__DELETED,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -200,6 +223,7 @@ public class AbstractNominationItemProvider extends AbstractNominationSpecItemPr
 			case NominationsPackage.ABSTRACT_NOMINATION__DONE:
 			case NominationsPackage.ABSTRACT_NOMINATION__ALERT_DATE:
 			case NominationsPackage.ABSTRACT_NOMINATION__SPEC_UUID:
+			case NominationsPackage.ABSTRACT_NOMINATION__DELETED:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

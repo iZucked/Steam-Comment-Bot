@@ -109,13 +109,22 @@ public interface NominationsPackage extends EPackage {
 	int NOMINATIONS_MODEL__NOMINATIONS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Nomination Parameters</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOMINATIONS_MODEL__NOMINATION_PARAMETERS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int NOMINATIONS_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int NOMINATIONS_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.nominations.impl.AbstractNominationSpecImpl <em>Abstract Nomination Spec</em>}' class.
@@ -535,13 +544,22 @@ public interface NominationsPackage extends EPackage {
 	int ABSTRACT_NOMINATION__SPEC_UUID = ABSTRACT_NOMINATION_SPEC_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Deleted</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_NOMINATION__DELETED = ABSTRACT_NOMINATION_SPEC_FEATURE_COUNT + 5;
+
+	/**
 	 * The number of structural features of the '<em>Abstract Nomination</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ABSTRACT_NOMINATION_FEATURE_COUNT = ABSTRACT_NOMINATION_SPEC_FEATURE_COUNT + 5;
+	int ABSTRACT_NOMINATION_FEATURE_COUNT = ABSTRACT_NOMINATION_SPEC_FEATURE_COUNT + 6;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.nominations.impl.SlotNominationImpl <em>Slot Nomination</em>}' class.
@@ -727,6 +745,15 @@ public interface NominationsPackage extends EPackage {
 	int SLOT_NOMINATION__SPEC_UUID = ABSTRACT_NOMINATION__SPEC_UUID;
 
 	/**
+	 * The feature id for the '<em><b>Deleted</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_NOMINATION__DELETED = ABSTRACT_NOMINATION__DELETED;
+
+	/**
 	 * The number of structural features of the '<em>Slot Nomination</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -889,6 +916,15 @@ public interface NominationsPackage extends EPackage {
 	int CONTRACT_NOMINATION__SPEC_UUID = ABSTRACT_NOMINATION__SPEC_UUID;
 
 	/**
+	 * The feature id for the '<em><b>Deleted</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_NOMINATION__DELETED = ABSTRACT_NOMINATION__DELETED;
+
+	/**
 	 * The number of structural features of the '<em>Contract Nomination</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1016,6 +1052,43 @@ public interface NominationsPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.nominations.impl.NominationsParametersImpl <em>Parameters</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.nominations.impl.NominationsParametersImpl
+	 * @see com.mmxlabs.models.lng.nominations.impl.NominationsPackageImpl#getNominationsParameters()
+	 * @generated
+	 */
+	int NOMINATIONS_PARAMETERS = 7;
+
+	/**
+	 * The feature id for the '<em><b>Start Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOMINATIONS_PARAMETERS__START_DATE = 0;
+
+	/**
+	 * The feature id for the '<em><b>End Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOMINATIONS_PARAMETERS__END_DATE = 1;
+
+	/**
+	 * The number of structural features of the '<em>Parameters</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOMINATIONS_PARAMETERS_FEATURE_COUNT = 2;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.nominations.DatePeriodPrior <em>Date Period Prior</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1023,7 +1096,7 @@ public interface NominationsPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.nominations.impl.NominationsPackageImpl#getDatePeriodPrior()
 	 * @generated
 	 */
-	int DATE_PERIOD_PRIOR = 7;
+	int DATE_PERIOD_PRIOR = 8;
 
 
 	/**
@@ -1034,7 +1107,7 @@ public interface NominationsPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.nominations.impl.NominationsPackageImpl#getSide()
 	 * @generated
 	 */
-	int SIDE = 8;
+	int SIDE = 9;
 
 
 	/**
@@ -1068,6 +1141,17 @@ public interface NominationsPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getNominationsModel_Nominations();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.nominations.NominationsModel#getNominationParameters <em>Nomination Parameters</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Nomination Parameters</em>'.
+	 * @see com.mmxlabs.models.lng.nominations.NominationsModel#getNominationParameters()
+	 * @see #getNominationsModel()
+	 * @generated
+	 */
+	EReference getNominationsModel_NominationParameters();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.nominations.AbstractNominationSpec <em>Abstract Nomination Spec</em>}'.
@@ -1295,6 +1379,49 @@ public interface NominationsPackage extends EPackage {
 	EAttribute getAbstractNomination_SpecUuid();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.nominations.AbstractNomination#isDeleted <em>Deleted</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Deleted</em>'.
+	 * @see com.mmxlabs.models.lng.nominations.AbstractNomination#isDeleted()
+	 * @see #getAbstractNomination()
+	 * @generated
+	 */
+	EAttribute getAbstractNomination_Deleted();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.nominations.NominationsParameters <em>Parameters</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Parameters</em>'.
+	 * @see com.mmxlabs.models.lng.nominations.NominationsParameters
+	 * @generated
+	 */
+	EClass getNominationsParameters();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.nominations.NominationsParameters#getStartDate <em>Start Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Start Date</em>'.
+	 * @see com.mmxlabs.models.lng.nominations.NominationsParameters#getStartDate()
+	 * @see #getNominationsParameters()
+	 * @generated
+	 */
+	EAttribute getNominationsParameters_StartDate();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.nominations.NominationsParameters#getEndDate <em>End Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>End Date</em>'.
+	 * @see com.mmxlabs.models.lng.nominations.NominationsParameters#getEndDate()
+	 * @see #getNominationsParameters()
+	 * @generated
+	 */
+	EAttribute getNominationsParameters_EndDate();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.nominations.DatePeriodPrior <em>Date Period Prior</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1361,6 +1488,14 @@ public interface NominationsPackage extends EPackage {
 		 * @generated
 		 */
 		EReference NOMINATIONS_MODEL__NOMINATIONS = eINSTANCE.getNominationsModel_Nominations();
+
+		/**
+		 * The meta object literal for the '<em><b>Nomination Parameters</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference NOMINATIONS_MODEL__NOMINATION_PARAMETERS = eINSTANCE.getNominationsModel_NominationParameters();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.nominations.impl.AbstractNominationSpecImpl <em>Abstract Nomination Spec</em>}' class.
@@ -1541,6 +1676,40 @@ public interface NominationsPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute ABSTRACT_NOMINATION__SPEC_UUID = eINSTANCE.getAbstractNomination_SpecUuid();
+
+		/**
+		 * The meta object literal for the '<em><b>Deleted</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ABSTRACT_NOMINATION__DELETED = eINSTANCE.getAbstractNomination_Deleted();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.nominations.impl.NominationsParametersImpl <em>Parameters</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.nominations.impl.NominationsParametersImpl
+		 * @see com.mmxlabs.models.lng.nominations.impl.NominationsPackageImpl#getNominationsParameters()
+		 * @generated
+		 */
+		EClass NOMINATIONS_PARAMETERS = eINSTANCE.getNominationsParameters();
+
+		/**
+		 * The meta object literal for the '<em><b>Start Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute NOMINATIONS_PARAMETERS__START_DATE = eINSTANCE.getNominationsParameters_StartDate();
+
+		/**
+		 * The meta object literal for the '<em><b>End Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute NOMINATIONS_PARAMETERS__END_DATE = eINSTANCE.getNominationsParameters_EndDate();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.nominations.DatePeriodPrior <em>Date Period Prior</em>}' enum.

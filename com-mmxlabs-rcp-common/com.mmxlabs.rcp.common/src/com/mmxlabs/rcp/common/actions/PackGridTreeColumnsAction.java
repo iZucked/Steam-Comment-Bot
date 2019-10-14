@@ -30,7 +30,7 @@ public class PackGridTreeColumnsAction extends Action {
 			for (final GridColumn c : columns) {
 				if (c.getResizeable()) {
 					c.pack();
-					c.setWidth(c.getWidth() + 4);
+					c.setWidth(c.getWidth() + 8);
 				}
 			}
 		}

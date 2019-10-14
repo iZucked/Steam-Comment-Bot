@@ -105,6 +105,10 @@ public class NominationsAdapterFactory extends AdapterFactoryImpl {
 				return createAbstractNominationAdapter();
 			}
 			@Override
+			public Adapter caseNominationsParameters(NominationsParameters object) {
+				return createNominationsParametersAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -227,6 +231,20 @@ public class NominationsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createAbstractNominationAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.nominations.NominationsParameters <em>Parameters</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.nominations.NominationsParameters
+	 * @generated
+	 */
+	public Adapter createNominationsParametersAdapter() {
 		return null;
 	}
 

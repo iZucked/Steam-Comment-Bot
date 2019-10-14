@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.nominations.ui.editorpart;
 import java.time.LocalDate;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jface.action.ControlContribution;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
@@ -17,13 +18,19 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+import com.mmxlabs.models.lng.nominations.NominationsFactory;
+import com.mmxlabs.models.lng.nominations.NominationsModel;
+import com.mmxlabs.models.lng.nominations.NominationsPackage;
+import com.mmxlabs.models.lng.nominations.NominationsParameters;
+import com.mmxlabs.models.lng.nominations.utils.NominationsModelUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.util.LimitWidgetHeightListener;
 
 public class RelativeDateRangeToolbarEditor extends ControlContribution {
 
-	private static final String FROM_START_STR = "from prompt start date.";
+	private static final String FROM_START_STR = "from start date.";
 	
 	private final AbstractNominationsViewerPane parent;
 	
@@ -72,10 +79,11 @@ public class RelativeDateRangeToolbarEditor extends ControlContribution {
 		
 		btn1M = createRangeModeButton(pparent, "1m", "1 month "+FROM_START_STR, RangeMode.OneMonth);
 		btn3M = createRangeModeButton(pparent, "3m", "3 month "+FROM_START_STR, RangeMode.ThreeMonth);
-		btnAll = createRangeModeButton(pparent, "All", "Display all "+FROM_START_STR, RangeMode.All);	
+		btnAll = createRangeModeButton(pparent, "All", "Display all", RangeMode.All);	
 		
 		//Set the default range mode button so user knows what the current range is set to, on opening the nominations view.
-		this.selectRangeModeButton(this.rangeMode);
+		//For now disable selection of buttons, as is complicated to maintain with From,To date range as well.
+		//this.selectRangeModeButton(this.rangeMode);
 		
 		return pparent;		
 	}
@@ -102,8 +110,12 @@ public class RelativeDateRangeToolbarEditor extends ControlContribution {
 				rangeMode = rangeModeOnClick;
 				
 				// Set the currently selected range mode button to be selected.
+				//For now disable selection of buttons, as is complicated to maintain with From,To date range as well.
 				selectRangeModeButton(rangeMode);
 		
+				// Set the end date to be x months from the start date.
+				setNominationParametersEndDate(rangeMode);
+				
 				// Get the nominations viewer pane to update.
 				parent.refresh();
 			}
@@ -128,20 +140,76 @@ public class RelativeDateRangeToolbarEditor extends ControlContribution {
 		}
 	}
 	
+	private void setNominationParametersEndDate(RangeMode rangeMode) {
+		NominationsParameters np = this.getNominationParameters();
+		
+		if (np.getStartDate() == null) {
+			np.setStartDate(this.getPromptStartDate());
+		}
+
+		switch (rangeMode) {
+		case OneMonth:
+			np.setEndDate(np.getStartDate().plusMonths(1));
+			break;
+
+		case ThreeMonth:
+			np.setEndDate(np.getStartDate().plusMonths(3));
+			break;
+
+		case All:
+			np.setStartDate(null);
+			np.setEndDate(null);
+			break;
+		}
+	} 
+
+	//For now we do not set any button to be selected, so this sets all buttons not to be selected.
 	private void setSelectedButton(Button btn) {
 		// Set other buttons to not be selected.
 		final Button[] btns = new Button[] { btn1M, btn3M, btnAll };
 		for (final Button otherBtn : btns) {
-			if (otherBtn != btn) {
+//			if (otherBtn != btn) {
 				otherBtn.setSelection(false);
-			}
+//			}
 		}
 		
 		// Set this one to be selected.
-		btn.setSelection(true);
+		//For now we do not set any button to be selected.
+		//btn.setSelection(true);
+	}
+	
+	private NominationsParameters getNominationParameters() {
+		final EObject scenario = this.jointModelEditor.getScenarioDataProvider().getScenario();
+		
+		if (scenario instanceof LNGScenarioModel) {
+			final LNGScenarioModel lngScenario = (LNGScenarioModel)scenario;
+			final NominationsModel nm = ScenarioModelUtil.findNominationsModel(lngScenario);
+			if (nm != null) {
+				NominationsParameters np = nm.getNominationParameters();
+				if (np != null) {
+					return np;
+				}
+				else {
+					np = NominationsFactory.eINSTANCE.createNominationsParameters();
+					nm.setNominationParameters(np);
+					return np;
+				}
+			}
+		}
+		
+		return null;
 	}
 	
 	public LocalDate getStartDate() {
+		return getNominationParameters().getStartDate();
+	}
+	
+	public LocalDate getEndDate() {
+		return getNominationParameters().getEndDate();
+	}
+	
+	
+	public LocalDate getPromptStartDate() {
 		final EObject scenario = this.jointModelEditor.getScenarioDataProvider().getScenario();
 		
 		if (scenario instanceof LNGScenarioModel) {
@@ -152,19 +220,7 @@ public class RelativeDateRangeToolbarEditor extends ControlContribution {
 			}
 		}
 		
-		return LocalDate.now();
-	}
-	
-	public LocalDate getEndDate() {
-		switch (rangeMode) {
-		case OneMonth:
-			return getStartDate().plusMonths(1);
-		case ThreeMonth:
-			return getStartDate().plusMonths(3);	
-		case All:
-		default:
-			return LocalDate.MAX;		
-		}
+		return LocalDate.MIN;
 	}
 	
 	public RangeMode getRangeMode() {

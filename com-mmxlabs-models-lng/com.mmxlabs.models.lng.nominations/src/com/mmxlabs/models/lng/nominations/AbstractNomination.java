@@ -22,6 +22,7 @@ import java.time.LocalDate;
  *   <li>{@link com.mmxlabs.models.lng.nominations.AbstractNomination#isDone <em>Done</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.nominations.AbstractNomination#getAlertDate <em>Alert Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.nominations.AbstractNomination#getSpecUuid <em>Spec Uuid</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.nominations.AbstractNomination#isDeleted <em>Deleted</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.nominations.NominationsPackage#getAbstractNomination()
@@ -239,5 +240,32 @@ public interface AbstractNomination extends AbstractNominationSpec {
 	 * @generated
 	 */
 	boolean isSetSpecUuid();
+
+	/**
+	 * Returns the value of the '<em><b>Deleted</b></em>' attribute.
+	 * The default value is <code>"false"</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Deleted</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Deleted</em>' attribute.
+	 * @see #setDeleted(boolean)
+	 * @see com.mmxlabs.models.lng.nominations.NominationsPackage#getAbstractNomination_Deleted()
+	 * @model default="false"
+	 * @generated
+	 */
+	boolean isDeleted();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.nominations.AbstractNomination#isDeleted <em>Deleted</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Deleted</em>' attribute.
+	 * @see #isDeleted()
+	 * @generated
+	 */
+	void setDeleted(boolean value);
 
 } // AbstractNomination

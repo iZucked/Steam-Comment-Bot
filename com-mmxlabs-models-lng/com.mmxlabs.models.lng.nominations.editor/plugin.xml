@@ -26,7 +26,15 @@
           id="com.mmxlabs.models.lng.nominations.editor.NominationSpecsCompositeFactory"
           inheritable="true">
     </displayCompositeFactory>
+    <!-- used for modifying layout of nomination specs editor. -->
+	<displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.nominations.AbstractNomination"
+          factory="com.mmxlabs.models.lng.nominations.ui.displaycomposites.AbstractNominationCompositeFactory"
+          id="com.mmxlabs.models.lng.nominations.editor.NominationCompositeFactory"
+          inheritable="true">
+    </displayCompositeFactory>
     </extension>
+    
     <extension
          point="com.mmxlabs.models.util.import.attributes">
       <attributeImporter
