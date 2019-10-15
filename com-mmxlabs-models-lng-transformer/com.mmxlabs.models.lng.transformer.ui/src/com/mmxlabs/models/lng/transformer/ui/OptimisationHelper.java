@@ -286,6 +286,24 @@ public final class OptimisationHelper {
 		// Permit the user to override the settings object. Use the previous settings as the initial value
 		if (promptUser) {
 			boolean forADP = scenario.getAdpModel() != null;
+			
+			//Do not allow optimisation if break even present in slots.
+			if (!forEvaluation && checkForBreakEven(scenario)) {
+				final String errMessage = "Optimisation is not possible with break-evens (?) present in price expressions.";
+				final Display display = PlatformUI.getWorkbench().getDisplay();
+				if (display != null) {
+					display.syncExec(new Runnable() {
+
+						@Override
+						public void run() {
+							MessageDialog.openError(display.getActiveShell(), "Unable to start optimisation", errMessage);
+						}
+					});
+				}
+				
+				return null;
+			}
+			
 			previousSettings = openUserDialog(scenario, forEvaluation, previousSettings, userSettings, promptOnlyIfOptionsEnabled, nameProvider, forADP);
 		}
 
@@ -348,7 +366,6 @@ public final class OptimisationHelper {
 			// dialog.addOption(DataSection.Controls, null, editingDomain, "Number of Iterations", copy, defaultSettings, DataType.PositiveInt,
 			// ParametersPackage.eINSTANCE.getOptimiserSettings_AnnealingSettings(), ParametersPackage.eINSTANCE.getAnnealingSettings_Iterations());
 			// optionAdded = true;
-
 			// Check period optimisation is permitted
 			// if (SecurityUtils.getSubject().isPermitted(KnownFeatures.FEATURE_OPTIMISATION_PERIOD)) {
 			{
@@ -1262,6 +1279,16 @@ public final class OptimisationHelper {
 		return copy;
 	}
 
+	private static boolean checkForBreakEven(final LNGScenarioModel lngScenarioModel) {
+		if (lngScenarioModel != null) {
+			return (checkBreakEvenInSlot(lngScenarioModel.getCargoModel().getLoadSlots()) || 
+					checkBreakEvenInSlot(lngScenarioModel.getCargoModel().getDischargeSlots()));
+		}
+		else {
+			return false;
+		}
+	}
+	
 	public static @NonNull OptimisationPlan transformUserSettings(@NonNull final UserSettings userSettings, @Nullable final String parameterMode, final LNGScenarioModel lngScenarioModel) {
 
 		final OptimisationPlan plan = ParametersFactory.eINSTANCE.createOptimisationPlan();
