@@ -289,7 +289,7 @@ public final class OptimisationHelper {
 			
 			//Do not allow optimisation if break even present in slots.
 			if (!forEvaluation && checkForBreakEven(scenario)) {
-				final String errMessage = "Optimisation is not possible with break-evens (?) present in price expressions.";
+				final String errMessage = "Optimisation does not support break-evens. Replace \"?\" in price expressions.";
 				final Display display = PlatformUI.getWorkbench().getDisplay();
 				if (display != null) {
 					display.syncExec(new Runnable() {
