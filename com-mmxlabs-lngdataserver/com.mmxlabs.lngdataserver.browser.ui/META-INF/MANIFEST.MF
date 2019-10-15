@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Dataserver Browser UI
 Bundle-SymbolicName: com.mmxlabs.lngdataserver.browser.ui;singleton:=true
-Bundle-Version: 4.7.20.RELEASE
+Bundle-Version: 4.7.21.qualifier
 Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  org.eclipse.ui.navigator;bundle-version="3.6.101",
