@@ -55,7 +55,8 @@ import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
 import com.mmxlabs.rcp.common.menus.SubLocalMenuHelper;
 
 /**
- * Class to organise insertion plans and optionally filter out related but "poorer" choices
+ * Class to organise insertion plans and optionally filter out related but
+ * "poorer" choices
  *
  */
 public class InsertionPlanGrouperAndFilter extends ViewerFilter {
@@ -379,14 +380,15 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 			for (final Map.Entry<ChangeSetMetadata, List<ChangeSetTableGroup>> e : grouper.entrySet()) {
 				final List<ChangeSetTableGroup> groups = e.getValue();
 				try {
-				Collections.sort(groups, (a, b) -> Long.compare(b.getDeltaMetrics().getPnlDelta(), a.getDeltaMetrics().getPnlDelta()));
+					Collections.sort(groups, (a, b) -> Long.compare(b.getDeltaMetrics().getPnlDelta(), a.getDeltaMetrics().getPnlDelta()));
 				} catch (NullPointerException ee) {
-					
+
 				}
 				boolean first = true;
 				double sortValue = 0.0;
 				for (final ChangeSetTableGroup g : groups) {
-					// Filter out no-change solutions. We can get here e.g. because of charter out generation.
+					// Filter out no-change solutions. We can get here e.g. because of charter out
+					// generation.
 					if (g.getComplexity() == 0) {
 						continue;
 					}
@@ -763,7 +765,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 				if (row.getLhsAfter() != null && row.getLhsAfter().getLoadSlot() == targetElement) {
 					if (row.isRhsSlot()) {
 						final Slot<?> discharge = row.getRhsAfter() != null ? row.getRhsAfter().getDischargeSlot() : null;
-						final Contract contract = discharge.getContract();
+						final Contract contract = discharge == null ? null : discharge.getContract();
 
 						if (discharge instanceof SpotSlot) {
 							final SpotSlot spotSlot = (SpotSlot) discharge;

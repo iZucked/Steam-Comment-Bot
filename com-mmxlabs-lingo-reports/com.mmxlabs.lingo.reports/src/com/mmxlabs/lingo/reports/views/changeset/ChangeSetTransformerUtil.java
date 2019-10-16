@@ -171,7 +171,8 @@ public final class ChangeSetTransformerUtil {
 	}
 
 	/**
-	 * Given a list of target {@link EObject}s, generate a {@link MappingModel} which can be used to compare against other {@link MappingModel}s
+	 * Given a list of target {@link EObject}s, generate a {@link MappingModel}
+	 * which can be used to compare against other {@link MappingModel}s
 	 * 
 	 * @param targets
 	 * @return
@@ -229,7 +230,8 @@ public final class ChangeSetTransformerUtil {
 					}
 				}
 
-				// Create a row for each pair of load and discharge slots in the cargo. This may lead to a row with only one slot
+				// Create a row for each pair of load and discharge slots in the cargo. This may
+				// lead to a row with only one slot
 				for (int i = 0; i < Math.max(loadAllocations.size(), dischargeAllocations.size()); ++i) {
 					final ChangeSetRowData row = ChangesetFactory.eINSTANCE.createChangeSetRowData();
 					group.getMembers().add(row);
@@ -245,9 +247,12 @@ public final class ChangeSetTransformerUtil {
 
 					if (i < loadAllocations.size()) {
 						final SlotAllocation loadAllocation = loadAllocations.get(i);
-						// We sometimes get class cast exceptions here. The SlotAllocation has the wrong SlotAllocationType.
-						// This is probably caused from schedule models pre-dating the SlotAllocationType. The purchase type appears to be used as default.
-						// We should add in migration into the relevant place to add it in (NOT CURRENT MIGRATION).
+						// We sometimes get class cast exceptions here. The SlotAllocation has the wrong
+						// SlotAllocationType.
+						// This is probably caused from schedule models pre-dating the
+						// SlotAllocationType. The purchase type appears to be used as default.
+						// We should add in migration into the relevant place to add it in (NOT CURRENT
+						// MIGRATION).
 						final LoadSlot slot = (LoadSlot) loadAllocation.getSlot();
 
 						final String key = ChangeSetTransformerUtil.getKeyName(loadAllocation);
@@ -356,15 +361,19 @@ public final class ChangeSetTransformerUtil {
 
 	public static @NonNull List<ChangeSetRow> generateChangeSetRows(final @NonNull MappingModel beforeMapping, final @NonNull MappingModel afterMapping) {
 
-		// Now start to generate the ChangeSetRows. There should be one for each Cargo, open position or other Vessel event.
+		// Now start to generate the ChangeSetRows. There should be one for each Cargo,
+		// open position or other Vessel event.
 
 		generateSimpleBindings(beforeMapping, afterMapping);
 		return generateRowData(beforeMapping, afterMapping);
 	}
 
 	/**
-	 * Bind the before and after state based on identical keys. For spot market slots which are not identical, but have exactly one free equivalent, bind them. (For example DES Sale market in Feb 2017
-	 * may use in stance 1 in the before state and instance 2 in the after state. This should be considered the same). This method sets the LHS/RHS links
+	 * Bind the before and after state based on identical keys. For spot market
+	 * slots which are not identical, but have exactly one free equivalent, bind
+	 * them. (For example DES Sale market in Feb 2017 may use in stance 1 in the
+	 * before state and instance 2 in the after state. This should be considered the
+	 * same). This method sets the LHS/RHS links
 	 * 
 	 * @param beforeMapping
 	 * @param afterMapping
@@ -381,7 +390,9 @@ public final class ChangeSetTransformerUtil {
 		rhsKeys.addAll(beforeMapping.rhsRowMap.keySet());
 		rhsKeys.addAll(afterMapping.rhsRowMap.keySet());
 
-		// Bind before and after data. For spots without a direct match, if there is exactly one other equivalent spot market option, bind to that. This could happen if the before used instance 1 and
+		// Bind before and after data. For spots without a direct match, if there is
+		// exactly one other equivalent spot market option, bind to that. This could
+		// happen if the before used instance 1 and
 		// the after used instance 2.
 		// Note - this should part should be a second pass.
 		final Set<String> tmp_lhsKeys = new HashSet<>(lhsKeys);
@@ -575,9 +586,12 @@ public final class ChangeSetTransformerUtil {
 						}
 					}
 					if (!foundSpotMatch) {
-						// TODO: This may need to be replicated above to the other cases e.g. spot loads.
-						// Try and find a match within the current group to link up to (head -> tail matching)
-						// This case can occur if we have two wiring groups both involving the same spot market/month combio
+						// TODO: This may need to be replicated above to the other cases e.g. spot
+						// loads.
+						// Try and find a match within the current group to link up to (head -> tail
+						// matching)
+						// This case can occur if we have two wiring groups both involving the same spot
+						// market/month combio
 						if (fromData.getDischargeSlot() instanceof SpotDischargeSlot) {
 							final String mKey = getMarketSlotKey((SpotDischargeSlot) fromData.getDischargeSlot());
 							final List<ChangeSetRowData> beforeDataList = beforeMapping.rhsRowMarketMap.get(mKey);
@@ -674,7 +688,8 @@ public final class ChangeSetTransformerUtil {
 			}
 		}
 
-		// TODO: I;ve fixed how the view looks. We need to test it. Make sure existing tests are not broken.
+		// TODO: I;ve fixed how the view looks. We need to test it. Make sure existing
+		// tests are not broken.
 		// Also need to update tests and make sure the output is as expected -
 
 		// Pass two - look for RHS cases not covered before. I.e. open discharges
@@ -1113,11 +1128,14 @@ public final class ChangeSetTransformerUtil {
 
 					if (event instanceof SlotVisit) {
 						final SlotVisit slotVisit = (SlotVisit) event;
-						if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
-							final CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
-							pnl += cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
-							lateness += LatenessUtils.getLatenessExcludingFlex(cargoAllocation);
-							violations += ScheduleModelKPIUtils.getCapacityViolationCount(cargoAllocation);
+						SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
+						if (slotAllocation != null && slotAllocation.getSlot() instanceof LoadSlot) {
+							final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
+							if (cargoAllocation != null) {
+								pnl += cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
+								lateness += LatenessUtils.getLatenessExcludingFlex(cargoAllocation);
+								violations += ScheduleModelKPIUtils.getCapacityViolationCount(cargoAllocation);
+							}
 						}
 					}
 
@@ -1138,7 +1156,8 @@ public final class ChangeSetTransformerUtil {
 			if (toSchedule.getOtherPNL() != null && toSchedule.getOtherPNL().getGroupProfitAndLoss() != null) {
 				pnl += toSchedule.getOtherPNL().getGroupProfitAndLoss().getProfitAndLoss();
 				lateness += LatenessUtils.getLatenessExcludingFlex(toSchedule.getOtherPNL());
-				// violations += ScheduleModelKPIUtils.getCapacityViolationCount(toSchedule.getOtherPNL());
+				// violations +=
+				// ScheduleModelKPIUtils.getCapacityViolationCount(toSchedule.getOtherPNL());
 
 			}
 		}
@@ -1158,11 +1177,14 @@ public final class ChangeSetTransformerUtil {
 					}
 					if (event instanceof SlotVisit) {
 						final SlotVisit slotVisit = (SlotVisit) event;
-						if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
-							final CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
-							pnl -= cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
-							lateness -= LatenessUtils.getLatenessExcludingFlex(cargoAllocation);
-							violations -= ScheduleModelKPIUtils.getCapacityViolationCount(cargoAllocation);
+						SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
+						if (slotAllocation != null && slotAllocation.getSlot() instanceof LoadSlot) {
+							final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
+							if (cargoAllocation != null) {
+								pnl -= cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
+								lateness -= LatenessUtils.getLatenessExcludingFlex(cargoAllocation);
+								violations -= ScheduleModelKPIUtils.getCapacityViolationCount(cargoAllocation);
+							}
 						}
 					}
 

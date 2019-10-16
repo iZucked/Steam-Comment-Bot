@@ -42,7 +42,8 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 
 /**
- * TODO: {@link #getSegmentStart(Event)} and {@link #getSegmentEnd(Event)} should be replaceable with the new {@link EventGrouping} interface.
+ * TODO: {@link #getSegmentStart(Event)} and {@link #getSegmentEnd(Event)}
+ * should be replaceable with the new {@link EventGrouping} interface.
  * 
  * @author sg
  *
@@ -50,7 +51,9 @@ import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 public class ScheduleModelUtils {
 
 	/**
-	 * Returns true if the event is the start of a sequence of events (and thus the prior events sequence ends) For example this could the Load up to the end of the voyage before another load.
+	 * Returns true if the event is the start of a sequence of events (and thus the
+	 * prior events sequence ends) For example this could the Load up to the end of
+	 * the voyage before another load.
 	 * 
 	 * @param event
 	 * @return
@@ -67,8 +70,11 @@ public class ScheduleModelUtils {
 		} else if (event instanceof EndEvent) {
 			return true;
 		} else if (event instanceof SlotVisit) {
-			if (((SlotVisit) event).getSlotAllocation().getSlot() instanceof LoadSlot) {
-				return true;
+			final SlotAllocation slotAllocation = ((SlotVisit) event).getSlotAllocation();
+			if (slotAllocation != null) {
+				if (slotAllocation.getSlot() instanceof LoadSlot) {
+					return true;
+				}
 			}
 		}
 		return false;
@@ -109,7 +115,8 @@ public class ScheduleModelUtils {
 	}
 
 	/**
-	 * Returns the total duration from start of this event to the start of the next segment.
+	 * Returns the total duration from start of this event to the start of the next
+	 * segment.
 	 * 
 	 * See {@link ScheduleModelUtils#isSegmentStart(Event)}
 	 * 
@@ -128,7 +135,8 @@ public class ScheduleModelUtils {
 	}
 
 	/**
-	 * Returns the main {@link Event} linked to the input. This could be a {@link LoadSlot} {@link SlotVisit}, or {@link VesselEventVisit} etc.
+	 * Returns the main {@link Event} linked to the input. This could be a
+	 * {@link LoadSlot} {@link SlotVisit}, or {@link VesselEventVisit} etc.
 	 * 
 	 * @param scheduleModelObject
 	 */
@@ -193,7 +201,8 @@ public class ScheduleModelUtils {
 	}
 
 	public static @Nullable Vessel getVessel(final @Nullable Sequence seq) {
-		if (seq == null) return null;
+		if (seq == null)
+			return null;
 		final VesselAvailability vesselAvailability = seq.getVesselAvailability();
 		if (vesselAvailability != null) {
 			return vesselAvailability.getVessel();
@@ -234,7 +243,7 @@ public class ScheduleModelUtils {
 		return false;
 	}
 
-	public static @Nullable ProfitAndLossContainer getProfitAndLossContainer(Object object) {
+	public static @Nullable ProfitAndLossContainer getProfitAndLossContainer(final Object object) {
 		ProfitAndLossContainer container = null;
 
 		if (object instanceof CargoAllocation //
@@ -253,7 +262,7 @@ public class ScheduleModelUtils {
 		}
 		return container;
 	}
-	
+
 	public static SlotAllocation getDischargeAllocation(final @NonNull CargoAllocation cargoAllocation) {
 		for (final SlotAllocation sa : cargoAllocation.getSlotAllocations()) {
 			if (sa.getSlot() instanceof DischargeSlot) {
@@ -262,7 +271,7 @@ public class ScheduleModelUtils {
 		}
 		return null;
 	}
-	
+
 	public static SlotAllocation getLoadAllocation(final @NonNull CargoAllocation cargoAllocation) {
 		for (final SlotAllocation sa : cargoAllocation.getSlotAllocations()) {
 			if (sa.getSlot() instanceof LoadSlot) {
@@ -271,7 +280,7 @@ public class ScheduleModelUtils {
 		}
 		return null;
 	}
-	
+
 	public static LoadSlot getLoadSlot(final Object allocation) {
 		LoadSlot slot = null;
 		if (allocation instanceof CargoAllocation) {
@@ -296,7 +305,7 @@ public class ScheduleModelUtils {
 		}
 		return slot;
 	}
-	
+
 	public static DischargeSlot getDischargeSlot(final Object allocation) {
 		DischargeSlot slot = null;
 		if (allocation instanceof CargoAllocation) {
@@ -321,22 +330,23 @@ public class ScheduleModelUtils {
 		}
 		return slot;
 	}
-	
-	public static String getLoadPortName(Object allocation) {
+
+	public static String getLoadPortName(final Object allocation) {
 		return getPortNameFromSlot(getLoadSlot(allocation));
 	}
-	
-	public static String getLoadPortFullName(Object allocation) {
+
+	public static String getLoadPortFullName(final Object allocation) {
 		return getPortFullNameFromSlot(getLoadSlot(allocation));
 	}
-	
-	public static String getDischargePortName(Object allocation) {
+
+	public static String getDischargePortName(final Object allocation) {
 		return getPortNameFromSlot(getDischargeSlot(allocation));
 	}
-	public static String getDischargePortFullName(Object allocation) {
+
+	public static String getDischargePortFullName(final Object allocation) {
 		return getPortFullNameFromSlot(getDischargeSlot(allocation));
 	}
-	
+
 	private static String getPortNameFromSlot(final Slot<?> slot) {
 		if (slot != null) {
 			if (slot.getPort() != null) {
@@ -349,7 +359,7 @@ public class ScheduleModelUtils {
 		}
 		return "";
 	}
-	
+
 	private static String getPortFullNameFromSlot(final Slot<?> slot) {
 		if (slot != null) {
 			if (slot.getPort() != null) {
@@ -359,28 +369,28 @@ public class ScheduleModelUtils {
 		}
 		return "";
 	}
-	
-	public static Port getLoadPort(Object allocation) {
+
+	public static Port getLoadPort(final Object allocation) {
 		return getPortFromSlot(getLoadSlot(allocation));
 	}
-	
-	public static Port getDischargePort(Object allocation) {
+
+	public static Port getDischargePort(final Object allocation) {
 		return getPortFromSlot(getDischargeSlot(allocation));
 	}
-	
+
 	private static Port getPortFromSlot(final Slot<?> slot) {
 		if (slot != null) {
 			return slot.getPort() != null ? slot.getPort() : null;
 		}
 		return null;
 	}
-	
-	public static Vessel getVesselFromAllocation(Object allocation) {
+
+	public static Vessel getVesselFromAllocation(final Object allocation) {
 		if (allocation instanceof CargoAllocation) {
 			final CargoAllocation cargoAllocation = (CargoAllocation) allocation;
 			return getVessel(cargoAllocation.getSequence());
 		}
 		return null;
 	}
-	
+
 }

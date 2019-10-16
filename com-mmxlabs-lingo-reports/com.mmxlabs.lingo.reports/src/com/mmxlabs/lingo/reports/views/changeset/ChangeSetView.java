@@ -132,6 +132,7 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.transformer.ui.analytics.EvaluateSolutionSetHelper;
 import com.mmxlabs.models.mmxcore.NamedObject;
@@ -632,13 +633,19 @@ public class ChangeSetView extends ViewPart {
 				selectedElements.add(rowData.getLoadSlot());
 				if (rowData.getLoadAllocation() != null) {
 					selectedElements.add(rowData.getLoadAllocation());
-					selectedElements.add(rowData.getLoadAllocation().getSlotVisit());
-					selectedElements.add(rowData.getLoadAllocation().getSlotVisit().getSequence());
+					SlotVisit slotVisit = rowData.getLoadAllocation().getSlotVisit();
+					selectedElements.add(slotVisit);
+					if (slotVisit != null) {
+						selectedElements.add(slotVisit.getSequence());
+					}
 				}
 				if (rowData.getDischargeAllocation() != null) {
 					selectedElements.add(rowData.getDischargeAllocation());
-					selectedElements.add(rowData.getDischargeAllocation().getSlotVisit());
-					selectedElements.add(rowData.getDischargeAllocation().getSlotVisit().getSequence());
+					SlotVisit slotVisit = rowData.getDischargeAllocation().getSlotVisit();
+					selectedElements.add(slotVisit);
+					if (slotVisit != null) {
+						selectedElements.add(slotVisit.getSequence());
+					}
 				}
 
 				selectedElements.add(rowData.getLhsGroupProfitAndLoss());
@@ -850,7 +857,8 @@ public class ChangeSetView extends ViewPart {
 			source.addDragListener(new BasicDragSource(viewer) {
 				@Override
 				public void dragStart(final DragSourceEvent event) {
-					// Grab selection now as the viewer selection can change (especially if it is also a drop target)
+					// Grab selection now as the viewer selection can change (especially if it is
+					// also a drop target)
 					final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
 					Object element = selection.getFirstElement();
 					if (element instanceof ChangeSetTableRow) {
@@ -1358,7 +1366,9 @@ public class ChangeSetView extends ViewPart {
 
 									// OtherPNL basePNL = ScheduleFactory.eINSTANCE.createOtherPNL();
 									// {
-									// ScheduleModelKPIUtils.updateOtherPNL(basePNL, sandboxResult.getBaseOption().getScheduleModel().getSchedule(), ScheduleModelKPIUtils.Mode.INCREMENT);
+									// ScheduleModelKPIUtils.updateOtherPNL(basePNL,
+									// sandboxResult.getBaseOption().getScheduleModel().getSchedule(),
+									// ScheduleModelKPIUtils.Mode.INCREMENT);
 									// }
 
 									final UUIDObject object = solution.getSolution();
@@ -1380,24 +1390,29 @@ public class ChangeSetView extends ViewPart {
 											}
 
 											// if (opt instanceof DualModeSolutionOption) {
-											// final DualModeSolutionOption dualModeSolutionOption = (DualModeSolutionOption) opt;
+											// final DualModeSolutionOption dualModeSolutionOption =
+											// (DualModeSolutionOption) opt;
 											//
-											// final SolutionOptionMicroCase base = dualModeSolutionOption.getMicroBaseCase();
+											// final SolutionOptionMicroCase base =
+											// dualModeSolutionOption.getMicroBaseCase();
 											// if (base != null) {
 											// // Re-evaluate from schedule
 											// ssHelper.processExtraData(base);
 											// ssHelper.processSolution(base.getScheduleModel());
 											// // (Experimental version) Re-evaluate from change specification)
-											// // helper.processSolution(base.getScheduleSpecification(), base.getScheduleModel());
+											// // helper.processSolution(base.getScheduleSpecification(),
+											// base.getScheduleModel());
 											// }
 											//
-											// final SolutionOptionMicroCase target = dualModeSolutionOption.getMicroTargetCase();
+											// final SolutionOptionMicroCase target =
+											// dualModeSolutionOption.getMicroTargetCase();
 											// if (target != null) {
 											// // Re-evaluate from schedule
 											// ssHelper.processExtraData(target);
 											// ssHelper.processSolution(target.getScheduleModel());
 											// // (Experimental version) Re-evaluate from change specification)
-											// // helper.processSolution(target.getScheduleSpecification(), target.getScheduleModel());
+											// // helper.processSolution(target.getScheduleSpecification(),
+											// target.getScheduleModel());
 											// }
 											//
 											// }
@@ -1520,7 +1535,8 @@ public class ChangeSetView extends ViewPart {
 			setViewMode(ViewMode.GENERIC, false);
 			setNewDataData(target, (monitor, targetSlotId) -> {
 				final OptimisationResultPlanTransformer transformer = new OptimisationResultPlanTransformer();
-				// Sorting by Group as the label provider uses the provided ordering for indexing
+				// Sorting by Group as the label provider uses the provided ordering for
+				// indexing
 				final ViewState viewState = new ViewState(transformer.createDataModel(target, (OptimisationResult) plan, monitor), SortMode.BY_GROUP);
 				viewState.lastSolution = solution;
 				return viewState;
@@ -1532,7 +1548,8 @@ public class ChangeSetView extends ViewPart {
 				insertionPlanFilter.setMaxComplexity(100);
 
 				final SandboxResult sandboxResult = (SandboxResult) plan;
-				// Sorting by Group as the label provider uses the provided ordering for indexing
+				// Sorting by Group as the label provider uses the provided ordering for
+				// indexing
 				final ViewState viewState = new ViewState(transformer.createDataModel(target, sandboxResult, monitor), SortMode.BY_PNL);
 				viewState.lastSolution = solution;
 				viewState.allTargetSlots.clear();
