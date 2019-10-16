@@ -134,9 +134,9 @@ public class NominationsModelUtils {
 		String from = "";
 
 		if (!nomination.isCounterparty()) {
-			from = NominationsModelUtils.getSeller(scenarioModel, nomination);
+			from = NominationsModelUtils.getEntity(scenarioModel, nomination);
 		} else {
-			from = NominationsModelUtils.getBuyer(scenarioModel, nomination);
+			from = NominationsModelUtils.getCounterparty(scenarioModel, nomination);
 		}
 		if (from != null) {
 			return from;
@@ -148,10 +148,10 @@ public class NominationsModelUtils {
 	public static String getTo(final LNGScenarioModel scenarioModel, final AbstractNomination nomination) {
 		String to = "";
 
-		if (nomination.isCounterparty()) {
-			to = NominationsModelUtils.getSeller(scenarioModel, nomination);
+		if (nomination.isCounterparty()) { //NB: for to, it is the entity if isCounterparty is set (different from getFrom() above).
+			to = NominationsModelUtils.getEntity(scenarioModel, nomination);
 		} else {
-			to = NominationsModelUtils.getBuyer(scenarioModel, nomination);
+			to = NominationsModelUtils.getCounterparty(scenarioModel, nomination);
 		}
 		if (to != null) {
 			return to;
@@ -160,39 +160,28 @@ public class NominationsModelUtils {
 		}
 	}
 
-	public static String getSeller(final LNGScenarioModel scenarioModel, final AbstractNomination nomination) {
+	public static String getEntity(final LNGScenarioModel scenarioModel, final AbstractNomination nomination) {
 		if (nomination.getNomineeId() != null) {
 			final Slot slot = findSlot(scenarioModel, nomination);
 			if (slot != null) {
-				if (slot instanceof DischargeSlot) {
-					final BaseLegalEntity entity = slot.getSlotOrDelegateEntity();
-					if (entity != null) {
-						return entity.getName();
-					}
-				} else {
-					return slot.getSlotOrDelegateCounterparty();
+				final BaseLegalEntity entity = slot.getSlotOrDelegateEntity();
+				if (entity != null) {
+					return entity.getName();
 				}
 			}
 		}
 		return null;
 	}
-
-	public static String getBuyer(final LNGScenarioModel scenarioModel, final AbstractNomination nomination) {
-		final String buyer = null;
+	
+	
+	public static String getCounterparty(final LNGScenarioModel scenarioModel, final AbstractNomination nomination) {
 		if (nomination.getNomineeId() != null) {
 			final Slot slot = findSlot(scenarioModel, nomination);
 			if (slot != null) {
-				if (slot instanceof LoadSlot) {
-					final BaseLegalEntity entity = slot.getSlotOrDelegateEntity();
-					if (entity != null) {
-						return entity.getName();
-					}
-				} else {
-					return slot.getSlotOrDelegateCounterparty();
-				}
+				return slot.getSlotOrDelegateCounterparty();
 			}
 		}
-		return buyer;
+		return null;
 	}
 
 	public static String getCN(final LNGScenarioModel scenarioModel, final AbstractNomination nomination) {
