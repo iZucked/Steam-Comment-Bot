@@ -74,6 +74,7 @@ public class ResetInitialSequencesStageImpl extends EObjectImpl implements Reset
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -83,6 +84,7 @@ public class ResetInitialSequencesStageImpl extends EObjectImpl implements Reset
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;

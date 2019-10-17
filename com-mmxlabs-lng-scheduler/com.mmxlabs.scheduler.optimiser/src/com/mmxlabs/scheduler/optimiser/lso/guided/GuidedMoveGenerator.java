@@ -22,7 +22,6 @@ import com.google.inject.Injector;
 import com.google.inject.Provider;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.components.ILookupManager;
-import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -99,8 +98,34 @@ public class GuidedMoveGenerator implements IMoveGenerator {
 	public IMove generateMove(final ISequences rawSequences, final ILookupManager lookupManager, final Random random) {
 
 		final GuideMoveGeneratorOptions options = GuideMoveGeneratorOptions.createDefault();
+		options.setStrictOptional(false);
+		
+		
+
+		final Random optionsRnd = random;
+		// For seed 0->4095 this will always return true, so kick it now it start introducing "more randomness"..
+		optionsRnd.nextBoolean();
+
+		// Set to true to do lateness and violation checks etc before returning a valid move.
+		options.setCheckingMove(false);
+		options.setExtendSearch(true);
+		// options.setStrictOptional(true);
+		options.setStrictOptional(optionsRnd.nextBoolean());
+		options.setCheckEvaluatedState(false);//optionsRnd.nextBoolean());
+		options.setIgnoreUsedElements(false);
+		options.setInsertCanRemove(true);
+		options.setNum_tries(5);
+
+
+		
 		providedRawSequences = lookupManager.getRawSequences();
 
+		List<ISequenceElement> allE = phaseOptimisationData.getSequenceElements().stream() //
+				.filter(e -> validElementTypes.contains(portTypeProvider.getPortType(e))) //
+				.collect(Collectors.toList());
+		
+		allTargetElements = Collections.singletonList(allE.get(random.nextInt(allE.size())));
+		
 		final long[] initialMetrics = evaluationHelper.evaluateState(providedRawSequences, sequenceManipulator.createManipulatedSequences(providedRawSequences), null, true,
 				options.isCheckEvaluatedState(), null, null);
 		final MoveResult p = generateMove(rawSequences, random, Collections.emptyList(), initialMetrics, options);
@@ -109,6 +134,7 @@ public class GuidedMoveGenerator implements IMoveGenerator {
 		}
 		return null;
 	}
+	
 
 	public static class MoveResult {
 		public MoveResult(final IMove move, final HintManager hintManager, final long[] metrics) {

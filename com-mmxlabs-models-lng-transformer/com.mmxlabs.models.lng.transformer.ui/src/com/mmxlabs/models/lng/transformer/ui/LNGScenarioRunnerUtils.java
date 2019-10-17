@@ -25,7 +25,7 @@ public class LNGScenarioRunnerUtils {
 
 	@NonNull
 	public static OptimisationPlan createDefaultOptimisationPlan() {
-		final OptimisationPlan optimisationPlan = ScenarioUtils.createDefaultOptimisationPlan();
+		final OptimisationPlan optimisationPlan = ScenarioUtils.createDefaultOptimisationPlan(false);
 		assert optimisationPlan != null;
 
 		return createExtendedSettings(optimisationPlan);
@@ -37,9 +37,11 @@ public class LNGScenarioRunnerUtils {
 	}
 
 	/**
-	 * Use the {@link IParameterModesRegistry} to extend and customise the existing settings object.
+	 * Use the {@link IParameterModesRegistry} to extend and customise the existing
+	 * settings object.
 	 * 
-	 * Extending adds in e.g. client specific constraints. Customising is intended to change settings such as iterations.
+	 * Extending adds in e.g. client specific constraints. Customising is intended
+	 * to change settings such as iterations.
 	 * 
 	 * @param optimiserSettings
 	 * @return

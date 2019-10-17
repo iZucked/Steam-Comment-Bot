@@ -27,6 +27,7 @@ import com.mmxlabs.lingo.its.verifier.OptimiserResultVerifier;
 import com.mmxlabs.lingo.its.verifier.SolutionData;
 import com.mmxlabs.lngdataserver.data.distances.DataConstants;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.parameters.OptimisationMode;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
@@ -97,8 +98,8 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
-		userSettings.setAdpOptimisation(false);
-		userSettings.setCleanStateOptimisation(false);
+		userSettings.setMode(OptimisationMode.SHORT_TERM);
+		userSettings.setCleanSlateOptimisation(false);
 
 		userSettings.setShippingOnly(true);
 		userSettings.setWithSpotCargoMarkets(true);

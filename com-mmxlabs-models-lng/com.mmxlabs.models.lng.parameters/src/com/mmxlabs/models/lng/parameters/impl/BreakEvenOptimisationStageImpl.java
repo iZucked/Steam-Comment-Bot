@@ -95,6 +95,7 @@ public class BreakEvenOptimisationStageImpl extends EObjectImpl implements Break
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -104,6 +105,7 @@ public class BreakEvenOptimisationStageImpl extends EObjectImpl implements Break
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -116,6 +118,7 @@ public class BreakEvenOptimisationStageImpl extends EObjectImpl implements Break
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public long getTargetProfitAndLoss() {
 		return targetProfitAndLoss;
 	}
@@ -125,6 +128,7 @@ public class BreakEvenOptimisationStageImpl extends EObjectImpl implements Break
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTargetProfitAndLoss(long newTargetProfitAndLoss) {
 		long oldTargetProfitAndLoss = targetProfitAndLoss;
 		targetProfitAndLoss = newTargetProfitAndLoss;

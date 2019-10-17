@@ -28,6 +28,7 @@ import com.mmxlabs.models.lng.parameters.InsertionOptimisationStage;
 import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
 import com.mmxlabs.models.lng.parameters.MultipleSolutionSimilarityOptimisationStage;
 import com.mmxlabs.models.lng.parameters.Objective;
+import com.mmxlabs.models.lng.parameters.OptimisationMode;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.OptimisationStage;
 import com.mmxlabs.models.lng.parameters.ParallelOptimisationStage;
@@ -173,6 +174,7 @@ public class ScenarioUtils {
 	public static UserSettings createDefaultUserSettings() {
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 
+		userSettings.setMode(OptimisationMode.SHORT_TERM);
 		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
 		userSettings.setShippingOnly(false);
@@ -472,7 +474,7 @@ public class ScenarioUtils {
 		ScenarioUtils.createOrUpdateAllObjectives(plan, VesselUtilisationFitnessCoreFactory.NAME, true, 1);
 		ScenarioUtils.createOrUpdateAllObjectives(plan, NonOptionalSlotFitnessCoreFactory.NAME, true, 24_000_000);
 	}
-	
+
 	private static int roundToInt(final double d) {
 		return (int) Math.ceil(d);
 	}

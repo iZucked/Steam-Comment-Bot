@@ -34,6 +34,7 @@ import com.mmxlabs.models.lng.parameters.ParallelHillClimbOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ParallelLocalSearchOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ParallelMultiobjectiveSimilarityOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ParallelMultipleSolutionSimilarityOptimisationStage;
+import com.mmxlabs.models.lng.parameters.ReduceSequencesStage;
 import com.mmxlabs.models.lng.parameters.ResetInitialSequencesStage;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.transformer.actionplan.LNGActionSetTransformerUnit;
@@ -41,6 +42,7 @@ import com.mmxlabs.models.lng.transformer.breakeven.BreakEvenTransformerUnit;
 import com.mmxlabs.models.lng.transformer.chain.ChainBuilder;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGHillClimbOptimiserTransformerUnit;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGLSOOptimiserTransformerUnit;
+import com.mmxlabs.models.lng.transformer.chain.impl.LNGReduceToBestSolutionUnit;
 import com.mmxlabs.models.lng.transformer.chain.impl.ResetInitialSequencesUnit;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.LightWeightSchedulerOptimiserUnit;
 import com.mmxlabs.models.lng.transformer.multisimilarity.LNGMultiObjectiveOptimiserTransformerUnit;
@@ -152,7 +154,6 @@ public class LNGScenarioChainUnitFactory {
 			return null;
 		} else if (template instanceof BreakEvenOptimisationStage) {
 			final BreakEvenOptimisationStage stage = (BreakEvenOptimisationStage) template;
-			long targetProfitAndLoss = stage.getTargetProfitAndLoss();
 			BreakEvenTransformerUnit.chain(builder, userSettings, stage, 100);
 			return null;
 		} else if (template instanceof HillClimbOptimisationStage) {
@@ -196,6 +197,9 @@ public class LNGScenarioChainUnitFactory {
 		} else if (template instanceof ResetInitialSequencesStage) {
 			ResetInitialSequencesStage stageSettings = (ResetInitialSequencesStage) template;
 			ResetInitialSequencesUnit.chain(builder, stageSettings.getName(), userSettings, stageSettings, 1);
+		} else if (template instanceof ReduceSequencesStage) {
+			final ReduceSequencesStage stageSettings = (ReduceSequencesStage) template;
+			LNGReduceToBestSolutionUnit.chain(builder, stageSettings.getName(), 1);
 		} else if (template instanceof InsertionOptimisationStage) {
 			// Currently we directly construct the chain up code, particularly due to the extra inputs required.
 			 return null;

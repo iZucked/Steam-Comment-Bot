@@ -71,67 +71,22 @@ public interface ParametersPackage extends EPackage {
 	int USER_SETTINGS = 0;
 
 	/**
-	 * The feature id for the '<em><b>Period Start Date</b></em>' attribute.
+	 * The feature id for the '<em><b>Mode</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS__PERIOD_START_DATE = 0;
+	int USER_SETTINGS__MODE = 0;
 
 	/**
-	 * The feature id for the '<em><b>Period End</b></em>' attribute.
+	 * The feature id for the '<em><b>Nominal Only</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS__PERIOD_END = 1;
-
-	/**
-	 * The feature id for the '<em><b>Shipping Only</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int USER_SETTINGS__SHIPPING_ONLY = 2;
-
-	/**
-	 * The feature id for the '<em><b>Generate Charter Outs</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int USER_SETTINGS__GENERATE_CHARTER_OUTS = 3;
-
-	/**
-	 * The feature id for the '<em><b>With Charter Length</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int USER_SETTINGS__WITH_CHARTER_LENGTH = 4;
-
-	/**
-	 * The feature id for the '<em><b>Charter Length Days</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int USER_SETTINGS__CHARTER_LENGTH_DAYS = 5;
-
-	/**
-	 * The feature id for the '<em><b>With Spot Cargo Markets</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int USER_SETTINGS__WITH_SPOT_CARGO_MARKETS = 6;
+	int USER_SETTINGS__NOMINAL_ONLY = 1;
 
 	/**
 	 * The feature id for the '<em><b>Build Action Sets</b></em>' attribute.
@@ -140,52 +95,25 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS__BUILD_ACTION_SETS = 7;
+	int USER_SETTINGS__BUILD_ACTION_SETS = 2;
 
 	/**
-	 * The feature id for the '<em><b>Similarity Mode</b></em>' attribute.
+	 * The feature id for the '<em><b>Period Start Date</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS__SIMILARITY_MODE = 8;
+	int USER_SETTINGS__PERIOD_START_DATE = 3;
 
 	/**
-	 * The feature id for the '<em><b>Nominal ADP</b></em>' attribute.
+	 * The feature id for the '<em><b>Period End</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS__NOMINAL_ADP = 9;
-
-	/**
-	 * The feature id for the '<em><b>Clean State Optimisation</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int USER_SETTINGS__CLEAN_STATE_OPTIMISATION = 10;
-
-	/**
-	 * The feature id for the '<em><b>Floating Days Limit</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int USER_SETTINGS__FLOATING_DAYS_LIMIT = 11;
-
-	/**
-	 * The feature id for the '<em><b>Adp Optimisation</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int USER_SETTINGS__ADP_OPTIMISATION = 12;
+	int USER_SETTINGS__PERIOD_END = 4;
 
 	/**
 	 * The feature id for the '<em><b>Dual Mode</b></em>' attribute.
@@ -194,7 +122,79 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS__DUAL_MODE = 13;
+	int USER_SETTINGS__DUAL_MODE = 5;
+
+	/**
+	 * The feature id for the '<em><b>Similarity Mode</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int USER_SETTINGS__SIMILARITY_MODE = 6;
+
+	/**
+	 * The feature id for the '<em><b>Shipping Only</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int USER_SETTINGS__SHIPPING_ONLY = 7;
+
+	/**
+	 * The feature id for the '<em><b>Generate Charter Outs</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int USER_SETTINGS__GENERATE_CHARTER_OUTS = 8;
+
+	/**
+	 * The feature id for the '<em><b>With Charter Length</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int USER_SETTINGS__WITH_CHARTER_LENGTH = 9;
+
+	/**
+	 * The feature id for the '<em><b>Charter Length Days</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int USER_SETTINGS__CHARTER_LENGTH_DAYS = 10;
+
+	/**
+	 * The feature id for the '<em><b>With Spot Cargo Markets</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int USER_SETTINGS__WITH_SPOT_CARGO_MARKETS = 11;
+
+	/**
+	 * The feature id for the '<em><b>Floating Days Limit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int USER_SETTINGS__FLOATING_DAYS_LIMIT = 12;
+
+	/**
+	 * The feature id for the '<em><b>Clean Slate Optimisation</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int USER_SETTINGS__CLEAN_SLATE_OPTIMISATION = 13;
 
 	/**
 	 * The number of structural features of the '<em>User Settings</em>' class.
@@ -989,6 +989,34 @@ public interface ParametersPackage extends EPackage {
 	int RESET_INITIAL_SEQUENCES_STAGE_FEATURE_COUNT = OPTIMISATION_STAGE_FEATURE_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.ReduceSequencesStageImpl <em>Reduce Sequences Stage</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.parameters.impl.ReduceSequencesStageImpl
+	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getReduceSequencesStage()
+	 * @generated
+	 */
+	int REDUCE_SEQUENCES_STAGE = 17;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDUCE_SEQUENCES_STAGE__NAME = OPTIMISATION_STAGE__NAME;
+
+	/**
+	 * The number of structural features of the '<em>Reduce Sequences Stage</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDUCE_SEQUENCES_STAGE_FEATURE_COUNT = OPTIMISATION_STAGE_FEATURE_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.InsertionOptimisationStageImpl <em>Insertion Optimisation Stage</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -996,7 +1024,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getInsertionOptimisationStage()
 	 * @generated
 	 */
-	int INSERTION_OPTIMISATION_STAGE = 17;
+	int INSERTION_OPTIMISATION_STAGE = 18;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1042,7 +1070,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getBreakEvenOptimisationStage()
 	 * @generated
 	 */
-	int BREAK_EVEN_OPTIMISATION_STAGE = 18;
+	int BREAK_EVEN_OPTIMISATION_STAGE = 19;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1079,7 +1107,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getSolutionBuilderSettings()
 	 * @generated
 	 */
-	int SOLUTION_BUILDER_SETTINGS = 19;
+	int SOLUTION_BUILDER_SETTINGS = 20;
 
 	/**
 	 * The feature id for the '<em><b>Constraint And Fitness Settings</b></em>' containment reference.
@@ -1107,7 +1135,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getMultipleSolutionSimilarityOptimisationStage()
 	 * @generated
 	 */
-	int MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE = 20;
+	int MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE = 21;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1162,7 +1190,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getParallelMultipleSolutionSimilarityOptimisationStage()
 	 * @generated
 	 */
-	int PARALLEL_MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE = 21;
+	int PARALLEL_MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE = 22;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1217,7 +1245,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getParallelHillClimbOptimisationStage()
 	 * @generated
 	 */
-	int PARALLEL_HILL_CLIMB_OPTIMISATION_STAGE = 22;
+	int PARALLEL_HILL_CLIMB_OPTIMISATION_STAGE = 23;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1272,7 +1300,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getParallelLocalSearchOptimisationStage()
 	 * @generated
 	 */
-	int PARALLEL_LOCAL_SEARCH_OPTIMISATION_STAGE = 23;
+	int PARALLEL_LOCAL_SEARCH_OPTIMISATION_STAGE = 24;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1327,7 +1355,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getMultiobjectiveSimilarityOptimisationStage()
 	 * @generated
 	 */
-	int MULTIOBJECTIVE_SIMILARITY_OPTIMISATION_STAGE = 24;
+	int MULTIOBJECTIVE_SIMILARITY_OPTIMISATION_STAGE = 25;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1382,7 +1410,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getParallelMultiobjectiveSimilarityOptimisationStage()
 	 * @generated
 	 */
-	int PARALLEL_MULTIOBJECTIVE_SIMILARITY_OPTIMISATION_STAGE = 25;
+	int PARALLEL_MULTIOBJECTIVE_SIMILARITY_OPTIMISATION_STAGE = 26;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1437,7 +1465,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getCleanStateOptimisationSettings()
 	 * @generated
 	 */
-	int CLEAN_STATE_OPTIMISATION_SETTINGS = 26;
+	int CLEAN_STATE_OPTIMISATION_SETTINGS = 27;
 
 	/**
 	 * The feature id for the '<em><b>Seed</b></em>' attribute.
@@ -1492,7 +1520,17 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getSimilarityMode()
 	 * @generated
 	 */
-	int SIMILARITY_MODE = 27;
+	int SIMILARITY_MODE = 28;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.OptimisationMode <em>Optimisation Mode</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.parameters.OptimisationMode
+	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getOptimisationMode()
+	 * @generated
+	 */
+	int OPTIMISATION_MODE = 29;
 
 
 	/**
@@ -1504,6 +1542,28 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getUserSettings();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.UserSettings#getMode <em>Mode</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Mode</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.UserSettings#getMode()
+	 * @see #getUserSettings()
+	 * @generated
+	 */
+	EAttribute getUserSettings_Mode();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.UserSettings#isNominalOnly <em>Nominal Only</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Nominal Only</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.UserSettings#isNominalOnly()
+	 * @see #getUserSettings()
+	 * @generated
+	 */
+	EAttribute getUserSettings_NominalOnly();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.UserSettings#getPeriodStartDate <em>Period Start Date</em>}'.
@@ -1594,39 +1654,6 @@ public interface ParametersPackage extends EPackage {
 	EAttribute getUserSettings_BuildActionSets();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.UserSettings#getSimilarityMode <em>Similarity Mode</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Similarity Mode</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.UserSettings#getSimilarityMode()
-	 * @see #getUserSettings()
-	 * @generated
-	 */
-	EAttribute getUserSettings_SimilarityMode();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.UserSettings#isNominalADP <em>Nominal ADP</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Nominal ADP</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.UserSettings#isNominalADP()
-	 * @see #getUserSettings()
-	 * @generated
-	 */
-	EAttribute getUserSettings_NominalADP();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.UserSettings#isCleanStateOptimisation <em>Clean State Optimisation</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Clean State Optimisation</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.UserSettings#isCleanStateOptimisation()
-	 * @see #getUserSettings()
-	 * @generated
-	 */
-	EAttribute getUserSettings_CleanStateOptimisation();
-
-	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.UserSettings#getFloatingDaysLimit <em>Floating Days Limit</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1638,15 +1665,15 @@ public interface ParametersPackage extends EPackage {
 	EAttribute getUserSettings_FloatingDaysLimit();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.UserSettings#isAdpOptimisation <em>Adp Optimisation</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.UserSettings#isCleanSlateOptimisation <em>Clean Slate Optimisation</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Adp Optimisation</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.UserSettings#isAdpOptimisation()
+	 * @return the meta object for the attribute '<em>Clean Slate Optimisation</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.UserSettings#isCleanSlateOptimisation()
 	 * @see #getUserSettings()
 	 * @generated
 	 */
-	EAttribute getUserSettings_AdpOptimisation();
+	EAttribute getUserSettings_CleanSlateOptimisation();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.UserSettings#isDualMode <em>Dual Mode</em>}'.
@@ -1658,6 +1685,17 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getUserSettings_DualMode();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.UserSettings#getSimilarityMode <em>Similarity Mode</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Similarity Mode</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.UserSettings#getSimilarityMode()
+	 * @see #getUserSettings()
+	 * @generated
+	 */
+	EAttribute getUserSettings_SimilarityMode();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.Objective <em>Objective</em>}'.
@@ -2119,6 +2157,16 @@ public interface ParametersPackage extends EPackage {
 	EClass getResetInitialSequencesStage();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.ReduceSequencesStage <em>Reduce Sequences Stage</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Reduce Sequences Stage</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.ReduceSequencesStage
+	 * @generated
+	 */
+	EClass getReduceSequencesStage();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.InsertionOptimisationStage <em>Insertion Optimisation Stage</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2393,6 +2441,16 @@ public interface ParametersPackage extends EPackage {
 	EAttribute getCleanStateOptimisationSettings_TabuSize();
 
 	/**
+	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.parameters.SimilarityMode <em>Similarity Mode</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Similarity Mode</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.SimilarityMode
+	 * @generated
+	 */
+	EEnum getSimilarityMode();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.CleanStateOptimisationSettings#getSeed <em>Seed</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2404,14 +2462,14 @@ public interface ParametersPackage extends EPackage {
 	EAttribute getCleanStateOptimisationSettings_Seed();
 
 	/**
-	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.parameters.SimilarityMode <em>Similarity Mode</em>}'.
+	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.parameters.OptimisationMode <em>Optimisation Mode</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for enum '<em>Similarity Mode</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.SimilarityMode
+	 * @return the meta object for enum '<em>Optimisation Mode</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.OptimisationMode
 	 * @generated
 	 */
-	EEnum getSimilarityMode();
+	EEnum getOptimisationMode();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -2444,6 +2502,22 @@ public interface ParametersPackage extends EPackage {
 		 * @generated
 		 */
 		EClass USER_SETTINGS = eINSTANCE.getUserSettings();
+
+		/**
+		 * The meta object literal for the '<em><b>Mode</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute USER_SETTINGS__MODE = eINSTANCE.getUserSettings_Mode();
+
+		/**
+		 * The meta object literal for the '<em><b>Nominal Only</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute USER_SETTINGS__NOMINAL_ONLY = eINSTANCE.getUserSettings_NominalOnly();
 
 		/**
 		 * The meta object literal for the '<em><b>Period Start Date</b></em>' attribute feature.
@@ -2510,30 +2584,6 @@ public interface ParametersPackage extends EPackage {
 		EAttribute USER_SETTINGS__BUILD_ACTION_SETS = eINSTANCE.getUserSettings_BuildActionSets();
 
 		/**
-		 * The meta object literal for the '<em><b>Similarity Mode</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute USER_SETTINGS__SIMILARITY_MODE = eINSTANCE.getUserSettings_SimilarityMode();
-
-		/**
-		 * The meta object literal for the '<em><b>Nominal ADP</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute USER_SETTINGS__NOMINAL_ADP = eINSTANCE.getUserSettings_NominalADP();
-
-		/**
-		 * The meta object literal for the '<em><b>Clean State Optimisation</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute USER_SETTINGS__CLEAN_STATE_OPTIMISATION = eINSTANCE.getUserSettings_CleanStateOptimisation();
-
-		/**
 		 * The meta object literal for the '<em><b>Floating Days Limit</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2542,12 +2592,12 @@ public interface ParametersPackage extends EPackage {
 		EAttribute USER_SETTINGS__FLOATING_DAYS_LIMIT = eINSTANCE.getUserSettings_FloatingDaysLimit();
 
 		/**
-		 * The meta object literal for the '<em><b>Adp Optimisation</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Clean Slate Optimisation</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute USER_SETTINGS__ADP_OPTIMISATION = eINSTANCE.getUserSettings_AdpOptimisation();
+		EAttribute USER_SETTINGS__CLEAN_SLATE_OPTIMISATION = eINSTANCE.getUserSettings_CleanSlateOptimisation();
 
 		/**
 		 * The meta object literal for the '<em><b>Dual Mode</b></em>' attribute feature.
@@ -2556,6 +2606,14 @@ public interface ParametersPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute USER_SETTINGS__DUAL_MODE = eINSTANCE.getUserSettings_DualMode();
+
+		/**
+		 * The meta object literal for the '<em><b>Similarity Mode</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute USER_SETTINGS__SIMILARITY_MODE = eINSTANCE.getUserSettings_SimilarityMode();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.ObjectiveImpl <em>Objective</em>}' class.
@@ -2930,6 +2988,16 @@ public interface ParametersPackage extends EPackage {
 		EClass RESET_INITIAL_SEQUENCES_STAGE = eINSTANCE.getResetInitialSequencesStage();
 
 		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.ReduceSequencesStageImpl <em>Reduce Sequences Stage</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.parameters.impl.ReduceSequencesStageImpl
+		 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getReduceSequencesStage()
+		 * @generated
+		 */
+		EClass REDUCE_SEQUENCES_STAGE = eINSTANCE.getReduceSequencesStage();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.InsertionOptimisationStageImpl <em>Insertion Optimisation Stage</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -3162,14 +3230,6 @@ public interface ParametersPackage extends EPackage {
 		EAttribute CLEAN_STATE_OPTIMISATION_SETTINGS__TABU_SIZE = eINSTANCE.getCleanStateOptimisationSettings_TabuSize();
 
 		/**
-		 * The meta object literal for the '<em><b>Seed</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CLEAN_STATE_OPTIMISATION_SETTINGS__SEED = eINSTANCE.getCleanStateOptimisationSettings_Seed();
-
-		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.SimilarityMode <em>Similarity Mode</em>}' enum.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -3178,6 +3238,24 @@ public interface ParametersPackage extends EPackage {
 		 * @generated
 		 */
 		EEnum SIMILARITY_MODE = eINSTANCE.getSimilarityMode();
+
+		/**
+		 * The meta object literal for the '<em><b>Seed</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CLEAN_STATE_OPTIMISATION_SETTINGS__SEED = eINSTANCE.getCleanStateOptimisationSettings_Seed();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.OptimisationMode <em>Optimisation Mode</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.parameters.OptimisationMode
+		 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getOptimisationMode()
+		 * @generated
+		 */
+		EEnum OPTIMISATION_MODE = eINSTANCE.getOptimisationMode();
 
 	}
 

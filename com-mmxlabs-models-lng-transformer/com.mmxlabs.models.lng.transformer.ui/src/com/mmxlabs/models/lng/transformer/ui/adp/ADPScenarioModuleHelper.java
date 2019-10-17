@@ -42,6 +42,8 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 public class ADPScenarioModuleHelper {
+	private static final String KEY_EMPTY_SOLUTION = "EMPTY_SOLUTION";
+
 	private ADPScenarioModuleHelper() {
 
 	}
@@ -55,7 +57,6 @@ public class ADPScenarioModuleHelper {
 			private IVesselAvailability provideDefaultVessel(final ModelEntityMap modelEntityMap, final IVesselProvider vesselProvider, final IOptimisationData optimisationData) {
 
 				final CharterInMarket defaultMarket = adpModel.getFleetProfile().getDefaultNominalMarket();
-
 				final ISpotCharterInMarket market = modelEntityMap.getOptimiserObjectNullChecked(defaultMarket, ISpotCharterInMarket.class);
 
 				for (final IResource o_resource : optimisationData.getResources()) {
@@ -68,6 +69,7 @@ public class ADPScenarioModuleHelper {
 					}
 
 				}
+
 				throw new IllegalStateException();
 			}
 
@@ -88,7 +90,7 @@ public class ADPScenarioModuleHelper {
 
 			@Provides
 			@Singleton
-			@Named("EMPTY_SOLUTION")
+			@Named(KEY_EMPTY_SOLUTION)
 			private ISequences provideSequences(final Injector injector, final ModelEntityMap modelEntityMap, final IScenarioDataProvider scenarioDataProvider, final IOptimisationData data) {
 				final IModifiableSequences initialSequences = SequenceHelper.createEmptySequences(injector, data.getResources());
 				// Ensure they are cleared
@@ -112,7 +114,7 @@ public class ADPScenarioModuleHelper {
 			@Singleton
 			@Named(LNGInitialSequencesModule.KEY_GENERATED_RAW_SEQUENCES)
 			@Exposed
-			private ISequences provideInitialSequences(@Named("EMPTY_SOLUTION") final ISequences sequences) {
+			private ISequences provideInitialSequences(@Named(KEY_EMPTY_SOLUTION) final ISequences sequences) {
 				return sequences;
 			}
 
@@ -120,7 +122,7 @@ public class ADPScenarioModuleHelper {
 			@Singleton
 			@Named(LNGInitialSequencesModule.KEY_GENERATED_SOLUTION_PAIR)
 			@Exposed
-			private IMultiStateResult provideSolutionPair(@Named("EMPTY_SOLUTION") final ISequences sequences) {
+			private IMultiStateResult provideSolutionPair(@Named(KEY_EMPTY_SOLUTION) final ISequences sequences) {
 
 				return new MultiStateResult(sequences, new HashMap<>());
 			}

@@ -30,6 +30,7 @@ import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
 import com.mmxlabs.models.lng.parameters.MultiobjectiveSimilarityOptimisationStage;
 import com.mmxlabs.models.lng.parameters.MultipleSolutionSimilarityOptimisationStage;
 import com.mmxlabs.models.lng.parameters.Objective;
+import com.mmxlabs.models.lng.parameters.OptimisationMode;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.OptimisationStage;
 import com.mmxlabs.models.lng.parameters.ParallelHillClimbOptimisationStage;
@@ -40,6 +41,7 @@ import com.mmxlabs.models.lng.parameters.ParallelOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ParallisableOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
+import com.mmxlabs.models.lng.parameters.ReduceSequencesStage;
 import com.mmxlabs.models.lng.parameters.ResetInitialSequencesStage;
 import com.mmxlabs.models.lng.parameters.SimilarityInterval;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
@@ -165,6 +167,13 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass reduceSequencesStageEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass insertionOptimisationStageEClass = null;
 
 	/**
@@ -252,6 +261,13 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	private EEnum similarityModeEEnum = null;
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum optimisationModeEEnum = null;
+
+	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
 	 * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
 	 * package URI value.
@@ -332,7 +348,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * @generated
 	 */
 	@Override
-	public EAttribute getUserSettings_PeriodStartDate() {
+	public EAttribute getUserSettings_Mode() {
 		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -342,7 +358,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * @generated
 	 */
 	@Override
-	public EAttribute getUserSettings_PeriodEnd() {
+	public EAttribute getUserSettings_NominalOnly() {
 		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -352,17 +368,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * @generated
 	 */
 	@Override
-	public EAttribute getUserSettings_ShippingOnly() {
-		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getUserSettings_GenerateCharterOuts() {
+	public EAttribute getUserSettings_PeriodStartDate() {
 		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -371,7 +377,8 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getUserSettings_WithCharterLength() {
+	@Override
+	public EAttribute getUserSettings_PeriodEnd() {
 		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(4);
 	}
 
@@ -380,27 +387,8 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getUserSettings_CharterLengthDays() {
-		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(5);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
-	public EAttribute getUserSettings_WithSpotCargoMarkets() {
-		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(6);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getUserSettings_BuildActionSets() {
+	public EAttribute getUserSettings_ShippingOnly() {
 		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(7);
 	}
 
@@ -410,7 +398,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * @generated
 	 */
 	@Override
-	public EAttribute getUserSettings_SimilarityMode() {
+	public EAttribute getUserSettings_GenerateCharterOuts() {
 		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(8);
 	}
 
@@ -419,7 +407,8 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getUserSettings_NominalADP() {
+	@Override
+	public EAttribute getUserSettings_WithCharterLength() {
 		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(9);
 	}
 
@@ -429,7 +418,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * @generated
 	 */
 	@Override
-	public EAttribute getUserSettings_CleanStateOptimisation() {
+	public EAttribute getUserSettings_CharterLengthDays() {
 		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(10);
 	}
 
@@ -439,7 +428,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * @generated
 	 */
 	@Override
-	public EAttribute getUserSettings_FloatingDaysLimit() {
+	public EAttribute getUserSettings_WithSpotCargoMarkets() {
 		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(11);
 	}
 
@@ -448,7 +437,18 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getUserSettings_AdpOptimisation() {
+	@Override
+	public EAttribute getUserSettings_BuildActionSets() {
+		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getUserSettings_FloatingDaysLimit() {
 		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(12);
 	}
 
@@ -457,8 +457,29 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getUserSettings_DualMode() {
+	@Override
+	public EAttribute getUserSettings_CleanSlateOptimisation() {
 		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(13);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getUserSettings_DualMode() {
+		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getUserSettings_SimilarityMode() {
+		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -776,6 +797,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getCleanStateOptimisationStage_CleanStateSettings() {
 		return (EReference)cleanStateOptimisationStageEClass.getEStructuralFeatures().get(2);
 	}
@@ -895,6 +917,17 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public EClass getReduceSequencesStage() {
+		return reduceSequencesStageEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getInsertionOptimisationStage() {
 		return insertionOptimisationStageEClass;
 	}
@@ -904,6 +937,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getInsertionOptimisationStage_Iterations() {
 		return (EAttribute)insertionOptimisationStageEClass.getEStructuralFeatures().get(0);
 	}
@@ -1023,6 +1057,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getOptimisationPlan_ResultName() {
 		return (EAttribute)optimisationPlanEClass.getEStructuralFeatures().get(3);
 	}
@@ -1062,6 +1097,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getParallelMultipleSolutionSimilarityOptimisationStage() {
 		return parallelMultipleSolutionSimilarityOptimisationStageEClass;
 	}
@@ -1071,6 +1107,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getParallelHillClimbOptimisationStage() {
 		return parallelHillClimbOptimisationStageEClass;
 	}
@@ -1080,6 +1117,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getParallelLocalSearchOptimisationStage() {
 		return parallelLocalSearchOptimisationStageEClass;
 	}
@@ -1089,6 +1127,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getMultiobjectiveSimilarityOptimisationStage() {
 		return multiobjectiveSimilarityOptimisationStageEClass;
 	}
@@ -1098,6 +1137,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getParallelMultiobjectiveSimilarityOptimisationStage() {
 		return parallelMultiobjectiveSimilarityOptimisationStageEClass;
 	}
@@ -1107,6 +1147,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getCleanStateOptimisationSettings() {
 		return cleanStateOptimisationSettingsEClass;
 	}
@@ -1116,6 +1157,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getCleanStateOptimisationSettings_GlobalIterations() {
 		return (EAttribute)cleanStateOptimisationSettingsEClass.getEStructuralFeatures().get(1);
 	}
@@ -1125,6 +1167,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getCleanStateOptimisationSettings_LocalIterations() {
 		return (EAttribute)cleanStateOptimisationSettingsEClass.getEStructuralFeatures().get(2);
 	}
@@ -1134,17 +1177,9 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getCleanStateOptimisationSettings_TabuSize() {
 		return (EAttribute)cleanStateOptimisationSettingsEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getCleanStateOptimisationSettings_Seed() {
-		return (EAttribute)cleanStateOptimisationSettingsEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -1155,6 +1190,26 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	@Override
 	public EEnum getSimilarityMode() {
 		return similarityModeEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getCleanStateOptimisationSettings_Seed() {
+		return (EAttribute)cleanStateOptimisationSettingsEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EEnum getOptimisationMode() {
+		return optimisationModeEEnum;
 	}
 
 	/**
@@ -1187,20 +1242,20 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 
 		// Create classes and their features
 		userSettingsEClass = createEClass(USER_SETTINGS);
+		createEAttribute(userSettingsEClass, USER_SETTINGS__MODE);
+		createEAttribute(userSettingsEClass, USER_SETTINGS__NOMINAL_ONLY);
+		createEAttribute(userSettingsEClass, USER_SETTINGS__BUILD_ACTION_SETS);
 		createEAttribute(userSettingsEClass, USER_SETTINGS__PERIOD_START_DATE);
 		createEAttribute(userSettingsEClass, USER_SETTINGS__PERIOD_END);
+		createEAttribute(userSettingsEClass, USER_SETTINGS__DUAL_MODE);
+		createEAttribute(userSettingsEClass, USER_SETTINGS__SIMILARITY_MODE);
 		createEAttribute(userSettingsEClass, USER_SETTINGS__SHIPPING_ONLY);
 		createEAttribute(userSettingsEClass, USER_SETTINGS__GENERATE_CHARTER_OUTS);
 		createEAttribute(userSettingsEClass, USER_SETTINGS__WITH_CHARTER_LENGTH);
 		createEAttribute(userSettingsEClass, USER_SETTINGS__CHARTER_LENGTH_DAYS);
 		createEAttribute(userSettingsEClass, USER_SETTINGS__WITH_SPOT_CARGO_MARKETS);
-		createEAttribute(userSettingsEClass, USER_SETTINGS__BUILD_ACTION_SETS);
-		createEAttribute(userSettingsEClass, USER_SETTINGS__SIMILARITY_MODE);
-		createEAttribute(userSettingsEClass, USER_SETTINGS__NOMINAL_ADP);
-		createEAttribute(userSettingsEClass, USER_SETTINGS__CLEAN_STATE_OPTIMISATION);
 		createEAttribute(userSettingsEClass, USER_SETTINGS__FLOATING_DAYS_LIMIT);
-		createEAttribute(userSettingsEClass, USER_SETTINGS__ADP_OPTIMISATION);
-		createEAttribute(userSettingsEClass, USER_SETTINGS__DUAL_MODE);
+		createEAttribute(userSettingsEClass, USER_SETTINGS__CLEAN_SLATE_OPTIMISATION);
 
 		objectiveEClass = createEClass(OBJECTIVE);
 		createEAttribute(objectiveEClass, OBJECTIVE__WEIGHT);
@@ -1271,6 +1326,8 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 
 		resetInitialSequencesStageEClass = createEClass(RESET_INITIAL_SEQUENCES_STAGE);
 
+		reduceSequencesStageEClass = createEClass(REDUCE_SEQUENCES_STAGE);
+
 		insertionOptimisationStageEClass = createEClass(INSERTION_OPTIMISATION_STAGE);
 		createEAttribute(insertionOptimisationStageEClass, INSERTION_OPTIMISATION_STAGE__ITERATIONS);
 
@@ -1300,6 +1357,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 
 		// Create enums
 		similarityModeEEnum = createEEnum(SIMILARITY_MODE);
+		optimisationModeEEnum = createEEnum(OPTIMISATION_MODE);
 	}
 
 	/**
@@ -1350,6 +1408,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		hillClimbOptimisationStageEClass.getESuperTypes().add(this.getConstraintsAndFitnessSettingsStage());
 		actionPlanOptimisationStageEClass.getESuperTypes().add(this.getConstraintsAndFitnessSettingsStage());
 		resetInitialSequencesStageEClass.getESuperTypes().add(this.getOptimisationStage());
+		reduceSequencesStageEClass.getESuperTypes().add(this.getOptimisationStage());
 		insertionOptimisationStageEClass.getESuperTypes().add(this.getConstraintsAndFitnessSettingsStage());
 		breakEvenOptimisationStageEClass.getESuperTypes().add(this.getOptimisationStage());
 		multipleSolutionSimilarityOptimisationStageEClass.getESuperTypes().add(this.getLocalSearchOptimisationStage());
@@ -1361,20 +1420,20 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(userSettingsEClass, UserSettings.class, "UserSettings", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getUserSettings_Mode(), this.getOptimisationMode(), "mode", null, 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getUserSettings_NominalOnly(), ecorePackage.getEBoolean(), "nominalOnly", "false", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getUserSettings_BuildActionSets(), ecorePackage.getEBoolean(), "buildActionSets", "false", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUserSettings_PeriodStartDate(), theDateTimePackage.getLocalDate(), "periodStartDate", null, 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUserSettings_PeriodEnd(), theDateTimePackage.getYearMonth(), "periodEnd", null, 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getUserSettings_DualMode(), ecorePackage.getEBoolean(), "dualMode", null, 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getUserSettings_SimilarityMode(), this.getSimilarityMode(), "similarityMode", "OFF", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUserSettings_ShippingOnly(), ecorePackage.getEBoolean(), "shippingOnly", "false", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUserSettings_GenerateCharterOuts(), ecorePackage.getEBoolean(), "generateCharterOuts", "false", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUserSettings_WithCharterLength(), ecorePackage.getEBoolean(), "withCharterLength", "false", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUserSettings_CharterLengthDays(), ecorePackage.getEInt(), "charterLengthDays", "0", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUserSettings_WithSpotCargoMarkets(), ecorePackage.getEBoolean(), "withSpotCargoMarkets", "false", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getUserSettings_BuildActionSets(), ecorePackage.getEBoolean(), "buildActionSets", "false", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getUserSettings_SimilarityMode(), this.getSimilarityMode(), "similarityMode", "OFF", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getUserSettings_NominalADP(), ecorePackage.getEBoolean(), "nominalADP", "false", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getUserSettings_CleanStateOptimisation(), ecorePackage.getEBoolean(), "cleanStateOptimisation", "false", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUserSettings_FloatingDaysLimit(), ecorePackage.getEInt(), "floatingDaysLimit", "15", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getUserSettings_AdpOptimisation(), ecorePackage.getEBoolean(), "adpOptimisation", null, 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getUserSettings_DualMode(), ecorePackage.getEBoolean(), "dualMode", null, 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getUserSettings_CleanSlateOptimisation(), ecorePackage.getEBoolean(), "cleanSlateOptimisation", "false", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(objectiveEClass, Objective.class, "Objective", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getObjective_Weight(), ecorePackage.getEDouble(), "weight", null, 1, 1, Objective.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1446,6 +1505,8 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 
 		initEClass(resetInitialSequencesStageEClass, ResetInitialSequencesStage.class, "ResetInitialSequencesStage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
+		initEClass(reduceSequencesStageEClass, ReduceSequencesStage.class, "ReduceSequencesStage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
 		initEClass(insertionOptimisationStageEClass, InsertionOptimisationStage.class, "InsertionOptimisationStage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getInsertionOptimisationStage_Iterations(), ecorePackage.getEInt(), "iterations", null, 0, 1, InsertionOptimisationStage.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -1480,6 +1541,11 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		addEEnumLiteral(similarityModeEEnum, SimilarityMode.LOW);
 		addEEnumLiteral(similarityModeEEnum, SimilarityMode.MEDIUM);
 		addEEnumLiteral(similarityModeEEnum, SimilarityMode.HIGH);
+
+		initEEnum(optimisationModeEEnum, OptimisationMode.class, "OptimisationMode");
+		addEEnumLiteral(optimisationModeEEnum, OptimisationMode.SHORT_TERM);
+		addEEnumLiteral(optimisationModeEEnum, OptimisationMode.ADP);
+		addEEnumLiteral(optimisationModeEEnum, OptimisationMode.STRATEGIC);
 
 		// Create resource
 		createResource(eNS_URI);

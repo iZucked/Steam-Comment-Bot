@@ -88,6 +88,7 @@ public abstract class ConstraintsAndFitnessSettingsStageImpl extends EObjectImpl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -97,6 +98,7 @@ public abstract class ConstraintsAndFitnessSettingsStageImpl extends EObjectImpl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -109,6 +111,7 @@ public abstract class ConstraintsAndFitnessSettingsStageImpl extends EObjectImpl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ConstraintAndFitnessSettings getConstraintAndFitnessSettings() {
 		return constraintAndFitnessSettings;
 	}
@@ -133,6 +136,7 @@ public abstract class ConstraintsAndFitnessSettingsStageImpl extends EObjectImpl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setConstraintAndFitnessSettings(ConstraintAndFitnessSettings newConstraintAndFitnessSettings) {
 		if (newConstraintAndFitnessSettings != constraintAndFitnessSettings) {
 			NotificationChain msgs = null;

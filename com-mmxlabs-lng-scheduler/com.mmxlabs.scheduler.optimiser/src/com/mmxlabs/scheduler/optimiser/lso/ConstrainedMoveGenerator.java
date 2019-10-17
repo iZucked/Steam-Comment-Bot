@@ -13,6 +13,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Injector;
+import com.google.inject.Provider;
 import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
@@ -63,7 +64,8 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 	private SwapElementsInSequenceMoveGeneratorUnit swapElementsMoveGenerator;
 	private ElementSwapMoveGenerator elementSwapMoveGenerator;
 
-	private GuidedMoveGenerator guidedMoveGenerator;
+	@Inject
+	private Provider<GuidedMoveGenerator> guidedMoveGenerator;
 
 	// TODO: Inject
 	private final boolean enableSwapElementsMoveGenerator = false;
@@ -77,6 +79,9 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 	public static final String LSO_MOVES_SCMG = "CMG_LSOMovesSCGM";
 
 	public static final String LSO_MOVES_UnusedAndNominalMove = "CMG_Enable_UnusedAndNominalMove";
+	
+	public static final String LSO_MOVES_GUIDED = "CMG_EnabledGuided";
+
 
 	@com.google.inject.Inject(optional = true)
 	@Named(LSO_MOVES_SCMG)
@@ -94,13 +99,12 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 	@com.google.inject.Inject(optional = true)
 	@Named(LSO_MOVES_UnusedAndNominalMove)
 	private boolean enableNominalAndUnusedSlotMove = false;
+	
+	@com.google.inject.Inject(optional = true)
+	@Named(LSO_MOVES_GUIDED)
+	private boolean enableGuidedMoveGenerator = false;
 
-	@Inject
-	private IVesselProvider vesselProvider;
-
-	@Inject
-	private IPromptPeriodProvider promptPeriodProvider;
-
+ 
 	@Inject
 	public void init(@Named(OptimiserConstants.SEQUENCE_TYPE_INPUT) final ISequences inputRawSequences) {
 
@@ -150,6 +154,9 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 
 	@Override
 	public @Nullable IMove generateMove(@NonNull final ISequences rawSequences, @NonNull final ILookupManager stateManager, @NonNull final Random random) {
+		if (enableGuidedMoveGenerator && random.nextDouble() < 0.01) {
+			return guidedMoveGenerator.get().generateMove(rawSequences, stateManager, random);
+		}
 		if (enableNominalAndUnusedSlotMove && (random.nextDouble() < 0.05)) {
 			return targetedNominalAndUnusedMoveHandler.generateMove(rawSequences, stateManager, random);
 		}

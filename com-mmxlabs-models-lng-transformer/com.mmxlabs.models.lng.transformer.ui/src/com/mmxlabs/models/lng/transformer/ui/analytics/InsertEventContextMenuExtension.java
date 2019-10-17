@@ -155,7 +155,7 @@ public class InsertEventContextMenuExtension implements IVesselEventsTableContex
 			// Reset settings not supplied to the user
 			userSettings.setShippingOnly(false);
 			userSettings.setBuildActionSets(false);
-			userSettings.setCleanStateOptimisation(false);
+			userSettings.setCleanSlateOptimisation(false);
 			userSettings.setSimilarityMode(SimilarityMode.OFF);
 			final UserSettings pUserSettings = userSettings;
 

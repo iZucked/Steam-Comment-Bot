@@ -140,8 +140,8 @@ public class Activator extends ValidationPlugin {
 		final Injector inj = Guice.createInjector(Peaberry.osgiModule(context, EclipseRegistry.eclipseRegistry()), new ParameterModesExtensionModule(), new ExtensionConfigurationModule(null));
 		inj.injectMembers(this);
 
-		// optioniserConsoleService = context.registerService(CommandProvider.class, optioniserConsole, null);
-		// optimiserConsoleService = context.registerService(CommandProvider.class, optimiserConsole, null);
+		 optioniserConsoleService = context.registerService(CommandProvider.class, optioniserConsole, null);
+		 optimiserConsoleService = context.registerService(CommandProvider.class, optimiserConsole, null);
 	}
 
 	/*

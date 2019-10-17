@@ -64,6 +64,7 @@ public class ExportScheduleHelper {
 	public static @Nullable ScenarioInstance export(final ScenarioResult scenarioResult, @Nullable final String nameSuggestion, final boolean openScenario,
 			@Nullable final BiConsumer<LNGScenarioModel, Schedule> modelCustomiser) throws Exception {
 		// Original data
+
 		final LNGScenarioModel o_scenarioModel = scenarioResult.getTypedRoot(LNGScenarioModel.class);
 		final ScheduleModel o_scheduleModel = scenarioResult.getTypedResult(ScheduleModel.class);
 		final ScenarioInstance scenarioInstance = scenarioResult.getScenarioInstance();

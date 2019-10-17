@@ -8,6 +8,7 @@ import java.util.Iterator;
 
 import com.mmxlabs.models.lng.parameters.HillClimbOptimisationStage;
 import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
+import com.mmxlabs.models.lng.parameters.OptimisationMode;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.OptimisationStage;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
@@ -27,8 +28,8 @@ public class OptimisationEMFTestUtils {
 		userSettings.setShippingOnly(false);
 
 		userSettings.setWithSpotCargoMarkets(true);
-		userSettings.setAdpOptimisation(true);
-		userSettings.setCleanStateOptimisation(true);
+		userSettings.setMode(OptimisationMode.ADP);
+		userSettings.setCleanSlateOptimisation(true);
 
 		OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
 		optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(optimisationPlan);

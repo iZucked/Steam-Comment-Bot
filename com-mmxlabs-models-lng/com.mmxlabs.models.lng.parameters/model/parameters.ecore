@@ -3,10 +3,22 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="parameters" nsURI="http://www.mmxlabs.com/models/lng/parameters/1/"
     nsPrefix="lng.parameters">
   <eClassifiers xsi:type="ecore:EClass" name="UserSettings">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mode" eType="#//OptimisationMode"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nominalOnly" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="buildActionSets" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false">
+      <eAnnotations source="http://www.minimaxlabs.com/license/features/required">
+        <details key="module" value="actionplan"/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="periodStartDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"
         unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="periodEnd" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//YearMonth"
         unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dualMode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="similarityMode" eType="#//SimilarityMode"
+        defaultValueLiteral="OFF"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="shippingOnly" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
         defaultValueLiteral="false"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="generateCharterOuts" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
@@ -17,22 +29,10 @@
         defaultValueLiteral="0"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="withSpotCargoMarkets" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
         defaultValueLiteral="false"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="buildActionSets" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
-        defaultValueLiteral="false">
-      <eAnnotations source="http://www.minimaxlabs.com/license/features/required">
-        <details key="module" value="actionplan"/>
-      </eAnnotations>
-    </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="similarityMode" eType="#//SimilarityMode"
-        defaultValueLiteral="OFF"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nominalADP" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
-        defaultValueLiteral="false"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cleanStateOptimisation"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="floatingDaysLimit" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
         defaultValueLiteral="15"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="adpOptimisation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dualMode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cleanSlateOptimisation"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="SimilarityMode">
     <eLiterals name="ALL" literal="ALL"/>
@@ -142,6 +142,7 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ResetInitialSequencesStage" eSuperTypes="#//OptimisationStage"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ReduceSequencesStage" eSuperTypes="#//OptimisationStage"/>
   <eClassifiers xsi:type="ecore:EClass" name="InsertionOptimisationStage" eSuperTypes="#//ConstraintsAndFitnessSettingsStage">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="iterations" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
@@ -172,5 +173,10 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="tabuSize" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="OptimisationMode">
+    <eLiterals name="SHORT_TERM"/>
+    <eLiterals name="ADP" value="1"/>
+    <eLiterals name="STRATEGIC" value="2"/>
   </eClassifiers>
 </ecore:EPackage>

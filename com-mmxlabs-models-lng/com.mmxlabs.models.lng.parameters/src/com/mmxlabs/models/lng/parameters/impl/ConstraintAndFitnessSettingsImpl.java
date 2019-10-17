@@ -119,6 +119,7 @@ public class ConstraintAndFitnessSettingsImpl extends EObjectImpl implements Con
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Objective> getObjectives() {
 		if (objectives == null) {
 			objectives = new EObjectContainmentEList<Objective>(Objective.class, this, ParametersPackage.CONSTRAINT_AND_FITNESS_SETTINGS__OBJECTIVES);
@@ -131,6 +132,7 @@ public class ConstraintAndFitnessSettingsImpl extends EObjectImpl implements Con
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Constraint> getConstraints() {
 		if (constraints == null) {
 			constraints = new EObjectContainmentEList<Constraint>(Constraint.class, this, ParametersPackage.CONSTRAINT_AND_FITNESS_SETTINGS__CONSTRAINTS);
@@ -143,6 +145,7 @@ public class ConstraintAndFitnessSettingsImpl extends EObjectImpl implements Con
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getFloatingDaysLimit() {
 		return floatingDaysLimit;
 	}
@@ -152,6 +155,7 @@ public class ConstraintAndFitnessSettingsImpl extends EObjectImpl implements Con
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFloatingDaysLimit(int newFloatingDaysLimit) {
 		int oldFloatingDaysLimit = floatingDaysLimit;
 		floatingDaysLimit = newFloatingDaysLimit;
@@ -164,6 +168,7 @@ public class ConstraintAndFitnessSettingsImpl extends EObjectImpl implements Con
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SimilaritySettings getSimilaritySettings() {
 		return similaritySettings;
 	}
@@ -188,6 +193,7 @@ public class ConstraintAndFitnessSettingsImpl extends EObjectImpl implements Con
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSimilaritySettings(SimilaritySettings newSimilaritySettings) {
 		if (newSimilaritySettings != similaritySettings) {
 			NotificationChain msgs = null;

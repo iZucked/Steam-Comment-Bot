@@ -67,6 +67,7 @@ public class SolutionBuilderSettingsImpl extends EObjectImpl implements Solution
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ConstraintAndFitnessSettings getConstraintAndFitnessSettings() {
 		return constraintAndFitnessSettings;
 	}
@@ -91,6 +92,7 @@ public class SolutionBuilderSettingsImpl extends EObjectImpl implements Solution
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setConstraintAndFitnessSettings(ConstraintAndFitnessSettings newConstraintAndFitnessSettings) {
 		if (newConstraintAndFitnessSettings != constraintAndFitnessSettings) {
 			NotificationChain msgs = null;

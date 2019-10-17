@@ -7,6 +7,8 @@ package com.mmxlabs.models.lng.transformer.ui.headless;
 import java.io.File;
 import java.util.HashMap;
 
+import com.mmxlabs.models.lng.parameters.UserSettings;
+
 public class HeadlessApplicationOptions {
 	/**
 	 * The name of the scenario being run.
@@ -93,4 +95,6 @@ public class HeadlessApplicationOptions {
 		
 		return ScenarioFileFormat.UNRECOGNISED;
 	}
+	
+	public UserSettings userSettings;
 }

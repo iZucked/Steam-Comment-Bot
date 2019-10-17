@@ -22,6 +22,7 @@ import com.google.inject.Module;
 import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.ExtraDataProvider;
+import com.mmxlabs.models.lng.parameters.OptimisationMode;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -32,6 +33,7 @@ import com.mmxlabs.models.lng.transformer.chain.IChainRunner;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.adp.ADPScenarioModuleHelper;
+import com.mmxlabs.models.lng.transformer.ui.strategic.StrategicScenarioModuleHelper;
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.rcp.common.RunnerHelper;
@@ -126,7 +128,8 @@ public class LNGOptimisationBuilder {
 	}
 
 	/**
-	 * Add the {@link LNGTransformerHelper#HINT_OPTIMISE_LSO} hint and sets evaluationOnly to false.
+	 * Add the {@link LNGTransformerHelper#HINT_OPTIMISE_LSO} hint and sets
+	 * evaluationOnly to false.
 	 * 
 	 * @return
 	 */
@@ -136,7 +139,8 @@ public class LNGOptimisationBuilder {
 	}
 
 	/**
-	 * Flag indicating whether to run the default export stages or just return the {@link IMultiStateResult} without further processing.
+	 * Flag indicating whether to run the default export stages or just return the
+	 * {@link IMultiStateResult} without further processing.
 	 * 
 	 * @return
 	 */
@@ -180,7 +184,7 @@ public class LNGOptimisationBuilder {
 			}
 			hints = listHints.toArray(new String[listHints.size()]);
 
-			if (localOptimisationPlan.getUserSettings().isAdpOptimisation()) {
+			if (localOptimisationPlan.getUserSettings().getMode() == OptimisationMode.ADP) {
 				final ADPModel adpModel = ScenarioModelUtil.getADPModel(scenarioDataProvider);
 				if (adpModel == null) {
 					throw new IllegalStateException("No ADP Model for ADP optimisation");
@@ -189,10 +193,19 @@ public class LNGOptimisationBuilder {
 						.withModuleBindInstance(IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, ADPModel.class, adpModel)//
 						.withModuleOverride(IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, ADPScenarioModuleHelper.createExtraDataModule(adpModel))//
 				;
-				if (!evaluationOnly && localOptimisationPlan.getUserSettings().isCleanStateOptimisation()) {
+				if (!evaluationOnly && localOptimisationPlan.getUserSettings().isCleanSlateOptimisation()) {
 					serviceMaker.withModuleOverride(IOptimiserInjectorService.ModuleType.Module_InitialSolution, ADPScenarioModuleHelper.createEmptySolutionModule());
 				}
 				// FIXME: This replaces any local overrides!
+				optimiserInjectorService = serviceMaker.make(optimiserInjectorService);
+			} else if (localOptimisationPlan.getUserSettings().getMode() == OptimisationMode.STRATEGIC) {
+				final OptimiserInjectorServiceMaker serviceMaker = OptimiserInjectorServiceMaker.begin()//
+						.withModuleOverride(IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, StrategicScenarioModuleHelper.createExtraDataModule())//
+				;
+				
+				// IS this needed?
+//				serviceMaker.withModuleOverride(IOptimiserInjectorService.ModuleType.Module_InitialSolution, StrategicScenarioModuleHelper.createEmptySolutionModule());
+
 				optimiserInjectorService = serviceMaker.make(optimiserInjectorService);
 			}
 

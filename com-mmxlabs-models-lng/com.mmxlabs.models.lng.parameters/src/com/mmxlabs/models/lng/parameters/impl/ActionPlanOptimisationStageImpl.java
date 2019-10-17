@@ -115,6 +115,7 @@ public class ActionPlanOptimisationStageImpl extends ConstraintsAndFitnessSettin
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getTotalEvaluations() {
 		return totalEvaluations;
 	}
@@ -124,6 +125,7 @@ public class ActionPlanOptimisationStageImpl extends ConstraintsAndFitnessSettin
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTotalEvaluations(int newTotalEvaluations) {
 		int oldTotalEvaluations = totalEvaluations;
 		totalEvaluations = newTotalEvaluations;
@@ -136,6 +138,7 @@ public class ActionPlanOptimisationStageImpl extends ConstraintsAndFitnessSettin
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getInRunEvaluations() {
 		return inRunEvaluations;
 	}
@@ -145,6 +148,7 @@ public class ActionPlanOptimisationStageImpl extends ConstraintsAndFitnessSettin
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setInRunEvaluations(int newInRunEvaluations) {
 		int oldInRunEvaluations = inRunEvaluations;
 		inRunEvaluations = newInRunEvaluations;
@@ -157,6 +161,7 @@ public class ActionPlanOptimisationStageImpl extends ConstraintsAndFitnessSettin
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getSearchDepth() {
 		return searchDepth;
 	}
@@ -166,6 +171,7 @@ public class ActionPlanOptimisationStageImpl extends ConstraintsAndFitnessSettin
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSearchDepth(int newSearchDepth) {
 		int oldSearchDepth = searchDepth;
 		searchDepth = newSearchDepth;

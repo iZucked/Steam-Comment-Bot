@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lingo.its.tests.scenarios;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.DynamicContainer;

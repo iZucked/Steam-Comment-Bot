@@ -147,6 +147,10 @@ public class ParametersAdapterFactory extends AdapterFactoryImpl {
 				return createResetInitialSequencesStageAdapter();
 			}
 			@Override
+			public Adapter caseReduceSequencesStage(ReduceSequencesStage object) {
+				return createReduceSequencesStageAdapter();
+			}
+			@Override
 			public Adapter caseInsertionOptimisationStage(InsertionOptimisationStage object) {
 				return createInsertionOptimisationStageAdapter();
 			}
@@ -421,6 +425,20 @@ public class ParametersAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createResetInitialSequencesStageAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.parameters.ReduceSequencesStage <em>Reduce Sequences Stage</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.parameters.ReduceSequencesStage
+	 * @generated
+	 */
+	public Adapter createReduceSequencesStageAdapter() {
 		return null;
 	}
 

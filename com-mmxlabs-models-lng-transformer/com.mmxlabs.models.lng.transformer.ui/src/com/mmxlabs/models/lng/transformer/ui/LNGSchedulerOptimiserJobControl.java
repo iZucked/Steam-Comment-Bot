@@ -163,11 +163,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 
 	@Override
 	protected void reallyPrepare() {
-		// TODO: perform better check for clean state optimisation (e.g. check first stage?)
-		boolean isCleanStateOptimisation = jobDescriptor.getOptimisationPlan().getStages().stream()
-				.anyMatch(stage -> (stage instanceof CleanStateOptimisationStage));
-				
-		if (isCleanStateOptimisation == false) {
+		if (!jobDescriptor.getOptimisationPlan().getUserSettings().isCleanSlateOptimisation()) {
 			originalScenarioDataProvider.setLastEvaluationFailed(true);
 			scenarioRunner.evaluateInitialState();
 		}

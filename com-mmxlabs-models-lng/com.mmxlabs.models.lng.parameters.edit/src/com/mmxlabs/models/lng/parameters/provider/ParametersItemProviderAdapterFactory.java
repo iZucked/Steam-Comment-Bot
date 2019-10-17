@@ -389,6 +389,29 @@ public class ParametersItemProviderAdapterFactory extends ParametersAdapterFacto
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.parameters.ReduceSequencesStage} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ReduceSequencesStageItemProvider reduceSequencesStageItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.parameters.ReduceSequencesStage}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createReduceSequencesStageAdapter() {
+		if (reduceSequencesStageItemProvider == null) {
+			reduceSequencesStageItemProvider = new ReduceSequencesStageItemProvider(this);
+		}
+
+		return reduceSequencesStageItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.parameters.InsertionOptimisationStage} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -813,6 +836,7 @@ public class ParametersItemProviderAdapterFactory extends ParametersAdapterFacto
 		if (hillClimbOptimisationStageItemProvider != null) hillClimbOptimisationStageItemProvider.dispose();
 		if (actionPlanOptimisationStageItemProvider != null) actionPlanOptimisationStageItemProvider.dispose();
 		if (resetInitialSequencesStageItemProvider != null) resetInitialSequencesStageItemProvider.dispose();
+		if (reduceSequencesStageItemProvider != null) reduceSequencesStageItemProvider.dispose();
 		if (insertionOptimisationStageItemProvider != null) insertionOptimisationStageItemProvider.dispose();
 		if (breakEvenOptimisationStageItemProvider != null) breakEvenOptimisationStageItemProvider.dispose();
 		if (solutionBuilderSettingsItemProvider != null) solutionBuilderSettingsItemProvider.dispose();

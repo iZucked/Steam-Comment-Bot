@@ -471,7 +471,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		// Reset settings not supplied to the user
 		userSettings.setShippingOnly(false);
 		userSettings.setBuildActionSets(false);
-		userSettings.setCleanStateOptimisation(false);
+		userSettings.setCleanSlateOptimisation(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
 		final String pTaskName = taskName;
@@ -527,7 +527,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		// Reset settings not supplied to the user
 		userSettings.setShippingOnly(false);
 		userSettings.setBuildActionSets(false);
-		userSettings.setCleanStateOptimisation(false);
+		userSettings.setCleanSlateOptimisation(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
 		final String pTaskName = taskName;

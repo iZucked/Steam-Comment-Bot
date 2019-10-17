@@ -72,6 +72,7 @@ public class ParallisableOptimisationStageImpl extends EObjectImpl implements Pa
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -81,6 +82,7 @@ public class ParallisableOptimisationStageImpl extends EObjectImpl implements Pa
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;

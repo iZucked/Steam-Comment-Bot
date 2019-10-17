@@ -15,21 +15,26 @@
       <genEnumLiterals ecoreEnumLiteral="parameters.ecore#//SimilarityMode/MEDIUM"/>
       <genEnumLiterals ecoreEnumLiteral="parameters.ecore#//SimilarityMode/HIGH"/>
     </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="parameters.ecore#//OptimisationMode">
+      <genEnumLiterals ecoreEnumLiteral="parameters.ecore#//OptimisationMode/SHORT_TERM"/>
+      <genEnumLiterals ecoreEnumLiteral="parameters.ecore#//OptimisationMode/ADP"/>
+      <genEnumLiterals ecoreEnumLiteral="parameters.ecore#//OptimisationMode/STRATEGIC"/>
+    </genEnums>
     <genClasses ecoreClass="parameters.ecore#//UserSettings">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/mode"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/nominalOnly"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/buildActionSets"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/periodStartDate"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/periodEnd"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/dualMode"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/similarityMode"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/shippingOnly"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/generateCharterOuts"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/withCharterLength"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/charterLengthDays"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/withSpotCargoMarkets"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/buildActionSets"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/similarityMode"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/nominalADP"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/cleanStateOptimisation"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/floatingDaysLimit"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/adpOptimisation"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/dualMode"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/cleanSlateOptimisation"/>
     </genClasses>
     <genClasses ecoreClass="parameters.ecore#//Objective">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//Objective/weight"/>
@@ -103,6 +108,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//ActionPlanOptimisationStage/searchDepth"/>
     </genClasses>
     <genClasses ecoreClass="parameters.ecore#//ResetInitialSequencesStage"/>
+    <genClasses ecoreClass="parameters.ecore#//ReduceSequencesStage"/>
     <genClasses ecoreClass="parameters.ecore#//InsertionOptimisationStage">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//InsertionOptimisationStage/iterations"/>
     </genClasses>

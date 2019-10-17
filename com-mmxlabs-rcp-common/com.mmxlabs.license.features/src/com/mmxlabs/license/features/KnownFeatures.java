@@ -7,7 +7,8 @@ package com.mmxlabs.license.features;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
- * This really should not be here.... but a shared place to store feature constants.
+ * This really should not be here.... but a shared place to store feature
+ * constants.
  * 
  * @author Simon Goodall
  *
@@ -61,15 +62,18 @@ public final class KnownFeatures {
 	 * Enable Exposures calculations
 	 */
 	public static final String FEATURE_EXPOSURES = "features:exposures";
-	
+
 	public static final String FEATURE_INVENTORY_MODEL = "features:inventory-model";
-	
+
 	public static final String FEATURE_PAPER_DEALS = "features:paperdeals";
 
 	/**
 	 * Enable the charter length evaluation mode
 	 */
 	public static final String FEATURE_CHARTER_LENGTH = "features:charter-length";
+
+	public static final String FEATURE_ADP = "features:adp";
+	public static final String FEATURE_STRATEGIC = "features:optimisation-strategic";
 
 	// Experimental
 	public static final String FEATURE_TRADER_BASED_INSERIONS = "features:trader-based-insertions";
@@ -78,21 +82,21 @@ public final class KnownFeatures {
 	 * Enable break-even evaluations
 	 */
 	public static final String FEATURE_BREAK_EVENS = "features:break-evens";
-	
+
 	public static final String FEATURE_RE_EVALUATE_SOLUTIONS = "features:re-evaluate-solutions";
-	
+
 	public static final String FEATURE_SANDBOX = "features:sandbox";
-	
+
 	public static final String FEATURE_BREAK_EVEN_TABLE = "features:break-even-table";
 
 	public static final String FEATURE_NOMINATIONS = "features:nominations";
-		
+
 	public static final String FEATURE_OPEN_SLOT_EXPOSURE = "features:open-slot-exposure";
-	
+
 	public static final String FEATURE_PURGE = "features:purge";
-	
+
 	public static final String FEATURE_DATAHUB_BASECASE_ARCHIVE = "features:datahub-basecase-archive";
-	
+
 	public static final String FEATURE_DATAHUB_BASECASE_NOTES = "features:datahub-basecase-notes";
 	
 	public static final String FEATURE_DATAHUB_STARTUP_CHECK = "features:datahub-lingo-startup-check";

@@ -30,15 +30,19 @@ import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightW
 import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.sequenceoptimisers.metaheuristic.modules.LWSTabuOptimiserModule;
 
 public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOptimiser {
+
 	@Inject
 	@Named(LWSTabuOptimiserModule.GLOBAL_ITERATIONS)
 	private int iterations;
+
 	@Inject
 	@Named(LWSTabuOptimiserModule.TABU_LIST_SIZE)
 	private int maxAge;
+
 	@Inject
 	@Named(LWSTabuOptimiserModule.NEIGHBOURHOOD_ITERATIONS)
 	private int search;
+
 	@Inject
 	@Named(LWSTabuOptimiserModule.SEED)
 	private int seed;
@@ -102,7 +106,8 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 				}
 
 				// Create new candidate schedules
-				// TODO: not threadsafe. Cannot use a parallel stream due to the random object being reused.
+				// TODO: not threadsafe. Cannot use a parallel stream due to the random object
+				// being reused.
 				List<TabuSolution> tabuSolutions = getNewCandidateSolutions(currentSolution.schedule, unusedCargoes, usedCargoes, random, mapping);
 
 				// Evaluate solutions
@@ -174,7 +179,8 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 	}
 
 	/**
-	 * Applies pertubations to an initial solution TODO: not threadsafe. Cannot use a parallel stream due to the random object being reused.
+	 * Applies pertubations to an initial solution TODO: not threadsafe. Cannot use
+	 * a parallel stream due to the random object being reused.
 	 * 
 	 * @param schedule
 	 * @param unusedCargoes

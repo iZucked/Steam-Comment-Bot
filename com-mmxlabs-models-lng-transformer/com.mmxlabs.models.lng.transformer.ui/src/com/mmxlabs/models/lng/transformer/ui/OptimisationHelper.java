@@ -64,9 +64,12 @@ import com.mmxlabs.models.lng.parameters.HillClimbOptimisationStage;
 import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
 import com.mmxlabs.models.lng.parameters.MultipleSolutionSimilarityOptimisationStage;
 import com.mmxlabs.models.lng.parameters.Objective;
+import com.mmxlabs.models.lng.parameters.OptimisationMode;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
+import com.mmxlabs.models.lng.parameters.ParallelOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
+import com.mmxlabs.models.lng.parameters.ReduceSequencesStage;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.SimilaritySettings;
 import com.mmxlabs.models.lng.parameters.UserSettings;
@@ -142,9 +145,10 @@ public final class OptimisationHelper {
 	public static final String SWTBOT_WITH_SPOT_CARGO_MARKETS_ON = SWTBOT_WITH_SPOT_CARGO_MARKETS_PREFIX + ".On";
 	public static final String SWTBOT_WITH_SPOT_CARGO_MARKETS_OFF = SWTBOT_WITH_SPOT_CARGO_MARKETS_PREFIX + ".Off";
 
-	public static final String SWTBOT_ADP_PREFIX = "swtbot.adp";
-	public static final String SWTBOT_ADP_ON = SWTBOT_ADP_PREFIX + ".On";
-	public static final String SWTBOT_ADP_OFF = SWTBOT_ADP_PREFIX + ".Off";
+	public static final String SWTBOT_OPTIMISATION_MODE_PREFIX = "swtbot.optimisation.mode";
+	public static final String SWTBOT_OPTIMISATION_MODE_SHORT_TERM = SWTBOT_OPTIMISATION_MODE_PREFIX + ".SHORT_TERM";
+	public static final String SWTBOT_OPTIMISATION_MODE_ADP = SWTBOT_OPTIMISATION_MODE_PREFIX + ".ADP";
+	public static final String SWTBOT_OPTIMISATION_MODE_STRATEGIC = SWTBOT_OPTIMISATION_MODE_PREFIX + ".STRATEGIC";
 
 	public static final String SWTBOT_CLEAN_SLATE_PREFIX = "swtbot.cleanslate";
 	public static final String SWTBOT_CLEAN_SLATE_ON = SWTBOT_CLEAN_SLATE_PREFIX + ".On";
@@ -378,9 +382,16 @@ public final class OptimisationHelper {
 			// ParametersPackage.eINSTANCE.getAnnealingSettings_Iterations());
 			// optionAdded = true;
 
-			// Create optional ADP toggles
+			// Create optimisation mode
 			{
-				createADPOptimisationOptions(defaultSettings, editingDomain, scenario, dialog, copy, forADP, optionsAdded);
+				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_ADP) && forADP //
+						|| LicenseFeatures.isPermitted(KnownFeatures.FEATURE_STRATEGIC) //
+				) {
+					final OptionGroup group = dialog.createGroup(DataSection.General, "Mode");
+					createOptimisationModeOption(defaultSettings, editingDomain, scenario, dialog, copy, group, forADP, optionsAdded);
+				} else {
+					copy.setMode(OptimisationMode.SHORT_TERM);
+				}
 			}
 			{
 				createPeriodOptions(defaultSettings, editingDomain, dialog, copy, optionsAdded);
@@ -665,7 +676,11 @@ public final class OptimisationHelper {
 		final SimilarityMode similarityMode = userSettings.getSimilarityMode();
 
 		boolean shouldUseRestartingLSO = false;
-		if (userSettings.isAdpOptimisation()) { // ADP Optimisation
+		if (userSettings.getMode() == OptimisationMode.ADP) { // ADP Optimisation
+			baseConstraintAndFitnessSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.OFF, periodStartOrDefault, periodEndOrDefault));
+			shouldUseRestartingLSO = false;
+			userSettings.setBuildActionSets(false);
+		} else if (userSettings.getMode() == OptimisationMode.STRATEGIC) { // Strategic optimisation
 			baseConstraintAndFitnessSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.OFF, periodStartOrDefault, periodEndOrDefault));
 			shouldUseRestartingLSO = false;
 			userSettings.setBuildActionSets(false);
@@ -708,15 +723,18 @@ public final class OptimisationHelper {
 			}
 		}
 
-		if (userSettings.isCleanStateOptimisation()) {
+		if (userSettings.isCleanSlateOptimisation() || userSettings.getMode() == OptimisationMode.STRATEGIC) {
+			shouldUseRestartingLSO = false;
+			baseConstraintAndFitnessSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.OFF, periodStartOrDefault, periodEndOrDefault));
+
 			final CleanStateOptimisationStage stage = ScenarioUtils.createDefaultCleanStateParameters(EcoreUtil.copy(baseConstraintAndFitnessSettings));
 			stage.getAnnealingSettings().setEpochLength(epochLength);
 			plan.getStages().add(stage);
-			if (!userSettings.isNominalADP()) {
+			if (!userSettings.isNominalOnly()) {
 				plan.getStages().add(ParametersFactory.eINSTANCE.createResetInitialSequencesStage());
 			} else {
 				// Return here for Nominal only modes
-				if (userSettings.isAdpOptimisation()) {
+				if (userSettings.getMode()  == OptimisationMode.ADP) {
 					ScenarioUtils.createOrUpdateAllConstraints(plan, MinMaxSlotGroupConstraintCheckerFactory.NAME, true);
 					ScenarioUtils.createOrUpdateAllConstraints(plan, LadenIdleTimeConstraintCheckerFactory.NAME, true);
 					ScenarioUtils.createOrUpdateAllObjectives(plan, VesselUtilisationFitnessCoreFactory.NAME, true, 1);
@@ -726,20 +744,29 @@ public final class OptimisationHelper {
 			}
 		}
 		final boolean parallelise = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MODULE_PARALLELISATION);
-		if (similarityMode != SimilarityMode.OFF) {
-			final MultipleSolutionSimilarityOptimisationStage stage = ScenarioUtils.createDefaultMultipleSolutionSimilarityParameters(EcoreUtil.copy(baseConstraintAndFitnessSettings), parallelise);
-			stage.getAnnealingSettings().setEpochLength(epochLength);
-			stage.getAnnealingSettings().setRestarting(shouldUseRestartingLSO);
-			
-			final SimilaritySettings similaritySettings = stage.getConstraintAndFitnessSettings().getSimilaritySettings();
-			if (similaritySettings != null) {
-				 stage.getConstraintAndFitnessSettings().setSimilaritySettings(ScenarioUtils.createUnweightedSimilaritySettings());
-			}
-			
-			plan.getStages().add(stage);
-		} else {
-			// Normal LSO
+		if (userSettings.getMode() == OptimisationMode.STRATEGIC) { // Strategic optimiser
 			{
+				final int jobCount = 10;// 30
+				final LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(EcoreUtil.copy(baseConstraintAndFitnessSettings), false);
+
+				stage.getAnnealingSettings().setInitialTemperature(5_000_000);
+
+				stage.getAnnealingSettings().setEpochLength(1_000);
+				stage.getAnnealingSettings().setIterations(400_000);
+				stage.getAnnealingSettings().setRestarting(false);
+
+				final ParallelOptimisationStage<LocalSearchOptimisationStage> stage2 = ParametersFactory.eINSTANCE.createParallelOptimisationStage();
+				stage2.setJobCount(jobCount);
+				stage2.setTemplate(stage);
+				stage2.setName("lso");
+				plan.getStages().add(stage2);
+			}
+			{
+				final ReduceSequencesStage stage = ParametersFactory.eINSTANCE.createReduceSequencesStage();
+				stage.setName("reduce");
+				plan.getStages().add(stage);
+			}
+			{			
 				final LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(EcoreUtil.copy(baseConstraintAndFitnessSettings), parallelise);
 				stage.getAnnealingSettings().setEpochLength(epochLength);
 				stage.getAnnealingSettings().setRestarting(shouldUseRestartingLSO);
@@ -751,7 +778,49 @@ public final class OptimisationHelper {
 				stage.getAnnealingSettings().setEpochLength(epochLength);
 				plan.getStages().add(stage);
 			}
+//			{
+//				final ReduceSequencesStage stage = ParametersFactory.eINSTANCE.createReduceSequencesStage();
+//				stage.setName("reduce2");
+//				plan.getStages().add(stage);
+//			}
+		} else if (userSettings.getMode() == OptimisationMode.ADP) { // ADP optimiser
+			final LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(EcoreUtil.copy(baseConstraintAndFitnessSettings), parallelise);
+			stage.getAnnealingSettings().setEpochLength(epochLength);
+			stage.getAnnealingSettings().setRestarting(shouldUseRestartingLSO);			
+			plan.getStages().add(stage);
 
+			// Add in ADP constraints and objectives
+			ScenarioUtils.createOrUpdateAllConstraints(plan, MinMaxSlotGroupConstraintCheckerFactory.NAME, true);
+			ScenarioUtils.createOrUpdateAllConstraints(plan, LadenIdleTimeConstraintCheckerFactory.NAME, true);
+			ScenarioUtils.createOrUpdateAllObjectives(plan, VesselUtilisationFitnessCoreFactory.NAME, true, 1);
+			ScenarioUtils.createOrUpdateAllObjectives(plan, NonOptionalSlotFitnessCoreFactory.NAME, true, 24_000_000);
+		} else {
+			if (similarityMode != SimilarityMode.OFF) {
+				final MultipleSolutionSimilarityOptimisationStage stage = ScenarioUtils.createDefaultMultipleSolutionSimilarityParameters(EcoreUtil.copy(baseConstraintAndFitnessSettings), parallelise);
+				stage.getAnnealingSettings().setEpochLength(epochLength);
+				stage.getAnnealingSettings().setRestarting(shouldUseRestartingLSO);
+				
+				final SimilaritySettings similaritySettings = stage.getConstraintAndFitnessSettings().getSimilaritySettings();
+				if (similaritySettings != null) {
+					 stage.getConstraintAndFitnessSettings().setSimilaritySettings(ScenarioUtils.createUnweightedSimilaritySettings());
+				}
+				
+				plan.getStages().add(stage);
+			} else {	
+				// Normal LSO
+				{			
+					final LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(EcoreUtil.copy(baseConstraintAndFitnessSettings), parallelise);
+					stage.getAnnealingSettings().setEpochLength(epochLength);
+					stage.getAnnealingSettings().setRestarting(shouldUseRestartingLSO);
+					plan.getStages().add(stage);
+				}
+				// Follow by hill-climb stage
+				{
+					final HillClimbOptimisationStage stage = ScenarioUtils.createDefaultHillClimbingParameters(EcoreUtil.copy(baseConstraintAndFitnessSettings), parallelise);
+					stage.getAnnealingSettings().setEpochLength(epochLength);
+					plan.getStages().add(stage);
+				}
+			}
 			if (userSettings.isBuildActionSets()) {
 				if (periodStart != null && periodEnd != null) {
 					final ActionPlanOptimisationStage stage = ScenarioUtils.getActionPlanSettings(similarityMode, periodStart, periodEnd, EcoreUtil.copy(baseConstraintAndFitnessSettings));
@@ -761,23 +830,9 @@ public final class OptimisationHelper {
 					plan.getStages().add(stage);
 				}
 			}
-
-			if (userSettings.isAdpOptimisation()) {
-				ScenarioUtils.createOrUpdateAllConstraints(plan, MinMaxSlotGroupConstraintCheckerFactory.NAME, true);
-				ScenarioUtils.createOrUpdateAllConstraints(plan, LadenIdleTimeConstraintCheckerFactory.NAME, true);
-				ScenarioUtils.createOrUpdateAllObjectives(plan, VesselUtilisationFitnessCoreFactory.NAME, true, 1);
-				ScenarioUtils.createOrUpdateAllObjectives(plan, NonOptionalSlotFitnessCoreFactory.NAME, true, 24_000_000);
-			}
 		}
+
 		return LNGScenarioRunnerUtils.createExtendedSettings(plan);
-	}
-
-	private static boolean shouldCreateDefaultSaveStage(@NonNull final UserSettings userSettings) {
-		if (userSettings.getSimilarityMode() != SimilarityMode.ALL) {
-			return true;
-		} else {
-			return false;
-		}
 	}
 
 	private static boolean shouldDisableActionSets(final SimilarityMode mode, final LocalDate periodStart, final YearMonth periodEnd) {
@@ -836,12 +891,12 @@ public final class OptimisationHelper {
 		// TODO: replace all this ugly code by a list of EStructuralFeatures and loop
 		// through
 		// them doing the right thing
-		if (from.isSetPeriodStartDate() == false || from.getPeriodStartDate() == null) {
+		if (!from.isSetPeriodStartDate() || from.getPeriodStartDate() == null) {
 			to.unsetPeriodStartDate();
 		} else {
 			to.setPeriodStartDate(from.getPeriodStartDate());
 		}
-		if (from.isSetPeriodEnd() == false || from.getPeriodEnd() == null) {
+		if (!from.isSetPeriodEnd() || from.getPeriodEnd() == null) {
 			to.unsetPeriodEnd();
 		} else {
 			to.setPeriodEnd(from.getPeriodEnd());
@@ -851,9 +906,9 @@ public final class OptimisationHelper {
 		to.setGenerateCharterOuts(from.isGenerateCharterOuts());
 		to.setWithSpotCargoMarkets(from.isWithSpotCargoMarkets());
 		to.setWithCharterLength(from.isWithCharterLength());
-		to.setAdpOptimisation(from.isAdpOptimisation());
-		to.setCleanStateOptimisation(from.isCleanStateOptimisation());
-		to.setNominalADP(from.isNominalADP());
+		to.setMode(from.getMode());
+		to.setCleanSlateOptimisation(from.isCleanSlateOptimisation());
+		to.setNominalOnly(from.isNominalOnly());
 		to.setDualMode(from.isDualMode());
 
 		if (from.getSimilarityMode() != null) {
@@ -867,13 +922,20 @@ public final class OptimisationHelper {
 	public static boolean checkUserSettings(@NonNull final UserSettings to, final boolean quiet) {
 		resetDisabledFeatures(to);
 
-		if (!to.isAdpOptimisation()) {
-			// Clean state is only valid with ADP mode
-			to.setCleanStateOptimisation(false);
-			to.setNominalADP(false);
-		}
-		if (!to.isCleanStateOptimisation()) {
-			to.setNominalADP(false);
+		if (to.getMode() == OptimisationMode.ADP) {
+			if (!to.isCleanSlateOptimisation()) {
+				// Only valid if clean slate is checked.
+				to.setNominalOnly(false);
+			}
+			to.setBuildActionSets(false);
+			to.setSimilarityMode(SimilarityMode.OFF);
+		} else if (to.getMode() == OptimisationMode.STRATEGIC) {
+			to.setCleanSlateOptimisation(false);
+			to.setBuildActionSets(false);
+			to.setSimilarityMode(SimilarityMode.OFF);
+		} else {
+			to.setCleanSlateOptimisation(false);
+			to.setNominalOnly(false);
 		}
 
 		// Turn off if settings are not nice
@@ -1060,11 +1122,10 @@ public final class OptimisationHelper {
 			choiceData.enabled = false;
 			choiceData.disabledMessage = adpVesselEventIssueMsg;
 		} else {
-			choiceData.enabledHook = (u -> (u.isAdpOptimisation() && u.isCleanStateOptimisation()));
-
+			choiceData.enabledHook = (u -> (u.getMode() == OptimisationMode.ADP && u.isCleanSlateOptimisation() || u.getMode() == OptimisationMode.STRATEGIC));
 		}
 		final Option option = dialog.addOption(DataSection.General, group, editingDomain, "Nominal Only: ", "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_NOMINAL_ADP_PREFIX,
-				ParametersPackage.eINSTANCE.getUserSettings_NominalADP());
+				ParametersPackage.eINSTANCE.getUserSettings_NominalOnly());
 		optionsAdded[IDX_OPTION_ADDED] |= true;
 		optionsAdded[IDX_OPTION_ENABLED_ADDED] |= true;
 
@@ -1075,7 +1136,7 @@ public final class OptimisationHelper {
 				if (value instanceof UserSettings) {
 					final UserSettings userSettings = (UserSettings) value;
 
-					if (userSettings.isAdpOptimisation()) {
+					if (userSettings.getMode() == OptimisationMode.ADP) {
 						if (userSettings.getPeriodStartDate() != null || userSettings.getPeriodEnd() != null) {
 						}
 
@@ -1294,10 +1355,10 @@ public final class OptimisationHelper {
 			choiceData.enabled = false;
 			choiceData.disabledMessage = adpVesselEventIssueMsg;
 		} else {
-			choiceData.enabledHook = (UserSettings::isAdpOptimisation);
+			choiceData.enabledHook = (us -> us.getMode() == OptimisationMode.ADP);
 		}
 		final Option option = dialog.addOption(DataSection.General, group, editingDomain, "Clean slate: ", "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_CLEAN_SLATE_PREFIX,
-				ParametersPackage.eINSTANCE.getUserSettings_CleanStateOptimisation());
+				ParametersPackage.eINSTANCE.getUserSettings_CleanSlateOptimisation());
 		optionsAdded[IDX_OPTION_ADDED] |= true;
 		optionsAdded[IDX_OPTION_ENABLED_ADDED] |= true;
 
@@ -1306,21 +1367,9 @@ public final class OptimisationHelper {
 			if (value instanceof UserSettings) {
 				final UserSettings userSettings = (UserSettings) value;
 
-				if (userSettings.isAdpOptimisation()) {
-					if (userSettings.getPeriodStartDate() != null || userSettings.getPeriodEnd() != null) {
-						return ValidationStatus.error("Period optimisation must be disabled with ADP optimisation");
-					}
-					if (userSettings.isCleanStateOptimisation()) {
-						if (userSettings.getSimilarityMode() != SimilarityMode.OFF) {
-							return ValidationStatus.error("Similarity must be disabled with clean slate ADP optimisation");
-						}
-
-						if (userSettings.isBuildActionSets()) {
-							return ValidationStatus.error("Action sets must be disabled with clean slate ADP optimisation");
-						}
-						if (userSettings.isGenerateCharterOuts()) {
-							return ValidationStatus.error("Charter out generation must be disabled with clean slate ADP optimisation");
-						}
+				if (userSettings.getMode() == OptimisationMode.ADP) {
+					if (userSettings.isCleanSlateOptimisation() && userSettings.isGenerateCharterOuts()) {
+						return ValidationStatus.error("Charter out generation must be disabled with clean slate ADP optimisation");
 					}
 				}
 			}
@@ -1369,41 +1418,75 @@ public final class OptimisationHelper {
 		optionsAdded[IDX_OPTION_ENABLED_ADDED] |= true;
 	}
 
-	private static void createADPOptimisationOptions(final UserSettings defaultSettings, final EditingDomain editingDomain, final LNGScenarioModel scenario, final ParameterModesDialog dialog,
-			final UserSettings copy, final boolean forADP, final boolean[] optionsAdded) {
+	private static void createOptimisationModeOption(final UserSettings defaultSettings, final EditingDomain editingDomain, final LNGScenarioModel scenario, final ParameterModesDialog dialog,
+			final UserSettings copy, final OptionGroup group, final boolean forADP, final boolean[] optionsAdded) {
 
-		if (forADP) {
+		final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
+		choiceData.addChoice("Short Term", OptimisationMode.SHORT_TERM);
 
-			boolean scenarioContainsForbiddedADPEvents = false;
-			String adpVesselEventIssueMsg = "";
-			if (scenario != null) {
-				final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenario);
-				for (final VesselEvent event : cargoModel.getVesselEvents()) {
-					if ((event instanceof CharterOutEvent)) {
-						final CharterOutEvent charterOutEvent = (CharterOutEvent) event;
-						if (charterOutEvent.isOptional() || charterOutEvent.getRelocateTo() != null) {
-							scenarioContainsForbiddedADPEvents = true;
-							copy.setCleanStateOptimisation(false);
-							adpVesselEventIssueMsg = "Clean slate only supports non-optional charter out events.";
-							break;
-						}
+		boolean extraChoiceAdded = false;
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_ADP) && forADP) {
+			choiceData.addChoice("ADP", OptimisationMode.ADP);
+			extraChoiceAdded = true;
+		}
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_STRATEGIC)) {
+			choiceData.addChoice("Strategic", OptimisationMode.STRATEGIC);
+			extraChoiceAdded = true;
+		}
+
+		choiceData.enabled = extraChoiceAdded;
+		// choiceData.enabledHook = (u -> (!u.isCleanStateOptimisation() &&
+		// !u.isAdpOptimisation()));
+
+		final Option option = dialog.addOption(group.dataSection, group, editingDomain, "", "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_OPTIMISATION_MODE_PREFIX,
+				ParametersPackage.Literals.USER_SETTINGS__MODE);
+
+		optionsAdded[IDX_OPTION_ADDED] |= true;
+		optionsAdded[IDX_OPTION_ENABLED_ADDED] |= choiceData.enabled;
+
+		boolean scenarioContainsForbiddedADPEvents = false;
+		String adpVesselEventIssueMsg = "";
+		if (scenario != null) {
+			final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenario);
+			for (final VesselEvent event : cargoModel.getVesselEvents()) {
+
+				if ((event instanceof CharterOutEvent)) {
+					final CharterOutEvent charterOutEvent = (CharterOutEvent) event;
+					if (charterOutEvent.isOptional()) {
+						scenarioContainsForbiddedADPEvents = true;
+						copy.setCleanSlateOptimisation(false);
+						adpVesselEventIssueMsg = "Clean slate only supports non-optional charter out events.";
+						break;
 					}
 				}
 			}
-
-			final OptionGroup group = dialog.createGroup(DataSection.General, "ADP");
-			{
-				final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
-				choiceData.addChoice("No", Boolean.FALSE);
-				choiceData.addChoice("Yes", Boolean.TRUE);
-				final Option option = dialog.addOption(DataSection.General, group, editingDomain, "Enabled: ", "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_ADP_PREFIX,
-						ParametersPackage.eINSTANCE.getUserSettings_AdpOptimisation());
-				optionsAdded[IDX_OPTION_ADDED] |= true;
-				optionsAdded[IDX_OPTION_ENABLED_ADDED] |= true;
-			}
-			createADPCleanStateOption(defaultSettings, optionsAdded, editingDomain, dialog, copy, scenarioContainsForbiddedADPEvents, adpVesselEventIssueMsg, group);
-			createNominalOnlyOption(defaultSettings, optionsAdded, editingDomain, dialog, copy, scenarioContainsForbiddedADPEvents, adpVesselEventIssueMsg, group);
 		}
+
+		dialog.addValidation(option, value -> {
+
+			if (value instanceof UserSettings) {
+				final UserSettings userSettings = (UserSettings) value;
+
+				if (userSettings.getMode() == OptimisationMode.ADP || userSettings.getMode() == OptimisationMode.STRATEGIC) {
+					final String mode = (userSettings.getMode() == OptimisationMode.ADP) ? "ADP" : "strategic";
+					if (userSettings.getPeriodStartDate() != null || userSettings.getPeriodEnd() != null) {
+						return ValidationStatus.error(String.format("Period optimisation must be disabled with %s optimisation", mode));
+					}
+					if (userSettings.isBuildActionSets()) {
+						return ValidationStatus.error(String.format("Action sets must be disabled with %s optimisation", mode));
+					}
+					if (userSettings.getSimilarityMode() != SimilarityMode.OFF) {
+						return ValidationStatus.error(String.format("Similarity must be disabled with %s optimisation", mode));
+					}
+				}
+			}
+			return Status.OK_STATUS;
+		});
+
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_ADP) && forADP) {
+			createADPCleanStateOption(defaultSettings, optionsAdded, editingDomain, dialog, copy, scenarioContainsForbiddedADPEvents, adpVesselEventIssueMsg, group);
+		}
+		createNominalOnlyOption(defaultSettings, optionsAdded, editingDomain, dialog, copy, scenarioContainsForbiddedADPEvents, adpVesselEventIssueMsg, group);
 	}
 
 	private static void createSimilarityModeOption(final UserSettings defaultSettings, final EditingDomain editingDomain, final ParameterModesDialog dialog, final UserSettings copy,
@@ -1415,6 +1498,7 @@ public final class OptimisationHelper {
 		choiceData.addChoice("On", SimilarityMode.ALL);
 
 		choiceData.enabled = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_SIMILARITY);
+		choiceData.enabledHook = (u -> (u.getMode() == OptimisationMode.SHORT_TERM));
 
 		final Option option = dialog.addOption(DataSection.Controls, group, editingDomain, "", "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_SIMILARITY_PREFIX,
 				ParametersPackage.Literals.USER_SETTINGS__SIMILARITY_MODE);

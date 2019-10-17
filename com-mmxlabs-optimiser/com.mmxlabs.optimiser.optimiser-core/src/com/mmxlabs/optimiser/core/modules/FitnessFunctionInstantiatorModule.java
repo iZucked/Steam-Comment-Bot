@@ -38,9 +38,9 @@ public class FitnessFunctionInstantiatorModule extends AbstractModule {
 
 		final FitnessComponentInstantiator fitnessComponentInstantiator = new FitnessComponentInstantiator();
 		final List<IFitnessComponent> fitnessComponents = fitnessComponentInstantiator.instantiateFitnesses(fitnessFunctionRegistry, enabledFitnessNames);
-		final Set<IFitnessCore> cores = new HashSet<IFitnessCore>();
+		final Set<IFitnessCore> cores = new HashSet<>();
 
-		final List<IFitnessComponent> result = new ArrayList<IFitnessComponent>(fitnessComponents.size());
+		final List<IFitnessComponent> result = new ArrayList<>(fitnessComponents.size());
 		for (final IFitnessComponent c : fitnessComponents) {
 			if (c != null) {
 				result.add(c);

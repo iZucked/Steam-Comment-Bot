@@ -126,7 +126,7 @@ public class AnnotatedSolutionExporter {
 
 	@Inject
 	private CooldownExporter cooldownDetailsExporter;
-	
+
 	@Inject
 	private PurgeExporter purgeDetailsExporter;
 

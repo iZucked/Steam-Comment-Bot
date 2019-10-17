@@ -111,7 +111,8 @@ public class MicroTestUtils {
 	}
 
 	/**
-	 * Returns null on success, or returns the failing evaluated state constraint checkers.
+	 * Returns null on success, or returns the failing evaluated state constraint
+	 * checkers.
 	 * 
 	 * @param rawSequences
 	 * @return
@@ -166,7 +167,8 @@ public class MicroTestUtils {
 	}
 
 	/**
-	 * Returns null on success, or returns the failing evaluated state constraint checkers.
+	 * Returns null on success, or returns the failing evaluated state constraint
+	 * checkers.
 	 * 
 	 * @param rawSequences
 	 * @return
@@ -195,9 +197,9 @@ public class MicroTestUtils {
 		}
 	}
 
-
 	/**
-	 * Returns null on success, or returns the failing evaluated state constraint checkers.
+	 * Returns null on success, or returns the failing evaluated state constraint
+	 * checkers.
 	 * 
 	 * @param rawSequences
 	 * @return metrics
@@ -218,9 +220,9 @@ public class MicroTestUtils {
 			final IModifiableSequences fullSequences = sequencesManipulator.createManipulatedSequences(rawSequences);
 
 			long[] metrics = evaluationHelper.evaluateState(rawSequences, fullSequences, null, false, false, null, null);
-			
+
 			return metrics;
-		}		
+		}
 	}
 
 	public static Pair<LNGEvaluationTransformerUnit, List<IConstraintChecker>> getConstraintCheckers(@NonNull final LNGDataTransformer dataTransformer) {

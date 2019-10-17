@@ -73,6 +73,7 @@ public class InsertionOptimisationStageImpl extends ConstraintsAndFitnessSetting
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getIterations() {
 		return iterations;
 	}
@@ -82,6 +83,7 @@ public class InsertionOptimisationStageImpl extends ConstraintsAndFitnessSetting
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setIterations(int newIterations) {
 		int oldIterations = iterations;
 		iterations = newIterations;

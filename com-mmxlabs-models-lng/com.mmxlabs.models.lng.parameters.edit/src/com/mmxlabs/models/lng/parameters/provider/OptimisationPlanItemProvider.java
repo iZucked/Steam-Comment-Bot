@@ -247,6 +247,11 @@ public class OptimisationPlanItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(ParametersPackage.Literals.OPTIMISATION_PLAN__STAGES,
+				 ParametersFactory.eINSTANCE.createReduceSequencesStage()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ParametersPackage.Literals.OPTIMISATION_PLAN__STAGES,
 				 ParametersFactory.eINSTANCE.createInsertionOptimisationStage()));
 
 		newChildDescriptors.add

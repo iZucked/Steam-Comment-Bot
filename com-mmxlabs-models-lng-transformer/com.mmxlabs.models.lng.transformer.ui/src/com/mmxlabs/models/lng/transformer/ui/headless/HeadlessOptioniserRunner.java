@@ -106,7 +106,7 @@ public class HeadlessOptioniserRunner {
 		// Reset settings not supplied to the user
 		userSettings.setShippingOnly(false);
 		userSettings.setBuildActionSets(false);
-		userSettings.setCleanStateOptimisation(false);
+		userSettings.setCleanSlateOptimisation(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
 		if (options.periodStart != null) {

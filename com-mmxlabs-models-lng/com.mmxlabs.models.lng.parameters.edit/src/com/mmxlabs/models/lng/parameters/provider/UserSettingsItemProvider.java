@@ -7,6 +7,7 @@
 package com.mmxlabs.models.lng.parameters.provider;
 
 
+import com.mmxlabs.models.lng.parameters.OptimisationMode;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 
@@ -66,22 +67,66 @@ public class UserSettingsItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addModePropertyDescriptor(object);
+			addNominalOnlyPropertyDescriptor(object);
+			addBuildActionSetsPropertyDescriptor(object);
 			addPeriodStartDatePropertyDescriptor(object);
 			addPeriodEndPropertyDescriptor(object);
+			addDualModePropertyDescriptor(object);
+			addSimilarityModePropertyDescriptor(object);
 			addShippingOnlyPropertyDescriptor(object);
 			addGenerateCharterOutsPropertyDescriptor(object);
 			addWithCharterLengthPropertyDescriptor(object);
 			addCharterLengthDaysPropertyDescriptor(object);
 			addWithSpotCargoMarketsPropertyDescriptor(object);
-			addBuildActionSetsPropertyDescriptor(object);
-			addSimilarityModePropertyDescriptor(object);
-			addNominalADPPropertyDescriptor(object);
-			addCleanStateOptimisationPropertyDescriptor(object);
 			addFloatingDaysLimitPropertyDescriptor(object);
-			addAdpOptimisationPropertyDescriptor(object);
-			addDualModePropertyDescriptor(object);
+			addCleanSlateOptimisationPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Mode feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addModePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_UserSettings_mode_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_UserSettings_mode_feature", "_UI_UserSettings_type"),
+				 ParametersPackage.Literals.USER_SETTINGS__MODE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Nominal Only feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addNominalOnlyPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_UserSettings_nominalOnly_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_UserSettings_nominalOnly_feature", "_UI_UserSettings_type"),
+				 ParametersPackage.Literals.USER_SETTINGS__NOMINAL_ONLY,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -261,72 +306,6 @@ public class UserSettingsItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Similarity Mode feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addSimilarityModePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_UserSettings_similarityMode_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_UserSettings_similarityMode_feature", "_UI_UserSettings_type"),
-				 ParametersPackage.Literals.USER_SETTINGS__SIMILARITY_MODE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Nominal ADP feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addNominalADPPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_UserSettings_nominalADP_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_UserSettings_nominalADP_feature", "_UI_UserSettings_type"),
-				 ParametersPackage.Literals.USER_SETTINGS__NOMINAL_ADP,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Clean State Optimisation feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addCleanStateOptimisationPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_UserSettings_cleanStateOptimisation_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_UserSettings_cleanStateOptimisation_feature", "_UI_UserSettings_type"),
-				 ParametersPackage.Literals.USER_SETTINGS__CLEAN_STATE_OPTIMISATION,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This adds a property descriptor for the Floating Days Limit feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -349,19 +328,19 @@ public class UserSettingsItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Adp Optimisation feature.
+	 * This adds a property descriptor for the Clean Slate Optimisation feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addAdpOptimisationPropertyDescriptor(Object object) {
+	protected void addCleanSlateOptimisationPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_UserSettings_adpOptimisation_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_UserSettings_adpOptimisation_feature", "_UI_UserSettings_type"),
-				 ParametersPackage.Literals.USER_SETTINGS__ADP_OPTIMISATION,
+				 getString("_UI_UserSettings_cleanSlateOptimisation_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_UserSettings_cleanSlateOptimisation_feature", "_UI_UserSettings_type"),
+				 ParametersPackage.Literals.USER_SETTINGS__CLEAN_SLATE_OPTIMISATION,
 				 true,
 				 false,
 				 false,
@@ -393,6 +372,28 @@ public class UserSettingsItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Similarity Mode feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addSimilarityModePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_UserSettings_similarityMode_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_UserSettings_similarityMode_feature", "_UI_UserSettings_type"),
+				 ParametersPackage.Literals.USER_SETTINGS__SIMILARITY_MODE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns UserSettings.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -411,7 +412,7 @@ public class UserSettingsItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		LocalDate labelValue = ((UserSettings)object).getPeriodStartDate();
+		OptimisationMode labelValue = ((UserSettings)object).getMode();
 		String label = labelValue == null ? null : labelValue.toString();
 		return label == null || label.length() == 0 ?
 			getString("_UI_UserSettings_type") :
@@ -431,20 +432,20 @@ public class UserSettingsItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(UserSettings.class)) {
+			case ParametersPackage.USER_SETTINGS__MODE:
+			case ParametersPackage.USER_SETTINGS__NOMINAL_ONLY:
+			case ParametersPackage.USER_SETTINGS__BUILD_ACTION_SETS:
 			case ParametersPackage.USER_SETTINGS__PERIOD_START_DATE:
 			case ParametersPackage.USER_SETTINGS__PERIOD_END:
+			case ParametersPackage.USER_SETTINGS__DUAL_MODE:
+			case ParametersPackage.USER_SETTINGS__SIMILARITY_MODE:
 			case ParametersPackage.USER_SETTINGS__SHIPPING_ONLY:
 			case ParametersPackage.USER_SETTINGS__GENERATE_CHARTER_OUTS:
 			case ParametersPackage.USER_SETTINGS__WITH_CHARTER_LENGTH:
 			case ParametersPackage.USER_SETTINGS__CHARTER_LENGTH_DAYS:
 			case ParametersPackage.USER_SETTINGS__WITH_SPOT_CARGO_MARKETS:
-			case ParametersPackage.USER_SETTINGS__BUILD_ACTION_SETS:
-			case ParametersPackage.USER_SETTINGS__SIMILARITY_MODE:
-			case ParametersPackage.USER_SETTINGS__NOMINAL_ADP:
-			case ParametersPackage.USER_SETTINGS__CLEAN_STATE_OPTIMISATION:
 			case ParametersPackage.USER_SETTINGS__FLOATING_DAYS_LIMIT:
-			case ParametersPackage.USER_SETTINGS__ADP_OPTIMISATION:
-			case ParametersPackage.USER_SETTINGS__DUAL_MODE:
+			case ParametersPackage.USER_SETTINGS__CLEAN_SLATE_OPTIMISATION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

@@ -92,6 +92,7 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 			case ParametersPackage.HILL_CLIMB_OPTIMISATION_STAGE: return createHillClimbOptimisationStage();
 			case ParametersPackage.ACTION_PLAN_OPTIMISATION_STAGE: return createActionPlanOptimisationStage();
 			case ParametersPackage.RESET_INITIAL_SEQUENCES_STAGE: return createResetInitialSequencesStage();
+			case ParametersPackage.REDUCE_SEQUENCES_STAGE: return createReduceSequencesStage();
 			case ParametersPackage.INSERTION_OPTIMISATION_STAGE: return createInsertionOptimisationStage();
 			case ParametersPackage.BREAK_EVEN_OPTIMISATION_STAGE: return createBreakEvenOptimisationStage();
 			case ParametersPackage.SOLUTION_BUILDER_SETTINGS: return createSolutionBuilderSettings();
@@ -117,6 +118,8 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 		switch (eDataType.getClassifierID()) {
 			case ParametersPackage.SIMILARITY_MODE:
 				return createSimilarityModeFromString(eDataType, initialValue);
+			case ParametersPackage.OPTIMISATION_MODE:
+				return createOptimisationModeFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -132,6 +135,8 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 		switch (eDataType.getClassifierID()) {
 			case ParametersPackage.SIMILARITY_MODE:
 				return convertSimilarityModeToString(eDataType, instanceValue);
+			case ParametersPackage.OPTIMISATION_MODE:
+				return convertOptimisationModeToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -285,6 +290,18 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public ReduceSequencesStage createReduceSequencesStage() {
+		ReduceSequencesStageImpl reduceSequencesStage = new ReduceSequencesStageImpl();
+		return reduceSequencesStage;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public InsertionOptimisationStage createInsertionOptimisationStage() {
 		InsertionOptimisationStageImpl insertionOptimisationStage = new InsertionOptimisationStageImpl();
 		return insertionOptimisationStage;
@@ -295,6 +312,7 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BreakEvenOptimisationStage createBreakEvenOptimisationStage() {
 		BreakEvenOptimisationStageImpl breakEvenOptimisationStage = new BreakEvenOptimisationStageImpl();
 		return breakEvenOptimisationStage;
@@ -338,6 +356,7 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public MultipleSolutionSimilarityOptimisationStage createMultipleSolutionSimilarityOptimisationStage() {
 		MultipleSolutionSimilarityOptimisationStageImpl multipleSolutionSimilarityOptimisationStage = new MultipleSolutionSimilarityOptimisationStageImpl();
 		return multipleSolutionSimilarityOptimisationStage;
@@ -348,6 +367,7 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ParallelMultipleSolutionSimilarityOptimisationStage createParallelMultipleSolutionSimilarityOptimisationStage() {
 		ParallelMultipleSolutionSimilarityOptimisationStageImpl parallelMultipleSolutionSimilarityOptimisationStage = new ParallelMultipleSolutionSimilarityOptimisationStageImpl();
 		return parallelMultipleSolutionSimilarityOptimisationStage;
@@ -358,6 +378,7 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ParallelHillClimbOptimisationStage createParallelHillClimbOptimisationStage() {
 		ParallelHillClimbOptimisationStageImpl parallelHillClimbOptimisationStage = new ParallelHillClimbOptimisationStageImpl();
 		return parallelHillClimbOptimisationStage;
@@ -368,6 +389,7 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ParallelLocalSearchOptimisationStage createParallelLocalSearchOptimisationStage() {
 		ParallelLocalSearchOptimisationStageImpl parallelLocalSearchOptimisationStage = new ParallelLocalSearchOptimisationStageImpl();
 		return parallelLocalSearchOptimisationStage;
@@ -378,6 +400,7 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public MultiobjectiveSimilarityOptimisationStage createMultiobjectiveSimilarityOptimisationStage() {
 		MultiobjectiveSimilarityOptimisationStageImpl multiobjectiveSimilarityOptimisationStage = new MultiobjectiveSimilarityOptimisationStageImpl();
 		return multiobjectiveSimilarityOptimisationStage;
@@ -388,6 +411,7 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ParallelMultiobjectiveSimilarityOptimisationStage createParallelMultiobjectiveSimilarityOptimisationStage() {
 		ParallelMultiobjectiveSimilarityOptimisationStageImpl parallelMultiobjectiveSimilarityOptimisationStage = new ParallelMultiobjectiveSimilarityOptimisationStageImpl();
 		return parallelMultiobjectiveSimilarityOptimisationStage;
@@ -398,6 +422,7 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CleanStateOptimisationSettings createCleanStateOptimisationSettings() {
 		CleanStateOptimisationSettingsImpl cleanStateOptimisationSettings = new CleanStateOptimisationSettingsImpl();
 		return cleanStateOptimisationSettings;
@@ -420,6 +445,26 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 	 * @generated
 	 */
 	public String convertSimilarityModeToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public OptimisationMode createOptimisationModeFromString(EDataType eDataType, String initialValue) {
+		OptimisationMode result = OptimisationMode.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertOptimisationModeToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 

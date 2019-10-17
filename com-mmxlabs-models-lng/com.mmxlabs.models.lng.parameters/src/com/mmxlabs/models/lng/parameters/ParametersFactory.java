@@ -141,6 +141,15 @@ public interface ParametersFactory extends EFactory {
 	ResetInitialSequencesStage createResetInitialSequencesStage();
 
 	/**
+	 * Returns a new object of class '<em>Reduce Sequences Stage</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Reduce Sequences Stage</em>'.
+	 * @generated
+	 */
+	ReduceSequencesStage createReduceSequencesStage();
+
+	/**
 	 * Returns a new object of class '<em>Insertion Optimisation Stage</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

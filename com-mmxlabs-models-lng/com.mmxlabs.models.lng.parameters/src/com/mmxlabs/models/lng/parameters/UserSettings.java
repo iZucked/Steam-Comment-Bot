@@ -20,20 +20,20 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#getMode <em>Mode</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isNominalOnly <em>Nominal Only</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isBuildActionSets <em>Build Action Sets</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#getPeriodStartDate <em>Period Start Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#getPeriodEnd <em>Period End</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isDualMode <em>Dual Mode</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#getSimilarityMode <em>Similarity Mode</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isShippingOnly <em>Shipping Only</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isGenerateCharterOuts <em>Generate Charter Outs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isWithCharterLength <em>With Charter Length</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#getCharterLengthDays <em>Charter Length Days</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isWithSpotCargoMarkets <em>With Spot Cargo Markets</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isBuildActionSets <em>Build Action Sets</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#getSimilarityMode <em>Similarity Mode</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isNominalADP <em>Nominal ADP</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isCleanStateOptimisation <em>Clean State Optimisation</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#getFloatingDaysLimit <em>Floating Days Limit</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isAdpOptimisation <em>Adp Optimisation</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isDualMode <em>Dual Mode</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isCleanSlateOptimisation <em>Clean Slate Optimisation</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getUserSettings()
@@ -41,6 +41,62 @@ import org.eclipse.emf.ecore.EObject;
  * @generated
  */
 public interface UserSettings extends EObject {
+	/**
+	 * Returns the value of the '<em><b>Mode</b></em>' attribute.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.parameters.OptimisationMode}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Mode</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Mode</em>' attribute.
+	 * @see com.mmxlabs.models.lng.parameters.OptimisationMode
+	 * @see #setMode(OptimisationMode)
+	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getUserSettings_Mode()
+	 * @model
+	 * @generated
+	 */
+	OptimisationMode getMode();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.UserSettings#getMode <em>Mode</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Mode</em>' attribute.
+	 * @see com.mmxlabs.models.lng.parameters.OptimisationMode
+	 * @see #getMode()
+	 * @generated
+	 */
+	void setMode(OptimisationMode value);
+
+	/**
+	 * Returns the value of the '<em><b>Nominal Only</b></em>' attribute.
+	 * The default value is <code>"false"</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Nominal Only</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Nominal Only</em>' attribute.
+	 * @see #setNominalOnly(boolean)
+	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getUserSettings_NominalOnly()
+	 * @model default="false"
+	 * @generated
+	 */
+	boolean isNominalOnly();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.UserSettings#isNominalOnly <em>Nominal Only</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Nominal Only</em>' attribute.
+	 * @see #isNominalOnly()
+	 * @generated
+	 */
+	void setNominalOnly(boolean value);
+
 	/**
 	 * Returns the value of the '<em><b>Period Start Date</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -311,6 +367,86 @@ public interface UserSettings extends EObject {
 	void setBuildActionSets(boolean value);
 
 	/**
+	 * Returns the value of the '<em><b>Floating Days Limit</b></em>' attribute.
+	 * The default value is <code>"15"</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Floating Days Limit</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Floating Days Limit</em>' attribute.
+	 * @see #setFloatingDaysLimit(int)
+	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getUserSettings_FloatingDaysLimit()
+	 * @model default="15"
+	 * @generated
+	 */
+	int getFloatingDaysLimit();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.UserSettings#getFloatingDaysLimit <em>Floating Days Limit</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Floating Days Limit</em>' attribute.
+	 * @see #getFloatingDaysLimit()
+	 * @generated
+	 */
+	void setFloatingDaysLimit(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Clean Slate Optimisation</b></em>' attribute.
+	 * The default value is <code>"false"</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Clean Slate Optimisation</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Clean Slate Optimisation</em>' attribute.
+	 * @see #setCleanSlateOptimisation(boolean)
+	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getUserSettings_CleanSlateOptimisation()
+	 * @model default="false"
+	 * @generated
+	 */
+	boolean isCleanSlateOptimisation();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.UserSettings#isCleanSlateOptimisation <em>Clean Slate Optimisation</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Clean Slate Optimisation</em>' attribute.
+	 * @see #isCleanSlateOptimisation()
+	 * @generated
+	 */
+	void setCleanSlateOptimisation(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Dual Mode</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Dual Mode</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Dual Mode</em>' attribute.
+	 * @see #setDualMode(boolean)
+	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getUserSettings_DualMode()
+	 * @model
+	 * @generated
+	 */
+	boolean isDualMode();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.UserSettings#isDualMode <em>Dual Mode</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Dual Mode</em>' attribute.
+	 * @see #isDualMode()
+	 * @generated
+	 */
+	void setDualMode(boolean value);
+
+	/**
 	 * Returns the value of the '<em><b>Similarity Mode</b></em>' attribute.
 	 * The default value is <code>"OFF"</code>.
 	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.parameters.SimilarityMode}.
@@ -339,138 +475,5 @@ public interface UserSettings extends EObject {
 	 * @generated
 	 */
 	void setSimilarityMode(SimilarityMode value);
-
-	/**
-	 * Returns the value of the '<em><b>Nominal ADP</b></em>' attribute.
-	 * The default value is <code>"false"</code>.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Nominal ADP</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Nominal ADP</em>' attribute.
-	 * @see #setNominalADP(boolean)
-	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getUserSettings_NominalADP()
-	 * @model default="false"
-	 * @generated
-	 */
-	boolean isNominalADP();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.UserSettings#isNominalADP <em>Nominal ADP</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Nominal ADP</em>' attribute.
-	 * @see #isNominalADP()
-	 * @generated
-	 */
-	void setNominalADP(boolean value);
-
-	/**
-	 * Returns the value of the '<em><b>Clean State Optimisation</b></em>' attribute.
-	 * The default value is <code>"false"</code>.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Clean State Optimisation</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Clean State Optimisation</em>' attribute.
-	 * @see #setCleanStateOptimisation(boolean)
-	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getUserSettings_CleanStateOptimisation()
-	 * @model default="false"
-	 * @generated
-	 */
-	boolean isCleanStateOptimisation();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.UserSettings#isCleanStateOptimisation <em>Clean State Optimisation</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Clean State Optimisation</em>' attribute.
-	 * @see #isCleanStateOptimisation()
-	 * @generated
-	 */
-	void setCleanStateOptimisation(boolean value);
-
-	/**
-	 * Returns the value of the '<em><b>Floating Days Limit</b></em>' attribute.
-	 * The default value is <code>"15"</code>.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Floating Days Limit</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Floating Days Limit</em>' attribute.
-	 * @see #setFloatingDaysLimit(int)
-	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getUserSettings_FloatingDaysLimit()
-	 * @model default="15"
-	 * @generated
-	 */
-	int getFloatingDaysLimit();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.UserSettings#getFloatingDaysLimit <em>Floating Days Limit</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Floating Days Limit</em>' attribute.
-	 * @see #getFloatingDaysLimit()
-	 * @generated
-	 */
-	void setFloatingDaysLimit(int value);
-
-	/**
-	 * Returns the value of the '<em><b>Adp Optimisation</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Adp Optimisation</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Adp Optimisation</em>' attribute.
-	 * @see #setAdpOptimisation(boolean)
-	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getUserSettings_AdpOptimisation()
-	 * @model
-	 * @generated
-	 */
-	boolean isAdpOptimisation();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.UserSettings#isAdpOptimisation <em>Adp Optimisation</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Adp Optimisation</em>' attribute.
-	 * @see #isAdpOptimisation()
-	 * @generated
-	 */
-	void setAdpOptimisation(boolean value);
-
-	/**
-	 * Returns the value of the '<em><b>Dual Mode</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Dual Mode</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Dual Mode</em>' attribute.
-	 * @see #setDualMode(boolean)
-	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getUserSettings_DualMode()
-	 * @model
-	 * @generated
-	 */
-	boolean isDualMode();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.UserSettings#isDualMode <em>Dual Mode</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Dual Mode</em>' attribute.
-	 * @see #isDualMode()
-	 * @generated
-	 */
-	void setDualMode(boolean value);
 
 } // UserSettings

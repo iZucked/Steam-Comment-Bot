@@ -220,12 +220,17 @@ public class HeadlessOptimiserRunner {
 					jsonOutput.setOptimisationPlan(optimisationPlan);
 				}
 				
-				final LNGScenarioRunner runner = LNGOptimisationBuilder.begin(sdp) //
+				final LNGOptimisationBuilder runnerBuilder = LNGOptimisationBuilder.begin(sdp) //
 						.withRunnerHook(runnerHook) //
 						.withOptimiserInjectorService(localOverrides) //
 						.withHints(hints.toArray(new String[hints.size()])) //
 						.withOptimisationPlan(optimisationPlan) //
 						.withThreadCount(num_threads) //
+				;
+				if (localOverrides != null) {
+					runnerBuilder.withOptimiserInjectorService(localOverrides);
+				}
+				final LNGScenarioRunner runner = runnerBuilder //
 						.buildDefaultRunner() //
 						.getScenarioRunner();
 

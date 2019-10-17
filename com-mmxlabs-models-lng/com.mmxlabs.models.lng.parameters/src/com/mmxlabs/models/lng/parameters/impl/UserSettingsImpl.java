@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.models.lng.parameters.impl;
 
+import com.mmxlabs.models.lng.parameters.OptimisationMode;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
@@ -28,25 +29,85 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#getMode <em>Mode</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isNominalOnly <em>Nominal Only</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isBuildActionSets <em>Build Action Sets</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#getPeriodStartDate <em>Period Start Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#getPeriodEnd <em>Period End</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isDualMode <em>Dual Mode</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#getSimilarityMode <em>Similarity Mode</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isShippingOnly <em>Shipping Only</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isGenerateCharterOuts <em>Generate Charter Outs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isWithCharterLength <em>With Charter Length</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#getCharterLengthDays <em>Charter Length Days</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isWithSpotCargoMarkets <em>With Spot Cargo Markets</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isBuildActionSets <em>Build Action Sets</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#getSimilarityMode <em>Similarity Mode</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isNominalADP <em>Nominal ADP</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isCleanStateOptimisation <em>Clean State Optimisation</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#getFloatingDaysLimit <em>Floating Days Limit</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isAdpOptimisation <em>Adp Optimisation</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isDualMode <em>Dual Mode</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isCleanSlateOptimisation <em>Clean Slate Optimisation</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class UserSettingsImpl extends EObjectImpl implements UserSettings {
+	/**
+	 * The default value of the '{@link #getMode() <em>Mode</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMode()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final OptimisationMode MODE_EDEFAULT = OptimisationMode.SHORT_TERM;
+
+	/**
+	 * The cached value of the '{@link #getMode() <em>Mode</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMode()
+	 * @generated
+	 * @ordered
+	 */
+	protected OptimisationMode mode = MODE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isNominalOnly() <em>Nominal Only</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isNominalOnly()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean NOMINAL_ONLY_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isNominalOnly() <em>Nominal Only</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isNominalOnly()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean nominalOnly = NOMINAL_ONLY_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isBuildActionSets() <em>Build Action Sets</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isBuildActionSets()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean BUILD_ACTION_SETS_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isBuildActionSets() <em>Build Action Sets</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isBuildActionSets()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean buildActionSets = BUILD_ACTION_SETS_EDEFAULT;
+
 	/**
 	 * The default value of the '{@link #getPeriodStartDate() <em>Period Start Date</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -104,6 +165,46 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * @ordered
 	 */
 	protected boolean periodEndESet;
+
+	/**
+	 * The default value of the '{@link #isDualMode() <em>Dual Mode</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isDualMode()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean DUAL_MODE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isDualMode() <em>Dual Mode</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isDualMode()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean dualMode = DUAL_MODE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getSimilarityMode() <em>Similarity Mode</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSimilarityMode()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final SimilarityMode SIMILARITY_MODE_EDEFAULT = SimilarityMode.OFF;
+
+	/**
+	 * The cached value of the '{@link #getSimilarityMode() <em>Similarity Mode</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSimilarityMode()
+	 * @generated
+	 * @ordered
+	 */
+	protected SimilarityMode similarityMode = SIMILARITY_MODE_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #isShippingOnly() <em>Shipping Only</em>}' attribute.
@@ -206,86 +307,6 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	protected boolean withSpotCargoMarkets = WITH_SPOT_CARGO_MARKETS_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #isBuildActionSets() <em>Build Action Sets</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isBuildActionSets()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean BUILD_ACTION_SETS_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isBuildActionSets() <em>Build Action Sets</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isBuildActionSets()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean buildActionSets = BUILD_ACTION_SETS_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getSimilarityMode() <em>Similarity Mode</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getSimilarityMode()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final SimilarityMode SIMILARITY_MODE_EDEFAULT = SimilarityMode.OFF;
-
-	/**
-	 * The cached value of the '{@link #getSimilarityMode() <em>Similarity Mode</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getSimilarityMode()
-	 * @generated
-	 * @ordered
-	 */
-	protected SimilarityMode similarityMode = SIMILARITY_MODE_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #isNominalADP() <em>Nominal ADP</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isNominalADP()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean NOMINAL_ADP_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isNominalADP() <em>Nominal ADP</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isNominalADP()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean nominalADP = NOMINAL_ADP_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #isCleanStateOptimisation() <em>Clean State Optimisation</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isCleanStateOptimisation()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean CLEAN_STATE_OPTIMISATION_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isCleanStateOptimisation() <em>Clean State Optimisation</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isCleanStateOptimisation()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean cleanStateOptimisation = CLEAN_STATE_OPTIMISATION_EDEFAULT;
-
-	/**
 	 * The default value of the '{@link #getFloatingDaysLimit() <em>Floating Days Limit</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -306,44 +327,24 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	protected int floatingDaysLimit = FLOATING_DAYS_LIMIT_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #isAdpOptimisation() <em>Adp Optimisation</em>}' attribute.
+	 * The default value of the '{@link #isCleanSlateOptimisation() <em>Clean Slate Optimisation</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #isAdpOptimisation()
+	 * @see #isCleanSlateOptimisation()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final boolean ADP_OPTIMISATION_EDEFAULT = false;
+	protected static final boolean CLEAN_SLATE_OPTIMISATION_EDEFAULT = false;
 
 	/**
-	 * The cached value of the '{@link #isAdpOptimisation() <em>Adp Optimisation</em>}' attribute.
+	 * The cached value of the '{@link #isCleanSlateOptimisation() <em>Clean Slate Optimisation</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #isAdpOptimisation()
+	 * @see #isCleanSlateOptimisation()
 	 * @generated
 	 * @ordered
 	 */
-	protected boolean adpOptimisation = ADP_OPTIMISATION_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #isDualMode() <em>Dual Mode</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isDualMode()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean DUAL_MODE_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isDualMode() <em>Dual Mode</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isDualMode()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean dualMode = DUAL_MODE_EDEFAULT;
+	protected boolean cleanSlateOptimisation = CLEAN_SLATE_OPTIMISATION_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -369,6 +370,53 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public OptimisationMode getMode() {
+		return mode;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setMode(OptimisationMode newMode) {
+		OptimisationMode oldMode = mode;
+		mode = newMode == null ? MODE_EDEFAULT : newMode;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.USER_SETTINGS__MODE, oldMode, mode));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isNominalOnly() {
+		return nominalOnly;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setNominalOnly(boolean newNominalOnly) {
+		boolean oldNominalOnly = nominalOnly;
+		nominalOnly = newNominalOnly;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.USER_SETTINGS__NOMINAL_ONLY, oldNominalOnly, nominalOnly));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public LocalDate getPeriodStartDate() {
 		return periodStartDate;
 	}
@@ -378,6 +426,7 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPeriodStartDate(LocalDate newPeriodStartDate) {
 		LocalDate oldPeriodStartDate = periodStartDate;
 		periodStartDate = newPeriodStartDate;
@@ -392,6 +441,7 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetPeriodStartDate() {
 		LocalDate oldPeriodStartDate = periodStartDate;
 		boolean oldPeriodStartDateESet = periodStartDateESet;
@@ -406,6 +456,7 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetPeriodStartDate() {
 		return periodStartDateESet;
 	}
@@ -511,6 +562,7 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isWithCharterLength() {
 		return withCharterLength;
 	}
@@ -520,6 +572,7 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setWithCharterLength(boolean newWithCharterLength) {
 		boolean oldWithCharterLength = withCharterLength;
 		withCharterLength = newWithCharterLength;
@@ -532,6 +585,7 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getCharterLengthDays() {
 		return charterLengthDays;
 	}
@@ -541,6 +595,7 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCharterLengthDays(int newCharterLengthDays) {
 		int oldCharterLengthDays = charterLengthDays;
 		charterLengthDays = newCharterLengthDays;
@@ -553,6 +608,7 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isWithSpotCargoMarkets() {
 		return withSpotCargoMarkets;
 	}
@@ -562,6 +618,7 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setWithSpotCargoMarkets(boolean newWithSpotCargoMarkets) {
 		boolean oldWithSpotCargoMarkets = withSpotCargoMarkets;
 		withSpotCargoMarkets = newWithSpotCargoMarkets;
@@ -598,6 +655,75 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * @generated
 	 */
 	@Override
+	public int getFloatingDaysLimit() {
+		return floatingDaysLimit;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setFloatingDaysLimit(int newFloatingDaysLimit) {
+		int oldFloatingDaysLimit = floatingDaysLimit;
+		floatingDaysLimit = newFloatingDaysLimit;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.USER_SETTINGS__FLOATING_DAYS_LIMIT, oldFloatingDaysLimit, floatingDaysLimit));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isCleanSlateOptimisation() {
+		return cleanSlateOptimisation;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setCleanSlateOptimisation(boolean newCleanSlateOptimisation) {
+		boolean oldCleanSlateOptimisation = cleanSlateOptimisation;
+		cleanSlateOptimisation = newCleanSlateOptimisation;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.USER_SETTINGS__CLEAN_SLATE_OPTIMISATION, oldCleanSlateOptimisation, cleanSlateOptimisation));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isDualMode() {
+		return dualMode;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setDualMode(boolean newDualMode) {
+		boolean oldDualMode = dualMode;
+		dualMode = newDualMode;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.USER_SETTINGS__DUAL_MODE, oldDualMode, dualMode));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public SimilarityMode getSimilarityMode() {
 		return similarityMode;
 	}
@@ -620,118 +746,23 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean isNominalADP() {
-		return nominalADP;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setNominalADP(boolean newNominalADP) {
-		boolean oldNominalADP = nominalADP;
-		nominalADP = newNominalADP;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.USER_SETTINGS__NOMINAL_ADP, oldNominalADP, nominalADP));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isCleanStateOptimisation() {
-		return cleanStateOptimisation;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setCleanStateOptimisation(boolean newCleanStateOptimisation) {
-		boolean oldCleanStateOptimisation = cleanStateOptimisation;
-		cleanStateOptimisation = newCleanStateOptimisation;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.USER_SETTINGS__CLEAN_STATE_OPTIMISATION, oldCleanStateOptimisation, cleanStateOptimisation));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public int getFloatingDaysLimit() {
-		return floatingDaysLimit;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setFloatingDaysLimit(int newFloatingDaysLimit) {
-		int oldFloatingDaysLimit = floatingDaysLimit;
-		floatingDaysLimit = newFloatingDaysLimit;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.USER_SETTINGS__FLOATING_DAYS_LIMIT, oldFloatingDaysLimit, floatingDaysLimit));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isAdpOptimisation() {
-		return adpOptimisation;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setAdpOptimisation(boolean newAdpOptimisation) {
-		boolean oldAdpOptimisation = adpOptimisation;
-		adpOptimisation = newAdpOptimisation;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.USER_SETTINGS__ADP_OPTIMISATION, oldAdpOptimisation, adpOptimisation));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isDualMode() {
-		return dualMode;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setDualMode(boolean newDualMode) {
-		boolean oldDualMode = dualMode;
-		dualMode = newDualMode;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.USER_SETTINGS__DUAL_MODE, oldDualMode, dualMode));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case ParametersPackage.USER_SETTINGS__MODE:
+				return getMode();
+			case ParametersPackage.USER_SETTINGS__NOMINAL_ONLY:
+				return isNominalOnly();
+			case ParametersPackage.USER_SETTINGS__BUILD_ACTION_SETS:
+				return isBuildActionSets();
 			case ParametersPackage.USER_SETTINGS__PERIOD_START_DATE:
 				return getPeriodStartDate();
 			case ParametersPackage.USER_SETTINGS__PERIOD_END:
 				return getPeriodEnd();
+			case ParametersPackage.USER_SETTINGS__DUAL_MODE:
+				return isDualMode();
+			case ParametersPackage.USER_SETTINGS__SIMILARITY_MODE:
+				return getSimilarityMode();
 			case ParametersPackage.USER_SETTINGS__SHIPPING_ONLY:
 				return isShippingOnly();
 			case ParametersPackage.USER_SETTINGS__GENERATE_CHARTER_OUTS:
@@ -742,20 +773,10 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 				return getCharterLengthDays();
 			case ParametersPackage.USER_SETTINGS__WITH_SPOT_CARGO_MARKETS:
 				return isWithSpotCargoMarkets();
-			case ParametersPackage.USER_SETTINGS__BUILD_ACTION_SETS:
-				return isBuildActionSets();
-			case ParametersPackage.USER_SETTINGS__SIMILARITY_MODE:
-				return getSimilarityMode();
-			case ParametersPackage.USER_SETTINGS__NOMINAL_ADP:
-				return isNominalADP();
-			case ParametersPackage.USER_SETTINGS__CLEAN_STATE_OPTIMISATION:
-				return isCleanStateOptimisation();
 			case ParametersPackage.USER_SETTINGS__FLOATING_DAYS_LIMIT:
 				return getFloatingDaysLimit();
-			case ParametersPackage.USER_SETTINGS__ADP_OPTIMISATION:
-				return isAdpOptimisation();
-			case ParametersPackage.USER_SETTINGS__DUAL_MODE:
-				return isDualMode();
+			case ParametersPackage.USER_SETTINGS__CLEAN_SLATE_OPTIMISATION:
+				return isCleanSlateOptimisation();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -768,11 +789,26 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case ParametersPackage.USER_SETTINGS__MODE:
+				setMode((OptimisationMode)newValue);
+				return;
+			case ParametersPackage.USER_SETTINGS__NOMINAL_ONLY:
+				setNominalOnly((Boolean)newValue);
+				return;
+			case ParametersPackage.USER_SETTINGS__BUILD_ACTION_SETS:
+				setBuildActionSets((Boolean)newValue);
+				return;
 			case ParametersPackage.USER_SETTINGS__PERIOD_START_DATE:
 				setPeriodStartDate((LocalDate)newValue);
 				return;
 			case ParametersPackage.USER_SETTINGS__PERIOD_END:
 				setPeriodEnd((YearMonth)newValue);
+				return;
+			case ParametersPackage.USER_SETTINGS__DUAL_MODE:
+				setDualMode((Boolean)newValue);
+				return;
+			case ParametersPackage.USER_SETTINGS__SIMILARITY_MODE:
+				setSimilarityMode((SimilarityMode)newValue);
 				return;
 			case ParametersPackage.USER_SETTINGS__SHIPPING_ONLY:
 				setShippingOnly((Boolean)newValue);
@@ -789,26 +825,11 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 			case ParametersPackage.USER_SETTINGS__WITH_SPOT_CARGO_MARKETS:
 				setWithSpotCargoMarkets((Boolean)newValue);
 				return;
-			case ParametersPackage.USER_SETTINGS__BUILD_ACTION_SETS:
-				setBuildActionSets((Boolean)newValue);
-				return;
-			case ParametersPackage.USER_SETTINGS__SIMILARITY_MODE:
-				setSimilarityMode((SimilarityMode)newValue);
-				return;
-			case ParametersPackage.USER_SETTINGS__NOMINAL_ADP:
-				setNominalADP((Boolean)newValue);
-				return;
-			case ParametersPackage.USER_SETTINGS__CLEAN_STATE_OPTIMISATION:
-				setCleanStateOptimisation((Boolean)newValue);
-				return;
 			case ParametersPackage.USER_SETTINGS__FLOATING_DAYS_LIMIT:
 				setFloatingDaysLimit((Integer)newValue);
 				return;
-			case ParametersPackage.USER_SETTINGS__ADP_OPTIMISATION:
-				setAdpOptimisation((Boolean)newValue);
-				return;
-			case ParametersPackage.USER_SETTINGS__DUAL_MODE:
-				setDualMode((Boolean)newValue);
+			case ParametersPackage.USER_SETTINGS__CLEAN_SLATE_OPTIMISATION:
+				setCleanSlateOptimisation((Boolean)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -822,11 +843,26 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case ParametersPackage.USER_SETTINGS__MODE:
+				setMode(MODE_EDEFAULT);
+				return;
+			case ParametersPackage.USER_SETTINGS__NOMINAL_ONLY:
+				setNominalOnly(NOMINAL_ONLY_EDEFAULT);
+				return;
+			case ParametersPackage.USER_SETTINGS__BUILD_ACTION_SETS:
+				setBuildActionSets(BUILD_ACTION_SETS_EDEFAULT);
+				return;
 			case ParametersPackage.USER_SETTINGS__PERIOD_START_DATE:
 				unsetPeriodStartDate();
 				return;
 			case ParametersPackage.USER_SETTINGS__PERIOD_END:
 				unsetPeriodEnd();
+				return;
+			case ParametersPackage.USER_SETTINGS__DUAL_MODE:
+				setDualMode(DUAL_MODE_EDEFAULT);
+				return;
+			case ParametersPackage.USER_SETTINGS__SIMILARITY_MODE:
+				setSimilarityMode(SIMILARITY_MODE_EDEFAULT);
 				return;
 			case ParametersPackage.USER_SETTINGS__SHIPPING_ONLY:
 				setShippingOnly(SHIPPING_ONLY_EDEFAULT);
@@ -843,26 +879,11 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 			case ParametersPackage.USER_SETTINGS__WITH_SPOT_CARGO_MARKETS:
 				setWithSpotCargoMarkets(WITH_SPOT_CARGO_MARKETS_EDEFAULT);
 				return;
-			case ParametersPackage.USER_SETTINGS__BUILD_ACTION_SETS:
-				setBuildActionSets(BUILD_ACTION_SETS_EDEFAULT);
-				return;
-			case ParametersPackage.USER_SETTINGS__SIMILARITY_MODE:
-				setSimilarityMode(SIMILARITY_MODE_EDEFAULT);
-				return;
-			case ParametersPackage.USER_SETTINGS__NOMINAL_ADP:
-				setNominalADP(NOMINAL_ADP_EDEFAULT);
-				return;
-			case ParametersPackage.USER_SETTINGS__CLEAN_STATE_OPTIMISATION:
-				setCleanStateOptimisation(CLEAN_STATE_OPTIMISATION_EDEFAULT);
-				return;
 			case ParametersPackage.USER_SETTINGS__FLOATING_DAYS_LIMIT:
 				setFloatingDaysLimit(FLOATING_DAYS_LIMIT_EDEFAULT);
 				return;
-			case ParametersPackage.USER_SETTINGS__ADP_OPTIMISATION:
-				setAdpOptimisation(ADP_OPTIMISATION_EDEFAULT);
-				return;
-			case ParametersPackage.USER_SETTINGS__DUAL_MODE:
-				setDualMode(DUAL_MODE_EDEFAULT);
+			case ParametersPackage.USER_SETTINGS__CLEAN_SLATE_OPTIMISATION:
+				setCleanSlateOptimisation(CLEAN_SLATE_OPTIMISATION_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -876,10 +897,20 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case ParametersPackage.USER_SETTINGS__MODE:
+				return mode != MODE_EDEFAULT;
+			case ParametersPackage.USER_SETTINGS__NOMINAL_ONLY:
+				return nominalOnly != NOMINAL_ONLY_EDEFAULT;
+			case ParametersPackage.USER_SETTINGS__BUILD_ACTION_SETS:
+				return buildActionSets != BUILD_ACTION_SETS_EDEFAULT;
 			case ParametersPackage.USER_SETTINGS__PERIOD_START_DATE:
 				return isSetPeriodStartDate();
 			case ParametersPackage.USER_SETTINGS__PERIOD_END:
 				return isSetPeriodEnd();
+			case ParametersPackage.USER_SETTINGS__DUAL_MODE:
+				return dualMode != DUAL_MODE_EDEFAULT;
+			case ParametersPackage.USER_SETTINGS__SIMILARITY_MODE:
+				return similarityMode != SIMILARITY_MODE_EDEFAULT;
 			case ParametersPackage.USER_SETTINGS__SHIPPING_ONLY:
 				return shippingOnly != SHIPPING_ONLY_EDEFAULT;
 			case ParametersPackage.USER_SETTINGS__GENERATE_CHARTER_OUTS:
@@ -890,20 +921,10 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 				return charterLengthDays != CHARTER_LENGTH_DAYS_EDEFAULT;
 			case ParametersPackage.USER_SETTINGS__WITH_SPOT_CARGO_MARKETS:
 				return withSpotCargoMarkets != WITH_SPOT_CARGO_MARKETS_EDEFAULT;
-			case ParametersPackage.USER_SETTINGS__BUILD_ACTION_SETS:
-				return buildActionSets != BUILD_ACTION_SETS_EDEFAULT;
-			case ParametersPackage.USER_SETTINGS__SIMILARITY_MODE:
-				return similarityMode != SIMILARITY_MODE_EDEFAULT;
-			case ParametersPackage.USER_SETTINGS__NOMINAL_ADP:
-				return nominalADP != NOMINAL_ADP_EDEFAULT;
-			case ParametersPackage.USER_SETTINGS__CLEAN_STATE_OPTIMISATION:
-				return cleanStateOptimisation != CLEAN_STATE_OPTIMISATION_EDEFAULT;
 			case ParametersPackage.USER_SETTINGS__FLOATING_DAYS_LIMIT:
 				return floatingDaysLimit != FLOATING_DAYS_LIMIT_EDEFAULT;
-			case ParametersPackage.USER_SETTINGS__ADP_OPTIMISATION:
-				return adpOptimisation != ADP_OPTIMISATION_EDEFAULT;
-			case ParametersPackage.USER_SETTINGS__DUAL_MODE:
-				return dualMode != DUAL_MODE_EDEFAULT;
+			case ParametersPackage.USER_SETTINGS__CLEAN_SLATE_OPTIMISATION:
+				return cleanSlateOptimisation != CLEAN_SLATE_OPTIMISATION_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -918,10 +939,20 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (periodStartDate: ");
+		result.append(" (mode: ");
+		result.append(mode);
+		result.append(", nominalOnly: ");
+		result.append(nominalOnly);
+		result.append(", buildActionSets: ");
+		result.append(buildActionSets);
+		result.append(", periodStartDate: ");
 		if (periodStartDateESet) result.append(periodStartDate); else result.append("<unset>");
 		result.append(", periodEnd: ");
 		if (periodEndESet) result.append(periodEnd); else result.append("<unset>");
+		result.append(", dualMode: ");
+		result.append(dualMode);
+		result.append(", similarityMode: ");
+		result.append(similarityMode);
 		result.append(", shippingOnly: ");
 		result.append(shippingOnly);
 		result.append(", generateCharterOuts: ");
@@ -932,20 +963,10 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 		result.append(charterLengthDays);
 		result.append(", withSpotCargoMarkets: ");
 		result.append(withSpotCargoMarkets);
-		result.append(", buildActionSets: ");
-		result.append(buildActionSets);
-		result.append(", similarityMode: ");
-		result.append(similarityMode);
-		result.append(", nominalADP: ");
-		result.append(nominalADP);
-		result.append(", cleanStateOptimisation: ");
-		result.append(cleanStateOptimisation);
 		result.append(", floatingDaysLimit: ");
 		result.append(floatingDaysLimit);
-		result.append(", adpOptimisation: ");
-		result.append(adpOptimisation);
-		result.append(", dualMode: ");
-		result.append(dualMode);
+		result.append(", cleanSlateOptimisation: ");
+		result.append(cleanSlateOptimisation);
 		result.append(')');
 		return result.toString();
 	}

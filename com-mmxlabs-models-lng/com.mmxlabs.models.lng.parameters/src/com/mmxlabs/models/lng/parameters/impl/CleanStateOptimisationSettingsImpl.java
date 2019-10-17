@@ -137,6 +137,7 @@ public class CleanStateOptimisationSettingsImpl extends EObjectImpl implements C
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getGlobalIterations() {
 		return globalIterations;
 	}
@@ -146,6 +147,7 @@ public class CleanStateOptimisationSettingsImpl extends EObjectImpl implements C
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setGlobalIterations(int newGlobalIterations) {
 		int oldGlobalIterations = globalIterations;
 		globalIterations = newGlobalIterations;
@@ -158,6 +160,7 @@ public class CleanStateOptimisationSettingsImpl extends EObjectImpl implements C
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getLocalIterations() {
 		return localIterations;
 	}
@@ -167,6 +170,7 @@ public class CleanStateOptimisationSettingsImpl extends EObjectImpl implements C
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLocalIterations(int newLocalIterations) {
 		int oldLocalIterations = localIterations;
 		localIterations = newLocalIterations;
@@ -179,6 +183,7 @@ public class CleanStateOptimisationSettingsImpl extends EObjectImpl implements C
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getTabuSize() {
 		return tabuSize;
 	}
@@ -188,6 +193,7 @@ public class CleanStateOptimisationSettingsImpl extends EObjectImpl implements C
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTabuSize(int newTabuSize) {
 		int oldTabuSize = tabuSize;
 		tabuSize = newTabuSize;
@@ -200,6 +206,7 @@ public class CleanStateOptimisationSettingsImpl extends EObjectImpl implements C
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getSeed() {
 		return seed;
 	}
@@ -209,6 +216,7 @@ public class CleanStateOptimisationSettingsImpl extends EObjectImpl implements C
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSeed(int newSeed) {
 		int oldSeed = seed;
 		seed = newSeed;

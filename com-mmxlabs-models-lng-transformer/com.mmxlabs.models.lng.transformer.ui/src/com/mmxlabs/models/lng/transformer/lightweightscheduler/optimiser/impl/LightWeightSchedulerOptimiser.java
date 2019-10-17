@@ -30,6 +30,7 @@ import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightW
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightFitnessFunction;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightOptimisationData;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightSequenceOptimiser;
+import com.mmxlabs.models.lng.transformer.optimiser.common.AbstractOptimiserHelper;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
@@ -104,7 +105,7 @@ public class LightWeightSchedulerOptimiser {
 		// Export the pairings matrix to the raw sequences:
 
 		final ModifiableSequences rawSequences1 = new ModifiableSequences(initialSequences);
-		LightWeightOptimiserHelper.moveElementsToUnusedList(rawSequences1, portSlotProvider);
+		AbstractOptimiserHelper.moveElementsToUnusedList(rawSequences1, portSlotProvider);
 		final ModifiableSequences rawSequences = new ModifiableSequences(initialSequences.getResources());
 		rawSequences.getModifiableUnusedElements().addAll(rawSequences1.getUnusedElements());
 

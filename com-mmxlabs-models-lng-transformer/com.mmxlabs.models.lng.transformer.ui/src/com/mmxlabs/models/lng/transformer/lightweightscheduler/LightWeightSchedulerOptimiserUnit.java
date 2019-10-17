@@ -130,7 +130,7 @@ public class LightWeightSchedulerOptimiserUnit {
 					final LightWeightSchedulerOptimiserUnit t = new LightWeightSchedulerOptimiserUnit(dataTransformer, userSettings, copyStageSettings,
 							copyStageSettings.getConstraintAndFitnessSettings(), executorService, (LNGScenarioModel) (optimiserBridge.getOptimiserScenario().getScenario()), hints);
 					final IMultiStateResult result;
-					if (userSettings.isNominalADP()) {
+					if (userSettings.isNominalOnly()) {
 						ISequences seq = t.computeNominalADP(initialSequencesContainer.getSequences(), monitor);
 						if (seq == null) {
 							throw new InfeasibleSolutionException("No feasible solution found");

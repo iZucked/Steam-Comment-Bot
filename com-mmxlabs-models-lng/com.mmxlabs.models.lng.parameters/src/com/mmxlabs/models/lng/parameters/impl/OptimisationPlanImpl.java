@@ -119,6 +119,7 @@ public class OptimisationPlanImpl extends EObjectImpl implements OptimisationPla
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public UserSettings getUserSettings() {
 		if (userSettings != null && userSettings.eIsProxy()) {
 			InternalEObject oldUserSettings = (InternalEObject)userSettings;
@@ -145,6 +146,7 @@ public class OptimisationPlanImpl extends EObjectImpl implements OptimisationPla
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setUserSettings(UserSettings newUserSettings) {
 		UserSettings oldUserSettings = userSettings;
 		userSettings = newUserSettings;
@@ -157,6 +159,7 @@ public class OptimisationPlanImpl extends EObjectImpl implements OptimisationPla
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<OptimisationStage> getStages() {
 		if (stages == null) {
 			stages = new EObjectContainmentEList<OptimisationStage>(OptimisationStage.class, this, ParametersPackage.OPTIMISATION_PLAN__STAGES);
@@ -169,6 +172,7 @@ public class OptimisationPlanImpl extends EObjectImpl implements OptimisationPla
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SolutionBuilderSettings getSolutionBuilderSettings() {
 		return solutionBuilderSettings;
 	}
@@ -193,6 +197,7 @@ public class OptimisationPlanImpl extends EObjectImpl implements OptimisationPla
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSolutionBuilderSettings(SolutionBuilderSettings newSolutionBuilderSettings) {
 		if (newSolutionBuilderSettings != solutionBuilderSettings) {
 			NotificationChain msgs = null;
@@ -212,6 +217,7 @@ public class OptimisationPlanImpl extends EObjectImpl implements OptimisationPla
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getResultName() {
 		return resultName;
 	}
@@ -221,6 +227,7 @@ public class OptimisationPlanImpl extends EObjectImpl implements OptimisationPla
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setResultName(String newResultName) {
 		String oldResultName = resultName;
 		resultName = newResultName;

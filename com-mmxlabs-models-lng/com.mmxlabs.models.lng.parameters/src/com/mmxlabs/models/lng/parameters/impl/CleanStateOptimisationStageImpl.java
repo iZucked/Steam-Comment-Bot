@@ -112,6 +112,7 @@ public class CleanStateOptimisationStageImpl extends ParallisableOptimisationSta
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getSeed() {
 		return seed;
 	}
@@ -121,6 +122,7 @@ public class CleanStateOptimisationStageImpl extends ParallisableOptimisationSta
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSeed(int newSeed) {
 		int oldSeed = seed;
 		seed = newSeed;
@@ -133,6 +135,7 @@ public class CleanStateOptimisationStageImpl extends ParallisableOptimisationSta
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public AnnealingSettings getAnnealingSettings() {
 		return annealingSettings;
 	}
@@ -157,6 +160,7 @@ public class CleanStateOptimisationStageImpl extends ParallisableOptimisationSta
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setAnnealingSettings(AnnealingSettings newAnnealingSettings) {
 		if (newAnnealingSettings != annealingSettings) {
 			NotificationChain msgs = null;
@@ -176,6 +180,7 @@ public class CleanStateOptimisationStageImpl extends ParallisableOptimisationSta
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CleanStateOptimisationSettings getCleanStateSettings() {
 		return cleanStateSettings;
 	}
@@ -200,6 +205,7 @@ public class CleanStateOptimisationStageImpl extends ParallisableOptimisationSta
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCleanStateSettings(CleanStateOptimisationSettings newCleanStateSettings) {
 		if (newCleanStateSettings != cleanStateSettings) {
 			NotificationChain msgs = null;
@@ -219,6 +225,7 @@ public class CleanStateOptimisationStageImpl extends ParallisableOptimisationSta
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ConstraintAndFitnessSettings getConstraintAndFitnessSettings() {
 		return constraintAndFitnessSettings;
 	}
@@ -243,6 +250,7 @@ public class CleanStateOptimisationStageImpl extends ParallisableOptimisationSta
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setConstraintAndFitnessSettings(ConstraintAndFitnessSettings newConstraintAndFitnessSettings) {
 		if (newConstraintAndFitnessSettings != constraintAndFitnessSettings) {
 			NotificationChain msgs = null;

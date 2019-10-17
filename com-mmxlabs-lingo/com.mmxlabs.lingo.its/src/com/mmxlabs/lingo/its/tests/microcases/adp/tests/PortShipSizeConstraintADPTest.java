@@ -247,7 +247,7 @@ public class PortShipSizeConstraintADPTest extends AbstractADPAndLightWeightTest
 	protected OptimisationPlan createOptimisationPlan(boolean nominalADP) {
 		// create plan in parent
 		final UserSettings userSettings = createUserSettings();
-		userSettings.setNominalADP(nominalADP);
+		userSettings.setNominalOnly(nominalADP);
 		final OptimisationPlan optimisationPlan = super.createOptimisationPlan(userSettings);
 		// and now delete lso and hill
 		OptimisationEMFTestUtils.removeLSOAndHill(optimisationPlan);

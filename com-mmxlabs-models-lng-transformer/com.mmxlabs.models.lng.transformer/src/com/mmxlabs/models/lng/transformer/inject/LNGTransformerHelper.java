@@ -111,7 +111,7 @@ public class LNGTransformerHelper {
 			}
 		}
 
-		if (userSettings.isNominalADP()) {
+		if (userSettings.isNominalOnly()) {
 			hints.add(HINT_NOMINAL_ADP);
 		}
 
