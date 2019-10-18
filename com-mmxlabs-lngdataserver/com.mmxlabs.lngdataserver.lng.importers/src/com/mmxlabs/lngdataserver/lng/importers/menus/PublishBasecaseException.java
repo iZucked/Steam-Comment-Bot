@@ -13,7 +13,8 @@ public class PublishBasecaseException extends RuntimeException {
 
 	public enum Type {
 		FAILED_UNKNOWN_ERROR, //
-		FAILED_SERVICE_LOCKED, //
+		FAILED_NOT_PERMITTED, // User is not permitted to publish base case
+		FAILED_SERVICE_LOCKED, // Service is locked by a different user
 		FAILED_TO_MIGRATE, //
 		FAILED_TO_EVALUATE, //
 		FAILED_TO_SAVE, //

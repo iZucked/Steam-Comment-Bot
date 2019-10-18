@@ -21,6 +21,7 @@ import javax.net.ssl.SSLPeerUnverifiedException;
 import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
 import org.eclipse.equinox.security.storage.StorageException;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
@@ -223,6 +224,10 @@ public class UpstreamUrlProvider implements IUserNameProvider {
 	}
 
 	public synchronized void testUpstreamAvailability() {
+		testUpstreamAvailability((Display)null); 
+	
+	}
+	public synchronized void testUpstreamAvailability(@Nullable Display optionalDisplay) {
 
 		boolean valid = false;
 		try {
@@ -267,7 +272,8 @@ public class UpstreamUrlProvider implements IUserNameProvider {
 			}
 
 			if (!hasDetails) {
-				final Display display = RunnerHelper.getWorkbenchDisplay();
+				
+				final Display display = optionalDisplay != null? optionalDisplay : RunnerHelper.getWorkbenchDisplay();
 				if (display == null) {
 					return;
 				}

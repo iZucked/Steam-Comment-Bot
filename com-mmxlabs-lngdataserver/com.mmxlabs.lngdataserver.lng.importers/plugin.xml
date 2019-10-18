@@ -76,12 +76,19 @@
                      <instanceof
                            value="com.mmxlabs.scenario.service.model.ScenarioInstance">
                      </instanceof>
+                     <and>
+                     <test
+                           args="basecase,publish"
+                           forcePluginActivation="true"
+                           property="com.mmxlabs.lngdataserver.server.permissions.ispermitted">
+                        </test>    
                      <not>
                         <test
                               forcePluginActivation="true"
                               property="com.mmxlabs.scenario.service.ui.flags.readonly">
                         </test>
                      </not>
+                     </and>
                   </iterate>
                </with>
                <count
@@ -105,7 +112,12 @@
                            value="com.mmxlabs.scenario.service.model.ScenarioService">
                      </instanceof>
                      <and>
-                       <test
+                        <test
+                           args="basecase,lock"
+                           forcePluginActivation="true"
+                           property="com.mmxlabs.lngdataserver.server.permissions.ispermitted">
+                        </test>
+                        <test
                               forcePluginActivation="true"
                               property="com.mmxlabs.datahub.basecase.service.needslocking">
                         </test>
@@ -141,6 +153,11 @@
                            value="com.mmxlabs.scenario.service.model.ScenarioService">
                      </instanceof>
                      <and>
+                       <test
+                           args="basecase,unlock"
+                           forcePluginActivation="true"
+                           property="com.mmxlabs.lngdataserver.server.permissions.ispermitted">
+                        </test>                     
                        <test
                               forcePluginActivation="true"
                               property="com.mmxlabs.datahub.basecase.service.needslocking">

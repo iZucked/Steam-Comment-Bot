@@ -39,6 +39,7 @@ import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.IReportPubl
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.ReportPublisherExtensionUtil;
 import com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard.SharedScenarioDataUtils.DataOptions;
 import com.mmxlabs.lngdataserver.lng.importers.menus.PublishBasecaseException.Type;
+import com.mmxlabs.lngdataserver.server.UserPermissionsService;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -102,6 +103,9 @@ public class ScenarioServicePublishAction {
 					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUBLISHING,
 							"Failed to publish base case with unknown error. " + publishBasecaseException.getCause().getMessage());
 					break;
+				case FAILED_NOT_PERMITTED:
+					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_FAILED_PUBLISHING, "Insufficient permissions to publish base case.");
+					break;					
 				case FAILED_TO_MIGRATE:
 					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUBLISHING,
 							"Failed to migrate the scenario to current data model version. Unable to publish as base case.");
@@ -112,6 +116,7 @@ public class ScenarioServicePublishAction {
 				case FAILED_TO_SAVE:
 					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUBLISHING, "Failed to save the base case scenario to a temporary file. Unable to publish as base case.");
 					break;
+					
 				case FAILED_SERVICE_LOCKED:
 					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_FAILED_PUBLISHING, "Base case locked by locked by another user.");
 					break;
@@ -145,6 +150,14 @@ public class ScenarioServicePublishAction {
 	}
 
 	public static void publishScenario(final ScenarioInstance scenarioInstance, final String notes, final IProgressMonitor parentProgressMonitor) {
+		
+		// Check user permission
+		if (UserPermissionsService.INSTANCE.hubSupportsPermissions()) {
+			if (!UserPermissionsService.INSTANCE.isPermitted("basecase", "publish")) {
+				throw new PublishBasecaseException("Error publishing scenario.", Type.FAILED_NOT_PERMITTED, new RuntimeException());
+			}
+		}
+		
 		{ // Early locked base case service check
 			Boolean serviceLocked;
 			try {

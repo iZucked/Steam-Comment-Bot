@@ -17,7 +17,6 @@ import javax.management.MBeanServer;
 import javax.management.ObjectName;
 
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.equinox.internal.p2.garbagecollector.GarbageCollector;
@@ -32,21 +31,21 @@ import org.eclipse.osgi.service.datalocation.Location;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
 import com.mmxlabs.common.io.FileDeleter;
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.license.features.pluginxml.PluginRegistryHook;
 import com.mmxlabs.license.ssl.LicenseChecker;
 import com.mmxlabs.license.ssl.LicenseChecker.LicenseState;
+import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
+import com.mmxlabs.lngdataserver.server.UserPermissionsService;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
-import com.mmxlabs.rcp.common.SelectionHelper;
-import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.rcp.common.application.DelayedOpenFileProcessor;
 import com.mmxlabs.rcp.common.application.WorkbenchStateManager;
 import com.mmxlabs.rcp.common.viewfactory.ReplaceableViewManager;
@@ -173,11 +172,52 @@ public class Application implements IApplication {
 		initAccessControl();
 		WorkbenchStateManager.cleanupWorkbenchState();
 
+		// Check Data Hub to see if user is authorised to use LiNGO
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_DATAHUB_STARTUP_CHECK)) {
+			// Small start up delay to wait for hub connection.
+			for (int i = 0; i < 30; ++i) {
+				if (UpstreamUrlProvider.INSTANCE.isAvailable()) {
+					break;
+				}
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				// Trigger the auth prompt in case this is a first run.
+				// Shouldn't really call directly, but the workbench is not started yet for this method to find a display
+				UpstreamUrlProvider.INSTANCE.testUpstreamAvailability(display);
+			}
+			if (!UpstreamUrlProvider.INSTANCE.isAvailable()) {
+				MessageDialog.openError(display.getActiveShell(), "", "Unable to connect to Data Hub to valid user permissions. Please try again later.");
+
+				display.dispose();
+				return IApplication.EXIT_OK;
+			}
+
+			// Force permissions refresh
+			try {
+				UserPermissionsService.INSTANCE.updateUserPermissions();
+			} catch (IOException e) {
+				e.printStackTrace();
+				MessageDialog.openError(display.getActiveShell(), "", "Error getting user permissions from Data Hub. Please try again later.");
+
+				display.dispose();
+				return IApplication.EXIT_OK;
+			}
+
+			if (!UserPermissionsService.INSTANCE.isPermitted("lingo", "read")) {
+				MessageDialog.openError(display.getActiveShell(), "", "Not authorised to use LiNGO");
+
+				display.dispose();
+				return IApplication.EXIT_OK;
+			}
+		}
+
 		// Don't abort LiNGO is p2 garbage collect fails.
 		// For some reason this started to happen ~14 Dec 2017
-		try
-
-		{
+		try {
 			cleanupP2();
 		} catch (final Exception e) {
 
