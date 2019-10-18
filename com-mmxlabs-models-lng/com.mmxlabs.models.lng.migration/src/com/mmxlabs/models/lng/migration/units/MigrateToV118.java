@@ -55,20 +55,22 @@ public class MigrateToV118 extends AbstractMigrationUnit {
 		//Go through the VesselAvailabilities, if no entity copy from BB contract if there is one, else use default entity if one.
 		final EObjectWrapper cargoModel = scenarioModel.getRef("cargoModel");
 		final List<EObjectWrapper> vesselAvailabilities = cargoModel.getRefAsList("vesselAvailabilities");
-		for (EObjectWrapper vesselAvailability : vesselAvailabilities) {
-			if (!vesselAvailability.isSetFeature("entity")) {
-				if (vesselAvailability.isSetFeature("charterContract")) {
-					EObjectWrapper entity = getEntityFromCharterContract(ballastBonusContractClass, vesselAvailability.getRef("charterContract"));
-					if (entity != null) {
-						 vesselAvailability.setRef("entity", entity);
+		
+		if (vesselAvailabilities != null) {
+			for (EObjectWrapper vesselAvailability : vesselAvailabilities) {
+				if (!vesselAvailability.isSetFeature("entity")) {
+					if (vesselAvailability.isSetFeature("charterContract")) {
+						EObjectWrapper entity = getEntityFromCharterContract(ballastBonusContractClass, vesselAvailability.getRef("charterContract"));
+						if (entity != null) {
+							vesselAvailability.setRef("entity", entity);
+						}
 					}
-				}
-				if (defaultEntity != null && vesselAvailability.getRef("entity") == null) {
-					 vesselAvailability.setRef("entity", defaultEntity);
+					if (defaultEntity != null && vesselAvailability.getRef("entity") == null) {
+						vesselAvailability.setRef("entity", defaultEntity);
+					}
 				}
 			}
 		}
-		
 		
 		//Go through the CharterIn markets, take from BB contract if there is one, else use default entity.
 		final EObjectWrapper spotMarketsModel = referenceModel.getRef("spotMarketsModel");
