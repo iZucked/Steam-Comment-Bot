@@ -75,15 +75,18 @@ public class MigrateToV118 extends AbstractMigrationUnit {
 		//Go through the CharterIn markets, take from BB contract if there is one, else use default entity.
 		final EObjectWrapper spotMarketsModel = referenceModel.getRef("spotMarketsModel");
 		final List<EObjectWrapper> charterInMarkets = spotMarketsModel.getRefAsList("charterInMarkets");
-		for (EObjectWrapper charterInMarket : charterInMarkets) {
-			if (charterInMarket.isSetFeature("charterContract")) {
-				EObjectWrapper entity = getEntityFromCharterContract(ballastBonusContractClass, charterInMarket.getRef("charterContract"));
-				if (entity != null) {
-					charterInMarket.setRef("entity", entity);
+		
+		if (charterInMarkets != null) {
+			for (EObjectWrapper charterInMarket : charterInMarkets) {
+				if (charterInMarket.isSetFeature("charterContract")) {
+					EObjectWrapper entity = getEntityFromCharterContract(ballastBonusContractClass, charterInMarket.getRef("charterContract"));
+					if (entity != null) {
+						charterInMarket.setRef("entity", entity);
+					}
 				}
-			}
-			if (defaultEntity != null && charterInMarket.getRef("entity") == null) {
-				charterInMarket.setRef("entity", defaultEntity);
+				if (defaultEntity != null && charterInMarket.getRef("entity") == null) {
+					charterInMarket.setRef("entity", defaultEntity);
+				}
 			}
 		}
 		
