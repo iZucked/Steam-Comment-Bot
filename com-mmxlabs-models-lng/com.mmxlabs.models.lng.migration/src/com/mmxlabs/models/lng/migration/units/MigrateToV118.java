@@ -58,8 +58,8 @@ public class MigrateToV118 extends AbstractMigrationUnit {
 		
 		if (vesselAvailabilities != null) {
 			for (EObjectWrapper vesselAvailability : vesselAvailabilities) {
-				if (!vesselAvailability.isSetFeature("entity")) {
-					if (vesselAvailability.isSetFeature("charterContract")) {
+				if (vesselAvailability.getRef("entity") == null) {
+					if (vesselAvailability.getRef("charterContract") != null) {
 						EObjectWrapper entity = getEntityFromCharterContract(ballastBonusContractClass, vesselAvailability.getRef("charterContract"));
 						if (entity != null) {
 							vesselAvailability.setRef("entity", entity);
