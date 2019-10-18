@@ -234,7 +234,7 @@ public class CharterInMarketItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_CharterInMarket_entity_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CharterInMarket_entity_feature", "_UI_CharterInMarket_type"),
+				 getString("_UI_CharterInMarket_entity_description"),
 				 SpotMarketsPackage.Literals.CHARTER_IN_MARKET__ENTITY,
 				 true,
 				 false,
