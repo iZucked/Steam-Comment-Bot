@@ -86,7 +86,7 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 		// Create the required basic elements
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
 		// Construct the cargo scenario
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
@@ -117,7 +117,7 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 		// Create the required basic elements
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
 		// Construct the cargo scenario
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
@@ -188,7 +188,7 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 		// Create the required basic elements
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
 		// Construct the cargo scenario
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
@@ -259,7 +259,7 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 		// Create the required basic elements
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
 		final PurchaseContract contract = commercialModelBuilder.makeExpressionPurchaseContract("P", entity, "5");
 		contract.setRestrictedPortsArePermissive(true);
@@ -333,7 +333,7 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 		// Create the required basic elements
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
 		final SalesContract contract = commercialModelBuilder.makeExpressionSalesContract("P", entity, "7");
 		contract.setRestrictedPortsArePermissive(true);
@@ -403,7 +403,7 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 		// Create the required basic elements
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
 		final FOBPurchasesMarket spotMarket = spotMarketsModelBuilder.makeFOBPurchaseMarket("Spot", portFinder.findPort("Point Fortin"), entity, "5", 22.8) //
 				.withVolumeLimits(0, 3_000_000, VolumeUnits.MMBTU) //
@@ -444,7 +444,7 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 		// Create the required basic elements
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
 		final FOBPurchasesMarket spotMarket = spotMarketsModelBuilder.makeFOBPurchaseMarket("Spot", portFinder.findPort("Point Fortin"), entity, "5", 22.8) //
 				.withVolumeLimits(0, 3_000_000, VolumeUnits.MMBTU) //
@@ -485,7 +485,7 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 		// Create the required basic elements
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
 		final DESSalesMarket spotMarket = spotMarketsModelBuilder.makeDESSaleMarket("Spot", portFinder.findPort("Sakai"), entity, "7") //
 				.withVolumeLimits(0, 3_000_000, VolumeUnits.MMBTU) //
@@ -526,7 +526,7 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 		// Create the required basic elements
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
 		final DESSalesMarket spotMarket = spotMarketsModelBuilder.makeDESSaleMarket("Spot", portFinder.findPort("Sakai"), entity, "7") //
 				.withVolumeLimits(0, 3_000_000, VolumeUnits.MMBTU) //
@@ -568,7 +568,7 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 		// Create the required basic elements
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
 		final PurchaseContract contract = commercialModelBuilder.makeExpressionPurchaseContract("Contract", entity, "5");
 		final PurchaseContract contract2 = commercialModelBuilder.makeExpressionPurchaseContract("Contract2", entity, "5");
@@ -608,7 +608,7 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 		// Create the required basic elements
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
 		final PurchaseContract contract = commercialModelBuilder.makeExpressionPurchaseContract("Contract", entity, "5");
 		final PurchaseContract contract2 = commercialModelBuilder.makeExpressionPurchaseContract("Contract", entity, "5");
@@ -648,7 +648,7 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 		// Create the required basic elements
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
 		final SalesContract contract = commercialModelBuilder.makeExpressionSalesContract("Contract", entity, "7");
 		final SalesContract contract2 = commercialModelBuilder.makeExpressionSalesContract("Contract", entity, "7");
@@ -688,7 +688,7 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 		// Create the required basic elements
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
 		final SalesContract contract = commercialModelBuilder.makeExpressionSalesContract("Contract", entity, "7");
 		final SalesContract contract2 = commercialModelBuilder.makeExpressionSalesContract("Contract", entity, "7");
@@ -727,7 +727,7 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 		// Create the required basic elements
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
 		final SalesContract salesContract = commercialModelBuilder.makeExpressionSalesContract("C1", entity, "7");
 		final SalesContract salesContract2 = commercialModelBuilder.makeExpressionSalesContract("C2", entity, "7");
@@ -768,7 +768,7 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 		// Create the required basic elements
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
 		final PurchaseContract purchaseContract = commercialModelBuilder.makeExpressionPurchaseContract("Contract", entity, "5");
 		final PurchaseContract purchaseContract2 = commercialModelBuilder.makeExpressionPurchaseContract("Contract", entity, "5");
@@ -810,7 +810,7 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 		// Create the required basic elements
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
 		final SalesContract contract = commercialModelBuilder.makeExpressionSalesContract("C1", entity, "7");
 		final SalesContract contract2 = commercialModelBuilder.makeExpressionSalesContract("C2", entity, "7");
@@ -854,7 +854,7 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 		// Create the required basic elements
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
 		final PurchaseContract contract = commercialModelBuilder.makeExpressionPurchaseContract("C1", entity, "5");
 		final PurchaseContract contract2 = commercialModelBuilder.makeExpressionPurchaseContract("C2", entity, "5");

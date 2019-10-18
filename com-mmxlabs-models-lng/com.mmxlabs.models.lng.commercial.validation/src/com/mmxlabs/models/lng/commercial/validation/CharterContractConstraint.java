@@ -57,15 +57,6 @@ public class CharterContractConstraint extends AbstractModelMultiConstraint {
 						dsd.addEObjectAndFeature(contract, attribute);
 						statuses.add(dsd);
 					}
-					
-					//Check for entity.
-					BaseLegalEntity entity = ballastBonusCharterContract.getEntity();
-					if (entity == null) {
-						final String message = String.format("[Charter Contract|'%s']%s", name, " Entity must be set, if Repositioning Fee used.");
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
-						dsd.addEObjectAndFeature(contract, CommercialPackage.eINSTANCE.getBallastBonusCharterContract_Entity());
-						statuses.add(dsd);
-					}
 				}
 			}	
 		}

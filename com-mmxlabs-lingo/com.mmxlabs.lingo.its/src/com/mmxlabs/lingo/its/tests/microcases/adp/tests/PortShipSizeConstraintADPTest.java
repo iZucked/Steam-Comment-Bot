@@ -220,7 +220,7 @@ public class PortShipSizeConstraintADPTest extends AbstractADPAndLightWeightTest
 		final Port himeji = portFinder.findPort(TrainingCaseConstants.PORT_HIMEJI);
 		himeji.setMinVesselSize(110000);
 		himeji.setMaxVesselSize(180000);
-		final CharterInMarket defaultCharterInMarket = spotMarketsModelBuilder.createCharterInMarket("ADP Default", vesselSmall, "50000", 0);
+		final CharterInMarket defaultCharterInMarket = spotMarketsModelBuilder.createCharterInMarket("ADP Default", vesselSmall, entity, "50000", 0);
 		defaultCharterInMarket.setNominal(true); //Creates 1 small ship, which ADP uses for Pnl evaluation and tabu search then moves to other ships after ADP phase, if sufficient capacity.
 		defaultCharterInMarket.setEnabled(true);
 		defaultCharterInMarket.setSpotCharterCount(0); //If set to 1, we get another small ship.

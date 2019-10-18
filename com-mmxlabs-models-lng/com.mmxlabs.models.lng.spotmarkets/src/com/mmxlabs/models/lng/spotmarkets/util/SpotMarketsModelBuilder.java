@@ -33,14 +33,14 @@ public class SpotMarketsModelBuilder {
 	}
 
 	@NonNull
-	public CharterInMarket createCharterInMarket(@NonNull final String name, @NonNull final Vessel vessel, @NonNull final String charterInRate, final int charterInCount) {
+	public CharterInMarket createCharterInMarket(@NonNull final String name, @NonNull final Vessel vessel, @NonNull final BaseLegalEntity entity, @NonNull final String charterInRate, final int charterInCount) {
 
 		final CharterInMarket charterInMarket = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
 		charterInMarket.setName(name);
 		charterInMarket.setVessel(vessel);
 		charterInMarket.setCharterInRate(charterInRate);
 		charterInMarket.setSpotCharterCount(charterInCount);
-
+		charterInMarket.setEntity(entity);
 		spotMarketsModel.getCharterInMarkets().add(charterInMarket);
 		return charterInMarket;
 	}

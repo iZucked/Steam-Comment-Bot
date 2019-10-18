@@ -109,7 +109,7 @@ public class LightWeightSchedulerTests extends AbstractMicroTestCase {
 		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 		charterInMarket_1.setNominal(true);
 
 		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("Bonny", LocalDate.of(2016, 1, 1), portFinder.findPort("Darwin LNG"), null, entity, "5", 22.8).withWindowSize(1, TimePeriod.MONTHS)
@@ -156,7 +156,7 @@ public class LightWeightSchedulerTests extends AbstractMicroTestCase {
 		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 		charterInMarket_1.setNominal(true);
 
 		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("Bonny", LocalDate.of(2016, 1, 1), portFinder.findPort("Darwin LNG"), null, entity, "5", 22.8).withWindowSize(1, TimePeriod.MONTHS)

@@ -180,7 +180,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 		Assumptions.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
 
 		final Vessel vesselSmall = fleetModelFinder.findVessel(TrainingCaseConstants.VESSEL_SMALL_SHIP);
-		final CharterInMarket defaultCharterInMarket = spotMarketsModelBuilder.createCharterInMarket("ADP Default", vesselSmall, "50000", 0);
+		final CharterInMarket defaultCharterInMarket = spotMarketsModelBuilder.createCharterInMarket("ADP Default", vesselSmall, entity, "50000", 0);
 		defaultCharterInMarket.setNominal(true);
 		defaultCharterInMarket.setEnabled(false);
 
@@ -514,7 +514,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 		final Vessel vesselMedium = fleetModelFinder.findVessel(TrainingCaseConstants.VESSEL_MEDIUM_SHIP);
 		final Port darwin = portFinder.findPort(TrainingCaseConstants.PORT_DARWIN);
 		final Port himeji = portFinder.findPort(TrainingCaseConstants.PORT_HIMEJI);
-		final CharterInMarket defaultCharterInMarket = spotMarketsModelBuilder.createCharterInMarket("ADP Default", vesselSmall, "50000", 0);
+		final CharterInMarket defaultCharterInMarket = spotMarketsModelBuilder.createCharterInMarket("ADP Default", vesselSmall, entity, "50000", 0);
 		defaultCharterInMarket.setNominal(true);
 		defaultCharterInMarket.setEnabled(false);
 

@@ -124,7 +124,7 @@ public class CustomScenarioCreator extends DefaultScenarioCreator {
 		final Vessel vessel = scenarioModelBuilder.getFleetModelBuilder().createVessel(vesselClassName, capacity, fillCapacity, minSpeed, maxSpeed, baseFuel, pilotLightRate, minHeelVolume,
 				cooldownVolume, warmupTime);
 
-		final CharterInMarket charterInMarket = spotMarketsModelBuilder.createCharterInMarket("market-" + vessel.getName(), vessel, "0", spotCharterCount);
+		final CharterInMarket charterInMarket = spotMarketsModelBuilder.createCharterInMarket("market-" + vessel.getName(), vessel, shippingEntity, "0", spotCharterCount);
 
 		scenarioModelBuilder.getFleetModelBuilder().setVesselStateAttributes(vessel, true, ladenNBORate, ladenIdleNBORate, ladenIdleConsumptionRate, 0);
 		scenarioModelBuilder.getFleetModelBuilder().setVesselStateAttributes(vessel, false, ballastNBORate, ballastIdleNBORate, ballastIdleConsumptionRate, 0);

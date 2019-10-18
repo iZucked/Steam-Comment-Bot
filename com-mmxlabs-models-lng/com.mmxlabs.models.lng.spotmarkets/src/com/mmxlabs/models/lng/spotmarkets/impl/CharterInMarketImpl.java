@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.models.lng.spotmarkets.impl;
 
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CharterContract;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -51,6 +52,7 @@ import com.mmxlabs.models.mmxcore.NamedObject;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#getMinDuration <em>Min Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#getMaxDuration <em>Max Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#isMtm <em>Mtm</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#getEntity <em>Entity</em>}</li>
  * </ul>
  *
  * @generated
@@ -282,6 +284,16 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 * @ordered
 	 */
 	protected boolean mtm = MTM_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getEntity() <em>Entity</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getEntity()
+	 * @generated
+	 * @ordered
+	 */
+	protected BaseLegalEntity entity;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -522,6 +534,46 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 		mtm = newMtm;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.CHARTER_IN_MARKET__MTM, oldMtm, mtm));
+	}
+
+/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public BaseLegalEntity getEntity() {
+		if (entity != null && entity.eIsProxy()) {
+			InternalEObject oldEntity = (InternalEObject)entity;
+			entity = (BaseLegalEntity)eResolveProxy(oldEntity);
+			if (entity != oldEntity) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SpotMarketsPackage.CHARTER_IN_MARKET__ENTITY, oldEntity, entity));
+			}
+		}
+		return entity;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BaseLegalEntity basicGetEntity() {
+		return entity;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setEntity(BaseLegalEntity newEntity) {
+		BaseLegalEntity oldEntity = entity;
+		entity = newEntity;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.CHARTER_IN_MARKET__ENTITY, oldEntity, entity));
 	}
 
 /**
@@ -778,6 +830,9 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 				return getMaxDuration();
 			case SpotMarketsPackage.CHARTER_IN_MARKET__MTM:
 				return isMtm();
+			case SpotMarketsPackage.CHARTER_IN_MARKET__ENTITY:
+				if (resolve) return getEntity();
+				return basicGetEntity();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -829,6 +884,9 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 			case SpotMarketsPackage.CHARTER_IN_MARKET__MTM:
 				setMtm((Boolean)newValue);
 				return;
+			case SpotMarketsPackage.CHARTER_IN_MARKET__ENTITY:
+				setEntity((BaseLegalEntity)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -877,6 +935,9 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 			case SpotMarketsPackage.CHARTER_IN_MARKET__MTM:
 				setMtm(MTM_EDEFAULT);
 				return;
+			case SpotMarketsPackage.CHARTER_IN_MARKET__ENTITY:
+				setEntity((BaseLegalEntity)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -913,6 +974,8 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 				return isSetMaxDuration();
 			case SpotMarketsPackage.CHARTER_IN_MARKET__MTM:
 				return mtm != MTM_EDEFAULT;
+			case SpotMarketsPackage.CHARTER_IN_MARKET__ENTITY:
+				return entity != null;
 		}
 		return super.eIsSet(featureID);
 	}

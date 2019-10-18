@@ -41,7 +41,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 
 		// Create the required basic elements
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 1);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 1);
 
 		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withCharterRate("30000") //
@@ -85,7 +85,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
 		final Vessel vessel2 = fleetModelFinder.findVessel("STEAM-138");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel1, "50000", 1);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel1, entity, "50000", 1);
 
 		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
 				.withCharterRate("30000") //
@@ -130,7 +130,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
 		final Vessel vessel2 = fleetModelFinder.findVessel("STEAM-138");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel1, "50000", 1);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel1, entity, "50000", 1);
 
 		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel2, entity) //
 				.withCharterRate("30000") //
@@ -219,7 +219,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
 		final Vessel vessel2 = fleetModelFinder.findVessel("STEAM-138");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel1, "50000", 1);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel1, entity, "50000", 1);
 
 		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel2, entity) //
 				.withCharterRate("30000") //
@@ -261,7 +261,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 		// Create the required basic elements
 		final Vessel source = fleetModelFinder.findVessel("STEAM-145");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", source, "50000", 1);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", source, entity, "50000", 1);
 
 		final Vessel vessel1 = fleetModelBuilder.createVesselFrom("Vessel1", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 		final Vessel vessel2 = fleetModelBuilder.createVesselFrom("Vessel2", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
@@ -309,7 +309,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 		final CharterCurve charterIndex1 = pricingModelBuilder.createCharterCurve("CharterIndex1", "$", "day", 50_000);
 		// final CharterIndex charterIndex2 = pricingModelBuilder.createCharterIndex("CharterIndex2", "$/day", 100_000);
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel2, "50000", 1);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel2, entity, "50000", 1);
 
 		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
 				.withCharterRate("30000") //
@@ -630,7 +630,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
 		final Vessel vessel2 = fleetModelFinder.findVessel("STEAM-138");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel1, "50000", 1);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel1, entity, "50000", 1);
 
 		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel2, entity) //
 				.withCharterRate("80000") //
@@ -672,7 +672,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
 		final Vessel vessel2 = fleetModelFinder.findVessel("STEAM-138");
 		
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel1, "50000", 1);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel1, entity, "50000", 1);
 		
 		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel2, entity) //
 				.withCharterRate("80000") //
@@ -717,7 +717,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
 		final Vessel vessel2 = fleetModelFinder.findVessel("STEAM-138");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel1, "50000", 1);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel1, entity, "50000", 1);
 
 		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel2, entity) //
 				.withCharterRate("80000") //
@@ -760,7 +760,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
 		final Vessel vessel2 = fleetModelFinder.findVessel("STEAM-138");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel1, "50000", 1);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel1, entity, "50000", 1);
 
 		PurchaseContract contract = commercialModelBuilder.makeExpressionPurchaseContract("C1", entity, "5");
 		contract.setRestrictedVesselsArePermissive(true);
@@ -805,7 +805,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
 		final Vessel vessel2 = fleetModelFinder.findVessel("STEAM-138");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel1, "50000", 1);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel1, entity, "50000", 1);
 
 		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel2, entity) //
 				.withCharterRate("80000") //

@@ -136,7 +136,7 @@ public class VesselConstraintTests extends AbstractADPAndLightWeightTests {
 		final Vessel vesselLarge = fleetModelFinder.findVessel(TrainingCaseConstants.VESSEL_LARGE_SHIP);
 		Port pluto = portFinder.findPort(TrainingCaseConstants.PORT_DARWIN);
 		Port himeji = portFinder.findPort(TrainingCaseConstants.PORT_HIMEJI);
-		final CharterInMarket defaultCharterInMarket = spotMarketsModelBuilder.createCharterInMarket("ADP Default", vesselMedium, "50000", 0);
+		final CharterInMarket defaultCharterInMarket = spotMarketsModelBuilder.createCharterInMarket("ADP Default", vesselMedium, entity, "50000", 0);
 		defaultCharterInMarket.setNominal(true);
 		defaultCharterInMarket.setEnabled(true);
 

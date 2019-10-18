@@ -103,7 +103,7 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 	private VesselAvailability createTestVesselAvailability(final LocalDateTime startStart, final LocalDateTime startEnd, final LocalDateTime endStart) {
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
 		return cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withCharterRate("30000") //
@@ -781,7 +781,7 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		CharterInMarket charterInMarket = spotMarketsModelBuilder.createCharterInMarket("CharterInMarket", vessel, "1", 1);
+		CharterInMarket charterInMarket = spotMarketsModelBuilder.createCharterInMarket("CharterInMarket", vessel, entity, "1", 1);
 		charterInMarket.setEnabled(true);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //

@@ -38,14 +38,15 @@ public class CharterInMarketConstraint extends AbstractModelConstraint {
 					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_CharterInMarkets());
 					failures.add(dsd);
 				}
-				if (ballastBonusCharterContract.getEntity() == null) {
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx
-							.createFailureStatus(String.format("[Charter in market vessel | %s] uses a ballast bonus chartering contract without an entity set.", spotMarket.getName())));
-					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_CharterInMarkets());
-					failures.add(dsd);
-				}
 			}
 
+			if (spotMarket.getEntity() == null) {
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx
+						.createFailureStatus(String.format("[Charter in market vessel | %s] needs an entity set.", spotMarket.getName())));
+				dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_CharterInMarkets());
+				failures.add(dsd);
+			}
+			
 			int minDurationInHours = spotMarket.getMarketOrContractMinDuration();
 			int maxDurationInHours = spotMarket.getMarketOrContractMaxDuration();
 

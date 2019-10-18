@@ -139,8 +139,6 @@
     <genClasses ecoreClass="commercial.ecore#//SimpleCharterContract"/>
     <genClasses image="false" ecoreClass="commercial.ecore#//BallastBonusCharterContract">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//BallastBonusCharterContract/ballastBonusContract"/>
-      <genFeatures notify="false" createChild="false" propertyDescription="Default commercial entity to assign PnL to"
-          propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//BallastBonusCharterContract/entity"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//BallastBonusCharterContract/repositioningFee"/>
     </genClasses>
     <genClasses ecoreClass="commercial.ecore#//SimpleBallastBonusCharterContract"/>

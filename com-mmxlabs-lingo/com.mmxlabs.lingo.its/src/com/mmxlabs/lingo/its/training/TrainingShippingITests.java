@@ -272,7 +272,7 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 		cargoModelFinder.findVesselAvailability("Small ship").setStartAt(portFinder.findPort("Sabine Pass"));
 
 		spotMarketsModelBuilder.getSpotMarketsModel().getCharterInMarkets().clear();
-		final CharterInMarket charterMarket = spotMarketsModelBuilder.createCharterInMarket("CI_10", fleetModelFinder.findVessel("Steam_2"), "21750", 1);
+		final CharterInMarket charterMarket = spotMarketsModelBuilder.createCharterInMarket("CI_10", fleetModelFinder.findVessel("Steam_2"), entity, "21750", 1);
 		charterMarket.setEnabled(true);
 		charterMarket.setNominal(true);
 
