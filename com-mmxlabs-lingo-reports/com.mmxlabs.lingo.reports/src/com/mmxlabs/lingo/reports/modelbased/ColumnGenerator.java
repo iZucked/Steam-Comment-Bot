@@ -49,12 +49,23 @@ public class ColumnGenerator {
 			Number.class);
 	private static Set<Class<?>> dateTypes = Sets.newHashSet(LocalDate.class, LocalDateTime.class);
 
-	public static Map<Integer, Field> createColumns(final GridTableViewer viewer, @Nullable final EObjectTableViewerSortingSupport sortingSupport, @Nullable final EObjectTableViewerFilterSupport filterSupport,
+	public static class ColumnInfo{
+		final public Map<Integer, Field> mapOfFields;
+		final public Map<Field, GridViewerColumn> mapOfFieldColumns;
+		
+		public ColumnInfo(final Map<Integer, Field> mapOfFields, final Map<Field, GridViewerColumn> mapOfFieldColumns) {
+			this.mapOfFields = mapOfFields;
+			this.mapOfFieldColumns = mapOfFieldColumns;
+		}
+	}
+	
+	public static ColumnInfo createColumns(final GridTableViewer viewer, @Nullable final EObjectTableViewerSortingSupport sortingSupport, @Nullable final EObjectTableViewerFilterSupport filterSupport,
 			final Class<?> cls, final BiConsumer<ViewerCell, Field> styler) {
 
-		List<Triple<Integer, GridViewerColumn, Boolean>> defaultSortColumns = new LinkedList<>();
+		final List<Triple<Integer, GridViewerColumn, Boolean>> defaultSortColumns = new LinkedList<>();
 
 		final Map<Integer, Field> mapOfFields = new HashMap<>();
+		final Map<Field, GridViewerColumn> mapOfFieldColumns = new HashMap<>();
 		int counter = -1;
 		
 		for (final Field f : cls.getFields()) {
@@ -77,6 +88,7 @@ public class ColumnGenerator {
 			}
 			GridViewerHelper.configureLookAndFeel(col);
 			mapOfFields.put(++counter, f);
+			mapOfFieldColumns.put(f, col);
 
 			final Function<Object, String> formatter;
 			Function<Object, Comparable> sortFunction;
@@ -218,6 +230,6 @@ public class ColumnGenerator {
 			}
 		}
 		
-		return mapOfFields;
+		return new ColumnInfo(mapOfFields, mapOfFieldColumns);
 	}
 }
