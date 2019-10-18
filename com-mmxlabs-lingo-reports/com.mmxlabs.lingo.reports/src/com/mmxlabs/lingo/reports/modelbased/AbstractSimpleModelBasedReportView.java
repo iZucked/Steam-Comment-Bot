@@ -34,6 +34,7 @@ import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.PropertySheet;
 
 import com.mmxlabs.lingo.reports.IReportContents;
+import com.mmxlabs.lingo.reports.modelbased.ColumnGenerator.ColumnInfo;
 import com.mmxlabs.lingo.reports.services.EDiffOption;
 import com.mmxlabs.lingo.reports.services.IScenarioComparisonServiceListener;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
@@ -73,7 +74,7 @@ public abstract class AbstractSimpleModelBasedReportView<M> extends ViewPart imp
 	private EObjectTableViewerFilterSupport filterSupport;
 	private FilterField filterField;
 	
-	protected Map<Integer, Field> mapOfFields;
+	protected ColumnInfo columnInfo;
 
 	public AbstractSimpleModelBasedReportView(final Class<M> modelClass) {
 		this.modelClass = modelClass;
@@ -118,7 +119,7 @@ public abstract class AbstractSimpleModelBasedReportView<M> extends ViewPart imp
 			filterField.setFilterSupport(filterSupport);
 		}
 		final BiConsumer<ViewerCell, Field> styler = createStyler();
-		mapOfFields = ColumnGenerator.createColumns(viewer, sortingSupport, filterSupport, modelClass, styler);
+		this.columnInfo = ColumnGenerator.createColumns(viewer, sortingSupport, filterSupport, modelClass, styler);
 
 		makeActions();
 
