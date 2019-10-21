@@ -2247,7 +2247,7 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 					.withEndHeel(0, 10_000, EVesselTankState.EITHER, null) //
 					.build();
 
-			final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
+			final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
 			// Create a nominal cargo in the prompt
 			final Cargo cargo1 = cargoModelBuilder.makeCargo() //

@@ -44,14 +44,9 @@ public class VesselAvailabilityEntityTransformer implements IVesselAvailabilityT
 
 	@Override
 	public void charterInVesselAvailabilityTransformed(@NonNull CharterInMarket charterInMarket, @NonNull IVesselAvailability vesselAvailability) {
-		if (charterInMarket.getCharterContract() != null) {
-			if (charterInMarket.getCharterContract() instanceof BallastBonusCharterContract) {
-				BallastBonusCharterContract charterContract = (BallastBonusCharterContract) charterInMarket.getCharterContract();
-				if (charterContract.getBallastBonusContract() != null && charterContract.getEntity() != null) {
-					final IEntity entity = modelEntityMap.getOptimiserObjectNullChecked(charterContract.getEntity(), IEntity.class);
-					entityProvider.setEntityForVesselAvailability(entity, vesselAvailability);
-				}
-			}
+		if (charterInMarket.getEntity() != null) {
+			final IEntity entity = modelEntityMap.getOptimiserObjectNullChecked(charterInMarket.getEntity(), IEntity.class);
+			entityProvider.setEntityForVesselAvailability(entity, vesselAvailability);
 		}
 	}
 }

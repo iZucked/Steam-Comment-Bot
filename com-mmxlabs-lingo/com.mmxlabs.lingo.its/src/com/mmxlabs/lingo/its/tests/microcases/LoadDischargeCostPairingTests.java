@@ -62,7 +62,7 @@ public class LoadDischargeCostPairingTests extends AbstractMicroTestCase {
 		// Create the required basic elements
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 		final LoadSlot load_DES1 = cargoModelBuilder.makeDESPurchase("DES1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 5), portFinder.findPort("Sakai"), null, entity, "5", 22.8, null).build();
 		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("FOB1", LocalDate.of(2015, 11, 5), portFinder.findPort("Point Fortin"), null, entity, "5", 22.8).build();
 		final LoadSlot load_FOB2 = cargoModelBuilder.makeFOBPurchase("FOB2", LocalDate.of(2015, 11, 4), portFinder.findPort("Point Fortin"), null, entity, "5", 22.8).build();

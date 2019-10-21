@@ -169,7 +169,7 @@ public class BreakEvenTests extends AbstractMicroTestCase {
 
 		Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		CharterInMarket market = spotMarketsModelBuilder.createCharterInMarket("default", vessel, "100000", 1);
+		CharterInMarket market = spotMarketsModelBuilder.createCharterInMarket("default", vessel, entity, "100000", 1);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "?") //
@@ -207,7 +207,7 @@ public class BreakEvenTests extends AbstractMicroTestCase {
 
 		Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		CharterInMarket market = spotMarketsModelBuilder.createCharterInMarket("default", vessel, "100000", 1);
+		CharterInMarket market = spotMarketsModelBuilder.createCharterInMarket("default", vessel, entity, "100000", 1);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "7") //

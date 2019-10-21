@@ -55,7 +55,6 @@ public class SimpleBallastBonusCharterContractItemProvider extends NamedObjectIt
 
 			addMinDurationPropertyDescriptor(object);
 			addMaxDurationPropertyDescriptor(object);
-			addEntityPropertyDescriptor(object);
 			addRepositioningFeePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
@@ -101,28 +100,6 @@ public class SimpleBallastBonusCharterContractItemProvider extends NamedObjectIt
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Entity feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addEntityPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_BallastBonusCharterContract_entity_feature"),
-				 getString("_UI_BallastBonusCharterContract_entity_description"),
-				 CommercialPackage.Literals.BALLAST_BONUS_CHARTER_CONTRACT__ENTITY,
-				 true,
-				 false,
-				 true,
-				 null,
 				 null,
 				 null));
 	}

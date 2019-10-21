@@ -112,7 +112,7 @@ public class CargoShippingTypeRequirementConstraintTest extends AbstractMicroTes
 		}
 		
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
-		final CharterInMarket charterInMarket1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 1);
+		final CharterInMarket charterInMarket1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 1);
 			
 		cargoModelBuilder.makeCargo()//
 				.makeFOBPurchase("L1", LocalDate.of(2015, 6, 1), portFinder.findPort("Point Fortin"), null, entity, "5") //

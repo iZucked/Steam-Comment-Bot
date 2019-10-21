@@ -64,7 +64,7 @@ public class CharterInVesselPositioningFeeTests extends AbstractMicroTestCase {
 		final Port port2 = portFinder.findPort("Dominion Cove Point LNG");
 
 		//Create Ballast Bonus Charter Contract with entity, no repositioningFee, and lump sum bonus.
-		final BallastBonusCharterContract ballastBonusCharterContract = createBallastBonusCharterContract(port1, entity, "");
+		final BallastBonusCharterContract ballastBonusCharterContract = createBallastBonusCharterContract(port1, "");
 		
 		// Create the required basic elements
 		final CharterInMarket charterInMarket_1 = createChartInMarket();
@@ -98,7 +98,7 @@ public class CharterInVesselPositioningFeeTests extends AbstractMicroTestCase {
 		});
 
 		//Create Ballast Bonus Charter Contract with entity, repositioningFee, and lump sum bonus.
-		final BallastBonusCharterContract ballastBonusCharterContract2 = createBallastBonusCharterContract(port1, entity, POSITIONING_FEE);
+		final BallastBonusCharterContract ballastBonusCharterContract2 = createBallastBonusCharterContract(port1, POSITIONING_FEE);
 		
 		charterInMarket_1.setCharterContract(ballastBonusCharterContract2);
 		
@@ -141,8 +141,8 @@ public class CharterInVesselPositioningFeeTests extends AbstractMicroTestCase {
 		assertEquals(-expectedPosFee, startEvent.getGroupProfitAndLoss().getProfitAndLossPreTax());
 	}
 	
-	private BallastBonusCharterContract createBallastBonusCharterContract(Port port, BaseLegalEntity legalEntity, String positioningFee) {
-		final BallastBonusCharterContract ballastBonusCharterContract = commercialModelBuilder.createLumpSumBallastBonusCharterContract(port, legalEntity, BALLAST_BONUS_LUMP_SUM, positioningFee);
+	private BallastBonusCharterContract createBallastBonusCharterContract(Port port, String positioningFee) {
+		final BallastBonusCharterContract ballastBonusCharterContract = commercialModelBuilder.createLumpSumBallastBonusCharterContract(port, BALLAST_BONUS_LUMP_SUM, positioningFee);
 		return ballastBonusCharterContract;
 	}
 
@@ -171,7 +171,7 @@ public class CharterInVesselPositioningFeeTests extends AbstractMicroTestCase {
 	private CharterInMarket createChartInMarket() {
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		vessel.setMaxSpeed(15.0);
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 1);	
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 1);	
 		charterInMarket_1.setNominal(false);
 		return charterInMarket_1;
 	}
@@ -194,7 +194,7 @@ public class CharterInVesselPositioningFeeTests extends AbstractMicroTestCase {
 		charterInMarket.setCharterInRate("10000");
 		
 		//Create Ballast Bonus Charter Contract with entity, repositioningFee, and lump sum bonus.
-		final BallastBonusCharterContract ballastBonusCharterContract2 = createBallastBonusCharterContract(port1, entity, POSITIONING_FEE);
+		final BallastBonusCharterContract ballastBonusCharterContract2 = createBallastBonusCharterContract(port1,POSITIONING_FEE);
 		charterInMarket.setCharterContract(ballastBonusCharterContract2);
 		
 		// Set distance and speed to exact multiple -- quickest travel time is 100 hours

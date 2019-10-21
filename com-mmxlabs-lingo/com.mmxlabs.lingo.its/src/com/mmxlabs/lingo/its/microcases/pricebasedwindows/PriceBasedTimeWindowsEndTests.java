@@ -133,7 +133,7 @@ public class PriceBasedTimeWindowsEndTests extends AbstractMicroTestCase {
 
 		// Create the required basic elements
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
-		final CharterInMarket charterInMarket = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "20000", 1);
+		final CharterInMarket charterInMarket = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "20000", 1);
 		// Construct the cargo scenario
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase(loadName, LocalDate.of(2016, 7, 1), portFinder.findPort("Bonny Nigeria"), null, entity, "Henry_Hub", 23.4) //

@@ -33,39 +33,6 @@ public class VesselAvailabilityOverrideTests {
 	}
 	
 	@Test
-	public void testEntityOnBBCC() {
-		VesselAvailability va = CargoFactory.eINSTANCE.createVesselAvailability();
-		LegalEntity le = CommercialFactory.eINSTANCE.createLegalEntity();
-		le.setName(TEST_ENTITY);
-		BallastBonusCharterContract bbc = CommercialFactory.eINSTANCE.createSimpleBallastBonusCharterContract();
-		bbc.setEntity(le);
-		va.setCharterContract(bbc);
-		assertEquals(TEST_ENTITY, va.getCharterOrDelegateEntity().getName());
-	}
-	
-	@Test
-	public void testEntityOnBothVABBCC() {
-		VesselAvailability va = CargoFactory.eINSTANCE.createVesselAvailability();
-		LegalEntity le = CommercialFactory.eINSTANCE.createLegalEntity();
-		le.setName(TEST_ENTITY);
-		BallastBonusCharterContract bbc = CommercialFactory.eINSTANCE.createSimpleBallastBonusCharterContract();
-		bbc.setEntity(le);
-		va.setCharterContract(bbc);
-		LegalEntity leva = CommercialFactory.eINSTANCE.createLegalEntity();
-		leva.setName(TEST_VA_ENTITY);
-		va.setEntity(leva);
-		assertEquals(TEST_VA_ENTITY, va.getCharterOrDelegateEntity().getName());
-	}
-
-	@Test
-	public void testNoEntity() {
-		VesselAvailability va = CargoFactory.eINSTANCE.createVesselAvailability();
-		BallastBonusCharterContract bbc = CommercialFactory.eINSTANCE.createSimpleBallastBonusCharterContract();
-		va.setCharterContract(bbc);
-		assertEquals(null, va.getCharterOrDelegateEntity());
-	}
-	
-	@Test
 	public void testRepositioningFeeOnVA() {
 		VesselAvailability va = CargoFactory.eINSTANCE.createVesselAvailability();
 		BallastBonusCharterContract bbc = CommercialFactory.eINSTANCE.createSimpleBallastBonusCharterContract();

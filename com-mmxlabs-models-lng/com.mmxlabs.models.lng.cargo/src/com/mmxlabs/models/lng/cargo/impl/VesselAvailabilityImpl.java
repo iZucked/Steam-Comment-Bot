@@ -35,6 +35,7 @@ import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.mmxcore.MMXObject.DelegateInformation;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
@@ -1908,12 +1909,11 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	public DelegateInformation getUnsetValueOrDelegate(EStructuralFeature feature) {
 		CargoPackage cargo = CargoPackage.eINSTANCE;
 		CommercialPackage commercial = CommercialPackage.eINSTANCE;
+		SpotMarketsPackage spotMarkets = SpotMarketsPackage.eINSTANCE;
 		if (cargo.getVesselAvailability_MinDuration() == feature) {
 			return new DelegateInformation(cargo.getVesselAvailability_CharterContract(), commercial.getCharterContract_MinDuration(), (Integer) 0);
 		} else if (cargo.getVesselAvailability_MaxDuration() == feature) {
 			return new DelegateInformation(cargo.getVesselAvailability_CharterContract(), commercial.getCharterContract_MaxDuration(), (Integer) 0);
-		} else if (cargo.getVesselAvailability_Entity() == feature) {
-			return new DelegateInformation(cargo.getVesselAvailability_CharterContract(), commercial.getBallastBonusCharterContract_Entity(), null);
 		} else if (cargo.getVesselAvailability_RepositioningFee() == feature) {
 			return new DelegateInformation(cargo.getVesselAvailability_CharterContract(), commercial.getBallastBonusCharterContract_RepositioningFee(), null);
 		}
