@@ -137,4 +137,45 @@ public class MigrateToV118 extends AbstractMigrationUnit {
 			}
 		}
 	}
+	
+	public static void migrateClient(@NonNull final MigrationModelRecord modelRecord, @NonNull final String defaultEntityName) {
+		final EObjectWrapper scenarioModel = modelRecord.getModelRoot();
+		final EObjectWrapper referenceModel = scenarioModel.getRef("referenceModel");
+		final EObjectWrapper commercialModel = referenceModel.getRef("commercialModel");
+
+		//if only one entity present, then set that in CharterInMarket objects, otherwise we have a problem.
+		final List<EObjectWrapper> entities = commercialModel.getRefAsList("entities");
+		EObjectWrapper defaultEntity = null;
+		for (int i = 0; i < entities.size(); i++) {
+			if (defaultEntityName.equals(entities.get(i).getAttrib("name"))) {
+				defaultEntity = entities.get(i);
+			}
+		}
+		
+		if (defaultEntity != null) {
+			//Go through the VesselAvailabilities, if no entity copy from BB contract if there is one, else use default entity if one.
+			final EObjectWrapper cargoModel = scenarioModel.getRef("cargoModel");
+			final List<EObjectWrapper> vesselAvailabilities = cargoModel.getRefAsList("vesselAvailabilities");
+			
+			if (vesselAvailabilities != null) {
+				for (EObjectWrapper vesselAvailability : vesselAvailabilities) {
+					if (vesselAvailability.getRef("entity") == null) {
+						vesselAvailability.setRef("entity", defaultEntity);
+					}
+				}
+			}
+			
+			//Go through the CharterIn markets, take from BB contract if there is one, else use default entity.
+			final EObjectWrapper spotMarketsModel = referenceModel.getRef("spotMarketsModel");
+			final List<EObjectWrapper> charterInMarkets = spotMarketsModel.getRefAsList("charterInMarkets");
+
+			if (charterInMarkets != null) {
+				for (EObjectWrapper charterInMarket : charterInMarkets) {
+					if (charterInMarket.getRef("entity") == null) {
+						charterInMarket.setRef("entity", defaultEntity);
+					}
+				}
+			}
+		}
+	}
 }
