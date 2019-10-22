@@ -63,8 +63,10 @@ public class PNLCalcsReport extends ViewPart {
 
 		{
 			final Action showOnlyDiff = new RunnableAction("Δ", () -> {
-				component.toggleShowDiffOnly();
-				component.rebuild();
+				if (component != null) {
+					component.toggleShowDiffOnly();
+					component.rebuild();
+				}
 			});
 			getViewSite().getActionBars().getToolBarManager().add(showOnlyDiff);
 
