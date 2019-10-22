@@ -38,6 +38,7 @@ public class SpotMarketsModelBuilder {
 		final CharterInMarket charterInMarket = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
 		charterInMarket.setName(name);
 		charterInMarket.setVessel(vessel);
+		charterInMarket.setEnabled(true);
 		charterInMarket.setCharterInRate(charterInRate);
 		charterInMarket.setSpotCharterCount(charterInCount);
 		charterInMarket.setEntity(entity);
