@@ -75,6 +75,7 @@ import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
@@ -376,8 +377,9 @@ public class CargoEconsReportComponent implements IAdaptable {
 				if (obj instanceof Event) {
 					obj = ScheduleModelUtils.getSegmentStart((Event) obj);
 				}
-
-				if (obj instanceof CharterLengthEvent) {
+				if (obj instanceof StartEvent) {
+					validObjects.add(obj);
+				} else if (obj instanceof CharterLengthEvent) {
 					validObjects.add(obj);
 				} else if (obj instanceof VesselEventVisit) {
 					validObjects.add(obj);
@@ -482,7 +484,7 @@ public class CargoEconsReportComponent implements IAdaptable {
 		return validObjects;
 
 	}
-
+	
 	public GridTableViewer getViewer() {
 		return viewer;
 	}
@@ -641,6 +643,10 @@ public class CargoEconsReportComponent implements IAdaptable {
 		for (final Object object : objects) {
 			String name = "";
 
+			if (object instanceof StartEvent) {
+				name = ((StartEvent) object).name();
+			}
+			
 			if (object instanceof VesselEventVisit) {
 				name = ((VesselEventVisit) object).name();
 			}
@@ -847,6 +853,25 @@ public class CargoEconsReportComponent implements IAdaptable {
 				@Nullable
 				final ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
 				if (currentSelectedDataProvider != null && currentSelectedDataProvider.isPinnedObject(charterLengthEvent)) {
+					gvc.getColumn().setHeaderRenderer(columnImageHeaderCenteredRenderer);
+					gvc.getColumn().setImage(pinImage);
+				}
+			} else if (selectedObject instanceof StartEvent) {
+				final StartEvent startEvent = (StartEvent) selectedObject;
+
+				final GridColumnGroup gridColumnGroup = gridColumnGroupsMap.get(startEvent.name());
+				final GridColumn gc = new GridColumn(gridColumnGroup, SWT.NONE);
+				final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+				GridViewerHelper.configureLookAndFeel(gvc);
+				// Mark column for disposal on selection change
+				dataColumns.add(gvc);
+
+				gvc.getColumn().setText("");
+				gvc.setLabelProvider(new FieldTypeMapperLabelProvider(selectedObject));
+				gvc.getColumn().setWidth(100);
+				@Nullable
+				final ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
+				if (currentSelectedDataProvider != null && currentSelectedDataProvider.isPinnedObject(startEvent)) {
 					gvc.getColumn().setHeaderRenderer(columnImageHeaderCenteredRenderer);
 					gvc.getColumn().setImage(pinImage);
 				}
