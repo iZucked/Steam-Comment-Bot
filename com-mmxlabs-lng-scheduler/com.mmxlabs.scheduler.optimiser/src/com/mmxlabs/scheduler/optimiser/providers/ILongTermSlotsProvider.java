@@ -5,6 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.providers;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -32,7 +33,7 @@ public interface ILongTermSlotsProvider extends IDataComponentProvider {
 	 * @return
 	 */
 	@NonNull
-	Collection<IPortSlot> getLongTermEvents();
+	Collection<List<IPortSlot>> getLongTermEvents();
 
 	/**
 	 * Is this slot a long term slot?

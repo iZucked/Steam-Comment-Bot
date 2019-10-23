@@ -19,21 +19,26 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 public class LightWeightOptimiserHelper extends AbstractOptimiserHelper {
 	private static final long VESSEL_EVENT_PNL = 400_000_000_000L;
-	
-	public static long[] getCargoPNL(Long[][] profit, List<List<IPortSlot>> cargoes, List<ILoadOption> loads, List<IDischargeOption> discharges, @NonNull IVesselAvailability pnlVessel, LightWeightCargoDetails[] cargoDetails) {
+
+	public static long[] getCargoPNL(Long[][] profit, List<List<IPortSlot>> cargoes, List<ILoadOption> loads, List<IDischargeOption> discharges, @NonNull IVesselAvailability pnlVessel,
+			LightWeightCargoDetails[] cargoDetails) {
 		long[] pnl = new long[cargoes.size()];
 		int idx = 0;
 		for (List<IPortSlot> cargo : cargoes) {
-			if (cargoDetails[idx].getType() == PortType.CharterOut || cargoDetails[idx].getType() == PortType.DryDock) {
+			if (cargoDetails[idx].getType() == PortType.CharterOut //
+					|| cargoDetails[idx].getType() == PortType.DryDock //
+					|| cargoDetails[idx].getType() == PortType.Maintenance) {
 				pnl[idx++] = VESSEL_EVENT_PNL;
 			} else {
-				pnl[idx++] = profit[loads.indexOf(cargo.get(0))][discharges.indexOf(cargo.get(cargo.size() - 1))]
-						/ pnlVessel.getVessel().getCargoCapacity();
+				if (cargoDetails[idx].getType() == PortType.Load //
+						|| cargoDetails[idx].getType() == PortType.Discharge) {
+					pnl[idx++] = profit[loads.indexOf(cargo.get(0))][discharges.indexOf(cargo.get(cargo.size() - 1))] / pnlVessel.getVessel().getCargoCapacity();
+				}
 			}
 		}
 		return pnl;
 	}
-	
+
 	public static ILoadOption getLoadOption(List<IPortSlot> cargo) {
 		for (IPortSlot portSlot : cargo) {
 			if (portSlot instanceof ILoadSlot) {
@@ -42,10 +47,9 @@ public class LightWeightOptimiserHelper extends AbstractOptimiserHelper {
 		}
 		return null;
 	}
-	
+
 	public static IPortSlot getVesselEvent(List<IPortSlot> cargo) {
-		if (cargo.get(0).getPortType() == PortType.CharterOut
-				|| cargo.get(0).getPortType() == PortType.DryDock) {
+		if (cargo.get(0).getPortType() == PortType.CharterOut || cargo.get(0).getPortType() == PortType.DryDock) {
 			return cargo.get(0);
 		}
 		return null;

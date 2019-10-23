@@ -12,6 +12,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +38,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.ILongTermSlotsProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -159,9 +161,10 @@ public abstract class AbstractOptimiserHelper {
 	 * @param dataTransformer
 	 * @param optimiserRecorder
 	 */
-	
+
 	/**
-	 * Updates the raw sequences given an allocations matrix Note: Assumes that elements are on unused list already
+	 * Updates the raw sequences given an allocations matrix Note: Assumes that
+	 * elements are on unused list already
 	 * 
 	 * @param rawSequences
 	 * @param pairingsMap
@@ -170,8 +173,8 @@ public abstract class AbstractOptimiserHelper {
 	 * @param virtualVesselSlotProvider
 	 * @param vesselProvider
 	 */
-	public static void updateVirtualSequences(@NonNull IModifiableSequences rawSequences, @NonNull List<List<IPortSlot>> cargoes, @NonNull Map<ILoadOption, IDischargeOption> pairingsMap, @NonNull IResource nominal,
-			IPortSlotProvider portSlotProvider, IVirtualVesselSlotProvider virtualVesselSlotProvider, IVesselProvider vesselProvider, ShippingType shippingType) {
+	public static void updateVirtualSequences(@NonNull IModifiableSequences rawSequences, @NonNull List<List<IPortSlot>> cargoes, @NonNull Map<ILoadOption, IDischargeOption> pairingsMap,
+			@NonNull IResource nominal, IPortSlotProvider portSlotProvider, IVirtualVesselSlotProvider virtualVesselSlotProvider, IVesselProvider vesselProvider, ShippingType shippingType) {
 		IModifiableSequence modifiableSequence = rawSequences.getModifiableSequence(nominal);
 		int insertIndex = 0;
 		for (int i = 0; i < modifiableSequence.size(); i++) {
@@ -182,10 +185,7 @@ public abstract class AbstractOptimiserHelper {
 		}
 		List<ISequenceElement> unusedElements = rawSequences.getModifiableUnusedElements();
 		for (List<IPortSlot> cargo : cargoes) {
-			Optional<ILoadOption> load = cargo.stream()
-					.filter(s->s instanceof ILoadOption)
-					.map(s->(ILoadOption) s)
-					.findFirst();
+			Optional<ILoadOption> load = cargo.stream().filter(s -> s instanceof ILoadOption).map(s -> (ILoadOption) s).findFirst();
 			if (!load.isPresent()) {
 				continue;
 			}
@@ -272,10 +272,14 @@ public abstract class AbstractOptimiserHelper {
 	}
 
 	public static void addTargetEventsToProvider(ILongTermSlotsProviderEditor longTermSlotsProviderEditor, Collection<IPortSlot> allPortSlots) {
-		Set<PortType> eventsPortType = Sets.newHashSet(PortType.DryDock, PortType.CharterOut);
+		Set<PortType> eventsPortType = Sets.newHashSet(PortType.DryDock, PortType.Maintenance, PortType.CharterOut);
 		allPortSlots.forEach(e -> {
 			if (eventsPortType.contains(e.getPortType())) {
-				longTermSlotsProviderEditor.addEvent(e);
+				if (e instanceof IVesselEventPortSlot) {
+					longTermSlotsProviderEditor.addEvent(((IVesselEventPortSlot) e).getEventPortSlots());
+				} else {
+					longTermSlotsProviderEditor.addEvent(Collections.singletonList(e));
+				}
 			}
 		});
 	}

@@ -45,6 +45,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
 import com.mmxlabs.scheduler.optimiser.moves.util.impl.FollowersAndPrecedersProviderImpl;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
@@ -73,7 +74,7 @@ public class PairingOptimiserUnit {
 	private @NonNull CleanableExecutorService executorService;
 
 	private IVesselAvailability nominalMarketAvailability;
-	
+
 	private LNGScenarioModel initialScenario;
 
 	@SuppressWarnings("null")
@@ -116,7 +117,7 @@ public class PairingOptimiserUnit {
 				}
 				return longTermOptimiser;
 			}
-			
+
 		});
 
 		injector = dataTransformer.getInjector().createChildInjector(modules);
@@ -125,76 +126,80 @@ public class PairingOptimiserUnit {
 	}
 
 	public IMultiStateResult run(@NonNull final IProgressMonitor monitor) {
+		try {
+
+			@NonNull
+			ModelEntityMap modelEntityMap = dataTransformer.getModelEntityMap();
+			ILongTermSlotsProviderEditor longTermSlotsProviderEditor = injector.getInstance(ILongTermSlotsProviderEditor.class);
+			IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
+			Collection<IPortSlot> allPortSlots = SequencesToPortSlotsUtils.getAllPortSlots(dataTransformer.getOptimisationData().getSequenceElements(), portSlotProvider);
+			allPortSlots.forEach(e -> longTermSlotsProviderEditor.addLongTermSlot(e));
+			addLongTermOptimiserEvents(longTermSlotsProviderEditor, allPortSlots);
+
+			monitor.beginTask("Generate solutions", 100);
+			CharterInMarket charterInMarket = initialScenario.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().get(0);
+			final List<Future<Pair<ISequences, Long>>> futures = new LinkedList<>();
 			try {
 
-				@NonNull
-				ModelEntityMap modelEntityMap = dataTransformer.getModelEntityMap();
-				ILongTermSlotsProviderEditor longTermSlotsProviderEditor = injector.getInstance(ILongTermSlotsProviderEditor.class);
-				IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
-				Collection<IPortSlot> allPortSlots = SequencesToPortSlotsUtils.getAllPortSlots(dataTransformer.getOptimisationData().getSequenceElements(), portSlotProvider);
-				allPortSlots.forEach(e -> longTermSlotsProviderEditor.addLongTermSlot(e));
-				addLongTermOptimiserEvents(longTermSlotsProviderEditor, allPortSlots);
+				futures.add(executorService.submit(() -> {
+					try {
+						// Bit nasty, but we are still in PoC stages
 
-				monitor.beginTask("Generate solutions", 100);
-				CharterInMarket charterInMarket = initialScenario.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().get(0);
-				final List<Future<Pair<ISequences, Long>>> futures = new LinkedList<>();
-				try {
-
-					futures.add(executorService.submit(() -> {
-						try {
-							// Bit nasty, but we are still in PoC stages
-
-							final PairingOptimiser calculator = injector.getInstance(PairingOptimiser.class);
-							return calculator.optimise(executorService, dataTransformer, charterInMarket);
-						} finally {
-							monitor.worked(1);
-						}
-					}));
-					final List<Pair<ISequences, Long>> results = new LinkedList<>();
-
-					// Block until all futures completed
-					for (final Future<Pair<ISequences, Long>> f : futures) {
-						try {
-							final Pair<ISequences, Long> s = f.get();
-							if (s != null) {
-								results.add(s);
-							}
-						} catch (final InterruptedException | ExecutionException e) {
-							e.printStackTrace();
-						}
+						final PairingOptimiser calculator = injector.getInstance(PairingOptimiser.class);
+						return calculator.optimise(executorService, dataTransformer, charterInMarket);
+					} finally {
+						monitor.worked(1);
 					}
+				}));
+				final List<Pair<ISequences, Long>> results = new LinkedList<>();
 
-					Collections.sort(results, (a, b) -> {
-						long al = a.getSecond();
-						long bl = b.getSecond();
-						if (al > bl) {
-							return -1;
-						} else if (al < bl) {
-							return 1;
-						} else {
-							return 0;
+				// Block until all futures completed
+				for (final Future<Pair<ISequences, Long>> f : futures) {
+					try {
+						final Pair<ISequences, Long> s = f.get();
+						if (s != null) {
+							results.add(s);
 						}
-					});
-
-					final List<NonNullPair<ISequences, Map<String, Object>>> solutions = results.stream() //
-							.distinct() //
-							.map(r -> new NonNullPair<ISequences, Map<String, Object>>(r.getFirst(), new HashMap<>())) //
-							.collect(Collectors.toList());
-
-					return new MultiStateResult(solutions.get(0), solutions);
-				} finally {
-					monitor.done();
+					} catch (final InterruptedException | ExecutionException e) {
+						e.printStackTrace();
+					}
 				}
 
+				Collections.sort(results, (a, b) -> {
+					long al = a.getSecond();
+					long bl = b.getSecond();
+					if (al > bl) {
+						return -1;
+					} else if (al < bl) {
+						return 1;
+					} else {
+						return 0;
+					}
+				});
+
+				final List<NonNullPair<ISequences, Map<String, Object>>> solutions = results.stream() //
+						.distinct() //
+						.map(r -> new NonNullPair<ISequences, Map<String, Object>>(r.getFirst(), new HashMap<>())) //
+						.collect(Collectors.toList());
+
+				return new MultiStateResult(solutions.get(0), solutions);
 			} finally {
+				monitor.done();
 			}
+
+		} finally {
+		}
 	}
 
 	private void addLongTermOptimiserEvents(ILongTermSlotsProviderEditor longTermSlotsProviderEditor, Collection<IPortSlot> allPortSlots) {
-		Set<PortType> eventsPortType = Sets.newHashSet(PortType.DryDock, PortType.CharterOut);
+		Set<PortType> eventsPortType = Sets.newHashSet(PortType.DryDock, PortType.Maintenance, PortType.CharterOut);
 		allPortSlots.forEach(e -> {
 			if (eventsPortType.contains(e.getPortType())) {
-				longTermSlotsProviderEditor.addEvent(e);
+				if (e instanceof IVesselEventPortSlot) {
+					longTermSlotsProviderEditor.addEvent(((IVesselEventPortSlot) e).getEventPortSlots());
+				} else {
+					longTermSlotsProviderEditor.addEvent(Collections.singletonList(e));
+				}
 			}
 		});
 	}

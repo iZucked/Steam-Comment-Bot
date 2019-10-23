@@ -376,18 +376,12 @@ public final class OptimisationHelper {
 					if (scenario != null) {
 						CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenario);
 						for (VesselEvent event : cargoModel.getVesselEvents()) {
-							if (!(event instanceof DryDockEvent || event instanceof CharterOutEvent)) {
-								scenarioContainsForbiddedADPEvents = true;
-								copy.setCleanStateOptimisation(false);
-								adpVesselEventIssueMsg = "Clean slate only supports dry-dock and charter out vessel events.";
-								break;
-							}
 							if ((event instanceof CharterOutEvent)) {
 								CharterOutEvent charterOutEvent = (CharterOutEvent) event;
 								if (charterOutEvent.isOptional() || charterOutEvent.getRelocateTo() != null) {
 									scenarioContainsForbiddedADPEvents = true;
 									copy.setCleanStateOptimisation(false);
-									adpVesselEventIssueMsg = "Clean slate only supports non-optional and non-relocated charter out events.";
+									adpVesselEventIssueMsg = "Clean slate only supports non-optional charter out events.";
 									break;
 								}
 							}
