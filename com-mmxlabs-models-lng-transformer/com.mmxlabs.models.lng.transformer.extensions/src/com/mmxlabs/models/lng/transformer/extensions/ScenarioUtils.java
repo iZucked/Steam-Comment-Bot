@@ -14,6 +14,8 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.time.Months;
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
 import com.mmxlabs.models.lng.parameters.AnnealingSettings;
 import com.mmxlabs.models.lng.parameters.CleanStateOptimisationSettings;
@@ -100,6 +102,11 @@ public class ScenarioUtils {
 
 	@NonNull
 	public static OptimisationPlan createDefaultOptimisationPlan() {
+		return createDefaultOptimisationPlan(LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MODULE_PARALLELISATION));
+	}
+
+	@NonNull
+	public static OptimisationPlan createDefaultOptimisationPlan(boolean parallelise) {
 
 		final OptimisationPlan plan = ParametersFactory.eINSTANCE.createOptimisationPlan();
 
@@ -110,9 +117,8 @@ public class ScenarioUtils {
 		@NonNull
 		final ConstraintAndFitnessSettings constraintAndFitnessSettings = createDefaultConstraintAndFitnessSettings();
 
-		// plan.getStages().add(createDefaultCleanStateParameters(EcoreUtil.copy(constraintAndFitnessSettings)));
-		plan.getStages().add(createDefaultLSOParameters(EcoreUtil.copy(constraintAndFitnessSettings)));
-		plan.getStages().add(createDefaultHillClimbingParameters(EcoreUtil.copy(constraintAndFitnessSettings)));
+		plan.getStages().add(createDefaultLSOParameters(EcoreUtil.copy(constraintAndFitnessSettings), parallelise));
+		plan.getStages().add(createDefaultHillClimbingParameters(EcoreUtil.copy(constraintAndFitnessSettings), parallelise));
 
 		return plan;
 	}
@@ -176,8 +182,9 @@ public class ScenarioUtils {
 		return userSettings;
 	}
 
-	public static @NonNull LocalSearchOptimisationStage createDefaultLSOParameters(@NonNull final ConstraintAndFitnessSettings constraintAndFitnessSettings) {
-		final LocalSearchOptimisationStage params = ParametersFactory.eINSTANCE.createLocalSearchOptimisationStage();
+	public static @NonNull LocalSearchOptimisationStage createDefaultLSOParameters(@NonNull final ConstraintAndFitnessSettings constraintAndFitnessSettings, boolean parallelise) {
+		final LocalSearchOptimisationStage params = parallelise ? ParametersFactory.eINSTANCE.createParallelLocalSearchOptimisationStage()
+				: ParametersFactory.eINSTANCE.createLocalSearchOptimisationStage();
 		params.setName("lso");
 		final AnnealingSettings annealingSettings = ParametersFactory.eINSTANCE.createAnnealingSettings();
 		annealingSettings.setIterations(1_000_000);
@@ -190,14 +197,15 @@ public class ScenarioUtils {
 		params.setAnnealingSettings(annealingSettings);
 
 		params.setSeed(0);
-
 		params.setConstraintAndFitnessSettings(constraintAndFitnessSettings);
 
 		return params;
 	}
 
-	public static @NonNull MultipleSolutionSimilarityOptimisationStage createDefaultMultipleSolutionSimilarityParameters(@NonNull final ConstraintAndFitnessSettings constraintAndFitnessSettings) {
-		final MultipleSolutionSimilarityOptimisationStage params = ParametersFactory.eINSTANCE.createMultipleSolutionSimilarityOptimisationStage();
+	public static @NonNull MultipleSolutionSimilarityOptimisationStage createDefaultMultipleSolutionSimilarityParameters(@NonNull final ConstraintAndFitnessSettings constraintAndFitnessSettings,
+			boolean parallelise) {
+		final MultipleSolutionSimilarityOptimisationStage params = parallelise ? ParametersFactory.eINSTANCE.createParallelMultipleSolutionSimilarityOptimisationStage()
+				: ParametersFactory.eINSTANCE.createMultipleSolutionSimilarityOptimisationStage();
 		params.setName("mo-sim-all");
 		final AnnealingSettings annealingSettings = ParametersFactory.eINSTANCE.createAnnealingSettings();
 		annealingSettings.setIterations(1_000_000);
@@ -210,14 +218,15 @@ public class ScenarioUtils {
 		params.setAnnealingSettings(annealingSettings);
 
 		params.setSeed(0);
-
 		params.setConstraintAndFitnessSettings(constraintAndFitnessSettings);
 
 		return params;
 	}
 
-	public static @NonNull HillClimbOptimisationStage createDefaultHillClimbingParameters(@NonNull final ConstraintAndFitnessSettings constraintAndFitnessSettings) {
-		final HillClimbOptimisationStage params = ParametersFactory.eINSTANCE.createHillClimbOptimisationStage();
+	public static @NonNull HillClimbOptimisationStage createDefaultHillClimbingParameters(@NonNull final ConstraintAndFitnessSettings constraintAndFitnessSettings, boolean parallelise) {
+
+		final HillClimbOptimisationStage params = (parallelise) ? ParametersFactory.eINSTANCE.createParallelHillClimbOptimisationStage()
+				: ParametersFactory.eINSTANCE.createHillClimbOptimisationStage();
 		params.setName("hill");
 
 		final AnnealingSettings annealingSettings = ParametersFactory.eINSTANCE.createAnnealingSettings();
@@ -231,7 +240,6 @@ public class ScenarioUtils {
 		params.setAnnealingSettings(annealingSettings);
 
 		params.setSeed(0);
-
 		params.setConstraintAndFitnessSettings(constraintAndFitnessSettings);
 
 		return params;

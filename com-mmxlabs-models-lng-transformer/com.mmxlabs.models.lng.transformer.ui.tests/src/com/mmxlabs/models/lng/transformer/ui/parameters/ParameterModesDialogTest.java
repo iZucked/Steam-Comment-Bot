@@ -26,6 +26,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.license.features.LicenseFeatures;
@@ -157,6 +158,7 @@ public class ParameterModesDialogTest {
 		});
 	}
 
+	@Disabled("Feature no longer in use")
 	@Test
 	public void testSetSimilarityMode_Low() throws Exception {
 		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
@@ -169,6 +171,7 @@ public class ParameterModesDialogTest {
 		});
 	}
 
+	@Disabled("Feature no longer in use")
 	@Test
 	public void testSetSimilarityMode_Medium() throws Exception {
 		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
@@ -181,6 +184,7 @@ public class ParameterModesDialogTest {
 		});
 	}
 
+	@Disabled("Feature no longer in use")
 	@Test
 	public void testSetSimilarityMode_High() throws Exception {
 		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
@@ -193,6 +197,30 @@ public class ParameterModesDialogTest {
 		});
 	}
 
+	@Test
+	public void testSetSimilarityMode_On() throws Exception {
+		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
+		settings.setSimilarityMode(SimilarityMode.OFF);
+
+		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_SIMILARITY_PREFIX_ON).click(), u -> {
+			Assertions.assertEquals(SimilarityMode.ALL, u.getSimilarityMode());
+			OptimisationHelper.mergeFields(u, settings);
+			Assertions.assertEquals(SimilarityMode.ALL, settings.getSimilarityMode());
+		});
+	}
+	
+	@Test
+	public void testSetSimilarityMode_Off() throws Exception {
+		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
+		settings.setSimilarityMode(SimilarityMode.ALL);
+		
+		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_SIMILARITY_PREFIX_OFF).click(), u -> {
+			Assertions.assertEquals(SimilarityMode.OFF, u.getSimilarityMode());
+			OptimisationHelper.mergeFields(u, settings);
+			Assertions.assertEquals(SimilarityMode.OFF, settings.getSimilarityMode());
+		});
+	}
+	
 	@Test
 	public void testSetPeriodStart() throws Exception {
 		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();

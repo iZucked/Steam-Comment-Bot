@@ -93,7 +93,11 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenIdleTimeConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.MinMaxSlotGroupConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.SimilarityFitnessCoreFactory;
+import com.mmxlabs.scheduler.optimiser.fitness.VesselUtilisationFitnessCoreFactory;
+import com.mmxlabs.scheduler.optimiser.fitness.components.NonOptionalSlotFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.IBreakEvenEvaluator;
 
 public final class OptimisationHelper {
@@ -168,6 +172,7 @@ public final class OptimisationHelper {
 
 	public static final String SWTBOT_SIMILARITY_PREFIX = "swtbot.similaritymode";
 	public static final String SWTBOT_SIMILARITY_PREFIX_OFF = SWTBOT_SIMILARITY_PREFIX + ".Off";
+	public static final String SWTBOT_SIMILARITY_PREFIX_ON = SWTBOT_SIMILARITY_PREFIX + ".On";
 	/**
 	 * @deprecated
 	 */
@@ -634,12 +639,12 @@ public final class OptimisationHelper {
 		plan.setSolutionBuilderSettings(ScenarioUtils.createDefaultSolutionBuilderSettings());
 
 		@NonNull
-		final ConstraintAndFitnessSettings constraintAndFitnessSettings = ScenarioUtils.createDefaultConstraintAndFitnessSettings();
-		Objective similarityObjective = findObjective(SimilarityFitnessCoreFactory.NAME, constraintAndFitnessSettings);
+		final ConstraintAndFitnessSettings baseConstraintAndFitnessSettings = ScenarioUtils.createDefaultConstraintAndFitnessSettings();
+		Objective similarityObjective = findObjective(SimilarityFitnessCoreFactory.NAME, baseConstraintAndFitnessSettings);
 		if (similarityObjective == null) {
 			similarityObjective = ParametersFactory.eINSTANCE.createObjective();
 			similarityObjective.setName(SimilarityFitnessCoreFactory.NAME);
-			constraintAndFitnessSettings.getObjectives().add(similarityObjective);
+			baseConstraintAndFitnessSettings.getObjectives().add(similarityObjective);
 		}
 		similarityObjective.setEnabled(true);
 		similarityObjective.setWeight(1.0);
@@ -650,90 +655,118 @@ public final class OptimisationHelper {
 		final LocalDate periodStartOrDefault = getPeriodStartOrDefault(periodStart, lngScenarioModel);
 		final YearMonth periodEndOrDefault = getPeriodEndOrDefault(periodEnd, lngScenarioModel);
 
-		final SimilarityMode similarityMode = userSettings.getSimilarityMode();
-
-		boolean shouldUseRestartingLSO = false;
-
-		switch (similarityMode) {
-		case ALL:
-			constraintAndFitnessSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.LOW, periodStartOrDefault, periodEndOrDefault));
-			shouldUseRestartingLSO = true;
-			userSettings.setBuildActionSets(false);
-			break;
-		case HIGH:
-			constraintAndFitnessSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.HIGH, periodStartOrDefault, periodEndOrDefault));
-			shouldUseRestartingLSO = true;
-			if (shouldDisableActionSets(SimilarityMode.HIGH, periodStart, periodEnd)) {
-				userSettings.setBuildActionSets(false);
-			}
-			break;
-		case LOW:
-			constraintAndFitnessSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.LOW, periodStartOrDefault, periodEndOrDefault));
-			shouldUseRestartingLSO = false;
-			if (shouldDisableActionSets(SimilarityMode.LOW, periodStart, periodEnd)) {
-				userSettings.setBuildActionSets(false);
-			}
-			break;
-		case MEDIUM:
-			constraintAndFitnessSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.MEDIUM, periodStartOrDefault, periodEndOrDefault));
-			shouldUseRestartingLSO = false;
-			if (shouldDisableActionSets(SimilarityMode.MEDIUM, periodStart, periodEnd)) {
-				userSettings.setBuildActionSets(false);
-			}
-			break;
-		case OFF:
-			constraintAndFitnessSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.OFF, periodStartOrDefault, periodEndOrDefault));
-			shouldUseRestartingLSO = false;
-			userSettings.setBuildActionSets(false);
-			break;
-		default:
-			assert false;
-			break;
-		}
-
 		int epochLength;
-		// TODO: make this better!
 		if (userSettings.isSetPeriodStartDate() && userSettings.isSetPeriodEnd()) {
 			epochLength = EPOCH_LENGTH_PERIOD;
 		} else {
 			epochLength = EPOCH_LENGTH_FULL;
 		}
+
+		final SimilarityMode similarityMode = userSettings.getSimilarityMode();
+
+		boolean shouldUseRestartingLSO = false;
+		if (userSettings.isAdpOptimisation()) { // ADP Optimisation
+			baseConstraintAndFitnessSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.OFF, periodStartOrDefault, periodEndOrDefault));
+			shouldUseRestartingLSO = false;
+			userSettings.setBuildActionSets(false);
+		} else { // Normal optimisation.
+			switch (similarityMode) {
+			case ALL:
+				baseConstraintAndFitnessSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.LOW, periodStartOrDefault, periodEndOrDefault));
+				shouldUseRestartingLSO = true;
+				userSettings.setBuildActionSets(false);
+				break;
+			case HIGH:
+				baseConstraintAndFitnessSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.HIGH, periodStartOrDefault, periodEndOrDefault));
+				shouldUseRestartingLSO = true;
+				if (shouldDisableActionSets(SimilarityMode.HIGH, periodStart, periodEnd)) {
+					userSettings.setBuildActionSets(false);
+				}
+				break;
+			case LOW:
+				baseConstraintAndFitnessSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.LOW, periodStartOrDefault, periodEndOrDefault));
+				shouldUseRestartingLSO = false;
+				if (shouldDisableActionSets(SimilarityMode.LOW, periodStart, periodEnd)) {
+					userSettings.setBuildActionSets(false);
+				}
+				break;
+			case MEDIUM:
+				baseConstraintAndFitnessSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.MEDIUM, periodStartOrDefault, periodEndOrDefault));
+				shouldUseRestartingLSO = false;
+				if (shouldDisableActionSets(SimilarityMode.MEDIUM, periodStart, periodEnd)) {
+					userSettings.setBuildActionSets(false);
+				}
+				break;
+			case OFF:
+				baseConstraintAndFitnessSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.OFF, periodStartOrDefault, periodEndOrDefault));
+				shouldUseRestartingLSO = false;
+				userSettings.setBuildActionSets(false);
+				break;
+			default:
+				assert false;
+				break;
+			}
+		}
+
 		if (userSettings.isCleanStateOptimisation()) {
-			final CleanStateOptimisationStage stage = ScenarioUtils.createDefaultCleanStateParameters(EcoreUtil.copy(constraintAndFitnessSettings));
+			final CleanStateOptimisationStage stage = ScenarioUtils.createDefaultCleanStateParameters(EcoreUtil.copy(baseConstraintAndFitnessSettings));
 			stage.getAnnealingSettings().setEpochLength(epochLength);
 			plan.getStages().add(stage);
 			if (!userSettings.isNominalADP()) {
 				plan.getStages().add(ParametersFactory.eINSTANCE.createResetInitialSequencesStage());
+			} else {
+				// Return here for Nominal only modes
+				if (userSettings.isAdpOptimisation()) {
+					ScenarioUtils.createOrUpdateAllConstraints(plan, MinMaxSlotGroupConstraintCheckerFactory.NAME, true);
+					ScenarioUtils.createOrUpdateAllConstraints(plan, LadenIdleTimeConstraintCheckerFactory.NAME, true);
+					ScenarioUtils.createOrUpdateAllObjectives(plan, VesselUtilisationFitnessCoreFactory.NAME, true, 1);
+					ScenarioUtils.createOrUpdateAllObjectives(plan, NonOptionalSlotFitnessCoreFactory.NAME, true, 24_000_000);
+				}
+				return LNGScenarioRunnerUtils.createExtendedSettings(plan);
 			}
 		}
-
-		if (!userSettings.isNominalADP()) {
-
-			if (similarityMode != SimilarityMode.ALL) {
-				final LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(EcoreUtil.copy(constraintAndFitnessSettings));
-				stage.getAnnealingSettings().setEpochLength(epochLength);
-				stage.getAnnealingSettings().setRestarting(shouldUseRestartingLSO);
-				plan.getStages().add(stage);
-			} else {
-				final MultipleSolutionSimilarityOptimisationStage stage = ScenarioUtils.createDefaultMultipleSolutionSimilarityParameters(EcoreUtil.copy(constraintAndFitnessSettings));
+		final boolean parallelise = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MODULE_PARALLELISATION);
+		if (similarityMode != SimilarityMode.OFF) {
+			final MultipleSolutionSimilarityOptimisationStage stage = ScenarioUtils.createDefaultMultipleSolutionSimilarityParameters(EcoreUtil.copy(baseConstraintAndFitnessSettings), parallelise);
+			stage.getAnnealingSettings().setEpochLength(epochLength);
+			stage.getAnnealingSettings().setRestarting(shouldUseRestartingLSO);
+			
+			final SimilaritySettings similaritySettings = stage.getConstraintAndFitnessSettings().getSimilaritySettings();
+			if (similaritySettings != null) {
+				 stage.getConstraintAndFitnessSettings().setSimilaritySettings(ScenarioUtils.createUnweightedSimilaritySettings());
+			}
+			
+			plan.getStages().add(stage);
+		} else {
+			// Normal LSO
+			{
+				final LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(EcoreUtil.copy(baseConstraintAndFitnessSettings), parallelise);
 				stage.getAnnealingSettings().setEpochLength(epochLength);
 				stage.getAnnealingSettings().setRestarting(shouldUseRestartingLSO);
 				plan.getStages().add(stage);
 			}
+			// Follow by hill-climb stage
 			{
-				final HillClimbOptimisationStage stage = ScenarioUtils.createDefaultHillClimbingParameters(EcoreUtil.copy(constraintAndFitnessSettings));
+				final HillClimbOptimisationStage stage = ScenarioUtils.createDefaultHillClimbingParameters(EcoreUtil.copy(baseConstraintAndFitnessSettings), parallelise);
 				stage.getAnnealingSettings().setEpochLength(epochLength);
 				plan.getStages().add(stage);
 			}
 
 			if (userSettings.isBuildActionSets()) {
 				if (periodStart != null && periodEnd != null) {
-					final ActionPlanOptimisationStage stage = ScenarioUtils.getActionPlanSettings(similarityMode, periodStart, periodEnd, EcoreUtil.copy(constraintAndFitnessSettings));
+					final ActionPlanOptimisationStage stage = ScenarioUtils.getActionPlanSettings(similarityMode, periodStart, periodEnd, EcoreUtil.copy(baseConstraintAndFitnessSettings));
 					plan.getStages().add(stage);
 				} else {
-					final ActionPlanOptimisationStage stage = ScenarioUtils.createDefaultActionPlanParameters(EcoreUtil.copy(constraintAndFitnessSettings));
+					final ActionPlanOptimisationStage stage = ScenarioUtils.createDefaultActionPlanParameters(EcoreUtil.copy(baseConstraintAndFitnessSettings));
 					plan.getStages().add(stage);
 				}
+			}
+
+			if (userSettings.isAdpOptimisation()) {
+				ScenarioUtils.createOrUpdateAllConstraints(plan, MinMaxSlotGroupConstraintCheckerFactory.NAME, true);
+				ScenarioUtils.createOrUpdateAllConstraints(plan, LadenIdleTimeConstraintCheckerFactory.NAME, true);
+				ScenarioUtils.createOrUpdateAllObjectives(plan, VesselUtilisationFitnessCoreFactory.NAME, true, 1);
+				ScenarioUtils.createOrUpdateAllObjectives(plan, NonOptionalSlotFitnessCoreFactory.NAME, true, 24_000_000);
 			}
 		}
 		return LNGScenarioRunnerUtils.createExtendedSettings(plan);
