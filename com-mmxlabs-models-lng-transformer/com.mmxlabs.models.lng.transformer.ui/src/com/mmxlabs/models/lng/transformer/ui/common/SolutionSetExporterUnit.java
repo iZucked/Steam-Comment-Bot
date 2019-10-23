@@ -28,22 +28,27 @@ import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.DualModeSolutionOption;
-import com.mmxlabs.models.lng.analytics.SandboxResult;
 import com.mmxlabs.models.lng.analytics.SolutionOption;
 import com.mmxlabs.models.lng.analytics.services.IAnalyticsScenarioEvaluator.BreakEvenMode;
 import com.mmxlabs.models.lng.cargo.ScheduleSpecification;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.parameters.BreakEvenOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.OtherPNL;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.breakeven.BreakEvenTransformerUnit;
 import com.mmxlabs.models.lng.transformer.chain.ChainBuilder;
 import com.mmxlabs.models.lng.transformer.chain.IChainLink;
@@ -100,7 +105,9 @@ public class SolutionSetExporterUnit {
 		// build this on the raw transformed seq
 		if (dualPNLMode) {
 			changeTransformer = new SequencesToChangeDescriptionTransformer(scenarioToOptimiserBridge.getFullDataTransformer());
-			// specificationTransformer = new ChangeModelToScheduleSpecification(scenarioToOptimiserBridge.getScenarioDataProvider(), null);
+			// specificationTransformer = new
+			// ChangeModelToScheduleSpecification(scenarioToOptimiserBridge.getScenarioDataProvider(),
+			// null);
 			final ISequences s = scenarioToOptimiserBridge.getTransformedOriginalRawSequences(initialSequences.getSequencesPair().getFirst());
 			changeTransformer.prepareFromBase(s);
 		}
@@ -160,13 +167,33 @@ public class SolutionSetExporterUnit {
 							plan.getExtraSlots().add(slot);
 						}
 					}
+					for (final Sequence seq : childSchedule.getSequences()) {
+						final CharterInMarket cm = seq.getCharterInMarket();
+						if (cm != null && cm.eContainer() == null) {
+							plan.getExtraCharterInMarkets().add(cm);
+						}
+						final VesselAvailability va = seq.getVesselAvailability();
+						if (va != null && va.eContainer() == null) {
+							plan.getExtraVesselAvailabilities().add(va);
+						}
+						for (Event evt : seq.getEvents()) {
+							if (evt instanceof VesselEventVisit) {
+								VesselEventVisit vesselEventVisit = (VesselEventVisit) evt;
+								VesselEvent vesselEvent = vesselEventVisit.getVesselEvent();
+								if (vesselEvent != null && vesselEvent.eContainer() == null) {
+									plan.getExtraVesselEvents().add(vesselEvent);
+								}
+							}
+						}
+					}
 
 					final SolutionOption option = helper == null ? AnalyticsFactory.eINSTANCE.createSolutionOption() : AnalyticsFactory.eINSTANCE.createDualModeSolutionOption();
 					if (helper != null) {
 						final ISequences s = scenarioToOptimiserBridge.getTransformedOriginalRawSequences(changeSet.getFirst());
 						option.setChangeDescription(changeTransformer.generateChangeDescription(s));
 						// try {
-						// Pair<ScheduleSpecification, ExtraDataProvider> p = specificationTransformer.buildScheduleSpecification(option.getChangeDescription());
+						// Pair<ScheduleSpecification, ExtraDataProvider> p =
+						// specificationTransformer.buildScheduleSpecification(option.getChangeDescription());
 						// option.setScheduleSpecification(p.getFirst());
 						// plan.getExtraSlots().addAll(p.getSecond().extraLoads);
 						// plan.getExtraSlots().addAll(p.getSecond().extraDischarges);
