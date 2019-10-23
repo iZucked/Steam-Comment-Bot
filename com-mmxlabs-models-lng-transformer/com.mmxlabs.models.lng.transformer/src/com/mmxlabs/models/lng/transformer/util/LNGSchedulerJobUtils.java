@@ -328,13 +328,13 @@ public class LNGSchedulerJobUtils {
 			Cargo loadCargo = null;
 
 			// The list of slots this cargo now uses
-			final List<Slot> cargoSlots = new ArrayList<>(allocation.getSlotAllocations().size());
+			final List<Slot<?>> cargoSlots = new ArrayList<>(allocation.getSlotAllocations().size());
 
 			// Treat the first load slot as the cargo defining slot
 			boolean firstLoad = true;
 			for (final SlotAllocation slotAllocation : allocation.getSlotAllocations()) {
 
-				final Slot slot = slotAllocation.getSlot();
+				final Slot<?> slot = slotAllocation.getSlot();
 				cargoSlots.add(slot);
 
 				// Slots created in the builder have no container so add it the container now as it is used.
@@ -404,16 +404,16 @@ public class LNGSchedulerJobUtils {
 			}
 
 			// Remove references to slots no longer in the cargo
-			final Set<Slot> oldSlots = new HashSet<>();
+			final Set<Slot<?>> oldSlots = new HashSet<>();
 			oldSlots.addAll(loadCargo.getSlots());
 			oldSlots.removeAll(cargoSlots);
-			for (final Slot slot : oldSlots) {
+			for (final Slot<?> slot : oldSlots) {
 				unsetCargoSlots.add(slot);
 			}
 
 			// Add in the slots which are currently not in the cargo
 			cargoSlots.removeAll(loadCargo.getSlots());
-			for (final Slot slot : cargoSlots) {
+			for (final Slot<?> slot : cargoSlots) {
 				setCommands.add(SetCommand.create(domain, slot, CargoPackage.eINSTANCE.getSlot_Cargo(), loadCargo));
 				setCargoSlots.add(slot);
 			}
@@ -421,7 +421,7 @@ public class LNGSchedulerJobUtils {
 
 		// Add the unset commands first so they do not overwrite the set commands
 		unsetCargoSlots.removeAll(setCargoSlots);
-		for (final Slot slot : unsetCargoSlots) {
+		for (final Slot<?> slot : unsetCargoSlots) {
 			cmd.append(SetCommand.create(domain, slot, CargoPackage.eINSTANCE.getSlot_Cargo(), SetCommand.UNSET_VALUE));
 		}
 		// Then add in the set commands
