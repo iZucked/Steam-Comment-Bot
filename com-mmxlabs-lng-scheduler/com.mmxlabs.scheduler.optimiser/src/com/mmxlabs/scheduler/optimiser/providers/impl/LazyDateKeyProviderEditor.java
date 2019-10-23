@@ -37,7 +37,7 @@ public class LazyDateKeyProviderEditor implements IDateKeyProviderEditor {
 	/**
 	 * A sorted set of date keys - the number of hours from time zero that a month begins in UTC time zone
 	 */
-	private final TreeSet<Integer> dateKeySet = new TreeSet<Integer>();
+	private final TreeSet<Integer> dateKeySet = new TreeSet<>();
 
 	@Override
 	public int getDateKeyFromHours(final int hours) {
@@ -51,7 +51,7 @@ public class LazyDateKeyProviderEditor implements IDateKeyProviderEditor {
 	}
 
 	@Override
-	public void setTimeZero(final long timeZeroInMillis) {
+	public synchronized void setTimeZero(final long timeZeroInMillis) {
 		// Reset
 
 		// Clear date
@@ -60,7 +60,7 @@ public class LazyDateKeyProviderEditor implements IDateKeyProviderEditor {
 		this.timeZeroInMillis = timeZeroInMillis;
 	}
 
-	private void buildTimeToDateKeyMap(final int targetExtent) {
+	private synchronized void buildTimeToDateKeyMap(final int targetExtent) {
 
 		final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 
