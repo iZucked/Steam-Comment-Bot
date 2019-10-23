@@ -22,9 +22,12 @@ import com.mmxlabs.common.util.TriFunction;
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.views.formatters.Formatters;
 import com.mmxlabs.lingo.reports.views.formatters.Formatters.DurationMode;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.EventGrouping;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
@@ -208,8 +211,14 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 				final CharterLengthEvent charterLength = (CharterLengthEvent) object;
 				return helper.apply(charterLength);
 			} else if (object instanceof StartEvent) {
-				final StartEvent startEvent = (StartEvent) object;;
+				final StartEvent startEvent = (StartEvent) object;
 				return helper.apply(startEvent);
+			} else if (object instanceof VesselEvent) {
+				final VesselEvent vesselEvent = (VesselEvent) object;
+				return helper.apply(vesselEvent);
+			} else if (object instanceof GeneratedCharterOut) {
+				final GeneratedCharterOut generatedCharterOut = (GeneratedCharterOut) object;
+				return helper.apply(generatedCharterOut);
 			} else if (object instanceof VesselEventVisit) {
 				final VesselEventVisit eventVisit = (VesselEventVisit) object;
 				return helper.apply(eventVisit);
@@ -236,8 +245,8 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 	protected @NonNull ICellRenderer createIntegerDaysFormatter(final EconsOptions options, final boolean isCost, final Function<Object, @Nullable Integer> transformer) {
 		return createBasicFormatter(options, isCost, Integer.class, new Function<Integer, String>() {
 			@Override
-			public String apply(Integer hours) {
-				return Formatters.formatAsDays(DurationMode.DAYS_HOURS_HUMAN, hours);
+			public String apply(Integer days) {
+				return Formatters.formatAsDays(DurationMode.DAYS_HOURS_HUMAN, days * 24);
 			}
 		}, transformer);
 	}
@@ -245,8 +254,8 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 	protected @NonNull ICellRenderer createDoubleDaysFormatter(final EconsOptions options, final boolean isCost, final Function<Object, @Nullable Double> transformer) {
 		return createBasicFormatter(options, isCost, Double.class, new Function<Double, String>() {
 			@Override
-			public String apply(Double hours) {
-				return Formatters.formatAsDays(DurationMode.DAYS_HOURS_HUMAN, hours);
+			public String apply(Double days) {
+				return Formatters.formatAsDays(DurationMode.DAYS_HOURS_HUMAN, days * 24);
 			}
 		}, transformer);
 	}
@@ -448,11 +457,26 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 	protected <T> Function<Object, @Nullable T> createFullLegTransformer2(final Class<T> resultType, final int index, final TriFunction<SlotVisit, Journey, Idle, T> func) {
 		return createMappingFunction(resultType, object -> {
 			try {
+				SlotVisit slotVisit = null;
+				Journey journey = null;
+				Idle idle = null;
+				if (object instanceof EventGrouping) {
+					final EventGrouping eg = (EventGrouping)object;
+					for (final Event event : eg.getEvents()) {
+						if (event instanceof SlotVisit) {
+							slotVisit = (SlotVisit) event;
+						}
+						if (event instanceof Journey) {
+							journey = (Journey) event;
+						}
+						if (event instanceof Idle) {
+							idle = (Idle) event;
+						}
+					}
+					return func.apply(slotVisit, journey, idle);
+				}
 				if (object instanceof CargoAllocation) {
 					final CargoAllocation cargoAllocation = (CargoAllocation) object;
-					SlotVisit slotVisit = null;
-					Journey journey = null;
-					Idle idle = null;
 					int legNumber = -1;
 					for (final Event event : cargoAllocation.getEvents()) {
 						if (event instanceof PortVisit) {
