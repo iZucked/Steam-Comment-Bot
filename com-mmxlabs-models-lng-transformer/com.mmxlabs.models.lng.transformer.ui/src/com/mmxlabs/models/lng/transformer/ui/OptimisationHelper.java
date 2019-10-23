@@ -2,9 +2,6 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2019
  * All rights reserved.
  */
-/**
- * All rights reserved.
- */
 package com.mmxlabs.models.lng.transformer.ui;
 
 import java.time.LocalDate;
