@@ -304,7 +304,7 @@ public class ScenarioServicePublishAction {
 				for (final IReportPublisherExtension reportPublisherExtension : publishersList) {
 					try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
 
-						reportPublisherExtension.publishReport(scenarioDataProvider, ScenarioModelUtil.getScheduleModel(scenarioDataProvider), outputStream);
+						reportPublisherExtension.publishReport(scenarioInstance, scenarioDataProvider, ScenarioModelUtil.getScheduleModel(scenarioDataProvider), outputStream);
 						final String reportType = reportPublisherExtension.getReportType();
 
 						// Call the correct upload report endpoint
