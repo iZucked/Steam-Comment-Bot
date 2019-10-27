@@ -45,7 +45,9 @@ public class ExposuresReportModel {
 			final ExposuresReportModel rm = new ExposuresReportModel();
 			rm.setDateCargo("Date");
 			for (final CommodityCurve ci : indices) {
-				rm.getIndicesList().add(ci.getName());
+				if (ci.getMarketIndex() != null) {
+					rm.getIndicesList().add(ci.getMarketIndex().getName());
+				}
 			}
 			rm.getIndicesList().add("Physical");
 			rmlist.add(rm);
@@ -68,12 +70,14 @@ public class ExposuresReportModel {
 		final ExposuresReportModel rm = new ExposuresReportModel();
 		rm.setDateCargo(rowHeader);
 		for (final CommodityCurve ci : indices) {
-			final String indexName = ci.getName();
-			if (ied.exposures.containsKey(indexName)) {
-				String result = String.format("%,.01f", ied.exposures.get(indexName));
-				rm.getIndicesList().add(result);
-			} else {
-				rm.getIndicesList().add("");
+			if (ci.getMarketIndex() != null) {
+				final String indexName = ci.getMarketIndex().getName();
+				if (ied.exposures.containsKey(indexName)) {
+					String result = String.format("%,.01f", ied.exposures.get(indexName));
+					rm.getIndicesList().add(result);
+				} else {
+					rm.getIndicesList().add("");
+				}
 			}
 		}
 		{
