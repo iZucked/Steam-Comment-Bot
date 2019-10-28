@@ -66,9 +66,11 @@ public class InventoryJSONGenerator {
 				if (scheduleModel.getSchedule().getInventoryLevels() != null //
 						&& !scheduleModel.getSchedule().getInventoryLevels().isEmpty()) {
 					final InventoryEvents event = scheduleModel.getSchedule().getInventoryLevels().get(0);
-					final InventoryChangeEvent ce = event.getEvents().get(0);
-					exportModel.setMaxVolume(ce.getCurrentMax());
-					exportModel.setMinVolume(ce.getCurrentMin());
+					if (event != null && event.getEvents() != null && !event.getEvents().isEmpty()) {
+						final InventoryChangeEvent ce = event.getEvents().get(0);
+						exportModel.setMaxVolume(ce.getCurrentMax());
+						exportModel.setMinVolume(ce.getCurrentMin());
+					}
 				}
 			}
 		}
