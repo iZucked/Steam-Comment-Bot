@@ -315,9 +315,9 @@ public class Exposures {
 					final Collection<ExposureDetail> exposureDetails = createExposureDetail(node, pricingDate, volume, isPurchase, lookupData, pricingFullDate.getDayOfMonth());
 					if (exposureDetails != null && !exposureDetails.isEmpty()) {
 						for (final ExposureDetail ed : exposureDetails) {
-							applyProRataCorrection(pcs, hcs, promptStart, ed);
 							if (ed.getDate().isAfter(YearMonth.of(promptStart.getYear(), promptStart.getMonthValue())) //
 									|| ed.getDate().equals(YearMonth.of(promptStart.getYear(), promptStart.getMonthValue()))) {
+								applyProRataCorrection(pcs, hcs, promptStart, ed);
 								slotAllocation.getExposures().add(ed);
 							}
 						}
@@ -384,7 +384,13 @@ public class Exposures {
 		double k = 1.0;
 		// workdays
 		if (pricingCalendarEntry != null) {
-			for (LocalDate c = cutoff; c.isBefore(pricingCalendarEntry.getEnd().plusDays(1)); c = c.plusDays(1)) {
+			final LocalDate co;
+			if (cutoff.isBefore(pricingCalendarEntry.getStart())) {
+				co = pricingCalendarEntry.getStart();
+			} else {
+				co = cutoff;
+			}
+			for (LocalDate c = co; c.isBefore(pricingCalendarEntry.getEnd().plusDays(1)); c = c.plusDays(1)) {
 				if (c.getDayOfWeek() != DayOfWeek.SATURDAY && c.getDayOfWeek() != DayOfWeek.SUNDAY) {
 					i += 1.0;
 				}
@@ -398,7 +404,7 @@ public class Exposures {
 				// extra holidays
 				for (final HolidayCalendar hc : hcs) {
 					for (final HolidayCalendarEntry hce : hc.getEntries()) {
-						if (hce.getDate().isAfter(cutoff) //
+						if (hce.getDate().isAfter(co) //
 								&& hce.getDate().isBefore(pricingCalendarEntry.getEnd())) {
 							i -= 1.0;
 						}
