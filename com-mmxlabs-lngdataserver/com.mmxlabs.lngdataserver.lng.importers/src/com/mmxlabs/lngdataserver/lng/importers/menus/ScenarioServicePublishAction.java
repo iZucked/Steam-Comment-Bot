@@ -130,6 +130,9 @@ public class ScenarioServicePublishAction {
 				case FAILED_TO_MAKE_CURRENT:
 					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUBLISHING, "Base case uploaded but was unable to mark as current.");
 					break;
+				case FAILED_TO_UPLOAD_BASECASE_CSV:
+					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUBLISHING, "Base case uploaded but failed to upload backup archive.");
+					break;
 				default:
 					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUBLISHING, "Unknown error occurred. Unable to publish as base case.");
 					break;
@@ -351,7 +354,7 @@ public class ScenarioServicePublishAction {
 				} catch (final IOException ex) {
 					System.out.println("Error while uploading base case archive");
 					ex.printStackTrace();
-					throw new PublishBasecaseException("Error while uploading base case archive", Type.FAILED_TO_MAKE_CURRENT, ex);
+					throw new PublishBasecaseException("Error while uploading base case archive", Type.FAILED_TO_UPLOAD_BASECASE_CSV, ex);
 				}
 			}
 
