@@ -33,53 +33,47 @@ import com.mmxlabs.models.ui.date.LocalDateTextFormatter;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 
 /**
- * Displays a start + end date formatted text box on the tool bar, so that the start date and end date used to generate nominations
- * can be set by the user. 
+ * Displays a start + end date formatted text box on the tool bar, so that the
+ * start date and end date used to generate nominations can be set by the user.
  */
 public class NominationDatesToolbarEditor extends ControlContribution {
-	
+
 	private interface DateGetter {
 		LocalDate getDate();
 	}
 
 	private final EditingDomain editingDomain;
-	
+
 	private final NominationsParameters nominationsParameters;
-	
+
 	private final LocalDateTextFormatter startDateFormatter = new LocalDateTextFormatter(true);
 	private final LocalDateTextFormatter endDateFormatter = new LocalDateTextFormatter(true);
 	private FormattedText startDateText;
 	private FormattedText endDateText;
-	
+
 	private boolean locked = false;
-	
+
 	private final @NonNull AdapterImpl adapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			final Object newValue = notification.getNewValue();
-			if(notification.isTouch()) {
+			if (notification.isTouch()) {
 				return;
 			}
 			if (notification.getFeature() == NominationsPackage.eINSTANCE.getNominationsParameters_StartDate()) {
 				startDateText.setValue(newValue);
-			} else if(notification.getFeature() == NominationsPackage.eINSTANCE.getNominationsParameters_EndDate()) {
+			} else if (notification.getFeature() == NominationsPackage.eINSTANCE.getNominationsParameters_EndDate()) {
 				endDateText.setValue(newValue);
 			}
 		}
-	};	
-	
+	};
+
 	public NominationDatesToolbarEditor(final String id, final @NonNull EditingDomain editingDomain, IScenarioEditingLocation jointModelEditor) {
 		super(id);
 		this.editingDomain = editingDomain;
 		final NominationsModel nominationsModel = ScenarioModelUtil.getNominationsModel(jointModelEditor.getScenarioDataProvider());
-		
-		if (nominationsModel.getNominationParameters() == null) {
-			this.nominationsParameters = NominationsFactory.eINSTANCE.createNominationsParameters();
-			nominationsModel.setNominationParameters(this.nominationsParameters);
-		}
-		else {
-			this.nominationsParameters = nominationsModel.getNominationParameters(); 
-		}
+
+		this.nominationsParameters = nominationsModel.getNominationParameters();
 	}
 
 	@Override
@@ -135,12 +129,12 @@ public class NominationDatesToolbarEditor extends ControlContribution {
 			endDateText.setValue(date);
 		}
 
-		//Listen to further changes
+		// Listen to further changes
 		nominationsParameters.eAdapters().add(adapter);
 
-		//Make sure dispose gets called.
+		// Make sure dispose gets called.
 		startDateText.getControl().addDisposeListener(e -> this.dispose());
-		
+
 		return pparent;
 	}
 
@@ -161,8 +155,9 @@ public class NominationDatesToolbarEditor extends ControlContribution {
 		startDateText.getControl().setEnabled(!locked);
 		endDateText.getControl().setEnabled(!locked);
 	}
-	
-	//TODO Find a better date picker control or fix the current one when entering the first character of the year and when deleting characters of the year.
+
+	// TODO Find a better date picker control or fix the current one when entering
+	// the first character of the year and when deleting characters of the year.
 	private FormattedText createDateEditorControl(final Composite parent, LocalDateTextFormatter dateFormatter, DateGetter dateGetter, EAttribute initValueEAttribute) {
 		final FormattedText dateText = new FormattedText(parent);
 		dateText.setFormatter(dateFormatter);
@@ -170,28 +165,27 @@ public class NominationDatesToolbarEditor extends ControlContribution {
 			if (dateText.isValid()) {
 				Object date = dateText.getValue();
 				final LocalDate prevDateValue = dateGetter.getDate();
-				if (!Objects.equals(date, prevDateValue)){
+				if (!Objects.equals(date, prevDateValue)) {
 					if (date == null) {
 						date = SetCommand.UNSET_VALUE;
 					}
-					final Command cmd = SetCommand.create(editingDomain, nominationsParameters, 
-						initValueEAttribute, date);
+					final Command cmd = SetCommand.create(editingDomain, nominationsParameters, initValueEAttribute, date);
 					editingDomain.getCommandStack().execute(cmd);
 				}
 			}
 		});
 		dateText.getControl().setLayoutData(GridDataFactory.swtDefaults().minSize(90, -1).hint(90, 20).create());
-		return dateText;		
+		return dateText;
 	}
 
 	private LocalDate getDate(FormattedText ft) {
-		return (LocalDate)ft.getValue();
+		return (LocalDate) ft.getValue();
 	}
-	
+
 	public LocalDate getStartDate() {
 		return getDate(startDateText);
 	}
-	
+
 	public LocalDate getEndDate() {
 		return getDate(endDateText);
 	}

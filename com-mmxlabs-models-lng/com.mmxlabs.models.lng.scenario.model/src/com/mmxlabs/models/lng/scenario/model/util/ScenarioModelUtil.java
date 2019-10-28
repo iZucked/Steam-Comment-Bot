@@ -169,22 +169,6 @@ public final class ScenarioModelUtil {
 		}
 		return nominationsModel;
 	}	
-
-	
-	@Nullable
-	public static NominationsModel findNominationsModel(@NonNull final IScenarioDataProvider scenarioDataProvider) {
-		final LNGScenarioModel scenarioModel = findScenarioModel(scenarioDataProvider);
-		return findNominationsModel(scenarioModel);
-	}
-
-	@Nullable
-	public static NominationsModel findNominationsModel(final LNGScenarioModel scenarioModel) {
-		NominationsModel nominationsModel = null;
-		if (scenarioModel != null) {
-			nominationsModel = scenarioModel.getNominationsModel();
-		}
-		return nominationsModel;
-	}	
 	
 	@NonNull
 	public static CostModel getCostModel(@NonNull final IScenarioDataProvider scenarioDataProvider) {

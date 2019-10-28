@@ -37,14 +37,6 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public class NominationsModelUtils {
 
-	public static NominationsModel getNominationModelAndCreateIfMissing(@NonNull final IScenarioDataProvider scenarioDataProvider) {
-		NominationsModel nominationsModel = ScenarioModelUtil.findNominationsModel(scenarioDataProvider);
-		if (nominationsModel == null) {
-			nominationsModel = createNominationsModel();
-		}
-		return nominationsModel;
-	}
-
 	public static NominationsModel createNominationsModel() {
 		final NominationsModel nominationsModel = NominationsFactory.eINSTANCE.createNominationsModel();
 		nominationsModel.setNominationParameters(NominationsFactory.eINSTANCE.createNominationsParameters());

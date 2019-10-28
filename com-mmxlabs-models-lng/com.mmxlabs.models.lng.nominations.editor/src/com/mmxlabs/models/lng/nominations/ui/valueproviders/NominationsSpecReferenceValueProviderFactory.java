@@ -23,7 +23,7 @@ public class NominationsSpecReferenceValueProviderFactory implements IReferenceV
 		if (rootObject instanceof LNGScenarioModel) {
 
 			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
-			final NominationsModel model = ScenarioModelUtil.findNominationsModel(lngScenarioModel);
+			final NominationsModel model = ScenarioModelUtil.getNominationsModel(lngScenarioModel);
 			final EClass referenceClass = reference.getEReferenceType();
 
 			if (referenceClass == NominationsPackage.eINSTANCE.getSlotNominationSpec()) {
