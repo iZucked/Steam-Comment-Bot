@@ -44,8 +44,6 @@ public class NominationDatesToolbarEditor extends ControlContribution {
 
 	private final EditingDomain editingDomain;
 	
-	private final IScenarioEditingLocation jointModelEditor;
-	
 	private final NominationsParameters nominationsParameters;
 	
 	private final LocalDateTextFormatter startDateFormatter = new LocalDateTextFormatter(true);
@@ -73,7 +71,6 @@ public class NominationDatesToolbarEditor extends ControlContribution {
 	public NominationDatesToolbarEditor(final String id, final @NonNull EditingDomain editingDomain, IScenarioEditingLocation jointModelEditor) {
 		super(id);
 		this.editingDomain = editingDomain;
-		this.jointModelEditor = jointModelEditor;
 		final NominationsModel nominationsModel = ScenarioModelUtil.getNominationsModel(jointModelEditor.getScenarioDataProvider());
 		
 		if (nominationsModel.getNominationParameters() == null) {

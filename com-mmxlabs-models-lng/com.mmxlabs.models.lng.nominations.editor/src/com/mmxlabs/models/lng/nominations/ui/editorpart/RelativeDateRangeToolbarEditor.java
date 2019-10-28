@@ -7,7 +7,7 @@ package com.mmxlabs.models.lng.nominations.ui.editorpart;
 import java.time.LocalDate;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.edit.command.SetCommand;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.ControlContribution;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
@@ -20,9 +20,7 @@ import org.eclipse.swt.widgets.Control;
 
 import com.mmxlabs.models.lng.nominations.NominationsFactory;
 import com.mmxlabs.models.lng.nominations.NominationsModel;
-import com.mmxlabs.models.lng.nominations.NominationsPackage;
 import com.mmxlabs.models.lng.nominations.NominationsParameters;
-import com.mmxlabs.models.lng.nominations.utils.NominationsModelUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -178,7 +176,7 @@ public class RelativeDateRangeToolbarEditor extends ControlContribution {
 		//btn.setSelection(true);
 	}
 	
-	private NominationsParameters getNominationParameters() {
+	private @NonNull NominationsParameters getNominationParameters() {
 		final EObject scenario = this.jointModelEditor.getScenarioDataProvider().getScenario();
 		
 		if (scenario instanceof LNGScenarioModel) {
@@ -197,7 +195,7 @@ public class RelativeDateRangeToolbarEditor extends ControlContribution {
 			}
 		}
 		
-		return null;
+		throw new IllegalStateException();
 	}
 	
 	public LocalDate getStartDate() {
