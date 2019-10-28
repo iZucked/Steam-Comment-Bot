@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Models: LNG Transformer Extensions
 Bundle-SymbolicName: com.mmxlabs.models.lng.transformer.extensions;singleton:=true
-Bundle-Version: 4.7.24.RELEASE
+Bundle-Version: 4.7.25.qualifier
 Bundle-Vendor: Minimax Labs Ltd.
 Bundle-RequiredExecutionEnvironment: JavaSE-10
 Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
@@ -11,23 +11,23 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  org.ops4j.peaberry;bundle-version="1.2.0",
  org.ops4j.peaberry.eclipse;bundle-version="1.1.1",
  org.ops4j.peaberry.activation;bundle-version="1.2.0",
- com.mmxlabs.common.common-util;bundle-version="[4.7.24,5.0.0)",
- com.mmxlabs.optimiser.optimiser-common;bundle-version="[4.7.24,5.0.0)",
- com.mmxlabs.optimiser.optimiser-core;bundle-version="[4.7.24,5.0.0)",
- com.mmxlabs.optimiser.optimiser-lso;bundle-version="[4.7.24,5.0.0)",
- com.mmxlabs.models.lng.fleet.editor;bundle-version="[4.7.24,5.0.0)",
- com.mmxlabs.scheduler.optimiser;bundle-version="[4.7.24,5.0.0)",
- com.mmxlabs.models.common;bundle-version="[4.7.24,5.0.0)",
- com.mmxlabs.scenario.service.util;bundle-version="[4.7.24,5.0.0)",
- com.mmxlabs.models.lng.scenario.model;bundle-version="[4.7.24,5.0.0)",
- com.mmxlabs.models.lng.transformer;bundle-version="[4.7.24,5.0.0)",
+ com.mmxlabs.common.common-util;bundle-version="[4.7.25,5.0.0)",
+ com.mmxlabs.optimiser.optimiser-common;bundle-version="[4.7.25,5.0.0)",
+ com.mmxlabs.optimiser.optimiser-core;bundle-version="[4.7.25,5.0.0)",
+ com.mmxlabs.optimiser.optimiser-lso;bundle-version="[4.7.25,5.0.0)",
+ com.mmxlabs.models.lng.fleet.editor;bundle-version="[4.7.25,5.0.0)",
+ com.mmxlabs.scheduler.optimiser;bundle-version="[4.7.25,5.0.0)",
+ com.mmxlabs.models.common;bundle-version="[4.7.25,5.0.0)",
+ com.mmxlabs.scenario.service.util;bundle-version="[4.7.25,5.0.0)",
+ com.mmxlabs.models.lng.scenario.model;bundle-version="[4.7.25,5.0.0)",
+ com.mmxlabs.models.lng.transformer;bundle-version="[4.7.25,5.0.0)",
  com.google.guava;bundle-version="13.0.1",
  com.mmxlabs.models.lng.parameters,
  com.mmxlabs.license.features,
  com.mmxlabs.models.lng.schedule,
  com.mmxlabs.models.ui.properties,
- com.mmxlabs.models.lng.commercial.editor;bundle-version="[4.7.24,5.0.0)",
- com.mmxlabs.scenario.service.model;bundle-version="[4.7.24,5.0.0)"
+ com.mmxlabs.models.lng.commercial.editor;bundle-version="[4.7.25,5.0.0)",
+ com.mmxlabs.scenario.service.model;bundle-version="[4.7.25,5.0.0)"
 Export-Package: com.mmxlabs.models.lng.transformer.extensions,
  com.mmxlabs.models.lng.transformer.extensions.actuals,
  com.mmxlabs.models.lng.transformer.extensions.common,
