@@ -197,7 +197,7 @@ public class LNGScenarioChainUnitFactory {
 			ResetInitialSequencesStage stageSettings = (ResetInitialSequencesStage) template;
 			ResetInitialSequencesUnit.chain(builder, stageSettings.getName(), userSettings, stageSettings, 1);
 		} else if (template instanceof InsertionOptimisationStage) {
-			// Currently we directly construct the chain up code, particulary due to the extra inputs required.
+			// Currently we directly construct the chain up code, particularly due to the extra inputs required.
 			 return null;
 		} else {
 			throw new IllegalArgumentException("Unknown stage type");

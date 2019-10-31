@@ -47,7 +47,6 @@ import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScheduleTools;
 import com.mmxlabs.models.lng.transformer.ui.AbstractRunnerHook;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.SequenceHelper;
-import com.mmxlabs.models.lng.transformer.ui.parametermodes.impl.ParallelOptimisationPlanExtender;
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
@@ -591,7 +590,6 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 
 		evaluateWithLSOTest(true, plan -> {
 			plan.getUserSettings().setSimilarityMode(SimilarityMode.ALL);
-			new ParallelOptimisationPlanExtender().modifyOptimisationPlan(plan);
 			// Set iterations to zero to avoid any optimisation changes and rely on the unpairing opt step
 			// (Actually needs to be 1 to trigger the optimisation stage. This may cause the test to fail if the first move set finds a good solution)
 			ScenarioUtils.setLSOStageIterations(plan, 1);

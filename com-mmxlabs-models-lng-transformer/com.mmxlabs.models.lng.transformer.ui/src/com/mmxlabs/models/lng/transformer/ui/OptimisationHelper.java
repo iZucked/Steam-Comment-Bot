@@ -2,9 +2,6 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2019
  * All rights reserved.
  */
-/**
- * All rights reserved.
- */
 package com.mmxlabs.models.lng.transformer.ui;
 
 import java.time.LocalDate;
@@ -12,9 +9,9 @@ import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
@@ -28,7 +25,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
@@ -38,8 +34,6 @@ import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.validation.model.Category;
 import org.eclipse.emf.validation.model.EvaluationMode;
 import org.eclipse.emf.validation.service.IBatchValidator;
-import org.eclipse.emf.validation.service.IConstraintDescriptor;
-import org.eclipse.emf.validation.service.IConstraintFilter;
 import org.eclipse.emf.validation.service.ModelValidationService;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -60,7 +54,6 @@ import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
-import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
@@ -100,12 +93,23 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenIdleTimeConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.MinMaxSlotGroupConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.SimilarityFitnessCoreFactory;
+import com.mmxlabs.scheduler.optimiser.fitness.VesselUtilisationFitnessCoreFactory;
+import com.mmxlabs.scheduler.optimiser.fitness.components.NonOptionalSlotFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.IBreakEvenEvaluator;
 
 public final class OptimisationHelper {
+
+	private OptimisationHelper() {
+	}
+
+	private static final int IDX_OPTION_ADDED = 0;
+	private static final int IDX_OPTION_ENABLED_ADDED = 1;
+
 	public static class NameProvider {
-		public NameProvider(String suggestion, Set<String> existingNames) {
+		public NameProvider(final String suggestion, final Set<String> existingNames) {
 			this.nameSuggestion = suggestion;
 			this.existingNames = existingNames;
 		}
@@ -142,9 +146,9 @@ public final class OptimisationHelper {
 	public static final String SWTBOT_ADP_ON = SWTBOT_ADP_PREFIX + ".On";
 	public static final String SWTBOT_ADP_OFF = SWTBOT_ADP_PREFIX + ".Off";
 
-	public static final String SWTBOT_CLEAN_STATE_PREFIX = "swtbot.cleanstate";
-	public static final String SWTBOT_CLEAN_STATE_ON = SWTBOT_CLEAN_STATE_PREFIX + ".On";
-	public static final String SWTBOT_CLEAN_STATE_OFF = SWTBOT_CLEAN_STATE_PREFIX + ".Off";
+	public static final String SWTBOT_CLEAN_SLATE_PREFIX = "swtbot.cleanslate";
+	public static final String SWTBOT_CLEAN_SLATE_ON = SWTBOT_CLEAN_SLATE_PREFIX + ".On";
+	public static final String SWTBOT_CLEAN_SLATE_OFF = SWTBOT_CLEAN_SLATE_PREFIX + ".Off";
 
 	public static final String SWTBOT_NOMINAL_ADP_PREFIX = "swtbot.nominal.adp";
 	public static final String SWTBOT_NOMINAL_ADP_ON = SWTBOT_NOMINAL_ADP_PREFIX + ".On";
@@ -166,8 +170,9 @@ public final class OptimisationHelper {
 	public static final String SWTBOT_DUAL_MODE_ON = SWTBOT_DUAL_MODE_PREFIX + ".On";
 	public static final String SWTBOT_DUAL_MODE_OFF = SWTBOT_DUAL_MODE_PREFIX + ".Off";
 
-	public static final String SWTBOT_SIMILARITY_PREFIX = "swtbot.similaritymode";	
+	public static final String SWTBOT_SIMILARITY_PREFIX = "swtbot.similaritymode";
 	public static final String SWTBOT_SIMILARITY_PREFIX_OFF = SWTBOT_SIMILARITY_PREFIX + ".Off";
+	public static final String SWTBOT_SIMILARITY_PREFIX_ON = SWTBOT_SIMILARITY_PREFIX + ".On";
 	/**
 	 * @deprecated
 	 */
@@ -188,13 +193,72 @@ public final class OptimisationHelper {
 
 	public static final String SWTBOT_IDLE_DAYS = "swtbot.idledays";
 
+	@Nullable
+	public static OptimisationPlan getOptimiserSettings(@NonNull final LNGScenarioModel scenario, final boolean forEvaluation, @Nullable final String parameterMode, final boolean promptUser,
+			final boolean promptOnlyIfOptionsEnabled, final NameProvider nameProvider) {
+
+		UserSettings previousSettings = null;
+		if (scenario != null) {
+			previousSettings = scenario.getUserSettings();
+		}
+
+		final UserSettings userSettings = ScenarioUtils.createDefaultUserSettings();
+		if (previousSettings == null) {
+			previousSettings = userSettings;
+		}
+
+		// Permit the user to override the settings object. Use the previous settings as
+		// the initial value
+		if (promptUser) {
+			final boolean forADP = scenario.getAdpModel() != null;
+
+			// Do not allow optimisation if break even present in slots.
+			if (!forEvaluation && checkForBreakEven(scenario)) {
+				final String errMessage = "Optimisation does not support break-evens. Replace \"?\" in price expressions.";
+				final Display display = PlatformUI.getWorkbench().getDisplay();
+				if (display != null) {
+					display.syncExec(new Runnable() {
+
+						@Override
+						public void run() {
+							MessageDialog.openError(display.getActiveShell(), "Unable to start optimisation", errMessage);
+						}
+					});
+				}
+
+				return null;
+			}
+
+			previousSettings = openUserDialog(scenario, forEvaluation, previousSettings, userSettings, promptOnlyIfOptionsEnabled, nameProvider, forADP);
+		}
+
+		if (previousSettings == null) {
+			return null;
+		}
+
+		// Only merge across specific fields - not all of them. This permits additions
+		// to the default settings to pass through to the scenario.
+		mergeFields(previousSettings, userSettings);
+
+		if (!checkUserSettings(userSettings, false)) {
+			return null;
+		}
+
+		final OptimisationPlan optimisationPlan = transformUserSettings(userSettings, parameterMode, scenario);
+		if (nameProvider != null) {
+			optimisationPlan.setResultName(nameProvider.nameSuggestion);
+		}
+
+		return optimisationPlan;
+	}
+
 	public static Object evaluateScenarioInstance(@NonNull final IEclipseJobManager jobManager, @NonNull final ScenarioInstance instance, @Nullable final String parameterMode,
-			final boolean promptForOptimiserSettings, final boolean optimising, final boolean promptOnlyIfOptionsEnabled, String nameSuggestion, Set<String> existingNames) {
+			final boolean promptForOptimiserSettings, final boolean optimising, final boolean promptOnlyIfOptionsEnabled, final String nameSuggestion, final Set<String> existingNames) {
 		return evaluateScenarioInstance(jobManager, instance, parameterMode, promptForOptimiserSettings, optimising, promptOnlyIfOptionsEnabled, new NameProvider(nameSuggestion, existingNames));
 	}
 
 	public static Object evaluateScenarioInstance(@NonNull final IEclipseJobManager jobManager, @NonNull final ScenarioInstance instance, @Nullable final String parameterMode,
-			final boolean promptForOptimiserSettings, final boolean optimising, final boolean promptOnlyIfOptionsEnabled, NameProvider nameProvider) {
+			final boolean promptForOptimiserSettings, final boolean optimising, final boolean promptOnlyIfOptionsEnabled, final NameProvider nameProvider) {
 
 		final IScenarioService service = SSDataManager.Instance.findScenarioService(instance);
 		if (service == null) {
@@ -225,7 +289,7 @@ public final class OptimisationHelper {
 		final Supplier<IJobDescriptor> createJobDescriptorCallback = () -> {
 			return new LNGSchedulerJobDescriptor(instance.getName(), instance, planRef[0], optimising);
 		};
-		String taskName = "Optimise " + instance.getName();
+		final String taskName = "Optimise " + instance.getName();
 
 		final OptimisationJobRunner jobRunner = new OptimisationJobRunner();
 		jobRunner.run(taskName, instance, modelRecord, prepareCallback, createJobDescriptorCallback, null);
@@ -234,7 +298,7 @@ public final class OptimisationHelper {
 	}
 
 	public static UserSettings promptForUserSettings(final LNGScenarioModel scenario, final boolean forEvaluation, final boolean promptUser, final boolean promptOnlyIfOptionsEnabled,
-			NameProvider nameProvider) {
+			final NameProvider nameProvider) {
 		UserSettings previousSettings = null;
 		if (scenario != null) {
 			previousSettings = scenario.getUserSettings();
@@ -244,14 +308,15 @@ public final class OptimisationHelper {
 	}
 
 	public static UserSettings promptForUserSettings(final LNGScenarioModel scenario, final boolean forEvaluation, final boolean promptUser, final boolean promptOnlyIfOptionsEnabled,
-			NameProvider nameProvider, UserSettings previousSettings) {
+			final NameProvider nameProvider, UserSettings previousSettings) {
 
 		final UserSettings userSettings = ScenarioUtils.createDefaultUserSettings();
 		if (previousSettings == null) {
 			previousSettings = userSettings;
 		}
 
-		// Permit the user to override the settings object. Use the previous settings as the initial value
+		// Permit the user to override the settings object. Use the previous settings as
+		// the initial value
 		if (promptUser) {
 			previousSettings = openUserDialog(scenario, forEvaluation, previousSettings, userSettings, promptOnlyIfOptionsEnabled, nameProvider, false);
 		}
@@ -260,7 +325,8 @@ public final class OptimisationHelper {
 			return null;
 		}
 
-		// Only merge across specific fields - not all of them. This permits additions to the default settings to pass through to the scenario.
+		// Only merge across specific fields - not all of them. This permits additions
+		// to the default settings to pass through to the scenario.
 		mergeFields(previousSettings, userSettings);
 
 		if (!checkUserSettings(userSettings, false)) {
@@ -269,74 +335,16 @@ public final class OptimisationHelper {
 		return userSettings;
 	}
 
-	@Nullable
-	public static OptimisationPlan getOptimiserSettings(@NonNull final LNGScenarioModel scenario, final boolean forEvaluation, @Nullable final String parameterMode, final boolean promptUser,
-			final boolean promptOnlyIfOptionsEnabled, NameProvider nameProvider) {
-
-		UserSettings previousSettings = null;
-		if (scenario != null) {
-			previousSettings = scenario.getUserSettings();
-		}
-
-		final UserSettings userSettings = ScenarioUtils.createDefaultUserSettings();
-		if (previousSettings == null) {
-			previousSettings = userSettings;
-		}
-
-		// Permit the user to override the settings object. Use the previous settings as the initial value
-		if (promptUser) {
-			boolean forADP = scenario.getAdpModel() != null;
-			
-			//Do not allow optimisation if break even present in slots.
-			if (!forEvaluation && checkForBreakEven(scenario)) {
-				final String errMessage = "Optimisation does not support break-evens. Replace \"?\" in price expressions.";
-				final Display display = PlatformUI.getWorkbench().getDisplay();
-				if (display != null) {
-					display.syncExec(new Runnable() {
-
-						@Override
-						public void run() {
-							MessageDialog.openError(display.getActiveShell(), "Unable to start optimisation", errMessage);
-						}
-					});
-				}
-				
-				return null;
-			}
-			
-			previousSettings = openUserDialog(scenario, forEvaluation, previousSettings, userSettings, promptOnlyIfOptionsEnabled, nameProvider, forADP);
-		}
-
-		if (previousSettings == null) {
-			return null;
-		}
-
-		// Only merge across specific fields - not all of them. This permits additions to the default settings to pass through to the scenario.
-		mergeFields(previousSettings, userSettings);
-
-		if (!checkUserSettings(userSettings, false)) {
-			return null;
-		}
-
-		final OptimisationPlan optimisationPlan = transformUserSettings(userSettings, parameterMode, scenario);
-		if (nameProvider != null) {
-			optimisationPlan.setResultName(nameProvider.nameSuggestion);
-		}
-
-		return optimisationPlan;
-	}
-
 	public static UserSettings openUserDialog(final LNGScenarioModel scenario, final boolean forEvaluation, final UserSettings previousSettings, final UserSettings defaultSettings,
-			final boolean displayOnlyIfOptionsEnabled, NameProvider nameProvider, boolean forADP) {
+			final boolean displayOnlyIfOptionsEnabled, final NameProvider nameProvider, final boolean forADP) {
 		return openUserDialog(scenario, PlatformUI.getWorkbench().getDisplay(), PlatformUI.getWorkbench().getDisplay().getActiveShell(), forEvaluation, previousSettings, defaultSettings,
 				displayOnlyIfOptionsEnabled, nameProvider, forADP);
 	}
 
 	public static UserSettings openUserDialog(final LNGScenarioModel scenario, final Display display, final Shell shell, final boolean forEvaluation, final UserSettings previousSettings,
-			final UserSettings defaultSettings, final boolean displayOnlyIfOptionsEnabled, NameProvider nameProvider, boolean forADP) {
+			final UserSettings defaultSettings, final boolean displayOnlyIfOptionsEnabled, final NameProvider nameProvider, final boolean forADP) {
 
-		boolean optionAdded = false;
-		boolean enabledOptionAdded = false;
+		final boolean[] optionsAdded = new boolean[2];
 
 		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
 		adapterFactory.addAdapterFactory(new ParametersItemProviderAdapterFactory());
@@ -345,6 +353,8 @@ public final class OptimisationHelper {
 		//
 		// Fire up a dialog
 		final ParameterModesDialog dialog = new ParameterModesDialog(shell) {
+
+			@Override
 			protected void configureShell(final org.eclipse.swt.widgets.Shell newShell) {
 
 				super.configureShell(newShell);
@@ -352,7 +362,6 @@ public final class OptimisationHelper {
 			}
 		};
 
-		// final OptimiserSettings copy = EcoreUtil.copy(previousSettings);
 		final UserSettings copy = EcoreUtil.copy(previousSettings);
 
 		// Reset disabled features
@@ -363,400 +372,40 @@ public final class OptimisationHelper {
 		}
 
 		if (!forEvaluation) {
-			// dialog.addOption(DataSection.Controls, null, editingDomain, "Number of Iterations", copy, defaultSettings, DataType.PositiveInt,
-			// ParametersPackage.eINSTANCE.getOptimiserSettings_AnnealingSettings(), ParametersPackage.eINSTANCE.getAnnealingSettings_Iterations());
+			// dialog.addOption(DataSection.Controls, null, editingDomain, "Number of
+			// Iterations", copy, defaultSettings, DataType.PositiveInt,
+			// ParametersPackage.eINSTANCE.getOptimiserSettings_AnnealingSettings(),
+			// ParametersPackage.eINSTANCE.getAnnealingSettings_Iterations());
 			// optionAdded = true;
-			// Check period optimisation is permitted
-			// if (SecurityUtils.getSubject().isPermitted(KnownFeatures.FEATURE_OPTIMISATION_PERIOD)) {
+
+			// Create optional ADP toggles
 			{
-
-				if (forADP) {
-					boolean scenarioContainsForbiddedADPEvents = false;
-					String adpVesselEventIssueMsg = "";
-					if (scenario != null) {
-						CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenario);
-						for (VesselEvent event : cargoModel.getVesselEvents()) {
-							if ((event instanceof CharterOutEvent)) {
-								CharterOutEvent charterOutEvent = (CharterOutEvent) event;
-								if (charterOutEvent.isOptional() || charterOutEvent.getRelocateTo() != null) {
-									scenarioContainsForbiddedADPEvents = true;
-									copy.setCleanStateOptimisation(false);
-									adpVesselEventIssueMsg = "Clean slate only supports non-optional charter out events.";
-									break;
-								}
-							}
-						}
-					}
-					final OptionGroup group = dialog.createGroup(DataSection.General, "ADP");
-					{
-						final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
-						choiceData.addChoice("No", Boolean.FALSE);
-						choiceData.addChoice("Yes", Boolean.TRUE);
-						final Option option = dialog.addOption(DataSection.General, group, editingDomain, "Enabled: ", "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_ADP_PREFIX,
-								ParametersPackage.eINSTANCE.getUserSettings_AdpOptimisation());
-						optionAdded = true;
-						enabledOptionAdded = true;
-					}
-					{
-						final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
-						choiceData.addChoice("No", Boolean.FALSE);
-						choiceData.addChoice("Yes", Boolean.TRUE);
-						if (scenarioContainsForbiddedADPEvents) {
-							choiceData.enabled = false;
-							choiceData.disabledMessage = adpVesselEventIssueMsg;
-						} else {
-							choiceData.enabledHook = (UserSettings::isAdpOptimisation);
-						}
-						final Option option = dialog.addOption(DataSection.General, group, editingDomain, "Clean slate: ", "", copy, defaultSettings, DataType.Choice, choiceData,
-								SWTBOT_CLEAN_STATE_PREFIX, ParametersPackage.eINSTANCE.getUserSettings_CleanStateOptimisation());
-						optionAdded = true;
-						enabledOptionAdded = true;
-
-						dialog.addValidation(option, new IValidator() {
-
-							@Override
-							public IStatus validate(final Object value) {
-								if (value instanceof UserSettings) {
-									final UserSettings userSettings = (UserSettings) value;
-
-									if (userSettings.isAdpOptimisation()) {
-										if (userSettings.getPeriodStartDate() != null || userSettings.getPeriodEnd() != null) {
-											return ValidationStatus.error("Period optimisation must be disabled with ADP optimisation");
-										}
-										if (userSettings.isCleanStateOptimisation()) {
-											if (userSettings.getSimilarityMode() != SimilarityMode.OFF) {
-												return ValidationStatus.error("Similarity must be disabled with clean slate ADP optimisation");
-											}
-
-											if (userSettings.isBuildActionSets()) {
-												return ValidationStatus.error("Action sets must be disabled with clean slate ADP optimisation");
-											}
-											if (userSettings.isGenerateCharterOuts()) {
-												return ValidationStatus.error("Charter out generation must be disabled with clean slate ADP optimisation");
-											}
-										}
-									}
-								}
-								return Status.OK_STATUS;
-							}
-						});
-					}
-					{
-						final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
-						choiceData.addChoice("No", Boolean.FALSE);
-						choiceData.addChoice("Yes", Boolean.TRUE);
-						if (scenarioContainsForbiddedADPEvents) {
-							choiceData.enabled = false;
-							choiceData.disabledMessage = adpVesselEventIssueMsg;
-						} else {
-							choiceData.enabledHook = (u -> (u.isAdpOptimisation() && u.isCleanStateOptimisation()));
-						}
-						final Option option = dialog.addOption(DataSection.General, group, editingDomain, "Nominal ADP: ", "", copy, defaultSettings, DataType.Choice, choiceData,
-								SWTBOT_NOMINAL_ADP_PREFIX, ParametersPackage.eINSTANCE.getUserSettings_NominalADP());
-						optionAdded = true;
-						enabledOptionAdded = true;
-
-						dialog.addValidation(option, new IValidator() {
-
-							@Override
-							public IStatus validate(final Object value) {
-								if (value instanceof UserSettings) {
-									final UserSettings userSettings = (UserSettings) value;
-
-									if (userSettings.isAdpOptimisation()) {
-										if (userSettings.getPeriodStartDate() != null || userSettings.getPeriodEnd() != null) {
-										}
-
-									}
-								}
-								return Status.OK_STATUS;
-							}
-						});
-					}
-				}
-
-				final OptionGroup group = dialog.createGroup(DataSection.Controls, "Optimise period");
-				final Option optStart = dialog.addOption(DataSection.Controls, group, editingDomain, "Start of (dd/mm/yyyy)", "", copy, defaultSettings, DataType.Date, SWTBOT_PERIOD_START,
-						ParametersPackage.eINSTANCE.getUserSettings_PeriodStartDate());
-				// Added a button. Had to extend Option and DataType classes.
-				final Option optToday = dialog.addOption(DataSection.Controls, group, editingDomain, "Today", "Today", copy, defaultSettings, DataType.Button, SWTBOT_PERIOD_TODAY, null);
-				optToday.setListener(new MouseAdapter() {
-
-					@Override
-					public void mouseDown(MouseEvent e) {
-						if (copy != null) {
-							copy.setPeriodStartDate(LocalDate.now());
-						}
-						if (defaultSettings != null) {
-							defaultSettings.setPeriodStartDate(LocalDate.now());
-						}
-					}
-				});
-				final Option optEnd = dialog.addOption(DataSection.Controls, group, editingDomain, "Up to start of (mm/yyyy)", "", copy, defaultSettings, DataType.MonthYear, SWTBOT_PERIOD_END,
-						ParametersPackage.eINSTANCE.getUserSettings_PeriodEnd());
-				final Option optThreeMonth = dialog.addOption(DataSection.Controls, group, editingDomain, "+3m", "Three months", copy, defaultSettings, DataType.Button, SWTBOT_PERIOD_THREE_MONTH,
-						null);
-				optThreeMonth.setListener(new MouseAdapter() {
-					@Override
-					public void mouseDown(MouseEvent e) {
-						if (copy != null) {
-							setPeriodEnd(copy);
-						}
-						if (defaultSettings != null) {
-							setPeriodEnd(defaultSettings);
-						}
-					}
-				});
-
-				if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_PERIOD)) {
-					optStart.enabled = false;
-					optEnd.enabled = false;
-					optToday.enabled = false;
-				} else {
-					enabledOptionAdded = true;
-
-					final IObservableValue[] values = new IObservableValue[2];
-
-					MultiValidator validator = new MultiValidator() {
-
-						@Override
-						protected IStatus validate() {
-							LocalDate periodStart = null;
-							if (values[0].getValue() instanceof LocalDate) {
-								periodStart = (LocalDate) values[0].getValue();
-							}
-							YearMonth periodEnd = null;
-							if (values[1].getValue() instanceof YearMonth) {
-								periodEnd = (YearMonth) values[1].getValue();
-							}
-							if (periodStart != null && periodEnd != null) {
-								if (periodEnd.atDay(1).isBefore(periodStart)) {
-									return ValidationStatus.error("Period start must be before period end");
-								}
-							}
-							return Status.OK_STATUS;
-						}
-					};
-
-					dialog.addValidation(optStart, value -> {
-						if (value instanceof LocalDate) {
-							final LocalDate startDate = (LocalDate) value;
-							if (startDate.getYear() < 2010) {
-								return ValidationStatus.error("Invalid period start date");
-							}
-						}
-						return Status.OK_STATUS;
-					});
-					dialog.addValidation(optEnd, value -> {
-						if (value instanceof YearMonth) {
-							final YearMonth endDate = (YearMonth) value;
-							if (endDate.getYear() < 2010) {
-								return ValidationStatus.error("Invalid period end date");
-							}
-						}
-						return Status.OK_STATUS;
-					});
-
-					dialog.addValidationCallback(optStart, (v) -> values[0] = v);
-					dialog.addValidationCallback(optEnd, (v) -> values[1] = v);
-
-					dialog.addValidationStatusProvider(validator);
-				}
-				optionAdded = true;
-			}
-
-			// if (LicenseFeatures.isPermitted("features:optimisation-clean-state")) {
-			// final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
-			// choiceData.addChoice("Off", Boolean.FALSE);
-			// choiceData.addChoice("On", Boolean.TRUE);
-			// final Option option = dialog.addOption(DataSection.Toggles, null, editingDomain, "Clean State: ", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_CLEAN_STATE_PREFIX,
-			// ParametersPackage.eINSTANCE.getUserSettings_CleanStateOptimisation());
-			// optionAdded = true;
-			// enabledOptionAdded = true;
-			// dialog.addValidation(option, new IValidator() {
-			//
-			// @Override
-			// public IStatus validate(final Object value) {
-			// if (value instanceof UserSettings) {
-			// final UserSettings userSettings = (UserSettings) value;
-			// if (userSettings.isCleanStateOptimisation()) {
-			// if (userSettings.getSimilarityMode() != SimilarityMode.OFF) {
-			// return ValidationStatus.error("Similarity must be disabled with clean state optimisation");
-			// }
-			// }
-			// }
-			// return Status.OK_STATUS;
-			// }
-			// });
-			// }
-
-			{
-				final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
-				choiceData.addChoice("Off", Boolean.FALSE);
-				choiceData.addChoice("On", Boolean.TRUE);
-				dialog.addOption(DataSection.Toggles, null, editingDomain, "Shipping only: ", "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_SHIPPING_ONLY_PREFIX,
-						ParametersPackage.eINSTANCE.getUserSettings_ShippingOnly());
-				optionAdded = true;
-				enabledOptionAdded = true;
+				createADPOptimisationOptions(defaultSettings, editingDomain, scenario, dialog, copy, forADP, optionsAdded);
 			}
 			{
-				final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
-				choiceData.addChoice("Off", Boolean.FALSE);
-				choiceData.addChoice("On", Boolean.TRUE);
-				choiceData.enabled = LicenseFeatures.isPermitted("features:charter-length");
-				if (choiceData.enabled == false) {
-					// if not enabled make sure to set setting to false
-					copy.setWithCharterLength(false);
-				}
-				dialog.addOption(DataSection.Toggles, null, editingDomain, "Charter Length: ", "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_CHARTERLENGTH_PREFIX,
-						ParametersPackage.eINSTANCE.getUserSettings_WithCharterLength());
-				optionAdded = true;
-				enabledOptionAdded = true;
+				createPeriodOptions(defaultSettings, editingDomain, dialog, copy, optionsAdded);
 			}
+
+			// Toggles
 			{
-				final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
-				choiceData.addChoice("Off", Boolean.FALSE);
-				choiceData.addChoice("On", Boolean.TRUE);
-				dialog.addOption(DataSection.Toggles, null, editingDomain, "Spot cargo markets: ", "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_WITH_SPOT_CARGO_MARKETS_PREFIX,
-						ParametersPackage.eINSTANCE.getUserSettings_WithSpotCargoMarkets());
-				optionAdded = true;
-				enabledOptionAdded = true;
+				createShippingModeOption(defaultSettings, editingDomain, dialog, copy, optionsAdded);
+				createCharterLengthOption(defaultSettings, editingDomain, dialog, copy, optionsAdded);
+				createSpotCargoMarketsOption(defaultSettings, editingDomain, dialog, copy, optionsAdded);
+				createCharterOutGenerationOption(scenario, defaultSettings, editingDomain, dialog, copy, optionsAdded);
 			}
-		}
-		// if (SecurityUtils.getSubject().isPermitted("features:optimisation-charter-out-generation")) {
-		{
-			// dialog.addOption(DataSection.Main, null, editingDomian, "Generate Charter Outs", copy, defaultSettings, DataType.Choice,
-			// ParametersPackage.eINSTANCE.getOptimiserSettings_GenerateCharterOuts());
-
-			final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
-			choiceData.addChoice("Off", Boolean.FALSE);
-			choiceData.addChoice("On", Boolean.TRUE);
-
-			choiceData.enabled = LicenseFeatures.isPermitted("features:optimisation-charter-out-generation") && isAllowedGCO(scenario);
-			if (choiceData.enabled == false) {
-				// if not enabled make sure to set setting to false
-				copy.setGenerateCharterOuts(false);
-			}
-			// dialog.addOption(DataSection.Main, null, editingDomian, "Similarity", copy, defaultSettings, DataType.Choice, choiceData,
-			// ParametersPackage.eINSTANCE.getOptimiserSettings_Range(), ParametersPackage.eINSTANCE.getOptimisationRange_OptimiseAfter());
-			final Option gcoOption = dialog.addOption(DataSection.Toggles, null, editingDomain, "Generate charter outs: ", "", copy, defaultSettings, DataType.Choice, choiceData,
-					SWTBOT_CHARTEROUTGENERATION_PREFIX, ParametersPackage.eINSTANCE.getUserSettings_GenerateCharterOuts());
-			optionAdded = !forEvaluation;
-			enabledOptionAdded = choiceData.enabled;
-
-			if (scenario != null) {
-				final SpotMarketsModel model = ScenarioModelUtil.getSpotMarketsModel(scenario);
-				if (model != null) {
-					final CharterOutMarketParameters params = model.getCharterOutMarketParameters();
-					if (params != null) {
-						String ltext = "";
-						final DateTimeFormatter format = DateTimeFormatter.ofPattern("d/M/yyyy");
-						final LocalDate start = params.getCharterOutStartDate();
-						final LocalDate end = params.getCharterOutEndDate();
-						boolean hasStart = false;
-						if (start != null) {
-							ltext += start.format(format);
-							hasStart = true;
-						}
-						if (end != null) {
-							if (hasStart)
-								ltext += "-";
-							ltext += end.format(format);
-						}
-						if (ltext.length() > 0) {
-							final String ftext = "Charter out dates (" + ltext + ")";
-							choiceData.changeHandlers.add((label, value) -> {
-								label.setText(ftext);
-								label.setVisible((Boolean) value);
-							});
-						}
-					}
-				}
-			}
-
 		}
 		if (!forEvaluation) {
-			{
-				if (LicenseFeatures.isPermitted("features:optimisation-idle-days")) {
-					final Option idleDays = dialog.addOption(DataSection.Toggles, null, editingDomain, "Netback idle day tolerance", "", copy, defaultSettings, DataType.PositiveInt, SWTBOT_IDLE_DAYS,
-							ParametersPackage.eINSTANCE.getUserSettings_FloatingDaysLimit());
-				}
-			}
-			// if (SecurityUtils.getSubject().isPermitted("features:optimisation-similarity")) {
-			{
-
-				final OptionGroup group = dialog.createGroup(DataSection.Controls, "Similarity");
-
-				final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
-				choiceData.addChoice("Off", SimilarityMode.OFF);
-//				choiceData.addChoice("Low", SimilarityMode.LOW);
-//				choiceData.addChoice("Med", SimilarityMode.MEDIUM);
-//				choiceData.addChoice("High", SimilarityMode.HIGH);
-				choiceData.addChoice("On", SimilarityMode.ALL);
-
-				choiceData.enabled = LicenseFeatures.isPermitted("features:optimisation-similarity");
-
-				final Option option = dialog.addOption(DataSection.Controls, group, editingDomain, "", "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_SIMILARITY_PREFIX,
-						ParametersPackage.Literals.USER_SETTINGS__SIMILARITY_MODE);
-				optionAdded = true;
-				enabledOptionAdded = choiceData.enabled;
-
-			}
-			{
-
-				final OptionGroup group = dialog.createGroup(DataSection.Controls, "Action sets");
-
-				final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
-				choiceData.addChoice("Off", Boolean.FALSE);
-				choiceData.addChoice("On", Boolean.TRUE);
-
-				choiceData.enabled = LicenseFeatures.isPermitted("features:optimisation-actionset");
-
-				final Option option = dialog.addOption(DataSection.Controls, group, editingDomain, " ", "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_ACTION_SET_PREFIX,
-						ParametersPackage.eINSTANCE.getUserSettings_BuildActionSets());
-				optionAdded = true;
-				dialog.addValidation(option, new IValidator() {
-
-					@Override
-					public IStatus validate(final Object value) {
-						if (value instanceof UserSettings) {
-							final UserSettings userSettings = (UserSettings) value;
-							if (userSettings.isBuildActionSets()) {
-								if (userSettings.getSimilarityMode() == SimilarityMode.OFF || userSettings.getSimilarityMode() == SimilarityMode.ALL) {
-									return ValidationStatus.error("Similarity (low, medium, high) must be enabled to use action sets");
-								}
-								final LocalDate periodStart = userSettings.getPeriodStartDate();
-								final YearMonth periodEnd = userSettings.getPeriodEnd();
-								if (periodStart != null && periodEnd != null) {
-									// 3 month window?
-									if (Months.between(periodStart, periodEnd) > 6) {
-										return ValidationStatus.error("Unable to run with Action Sets as the period range is greater than six months");
-									} else if (Months.between(periodStart, periodEnd) > 3 && userSettings.getSimilarityMode() == SimilarityMode.LOW) {
-										return ValidationStatus
-												.error("Unable to run with Action Sets as the period range is too long for the low similarity setting (max 3 Months). Please try medium or high");
-									}
-								} else {
-									return ValidationStatus.error("Unable to run with Action Sets as the period range is greater than six months");
-								}
-							}
-						}
-						return Status.OK_STATUS;
-					}
-				});
-				optionAdded = true;
-				enabledOptionAdded = choiceData.enabled;
-			}
+			createIdleDaysOption(defaultSettings, editingDomain, dialog, copy, optionsAdded);
+			createSimilarityModeOption(defaultSettings, editingDomain, dialog, copy, optionsAdded);
+			createActionSetsOption(defaultSettings, editingDomain, dialog, copy, optionsAdded);
 		}
+
+		final boolean optionAdded = optionsAdded[IDX_OPTION_ADDED];
+		final boolean enabledOptionAdded = optionsAdded[IDX_OPTION_ENABLED_ADDED];
 
 		if (optionAdded && (enabledOptionAdded || !displayOnlyIfOptionsEnabled)) {
 			final int[] ret = new int[] { Window.CANCEL };
-			display.syncExec(new Runnable() {
-
-				@Override
-				public void run() {
-					ret[0] = dialog.open();
-				}
-			});
+			display.syncExec(() -> ret[0] = dialog.open());
 
 			if (ret[0] != Window.OK) {
 				return null;
@@ -769,7 +418,7 @@ public final class OptimisationHelper {
 	}
 
 	public static UserSettings promptForInsertionUserSettings(final LNGScenarioModel scenario, final boolean forEvaluation, final boolean promptUser, final boolean promptOnlyIfOptionsEnabled,
-			NameProvider nameProvider) {
+			final NameProvider nameProvider) {
 		UserSettings previousSettings = null;
 		if (scenario != null) {
 			previousSettings = scenario.getUserSettings();
@@ -779,13 +428,14 @@ public final class OptimisationHelper {
 	}
 
 	public static UserSettings promptForInsertionUserSettings(final LNGScenarioModel scenario, final boolean forEvaluation, final boolean promptUser, final boolean promptOnlyIfOptionsEnabled,
-			NameProvider nameProvider, UserSettings previousSettings) {
+			final NameProvider nameProvider, UserSettings previousSettings) {
 		final UserSettings userSettings = ScenarioUtils.createDefaultUserSettings();
 		if (previousSettings == null) {
 			previousSettings = userSettings;
 		}
 
-		// Permit the user to override the settings object. Use the previous settings as the initial value
+		// Permit the user to override the settings object. Use the previous settings as
+		// the initial value
 		if (promptUser) {
 			previousSettings = openInsertionPlanUserDialog(scenario, forEvaluation, previousSettings, userSettings, promptOnlyIfOptionsEnabled, nameProvider);
 		}
@@ -794,7 +444,8 @@ public final class OptimisationHelper {
 			return null;
 		}
 
-		// Only merge across specific fields - not all of them. This permits additions to the default settings to pass through to the scenario.
+		// Only merge across specific fields - not all of them. This permits additions
+		// to the default settings to pass through to the scenario.
 		mergeFields(previousSettings, userSettings);
 
 		if (!checkUserSettings(userSettings, false)) {
@@ -804,15 +455,14 @@ public final class OptimisationHelper {
 	}
 
 	public static UserSettings openInsertionPlanUserDialog(final LNGScenarioModel scenario, final boolean forEvaluation, final UserSettings previousSettings, final UserSettings defaultSettings,
-			final boolean displayOnlyIfOptionsEnabled, NameProvider nameProvider) {
+			final boolean displayOnlyIfOptionsEnabled, final NameProvider nameProvider) {
 		return openInsertionPlanUserDialog(scenario, PlatformUI.getWorkbench().getDisplay(), PlatformUI.getWorkbench().getDisplay().getActiveShell(), forEvaluation, previousSettings, defaultSettings,
 				displayOnlyIfOptionsEnabled, nameProvider);
 	}
 
 	public static UserSettings openInsertionPlanUserDialog(final LNGScenarioModel scenario, final Display display, final Shell shell, final boolean forEvaluation, final UserSettings previousSettings,
-			final UserSettings defaultSettings, final boolean displayOnlyIfOptionsEnabled, NameProvider nameProvider) {
-		boolean optionAdded = false;
-		boolean enabledOptionAdded = false;
+			final UserSettings defaultSettings, final boolean displayOnlyIfOptionsEnabled, final NameProvider nameProvider) {
+		final boolean[] optionsAdded = new boolean[2];
 
 		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
 		adapterFactory.addAdapterFactory(new ParametersItemProviderAdapterFactory());
@@ -839,276 +489,25 @@ public final class OptimisationHelper {
 		}
 
 		if (!forEvaluation) {
-			// dialog.addOption(DataSection.Controls, null, editingDomain, "Number of Iterations", copy, defaultSettings, DataType.PositiveInt,
-			// ParametersPackage.eINSTANCE.getOptimiserSettings_AnnealingSettings(), ParametersPackage.eINSTANCE.getAnnealingSettings_Iterations());
-			// optionAdded = true;
+			createPeriodOptions(defaultSettings, editingDomain, dialog, copy, optionsAdded);
 
-			// Check period optimisation is permitted
-			if (SecurityUtils.getSubject().isPermitted(KnownFeatures.FEATURE_OPTIMISATION_PERIOD)) {
-				final OptionGroup group = dialog.createGroup(DataSection.Controls, "Optimise period");
-				final Option optStart = dialog.addOption(DataSection.Controls, group, editingDomain, "Start of (dd/mm/yyyy)", "", copy, defaultSettings, DataType.Date, SWTBOT_PERIOD_START,
-						ParametersPackage.eINSTANCE.getUserSettings_PeriodStartDate());
-				// Added a button. Had to extend Option and DataType classes.
-				final Option optToday = dialog.addOption(DataSection.Controls, group, editingDomain, "Today", "Today", copy, defaultSettings, DataType.Button, SWTBOT_PERIOD_TODAY, null);
-				optToday.setListener(new MouseAdapter() {
-
-					@Override
-					public void mouseDown(MouseEvent e) {
-						if (copy != null) {
-							copy.setPeriodStartDate(LocalDate.now());
-						}
-						if (defaultSettings != null) {
-							defaultSettings.setPeriodStartDate(LocalDate.now());
-						}
-					}
-				});
-				// TODO set the optToday button size
-				final Option optEnd = dialog.addOption(DataSection.Controls, group, editingDomain, "Up to start of (mm/yyyy)", "", copy, defaultSettings, DataType.MonthYear, SWTBOT_PERIOD_END,
-						ParametersPackage.eINSTANCE.getUserSettings_PeriodEnd());
-				final Option optThreeMonth = dialog.addOption(DataSection.Controls, group, editingDomain, "+3m", "Three months", copy, defaultSettings, DataType.Button, SWTBOT_PERIOD_THREE_MONTH,
-						null);
-				optThreeMonth.setListener(new MouseAdapter() {
-
-					@Override
-					public void mouseDown(MouseEvent e) {
-							if (copy != null) {
-								setPeriodEnd(copy);
-							}
-							if (defaultSettings != null) {
-								setPeriodEnd(defaultSettings);
-							}
-						}
-				});
-
-				if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_PERIOD)) {
-					optStart.enabled = false;
-					optEnd.enabled = false;
-				} else {
-					enabledOptionAdded = true;
-					final IObservableValue[] values = new IObservableValue[2];
-
-					MultiValidator validator = new MultiValidator() {
-
-						@Override
-						protected IStatus validate() {
-							LocalDate periodStart = null;
-							if (values[0].getValue() instanceof LocalDate) {
-								periodStart = (LocalDate) values[0].getValue();
-							}
-							YearMonth periodEnd = null;
-							if (values[1].getValue() instanceof YearMonth) {
-								periodEnd = (YearMonth) values[1].getValue();
-							}
-							if (periodStart != null && periodEnd != null) {
-								if (periodEnd.atDay(1).isBefore(periodStart)) {
-									return ValidationStatus.error("Period start must be before period end");
-								}
-							}
-							return Status.OK_STATUS;
-						}
-					};
-
-					dialog.addValidation(optStart, new IValidator() {
-
-						@Override
-						public IStatus validate(final Object value) {
-							if (value instanceof LocalDate) {
-								final LocalDate startDate = (LocalDate) value;
-								if (startDate.getYear() < 2010) {
-									return ValidationStatus.error("Invalid period start date");
-								}
-							}
-							return Status.OK_STATUS;
-						}
-					});
-					dialog.addValidation(optEnd, new IValidator() {
-
-						@Override
-						public IStatus validate(final Object value) {
-							if (value instanceof YearMonth) {
-								final YearMonth endDate = (YearMonth) value;
-								if (endDate.getYear() < 2010) {
-									return ValidationStatus.error("Invalid period end date");
-								}
-							}
-							return Status.OK_STATUS;
-						}
-					});
-
-					dialog.addValidationCallback(optStart, (v) -> values[0] = v);
-					dialog.addValidationCallback(optEnd, (v) -> values[1] = v);
-
-					dialog.addValidationStatusProvider(validator);
-				}
-				optionAdded = true;
-			}
-
-			// if (LicenseFeatures.isPermitted("features:optimisation-clean-state")) {
-			// final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
-			// choiceData.addChoice("Off", Boolean.FALSE);
-			// choiceData.addChoice("On", Boolean.TRUE);
-			// final Option option = dialog.addOption(DataSection.Toggles, null, editingDomain, "Clean State: ", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_CLEAN_STATE_PREFIX,
-			// ParametersPackage.eINSTANCE.getUserSettings_CleanStateOptimisation());
-			// optionAdded = true;
-			// enabledOptionAdded = true;
-			// dialog.addValidation(option, new IValidator() {
-			//
-			// @Override
-			// public IStatus validate(final Object value) {
-			// if (value instanceof UserSettings) {
-			// final UserSettings userSettings = (UserSettings) value;
-			// if (userSettings.isCleanStateOptimisation()) {
-			// if (userSettings.getSimilarityMode() != SimilarityMode.OFF) {
-			// return ValidationStatus.error("Similarity must be disabled with clean state optimisation");
-			// }
-			// }
-			// }
-			// return Status.OK_STATUS;
-			// }
-			// });
-			// }
-			//
-			// {
-			// final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
-			// choiceData.addChoice("Off", Boolean.FALSE);
-			// choiceData.addChoice("On", Boolean.TRUE);
-			// dialog.addOption(DataSection.Toggles, null, editingDomain, "Shipping only: ", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_SHIPPING_ONLY_PREFIX,
-			// ParametersPackage.eINSTANCE.getUserSettings_ShippingOnly());
-			// optionAdded = true;
-			// enabledOptionAdded = true;
-			// }
-
-			if (false && LicenseFeatures.isPermitted("features:trader-based-insertions")) {
-				final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
-				choiceData.addChoice("Off", Boolean.FALSE);
-				choiceData.addChoice("On", Boolean.TRUE);
-				choiceData.enabled = LicenseFeatures.isPermitted("features:trader-based-insertions");
-				if (!choiceData.enabled) {
-					// if not enabled make sure to set setting to false
-					copy.setDualMode(false);
-				}
-				dialog.addOption(DataSection.Toggles, null, editingDomain, "Dual mode: ", "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_DUAL_MODE_PREFIX,
-						ParametersPackage.eINSTANCE.getUserSettings_DualMode());
-				optionAdded = true;
-				enabledOptionAdded = true;
+			if (false) {
+				createTraderBasedInsertionsOption(defaultSettings, editingDomain, dialog, copy, optionsAdded);
 			}
 			{
-				final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
-				choiceData.addChoice("Off", Boolean.FALSE);
-				choiceData.addChoice("On", Boolean.TRUE);
-				choiceData.enabled = LicenseFeatures.isPermitted("features:charter-length");
-				if (choiceData.enabled == false) {
-					// if not enabled make sure to set setting to false
-					copy.setWithCharterLength(false);
-				}
-				dialog.addOption(DataSection.Toggles, null, editingDomain, "Charter Length: ", "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_CHARTERLENGTH_PREFIX,
-						ParametersPackage.eINSTANCE.getUserSettings_WithCharterLength());
-				optionAdded = true;
-				enabledOptionAdded = true;
-			}
-			{
-				final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
-				choiceData.addChoice("Off", Boolean.FALSE);
-				choiceData.addChoice("On", Boolean.TRUE);
-				dialog.addOption(DataSection.Toggles, null, editingDomain, "Spot cargo markets: ", "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_WITH_SPOT_CARGO_MARKETS_PREFIX,
-						ParametersPackage.eINSTANCE.getUserSettings_WithSpotCargoMarkets());
-				optionAdded = true;
-				enabledOptionAdded = true;
+				createCharterLengthOption(defaultSettings, editingDomain, dialog, copy, optionsAdded);
+				createSpotCargoMarketsOption(defaultSettings, editingDomain, dialog, copy, optionsAdded);
 			}
 		}
-		// if (SecurityUtils.getSubject().isPermitted("features:optimisation-charter-out-generation")) {
 		{
-			// dialog.addOption(DataSection.Main, null, editingDomian, "Generate Charter Outs", copy, defaultSettings, DataType.Choice,
-			// ParametersPackage.eINSTANCE.getOptimiserSettings_GenerateCharterOuts());
-
-			final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
-			choiceData.addChoice("Off", Boolean.FALSE);
-			choiceData.addChoice("On", Boolean.TRUE);
-
-			choiceData.enabled = LicenseFeatures.isPermitted("features:optimisation-charter-out-generation") && isAllowedGCO(scenario);
-			if (choiceData.enabled == false) {
-				// if not enabled make sure to set setting to false
-				copy.setGenerateCharterOuts(false);
-			}
-			// dialog.addOption(DataSection.Main, null, editingDomian, "Similarity", copy, defaultSettings, DataType.Choice, choiceData,
-			// ParametersPackage.eINSTANCE.getOptimiserSettings_Range(), ParametersPackage.eINSTANCE.getOptimisationRange_OptimiseAfter());
-			final Option gcoOption = dialog.addOption(DataSection.Toggles, null, editingDomain, "Generate charter outs: ", "", copy, defaultSettings, DataType.Choice, choiceData,
-					SWTBOT_CHARTEROUTGENERATION_PREFIX, ParametersPackage.eINSTANCE.getUserSettings_GenerateCharterOuts());
-			optionAdded = true;
-			enabledOptionAdded = choiceData.enabled;
+			createCharterOutGenerationOption(scenario, defaultSettings, editingDomain, dialog, copy, optionsAdded);
 		}
 		if (!forEvaluation) {
-			{
-				if (LicenseFeatures.isPermitted("features:optimisation-idle-days")) {
-					final Option idleDays = dialog.addOption(DataSection.Toggles, null, editingDomain, "Netback idle day tolerance", "", copy, defaultSettings, DataType.PositiveInt, SWTBOT_IDLE_DAYS,
-							ParametersPackage.eINSTANCE.getUserSettings_FloatingDaysLimit());
-				}
-			}
-			// // if (SecurityUtils.getSubject().isPermitted("features:optimisation-similarity")) {
-			// {
-			//
-			// final OptionGroup group = dialog.createGroup(DataSection.Controls, "Similarity");
-			//
-			// final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
-			// choiceData.addChoice("Off", SimilarityMode.OFF);
-			// choiceData.addChoice("Low", SimilarityMode.LOW);
-			// choiceData.addChoice("Med", SimilarityMode.MEDIUM);
-			// choiceData.addChoice("High", SimilarityMode.HIGH);
-			// // choiceData.addChoice("All", SimilarityMode.ALL);
-			//
-			// choiceData.enabled = LicenseFeatures.isPermitted("features:optimisation-similarity");
-			//
-			// final Option option = dialog.addOption(DataSection.Controls, group, editingDomain, "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_SIMILARITY_PREFIX,
-			// ParametersPackage.Literals.USER_SETTINGS__SIMILARITY_MODE);
-			// optionAdded = true;
-			// enabledOptionAdded = choiceData.enabled;
-			//
-			// }
-			// {
-			//
-			// final OptionGroup group = dialog.createGroup(DataSection.Controls, "Action sets");
-			//
-			// final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
-			// choiceData.addChoice("Off", Boolean.FALSE);
-			// choiceData.addChoice("On", Boolean.TRUE);
-			//
-			// choiceData.enabled = LicenseFeatures.isPermitted("features:optimisation-actionset");
-			//
-			// final Option option = dialog.addOption(DataSection.Controls, group, editingDomain, " ", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_ACTION_SET_PREFIX,
-			// ParametersPackage.eINSTANCE.getUserSettings_BuildActionSets());
-			// optionAdded = true;
-			// dialog.addValidation(option, new IValidator() {
-			//
-			// @Override
-			// public IStatus validate(final Object value) {
-			// if (value instanceof UserSettings) {
-			// final UserSettings userSettings = (UserSettings) value;
-			// if (userSettings.isBuildActionSets()) {
-			// if (userSettings.getSimilarityMode() == SimilarityMode.OFF) {
-			// return ValidationStatus.error("Similarity must be enabled to use action sets");
-			// }
-			// final YearMonth periodStart = userSettings.getPeriodStart();
-			// final YearMonth periodEnd = userSettings.getPeriodEnd();
-			// if (periodStart != null && periodEnd != null) {
-			// // 3 month window?
-			// if (Months.between(periodStart, periodEnd) > 6) {
-			// return ValidationStatus.error("Unable to run with Action Sets as the period range is greater than six months");
-			// } else if (Months.between(periodStart, periodEnd) > 3 && userSettings.getSimilarityMode() == SimilarityMode.LOW) {
-			// return ValidationStatus
-			// .error("Unable to run with Action Sets as the period range is too long for the low similarity setting (max 3 Months). Please try medium or high");
-			// }
-			// } else {
-			// return ValidationStatus.error("Unable to run with Action Sets as the period range is greater than six months");
-			// }
-			// }
-			// }
-			// return Status.OK_STATUS;
-			// }
-			// });
-			// optionAdded = true;
-			// enabledOptionAdded = choiceData.enabled;
-			// }
+			createIdleDaysOption(defaultSettings, editingDomain, dialog, copy, optionsAdded);
 		}
+
+		final boolean optionAdded = optionsAdded[IDX_OPTION_ADDED];
+		final boolean enabledOptionAdded = optionsAdded[IDX_OPTION_ENABLED_ADDED];
 
 		if (optionAdded && (enabledOptionAdded || !displayOnlyIfOptionsEnabled)) {
 			final int[] ret = new int[1];
@@ -1129,53 +528,54 @@ public final class OptimisationHelper {
 		}
 		return copy;
 	}
-	
+
 	public static UserSettings promptForSandboxUserSettings(final LNGScenarioModel scenario, final boolean forEvaluation, final boolean promptUser, final boolean promptOnlyIfOptionsEnabled,
-			NameProvider nameProvider) {
+			final NameProvider nameProvider) {
 		UserSettings previousSettings = null;
 		if (scenario != null) {
 			previousSettings = scenario.getUserSettings();
 		}
 		return promptForSandboxUserSettings(scenario, forEvaluation, promptUser, promptOnlyIfOptionsEnabled, nameProvider, previousSettings);
-		
+
 	}
-	
+
 	public static UserSettings promptForSandboxUserSettings(final LNGScenarioModel scenario, final boolean forEvaluation, final boolean promptUser, final boolean promptOnlyIfOptionsEnabled,
-			NameProvider nameProvider, UserSettings previousSettings) {
+			final NameProvider nameProvider, UserSettings previousSettings) {
 		final UserSettings userSettings = ScenarioUtils.createDefaultUserSettings();
 		if (previousSettings == null) {
 			previousSettings = userSettings;
 		}
-		
-		// Permit the user to override the settings object. Use the previous settings as the initial value
+
+		// Permit the user to override the settings object. Use the previous settings as
+		// the initial value
 		if (promptUser) {
 			previousSettings = openSandboxUserDialog(scenario, forEvaluation, previousSettings, userSettings, promptOnlyIfOptionsEnabled, nameProvider);
 		}
-		
+
 		if (previousSettings == null) {
 			return null;
 		}
-		
-		// Only merge across specific fields - not all of them. This permits additions to the default settings to pass through to the scenario.
+
+		// Only merge across specific fields - not all of them. This permits additions
+		// to the default settings to pass through to the scenario.
 		mergeFields(previousSettings, userSettings);
-		
+
 		if (!checkUserSettings(userSettings, false)) {
 			return null;
 		}
 		return userSettings;
 	}
-	
+
 	public static UserSettings openSandboxUserDialog(final LNGScenarioModel scenario, final boolean forEvaluation, final UserSettings previousSettings, final UserSettings defaultSettings,
-			final boolean displayOnlyIfOptionsEnabled, NameProvider nameProvider) {
+			final boolean displayOnlyIfOptionsEnabled, final NameProvider nameProvider) {
 		return openSandboxUserDialog(scenario, PlatformUI.getWorkbench().getDisplay(), PlatformUI.getWorkbench().getDisplay().getActiveShell(), forEvaluation, previousSettings, defaultSettings,
 				displayOnlyIfOptionsEnabled, nameProvider);
 	}
-	
+
 	public static UserSettings openSandboxUserDialog(final LNGScenarioModel scenario, final Display display, final Shell shell, final boolean forEvaluation, final UserSettings previousSettings,
-			final UserSettings defaultSettings, final boolean displayOnlyIfOptionsEnabled, NameProvider nameProvider) {
-		boolean optionAdded = false;
-		boolean enabledOptionAdded = false;
-		
+			final UserSettings defaultSettings, final boolean displayOnlyIfOptionsEnabled, final NameProvider nameProvider) {
+		final boolean[] optionsAdded = new boolean[2];
+
 		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
 		adapterFactory.addAdapterFactory(new ParametersItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
@@ -1185,84 +585,41 @@ public final class OptimisationHelper {
 		final ParameterModesDialog dialog = new ParameterModesDialog(shell) {
 			@Override
 			protected void configureShell(final org.eclipse.swt.widgets.Shell newShell) {
-				
+
 				super.configureShell(newShell);
 				newShell.setText("Sandbox Settings");
 			}
 		};
-		
+
 		final UserSettings copy = EcoreUtil.copy(previousSettings);
-		
+
 		// Reset disabled features
 		resetDisabledFeatures(copy);
-		
+
 		if (!forEvaluation && nameProvider != null) {
 			dialog.addNameOption(nameProvider.nameSuggestion, nameProvider.existingNames);
 		}
-		
+
 		if (!forEvaluation) {
-			 
-			if (false && LicenseFeatures.isPermitted("features:trader-based-insertions")) {
-				final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
-				choiceData.addChoice("Off", Boolean.FALSE);
-				choiceData.addChoice("On", Boolean.TRUE);
-				choiceData.enabled = LicenseFeatures.isPermitted("features:trader-based-insertions");
-				if (!choiceData.enabled) {
-					// if not enabled make sure to set setting to false
-					copy.setDualMode(false);
-				}
-				dialog.addOption(DataSection.Toggles, null, editingDomain, "Dual mode: ", "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_DUAL_MODE_PREFIX,
-						ParametersPackage.eINSTANCE.getUserSettings_DualMode());
-				optionAdded = true;
-				enabledOptionAdded = true;
+
+			if (false) {
+				createTraderBasedInsertionsOption(defaultSettings, editingDomain, dialog, copy, optionsAdded);
 			}
 			{
-				final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
-				choiceData.addChoice("Off", Boolean.FALSE);
-				choiceData.addChoice("On", Boolean.TRUE);
-				choiceData.enabled = LicenseFeatures.isPermitted("features:charter-length");
-				if (choiceData.enabled == false) {
-					// if not enabled make sure to set setting to false
-					copy.setWithCharterLength(false);
-				}
-				dialog.addOption(DataSection.Toggles, null, editingDomain, "Charter Length: ", "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_CHARTERLENGTH_PREFIX,
-						ParametersPackage.eINSTANCE.getUserSettings_WithCharterLength());
-				optionAdded = true;
-				enabledOptionAdded = true;
+				createCharterLengthOption(defaultSettings, editingDomain, dialog, copy, optionsAdded);
 			}
 		}
-		// if (SecurityUtils.getSubject().isPermitted("features:optimisation-charter-out-generation")) {
 		{
-			// dialog.addOption(DataSection.Main, null, editingDomian, "Generate Charter Outs", copy, defaultSettings, DataType.Choice,
-			// ParametersPackage.eINSTANCE.getOptimiserSettings_GenerateCharterOuts());
-			
-			final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
-			choiceData.addChoice("Off", Boolean.FALSE);
-			choiceData.addChoice("On", Boolean.TRUE);
-			
-			choiceData.enabled = LicenseFeatures.isPermitted("features:optimisation-charter-out-generation") && isAllowedGCO(scenario);
-			if (choiceData.enabled == false) {
-				// if not enabled make sure to set setting to false
-				copy.setGenerateCharterOuts(false);
-			}
-			// dialog.addOption(DataSection.Main, null, editingDomian, "Similarity", copy, defaultSettings, DataType.Choice, choiceData,
-			// ParametersPackage.eINSTANCE.getOptimiserSettings_Range(), ParametersPackage.eINSTANCE.getOptimisationRange_OptimiseAfter());
-			final Option gcoOption = dialog.addOption(DataSection.Toggles, null, editingDomain, "Generate charter outs: ", "", copy, defaultSettings, DataType.Choice, choiceData,
-					SWTBOT_CHARTEROUTGENERATION_PREFIX, ParametersPackage.eINSTANCE.getUserSettings_GenerateCharterOuts());
-			optionAdded = true;
-			enabledOptionAdded = choiceData.enabled;
+			createCharterOutGenerationOption(scenario, defaultSettings, editingDomain, dialog, copy, optionsAdded);
 		}
-		
+
+		final boolean optionAdded = optionsAdded[IDX_OPTION_ADDED];
+		final boolean enabledOptionAdded = optionsAdded[IDX_OPTION_ENABLED_ADDED];
+
 		if (optionAdded && (enabledOptionAdded || !displayOnlyIfOptionsEnabled)) {
 			final int[] ret = new int[1];
-			display.syncExec(new Runnable() {
-				
-				@Override
-				public void run() {
-					ret[0] = dialog.open();
-				}
-			});
-			
+			display.syncExec(() -> ret[0] = dialog.open());
+
 			if (ret[0] != Window.OK) {
 				return null;
 			}
@@ -1273,16 +630,6 @@ public final class OptimisationHelper {
 		return copy;
 	}
 
-	private static boolean checkForBreakEven(final LNGScenarioModel lngScenarioModel) {
-		if (lngScenarioModel != null) {
-			return (checkBreakEvenInSlot(lngScenarioModel.getCargoModel().getLoadSlots()) || 
-					checkBreakEvenInSlot(lngScenarioModel.getCargoModel().getDischargeSlots()));
-		}
-		else {
-			return false;
-		}
-	}
-	
 	public static @NonNull OptimisationPlan transformUserSettings(@NonNull final UserSettings userSettings, @Nullable final String parameterMode, final LNGScenarioModel lngScenarioModel) {
 
 		final OptimisationPlan plan = ParametersFactory.eINSTANCE.createOptimisationPlan();
@@ -1292,12 +639,12 @@ public final class OptimisationHelper {
 		plan.setSolutionBuilderSettings(ScenarioUtils.createDefaultSolutionBuilderSettings());
 
 		@NonNull
-		final ConstraintAndFitnessSettings constraintAndFitnessSettings = ScenarioUtils.createDefaultConstraintAndFitnessSettings();
-		Objective similarityObjective = findObjective(SimilarityFitnessCoreFactory.NAME, constraintAndFitnessSettings);
+		final ConstraintAndFitnessSettings baseConstraintAndFitnessSettings = ScenarioUtils.createDefaultConstraintAndFitnessSettings();
+		Objective similarityObjective = findObjective(SimilarityFitnessCoreFactory.NAME, baseConstraintAndFitnessSettings);
 		if (similarityObjective == null) {
 			similarityObjective = ParametersFactory.eINSTANCE.createObjective();
 			similarityObjective.setName(SimilarityFitnessCoreFactory.NAME);
-			constraintAndFitnessSettings.getObjectives().add(similarityObjective);
+			baseConstraintAndFitnessSettings.getObjectives().add(similarityObjective);
 		}
 		similarityObjective.setEnabled(true);
 		similarityObjective.setWeight(1.0);
@@ -1308,96 +655,124 @@ public final class OptimisationHelper {
 		final LocalDate periodStartOrDefault = getPeriodStartOrDefault(periodStart, lngScenarioModel);
 		final YearMonth periodEndOrDefault = getPeriodEndOrDefault(periodEnd, lngScenarioModel);
 
-		final SimilarityMode similarityMode = userSettings.getSimilarityMode();
-
-		boolean shouldUseRestartingLSO = false;
-
-		switch (similarityMode) {
-		case ALL:
-			constraintAndFitnessSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.LOW, periodStartOrDefault, periodEndOrDefault));
-			shouldUseRestartingLSO = true;
-			userSettings.setBuildActionSets(false);
-			break;
-		case HIGH:
-			constraintAndFitnessSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.HIGH, periodStartOrDefault, periodEndOrDefault));
-			shouldUseRestartingLSO = true;
-			if (shouldDisableActionSets(SimilarityMode.HIGH, periodStart, periodEnd)) {
-				userSettings.setBuildActionSets(false);
-			}
-			break;
-		case LOW:
-			constraintAndFitnessSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.LOW, periodStartOrDefault, periodEndOrDefault));
-			shouldUseRestartingLSO = false;
-			if (shouldDisableActionSets(SimilarityMode.LOW, periodStart, periodEnd)) {
-				userSettings.setBuildActionSets(false);
-			}
-			break;
-		case MEDIUM:
-			constraintAndFitnessSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.MEDIUM, periodStartOrDefault, periodEndOrDefault));
-			shouldUseRestartingLSO = false;
-			if (shouldDisableActionSets(SimilarityMode.MEDIUM, periodStart, periodEnd)) {
-				userSettings.setBuildActionSets(false);
-			}
-			break;
-		case OFF:
-			constraintAndFitnessSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.OFF, periodStartOrDefault, periodEndOrDefault));
-			shouldUseRestartingLSO = false;
-			userSettings.setBuildActionSets(false);
-			break;
-		default:
-			assert false;
-			break;
-		}
-
 		int epochLength;
-		// TODO: make this better!
 		if (userSettings.isSetPeriodStartDate() && userSettings.isSetPeriodEnd()) {
 			epochLength = EPOCH_LENGTH_PERIOD;
 		} else {
 			epochLength = EPOCH_LENGTH_FULL;
 		}
+
+		final SimilarityMode similarityMode = userSettings.getSimilarityMode();
+
+		boolean shouldUseRestartingLSO = false;
+		if (userSettings.isAdpOptimisation()) { // ADP Optimisation
+			baseConstraintAndFitnessSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.OFF, periodStartOrDefault, periodEndOrDefault));
+			shouldUseRestartingLSO = false;
+			userSettings.setBuildActionSets(false);
+		} else { // Normal optimisation.
+			switch (similarityMode) {
+			case ALL:
+				baseConstraintAndFitnessSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.LOW, periodStartOrDefault, periodEndOrDefault));
+				shouldUseRestartingLSO = true;
+				userSettings.setBuildActionSets(false);
+				break;
+			case HIGH:
+				baseConstraintAndFitnessSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.HIGH, periodStartOrDefault, periodEndOrDefault));
+				shouldUseRestartingLSO = true;
+				if (shouldDisableActionSets(SimilarityMode.HIGH, periodStart, periodEnd)) {
+					userSettings.setBuildActionSets(false);
+				}
+				break;
+			case LOW:
+				baseConstraintAndFitnessSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.LOW, periodStartOrDefault, periodEndOrDefault));
+				shouldUseRestartingLSO = false;
+				if (shouldDisableActionSets(SimilarityMode.LOW, periodStart, periodEnd)) {
+					userSettings.setBuildActionSets(false);
+				}
+				break;
+			case MEDIUM:
+				baseConstraintAndFitnessSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.MEDIUM, periodStartOrDefault, periodEndOrDefault));
+				shouldUseRestartingLSO = false;
+				if (shouldDisableActionSets(SimilarityMode.MEDIUM, periodStart, periodEnd)) {
+					userSettings.setBuildActionSets(false);
+				}
+				break;
+			case OFF:
+				baseConstraintAndFitnessSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.OFF, periodStartOrDefault, periodEndOrDefault));
+				shouldUseRestartingLSO = false;
+				userSettings.setBuildActionSets(false);
+				break;
+			default:
+				assert false;
+				break;
+			}
+		}
+
 		if (userSettings.isCleanStateOptimisation()) {
-			final CleanStateOptimisationStage stage = ScenarioUtils.createDefaultCleanStateParameters(EcoreUtil.copy(constraintAndFitnessSettings));
+			final CleanStateOptimisationStage stage = ScenarioUtils.createDefaultCleanStateParameters(EcoreUtil.copy(baseConstraintAndFitnessSettings));
 			stage.getAnnealingSettings().setEpochLength(epochLength);
 			plan.getStages().add(stage);
 			if (!userSettings.isNominalADP()) {
 				plan.getStages().add(ParametersFactory.eINSTANCE.createResetInitialSequencesStage());
+			} else {
+				// Return here for Nominal only modes
+				if (userSettings.isAdpOptimisation()) {
+					ScenarioUtils.createOrUpdateAllConstraints(plan, MinMaxSlotGroupConstraintCheckerFactory.NAME, true);
+					ScenarioUtils.createOrUpdateAllConstraints(plan, LadenIdleTimeConstraintCheckerFactory.NAME, true);
+					ScenarioUtils.createOrUpdateAllObjectives(plan, VesselUtilisationFitnessCoreFactory.NAME, true, 1);
+					ScenarioUtils.createOrUpdateAllObjectives(plan, NonOptionalSlotFitnessCoreFactory.NAME, true, 24_000_000);
+				}
+				return LNGScenarioRunnerUtils.createExtendedSettings(plan);
 			}
 		}
-
-		if (!userSettings.isNominalADP()) {
-
-			if (similarityMode != SimilarityMode.ALL) {
-				final LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(EcoreUtil.copy(constraintAndFitnessSettings));
-				stage.getAnnealingSettings().setEpochLength(epochLength);
-				stage.getAnnealingSettings().setRestarting(shouldUseRestartingLSO);
-				plan.getStages().add(stage);
-			} else {
-				final MultipleSolutionSimilarityOptimisationStage stage = ScenarioUtils.createDefaultMultipleSolutionSimilarityParameters(EcoreUtil.copy(constraintAndFitnessSettings));
+		final boolean parallelise = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MODULE_PARALLELISATION);
+		if (similarityMode != SimilarityMode.OFF) {
+			final MultipleSolutionSimilarityOptimisationStage stage = ScenarioUtils.createDefaultMultipleSolutionSimilarityParameters(EcoreUtil.copy(baseConstraintAndFitnessSettings), parallelise);
+			stage.getAnnealingSettings().setEpochLength(epochLength);
+			stage.getAnnealingSettings().setRestarting(shouldUseRestartingLSO);
+			
+			final SimilaritySettings similaritySettings = stage.getConstraintAndFitnessSettings().getSimilaritySettings();
+			if (similaritySettings != null) {
+				 stage.getConstraintAndFitnessSettings().setSimilaritySettings(ScenarioUtils.createUnweightedSimilaritySettings());
+			}
+			
+			plan.getStages().add(stage);
+		} else {
+			// Normal LSO
+			{
+				final LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(EcoreUtil.copy(baseConstraintAndFitnessSettings), parallelise);
 				stage.getAnnealingSettings().setEpochLength(epochLength);
 				stage.getAnnealingSettings().setRestarting(shouldUseRestartingLSO);
 				plan.getStages().add(stage);
 			}
+			// Follow by hill-climb stage
 			{
-				final HillClimbOptimisationStage stage = ScenarioUtils.createDefaultHillClimbingParameters(EcoreUtil.copy(constraintAndFitnessSettings));
+				final HillClimbOptimisationStage stage = ScenarioUtils.createDefaultHillClimbingParameters(EcoreUtil.copy(baseConstraintAndFitnessSettings), parallelise);
 				stage.getAnnealingSettings().setEpochLength(epochLength);
 				plan.getStages().add(stage);
 			}
 
 			if (userSettings.isBuildActionSets()) {
 				if (periodStart != null && periodEnd != null) {
-					final ActionPlanOptimisationStage stage = ScenarioUtils.getActionPlanSettings(similarityMode, periodStart, periodEnd, EcoreUtil.copy(constraintAndFitnessSettings));
+					final ActionPlanOptimisationStage stage = ScenarioUtils.getActionPlanSettings(similarityMode, periodStart, periodEnd, EcoreUtil.copy(baseConstraintAndFitnessSettings));
 					plan.getStages().add(stage);
 				} else {
-					final ActionPlanOptimisationStage stage = ScenarioUtils.createDefaultActionPlanParameters(EcoreUtil.copy(constraintAndFitnessSettings));
+					final ActionPlanOptimisationStage stage = ScenarioUtils.createDefaultActionPlanParameters(EcoreUtil.copy(baseConstraintAndFitnessSettings));
 					plan.getStages().add(stage);
 				}
+			}
+
+			if (userSettings.isAdpOptimisation()) {
+				ScenarioUtils.createOrUpdateAllConstraints(plan, MinMaxSlotGroupConstraintCheckerFactory.NAME, true);
+				ScenarioUtils.createOrUpdateAllConstraints(plan, LadenIdleTimeConstraintCheckerFactory.NAME, true);
+				ScenarioUtils.createOrUpdateAllObjectives(plan, VesselUtilisationFitnessCoreFactory.NAME, true, 1);
+				ScenarioUtils.createOrUpdateAllObjectives(plan, NonOptionalSlotFitnessCoreFactory.NAME, true, 24_000_000);
 			}
 		}
 		return LNGScenarioRunnerUtils.createExtendedSettings(plan);
 	}
 
-	private static boolean shouldCreateDefaultSaveStage(@NonNull UserSettings userSettings) {
+	private static boolean shouldCreateDefaultSaveStage(@NonNull final UserSettings userSettings) {
 		if (userSettings.getSimilarityMode() != SimilarityMode.ALL) {
 			return true;
 		} else {
@@ -1419,14 +794,6 @@ public final class OptimisationHelper {
 			return true;
 		}
 		return false;
-	}
-
-	public static SimilaritySettings createSimilaritySettings(final SimilarityMode mode, final LocalDate periodStart, final YearMonth periodEnd) {
-		if (periodStart == null || periodEnd == null || mode == null || mode == SimilarityMode.OFF) {
-			return ScenarioUtils.createOffSimilaritySettings();
-		} else {
-			return SimilarityUIParameters.getSimilaritySettings(mode, periodStart, periodEnd);
-		}
 	}
 
 	private static void resetDisabledFeatures(@NonNull final UserSettings copy) {
@@ -1466,7 +833,8 @@ public final class OptimisationHelper {
 		if (from == to) {
 			return;
 		}
-		// TODO: replace all this ugly code by a list of EStructuralFeatures and loop through
+		// TODO: replace all this ugly code by a list of EStructuralFeatures and loop
+		// through
 		// them doing the right thing
 		if (from.isSetPeriodStartDate() == false || from.getPeriodStartDate() == null) {
 			to.unsetPeriodStartDate();
@@ -1547,12 +915,8 @@ public final class OptimisationHelper {
 					final String errMessage = actionSetErrorMessage;
 					final Display display = PlatformUI.getWorkbench().getDisplay();
 					if (display != null) {
-						display.syncExec(new Runnable() {
-
-							@Override
-							public void run() {
-								MessageDialog.openError(display.getActiveShell(), "Unable to start optimisation", errMessage);
-							}
+						display.syncExec(() -> {
+							MessageDialog.openError(display.getActiveShell(), "Unable to start optimisation", errMessage);
 						});
 					}
 				}
@@ -1564,7 +928,7 @@ public final class OptimisationHelper {
 
 	private static Objective findObjective(final String objective, final ConstraintAndFitnessSettings settings) {
 		for (final Objective o : settings.getObjectives()) {
-			if (SimilarityFitnessCoreFactory.NAME.equals(o.getName())) {
+			if (Objects.equals(objective, o.getName())) {
 				return o;
 			}
 		}
@@ -1578,12 +942,8 @@ public final class OptimisationHelper {
 			return periodEnd;
 		} else {
 			final List<LoadSlot> loadSlots = new LinkedList<>(scenario.getCargoModel().getLoadSlots());
-			Collections.sort(loadSlots, new Comparator<LoadSlot>() {
-
-				@Override
-				public int compare(final LoadSlot o1, final LoadSlot o2) {
-					return o1.getSchedulingTimeWindow().getEndWithFlex().compareTo(o2.getSchedulingTimeWindow().getEndWithFlex()) * -1;
-				}
+			Collections.sort(loadSlots, (o1, o2) -> {
+				return o1.getSchedulingTimeWindow().getEndWithFlex().compareTo(o2.getSchedulingTimeWindow().getEndWithFlex()) * -1;
 			});
 			if (loadSlots.isEmpty()) {
 				return YearMonth.of(2000, 1);
@@ -1599,15 +959,12 @@ public final class OptimisationHelper {
 			return periodStart;
 		} else {
 			final List<LoadSlot> loadSlots = new LinkedList<>(scenario.getCargoModel().getLoadSlots());
-			Collections.sort(loadSlots, new Comparator<LoadSlot>() {
-
-				@Override
-				public int compare(final LoadSlot o1, final LoadSlot o2) {
-					return o1.getSchedulingTimeWindow().getStart().compareTo(o2.getSchedulingTimeWindow().getStart());
-				}
+			Collections.sort(loadSlots, (o1, o2) -> {
+				return o1.getSchedulingTimeWindow().getStart().compareTo(o2.getSchedulingTimeWindow().getStart());
 			});
 			if (loadSlots.isEmpty()) {
-				// FIXME: (SG) This is not always a good idea... I have seen arrays created to hold data from 2000 to now - and this can take a long time.
+				// FIXME: (SG) This is not always a good idea... I have seen arrays created to
+				// hold data from 2000 to now - and this can take a long time.
 				return LocalDate.of(2000, 1, 1);
 			}
 			return loadSlots.get(0).getSchedulingTimeWindow().getStart().toLocalDate();
@@ -1624,8 +981,8 @@ public final class OptimisationHelper {
 		return false;
 	}
 
-	private static boolean checkBreakEvenInSlot(final Collection<? extends Slot> slots) {
-		for (final Slot slot : slots) {
+	private static boolean checkBreakEvenInSlot(final Collection<? extends Slot<?>> slots) {
+		for (final Slot<?> slot : slots) {
 			if (slot.isSetPriceExpression() && slot.getPriceExpression().contains(IBreakEvenEvaluator.MARKER)) {
 				return true;
 			}
@@ -1633,27 +990,22 @@ public final class OptimisationHelper {
 		return false;
 	}
 
-	public static boolean validateScenario(final IScenarioDataProvider scenarioDataProvider, final boolean optimising, final boolean displayErrors, boolean relaxedValidation) {
+	public static boolean validateScenario(final IScenarioDataProvider scenarioDataProvider, final boolean optimising, final boolean displayErrors, final boolean relaxedValidation) {
 		final IBatchValidator validator = (IBatchValidator) ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
 		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
 
-		validator.addConstraintFilter(new IConstraintFilter() {
-
-			@Override
-			public boolean accept(final IConstraintDescriptor constraint, final EObject target) {
-
-				for (final Category cat : constraint.getCategories()) {
-					if (cat.getId().endsWith(".base")) {
-						return true;
-					} else if (optimising && cat.getId().endsWith(".optimisation")) {
-						return true;
-					} else if (!optimising && cat.getId().endsWith(".evaluation")) {
-						return true;
-					}
+		validator.addConstraintFilter((constraint, target) -> {
+			for (final Category cat : constraint.getCategories()) {
+				if (cat.getId().endsWith(".base")) {
+					return true;
+				} else if (optimising && cat.getId().endsWith(".optimisation")) {
+					return true;
+				} else if (!optimising && cat.getId().endsWith(".evaluation")) {
+					return true;
 				}
-
-				return false;
 			}
+
+			return false;
 		});
 
 		final MMXRootObject root = scenarioDataProvider.getTypedScenario(MMXRootObject.class);
@@ -1670,7 +1022,8 @@ public final class OptimisationHelper {
 
 			if (optimising || status.getSeverity() == IStatus.ERROR) {
 
-				// See if this command was executed in the UI thread - if so fire up the dialog box.
+				// See if this command was executed in the UI thread - if so fire up the dialog
+				// box.
 				if (displayErrors) {
 					final boolean[] res = new boolean[1];
 					Display.getDefault().syncExec(() -> {
@@ -1697,12 +1050,438 @@ public final class OptimisationHelper {
 
 		return true;
 	}
-	
+
+	private static void createNominalOnlyOption(final UserSettings defaultSettings, final boolean[] optionsAdded, final EditingDomain editingDomain, final ParameterModesDialog dialog,
+			final UserSettings copy, final boolean scenarioContainsForbiddedADPEvents, final String adpVesselEventIssueMsg, final OptionGroup group) {
+		final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
+		choiceData.addChoice("No", Boolean.FALSE);
+		choiceData.addChoice("Yes", Boolean.TRUE);
+		if (scenarioContainsForbiddedADPEvents) {
+			choiceData.enabled = false;
+			choiceData.disabledMessage = adpVesselEventIssueMsg;
+		} else {
+			choiceData.enabledHook = (u -> (u.isAdpOptimisation() && u.isCleanStateOptimisation()));
+
+		}
+		final Option option = dialog.addOption(DataSection.General, group, editingDomain, "Nominal Only: ", "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_NOMINAL_ADP_PREFIX,
+				ParametersPackage.eINSTANCE.getUserSettings_NominalADP());
+		optionsAdded[IDX_OPTION_ADDED] |= true;
+		optionsAdded[IDX_OPTION_ENABLED_ADDED] |= true;
+
+		dialog.addValidation(option, new IValidator() {
+
+			@Override
+			public IStatus validate(final Object value) {
+				if (value instanceof UserSettings) {
+					final UserSettings userSettings = (UserSettings) value;
+
+					if (userSettings.isAdpOptimisation()) {
+						if (userSettings.getPeriodStartDate() != null || userSettings.getPeriodEnd() != null) {
+						}
+
+					}
+				}
+				return Status.OK_STATUS;
+			}
+		});
+	}
+
+	public static SimilaritySettings createSimilaritySettings(final SimilarityMode mode, final LocalDate periodStart, final YearMonth periodEnd) {
+		if (periodStart == null || periodEnd == null || mode == null || mode == SimilarityMode.OFF) {
+			return ScenarioUtils.createOffSimilaritySettings();
+		} else {
+			return SimilarityUIParameters.getSimilaritySettings(mode, periodStart, periodEnd);
+		}
+	}
+
+	private static void createTraderBasedInsertionsOption(final UserSettings defaultSettings, final EditingDomain editingDomain, final ParameterModesDialog dialog, final UserSettings copy,
+			final boolean[] optionsAdded) {
+		if (LicenseFeatures.isPermitted("features:trader-based-insertions")) {
+
+			final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
+			choiceData.addChoice("Off", Boolean.FALSE);
+			choiceData.addChoice("On", Boolean.TRUE);
+			choiceData.enabled = LicenseFeatures.isPermitted("features:trader-based-insertions");
+			if (!choiceData.enabled) {
+				// if not enabled make sure to set setting to false
+				copy.setDualMode(false);
+			}
+			dialog.addOption(DataSection.Toggles, null, editingDomain, "Dual mode: ", "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_DUAL_MODE_PREFIX,
+					ParametersPackage.eINSTANCE.getUserSettings_DualMode());
+
+			optionsAdded[IDX_OPTION_ADDED] |= true;
+			optionsAdded[IDX_OPTION_ENABLED_ADDED] |= true;
+		}
+	}
+
+	private static void createIdleDaysOption(final UserSettings defaultSettings, final EditingDomain editingDomain, final ParameterModesDialog dialog, final UserSettings copy,
+			final boolean[] optionsAdded) {
+		if (LicenseFeatures.isPermitted("features:optimisation-idle-days")) {
+			final Option idleDays = dialog.addOption(DataSection.Toggles, null, editingDomain, "Netback idle day tolerance", "", copy, defaultSettings, DataType.PositiveInt, SWTBOT_IDLE_DAYS,
+					ParametersPackage.eINSTANCE.getUserSettings_FloatingDaysLimit());
+
+			optionsAdded[IDX_OPTION_ADDED] |= true;
+			optionsAdded[IDX_OPTION_ENABLED_ADDED] |= true;
+		}
+	}
+
+	private static void createCharterOutGenerationOption(final LNGScenarioModel scenario, final UserSettings defaultSettings, final EditingDomain editingDomain, final ParameterModesDialog dialog,
+			final UserSettings copy, final boolean[] optionsAdded) {
+		final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
+		choiceData.addChoice("Off", Boolean.FALSE);
+		choiceData.addChoice("On", Boolean.TRUE);
+
+		choiceData.enabled = LicenseFeatures.isPermitted("features:optimisation-charter-out-generation") && isAllowedGCO(scenario);
+		if (choiceData.enabled == false) {
+			// if not enabled make sure to set setting to false
+			copy.setGenerateCharterOuts(false);
+		}
+		// dialog.addOption(DataSection.Main, null, editingDomian, "Similarity", copy,
+		// defaultSettings, DataType.Choice, choiceData,
+		// ParametersPackage.eINSTANCE.getOptimiserSettings_Range(),
+		// ParametersPackage.eINSTANCE.getOptimisationRange_OptimiseAfter());
+		final Option gcoOption = dialog.addOption(DataSection.Toggles, null, editingDomain, "Generate charter outs: ", "", copy, defaultSettings, DataType.Choice, choiceData,
+				SWTBOT_CHARTEROUTGENERATION_PREFIX, ParametersPackage.eINSTANCE.getUserSettings_GenerateCharterOuts());
+
+		if (scenario != null) {
+			final SpotMarketsModel model = ScenarioModelUtil.getSpotMarketsModel(scenario);
+			if (model != null) {
+				final CharterOutMarketParameters params = model.getCharterOutMarketParameters();
+				if (params != null) {
+					String ltext = "";
+					final DateTimeFormatter format = DateTimeFormatter.ofPattern("d/M/yyyy");
+					final LocalDate start = params.getCharterOutStartDate();
+					final LocalDate end = params.getCharterOutEndDate();
+					boolean hasStart = false;
+					if (start != null) {
+						ltext += start.format(format);
+						hasStart = true;
+					}
+					if (end != null) {
+						if (hasStart)
+							ltext += "-";
+						ltext += end.format(format);
+					}
+					if (ltext.length() > 0) {
+						final String ftext = "Charter out dates (" + ltext + ")";
+						choiceData.changeHandlers.add((label, value) -> {
+							label.setText(ftext);
+							label.setVisible((Boolean) value);
+						});
+					}
+				}
+			}
+		}
+
+		optionsAdded[IDX_OPTION_ADDED] |= true;
+		optionsAdded[IDX_OPTION_ENABLED_ADDED] |= true;
+	}
+
+	private static void createPeriodOptions(final UserSettings defaultSettings, final EditingDomain editingDomain, final ParameterModesDialog dialog, final UserSettings copy,
+			final boolean[] optionsAdded) {
+		// Check period optimisation is permitted
+
+		final OptionGroup group = dialog.createGroup(DataSection.Controls, "Optimise period");
+		final Option optStart = dialog.addOption(DataSection.Controls, group, editingDomain, "Start of (dd/mm/yyyy)", "", copy, defaultSettings, DataType.Date, SWTBOT_PERIOD_START,
+				ParametersPackage.eINSTANCE.getUserSettings_PeriodStartDate());
+
+		if (SecurityUtils.getSubject().isPermitted(KnownFeatures.FEATURE_OPTIMISATION_PERIOD)) {
+			// Added a button. Had to extend Option and DataType classes.
+			final Option optToday = dialog.addOption(DataSection.Controls, group, editingDomain, "Today", "Today", copy, defaultSettings, DataType.Button, SWTBOT_PERIOD_TODAY, null);
+			optToday.setListener(new MouseAdapter() {
+
+				@Override
+				public void mouseDown(final MouseEvent e) {
+					if (copy != null) {
+						copy.setPeriodStartDate(LocalDate.now());
+					}
+					if (defaultSettings != null) {
+						defaultSettings.setPeriodStartDate(LocalDate.now());
+					}
+				}
+			});
+		}
+		// TODO set the optToday button size
+		final Option optEnd = dialog.addOption(DataSection.Controls, group, editingDomain, "Up to start of (mm/yyyy)", "", copy, defaultSettings, DataType.MonthYear, SWTBOT_PERIOD_END,
+				ParametersPackage.eINSTANCE.getUserSettings_PeriodEnd());
+		if (SecurityUtils.getSubject().isPermitted(KnownFeatures.FEATURE_OPTIMISATION_PERIOD)) {
+
+			final Option optThreeMonth = dialog.addOption(DataSection.Controls, group, editingDomain, "+3m", "Three months", copy, defaultSettings, DataType.Button, SWTBOT_PERIOD_THREE_MONTH, null);
+			optThreeMonth.setListener(new MouseAdapter() {
+
+				@Override
+				public void mouseDown(final MouseEvent e) {
+					if (copy != null) {
+						setPeriodEnd(copy);
+					}
+					if (defaultSettings != null) {
+						setPeriodEnd(defaultSettings);
+					}
+				}
+			});
+
+			final IObservableValue[] values = new IObservableValue[2];
+
+			final MultiValidator validator = new MultiValidator() {
+
+				@Override
+				protected IStatus validate() {
+					LocalDate periodStart = null;
+					if (values[0].getValue() instanceof LocalDate) {
+						periodStart = (LocalDate) values[0].getValue();
+					}
+					YearMonth periodEnd = null;
+					if (values[1].getValue() instanceof YearMonth) {
+						periodEnd = (YearMonth) values[1].getValue();
+					}
+					if (periodStart != null && periodEnd != null) {
+						if (periodEnd.atDay(1).isBefore(periodStart)) {
+							return ValidationStatus.error("Period start must be before period end");
+						}
+					}
+					return Status.OK_STATUS;
+				}
+			};
+
+			dialog.addValidation(optStart, new IValidator() {
+
+				@Override
+				public IStatus validate(final Object value) {
+					if (value instanceof LocalDate) {
+						final LocalDate startDate = (LocalDate) value;
+						if (startDate.getYear() < 2010) {
+							return ValidationStatus.error("Invalid period start date");
+						}
+					}
+					return Status.OK_STATUS;
+				}
+			});
+			dialog.addValidation(optEnd, new IValidator() {
+
+				@Override
+				public IStatus validate(final Object value) {
+					if (value instanceof YearMonth) {
+						final YearMonth endDate = (YearMonth) value;
+						if (endDate.getYear() < 2010) {
+							return ValidationStatus.error("Invalid period end date");
+						}
+					}
+					return Status.OK_STATUS;
+				}
+			});
+
+			dialog.addValidationCallback(optStart, v -> values[0] = v);
+			dialog.addValidationCallback(optEnd, v -> values[1] = v);
+
+			dialog.addValidationStatusProvider(validator);
+
+			optionsAdded[IDX_OPTION_ENABLED_ADDED] |= true;
+		} else {
+			optStart.enabled = false;
+			optEnd.enabled = false;
+
+		}
+		optionsAdded[IDX_OPTION_ADDED] |= true;
+
+	}
+
+	private static void createADPCleanStateOption(final UserSettings defaultSettings, final boolean[] optionsAdded, final EditingDomain editingDomain, final ParameterModesDialog dialog,
+			final UserSettings copy, final boolean scenarioContainsForbiddedADPEvents, final String adpVesselEventIssueMsg, final OptionGroup group) {
+		final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
+		choiceData.addChoice("No", Boolean.FALSE);
+		choiceData.addChoice("Yes", Boolean.TRUE);
+		if (scenarioContainsForbiddedADPEvents) {
+			choiceData.enabled = false;
+			choiceData.disabledMessage = adpVesselEventIssueMsg;
+		} else {
+			choiceData.enabledHook = (UserSettings::isAdpOptimisation);
+		}
+		final Option option = dialog.addOption(DataSection.General, group, editingDomain, "Clean slate: ", "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_CLEAN_SLATE_PREFIX,
+				ParametersPackage.eINSTANCE.getUserSettings_CleanStateOptimisation());
+		optionsAdded[IDX_OPTION_ADDED] |= true;
+		optionsAdded[IDX_OPTION_ENABLED_ADDED] |= true;
+
+		dialog.addValidation(option, value -> {
+
+			if (value instanceof UserSettings) {
+				final UserSettings userSettings = (UserSettings) value;
+
+				if (userSettings.isAdpOptimisation()) {
+					if (userSettings.getPeriodStartDate() != null || userSettings.getPeriodEnd() != null) {
+						return ValidationStatus.error("Period optimisation must be disabled with ADP optimisation");
+					}
+					if (userSettings.isCleanStateOptimisation()) {
+						if (userSettings.getSimilarityMode() != SimilarityMode.OFF) {
+							return ValidationStatus.error("Similarity must be disabled with clean slate ADP optimisation");
+						}
+
+						if (userSettings.isBuildActionSets()) {
+							return ValidationStatus.error("Action sets must be disabled with clean slate ADP optimisation");
+						}
+						if (userSettings.isGenerateCharterOuts()) {
+							return ValidationStatus.error("Charter out generation must be disabled with clean slate ADP optimisation");
+						}
+					}
+				}
+			}
+			return Status.OK_STATUS;
+		});
+	}
+
+	private static void createSpotCargoMarketsOption(final UserSettings defaultSettings, final EditingDomain editingDomain, final ParameterModesDialog dialog, final UserSettings copy,
+			final boolean[] optionsAdded) {
+		final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
+		choiceData.addChoice("Off", Boolean.FALSE);
+		choiceData.addChoice("On", Boolean.TRUE);
+		dialog.addOption(DataSection.Toggles, null, editingDomain, "Spot cargo markets: ", "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_WITH_SPOT_CARGO_MARKETS_PREFIX,
+				ParametersPackage.eINSTANCE.getUserSettings_WithSpotCargoMarkets());
+
+		optionsAdded[IDX_OPTION_ADDED] |= true;
+		optionsAdded[IDX_OPTION_ENABLED_ADDED] |= true;
+	}
+
+	private static void createCharterLengthOption(final UserSettings defaultSettings, final EditingDomain editingDomain, final ParameterModesDialog dialog, final UserSettings copy,
+			final boolean[] optionsAdded) {
+		final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
+		choiceData.addChoice("Off", Boolean.FALSE);
+		choiceData.addChoice("On", Boolean.TRUE);
+		choiceData.enabled = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_CHARTER_LENGTH);
+		if (choiceData.enabled == false) {
+			// if not enabled make sure to set setting to false
+			copy.setWithCharterLength(false);
+		}
+		dialog.addOption(DataSection.Toggles, null, editingDomain, "Charter Length: ", "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_CHARTERLENGTH_PREFIX,
+				ParametersPackage.eINSTANCE.getUserSettings_WithCharterLength());
+
+		optionsAdded[IDX_OPTION_ADDED] |= true;
+		optionsAdded[IDX_OPTION_ENABLED_ADDED] |= true;
+	}
+
+	private static void createShippingModeOption(final UserSettings defaultSettings, final EditingDomain editingDomain, final ParameterModesDialog dialog, final UserSettings copy,
+			final boolean[] optionsAdded) {
+		final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
+		choiceData.addChoice("Off", Boolean.FALSE);
+		choiceData.addChoice("On", Boolean.TRUE);
+		dialog.addOption(DataSection.Toggles, null, editingDomain, "Shipping only: ", "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_SHIPPING_ONLY_PREFIX,
+				ParametersPackage.eINSTANCE.getUserSettings_ShippingOnly());
+
+		optionsAdded[IDX_OPTION_ADDED] |= true;
+		optionsAdded[IDX_OPTION_ENABLED_ADDED] |= true;
+	}
+
+	private static void createADPOptimisationOptions(final UserSettings defaultSettings, final EditingDomain editingDomain, final LNGScenarioModel scenario, final ParameterModesDialog dialog,
+			final UserSettings copy, final boolean forADP, final boolean[] optionsAdded) {
+
+		if (forADP) {
+
+			boolean scenarioContainsForbiddedADPEvents = false;
+			String adpVesselEventIssueMsg = "";
+			if (scenario != null) {
+				final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenario);
+				for (final VesselEvent event : cargoModel.getVesselEvents()) {
+					if ((event instanceof CharterOutEvent)) {
+						final CharterOutEvent charterOutEvent = (CharterOutEvent) event;
+						if (charterOutEvent.isOptional() || charterOutEvent.getRelocateTo() != null) {
+							scenarioContainsForbiddedADPEvents = true;
+							copy.setCleanStateOptimisation(false);
+							adpVesselEventIssueMsg = "Clean slate only supports non-optional charter out events.";
+							break;
+						}
+					}
+				}
+			}
+
+			final OptionGroup group = dialog.createGroup(DataSection.General, "ADP");
+			{
+				final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
+				choiceData.addChoice("No", Boolean.FALSE);
+				choiceData.addChoice("Yes", Boolean.TRUE);
+				final Option option = dialog.addOption(DataSection.General, group, editingDomain, "Enabled: ", "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_ADP_PREFIX,
+						ParametersPackage.eINSTANCE.getUserSettings_AdpOptimisation());
+				optionsAdded[IDX_OPTION_ADDED] |= true;
+				optionsAdded[IDX_OPTION_ENABLED_ADDED] |= true;
+			}
+			createADPCleanStateOption(defaultSettings, optionsAdded, editingDomain, dialog, copy, scenarioContainsForbiddedADPEvents, adpVesselEventIssueMsg, group);
+			createNominalOnlyOption(defaultSettings, optionsAdded, editingDomain, dialog, copy, scenarioContainsForbiddedADPEvents, adpVesselEventIssueMsg, group);
+		}
+	}
+
+	private static void createSimilarityModeOption(final UserSettings defaultSettings, final EditingDomain editingDomain, final ParameterModesDialog dialog, final UserSettings copy,
+			final boolean[] optionsAdded) {
+		final OptionGroup group = dialog.createGroup(DataSection.Controls, "Similarity");
+
+		final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
+		choiceData.addChoice("Off", SimilarityMode.OFF);
+		choiceData.addChoice("On", SimilarityMode.ALL);
+
+		choiceData.enabled = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_SIMILARITY);
+
+		final Option option = dialog.addOption(DataSection.Controls, group, editingDomain, "", "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_SIMILARITY_PREFIX,
+				ParametersPackage.Literals.USER_SETTINGS__SIMILARITY_MODE);
+
+		optionsAdded[IDX_OPTION_ADDED] |= true;
+		optionsAdded[IDX_OPTION_ENABLED_ADDED] |= choiceData.enabled;
+	}
+
+	private static void createActionSetsOption(final UserSettings defaultSettings, final EditingDomain editingDomain, final ParameterModesDialog dialog, final UserSettings copy,
+			final boolean[] optionsAdded) {
+		final OptionGroup group = dialog.createGroup(DataSection.Controls, "Action sets");
+
+		final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
+		choiceData.addChoice("Off", Boolean.FALSE);
+		choiceData.addChoice("On", Boolean.TRUE);
+
+		choiceData.enabled = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_ACTIONSET);
+
+		final Option option = dialog.addOption(DataSection.Controls, group, editingDomain, " ", "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_ACTION_SET_PREFIX,
+				ParametersPackage.eINSTANCE.getUserSettings_BuildActionSets());
+		dialog.addValidation(option, new IValidator() {
+
+			@Override
+			public IStatus validate(final Object value) {
+				if (value instanceof UserSettings) {
+					final UserSettings userSettings = (UserSettings) value;
+					if (userSettings.isBuildActionSets()) {
+						if (userSettings.getSimilarityMode() == SimilarityMode.OFF || userSettings.getSimilarityMode() == SimilarityMode.ALL) {
+							return ValidationStatus.error("Similarity (low, medium, high) must be enabled to use action sets");
+						}
+						final LocalDate periodStart = userSettings.getPeriodStartDate();
+						final YearMonth periodEnd = userSettings.getPeriodEnd();
+						if (periodStart != null && periodEnd != null) {
+							// 3 month window?
+							if (Months.between(periodStart, periodEnd) > 6) {
+								return ValidationStatus.error("Unable to run with Action Sets as the period range is greater than six months");
+							} else if (Months.between(periodStart, periodEnd) > 3 && userSettings.getSimilarityMode() == SimilarityMode.LOW) {
+								return ValidationStatus
+										.error("Unable to run with Action Sets as the period range is too long for the low similarity setting (max 3 Months). Please try medium or high");
+							}
+						} else {
+							return ValidationStatus.error("Unable to run with Action Sets as the period range is greater than six months");
+						}
+					}
+				}
+				return Status.OK_STATUS;
+			}
+		});
+		optionsAdded[IDX_OPTION_ADDED] |= true;
+		optionsAdded[IDX_OPTION_ENABLED_ADDED] |= choiceData.enabled;
+	}
+
 	private static void setPeriodEnd(final UserSettings copy) {
 		LocalDate temp = LocalDate.now();
 		if (copy.getPeriodStartDate() != null) {
 			temp = copy.getPeriodStartDate();
 		}
 		copy.setPeriodEnd(YearMonth.from(temp.plusMonths(3)));
+	}
+
+	private static boolean checkForBreakEven(final @Nullable LNGScenarioModel lngScenarioModel) {
+		if (lngScenarioModel != null) {
+			final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(lngScenarioModel);
+			return checkBreakEvenInSlot(cargoModel.getLoadSlots()) //
+					|| checkBreakEvenInSlot(cargoModel.getDischargeSlots());
+		} else {
+			return false;
+		}
 	}
 }
