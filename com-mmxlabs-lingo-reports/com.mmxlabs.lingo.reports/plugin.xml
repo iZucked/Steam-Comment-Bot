@@ -549,6 +549,12 @@
          <InitialRowType
                rowType="orphanlegs">
          </InitialRowType>
+         <InitialRowType
+               rowType="endevents">
+         </InitialRowType>
+         <InitialRowType
+               rowType="charterlength">
+         </InitialRowType>
          <InitialColumn
                id="com.mmxlabs.lingo.reports.components.columns.schedule.schedule">
          </InitialColumn>
