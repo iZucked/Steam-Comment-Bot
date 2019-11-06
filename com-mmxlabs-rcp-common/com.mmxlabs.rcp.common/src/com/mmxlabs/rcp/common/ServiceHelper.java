@@ -65,7 +65,11 @@ public final class ServiceHelper {
 			final T service = bundleContext.getService(serviceReference);
 			try {
 				withFunc.accept(service);
-			} finally {
+			} 
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+			finally {
 				bundleContext.ungetService(serviceReference);
 			}
 		} else {

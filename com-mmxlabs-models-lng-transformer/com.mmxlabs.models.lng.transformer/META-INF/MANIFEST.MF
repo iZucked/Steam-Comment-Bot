@@ -27,10 +27,17 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.models.lng.commercial,
  com.mmxlabs.models.lng.spotmarkets,
  org.eclipse.emf.ecore,
- com.mmxlabs.models.lng.analytics.editor
+ com.mmxlabs.models.lng.analytics.editor,
+ com.fasterxml.jackson.core.jackson-databind,
+ com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.9.2",
+ com.fasterxml.jackson.core.jackson-core;bundle-version="2.9.2",
+ com.fasterxml.jackson.datatype.jackson-datatype-jdk8,
+ com.fasterxml.jackson.datatype.jackson-datatype-jsr310,
+ com.mmxlabs.rcp.common
 Export-Package: com.mmxlabs.models.lng.transformer,
  com.mmxlabs.models.lng.transformer.chain,
  com.mmxlabs.models.lng.transformer.chain.impl,
+ com.mmxlabs.models.lng.transformer.config,
  com.mmxlabs.models.lng.transformer.contracts,
  com.mmxlabs.models.lng.transformer.export,
  com.mmxlabs.models.lng.transformer.inject,
@@ -42,6 +49,7 @@ Export-Package: com.mmxlabs.models.lng.transformer,
  com.mmxlabs.models.lng.transformer.shared.impl,
  com.mmxlabs.models.lng.transformer.util
 Import-Package: javax.inject;version="1.0.0",
+ org.json,
  org.slf4j;version="1.6.4"
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.mmxlabs.models.lng.transformer.internal.Activator

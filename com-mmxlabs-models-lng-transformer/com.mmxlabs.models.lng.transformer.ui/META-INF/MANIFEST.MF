@@ -78,6 +78,7 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
 Bundle-RequiredExecutionEnvironment: JavaSE-10
 Bundle-ActivationPolicy: lazy
 Import-Package: javax.inject;version="1.0.0",
+ org.json,
  org.slf4j;version="1.6.4"
 Service-Component: OSGI-INF/*.xml
 Export-Package: com.mmxlabs.models.lng.transformer.actionplan,

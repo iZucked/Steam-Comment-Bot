@@ -25,6 +25,7 @@ import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
@@ -162,7 +163,11 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 
 	@Override
 	protected void reallyPrepare() {
-		if (!jobDescriptor.getOptimisationPlan().getUserSettings().isCleanStateOptimisation()) {
+		// TODO: perform better check for clean state optimisation (e.g. check first stage?)
+		boolean isCleanStateOptimisation = jobDescriptor.getOptimisationPlan().getStages().stream()
+				.anyMatch(stage -> (stage instanceof CleanStateOptimisationStage));
+				
+		if (isCleanStateOptimisation == false) {
 			originalScenarioDataProvider.setLastEvaluationFailed(true);
 			scenarioRunner.evaluateInitialState();
 		}

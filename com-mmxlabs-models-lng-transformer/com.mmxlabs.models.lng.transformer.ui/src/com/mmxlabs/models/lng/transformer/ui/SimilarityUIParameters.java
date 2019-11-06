@@ -40,17 +40,21 @@ public class SimilarityUIParameters {
 			similaritySettings.setMedInterval(createSimilarityInterval(roundToInt(monthsInPeriod * medW), 250_000));
 			similaritySettings.setHighInterval(createSimilarityInterval(roundToInt(monthsInPeriod * highW), 500_000));
 			similaritySettings.setOutOfBoundsWeight(5_000_000);
-			break;
+			break;			
 		case LOW:
+		case ALL:
 			similaritySettings = ParametersFactory.eINSTANCE.createSimilaritySettings();
 			similaritySettings.setLowInterval(createSimilarityInterval(roundToInt(monthsInPeriod * medW), 0));
 			similaritySettings.setMedInterval(createSimilarityInterval(roundToInt(monthsInPeriod * highW), 250_000));
 			similaritySettings.setHighInterval(createSimilarityInterval(roundToInt(monthsInPeriod * topW), 500_000));
 			similaritySettings.setOutOfBoundsWeight(5_000_000);
 			break;
-		default:
+		case OFF:	
 			similaritySettings = ScenarioUtils.createOffSimilaritySettings();
 			break;
+		default:
+			assert false;
+			similaritySettings = null;
 		}
 
 		return similaritySettings;
