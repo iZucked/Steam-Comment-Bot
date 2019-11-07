@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.analytics.ui.views.mtm;
 
+import java.time.LocalDate;
+
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
@@ -12,10 +14,8 @@ import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.analytics.MTMModel;
 import com.mmxlabs.models.lng.analytics.MTMRow;
 import com.mmxlabs.models.lng.analytics.SellOption;
-import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
@@ -27,17 +27,17 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public final class MTMUtils {
 	
-	public static MTMModel createModelFromScenario(final LNGScenarioModel sm, final @NonNull String name, 
-			final boolean allowCargoes, final boolean allowSpotCargoes){
+	public static MTMModel createModelFromScenario(final LNGScenarioModel sm, final @NonNull String name, //
+			final boolean allowCargoes, final boolean allowSpotCargoes, final LocalDate start, final LocalDate end){
 		if (sm == null) {
 			return null;
 		}
 		final MTMModel[] model = new MTMModel[1];
 		ServiceHelper.withOptionalServiceConsumer(IMTMInitialiser.class, customiser -> {
 			if (customiser == null) {
-				model[0] = createModelFromScenario(sm, name, allowCargoes, allowSpotCargoes, new DefaultMTMInitialiser());
+				model[0] = createModelFromScenario(sm, name, allowCargoes, allowSpotCargoes, new DefaultMTMInitialiser(), start, end);
 			} else {
-				model[0] = createModelFromScenario(sm, name, allowCargoes, allowSpotCargoes, customiser);
+				model[0] = createModelFromScenario(sm, name, allowCargoes, allowSpotCargoes, customiser, start, end);
 			}
 		});
 		
@@ -45,23 +45,17 @@ public final class MTMUtils {
 	}
 	
 	protected static MTMModel createModelFromScenario(final @NonNull LNGScenarioModel sm, final @NonNull String name, 
-			final boolean allowCargoes, final boolean allowSpotCargoes, final IMTMInitialiser customiser){
+			final boolean allowCargoes, final boolean allowSpotCargoes, final IMTMInitialiser customiser, //
+			final LocalDate start, final LocalDate end){
 		final MTMModel model = AnalyticsFactory.eINSTANCE.createMTMModel();
 		model.setName(name);
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sm);
 
 		for (final LoadSlot slot : cargoModel.getLoadSlots()) {
-			if (allowSlot(slot, allowCargoes, allowSpotCargoes)) {
+			if (allowSlot(slot, allowCargoes, allowSpotCargoes, start, end)) {
 				final BuyReference buy = AnalyticsFactory.eINSTANCE.createBuyReference();
 				buy.setSlot(slot);
 				model.getBuys().add(buy);
-			}
-		}
-		for (final DischargeSlot slot : cargoModel.getDischargeSlots()) {
-			if (allowSlot(slot, allowCargoes, allowSpotCargoes)) {
-				final SellReference sale = AnalyticsFactory.eINSTANCE.createSellReference();
-				sale.setSlot(slot);
-				model.getSells().add(sale);
 			}
 		}
 		
@@ -84,14 +78,14 @@ public final class MTMUtils {
 		}
 	}
 	
-	protected static boolean allowSlot(final Slot slot, final boolean allowCargoes, final boolean allowSpotCargoes) {
+	protected static boolean allowSlot(final Slot<?> slot, final boolean allowCargoes, final boolean allowSpotCargoes) {
 		if (slot instanceof SpotSlot || slot.isCancelled()) {
 			return false;
 		}
 		if (allowSpotCargoes) {
 			final Cargo cargo = slot.getCargo();
 			if (cargo != null) {
-				for (final Slot s : cargo.getSlots()) {
+				for (final Slot<?> s : cargo.getSlots()) {
 					if (s instanceof SpotSlot) {
 						return true;
 					}
@@ -105,9 +99,25 @@ public final class MTMUtils {
 		return slot.getCargo() == null;
 	}
 	
+	protected static boolean allowSlot(final Slot<?> slot, final boolean allowCargoes, final boolean allowSpotCargoes, //
+			final LocalDate start, final LocalDate end) {
+		if (checkDates(slot, start, end)) {
+			return allowSlot(slot, allowCargoes, allowSpotCargoes);
+		}
+		return false;
+	}
+	
+	private static boolean checkDates(final Slot<?> slot, final LocalDate start, final LocalDate end) {
+		if (start == null || end == null) {
+			return true;
+		}
+		return !slot.getWindowStart().isBefore(start) && !slot.getWindowStart().isAfter(end);
+	}
+	
 	public static MTMModel evaluateMTMModel(final LNGScenarioModel scenarioModel, final ScenarioInstance scenarioInstance, 
-			final IScenarioDataProvider sdp, final boolean allowCargoes, final String modelName, final boolean allowSpotCargoes) {
-		final MTMModel model = MTMUtils.createModelFromScenario(scenarioModel, modelName, allowCargoes, allowSpotCargoes);
+			final IScenarioDataProvider sdp, final boolean allowCargoes, final String modelName, final boolean allowSpotCargoes, 
+			final LocalDate start, final LocalDate end) {
+		final MTMModel model = MTMUtils.createModelFromScenario(scenarioModel, modelName, allowCargoes, allowSpotCargoes, start, end);
 		MTMSandboxEvaluator.evaluate(sdp, scenarioInstance, model);
 		return model;
 	}

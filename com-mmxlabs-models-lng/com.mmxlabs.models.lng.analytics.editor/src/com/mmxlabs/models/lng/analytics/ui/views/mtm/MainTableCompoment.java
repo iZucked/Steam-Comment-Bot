@@ -16,47 +16,43 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
-import org.eclipse.nebula.widgets.formattedtext.DateFormatter;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridColumnGroup;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 
-import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
+import com.mmxlabs.models.lng.analytics.BuyOption;
+import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
-import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.MTMModel;
 import com.mmxlabs.models.lng.analytics.MTMResult;
 import com.mmxlabs.models.lng.analytics.MTMRow;
-import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.AsLocalDateFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.BuyOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers.CellFormatterLabelProvider;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
-import com.mmxlabs.models.ui.date.LocalDateTextFormatter;
+import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
+import com.mmxlabs.models.ui.tabular.EObjectTableViewerSortingSupport;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
-import com.mmxlabs.models.ui.tabular.manipulators.LocalDateAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.IComparableProvider;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.ViewerHelper;
 
@@ -69,6 +65,7 @@ public class MainTableCompoment {
 	private final List<GridColumn> dynamicColumns = new LinkedList<>();
 	private GridTreeViewer tableViewer;
 	private Map<String, GridColumnGroup> marketCGByName = new HashMap<>();
+	private EObjectTableViewerSortingSupport sortingSupport;
 	
 	public GridTreeViewer getViewer() {
 		return this.tableViewer;
@@ -82,7 +79,6 @@ public class MainTableCompoment {
 		myColor = new Color(Display.getDefault(), 0, 168, 107);
 		Control control = createViewer(main_parent);
 		control.setLayoutData(GridDataFactory.fillDefaults().minSize(SWT.DEFAULT, 300).grab(true, true).create());
-		
 	}
 	
 	public void dispose() {
@@ -100,7 +96,29 @@ public class MainTableCompoment {
 		tableViewer.getGrid().setRowHeaderVisible(true);
 		
 		createColumn(tableViewer, "Buy", new BuyOptionDescriptionFormatter(), false).getColumn().setWordWrap(true);
-		createColumn(tableViewer, "Date", new AsLocalDateFormatter(DateTimeFormatter.ofPattern("dd/MM/yyyy")), false);
+		GridViewerColumn gvcd = createColumn(tableViewer, "Date", new AsLocalDateFormatter(DateTimeFormatter.ofPattern("dd/MM/yyyy")), false);
+		
+		sortingSupport = new EObjectTableViewerSortingSupport();
+		tableViewer.setComparator(sortingSupport.createViewerComparer());
+		
+		final IComparableProvider provider = (m) -> {
+			if (m instanceof MTMRow) {
+				final BuyOption bo = ((MTMRow)m).getBuyOption();
+				if (bo instanceof BuyReference) {
+					final LoadSlot ls = ((BuyReference)bo).getSlot();
+					if (ls != null) {
+						return ls.getWindowStart();
+					}
+				}
+			}
+			return null;
+		};
+
+		gvcd.getColumn().setData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER, provider);
+		
+		sortingSupport.addSortableColumn(tableViewer, gvcd, gvcd.getColumn());
+		sortingSupport.setSortDescending(true);
+		sortingSupport.sortColumnsBy(gvcd.getColumn());		
 
 		Consumer<MTMModel> refreshDynamicColumnGroups = (mt) -> {
 			dynamicColumnGroups.forEach(GridColumnGroup::dispose);
@@ -385,31 +403,7 @@ public class MainTableCompoment {
 	}
 
 	private CellFormatterLabelProvider createLabelProvider(final String name, final ICellRenderer renderer, final ETypedElement... pathObjects) {
-		return new CellFormatterLabelProvider(renderer, pathObjects) {
-
-			Image imgShippingRoundTrip = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "/icons/roundtrip.png").createImage();
-			Image imgShippingFleet = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "/icons/fleet.png").createImage();
-
-			@Override
-			protected @Nullable Image getImage(@NonNull final ViewerCell cell, @Nullable final Object element) {
-
-				if (element instanceof RoundTripShippingOption) {
-					return imgShippingRoundTrip;
-				} else if (element instanceof SimpleVesselCharterOption) {
-					return imgShippingFleet;
-				}
-				return null;
-			}
-
-			@Override
-			public void dispose() {
-
-				imgShippingRoundTrip.dispose();
-				imgShippingFleet.dispose();
-
-				super.dispose();
-			}
-		};
+		return new CellFormatterLabelProvider(renderer, pathObjects);
 	}
 	
 	public void setFocus() {
@@ -417,6 +411,7 @@ public class MainTableCompoment {
 	}
 	
 	private void highlightCellForeground(final SpotMarket sm, final ViewerCell cell, double price, final MTMRow row) {
+		cell.setForeground(null);
 		for (final MTMResult result : row.getRhsResults()) {
 			if (result.getEarliestETA() == null) continue;
 			if (result.getTarget() != sm) continue;

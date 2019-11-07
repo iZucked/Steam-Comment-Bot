@@ -85,7 +85,7 @@ public class MTMSanboxUnit {
 
 	static class InternalResult {
 		int arrivalTime = Integer.MAX_VALUE;
-		int breakEvenPrice;
+		int netbackPrice;
 		long volumeInMMBTU;
 		long shippingCost;
 
@@ -93,7 +93,7 @@ public class MTMSanboxUnit {
 			if (other != null) {
 				if (other.arrivalTime < this.arrivalTime) {
 					this.arrivalTime = other.arrivalTime;
-					this.breakEvenPrice = other.breakEvenPrice;
+					this.netbackPrice = other.netbackPrice;
 					this.volumeInMMBTU = other.volumeInMMBTU;
 					this.shippingCost = other.shippingCost;
 				}
@@ -104,7 +104,7 @@ public class MTMSanboxUnit {
 			if (other != null) {
 				if (other.arrivalTime < this.arrivalTime) {
 					this.arrivalTime = other.arrivalTime;
-					this.breakEvenPrice = other.price;
+					this.netbackPrice = other.price;
 					this.volumeInMMBTU = other.volumeInMMBTU;
 					this.shippingCost = other.shippingCost;
 				}
@@ -299,10 +299,9 @@ public class MTMSanboxUnit {
 										if (ret != null && ret.arrivalTime != Integer.MAX_VALUE) {
 											mtmResult.setEarliestETA(modelEntityMap.getDateFromHours(ret.arrivalTime, timeZone).toLocalDate());
 											mtmResult.setEarliestVolume(OptimiserUnitConvertor.convertToExternalVolume(ret.volumeInMMBTU));
-											mtmResult.setEarliestPrice(OptimiserUnitConvertor.convertToExternalPrice(ret.breakEvenPrice));
+											mtmResult.setEarliestPrice(OptimiserUnitConvertor.convertToExternalPrice(ret.netbackPrice));
 											mtmResult.setShippingCost(OptimiserUnitConvertor.convertToExternalPrice(
 													Calculator.getPerMMBTuFromTotalAndVolumeInMMBTu(ret.shippingCost, ret.volumeInMMBTU)));
-	
 										}
 										synchronized (row) {
 											if (row.getBuyOption() != null) {
@@ -362,11 +361,11 @@ public class MTMSanboxUnit {
 						.collect(Collectors.groupingBy(MTMResult::getTarget));
 
 				for(final Map.Entry<SpotMarket, List<MTMResult>> entry : grouped.entrySet() ) {
-					double price = Double.MAX_VALUE;
+					double price = -Double.MAX_VALUE;
 					final List<MTMResult> lmtm = entry.getValue();
 					MTMResult best = null;
 					for (final MTMResult result : lmtm) {
-						if (price > result.getEarliestPrice()) {
+						if (price < result.getEarliestPrice()) {
 							price = result.getEarliestPrice();
 							best = result;
 						}
