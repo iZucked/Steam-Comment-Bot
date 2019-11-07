@@ -1,0 +1,64 @@
+{
+   "annealingSettings":{
+      "*id":"default-annealing-settings",
+      "iterations":20000,
+      "restarting":false,
+      "cooling":0.96,
+      "epochLength":10000,
+      "initialTemperature":1000000
+   },
+   "constraintAndFitnessSettings":{
+      "*id":"default-caf-settings",
+      "objectives":{
+         "*key":"name",
+         "*content":[
+            { "name":"cargo-scheduler-group-profit", "weight":1.0, "enabled":true },
+            { "name":"cargo-scheduler-lateness", "weight":1.0, "enabled":true },
+            { "name":"NonOptionalSlotFitness", "weight":3000000, "enabled":true },
+            { "name":"SimilarityFitnessCore", "weight":1.0, "enabled":true }
+         ]
+      },
+      "similaritySettings":{
+         "lowInterval":{
+            "threshold":8,
+            "weight":0
+         },
+         "medInterval":{
+            "threshold":16,
+            "weight":0
+         },
+         "highInterval":{
+            "threshold":30,
+            "weight":0
+         },
+         "outOfBoundsWeight":0
+      },
+      "constraints":{
+         "*key":"name",
+         "*content":[
+           { "name":"ResourceAllocationConstraintChecker", "enabled": true },
+           { "name":"RoundTripVesselPermissionConstraintChecker", "enabled": true },
+           { "name":"PromptRoundTripVesselPermissionConstraintChecker", "enabled": true },
+           { "name":"AllowedVesselPermissionConstraintChecker", "enabled": true },
+           { "name":"PortExclusionConstraintChecker", "enabled": true },
+           { "name":"VesselEventConstraintChecker", "enabled": true },
+           { "name":"FOBDESCompatibilityConstraintChecker", "enabled": true },
+           { "name":"OrderedSequenceElementsConstraintChecker", "enabled": true },
+           { "name":"PortTypeConstraintChecker", "enabled": true },
+           { "name":"TravelTimeChecker", "enabled": true },
+           { "name":"VirtualVesselConstraintChecker", "enabled": true },
+           { "name":"TimeSortConstraintChecker", "enabled": true },
+           { "name":"RestrictedElementsConstraintChecker", "enabled": true },
+           { "name":"RestrictedSlotsConstraintChecker", "enabled": true },
+           { "name":"ContractCvConstraintChecker", "enabled": true },
+           { "name":"PortCvCompatibilityConstraintChecker", "enabled": true },
+           { "name":"PortShipSizeConstraintChecker", "enabled": true },
+           { "name":"SpotToSpotConstraintChecker", "enabled": true },
+           { "name":"DifferentSTSVesselsConstraintChecker", "enabled": true },
+           { "name":"ShippingTypeRequirementConstraintChecker", "enabled": true },
+           { "name":"ShippingHoursRestrictionChecker", "enabled": true },
+           { "name":"LockedUnusedElementsConstraintChecker", "enabled": true }
+        ]
+      }
+   }
+}
