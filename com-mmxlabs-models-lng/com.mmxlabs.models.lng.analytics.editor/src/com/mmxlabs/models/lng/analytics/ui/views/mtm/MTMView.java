@@ -20,7 +20,6 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EContentAdapter;
-import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
@@ -31,7 +30,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
@@ -50,7 +48,7 @@ import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.rcp.common.RunnerHelper;
-import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
+import com.mmxlabs.rcp.common.actions.CopyGridToHtmlClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -69,6 +67,7 @@ public class MTMView extends ScenarioInstanceView implements CommandStackListene
 	private org.eclipse.e4.ui.workbench.modeling.ISelectionListener selectionListener;
 	// selection service from upper class
 	private ESelectionService service;
+	private DatesToolbarEditor dates;
 
 	// Callbacks for objects that need the current input
 	private final List<Consumer<MTMModel>> inputWants = new LinkedList<>();
@@ -92,6 +91,9 @@ public class MTMView extends ScenarioInstanceView implements CommandStackListene
 		mainTableComponent.createControls(this.parent, MTMView.this);
 		inputWants.addAll(mainTableComponent.getInputWants());
 
+		dates = new DatesToolbarEditor("netbacks_dates_toolbar", e -> refresh());
+		getViewSite().getActionBars().getToolBarManager().add(dates);
+		
 		final RunnableAction go = new RunnableAction("Generate", Action.AS_PUSH_BUTTON, () -> {
 			BusyIndicator.showWhile(Display.getDefault(), () -> {
 				try {
@@ -106,7 +108,8 @@ public class MTMView extends ScenarioInstanceView implements CommandStackListene
 					try {
 						executor.submit(() -> {
 
-							final MTMModel model = MTMUtils.evaluateMTMModel(scenarioModel, scenarioInstance, sdp, true, "mtm", false);
+							final MTMModel model = MTMUtils.evaluateMTMModel(scenarioModel, scenarioInstance, sdp, true, "mtm", false,//
+									dates.getStartDate(), dates.getEndDate());
 
 							RunnerHelper.asyncExec(() -> {
 								final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(sdp);
@@ -157,9 +160,12 @@ public class MTMView extends ScenarioInstanceView implements CommandStackListene
 		final Action packColumnsAction = PackActionFactory.createPackColumnsAction(mainTableComponent.getViewer());
 		getViewSite().getActionBars().getToolBarManager().add(packColumnsAction);
 
-		final Action copyTableAction = new CopyGridToClipboardAction(mainTableComponent.getViewer().getGrid());
-		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableAction);
-		getViewSite().getActionBars().getToolBarManager().add(copyTableAction);
+		final CopyGridToHtmlClipboardAction copyTableExtendedAction = new CopyGridToHtmlClipboardAction(mainTableComponent.getViewer().getGrid(), true);
+
+		copyTableExtendedAction.setShowForegroundColours(true);
+		
+		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableExtendedAction);
+		getViewSite().getActionBars().getToolBarManager().add(copyTableExtendedAction);
 
 		getViewSite().getActionBars().getToolBarManager().update(true);
 
@@ -167,6 +173,9 @@ public class MTMView extends ScenarioInstanceView implements CommandStackListene
 
 		listenToScenarioSelection();
 
+	}
+	
+	private void refresh() {
 	}
 
 	@Override
@@ -334,35 +343,6 @@ public class MTMView extends ScenarioInstanceView implements CommandStackListene
 	@Override
 	public void setFocus() {
 		mainTableComponent.setFocus();
-	}
-
-	public class ExportMTMToExcellAction extends Action {
-
-		public ExportMTMToExcellAction(final String label) {
-			super(label);
-		}
-
-		@Override
-		public void run() {
-			// MTMExporter.export(getTable(), getFile(), dates.getStartMonth(), dates.getEndMonth());
-		}
-
-		private String getFile() {
-
-			FileDialog dialog = new FileDialog(getViewSite().getShell(), SWT.SAVE);
-			String[] filterNames = new String[] { "Excel files", "All Files (*)" };
-			String[] filterExtensions = new String[] { "*.xlsx;*.xls;", "*" };
-			dialog.setFilterNames(filterNames);
-			dialog.setFilterExtensions(filterExtensions);
-			String file = dialog.open();
-			if (file != null) {
-				file = file.trim();
-				if (file.length() > 0) {
-					return file;
-				}
-			}
-			return "";
-		}
 	}
 
 }

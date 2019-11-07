@@ -144,7 +144,7 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 		progressMonitor.subTask("Creating MtM model");
 		final MTMModel[] model = new MTMModel[1];
 		RunnerHelper.syncExecDisplayOptional(() -> {
-			model[0] = MTMUtils.createModelFromScenario(scenarioModel, "MtMScenarioEditorActionDelegate", false, true);
+			model[0] = MTMUtils.createModelFromScenario(scenarioModel, "MtMScenarioEditorActionDelegate", false, true, null, null);
 		});
 		if (model[0] == null) {
 			throw new RuntimeException("Unable to create an MTM model");
