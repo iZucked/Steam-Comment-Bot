@@ -67,7 +67,9 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
+import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
 import com.mmxlabs.models.lng.schedule.Purge;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -131,7 +133,7 @@ public class CargoEconsReportComponent implements IAdaptable {
 
 	private boolean compareMode = true;
 	private boolean onlyDiffMode = false;
-
+	
 	private GridViewerColumn dummyDataCol;
 
 	private Image createImage(String path) {
@@ -378,6 +380,10 @@ public class CargoEconsReportComponent implements IAdaptable {
 					obj = ScheduleModelUtils.getSegmentStart((Event) obj);
 				}
 				if (obj instanceof StartEvent) {
+					validObjects.add(obj);
+				} else if (obj instanceof EndEvent) {
+					validObjects.add(obj);
+				} else if (obj instanceof GeneratedCharterOut) {
 					validObjects.add(obj);
 				} else if (obj instanceof CharterLengthEvent) {
 					validObjects.add(obj);
@@ -643,8 +649,8 @@ public class CargoEconsReportComponent implements IAdaptable {
 		for (final Object object : objects) {
 			String name = "";
 
-			if (object instanceof StartEvent) {
-				name = ((StartEvent) object).name();
+			if (object instanceof Event) {
+				name = ((Event) object).name();
 			}
 			
 			if (object instanceof VesselEventVisit) {
@@ -856,10 +862,10 @@ public class CargoEconsReportComponent implements IAdaptable {
 					gvc.getColumn().setHeaderRenderer(columnImageHeaderCenteredRenderer);
 					gvc.getColumn().setImage(pinImage);
 				}
-			} else if (selectedObject instanceof StartEvent) {
-				final StartEvent startEvent = (StartEvent) selectedObject;
+			} else if (selectedObject instanceof StartEvent || selectedObject instanceof EndEvent || selectedObject instanceof GeneratedCharterOut) {
+				final Event event = (Event) selectedObject;
 
-				final GridColumnGroup gridColumnGroup = gridColumnGroupsMap.get(startEvent.name());
+				final GridColumnGroup gridColumnGroup = gridColumnGroupsMap.get(event.name());
 				final GridColumn gc = new GridColumn(gridColumnGroup, SWT.NONE);
 				final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
 				GridViewerHelper.configureLookAndFeel(gvc);
@@ -871,7 +877,7 @@ public class CargoEconsReportComponent implements IAdaptable {
 				gvc.getColumn().setWidth(100);
 				@Nullable
 				final ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
-				if (currentSelectedDataProvider != null && currentSelectedDataProvider.isPinnedObject(startEvent)) {
+				if (currentSelectedDataProvider != null && currentSelectedDataProvider.isPinnedObject(event)) {
 					gvc.getColumn().setHeaderRenderer(columnImageHeaderCenteredRenderer);
 					gvc.getColumn().setImage(pinImage);
 				}
@@ -908,5 +914,13 @@ public class CargoEconsReportComponent implements IAdaptable {
 	public void setCopyPasteMode(boolean copyPasteMode) {
 		setIncludedUnit(!copyPasteMode);
 		options.alwaysShowRawValue = copyPasteMode;
+	}
+
+	public boolean isShowPnLCalcs() {
+		return options.showPnLCalcs;
+	}
+
+	public void setShowPnLCalcs(boolean showPnLCalcs) {
+		this.options.showPnLCalcs = showPnLCalcs;
 	}
 }

@@ -25,6 +25,7 @@ import com.mmxlabs.lingo.reports.views.formatters.Formatters.DurationMode;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
+import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
@@ -213,7 +214,10 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 			} else if (object instanceof StartEvent) {
 				final StartEvent startEvent = (StartEvent) object;
 				return helper.apply(startEvent);
-			} else if (object instanceof VesselEvent) {
+			} else if (object instanceof EndEvent) {
+				final EndEvent endEvent = (EndEvent) object;
+				return helper.apply(endEvent);
+			}  else if (object instanceof VesselEvent) {
 				final VesselEvent vesselEvent = (VesselEvent) object;
 				return helper.apply(vesselEvent);
 			} else if (object instanceof GeneratedCharterOut) {
@@ -251,6 +255,15 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 		}, transformer);
 	}
 
+	protected @NonNull ICellRenderer createIntegerDaysFromHoursFormatter(final EconsOptions options, final boolean isCost, final Function<Object, @Nullable Integer> transformer) {
+		return createBasicFormatter(options, isCost, Integer.class, new Function<Integer, String>() {
+			@Override
+			public String apply(Integer hours) {
+				return Formatters.formatAsDays(DurationMode.DAYS_HOURS_HUMAN, hours);
+			}
+		}, transformer);
+	}
+	
 	protected @NonNull ICellRenderer createDoubleDaysFormatter(final EconsOptions options, final boolean isCost, final Function<Object, @Nullable Double> transformer) {
 		return createBasicFormatter(options, isCost, Double.class, new Function<Double, String>() {
 			@Override
@@ -460,21 +473,6 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 				SlotVisit slotVisit = null;
 				Journey journey = null;
 				Idle idle = null;
-				if (object instanceof EventGrouping) {
-					final EventGrouping eg = (EventGrouping)object;
-					for (final Event event : eg.getEvents()) {
-						if (event instanceof SlotVisit) {
-							slotVisit = (SlotVisit) event;
-						}
-						if (event instanceof Journey) {
-							journey = (Journey) event;
-						}
-						if (event instanceof Idle) {
-							idle = (Idle) event;
-						}
-					}
-					return func.apply(slotVisit, journey, idle);
-				}
 				if (object instanceof CargoAllocation) {
 					final CargoAllocation cargoAllocation = (CargoAllocation) object;
 					int legNumber = -1;
@@ -505,6 +503,21 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 						return func.apply(slotVisit, journey, idle);
 					}
 
+				}
+				if (object instanceof EventGrouping) {
+					final EventGrouping eg = (EventGrouping)object;
+					for (final Event event : eg.getEvents()) {
+						if (event instanceof SlotVisit) {
+							slotVisit = (SlotVisit) event;
+						}
+						if (event instanceof Journey) {
+							journey = (Journey) event;
+						}
+						if (event instanceof Idle) {
+							idle = (Idle) event;
+						}
+					}
+					return func.apply(slotVisit, journey, idle);
 				}
 			} catch (final NullPointerException e) {
 				// ignore npe's

@@ -81,6 +81,7 @@ public class CargoEconsReport extends ViewPart {
 				ContextInjectionFactory.invoke(component, SetEconsMarginMode.class, componentContext, actionCtx, null);
 				changeSelectedAction.accept(MarginBy.PURCHASE_VOLUME);
 			});
+			actionMap.put(MarginBy.PURCHASE_VOLUME, volumeByPurchase);
 			getViewSite().getActionBars().getMenuManager().add(volumeByPurchase);
 
 			final Action volumeBySell = new RunnableAction("Per mmBtu by sales volume", SWT.TOGGLE, () -> {
@@ -89,11 +90,17 @@ public class CargoEconsReport extends ViewPart {
 				ContextInjectionFactory.invoke(component, SetEconsMarginMode.class, componentContext, actionCtx, null);
 				changeSelectedAction.accept(MarginBy.SALE_VOLUME);
 			});
-			actionMap.put(MarginBy.PURCHASE_VOLUME, volumeByPurchase);
 			actionMap.put(MarginBy.SALE_VOLUME, volumeBySell);
-
 			getViewSite().getActionBars().getMenuManager().add(volumeBySell);
 
+			final Action showPnLCalcs = new RunnableAction("Show PnL calcs", SWT.TOGGLE, () -> {
+				component.setShowPnLCalcs(!component.isShowPnLCalcs());
+				component.rebuild();
+			});
+			component.setShowPnLCalcs(true);
+			showPnLCalcs.setChecked(true);
+			getViewSite().getActionBars().getMenuManager().add(showPnLCalcs);
+			
 			final Action showOnlyDiff = new RunnableAction("Δ", () -> {
 				component.toggleShowDiffOnly();
 				component.rebuild();

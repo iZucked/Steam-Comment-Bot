@@ -32,6 +32,7 @@ import com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.Cooldown;
+import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
@@ -64,9 +65,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 	public Collection<CargoEconsReportRow> createRows(@NonNull final EconsOptions options, @Nullable final Collection<Object> targets) {
 
 		boolean containsCargo = false;
-		boolean containsEvent = false;
 		boolean containsCharterOut = false;
-		boolean containsCharterLength = false;
 		boolean containsCooldown = false;
 		boolean containsPurge = false;
 		boolean containsVesselEvent = false;
@@ -78,37 +77,15 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		} else {
 			for (final Object target : targets) {
 				if (target instanceof CargoAllocation) {
-					final CargoAllocation cargoAllocation = (CargoAllocation) target;
 					containsCargo = true;
-					for (final Event evt : cargoAllocation.getEvents()) {
-						if (evt instanceof Cooldown) {
-							containsCooldown = true;
-						}
-						if (evt instanceof Purge) {
-							containsPurge = true;
-						}
-					}
 				}
 				if (target instanceof StartEvent) {
 					containsStartEvent = true;
 				}
-				if (target instanceof CharterLengthEvent) {
-					containsCharterLength = true;
-				}
 				if (target instanceof VesselEventVisit) {
 					final VesselEventVisit vesselEventVisit = (VesselEventVisit) target;
-					containsEvent = true;
 					if (vesselEventVisit.getVesselEvent() instanceof CharterOutEvent) {
 						containsCharterOut = true;
-					}
-					for (final Event evt : vesselEventVisit.getEvents()) {
-						
-						if (evt instanceof Cooldown) {
-							containsCooldown = true;
-						}
-						if (evt instanceof Purge) {
-							containsPurge = true;
-						}
 					}
 				}
 				if (target instanceof EventGrouping) {
@@ -122,6 +99,12 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 						}
 						if (e instanceof GeneratedCharterOut) {
 							containsGeneratedCharterOut = true;
+						}
+						if (e instanceof Cooldown) {
+							containsCooldown = true;
+						}
+						if (e instanceof Purge) {
+							containsPurge = true;
 						}
 					}
 				}
@@ -192,147 +175,148 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 			};
 			rows.add(row);
 
-			//Pnl calcs start.
-			rows.add(createRow(205, "", false, "", "", false, createEmptyFormatter()));
+			if (options.showPnLCalcs) {
+				//Pnl calcs start.
+				rows.add(createRow(205, "", false, "", "", false, createEmptyFormatter()));
 
-			rows.add(createRow(206, "Buy port", false, "", "", false, createFirstPurchaseFormatter(sa -> sa.getPort() != null ? sa.getPort().getName() : "")));
-			rows.add(createRow(210, "Buy date", false, "", "", false,
-					createFirstPurchaseFormatter(sa -> sa.getSlotVisit().getStart().format(DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter()))));
-			rows.add(createRow(220, "Buy volume (m3)", false, "", "", false,
-					createBasicFormatter(options, false, Integer.class, VolumeM3Format::format, createFirstPurchaseTransformer(Integer.class, SlotAllocation::getVolumeTransferred))));
-			rows.add(createRow(230, "Buy volume (mmBtu)", false, "", "", false,
-					createBasicFormatter(options, false, Integer.class, VolumeMMBtuFormat::format, createFirstPurchaseTransformer(Integer.class, SlotAllocation::getEnergyTransferred))));
-			//CV should have units: mmbtu/m^3, although since not shown in slot editor, will not show here?
-			rows.add(createRow(240, "Buy CV (mmBtu/m3)", false, "", "", false, createBasicFormatter(options, false, Double.class, CVFormat::format,
-					createFullLegTransformer2(Double.class, 0, (visit, travel, idle) -> {
-						if (visit != null && visit.getSlotAllocation() != null) {
-							return visit.getSlotAllocation().getCv();
-						}
-						else {
-							return 0.0;
-						}
-					}))));
-			rows.add(createRow(250, "Buy price($/mmBtu)", false, "", "", false,
-					createBasicFormatter(options, false, Double.class, DollarsPerMMBtuFormat::format, createFirstPurchaseTransformer(Double.class, SlotAllocation::getPrice))));
+				rows.add(createRow(206, "Buy port", false, "", "", false, createFirstPurchaseFormatter(sa -> sa.getPort() != null ? sa.getPort().getName() : "")));
+				rows.add(createRow(210, "Buy date", false, "", "", false,
+						createFirstPurchaseFormatter(sa -> sa.getSlotVisit().getStart().format(DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter()))));
+				rows.add(createRow(220, "Buy volume (m3)", false, "", "", false,
+						createBasicFormatter(options, false, Integer.class, VolumeM3Format::format, createFirstPurchaseTransformer(Integer.class, SlotAllocation::getVolumeTransferred))));
+				rows.add(createRow(230, "Buy volume (mmBtu)", false, "", "", false,
+						createBasicFormatter(options, false, Integer.class, VolumeMMBtuFormat::format, createFirstPurchaseTransformer(Integer.class, SlotAllocation::getEnergyTransferred))));
+				//CV should have units: mmbtu/m^3, although since not shown in slot editor, will not show here?
+				rows.add(createRow(240, "Buy CV (mmBtu/m3)", false, "", "", false, createBasicFormatter(options, false, Double.class, CVFormat::format,
+						createFullLegTransformer2(Double.class, 0, (visit, travel, idle) -> {
+							if (visit != null && visit.getSlotAllocation() != null) {
+								return visit.getSlotAllocation().getCv();
+							}
+							else {
+								return 0.0;
+							}
+						}))));
+				rows.add(createRow(250, "Buy price($/mmBtu)", false, "", "", false,
+						createBasicFormatter(options, false, Double.class, DollarsPerMMBtuFormat::format, createFirstPurchaseTransformer(Double.class, SlotAllocation::getPrice))));
 
-			rows.add(createRow(260, "Sale port", false, "", "", false, createFirstSaleAllocationFormatter(sa -> sa.getPort().getName())));
-			rows.add(createRow(270, "Sale date", false, "", "", false,
-					createFirstSaleAllocationFormatter(sa -> sa.getSlotVisit().getStart().format(DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter()))));
-			rows.add(createRow(280, "Sale price($/mmBtu)", false, "", "", false,
-					createBasicFormatter(options, false, Double.class, DollarsPerMMBtuFormat::format, createFirstSaleTransformer(Double.class, SlotAllocation::getPrice))));
-			rows.add(createRow(290, "Sale volume (m3)", false, "", "", false,
-					createBasicFormatter(options, false, Integer.class, VolumeM3Format::format, createFirstSaleTransformer(Integer.class, SlotAllocation::getVolumeTransferred))));
-			rows.add(createRow(300, "Sale volume (mmBtu)", false, "", "", false,
-					createBasicFormatter(options, false, Integer.class, VolumeMMBtuFormat::format, createFirstSaleTransformer(Integer.class, SlotAllocation::getEnergyTransferred))));
+				rows.add(createRow(260, "Sale port", false, "", "", false, createFirstSaleAllocationFormatter(sa -> sa.getPort().getName())));
+				rows.add(createRow(270, "Sale date", false, "", "", false,
+						createFirstSaleAllocationFormatter(sa -> sa.getSlotVisit().getStart().format(DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter()))));
+				rows.add(createRow(280, "Sale price($/mmBtu)", false, "", "", false,
+						createBasicFormatter(options, false, Double.class, DollarsPerMMBtuFormat::format, createFirstSaleTransformer(Double.class, SlotAllocation::getPrice))));
+				rows.add(createRow(290, "Sale volume (m3)", false, "", "", false,
+						createBasicFormatter(options, false, Integer.class, VolumeM3Format::format, createFirstSaleTransformer(Integer.class, SlotAllocation::getVolumeTransferred))));
+				rows.add(createRow(300, "Sale volume (mmBtu)", false, "", "", false,
+						createBasicFormatter(options, false, Integer.class, VolumeMMBtuFormat::format, createFirstSaleTransformer(Integer.class, SlotAllocation::getEnergyTransferred))));
 
-			// Spacer
-			rows.add(createRow(310, "", false, "", "", false, createEmptyFormatter()));
+				//Omit the following rows for now as duplicated elsewhere.
+				if (false) {
+					// Spacer
+					rows.add(createRow(310, "", false, "", "", false, createEmptyFormatter()));
 
-			rows.add(createRow(320, "Purchase cost", false, "", "", true,
-					createBasicFormatter(options, true, Integer.class, DollarsFormat::format, createFirstPurchaseTransformer(Integer.class, SlotAllocation::getVolumeValue))));
-			rows.add(createRow(330, "Sales revenue", false, "", "", false,
-					createBasicFormatter(options, false, Integer.class, DollarsFormat::format, createFirstSaleTransformer(Integer.class, SlotAllocation::getVolumeValue))));
-			// Equity
-			rows.add(createRow(340, "Equity", false, "", "", false, createEmptyFormatter()));
-			rows.add(createRow(350, "Theoretical shipping cost", false, "", "", false, createEmptyFormatter()));
+					rows.add(createRow(320, "Purchase cost", false, "", "", true,
+							createBasicFormatter(options, true, Integer.class, DollarsFormat::format, createFirstPurchaseTransformer(Integer.class, SlotAllocation::getVolumeValue))));
+					rows.add(createRow(330, "Sales revenue", false, "", "", false,
+							createBasicFormatter(options, false, Integer.class, DollarsFormat::format, createFirstSaleTransformer(Integer.class, SlotAllocation::getVolumeValue))));
+					// Equity
+					rows.add(createRow(340, "Equity", false, "", "", false, createEmptyFormatter()));
+					rows.add(createRow(350, "Theoretical shipping cost", false, "", "", false, createEmptyFormatter()));
 
-			// Theoretical shipping cost
-			// Real Shipping cost
+					// Theoretical shipping cost
+					// Real Shipping cost
 
-			// getShippingCost((fu) -> getFuelcost(fu, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT));
-			// rows.add(createRow(200, "Real shipping cost", false, "$", "", true, createShippingCosts((fu) -> getShippingCost(StandardPNLCalcRowFactory::getShippingCost(fuelCostFunc) )));
+					// getShippingCost((fu) -> getFuelcost(fu, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT));
+					// rows.add(createRow(200, "Real shipping cost", false, "$", "", true, createShippingCosts((fu) -> getShippingCost(StandardPNLCalcRowFactory::getShippingCost(fuelCostFunc) )));
 
-			Function<FuelUsage, Integer> fuelCostFunc = (fu) -> getFuelCost(fu, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
-			Function<SlotVisit, Integer> portCostFunc = SlotVisit::getPortCost;
-			Function<Object, Integer> func2 = (object) -> getShippingCost(object, portCostFunc, fuelCostFunc);
+					Function<FuelUsage, Integer> fuelCostFunc = (fu) -> getFuelCost(fu, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
+					Function<SlotVisit, Integer> portCostFunc = SlotVisit::getPortCost;
+					Function<Object, Integer> func2 = (object) -> getShippingCost(object, portCostFunc, fuelCostFunc);
 
-			rows.add(createRow(400, "Real shipping cost", false, "$", "", true, createBasicFormatter(options, true, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, func2))));
-			rows.add(createRow(405, "PNL", false, "$", "", false,
-					createBasicFormatter(options, false, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, StandardEconsRowFactory::getPNLValue))));
-		}
-		if (containsCargo || containsVesselEvent || containsCharterOut || containsGeneratedCharterOut || containsStartEvent) {
-				
-			// Spacer
+					rows.add(createRow(400, "Real shipping cost", false, "$", "", true, createBasicFormatter(options, true, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, func2))));
+					rows.add(createRow(405, "PNL", false, "$", "", false,
+							createBasicFormatter(options, false, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, StandardEconsRowFactory::getPNLValue))));
+				}
 
-			//rows.add(createRow(400, "Real shipping", false, "", "", false, createEmptyFormatter()));
-			//rows.add(createRow(410, "", false, "", "", false, createEmptyFormatter()));
-			rows.add(createRow(420, "", false, "", "", false, createEmptyFormatter()));
+				if (containsCargo || containsVesselEvent || containsCharterOut || containsGeneratedCharterOut || containsStartEvent) {
+
+					// Spacer
+
+					//rows.add(createRow(400, "Real shipping", false, "", "", false, createEmptyFormatter()));
+					//rows.add(createRow(410, "", false, "", "", false, createEmptyFormatter()));
+					rows.add(createRow(420, "", false, "", "", false, createEmptyFormatter()));
 
 
-			for (int legIdx = 0; legIdx < 2; ++legIdx) {
-				final int base = 1000 + 1000 * legIdx;
+					for (int legIdx = 0; legIdx < 2; ++legIdx) {
+						final int base = 1000 + 1000 * legIdx;
 
-				//Only show ballast leg for anything other than a cargo.
-				if (containsCargo || legIdx == 1) {
-					if (legIdx == 0) {
-						rows.add(createRow(base + 10, "Laden leg", false, "", "", false, createEmptyFormatter()));
-					} else {
-						if (containsCargo) {
-							rows.add(createRow(base + 9, "", false, "", "", false, createEmptyFormatter()));
-						}
-						rows.add(createRow(base + 10, "Ballast leg", false, "", "", false, createEmptyFormatter()));
-					}
+						//Only show ballast leg for anything other than a cargo.
+						if (containsCargo || legIdx == 1) {
+							if (legIdx == 0) {
+								rows.add(createRow(base + 10, "Laden leg", false, "", "", false, createEmptyFormatter()));
+							} else {
+								if (containsCargo) {
+									rows.add(createRow(base + 9, "", false, "", "", false, createEmptyFormatter()));
+								}
+								rows.add(createRow(base + 10, "Ballast leg", false, "", "", false, createEmptyFormatter()));
+							}
 
-					// rows.add(createRow(base + 20, " Speed", false, "", "", false, createFullLegFormatter2(legIdx, Double.class, SpeedFormat::format, (visit, travel, idle) -> travel.getSpeed())));
-					rows.add(createRow(base + 20, "    Speed", false, "", "", false,
-							createBasicFormatter(options, true, Double.class, SpeedFormat::format, createFullLegTransformer2(Double.class, legIdx, (visit, travel, idle) -> travel == null ? 0 : travel.getSpeed()))));
-					rows.add(createRow(base + 30, "    Days", false, "", "", false, createDoubleDaysFormatter(options, true,  createFullLegTransformer2(Double.class, legIdx,
-							(visit, travel, idle) -> ((getOrZero(visit, Event::getDuration) + getOrZero(travel, Event::getDuration) + getOrZero(idle, Event::getDuration)) / 24.0)))));
+							// rows.add(createRow(base + 20, " Speed", false, "", "", false, createFullLegFormatter2(legIdx, Double.class, SpeedFormat::format, (visit, travel, idle) -> travel.getSpeed())));
+							rows.add(createRow(base + 20, "    Speed", false, "", "", false,
+									createBasicFormatter(options, true, Double.class, SpeedFormat::format, createFullLegTransformer2(Double.class, legIdx, (visit, travel, idle) -> travel == null ? 0 : travel.getSpeed()))));
+							rows.add(createRow(base + 30, "    Days", false, "", "", false, createDoubleDaysFormatter(options, true,  createFullLegTransformer2(Double.class, legIdx,
+									(visit, travel, idle) -> ((getOrZero(visit, Event::getDuration) + getOrZero(travel, Event::getDuration) + getOrZero(idle, Event::getDuration)) / 24.0)))));
 
-					// rows.add(createRow(base + 90, " Route", false, "", "", false, createFullLegFormatter(legIdx, (travel, idle) -> getRoute(travel.getRouteOption()))));
-					// rows.add(createRow(base + 91, " Port duration", false, "", "", false, createFullLegFormatter(legIdx, (travel, idle) -> getPortDuration(travel))));
-					// rows.add(createRow(base + 31, " Port days", false, "", "", false, createFullLegFormatter2(legIdx, Double.class, DaysFormat::format,
-					// (visit, travel, idle) -> ((getOrZero(visit, Event::getDuration)) / 24.0))));
+							// rows.add(createRow(base + 90, " Route", false, "", "", false, createFullLegFormatter(legIdx, (travel, idle) -> getRoute(travel.getRouteOption()))));
+							// rows.add(createRow(base + 91, " Port duration", false, "", "", false, createFullLegFormatter(legIdx, (travel, idle) -> getPortDuration(travel))));
+							// rows.add(createRow(base + 31, " Port days", false, "", "", false, createFullLegFormatter2(legIdx, Double.class, DaysFormat::format,
+							// (visit, travel, idle) -> ((getOrZero(visit, Event::getDuration)) / 24.0))));
 
-					rows.add(createRow(base + 40, "    Total BO (mmBtu)", false, "", "", false, createBasicFormatter(options, true, Integer.class, VolumeMMBtuFormat::format,
-							createFullLegTransformer2(Integer.class, legIdx, (visit, travel, idle) -> (getFuelVolume(visit, travel, idle, FuelUnit.MMBTU, Fuel.NBO, Fuel.FBO))))));
-					rows.add(createRow(base + 50, "    Charter Cost", true, "$", "", true, createBasicFormatter(options, true, Integer.class, DollarsFormat::format, createFullLegTransformer2(Integer.class,
-							legIdx, (visit, travel, idle) -> (getOrZero(visit, Event::getCharterCost) + getOrZero(travel, Event::getCharterCost) + getOrZero(idle, Event::getCharterCost))))));
+							rows.add(createRow(base + 40, "    Total BO (mmBtu)", false, "", "", false, createBasicFormatter(options, true, Integer.class, VolumeMMBtuFormat::format,
+									createFullLegTransformer2(Integer.class, legIdx, (visit, travel, idle) -> (getFuelVolume(visit, travel, idle, FuelUnit.MMBTU, Fuel.NBO, Fuel.FBO))))));
+							rows.add(createRow(base + 50, "    Charter Cost", true, "$", "", true, createBasicFormatter(options, true, Integer.class, DollarsFormat::format, createFullLegTransformer2(Integer.class,
+									legIdx, (visit, travel, idle) -> (getOrZero(visit, Event::getCharterCost) + getOrZero(travel, Event::getCharterCost) + getOrZero(idle, Event::getCharterCost))))));
 
-					rows.add(createRow(base + 51, "    Charter Rate", true, "$", "", true,
-							createBasicFormatter(options, true, Integer.class, DollarsFormat::format, createFullLegTransformer2(Integer.class, legIdx, (visit, travel, idle) -> getOrZero(visit, event -> {
-								return (int) ((double) event.getCharterCost() * 24 / (double) event.getDuration());
-							})))));
+							rows.add(createRow(base + 51, "    Charter Rate", true, "$", "", true,
+									createBasicFormatter(options, true, Integer.class, DollarsFormat::format, createFullLegTransformer2(Integer.class, legIdx, (visit, travel, idle) -> getOrZero(visit, event -> {
+										return (int) ((double) event.getCharterCost() * 24 / (double) event.getDuration());
+									})))));
 
-					rows.add(createRow(base + 60, "    Bunkers (MT)", false, "", "", false, createBasicFormatter(options, true, Integer.class, VolumeM3Format::format,
-							createFullLegTransformer2(Integer.class, legIdx, (visit, travel, idle) -> (getFuelVolume(visit, travel, idle, FuelUnit.MT, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT))))));
-					rows.add(createRow(base + 70, "    Bunkers cost", false, "", "", false, createBasicFormatter(options, true, Integer.class, DollarsFormat::format,
-							createFullLegTransformer2(Integer.class, legIdx, (visit, travel, idle) -> (getFuelCost(visit, travel, idle, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT))))));
-					rows.add(createRow(base + 80, "    Port Costs ", false, "", "", false,
-							createBasicFormatter(options, true, Integer.class, DollarsFormat::format, createFullLegTransformer2(Integer.class, legIdx, (visit, travel, idle) -> (visit.getPortCost())))));
-					rows.add(createRow(base + 90, "    Route", false, "", "", false,
-							createBasicFormatter(options, false, String.class, Object::toString, createFullLegTransformer(String.class, legIdx, (travel, idle) -> travel == null ? "" : getRoute(travel.getRouteOption())))));
-					rows.add(createRow(base + 100, "    Canal Cost", true, "$", "", true, createBasicFormatter(options, true, Integer.class, DollarsFormat::format,
-							createFullLegTransformer2(Integer.class, legIdx, (visit, travel, idle) -> (getOrZero(travel, Journey::getToll))))));
+							rows.add(createRow(base + 60, "    Bunkers (MT)", false, "", "", false, createBasicFormatter(options, true, Integer.class, VolumeM3Format::format,
+									createFullLegTransformer2(Integer.class, legIdx, (visit, travel, idle) -> (getFuelVolume(visit, travel, idle, FuelUnit.MT, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT))))));
+							rows.add(createRow(base + 70, "    Bunkers cost", false, "", "", false, createBasicFormatter(options, true, Integer.class, DollarsFormat::format,
+									createFullLegTransformer2(Integer.class, legIdx, (visit, travel, idle) -> (getFuelCost(visit, travel, idle, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT))))));
+							rows.add(createRow(base + 80, "    Port Costs ", false, "", "", false,
+									createBasicFormatter(options, true, Integer.class, DollarsFormat::format, createFullLegTransformer2(Integer.class, legIdx, (visit, travel, idle) -> (visit.getPortCost())))));
+							rows.add(createRow(base + 90, "    Route", false, "", "", false,
+									createBasicFormatter(options, false, String.class, Object::toString, createFullLegTransformer2(String.class, legIdx, (visit, travel, idle) -> travel == null ? "" : getRoute(travel.getRouteOption())))));
+							rows.add(createRow(base + 100, "    Canal Cost", true, "$", "", true, createBasicFormatter(options, true, Integer.class, DollarsFormat::format,
+									createFullLegTransformer2(Integer.class, legIdx, (visit, travel, idle) -> (getOrZero(travel, Journey::getToll))))));
 
-					if (legIdx != 0) {
-						rows.add(createRow(base + 109, "    Cooldown cost ($)", true, "$", "", true, createEmptyFormatter()));
-					}
+							rows.add(createRow(base + 110, "    Total cost ($)", true, "$", "", true, createBasicFormatter(options, true, Long.class, DollarsFormat::format,
+									createFullLegTransformer2(Long.class, legIdx, (visit, travel, idle) -> (getEventShippingCost(visit) + getEventShippingCost(travel) + getEventShippingCost(idle))))));
+							rows.add(createRow(base + 120, "    Idle days", false, "", "", false, createDoubleDaysFormatter(options, true, 
+									createFullLegTransformer2(Double.class, legIdx, (visit, travel, idle) -> (getOrZero(idle, Event::getDuration) / 24.0))), greyColourProvider));
+							rows.add(createRow(base + 130, "    Idle BO", false, "", "", false, createBasicFormatter(options, true, Integer.class, VolumeMMBtuFormat::format,
+									createFullLegTransformer2(Integer.class, legIdx, (visit, travel, idle) -> (getFuelVolume(idle, FuelUnit.MMBTU, Fuel.NBO, Fuel.FBO)))), greyColourProvider));
+							rows.add(createRow(base + 140, "    Idle charter", true, "$", "", true, createBasicFormatter(options, true, Integer.class, DollarsFormat::format,
+									createFullLegTransformer2(Integer.class, legIdx, (visit, travel, idle) -> (getOrZero(idle, Event::getCharterCost)))), greyColourProvider));
+							rows.add(
+									createRow(base + 150, "    Idle bunkers", false, "", "", false,
+											createBasicFormatter(options, true, Integer.class, VolumeM3Format::format,
+													createFullLegTransformer2(Integer.class, legIdx, (visit, travel, idle) -> (getFuelVolume(idle, FuelUnit.MT, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT)))),
+											greyColourProvider));
 
-					rows.add(createRow(base + 110, "    Total cost ($)", true, "$", "", true, createBasicFormatter(options, true, Long.class, DollarsFormat::format,
-							createFullLegTransformer2(Long.class, legIdx, (visit, travel, idle) -> (getEventShippingCost(visit) + getEventShippingCost(travel) + getEventShippingCost(idle))))));
-					rows.add(createRow(base + 120, "    Idle days", false, "", "", false, createDoubleDaysFormatter(options, true, 
-							createFullLegTransformer2(Double.class, legIdx, (visit, travel, idle) -> (getOrZero(idle, Event::getDuration) / 24.0))), greyColourProvider));
-					rows.add(createRow(base + 130, "    Idle BO", false, "", "", false, createBasicFormatter(options, true, Integer.class, VolumeMMBtuFormat::format,
-							createFullLegTransformer2(Integer.class, legIdx, (visit, travel, idle) -> (getFuelVolume(idle, FuelUnit.MMBTU, Fuel.NBO, Fuel.FBO)))), greyColourProvider));
-					rows.add(createRow(base + 140, "    Idle charter", true, "$", "", true, createBasicFormatter(options, true, Integer.class, DollarsFormat::format,
-							createFullLegTransformer2(Integer.class, legIdx, (visit, travel, idle) -> (getOrZero(idle, Event::getCharterCost)))), greyColourProvider));
-					rows.add(
-							createRow(base + 150, "    Idle bunkers", false, "", "", false,
-									createBasicFormatter(options, true, Integer.class, VolumeM3Format::format,
-											createFullLegTransformer2(Integer.class, legIdx, (visit, travel, idle) -> (getFuelVolume(idle, FuelUnit.MT, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT)))),
+							rows.add(createRow(base + 160, "    Idle bunkers cost", false, "", "", false, createBasicFormatter(options, true, Integer.class, DollarsFormat::format,
+									createFullLegTransformer2(Integer.class, legIdx, (visit, travel, idle) -> (getFuelCost(idle, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT)))), greyColourProvider));
+
+							rows.add(createRow(base + 170, "    Total idle cost ($)", false, "", "", true,
+									createBasicFormatter(options, true, Long.class, DollarsFormat::format, createFullLegTransformer2(Long.class, legIdx, (visit, travel, idle) -> (getEventShippingCost(idle)))),
 									greyColourProvider));
-
-					rows.add(createRow(base + 160, "    Idle bunkers cost", false, "", "", false, createBasicFormatter(options, true, Integer.class, DollarsFormat::format,
-							createFullLegTransformer2(Integer.class, legIdx, (visit, travel, idle) -> (getFuelCost(idle, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT)))), greyColourProvider));
-
-					rows.add(createRow(base + 170, "    Total idle cost ($)", false, "", "", true,
-							createBasicFormatter(options, true, Long.class, DollarsFormat::format, createFullLegTransformer2(Long.class, legIdx, (visit, travel, idle) -> (getEventShippingCost(idle)))),
-							greyColourProvider));
+						}
+					}
 				}
 			}
 		}
-		
 		return rows;
 	}
 
@@ -777,6 +761,10 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 				revenue = charterOutEvent.getHireRate() * charterOutEvent.getDurationInDays();
 			}
 		}
+		if (object instanceof GeneratedCharterOut) {
+			GeneratedCharterOut gco = (GeneratedCharterOut)object;
+			revenue = gco.getRevenue();
+		}
 		return revenue;
 	}
 
@@ -785,38 +773,46 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		return createBasicFormatter(options, isCost, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, StandardEconsRowFactory::vesselEventVisitShippingCharterRevenueHelper));
 	}
 
-	private static int vesselEventVisitShippingBallastBonusHelper(final Object object) {
-		int revenue = 0;
+	private static long vesselEventVisitShippingBallastBonusHelper(final Object object) {
+		long ballastBonus = 0;
 
 		if (object instanceof VesselEventVisit) {
 			final VesselEventVisit cargoAllocation = (VesselEventVisit) object;
 			if (cargoAllocation.getVesselEvent() instanceof CharterOutEvent) {
 				final CharterOutEvent charterOutEvent = (CharterOutEvent) cargoAllocation.getVesselEvent();
-				revenue = charterOutEvent.getBallastBonus();
+				ballastBonus = charterOutEvent.getBallastBonus();
 			}
 		}
-		return revenue;
+		if (object instanceof EndEvent) {
+			EndEvent ee = (EndEvent)object;
+			ballastBonus = ee.getBallastBonusFee();
+		}
+		return ballastBonus;
 	}
 
 	private @NonNull ICellRenderer createShippingBallastBonus(final EconsOptions options, final boolean isCost) {
-		return createBasicFormatter(options, isCost, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, StandardEconsRowFactory::vesselEventVisitShippingBallastBonusHelper));
+		return createBasicFormatter(options, isCost, Long.class, DollarsFormat::format, createMappingFunction(Long.class, StandardEconsRowFactory::vesselEventVisitShippingBallastBonusHelper));
 	}
 
-	private static int vesselEventVisitCharterDaysHelper(final Object object) {
-		int days = 0;
+	private static int vesselEventVisitCharterDurationInHoursHelper(final Object object) {
+		int durationInHours = 0;
 
 		if (object instanceof VesselEventVisit) {
 			final VesselEventVisit cargoAllocation = (VesselEventVisit) object;
 			if (cargoAllocation.getVesselEvent() instanceof CharterOutEvent) {
 				final CharterOutEvent charterOutEvent = (CharterOutEvent) cargoAllocation.getVesselEvent();
-				days = charterOutEvent.getDurationInDays();
+				durationInHours = charterOutEvent.getDurationInDays() * 24;
 			}
+		} 
+		if (object instanceof GeneratedCharterOut) {
+			GeneratedCharterOut gco = (GeneratedCharterOut)object;
+			durationInHours = gco.getDuration();
 		}
-		return days;
+		return durationInHours;
 	}
 
 	private @NonNull ICellRenderer createCharterDays(final EconsOptions options, final boolean isCost) {
-		return createIntegerDaysFormatter(options, isCost, createMappingFunction(Integer.class, StandardEconsRowFactory::vesselEventVisitCharterDaysHelper));
+		return createIntegerDaysFromHoursFormatter(options, isCost, createMappingFunction(Integer.class, StandardEconsRowFactory::vesselEventVisitCharterDurationInHoursHelper));
 	}
 
 	private static int vesselEventVisitShippingRepositioningHelper(final Object object) {
@@ -828,6 +824,9 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 				final CharterOutEvent charterOutEvent = (CharterOutEvent) cargoAllocation.getVesselEvent();
 				revenue = charterOutEvent.getRepositioningFee();
 			}
+		}
+		if (object instanceof StartEvent) {
+			//TODO
 		}
 		return revenue;
 	}
@@ -902,23 +901,14 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		Sequence sequence = null;
 		List<Event> events = null;
 
-		if (object instanceof CargoAllocation) {
-			sequence = ((CargoAllocation) object).getSequence();
-			events = ((CargoAllocation) object).getEvents();
-		} else if (object instanceof VesselEventVisit) {
-			sequence = ((VesselEventVisit) object).getSequence();
-			events = ((VesselEventVisit) object).getEvents();
-		} else if (object instanceof CharterLengthEvent) {
-			sequence = ((CharterLengthEvent) object).getSequence();
-			events = ((CharterLengthEvent) object).getEvents();
-		} else if (object instanceof StartEvent) {
-			sequence = ((StartEvent) object).getSequence();
-			events = ((StartEvent) object).getEvents();
-		} else if (object instanceof Purge) {
+		if (object instanceof Purge) {
 			sequence = ((Purge) object).getSequence();
 			events = Collections.singletonList((Purge) object);
+		} else if (object instanceof EventGrouping && object instanceof Event) {
+			sequence = ((Event)object).getSequence();
+			events = ((EventGrouping)object).getEvents();
 		}
-
+		
 		if (sequence == null || events == null) {
 			return null;
 		}
@@ -1040,14 +1030,11 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		Sequence sequence = null;
 		List<Event> events = null;
 
-		if (object instanceof CargoAllocation) {
-			sequence = ((CargoAllocation) object).getSequence();
-			events = ((CargoAllocation) object).getEvents();
-		} else if (object instanceof VesselEventVisit) {
-			sequence = ((VesselEventVisit) object).getSequence();
-			events = ((VesselEventVisit) object).getEvents();
+		if (object instanceof EventGrouping && object instanceof Event) {
+			sequence = ((Event) object).getSequence();
+			events = ((EventGrouping) object).getEvents();
 		}
-
+		
 		if (sequence == null || events == null) {
 			return null;
 		}
@@ -1112,10 +1099,10 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 
 			charterCost += event.getCharterCost();
 
-			if (event instanceof SlotVisit) {
-				final SlotVisit slotVisit = (SlotVisit) event;
+			if (event instanceof PortVisit) {
+				final PortVisit portVisit = (PortVisit) event;
 				// Port Costs
-				shippingCost += slotVisit.getPortCost();
+				shippingCost += portVisit.getPortCost();
 			}
 
 			if (event instanceof Journey) {
