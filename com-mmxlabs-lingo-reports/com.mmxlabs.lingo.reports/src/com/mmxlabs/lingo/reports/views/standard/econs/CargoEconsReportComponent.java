@@ -695,9 +695,9 @@ public class CargoEconsReportComponent implements IAdaptable {
 			gvc.getColumn().dispose();
 		}
 
-		if (validObjects == null || validObjects.isEmpty()) {
-			return;
-		}
+		//if (validObjects == null || validObjects.isEmpty()) {
+		//	return;
+		//}
 
 		for (final GridColumnGroup gcg : gridColumnGroupsMap.values()) {
 			gcg.dispose();
