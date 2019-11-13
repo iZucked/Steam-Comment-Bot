@@ -128,12 +128,24 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 		if (element instanceof ChangeSetTableGroup) {
 
 			final ChangeSetTableGroup changeSetTableGroup = (ChangeSetTableGroup) element;
+			// Filter out no-change solutions. We can get here e.g. because of charter out
+			// generation.
+			if (changeSetTableGroup.getComplexity() == 0) {
+				return false;
+			}
+			// Filter out overly complex solutions
 			if (changeSetTableGroup.getComplexity() > getMaxComplexity()) {
 				return false;
 			}
 		}
 		if (parentElement instanceof ChangeSetTableGroup) {
 			final ChangeSetTableGroup changeSetTableGroup = (ChangeSetTableGroup) parentElement;
+			// Filter out no-change solutions. We can get here e.g. because of charter out
+			// generation.
+			if (changeSetTableGroup.getComplexity() == 0) {
+				return false;
+			}
+			// Filter out overly complex solutions
 			if (changeSetTableGroup.getComplexity() > getMaxComplexity()) {
 				return false;
 			}
@@ -359,7 +371,6 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 			if (tableRoot == null) {
 				return;
 			}
-
 			final Map<ChangeSetMetadata, List<ChangeSetTableGroup>> grouper = new LinkedHashMap<>();
 			int minComplexity = Integer.MAX_VALUE;
 			for (final ChangeSetTableGroup tableGroup : tableRoot.getGroups()) {
@@ -368,6 +379,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 				final ChangeSetMetadata key = new ChangeSetMetadata(groupMode);
 				key.sendTo = p.getSecond();
 				key.changeCount = tableGroup.getComplexity();
+
 				tableGroup.setDescription(label);
 				grouper.computeIfAbsent(key, k -> new LinkedList<ChangeSetTableGroup>()).add(tableGroup);
 				if (tableGroup.getComplexity() > 0) {
@@ -376,25 +388,19 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 			}
 			// Make sure at least one level of complexity is included.
 			int adjustedMaxComplexity = getMaxComplexity();
-			adjustedMaxComplexity = Math.max(1, Math.min(minComplexity, maxComplexity));
+			adjustedMaxComplexity = minComplexity != Integer.MAX_VALUE ? Math.max(1, Math.max(minComplexity, maxComplexity)) : Math.max(1, maxComplexity);
+			setMaxComplexity(adjustedMaxComplexity);
 			for (final Map.Entry<ChangeSetMetadata, List<ChangeSetTableGroup>> e : grouper.entrySet()) {
 				final List<ChangeSetTableGroup> groups = e.getValue();
 				try {
 					Collections.sort(groups, (a, b) -> Long.compare(b.getDeltaMetrics().getPnlDelta(), a.getDeltaMetrics().getPnlDelta()));
 				} catch (NullPointerException ee) {
-
+					// Ignore sort issues
 				}
+
 				boolean first = true;
 				double sortValue = 0.0;
 				for (final ChangeSetTableGroup g : groups) {
-					// Filter out no-change solutions. We can get here e.g. because of charter out
-					// generation.
-					if (g.getComplexity() == 0) {
-						continue;
-					}
-					if (g.getComplexity() > adjustedMaxComplexity) {
-						continue;
-					}
 					g.setGroupAlternative(!first);
 					if (first) {
 						sortValue = g.getDeltaMetrics().getPnlDelta() / (double) (g.getComplexity() == 0 ? 1 : g.getComplexity());
@@ -1261,6 +1267,8 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 				assert false;
 				throw new IllegalStateException();
 			}
+		} else if (sendTo instanceof NamedObject) {
+			dest = ((NamedObject) sendTo).getName();
 		} else {
 			dest = sendTo.toString();
 		}
