@@ -723,7 +723,6 @@ public class ChangeSetView extends ViewPart {
 				return true;
 			}
 		};
-		// insertionPlanFilter = new InsertionPlanGrouperAndFilter();
 		filters[1] = insertionPlanFilter;
 
 		viewer.setFilters(filters);
@@ -816,17 +815,12 @@ public class ChangeSetView extends ViewPart {
 			viewer.getGrid().addMenuDetectListener(listener);
 		}
 
-		eventHandler = new EventHandler() {
-
-			@Override
-			public void handleEvent(final org.osgi.service.event.Event event) {
-				// event.getProperty(name)
-				final Object o = event.getProperty("org.eclipse.e4.data");
-				if (o instanceof ScenarioInstance) {
-					final ScenarioInstance scenarioInstance = (ScenarioInstance) o;
-
-					onClosingScenario(scenarioInstance);
-				}
+		eventHandler = event -> {
+			// event.getProperty(name)
+			final Object o = event.getProperty("org.eclipse.e4.data");
+			if (o instanceof ScenarioInstance) {
+				final ScenarioInstance scenarioInstance = (ScenarioInstance) o;
+				onClosingScenario(scenarioInstance);
 			}
 		};
 		final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
