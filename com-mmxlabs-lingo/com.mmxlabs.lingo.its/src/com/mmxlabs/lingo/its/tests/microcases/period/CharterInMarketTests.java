@@ -5,10 +5,12 @@
 package com.mmxlabs.lingo.its.tests.microcases.period;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.eclipse.emf.common.util.EList;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -18,7 +20,9 @@ import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.lingo.its.tests.microcases.MicroTestUtils;
+import com.mmxlabs.lngdataserver.data.distances.DataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.util.CommercialModelFinder;
@@ -51,14 +55,14 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 public class CharterInMarketTests extends AbstractMicroTestCase {
 
 	/**
-	 * If we have two charter in markets and we remove all cargoes from one used option, make sure we reduce the market count and renumber spot index assignments. This test removes cargo after the
-	 * period.
+	 * If we have two charter in markets and we remove all cargoes from one used
+	 * option, make sure we reduce the market count and renumber spot index
+	 * assignments. This test removes cargo after the period.
 	 * 
 	 * @throws Exception
 	 */
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
-	@Tag(TestCategories.QUICK_TEST)
 	public void testSpotCharterInMarketReduction_After() throws Exception {
 
 		// Load in the basic scenario from CSV
@@ -106,7 +110,8 @@ public class CharterInMarketTests extends AbstractMicroTestCase {
 				.withAssignmentFlags(true, false) //
 				.build();
 
-		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in period.
+		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in
+		// period.
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
@@ -158,18 +163,17 @@ public class CharterInMarketTests extends AbstractMicroTestCase {
 	}
 
 	/**
-	 * If we have two charter in markets and we remove all cargoes from one used option, make sure we reduce the market count and renumber spot index assignments. This test removes cargo before the
-	 * period.
+	 * If we have two charter in markets and we remove all cargoes from one used
+	 * option, make sure we reduce the market count and renumber spot index
+	 * assignments. This test removes cargo before the period.
 	 * 
 	 * @throws Exception
 	 */
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
-	@Tag(TestCategories.QUICK_TEST)
 	public void testSpotCharterInMarketReduction_Before() throws Exception {
 
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-
 
 		// Create the required basic elements
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
@@ -213,7 +217,8 @@ public class CharterInMarketTests extends AbstractMicroTestCase {
 				.withAssignmentFlags(true, false) //
 				.build();
 
-		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in period.
+		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in
+		// period.
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
@@ -263,5 +268,52 @@ public class CharterInMarketTests extends AbstractMicroTestCase {
 		} finally {
 			runner.dispose();
 		}
+	}
+
+	/**
+	 * We have a large > 270 day idle period between cargoes on a spot charter in.
+	 * The first cargo is well before the period start and the second cargo is
+	 * within the optimisation period. We had a bug were the first cargo was
+	 * trimmed, but the mapping state was wrong and threw an AssertionError when
+	 * transforming.
+	 */
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testLongIdleOverPeriodStartWithinCharter() throws Exception {
+
+		//
+		updateDistanceData(scenarioDataProvider, DataConstants.DISTANCES_LATEST_JSON);
+		updatePortsData(scenarioDataProvider, DataConstants.PORTS_LATEST_JSON);
+
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		vessel.setSafetyHeel(500);
+
+		CharterInMarket charterInMarket = spotMarketsModelBuilder.createCharterInMarket("MKT", vessel, entity, "80000", 1);
+
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2019, 01, 16), portFinder.findPort("Zeebrugge"), null, entity, "5") //
+				.build() //
+				.makeDESSale("D1", LocalDate.of(2019, 1, 20), portFinder.findPort("Isle of Grain"), null, entity, "7") //
+				.build() //
+				.withVesselAssignment(charterInMarket, 0, 1) //
+				.withAssignmentFlags(false, false) //
+				.build();
+
+		final Cargo cargo2 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L2", LocalDate.of(2019, 11, 1), portFinder.findPort("Zeebrugge"), null, entity, "5") //
+				.build() //
+				.makeDESSale("D2", LocalDate.of(2019, 11, 7), portFinder.findPort("Isle of Grain"), null, entity, "7") //
+				.build() //
+				.withVesselAssignment(charterInMarket, 0, 2) //
+				.withAssignmentFlags(false, false) //
+				.build();
+
+		evaluateWithLSOTest(false, optimisationPlan -> {
+			optimisationPlan.getUserSettings().setPeriodStartDate(LocalDate.of(2019, 11, 5));
+			optimisationPlan.getUserSettings().setPeriodEnd(YearMonth.of(2020, 1));
+		}, null, scenarioRunner -> {
+
+			// Nothing to check.
+		}, null);
 	}
 }

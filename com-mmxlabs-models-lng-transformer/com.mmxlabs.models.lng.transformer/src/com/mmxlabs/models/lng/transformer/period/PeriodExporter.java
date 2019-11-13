@@ -222,7 +222,7 @@ public class PeriodExporter {
 								start_idx = lookup.get(e.getName()).getSecond() + 1;
 							} else if (lastTrimmedBefore instanceof Cargo) {
 								final Cargo cargo = (Cargo) lastTrimmedBefore;
-								final Slot slot = cargo.getSortedSlots().get(cargo.getSlots().size() - 1);
+								final Slot<?> slot = cargo.getSortedSlots().get(cargo.getSlots().size() - 1);
 								final IPortSlot portSlot = originalDataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(slot, IPortSlot.class);
 								final ISequenceElement e = complete_portSlotProvider.getElement(portSlot);
 								start_idx = lookup.get(e.getName()).getSecond() + 1;
@@ -246,7 +246,7 @@ public class PeriodExporter {
 								end_idx = lookup.get(e.getName()).getSecond();
 							} else if (lastTrimmedAfter instanceof Cargo) {
 								final Cargo cargo = (Cargo) lastTrimmedAfter;
-								final Slot slot = cargo.getSortedSlots().get(0);
+								final Slot<?> slot = cargo.getSortedSlots().get(0);
 								final IPortSlot portSlot = originalDataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(slot, IPortSlot.class);
 								final ISequenceElement e = complete_portSlotProvider.getElement(portSlot);
 								end_idx = lookup.get(e.getName()).getSecond();

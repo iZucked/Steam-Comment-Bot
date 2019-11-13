@@ -1057,7 +1057,7 @@ public class PeriodTransformer {
 
 						// This *should* be working in sorted order. Thus keep that last #Before case and terminate loop at the first #After case
 						if (position == Position.Before) {
-							mapping.setLastTrimmedAfter(collectedAssignment.getCharterInMarket(), collectedAssignment.getSpotIndex(), assignedObject);
+							mapping.setLastTrimmedBefore(collectedAssignment.getCharterInMarket(), collectedAssignment.getSpotIndex(), assignedObject);
 						} else if (position == Position.After) {
 							mapping.setLastTrimmedAfter(collectedAssignment.getCharterInMarket(), collectedAssignment.getSpotIndex(), assignedObject);
 							continue COLLECTED_ASSIGNMENT_LOOP;
