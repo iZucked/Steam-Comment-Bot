@@ -10,8 +10,6 @@ import com.mmxlabs.models.lng.nominations.AbstractNomination;
 import com.mmxlabs.models.lng.nominations.NominationsPackage;
 import com.mmxlabs.models.lng.nominations.utils.NominationsModelUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.mmxcore.MMXObject;
-import com.mmxlabs.models.mmxcore.MMXObject.DelegateInformation;
 import com.mmxlabs.models.ui.editors.impl.LocalDateInlineEditor;
 
 public class DueDateInlineEditor extends LocalDateInlineEditor {
