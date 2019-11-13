@@ -5,6 +5,7 @@
 package com.mmxlabs.lngdataserver.server;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.HashSet;
 import java.util.Set;
@@ -359,6 +360,12 @@ public class UpstreamUrlProvider implements IUserNameProvider {
 			if (!reportedError.containsKey(url)) {
 				reportedError.put(url, new Object());
 				LOGGER.error("Error validating server SSL certificates", e);
+			}
+			return false;
+		} catch (final SocketTimeoutException e) {
+			if (!reportedError.containsKey(url)) {
+				reportedError.put(url, new Object());
+				LOGGER.warn("Connection attempt to upstream server timed out", e);
 			}
 			return false;
 		} catch (final IOException e) {
