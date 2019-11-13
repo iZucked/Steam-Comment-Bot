@@ -11,4 +11,5 @@ public class EconsOptions {
 
 	boolean alwaysShowRawValue = false;
 	MarginBy marginBy = MarginBy.SALE_VOLUME;
+	boolean showPnLCalcs = true;
 }

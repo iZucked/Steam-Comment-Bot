@@ -5,7 +5,6 @@
 package com.mmxlabs.lingo.reports.views.standard.pnlcalcs;
 
 import java.text.NumberFormat;
-import java.time.format.DateTimeFormatter;
 
 import javax.annotation.PreDestroy;
 
@@ -63,7 +62,7 @@ public class PNLCalcsReport extends ViewPart {
 
 		{
 			final Action showOnlyDiff = new RunnableAction("Δ", () -> {
-				if (component!= null) {
+				if (component != null) {
 					component.toggleShowDiffOnly();
 					component.rebuild();
 				}
