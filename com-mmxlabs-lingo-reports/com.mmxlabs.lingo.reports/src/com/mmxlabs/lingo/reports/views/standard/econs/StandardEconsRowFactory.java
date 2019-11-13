@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.ToIntFunction;
@@ -20,6 +21,7 @@ import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.internal.themes.WorkbenchThemeManager.Events;
 
 import com.google.common.collect.Sets;
 import com.mmxlabs.lingo.reports.views.standard.econs.EconsOptions.MarginBy;
@@ -853,11 +855,11 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 				return getFromCargoAllocationPair(Double.class, helper, object);
 			} else if (object instanceof List<?>) {
 				final List<DeltaPair> pairs = (List<DeltaPair>) object;
-				final double totalVolume = pairs.stream().mapToDouble(x -> cargoAllocationPerMMBTUVolumeHelper(x.first(), options)).sum();
-				final double totalCost = pairs.stream().mapToDouble(x -> getShippingCost(x.first())).sum();
+				final double totalVolume = pairs.stream().filter(Objects::nonNull).mapToDouble(x -> cargoAllocationPerMMBTUVolumeHelper(x.first(), options)).sum();
+				final double totalCost = pairs.stream().filter(Objects::nonNull).mapToDouble(x -> getShippingCost(x.first())).sum();
 
-				final double totalOldVolume = pairs.stream().mapToDouble(x -> cargoAllocationPerMMBTUVolumeHelper(x.second(), options)).sum();
-				final double totalOldCost = pairs.stream().mapToDouble(x -> getShippingCost(x.second())).sum();
+				final double totalOldVolume = pairs.stream().filter(Objects::nonNull).mapToDouble(x -> cargoAllocationPerMMBTUVolumeHelper(x.second(), options)).sum();
+				final double totalOldCost = pairs.stream().filter(Objects::nonNull).mapToDouble(x -> getShippingCost(x.second())).sum();
 				final double value = (double) (totalOldCost / totalOldVolume) - (double) (totalCost / totalVolume);
 				return value;
 			}
@@ -891,6 +893,30 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		return null;
 
 	}
+	
+	private static List<Event> getEvents(final Object object) {
+		if (object instanceof EventGrouping) {
+			return ((EventGrouping)object).getEvents();
+		}
+		else if (object instanceof Purge) {
+			return Collections.singletonList((Purge) object);
+		}
+		else {
+			return null;
+		}
+	}
+
+	private static Sequence getSequence(final Object object) {
+		if (object instanceof Event) {
+			return ((Event)object).getSequence();
+		}
+		else if (object instanceof CargoAllocation) {
+			return ((CargoAllocation)object).getSequence();
+		}
+		else {
+			return null;
+		}
+	}
 
 	private static Integer getShippingCost(final Object object) {
 
@@ -898,20 +924,13 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 			return null;
 		}
 
-		Sequence sequence = null;
-		List<Event> events = null;
-
-		if (object instanceof Purge) {
-			sequence = ((Purge) object).getSequence();
-			events = Collections.singletonList((Purge) object);
-		} else if (object instanceof EventGrouping && object instanceof Event) {
-			sequence = ((Event)object).getSequence();
-			events = ((EventGrouping)object).getEvents();
-		}
+		Sequence sequence = getSequence(object);
+		List<Event> events = getEvents(object);
 		
 		if (sequence == null || events == null) {
 			return null;
 		}
+		
 		// Bit of a double count here, but need to decide what to add to the model
 		int shippingCost = 0;
 		int charterCost = 0;
@@ -1027,13 +1046,8 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 			return null;
 		}
 
-		Sequence sequence = null;
-		List<Event> events = null;
-
-		if (object instanceof EventGrouping && object instanceof Event) {
-			sequence = ((Event) object).getSequence();
-			events = ((EventGrouping) object).getEvents();
-		}
+		Sequence sequence = getSequence(object);
+		List<Event> events = getEvents(object);
 		
 		if (sequence == null || events == null) {
 			return null;
