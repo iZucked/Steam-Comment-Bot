@@ -73,6 +73,13 @@ public interface IVesselAvailability {
 	ICharterCostCalculator getCharterCostCalculator();
 	
 	/**
+	 * Returns the daily rate at which this vessel can be chartered in.
+	 * 
+	 * @return daily charter in price
+	 */
+	//ILongCurve getDailyCharterInRate();
+	
+	/**
 	 * A flag determining whether the charter is optional or not
 	 * 
 	 * @return

@@ -100,6 +100,8 @@ import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.IBallastBonusContract;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.CharterRateToCharterCostCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.VoyagePlanStartDateCharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
@@ -803,7 +805,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		final DefaultVesselAvailability vesselAvailability = new DefaultVesselAvailability(vessel, vesselInstanceType);
 
-		vesselAvailability.setDailyCharterInRate(dailyCharterInRate);
+		vesselAvailability.setCharterCostCalculator(new CharterRateToCharterCostCalculator(vesselAvailability, new VoyagePlanStartDateCharterRateCalculator()));
 
 		vesselAvailability.setStartRequirement(start);
 		vesselAvailability.setEndRequirement(end);

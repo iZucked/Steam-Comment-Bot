@@ -37,6 +37,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.GeneratedCharterOutVessel
 import com.mmxlabs.scheduler.optimiser.components.impl.HeelOptionConsumer;
 import com.mmxlabs.scheduler.optimiser.components.impl.HeelOptionSupplier;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.WeightAverageCharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanChoice;
@@ -220,7 +221,8 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 			charterToEndPlanStartingHeelRangeInM3[1] = charterToEndPlan.getStartingHeelInM3();
 
 			voyageCalculator.calculateVoyagePlan(charterToEndPlan, vesselAvailability.getVessel(), charterToEndPlanStartingHeelRangeInM3,
-					vesselBaseFuelCalculator.getBaseFuelPrices(vesselAvailability.getVessel(), postCharteringTimes), postCharteringTimes, charterToEndPlan.getSequence());
+					vesselBaseFuelCalculator.getBaseFuelPrices(vesselAvailability.getVessel(), postCharteringTimes), 
+					postCharteringTimes, charterToEndPlan.getSequence());
 			// remaining heel may have been overwritten
 			charterToEndPlan.setStartingHeelInM3(secondPlanStartHeel);
 			charterToEndPlan.setRemainingHeelInM3(secondPlanRemainingHeel);
@@ -565,7 +567,7 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 		// Calculate our new plan
 		// final VoyagePlan newVoyagePlan = vpo.optimise();
 
-		final VoyagePlan newVoyagePlan = vpo.optimise(null, vessel, startHeelVolumeRangeInM3, baseFuelPricesPerMT, originalVoyagePlan.getCharterInRatePerDay(), bigSequence.getPortTimesRecord(),
+		final VoyagePlan newVoyagePlan = vpo.optimise(null, vessel, startHeelVolumeRangeInM3, baseFuelPricesPerMT, originalVoyagePlan.getCharterCostCalculator(), bigSequence.getPortTimesRecord(),
 				bigSequence.getSequence(), vpoChoices, startingTime);
 
 		return newVoyagePlan;
@@ -619,8 +621,8 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 		upToCharterPlan.setStartingHeelInM3(bigVoyagePlan.getStartingHeelInM3());
 		upToCharterPlan.setRemainingHeelInM3(remainingHeelInM3 + totalBoilOffPostCharter);
 
-		upToCharterPlan.setCharterInRatePerDay(originalVP.getCharterInRatePerDay());
-		charterToEndPlan.setCharterInRatePerDay(originalVP.getCharterInRatePerDay());
+		upToCharterPlan.setCharterCostCalculator(originalVP.getCharterCostCalculator());
+		charterToEndPlan.setCharterCostCalculator(originalVP.getCharterCostCalculator());
 
 		upToCharterPlan.setIgnoreEnd(true);
 		charterToEndPlan.setIgnoreEnd(originalVP.isIgnoreEnd());

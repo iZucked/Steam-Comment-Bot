@@ -46,6 +46,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.Vessel;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedCharterInRateCharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.GeneralTestUtils;
@@ -701,7 +702,7 @@ public class LNGVoyageCalculatorTest {
 		expectedPlan.setLngFuelCost(240_000);
 		expectedPlan.setLNGFuelVolume(120000);
 
-		expectedPlan.setCharterInRatePerDay(0);
+		expectedPlan.setCharterCostCalculator(new FixedCharterInRateCharterCostCalculator(0));
 		expectedPlan.setIgnoreEnd(true);
 		expectedPlan.setRemainingHeelInM3(0);
 		expectedPlan.setStartingHeelInM3(0);

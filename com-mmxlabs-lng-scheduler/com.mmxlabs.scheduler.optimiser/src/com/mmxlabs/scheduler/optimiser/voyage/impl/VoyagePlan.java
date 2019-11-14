@@ -6,6 +6,8 @@ package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
 import java.util.Arrays;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
@@ -56,6 +58,25 @@ public final class VoyagePlan implements Cloneable {
 		this.remainingHeelInM3 = remainingHeelInM3;
 	}
 
+	public long getCharterCost() {
+		long charterCost = 0;
+		final Object[] sequence = this.getSequence();
+		final int offset = this.isIgnoreEnd() ? 1 : 0;
+		final int k = sequence.length - offset;
+		for (int i = 0; i < k; i++) {
+			final Object o = sequence[i];
+			if (o instanceof VoyageDetails) {
+				final VoyageDetails voyageDetails = (VoyageDetails) o;
+				charterCost += voyageDetails.getTravelCharterCost();
+				charterCost += voyageDetails.getIdleCharterCost();
+				charterCost += voyageDetails.getPurgeCharterCost();
+			} else {
+				charterCost += ((PortDetails) o).getCharterCost();
+			}
+		}
+		return charterCost;
+	}
+	
 	public long getLngFuelCost() {
 		return lngFuelCost;
 	}

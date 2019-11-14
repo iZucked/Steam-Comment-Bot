@@ -20,6 +20,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.WeightAverageCharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
@@ -83,7 +84,7 @@ public class ContractNotionalVoyageUtils {
 
 	@Nullable
 	public VoyagePlan createFOBPurchaseRealLadenNotionalBallastVoyagePlan(@NonNull final VoyageCalculatorFuelChoice fuelChoice, @NonNull final ERouteOption routeOption, @NonNull final IVessel calculationVessel,
-			@NonNull final IVesselAvailability resourceVesselAvailability, final long vesselCharterInRatePerDay, final long startHeelInM3, final long loadVolumeInMMBTu, @NonNull final ILoadOption buy,
+			@NonNull final IVesselAvailability resourceVesselAvailability, final ICharterCostCalculator charterCostCalculator, final long startHeelInM3, final long loadVolumeInMMBTu, @NonNull final ILoadOption buy,
 			final int loadTime, final int loadDuration, @NonNull final IPort destinationPort, final int dischargeTime, final int dischargeDuration, final int salesPricePerMMBTu,
 			int[] baseFuelCostPerMT, @NonNull final VoyagePlan actualVoyagePlan, @NonNull VoyagePlan notionalVoyagePlan, final int notionalSpeed,
 			@Nullable final ShippingAnnotation shipAnnotation) {
@@ -133,8 +134,9 @@ public class ContractNotionalVoyageUtils {
 		portTimesRecord.setSlotDuration(buy, 0);
 		portTimesRecord.setSlotDuration(sell, 0);
 
-		voyageCalculator.calculateVoyagePlan(newVP, resourceVesselAvailability, new long[] { startHeelInM3, startHeelInM3 }, baseFuelCostPerMT, portTimesRecord, notionalSequence);
-		
+		voyageCalculator.calculateVoyagePlan(newVP, calculationVessel, new long[] { startHeelInM3, startHeelInM3 }, baseFuelCostPerMT, portTimesRecord, notionalSequence);
+		newVP.setCharterCostCalculator(charterCostCalculator);
+
 		return newVP;
 	}
 

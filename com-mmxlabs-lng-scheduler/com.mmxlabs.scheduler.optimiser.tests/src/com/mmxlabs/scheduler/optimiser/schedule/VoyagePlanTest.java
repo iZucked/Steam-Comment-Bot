@@ -7,6 +7,8 @@ package com.mmxlabs.scheduler.optimiser.schedule;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedCharterInRateCharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -87,7 +89,7 @@ public class VoyagePlanTest {
 
 		p.setSequence(sequence);
 		p.setBaseFuelCost(baseFuelCost);
-		p.setCharterInRatePerDay(charterInRate);
+		p.setCharterCostCalculator(new FixedCharterInRateCharterCostCalculator(charterInRate));
 		p.setCooldownCost(cooldownCost);
 		p.setLngFuelCost(lngFuelCost);
 		p.setLNGFuelVolume(lngFuelVolume);

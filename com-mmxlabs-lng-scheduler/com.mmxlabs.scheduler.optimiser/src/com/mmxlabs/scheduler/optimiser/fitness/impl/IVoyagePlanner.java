@@ -46,7 +46,7 @@ public interface IVoyagePlanner {
 	 * @return
 	 */
 	@Nullable
-	VoyagePlan makeVoyage(@NonNull IResource resource, long vesselCharterInRatePerDay, @NonNull IPortTimesRecord portTimesRecord, long[] heelVolumeRangeInM3, int startingTime);
+	VoyagePlan makeVoyage(@NonNull IResource resource, @NonNull final ICharterCostCalculator charterCostCalculator, @NonNull IPortTimesRecord portTimesRecord, long[] heelVolumeRangeInM3, int startingTime);
 
 	/**
 	 * Returns a voyage plan based on the given sequence
@@ -57,7 +57,7 @@ public interface IVoyagePlanner {
 	 * @return
 	 */
 	@Nullable
-	VoyagePlan makeVoyage(@NonNull IResource resource, long vesselCharterInRatePerDay, @NonNull IPortTimesRecord portTimesRecord, long[] initialHeelVolumeRangeInM3,
+	VoyagePlan makeVoyage(@NonNull IResource resource, @NonNull final ICharterCostCalculator charterCostCalculator, @NonNull IPortTimesRecord portTimesRecord, long[] initialHeelVolumeRangeInM3,
 			@NonNull IVoyagePlanOptimiser voyagePlanOptimiser, int startingTime);
 
 	@NonNull

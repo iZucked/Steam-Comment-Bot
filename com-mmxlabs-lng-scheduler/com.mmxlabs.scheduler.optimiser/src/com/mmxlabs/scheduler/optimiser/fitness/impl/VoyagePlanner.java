@@ -37,6 +37,7 @@ import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedCharterInRateCharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord;
@@ -619,8 +620,7 @@ public class VoyagePlanner implements IVoyagePlanner {
 
 		final VoyagePlan plan = new VoyagePlan();
 		// Replace with actuals later if needed
-		plan.setCharterInRatePerDay(charterRateCalculator.getCharterRatePerDay(vesselAvailability, /** FIXME: not utc */
-				vesselStartTime, timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getFirstSlotTime(), portTimesRecord.getFirstSlot())));
+		plan.setCharterCostCalculator(vesselAvailability.getCharterCostCalculator());
 		assert startHeelVolumeInM3[0] == startHeelVolumeInM3[1];
 		plan.setStartingHeelInM3(startHeelVolumeInM3[0]);
 		{
@@ -637,7 +637,7 @@ public class VoyagePlanner implements IVoyagePlanner {
 
 						if (portOptions.getPortSlot() instanceof ILoadOption && idx != voyageOrPortOptions.size() - 1) {
 							cargoCV = actualsDataProvider.getCVValue(portOptions.getPortSlot());
-							plan.setCharterInRatePerDay(actualsDataProvider.getCharterRatePerDay(portOptions.getPortSlot()));
+							plan.setCharterCostCalculator(new FixedCharterInRateCharterCostCalculator(actualsDataProvider.getCharterRatePerDay(portOptions.getPortSlot())));
 						}
 
 						else if (portOptions.getPortSlot() instanceof IDischargeOption) {
@@ -957,9 +957,9 @@ public class VoyagePlanner implements IVoyagePlanner {
 	 * @return
 	 */
 	@Nullable
-	final public VoyagePlan makeVoyage(@NonNull final IResource resource, final long vesselCharterInRatePerDay, @NonNull final IPortTimesRecord portTimesRecord, final long[] heelVolumeRangeInM3,
+	final public VoyagePlan makeVoyage(@NonNull final IResource resource, final ICharterCostCalculator charterCostCalculator, @NonNull final IPortTimesRecord portTimesRecord, final long[] heelVolumeRangeInM3,
 			int startingTime) {
-		return makeVoyage(resource, vesselCharterInRatePerDay, portTimesRecord, heelVolumeRangeInM3, voyagePlanOptimiserProvider.get(), startingTime);
+		return makeVoyage(resource, charterCostCalculator, portTimesRecord, heelVolumeRangeInM3, voyagePlanOptimiserProvider.get(), startingTime);
 	}
 
 	/**
@@ -972,7 +972,7 @@ public class VoyagePlanner implements IVoyagePlanner {
 	 */
 	@Override
 	@Nullable
-	final public VoyagePlan makeVoyage(@NonNull final IResource resource, final long vesselCharterInRatePerDay, @NonNull final IPortTimesRecord portTimesRecord, long[] initialHeelVolumeRangeInM3,
+	final public VoyagePlan makeVoyage(@NonNull final IResource resource, final ICharterCostCalculator vesselCharterInRatePerDay, @NonNull final IPortTimesRecord portTimesRecord, long[] initialHeelVolumeRangeInM3,
 			@NonNull final IVoyagePlanOptimiser voyagePlanOptimiser, int startingTime) {
 
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
