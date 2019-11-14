@@ -1086,7 +1086,7 @@
             class="com.mmxlabs.lingo.reports.views.changeset.ChangeSetView"
             icon="icons/cview16/changes_view.gif"
             id="com.mmxlabs.lingo.reports.views.changeset.ChangeSetsView"
-            name="Change Sets">
+            name="Changes">
       </view>
       <view
             class="com.mmxlabs.lingo.reports.views.changeset.ChangeSetView"

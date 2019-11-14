@@ -60,7 +60,7 @@ public class ScenarioComparisonTransformer {
 
 	public ChangeSetRoot createDataModel(final Map<EObject, Set<EObject>> equivalancesMap, @NonNull final Table table, @NonNull final ScenarioResult from, @NonNull final ScenarioResult to,
 			final IProgressMonitor monitor) {
-		monitor.beginTask("Opening change sets", 1);
+		monitor.beginTask("Opening changes", 1);
 		final ChangeSetRoot root = ChangesetFactory.eINSTANCE.createChangeSetRoot();
 		assert root != null;
 
