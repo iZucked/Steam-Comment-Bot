@@ -260,7 +260,7 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 
 			//
 			final VoyagePlan currentPlan = new VoyagePlan();
-			currentPlan.setCharterInRatePerDay(originalPlan.getCharterInRatePerDay());
+			currentPlan.setCharterCostCalculator(originalPlan.getCharterCostCalculator());
 			currentPlan.setIgnoreEnd(true);
 
 			// Calculate voyage plan
@@ -302,7 +302,7 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 			portTimesRecord2.setReturnSlotTime(originalPortTimesRecord.getReturnSlot(), originalPortTimesRecord.getSlotTime(originalPortTimesRecord.getReturnSlot()));
 
 			final VoyagePlan currentPlan = new VoyagePlan();
-			currentPlan.setCharterInRatePerDay(originalPlan.getCharterInRatePerDay());
+			currentPlan.setCharterCostCalculator(originalPlan.getCharterCostCalculator());
 			currentPlan.setIgnoreEnd(originalPlan.isIgnoreEnd());
 
 			// Calculate voyage plan
