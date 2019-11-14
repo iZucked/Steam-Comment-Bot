@@ -26,7 +26,7 @@ import com.mmxlabs.models.ui.util.LimitWidgetHeightListener;
 
 public class RelativeDateRangeToolbarEditor extends ControlContribution {
 
-	private static final String FROM_START_STR = "from start date.";
+	private static final String FROM_START_STR = "from today's date.";
 
 	private final AbstractNominationsViewerPane parent;
 
@@ -141,16 +141,14 @@ public class RelativeDateRangeToolbarEditor extends ControlContribution {
 	private void setNominationParametersEndDate(RangeMode rangeMode) {
 		NominationsParameters np = this.getNominationParameters();
 
-		if (np.getStartDate() == null) {
-			np.setStartDate(this.getPromptStartDate());
-		}
-
 		switch (rangeMode) {
 		case OneMonth:
+			np.setStartDate(LocalDate.now());
 			np.setEndDate(np.getStartDate().plusMonths(1));
 			break;
 
 		case ThreeMonth:
+			np.setStartDate(LocalDate.now());
 			np.setEndDate(np.getStartDate().plusMonths(3));
 			break;
 
