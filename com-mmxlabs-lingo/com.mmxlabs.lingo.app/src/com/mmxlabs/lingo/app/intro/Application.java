@@ -16,6 +16,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
@@ -27,6 +28,7 @@ import org.eclipse.equinox.p2.engine.IProfile;
 import org.eclipse.equinox.p2.engine.IProfileRegistry;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.osgi.service.datalocation.Location;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
@@ -61,7 +63,8 @@ public class Application implements IApplication {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.equinox.app.IApplication#start(org.eclipse.equinox.app.IApplicationContext)
+	 * @see org.eclipse.equinox.app.IApplication#start(org.eclipse.equinox.app.
+	 * IApplicationContext)
 	 */
 	@Override
 	public Object start(final IApplicationContext context) {
@@ -103,7 +106,8 @@ public class Application implements IApplication {
 		final ISharedDataModelType<@NonNull PortModel> distances = LNGScenarioSharedModelTypes.DISTANCES;
 
 		if (appLineArgs != null && appLineArgs.length > 0) {
-			// Look for the no-auto-mem command first and skip auto-mem code if so (e.g. could get here through a relaunch)
+			// Look for the no-auto-mem command first and skip auto-mem code if so (e.g.
+			// could get here through a relaunch)
 			boolean skipAutoMemory = false;
 			for (final String arg : appLineArgs) {
 				if (arg.equalsIgnoreCase(CMD_NO_AUTO_MEM)) {
@@ -174,20 +178,34 @@ public class Application implements IApplication {
 
 		// Check Data Hub to see if user is authorised to use LiNGO
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_DATAHUB_STARTUP_CHECK)) {
-			// Small start up delay to wait for hub connection.
-			for (int i = 0; i < 30; ++i) {
-				if (UpstreamUrlProvider.INSTANCE.isAvailable()) {
-					break;
-				}
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				// Trigger the auth prompt in case this is a first run.
-				// Shouldn't really call directly, but the workbench is not started yet for this method to find a display
-				UpstreamUrlProvider.INSTANCE.testUpstreamAvailability(display);
+			try {
+
+				ProgressMonitorDialog d = new ProgressMonitorDialog(display.getActiveShell());
+				d.run(true, false, monitor -> {
+					monitor.beginTask("Connecting to Data Hub", IProgressMonitor.UNKNOWN);
+					try {
+						// Small start up delay to wait for hub connection.
+						for (int i = 0; i < 5; ++i) {
+							if (UpstreamUrlProvider.INSTANCE.isAvailable()) {
+								break;
+							}
+							try {
+								Thread.sleep(1000);
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							// Trigger the auth prompt in case this is a first run.
+							// Shouldn't really call directly, but the workbench is not started yet for this
+							// method to find a display
+							UpstreamUrlProvider.INSTANCE.testUpstreamAvailability(display);
+						}
+					} finally {
+						monitor.done();
+					}
+				});
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 			if (!UpstreamUrlProvider.INSTANCE.isAvailable()) {
 				MessageDialog.openError(display.getActiveShell(), "", "Unable to connect to Data Hub to valid user permissions. Please try again later.");
@@ -277,8 +295,10 @@ public class Application implements IApplication {
 				throw new RuntimeException("No provisioning agent provider is available"); //$NON-NLS-1$
 			}
 
-			// See http://wiki.eclipse.org/Equinox/p2/FAQ#But_why_aren.27t_uninstalled_bundles.2Ffeatures_immediately_removed.3F
-			// IProvisioningAgentProvider provider = // obtain the IProvisioningAgentProvider using OSGi services
+			// See
+			// http://wiki.eclipse.org/Equinox/p2/FAQ#But_why_aren.27t_uninstalled_bundles.2Ffeatures_immediately_removed.3F
+			// IProvisioningAgentProvider provider = // obtain the
+			// IProvisioningAgentProvider using OSGi services
 			final IProvisioningAgent agent = provider.createAgent(null); // null = location for running system
 			if (agent == null)
 				throw new RuntimeException("Location was not provisioned by p2");
@@ -287,7 +307,8 @@ public class Application implements IApplication {
 				throw new RuntimeException("Unable to acquire the profile registry service.");
 			// can also use IProfileRegistry.SELF for the current profile
 			final IProfile profile = profileRegistry.getProfile(IProfileRegistry.SELF);
-			// Profile can be null if we have not enabled p2 support in the runtime config in eclipse. Generated product should be fine.
+			// Profile can be null if we have not enabled p2 support in the runtime config
+			// in eclipse. Generated product should be fine.
 			if (profile != null) {
 				final GarbageCollector gc = (GarbageCollector) agent.getService(GarbageCollector.SERVICE_NAME);
 				gc.runGC(profile);
@@ -344,7 +365,9 @@ public class Application implements IApplication {
 	/**
 	 * Reconstruct command line arguments and modify to suit
 	 * 
-	 * Taken from org.eclipse.ui.internal.ide.actions.OpenWorkspaceAction. This required EXIT_RELAUNCH - not EXIT_RESTART to work. Note only works in builds, not from within eclipse.
+	 * Taken from org.eclipse.ui.internal.ide.actions.OpenWorkspaceAction. This
+	 * required EXIT_RELAUNCH - not EXIT_RESTART to work. Note only works in builds,
+	 * not from within eclipse.
 	 * 
 	 * 
 	 */
@@ -365,7 +388,8 @@ public class Application implements IApplication {
 			result.append(vmargs.replaceAll("-Xmx[0-9*][a-zA-Z]", ""));
 		}
 
-		// append the rest of the args, replacing or adding -no-auto-mem / -auto-mem as required
+		// append the rest of the args, replacing or adding -no-auto-mem / -auto-mem as
+		// required
 		property = System.getProperty(PROP_COMMANDS);
 		if (property == null) {
 
