@@ -247,46 +247,46 @@ public class NominationsModelUtils {
 		}
 
 		// Refresh.
-		for (final Cargo cargo : cargoModel.getCargoes()) {
-			if (cargo != null) {
-				for (final Slot<?> slot : cargo.getSlots()) {
+		List<Slot<?>> slots = new ArrayList<Slot<?>>();
+		slots.addAll(cargoModel.getLoadSlots());
+		slots.addAll(cargoModel.getDischargeSlots());
+		
+		for (Slot<?> slot : slots) {
 
-					if (slot == null || slot instanceof SpotSlot)
-						continue;
+			if (slot == null || slot instanceof SpotSlot)
+				continue;
 
-					final LocalDate date = slot.getWindowStart();
+			final LocalDate date = slot.getWindowStart();
 
-					if (date != null && !date.isBefore(startDate) && !date.isAfter(endDate)) {
+			if (date != null && !date.isBefore(startDate) && !date.isAfter(endDate)) {
 
-						// Set nomination type as part of nomination id, so we know which sort of slot
-						// made this nomination.
-						Side side = null;
-						if (slot instanceof DischargeSlot) {
-							side = Side.SELL;
-						} else if (slot instanceof LoadSlot) {
-							side = Side.BUY;
-						}
-						final String nomineeId = slot.getName();
-						final Contract contract = slot.getContract();
-						String contractName = "";
-						if (contract != null && contract.getName() != null) {
-							contractName = contract.getName();
-						}
+				// Set nomination type as part of nomination id, so we know which sort of slot
+				// made this nomination.
+				Side side = null;
+				if (slot instanceof DischargeSlot) {
+					side = Side.SELL;
+				} else if (slot instanceof LoadSlot) {
+					side = Side.BUY;
+				}
+				final String nomineeId = slot.getName();
+				final Contract contract = slot.getContract();
+				String contractName = "";
+				if (contract != null && contract.getName() != null) {
+					contractName = contract.getName();
+				}
 
-						for (final AbstractNominationSpec sp : nominationsModel.getNominationSpecs()) {
-							String refererId = "";
-							if (sp.getRefererId() != null) {
-								refererId = sp.getRefererId();
-							}
+				for (final AbstractNominationSpec sp : nominationsModel.getNominationSpecs()) {
+					String refererId = "";
+					if (sp.getRefererId() != null) {
+						refererId = sp.getRefererId();
+					}
 
-							if (!Objects.equals(refererId, "") && sp.getSide() == side && Objects.equals(contractName, refererId)) {
-								AbstractNomination sn = existingSlotNominations.get(sp.getUuid() + ":" + nomineeId);
-								if (sn == null) {
-									sn = NominationsFactory.eINSTANCE.createSlotNomination();
-									populateNomination(sn, nomineeId, sp);
-									nominations.add(sn);
-								}
-							}
+					if (!Objects.equals(refererId, "") && sp.getSide() == side && Objects.equals(contractName, refererId)) {
+						AbstractNomination sn = existingSlotNominations.get(sp.getUuid() + ":" + nomineeId);
+						if (sn == null) {
+							sn = NominationsFactory.eINSTANCE.createSlotNomination();
+							populateNomination(sn, nomineeId, sp);
+							nominations.add(sn);
 						}
 					}
 				}
