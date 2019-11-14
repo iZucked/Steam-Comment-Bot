@@ -548,8 +548,6 @@ public class AnnotatedSolutionExporter {
 			final int currentTime = vpi.getCurrentTime();
 			final VoyagePlan currentPlan = vpi.getCurrentPlan();
 
-			final long charterRatePerDay = currentPlan.getCharterInRatePerDay();
-
 			if (e instanceof PortDetails) {
 				final PortDetails details = (PortDetails) e;
 				final IPortSlot currentPortSlot = details.getOptions().getPortSlot();
@@ -597,8 +595,8 @@ public class AnnotatedSolutionExporter {
 							event.setHeelRevenueUnitPrice(OptimiserUnitConvertor.convertToExternalPrice(heelValueRecord.getRevenueUnitPrice()));
 						}
 					}
-					event.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(Calculator.quantityFromRateTime(charterRatePerDay, details.getOptions().getVisitDuration()) / 24L));
-
+					event.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(((PortDetails) e).getCharterCost()));
+					
 					if (patchupRedirectCharterEvent) {
 						final IPortSlot startSlot = redirectedCharterOutStart.getOptions().getPortSlot();
 
@@ -646,7 +644,7 @@ public class AnnotatedSolutionExporter {
 						journey.setHeelAtStart(OptimiserUnitConvertor.convertToExternalVolume(heelRecord.getHeelAtStartInM3()));
 						journey.setHeelAtEnd(OptimiserUnitConvertor.convertToExternalVolume(heelRecord.getHeelAtEndInM3()));
 					}
-					journey.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(Calculator.quantityFromRateTime(charterRatePerDay, details.getTravelTime()) / 24L));
+					journey.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(details.getTravelCharterCost()));
 					lastEvent = journey;
 				}
 
@@ -658,7 +656,8 @@ public class AnnotatedSolutionExporter {
 						charterLengthEvent.setHeelAtStart(OptimiserUnitConvertor.convertToExternalVolume(heelRecord.getHeelAtStartInM3()));
 						charterLengthEvent.setHeelAtEnd(OptimiserUnitConvertor.convertToExternalVolume(heelRecord.getHeelAtEndInM3()));
 					}
-					charterLengthEvent.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(Calculator.quantityFromRateTime(charterRatePerDay, details.getIdleTime()) / 24L));
+					//Not right one here. CharterLengthEvalator...probably covered by PortDetails, but need to check when testing.
+					//charterLengthEvent.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(details.getIdleCharterCost()));
 					lastEvent = charterLengthEvent;
 
 				} else if (!details.getOptions().isCharterOutIdleTime()) {
@@ -672,7 +671,7 @@ public class AnnotatedSolutionExporter {
 							idle.setHeelAtStart(OptimiserUnitConvertor.convertToExternalVolume(heelRecord.getHeelAtStartInM3()));
 							idle.setHeelAtEnd(OptimiserUnitConvertor.convertToExternalVolume(heelRecord.getHeelAtEndInM3()));
 						}
-						idle.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(Calculator.quantityFromRateTime(charterRatePerDay, details.getIdleTime()) / 24L));
+						idle.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(details.getIdleCharterCost()));
 						lastEvent = idle;
 					}
 				} else {
@@ -685,7 +684,8 @@ public class AnnotatedSolutionExporter {
 							event.setHeelAtStart(OptimiserUnitConvertor.convertToExternalVolume(heelRecord.getHeelAtStartInM3()));
 							event.setHeelAtEnd(OptimiserUnitConvertor.convertToExternalVolume(heelRecord.getHeelAtEndInM3()));
 						}
-						event.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(Calculator.quantityFromRateTime(charterRatePerDay, details.getIdleTime()) / 24L));
+						//event.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(details.get));
+						//TODO: tidy up below method.
 						event.setRevenue(
 								OptimiserUnitConvertor.convertToExternalFixedCost(Calculator.quantityFromRateTime(details.getOptions().getCharterOutDailyRate(), details.getIdleTime()) / 24L));
 						lastEvent = event;
@@ -701,7 +701,7 @@ public class AnnotatedSolutionExporter {
 						purge.setHeelAtStart(lastEvent.getHeelAtStart());
 						purge.setHeelAtEnd(lastEvent.getHeelAtEnd());
 					}
-					purge.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(Calculator.quantityFromRateTime(charterRatePerDay, details.getPurgeDuration()) / 24L));
+					purge.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(details.getPurgeCharterCost()));
 
 					voyage_currentTime += details.getPurgeDuration();
 				}

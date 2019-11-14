@@ -44,13 +44,18 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 	private int travelNBOHours;
 	private int purgeHours;
 
+	private long idleCharterCost;
+	private long purgeCharterCost;
+	private long travelCharterCost;
+	
 	public VoyageDetails(@NonNull final VoyageOptions options) {
 		this.options = options;
 	}
 
 	private VoyageDetails(final int idleTime2, final int travelTime2, final int speed2, final int startTime2, final @NonNull VoyageOptions options,
 			final LongFastEnumEnumMap<FuelComponent, FuelUnit> fuelConsumption2, final @NonNull LongFastEnumEnumMap<FuelComponent, FuelUnit> routeAdditionalConsumption2,
-			final @NonNull LongFastEnumMap<FuelComponent> fuelUnitPrices2, final boolean cooldownPerformed, final boolean purgePerformed, int purgeHours, int idleNBOHours, int travelNBOHours) {
+			final @NonNull LongFastEnumMap<FuelComponent> fuelUnitPrices2, final boolean cooldownPerformed, final boolean purgePerformed, int purgeHours, int idleNBOHours, 
+			int travelNBOHours, long idleCharterCost, long purgeCharterCost, long travelCharterCost) {
 		this.idleTime = idleTime2;
 		this.travelTime = travelTime2;
 		this.speed = speed2;
@@ -64,13 +69,16 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 		this.routeAdditionalConsumption.putAll(routeAdditionalConsumption2);
 		this.cooldownPerformed = cooldownPerformed;
 		this.purgePerformed = purgePerformed;
+		this.idleCharterCost = idleCharterCost;
+		this.purgeCharterCost = purgeCharterCost;
+		this.travelCharterCost = travelCharterCost;
 	}
 
 	@Override
 	public VoyageDetails clone() {
 		return new VoyageDetails(idleTime, travelTime, speed, startTime, new VoyageOptions(options), fuelConsumption, routeAdditionalConsumption, fuelUnitPrices, //
 				cooldownPerformed, purgePerformed, purgeHours, //
-				getIdleNBOHours(), getTravelNBOHours());
+				getIdleNBOHours(), getTravelNBOHours(), this.idleCharterCost, this.purgeCharterCost, this.travelCharterCost);
 	}
 
 	public final long getFuelConsumption(final @NonNull FuelKey fuelKey) {
@@ -158,6 +166,9 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 				&& Objects.equal(routeAdditionalConsumption,  d.routeAdditionalConsumption)
 				&& Objects.equal(getIdleNBOHours(),  d.getIdleNBOHours())
 				&& Objects.equal(getTravelNBOHours(),  d.getTravelNBOHours())
+				&& this.idleCharterCost == d.idleCharterCost
+				&& this.purgeCharterCost == d.purgeCharterCost
+				&& this.travelCharterCost == d.travelCharterCost
 				;
 				// @formatter:on
 		}
@@ -181,6 +192,9 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 				.add("startTime", startTime)
 				.add("idleNBOHours", getIdleNBOHours())
 				.add("travelNBOHours", getTravelNBOHours())
+				.add("idleCharterCost",  getIdleCharterCost())
+				.add("purgeCharterCost",  getPurgeCharterCost())
+				.add("travelCharterCost", getTravelCharterCost())
 				.toString();
 		// @formatter:on
 	}
@@ -223,5 +237,29 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 
 	public void setPurgeDuration(int hours) {
 		purgeHours = hours;
+	}
+
+	public long getIdleCharterCost() {
+		return idleCharterCost;
+	}
+
+	public void setIdleCharterCost(long idleCharterCost) {
+		this.idleCharterCost = idleCharterCost;
+	}
+
+	public long getPurgeCharterCost() {
+		return purgeCharterCost;
+	}
+
+	public void setPurgeCharterCost(long purgeCharterCost) {
+		this.purgeCharterCost = purgeCharterCost;
+	}
+
+	public long getTravelCharterCost() {
+		return travelCharterCost;
+	}
+
+	public void setTravelCharterCost(long travelCharterCost) {
+		this.travelCharterCost = travelCharterCost;
 	}
 }

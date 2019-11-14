@@ -19,7 +19,9 @@ import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.IBallastBonusContract;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.ConstantCharterCostCalculator;
 
 /**
  */
@@ -36,7 +38,7 @@ public class MarkToMarketVesselAvailability implements IVesselAvailability {
 	private final VesselInstanceType vesselInstanceType;
 
 	@NonNull
-	private ILongCurve curve;
+	private ICharterCostCalculator charterCostCalculator;
 	
 	private ILongCurve repositioningFee;
 	
@@ -47,14 +49,14 @@ public class MarkToMarketVesselAvailability implements IVesselAvailability {
 	public MarkToMarketVesselAvailability(@NonNull final IMarkToMarket markToMarket, @NonNull final IDischargeOption dischargeOption) {
 		this.markToMarket = markToMarket;
 		this.portSlot = dischargeOption;
-		this.curve = new ConstantValueLongCurve(0);
+		this.charterCostCalculator = new ConstantCharterCostCalculator(0);
 		this.vesselInstanceType = VesselInstanceType.DES_PURCHASE;
 	}
 
 	public MarkToMarketVesselAvailability(@NonNull final IMarkToMarket markToMarket, @NonNull final ILoadOption loadOption) {
 		this.markToMarket = markToMarket;
 		this.portSlot = loadOption;
-		this.curve = new ConstantValueLongCurve(0);
+		this.charterCostCalculator = new ConstantCharterCostCalculator(0);
 		this.vesselInstanceType = VesselInstanceType.FOB_SALE;
 	}
 
@@ -72,8 +74,8 @@ public class MarkToMarketVesselAvailability implements IVesselAvailability {
 
 	@Override
 	@NonNull
-	public ILongCurve getDailyCharterInRate() {
-		return curve;
+	public ICharterCostCalculator getCharterCostCalculator() {
+		return charterCostCalculator;
 	}
 
 	@NonNull

@@ -8,6 +8,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.curves.ILongCurve;
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.IBallastBonusContract;
 
 /**
@@ -65,12 +66,12 @@ public interface IVesselAvailability {
 	IBallastBonusContract getBallastBonusContract();
 
 	/**
-	 * Returns the daily rate at which this vessel can be chartered in.
+	 * Returns charter in cost calculator for this vessel.
 	 * 
-	 * @return daily charter in price
-	 */
-	ILongCurve getDailyCharterInRate();
-
+	 * @return charter cost calculator
+	 */	
+	ICharterCostCalculator getCharterCostCalculator();
+	
 	/**
 	 * A flag determining whether the charter is optional or not
 	 * 

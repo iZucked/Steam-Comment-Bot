@@ -189,7 +189,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 			bigVoyageStartingHeelRangeInM3[1] = bigVoyagePlan.getStartingHeelInM3();
 
 			// calculate pre-charter plan
-			voyageCalculator.calculateVoyagePlan(upToCharterPlan, vesselAvailability.getVessel(), bigVoyageStartingHeelRangeInM3,
+			voyageCalculator.calculateVoyagePlan(upToCharterPlan, vesselAvailability, bigVoyageStartingHeelRangeInM3,
 					vesselBaseFuelCalculator.getBaseFuelPrices(vesselAvailability.getVessel(), preCharteringTimes), preCharteringTimes, upToCharterPlan.getSequence());
 			// remaining heel may have been overwritten
 			upToCharterPlan.setRemainingHeelInM3(firstPlanRemainingHeel);
@@ -218,7 +218,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 			charterToEndPlanStartingHeelRangeInM3[1] = charterToEndPlan.getStartingHeelInM3();
 
 			// calculate post-charter plan
-			voyageCalculator.calculateVoyagePlan(charterToEndPlan, vesselAvailability.getVessel(), charterToEndPlanStartingHeelRangeInM3,
+			voyageCalculator.calculateVoyagePlan(charterToEndPlan, vesselAvailability, charterToEndPlanStartingHeelRangeInM3,
 					vesselBaseFuelCalculator.getBaseFuelPrices(vesselAvailability.getVessel(), postCharteringTimes), postCharteringTimes, charterToEndPlan.getSequence());
 			// remaining heel may have been overwritten
 			charterToEndPlan.setStartingHeelInM3(secondPlanStartHeel);

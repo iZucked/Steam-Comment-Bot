@@ -22,6 +22,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
@@ -36,7 +37,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * 
  * @param
  */
-
+//TODO: replace with new impl based on CachingVolumeAllocator.
+//TODO: test with OptimiserCacheTests.
 public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 	/**
@@ -53,12 +55,12 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		private final int[] durations;
 		private final int[] voyageTimes;
 		private final int dischargePrice;
-		private final long vesselCharterInRatePerDay;
+		private final ICharterCostCalculator charterCostCalculator;
 		private final @NonNull IVessel vessel;
 		private final long @NonNull [] startHeelRangeInM3;
 		private final int[] baseFuelPricesPerMT;
 		private int startCV;
-		private int startingTime;
+		private int startingTime;//starting time of the vessel.
 		private final @NonNull List<AvailableRouteChoices> voyageKeys = new LinkedList<>();
 
 		// Non hashcode fields
@@ -69,13 +71,13 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 		private int originalHashCode;
 
-		public CacheKey(final @NonNull IVessel vessel, final @Nullable IResource resource, final long vesselCharterInRatePerDay, final int[] baseFuelPricesPerMT,
+		public CacheKey(final @NonNull IVessel vessel, final @Nullable IResource resource, final ICharterCostCalculator charterCostCalculator, final int[] baseFuelPricesPerMT,
 				final @NonNull List<@NonNull IOptionsSequenceElement> sequence, final @NonNull IPortTimesRecord portTimesRecord, final @NonNull List<@NonNull IVoyagePlanChoice> choices,
 				final long @NonNull [] startHeelRangeInM3, final int startingTime) {
 			super();
 			this.vessel = vessel;
 			this.resource = resource;
-			this.vesselCharterInRatePerDay = vesselCharterInRatePerDay;
+			this.charterCostCalculator = charterCostCalculator;
 			this.baseFuelPricesPerMT = baseFuelPricesPerMT;
 			final int sz = sequence.size();
 			this.voyageTimes = new int[sz / 2];
@@ -137,7 +139,6 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			result = (prime * result) + dischargePrice;
 			result = (prime * result) + startCV;
 			result = (prime * result) + Arrays.hashCode(baseFuelPricesPerMT);
-			result = (prime * result) + (int) vesselCharterInRatePerDay;
 			result = (prime * result) + startingTime;
 
 			result = (prime * result) + vessel.hashCode();
@@ -176,6 +177,9 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			return false;
 		}
 	}
+	
+	//TODO create new CacheKey based on CacchingVolumeAllocator version.
+	
 
 	private final AbstractCache<@NonNull CacheKey, VoyagePlan> cache;
 
@@ -186,7 +190,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			@Override
 			public final @NonNull Pair<@NonNull CacheKey, VoyagePlan> evaluate(final CacheKey arg) {
 
-				final VoyagePlan plan = delegate.optimise(arg.resource, arg.vessel, arg.startHeelRangeInM3, arg.baseFuelPricesPerMT, arg.vesselCharterInRatePerDay, arg.portTimesRecord, arg.sequence,
+				final VoyagePlan plan = delegate.optimise(arg.resource, arg.vessel, arg.startHeelRangeInM3, arg.baseFuelPricesPerMT, arg.charterCostCalculator, arg.portTimesRecord, arg.sequence,
 						arg.choices, arg.startingTime);
 
 				plan.setCacheLocked(true);
@@ -199,10 +203,10 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 	@Override
 	@Nullable
-	public VoyagePlan optimise(@Nullable final IResource resource, final IVessel vessel, final long[] startHeelRangeInM3, final int[] baseFuelPricesPerMT, final long vesselCharterInRatePerDay,
-			final IPortTimesRecord portTimesRecord, final List<@NonNull IOptionsSequenceElement> basicSequence, final List<@NonNull IVoyagePlanChoice> choices, int startingTime) {
+	public VoyagePlan optimise(@Nullable final IResource resource, final IVessel vessel, final long[] startHeelRangeInM3, final int[] baseFuelPricesPerMT,
+			final ICharterCostCalculator charterCostCalculator, final IPortTimesRecord portTimesRecord, final List<@NonNull IOptionsSequenceElement> basicSequence, final List<@NonNull IVoyagePlanChoice> choices, int startingTime) {
 
-		final VoyagePlan best = cache.get(new CacheKey(vessel, resource, vesselCharterInRatePerDay, baseFuelPricesPerMT, basicSequence, portTimesRecord, choices, startHeelRangeInM3, startingTime));
+		final VoyagePlan best = cache.get(new CacheKey(vessel, resource, charterCostCalculator, baseFuelPricesPerMT, basicSequence, portTimesRecord, choices, startHeelRangeInM3, startingTime));
 
 		return best;
 	}

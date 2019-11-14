@@ -25,6 +25,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.impl.DefaultVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
@@ -275,6 +276,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 				final int dischargeDuration = portVisitDurationProvider.getVisitDuration(baseSalesMarketPort, PortType.Discharge);
 
 				final long vesselCharterInRatePerDay;
+				ICharterCostCalculator ccc = notionalVesselAvailability.getCharterCostCalculator();
 				if (actualsDataProvider.hasActuals(loadOption)) {
 					vesselCharterInRatePerDay = actualsDataProvider.getCharterRatePerDay(loadOption);
 				} else {
@@ -312,11 +314,10 @@ public class RedirectionContract implements ILoadPriceCalculator {
 				final int loadDuration = portVisitDurationProvider.getVisitDuration(loadOption.getPort(), PortType.Load);
 				final int dischargeDuration = portVisitDurationProvider.getVisitDuration(dischargeOption.getPort(), PortType.Discharge);
 
-				final long vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(notionalVesselAvailability, timeZoneToUtcOffsetProvider.UTC(originalLoadTime, loadOption),
-						timeZoneToUtcOffsetProvider.UTC(originalLoadTime, loadOption));
-
+				final ICharterCostCalculator charterCostCalculator = notionalVesselAvailability.getCharterCostCalculator();
+				
 				final VoyagePlan plan = redirVCC.calculateShippingCosts(loadOption.getPort(), dischargeOption.getPort(), originalLoadTime, loadDuration, transferTime, dischargeDuration, vessel,
-						vesselCharterInRatePerDay, startHeelInM3, notionalVesselAvailability.getVessel().getMaxSpeed(), loadOption.getCargoCVValue(), route, baseFuelPricesInMT,
+						charterCostCalculator, startHeelInM3, notionalVesselAvailability.getVessel().getMaxSpeed(), loadOption.getCargoCVValue(), route, baseFuelPricesInMT,
 						actualSalesPricePerMMBTu);
 
 				if (plan == null) {

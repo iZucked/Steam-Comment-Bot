@@ -20,6 +20,7 @@ import com.mmxlabs.common.curves.ConstantValueLongCurve;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.ILongCurve;
 import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
@@ -29,6 +30,7 @@ import com.mmxlabs.scheduler.optimiser.components.IHeelPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
 import com.mmxlabs.scheduler.optimiser.components.impl.BaseFuel;
@@ -573,7 +575,7 @@ public class LNGVoyageCalculatorTest {
 		vessel.setIdleBaseFuel(new BaseFuel(indexingContext, "IDLE"));
 		vessel.setPilotLightBaseFuel(new BaseFuel(indexingContext, "PILOT"));
 		vessel.setInPortBaseFuel(new BaseFuel(indexingContext, "PORT"));
-
+		
 		final LoadSlot loadSlot = new LoadSlot("load", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), true, 0L, 0L, Mockito.mock(ILoadPriceCalculator.class), 1_000_000, false, false);
 		final DischargeSlot dischargeSlot = new DischargeSlot("discharge", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), true, 0L, 0L, Mockito.mock(ISalesPriceCalculator.class), 0, 0);
 

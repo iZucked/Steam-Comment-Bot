@@ -34,6 +34,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
@@ -471,9 +472,8 @@ public class VoyagePlanner implements IVoyagePlanner {
 			@Nullable
 			IPortSlot prevPortSlot = null;
 
-			final long vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vesselAvailability, /** FIXME: not utc */
-					vesselStartTime, timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getFirstSlotTime(), portTimesRecord.getFirstSlot()));
-
+			final ICharterCostCalculator charterCostCalculator = vesselAvailability.getCharterCostCalculator();
+			
 			// Create a list of all slots including the optional (not for shipped cargoes) return slot
 			final List<@NonNull IPortSlot> recordSlots = new ArrayList<>(portTimesRecord.getSlots().size() + 1);
 			recordSlots.addAll(portTimesRecord.getSlots());
@@ -583,7 +583,7 @@ public class VoyagePlanner implements IVoyagePlanner {
 					// model the Round_Trip_Cargo_End for the VoyagePlanIterator to work correctly. Here we strip the voyage and make this a single element sequence.
 					if (!roundTripCargoEnd) {
 
-						final VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, portTimesRecord, voyagePlanOptimiser, heelInM3Range, vesselCharterInRatePerDay,
+						final VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, portTimesRecord, voyagePlanOptimiser, heelInM3Range, charterCostCalculator,
 								vesselAvailability.getVesselInstanceType(), vesselTriple, vpoChoices, portTimesRecords.get(0).getFirstSlotTime());
 
 						if (plan == null) {
@@ -805,9 +805,8 @@ public class VoyagePlanner implements IVoyagePlanner {
 			plan.setLngFuelCost(LNGFuelCost);
 			plan.setCooldownCost(cooldownFuelCost);
 			plan.setTotalRouteCost(totalRouteCost);
-
 		}
-
+		
 		voyagePlansList.add(plan);
 
 		final AllocationRecord allocationRecord = volumeAllocator.get().createAllocationRecord(vesselAvailability, vesselStartTime, plan, portTimesRecord);
@@ -1071,7 +1070,8 @@ public class VoyagePlanner implements IVoyagePlanner {
 		if (!voyageOrPortOptions.isEmpty()) {
 			// set base fuel price in VPO
 			final Triple<@NonNull IVessel, @Nullable IResource, int[]> vesselTriple = setVesselAndBaseFuelPrice(portTimesRecord, vesselAvailability.getVessel(), resource);
-			final VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, portTimesRecord, voyagePlanOptimiser, heelInM3Range, vesselCharterInRatePerDay,
+			final ICharterCostCalculator charterCostCalculator = vesselAvailability.getCharterCostCalculator();
+			final VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, portTimesRecord, voyagePlanOptimiser, heelInM3Range, charterCostCalculator,
 					vesselAvailability.getVesselInstanceType(), vesselTriple, vpoChoices, startingTime);
 
 			if (plan == null) {
@@ -1189,11 +1189,12 @@ public class VoyagePlanner implements IVoyagePlanner {
 	 */
 	@Nullable
 	final public VoyagePlan getOptimisedVoyagePlan(final @NonNull List<@NonNull IOptionsSequenceElement> voyageOrPortOptionsSubsequence, final @NonNull IPortTimesRecord portTimesRecord,
-			final @NonNull IVoyagePlanOptimiser optimiser, final long @NonNull [] heelVolumeRangeInM3, final long vesselCharterInRatePerDay, final @NonNull VesselInstanceType vesselInstanceType,
+			final @NonNull IVoyagePlanOptimiser optimiser, final long @NonNull [] heelVolumeRangeInM3, @NonNull final ICharterCostCalculator charterCostCalculator, final @NonNull VesselInstanceType vesselInstanceType,
 			final Triple<@NonNull IVessel, @Nullable IResource, int[]> vesselTriple, @NonNull final List<@NonNull IVoyagePlanChoice> vpoChoices, int startingTime) {
 
 		// Run sequencer evaluation
-		final VoyagePlan result = optimiser.optimise(vesselTriple.getSecond(), vesselTriple.getFirst(), heelVolumeRangeInM3.clone(), vesselTriple.getThird(), vesselCharterInRatePerDay,
+		final VoyagePlan result = optimiser.optimise(vesselTriple.getSecond(), vesselTriple.getFirst(), heelVolumeRangeInM3.clone(), 
+				vesselTriple.getThird(), charterCostCalculator,
 				portTimesRecord, voyageOrPortOptionsSubsequence, vpoChoices, startingTime);
 
 		if (result == null) {

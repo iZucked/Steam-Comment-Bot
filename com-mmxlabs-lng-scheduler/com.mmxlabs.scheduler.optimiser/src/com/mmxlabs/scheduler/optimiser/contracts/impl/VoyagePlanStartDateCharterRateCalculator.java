@@ -24,6 +24,11 @@ public class VoyagePlanStartDateCharterRateCalculator implements ICharterRateCal
 	@Inject
 	private IVesselCharterInRateProvider IVesselCharterInRateProvider;
 
+	/**
+	 * One client used to use vesselStartTime, probably not used anymore.
+	 * @param vesselStartTime
+	 * @param voyagePlanStartTime
+	 */
 	@Override
 	public long getCharterRatePerDay(final @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime, final int voyagePlanStartTime) {
 		final ILongCurve rate = IVesselCharterInRateProvider.getCharterInRatePerDay(vesselAvailability);

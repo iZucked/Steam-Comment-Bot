@@ -14,6 +14,7 @@ import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.IBallastBonusContract;
 
 /**
@@ -30,7 +31,7 @@ public final class DefaultVesselAvailability implements IVesselAvailability {
 	@NonNull
 	private final VesselInstanceType vesselInstanceType;
 
-	private ILongCurve dailyCharterInRate;
+	private ICharterCostCalculator charterCostCalculator;
 
 	private ILongCurve repositioningFee;
 	
@@ -70,12 +71,12 @@ public final class DefaultVesselAvailability implements IVesselAvailability {
 	}
 
 	@Override
-	public ILongCurve getDailyCharterInRate() {
-		return dailyCharterInRate;
+	public ICharterCostCalculator getCharterCostCalculator() {
+		return charterCostCalculator;
 	}
 
-	public void setDailyCharterInRate(final ILongCurve dailyCharterInRate) {
-		this.dailyCharterInRate = dailyCharterInRate;
+	public void setCharterCostCalculator(final ICharterCostCalculator charterCostCalculator) {
+		this.charterCostCalculator = charterCostCalculator;
 	}
 
 	@Override

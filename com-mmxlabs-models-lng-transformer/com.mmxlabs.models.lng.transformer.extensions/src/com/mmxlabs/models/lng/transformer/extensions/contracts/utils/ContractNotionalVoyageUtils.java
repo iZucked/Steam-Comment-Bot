@@ -20,6 +20,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.WeightAverageCharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
@@ -69,10 +70,10 @@ public class ContractNotionalVoyageUtils {
 
 		FuelChoiceVoyageCostCalculator voyageCostCalculator = voyageCostCalculatorProvider.get();
 
-		voyageCostCalculator.setFuelChoice(fuelChoice);
-
+		voyageCostCalculator.setFuelChoice(fuelChoice); 
+			
 		final VoyagePlan notionalVoyagePlan = voyageCostCalculator.calculateShippingCosts(buy.getPort(), destinationPort, loadTime, loadDuration, dischargeTime, dischargeDuration, calculationVessel,
-				vesselCharterInRatePerDay, startHeelInM3, notionalSpeed, buy.getCargoCVValue(), routeOption, baseFuelCostPerMT, salesPricePerMMBTu);
+				resourceVesselAvailability.getCharterCostCalculator(), startHeelInM3, notionalSpeed, buy.getCargoCVValue(), routeOption, baseFuelCostPerMT, salesPricePerMMBTu);
 
 		assert notionalVoyagePlan != null;
 
@@ -132,9 +133,8 @@ public class ContractNotionalVoyageUtils {
 		portTimesRecord.setSlotDuration(buy, 0);
 		portTimesRecord.setSlotDuration(sell, 0);
 
-		voyageCalculator.calculateVoyagePlan(newVP, calculationVessel, new long[] { startHeelInM3, startHeelInM3 }, baseFuelCostPerMT, portTimesRecord, notionalSequence);
-		newVP.setCharterInRatePerDay(vesselCharterInRatePerDay);
-
+		voyageCalculator.calculateVoyagePlan(newVP, resourceVesselAvailability, new long[] { startHeelInM3, startHeelInM3 }, baseFuelCostPerMT, portTimesRecord, notionalSequence);
+		
 		return newVP;
 	}
 
