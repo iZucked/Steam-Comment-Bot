@@ -195,8 +195,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 					// This is not calculator.multiply, because hireRate is not scaled.
 					{
-						final long hireRatePerDay = currentPlan.getCharterInRatePerDay();
-						final long hireCost = hireRatePerDay * (long) (lastVoyageDetails.getIdleTime() + lastVoyageDetails.getTravelTime()) / 24;
+						final long hireCost = lastVoyageDetails.getIdleCharterCost() + lastVoyageDetails.getTravelCharterCost();
 						currentCost += hireCost;
 					}
 
@@ -333,9 +332,10 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		final List<IDetailsSequenceElement> currentSequence = voyageCalculator.generateFuelCostCalculatedSequence(record.basicSequence.toArray(new IOptionsSequenceElement[0]));
 
 		final VoyagePlan currentPlan = new VoyagePlan();
-		
+		currentPlan.setCharterCostCalculator(record.charterCostCalculator);
+
 		// Calculate voyage plan
-		int violationCount = voyageCalculator.calculateVoyagePlan(currentPlan, record.vessel, record.charterCostCalculator, record.startHeelRangeInM3, record.baseFuelPricesPerMT, record.portTimesRecord,
+		int violationCount = voyageCalculator.calculateVoyagePlan(currentPlan, record.vessel, record.startHeelRangeInM3, record.baseFuelPricesPerMT, record.portTimesRecord,
 				currentSequence.toArray(new IDetailsSequenceElement[0]));
 
 		if (violationCount == Integer.MAX_VALUE) {
