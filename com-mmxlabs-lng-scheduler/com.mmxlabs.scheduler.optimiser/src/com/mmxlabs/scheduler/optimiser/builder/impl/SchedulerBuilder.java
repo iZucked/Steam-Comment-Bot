@@ -805,6 +805,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		final DefaultVesselAvailability vesselAvailability = new DefaultVesselAvailability(vessel, vesselInstanceType);
 
+		vesselAvailability.setDailyCharterInRate(dailyCharterInRate);
 		vesselAvailability.setCharterCostCalculator(new CharterRateToCharterCostCalculator(vesselAvailability, new VoyagePlanStartDateCharterRateCalculator()));
 
 		vesselAvailability.setStartRequirement(start);

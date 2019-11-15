@@ -31,6 +31,8 @@ public final class DefaultVesselAvailability implements IVesselAvailability {
 	@NonNull
 	private final VesselInstanceType vesselInstanceType;
 
+	private ILongCurve dailyCharterInRate;
+	
 	private ICharterCostCalculator charterCostCalculator;
 
 	private ILongCurve repositioningFee;
@@ -68,6 +70,15 @@ public final class DefaultVesselAvailability implements IVesselAvailability {
 	@Override
 	public String toString() {
 		return vessel.getName();
+	}
+
+	@Override
+	public ILongCurve getDailyCharterInRate() {
+		return dailyCharterInRate;
+	}
+
+	public void setDailyCharterInRate(final ILongCurve dailyCharterInRate) {
+		this.dailyCharterInRate = dailyCharterInRate;
 	}
 
 	@Override

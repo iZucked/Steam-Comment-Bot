@@ -38,6 +38,9 @@ public class MarkToMarketVesselAvailability implements IVesselAvailability {
 	private final VesselInstanceType vesselInstanceType;
 
 	@NonNull
+	private ILongCurve curve;
+	
+	@NonNull
 	private ICharterCostCalculator charterCostCalculator;
 	
 	private ILongCurve repositioningFee;
@@ -49,6 +52,7 @@ public class MarkToMarketVesselAvailability implements IVesselAvailability {
 	public MarkToMarketVesselAvailability(@NonNull final IMarkToMarket markToMarket, @NonNull final IDischargeOption dischargeOption) {
 		this.markToMarket = markToMarket;
 		this.portSlot = dischargeOption;
+		this.curve = new ConstantValueLongCurve(0);
 		this.charterCostCalculator = new ConstantCharterCostCalculator(0);
 		this.vesselInstanceType = VesselInstanceType.DES_PURCHASE;
 	}
@@ -56,6 +60,7 @@ public class MarkToMarketVesselAvailability implements IVesselAvailability {
 	public MarkToMarketVesselAvailability(@NonNull final IMarkToMarket markToMarket, @NonNull final ILoadOption loadOption) {
 		this.markToMarket = markToMarket;
 		this.portSlot = loadOption;
+		this.curve = new ConstantValueLongCurve(0);
 		this.charterCostCalculator = new ConstantCharterCostCalculator(0);
 		this.vesselInstanceType = VesselInstanceType.FOB_SALE;
 	}
@@ -72,6 +77,12 @@ public class MarkToMarketVesselAvailability implements IVesselAvailability {
 		return vesselInstanceType;
 	}
 
+	@Override
+	@NonNull
+	public ILongCurve getDailyCharterInRate() {
+		return curve;
+	}
+	
 	@Override
 	@NonNull
 	public ICharterCostCalculator getCharterCostCalculator() {

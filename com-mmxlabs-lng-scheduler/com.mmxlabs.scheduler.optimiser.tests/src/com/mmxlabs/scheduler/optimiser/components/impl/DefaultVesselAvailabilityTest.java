@@ -17,6 +17,18 @@ import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 public class DefaultVesselAvailabilityTest {
 
 	@Test
+	public void testGetSetDailyCharterInRate() {
+		final IVessel vessel = Mockito.mock(IVessel.class);
+		final VesselInstanceType vesselInstanceType = VesselInstanceType.FLEET;
+
+		final DefaultVesselAvailability vesselAvailavility = new DefaultVesselAvailability(vessel, vesselInstanceType);
+		Assertions.assertNull(vesselAvailavility.getDailyCharterInRate());
+		final ILongCurve curve = Mockito.mock(ILongCurve.class);
+		vesselAvailavility.setDailyCharterInRate(curve);
+		Assertions.assertSame(curve, vesselAvailavility.getDailyCharterInRate());
+	}
+	
+	@Test
 	public void testGetSetStartRequirement() {
 		final IVessel vessel = Mockito.mock(IVessel.class);
 		final VesselInstanceType vesselInstanceType = VesselInstanceType.FLEET;
