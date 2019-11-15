@@ -978,14 +978,14 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				
 				//Calculate idle charter cost.
 				startTime = time;
-				duration = details.getTravelTime();
+				duration = details.getIdleTime();
 				charterCost = charterCostCalculator.getCharterCost(startTime, startTime, startTime, duration);
 				details.setIdleCharterCost(charterCost);
 				time += duration;
 				
 				//Calculate purge charter cost.
 				startTime = time;
-				duration = details.getTravelTime();
+				duration = details.getPurgeDuration();
 				charterCost = charterCostCalculator.getCharterCost(startTime, startTime, startTime, duration);				
 				details.setPurgeCharterCost(charterCost);
 				time += duration;
