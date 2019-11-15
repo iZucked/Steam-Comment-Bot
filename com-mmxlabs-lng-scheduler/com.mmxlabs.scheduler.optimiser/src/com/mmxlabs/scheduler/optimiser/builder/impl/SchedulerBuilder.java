@@ -96,12 +96,12 @@ import com.mmxlabs.scheduler.optimiser.components.impl.TotalVolumeLimit;
 import com.mmxlabs.scheduler.optimiser.components.impl.Vessel;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselEvent;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselEventPortSlot;
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.IBallastBonusContract;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.CharterRateToCharterCostCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.impl.VoyagePlanStartDateCharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
@@ -128,7 +128,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IRoundTripVesselPermissionProvi
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteExclusionProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IScheduledPurgeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IScheduledPurgeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IShortCargoReturnElementProviderEditor;
@@ -407,6 +406,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@NonNull
 	private IPromptPeriodProviderEditor promptPeriodProviderEditor;
 
+	@Inject
+	@NonNull
+	private ICharterRateCalculator charterRateCalculator;
+	
 	/**
 	 * Constant used during end date of scenario calculations - {@link #minDaysFromLastEventToEnd} days extra after last date. See code in {@link SchedulerBuilder#getOptimisationData()}
 	 * 
@@ -806,7 +809,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		final DefaultVesselAvailability vesselAvailability = new DefaultVesselAvailability(vessel, vesselInstanceType);
 
 		vesselAvailability.setDailyCharterInRate(dailyCharterInRate);
-		vesselAvailability.setCharterCostCalculator(new CharterRateToCharterCostCalculator(vesselAvailability, new VoyagePlanStartDateCharterRateCalculator()));
+		vesselAvailability.setCharterCostCalculator(new CharterRateToCharterCostCalculator(vesselAvailability, this.charterRateCalculator));
 
 		vesselAvailability.setStartRequirement(start);
 		vesselAvailability.setEndRequirement(end);
