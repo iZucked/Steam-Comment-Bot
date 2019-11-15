@@ -56,7 +56,20 @@ public final class Formatters {
 	}
 
 	public static @NonNull String formatAsDays(final int hours) {
-		switch (durationMode) {
+		return formatAsDays(durationMode, hours);
+	}
+
+	public static @NonNull String formatAsDays(DurationMode mode, final double hours) {
+		switch (mode) {
+		case DECIMAL:
+			return String.format("%.01f", hours / 24.0);
+		default:
+			return formatAsDays(mode, Math.round(hours));
+		}
+	}
+	
+	public static @NonNull String formatAsDays(DurationMode mode, final long hours) {
+		switch (mode) {
 		case DAYS_HOURS_COLON:
 			return String.format("%02d:%02d", hours / 24, hours % 24);
 		case DAYS_HOURS_HUMAN:

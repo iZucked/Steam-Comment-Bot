@@ -440,7 +440,7 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 		// Very large capacity to cover volume limits
 		vessel.setCapacity(250_000);
 
-		final CharterInMarket market = spotMarketsModelBuilder.createCharterInMarket("default", vessel, "100000", 1);
+		final CharterInMarket market = spotMarketsModelBuilder.createCharterInMarket("default", vessel, entity, "100000", 1);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "5", 20.0) //
@@ -476,7 +476,7 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 	public void testShipped_MinTransfer() throws Exception {
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
-		final CharterInMarket market = spotMarketsModelBuilder.createCharterInMarket("default", vessel, "100000", 1);
+		final CharterInMarket market = spotMarketsModelBuilder.createCharterInMarket("default", vessel, entity, "100000", 1);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "7", 20.0) //
@@ -514,7 +514,7 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		vessel.setCapacity(250_000);
 
-		final CharterInMarket market = spotMarketsModelBuilder.createCharterInMarket("default", vessel, "100000", 1);
+		final CharterInMarket market = spotMarketsModelBuilder.createCharterInMarket("default", vessel, entity, "100000", 1);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "7", 20.0) //
@@ -553,7 +553,7 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		vessel.setCapacity(100_000);
 		vessel.setFillCapacity(1.0);
-		final CharterInMarket market = spotMarketsModelBuilder.createCharterInMarket("default", vessel, "100000", 1);
+		final CharterInMarket market = spotMarketsModelBuilder.createCharterInMarket("default", vessel, entity, "100000", 1);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "7", 20.0) //
@@ -592,7 +592,7 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		vessel.setCapacity(100_000);
 		vessel.setFillCapacity(1.0);
-		final CharterInMarket market = spotMarketsModelBuilder.createCharterInMarket("default", vessel, "100000", 1);
+		final CharterInMarket market = spotMarketsModelBuilder.createCharterInMarket("default", vessel, entity, "100000", 1);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "7", 20.0) //
@@ -630,7 +630,7 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		vessel.setCapacity(250_000);
 
-		final CharterInMarket market = spotMarketsModelBuilder.createCharterInMarket("default", vessel, "100000", 1);
+		final CharterInMarket market = spotMarketsModelBuilder.createCharterInMarket("default", vessel, entity, "100000", 1);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "7", 23.7) //
@@ -669,7 +669,7 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		vessel.setCapacity(250_000);
 
-		final CharterInMarket market = spotMarketsModelBuilder.createCharterInMarket("default", vessel, "100000", 1);
+		final CharterInMarket market = spotMarketsModelBuilder.createCharterInMarket("default", vessel, entity, "100000", 1);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "7", 23.7) //

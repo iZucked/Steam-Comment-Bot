@@ -100,6 +100,8 @@ public class ExportScheduleHelper {
 			if (charterInMarket != null) {
 				if (charterInMarket.eContainer() == null) {
 					spotMarketsModel.getCharterInMarkets().add(charterInMarket);
+				} else if (charterInMarket.eContainer() != spotMarketsModel) {
+					spotMarketsModel.getCharterInMarkets().add(charterInMarket);
 				}
 			}
 		}

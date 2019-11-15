@@ -19,6 +19,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.PricingEventHelper;
@@ -40,53 +41,54 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 
 	@Inject
 	IDistanceProvider distanceProvider;
-	
+
 	@Inject
 	private IVesselBaseFuelCalculator vesselBaseFuelCalculator;
-	
+
 	@Inject
 	private IRouteCostProvider routeCostProvider;
-	
+
 	@Inject
 	private IElementDurationProvider elementDurationProvider;
-	
+
 	@Inject
 	private IPortSlotProvider portSlotProvider;
-	
+
 	@Inject
 	private IVesselProvider vesselProvider;
-	
+
 	@Inject
 	IVesselCharterInRateProvider vesselCharterInRateProvider;
-	
+
 	@Inject
 	PricingEventHelper pricingEventHelper;
-	
-	private long calculateNonCharterVariableCosts(final ILoadSlot loadA, final IDischargeSlot dischargeA, final IPortSlot vesselEventA, IPortSlot startSlotB, final IVesselAvailability vessel) {
-		assert((loadA != null && dischargeA != null) || vesselEventA != null);
+
+	private long calculateNonCharterVariableCosts(final ILoadSlot loadA, final IDischargeSlot dischargeA, final IPortSlot vesselEventA, final IPortSlot startSlotB, final IVesselAvailability vessel) {
+		assert ((loadA != null && dischargeA != null) || vesselEventA != null);
 		final int startA = loadA != null ? loadA.getTimeWindow().getInclusiveStart() : vesselEventA.getTimeWindow().getInclusiveStart();
-		final int endA = dischargeA != null ? dischargeA.getTimeWindow().getInclusiveStart() : vesselEventA.getTimeWindow().getInclusiveStart() //
-				+ elementDurationProvider.getElementDuration(portSlotProvider.getElement(vesselEventA), vesselProvider.getResource(vessel));
+		final int endA = dischargeA != null ? dischargeA.getTimeWindow().getInclusiveStart()
+				: vesselEventA.getTimeWindow().getInclusiveStart() //
+						+ elementDurationProvider.getElementDuration(portSlotProvider.getElement(vesselEventA), vesselProvider.getResource(vessel));
 		final int startB = startSlotB.getTimeWindow().getInclusiveStart();
 
 		// if discharge is null use the vessel event (as it must be a vessel event)
 		final IPort endAPort = getEndPort(dischargeA, vesselEventA);
-		
+
 		if (endAPort == startSlotB.getPort()) {
 			return 0;
 		}
 		@NonNull
 		final Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTimeAToB = distanceProvider.getQuickestTravelTime(vessel.getVessel(), endAPort, //
-				startSlotB.getPort(), vessel.getVessel().getMaxSpeed(),AvailableRouteChoices.OPTIMAL);
+				startSlotB.getPort(), vessel.getVessel().getMaxSpeed(), AvailableRouteChoices.OPTIMAL);
 		// If the travel time is 0 no cost so shortcut
 		if (quickestTravelTimeAToB.getSecond() == 0) {
 			return 0L;
 		}
-		final int[] baseFuelPrices = vesselBaseFuelCalculator.getBaseFuelPrices(vessel.getVessel(), startA);		
-		
+		final int[] baseFuelPrices = vesselBaseFuelCalculator.getBaseFuelPrices(vessel.getVessel(), startA);
+
 		ApproximateFuelCosts legFuelCosts = null;
 		if (loadA != null) {
-			ApproximateFuelCostLegData inputData = new ApproximateFuelCostLegData();
+			final ApproximateFuelCostLegData inputData = new ApproximateFuelCostLegData();
 			inputData.salesPrice = dischargeA.getDischargePriceCalculator().getEstimatedSalesPrice(loadA, dischargeA, endA);
 			inputData.boiloffRateM3 = vessel.getVessel().getNBORate(VesselState.Ballast);
 			inputData.vessel = vessel.getVessel();
@@ -104,7 +106,7 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 
 			legFuelCosts = ApproximateVoyageCalculatorHelper.getLegFuelCosts(inputData);
 		} else {
-			ApproximateFuelCostLegData inputData = new ApproximateFuelCostLegData();
+			final ApproximateFuelCostLegData inputData = new ApproximateFuelCostLegData();
 			inputData.salesPrice = 0;
 			inputData.boiloffRateM3 = vessel.getVessel().getNBORate(VesselState.Ballast);
 			inputData.vessel = vessel.getVessel();
@@ -121,28 +123,27 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 			inputData.includeIdleBunkerCosts = true;
 			try {
 				legFuelCosts = ApproximateVoyageCalculatorHelper.getLegFuelCosts(inputData);
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				ApproximateVoyageCalculatorHelper.getLegFuelCosts(inputData);
 			}
 		}
-		return legFuelCosts.getTotalCost() + routeCostProvider
-				.getRouteCost(quickestTravelTimeAToB.getFirst(), vessel.getVessel(), endA, CostType.RoundTripBallast);
+		return legFuelCosts.getTotalCost() + routeCostProvider.getRouteCost(quickestTravelTimeAToB.getFirst(), vessel.getVessel(), endA, CostType.RoundTripBallast);
 	}
 
 	private IPort getEndPort(final IDischargeSlot dischargeA, final IPortSlot vesselEventA) {
 		return dischargeA != null ? dischargeA.getPort() : vesselEventA.getPort();
 	}
-	
-	private IPortSlot getEndPortSlot(final IDischargeSlot dischargeA, final IPortSlot vesselEventA) {	
+
+	private IPortSlot getEndPortSlot(final IDischargeSlot dischargeA, final IPortSlot vesselEventA) {
 		return dischargeA != null ? dischargeA : vesselEventA;
 	}
-	
+
 	public long[][] getCargoCharterCostPerAvailability(final List<List<IPortSlot>> cargoes, final List<IVesselAvailability> vessels) {
-		long[][] costs = new long[cargoes.size()][vessels.size()];
+		final long[][] costs = new long[cargoes.size()][vessels.size()];
 		for (int i = 0; i < cargoes.size(); i++) {
-			List<IPortSlot> cargo = cargoes.get(i);
+			final List<IPortSlot> cargo = cargoes.get(i);
 			for (int j = 0; j < vessels.size(); j++) {
-				IVesselAvailability availability = vessels.get(j);
+				final IVesselAvailability availability = vessels.get(j);
 				if (SchedulerCalculationUtils.isVesselAvailabilityOptional(availability)) {
 					costs[i][j] = availability.getDailyCharterInRate().getValueAtPoint(cargo.get(0).getTimeWindow().getInclusiveStart());
 				}
@@ -170,10 +171,11 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 							costs[cargoMap.get(cargoA)][cargoMap.get(cargoB)][vesselMap.get(vessel)] = 0L;
 						} else {
 							long cost = -Long.MIN_VALUE;
+
 							cost = calculateNonCharterVariableCosts(loadA, dischargeA, vesselEventA, endSlot, vessel);
 							// Sanity check, should it be an exception ?
-							assert(cost != -Long.MIN_VALUE);
-							
+							assert (cost != -Long.MIN_VALUE);
+
 							costs[cargoMap.get(cargoA)][cargoMap.get(cargoB)][vesselMap.get(vessel)] = cost;
 						}
 					}
@@ -182,70 +184,80 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 		}
 		return costs;
 	}
-	
+
 	/**
-	 * Note: includes duration. Between two consecutive cargoes. 
-	 * Including the contingency.
+	 * Note: includes duration. Between two consecutive cargoes. Including the
+	 * contingency.
+	 * 
 	 * @param cargoes
 	 * @param vessels
 	 * @return
 	 */
-	public int[][][] getMinCargoToCargoTravelTimesPerVessel(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels) {
-		Map<List<IPortSlot>, Integer> cargoMap = getCargoMap(cargoes);
-		Map<IVesselAvailability, Integer> vesselMap = getVesselMap(vessels);
-		int[][][] times = new int[cargoes.size()][cargoes.size()][vessels.size()];
-		for (List<IPortSlot> cargoA : cargoes) {
+	public int[][][] getMinCargoToCargoTravelTimesPerVessel(final List<List<IPortSlot>> cargoes, final List<IVesselAvailability> vessels) {
+		final Map<List<IPortSlot>, Integer> cargoMap = getCargoMap(cargoes);
+		final Map<IVesselAvailability, Integer> vesselMap = getVesselMap(vessels);
+		final int[][][] times = new int[cargoes.size()][cargoes.size()][vessels.size()];
+		for (final List<IPortSlot> cargoA : cargoes) {
 			final IDischargeSlot dischargeA = getDischargeSlot(cargoA);
 			final IPortSlot vesselEventA = getVesselEvent(cargoA);
 			if (dischargeA != null || vesselEventA != null) {
 				// if discharge is null use the vessel event (as it must be a vessel event)
-				//final IPort endAPort = getEndPort(dischargeA, vesselEventA);
+				// final IPort endAPort = getEndPort(dischargeA, vesselEventA);
 				final IPortSlot endAPortSlot = getEndPortSlot(dischargeA, vesselEventA);
-				for (List<IPortSlot> cargoB : cargoes) {
+				for (final List<IPortSlot> cargoB : cargoes) {
 					if (cargoA == cargoB) {
 						continue;
 					}
-					for (IVesselAvailability vessel : vessels) {
-						int endADuration = dischargeA != null ? elementDurationProvider.getElementDuration(portSlotProvider.getElement(dischargeA), vesselProvider.getResource(vessel)) : 0;
+					for (final IVesselAvailability vessel : vessels) {
+						final int endADuration = dischargeA != null ? elementDurationProvider.getElementDuration(portSlotProvider.getElement(dischargeA), vesselProvider.getResource(vessel)) : 0;
 						IPortSlot startB = cargoB.get(0);
+						
+						if (startB instanceof IVesselEventPortSlot) {
+							final IVesselEventPortSlot iVesselEventPortSlot = (IVesselEventPortSlot) startB;
+							
+							startB = iVesselEventPortSlot.getEventPortSlots().get(0);
+						}
+						
 						@NonNull
 						final Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTimeAToB = distanceProvider.getQuickestTravelTimeWithContingency(vessel.getVessel(), endAPortSlot, startB,
 								vessel.getVessel().getMaxSpeed(), AvailableRouteChoices.OPTIMAL);
-						
-						times[cargoMap.get(cargoA)][cargoMap.get(cargoB)][vesselMap.get(vessel)] = quickestTravelTimeAToB.getSecond()
-								+ endADuration;
+
+						times[cargoMap.get(cargoA)][cargoMap.get(cargoB)][vesselMap.get(vessel)] = quickestTravelTimeAToB.getSecond() + endADuration;
 					}
 				}
 			}
 		}
 		return times;
 	}
-	
+
 	/**
 	 * Note: includes duration. Between load and discharge slots within the cargo.
 	 * Including the contingency.
+	 * 
 	 * @param cargoes
 	 * @param vessels
 	 * @return
 	 */
-	public int[][] getMinCargoStartToEndSlotTravelTimesPerVessel(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels) {
-		Map<List<IPortSlot>, Integer> cargoMap = getCargoMap(cargoes);
-		Map<IVesselAvailability, Integer> vesselMap = getVesselMap(vessels);
-		int[][] times = new int[cargoes.size()][vessels.size()];
-		for (List<IPortSlot> cargoA : cargoes) {
-			ILoadSlot loadA = getLoadSlot(cargoA);
-			IDischargeSlot dischargeA = getDischargeSlot(cargoA);
+	public int[][] getMinCargoStartToEndSlotTravelTimesPerVessel(final List<List<IPortSlot>> cargoes, final List<IVesselAvailability> vessels) {
+		final Map<List<IPortSlot>, Integer> cargoMap = getCargoMap(cargoes);
+		final Map<IVesselAvailability, Integer> vesselMap = getVesselMap(vessels);
+		final int[][] times = new int[cargoes.size()][vessels.size()];
+		for (final List<IPortSlot> cargoA : cargoes) {
+			final ILoadSlot loadA = getLoadSlot(cargoA);
+			final IDischargeSlot dischargeA = getDischargeSlot(cargoA);
 			final IPortSlot vesselEventA = getVesselEvent(cargoA);
 
-			for (IVesselAvailability vessel : vessels) {
+			for (final IVesselAvailability vessel : vessels) {
 				if (vesselEventA != null) {
-					times[cargoMap.get(cargoA)][vesselMap.get(vessel)] = elementDurationProvider.getElementDuration(portSlotProvider.getElement(vesselEventA), vesselProvider.getResource(vessel));
+					final int duration = elementDurationProvider.getElementDuration(portSlotProvider.getElement(vesselEventA), vesselProvider.getResource(vessel));
+					times[cargoMap.get(cargoA)][vesselMap.get(vessel)] = duration;
 				} else {
-					
+
 					@NonNull
+					final
 					Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTimeAToB = distanceProvider.getQuickestTravelTimeWithContingency(vessel.getVessel(), loadA, dischargeA,
 							vessel.getVessel().getMaxSpeed(), AvailableRouteChoices.OPTIMAL);
-	
+
 					times[cargoMap.get(cargoA)][vesselMap.get(vessel)] = quickestTravelTimeAToB.getSecond()
 							+ elementDurationProvider.getElementDuration(portSlotProvider.getElement(loadA), vesselProvider.getResource(vessel));
 				}
@@ -253,26 +265,23 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 		}
 		return times;
 	}
-	
-	public int[] getCargoStartSlotDurations(List<List<IPortSlot>> cargoes) {
-		int[] durations = new int[cargoes.size()];
+
+	public int[] getCargoStartSlotDurations(final List<List<IPortSlot>> cargoes) {
+		final int[] durations = new int[cargoes.size()];
 		for (int i = 0; i < cargoes.size(); i++) {
-			List<IPortSlot> cargo = cargoes.get(i);
-			durations[i] = elementDurationProvider.getElementDuration(
-					portSlotProvider.getElement(cargo.get(0)));
+			final List<IPortSlot> cargo = cargoes.get(i);
+			durations[i] = elementDurationProvider.getElementDuration(portSlotProvider.getElement(cargo.get(0)));
 		}
 		return durations;
 	}
 
-	public int[] getCargoEndSlotDurations(List<List<IPortSlot>> cargoes) {
-		int[] durations = new int[cargoes.size()];
+	public int[] getCargoEndSlotDurations(final List<List<IPortSlot>> cargoes) {
+		final int[] durations = new int[cargoes.size()];
 		for (int i = 0; i < cargoes.size(); i++) {
-			List<IPortSlot> cargo = cargoes.get(i);
-			IPortSlot lastSlot = cargo.get(cargo.size()-1);
-			if (lastSlot.getPortType() == PortType.Load
-					|| lastSlot.getPortType() == PortType.Discharge) {
-				durations[i] = elementDurationProvider.getElementDuration(
-						portSlotProvider.getElement(cargo.get(cargo.size()-1)));
+			final List<IPortSlot> cargo = cargoes.get(i);
+			final IPortSlot lastSlot = cargo.get(cargo.size() - 1);
+			if (lastSlot.getPortType() == PortType.Load || lastSlot.getPortType() == PortType.Discharge) {
+				durations[i] = elementDurationProvider.getElementDuration(portSlotProvider.getElement(cargo.get(cargo.size() - 1)));
 			} else {
 				// durations will be encoded on the start slot for vessel events
 				durations[i] = 0;
@@ -281,46 +290,50 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 		return durations;
 	}
 
-	private ILoadSlot getLoadSlot(List<IPortSlot> cargo) {
-		for (IPortSlot portSlot : cargo) {
+	private ILoadSlot getLoadSlot(final List<IPortSlot> cargo) {
+		for (final IPortSlot portSlot : cargo) {
 			if (portSlot instanceof ILoadSlot) {
 				return (ILoadSlot) portSlot;
 			}
 		}
 		return null;
 	}
-	
-	private IPortSlot getVesselEvent(List<IPortSlot> cargo) {
-		if (cargo.get(0).getPortType() == PortType.CharterOut
-				|| cargo.get(0).getPortType() == PortType.DryDock) {
-			return cargo.get(0);
+
+	private IPortSlot getVesselEvent(final List<IPortSlot> cargo) {
+
+		for (int i = 0; i < cargo.size(); ++i) {
+			if (cargo.get(i).getPortType() == PortType.CharterOut //
+					|| cargo.get(i).getPortType() == PortType.DryDock //
+					|| cargo.get(i).getPortType() == PortType.Maintenance) {
+				return cargo.get(i);
+			}
 		}
 		return null;
 	}
 
-	private IDischargeSlot getDischargeSlot(List<IPortSlot> cargo) {
+	private IDischargeSlot getDischargeSlot(final List<IPortSlot> cargo) {
 		if (cargo.get(cargo.size() - 1) instanceof IDischargeSlot) {
 			return (IDischargeSlot) cargo.get(cargo.size() - 1);
 		}
 		return null;
 	}
-	
-	private Map<List<IPortSlot>, Integer> getCargoMap(List<List<IPortSlot>> cargoes) {
-		Map<List<IPortSlot>, Integer> cargoMap = new HashMap<>();
+
+	private Map<List<IPortSlot>, Integer> getCargoMap(final List<List<IPortSlot>> cargoes) {
+		final Map<List<IPortSlot>, Integer> cargoMap = new HashMap<>();
 		for (int i = 0; i < cargoes.size(); i++) {
-			List<IPortSlot> cargo = cargoes.get(i);
+			final List<IPortSlot> cargo = cargoes.get(i);
 			cargoMap.put(cargo, i);
 		}
 		return cargoMap;
 	}
 
-	private Map<IVesselAvailability, Integer> getVesselMap(List<IVesselAvailability> vessels) {
-		Map<IVesselAvailability, Integer> vesselMap = new HashMap<>();
+	private Map<IVesselAvailability, Integer> getVesselMap(final List<IVesselAvailability> vessels) {
+		final Map<IVesselAvailability, Integer> vesselMap = new HashMap<>();
 		for (int i = 0; i < vessels.size(); i++) {
-			IVesselAvailability vessel = vessels.get(i);
+			final IVesselAvailability vessel = vessels.get(i);
 			vesselMap.put(vessel, i);
 		}
 		return vesselMap;
 	}
-	
+
 }

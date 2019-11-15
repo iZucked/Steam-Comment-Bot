@@ -70,7 +70,8 @@ import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.ui.forms.AbstractDataBindingFormDialog;
 
 /**
- * A Dialog to present options for running an optimisation or evaluation that can be changed.
+ * A Dialog to present options for running an optimisation or evaluation that
+ * can be changed.
  * 
  * @author Simon Goodall
  * 
@@ -101,8 +102,8 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 	}
 
 	public static class OptionGroup {
-		String name;
-		DataSection dataSection;
+		public String name;
+		public DataSection dataSection;
 	}
 
 	public class Option {
@@ -322,7 +323,8 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 				}
 
 			});
-			// Note, if we want an additional field here, then we should create a composite and add them all to the composite. The composite then becomes the client
+			// Note, if we want an additional field here, then we should create a composite
+			// and add them all to the composite. The composite then becomes the client
 			final Composite area = toolkit.createComposite(advanced);
 			area.setLayout(new GridLayout(1, true));
 			final List<Option> options = optionsMap.get(DataSection.Advanced);
@@ -412,7 +414,8 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 	}
 
 	/**
-	 * Create a check box button with the given label for the given property on {@link ParameterModesDialog}
+	 * Create a check box button with the given label for the given property on
+	 * {@link ParameterModesDialog}
 	 * 
 	 * @param form
 	 * @param label
@@ -453,7 +456,8 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 	}
 
 	/**
-	 * Create a +ve integer text box with the given label for the given property on {@link ParameterModesDialog}
+	 * Create a +ve integer text box with the given label for the given property on
+	 * {@link ParameterModesDialog}
 	 * 
 	 * @param form
 	 * @param label
@@ -845,8 +849,10 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 	}
 
 	/**
-	 * A validation status provider that is triggered on any value change. Intended for use where a data binding is not available (e.g. the choice controls). Ensure dispose is called. Registering this
-	 * with the data binding context should be sufficient.
+	 * A validation status provider that is triggered on any value change. Intended
+	 * for use where a data binding is not available (e.g. the choice controls).
+	 * Ensure dispose is called. Registering this with the data binding context
+	 * should be sufficient.
 	 * 
 	 * @author Simon Goodall
 	 *

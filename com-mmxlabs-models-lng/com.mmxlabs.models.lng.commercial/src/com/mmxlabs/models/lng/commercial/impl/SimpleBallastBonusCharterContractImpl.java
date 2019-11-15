@@ -31,7 +31,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.SimpleBallastBonusCharterContractImpl#getMinDuration <em>Min Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.SimpleBallastBonusCharterContractImpl#getMaxDuration <em>Max Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.SimpleBallastBonusCharterContractImpl#getBallastBonusContract <em>Ballast Bonus Contract</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.SimpleBallastBonusCharterContractImpl#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.SimpleBallastBonusCharterContractImpl#getRepositioningFee <em>Repositioning Fee</em>}</li>
  * </ul>
  *
@@ -105,16 +104,6 @@ public class SimpleBallastBonusCharterContractImpl extends NamedObjectImpl imple
 	 * @ordered
 	 */
 	protected BallastBonusContract ballastBonusContract;
-
-	/**
-	 * The cached value of the '{@link #getEntity() <em>Entity</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getEntity()
-	 * @generated
-	 * @ordered
-	 */
-	protected BaseLegalEntity entity;
 
 	/**
 	 * The default value of the '{@link #getRepositioningFee() <em>Repositioning Fee</em>}' attribute.
@@ -306,46 +295,6 @@ public class SimpleBallastBonusCharterContractImpl extends NamedObjectImpl imple
 	 * @generated
 	 */
 	@Override
-	public BaseLegalEntity getEntity() {
-		if (entity != null && entity.eIsProxy()) {
-			InternalEObject oldEntity = (InternalEObject)entity;
-			entity = (BaseLegalEntity)eResolveProxy(oldEntity);
-			if (entity != oldEntity) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__ENTITY, oldEntity, entity));
-			}
-		}
-		return entity;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public BaseLegalEntity basicGetEntity() {
-		return entity;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setEntity(BaseLegalEntity newEntity) {
-		BaseLegalEntity oldEntity = entity;
-		entity = newEntity;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__ENTITY, oldEntity, entity));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public String getRepositioningFee() {
 		return repositioningFee;
 	}
@@ -391,9 +340,6 @@ public class SimpleBallastBonusCharterContractImpl extends NamedObjectImpl imple
 				return getMaxDuration();
 			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT:
 				return getBallastBonusContract();
-			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__ENTITY:
-				if (resolve) return getEntity();
-				return basicGetEntity();
 			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__REPOSITIONING_FEE:
 				return getRepositioningFee();
 		}
@@ -416,9 +362,6 @@ public class SimpleBallastBonusCharterContractImpl extends NamedObjectImpl imple
 				return;
 			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT:
 				setBallastBonusContract((BallastBonusContract)newValue);
-				return;
-			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__ENTITY:
-				setEntity((BaseLegalEntity)newValue);
 				return;
 			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__REPOSITIONING_FEE:
 				setRepositioningFee((String)newValue);
@@ -444,9 +387,6 @@ public class SimpleBallastBonusCharterContractImpl extends NamedObjectImpl imple
 			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT:
 				setBallastBonusContract((BallastBonusContract)null);
 				return;
-			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__ENTITY:
-				setEntity((BaseLegalEntity)null);
-				return;
 			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__REPOSITIONING_FEE:
 				setRepositioningFee(REPOSITIONING_FEE_EDEFAULT);
 				return;
@@ -468,8 +408,6 @@ public class SimpleBallastBonusCharterContractImpl extends NamedObjectImpl imple
 				return isSetMaxDuration();
 			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT:
 				return ballastBonusContract != null;
-			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__ENTITY:
-				return entity != null;
 			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__REPOSITIONING_FEE:
 				return REPOSITIONING_FEE_EDEFAULT == null ? repositioningFee != null : !REPOSITIONING_FEE_EDEFAULT.equals(repositioningFee);
 		}

@@ -80,6 +80,7 @@ public class CharterInMarketComponentHelper extends BaseComponentHelper {
 		add_minDurationEditor(detailComposite, topClass);
 		add_maxDurationEditor(detailComposite, topClass);
 		add_mtmEditor(detailComposite, topClass);
+		add_entityEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the vessel feature on CharterInMarket
@@ -126,6 +127,15 @@ public class CharterInMarketComponentHelper extends BaseComponentHelper {
 		if(LicenseFeatures.isPermitted("features:mtm")) {
 			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.CHARTER_IN_MARKET__MTM));
 		}
+	}
+
+	/**
+	 * Create the editor for the entity feature on CharterInMarket
+	 *
+	 * @generated
+	 */
+	protected void add_entityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.CHARTER_IN_MARKET__ENTITY));
 	}
 
 	/**

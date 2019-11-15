@@ -316,10 +316,10 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 
 	@Override
 	public void processValidation(final IStatus status) {
-		if (validationDecoration == null || validationDecoration.getControl().isDisposed()) {
+		if (validationDecoration == null || validationDecoration.getControl() == null || validationDecoration.getControl().isDisposed()) {
 			return;
 		}
-		
+
 		if (status.isOK()) {
 			// No problems, so hide decoration
 			if (validationDecoration != null) {

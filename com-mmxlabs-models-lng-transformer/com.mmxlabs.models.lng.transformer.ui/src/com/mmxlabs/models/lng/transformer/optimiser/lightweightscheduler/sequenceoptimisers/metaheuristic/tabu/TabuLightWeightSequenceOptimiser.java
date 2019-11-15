@@ -51,7 +51,9 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 
 		TabuList tabuList = new TabuList();
 
-		List<List<Integer>> schedule = lightWeightOptimisationData.getVessels().stream().map(v -> new LinkedList<Integer>()).collect(Collectors.toList());
+		List<List<Integer>> schedule = lightWeightOptimisationData.getVessels().stream() //
+				.map(v -> new LinkedList<Integer>()) //
+				.collect(Collectors.toList());
 
 		if (cargoCount == 0) {
 			// No shipped cargoes to allocate
@@ -89,7 +91,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 				unusedCargoes.removeAll(currentTabuSolutions);
 				usedCargoes.removeAll(currentTabuSolutions);
 
-				// Print progess
+				// Print progress
 				if (iteration % (iterations / 10) == 0) {
 					System.out.println(iteration * 100 / iterations + "% ");
 				}
@@ -130,7 +132,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 			}
 
 			System.out.println("\n\nFitness best : " + bestSolution.fitness);
-			System.out.println("Iteration best: %d it\n" + bestIteration);
+			System.out.printf("Iteration best: %d it\n", bestIteration);
 
 			annotateSolution(bestSolution.schedule, cargoCount, vesselCount, lightWeightOptimisationData, constraintCheckers, fitnessFunctions, allCargoes);
 
@@ -239,7 +241,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 	}
 
 	private List<Integer> updateUnusedList(List<List<Integer>> solution, Set<Integer> cargoes) {
-		List<Integer> cargoesSet = new ArrayList<Integer>(cargoes);
+		List<Integer> cargoesSet = new ArrayList<>(cargoes);
 		cargoesSet.removeAll(updateUsedList(solution));
 
 		return cargoesSet;

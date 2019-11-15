@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.cargo.ui.displaycomposites;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
@@ -201,6 +202,32 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 			return sub;
 		}
 		return null;
+	}
+	
+	@Override
+	protected ChildCompositeContainer createChildComposites(final MMXRootObject root, final EObject object, final EClass eClass, final Composite parent) {
+		final ChildCompositeContainer childReferences = new ChildCompositeContainer();
+		for (final EReference ref : eClass.getEAllReferences()) {
+			if (shouldDisplay(ref)) {
+				if (ref.isMany()) {
+					List values = (List) object.eGet(ref);
+					if (object instanceof Cargo) {
+						Cargo cargo = (Cargo) object;
+						values = cargo.getSortedSlots();
+					}
+					for (final Object o : values) {
+						if (o instanceof EObject) {
+							createChildArea(childReferences, root, object, parent, ref, (EObject) o);
+						}
+					}
+				} else {
+					final EObject value = (EObject) object.eGet(ref);
+
+					createChildArea(childReferences, root, object, parent, ref, value);
+				}
+			}
+		}
+		return childReferences;
 	}
 
 }

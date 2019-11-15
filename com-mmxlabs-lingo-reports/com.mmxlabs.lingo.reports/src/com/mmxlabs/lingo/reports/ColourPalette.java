@@ -39,7 +39,7 @@ public final class ColourPalette {
 	private static final RGB Vessel_Dry_Dock = VesselEvent_Brown;
 	private static final RGB Vessel_Maintenance = VesselEvent_Brown;
 	private static final RGB Vessel_Generated_Charter_Out = VesselEvent_LightPurple;
-	private static final RGB Vessel_Charter_Length = new RGB(80, 80, 80);
+	private static final RGB Vessel_Charter_Length = new RGB(221, 220, 221);
 	private static final RGB Vessel_Laden_Idle = Light_Green;
 	private static final RGB Vessel_Laden_Journey = Green;
 	private static final RGB Warning_Orange = new RGB(255, 120, 25);

@@ -28,7 +28,6 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
-import com.mmxlabs.models.lng.transformer.ui.parametermodes.impl.ParallelOptimisationPlanExtender;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.fitness.components.NonOptionalSlotFitnessCoreFactory;
 
@@ -100,8 +99,6 @@ public abstract class AbstractADPAndLightWeightTests extends AbstractMicroTestCa
 		ScenarioUtils.setHillClimbStageIterations(optimisationPlan, 50_000);
 		ScenarioUtils.setActionPlanStageParameters(optimisationPlan, 5_000_000, 1_500_000, 5_000);
 		ScenarioUtils.createOrUpdateAllObjectives(optimisationPlan, NonOptionalSlotFitnessCoreFactory.NAME, true, 24_000_000);
-
-		new ParallelOptimisationPlanExtender().extend(optimisationPlan);
 
 		// and now delete lso and hill
 		OptimisationEMFTestUtils.removeLSOAndHill(optimisationPlan);

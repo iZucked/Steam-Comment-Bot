@@ -147,10 +147,11 @@ public class SharedScenarioUpdater {
 			synchronized (pathMap) {
 				if (pathMap.containsKey(segmentPath)) {
 					parent = pathMap.get(segmentPath);
-					// Convert folder to managed state (it may have been created by the user, but now we take it over
+					// Convert folder to managed state (it may have been created by the user, but
+					// now we take it over
 					if (parent instanceof Folder) {
 						final Folder folder = (Folder) parent;
-						folder.setManaged(true);
+						RunnerHelper.syncExecDisplayOptional(() -> folder.setManaged(true));
 					}
 				} else {
 					final Folder f = ScenarioServiceFactory.eINSTANCE.createFolder();
@@ -176,10 +177,7 @@ public class SharedScenarioUpdater {
 
 		@Override
 		public void run() {
-			RunnerHelper.syncExecDisplayOptional(() -> {
-
-				parent.getElements().add(f);
-			});
+			RunnerHelper.syncExecDisplayOptional(() -> parent.getElements().add(f));
 		}
 	}
 
@@ -394,7 +392,8 @@ public class SharedScenarioUpdater {
 	}
 
 	/**
-	 * UI created folder, so register with the local map to avoid recreating it later
+	 * UI created folder, so register with the local map to avoid recreating it
+	 * later
 	 * 
 	 * @param f
 	 */

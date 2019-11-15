@@ -3536,7 +3536,7 @@ public class LNGScenarioTransformer {
 
 					final int minDuration = 24 * eCharterOutMarket.getMinCharterOutDuration();
 
-					final int maxDuration = eCharterOutMarket.isSetMaxCharterOutDuration() ? 24 * eCharterOutMarket.getMinCharterOutDuration() : Integer.MAX_VALUE;
+					final int maxDuration = eCharterOutMarket.isSetMaxCharterOutDuration() ? 24 * eCharterOutMarket.getMaxCharterOutDuration() : Integer.MAX_VALUE;
 
 					final Set<Port> portSet = SetUtils.getObjects(eCharterOutMarket.getAvailablePorts());
 

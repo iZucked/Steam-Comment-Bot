@@ -39,7 +39,7 @@ public class ContingencyIdleTimeTest extends AbstractIdleTimeTests {
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
 		// Construct the cargo scenario
 
@@ -103,7 +103,7 @@ public class ContingencyIdleTimeTest extends AbstractIdleTimeTests {
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
 		// Construct the cargo scenario
 
@@ -141,7 +141,7 @@ public class ContingencyIdleTimeTest extends AbstractIdleTimeTests {
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
 		// Construct the cargo scenario
 

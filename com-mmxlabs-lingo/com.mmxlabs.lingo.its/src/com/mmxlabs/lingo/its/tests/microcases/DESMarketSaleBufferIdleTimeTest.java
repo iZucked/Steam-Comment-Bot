@@ -27,7 +27,7 @@ public class DESMarketSaleBufferIdleTimeTest extends AbstractIdleTimeTests {
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		final CharterInMarket charterInMarket1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
+		final CharterInMarket charterInMarket1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
 		final DESSalesMarket desSalesMarket = spotMarketsModelBuilder.makeDESSaleMarket("D1DESSaleMarket", portFinder.findPort("Dominion Cove Point LNG"), entity, "7")
 				.withDaysBuffer(100).build();

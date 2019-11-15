@@ -67,7 +67,9 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
+import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
 import com.mmxlabs.models.lng.schedule.Purge;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -75,6 +77,7 @@ import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
@@ -130,7 +133,7 @@ public class CargoEconsReportComponent implements IAdaptable {
 
 	private boolean compareMode = true;
 	private boolean onlyDiffMode = false;
-
+	
 	private GridViewerColumn dummyDataCol;
 
 	private Image createImage(String path) {
@@ -376,8 +379,13 @@ public class CargoEconsReportComponent implements IAdaptable {
 				if (obj instanceof Event) {
 					obj = ScheduleModelUtils.getSegmentStart((Event) obj);
 				}
-
-				if (obj instanceof CharterLengthEvent) {
+				if (obj instanceof StartEvent) {
+					validObjects.add(obj);
+				} else if (obj instanceof EndEvent) {
+					validObjects.add(obj);
+				} else if (obj instanceof GeneratedCharterOut) {
+					validObjects.add(obj);
+				} else if (obj instanceof CharterLengthEvent) {
 					validObjects.add(obj);
 				} else if (obj instanceof VesselEventVisit) {
 					validObjects.add(obj);
@@ -482,7 +490,7 @@ public class CargoEconsReportComponent implements IAdaptable {
 		return validObjects;
 
 	}
-
+	
 	public GridTableViewer getViewer() {
 		return viewer;
 	}
@@ -641,6 +649,10 @@ public class CargoEconsReportComponent implements IAdaptable {
 		for (final Object object : objects) {
 			String name = "";
 
+			if (object instanceof Event) {
+				name = ((Event) object).name();
+			}
+			
 			if (object instanceof VesselEventVisit) {
 				name = ((VesselEventVisit) object).name();
 			}
@@ -683,9 +695,9 @@ public class CargoEconsReportComponent implements IAdaptable {
 			gvc.getColumn().dispose();
 		}
 
-		if (validObjects == null || validObjects.isEmpty()) {
-			return;
-		}
+		//if (validObjects == null || validObjects.isEmpty()) {
+		//	return;
+		//}
 
 		for (final GridColumnGroup gcg : gridColumnGroupsMap.values()) {
 			gcg.dispose();
@@ -850,6 +862,25 @@ public class CargoEconsReportComponent implements IAdaptable {
 					gvc.getColumn().setHeaderRenderer(columnImageHeaderCenteredRenderer);
 					gvc.getColumn().setImage(pinImage);
 				}
+			} else if (selectedObject instanceof StartEvent || selectedObject instanceof EndEvent || selectedObject instanceof GeneratedCharterOut) {
+				final Event event = (Event) selectedObject;
+
+				final GridColumnGroup gridColumnGroup = gridColumnGroupsMap.get(event.name());
+				final GridColumn gc = new GridColumn(gridColumnGroup, SWT.NONE);
+				final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+				GridViewerHelper.configureLookAndFeel(gvc);
+				// Mark column for disposal on selection change
+				dataColumns.add(gvc);
+
+				gvc.getColumn().setText("");
+				gvc.setLabelProvider(new FieldTypeMapperLabelProvider(selectedObject));
+				gvc.getColumn().setWidth(100);
+				@Nullable
+				final ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
+				if (currentSelectedDataProvider != null && currentSelectedDataProvider.isPinnedObject(event)) {
+					gvc.getColumn().setHeaderRenderer(columnImageHeaderCenteredRenderer);
+					gvc.getColumn().setImage(pinImage);
+				}
 			} else if (selectedObject instanceof MarketAllocation) {
 				final MarketAllocation cargoAllocation = (MarketAllocation) selectedObject;
 
@@ -883,5 +914,13 @@ public class CargoEconsReportComponent implements IAdaptable {
 	public void setCopyPasteMode(boolean copyPasteMode) {
 		setIncludedUnit(!copyPasteMode);
 		options.alwaysShowRawValue = copyPasteMode;
+	}
+
+	public boolean isShowPnLCalcs() {
+		return options.showPnLCalcs;
+	}
+
+	public void setShowPnLCalcs(boolean showPnLCalcs) {
+		this.options.showPnLCalcs = showPnLCalcs;
 	}
 }

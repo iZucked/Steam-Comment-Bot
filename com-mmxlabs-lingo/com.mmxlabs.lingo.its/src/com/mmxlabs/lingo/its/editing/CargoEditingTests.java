@@ -206,7 +206,7 @@ public class CargoEditingTests extends AbstractMicroTestCase {
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		vessel.setSafetyHeel(500);
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
 				.build() //

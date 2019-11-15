@@ -30,7 +30,6 @@ import com.mmxlabs.lngdataserver.server.HttpClientUtil;
 import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
 import com.mmxlabs.scenario.service.model.util.encryption.EncryptionUtils;
 
-import okhttp3.Credentials;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -201,8 +200,11 @@ public class DataServiceClient {
 				}
 				return Boolean.FALSE;
 			} catch (final IOException e) {
-				LOG.error("Error waiting for new version");
-				throw new RuntimeException("Error waiting for new version");
+				// Silently ignore.
+				
+				// LOG.error("Error waiting for new version");
+				//throw new RuntimeException("Error waiting for new version");
+				return Boolean.FALSE;
 			}
 		});
 	}

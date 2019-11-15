@@ -123,7 +123,7 @@ public class LightWeightOptimisationDataFactory {
 		// add events
 		final Set<Integer> eventIndexes = new HashSet<>();
 		longTermSlotsProvider.getLongTermEvents().forEach(e -> {
-			shippedCargoes.add(CollectionsUtil.makeLinkedList(e));
+			shippedCargoes.add(e);
 			eventIndexes.add(shippedCargoes.size() - 1);
 		});
 

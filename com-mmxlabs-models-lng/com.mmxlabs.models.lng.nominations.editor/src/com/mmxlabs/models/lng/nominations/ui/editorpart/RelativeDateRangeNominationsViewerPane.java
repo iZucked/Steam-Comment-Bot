@@ -424,6 +424,17 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 				return NominationsModelUtils.getSide((AbstractNomination) object);
 			}
 		});
+		final GridViewerColumn gcvCP = addTypicalColumn("C/P", new BooleanFlagAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNominationSpec_Counterparty(), jointModelEditor.getEditingDomain()) {
+			@Override
+			public void doSetValue(Object object, Object value) {
+				final AbstractNomination nomination = (AbstractNomination)object;
+				if (nomination.eContainer() == null) {
+					addNomination(nomination);	
+				}
+				super.doSetValue(object, value);
+			}
+		});
+		gcvCP.getColumn().setAlignment(SWT.CENTER);	
 		addTypicalColumn("Date", new DateTimeAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNomination_NomineeId(), jointModelEditor.getEditingDomain()) {
 			@Override
 			public boolean canEdit(final Object object) {

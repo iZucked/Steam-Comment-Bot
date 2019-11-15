@@ -61,10 +61,19 @@ public class InventoryJSONGenerator {
 	}
 	
 	public static void setMinMaxVolume(final InventoryExportModel exportModel, final ScheduleModel scheduleModel) {
-		final InventoryEvents event = scheduleModel.getSchedule().getInventoryLevels().get(0);
-		final InventoryChangeEvent ce = event.getEvents().get(0);
-		exportModel.setMaxVolume(ce.getCurrentMax());
-		exportModel.setMinVolume(ce.getCurrentMin());
+		if (scheduleModel != null) {
+			if (scheduleModel.getSchedule() != null) {
+				if (scheduleModel.getSchedule().getInventoryLevels() != null //
+						&& !scheduleModel.getSchedule().getInventoryLevels().isEmpty()) {
+					final InventoryEvents event = scheduleModel.getSchedule().getInventoryLevels().get(0);
+					if (event != null && event.getEvents() != null && !event.getEvents().isEmpty()) {
+						final InventoryChangeEvent ce = event.getEvents().get(0);
+						exportModel.setMaxVolume(ce.getCurrentMax());
+						exportModel.setMinVolume(ce.getCurrentMin());
+					}
+				}
+			}
+		}
 	}
 	
 	private static void jsonOutput(Object inventoryLevel) {

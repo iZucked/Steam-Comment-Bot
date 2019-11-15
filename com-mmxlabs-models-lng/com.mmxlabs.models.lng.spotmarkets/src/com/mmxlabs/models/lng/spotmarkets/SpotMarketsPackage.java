@@ -1476,13 +1476,22 @@ public interface SpotMarketsPackage extends EPackage {
 	int CHARTER_IN_MARKET__MTM = SPOT_CHARTER_MARKET_FEATURE_COUNT + 11;
 
 	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_IN_MARKET__ENTITY = SPOT_CHARTER_MARKET_FEATURE_COUNT + 12;
+
+	/**
 	 * The number of structural features of the '<em>Charter In Market</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_IN_MARKET_FEATURE_COUNT = SPOT_CHARTER_MARKET_FEATURE_COUNT + 12;
+	int CHARTER_IN_MARKET_FEATURE_COUNT = SPOT_CHARTER_MARKET_FEATURE_COUNT + 13;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterOutMarketParametersImpl <em>Charter Out Market Parameters</em>}' class.
@@ -2128,6 +2137,17 @@ public interface SpotMarketsPackage extends EPackage {
 	EAttribute getCharterInMarket_Mtm();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getEntity <em>Entity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Entity</em>'.
+	 * @see com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getEntity()
+	 * @see #getCharterInMarket()
+	 * @generated
+	 */
+	EReference getCharterInMarket_Entity();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.spotmarkets.SpotCharterMarket <em>Spot Charter Market</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2726,6 +2746,14 @@ public interface SpotMarketsPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CHARTER_IN_MARKET__MTM = eINSTANCE.getCharterInMarket_Mtm();
+
+		/**
+		 * The meta object literal for the '<em><b>Entity</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CHARTER_IN_MARKET__ENTITY = eINSTANCE.getCharterInMarket_Entity();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotCharterMarketImpl <em>Spot Charter Market</em>}' class.

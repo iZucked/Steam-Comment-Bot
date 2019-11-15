@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.port.CanalEntry;
 import com.mmxlabs.models.lng.schedule.CanalBookingEvent;
 import com.mmxlabs.models.lng.schedule.CharterAvailableFromEvent;
 import com.mmxlabs.models.lng.schedule.CharterAvailableToEvent;
+import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Idle;
@@ -70,6 +71,8 @@ public class VesselStateColourScheme extends ColourScheme {
 			}
 		} else if (element instanceof GeneratedCharterOut) {
 			return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_GeneratedCharterOut, ColourElements.Background);
+		} else if (element instanceof CharterLengthEvent) {
+			return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_CharterLength, ColourElements.Background);
 
 		} else if (element instanceof CanalBookingEvent) {
 			CanalBookingEvent canalBookingEvent = (CanalBookingEvent) element;

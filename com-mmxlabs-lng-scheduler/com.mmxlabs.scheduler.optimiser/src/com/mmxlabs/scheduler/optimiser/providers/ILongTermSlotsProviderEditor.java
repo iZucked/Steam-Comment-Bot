@@ -4,12 +4,15 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers;
 
+import java.util.List;
+
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 
 public interface ILongTermSlotsProviderEditor extends ILongTermSlotsProvider {
 
-	public void addLongTermSlot(@NonNull IPortSlot element);
-	public void addEvent(@NonNull IPortSlot event);
+	void addLongTermSlot(@NonNull IPortSlot element);
+
+	void addEvent(@NonNull List<IPortSlot> event);
 }

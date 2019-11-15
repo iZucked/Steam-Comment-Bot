@@ -6,6 +6,7 @@ package com.mmxlabs.scheduler.optimiser.providers.impl;
 
 import java.util.Collection;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -19,7 +20,7 @@ public final class HashSetLongTermSlotsEditor implements ILongTermSlotsProviderE
 	private final Set<IPortSlot> portSlotMap = new LinkedHashSet<>();
 
 	@NonNull
-	private final Set<IPortSlot> eventMap = new LinkedHashSet<>();
+	private final Set<List<IPortSlot>> eventMap = new LinkedHashSet<>();
 
 	@Override
 	public @NonNull Collection<IPortSlot> getLongTermSlots() {
@@ -37,13 +38,12 @@ public final class HashSetLongTermSlotsEditor implements ILongTermSlotsProviderE
 	}
 
 	@Override
-	public @NonNull Collection<IPortSlot> getLongTermEvents() {
-		// TODO Auto-generated method stub
+	public @NonNull Collection<List<IPortSlot>> getLongTermEvents() {
 		return this.eventMap;
 	}
 
 	@Override
-	public void addEvent(@NonNull IPortSlot event) {
+	public void addEvent(@NonNull List<IPortSlot> event) {
 		eventMap.add(event);
 	}
 

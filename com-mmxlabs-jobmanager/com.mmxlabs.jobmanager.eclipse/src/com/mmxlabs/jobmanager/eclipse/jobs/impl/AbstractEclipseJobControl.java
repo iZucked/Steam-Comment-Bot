@@ -114,7 +114,7 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 	private int progress = 0;
 
 	public AbstractEclipseJobControl(final String jobName) {
-		this(jobName, Collections.<QualifiedName, Object> emptyMap());
+		this(jobName, Collections.<QualifiedName, Object>emptyMap());
 	}
 
 	protected abstract void doRunJob(IProgressMonitor progressMonitor);
@@ -149,11 +149,15 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 			currentState = newState;
 
 			// Take copy to avoid concurrent modification exceptions.
-			final List<IJobControlListener> copy = new ArrayList<IJobControlListener>(listeners);
+			final List<IJobControlListener> copy = new ArrayList<>(listeners);
 
 			for (final IJobControlListener mjl : copy) {
-				if (!mjl.jobStateChanged(this, oldState, newState)) {
-					listeners.remove(mjl);
+				try {
+					if (!mjl.jobStateChanged(this, oldState, newState)) {
+						listeners.remove(mjl);
+					}
+				} catch (Exception e) {
+					LOG.error("Error in job state listener " + e.getMessage(), e);
 				}
 			}
 		}

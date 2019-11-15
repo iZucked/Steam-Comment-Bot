@@ -63,7 +63,7 @@ public class EndEventInPeriodTest extends AbstractMicroTestCase {
 				.withAssignmentFlags(false, false) //
 				.build();
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "150000", 0);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "150000", 0);
 
 		// Create cargo 1, cargo 2
 		final Cargo cargo2 = cargoModelBuilder.makeCargo() //

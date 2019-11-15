@@ -230,14 +230,14 @@ public class LightWeightSchedulerOptimiserUnit {
 
 		final LightWeightOptimisationDataFactory scheduler = stage1Injector.getInstance(LightWeightOptimisationDataFactory.class);
 
-		final CleanableExecutorService executorService = new SimpleCleanableExecutorService(Executors.newFixedThreadPool(1), 1);
+		final CleanableExecutorService localExecutorService = new SimpleCleanableExecutorService(Executors.newFixedThreadPool(1), 1);
 
 		try {
-			return scheduler.createSlotPairingMatrix(pnlVessel, calculator, executorService, monitor);
+			return scheduler.createSlotPairingMatrix(pnlVessel, calculator, localExecutorService, monitor);
 		} catch (Exception e) {
 			return null;
 		} finally {
-			executorService.shutdown();
+			localExecutorService.shutdown();
 		}
 	}
 
@@ -292,12 +292,12 @@ public class LightWeightSchedulerOptimiserUnit {
 
 		final LightWeightOptimisationDataFactory scheduler = stage1Injector.getInstance(LightWeightOptimisationDataFactory.class);
 
-		final CleanableExecutorService executorService = new SimpleCleanableExecutorService(Executors.newFixedThreadPool(1), 1);
+		final CleanableExecutorService localExecutorService = new SimpleCleanableExecutorService(Executors.newFixedThreadPool(1), 1);
 
 		try {
-			return scheduler.createLightWeightOptimisationData(pnlVessel, calculator, executorService, monitor);
+			return scheduler.createLightWeightOptimisationData(pnlVessel, calculator, localExecutorService, monitor);
 		} finally {
-			executorService.shutdown();
+			localExecutorService.shutdown();
 		}
 
 	}
@@ -314,12 +314,12 @@ public class LightWeightSchedulerOptimiserUnit {
 
 		final LightWeightOptimisationDataFactory scheduler = stage1Injector.getInstance(LightWeightOptimisationDataFactory.class);
 
-		final CleanableExecutorService executorService = new SimpleCleanableExecutorService(Executors.newFixedThreadPool(1), 1);
+		final CleanableExecutorService localExecutorService = new SimpleCleanableExecutorService(Executors.newFixedThreadPool(1), 1);
 
 		try {
-			return scheduler.createNominalADP(pnlVessel, calculator, executorService, monitor);
+			return scheduler.createNominalADP(pnlVessel, calculator, localExecutorService, monitor);
 		} finally {
-			executorService.shutdown();
+			localExecutorService.shutdown();
 		}
 
 	}

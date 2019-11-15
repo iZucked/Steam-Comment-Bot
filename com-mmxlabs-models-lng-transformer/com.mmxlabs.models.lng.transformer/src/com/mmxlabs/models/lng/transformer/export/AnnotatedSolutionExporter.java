@@ -260,9 +260,6 @@ public class AnnotatedSolutionExporter {
 			if (!(isDESSequence || isFOBSequence || isRoundTripSequence)) {
 				sequences.add(eSequence);
 			}
-			if (sequences.size() > annotatedSolution.getFullSequences().getResources().size()) {
-				int ii = 0;
-			}
 
 			final boolean pIsRoundTripSequence = isRoundTripSequence;
 			final boolean pIsFOBSequence = isFOBSequence;

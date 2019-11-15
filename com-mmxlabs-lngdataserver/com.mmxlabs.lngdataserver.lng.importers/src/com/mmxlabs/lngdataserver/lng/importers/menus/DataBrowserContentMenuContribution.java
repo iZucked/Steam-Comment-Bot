@@ -29,6 +29,7 @@ import com.mmxlabs.lngdataserver.integration.ports.model.PortsVersion;
 import com.mmxlabs.lngdataserver.integration.pricing.PricingRepository;
 import com.mmxlabs.lngdataserver.integration.pricing.model.PricingVersion;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.BaseCaseServiceClient;
+import com.mmxlabs.lngdataserver.lng.importers.menus.PublishBasecaseException.Type;
 import com.mmxlabs.lngdataserver.lng.io.distances.ui.DistancesToScenarioImportWizard;
 import com.mmxlabs.lngdataserver.lng.io.port.PortFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.io.port.ui.PortsToScenarioImportWizard;
@@ -37,6 +38,7 @@ import com.mmxlabs.lngdataserver.lng.io.pricing.ui.PricingFromScenarioImportWiza
 import com.mmxlabs.lngdataserver.lng.io.pricing.ui.PricingToScenarioImportWizard;
 import com.mmxlabs.lngdataserver.lng.io.vessels.ui.VesselsToScenarioImportWizard;
 import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
+import com.mmxlabs.lngdataserver.server.UserPermissionsService;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -99,25 +101,33 @@ public class DataBrowserContentMenuContribution implements IDataBrowserContextMe
 		if (UpstreamUrlProvider.INSTANCE.isAvailable() && BaseCaseServiceClient.INSTANCE.needsLocking()) {
 			if (BaseCaseServiceClient.INSTANCE.isServiceLockedByMe()) {
 
-				menuManager.add(new RunnableAction("Unlock base case", () -> {
-					try {
-						BaseCaseServiceClient.INSTANCE.unlock();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}));
-				itemsAdded = true;
+				// Check user permission
+				if (!UserPermissionsService.INSTANCE.hubSupportsPermissions() || UserPermissionsService.INSTANCE.isPermitted("basecase", "unlock")) {
+
+					menuManager.add(new RunnableAction("Unlock base case", () -> {
+						try {
+							BaseCaseServiceClient.INSTANCE.unlock();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}));
+					itemsAdded = true;
+				}
 			} else if (!BaseCaseServiceClient.INSTANCE.isServiceLocked()) {
-				menuManager.add(new RunnableAction("Lock base case", () -> {
-					try {
-						BaseCaseServiceClient.INSTANCE.lock();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}));
-				itemsAdded = true;
+				// Check user permission
+				if (!UserPermissionsService.INSTANCE.hubSupportsPermissions() || UserPermissionsService.INSTANCE.isPermitted("basecase", "lock")) {
+
+					menuManager.add(new RunnableAction("Lock base case", () -> {
+						try {
+							BaseCaseServiceClient.INSTANCE.lock();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}));
+					itemsAdded = true;
+				}
 			}
 		}
 
@@ -134,10 +144,14 @@ public class DataBrowserContentMenuContribution implements IDataBrowserContextMe
 				final ScenarioInstance scenarioInstance = (ScenarioInstance) firstElement;
 				final Manifest manifest = scenarioInstance.getManifest();
 				if (UpstreamUrlProvider.INSTANCE.isAvailable() && BaseCaseServiceClient.INSTANCE.canPublish()) {
-					menuManager.add(new RunnableAction("Publish scenario as current base case", () -> {
-						ScenarioServicePublishAction.publishScenario(scenarioInstance);
-					}));
-					itemsAdded = true;
+
+					// Check user permission
+					if (!UserPermissionsService.INSTANCE.hubSupportsPermissions() || UserPermissionsService.INSTANCE.isPermitted("basecase", "publish")) {
+						menuManager.add(new RunnableAction("Publish scenario as current base case", () -> {
+							ScenarioServicePublishAction.publishScenario(scenarioInstance);
+						}));
+						itemsAdded = true;
+					}
 				}
 				if (manifest != null) {
 					for (final ModelArtifact modelArtifact : manifest.getModelDependencies()) {

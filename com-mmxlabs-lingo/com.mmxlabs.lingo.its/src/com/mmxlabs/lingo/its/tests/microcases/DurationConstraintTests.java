@@ -1130,7 +1130,7 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 		int minDuration = 10;
 		int maxDuration = 28;
 
-		CharterInMarket charterInMarket = spotMarketsModelBuilder.createCharterInMarket("TestCharterMarket", vessel1, "1", 1);
+		CharterInMarket charterInMarket = spotMarketsModelBuilder.createCharterInMarket("TestCharterMarket", vessel1, entity, "1", 1);
 		charterInMarket.setEnabled(true);
 		charterInMarket.setMinDuration(minDuration);
 		charterInMarket.setMaxDuration(maxDuration);

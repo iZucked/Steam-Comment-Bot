@@ -23,6 +23,7 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.CertificateNotYetValidException;
 import java.security.cert.X509Certificate;
 import java.util.Enumeration;
+import java.util.Objects;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
@@ -31,15 +32,18 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.license.ssl.internal.Activator;
 
 /**
- * A simple class to load a license - a SSL certificate from a disk location and verify it has been signed by the "root" key in the embedded keystore and that it is still in date.
+ * A simple class to load a license - a SSL certificate from a disk location and
+ * verify it has been signed by the "root" key in the embedded keystore and that
+ * it is still in date.
  * 
  * @author Simon Goodall
  */
 public final class LicenseChecker {
 
 	@SuppressWarnings("serial")
-	public static class InvalidLicenseException extends Exception { }
-	
+	public static class InvalidLicenseException extends Exception {
+	}
+
 	private static final Logger log = LoggerFactory.getLogger(LicenseChecker.class);
 
 	/**
@@ -66,7 +70,8 @@ public final class LicenseChecker {
 		}
 	}
 
-	// Hardcoded keystore password - only storing public key so not really an issue - although tampering may be an issue
+	// Hardcoded keystore password - only storing public key so not really an issue
+	// - although tampering may be an issue
 	private static final String password = "Lok3pDTS";
 
 	private static final String CACERTS_PATH = System.getProperty("java.home") + File.separatorChar + "lib" + File.separatorChar + "security" + File.separatorChar + "cacerts"; //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$//$NON-NLS-4$
@@ -79,7 +84,7 @@ public final class LicenseChecker {
 			final File trustStoreFile = Activator.getDefault().getBundle().getDataFile("local-truststore.jks");
 			final KeyStore keyStore = KeyStore.getInstance("JKS");
 			try (final InputStream astream = new FileInputStream(trustStoreFile)) {
-				keyStore.load(astream,  password.toCharArray());
+				keyStore.load(astream, password.toCharArray());
 			}
 			return new Pair<>(keyStore, password.toCharArray());
 		}
@@ -136,7 +141,19 @@ public final class LicenseChecker {
 			// Verify license is signed by the server
 			licenseCertificate.verify(rootCertificate.getPublicKey());
 
-			// Load in existing certificates from default store. We replace the default store with our own, so make sure other bits of the app using a truststore still work.
+			// Check dates are valid. We expect a X509 certificate
+			if (licenseCertificate instanceof X509Certificate) {
+				final X509Certificate x509Certificate = (X509Certificate) licenseCertificate;
+				x509Certificate.checkValidity();
+			} else {
+				return LicenseState.Unknown;
+			}
+
+			// License is valid, now populate the rest of the keystore
+
+			// Load in existing certificates from default store. We replace the default
+			// store with our own, so make sure other bits of the app using a truststore
+			// still work.
 			{
 				String defaultStorePath = System.getProperty("javax.net.ssl.trustStore");
 				if (defaultStorePath == null) {
@@ -151,27 +168,27 @@ public final class LicenseChecker {
 				final char[] pass = defaultStorePassword == null ? null : defaultStorePassword.toCharArray();
 
 				final KeyStore defaultStore = KeyStore.getInstance(defaultStoreType);
-				try (FileInputStream fis = new FileInputStream(defaultStorePath)) {
-					defaultStore.load(fis, pass);
+				if (Objects.equals("NUL", defaultStorePath)) {
+					defaultStore.load(null);
+				} else {
+					try (FileInputStream fis = new FileInputStream(defaultStorePath)) {
+						defaultStore.load(fis, pass);
+					}
+				}
+
+				{
 					final Enumeration<String> enumerator = defaultStore.aliases();
 					while (enumerator.hasMoreElements()) {
 						final String alias = enumerator.nextElement();
 						keyStore.setCertificateEntry(alias, defaultStore.getCertificate(alias));
 					}
-				} catch (final IOException e) {
-					log.error(e.getMessage(), e);
 				}
-			}
-
-			// Check dates are valid. We expect a X509 certificate
-			if (licenseCertificate instanceof X509Certificate) {
-				final X509Certificate x509Certificate = (X509Certificate) licenseCertificate;
-				x509Certificate.checkValidity();
 
 				importExtraCertsFromHome(keyStore);
 				importExtraCertsInstall(keyStore);
 
-				// Create copies of the keystores in a known place on filesystem so we can reference them
+				// Create copies of the keystores in a known place on filesystem so we can
+				// reference them
 				final File keyStoreFile = Activator.getDefault().getBundle().getDataFile("local-keystore.jks");
 				final File trustStoreFile = Activator.getDefault().getBundle().getDataFile("local-truststore.jks");
 
@@ -186,11 +203,11 @@ public final class LicenseChecker {
 
 					System.setProperty("javax.net.ssl.trustStore", trustStoreFile.toString());
 					System.setProperty("javax.net.ssl.trustStorePassword", password);
+					System.setProperty("javax.net.ssl.trustStoreType", "pkcs12");
 					return LicenseState.Valid;
 				}
 			}
 
-			return LicenseState.Unknown;
 		} catch (final CertificateExpiredException e) {
 			return LicenseState.Expired;
 		} catch (final CertificateNotYetValidException e) {
@@ -274,7 +291,7 @@ public final class LicenseChecker {
 		final String userHome = System.getProperty("eclipse.home.location");
 		if (userHome != null) {
 			try {
-				File f = new File(new URI(userHome + "/cacerts/"));
+				final File f = new File(new URI(userHome + "/cacerts/"));
 				if (f.exists() && f.isDirectory()) {
 					for (final File certFile : f.listFiles()) {
 						if (certFile.isFile()) {

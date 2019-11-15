@@ -124,9 +124,14 @@ public class BaseCaseServiceClient {
 				if (response.code() == 404) {
 					// 404: Endpoint not defined - old server version
 					return;
+				} else if (response.code() == 405) {
+					// POST return a 405 instead of 404
+					// 405: Endpoint not defined - old server version
+					return;
 				}
 				if (response.code() == 503) {
-					// 503: Service unavailable - not configured on server, so do not report an error for this code.
+					// 503: Service unavailable - not configured on server, so do not report an
+					// error for this code.
 					return;
 
 				}

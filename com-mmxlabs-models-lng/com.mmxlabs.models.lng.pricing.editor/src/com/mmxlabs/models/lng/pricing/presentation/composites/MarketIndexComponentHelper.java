@@ -65,13 +65,13 @@ public class MarketIndexComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editors for features on this class directly, and superclass' features.
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_settleCalendarEditor(detailComposite, topClass);
 		add_pricingCalendarEditor(detailComposite, topClass);
+		add_settleCalendarEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the settleCalendar feature on MarketIndex

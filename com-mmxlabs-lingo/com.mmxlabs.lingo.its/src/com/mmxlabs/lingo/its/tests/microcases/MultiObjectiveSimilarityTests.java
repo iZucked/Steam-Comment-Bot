@@ -34,7 +34,6 @@ import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
-import com.mmxlabs.models.lng.transformer.ui.parametermodes.impl.ParallelOptimisationPlanExtender;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.fitness.components.NonOptionalSlotFitnessCoreFactory;
@@ -98,8 +97,6 @@ public class MultiObjectiveSimilarityTests extends AbstractMicroTestCase {
 		ScenarioUtils.setHillClimbStageIterations(optimisationPlan, 10_000);
 		ScenarioUtils.setActionPlanStageParameters(optimisationPlan, 5_000_000, 1_500_000, 5_000);
 		ScenarioUtils.createOrUpdateAllObjectives(optimisationPlan, NonOptionalSlotFitnessCoreFactory.NAME, true, 24_000_000);
-
-		new ParallelOptimisationPlanExtender().extend(optimisationPlan);
 
 		return optimisationPlan;
 	}

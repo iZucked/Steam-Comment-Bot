@@ -33,10 +33,12 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.common.concurrent.SimpleCleanableExecutorService;
+import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.actionplan.ActionSetLogger;
+import com.mmxlabs.models.lng.transformer.config.OptimiserConfigurationOptions;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.AbstractRunnerHook;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
@@ -153,12 +155,14 @@ public class HeadlessOptimiserRunner {
 		// updateOptimiserSettings(null, null, null);
 		
 		
+		//OptimiserConfigurationOptions ocOptions = OptimiserConfigurationOptions.readFromFile(options.algorithmConfigFile);
 		OptimiserConfigurationOptions ocOptions = OptimiserConfigurationOptions.readFromFile(options.algorithmConfigFile);
+		
 		OptimisationPlan optimisationPlan = ocOptions.plan;
 		
 		createPromptDates((LNGScenarioModel) sdp.getScenario(), ocOptions.other);
 
-		optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(optimisationPlan, true, false); // incorporate the settings from the parameterModesRegistry
+		optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(optimisationPlan, true, false); // incorporate the settings from the parameterModesRegistry				
 		
 		// assert overrideSettings.getOutputName() != null;//
 		// final String outputFolderName = overrideSettings.getOutputName() == null ? getFolderNameFromSettings(optimisationPlan) : getFolderNameFromSettings(overrideSettings);
@@ -180,7 +184,9 @@ public class HeadlessOptimiserRunner {
 
 		final Map<String, LSOLogger> phaseToLoggerMap = new ConcurrentHashMap<>();
 
-		final ActionSetLogger actionSetLogger = optimisationPlan.getUserSettings().isBuildActionSets() ? new ActionSetLogger() : null;
+		final boolean doesActionSet = optimisationPlan.getStages().stream().anyMatch(stage -> (stage instanceof ActionPlanOptimisationStage));
+		final ActionSetLogger actionSetLogger = doesActionSet ? new ActionSetLogger() : null; 
+		
 		try {
 
 			final AbstractRunnerHook runnerHook = !exportLogs ? null : new AbstractRunnerHook() {
@@ -236,6 +242,10 @@ public class HeadlessOptimiserRunner {
 
 			try {
 
+				if (jsonOutput != null) {
+					jsonOutput.setOptimisationPlan(optimisationPlan);
+				}
+				
 				final LNGScenarioRunner runner = LNGOptimisationBuilder.begin(sdp) //
 						.withRunnerHook(runnerHook) //
 						.withOptimiserInjectorService(localOverrides) //

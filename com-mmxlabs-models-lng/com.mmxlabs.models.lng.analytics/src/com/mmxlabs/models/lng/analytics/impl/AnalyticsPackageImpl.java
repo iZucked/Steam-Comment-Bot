@@ -3904,6 +3904,12 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 			   "nonUniqueChildren", "true"
 		   });
 		addAnnotation
+		  (getAbstractSolutionSet_ExtraCharterInMarkets(),
+		   source,
+		   new String[] {
+			   "nonUniqueChildren", "true"
+		   });
+		addAnnotation
 		  (actionableSetPlanEClass,
 		   source,
 		   new String[] {

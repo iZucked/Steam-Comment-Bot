@@ -27,19 +27,22 @@ import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class ExposuresReportJSONGenerator {
 
-	public static List<ExposuresReportModel> createReportData(final @NonNull ScheduleModel scheduleModel, final @NonNull IScenarioDataProvider scenarioDataProvider) {
+	public static List<ExposuresReportModel> createReportData(final @NonNull ScheduleModel scheduleModel, final @NonNull IScenarioDataProvider scenarioDataProvider, //
+			final ScenarioResult scenarioResult) {
 
 		Schedule schedule = scheduleModel.getSchedule();
 		if (schedule == null) {
 			return null;
 		}
-		return createTransformedData(schedule, scenarioDataProvider);
+		return createTransformedData(schedule, scenarioDataProvider, scenarioResult);
 	}
 
-	public static List<ExposuresReportModel> createTransformedData(final @NonNull Schedule schedule, final @NonNull IScenarioDataProvider scenarioDataProvider) {
+	public static List<ExposuresReportModel> createTransformedData(final @NonNull Schedule schedule, final @NonNull IScenarioDataProvider scenarioDataProvider, //
+			final ScenarioResult scenarioResult) {
 
 		final PricingModel pm = ScenarioModelUtil.getPricingModel(scenarioDataProvider);
 		final List<CommodityCurve> indices = pm.getCommodityCurves();
@@ -51,7 +54,7 @@ public class ExposuresReportJSONGenerator {
 		for (YearMonth cym = ymStart; cym.isBefore(ymEnd); cym = cym.plusMonths(1)) {
 
 			IndexExposureData exposuresByMonth = 
-					ExposuresTransformer.getExposuresByMonth(null, schedule, cym, Exposures.ValueMode.VOLUME_MMBTU,  Collections.emptyList(), null, -1, AssetType.NET);
+					ExposuresTransformer.getExposuresByMonth(scenarioResult, schedule, cym, Exposures.ValueMode.VOLUME_MMBTU,  Collections.emptyList(), null, -1, AssetType.NET);
 
 			if (exposuresByMonth.exposures.size() != 0.0) {
 				temp.add(exposuresByMonth);

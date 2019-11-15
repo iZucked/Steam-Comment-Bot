@@ -126,6 +126,10 @@ orphanlegs - Include orphan ballast legs
                   </enumeration>
                   <enumeration value="virtualcharters">
                   </enumeration>
+                  <enumeration value="charterlength">
+                  </enumeration>
+                  <enumeration value="endevents">
+                  </enumeration>
                </restriction>
             </simpleType>
          </attribute>

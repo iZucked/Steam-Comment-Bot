@@ -254,7 +254,7 @@ public class MicroTestUtils {
 	 */
 	public static boolean evaluateLSOSequences(@NonNull final LNGDataTransformer dataTransformer, @NonNull final ISequences rawSequences) {
 
-		LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(ScenarioUtils.createDefaultConstraintAndFitnessSettings());
+		LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(ScenarioUtils.createDefaultConstraintAndFitnessSettings(), false);
 
 		final LNGLSOOptimiserTransformerUnit unit = new LNGLSOOptimiserTransformerUnit(dataTransformer, IRunnerHook.STAGE_LSO, 0, dataTransformer.getUserSettings(), stage,
 				dataTransformer.getInitialSequences(), dataTransformer.getInitialSequences(), dataTransformer.getHints());
