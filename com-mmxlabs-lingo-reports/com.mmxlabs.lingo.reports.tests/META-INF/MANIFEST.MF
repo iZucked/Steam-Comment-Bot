@@ -6,8 +6,7 @@ Fragment-Host: com.mmxlabs.lingo.reports
 Bundle-Version: 4.7.26.qualifier
 Bundle-Vendor: Minimax Labs Ltd.
 Bundle-RequiredExecutionEnvironment: JavaSE-10
-Require-Bundle: org.junit.jupiter.api;bundle-version="5.0.0",
- com.mmxlabs.models.lng.types;bundle-version="[4.7.26,5.0.0)",
+Require-Bundle: com.mmxlabs.models.lng.types;bundle-version="[4.7.26,5.0.0)",
  com.mmxlabs.models.lng.cargo;bundle-version="[4.7.26,5.0.0)",
  com.mmxlabs.models.lng.commercial;bundle-version="[4.7.26,5.0.0)",
  com.mmxlabs.models.lng.pricing;bundle-version="[4.7.26,5.0.0)",
@@ -18,3 +17,5 @@ Require-Bundle: org.junit.jupiter.api;bundle-version="5.0.0",
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
 Automatic-Module-Name: com.mmxlabs.lingo.reports.tests
+Import-Package: org.junit.jupiter.api;version="5.1.0",
+ org.junit.runner.manipulation;version="4.12.0"
