@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.TreeMap;
 
+import javax.inject.Singleton;
+
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -64,9 +66,11 @@ import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
 import com.mmxlabs.scheduler.optimiser.components.impl.ConstantHeelPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.HeelOptionConsumer;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.VoyagePlanStartDateCharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
@@ -336,6 +340,8 @@ public class SimpleSchedulerTest {
 					@Override
 					protected void configure() {
 						bind(CalendarMonthMapper.class).toInstance(Mockito.mock(CalendarMonthMapper.class));
+						bind(VoyagePlanStartDateCharterRateCalculator.class).in(Singleton.class);
+						bind(ICharterRateCalculator.class).to(VoyagePlanStartDateCharterRateCalculator.class);
 					}
 				});
 	}

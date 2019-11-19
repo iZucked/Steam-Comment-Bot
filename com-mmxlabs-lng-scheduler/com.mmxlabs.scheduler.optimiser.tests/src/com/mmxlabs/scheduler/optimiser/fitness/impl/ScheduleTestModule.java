@@ -113,7 +113,7 @@ public class ScheduleTestModule extends AbstractModule {
 		bind(LNGVoyageCalculator.class).in(Singleton.class);
 
 		bind(IVolumeAllocator.class).to(UnconstrainedVolumeAllocator.class).in(Singleton.class);
-		bind(ICharterRateCalculator.class).to(VesselStartDateCharterRateCalculator.class);
+		//bind(ICharterRateCalculator.class).to(VesselStartDateCharterRateCalculator.class);
 
 		bind(IVoyagePlanner.class).to(VoyagePlanner.class);
 
