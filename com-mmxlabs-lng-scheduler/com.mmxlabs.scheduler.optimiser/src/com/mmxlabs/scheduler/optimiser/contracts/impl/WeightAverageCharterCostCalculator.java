@@ -1,5 +1,7 @@
 package com.mmxlabs.scheduler.optimiser.contracts.impl;
 
+import java.util.NavigableSet;
+
 import com.mmxlabs.common.curves.ILongCurve;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 
@@ -16,9 +18,20 @@ public class WeightAverageCharterCostCalculator implements ICharterCostCalculato
 		if (charterRateCurve != null) {
 			long charterCost = 0;
 			final int vesselEndTime = vesselStartTime + duration;
-			for (int t = vesselStartTime; t <= vesselEndTime; t++) {
+			NavigableSet<Integer> changePoints = charterRateCurve.getChangePoints();
+						
+			//Otherwise have to step through the change points, from the vesselStartTime up to the vesselEndTime.
+			Integer firstT = vesselStartTime;
+			Integer lastT = vesselEndTime;
+			int durationCharterRate = 1;
+			for (int t = firstT; t < lastT; t+= durationCharterRate) {
 				long charterRatePerDay = charterRateCurve.getValueAtPoint(t);
-				charterCost += charterRatePerDay;
+				Integer nextT = changePoints.ceiling(t+1);
+				if (nextT == null) {
+					nextT = lastT;
+				}
+				durationCharterRate = nextT - t;				
+				charterCost += (charterRatePerDay * durationCharterRate);
 			}
 			return charterCost / 24L;
 		}
