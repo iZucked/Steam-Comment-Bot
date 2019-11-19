@@ -8,7 +8,9 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 
-//TODO: create ICharterCostCalculator and replace ICharterRateCalculator below with new interface.
+/**
+* @deprecated Use ICharterCostCalculator instead.
+*/ 
 public interface ICharterRateCalculator extends ICalculator {
 	/**
 	 * 
