@@ -4,19 +4,21 @@
  */
 package com.mmxlabs.common.curves;
 
+import java.util.Collections;
+import java.util.NavigableSet;
+import java.util.Set;
+
 /**
  * An interface for a curve, which uses long precision.
  * 
  */
 public interface ILongCurve {
 	
-	static final int zeroChangePoints[] = new int[0];
-	
 	/**
 	 * Get the first point where the values in the curve change.
-	 * @return empty array, if constant value, array times in hours otherwise.
+	 * @return empty set, if constant value, set of change points in hours otherwise.
 	 */
-	default int[] getChangePoints() { return zeroChangePoints; }
+	default NavigableSet<Integer> getChangePoints() { return Collections.emptyNavigableSet(); }
 	
 	/**
 	 * Get the value at a particular point in time in hours.

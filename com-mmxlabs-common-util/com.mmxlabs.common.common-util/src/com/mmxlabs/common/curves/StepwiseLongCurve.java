@@ -4,8 +4,9 @@
  */
 package com.mmxlabs.common.curves;
 
+import java.util.Collections;
 import java.util.Map;
-import java.util.Set;
+import java.util.NavigableSet;
 import java.util.TreeMap;
 
 /**
@@ -18,21 +19,10 @@ import java.util.TreeMap;
 public class StepwiseLongCurve implements ILongCurve {
 	private long defaultValue;
 	private final TreeMap<Integer, Long> intervals = new TreeMap<>();
-	private int[] changePoints;
 	
 	@Override
-	public int[] getChangePoints() { 
-		if (this.changePoints == null || intervals.keySet().size() != this.changePoints.length) {
-			Set<Integer> keys = intervals.navigableKeySet();
-			int keysLength = keys.size();
-			this.changePoints = new int[keysLength];
-			int i = 0;
-			for (int key : keys) {
-				this.changePoints[i] = key;
-				i++;
-			}
-		}
-		return this.changePoints;
+	public NavigableSet<Integer> getChangePoints() { 
+		return Collections.unmodifiableNavigableSet(intervals.navigableKeySet());
 	}
 	
 	/**
