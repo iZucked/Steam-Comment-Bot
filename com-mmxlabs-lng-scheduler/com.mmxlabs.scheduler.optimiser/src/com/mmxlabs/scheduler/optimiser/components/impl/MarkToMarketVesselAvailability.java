@@ -21,7 +21,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.IBallastBonusContract;
-import com.mmxlabs.scheduler.optimiser.contracts.impl.ConstantCharterCostCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedCharterInRateCharterCostCalculator;
 
 /**
  */
@@ -53,7 +53,7 @@ public class MarkToMarketVesselAvailability implements IVesselAvailability {
 		this.markToMarket = markToMarket;
 		this.portSlot = dischargeOption;
 		this.curve = new ConstantValueLongCurve(0);
-		this.charterCostCalculator = new ConstantCharterCostCalculator(0);
+		this.charterCostCalculator = new FixedCharterInRateCharterCostCalculator(0);
 		this.vesselInstanceType = VesselInstanceType.DES_PURCHASE;
 	}
 
@@ -61,7 +61,7 @@ public class MarkToMarketVesselAvailability implements IVesselAvailability {
 		this.markToMarket = markToMarket;
 		this.portSlot = loadOption;
 		this.curve = new ConstantValueLongCurve(0);
-		this.charterCostCalculator = new ConstantCharterCostCalculator(0);
+		this.charterCostCalculator = new FixedCharterInRateCharterCostCalculator(0);
 		this.vesselInstanceType = VesselInstanceType.FOB_SALE;
 	}
 
