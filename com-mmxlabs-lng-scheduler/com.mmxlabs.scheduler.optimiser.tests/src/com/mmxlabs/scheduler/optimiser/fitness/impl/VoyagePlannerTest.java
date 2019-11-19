@@ -285,12 +285,9 @@ public final class VoyagePlannerTest {
 
 		int[] fuelMap = GeneralTestUtils.makeBaseFuelPrices(0);
 		// Matchers.eq!!
-		ICharterCostCalculator ccc = new ICharterCostCalculator() {
-			@Override
-			public long getCharterCost(int vesselStartTime, int voyagePlanStartTime, int eventStartTime, int duration) {
-				return 0;
-			}
-		};
+		ICharterCostCalculator ccc = Mockito.mock(ICharterCostCalculator.class);
+		Mockito.when(ccc.getCharterCost(ArgumentMatchers.anyInt(), ArgumentMatchers.anyInt(), ArgumentMatchers.anyInt(), ArgumentMatchers.anyInt())).thenReturn(0L);
+		
 		Mockito.when(voyagePlanOptimiser.optimise(resource, vessel, new long[] { 0L, 0L }, fuelMap, ccc, portTimesRecord1, expectedBasicSequence1, vpoChoices1, Integer.MAX_VALUE)).thenReturn(testVoyagePlan);
 		Mockito.when(voyagePlanOptimiser.optimise(resource, vessel, new long[] { 0L, 0L }, fuelMap, ccc, portTimesRecord2, expectedBasicSequence2, vpoChoices2, Integer.MAX_VALUE)).thenReturn(testVoyagePlan);
 
