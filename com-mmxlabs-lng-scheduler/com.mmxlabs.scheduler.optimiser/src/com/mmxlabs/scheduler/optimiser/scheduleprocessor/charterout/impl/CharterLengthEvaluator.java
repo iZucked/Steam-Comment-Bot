@@ -260,11 +260,10 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 
 			//
 			final VoyagePlan currentPlan = new VoyagePlan();
-			currentPlan.setCharterCostCalculator(originalPlan.getCharterCostCalculator());
 			currentPlan.setIgnoreEnd(true);
 
 			// Calculate voyage plan
-			final int violationCount = voyageCalculator.calculateVoyagePlan(currentPlan, vessel, startHeelRangeInM3, baseFuelPricesPerMT, portTimesRecord1,
+			final int violationCount = voyageCalculator.calculateVoyagePlan(currentPlan, vessel, vesselAvailability.getCharterCostCalculator(), startHeelRangeInM3, baseFuelPricesPerMT, portTimesRecord1,
 					newRawSequence1.toArray(new IDetailsSequenceElement[0]));
 			assert violationCount != Integer.MAX_VALUE;
 
@@ -302,11 +301,10 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 			portTimesRecord2.setReturnSlotTime(originalPortTimesRecord.getReturnSlot(), originalPortTimesRecord.getSlotTime(originalPortTimesRecord.getReturnSlot()));
 
 			final VoyagePlan currentPlan = new VoyagePlan();
-			currentPlan.setCharterCostCalculator(originalPlan.getCharterCostCalculator());
 			currentPlan.setIgnoreEnd(originalPlan.isIgnoreEnd());
 
 			// Calculate voyage plan
-			final int violationCount = voyageCalculator.calculateVoyagePlan(currentPlan, vessel, startHeelRangeInM3, baseFuelPricesPerMT, portTimesRecord2,
+			final int violationCount = voyageCalculator.calculateVoyagePlan(currentPlan, vessel, vesselAvailability.getCharterCostCalculator(), startHeelRangeInM3, baseFuelPricesPerMT, portTimesRecord2,
 					newRawSequence2.toArray(new IDetailsSequenceElement[0]));
 			assert violationCount != Integer.MAX_VALUE;
 			charterPlans.add(new Pair<VoyagePlan, IPortTimesRecord>(currentPlan, portTimesRecord2));

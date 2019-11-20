@@ -68,7 +68,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 	public Pair<VoyagePlan, IAllocationAnnotation> processSchedule(final int vesselStartTime, final @NonNull IVesselAvailability vesselAvailability, final @NonNull VoyagePlan vp,
 			final @NonNull IPortTimesRecord portTimesRecord) {
 		final long startingHeelInM3 = vp.getStartingHeelInM3();
-		final ICharterCostCalculator charterCostCalculator = vp.getCharterCostCalculator();
+		final ICharterCostCalculator charterCostCalculator = vesselAvailability.getCharterCostCalculator();
 
 		boolean isCargoPlan = false;
 		boolean missingPurchasePrice = false;

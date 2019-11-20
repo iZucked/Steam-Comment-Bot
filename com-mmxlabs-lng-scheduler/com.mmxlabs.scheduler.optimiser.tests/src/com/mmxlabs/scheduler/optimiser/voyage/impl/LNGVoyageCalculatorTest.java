@@ -20,7 +20,6 @@ import com.mmxlabs.common.curves.ConstantValueLongCurve;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.ILongCurve;
 import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
@@ -30,7 +29,6 @@ import com.mmxlabs.scheduler.optimiser.components.IHeelPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
 import com.mmxlabs.scheduler.optimiser.components.impl.BaseFuel;
@@ -43,6 +41,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.NotionalEndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.Vessel;
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
@@ -66,6 +65,11 @@ import com.mmxlabs.scheduler.optimiser.voyage.TravelFuelChoice;
 
 public class LNGVoyageCalculatorTest {
 
+	private ICharterCostCalculator createTestCharterCostCalculator() {
+		ICharterCostCalculator ccc = Mockito.mock(ICharterCostCalculator.class);
+		return ccc;
+	}
+	
 	@Test
 	public void testCalculateVoyageFuelRequirements1() {
 
@@ -604,7 +608,7 @@ public class LNGVoyageCalculatorTest {
 		Mockito.when(portTimesRecord.getSlotTime(ArgumentMatchers.<@NonNull IPortSlot> any())).thenReturn(0);
 
 		final int[] baseFuels = GeneralTestUtils.makeBaseFuelPrices(0);
-		calc.calculateVoyagePlan(plan, vessel, new long[] { 0L, 0L }, baseFuels, portTimesRecord, sequence);
+		calc.calculateVoyagePlan(plan, vessel, createTestCharterCostCalculator(), new long[] { 0L, 0L }, baseFuels, portTimesRecord, sequence);
 
 		final VoyagePlan expectedPlan = new VoyagePlan();
 		expectedPlan.setSequence(sequence);
@@ -674,7 +678,7 @@ public class LNGVoyageCalculatorTest {
 		final IPortTimesRecord portTimesRecord = Mockito.mock(IPortTimesRecord.class);
 		Mockito.when(portTimesRecord.getSlotTime(ArgumentMatchers.<@NonNull IPortSlot> any())).thenReturn(0);
 
-		calc.calculateVoyagePlan(plan, vessel, new long[] { 0L, 0L }, baseFuelCalculator.getBaseFuelPrices(vessel, 100), portTimesRecord, sequence);
+		calc.calculateVoyagePlan(plan, vessel, createTestCharterCostCalculator(), new long[] { 0L, 0L }, baseFuelCalculator.getBaseFuelPrices(vessel, 100), portTimesRecord, sequence);
 
 		final VoyagePlan expectedPlan = new VoyagePlan();
 		expectedPlan.setSequence(sequence);
@@ -702,7 +706,6 @@ public class LNGVoyageCalculatorTest {
 		expectedPlan.setLngFuelCost(240_000);
 		expectedPlan.setLNGFuelVolume(120000);
 
-		expectedPlan.setCharterCostCalculator(new FixedCharterInRateCharterCostCalculator(0));
 		expectedPlan.setIgnoreEnd(true);
 		expectedPlan.setRemainingHeelInM3(0);
 		expectedPlan.setStartingHeelInM3(0);
@@ -793,7 +796,7 @@ public class LNGVoyageCalculatorTest {
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
 
 		final int[] baseFuelPrices = GeneralTestUtils.makeBaseFuelPrices(0);
-		Assertions.assertThrows(RuntimeException.class, () -> calc.calculateVoyagePlan(plan, vessel, new long[] { 0L, 0L }, baseFuelPrices, portTimesRecord, sequence));
+		Assertions.assertThrows(RuntimeException.class, () -> calc.calculateVoyagePlan(plan, vessel, createTestCharterCostCalculator(), new long[] { 0L, 0L }, baseFuelPrices, portTimesRecord, sequence));
 
 	}
 
@@ -870,7 +873,7 @@ public class LNGVoyageCalculatorTest {
 		final IPortTimesRecord portTimesRecord = Mockito.mock(IPortTimesRecord.class);
 		Mockito.when(portTimesRecord.getSlotTime(ArgumentMatchers.<@NonNull IPortSlot> any())).thenReturn(0);
 
-		calc.calculateVoyagePlan(plan, vessel, new long[] { 0L, 0L }, baseFuelCalculator.getBaseFuelPrices(vessel, 100), portTimesRecord, sequence);
+		calc.calculateVoyagePlan(plan, vessel, createTestCharterCostCalculator(), new long[] { 0L, 0L }, baseFuelCalculator.getBaseFuelPrices(vessel, 100), portTimesRecord, sequence);
 
 		final VoyagePlan expectedPlan = new VoyagePlan();
 		expectedPlan.setSequence(sequence);
@@ -950,7 +953,7 @@ public class LNGVoyageCalculatorTest {
 		Mockito.when(portTimesRecord.getFirstSlot()).thenReturn(otherSlot);
 
 		final int[] baseFuelPrices = GeneralTestUtils.makeBaseFuelPrices(0);
-		calc.calculateVoyagePlan(plan, vessel, new long[] { 0L, 0L }, baseFuelPrices, portTimesRecord, sequence);
+		calc.calculateVoyagePlan(plan, vessel, createTestCharterCostCalculator(), new long[] { 0L, 0L }, baseFuelPrices, portTimesRecord, sequence);
 
 		final VoyagePlan expectedPlan = new VoyagePlan();
 		expectedPlan.setSequence(sequence);
@@ -1038,7 +1041,7 @@ public class LNGVoyageCalculatorTest {
 		Mockito.when(portTimesRecord.getSlotTime(ArgumentMatchers.<@NonNull IPortSlot> any())).thenReturn(0);
 		Mockito.when(portTimesRecord.getFirstSlot()).thenReturn(otherSlot);
 
-		calc.calculateVoyagePlan(plan, vessel, new long[] { 0L, 0L }, baseFuelCalculator.getBaseFuelPrices(vessel, 100), portTimesRecord, sequence);
+		calc.calculateVoyagePlan(plan, vessel, createTestCharterCostCalculator(), new long[] { 0L, 0L }, baseFuelCalculator.getBaseFuelPrices(vessel, 100), portTimesRecord, sequence);
 
 		final VoyagePlan expectedPlan = new VoyagePlan();
 		expectedPlan.setSequence(sequence);

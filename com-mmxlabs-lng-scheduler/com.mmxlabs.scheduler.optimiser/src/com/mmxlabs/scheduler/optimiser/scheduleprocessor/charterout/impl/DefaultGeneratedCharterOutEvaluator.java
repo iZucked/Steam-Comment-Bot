@@ -37,6 +37,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.GeneratedCharterOutVessel
 import com.mmxlabs.scheduler.optimiser.components.impl.HeelOptionConsumer;
 import com.mmxlabs.scheduler.optimiser.components.impl.HeelOptionSupplier;
 import com.mmxlabs.scheduler.optimiser.components.impl.IEndPortSlot;
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
@@ -166,7 +167,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 
 			final ExtendedCharterOutSequence bigSequence = constructNewRawSequenceWithCharterOuts(vesselAvailability, currentSequence, gcoMarket, portTimesRecord, ballastIdx, ballastStartTime);
 
-			final VoyagePlan bigVoyagePlan = runVPOOnBigSequence(vesselAvailability.getVessel(), vp, startHeelVolumeRangeInM3, bigSequence, vesselStartTime);
+			final VoyagePlan bigVoyagePlan = runVPOOnBigSequence(vesselAvailability.getVessel(), vp, vesselAvailability.getCharterCostCalculator(), startHeelVolumeRangeInM3, bigSequence, vesselStartTime);
 
 			final long remainingHeelInM3 = bigVoyagePlan.getRemainingHeelInM3();
 
@@ -189,7 +190,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 			bigVoyageStartingHeelRangeInM3[1] = bigVoyagePlan.getStartingHeelInM3();
 
 			// calculate pre-charter plan
-			voyageCalculator.calculateVoyagePlan(upToCharterPlan, vesselAvailability.getVessel(), bigVoyageStartingHeelRangeInM3,
+			voyageCalculator.calculateVoyagePlan(upToCharterPlan, vesselAvailability.getVessel(), vesselAvailability.getCharterCostCalculator(), bigVoyageStartingHeelRangeInM3,
 					vesselBaseFuelCalculator.getBaseFuelPrices(vesselAvailability.getVessel(), preCharteringTimes), preCharteringTimes, upToCharterPlan.getSequence());
 			// remaining heel may have been overwritten
 			upToCharterPlan.setRemainingHeelInM3(firstPlanRemainingHeel);
@@ -218,7 +219,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 			charterToEndPlanStartingHeelRangeInM3[1] = charterToEndPlan.getStartingHeelInM3();
 
 			// calculate post-charter plan
-			voyageCalculator.calculateVoyagePlan(charterToEndPlan, vesselAvailability.getVessel(), charterToEndPlanStartingHeelRangeInM3,
+			voyageCalculator.calculateVoyagePlan(charterToEndPlan, vesselAvailability.getVessel(), vesselAvailability.getCharterCostCalculator(), charterToEndPlanStartingHeelRangeInM3,
 					vesselBaseFuelCalculator.getBaseFuelPrices(vesselAvailability.getVessel(), postCharteringTimes), postCharteringTimes, charterToEndPlan.getSequence());
 			// remaining heel may have been overwritten
 			charterToEndPlan.setStartingHeelInM3(secondPlanStartHeel);
@@ -532,7 +533,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 	 * @param bigSequence
 	 * @return
 	 */
-	private VoyagePlan runVPOOnBigSequence(@NonNull final IVessel vessel, final @NonNull VoyagePlan originalVoyagePlan, final long @NonNull [] startHeelRangeInM3,
+	private VoyagePlan runVPOOnBigSequence(@NonNull final IVessel vessel, final @NonNull VoyagePlan originalVoyagePlan, final ICharterCostCalculator charterCostCalculator, final long @NonNull [] startHeelRangeInM3,
 			final @NonNull ExtendedCharterOutSequence bigSequence, final int startingTime) {
 		final int[] baseFuelPricePerMT = vesselBaseFuelCalculator.getBaseFuelPrices(vessel, bigSequence.getPortTimesRecord());
 
@@ -551,7 +552,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 			vpoChoices.add(new ReliqVoyagePlanChoice(bigSequence.getToCharter(), bigSequence.getFromCharter()));
 		}
 		// Calculate our new plan
-		final VoyagePlan newVoyagePlan = vpoProvider.get().optimise(null, vessel, startHeelRangeInM3, baseFuelPricePerMT, originalVoyagePlan.getCharterCostCalculator(), bigSequence.getPortTimesRecord(),
+		final VoyagePlan newVoyagePlan = vpoProvider.get().optimise(null, vessel, startHeelRangeInM3, baseFuelPricePerMT, charterCostCalculator, bigSequence.getPortTimesRecord(),
 				bigSequence.getSequence(), vpoChoices, startingTime);
 
 		return newVoyagePlan;
@@ -604,9 +605,6 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 
 		upToCharterPlan.setStartingHeelInM3(bigVoyagePlan.getStartingHeelInM3());
 		upToCharterPlan.setRemainingHeelInM3(remainingHeelInM3 + totalBoilOffPostCharter);
-
-		upToCharterPlan.setCharterCostCalculator(originalVP.getCharterCostCalculator());
-		charterToEndPlan.setCharterCostCalculator(originalVP.getCharterCostCalculator());
 
 		upToCharterPlan.setIgnoreEnd(true);
 		charterToEndPlan.setIgnoreEnd(originalVP.isIgnoreEnd());

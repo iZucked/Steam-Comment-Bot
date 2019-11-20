@@ -473,7 +473,7 @@ public class VoyagePlanner implements IVoyagePlanner {
 			@Nullable
 			IPortSlot prevPortSlot = null;
 
-			final ICharterCostCalculator charterCostCalculator = vesselAvailability.getCharterCostCalculator();
+			ICharterCostCalculator charterCostCalculator = vesselAvailability.getCharterCostCalculator();
 			
 			// Create a list of all slots including the optional (not for shipped cargoes) return slot
 			final List<@NonNull IPortSlot> recordSlots = new ArrayList<>(portTimesRecord.getSlots().size() + 1);
@@ -570,7 +570,7 @@ public class VoyagePlanner implements IVoyagePlanner {
 				// Use prev slot as "thisPortSlot" is the start of a new voyage plan and thus likely a different cargo
 				if (actualsDataProvider.hasActuals(recordSlots.get(0))) {
 					long endHeelInM3 = generateActualsVoyagePlan(vesselAvailability, vesselStartTime, voyagePlansMap, voyagePlansList, voyageOrPortOptions, portTimesRecord, heelInM3Range);
-
+					charterCostCalculator = getActualsCharterCostCalculator(vesselAvailability, voyageOrPortOptions);
 					assert heelInM3Range[0] >= 0;
 					heelInM3Range[0] = endHeelInM3;
 					heelInM3Range[1] = endHeelInM3;
@@ -612,6 +612,25 @@ public class VoyagePlanner implements IVoyagePlanner {
 
 	}
 
+	private ICharterCostCalculator getActualsCharterCostCalculator(final @NonNull IVesselAvailability vesselAvailability,
+			final @NonNull List<@NonNull IOptionsSequenceElement> voyageOrPortOptions) {
+		ICharterCostCalculator charterCostCalculator = vesselAvailability.getCharterCostCalculator();
+		int idx = -1;
+
+		for (final IOptionsSequenceElement element : voyageOrPortOptions) {
+			++idx;
+			if (element instanceof PortOptions) {
+				final PortOptions portOptions = (PortOptions) element;
+
+				if (portOptions.getPortSlot() instanceof ILoadOption && idx != voyageOrPortOptions.size() - 1) {
+					charterCostCalculator = new FixedCharterInRateCharterCostCalculator(actualsDataProvider.getCharterRatePerDay(portOptions.getPortSlot()));
+				}
+			}
+		}
+		
+		return charterCostCalculator;
+	}
+	
 	private long generateActualsVoyagePlan(final @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime,
 			final @NonNull List<@NonNull Pair<VoyagePlan, IPortTimesRecord>> voyagePlansMap, final @NonNull List<@NonNull VoyagePlan> voyagePlansList,
 			final @NonNull List<@NonNull IOptionsSequenceElement> voyageOrPortOptions, final @NonNull IPortTimesRecord portTimesRecord, final long[] startHeelVolumeInM3) {
@@ -619,8 +638,7 @@ public class VoyagePlanner implements IVoyagePlanner {
 		IVessel vessel = vesselAvailability.getVessel();
 
 		final VoyagePlan plan = new VoyagePlan();
-		// Replace with actuals later if needed
-		plan.setCharterCostCalculator(vesselAvailability.getCharterCostCalculator());
+
 		assert startHeelVolumeInM3[0] == startHeelVolumeInM3[1];
 		plan.setStartingHeelInM3(startHeelVolumeInM3[0]);
 		{
@@ -637,7 +655,7 @@ public class VoyagePlanner implements IVoyagePlanner {
 
 						if (portOptions.getPortSlot() instanceof ILoadOption && idx != voyageOrPortOptions.size() - 1) {
 							cargoCV = actualsDataProvider.getCVValue(portOptions.getPortSlot());
-							plan.setCharterCostCalculator(new FixedCharterInRateCharterCostCalculator(actualsDataProvider.getCharterRatePerDay(portOptions.getPortSlot())));
+
 						}
 
 						else if (portOptions.getPortSlot() instanceof IDischargeOption) {

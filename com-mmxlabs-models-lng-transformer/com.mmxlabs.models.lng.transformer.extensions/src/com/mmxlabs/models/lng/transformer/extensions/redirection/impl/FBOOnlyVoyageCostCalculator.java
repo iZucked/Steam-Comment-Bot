@@ -57,7 +57,6 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 			@NonNull final ERouteOption route, final int[] baseFuelPricePerMT, @NonNull final ISalesPriceCalculator salesPrice) {
 
 		final VoyagePlan notionalPlan = new VoyagePlan();
-		notionalPlan.setCharterCostCalculator(charterCostCalculator);
 
 		final int distance = distanceProvider.getDistance(route, loadPort, dischargePort, vessel);
 		if (distance == Integer.MAX_VALUE) {
@@ -111,7 +110,7 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 
 			final IDetailsSequenceElement[] sequence = new IDetailsSequenceElement[] { loadDetails, ladenDetails, dischargeDetails, ballastDetails, returnDetails };
 			notionalPlan.setSequence(sequence);
-			voyageCalculator.calculateVoyagePlan(notionalPlan, vessel, new long[] { startHeelInM3, startHeelInM3 }, baseFuelPricePerMT, portTimesRecord, sequence);
+			voyageCalculator.calculateVoyagePlan(notionalPlan, vessel, charterCostCalculator, new long[] { startHeelInM3, startHeelInM3 }, baseFuelPricePerMT, portTimesRecord, sequence);
 
 			return notionalPlan;
 		}
@@ -124,7 +123,6 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 			@NonNull final ERouteOption route, final int[] baseFuelPricePerMT, @NonNull final ISalesPriceCalculator salesPrice) {
 
 		final VoyagePlan notionalPlan = new VoyagePlan();
-		notionalPlan.setCharterCostCalculator(charterCostCalculator);
 
 		final int distance = distanceProvider.getDistance(route, loadPort, dischargePort, vessel);
 		if (distance == Integer.MAX_VALUE) {
@@ -140,7 +138,6 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 			final int dischargeDistance, final int dischargeDuration, final int notionalReturnTime, final IVessel vessel, final ICharterCostCalculator charterCostCalculator, final long startHeelInM3,
 			final int cargoCVValue, final ERouteOption route, final int[] baseFuelPricePerMT, final ISalesPriceCalculator salesPriceCalculator) {
 		final VoyagePlan notionalPlan = new VoyagePlan();
-		notionalPlan.setCharterCostCalculator(charterCostCalculator);
 
 		final LoadSlot notionalLoadSlot = makeNotionalLoad(loadPort, loadTime, vessel, cargoCVValue);
 
@@ -182,7 +179,7 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 
 			final IDetailsSequenceElement[] sequence = new IDetailsSequenceElement[] { loadDetails, ladenDetails, dischargeDetails, ballastDetails, returnDetails };
 			notionalPlan.setSequence(sequence);
-			voyageCalculator.calculateVoyagePlan(notionalPlan, vessel, new long[] { startHeelInM3, startHeelInM3 }, baseFuelPricePerMT, portTimesRecord, sequence);
+			voyageCalculator.calculateVoyagePlan(notionalPlan, vessel, charterCostCalculator, new long[] { startHeelInM3, startHeelInM3 }, baseFuelPricePerMT, portTimesRecord, sequence);
 
 			return notionalPlan;
 		}

@@ -708,7 +708,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 * @return Number of capacity constraints which had to be violated in the allocation
 	 */
 	@Override
-	public final int calculateVoyagePlan(final VoyagePlan voyagePlan, final IVessel vessel, final long[] startHeelRangeInM3, final int[] baseFuelPricesPerMT, final IPortTimesRecord portTimesRecord,
+	public final int calculateVoyagePlan(final VoyagePlan voyagePlan, final IVessel vessel, final ICharterCostCalculator charterCostCalculator, final long[] startHeelRangeInM3, final int[] baseFuelPricesPerMT, final IPortTimesRecord portTimesRecord,
 			final IDetailsSequenceElement... sequence) {
 		/*
 		 * TODO: instead of taking an interleaved List<Object> as a parameter, this would have a far more informative signature (and cleaner logic?) if it passed a list of IPortDetails and a list of
@@ -927,7 +927,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			}
 		}
 		
-		calculateCharterCosts(voyagePlan.getCharterCostCalculator(), sequence, portTimesRecord.getFirstSlotTime());
+		calculateCharterCosts(charterCostCalculator, sequence, portTimesRecord.getFirstSlotTime());
 		
 		// Store results in plan
 		voyagePlan.setSequence(sequence);

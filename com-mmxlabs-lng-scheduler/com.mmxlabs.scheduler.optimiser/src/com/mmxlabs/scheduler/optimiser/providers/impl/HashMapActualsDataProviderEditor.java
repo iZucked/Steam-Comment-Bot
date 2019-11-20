@@ -36,7 +36,8 @@ public class HashMapActualsDataProviderEditor implements IActualsDataProviderEdi
 	private final Map<IPortSlot, Long> startHeelInM3 = new HashMap<>();
 	private final Map<IPortSlot, Long> endHeelInM3 = new HashMap<>();
 
-	private final Map<IPortSlot, Integer> lngPricePerMMBTu = new HashMap<>();
+
+	final Map<IPortSlot, Integer> lngPricePerMMBTu = new HashMap<>();
 	private final Map<IPortSlot, Integer> baseFuelPricePerMT = new HashMap<>();
 	private final Map<IPortSlot, IBaseFuel> baseFuel = new HashMap<>();
 	private final Map<IPortSlot, Long> charterRatePerDay = new HashMap<>();
