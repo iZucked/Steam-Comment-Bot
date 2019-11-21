@@ -1252,13 +1252,22 @@ s	 * <!-- end-user-doc -->
 	int ROUND_TRIP_SHIPPING_OPTION__HIRE_COST = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROUND_TRIP_SHIPPING_OPTION__ENTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Round Trip Shipping Option</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ROUND_TRIP_SHIPPING_OPTION_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int ROUND_TRIP_SHIPPING_OPTION_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.NominatedShippingOptionImpl <em>Nominated Shipping Option</em>}' class.
@@ -4874,6 +4883,17 @@ s	 * <!-- end-user-doc -->
 	EAttribute getRoundTripShippingOption_HireCost();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.RoundTripShippingOption#getEntity <em>Entity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Entity</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.RoundTripShippingOption#getEntity()
+	 * @see #getRoundTripShippingOption()
+	 * @generated
+	 */
+	EReference getRoundTripShippingOption_Entity();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.NominatedShippingOption <em>Nominated Shipping Option</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7305,6 +7325,14 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute ROUND_TRIP_SHIPPING_OPTION__HIRE_COST = eINSTANCE.getRoundTripShippingOption_HireCost();
+
+		/**
+		 * The meta object literal for the '<em><b>Entity</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ROUND_TRIP_SHIPPING_OPTION__ENTITY = eINSTANCE.getRoundTripShippingOption_Entity();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.NominatedShippingOptionImpl <em>Nominated Shipping Option</em>}' class.

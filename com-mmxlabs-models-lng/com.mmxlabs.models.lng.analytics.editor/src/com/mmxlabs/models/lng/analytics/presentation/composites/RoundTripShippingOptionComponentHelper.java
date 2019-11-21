@@ -70,6 +70,7 @@ public class RoundTripShippingOptionComponentHelper extends BaseComponentHelper 
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_vesselEditor(detailComposite, topClass);
 		add_hireCostEditor(detailComposite, topClass);
+		add_entityEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the vessel feature on RoundTripShippingOption
@@ -88,5 +89,14 @@ public class RoundTripShippingOptionComponentHelper extends BaseComponentHelper 
 	 */
 	protected void add_hireCostEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.ROUND_TRIP_SHIPPING_OPTION__HIRE_COST));
+	}
+
+	/**
+	 * Create the editor for the entity feature on RoundTripShippingOption
+	 *
+	 * @generated
+	 */
+	protected void add_entityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.ROUND_TRIP_SHIPPING_OPTION__ENTITY));
 	}
 }

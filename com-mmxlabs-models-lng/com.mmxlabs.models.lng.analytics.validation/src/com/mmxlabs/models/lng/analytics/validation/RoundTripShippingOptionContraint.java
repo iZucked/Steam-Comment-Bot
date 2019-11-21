@@ -29,6 +29,20 @@ public class RoundTripShippingOptionContraint extends AbstractModelMultiConstrai
 
 		if (target instanceof RoundTripShippingOption) {
 			final RoundTripShippingOption option = (RoundTripShippingOption) target;
+
+			if (option.getVessel() == null) {
+				final String message = "No vessel specified";
+				DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+
+				dsd.addEObjectAndFeature(option, AnalyticsPackage.Literals.ROUND_TRIP_SHIPPING_OPTION__VESSEL);
+				failures.add(dsd);
+			}
+			if (option.getEntity() == null) {
+				final String message = "No entity specified";
+				DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+				dsd.addEObjectAndFeature(option, AnalyticsPackage.Literals.ROUND_TRIP_SHIPPING_OPTION__ENTITY);
+				failures.add(dsd);
+			}
 			ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, option, AnalyticsPackage.Literals.ROUND_TRIP_SHIPPING_OPTION__HIRE_COST, option.getHireCost(),
 					PriceIndexType.CHARTER);
 			if (!result.isOk()) {

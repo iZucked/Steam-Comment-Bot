@@ -52,6 +52,7 @@ public class RoundTripShippingOptionItemProvider extends UUIDObjectItemProvider 
 
 			addVesselPropertyDescriptor(object);
 			addHireCostPropertyDescriptor(object);
+			addEntityPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -96,6 +97,28 @@ public class RoundTripShippingOptionItemProvider extends UUIDObjectItemProvider 
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Entity feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addEntityPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_RoundTripShippingOption_entity_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_RoundTripShippingOption_entity_feature", "_UI_RoundTripShippingOption_type"),
+				 AnalyticsPackage.Literals.ROUND_TRIP_SHIPPING_OPTION__ENTITY,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}

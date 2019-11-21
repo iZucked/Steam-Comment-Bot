@@ -1414,6 +1414,16 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
+	public EReference getRoundTripShippingOption_Entity() {
+		return (EReference)roundTripShippingOptionEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getNominatedShippingOption() {
 		return nominatedShippingOptionEClass;
 	}
@@ -3155,6 +3165,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		roundTripShippingOptionEClass = createEClass(ROUND_TRIP_SHIPPING_OPTION);
 		createEReference(roundTripShippingOptionEClass, ROUND_TRIP_SHIPPING_OPTION__VESSEL);
 		createEAttribute(roundTripShippingOptionEClass, ROUND_TRIP_SHIPPING_OPTION__HIRE_COST);
+		createEReference(roundTripShippingOptionEClass, ROUND_TRIP_SHIPPING_OPTION__ENTITY);
 
 		nominatedShippingOptionEClass = createEClass(NOMINATED_SHIPPING_OPTION);
 		createEReference(nominatedShippingOptionEClass, NOMINATED_SHIPPING_OPTION__NOMINATED_VESSEL);
@@ -3558,6 +3569,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEClass(roundTripShippingOptionEClass, RoundTripShippingOption.class, "RoundTripShippingOption", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getRoundTripShippingOption_Vessel(), theFleetPackage.getVessel(), null, "vessel", null, 0, 1, RoundTripShippingOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getRoundTripShippingOption_HireCost(), ecorePackage.getEString(), "hireCost", null, 0, 1, RoundTripShippingOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getRoundTripShippingOption_Entity(), theCommercialPackage.getBaseLegalEntity(), null, "entity", null, 0, 1, RoundTripShippingOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(nominatedShippingOptionEClass, NominatedShippingOption.class, "NominatedShippingOption", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getNominatedShippingOption_NominatedVessel(), theFleetPackage.getVessel(), null, "nominatedVessel", null, 0, 1, NominatedShippingOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

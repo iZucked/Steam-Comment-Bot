@@ -111,6 +111,7 @@
     <genClasses ecoreClass="analytics.ecore#//RoundTripShippingOption">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//RoundTripShippingOption/vessel"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//RoundTripShippingOption/hireCost"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//RoundTripShippingOption/entity"/>
     </genClasses>
     <genClasses ecoreClass="analytics.ecore#//NominatedShippingOption">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//NominatedShippingOption/nominatedVessel"/>

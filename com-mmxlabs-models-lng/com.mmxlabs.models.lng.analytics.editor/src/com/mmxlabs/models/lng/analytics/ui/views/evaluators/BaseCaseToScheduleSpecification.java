@@ -42,6 +42,7 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.VesselEventSpecification;
 import com.mmxlabs.models.lng.cargo.VesselScheduleSpecification;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -118,12 +119,14 @@ public class BaseCaseToScheduleSpecification {
 				if (shipping instanceof RoundTripShippingOption) {
 					final RoundTripShippingOption roundTripShippingOption = (RoundTripShippingOption) shipping;
 					final Vessel vessel = roundTripShippingOption.getVessel();
+					final BaseLegalEntity entity = roundTripShippingOption.getEntity();
 					final String hireCost = roundTripShippingOption.getHireCost();
 
 					// TODO: Need place to store this in datamodel
 					final CharterInMarket newMarket = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
 					newMarket.setCharterInRate(hireCost);
 					newMarket.setVessel(vessel);
+					newMarket.setEntity(entity);
 					newMarket.setNominal(true);
 					// { // From old sandbox code
 					// final String baseName = SHIPPING_OPTION_DESCRIPTION_FORMATTER.render(roundTripShippingOption);
