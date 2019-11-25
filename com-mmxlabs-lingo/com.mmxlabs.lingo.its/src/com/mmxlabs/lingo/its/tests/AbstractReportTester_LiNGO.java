@@ -10,6 +10,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import javax.swing.text.rtf.RTFEditorKit;
+
 import org.eclipse.jdt.annotation.Nullable;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -87,7 +89,7 @@ public abstract class AbstractReportTester_LiNGO extends AbstractReportTester {
 	}
 
 	@Override
-	protected void testReports(final String reportID, final String shortName, final String extension, @Nullable final Consumer<ScenarioModelRecord> preAction) throws Exception {
+	protected void testReports(final String reportID, final String shortName, final ReportType type, @Nullable final Consumer<ScenarioModelRecord> preAction) throws Exception {
 		Assumptions.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
 
 		final Triple<URL, ScenarioModelRecord, IScenarioDataProvider> triple = cache.get(key);
@@ -102,6 +104,6 @@ public abstract class AbstractReportTester_LiNGO extends AbstractReportTester {
 		Assertions.assertNotNull(modelRecord);
 		Assertions.assertNotNull(scenarioDataProvider);
 
-		ReportTester.testReports_NoEvaluate(modelRecord, scenarioDataProvider, url, reportID, shortName, extension, preAction);
+		ReportTester.testReports_NoEvaluate(modelRecord, scenarioDataProvider, url, reportID, shortName, type, preAction);
 	}
 }

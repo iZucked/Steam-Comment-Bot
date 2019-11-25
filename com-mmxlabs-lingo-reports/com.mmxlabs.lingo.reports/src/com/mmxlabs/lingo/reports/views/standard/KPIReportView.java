@@ -481,7 +481,7 @@ public class KPIReportView extends ViewPart {
 			return (T) new IReportContents() {
 
 				@Override
-				public String getStringContents() {
+				public String getHTMLContents() {
 					return contents;
 				}
 			};

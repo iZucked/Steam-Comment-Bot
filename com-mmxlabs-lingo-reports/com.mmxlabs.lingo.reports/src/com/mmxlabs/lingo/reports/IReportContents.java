@@ -4,9 +4,14 @@
  */
 package com.mmxlabs.lingo.reports;
 
-@FunctionalInterface
 public interface IReportContents {
 
-	String getStringContents();
+	default String getHTMLContents() {
+		return "HTML version not implemented";
+	};
+
+	default String getJSONContents() {
+		return "JSON version not implemented";
+	};
 
 }

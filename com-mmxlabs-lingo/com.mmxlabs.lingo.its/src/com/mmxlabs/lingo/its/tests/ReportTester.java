@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.util.CheckedBiConsumer;
 import com.mmxlabs.common.util.CheckedConsumer;
+import com.mmxlabs.lingo.its.tests.AbstractReportTester.ReportType;
 import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.IReportContentsGenerator;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -42,7 +43,8 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
- * Helper class to open up a view, set the scenario selection provider to the given instance and adapt the result to a {@link IReportContents} instance.
+ * Helper class to open up a view, set the scenario selection provider to the
+ * given instance and adapt the result to a {@link IReportContents} instance.
  * 
  * @author Simon Goodall
  * 
@@ -53,8 +55,8 @@ public class ReportTester {
 	private static final UnaryOperator<String> stripWhitespace = s -> s.replaceAll("\\s+", "").replaceAll("\r\n", "").replaceAll("\n", "");
 
 	public static void testReportsWithElement(final ScenarioModelRecord instance, @NonNull final IScenarioDataProvider scenarioDataProvider, final URL scenarioURL, final String reportID,
-			final String shortName, final String extension, final String elementID, @Nullable final Consumer<ScenarioModelRecord> preAction) throws Exception {
-		testReports(instance, scenarioDataProvider, scenarioURL, reportID, shortName, extension, (t) -> {
+			final String shortName, final ReportType type, final String elementID, @Nullable final Consumer<ScenarioModelRecord> preAction) throws Exception {
+		testReports(instance, scenarioDataProvider, scenarioURL, reportID, shortName, type, (t) -> {
 
 			Object target = null;
 			final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(scenarioDataProvider);
@@ -90,18 +92,18 @@ public class ReportTester {
 	}
 
 	public static void testReports(final @NonNull ScenarioModelRecord modelRecord, @NonNull final IScenarioDataProvider scenarioDataProvider, final URL scenarioURL, final String reportID,
-			final String shortName, final String extension, @Nullable final Consumer<ScenarioModelRecord> preAction) throws Exception {
+			final String shortName, final ReportType type, @Nullable final Consumer<ScenarioModelRecord> preAction) throws Exception {
 
 		Assumptions.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
 
 		// A side-effect is the initial evaluation.
 		LNGScenarioRunnerCreator.withLegacyEvaluationRunner(scenarioDataProvider, true, runner -> {
 		});
-		testReports_NoEvaluate(modelRecord, scenarioDataProvider, scenarioURL, reportID, shortName, extension, preAction);
+		testReports_NoEvaluate(modelRecord, scenarioDataProvider, scenarioURL, reportID, shortName, type, preAction);
 	}
 
 	public static void testReports_NoEvaluate(final @NonNull ScenarioModelRecord modelRecord, @NonNull final IScenarioDataProvider scenarioDataProvider, final URL scenarioURL, final String reportID,
-			final String shortName, final String extension, @Nullable final Consumer<ScenarioModelRecord> preAction) throws Exception {
+			final String shortName, ReportType type, @Nullable final Consumer<ScenarioModelRecord> preAction) throws Exception {
 
 		if (preAction != null) {
 			preAction.accept(modelRecord);
@@ -112,7 +114,18 @@ public class ReportTester {
 		final IReportContents reportContents = reportTester.getReportContents(scenarioResult, reportID);
 
 		Assertions.assertNotNull(reportContents);
-		final String actualContents = reportContents.getStringContents();
+		final String actualContents;
+
+		switch (type) {
+		case REPORT_HTML:
+			actualContents = reportContents.getHTMLContents();
+			break;
+		case REPORT_JSON:
+			actualContents = reportContents.getJSONContents();
+			break;
+		default:
+			throw new IllegalArgumentException();
+		}
 		Assertions.assertNotNull(actualContents);
 		if (TestingModes.ReportTestMode == TestMode.Generate) {
 
@@ -120,12 +133,13 @@ public class ReportTester {
 
 			final File f1 = new File(expectedReportOutput.toURI());
 			final String slash = f1.isDirectory() ? "/" : "";
-			final File file2 = new File(f1.getAbsoluteFile() + slash + "reports" + "." + shortName + "." + extension);
+			final File file2 = new File(f1.getAbsoluteFile() + slash + "reports" + "." + shortName + "." + type.getExtension());
 			try (PrintWriter pw = new PrintWriter(file2, StandardCharsets.UTF_8.name())) {
 				pw.print(actualContents);
 			}
 		} else {
-			final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(scenarioURL.toString() + "reports" + "." + shortName + "." + extension)).toString().replaceAll(" ", "%20"));
+			final URL expectedReportOutput = new URL(
+					FileLocator.toFileURL(new URL(scenarioURL.toString() + "reports" + "." + shortName + "." + type.getExtension())).toString().replaceAll(" ", "%20"));
 			final StringBuilder expectedOutputBuilder = new StringBuilder();
 			{
 				try (InputStream is = expectedReportOutput.openStream(); BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
@@ -136,7 +150,7 @@ public class ReportTester {
 					while (line != null) {
 						line = reader.readLine();
 						if (line != null) {
-							expectedOutputBuilder.append("\n");
+							expectedOutputBuilder.append(System.lineSeparator());
 							expectedOutputBuilder.append(line);
 						}
 					}
@@ -248,7 +262,7 @@ public class ReportTester {
 			final IReportContents reportContents = reportTester.getActionPlanReportContents(orderedResults, reportID);
 
 			Assertions.assertNotNull(reportContents);
-			final String actualContents = reportContents.getStringContents();
+			final String actualContents = reportContents.getHTMLContents();
 			Assertions.assertNotNull(actualContents);
 			if (TestingModes.ReportTestMode == TestMode.Generate) {
 

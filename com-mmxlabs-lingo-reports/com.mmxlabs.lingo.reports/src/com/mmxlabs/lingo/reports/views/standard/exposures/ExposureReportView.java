@@ -42,6 +42,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.IReportContents;
+import com.mmxlabs.lingo.reports.ReportContents;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportContentProvider;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransformer;
 import com.mmxlabs.lingo.reports.internal.Activator;
@@ -83,30 +84,31 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 	protected Color colourOrange;
 	protected Color colourViolet;
 	protected Font fontBold;
-	
+
 	protected Image cellImageDarkArrowDown;
 	protected Image cellImageDarkArrowUp;
-	
+
 	protected List<String> entities;
 	protected List<String> fiscalYears;
 	protected String selectedEntity;
 	protected int selectedFiscalYear = -1;
 	protected AssetType selectedAssetType = AssetType.NET;
-	
-	// -------------------------------------Transformer class starts-------------------------------------
+
+	// -------------------------------------Transformer class
+	// starts-------------------------------------
 	protected class ExposureData extends AbstractSimpleTabularReportTransformer<IndexExposureData> {
 		@Override
 		public List<ColumnManager<IndexExposureData>> getColumnManagers(@NonNull final ISelectedDataProvider selectedDataProvider) {
-			
+
 			final ArrayList<ColumnManager<IndexExposureData>> result = new ArrayList<ColumnManager<IndexExposureData>>();
 			if (selectedDataProvider.getScenarioResults().isEmpty()) {
 				return result;
 			}
 			createGenericColumns(selectedDataProvider, result);
 			final List<String> columnNames = getGenericColumnNames(selectedDataProvider);
-			
+
 			customiseColumnList(columnNames);
-						
+
 			generateColumnsFromList(result, columnNames);
 
 			return result;
@@ -117,8 +119,10 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 				result.add(new ColumnManager<IndexExposureData>(columnName) {
 					@Override
 					public String getColumnText(final IndexExposureData data) {
-						if (data == null) return "";
-						if (data.exposures.isEmpty()) return "";
+						if (data == null)
+							return "";
+						if (data.exposures.isEmpty())
+							return "";
 						if (data.exposures.containsKey(columnName)) {
 							final double result;
 							if (pinnedMode) {
@@ -130,7 +134,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 							} else {
 								result = data.exposures.get(columnName);
 							}
-							if(mode == ValueMode.VOLUME_TBTU) {
+							if (mode == ValueMode.VOLUME_TBTU) {
 								return String.format("%,.03f", result);
 							} else {
 								return String.format("%,.01f", result);
@@ -141,13 +145,15 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 					@Override
 					public Image getColumnImage(final IndexExposureData ied) {
-						if (!useImage(ied)) return null;
-						if (!pinnedMode) return null;
+						if (!useImage(ied))
+							return null;
+						if (!pinnedMode)
+							return null;
 						if (ied.exposures.containsKey(columnName)) {
 							final double result = ied.exposures.get(columnName);
-							if(result > 0.0) {
+							if (result > 0.0) {
 								return cellImageDarkArrowUp;
-							} else if (result < 0.0){
+							} else if (result < 0.0) {
 								return cellImageDarkArrowDown;
 							}
 						}
@@ -158,7 +164,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					public Color getBackground(final IndexExposureData element) {
 						return colorByType(element, columnName);
 					}
-					
+
 					@Override
 					public Font getFont(final IndexExposureData element) {
 						return fontByType(element);
@@ -183,7 +189,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 				final EList<CommodityCurve> indices = pm.getCommodityCurves();
 				for (final CommodityCurve index : indices) {
-					if(index.getMarketIndex() == null) {
+					if (index.getMarketIndex() == null) {
 						continue;
 					}
 					String indexName = index.getMarketIndex().getName();
@@ -194,22 +200,22 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			}
 			return columnNames;
 		}
-		
+
 		protected boolean useImage(IndexExposureData ied) {
 			return true;
 		}
-		
+
 		protected Color colorByType(final IndexExposureData ied, final String customColumnName) {
-			if(IndexExposureType.ANNUAL.equals(ied.type)) {
+			if (IndexExposureType.ANNUAL.equals(ied.type)) {
 				return colourBlue;
-			} else if(IndexExposureType.QUARTERLY.equals(ied.type)) {
+			} else if (IndexExposureType.QUARTERLY.equals(ied.type)) {
 				return colourLightBlue;
 			}
 			return null;
 		}
-		
+
 		protected Font fontByType(final IndexExposureData ied) {
-			if(!IndexExposureType.MONTHLY.equals(ied.type)) {
+			if (!IndexExposureType.MONTHLY.equals(ied.type)) {
 				return fontBold;
 			}
 			return null;
@@ -251,25 +257,26 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					}
 				});
 			}
-			
+
 			pinnedMode = selectedDataProvider.getPinnedScenarioResult() != null;
-			
+
 			result.add(new ColumnManager<IndexExposureData>("Date") {
 				@Override
 				public String getColumnText(final IndexExposureData data) {
-					if (data == null) return "";
+					if (data == null)
+						return "";
 					if (data.isChild) {
 						return data.childName;
 					}
 					if (viewMode.equals(AggregationMode.BY_DEALSET)) {
-						if (data.dealSet!= null) {
+						if (data.dealSet != null) {
 							return data.dealSet;
 						}
 					}
 					if (data.type != null) {
 						if (data.type == IndexExposureType.ANNUAL) {
 							return String.format("%04d Total", data.year);
-						} else if(data.type == IndexExposureType.QUARTERLY) {
+						} else if (data.type == IndexExposureType.QUARTERLY) {
 							return String.format("Q%1d Total", data.quarter);
 						}
 					}
@@ -280,17 +287,17 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 				public Color getForeground(final IndexExposureData element) {
 					return colorByType(element, "");
 				}
-				
+
 				@Override
 				public Font getFont(final IndexExposureData element) {
 					return fontByType(element);
 				}
-				
+
 				@Override
 				public int compare(final IndexExposureData o1, final IndexExposureData o2) {
 					if (o1.isChild && o2.isChild) {
 						return o1.childName.compareTo(o2.childName);
-					} else if(!o1.isChild && !o2.isChild) {
+					} else if (!o1.isChild && !o2.isChild) {
 						int ret = o1.date.compareTo(o2.date);
 						if (ret == 0) {
 							ret += o1.type.getValue() - o2.type.getValue();
@@ -325,8 +332,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					final Iterator<IndexExposureData> otherIterator = other.iterator();
 					while (otherIterator.hasNext()) {
 						final IndexExposureData otherData = otherIterator.next();
-						if (Equality.isEqual(refData.date, otherData.date) 
-								&& Equality.isEqual(refData.type, otherData.type)) { // indexName
+						if (Equality.isEqual(refData.date, otherData.date) && Equality.isEqual(refData.type, otherData.type)) { // indexName
 
 							output.add(createDiffData(refData, otherData));
 							otherIterator.remove();
@@ -380,12 +386,10 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			return output;
 		}
 
-		protected List<IndexExposureData> getExposuresByMonth(final Schedule schedule, final ScenarioResult scenarioResult, final YearMonth ymStart, final YearMonth ymEnd,
-				List<Object> selected) {
+		protected List<IndexExposureData> getExposuresByMonth(final Schedule schedule, final ScenarioResult scenarioResult, final YearMonth ymStart, final YearMonth ymEnd, List<Object> selected) {
 			final List<IndexExposureData> output = new LinkedList<>();
 			for (YearMonth cym = ymStart; cym.isBefore(ymEnd.plusMonths(1)); cym = cym.plusMonths(1)) {
-				IndexExposureData exposuresByMonth = 
-						ExposuresTransformer.getExposuresByMonth(scenarioResult, schedule, cym, mode, selected, selectedEntity, selectedFiscalYear, selectedAssetType);
+				IndexExposureData exposuresByMonth = ExposuresTransformer.getExposuresByMonth(scenarioResult, schedule, cym, mode, selected, selectedEntity, selectedFiscalYear, selectedAssetType);
 				if (inspectChildrenAndExposures(exposuresByMonth)) {
 					output.add(exposuresByMonth);
 				}
@@ -397,67 +401,72 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			columnNames.add("Physical");
 		}
 	}
-	// -------------------------------------Transformer class ends----------------------------------------
-	
-	protected List<String> getFiscalYears(final Schedule schedule){
+	// -------------------------------------Transformer class
+	// ends----------------------------------------
+
+	protected List<String> getFiscalYears(final Schedule schedule) {
 		final List<String> result = new LinkedList<String>();
 		for (final PaperDealAllocation paperDealAllocation : schedule.getPaperDealAllocations()) {
 			final PaperDeal pd = paperDealAllocation.getPaperDeal();
 			final String year = String.format("%d", pd.getYear());
-			if(!result.contains(year)) {
+			if (!result.contains(year)) {
 				result.add(year);
 			}
 		}
 		for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
 			for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
 				final Slot s = slotAllocation.getSlot();
-				if (s == null) continue;
+				if (s == null)
+					continue;
 				final String year = String.format("%d", s.getWindowStart().getYear());
-				if(!result.contains(year)) {
+				if (!result.contains(year)) {
 					result.add(year);
 				}
 			}
 		}
-		result.sort((a,b) -> a.compareTo(b));
+		result.sort((a, b) -> a.compareTo(b));
 		return result;
 	}
-	
-	protected List<String> getEntities(final Schedule schedule){
+
+	protected List<String> getEntities(final Schedule schedule) {
 		final List<String> result = new LinkedList<String>();
 		for (final PaperDealAllocation paperDealAllocation : schedule.getPaperDealAllocations()) {
 			final PaperDeal pd = paperDealAllocation.getPaperDeal();
-			if(pd.getEntity() == null) continue;
+			if (pd.getEntity() == null)
+				continue;
 			final String entity = pd.getEntity().getName();
-			if(!result.contains(entity)) {
+			if (!result.contains(entity)) {
 				result.add(entity);
 			}
 		}
 		for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
 			for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
 				final Slot s = slotAllocation.getSlot();
-				if (s == null) continue;
-				if (s.getSlotOrDelegateEntity() == null) continue;
+				if (s == null)
+					continue;
+				if (s.getSlotOrDelegateEntity() == null)
+					continue;
 				final String entity = s.getSlotOrDelegateEntity().getName();
-				if(!result.contains(entity)) {
+				if (!result.contains(entity)) {
 					result.add(entity);
 				}
 			}
 		}
 		return result;
 	}
-	
+
 	@Override
 	public void createPartControl(final Composite parent) {
 		super.createPartControl(parent);
 		// Get e4 selection service!
 		final ESelectionService service = (ESelectionService) getSite().getService(ESelectionService.class);
 		service.addPostSelectionListener(this);
-		
+
 		ImageDescriptor imageDescriptor = Activator.Implementation.getImageDescriptor("icons/dark_arrow_down.png");
 		cellImageDarkArrowDown = imageDescriptor.createImage();
 		imageDescriptor = Activator.Implementation.getImageDescriptor("icons/dark_arrow_up.png");
 		cellImageDarkArrowUp = imageDescriptor.createImage();
-		
+
 		colourBlue = new Color(Display.getDefault(), 135, 206, 235);
 		colourLightBlue = new Color(Display.getDefault(), 135, 206, 250);
 		colourGreen = new Color(Display.getDefault(), 132, 148, 67);
@@ -557,10 +566,8 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 			@Override
 			public boolean hasChildren(final Object element) {
-				return element instanceof Collection<?> || 
-						(element instanceof IndexExposureData 
-								&& ((IndexExposureData) element).children != null 
-						&& ((IndexExposureData) element).type == IndexExposureType.MONTHLY);
+				return element instanceof Collection<?>
+						|| (element instanceof IndexExposureData && ((IndexExposureData) element).children != null && ((IndexExposureData) element).type == IndexExposureType.MONTHLY);
 			}
 		};
 	}
@@ -574,7 +581,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 		final IndexExposureData modelData = pinData != null ? pinData : otherData;
 		final Map<String, Double> exposuresByMonth = new HashMap<>();
-		
+
 		Collection<String> k = new LinkedHashSet<>();
 		Map<String, IndexExposureData> pc = new HashMap<>();
 		Map<String, IndexExposureData> oc = new HashMap<>();
@@ -611,7 +618,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		}
 		IndexExposureData ied1;
 		if (modelData.isChild) {
-			ied1 = new IndexExposureData(null, null, modelData.date, modelData.childName , exposuresByMonth, modelData.entity);
+			ied1 = new IndexExposureData(null, null, modelData.date, modelData.childName, exposuresByMonth, modelData.entity);
 		} else {
 			ied1 = new IndexExposureData(null, null, modelData.date, exposuresByMonth, newChildren);
 		}
@@ -622,7 +629,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 	@Override
 	protected void makeActions() {
 		super.makeActions();
-		
+
 		final FilterMenuAction filterAction = new FilterMenuAction("Filters");
 		filterAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.tabular", "/icons/filter.gif"));
 		getViewSite().getActionBars().getToolBarManager().add(filterAction);
@@ -641,7 +648,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		};
 		setUnitsActionText(modeToggle);
 		getViewSite().getActionBars().getToolBarManager().add(modeToggle);
-		
+
 		final Action selectionToggle = new Action("View: " + (selectionMode ? "Selection" : "All"), Action.AS_CHECK_BOX) {
 			@Override
 			public void run() {
@@ -669,10 +676,10 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		};
 		setAggregationModeActionText(viewModeToggle);
 		getViewSite().getActionBars().getToolBarManager().add(viewModeToggle);
-		
+
 		getViewSite().getActionBars().getToolBarManager().update(true);
 	}
-	
+
 	private class FilterMenuAction extends DefaultMenuCreatorAction {
 
 		public FilterMenuAction(final String label) {
@@ -692,12 +699,13 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			};
 
 			addActionToMenu(clearAction, menu);
-			
+
 			final DefaultMenuCreatorAction dmcaEntity = new DefaultMenuCreatorAction("Entity") {
 
 				@Override
 				protected void populate(Menu subMenu) {
-					if (entities.isEmpty()) return;
+					if (entities.isEmpty())
+						return;
 					for (final String e : entities) {
 						final Action entityAction = new Action(e) {
 							@Override
@@ -709,15 +717,16 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 						addActionToMenu(entityAction, subMenu);
 					}
 				}
-				
+
 			};
 			addActionToMenu(dmcaEntity, menu);
-			
+
 			final DefaultMenuCreatorAction dmcaFiscalYear = new DefaultMenuCreatorAction("Fiscal Year") {
 
 				@Override
 				protected void populate(Menu subMenu) {
-					if (fiscalYears.isEmpty()) return;
+					if (fiscalYears.isEmpty())
+						return;
 					for (final String e : fiscalYears) {
 						final Action fiscalYearAction = new Action(e) {
 							@Override
@@ -729,10 +738,10 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 						addActionToMenu(fiscalYearAction, subMenu);
 					}
 				}
-				
+
 			};
 			addActionToMenu(dmcaFiscalYear, menu);
-			
+
 			final DefaultMenuCreatorAction dmcaAssetTypes = new DefaultMenuCreatorAction("Phys/Fin") {
 
 				@Override
@@ -751,9 +760,8 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			};
 			addActionToMenu(dmcaAssetTypes, menu);
 		}
-		
+
 	}
-	
 
 	@Override
 	public void selectionChanged(final MPart part, final Object selectionObject) {
@@ -796,7 +804,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		assert modeStr != null;
 		a.setText("Units: " + modeStr);
 	}
-	
+
 	private void setAggregationModeActionText(final Action a) {
 		String modeStr = null;
 		switch (viewMode) {
@@ -826,8 +834,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
 			util.setRowHeadersIncluded(true);
 			util.setShowBackgroundColours(true);
-			final String contents = util.convert();
-			return adapter.cast((IReportContents) () -> contents);
+			return adapter.cast(ReportContents.makeHTML(util.convert()));
 		}
 		return super.getAdapter(adapter);
 	}
@@ -847,8 +854,9 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					}
 				}
 			}
-			if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPEN_SLOT_EXPOSURE)) return result;
-			for (final OpenSlotAllocation sa: schedule.getOpenSlotAllocations()) {
+			if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPEN_SLOT_EXPOSURE))
+				return result;
+			for (final OpenSlotAllocation sa : schedule.getOpenSlotAllocations()) {
 				for (final ExposureDetail detail : sa.getExposures()) {
 					if (detail.getDate().isBefore(result)) {
 						result = detail.getDate();
@@ -874,8 +882,9 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					}
 				}
 			}
-			if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPEN_SLOT_EXPOSURE)) return result;
-			for (final OpenSlotAllocation sa: schedule.getOpenSlotAllocations()) {
+			if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPEN_SLOT_EXPOSURE))
+				return result;
+			for (final OpenSlotAllocation sa : schedule.getOpenSlotAllocations()) {
 				for (final ExposureDetail detail : sa.getExposures()) {
 					if (detail.getDate().isAfter(result)) {
 						result = detail.getDate();
@@ -885,22 +894,22 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		}
 		return result;
 	}
-	
+
 	public enum AssetType {
 		NET("All"), FINANCIAL("Net Index"), PAPER("Paper"), INDEX("Physical Index"), PHYSICAL("Physical");
-		
+
 		private String value;
-		
+
 		private AssetType(String value) {
 			this.value = value;
 		}
-		
+
 		@Override
 		public String toString() {
 			return value;
 		}
 	}
-	
+
 	public static boolean inspectChildrenAndExposures(IndexExposureData fd) {
 		if (fd.children != null && !fd.children.isEmpty()) {
 			return true;
@@ -908,7 +917,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		if (fd.exposures != null && !fd.exposures.isEmpty()) {
 			return true;
 		}
-		
+
 		return false;
 	}
 }

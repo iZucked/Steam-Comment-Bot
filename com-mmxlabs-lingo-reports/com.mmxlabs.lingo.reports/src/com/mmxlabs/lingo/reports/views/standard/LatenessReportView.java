@@ -221,7 +221,7 @@ public class LatenessReportView extends EMFReportView {
 			return (T) new IReportContents() {
 
 				@Override
-				public String getStringContents() {
+				public String getHTMLContents() {
 					return contents;
 				}
 			};

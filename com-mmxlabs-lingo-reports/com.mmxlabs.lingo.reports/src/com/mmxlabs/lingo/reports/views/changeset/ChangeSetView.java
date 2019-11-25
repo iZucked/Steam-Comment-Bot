@@ -511,7 +511,7 @@ public class ChangeSetView extends ViewPart {
 				return (T) new IReportContents() {
 
 					@Override
-					public String getStringContents() {
+					public String getHTMLContents() {
 						// Prefix this header for rendering purposes
 						return "<meta charset=\"UTF-8\"/>" + contents;
 					}

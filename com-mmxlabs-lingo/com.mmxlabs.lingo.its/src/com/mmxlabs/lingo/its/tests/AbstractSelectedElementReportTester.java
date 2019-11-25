@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.DynamicNode;
 import org.junit.jupiter.api.DynamicTest;
 
+import com.mmxlabs.lingo.its.tests.AbstractReportTester.ReportType;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 /**
@@ -33,11 +34,11 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 public abstract class AbstractSelectedElementReportTester extends AbstractOptimisationResultTester {
 	public abstract void init(final String scenarioPath, String elementID) throws Exception;
 
-	protected void testReports(final String reportID, final String shortName, final String extension) throws Exception {
-		testReports(reportID, shortName, extension, null);
+	protected void testReports(final String reportID, final String shortName, final ReportType type) throws Exception {
+		testReports(reportID, shortName, type, null);
 	}
 
-	protected abstract void testReports(final String reportID, final String shortName, final String extension, @Nullable Consumer<ScenarioModelRecord> preAction) throws Exception;
+	protected abstract void testReports(final String reportID, final String shortName, final ReportType type, @Nullable Consumer<ScenarioModelRecord> preAction) throws Exception;
 
 	public List<DynamicNode> makeTests(final String scenarioPath, final String elementID) {
 		final List<DynamicNode> tests = new LinkedList<>();
@@ -45,7 +46,7 @@ public abstract class AbstractSelectedElementReportTester extends AbstractOptimi
 		tests.add(DynamicTest.dynamicTest("CargoEconsReport", () -> {
 			Assumptions.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
 			init(scenarioPath, elementID);
-			testReports(ReportTesterHelper.CARGO_ECONS_REPORT_ID, ReportTesterHelper.CARGO_ECONS_REPORT_SHORTNAME, "html");
+			testReports(ReportTesterHelper.CARGO_ECONS_REPORT_ID, ReportTesterHelper.CARGO_ECONS_REPORT_SHORTNAME, ReportType.REPORT_HTML);
 		}));
 
 		return tests;

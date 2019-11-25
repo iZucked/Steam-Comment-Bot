@@ -634,7 +634,7 @@ public class CargoEconsReportComponent implements IAdaptable {
 			return (T) new IReportContents() {
 
 				@Override
-				public String getStringContents() {
+				public String getHTMLContents() {
 					return contents;
 				}
 			};
