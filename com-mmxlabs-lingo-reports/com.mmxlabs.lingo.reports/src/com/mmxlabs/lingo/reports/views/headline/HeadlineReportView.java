@@ -33,6 +33,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
@@ -51,9 +52,9 @@ import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
@@ -87,26 +88,46 @@ public class HeadlineReportView extends ViewPart {
 	}
 
 	/**
-	 * The ordered list of columns. These are either labels, or values. Label types take a String value and no formatter. Value types take a default Long value representing the largest expected value
-	 * which is used to calculate the required column width.
+	 * The ordered list of columns. These are either labels, or values. Label types
+	 * take a String value and no formatter. Value types take a default Long value
+	 * representing the largest expected value which is used to calculate the
+	 * required column width.
 	 */
 	public enum ColumnDefinition {
-		LABEL_PNL(ColumnType.Label, "P&L", null), VALUE_PNL(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST), //
-		LABEL_PAPER(ColumnType.Label, "Paper", null, "features:paperdeals"), VALUE_PAPER(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST, "features:paperdeals"), //
-		LABEL_TRADING(ColumnType.Label, "Trading", null), VALUE_TRADING(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST), //
-		LABEL_SHIPPING(ColumnType.Label, "Shipping", null), VALUE_SHIPPING(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST), //
-		LABEL_UPSIDE(ColumnType.Label, "Upside", null, "features:report-headline-upside"), VALUE_UPSIDE(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST,
-				"features:report-headline-upside"), //
-		LABEL_SALES_REVENUE(ColumnType.Label, "Revenue", null, "features:headline-sales-revenue"), VALUE_SALES_REVENUE(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST,
-				"features:headline-sales-revenue"), //
+		LABEL_PNL(ColumnType.Label, "P&L", null), // 
+		VALUE_PNL(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST), //
+		//
+		LABEL_PAPER(ColumnType.Label, "Paper", null, KnownFeatures.FEATURE_PAPER_DEALS), //
+		VALUE_PAPER(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST, KnownFeatures.FEATURE_PAPER_DEALS), //
+		//
+		LABEL_TRADING(ColumnType.Label, "Trading", null,  KnownFeatures.FEATURE_SHOW_TRADING_SHIPPING_SPLIT), //
+		VALUE_TRADING(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST,  KnownFeatures.FEATURE_SHOW_TRADING_SHIPPING_SPLIT), //
+		//
+		LABEL_SHIPPING(ColumnType.Label, "Shipping", null,  KnownFeatures.FEATURE_SHOW_TRADING_SHIPPING_SPLIT), //
+		VALUE_SHIPPING(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST,  KnownFeatures.FEATURE_SHOW_TRADING_SHIPPING_SPLIT), //
+		//
+		LABEL_UPSIDE(ColumnType.Label, "Upside", null, "features:report-headline-upside"),
+		VALUE_UPSIDE(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST, "features:report-headline-upside"), //
+		//
+		LABEL_SALES_REVENUE(ColumnType.Label, "Revenue", null, "features:headline-sales-revenue"),
+		VALUE_SALES_REVENUE(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST, "features:headline-sales-revenue"), //
+		//
 		LABEL_EQUITY(ColumnType.Label, "Equity", null, "features:report-equity-book"), VALUE_EQUITY(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST, "features:report-equity-book"), //
+		//
 		LABEL_IDLE_DAYS(ColumnType.Label, "Idle", null, "features:headline-idle-days"), VALUE_IDLE_DAYS(ColumnType.Value, 24000l, KPIReportTransformer.TYPE_TIME, "features:headline-idle-days"), //
-		LABEL_CHARTER_LENGTH_DAYS(ColumnType.Label, "Charter Length", null, "features:headline-charter-length"), VALUE_CHARTER_LENGTH_DAYS(ColumnType.Value, 24000l, KPIReportTransformer.TYPE_TIME, "features:headline-charter-length"), //
-		LABEL_GCO(ColumnType.Label, "Charter Out (virt)", null, "features:optimisation-charter-out-generation"), VALUE_GCO_DAYS(ColumnType.Value, 2400l, KPIReportTransformer.TYPE_TIME,
-				"features:optimisation-charter-out-generation"), VALUE_GCO_REVENUE(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST, "features:optimisation-charter-out-generation"), //
-		LABEL_PURCHASE_COST(ColumnType.Label, "P. Cost", null, "features:headline-purchase-cost"), VALUE_PURCHASE_COST(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST,
-				"features:headline-purchase-cost"), //
+		//
+		LABEL_CHARTER_LENGTH_DAYS(ColumnType.Label, "Charter Length", null, "features:headline-charter-length"),
+		VALUE_CHARTER_LENGTH_DAYS(ColumnType.Value, 24000l, KPIReportTransformer.TYPE_TIME, "features:headline-charter-length"), //
+		//
+		LABEL_GCO(ColumnType.Label, "Charter Out (virt)", null, KnownFeatures.FEATURE_OPTIMISATION_CHARTER_OUT_GENERATION),
+		VALUE_GCO_DAYS(ColumnType.Value, 2400l, KPIReportTransformer.TYPE_TIME, KnownFeatures.FEATURE_OPTIMISATION_CHARTER_OUT_GENERATION),
+		VALUE_GCO_REVENUE(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST, KnownFeatures.FEATURE_OPTIMISATION_CHARTER_OUT_GENERATION), //
+		//
+		LABEL_PURCHASE_COST(ColumnType.Label, "P. Cost", null, "features:headline-purchase-cost"),
+		VALUE_PURCHASE_COST(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST, "features:headline-purchase-cost"), //
+		//
 		LABEL_LATENESS(ColumnType.Label, "Late", null), VALUE_LATENESS(ColumnType.Value, 5200l, KPIReportTransformer.TYPE_TIME), //
+		//
 		LABEL_VIOLATIONS(ColumnType.Label, "Issues", null), VALUE_VIOLATIONS(ColumnType.Value, 100l, ""); //
 
 		private final ColumnType columnType;
@@ -226,7 +247,8 @@ public class HeadlineReportView extends ViewPart {
 		}
 
 		/**
-		 * Get Mapping between a {@link ColumnDefinition} value type and a {@link RowData} field.
+		 * Get Mapping between a {@link ColumnDefinition} value type and a
+		 * {@link RowData} field.
 		 * 
 		 * @param d
 		 * @param columnDefinition
@@ -377,14 +399,16 @@ public class HeadlineReportView extends ViewPart {
 					// if (pinD == null) {
 					color = SWT.COLOR_BLACK;
 					// } else {
-					// color = (d.idleTime - pinD.idleTime) <= 0 ? SWT.COLOR_DARK_GREEN : SWT.COLOR_RED;
+					// color = (d.idleTime - pinD.idleTime) <= 0 ? SWT.COLOR_DARK_GREEN :
+					// SWT.COLOR_RED;
 					// }
 					break;
 				case VALUE_CHARTER_LENGTH_DAYS:
 					// if (pinD == null) {
 					color = SWT.COLOR_BLACK;
 					// } else {
-					// color = (d.idleTime - pinD.idleTime) <= 0 ? SWT.COLOR_DARK_GREEN : SWT.COLOR_RED;
+					// color = (d.idleTime - pinD.idleTime) <= 0 ? SWT.COLOR_DARK_GREEN :
+					// SWT.COLOR_RED;
 					// }
 					break;
 				case VALUE_GCO_DAYS:
@@ -566,7 +590,8 @@ public class HeadlineReportView extends ViewPart {
 		final GC gc = new GC(viewer.getControl());
 		try {
 			gc.setFont(boldFont);
-			// 8 taken from sum margins in org.eclipse.nebula.widgets.grid.internal.DefaultCellRenderer
+			// 8 taken from sum margins in
+			// org.eclipse.nebula.widgets.grid.internal.DefaultCellRenderer
 			return Math.max(minWidth, 10 + gc.textExtent(string).x);
 		} finally {
 			gc.dispose();
@@ -577,7 +602,8 @@ public class HeadlineReportView extends ViewPart {
 		final GC gc = new GC(viewer.getControl());
 		try {
 			gc.setFont(boldFont);
-			// 3 taken from sum margins in org.eclipse.nebula.widgets.grid.internal.DefaultCellRenderer
+			// 3 taken from sum margins in
+			// org.eclipse.nebula.widgets.grid.internal.DefaultCellRenderer
 			return Math.max(minHeight, 3 + gc.textExtent(string).y);
 		} finally {
 			gc.dispose();
