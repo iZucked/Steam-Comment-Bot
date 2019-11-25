@@ -30,7 +30,7 @@ public class WeightedAverageCharterCostCalculator implements ICharterCostCalcula
 				if (nextT == null) {
 					nextT = lastT;
 				}
-				durationCharterRate = nextT - t;				
+				durationCharterRate = Math.min(duration, nextT - t);				
 				charterCost += (charterRatePerDay * durationCharterRate);
 			}
 			return charterCost / 24L;
