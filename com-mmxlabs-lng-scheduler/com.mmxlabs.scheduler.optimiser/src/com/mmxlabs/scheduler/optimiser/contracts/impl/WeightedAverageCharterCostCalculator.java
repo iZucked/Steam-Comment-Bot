@@ -5,11 +5,11 @@ import java.util.NavigableSet;
 import com.mmxlabs.common.curves.ILongCurve;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 
-public class WeightAverageCharterCostCalculator implements ICharterCostCalculator {
+public class WeightedAverageCharterCostCalculator implements ICharterCostCalculator {
 
 	private final ILongCurve charterRateCurve;
 	
-	public WeightAverageCharterCostCalculator(ILongCurve charterRateCurve) {
+	public WeightedAverageCharterCostCalculator(ILongCurve charterRateCurve) {
 		this.charterRateCurve = charterRateCurve;
 	}
 

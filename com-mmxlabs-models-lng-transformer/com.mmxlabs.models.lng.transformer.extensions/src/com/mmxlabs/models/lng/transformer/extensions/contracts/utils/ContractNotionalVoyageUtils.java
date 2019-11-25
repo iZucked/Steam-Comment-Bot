@@ -21,7 +21,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.impl.WeightAverageCharterCostCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.WeightedAverageCharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
