@@ -37,17 +37,14 @@ import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.types.TimePeriod;
-import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
-import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
-import com.mmxlabs.scheduler.optimiser.moves.util.MetricType;
 import com.mmxlabs.scheduler.optimiser.schedule.ShippingCostHelper;
 
 /***
@@ -60,7 +57,7 @@ public class WeightedAverageCharterRateCharteringCostTests extends AbstractMicro
 	
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
-	public void testCargoOnVessel() throws Exception {
+	public void testCargoSameMonthCharterCost() throws Exception {
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
 
@@ -99,19 +96,123 @@ public class WeightedAverageCharterRateCharteringCostTests extends AbstractMicro
 		});
 	}
 
-	private long calculateInternalPnl(LNGScenarioRunner scenarioRunner) {
-		final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testCargoSameMonthZeroDurationCharterCost() throws Exception {
+		// map into same timezone to make expectations easier
+		portModelBuilder.setAllExistingPortsToUTC();
 
 		@NonNull
-		IModifiableSequences initialSequences = new ModifiableSequences(scenarioToOptimiserBridge.getDataTransformer().getInitialSequences());
+		final Port port1 = portFinder.findPort("Point Fortin");
 
-		long[] metrics = MicroTestUtils.evaluateMetrics(scenarioToOptimiserBridge.getDataTransformer(), initialSequences);
+		@NonNull
+		final Port port2 = portFinder.findPort("Dominion Cove Point LNG");
 
-		long internalPnl = metrics[MetricType.PNL.ordinal()];
-			
-		return internalPnl;
+		// Create the required basic elements
+		final CharterInMarket charterInMarket_1 = createChartInMarket();
+		
+		// Set distance and speed to exact multiple -- quickest travel time is 100 hours
+		scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(port1, port2, 1500, 2000, 2000, true);
+
+		final LocalDateTime dischargeDate = LocalDateTime.of(2015, 12, 1, 0, 0, 0).plusHours(24 + 100);
+
+		final Cargo cargo = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L", LocalDate.of(2015, 12, 1), port1, null, entity, "5") //
+				.withWindowStartTime(0) //
+				.withVisitDuration(0) //
+				.withWindowSize(0, TimePeriod.HOURS) //
+				.build() //
+				//
+				.makeDESSale("D", dischargeDate.toLocalDate(), port2, null, entity, "7") //
+				.withWindowStartTime(dischargeDate.toLocalTime().getHour()) //
+				.withVisitDuration(0) //
+				.withWindowSize(0, TimePeriod.HOURS) //
+				.build() //
+				//
+				.withVesselAssignment(charterInMarket_1, 0, 0) 
+				.build();
+		
+		evaluateTest(null, null, scenarioRunner -> {
+			validateCharterCosts(scenarioRunner, 0);
+		});
+	}
+	
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testCargoDifferentMonthTimezoneCharterCost() throws Exception {
+		@NonNull
+		final Port port1 = portFinder.findPort("Point Fortin");
+
+		@NonNull
+		final Port port2 = portFinder.findPort("Ogishima - Tokyo Gas LNG Berth");
+
+		// Create the required basic elements
+		final CharterInMarket charterInMarket_1 = createChartInMarket();
+		
+		// Set distance and speed to exact multiple -- quickest travel time is 100 hours
+		scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(port1, port2, 1500, 2000, 2000, true);
+
+		final LocalDateTime dischargeDate = LocalDateTime.of(2015, 12, 31, 0, 0, 0).plusHours(24 + 100);
+
+		final Cargo cargo = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L", LocalDate.of(2015, 12, 31), port1, null, entity, "5") //
+				.withWindowStartTime(0) //
+				.withVisitDuration(24) //
+				.withWindowSize(0, TimePeriod.HOURS) //
+				.build() //
+				//
+				.makeDESSale("D", dischargeDate.toLocalDate(), port2, null, entity, "7") //
+				.withWindowStartTime(dischargeDate.toLocalTime().getHour()) //
+				.withVisitDuration(24) //
+				.withWindowSize(0, TimePeriod.HOURS) //
+				.build() //
+				//
+				.withVesselAssignment(charterInMarket_1, 0, 0) 
+				.build();
+		
+		evaluateTest(null, null, scenarioRunner -> {
+			validateCharterCosts(scenarioRunner, 0);
+		});
 	}
 
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testCargoZeroDurationDifferentMonthTimezoneCharterCost() throws Exception {
+		@NonNull
+		final Port port1 = portFinder.findPort("Point Fortin");
+
+		@NonNull
+		final Port port2 = portFinder.findPort("Ogishima - Tokyo Gas LNG Berth");
+
+		// Create the required basic elements
+		final CharterInMarket charterInMarket_1 = createChartInMarket();
+		
+		// Set distance and speed to exact multiple -- quickest travel time is 100 hours
+		scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(port1, port2, 1500, 2000, 2000, true);
+
+		final LocalDateTime dischargeDate = LocalDateTime.of(2015, 12, 31, 0, 0, 0).plusHours(24 + 100);
+
+		final Cargo cargo = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L", LocalDate.of(2015, 12, 31), port1, null, entity, "5") //
+				.withWindowStartTime(0) //
+				.withVisitDuration(0) //
+				.withWindowSize(0, TimePeriod.HOURS) //
+				.build() //
+				//
+				.makeDESSale("D", dischargeDate.toLocalDate(), port2, null, entity, "7") //
+				.withWindowStartTime(dischargeDate.toLocalTime().getHour()) //
+				.withVisitDuration(0) //
+				.withWindowSize(0, TimePeriod.HOURS) //
+				.build() //
+				//
+				.withVesselAssignment(charterInMarket_1, 0, 0) 
+				.build();
+		
+		evaluateTest(null, null, scenarioRunner -> {
+			validateCharterCosts(scenarioRunner, 0);
+		});
+	}
+	
 	private void validateCharterCosts(LNGScenarioRunner scenarioRunner, long expectedPnL) {
 		final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 		
