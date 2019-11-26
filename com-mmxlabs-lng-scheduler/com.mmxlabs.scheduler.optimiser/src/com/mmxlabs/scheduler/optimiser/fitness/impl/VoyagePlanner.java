@@ -129,8 +129,9 @@ public class VoyagePlanner implements IVoyagePlanner {
 	private IStartEndRequirementProvider startEndRequirementProvider;
 
 	/**
-	 * Returns a voyage options object and extends the current VPO with appropriate choices for a particular journey. TODO: refactor this if possible to simplify it and make it stateless (it currently
-	 * messes with the VPO).
+	 * Returns a voyage options object and extends the current VPO with appropriate
+	 * choices for a particular journey. TODO: refactor this if possible to simplify
+	 * it and make it stateless (it currently messes with the VPO).
 	 * 
 	 * @param portTimesRecord
 	 * 
@@ -160,7 +161,8 @@ public class VoyagePlanner implements IVoyagePlanner {
 		options.setAvailableTime(availableTime);
 		options.setExtraIdleTime(extraIdleTime);
 
-		// Flag to force NBO use over cost choice - e.g. for cases where there is already a heel onboard
+		// Flag to force NBO use over cost choice - e.g. for cases where there is
+		// already a heel onboard
 		boolean forceNBO = false;
 
 		final boolean isReliq = vessel.hasReliqCapability();
@@ -373,13 +375,15 @@ public class VoyagePlanner implements IVoyagePlanner {
 		}
 
 		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER && thisPortSlot.getPortType() == PortType.End) {
-			// The SchedulerBuilder should set options to trigger these values to be set above
+			// The SchedulerBuilder should set options to trigger these values to be set
+			// above
 			assert !options.getAllowCooldown();
 			assert options.shouldBeCold() == VesselTankState.MUST_BE_COLD;
 			options.setAllowCooldown(false);
 			options.setShouldBeCold(VesselTankState.MUST_BE_COLD);
 		} else if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP && thisPortSlot.getPortType() == PortType.Round_Trip_Cargo_End) {
-			// The SchedulerBuilder should set options to trigger these values to be set above
+			// The SchedulerBuilder should set options to trigger these values to be set
+			// above
 			assert !options.getAllowCooldown();
 			assert options.shouldBeCold() == VesselTankState.MUST_BE_COLD;
 			options.setAllowCooldown(false);
@@ -391,7 +395,8 @@ public class VoyagePlanner implements IVoyagePlanner {
 	}
 
 	/**
-	 * Should this ballast voyage be forced to use NBO for travel and idle? (Laden is always NBO);
+	 * Should this ballast voyage be forced to use NBO for travel and idle? (Laden
+	 * is always NBO);
 	 * 
 	 * @param prevPortSlot
 	 * @param toPortSlot
@@ -416,7 +421,8 @@ public class VoyagePlanner implements IVoyagePlanner {
 	}
 
 	/**
-	 * Returns a list of voyage plans based on breaking up a sequence of vessel real or virtual destinations into single conceptual cargo voyages.
+	 * Returns a list of voyage plans based on breaking up a sequence of vessel real
+	 * or virtual destinations into single conceptual cargo voyages.
 	 * 
 	 * @param resource
 	 * @param sequence
@@ -460,6 +466,12 @@ public class VoyagePlanner implements IVoyagePlanner {
 		for (final IPortTimesRecord portTimesRecord : portTimesRecords) {
 			++idx;
 
+			if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
+				// Reset heel for nominal cargoes.
+				heelInM3Range[0] = startRequirement.getHeelOptions().getMinimumHeelAvailableInM3();
+				heelInM3Range[1] = startRequirement.getHeelOptions().getMaximumHeelAvailableInM3();
+			}
+
 			final List<@NonNull IOptionsSequenceElement> voyageOrPortOptions = new LinkedList<>();
 			final List<@NonNull IVoyagePlanChoice> vpoChoices = new LinkedList<>();
 
@@ -474,7 +486,8 @@ public class VoyagePlanner implements IVoyagePlanner {
 			final long vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vesselAvailability, /** FIXME: not utc */
 					vesselStartTime, timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getFirstSlotTime(), portTimesRecord.getFirstSlot()));
 
-			// Create a list of all slots including the optional (not for shipped cargoes) return slot
+			// Create a list of all slots including the optional (not for shipped cargoes)
+			// return slot
 			final List<@NonNull IPortSlot> recordSlots = new ArrayList<>(portTimesRecord.getSlots().size() + 1);
 			recordSlots.addAll(portTimesRecord.getSlots());
 			final IPortSlot returnSlot = portTimesRecord.getReturnSlot();
@@ -487,7 +500,8 @@ public class VoyagePlanner implements IVoyagePlanner {
 
 				if (thisPortSlot != returnSlot) {
 
-					// If we are a heel options slots (i.e. Start or other vessel event slot, overwrite previous heel (assume lost) and replace with a new heel value
+					// If we are a heel options slots (i.e. Start or other vessel event slot,
+					// overwrite previous heel (assume lost) and replace with a new heel value
 					// TODO: Move (back?)into VPO code
 					if (thisPortSlot instanceof IHeelOptionSupplierPortSlot) {
 						final IHeelOptionSupplierPortSlot supplier = (IHeelOptionSupplierPortSlot) thisPortSlot;
@@ -514,9 +528,6 @@ public class VoyagePlanner implements IVoyagePlanner {
 
 					final int voyageStartTime = prevArrivalTime + portTimesRecord.getSlotDuration(prevPortSlot);
 					final int extraIdleTime = portTimesRecord.getSlotExtraIdleTime(prevPortSlot);
-					if (extraIdleTime > 0) {
-						int ii = 0;
-					}
 
 					final VesselState vesselState = findVesselState(portTimesRecord, prevPortSlot);
 					final VoyageOptions options = getVoyageOptionsAndSetVpoChoices(vesselAvailability, portTimesRecord, vesselState, voyageStartTime, availableTravelTime, extraIdleTime, prevPortSlot,
@@ -563,10 +574,9 @@ public class VoyagePlanner implements IVoyagePlanner {
 				prevPortSlot = thisPortSlot;
 			}
 
-			// final IPortSlot thisPortSlot = portTimesRecord.getReturnSlot();
-			// final PortOptions portOptions;
 			if (!voyageOrPortOptions.isEmpty()) {
-				// Use prev slot as "thisPortSlot" is the start of a new voyage plan and thus likely a different cargo
+				// Use prev slot as "thisPortSlot" is the start of a new voyage plan and thus
+				// likely a different cargo
 				if (actualsDataProvider.hasActuals(recordSlots.get(0))) {
 					long endHeelInM3 = generateActualsVoyagePlan(vesselAvailability, vesselStartTime, voyagePlansMap, voyagePlansList, voyageOrPortOptions, portTimesRecord, heelInM3Range);
 
@@ -579,8 +589,11 @@ public class VoyagePlanner implements IVoyagePlanner {
 
 					final boolean roundTripCargoEnd = ((PortOptions) voyageOrPortOptions.get(0)).getPortSlot().getPortType() == PortType.Round_Trip_Cargo_End;
 
-					// Special case for round trip cargo routes. There is no voyage between a Round_Trip_Cargo_End and the next load - which this current sequence will represent. However we do need to
-					// model the Round_Trip_Cargo_End for the VoyagePlanIterator to work correctly. Here we strip the voyage and make this a single element sequence.
+					// Special case for round trip cargo routes. There is no voyage between a
+					// Round_Trip_Cargo_End and the next load - which this current sequence will
+					// represent. However we do need to
+					// model the Round_Trip_Cargo_End for the VoyagePlanIterator to work correctly.
+					// Here we strip the voyage and make this a single element sequence.
 					if (!roundTripCargoEnd) {
 
 						final VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, portTimesRecord, voyagePlanOptimiser, heelInM3Range, vesselCharterInRatePerDay,
@@ -674,7 +687,8 @@ public class VoyagePlanner implements IVoyagePlanner {
 					if (idx == 0) {
 						if (actualsDataProvider.hasActuals(portOptions.getPortSlot())) {
 
-							// This should not be required in future as preceding voyages should also be actualised!
+							// This should not be required in future as preceding voyages should also be
+							// actualised!
 							assert startHeelVolumeInM3[0] == actualsDataProvider.getStartHeelInM3(portOptions.getPortSlot());
 							assert startHeelVolumeInM3[1] == actualsDataProvider.getStartHeelInM3(portOptions.getPortSlot());
 							// plan.setStartingHeelInM3(startHeelVolumeInM3);
@@ -861,24 +875,24 @@ public class VoyagePlanner implements IVoyagePlanner {
 				planSet = true;
 			}
 		}
-		
+
 		if (!planSet && generatedCharterLengthEvaluator != null) {
-			final List<@NonNull Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord>> lp = generatedCharterLengthEvaluator.processSchedule(vesselStartTime, heelVolumeRangeInM3, vesselAvailability, plan,
-					portTimesRecord);
+			final List<@NonNull Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord>> lp = generatedCharterLengthEvaluator.processSchedule(vesselStartTime, heelVolumeRangeInM3, vesselAvailability,
+					plan, portTimesRecord);
 			if (lp != null) {
 				for (final Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord> p : lp) {
 					final PlanEvaluationData evalData = new PlanEvaluationData(portTimesRecord, p.getFirst());
 					voyagePlansList.add(evalData.plan);
-					
+
 					if (p.getSecond() instanceof IAllocationAnnotation) {
 						evalData.allocation = (IAllocationAnnotation) p.getSecond();
 					}
 					evalData.portTimesRecord = p.getSecond();
-					
+
 					if (evalData.allocation != null) {
 						evalData.endHeelVolumeInM3 = evalData.allocation.getRemainingHeelVolumeInM3();
 						evalData.startHeelVolumeInM3 = evalData.allocation.getStartHeelVolumeInM3();
-						
+
 					} else {
 						evalData.endHeelVolumeInM3 = evalData.plan.getRemainingHeelInM3();
 						evalData.startHeelVolumeInM3 = evalData.plan.getStartingHeelInM3();
@@ -889,8 +903,6 @@ public class VoyagePlanner implements IVoyagePlanner {
 				planSet = true;
 			}
 		}
-		
-
 
 		// Execute custom logic to manipulate the schedule and choices
 		if (breakEvenEvaluator != null) {
@@ -944,7 +956,8 @@ public class VoyagePlanner implements IVoyagePlanner {
 			evaluateBrokenUpVoyagePlan(planData, vesselAvailability, vesselStartTime, voyagePlansMap, voyagePlansList, originalPlan);
 		}
 
-		// return the end heel of the last plan (for the generated charter out case there will be more than one plan)
+		// return the end heel of the last plan (for the generated charter out case
+		// there will be more than one plan)
 		return plans.get(plans.size() - 1).getEndHeelVolumeInM3();
 
 	}
@@ -990,7 +1003,8 @@ public class VoyagePlanner implements IVoyagePlanner {
 		@Nullable
 		IPortSlot prevPortSlot = null;
 
-		// Create a list of all slots including the optional (not for shipped cargoes) return slot
+		// Create a list of all slots including the optional (not for shipped cargoes)
+		// return slot
 		final List<@NonNull IPortSlot> recordSlots = new ArrayList<>(portTimesRecord.getSlots().size() + 1);
 		recordSlots.addAll(portTimesRecord.getSlots());
 		final IPortSlot returnSlot = portTimesRecord.getReturnSlot();
@@ -1002,7 +1016,8 @@ public class VoyagePlanner implements IVoyagePlanner {
 		heelInM3Range[1] = initialHeelVolumeRangeInM3[1];
 		for (final IPortSlot thisPortSlot : recordSlots) {
 			final int thisArrivalTime = portTimesRecord.getSlotTime(thisPortSlot);
-			// If we are a heel options slots (i.e. Start or other vessel event slot, overwrite previous heel (assume lost) and replace with a new heel value
+			// If we are a heel options slots (i.e. Start or other vessel event slot,
+			// overwrite previous heel (assume lost) and replace with a new heel value
 			// TODO: Move (back?)into VPO code
 			if (thisPortSlot instanceof IHeelOptionSupplierPortSlot) {
 				IHeelOptionSupplierPortSlot supplier = (IHeelOptionSupplierPortSlot) thisPortSlot;
@@ -1060,12 +1075,14 @@ public class VoyagePlanner implements IVoyagePlanner {
 
 			// Sequence scheduler should be using the actuals time
 			assert actualsDataProvider.hasActuals(thisPortSlot) == false || actualsDataProvider.getArrivalTime(thisPortSlot) == thisArrivalTime;
-			// assert actualsDataProvider.hasActuals(thisPortSlot) == false || actualsDataProvider.getVisitDuration(thisPortSlot) == visitDuration;
+			// assert actualsDataProvider.hasActuals(thisPortSlot) == false ||
+			// actualsDataProvider.getVisitDuration(thisPortSlot) == visitDuration;
 
 			prevPortSlot = thisPortSlot;
 		}
 
-		// TODO: Insert actuals VoyagePlan stuff here to allow this method to be used inside main makeVoyagePlans loop
+		// TODO: Insert actuals VoyagePlan stuff here to allow this method to be used
+		// inside main makeVoyagePlans loop
 
 		// Populate final plan details
 		if (!voyageOrPortOptions.isEmpty()) {
@@ -1089,8 +1106,10 @@ public class VoyagePlanner implements IVoyagePlanner {
 	@Override
 	public final @NonNull VoyagePlan makeDESOrFOBVoyagePlan(final @NonNull IResource resource, final @NonNull IPortTimesRecord portTimesRecord) {
 
-		// Virtual vessels are those operated by a third party, for FOB and DES situations.
-		// Should we compute a schedule for them anyway? The arrival times don't mean much,
+		// Virtual vessels are those operated by a third party, for FOB and DES
+		// situations.
+		// Should we compute a schedule for them anyway? The arrival times don't mean
+		// much,
 		// but contracts need this kind of information to make up numbers with.
 		final List<@NonNull IDetailsSequenceElement> currentSequence = new ArrayList<>(2);
 		final VoyagePlan currentPlan = new VoyagePlan();
@@ -1129,7 +1148,8 @@ public class VoyagePlanner implements IVoyagePlanner {
 			final PortOptions portOptions = new PortOptions(slot);
 			final PortDetails portDetails = new PortDetails(portOptions);
 			portOptions.setVisitDuration(0);
-			// Custom scheduling code may change this to non-zero, but we need it as zero for visualisation in reports
+			// Custom scheduling code may change this to non-zero, but we need it as zero
+			// for visualisation in reports
 			// portOptions.setVisitDuration(portTimesRecord.getSlotDuration(slot));
 			currentSequence.add(portDetails);
 		}
@@ -1170,7 +1190,8 @@ public class VoyagePlanner implements IVoyagePlanner {
 		Triple<@NonNull IVessel, @Nullable IResource, int[]> t = new Triple<>(vessel, resource, vesselBaseFuelCalculator.getBaseFuelPrices(vessel, portTimesRecord));
 		if (portTimesRecord.getFirstSlot() instanceof ILoadOption) {
 			if (actualsDataProvider.hasActuals(portTimesRecord.getFirstSlot())) {
-				// Note: older versions of multi-base-fuels code used t.getThrid() rather then actuals provider
+				// Note: older versions of multi-base-fuels code used t.getThrid() rather then
+				// actuals provider
 				t = new Triple<>(vessel, resource, actualsBaseFuelHelper.getActualisedOrForecastBaseFuelPrices(t.getFirst(), portTimesRecord, portTimesRecord.getFirstSlot()));
 			}
 		}
@@ -1180,8 +1201,8 @@ public class VoyagePlanner implements IVoyagePlanner {
 	/**
 	 * Returns a VoyagePlan produced by the optimiser from a cargo itinerary.
 	 * 
-	 * @param voyageOrPortOptionsSubsequence
-	 *            An alternating list of PortOptions and VoyageOptions objects
+	 * @param voyageOrPortOptionsSubsequence An alternating list of PortOptions and
+	 *                                       VoyageOptions objects
 	 * @param arrivalTimes
 	 * @param optimiser
 	 * @param startHeelVolumeInM3
@@ -1215,23 +1236,30 @@ public class VoyagePlanner implements IVoyagePlanner {
 				// "Duration should exceed available time less one, but is "
 				// + duration + " vs " + availableTime; // hack
 				if (duration > availableTime) {
-					// TODO: replace by throwing an exception, since if any one subsequence is infeasible, the whole sequence is infeasible
+					// TODO: replace by throwing an exception, since if any one subsequence is
+					// infeasible, the whole sequence is infeasible
 					return null;
 				}
 			}
 		}
 
-		// Fix up final arrival time. The VPO is permitted to change the final arrival time of certain vessels and we need to alter the arrival time array and the portTimesRecord with the new
+		// Fix up final arrival time. The VPO is permitted to change the final arrival
+		// time of certain vessels and we need to alter the arrival time array and the
+		// portTimesRecord with the new
 		// arrival time.
 		final IDetailsSequenceElement[] vpSequence = result.getSequence();
 		if (vpSequence.length > 1) {
 			final VoyageDetails lastVoyage = (VoyageDetails) vpSequence[vpSequence.length - 2];
 			if (lastVoyage.getOptions().getToPortSlot().getPortType() == PortType.End) {
-				// New arrival time = Previous element arrival time + visit duration + travel time + idle time.
+				// New arrival time = Previous element arrival time + visit duration + travel
+				// time + idle time.
 				final IPortSlot fromSlot = lastVoyage.getOptions().getFromPortSlot();
 				final int newTime = portTimesRecord.getSlotTime(fromSlot) + portTimesRecord.getSlotDuration(fromSlot) + lastVoyage.getTravelTime() + lastVoyage.getIdleTime();
-				// FIXME: This breaks the caches! This either changes previously changed data (actually - no cache here) or it changes the input data in the ScheduleCalculator cache as the same PTR is
-				// used as an input, but this changes it between cache calculation and verification pass.
+				// FIXME: This breaks the caches! This either changes previously changed data
+				// (actually - no cache here) or it changes the input data in the
+				// ScheduleCalculator cache as the same PTR is
+				// used as an input, but this changes it between cache calculation and
+				// verification pass.
 				// Other caches should be ok at they would always work on the modified value
 				portTimesRecord.setSlotTime(portTimesRecord.getReturnSlot(), newTime);
 			}
@@ -1242,7 +1270,9 @@ public class VoyagePlanner implements IVoyagePlanner {
 	}
 
 	/**
-	 * Returns an array of vessel states determining, for each index of the vessel location sequence, whether the vessel arrives at that location with LNG cargo on board for resale or not
+	 * Returns an array of vessel states determining, for each index of the vessel
+	 * location sequence, whether the vessel arrives at that location with LNG cargo
+	 * on board for resale or not
 	 * 
 	 * @param sequence
 	 * @return
@@ -1264,7 +1294,8 @@ public class VoyagePlanner implements IVoyagePlanner {
 			} else if (portType == PortType.Discharge) {
 				final VesselState lstate = state;
 				state = VesselState.Ballast;
-				// For complex cargoes, we are laden until the last leg. Thus LDD is laden, laden, then ballast
+				// For complex cargoes, we are laden until the last leg. Thus LDD is laden,
+				// laden, then ballast
 				if (lstate == VesselState.Laden && idx + 1 < size) {
 					final IPortSlot next_portSlot = slots.get(1 + idx);
 					final PortType next_portType = next_portSlot.getPortType();
@@ -1284,7 +1315,8 @@ public class VoyagePlanner implements IVoyagePlanner {
 	}
 
 	/**
-	 * Here, a single a voyage plan is evaluated, which may be part of what used to be a single voyage plan, e.g. if a charter out event was generated.
+	 * Here, a single a voyage plan is evaluated, which may be part of what used to
+	 * be a single voyage plan, e.g. if a charter out event was generated.
 	 * 
 	 * @return
 	 */
@@ -1329,7 +1361,8 @@ public class VoyagePlanner implements IVoyagePlanner {
 					} else {
 						if (portSlot.getPortType() == PortType.End) {
 							// final EndPortSlot endPortSlot = (EndPortSlot) portSlot;
-							// Assert disabled as it is not always possible to arrive with target heel (thus capacity violation should be triggered)
+							// Assert disabled as it is not always possible to arrive with target heel (thus
+							// capacity violation should be triggered)
 							// assert currentHeelInM3 >= endPortSlot.getTargetEndHeelInM3();
 						}
 					}
@@ -1351,7 +1384,8 @@ public class VoyagePlanner implements IVoyagePlanner {
 
 			// Sanity check these calculations match expected values
 			assert totalVoyageBOG == planData.getPlan().getLNGFuelVolume();
-			// Note: there may be some rounding errors when using MMBTU, so keep an eye on epsilon
+			// Note: there may be some rounding errors when using MMBTU, so keep an eye on
+			// epsilon
 			assert (Math.abs(planData.getEndHeelVolumeInM3() - currentHeelInM3) <= ROUNDING_EPSILON);
 		}
 
