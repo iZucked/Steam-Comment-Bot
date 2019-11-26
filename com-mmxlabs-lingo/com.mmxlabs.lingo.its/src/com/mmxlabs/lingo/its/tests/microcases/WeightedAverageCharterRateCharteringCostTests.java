@@ -4,18 +4,16 @@
  */
 package com.mmxlabs.lingo.its.tests.microcases;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+import java.util.function.BiConsumer;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.Assertions;
@@ -23,6 +21,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import com.google.inject.Injector;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -39,8 +38,15 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
+import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
+import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
+import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.moves.util.MetricType;
 import com.mmxlabs.scheduler.optimiser.schedule.ShippingCostHelper;
 
@@ -115,27 +121,57 @@ public class WeightedAverageCharterRateCharteringCostTests extends AbstractMicro
 		final Schedule schedule = ScenarioModelUtil.getScheduleModel(optimiserScenario).getSchedule();
 		
 		//Check charter costs for each event correct.
+		long expectedTotalCharterCost = 0;
 		for (final Sequence sequence : schedule.getSequences()) {
 			for (final Event event : sequence.getEvents()) {
-				validateEventCharterCost(event);
+				expectedTotalCharterCost += validateEventCharterCost(event);
 			}
 		}
 		
 		//Check overall calculated charter cost correct.
-		validateOverallCharterCost();
+		long totalCharterCost = getTotalVoyagePlansCharterCost(scenarioToOptimiserBridge);
+		Assertions.assertEquals(expectedTotalCharterCost, totalCharterCost, 1);   
+	}
+	
+	private class CharterCostEvaluator implements BiConsumer<Injector, AnnotatedSolution> {
+		long charterCost;
 		
-		//Check Pnl is as expected.
-		//long pnl = calculateInternalPnl(scenarioRunner);
-		//Assertions.assertEquals(expectedPnL, pnl);    
-	}
+		public CharterCostEvaluator() {
+			charterCost = 0;
+		}
+		
+		@Override
+		public void accept(Injector injector, AnnotatedSolution annotatedSolution) {
+			@NonNull
+			final IEvaluationState evaluationState = annotatedSolution.getEvaluationState();
 
+			@NonNull
+			final VolumeAllocatedSequences volumeAllocatedSequences = evaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, VolumeAllocatedSequences.class);
+			Assertions.assertNotNull(volumeAllocatedSequences);
+			
+			ShippingCostHelper shippingCostHelper = new ShippingCostHelper();
+			
+			for (VolumeAllocatedSequence vas : volumeAllocatedSequences) {
+				var vps = vas.getVoyagePlans();
+				for (var vp : vps) {
+					charterCost += shippingCostHelper.getHireCosts(vp.getFirst());
+				}
+			}
+		}
+		
+		public long getCharterCost() {
+			return charterCost;
+		}
+	};
 	
-	
-	private void validateOverallCharterCost() {
-		//TODO.
+	private long getTotalVoyagePlansCharterCost(final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge) {
+		final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
+		CharterCostEvaluator charterCostEvaluator = new CharterCostEvaluator();
+		MicroTestUtils.evaluateState(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences, charterCostEvaluator);
+		return OptimiserUnitConvertor.convertToExternalDailyCost(charterCostEvaluator.getCharterCost());
 	}
 	
-	private void validateEventCharterCost(Event event) {
+	private long validateEventCharterCost(Event event) {
 
 		//Convert charterCurve to a map.
 		List<YearMonthPoint> points = charterCurve.getPoints();
@@ -155,16 +191,18 @@ public class WeightedAverageCharterRateCharteringCostTests extends AbstractMicro
 		LocalDateTime endDate = startDate.plus(duration, ChronoUnit.HOURS);
 		
 		//Compute charter cost hour by hour, by adding charter cost per day per hour and then dividing by 24 at the end to correct amount.
-		long charterCost = 0;
+		long expectedCharterCost = 0;
 		for (LocalDateTime t = startDate; t.isBefore(endDate); t = t.plus(1, ChronoUnit.HOURS)) {
 			Entry<LocalDateTime, Long> charterCostEntry = localDateToCharterCost.floorEntry(t);
 			if (charterCostEntry != null) {
 				long charterRatePerDay = charterCostEntry.getValue();
-				charterCost += charterRatePerDay;
+				expectedCharterCost += charterRatePerDay;
 			}
 		}
-		charterCost /= 24;
-		Assertions.assertEquals(charterCost, event.getCharterCost());
+		expectedCharterCost /= 24;
+		Assertions.assertEquals(expectedCharterCost, event.getCharterCost());
+		
+		return expectedCharterCost;
 	}
 	
 	private CharterInMarket createChartInMarket() {
