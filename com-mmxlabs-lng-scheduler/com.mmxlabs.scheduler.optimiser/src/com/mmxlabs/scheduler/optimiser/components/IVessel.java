@@ -15,9 +15,8 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelKey;
 
 /**
- * A {@link IVessel} is an extended version of the {@link IResource} interface and contains attributes specific to a vessel.
+ * A {@link IVessel} contains attributes specific to a vessel.
  * 
- * TODO: This should not necessarily extend IResource and should instead come through a data provider linked to a IResource.
  * 
  * @author Simon Goodall
  */
@@ -33,15 +32,18 @@ public interface IVessel {
 	String getName();
 
 	/**
-	 * Return the upper limit of usable cargo capacity in M3 (raw capacity * ship fill)
+	 * Return the upper limit of usable cargo capacity in M3 (raw capacity * ship
+	 * fill)
 	 * 
 	 * @return
 	 */
 	long getCargoCapacity();
 
 	/**
-	 * Returns a {@link IConsumptionRateCalculator} to calculate required fuel consumption for the given state at the given speed. The valid range of input values should be between
-	 * {@link #getMinSpeed()} and {@link #getMaxSpeed()} inclusively. It is expected that the rate in MT per Day.
+	 * Returns a {@link IConsumptionRateCalculator} to calculate required fuel
+	 * consumption for the given state at the given speed. The valid range of input
+	 * values should be between {@link #getMinSpeed()} and {@link #getMaxSpeed()}
+	 * inclusively. It is expected that the rate in MT per Day.
 	 * 
 	 * @param vesselState
 	 * @return
@@ -49,7 +51,8 @@ public interface IVessel {
 	IConsumptionRateCalculator getConsumptionRate(VesselState vesselState);
 
 	/**
-	 * Returns the fuel consumption requirements when the vessel is idle. Units are MT Per Day
+	 * Returns the fuel consumption requirements when the vessel is idle. Units are
+	 * MT Per Day
 	 * 
 	 * @param vesselState
 	 * @return
@@ -57,7 +60,8 @@ public interface IVessel {
 	long getIdleConsumptionRate(VesselState vesselState);
 
 	/**
-	 * Returns the fuel consumption requirements when the vessel is in port. Units are MT Per Day
+	 * Returns the fuel consumption requirements when the vessel is in port. Units
+	 * are MT Per Day
 	 * 
 	 * @param portType
 	 * @return
@@ -74,7 +78,9 @@ public interface IVessel {
 	long getIdleNBORate(VesselState vesselState);
 
 	/**
-	 * Returns the pilot light rate in MT/Day for vessels which require a pilot light when running on just LNG. Vessels with no pilot light rate can return 0.
+	 * Returns the pilot light rate in MT/Day for vessels which require a pilot
+	 * light when running on just LNG. Vessels with no pilot light rate can return
+	 * 0.
 	 * 
 	 * @return
 	 */
@@ -88,7 +94,8 @@ public interface IVessel {
 	int getMaxSpeed();
 
 	/**
-	 * Return the minimum volume of heel that need to be retained on voyages that need to retain a heel.
+	 * Return the minimum volume of heel that need to be retained on voyages that
+	 * need to retain a heel.
 	 * 
 	 * @return
 	 */
@@ -117,7 +124,8 @@ public interface IVessel {
 	long getNBORate(VesselState vesselState);
 
 	/**
-	 * The time in hours for which these vessels can idle with no heel without the tanks becoming warm and thus requiring a cooldown.
+	 * The time in hours for which these vessels can idle with no heel without the
+	 * tanks becoming warm and thus requiring a cooldown.
 	 * 
 	 * @return the time to warm up
 	 */
@@ -129,16 +137,19 @@ public interface IVessel {
 	int getPurgeTime();
 
 	/**
-	 * The volume of LNG in M3 (scaled, see {@link Calculator#ScaleFactor}) required to cool down the tanks if they have warmed up.
+	 * The volume of LNG in M3 (scaled, see {@link Calculator#ScaleFactor}) required
+	 * to cool down the tanks if they have warmed up.
 	 * 
-	 * In a future version this API may take more parameters, for example an estimate of the tanks' temperature, or the time spent warming up.
+	 * In a future version this API may take more parameters, for example an
+	 * estimate of the tanks' temperature, or the time spent warming up.
 	 * 
 	 * @return scaled M3 of LNG
 	 */
 	long getCooldownVolume();
 
 	/**
-	 * MT/day of base fuel required as a *minimum* consumption for all events (port, travel & idle).
+	 * MT/day of base fuel required as a *minimum* consumption for all events (port,
+	 * travel & idle).
 	 * 
 	 * @return
 	 */
