@@ -121,6 +121,7 @@ public class OptimiserConfigurationOptions {
 		result.loggingInterval = node.get("loggingInterval").asInt();
 		result.doLogRejectedFitnesses = node.get("doLogRejectedFitnesses").asBoolean();
 		result.doLogAcceptedFitnesses = node.get("doLogAcceptedFitnesses").asBoolean();
+		result.doLogHeapUsage = node.get("doLogHeapUsage").asBoolean();
 		return result;
 	}
 	

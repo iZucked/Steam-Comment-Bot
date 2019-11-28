@@ -36,6 +36,7 @@ public class LSOLogger implements ILoggingDataStore {
 		public int loggingInterval;
 		public boolean doLogAcceptedFitnesses;
 		public boolean doLogRejectedFitnesses;
+		public boolean doLogHeapUsage;
 	}
 	
 	private Map<String, AtomicInteger> moveMap = new HashMap<>();

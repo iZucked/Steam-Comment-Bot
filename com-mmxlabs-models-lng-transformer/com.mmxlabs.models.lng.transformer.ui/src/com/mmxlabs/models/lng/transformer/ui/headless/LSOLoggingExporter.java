@@ -189,7 +189,9 @@ public class LSOLoggingExporter {
 	}
 	
 	private void exportHeapUsageData() {
-		writeHeapUsageData(getJSONObject("heapUsage"), lsoLogger.getHeapUsageMap());
+		if (lsoLogger.getLoggingParameters().doLogHeapUsage) {
+			writeHeapUsageData(getJSONObject("heapUsage"), lsoLogger.getHeapUsageMap());
+		}
 	}
 
 	private void writeSequencesData(final JSONObject node, final List<Integer> frequencies) {
