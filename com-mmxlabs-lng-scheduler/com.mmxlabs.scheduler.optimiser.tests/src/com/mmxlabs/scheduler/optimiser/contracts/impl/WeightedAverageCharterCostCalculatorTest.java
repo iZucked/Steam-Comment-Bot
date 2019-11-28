@@ -12,8 +12,7 @@ public class WeightedAverageCharterCostCalculatorTest {
 	@Test
 	public void testConstantValueCharterRate() {
 		ConstantValueLongCurve charterRate = new ConstantValueLongCurve(9);
-		WeightedAverageCharterCostCalculator waccc = new WeightedAverageCharterCostCalculator(charterRate);
-		
+		WeightedAverageCharterCostCalculator waccc = new WeightedAverageCharterCostCalculator(charterRate);	
 		assertEquals(9*21, waccc.getCharterCost(0, 0, 0, 21*24));
 	}
 	
@@ -24,7 +23,7 @@ public class WeightedAverageCharterCostCalculatorTest {
 		monthlyCharterRate.setValueAfter(31*24, 20000);
 		monthlyCharterRate.setValueAfter(31*2*24, 30000);
 		WeightedAverageCharterCostCalculator waccc = new WeightedAverageCharterCostCalculator(monthlyCharterRate);			
-		assertEquals(15000 * 31 * 2, waccc.getCharterCost(0, 0, 0, (31*2*24)-1));
+		assertEquals(15000 * 31 * 2, waccc.getCharterCost(0, 0, 0, 31*2*24));
 	}
 	
 	@Test
@@ -34,19 +33,6 @@ public class WeightedAverageCharterCostCalculatorTest {
 		monthlyCharterRate.setValueAfter(31*24, 20000);
 		monthlyCharterRate.setValueAfter(31*2*24, 30000);
 		WeightedAverageCharterCostCalculator waccc = new WeightedAverageCharterCostCalculator(monthlyCharterRate);
-		assertEquals(15000 * 31 * 2, waccc.getCharterCost(0, 0, 0, (31*2*24)-1));
+		assertEquals(15000 * 31 * 2, waccc.getCharterCost(0, 0, 0, 31*2*24));
 	}
-/*
- * NB: StepwiseLongCurve does not recognise having a max bound, only a min bound time value...
-	@Test
-	public void testMonthlyChangeCharterRateAboveUpperRate() {
-		StepwiseLongCurve monthlyCharterRate = new StepwiseLongCurve();
-		monthlyCharterRate.setDefaultValue(20000);
-		monthlyCharterRate.setValueAfter(0, 10000);
-		monthlyCharterRate.setValueAfter(31*24, 20000);
-
-		WeightAverageCharterCostCalculator waccc = new WeightAverageCharterCostCalculator(monthlyCharterRate);
-		assertEquals(15000 * 31 * 2, waccc.getCharterCost(0, 0, 0, (31*2*24)-1));
-	}
-	*/	
 }
