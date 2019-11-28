@@ -37,8 +37,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * 
  * @param
  */
-//TODO: replace with new impl based on CachingVolumeAllocator.
-//TODO: test with OptimiserCacheTests.
 public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 	/**
@@ -142,6 +140,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			result = (prime * result) + startingTime;
 
 			result = (prime * result) + vessel.hashCode();
+			result = (prime * result) + charterCostCalculator.hashCode();
 
 			result = (prime * result) + Arrays.hashCode(startHeelRangeInM3);
 			result = (prime * result) + voyageKeys.hashCode();
@@ -168,6 +167,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 						&& startCV == other.startCV //
 						&& startingTime == other.startingTime //
 						&& (vessel == other.vessel) //
+						&& (charterCostCalculator == other.charterCostCalculator)
 						&& Arrays.equals(startHeelRangeInM3, other.startHeelRangeInM3) //
 						&& Arrays.equals(voyageTimes, other.voyageTimes) //
 						&& Arrays.equals(durations, other.durations)//
@@ -179,7 +179,6 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	}
 	
 	//TODO create new CacheKey based on CacchingVolumeAllocator version.
-	
 
 	private final AbstractCache<@NonNull CacheKey, VoyagePlan> cache;
 

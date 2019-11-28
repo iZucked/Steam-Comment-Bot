@@ -255,8 +255,6 @@ public class LNGTransformerModule extends AbstractModule {
 	@PerChainUnitScope
 	private IVoyagePlanOptimiser provideVoyagePlanOptimiser(Injector injector, final @NonNull VoyagePlanOptimiser delegate,
 			@Named(SchedulerConstants.Key_VoyagePlanOptimiserCache) CacheMode cacheMode) {
-		return delegate; //TODO FIXME Turn off caching for now. Do not commit this piece to master.
-		/*
 		if (cacheMode == CacheMode.Off || !hintEnableCache) {
 			return delegate;
 		} else {
@@ -269,7 +267,7 @@ public class LNGTransformerModule extends AbstractModule {
 				assert cacheMode == CacheMode.Verify;
 				return new CheckingVPO(delegate, cachingVoyagePlanOptimiser);
 			}
-		}*/
+		}
 	}
 
 	@Provides
