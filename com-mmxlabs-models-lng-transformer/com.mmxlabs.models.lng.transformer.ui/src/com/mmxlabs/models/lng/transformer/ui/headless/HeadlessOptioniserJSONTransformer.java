@@ -29,7 +29,6 @@ public class HeadlessOptioniserJSONTransformer extends HeadlessGenericJSONTransf
 
 		HeadlessOptioniserJSON.OptioniserMetrics om = new HeadlessOptioniserJSON.OptioniserMetrics();
 		om.setSolutionsFound(logger.getSolutionsFound());
-		// om.setSolutionsReturned(0);
 
 		metrics.setOptioniserMetrics(om);
 
@@ -42,6 +41,7 @@ public class HeadlessOptioniserJSONTransformer extends HeadlessGenericJSONTransf
 		}
 
 		metrics.setStages(stages);
+		metrics.setMemoryUsage(logger.getIterationHeapUsages());
 
 		result.setMetrics(metrics);
 	}

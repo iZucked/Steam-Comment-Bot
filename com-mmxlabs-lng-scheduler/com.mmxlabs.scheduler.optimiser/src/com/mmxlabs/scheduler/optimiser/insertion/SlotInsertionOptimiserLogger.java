@@ -6,11 +6,10 @@ package com.mmxlabs.scheduler.optimiser.insertion;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+
+import com.mmxlabs.common.caches.MemoryUsageInfo;
 
 /**
  * Class to implement simple logging of an optioniser run. Note: This is not thread-safe.
@@ -23,7 +22,7 @@ public class SlotInsertionOptimiserLogger {
 	public static final String STAGE_NON_SHIPPED_PAIRS = "non-shipped-pairs";
 	public static final String STAGE_FULL_SEARCH = "full-search";
 	public static final String STAGE_PROCESS_SOLUTIONS = "process-solutions";
-	
+	private static final int DEFAULT_LOGGING_INTERVAL = 100000;			
 	
 	private long startTime = 0L;
 	private long endTime = 0L;
@@ -31,8 +30,13 @@ public class SlotInsertionOptimiserLogger {
 	private List<String> stages = new ArrayList<>();
 	private Map<String, Long> stageStartTimes = new HashMap<>();
 	private Map<String, Long> stageEndTimes = new HashMap<>();
+	private Map<String, MemoryUsageInfo> heapUsages = new HashMap<>();
 
 	private int solutionsFound = 0;
+
+	public Map<String, MemoryUsageInfo> getIterationHeapUsages() {
+		return heapUsages;
+	}
 
 	public int getSolutionsFound() {
 		return solutionsFound;
@@ -44,6 +48,7 @@ public class SlotInsertionOptimiserLogger {
 
 	public void begin() {
 		startTime = System.currentTimeMillis();
+		logCurrentMemoryUsage("Start of optioniser run");
 	}
 
 	public void done() {
@@ -52,11 +57,11 @@ public class SlotInsertionOptimiserLogger {
 
 	public void beginStage(String stage) {
 		stages.add(stage);
-		stageStartTimes.put(stage, System.currentTimeMillis());
 	}
 
 	public void doneStage(String stage) {
 		stageEndTimes.put(stage, System.currentTimeMillis());
+		logCurrentMemoryUsage(String.format("End of stage %s", stage));
 	}
 
 	public long getRuntime() {
@@ -65,6 +70,12 @@ public class SlotInsertionOptimiserLogger {
 
 	public long getRuntime(String stage) {
 		return stageEndTimes.getOrDefault(stage, 0L) - stageStartTimes.getOrDefault(stage, 0L);
+	}
+	
+	public void logCurrentMemoryUsage(String label) {
+		Runtime runtime = Runtime.getRuntime();
+		
+		heapUsages.put(label, new MemoryUsageInfo(runtime.freeMemory(), runtime.totalMemory()));
 	}
 
 	public List<String> getStages() {
@@ -91,9 +102,11 @@ public class SlotInsertionOptimiserLogger {
 				if (!result.stages.contains(stage)) {
 					result.stages.add(stage);
 				}
+				
 				if (result.stageStartTimes.get(stage) == null) {
 					result.stageStartTimes.put(stage, logger.stageStartTimes.get(stage));
 				}	
+				
 				if (result.stageStartTimes.get(stage) != null && logger.stageStartTimes.get(stage) != null &&
 						result.stageStartTimes.get(stage) > logger.stageStartTimes.get(stage)) {
 					result.stageStartTimes.put(stage, logger.stageStartTimes.get(stage));
@@ -106,6 +119,18 @@ public class SlotInsertionOptimiserLogger {
 					result.stageEndTimes.put(stage, logger.stageEndTimes.get(stage));
 				}
 			}
+
 		}	
 	}
+
+	/**
+	 * Returns the number of iterations to wait before logging memory usage.
+	 * @return
+	 */
+	public int getLoggingInterval() {
+		return DEFAULT_LOGGING_INTERVAL;
+	}
+
+
+
 }

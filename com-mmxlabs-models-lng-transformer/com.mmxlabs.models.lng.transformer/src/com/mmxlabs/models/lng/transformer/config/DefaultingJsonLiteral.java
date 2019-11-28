@@ -43,7 +43,7 @@ public class DefaultingJsonLiteral extends DefaultingJsonStructure<Object, @Null
 				this.value = value;
 			}
 			else {
-				throw new IllegalArgumentException("Tried to initialise a DefaultingJsonLiteral with a value of type %s");
+				throw new IllegalArgumentException(String.format("Tried to initialise a DefaultingJsonLiteral with a value of type %s", value.getClass().toString() ));
 			}
 		}
 		else {

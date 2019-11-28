@@ -13,10 +13,15 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper.DefaultTypeResolverBuilder;
+import com.fasterxml.jackson.databind.ObjectMapper.DefaultTyping;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.mmxlabs.models.lng.parameters.OptimisationStage;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessApplicationOptions;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessApplicationOptions.ScenarioFileFormat;
 import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.HeadlessOptimiserJSON;
@@ -32,6 +37,28 @@ import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.HeadlessOptimise
 
 public class HeadlessOptimiserApplication extends HeadlessGenericApplication {
 	
+	@SuppressWarnings("serial")
+	public class CustomTypeResolverBuilder extends DefaultTypeResolverBuilder
+	{
+	    public CustomTypeResolverBuilder()
+	    {
+	        super(DefaultTyping.NON_FINAL);
+	    }
+
+	    @Override
+	    public boolean useForType(JavaType t)
+	    {
+	    	Class<?> clazz = t.getRawClass();
+	    	// only provide class information for OptimisationStage objects
+	    	// don't add class information to plain Object instances that are somehow assignable from OptimisationStage
+	    	if (clazz.equals(Object.class) == false && clazz.isAssignableFrom(OptimisationStage.class)) {
+	            return true;
+	        }
+
+	        return false;
+	    }
+	}
+	
 	/**
 	 * Runs the optimiser and writes the output log results.
 	 * 
@@ -46,6 +73,9 @@ public class HeadlessOptimiserApplication extends HeadlessGenericApplication {
 		json.getMeta().setClient(clientCode);
 		json.getMeta().setVersion(buildVersion);
 		json.getMeta().setMachineType(machineInfo);
+		json.getMeta().setCustomInfo(hOptions.customInfo);
+		json.getMeta().setMaxHeapSize(Runtime.getRuntime().maxMemory());
+		json.getParams().setCores(threads);
 
 		HeadlessOptimiserRunner runner = new HeadlessOptimiserRunner();
 		
@@ -76,6 +106,13 @@ public class HeadlessOptimiserApplication extends HeadlessGenericApplication {
 			mapper.registerModule(new JavaTimeModule());
 			mapper.registerModule(new Jdk8Module());
 
+			CustomTypeResolverBuilder resolver = new CustomTypeResolverBuilder();
+			resolver.init(JsonTypeInfo.Id.CLASS, null);
+			resolver.inclusion(JsonTypeInfo.As.PROPERTY);
+			resolver.typeProperty("@class");			
+			mapper.setDefaultTyping(resolver);
+			
+			
 			mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 			mapper.disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS);
 

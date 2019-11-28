@@ -54,7 +54,8 @@ public class DefaultingJsonObject extends DefaultingJsonStructure<JSONObject, @N
 	 */
 	private Object generateProperty(String key) throws IOException {
 		// if the JSON structure this is based on has the specified key,
-		// read the data from there; we may need to associate it with a default-source
+		// read the data from there; we may need to produce a derived template for it
+		// and apply it to that template
 		if (inputJSONObject.has(key)) {
 			Object inputProperty = inputJSONObject.get(key);
 			DefaultingJsonStructure<?,?> propertyTemplate = templateFor(key);

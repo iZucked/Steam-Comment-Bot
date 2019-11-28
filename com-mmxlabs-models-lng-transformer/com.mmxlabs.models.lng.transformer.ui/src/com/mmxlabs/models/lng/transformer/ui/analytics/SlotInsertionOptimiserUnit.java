@@ -458,12 +458,19 @@ public class SlotInsertionOptimiserUnit {
 				List<Pair<ISequences, Long>> results = new LinkedList<>();
 
 				// Block until all futures completed
+				int i = 0;
+				
 				for (final Future<Pair<ISequences, Long>> f : futures) {
 					if (monitor.isCanceled()) {
 						return null;
 					}
 					try {
 						final Pair<ISequences, Long> s = f.get();
+						
+						if (++i % logger.getLoggingInterval() == 0) {
+							logger.logCurrentMemoryUsage(String.format("Full search iteration %d", i));
+						}
+						
 						if (s != null) {
 							results.add(s);
 						}
@@ -472,6 +479,7 @@ public class SlotInsertionOptimiserUnit {
 					}
 				}
 				logger.doneStage(SlotInsertionOptimiserLogger.STAGE_FULL_SEARCH);
+				
 				if (monitor.isCanceled()) {
 					return null;
 				}

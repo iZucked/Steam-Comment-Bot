@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.transformer.ui.headless;
 
 import java.io.File;
+import java.util.HashMap;
 
 public class HeadlessApplicationOptions {
 	/**
@@ -26,6 +27,11 @@ public class HeadlessApplicationOptions {
 	 * The name of the folder to log algorithm metrics in.
 	 */
 	public String outputLoggingFolder;
+	
+	/**
+	 * Any additional custom information
+	 */
+	public HashMap<String, String> customInfo = new HashMap<>();  
 	
 	/**
 	 * The number of replications to use: the algorithm will be re-run this many times with the same parameters.
