@@ -24,14 +24,16 @@ public class WeightedAverageCharterCostCalculator implements ICharterCostCalcula
 			Integer firstT = vesselStartTime;
 			Integer lastT = vesselEndTime;
 			int durationCharterRate = 1;
+			int durationRemaining = duration;
 			for (int t = firstT; t < lastT; t+= durationCharterRate) {
 				long charterRatePerDay = charterRateCurve.getValueAtPoint(t);
 				Integer nextT = changePoints.ceiling(t+1);
 				if (nextT == null) {
 					nextT = lastT;
 				}
-				durationCharterRate = Math.min(duration, nextT - t);				
+				durationCharterRate = Math.min(nextT - t, durationRemaining);				
 				charterCost += (charterRatePerDay * durationCharterRate);
+				durationRemaining -= durationCharterRate;
 			}
 			return charterCost / 24L;
 		}
