@@ -47,8 +47,10 @@ import com.mmxlabs.scheduler.optimiser.calculators.IDivertibleDESShippingTimesCa
 import com.mmxlabs.scheduler.optimiser.calculators.IDivertibleFOBShippingTimesCalculator;
 import com.mmxlabs.scheduler.optimiser.calculators.impl.DefaultDivertibleDESShippingTimesCalculator;
 import com.mmxlabs.scheduler.optimiser.calculators.impl.DefaultDivertibleFOBShippingTimesCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.CharterRateToCharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VoyagePlanStartDateCharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.curves.CachingPriceIntervalProducer;
@@ -182,6 +184,8 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(VoyagePlanStartDateCharterRateCalculator.class).in(Singleton.class);
 		bind(ICharterRateCalculator.class).to(VoyagePlanStartDateCharterRateCalculator.class);
 
+		bind(ICharterCostCalculator.class).to(CharterRateToCharterCostCalculator.class);
+		
 		// <--- Time windows
 
 		bind(SchedulerCalculationUtils.class);
