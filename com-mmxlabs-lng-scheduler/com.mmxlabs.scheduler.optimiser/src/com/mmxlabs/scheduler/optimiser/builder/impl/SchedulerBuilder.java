@@ -23,6 +23,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.collect.Lists;
+import com.google.inject.Injector;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.ILongCurve;
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
@@ -96,6 +97,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.TotalVolumeLimit;
 import com.mmxlabs.scheduler.optimiser.components.impl.Vessel;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselEvent;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselEventPortSlot;
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
@@ -148,6 +150,9 @@ import com.mmxlabs.scheduler.optimiser.shared.port.IPortProvider;
  */
 public final class SchedulerBuilder implements ISchedulerBuilder {
 
+	@Inject
+	private Injector injector;
+	
 	@Inject
 	private IBaseFuelProviderEditor baseFuelProvider;
 
@@ -409,7 +414,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Inject
 	@NonNull
 	private ICharterRateCalculator charterRateCalculator;
-	
+		
 	/**
 	 * Constant used during end date of scenario calculations - {@link #minDaysFromLastEventToEnd} days extra after last date. See code in {@link SchedulerBuilder#getOptimisationData()}
 	 * 
@@ -809,8 +814,16 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		final DefaultVesselAvailability vesselAvailability = new DefaultVesselAvailability(vessel, vesselInstanceType);
 
 		vesselAvailability.setDailyCharterInRate(dailyCharterInRate);
-		vesselAvailability.setCharterCostCalculator(new CharterRateToCharterCostCalculator(vesselAvailability, this.charterRateCalculator));
+		
+		ICharterCostCalculator charterCostCalculator = injector.getInstance(ICharterCostCalculator.class);
 
+		charterCostCalculator.setCharterRateCurve(dailyCharterInRate);
+		if (charterCostCalculator instanceof CharterRateToCharterCostCalculator) {
+			CharterRateToCharterCostCalculator charterRateToCharterCostCalculator = (CharterRateToCharterCostCalculator)charterCostCalculator;
+			charterRateToCharterCostCalculator.initialise(vesselAvailability, this.charterRateCalculator);
+		}
+		vesselAvailability.setCharterCostCalculator(charterCostCalculator);
+		
 		vesselAvailability.setStartRequirement(start);
 		vesselAvailability.setEndRequirement(end);
 
