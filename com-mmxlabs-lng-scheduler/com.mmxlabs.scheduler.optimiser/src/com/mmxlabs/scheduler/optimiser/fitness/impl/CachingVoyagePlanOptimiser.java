@@ -50,7 +50,13 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 		// Hashcode / Equals fields
 		private final IPortSlot[] slots;
+		
+		private final int voyagePlanStartTime;
+		
+		//Discharge/load times (durations).
 		private final int[] durations;
+		
+		//Travel and idle time (durations)/
 		private final int[] voyageTimes;
 		private final int dischargePrice;
 		private final ICharterCostCalculator charterCostCalculator;
@@ -58,7 +64,9 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		private final long @NonNull [] startHeelRangeInM3;
 		private final int[] baseFuelPricesPerMT;
 		private int startCV;
+		
 		private int startingTime;//starting time of the vessel.
+		
 		private final @NonNull List<AvailableRouteChoices> voyageKeys = new LinkedList<>();
 
 		// Non hashcode fields
@@ -73,6 +81,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 				final @NonNull List<@NonNull IOptionsSequenceElement> sequence, final @NonNull IPortTimesRecord portTimesRecord, final @NonNull List<@NonNull IVoyagePlanChoice> choices,
 				final long @NonNull [] startHeelRangeInM3, final int startingTime) {
 			super();
+			this.voyagePlanStartTime = portTimesRecord.getFirstSlotTime();
 			this.vessel = vessel;
 			this.resource = resource;
 			this.charterCostCalculator = charterCostCalculator;
@@ -130,6 +139,8 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		private int doHashCode() {
 			final int prime = 31;
 			int result = 1;
+			
+			result = (prime * result) + voyagePlanStartTime;
 			result = (prime * result) + Arrays.hashCode(slots);
 			result = (prime * result) + Arrays.hashCode(durations);
 			result = (prime * result) + Arrays.hashCode(voyageTimes);
@@ -162,7 +173,8 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			if (obj instanceof CacheKey) {
 				final CacheKey other = (CacheKey) obj;
 
-				return dischargePrice == other.dischargePrice//
+				return voyagePlanStartTime == other.voyagePlanStartTime
+						&& dischargePrice == other.dischargePrice//
 						&& Arrays.equals(baseFuelPricesPerMT, other.baseFuelPricesPerMT)//
 						&& startCV == other.startCV //
 						&& startingTime == other.startingTime //
