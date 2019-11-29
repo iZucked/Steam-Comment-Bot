@@ -7,9 +7,10 @@ import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 
 public class WeightedAverageCharterCostCalculator implements ICharterCostCalculator {
 
-	private final ILongCurve charterRateCurve;
+	private ILongCurve charterRateCurve;
 	
-	public WeightedAverageCharterCostCalculator(ILongCurve charterRateCurve) {
+	@Override
+	public void setCharterRateCurve(final ILongCurve charterRateCurve) {
 		this.charterRateCurve = charterRateCurve;
 	}
 
