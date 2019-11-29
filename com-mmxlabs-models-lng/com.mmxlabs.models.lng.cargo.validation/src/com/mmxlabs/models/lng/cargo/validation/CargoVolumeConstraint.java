@@ -13,6 +13,7 @@ import org.eclipse.emf.validation.IValidationContext;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -28,7 +29,8 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusFactory;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
- * A constraint which checks that the load and discharge quantities for a cargo are compatible, so min discharge volume < max load volume
+ * A constraint which checks that the load and discharge quantities for a cargo
+ * are compatible, so min discharge volume < max load volume
  * 
  * @author Tom Hinton
  * 
@@ -59,7 +61,7 @@ public class CargoVolumeConstraint extends AbstractModelMultiConstraint {
 			// If false, we have hit an unbounded limit, so skip max checks.
 			boolean maxLoadValid = true;
 			boolean maxDischargeValid = true;
-			for (final Slot slot : cargo.getSlots()) {
+			for (final Slot<?> slot : cargo.getSlots()) {
 				if (slot instanceof LoadSlot) {
 					loadMinVolume += slot.getSlotOrDelegateMinQuantity();
 					loadMaxVolume += slot.getSlotOrDelegateMaxQuantity();
@@ -119,12 +121,12 @@ public class CargoVolumeConstraint extends AbstractModelMultiConstraint {
 
 	private void checkMinAndMaxVolumes(final DetailConstraintStatusFactory factoryBase, final IValidationContext ctx, final List<IStatus> failures, final Cargo cargo, final int loadMinVolume,
 			final int loadMaxVolume, final int dischargeMinVolume, final int dischargeMaxVolume, final String unitsWarning, final boolean maxLoadValid, final boolean maxDischargeValid) {
-			if (maxLoadValid && loadMaxVolume < dischargeMinVolume) {
+		if (maxLoadValid && loadMaxVolume < dischargeMinVolume) {
 			final DetailConstraintStatusFactory factory = factoryBase.copyName() //
 					.withFormattedMessage("Max load volume less than min discharge %s", unitsWarning) //
 					.withSeverity(IStatus.WARNING);
 
-			for (final Slot slot : cargo.getSlots()) {
+			for (final Slot<?> slot : cargo.getSlots()) {
 				if (slot instanceof LoadSlot) {
 					factory.withObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
 				} else if (slot instanceof DischargeSlot) {
@@ -135,14 +137,17 @@ public class CargoVolumeConstraint extends AbstractModelMultiConstraint {
 			factory.make(ctx, failures);
 		}
 		if (maxDischargeValid && loadMinVolume > dischargeMaxVolume) {
-			if (!LicenseFeatures.isPermitted("features:heelrollover")) {
+			// Always consider non-shipped, or shipped if we have not enabled heel roll over
+			// TODO: Make this more customisable for client rules
+			if (cargo.getCargoType() != CargoType.FLEET //
+					|| !LicenseFeatures.isPermitted("features:heelrollover")) {
 
 				final DetailConstraintStatusFactory factory = factoryBase //
 						.copyName() //
 						.withFormattedMessage("Min load volume greater than max discharge %s", unitsWarning) //
 						.withSeverity(IStatus.WARNING);
 
-				for (final Slot slot : cargo.getSlots()) {
+				for (final Slot<?> slot : cargo.getSlots()) {
 					if (slot instanceof LoadSlot) {
 						factory.withObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
 					} else if (slot instanceof DischargeSlot) {

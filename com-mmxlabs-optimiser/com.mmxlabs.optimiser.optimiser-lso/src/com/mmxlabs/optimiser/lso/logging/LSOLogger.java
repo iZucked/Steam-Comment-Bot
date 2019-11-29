@@ -17,6 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.caches.MemoryUsageInfo;
 import com.mmxlabs.optimiser.common.logging.ILoggingDataStore;
 import com.mmxlabs.optimiser.common.logging.impl.EvaluationNumberKey;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
@@ -44,6 +45,8 @@ public class LSOLogger implements ILoggingDataStore {
 	private Map<String, Map<String, AtomicInteger>> failedConstraintsMovesMap = new HashMap<>();
 	private Map<String, Map<String, AtomicInteger>> failedEvaluatedConstraintsMovesMap = new HashMap<>();
 	private Map<EvaluationNumberKey, long[]> progressLogMap = new HashMap<>();
+	private Map<Long, MemoryUsageInfo> heapUsageMap = new HashMap<>();
+
 	private Map<String, Integer> progressKeys = new HashMap<>();
 	private Map<ISequences, SequencesCounts> seenSequencesCount = new HashMap<>();
 	private Map<ISequences, String> constraintsFailedSequences = new HashMap<>();
@@ -95,6 +98,14 @@ public class LSOLogger implements ILoggingDataStore {
 
 	public boolean keyInProgressLog(String key) {
 		return progressKeys.containsKey(key);
+	}
+	
+	public void logCurrentJavaHeapUsage(long time) {
+		Runtime runtime = Runtime.getRuntime();
+		
+		MemoryUsageInfo info = new MemoryUsageInfo(runtime.freeMemory(), runtime.totalMemory());
+		
+		heapUsageMap.put(time, info);
 	}
 
 	public void logNullMove(IMove move) {
@@ -235,6 +246,7 @@ public class LSOLogger implements ILoggingDataStore {
 		progressLogMap.put(new EvaluationNumberKey(numberOfMovesTried), progress);
 		fitnessAnnotationLogger.report(numberOfMovesTried);
 		generalAnnotationLogger.report(numberOfMovesTried);
+		logCurrentJavaHeapUsage(time);
 	}
 
 	public List<EvaluationNumberKey> getProgressEvaluations() {
@@ -490,6 +502,10 @@ public class LSOLogger implements ILoggingDataStore {
 
 	public GeneralAnnotationLogger getGeneralAnnotationLogger() {
 		return generalAnnotationLogger;
+	}
+
+	public Map<Long, MemoryUsageInfo> getHeapUsageMap() {
+		return heapUsageMap;
 	}
 
 	private class SequencesCounts {

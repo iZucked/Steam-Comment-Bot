@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.transformer.ui.headless;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 /**
  * This class represents a wrapper for JSON output logs from a headless algorithm run.
@@ -13,19 +14,26 @@ import java.time.LocalDateTime;
  * @param <T>
  * @param <U>
  */
-public class HeadlessGenericJSON<T extends HeadlessGenericJSON.Params, U extends HeadlessGenericJSON.Metrics> {
+public abstract class HeadlessGenericJSON<T extends HeadlessGenericJSON.Params, U extends HeadlessGenericJSON.Metrics> {
 
 	private String type;
 	private Meta meta;
+	@SuppressWarnings("null")
 	private T params;
+	@SuppressWarnings("null")
 	private U metrics;
 
-	public HeadlessGenericJSON() {
-	}	
-
+	/**
+	 * Base class for metrics information; this should be subclassed to store detailed
+	 * metrics for a particular algorithm.
+	 * 
+	 * @author simonmcgregor
+	 *
+	 */
 	public static class Metrics {
 		private long runtime;
 		private long seed;
+		
 		
 		public long getSeed() {
 			return seed;
@@ -45,11 +53,19 @@ public class HeadlessGenericJSON<T extends HeadlessGenericJSON.Params, U extends
 
 	}
 
+	/**
+	 * General information about the context in which the algorithm was run. 
+	 * @author simonmcgregor
+	 *
+	 */
 	public static class Meta {
 		private String machineType;
 		private String scenario;
 		private LocalDateTime date;
-
+		private String version;
+		private String client;		
+		private Map<String, String> customInfo;
+		private long maxHeapSize;
 
 		public LocalDateTime getDate() {
 			return date;
@@ -91,10 +107,30 @@ public class HeadlessGenericJSON<T extends HeadlessGenericJSON.Params, U extends
 			this.client = client;
 		}
 
-		private String version;
-		private String client;
+		public Map<String, String> getCustomInfo() {
+			return customInfo;
+		}
+
+		public void setCustomInfo(Map<String, String> customInfo) {
+			this.customInfo = customInfo;
+		}
+
+		public long getMaxHeapSize() {
+			return maxHeapSize;
+		}
+
+		public void setMaxHeapSize(long maxHeapSize) {
+			this.maxHeapSize = maxHeapSize;
+		}
 	}
 
+	/**
+	 * Parameters for the algorithm being run. Should be subclassed to 
+	 * store detailed parameters for a particular algorithm.
+	 * 
+	 * @author simonmcgregor
+	 *
+	 */
 	public static class Params {
 		private int cores;
 

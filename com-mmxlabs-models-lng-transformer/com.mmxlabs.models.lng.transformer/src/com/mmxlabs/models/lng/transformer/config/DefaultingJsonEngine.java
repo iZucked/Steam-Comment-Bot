@@ -13,11 +13,13 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -28,6 +30,23 @@ import org.json.JSONObject;
 
 /**
  * This class provides a defaulting mechanism for JSON data. 
+ * Special properties with a '*' prefix in the data are interpreted as directives to identify "templates" and/or reuse
+ * those templates with selective overrides.
+ * 
+ * The most important ones are 
+ * <ul>
+ *  <li>{@code '*id'}: associate a particular id with a JSON object</li>
+ * 	<li>{@code '*reuse'}: reuse a template object, specified by id, with selective overrides</li>
+ *  <li>{@code '*requires'}: force loading of other JSON files that may define relevant templates</li>
+ * </ul>
+ * 
+ * Others are
+ * <ul>
+ *  <li>{@code '*content'}: treat this template as evaluating to particular content data. This is necessary
+ *  to allow JSON array data to make use of directives, but has other uses too.</li>
+ * 	<li>{@code '*key'}: treat a particular field in an array's elements as a key field. This allows 
+ *  objects that reuse an array template to selectively modify or remove elements of the template array. </li>
+ * </ul>
  * 
  * @author simonmcgregor
  *
@@ -49,13 +68,38 @@ public class DefaultingJsonEngine {
 	 */
 	private class JsonObjectRegistry {
 		Map<String, DefaultingJsonStructure<?,?>> objectMap = new HashMap<>();
+		Set<String> overrides = new HashSet<>();
 		
+		/**
+		 * Registers a {@link DefaultingJsonStructure} for retrieval under a particular id. 
+		 * Throws a {@link JsonRegistryException} if the id has already been assigned, unless
+		 * it was assigned as an override, in which case the new assignment is ignored.
+		 * 
+		 * @param object
+		 * @param id
+		 */
 		public void register(DefaultingJsonStructure<?,?> object, String id) {
-			if (objectMap.containsKey(id)) {
+			if (objectMap.containsKey(id) && overrides.contains(id) == false) {
 				throw new JsonRegistryException(String.format("Attempted to register JSON template with id '%s' that is already in use.", id));
 			}
 			objectMap.put(id, object);
 			
+		}
+		
+		/**
+		 * Forces an id to be associated with a particular {@link DefaultingJsonStructure} object. 
+		 * Future attempts to {@link #register} an object against this id will fail silently.
+		 * Throws a {@link JsonRegistryException} if the id was already overriden. 
+		 *  
+		 * @param object
+		 * @param id
+		 */
+		public void override(DefaultingJsonStructure<?,?> object, String id) {
+			if (overrides.contains(id)) {
+				throw new JsonRegistryException(String.format("Attempted to override JSON template with id '%s' that is already in use.", id));
+			}
+			overrides.add(id);
+			objectMap.put(id,  object);
 		}
 		
 		public DefaultingJsonStructure<?,?> findObject(String id) {
@@ -78,13 +122,22 @@ public class DefaultingJsonEngine {
 	 *
 	 */
 	private class SpecialDefaultingParameters {
+		/** The {@link DefaultingJsonStructure}, if any, that the generated object is using as a template. */ 
 		public DefaultingJsonStructure<?,?> template = null;
+		
+		/** The id, if any, to associate the generated object with. */
 		public String id = null;
+		
+		/** The {@link JSONObject} that the generated DefaultingJsonStructure is based on. */
 		public JSONObject inputJSONObject = null;
 		
+		/** Any child JSONArray or JSONObject that the generated DefaultingJsonStructure is "pretending to be". */
 		public Object jsonContentValue = null;
 		
+		/** The field, if any, to use as a key in array elements. */
 		public String arrayKey = null;
+		
+		/** The JSON files, if any, that must be loaded before the generated object is evaluated. */
 		public List<String> requiredFiles = new LinkedList<>(); 
 		
 		private boolean representsArray() {
@@ -153,6 +206,35 @@ public class DefaultingJsonEngine {
 						literal = new DefaultingJsonObject(jsonValue, DefaultingJsonEngine.this, null);
 					}				
 					registry.register(literal, entry.getKey());
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return this;		
+	}
+	
+	/**
+	 * Sets override values for the defaulting system.  
+	 * @param parameters A {@link Map<String, Object>} for literal values to override the registry with. These 
+	 * will cause automatic assignments to these ids to be silently ignored.
+	 */
+	public DefaultingJsonEngine withOverrideValues(Map<String,Object> parameters) {
+		if (parameters != null) {
+			for (Entry<String, Object> entry: parameters.entrySet()) {
+				final DefaultingJsonStructure<?,?> literal;
+				final Object value = entry.getValue();
+				try {
+					if (DefaultingJsonLiteral.canMakeLiteral(value)) {				
+						literal = new DefaultingJsonLiteral(entry.getValue(), DefaultingJsonEngine.this, null);
+					}
+					else {
+						JSONObject jsonValue = new JSONObject(value);
+						literal = new DefaultingJsonObject(jsonValue, DefaultingJsonEngine.this, null);
+					}				
+					registry.override(literal, entry.getKey());
 				}
 				catch (Exception e) {
 					e.printStackTrace();

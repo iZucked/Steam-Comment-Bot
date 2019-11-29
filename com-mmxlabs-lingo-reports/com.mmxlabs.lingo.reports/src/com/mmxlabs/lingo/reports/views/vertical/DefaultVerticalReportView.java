@@ -113,7 +113,7 @@ public class DefaultVerticalReportView extends AbstractVerticalCalendarReportVie
 			return (T) new IReportContents() {
 
 				@Override
-				public String getStringContents() {
+				public String getHTMLContents() {
 					return contents;
 				}
 			};

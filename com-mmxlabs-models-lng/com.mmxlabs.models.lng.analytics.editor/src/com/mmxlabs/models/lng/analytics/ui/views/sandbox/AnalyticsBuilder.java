@@ -824,6 +824,10 @@ public class AnalyticsBuilder {
 								if (opt.getVessel() != vesselAvailability.getVessel()) {
 									continue;
 								}
+								
+								if (opt.getEntity() != vesselAvailability.getEntity()) {
+									continue;
+								}
 
 								if (!Objects.equal(opt.getHireCost(), vesselAvailability.getTimeCharterRate())) {
 									continue;
@@ -837,6 +841,7 @@ public class AnalyticsBuilder {
 						final RoundTripShippingOption opt = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
 						opt.setHireCost(vesselAvailability.getTimeCharterRate());
 						opt.setVessel(vesselAvailability.getVessel());
+						opt.setEntity(vesselAvailability.getEntity());
 
 						return opt;
 
@@ -878,6 +883,7 @@ public class AnalyticsBuilder {
 						final RoundTripShippingOption opt = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
 						opt.setHireCost(charterInMarket.getCharterInRate());
 						opt.setVessel(charterInMarket.getVessel());
+						opt.setEntity(charterInMarket.getEntity());
 						return opt;
 					}
 				}
@@ -975,6 +981,9 @@ public class AnalyticsBuilder {
 							if (opt.getVessel() != vesselAvailability.getVessel()) {
 								continue;
 							}
+							if (opt.getEntity() != vesselAvailability.getEntity()) {
+								continue;
+							}
 
 							if (!Objects.equal(opt.getHireCost(), vesselAvailability.getTimeCharterRate())) {
 								continue;
@@ -988,6 +997,7 @@ public class AnalyticsBuilder {
 					final RoundTripShippingOption opt = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
 					opt.setHireCost(vesselAvailability.getTimeCharterRate());
 					opt.setVessel(vesselAvailability.getVessel());
+					opt.setEntity(vesselAvailability.getEntity());
 
 					return opt;
 
@@ -1029,6 +1039,7 @@ public class AnalyticsBuilder {
 					final RoundTripShippingOption opt = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
 					opt.setHireCost(charterInMarket.getCharterInRate());
 					opt.setVessel(charterInMarket.getVessel());
+					opt.setEntity(charterInMarket.getEntity());
 					return opt;
 				}
 			}
@@ -1139,7 +1150,11 @@ public class AnalyticsBuilder {
 		menuHelper.addAction(new RunnableAction("New", () -> {
 			final RoundTripShippingOption opt = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
 			opt.setVessel(vessel);
-
+			CommercialModel cm = ScenarioModelUtil.getCommercialModel(scenarioEditingLocation.getScenarioDataProvider());
+			if (cm.getEntities().size() == 1) {
+				opt.setEntity(cm.getEntities().get(0));
+			}
+			
 			final CompoundCommand cmd = new CompoundCommand();
 			cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt));
 			final Object target = feature.isMany() ? Collections.singletonList(opt) : opt;

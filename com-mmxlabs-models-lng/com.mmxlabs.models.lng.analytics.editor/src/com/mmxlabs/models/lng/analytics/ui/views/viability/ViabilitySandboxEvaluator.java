@@ -282,6 +282,7 @@ public class ViabilitySandboxEvaluator {
 				market.setName(id);
 				market.setCharterInRate(roundTripShippingOption.getHireCost());
 				market.setVessel(roundTripShippingOption.getVessel());
+				market.setEntity(roundTripShippingOption.getEntity());
 
 				availabilitiesMap.put(roundTripShippingOption, market);
 

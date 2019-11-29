@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2019
  * All rights reserved.
  */
-package com.mmxlabs.optimiser.lso.logging;
+package com.mmxlabs.models.lng.transformer.ui.headless;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -14,7 +14,12 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.caches.MemoryUsageInfo;
+import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.HeadlessOptimiserJSON;
 import com.mmxlabs.optimiser.common.logging.impl.EvaluationNumberKey;
+import com.mmxlabs.optimiser.lso.logging.FitnessAnnotationLogger;
+import com.mmxlabs.optimiser.lso.logging.GeneralAnnotationLogger;
+import com.mmxlabs.optimiser.lso.logging.LSOLogger;
 
 public class LSOLoggingExporter {
 
@@ -49,18 +54,12 @@ public class LSOLoggingExporter {
 
 	public void close() {
 		writeDate(root);
-		// close(writer);
 	}
-
-	// private void close(final PrintWriter writer) {
-	//// writer.close();
-	// }
 
 	private void writeDate(final JSONObject node) {
 		final DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		// // get current date time with Date()
 		final Date date = new Date();
-		// writer.println();
 		node.put("date", dateFormat.format(date));
 	}
 
@@ -74,9 +73,7 @@ public class LSOLoggingExporter {
 		final Map<String, Long> endResults = lsoLogger.getEndProgressResults();
 		for (final String key : endResults.keySet()) {
 			node.put(key, endResults.get(key));
-			// writeLineForFinalData(node, key, endResults.get(key));
 		}
-		// writer.close();
 	}
 
 	private void writeDataOverCourseOfRun(final String... keys) {
@@ -110,6 +107,10 @@ public class LSOLoggingExporter {
 	private void writeGeneralAnnotations(final GeneralAnnotationLogger generalAnnotationLogger) {
 		generalAnnotationLogger.exportData(getJSONArray("generalAnnotations"));
 	}
+	
+	private void writeHeapUsageData(final JSONObject node, final Map<Long, MemoryUsageInfo> info) {
+		node.putAll(info);
+	}
 
 	public void exportData(final String... keys) {
 		writeDataOverCourseOfRun(keys);
@@ -123,6 +124,7 @@ public class LSOLoggingExporter {
 		exportRejectedFitnesses();
 		exportFitnessAnnotations();
 		exportGeneralAnnotations();
+		exportHeapUsageData();
 	}
 
 	public void exportEndData() {
@@ -185,20 +187,10 @@ public class LSOLoggingExporter {
 			exportIterationsList(lsoLogger.getRejectedFitnesses(), object);
 		}
 	}
-
-	// private void exportAcceptedFitnesses() {
-	// Path newPath = getPath("acceptedSequencesFitnesses");
-	// PrintWriter writer = getWriter(newPath.toString());
-	// writeSequencesDataFitnessStatistics(writer, lsoLogger.getSequenceFitnessesAccepted());
-	// writer.close();
-	// }
-	//
-	// private void exportRejectedFitnesses() {
-	// Path newPath = getPath("rejectedSequencesFitnesses" );
-	// PrintWriter writer = getWriter(newPath.toString());
-	// writeSequencesDataFitnessStatistics(writer, lsoLogger.getSequenceFitnessesRejected());
-	// writer.close();
-	// }
+	
+	private void exportHeapUsageData() {
+		writeHeapUsageData(getJSONObject("heapUsage"), lsoLogger.getHeapUsageMap());
+	}
 
 	private void writeSequencesData(final JSONObject node, final List<Integer> frequencies) {
 		final JSONArray array = new JSONArray();
@@ -219,10 +211,6 @@ public class LSOLoggingExporter {
 		}
 
 	}
-
-	// private void writeLineForFinalData(final JSONObject node, final String key, final Object value) {
-	// writer.println(String.format("[%s] %s", key, value.toString()));
-	// }
 
 	private void writeMoveData(final JSONObject node) {
 		{

@@ -33,6 +33,9 @@ public class HeadlessOptioniserApplication extends HeadlessGenericApplication {
 		json.getMeta().setClient(clientCode);
 		json.getMeta().setVersion(buildVersion);
 		json.getMeta().setMachineType(machineInfo);
+		json.getMeta().setCustomInfo(hOptions.customInfo);	
+		json.getMeta().setMaxHeapSize(Runtime.getRuntime().maxMemory());
+		json.getParams().setCores(threads);		
 
 		SlotInsertionOptimiserLogger logger = new SlotInsertionOptimiserLogger();
 		

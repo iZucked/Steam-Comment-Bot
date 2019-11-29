@@ -4,42 +4,22 @@
  */
 package com.mmxlabs.models.lng.transformer.config;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.json.JSONObject;
 
-import com.fasterxml.jackson.core.JsonParser.Feature;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.IntNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
 import com.mmxlabs.models.lng.parameters.AnnealingSettings;
-import com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
-import com.mmxlabs.models.lng.parameters.HillClimbOptimisationStage;
-import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
-import com.mmxlabs.models.lng.parameters.MultipleSolutionSimilarityOptimisationStage;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
-import com.mmxlabs.models.lng.parameters.OptimisationStage;
-import com.mmxlabs.models.lng.parameters.ParallelOptimisationStage;
-import com.mmxlabs.models.lng.parameters.ParallisableOptimisationStage;
-import com.mmxlabs.models.lng.parameters.ParametersFactory;
-import com.mmxlabs.models.lng.parameters.ResetInitialSequencesStage;
-import com.mmxlabs.models.lng.parameters.SolutionBuilderSettings;
-import com.mmxlabs.models.lng.parameters.UserSettings;
-import com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl;
 import com.mmxlabs.optimiser.lso.logging.LSOLogger;
 import com.mmxlabs.optimiser.lso.logging.LSOLogger.LoggingParameters;
-import com.mmxlabs.rcp.common.json.EMFJacksonModule;
 
 /**
  * This class represents configuration options for the optimiser that are deserialised from 
@@ -90,13 +70,17 @@ public class OptimiserConfigurationOptions {
 		return other.get("numThreads").asInt();
 	}
 	
-	public static OptimiserConfigurationOptions readFromFile(String jsonFilename) {
+	public static OptimiserConfigurationOptions readFromFile(String jsonFilename, HashMap<String, String> customInfo) {
 		try {
 			String inputJSONX = new String(Files.readAllBytes(Paths.get(jsonFilename)));
 			
+			HashMap<String, Object> inputParameters = new HashMap<>();
+			// populate input with "custom-" literals
+			customInfo.forEach( (k, v) -> inputParameters.put("custom-" + k, v) );
+			
 			JSONObject obj = new JSONObject(inputJSONX);
 			
-			DefaultingJsonEngine engine = new DefaultingJsonEngine(".");
+			DefaultingJsonEngine engine = new DefaultingJsonEngine(".").withLiteralValues(inputParameters);
 			
 			String inputPlainJSON = engine.newDefaultingJsonStructure(obj).outputString();
 			
@@ -138,6 +122,14 @@ public class OptimiserConfigurationOptions {
 		result.doLogRejectedFitnesses = node.get("doLogRejectedFitnesses").asBoolean();
 		result.doLogAcceptedFitnesses = node.get("doLogAcceptedFitnesses").asBoolean();
 		return result;
+	}
+	
+	/**
+	 * Describes whether or not the specified options require any injections into the injection framework.
+	 * @return
+	 */
+	public static boolean requiresInjections(OptimiserConfigurationOptions options) {
+		return options != null && options.injections != null && options.loggingParameters != null;
 	}
 	
 }	

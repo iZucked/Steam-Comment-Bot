@@ -222,7 +222,7 @@ public abstract class AbstractSimpleModelBasedReportView<M> extends ViewPart imp
 			return (T) new IReportContents() {
 
 				@Override
-				public String getStringContents() {
+				public String getHTMLContents() {
 					return contents;
 				}
 			};

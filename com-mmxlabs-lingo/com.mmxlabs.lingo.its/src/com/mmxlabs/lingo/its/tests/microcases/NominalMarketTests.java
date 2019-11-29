@@ -49,15 +49,24 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.SequenceHelper;
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
+import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.util.CargoTypeUtil;
+import com.mmxlabs.scheduler.optimiser.components.util.CargoTypeUtil.SimpleCargoType;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.AllowedVesselPermissionConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPermissionConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.fitness.components.NonOptionalSlotFitnessCore;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ICustomVolumeAllocator;
+import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
+import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService.ModuleType;
+import com.mmxlabs.scheduler.optimiser.peaberry.OptimiserInjectorServiceMaker;
 
 @SuppressWarnings("unused")
 @ExtendWith(ShiroRunner.class)
@@ -152,7 +161,98 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 	}
 
 	/**
-	 * Test: Test a charter-in vessel start and end heel level. (Not strictly a nominal vessel issue, but implemented parallel test here also).
+	 * Test: Check heel rollover does not impact other nominal cargoes. Regression
+	 * test.
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testNominalHeel_MultipleCargoes() throws Exception {
+
+		// Create the required basic elements
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		vessel.setSafetyHeel(500);
+
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
+
+		// Construct the cargo scenario
+
+		// Create two identical cargoes, with limited heel.
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.withVolumeLimits(150_000, 150_000, VolumeUnits.M3) //
+				.build() //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.withVolumeLimits(50_000, 50_000, VolumeUnits.M3) //
+				.build() //
+				.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
+				.withAssignmentFlags(false, false) //
+				.build();
+
+		final Cargo cargo2 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L2", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.withVolumeLimits(150_000, 150_000, VolumeUnits.M3) //
+				.build() //
+				.makeDESSale("D2", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.withVolumeLimits(50_000, 50_000, VolumeUnits.M3) //
+				.build() //
+				.withVesselAssignment(charterInMarket_1, -1, 2) // -1 is nominal
+				.withAssignmentFlags(false, false) //
+				.build();
+
+		ICustomVolumeAllocator customAllocator = record -> {
+			if (record.slots.size() == 2) {
+				final ILoadOption buy = (ILoadOption) record.slots.get(0);
+				final IDischargeOption sell = (IDischargeOption) record.slots.get(1);
+
+				if (CargoTypeUtil.getSimpleCargoType(buy, sell) == SimpleCargoType.SHIPPED) {
+					record.preferShortLoadOverLeftoverHeel = false;
+				}
+			}
+		};
+
+		IOptimiserInjectorService customisationService = OptimiserInjectorServiceMaker.begin() //
+				.withModuleOverrideBindInstance(ModuleType.Module_LNGTransformerModule, ICustomVolumeAllocator.class, customAllocator) //
+				.make();
+		
+		evaluateWithLSOTest(scenarioRunner -> {
+
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+
+			// Check spot index has been updated
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
+			// Check cargoes removed
+			Assertions.assertEquals(2, optimiserScenario.getCargoModel().getCargoes().size());
+
+			@Nullable
+			final Schedule schedule = ScenarioModelUtil.findSchedule(lngScenarioModel);
+			Assertions.assertNotNull(schedule);
+
+			for (int i = 0; i < 2; ++i) {
+				// Check correct heel values
+				final Cargo optCargo = optimiserScenario.getCargoModel().getCargoes().get(i);
+
+				@Nullable
+				final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(optCargo.getLoadName(), schedule);
+
+				Assertions.assertNotNull(cargoAllocation);
+				final EList<Event> events = cargoAllocation.getEvents();
+				final Event firstEvent = events.get(0);
+				final Event lastEvent = events.get(events.size() - 1);
+
+				// Check safety heel present.
+				Assertions.assertEquals(vessel.getVesselOrDelegateSafetyHeel(), firstEvent.getHeelAtStart());
+				// Expect a large quantity of gas on board, more than the heel.
+				Assertions.assertTrue(lastEvent.getHeelAtEnd() > vessel.getVesselOrDelegateSafetyHeel());
+				Assertions.assertTrue(lastEvent.getHeelAtEnd() > 80_000);
+			}
+		}, customisationService);
+	}
+
+	/**
+	 * Test: Test a charter-in vessel start and end heel level. (Not strictly a
+	 * nominal vessel issue, but implemented parallel test here also).
 	 * 
 	 * @throws Exception
 	 */
@@ -210,7 +310,8 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 	}
 
 	/**
-	 * Test: Make sure the slots are kept as a bound pair on the nominal. Test by swapping discharges round.
+	 * Test: Make sure the slots are kept as a bound pair on the nominal. Test by
+	 * swapping discharges round.
 	 * 
 	 * @throws Exception
 	 */
@@ -284,7 +385,8 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 	}
 
 	/**
-	 * Test: Move a nominal cargo onto an empty fleet vessel (needs pre-defined vessel start and end dates)
+	 * Test: Move a nominal cargo onto an empty fleet vessel (needs pre-defined
+	 * vessel start and end dates)
 	 * 
 	 * @throws Exception
 	 */
@@ -337,7 +439,8 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 	}
 
 	/**
-	 * Test: Move a nominal cargo onto an empty fleet vessel (needs pre-defined vessel start and end dates). The non-optional fitness should kick in
+	 * Test: Move a nominal cargo onto an empty fleet vessel (needs pre-defined
+	 * vessel start and end dates). The non-optional fitness should kick in
 	 * 
 	 * @throws Exception
 	 */
@@ -413,7 +516,8 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 	}
 
 	/**
-	 * Test: Move a nominal cargo onto an empty fleet vessel (needs pre-defined vessel start and end dates). The non-optional fitness should kick in
+	 * Test: Move a nominal cargo onto an empty fleet vessel (needs pre-defined
+	 * vessel start and end dates). The non-optional fitness should kick in
 	 * 
 	 * @throws Exception
 	 */
@@ -545,7 +649,8 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2016, 12, 5));
 
 		evaluateWithLSOTest(true, plan -> {
-			// Set iterations to zero to avoid any optimisation changes and rely on the unpairing opt step
+			// Set iterations to zero to avoid any optimisation changes and rely on the
+			// unpairing opt step
 			ScenarioUtils.setLSOStageIterations(plan, 0);
 			ScenarioUtils.setHillClimbStageIterations(plan, 0);
 		}, null, scenarioRunner -> {
@@ -590,8 +695,10 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 
 		evaluateWithLSOTest(true, plan -> {
 			plan.getUserSettings().setSimilarityMode(SimilarityMode.ALL);
-			// Set iterations to zero to avoid any optimisation changes and rely on the unpairing opt step
-			// (Actually needs to be 1 to trigger the optimisation stage. This may cause the test to fail if the first move set finds a good solution)
+			// Set iterations to zero to avoid any optimisation changes and rely on the
+			// unpairing opt step
+			// (Actually needs to be 1 to trigger the optimisation stage. This may cause the
+			// test to fail if the first move set finds a good solution)
 			ScenarioUtils.setLSOStageIterations(plan, 1);
 			ScenarioUtils.setHillClimbStageIterations(plan, 0);
 		}, null, scenarioRunner -> {
@@ -635,7 +742,8 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2016, 12, 5));
 
 		evaluateWithLSOTest(true, plan -> {
-			// Set iterations to zero to avoid any optimisation changes and rely on the unpairing opt step
+			// Set iterations to zero to avoid any optimisation changes and rely on the
+			// unpairing opt step
 			ScenarioUtils.setLSOStageIterations(plan, 0);
 			ScenarioUtils.setHillClimbStageIterations(plan, 0);
 		}, null, scenarioRunner -> {
@@ -679,7 +787,8 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2017, 1, 2));
 
 		evaluateWithLSOTest(true, plan -> {
-			// Set iterations to zero to avoid any optimisation changes and rely on the unpairing opt step
+			// Set iterations to zero to avoid any optimisation changes and rely on the
+			// unpairing opt step
 			ScenarioUtils.setLSOStageIterations(plan, 0);
 			ScenarioUtils.setHillClimbStageIterations(plan, 0);
 		}, null, scenarioRunner -> {
@@ -697,20 +806,22 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 			Assertions.assertEquals(-1, cargo1.getSpotIndex());
 		}, null);
 	}
+
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testPromptLockedNominalInPromptNotOpenedWithSpotSaleOpti() throws Exception {
-		
-		// Same as #testPromptLockedNominalInPromptNotOpenedWithSpotSale but we run an optimisation and make sure loss making cargo is not unpaired. 
-		
+
+		// Same as #testPromptLockedNominalInPromptNotOpenedWithSpotSale but we run an
+		// optimisation and make sure loss making cargo is not unpaired.
+
 		// Create the required basic elements
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
-		
+
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "200000", 0);
-		
+
 		DESSalesMarket market = spotMarketsModelBuilder.makeDESSaleMarket("Sale Market", portFinder.findPort("Dominion Cove Point LNG"), entity, "1").build();
 		// Construct the cargo scenario
-		
+
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "7") //
@@ -720,23 +831,23 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 				.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
 				.withAssignmentFlags(false, true) //
 				.build();
-		
+
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2017, 1, 2));
-		
+
 		evaluateWithLSOTest(true, plan -> {
 			ScenarioUtils.setLSOStageIterations(plan, 1_000);
 			ScenarioUtils.setHillClimbStageIterations(plan, 0);
 		}, null, scenarioRunner -> {
-			
+
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
-			
+
 			// Check spot index has been updated
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check cargo still exists
 			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
 			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getDischargeSlots().size());
-			
+
 			Assertions.assertSame(charterInMarket_1, cargo1.getVesselAssignmentType());
 			Assertions.assertEquals(-1, cargo1.getSpotIndex());
 		}, null);
@@ -793,7 +904,8 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 	}
 
 	/**
-	 * Test that the correction to BugzId: 2304 has been fixed. (Initial fixes made all nominal cargoes optional, thus bad P&L cargoes were optimised out)
+	 * Test that the correction to BugzId: 2304 has been fixed. (Initial fixes made
+	 * all nominal cargoes optional, thus bad P&L cargoes were optimised out)
 	 * 
 	 * @throws Exception
 	 */
@@ -845,7 +957,8 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 	}
 
 	/**
-	 * A cargo in the prompt, but outside the optimisation period should not be unpaired.
+	 * A cargo in the prompt, but outside the optimisation period should not be
+	 * unpaired.
 	 * 
 	 * @throws Exception
 	 */
@@ -896,8 +1009,9 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 	}
 
 	/**
-	 * Aim of test is to try and ensure a) the action set can work with these solutions correctly and b) support the filtering correctly. (I.e ensure highly profitable but nominal cargoes are not
-	 * used).
+	 * Aim of test is to try and ensure a) the action set can work with these
+	 * solutions correctly and b) support the filtering correctly. (I.e ensure
+	 * highly profitable but nominal cargoes are not used).
 	 * 
 	 * @throws Exception
 	 */
@@ -944,7 +1058,8 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 
 		evaluateWithLSOTest(true, plan -> {
 
-			// Set iterations to zero to avoid any optimisation changes and rely on the unpairing opt step
+			// Set iterations to zero to avoid any optimisation changes and rely on the
+			// unpairing opt step
 			// s.getAnnealingSettings().setIterations(0);
 			ScenarioUtils.setHillClimbStageIterations(plan, 0);
 
@@ -1030,7 +1145,8 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 4));
 
 		evaluateWithLSOTest(true, plan -> {
-			// Set iterations to zero to avoid any optimisation changes and rely on the unpairing opt step
+			// Set iterations to zero to avoid any optimisation changes and rely on the
+			// unpairing opt step
 			ScenarioUtils.setLSOStageIterations(plan, 0);
 			ScenarioUtils.setHillClimbStageIterations(plan, 0);
 
@@ -1093,7 +1209,8 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 	}
 
 	/**
-	 * Test: Assign cargo to a nominal vessel of restricted class - initial solution should be invalid.
+	 * Test: Assign cargo to a nominal vessel of restricted class - initial solution
+	 * should be invalid.
 	 * 
 	 * @throws Exception
 	 */
@@ -1139,7 +1256,8 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 	}
 
 	/**
-	 * Test: Ensure we do not use a cheaper nominal vessel and avoid fleet vessel charter cost.
+	 * Test: Ensure we do not use a cheaper nominal vessel and avoid fleet vessel
+	 * charter cost.
 	 * 
 	 * @throws Exception
 	 */

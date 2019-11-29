@@ -61,7 +61,8 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
  * 
  * @author Simon McGregor
  * 
- *         Utility class to provide methods for help when validating contract constraints.
+ *         Utility class to provide methods for help when validating contract
+ *         constraints.
  * 
  */
 public class PriceExpressionUtils {
@@ -107,16 +108,16 @@ public class PriceExpressionUtils {
 	private final @NonNull static Pattern shiftUsePattern = Pattern.compile("SHIFT\\p{Space}*\\(\\p{Space}*[a-z][a-z0-9_]*\\p{Space}*,\\p{Space}*-?[0-9]+\\p{Space}*\\)", Pattern.CASE_INSENSITIVE);
 
 	public static void validatePriceExpression(final @NonNull IValidationContext ctx, final @NonNull List<IStatus> failures, final @NonNull DetailConstraintStatusFactory factory,
-			final @NonNull EObject target, EAttribute feature, boolean missingIsOk, Pair<EObject, EStructuralFeature>... otherFeatures) {
-		PriceIndexType priceIndexType = getPriceIndexType(feature);
+			final @NonNull EObject target, final EAttribute feature, final boolean missingIsOk, final Pair<EObject, EStructuralFeature>... otherFeatures) {
+		final PriceIndexType priceIndexType = getPriceIndexType(feature);
 		validatePriceExpression(ctx, failures, factory, target, feature, priceIndexType, missingIsOk, otherFeatures);
 	}
 
-	public static @NonNull PriceIndexType getPriceIndexType(EAttribute feature) {
+	public static @NonNull PriceIndexType getPriceIndexType(final EAttribute feature) {
 		PriceIndexType priceIndexType = null;
 		final EAnnotation eAnnotation = feature.getEAnnotation(ExpressionAnnotationConstants.ANNOTATION_NAME);
 		if (eAnnotation != null) {
-			String value = eAnnotation.getDetails().get(ExpressionAnnotationConstants.ANNOTATION_KEY);
+			final String value = eAnnotation.getDetails().get(ExpressionAnnotationConstants.ANNOTATION_KEY);
 			if (ExpressionAnnotationConstants.TYPE_COMMODITY.equals(value)) {
 				priceIndexType = PriceIndexType.COMMODITY;
 			} else if (ExpressionAnnotationConstants.TYPE_CHARTER.equals(value)) {
@@ -134,8 +135,8 @@ public class PriceExpressionUtils {
 	}
 
 	public static void validatePriceExpression(final @NonNull IValidationContext ctx, final @NonNull List<IStatus> failures, final @NonNull DetailConstraintStatusFactory factory,
-			final @NonNull EObject target, EAttribute feature, final @NonNull PriceIndexType priceIndexType, boolean missingIsOk, Pair<EObject, EStructuralFeature>... otherFeatures) {
-		String expression = (String) target.eGet(feature);
+			final @NonNull EObject target, final EAttribute feature, final @NonNull PriceIndexType priceIndexType, final boolean missingIsOk, final Pair<EObject, EStructuralFeature>... otherFeatures) {
+		final String expression = (String) target.eGet(feature);
 		if (expression == null || expression.isEmpty()) {
 			if (!missingIsOk) {
 				factory.copyName() //
@@ -173,18 +174,13 @@ public class PriceExpressionUtils {
 	 * 
 	 *         Validates a price expression for a given EMF object
 	 * 
-	 * @param ctx
-	 *            A validation context.
-	 * @param object
-	 *            The EMF object to associate validation failures with.
-	 * @param feature
-	 *            The structural feature to attach validation failures to.
-	 * @param priceExpression
-	 *            The price expression to validate.
-	 * @param parser
-	 *            A parser for price expressions.
-	 * @param failures
-	 *            The list of validation failures to append to.
+	 * @param ctx             A validation context.
+	 * @param object          The EMF object to associate validation failures with.
+	 * @param feature         The structural feature to attach validation failures
+	 *                        to.
+	 * @param priceExpression The price expression to validate.
+	 * @param parser          A parser for price expressions.
+	 * @param failures        The list of validation failures to append to.
 	 */
 	@NonNull
 	public static ValidationResult validatePriceExpression(final @NonNull IValidationContext ctx, final @NonNull EObject object, final @NonNull EStructuralFeature feature,
@@ -245,6 +241,14 @@ public class PriceExpressionUtils {
 			final Double maxValue, final YearMonth date, final List<IStatus> failures) {
 
 		if (date == null) {
+			// No date, but try to parse expression as a number.
+			try {
+				final double value = Double.parseDouble(priceExpression);
+				checkValue(ctx, object, feature, minValue, maxValue, failures, value);
+			} catch (final Exception e) {
+				// Ignore errors.
+			}
+
 			return;
 		}
 
@@ -269,19 +273,7 @@ public class PriceExpressionUtils {
 
 			final double value = parsed.evaluate(pricingTime).doubleValue();
 
-			final boolean lessThanMin = minValue != null && value < minValue;
-			final boolean moreThanMax = minValue != null && value > maxValue;
-			if (lessThanMin || moreThanMax) {
-				final String boundLabel = lessThanMin ? "minimum" : "maximum";
-				final double boundValue = lessThanMin ? minValue : maxValue;
-				final String comparisonLabel = lessThanMin ? "less" : "more";
-
-				final String message = String.format("Price expression has value %.2f which is %s than %s value %.2f", value, comparisonLabel, boundLabel, boundValue);
-				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
-				dsd.addEObjectAndFeature(object, feature);
-				failures.add(dsd);
-
-			}
+			checkValue(ctx, object, feature, minValue, maxValue, failures, value);
 
 		} catch (final Exception e) {
 			final String message = String.format("Price expression is not valid: %s", priceExpression);
@@ -290,6 +282,23 @@ public class PriceExpressionUtils {
 			failures.add(dsd);
 		}
 
+	}
+
+	private static void checkValue(final IValidationContext ctx, final EObject object, final EStructuralFeature feature, final Double minValue, final Double maxValue, final List<IStatus> failures,
+			final double value) {
+		final boolean lessThanMin = minValue != null && value < minValue;
+		final boolean moreThanMax = minValue != null && value > maxValue;
+		if (lessThanMin || moreThanMax) {
+			final String boundLabel = lessThanMin ? "minimum" : "maximum";
+			final double boundValue = lessThanMin ? minValue : maxValue;
+			final String comparisonLabel = lessThanMin ? "less" : "more";
+
+			final String message = String.format("Price expression has value %.2f which is %s than %s value %.2f", value, comparisonLabel, boundLabel, boundValue);
+			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+			dsd.addEObjectAndFeature(object, feature);
+			failures.add(dsd);
+
+		}
 	}
 
 	public static ISeries getParsedSeries(final IValidationContext ctx, final EObject object, final EStructuralFeature feature, final String priceExpression, final YearMonth date,
@@ -313,9 +322,9 @@ public class PriceExpressionUtils {
 		if (activator != null) {
 			final IExtraValidationContext extraValidationContext = activator.getExtraValidationContext();
 			if (extraValidationContext != null) {
-				IScenarioDataProvider scenarioDataProvider = extraValidationContext.getScenarioDataProvider();
+				final IScenarioDataProvider scenarioDataProvider = extraValidationContext.getScenarioDataProvider();
 				if (scenarioDataProvider != null) {
-					ModelMarketCurveProvider provider = scenarioDataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.MARKET_CURVES, ModelMarketCurveProvider.class);
+					final ModelMarketCurveProvider provider = scenarioDataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.MARKET_CURVES, ModelMarketCurveProvider.class);
 					if (provider != null) {
 						return provider;
 					}
@@ -388,7 +397,7 @@ public class PriceExpressionUtils {
 
 	}
 
-	public static PriceIndexType getPriceIndexType(AbstractYearMonthCurve namedIndexContainer) {
+	public static PriceIndexType getPriceIndexType(final AbstractYearMonthCurve namedIndexContainer) {
 		if (namedIndexContainer instanceof CommodityCurve) {
 			return PriceIndexType.COMMODITY;
 		} else if (namedIndexContainer instanceof CurrencyCurve) {
@@ -402,7 +411,7 @@ public class PriceExpressionUtils {
 
 	}
 
-	public static void checkExpressionAgainstPricingDate(IValidationContext ctx, String priceExpression, Slot slot, LocalDate pricingDate, EStructuralFeature feature, final List<IStatus> failures) {
+	public static void checkExpressionAgainstPricingDate(final IValidationContext ctx, final String priceExpression, final Slot slot, final LocalDate pricingDate, final EStructuralFeature feature, final List<IStatus> failures) {
 		final ModelMarketCurveProvider marketCurveProvider = PriceExpressionUtils.getMarketCurveProvider();
 		final List<Pair<AbstractYearMonthCurve, LocalDate>> linkedCurvesAndDate = marketCurveProvider.getLinkedCurvesAndDate(priceExpression, pricingDate);
 
@@ -435,17 +444,16 @@ public class PriceExpressionUtils {
 		}
 	}
 
-	public static Node convertCommodityToExpandedNodes(String expression) {
+	public static Node convertCommodityToExpandedNodes(final String expression) {
 
 		final ModelMarketCurveProvider marketCurveProvider = PriceExpressionUtils.getMarketCurveProvider();
-		PricingModel pricingModel = marketCurveProvider.getPricingModel();
- 
+		final PricingModel pricingModel = marketCurveProvider.getPricingModel();
 
-		LookupData lookupData =  LookupData.createLookupData(pricingModel);
+		final LookupData lookupData = LookupData.createLookupData(pricingModel);
 		final IExpression<Node> parse = new RawTreeParser().parse(expression);
 		final Node p = parse.evaluate();
 		final Node node = Nodes.expandNode(p, lookupData);
-		
+
 		return node;
 	}
 }

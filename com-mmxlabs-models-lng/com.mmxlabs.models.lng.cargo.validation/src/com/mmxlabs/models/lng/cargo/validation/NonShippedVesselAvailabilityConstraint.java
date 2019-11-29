@@ -86,17 +86,50 @@ public class NonShippedVesselAvailabilityConstraint extends AbstractModelMultiCo
 			for (final VesselAvailability va : cargoModel.getVesselAvailabilities()) {
 				NonNullPair<ZonedDateTime, ZonedDateTime> availabilityInterval = null;
 
-				{
+				if (va.isSetMaxDuration()) {
+					// We can only usefully use max duration when the start or end is properly
+					// bounded.
+					if (va.isSetStartAfter() && va.isSetStartBy()) {
+						ZonedDateTime start = va.getStartAfterAsDateTime();
+						ZonedDateTime end = va.getStartByAsDateTime().plusDays(va.getMaxDuration());
+
+						if (va.isSetEndAfter()) {
+							ZonedDateTime end2 = va.getEndAfterAsDateTime();
+							if (end2.isAfter(end)) {
+								end = end2;
+							}
+						}
+						availabilityInterval = new NonNullPair<>(start, end);
+
+					} else if (va.isSetEndAfter() && va.isSetEndBy()) {
+						ZonedDateTime end = va.getEndByAsDateTime();
+						ZonedDateTime start = va.getEndAfterAsDateTime().minusDays(va.getMaxDuration());
+
+						if (va.isSetStartAfter()) {
+							ZonedDateTime start2 = va.getStartAfterAsDateTime();
+							if (start2.isBefore(start)) {
+								start = start2;
+							}
+						}
+						availabilityInterval = new NonNullPair<>(start, end);
+					}
+				}
+
+				if (availabilityInterval == null) {
+					// No max, duration, use the defined dates
+
 					ZonedDateTime start;
 					if (va.isSetStartAfter()) {
 						start = va.getStartAfterAsDateTime();
 					} else {
+						// Start is unbounded.
 						start = ZonedDateTime.of(1970, 1, 1, 0, 0, 0, 0, ZoneId.of("UTC"));
 					}
 					ZonedDateTime end;
 					if (va.isSetEndBy()) {
 						end = va.getEndByAsDateTime();
 					} else {
+						// End date is unbounded
 						end = ZonedDateTime.now().withYear(Year.MAX_VALUE);
 					}
 					availabilityInterval = new NonNullPair<>(start, end);

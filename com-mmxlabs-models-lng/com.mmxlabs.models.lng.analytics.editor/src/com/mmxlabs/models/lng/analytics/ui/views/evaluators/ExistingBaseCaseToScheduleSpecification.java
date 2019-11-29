@@ -64,6 +64,7 @@ import com.mmxlabs.models.lng.cargo.VesselScheduleSpecification;
 import com.mmxlabs.models.lng.cargo.util.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.util.CollectedAssignment;
 import com.mmxlabs.models.lng.cargo.util.scheduling.FakeCargo;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -256,12 +257,14 @@ public class ExistingBaseCaseToScheduleSpecification {
 						CharterInMarket newMarket = mapper.get(roundTripShippingOption);
 						if (newMarket == null) {
 							final Vessel vessel = roundTripShippingOption.getVessel();
+							final BaseLegalEntity entity = roundTripShippingOption.getEntity();
 							final String hireCost = roundTripShippingOption.getHireCost();
 
 							// TODO: Need place to store this in datamodel
 							newMarket = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
 							newMarket.setCharterInRate(hireCost);
 							newMarket.setVessel(vessel);
+							newMarket.setEntity(entity);
 							newMarket.setNominal(true);
 
 							newMarket.setName(vessel.getName() + " @" + hireCost);

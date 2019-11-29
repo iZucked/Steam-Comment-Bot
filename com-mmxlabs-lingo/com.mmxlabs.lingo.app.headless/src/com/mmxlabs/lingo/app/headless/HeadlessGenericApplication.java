@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.cli.CommandLine;
@@ -57,6 +58,7 @@ import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessApplicationOptions
 public abstract class HeadlessGenericApplication implements IApplication {
 	
 	/** New exception type for scenario types that can't be handled */ 
+	@SuppressWarnings("serial")
 	public static class UnhandledScenarioTypeException extends RuntimeException {
 		public UnhandledScenarioTypeException(@NonNull String message) {
 			super(message);
@@ -76,6 +78,7 @@ public abstract class HeadlessGenericApplication implements IApplication {
 	protected static final String OUTPUT_FOLDER = "outputFolder";
 	protected static final String JSON = "json";
 	protected static final String NUM_RUNS = "numRuns";
+	protected static final String CUSTOM_INFO = "custom";
 	
 	protected String clientCode;
 	protected String machineInfo;
@@ -235,6 +238,7 @@ public abstract class HeadlessGenericApplication implements IApplication {
 		commandLineArgs = filterCommandLineArgs(commandLineArgs);
 
 		commandLine = parseOptions(commandLineArgs);
+		
 		if (commandLine == null) {
 			System.err.println("Error parsing the command line settings");
 			throw new InvalidCommandLineException();
@@ -297,6 +301,7 @@ public abstract class HeadlessGenericApplication implements IApplication {
 		
 		// override batch file options with command line options
 		for (HeadlessApplicationOptions options: optionsList) {
+			overwriteCustomInfo(options.customInfo);
 			options.outputLoggingFolder = commandLineParameterOrValue(OUTPUT_FOLDER, options.outputLoggingFolder);
 			options.outputScenarioFileName = commandLineParameterOrValue(OUTPUT_SCENARIO, options.outputScenarioFileName);
 			options.algorithmConfigFile = commandLineParameterOrValue(JSON, options.algorithmConfigFile);
@@ -307,6 +312,34 @@ public abstract class HeadlessGenericApplication implements IApplication {
 		return optionsList;
 	}
 	
+	protected void overwriteCustomInfo(Map<String, String> info) {
+		String[] customValues = commandLine.getOptionValues(CUSTOM_INFO);
+
+		if (customValues != null) {
+			for (String custom: customValues) {
+				String[] fields = custom.split("=");
+				
+				if (fields.length != 2) {
+					throw new IllegalArgumentException(String.format("Custom argument '%s' needs to be in 'key=val' format", custom));
+				}
+				
+				String key = fields[0];
+				String val = fields[1];
+				
+				if (info.containsKey(key)) {
+					String oldValue = info.get(key);
+					if (oldValue.equals(val) == false) {
+						String overrideWarning = "Overriding existing custom field '%s' with command line value: '%s' -> '%s'"; 
+						System.err.println(String.format(overrideWarning, key, info.get(key), val));
+					}
+				}
+				
+				info.put(key, val);
+			}
+		}
+
+	}
+	
 	/**
 	 * Returns the value of a command line parameter, or a specified existing value.
 	 * If the existing value is not null, and the command line parameter is present, a warning is printed to stderr.
@@ -315,7 +348,7 @@ public abstract class HeadlessGenericApplication implements IApplication {
 		if (commandLine.hasOption(commandLineOptionName)) {
 			String newValue = commandLine.getOptionValue(commandLineOptionName);
 			
-			if (oldValue != null) {
+			if (oldValue != null && oldValue.equals(newValue) == false) {
 				String overrideWarning = "Overriding existing value with command line option %s: '%s' -> '%s'"; 
 				System.err.println(String.format(overrideWarning, commandLineOptionName, oldValue, newValue));			
 			}
@@ -385,7 +418,7 @@ public abstract class HeadlessGenericApplication implements IApplication {
 
 		// create the Options
 		final Options options = HeadlessUtils.getRequiredOsgiOptions();
-
+		
 		// Headless application options
 
 		options.addOption(OptionBuilder.withLongOpt(MACHINE_INFO).withDescription("JSON file containing machine info").hasArg().create());
@@ -393,6 +426,7 @@ public abstract class HeadlessGenericApplication implements IApplication {
 		options.addOption(OptionBuilder.withLongOpt(CLIENT_CODE).withDescription("Client code for build").hasArg().create());
 
 		options.addOption(OptionBuilder.withLongOpt(BATCH_FILE).withDescription("File listing a batch of jobs to run").hasArg().create());
+		options.addOption(OptionBuilder.withLongOpt(CUSTOM_INFO).withDescription("Custom information (using name=val syntax)").hasArg().create());
 
 		options.addOption(OptionBuilder.withLongOpt(INPUT_SCENARIO).withDescription("Input scenario file").hasArg().create());
 		options.addOption(OptionBuilder.withLongOpt(OUTPUT_SCENARIO).withDescription("Output scenario file").hasArg().create());

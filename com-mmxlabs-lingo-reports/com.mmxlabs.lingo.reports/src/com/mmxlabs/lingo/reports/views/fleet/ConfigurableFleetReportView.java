@@ -252,7 +252,7 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 			return (T) new IReportContents() {
 
 				@Override
-				public String getStringContents() {
+				public String getHTMLContents() {
 					return contents;
 				}
 			};

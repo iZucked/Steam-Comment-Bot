@@ -96,4 +96,6 @@ public final class KnownFeatures {
 	public static final String FEATURE_DATAHUB_BASECASE_NOTES = "features:datahub-basecase-notes";
 	
 	public static final String FEATURE_DATAHUB_STARTUP_CHECK = "features:datahub-lingo-startup-check";
+	
+	public static final String FEATURE_SHOW_TRADING_SHIPPING_SPLIT= "features:headline-trading-shipping-split";
 }

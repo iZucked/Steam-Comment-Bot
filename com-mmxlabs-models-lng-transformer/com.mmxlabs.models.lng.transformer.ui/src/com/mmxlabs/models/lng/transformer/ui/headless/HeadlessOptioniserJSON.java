@@ -5,6 +5,9 @@
 package com.mmxlabs.models.lng.transformer.ui.headless;
 
 import java.util.List;
+import java.util.Map;
+
+import com.mmxlabs.common.caches.MemoryUsageInfo;
 
 public class HeadlessOptioniserJSON extends HeadlessGenericJSON<HeadlessOptioniserJSON.Params, HeadlessOptioniserJSON.Metrics>{
 
@@ -82,9 +85,13 @@ public class HeadlessOptioniserJSON extends HeadlessGenericJSON<HeadlessOptionis
 		private String[] eventIds;
 	}
 
+	/**
+	 * Additional metrics information for optioniser runs.
+	 */
 	public static class Metrics extends HeadlessGenericJSON.Metrics {
 		private OptioniserMetrics optioniserMetrics;
 		private List<Stage> stages;
+		private Map<String,MemoryUsageInfo> memoryUsage;
 
 		public OptioniserMetrics getOptioniserMetrics() {
 			return optioniserMetrics;
@@ -102,8 +109,19 @@ public class HeadlessOptioniserJSON extends HeadlessGenericJSON<HeadlessOptionis
 			this.stages = stages;
 		}
 
+		public Map<String,MemoryUsageInfo> getMemoryUsage() {
+			return memoryUsage;
+		}
+
+		public void setMemoryUsage(Map<String,MemoryUsageInfo> memoryUsage) {
+			this.memoryUsage = memoryUsage;
+		}
+
 	}
 
+	/**
+	 * Optioniser stage information
+	 */
 	public static class Stage {
 		private String stage;
 
@@ -127,6 +145,9 @@ public class HeadlessOptioniserJSON extends HeadlessGenericJSON<HeadlessOptionis
 
 	}
 
+	/**
+	 * Additional parameter information for optioniser runs
+	 */
 	public static class Params extends HeadlessGenericJSON.Params {
 		private OptioniserProperties optioniserProperties;
 

@@ -7,8 +7,8 @@ package com.mmxlabs.common.parser.series;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,13 +22,17 @@ import com.mmxlabs.common.parser.IExpression;
 public class SeriesParserChangePointsTests {
 
 	public static Iterable<Object[]> generateTests() {
+
+		// Testing split month function (First day of month is zero not 1, hence -1)
+
+		List<Integer> expectedChangePoints = new LinkedList<>();
+		for (int i = 0; i < 4; ++i) {
+			expectedChangePoints.add(i * 30 * 24); // 1st of month
+			expectedChangePoints.add(((i * 30) + (15 - 1)) * 24); // 15th of month
+		}
+
 		return Arrays.asList(new Object[][] { //
-				// Testing split month function (First day of month is zero not 1, hence -1)
-				// The default test month mapper passes the input value back unchanged.
-				{ "splitmonth(HH,HH2, 15)", new ArrayList<>(Arrays.asList(0, (15 - 1) * 24, //
-						1, ((15 - 1) * 24) + 1, //
-						2, ((15 - 1) * 24) + 2, //
-						3, ((15 - 1) * 24) + 3)) } //
+				{ "splitmonth(HH,HH2, 15)", expectedChangePoints } //
 		});
 	}
 
@@ -42,16 +46,17 @@ public class SeriesParserChangePointsTests {
 		final SeriesParserData data = new SeriesParserData();
 
 		data.setShiftMapper((a, b) -> a);
+		// Assume 30 day month
 		data.setCalendarMonthMapper(new CalendarMonthMapper() {
 
 			@Override
 			public int mapMonthToChangePoint(final int currentChangePoint) {
-				return currentChangePoint;
+				return currentChangePoint * 30 * 24;
 			}
 
 			@Override
 			public int mapChangePointToMonth(final int currentChangePoint) {
-				return currentChangePoint;
+				return currentChangePoint / 30 / 24;
 			}
 		});
 

@@ -2,11 +2,10 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Jobmanager Tests
 Bundle-SymbolicName: com.mmxlabs.jobmanager.tests;singleton:=true
-Bundle-Version: 4.7.26.qualifier
+Bundle-Version: 4.7.29.qualifier
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
- com.mmxlabs.jobmanager;bundle-version="[4.7.26,5.0.0)",
+ com.mmxlabs.jobmanager;bundle-version="[4.7.29,5.0.0)",
  org.eclipse.core.resources;bundle-version="3.7.100",
- org.junit.jupiter.api;bundle-version="5.0.0",
  org.mockito.mockito-core,
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  javax.annotation;bundle-version="1.2.0"
@@ -14,3 +13,5 @@ Bundle-RequiredExecutionEnvironment: JavaSE-10
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: Minimax Labs Ltd.
 Automatic-Module-Name: com.mmxlabs.jobmanager.tests
+Import-Package: org.junit.jupiter.api;version="5.1.0",
+ org.junit.runner.manipulation;version="4.12.0"

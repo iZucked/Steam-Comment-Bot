@@ -118,7 +118,7 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 			return (T) new IReportContents() {
 
 				@Override
-				public String getStringContents() {
+				public String getHTMLContents() {
 					return contents;
 				}
 			};
