@@ -199,18 +199,21 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 
-
 /**
- * Tabular editor displaying cargoes and slots with a custom wiring editor. This implementation is "stupid" in that any changes to the data cause a full update. This has the disadvantage of loosing
- * the current ordering of items. Each row is a cargo. Changing the wiring will re-order slots. The {@link CargoWiringComposite} based view only re-orders slots when requested permitting the original
- * (or at least the wiring at time of opening the editor) wiring to be seem via rows and the current wiring via the wire lines.
+ * Tabular editor displaying cargoes and slots with a custom wiring editor. This
+ * implementation is "stupid" in that any changes to the data cause a full
+ * update. This has the disadvantage of loosing the current ordering of items.
+ * Each row is a cargo. Changing the wiring will re-order slots. The
+ * {@link CargoWiringComposite} based view only re-orders slots when requested
+ * permitting the original (or at least the wiring at time of opening the
+ * editor) wiring to be seem via rows and the current wiring via the wire lines.
  * 
  * 
  * @author Simon Goodall
  * 
  */
 public class TradesWiringViewer extends ScenarioTableViewerPane {
-	
+
 	private static int LineWrap = 40;
 	private static String nl = System.getProperty("line.separator");
 
@@ -220,8 +223,10 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 	protected RootData rootData;
 	/**
-	 * A reference {@link RootData} object. This is used by a {@link CargoModelRowTransformer} to retain load/discharge row pairings but allow wires to cross rows. Initially null until the first
-	 * rootData object is created. May be "nulled" again to reset state by an action.
+	 * A reference {@link RootData} object. This is used by a
+	 * {@link CargoModelRowTransformer} to retain load/discharge row pairings but
+	 * allow wires to cross rows. Initially null until the first rootData object is
+	 * created. May be "nulled" again to reset state by an action.
 	 * 
 	 */
 	protected RootData referenceRootData;
@@ -255,7 +260,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	private final TimePeriodFilter monthFilter = new TimePeriodFilter();
 	private LocalDate earliest;
 	private LocalDate latest;
-	
+
 	private Action resetSortOrder;
 
 	private PromptToolbarEditor promptToolbarEditor;
@@ -274,7 +279,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				ScenarioModelUtil.getCommercialModel(scenarioModel), Activator.getDefault().getModelFactoryRegistry());
 		this.menuHelper = new CargoEditorMenuHelper(part.getSite().getShell(), scenarioEditingLocation, scenarioModel);
 		notesImage = CargoEditorPlugin.getPlugin().getImage(CargoEditorPlugin.IMAGE_CARGO_NOTES);
-		
+
 		ServiceHelper.withOptionalServiceConsumer(IExtraFiltersProvider.class, p -> {
 			if (p == null) {
 				setExtraFiltersProvider(new DefaultExtraFiltersProvider());
@@ -282,9 +287,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				setExtraFiltersProvider(p);
 			}
 		});
-		
+
 	}
-	
+
 	private void setExtraFiltersProvider(final IExtraFiltersProvider provider) {
 		this.extraFiltersProvider = provider;
 	}
@@ -357,7 +362,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			}
 
 			/**
-			 * Overridden method to convert internal RowData objects into a collection of EMF Objects
+			 * Overridden method to convert internal RowData objects into a collection of
+			 * EMF Objects
 			 */
 			@Override
 			protected void updateSelection(final ISelection selection) {
@@ -489,13 +495,13 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 				addFilters();
 			}
-			
+
 			private void addFilters() {
 				addFilter(tradesFilter);
 				addFilter(tradesCargoFilter);
 				addFilter(shippedCargoFilter);
 				addFilter(monthFilter);
-				
+
 				if (extraFiltersProvider != null) {
 					for (final ViewerFilter vf : extraFiltersProvider.getExtraFilters()) {
 						addFilter(vf);
@@ -600,7 +606,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					if (dString.length() > LineWrap) {
 						dString = wrapString(dString, LineWrap);
 					}
-					return (lString.length()>0? lString : "") + (dString.length()> 0 ? nl + " --- " + nl + dString : "");
+					return (lString.length() > 0 ? lString : "") + (dString.length() > 0 ? nl + " --- " + nl + dString : "");
 				}
 			}
 
@@ -864,44 +870,43 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 		return scenarioViewer;
 	}
-	
+
 	/**
-	 * Break up inputString into lines, then break up those input lines into wrapped lines lineLength 
-	 * characters long.
+	 * Break up inputString into lines, then break up those input lines into wrapped
+	 * lines lineLength characters long.
+	 * 
 	 * @param inputString
 	 * @param lineLength
 	 * @return the wrapped lines
 	 */
-	protected static String wrapString(String inputString, int lineLength) {		
-		//		System.out.println("It's a wrap yo: \n" + inputString);
+	protected static String wrapString(String inputString, int lineLength) {
+		// System.out.println("It's a wrap yo: \n" + inputString);
 		String newString = "";
-		// Split input string into inputLineStrings, each of which is a list of words 
+		// Split input string into inputLineStrings, each of which is a list of words
 		// which will result in one or more lines of formatted text
 		String[] inputLineStrings = inputString.split(nl);
 		for (int i = 0; i < inputLineStrings.length; i++) {
 			String inputLine = inputLineStrings[i];
 			// Wrap inputLine
-			if(inputLine.length() > lineLength) {
-				// Split on spaces and decompose into wrapped lines, adding each word to newLine 
+			if (inputLine.length() > lineLength) {
+				// Split on spaces and decompose into wrapped lines, adding each word to newLine
 				// up to line wrap limit, then starting a newLine.
 				String[] words = inputLine.split(" ");
 				String newLine = words[0] + " ";
 				for (int j = 1; j < words.length; j++) {
 					String word = words[j];
 					// Add word if within limit
-					if(newLine.length() + word.length() <= lineLength) {						
+					if (newLine.length() + word.length() <= lineLength) {
 						newLine += word + " ";
-					}
-					else {
-					// else add line and start a new line with this word	
+					} else {
+						// else add line and start a new line with this word
 						newString += newLine + nl;
 						newLine = word + " ";
 					}
 				}
 				// Any last words...
-				newString += newLine + nl;				
-			}
-			else {
+				newString += newLine + nl;
+			} else {
 				// inputLine needs no wrapping.
 				newString += inputLine + nl;
 			}
@@ -1012,14 +1017,19 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), deleteAction);
 		}
 
-		// TODO: uncomment lines below, to add relevant actions to trades wiring tool bar
+		// TODO: uncomment lines below, to add relevant actions to trades wiring tool
+		// bar
 
 		/*
-		 * copyAction = createCopyAction(); if (copyAction != null) { toolbar.appendToGroup(ADD_REMOVE_GROUP, copyAction); } if (actionBars != null) {
-		 * actionBars.setGlobalActionHandler(ActionFactory.COPY.getId(), copyAction); }
+		 * copyAction = createCopyAction(); if (copyAction != null) {
+		 * toolbar.appendToGroup(ADD_REMOVE_GROUP, copyAction); } if (actionBars !=
+		 * null) { actionBars.setGlobalActionHandler(ActionFactory.COPY.getId(),
+		 * copyAction); }
 		 * 
-		 * pasteAction = createPasteAction(); if (pasteAction != null) { toolbar.appendToGroup(ADD_REMOVE_GROUP, pasteAction); } if (actionBars != null) {
-		 * actionBars.setGlobalActionHandler(ActionFactory.COPY.getId(), pasteAction); }
+		 * pasteAction = createPasteAction(); if (pasteAction != null) {
+		 * toolbar.appendToGroup(ADD_REMOVE_GROUP, pasteAction); } if (actionBars !=
+		 * null) { actionBars.setGlobalActionHandler(ActionFactory.COPY.getId(),
+		 * pasteAction); }
 		 */
 
 		Action copyToClipboardAction = null;
@@ -1144,7 +1154,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(sp.getEvent_Start(), editingDomain) {
 
 						/**
-						 * FM had to copy the entire code from com.mmxlabs.lingo.reports.views.formatters AsLocalDateFormatter from getLocalDate() to not create cross dependency
+						 * FM had to copy the entire code from
+						 * com.mmxlabs.lingo.reports.views.formatters AsLocalDateFormatter from
+						 * getLocalDate() to not create cross dependency
 						 */
 						@Override
 						public String renderSetValue(final Object owner, final Object object) {
@@ -1192,7 +1204,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(sp.getEvent_Start(), editingDomain) {
 
 						/**
-						 * FM had to copy the entire code from com.mmxlabs.lingo.reports.views.formatters AsLocalDateFormatter from getLocalDate() to not create cross dependency
+						 * FM had to copy the entire code from
+						 * com.mmxlabs.lingo.reports.views.formatters AsLocalDateFormatter from
+						 * getLocalDate() to not create cross dependency
 						 */
 						@Override
 						public String renderSetValue(final Object owner, final Object object) {
@@ -1237,7 +1251,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		addTradesColumn(dischargeColumns, "Vol", new VolumeAttributeManipulator(pkg.getSlot_MaxQuantity(), editingDomain), new RowDataEMFPath(false, Type.DISCHARGE)).getColumn()
 				.setHeaderTooltip("in m³ or mmBtu");
 		addTradesColumn(dischargeColumns, "Port", new SingleReferenceManipulator(pkg.getSlot_Port(), provider, editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
-		// addTradesColumn(dischargeColumns, "D-ID", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
+		// addTradesColumn(dischargeColumns, "D-ID", new
+		// BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(),
+		// editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
 		{
 			final BasicAttributeManipulator manipulator = new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain);
 			final RowDataEMFPath assignmentPath = new RowDataEMFPath(false, Type.DISCHARGE);
@@ -1274,11 +1290,17 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			}
 		}
 
-		// addPNLColumn("P&L (Trade)", CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK,
-		// new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getProfitAndLossContainer_GroupProfitAndLoss(), editingDomain),
+		// addPNLColumn("P&L (Trade)",
+		// CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK,
+		// new
+		// BasicAttributeManipulator(SchedulePackage.eINSTANCE.getProfitAndLossContainer_GroupProfitAndLoss(),
+		// editingDomain),
 		// new RowDataEMFPath(true, Type.CARGO_OR_MARKET_OR_OPEN_ALLOCATION));
-		// addPNLColumn("P&L (Shipping)", CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK,
-		// new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getProfitAndLossContainer_GroupProfitAndLoss(), editingDomain),
+		// addPNLColumn("P&L (Shipping)",
+		// CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK,
+		// new
+		// BasicAttributeManipulator(SchedulePackage.eINSTANCE.getProfitAndLossContainer_GroupProfitAndLoss(),
+		// editingDomain),
 		// new RowDataEMFPath(true, Type.CARGO_OR_MARKET_OR_OPEN_ALLOCATION));
 		if (SecurityUtils.getSubject().isPermitted("features:report-equity-book")) {
 			addPNLColumn("P&L (Equity)", CommercialPackage.Literals.BASE_LEGAL_ENTITY__UPSTREAM_BOOK,
@@ -1310,7 +1332,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					final GridItem item = items[idx - 1];
 					heights[idx] = 1 + heights[idx - 1] + item.getHeight();
 				}
-				// Find the row at the top of the table and get it's "height" so we can adjust it later
+				// Find the row at the top of the table and get it's "height" so we can adjust
+				// it later
 				final int vPod = getScenarioViewer().getGrid().getVerticalBar().getSelection();
 				final int hOffset = (heights[vPod]) - getScenarioViewer().getGrid().getHeaderHeight();
 				// Pass 2 get mid-points
@@ -1369,9 +1392,12 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				if (!foundColumn) {
 					return null;
 				}
-				// This used to be based in column index, now for some reason it is px based. If the old behaviour re-appears, then this value is the second for loop initialiser value.
+				// This used to be based in column index, now for some reason it is px based. If
+				// the old behaviour re-appears, then this value is the second for loop
+				// initialiser value.
 				offset -= getScenarioViewer().getGrid().getHorizontalBar().getSelection();
-				// TODO: Take into account h scroll final int colWidth = getScenarioViewer().getGrid().getColumn(wiringColumnIndex).getWidth();
+				// TODO: Take into account h scroll final int colWidth =
+				// getScenarioViewer().getGrid().getColumn(wiringColumnIndex).getWidth();
 				return new Rectangle(area.x + offset, area.y + getScenarioViewer().getGrid().getHeaderHeight(), wiringColumn.getColumn().getWidth(), area.height);
 			}
 		};
@@ -1477,14 +1503,12 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		LocalDate erl = result;
 
 		for (final LoadSlot ls : cargoModel.getLoadSlots()) {
-			if (ls.getSchedulingTimeWindow().getEnd() != null &&
-				erl.isBefore(ls.getSchedulingTimeWindow().getEnd().toLocalDate())) {
+			if (ls.getSchedulingTimeWindow().getEnd() != null && erl.isBefore(ls.getSchedulingTimeWindow().getEnd().toLocalDate())) {
 				erl = ls.getSchedulingTimeWindow().getEnd().toLocalDate();
 			}
 		}
 		for (final DischargeSlot ds : cargoModel.getDischargeSlots()) {
-			if (ds.getSchedulingTimeWindow().getEnd() != null &&
-				erl.isBefore(ds.getSchedulingTimeWindow().getEnd().toLocalDate())) {
+			if (ds.getSchedulingTimeWindow().getEnd() != null && erl.isBefore(ds.getSchedulingTimeWindow().getEnd().toLocalDate())) {
 				erl = ds.getSchedulingTimeWindow().getEnd().toLocalDate();
 			}
 		}
@@ -1694,7 +1718,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	 */
 	protected void doWiringChanged(final Map<RowData, RowData> newWiring, final boolean ctrlPressed) {
 
-		final boolean createComplexCargo = ctrlPressed && LicenseFeatures.isPermitted("features:complex-cargo");
+		final boolean swapDischarges = ctrlPressed;
+		// Complex cargoes no longer supported in wiring DND
+		final boolean createComplexCargo = false; // ctrlPressed && LicenseFeatures.isPermitted("features:complex-cargo")
 
 		final List<Command> setCommands = new LinkedList<>();
 
@@ -1723,7 +1749,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					} else {
 						c = loadSide.cargo;
 
-						if (!createComplexCargo) {
+						// Swap discharges will take care of this later if needed
+						if (!createComplexCargo && !swapDischarges) {
 							// Break the existing wiring
 							for (final Slot<?> s : c.getSlots()) {
 								if (s != loadSide.loadSlot) {
@@ -1733,7 +1760,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 									if (s instanceof SpotSlot && s.isOptional()) {
 										slotsToRemove.add(s);
 									}
-
 								}
 							}
 						}
@@ -1760,22 +1786,48 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 							dischargeCargo = dischargeSide.dischargeSlot.getCargo();
 						}
 						if (dischargeCargo != null) {
-							if (dischargeCargo.getSlots().size() <= 2) {
-								for (final Slot<?> s : dischargeCargo.getSlots()) {
-									if (s != dischargeSide.dischargeSlot) {
-										setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), s, CargoPackage.eINSTANCE.getSlot_Cargo(), null));
-
-										// Optional market slots can be removed.
-										if (s instanceof SpotSlot && s.isOptional()) {
-											slotsToRemove.add(s);
-										}
-
+							// Make sure the discharge from the original load is now passed into the new
+							// cargo
+							if (swapDischarges && loadSide.dischargeSlot != null) {
+								// Break the existing wiring
+								for (final Slot<?> s : c.getSlots()) {
+									if (s != loadSide.loadSlot) {
+										setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), s, CargoPackage.eINSTANCE.getSlot_Cargo(), dischargeCargo));
 									}
 								}
-								cargoesToRemove.add(dischargeCargo);
 							} else {
-								// Kept cargoes should not force fixed wiring after a change
-								setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), dischargeCargo, CargoPackage.Literals.CARGO__ALLOW_REWIRING, Boolean.TRUE));
+								// We want to break up the discharge cargo
+								if (dischargeCargo.getSlots().size() <= 2) {
+									for (final Slot<?> s : dischargeCargo.getSlots()) {
+										if (s != dischargeSide.dischargeSlot) {
+											setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), s, CargoPackage.eINSTANCE.getSlot_Cargo(), null));
+
+											// Optional market slots can be removed.
+											if (s instanceof SpotSlot && s.isOptional()) {
+												slotsToRemove.add(s);
+											}
+
+										}
+									}
+									cargoesToRemove.add(dischargeCargo);
+								} else {
+									// Kept cargoes should not force fixed wiring after a change
+									setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), dischargeCargo, CargoPackage.Literals.CARGO__ALLOW_REWIRING, Boolean.TRUE));
+								}
+							}
+						} else if (swapDischarges) {
+							// Swapping discharges, but we don't have a pair of cargoes, so fall back to non-swap behaviour.
+							
+							// Break the existing wiring
+							for (final Slot<?> s : c.getSlots()) {
+								if (s != loadSide.loadSlot) {
+									setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), s, CargoPackage.eINSTANCE.getSlot_Cargo(), dischargeCargo));
+
+									// Optional market slots can be removed.
+									if (s instanceof SpotSlot && s.isOptional()) {
+										slotsToRemove.add(s);
+									}
+								}
 							}
 						}
 					}
@@ -1829,7 +1881,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		if (currentWiringCommand.isEmpty()) {
 			return;
 		}
-		// TODO: Race conditions in the app can cause this command to fail. If two editing command happen too quickly, the first command could have executed but the second command is created
+		// TODO: Race conditions in the app can cause this command to fail. If two
+		// editing command happen too quickly, the first command could have executed but
+		// the second command is created
 		// before the UI state has refreshed properly (due to various asyncExec calls).
 		BusyIndicator.showWhile(null, () -> scenarioEditingLocation.getEditingDomain().getCommandStack().execute(currentWiringCommand));
 	}
@@ -2130,10 +2184,10 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 	private class FilterMenuAction extends DefaultMenuCreatorAction {
 		/**
-		 * A holder for a menu list of filter actions on different fields for the trades wiring table.
+		 * A holder for a menu list of filter actions on different fields for the trades
+		 * wiring table.
 		 * 
-		 * @param label
-		 *            The label to show in the UI for this menu.
+		 * @param label The label to show in the UI for this menu.
 		 */
 		public FilterMenuAction(final String label) {
 			super(label);
@@ -2302,13 +2356,13 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			};
 
 			addActionToMenu(dmcaTimePeriod, menu);
-			
+
 			if (extraFiltersProvider != null) {
 				for (final DefaultMenuCreatorAction edmca : extraFiltersProvider.getExtraMenuActions(scenarioViewer)) {
 					addActionToMenu(edmca, menu);
 				}
 			}
-			
+
 			// TODO : Consider using TradesBasedFilterHandler!
 		}
 	}
@@ -2319,16 +2373,17 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		private final IEMFPath filterPath;
 
 		/**
-		 * An action which updates the filter on the trades wiring table and refreshes the table.
+		 * An action which updates the filter on the trades wiring table and refreshes
+		 * the table.
 		 * 
-		 * @param label
-		 *            The label to associate with this action (the feature from the cargo row it represents).
-		 * @param sourceObject
-		 *            The source object in the EMF model which holds the list of possible values for the filter.
-		 * @param sourceFeature
-		 *            The EMF feature of the source object where the list of possible values resides.
-		 * @param filterPath
-		 *            The path within a cargo row object of the field which the table is being filtered on.
+		 * @param label         The label to associate with this action (the feature
+		 *                      from the cargo row it represents).
+		 * @param sourceObject  The source object in the EMF model which holds the list
+		 *                      of possible values for the filter.
+		 * @param sourceFeature The EMF feature of the source object where the list of
+		 *                      possible values resides.
+		 * @param filterPath    The path within a cargo row object of the field which
+		 *                      the table is being filtered on.
 		 */
 		public FilterAction(final String label, final EObject sourceObject, final EStructuralFeature sourceFeature, final IEMFPath filterPath) {
 			super(label);
@@ -2345,7 +2400,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			// Get the labels to populate the menu from the source object in the EMF model
 			final EList<NamedObject> values = (EList<NamedObject>) sourceObject.eGet(sourceFeature);
 			final List<NamedObject> copiedValues = new LinkedList(values);
-			Collections.sort(copiedValues, (a,b) -> {
+			Collections.sort(copiedValues, (a, b) -> {
 				if (a != null && a.getName() != null && b != null) {
 					return a.getName().compareTo(b.getName());
 				}
@@ -2366,7 +2421,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					final Action action = createAction(value);
 					collection.add(action);
 					counter++;
-					
+
 					if (counter == 15) {
 						addListOfActionsToMenu(menu, firstEntry, lastEntry, collection);
 						counter = 0;
@@ -2378,7 +2433,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			} else {
 				// Show the list of labels (one for each item in the source object feature)
 				for (final NamedObject value : copiedValues) {
-					
+
 					final Action action = createAction(value);
 					addActionToMenu(action, menu);
 				}
@@ -2387,7 +2442,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		}
 
 		private Action createAction(final NamedObject value) {
-			// WEIRD: action returns wrong value from isChecked() so set the checked value here
+			// WEIRD: action returns wrong value from isChecked() so set the checked value
+			// here
 			// A label is checked if it is the value already selected in the trades filter
 			final boolean checked = tradesFilter.getFilterValue(filterPath) == value;
 			final Action action = new Action(value.getName(), IAction.AS_RADIO_BUTTON) {
@@ -2405,10 +2461,10 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 		private void addListOfActionsToMenu(final Menu menu, String firstEntry, String lastEntry, final List<Action> collection) {
 			final String title = String.format("%s ... %s", firstEntry, lastEntry);
-			
+
 			final DefaultMenuCreatorAction dmca = new DefaultMenuCreatorAction(title) {
 				final List<Action> local = new LinkedList<>(collection);
-				
+
 				@Override
 				protected void populate(Menu menu) {
 					for (final Action a : this.local) {
@@ -2431,8 +2487,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		/**
 		 * Subclasses should fill their menu with actions here.
 		 * 
-		 * @param menu
-		 *            the menu which is about to be displayed
+		 * @param menu the menu which is about to be displayed
 		 */
 		protected void populate(final Menu menu) {
 			{
@@ -2592,7 +2647,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			newSlot.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 			newSlot.setOptional(false);
 			newSlot.setName("");
-			// Set window so that via default sorting inserts new slot at current table position
+			// Set window so that via default sorting inserts new slot at current table
+			// position
 			if (referenceRowData != null) {
 				final Slot<?> primarySortSlot = isLoad ? referenceRowData.loadSlot : referenceRowData.dischargeSlot;
 				final Slot<?> secondarySortSlot = isLoad ? referenceRowData.dischargeSlot : referenceRowData.loadSlot;
@@ -2608,7 +2664,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	}
 
 	/**
-	 * A combined {@link MouseListener} and {@link MouseMoveListener} to scroll the table during wiring operations.
+	 * A combined {@link MouseListener} and {@link MouseMoveListener} to scroll the
+	 * table during wiring operations.
 	 * 
 	 */
 	private class WiringDiagramMouseListener implements MouseListener, MouseMoveListener {
@@ -2673,7 +2730,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 						}
 						if (item2 != null && vScroll != 0) {
-							// Almost! it will show part of the item, but it may be obscured by the h.scroll bar
+							// Almost! it will show part of the item, but it may be obscured by the h.scroll
+							// bar
 							getScenarioViewer().getGrid().showItem(item2);
 						}
 						getScenarioViewer().refresh();
@@ -2742,8 +2800,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		/**
 		 * Subclasses should fill their menu with actions here.
 		 * 
-		 * @param menu
-		 *            the menu which is about to be displayed
+		 * @param menu the menu which is about to be displayed
 		 */
 		protected void populate(final Menu menu) {
 
