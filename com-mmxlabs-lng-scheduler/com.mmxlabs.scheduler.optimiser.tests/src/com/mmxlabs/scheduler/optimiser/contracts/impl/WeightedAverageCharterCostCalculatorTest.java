@@ -12,7 +12,8 @@ public class WeightedAverageCharterCostCalculatorTest {
 	@Test
 	public void testConstantValueCharterRate() {
 		ConstantValueLongCurve charterRate = new ConstantValueLongCurve(9);
-		WeightedAverageCharterCostCalculator waccc = new WeightedAverageCharterCostCalculator(charterRate);	
+		WeightedAverageCharterCostCalculator waccc = new WeightedAverageCharterCostCalculator();
+		waccc.setCharterRateCurve(charterRate);
 		assertEquals(9*21, waccc.getCharterCost(0, 0, 0, 21*24));
 	}
 	
@@ -22,7 +23,8 @@ public class WeightedAverageCharterCostCalculatorTest {
 		monthlyCharterRate.setValueAfter(0, 10000);
 		monthlyCharterRate.setValueAfter(31*24, 20000);
 		monthlyCharterRate.setValueAfter(31*2*24, 30000);
-		WeightedAverageCharterCostCalculator waccc = new WeightedAverageCharterCostCalculator(monthlyCharterRate);			
+		WeightedAverageCharterCostCalculator waccc = new WeightedAverageCharterCostCalculator();			
+		waccc.setCharterRateCurve(monthlyCharterRate);
 		assertEquals(15000 * 31 * 2, waccc.getCharterCost(0, 0, 0, 31*2*24));
 	}
 	
@@ -32,7 +34,8 @@ public class WeightedAverageCharterCostCalculatorTest {
 		monthlyCharterRate.setDefaultValue(10000);
 		monthlyCharterRate.setValueAfter(31*24, 20000);
 		monthlyCharterRate.setValueAfter(31*2*24, 30000);
-		WeightedAverageCharterCostCalculator waccc = new WeightedAverageCharterCostCalculator(monthlyCharterRate);
+		WeightedAverageCharterCostCalculator waccc = new WeightedAverageCharterCostCalculator();
+		waccc.setCharterRateCurve(monthlyCharterRate);
 		assertEquals(15000 * 31 * 2, waccc.getCharterCost(0, 0, 0, 31*2*24));
 	}
 }
