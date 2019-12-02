@@ -64,8 +64,10 @@ import com.mmxlabs.scheduler.optimiser.components.impl.BaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.impl.ConstantHeelPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.HeelOptionConsumer;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.CharterRateToCharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselStartDateCharterRateCalculator;
@@ -1109,6 +1111,7 @@ public class TestCalculations {
 				bind(CalendarMonthMapper.class).toInstance(Mockito.mock(CalendarMonthMapper.class));
 				bind(ScheduleCalculator.class);
 				bind(ICharterRateCalculator.class).to(VesselStartDateCharterRateCalculator.class);
+				bind(ICharterCostCalculator.class).to(CharterRateToCharterCostCalculator.class);
 				bind(IVolumeAllocator.class).toInstance(volumeAllocator);
 				bind(SchedulerBuilder.class);
 				bind(ILNGVoyageCalculator.class).to(LNGVoyageCalculator.class);
