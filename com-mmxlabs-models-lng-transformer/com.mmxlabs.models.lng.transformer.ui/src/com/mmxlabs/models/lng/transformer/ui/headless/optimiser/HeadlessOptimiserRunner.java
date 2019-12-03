@@ -141,9 +141,6 @@ public class HeadlessOptimiserRunner {
 
 		final OptimiserConfigurationOptions ocOptions = getOrCreateConfigOptions(options, sdp);		
 		
-		// override scenario prompt dates from input options (TODO: remove this?)
-		createPromptDates((LNGScenarioModel) sdp.getScenario(), ocOptions.other);
-
 		final int num_threads = ocOptions.getNumThreads();
 
 		OptimisationPlan optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(ocOptions.plan, true, false); // incorporate the settings from the parameterModesRegistry
@@ -285,28 +282,6 @@ public class HeadlessOptimiserRunner {
 			executorService.shutdownNow();
 		}
 		return false;
-	}
-
-	private void createPromptDates(final LNGScenarioModel scenario, JsonNode other) {
-		LocalDate promptEnd = null;
-		LocalDate promptStart = null;
-
-		if (other != null && other.has("period-data")) {
-			JsonNode periodData = other.get("period-data");
-
-			if (periodData.has("prompt-end")) {
-				String promptEndText = periodData.get("prompt-end").asText();
-				promptEnd = LocalDate.parse(promptEndText);
-			}
-
-			if (periodData.has("prompt-start")) {
-				String promptStartText = periodData.get("prompt-start").asText();
-				promptStart = LocalDate.parse(promptStartText);
-			}
-		}
-
-		scenario.setPromptPeriodEnd(promptEnd);
-		scenario.setPromptPeriodEnd(promptStart);
 	}
 
 	private void exportData(final Map<String, LSOLogger> loggerMap, final ActionSetLogger actionSetLogger, final String path, final boolean verbose) {
