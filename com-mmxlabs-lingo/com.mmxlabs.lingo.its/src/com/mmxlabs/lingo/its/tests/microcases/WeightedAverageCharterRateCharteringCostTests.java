@@ -14,8 +14,11 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -25,6 +28,10 @@ import com.google.inject.Injector;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.parameters.OptimisationPlan;
+import com.mmxlabs.models.lng.parameters.ParametersFactory;
+import com.mmxlabs.models.lng.parameters.SimilarityMode;
+import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.pricing.CharterCurve;
 import com.mmxlabs.models.lng.pricing.YearMonthPoint;
@@ -34,17 +41,25 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
+import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
+import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
+import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.WeightedAverageCharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
+import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
+import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService.ModuleType;
+import com.mmxlabs.scheduler.optimiser.peaberry.OptimiserInjectorServiceMaker;
 import com.mmxlabs.scheduler.optimiser.schedule.ShippingCostHelper;
 
 /***
@@ -54,6 +69,34 @@ import com.mmxlabs.scheduler.optimiser.schedule.ShippingCostHelper;
 public class WeightedAverageCharterRateCharteringCostTests extends AbstractMicroTestCase {
 	
 	private CharterCurve charterCurve;
+
+	public void evaluateTest(@Nullable final Consumer<OptimisationPlan> tweaker, @Nullable final Function<LNGScenarioRunner, IRunnerHook> runnerHookFactory,
+			@NonNull final Consumer<LNGScenarioRunner> checker) {
+
+		// Create UserSettings
+		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
+		userSettings.setBuildActionSets(false);
+		userSettings.setGenerateCharterOuts(false);
+		userSettings.setShippingOnly(false);
+		userSettings.setSimilarityMode(SimilarityMode.OFF);
+
+		IOptimiserInjectorService optimiserInjectorService = OptimiserInjectorServiceMaker.begin().withModuleOverrideBind(ModuleType.Module_LNGTransformerModule, ICharterCostCalculator.class, WeightedAverageCharterCostCalculator.class).make();
+		
+		LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null) //
+				.withOptimisationPlanCustomiser(tweaker) //
+				.withRunnerHookFactory(runnerHookFactory) //
+				.withUserSettings(userSettings) //
+				.withOptimiserInjectorService(optimiserInjectorService)
+				.withThreadCount(getThreadCount()) //
+				.buildDefaultRunner();
+
+		try {
+			runnerBuilder.evaluateInitialState();
+			runnerBuilder.run(false, checker);
+		} finally {
+			runnerBuilder.dispose();
+		}
+	}	
 	
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
