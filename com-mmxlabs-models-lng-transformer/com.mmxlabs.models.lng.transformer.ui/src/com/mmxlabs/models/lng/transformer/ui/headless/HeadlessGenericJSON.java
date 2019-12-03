@@ -63,6 +63,7 @@ public abstract class HeadlessGenericJSON<T extends HeadlessGenericJSON.Params, 
 		private String scenario;
 		private String checkSum;
 		private LocalDateTime date;
+		private String useCase;
 		private String version;
 		private String client;		
 		private Map<String, String> customInfo;
@@ -130,6 +131,14 @@ public abstract class HeadlessGenericJSON<T extends HeadlessGenericJSON.Params, 
 
 		public void setCheckSum(String checkSum) {
 			this.checkSum = checkSum;
+		}
+
+		public String getUseCase() {
+			return useCase;
+		}
+
+		public void setUseCase(String useCase) {
+			this.useCase = useCase;
 		}
 	}
 

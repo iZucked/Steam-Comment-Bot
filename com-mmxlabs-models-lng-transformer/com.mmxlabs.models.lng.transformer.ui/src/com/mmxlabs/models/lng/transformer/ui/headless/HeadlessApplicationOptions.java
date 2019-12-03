@@ -18,6 +18,11 @@ public class HeadlessApplicationOptions {
 	public String scenarioFileName;
 	
 	/**
+	 * The use-case handle associated with the data.
+	 */
+	public String useCase;
+	
+	/**
 	 * The name of the file containing config information for the algorithm being run on the scenario.
 	 */
 	public String algorithmConfigFile; 

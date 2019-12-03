@@ -30,13 +30,7 @@ public class HeadlessOptioniserApplication extends HeadlessGenericApplication {
 		HeadlessOptioniserRunner.Options options = getAlgorithmOptionsFromJSON(hOptions.algorithmConfigFile, HeadlessOptioniserRunner.Options.class);		
 		
 		HeadlessOptioniserJSON json = (new HeadlessOptioniserJSONTransformer()).createJSONResultObject(getDefaultMachineInfo(), (HeadlessOptioniserRunner.Options) options, scenarioFile, threads);
-		json.getMeta().setCheckSum(mD5Checksum(scenarioFile));
-		json.getMeta().setClient(clientCode);
-		json.getMeta().setVersion(buildVersion);
-		json.getMeta().setMachineType(machineInfo);
-		json.getMeta().setCustomInfo(hOptions.customInfo);	
-		json.getMeta().setMaxHeapSize(Runtime.getRuntime().maxMemory());
-		json.getParams().setCores(threads);		
+		writeMetaFields(json, scenarioFile, hOptions, threads);
 
 		SlotInsertionOptimiserLogger logger = new SlotInsertionOptimiserLogger();
 		

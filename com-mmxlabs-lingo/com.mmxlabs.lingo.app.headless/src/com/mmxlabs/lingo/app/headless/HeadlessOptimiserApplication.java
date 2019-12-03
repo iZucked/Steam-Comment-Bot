@@ -70,13 +70,7 @@ public class HeadlessOptimiserApplication extends HeadlessGenericApplication {
 	 */
 	protected void runAndWriteResults(int run, HeadlessApplicationOptions hOptions, File scenarioFile, File outputFile, int threads) throws Exception {
 		HeadlessOptimiserJSON json = (new HeadlessOptimiserJSONTransformer()).createJSONResultObject(getDefaultMachineInfo(), scenarioFile, threads);
-		json.getMeta().setCheckSum(mD5Checksum(scenarioFile));		
-		json.getMeta().setClient(clientCode);
-		json.getMeta().setVersion(buildVersion);
-		json.getMeta().setMachineType(machineInfo);
-		json.getMeta().setCustomInfo(hOptions.customInfo);
-		json.getMeta().setMaxHeapSize(Runtime.getRuntime().maxMemory());
-		json.getParams().setCores(threads);
+		writeMetaFields(json, scenarioFile, hOptions, threads);
 
 		HeadlessOptimiserRunner runner = new HeadlessOptimiserRunner();
 		

@@ -42,6 +42,7 @@ import com.mmxlabs.license.ssl.LicenseChecker;
 import com.mmxlabs.license.ssl.LicenseChecker.InvalidLicenseException;
 import com.mmxlabs.license.ssl.LicenseChecker.LicenseState;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessApplicationOptions;
+import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessGenericJSON;
 import com.mmxlabs.rcp.common.json.EMFJacksonModule;
 
 
@@ -83,6 +84,7 @@ public abstract class HeadlessGenericApplication implements IApplication {
 	protected static final String JSON = "json";
 	protected static final String NUM_RUNS = "numRuns";
 	protected static final String CUSTOM_INFO = "custom";
+	protected static final String USE_CASE = "useCase";
 	
 	protected String clientCode;
 	protected String machineInfo;
@@ -164,6 +166,18 @@ public abstract class HeadlessGenericApplication implements IApplication {
 	}
 	
 	protected abstract String getAlgorithmName();
+	
+	protected void writeMetaFields(HeadlessGenericJSON<?,?> json, File scenarioFile, HeadlessApplicationOptions hOptions, int threads) {
+		json.getMeta().setCheckSum(mD5Checksum(scenarioFile));
+		json.getMeta().setUseCase(hOptions.useCase);
+		json.getMeta().setClient(clientCode);
+		json.getMeta().setVersion(buildVersion);
+		json.getMeta().setMachineType(machineInfo);
+		json.getMeta().setCustomInfo(hOptions.customInfo);
+		json.getMeta().setMaxHeapSize(Runtime.getRuntime().maxMemory());
+		json.getParams().setCores(threads);
+	}
+	
 	
 	private void writeRunFailure(HeadlessApplicationOptions hOptions, int run, Exception e) {
 		if (hOptions.outputLoggingFolder != null) {
@@ -313,6 +327,7 @@ public abstract class HeadlessGenericApplication implements IApplication {
 			options.algorithmConfigFile = commandLineParameterOrValue(JSON, options.algorithmConfigFile);
 			options.scenarioFileName = commandLineParameterOrValue(INPUT_SCENARIO, options.scenarioFileName);
 			options.numRuns = Integer.parseInt(commandLineParameterOrValue(NUM_RUNS, Integer.toString(options.numRuns)));			
+			options.useCase = commandLineParameterOrValue(USE_CASE, options.useCase);			
 		}
 		
 		return optionsList;
@@ -433,6 +448,7 @@ public abstract class HeadlessGenericApplication implements IApplication {
 
 		options.addOption(OptionBuilder.withLongOpt(BATCH_FILE).withDescription("File listing a batch of jobs to run").hasArg().create());
 		options.addOption(OptionBuilder.withLongOpt(CUSTOM_INFO).withDescription("Custom information (using name=val syntax)").hasArg().create());
+		options.addOption(OptionBuilder.withLongOpt(USE_CASE).withDescription("Use-case handle").hasArg().create());
 
 		options.addOption(OptionBuilder.withLongOpt(INPUT_SCENARIO).withDescription("Input scenario file").hasArg().create());
 		options.addOption(OptionBuilder.withLongOpt(OUTPUT_SCENARIO).withDescription("Output scenario file").hasArg().create());
