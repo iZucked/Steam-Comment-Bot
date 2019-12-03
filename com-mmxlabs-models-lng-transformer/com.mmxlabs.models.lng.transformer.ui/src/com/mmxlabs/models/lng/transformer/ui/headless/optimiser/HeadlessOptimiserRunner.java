@@ -44,6 +44,7 @@ import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.AbstractRunnerHook;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
@@ -116,36 +117,36 @@ public class HeadlessOptimiserRunner {
 	 * @param sdp
 	 * @return
 	 */
-	public static @NonNull OptimisationPlan getOrCreatePlan(final OptimiserConfigurationOptions ocOptions, @NonNull final IScenarioDataProvider sdp) {
-		// check if the plan has any stages: if so, treat it as a "complete" plan
-		if (ocOptions != null && ocOptions.plan != null && ocOptions.plan.getStages().size() > 0) {
-			final OptimisationPlan plan = ocOptions.plan;
-			if (plan != null && plan.getStages().size() > 0) {
-				return plan;
-			}
-		}
-
-		final boolean hasPlan = (ocOptions != null && ocOptions.plan != null);
-
-		// if the plan has no stages (or is null), we will generate a new plan from any user settings there  
-		final UserSettings planSettings = (hasPlan ? ocOptions.plan.getUserSettings() : null);
+	public static @NonNull OptimiserConfigurationOptions getOrCreateConfigOptions(HeadlessApplicationOptions options, @NonNull final IScenarioDataProvider sdp) {
+		final OptimiserConfigurationOptions result;
 		
-		final @NonNull UserSettings userSettings = (planSettings == null ? ScenarioUtils.createDefaultUserSettings() : planSettings);
-		return OptimisationHelper.transformUserSettings(userSettings, null, sdp.getTypedScenario(LNGScenarioModel.class));
+		if (options.algorithmConfigFile != null) {
+			result = OptimiserConfigurationOptions.readFromFile(options.algorithmConfigFile, options.customInfo);						
+		}
+		else {
+			result = new OptimiserConfigurationOptions();
+			
+			final UserSettings optionSettings = options.userSettings;
+			final @NonNull UserSettings userSettings = (optionSettings == null ? ScenarioUtils.createDefaultUserSettings() : optionSettings);
+			result.plan = OptimisationHelper.transformUserSettings(userSettings, null, sdp.getTypedScenario(LNGScenarioModel.class));
+			result.overrideNumThreads(LNGScenarioChainBuilder.getNumberOfAvailableCores());
+			
+		}		
+		
+		return result;
 	}
 
 	public boolean run(final HeadlessApplicationOptions options, @NonNull final IScenarioDataProvider sdp, IProgressMonitor monitor,
 			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook, HeadlessOptimiserJSON jsonOutput) {
 
-		final OptimiserConfigurationOptions ocOptions = OptimiserConfigurationOptions.readFromFile(options.algorithmConfigFile, options.customInfo);		
+		final OptimiserConfigurationOptions ocOptions = getOrCreateConfigOptions(options, sdp);		
 		
-		@NonNull OptimisationPlan optimisationPlan = getOrCreatePlan(ocOptions, sdp);
-		
+		// override scenario prompt dates from input options (TODO: remove this?)
 		createPromptDates((LNGScenarioModel) sdp.getScenario(), ocOptions.other);
 
 		final int num_threads = ocOptions.getNumThreads();
 
-		optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(optimisationPlan, true, false); // incorporate the settings from the parameterModesRegistry
+		OptimisationPlan optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(ocOptions.plan, true, false); // incorporate the settings from the parameterModesRegistry
 
 		// Ensure dir structure is in place
 		boolean exportLogs = options.isLoggingExportRequired();
@@ -181,7 +182,7 @@ public class HeadlessOptimiserRunner {
 
 			};
 
-			final boolean doInjections = OptimiserConfigurationOptions.requiresInjections(ocOptions);
+			final boolean doInjections = OptimiserConfigurationOptions.requiresInjections(ocOptions) || exportLogs;
 			
 			// Create logging module
 			final IOptimiserInjectorService localOverrides = (doInjections == false) ? null : new IOptimiserInjectorService() {
@@ -194,7 +195,9 @@ public class HeadlessOptimiserRunner {
 				@Nullable
 				public List<@NonNull Module> requestModuleOverrides(@NonNull final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
 					if (moduleType == ModuleType.Module_EvaluationParametersModule) {
-						return Collections.<@NonNull Module>singletonList(new EvaluationSettingsOverrideModule(ocOptions.injections));
+						if (ocOptions.injections != null) {
+							return Collections.<@NonNull Module>singletonList(new EvaluationSettingsOverrideModule(ocOptions.injections));
+						}
 					}
 					if (moduleType == ModuleType.Module_OptimisationParametersModule) {
 						return Collections.<@NonNull Module>singletonList(new OptimisationSettingsOverrideModule());
@@ -202,9 +205,11 @@ public class HeadlessOptimiserRunner {
 					if (moduleType == ModuleType.Module_Optimisation) {
 						final LinkedList<@NonNull Module> modules = new LinkedList<>();
 						if (exportLogs) {
-							modules.add(createLoggingModule(ocOptions.loggingParameters, phaseToLoggerMap, actionSetLogger, runnerHook));
+							modules.add(createLoggingModule(options.loggingParameters, phaseToLoggerMap, actionSetLogger, runnerHook));
 						}
-						modules.add(new LNGOptimisationOverrideModule(ocOptions.injections));
+						if (ocOptions.injections != null) {
+							modules.add(new LNGOptimisationOverrideModule(ocOptions.injections));
+						}
 						return modules;
 					}
 					return null;
@@ -286,7 +291,7 @@ public class HeadlessOptimiserRunner {
 		LocalDate promptEnd = null;
 		LocalDate promptStart = null;
 
-		if (other.has("period-data")) {
+		if (other != null && other.has("period-data")) {
 			JsonNode periodData = other.get("period-data");
 
 			if (periodData.has("prompt-end")) {
