@@ -29,7 +29,8 @@ public class HeadlessOptioniserApplication extends HeadlessGenericApplication {
 	protected void runAndWriteResults(int run, HeadlessApplicationOptions hOptions, File scenarioFile, File outputFile, int threads) throws Exception  {
 		HeadlessOptioniserRunner.Options options = getAlgorithmOptionsFromJSON(hOptions.algorithmConfigFile, HeadlessOptioniserRunner.Options.class);		
 		
-		HeadlessOptioniserJSON json = (new HeadlessOptioniserJSONTransformer()).createJSONResultObject(getDefaultMachineInfo(), (HeadlessOptioniserRunner.Options) options, scenarioFile, threads);							
+		HeadlessOptioniserJSON json = (new HeadlessOptioniserJSONTransformer()).createJSONResultObject(getDefaultMachineInfo(), (HeadlessOptioniserRunner.Options) options, scenarioFile, threads);
+		json.getMeta().setCheckSum(mD5Checksum(scenarioFile));
 		json.getMeta().setClient(clientCode);
 		json.getMeta().setVersion(buildVersion);
 		json.getMeta().setMachineType(machineInfo);

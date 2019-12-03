@@ -5,11 +5,14 @@
 package com.mmxlabs.lingo.app.headless;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.security.MessageDigest;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -39,6 +42,7 @@ import com.mmxlabs.license.ssl.LicenseChecker;
 import com.mmxlabs.license.ssl.LicenseChecker.InvalidLicenseException;
 import com.mmxlabs.license.ssl.LicenseChecker.LicenseState;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessApplicationOptions;
+import com.mmxlabs.rcp.common.json.EMFJacksonModule;
 
 
 /**
@@ -114,6 +118,7 @@ public abstract class HeadlessGenericApplication implements IApplication {
 	 * @param hOptions
 	 */
 	protected void runScenarioMultipleTimes(HeadlessApplicationOptions hOptions) {
+		hOptions.validate();
 		final String scenarioFilename = hOptions.scenarioFileName;
 		
 		if (scenarioFilename == null || scenarioFilename.isEmpty()) {
@@ -292,6 +297,7 @@ public abstract class HeadlessGenericApplication implements IApplication {
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.registerModule(new JavaTimeModule());
 			mapper.registerModule(new Jdk8Module());
+			mapper.registerModule(new EMFJacksonModule());
 			optionsList.addAll(mapper.readValue(new File(commandLine.getOptionValue(BATCH_FILE)), new TypeReference<List<HeadlessApplicationOptions>>() {
 			}));
 		} else {
@@ -450,5 +456,33 @@ public abstract class HeadlessGenericApplication implements IApplication {
 		String machInfo = "AvailableProcessors:" + Integer.toString(Runtime.getRuntime().availableProcessors());
 		return machInfo;
 	}
+
+	private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
+	public static String bytesToHex(byte[] bytes) {
+	    char[] hexChars = new char[bytes.length * 2];
+	    for (int j = 0; j < bytes.length; j++) {
+	        int v = bytes[j] & 0xFF;
+	        hexChars[j * 2] = HEX_ARRAY[v >>> 4];
+	        hexChars[j * 2 + 1] = HEX_ARRAY[v & 0x0F];
+	    }
+	    return new String(hexChars);
+	}
+	
+	public String mD5Checksum(File input) {
+        try (InputStream in = new FileInputStream(input)) {
+            MessageDigest digest = MessageDigest.getInstance("MD5");
+            byte[] block = new byte[4096];
+            int length;
+            while ((length = in.read(block)) > 0) {
+                digest.update(block, 0, length);
+            }
+            String result = bytesToHex(digest.digest());
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
 }
