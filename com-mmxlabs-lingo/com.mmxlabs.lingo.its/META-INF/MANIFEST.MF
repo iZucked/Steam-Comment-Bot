@@ -68,7 +68,8 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.lngdataserver.integration.ports
 Bundle-ClassPath: data/,
  .
-Import-Package: org.junit.jupiter.api;version="5.1.0",
+Import-Package: org.junit;version="4.12.0",
+ org.junit.jupiter.api;version="5.1.0",
  org.junit.jupiter.api.extension;version="5.1.0",
  org.junit.jupiter.api.function;version="5.1.0",
  org.junit.jupiter.params;version="5.1.0",

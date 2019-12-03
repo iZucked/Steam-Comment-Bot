@@ -45,9 +45,24 @@ public class SchedulerCalculationUtils {
 
 
 	public long getVesselCharterInRatePerDay(final IVesselAvailability vesselAvailability, final int vesselStartTime, final int voyagePlanStartTime) {
+		/*
+		 * final long charterRatePerDay = schedulerCalculationUtils.getVesselCharterInRatePerDay(vesselAvailability, vesselStartTime, purchaseIntervals[purchaseIndex].start);
+
+		 */
+		
+		/*return schedulerCalculationUtils.getVesselCharterInRatePerDay(vesselAvailability, portTimeWindowRecord.getFirstSlotFeasibleTimeWindow().getInclusiveStart(),
+				portTimeWindowRecord.getFirstSlotFeasibleTimeWindow().getInclusiveStart());
+		*/
 		final long vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vesselAvailability, vesselStartTime, voyagePlanStartTime);
 		return vesselCharterInRatePerDay;
 	}
+/*	
+ * TODO: replace above method with this one.
+	public long getVesselCharterCost(final IVesselAvailability vesselAvailability, final int vesselStartTime, final int vesselEndTime) {
+		final long vesselCharterInRatePerDay = charterCostCalculator.getCharterCost(vesselAvailability, vesselStartTime, v);
+		return vesselCharterInRatePerDay;
+	}
+	*/
 	
 	/**
 	 * Determines whether the vessel should be considered optional, and consequently the charter

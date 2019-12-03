@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -30,11 +31,11 @@ public class CheckingVPO implements IVoyagePlanOptimiser {
 	}
 
 	@Override
-	public VoyagePlan optimise(@Nullable final IResource resource, @NonNull final IVessel vessel, final long[] startHeelRangeInM3, final int[] baseFuelPricesPerMT, final long vesselCharterInRatePerDay,
+	public VoyagePlan optimise(@Nullable final IResource resource, @NonNull final IVessel vessel, final long[] startHeelRangeInM3, final int[] baseFuelPricesPerMT, final ICharterCostCalculator charterCostCalculator,
 			@NonNull final IPortTimesRecord portTimesRecord, @NonNull final List<@NonNull IOptionsSequenceElement> basicSequence, @NonNull final List<@NonNull IVoyagePlanChoice> choices, int startingTime) {
 
-		final VoyagePlan ref = reference.optimise(resource, vessel, startHeelRangeInM3, baseFuelPricesPerMT, vesselCharterInRatePerDay, portTimesRecord, basicSequence, choices, startingTime);
-		final VoyagePlan res = cache.optimise(resource, vessel, startHeelRangeInM3, baseFuelPricesPerMT, vesselCharterInRatePerDay, portTimesRecord, basicSequence, choices, startingTime);
+		final VoyagePlan ref = reference.optimise(resource, vessel, startHeelRangeInM3, baseFuelPricesPerMT, charterCostCalculator, portTimesRecord, basicSequence, choices, startingTime);
+		final VoyagePlan res = cache.optimise(resource, vessel, startHeelRangeInM3, baseFuelPricesPerMT, charterCostCalculator, portTimesRecord, basicSequence, choices, startingTime);
 
 		@NonNull
 		String refStr = getString(ref);

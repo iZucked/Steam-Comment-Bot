@@ -11,6 +11,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -31,7 +32,7 @@ public interface IVoyagePlanOptimiser {
 	 * @return
 	 */
 	@Nullable
-	VoyagePlan optimise(@Nullable IResource resource, IVessel vessel, long[] heelVolumeRangeInM3, int[] baseFuelPricesPerMT, long vesselCharterInRatePerDay, IPortTimesRecord portTimesRecord,
+	VoyagePlan optimise(@Nullable IResource resource, IVessel vessel, long[] heelVolumeRangeInM3, int[] baseFuelPricesPerMT, ICharterCostCalculator charterCostCalculator, IPortTimesRecord portTimesRecord,
 			List<IOptionsSequenceElement> basicSequence, List<IVoyagePlanChoice> choices, int startingTime);
 
 }

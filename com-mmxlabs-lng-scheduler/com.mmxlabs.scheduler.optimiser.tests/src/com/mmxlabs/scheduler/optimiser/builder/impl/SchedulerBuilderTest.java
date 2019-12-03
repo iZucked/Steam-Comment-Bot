@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.builder.impl;
 
+import javax.inject.Singleton;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -17,6 +19,8 @@ import com.mmxlabs.common.parser.series.CalendarMonthMapper;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.impl.BaseFuel;
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.VoyagePlanStartDateCharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 import com.mmxlabs.scheduler.optimiser.shared.SharedDataModule;
 import com.mmxlabs.scheduler.optimiser.shared.SharedPortDistanceDataBuilder;
@@ -110,6 +114,8 @@ public class SchedulerBuilderTest {
 			@Override
 			protected void configure() {
 				bind(CalendarMonthMapper.class).toInstance(Mockito.mock(CalendarMonthMapper.class));
+				bind(VoyagePlanStartDateCharterRateCalculator.class).in(Singleton.class);
+				bind(ICharterRateCalculator.class).to(VoyagePlanStartDateCharterRateCalculator.class);
 			}
 		});
 

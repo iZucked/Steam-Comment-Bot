@@ -6,8 +6,11 @@ package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
 import java.util.Arrays;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.CachingVoyagePlanOptimiser;
 
 /**
@@ -25,7 +28,6 @@ public final class VoyagePlan implements Cloneable {
 	private boolean locked = false;
 
 	private IDetailsSequenceElement[] sequence;
-	private long charterInRatePerDay;
 	private long lngFuelVolume;
 	private long lngFuelCost;
 	private long cooldownCost;
@@ -43,11 +45,10 @@ public final class VoyagePlan implements Cloneable {
 		ignoreEnd = true;
 	}
 
-	protected VoyagePlan(final IDetailsSequenceElement[] sequence, final long charterInRatePerDay, final long fuelVolume, final int violationsCount, final boolean ignoreEnd,
+	protected VoyagePlan(final IDetailsSequenceElement[] sequence, final long fuelVolume, final int violationsCount, final boolean ignoreEnd,
 			final long startingHeelInM3, final long remainingHeelInM3) {
 		super();
 		this.sequence = sequence;
-		this.charterInRatePerDay = charterInRatePerDay;
 		this.lngFuelVolume = fuelVolume;
 		this.violationsCount = violationsCount;
 		this.ignoreEnd = ignoreEnd;
@@ -55,6 +56,25 @@ public final class VoyagePlan implements Cloneable {
 		this.remainingHeelInM3 = remainingHeelInM3;
 	}
 
+	public long getCharterCost() {
+		long charterCost = 0;
+		final Object[] sequence = this.getSequence();
+		final int offset = this.isIgnoreEnd() ? 1 : 0;
+		final int k = sequence.length - offset;
+		for (int i = 0; i < k; i++) {
+			final Object o = sequence[i];
+			if (o instanceof VoyageDetails) {
+				final VoyageDetails voyageDetails = (VoyageDetails) o;
+				charterCost += voyageDetails.getTravelCharterCost();
+				charterCost += voyageDetails.getIdleCharterCost();
+				charterCost += voyageDetails.getPurgeCharterCost();
+			} else {
+				charterCost += ((PortDetails) o).getCharterCost();
+			}
+		}
+		return charterCost;
+	}
+	
 	public long getLngFuelCost() {
 		return lngFuelCost;
 	}
@@ -121,7 +141,6 @@ public final class VoyagePlan implements Cloneable {
 			// @formatter:off
 			return Objects.equal(lngFuelVolume, plan.lngFuelVolume)
 					&& Objects.equal(ignoreEnd, plan.ignoreEnd)
-					&& Objects.equal(charterInRatePerDay, plan.charterInRatePerDay)
 					&& Objects.equal(lngFuelCost, plan.lngFuelCost)
 					&& Objects.equal(cooldownCost, plan.cooldownCost)
 					&& Objects.equal(baseFuelCost, plan.baseFuelCost)
@@ -148,7 +167,6 @@ public final class VoyagePlan implements Cloneable {
 	public String toString() {
 		return MoreObjects.toStringHelper(VoyagePlan.class) //
 				.add("sequence", Arrays.toString(sequence)) //
-				.add("charterInRatePerDay", charterInRatePerDay) //
 				.add("totalRouteCost", totalRouteCost) //
 				.add("lngFuelVolume", lngFuelVolume) //
 				.add("lngFuelCost", lngFuelCost) //
@@ -174,7 +192,7 @@ public final class VoyagePlan implements Cloneable {
 				clonedSequence[k++] = o;
 			}
 		}
-		return new VoyagePlan(clonedSequence, charterInRatePerDay, lngFuelVolume, violationsCount, ignoreEnd, startingHeelInM3, remainingHeelInM3);
+		return new VoyagePlan(clonedSequence, lngFuelVolume, violationsCount, ignoreEnd, startingHeelInM3, remainingHeelInM3);
 	}
 
 	/**
@@ -240,15 +258,6 @@ public final class VoyagePlan implements Cloneable {
 	public void setStartingHeelInM3(final long startingHeelInM3) {
 		assert !locked;
 		this.startingHeelInM3 = startingHeelInM3;
-	}
-
-	public long getCharterInRatePerDay() {
-		return charterInRatePerDay;
-	}
-
-	public void setCharterInRatePerDay(final long charterInRatePerDay) {
-		assert !locked;
-		this.charterInRatePerDay = charterInRatePerDay;
 	}
 
 	public void setStartHeelCost(long startHeelCost) {

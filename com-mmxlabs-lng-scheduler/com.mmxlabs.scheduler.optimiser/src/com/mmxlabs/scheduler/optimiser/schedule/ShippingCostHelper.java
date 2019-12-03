@@ -15,6 +15,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.IBallastBonusContract;
 import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.impl.BallastBonusAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
@@ -63,11 +64,7 @@ public class ShippingCostHelper {
 	}
 
 	public long getHireCosts(final @NonNull VoyagePlan plan) {
-		final long planDuration = getPlanDurationInHours(plan);
-
-		final long hireRatePerDay = plan.getCharterInRatePerDay();
-		final long hireCosts = hireRatePerDay * planDuration / 24L;
-		return hireCosts;
+		return plan.getCharterCost();
 	}
 
 	private long getDurationInDays(final @NonNull VoyagePlan plan) {
@@ -93,7 +90,7 @@ public class ShippingCostHelper {
 		}
 		return planDuration;
 	}
-
+	
 	/**
 	 * Calculate revenue for the idle time method of generating charter outs
 	 * 
@@ -142,18 +139,20 @@ public class ShippingCostHelper {
 	 * @return
 	 */
 	public long getIdleTimeGeneratedCharterOutCosts(final @NonNull VoyagePlan plan) {
-		int planDuration = 0;
+		//int planDuration = 0;
+		long hireCosts = 0;
 		for (final Object obj : plan.getSequence()) {
 
 			if (obj instanceof VoyageDetails) {
 				final VoyageDetails voyageDetails = (VoyageDetails) obj;
 				if (voyageDetails.getOptions().isCharterOutIdleTime()) {
-					planDuration += voyageDetails.getIdleTime();
+					//planDuration += voyageDetails.getIdleTime();
+					hireCosts += voyageDetails.getIdleCharterCost();
 				}
 			}
 		}
-		final long hireRatePerDay = plan.getCharterInRatePerDay();
-		final long hireCosts = hireRatePerDay * (long) planDuration / 24L;
+		//final long hireRatePerDay = plan.getCharterCostCalculator();
+		//final long hireCosts = hireRatePerDay * (long) planDuration / 24L;
 
 		return hireCosts;
 	}
@@ -203,7 +202,7 @@ public class ShippingCostHelper {
 
 		final long shippingCosts = getRouteExtraCosts(plan) + getFuelCosts(plan);
 		final long portCosts = getPortCosts(vesselAvailability.getVessel(), plan);
-		final long hireCosts = includeCharterInCosts ? getHireCosts(plan) : 0L;
+		final long hireCosts = includeCharterInCosts ? plan.getCharterCost() : 0L;
 
 		return shippingCosts + portCosts + hireCosts + capacityCosts + crewBonusCosts + insuranceCosts;
 	}
@@ -249,7 +248,7 @@ public class ShippingCostHelper {
 
 		final long shippingCosts = getRouteExtraCosts(plan) + getFuelCosts(plan);
 		final long portCosts = getPortCosts(vesselAvailability.getVessel(), plan);
-		final long hireCosts = includeCharterInCosts ? getHireCosts(plan) : 0L;
+		final long hireCosts = includeCharterInCosts ? plan.getCharterCost() : 0L;
 		final long shippingDays = includeCharterInCosts ? getDurationInDays(plan) : 0L;
 
 		costs[0] = shippingCosts;

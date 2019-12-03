@@ -27,7 +27,7 @@ public class DefaultVesselAvailabilityTest {
 		vesselAvailavility.setDailyCharterInRate(curve);
 		Assertions.assertSame(curve, vesselAvailavility.getDailyCharterInRate());
 	}
-
+	
 	@Test
 	public void testGetSetStartRequirement() {
 		final IVessel vessel = Mockito.mock(IVessel.class);

@@ -48,6 +48,24 @@ public class OptimiserInjectorServiceMaker {
 	}
 
 	/**
+     * Create a new module to bind the instance type
+     * 
+     * @param moduleType
+     * @param clz
+     * @param object
+     * @return
+     */
+    public <T> OptimiserInjectorServiceMaker withModuleOverrideBind(final ModuleType moduleType, final Class<T> clz, final @NonNull Class<? extends T> object) {
+        moduleOverrideMap.computeIfAbsent(moduleType, t -> new LinkedList<>()).add(hints -> new AbstractModule() {
+            @Override
+            protected void configure() {
+                bind(clz).to(object);
+            }
+        });
+        return this;
+    }
+	
+	/**
 	 * Create a new module to bind the instance type
 	 * 
 	 * @param moduleType

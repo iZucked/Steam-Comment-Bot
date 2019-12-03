@@ -47,8 +47,10 @@ import com.mmxlabs.scheduler.optimiser.calculators.IDivertibleDESShippingTimesCa
 import com.mmxlabs.scheduler.optimiser.calculators.IDivertibleFOBShippingTimesCalculator;
 import com.mmxlabs.scheduler.optimiser.calculators.impl.DefaultDivertibleDESShippingTimesCalculator;
 import com.mmxlabs.scheduler.optimiser.calculators.impl.DefaultDivertibleFOBShippingTimesCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.CharterRateToCharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VoyagePlanStartDateCharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.curves.CachingPriceIntervalProducer;
@@ -182,6 +184,8 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(VoyagePlanStartDateCharterRateCalculator.class).in(Singleton.class);
 		bind(ICharterRateCalculator.class).to(VoyagePlanStartDateCharterRateCalculator.class);
 
+		bind(ICharterCostCalculator.class).to(CharterRateToCharterCostCalculator.class);
+		
 		// <--- Time windows
 
 		bind(SchedulerCalculationUtils.class);
@@ -255,10 +259,10 @@ public class LNGTransformerModule extends AbstractModule {
 	@PerChainUnitScope
 	private IVoyagePlanOptimiser provideVoyagePlanOptimiser(Injector injector, final @NonNull VoyagePlanOptimiser delegate,
 			@Named(SchedulerConstants.Key_VoyagePlanOptimiserCache) CacheMode cacheMode) {
-
 		if (cacheMode == CacheMode.Off || !hintEnableCache) {
 			return delegate;
 		} else {
+			//TODO: replace CachingVoyagePlanOptimiser with new impl
 			final CachingVoyagePlanOptimiser cachingVoyagePlanOptimiser = new CachingVoyagePlanOptimiser(delegate, DEFAULT_VPO_CACHE_SIZE);
 			injector.injectMembers(cachingVoyagePlanOptimiser);
 			if (cacheMode == CacheMode.On) {

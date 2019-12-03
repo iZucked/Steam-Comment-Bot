@@ -4,7 +4,9 @@
  */
 package com.mmxlabs.common.curves;
 
+import java.util.Collections;
 import java.util.Map;
+import java.util.NavigableSet;
 import java.util.TreeMap;
 
 /**
@@ -17,7 +19,12 @@ import java.util.TreeMap;
 public class StepwiseLongCurve implements ILongCurve {
 	private long defaultValue;
 	private final TreeMap<Integer, Long> intervals = new TreeMap<>();
-
+	
+	@Override
+	public NavigableSet<Integer> getChangePoints() { 
+		return Collections.unmodifiableNavigableSet(intervals.navigableKeySet());
+	}
+	
 	/**
 	 * Set the default value - this is what will be returned for any queries to points in the curve's specified range
 	 * 

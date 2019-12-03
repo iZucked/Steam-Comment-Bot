@@ -13,6 +13,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.name.Named;
+import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
@@ -25,23 +26,27 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCVProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCooldownDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IScheduledPurgeProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelKey;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.IdleFuelChoice;
-import com.mmxlabs.scheduler.optimiser.voyage.TravelFuelChoice;
 import com.mmxlabs.scheduler.optimiser.voyage.LNGFuelKeys;
+import com.mmxlabs.scheduler.optimiser.voyage.TravelFuelChoice;
 
 /**
  * Implementation of {@link ILNGVoyageCalculator}.
@@ -57,7 +62,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	public static final int STATE_COLD_WARMING_TIME = 2; // Vessel ends cold as with warming time. Zero heel.
 	public static final int STATE_COLD_COOLDOWN = 3; // Vessel ends cold due to cooldown. Zero heel
 	public static final int STATE_COLD_NO_VOYAGE = 4; // Vessel ends cold. There was no voyage. We are still at discharge port. Can pick heel...
-
+	
 	@Inject
 	private IRouteCostProvider routeCostProvider;
 
@@ -703,7 +708,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 * @return Number of capacity constraints which had to be violated in the allocation
 	 */
 	@Override
-	public final int calculateVoyagePlan(final VoyagePlan voyagePlan, final IVessel vessel, final long[] startHeelRangeInM3, final int[] baseFuelPricesPerMT, final IPortTimesRecord voyageRecord,
+	public final int calculateVoyagePlan(final VoyagePlan voyagePlan, final IVessel vessel, final ICharterCostCalculator charterCostCalculator, final long[] startHeelRangeInM3, final int[] baseFuelPricesPerMT, final IPortTimesRecord portTimesRecord,
 			final IDetailsSequenceElement... sequence) {
 		/*
 		 * TODO: instead of taking an interleaved List<Object> as a parameter, this would have a far more informative signature (and cleaner logic?) if it passed a list of IPortDetails and a list of
@@ -725,7 +730,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		 * Accumulates route costs due to canal decisions.
 		 */
 		long routeCostAccumulator = 0;
-
+	
 		// The last voyage details in sequence.
 		VoyageDetails lastVoyageDetailsElement = null;
 
@@ -811,7 +816,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		// processing, but this is where the information is being processed.
 		// Can this be moved into the scheduler? If so, we need to ensure the
 		// same price is used in all valid voyage legs.
-		final int[] pricesPerMMBTu = getLngEffectivePrices(loadIndices, dischargeIndices, voyageRecord, voyagePlan.getStartingHeelInM3(), sequence);
+		final int[] pricesPerMMBTu = getLngEffectivePrices(loadIndices, dischargeIndices, portTimesRecord, voyagePlan.getStartingHeelInM3(), sequence);
 
 		// set the LNG values for the voyages
 		IHeelOptionSupplierPortSlot heelOptionSupplierPortSlot = null;
@@ -921,15 +926,17 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				}
 			}
 		}
-
+		
+		calculateCharterCosts(charterCostCalculator, sequence, portTimesRecord.getFirstSlotTime());
+		
 		// Store results in plan
 		voyagePlan.setSequence(sequence);
 
 		// Calculate cost of start heel
 		if (heelOptionSupplierPortSlot != null) {
 
-			final int pricePerMMBTU = heelOptionSupplierPortSlot.getHeelOptionsSupplier().getHeelPriceCalculator().getHeelPrice(voyagePlan.getStartingHeelInM3(), voyageRecord.getFirstSlotTime(),
-					voyageRecord.getFirstSlot().getPort());
+			final int pricePerMMBTU = heelOptionSupplierPortSlot.getHeelOptionsSupplier().getHeelPriceCalculator().getHeelPrice(voyagePlan.getStartingHeelInM3(), portTimesRecord.getFirstSlotTime(),
+					portTimesRecord.getFirstSlot().getPort());
 			final int cv = heelOptionSupplierPortSlot.getHeelOptionsSupplier().getHeelCVValue();
 
 			final long startHeelInMMBTU = Calculator.convertM3ToMMBTu(voyagePlan.getStartingHeelInM3(), cv);
@@ -937,7 +944,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			voyagePlan.setStartHeelCost(startHeelCost);
 		}
 
-		final long cooldownCost = calculateCooldownCost(vessel, voyageRecord, sequence);
+		final long cooldownCost = calculateCooldownCost(vessel, portTimesRecord, sequence);
 		// calculateCoolDown
 		// voyagePlan.setTotalFuelCost(FuelComponent.Cooldown, cooldownCost);
 		voyagePlan.setCooldownCost(cooldownCost);
@@ -951,6 +958,49 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 		voyagePlan.setViolationsCount(violationsCount);
 		return violationsCount;
+	}
+
+	private void calculateCharterCosts(final ICharterCostCalculator charterCostCalculator, final IDetailsSequenceElement[] sequence, int timeStart) {
+		final int offset = sequence.length > 1 ? 1 : 0;
+		int time = timeStart;
+		for (int i = 0; i < sequence.length - offset; ++i) {
+			final IDetailsSequenceElement element = sequence[i];
+			
+			if (element instanceof VoyageDetails) {
+				final VoyageDetails details = (VoyageDetails) element;
+				//Calculate travel charter cost.
+				int startTime = time;
+				
+				int duration = details.getTravelTime();
+				long charterCost = charterCostCalculator.getCharterCost(startTime, startTime, startTime, duration);	
+				details.setTravelCharterCost(charterCost);
+				time += duration;
+				
+				//Calculate idle charter cost.
+				startTime = time;
+				duration = details.getIdleTime();
+				charterCost = charterCostCalculator.getCharterCost(startTime, startTime, startTime, duration);
+				details.setIdleCharterCost(charterCost);
+				time += duration;
+				
+				//Calculate purge charter cost.
+				startTime = time;
+				duration = details.getPurgeDuration();
+				charterCost = charterCostCalculator.getCharterCost(startTime, startTime, startTime, duration);				
+				details.setPurgeCharterCost(charterCost);
+				time += duration;
+			}
+			else {
+				assert element instanceof PortDetails;
+				final PortDetails details = (PortDetails) element;
+				int startTime = time;
+				int duration = details.getOptions().getVisitDuration();
+				
+				long charterCost = charterCostCalculator.getCharterCost(startTime, startTime, startTime, duration);
+				details.setCharterCost(charterCost);
+				time += duration;
+			}
+		}
 	}
 
 	protected int calculateNonCargoEndState(final @NonNull VoyagePlan voyagePlan, @Nullable final VoyageDetails lastVoyageDetailsElement, final int voyageDuration, final long[] startHeelRangeInM3,

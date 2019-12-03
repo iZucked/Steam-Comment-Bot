@@ -18,6 +18,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
@@ -36,6 +37,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  */
 // @PerChainUnitScope
 public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
+	
 	@Inject
 	private IStartEndRequirementProvider startEndRequirementProvider;
 
@@ -43,13 +45,14 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 	public static class Record {
 
-		public Record(@Nullable IResource resource, @NonNull IVessel vessel, long[] startHeelRangeInM3, int[] baseFuelPricesPerMT, long vesselCharterInRatePerDay, IPortTimesRecord portTimesRecord,
+		public Record(@Nullable IResource resource, @NonNull IVessel vessel, long[] startHeelRangeInM3, int[] baseFuelPricesPerMT,
+				ICharterCostCalculator charterCostCalculator, IPortTimesRecord portTimesRecord,
 				List<@NonNull IOptionsSequenceElement> basicSequence, List<@NonNull IVoyagePlanChoice> choices, int startingTime) {
 			this.resource = resource;
 			this.vessel = vessel;
 			this.startHeelRangeInM3 = startHeelRangeInM3;
 			this.baseFuelPricesPerMT = baseFuelPricesPerMT;
-			this.vesselCharterInRatePerDay = vesselCharterInRatePerDay;
+			this.charterCostCalculator = charterCostCalculator;
 			this.portTimesRecord = portTimesRecord;
 			this.basicSequence = basicSequence;
 			this.choices = choices;
@@ -66,7 +69,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 		public final int[] baseFuelPricesPerMT;
 
-		public final long vesselCharterInRatePerDay;
+		public final ICharterCostCalculator charterCostCalculator;
 		public final long[] startHeelRangeInM3;
 
 		public final int startingTime;
@@ -98,10 +101,10 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	 * @return
 	 */
 	@Override
-	public VoyagePlan optimise(IResource resource, IVessel vessel, long[] startHeelRangeInM3, int[] baseFuelPricesPerMT, long vesselCharterInRatePerDay, IPortTimesRecord portTimesRecord,
+	public VoyagePlan optimise(IResource resource, IVessel vessel, long[] startHeelRangeInM3, int[] baseFuelPricesPerMT, final ICharterCostCalculator charterCostCalculator, IPortTimesRecord portTimesRecord,
 			List<@NonNull IOptionsSequenceElement> basicSequence, List<@NonNull IVoyagePlanChoice> choices, int startingTime) {
 
-		Record record = new Record(resource, vessel, startHeelRangeInM3, baseFuelPricesPerMT, vesselCharterInRatePerDay, portTimesRecord, basicSequence, choices, startingTime);
+		Record record = new Record(resource, vessel, startHeelRangeInM3, baseFuelPricesPerMT, charterCostCalculator, portTimesRecord, basicSequence, choices, startingTime);
 
 		InternalState state = new InternalState();
 		runLoop(record, state, 0);
@@ -192,8 +195,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 					// This is not calculator.multiply, because hireRate is not scaled.
 					{
-						final long hireRatePerDay = currentPlan.getCharterInRatePerDay();
-						final long hireCost = hireRatePerDay * (long) (lastVoyageDetails.getIdleTime() + lastVoyageDetails.getTravelTime()) / 24;
+						final long hireCost = lastVoyageDetails.getIdleCharterCost() + lastVoyageDetails.getTravelCharterCost();
 						currentCost += hireCost;
 					}
 
@@ -330,10 +332,9 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		final List<IDetailsSequenceElement> currentSequence = voyageCalculator.generateFuelCostCalculatedSequence(record.basicSequence.toArray(new IOptionsSequenceElement[0]));
 
 		final VoyagePlan currentPlan = new VoyagePlan();
-		currentPlan.setCharterInRatePerDay(record.vesselCharterInRatePerDay);
 
 		// Calculate voyage plan
-		int violationCount = voyageCalculator.calculateVoyagePlan(currentPlan, record.vessel, record.startHeelRangeInM3, record.baseFuelPricesPerMT, record.portTimesRecord,
+		int violationCount = voyageCalculator.calculateVoyagePlan(currentPlan, record.vessel, record.charterCostCalculator, record.startHeelRangeInM3, record.baseFuelPricesPerMT, record.portTimesRecord,
 				currentSequence.toArray(new IDetailsSequenceElement[0]));
 
 		if (violationCount == Integer.MAX_VALUE) {

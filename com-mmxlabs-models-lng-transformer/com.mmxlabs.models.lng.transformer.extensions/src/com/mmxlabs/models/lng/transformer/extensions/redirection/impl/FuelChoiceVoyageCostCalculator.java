@@ -27,6 +27,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.HeelOptionConsumer;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.NotionalEndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
@@ -39,8 +40,8 @@ import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
-import com.mmxlabs.scheduler.optimiser.voyage.TravelFuelChoice;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.TravelFuelChoice;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimesRecord;
@@ -70,7 +71,7 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 
 	@Override
 	public @Nullable VoyagePlan calculateShippingCosts(@NonNull final IPort loadPort, @NonNull final IPort dischargePort, final int loadTime, final int loadDuration, final int dischargeTime,
-			final int dischargeDuration, @NonNull final IVessel vessel, final long vesselCharterInRatePerDay, final long startHeelInM3, final int notionalBallastSpeed, final int cargoCVValue,
+			final int dischargeDuration, @NonNull final IVessel vessel, @NonNull final ICharterCostCalculator charterCostCalculator, final long startHeelInM3, final int notionalBallastSpeed, final int cargoCVValue,
 			@NonNull final ERouteOption route, final int[] baseFuelPricesPerMT, @NonNull final ISalesPriceCalculator salesPriceCalculator) {
 
 		final int ladenDistance = distanceProvider.getDistance(route, loadPort, dischargePort, vessel);
@@ -89,13 +90,13 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 		// Determine notional port visit times.
 		final int notionalReturnTime = dischargeTime + dischargeDuration + ballastTravelTime;
 
-		return calculateShippingCosts(loadPort, dischargePort, loadTime, loadDuration, dischargeTime, dischargeDuration, notionalReturnTime, vessel, vesselCharterInRatePerDay, startHeelInM3,
+		return calculateShippingCosts(loadPort, dischargePort, loadTime, loadDuration, dischargeTime, dischargeDuration, notionalReturnTime, vessel, charterCostCalculator, startHeelInM3,
 				cargoCVValue, route, baseFuelPricesPerMT, salesPriceCalculator);
 	}
 
 	@Override
 	public @Nullable VoyagePlan calculateShippingCosts(@NonNull final IPort loadPort, @NonNull final IPort dischargePort, final int loadTime, final int loadDuration, final int dischargeTime,
-			final int dischargeDuration, final int notionalReturnTime, @NonNull final IVessel vessel, final long vesselCharterInRatePerDay, final long startHeelInM3, final int cargoCVValue,
+			final int dischargeDuration, final int notionalReturnTime, @NonNull final IVessel vessel, @NonNull ICharterCostCalculator charterCostCalculator, final long startHeelInM3, final int cargoCVValue,
 			@NonNull final ERouteOption route, final int[] baseFuelPricesPerMT, @NonNull final ISalesPriceCalculator salesPriceCalculator) {
 		final int ladenDistance = distanceProvider.getDistance(route, loadPort, dischargePort, vessel);
 		if (ladenDistance == Integer.MAX_VALUE) {
@@ -108,13 +109,13 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 		}
 
 		return calculateShippingCosts(loadPort, dischargePort, loadTime, ladenDistance, loadDuration, dischargeTime, ballastDistance, dischargeDuration, notionalReturnTime, vessel,
-				vesselCharterInRatePerDay, startHeelInM3, cargoCVValue, route, baseFuelPricesPerMT, salesPriceCalculator);
+				charterCostCalculator, startHeelInM3, cargoCVValue, route, baseFuelPricesPerMT, salesPriceCalculator);
 
 	}
 
 	@Override
 	public @Nullable VoyagePlan calculateShippingCosts(@NonNull final IPort loadPort, @NonNull final IPort dischargePort, final int loadTime, final int loadDistance, final int loadDuration,
-			final int dischargeTime, final int dischargeDistance, final int dischargeDuration, final int notionalReturnTime, @NonNull final IVessel vessel, final long vesselCharterInRatePerDay,
+			final int dischargeTime, final int dischargeDistance, final int dischargeDuration, final int notionalReturnTime, @NonNull final IVessel vessel,  @NonNull ICharterCostCalculator charterCostCalculator, 
 			final long startHeelInM3, final int cargoCVValue, @NonNull final ERouteOption route, final int[] baseFuelPricesPerMT, @NonNull final ISalesPriceCalculator salesPriceCalculator) {
 
 		// MUST CALL setFuelChoice!
@@ -143,13 +144,13 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 
 		final VoyagePlanOptimiser vpo = vpoProvider.get();
 
-		return applyVPOAndGetVP(loadTime, loadDistance, loadDuration, dischargeTime, dischargeDistance, dischargeDuration, notionalReturnTime, vessel, vesselCharterInRatePerDay, startHeelInM3,
+		return applyVPOAndGetVP(loadTime, loadDistance, loadDuration, dischargeTime, dischargeDistance, dischargeDuration, notionalReturnTime, vessel, charterCostCalculator, startHeelInM3,
 				cargoCVValue, route, baseFuelPricesPerMT, notionalLoadSlot, notionalDischargeSlot, notionalReturnSlot, portTimesRecord, vpo);
 	}
 
 	public @Nullable Pair<VoyagePlan, IPortTimesRecord> calculateShippingCostsAndGetPTR(@NonNull final IPort loadPort, @NonNull final IPort dischargePort, final int loadTime, final int loadDistance,
 			final int loadDuration, final int dischargeTime, final int dischargeDistance, final int dischargeDuration, final int notionalReturnTime, @NonNull final IVessel vessel,
-			final int vesselCharterInRatePerDay, final long startHeelInM3, final int cargoCVValue, @NonNull final ERouteOption route, final int[] baseFuelPricesPerMT, final int salesPricePerMMBTu) {
+			@NonNull final ICharterCostCalculator charterCostCalculator, final long startHeelInM3, final int cargoCVValue, @NonNull final ERouteOption route, final int[] baseFuelPricesPerMT, final int salesPricePerMMBTu) {
 
 		// MUST CALL setFuelChoice!
 		assert fuelChoice != null;
@@ -171,7 +172,7 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 
 		final VoyagePlanOptimiser vpo = vpoProvider.get();
 
-		return new Pair<>(applyVPOAndGetVP(loadTime, loadDistance, loadDuration, dischargeTime, dischargeDistance, dischargeDuration, notionalReturnTime, vessel, vesselCharterInRatePerDay,
+		return new Pair<>(applyVPOAndGetVP(loadTime, loadDistance, loadDuration, dischargeTime, dischargeDistance, dischargeDuration, notionalReturnTime, vessel, charterCostCalculator,
 				startHeelInM3, cargoCVValue, route, baseFuelPricesPerMT, notionalLoadSlot, notionalDischargeSlot, notionalReturnSlot, portTimesRecord, vpo), portTimesRecord);
 	}
 
@@ -192,7 +193,8 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 	}
 
 	private VoyagePlan applyVPOAndGetVP(final int loadTime, final int loadDistance, final int loadDuration, final int dischargeTime, final int dischargeDistance, final int dischargeDuration,
-			final int notionalReturnTime, final IVessel vessel, final long vesselCharterInRatePerDay, final long startHeelInM3, final int cargoCVValue, final ERouteOption route,
+			final int notionalReturnTime, final IVessel vessel, final ICharterCostCalculator charterCostCalculator,
+			final long startHeelInM3, final int cargoCVValue, final ERouteOption route,
 			final int[] baseFuelPricesPerMT, final LoadSlot notionalLoadSlot, final DischargeSlot notionalDischargeSlot, final PortSlot notionalReturnSlot, final PortTimesRecord portTimesRecord,
 			final VoyagePlanOptimiser vpo) {
 		@NonNull
@@ -265,7 +267,7 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 			final List<@NonNull IOptionsSequenceElement> basicSequence = Lists.<@NonNull IOptionsSequenceElement> newArrayList(loadOptions, ladenOptions, dischargeOptions, ballastOptions,
 					returnOptions);
 
-			final VoyagePlan notionalPlan = vpo.optimise(null, vessel, new long[] { startHeelInM3, startHeelInM3 }, baseFuelPricesPerMT, vesselCharterInRatePerDay, portTimesRecord, basicSequence,
+			final VoyagePlan notionalPlan = vpo.optimise(null, vessel, new long[] { startHeelInM3, startHeelInM3 }, baseFuelPricesPerMT, charterCostCalculator, portTimesRecord, basicSequence,
 					vpoChoices, Integer.MAX_VALUE);
 
 			// Set to null to trigger assert at start of method if API is not being correctly used.

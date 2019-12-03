@@ -42,6 +42,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.Port;
 import com.mmxlabs.scheduler.optimiser.components.impl.SequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.impl.Vessel;
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
@@ -284,8 +285,11 @@ public final class VoyagePlannerTest {
 
 		int[] fuelMap = GeneralTestUtils.makeBaseFuelPrices(0);
 		// Matchers.eq!!
-		Mockito.when(voyagePlanOptimiser.optimise(resource, vessel, new long[] { 0L, 0L }, fuelMap, 0, portTimesRecord1, expectedBasicSequence1, vpoChoices1, Integer.MAX_VALUE)).thenReturn(testVoyagePlan);
-		Mockito.when(voyagePlanOptimiser.optimise(resource, vessel, new long[] { 0L, 0L }, fuelMap, 0, portTimesRecord2, expectedBasicSequence2, vpoChoices2, Integer.MAX_VALUE)).thenReturn(testVoyagePlan);
+		ICharterCostCalculator ccc = Mockito.mock(ICharterCostCalculator.class);
+		Mockito.when(ccc.getCharterCost(ArgumentMatchers.anyInt(), ArgumentMatchers.anyInt(), ArgumentMatchers.anyInt(), ArgumentMatchers.anyInt())).thenReturn(0L);
+		
+		Mockito.when(voyagePlanOptimiser.optimise(resource, vessel, new long[] { 0L, 0L }, fuelMap, ccc, portTimesRecord1, expectedBasicSequence1, vpoChoices1, Integer.MAX_VALUE)).thenReturn(testVoyagePlan);
+		Mockito.when(voyagePlanOptimiser.optimise(resource, vessel, new long[] { 0L, 0L }, fuelMap, ccc, portTimesRecord2, expectedBasicSequence2, vpoChoices2, Integer.MAX_VALUE)).thenReturn(testVoyagePlan);
 
 		// Schedule sequence
 		final List<Pair<VoyagePlan, IPortTimesRecord>> plans = planner.makeVoyagePlans(resource, sequence, portTimesRecords);

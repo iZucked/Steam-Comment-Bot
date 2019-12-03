@@ -28,7 +28,8 @@ public final class PortDetails implements IDetailsSequenceElement, Cloneable {
 	private final LongFastEnumEnumMap<FuelComponent, FuelUnit> fuelConsumption = new LongFastEnumEnumMap<FuelComponent, FuelUnit>(FuelComponent.values().length, FuelUnit.values().length);
 	private final LongFastEnumMap<FuelComponent> fuelUnitPrices = new LongFastEnumMap<FuelComponent>(FuelComponent.values().length);
 	private long portCosts;
-
+	private long charterCost;
+	
 	public PortDetails(final @NonNull PortOptions options) {
 		this.options = options;
 	}
@@ -125,5 +126,13 @@ public final class PortDetails implements IDetailsSequenceElement, Cloneable {
 
 	public void setPortCosts(final long portCosts) {
 		this.portCosts = portCosts;
+	}
+
+	public long getCharterCost() {
+		return charterCost;
+	}
+
+	public void setCharterCost(long charterCost) {
+		this.charterCost = charterCost;
 	}
 }

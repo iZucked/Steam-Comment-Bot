@@ -15,6 +15,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
@@ -45,7 +46,7 @@ public interface IVoyagePlanner {
 	 * @return
 	 */
 	@Nullable
-	VoyagePlan makeVoyage(@NonNull IResource resource, long vesselCharterInRatePerDay, @NonNull IPortTimesRecord portTimesRecord, long[] heelVolumeRangeInM3, int startingTime);
+	VoyagePlan makeVoyage(@NonNull IResource resource, @NonNull final ICharterCostCalculator charterCostCalculator, @NonNull IPortTimesRecord portTimesRecord, long[] heelVolumeRangeInM3, int startingTime);
 
 	/**
 	 * Returns a voyage plan based on the given sequence
@@ -56,7 +57,7 @@ public interface IVoyagePlanner {
 	 * @return
 	 */
 	@Nullable
-	VoyagePlan makeVoyage(@NonNull IResource resource, long vesselCharterInRatePerDay, @NonNull IPortTimesRecord portTimesRecord, long[] initialHeelVolumeRangeInM3,
+	VoyagePlan makeVoyage(@NonNull IResource resource, @NonNull final ICharterCostCalculator charterCostCalculator, @NonNull IPortTimesRecord portTimesRecord, long[] initialHeelVolumeRangeInM3,
 			@NonNull IVoyagePlanOptimiser voyagePlanOptimiser, int startingTime);
 
 	@NonNull
@@ -77,6 +78,6 @@ public interface IVoyagePlanner {
 	 */
 	@Nullable
 	VoyagePlan getOptimisedVoyagePlan(@NonNull List<@NonNull IOptionsSequenceElement> voyageOrPortOptionsSubsequence, @NonNull IPortTimesRecord portTimesRecord,
-			@NonNull IVoyagePlanOptimiser optimiser, long @NonNull [] heelVolumeRangeInM3, long vesselCharterInRatePerDay, @NonNull VesselInstanceType vesselInstanceType,
-			Triple<@NonNull IVessel, @Nullable IResource, int[]> vesselTriple, @NonNull List<@NonNull IVoyagePlanChoice> vpoChoices, int startingTime);
+			@NonNull IVoyagePlanOptimiser optimiser, long @NonNull [] heelVolumeRangeInM3, @NonNull final ICharterCostCalculator charterCostCalculator, @NonNull VesselInstanceType vesselInstanceType,
+			Triple<@NonNull IVessel, @Nullable IResource,  int[]> vesselTriple, @NonNull List<@NonNull IVoyagePlanChoice> vpoChoices, int startingTime);
 }
