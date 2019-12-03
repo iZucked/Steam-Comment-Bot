@@ -7,6 +7,10 @@ package com.mmxlabs.models.lng.transformer.ui.headless;
 import java.io.File;
 import java.util.HashMap;
 
+import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl;
+import com.mmxlabs.optimiser.lso.logging.LSOLogger;
+
 public class HeadlessApplicationOptions {
 	/**
 	 * The name of the scenario being run.
@@ -42,6 +46,16 @@ public class HeadlessApplicationOptions {
 	 * How often to log results
 	 */
 	public int loggingInterval = 10000;
+	
+	/**
+	 * Logging parameters for these runs
+	 */
+	public LSOLogger.LoggingParameters loggingParameters;
+	
+	/** 
+	 * A {@link UserSettings} object to create the algorithm's config data from, if no config file is provided.
+	 */
+	public UserSettingsImpl userSettings;
 	
 	public boolean isLoggingExportRequired() {
 		return outputLoggingFolder != null;
@@ -92,5 +106,19 @@ public class HeadlessApplicationOptions {
 		// TODO: allow a URL to be provided. 
 		
 		return ScenarioFileFormat.UNRECOGNISED;
+	}
+	
+	public void validate() throws IllegalArgumentException {
+		if ( outputLoggingFolder != null && loggingParameters == null) {
+			throw new IllegalArgumentException("Output logging folder specified but no logging parameters provided.");
+		}
+		
+		if ( outputLoggingFolder == null && loggingParameters != null) {
+			throw new IllegalArgumentException("Logging parameters specified but no output logging folder provided.");
+		}
+		
+		if ( (userSettings == null) == (algorithmConfigFile == null) ) {
+			throw new IllegalArgumentException("Exactly one of the fields 'userSettings' and 'algorithmConfigFile' must be non-null.");
+		}
 	}
 }
