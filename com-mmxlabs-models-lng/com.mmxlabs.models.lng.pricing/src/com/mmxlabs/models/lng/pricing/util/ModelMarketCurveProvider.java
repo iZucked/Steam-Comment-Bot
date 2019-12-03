@@ -444,7 +444,8 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 		}
 		final EList<CommodityCurve> indices = pm.getCommodityCurves();
 
-		List<CommodityCurve> inc = indices.stream().filter(e -> e.getName().equals(curveName)).collect(Collectors.toList());
+		List<CommodityCurve> inc = indices.stream()//
+				.filter(e -> e.getName().equalsIgnoreCase(curveName)).collect(Collectors.toList());
 
 		if (inc.isEmpty() || inc.size() > 1) {
 			return null;

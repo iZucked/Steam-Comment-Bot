@@ -42,6 +42,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.NonShippedCargoSpecification;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
+import com.mmxlabs.models.lng.cargo.PaperPricingType;
 import com.mmxlabs.models.lng.cargo.ScheduleSpecification;
 import com.mmxlabs.models.lng.cargo.ScheduleSpecificationEvent;
 import com.mmxlabs.models.lng.cargo.SellPaperDeal;
@@ -354,6 +355,13 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	private EEnum inventoryFrequencyEEnum = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum paperPricingTypeEEnum = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -2890,16 +2898,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EAttribute getPaperDeal_Quantity() {
-		return (EAttribute)paperDealEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getPaperDeal_StartDate() {
 		return (EAttribute)paperDealEClass.getEStructuralFeatures().get(4);
 	}
 
@@ -2909,7 +2907,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getPaperDeal_EndDate() {
+	public EAttribute getPaperDeal_PricingMonth() {
 		return (EAttribute)paperDealEClass.getEStructuralFeatures().get(5);
 	}
 
@@ -2919,8 +2917,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getPaperDeal_Entity() {
-		return (EReference)paperDealEClass.getEStructuralFeatures().get(6);
+	public EAttribute getPaperDeal_StartDate() {
+		return (EAttribute)paperDealEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -2929,7 +2927,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getPaperDeal_Year() {
+	public EAttribute getPaperDeal_EndDate() {
 		return (EAttribute)paperDealEClass.getEStructuralFeatures().get(7);
 	}
 
@@ -2939,8 +2937,28 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getPaperDeal_Entity() {
+		return (EReference)paperDealEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPaperDeal_Year() {
+		return (EAttribute)paperDealEClass.getEStructuralFeatures().get(9);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EAttribute getPaperDeal_Comment() {
-		return (EAttribute)paperDealEClass.getEStructuralFeatures().get(8);
+		return (EAttribute)paperDealEClass.getEStructuralFeatures().get(10);
 	}
 
 	/**
@@ -2959,7 +2977,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getPaperDeal_Index() {
+	public EAttribute getPaperDeal_PricingType() {
 		return (EAttribute)paperDealEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -2969,8 +2987,18 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getPaperDeal_Index() {
+		return (EAttribute)paperDealEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EReference getPaperDeal_Instrument() {
-		return (EReference)paperDealEClass.getEStructuralFeatures().get(2);
+		return (EReference)paperDealEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -3071,6 +3099,16 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	@Override
 	public EEnum getInventoryFrequency() {
 		return inventoryFrequencyEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EEnum getPaperPricingType() {
+		return paperPricingTypeEEnum;
 	}
 
 	/**
@@ -3390,9 +3428,11 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 		paperDealEClass = createEClass(PAPER_DEAL);
 		createEAttribute(paperDealEClass, PAPER_DEAL__PRICE);
+		createEAttribute(paperDealEClass, PAPER_DEAL__PRICING_TYPE);
 		createEAttribute(paperDealEClass, PAPER_DEAL__INDEX);
 		createEReference(paperDealEClass, PAPER_DEAL__INSTRUMENT);
 		createEAttribute(paperDealEClass, PAPER_DEAL__QUANTITY);
+		createEAttribute(paperDealEClass, PAPER_DEAL__PRICING_MONTH);
 		createEAttribute(paperDealEClass, PAPER_DEAL__START_DATE);
 		createEAttribute(paperDealEClass, PAPER_DEAL__END_DATE);
 		createEReference(paperDealEClass, PAPER_DEAL__ENTITY);
@@ -3413,6 +3453,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		eVesselTankStateEEnum = createEEnum(EVESSEL_TANK_STATE);
 		inventoryFacilityTypeEEnum = createEEnum(INVENTORY_FACILITY_TYPE);
 		inventoryFrequencyEEnum = createEEnum(INVENTORY_FREQUENCY);
+		paperPricingTypeEEnum = createEEnum(PAPER_PRICING_TYPE);
 
 		// Create data types
 		schedulingTimeWindowEDataType = createEDataType(SCHEDULING_TIME_WINDOW);
@@ -3865,9 +3906,11 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 		initEClass(paperDealEClass, PaperDeal.class, "PaperDeal", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getPaperDeal_Price(), ecorePackage.getEDouble(), "price", null, 0, 1, PaperDeal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPaperDeal_PricingType(), this.getPaperPricingType(), "pricingType", null, 0, 1, PaperDeal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPaperDeal_Index(), ecorePackage.getEString(), "index", null, 0, 1, PaperDeal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getPaperDeal_Instrument(), thePricingPackage.getSettleStrategy(), null, "instrument", null, 0, 1, PaperDeal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPaperDeal_Instrument(), thePricingPackage.getSettleStrategy(), null, "instrument", null, 0, 1, PaperDeal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPaperDeal_Quantity(), ecorePackage.getEDouble(), "quantity", null, 0, 1, PaperDeal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPaperDeal_PricingMonth(), theDateTimePackage.getYearMonth(), "pricingMonth", null, 0, 1, PaperDeal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPaperDeal_StartDate(), theDateTimePackage.getLocalDate(), "startDate", null, 0, 1, PaperDeal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPaperDeal_EndDate(), theDateTimePackage.getLocalDate(), "endDate", null, 0, 1, PaperDeal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPaperDeal_Entity(), theCommercialPackage.getBaseLegalEntity(), null, "entity", null, 0, 1, PaperDeal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3911,6 +3954,11 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		addEEnumLiteral(inventoryFrequencyEEnum, InventoryFrequency.DAILY);
 		addEEnumLiteral(inventoryFrequencyEEnum, InventoryFrequency.MONTHLY);
 		addEEnumLiteral(inventoryFrequencyEEnum, InventoryFrequency.LEVEL);
+
+		initEEnum(paperPricingTypeEEnum, PaperPricingType.class, "PaperPricingType");
+		addEEnumLiteral(paperPricingTypeEEnum, PaperPricingType.PERIOD_AVG);
+		addEEnumLiteral(paperPricingTypeEEnum, PaperPricingType.CALENDAR);
+		addEEnumLiteral(paperPricingTypeEEnum, PaperPricingType.INSTRUMENT);
 
 		// Initialize data types
 		initEDataType(schedulingTimeWindowEDataType, SchedulingTimeWindow.class, "SchedulingTimeWindow", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);

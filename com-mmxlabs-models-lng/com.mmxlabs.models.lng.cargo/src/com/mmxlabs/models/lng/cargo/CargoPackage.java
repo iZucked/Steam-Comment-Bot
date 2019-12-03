@@ -6765,13 +6765,22 @@ public interface CargoPackage extends EPackage {
 	int PAPER_DEAL__PRICE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Pricing Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL__PRICING_TYPE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
+
+	/**
 	 * The feature id for the '<em><b>Index</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PAPER_DEAL__INDEX = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
+	int PAPER_DEAL__INDEX = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Instrument</b></em>' reference.
@@ -6780,7 +6789,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PAPER_DEAL__INSTRUMENT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
+	int PAPER_DEAL__INSTRUMENT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Quantity</b></em>' attribute.
@@ -6789,7 +6798,16 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PAPER_DEAL__QUANTITY = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 3;
+	int PAPER_DEAL__QUANTITY = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Pricing Month</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL__PRICING_MONTH = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Start Date</b></em>' attribute.
@@ -6798,7 +6816,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PAPER_DEAL__START_DATE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
+	int PAPER_DEAL__START_DATE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>End Date</b></em>' attribute.
@@ -6807,7 +6825,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PAPER_DEAL__END_DATE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 5;
+	int PAPER_DEAL__END_DATE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
@@ -6816,7 +6834,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PAPER_DEAL__ENTITY = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 6;
+	int PAPER_DEAL__ENTITY = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Year</b></em>' attribute.
@@ -6825,7 +6843,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PAPER_DEAL__YEAR = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 7;
+	int PAPER_DEAL__YEAR = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
@@ -6834,7 +6852,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PAPER_DEAL__COMMENT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 8;
+	int PAPER_DEAL__COMMENT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 10;
 
 	/**
 	 * The number of structural features of the '<em>Paper Deal</em>' class.
@@ -6843,7 +6861,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PAPER_DEAL_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 9;
+	int PAPER_DEAL_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 11;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -6919,6 +6937,15 @@ public interface CargoPackage extends EPackage {
 	int BUY_PAPER_DEAL__PRICE = PAPER_DEAL__PRICE;
 
 	/**
+	 * The feature id for the '<em><b>Pricing Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUY_PAPER_DEAL__PRICING_TYPE = PAPER_DEAL__PRICING_TYPE;
+
+	/**
 	 * The feature id for the '<em><b>Index</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6944,6 +6971,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int BUY_PAPER_DEAL__QUANTITY = PAPER_DEAL__QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Pricing Month</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUY_PAPER_DEAL__PRICING_MONTH = PAPER_DEAL__PRICING_MONTH;
 
 	/**
 	 * The feature id for the '<em><b>Start Date</b></em>' attribute.
@@ -7073,6 +7109,15 @@ public interface CargoPackage extends EPackage {
 	int SELL_PAPER_DEAL__PRICE = PAPER_DEAL__PRICE;
 
 	/**
+	 * The feature id for the '<em><b>Pricing Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_PAPER_DEAL__PRICING_TYPE = PAPER_DEAL__PRICING_TYPE;
+
+	/**
 	 * The feature id for the '<em><b>Index</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7098,6 +7143,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SELL_PAPER_DEAL__QUANTITY = PAPER_DEAL__QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Pricing Month</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_PAPER_DEAL__PRICING_MONTH = PAPER_DEAL__PRICING_MONTH;
 
 	/**
 	 * The feature id for the '<em><b>Start Date</b></em>' attribute.
@@ -7335,6 +7389,16 @@ public interface CargoPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.PaperPricingType <em>Paper Pricing Type</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.PaperPricingType
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getPaperPricingType()
+	 * @generated
+	 */
+	int PAPER_PRICING_TYPE = 40;
+
+	/**
 	 * The meta object id for the '<em>Scheduling Time Window</em>' data type.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7342,7 +7406,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getSchedulingTimeWindow()
 	 * @generated
 	 */
-	int SCHEDULING_TIME_WINDOW = 40;
+	int SCHEDULING_TIME_WINDOW = 41;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.Cargo <em>Cargo</em>}'.
@@ -9991,6 +10055,17 @@ public interface CargoPackage extends EPackage {
 	EAttribute getPaperDeal_Quantity();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getPricingMonth <em>Pricing Month</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Pricing Month</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.PaperDeal#getPricingMonth()
+	 * @see #getPaperDeal()
+	 * @generated
+	 */
+	EAttribute getPaperDeal_PricingMonth();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getStartDate <em>Start Date</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -10066,6 +10141,17 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getPaperDeal_Price();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getPricingType <em>Pricing Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Pricing Type</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.PaperDeal#getPricingType()
+	 * @see #getPaperDeal()
+	 * @generated
+	 */
+	EAttribute getPaperDeal_PricingType();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getIndex <em>Index</em>}'.
@@ -10179,6 +10265,16 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EEnum getInventoryFrequency();
+
+	/**
+	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.cargo.PaperPricingType <em>Paper Pricing Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Paper Pricing Type</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.PaperPricingType
+	 * @generated
+	 */
+	EEnum getPaperPricingType();
 
 	/**
 	 * Returns the meta object for data type '{@link com.mmxlabs.models.lng.cargo.SchedulingTimeWindow <em>Scheduling Time Window</em>}'.
@@ -12254,6 +12350,14 @@ public interface CargoPackage extends EPackage {
 		EAttribute PAPER_DEAL__QUANTITY = eINSTANCE.getPaperDeal_Quantity();
 
 		/**
+		 * The meta object literal for the '<em><b>Pricing Month</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PAPER_DEAL__PRICING_MONTH = eINSTANCE.getPaperDeal_PricingMonth();
+
+		/**
 		 * The meta object literal for the '<em><b>Start Date</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -12308,6 +12412,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PAPER_DEAL__PRICE = eINSTANCE.getPaperDeal_Price();
+
+		/**
+		 * The meta object literal for the '<em><b>Pricing Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PAPER_DEAL__PRICING_TYPE = eINSTANCE.getPaperDeal_PricingType();
 
 		/**
 		 * The meta object literal for the '<em><b>Index</b></em>' attribute feature.
@@ -12412,6 +12524,16 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EEnum INVENTORY_FREQUENCY = eINSTANCE.getInventoryFrequency();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.PaperPricingType <em>Paper Pricing Type</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.PaperPricingType
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getPaperPricingType()
+		 * @generated
+		 */
+		EEnum PAPER_PRICING_TYPE = eINSTANCE.getPaperPricingType();
 
 		/**
 		 * The meta object literal for the '<em>Scheduling Time Window</em>' data type.

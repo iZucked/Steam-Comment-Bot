@@ -71,7 +71,7 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 	@Override
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final ModelReference modelReference) {
 		super.init(path, adapterFactory, modelReference);
-		final EditingDomain editingDomain = jointModelEditor.getEditingDomain();
+		//final EditingDomain editingDomain = jointModelEditor.getEditingDomain();
 		
 		final GridViewerColumn gtc = addNameManipulator("Name");
 		gtc.getColumn().setTree(true);
@@ -260,7 +260,7 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 					final DealSet ds = CargoFactory.eINSTANCE.createDealSet();
 					ds.setName(String.format("%s_%s", cargo.getLoadName(), "set"));
 					cmd.append(AddCommand.create(ed, cargoModel, CargoPackage.Literals.CARGO_MODEL__DEAL_SETS, ds));
-					for (final Slot slot : cargo.getSlots()) {
+					for (final Slot<?> slot : cargo.getSlots()) {
 						if (slot instanceof SpotSlot) continue;
 						cmd.append(AddCommand.create(ed, ds, CargoPackage.Literals.DEAL_SET__SLOTS, slot));
 					}
@@ -282,7 +282,7 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 	}
 	
 	private boolean checkContainment(final Cargo cargo, final Set<Slot> usedSlots) {
-		for (final Slot slot : cargo.getSlots()) {
+		for (final Slot<?> slot : cargo.getSlots()) {
 			if (usedSlots.contains(slot)) return true;
 		}
 		return false;

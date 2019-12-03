@@ -28,7 +28,6 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SettleStrategyImpl#getDayOfTheMonth <em>Day Of The Month</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SettleStrategyImpl#isLastDayOfTheMonth <em>Last Day Of The Month</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SettleStrategyImpl#isUseCalendarMonth <em>Use Calendar Month</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SettleStrategyImpl#getSettlePeriod <em>Settle Period</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SettleStrategyImpl#getSettlePeriodUnit <em>Settle Period Unit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SettleStrategyImpl#getSettleStartMonthsPrior <em>Settle Start Months Prior</em>}</li>
@@ -76,26 +75,6 @@ public class SettleStrategyImpl extends NamedObjectImpl implements SettleStrateg
 	 * @ordered
 	 */
 	protected boolean lastDayOfTheMonth = LAST_DAY_OF_THE_MONTH_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #isUseCalendarMonth() <em>Use Calendar Month</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isUseCalendarMonth()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean USE_CALENDAR_MONTH_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isUseCalendarMonth() <em>Use Calendar Month</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isUseCalendarMonth()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean useCalendarMonth = USE_CALENDAR_MONTH_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getSettlePeriod() <em>Settle Period</em>}' attribute.
@@ -297,37 +276,12 @@ public class SettleStrategyImpl extends NamedObjectImpl implements SettleStrateg
 	 * @generated
 	 */
 	@Override
-	public boolean isUseCalendarMonth() {
-		return useCalendarMonth;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setUseCalendarMonth(boolean newUseCalendarMonth) {
-		boolean oldUseCalendarMonth = useCalendarMonth;
-		useCalendarMonth = newUseCalendarMonth;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.SETTLE_STRATEGY__USE_CALENDAR_MONTH, oldUseCalendarMonth, useCalendarMonth));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case PricingPackage.SETTLE_STRATEGY__DAY_OF_THE_MONTH:
 				return getDayOfTheMonth();
 			case PricingPackage.SETTLE_STRATEGY__LAST_DAY_OF_THE_MONTH:
 				return isLastDayOfTheMonth();
-			case PricingPackage.SETTLE_STRATEGY__USE_CALENDAR_MONTH:
-				return isUseCalendarMonth();
 			case PricingPackage.SETTLE_STRATEGY__SETTLE_PERIOD:
 				return getSettlePeriod();
 			case PricingPackage.SETTLE_STRATEGY__SETTLE_PERIOD_UNIT:
@@ -351,9 +305,6 @@ public class SettleStrategyImpl extends NamedObjectImpl implements SettleStrateg
 				return;
 			case PricingPackage.SETTLE_STRATEGY__LAST_DAY_OF_THE_MONTH:
 				setLastDayOfTheMonth((Boolean)newValue);
-				return;
-			case PricingPackage.SETTLE_STRATEGY__USE_CALENDAR_MONTH:
-				setUseCalendarMonth((Boolean)newValue);
 				return;
 			case PricingPackage.SETTLE_STRATEGY__SETTLE_PERIOD:
 				setSettlePeriod((Integer)newValue);
@@ -382,9 +333,6 @@ public class SettleStrategyImpl extends NamedObjectImpl implements SettleStrateg
 			case PricingPackage.SETTLE_STRATEGY__LAST_DAY_OF_THE_MONTH:
 				setLastDayOfTheMonth(LAST_DAY_OF_THE_MONTH_EDEFAULT);
 				return;
-			case PricingPackage.SETTLE_STRATEGY__USE_CALENDAR_MONTH:
-				setUseCalendarMonth(USE_CALENDAR_MONTH_EDEFAULT);
-				return;
 			case PricingPackage.SETTLE_STRATEGY__SETTLE_PERIOD:
 				setSettlePeriod(SETTLE_PERIOD_EDEFAULT);
 				return;
@@ -410,8 +358,6 @@ public class SettleStrategyImpl extends NamedObjectImpl implements SettleStrateg
 				return dayOfTheMonth != DAY_OF_THE_MONTH_EDEFAULT;
 			case PricingPackage.SETTLE_STRATEGY__LAST_DAY_OF_THE_MONTH:
 				return lastDayOfTheMonth != LAST_DAY_OF_THE_MONTH_EDEFAULT;
-			case PricingPackage.SETTLE_STRATEGY__USE_CALENDAR_MONTH:
-				return useCalendarMonth != USE_CALENDAR_MONTH_EDEFAULT;
 			case PricingPackage.SETTLE_STRATEGY__SETTLE_PERIOD:
 				return settlePeriod != SETTLE_PERIOD_EDEFAULT;
 			case PricingPackage.SETTLE_STRATEGY__SETTLE_PERIOD_UNIT:
@@ -436,8 +382,6 @@ public class SettleStrategyImpl extends NamedObjectImpl implements SettleStrateg
 		result.append(dayOfTheMonth);
 		result.append(", lastDayOfTheMonth: ");
 		result.append(lastDayOfTheMonth);
-		result.append(", useCalendarMonth: ");
-		result.append(useCalendarMonth);
 		result.append(", settlePeriod: ");
 		result.append(settlePeriod);
 		result.append(", settlePeriodUnit: ");

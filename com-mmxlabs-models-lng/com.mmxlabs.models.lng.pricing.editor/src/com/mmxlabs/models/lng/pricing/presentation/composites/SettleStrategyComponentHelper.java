@@ -7,7 +7,7 @@
 package com.mmxlabs.models.lng.pricing.presentation.composites;
 
 import com.mmxlabs.models.lng.pricing.PricingPackage;
-
+import com.mmxlabs.models.lng.pricing.editor.SettleStrategyStartDayWrapper;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
@@ -71,7 +71,6 @@ public class SettleStrategyComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_dayOfTheMonthEditor(detailComposite, topClass);
 		add_lastDayOfTheMonthEditor(detailComposite, topClass);
-		add_useCalendarMonthEditor(detailComposite, topClass);
 		add_settlePeriodEditor(detailComposite, topClass);
 		add_settlePeriodUnitEditor(detailComposite, topClass);
 		add_settleStartMonthsPriorEditor(detailComposite, topClass);
@@ -79,10 +78,10 @@ public class SettleStrategyComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the dayOfTheMonth feature on SettleStrategy
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_dayOfTheMonthEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.SETTLE_STRATEGY__DAY_OF_THE_MONTH));
+		detailComposite.addInlineEditor(new SettleStrategyStartDayWrapper(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.SETTLE_STRATEGY__DAY_OF_THE_MONTH)));
 	}
 	/**
 	 * Create the editor for the settlePeriod feature on SettleStrategy
@@ -117,13 +116,5 @@ public class SettleStrategyComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_lastDayOfTheMonthEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.SETTLE_STRATEGY__LAST_DAY_OF_THE_MONTH));
-	}
-	/**
-	 * Create the editor for the useCalendarMonth feature on SettleStrategy
-	 *
-	 * @generated
-	 */
-	protected void add_useCalendarMonthEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.SETTLE_STRATEGY__USE_CALENDAR_MONTH));
 	}
 }

@@ -1993,22 +1993,13 @@ public interface PricingPackage extends EPackage {
 	int SETTLE_STRATEGY__LAST_DAY_OF_THE_MONTH = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Use Calendar Month</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SETTLE_STRATEGY__USE_CALENDAR_MONTH = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
-
-	/**
 	 * The feature id for the '<em><b>Settle Period</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SETTLE_STRATEGY__SETTLE_PERIOD = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 3;
+	int SETTLE_STRATEGY__SETTLE_PERIOD = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Settle Period Unit</b></em>' attribute.
@@ -2017,7 +2008,7 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SETTLE_STRATEGY__SETTLE_PERIOD_UNIT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
+	int SETTLE_STRATEGY__SETTLE_PERIOD_UNIT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Settle Start Months Prior</b></em>' attribute.
@@ -2026,7 +2017,7 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SETTLE_STRATEGY__SETTLE_START_MONTHS_PRIOR = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 5;
+	int SETTLE_STRATEGY__SETTLE_START_MONTHS_PRIOR = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Settle Strategy</em>' class.
@@ -2035,7 +2026,7 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SETTLE_STRATEGY_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 6;
+	int SETTLE_STRATEGY_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.PricingModel <em>Model</em>}'.
@@ -3324,17 +3315,6 @@ public interface PricingPackage extends EPackage {
 	EAttribute getSettleStrategy_LastDayOfTheMonth();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.SettleStrategy#isUseCalendarMonth <em>Use Calendar Month</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Use Calendar Month</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.SettleStrategy#isUseCalendarMonth()
-	 * @see #getSettleStrategy()
-	 * @generated
-	 */
-	EAttribute getSettleStrategy_UseCalendarMonth();
-
-	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.SettleStrategy#getSettlePeriod <em>Settle Period</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4416,14 +4396,6 @@ public interface PricingPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SETTLE_STRATEGY__LAST_DAY_OF_THE_MONTH = eINSTANCE.getSettleStrategy_LastDayOfTheMonth();
-
-		/**
-		 * The meta object literal for the '<em><b>Use Calendar Month</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SETTLE_STRATEGY__USE_CALENDAR_MONTH = eINSTANCE.getSettleStrategy_UseCalendarMonth();
 
 		/**
 		 * The meta object literal for the '<em><b>Settle Period</b></em>' attribute feature.

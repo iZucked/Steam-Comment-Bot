@@ -7,17 +7,31 @@ package com.mmxlabs.models.lng.transformer.extensions.paperdeals;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.BuyPaperDeal;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
+import com.mmxlabs.models.lng.cargo.PaperPricingType;
 import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
+import com.mmxlabs.models.lng.pricing.CommodityCurve;
+import com.mmxlabs.models.lng.pricing.HolidayCalendar;
+import com.mmxlabs.models.lng.pricing.MarketIndex;
+import com.mmxlabs.models.lng.pricing.PricingCalendar;
+import com.mmxlabs.models.lng.pricing.PricingCalendarEntry;
 import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.pricing.SettleStrategy;
 import com.mmxlabs.models.lng.pricing.UnitConversion;
 import com.mmxlabs.models.lng.pricing.util.ModelMarketCurveProvider;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
@@ -46,6 +60,7 @@ public class PaperDealsScheduleProcessor implements IOutputScheduleProcessor {
 	public void process(final Schedule schedule) {
 		if (LicenseFeatures.isPermitted("features:paperdeals")) {
 			boolean calculateExposures = LicenseFeatures.isPermitted("features:exposures");
+			//add calendar support
 			final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
 			final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioModel);
 
@@ -53,6 +68,8 @@ public class PaperDealsScheduleProcessor implements IOutputScheduleProcessor {
 			if (provider == null) {
 				return;
 			}
+			
+			final CalendarHandler calendarHandler = new CalendarHandler(scenarioDataProvider);
 
 			for (final PaperDeal paperDeal : cargoModel.getPaperDeals()) {
 
@@ -61,111 +78,240 @@ public class PaperDealsScheduleProcessor implements IOutputScheduleProcessor {
 				final PaperDealAllocation allocation = ScheduleFactory.eINSTANCE.createPaperDealAllocation();
 				allocation.setPaperDeal(paperDeal);
 
-				LocalDate start = paperDeal.getStartDate();
-				int days = 0;
-				// Count trading days
-				while (!start.isAfter(paperDeal.getEndDate())) {
-					final boolean isWeekend = start.getDayOfWeek() == DayOfWeek.SATURDAY || start.getDayOfWeek() == DayOfWeek.SUNDAY;
-
-					start = start.plusDays(1);
-					if (isWeekend) {
-						continue;
-					}
-					// If holiday continue
-					++days;
-				}
-
 				final Map<LocalDate, Double> settledPrices = provider.getSettledPrices(paperDeal.getIndex());
 				final ISeries series = provider.getSeriesParser(PriceIndexType.COMMODITY).getSeries(paperDeal.getIndex());
 				final AbstractYearMonthCurve curveData = provider.getCurve(PriceIndexType.COMMODITY, paperDeal.getIndex());
-
-				start = paperDeal.getStartDate();
-				// Fixed price portion
-				final PaperDealAllocationEntry fixedPortion;
-				{
-					PaperDealAllocationEntry entry = ScheduleFactory.eINSTANCE.createPaperDealAllocationEntry();
-					entry.setDate(start);
-					double price = paperDeal.getPrice();
-					boolean settled = true;
-					entry.setPrice(price);
-					entry.setSettled(settled);
-					// Buy, gain volume, sell loose volume
-					entry.setQuantity((isBuy ? 1.0 : -1.0) * paperDeal.getQuantity());
-					// Buy, pay money , sell gain money
-					entry.setValue(-entry.getQuantity() * entry.getPrice());
-
-					allocation.getEntries().add(entry);
-
-					fixedPortion = entry;
+				
+				switch (paperDeal.getPricingType()) {
+				case PERIOD_AVG:
+					calculateDailyAveragePaperExposures(schedule, calculateExposures, pricingModel, paperDeal, isBuy, allocation, settledPrices, series, curveData);
+					break;
+				case CALENDAR:
+					calculateCalendarPaperExposures(schedule, calculateExposures, pricingModel, paperDeal, isBuy, allocation, settledPrices, series, curveData, calendarHandler);
+					break;
+				case INSTRUMENT:
+					calculateInstrumentPaperExposures(schedule, calculateExposures, pricingModel, paperDeal, isBuy, allocation, settledPrices, series, curveData);
+					break;
+				default:
+					throw new IllegalArgumentException("Paper pricing type has a wrong state");
 				}
-				// MTM Part
-				// Count trading days
-				while (!start.isAfter(paperDeal.getEndDate())) {
-					final boolean isWeekend = start.getDayOfWeek() == DayOfWeek.SATURDAY || start.getDayOfWeek() == DayOfWeek.SUNDAY;
+			}
+		}
+	}
 
-					if (!isWeekend) {
-						final PaperDealAllocationEntry entry = ScheduleFactory.eINSTANCE.createPaperDealAllocationEntry();
+	private void calculateDailyAveragePaperExposures(final Schedule schedule, boolean calculateExposures, final PricingModel pricingModel, final PaperDeal paperDeal, final boolean isBuy,
+			final PaperDealAllocation allocation, final Map<LocalDate, Double> settledPrices, final ISeries series, final AbstractYearMonthCurve curveData) {
+		final LocalDate extStart = paperDeal.getStartDate();
+		final LocalDate extEnd = paperDeal.getEndDate();
+		
+		settlePaper(schedule, calculateExposures, pricingModel, paperDeal, isBuy, allocation, settledPrices, series, curveData, extStart, extEnd);
+	}
+	
+	private void calculateCalendarPaperExposures(final Schedule schedule, boolean calculateExposures, final PricingModel pricingModel, final PaperDeal paperDeal, final boolean isBuy,//
+			final PaperDealAllocation allocation, final Map<LocalDate, Double> settledPrices, final ISeries series, final AbstractYearMonthCurve curveData, //
+			final CalendarHandler calendarHandler) {
+		
+		final List<PricingCalendar> pcs = new ArrayList<>();
+		final List<HolidayCalendar> hcs = new ArrayList<>();
 
-						entry.setDate(start);
-						double price = series.evaluate(PriceIndexUtils.convertTime(PriceIndexUtils.dateZero, start)).doubleValue();
-						boolean settled = false;
-						if (settledPrices != null) {
-							final Double settledPrice = settledPrices.get(start);
+		if (curveData instanceof CommodityCurve) {
+			final CommodityCurve cc = (CommodityCurve) curveData;
+			if (calendarHandler.getPricingCalendar(cc) != null) {
+				pcs.add(calendarHandler.getPricingCalendar(cc));
+			}
+			if (calendarHandler.getHolidayCalendar(cc) != null) {
+				hcs.add(calendarHandler.getHolidayCalendar(cc));
+			}
+		}
+		
+		if (pcs.isEmpty() || paperDeal.getPricingMonth() == null) {
+			return;
+		}
+		final PricingCalendar pc = pcs.get(0);
+		final List<PricingCalendarEntry> lpce = pc.getEntries().stream().filter(a -> paperDeal.getPricingMonth().equals(a.getMonth())).collect(Collectors.toList());
+		if (lpce.isEmpty()) {
+			return;
+		}
+		final PricingCalendarEntry pce = lpce.get(0);
+		
+		final LocalDate extStart = pce.getStart();
+		final LocalDate extEnd = pce.getEnd();
+		
+		settlePaper(schedule, calculateExposures, pricingModel, paperDeal, isBuy, allocation, settledPrices, series, curveData, extStart, extEnd);
+	}
+	
+	private void calculateInstrumentPaperExposures(final Schedule schedule, boolean calculateExposures, final PricingModel pricingModel, final PaperDeal paperDeal, final boolean isBuy,
+			final PaperDealAllocation allocation, final Map<LocalDate, Double> settledPrices, final ISeries series, final AbstractYearMonthCurve curveData) {
+		
+		if (paperDeal.getInstrument() == null || paperDeal.getPricingMonth() == null) {
+			return;
+		}
+		
+		final SettleStrategy ss = paperDeal.getInstrument();
+		final YearMonth originalMonth = paperDeal.getPricingMonth();
+		final YearMonth startMonth = originalMonth.plusMonths(-1*ss.getSettleStartMonthsPrior());
+		
+		int settlingPeriodDurationInDays = 0;
+		switch (ss.getSettlePeriodUnit()) {
+		case HOURS:
+			settlingPeriodDurationInDays = ss.getSettlePeriod() / 24;
+			break;
+		case DAYS:
+			settlingPeriodDurationInDays = ss.getSettlePeriod();
+			break;
+		case MONTHS:
+			settlingPeriodDurationInDays = ss.getSettlePeriod() * 30;
+		default:
+			break;
+		}
+		
+		int startDay = ss.isLastDayOfTheMonth() ? startMonth.lengthOfMonth() : ss.getDayOfTheMonth();
+		if (startDay == 0) {
+			startDay = 1;
+		}
+		
+		final LocalDate extStart = LocalDate.of(startMonth.getYear(), startMonth.getMonthValue(), startDay);
+		final LocalDate extEnd = extStart.plusDays(settlingPeriodDurationInDays);
+		
+		settlePaper(schedule, calculateExposures, pricingModel, paperDeal, isBuy, allocation, settledPrices, series, curveData, extStart, extEnd);
+	}
+	
+	private void settlePaper(final Schedule schedule, boolean calculateExposures, final PricingModel pricingModel, final PaperDeal paperDeal, final boolean isBuy, final PaperDealAllocation allocation,
+			final Map<LocalDate, Double> settledPrices, final ISeries series, final AbstractYearMonthCurve curveData, final LocalDate extStart, final LocalDate extEnd) {
+		LocalDate start = extStart;
+		int days = 0;
+		// Count trading days
+		while (!start.isAfter(extEnd)) {
+			final boolean isWeekend = start.getDayOfWeek() == DayOfWeek.SATURDAY || start.getDayOfWeek() == DayOfWeek.SUNDAY;
 
-							if (settledPrice != null) {
-								price = settledPrice;
-								settled = true;
-							}
-						}
+			start = start.plusDays(1);
+			if (isWeekend) {
+				continue;
+			}
+			// If holiday continue
+			++days;
+		}
 
-						entry.setPrice(price);
-						//
-						entry.setSettled(settled);
-						entry.setQuantity((isBuy ? 1.0 : -1.0) * paperDeal.getQuantity() / (double) days);
-						entry.setValue(-(entry.getQuantity() * entry.getPrice()));
+		start = extStart;
+		// Fixed price portion
+		final PaperDealAllocationEntry fixedPortion;
+		{
+			PaperDealAllocationEntry entry = ScheduleFactory.eINSTANCE.createPaperDealAllocationEntry();
+			entry.setDate(start);
+			double price = paperDeal.getPrice();
+			boolean settled = true;
+			entry.setPrice(price);
+			entry.setSettled(settled);
+			// Buy, gain volume, sell loose volume
+			entry.setQuantity((isBuy ? 1.0 : -1.0) * paperDeal.getQuantity());
+			// Buy, pay money , sell gain money
+			entry.setValue(-entry.getQuantity() * entry.getPrice());
 
-						if (!settled && calculateExposures) {
-							final ExposureDetail detail = ScheduleFactory.eINSTANCE.createExposureDetail();
-							detail.setDealType(DealType.FINANCIAL);
-							detail.setCurrencyUnit(curveData.getCurrencyUnit());
-							detail.setVolumeUnit(curveData.getVolumeUnit());
+			allocation.getEntries().add(entry);
 
-							detail.setDate(YearMonth.from(entry.getDate()));
+			fixedPortion = entry;
+		}
+		// MTM Part
+		// Count trading days
+		while (!start.isAfter(extEnd)) {
+			final boolean isWeekend = start.getDayOfWeek() == DayOfWeek.SATURDAY || start.getDayOfWeek() == DayOfWeek.SUNDAY;
 
-							detail.setIndexName(paperDeal.getIndex());
+			if (!isWeekend) {
+				final PaperDealAllocationEntry entry = ScheduleFactory.eINSTANCE.createPaperDealAllocationEntry();
 
-							detail.setVolumeInNativeUnits(entry.getQuantity());
-							if (curveData.getVolumeUnit() == null || curveData.getVolumeUnit().isEmpty() || "mmbtu".equalsIgnoreCase(curveData.getVolumeUnit())) {
-								// Native matches mmbtu
-								detail.setVolumeInMMBTU(entry.getQuantity());
-							} else {
+				entry.setDate(start);
+				double price = series.evaluate(PriceIndexUtils.convertTime(PriceIndexUtils.dateZero, start)).doubleValue();
+				boolean settled = false;
+				if (settledPrices != null) {
+					final Double settledPrice = settledPrices.get(start);
 
-							}
-							// Not mmBtu? then the mmBtu field is still really native units
-							// Perform units conversion - compute mmBtu equivalent of exposed native volume
-							double mmbtuVolume = entry.getQuantity();
-							for (final UnitConversion factor : pricingModel.getConversionFactors()) {
-								if (factor.getTo().equalsIgnoreCase("mmbtu")) {
-									if (factor.getFrom().equalsIgnoreCase(curveData.getVolumeUnit())) {
-										mmbtuVolume /= factor.getFactor();
-										break;
-									}
-								}
-							}
-							detail.setVolumeInMMBTU(mmbtuVolume);
-
-							detail.setNativeValue(entry.getQuantity() * entry.getPrice());
-							detail.setUnitPrice(entry.getPrice());
-
-							fixedPortion.getExposures().add(detail);
-
-						}
-						allocation.getEntries().add(entry);
+					if (settledPrice != null) {
+						price = settledPrice;
+						settled = true;
 					}
-					start = start.plusDays(1);
 				}
 
-				schedule.getPaperDealAllocations().add(allocation);
+				entry.setPrice(price);
+				//
+				entry.setSettled(settled);
+				entry.setQuantity((isBuy ? 1.0 : -1.0) * paperDeal.getQuantity() / (double) days);
+				entry.setValue(-(entry.getQuantity() * entry.getPrice()));
+
+				if (!settled && calculateExposures) {
+					final ExposureDetail detail = ScheduleFactory.eINSTANCE.createExposureDetail();
+					detail.setDealType(DealType.FINANCIAL);
+					detail.setCurrencyUnit(curveData.getCurrencyUnit());
+					detail.setVolumeUnit(curveData.getVolumeUnit());
+
+					detail.setDate(YearMonth.from(entry.getDate()));
+
+					detail.setIndexName(paperDeal.getIndex());
+
+					detail.setVolumeInNativeUnits(entry.getQuantity());
+					if (curveData.getVolumeUnit() == null || curveData.getVolumeUnit().isEmpty() || "mmbtu".equalsIgnoreCase(curveData.getVolumeUnit())) {
+						// Native matches mmbtu
+						detail.setVolumeInMMBTU(entry.getQuantity());
+					} else {
+
+					}
+					// Not mmBtu? then the mmBtu field is still really native units
+					// Perform units conversion - compute mmBtu equivalent of exposed native volume
+					double mmbtuVolume = entry.getQuantity();
+					for (final UnitConversion factor : pricingModel.getConversionFactors()) {
+						if (factor.getTo().equalsIgnoreCase("mmbtu")) {
+							if (factor.getFrom().equalsIgnoreCase(curveData.getVolumeUnit())) {
+								mmbtuVolume /= factor.getFactor();
+								break;
+							}
+						}
+					}
+					detail.setVolumeInMMBTU(mmbtuVolume);
+
+					detail.setNativeValue(entry.getQuantity() * entry.getPrice());
+					detail.setUnitPrice(entry.getPrice());
+
+					fixedPortion.getExposures().add(detail);
+
+				}
+				allocation.getEntries().add(entry);
+			}
+			start = start.plusDays(1);
+		}
+
+		schedule.getPaperDealAllocations().add(allocation);
+	}
+	
+	private static class CalendarHandler {
+
+		private Map<CommodityCurve, PricingCalendar> pricingCalendars = new HashMap<>();
+		private Map<CommodityCurve, HolidayCalendar> holidayCalendars = new HashMap<>();
+
+		public PricingCalendar getPricingCalendar(final CommodityCurve cc) {
+			return pricingCalendars.get(cc);
+		}
+
+		public HolidayCalendar getHolidayCalendar(final CommodityCurve cc) {
+			return holidayCalendars.get(cc);
+		}
+
+		public CalendarHandler(final @NonNull IScenarioDataProvider scenarioDataProvider) {
+
+			PricingModel pm = ScenarioModelUtil.getPricingModel(scenarioDataProvider);
+
+			for (final AbstractYearMonthCurve curve : pm.getCommodityCurves()) {
+				if (curve instanceof CommodityCurve) {
+					final CommodityCurve cc = (CommodityCurve) curve;
+					final MarketIndex mi = cc.getMarketIndex();
+					if (mi == null) {
+						continue;
+					}
+					if (mi.getPricingCalendar() != null) {
+						pricingCalendars.putIfAbsent(cc, mi.getPricingCalendar());
+					}
+					if (mi.getSettleCalendar() != null) {
+						holidayCalendars.putIfAbsent(cc, mi.getSettleCalendar());
+					}
+				}
 			}
 		}
 	}

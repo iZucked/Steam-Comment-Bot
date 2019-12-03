@@ -50,13 +50,13 @@ public class PricingMonthUtils {
 	
 	public static SlotAllocation getDischargeIfExists(@NonNull final SlotAllocation slotAllocation) {
 		SlotAllocation result = slotAllocation;
-		final Slot slot = result.getSlot();
+		final Slot<?> slot = result.getSlot();
 		if (slot instanceof LoadSlot) {
 			final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
 			if (cargoAllocation != null) {
 				for (final SlotAllocation sa : cargoAllocation.getSlotAllocations()) {
 					if (sa.equals(slotAllocation)) continue;
-					final Slot s = sa.getSlot();
+					final Slot<?> s = sa.getSlot();
 					if (s instanceof DischargeSlot) {
 						result = sa;
 					}
@@ -67,7 +67,7 @@ public class PricingMonthUtils {
 	}
 	
 	public static @Nullable LocalDate getFullPricingDate(@NonNull final SlotAllocation slotAllocation) {
-		final Slot slot = slotAllocation.getSlot();
+		final Slot<?> slot = slotAllocation.getSlot();
 
 		Optional<LocalDate> pricingDate = Optional.empty();
 		if (slot.isSetPricingDate()) {
@@ -137,7 +137,7 @@ public class PricingMonthUtils {
 
 	private static final BiFunction<Optional<SlotAllocation>, Class<? extends Slot>, Optional<SlotAllocation>> getAllocationOf = (slotAllocation, cls) -> {
 		if (slotAllocation.isPresent()) {
-			final Slot slot = slotAllocation.get().getSlot();
+			final Slot<?> slot = slotAllocation.get().getSlot();
 			if (cls.isInstance(slot)) {
 				return slotAllocation;
 			}

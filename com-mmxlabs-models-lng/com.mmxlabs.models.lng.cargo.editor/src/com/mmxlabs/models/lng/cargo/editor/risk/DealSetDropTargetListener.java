@@ -84,22 +84,6 @@ public class DealSetDropTargetListener implements DropTargetListener {
 
 	@Override
 	public void dragOver(final DropTargetEvent event) {
-		if (LocalSelectionTransfer.getTransfer().isSupportedType(event.currentDataType)) {
-			final IStructuredSelection selection = (IStructuredSelection) LocalSelectionTransfer.getTransfer().nativeToJava(event.currentDataType);
-			if (selection == null) return;
-			if (!selection.isEmpty()) {
-				final Iterator<?> itr = selection.iterator();
-				while (itr.hasNext()) {
-					final Object o = itr.next();
-					if (o instanceof Slot || o instanceof PaperDeal) {
-						// Found a valid source in the selection.
-						event.operations = DND.DROP_MOVE;
-						return;
-					}
-				}
-			}
-		}
-		event.operations = DND.DROP_NONE;
 	}
 
 	@Override

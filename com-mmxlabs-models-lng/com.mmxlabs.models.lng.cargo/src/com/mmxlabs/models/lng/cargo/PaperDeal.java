@@ -11,6 +11,7 @@ import com.mmxlabs.models.lng.pricing.SettleStrategy;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import java.time.LocalDate;
 
+import java.time.YearMonth;
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -23,9 +24,11 @@ import org.eclipse.emf.ecore.EObject;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.PaperDeal#getPrice <em>Price</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.PaperDeal#getPricingType <em>Pricing Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.PaperDeal#getIndex <em>Index</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.PaperDeal#getInstrument <em>Instrument</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.PaperDeal#getQuantity <em>Quantity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.PaperDeal#getPricingMonth <em>Pricing Month</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.PaperDeal#getStartDate <em>Start Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.PaperDeal#getEndDate <em>End Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.PaperDeal#getEntity <em>Entity</em>}</li>
@@ -63,6 +66,32 @@ public interface PaperDeal extends NamedObject {
 	 * @generated
 	 */
 	void setQuantity(double value);
+
+	/**
+	 * Returns the value of the '<em><b>Pricing Month</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Pricing Month</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Pricing Month</em>' attribute.
+	 * @see #setPricingMonth(YearMonth)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getPaperDeal_PricingMonth()
+	 * @model dataType="com.mmxlabs.models.datetime.YearMonth"
+	 * @generated
+	 */
+	YearMonth getPricingMonth();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getPricingMonth <em>Pricing Month</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Pricing Month</em>' attribute.
+	 * @see #getPricingMonth()
+	 * @generated
+	 */
+	void setPricingMonth(YearMonth value);
 
 	/**
 	 * Returns the value of the '<em><b>Start Date</b></em>' attribute.
@@ -203,9 +232,11 @@ public interface PaperDeal extends NamedObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Instrument</em>' reference.
+	 * @see #isSetInstrument()
+	 * @see #unsetInstrument()
 	 * @see #setInstrument(SettleStrategy)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getPaperDeal_Instrument()
-	 * @model
+	 * @model unsettable="true"
 	 * @generated
 	 */
 	SettleStrategy getInstrument();
@@ -215,10 +246,35 @@ public interface PaperDeal extends NamedObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Instrument</em>' reference.
+	 * @see #isSetInstrument()
+	 * @see #unsetInstrument()
 	 * @see #getInstrument()
 	 * @generated
 	 */
 	void setInstrument(SettleStrategy value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getInstrument <em>Instrument</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetInstrument()
+	 * @see #getInstrument()
+	 * @see #setInstrument(SettleStrategy)
+	 * @generated
+	 */
+	void unsetInstrument();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getInstrument <em>Instrument</em>}' reference is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Instrument</em>' reference is set.
+	 * @see #unsetInstrument()
+	 * @see #getInstrument()
+	 * @see #setInstrument(SettleStrategy)
+	 * @generated
+	 */
+	boolean isSetInstrument();
 
 	/**
 	 * Returns the value of the '<em><b>Price</b></em>' attribute.
@@ -245,6 +301,35 @@ public interface PaperDeal extends NamedObject {
 	 * @generated
 	 */
 	void setPrice(double value);
+
+	/**
+	 * Returns the value of the '<em><b>Pricing Type</b></em>' attribute.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.cargo.PaperPricingType}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Pricing Type</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Pricing Type</em>' attribute.
+	 * @see com.mmxlabs.models.lng.cargo.PaperPricingType
+	 * @see #setPricingType(PaperPricingType)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getPaperDeal_PricingType()
+	 * @model
+	 * @generated
+	 */
+	PaperPricingType getPricingType();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getPricingType <em>Pricing Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Pricing Type</em>' attribute.
+	 * @see com.mmxlabs.models.lng.cargo.PaperPricingType
+	 * @see #getPricingType()
+	 * @generated
+	 */
+	void setPricingType(PaperPricingType value);
 
 	/**
 	 * Returns the value of the '<em><b>Index</b></em>' attribute.
