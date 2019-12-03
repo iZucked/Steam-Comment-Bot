@@ -9,11 +9,13 @@ package com.mmxlabs.models.lng.cargo.impl;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 
+import com.mmxlabs.models.lng.cargo.PaperPricingType;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.pricing.SettleStrategy;
 import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
 import java.time.LocalDate;
 
+import java.time.YearMonth;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
@@ -31,9 +33,11 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.PaperDealImpl#getPrice <em>Price</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.PaperDealImpl#getPricingType <em>Pricing Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.PaperDealImpl#getIndex <em>Index</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.PaperDealImpl#getInstrument <em>Instrument</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.PaperDealImpl#getQuantity <em>Quantity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.PaperDealImpl#getPricingMonth <em>Pricing Month</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.PaperDealImpl#getStartDate <em>Start Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.PaperDealImpl#getEndDate <em>End Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.PaperDealImpl#getEntity <em>Entity</em>}</li>
@@ -63,6 +67,26 @@ public abstract class PaperDealImpl extends NamedObjectImpl implements PaperDeal
 	 * @ordered
 	 */
 	protected double price = PRICE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getPricingType() <em>Pricing Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPricingType()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final PaperPricingType PRICING_TYPE_EDEFAULT = PaperPricingType.PERIOD_AVG;
+
+	/**
+	 * The cached value of the '{@link #getPricingType() <em>Pricing Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPricingType()
+	 * @generated
+	 * @ordered
+	 */
+	protected PaperPricingType pricingType = PRICING_TYPE_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getIndex() <em>Index</em>}' attribute.
@@ -95,6 +119,15 @@ public abstract class PaperDealImpl extends NamedObjectImpl implements PaperDeal
 	protected SettleStrategy instrument;
 
 	/**
+	 * This is true if the Instrument reference has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean instrumentESet;
+
+	/**
 	 * The default value of the '{@link #getQuantity() <em>Quantity</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -113,6 +146,26 @@ public abstract class PaperDealImpl extends NamedObjectImpl implements PaperDeal
 	 * @ordered
 	 */
 	protected double quantity = QUANTITY_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getPricingMonth() <em>Pricing Month</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPricingMonth()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final YearMonth PRICING_MONTH_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getPricingMonth() <em>Pricing Month</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPricingMonth()
+	 * @generated
+	 * @ordered
+	 */
+	protected YearMonth pricingMonth = PRICING_MONTH_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getStartDate() <em>Start Date</em>}' attribute.
@@ -244,6 +297,29 @@ public abstract class PaperDealImpl extends NamedObjectImpl implements PaperDeal
 		quantity = newQuantity;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.PAPER_DEAL__QUANTITY, oldQuantity, quantity));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public YearMonth getPricingMonth() {
+		return pricingMonth;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setPricingMonth(YearMonth newPricingMonth) {
+		YearMonth oldPricingMonth = pricingMonth;
+		pricingMonth = newPricingMonth;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.PAPER_DEAL__PRICING_MONTH, oldPricingMonth, pricingMonth));
 	}
 
 	/**
@@ -414,8 +490,35 @@ public abstract class PaperDealImpl extends NamedObjectImpl implements PaperDeal
 	public void setInstrument(SettleStrategy newInstrument) {
 		SettleStrategy oldInstrument = instrument;
 		instrument = newInstrument;
+		boolean oldInstrumentESet = instrumentESet;
+		instrumentESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.PAPER_DEAL__INSTRUMENT, oldInstrument, instrument));
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.PAPER_DEAL__INSTRUMENT, oldInstrument, instrument, !oldInstrumentESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetInstrument() {
+		SettleStrategy oldInstrument = instrument;
+		boolean oldInstrumentESet = instrumentESet;
+		instrument = null;
+		instrumentESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.PAPER_DEAL__INSTRUMENT, oldInstrument, null, oldInstrumentESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetInstrument() {
+		return instrumentESet;
 	}
 
 	/**
@@ -439,6 +542,29 @@ public abstract class PaperDealImpl extends NamedObjectImpl implements PaperDeal
 		price = newPrice;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.PAPER_DEAL__PRICE, oldPrice, price));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public PaperPricingType getPricingType() {
+		return pricingType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setPricingType(PaperPricingType newPricingType) {
+		PaperPricingType oldPricingType = pricingType;
+		pricingType = newPricingType == null ? PRICING_TYPE_EDEFAULT : newPricingType;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.PAPER_DEAL__PRICING_TYPE, oldPricingType, pricingType));
 	}
 
 	/**
@@ -474,6 +600,8 @@ public abstract class PaperDealImpl extends NamedObjectImpl implements PaperDeal
 		switch (featureID) {
 			case CargoPackage.PAPER_DEAL__PRICE:
 				return getPrice();
+			case CargoPackage.PAPER_DEAL__PRICING_TYPE:
+				return getPricingType();
 			case CargoPackage.PAPER_DEAL__INDEX:
 				return getIndex();
 			case CargoPackage.PAPER_DEAL__INSTRUMENT:
@@ -481,6 +609,8 @@ public abstract class PaperDealImpl extends NamedObjectImpl implements PaperDeal
 				return basicGetInstrument();
 			case CargoPackage.PAPER_DEAL__QUANTITY:
 				return getQuantity();
+			case CargoPackage.PAPER_DEAL__PRICING_MONTH:
+				return getPricingMonth();
 			case CargoPackage.PAPER_DEAL__START_DATE:
 				return getStartDate();
 			case CargoPackage.PAPER_DEAL__END_DATE:
@@ -507,6 +637,9 @@ public abstract class PaperDealImpl extends NamedObjectImpl implements PaperDeal
 			case CargoPackage.PAPER_DEAL__PRICE:
 				setPrice((Double)newValue);
 				return;
+			case CargoPackage.PAPER_DEAL__PRICING_TYPE:
+				setPricingType((PaperPricingType)newValue);
+				return;
 			case CargoPackage.PAPER_DEAL__INDEX:
 				setIndex((String)newValue);
 				return;
@@ -515,6 +648,9 @@ public abstract class PaperDealImpl extends NamedObjectImpl implements PaperDeal
 				return;
 			case CargoPackage.PAPER_DEAL__QUANTITY:
 				setQuantity((Double)newValue);
+				return;
+			case CargoPackage.PAPER_DEAL__PRICING_MONTH:
+				setPricingMonth((YearMonth)newValue);
 				return;
 			case CargoPackage.PAPER_DEAL__START_DATE:
 				setStartDate((LocalDate)newValue);
@@ -546,14 +682,20 @@ public abstract class PaperDealImpl extends NamedObjectImpl implements PaperDeal
 			case CargoPackage.PAPER_DEAL__PRICE:
 				setPrice(PRICE_EDEFAULT);
 				return;
+			case CargoPackage.PAPER_DEAL__PRICING_TYPE:
+				setPricingType(PRICING_TYPE_EDEFAULT);
+				return;
 			case CargoPackage.PAPER_DEAL__INDEX:
 				setIndex(INDEX_EDEFAULT);
 				return;
 			case CargoPackage.PAPER_DEAL__INSTRUMENT:
-				setInstrument((SettleStrategy)null);
+				unsetInstrument();
 				return;
 			case CargoPackage.PAPER_DEAL__QUANTITY:
 				setQuantity(QUANTITY_EDEFAULT);
+				return;
+			case CargoPackage.PAPER_DEAL__PRICING_MONTH:
+				setPricingMonth(PRICING_MONTH_EDEFAULT);
 				return;
 			case CargoPackage.PAPER_DEAL__START_DATE:
 				setStartDate(START_DATE_EDEFAULT);
@@ -584,12 +726,16 @@ public abstract class PaperDealImpl extends NamedObjectImpl implements PaperDeal
 		switch (featureID) {
 			case CargoPackage.PAPER_DEAL__PRICE:
 				return price != PRICE_EDEFAULT;
+			case CargoPackage.PAPER_DEAL__PRICING_TYPE:
+				return pricingType != PRICING_TYPE_EDEFAULT;
 			case CargoPackage.PAPER_DEAL__INDEX:
 				return INDEX_EDEFAULT == null ? index != null : !INDEX_EDEFAULT.equals(index);
 			case CargoPackage.PAPER_DEAL__INSTRUMENT:
-				return instrument != null;
+				return isSetInstrument();
 			case CargoPackage.PAPER_DEAL__QUANTITY:
 				return quantity != QUANTITY_EDEFAULT;
+			case CargoPackage.PAPER_DEAL__PRICING_MONTH:
+				return PRICING_MONTH_EDEFAULT == null ? pricingMonth != null : !PRICING_MONTH_EDEFAULT.equals(pricingMonth);
 			case CargoPackage.PAPER_DEAL__START_DATE:
 				return START_DATE_EDEFAULT == null ? startDate != null : !START_DATE_EDEFAULT.equals(startDate);
 			case CargoPackage.PAPER_DEAL__END_DATE:
@@ -616,10 +762,14 @@ public abstract class PaperDealImpl extends NamedObjectImpl implements PaperDeal
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (price: ");
 		result.append(price);
+		result.append(", pricingType: ");
+		result.append(pricingType);
 		result.append(", index: ");
 		result.append(index);
 		result.append(", quantity: ");
 		result.append(quantity);
+		result.append(", pricingMonth: ");
+		result.append(pricingMonth);
 		result.append(", startDate: ");
 		result.append(startDate);
 		result.append(", endDate: ");

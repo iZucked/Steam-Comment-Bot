@@ -21,7 +21,6 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.SettleStrategy#getDayOfTheMonth <em>Day Of The Month</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.SettleStrategy#isLastDayOfTheMonth <em>Last Day Of The Month</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.SettleStrategy#isUseCalendarMonth <em>Use Calendar Month</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.SettleStrategy#getSettlePeriod <em>Settle Period</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.SettleStrategy#getSettlePeriodUnit <em>Settle Period Unit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.SettleStrategy#getSettleStartMonthsPrior <em>Settle Start Months Prior</em>}</li>
@@ -43,7 +42,7 @@ public interface SettleStrategy extends NamedObject {
 	 * @return the value of the '<em>Day Of The Month</em>' attribute.
 	 * @see #setDayOfTheMonth(int)
 	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getSettleStrategy_DayOfTheMonth()
-	 * @model
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='#0'"
 	 * @generated
 	 */
 	int getDayOfTheMonth();
@@ -164,31 +163,5 @@ public interface SettleStrategy extends NamedObject {
 	 * @generated
 	 */
 	void setLastDayOfTheMonth(boolean value);
-
-	/**
-	 * Returns the value of the '<em><b>Use Calendar Month</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Use Calendar Month</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Use Calendar Month</em>' attribute.
-	 * @see #setUseCalendarMonth(boolean)
-	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getSettleStrategy_UseCalendarMonth()
-	 * @model
-	 * @generated
-	 */
-	boolean isUseCalendarMonth();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.SettleStrategy#isUseCalendarMonth <em>Use Calendar Month</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Use Calendar Month</em>' attribute.
-	 * @see #isUseCalendarMonth()
-	 * @generated
-	 */
-	void setUseCalendarMonth(boolean value);
 
 } // SettleStrategy

@@ -127,6 +127,8 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 				return createInventoryFacilityTypeFromString(eDataType, initialValue);
 			case CargoPackage.INVENTORY_FREQUENCY:
 				return createInventoryFrequencyFromString(eDataType, initialValue);
+			case CargoPackage.PAPER_PRICING_TYPE:
+				return createPaperPricingTypeFromString(eDataType, initialValue);
 			case CargoPackage.SCHEDULING_TIME_WINDOW:
 				return createSchedulingTimeWindowFromString(eDataType, initialValue);
 			default:
@@ -152,6 +154,8 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 				return convertInventoryFacilityTypeToString(eDataType, instanceValue);
 			case CargoPackage.INVENTORY_FREQUENCY:
 				return convertInventoryFrequencyToString(eDataType, instanceValue);
+			case CargoPackage.PAPER_PRICING_TYPE:
+				return convertPaperPricingTypeToString(eDataType, instanceValue);
 			case CargoPackage.SCHEDULING_TIME_WINDOW:
 				return convertSchedulingTimeWindowToString(eDataType, instanceValue);
 			default:
@@ -586,6 +590,26 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * @generated
 	 */
 	public String convertInventoryFrequencyToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PaperPricingType createPaperPricingTypeFromString(EDataType eDataType, String initialValue) {
+		PaperPricingType result = PaperPricingType.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertPaperPricingTypeToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 

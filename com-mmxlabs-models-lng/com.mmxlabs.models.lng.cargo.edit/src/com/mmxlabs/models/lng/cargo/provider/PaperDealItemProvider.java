@@ -61,9 +61,11 @@ public class PaperDealItemProvider
 			super.getPropertyDescriptors(object);
 
 			addPricePropertyDescriptor(object);
+			addPricingTypePropertyDescriptor(object);
 			addIndexPropertyDescriptor(object);
 			addInstrumentPropertyDescriptor(object);
 			addQuantityPropertyDescriptor(object);
+			addPricingMonthPropertyDescriptor(object);
 			addStartDatePropertyDescriptor(object);
 			addEndDatePropertyDescriptor(object);
 			addEntityPropertyDescriptor(object);
@@ -91,6 +93,28 @@ public class PaperDealItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Pricing Month feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPricingMonthPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_PaperDeal_pricingMonth_feature"),
+				 getString("_UI_PaperDeal_pricingMonth_description"),
+				 CargoPackage.Literals.PAPER_DEAL__PRICING_MONTH,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -250,6 +274,28 @@ public class PaperDealItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Pricing Type feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPricingTypePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_PaperDeal_pricingType_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_PaperDeal_pricingType_feature", "_UI_PaperDeal_type"),
+				 CargoPackage.Literals.PAPER_DEAL__PRICING_TYPE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Index feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -261,7 +307,7 @@ public class PaperDealItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_PaperDeal_index_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_PaperDeal_index_feature", "_UI_PaperDeal_type"),
+				 getString("_UI_PaperDeal_index_description"),
 				 CargoPackage.Literals.PAPER_DEAL__INDEX,
 				 true,
 				 false,
@@ -299,8 +345,10 @@ public class PaperDealItemProvider
 
 		switch (notification.getFeatureID(PaperDeal.class)) {
 			case CargoPackage.PAPER_DEAL__PRICE:
+			case CargoPackage.PAPER_DEAL__PRICING_TYPE:
 			case CargoPackage.PAPER_DEAL__INDEX:
 			case CargoPackage.PAPER_DEAL__QUANTITY:
+			case CargoPackage.PAPER_DEAL__PRICING_MONTH:
 			case CargoPackage.PAPER_DEAL__START_DATE:
 			case CargoPackage.PAPER_DEAL__END_DATE:
 			case CargoPackage.PAPER_DEAL__YEAR:

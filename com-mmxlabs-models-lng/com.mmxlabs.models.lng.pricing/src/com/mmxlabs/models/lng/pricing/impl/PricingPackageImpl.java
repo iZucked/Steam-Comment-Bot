@@ -1578,7 +1578,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSettleStrategy_UseCalendarMonth() {
+	public EAttribute getSettleStrategy_SettlePeriod() {
 		return (EAttribute)settleStrategyEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -1588,7 +1588,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSettleStrategy_SettlePeriod() {
+	public EAttribute getSettleStrategy_SettlePeriodUnit() {
 		return (EAttribute)settleStrategyEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -1598,18 +1598,8 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSettleStrategy_SettlePeriodUnit() {
-		return (EAttribute)settleStrategyEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EAttribute getSettleStrategy_SettleStartMonthsPrior() {
-		return (EAttribute)settleStrategyEClass.getEStructuralFeatures().get(5);
+		return (EAttribute)settleStrategyEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -1794,7 +1784,6 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		settleStrategyEClass = createEClass(SETTLE_STRATEGY);
 		createEAttribute(settleStrategyEClass, SETTLE_STRATEGY__DAY_OF_THE_MONTH);
 		createEAttribute(settleStrategyEClass, SETTLE_STRATEGY__LAST_DAY_OF_THE_MONTH);
-		createEAttribute(settleStrategyEClass, SETTLE_STRATEGY__USE_CALENDAR_MONTH);
 		createEAttribute(settleStrategyEClass, SETTLE_STRATEGY__SETTLE_PERIOD);
 		createEAttribute(settleStrategyEClass, SETTLE_STRATEGY__SETTLE_PERIOD_UNIT);
 		createEAttribute(settleStrategyEClass, SETTLE_STRATEGY__SETTLE_START_MONTHS_PRIOR);
@@ -2063,7 +2052,6 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		initEClass(settleStrategyEClass, SettleStrategy.class, "SettleStrategy", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getSettleStrategy_DayOfTheMonth(), ecorePackage.getEInt(), "dayOfTheMonth", null, 0, 1, SettleStrategy.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSettleStrategy_LastDayOfTheMonth(), ecorePackage.getEBoolean(), "lastDayOfTheMonth", null, 0, 1, SettleStrategy.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSettleStrategy_UseCalendarMonth(), ecorePackage.getEBoolean(), "useCalendarMonth", null, 0, 1, SettleStrategy.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSettleStrategy_SettlePeriod(), ecorePackage.getEInt(), "settlePeriod", null, 0, 1, SettleStrategy.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSettleStrategy_SettlePeriodUnit(), theTypesPackage.getTimePeriod(), "settlePeriodUnit", null, 0, 1, SettleStrategy.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSettleStrategy_SettleStartMonthsPrior(), ecorePackage.getEInt(), "settleStartMonthsPrior", null, 0, 1, SettleStrategy.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2242,6 +2230,12 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 			   "scale", "100",
 			   "formatString", "##0.#",
 			   "unit", "%"
+		   });
+		addAnnotation
+		  (getSettleStrategy_DayOfTheMonth(),
+		   source,
+		   new String[] {
+			   "formatString", "#0"
 		   });
 	}
 

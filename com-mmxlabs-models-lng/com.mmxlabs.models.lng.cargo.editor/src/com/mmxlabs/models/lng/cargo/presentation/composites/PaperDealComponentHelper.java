@@ -7,7 +7,7 @@
 package com.mmxlabs.models.lng.cargo.presentation.composites;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-
+import com.mmxlabs.models.lng.cargo.editor.PaperDealTypeExtensionWrapper;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
@@ -70,9 +70,11 @@ public class PaperDealComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_priceEditor(detailComposite, topClass);
+		add_pricingTypeEditor(detailComposite, topClass);
 		add_indexEditor(detailComposite, topClass);
 		add_instrumentEditor(detailComposite, topClass);
 		add_quantityEditor(detailComposite, topClass);
+		add_pricingMonthEditor(detailComposite, topClass);
 		add_startDateEditor(detailComposite, topClass);
 		add_endDateEditor(detailComposite, topClass);
 		add_entityEditor(detailComposite, topClass);
@@ -88,21 +90,30 @@ public class PaperDealComponentHelper extends BaseComponentHelper {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.PAPER_DEAL__QUANTITY));
 	}
 	/**
+	 * Create the editor for the pricingMonth feature on PaperDeal
+	 *
+	 * @generated NOT
+	 */
+	protected void add_pricingMonthEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(new PaperDealTypeExtensionWrapper(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.PAPER_DEAL__PRICING_MONTH)));
+	}
+
+	/**
 	 * Create the editor for the startDate feature on PaperDeal
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_startDateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.PAPER_DEAL__START_DATE));
+		detailComposite.addInlineEditor(new PaperDealTypeExtensionWrapper(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.PAPER_DEAL__START_DATE)));
 	}
 
 	/**
 	 * Create the editor for the endDate feature on PaperDeal
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_endDateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.PAPER_DEAL__END_DATE));
+		detailComposite.addInlineEditor(new PaperDealTypeExtensionWrapper(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.PAPER_DEAL__END_DATE)));
 	}
 
 	/**
@@ -148,6 +159,15 @@ public class PaperDealComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_priceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.PAPER_DEAL__PRICE));
+	}
+
+	/**
+	 * Create the editor for the pricingType feature on PaperDeal
+	 *
+	 * @generated
+	 */
+	protected void add_pricingTypeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.PAPER_DEAL__PRICING_TYPE));
 	}
 
 	/**

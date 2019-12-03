@@ -62,7 +62,6 @@ public class SettleStrategyItemProvider
 
 			addDayOfTheMonthPropertyDescriptor(object);
 			addLastDayOfTheMonthPropertyDescriptor(object);
-			addUseCalendarMonthPropertyDescriptor(object);
 			addSettlePeriodPropertyDescriptor(object);
 			addSettlePeriodUnitPropertyDescriptor(object);
 			addSettleStartMonthsPriorPropertyDescriptor(object);
@@ -181,28 +180,6 @@ public class SettleStrategyItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Use Calendar Month feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addUseCalendarMonthPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_SettleStrategy_useCalendarMonth_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SettleStrategy_useCalendarMonth_feature", "_UI_SettleStrategy_type"),
-				 PricingPackage.Literals.SETTLE_STRATEGY__USE_CALENDAR_MONTH,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This returns SettleStrategy.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -242,7 +219,6 @@ public class SettleStrategyItemProvider
 		switch (notification.getFeatureID(SettleStrategy.class)) {
 			case PricingPackage.SETTLE_STRATEGY__DAY_OF_THE_MONTH:
 			case PricingPackage.SETTLE_STRATEGY__LAST_DAY_OF_THE_MONTH:
-			case PricingPackage.SETTLE_STRATEGY__USE_CALENDAR_MONTH:
 			case PricingPackage.SETTLE_STRATEGY__SETTLE_PERIOD:
 			case PricingPackage.SETTLE_STRATEGY__SETTLE_PERIOD_UNIT:
 			case PricingPackage.SETTLE_STRATEGY__SETTLE_START_MONTHS_PRIOR:

@@ -186,7 +186,6 @@
     <genClasses ecoreClass="pricing.ecore#//SettleStrategy">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//SettleStrategy/dayOfTheMonth"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//SettleStrategy/lastDayOfTheMonth"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//SettleStrategy/useCalendarMonth"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//SettleStrategy/settlePeriod"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//SettleStrategy/settlePeriodUnit"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//SettleStrategy/settleStartMonthsPrior"/>

@@ -327,6 +327,12 @@
           id="com.mmxlabs.models.lng.cargo.ui.displaycomposites.EndHeelOptionsCompositeFactory"
           inheritable="true">
     </displayCompositeFactory>
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.cargo.PaperDeal"
+          factory="com.mmxlabs.models.lng.cargo.ui.displaycomposites.PaperCompositeFactory"
+          id="com.mmxlabs.models.lng.cargo.ui.displaycomposites.PaperCompositeFactory"
+          inheritable="true">
+    </displayCompositeFactory>
  </extension>
  <extension
        point="com.mmxlabs.models.util.import.submodels">
@@ -551,6 +557,16 @@
        <FeatureAnyOf>
           <EDataTypeIs
                 EDataTypeName="InventoryFacilityType"
+                EDataTypeURI="http://www.mmxlabs.com/models/lng/cargo/1/">
+          </EDataTypeIs>
+       </FeatureAnyOf>
+    </editorFactory>
+    <editorFactory
+          factoryClass="com.mmxlabs.models.lng.cargo.editor.editors.PaperDealTypeValueListInlineEditorFactory"
+          id="com.mmxlabs.models.lng.cargo.editor.editors.PaperDealTypeValueListInlineEditorFactory">
+       <FeatureAnyOf>
+          <EDataTypeIs
+                EDataTypeName="PaperPricingType"
                 EDataTypeURI="http://www.mmxlabs.com/models/lng/cargo/1/">
           </EDataTypeIs>
        </FeatureAnyOf>

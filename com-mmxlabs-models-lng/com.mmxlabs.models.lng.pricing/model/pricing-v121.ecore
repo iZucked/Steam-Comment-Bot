@@ -375,6 +375,7 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastDayOfTheMonth" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="useCalendarMonth" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="settlePeriod" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="settlePeriodUnit" eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//TimePeriod"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="settleStartMonthsPrior"

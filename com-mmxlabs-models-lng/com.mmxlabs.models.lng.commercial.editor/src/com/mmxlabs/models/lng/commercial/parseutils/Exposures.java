@@ -35,6 +35,7 @@ import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.commercial.Contract;
@@ -91,7 +92,7 @@ import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 /**
  * Utility class to calculate schedule exposure to market indices. Provides static methods
  * 
- * @author Simon McGregor
+ * @author Simon McGregor & FM
  */
 public class Exposures {
 
@@ -225,100 +226,99 @@ public class Exposures {
 			}
 		}
 
-		if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPEN_SLOT_EXPOSURE)) {
-			return;
-		}
-		for (final OpenSlotAllocation slotAllocation : schedule.getOpenSlotAllocations()) {
-			slotAllocation.getExposures().clear();
-			final Slot slot = slotAllocation.getSlot();
-			if (slot == null) {
-				continue;
-			}
-			final LocalDate date = slot.getSchedulingTimeWindow().getEnd().toLocalDate();
-			if (date.isBefore(promptStart) || slot.getWindowStart().isBefore(promptStart)) {
-				continue;
-			}
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPEN_SLOT_EXPOSURE)) {
+			for (final OpenSlotAllocation slotAllocation : schedule.getOpenSlotAllocations()) {
+				slotAllocation.getExposures().clear();
+				final Slot<?> slot = slotAllocation.getSlot();
+				if (slot == null) {
+					continue;
+				}
+				final LocalDate date = slot.getSchedulingTimeWindow().getEnd().toLocalDate();
+				if (date.isBefore(promptStart) || slot.getWindowStart().isBefore(promptStart)) {
+					continue;
+				}
 
-			final String priceExpression;
-			if (slot.eIsSet(CargoPackage.Literals.SLOT__PRICE_EXPRESSION)) {
-				priceExpression = slot.getPriceExpression();
-			} else {
-				priceExpression = exposuresCustomiser.provideExposedPriceExpression(slot, null);
-			}
+				final String priceExpression;
+				if (slot.eIsSet(CargoPackage.Literals.SLOT__PRICE_EXPRESSION)) {
+					priceExpression = slot.getPriceExpression();
+				} else {
+					priceExpression = exposuresCustomiser.provideExposedPriceExpression(slot, null);
+				}
 
-			final Collection<AbstractYearMonthCurve> curves = mmCurveProvider.getLinkedCurves(priceExpression);
-			final List<PricingCalendar> pcs = new ArrayList<PricingCalendar>();
-			final List<HolidayCalendar> hcs = new ArrayList<HolidayCalendar>();
+				final Collection<AbstractYearMonthCurve> curves = mmCurveProvider.getLinkedCurves(priceExpression);
+				final List<PricingCalendar> pcs = new ArrayList<PricingCalendar>();
+				final List<HolidayCalendar> hcs = new ArrayList<HolidayCalendar>();
 
-			for (AbstractYearMonthCurve curve : curves) {
-				if (curve instanceof CommodityCurve) {
-					final CommodityCurve cc = (CommodityCurve) curve;
-					if (calendarHandler.getPricingCalendar(cc) != null) {
-						pcs.add(calendarHandler.getPricingCalendar(cc));
+				for (AbstractYearMonthCurve curve : curves) {
+					if (curve instanceof CommodityCurve) {
+						final CommodityCurve cc = (CommodityCurve) curve;
+						if (calendarHandler.getPricingCalendar(cc) != null) {
+							pcs.add(calendarHandler.getPricingCalendar(cc));
+						}
+						if (calendarHandler.getHolidayCalendar(cc) != null) {
+							hcs.add(calendarHandler.getHolidayCalendar(cc));
+						}
 					}
-					if (calendarHandler.getHolidayCalendar(cc) != null) {
-						hcs.add(calendarHandler.getHolidayCalendar(cc));
+				}
+
+				final boolean isPurchase = slot instanceof LoadSlot;
+				int volume = 0;
+
+				if (slot.getSlotOrDelegateVolumeLimitsUnit() == VolumeUnits.M3) {
+					double cv = 22.3;
+					if (slot instanceof LoadSlot) {
+						cv = ((LoadSlot) slot).getSlotOrDelegateCV();
+					} else if (slot instanceof DischargeSlot) {
+						cv = ((DischargeSlot) slot).getSlotOrDelegateMaxCv();
+					}
+					long tempVolume = OptimiserUnitConvertor.convertToInternalVolume(slot.getSlotOrDelegateMaxQuantity());
+					int tempCV = OptimiserUnitConvertor.convertToInternalConversionFactor(cv);
+					long longVolume = Calculator.convertM3ToMMBTuWithOverflowProtection(tempVolume, tempCV);
+					volume = OptimiserUnitConvertor.convertToExternalVolume(longVolume);
+				} else {
+					volume = slot.getSlotOrDelegateMaxQuantity();
+				}
+
+				final YearMonth ymDate = YearMonth.from(date);
+
+				final SeriesParser seriesParser = PriceIndexUtils.getParserFor(pricingModel, PriceIndexType.COMMODITY);
+				int volumeValue = 0;
+
+				if (seriesParser != null) {
+					final IExpression<ISeries> expression = seriesParser.parse(priceExpression);
+					final ISeries parsed = expression.evaluate();
+					if (parsed != null) {
+						int time = PriceIndexUtils.convertTime(PriceIndexUtils.dateZero, date);
+						volumeValue = parsed.evaluate(time).intValue();
 					}
 				}
-			}
 
-			final boolean isPurchase = slot instanceof LoadSlot;
-			int volume = 0;
+				{
+					final ExposureDetail physical = ScheduleFactory.eINSTANCE.createExposureDetail();
+					physical.setDealType(DealType.PHYSICAL);
+					physical.setVolumeInMMBTU((isPurchase ? 1.0 : -1.0) * volume);
+					physical.setVolumeInNativeUnits((isPurchase ? 1.0 : -1.0) * slot.getSlotOrDelegateMaxQuantity());
+					physical.setNativeValue((isPurchase ? -1.0 : 1.0) * slot.getSlotOrDelegateMaxQuantity() * volumeValue);
+					physical.setVolumeUnit("mmBtu");
+					physical.setIndexName("Physical");
+					physical.setDate(ymDate);
 
-			if (slot.getSlotOrDelegateVolumeLimitsUnit() == VolumeUnits.M3) {
-				double cv = 22.3;
-				if (slot instanceof LoadSlot) {
-					cv = ((LoadSlot) slot).getSlotOrDelegateCV();
-				} else if (slot instanceof DischargeSlot) {
-					cv = ((DischargeSlot) slot).getSlotOrDelegateMaxCv();
+					slotAllocation.getExposures().add(physical);
 				}
-				long tempVolume = OptimiserUnitConvertor.convertToInternalVolume(slot.getSlotOrDelegateMaxQuantity());
-				int tempCV = OptimiserUnitConvertor.convertToInternalConversionFactor(cv);
-				long longVolume = Calculator.convertM3ToMMBTuWithOverflowProtection(tempVolume, tempCV);
-				volume = OptimiserUnitConvertor.convertToExternalVolume(longVolume);
-			} else {
-				volume = slot.getSlotOrDelegateMaxQuantity();
-			}
 
-			final YearMonth ymDate = YearMonth.from(date);
-
-			final SeriesParser seriesParser = PriceIndexUtils.getParserFor(pricingModel, PriceIndexType.COMMODITY);
-			int volumeValue = 0;
-
-			if (seriesParser != null) {
-				final IExpression<ISeries> expression = seriesParser.parse(priceExpression);
-				final ISeries parsed = expression.evaluate();
-				if (parsed != null) {
-					int time = PriceIndexUtils.convertTime(PriceIndexUtils.dateZero, date);
-					volumeValue = parsed.evaluate(time).intValue();
-				}
-			}
-
-			{
-				final ExposureDetail physical = ScheduleFactory.eINSTANCE.createExposureDetail();
-				physical.setDealType(DealType.PHYSICAL);
-				physical.setVolumeInMMBTU((isPurchase ? 1.0 : -1.0) * volume);
-				physical.setVolumeInNativeUnits((isPurchase ? 1.0 : -1.0) * slot.getSlotOrDelegateMaxQuantity());
-				physical.setNativeValue((isPurchase ? -1.0 : 1.0) * slot.getSlotOrDelegateMaxQuantity() * volumeValue);
-				physical.setVolumeUnit("mmBtu");
-				physical.setIndexName("Physical");
-				physical.setDate(ymDate);
-
-				slotAllocation.getExposures().add(physical);
-			}
-
-			final LocalDate pricingFullDate = date;
-			if (pricingFullDate != null) {
-				final YearMonth pricingDate = YearMonth.of(pricingFullDate.getYear(), pricingFullDate.getMonth());
-				final MarkedUpNode node = getExposureCoefficient(slot, null, lookupData);
-				if (node != null) {
-					final Collection<ExposureDetail> exposureDetails = createExposureDetail(node, pricingDate, volume, isPurchase, lookupData, pricingFullDate.getDayOfMonth());
-					if (exposureDetails != null && !exposureDetails.isEmpty()) {
-						for (final ExposureDetail ed : exposureDetails) {
-							if (ed.getDate().isAfter(YearMonth.of(promptStart.getYear(), promptStart.getMonthValue())) //
-									|| ed.getDate().equals(YearMonth.of(promptStart.getYear(), promptStart.getMonthValue()))) {
-								applyProRataCorrection(pcs, hcs, promptStart, ed);
-								slotAllocation.getExposures().add(ed);
+				final LocalDate pricingFullDate = date;
+				if (pricingFullDate != null) {
+					final YearMonth pricingDate = YearMonth.of(pricingFullDate.getYear(), pricingFullDate.getMonth());
+					final MarkedUpNode node = getExposureCoefficient(slot, null, lookupData);
+					if (node != null) {
+						final Collection<ExposureDetail> exposureDetails = createExposureDetail(node, pricingDate, volume, isPurchase, lookupData, pricingFullDate.getDayOfMonth());
+						if (exposureDetails != null && !exposureDetails.isEmpty()) {
+							for (final ExposureDetail ed : exposureDetails) {
+								if (ed.getDate().isAfter(YearMonth.of(promptStart.getYear(), promptStart.getMonthValue())) //
+										|| ed.getDate().equals(YearMonth.of(promptStart.getYear(), promptStart.getMonthValue()))) {
+									applyProRataCorrection(pcs, hcs, promptStart, ed);
+									slotAllocation.getExposures().add(ed);
+								}
 							}
 						}
 					}
@@ -503,6 +503,7 @@ public class Exposures {
 		return null;
 	}
 
+	// NOT IN USE
 	/**
 	 * Calculates the exposure of a given schedule to a given index. Depends on the getExposureCoefficient method to correctly determine the exposure per cubic metre associated with a load or
 	 * discharge slot.
