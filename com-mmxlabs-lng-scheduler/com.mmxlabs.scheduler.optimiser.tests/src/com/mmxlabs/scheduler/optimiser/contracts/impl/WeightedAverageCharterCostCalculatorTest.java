@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * All rights reserved.
+ */
 package com.mmxlabs.scheduler.optimiser.contracts.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
