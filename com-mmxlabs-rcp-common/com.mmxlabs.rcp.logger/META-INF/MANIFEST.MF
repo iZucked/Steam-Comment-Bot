@@ -4,7 +4,7 @@ Bundle-Name: MMXLabs Logger
 Fragment-Host: org.slf4j.api;bundle-version="1.7.2"
 Bundle-SymbolicName: com.mmxlabs.rcp.logger
 Automatic-Module-Name: com.mmxlabs.rcp.logger
-Bundle-Version: 4.7.31.RELEASE
+Bundle-Version: 4.7.32.qualifier
 Bundle-Vendor: Minimax Labs
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
