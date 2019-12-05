@@ -596,7 +596,8 @@ public class LNGVoyageCalculatorTest {
 		final VoyageDetails details = new VoyageDetails(options);
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
-
+		calc.setTimeZoneToUtcOffsetProvider(new TimeZoneToUtcOffsetProvider());
+		
 		final IRouteCostProvider mockRouteCostProvider = Mockito.mock(IRouteCostProvider.class);
 		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
@@ -606,7 +607,7 @@ public class LNGVoyageCalculatorTest {
 
 		final IPortTimesRecord portTimesRecord = Mockito.mock(IPortTimesRecord.class);
 		Mockito.when(portTimesRecord.getSlotTime(ArgumentMatchers.<@NonNull IPortSlot> any())).thenReturn(0);
-
+		
 		final int[] baseFuels = GeneralTestUtils.makeBaseFuelPrices(0);
 		calc.calculateVoyagePlan(plan, vessel, createTestCharterCostCalculator(), new long[] { 0L, 0L }, baseFuels, portTimesRecord, sequence);
 
@@ -667,6 +668,7 @@ public class LNGVoyageCalculatorTest {
 		details.setFuelConsumption(vessel.getIdlePilotLightFuelInMT(), 80000);
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
+		calc.setTimeZoneToUtcOffsetProvider(new TimeZoneToUtcOffsetProvider());
 
 		final IRouteCostProvider mockRouteCostProvider = Mockito.mock(IRouteCostProvider.class);
 		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
@@ -734,7 +736,6 @@ public class LNGVoyageCalculatorTest {
 					Mockito.when(b.getNumberOfBaseFuels()).thenReturn(5);
 					bind(IBaseFuelProvider.class).toInstance(b);
 				}
-
 			}
 		});
 
@@ -862,6 +863,7 @@ public class LNGVoyageCalculatorTest {
 		details2.setFuelConsumption(vessel.getIdlePilotLightFuelInMT(), 140000);
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
+		calc.setTimeZoneToUtcOffsetProvider(new TimeZoneToUtcOffsetProvider());
 
 		final IRouteCostProvider mockRouteCostProvider = Mockito.mock(IRouteCostProvider.class);
 		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
@@ -940,6 +942,7 @@ public class LNGVoyageCalculatorTest {
 		final VoyageDetails details2 = new VoyageDetails(options2);
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
+		calc.setTimeZoneToUtcOffsetProvider(new TimeZoneToUtcOffsetProvider());
 
 		final IRouteCostProvider mockRouteCostProvider = Mockito.mock(IRouteCostProvider.class);
 		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
@@ -1029,6 +1032,7 @@ public class LNGVoyageCalculatorTest {
 		final VoyageDetails details2 = new VoyageDetails(options2);
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
+		calc.setTimeZoneToUtcOffsetProvider(new TimeZoneToUtcOffsetProvider());
 
 		final IRouteCostProvider mockRouteCostProvider = Mockito.mock(IRouteCostProvider.class);
 		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);

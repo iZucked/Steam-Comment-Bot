@@ -94,6 +94,10 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	@Named(SchedulerConstants.Key_SchedulePurges)
 	private boolean purgeSchedulingEnabled;
 
+	public void setTimeZoneToUtcOffsetProvider(ITimeZoneToUtcOffsetProvider timeZoneToUtcOffsetProvider) {
+		this.timeZoneToUtcOffsetProvider = timeZoneToUtcOffsetProvider;
+	}
+
 	/**
 	 * Calculate the fuel requirements between a pair of {@link IPortSlot}s. The {@link VoyageOptions} provides the specific choices to evaluate for this voyage (e.g. fuel choice, route, ...).
 	 * 
