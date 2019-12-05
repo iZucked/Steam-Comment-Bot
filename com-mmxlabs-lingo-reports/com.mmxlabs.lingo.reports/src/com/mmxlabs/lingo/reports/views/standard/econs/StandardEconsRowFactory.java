@@ -279,9 +279,8 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 									legIdx, (visit, travel, idle) -> (getOrZero(visit, Event::getCharterCost) + getOrZero(travel, Event::getCharterCost) + getOrZero(idle, Event::getCharterCost))))));
 
 							rows.add(createRow(base + 51, "    Charter Rate", true, "$", "", true,
-									createBasicFormatter(options, true, Integer.class, DollarsFormat::format, createFullLegTransformer2(Integer.class, legIdx, (visit, travel, idle) -> getOrZero(visit, event -> {
-										return (int) ((double) event.getCharterCost() * 24 / (double) event.getDuration());
-									})))));
+									createBasicFormatter(options, true, Integer.class, DollarsFormat::format, 
+											createFullLegTransformer2(Integer.class, legIdx, (visit, travel, idle) -> getAverageDailyCharterRate(visit, travel, idle)))));
 
 							rows.add(createRow(base + 60, "    Bunkers (MT)", false, "", "", false, createBasicFormatter(options, true, Integer.class, VolumeM3Format::format,
 									createFullLegTransformer2(Integer.class, legIdx, (visit, travel, idle) -> (getFuelVolume(visit, travel, idle, FuelUnit.MT, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT))))));
@@ -321,7 +320,13 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		}
 		return rows;
 	}
-
+	
+	private int getAverageDailyCharterRate(Event visit, Event travel, Event idle) {
+		double totalCharterCost = getOrZero(visit, Event::getCharterCost) + getOrZero(travel, Event::getCharterCost) + getOrZero(idle, Event::getCharterCost);
+		double totalDuration = getOrZero(visit, Event::getDuration) + getOrZero(travel, Event::getDuration) + getOrZero(idle, Event::getDuration);
+		return (int) (totalCharterCost * 24 / totalDuration);
+	}
+	
 	private @Nullable IColorProvider createBOGColourProvider(final EconsOptions options) {
 
 		return new IColorProvider() {
