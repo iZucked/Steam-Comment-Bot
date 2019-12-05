@@ -29,7 +29,6 @@ import okio.Okio;
 
 public class ReportsServiceClient {
 
-	private static final String REPORT_UPLOAD_URL = "/scenarios/v1/reports/upload";
 	private static final String REPORT_GET_URL = "/scenarios/v1/reports/";
 
 	private File baseCaseFolder;
@@ -38,23 +37,36 @@ public class ReportsServiceClient {
 			.build();
 
 	private final okhttp3.MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
-
-	public String uploadReport(String data, String type, String uuid) throws IOException {
+	
+	public String uploadReportData(String data, String type, String uuid, String uploadURL, String fileExtension) throws IOException {
 
 		RequestBody requestBody = new MultipartBody.Builder() //
 				.setType(MultipartBody.FORM) //
-				.addFormDataPart("report", type + ".json", RequestBody.create(mediaType, data))//
+				.addFormDataPart("report", type + fileExtension, RequestBody.create(mediaType, data))//
 				.build();
 		// String upstreamURL = "http://"
 		String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
 
 		Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
-				.url(upstreamURL + REPORT_UPLOAD_URL + "/" + uuid + "/" + type) //
+				.url(upstreamURL + uploadURL + "/" + uuid + "/" + type) //
 				.post(requestBody).build();
 
 		// Check the response
 		try (Response response = httpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
+				if (response.code() == 404) {
+					// 404: Endpoint not defined - old server version
+					return "404: Endpoint not defined - old server version";
+				} else if (response.code() == 405) {
+					// POST return a 405 instead of 404
+					// 405: Endpoint not defined - old server version
+					return "405: Endpoint not defined - old server version";
+				}
+				if (response.code() == 503) {
+					// 503: Service unavailable - not configured on server, so do not report an
+					// error for this code.
+					return "503: Service unavailable - not configured on server, so do not report an error for this code";
+				}
 				response.body().close();
 				throw new IOException("Unexpected code " + response);
 			}

@@ -328,11 +328,11 @@ public class ScenarioServicePublishAction {
 						final ReportsServiceClient reportsServiceClient = new ReportsServiceClient();
 
 						try {
-							reportsServiceClient.uploadReport(outputStream.toString(), reportType, uuid);
+							reportsServiceClient.uploadReportData(outputStream.toString(), reportType, uuid, //
+									reportPublisherExtension.getEndpointURL(), reportPublisherExtension.getFileExtension());
 						} catch (final IOException e) {
 							e.printStackTrace();
 							throw new PublishBasecaseException("Error uploading report " + reportType, Type.FAILED_TO_UPLOAD_REPORT, e);
-
 						}
 					} catch (final Exception e) {
 						LOG.error(e.getMessage(), e);
