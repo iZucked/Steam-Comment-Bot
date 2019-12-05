@@ -46,7 +46,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselStartDateCharterRateCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.VoyagePlanStartDateCharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IElementPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IElementPortProviderEditor;
@@ -176,7 +176,7 @@ public final class VoyagePlannerTest {
 				bind(IVoyagePlanOptimiser.class).toInstance(voyagePlanOptimiser);
 				bind(IRouteCostProvider.class).toInstance(routeCostProvider);
 				bind(IVoyagePlanner.class).to(VoyagePlanner.class);
-				bind(ICharterRateCalculator.class).to(VesselStartDateCharterRateCalculator.class);
+				bind(ICharterRateCalculator.class).to(VoyagePlanStartDateCharterRateCalculator.class);
 			}
 		});
 
@@ -286,7 +286,7 @@ public final class VoyagePlannerTest {
 		int[] fuelMap = GeneralTestUtils.makeBaseFuelPrices(0);
 		// Matchers.eq!!
 		ICharterCostCalculator ccc = Mockito.mock(ICharterCostCalculator.class);
-		Mockito.when(ccc.getCharterCost(ArgumentMatchers.anyInt(), ArgumentMatchers.anyInt(), ArgumentMatchers.anyInt(), ArgumentMatchers.anyInt())).thenReturn(0L);
+		Mockito.when(ccc.getCharterCost(ArgumentMatchers.anyInt(), ArgumentMatchers.anyInt(), ArgumentMatchers.anyInt())).thenReturn(0L);
 		
 		Mockito.when(voyagePlanOptimiser.optimise(resource, vessel, new long[] { 0L, 0L }, fuelMap, ccc, portTimesRecord1, expectedBasicSequence1, vpoChoices1, Integer.MAX_VALUE)).thenReturn(testVoyagePlan);
 		Mockito.when(voyagePlanOptimiser.optimise(resource, vessel, new long[] { 0L, 0L }, fuelMap, ccc, portTimesRecord2, expectedBasicSequence2, vpoChoices2, Integer.MAX_VALUE)).thenReturn(testVoyagePlan);

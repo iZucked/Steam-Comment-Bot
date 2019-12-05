@@ -44,7 +44,7 @@ public class SchedulerCalculationUtils {
 	}
 
 
-	public long getVesselCharterInRatePerDay(final IVesselAvailability vesselAvailability, final int vesselStartTime, final int voyagePlanStartTime) {
+	public long getVesselCharterInRatePerDay(final IVesselAvailability vesselAvailability, final int voyagePlanStartTime) {
 		/*
 		 * final long charterRatePerDay = schedulerCalculationUtils.getVesselCharterInRatePerDay(vesselAvailability, vesselStartTime, purchaseIntervals[purchaseIndex].start);
 
@@ -53,7 +53,7 @@ public class SchedulerCalculationUtils {
 		/*return schedulerCalculationUtils.getVesselCharterInRatePerDay(vesselAvailability, portTimeWindowRecord.getFirstSlotFeasibleTimeWindow().getInclusiveStart(),
 				portTimeWindowRecord.getFirstSlotFeasibleTimeWindow().getInclusiveStart());
 		*/
-		final long vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vesselAvailability, vesselStartTime, voyagePlanStartTime);
+		final long vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vesselAvailability, voyagePlanStartTime);
 		return vesselCharterInRatePerDay;
 	}
 /*	

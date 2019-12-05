@@ -38,6 +38,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortCooldownDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IScheduledPurgeProvider;
+import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
@@ -62,6 +63,9 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	public static final int STATE_COLD_WARMING_TIME = 2; // Vessel ends cold as with warming time. Zero heel.
 	public static final int STATE_COLD_COOLDOWN = 3; // Vessel ends cold due to cooldown. Zero heel
 	public static final int STATE_COLD_NO_VOYAGE = 4; // Vessel ends cold. There was no voyage. We are still at discharge port. Can pick heel...
+	
+	@Inject
+	private ITimeZoneToUtcOffsetProvider timeZoneToUtcOffsetProvider;
 	
 	@Inject
 	private IRouteCostProvider routeCostProvider;
@@ -927,7 +931,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			}
 		}
 		
-		calculateCharterCosts(charterCostCalculator, sequence, portTimesRecord.getFirstSlotTime());
+		calculateCharterCosts(charterCostCalculator, sequence, portTimesRecord);
 		
 		// Store results in plan
 		voyagePlan.setSequence(sequence);
@@ -960,43 +964,43 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		return violationsCount;
 	}
 
-	private void calculateCharterCosts(final ICharterCostCalculator charterCostCalculator, final IDetailsSequenceElement[] sequence, int timeStart) {
+	private void calculateCharterCosts(final ICharterCostCalculator charterCostCalculator, final IDetailsSequenceElement[] sequence, final IPortTimesRecord portTimesRecord) {
+		int voyagePlanStartTimeUTC = timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getFirstSlotTime(), portTimesRecord.getFirstSlot());
 		final int offset = sequence.length > 1 ? 1 : 0;
-		int time = timeStart;
+		int time = portTimesRecord.getFirstSlotTime();
 		for (int i = 0; i < sequence.length - offset; ++i) {
 			final IDetailsSequenceElement element = sequence[i];
 			
 			if (element instanceof VoyageDetails) {
 				final VoyageDetails details = (VoyageDetails) element;
 				//Calculate travel charter cost.
-				int startTime = time;
-				
+				int eventStartTime = time;			
 				int duration = details.getTravelTime();
-				long charterCost = charterCostCalculator.getCharterCost(startTime, startTime, startTime, duration);	
+				long charterCost = charterCostCalculator.getCharterCost(voyagePlanStartTimeUTC, eventStartTime, duration);	
 				details.setTravelCharterCost(charterCost);
 				time += duration;
 				
 				//Calculate idle charter cost.
-				startTime = time;
+				eventStartTime = time;
 				duration = details.getIdleTime();
-				charterCost = charterCostCalculator.getCharterCost(startTime, startTime, startTime, duration);
+				charterCost = charterCostCalculator.getCharterCost(voyagePlanStartTimeUTC, eventStartTime, duration);
 				details.setIdleCharterCost(charterCost);
 				time += duration;
 				
 				//Calculate purge charter cost.
-				startTime = time;
+				eventStartTime = time;
 				duration = details.getPurgeDuration();
-				charterCost = charterCostCalculator.getCharterCost(startTime, startTime, startTime, duration);				
+				charterCost = charterCostCalculator.getCharterCost(voyagePlanStartTimeUTC, eventStartTime, duration);				
 				details.setPurgeCharterCost(charterCost);
 				time += duration;
 			}
 			else {
 				assert element instanceof PortDetails;
 				final PortDetails details = (PortDetails) element;
-				int startTime = time;
+				int eventStartTime = time;
 				int duration = details.getOptions().getVisitDuration();
 				
-				long charterCost = charterCostCalculator.getCharterCost(startTime, startTime, startTime, duration);
+				long charterCost = charterCostCalculator.getCharterCost(voyagePlanStartTimeUTC, eventStartTime, duration);
 				details.setCharterCost(charterCost);
 				time += duration;
 			}

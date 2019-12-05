@@ -460,7 +460,7 @@ public class TimeWindowsTrimming {
 		if (purchaseIntervals.length > 1 || salesIntervals.length > 1) {
 			for (int purchaseIndex = bestPurchaseDetailsIdx; purchaseIndex >= 0; purchaseIndex--) {
 				for (int salesIndex = bestSalesDetailsIdx; salesIndex < salesIntervals.length; salesIndex++) {
-					final long charterRatePerDay = schedulerCalculationUtils.getVesselCharterInRatePerDay(vesselAvailability, vesselStartTime, purchaseIntervals[purchaseIndex].start);
+					final long charterRatePerDay = schedulerCalculationUtils.getVesselCharterInRatePerDay(vesselAvailability, purchaseIntervals[purchaseIndex].start);
 					final NonNullPair<LadenRouteData, Long> totalEstimatedJourneyCostDetails = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchaseIntervals[purchaseIndex],
 							salesIntervals[salesIndex], // D to E
 							loadDuration, boiloffIntervals[purchaseIndex].price, charterRatePerDay, sortedCanalTimes, vesselAvailability.getVessel().getNBORate(VesselState.Ballast),

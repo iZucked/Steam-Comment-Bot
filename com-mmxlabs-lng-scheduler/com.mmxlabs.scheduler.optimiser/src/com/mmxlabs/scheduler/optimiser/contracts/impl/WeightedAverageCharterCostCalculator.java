@@ -19,15 +19,15 @@ public class WeightedAverageCharterCostCalculator implements ICharterCostCalcula
 	}
 
 	@Override
-	public long getCharterCost(int vesselStartTime, int voyagePlanStartTime, int eventStartTime, int duration) {
+	public long getCharterCost(int voyagePlanStartTime, int eventStartTime, int duration) {
 		if (charterRateCurve != null) {
 			long charterCost = 0;
-			final int vesselEndTime = vesselStartTime + duration;
+			final int eventEndTime = eventStartTime + duration;
 			NavigableSet<Integer> changePoints = charterRateCurve.getChangePoints();
 						
 			//Otherwise have to step through the change points, from the vesselStartTime up to the vesselEndTime.
-			Integer firstT = vesselStartTime;
-			Integer lastT = vesselEndTime;
+			Integer firstT = eventStartTime;
+			Integer lastT = eventEndTime;
 			int durationCharterRate = 1;
 			int durationRemaining = duration;
 			for (int t = firstT; t < lastT; t+= durationCharterRate) {

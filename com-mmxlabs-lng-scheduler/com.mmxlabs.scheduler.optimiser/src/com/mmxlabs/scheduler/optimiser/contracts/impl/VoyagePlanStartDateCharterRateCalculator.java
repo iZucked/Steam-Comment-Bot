@@ -30,7 +30,7 @@ public class VoyagePlanStartDateCharterRateCalculator implements ICharterRateCal
 	 * @param voyagePlanStartTime
 	 */
 	@Override
-	public long getCharterRatePerDay(final @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime, final int voyagePlanStartTime) {
+	public long getCharterRatePerDay(final @NonNull IVesselAvailability vesselAvailability, final int voyagePlanStartTime) {
 		final ILongCurve rate = IVesselCharterInRateProvider.getCharterInRatePerDay(vesselAvailability);
 		if (rate != null) {
 			return rate.getValueAtPoint(voyagePlanStartTime);

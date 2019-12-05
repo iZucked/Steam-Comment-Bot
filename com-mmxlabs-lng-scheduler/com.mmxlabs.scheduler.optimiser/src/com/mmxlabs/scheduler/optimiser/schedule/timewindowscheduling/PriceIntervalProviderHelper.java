@@ -944,8 +944,7 @@ public class PriceIntervalProviderHelper {
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER || vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
 			if (portTimeWindowRecord == portTimeWindowRecordStart) {
-				return schedulerCalculationUtils.getVesselCharterInRatePerDay(vesselAvailability, portTimeWindowRecord.getFirstSlotFeasibleTimeWindow().getInclusiveStart(),
-						portTimeWindowRecord.getFirstSlotFeasibleTimeWindow().getInclusiveStart());
+				return schedulerCalculationUtils.getVesselCharterInRatePerDay(vesselAvailability, portTimeWindowRecord.getFirstSlotFeasibleTimeWindow().getInclusiveStart());
 			}
 		}
 		return 0L;

@@ -14,7 +14,7 @@ public class FixedCharterInRateCharterCostCalculator implements ICharterCostCalc
 	}
 
 	@Override
-	public long getCharterCost(int vesselStartTime, int voyagePlanStartTime, int eventStartTime, int duration) {
+	public long getCharterCost(int voyagePlanStartTime, int eventStartTime, int duration) {
 		return (charterInRatePerDay * duration) / 24L;
 	}	
 }

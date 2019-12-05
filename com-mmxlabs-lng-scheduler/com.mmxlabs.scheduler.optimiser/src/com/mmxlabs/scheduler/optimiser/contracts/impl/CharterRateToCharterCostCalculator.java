@@ -16,8 +16,8 @@ public class CharterRateToCharterCostCalculator implements ICharterCostCalculato
 	ICharterRateCalculator charterRateCalculator;
 	
 	@Override
-	public long getCharterCost(int vesselStartTime, int voyagePlanStartTime, int eventStartTime, int duration) {
-		long charterRatePerDay = charterRateCalculator.getCharterRatePerDay(vesselAvailability, vesselStartTime, voyagePlanStartTime);
+	public long getCharterCost(int voyagePlanStartTime, int eventStartTime, int duration) {
+		long charterRatePerDay = charterRateCalculator.getCharterRatePerDay(vesselAvailability, voyagePlanStartTime);
 		return (charterRatePerDay * duration) / 24L;
 	}
 
