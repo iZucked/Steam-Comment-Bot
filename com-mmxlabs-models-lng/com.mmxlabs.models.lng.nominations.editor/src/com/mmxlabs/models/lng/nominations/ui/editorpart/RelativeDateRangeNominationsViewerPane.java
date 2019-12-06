@@ -51,6 +51,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Item;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
@@ -59,6 +60,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorAction;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.nominations.AbstractNomination;
 import com.mmxlabs.models.lng.nominations.ContractNomination;
@@ -74,11 +76,8 @@ import com.mmxlabs.models.ui.date.LocalDateTextFormatter;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerColumnProvider;
-import com.mmxlabs.models.ui.tabular.EObjectTableViewerSortingSupport;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
-import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
-import com.mmxlabs.models.ui.tabular.columngeneration.ColumnHandler;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.BooleanFlagAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.DateTimeAttributeManipulator;
@@ -90,7 +89,50 @@ import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsViewerPane implements ISelectionListener {
 
+	private String nominationTypeFilter = null;
+
+	private class FilterMenuAction extends DefaultMenuCreatorAction {
+
+		public FilterMenuAction(final String label) {
+			super(label);
+		}
+
+		@Override
+		protected void populate(Menu menu) {
+			final Action clearAction = new Action("Clear Filter") {
+				@Override
+				public void run() {
+					nominationTypeFilter = null;
+					refresh();
+				}
+			};
+
+			addActionToMenu(clearAction, menu);
+
+			final DefaultMenuCreatorAction nominationType = new DefaultMenuCreatorAction("Nomination Type") {
+
+				@Override
+				protected void populate(Menu subMenu) {
+					List<String> nominationTypes = NominationsModelUtils.getNominationTypes();
+					for (final String e : nominationTypes) {
+						final Action entityAction = new Action(e) {
+							@Override
+							public void run() {
+								nominationTypeFilter = e;
+								refresh();
+							}
+						};
+						addActionToMenu(entityAction, subMenu);
+					}
+				}
+
+			};
+			addActionToMenu(nominationType, menu);
+		}
+	}
+	
 	final class NominationsScenarioTableViewer extends ScenarioTableViewer {
+		
 		NominationsScenarioTableViewer(Composite parent, int style, IScenarioEditingLocation part) {
 			super(parent, style, part);
 		}
@@ -200,7 +242,20 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 		@Override
 		public void init(final AdapterFactory adapterFactory, final ModelReference modelReference, final EReference... path) {
 			super.init(adapterFactory, modelReference, path);
-
+			
+			this.addFilter(new ViewerFilter() {
+				@Override
+				public boolean select(Viewer viewer, Object parentElement, Object element) {
+					if (element instanceof AbstractNomination) {
+						AbstractNomination n = (AbstractNomination)element;
+						if (nominationTypeFilter == null || n.getType().equals(nominationTypeFilter)) {
+							return true;
+						}
+					}
+					return false;
+				}
+			});
+			
 			init(new ITreeContentProvider() {
 
 				@Override
@@ -293,6 +348,9 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 		}
 	}
 		
+	
+	
+	
 	private static final String PLUGIN_ID = "com.mmxlabs.models.lng.nominations.editor";
 	
 	@NonNull 
@@ -375,7 +433,11 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 		};
 		viewSelectedToggle.setChecked(this.viewSelected);
 		this.getMenuManager().add(viewSelectedToggle);
-
+		
+		final FilterMenuAction filterAction = new FilterMenuAction("Filters");
+		filterAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.tabular", "/icons/filter.gif"));
+		toolbar.add(filterAction);
+		
 		this.getMenuManager().update(true);
 		
 		nomineeIdColumn = addTypicalColumn("Nominee Id", new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(
