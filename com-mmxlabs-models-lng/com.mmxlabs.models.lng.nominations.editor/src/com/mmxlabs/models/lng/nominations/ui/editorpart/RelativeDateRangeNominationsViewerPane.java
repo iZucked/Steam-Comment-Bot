@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.function.Function;
 
 import org.eclipse.core.runtime.Assert;
@@ -89,7 +90,7 @@ import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsViewerPane implements ISelectionListener {
 
-	private String nominationTypeFilter = null;
+	private final Set<String> nominationTypeFilter = new TreeSet<>();
 
 	private class FilterMenuAction extends DefaultMenuCreatorAction {
 
@@ -102,7 +103,7 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 			final Action clearAction = new Action("Clear Filter") {
 				@Override
 				public void run() {
-					nominationTypeFilter = null;
+					nominationTypeFilter.clear();
 					refresh();
 				}
 			};
@@ -115,17 +116,27 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 				protected void populate(Menu subMenu) {
 					List<String> nominationTypes = NominationsModelUtils.getNominationTypes();
 					for (final String e : nominationTypes) {
-						final Action entityAction = new Action(e) {
+						final Action nominationTypeAction = new Action(e, Action.AS_CHECK_BOX) {
 							@Override
 							public void run() {
-								nominationTypeFilter = e;
+								if (!nominationTypeFilter.contains(e)) {
+									nominationTypeFilter.add(e);
+									this.setChecked(true);
+								}
+								else {
+									nominationTypeFilter.remove(e);
+									this.setChecked(false);			
+								}
 								refresh();
 							}
 						};
-						addActionToMenu(entityAction, subMenu);
+						if (nominationTypeFilter.contains(e)) {
+							nominationTypeAction.setChecked(true);
+						}
+						addActionToMenu(nominationTypeAction, subMenu);	
 					}
 				}
-
+				
 			};
 			addActionToMenu(nominationType, menu);
 		}
@@ -248,7 +259,7 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 				public boolean select(Viewer viewer, Object parentElement, Object element) {
 					if (element instanceof AbstractNomination) {
 						AbstractNomination n = (AbstractNomination)element;
-						if (nominationTypeFilter == null || n.getType().equals(nominationTypeFilter)) {
+						if (nominationTypeFilter.isEmpty() || nominationTypeFilter.contains(n.getType())) {
 							return true;
 						}
 					}
@@ -434,6 +445,10 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 		viewSelectedToggle.setChecked(this.viewSelected);
 		this.getMenuManager().add(viewSelectedToggle);
 		
+		//Remove default filter.
+		toolbar.remove(this.filterField.getContribution());
+		
+		//Add new filter for nomination type.
 		final FilterMenuAction filterAction = new FilterMenuAction("Filters");
 		filterAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.tabular", "/icons/filter.gif"));
 		toolbar.add(filterAction);
