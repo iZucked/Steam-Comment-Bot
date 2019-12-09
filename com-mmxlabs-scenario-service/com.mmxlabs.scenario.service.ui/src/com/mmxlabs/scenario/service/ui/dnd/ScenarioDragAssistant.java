@@ -52,7 +52,9 @@ import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvide
 import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
 
 /**
- * DND handler to allow element moving in the scenario navigator. This needs more support to handle copy actions and to allow scenarios to be dragged in from e.g. filesystem.
+ * DND handler to allow element moving in the scenario navigator. This needs
+ * more support to handle copy actions and to allow scenarios to be dragged in
+ * from e.g. filesystem.
  * 
  * @author Simon Goodall
  * 
@@ -98,7 +100,8 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 						}
 					}
 					if (o instanceof EObject) {
-						// since containers contains the full hierarchy above the drop target, if o is in that hierarchy then we are dragging
+						// since containers contains the full hierarchy above the drop target, if o is
+						// in that hierarchy then we are dragging
 						// something into something which it contains, so cancel the drop
 						if (containers.contains(o))
 							return Status.CANCEL_STATUS;
@@ -142,7 +145,10 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 				for (final String filePath : files) {
 					// Expect this type of extension
 					final String lowerFilePath = filePath.toLowerCase();
-					if (!lowerFilePath.endsWith(".lingodata")) {
+					if (!( //
+					lowerFilePath.endsWith(".lingodata") //
+							|| lowerFilePath.endsWith(".lingoupdate") //
+					)) {
 						return Status.CANCEL_STATUS;
 
 					}
@@ -176,7 +182,7 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 
 					int detail = aDropTargetEvent.detail;
 
-					final List<Container> containers = new LinkedList<Container>();
+					final List<Container> containers = new LinkedList<>();
 					final Iterator<?> iterator = ((IStructuredSelection) selection).iterator();
 					while (iterator.hasNext()) {
 						final Object obj = iterator.next();
@@ -197,13 +203,9 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 					// TODO: This should really invoke a shared move/copy etc command/action handler
 					if (detail == DND.DROP_MOVE) {
 
-						BusyIndicator.showWhile(Display.getCurrent(), new Runnable() {
-
-							@Override
-							public void run() {
-								final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(container);
-								scenarioService.moveInto(containers, container);
-							}
+						BusyIndicator.showWhile(Display.getCurrent(), () -> {
+							final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(container);
+							scenarioService.moveInto(containers, container);
 						});
 					} else if (detail == DND.DROP_COPY) {
 						final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());

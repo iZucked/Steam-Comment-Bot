@@ -65,3 +65,5 @@ Export-Package: com.mmxlabs.lngdataserver.lng.io.distances,
  com.mmxlabs.lngdataserver.lng.io.distances,
  com.mmxlabs.lngdataserver.lng.io.port,
  com.mmxlabs.lngdataserver.lng.io.pricing
+Bundle-ClassPath: data/,
+ .

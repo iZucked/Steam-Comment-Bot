@@ -1,0 +1,4870 @@
+{
+  "identifier": "v1.0.11.250_20",
+  "abcIdentifier": "v1.0.11.250",
+  "createdAt": "2019-06-21T10:45:44.228Z",
+  "locations": [
+    {
+      "mmxId": "L_V_Panam",
+      "virtual": true,
+      "name": "Panama Canal",
+      "geographicPoint": {
+        "lat": 0,
+        "lon": 0,
+        "country": "Panama",
+        "timeZone": "America/Panama"
+      }
+    },
+    {
+      "mmxId": "L_V_SuezC",
+      "virtual": true,
+      "name": "Suez Canal",
+      "geographicPoint": {
+        "lat": 0,
+        "lon": 0,
+        "country": "Egypt",
+        "timeZone": "Africa/Cairo"
+      }
+    },
+    {
+      "mmxId": "L_DZ_Bethi",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "DZ0004",
+          "provider": "abc"
+        }
+      },
+      "name": "Bethioua",
+      "geographicPoint": {
+        "lat": 35.8216667175293,
+        "lon": -0.25,
+        "country": "Algeria",
+        "timeZone": "Africa/Algiers"
+      }
+    },
+    {
+      "mmxId": "L_AO_Soyo",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "AO0061",
+          "provider": "abc"
+        }
+      },
+      "name": "Soyo",
+      "aliases": [
+        "Angola"
+      ],
+      "geographicPoint": {
+        "lat": -6.120833396911621,
+        "lon": 12.319999694824219,
+        "country": "Angola",
+        "timeZone": "Africa/Luanda"
+      }
+    },
+    {
+      "mmxId": "L_YI_Tener",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "YI0016",
+          "provider": "abc"
+        }
+      },
+      "name": "Tenerife",
+      "aliases": [
+        "Tenerife",
+        "Santa Cruz de Tenerife"
+      ],
+      "geographicPoint": {
+        "lat": 28.482500076293945,
+        "lon": -16.232500076293945,
+        "country": "Canary Is.",
+        "timeZone": "Atlantic/Canary"
+      }
+    },
+    {
+      "mmxId": "L_CN_Ningb",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "CN0101",
+          "provider": "abc"
+        }
+      },
+      "name": "Ningbo",
+      "aliases": [
+        "Ningbo"
+      ],
+      "geographicPoint": {
+        "lat": 29.899999618530273,
+        "lon": 121.55000305175781,
+        "country": "China",
+        "timeZone": "Asia/Shanghai"
+      }
+    },
+    {
+      "mmxId": "L_CN_BeiHa",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "CN0009",
+          "provider": "abc"
+        }
+      },
+      "name": "Bei Hai",
+      "aliases": [
+        "Beihai"
+      ],
+      "geographicPoint": {
+        "lat": 21.475000381469727,
+        "lon": 109.0616683959961,
+        "country": "China",
+        "timeZone": "Asia/Shanghai"
+      }
+    },
+    {
+      "mmxId": "L_CN_Zhous",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "CN0188",
+          "provider": "abc"
+        }
+      },
+      "name": "Zhoushan",
+      "aliases": [
+        "Ting Hai"
+      ],
+      "geographicPoint": {
+        "lat": 30.00666618347168,
+        "lon": 122.09500122070312,
+        "country": "China",
+        "timeZone": "Asia/Shanghai"
+      }
+    },
+    {
+      "mmxId": "L_HR_KrkIs",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "HR0036",
+          "provider": "abc"
+        }
+      },
+      "name": "Krk Island",
+      "geographicPoint": {
+        "lat": 45.32666778564453,
+        "lon": 14.428333282470703,
+        "country": "Croatia",
+        "timeZone": "Europe/Zagreb"
+      }
+    },
+    {
+      "mmxId": "L_FR_FosCa",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "FR0248",
+          "provider": "abc"
+        }
+      },
+      "name": "Fos",
+      "aliases": [
+        "Fos - Cavaou"
+      ],
+      "geographicPoint": {
+        "lat": 43.4133338928223,
+        "lon": 4.89750003814697,
+        "country": "France",
+        "timeZone": "Europe/Paris"
+      }
+    },
+    {
+      "mmxId": "L_ID_Jakar",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "ID0076",
+          "provider": "abc"
+        }
+      },
+      "name": "Jakarta",
+      "aliases": [
+        "Jakarta"
+      ],
+      "geographicPoint": {
+        "lat": -6.066666603088379,
+        "lon": 106.79499816894531,
+        "country": "Indonesia",
+        "timeZone": "Asia/Jakarta"
+      }
+    },
+    {
+      "mmxId": "L_JP_Higas",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "JP0116",
+          "provider": "abc"
+        }
+      },
+      "name": "Higashi-Ogishima",
+      "aliases": [
+        "Higashi-Ogishima",
+        "H-Ogishima",
+        "H-Ohgishima"
+      ],
+      "geographicPoint": {
+        "lat": 35.503334045410156,
+        "lon": 139.75,
+        "country": "Japan",
+        "timeZone": "Asia/Tokyo"
+      }
+    },
+    {
+      "mmxId": "L_JP_Joets",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "JP0197",
+          "provider": "abc"
+        }
+      },
+      "name": "Joetsu",
+      "geographicPoint": {
+        "lat": 37.19335174560547,
+        "lon": 138.25186157226562,
+        "country": "Japan",
+        "timeZone": "Asia/Kuching"
+      }
+    },
+    {
+      "mmxId": "L_JP_Naoet",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "JP0197",
+          "provider": "abc"
+        }
+      },
+      "name": "Naoetsu",
+      "geographicPoint": {
+        "lat": 37.19335174560547,
+        "lon": 138.25186157226562,
+        "country": "Japan",
+        "timeZone": "Asia/Kuching"
+      }
+    },
+    {
+      "mmxId": "L_JP_Senbo",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "JP0254",
+          "provider": "abc"
+        }
+      },
+      "name": "Senboku",
+      "geographicPoint": {
+        "lat": 34.55666732788086,
+        "lon": 135.42166137695312,
+        "country": "Japan",
+        "timeZone": "Asia/Tokyo"
+      }
+    },
+    {
+      "mmxId": "L_NG_Bonny",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "NG0009",
+          "provider": "abc"
+        }
+      },
+      "name": "Bonny",
+      "aliases": [
+        "Bonny Island",
+        "Lagos"
+      ],
+      "geographicPoint": {
+        "lat": 4.416666507720947,
+        "lon": 7.133333206176758,
+        "country": "Nigeria",
+        "timeZone": "Africa/Lagos"
+      }
+    },
+    {
+      "mmxId": "L_PH_Taban",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "PH0018",
+          "provider": "abc"
+        }
+      },
+      "name": "Tabangao",
+      "geographicPoint": {
+        "lat": 13.721290588378906,
+        "lon": 121.05397033691406,
+        "country": "Philippines",
+        "timeZone": "Asia/Manila"
+      }
+    },
+    {
+      "mmxId": "L_KR_Gwang",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "KR0046",
+          "provider": "abc"
+        }
+      },
+      "name": "Gwangyang",
+      "geographicPoint": {
+        "lat": 34.88333511352539,
+        "lon": 127.79499816894531,
+        "country": "South Korea",
+        "timeZone": "Asia/Seoul"
+      }
+    },
+    {
+      "mmxId": "L_KR_Pyeon",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "KR0079",
+          "provider": "abc"
+        }
+      },
+      "name": "Pyeongtaek",
+      "aliases": [
+        "Pyeong Taek"
+      ],
+      "geographicPoint": {
+        "lat": 37.00400161743164,
+        "lon": 126.774169921875,
+        "country": "South Korea",
+        "timeZone": "Asia/Seoul"
+      }
+    },
+    {
+      "mmxId": "L_KR_Samch",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "KR0033",
+          "provider": "abc"
+        }
+      },
+      "name": "Samcheog",
+      "aliases": [
+        "Samchok",
+        "Samcheok"
+      ],
+      "geographicPoint": {
+        "lat": 37.494998931884766,
+        "lon": 129.13999938964844,
+        "country": "South Korea",
+        "timeZone": "Asia/Seoul"
+      }
+    },
+    {
+      "mmxId": "L_ES_ElFer",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "ES0061",
+          "provider": "abc"
+        }
+      },
+      "name": "El Ferrol",
+      "aliases": [
+        "El Ferrol",
+        "Ferol",
+        "La Coruna",
+        "Reganose",
+        "Reganosa",
+        "Murgardos",
+        "Ferrol"
+      ],
+      "geographicPoint": {
+        "lat": 43.4716682434082,
+        "lon": -8.25,
+        "country": "Spain",
+        "timeZone": "Europe/Madrid"
+      }
+    },
+    {
+      "mmxId": "L_DZ_Arzew",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "DZ0003",
+          "provider": "abc"
+        }
+      },
+      "name": "Arzew",
+      "geographicPoint": {
+        "lat": 35.849998474121094,
+        "lon": -0.2933333218097687,
+        "country": "Algeria",
+        "timeZone": "Africa/Algiers"
+      }
+    },
+    {
+      "mmxId": "L_DZ_Skikd",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "DZ0033",
+          "provider": "abc"
+        }
+      },
+      "name": "Skikda",
+      "aliases": [
+        "Sonatrach"
+      ],
+      "geographicPoint": {
+        "lat": 36.88666534423828,
+        "lon": 6.940000057220459,
+        "country": "Algeria",
+        "timeZone": "Africa/Algiers"
+      }
+    },
+    {
+      "mmxId": "L_AR_Bahia",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "AR0129",
+          "provider": "abc"
+        }
+      },
+      "name": "Bahia Blanca",
+      "geographicPoint": {
+        "lat": -38.788333892822266,
+        "lon": -62.28883361816406,
+        "country": "Argentina",
+        "timeZone": "America/Buenos_Aires"
+      }
+    },
+    {
+      "mmxId": "L_AR_Escob",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "AR0130",
+          "provider": "abc"
+        }
+      },
+      "name": "Escobar",
+      "geographicPoint": {
+        "lat": -34.23666763305664,
+        "lon": -58.76333236694336,
+        "country": "Argentina",
+        "timeZone": "America/Cordoba"
+      }
+    },
+    {
+      "mmxId": "L_AU_Barro",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "AU0021",
+          "provider": "abc"
+        }
+      },
+      "name": "Barrow Island",
+      "aliases": [
+        "Gorgon"
+      ],
+      "geographicPoint": {
+        "lat": -20.81281280517578,
+        "lon": 115.5650863647461,
+        "country": "Australia",
+        "timeZone": "Australia/Perth"
+      }
+    },
+    {
+      "mmxId": "L_AU_Dampi",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "AU0089",
+          "provider": "abc"
+        }
+      },
+      "name": "Dampier",
+      "geographicPoint": {
+        "lat": -20.648332595825195,
+        "lon": 116.67333221435547,
+        "country": "Australia",
+        "timeZone": "Australia/Perth"
+      }
+    },
+    {
+      "mmxId": "L_AU_Darwi",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "AU0329",
+          "provider": "abc"
+        }
+      },
+      "name": "Darwin",
+      "aliases": [
+        "Wickham Point"
+      ],
+      "geographicPoint": {
+        "lat": -12.491666793823242,
+        "lon": 130.8816680908203,
+        "country": "Australia",
+        "timeZone": "Australia/Darwin"
+      }
+    },
+    {
+      "mmxId": "L_AU_Glads",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "AU0421",
+          "provider": "abc"
+        }
+      },
+      "name": "Gladstone",
+      "geographicPoint": {
+        "lat": -23.805665969848633,
+        "lon": 151.21817016601562,
+        "country": "Australia",
+        "timeZone": "Australia/Brisbane"
+      }
+    },
+    {
+      "mmxId": "L_AU_Karra",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "AU0311",
+          "provider": "abc"
+        }
+      },
+      "name": "Karratha",
+      "aliases": [
+        "Withnell Bay"
+      ],
+      "geographicPoint": {
+        "lat": -20.584999084472656,
+        "lon": 116.76499938964844,
+        "country": "Australia",
+        "timeZone": "Australia/Perth"
+      }
+    },
+    {
+      "mmxId": "L_AU_Pluto",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "AU0420",
+          "provider": "abc"
+        }
+      },
+      "name": "Pluto",
+      "geographicPoint": {
+        "lat": -20.60416603088379,
+        "lon": 116.75416564941406,
+        "country": "Australia",
+        "timeZone": "Australia/Perth"
+      }
+    },
+    {
+      "mmxId": "L_BH_Bahra",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "BH0003",
+          "provider": "abc"
+        }
+      },
+      "name": "Bahrain",
+      "geographicPoint": {
+        "lat": 26.16666603088379,
+        "lon": 50.68166732788086,
+        "country": "Bahrain",
+        "timeZone": "Asia/Bahrain"
+      }
+    },
+    {
+      "mmxId": "L_BD_Chitt",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "BD0003",
+          "provider": "abc"
+        }
+      },
+      "name": "Chittagong",
+      "geographicPoint": {
+        "lat": 22.308332443237305,
+        "lon": 91.80500030517578,
+        "country": "Bangladesh",
+        "timeZone": "Asia/Dhaka"
+      }
+    },
+    {
+      "mmxId": "L_BE_Zeebr",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "BE0033",
+          "provider": "abc"
+        }
+      },
+      "name": "Zeebrugge",
+      "aliases": [
+        "Fluxys"
+      ],
+      "geographicPoint": {
+        "lat": 51.352333068847656,
+        "lon": 3.2149999141693115,
+        "country": "Belgium",
+        "timeZone": "Europe/Brussels"
+      }
+    },
+    {
+      "mmxId": "L_BR_Guana",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "BR0240",
+          "provider": "abc"
+        }
+      },
+      "name": "Guanabara",
+      "aliases": [
+        "Petrobras Guanabara"
+      ],
+      "geographicPoint": {
+        "lat": -22.78333282470703,
+        "lon": -43.13283157348633,
+        "country": "Brazil",
+        "timeZone": "America/Sao_Paulo"
+      }
+    },
+    {
+      "mmxId": "L_BR_Pecem",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "BR0166",
+          "provider": "abc"
+        }
+      },
+      "name": "Pecem",
+      "aliases": [
+        "Petrobras Pecem"
+      ],
+      "geographicPoint": {
+        "lat": -3.5274999141693115,
+        "lon": -38.79999923706055,
+        "country": "Brazil",
+        "timeZone": "America/Fortaleza"
+      }
+    },
+    {
+      "mmxId": "L_BR_Salva",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "BR0130",
+          "provider": "abc"
+        }
+      },
+      "name": "Salvador",
+      "aliases": [
+        "Bahia"
+      ],
+      "geographicPoint": {
+        "lat": -12.97166633605957,
+        "lon": -38.53666687011719,
+        "country": "Brazil",
+        "timeZone": "America/Sao_Paulo"
+      }
+    },
+    {
+      "mmxId": "L_BR_SaoFr",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "BR0134",
+          "provider": "abc"
+        }
+      },
+      "name": "Sao Francisco do Sul",
+      "geographicPoint": {
+        "lat": -26.235666275024414,
+        "lon": -48.63833236694336,
+        "country": "Brazil",
+        "timeZone": "America/Sao_Paulo"
+      }
+    },
+    {
+      "mmxId": "L_BN_Lumut",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "BN0003",
+          "provider": "abc"
+        }
+      },
+      "name": "Lumut",
+      "aliases": [
+        "Brunei"
+      ],
+      "geographicPoint": {
+        "lat": 4.712500095367432,
+        "lon": 114.44283294677734,
+        "country": "Brunei Darussalam",
+        "timeZone": "Asia/Brunei"
+      }
+    },
+    {
+      "mmxId": "L_BN_Seria",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "BN0005",
+          "provider": "abc"
+        }
+      },
+      "name": "Seria",
+      "geographicPoint": {
+        "lat": 4.714999675750732,
+        "lon": 114.32499694824219,
+        "country": "Brunei Darussalam",
+        "timeZone": "Asia/Brunei"
+      }
+    },
+    {
+      "mmxId": "L_CM_Kribi",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "CM0009",
+          "provider": "abc"
+        }
+      },
+      "name": "Kribi",
+      "geographicPoint": {
+        "lat": 2.941666603088379,
+        "lon": 9.893333435058594,
+        "country": "Cameroon",
+        "timeZone": "Africa/Douala"
+      }
+    },
+    {
+      "mmxId": "L_CA_Canap",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "CA0712",
+          "provider": "abc"
+        }
+      },
+      "name": "Canaport",
+      "aliases": [
+        "Saint John"
+      ],
+      "geographicPoint": {
+        "lat": 45.2043342590332,
+        "lon": -65.98049926757812,
+        "country": "Canada",
+        "timeZone": "America/Halifax"
+      }
+    },
+    {
+      "mmxId": "L_CA_Halif",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "CA0201",
+          "provider": "abc"
+        }
+      },
+      "name": "Halifax",
+      "geographicPoint": {
+        "lat": 44.63666534423828,
+        "lon": -63.54166793823242,
+        "country": "Canada",
+        "timeZone": "America/Halifax"
+      }
+    },
+    {
+      "mmxId": "L_CA_Kitim",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "CA0250",
+          "provider": "abc"
+        }
+      },
+      "name": "Kitimat",
+      "geographicPoint": {
+        "lat": 53.98833465576172,
+        "lon": -128.67832946777344,
+        "country": "Canada",
+        "timeZone": "America/Vancouver"
+      }
+    },
+    {
+      "mmxId": "L_CA_Princ",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "CA0422",
+          "provider": "abc"
+        }
+      },
+      "name": "Prince Rupert",
+      "geographicPoint": {
+        "lat": 54.3216667175293,
+        "lon": -130.31666564941406,
+        "country": "Canada",
+        "timeZone": "America/Vancouver"
+      }
+    },
+    {
+      "mmxId": "L_CA_Quebe",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "CA0427",
+          "provider": "abc"
+        }
+      },
+      "name": "Quebec",
+      "geographicPoint": {
+        "lat": 46.82666778564453,
+        "lon": -71.19666290283203,
+        "country": "Canada",
+        "timeZone": "America/Toronto"
+      }
+    },
+    {
+      "mmxId": "L_CL_Mejil",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "CL0043",
+          "provider": "abc"
+        }
+      },
+      "name": "Mejillones",
+      "geographicPoint": {
+        "lat": -23.08333396911621,
+        "lon": -70.41666412353516,
+        "country": "Chile",
+        "timeZone": "America/Santiago"
+      }
+    },
+    {
+      "mmxId": "L_CL_Quint",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "CL0068",
+          "provider": "abc"
+        }
+      },
+      "name": "Quintero",
+      "geographicPoint": {
+        "lat": -32.747501373291016,
+        "lon": -71.5199966430664,
+        "country": "Chile",
+        "timeZone": "America/Santiago"
+      }
+    },
+    {
+      "mmxId": "L_CL_Talca",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "CL0074",
+          "provider": "abc"
+        }
+      },
+      "name": "Talcahuano",
+      "geographicPoint": {
+        "lat": -36.70500183105469,
+        "lon": -73.07333374023438,
+        "country": "Chile",
+        "timeZone": "America/Santiago"
+      }
+    },
+    {
+      "mmxId": "L_CN_Chiwa",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "CN0025",
+          "provider": "abc"
+        }
+      },
+      "name": "Chiwan",
+      "geographicPoint": {
+        "lat": 22.461666107177734,
+        "lon": 113.88166809082031,
+        "country": "China",
+        "timeZone": "Asia/Shanghai"
+      }
+    },
+    {
+      "mmxId": "L_CN_Dalia",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "CN0609",
+          "provider": "abc"
+        }
+      },
+      "name": "Dalian",
+      "geographicPoint": {
+        "lat": 38.9561653137207,
+        "lon": 121.88716888427734,
+        "country": "China",
+        "timeZone": "Asia/Chongqing"
+      }
+    },
+    {
+      "mmxId": "L_CN_Fujia",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "CN0587",
+          "provider": "abc"
+        }
+      },
+      "name": "Fujian",
+      "aliases": [
+        "Xiuyu"
+      ],
+      "geographicPoint": {
+        "lat": 25.211166381835938,
+        "lon": 118.99666595458984,
+        "country": "China",
+        "timeZone": "Asia/Shanghai"
+      }
+    },
+    {
+      "mmxId": "L_CN_Guang",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "CN0204",
+          "provider": "abc"
+        }
+      },
+      "name": "Guangdong",
+      "aliases": [
+        "Dapeng"
+      ],
+      "geographicPoint": {
+        "lat": 22.574167251586914,
+        "lon": 114.43000030517578,
+        "country": "China",
+        "timeZone": "Asia/Chongqing"
+      }
+    },
+    {
+      "mmxId": "L_CN_Yuedo",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "CN0204",
+          "provider": "abc"
+        }
+      },
+      "name": "Yuedong",
+      "geographicPoint": {
+        "lat": 22.574167251586914,
+        "lon": 114.43000030517578,
+        "country": "China",
+        "timeZone": "Asia/Chongqing"
+      }
+    },
+    {
+      "mmxId": "L_CN_Haiko",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "CN0036",
+          "provider": "abc"
+        }
+      },
+      "name": "Haikou",
+      "geographicPoint": {
+        "lat": 20.02666664123535,
+        "lon": 110.27833557128906,
+        "country": "China",
+        "timeZone": "Asia/Chongqing"
+      }
+    },
+    {
+      "mmxId": "L_SP_Haina",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "SP5012",
+          "provider": "abc"
+        }
+      },
+      "name": "Hainan",
+      "aliases": [
+        "Hainan Strait"
+      ],
+      "geographicPoint": {
+        "lat": 20.183332443237305,
+        "lon": 110.36499786376953,
+        "country": "China",
+        "timeZone": "Asia/Chongqing"
+      }
+    },
+    {
+      "mmxId": "L_CN_Heibe",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "CN0637",
+          "provider": "abc"
+        }
+      },
+      "name": "Heibei",
+      "geographicPoint": {
+        "lat": 38.91666793823242,
+        "lon": 118.55000305175781,
+        "country": "China",
+        "timeZone": "Asia/Chongqing"
+      }
+    },
+    {
+      "mmxId": "L_CN_Caofe",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "CN0637",
+          "provider": "abc"
+        }
+      },
+      "name": "Caofeidian",
+      "aliases": [
+        "Cao Fei Dian"
+      ],
+      "geographicPoint": {
+        "lat": 38.91666793823242,
+        "lon": 118.55000305175781,
+        "country": "China",
+        "timeZone": "Asia/Chongqing"
+      }
+    },
+    {
+      "mmxId": "L_CN_Tangs",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "CN0637",
+          "provider": "abc"
+        }
+      },
+      "name": "Tangshan",
+      "geographicPoint": {
+        "lat": 38.91666793823242,
+        "lon": 118.55000305175781,
+        "country": "China",
+        "timeZone": "Asia/Chongqing"
+      }
+    },
+    {
+      "mmxId": "L_CN_Jiang",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "CN0606",
+          "provider": "abc"
+        }
+      },
+      "name": "Jiangsu",
+      "aliases": [
+        "Nantong",
+        "Rudong"
+      ],
+      "geographicPoint": {
+        "lat": 32.54999923706055,
+        "lon": 121.43000030517578,
+        "country": "China",
+        "timeZone": "Asia/Chongqing"
+      }
+    },
+    {
+      "mmxId": "L_CN_Liany",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "CN0073",
+          "provider": "abc"
+        }
+      },
+      "name": "Lianyungang",
+      "geographicPoint": {
+        "lat": 34.75,
+        "lon": 119.44999694824219,
+        "country": "China",
+        "timeZone": "Asia/Shanghai"
+      }
+    },
+    {
+      "mmxId": "L_CN_Qingd",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "CN0148",
+          "provider": "abc"
+        }
+      },
+      "name": "Qingdao",
+      "aliases": [
+        "Tsingtao"
+      ],
+      "geographicPoint": {
+        "lat": 36.09416580200195,
+        "lon": 120.31666564941406,
+        "country": "China",
+        "timeZone": "Asia/Shanghai"
+      }
+    },
+    {
+      "mmxId": "L_CN_Qinhu",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "CN0109",
+          "provider": "abc"
+        }
+      },
+      "name": "Qinhuangdao",
+      "geographicPoint": {
+        "lat": 39.904998779296875,
+        "lon": 119.59166717529297,
+        "country": "China",
+        "timeZone": "Asia/Shanghai"
+      }
+    },
+    {
+      "mmxId": "L_CN_Qinzh",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "CN0110",
+          "provider": "abc"
+        }
+      },
+      "name": "Qinzhou",
+      "geographicPoint": {
+        "lat": 21.71666717529297,
+        "lon": 108.58333587646484,
+        "country": "China",
+        "timeZone": "Asia/Chongqing"
+      }
+    },
+    {
+      "mmxId": "L_CN_Shang",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "CN0116",
+          "provider": "abc"
+        }
+      },
+      "name": "Shanghai",
+      "geographicPoint": {
+        "lat": 31.258333206176758,
+        "lon": 121.5433349609375,
+        "country": "China",
+        "timeZone": "Asia/Shanghai"
+      }
+    },
+    {
+      "mmxId": "L_CN_Shenz",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "CN0122",
+          "provider": "abc"
+        }
+      },
+      "name": "Shenzhen",
+      "geographicPoint": {
+        "lat": 22.443429946899414,
+        "lon": 113.88360595703125,
+        "country": "China",
+        "timeZone": "Asia/Shanghai"
+      }
+    },
+    {
+      "mmxId": "L_CN_Tianj",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "CN0594",
+          "provider": "abc"
+        }
+      },
+      "name": "Tianjin (CNOOC)",
+      "aliases": [
+        "Tianjin Lingang"
+      ],
+      "geographicPoint": {
+        "lat": 38.938331604003906,
+        "lon": 117.8116683959961,
+        "country": "China",
+        "timeZone": "Asia/Shanghai"
+      }
+    },
+    {
+      "mmxId": "L_CN_Tianj2",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "CN0594",
+          "provider": "abc"
+        }
+      },
+      "name": "Tianjin (Sinopec)",
+      "geographicPoint": {
+        "lat": 38.938331604003906,
+        "lon": 117.8116683959961,
+        "country": "China",
+        "timeZone": "Asia/Shanghai"
+      }
+    },
+    {
+      "mmxId": "L_CN_Yangp",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "CN0621",
+          "provider": "abc"
+        }
+      },
+      "name": "Yangpu",
+      "geographicPoint": {
+        "lat": 19.72016716003418,
+        "lon": 109.18199920654297,
+        "country": "China",
+        "timeZone": "Asia/Chongqing"
+      }
+    },
+    {
+      "mmxId": "L_CN_Yangs",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "CN0540",
+          "provider": "abc"
+        }
+      },
+      "name": "Yangshan",
+      "aliases": [
+        "Yangshan Deep Water Port"
+      ],
+      "geographicPoint": {
+        "lat": 30.6200008392334,
+        "lon": 122.05833435058594,
+        "country": "China",
+        "timeZone": "Asia/Shanghai"
+      }
+    },
+    {
+      "mmxId": "L_CN_Zhang",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "CN0182",
+          "provider": "abc"
+        }
+      },
+      "name": "Zhangjiagang",
+      "geographicPoint": {
+        "lat": 31.969999313354492,
+        "lon": 120.4000015258789,
+        "country": "China",
+        "timeZone": "Asia/Shanghai"
+      }
+    },
+    {
+      "mmxId": "L_CN_Zhuha",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "CN0189",
+          "provider": "abc"
+        }
+      },
+      "name": "Zhuhai",
+      "geographicPoint": {
+        "lat": 22.239166259765625,
+        "lon": 113.58499908447266,
+        "country": "China",
+        "timeZone": "Asia/Chongqing"
+      }
+    },
+    {
+      "mmxId": "L_CO_Puert",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "CO0051",
+          "provider": "abc"
+        }
+      },
+      "name": "Puerto Bahia",
+      "aliases": [
+        "Puerto Bahia"
+      ],
+      "geographicPoint": {
+        "lat": 10.293100357055664,
+        "lon": -75.53398132324219,
+        "country": "Colombia",
+        "timeZone": "America/Bogota"
+      }
+    },
+    {
+      "mmxId": "L_CY_Limas",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "CY0014",
+          "provider": "abc"
+        }
+      },
+      "name": "Limassol",
+      "geographicPoint": {
+        "lat": 34.64833450317383,
+        "lon": 33.02083206176758,
+        "country": "Cyprus",
+        "timeZone": "Africa/Cairo"
+      }
+    },
+    {
+      "mmxId": "L_DO_AESAn",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "DO0027",
+          "provider": "abc"
+        }
+      },
+      "name": "AES Andres",
+      "aliases": [
+        "Caucedo",
+        "Dominican Republic",
+        "Andres"
+      ],
+      "geographicPoint": {
+        "lat": 18.399999618530273,
+        "lon": -69.61499786376953,
+        "country": "Dominican Republic",
+        "timeZone": "America/Santo_Domingo"
+      }
+    },
+    {
+      "mmxId": "L_TP_Dili",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "TP0001",
+          "provider": "abc"
+        }
+      },
+      "name": "Dili",
+      "geographicPoint": {
+        "lat": -8.550833702087402,
+        "lon": 125.57550048828125,
+        "country": "East Timor",
+        "timeZone": "Asia/Dili"
+      }
+    },
+    {
+      "mmxId": "L_EG_AinSo",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "EG0006",
+          "provider": "abc"
+        }
+      },
+      "name": "Ain Sokhna",
+      "aliases": [
+        "Ain Sukhna",
+        "Sokhna"
+      ],
+      "geographicPoint": {
+        "lat": 29.575000762939453,
+        "lon": 32.40833282470703,
+        "country": "Egypt",
+        "timeZone": "Africa/Cairo"
+      }
+    },
+    {
+      "mmxId": "L_EG_Damie",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "EG0016",
+          "provider": "abc"
+        }
+      },
+      "name": "Damietta",
+      "aliases": [
+        "SEGAS"
+      ],
+      "geographicPoint": {
+        "lat": 31.46666717529297,
+        "lon": 31.758333206176758,
+        "country": "Egypt",
+        "timeZone": "Africa/Cairo"
+      }
+    },
+    {
+      "mmxId": "L_EG_Idku",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "EG0096",
+          "provider": "abc"
+        }
+      },
+      "name": "Idku",
+      "geographicPoint": {
+        "lat": 31.3700008392334,
+        "lon": 30.295000076293945,
+        "country": "Egypt",
+        "timeZone": "Asia/Kuwait"
+      }
+    },
+    {
+      "mmxId": "L_CP_Suez",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "CP3200",
+          "provider": "abc"
+        }
+      },
+      "name": "Suez",
+      "geographicPoint": {
+        "lat": 29.834999084472656,
+        "lon": 32.5533332824707,
+        "country": "Egypt",
+        "timeZone": "Africa/Cairo"
+      }
+    },
+    {
+      "mmxId": "L_SV_Acaju",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "SV0001",
+          "provider": "abc"
+        }
+      },
+      "name": "Acajutla",
+      "geographicPoint": {
+        "lat": 13.563333511352539,
+        "lon": -89.84166717529297,
+        "country": "El Salvador",
+        "timeZone": "America/El_Salvador"
+      }
+    },
+    {
+      "mmxId": "L_GQ_Punta",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "GQ0044",
+          "provider": "abc"
+        }
+      },
+      "name": "Punta Europa",
+      "aliases": [
+        "Bioko Island"
+      ],
+      "geographicPoint": {
+        "lat": 3.7833333015441895,
+        "lon": 8.696666717529297,
+        "country": "Equatorial Guinea",
+        "timeZone": "Africa/Malabo"
+      }
+    },
+    {
+      "mmxId": "L_EE_Paldi",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "EE0019",
+          "provider": "abc"
+        }
+      },
+      "name": "Paldiski",
+      "aliases": [
+        "Paldiski South Harbour"
+      ],
+      "geographicPoint": {
+        "lat": 59.33333206176758,
+        "lon": 24.08333396911621,
+        "country": "Estonia",
+        "timeZone": "Europe/Tallinn"
+      }
+    },
+    {
+      "mmxId": "L_FR_Dunki",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "FR0299",
+          "provider": "abc"
+        }
+      },
+      "name": "Dunkirk",
+      "aliases": [
+        "Dunkirk, France"
+      ],
+      "geographicPoint": {
+        "lat": 51.03756666666666,
+        "lon": 2.1870833333333333,
+        "country": "France",
+        "timeZone": "Europe/Paris"
+      }
+    },
+    {
+      "mmxId": "L_FR_FosSu",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "FR0245",
+          "provider": "abc"
+        }
+      },
+      "name": "Fos Sur Mer",
+      "aliases": [
+        "Fos"
+      ],
+      "geographicPoint": {
+        "lat": 43.45000076293945,
+        "lon": 4.855000019073486,
+        "country": "France",
+        "timeZone": "Europe/Paris"
+      }
+    },
+    {
+      "mmxId": "L_FR_LeHav",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "FR0090",
+          "provider": "abc"
+        }
+      },
+      "name": "Le Havre",
+      "geographicPoint": {
+        "lat": 49.4716682434082,
+        "lon": 0.1599999964237213,
+        "country": "France",
+        "timeZone": "Europe/Paris"
+      }
+    },
+    {
+      "mmxId": "L_FR_Monto",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "FR0134",
+          "provider": "abc"
+        }
+      },
+      "name": "Montoir",
+      "aliases": [
+        "Montoir De Bretagne"
+      ],
+      "geographicPoint": {
+        "lat": 47.29833221435547,
+        "lon": -2.140000104904175,
+        "country": "France",
+        "timeZone": "Europe/Paris"
+      }
+    },
+    {
+      "mmxId": "L_DE_Rosto",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "DE0091",
+          "provider": "abc"
+        }
+      },
+      "name": "Rostock",
+      "geographicPoint": {
+        "lat": 54.15833282470703,
+        "lon": 12.103333473205566,
+        "country": "Germany",
+        "timeZone": "Europe/Berlin"
+      }
+    },
+    {
+      "mmxId": "L_DE_Wilhe",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "DE0117",
+          "provider": "abc"
+        }
+      },
+      "name": "Wilhelmshaven",
+      "geographicPoint": {
+        "lat": 53.53333282470703,
+        "lon": 8.16333293914795,
+        "country": "Germany",
+        "timeZone": "Europe/Berlin"
+      }
+    },
+    {
+      "mmxId": "L_GI_Gibra",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "GI0003",
+          "provider": "abc"
+        }
+      },
+      "name": "Gibraltar",
+      "aliases": [
+        "Gibraltar"
+      ],
+      "geographicPoint": {
+        "lat": 36.1349983215332,
+        "lon": -5.364999771118164,
+        "country": "Gibraltar",
+        "timeZone": "Europe/Gibraltar"
+      }
+    },
+    {
+      "mmxId": "L_GR_Revit",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "GR0235",
+          "provider": "abc"
+        }
+      },
+      "name": "Revithoussa",
+      "geographicPoint": {
+        "lat": 37.95833206176758,
+        "lon": 23.405000686645508,
+        "country": "Greece",
+        "timeZone": "Europe/Athens"
+      }
+    },
+    {
+      "mmxId": "L_TT_Point",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "GP0005",
+          "provider": "abc"
+        }
+      },
+      "name": "Pointe-a-Pitre",
+      "aliases": [
+        "Pointe-a-Pitre a",
+        "Pointe"
+      ],
+      "geographicPoint": {
+        "lat": 16.233333587646484,
+        "lon": -61.54750061035156,
+        "country": "Guadeloupe",
+        "timeZone": "America/Guadeloupe"
+      }
+    },
+    {
+      "mmxId": "L_IN_Dabho",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "IN0189",
+          "provider": "abc"
+        }
+      },
+      "name": "Dabhol",
+      "geographicPoint": {
+        "lat": 17.52666664123535,
+        "lon": 73.13833618164062,
+        "country": "India",
+        "timeZone": "Asia/Calcutta"
+      }
+    },
+    {
+      "mmxId": "L_IN_Dahej",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "IN0201",
+          "provider": "abc"
+        }
+      },
+      "name": "Dahej",
+      "geographicPoint": {
+        "lat": 21.672515869140625,
+        "lon": 72.50035095214844,
+        "country": "India",
+        "timeZone": "Asia/Calcutta"
+      }
+    },
+    {
+      "mmxId": "L_IN_Ennor",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "IN0044",
+          "provider": "abc"
+        }
+      },
+      "name": "Ennore",
+      "geographicPoint": {
+        "lat": 13.261666297912598,
+        "lon": 80.34166717529297,
+        "country": "India",
+        "timeZone": "Asia/Kolkata"
+      }
+    },
+    {
+      "mmxId": "L_IN_Ganga",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "IN0171",
+          "provider": "abc"
+        }
+      },
+      "name": "Gangavaram",
+      "geographicPoint": {
+        "lat": 17.623332977294922,
+        "lon": 83.23666381835938,
+        "country": "India",
+        "timeZone": "Asia/Kolkata"
+      }
+    },
+    {
+      "mmxId": "L_IN_Haldi",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "IN0047",
+          "provider": "abc"
+        }
+      },
+      "name": "Haldia",
+      "aliases": [
+        "Offshore Haldia No.1 (TA)"
+      ],
+      "geographicPoint": {
+        "lat": 22.02666664123535,
+        "lon": 88.09833526611328,
+        "country": "India",
+        "timeZone": "Asia/Kolkata"
+      }
+    },
+    {
+      "mmxId": "L_IN_Hazir",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "IN0048",
+          "provider": "abc"
+        }
+      },
+      "name": "Hazira",
+      "geographicPoint": {
+        "lat": 21.14666748046875,
+        "lon": 72.56416320800781,
+        "country": "India",
+        "timeZone": "Asia/Calcutta"
+      }
+    },
+    {
+      "mmxId": "L_IN_Kakin",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "IN0057",
+          "provider": "abc"
+        }
+      },
+      "name": "Kakinada",
+      "geographicPoint": {
+        "lat": 16.97333335876465,
+        "lon": 82.28500366210938,
+        "country": "India",
+        "timeZone": "Asia/Kolkata"
+      }
+    },
+    {
+      "mmxId": "L_IN_Karwa",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "IN0185",
+          "provider": "abc"
+        }
+      },
+      "name": "Karwar - South Port",
+      "aliases": [
+        "Karwar - South Port South",
+        "Karwar"
+      ],
+      "geographicPoint": {
+        "lat": 14.770000457763672,
+        "lon": 74.13666534423828,
+        "country": "India",
+        "timeZone": "Asia/Kolkata"
+      }
+    },
+    {
+      "mmxId": "L_IN_Kochi",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "IN0202",
+          "provider": "abc"
+        }
+      },
+      "name": "Kochi",
+      "aliases": [
+        "Cochin"
+      ],
+      "geographicPoint": {
+        "lat": 9.972000122070312,
+        "lon": 76.22808074951172,
+        "country": "India",
+        "timeZone": "Asia/Calcutta"
+      }
+    },
+    {
+      "mmxId": "L_IN_Mundr",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "IN0093",
+          "provider": "abc"
+        }
+      },
+      "name": "Mundra",
+      "geographicPoint": {
+        "lat": 22.726667404174805,
+        "lon": 69.7066650390625,
+        "country": "India",
+        "timeZone": "Asia/Kolkata"
+      }
+    },
+    {
+      "mmxId": "L_IN_Pipav",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "IN0110",
+          "provider": "abc"
+        }
+      },
+      "name": "Pipavav",
+      "geographicPoint": {
+        "lat": 20.91583251953125,
+        "lon": 71.50916290283203,
+        "country": "India",
+        "timeZone": "Asia/Kolkata"
+      }
+    },
+    {
+      "mmxId": "L_ID_Ambon",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "ID0008",
+          "provider": "abc"
+        }
+      },
+      "name": "Ambon",
+      "geographicPoint": {
+        "lat": -3.691666603088379,
+        "lon": 128.1616668701172,
+        "country": "Indonesia",
+        "timeZone": "Asia/Jayapura"
+      }
+    },
+    {
+      "mmxId": "L_ID_Arun",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "ID0431",
+          "provider": "abc"
+        }
+      },
+      "name": "Arun",
+      "aliases": [
+        "Blanglacang",
+        "Blang Lacang"
+      ],
+      "geographicPoint": {
+        "lat": 5.2191667556762695,
+        "lon": 97.0999984741211,
+        "country": "Indonesia",
+        "timeZone": "Asia/Jakarta"
+      }
+    },
+    {
+      "mmxId": "L_ID_Bonta",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "ID0054",
+          "provider": "abc"
+        }
+      },
+      "name": "Bontang",
+      "aliases": [
+        "Badak"
+      ],
+      "geographicPoint": {
+        "lat": 0.09666666388511658,
+        "lon": 117.4800033569336,
+        "country": "Indonesia",
+        "timeZone": "Asia/Makassar"
+      }
+    },
+    {
+      "mmxId": "L_ID_Luwuk",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "ID0154",
+          "provider": "abc"
+        }
+      },
+      "name": "Luwuk",
+      "geographicPoint": {
+        "lat": -0.9483333230018616,
+        "lon": 122.79833221435547,
+        "country": "Indonesia",
+        "timeZone": "Asia/Makassar"
+      }
+    },
+    {
+      "mmxId": "L_ID_Semar",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "ID0260",
+          "provider": "abc"
+        }
+      },
+      "name": "Semarang",
+      "geographicPoint": {
+        "lat": -6.947133333333333,
+        "lon": 110.42238333333333,
+        "country": "Indonesia",
+        "timeZone": "Asia/Jakarta"
+      }
+    },
+    {
+      "mmxId": "L_ID_Tangg",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "ID0352",
+          "provider": "abc"
+        }
+      },
+      "name": "Tangguh",
+      "aliases": [
+        "Tannguh"
+      ],
+      "geographicPoint": {
+        "lat": -2.4233334064483643,
+        "lon": 133.1266632080078,
+        "country": "Indonesia",
+        "timeZone": "Asia/Jayapura"
+      }
+    },
+    {
+      "mmxId": "L_IQ_Khora",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "IQ0006",
+          "provider": "abc"
+        }
+      },
+      "name": "Khor al Zubair",
+      "geographicPoint": {
+        "lat": 30.196516036987305,
+        "lon": 47.88589859008789,
+        "country": "Iraq",
+        "timeZone": "Asia/Baghdad"
+      }
+    },
+    {
+      "mmxId": "L_IR_ParsL",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "IR0003",
+          "provider": "abc"
+        }
+      },
+      "name": "Pars",
+      "geographicPoint": {
+        "lat": 27.516666412353516,
+        "lon": 52.51333236694336,
+        "country": "Iran",
+        "timeZone": "Asia/Tehran"
+      }
+    },
+    {
+      "mmxId": "L_IR_Tomba",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "IR0082",
+          "provider": "abc"
+        }
+      },
+      "name": "Tombak",
+      "aliases": [
+        "Iran"
+      ],
+      "geographicPoint": {
+        "lat": 27.71666717529297,
+        "lon": 52.16666793823242,
+        "country": "Iran",
+        "timeZone": "Asia/Tehran"
+      }
+    },
+    {
+      "mmxId": "L_IE_Limer",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "IE0057",
+          "provider": "abc"
+        }
+      },
+      "name": "Limerick",
+      "geographicPoint": {
+        "lat": 52.6591682434082,
+        "lon": -8.645833015441895,
+        "country": "Ireland",
+        "timeZone": "Europe/Dublin"
+      }
+    },
+    {
+      "mmxId": "L_IL_Ashdo",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "IL0013",
+          "provider": "abc"
+        }
+      },
+      "name": "Ashdod",
+      "geographicPoint": {
+        "lat": 31.8266658782959,
+        "lon": 34.63750076293945,
+        "country": "Israel",
+        "timeZone": "Asia/Jerusalem"
+      }
+    },
+    {
+      "mmxId": "L_IL_Hader",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "IL0014",
+          "provider": "abc"
+        }
+      },
+      "name": "Hadera",
+      "geographicPoint": {
+        "lat": 32.46666717529297,
+        "lon": 34.73833465576172,
+        "country": "Israel",
+        "timeZone": "Asia/Tel_Aviv"
+      }
+    },
+    {
+      "mmxId": "L_IT_Falco",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "IT0053",
+          "provider": "abc"
+        }
+      },
+      "name": "Falconara",
+      "geographicPoint": {
+        "lat": 43.650001525878906,
+        "lon": 13.399999618530273,
+        "country": "Italy",
+        "timeZone": "Europe/Rome"
+      }
+    },
+    {
+      "mmxId": "L_IT_Gioia",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "IT0070",
+          "provider": "abc"
+        }
+      },
+      "name": "Gioia Tauro",
+      "geographicPoint": {
+        "lat": 38.44166564941406,
+        "lon": 15.898333549499512,
+        "country": "Italy",
+        "timeZone": "Europe/Rome"
+      }
+    },
+    {
+      "mmxId": "L_IT_Livor",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "IT0276",
+          "provider": "abc"
+        }
+      },
+      "name": "Livorno",
+      "geographicPoint": {
+        "lat": 43.63333511352539,
+        "lon": 9.97166633605957,
+        "country": "Italy",
+        "timeZone": "Europe/Rome"
+      }
+    },
+    {
+      "mmxId": "L_IT_Orton",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "IT0110",
+          "provider": "abc"
+        }
+      },
+      "name": "Ortona",
+      "geographicPoint": {
+        "lat": 42.35333251953125,
+        "lon": 14.416666984558105,
+        "country": "Italy",
+        "timeZone": "Europe/Rome"
+      }
+    },
+    {
+      "mmxId": "L_IT_Panig",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "IT0270",
+          "provider": "abc"
+        }
+      },
+      "name": "Panigaglia",
+      "aliases": [
+        "La Spezia"
+      ],
+      "geographicPoint": {
+        "lat": 44.07666778564453,
+        "lon": 9.836166381835938,
+        "country": "Italy",
+        "timeZone": "Europe/Rome"
+      }
+    },
+    {
+      "mmxId": "L_IT_Porto",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "IT0133",
+          "provider": "abc"
+        }
+      },
+      "name": "Porto Empedocle",
+      "geographicPoint": {
+        "lat": 37.28166580200195,
+        "lon": 13.52833366394043,
+        "country": "Italy",
+        "timeZone": "Europe/Rome"
+      }
+    },
+    {
+      "mmxId": "L_IT_Rosig",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "IT0263",
+          "provider": "abc"
+        }
+      },
+      "name": "Rosignano",
+      "geographicPoint": {
+        "lat": 43.358333587646484,
+        "lon": 10.416666984558105,
+        "country": "Italy",
+        "timeZone": "Europe/Rome"
+      }
+    },
+    {
+      "mmxId": "L_IT_Rovig",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "IT0265",
+          "provider": "abc"
+        }
+      },
+      "name": "Rovigo",
+      "geographicPoint": {
+        "lat": 45.09166717529297,
+        "lon": 12.591666221618652,
+        "country": "Italy",
+        "timeZone": "Europe/Rome"
+      }
+    },
+    {
+      "mmxId": "L_IT_Tries",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "IT0204",
+          "provider": "abc"
+        }
+      },
+      "name": "Trieste",
+      "geographicPoint": {
+        "lat": 45.63166809082031,
+        "lon": 13.744999885559082,
+        "country": "Italy",
+        "timeZone": "Europe/Rome"
+      }
+    },
+    {
+      "mmxId": "L_JM_PortE",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "JM0013",
+          "provider": "abc"
+        }
+      },
+      "name": "Port Esquivel",
+      "geographicPoint": {
+        "lat": 17.88833236694336,
+        "lon": -77.12999725341797,
+        "country": "Jamaica",
+        "timeZone": "America/Jamaica"
+      }
+    },
+    {
+      "mmxId": "L_JP_Chita",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "JP0021",
+          "provider": "abc"
+        }
+      },
+      "name": "Chita",
+      "geographicPoint": {
+        "lat": 34.9716682434082,
+        "lon": 136.81832885742188,
+        "country": "Japan",
+        "timeZone": "Asia/Tokyo"
+      }
+    },
+    {
+      "mmxId": "L_JP_Fukuo",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "JP0358",
+          "provider": "abc"
+        }
+      },
+      "name": "Fukuoko",
+      "aliases": [
+        "Kumamoto"
+      ],
+      "geographicPoint": {
+        "lat": 32.7599983215332,
+        "lon": 130.5883331298828,
+        "country": "Japan",
+        "timeZone": "Asia/Tokyo"
+      }
+    },
+    {
+      "mmxId": "L_JP_Futts",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "JP0360",
+          "provider": "abc"
+        }
+      },
+      "name": "Futtsu",
+      "geographicPoint": {
+        "lat": 35.34166717529297,
+        "lon": 139.82000732421875,
+        "country": "Japan",
+        "timeZone": "Asia/Tokyo"
+      }
+    },
+    {
+      "mmxId": "L_JP_Hachi",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "JP0043",
+          "provider": "abc"
+        }
+      },
+      "name": "Hachinohe",
+      "geographicPoint": {
+        "lat": 40.551666259765625,
+        "lon": 141.52499389648438,
+        "country": "Japan",
+        "timeZone": "Asia/Tokyo"
+      }
+    },
+    {
+      "mmxId": "L_JP_Hakod",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "JP0047",
+          "provider": "abc"
+        }
+      },
+      "name": "Hakodate",
+      "geographicPoint": {
+        "lat": 41.788333892822266,
+        "lon": 140.71417236328125,
+        "country": "Japan",
+        "timeZone": "Asia/Tokyo"
+      }
+    },
+    {
+      "mmxId": "L_JP_Hatsu",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "JP0361",
+          "provider": "abc"
+        }
+      },
+      "name": "Hatsukaichi",
+      "geographicPoint": {
+        "lat": 34.34166717529297,
+        "lon": 132.35667419433594,
+        "country": "Japan",
+        "timeZone": "Asia/Tokyo"
+      }
+    },
+    {
+      "mmxId": "L_JP_Himej",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "JP0063",
+          "provider": "abc"
+        }
+      },
+      "name": "Himeji",
+      "geographicPoint": {
+        "lat": 34.76416778564453,
+        "lon": 134.6858367919922,
+        "country": "Japan",
+        "timeZone": "Asia/Tokyo"
+      }
+    },
+    {
+      "mmxId": "L_JP_Hitac",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "JP0451",
+          "provider": "abc"
+        }
+      },
+      "name": "Hitachi",
+      "geographicPoint": {
+        "lat": 36.484033333333336,
+        "lon": 140.625,
+        "country": "Japan",
+        "timeZone": "Asia/Tokyo"
+      }
+    },
+    {
+      "mmxId": "L_JP_Kagos",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "JP0365",
+          "provider": "abc"
+        }
+      },
+      "name": "Kagoshima",
+      "geographicPoint": {
+        "lat": 31.483333587646484,
+        "lon": 130.52999877929688,
+        "country": "Japan",
+        "timeZone": "Asia/Tokyo"
+      }
+    },
+    {
+      "mmxId": "L_JP_Kawag",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "JP0366",
+          "provider": "abc"
+        }
+      },
+      "name": "Kawagoe",
+      "geographicPoint": {
+        "lat": 34.996665954589844,
+        "lon": 136.69667053222656,
+        "country": "Japan",
+        "timeZone": "Asia/Tokyo"
+      }
+    },
+    {
+      "mmxId": "L_JP_Kitak",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "JP0340",
+          "provider": "abc"
+        }
+      },
+      "name": "Kitakyushu",
+      "geographicPoint": {
+        "lat": 33.90999984741211,
+        "lon": 130.81832885742188,
+        "country": "Japan",
+        "timeZone": "Asia/Tokyo"
+      }
+    },
+    {
+      "mmxId": "L_JP_Kushi",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "JP0143",
+          "provider": "abc"
+        }
+      },
+      "name": "Kushiro",
+      "geographicPoint": {
+        "lat": 42.99166488647461,
+        "lon": 144.336669921875,
+        "country": "Japan",
+        "timeZone": "Asia/Tokyo"
+      }
+    },
+    {
+      "mmxId": "L_JP_Mizus",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "JP0174",
+          "provider": "abc"
+        }
+      },
+      "name": "Mizushima",
+      "geographicPoint": {
+        "lat": 34.49333190917969,
+        "lon": 133.74000549316406,
+        "country": "Japan",
+        "timeZone": "Asia/Tokyo"
+      }
+    },
+    {
+      "mmxId": "L_JP_Nagas",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "JP0188",
+          "provider": "abc"
+        }
+      },
+      "name": "Nagasaki",
+      "geographicPoint": {
+        "lat": 32.73833465576172,
+        "lon": 129.8633270263672,
+        "country": "Japan",
+        "timeZone": "Asia/Tokyo"
+      }
+    },
+    {
+      "mmxId": "L_JP_Nanao",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "JP0196",
+          "provider": "abc"
+        }
+      },
+      "name": "Nanao",
+      "geographicPoint": {
+        "lat": 37.0716667175293,
+        "lon": 137.0016632080078,
+        "country": "Japan",
+        "timeZone": "Asia/Tokyo"
+      }
+    },
+    {
+      "mmxId": "L_JP_Negis",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "JP0200",
+          "provider": "abc"
+        }
+      },
+      "name": "Negishi",
+      "geographicPoint": {
+        "lat": 35.399166107177734,
+        "lon": 139.63417053222656,
+        "country": "Japan",
+        "timeZone": "Asia/Tokyo"
+      }
+    },
+    {
+      "mmxId": "L_JP_Niiga",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "JP0203",
+          "provider": "abc"
+        }
+      },
+      "name": "Niigata Higashi",
+      "aliases": [
+        "Niigata-Higashi"
+      ],
+      "geographicPoint": {
+        "lat": 38.003334045410156,
+        "lon": 139.22833251953125,
+        "country": "Japan",
+        "timeZone": "Asia/Tokyo"
+      }
+    },
+    {
+      "mmxId": "L_JP_Niiga2",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "JP0204",
+          "provider": "abc"
+        }
+      },
+      "name": "Niigata-Nishi",
+      "aliases": [
+        "Niigata Nishi"
+      ],
+      "geographicPoint": {
+        "lat": 37.94499969482422,
+        "lon": 139.06666564941406,
+        "country": "Japan",
+        "timeZone": "Asia/Tokyo"
+      }
+    },
+    {
+      "mmxId": "L_JP_Ohgis",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "JP0215",
+          "provider": "abc"
+        }
+      },
+      "name": "Ohgishima",
+      "aliases": [
+        "Ogishima",
+        "Ogishima Tokyo Gas"
+      ],
+      "geographicPoint": {
+        "lat": 35.461666107177734,
+        "lon": 139.72000122070312,
+        "country": "Japan",
+        "timeZone": "Asia/Tokyo"
+      }
+    },
+    {
+      "mmxId": "L_JP_Oita",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "JP0219",
+          "provider": "abc"
+        }
+      },
+      "name": "Oita",
+      "aliases": [
+        "Ohita"
+      ],
+      "geographicPoint": {
+        "lat": 33.28083419799805,
+        "lon": 131.66000366210938,
+        "country": "Japan",
+        "timeZone": "Asia/Tokyo"
+      }
+    },
+    {
+      "mmxId": "L_JP_Okina",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "JP0369",
+          "provider": "abc"
+        }
+      },
+      "name": "Okinawa",
+      "aliases": [
+        "Yoshinaura"
+      ],
+      "geographicPoint": {
+        "lat": 26.267499923706055,
+        "lon": 127.81500244140625,
+        "country": "Japan",
+        "timeZone": "Asia/Tokyo"
+      }
+    },
+    {
+      "mmxId": "L_JP_Osaka",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "JP0238",
+          "provider": "abc"
+        }
+      },
+      "name": "Osaka",
+      "aliases": [
+        "Osaka"
+      ],
+      "geographicPoint": {
+        "lat": 34.64833450317383,
+        "lon": 135.4166717529297,
+        "country": "Japan",
+        "timeZone": "Asia/Tokyo"
+      }
+    },
+    {
+      "mmxId": "L_JP_Otaru",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "JP0240",
+          "provider": "abc"
+        }
+      },
+      "name": "Otaru",
+      "aliases": [
+        "Ishikariwanshinko",
+        "Ishikariwan-Shinko Ishikariwan",
+        "Ishikariwan",
+        "Ishikariwan-Shinko"
+      ],
+      "geographicPoint": {
+        "lat": 43.20000076293945,
+        "lon": 141.01666259765625,
+        "country": "Japan",
+        "timeZone": "Asia/Tokyo"
+      }
+    },
+    {
+      "mmxId": "L_JP_Sakai",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "JP0427",
+          "provider": "abc"
+        }
+      },
+      "name": "Sakai",
+      "geographicPoint": {
+        "lat": 34.564998626708984,
+        "lon": 135.40499877929688,
+        "country": "Japan",
+        "timeZone": "Asia/Tokyo"
+      }
+    },
+    {
+      "mmxId": "L_JP_Sakai2",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "JP0255",
+          "provider": "abc"
+        }
+      },
+      "name": "Sakaide",
+      "geographicPoint": {
+        "lat": 34.36249923706055,
+        "lon": 133.836669921875,
+        "country": "Japan",
+        "timeZone": "Asia/Tokyo"
+      }
+    },
+    {
+      "mmxId": "L_JP_Senda",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "JP0264",
+          "provider": "abc"
+        }
+      },
+      "name": "Sendai",
+      "geographicPoint": {
+        "lat": 38.27000045776367,
+        "lon": 141.03334045410156,
+        "country": "Japan",
+        "timeZone": "Asia/Tokyo"
+      }
+    },
+    {
+      "mmxId": "L_JP_Shimi",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "JP0274",
+          "provider": "abc"
+        }
+      },
+      "name": "Shimizu",
+      "aliases": [
+        "Shimizu, (Honshu), Japan",
+        "Sodeshi"
+      ],
+      "geographicPoint": {
+        "lat": 35.02333450317383,
+        "lon": 138.5050048828125,
+        "country": "Japan",
+        "timeZone": "Asia/Tokyo"
+      }
+    },
+    {
+      "mmxId": "L_JP_Shinm",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "JP0368",
+          "provider": "abc"
+        }
+      },
+      "name": "Shinminato",
+      "aliases": [
+        "Shin-minato"
+      ],
+      "geographicPoint": {
+        "lat": 36.77000045776367,
+        "lon": 137.11500549316406,
+        "country": "Japan",
+        "timeZone": "Asia/Tokyo"
+      }
+    },
+    {
+      "mmxId": "L_JP_Sodeg",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "JP0362",
+          "provider": "abc"
+        }
+      },
+      "name": "Sodegaura",
+      "geographicPoint": {
+        "lat": 35.473331451416016,
+        "lon": 139.96665954589844,
+        "country": "Japan",
+        "timeZone": "Asia/Tokyo"
+      }
+    },
+    {
+      "mmxId": "L_JP_Soma",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "JP0285",
+          "provider": "abc"
+        }
+      },
+      "name": "Soma",
+      "geographicPoint": {
+        "lat": 37.84166717529297,
+        "lon": 140.97500610351562,
+        "country": "Japan",
+        "timeZone": "Asia/Tokyo"
+      }
+    },
+    {
+      "mmxId": "L_JP_Tobat",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "JP0305",
+          "provider": "abc"
+        }
+      },
+      "name": "Tobata",
+      "geographicPoint": {
+        "lat": 33.91999816894531,
+        "lon": 130.8633270263672,
+        "country": "Japan",
+        "timeZone": "Asia/Tokyo"
+      }
+    },
+    {
+      "mmxId": "L_JP_Tokyo",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "JP0310",
+          "provider": "abc"
+        }
+      },
+      "name": "Tokyo Bay",
+      "aliases": [
+        "Tokyo"
+      ],
+      "geographicPoint": {
+        "lat": 35.60333251953125,
+        "lon": 139.77499389648438,
+        "country": "Japan",
+        "timeZone": "Asia/Tokyo"
+      }
+    },
+    {
+      "mmxId": "L_JP_Wakay",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "JP0341",
+          "provider": "abc"
+        }
+      },
+      "name": "Wakayama",
+      "geographicPoint": {
+        "lat": 34.209999084472656,
+        "lon": 135.13833618164062,
+        "country": "Japan",
+        "timeZone": "Asia/Tokyo"
+      }
+    },
+    {
+      "mmxId": "L_JP_Yanai",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "JP0363",
+          "provider": "abc"
+        }
+      },
+      "name": "Yanai",
+      "geographicPoint": {
+        "lat": 33.95000076293945,
+        "lon": 132.13333129882812,
+        "country": "Japan",
+        "timeZone": "Asia/Tokyo"
+      }
+    },
+    {
+      "mmxId": "L_JP_Yokka",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "JP0367",
+          "provider": "abc"
+        }
+      },
+      "name": "Yokkaichi",
+      "geographicPoint": {
+        "lat": 34.970001220703125,
+        "lon": 136.6616668701172,
+        "country": "Japan",
+        "timeZone": "Asia/Tokyo"
+      }
+    },
+    {
+      "mmxId": "L_JP_Yokoh",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "JP0352",
+          "provider": "abc"
+        }
+      },
+      "name": "Yokohama",
+      "aliases": [
+        "Yokohama"
+      ],
+      "geographicPoint": {
+        "lat": 35.448333740234375,
+        "lon": 139.68499755859375,
+        "country": "Japan",
+        "timeZone": "Asia/Tokyo"
+      }
+    },
+    {
+      "mmxId": "L_JO_Aqaba",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "JO0001",
+          "provider": "abc"
+        }
+      },
+      "name": "Aqaba",
+      "geographicPoint": {
+        "lat": 29.50666618347168,
+        "lon": 34.98833465576172,
+        "country": "Jordan",
+        "timeZone": "Asia/Amman"
+      }
+    },
+    {
+      "mmxId": "L_KE_Momba",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "KE0006",
+          "provider": "abc"
+        }
+      },
+      "name": "Mombasa",
+      "geographicPoint": {
+        "lat": -4.049999713897705,
+        "lon": 39.641666412353516,
+        "country": "Kenya",
+        "timeZone": "Africa/Nairobi"
+      }
+    },
+    {
+      "mmxId": "L_KR_Kwang",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "KR0046",
+          "provider": "abc"
+        }
+      },
+      "name": "Kwangyang",
+      "geographicPoint": {
+        "lat": 34.88333511352539,
+        "lon": 127.79499816894531,
+        "country": "South Korea",
+        "timeZone": "Asia/Seoul"
+      }
+    },
+    {
+      "mmxId": "L_KW_MinaA",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "KW0009",
+          "provider": "abc"
+        }
+      },
+      "name": "Mina Al Ahmadi",
+      "aliases": [
+        "Mina Al-Ahmadi",
+        "Mina Al-Ahmadi, Kuwait"
+      ],
+      "geographicPoint": {
+        "lat": 29.066665649414062,
+        "lon": 48.16666793823242,
+        "country": "Kuwait",
+        "timeZone": "Asia/Kuwait"
+      }
+    },
+    {
+      "mmxId": "L_LB_Tripo",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "LB0010",
+          "provider": "abc"
+        }
+      },
+      "name": "Tripoli",
+      "aliases": [
+        "Tripoli, Lebanon"
+      ],
+      "geographicPoint": {
+        "lat": 34.48833465576172,
+        "lon": 35.85333251953125,
+        "country": "Lebanon",
+        "timeZone": "Asia/Beirut"
+      }
+    },
+    {
+      "mmxId": "L_LY_Marsa",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "LY0020",
+          "provider": "abc"
+        }
+      },
+      "name": "Marsa el Brega",
+      "aliases": [
+        "Marsa El Brega",
+        "Marsa Brega"
+      ],
+      "geographicPoint": {
+        "lat": 30.41666603088379,
+        "lon": 19.59166717529297,
+        "country": "Libya",
+        "timeZone": "Africa/Tripoli"
+      }
+    },
+    {
+      "mmxId": "L_LT_Klaip",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "LT0004",
+          "provider": "abc"
+        }
+      },
+      "name": "Klaipeda",
+      "geographicPoint": {
+        "lat": 55.664516666666664,
+        "lon": 21.13906666666667,
+        "country": "Lithuania",
+        "timeZone": "Europe/Vilnius"
+      }
+    },
+    {
+      "mmxId": "L_MY_Bintu",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "MY0010",
+          "provider": "abc"
+        }
+      },
+      "name": "Bintulu",
+      "aliases": [
+        "Malaysia"
+      ],
+      "geographicPoint": {
+        "lat": 3.2632665634155273,
+        "lon": 113.05909729003906,
+        "country": "Malaysia",
+        "timeZone": "Asia/Kuala_Lumpur"
+      }
+    },
+    {
+      "mmxId": "L_MY_Johor",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "MY0129",
+          "provider": "abc"
+        }
+      },
+      "name": "Johore",
+      "geographicPoint": {
+        "lat": 1.4574999809265137,
+        "lon": 103.77666473388672,
+        "country": "Malaysia",
+        "timeZone": "Asia/Kuala_Lumpur"
+      }
+    },
+    {
+      "mmxId": "L_MY_Malac",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "MY0056",
+          "provider": "abc"
+        }
+      },
+      "name": "Malacca",
+      "geographicPoint": {
+        "lat": 2.18833327293396,
+        "lon": 102.10333251953125,
+        "country": "Malaysia",
+        "timeZone": "Asia/Kuala_Lumpur"
+      }
+    },
+    {
+      "mmxId": "L_MY_Sunga",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "MY0097",
+          "provider": "abc"
+        }
+      },
+      "name": "Sungai Udang",
+      "geographicPoint": {
+        "lat": 2.2430832386016846,
+        "lon": 102.12018585205078,
+        "country": "Malaysia",
+        "timeZone": "Asia/Kuala_Lumpur"
+      }
+    },
+    {
+      "mmxId": "L_MT_Malta",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "MT0001",
+          "provider": "abc"
+        }
+      },
+      "name": "Malta",
+      "geographicPoint": {
+        "lat": 35.900001525878906,
+        "lon": 14.521666526794434,
+        "country": "Malta",
+        "timeZone": "Europe/Malta"
+      }
+    },
+    {
+      "mmxId": "L_MQ_Fortd",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "MQ0002",
+          "provider": "abc"
+        }
+      },
+      "name": "Fort de France",
+      "geographicPoint": {
+        "lat": 14.598333358764648,
+        "lon": -61.073333740234375,
+        "country": "Martinique",
+        "timeZone": "America/Martinique"
+      }
+    },
+    {
+      "mmxId": "L_MX_Altam",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "MX0002",
+          "provider": "abc"
+        }
+      },
+      "name": "Altamira",
+      "aliases": [
+        "Altamira, Mexico"
+      ],
+      "geographicPoint": {
+        "lat": 22.479999542236328,
+        "lon": -97.88749694824219,
+        "country": "Mexico",
+        "timeZone": "America/Mexico_City"
+      }
+    },
+    {
+      "mmxId": "L_MX_Costa",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "MX0105",
+          "provider": "abc"
+        }
+      },
+      "name": "Costa Azul",
+      "geographicPoint": {
+        "lat": 31.987667083740234,
+        "lon": -116.85832977294922,
+        "country": "Mexico",
+        "timeZone": "America/Mexico_City"
+      }
+    },
+    {
+      "mmxId": "L_MX_Manza",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "MX0039",
+          "provider": "abc"
+        }
+      },
+      "name": "Manzanillo",
+      "aliases": [
+        "Manzanillo, Mexico"
+      ],
+      "geographicPoint": {
+        "lat": 19.0575008392334,
+        "lon": -104.31666564941406,
+        "country": "Mexico",
+        "timeZone": "America/Mexico_City"
+      }
+    },
+    {
+      "mmxId": "L_MX_Rosar",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "MX0062",
+          "provider": "abc"
+        }
+      },
+      "name": "Rosarito",
+      "geographicPoint": {
+        "lat": 32.3466682434082,
+        "lon": -117.10416412353516,
+        "country": "Mexico",
+        "timeZone": "America/Tijuana"
+      }
+    },
+    {
+      "mmxId": "L_MA_JorfL",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "MA0021",
+          "provider": "abc"
+        }
+      },
+      "name": "Jorf Lasfar",
+      "geographicPoint": {
+        "lat": 33.128334045410156,
+        "lon": -8.635000228881836,
+        "country": "Morocco",
+        "timeZone": "Africa/Casablanca"
+      }
+    },
+    {
+      "mmxId": "L_MZ_Mozam",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "MZ0018",
+          "provider": "abc"
+        }
+      },
+      "name": "Mozambique Port",
+      "geographicPoint": {
+        "lat": -15.040833473205566,
+        "lon": 40.78666687011719,
+        "country": "Mozambique",
+        "timeZone": "Africa/Maputo"
+      }
+    },
+    {
+      "mmxId": "L_NL_Rotte",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "NL0051",
+          "provider": "abc"
+        }
+      },
+      "name": "Rotterdam",
+      "aliases": [
+        "Maasvlakte",
+        "Gate"
+      ],
+      "geographicPoint": {
+        "lat": 51.901668548583984,
+        "lon": 4.434999942779541,
+        "country": "Netherlands",
+        "timeZone": "Europe/Amsterdam"
+      }
+    },
+    {
+      "mmxId": "L_NZ_NewPl",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "NZ0052",
+          "provider": "abc"
+        }
+      },
+      "name": "New Plymouth",
+      "geographicPoint": {
+        "lat": -39.05500030517578,
+        "lon": 174.038330078125,
+        "country": "New Zealand",
+        "timeZone": "Pacific/Auckland"
+      }
+    },
+    {
+      "mmxId": "L_NG_Brass",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "NG0013",
+          "provider": "abc"
+        }
+      },
+      "name": "Brass",
+      "geographicPoint": {
+        "lat": 4.0933332443237305,
+        "lon": 6.324999809265137,
+        "country": "Nigeria",
+        "timeZone": "Africa/Lagos"
+      }
+    },
+    {
+      "mmxId": "L_NO_Hamme",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "NO0278",
+          "provider": "abc"
+        }
+      },
+      "name": "Hammerfest",
+      "aliases": [
+        "Hammerfest",
+        "Melkoya Island"
+      ],
+      "geographicPoint": {
+        "lat": 70.68333435058594,
+        "lon": 23.600000381469727,
+        "country": "Norway",
+        "timeZone": "Europe/Warsaw"
+      }
+    },
+    {
+      "mmxId": "L_OM_Qalha",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "OM0018",
+          "provider": "abc"
+        }
+      },
+      "name": "Qalhat",
+      "aliases": [
+        "Sur",
+        "Oman"
+      ],
+      "geographicPoint": {
+        "lat": 22.66666603088379,
+        "lon": 59.413333892822266,
+        "country": "Oman",
+        "timeZone": "Asia/Qatar"
+      }
+    },
+    {
+      "mmxId": "L_PK_Karac",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "PK0004",
+          "provider": "abc"
+        }
+      },
+      "name": "Karachi",
+      "geographicPoint": {
+        "lat": 24.81166648864746,
+        "lon": 66.97333526611328,
+        "country": "Pakistan",
+        "timeZone": "Asia/Karachi"
+      }
+    },
+    {
+      "mmxId": "L_PK_PortQ",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "PK0021",
+          "provider": "abc"
+        }
+      },
+      "name": "Port Qasim",
+      "aliases": [
+        "Port Qasim"
+      ],
+      "geographicPoint": {
+        "lat": 24.77166666666667,
+        "lon": 67.31,
+        "country": "Pakistan",
+        "timeZone": "Asia/Karachi"
+      }
+    },
+    {
+      "mmxId": "L_CP_Colon",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "CP1500",
+          "provider": "abc"
+        }
+      },
+      "name": "Colon",
+      "aliases": [
+        "Colon,Panama",
+        "Colon, Panama"
+      ],
+      "geographicPoint": {
+        "lat": 9.388333320617676,
+        "lon": -79.9191665649414,
+        "country": "Panama",
+        "timeZone": "America/Panama"
+      }
+    },
+    {
+      "mmxId": "L_PG_PortM",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "PG0049",
+          "provider": "abc"
+        }
+      },
+      "name": "Port Moresby",
+      "aliases": [
+        "Port Moresby"
+      ],
+      "geographicPoint": {
+        "lat": -9.47583293914795,
+        "lon": 147.1458282470703,
+        "country": "Papua New Guinea",
+        "timeZone": "Pacific/Port_Moresby"
+      }
+    },
+    {
+      "mmxId": "L_PE_Pampa",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "PE0045",
+          "provider": "abc"
+        }
+      },
+      "name": "Pampa Melchorita",
+      "aliases": [
+        "Peru",
+        "P.Melchorita"
+      ],
+      "geographicPoint": {
+        "lat": -13.260000228881836,
+        "lon": -76.31033325195312,
+        "country": "Peru",
+        "timeZone": "America/Lima"
+      }
+    },
+    {
+      "mmxId": "L_PH_Batan",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "PH0018",
+          "provider": "abc"
+        }
+      },
+      "name": "Batangas",
+      "geographicPoint": {
+        "lat": 13.721290588378906,
+        "lon": 121.05397033691406,
+        "country": "Philippines",
+        "timeZone": "Asia/Manila"
+      }
+    },
+    {
+      "mmxId": "L_PL_Swino",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "PL0021",
+          "provider": "abc"
+        }
+      },
+      "name": "Swinoujscie",
+      "geographicPoint": {
+        "lat": 53.89500045776367,
+        "lon": 14.25333309173584,
+        "country": "Poland",
+        "timeZone": "Europe/Lisbon"
+      }
+    },
+    {
+      "mmxId": "L_PT_Sines",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "PT0044",
+          "provider": "abc"
+        }
+      },
+      "name": "Sines",
+      "geographicPoint": {
+        "lat": 37.935665130615234,
+        "lon": -8.857500076293945,
+        "country": "Portugal",
+        "timeZone": "Europe/Madrid"
+      }
+    },
+    {
+      "mmxId": "L_PR_Penue",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "PR0029",
+          "provider": "abc"
+        }
+      },
+      "name": "Guayanilla",
+      "aliases": [
+        "Guayama",
+        "EcoElectrica",
+        "Penuelas"
+      ],
+      "geographicPoint": {
+        "lat": 17.972999572753906,
+        "lon": -66.76249694824219,
+        "country": "Puerto Rico",
+        "timeZone": "America/Puerto_Rico"
+      }
+    },
+    {
+      "mmxId": "L_QA_RasLa",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "QA0009",
+          "provider": "abc"
+        }
+      },
+      "name": "Ras Laffan",
+      "aliases": [
+        "Ras Laffan (Rich)",
+        "Ras Laffan (Lean)"
+      ],
+      "geographicPoint": {
+        "lat": 25.93000030517578,
+        "lon": 51.606666564941406,
+        "country": "Qatar",
+        "timeZone": "Asia/Qatar"
+      }
+    },
+    {
+      "mmxId": "L_IT_Taran",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "IT0194",
+          "provider": "abc"
+        }
+      },
+      "name": "Taranto",
+      "geographicPoint": {
+        "lat": 40.45166778564453,
+        "lon": 17.213333129882812,
+        "country": "Italy",
+        "timeZone": "Europe/Rome"
+      }
+    },
+    {
+      "mmxId": "L_RU_Drovy",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "RU0242",
+          "provider": "abc"
+        }
+      },
+      "name": "Drovyanoy",
+      "geographicPoint": {
+        "lat": 72.4000015258789,
+        "lon": 72.8463363647461,
+        "country": "Russian Federation",
+        "timeZone": "Europe/Moscow"
+      }
+    },
+    {
+      "mmxId": "L_RU_Sakha",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "RU0293",
+          "provider": "abc"
+        }
+      },
+      "name": "Sakhalin",
+      "aliases": [
+        "Prigorodnoye",
+        "Sakhalin-2",
+        "Sakhalin II"
+      ],
+      "geographicPoint": {
+        "lat": 46.618831634521484,
+        "lon": 142.899169921875,
+        "country": "Russian Federation",
+        "timeZone": "Asia/Vladivostok"
+      }
+    },
+    {
+      "mmxId": "L_RU_Shtok",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "RU0102",
+          "provider": "abc"
+        }
+      },
+      "name": "Shtokman",
+      "aliases": [
+        "Murmansk"
+      ],
+      "geographicPoint": {
+        "lat": 68.98916625976562,
+        "lon": 33.0433349609375,
+        "country": "Russian Federation",
+        "timeZone": "Europe/Moscow"
+      }
+    },
+    {
+      "mmxId": "L_RU_Vladi",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "RU0218",
+          "provider": "abc"
+        }
+      },
+      "name": "Vladivostok",
+      "geographicPoint": {
+        "lat": 43.108333587646484,
+        "lon": 131.8866729736328,
+        "country": "Russian Federation",
+        "timeZone": "Asia/Vladivostok"
+      }
+    },
+    {
+      "mmxId": "L_RU_Vybor",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "RU0225",
+          "provider": "abc"
+        }
+      },
+      "name": "Vyborg",
+      "geographicPoint": {
+        "lat": 60.7066650390625,
+        "lon": 28.731666564941406,
+        "country": "Russian Federation",
+        "timeZone": "Europe/Moscow"
+      }
+    },
+    {
+      "mmxId": "L_TZ_Dar-e",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "TZ0002",
+          "provider": "abc"
+        }
+      },
+      "name": "Dar-es-Salaam",
+      "geographicPoint": {
+        "lat": -6.842979907989502,
+        "lon": 39.29983139038086,
+        "country": "Tanzania",
+        "timeZone": "Africa/Dar_es_Salaam"
+      }
+    },
+    {
+      "mmxId": "L_SG_Juron",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "SG0048",
+          "provider": "abc"
+        }
+      },
+      "name": "Jurong Marine Base - Singapore",
+      "aliases": [
+        "Jurong Marine Base - Singapore Base",
+        "Jurong Marine Base",
+        "Singapore",
+        "Jurong Island, Singapore"
+      ],
+      "geographicPoint": {
+        "lat": 1.2999999523162842,
+        "lon": 103.68250274658203,
+        "country": "Singapore",
+        "timeZone": "Asia/Singapore"
+      }
+    },
+    {
+      "mmxId": "L_ID_Panja",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "ID0199",
+          "provider": "abc"
+        }
+      },
+      "name": "Panjang",
+      "geographicPoint": {
+        "lat": -5.46999979019165,
+        "lon": 105.31500244140625,
+        "country": "Indonesia",
+        "timeZone": "Asia/Singapore"
+      }
+    },
+    {
+      "mmxId": "L_SI_Koper",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "SI0002",
+          "provider": "abc"
+        }
+      },
+      "name": "Koper",
+      "geographicPoint": {
+        "lat": 45.55833435058594,
+        "lon": 13.733333587646484,
+        "country": "Slovenia",
+        "timeZone": "Europe/Ljubljana"
+      }
+    },
+    {
+      "mmxId": "L_ZA_CapeT",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "ZA0006",
+          "provider": "abc"
+        }
+      },
+      "name": "Cape Town",
+      "geographicPoint": {
+        "lat": -33.90999984741211,
+        "lon": 18.433332443237305,
+        "country": "South Africa",
+        "timeZone": "Africa/Johannesburg"
+      }
+    },
+    {
+      "mmxId": "L_ZA_Coega",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "ZA0026",
+          "provider": "abc"
+        }
+      },
+      "name": "Coega",
+      "geographicPoint": {
+        "lat": -33.8033332824707,
+        "lon": 25.691667556762695,
+        "country": "South Africa",
+        "timeZone": "Africa/Johannesburg"
+      }
+    },
+    {
+      "mmxId": "L_ZA_Mosse",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "ZA0013",
+          "provider": "abc"
+        }
+      },
+      "name": "Mossel Bay",
+      "geographicPoint": {
+        "lat": -34.1775016784668,
+        "lon": 22.14666748046875,
+        "country": "South Africa",
+        "timeZone": "Africa/Johannesburg"
+      }
+    },
+    {
+      "mmxId": "L_KR_Dangj",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "KR0042",
+          "provider": "abc"
+        }
+      },
+      "name": "Dangjin",
+      "geographicPoint": {
+        "lat": 36.915000915527344,
+        "lon": 126.23500061035156,
+        "country": "South Korea",
+        "timeZone": "Asia/Seoul"
+      }
+    },
+    {
+      "mmxId": "L_KR_Dongh",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "KR0033",
+          "provider": "abc"
+        }
+      },
+      "name": "Donghae",
+      "geographicPoint": {
+        "lat": 37.494998931884766,
+        "lon": 129.13999938964844,
+        "country": "South Korea",
+        "timeZone": "Asia/Seoul"
+      }
+    },
+    {
+      "mmxId": "L_KR_Inche",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "KR0012",
+          "provider": "abc"
+        }
+      },
+      "name": "Incheon",
+      "aliases": [
+        "Inchon",
+        "Inchon - Soraepogu"
+      ],
+      "geographicPoint": {
+        "lat": 37.505001068115234,
+        "lon": 126.5999984741211,
+        "country": "South Korea",
+        "timeZone": "Asia/Seoul"
+      }
+    },
+    {
+      "mmxId": "L_KR_TongY",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "KR0041",
+          "provider": "abc"
+        }
+      },
+      "name": "Tong Yong",
+      "aliases": [
+        "Tongyeong"
+      ],
+      "geographicPoint": {
+        "lat": 34.94916534423828,
+        "lon": 128.43666076660156,
+        "country": "South Korea",
+        "timeZone": "Asia/Seoul"
+      }
+    },
+    {
+      "mmxId": "L_ES_Barce",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "ES0200",
+          "provider": "abc"
+        }
+      },
+      "name": "Barcelona",
+      "geographicPoint": {
+        "lat": 41.342498779296875,
+        "lon": 2.1633334159851074,
+        "country": "Spain",
+        "timeZone": "Europe/Madrid"
+      }
+    },
+    {
+      "mmxId": "L_ES_Bilba",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "ES0168",
+          "provider": "abc"
+        }
+      },
+      "name": "Bilbao",
+      "geographicPoint": {
+        "lat": 43.3650016784668,
+        "lon": -3.0950000286102295,
+        "country": "Spain",
+        "timeZone": "Europe/Madrid"
+      }
+    },
+    {
+      "mmxId": "L_ES_Carta",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "ES0201",
+          "provider": "abc"
+        }
+      },
+      "name": "Cartagena",
+      "geographicPoint": {
+        "lat": 37.573333740234375,
+        "lon": -0.9649999737739563,
+        "country": "Spain",
+        "timeZone": "Europe/Madrid"
+      }
+    },
+    {
+      "mmxId": "L_ES_Huelv",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "ES0073",
+          "provider": "abc"
+        }
+      },
+      "name": "Huelva",
+      "geographicPoint": {
+        "lat": 37.16666793823242,
+        "lon": -6.909999847412109,
+        "country": "Spain",
+        "timeZone": "Europe/Madrid"
+      }
+    },
+    {
+      "mmxId": "L_ES_Sagun",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "ES0199",
+          "provider": "abc"
+        }
+      },
+      "name": "Sagunto",
+      "geographicPoint": {
+        "lat": 39.637001037597656,
+        "lon": -0.2160000056028366,
+        "country": "Spain",
+        "timeZone": "Europe/Madrid"
+      }
+    },
+    {
+      "mmxId": "L_TW_Taich",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "TW0022",
+          "provider": "abc"
+        }
+      },
+      "name": "Taichung",
+      "geographicPoint": {
+        "lat": 24.28333282470703,
+        "lon": 120.51667022705078,
+        "country": "Taiwan",
+        "timeZone": "Asia/Taipei"
+      }
+    },
+    {
+      "mmxId": "L_TW_YungA",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "TW0024",
+          "provider": "abc"
+        }
+      },
+      "name": "Yung An",
+      "aliases": [
+        "Yung-An"
+      ],
+      "geographicPoint": {
+        "lat": 22.81366729736328,
+        "lon": 120.19633483886719,
+        "country": "Taiwan",
+        "timeZone": "Asia/Taipei"
+      }
+    },
+    {
+      "mmxId": "L_TH_MapTa",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "TH0017",
+          "provider": "abc"
+        }
+      },
+      "name": "Map Ta Phut",
+      "geographicPoint": {
+        "lat": 12.65666675567627,
+        "lon": 101.14583587646484,
+        "country": "Thailand",
+        "timeZone": "Asia/Bangkok"
+      }
+    },
+    {
+      "mmxId": "L_TT_Point2",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "TT0008",
+          "provider": "abc"
+        }
+      },
+      "name": "Point Fortin",
+      "geographicPoint": {
+        "lat": 10.193333625793457,
+        "lon": -61.70000076293945,
+        "country": "Trinidad and Tobago",
+        "timeZone": "America/Port_of_Spain"
+      }
+    },
+    {
+      "mmxId": "L_TR_Aliag",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "TR0183",
+          "provider": "abc"
+        }
+      },
+      "name": "Aliaga",
+      "geographicPoint": {
+        "lat": 38.82500076293945,
+        "lon": 26.913333892822266,
+        "country": "Turkey",
+        "timeZone": "Europe/London"
+      }
+    },
+    {
+      "mmxId": "L_TR_Marma",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "TR0098",
+          "provider": "abc"
+        }
+      },
+      "name": "Marmara Ereglisi",
+      "aliases": [
+        "Ereglisi",
+        "Marmara"
+      ],
+      "geographicPoint": {
+        "lat": 40.97249984741211,
+        "lon": 27.961666107177734,
+        "country": "Turkey",
+        "timeZone": "Europe/Istanbul"
+      }
+    },
+    {
+      "mmxId": "L_GB_Drago",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "GB0753",
+          "provider": "abc"
+        }
+      },
+      "name": "Dragon",
+      "geographicPoint": {
+        "lat": 51.69933319091797,
+        "lon": -4.997666835784912,
+        "country": "United Kingdom",
+        "timeZone": "Europe/London"
+      }
+    },
+    {
+      "mmxId": "L_GB_Holyh",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "GB0220",
+          "provider": "abc"
+        }
+      },
+      "name": "Holyhead",
+      "geographicPoint": {
+        "lat": 53.32666778564453,
+        "lon": -4.608333110809326,
+        "country": "United Kingdom",
+        "timeZone": "Europe/London"
+      }
+    },
+    {
+      "mmxId": "L_GB_South",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "GB0752",
+          "provider": "abc"
+        }
+      },
+      "name": "South Hook",
+      "aliases": [
+        "Milford Haven",
+        "Swansea"
+      ],
+      "geographicPoint": {
+        "lat": 51.697166442871094,
+        "lon": -5.079999923706055,
+        "country": "United Kingdom",
+        "timeZone": "Europe/London"
+      }
+    },
+    {
+      "mmxId": "L_GB_Teesi",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "GB0755",
+          "provider": "abc"
+        }
+      },
+      "name": "Teeside",
+      "aliases": [
+        "Excelerate",
+        "Teesport"
+      ],
+      "geographicPoint": {
+        "lat": 54.6115837097168,
+        "lon": -1.1553332805633545,
+        "country": "United Kingdom",
+        "timeZone": "Europe/London"
+      }
+    },
+    {
+      "mmxId": "L_GB_Isleo",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "GB0244",
+          "provider": "abc"
+        }
+      },
+      "name": "Isle of Grain",
+      "geographicPoint": {
+        "lat": 51.43000030517578,
+        "lon": 0.6758333444595337,
+        "country": "United Kingdom",
+        "timeZone": "Europe/London"
+      }
+    },
+    {
+      "mmxId": "L_US_Brown",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "US0104",
+          "provider": "abc"
+        }
+      },
+      "name": "Brownsville",
+      "geographicPoint": {
+        "lat": 25.959999084472656,
+        "lon": -97.37666320800781,
+        "country": "United States",
+        "timeZone": "America/Chicago"
+      }
+    },
+    {
+      "mmxId": "L_US_Camer",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "US1232",
+          "provider": "abc"
+        }
+      },
+      "name": "Cameron",
+      "geographicPoint": {
+        "lat": 30.038333892822266,
+        "lon": -93.33233642578125,
+        "country": "United States",
+        "timeZone": "America/Chicago"
+      }
+    },
+    {
+      "mmxId": "L_US_CoosB",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "US0185",
+          "provider": "abc"
+        }
+      },
+      "name": "Coos Bay",
+      "geographicPoint": {
+        "lat": 43.37666702270508,
+        "lon": -124.30000305175781,
+        "country": "United States",
+        "timeZone": "America/Los_Angeles"
+      }
+    },
+    {
+      "mmxId": "L_US_Corpu",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "US0190",
+          "provider": "abc"
+        }
+      },
+      "name": "Corpus Christi",
+      "geographicPoint": {
+        "lat": 27.81333351135254,
+        "lon": -97.40333557128906,
+        "country": "United States",
+        "timeZone": "America/Chicago"
+      }
+    },
+    {
+      "mmxId": "L_US_Pasca",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "US0566",
+          "provider": "abc"
+        }
+      },
+      "name": "Pascagoula",
+      "aliases": [
+        "Gulf LNG Terminal"
+      ],
+      "geographicPoint": {
+        "lat": 30.34833335876465,
+        "lon": -88.56666564941406,
+        "country": "United States",
+        "timeZone": "America/Chicago"
+      }
+    },
+    {
+      "mmxId": "L_US_Plaqu",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "US0645",
+          "provider": "abc"
+        }
+      },
+      "name": "Plaquemines",
+      "geographicPoint": {
+        "lat": 29.477062225341797,
+        "lon": -89.68497467041016,
+        "country": "United States",
+        "timeZone": "America/Chicago"
+      }
+    },
+    {
+      "mmxId": "L_US_PortA",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "US0613",
+          "provider": "abc"
+        }
+      },
+      "name": "Port Arthur",
+      "aliases": [
+        "Port Arthur, Texas, U.S.A."
+      ],
+      "geographicPoint": {
+        "lat": 29.861665725708008,
+        "lon": -93.9366683959961,
+        "country": "United States",
+        "timeZone": "America/Chicago"
+      }
+    },
+    {
+      "mmxId": "L_US_PortD",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "US0799",
+          "provider": "abc"
+        }
+      },
+      "name": "Port Dolphin",
+      "aliases": [
+        "Tampa"
+      ],
+      "geographicPoint": {
+        "lat": 27.920833587646484,
+        "lon": -82.42500305175781,
+        "country": "United States",
+        "timeZone": "America/New_York"
+      }
+    },
+    {
+      "mmxId": "L_BR_RioGr",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "BR0124",
+          "provider": "abc"
+        }
+      },
+      "name": "Rio Grande",
+      "geographicPoint": {
+        "lat": -32.079166412353516,
+        "lon": -52.09166717529297,
+        "country": "Brazil",
+        "timeZone": "America/Monterrey"
+      }
+    },
+    {
+      "mmxId": "L_US_CoveP",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "US0976",
+          "provider": "abc"
+        }
+      },
+      "name": "Cove Point",
+      "aliases": [
+        "Dominion Cove Point"
+      ],
+      "geographicPoint": {
+        "lat": 38.404998779296875,
+        "lon": -76.37999725341797,
+        "country": "United States",
+        "timeZone": "America/New_York"
+      }
+    },
+    {
+      "mmxId": "L_US_Elba",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "US0977",
+          "provider": "abc"
+        }
+      },
+      "name": "Elba",
+      "aliases": [
+        "Elba Island",
+        "Savanah",
+        "Savannah",
+        "Southern LNG"
+      ],
+      "geographicPoint": {
+        "lat": 32.08833312988281,
+        "lon": -80.98999786376953,
+        "country": "United States",
+        "timeZone": "America/New_York"
+      }
+    },
+    {
+      "mmxId": "L_US_Evere",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "US0243",
+          "provider": "abc"
+        }
+      },
+      "name": "Everett",
+      "geographicPoint": {
+        "lat": 42.38833236694336,
+        "lon": -71.0616683959961,
+        "country": "United States",
+        "timeZone": "America/New_York"
+      }
+    },
+    {
+      "mmxId": "L_US_Freep",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "US1245",
+          "provider": "abc"
+        }
+      },
+      "name": "Freeport",
+      "geographicPoint": {
+        "lat": 28.939167022705078,
+        "lon": -95.30699920654297,
+        "country": "United States",
+        "timeZone": "America/New_York"
+      }
+    },
+    {
+      "mmxId": "L_US_Golde",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "US1235",
+          "provider": "abc"
+        }
+      },
+      "name": "Golden Pass",
+      "geographicPoint": {
+        "lat": 29.764999389648438,
+        "lon": -93.92500305175781,
+        "country": "United States",
+        "timeZone": "America/Chicago"
+      }
+    },
+    {
+      "mmxId": "L_US_Kenai",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "US1220",
+          "provider": "abc"
+        }
+      },
+      "name": "Kenai",
+      "aliases": [
+        "Nikiski"
+      ],
+      "geographicPoint": {
+        "lat": 60.676666259765625,
+        "lon": -151.40333557128906,
+        "country": "United States",
+        "timeZone": "America/Anchorage"
+      }
+    },
+    {
+      "mmxId": "L_US_LakeC",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "US0978",
+          "provider": "abc"
+        }
+      },
+      "name": "Lake Charles",
+      "aliases": [
+        "Trunkline LNG"
+      ],
+      "geographicPoint": {
+        "lat": 30.110000610351562,
+        "lon": -93.29000091552734,
+        "country": "United States",
+        "timeZone": "America/Chicago"
+      }
+    },
+    {
+      "mmxId": "L_US_Sabin",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "US1238",
+          "provider": "abc"
+        }
+      },
+      "name": "Sabine Pass",
+      "geographicPoint": {
+        "lat": 29.74250030517578,
+        "lon": -93.87083435058594,
+        "country": "United States",
+        "timeZone": "America/Chicago"
+      }
+    },
+    {
+      "mmxId": "L_UM_GulfG",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "UM0024",
+          "provider": "abc"
+        }
+      },
+      "name": "Gulf Gateway",
+      "aliases": [
+        "Gulf Gateway Deepwater Port"
+      ],
+      "geographicPoint": {
+        "lat": 28.094999313354492,
+        "lon": -93.02166748046875,
+        "country": "United States Minor Outlying Islands",
+        "timeZone": "America/Chicago"
+      }
+    },
+    {
+      "mmxId": "L_UM_Neptu",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "UM0042",
+          "provider": "abc"
+        }
+      },
+      "name": "Neptune",
+      "aliases": [
+        "Neptune Deepwater Port"
+      ],
+      "geographicPoint": {
+        "lat": 42.4716682434082,
+        "lon": -70.6050033569336,
+        "country": "United States Minor Outlying Islands",
+        "timeZone": "America/New_York"
+      }
+    },
+    {
+      "mmxId": "L_UM_North",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "UM0043",
+          "provider": "abc"
+        }
+      },
+      "name": "Northeast Gateway",
+      "aliases": [
+        "Northeast Gateway Deepwater Port",
+        "North East Gateway"
+      ],
+      "geographicPoint": {
+        "lat": 42.404998779296875,
+        "lon": -70.5999984741211,
+        "country": "United States Minor Outlying Islands",
+        "timeZone": "America/Chicago"
+      }
+    },
+    {
+      "mmxId": "L_UA_Yuzhn",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "UA0039",
+          "provider": "abc"
+        }
+      },
+      "name": "Yuzhny",
+      "geographicPoint": {
+        "lat": 46.6150016784668,
+        "lon": 31.020000457763672,
+        "country": "Ukraine",
+        "timeZone": "Europe/Kiev"
+      }
+    },
+    {
+      "mmxId": "L_AE_AbuDh",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "AE0010",
+          "provider": "abc"
+        }
+      },
+      "name": "Das Island",
+      "aliases": [
+        "Abu Dhabi",
+        "ADGAS"
+      ],
+      "geographicPoint": {
+        "lat": 25.15999984741211,
+        "lon": 52.89833450317383,
+        "country": "United Arab Emirates",
+        "timeZone": "Asia/Dubai"
+      }
+    },
+    {
+      "mmxId": "L_AE_Fujai",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "AE0014",
+          "provider": "abc"
+        }
+      },
+      "name": "Fujairah",
+      "geographicPoint": {
+        "lat": 25.18000030517578,
+        "lon": 56.36166763305664,
+        "country": "United Arab Emirates",
+        "timeZone": "Asia/Dubai"
+      }
+    },
+    {
+      "mmxId": "L_AE_Jebel",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "AE0084",
+          "provider": "abc"
+        }
+      },
+      "name": "Jebel Ali",
+      "aliases": [
+        "Dubai"
+      ],
+      "geographicPoint": {
+        "lat": 25.031116485595703,
+        "lon": 55.06705093383789,
+        "country": "United Arab Emirates",
+        "timeZone": "Asia/Dubai"
+      }
+    },
+    {
+      "mmxId": "L_UY_Monte",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "UY0011",
+          "provider": "abc"
+        }
+      },
+      "name": "Montevideo",
+      "geographicPoint": {
+        "lat": -34.90083312988281,
+        "lon": -56.21083450317383,
+        "country": "Uruguay",
+        "timeZone": "America/Montevideo"
+      }
+    },
+    {
+      "mmxId": "L_VN_CaiMe",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "VN0090",
+          "provider": "abc"
+        }
+      },
+      "name": "Cai Mep",
+      "geographicPoint": {
+        "lat": 10.53166675567627,
+        "lon": 107.024169921875,
+        "country": "Vietnam",
+        "timeZone": "Asia/Ho_Chi_Minh"
+      }
+    },
+    {
+      "mmxId": "L_VN_HoChi",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "VN0099",
+          "provider": "abc"
+        }
+      },
+      "name": "Ho Chi Min City",
+      "aliases": [
+        "Ho Chi Min City (formerly Saigon)"
+      ],
+      "geographicPoint": {
+        "lat": 10.75278377532959,
+        "lon": 106.78526306152344,
+        "country": "Vietnam",
+        "timeZone": "Asia/Ho_Chi_Minh"
+      }
+    },
+    {
+      "mmxId": "L_YE_BalHa",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "YE0035",
+          "provider": "abc"
+        }
+      },
+      "name": "Bal Haf",
+      "aliases": [
+        "Balhaf",
+        "Yemen"
+      ],
+      "geographicPoint": {
+        "lat": 13.956666946411133,
+        "lon": 48.16666793823242,
+        "country": "Yemen",
+        "timeZone": "Asia/Aden"
+      }
+    },
+    {
+      "mmxId": "L_CP_PortS",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "CP2800",
+          "provider": "abc"
+        }
+      },
+      "name": "Port Said",
+      "geographicPoint": {
+        "lat": 31.420000076293945,
+        "lon": 32.401668548583984,
+        "country": "Egypt",
+        "timeZone": "Africa/Cairo"
+      }
+    },
+    {
+      "mmxId": "L_CP_Balbo",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "CP1550",
+          "provider": "abc"
+        }
+      },
+      "name": "Balboa",
+      "geographicPoint": {
+        "lat": 8.96500015258789,
+        "lon": -79.57499694824219,
+        "country": "Panama",
+        "timeZone": "America/Panama"
+      }
+    },
+    {
+      "mmxId": "L_MY_Lahad",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "MY0048",
+          "provider": "abc"
+        }
+      },
+      "name": "Lahad Datu",
+      "geographicPoint": {
+        "lat": 5.019999980926514,
+        "lon": 118.32833099365234,
+        "country": "Malaysia",
+        "timeZone": "Asia/Kuching"
+      }
+    },
+    {
+      "mmxId": "L_PR_Guaya",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "PR0007",
+          "provider": "abc"
+        }
+      },
+      "name": "Guayama",
+      "aliases": [
+        "Aguirre"
+      ],
+      "geographicPoint": {
+        "lat": 17.90833282470703,
+        "lon": -66.15333557128906,
+        "country": "Puerto Rico",
+        "timeZone": "America/Puerto_Rico"
+      }
+    },
+    {
+      "mmxId": "L_KR_Borye",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "KR0010",
+          "provider": "abc"
+        }
+      },
+      "name": "Boryeong",
+      "geographicPoint": {
+        "lat": 35.994998931884766,
+        "lon": 126.70916748046875,
+        "country": "South Korea",
+        "timeZone": "Asia/Seoul"
+      }
+    },
+    {
+      "mmxId": "L_AU_Onslo",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "AU0197",
+          "provider": "abc"
+        }
+      },
+      "name": "Onslow",
+      "aliases": [
+        "Wheatstone"
+      ],
+      "geographicPoint": {
+        "lat": -21.625,
+        "lon": 115.09583282470703,
+        "country": "Australia",
+        "timeZone": "Australia/Perth"
+      }
+    },
+    {
+      "mmxId": "L_JP_Hibik",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "JP0055",
+          "provider": "abc"
+        }
+      },
+      "name": "Hibiki",
+       "aliases": [
+        "Hibikinada"
+      ],
+      "geographicPoint": {
+        "lat": 33.95000076293945,
+        "lon": 130.82833862304688,
+        "country": "Japan",
+        "timeZone": "Asia/Tokyo"
+      }
+    },
+    {
+      "mmxId": "L_AU_Prelu",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "AU0436",
+          "provider": "abc"
+        }
+      },
+      "name": "Prelude FLNG",
+      "geographicPoint": {
+        "lat": -13.786333084106445,
+        "lon": 123.31749725341797,
+        "country": "Australia",
+        "timeZone": "Australia/Brisbane"
+      }
+    },
+    {
+      "mmxId": "L_AU_Ichth",
+      "virtual": false,
+      "otherIdentifiers": {
+        "abc": {
+          "identifier": "AU0329",
+          "provider": "abc"
+        }
+      },
+      "name": "Ichthys",
+      "geographicPoint": {
+        "lat": -12.491666793823242,
+        "lon": 130.8816680908203,
+        "country": "Australia",
+        "timeZone": "Australia/Darwin"
+      }    
+    }
+  ],
+  "routingPoints": [
+    {
+      "identifier": "SUZ",
+      "virtualLocation": "L_V_SuezC",
+      "northernEntry": "L_CP_PortS",
+      "southernEntry": "L_CP_Suez",
+      "distance": 102.279
+    },
+    {
+      "identifier": "PAN",
+      "virtualLocation": "L_V_Panam",
+      "northernEntry": "L_CP_Colon",
+      "southernEntry": "L_CP_Balbo",
+      "distance": 39.97
+    }
+  ]
+}

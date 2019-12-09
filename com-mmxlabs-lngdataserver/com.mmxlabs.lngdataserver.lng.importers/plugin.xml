@@ -56,6 +56,11 @@
          id="com.mmxlabs.datahub.basecase.syncwith"
          name="Sync data with base case">
    </command>
+   <command
+         defaultHandler="com.mmxlabs.lngdataserver.lng.importers.distanceupdate.ui.DistanceUpdateCommandHandler"
+         id="com.mmxlabs.datahub.update.distances"
+         name="Update distances">
+   </command>
 </extension>
 <extension
       point="org.eclipse.ui.menus">
@@ -206,6 +211,15 @@
                </count>
             </and>
          </visibleWhen>
+      </command>
+   </menuContribution>
+   <menuContribution
+         allPopups="false"
+         locationURI="menu:data?after=additions">
+      <command
+            commandId="com.mmxlabs.datahub.update.distances"
+            label="Update Distances"
+            style="push">
       </command>
    </menuContribution>
 </extension>
