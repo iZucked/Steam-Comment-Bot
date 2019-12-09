@@ -14,6 +14,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.time.Days;
+import com.mmxlabs.common.util.exceptions.UserFeedbackException;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.CargoNumberDistributionModel;
 import com.mmxlabs.models.lng.adp.ContractProfile;
@@ -40,12 +41,12 @@ public class CargoNumberGenerator implements IProfileGenerator {
 
 		Contract contract = profile.getContract();
 		if (contract == null) {
-			throw new IllegalStateException();
+			throw new UserFeedbackException("No contract specified.");
 		}
 		
 		final Pair<YearMonth, YearMonth> adpPeriod = ADPModelUtil.getContractProfilePeriod(adpModel, contract);
 		if (adpPeriod == null) {
-			throw new IllegalStateException();
+			throw new UserFeedbackException("No ADP period set.");
 		}
 		final YearMonth start = adpPeriod.getFirst();
 		final YearMonth end = adpPeriod.getSecond();

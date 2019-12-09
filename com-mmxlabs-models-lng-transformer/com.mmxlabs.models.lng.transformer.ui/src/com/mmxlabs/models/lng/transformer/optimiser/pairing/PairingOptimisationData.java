@@ -17,6 +17,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.google.inject.Inject;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.util.exceptions.UserFeedbackException;
 import com.mmxlabs.models.lng.transformer.optimiser.valuepair.ProfitAndLossRecorder;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -157,6 +158,9 @@ public class PairingOptimisationData implements ProfitAndLossRecorder {
 	}
 
 	public long[][] getProfitAsPrimitive() {
+		if (profit.length == 0) {
+			throw new UserFeedbackException("Please generate slots for purchase and sales contracts before doing ADP optimisation.");
+		}
 		long[][] profitL = new long[profit.length][profit[0].length];
 		for (int i = 0; i < profit.length; i++) {
 			for (int j = 0; j < profit[i].length; j++) {

@@ -53,9 +53,6 @@ public class DistributionModelGeneratorUtil {
 		}
 
 		String contractShortName = contract.getName();
-		if (contractShortName.length() > 3) {
-			contractShortName = contractShortName.substring(0, 3);
-		}
 		contractShortName = contractShortName.toUpperCase();
 		return contractShortName;
 	}
