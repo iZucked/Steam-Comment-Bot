@@ -201,7 +201,6 @@ public class HeadlessApplicationOptions {
 	 * @return
 	 */
 	public UserSettingsImpl getUserSettingsContent() {
-		return userSettings != null ? userSettings : getBundledUserSettings();
-		
+		return userSettings != null ? userSettings : getBundledUserSettings();		
 	}
 }
