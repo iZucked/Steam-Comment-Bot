@@ -623,6 +623,10 @@
                attributeTypeName="InventoryFacilityType"
                attributeTypeURI="http://www.mmxlabs.com/models/lng/cargo/1/">
          </dataType>
+          <dataType
+               attributeTypeName="PaperPricingType"
+               attributeTypeURI="http://www.mmxlabs.com/models/lng/cargo/1/">
+         </dataType>
       </attributeImporter>
    </extension>
    <extension
