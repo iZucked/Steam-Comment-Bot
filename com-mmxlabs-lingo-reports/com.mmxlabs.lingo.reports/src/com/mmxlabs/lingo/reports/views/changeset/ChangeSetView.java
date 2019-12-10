@@ -1026,26 +1026,34 @@ public class ChangeSetView extends ViewPart {
 		if (target == null) {
 			setEmptyData();
 		} else {
+			final Display display = PlatformUI.getWorkbench().getDisplay();
+			final Shell activeShell = display.getActiveShell();
+			
 			final ICoreRunnable runnable = (monitor) -> {
-				final ViewState newViewState = action.apply(monitor, targetSlotId);
-				final ChangeSetToTableTransformer changeSetToTableTransformer = new ChangeSetToTableTransformer();
-				newViewState.tableRootAlternative = changeSetToTableTransformer.createViewDataModel(newViewState.root, true, newViewState.lastTargetSlot, newViewState.displaySortMode);
-				newViewState.tableRootDefault = changeSetToTableTransformer.createViewDataModel(newViewState.root, false, newViewState.lastTargetSlot, newViewState.displaySortMode);
+				try {
+					final ViewState newViewState = action.apply(monitor, targetSlotId);
+					final ChangeSetToTableTransformer changeSetToTableTransformer = new ChangeSetToTableTransformer();
+					newViewState.tableRootAlternative = changeSetToTableTransformer.createViewDataModel(newViewState.root, true, newViewState.lastTargetSlot, newViewState.displaySortMode);
+					newViewState.tableRootDefault = changeSetToTableTransformer.createViewDataModel(newViewState.root, false, newViewState.lastTargetSlot, newViewState.displaySortMode);
 
-				changeSetToTableTransformer.bindModels(newViewState.tableRootDefault, newViewState.tableRootAlternative);
+					changeSetToTableTransformer.bindModels(newViewState.tableRootDefault, newViewState.tableRootAlternative);
 
-				newViewState.postProcess.accept(newViewState.tableRootDefault);
-				newViewState.postProcess.accept(newViewState.tableRootAlternative);
+					newViewState.postProcess.accept(newViewState.tableRootDefault);
+					newViewState.postProcess.accept(newViewState.tableRootAlternative);
 
-				if (runAsync) {
-					RunnerHelper.asyncExec(new ViewUpdateRunnable(newViewState));
-				} else {
-					RunnerHelper.syncExec(new ViewUpdateRunnable(newViewState));
+					if (runAsync) {
+						RunnerHelper.asyncExec(new ViewUpdateRunnable(newViewState));
+					} else {
+						RunnerHelper.syncExec(new ViewUpdateRunnable(newViewState));
+					}
+				}
+				catch (ScenarioNotEvaluatedException cause) {
+					RunnerHelper.asyncExec(new Runnable() { public void run() { 
+							MessageDialog.openError(activeShell, "Error opening result", cause.getMessage());
+					}});
 				}
 			};
 
-			final Display display = PlatformUI.getWorkbench().getDisplay();
-			final Shell activeShell = display.getActiveShell();
 			try {
 
 				if (runAsync) {
