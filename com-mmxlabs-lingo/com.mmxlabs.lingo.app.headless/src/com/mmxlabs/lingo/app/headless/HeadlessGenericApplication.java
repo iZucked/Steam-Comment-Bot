@@ -32,8 +32,11 @@ import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.fasterxml.jackson.core.JsonParser.Feature;
 import com.fasterxml.jackson.core.io.JsonStringEncoder;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationConfig;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -41,6 +44,7 @@ import com.google.common.io.CharStreams;
 import com.mmxlabs.license.ssl.LicenseChecker;
 import com.mmxlabs.license.ssl.LicenseChecker.InvalidLicenseException;
 import com.mmxlabs.license.ssl.LicenseChecker.LicenseState;
+import com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessApplicationOptions;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessGenericJSON;
 import com.mmxlabs.rcp.common.json.EMFJacksonModule;
@@ -312,6 +316,8 @@ public abstract class HeadlessGenericApplication implements IApplication {
 			mapper.registerModule(new JavaTimeModule());
 			mapper.registerModule(new Jdk8Module());
 			mapper.registerModule(new EMFJacksonModule());
+			mapper.enable(Feature.ALLOW_COMMENTS);
+			
 			optionsList.addAll(mapper.readValue(new File(commandLine.getOptionValue(BATCH_FILE)), new TypeReference<List<HeadlessApplicationOptions>>() {
 			}));
 		} else {
@@ -392,13 +398,15 @@ public abstract class HeadlessGenericApplication implements IApplication {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.registerModule(new JavaTimeModule());
 		mapper.registerModule(new Jdk8Module());
+		mapper.enable(Feature.ALLOW_COMMENTS);
 
 		try {
 			return mapper.readValue(new File(filename), clazz);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
-		}				
+		}
+		
 	}
 	
 	/**
