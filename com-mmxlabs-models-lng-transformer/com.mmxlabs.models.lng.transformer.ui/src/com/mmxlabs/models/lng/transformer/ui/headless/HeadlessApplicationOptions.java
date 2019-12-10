@@ -133,12 +133,11 @@ public class HeadlessApplicationOptions {
 		UserSettings effectiveUserSettings = getUserSettingsContent();
 		
 		if ( (effectiveUserSettings == null) && (algorithmConfigFile == null) ) {			
-			throw new IllegalArgumentException("If no algorithm config file is provided, user settings must be provided or bundled with scenario file.");
+			throw new IllegalArgumentException("If algorithmConfigFile is not specified, user settings must be provided via userSettings field or bundled with scenario file.");
 		}
 		
-		if ( (effectiveUserSettings != null) && (algorithmConfigFile != null) ) {
-			String userSettingsOrigin = (bundledUserSettings != null ? "bundled file" : "userSettings field");
-			throw new IllegalArgumentException("User settings (from " + userSettingsOrigin + ") are not currently usable with an explicit algorithm config file.");			
+		if ( (userSettings != null) && (algorithmConfigFile != null) ) {
+			throw new IllegalArgumentException("Cannot specify both userSettings and algorithmConfigFile (userSettings is used to generate a config if set).");			
 		}
 	}
 
@@ -201,6 +200,15 @@ public class HeadlessApplicationOptions {
 	 * @return
 	 */
 	public UserSettingsImpl getUserSettingsContent() {
-		return userSettings != null ? userSettings : getBundledUserSettings();		
+		if (userSettings != null) {
+			return userSettings;
+		}
+		
+		if (algorithmConfigFile != null) {
+			System.out.println("Ignoring bundled user settings (explicit optimisation plan provided).");
+			return null;
+		}
+		
+		return getBundledUserSettings();		
 	}
 }
