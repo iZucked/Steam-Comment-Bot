@@ -5,8 +5,13 @@
 package com.mmxlabs.models.lng.transformer.ui.headless;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 
+import com.fasterxml.jackson.core.JsonParser.Feature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl;
 import com.mmxlabs.optimiser.lso.logging.LSOLogger;
@@ -60,7 +65,10 @@ public class HeadlessApplicationOptions {
 	/** 
 	 * A {@link UserSettings} object to create the algorithm's config data from, if no config file is provided.
 	 */
-	public UserSettingsImpl userSettings;
+	private UserSettingsImpl userSettings;
+	
+	private UserSettingsImpl bundledUserSettings;
+	private boolean attemptedToReadBundledSettings = false;
 	
 	public boolean isLoggingExportRequired() {
 		return outputLoggingFolder != null;
@@ -122,8 +130,78 @@ public class HeadlessApplicationOptions {
 			throw new IllegalArgumentException("Logging parameters specified but no output logging folder provided.");
 		}
 		
-		if ( (userSettings == null) == (algorithmConfigFile == null) ) {
-			throw new IllegalArgumentException("Exactly one of the fields 'userSettings' and 'algorithmConfigFile' must be non-null.");
+		UserSettings effectiveUserSettings = getUserSettingsContent();
+		
+		if ( (effectiveUserSettings == null) && (algorithmConfigFile == null) ) {			
+			throw new IllegalArgumentException("If no algorithm config file is provided, user settings must be provided or bundled with scenario file.");
 		}
+		
+		if ( (effectiveUserSettings != null) && (algorithmConfigFile != null) ) {
+			String userSettingsOrigin = (bundledUserSettings != null ? "bundled file" : "userSettings field");
+			throw new IllegalArgumentException("User settings (from " + userSettingsOrigin + ") are not currently usable with an explicit algorithm config file.");			
+		}
+	}
+
+	public static String fileNameWithoutExt(String fileName) {
+		if (fileName != null) {
+			int i = fileName.lastIndexOf(".");
+			if (i >= 0) {
+				return fileName.substring(0, i);
+			}
+			else {
+				return fileName;
+			}
+		}
+		else {
+			return null;
+		}
+	}	
+	
+	private UserSettingsImpl getBundledUserSettings() {
+		if (attemptedToReadBundledSettings) {
+			return bundledUserSettings;
+		}
+		
+		attemptedToReadBundledSettings = true;
+		
+		System.out.println("Attempting to read bundled user settings based on scenario path.");
+		
+		if (scenarioFileName == null) {
+			return null;
+		}
+		String userSettingsName = fileNameWithoutExt(scenarioFileName) + ".userSettings.json";
+		
+		File file = new File(userSettingsName);
+
+		if (file.exists() == false) {
+			return null;
+		}
+		else {
+
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.registerModule(new JavaTimeModule());
+			mapper.registerModule(new Jdk8Module());
+			mapper.enable(Feature.ALLOW_COMMENTS);
+	
+			try {
+				bundledUserSettings = mapper.readValue(file, UserSettingsImpl.class);
+				System.out.println("Setting user settings from bundled file.");
+				return bundledUserSettings;
+			} catch (IOException e) {
+				e.printStackTrace();
+				return null;
+			}			
+		}
+		
+		
+	}
+	
+	/**
+	 * Provides the user settings content from the userSettings field or by loading it from a "bundled" user settings file.
+	 * @return
+	 */
+	public UserSettingsImpl getUserSettingsContent() {
+		return userSettings != null ? userSettings : getBundledUserSettings();
+		
 	}
 }

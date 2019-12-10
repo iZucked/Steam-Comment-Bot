@@ -126,7 +126,7 @@ public class HeadlessOptimiserRunner {
 		else {
 			result = new OptimiserConfigurationOptions();
 			
-			final UserSettings optionSettings = options.userSettings;
+			final UserSettings optionSettings = options.getUserSettingsContent();
 			final @NonNull UserSettings userSettings = (optionSettings == null ? ScenarioUtils.createDefaultUserSettings() : optionSettings);
 			result.plan = OptimisationHelper.transformUserSettings(userSettings, null, sdp.getTypedScenario(LNGScenarioModel.class));
 			result.overrideNumThreads(LNGScenarioChainBuilder.getNumberOfAvailableCores());
