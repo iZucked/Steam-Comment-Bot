@@ -587,7 +587,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		Map<String, IndexExposureData> oc = new HashMap<>();
 		if (pinData != null) {
 			for (final Map.Entry<String, Double> e : pinData.exposures.entrySet()) {
-				exposuresByMonth.merge(e.getKey(), e.getValue(), Double::sum);
+				exposuresByMonth.merge(e.getKey(), -e.getValue(), Double::sum);
 			}
 			if (pinData.children != null) {
 				for (IndexExposureData d : pinData.children) {
@@ -598,7 +598,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		}
 		if (otherData != null) {
 			for (final Map.Entry<String, Double> e : otherData.exposures.entrySet()) {
-				exposuresByMonth.merge(e.getKey(), -e.getValue(), Double::sum);
+				exposuresByMonth.merge(e.getKey(), e.getValue(), Double::sum);
 			}
 			if (otherData.children != null) {
 				for (IndexExposureData d : otherData.children) {

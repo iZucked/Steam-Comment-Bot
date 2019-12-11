@@ -152,6 +152,7 @@ public class PaperDealsScheduleProcessor implements IOutputScheduleProcessor {
 		final YearMonth startMonth = originalMonth.plusMonths(-1*ss.getSettleStartMonthsPrior());
 		
 		int settlingPeriodDurationInDays = 0;
+
 		switch (ss.getSettlePeriodUnit()) {
 		case HOURS:
 			settlingPeriodDurationInDays = ss.getSettlePeriod() / 24;
@@ -164,16 +165,39 @@ public class PaperDealsScheduleProcessor implements IOutputScheduleProcessor {
 		default:
 			break;
 		}
-		
+
 		int startDay = ss.isLastDayOfTheMonth() ? startMonth.lengthOfMonth() : ss.getDayOfTheMonth();
 		if (startDay == 0) {
 			startDay = 1;
 		}
 		
-		final LocalDate extStart = LocalDate.of(startMonth.getYear(), startMonth.getMonthValue(), startDay);
-		final LocalDate extEnd = extStart.plusDays(settlingPeriodDurationInDays);
+		final LocalDate extStart = getNonWeekendStart(startMonth, startDay);
+		final LocalDate extEnd = extStart.plusDays(settlingPeriodDurationInDays - 1);
 		
 		settlePaper(schedule, calculateExposures, pricingModel, paperDeal, isBuy, allocation, settledPrices, series, curveData, extStart, extEnd);
+	}
+
+	private @NonNull LocalDate getNonWeekendStart(final YearMonth startMonth, int startDay) {
+
+		LocalDate result = LocalDate.of(startMonth.getYear(), startMonth.getMonthValue(), startDay);
+		boolean isWeekend = result.getDayOfWeek() == DayOfWeek.SATURDAY || result.getDayOfWeek() == DayOfWeek.SUNDAY;
+		while(isWeekend) {
+			result = result.plusDays(1);
+			isWeekend = result.getDayOfWeek() == DayOfWeek.SATURDAY || result.getDayOfWeek() == DayOfWeek.SUNDAY;
+		}
+		return result;
+	}
+	
+	private int getNonWeekendStartDay(final YearMonth startMonth, int startDay) {
+
+		LocalDate result = LocalDate.of(startMonth.getYear(), startMonth.getMonthValue(), startDay);
+		boolean isWeekend = result.getDayOfWeek() == DayOfWeek.SATURDAY || result.getDayOfWeek() == DayOfWeek.SUNDAY;
+		while(isWeekend) {
+			result = result.plusDays(1);
+			isWeekend = result.getDayOfWeek() == DayOfWeek.SATURDAY || result.getDayOfWeek() == DayOfWeek.SUNDAY;
+			++startDay;
+		}
+		return startDay;
 	}
 	
 	private void settlePaper(final Schedule schedule, boolean calculateExposures, final PricingModel pricingModel, final PaperDeal paperDeal, final boolean isBuy, final PaperDealAllocation allocation,
@@ -205,9 +229,10 @@ public class PaperDealsScheduleProcessor implements IOutputScheduleProcessor {
 			// Buy, gain volume, sell loose volume
 			entry.setQuantity((isBuy ? 1.0 : -1.0) * paperDeal.getQuantity());
 			// Buy, pay money , sell gain money
-			entry.setValue(-entry.getQuantity() * entry.getPrice());
+			entry.setValue(entry.getQuantity() * (entry.getPrice() - paperDeal.getPrice()));
 
-			allocation.getEntries().add(entry);
+			// excluding the fixed portion for now
+			//allocation.getEntries().add(entry); 
 
 			fixedPortion = entry;
 		}
@@ -235,7 +260,7 @@ public class PaperDealsScheduleProcessor implements IOutputScheduleProcessor {
 				//
 				entry.setSettled(settled);
 				entry.setQuantity((isBuy ? 1.0 : -1.0) * paperDeal.getQuantity() / (double) days);
-				entry.setValue(-(entry.getQuantity() * entry.getPrice()));
+				entry.setValue(entry.getQuantity() * (entry.getPrice() - paperDeal.getPrice()));
 
 				if (!settled && calculateExposures) {
 					final ExposureDetail detail = ScheduleFactory.eINSTANCE.createExposureDetail();
@@ -270,7 +295,7 @@ public class PaperDealsScheduleProcessor implements IOutputScheduleProcessor {
 					detail.setNativeValue(entry.getQuantity() * entry.getPrice());
 					detail.setUnitPrice(entry.getPrice());
 
-					fixedPortion.getExposures().add(detail);
+					entry.getExposures().add(detail);
 
 				}
 				allocation.getEntries().add(entry);
