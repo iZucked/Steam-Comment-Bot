@@ -667,5 +667,12 @@
             plugin.xml="risk.plugin.xml">
       </PluginXMLEnablement>
    </extension>
+   
+    <extension point="com.mmxlabs.models.common.modelcommandprovider">
+    	<ModelCommandProvider
+          commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.PaperDealUpdatingCommandProvider"
+          id="com.mmxlabs.models.lng.cargo.ui.commands.PaperDealUpdatingCommandProvider">
+    	</ModelCommandProvider>
+    </extension>
 
 </plugin>

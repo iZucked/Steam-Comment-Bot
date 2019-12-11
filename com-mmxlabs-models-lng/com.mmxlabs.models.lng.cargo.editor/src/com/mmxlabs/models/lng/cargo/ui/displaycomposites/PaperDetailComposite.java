@@ -49,13 +49,6 @@ public class PaperDetailComposite extends DefaultDetailComposite {
 				|| editor.getFeature() == CargoPackage.eINSTANCE.getPaperDeal_EndDate()) {
 			cdg = PaperDetailGroup.CALENDAR;
 		}
-	
-		// Do not add elements if they are for the wrong section.
-		// Not now
-//		if (paperDetailGroup != cdg){
-//			// Rejected...
-//			return null;
-//		}
 
 		return super.addInlineEditor(editor);
 	}

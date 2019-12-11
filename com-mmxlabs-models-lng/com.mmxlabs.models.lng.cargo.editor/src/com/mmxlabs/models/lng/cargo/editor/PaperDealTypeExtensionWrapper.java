@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.cargo.editor;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -38,7 +40,6 @@ public class PaperDealTypeExtensionWrapper extends IInlineEditorEnablementWrappe
 	private Collection<EObject> range = null;
 
 	private Control control;
-
 
 	@Override
 	protected boolean respondToNotification(final Notification notification) {
