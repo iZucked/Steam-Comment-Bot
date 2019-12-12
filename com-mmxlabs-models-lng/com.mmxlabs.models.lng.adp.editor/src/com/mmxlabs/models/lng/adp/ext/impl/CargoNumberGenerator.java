@@ -26,7 +26,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
 
 public class CargoNumberGenerator implements IProfileGenerator {
-
+	
 	@Override
 	public <T extends Slot<U>, U extends Contract> boolean canGenerate(final ContractProfile<T, U> profile, final SubContractProfile<T, U> subProfile) {
 		return subProfile.getDistributionModel() instanceof CargoNumberDistributionModel;
@@ -51,32 +51,42 @@ public class CargoNumberGenerator implements IProfileGenerator {
 		final YearMonth start = adpPeriod.getFirst();
 		final YearMonth end = adpPeriod.getSecond();
 		
-		Function<LocalDate, LocalDate> nextDateGenerator;
-		final int numberOfCargoes = model.getNumberOfCargoes();
-
-		if (numberOfCargoes == 12) {
-			nextDateGenerator = date -> date.plusMonths(1);
-		} else {
-			int days = Days.between(start, start.plusYears(1));
-			nextDateGenerator = date -> {
-				int spacing = (int) Math.round((double) days / (double) numberOfCargoes);
-				return date.plusDays(Math.max(1, spacing));
-			};
+		if (start == null || end == null) {
+			throw new UserFeedbackException("Please specify both ADP start and end period.");
 		}
-
+		if (!end.isAfter(start)) {
+			throw new UserFeedbackException("Please specify both ADP end period that is after start period.");
+		}
+		final int numberOfCargoes = model.getNumberOfCargoes();
+		if (numberOfCargoes == 0) {
+			throw new UserFeedbackException("Please specify number of cargoes to generate (greater than 0).");
+		}
+		
+		double daysFromStart = 0.0;
+		LocalDate startDate = start.atDay(1);
+		int days = Days.between(start, end);
+		double spacing = ((double) days / (double) numberOfCargoes);
+		int generatedSlots = 0;
+		
 		int idx = 0;
-		LocalDate date = start.atDay(1);
+		LocalDate date = startDate;
 		final LocalDate endDate = end.atDay(1);
 
-		while (date.isBefore(endDate)) {
+		while (date.isBefore(endDate) && generatedSlots < numberOfCargoes) {
 			if (DistributionModelGeneratorUtil.checkContractDate(contract, date)) {
-				final T slot = DistributionModelGeneratorUtil.generateSlot(factory, profile, subProfile, start, date, nextDateGenerator, idx++);
+				final T slot = DistributionModelGeneratorUtil.generateSlot(factory, profile, subProfile, start, date, idx++);
 				ADPModelUtil.setSlotVolumeFrom(contract.getMinQuantity(), model.getModelOrContractVolumePerCargo(), model.getModelOrContractVolumeUnit(), slot, false);
 				slots.add(slot);
+				generatedSlots++;
 			}
-
-			final LocalDate nextDate = nextDateGenerator.apply(date);
-			date = nextDate;
+			
+			if (numberOfCargoes == 12 && start.plusYears(1).equals(end)) {
+				date = date.plusMonths(1);
+			}
+			else {
+				daysFromStart += spacing;
+				date = startDate.plusDays((long)Math.floor(daysFromStart));
+			}
 		}
 		return slots;
 	}

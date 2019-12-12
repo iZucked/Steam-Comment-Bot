@@ -41,7 +41,7 @@ public class PreDefinedSlotGenerator implements IProfileGenerator {
 
 		int idx = 0;
 		for (PreDefinedDate preDefinedDate : model.getDates()) {
-			final T slot = DistributionModelGeneratorUtil.generateSlot(factory, profile, subProfile, start, preDefinedDate.getDate(), (d) -> d.plusDays(1), idx++);
+			final T slot = DistributionModelGeneratorUtil.generateSlot(factory, profile, subProfile, start, preDefinedDate.getDate(), idx++);
 			slot.setWindowStart(preDefinedDate.getDate());
 			slot.setWindowSize(model.getWindowSize());
 			slot.setWindowSizeUnits(model.getWindowSizeUnits());

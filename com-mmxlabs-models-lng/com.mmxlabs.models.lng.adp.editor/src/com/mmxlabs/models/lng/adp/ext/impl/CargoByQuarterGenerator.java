@@ -86,7 +86,7 @@ public class CargoByQuarterGenerator implements IProfileGenerator {
 			final int numberOfCargoes = getNumberOfCargoes(model, q);
 			if (DistributionModelGeneratorUtil.checkContractDate(contract, date)) {
 				for (int i = 0; i < numberOfCargoes; ++i) {
-					final T slot = DistributionModelGeneratorUtil.generateSlot(factory, profile, subProfile, start, date, nextDateGenerator, idx++);
+					final T slot = DistributionModelGeneratorUtil.generateSlot(factory, profile, subProfile, start, date, idx++);
 					ADPModelUtil.setSlotVolumeFrom(contract.getMinQuantity(), model.getModelOrContractVolumePerCargo(), model.getModelOrContractVolumeUnit(), slot, false);
 					slot.setWindowSize(3);
 					slot.setWindowSizeUnits(TimePeriod.MONTHS);
