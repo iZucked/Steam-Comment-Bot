@@ -8,7 +8,6 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +22,6 @@ import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.BuyPaperDeal;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
-import com.mmxlabs.models.lng.cargo.PaperPricingType;
 import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.HolidayCalendar;
@@ -227,9 +225,9 @@ public class PaperDealsScheduleProcessor implements IOutputScheduleProcessor {
 			entry.setPrice(price);
 			entry.setSettled(settled);
 			// Buy, gain volume, sell loose volume
-			entry.setQuantity((isBuy ? 1.0 : -1.0) * paperDeal.getQuantity());
+			entry.setQuantity((isBuy ? -1.0 : 1.0) * paperDeal.getQuantity());
 			// Buy, pay money , sell gain money
-			entry.setValue(entry.getQuantity() * (entry.getPrice() - paperDeal.getPrice()));
+			entry.setValue(entry.getQuantity() * entry.getPrice());
 
 			// excluding the fixed portion for now
 			//allocation.getEntries().add(entry); 
