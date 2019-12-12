@@ -61,7 +61,9 @@ public abstract class HeadlessGenericJSON<T extends HeadlessGenericJSON.Params, 
 	public static class Meta {
 		private String machineType;
 		private String scenario;
+		private String checkSum;
 		private LocalDateTime date;
+		private String useCase;
 		private String version;
 		private String client;		
 		private Map<String, String> customInfo;
@@ -121,6 +123,22 @@ public abstract class HeadlessGenericJSON<T extends HeadlessGenericJSON.Params, 
 
 		public void setMaxHeapSize(long maxHeapSize) {
 			this.maxHeapSize = maxHeapSize;
+		}
+
+		public String getCheckSum() {
+			return checkSum;
+		}
+
+		public void setCheckSum(String checkSum) {
+			this.checkSum = checkSum;
+		}
+
+		public String getUseCase() {
+			return useCase;
+		}
+
+		public void setUseCase(String useCase) {
+			this.useCase = useCase;
 		}
 	}
 

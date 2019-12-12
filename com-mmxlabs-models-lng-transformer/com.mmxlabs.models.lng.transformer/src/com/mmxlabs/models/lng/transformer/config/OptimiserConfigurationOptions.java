@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.transformer.config;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -63,11 +64,22 @@ public class OptimiserConfigurationOptions {
 	
 	public OptimisationPlan plan;
 	public JsonNode injections; // hack: pull this directly from JSON
-	public LSOLogger.LoggingParameters loggingParameters;
 	public JsonNode other;
+	private Integer rawNumThreads = null;
 	
 	public int getNumThreads() {
+		if (rawNumThreads != null) {
+			return rawNumThreads;
+		}
 		return other.get("numThreads").asInt();
+	}
+	
+	/**
+	 * Forces the number of threads to a particular value. 
+	 * @param n
+	 */
+	public void overrideNumThreads(int n) {
+		rawNumThreads = n;
 	}
 	
 	public static OptimiserConfigurationOptions readFromFile(String jsonFilename, HashMap<String, String> customInfo) {
@@ -104,8 +116,6 @@ public class OptimiserConfigurationOptions {
 			
 			result.injections = mapper.treeToValue(root.get("injections"), JsonNode.class);
 			
-			result.loggingParameters = decodeLoggingParameters(mapper, root.get("loggingParameters"));
-			
 			result.other = mapper.treeToValue(root.get("other"), JsonNode.class);
 			
 		} catch (IOException e) {
@@ -115,21 +125,13 @@ public class OptimiserConfigurationOptions {
 		
 		return result;
 	}
-
-	private static LSOLogger.LoggingParameters decodeLoggingParameters(ObjectMapper mapper, JsonNode node) {
-		LoggingParameters result = new LSOLogger.LoggingParameters();
-		result.loggingInterval = node.get("loggingInterval").asInt();
-		result.doLogRejectedFitnesses = node.get("doLogRejectedFitnesses").asBoolean();
-		result.doLogAcceptedFitnesses = node.get("doLogAcceptedFitnesses").asBoolean();
-		return result;
-	}
 	
 	/**
 	 * Describes whether or not the specified options require any injections into the injection framework.
 	 * @return
 	 */
 	public static boolean requiresInjections(OptimiserConfigurationOptions options) {
-		return options != null && options.injections != null && options.loggingParameters != null;
+		return options != null && options.injections != null;
 	}
 	
 }	

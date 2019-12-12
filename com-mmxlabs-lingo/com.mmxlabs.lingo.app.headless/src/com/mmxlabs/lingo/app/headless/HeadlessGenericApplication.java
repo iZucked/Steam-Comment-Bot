@@ -5,11 +5,14 @@
 package com.mmxlabs.lingo.app.headless;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.security.MessageDigest;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -29,8 +32,11 @@ import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.fasterxml.jackson.core.JsonParser.Feature;
 import com.fasterxml.jackson.core.io.JsonStringEncoder;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationConfig;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -38,7 +44,10 @@ import com.google.common.io.CharStreams;
 import com.mmxlabs.license.ssl.LicenseChecker;
 import com.mmxlabs.license.ssl.LicenseChecker.InvalidLicenseException;
 import com.mmxlabs.license.ssl.LicenseChecker.LicenseState;
+import com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessApplicationOptions;
+import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessGenericJSON;
+import com.mmxlabs.rcp.common.json.EMFJacksonModule;
 
 
 /**
@@ -79,6 +88,7 @@ public abstract class HeadlessGenericApplication implements IApplication {
 	protected static final String JSON = "json";
 	protected static final String NUM_RUNS = "numRuns";
 	protected static final String CUSTOM_INFO = "custom";
+	protected static final String USE_CASE = "useCase";
 	
 	protected String clientCode;
 	protected String machineInfo;
@@ -114,6 +124,7 @@ public abstract class HeadlessGenericApplication implements IApplication {
 	 * @param hOptions
 	 */
 	protected void runScenarioMultipleTimes(HeadlessApplicationOptions hOptions) {
+		hOptions.validate();
 		final String scenarioFilename = hOptions.scenarioFileName;
 		
 		if (scenarioFilename == null || scenarioFilename.isEmpty()) {
@@ -159,6 +170,18 @@ public abstract class HeadlessGenericApplication implements IApplication {
 	}
 	
 	protected abstract String getAlgorithmName();
+	
+	protected void writeMetaFields(HeadlessGenericJSON<?,?> json, File scenarioFile, HeadlessApplicationOptions hOptions, int threads) {
+		json.getMeta().setCheckSum(mD5Checksum(scenarioFile));
+		json.getMeta().setUseCase(hOptions.useCase);
+		json.getMeta().setClient(clientCode);
+		json.getMeta().setVersion(buildVersion);
+		json.getMeta().setMachineType(machineInfo);
+		json.getMeta().setCustomInfo(hOptions.customInfo);
+		json.getMeta().setMaxHeapSize(Runtime.getRuntime().maxMemory());
+		json.getParams().setCores(threads);
+	}
+	
 	
 	private void writeRunFailure(HeadlessApplicationOptions hOptions, int run, Exception e) {
 		if (hOptions.outputLoggingFolder != null) {
@@ -292,6 +315,9 @@ public abstract class HeadlessGenericApplication implements IApplication {
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.registerModule(new JavaTimeModule());
 			mapper.registerModule(new Jdk8Module());
+			mapper.registerModule(new EMFJacksonModule());
+			mapper.enable(Feature.ALLOW_COMMENTS);
+			
 			optionsList.addAll(mapper.readValue(new File(commandLine.getOptionValue(BATCH_FILE)), new TypeReference<List<HeadlessApplicationOptions>>() {
 			}));
 		} else {
@@ -307,6 +333,7 @@ public abstract class HeadlessGenericApplication implements IApplication {
 			options.algorithmConfigFile = commandLineParameterOrValue(JSON, options.algorithmConfigFile);
 			options.scenarioFileName = commandLineParameterOrValue(INPUT_SCENARIO, options.scenarioFileName);
 			options.numRuns = Integer.parseInt(commandLineParameterOrValue(NUM_RUNS, Integer.toString(options.numRuns)));			
+			options.useCase = commandLineParameterOrValue(USE_CASE, options.useCase);			
 		}
 		
 		return optionsList;
@@ -371,13 +398,15 @@ public abstract class HeadlessGenericApplication implements IApplication {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.registerModule(new JavaTimeModule());
 		mapper.registerModule(new Jdk8Module());
+		mapper.enable(Feature.ALLOW_COMMENTS);
 
 		try {
 			return mapper.readValue(new File(filename), clazz);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
-		}				
+		}
+		
 	}
 	
 	/**
@@ -427,6 +456,7 @@ public abstract class HeadlessGenericApplication implements IApplication {
 
 		options.addOption(OptionBuilder.withLongOpt(BATCH_FILE).withDescription("File listing a batch of jobs to run").hasArg().create());
 		options.addOption(OptionBuilder.withLongOpt(CUSTOM_INFO).withDescription("Custom information (using name=val syntax)").hasArg().create());
+		options.addOption(OptionBuilder.withLongOpt(USE_CASE).withDescription("Use-case handle").hasArg().create());
 
 		options.addOption(OptionBuilder.withLongOpt(INPUT_SCENARIO).withDescription("Input scenario file").hasArg().create());
 		options.addOption(OptionBuilder.withLongOpt(OUTPUT_SCENARIO).withDescription("Output scenario file").hasArg().create());
@@ -450,5 +480,33 @@ public abstract class HeadlessGenericApplication implements IApplication {
 		String machInfo = "AvailableProcessors:" + Integer.toString(Runtime.getRuntime().availableProcessors());
 		return machInfo;
 	}
+
+	private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
+	public static String bytesToHex(byte[] bytes) {
+	    char[] hexChars = new char[bytes.length * 2];
+	    for (int j = 0; j < bytes.length; j++) {
+	        int v = bytes[j] & 0xFF;
+	        hexChars[j * 2] = HEX_ARRAY[v >>> 4];
+	        hexChars[j * 2 + 1] = HEX_ARRAY[v & 0x0F];
+	    }
+	    return new String(hexChars);
+	}
+	
+	public String mD5Checksum(File input) {
+        try (InputStream in = new FileInputStream(input)) {
+            MessageDigest digest = MessageDigest.getInstance("MD5");
+            byte[] block = new byte[4096];
+            int length;
+            while ((length = in.read(block)) > 0) {
+                digest.update(block, 0, length);
+            }
+            String result = bytesToHex(digest.digest());
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
 }

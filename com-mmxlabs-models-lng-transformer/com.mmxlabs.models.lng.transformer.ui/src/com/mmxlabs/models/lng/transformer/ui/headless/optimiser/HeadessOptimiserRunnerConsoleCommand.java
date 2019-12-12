@@ -4,16 +4,13 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.headless.optimiser;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.function.BiConsumer;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
@@ -31,15 +28,15 @@ import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.OptimisationStage;
 import com.mmxlabs.models.lng.parameters.ParallelOptimisationStage;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
+import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
-import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessApplicationOptions;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
-import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 
 //From OSGI prompt, run e.g. 
@@ -75,11 +72,12 @@ public class HeadessOptimiserRunnerConsoleCommand implements CommandProvider {
 							options.outputScenarioFileName = "required";
 //					options.outputLoggingFolder = outputPath;
 
-							options.userSettings = ScenarioUtils.createDefaultUserSettings();
-							options.userSettings.setMode(OptimisationMode.STRATEGIC);
-							options.userSettings.setSimilarityMode(SimilarityMode.OFF);
-							options.userSettings.setWithCharterLength(true);
-							options.userSettings.setWithSpotCargoMarkets(true);
+							UserSettings userSettings = ScenarioUtils.createDefaultUserSettings();
+							options.setUserSettings((UserSettingsImpl) userSettings); 
+							userSettings.setMode(OptimisationMode.STRATEGIC);
+							userSettings.setSimilarityMode(SimilarityMode.OFF);
+							userSettings.setWithCharterLength(true);
+							userSettings.setWithSpotCargoMarkets(true);
 
 							File scenarioFile = new File(scenarioFileName);
 							{

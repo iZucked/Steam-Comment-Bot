@@ -5,6 +5,7 @@
 package com.mmxlabs.optimiser.lso.logging;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -33,9 +34,25 @@ import com.mmxlabs.optimiser.lso.INullMove;
 public class LSOLogger implements ILoggingDataStore {
 	
 	public static class LoggingParameters {
+		public static final Object ACCEPTED_FITNESS_KEY = "ACCEPTED_FITNESS";
+		private static final Object REJECTED_FITNESS_KEY = "REJECTED_FITNESS";
+		private static final Object HEAP_USAGE_KEY = "HEAP_USAGE";
+
 		public int loggingInterval;
-		public boolean doLogAcceptedFitnesses;
-		public boolean doLogRejectedFitnesses;
+		public String [] metricsToLog;
+		
+		public boolean doLogAcceptedFitnesses() {
+			return Arrays.asList(metricsToLog).contains(ACCEPTED_FITNESS_KEY);
+		}
+
+		public boolean doLogRejectedFitnesses() {
+			return Arrays.asList(metricsToLog).contains(REJECTED_FITNESS_KEY);
+		}
+
+		public boolean doLogHeapUsage() {
+			return Arrays.asList(metricsToLog).contains(HEAP_USAGE_KEY);
+		}		
+		
 	}
 	
 	private Map<String, AtomicInteger> moveMap = new HashMap<>();
@@ -151,13 +168,13 @@ public class LSOLogger implements ILoggingDataStore {
 	public void logSuccessfulMove(IMove move, int numberOfMovesTried, long fitness) {
 		String moveName = move.getClass().getName();
 		logSuccessfulMove(moveName);
-		if (loggingParameters.doLogAcceptedFitnesses) {
+		if (loggingParameters.doLogAcceptedFitnesses()) {
 			addFitnessIterationPoint(acceptedSolutionFitnesses, numberOfMovesTried, fitness);
 		}
 	}
 
 	public void logRejectedMove(IMove move, int numberOfMovesTried, long fitness) {
-		if (loggingParameters.doLogRejectedFitnesses) {
+		if (loggingParameters.doLogRejectedFitnesses()) {
 			addFitnessIterationPoint(rejectedSolutionFitnesses, numberOfMovesTried, fitness);
 		}
 	}

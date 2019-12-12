@@ -175,21 +175,23 @@ public class LSOLoggingExporter {
 	}
 
 	private void exportAcceptedFitnesses() {
-		if (lsoLogger.getLoggingParameters().doLogAcceptedFitnesses) {
+		if (lsoLogger.getLoggingParameters().doLogAcceptedFitnesses()) {
 			final JSONObject object = getJSONObject("acceptedFitnesses");
 			exportIterationsList(lsoLogger.getAcceptedFitnesses(), object);
 		}
 	}
 
 	private void exportRejectedFitnesses() {
-		if (lsoLogger.getLoggingParameters().doLogRejectedFitnesses) {
+		if (lsoLogger.getLoggingParameters().doLogRejectedFitnesses()) {
 			final JSONObject object = getJSONObject("rejectedFitnesses");
 			exportIterationsList(lsoLogger.getRejectedFitnesses(), object);
 		}
 	}
 	
 	private void exportHeapUsageData() {
-		writeHeapUsageData(getJSONObject("heapUsage"), lsoLogger.getHeapUsageMap());
+		if (lsoLogger.getLoggingParameters().doLogHeapUsage()) {
+			writeHeapUsageData(getJSONObject("heapUsage"), lsoLogger.getHeapUsageMap());
+		}
 	}
 
 	private void writeSequencesData(final JSONObject node, final List<Integer> frequencies) {
