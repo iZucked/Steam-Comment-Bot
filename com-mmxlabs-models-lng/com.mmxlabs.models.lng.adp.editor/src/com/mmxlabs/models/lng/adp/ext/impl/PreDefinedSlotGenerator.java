@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.adp.ext.ISlotTemplateFactory;
 import com.mmxlabs.models.lng.adp.utils.ADPModelUtil;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.commercial.PurchaseContract;
 
 public class PreDefinedSlotGenerator implements IProfileGenerator {
 
@@ -36,13 +37,15 @@ public class PreDefinedSlotGenerator implements IProfileGenerator {
 		final YearMonth start = adpModel.getYearStart();
 		final List<T> slots = new LinkedList<>();
 
+		final Contract contract = profile.getContract();
+
 		int idx = 0;
 		for (PreDefinedDate preDefinedDate : model.getDates()) {
 			final T slot = DistributionModelGeneratorUtil.generateSlot(factory, profile, subProfile, start, preDefinedDate.getDate(), (d) -> d.plusDays(1), idx++);
 			slot.setWindowStart(preDefinedDate.getDate());
 			slot.setWindowSize(model.getWindowSize());
 			slot.setWindowSizeUnits(model.getWindowSizeUnits());
-			ADPModelUtil.setSlotVolumeFrom(model.getModelOrContractVolumePerCargo(), model.getModelOrContractVolumeUnit(), slot, false);
+			ADPModelUtil.setSlotVolumeFrom(contract.getMinQuantity(), model.getModelOrContractVolumePerCargo(), model.getModelOrContractVolumeUnit(), slot, false);
 			slots.add(slot);
 		}
 		return slots;

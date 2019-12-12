@@ -335,29 +335,30 @@ public class ADPModelUtil {
 		}
 	}
 
-	public static int convertMTtoM3(double volumeInMT) {
-		int volumeInM3 = (int) Math.round(volumeInMT * 1380.0 / 600.0 * 1_000_000.0);
+	public static double convertMTtoM3(double volumeInMT) {
+		double volumeInM3 = volumeInMT * 1380.0 / 600.0 * 1_000_000.0;
 		return volumeInM3;
 	}
 
-	public static void setSlotVolumeFrom(double volume, LNGVolumeUnit volumeUnit, Slot slot, boolean exact) {
+	public static void setSlotVolumeFrom(double minVolume, double maxVolume, LNGVolumeUnit volumeUnit, Slot slot, boolean exact) {
 		switch (volumeUnit) {
 		case M3:
 			slot.setVolumeLimitsUnit(VolumeUnits.M3);
-			slot.setMinQuantity(getMinQuantity((int)volume, exact));
-			slot.setMaxQuantity((int) Math.round(volume));
+			slot.setMinQuantity(getMinQuantity(minVolume, maxVolume, exact));
+			slot.setMaxQuantity((int) Math.round(maxVolume));
 			break;
 		case MMBTU:
 			slot.setVolumeLimitsUnit(VolumeUnits.MMBTU);
-			slot.setMinQuantity(getMinQuantity((int)volume, exact));
-			slot.setMaxQuantity((int) Math.round(volume));
+			slot.setMinQuantity(getMinQuantity(minVolume, maxVolume, exact));
+			slot.setMaxQuantity((int) Math.round(maxVolume));
 			break;
 		case MT:
 			slot.setVolumeLimitsUnit(VolumeUnits.M3);
 			// Rough MT to m3 conversion
-			int volumeInM3 = convertMTtoM3(volume);
-			slot.setMinQuantity(getMinQuantity(volumeInM3, exact));
-			slot.setMaxQuantity(volumeInM3);
+			double maxVolumeInM3 = convertMTtoM3(maxVolume);
+			double minVolumeInM3 = convertMTtoM3(minVolume);
+			slot.setMinQuantity(getMinQuantity(minVolumeInM3, maxVolumeInM3, exact));
+			slot.setMaxQuantity((int) Math.round(maxVolumeInM3));
 			break;
 		default:
 			throw new IllegalArgumentException();
@@ -365,8 +366,8 @@ public class ADPModelUtil {
 		}
 	}
 	
-	private static int getMinQuantity(int volume, boolean exact) {
-		return exact ? Math.round(volume) : 0;
+	private static int getMinQuantity(double minVolume, double volume, boolean exact) {
+		return exact ? (int)Math.round(volume) : (int)Math.round(minVolume);
 	}
 
 	public static void generateModelSlots(@NonNull LNGScenarioModel scenarioModel, @NonNull ADPModel adpModel) {
