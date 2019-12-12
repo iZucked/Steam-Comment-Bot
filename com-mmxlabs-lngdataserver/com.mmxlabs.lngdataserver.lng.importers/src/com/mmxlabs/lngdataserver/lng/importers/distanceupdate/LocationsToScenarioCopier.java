@@ -29,7 +29,6 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.BasicLocation;
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.GeographicPoint;
-import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.Identifier;
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.LocationsVersion;
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.RoutingPoint;
 import com.mmxlabs.models.lng.port.EntryPoint;
@@ -138,7 +137,7 @@ public class LocationsToScenarioCopier {
 
 								for (BasicLocation bl : versionLocations) {
 									if (Objects.equals(bl.getMmxId(), port.getLocation().getMmxId())) {
-										UpdateStep step2 = new UpdateWarning(
+										UpdateStep step2 = new UpdateError(
 												String.format("Existing port called %s conflicts with new port of the same name. The old port should be called %s", port.getName(), bl.getName()),
 												"Rename existing and replace existing references with new port?", cmd -> {
 
@@ -170,28 +169,27 @@ public class LocationsToScenarioCopier {
 				}
 				idToPort.put(mmxId, oldPort);
 
-				if (versionLocation.getOtherIdentifiers() != null) {
-					LOOP_VERSION_OTHER_ID: for (final Map.Entry<String, Identifier> e : versionLocation.getOtherIdentifiers().entrySet()) {
-
-						for (OtherIdentifiers existingID : oldPort.getLocation().getOtherIdentifiers()) {
-							if (Objects.equals(existingID.getProvider(), e.getValue().getProvider())) {
-								if (Objects.equals(existingID.getIdentifier(), e.getValue().getIdentifier())) {
-									// Found match, no further action required
-								} else {
-									// Found provider, wrong distance id
-									UpdateStep step = new UpdateStep(String.format("Update distance code for port %s", oldPort.getName()), cmd -> {
-										cmd.append(SetCommand.create(editingDomain, existingID, PortPackage.Literals.OTHER_IDENTIFIERS__IDENTIFIER, e.getValue().getIdentifier()));
-									});
-									steps.add(step);
-								}
-								// Found provider, no need to update.
-								continue LOOP_VERSION_OTHER_ID;
+				if (versionLocation.getUpstreamID() != null) {
+					boolean foundMatch = false;
+					for (OtherIdentifiers existingID : oldPort.getLocation().getOtherIdentifiers()) {
+						if (Objects.equals(existingID.getProvider(), "abc")) {
+							foundMatch = true;
+							if (Objects.equals(existingID.getIdentifier(), versionLocation.getUpstreamID())) {
+								// Found match, no further action required
+							} else {
+								// Found provider, wrong distance id
+								UpdateStep step = new UpdateStep(String.format("Update distance code for port %s", oldPort.getName()), cmd -> {
+									cmd.append(SetCommand.create(editingDomain, existingID, PortPackage.Literals.OTHER_IDENTIFIERS__IDENTIFIER, versionLocation.getUpstreamID()));
+								});
+								steps.add(step);
 							}
 						}
+					}
+					if (!foundMatch) {
 						final OtherIdentifiers id = PortFactory.eINSTANCE.createOtherIdentifiers();
-						id.setIdentifier(e.getValue().getIdentifier());
-						id.setProvider(e.getValue().getProvider());
-//
+						id.setIdentifier(versionLocation.getUpstreamID());
+						id.setProvider("abc");
+						// No need to tell user about this step
 						UpdateStep step = new UpdateStep(String.format("Update distance code for port %s", oldPort.getName()), cmd -> {
 							cmd.append(AddCommand.create(editingDomain, oldPort.getLocation(), PortPackage.Literals.LOCATION__OTHER_IDENTIFIERS, id));
 						});
@@ -205,7 +203,7 @@ public class LocationsToScenarioCopier {
 			portsToRemove.removeAll(portsModified);
 			if (!portsToRemove.isEmpty()) {
 				String lbl = portsToRemove.stream().map(p -> p.getName()).collect(Collectors.joining(", "));
-				UpdateStep step = new UpdateWarning(String.format("Remove unsupported ports %s", lbl), cmd -> {
+				UpdateStep step = new UpdateError(String.format("Remove unsupported ports %s", lbl), cmd -> {
 					cmd.append(DeleteCommand.create(editingDomain, portsToRemove));
 
 					// Clean up missing routes.
@@ -350,7 +348,7 @@ public class LocationsToScenarioCopier {
 					existingGroup = PortFactory.eINSTANCE.createPortCountryGroup();
 					existingGroup.setName(countryName);
 					final PortCountryGroup pExistingGroup = existingGroup;
-					UpdateStep step = new UpdateWarning(String.format("Adding country group  %s", existingGroup.getName()), cmd -> {
+					UpdateStep step = new UserUpdateStep(String.format("Adding country group  %s", existingGroup.getName()), cmd -> {
 						cmd.append(AddCommand.create(editingDomain, portModel, PortPackage.Literals.PORT_MODEL__PORT_COUNTRY_GROUPS, pExistingGroup));
 					});
 					steps.add(step);
@@ -361,7 +359,7 @@ public class LocationsToScenarioCopier {
 			existing.removeAll(updated);
 			if (!existing.isEmpty()) {
 				String lbl = existing.stream().map(p -> p.getName()).collect(Collectors.joining(", "));
-				UpdateStep step = new UpdateWarning(String.format("Remove unsupported country groups %s", lbl), cmd -> {
+				UpdateStep step = new UpdateError(String.format("Remove unsupported country groups %s", lbl), cmd -> {
 					cmd.append(DeleteCommand.create(editingDomain, existing));
 				});
 				steps.add(step);

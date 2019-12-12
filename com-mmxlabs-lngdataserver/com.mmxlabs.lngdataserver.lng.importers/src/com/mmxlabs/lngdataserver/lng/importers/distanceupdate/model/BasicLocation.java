@@ -4,9 +4,7 @@
  */
 package com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -20,10 +18,9 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 public class BasicLocation {
 
 	private String mmxId;
+	private String upstreamID;
 
 	private boolean virtual = false;
-
-	private Map<String, Identifier> otherIdentifiers;
 
 	private String name;
 
@@ -31,14 +28,21 @@ public class BasicLocation {
 
 	private GeographicPoint geographicPoint;
 
-	public static BasicLocation of(String name, String mmxId, String abcId) {
+	public static BasicLocation of(String name, String mmxId, String upstreamID) {
 		BasicLocation result = new BasicLocation();
 		result.setName(name);
 		result.setMmxId(mmxId);
-		result.setOtherIdentifiers(new HashMap<>());
+		result.setUpstreamID(upstreamID);
 		result.setGeographicPoint(new GeographicPoint());
-		result.getOtherIdentifiers().put("abc", new Identifier(abcId, "abc"));
 		return result;
+	}
+
+	public String getUpstreamID() {
+		return upstreamID;
+	}
+
+	public void setUpstreamID(String upstreamID) {
+		this.upstreamID = upstreamID;
 	}
 
 	public String getMmxId() {
@@ -47,10 +51,6 @@ public class BasicLocation {
 
 	public void setMmxId(String mmxId) {
 		this.mmxId = mmxId;
-	}
-
-	public Map<String, Identifier> getOtherIdentifiers() {
-		return otherIdentifiers;
 	}
 
 	public List<String> getAliases() {
@@ -75,10 +75,6 @@ public class BasicLocation {
 
 	public void setGeographicPoint(GeographicPoint geographicPoint) {
 		this.geographicPoint = geographicPoint;
-	}
-
-	public void setOtherIdentifiers(Map<String, Identifier> otherIdentifiers) {
-		this.otherIdentifiers = otherIdentifiers;
 	}
 
 	public boolean isVirtual() {

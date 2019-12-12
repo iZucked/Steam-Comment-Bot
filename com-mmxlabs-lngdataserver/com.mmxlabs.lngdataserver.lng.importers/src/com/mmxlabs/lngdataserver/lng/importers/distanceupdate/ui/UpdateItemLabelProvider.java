@@ -8,6 +8,7 @@ import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.UpdateError;
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.UpdateWarning;
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.UserUpdateStep;
 
@@ -46,6 +47,9 @@ public class UpdateItemLabelProvider extends ColumnLabelProvider {
 	public Image getImage(final Object element) {
 
 		if (colIdx == 0) {
+			if (element instanceof UpdateError) {
+				return imgError;
+			}
 			if (element instanceof UpdateWarning) {
 				return imgWarn;
 			}
