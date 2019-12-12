@@ -56,7 +56,7 @@ public class LatenessUtils {
 					final SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
 					if (slotAllocation != null) {
 						final Slot slot = slotAllocation.getSlot();
-						if (slot.getWindowFlex() > 0 && getLatenessInHours(slotVisit) < slot.getWindowFlex()) {
+						if (slot != null && slot.getWindowFlex() > 0 && getLatenessInHours(slotVisit) < slot.getWindowFlex()) {
 							return false;
 						}
 					}
