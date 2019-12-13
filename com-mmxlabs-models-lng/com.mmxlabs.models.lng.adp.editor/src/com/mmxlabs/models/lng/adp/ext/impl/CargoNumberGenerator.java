@@ -8,9 +8,6 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Function;
-
-import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.time.Days;
