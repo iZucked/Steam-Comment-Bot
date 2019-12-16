@@ -27,6 +27,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption;
+import com.mmxlabs.models.lng.analytics.FullVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
@@ -174,7 +175,8 @@ public class BaseCaseDropTargetListener implements DropTargetListener {
 							}
 						} else if (AnalyticsBuilder.isNonShipped(existing) == ShippingType.Shipped) {
 
-							if (o instanceof RoundTripShippingOption || o instanceof SimpleVesselCharterOption || o instanceof ExistingVesselCharterOption) {
+							if (o instanceof RoundTripShippingOption || o instanceof SimpleVesselCharterOption
+									|| o instanceof ExistingVesselCharterOption || o instanceof FullVesselCharterOption) {
 								opt = (ShippingOption) o;
 							}
 						}

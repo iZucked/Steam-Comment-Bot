@@ -133,7 +133,7 @@ public class SolutionSetExporterUnit {
 				if (changeSet.getFirst() == null) {
 					continue;
 				}
-				try {
+				try { 
 					final ISequences sequences = spotUndoHelper.undoSpotMarketSwaps(initialSequences.getSequences(), changeSet.getFirst());
 
 					// Perform a portfolio break-even if requested.
