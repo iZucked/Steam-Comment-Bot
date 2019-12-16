@@ -764,7 +764,13 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 
 			sandboxResult.getCharterInMarketOverrides().addAll(extraDataProvider.extraCharterInMarketOverrides);
 			sandboxResult.getExtraCharterInMarkets().addAll(extraDataProvider.extraCharterInMarkets);
-			sandboxResult.getExtraVesselAvailabilities().addAll(extraDataProvider.extraVesselAvailabilities);
+			
+			
+			for (final VesselAvailability va : extraDataProvider.extraVesselAvailabilities) {
+				if (va != null && va.eContainer() == null) {
+					sandboxResult.getExtraVesselAvailabilities().add(va);
+				}
+			}
 			sandboxResult.getExtraSlots().addAll(extraDataProvider.extraLoads);
 			sandboxResult.getExtraSlots().addAll(extraDataProvider.extraDischarges);
 			sandboxResult.getExtraVesselEvents().addAll(extraDataProvider.extraVesselEvents);

@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.models.lng.transformer.ui;
 
+import java.time.LocalDate;
+import java.time.Month;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 
@@ -24,7 +27,11 @@ import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.nominations.AbstractNomination;
+import com.mmxlabs.models.lng.nominations.NominationsModel;
+import com.mmxlabs.models.lng.nominations.utils.NominationsModelUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -33,6 +40,7 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
@@ -170,6 +178,37 @@ public class ExportScheduleHelper {
 				}
 			}
 		}
+		
+		// Spot market slots should only have one month window
+		for (final Sequence seq : schedule.getSequences()) {
+			for (final Event event : seq.getEvents()) {
+				if (event instanceof SlotVisit) {
+					final SlotVisit slotVisit = (SlotVisit) event;
+					final LocalDate date = slotVisit.getStart().toLocalDate();
+					final SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
+					if (slotAllocation != null) {
+						final Slot<?> slot = slotAllocation.getSlot();
+						if (slot instanceof SpotSlot) {
+							slot.setWindowSize(1);
+							slot.setWindowStart(LocalDate.of(date.getYear(), date.getMonthValue(), 1));
+							slot.setWindowStartTime(0);
+						}
+					}
+				}
+			}
+		}
+		
+		// Only retain nominations for retained slots
+		final NominationsModel nominationsModel = ScenarioModelUtil.getNominationsModel(scenarioDataProvider);
+		final List<AbstractNomination> nominationsToKeep = new ArrayList<>();
+
+		for (final Slot<?> slot : cargoModel.getLoadSlots()) {
+			nominationsToKeep.addAll(NominationsModelUtils.findNominationsForSlot(scenarioModel,slot));
+		}
+		for (final Slot<?> slot : cargoModel.getDischargeSlots()) {
+			nominationsToKeep.addAll(NominationsModelUtils.findNominationsForSlot(scenarioModel,slot));
+		}
+		nominationsModel.getNominations().retainAll(nominationsToKeep);
 
 		assert EMFUtils.checkValidContainment(scenarioModel);
 
@@ -178,6 +217,7 @@ public class ExportScheduleHelper {
 			// Open but deleted scenario?
 			return null;
 		}
+		
 		final ScenarioInstance theFork = scenarioService.copyInto(scenarioInstance, scenarioDataProvider, newForkName, new NullProgressMonitor());
 
 		if (openScenario) {

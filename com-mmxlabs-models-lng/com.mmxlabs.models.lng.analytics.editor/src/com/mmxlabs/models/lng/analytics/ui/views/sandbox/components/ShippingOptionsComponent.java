@@ -43,6 +43,7 @@ import com.mmxlabs.models.lng.analytics.ui.views.formatters.ShippingOptionDescri
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers.ShippingOptionsContentProvider;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
@@ -138,7 +139,10 @@ public class ShippingOptionsComponent extends AbstractSandboxComponent<Object, A
 						if (true) {
 							helper.addAction(new RunnableAction("Full Charter", () -> {
 								final FullVesselCharterOption opt = AnalyticsFactory.eINSTANCE.createFullVesselCharterOption();
-								opt.setVesselCharter(CargoFactory.eINSTANCE.createVesselAvailability());
+								final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
+								vesselAvailability.setStartHeel(CargoFactory.eINSTANCE.createStartHeelOptions());
+								vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
+								opt.setVesselCharter(vesselAvailability);
 								AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, opt);
 								scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
 										AddCommand.create(scenarioEditingLocation.getEditingDomain(), modelProvider.get(), AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
