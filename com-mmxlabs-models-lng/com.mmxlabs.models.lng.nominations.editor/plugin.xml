@@ -130,7 +130,6 @@
           commandProvider="com.mmxlabs.models.lng.nominations.ui.commands.SlotUpdatingCommandProvider"
           id="com.mmxlabs.models.lng.nominations.ui.commands.SlotUpdatingCommandProvider">
     </ModelCommandProvider>
-    ContractUpdatingCommandProvider
     <ModelCommandProvider
           commandProvider="com.mmxlabs.models.lng.nominations.ui.commands.ContractUpdatingCommandProvider"
           id="com.mmxlabs.models.lng.nominations.ui.commands.ContractUpdatingCommandProvider">
