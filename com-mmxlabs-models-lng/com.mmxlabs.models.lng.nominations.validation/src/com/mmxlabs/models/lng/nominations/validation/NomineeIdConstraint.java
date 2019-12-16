@@ -29,6 +29,14 @@ public class NomineeIdConstraint extends AbstractModelMultiConstraint {
 	@Override
 	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
+		if (target instanceof AbstractNomination) {
+			final AbstractNomination nomination = (AbstractNomination)target;
+			
+			//Do not validate deleted or done nominations.
+			if (nomination.isDeleted() || nomination.isDone()) {
+				return Activator.PLUGIN_ID;
+			}	
+		}
 		if (target instanceof SlotNomination) {
 			final AbstractNomination nomination = (AbstractNomination)target;
 			final String nomineeId = nomination.getNomineeId();
@@ -67,7 +75,6 @@ public class NomineeIdConstraint extends AbstractModelMultiConstraint {
 				statuses.add(status);
 			}
 		}
-		
 		return Activator.PLUGIN_ID;
 	}
 }
