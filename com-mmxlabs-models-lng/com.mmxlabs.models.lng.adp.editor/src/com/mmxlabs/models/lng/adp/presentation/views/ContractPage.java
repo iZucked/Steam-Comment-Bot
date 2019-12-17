@@ -57,9 +57,11 @@ import com.mmxlabs.models.lng.adp.ContractProfile;
 import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
 import com.mmxlabs.models.lng.adp.utils.ADPModelUtil;
+import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.VolumeAttributeManipulator;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
@@ -370,9 +372,15 @@ public class ContractPage extends ADPComposite {
 		final List<Object> objects = new LinkedList<>();
 		if (scenarioModel != null && adpModel != null) {
 			final CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(scenarioModel);
-			commercialModel.eAdapters().add(rootModelAdapter);
-
-			releaseAdaptersRunnable = () -> commercialModel.eAdapters().remove(rootModelAdapter);
+			commercialModel.eAdapters().add(commercialModelAdapter);
+			
+			final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
+			cargoModel.eAdapters().add(cargoModelAdapter);
+			
+			releaseAdaptersRunnable = () -> { 
+				commercialModel.eAdapters().remove(commercialModelAdapter);
+				cargoModel.eAdapters().remove(cargoModelAdapter);
+			};
 
 			objects.addAll(commercialModel.getPurchaseContracts());
 			objects.addAll(commercialModel.getSalesContracts());
@@ -464,7 +472,7 @@ public class ContractPage extends ADPComposite {
 		}
 	}
 
-	private final AdapterImpl rootModelAdapter = new EContentAdapter() {
+	private final AdapterImpl commercialModelAdapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(final org.eclipse.emf.common.notify.Notification msg) {
 
@@ -505,6 +513,26 @@ public class ContractPage extends ADPComposite {
 		}
 	};
 
+	private final AdapterImpl cargoModelAdapter = new EContentAdapter() {
+		@Override
+		public void notifyChanged(final org.eclipse.emf.common.notify.Notification msg) {
+
+			super.notifyChanged(msg);
+
+			if (msg.isTouch()) {
+				return;
+			}
+
+			if (msg.getFeature() == CargoPackage.Literals.CARGO_MODEL__LOAD_SLOTS
+					|| msg.getFeature() == CargoPackage.Literals.CARGO_MODEL__DISCHARGE_SLOTS
+					|| msg.getNotifier() instanceof Slot<?>) {
+					RunnerHelper.runNowOrAsync(() -> {
+						updatePreviewPaneInput(detailComposite.getInput());
+				});
+			} 
+		}
+	};
+	
 	private Button generateButton;
 
 	private Group previewGroup;
