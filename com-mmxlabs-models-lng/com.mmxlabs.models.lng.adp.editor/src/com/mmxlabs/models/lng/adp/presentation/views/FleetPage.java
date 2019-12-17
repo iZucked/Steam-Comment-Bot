@@ -8,7 +8,9 @@ import java.util.Iterator;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
@@ -60,6 +62,9 @@ import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.port.ui.editorpart.MultiplePortReferenceManipulator;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.editors.DetailToolbarManager;
@@ -73,6 +78,7 @@ import com.mmxlabs.models.ui.tabular.manipulators.LocalDateTimeAttributeManipula
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.ReadOnlyManipulatorWrapper;
 import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
+import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.actions.AbstractMenuLockableAction;
 
 public class FleetPage extends ADPComposite {
@@ -88,7 +94,7 @@ public class FleetPage extends ADPComposite {
 	private ScenarioTableViewer availabilityViewer;
 	private ScenarioTableViewer eventsViewer;
 
-	private Button generateButton;
+	private Button updateFleetDatesButton;
 
 	private Group availabilityGroup;
 	private Group eventsGroup;
@@ -96,6 +102,26 @@ public class FleetPage extends ADPComposite {
 	private Action deleteAvailabilityAction;
 	private Action deleteEventAction;
 
+	private final AdapterImpl spotMarketsModelAdapter = new EContentAdapter() {
+		@Override
+		public void notifyChanged(final org.eclipse.emf.common.notify.Notification msg) {
+
+			super.notifyChanged(msg);
+
+			if (msg.isTouch()) {
+				return;
+			}
+
+			if (msg.getFeature() == SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__CHARTER_IN_MARKETS
+					|| msg.getNotifier() instanceof CharterInMarket) {
+					RunnerHelper.asyncExec(() -> {
+						updateDetailComposite();
+				});
+			} 
+		}
+	};
+	
+	
 	public FleetPage(final Composite parent, final int style, final ADPEditorData editorData) {
 		super(parent, style);
 		this.editorData = editorData;
@@ -110,9 +136,9 @@ public class FleetPage extends ADPComposite {
 					.create());
 
 			{
-				generateButton = new Button(toolbarComposite, SWT.PUSH);
-				generateButton.setText("Update fleet dates");
-				generateButton.addSelectionListener(new SelectionAdapter() {
+				updateFleetDatesButton = new Button(toolbarComposite, SWT.PUSH);
+				updateFleetDatesButton.setText("Update fleet dates");
+				updateFleetDatesButton.addSelectionListener(new SelectionAdapter() {
 
 					@Override
 					public void widgetSelected(final SelectionEvent e) {
@@ -653,11 +679,18 @@ public class FleetPage extends ADPComposite {
 
 			eventsViewer = constructEventsViewer(editorData, eventsGroup);
 			eventsGroup.layout();
+			
+			final SpotMarketsModel spotMarketsModel = ScenarioModelUtil.getSpotMarketsModel(scenarioModel);
+			spotMarketsModel.eAdapters().add(spotMarketsModelAdapter);
+			
+			releaseAdaptersRunnable = () -> { 
+				spotMarketsModel.eAdapters().remove(spotMarketsModelAdapter);
+			};
 		}
 
 		// TODO: Attach adapter if needed.
 		mainComposite.setVisible(adpModel != null);
-		generateButton.setEnabled(adpModel != null);
+		updateFleetDatesButton.setEnabled(adpModel != null);
 		if (adpModel == null) {
 			updateDetailPaneInput();
 		} else {
@@ -677,6 +710,14 @@ public class FleetPage extends ADPComposite {
 		super.dispose();
 	}
 
+	private void updateDetailComposite() {
+		EObject target = null;
+		if (editorData.getAdpModel() != null) {
+			target = editorData.getAdpModel().getFleetProfile();
+		}
+		detailComposite.setInput(target);
+	}
+	
 	private void updateDetailPaneInput() {
 		EObject target = null;
 		if (editorData.getAdpModel() != null) {
