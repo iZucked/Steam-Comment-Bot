@@ -111,7 +111,7 @@ public class FleetPage extends ADPComposite {
 
 			{
 				generateButton = new Button(toolbarComposite, SWT.PUSH);
-				generateButton.setText("Re-generate fleet");
+				generateButton.setText("Update fleet dates");
 				generateButton.addSelectionListener(new SelectionAdapter() {
 
 					@Override
