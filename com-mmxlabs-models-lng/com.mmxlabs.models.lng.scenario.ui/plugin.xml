@@ -177,6 +177,11 @@
                   style="push">
             </command>
             <command
+                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.portcosts"
+                  label="Import port costs"
+                  style="push">
+            </command>
+            <command
                   commandId="com.mmxlabs.models.lng.scenario.import.wizards.settledprices"
                   label="Import settled prices"
                   style="push">
@@ -205,6 +210,19 @@
             <command
                   commandId="com.mmxlabs.models.lng.scenario.import.wizards.pricingcalendars"
                   label="Import pricing calendars"
+                  style="push">
+ 				<visibleWhen
+                     checkEnabled="false">
+                  <test
+                        args="features:paperdeals"
+                        forcePluginActivation="true"
+                        property="com.mmxlabs.license.features.enablement">
+                  </test>
+               </visibleWhen>                  
+            </command>
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.paperdeals"
+                  label="Import paper deals"
                   style="push">
  				<visibleWhen
                      checkEnabled="false">
@@ -303,6 +321,11 @@
                name="Import settled prices from CSV">
          </command>
          <command
+               defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.paperdeals.ImportPaperDealsHandler"
+               id="com.mmxlabs.models.lng.scenario.import.wizards.paperdeals"
+               name="Import paper deals from CSV">
+         </command>
+         <command
                defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.holidaycalendars.ImportHolidayCalendarsHandler"
                id="com.mmxlabs.models.lng.scenario.import.wizards.holidaycalendars"
                name="Import holiday calendars from CSV">
@@ -311,6 +334,11 @@
                defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.pricingcalendars.ImportPricingCalendarsHandler"
                id="com.mmxlabs.models.lng.scenario.import.wizards.pricingcalendars"
                name="Import pricing calendars from CSV">
+         </command>
+         <command
+               defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.portcosts.ImportPortCostsHandler"
+               id="com.mmxlabs.models.lng.scenario.import.wizards.portcosts"
+               name="Import port costs from CSV">
          </command>
          <command
                defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.nominations.ImportNominationsHandler"
