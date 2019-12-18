@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -95,20 +96,20 @@ public class ViabilityTest extends AbstractMicroTestCase {
 		
 		for (ViabilityRow vr : model.getRows()) {
 			final ShippingOption so = vr.getShipping();
-			assert so != null;
+			Assertions.assertNotNull(so);
 			VesselAvailability va = null;
 			
 			if (so instanceof ExistingVesselCharterOption) {
 				va = ((ExistingVesselCharterOption)so).getVesselCharter();
 			}
 			
-			assert va != null;
+			Assertions.assertNotNull(va);
 			
 			final BuyOption bo = vr.getBuyOption();
 			if (bo instanceof BuyReference) {
 				final BuyReference br = (BuyReference) bo;
 				final LoadSlot ls = br.getSlot();
-				assert ls != null;
+				Assertions.assertNotNull(ls);
 				
 				Pair<LoadSlot,VesselAvailability> one = new Pair<LoadSlot, VesselAvailability>(ls, va);
 				
@@ -119,8 +120,8 @@ public class ViabilityTest extends AbstractMicroTestCase {
 					continue;
 				}
 				
-				assert actualResults.size() == inputResults.size();
-				assert doCheck(actualResults, inputResults);
+				Assertions.assertTrue( actualResults.size() == inputResults.size());
+				Assertions.assertTrue( doCheck(actualResults, inputResults));
 			}
 		}
 	}
