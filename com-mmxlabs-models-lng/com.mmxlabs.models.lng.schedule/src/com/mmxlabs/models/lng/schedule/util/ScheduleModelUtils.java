@@ -45,7 +45,7 @@ import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
  * TODO: {@link #getSegmentStart(Event)} and {@link #getSegmentEnd(Event)}
  * should be replaceable with the new {@link EventGrouping} interface.
  * 
- * @author sg
+ * @author sg & fm
  *
  */
 public class ScheduleModelUtils {
