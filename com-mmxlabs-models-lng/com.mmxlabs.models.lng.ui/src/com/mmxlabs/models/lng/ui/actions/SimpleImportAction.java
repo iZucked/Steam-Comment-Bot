@@ -10,14 +10,21 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.common.csv.FileCSVReader;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.util.Activator;
 import com.mmxlabs.models.util.importer.IClassImporter;
@@ -106,7 +113,20 @@ public class SimpleImportAction extends ImportAction {
 			reader = new FileCSVReader(new File(path), importHooksProvider.getCsvSeparator());
 			final Collection<EObject> importedObjects = importer.importObjects(containment.getEReferenceType(), reader, context);
 			context.run();
-			final Command cmd = mergeImports(container, containment, importedObjects);
+			final CompoundCommand cmd = new CompoundCommand();
+			cmd.append(mergeImports(container, containment, importedObjects));
+			
+			if (!cmd.isEmpty()) {
+				final MMXRootObject rootObject = context.getRootObject();
+				if (rootObject instanceof LNGScenarioModel) {
+						final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+						final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
+						if (scheduleModel != null) {
+							cmd.append(SetCommand.create(importHooksProvider.getEditingDomain(), scheduleModel, SchedulePackage.Literals.SCHEDULE_MODEL__DIRTY, Boolean.TRUE));
+						}
+				}
+			}
+			
 			importHooksProvider.getEditingDomain().getCommandStack().execute(cmd);
 		} catch (final IOException e) {
 			log.error(e.getMessage(), e);
