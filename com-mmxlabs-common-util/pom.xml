@@ -11,7 +11,7 @@
 		<groupId>com.mmxlabs.parent</groupId>
 		<artifactId>tycho-parent</artifactId>
 		<relativePath />
-		<version>40</version>
+		<version>41</version>
 	</parent>
 
 	<description>Project containing commonly used classes and utility functions.</description>
