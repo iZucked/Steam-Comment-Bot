@@ -225,5 +225,12 @@
             inheritable="true">
       </displayCompositeFactory>
    </extension>
+   
+   <extension point="com.mmxlabs.models.common.modelcommandprovider">
+    	<ModelCommandProvider
+          commandProvider="com.mmxlabs.models.lng.spotmarkets.editor.ui.commands.FOBPurchaseMarketUpdatingCommandProvider"
+          id="com.mmxlabs.models.lng.spotmarkets.editor.ui.commands.FOBPurchaseMarketUpdatingCommandProvider">
+    	</ModelCommandProvider>
+    </extension>
 
 </plugin>
