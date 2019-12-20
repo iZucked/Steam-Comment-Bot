@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.lng.cargo.editor;
 
-import java.time.LocalDate;
-import java.time.YearMonth;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;

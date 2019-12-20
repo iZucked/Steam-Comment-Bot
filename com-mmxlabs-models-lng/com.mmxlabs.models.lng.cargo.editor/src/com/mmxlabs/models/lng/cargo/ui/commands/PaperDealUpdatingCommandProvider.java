@@ -23,7 +23,7 @@ import com.mmxlabs.models.lng.cargo.PaperPricingType;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
- * @author Farukh
+ * @author Farukh Mukhamedov
  * 
  */
 public class PaperDealUpdatingCommandProvider implements IModelCommandProvider {
