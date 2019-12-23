@@ -132,7 +132,7 @@ public class EMFDeserializer<T extends EObject> extends StdDeserializer<T> {
 
 	}
 
-	private static EClass getEClass(final EClass outputEClass, final String kind) {
+	public static EClass getEClass(final EClass outputEClass, final String kind) {
 
 		if (kind == null) {
 			return outputEClass;
