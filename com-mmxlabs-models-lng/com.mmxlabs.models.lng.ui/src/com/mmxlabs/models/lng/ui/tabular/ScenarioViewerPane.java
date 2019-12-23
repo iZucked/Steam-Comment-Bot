@@ -86,7 +86,7 @@ public abstract class ScenarioViewerPane extends EMFViewerPane {
 			if (inSelectionChanged.compareAndSet(false, true)) {
 				try {
 					// Avoid cyclic selection changes
-					if (ScenarioViewerPane.this.page.getActivePart() == ScenarioViewerPane.this.part) {
+					if (ScenarioViewerPane.this.page == null || ScenarioViewerPane.this.page.getActivePart() == ScenarioViewerPane.this.part) {
 						return;
 					}
 					if (viewer != null) {
