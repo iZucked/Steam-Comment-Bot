@@ -7,7 +7,9 @@ package com.mmxlabs.models.lng.spotmarkets.util;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotType;
@@ -40,6 +42,16 @@ public class SpotMarketsModelFinder {
 		}
 		for (final SpotMarket spotMarket : markets) {
 			if (marketName.equals(spotMarket.getName())) {
+				return spotMarket;
+			}
+		}
+
+		return null;
+	}
+
+	public @Nullable CharterInMarket findCharterInMarket(final @NonNull String name) {
+		for (final CharterInMarket spotMarket : spotMarketsModel.getCharterInMarkets()) {
+			if (name.equals(spotMarket.getName())) {
 				return spotMarket;
 			}
 		}
