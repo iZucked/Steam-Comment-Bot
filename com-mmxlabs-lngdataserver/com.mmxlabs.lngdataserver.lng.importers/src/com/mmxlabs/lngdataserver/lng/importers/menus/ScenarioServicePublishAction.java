@@ -98,6 +98,10 @@ public class ScenarioServicePublishAction {
 			final Throwable cause = e.getCause();
 			if (cause instanceof PublishBasecaseException) {
 				final PublishBasecaseException publishBasecaseException = (PublishBasecaseException) cause;
+				String message = e.getMessage();
+				if (publishBasecaseException.getMessage() != null) {
+					message = publishBasecaseException.getMessage();
+				}
 				switch (publishBasecaseException.getType()) {
 				case FAILED_UNKNOWN_ERROR:
 					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUBLISHING,
@@ -124,13 +128,14 @@ public class ScenarioServicePublishAction {
 					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUBLISHING, "Failed to upload the base case scenario. Unable to publish as base case.");
 					break;
 				case FAILED_TO_GENERATE_REPORT:
-					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUBLISHING, e.getMessage() + " Unable to publish as base case.");
+					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUBLISHING, message + " Unable to publish as base case.");
 					break;
 				case FAILED_TO_UPLOAD_BACKING_DATA:
 					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUBLISHING, "Error uploading refernce data. Unable to publish as base case.");
 					break;
 				case FAILED_TO_UPLOAD_REPORT:
-					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUBLISHING, e.getMessage() + " Unable to publish as base case.");
+					
+					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUBLISHING, message + " Unable to publish as base case.");
 					break;
 				case FAILED_TO_MAKE_CURRENT:
 					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUBLISHING, "Base case uploaded but was unable to mark as current.");
