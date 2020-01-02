@@ -84,7 +84,7 @@ public class FragmentCopyHandler implements IScenarioFragmentCopyHandler {
 					try (IScenarioDataProvider targetSDP = targetRecord.aquireScenarioDataProvider("FragmentCopyHandler:2")) {
 
 						try {
-							OptionAnalysisModel model = copySandboxModelWithJSON(sourceSDP, sourceModel, targetSDP);
+							final OptionAnalysisModel model = copySandboxModelWithJSON(sourceSDP, sourceModel, targetSDP);
 							if (model != null) {
 								EvaluateSolutionSetHelper.recomputeSolution(targetRecord, targetRecord.getScenarioInstance(), model.getResults(), true, true);
 								return true;
@@ -102,15 +102,14 @@ public class FragmentCopyHandler implements IScenarioFragmentCopyHandler {
 
 	}
 
-	public static OptionAnalysisModel copySandboxModelWithJSON(IScenarioDataProvider sourceSDP, final OptionAnalysisModel sourceModel, IScenarioDataProvider targetSDP) throws JsonProcessingException {
-		String json = SharedScenarioDataUtils.createSandboxJSON(sourceSDP, sourceModel);
+	public static OptionAnalysisModel copySandboxModelWithJSON(final IScenarioDataProvider sourceSDP, final OptionAnalysisModel sourceModel, final IScenarioDataProvider targetSDP) throws JsonProcessingException {
+		final String json = SharedScenarioDataUtils.createSandboxJSON(sourceSDP, sourceModel);
 
-		final List<JSONReference> missingReferences = new LinkedList<>();
+		final List<Pair<JSONReference, String>> missingReferences = new LinkedList<>();
 		// Reference will be populated on successful command execution.
-		OptionAnalysisModel[] modelRef = new OptionAnalysisModel[1];
-		final BiConsumer<CompoundCommand, IScenarioDataProvider> updater = SharedScenarioDataUtils.createSandboxUpdater(json, ref -> {
-
-			missingReferences.add(ref);
+		final OptionAnalysisModel[] modelRef = new OptionAnalysisModel[1];
+		final BiConsumer<CompoundCommand, IScenarioDataProvider> updater = SharedScenarioDataUtils.createSandboxUpdater(json, (ref, lbl) -> {
+			missingReferences.add(Pair.of(ref, lbl));
 			return false;
 		}, modelRef);
 
@@ -119,7 +118,8 @@ public class FragmentCopyHandler implements IScenarioFragmentCopyHandler {
 		updater.accept(cmd, targetSDP);
 
 		final EditingDomain domain = targetSDP.getEditingDomain();
-		// final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(targetModel);
+		// final AnalyticsModel analyticsModel =
+		// ScenarioModelUtil.getAnalyticsModel(targetModel);
 		//
 		if (cmd.canExecute()) {
 			domain.getCommandStack().execute(cmd);
@@ -133,11 +133,14 @@ public class FragmentCopyHandler implements IScenarioFragmentCopyHandler {
 
 					final List<Status> ss = new LinkedList<>();
 					final Set<String> messages = new HashSet<>();
-					for (final JSONReference ref : missingReferences) {
-
-						final int idx = ref.getClassType().lastIndexOf('/');
-						final String type = (idx > 0) ? ref.getClassType().substring(idx + 1) : ref.getClassType();
-						messages.add(String.format("Missing %s: %s", type, ref.getName()));
+					for (final Pair<JSONReference, String> p : missingReferences) {
+						final JSONReference ref = p.getFirst();
+						String lbl = p.getSecond();
+						if (lbl == null) {
+							final int idx = ref.getClassType().lastIndexOf('/');
+							lbl = (idx > 0) ? ref.getClassType().substring(idx + 1) : ref.getClassType();
+						}
+						messages.add(String.format("Missing %s: %s", lbl, ref.getName()));
 					}
 					final String pluginId = FrameworkUtil.getBundle(FragmentCopyHandler.class).getSymbolicName();
 					messages.forEach(m -> ss.add(new Status(IStatus.ERROR, pluginId, m)));

@@ -44,7 +44,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.BeanDeserializerFactory;
-import com.mmxlabs.common.util.ToBooleanFunction;
+import com.mmxlabs.common.util.ToBooleanBiFunction;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lngdataserver.integration.distances.model.DistancesVersion;
 import com.mmxlabs.lngdataserver.integration.models.bunkerfuels.BunkerFuelsVersion;
@@ -1220,7 +1220,7 @@ public final class SharedScenarioDataUtils {
 		};
 	}
 
-	public static BiConsumer<CompoundCommand, IScenarioDataProvider> createSandboxUpdater(final String json, @Nullable ToBooleanFunction<JSONReference> missingReferenceHandler,
+	public static BiConsumer<CompoundCommand, IScenarioDataProvider> createSandboxUpdater(final String json, @Nullable ToBooleanBiFunction<JSONReference, @Nullable String> missingReferenceHandler,
 			OptionAnalysisModel[] ref) {
 
 		return (cmd, target) -> {
@@ -1311,7 +1311,7 @@ public final class SharedScenarioDataUtils {
 		};
 	}
 
-	public static BiConsumer<CompoundCommand, IScenarioDataProvider> createAbstractSolutionSetUpdater(final String json, @Nullable ToBooleanFunction<JSONReference> missingReferenceHandler,
+	public static BiConsumer<CompoundCommand, IScenarioDataProvider> createAbstractSolutionSetUpdater(final String json, @Nullable ToBooleanBiFunction<JSONReference, @Nullable String> missingReferenceHandler,
 			AbstractSolutionSet[] ref) {
 
 		return (cmd, target) -> {

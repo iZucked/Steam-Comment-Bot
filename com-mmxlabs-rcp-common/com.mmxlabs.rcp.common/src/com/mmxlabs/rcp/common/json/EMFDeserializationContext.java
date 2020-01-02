@@ -4,16 +4,27 @@
  */
 package com.mmxlabs.rcp.common.json;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.MissingResourceException;
 
+import org.eclipse.emf.common.notify.AdapterFactory;
+import org.eclipse.emf.common.util.ResourceLocator;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
+import org.eclipse.emf.edit.provider.IItemLabelProvider;
+import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationConfig;
@@ -23,15 +34,25 @@ import com.fasterxml.jackson.databind.deser.DeserializerCache;
 import com.fasterxml.jackson.databind.deser.DeserializerFactory;
 import com.fasterxml.jackson.databind.util.ClassUtil;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.util.ToBooleanFunction;
+import com.mmxlabs.common.util.ToBooleanBiFunction;
 
 public class EMFDeserializationContext extends DefaultDeserializationContext {
+
+	private static final ComposedAdapterFactory FACTORY = createAdapterFactory();
+
+	private static ComposedAdapterFactory createAdapterFactory() {
+		final List<AdapterFactory> factories = new ArrayList<>();
+		factories.add(new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE));
+		factories.add(new ReflectiveItemProviderAdapterFactory());
+		return new ComposedAdapterFactory(factories);
+	}
+
 	private class State {
 		final List<Runnable> actions = new LinkedList<>();
 		final Map<Pair<String, String>, Object> nameMap = new HashMap<>();
 		final Map<Pair<String, String>, Object> idMap = new HashMap<>();
 		final Collection<EStructuralFeature> ignoredFeatures = new HashSet<>();
-		ToBooleanFunction<JSONReference> missingReferenceHandler = ref -> Boolean.TRUE;
+		ToBooleanBiFunction<JSONReference, @Nullable String> missingReferenceHandler = (ref, lbl) -> Boolean.TRUE;
 	}
 
 	private final State state;
@@ -40,7 +61,7 @@ public class EMFDeserializationContext extends DefaultDeserializationContext {
 		state.ignoredFeatures.add(feature);
 	}
 
-	public void setMissingFeatureHandler(final ToBooleanFunction<JSONReference> missingReferenceHandler) {
+	public void setMissingFeatureHandler(final ToBooleanBiFunction<JSONReference, @Nullable String> missingReferenceHandler) {
 		state.missingReferenceHandler = missingReferenceHandler;
 	}
 
@@ -89,33 +110,43 @@ public class EMFDeserializationContext extends DefaultDeserializationContext {
 			state.actions.add(() -> {
 				final Object referenceObject = lookupType(ref);
 				if (referenceObject == null) {
-					if (state.missingReferenceHandler.accept(ref)) {
-						throw new IllegalArgumentException();
-					}
-					// if (true) {
-					// } else {
-					// System.out.println("Unknown reference " + ref.getName() + " " + ref.getGlobalId() + " " + ref.getClassType());
-					// }
+					handleMissingReference(ref, feature);
+				} else {
+					((List) owner.eGet(feature)).add(referenceObject);
 				}
-
-				((List) owner.eGet(feature)).add(referenceObject);
 			});
 		} else {
 			state.actions.add(() -> {
 
 				final Object referenceObject = lookupType(ref);
 				if (referenceObject == null) {
-					if (state.missingReferenceHandler.accept(ref)) {
-						throw new IllegalArgumentException();
-					}
-					// if (true) {
-					// } else {
-					// System.out.println("Unknown reference " + ref.getName() + " " + ref.getGlobalId() + " " + ref.getClassType());
-					// }
+					handleMissingReference(ref, feature);
+				} else {
+					owner.eSet(feature, referenceObject);
 				}
-
-				owner.eSet(feature, referenceObject);
 			});
+		}
+	}
+
+	private void handleMissingReference(final JSONReference ref, final EReference feature) {
+		// TODO: Maybe we should just pass in the reference to the missing feature
+		// handler and make this a util method?
+		String typeLabel = null;
+		try {
+
+			final int idx = ref.getClassType().lastIndexOf('/');
+			final String type = (idx > 0) ? ref.getClassType().substring(idx + 1) : ref.getClassType();
+			EClass eClass = EMFDeserializer.getEClass(feature.getEReferenceType(), type);
+			ResourceLocator rl = findResourceLocator(eClass.getEPackage());
+			if (rl != null) {
+				typeLabel = rl.getString(String.format("_UI_%s_type", eClass.getName()));
+			}
+
+		} catch (MissingResourceException e) {
+
+		}
+		if (state.missingReferenceHandler.accept(ref, typeLabel)) {
+			throw new IllegalArgumentException();
 		}
 	}
 
@@ -127,7 +158,8 @@ public class EMFDeserializationContext extends DefaultDeserializationContext {
 	}
 
 	/**
-	 * Default constructor for a blueprint object, which will use the standard {@link DeserializerCache}, given factory.
+	 * Default constructor for a blueprint object, which will use the standard
+	 * {@link DeserializerCache}, given factory.
 	 */
 	public EMFDeserializationContext(final DeserializerFactory df) {
 		super(df, null);
@@ -167,4 +199,41 @@ public class EMFDeserializationContext extends DefaultDeserializationContext {
 		return new EMFDeserializationContext(this, factory);
 	}
 
-};
+	// Pulled from gmf-runtime
+	// https://github.com/eclipse/gmf-runtime/blob/master/org.eclipse.gmf.runtime.emf.core/src/org/eclipse/gmf/runtime/emf/core/internal/util/MetamodelManager.java
+	private static ResourceLocator findResourceLocator(EPackage pkg) {
+		ResourceLocator result = null;
+
+		// the composed adapter factory has a registry of pairs by EPackage
+		// and adapter class
+		List<Object> types = new java.util.ArrayList<>(2);
+		types.add(pkg);
+		types.add(IItemLabelProvider.class);
+
+		AdapterFactory factory = FACTORY.getFactoryForTypes(types);
+
+		if (factory != null) {
+			// find some EClass to instantiate to get an item provider for it
+			EObject instance = null;
+
+			for (Iterator<?> iter = pkg.getEClassifiers().iterator(); iter.hasNext();) {
+				Object next = iter.next();
+
+				if ((next instanceof EClass) && !((EClass) next).isAbstract()) {
+					instance = pkg.getEFactoryInstance().create((EClass) next);
+					break;
+				}
+			}
+
+			if (instance != null) {
+				Object adapter = factory.adapt(instance, IItemLabelProvider.class);
+
+				if (adapter instanceof ResourceLocator) {
+					result = (ResourceLocator) adapter;
+				}
+			}
+		}
+
+		return result;
+	}
+}
