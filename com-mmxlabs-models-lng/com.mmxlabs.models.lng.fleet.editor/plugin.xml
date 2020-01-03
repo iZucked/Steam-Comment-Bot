@@ -103,6 +103,12 @@
           id="com.mmxlabs.models.lng.fleet.editor.attributesDisplayCompositeFactory"
           inheritable="true">
     </displayCompositeFactory>
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.fleet.Vessel"
+          factory="com.mmxlabs.models.lng.fleet.ui.displaycomposites.FillCapacityDisplayCompositeFactory"
+          id="com.mmxlabs.models.lng.fleet.editor.FillCapacityCompositeFactory"
+          inheritable="true">
+    </displayCompositeFactory>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.modelfactories">

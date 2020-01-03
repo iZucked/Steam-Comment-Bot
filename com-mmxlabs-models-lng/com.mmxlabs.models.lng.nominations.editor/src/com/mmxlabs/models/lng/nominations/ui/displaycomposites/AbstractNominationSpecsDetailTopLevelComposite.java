@@ -1,9 +1,8 @@
-package com.mmxlabs.models.lng.nominations.ui.displaycomposites;
 /**
  * Copyright (C) Minimax Labs Ltd., 2010 - 2019
  * All rights reserved.
  */
-
+package com.mmxlabs.models.lng.nominations.ui.displaycomposites;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -15,14 +14,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite;
-import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite.ChildCompositeContainer;
 
-/**
- * A display composite to show a commodity index (not including its DataIndex children)
- * 
- * @author Simon McGregor
- * 
- */
 public class AbstractNominationSpecsDetailTopLevelComposite extends DefaultTopLevelComposite {
 
 	public AbstractNominationSpecsDetailTopLevelComposite(final Composite parent, final int style, final IDialogEditingContext dialogContext, final FormToolkit toolkit) {
