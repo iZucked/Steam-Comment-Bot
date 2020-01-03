@@ -64,7 +64,7 @@ public class VesselComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editors for features on this class directly, and superclass' features.
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
@@ -75,6 +75,7 @@ public class VesselComponentHelper extends BaseComponentHelper {
 		add_referenceEditor(detailComposite, topClass);
 		add_capacityEditor(detailComposite, topClass);
 		add_fillCapacityEditor(detailComposite, topClass);
+		add_fillVolumeReadOnlyEditor(detailComposite, topClass);
 		add_scntEditor(detailComposite, topClass);
 		add_baseFuelEditor(detailComposite, topClass);
 		add_inPortBaseFuelEditor(detailComposite, topClass);
@@ -174,6 +175,15 @@ public class VesselComponentHelper extends BaseComponentHelper {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL__FILL_CAPACITY));
 	}
 
+	/**
+	 * Create the editor for the fillCapacity feature on Vessel
+	 *
+	 * @generated
+	 */
+	protected void add_fillVolumeReadOnlyEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(new VesselFillVolumeInlineEditor(FleetPackage.Literals.VESSEL__CAPACITY));
+	}
+	
 	/**
 	 * Create the editor for the ladenAttributes feature on Vessel
 	 *
