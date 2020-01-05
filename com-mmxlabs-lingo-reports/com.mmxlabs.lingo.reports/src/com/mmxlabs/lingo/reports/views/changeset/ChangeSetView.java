@@ -629,6 +629,7 @@ public class ChangeSetView extends ViewPart {
 
 				selectedElements.add(rowData);
 				selectedElements.add(rowData.getLoadSlot());
+				selectedElements.add(rowData.getDischargeSlot());
 				if (rowData.getLoadAllocation() != null) {
 					selectedElements.add(rowData.getLoadAllocation());
 					SlotVisit slotVisit = rowData.getLoadAllocation().getSlotVisit();

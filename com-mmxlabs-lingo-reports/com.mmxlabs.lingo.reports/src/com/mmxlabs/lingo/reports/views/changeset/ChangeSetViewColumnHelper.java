@@ -69,6 +69,8 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
 import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
 import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.nominations.utils.NominationsModelUtils;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
@@ -116,7 +118,9 @@ public class ChangeSetViewColumnHelper {
 	private GridViewerColumn violationColumn;
 
 	private GridViewerColumn latenessColumn;
-
+	
+	private GridViewerColumn nominationBreaksColumn;
+	
 	private ChangeSetWiringDiagram diagram;
 
 	public ChangeSetWiringDiagram getDiagram() {
@@ -128,7 +132,7 @@ public class ChangeSetViewColumnHelper {
 	private GridViewerColumn column_Lateness;
 
 	private GridViewerColumn column_Violations;
-
+	
 	/**
 	 * Display textual vessel change markers - used for unit testing where graphics are not captured in data dump.
 	 */
@@ -454,8 +458,9 @@ public class ChangeSetViewColumnHelper {
 			this.violationColumn = column_Violations;
 
 			this.violationColumn.getColumn().setVisible(showCompareColumns);
-
 		}
+
+		createNominationBreaksColumn();
 
 		// Space col
 		createSpacerColumn();
@@ -603,6 +608,17 @@ public class ChangeSetViewColumnHelper {
 			gvc.getColumn().setCellRenderer(createCellRenderer());
 		}
 
+	}
+
+	private void createNominationBreaksColumn() {
+		nominationBreaksColumn = new GridViewerColumn(viewer, SWT.CENTER);
+		nominationBreaksColumn.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
+		nominationBreaksColumn.getColumn().setText("#Nomination Breaks");
+		nominationBreaksColumn.getColumn().setHeaderTooltip("Number of nominations potentially affected.");
+		nominationBreaksColumn.getColumn().setWidth(50);
+		nominationBreaksColumn.setLabelProvider(createNominationBreaksLabelProvider());
+		nominationBreaksColumn.getColumn().setCellRenderer(createCellRenderer());
+		nominationBreaksColumn.getColumn().setVisible(showCompareColumns);
 	}
 
 	public static class VesselData {
@@ -1422,6 +1438,66 @@ public class ChangeSetViewColumnHelper {
 
 	}
 
+	private CellLabelProvider createNominationBreaksLabelProvider() {
+		return new CellLabelProvider() {
+
+			@Override
+			public String getToolTipText(final Object element) {
+				if (element instanceof ChangeSetTableRow) {
+					return getNominationBreaks((ChangeSetTableRow)element);
+				}
+				return super.getToolTipText(element);
+			}
+			
+			@Override
+			public void update(ViewerCell cell) {
+				final Object element = cell.getElement();
+				cell.setText("");
+				cell.setForeground(null);
+				cell.setFont(boldFont);
+
+				if (element instanceof ChangeSetTableGroup) {
+					cell.setText(getNominationBreaks((ChangeSetTableGroup)element));	
+				}
+				if (element instanceof ChangeSetTableRow) {					
+					cell.setText(getNominationBreaks((ChangeSetTableRow)element));
+				}
+			}
+		};		
+	}
+	
+	private String getNominationBreaks(ChangeSetTableGroup change) {
+		int cnt = 0;
+		LNGScenarioModel sm = (LNGScenarioModel)change.getBaseScenario().getResultRoot().eContainer();
+		for (ChangeSetTableRow row : change.getRows()) {
+			cnt += getNominationBreakCount(row);
+		}
+		if (cnt > 0) {
+			return Integer.toString(cnt);
+		}
+		else {
+			return "";
+		}
+	}
+	
+	private String getNominationBreaks(ChangeSetTableRow change) {
+		int cnt = getNominationBreakCount(change);
+		if (cnt > 0) {
+			return Integer.toString(cnt);
+		}
+		else {
+			return "";
+		}
+	}
+
+	private int getNominationBreakCount(ChangeSetTableRow change) {
+		int cnt = 0;
+		LNGScenarioModel sm = (LNGScenarioModel)((ChangeSetTableGroup)change.eContainer()).getBaseScenario().getResultRoot().eContainer();
+		cnt += NominationsModelUtils.findNominationsForSlot(sm, change.getLhsName()).size();
+		cnt += NominationsModelUtils.findNominationsForSlot(sm, change.getRhsName()).size();
+		return cnt;
+	}
+	
 	private CellLabelProvider createViolationsDeltaLabelProvider() {
 		return new CellLabelProvider() {
 
