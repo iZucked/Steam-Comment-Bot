@@ -10,7 +10,7 @@ package com.mmxlabs.lingo.reports.views.changeset;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -69,6 +69,7 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
 import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
 import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.nominations.AbstractNomination;
 import com.mmxlabs.models.lng.nominations.utils.NominationsModelUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
@@ -613,7 +614,7 @@ public class ChangeSetViewColumnHelper {
 	private void createNominationBreaksColumn() {
 		nominationBreaksColumn = new GridViewerColumn(viewer, SWT.CENTER);
 		nominationBreaksColumn.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
-		nominationBreaksColumn.getColumn().setText("#Nomination Breaks");
+		nominationBreaksColumn.getColumn().setText("Noms");
 		nominationBreaksColumn.getColumn().setHeaderTooltip("Number of nominations potentially affected.");
 		nominationBreaksColumn.getColumn().setWidth(50);
 		nominationBreaksColumn.setLabelProvider(createNominationBreaksLabelProvider());
@@ -1444,7 +1445,7 @@ public class ChangeSetViewColumnHelper {
 			@Override
 			public String getToolTipText(final Object element) {
 				if (element instanceof ChangeSetTableRow) {
-					return getNominationBreaks((ChangeSetTableRow)element);
+					return getNominationBreaksDetail((ChangeSetTableRow)element);
 				}
 				return super.getToolTipText(element);
 			}
@@ -1490,6 +1491,35 @@ public class ChangeSetViewColumnHelper {
 		}
 	}
 
+	private String getNominationBreaksDetail(ChangeSetTableRow change) {
+		StringBuilder sb = new StringBuilder();
+		LNGScenarioModel sm = (LNGScenarioModel)((ChangeSetTableGroup)change.eContainer()).getBaseScenario().getResultRoot().eContainer();
+		addNominations(sm, change.getLhsName(), sb);
+		addNominations(sm, change.getRhsName(), sb);
+		if (sb.length() == 0) {
+			return null;
+		}
+		else {
+			return sb.toString();
+		}
+	}
+
+	private void addNominations(LNGScenarioModel sm, String slotName, StringBuilder sb) {
+		List<AbstractNomination> noms = NominationsModelUtils.findNominationsForSlot(sm, slotName);
+		if (!noms.isEmpty()) {
+			if (sb.length() > 0) {
+				sb.append("\n");
+			}
+			sb.append(slotName).append(": ");
+			for (var n : noms) {
+				if (sb.charAt(sb.length()-2) != ':') {
+					sb.append(", ");
+				}
+				sb.append(n.getType());
+			}
+		}
+	}
+		
 	private int getNominationBreakCount(ChangeSetTableRow change) {
 		int cnt = 0;
 		LNGScenarioModel sm = (LNGScenarioModel)((ChangeSetTableGroup)change.eContainer()).getBaseScenario().getResultRoot().eContainer();
@@ -1497,7 +1527,7 @@ public class ChangeSetViewColumnHelper {
 		cnt += NominationsModelUtils.findNominationsForSlot(sm, change.getRhsName()).size();
 		return cnt;
 	}
-	
+
 	private CellLabelProvider createViolationsDeltaLabelProvider() {
 		return new CellLabelProvider() {
 
