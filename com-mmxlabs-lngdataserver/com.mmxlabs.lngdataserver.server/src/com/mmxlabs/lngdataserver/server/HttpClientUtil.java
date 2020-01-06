@@ -6,6 +6,7 @@ package com.mmxlabs.lngdataserver.server;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.KeyStore;
@@ -18,8 +19,11 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.CertificateParsingException;
 import java.security.cert.X509Certificate;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -33,6 +37,7 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
+import javax.swing.text.html.CSS;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.slf4j.Logger;
@@ -41,8 +46,16 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.license.ssl.LicenseChecker;
 
+import okhttp3.CipherSuite;
+import okhttp3.ConnectionSpec;
+import okhttp3.Handshake;
+import okhttp3.Interceptor;
+import okhttp3.Interceptor.Chain;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.TlsVersion;
 import okhttp3.internal.tls.OkHostnameVerifier;
 
 public class HttpClientUtil {
@@ -54,7 +67,7 @@ public class HttpClientUtil {
 
 	private static boolean disableSSLHostnameCheck = true;
 
-	public static void setDisableSSLHostnameCheck(boolean b) {
+	public static void setDisableSSLHostnameCheck(final boolean b) {
 		disableSSLHostnameCheck = b;
 	}
 
@@ -66,7 +79,7 @@ public class HttpClientUtil {
 		builder.hostnameVerifier(new HostnameVerifier() {
 
 			@Override
-			public boolean verify(String hostname, SSLSession session) {
+			public boolean verify(final String hostname, final SSLSession session) {
 
 				if (!disableSSLHostnameCheck) {
 					return OkHostnameVerifier.INSTANCE.verify(hostname, session);
@@ -111,7 +124,7 @@ public class HttpClientUtil {
 							try (FileInputStream inStream = new FileInputStream(certFile)) {
 								final CertificateFactory factory = CertificateFactory.getInstance("X.509");
 								final X509Certificate cert = (X509Certificate) factory.generateCertificate(inStream);
-								CertInfo info = CertInfo.from(cert);
+								final CertInfo info = CertInfo.from(cert);
 								info.filename = certFile.getAbsolutePath();
 								infos.add(info);
 							} catch (final Exception e) {
@@ -127,14 +140,14 @@ public class HttpClientUtil {
 			final String userHome = System.getProperty("eclipse.home.location");
 			if (userHome != null) {
 				try {
-					File f = new File(new URI(userHome + "/cacerts/"));
+					final File f = new File(new URI(userHome + "/cacerts/"));
 					if (f.exists() && f.isDirectory()) {
 						for (final File certFile : f.listFiles()) {
 							if (certFile.isFile()) {
 								try (FileInputStream inStream = new FileInputStream(certFile)) {
 									final CertificateFactory factory = CertificateFactory.getInstance("X.509");
 									final X509Certificate cert = (X509Certificate) factory.generateCertificate(inStream);
-									CertInfo info = CertInfo.from(cert);
+									final CertInfo info = CertInfo.from(cert);
 									info.filename = certFile.getAbsolutePath();
 									infos.add(info);
 								} catch (final Exception e) {
@@ -206,7 +219,7 @@ public class HttpClientUtil {
 		public String validity;
 		public String thumbprint;
 
-		public static CertInfo from(X509Certificate cert) {
+		public static CertInfo from(final X509Certificate cert) {
 			final CertInfo certInfo = new CertInfo();
 			certInfo.subject = cert.getSubjectDN().toString();
 			certInfo.serial = cert.getSerialNumber().toString();
@@ -215,7 +228,7 @@ public class HttpClientUtil {
 				certInfo.altNames = cert.getSubjectAlternativeNames() == null ? ""
 						: cert.getSubjectAlternativeNames().stream() //
 								.map(Object::toString).collect(Collectors.joining(", "));
-			} catch (CertificateParsingException e) {
+			} catch (final CertificateParsingException e) {
 				e.printStackTrace();
 			}
 			try {
@@ -230,10 +243,10 @@ public class HttpClientUtil {
 
 		private static final char[] hexArray = "0123456789abcdef".toCharArray();
 
-		private static String bytesToHex(byte[] bytes) {
-			char[] hexChars = new char[bytes.length * 2];
+		private static String bytesToHex(final byte[] bytes) {
+			final char[] hexChars = new char[bytes.length * 2];
 			for (int j = 0; j < bytes.length; j++) {
-				int v = bytes[j] & 0xFF;
+				final int v = bytes[j] & 0xFF;
 				hexChars[j * 2] = hexArray[v >>> 4];
 				hexChars[j * 2 + 1] = hexArray[v & 0x0F];
 			}
@@ -242,7 +255,7 @@ public class HttpClientUtil {
 
 		@Override
 		public @NonNull String toString() {
-			StringBuilder sb = new StringBuilder();
+			final StringBuilder sb = new StringBuilder();
 
 			if (this.filename != null) {
 				sb.append("Filename: " + this.filename + "\n");
@@ -278,5 +291,99 @@ public class HttpClientUtil {
 		public void checkServerTrusted(final X509Certificate[] chain, final String authType) throws CertificateException {
 
 		}
+	}
+
+	public static boolean extractSSLCompatibilityFromHost(final String url, final BiConsumer<TlsVersion, CipherSuite> action) throws Exception {
+
+		if (!url.startsWith("https://")) {
+			return false;
+		}
+
+		// Modern is the default in okhttp.
+		for (final ConnectionSpec spec : new ConnectionSpec[] { ConnectionSpec.MODERN_TLS }) {
+
+			for (final TlsVersion tlsVersion : spec.tlsVersions()) {
+				for (final CipherSuite cipherSuite : spec.cipherSuites()) {
+					if (checkCompatibility(url, spec, tlsVersion, cipherSuite)) {
+						action.accept(tlsVersion, cipherSuite);
+					}
+				}
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Method to extract the selected protocol and cipher for the request.
+	 * 
+	 * @param url
+	 * @param selectedTlsVersion
+	 *            Output - expected length = 1
+	 * @param selectedCipher
+	 *            Output - expected length = 1
+	 * @return
+	 */
+	public static boolean getSelectedProtocolAndVersion(final String url, final TlsVersion[] selectedTlsVersion, final CipherSuite[] selectedCipher) {
+
+		final OkHttpClient.Builder builder = CLIENT.newBuilder();
+
+		// Ignore any hostname issues here
+		builder.hostnameVerifier((hostname, session) -> Boolean.TRUE);
+
+		builder.addInterceptor(new Interceptor() {
+
+			@Override
+			public Response intercept(final Chain chain) throws IOException {
+				final Response response = chain.proceed(chain.request());
+				if (response != null) {
+					final Handshake handshake = response.handshake();
+					if (handshake != null) {
+						selectedCipher[0] = handshake.cipherSuite();
+						selectedTlsVersion[0] = handshake.tlsVersion();
+					}
+				}
+				return response;
+			}
+		});
+
+		final OkHttpClient client = builder.build();
+		final Request request = new Request.Builder().url(url).get().build();
+
+		try (Response response = client.newCall(request).execute()) {
+			return true;
+		} catch (final Exception e) {
+			// Log.e("error", e.toString());
+		}
+		return false;
+	}
+
+	private static boolean checkCompatibility(final String url, final ConnectionSpec connectionSpec, final TlsVersion tlsVersion, final CipherSuite cipherSuite) {
+
+		final OkHttpClient.Builder builder = CLIENT.newBuilder();
+
+		// Ignore any hostname issues here
+		builder.hostnameVerifier(new HostnameVerifier() {
+
+			@Override
+			public boolean verify(final String hostname, final SSLSession session) {
+				return true;
+			}
+		});
+
+		final ConnectionSpec spec = new ConnectionSpec.Builder(connectionSpec) //
+				.tlsVersions(tlsVersion) //
+				.cipherSuites(cipherSuite) //
+				.build();
+		builder.connectionSpecs(Collections.singletonList(spec));
+
+		final Request request = new Request.Builder().url(url).get().build();
+
+		final OkHttpClient client = builder.build();
+		try (Response response = client.newCall(request).execute()) {
+			return true;
+		} catch (final Exception e) {
+			// e.printStackTrace();
+		}
+		return false;
 	}
 }

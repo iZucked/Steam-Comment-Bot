@@ -6,12 +6,12 @@ package com.mmxlabs.lngdataserver.server.preferences;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLPeerUnverifiedException;
-import javax.net.ssl.SSLSession;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -19,12 +19,14 @@ import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
@@ -37,9 +39,11 @@ import com.mmxlabs.lngdataserver.server.DataServerActivator;
 import com.mmxlabs.lngdataserver.server.HttpClientUtil;
 import com.mmxlabs.lngdataserver.server.HttpClientUtil.CertInfo;
 
+import okhttp3.CipherSuite;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.TlsVersion;
 
 public class DataserverPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
@@ -52,19 +56,19 @@ public class DataserverPreferencePage extends FieldEditorPreferencePage implemen
 	@Override
 	protected void createFieldEditors() {
 
-		StringFieldEditor editor = new StringFieldEditor(StandardDateRepositoryPreferenceConstants.P_URL_KEY, "&URL", getFieldEditorParent());
+		final StringFieldEditor editor = new StringFieldEditor(StandardDateRepositoryPreferenceConstants.P_URL_KEY, "&URL", getFieldEditorParent());
 		addField(editor);
 		addField(new BooleanFieldEditor(StandardDateRepositoryPreferenceConstants.P_ENABLE_BASE_CASE_SERVICE_KEY, "&Base case sharing", getFieldEditorParent()));
 		if (LicenseFeatures.isPermitted("features:hub-team-folder")) {
 			addField(new BooleanFieldEditor(StandardDateRepositoryPreferenceConstants.P_ENABLE_TEAM_SERVICE_KEY, "&Team folder", getFieldEditorParent()));
 		}
 
-		ExpandableComposite debugCompositeParent = new ExpandableComposite(getFieldEditorParent(), ExpandableComposite.TWISTIE);
+		final ExpandableComposite debugCompositeParent = new ExpandableComposite(getFieldEditorParent(), ExpandableComposite.TWISTIE);
 		debugCompositeParent.setExpanded(false);
 		debugCompositeParent.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).grab(true, true).create());
 		debugCompositeParent.setLayout(new FillLayout());
 		debugCompositeParent.setText("SSL Info");
-		Composite debugComposite = new Composite(debugCompositeParent, SWT.BORDER);
+		final Composite debugComposite = new Composite(debugCompositeParent, SWT.BORDER);
 
 		debugCompositeParent.setClient(debugComposite);
 		debugComposite.setLayout(new GridLayout(2, false));
@@ -72,25 +76,25 @@ public class DataserverPreferencePage extends FieldEditorPreferencePage implemen
 		debugCompositeParent.addExpansionListener(new IExpansionListener() {
 
 			@Override
-			public void expansionStateChanging(ExpansionEvent e) {
+			public void expansionStateChanging(final ExpansionEvent e) {
 				// Nothing to do
 			}
 
 			@Override
-			public void expansionStateChanged(ExpansionEvent e) {
+			public void expansionStateChanged(final ExpansionEvent e) {
 				debugComposite.layout();
 			}
 		});
 
 		addField(new BooleanFieldEditor(StandardDateRepositoryPreferenceConstants.P_DISABLE_SSL_HOSTNAME_CHECK, "Disable hostname checks (Apply changes to test)", debugComposite));
 
-		Button btn3 = new Button(debugComposite, SWT.PUSH);
+		final Button btn3 = new Button(debugComposite, SWT.PUSH);
 		btn3.setText("Check connection");
 		btn3.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).create());
 		btn3.addSelectionListener(new SelectionListener() {
 
 			@Override
-			public void widgetSelected(SelectionEvent se) {
+			public void widgetSelected(final SelectionEvent se) {
 
 				String url = editor.getStringValue();
 				if (url == null || url.isEmpty()) {
@@ -113,7 +117,7 @@ public class DataserverPreferencePage extends FieldEditorPreferencePage implemen
 					return;
 				}
 
-				OkHttpClient client = HttpClientUtil.basicBuilder().build();
+				final OkHttpClient client = HttpClientUtil.basicBuilder().build();
 
 				try (final Response pingResponse = client.newCall(pingRequest).execute()) {
 					if (pingResponse.isSuccessful()) {
@@ -140,72 +144,138 @@ public class DataserverPreferencePage extends FieldEditorPreferencePage implemen
 			}
 
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
+			public void widgetDefaultSelected(final SelectionEvent e) {
 
 			}
 		});
 
-		Button btn = new Button(debugComposite, SWT.PUSH);
-		btn.setText("Check Remote SSL");
-		btn.setLayoutData(GridDataFactory.fillDefaults().span(1, 1).create());
+		final Button btnCheckRemoteSSL = new Button(debugComposite, SWT.PUSH);
+		btnCheckRemoteSSL.setText("Check Remote SSL");
+		btnCheckRemoteSSL.setLayoutData(GridDataFactory.fillDefaults().span(1, 1).create());
 
-		Button btn2 = new Button(debugComposite, SWT.PUSH);
-		btn2.setText("Check Local certificates");
-		btn2.setLayoutData(GridDataFactory.fillDefaults().span(1, 1).create());
+		final Button btnCheckLocalSSL = new Button(debugComposite, SWT.PUSH);
+		btnCheckLocalSSL.setText("Check Local certificates");
+		btnCheckLocalSSL.setLayoutData(GridDataFactory.fillDefaults().span(1, 1).create());
 
-		Text lbl = new Text(debugComposite, SWT.MULTI | SWT.V_SCROLL | SWT.BORDER | SWT.WRAP);
+		final Button btnCheckHubSSLCompatibility = new Button(debugComposite, SWT.PUSH);
+		btnCheckHubSSLCompatibility.setText("Check remote SSL compatibility");
+		btnCheckHubSSLCompatibility.setLayoutData(GridDataFactory.fillDefaults().span(1, 1).create());
+
+		final Text lbl = new Text(debugComposite, SWT.MULTI | SWT.V_SCROLL | SWT.BORDER | SWT.WRAP);
 		lbl.setText("");
 		lbl.setLayoutData(GridDataFactory.fillDefaults().span(2, 5).minSize(250, 300).hint(250, 300).create());
 
-		btn.addSelectionListener(new SelectionListener() {
+		btnCheckRemoteSSL.addSelectionListener(new SelectionListener() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				try {
-					List<CertInfo> infos = HttpClientUtil.extractSSLInfoFromHost(editor.getStringValue());
+					final List<CertInfo> infos = HttpClientUtil.extractSSLInfoFromHost(editor.getStringValue());
 
-					StringBuilder sb = new StringBuilder();
+					final StringBuilder sb = new StringBuilder();
 					int counter = 1;
-					for (CertInfo info : infos) {
+					for (final CertInfo info : infos) {
 						sb.append("Certificate " + counter++ + "\n");
 						sb.append(info);
 						sb.append("\n");
 					}
 					lbl.setText(sb.toString());
-				} catch (Exception e1) {
+				} catch (final Exception e1) {
 					e1.printStackTrace();
 				}
 
 			}
 
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
+			public void widgetDefaultSelected(final SelectionEvent e) {
 
 			}
 		});
-		btn2.addSelectionListener(new SelectionListener() {
+		btnCheckLocalSSL.addSelectionListener(new SelectionListener() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				try {
-					List<CertInfo> infos = HttpClientUtil.extractSSLInfoFromLocalStore();
+					final List<CertInfo> infos = HttpClientUtil.extractSSLInfoFromLocalStore();
 
-					StringBuilder sb = new StringBuilder();
+					final StringBuilder sb = new StringBuilder();
 					int counter = 1;
-					for (CertInfo info : infos) {
+					for (final CertInfo info : infos) {
 						sb.append("Certificate " + counter++ + "\n");
 						sb.append(info);
 						sb.append("\n");
 					}
 					lbl.setText(sb.toString());
-				} catch (Exception e1) {
+				} catch (final Exception e1) {
 					e1.printStackTrace();
 				}
 
 			}
 
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
+			public void widgetDefaultSelected(final SelectionEvent e) {
+
+			}
+		});
+
+		btnCheckHubSSLCompatibility.addSelectionListener(new SelectionListener() {
+
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+
+				final StringBuilder sb = new StringBuilder();
+
+				BusyIndicator.showWhile(Display.getCurrent(), () -> {
+					final String url = editor.getStringValue();
+
+					if (!url.startsWith("https://")) {
+						sb.append("Invalid https URL");
+						return;
+					}
+
+					final CipherSuite[] selectedCipher = new CipherSuite[1];
+					final TlsVersion[] selectedTlsVersion = new TlsVersion[1];
+					HttpClientUtil.getSelectedProtocolAndVersion(url, selectedTlsVersion, selectedCipher);
+
+					if (selectedCipher[0] != null && selectedTlsVersion[0] != null) {
+						sb.append("Selected TLS Version: ");
+						sb.append(selectedTlsVersion[0]);
+						sb.append("\n\n");
+						sb.append("Selected Cipher Version: ");
+						sb.append(selectedCipher[0]);
+						sb.append("\n\n");
+					}
+
+					try {
+
+						final Set<TlsVersion> supportedVersion = new HashSet<>();
+						final Set<CipherSuite> supportedCiphers = new HashSet<>();
+						HttpClientUtil.extractSSLCompatibilityFromHost(url, (tlsVersion, cipher) -> {
+							supportedVersion.add(tlsVersion);
+							supportedCiphers.add(cipher);
+						});
+						sb.append("Supported TLS Versions\n");
+						for (final TlsVersion info : supportedVersion) {
+							sb.append(info);
+							sb.append("\n");
+						}
+						sb.append("\n");
+						sb.append("Supported Ciphers\n");
+						for (final CipherSuite info : supportedCiphers) {
+							sb.append(info);
+							sb.append("\n");
+						}
+					} catch (final Exception e1) {
+						e1.printStackTrace();
+					}
+				});
+
+				lbl.setText(sb.toString());
+
+			}
+
+			@Override
+			public void widgetDefaultSelected(final SelectionEvent e) {
 
 			}
 		});
@@ -213,7 +283,7 @@ public class DataserverPreferencePage extends FieldEditorPreferencePage implemen
 	}
 
 	@Override
-	public void init(IWorkbench workbench) {
+	public void init(final IWorkbench workbench) {
 
 	}
 
