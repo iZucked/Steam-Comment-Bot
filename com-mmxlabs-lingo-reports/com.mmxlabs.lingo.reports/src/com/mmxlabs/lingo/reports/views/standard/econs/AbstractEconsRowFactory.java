@@ -217,7 +217,7 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 			} else if (object instanceof EndEvent) {
 				final EndEvent endEvent = (EndEvent) object;
 				return helper.apply(endEvent);
-			}  else if (object instanceof VesselEvent) {
+			} else if (object instanceof VesselEvent) {
 				final VesselEvent vesselEvent = (VesselEvent) object;
 				return helper.apply(vesselEvent);
 			} else if (object instanceof GeneratedCharterOut) {
@@ -263,7 +263,7 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 			}
 		}, transformer);
 	}
-	
+
 	protected @NonNull ICellRenderer createDoubleDaysFormatter(final EconsOptions options, final boolean isCost, final Function<Object, @Nullable Double> transformer) {
 		return createBasicFormatter(options, isCost, Double.class, new Function<Double, String>() {
 			@Override
@@ -272,7 +272,7 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 			}
 		}, transformer);
 	}
-	
+
 	protected <T, U> T getFromCargoAllocationPairList(final Class<T> type, final Function<U, T> f, final Object object) {
 		final List<DeltaPair> cargoAllocations = (List<DeltaPair>) object;
 
@@ -307,7 +307,7 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 
 		return null;
 	}
-	
+
 	protected <T, U> T getFromCargoAllocationPair(final Class<T> type, final Function<U, @Nullable T> f, final Object object) {
 		Object first = null;
 		Object second = null;
@@ -467,7 +467,8 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 		};
 	}
 
-	protected <T> Function<Object, @Nullable T> createFullLegTransformer2(final Class<T> resultType, final int index, final TriFunction<SlotVisit, Journey, Idle, T> func) {
+	protected <T> Function<Object, @Nullable T> createFullLegTransformer2(final Class<T> resultType, final int index,
+			final TriFunction<@Nullable SlotVisit, @Nullable Journey, @Nullable Idle, @Nullable T> func) {
 		return createMappingFunction(resultType, object -> {
 			try {
 				SlotVisit slotVisit = null;
@@ -505,7 +506,7 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 
 				}
 				if (object instanceof EventGrouping) {
-					final EventGrouping eg = (EventGrouping)object;
+					final EventGrouping eg = (EventGrouping) object;
 					for (final Event event : eg.getEvents()) {
 						if (event instanceof SlotVisit) {
 							slotVisit = (SlotVisit) event;
@@ -566,9 +567,4 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 		});
 	}
 
-
-
-
-
-	
 }
