@@ -179,7 +179,8 @@ public class CSVReader implements Closeable {
 		while ((result = readRowFields()) != null) {
 			for (final String value : result.values()) {
 				if (!value.equals("") || !ignoreBlankRows) {
-					return (currentLine = new FieldMap(result));
+					currentLine = new FieldMap(result);
+					return currentLine;
 				}
 			}
 		}
