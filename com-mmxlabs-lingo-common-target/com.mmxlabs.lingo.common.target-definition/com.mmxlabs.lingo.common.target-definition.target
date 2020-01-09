@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><?pde version="3.8"?><target name="LiNGO Common Platform Target - (Mars SR1)" sequenceNumber="58">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><?pde version="3.8"?><target name="LiNGO Common Platform Target - (Mars SR1)" sequenceNumber="59">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.equinox.compendium.sdk.feature.group" version="0.0.0"/>
@@ -144,7 +144,7 @@
 <unit id="org.swtchart" version="0.10.0.v20160212"/>
 <unit id="org.swtchart.ext" version="0.10.0.v20160212"/>
 <unit id="com.google.guava" version="25.1.0.jre"/>
-<repository id="mmxlabs-releases" location="http://kubera.mmxlabs.lan/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/p2/repository/mmxlabs-external/1.0.26/mmxlabs-external-1.0.26-p2-repo.zip-unzip/"/>
+<repository id="mmxlabs-releases" location="http://kubera.mmxlabs.lan/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/p2/repository/mmxlabs-external/1.0.27/mmxlabs-external-1.0.27-p2-repo.zip-unzip/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.mmxlabs.models.datetime.feature.feature.group" version="0.0.0"/>
