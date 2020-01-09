@@ -87,27 +87,30 @@ public class CanalBookingSlotValueProviderFactory implements IReferenceValueProv
 					} else {
 						SchedulingTimeWindow tw = slot.getSchedulingTimeWindow();
 						LocalDate windowStart = slot.getWindowStart();
-						LocalDate windowEnd = windowStart;
 
-						switch (tw.getSizeUnits()) {
-						case DAYS:
-							windowEnd = windowStart.plusDays(tw.getSize());
-							break;
-						case HOURS:
-							windowEnd = windowStart.plusDays((tw.getSize() + 12) / 24);
-							break;
-						case MONTHS:
-							windowEnd = windowStart.plusMonths(tw.getSize());
-							break;
-						default:
-							break;
-						}
+						if (windowStart != null) {
+							LocalDate windowEnd = windowStart;
 
-						NonNullPair<LocalDate, LocalDate> selectionRange = null;
-						selectionRange = new NonNullPair<>(windowStart.minusDays(2), windowEnd.plusDays(60));
+							switch (tw.getSizeUnits()) {
+							case DAYS:
+								windowEnd = windowStart.plusDays(tw.getSize());
+								break;
+							case HOURS:
+								windowEnd = windowStart.plusDays((tw.getSize() + 12) / 24);
+								break;
+							case MONTHS:
+								windowEnd = windowStart.plusMonths(tw.getSize());
+								break;
+							default:
+								break;
+							}
 
-						if (canalBookingSlot.getBookingDate() == null || TimeUtils.overlaps(selectionRange, new NonNullPair<>(canalBookingSlot.getBookingDate(), canalBookingSlot.getBookingDate()), LocalDate::isBefore)) {
-							filteredList.add(value);
+							NonNullPair<LocalDate, LocalDate> selectionRange = null;
+							selectionRange = new NonNullPair<>(windowStart.minusDays(2), windowEnd.plusDays(60));
+
+							if (canalBookingSlot.getBookingDate() == null || TimeUtils.overlaps(selectionRange, new NonNullPair<>(canalBookingSlot.getBookingDate(), canalBookingSlot.getBookingDate()), LocalDate::isBefore)) {
+								filteredList.add(value);
+							}
 						}
 					}
 				}
