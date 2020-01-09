@@ -106,7 +106,7 @@ public class CanalBookingSlotValueProviderFactory implements IReferenceValueProv
 						NonNullPair<LocalDate, LocalDate> selectionRange = null;
 						selectionRange = new NonNullPair<>(windowStart.minusDays(2), windowEnd.plusDays(60));
 
-						if (TimeUtils.overlaps(selectionRange, new NonNullPair<>(canalBookingSlot.getBookingDate(), canalBookingSlot.getBookingDate()), LocalDate::isBefore)) {
+						if (canalBookingSlot.getBookingDate() == null || TimeUtils.overlaps(selectionRange, new NonNullPair<>(canalBookingSlot.getBookingDate(), canalBookingSlot.getBookingDate()), LocalDate::isBefore)) {
 							filteredList.add(value);
 						}
 					}
