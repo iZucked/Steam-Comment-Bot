@@ -21,7 +21,7 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.scenario.service.model.util.encryption.impl.KeyFileHeader;
-import com.mmxlabs.scenario.service.model.util.encryption.impl.v1.KeyFile;
+import com.mmxlabs.scenario.service.model.util.encryption.impl.v1.KeyFileV1;
 import com.mmxlabs.scenario.service.model.util.encryption.ui.NewPasswordPromptDialog;
 
 /**
@@ -62,7 +62,7 @@ public class CipherPreferencesPage extends PreferencePage implements IWorkbenchP
 				dialog.setBlockOnOpen(true);
 				if (dialog.open() == Window.OK) {
 
-					final KeyFile newKey = KeyFile.generateKey(256);
+					final KeyFileV1 newKey = KeyFileV1.generateKey(256);
 					final File f = new File("C:/temp/lingo.data");
 					try (FileOutputStream fos = new FileOutputStream(f)) {
 						final KeyFileHeader header = new KeyFileHeader(KeyFileHeader.VERSION__0, KeyFileHeader.PASSWORD_TYPE__DEFAULT, dialog.getName());
