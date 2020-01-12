@@ -15,16 +15,20 @@ public class RiskModelPerspective implements IPerspectiveFactory {
 		layout.setEditorAreaVisible(false);
 
 		final IFolderLayout browserArea = layout.createFolder("browserArea", IPageLayout.LEFT, 0.2f, IPageLayout.ID_EDITOR_AREA);
-		final IFolderLayout editorsArea = layout.createFolder("editorsArea", IPageLayout.RIGHT, 0.8f, IPageLayout.ID_EDITOR_AREA);
+		final IFolderLayout editorsAreaTop = layout.createFolder("editorsArea", IPageLayout.TOP, 0.4f, IPageLayout.ID_EDITOR_AREA);
+		final IFolderLayout editorsAreaBottom = layout.createFolder("editorsArea", IPageLayout.BOTTOM, 0.4f, IPageLayout.ID_EDITOR_AREA);
 
 		browserArea.addView("com.mmxlabs.scenario.service.ui.navigator");
 
-		editorsArea.addView("com.mmxlabs.models.lng.cargo.editor.risk.DealSetTableEditorView");
+		editorsAreaTop.addView("com.mmxlabs.models.lng.cargo.editor.risk.DealSetTableEditorView");
+		editorsAreaBottom.addView("com.mmxlabs.shiplingo.platform.reports.views.ExposureReportView");
 
 		layout.addShowViewShortcut("com.mmxlabs.models.lng.cargo.editor.risk.DealSetTableEditorView");
+		layout.addShowViewShortcut("com.mmxlabs.shiplingo.platform.reports.views.ExposureReportView");
+		layout.addShowViewShortcut("com.mmxlabs.shiplingo.platform.reports.views.ExposureDetailReportView");
+		
 		layout.addPerspectiveShortcut("com.mmxlabs.lingo.app.perspective.editing");
 		layout.addPerspectiveShortcut("com.mmxlabs.lingo.app.perspective.analysis");
-
 	}
 
 }

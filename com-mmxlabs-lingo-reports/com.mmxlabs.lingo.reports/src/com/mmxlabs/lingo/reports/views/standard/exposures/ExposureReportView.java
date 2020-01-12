@@ -14,6 +14,7 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -649,7 +650,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		setUnitsActionText(modeToggle);
 		getViewSite().getActionBars().getToolBarManager().add(modeToggle);
 
-		final Action selectionToggle = new Action("View: " + (selectionMode ? "Selection" : "All"), Action.AS_CHECK_BOX) {
+		final Action selectionToggle = new Action("View: " + (selectionMode ? "Selection" : "All"), Action.AS_PUSH_BUTTON) {
 			@Override
 			public void run() {
 
@@ -662,7 +663,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		};
 		getViewSite().getActionBars().getToolBarManager().add(selectionToggle);
 
-		final Action viewModeToggle = new Action("View mode: Month", Action.AS_PUSH_BUTTON) {
+		final Action viewModeToggle = new Action("Group: Month", Action.AS_PUSH_BUTTON) {
 			@Override
 			public void run() {
 
@@ -823,7 +824,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 		}
 		assert modeStr != null;
-		a.setText("View mode: " + modeStr);
+		a.setText("Group: " + modeStr);
 	}
 
 	@Override
@@ -896,7 +897,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 	}
 
 	public enum AssetType {
-		NET("All"), FINANCIAL("Net Index"), PAPER("Paper"), INDEX("Physical Index"), PHYSICAL("Physical");
+		NET("All"), FINANCIAL("Index"), PAPER("Paper"), INDEX("Physical Index"), PHYSICAL("Physical");
 
 		private String value;
 
@@ -917,7 +918,28 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		if (fd.exposures != null && !fd.exposures.isEmpty()) {
 			return true;
 		}
-
 		return false;
+	}
+	
+	@Override
+	protected void applyExpansionOnNewElements(final Object[] expanded, final List<?> rowElements) {
+		final List<Object> newToExpand = new ArrayList<Object>();
+		for (var e : expanded) {
+			if (e instanceof IndexExposureData) {
+				for (var elem : rowElements) {
+					if (elem instanceof IndexExposureData) {
+						final IndexExposureData newE = (IndexExposureData) elem;
+						final IndexExposureData oldE = (IndexExposureData) e;
+						
+						if (newE.date.equals(oldE.date) && Objects.equals(newE.scenarioResult, oldE.scenarioResult)) {
+							newToExpand.add(newE);
+						}
+					}
+				}
+			}
+		}
+		if (!newToExpand.isEmpty()) {
+			viewer.setExpandedElements(newToExpand.toArray());
+		}
 	}
 }

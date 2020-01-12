@@ -57,7 +57,7 @@ public class ExposuresTransformer {
 
 		final IScenarioDataProvider sdp = scenarioResult.getScenarioDataProvider();
 		final PricingModel pm = ScenarioModelUtil.getPricingModel(sdp);
-		if (selectedAssetType != AssetType.PAPER) {
+		if (selectedAssetType != AssetType.PAPER && selectedAssetType != AssetType.FINANCIAL) {
 			for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
 				for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
 					if (!filterOn.isEmpty()) {
