@@ -6,7 +6,7 @@
 	<parent>
 		<artifactId>com.mmxlabs.lngdataserver.parent</artifactId>
 		<groupId>com.mmxlabs.lngdataserver</groupId>
-		<version>4.8.3.RELEASE</version>
+		<version>4.8.4-SNAPSHOT</version>
 	</parent>
 	<artifactId>com.mmxlabs.lngdataserver.integration.reports</artifactId>
 	<packaging>eclipse-plugin</packaging>
