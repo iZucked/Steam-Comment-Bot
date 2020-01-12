@@ -1,5 +1,5 @@
 @REM
-@REM Copyright (C) Minimax Labs Ltd., 2010 - 2019
+@REM Copyright (C) Minimax Labs Ltd., 2010 - 2020
 @REM All rights reserved.
 @REM
 
