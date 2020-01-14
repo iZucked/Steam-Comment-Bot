@@ -103,14 +103,14 @@ public class ScheduleModelKPIUtils {
 			if (openSlotAllocation != null) {
 				totalTradingPNL += getElementTradingPNL(openSlotAllocation);
 				totalShippingPNL += getElementShippingPNL(openSlotAllocation);
-				totalShippingPNL += getElementUpstreamPNL(openSlotAllocation);
+				totalUpstreamPNL += getElementUpstreamPNL(openSlotAllocation);
 			}
 		}
 
 		if (schedule.getOtherPNL() != null) {
 			totalTradingPNL += getElementTradingPNL(schedule.getOtherPNL());
 			totalShippingPNL += getElementShippingPNL(schedule.getOtherPNL());
-			totalShippingPNL += getElementUpstreamPNL(schedule.getOtherPNL());
+			totalUpstreamPNL += getElementUpstreamPNL(schedule.getOtherPNL());
 		}
 
 		final long[] result = new long[PNL_COMPONENT_COUNT];

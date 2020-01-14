@@ -653,8 +653,7 @@ public class AnnotatedSolutionExporter {
 						charterLengthEvent.setHeelAtStart(OptimiserUnitConvertor.convertToExternalVolume(heelRecord.getHeelAtStartInM3()));
 						charterLengthEvent.setHeelAtEnd(OptimiserUnitConvertor.convertToExternalVolume(heelRecord.getHeelAtEndInM3()));
 					}
-					//Not right one here. CharterLengthEvalator...probably covered by PortDetails, but need to check when testing.
-					//charterLengthEvent.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(details.getIdleCharterCost()));
+					charterLengthEvent.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(details.getIdleCharterCost()));
 					lastEvent = charterLengthEvent;
 
 				} else if (!details.getOptions().isCharterOutIdleTime()) {
