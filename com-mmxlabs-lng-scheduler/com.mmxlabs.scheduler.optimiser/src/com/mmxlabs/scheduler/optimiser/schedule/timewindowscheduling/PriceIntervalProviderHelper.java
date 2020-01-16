@@ -613,11 +613,11 @@ public class PriceIntervalProviderHelper {
 				if (isStartOfEvent(pricingEventType)) {
 					transferDate = date;
 				} else if (isEndOfEvent(pricingEventType)) {
-					transferDate = date - slotDuration;
+					transferDate = date;
 				}
 				final int windowDate = shiftTimeByTimezoneToLocalTime(transferDate, slot, portTimeWindowsRecord, pricingEventType);
 				if (windowDate < end && windowDate > start) {
-					priceIntervals.add(new int[] { windowDate, getPriceFromLoadOrDischargeCalculator(slot, loadOption, dischargeOption, date) });
+					priceIntervals.add(new int[] { windowDate, getPriceFromLoadOrDischargeCalculator(slot, loadOption, dischargeOption, date + (isEndOfEvent(pricingEventType) ? slotDuration : 0)) });
 				}
 			}
 			priceIntervals.add(getEndInterval(end));

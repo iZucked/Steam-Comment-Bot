@@ -424,7 +424,7 @@ public class TimeWindowsTrimming {
 		if (purchaseIntervals.length > 1 || salesIntervals.length > 1) {
 			for (int purchaseIndex = bestPurchaseDetailsIdx; purchaseIndex < purchaseIntervals.length; purchaseIndex++) {
 				for (int salesIndex = bestSalesDetailsIdx; salesIndex >= 0; salesIndex--) {
-					final int salesPrice = boiloffIntervals[salesIndex].price; // inverted!
+					final int salesPrice = boiloffIntervals[purchaseIndex].price; // inverted!
 					final NonNullPair<LadenRouteData, Long> totalEstimatedJourneyCostDetails = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchaseIntervals[purchaseIndex],
 							salesIntervals[salesIndex], loadDuration, salesPrice, charterRateForTimePickingDecision, sortedCanalTimes, vessel.getNBORate(VesselState.Laden), vessel,
 							load.getCargoCVValue(), true);
