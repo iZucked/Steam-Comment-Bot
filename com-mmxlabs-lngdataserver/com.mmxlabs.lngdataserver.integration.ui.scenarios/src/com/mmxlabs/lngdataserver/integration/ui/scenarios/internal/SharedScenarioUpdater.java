@@ -387,7 +387,10 @@ public class SharedScenarioUpdater {
 			}
 
 		};
-		updateThread.start();
+
+		// Defer the update thread start to the task executor so the task created in the
+		// #update calls at the of the method do not clash.
+		taskExecutor.submit(() -> updateThread.start());
 
 	}
 
