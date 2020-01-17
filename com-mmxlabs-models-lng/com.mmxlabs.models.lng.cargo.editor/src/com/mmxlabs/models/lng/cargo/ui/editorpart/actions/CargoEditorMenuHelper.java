@@ -253,7 +253,7 @@ public class CargoEditorMenuHelper {
 				if (dischargeSlot.getCargo() == null) {
 					if (SecurityUtils.getSubject().isPermitted("features:menu-item-markto")) {
 						final MenuManager markToMenuManager = new MenuManager("Mark to...", null);
-						if (dischargeSlot.isFOBSale() == false) {
+						if (!dischargeSlot.isFOBSale()) {
 							createSpotMarketMenu(markToMenuManager, SpotType.DES_PURCHASE, dischargeSlot, "");
 						}
 						createSpotMarketMenu(markToMenuManager, SpotType.FOB_PURCHASE, dischargeSlot, "");
@@ -265,7 +265,7 @@ public class CargoEditorMenuHelper {
 				manager.add(newMenuManager);
 				createNewSlotMenu(newMenuManager, dischargeSlot);
 				createMenus(manager, dischargeSlot, dischargeSlot.getCargo(), filterSlotsByCompatibility(dischargeSlot, cargoModel.getLoadSlots()), false);
-				if (dischargeSlot.isFOBSale() == false) {
+				if (!dischargeSlot.isFOBSale()) {
 					createSpotMarketMenu(newMenuManager, SpotType.DES_PURCHASE, dischargeSlot, " market");
 				}
 				createSpotMarketMenu(newMenuManager, SpotType.FOB_PURCHASE, dischargeSlot, " market");
@@ -347,6 +347,7 @@ public class CargoEditorMenuHelper {
 					this.vessel = vessel;
 				}
 
+				@Override
 				public void run() {
 					helper.assignNominatedVessel(String.format("Assign to %s (%dk)", vessel.getName(), vessel.getVesselOrDelegateCapacity() / 1000), slot, vessel);
 				}
@@ -603,7 +604,7 @@ public class CargoEditorMenuHelper {
 			if (!loads.isEmpty()) {
 				final MenuManager newMenuManager = new MenuManager("Pair to new...", null);
 				manager.add(newMenuManager);
-				final boolean hasDESPurchase = loads.stream().filter(s -> s.isDESPurchase()).findFirst().isPresent();
+				final boolean hasDESPurchase = loads.stream().anyMatch(LoadSlot::isDESPurchase);
 				createBulkSpotMarketMenu(newMenuManager, SpotType.DES_SALE, (Collection) loads, " market");
 				if (!hasDESPurchase) {
 					createBulkSpotMarketMenu(newMenuManager, SpotType.FOB_SALE, (Collection) loads, " market");
@@ -612,7 +613,7 @@ public class CargoEditorMenuHelper {
 			} else if (!discharges.isEmpty()) {
 				final MenuManager newMenuManager = new MenuManager("Pair to new...", null);
 				manager.add(newMenuManager);
-				final boolean hasFOBSale = discharges.stream().filter(s -> s.isFOBSale()).findFirst().isPresent();
+				final boolean hasFOBSale = discharges.stream().anyMatch(DischargeSlot::isFOBSale);
 				createBulkSpotMarketMenu(newMenuManager, SpotType.FOB_PURCHASE, (Collection) discharges, " market");
 				if (!hasFOBSale) {
 					createBulkSpotMarketMenu(newMenuManager, SpotType.DES_PURCHASE, (Collection) discharges, " market");
@@ -1008,7 +1009,7 @@ public class CargoEditorMenuHelper {
 
 	void createNewSlotMenu(final IMenuManager menuManager, final Slot<?> source) {
 
-		final List<Port> transferPorts = new LinkedList<Port>();
+		final List<Port> transferPorts = new LinkedList<>();
 		for (final Port p : scenarioModel.getReferenceModel().getPortModel().getPorts()) {
 			if (p.getCapabilities().contains(PortCapability.TRANSFER)) {
 				transferPorts.add(p);
@@ -1189,7 +1190,11 @@ public class CargoEditorMenuHelper {
 
 	private void createWireAction(final IMenuManager subMenu, final Slot<?> source, final Slot<?> target, final boolean sourceIsLoad, final boolean includeContract, final boolean includePort) {
 		final String name = getActionName(target, !sourceIsLoad, includeContract, includePort);
-		subMenu.add(new RunnableAction(name, () -> helper.pairSlotsIntoCargo("Rewire Cargoes", (LoadSlot) source, (DischargeSlot) target)));
+		if (sourceIsLoad) {
+			subMenu.add(new RunnableAction(name, () -> helper.pairSlotsIntoCargo("Rewire Cargoes", (LoadSlot) source, (DischargeSlot) target)));
+		} else {
+			subMenu.add(new RunnableAction(name, () -> helper.pairSlotsIntoCargo("Rewire Cargoes", (LoadSlot) target, (DischargeSlot) source)));
+		}
 	}
 
 	private void createSwapAction(final MenuManager subMenu, final Slot<?> source, final Slot<?> target, final boolean isLoad, final boolean includeContract, final boolean includePort) {
@@ -1231,11 +1236,6 @@ public class CargoEditorMenuHelper {
 		private final boolean sourceIsLoad;
 		private final boolean isDesPurchaseOrFobSale;
 		private final Port shipToShipPort;
-
-		private String getKeyForDate(final LocalDate date) {
-			final String key = String.format("%04d-%02d", date.getYear(), date.getMonthValue());
-			return key;
-		}
 
 		public CreateSTSSlotAction(final String name, final Slot<?> source, final SpotMarket market, final boolean isDesPurchaseOrFobSale, final Port shipToShipPort) {
 			super(name);
@@ -1349,7 +1349,7 @@ public class CargoEditorMenuHelper {
 									assignedVessel = ((CharterInMarketOverride) vesselAssignmentType).getCharterInMarket().getVessel();
 								}
 							}
-							final int travelTime = getTravelTime(loadSlot, dischargeSlot, assignedVessel,scenarioEditingLocation.getScenarioDataProvider());
+							final int travelTime = getTravelTime(loadSlot, dischargeSlot, assignedVessel, scenarioEditingLocation.getScenarioDataProvider());
 							if (travelTime == Integer.MAX_VALUE) {
 								final String message = String.format("Can not determine travel time between %s and %s. \n Travel time can not be %d hours.", loadSlot.getPort().getName(),
 										dischargeSlot.getPort().getName(), travelTime);
@@ -1411,8 +1411,7 @@ public class CargoEditorMenuHelper {
 	}
 
 	public static String getKeyForDate(final LocalDate date) {
-		final String key = String.format("%04d-%02d", date.getYear(), date.getMonthValue());
-		return key;
+		return String.format("%04d-%02d", date.getYear(), date.getMonthValue());
 	}
 
 	class CreateSlotAction extends Action {
@@ -1506,9 +1505,9 @@ public class CargoEditorMenuHelper {
 			return assignedVessel;
 		}
 	}
-	
-	public static void makeUpLoadSlot(final Set<String> usedLoadIDStrings, final LoadSlot loadSlot, final DischargeSlot dischargeSlot, 
-			final SpotMarket market, final IScenarioDataProvider sdp, final Vessel assignedVessel) {
+
+	public static void makeUpLoadSlot(final Set<String> usedLoadIDStrings, final LoadSlot loadSlot, final DischargeSlot dischargeSlot, final SpotMarket market, final IScenarioDataProvider sdp,
+			final Vessel assignedVessel) {
 		// Get start of month and create full sized window
 		ZonedDateTime cal = dischargeSlot.getSchedulingTimeWindow().getStart();
 		// Take into account travel time
@@ -1552,8 +1551,8 @@ public class CargoEditorMenuHelper {
 		}
 	}
 
-	public static void makeUpDischargeSlot(final Set<String> usedDischargeIDStrings, final LoadSlot loadSlot, final DischargeSlot dischargeSlot, 
-			final SpotMarket market, final IScenarioDataProvider sdp, final Vessel assignedVessel) {
+	public static void makeUpDischargeSlot(final Set<String> usedDischargeIDStrings, final LoadSlot loadSlot, final DischargeSlot dischargeSlot, final SpotMarket market,
+			final IScenarioDataProvider sdp, final Vessel assignedVessel) {
 		// Get start of month and create full sized window
 		ZonedDateTime cal = loadSlot.getSchedulingTimeWindow().getStart();
 		// Take into account travel time
@@ -1563,7 +1562,7 @@ public class CargoEditorMenuHelper {
 			cal = cal.plusHours(loadSlot.getSchedulingTimeWindow().getDuration());
 		} else if (!loadSlot.isDESPurchase() && !dischargeSlot.isFOBSale()) {
 
-			final int travelTime = getTravelTime(loadSlot, dischargeSlot, assignedVessel,sdp);
+			final int travelTime = getTravelTime(loadSlot, dischargeSlot, assignedVessel, sdp);
 			if (travelTime == Integer.MAX_VALUE) {
 				final String message = String.format("Can not determine travel time between %s and %s. \n Travel time can not be %d hours.", loadSlot.getPort().getName(),
 						dischargeSlot.getPort().getName(), travelTime);
@@ -1688,6 +1687,7 @@ public class CargoEditorMenuHelper {
 				this.cargoModel = cargoModel;
 			}
 
+			@Override
 			public void run() {
 
 				final List<CanalBookingSlot> canalbookings = cargoModel.getCanalBookings().getCanalBookingSlots();
@@ -1721,9 +1721,7 @@ public class CargoEditorMenuHelper {
 
 		reassignMenuManager.add(northBoundCanalBookingMenu);
 		reassignMenuManager.add(southBoundCanalBookingMenu);
-		Collections.sort(canalbookings, (a, b) -> {
-			return (int) b.getBookingDate().until(a.getBookingDate(), ChronoUnit.DAYS);
-		});
+		Collections.sort(canalbookings, (a, b) -> (int) b.getBookingDate().until(a.getBookingDate(), ChronoUnit.DAYS));
 
 		for (final CanalBookingSlot canalbooking : canalbookings) {
 			String canalBookingHandle = String.format("%s", canalbooking.getBookingDate());
