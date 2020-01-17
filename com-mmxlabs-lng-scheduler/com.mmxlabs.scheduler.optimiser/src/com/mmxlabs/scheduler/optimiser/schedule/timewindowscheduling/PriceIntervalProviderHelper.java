@@ -129,9 +129,7 @@ public class PriceIntervalProviderHelper {
 	@NonNull
 	public List<int @NonNull []> getPriceIntervalsList(final @NonNull ILoadOption slot, final @NonNull IIntegerIntervalCurve intervals, final @Nullable ICurve curve, final int start, final int end,
 			final int offsetInHours, final @NonNull IPortTimeWindowsRecord portTimeWindowRecord) {
-		final List<int @NonNull []> priceIntervals = new LinkedList<>();
-		buildIntervalsList(slot, intervals, curve, start, end, portTimeWindowRecord, priceIntervals);
-		return priceIntervals;
+		return buildIntervalsList(slot, intervals, curve, start, end, portTimeWindowRecord);
 	}
 
 	/**
@@ -147,10 +145,8 @@ public class PriceIntervalProviderHelper {
 	 * @return
 	 */
 	public List<int @NonNull []> getPriceIntervalsList(final @NonNull IDischargeOption slot, final @NonNull IIntegerIntervalCurve intervals, final @Nullable ICurve curve, final int start,
-			final int end, final int offsetInHours, final @NonNull IPortTimeWindowsRecord portTimeWindowRecord) {
-		final List<int @NonNull []> priceIntervals = new LinkedList<>();
-		buildIntervalsList(slot, intervals, curve, start, end, portTimeWindowRecord, priceIntervals);
-		return priceIntervals;
+			final int end, final int offsetInHours, final @NonNull IPortTimeWindowsRecord portTimeWindowRecord) {		
+		return buildIntervalsList(slot, intervals, curve, start, end, portTimeWindowRecord);
 	}
 
 	/**
@@ -574,9 +570,20 @@ public class PriceIntervalProviderHelper {
 		return false;
 	}
 
+	/**
+	 * Build a list of price intervals.
+	 * @param slot
+	 * @param intervals - time intervals.
+	 * @param curve - pricing curve
+	 * @param start
+	 * @param end
+	 * @param portTimeWindowsRecord
+	 * @return priceIntervals.
+	 */
 	@NonNull
 	List<int @NonNull []> buildIntervalsList(final @NonNull IPortSlot slot, final @NonNull IIntegerIntervalCurve intervals, final @Nullable ICurve curve, final int start, final int end,
-			final @NonNull IPortTimeWindowsRecord portTimeWindowsRecord, @NonNull final List<int @NonNull []> priceIntervals) {
+			final @NonNull IPortTimeWindowsRecord portTimeWindowsRecord) {
+		final List<int @NonNull []> priceIntervals = new LinkedList<>();
 
 		final ILoadOption loadOption = getFirstLoadOption(portTimeWindowsRecord.getSlots());
 		assert loadOption != null;
