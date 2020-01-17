@@ -129,7 +129,7 @@ public class PriceIntervalProviderHelper {
 	@NonNull
 	public List<int @NonNull []> getPriceIntervalsList(final @NonNull ILoadOption slot, final @NonNull IIntegerIntervalCurve intervals, final @Nullable ICurve curve, final int start, final int end,
 			final int offsetInHours, final @NonNull IPortTimeWindowsRecord portTimeWindowRecord) {
-		return buildIntervalsList(slot, intervals, curve, start, end, portTimeWindowRecord);
+		return buildIntervalsList(slot, intervals, start, end, portTimeWindowRecord);
 	}
 
 	/**
@@ -146,7 +146,7 @@ public class PriceIntervalProviderHelper {
 	 */
 	public List<int @NonNull []> getPriceIntervalsList(final @NonNull IDischargeOption slot, final @NonNull IIntegerIntervalCurve intervals, final @Nullable ICurve curve, final int start,
 			final int end, final int offsetInHours, final @NonNull IPortTimeWindowsRecord portTimeWindowRecord) {		
-		return buildIntervalsList(slot, intervals, curve, start, end, portTimeWindowRecord);
+		return buildIntervalsList(slot, intervals, start, end, portTimeWindowRecord);
 	}
 
 	/**
@@ -572,16 +572,15 @@ public class PriceIntervalProviderHelper {
 
 	/**
 	 * Build a list of price intervals.
-	 * @param slot
-	 * @param intervals - time intervals.
-	 * @param curve - pricing curve
-	 * @param start
-	 * @param end
-	 * @param portTimeWindowsRecord
-	 * @return priceIntervals.
+	 * @param slot - the slot we are building the price intervals for (also where we get the price calculator + price curve from).
+	 * @param intervals - a list of time points to consider.
+	 * @param start - the start of the time range to consider.
+	 * @param end - the end of the time range to consider.
+	 * @param portTimeWindowsRecord - the port times window record for the cargo which slot is part of.
+	 * @return a list of price intervals with the first element of the integer array the start of the bucket, and the second element the price.
 	 */
 	@NonNull
-	List<int @NonNull []> buildIntervalsList(final @NonNull IPortSlot slot, final @NonNull IIntegerIntervalCurve intervals, final @Nullable ICurve curve, final int start, final int end,
+	List<int @NonNull []> buildIntervalsList(final @NonNull IPortSlot slot, final @NonNull IIntegerIntervalCurve intervals, final int start, final int end,
 			final @NonNull IPortTimeWindowsRecord portTimeWindowsRecord) {
 		final List<int @NonNull []> priceIntervals = new LinkedList<>();
 
