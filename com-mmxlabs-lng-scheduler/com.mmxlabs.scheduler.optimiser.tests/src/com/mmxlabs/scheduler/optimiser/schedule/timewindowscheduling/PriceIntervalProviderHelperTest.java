@@ -141,11 +141,12 @@ public class PriceIntervalProviderHelperTest {
 		curve.add(30);
 		curve.add(40);
 
-		final List<int[]> priceIntervals = priceIntervalProviderHelper.buildIntervalsList(loadSlot, curve, null, 0, 50, portTimeWindowsRecord);
+		final List<int[]> priceIntervals = priceIntervalProviderHelper.buildIntervalsList(loadSlot, curve, 0, 50, portTimeWindowsRecord);
 		final List<int[]> expected = new LinkedList<>();
 		expected.add(new int[] { 0, 15 });
-		expected.add(new int[] { 6, 20 });
-		expected.add(new int[] { 16, 30 });
+		expected.add(new int[] { 20, c.getValueAtPoint(20+24) }); //NB: 24 duration as end of load pricing, 0 hours time shift to UTC.
+		expected.add(new int[] { 30, c.getValueAtPoint(30+24) });
+		expected.add(new int[] { 40, c.getValueAtPoint(40+24) });
 		expected.add(new int[] { 50, Integer.MIN_VALUE });
 
 		for (int i = 0; i < expected.size(); i++) {
@@ -198,11 +199,12 @@ public class PriceIntervalProviderHelperTest {
 		curve.add(30);
 		curve.add(40);
 
-		final List<int[]> priceIntervals = priceIntervalProviderHelper.buildIntervalsList(loadSlot, curve, null, 0, 50, portTimeWindowsRecord);
+		final List<int[]> priceIntervals = priceIntervalProviderHelper.buildIntervalsList(loadSlot, curve, 0, 50, portTimeWindowsRecord);
 		final List<int[]> expected = new LinkedList<>();
 		expected.add(new int[] { 0, 20 });
-		expected.add(new int[] { 5, 25 });
-		expected.add(new int[] { 15, 30 });
+		expected.add(new int[] { 19, c.getValueAtPoint(19+24+1) }); //NB: 24 duration as end of load pricing, 1 hour time shift to UTC.
+		expected.add(new int[] { 29, c.getValueAtPoint(29+24+1) });
+		expected.add(new int[] { 39, c.getValueAtPoint(39+24+1) });
 		expected.add(new int[] { 50, Integer.MIN_VALUE });
 
 		for (int i = 0; i < expected.size(); i++) {
@@ -255,7 +257,7 @@ public class PriceIntervalProviderHelperTest {
 		curve.add(30);
 		curve.add(40);
 
-		final List<int[]> priceIntervals = priceIntervalProviderHelper.buildIntervalsList(loadSlot, curve, null, 0, 50, portTimeWindowsRecord);
+		final List<int[]> priceIntervals = priceIntervalProviderHelper.buildIntervalsList(loadSlot, curve, 0, 50, portTimeWindowsRecord);
 		final List<int[]> expected = new LinkedList<>();
 		expected.add(new int[] { 0, 8 });
 		expected.add(new int[] { 50, Integer.MIN_VALUE });
@@ -306,7 +308,7 @@ public class PriceIntervalProviderHelperTest {
 		curve.add(30);
 		curve.add(40);
 
-		final List<int[]> priceIntervals = priceIntervalProviderHelper.buildIntervalsList(loadSlot, curve, null, 0, 50, portTimeWindowsRecord);
+		final List<int[]> priceIntervals = priceIntervalProviderHelper.buildIntervalsList(loadSlot, curve, 0, 50, portTimeWindowsRecord);
 		final List<int[]> expected = new LinkedList<>();
 		expected.add(new int[] { 0, 5 });
 		expected.add(new int[] { 50, Integer.MIN_VALUE });
