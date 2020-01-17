@@ -60,7 +60,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.IntervalData;
-import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.LadenRouteData;
+import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.TravelRouteData;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.PriceIntervalProviderHelper;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.TimeWindowsTrimming;
 import com.mmxlabs.scheduler.optimiser.scheduling.ScheduledTimeWindows;
@@ -150,9 +150,9 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				 */
 				final IntervalData purchase = new IntervalData(0, 10, OptimiserUnitConvertor.convertToInternalPrice(5));
 				final IntervalData sales = new IntervalData(50, 70, OptimiserUnitConvertor.convertToInternalPrice(10));
-				final LadenRouteData[] lrd = new LadenRouteData[2];
-				lrd[0] = new LadenRouteData(52, 71, 0, 1000, 0);
-				lrd[1] = new LadenRouteData(26, 35, OptimiserUnitConvertor.convertToInternalDailyCost(500000), 500, 0);
+				final TravelRouteData[] lrd = new TravelRouteData[2];
+				lrd[0] = new TravelRouteData(52, 71, 0, 1000, 0);
+				lrd[1] = new TravelRouteData(26, 35, OptimiserUnitConvertor.convertToInternalDailyCost(500000), 500, 0);
 				final IVesselAvailability o_vesselAvailability = TimeWindowsTestsUtils.getIVesselAvailabilityWithName(vesselAvailability1.getVessel().getName(),
 						optimiserScenario.getCargoModel().getVesselAvailabilities(), scenarioToOptimiserBridge.getDataTransformer().getModelEntityMap());
 
@@ -201,7 +201,7 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				/*
 				 * Test correct route chosen
 				 */
-				final NonNullPair<LadenRouteData, Long> totalEstimatedJourneyCost = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchase, sales, loadDuration, salesPrice, 0, lrd,
+				final NonNullPair<TravelRouteData, Long> totalEstimatedJourneyCost = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchase, sales, loadDuration, salesPrice, 0, lrd,
 						o_vessel.getNBORate(VesselState.Laden), o_vessel, load.getCargoCVValue(), true);
 				Assertions.assertEquals(totalEstimatedJourneyCost.getFirst(), lrd[0]);
 				final TimeWindowsTrimming timeWindowsTrimming = MicroCaseUtils.getClassFromInjector(scenarioToOptimiserBridge, TimeWindowsTrimming.class);

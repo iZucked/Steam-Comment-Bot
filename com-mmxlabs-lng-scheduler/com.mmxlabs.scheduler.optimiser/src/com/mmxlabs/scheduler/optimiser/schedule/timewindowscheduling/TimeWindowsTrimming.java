@@ -260,7 +260,7 @@ public class TimeWindowsTrimming {
 		final IVesselAvailability vesselAvailability = schedulerCalculationUtils.getVesselAvailabilityFromResource(resource);
 	
 		// get distances for end ballast journey
-		final LadenRouteData[] sortedCanalTimes = schedulingCanalDistanceProvider.getMinimumBallastTravelTimes(discharge.getPort(), endSlot.getPort(), vesselAvailability.getVessel(),
+		final TravelRouteData[] sortedCanalTimes = schedulingCanalDistanceProvider.getMinimumBallastTravelTimes(discharge.getPort(), endSlot.getPort(), vesselAvailability.getVessel(),
 				Math.max((dischargeTimeWindow.getExclusiveEnd() - 1) + portTimeWindowsRecord.getSlotDuration(discharge), IPortSlot.NO_PRICING_DATE),
 				portTimeWindowsRecord.getSlotNextVoyageOptions(discharge), portTimeWindowsRecord.getSlotIsNextVoyageConstrainedPanama(discharge),
 				portTimeWindowsRecord.getSlotAdditionalPanamaIdleHours(discharge));
@@ -269,7 +269,7 @@ public class TimeWindowsTrimming {
 		final int endTimeOfLastNonReturnSlot = getEarliestStartTimeOfBallastForEndSlot(portTimeWindowsRecord);
 	
 		// set the feasible window for the end slot
-		processFeasibleTimeWindowForEndSlot(portTimeWindowsRecord, endSlot, endTimeOfLastNonReturnSlot, LadenRouteData.getMinimumTravelTime(sortedCanalTimes), resource, portTimeWindowRecordStart);
+		processFeasibleTimeWindowForEndSlot(portTimeWindowsRecord, endSlot, endTimeOfLastNonReturnSlot, TravelRouteData.getMinimumTravelTime(sortedCanalTimes), resource, portTimeWindowRecordStart);
 	
 		// get intervals for the end slot based on different speeds
 		final List<int[]> endPriceIntervals = getEndPriceIntervals(portTimeWindowsRecord, discharge, endSlot, endTimeOfLastNonReturnSlot, vessel, load.getCargoCVValue());
@@ -302,7 +302,7 @@ public class TimeWindowsTrimming {
 			long charterRateForTimePickingDecision, final boolean inverted) {
 		final ITimeWindow loadTimeWindow = portTimeWindowsRecord.getSlotFeasibleTimeWindow(load);
 		assert loadTimeWindow != null;
-		final @NonNull LadenRouteData @NonNull [] sortedCanalTimes = schedulingCanalDistanceProvider.getMinimumLadenTravelTimes(load.getPort(), discharge.getPort(), vessel,
+		final @NonNull TravelRouteData @NonNull [] sortedCanalTimes = schedulingCanalDistanceProvider.getMinimumLadenTravelTimes(load.getPort(), discharge.getPort(), vessel,
 				loadTimeWindow.getInclusiveStart() + portTimeWindowsRecord.getSlotDuration(load), portTimeWindowsRecord.getSlotNextVoyageOptions(load),
 				portTimeWindowsRecord.getSlotIsNextVoyageConstrainedPanama(load), portTimeWindowsRecord.getSlotAdditionalPanamaIdleHours(load));
 		assert sortedCanalTimes.length > 0;
@@ -323,7 +323,7 @@ public class TimeWindowsTrimming {
 				dischargeBounds = priceIntervalProviderHelper.getLowestPriceInterval(dischargePriceIntervals);
 			}
 			return getCargoBounds(loadBounds.getFirst(), loadBounds.getSecond(), dischargeBounds.getFirst(), dischargeBounds.getSecond(), loadDuration,
-					(int) sortedCanalTimes[canalsWeCanUse.get(0)].ladenTimeAtMaxSpeed, (int) sortedCanalTimes[canalsWeCanUse.get(0)].ladenTimeAtNBOSpeed);
+					(int) sortedCanalTimes[canalsWeCanUse.get(0)].travelTimeAtMaxSpeed, (int) sortedCanalTimes[canalsWeCanUse.get(0)].travelTimeAtNBOSpeed);
 		} else {
 			// we could go via canal but should we?
 			final @NonNull IntervalData @NonNull [] purchaseIntervals = priceIntervalProviderHelper.getIntervalsBoundsAndPrices(loadPriceIntervals);
@@ -352,7 +352,7 @@ public class TimeWindowsTrimming {
 	 * @param charterRateForTimePickingDecision
 	 * @return
 	 */
-	public int[] findBestBucketPairWithRouteAndBoiloffConsiderations(final @NonNull IVessel vessel, final @NonNull ILoadOption load, final @NonNull LadenRouteData @NonNull [] sortedCanalTimes,
+	public int[] findBestBucketPairWithRouteAndBoiloffConsiderations(final @NonNull IVessel vessel, final @NonNull ILoadOption load, final @NonNull TravelRouteData @NonNull [] sortedCanalTimes,
 			final int loadDuration, final @NonNull IntervalData @NonNull [] purchaseIntervals, final @NonNull IntervalData @NonNull [] boiloffIntervals,
 			final @NonNull IntervalData @NonNull [] salesIntervals, long charterRateForTimePickingDecision) {
 		assert purchaseIntervals.length > 0;
@@ -360,12 +360,12 @@ public class TimeWindowsTrimming {
 		int bestPurchaseDetailsIdx = purchaseIntervals.length - 1;
 		int bestSalesDetailsIdx = 0;
 		final long loadVolumeMMBTU = getMaxLoadVolumeInMMBTU(load, vessel);
-		LadenRouteData bestCanalDetails = sortedCanalTimes[0];
+		TravelRouteData bestCanalDetails = sortedCanalTimes[0];
 		long bestMargin = Long.MIN_VALUE;
 		if (purchaseIntervals.length > 1 || salesIntervals.length > 1) {
 			for (int purchaseIndex = bestPurchaseDetailsIdx; purchaseIndex >= 0; purchaseIndex--) {
 				for (int salesIndex = bestSalesDetailsIdx; salesIndex < salesIntervals.length; salesIndex++) {
-					NonNullPair<LadenRouteData, Long> totalEstimatedJourneyCostDetails;
+					NonNullPair<TravelRouteData, Long> totalEstimatedJourneyCostDetails;
 					totalEstimatedJourneyCostDetails = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchaseIntervals[purchaseIndex], boiloffIntervals[salesIndex], loadDuration,
 							salesIntervals[salesIndex].price, charterRateForTimePickingDecision, sortedCanalTimes, vessel.getNBORate(VesselState.Laden), vessel, load.getCargoCVValue(), true);
 					final long estimatedCostMMBTU = Calculator.getPerMMBTuFromTotalAndVolumeInMMBTu(totalEstimatedJourneyCostDetails.getSecond(), loadVolumeMMBTU);
@@ -380,14 +380,14 @@ public class TimeWindowsTrimming {
 			}
 		} else if (sortedCanalTimes.length > 1) {
 			// still need to find out the best canal
-			final NonNullPair<LadenRouteData, Long> totalEstimatedJourneyCostDetails = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchaseIntervals[0], boiloffIntervals[0], loadDuration,
+			final NonNullPair<TravelRouteData, Long> totalEstimatedJourneyCostDetails = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchaseIntervals[0], boiloffIntervals[0], loadDuration,
 					salesIntervals[0].price, charterRateForTimePickingDecision, sortedCanalTimes, vessel.getNBORate(VesselState.Laden), vessel, load.getCargoCVValue(), true);
 			bestCanalDetails = totalEstimatedJourneyCostDetails.getFirst();
 		}
 	
 		assert bestCanalDetails != null;
 		return getCargoBounds(purchaseIntervals[bestPurchaseDetailsIdx].start, purchaseIntervals[bestPurchaseDetailsIdx].end, salesIntervals[bestSalesDetailsIdx].start,
-				salesIntervals[bestSalesDetailsIdx].end, loadDuration, (int) bestCanalDetails.ladenTimeAtMaxSpeed, (int) bestCanalDetails.ladenTimeAtNBOSpeed);
+				salesIntervals[bestSalesDetailsIdx].end, loadDuration, (int) bestCanalDetails.travelTimeAtMaxSpeed, (int) bestCanalDetails.travelTimeAtNBOSpeed);
 	}
 
 	private long getMaxLoadVolumeInMMBTU(final ILoadOption load, @NonNull IVessel vessel) {
@@ -411,7 +411,7 @@ public class TimeWindowsTrimming {
 	 * @return
 	 */
 	private int[] findBestBucketPairWithRouteAndBoiloffConsiderationsInverted(final @NonNull IVessel vessel, final @NonNull ILoadOption load,
-			final @NonNull LadenRouteData @NonNull [] sortedCanalTimes, final int loadDuration, final @NonNull IntervalData @NonNull [] purchaseIntervals,
+			final @NonNull TravelRouteData @NonNull [] sortedCanalTimes, final int loadDuration, final @NonNull IntervalData @NonNull [] purchaseIntervals,
 			final @NonNull IntervalData @NonNull [] boiloffIntervals, final @NonNull IntervalData @NonNull [] salesIntervals, long charterRateForTimePickingDecision) {
 	
 		assert purchaseIntervals.length > 0;
@@ -419,13 +419,13 @@ public class TimeWindowsTrimming {
 		int bestPurchaseDetailsIdx = 0;
 		int bestSalesDetailsIdx = salesIntervals.length - 1;
 		final long loadVolumeMMBTU = getMaxLoadVolumeInMMBTU(load, vessel);
-		LadenRouteData bestCanalDetails = sortedCanalTimes[0];
+		TravelRouteData bestCanalDetails = sortedCanalTimes[0];
 		long bestMargin = Long.MIN_VALUE;
 		if (purchaseIntervals.length > 1 || salesIntervals.length > 1) {
 			for (int purchaseIndex = bestPurchaseDetailsIdx; purchaseIndex < purchaseIntervals.length; purchaseIndex++) {
 				for (int salesIndex = bestSalesDetailsIdx; salesIndex >= 0; salesIndex--) {
 					final int salesPrice = boiloffIntervals[purchaseIndex].price; // inverted!
-					final NonNullPair<LadenRouteData, Long> totalEstimatedJourneyCostDetails = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchaseIntervals[purchaseIndex],
+					final NonNullPair<TravelRouteData, Long> totalEstimatedJourneyCostDetails = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchaseIntervals[purchaseIndex],
 							salesIntervals[salesIndex], loadDuration, salesPrice, charterRateForTimePickingDecision, sortedCanalTimes, vessel.getNBORate(VesselState.Laden), vessel,
 							load.getCargoCVValue(), true);
 					final long estimatedCostMMBTU = Calculator.getPerMMBTuFromTotalAndVolumeInMMBTu(totalEstimatedJourneyCostDetails.getSecond(), loadVolumeMMBTU);
@@ -441,16 +441,16 @@ public class TimeWindowsTrimming {
 			}
 		} else if (sortedCanalTimes.length > 1) {
 			// still need to find out the best canal
-			final NonNullPair<LadenRouteData, Long> totalEstimatedJourneyCostDetails = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchaseIntervals[0], boiloffIntervals[0], loadDuration,
+			final NonNullPair<TravelRouteData, Long> totalEstimatedJourneyCostDetails = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchaseIntervals[0], boiloffIntervals[0], loadDuration,
 					salesIntervals[0].price, charterRateForTimePickingDecision, sortedCanalTimes, vessel.getNBORate(VesselState.Laden), vessel, load.getCargoCVValue(), true);
 			bestCanalDetails = totalEstimatedJourneyCostDetails.getFirst();
 		}
 		assert bestCanalDetails != null;
 		return getCargoBounds(purchaseIntervals[bestPurchaseDetailsIdx].start, purchaseIntervals[bestPurchaseDetailsIdx].end, salesIntervals[bestSalesDetailsIdx].start,
-				salesIntervals[bestSalesDetailsIdx].end, loadDuration, (int) bestCanalDetails.ladenTimeAtMaxSpeed, (int) bestCanalDetails.ladenTimeAtNBOSpeed);
+				salesIntervals[bestSalesDetailsIdx].end, loadDuration, (int) bestCanalDetails.travelTimeAtMaxSpeed, (int) bestCanalDetails.travelTimeAtNBOSpeed);
 	}
 
-	private int[] findBestUnboundBucketTimesWithRouteAndBoiloffConsiderations(final IVesselAvailability vesselAvailability, final ILoadOption load, final LadenRouteData[] sortedCanalTimes,
+	private int[] findBestUnboundBucketTimesWithRouteAndBoiloffConsiderations(final IVesselAvailability vesselAvailability, final ILoadOption load, final TravelRouteData[] sortedCanalTimes,
 			final int loadDuration, final IntervalData[] purchaseIntervals, final IntervalData[] boiloffIntervals, final IntervalData[] salesIntervals, final int vesselStartTime) {
 		assert purchaseIntervals.length > 0;
 	
@@ -461,7 +461,7 @@ public class TimeWindowsTrimming {
 			for (int purchaseIndex = bestPurchaseDetailsIdx; purchaseIndex >= 0; purchaseIndex--) {
 				for (int salesIndex = bestSalesDetailsIdx; salesIndex < salesIntervals.length; salesIndex++) {
 					final long charterRatePerDay = schedulerCalculationUtils.getVesselCharterInRatePerDay(vesselAvailability, purchaseIntervals[purchaseIndex].start);
-					final NonNullPair<LadenRouteData, Long> totalEstimatedJourneyCostDetails = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchaseIntervals[purchaseIndex],
+					final NonNullPair<TravelRouteData, Long> totalEstimatedJourneyCostDetails = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchaseIntervals[purchaseIndex],
 							salesIntervals[salesIndex], // D to E
 							loadDuration, boiloffIntervals[purchaseIndex].price, charterRatePerDay, sortedCanalTimes, vesselAvailability.getVessel().getNBORate(VesselState.Ballast),
 							vesselAvailability.getVessel(), load.getCargoCVValue(), false);

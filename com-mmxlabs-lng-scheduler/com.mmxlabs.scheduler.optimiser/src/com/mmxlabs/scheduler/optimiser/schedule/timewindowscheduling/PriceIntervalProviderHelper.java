@@ -256,24 +256,24 @@ public class PriceIntervalProviderHelper {
 	}
 
 	@NonNull
-	public LadenRouteData getBestCanalDetails(@NonNull final IntervalData purchase, @NonNull final IntervalData sales, final int loadDuration, @NonNull final LadenRouteData[] sortedCanalTimes) {
-		for (final LadenRouteData canal : sortedCanalTimes) {
-			if (isFeasibleTravelTime(purchase, sales, loadDuration, canal.ladenTimeAtMaxSpeed)) {
+	public TravelRouteData getBestCanalDetails(@NonNull final IntervalData purchase, @NonNull final IntervalData sales, final int loadDuration, @NonNull final TravelRouteData[] sortedCanalTimes) {
+		for (final TravelRouteData canal : sortedCanalTimes) {
+			if (isFeasibleTravelTime(purchase, sales, loadDuration, canal.travelTimeAtMaxSpeed)) {
 				return canal;
 			}
 		}
 		return sortedCanalTimes[sortedCanalTimes.length - 1];
 	}
 
-	public NonNullPair<LadenRouteData, Long> getTotalEstimatedJourneyCost(@NonNull final IntervalData purchase, @NonNull final IntervalData sales, final int loadDuration, final int salesPrice,
-			final long charterRatePerDay, @NonNull final LadenRouteData[] sortedCanalTimes, final long boiloffRateM3, final IVessel vessel, final int cv, final boolean isLaden) {
+	public NonNullPair<TravelRouteData, Long> getTotalEstimatedJourneyCost(@NonNull final IntervalData purchase, @NonNull final IntervalData sales, final int loadDuration, final int salesPrice,
+			final long charterRatePerDay, @NonNull final TravelRouteData[] sortedCanalTimes, final long boiloffRateM3, final IVessel vessel, final int cv, final boolean isLaden) {
 		assert sortedCanalTimes.length > 0;
 		final int equivalenceFactor = vessel.getTravelBaseFuel().getEquivalenceFactor();
 		long bestMargin = Long.MAX_VALUE;
-		LadenRouteData bestCanal = null;
+		TravelRouteData bestCanal = null;
 
-		for (final LadenRouteData canal : sortedCanalTimes) {
-			if (isFeasibleTravelTime(purchase, sales, loadDuration, canal.ladenTimeAtMaxSpeed)) {
+		for (final TravelRouteData canal : sortedCanalTimes) {
+			if (isFeasibleTravelTime(purchase, sales, loadDuration, canal.travelTimeAtMaxSpeed)) {
 				final long cost = getTotalEstimatedCostForRoute(purchase, sales, salesPrice, loadDuration, boiloffRateM3, vessel, cv, equivalenceFactor, canal, charterRatePerDay, isLaden);
 				if (cost < bestMargin) {
 					bestMargin = cost;
@@ -283,8 +283,8 @@ public class PriceIntervalProviderHelper {
 		}
 		if (bestCanal == null) {
 			final long fastest = Long.MAX_VALUE;
-			for (final LadenRouteData canal : sortedCanalTimes) {
-				if (canal.ladenTimeAtMaxSpeed < fastest) {
+			for (final TravelRouteData canal : sortedCanalTimes) {
+				if (canal.travelTimeAtMaxSpeed < fastest) {
 					bestCanal = canal;
 				}
 			}
@@ -293,13 +293,13 @@ public class PriceIntervalProviderHelper {
 			}
 		}
 		assert bestCanal != null;
-		return new NonNullPair<LadenRouteData, Long>(bestCanal, bestMargin);
+		return new NonNullPair<TravelRouteData, Long>(bestCanal, bestMargin);
 	}
 
 	public long getTotalEstimatedCostForRoute(final IntervalData purchase, final IntervalData sales, final int salesPrice, final int loadDuration, final long boiloffRateM3,
-			final @NonNull IVessel vessel, final int cv, final int equivalenceFactor, final LadenRouteData canal, final long charterRatePerDay, final boolean isLaden) {
-		final int[] times = getIdealLoadAndDischargeTimesGivenCanal(purchase.start, purchase.end, sales.start, sales.end, loadDuration, (int) canal.ladenTimeAtMaxSpeed,
-				(int) canal.ladenTimeAtNBOSpeed);
+			final @NonNull IVessel vessel, final int cv, final int equivalenceFactor, final TravelRouteData canal, final long charterRatePerDay, final boolean isLaden) {
+		final int[] times = getIdealLoadAndDischargeTimesGivenCanal(purchase.start, purchase.end, sales.start, sales.end, loadDuration, (int) canal.travelTimeAtMaxSpeed,
+				(int) canal.travelTimeAtNBOSpeed);
 
 		ApproximateFuelCostLegData inputData = new ApproximateFuelCostLegData();
 		inputData.salesPrice = salesPrice;
@@ -307,7 +307,7 @@ public class PriceIntervalProviderHelper {
 		inputData.vessel = vessel;
 		inputData.cv = cv;
 		inputData.times = times;
-		inputData.distance = canal.ladenRouteDistance;
+		inputData.distance = canal.routeDistance;
 		inputData.equivalenceFactor = equivalenceFactor;
 		inputData.baseFuelPricesPerMT = vesselBaseFuelCalculator.getBaseFuelPrices(vessel, times[0]);
 		inputData.canalTransitTime = canal.transitTime;
@@ -319,7 +319,7 @@ public class PriceIntervalProviderHelper {
 		ApproximateFuelCosts legFuelCosts = ApproximateVoyageCalculatorHelper.getLegFuelCosts(inputData);
 		
 		final long charterCost = Calculator.costFromDailyRateAndTimeInHours(charterRatePerDay, times[1] - times[0]);
-		final long cost = canal.ladenRouteCost + legFuelCosts.getBoilOffCost() + legFuelCosts.getJourneyBunkerCost() + charterCost;
+		final long cost = canal.routeCost + legFuelCosts.getBoilOffCost() + legFuelCosts.getJourneyBunkerCost() + charterCost;
 		return cost;
 	}
 
@@ -416,11 +416,11 @@ public class PriceIntervalProviderHelper {
 		return dischargePriceIntervals.get(dischargePriceIntervals.size() - 1)[0] - loadPriceIntervals.get(0)[0] - 1;
 	}
 
-	public int getMinTravelTimeAtMaxSpeed(@NonNull final LadenRouteData @NonNull [] canalTimes) {
+	public int getMinTravelTimeAtMaxSpeed(@NonNull final TravelRouteData @NonNull [] canalTimes) {
 		int min = Integer.MAX_VALUE;
-		for (final LadenRouteData ladenRouteData : canalTimes) {
-			if (ladenRouteData.ladenTimeAtMaxSpeed < min) {
-				min = (int) ladenRouteData.ladenTimeAtMaxSpeed;
+		for (final TravelRouteData ladenRouteData : canalTimes) {
+			if (ladenRouteData.travelTimeAtMaxSpeed < min) {
+				min = (int) ladenRouteData.travelTimeAtMaxSpeed;
 			}
 		}
 		return min;

@@ -65,11 +65,11 @@ public class PriceIntervalProviderHelperTest {
 		final IntervalData sales = new IntervalData(50, 70, 10);
 		final int loadDuration = 0;
 		final int salesPrice = 10;
-		final LadenRouteData[] lrd = new LadenRouteData[2];
-		lrd[0] = new LadenRouteData(20, 30, 0, 300, 0);
-		lrd[1] = new LadenRouteData(10, 15, OptimiserUnitConvertor.convertToInternalDailyCost(500000), 150, 0);
+		final TravelRouteData[] lrd = new TravelRouteData[2];
+		lrd[0] = new TravelRouteData(20, 30, 0, 300, 0);
+		lrd[1] = new TravelRouteData(10, 15, OptimiserUnitConvertor.convertToInternalDailyCost(500000), 150, 0);
 		final IVessel iVessel = getIVessel();
-		final NonNullPair<LadenRouteData, Long> totalEstimatedJourneyCost = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchase, sales, loadDuration, salesPrice, 0, lrd, 10300, iVessel,
+		final NonNullPair<TravelRouteData, Long> totalEstimatedJourneyCost = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchase, sales, loadDuration, salesPrice, 0, lrd, 10300, iVessel,
 				OptimiserUnitConvertor.convertToInternalDailyRate(22), true);
 
 	}
