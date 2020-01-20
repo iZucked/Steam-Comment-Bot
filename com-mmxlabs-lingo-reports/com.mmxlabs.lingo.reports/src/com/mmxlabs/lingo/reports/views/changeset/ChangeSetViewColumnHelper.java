@@ -130,7 +130,8 @@ public class ChangeSetViewColumnHelper {
 	private GridViewerColumn column_Violations;
 
 	/**
-	 * Display textual vessel change markers - used for unit testing where graphics are not captured in data dump.
+	 * Display textual vessel change markers - used for unit testing where graphics
+	 * are not captured in data dump.
 	 */
 	private boolean textualVesselMarkers = false;
 
@@ -1637,6 +1638,19 @@ public class ChangeSetViewColumnHelper {
 					// }
 					// if (element instanceof ChangeSetTableGroup) {
 
+				} else if (false && element instanceof ChangeSetTableRow) {
+					// DEBUG helper, show P&L sums in label
+					ChangeSetTableRow change = (ChangeSetTableRow) element;
+
+					long pnl = ChangeSetKPIUtil.getPNL(change, ResultType.After) - ChangeSetKPIUtil.getPNL(change, ResultType.Before);
+					long purchase = ChangeSetKPIUtil.getPurchaseCost(change, ResultType.After) - ChangeSetKPIUtil.getPurchaseCost(change, ResultType.Before);
+					long sales = ChangeSetKPIUtil.getSalesRevenue(change, ResultType.After) - ChangeSetKPIUtil.getSalesRevenue(change, ResultType.Before);
+					long shipFOB = ChangeSetKPIUtil.getShipping(change, ResultType.After) - ChangeSetKPIUtil.getShipping(change, ResultType.Before);
+
+					// Note: Missing other PNL components.
+					long computedPNL = sales - purchase - shipFOB;
+//					cell.setText(String.format("%,d", computedPNL));
+					cell.setText(String.format("%,d", pnl - computedPNL));
 				}
 			}
 		};

@@ -392,6 +392,11 @@ public class GroupedCharterLengthEventImpl extends EventImpl implements GroupedC
 		final Sequence sequence = getLinkedSequence();
 		prefix = prefix + " " + sequence.getName();
 
+		if (getLinkedSequence().getVesselAvailability() != null) {
+			return String.format("%s (%d)", prefix, getLinkedSequence().getVesselAvailability().getCharterNumber());
+		} else if (getLinkedSequence().getCharterInMarket() != null) {
+			return String.format("%s (%d)", prefix, getLinkedSequence().getSpotIndex() + 1);
+		}
 		return prefix;
 
 	}

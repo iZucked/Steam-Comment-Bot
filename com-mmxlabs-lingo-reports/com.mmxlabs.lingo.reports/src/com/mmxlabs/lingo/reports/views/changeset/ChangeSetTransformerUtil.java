@@ -143,8 +143,6 @@ public final class ChangeSetTransformerUtil {
 					} else if (event instanceof GeneratedCharterOut) {
 						// Keep going!
 					} else if (event instanceof CharterLengthEvent) {
-						continue;
-					} else if (event instanceof GroupedCharterLengthEvent) {
 						// Keep going!
 					} else if (event instanceof SlotVisit) {
 						// Already processed
@@ -327,11 +325,10 @@ public final class ChangeSetTransformerUtil {
 				}
 			} else if (target instanceof Event) {
 				final Event event = (Event) target;
-
 				if (event instanceof CharterLengthEvent) {
 					// Record these events so we can group them up later
 					final CharterLengthEvent charterLengthEvent = (CharterLengthEvent) event;
-					extraEvents.computeIfAbsent(charterLengthEvent.getSequence(), k -> ScheduleFactory.eINSTANCE.createGroupedCharterLengthEvent()).getEvents().add(charterLengthEvent);
+					extraEvents.computeIfAbsent(charterLengthEvent.getSequence(), k -> ScheduleFactory.eINSTANCE.createGroupedCharterLengthEvent()).getEvents().addAll(charterLengthEvent.getEvents());
 				} else {
 					eventMapper.accept(event);
 				}
@@ -342,10 +339,15 @@ public final class ChangeSetTransformerUtil {
 			long pnl1 = 0L;
 			long pnl2 = 0L;
 			for (final Event e : cle.getEvents()) {
-				final CharterLengthEvent c = (CharterLengthEvent) e;
-				pnl1 += c.getGroupProfitAndLoss().getProfitAndLoss();
-				pnl2 += c.getGroupProfitAndLoss().getProfitAndLossPreTax();
-				cle.setLinkedSequence(c.getSequence());
+				if (e instanceof CharterLengthEvent) {
+					final CharterLengthEvent c = (CharterLengthEvent) e;
+					cle.setLinkedSequence(c.getSequence());
+				}
+				if (e instanceof ProfitAndLossContainer) {
+					ProfitAndLossContainer c = (ProfitAndLossContainer)e;
+					pnl1 += c.getGroupProfitAndLoss().getProfitAndLoss();
+					pnl2 += c.getGroupProfitAndLoss().getProfitAndLossPreTax();
+				}
 			}
 			final GroupProfitAndLoss groupProfitAndLoss = ScheduleFactory.eINSTANCE.createGroupProfitAndLoss();
 			groupProfitAndLoss.setProfitAndLoss(pnl1);
