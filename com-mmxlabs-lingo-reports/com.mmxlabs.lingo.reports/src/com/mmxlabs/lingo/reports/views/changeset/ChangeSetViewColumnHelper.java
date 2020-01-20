@@ -72,6 +72,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils.ShippingCostType;
 import com.mmxlabs.models.ui.date.DateTimeFormatsProvider;
@@ -1287,47 +1288,31 @@ public class ChangeSetViewColumnHelper {
 			public String getToolTipText(final Object element) {
 				if (element instanceof ChangeSetTableRow) {
 					final ChangeSetTableRow change = (ChangeSetTableRow) element;
+		
+					final long originalLateness = ChangeSetKPIUtil.getLatenessInHours(change, ResultType.Before);
+					final long originalFlexUsed = ChangeSetKPIUtil.getFlexUsedInHours(change, ResultType.Before);
+					final long originalFlexAvailable = ChangeSetKPIUtil.getFlexAvailableInHours(change, ResultType.Before);
+					final long newLateness = ChangeSetKPIUtil.getLatenessInHours(change, ResultType.After);
+					final long newFlexUsed = ChangeSetKPIUtil.getFlexUsedInHours(change, ResultType.After);
+					final long newFlexAvailable = ChangeSetKPIUtil.getFlexAvailableInHours(change, ResultType.After);				
 
-					final long[] originalLateness = ChangeSetKPIUtil.getLateness(change, ResultType.Before);
-					final long[] newLateness = ChangeSetKPIUtil.getLateness(change, ResultType.After);
-
-					// No lateness
-					if (originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] == 0 && newLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] == 0) {
+					final long deltaLateness = newLateness - originalLateness;
+					if (deltaLateness == 0) {
 						return null;
 					}
-
-					final boolean originalInFlex = originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] > 0 && originalLateness[ChangeSetKPIUtil.FlexType.WithFlex.ordinal()] == 0;
-					final boolean newInFlex = newLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] > 0 && newLateness[ChangeSetKPIUtil.FlexType.WithFlex.ordinal()] == 0;
-
-					if (originalInFlex != newInFlex) {
-						// Lateness shift between flex and non-flex times.
-						final long delta = newLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] - originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()];
-						final String flexStr;
-						if (originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] == 0) {
-							assert !originalInFlex;
-							flexStr = "within";
-						} else if (delta > 0) {
-							flexStr = "out of";
-						} else {
-							flexStr = "within";
-						}
-						// CHECK -- IF Original was zero, then we have moved into the felx time.
-						return String.format("Lateness %s by %d days, %d hours %s flex time", delta > 0 ? "increased" : "decreased", Math.abs(delta) / 24, Math.abs(delta) % 24, flexStr);
-					}
-					if (!originalInFlex) {
-						// if (originalLateWithoutFlex > 0 && newLatenessWithoutFlex > 0) {
-						final long delta = newLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] - originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()];
-						return String.format("Lateness %s by %d days, %d hours", delta > 0 ? "increased" : "decreased", Math.abs(delta) / 24, Math.abs(delta) % 24);
-						// }
-					} else {
-						// if (originalLateWithoutFlex > 0 && newLatenessWithoutFlex > 0) {
-						final long delta = newLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] - originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()];
-						return String.format("Lateness (within flex time) %s by %d days, %d hours", delta > 0 ? "increased" : "decreased", Math.abs(delta) / 24, Math.abs(delta) % 24);
-						// }
-					}
-
+				
+					String direction = (deltaLateness > 0 ? "increased" : "decreased");
+					
+					StringBuilder sb = new StringBuilder();
+					sb.append("Lateness ").append(direction).append(" by ").append(LatenessUtils.formatLatenessHoursConcise(Math.abs(deltaLateness))).append(" hours:\n");
+					sb.append("Before: ").append(LatenessUtils.formatLatenessHoursConcise(originalLateness));
+					sb.append(" (").append(originalFlexUsed).append(" hours flex used of available ").append(originalFlexAvailable).append(" hours flex)");
+					sb.append("\r\nAfter: ").append(LatenessUtils.formatLatenessHoursConcise(newLateness));
+					sb.append(" (").append(newFlexUsed).append(" hours flex used of available ").append(newFlexAvailable).append(" hours flex)");
+					return sb.toString();				
 				}
 				return null;
+				
 			}
 
 			@Override
@@ -1369,14 +1354,14 @@ public class ChangeSetViewColumnHelper {
 					final long[] originalLateness = ChangeSetKPIUtil.getLateness(change, ResultType.Before);
 					final long[] newLateness = ChangeSetKPIUtil.getLateness(change, ResultType.After);
 
-					final boolean originalInFlex = originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] > 0 && originalLateness[ChangeSetKPIUtil.FlexType.WithFlex.ordinal()] == 0;
-					final boolean newInFlex = newLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] > 0 && newLateness[ChangeSetKPIUtil.FlexType.WithFlex.ordinal()] == 0;
+					final boolean originalInFlex = originalLateness[ChangeSetKPIUtil.FlexType.TotalIfFlexInsufficient.ordinal()] > 0 && originalLateness[ChangeSetKPIUtil.FlexType.TotalIfWithinFlex.ordinal()] == 0;
+					final boolean newInFlex = newLateness[ChangeSetKPIUtil.FlexType.TotalIfFlexInsufficient.ordinal()] > 0 && newLateness[ChangeSetKPIUtil.FlexType.TotalIfWithinFlex.ordinal()] == 0;
 
 					String flexStr = "";
 					if (originalInFlex != newInFlex) {
 						// Lateness shift between flex and non-flex times.
-						final long delta = newLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] - originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()];
-						if (originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] == 0) {
+						final long delta = newLateness[ChangeSetKPIUtil.FlexType.TotalIfFlexInsufficient.ordinal()] - originalLateness[ChangeSetKPIUtil.FlexType.TotalIfFlexInsufficient.ordinal()];
+						if (originalLateness[ChangeSetKPIUtil.FlexType.TotalIfFlexInsufficient.ordinal()] == 0) {
 							assert originalInFlex == false;
 							flexStr = " *";
 						} else if (delta > 0) {
@@ -1386,8 +1371,8 @@ public class ChangeSetViewColumnHelper {
 						}
 					}
 					long delta = 0L;
-					delta -= originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()];
-					delta += newLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()];
+					delta -= originalLateness[ChangeSetKPIUtil.FlexType.TotalIfFlexInsufficient.ordinal()];
+					delta += newLateness[ChangeSetKPIUtil.FlexType.TotalIfFlexInsufficient.ordinal()];
 					final long originalDelta = delta;
 					delta = (int) Math.round((double) delta / 24.0);
 					if (delta != 0L) {

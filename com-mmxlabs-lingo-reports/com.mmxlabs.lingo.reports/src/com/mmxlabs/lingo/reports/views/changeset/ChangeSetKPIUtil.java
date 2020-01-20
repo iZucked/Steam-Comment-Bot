@@ -35,7 +35,8 @@ public class ChangeSetKPIUtil {
 	}
 
 	public enum FlexType {
-		WithoutFlex, WithFlex
+		TotalIfFlexInsufficient, 
+		TotalIfWithinFlex
 	}
 
 	public static long getPNL(@Nullable final ChangeSetTableRow tableRow, @NonNull final ResultType type) {
@@ -203,14 +204,36 @@ public class ChangeSetKPIUtil {
 		return getRowProfitAndLossValue(tableRow, type, ScheduleModelKPIUtils::getGroupProfitAndLoss) - getRowProfitAndLossValue(tableRow, type, ScheduleModelKPIUtils::getGroupPreTaxProfitAndLoss);
 	}
 
-	public static long[] getLateness(@NonNull final ChangeSetTableRow tableRow, @NonNull final ResultType type) {
+	public static long getFlexUsedInHours(@NonNull final ChangeSetTableRow tableRow, @NonNull final ResultType type) {
+		long lateness = getLatenessInHours(tableRow, type);
+		long flex = getFlexAvailableInHours(tableRow,type); 
+		if (flex < lateness) {
+			return 0;
+		}
+		else {
+			return lateness;
+		}
+	}
+	
+	public static long getFlexAvailableInHours(@NonNull final ChangeSetTableRow tableRow, @NonNull final ResultType type) {
 
 		final EventGrouping eventGrouping = getEventGrouping(tableRow, type);
-
-		final long[] result = new long[FlexType.values().length];
+		long result = 0;
+		
 		if (eventGrouping != null) {
-			result[FlexType.WithFlex.ordinal()] = LatenessUtils.getLatenessAfterFlex(eventGrouping);
-			result[FlexType.WithoutFlex.ordinal()] = LatenessUtils.getLatenessExcludingFlex(eventGrouping);
+			result = LatenessUtils.getEventGroupingFlexInHours(eventGrouping);
+		}
+		
+		return result;	
+	}
+	
+	public static long getLatenessInHours(@NonNull final ChangeSetTableRow tableRow, @NonNull final ResultType type) {
+
+		final EventGrouping eventGrouping = getEventGrouping(tableRow, type);
+		long result = 0;
+		
+		if (eventGrouping != null) {
+			result = LatenessUtils.getEventGroupingLatenessInHours(eventGrouping);
 		}
 		
 		switch (type) {
@@ -218,8 +241,7 @@ public class ChangeSetKPIUtil {
 			if (tableRow.getLhsAfter() != null) {
 				if (tableRow.getLhsAfter().getLhsGroupProfitAndLoss() instanceof OtherPNL) {
 					OtherPNL otherPNL = (OtherPNL) tableRow.getLhsAfter().getLhsGroupProfitAndLoss();
-					result[FlexType.WithoutFlex.ordinal()] += LatenessUtils.getLatenessExcludingFlex(otherPNL);
-					result[FlexType.WithFlex.ordinal()] += LatenessUtils.getLatenessExcludingFlex(otherPNL);
+					result += LatenessUtils.getLatenessInHours(otherPNL);
 				}
 			}
 			break;
@@ -227,8 +249,50 @@ public class ChangeSetKPIUtil {
 			if (tableRow.getLhsBefore() != null) {
 				if (tableRow.getLhsBefore().getLhsGroupProfitAndLoss() instanceof OtherPNL) {
 					OtherPNL otherPNL = (OtherPNL) tableRow.getLhsBefore().getLhsGroupProfitAndLoss();
-					result[FlexType.WithoutFlex.ordinal()] += LatenessUtils.getLatenessExcludingFlex(otherPNL);
-					result[FlexType.WithFlex.ordinal()] += LatenessUtils.getLatenessExcludingFlex(otherPNL);
+					result += LatenessUtils.getLatenessInHours(otherPNL);
+				}
+			}
+			break;
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * Get the lateness with and without flex 
+	 * e.g. 1 day window, 5 days flex, 3 days late, WithFlex = 3 days, withoutflex = 0.
+	 * If 6 days late, then WithFlex = Undefined as optimiser doesn't care, WithoutFlex = 6 days
+	 * 
+	 * @param tableRow
+	 * @param type
+	 * @return
+	 */
+	public static long[] getLateness(@NonNull final ChangeSetTableRow tableRow, @NonNull final ResultType type) {
+
+		final EventGrouping eventGrouping = getEventGrouping(tableRow, type);
+
+		final long[] result = new long[FlexType.values().length];
+		if (eventGrouping != null) {
+			result[FlexType.TotalIfWithinFlex.ordinal()] = LatenessUtils.getLatenessAfterFlex(eventGrouping);
+			result[FlexType.TotalIfFlexInsufficient.ordinal()] = LatenessUtils.getLatenessExcludingFlex(eventGrouping);
+		}
+		
+		switch (type) {
+		case After:
+			if (tableRow.getLhsAfter() != null) {
+				if (tableRow.getLhsAfter().getLhsGroupProfitAndLoss() instanceof OtherPNL) {
+					OtherPNL otherPNL = (OtherPNL) tableRow.getLhsAfter().getLhsGroupProfitAndLoss();
+					result[FlexType.TotalIfFlexInsufficient.ordinal()] += LatenessUtils.getLatenessExcludingFlex(otherPNL);
+					result[FlexType.TotalIfWithinFlex.ordinal()] += LatenessUtils.getLatenessExcludingFlex(otherPNL);
+				}
+			}
+			break;
+		case Before:
+			if (tableRow.getLhsBefore() != null) {
+				if (tableRow.getLhsBefore().getLhsGroupProfitAndLoss() instanceof OtherPNL) {
+					OtherPNL otherPNL = (OtherPNL) tableRow.getLhsBefore().getLhsGroupProfitAndLoss();
+					result[FlexType.TotalIfFlexInsufficient.ordinal()] += LatenessUtils.getLatenessExcludingFlex(otherPNL);
+					result[FlexType.TotalIfWithinFlex.ordinal()] += LatenessUtils.getLatenessExcludingFlex(otherPNL);
 				}
 			}
 			break;
