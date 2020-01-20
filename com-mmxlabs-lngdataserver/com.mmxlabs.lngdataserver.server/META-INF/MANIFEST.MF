@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Dataserver: LiNGO Server
 Bundle-SymbolicName: com.mmxlabs.lngdataserver.server;singleton:=true
-Bundle-Version: 4.8.5.qualifier
+Bundle-Version: 4.8.5.RELEASE
 Bundle-RequiredExecutionEnvironment: JavaSE-10
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: config,
