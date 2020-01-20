@@ -1290,10 +1290,8 @@ public class ChangeSetViewColumnHelper {
 					final ChangeSetTableRow change = (ChangeSetTableRow) element;
 		
 					final long originalLateness = ChangeSetKPIUtil.getLatenessInHours(change, ResultType.Before);
-					final long originalFlexUsed = ChangeSetKPIUtil.getFlexUsedInHours(change, ResultType.Before);
 					final long originalFlexAvailable = ChangeSetKPIUtil.getFlexAvailableInHours(change, ResultType.Before);
 					final long newLateness = ChangeSetKPIUtil.getLatenessInHours(change, ResultType.After);
-					final long newFlexUsed = ChangeSetKPIUtil.getFlexUsedInHours(change, ResultType.After);
 					final long newFlexAvailable = ChangeSetKPIUtil.getFlexAvailableInHours(change, ResultType.After);				
 
 					final long deltaLateness = newLateness - originalLateness;
@@ -1304,17 +1302,28 @@ public class ChangeSetViewColumnHelper {
 					String direction = (deltaLateness > 0 ? "increased" : "decreased");
 					
 					StringBuilder sb = new StringBuilder();
-					sb.append("Lateness ").append(direction).append(" by ").append(LatenessUtils.formatLatenessHoursConcise(Math.abs(deltaLateness))).append(" hours:\n");
+					sb.append("Lateness ").append(direction).append(" by ").append(LatenessUtils.formatLatenessHoursConcise(Math.abs(deltaLateness))).append(":\n");
 					sb.append("Before: ").append(LatenessUtils.formatLatenessHoursConcise(originalLateness));
-					sb.append(" (").append(originalFlexUsed).append(" hours flex used of available ").append(originalFlexAvailable).append(" hours flex)");
+					sb.append(getFlexString(originalLateness, originalFlexAvailable));
 					sb.append("\r\nAfter: ").append(LatenessUtils.formatLatenessHoursConcise(newLateness));
-					sb.append(" (").append(newFlexUsed).append(" hours flex used of available ").append(newFlexAvailable).append(" hours flex)");
+					sb.append(getFlexString(newLateness, newFlexAvailable));
 					return sb.toString();				
 				}
 				return null;
 				
 			}
 
+			private String getFlexString(long lateness, long availableFlex) {
+				StringBuilder sb = new StringBuilder();
+				if (lateness > availableFlex) {
+					sb.append(" (exceeds flex of ").append(availableFlex).append(" hours by ").append(lateness - availableFlex).append(" hours)");
+				}
+				else {
+					sb.append(" (within flex of ").append(availableFlex).append(" hours by ").append(availableFlex - lateness).append(" hours)");
+				}
+				return sb.toString();
+			}
+			
 			@Override
 			public void update(final ViewerCell cell) {
 				final Object element = cell.getElement();

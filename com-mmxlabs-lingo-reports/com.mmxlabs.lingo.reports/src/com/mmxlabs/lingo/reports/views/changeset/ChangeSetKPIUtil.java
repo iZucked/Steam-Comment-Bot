@@ -203,17 +203,6 @@ public class ChangeSetKPIUtil {
 	public static long getTax(@NonNull final ChangeSetTableRow tableRow, @NonNull final ResultType type) {
 		return getRowProfitAndLossValue(tableRow, type, ScheduleModelKPIUtils::getGroupProfitAndLoss) - getRowProfitAndLossValue(tableRow, type, ScheduleModelKPIUtils::getGroupPreTaxProfitAndLoss);
 	}
-
-	public static long getFlexUsedInHours(@NonNull final ChangeSetTableRow tableRow, @NonNull final ResultType type) {
-		long lateness = getLatenessInHours(tableRow, type);
-		long flex = getFlexAvailableInHours(tableRow,type); 
-		if (flex < lateness) {
-			return 0;
-		}
-		else {
-			return lateness;
-		}
-	}
 	
 	public static long getFlexAvailableInHours(@NonNull final ChangeSetTableRow tableRow, @NonNull final ResultType type) {
 
