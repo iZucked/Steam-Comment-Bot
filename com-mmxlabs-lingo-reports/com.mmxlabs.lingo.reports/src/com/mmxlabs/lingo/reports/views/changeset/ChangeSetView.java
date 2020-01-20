@@ -94,10 +94,7 @@ import com.mmxlabs.lingo.reports.services.EDiffOption;
 import com.mmxlabs.lingo.reports.services.IScenarioComparisonServiceListener;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
-import com.mmxlabs.lingo.reports.services.ScenarioComparisonServiceTransformer;
 import com.mmxlabs.lingo.reports.services.ScenarioNotEvaluatedException;
-import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
-import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetKPIUtil.ResultType;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetToTableTransformer.SortMode;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetViewColumnHelper.VesselData;
@@ -237,13 +234,8 @@ public class ChangeSetView extends ViewPart {
 			if (ChangeSetView.this.viewMode == ViewMode.COMPARE) {
 				final ScenarioResult target = pin == null ? other : pin;
 				setNewDataData(target, (monitor, targetSlotId) -> {
-					final ScheduleDiffUtils scheduleDiffUtils = new ScheduleDiffUtils();
-					scheduleDiffUtils.setCheckAssignmentDifferences(true);
-					scheduleDiffUtils.setCheckSpotMarketDifferences(true);
-					scheduleDiffUtils.setCheckNextPortDifferences(true);
-					final ScenarioComparisonTransformer transformer = new ScenarioComparisonTransformer();
-					final ChangeSetRoot newRoot = transformer.createDataModel(equivalancesMap, table, pin, other, monitor);
-
+					final PinDiffResultPlanTransformer transformer = new PinDiffResultPlanTransformer();
+					final ChangeSetRoot newRoot = transformer.createDataModel(pin, other, monitor);
 					return new ViewState(newRoot, SortMode.BY_GROUP);
 				}, null);
 			}
@@ -460,26 +452,10 @@ public class ChangeSetView extends ViewPart {
 				public String getStringContents(final ScenarioResult pin, final ScenarioResult other) {
 					try {
 						columnHelper.setTextualVesselMarkers(true);
-						// Need to refresh the view to trigger creation of the text labels
-						final ScheduleDiffUtils scheduleDiffUtils = new ScheduleDiffUtils();
-						scheduleDiffUtils.setCheckAssignmentDifferences(true);
-						scheduleDiffUtils.setCheckSpotMarketDifferences(true);
-						scheduleDiffUtils.setCheckNextPortDifferences(true);
-
-						final ISelectedDataProvider selectedDataProvider = SelectedScenariosService.createTestingSelectedDataProvider(pin, other);
-						final ScenarioComparisonServiceTransformer.TransformResult result = ScenarioComparisonServiceTransformer.transform(pin, Collections.singletonList(other), selectedDataProvider,
-								scheduleDiffUtils, Collections.emptyList());
-						result.selectedDataProvider = selectedDataProvider;
-						final Table table = result.table;
-
-						// Take a copy of current diff options
-						// table.setOptions(EcoreUtil.copy(diffOptions));
-
+					 
 						ChangeSetView.this.setNewDataData(pin, (monitor, targetSlotId) -> {
-
-							final ScenarioComparisonTransformer transformer = new ScenarioComparisonTransformer();
-							final ChangeSetRoot newRoot = transformer.createDataModel(result.equivalancesMap, table, pin, other, monitor);
-
+							final PinDiffResultPlanTransformer transformer = new PinDiffResultPlanTransformer();
+							final ChangeSetRoot newRoot = transformer.createDataModel(  pin, other, monitor);
 							return new ViewState(newRoot, SortMode.BY_GROUP);
 						}, false, null);
 						ViewerHelper.refresh(viewer, true);
