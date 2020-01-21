@@ -13,9 +13,12 @@ Require-Bundle: com.mmxlabs.models.lng.types;bundle-version="[4.8.6,5.0.0)",
  org.mockito.mockito-core;bundle-version="1.9.5",
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.models.lng.pricing.validation,
- org.junit.jupiter.params;bundle-version="5.1.0"
+ net.bytebuddy.byte-buddy;bundle-version="1.9.9",
+ org.objenesis;bundle-version="2.6.0",
+ org.aopalliance;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
 Automatic-Module-Name: com.mmxlabs.lingo.reports.tests
 Import-Package: org.junit.jupiter.api;version="5.1.0",
+ org.junit.jupiter.params;version="5.1.0",
  org.junit.runner.manipulation;version="4.12.0"
