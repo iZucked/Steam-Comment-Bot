@@ -136,6 +136,7 @@ import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
+import com.mmxlabs.rcp.common.actions.CopyGridToHtmlClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.rcp.common.actions.CopyToClipboardActionFactory;
 import com.mmxlabs.rcp.common.actions.IAdditionalAttributeProvider;
@@ -452,10 +453,10 @@ public class ChangeSetView extends ViewPart {
 				public String getStringContents(final ScenarioResult pin, final ScenarioResult other) {
 					try {
 						columnHelper.setTextualVesselMarkers(true);
-					 
+
 						ChangeSetView.this.setNewDataData(pin, (monitor, targetSlotId) -> {
 							final PinDiffResultPlanTransformer transformer = new PinDiffResultPlanTransformer();
-							final ChangeSetRoot newRoot = transformer.createDataModel(  pin, other, monitor);
+							final ChangeSetRoot newRoot = transformer.createDataModel(pin, other, monitor);
 							return new ViewState(newRoot, SortMode.BY_GROUP);
 						}, false, null);
 						ViewerHelper.refresh(viewer, true);
@@ -866,7 +867,13 @@ public class ChangeSetView extends ViewPart {
 		getViewSite().getActionBars().getToolBarManager().add(new GroupMarker("start"));
 
 		{
-			copyAction = CopyToClipboardActionFactory.createCopyToHtmlClipboardAction(viewer, true);
+			copyAction = new CopyGridToHtmlClipboardAction(viewer.getGrid(), true, () -> {
+				columnHelper.setTextualVesselMarkers(true);
+				ViewerHelper.refresh(viewer, true);
+			}, () -> {
+				columnHelper.setTextualVesselMarkers(false);
+				ViewerHelper.refresh(viewer, true);
+			});
 			getViewSite().getActionBars().getToolBarManager().add(copyAction);
 		}
 		{
@@ -914,7 +921,7 @@ public class ChangeSetView extends ViewPart {
 								addActionToMenu(mode_Target, menu2);
 								addActionToMenu(mode_TargetComplexity, menu2);
 								addActionToMenu(mode_Complextiy, menu2);
-							};
+							}
 						};
 						groupModeAction.setToolTipText("Change the grouping choice");
 						addActionToMenu(groupModeAction, menu);
@@ -1002,7 +1009,7 @@ public class ChangeSetView extends ViewPart {
 		} else {
 			final Display display = PlatformUI.getWorkbench().getDisplay();
 			final Shell activeShell = display.getActiveShell();
-			
+
 			final ICoreRunnable runnable = (monitor) -> {
 				try {
 					final ViewState newViewState = action.apply(monitor, targetSlotId);
@@ -1020,11 +1027,12 @@ public class ChangeSetView extends ViewPart {
 					} else {
 						RunnerHelper.syncExec(new ViewUpdateRunnable(newViewState));
 					}
-				}
-				catch (ScenarioNotEvaluatedException cause) {
-					RunnerHelper.asyncExec(new Runnable() { public void run() { 
+				} catch (ScenarioNotEvaluatedException cause) {
+					RunnerHelper.asyncExec(new Runnable() {
+						public void run() {
 							MessageDialog.openError(activeShell, "Error opening result", cause.getMessage());
-					}});
+						}
+					});
 				}
 			};
 
