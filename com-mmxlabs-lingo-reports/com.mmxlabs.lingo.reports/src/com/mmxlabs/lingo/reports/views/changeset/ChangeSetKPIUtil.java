@@ -204,40 +204,52 @@ public class ChangeSetKPIUtil {
 		return getRowProfitAndLossValue(tableRow, type, ScheduleModelKPIUtils::getGroupProfitAndLoss) - getRowProfitAndLossValue(tableRow, type, ScheduleModelKPIUtils::getGroupPreTaxProfitAndLoss);
 	}
 	
-	public static long getFlexAvailableInHours(@NonNull final ChangeSetTableRow tableRow, @NonNull final ResultType type) {
+	public static long getFlexAvailableInHours(@NonNull final ChangeSetTableRow tableRow, @NonNull final ResultType type, @NonNull final String slotName) {
 
 		final EventGrouping eventGrouping = getEventGrouping(tableRow, type);
 		long result = 0;
 		
 		if (eventGrouping != null) {
-			result = LatenessUtils.getEventGroupingFlexInHours(eventGrouping);
+			result = LatenessUtils.getEventGroupingFlexInHours(eventGrouping, slotName);
 		}
 		
 		return result;	
-	}
+	}	
 	
-	public static long getLatenessInHours(@NonNull final ChangeSetTableRow tableRow, @NonNull final ResultType type) {
+	public static long getLatenessInHours(@NonNull final ChangeSetTableRow tableRow, @NonNull final ResultType type, @NonNull final String slotName) {
 
 		final EventGrouping eventGrouping = getEventGrouping(tableRow, type);
 		long result = 0;
 		
 		if (eventGrouping != null) {
-			result = LatenessUtils.getEventGroupingLatenessInHours(eventGrouping);
+			result = LatenessUtils.getEventGroupingLatenessInHours(eventGrouping, slotName);
 		}
 		
 		switch (type) {
 		case After:
-			if (tableRow.getLhsAfter() != null) {
+			if (tableRow.getLhsAfter() != null && slotName.equals(tableRow.getLhsName())) {
 				if (tableRow.getLhsAfter().getLhsGroupProfitAndLoss() instanceof OtherPNL) {
 					OtherPNL otherPNL = (OtherPNL) tableRow.getLhsAfter().getLhsGroupProfitAndLoss();
 					result += LatenessUtils.getLatenessInHours(otherPNL);
 				}
 			}
+			if (tableRow.getRhsAfter() != null && slotName.equals(tableRow.getRhsName())) {
+				if (tableRow.getRhsAfter().getLhsGroupProfitAndLoss() instanceof OtherPNL) {
+					OtherPNL otherPNL = (OtherPNL) tableRow.getRhsAfter().getRhsGroupProfitAndLoss();
+					result += LatenessUtils.getLatenessInHours(otherPNL);
+				}
+			}
 			break;
 		case Before:
-			if (tableRow.getLhsBefore() != null) {
+			if (tableRow.getLhsBefore() != null && slotName.equals(tableRow.getLhsName())) {
 				if (tableRow.getLhsBefore().getLhsGroupProfitAndLoss() instanceof OtherPNL) {
 					OtherPNL otherPNL = (OtherPNL) tableRow.getLhsBefore().getLhsGroupProfitAndLoss();
+					result += LatenessUtils.getLatenessInHours(otherPNL);
+				}
+			}
+			if (tableRow.getRhsBefore() != null && slotName.equals(tableRow.getRhsName())) {
+				if (tableRow.getRhsBefore().getRhsGroupProfitAndLoss() instanceof OtherPNL) {
+					OtherPNL otherPNL = (OtherPNL) tableRow.getRhsBefore().getRhsGroupProfitAndLoss();
 					result += LatenessUtils.getLatenessInHours(otherPNL);
 				}
 			}

@@ -1288,38 +1288,62 @@ public class ChangeSetViewColumnHelper {
 			public String getToolTipText(final Object element) {
 				if (element instanceof ChangeSetTableRow) {
 					final ChangeSetTableRow change = (ChangeSetTableRow) element;
-		
-					final long originalLateness = ChangeSetKPIUtil.getLatenessInHours(change, ResultType.Before);
-					final long originalFlexAvailable = ChangeSetKPIUtil.getFlexAvailableInHours(change, ResultType.Before);
-					final long newLateness = ChangeSetKPIUtil.getLatenessInHours(change, ResultType.After);
-					final long newFlexAvailable = ChangeSetKPIUtil.getFlexAvailableInHours(change, ResultType.After);				
-
-					final long deltaLateness = newLateness - originalLateness;
-					if (deltaLateness == 0) {
-						return null;
+					String latenessTooltip = null;
+					String lhsLateness = getLatenessDetailForSlot(change, change.getLhsName());
+					String rhsLateness = getLatenessDetailForSlot(change, change.getRhsName());
+					if (lhsLateness != null) {
+						latenessTooltip = lhsLateness;
 					}
-				
-					String direction = (deltaLateness > 0 ? "increased" : "decreased");
-					
-					StringBuilder sb = new StringBuilder();
-					sb.append("Lateness ").append(direction).append(" by ").append(LatenessUtils.formatLatenessHoursConcise(Math.abs(deltaLateness))).append(":\n");
-					sb.append("Before: ").append(LatenessUtils.formatLatenessHoursConcise(originalLateness));
-					sb.append(getFlexString(originalLateness, originalFlexAvailable));
-					sb.append("\r\nAfter: ").append(LatenessUtils.formatLatenessHoursConcise(newLateness));
-					sb.append(getFlexString(newLateness, newFlexAvailable));
-					return sb.toString();				
+					if (rhsLateness != null) {
+						if (latenessTooltip != null) {
+							latenessTooltip += "\r\n";
+							latenessTooltip += "\r\n";
+						}
+						latenessTooltip += rhsLateness;
+					}
+					return latenessTooltip;
 				}
 				return null;
 				
 			}
 
+			private String getLatenessDetailForSlot(@NonNull final ChangeSetTableRow change, final String slotName) {
+				if (slotName == null) {
+					return null;
+				}
+				final long originalLateness = ChangeSetKPIUtil.getLatenessInHours(change, ResultType.Before, slotName);
+				final long originalFlexAvailable = ChangeSetKPIUtil.getFlexAvailableInHours(change, ResultType.Before, slotName);
+				final long newLateness = ChangeSetKPIUtil.getLatenessInHours(change, ResultType.After, slotName);
+				final long newFlexAvailable = ChangeSetKPIUtil.getFlexAvailableInHours(change, ResultType.After, slotName);				
+				final long deltaLateness = newLateness - originalLateness;
+				if (deltaLateness == 0) {
+					return null;
+				}
+				String direction = (deltaLateness > 0 ? " more late." : " less late.");
+				StringBuilder sb = new StringBuilder();
+				sb.append(slotName);
+				sb.append(" is ").append(LatenessUtils.formatLatenessHoursConcise(Math.abs(deltaLateness))).append(direction).append("\n");
+				sb.append("Before:\t").append(LatenessUtils.formatLatenessHoursConcise(originalLateness));
+				if (originalLateness != 0) {
+					sb.append(getFlexString(originalLateness, originalFlexAvailable));
+				}
+				sb.append("\r\nAfter: \t").append(LatenessUtils.formatLatenessHoursConcise(newLateness));
+				if (newLateness != 0) {
+					sb.append(getFlexString(newLateness, newFlexAvailable));
+				}
+				return sb.toString();
+			}
+
 			private String getFlexString(long lateness, long availableFlex) {
 				StringBuilder sb = new StringBuilder();
-				if (lateness > availableFlex) {
-					sb.append(" (exceeds flex of ").append(availableFlex).append(" hours by ").append(lateness - availableFlex).append(" hours)");
-				}
-				else {
-					sb.append(" (within flex of ").append(availableFlex).append(" hours by ").append(availableFlex - lateness).append(" hours)");
+				if (availableFlex > 0) {
+					sb.append(" \t(");
+					if (lateness > availableFlex) {
+						sb.append(LatenessUtils.formatLatenessHoursConcise(lateness - availableFlex)).append(" more than flex of ").append(LatenessUtils.formatLatenessHoursConcise(availableFlex)).append(")");
+					}
+					else {
+						sb.append("using flex of ").append(LatenessUtils.formatLatenessHoursConcise(availableFlex)).append(")");
+					}
 				}
 				return sb.toString();
 			}

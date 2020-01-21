@@ -133,26 +133,30 @@ public class LatenessUtils {
 		}
 	}
 
-	public static int getEventGroupingLatenessInHours(@Nullable final EventGrouping eventGrouping) {
+	public static int getEventGroupingLatenessInHours(@Nullable final EventGrouping eventGrouping, final String slotName) {
 		int lateness = 0;
 		if (eventGrouping != null) {
 			for (final Event evt : eventGrouping.getEvents()) {
-				if (evt instanceof PortVisit) {
-					final PortVisit visit = (PortVisit) evt;
-					lateness += LatenessUtils.getLatenessInHours(visit);
+				if (evt instanceof SlotVisit) {
+					final SlotVisit visit = (SlotVisit) evt;
+					if (visit.getSlotAllocation() != null && visit.getSlotAllocation().getName().equals(slotName)) {
+						lateness += LatenessUtils.getLatenessInHours(visit);
+					}
 				}
 			}
 		}
 		return lateness;
 	}
 
-	public static int getEventGroupingFlexInHours(@Nullable final EventGrouping eventGrouping) {
+	public static int getEventGroupingFlexInHours(@Nullable final EventGrouping eventGrouping, final String slotName) {
 		int flex = 0;
 		if (eventGrouping != null) {
 			for (final Event evt : eventGrouping.getEvents()) {
-				if (evt instanceof PortVisit) {
-					final PortVisit visit = (PortVisit) evt;
-					flex += LatenessUtils.getFlex(visit);
+				if (evt instanceof SlotVisit) {
+					final SlotVisit visit = (SlotVisit) evt;
+					if (visit.getSlotAllocation() != null && visit.getSlotAllocation().getName().equals(slotName)) {
+						flex += LatenessUtils.getFlex(visit);
+					}
 				}
 			}
 		}
@@ -160,7 +164,6 @@ public class LatenessUtils {
 	}
 	
 	public static int getLatenessInHours(final PortVisit visit) {
-
 		final PortVisitLateness portVisitLateness = visit.getLateness();
 		if (portVisitLateness != null) {
 			return portVisitLateness.getLatenessInHours();
@@ -169,7 +172,6 @@ public class LatenessUtils {
 	}
 
 	public static int getLatenessInHours(final OtherPNL visit) {
-
 		final PortVisitLateness portVisitLateness = visit.getLateness();
 		if (portVisitLateness != null) {
 			return portVisitLateness.getLatenessInHours();
@@ -180,7 +182,6 @@ public class LatenessUtils {
 	public static int getLatenessAfterFlex(@Nullable final EventGrouping eventGrouping) {
 		int lateness = 0;
 		if (eventGrouping != null) {
-
 			for (final Event evt : eventGrouping.getEvents()) {
 				if (evt instanceof PortVisit) {
 					final PortVisit visit = (PortVisit) evt;
