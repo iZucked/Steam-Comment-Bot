@@ -69,6 +69,24 @@ public class LatenessUtils {
 		return false;
 	}
 
+	public static int getFlex(final Event e) {
+		if (e instanceof PortVisit) {
+			final PortVisitLateness portVisitLateness = ((PortVisit) e).getLateness();
+			if (portVisitLateness != null) {
+				if (e instanceof SlotVisit) {
+					final SlotVisit slotVisit = (SlotVisit) e;
+					final SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
+					if (slotAllocation != null) {
+						final Slot slot = slotAllocation.getSlot();
+						if (slot != null)
+						return slot.getWindowFlex();
+					}
+				}
+			}
+		}
+		return 0;
+	}
+	
 	public static ZonedDateTime getWindowStartDate(final Object object) {
 		if (object instanceof SlotVisit) {
 			return ((SlotVisit) object).getSlotAllocation().getSlot().getSchedulingTimeWindow().getStart();
@@ -105,11 +123,47 @@ public class LatenessUtils {
 		} else {
 			return String.format("%2dd, %2dh", hours / 24, hours % 24);
 		}
-
+	}
+	
+	public static String formatLatenessHoursConcise(final long hours) {
+		if (hours / 24 == 0) {
+			return String.format("%dh", hours % 24);
+		} else {
+			return String.format("%dd, %dh", hours / 24, hours % 24);
+		}
 	}
 
-	public static int getLatenessInHours(final PortVisit visit) {
+	public static int getEventGroupingLatenessInHours(@Nullable final EventGrouping eventGrouping, final String slotName) {
+		int lateness = 0;
+		if (eventGrouping != null) {
+			for (final Event evt : eventGrouping.getEvents()) {
+				if (evt instanceof SlotVisit) {
+					final SlotVisit visit = (SlotVisit) evt;
+					if (visit.getSlotAllocation() != null && visit.getSlotAllocation().getName().equals(slotName)) {
+						lateness += LatenessUtils.getLatenessInHours(visit);
+					}
+				}
+			}
+		}
+		return lateness;
+	}
 
+	public static int getEventGroupingFlexInHours(@Nullable final EventGrouping eventGrouping, final String slotName) {
+		int flex = 0;
+		if (eventGrouping != null) {
+			for (final Event evt : eventGrouping.getEvents()) {
+				if (evt instanceof SlotVisit) {
+					final SlotVisit visit = (SlotVisit) evt;
+					if (visit.getSlotAllocation() != null && visit.getSlotAllocation().getName().equals(slotName)) {
+						flex += LatenessUtils.getFlex(visit);
+					}
+				}
+			}
+		}
+		return flex;
+	}
+	
+	public static int getLatenessInHours(final PortVisit visit) {
 		final PortVisitLateness portVisitLateness = visit.getLateness();
 		if (portVisitLateness != null) {
 			return portVisitLateness.getLatenessInHours();
@@ -118,18 +172,16 @@ public class LatenessUtils {
 	}
 
 	public static int getLatenessInHours(final OtherPNL visit) {
-
 		final PortVisitLateness portVisitLateness = visit.getLateness();
 		if (portVisitLateness != null) {
 			return portVisitLateness.getLatenessInHours();
 		}
 		return 0;
 	}
-
+	
 	public static int getLatenessAfterFlex(@Nullable final EventGrouping eventGrouping) {
 		int lateness = 0;
 		if (eventGrouping != null) {
-
 			for (final Event evt : eventGrouping.getEvents()) {
 				if (evt instanceof PortVisit) {
 					final PortVisit visit = (PortVisit) evt;

@@ -1310,8 +1310,8 @@ public final class ChangeSetTransformerUtil {
 						a = ChangeSetKPIUtil.getViolations(changeSetTableRow, ResultType.Before);
 						b = ChangeSetKPIUtil.getViolations(changeSetTableRow, ResultType.After);
 						if (a == b) {
-							a = ChangeSetKPIUtil.getLateness(changeSetTableRow, ResultType.Before)[FlexType.WithoutFlex.ordinal()];
-							b = ChangeSetKPIUtil.getLateness(changeSetTableRow, ResultType.After)[FlexType.WithoutFlex.ordinal()];
+							a = ChangeSetKPIUtil.getLateness(changeSetTableRow, ResultType.Before)[FlexType.TotalIfFlexInsufficient.ordinal()];
+							b = ChangeSetKPIUtil.getLateness(changeSetTableRow, ResultType.After)[FlexType.TotalIfFlexInsufficient.ordinal()];
 							if (a == b) {
 								itr.remove();
 							}

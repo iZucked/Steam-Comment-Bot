@@ -914,8 +914,6 @@ public class ChangeSetView extends ViewPart {
 								addActionToMenu(mode_Target, menu2);
 								addActionToMenu(mode_TargetComplexity, menu2);
 								addActionToMenu(mode_Complextiy, menu2);
-
-								final int ii = 0;
 							};
 						};
 						groupModeAction.setToolTipText("Change the grouping choice");
