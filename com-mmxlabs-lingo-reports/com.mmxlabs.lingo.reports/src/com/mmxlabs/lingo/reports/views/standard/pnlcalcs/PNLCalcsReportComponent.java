@@ -700,8 +700,10 @@ public class PNLCalcsReportComponent implements IAdaptable /* extends ViewPart *
 				validObjects.clear();
 			}
 
-			final List<CargoAllocationPair> cargoAllocationPairs = CargoAllocationPair.generateCargoPair(cargoAllocations);
-			final List<VesselEventVisitPair> vesselEventVisitsPairs = VesselEventVisitPair.generateVesselEventPair(vesselEventVisits);
+			ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
+
+			final List<CargoAllocationPair> cargoAllocationPairs = CargoAllocationPair.generateDeltaPairs(currentSelectedDataProvider, cargoAllocations);
+			final List<VesselEventVisitPair> vesselEventVisitsPairs = VesselEventVisitPair.generateDeltaPairs(currentSelectedDataProvider, vesselEventVisits);
 			validObjects.addAll(cargoAllocationPairs);
 			validObjects.addAll(vesselEventVisitsPairs);
 
@@ -822,8 +824,7 @@ public class PNLCalcsReportComponent implements IAdaptable /* extends ViewPart *
 
 				gvc.getColumn().setWidth(100);
 
-				@Nullable
-				final ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
+				final @Nullable ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
 				if (currentSelectedDataProvider != null && currentSelectedDataProvider.isPinnedObject(cargoAllocation)) {
 					gvc.getColumn().setHeaderRenderer(columnImageHeaderCenteredRenderer);
 					gvc.getColumn().setImage(pinImage);

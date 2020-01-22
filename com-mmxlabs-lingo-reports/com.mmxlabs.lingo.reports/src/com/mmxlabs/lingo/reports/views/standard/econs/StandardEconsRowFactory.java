@@ -592,7 +592,9 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 				if (pnl != null) {
 					final SlotAllocation allocation = marketAllocation.getSlotAllocation();
 					final double volume = allocation.getEnergyTransferred();
-
+					if (volume == 0.0) {
+						return 0.0;
+					}
 					return (double) pnl / volume;
 				}
 			}
@@ -607,14 +609,16 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 				final MarketAllocation marketAllocation = (MarketAllocation) object;
 				return helper.apply(marketAllocation);
 			} else if (object instanceof CargoAllocationPair) {
-				return getFromCargoAllocationPair(Double.class, helper, object);
+				return getFromDeltaPair(Double.class, helper, object);
+			} else if (object instanceof DeltaPair) {
+				return getFromDeltaPair(Double.class, helper, object);
 			} else if (object instanceof List<?>) {
 				final List<DeltaPair> pairs = (List<DeltaPair>) object;
 				final double totalVolume = pairs.stream().mapToDouble(x -> cargoAllocationPerMMBTUVolumeHelper(x.first(), options)).sum();
 				final double totalPNL = pairs.stream().mapToDouble(x -> cargoAllocationPNLPerMMBTUPNLHelper(x.first())).sum();
 				final double totalOldVolume = pairs.stream().mapToDouble(x -> cargoAllocationPerMMBTUVolumeHelper(x.second(), options)).sum();
 				final double totalOldPNL = pairs.stream().mapToDouble(x -> cargoAllocationPNLPerMMBTUPNLHelper(x.second())).sum();
-				final double value = (double) (totalOldPNL / totalOldVolume) - (double) (totalPNL / totalVolume);
+				final double value = totalOldVolume == 0.0 ? 0.0 : (double) (totalOldPNL / totalOldVolume) - (double) (totalPNL / totalVolume);
 				return value;
 			}
 			return null;
@@ -870,8 +874,8 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 			} else if (object instanceof VesselEventVisit) {
 				final VesselEventVisit eventVisit = (VesselEventVisit) object;
 				return helper.apply(eventVisit);
-			} else if (object instanceof CargoAllocationPair) {
-				return getFromCargoAllocationPair(Double.class, helper, object);
+			} else if (object instanceof DeltaPair) {
+				return getFromDeltaPair(Double.class, helper, object);
 			} else if (object instanceof List<?>) {
 				final List<DeltaPair> pairs = (List<DeltaPair>) object;
 				final double totalVolume = pairs.stream().filter(Objects::nonNull).mapToDouble(x -> cargoAllocationPerMMBTUVolumeHelper(x.first(), options)).sum();
@@ -879,7 +883,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 
 				final double totalOldVolume = pairs.stream().filter(Objects::nonNull).mapToDouble(x -> cargoAllocationPerMMBTUVolumeHelper(x.second(), options)).sum();
 				final double totalOldCost = pairs.stream().filter(Objects::nonNull).mapToDouble(x -> getShippingCost(x.second())).sum();
-				final double value = (double) (totalOldCost / totalOldVolume) - (double) (totalCost / totalVolume);
+				final double value = totalOldVolume == 0.0 ? 0.0 : (double) (totalOldCost / totalOldVolume) - (double) (totalCost / totalVolume);
 				return value;
 			}
 			return null;
@@ -936,14 +940,14 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 	private static Integer getShippingCost(final Object object) {
 
 		if (object == null) {
-			return null;
+			return 0;
 		}
 
 		Sequence sequence = getSequence(object);
 		List<Event> events = getEvents(object);
 
 		if (sequence == null || events == null) {
-			return null;
+			return 0;
 		}
 
 		// Bit of a double count here, but need to decide what to add to the model

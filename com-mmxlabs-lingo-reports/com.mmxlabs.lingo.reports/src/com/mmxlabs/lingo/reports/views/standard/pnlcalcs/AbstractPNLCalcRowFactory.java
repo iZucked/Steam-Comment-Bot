@@ -20,7 +20,6 @@ import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.common.util.TriFunction;
 import com.mmxlabs.lingo.reports.internal.Activator;
-import com.mmxlabs.lingo.reports.views.standard.econs.CargoAllocationPair;
 import com.mmxlabs.lingo.reports.views.standard.econs.DeltaPair;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -169,10 +168,10 @@ public abstract class AbstractPNLCalcRowFactory implements IPNLCalcsRowFactory {
 			} else if (object instanceof MarketAllocation) {
 				final MarketAllocation marketAllocation = (MarketAllocation) object;
 				return helper.apply(marketAllocation);
-			} else if (object instanceof CargoAllocationPair) {
-				return getFromCargoAllocationPair(type, helper, object);
+			} else if (object instanceof DeltaPair) {
+				return getFromDeltaPair(type, helper, object);
 			} else if (object instanceof List<?>) {
-				return getFromCargoAllocationPairList(type, helper, object);
+				return getFromDeltaPairList(type, helper, object);
 			}
 			return null;
 		};
@@ -439,13 +438,13 @@ public abstract class AbstractPNLCalcRowFactory implements IPNLCalcsRowFactory {
 		};
 	}
 
-	protected <T, U> T getFromCargoAllocationPairList(final Class<T> type, final Function<U, T> f, final Object object) {
-		final List<DeltaPair> cargoAllocations = (List<DeltaPair>) object;
+	protected <T, U> T getFromDeltaPairList(final Class<T> type, final Function<U, T> f, final Object object) {
+		final List<DeltaPair> deltaPairs = (List<DeltaPair>) object;
 
 		if (type == Integer.class) {
 			int acc = 0;
-			for (final DeltaPair cargoAllocation : cargoAllocations) {
-				final Integer v = (Integer) getFromCargoAllocationPair(type, f, cargoAllocation);
+			for (final DeltaPair deltaPair : deltaPairs) {
+				final Integer v = (Integer) getFromDeltaPair(type, f, deltaPair);
 				if (v != null) {
 					acc += (int) v;
 				}
@@ -453,8 +452,8 @@ public abstract class AbstractPNLCalcRowFactory implements IPNLCalcsRowFactory {
 			return type.cast(acc);
 		} else if (type == Double.class) {
 			double acc = 0;
-			for (final DeltaPair cargoAllocation : cargoAllocations) {
-				final Double v = (Double) getFromCargoAllocationPair(type, f, cargoAllocation);
+			for (final DeltaPair deltaPair : deltaPairs) {
+				final Double v = (Double) getFromDeltaPair(type, f, deltaPair);
 				if (v != null) {
 					acc += (double) v;
 				}
@@ -462,8 +461,8 @@ public abstract class AbstractPNLCalcRowFactory implements IPNLCalcsRowFactory {
 			return type.cast(acc);
 		} else if (type == Long.class) {
 			long acc = 0;
-			for (final DeltaPair cargoAllocation : cargoAllocations) {
-				final Long v = (Long) getFromCargoAllocationPair(type, f, cargoAllocation);
+			for (final DeltaPair deltaPair : deltaPairs) {
+				final Long v = (Long) getFromDeltaPair(type, f, deltaPair);
 				if (v != null) {
 					acc += (long) v;
 				}
@@ -474,7 +473,7 @@ public abstract class AbstractPNLCalcRowFactory implements IPNLCalcsRowFactory {
 		return null;
 	}
 
-	protected <T, U> T getFromCargoAllocationPair(final Class<T> type, final Function<U, @Nullable T> f, final Object object) {
+	protected <T, U> T getFromDeltaPair(final Class<T> type, final Function<U, @Nullable T> f, final Object object) {
 		Object first = null;
 		Object second = null;
 
