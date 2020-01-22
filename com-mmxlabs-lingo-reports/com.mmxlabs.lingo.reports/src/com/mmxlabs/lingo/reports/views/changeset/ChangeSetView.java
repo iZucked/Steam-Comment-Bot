@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.reports.views.changeset;
 
+import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -258,6 +259,7 @@ public class ChangeSetView extends ViewPart {
 	private InsertionPlanGrouperAndFilter insertionPlanFilter;
 
 	private boolean showNonStructuralChanges = false;
+	private boolean sortByVesselAndDate = false;
 	private boolean showRelatedChangesMenus = false;
 	private boolean showUserFilterMenus = false;
 	private boolean showNegativePNLChanges = true;
@@ -714,7 +716,35 @@ public class ChangeSetView extends ViewPart {
 					final ChangeSetTableRow r2 = (ChangeSetTableRow) e2;
 					if (r1.eContainer() == r2.eContainer()) {
 						final ChangeSetTableGroup g = (ChangeSetTableGroup) r1.eContainer();
-						return g.getRows().indexOf(r1) - g.getRows().indexOf(r2);
+						if (ChangeSetView.this.sortByVesselAndDate) {
+							if (r1.getAfterVesselName() != null && r2.getAfterVesselName() != null) {
+								int diffVesselAfter = r1.getAfterVesselName().compareTo(r2.getAfterVesselName());
+								if (diffVesselAfter == 0) {
+									if (r1.getBeforeVesselName() != null && r2.getBeforeVesselName() != null) {
+										int diffVesselBefore = r1.getBeforeVesselName().compareTo(r2.getBeforeVesselName());
+										if (diffVesselBefore == 0) {
+											ZonedDateTime date1 = getDate(r1);
+											ZonedDateTime date2 = getDate(r2);
+											if (date1 != null && date2 != null) {
+												int diffDates = date1.compareTo(date2);
+												return diffDates;
+											}
+											else if (date1 != null) {
+												return -1;
+											}
+											else if (date2 != null) {
+												return 1;
+											}
+										}
+										
+									}
+								}
+								return diffVesselAfter;
+							}
+						}
+						else {
+							return g.getRows().indexOf(r1) - g.getRows().indexOf(r2);
+						}
 					}
 				}
 
@@ -738,6 +768,32 @@ public class ChangeSetView extends ViewPart {
 				}
 
 				return super.compare(viewer, original_e1, original_e2);
+			}
+
+			private String getVesselName(ChangeSetTableRow row) {
+				if (row.getAfterVesselName() != null) {
+					return row.getAfterVesselName();
+				}
+				else if (row.getBeforeVesselName() != null) {
+					return row.getBeforeVesselName();
+				}
+				else {
+					return "";
+				}
+			}
+			
+			private ZonedDateTime getDate(ChangeSetTableRow row) {
+				if (row.getLhsAfter() != null && row.getLhsAfter().getLoadAllocation() != null && row.getLhsAfter().getLoadAllocation().getSlotVisit() != null
+					&& row.getLhsAfter().getLoadAllocation().getSlotVisit().getStart() != null) { 
+					return row.getLhsAfter().getLoadAllocation().getSlotVisit().getStart();
+				}
+				else if (row.getRhsAfter() != null && row.getRhsAfter().getDischargeAllocation() != null && row.getRhsAfter().getDischargeAllocation().getSlotVisit() != null
+						&& row.getRhsAfter().getDischargeAllocation().getSlotVisit().getStart() != null) { 
+						return row.getRhsAfter().getDischargeAllocation().getSlotVisit().getStart();
+				}
+				else {
+					return null;
+				}
 			}
 		});
 
@@ -924,6 +980,11 @@ public class ChangeSetView extends ViewPart {
 					toggleStructuralChanges.setChecked(showNonStructuralChanges);
 					addActionToMenu(toggleStructuralChanges, menu);
 
+					final RunnableAction toggleSortByVesselAndDate = new RunnableAction("Sort by vessel and date", ChangeSetView.this::doSortByVesselAndDateToggle);
+					toggleSortByVesselAndDate.setToolTipText("Toggling sorting by vessel and date");
+					toggleSortByVesselAndDate.setChecked(sortByVesselAndDate);
+					addActionToMenu(toggleSortByVesselAndDate, menu);
+					
 					if (showNegativePNLChangesMenu) {
 						final RunnableAction toggleNegativePNL = new RunnableAction("Show negative PNL Changes", ChangeSetView.this::doShowNegativePNLToggle);
 						toggleNegativePNL.setToolTipText("Toggling filtering of negative PNL");
@@ -1190,6 +1251,11 @@ public class ChangeSetView extends ViewPart {
 		ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
 	}
 
+	private void doSortByVesselAndDateToggle() {
+		sortByVesselAndDate = !sortByVesselAndDate;
+		ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
+	}
+	
 	private void doShowNegativePNLToggle() {
 		showNegativePNLChanges = !showNegativePNLChanges;
 		ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
