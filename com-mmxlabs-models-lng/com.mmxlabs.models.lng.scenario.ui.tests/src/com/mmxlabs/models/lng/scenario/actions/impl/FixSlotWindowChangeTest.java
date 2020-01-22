@@ -13,8 +13,8 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -43,35 +43,35 @@ public class FixSlotWindowChangeTest {
 		LocalDate originalWindowStart = LocalDate.of(2013, 8, 29);
 		slot.setWindowStart(originalWindowStart);
 
-		Assert.assertFalse(slot.isSetWindowSize());
-		Assert.assertFalse(slot.isSetWindowStartTime());
+		Assertions.assertFalse(slot.isSetWindowSize());
+		Assertions.assertFalse(slot.isSetWindowStartTime());
 
 		ZonedDateTime newWindowStart = ZonedDateTime.of(2013, 8, 29, 15, 0, 0, 0, ZoneId.of("GMT+5"));
 		final FixSlotWindowChange change = new FixSlotWindowChange(slot, newWindowStart, domain);
-		Assert.assertSame(slot, change.getChangedObject());
+		Assertions.assertSame(slot, change.getChangedObject());
 
 		// Check state has not changed
-		Assert.assertFalse(slot.isSetWindowSize());
-		Assert.assertFalse(slot.isSetWindowStartTime());
-		Assert.assertEquals(originalWindowStart, slot.getWindowStart());
+		Assertions.assertFalse(slot.isSetWindowSize());
+		Assertions.assertFalse(slot.isSetWindowStartTime());
+		Assertions.assertEquals(originalWindowStart, slot.getWindowStart());
 
 		final Command command = change.getCommand();
-		Assert.assertNotNull(command);
-		Assert.assertTrue(command.canExecute());
+		Assertions.assertNotNull(command);
+		Assertions.assertTrue(command.canExecute());
 
 		command.execute();
 
-		Assert.assertTrue(slot.isSetWindowSize());
-		Assert.assertEquals(0, slot.getWindowSize());
+		Assertions.assertTrue(slot.isSetWindowSize());
+		Assertions.assertEquals(0, slot.getWindowSize());
 
 		LocalDate changedWindowStart = slot.getWindowStart();
 
-		Assert.assertEquals(2013, changedWindowStart.getYear());
-		Assert.assertEquals(8, changedWindowStart.getMonthValue());
-		Assert.assertEquals(29, changedWindowStart.getDayOfMonth());
+		Assertions.assertEquals(2013, changedWindowStart.getYear());
+		Assertions.assertEquals(8, changedWindowStart.getMonthValue());
+		Assertions.assertEquals(29, changedWindowStart.getDayOfMonth());
 		// GMT +5 offset
-		Assert.assertTrue(slot.isSetWindowStartTime());
-		Assert.assertEquals(10, slot.getWindowStartTime());
+		Assertions.assertTrue(slot.isSetWindowStartTime());
+		Assertions.assertEquals(10, slot.getWindowStartTime());
 
 	}
 

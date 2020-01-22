@@ -11,8 +11,8 @@ import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
@@ -49,14 +49,14 @@ public class UpdateVesselAvailabilityChangeTest {
 		change.appendUpdatePortCommand(vesselAvailability, domain, port2);
 
 		final Command command = change.getCommand();
-		Assert.assertNotNull(command);
-		Assert.assertTrue(command.canExecute());
+		Assertions.assertNotNull(command);
+		Assertions.assertTrue(command.canExecute());
 
 		command.execute();
 
 		Port startAt = vesselAvailability.getStartAt();
-		Assert.assertNotNull(startAt);
-		Assert.assertSame(port2, startAt);
+		Assertions.assertNotNull(startAt);
+		Assertions.assertSame(port2, startAt);
 	}
 
 	@Test
@@ -73,13 +73,13 @@ public class UpdateVesselAvailabilityChangeTest {
 		change.appendUpdatePortCommand(vesselAvailability, domain, port1);
 
 		final Command command = change.getCommand();
-		Assert.assertNotNull(command);
-		Assert.assertTrue(command.canExecute());
+		Assertions.assertNotNull(command);
+		Assertions.assertTrue(command.canExecute());
 
 		command.execute();
 
 		Port startAt = vesselAvailability.getStartAt();
-		Assert.assertNotNull(startAt);
-		Assert.assertSame(port1, startAt);
+		Assertions.assertNotNull(startAt);
+		Assertions.assertSame(port1, startAt);
 	}
 }
