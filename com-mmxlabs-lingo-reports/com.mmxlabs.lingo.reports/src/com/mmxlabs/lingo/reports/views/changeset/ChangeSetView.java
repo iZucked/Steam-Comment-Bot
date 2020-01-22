@@ -794,7 +794,7 @@ public class ChangeSetView extends ViewPart {
 				if (slotAllocation == null) {
 					slotAllocation =  tableRow.getRhsAfter() != null ? tableRow.getRhsAfter().getDischargeAllocation() : null;
 				}
-				if (slotAllocation.getSlotVisit() != null) {
+				if (slotAllocation != null && slotAllocation.getSlotVisit() != null) {
 					return slotAllocation.getSlotVisit().getStart();
 				}
 				else {
