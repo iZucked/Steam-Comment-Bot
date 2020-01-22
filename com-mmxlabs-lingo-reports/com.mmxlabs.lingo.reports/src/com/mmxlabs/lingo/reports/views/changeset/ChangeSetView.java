@@ -128,6 +128,7 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.transformer.ui.analytics.EvaluateSolutionSetHelper;
@@ -782,14 +783,19 @@ public class ChangeSetView extends ViewPart {
 				}
 			}
 			
-			private ZonedDateTime getDate(ChangeSetTableRow row) {
-				if (row.getLhsAfter() != null && row.getLhsAfter().getLoadAllocation() != null && row.getLhsAfter().getLoadAllocation().getSlotVisit() != null
-					&& row.getLhsAfter().getLoadAllocation().getSlotVisit().getStart() != null) { 
-					return row.getLhsAfter().getLoadAllocation().getSlotVisit().getStart();
+			private ZonedDateTime getDate(ChangeSetTableRow tableRow) {
+				SlotAllocation slotAllocation = tableRow.getLhsAfter() != null ? tableRow.getLhsAfter().getLoadAllocation() : null;
+				if (slotAllocation == null) {
+					slotAllocation = tableRow.getLhsBefore() != null ? tableRow.getLhsBefore().getLoadAllocation() : null;
 				}
-				else if (row.getRhsAfter() != null && row.getRhsAfter().getDischargeAllocation() != null && row.getRhsAfter().getDischargeAllocation().getSlotVisit() != null
-						&& row.getRhsAfter().getDischargeAllocation().getSlotVisit().getStart() != null) { 
-						return row.getRhsAfter().getDischargeAllocation().getSlotVisit().getStart();
+				if (slotAllocation == null) {
+					slotAllocation =  tableRow.getRhsBefore() != null ? tableRow.getRhsBefore().getDischargeAllocation() : null;
+				}
+				if (slotAllocation == null) {
+					slotAllocation =  tableRow.getRhsAfter() != null ? tableRow.getRhsAfter().getDischargeAllocation() : null;
+				}
+				if (slotAllocation.getSlotVisit() != null) {
+					return slotAllocation.getSlotVisit().getStart();
 				}
 				else {
 					return null;
