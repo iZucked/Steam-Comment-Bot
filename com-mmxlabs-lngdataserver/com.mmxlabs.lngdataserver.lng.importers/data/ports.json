@@ -3015,6 +3015,17 @@
     "timeZone" : "Australia/Darwin"
   },
   "upstreamID" : "AU0329"
+}, {
+  "mmxId" : "L_AU_Bladi",
+  "virtual" : false,
+  "name" : "Bladin Point",
+  "geographicPoint" : {
+    "lat" : -12.491666793823242,
+    "lon" : 130.8816680908203,
+    "country" : "Australia",
+    "timeZone" : "Australia/Darwin"
+  },
+  "upstreamID" : "AU0329"
 } ],
   "routingPoints": [
     {
