@@ -1020,6 +1020,8 @@ public class ChangeSetViewColumnHelper {
 			public void update(final ViewerCell cell) {
 				final Object element = cell.getElement();
 				cell.setText("");
+				cell.setImage(null);
+				cell.setFont(null);
 				if (element instanceof ChangeSetTableRow) {
 					final ChangeSetTableRow tableRow = (ChangeSetTableRow) element;
 
@@ -1087,7 +1089,7 @@ public class ChangeSetViewColumnHelper {
 						isSpot = tableRow.isRhsSpot();
 
 						if (newDischargeAllocation != null) {
-							final Slot slot = newDischargeAllocation.getSlot();
+							final Slot<?> slot = newDischargeAllocation.getSlot();
 							if (slot != null) {
 								windowStart = slot.getWindowStart();
 							}
@@ -1182,7 +1184,11 @@ public class ChangeSetViewColumnHelper {
 			@Override
 			public void update(final ViewerCell cell) {
 				final Object element = cell.getElement();
+				
 				cell.setText("");
+				cell.setImage(null);
+				cell.setFont(null);
+
 				if (element instanceof ChangeSetTableGroup) {
 
 					cell.setFont(boldFont);
@@ -1354,6 +1360,8 @@ public class ChangeSetViewColumnHelper {
 				final Object element = cell.getElement();
 				cell.setText("");
 				cell.setForeground(null);
+				cell.setImage(null);
+				cell.setFont(null);
 				if (element instanceof ChangeSetTableGroup) {
 
 					cell.setFont(boldFont);
@@ -1504,6 +1512,8 @@ public class ChangeSetViewColumnHelper {
 				final Object element = cell.getElement();
 				cell.setText("");
 				cell.setForeground(null);
+				cell.setImage(null);
+				cell.setFont(null);
 				if (element instanceof ChangeSetTableGroup) {
 
 					cell.setFont(boldFont);
@@ -1635,6 +1645,8 @@ public class ChangeSetViewColumnHelper {
 			public void update(final ViewerCell cell) {
 				final Object element = cell.getElement();
 				cell.setText("");
+				cell.setImage(null);
+				cell.setFont(null);
 				if (element instanceof ChangeSetTableGroup) {
 					// ChangeSetNode changeSetNode = (ChangeSetNode) element;
 					final ChangeSetTableGroup changeSet = (ChangeSetTableGroup) element;
@@ -1829,6 +1841,7 @@ public class ChangeSetViewColumnHelper {
 			public void update(final ViewerCell cell) {
 				final Object element = cell.getElement();
 				cell.setText("");
+				cell.setImage(null);
 				cell.setFont(null);
 				double delta = 0;
 				if (element instanceof ChangeSetTableGroup) {
@@ -1972,6 +1985,7 @@ public class ChangeSetViewColumnHelper {
 				final Object element = cell.getElement();
 				cell.setText("");
 				cell.setFont(null);
+				cell.setImage(null);
 				long delta = 0;
 				if (element instanceof ChangeSetTableGroup) {
 					cell.setFont(boldFont);
@@ -2054,6 +2068,7 @@ public class ChangeSetViewColumnHelper {
 				final Object element = cell.getElement();
 				cell.setText("");
 				cell.setFont(null);
+				cell.setImage(null);
 				double delta = 0;
 				if (element instanceof ChangeSetTableGroup) {
 					// cell.setFont(boldFont);
