@@ -7,6 +7,7 @@ package com.mmxlabs.rcp.common;
 import java.util.Collection;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -20,6 +21,8 @@ import com.mmxlabs.common.util.CheckedConsumer;
 import com.mmxlabs.common.util.CheckedFunction;
 
 public final class ServiceHelper {
+
+	private static final String MSG_SERVICE_NOT_FOUND = "Service not found";
 
 	@SuppressWarnings("null")
 	public static <T> void withOptionalServiceConsumer(final Class<T> cls, final Consumer<@Nullable T> withFunc) {
@@ -65,11 +68,7 @@ public final class ServiceHelper {
 			final T service = bundleContext.getService(serviceReference);
 			try {
 				withFunc.accept(service);
-			} 
-			catch (Exception e) {
-				e.printStackTrace();
-			}
-			finally {
+			} finally {
 				bundleContext.ungetService(serviceReference);
 			}
 		} else {
@@ -102,7 +101,7 @@ public final class ServiceHelper {
 		final BundleContext bundleContext = FrameworkUtil.getBundle(ServiceHelper.class).getBundleContext();
 		final ServiceReference<T> serviceReference = bundleContext.getServiceReference(cls);
 		if (serviceReference == null) {
-			throw new RuntimeException("Service not found");
+			throw new RuntimeException(MSG_SERVICE_NOT_FOUND);
 		}
 		final T service = bundleContext.getService(serviceReference);
 		try {
@@ -116,7 +115,7 @@ public final class ServiceHelper {
 		final BundleContext bundleContext = FrameworkUtil.getBundle(ServiceHelper.class).getBundleContext();
 		final ServiceReference<T> serviceReference = bundleContext.getServiceReference(cls);
 		if (serviceReference == null) {
-			throw new RuntimeException("Service not found");
+			throw new RuntimeException(MSG_SERVICE_NOT_FOUND);
 		}
 		final T service = bundleContext.getService(serviceReference);
 		try {
@@ -130,7 +129,7 @@ public final class ServiceHelper {
 		final BundleContext bundleContext = FrameworkUtil.getBundle(ServiceHelper.class).getBundleContext();
 		final ServiceReference<T> serviceReference = bundleContext.getServiceReference(cls);
 		if (serviceReference == null) {
-			throw new RuntimeException("Service not found");
+			throw new RuntimeException(MSG_SERVICE_NOT_FOUND);
 		}
 		final T service = bundleContext.getService(serviceReference);
 		try {
@@ -144,7 +143,7 @@ public final class ServiceHelper {
 		final BundleContext bundleContext = FrameworkUtil.getBundle(ServiceHelper.class).getBundleContext();
 		final ServiceReference<T> serviceReference = bundleContext.getServiceReference(cls);
 		if (serviceReference == null) {
-			throw new RuntimeException("Service not found");
+			throw new RuntimeException(MSG_SERVICE_NOT_FOUND);
 		}
 		final T service = bundleContext.getService(serviceReference);
 		try {
@@ -158,7 +157,7 @@ public final class ServiceHelper {
 		final BundleContext bundleContext = FrameworkUtil.getBundle(ServiceHelper.class).getBundleContext();
 		final ServiceReference<T> serviceReference = bundleContext.getServiceReference(cls);
 		if (serviceReference == null) {
-			throw new RuntimeException("Service not found");
+			throw new RuntimeException(MSG_SERVICE_NOT_FOUND);
 		}
 		final T service = bundleContext.getService(serviceReference);
 		try {
@@ -174,7 +173,7 @@ public final class ServiceHelper {
 	 * @param cls
 	 * @param withFunc
 	 */
-	public static <T> void withAllServices(final Class<T> cls, @Nullable String filter, final Function<T, @NonNull Boolean> withFunc) {
+	public static <T> void withAllServices(final Class<T> cls, @Nullable String filter, final Predicate<T> withFunc) {
 		final BundleContext bundleContext = FrameworkUtil.getBundle(ServiceHelper.class).getBundleContext();
 		Collection<ServiceReference<T>> serviceReferences;
 		try {
@@ -183,7 +182,7 @@ public final class ServiceHelper {
 			for (final ServiceReference<T> serviceReference : serviceReferences) {
 				final T service = bundleContext.getService(serviceReference);
 				try {
-					final Boolean cont = withFunc.apply(service);
+					final boolean cont = withFunc.test(service);
 					if (!cont) {
 						break;
 					}
