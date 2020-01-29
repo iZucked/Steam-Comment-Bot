@@ -86,6 +86,25 @@ public class VesselAvailabilityDetailComposite extends DefaultDetailComposite {
 
 					return gd;
 				}
+				if (feature == CargoPackage.Literals.VESSEL_AVAILABILITY__END_AFTER || feature == CargoPackage.Literals.VESSEL_AVAILABILITY__END_BY) {
+					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+					
+					if (feature == CargoPackage.Literals.VESSEL_AVAILABILITY__END_AFTER) {
+						final Label label = editor.getLabel();
+						if (label != null) {
+							label.setText("After");
+						}
+						editor.setLabel(null);
+					} else {
+						final Label label = editor.getLabel();
+						if (label != null) {
+							label.setText("By");
+						}
+						editor.setLabel(null);
+					}
+					
+					return gd;
+				}
 
 				if (feature == CargoPackage.Literals.VESSEL_AVAILABILITY__MIN_DURATION|| feature == CargoPackage.Literals.VESSEL_AVAILABILITY__MAX_DURATION) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
