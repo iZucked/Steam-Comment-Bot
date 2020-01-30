@@ -174,7 +174,7 @@ public class VesselsFromScenarioCopier {
 		}
 
 		if (lingoAttributes.isSetServiceSpeed()) {
-			travelAttributes.setServiceSped(OptionalDouble.of(lingoAttributes.getServiceSpeed()));
+			travelAttributes.setServiceSpeed(OptionalDouble.of(lingoAttributes.getServiceSpeed()));
 		}
 		if (lingoAttributes.isSetNboRate()) {
 			travelAttributes.setNboRate(OptionalDouble.of(lingoAttributes.getNboRate()));

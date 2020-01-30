@@ -40,11 +40,11 @@ public class VesselTravelAttributes {
 		this.idleBaseRate = idleBaseRate;
 	}
 
-	public OptionalDouble getServiceSped() {
+	public OptionalDouble getServiceSpeed() {
 		return serviceSpeed;
 	}
 
-	public void setServiceSped(OptionalDouble serviceSped) {
+	public void setServiceSpeed(OptionalDouble serviceSped) {
 		this.serviceSpeed = serviceSped;
 	}
 
