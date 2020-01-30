@@ -40,7 +40,7 @@ import com.mmxlabs.lngdataserver.integration.vessels.model.VesselsVersion;
  * @author Simon Goodall
  *
  */
-public class CSVConvertor {
+public class VesselsCSVConvertor {
 
 	public static void main(String[] args) throws Exception {
 
