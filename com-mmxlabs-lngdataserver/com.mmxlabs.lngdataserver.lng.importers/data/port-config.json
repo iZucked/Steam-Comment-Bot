@@ -1,0 +1,29 @@
+[
+  { "mmxId" : "L_AO_Soyo", "type" : "LOAD", "duration" : 24, "cv" : 23.2 },
+  { "mmxId" : "L_RU_Sakha", "type" : "LOAD", "duration" : 24, "cv" : 22.8 },
+  { "mmxId" : "L_QA_RasLa", "type" : "LOAD", "duration" : 24, "cv" : 22.8 },
+  { "mmxId" : "L_TT_Point2", "type" : "LOAD", "duration" : 24, "cv" : 22.45 },
+  { "mmxId" : "L_AU_Onslo", "type" : "LOAD", "duration" : 24, "cv" : 23.3 },
+  { "mmxId" : "L_AU_Pluto", "type" : "LOAD", "duration" : 24, "cv" : 23.25 },
+  { "mmxId" : "L_AU_Karra", "type" : "LOAD", "duration" : 24, "cv" : 23.85 },
+  { "mmxId" : "L_AU_Ichth", "type" : "LOAD", "duration" : 24, "cv" : 22.8 },
+  { "mmxId" : "L_AU_Barro", "type" : "LOAD", "duration" : 24, "cv" : 23.3 },
+  { "mmxId" : "L_NO_Hamme", "type" : "LOAD", "duration" : 24, "cv" : 22.8 },
+  { "mmxId" : "L_AU_Glads", "type" : "LOAD", "duration" : 24, "cv" : 22.67 },
+  { "mmxId" : "L_AU_Dampi", "type" : "LOAD", "duration" : 24, "cv" : 24.02 },
+  { "mmxId" : "L_US_Sabin", "type" : "LOAD", "duration" : 24, "cv" : 22.53 },
+  { "mmxId" : "L_US_Corpu", "type" : "LOAD", "duration" : 24, "cv" : 22.35 },
+  { "mmxId" : "L_US_Camer", "type" : "LOAD", "duration" : 24, "cv" : 22.8 },
+  { "mmxId" : "L_NG_Bonny", "type" : "LOAD", "duration" : 24, "cv" : 23.47 },
+
+  { "mmxId" : "L_TW_YungA", "type" : "DISCHARGE", "duration" : 24 },
+  { "mmxId" : "L_JP_Tokyo", "type" : "DISCHARGE", "duration" : 24 },
+  { "mmxId" : "L_JP_Sodeg", "type" : "DISCHARGE", "duration" : 24 },
+  { "mmxId" : "L_JP_Sakai", "type" : "DISCHARGE", "duration" : 24 },
+  { "mmxId" : "L_JP_Futts", "type" : "DISCHARGE", "duration" : 24 },
+  { "mmxId" : "L_JP_Himej", "type" : "DISCHARGE", "duration" : 24 },
+  { "mmxId" : "L_GB_Isleo", "type" : "DISCHARGE", "duration" : 24 },
+  { "mmxId" : "L_CN_Guang", "type" : "DISCHARGE", "duration" : 24 },
+  { "mmxId" : "L_CN_Tangs", "type" : "DISCHARGE", "duration" : 24 }
+
+]

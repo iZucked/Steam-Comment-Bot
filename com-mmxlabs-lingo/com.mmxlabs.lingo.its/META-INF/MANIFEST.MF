@@ -65,7 +65,9 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.lngdataserver.integration.distances,
  com.mmxlabs.models.lng.analytics.editor,
  javax.annotation;bundle-version="1.2.0",
- com.mmxlabs.lngdataserver.integration.ports
+ com.mmxlabs.lngdataserver.integration.ports,
+ com.mmxlabs.lngdataserver.integration.general,
+ com.mmxlabs.lngdataserver.integration.vessels
 Bundle-ClassPath: data/,
  .
 Import-Package: org.junit;version="4.12.0",

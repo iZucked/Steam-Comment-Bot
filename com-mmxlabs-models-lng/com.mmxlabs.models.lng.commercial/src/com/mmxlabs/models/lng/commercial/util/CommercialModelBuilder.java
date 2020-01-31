@@ -200,14 +200,15 @@ public class CommercialModelBuilder {
 	}
 	
 	public @NonNull RuleBasedBallastBonusContract createSimpleNotionalJourneyBallastBonusContract(final @NonNull Collection<@NonNull APortSet<Port>> redeliveryPorts, final double speed,
-			final @NonNull String hireExpression, final @NonNull String fuelExpression, final boolean includeCanal, final @NonNull Collection<@NonNull APortSet<Port>> returnPorts) {
+			final @NonNull String hireExpression, final @NonNull String fuelExpression, final boolean includeCanalFees, final boolean includeCanalTime ,final @NonNull Collection<@NonNull APortSet<Port>> returnPorts) {
 
 		final NotionalJourneyBallastBonusContractLine notionalJourneyBallastBonusContractLine = CommercialFactory.eINSTANCE.createNotionalJourneyBallastBonusContractLine();
 		notionalJourneyBallastBonusContractLine.getRedeliveryPorts().addAll(redeliveryPorts);
 		notionalJourneyBallastBonusContractLine.getReturnPorts().addAll(returnPorts);
 		notionalJourneyBallastBonusContractLine.setFuelPriceExpression(fuelExpression);
 		notionalJourneyBallastBonusContractLine.setHirePriceExpression(hireExpression);
-		notionalJourneyBallastBonusContractLine.setIncludeCanal(includeCanal);
+		notionalJourneyBallastBonusContractLine.setIncludeCanal(includeCanalFees);
+		notionalJourneyBallastBonusContractLine.setIncludeCanalTime(includeCanalTime);
 		notionalJourneyBallastBonusContractLine.setSpeed(speed);
 
 		final RuleBasedBallastBonusContract ballastBonusContract = CommercialFactory.eINSTANCE.createRuleBasedBallastBonusContract();

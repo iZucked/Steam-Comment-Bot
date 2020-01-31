@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.fleet.BaseFuel;
+import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.RouteOption;
@@ -62,6 +63,12 @@ public class CostModelBuilder {
 		};
 	}
 
+	public void setAllBaseFuelCost(FleetModel fleetModel, String expr) {
+		for (BaseFuel bf : fleetModel.getBaseFuels()) {
+			createOrUpdateBaseFuelCost(bf, expr);
+		}
+	}
+	
 	public @NonNull BaseFuelCost createOrUpdateBaseFuelCost(@NonNull final BaseFuel baseFuel, @NonNull final String baseFuelExpression) {
 
 		for (BaseFuelCost baseFuelCost : costModel.getBaseFuelCosts()) {

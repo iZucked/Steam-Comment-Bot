@@ -1,0 +1,6367 @@
+{
+  "identifier" : "7ce3f88c-fdae-4e48-9b3a-5deb8e9dd387",
+  "vessels" : [ {
+    "name" : "BW Pavilion Leeara",
+    "imo" : "9640645",
+    "referenceVessel" : "TFDE_170",
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Barcelona Knutsen",
+    "imo" : "9401295",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 173400,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Bw Integrity",
+    "imo" : "9724946",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 170000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Bw Singapore",
+    "imo" : "9684495",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 170000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Castillo De Santisteban",
+    "imo" : "9433717",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 173673,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Cesi Gladstone",
+    "imo" : "9672820",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 174000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Cesi Qingdao",
+    "imo" : "9672832",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 174000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Christophe De Margerie",
+    "imo" : "9737187",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 170000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Corcovado",
+    "imo" : "9636711",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 160000,
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Experience",
+    "imo" : "9638525",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 173660,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Gaslog Geneva",
+    "imo" : "9707508",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 174000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Gaslog Gibraltar",
+    "imo" : "9707510",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 174000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Gaslog Glasgow",
+    "imo" : "9687021",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 174000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Gaslog Greece",
+    "imo" : "9687019",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 170520,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Gigira Laitebo",
+    "imo" : "9360922",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 173870,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Golar Igloo",
+    "imo" : "9633991",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 170000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Golar Nanook",
+    "imo" : "9785500",
+    "referenceVessel" : "TFDE_170",
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Golar Tundra",
+    "imo" : "9655808",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 170000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Grand Aniva",
+    "imo" : "9338955",
+    "referenceVessel" : "TFDE_170",
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Hoegh Gallant",
+    "imo" : "9653678",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 170000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Hoegh Grace",
+    "imo" : "9674907",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 170000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Independence",
+    "imo" : "9629536",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 170132,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Abuja Ii",
+    "imo" : "9690169",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 175180,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Bonny Ii",
+    "imo" : "9692002",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 177000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Finima Ii",
+    "imo" : "9690145",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 170000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Lagos Ii",
+    "imo" : "9692014",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 177000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "MG Lindos",
+    "imo" : "9627502",
+    "referenceVessel" : "TFDE_170",
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Maran Gas Amphipolis",
+    "imo" : "9701217",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 173400,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Maran Gas Hector",
+    "imo" : "9682605",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 174000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Maran Gas Olympias",
+    "imo" : "9732371",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 173400,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Maran Gas Pericles",
+    "imo" : "9709489",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 174000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Maran Gas Roxana",
+    "imo" : "9701229",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 173400,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Maria Energy",
+    "imo" : "9659725",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 174000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Marib Spirit",
+    "imo" : "9336749",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 165500,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Meridian Spirit",
+    "imo" : "9369904",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 165500,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Papua",
+    "imo" : "9613135",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 172000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Pgn Fsru Lampung",
+    "imo" : "9629524",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 170000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Prachi",
+    "imo" : "9723801",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 173000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Pskov",
+    "imo" : "9630028",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 170535,
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Ribera Del Duero Knutsen",
+    "imo" : "9477593",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 173400,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Scf Melampus",
+    "imo" : "9654878",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 170200,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Scf Mitre",
+    "imo" : "9654880",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 170200,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Sevilla Knutsen",
+    "imo" : "9414632",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 173400,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Spirit Of Hela",
+    "imo" : "9361639",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 173800,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Stena Clear Sky",
+    "imo" : "9413327",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 173593,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Stena Crystal Sky",
+    "imo" : "9383900",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 173611,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Tessala",
+    "imo" : "9761243",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 171800,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Trinity Glory",
+    "imo" : "9350927",
+    "referenceVessel" : "TFDE_170",
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Valencia Knutsen",
+    "imo" : "9434266",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 173400,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Velikiy Novgorod",
+    "imo" : "9630004",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 170568,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Woodside Rees Withers",
+    "imo" : "9732369",
+    "referenceVessel" : "TFDE_170",
+    "capacity" : 173400,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Maran Gas Alexandria",
+    "imo" : "9650054",
+    "referenceVessel" : "TFDE_165",
+    "capacity" : 164000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Maran Gas Apollonia",
+    "imo" : "9633422",
+    "referenceVessel" : "TFDE_165",
+    "capacity" : 164000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Maran Gas Posidonia",
+    "imo" : "9633434",
+    "referenceVessel" : "TFDE_165",
+    "capacity" : 164000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Methane Becki Anne",
+    "imo" : "9516129",
+    "referenceVessel" : "TFDE_165",
+    "capacity" : 167416,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Methane Julia Louise",
+    "imo" : "9412880",
+    "referenceVessel" : "TFDE_165",
+    "capacity" : 167416,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Methane Mickie Harper",
+    "imo" : "9520376",
+    "referenceVessel" : "TFDE_165",
+    "capacity" : 167400,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Methane Patricia Camila",
+    "imo" : "9425277",
+    "referenceVessel" : "TFDE_165",
+    "capacity" : 167416,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Adam Lng",
+    "imo" : "9501186",
+    "referenceVessel" : "TFDE_160",
+    "capacity" : 162000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Arwa Spirit",
+    "imo" : "9339260",
+    "referenceVessel" : "TFDE_160",
+    "capacity" : 163285,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Bw Gdf Suez Brussels",
+    "imo" : "9368314",
+    "referenceVessel" : "TFDE_160",
+    "capacity" : 162514,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Bw Gdf Suez Paris",
+    "imo" : "9368302",
+    "referenceVessel" : "TFDE_160",
+    "capacity" : 162524,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Bw Pavilion Vanda",
+    "imo" : "9640437",
+    "referenceVessel" : "TFDE_160",
+    "capacity" : 161880,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Clean Horizon",
+    "imo" : "9655444",
+    "referenceVessel" : "TFDE_160",
+    "capacity" : 162000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Clean Ocean",
+    "imo" : "9637492",
+    "referenceVessel" : "TFDE_160",
+    "capacity" : 162000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Clean Planet",
+    "imo" : "9637507",
+    "referenceVessel" : "TFDE_160",
+    "capacity" : 162000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Clean Vision",
+    "imo" : "9655456",
+    "referenceVessel" : "TFDE_160",
+    "capacity" : 162000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Cool Explorer",
+    "imo" : "9640023",
+    "referenceVessel" : "TFDE_160",
+    "capacity" : 160000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Cool Runner",
+    "imo" : "9636797",
+    "referenceVessel" : "TFDE_160",
+    "capacity" : 160000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Cool Voyager",
+    "imo" : "9636785",
+    "referenceVessel" : "TFDE_160",
+    "capacity" : 160000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Golar Bear",
+    "imo" : "9626039",
+    "referenceVessel" : "TFDE_160",
+    "capacity" : 160000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Golar Celsius",
+    "imo" : "9626027",
+    "referenceVessel" : "TFDE_160",
+    "capacity" : 160000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Golar Crystal",
+    "imo" : "9624926",
+    "referenceVessel" : "TFDE_160",
+    "capacity" : 160000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Golar Eskimo",
+    "imo" : "9624940",
+    "referenceVessel" : "TFDE_160",
+    "capacity" : 160000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Golar Frost",
+    "imo" : "9655042",
+    "referenceVessel" : "TFDE_160",
+    "capacity" : 160000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Golar Glacier",
+    "imo" : "9654696",
+    "referenceVessel" : "TFDE_160",
+    "capacity" : 162500,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Golar Ice",
+    "imo" : "9637325",
+    "referenceVessel" : "TFDE_160",
+    "capacity" : 160000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Golar Kelvin",
+    "imo" : "9654701",
+    "referenceVessel" : "TFDE_160",
+    "capacity" : 162000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Golar Seal",
+    "imo" : "9624914",
+    "referenceVessel" : "TFDE_160",
+    "capacity" : 160000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Golar Snow",
+    "imo" : "9635315",
+    "referenceVessel" : "TFDE_160",
+    "capacity" : 160000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Kita Lng",
+    "imo" : "9636723",
+    "referenceVessel" : "TFDE_160",
+    "capacity" : 159800,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Magellan Spirit",
+    "imo" : "9342487",
+    "referenceVessel" : "TFDE_160",
+    "capacity" : 163194,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Maran Gas Delphi",
+    "imo" : "9633173",
+    "referenceVessel" : "TFDE_160",
+    "capacity" : 159800,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Maran Gas Efessos",
+    "imo" : "9627497",
+    "referenceVessel" : "TFDE_160",
+    "capacity" : 159800,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Maran Gas Mystras",
+    "imo" : "9658238",
+    "referenceVessel" : "TFDE_160",
+    "capacity" : 159800,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Maran Gas Sparta",
+    "imo" : "9650042",
+    "referenceVessel" : "TFDE_160",
+    "capacity" : 162000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Maran Gas Troy",
+    "imo" : "9658240",
+    "referenceVessel" : "TFDE_160",
+    "capacity" : 159800,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Methane Spirit",
+    "imo" : "9336737",
+    "referenceVessel" : "TFDE_160",
+    "capacity" : 163195,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Palu Lng",
+    "imo" : "9636735",
+    "referenceVessel" : "TFDE_160",
+    "capacity" : 159800,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Woodside Donaldson",
+    "imo" : "9369899",
+    "referenceVessel" : "TFDE_160",
+    "capacity" : 162620,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Woodside Goode",
+    "imo" : "9633161",
+    "referenceVessel" : "TFDE_160",
+    "capacity" : 159800,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Woodside Rogers",
+    "imo" : "9627485",
+    "referenceVessel" : "TFDE_160",
+    "capacity" : 159800,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Yari Lng",
+    "imo" : "9636747",
+    "referenceVessel" : "TFDE_160",
+    "capacity" : 159800,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Amani",
+    "imo" : "9661869",
+    "referenceVessel" : "TFDE_155",
+    "capacity" : 155000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Arctic Aurora",
+    "imo" : "9645970",
+    "referenceVessel" : "TFDE_155",
+    "capacity" : 154880,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Aseem",
+    "imo" : "9377547",
+    "referenceVessel" : "TFDE_155",
+    "capacity" : 154948,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Asia Endeavour",
+    "imo" : "9610779",
+    "referenceVessel" : "TFDE_155",
+    "capacity" : 154948,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Asia Energy",
+    "imo" : "9606950",
+    "referenceVessel" : "TFDE_155",
+    "capacity" : 154948,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Asia Excellence",
+    "imo" : "9610767",
+    "referenceVessel" : "TFDE_155",
+    "capacity" : 154948,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Asia Venture",
+    "imo" : "9680190",
+    "referenceVessel" : "TFDE_155",
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Asia Vision",
+    "imo" : "9606948",
+    "referenceVessel" : "TFDE_155",
+    "capacity" : 154948,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "British Emerald",
+    "imo" : "9333591",
+    "referenceVessel" : "TFDE_155",
+    "capacity" : 154983,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "British Ruby",
+    "imo" : "9333606",
+    "referenceVessel" : "TFDE_155",
+    "capacity" : 155000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "British Sapphire",
+    "imo" : "9333618",
+    "referenceVessel" : "TFDE_155",
+    "capacity" : 155000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Cubal",
+    "imo" : "9491812",
+    "referenceVessel" : "TFDE_155",
+    "capacity" : 154948,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Energy Atlantic",
+    "imo" : "9649328",
+    "referenceVessel" : "TFDE_155",
+    "capacity" : 157521,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Gaslog Salem",
+    "imo" : "9638915",
+    "referenceVessel" : "TFDE_155",
+    "capacity" : 155000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Gaslog Santiago",
+    "imo" : "9600530",
+    "referenceVessel" : "TFDE_155",
+    "capacity" : 154948,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Gaslog Saratoga",
+    "imo" : "9638903",
+    "referenceVessel" : "TFDE_155",
+    "capacity" : 155000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Gaslog Savannah",
+    "imo" : "9352860",
+    "referenceVessel" : "TFDE_155",
+    "capacity" : 154948,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Gaslog Seattle",
+    "imo" : "9634086",
+    "referenceVessel" : "TFDE_155",
+    "capacity" : 154948,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Gaslog Shanghai",
+    "imo" : "9600528",
+    "referenceVessel" : "TFDE_155",
+    "capacity" : 154948,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Gaslog Singapore",
+    "imo" : "9355604",
+    "referenceVessel" : "TFDE_155",
+    "capacity" : 154948,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Gaslog Skagen",
+    "imo" : "9626285",
+    "referenceVessel" : "TFDE_155",
+    "capacity" : 154948,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Gaslog Sydney",
+    "imo" : "9626273",
+    "referenceVessel" : "TFDE_155",
+    "capacity" : 154948,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Golar Penguin",
+    "imo" : "9624938",
+    "referenceVessel" : "TFDE_155",
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lena River",
+    "imo" : "9629598",
+    "referenceVessel" : "TFDE_155",
+    "capacity" : 154880,
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lobito",
+    "imo" : "9490961",
+    "referenceVessel" : "TFDE_155",
+    "capacity" : 154948,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Malanje",
+    "imo" : "9490959",
+    "referenceVessel" : "TFDE_155",
+    "capacity" : 154948,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Seri Balhaf",
+    "imo" : "9331660",
+    "referenceVessel" : "TFDE_155",
+    "capacity" : 154567,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Seri Balqis",
+    "imo" : "9331672",
+    "referenceVessel" : "TFDE_155",
+    "capacity" : 154747,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Solaris",
+    "imo" : "9634098",
+    "referenceVessel" : "TFDE_155",
+    "capacity" : 155000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Soyo",
+    "imo" : "9475208",
+    "referenceVessel" : "TFDE_155",
+    "capacity" : 154948,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Tangguh Foja",
+    "imo" : "9349007",
+    "referenceVessel" : "TFDE_155",
+    "capacity" : 154948,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Tangguh Jaya",
+    "imo" : "9349019",
+    "referenceVessel" : "TFDE_155",
+    "capacity" : 154948,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Tangguh Palung",
+    "imo" : "9355379",
+    "referenceVessel" : "TFDE_155",
+    "capacity" : 154948,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Wilforce",
+    "imo" : "9627954",
+    "referenceVessel" : "TFDE_155",
+    "capacity" : 155900,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Wilpride",
+    "imo" : "9627966",
+    "referenceVessel" : "TFDE_155",
+    "capacity" : 156007,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Yenisei River",
+    "imo" : "9629586",
+    "referenceVessel" : "TFDE_155",
+    "capacity" : 154925,
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Amali",
+    "imo" : "9496317",
+    "referenceVessel" : "TFDE_145",
+    "capacity" : 147228,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Arkat",
+    "imo" : "9496305",
+    "referenceVessel" : "TFDE_145",
+    "capacity" : 147228,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "British Diamond",
+    "imo" : "9333620",
+    "referenceVessel" : "TFDE_145",
+    "capacity" : 151883,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Gaselys",
+    "imo" : "9320075",
+    "referenceVessel" : "TFDE_145",
+    "capacity" : 151383,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Gaslog Chelsea",
+    "imo" : "9390185",
+    "referenceVessel" : "TFDE_145",
+    "capacity" : 153600,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Gdf Suez Cape Ann",
+    "imo" : "9390680",
+    "referenceVessel" : "TFDE_145",
+    "capacity" : 145130,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Provalys",
+    "imo" : "9306495",
+    "referenceVessel" : "TFDE_145",
+    "capacity" : 151383,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Tangguh Hiri",
+    "imo" : "9333632",
+    "referenceVessel" : "TFDE_145",
+    "capacity" : 151885,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Tangguh Sago",
+    "imo" : "9361990",
+    "referenceVessel" : "TFDE_145",
+    "capacity" : 151872,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Marrouna",
+    "imo" : "9325685",
+    "referenceVessel" : "Steam_150",
+    "capacity" : 149539,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Amadi",
+    "imo" : "9682552",
+    "referenceVessel" : "Steam_150",
+    "capacity" : 155000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Clean Energy",
+    "imo" : "9323687",
+    "referenceVessel" : "Steam_150",
+    "capacity" : 149755,
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Energy Confidence",
+    "imo" : "9405588",
+    "referenceVessel" : "Steam_150",
+    "capacity" : 152880,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Energy Horizon",
+    "imo" : "9483877",
+    "referenceVessel" : "Steam_150",
+    "capacity" : 177441,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Esshu Maru",
+    "imo" : "9666560",
+    "referenceVessel" : "Steam_150",
+    "capacity" : 155300,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Exemplar",
+    "imo" : "9444649",
+    "referenceVessel" : "Steam_150",
+    "capacity" : 151072,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Explorer",
+    "imo" : "9361079",
+    "referenceVessel" : "Steam_150",
+    "capacity" : 150900,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Express",
+    "imo" : "9361445",
+    "referenceVessel" : "Steam_150",
+    "capacity" : 150900,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Exquisite",
+    "imo" : "9381134",
+    "referenceVessel" : "Steam_150",
+    "capacity" : 151035,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Gdf Suez Point Fortin",
+    "imo" : "9375721",
+    "referenceVessel" : "Steam_150",
+    "capacity" : 154982,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Grace Dahlia",
+    "imo" : "9540716",
+    "referenceVessel" : "Steam_150",
+    "capacity" : 177425,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Barka",
+    "imo" : "9341299",
+    "referenceVessel" : "Steam_150",
+    "capacity" : 152880,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Borno",
+    "imo" : "9322803",
+    "referenceVessel" : "Steam_150",
+    "capacity" : 149600,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Fukurokuju",
+    "imo" : "9666986",
+    "referenceVessel" : "Steam_150",
+    "capacity" : 164700,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Jupiter",
+    "imo" : "9341689",
+    "referenceVessel" : "Steam_150",
+    "capacity" : 152880,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Jurojin",
+    "imo" : "9666998",
+    "referenceVessel" : "Steam_150",
+    "capacity" : 155300,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Kolt",
+    "imo" : "9372963",
+    "referenceVessel" : "Steam_150",
+    "capacity" : 153595,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Mars",
+    "imo" : "9645748",
+    "referenceVessel" : "Steam_150",
+    "capacity" : 153000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Ogun",
+    "imo" : "9322815",
+    "referenceVessel" : "Steam_150",
+    "capacity" : 149600,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Saturn",
+    "imo" : "9696149",
+    "referenceVessel" : "Steam_150",
+    "capacity" : 153000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Venus",
+    "imo" : "9645736",
+    "referenceVessel" : "Steam_150",
+    "capacity" : 155300,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Seishu Maru",
+    "imo" : "9666558",
+    "referenceVessel" : "Steam_150",
+    "capacity" : 155300,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Seri Begawan",
+    "imo" : "9331646",
+    "referenceVessel" : "Steam_150",
+    "capacity" : 149964,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Seri Bijaksana",
+    "imo" : "9331658",
+    "referenceVessel" : "Steam_150",
+    "capacity" : 149822,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Seri Camar",
+    "imo" : "9714305",
+    "referenceVessel" : "Steam_150",
+    "capacity" : 150444,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Seri Camellia",
+    "imo" : "9714276",
+    "referenceVessel" : "Steam_150",
+    "capacity" : 150200,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Seri Cenderawasih",
+    "imo" : "9714288",
+    "referenceVessel" : "Steam_150",
+    "capacity" : 150200,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Sonangol Benguela",
+    "imo" : "9482304",
+    "referenceVessel" : "Steam_150",
+    "capacity" : 160918,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Sonangol Etosha",
+    "imo" : "9482299",
+    "referenceVessel" : "Steam_150",
+    "capacity" : 160500,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Sonangol Sambizanga",
+    "imo" : "9475600",
+    "referenceVessel" : "Steam_150",
+    "capacity" : 160500,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Southern Cross",
+    "imo" : "9613147",
+    "referenceVessel" : "Steam_150",
+    "capacity" : 169295,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Trinity Arrow",
+    "imo" : "9319404",
+    "referenceVessel" : "Steam_150",
+    "capacity" : 154930,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Areesh",
+    "imo" : "9325697",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 148786,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Daayen",
+    "imo" : "9325702",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 148853,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Alto Acrux",
+    "imo" : "9343106",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 147798,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Amur River",
+    "imo" : "9317999",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 146748,
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Arctic Lady",
+    "imo" : "9284192",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 147835,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Arctic Princess",
+    "imo" : "9271248",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 147835,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Celestine River",
+    "imo" : "9330745",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 145394,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Cygnus Passage",
+    "imo" : "9376294",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 145400,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Dapeng Moon",
+    "imo" : "9308481",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 147200,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Dapeng Star",
+    "imo" : "9369473",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 147200,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Dapeng Sun",
+    "imo" : "9308479",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 147200,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Energy Advance",
+    "imo" : "9269180",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 144590,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Energy Frontier",
+    "imo" : "9245720",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 144596,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Energy Navigator",
+    "imo" : "9355264",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 147558,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Energy Progress",
+    "imo" : "9274226",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 144596,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Expedient",
+    "imo" : "9389643",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 147994,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Fuji Lng",
+    "imo" : "9275359",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 144596,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Golar Grand",
+    "imo" : "9303560",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 145700,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Golar Maria",
+    "imo" : "9320374",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 145700,
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Grace Acacia",
+    "imo" : "9315707",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 146791,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Grace Barleria",
+    "imo" : "9315719",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 146770,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Grace Cosmos",
+    "imo" : "9323675",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 146794,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Grand Elena",
+    "imo" : "9332054",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 147968,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Grand Mereya",
+    "imo" : "9338929",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 145964,
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Hyundai Ecopia",
+    "imo" : "9372999",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 146790,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Ibra Lng",
+    "imo" : "9326689",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 145951,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Ibri Lng",
+    "imo" : "9317315",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 145173,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "K. Mugungwha",
+    "imo" : "9373010",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 148776,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lalla Fatma N&#39;Soumer",
+    "imo" : "9275347",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 144888,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Dream",
+    "imo" : "9277620",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 147326,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Ebisu",
+    "imo" : "9329291",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 147546,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Imo",
+    "imo" : "9311581",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 148452,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Kano",
+    "imo" : "9311567",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 148565,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Lokoja",
+    "imo" : "9269960",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 148471,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Ondo",
+    "imo" : "9311579",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 148478,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Methane Alison Victoria",
+    "imo" : "9321768",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 145000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Methane Heather Sally",
+    "imo" : "9321744",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 145000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Methane Jane Elizabeth",
+    "imo" : "9307190",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 145000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Methane Lydon Volney",
+    "imo" : "9307205",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 145000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Methane Nile Eagle",
+    "imo" : "9321770",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 145000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Methane Rita Andrea",
+    "imo" : "9307188",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 145000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Milaha Qatar",
+    "imo" : "9321732",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 145140,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Min Lu",
+    "imo" : "9305128",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 145000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Min Rong",
+    "imo" : "9305116",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 145000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Neo Energy",
+    "imo" : "9324277",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 146838,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Neptune",
+    "imo" : "9385673",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 145130,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Nizwa Lng",
+    "imo" : "9294264",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 145469,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Ob River",
+    "imo" : "9315692",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 146791,
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Pacific Arcadia",
+    "imo" : "9621077",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 145400,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Pacific Enlighten",
+    "imo" : "9351971",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 147800,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Salalah Lng",
+    "imo" : "9300817",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 148174,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Seri Alam",
+    "imo" : "9293832",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 145572,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Seri Anggun",
+    "imo" : "9321653",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 145100,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Symphonic Breeze",
+    "imo" : "9330745",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 145000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Taitar No. 1",
+    "imo" : "9403669",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 144627,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Taitar No. 2",
+    "imo" : "9403645",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 144627,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Taitar No. 3",
+    "imo" : "9403671",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 144627,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Taitar No. 4",
+    "imo" : "9403657",
+    "referenceVessel" : "Steam_145",
+    "capacity" : 144596,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Abadi",
+    "imo" : "9210828",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 135269,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Bidda",
+    "imo" : "9132741",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 135466,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Deebel",
+    "imo" : "9307176",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 142795,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Hamra",
+    "imo" : "9074640",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 137000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Jasra",
+    "imo" : "9132791",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 135855,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Jassasiya",
+    "imo" : "9324435",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 142988,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Khaznah",
+    "imo" : "9038440",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 137540,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Khor",
+    "imo" : "9085613",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 135295,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Rayyan",
+    "imo" : "9086734",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 134671,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Thakhira",
+    "imo" : "9298399",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 143517,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Wajbah",
+    "imo" : "9085625",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 134562,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Wakrah",
+    "imo" : "9086746",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 134624,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Zubarah",
+    "imo" : "9085649",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 135510,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Arctic Discoverer",
+    "imo" : "9276389",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 139759,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Arctic Voyager",
+    "imo" : "9275335",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 140071,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Berge Arzew",
+    "imo" : "9256597",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 138089,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Bilbao Knutsen",
+    "imo" : "9236432",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 135049,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "British Innovator",
+    "imo" : "9238040",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 136135,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "British Merchant",
+    "imo" : "9250191",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 138517,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "British Trader",
+    "imo" : "9238038",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 138248,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Broog",
+    "imo" : "9085651",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 136359,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Bw Gdf Suez Boston",
+    "imo" : "9230062",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 138059,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Bw Gdf Suez Everett",
+    "imo" : "9243148",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 138028,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Cadiz Knutsen",
+    "imo" : "9246578",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 135240,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Castillo De Villalba",
+    "imo" : "9236418",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 135420,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Catalunya Spirit",
+    "imo" : "9236420",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 135423,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Disha",
+    "imo" : "9250713",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 136026,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Doha",
+    "imo" : "9085637",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 135203,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Dukhan",
+    "imo" : "9265500",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 137672,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Ejnan",
+    "imo" : "9334076",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 143815,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Ekaputra 1",
+    "imo" : "8706155",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 136400,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Excalibur",
+    "imo" : "9230050",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 138000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Excel",
+    "imo" : "9246621",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 135344,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Excelerate",
+    "imo" : "9322255",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 135313,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Excellence",
+    "imo" : "9252539",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 138124,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Excelsior",
+    "imo" : "9239616",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 138000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Fsru Toscana",
+    "imo" : "9253284",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 137500,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Fuwairit",
+    "imo" : "9256200",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 138262,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Galea",
+    "imo" : "9236614",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 135269,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Galicia Spirit",
+    "imo" : "9247364",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 140705,
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Gallina",
+    "imo" : "9236626",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 135269,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Gemmata",
+    "imo" : "9253222",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 135269,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Ghasha",
+    "imo" : "9038452",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 137100,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Golar Arctic",
+    "imo" : "9253105",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 137814,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Golar Mazo",
+    "imo" : "9165011",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 135000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Golar Viking",
+    "imo" : "9256767",
+    "referenceVessel" : "Steam_138",
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { },
+    "routeParameters" : [ {
+      "route" : "SUEZ",
+      "extraTransitTimeInHours" : 0,
+      "ladenNBORate" : 0.0,
+      "ballastNBORate" : 0.0,
+      "ladenBunkerRate" : 0.0,
+      "ballastBunkerRate" : 0.0
+    }, {
+      "route" : "PANAMA",
+      "extraTransitTimeInHours" : 0,
+      "ladenNBORate" : 0.0,
+      "ballastNBORate" : 0.0,
+      "ladenBunkerRate" : 0.0,
+      "ballastBunkerRate" : 0.0
+    } ]
+  }, {
+    "name" : "Golar Winter",
+    "imo" : "9256614",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 138000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Hanjin Muscat",
+    "imo" : "9155078",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 138366,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Hanjin Ras Laffan",
+    "imo" : "9176008",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 138214,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Hanjin Sur",
+    "imo" : "9176010",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 138333,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Hispania Spirit",
+    "imo" : "9230048",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 137814,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Hyundai Aquapia",
+    "imo" : "9179581",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 134400,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Hyundai Cosmopia",
+    "imo" : "9155157",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 134308,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Hyundai Oceanpia",
+    "imo" : "9183269",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 134300,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Hyundai Technopia",
+    "imo" : "9155145",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 134524,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Iberica Knutsen",
+    "imo" : "9326603",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 135230,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Ish",
+    "imo" : "9035864",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 137512,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "K. Acacia",
+    "imo" : "9157636",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 138017,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "K. Freesia",
+    "imo" : "9186584",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 138015,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "K. Jasmine",
+    "imo" : "9373008",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 142961,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Adamawa",
+    "imo" : "9262211",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 142656,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Akwa Ibom",
+    "imo" : "9262209",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 142656,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Bayelsa",
+    "imo" : "9241267",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 137500,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Benue",
+    "imo" : "9267015",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 142988,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Cross River",
+    "imo" : "9262223",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 142656,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Enugu",
+    "imo" : "9266994",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 142988,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Jamal",
+    "imo" : "9200316",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 136977,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Oyo",
+    "imo" : "9267003",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 142988,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Pioneer",
+    "imo" : "9256602",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 138000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng River Niger",
+    "imo" : "9262235",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 142656,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng River Orashi",
+    "imo" : "9266982",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 142988,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Rivers",
+    "imo" : "9216298",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 137500,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Sokoto",
+    "imo" : "9216303",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 137500,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lusail",
+    "imo" : "9285952",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 142808,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Madrid Spirit",
+    "imo" : "9259276",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 135423,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Maran Gas Asclepius",
+    "imo" : "9302499",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 142906,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Maran Gas Coronis",
+    "imo" : "9331048",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 142889,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Methane Kari Elin",
+    "imo" : "9256793",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 136167,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Methane Princess",
+    "imo" : "9253715",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 136086,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Methane Shirley Elisabeth",
+    "imo" : "9321756",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 142800,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Milaha Ras Laffan",
+    "imo" : "9255854",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 136199,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Mraweh",
+    "imo" : "9074638",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 135000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Mubaraz",
+    "imo" : "9074626",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 135000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Northwest Swan",
+    "imo" : "9250725",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 140500,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Pacific Eurus",
+    "imo" : "9264910",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 135000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Pacific Notus",
+    "imo" : "9247962",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 137006,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Puteri Delima Satu",
+    "imo" : "9211872",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 134849,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Puteri Firus Satu",
+    "imo" : "9248502",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 134865,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Puteri Intan Satu",
+    "imo" : "9213416",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 134770,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Puteri Mutiara Satu",
+    "imo" : "9261205",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 134861,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Puteri Nilam Satu",
+    "imo" : "9229647",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 134833,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Puteri Zamrud Satu",
+    "imo" : "9245031",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 134870,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Raahi",
+    "imo" : "9253703",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 138077,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Seri Amanah",
+    "imo" : "9293844",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 142795,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Seri Angkasa",
+    "imo" : "9321665",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 142786,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Seri Ayu",
+    "imo" : "9329679",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 143474,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Seri Bakti",
+    "imo" : "9331634",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 152300,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Sestao Knutsen",
+    "imo" : "9338797",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 135357,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Shahamah",
+    "imo" : "9035852",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 137756,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Shen Hai",
+    "imo" : "9583677",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 142741,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Simaisma",
+    "imo" : "9320386",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 142971,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Sk Splendor",
+    "imo" : "9180231",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 135540,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Sk Stellar",
+    "imo" : "9180243",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 135540,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Sk Summit",
+    "imo" : "9157624",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 135933,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Sk Sunrise",
+    "imo" : "9247194",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 135505,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Sk Supreme",
+    "imo" : "9157739",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 136320,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Sohar LNG",
+    "imo" : "9210816",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 137248,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Stena Blue Sky",
+    "imo" : "9315393",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 142988,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Tangguh Batur",
+    "imo" : "9334284",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 142988,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Tangguh Towuti",
+    "imo" : "9325893",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 142988,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Umm Al Ashtan",
+    "imo" : "9074652",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 137000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Umm Bab",
+    "imo" : "9308431",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 143708,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Zekreet",
+    "imo" : "9132818",
+    "referenceVessel" : "Steam_138",
+    "capacity" : 134733,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Arctic Spirit",
+    "imo" : "9001784",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 87305,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Armada Lng Mediterrana",
+    "imo" : "8125868",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 127209,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Atlantic Energy",
+    "imo" : "7702401",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 132588,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Bachir Chihani",
+    "imo" : "7400675",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 129767,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Baltic Energy",
+    "imo" : "8013950",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 125929,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Bebatik",
+    "imo" : "7121633",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 75056,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Belanak",
+    "imo" : "7347768",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 75000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Cheikh Bouamama",
+    "imo" : "9324344",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 74245,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Cheikh El Mokrani",
+    "imo" : "9324332",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 73990,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Dwiputra",
+    "imo" : "9043677",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 127386,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "East Energy",
+    "imo" : "7360136",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 122255,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Echigo Maru",
+    "imo" : "8110203",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 125568,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Fortune Fsu",
+    "imo" : "7428471",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 130000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Gaea",
+    "imo" : "7619575",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 126530,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Gandria",
+    "imo" : "7361934",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 123512,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Gdf Suez Global Energy",
+    "imo" : "9269207",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 74130,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Gimi",
+    "imo" : "7382732",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 122388,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Golar Freeze",
+    "imo" : "7361922",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 126000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Golar Spirit",
+    "imo" : "7373327",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 129000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Grace Energy",
+    "imo" : "8702941",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 127580,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Hanjin Pyeong Taek",
+    "imo" : "9061928",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 130366,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Hilli Episeyo",
+    "imo" : "7382720",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 126227,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Hyundai Greenpia",
+    "imo" : "9075333",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 125000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Hyundai Utopia",
+    "imo" : "9018555",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 125182,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Larbi Ben M&#39;Hidi",
+    "imo" : "7400663",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 129500,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Aquarius",
+    "imo" : "7390181",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 126750,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Capricorn",
+    "imo" : "7390208",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 126750,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Flora",
+    "imo" : "9006681",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 125637,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Gemini",
+    "imo" : "7390143",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 126750,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Leo",
+    "imo" : "7390155",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 126750,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Lerici",
+    "imo" : "9064085",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 63993,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Libra",
+    "imo" : "7413232",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 126000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Maleo",
+    "imo" : "8701791",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 127544,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Portovenere",
+    "imo" : "9064073",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 65262,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Taurus",
+    "imo" : "7390167",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 126750,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Vesta",
+    "imo" : "9020766",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 127547,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Virgo",
+    "imo" : "7390179",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 126750,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lucky Fsu",
+    "imo" : "7428469",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 127400,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Matthew",
+    "imo" : "7391214",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 126540,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Methania",
+    "imo" : "7357452",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 131235,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Mourad Didouche",
+    "imo" : "7400704",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 126190,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Nkossa Ii",
+    "imo" : "9003859",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 78488,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Northwest Sanderling",
+    "imo" : "8608872",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 125452,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Northwest Sandpiper",
+    "imo" : "8913150",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 125042,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Northwest Seaeagle",
+    "imo" : "8913174",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 125541,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Northwest Shearwater",
+    "imo" : "8608705",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 125660,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Northwest Snipe",
+    "imo" : "8608884",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 127747,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Northwest Stormpetrel",
+    "imo" : "9045132",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 125525,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Nusantara Regas Satu",
+    "imo" : "7382744",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 125003,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Ocean Quest",
+    "imo" : "7391214",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 126540,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Pacific Energy",
+    "imo" : "7708948",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 132588,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Polar Spirit",
+    "imo" : "9001772",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 88100,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Puteri Delima",
+    "imo" : "9030814",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 127797,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Puteri Firus",
+    "imo" : "9030840",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 127689,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Puteri Intan",
+    "imo" : "9030802",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 127694,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Puteri Nilam",
+    "imo" : "9030826",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 127756,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Puteri Zamrud",
+    "imo" : "9030838",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 127751,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Ramdane Abane",
+    "imo" : "7411961",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 126190,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Senshu Maru",
+    "imo" : "8014473",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 125835,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "South Energy",
+    "imo" : "7619587",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 126750,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Sunrise",
+    "imo" : "7359670",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 126813,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Tenaga Empat",
+    "imo" : "7428433",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 130000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Tenaga Lima",
+    "imo" : "7428445",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 127409,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Tenaga Satu",
+    "imo" : "7428457",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 130000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "West Energy",
+    "imo" : "7360124",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 122255,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Wilenergy",
+    "imo" : "8014409",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 125788,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Wilgas",
+    "imo" : "8125832",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 126975,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Yk Sovereign",
+    "imo" : "9038816",
+    "referenceVessel" : "Steam_126",
+    "capacity" : 124582,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Aamira",
+    "imo" : "9443401",
+    "referenceVessel" : "Q-max",
+    "capacity" : 260912,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Dafna",
+    "imo" : "9443683",
+    "referenceVessel" : "Q-max",
+    "capacity" : 261988,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Ghuwairiya",
+    "imo" : "9372743",
+    "referenceVessel" : "Q-max",
+    "capacity" : 257984,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Mafyar",
+    "imo" : "9397315",
+    "referenceVessel" : "Q-max",
+    "capacity" : 261043,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Mayeda",
+    "imo" : "9397298",
+    "referenceVessel" : "Q-max",
+    "capacity" : 261157,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Samriya",
+    "imo" : "9388821",
+    "referenceVessel" : "Q-max",
+    "capacity" : 258054,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Bu Samra",
+    "imo" : "9388833",
+    "referenceVessel" : "Q-max",
+    "capacity" : 260928,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lijmiliya",
+    "imo" : "9388819",
+    "referenceVessel" : "Q-max",
+    "capacity" : 258019,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Mekaines",
+    "imo" : "9397303",
+    "referenceVessel" : "Q-max",
+    "capacity" : 261137,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Mozah",
+    "imo" : "9337755",
+    "referenceVessel" : "Q-max",
+    "capacity" : 261988,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Rasheeda",
+    "imo" : "9443413",
+    "referenceVessel" : "Q-max",
+    "capacity" : 260912,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Shagra",
+    "imo" : "9418365",
+    "referenceVessel" : "Q-max",
+    "capacity" : 261988,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Umm Slal",
+    "imo" : "9372731",
+    "referenceVessel" : "Q-max",
+    "capacity" : 260928,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Zarga",
+    "imo" : "9431214",
+    "referenceVessel" : "Q-max",
+    "capacity" : 261104,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Aamriya",
+    "imo" : "9338266",
+    "referenceVessel" : "Q-flex",
+    "capacity" : 206958,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Bahiya",
+    "imo" : "9431147",
+    "referenceVessel" : "Q-flex",
+    "capacity" : 205981,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Gattara",
+    "imo" : "9337705",
+    "referenceVessel" : "Q-flex",
+    "capacity" : 216200,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Ghariya",
+    "imo" : "9337987",
+    "referenceVessel" : "Q-flex",
+    "capacity" : 205941,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Gharrafa",
+    "imo" : "9337717",
+    "referenceVessel" : "Q-flex",
+    "capacity" : 216200,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Ghashamiya",
+    "imo" : "9397286",
+    "referenceVessel" : "Q-flex",
+    "capacity" : 211885,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Hamla",
+    "imo" : "9337743",
+    "referenceVessel" : "Q-flex",
+    "capacity" : 211862,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Huwaila",
+    "imo" : "9360879",
+    "referenceVessel" : "Q-flex",
+    "capacity" : 214176,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Karaana",
+    "imo" : "9431123",
+    "referenceVessel" : "Q-flex",
+    "capacity" : 205988,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Kharaitiyat",
+    "imo" : "9397327",
+    "referenceVessel" : "Q-flex",
+    "capacity" : 211986,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Kharsaah",
+    "imo" : "9360881",
+    "referenceVessel" : "Q-flex",
+    "capacity" : 211885,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Khattiya",
+    "imo" : "9431111",
+    "referenceVessel" : "Q-flex",
+    "capacity" : 205993,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Khuwair",
+    "imo" : "9360908",
+    "referenceVessel" : "Q-flex",
+    "capacity" : 211885,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Nuaman",
+    "imo" : "9431135",
+    "referenceVessel" : "Q-flex",
+    "capacity" : 205981,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Oraiq",
+    "imo" : "9360790",
+    "referenceVessel" : "Q-flex",
+    "capacity" : 205994,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Rekayyat",
+    "imo" : "9397339",
+    "referenceVessel" : "Q-flex",
+    "capacity" : 211986,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Ruwais",
+    "imo" : "9337951",
+    "referenceVessel" : "Q-flex",
+    "capacity" : 205941,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Sadd",
+    "imo" : "9397341",
+    "referenceVessel" : "Q-flex",
+    "capacity" : 205963,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Safliya",
+    "imo" : "9337963",
+    "referenceVessel" : "Q-flex",
+    "capacity" : 210100,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Sahla",
+    "imo" : "9360855",
+    "referenceVessel" : "Q-flex",
+    "capacity" : 211842,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Shamal",
+    "imo" : "9360893",
+    "referenceVessel" : "Q-flex",
+    "capacity" : 213536,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Sheehaniya",
+    "imo" : "9360831",
+    "referenceVessel" : "Q-flex",
+    "capacity" : 205963,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Thumama",
+    "imo" : "9360843",
+    "referenceVessel" : "Q-flex",
+    "capacity" : 216235,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Al Utouriya",
+    "imo" : "9360867",
+    "referenceVessel" : "Q-flex",
+    "capacity" : 211879,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Duhail",
+    "imo" : "9337975",
+    "referenceVessel" : "Q-flex",
+    "capacity" : 210100,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Fraiha",
+    "imo" : "9360817",
+    "referenceVessel" : "Q-flex",
+    "capacity" : 205950,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Kumul",
+    "imo" : "9613161",
+    "referenceVessel" : "Q-flex",
+    "capacity" : 169147,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Mesaimeer",
+    "imo" : "9337729",
+    "referenceVessel" : "Q-flex",
+    "capacity" : 211986,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Murwab",
+    "imo" : "9360805",
+    "referenceVessel" : "Q-flex",
+    "capacity" : 205971,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Onaiza",
+    "imo" : "9397353",
+    "referenceVessel" : "Q-flex",
+    "capacity" : 205963,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Pflng Satu",
+    "imo" : "9665085",
+    "referenceVessel" : "Q-flex",
+    "capacity" : 167341,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Tembek",
+    "imo" : "9337731",
+    "referenceVessel" : "Q-flex",
+    "capacity" : 211885,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Umm Al Amad",
+    "imo" : "9360829",
+    "referenceVessel" : "Q-flex",
+    "capacity" : 206958,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Woodside Chaney",
+    "imo" : "9682576",
+    "referenceVessel" : "Q-flex",
+    "capacity" : 174000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Beidou Star",
+    "imo" : "9613159",
+    "referenceVessel" : "MEGI_176",
+    "capacity" : 172000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Creole Spirit",
+    "imo" : "9681687",
+    "referenceVessel" : "MEGI_176",
+    "capacity" : 173400,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "La Mancha Knutsen",
+    "imo" : "9721724",
+    "referenceVessel" : "MEGI_176",
+    "capacity" : 176300,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Abalamabie",
+    "imo" : "9690171",
+    "referenceVessel" : "MEGI_176",
+    "capacity" : 170000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Lng Port-Harcourt Ii",
+    "imo" : "9690157",
+    "referenceVessel" : "MEGI_176",
+    "capacity" : 170000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Maran Gas Achilles",
+    "imo" : "9682588",
+    "referenceVessel" : "MEGI_176",
+    "capacity" : 174000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Maran Gas Agamemnon",
+    "imo" : "9682590",
+    "referenceVessel" : "MEGI_176",
+    "capacity" : 174000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Oak Spirit",
+    "imo" : "9681699",
+    "referenceVessel" : "MEGI_176",
+    "capacity" : 173400,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "Rioja Knutsen",
+    "imo" : "9721736",
+    "referenceVessel" : "MEGI_176",
+    "capacity" : 176300,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "ladenAttributes" : { },
+    "ballastAttributes" : { },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { }
+  }, {
+    "name" : "MEGI_176",
+    "shortName" : "MEGI",
+    "type" : "MEGI",
+    "capacity" : 176000,
+    "fillCapacity" : 0.985,
+    "scnt" : 100000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "travelBaseFuel" : "HFO",
+    "idleBaseFuel" : "HFO",
+    "inPortBaseFuel" : "HFO",
+    "pilotLightBaseFuel" : "HFO",
+    "ladenAttributes" : {
+      "nboRate" : 154.34,
+      "idleNBORate" : 154.34,
+      "idleBaseRate" : 70.31,
+      "fuelConsumption" : [ {
+        "speed" : 16.0,
+        "consumption" : 53.2
+      }, {
+        "speed" : 17.0,
+        "consumption" : 60.9
+      }, {
+        "speed" : 18.0,
+        "consumption" : 70.2
+      }, {
+        "speed" : 19.0,
+        "consumption" : 83.5
+      }, {
+        "speed" : 20.0,
+        "consumption" : 87.5
+      }, {
+        "speed" : 12.0,
+        "consumption" : 30.2
+      }, {
+        "speed" : 13.0,
+        "consumption" : 34.6
+      }, {
+        "speed" : 14.0,
+        "consumption" : 40.0
+      }, {
+        "speed" : 15.0,
+        "consumption" : 46.2
+      } ]
+    },
+    "ballastAttributes" : {
+      "nboRate" : 154.34,
+      "idleNBORate" : 154.34,
+      "idleBaseRate" : 70.31,
+      "fuelConsumption" : [ {
+        "speed" : 16.0,
+        "consumption" : 52.2
+      }, {
+        "speed" : 17.0,
+        "consumption" : 59.4
+      }, {
+        "speed" : 18.0,
+        "consumption" : 67.4
+      }, {
+        "speed" : 19.0,
+        "consumption" : 78.9
+      }, {
+        "speed" : 20.0,
+        "consumption" : 83.0
+      }, {
+        "speed" : 12.0,
+        "consumption" : 30.0
+      }, {
+        "speed" : 13.0,
+        "consumption" : 34.4
+      }, {
+        "speed" : 14.0,
+        "consumption" : 39.7
+      }, {
+        "speed" : 15.0,
+        "consumption" : 45.6
+      } ]
+    },
+    "loadAttributes" : {
+      "inPortBaseRate" : 70.31,
+      "inPortNBORate" : 154.34
+    },
+    "dischargeAttributes" : {
+      "inPortBaseRate" : 70.31,
+      "inPortNBORate" : 70.31
+    },
+    "routeParameters" : [ {
+      "route" : "SUEZ",
+      "extraTransitTimeInHours" : 24,
+      "ladenNBORate" : 154.34,
+      "ballastNBORate" : 154.34,
+      "ladenBunkerRate" : 70.31,
+      "ballastBunkerRate" : 70.31
+    }, {
+      "route" : "PANAMA",
+      "extraTransitTimeInHours" : 24,
+      "ladenNBORate" : 154.34,
+      "ballastNBORate" : 154.34,
+      "ladenBunkerRate" : 70.31,
+      "ballastBunkerRate" : 70.31
+    } ],
+    "minSpeed" : 12.0,
+    "maxSpeed" : 20.0,
+    "warmingTime" : 24,
+    "pilotLightRate" : 1.0,
+    "hasReliqCapacity" : false
+  }, {
+    "name" : "Q-flex",
+    "shortName" : "QFLX",
+    "type" : "Q-Flex",
+    "capacity" : 220000,
+    "fillCapacity" : 0.985,
+    "scnt" : 125000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "travelBaseFuel" : "HFO",
+    "idleBaseFuel" : "HFO",
+    "inPortBaseFuel" : "HFO",
+    "pilotLightBaseFuel" : "HFO",
+    "ladenAttributes" : {
+      "nboRate" : 286.0,
+      "idleNBORate" : 286.0,
+      "fuelConsumption" : [ {
+        "speed" : 16.0,
+        "consumption" : 126.0
+      }, {
+        "speed" : 17.0,
+        "consumption" : 139.0
+      }, {
+        "speed" : 18.0,
+        "consumption" : 153.0
+      }, {
+        "speed" : 19.0,
+        "consumption" : 164.0
+      }, {
+        "speed" : 15.0,
+        "consumption" : 120.0
+      } ]
+    },
+    "ballastAttributes" : {
+      "nboRate" : 132.0,
+      "idleNBORate" : 132.0,
+      "fuelConsumption" : [ {
+        "speed" : 16.0,
+        "consumption" : 122.0
+      }, {
+        "speed" : 17.0,
+        "consumption" : 132.0
+      }, {
+        "speed" : 18.0,
+        "consumption" : 141.0
+      }, {
+        "speed" : 19.0,
+        "consumption" : 152.0
+      }, {
+        "speed" : 15.0,
+        "consumption" : 113.0
+      } ]
+    },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { },
+    "routeParameters" : [ {
+      "route" : "SUEZ",
+      "extraTransitTimeInHours" : 24,
+      "ladenNBORate" : 286.0,
+      "ballastNBORate" : 286.0,
+      "ladenBunkerRate" : 0.0,
+      "ballastBunkerRate" : 0.0
+    }, {
+      "route" : "PANAMA",
+      "extraTransitTimeInHours" : 24,
+      "ladenNBORate" : 286.0,
+      "ballastNBORate" : 286.0,
+      "ladenBunkerRate" : 0.0,
+      "ballastBunkerRate" : 0.0
+    } ],
+    "minSpeed" : 15.0,
+    "maxSpeed" : 19.0,
+    "warmingTime" : 24,
+    "pilotLightRate" : 1.0,
+    "hasReliqCapacity" : false
+  }, {
+    "name" : "Q-max",
+    "shortName" : "QMAX",
+    "type" : "Q-Max",
+    "capacity" : 260000,
+    "fillCapacity" : 0.985,
+    "scnt" : 158000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "travelBaseFuel" : "HFO",
+    "idleBaseFuel" : "HFO",
+    "inPortBaseFuel" : "HFO",
+    "pilotLightBaseFuel" : "HFO",
+    "ladenAttributes" : {
+      "nboRate" : 338.0,
+      "idleNBORate" : 338.0,
+      "fuelConsumption" : [ {
+        "speed" : 19.0,
+        "consumption" : 150.0
+      }, {
+        "speed" : 15.0,
+        "consumption" : 110.0
+      } ]
+    },
+    "ballastAttributes" : {
+      "nboRate" : 130.0,
+      "idleNBORate" : 130.0,
+      "fuelConsumption" : [ {
+        "speed" : 19.0,
+        "consumption" : 140.0
+      }, {
+        "speed" : 15.0,
+        "consumption" : 100.0
+      } ]
+    },
+    "loadAttributes" : { },
+    "dischargeAttributes" : { },
+    "routeParameters" : [ {
+      "route" : "SUEZ",
+      "extraTransitTimeInHours" : 24,
+      "ladenNBORate" : 338.0,
+      "ballastNBORate" : 338.0,
+      "ladenBunkerRate" : 0.0,
+      "ballastBunkerRate" : 0.0
+    }, {
+      "route" : "PANAMA",
+      "extraTransitTimeInHours" : 24,
+      "ladenNBORate" : 338.0,
+      "ballastNBORate" : 338.0,
+      "ladenBunkerRate" : 0.0,
+      "ballastBunkerRate" : 0.0
+    } ],
+    "minSpeed" : 15.0,
+    "maxSpeed" : 19.0,
+    "warmingTime" : 24,
+    "pilotLightRate" : 1.0,
+    "hasReliqCapacity" : false
+  }, {
+    "name" : "Steam_126",
+    "shortName" : "ST26",
+    "type" : "Steam",
+    "capacity" : 125862,
+    "fillCapacity" : 0.985,
+    "scnt" : 90000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "travelBaseFuel" : "HFO",
+    "idleBaseFuel" : "HFO",
+    "inPortBaseFuel" : "HFO",
+    "pilotLightBaseFuel" : "HFO",
+    "ladenAttributes" : {
+      "nboRate" : 307.0,
+      "idleNBORate" : 307.0,
+      "idleBaseRate" : 35.0,
+      "fuelConsumption" : [ {
+        "speed" : 16.0,
+        "consumption" : 148.0
+      }, {
+        "speed" : 17.0,
+        "consumption" : 165.0
+      }, {
+        "speed" : 18.0,
+        "consumption" : 188.0
+      }, {
+        "speed" : 19.0,
+        "consumption" : 207.0
+      }, {
+        "speed" : 20.0,
+        "consumption" : 226.0
+      }, {
+        "speed" : 15.0,
+        "consumption" : 132.0
+      } ]
+    },
+    "ballastAttributes" : {
+      "nboRate" : 307.0,
+      "idleNBORate" : 307.0,
+      "idleBaseRate" : 35.0,
+      "fuelConsumption" : [ {
+        "speed" : 16.0,
+        "consumption" : 148.0
+      }, {
+        "speed" : 17.0,
+        "consumption" : 165.0
+      }, {
+        "speed" : 18.0,
+        "consumption" : 188.0
+      }, {
+        "speed" : 19.0,
+        "consumption" : 207.0
+      }, {
+        "speed" : 20.0,
+        "consumption" : 226.0
+      }, {
+        "speed" : 15.0,
+        "consumption" : 132.0
+      } ]
+    },
+    "loadAttributes" : {
+      "inPortBaseRate" : 40.0,
+      "inPortNBORate" : 314.66
+    },
+    "dischargeAttributes" : {
+      "inPortBaseRate" : 40.0,
+      "inPortNBORate" : 314.66
+    },
+    "routeParameters" : [ {
+      "route" : "SUEZ",
+      "extraTransitTimeInHours" : 24,
+      "ladenNBORate" : 307.0,
+      "ballastNBORate" : 307.0,
+      "ladenBunkerRate" : 35.0,
+      "ballastBunkerRate" : 35.0
+    }, {
+      "route" : "PANAMA",
+      "extraTransitTimeInHours" : 24,
+      "ladenNBORate" : 307.0,
+      "ballastNBORate" : 307.0,
+      "ladenBunkerRate" : 35.0,
+      "ballastBunkerRate" : 35.0
+    } ],
+    "minSpeed" : 15.0,
+    "maxSpeed" : 20.0,
+    "warmingTime" : 24,
+    "pilotLightRate" : 1.0,
+    "hasReliqCapacity" : false
+  }, {
+    "name" : "Steam_138",
+    "shortName" : "ST38",
+    "type" : "Steam",
+    "capacity" : 140705,
+    "fillCapacity" : 0.985,
+    "scnt" : 84218,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "travelBaseFuel" : "HFO",
+    "idleBaseFuel" : "HFO",
+    "inPortBaseFuel" : "HFO",
+    "pilotLightBaseFuel" : "HFO",
+    "ladenAttributes" : {
+      "nboRate" : 207.89,
+      "idleNBORate" : 207.892,
+      "idleBaseRate" : 60.0,
+      "fuelConsumption" : [ {
+        "speed" : 16.0,
+        "consumption" : 125.0
+      }, {
+        "speed" : 17.0,
+        "consumption" : 145.0
+      }, {
+        "speed" : 18.0,
+        "consumption" : 168.0
+      }, {
+        "speed" : 19.0,
+        "consumption" : 185.0
+      }, {
+        "speed" : 20.0,
+        "consumption" : 194.0
+      }, {
+        "speed" : 12.0,
+        "consumption" : 84.0
+      }, {
+        "speed" : 13.0,
+        "consumption" : 95.0
+      }, {
+        "speed" : 14.0,
+        "consumption" : 105.0
+      }, {
+        "speed" : 15.0,
+        "consumption" : 118.0
+      } ]
+    },
+    "ballastAttributes" : {
+      "nboRate" : 207.89,
+      "idleNBORate" : 207.89,
+      "idleBaseRate" : 60.0,
+      "fuelConsumption" : [ {
+        "speed" : 16.0,
+        "consumption" : 125.0
+      }, {
+        "speed" : 17.0,
+        "consumption" : 135.0
+      }, {
+        "speed" : 18.0,
+        "consumption" : 152.0
+      }, {
+        "speed" : 19.0,
+        "consumption" : 167.0
+      }, {
+        "speed" : 20.0,
+        "consumption" : 182.0
+      }, {
+        "speed" : 12.0,
+        "consumption" : 76.0
+      }, {
+        "speed" : 13.0,
+        "consumption" : 87.0
+      }, {
+        "speed" : 14.0,
+        "consumption" : 97.0
+      }, {
+        "speed" : 15.0,
+        "consumption" : 115.0
+      } ]
+    },
+    "loadAttributes" : {
+      "inPortBaseRate" : 60.0,
+      "inPortNBORate" : 207.89
+    },
+    "dischargeAttributes" : {
+      "inPortBaseRate" : 60.0,
+      "inPortNBORate" : 207.89
+    },
+    "routeParameters" : [ {
+      "route" : "SUEZ",
+      "extraTransitTimeInHours" : 24,
+      "ladenNBORate" : 207.892,
+      "ballastNBORate" : 207.892,
+      "ladenBunkerRate" : 60.0,
+      "ballastBunkerRate" : 60.0
+    }, {
+      "route" : "PANAMA",
+      "extraTransitTimeInHours" : 24,
+      "ladenNBORate" : 207.892,
+      "ballastNBORate" : 207.892,
+      "ladenBunkerRate" : 60.0,
+      "ballastBunkerRate" : 60.0
+    } ],
+    "minSpeed" : 12.0,
+    "maxSpeed" : 20.0,
+    "warmingTime" : 24,
+    "pilotLightRate" : 1.0,
+    "hasReliqCapacity" : false
+  }, {
+    "name" : "Steam_145",
+    "shortName" : "ST45",
+    "type" : "Steam",
+    "capacity" : 145700,
+    "fillCapacity" : 0.985,
+    "scnt" : 84752,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "travelBaseFuel" : "HFO",
+    "idleBaseFuel" : "HFO",
+    "inPortBaseFuel" : "HFO",
+    "pilotLightBaseFuel" : "HFO",
+    "ladenAttributes" : {
+      "nboRate" : 215.27,
+      "idleNBORate" : 215.272,
+      "idleBaseRate" : 60.0,
+      "fuelConsumption" : [ {
+        "speed" : 16.0,
+        "consumption" : 125.0
+      }, {
+        "speed" : 17.0,
+        "consumption" : 145.0
+      }, {
+        "speed" : 18.0,
+        "consumption" : 168.0
+      }, {
+        "speed" : 19.0,
+        "consumption" : 185.0
+      }, {
+        "speed" : 20.0,
+        "consumption" : 205.0
+      }, {
+        "speed" : 12.0,
+        "consumption" : 84.0
+      }, {
+        "speed" : 13.0,
+        "consumption" : 95.0
+      }, {
+        "speed" : 14.0,
+        "consumption" : 105.0
+      }, {
+        "speed" : 15.0,
+        "consumption" : 118.0
+      } ]
+    },
+    "ballastAttributes" : {
+      "nboRate" : 215.27,
+      "idleNBORate" : 215.27,
+      "idleBaseRate" : 60.0,
+      "fuelConsumption" : [ {
+        "speed" : 16.0,
+        "consumption" : 125.0
+      }, {
+        "speed" : 17.0,
+        "consumption" : 135.0
+      }, {
+        "speed" : 18.0,
+        "consumption" : 152.0
+      }, {
+        "speed" : 19.0,
+        "consumption" : 167.0
+      }, {
+        "speed" : 20.0,
+        "consumption" : 190.0
+      }, {
+        "speed" : 12.0,
+        "consumption" : 76.0
+      }, {
+        "speed" : 13.0,
+        "consumption" : 87.0
+      }, {
+        "speed" : 14.0,
+        "consumption" : 97.0
+      }, {
+        "speed" : 15.0,
+        "consumption" : 115.0
+      } ]
+    },
+    "loadAttributes" : {
+      "inPortBaseRate" : 60.0,
+      "inPortNBORate" : 215.27
+    },
+    "dischargeAttributes" : {
+      "inPortBaseRate" : 60.0,
+      "inPortNBORate" : 215.27
+    },
+    "routeParameters" : [ {
+      "route" : "SUEZ",
+      "extraTransitTimeInHours" : 24,
+      "ladenNBORate" : 215.272,
+      "ballastNBORate" : 215.272,
+      "ladenBunkerRate" : 60.0,
+      "ballastBunkerRate" : 60.0
+    }, {
+      "route" : "PANAMA",
+      "extraTransitTimeInHours" : 24,
+      "ladenNBORate" : 215.272,
+      "ballastNBORate" : 215.272,
+      "ladenBunkerRate" : 60.0,
+      "ballastBunkerRate" : 60.0
+    } ],
+    "minSpeed" : 12.0,
+    "maxSpeed" : 20.0,
+    "warmingTime" : 24,
+    "pilotLightRate" : 1.0,
+    "hasReliqCapacity" : false
+  }, {
+    "name" : "Steam_150",
+    "shortName" : "ST50",
+    "type" : "Steam",
+    "capacity" : 149755,
+    "fillCapacity" : 0.985,
+    "scnt" : 88241,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "travelBaseFuel" : "HFO",
+    "idleBaseFuel" : "HFO",
+    "inPortBaseFuel" : "HFO",
+    "pilotLightBaseFuel" : "HFO",
+    "ladenAttributes" : {
+      "nboRate" : 221.26,
+      "idleNBORate" : 221.26,
+      "idleBaseRate" : 28.0,
+      "fuelConsumption" : [ {
+        "speed" : 16.0,
+        "consumption" : 137.0
+      }, {
+        "speed" : 17.0,
+        "consumption" : 148.0
+      }, {
+        "speed" : 18.0,
+        "consumption" : 164.0
+      }, {
+        "speed" : 19.0,
+        "consumption" : 186.0
+      }, {
+        "speed" : 20.0,
+        "consumption" : 207.0
+      }, {
+        "speed" : 12.0,
+        "consumption" : 105.0
+      }, {
+        "speed" : 13.0,
+        "consumption" : 114.0
+      }, {
+        "speed" : 14.0,
+        "consumption" : 122.0
+      }, {
+        "speed" : 15.0,
+        "consumption" : 127.0
+      } ]
+    },
+    "ballastAttributes" : {
+      "nboRate" : 221.26,
+      "idleNBORate" : 221.26,
+      "idleBaseRate" : 28.0,
+      "fuelConsumption" : [ {
+        "speed" : 16.0,
+        "consumption" : 140.0
+      }, {
+        "speed" : 17.0,
+        "consumption" : 153.0
+      }, {
+        "speed" : 18.0,
+        "consumption" : 165.0
+      }, {
+        "speed" : 19.0,
+        "consumption" : 180.0
+      }, {
+        "speed" : 20.0,
+        "consumption" : 197.0
+      }, {
+        "speed" : 12.0,
+        "consumption" : 97.0
+      }, {
+        "speed" : 13.0,
+        "consumption" : 107.0
+      }, {
+        "speed" : 14.0,
+        "consumption" : 116.0
+      }, {
+        "speed" : 15.0,
+        "consumption" : 129.0
+      } ]
+    },
+    "loadAttributes" : {
+      "inPortBaseRate" : 47.5,
+      "inPortNBORate" : 221.26
+    },
+    "dischargeAttributes" : {
+      "inPortBaseRate" : 47.5,
+      "inPortNBORate" : 221.26
+    },
+    "routeParameters" : [ {
+      "route" : "SUEZ",
+      "extraTransitTimeInHours" : 24,
+      "ladenNBORate" : 221.26,
+      "ballastNBORate" : 221.26,
+      "ladenBunkerRate" : 28.0,
+      "ballastBunkerRate" : 28.0
+    }, {
+      "route" : "PANAMA",
+      "extraTransitTimeInHours" : 24,
+      "ladenNBORate" : 221.26,
+      "ballastNBORate" : 221.26,
+      "ladenBunkerRate" : 28.0,
+      "ballastBunkerRate" : 28.0
+    } ],
+    "minSpeed" : 12.0,
+    "maxSpeed" : 20.0,
+    "warmingTime" : 24,
+    "pilotLightRate" : 1.0,
+    "hasReliqCapacity" : false
+  }, {
+    "name" : "TFDE_145",
+    "shortName" : "TF45",
+    "type" : "TFDE",
+    "capacity" : 145000,
+    "fillCapacity" : 0.985,
+    "scnt" : 86000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "travelBaseFuel" : "HFO",
+    "idleBaseFuel" : "HFO",
+    "inPortBaseFuel" : "HFO",
+    "pilotLightBaseFuel" : "HFO",
+    "ladenAttributes" : {
+      "nboRate" : 217.0,
+      "idleNBORate" : 217.0,
+      "idleBaseRate" : 25.0,
+      "fuelConsumption" : [ {
+        "speed" : 16.0,
+        "consumption" : 134.0
+      }, {
+        "speed" : 17.0,
+        "consumption" : 146.5
+      }, {
+        "speed" : 18.0,
+        "consumption" : 163.0
+      }, {
+        "speed" : 19.0,
+        "consumption" : 180.0
+      }, {
+        "speed" : 20.0,
+        "consumption" : 195.0
+      }, {
+        "speed" : 15.0,
+        "consumption" : 123.0
+      } ]
+    },
+    "ballastAttributes" : {
+      "nboRate" : 145.0,
+      "idleNBORate" : 145.0,
+      "idleBaseRate" : 25.0,
+      "fuelConsumption" : [ {
+        "speed" : 16.0,
+        "consumption" : 130.0
+      }, {
+        "speed" : 17.0,
+        "consumption" : 142.0
+      }, {
+        "speed" : 18.0,
+        "consumption" : 158.0
+      }, {
+        "speed" : 19.0,
+        "consumption" : 175.0
+      }, {
+        "speed" : 20.0,
+        "consumption" : 189.0
+      }, {
+        "speed" : 15.0,
+        "consumption" : 119.0
+      } ]
+    },
+    "loadAttributes" : {
+      "inPortBaseRate" : 40.0,
+      "inPortNBORate" : 217.5
+    },
+    "dischargeAttributes" : {
+      "inPortBaseRate" : 40.0,
+      "inPortNBORate" : 145.0
+    },
+    "routeParameters" : [ {
+      "route" : "SUEZ",
+      "extraTransitTimeInHours" : 24,
+      "ladenNBORate" : 217.0,
+      "ballastNBORate" : 145.0,
+      "ladenBunkerRate" : 25.0,
+      "ballastBunkerRate" : 25.0
+    }, {
+      "route" : "PANAMA",
+      "extraTransitTimeInHours" : 24,
+      "ladenNBORate" : 217.0,
+      "ballastNBORate" : 145.0,
+      "ladenBunkerRate" : 25.0,
+      "ballastBunkerRate" : 25.0
+    } ],
+    "minSpeed" : 15.0,
+    "maxSpeed" : 20.0,
+    "warmingTime" : 24,
+    "pilotLightRate" : 1.0,
+    "hasReliqCapacity" : false
+  }, {
+    "name" : "TFDE_155",
+    "shortName" : "TF55",
+    "type" : "TFDE",
+    "capacity" : 154925,
+    "fillCapacity" : 0.985,
+    "scnt" : 94689,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "travelBaseFuel" : "HFO",
+    "idleBaseFuel" : "HFO",
+    "inPortBaseFuel" : "HFO",
+    "pilotLightBaseFuel" : "HFO",
+    "ladenAttributes" : {
+      "nboRate" : 228.9,
+      "idleNBORate" : 228.902,
+      "idleBaseRate" : 60.0,
+      "fuelConsumption" : [ {
+        "speed" : 16.0,
+        "consumption" : 88.0
+      }, {
+        "speed" : 17.0,
+        "consumption" : 101.0
+      }, {
+        "speed" : 18.0,
+        "consumption" : 117.0
+      }, {
+        "speed" : 19.0,
+        "consumption" : 134.0
+      }, {
+        "speed" : 15.0,
+        "consumption" : 74.0
+      } ]
+    },
+    "ballastAttributes" : {
+      "nboRate" : 228.9,
+      "idleNBORate" : 228.9,
+      "idleBaseRate" : 60.0,
+      "fuelConsumption" : [ {
+        "speed" : 16.0,
+        "consumption" : 84.0
+      }, {
+        "speed" : 17.0,
+        "consumption" : 96.0
+      }, {
+        "speed" : 18.0,
+        "consumption" : 110.0
+      }, {
+        "speed" : 19.0,
+        "consumption" : 130.0
+      }, {
+        "speed" : 15.0,
+        "consumption" : 70.0
+      } ]
+    },
+    "loadAttributes" : {
+      "inPortBaseRate" : 60.0,
+      "inPortNBORate" : 228.9
+    },
+    "dischargeAttributes" : {
+      "inPortBaseRate" : 60.0,
+      "inPortNBORate" : 228.9
+    },
+    "routeParameters" : [ {
+      "route" : "SUEZ",
+      "extraTransitTimeInHours" : 24,
+      "ladenNBORate" : 228.902,
+      "ballastNBORate" : 228.902,
+      "ladenBunkerRate" : 60.0,
+      "ballastBunkerRate" : 60.0
+    }, {
+      "route" : "PANAMA",
+      "extraTransitTimeInHours" : 24,
+      "ladenNBORate" : 228.902,
+      "ballastNBORate" : 228.902,
+      "ladenBunkerRate" : 60.0,
+      "ballastBunkerRate" : 60.0
+    } ],
+    "minSpeed" : 15.0,
+    "maxSpeed" : 19.0,
+    "warmingTime" : 24,
+    "pilotLightRate" : 1.0,
+    "hasReliqCapacity" : false
+  }, {
+    "name" : "TFDE_160",
+    "shortName" : "TF60",
+    "type" : "TFDE",
+    "capacity" : 160000,
+    "fillCapacity" : 0.985,
+    "scnt" : 91000,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "travelBaseFuel" : "HFO",
+    "idleBaseFuel" : "HFO",
+    "inPortBaseFuel" : "HFO",
+    "pilotLightBaseFuel" : "HFO",
+    "ladenAttributes" : {
+      "nboRate" : 172.8,
+      "idleNBORate" : 172.8,
+      "idleBaseRate" : 15.0,
+      "fuelConsumption" : [ {
+        "speed" : 16.0,
+        "consumption" : 97.0
+      }, {
+        "speed" : 17.0,
+        "consumption" : 111.0
+      }, {
+        "speed" : 18.0,
+        "consumption" : 127.0
+      }, {
+        "speed" : 19.0,
+        "consumption" : 146.0
+      }, {
+        "speed" : 12.0,
+        "consumption" : 60.0
+      }, {
+        "speed" : 13.0,
+        "consumption" : 64.0
+      }, {
+        "speed" : 14.0,
+        "consumption" : 74.0
+      }, {
+        "speed" : 15.0,
+        "consumption" : 84.0
+      } ]
+    },
+    "ballastAttributes" : {
+      "nboRate" : 172.8,
+      "idleNBORate" : 172.8,
+      "idleBaseRate" : 15.0,
+      "fuelConsumption" : [ {
+        "speed" : 16.0,
+        "consumption" : 101.0
+      }, {
+        "speed" : 17.0,
+        "consumption" : 113.0
+      }, {
+        "speed" : 18.0,
+        "consumption" : 126.0
+      }, {
+        "speed" : 19.0,
+        "consumption" : 143.0
+      }, {
+        "speed" : 12.0,
+        "consumption" : 55.0
+      }, {
+        "speed" : 13.0,
+        "consumption" : 63.0
+      }, {
+        "speed" : 14.0,
+        "consumption" : 74.0
+      }, {
+        "speed" : 15.0,
+        "consumption" : 87.0
+      } ]
+    },
+    "loadAttributes" : {
+      "inPortBaseRate" : 20.0,
+      "inPortNBORate" : 172.8
+    },
+    "dischargeAttributes" : {
+      "inPortBaseRate" : 41.0,
+      "inPortNBORate" : 172.8
+    },
+    "routeParameters" : [ {
+      "route" : "SUEZ",
+      "extraTransitTimeInHours" : 24,
+      "ladenNBORate" : 172.8,
+      "ballastNBORate" : 172.8,
+      "ladenBunkerRate" : 15.0,
+      "ballastBunkerRate" : 15.0
+    }, {
+      "route" : "PANAMA",
+      "extraTransitTimeInHours" : 24,
+      "ladenNBORate" : 172.8,
+      "ballastNBORate" : 172.8,
+      "ladenBunkerRate" : 15.0,
+      "ballastBunkerRate" : 15.0
+    } ],
+    "minSpeed" : 12.0,
+    "maxSpeed" : 19.0,
+    "warmingTime" : 24,
+    "pilotLightRate" : 1.0,
+    "hasReliqCapacity" : false
+  }, {
+    "name" : "TFDE_165",
+    "shortName" : "TF65",
+    "type" : "TFDE",
+    "capacity" : 165000,
+    "fillCapacity" : 0.985,
+    "scnt" : 91944,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "travelBaseFuel" : "HFO",
+    "idleBaseFuel" : "HFO",
+    "inPortBaseFuel" : "HFO",
+    "pilotLightBaseFuel" : "HFO",
+    "ladenAttributes" : {
+      "nboRate" : 165.0,
+      "idleNBORate" : 165.0,
+      "idleBaseRate" : 18.0,
+      "fuelConsumption" : [ {
+        "speed" : 16.0,
+        "consumption" : 94.0
+      }, {
+        "speed" : 17.0,
+        "consumption" : 102.0
+      }, {
+        "speed" : 18.0,
+        "consumption" : 112.0
+      }, {
+        "speed" : 19.0,
+        "consumption" : 128.0
+      }, {
+        "speed" : 20.0,
+        "consumption" : 138.0
+      }, {
+        "speed" : 12.0,
+        "consumption" : 65.0
+      }, {
+        "speed" : 13.0,
+        "consumption" : 65.0
+      }, {
+        "speed" : 14.0,
+        "consumption" : 75.0
+      }, {
+        "speed" : 15.0,
+        "consumption" : 85.0
+      } ]
+    },
+    "ballastAttributes" : {
+      "nboRate" : 165.0,
+      "idleNBORate" : 165.0,
+      "idleBaseRate" : 18.0,
+      "fuelConsumption" : [ {
+        "speed" : 16.0,
+        "consumption" : 88.0
+      }, {
+        "speed" : 17.0,
+        "consumption" : 99.0
+      }, {
+        "speed" : 18.0,
+        "consumption" : 111.0
+      }, {
+        "speed" : 19.0,
+        "consumption" : 121.0
+      }, {
+        "speed" : 20.0,
+        "consumption" : 133.0
+      }, {
+        "speed" : 12.0,
+        "consumption" : 61.0
+      }, {
+        "speed" : 13.0,
+        "consumption" : 61.0
+      }, {
+        "speed" : 14.0,
+        "consumption" : 70.0
+      }, {
+        "speed" : 15.0,
+        "consumption" : 79.0
+      } ]
+    },
+    "loadAttributes" : {
+      "inPortBaseRate" : 45.0,
+      "inPortNBORate" : 165.0
+    },
+    "dischargeAttributes" : {
+      "inPortBaseRate" : 45.0,
+      "inPortNBORate" : 165.0
+    },
+    "routeParameters" : [ {
+      "route" : "SUEZ",
+      "extraTransitTimeInHours" : 24,
+      "ladenNBORate" : 165.0,
+      "ballastNBORate" : 165.0,
+      "ladenBunkerRate" : 18.0,
+      "ballastBunkerRate" : 18.0
+    }, {
+      "route" : "PANAMA",
+      "extraTransitTimeInHours" : 24,
+      "ladenNBORate" : 165.0,
+      "ballastNBORate" : 165.0,
+      "ladenBunkerRate" : 18.0,
+      "ballastBunkerRate" : 18.0
+    } ],
+    "minSpeed" : 12.0,
+    "maxSpeed" : 20.0,
+    "warmingTime" : 24,
+    "pilotLightRate" : 1.0,
+    "hasReliqCapacity" : false
+  }, {
+    "name" : "TFDE_170",
+    "shortName" : "TF70",
+    "type" : "TFDE",
+    "capacity" : 170535,
+    "fillCapacity" : 0.985,
+    "scnt" : 92447,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "travelBaseFuel" : "HFO",
+    "idleBaseFuel" : "HFO",
+    "inPortBaseFuel" : "HFO",
+    "pilotLightBaseFuel" : "HFO",
+    "ladenAttributes" : {
+      "nboRate" : 251.97,
+      "idleNBORate" : 251.965,
+      "idleBaseRate" : 62.2,
+      "fuelConsumption" : [ {
+        "speed" : 16.0,
+        "consumption" : 98.1
+      }, {
+        "speed" : 17.0,
+        "consumption" : 113.3
+      }, {
+        "speed" : 18.0,
+        "consumption" : 126.7
+      }, {
+        "speed" : 19.0,
+        "consumption" : 133.0
+      }, {
+        "speed" : 20.0,
+        "consumption" : 140.0
+      }, {
+        "speed" : 12.0,
+        "consumption" : 66.0
+      }, {
+        "speed" : 13.0,
+        "consumption" : 73.1
+      }, {
+        "speed" : 14.0,
+        "consumption" : 79.1
+      }, {
+        "speed" : 15.0,
+        "consumption" : 85.2
+      } ]
+    },
+    "ballastAttributes" : {
+      "nboRate" : 251.97,
+      "idleNBORate" : 251.97,
+      "idleBaseRate" : 62.2,
+      "fuelConsumption" : [ {
+        "speed" : 16.0,
+        "consumption" : 93.4
+      }, {
+        "speed" : 17.0,
+        "consumption" : 104.7
+      }, {
+        "speed" : 18.0,
+        "consumption" : 116.5
+      }, {
+        "speed" : 19.0,
+        "consumption" : 124.5
+      }, {
+        "speed" : 20.0,
+        "consumption" : 140.0
+      }, {
+        "speed" : 12.0,
+        "consumption" : 62.0
+      }, {
+        "speed" : 13.0,
+        "consumption" : 73.1
+      }, {
+        "speed" : 14.0,
+        "consumption" : 79.1
+      }, {
+        "speed" : 15.0,
+        "consumption" : 84.7
+      } ]
+    },
+    "loadAttributes" : {
+      "inPortBaseRate" : 62.2,
+      "inPortNBORate" : 251.97
+    },
+    "dischargeAttributes" : {
+      "inPortBaseRate" : 62.2,
+      "inPortNBORate" : 251.97
+    },
+    "routeParameters" : [ {
+      "route" : "SUEZ",
+      "extraTransitTimeInHours" : 24,
+      "ladenNBORate" : 251.965,
+      "ballastNBORate" : 251.965,
+      "ladenBunkerRate" : 62.2,
+      "ballastBunkerRate" : 62.2
+    }, {
+      "route" : "PANAMA",
+      "extraTransitTimeInHours" : 24,
+      "ladenNBORate" : 251.965,
+      "ballastNBORate" : 251.965,
+      "ladenBunkerRate" : 62.2,
+      "ballastBunkerRate" : 62.2
+    } ],
+    "minSpeed" : 12.0,
+    "maxSpeed" : 20.0,
+    "warmingTime" : 24,
+    "pilotLightRate" : 1.0,
+    "hasReliqCapacity" : false
+  }, {
+    "name" : "XDF_174",
+    "shortName" : "XDF",
+    "type" : "XDF",
+    "capacity" : 174000,
+    "fillCapacity" : 0.985,
+    "scnt" : 103800,
+    "inaccessiblePorts" : [ ],
+    "inaccessibleRoutes" : [ ],
+    "travelBaseFuel" : "HFO",
+    "idleBaseFuel" : "HFO",
+    "inPortBaseFuel" : "HFO",
+    "pilotLightBaseFuel" : "HFO",
+    "ladenAttributes" : {
+      "nboRate" : 156.6,
+      "idleNBORate" : 156.6,
+      "idleBaseRate" : 25.9,
+      "fuelConsumption" : [ {
+        "speed" : 16.0,
+        "consumption" : 73.05
+      }, {
+        "speed" : 17.0,
+        "consumption" : 82.9
+      }, {
+        "speed" : 18.0,
+        "consumption" : 91.8
+      }, {
+        "speed" : 19.0,
+        "consumption" : 103.6
+      }, {
+        "speed" : 20.0,
+        "consumption" : 118.4
+      }, {
+        "speed" : 12.0,
+        "consumption" : 44.5
+      }, {
+        "speed" : 13.0,
+        "consumption" : 44.5
+      }, {
+        "speed" : 14.0,
+        "consumption" : 50.3
+      }, {
+        "speed" : 15.0,
+        "consumption" : 61.9
+      } ]
+    },
+    "ballastAttributes" : {
+      "nboRate" : 73.8,
+      "idleNBORate" : 73.8,
+      "idleBaseRate" : 25.9,
+      "fuelConsumption" : [ {
+        "speed" : 16.0,
+        "consumption" : 71.0
+      }, {
+        "speed" : 17.0,
+        "consumption" : 80.65
+      }, {
+        "speed" : 18.0,
+        "consumption" : 90.9
+      }, {
+        "speed" : 19.0,
+        "consumption" : 103.05
+      }, {
+        "speed" : 20.0,
+        "consumption" : 115.75
+      }, {
+        "speed" : 12.0,
+        "consumption" : 46.8
+      }, {
+        "speed" : 13.0,
+        "consumption" : 46.8
+      }, {
+        "speed" : 14.0,
+        "consumption" : 51.55
+      }, {
+        "speed" : 15.0,
+        "consumption" : 61.05
+      } ]
+    },
+    "loadAttributes" : {
+      "inPortBaseRate" : 37.0,
+      "inPortNBORate" : 156.6
+    },
+    "dischargeAttributes" : {
+      "inPortBaseRate" : 37.0,
+      "inPortNBORate" : 73.8
+    },
+    "routeParameters" : [ {
+      "route" : "SUEZ",
+      "extraTransitTimeInHours" : 24,
+      "ladenNBORate" : 156.6,
+      "ballastNBORate" : 156.6,
+      "ladenBunkerRate" : 25.9,
+      "ballastBunkerRate" : 25.9
+    }, {
+      "route" : "PANAMA",
+      "extraTransitTimeInHours" : 24,
+      "ladenNBORate" : 156.6,
+      "ballastNBORate" : 156.6,
+      "ladenBunkerRate" : 25.9,
+      "ballastBunkerRate" : 25.9
+    } ],
+    "minSpeed" : 12.0,
+    "maxSpeed" : 20.0,
+    "warmingTime" : 24,
+    "pilotLightRate" : 1.0,
+    "hasReliqCapacity" : false
+  } ]
+}

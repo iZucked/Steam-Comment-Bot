@@ -79,8 +79,8 @@ public class FleetModelBuilder {
 		fleetModel.getVessels().add(vessel);
 	}
 
-	public void setRouteParameters(final Vessel vessel, @NonNull final RouteOption routeOption, final int ladenConsumptionRatePerDay, final int ballastConsumptionRatePerDay,
-			final int ladenNBORatePerDay, final int ballastNBORatePerDay, final int canalTransitHours) {
+	public void setRouteParameters(final Vessel vessel, @NonNull final RouteOption routeOption, final double ladenConsumptionRatePerDay, final double ballastConsumptionRatePerDay,
+			final double ladenNBORatePerDay, final double ballastNBORatePerDay, final int canalTransitHours) {
 
 		VesselClassRouteParameters params = null;
 		for (final VesselClassRouteParameters p : vessel.getRouteParameters()) {

@@ -32,6 +32,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
+import com.mmxlabs.models.lng.spotmarkets.SpotType;
 import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelBuilder;
 import com.mmxlabs.rcp.common.versions.VersionsUtil;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
@@ -72,7 +73,17 @@ public final class ScenarioModelBuilder {
 		referenceModel.setCostModel(PricingFactory.eINSTANCE.createCostModel());
 		referenceModel.setCommercialModel(CommercialFactory.eINSTANCE.createCommercialModel());
 		referenceModel.setSpotMarketsModel(SpotMarketsFactory.eINSTANCE.createSpotMarketsModel());
-
+		
+		referenceModel.getSpotMarketsModel().setDesPurchaseSpotMarket(SpotMarketsFactory.eINSTANCE.createSpotMarketGroup());
+		referenceModel.getSpotMarketsModel().setDesSalesSpotMarket(SpotMarketsFactory.eINSTANCE.createSpotMarketGroup());
+		referenceModel.getSpotMarketsModel().setFobPurchasesSpotMarket(SpotMarketsFactory.eINSTANCE.createSpotMarketGroup());
+		referenceModel.getSpotMarketsModel().setFobSalesSpotMarket(SpotMarketsFactory.eINSTANCE.createSpotMarketGroup());
+		
+		referenceModel.getSpotMarketsModel().getDesPurchaseSpotMarket().setType(SpotType.DES_PURCHASE);
+		referenceModel.getSpotMarketsModel().getDesSalesSpotMarket().setType(SpotType.DES_SALE);
+		referenceModel.getSpotMarketsModel().getFobPurchasesSpotMarket().setType(SpotType.FOB_PURCHASE);
+		referenceModel.getSpotMarketsModel().getFobSalesSpotMarket().setType(SpotType.FOB_SALE);
+		
 		rootObject.setReferenceModel(referenceModel);
 		
 		// Initialise version UUIDs

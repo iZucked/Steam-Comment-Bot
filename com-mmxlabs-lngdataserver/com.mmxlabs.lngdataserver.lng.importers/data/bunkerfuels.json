@@ -1,0 +1,9 @@
+{
+  "identifier" : "ab2150e2-e57a-455a-9d9e-3c5021b98201",
+  "createdAt" : 1551791790.730571000,
+  "createdBy" : "farukh",
+  "fuels" : [ {
+    "name" : "HFO",
+    "equivalenceFactor" : 47.423
+  } ]
+}

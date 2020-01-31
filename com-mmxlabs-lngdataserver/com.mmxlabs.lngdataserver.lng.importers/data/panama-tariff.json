@@ -1,0 +1,31 @@
+{
+  "@class" : "PanamaCanalTariff",
+  "bands" : [ {
+    "@class" : "PanamaCanalTariffBand",
+    "ladenTariff" : "2.5",
+    "ballastTariff" : "2.23",
+    "ballastRoundtripTariff" : "2.0",
+    "bandEnd" : "60000"
+  }, {
+    "@class" : "PanamaCanalTariffBand",
+    "ladenTariff" : "2.15",
+    "ballastTariff" : "1.88",
+    "ballastRoundtripTariff" : "1.75",
+    "bandStart" : "60000",
+    "bandEnd" : "90000"
+  }, {
+    "@class" : "PanamaCanalTariffBand",
+    "ladenTariff" : "2.07",
+    "ballastTariff" : "1.8",
+    "ballastRoundtripTariff" : "1.6",
+    "bandStart" : "90000",
+    "bandEnd" : "120000"
+  }, {
+    "@class" : "PanamaCanalTariffBand",
+    "ladenTariff" : "1.96",
+    "ballastTariff" : "1.71",
+    "ballastRoundtripTariff" : "1.5",
+    "bandStart" : "120000"
+  } ],
+  "markupRate" : "0.2"
+}
