@@ -279,6 +279,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			calculateCargoShippingEntityCosts(evaluationMode, entityPreTaxProfit, vesselAvailability, plan, cargoPNLData, baseEntity, shippingEntity, entityBookDetailTreeMap);
 		}
 
+		calculateExtraPreTaxItems(evaluationMode, entityPreTaxProfit, vesselAvailability, plan, cargoPNLData, baseEntity, shippingEntity, entityBookDetailTreeMap);
+
 		// Taxed P&L
 		final Map<IEntityBook, Long> entityPostTaxProfit = new HashMap<>();
 		for (final Map.Entry<IEntityBook, Long> e : entityPreTaxProfit.entrySet()) {
@@ -337,6 +339,12 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		}
 
 		return new Pair<>(cargoPNLData, result);
+	}
+
+	protected void calculateExtraPreTaxItems(@NonNull EvaluationMode evaluationMode, Map<IEntityBook, Long> entityPreTaxProfit, @NonNull IVesselAvailability vesselAvailability,
+			@NonNull VoyagePlan plan, CargoValueAnnotation cargoPNLData, IEntity baseEntity, IEntity shippingEntity, Map<IEntityBook, IDetailTree> entityBookDetailTreeMap) {
+		// Do nothing by default
+
 	}
 
 	/**
