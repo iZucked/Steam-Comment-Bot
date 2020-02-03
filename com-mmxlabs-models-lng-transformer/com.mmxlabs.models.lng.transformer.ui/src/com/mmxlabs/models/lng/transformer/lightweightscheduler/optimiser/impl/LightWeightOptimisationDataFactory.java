@@ -26,8 +26,12 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Injector;
 import com.google.inject.name.Named;
-import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.concurrent.CleanableExecutorService;
+import com.mmxlabs.models.lng.adp.ContractProfile;
+import com.mmxlabs.models.lng.adp.MaxCargoConstraint;
+import com.mmxlabs.models.lng.adp.MinCargoConstraint;
+import com.mmxlabs.models.lng.adp.ProfileConstraint;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.LightWeightSchedulerStage2Module;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ICargoToCargoCostCalculator;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ICargoVesselRestrictionsMatrixProducer;
@@ -45,6 +49,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
+import com.mmxlabs.optimiser.core.exceptions.InfeasibleSolutionException;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
@@ -59,7 +64,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
 public class LightWeightOptimisationDataFactory {
 
 	@Inject
-	private PairingOptimisationData optimiserRecorder;
+	private PairingOptimisationData<?,?> optimiserRecorder;
 	@Inject
 	private ILongTermSlotsProvider longTermSlotsProvider;
 	@Inject
@@ -342,6 +347,26 @@ public class LightWeightOptimisationDataFactory {
 		final boolean[][] pairingsMatrix = matrixOptimiser.findOptimalPairings(optimiserRecorder.getProfitAsPrimitive(), optimiserRecorder.getOptionalLoads(),
 				optimiserRecorder.getOptionalDischarges(), optimiserRecorder.getValid(), optimiserRecorder.getMaxDischargeGroupCount(), optimiserRecorder.getMinDischargeGroupCount(),
 				optimiserRecorder.getMaxLoadGroupCount(), optimiserRecorder.getMinLoadGroupCount());
+
+		if (pairingsMatrix == null) {
+			final List<Pair<ContractProfile, ProfileConstraint>> violatedConstraints = matrixOptimiser.findMinViolatedConstraints(optimiserRecorder, optimiserRecorder.getProfitAsPrimitive(), optimiserRecorder.getOptionalLoads(),
+					optimiserRecorder.getOptionalDischarges(), optimiserRecorder.getValid(), optimiserRecorder.getMaxDischargeGroupCounts(), optimiserRecorder.getMinDischargeGroupCounts(),
+					optimiserRecorder.getMaxLoadGroupCounts(), optimiserRecorder.getMinLoadGroupCounts());
+
+			StringBuilder errorMessage = new StringBuilder();
+			
+			errorMessage.append("Some constraints cannot be satisifed:\r\n\r\n");
+			
+			for (Pair<ContractProfile, ProfileConstraint> violated : violatedConstraints) {
+				ContractProfile contract = violated.getFirst();
+				ProfileConstraint constraint = violated.getSecond();
+				errorMessage.append("On contract ").append(contract.getContract().getName()).append(":\r\n");
+				errorMessage.append(constraint.toString()).append("\r\n");
+			}
+			
+			throw new InfeasibleSolutionException(errorMessage.toString());
+		}
+		
 		return pairingsMatrix;
 	}
 

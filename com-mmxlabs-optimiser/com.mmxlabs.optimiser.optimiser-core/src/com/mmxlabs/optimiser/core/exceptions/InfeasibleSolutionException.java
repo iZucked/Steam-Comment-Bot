@@ -4,12 +4,13 @@
  */
 package com.mmxlabs.optimiser.core.exceptions;
 
-public class InfeasibleSolutionException extends RuntimeException {
+import com.mmxlabs.common.util.exceptions.UserFeedbackException;
 
+public class InfeasibleSolutionException extends UserFeedbackException {
+
+	private static final long serialVersionUID = 1L;
+	
 	public InfeasibleSolutionException(final String message) {
 		super(message);
 	}
-
-	private static final long serialVersionUID = 1L;
-
 }

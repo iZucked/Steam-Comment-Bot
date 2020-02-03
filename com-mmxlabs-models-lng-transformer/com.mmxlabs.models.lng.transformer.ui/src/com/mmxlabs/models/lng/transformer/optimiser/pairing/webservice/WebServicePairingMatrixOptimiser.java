@@ -10,9 +10,14 @@ import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.transformer.optimiser.pairing.IPairingMatrixOptimiser;
+import com.mmxlabs.models.lng.transformer.optimiser.pairing.PairingOptimisationData;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.providers.ConstraintInfo;
 
-public class WebServicePairingMatrixOptimiser implements IPairingMatrixOptimiser {
+public class WebServicePairingMatrixOptimiser<P,C> implements IPairingMatrixOptimiser<P,C> {
 	public static final String OPTIMISER_URL = "http://localhost:8080/api/optimise";
 	ObjectMapper mapper = new ObjectMapper();
 
@@ -45,4 +50,10 @@ public class WebServicePairingMatrixOptimiser implements IPairingMatrixOptimiser
 		return pairings;
 	}
 
+	@Override
+	public List<Pair<P,C>> findMinViolatedConstraints(PairingOptimisationData<?, ?> optimiserRecorder, long[][] values, boolean[] optionalLoads, boolean[] optionalDischarges, boolean[][] valid,
+			List<ConstraintInfo<P,C,IDischargeOption>> maxDischargeSlotsConstraints, List<ConstraintInfo<P,C,IDischargeOption>> minDischargeSlotsConstraints, 
+			List<ConstraintInfo<P,C,ILoadOption>> maxLoadSlotsConstraints, List<ConstraintInfo<P,C,ILoadOption>> minLoadSlotsConstraints) {
+		throw new UnsupportedOperationException("Not implemented yet.");
+	}
 }
