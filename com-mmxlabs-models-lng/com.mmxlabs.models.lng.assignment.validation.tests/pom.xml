@@ -48,6 +48,11 @@
 							<artifactId>ch.qos.logback.slf4j</artifactId>
 							<version>0.0.0</version>
 						</dependency>
+						<dependency>
+							<type>eclipse-plugin</type>
+							<artifactId>com.mmxlabs.models.lng.assignment.validation</artifactId>
+							<version>0.0.0</version>
+						</dependency>
 
 					</dependencies>
 
