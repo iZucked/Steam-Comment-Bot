@@ -326,7 +326,7 @@ public class PeriodDistributionImpl extends EObjectImpl implements PeriodDistrib
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder();
-		result.append(" Range: ");
+		result.append("Range: ");
 		result.append(range);
 		result.append(", minCargoes: ");
 		if (minCargoesESet) result.append(minCargoes); else result.append("<unset>");

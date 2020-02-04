@@ -29,9 +29,10 @@ import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.models.lng.adp.ContractProfile;
-import com.mmxlabs.models.lng.adp.MaxCargoConstraint;
-import com.mmxlabs.models.lng.adp.MinCargoConstraint;
+import com.mmxlabs.models.lng.adp.PeriodDistribution;
+import com.mmxlabs.models.lng.adp.PeriodDistributionProfileConstraint;
 import com.mmxlabs.models.lng.adp.ProfileConstraint;
+import com.mmxlabs.models.lng.adp.utils.ADPModelUtil;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.LightWeightSchedulerStage2Module;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ICargoToCargoCostCalculator;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ICargoVesselRestrictionsMatrixProducer;
@@ -361,7 +362,23 @@ public class LightWeightOptimisationDataFactory {
 				ContractProfile contract = violated.getFirst();
 				ProfileConstraint constraint = violated.getSecond();
 				errorMessage.append("On contract ").append(contract.getContract().getName()).append(":\r\n");
-				errorMessage.append(constraint.toString()).append("\r\n");
+				if (constraint instanceof PeriodDistributionProfileConstraint) {
+					PeriodDistributionProfileConstraint pdc = (PeriodDistributionProfileConstraint)constraint;
+					for (PeriodDistribution pd : pdc.getDistributions()) {
+						errorMessage.append(ADPModelUtil.getPeriodDistributionRangeString(pd));
+						if (pd.isSetMinCargoes()) {
+							errorMessage.append(" Min:").append(pd.getMinCargoes());
+						}
+						if (pd.isSetMaxCargoes()) {
+							errorMessage.append(" Max:").append(pd.getMaxCargoes());
+						}
+						errorMessage.append("\r\n");
+					}
+					errorMessage.append("\r\n");					
+				}
+				else {
+					errorMessage.append(constraint.toString()).append("\r\n");
+				}
 			}
 			
 			throw new InfeasibleSolutionException(errorMessage.toString());
