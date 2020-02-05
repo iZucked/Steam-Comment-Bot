@@ -11,6 +11,8 @@ import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.models.lng.adp.ContractProfile;
+import com.mmxlabs.models.lng.adp.ProfileConstraint;
 import com.mmxlabs.models.lng.transformer.optimiser.pairing.IPairingMatrixOptimiser;
 import com.mmxlabs.models.lng.transformer.optimiser.pairing.PairingOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -51,7 +53,7 @@ public class WebServicePairingMatrixOptimiser<P,C> implements IPairingMatrixOpti
 	}
 
 	@Override
-	public List<Pair<P,C>> findMinViolatedConstraints(PairingOptimisationData<?, ?> optimiserRecorder, long[][] values, boolean[] optionalLoads, boolean[] optionalDischarges, boolean[][] valid,
+	public List<ConstraintInfo<P, C,?>> findMinViolatedConstraints(PairingOptimisationData<?, ?> optimiserRecorder, long[][] values, boolean[] optionalLoads, boolean[] optionalDischarges, boolean[][] valid,
 			List<ConstraintInfo<P,C,IDischargeOption>> maxDischargeSlotsConstraints, List<ConstraintInfo<P,C,IDischargeOption>> minDischargeSlotsConstraints, 
 			List<ConstraintInfo<P,C,ILoadOption>> maxLoadSlotsConstraints, List<ConstraintInfo<P,C,ILoadOption>> minLoadSlotsConstraints) {
 		throw new UnsupportedOperationException("Not implemented yet.");

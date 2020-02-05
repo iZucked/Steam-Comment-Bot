@@ -20,9 +20,9 @@ import com.google.ortools.linearsolver.MPConstraint;
 import com.google.ortools.linearsolver.MPObjective;
 import com.google.ortools.linearsolver.MPSolver;
 import com.google.ortools.linearsolver.MPVariable;
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.providers.ConstraintInfo;
 
 /**
@@ -223,7 +223,7 @@ public class GoogleORToolsPairingMatrixOptimiser<P,C> implements IPairingMatrixO
 	 * @param minLoadSlotsInformation
 	 * @return the minimum set of violated constraints that the mip can find.
 	 */
-	public List<Pair<P,C>> minimiseViolations(PairingOptimisationData<?, ?> optimiserRecorder, SerializablePairingData pairingData,
+	public List<ConstraintInfo<P, C, ?>> minimiseViolations(PairingOptimisationData<?, ?> optimiserRecorder, SerializablePairingData pairingData,
 			List<ConstraintInfo<P, C, IDischargeOption>> maxDischargeSlotsInformation, List<ConstraintInfo<P, C, IDischargeOption>> minDischargeSlotsInformation,
 			List<ConstraintInfo<P, C, ILoadOption>> maxLoadSlotsInformation, List<ConstraintInfo<P, C, ILoadOption>> minLoadSlotsInformation) {
 		long[][] pnl = pairingData.getPnl();
@@ -439,36 +439,71 @@ public class GoogleORToolsPairingMatrixOptimiser<P,C> implements IPairingMatrixO
 		System.out.println("\t" + solver.iterations() + " iterations");
 		System.out.println("\t" + solver.wallTime() + " milliseconds");
 
-		List<Pair<P,C>> violatedConstraints = new ArrayList<>();
+		List<ConstraintInfo<P, C, ?>> violatedConstraints = new ArrayList<>();
 		
 		for (int i = 0; i < maxLoadSlotsVars.length; i++) {
 			if (maxLoadSlotsVars[i].solutionValue() < 1.0) {
 				ConstraintInfo<P, C, ILoadOption> violated = maxLoadSlotsInformation.get(i);
-				violatedConstraints.add(Pair.of(violated.getContractProfile(), violated.getProfileConstraint()));
+				violatedConstraints.add(violated);
+				int loadCount = getLoadSlotCount(optimiserRecorder,violated,vars);
+				violated.setViolatedAmount(ConstraintInfo.ViolationType.Max, loadCount - violated.getBound());
 			}
 		}
 		for (int i = 0; i < minLoadSlotsVars.length; i++) {
 			if (minLoadSlotsVars[i].solutionValue() < 1.0) {
 				ConstraintInfo<P, C, ILoadOption> violated = minLoadSlotsInformation.get(i);
-				violatedConstraints.add(Pair.of(violated.getContractProfile(), violated.getProfileConstraint()));
+				violatedConstraints.add(violated);
+				int loadCount = getLoadSlotCount(optimiserRecorder,violated,vars);
+				violated.setViolatedAmount(ConstraintInfo.ViolationType.Min, violated.getBound() - loadCount);
 			}
 		}
 		for (int i = 0; i < maxDischargeSlotsVars.length; i++) {
 			if (maxDischargeSlotsVars[i].solutionValue() < 1.0) {
 				ConstraintInfo<P, C, IDischargeOption> violated = maxDischargeSlotsInformation.get(i);
-				violatedConstraints.add(Pair.of(violated.getContractProfile(), violated.getProfileConstraint()));
+				violatedConstraints.add(violated);
+				int dischargeCount = getDischargeSlotCount(optimiserRecorder,violated,vars);
+				violated.setViolatedAmount(ConstraintInfo.ViolationType.Max, dischargeCount - violated.getBound());
 			}
 		}
 		for (int i = 0; i < minDischargeSlotsVars.length; i++) {
 			if (minDischargeSlotsVars[i].solutionValue() < 1.0) {
 				ConstraintInfo<P, C, IDischargeOption> violated = minDischargeSlotsInformation.get(i);
-				violatedConstraints.add(Pair.of(violated.getContractProfile(), violated.getProfileConstraint()));
+				violatedConstraints.add(violated);
+				int dischargeCount = getDischargeSlotCount(optimiserRecorder,violated,vars);
+				violated.setViolatedAmount(ConstraintInfo.ViolationType.Min, violated.getBound() - dischargeCount);
 			}
 		}
 		
 		return violatedConstraints;
 	}
 
+	private int getLoadSlotCount(PairingOptimisationData<?, ?> optimiserRecorder, ConstraintInfo<P, C, ILoadOption> info, MPVariable[][] vars) {
+		int cnt = 0;
+		Set<ILoadOption> slots = info.getSlots();
+		for (ILoadOption slot : slots) {
+			int i = optimiserRecorder.getIndex(slot);
+			for (int j = 0; j < vars[i].length; j++) {
+				if (vars[i][j].solutionValue() > 0.0) {
+					cnt++;
+				}
+			}
+		}
+		return cnt;
+	}
+
+	private int getDischargeSlotCount(PairingOptimisationData<?, ?> optimiserRecorder, ConstraintInfo<P, C, IDischargeOption> info, MPVariable[][] vars) {
+		int cnt = 0;
+		Set<IDischargeOption> slots = info.getSlots();
+		for (int i = 0; i < vars.length; i++) {
+			for (IDischargeOption slot : slots) {
+				int j = optimiserRecorder.getIndex(slot);
+				if (vars[i][j].solutionValue() > 0.0) {
+					cnt++;
+				}
+			}
+		}
+		return cnt;
+	}
 	
 	private static List<String> findSequence(double[][] ds) {
 		List<String> strings = new LinkedList<String>();
@@ -594,7 +629,7 @@ public class GoogleORToolsPairingMatrixOptimiser<P,C> implements IPairingMatrixO
 	}
 
 	@Override
-	public List<Pair<P,C>> findMinViolatedConstraints(PairingOptimisationData<?, ?> optimiserRecorder, long[][] values, boolean[] optionalLoads, boolean[] optionalDischarges, boolean[][] valid,
+	public List<ConstraintInfo<P, C, ?>>  findMinViolatedConstraints(PairingOptimisationData<?, ?> optimiserRecorder, long[][] values, boolean[] optionalLoads, boolean[] optionalDischarges, boolean[][] valid,
 			List<ConstraintInfo<P, C, IDischargeOption>> maxDischargeSlotsConstraints, List<ConstraintInfo<P, C, IDischargeOption>> minDischargeSlotsConstraints,
 			List<ConstraintInfo<P, C, ILoadOption>> maxLoadSlotsConstraints, List<ConstraintInfo<P, C, ILoadOption>> minLoadSlotsConstraints) {
 		SerializablePairingData data = createSerializablePairingData(values, optionalLoads, optionalDischarges, valid, null, null, null, null);

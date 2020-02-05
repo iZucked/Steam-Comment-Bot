@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.models.lng.adp.ContractProfile;
+import com.mmxlabs.models.lng.adp.ProfileConstraint;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.providers.ConstraintInfo;
@@ -37,9 +39,9 @@ public interface IPairingMatrixOptimiser<P,C> {
 	 * @param minDischargeSlotsConstraints
 	 * @param maxLoadSlotsConstraints
 	 * @param minLoadSlotsConstraints
-	 * @return a list of pairs of ContractProfile and ProfileConstraint which are violated.
+	 * @return a list of ConstraintInfo objects with details of constraints which are violated.
 	 */
-	List<Pair<P,C>> findMinViolatedConstraints(PairingOptimisationData<?, ?> optimiserRecorder, long[][] values, boolean[] optionalLoads, boolean[] optionalDischarges, boolean[][] valid,
+	List<ConstraintInfo<P, C, ?>> findMinViolatedConstraints(PairingOptimisationData<?, ?> optimiserRecorder, long[][] values, boolean[] optionalLoads, boolean[] optionalDischarges, boolean[][] valid,
 			List<ConstraintInfo<P,C,IDischargeOption>> maxDischargeSlotsConstraints, List<ConstraintInfo<P,C,IDischargeOption>> minDischargeSlotsConstraints, 
 			List<ConstraintInfo<P,C,ILoadOption>> maxLoadSlotsConstraints, List<ConstraintInfo<P,C,ILoadOption>> minLoadSlotsConstraints);
 }

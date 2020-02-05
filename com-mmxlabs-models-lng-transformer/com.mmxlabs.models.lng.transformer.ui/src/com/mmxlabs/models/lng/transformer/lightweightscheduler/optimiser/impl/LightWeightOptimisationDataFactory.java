@@ -56,11 +56,13 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.providers.ConstraintInfo;
 import com.mmxlabs.scheduler.optimiser.providers.ILongTermSlotsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.ConstraintInfo.ViolationType;
 
 public class LightWeightOptimisationDataFactory {
 
@@ -350,7 +352,7 @@ public class LightWeightOptimisationDataFactory {
 				optimiserRecorder.getMaxLoadGroupCount(), optimiserRecorder.getMinLoadGroupCount());
 
 		if (pairingsMatrix == null) {
-			final List<Pair<ContractProfile, ProfileConstraint>> violatedConstraints = matrixOptimiser.findMinViolatedConstraints(optimiserRecorder, optimiserRecorder.getProfitAsPrimitive(), optimiserRecorder.getOptionalLoads(),
+			final List<ConstraintInfo<ContractProfile, ProfileConstraint,?>> violatedConstraints = matrixOptimiser.findMinViolatedConstraints(optimiserRecorder, optimiserRecorder.getProfitAsPrimitive(), optimiserRecorder.getOptionalLoads(),
 					optimiserRecorder.getOptionalDischarges(), optimiserRecorder.getValid(), optimiserRecorder.getMaxDischargeGroupCounts(), optimiserRecorder.getMinDischargeGroupCounts(),
 					optimiserRecorder.getMaxLoadGroupCounts(), optimiserRecorder.getMinLoadGroupCounts());
 
@@ -358,21 +360,29 @@ public class LightWeightOptimisationDataFactory {
 			
 			errorMessage.append("Some constraints cannot be satisifed:\r\n\r\n");
 			
-			for (Pair<ContractProfile, ProfileConstraint> violated : violatedConstraints) {
-				ContractProfile contract = violated.getFirst();
-				ProfileConstraint constraint = violated.getSecond();
+			for (ConstraintInfo<ContractProfile, ProfileConstraint,?> violated : violatedConstraints) {
+				ContractProfile contract = violated.getContractProfile();
+				ProfileConstraint constraint = violated.getProfileConstraint();
 				errorMessage.append("On contract ").append(contract.getContract().getName()).append(":\r\n");
 				if (constraint instanceof PeriodDistributionProfileConstraint) {
 					PeriodDistributionProfileConstraint pdc = (PeriodDistributionProfileConstraint)constraint;
 					for (PeriodDistribution pd : pdc.getDistributions()) {
-						errorMessage.append(ADPModelUtil.getPeriodDistributionRangeString(pd));
-						if (pd.isSetMinCargoes()) {
-							errorMessage.append(" Min:").append(pd.getMinCargoes());
+						if (pd.getMinCargoes() == violated.getBound() || pd.getMaxCargoes() == violated.getBound()) {
+							errorMessage.append(ADPModelUtil.getPeriodDistributionRangeString(pd));
+							if (pd.isSetMinCargoes()) {
+								errorMessage.append(" Min:").append(pd.getMinCargoes());
+							}
+							if (pd.isSetMaxCargoes()) {
+								errorMessage.append(" Max:").append(pd.getMaxCargoes());
+							}
+							if (violated.getViolationType() == ViolationType.Min) {
+								errorMessage.append(" (Below minimium bound by: ").append(violated.getViolatedAmount()).append(")");
+							}
+							else if (violated.getViolationType() == ViolationType.Max) {
+								errorMessage.append(" (Exceeds maximum bound by: ").append(violated.getViolatedAmount()).append(")");
+							}
+							errorMessage.append("\r\n");
 						}
-						if (pd.isSetMaxCargoes()) {
-							errorMessage.append(" Max:").append(pd.getMaxCargoes());
-						}
-						errorMessage.append("\r\n");
 					}
 					errorMessage.append("\r\n");					
 				}
