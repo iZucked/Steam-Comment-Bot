@@ -6,17 +6,22 @@ package com.mmxlabs.models.lng.adp.utils;
 
 import java.time.Month;
 import java.time.YearMonth;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.command.IdentityCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -35,6 +40,7 @@ import com.mmxlabs.models.lng.adp.ADPFactory;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.FleetProfile;
 import com.mmxlabs.models.lng.adp.LNGVolumeUnit;
+import com.mmxlabs.models.lng.adp.PeriodDistribution;
 import com.mmxlabs.models.lng.adp.ProfileVesselRestriction;
 import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
@@ -513,4 +519,69 @@ public class ADPModelUtil {
 		return new Pair<YearMonth, YearMonth>(start, end);
 	}
 
+	public static String getPeriodDistributionRangeString(@NonNull PeriodDistribution periodDistribution) {
+		ADPModel m = getADPModel(periodDistribution);
+		return getPeriodDistributionRangeString(m, periodDistribution);
+	}
+	
+	private static String getPeriodDistributionRangeString(ADPModel m, PeriodDistribution periodDistribution) {
+		if (periodDistribution.getRange().isEmpty()) {
+			return "-";
+		}
+		
+		// Sort the dates
+		List<YearMonth> v = periodDistribution.getRange().stream() //
+				.sorted((a, b) -> a.compareTo(b)) //
+				.collect(Collectors.toCollection(LinkedList::new));
+
+		// Group consecutive elements
+		List<List<YearMonth>> grouped = new LinkedList<>();
+		List<YearMonth> g = new LinkedList<>();
+		grouped.add(g);
+		YearMonth lastYM = null;
+		for (YearMonth ym : v) {
+			if (lastYM == null || lastYM.plusMonths(1).equals(ym)) {
+				g.add(ym);
+			} else {
+				g = new LinkedList<>();
+				grouped.add(g);
+				g.add(ym);
+			}
+			lastYM = ym;
+		}
+		// Label provider for a yearmonth
+		Function<YearMonth, String> lp = (ym) -> {
+			if (m != null && ym.getYear() == m.getYearStart().getYear()) {
+				return String.format("%s", //
+						ym.getMonth().getDisplayName(TextStyle.SHORT, Locale.getDefault()));
+			} else {
+				return String.format("%s '%02d", //
+						ym.getMonth().getDisplayName(TextStyle.SHORT, Locale.getDefault()), //
+						ym.getYear() % 100);
+			}
+		};
+
+		return grouped.stream() //
+				.filter(l -> !l.isEmpty()) //
+				.map(l -> {
+					if (l.size() == 1) {
+						return lp.apply(l.get(0));
+					} else if (l.size() == 2) {
+						return String.format("%s, %s", lp.apply(l.get(0)), lp.apply(l.get(1)));
+					} else {
+						return String.format("%s-%s", lp.apply(l.get(0)), lp.apply(l.get(l.size() - 1)));
+					}
+				}) //
+				.collect(Collectors.joining(", "));
+	}
+	
+	public static @Nullable ADPModel getADPModel(EObject obj) {
+		while (obj != null) {
+			if (obj instanceof ADPModel) {
+				return (ADPModel) obj;
+			}
+			obj = obj.eContainer();
+		}
+		return (ADPModel) obj;
+	}
 }

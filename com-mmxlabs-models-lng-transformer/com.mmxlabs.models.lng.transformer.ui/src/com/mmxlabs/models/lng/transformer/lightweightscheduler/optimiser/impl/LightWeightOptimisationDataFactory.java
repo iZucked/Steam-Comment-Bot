@@ -26,8 +26,13 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Injector;
 import com.google.inject.name.Named;
-import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.concurrent.CleanableExecutorService;
+import com.mmxlabs.models.lng.adp.ContractProfile;
+import com.mmxlabs.models.lng.adp.PeriodDistribution;
+import com.mmxlabs.models.lng.adp.PeriodDistributionProfileConstraint;
+import com.mmxlabs.models.lng.adp.ProfileConstraint;
+import com.mmxlabs.models.lng.adp.utils.ADPModelUtil;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.LightWeightSchedulerStage2Module;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ICargoToCargoCostCalculator;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ICargoVesselRestrictionsMatrixProducer;
@@ -45,21 +50,24 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
+import com.mmxlabs.optimiser.core.exceptions.InfeasibleSolutionException;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.providers.ConstraintInfo;
 import com.mmxlabs.scheduler.optimiser.providers.ILongTermSlotsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.ConstraintInfo.ViolationType;
 
 public class LightWeightOptimisationDataFactory {
 
 	@Inject
-	private PairingOptimisationData optimiserRecorder;
+	private PairingOptimisationData<?,?> optimiserRecorder;
 	@Inject
 	private ILongTermSlotsProvider longTermSlotsProvider;
 	@Inject
@@ -342,6 +350,50 @@ public class LightWeightOptimisationDataFactory {
 		final boolean[][] pairingsMatrix = matrixOptimiser.findOptimalPairings(optimiserRecorder.getProfitAsPrimitive(), optimiserRecorder.getOptionalLoads(),
 				optimiserRecorder.getOptionalDischarges(), optimiserRecorder.getValid(), optimiserRecorder.getMaxDischargeGroupCount(), optimiserRecorder.getMinDischargeGroupCount(),
 				optimiserRecorder.getMaxLoadGroupCount(), optimiserRecorder.getMinLoadGroupCount());
+
+		if (pairingsMatrix == null) {
+			final List<ConstraintInfo<ContractProfile, ProfileConstraint,?>> violatedConstraints = matrixOptimiser.findMinViolatedConstraints(optimiserRecorder, optimiserRecorder.getProfitAsPrimitive(), optimiserRecorder.getOptionalLoads(),
+					optimiserRecorder.getOptionalDischarges(), optimiserRecorder.getValid(), optimiserRecorder.getMaxDischargeGroupCounts(), optimiserRecorder.getMinDischargeGroupCounts(),
+					optimiserRecorder.getMaxLoadGroupCounts(), optimiserRecorder.getMinLoadGroupCounts());
+
+			StringBuilder errorMessage = new StringBuilder();
+			
+			errorMessage.append("Some constraints cannot be satisifed:\r\n\r\n");
+			
+			for (ConstraintInfo<ContractProfile, ProfileConstraint,?> violated : violatedConstraints) {
+				ContractProfile contract = violated.getContractProfile();
+				ProfileConstraint constraint = violated.getProfileConstraint();
+				errorMessage.append("On contract ").append(contract.getContract().getName()).append(":\r\n");
+				if (constraint instanceof PeriodDistributionProfileConstraint) {
+					PeriodDistributionProfileConstraint pdc = (PeriodDistributionProfileConstraint)constraint;
+					for (PeriodDistribution pd : pdc.getDistributions()) {
+						if (pd.getMinCargoes() == violated.getBound() || pd.getMaxCargoes() == violated.getBound()) {
+							errorMessage.append(ADPModelUtil.getPeriodDistributionRangeString(pd));
+							if (pd.isSetMinCargoes()) {
+								errorMessage.append(" Min:").append(pd.getMinCargoes());
+							}
+							if (pd.isSetMaxCargoes()) {
+								errorMessage.append(" Max:").append(pd.getMaxCargoes());
+							}
+							if (violated.getViolationType() == ViolationType.Min) {
+								errorMessage.append(" (Below minimium bound by: ").append(violated.getViolatedAmount()).append(")");
+							}
+							else if (violated.getViolationType() == ViolationType.Max) {
+								errorMessage.append(" (Exceeds maximum bound by: ").append(violated.getViolatedAmount()).append(")");
+							}
+							errorMessage.append("\r\n");
+						}
+					}
+					errorMessage.append("\r\n");					
+				}
+				else {
+					errorMessage.append(constraint.toString()).append("\r\n");
+				}
+			}
+			
+			throw new InfeasibleSolutionException(errorMessage.toString());
+		}
+		
 		return pairingsMatrix;
 	}
 

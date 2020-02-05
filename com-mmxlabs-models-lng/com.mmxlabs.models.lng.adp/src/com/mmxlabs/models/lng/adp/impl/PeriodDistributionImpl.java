@@ -319,20 +319,19 @@ public class PeriodDistributionImpl extends EObjectImpl implements PeriodDistrib
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (range: ");
+		StringBuilder result = new StringBuilder();
+		result.append("Range: ");
 		result.append(range);
 		result.append(", minCargoes: ");
 		if (minCargoesESet) result.append(minCargoes); else result.append("<unset>");
 		result.append(", maxCargoes: ");
 		if (maxCargoesESet) result.append(maxCargoes); else result.append("<unset>");
-		result.append(')');
 		return result.toString();
 	}
 
