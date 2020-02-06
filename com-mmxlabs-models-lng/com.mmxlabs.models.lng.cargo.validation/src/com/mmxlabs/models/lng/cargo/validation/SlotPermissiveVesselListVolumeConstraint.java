@@ -57,8 +57,8 @@ public class SlotPermissiveVesselListVolumeConstraint extends AbstractModelMulti
 					double fillCapacity = (vessel.getVesselOrDelegateFillCapacity() > 0.0 ? vessel.getVesselOrDelegateFillCapacity() : 1.0);
 					double minQuantity = slot.getSlotOrDelegateMinQuantity();
 
-					//Convert minQuantity to m^3 if neccessary.
-					if (slot.getVolumeLimitsUnit() == VolumeUnits.MMBTU) {
+					// Convert minQuantity to m^3 if neccessary.
+					if (slot.getSlotOrDelegateVolumeLimitsUnit() == VolumeUnits.MMBTU) {
 						minQuantity = this.convertToM3(minQuantity, (cv > 0.0 ? cv : maxDefaultCV));
 					}
 					
@@ -90,7 +90,7 @@ public class SlotPermissiveVesselListVolumeConstraint extends AbstractModelMulti
 	}
 	
 	@NonNull
-	private DetailConstraintStatusDecorator createInvalidPermittedVesselStatus(final IValidationContext ctx, final Vessel vessel, final Slot slot, int minRequiredVolumeM3) {
+	private DetailConstraintStatusDecorator createInvalidPermittedVesselStatus(final IValidationContext ctx, final Vessel vessel, final Slot<?> slot, int minRequiredVolumeM3) {
 		final String slotType = (slot instanceof LoadSlot) ? "load" : "discharge";
 		final String message = String.format("Permitted vessel %s can not service %s slot %s as vessel capacity %d m3 is less than required min volume for slot of %d m3", 
 				vessel.getName(), slotType, slot.getName(), vessel.getVesselOrDelegateCapacity(), minRequiredVolumeM3);
