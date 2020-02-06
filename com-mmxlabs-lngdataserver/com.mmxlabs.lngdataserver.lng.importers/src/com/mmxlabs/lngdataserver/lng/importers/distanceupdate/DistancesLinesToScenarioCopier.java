@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.command.Command;
@@ -102,9 +103,9 @@ public class DistancesLinesToScenarioCopier {
 				final Map<Pair<String, String>, AtoBviaCLookupRecord> recordsMap = records.stream() // .
 						.collect(Collectors.toMap(r -> Pair.of(r.getFrom(), r.getTo()), r -> r));
 
-//				for (AtoBviaCLookupRecord record : records) {
-////					record.get
-//				}
+				// for (AtoBviaCLookupRecord record : records) {
+				//// record.get
+				// }
 
 				{
 					final Route route = routeMap.get(RouteOption.DIRECT);
@@ -131,6 +132,22 @@ public class DistancesLinesToScenarioCopier {
 
 								final Pair<Port, Port> portObjectPair = Pair.of(from, to);
 								final Pair<String, String> portIdPair = Pair.of(fromID, toID);
+
+								if (Objects.equals(fromID, toID)) {
+									// Different ports, same upstream code.
+									final RouteLine rl = PortFactoryImpl.eINSTANCE.createRouteLine();
+									rl.setFrom(from);
+									rl.setTo(to);
+
+									rl.setDistance(0.0);
+									rl.setErrorCode(null);
+									toAdd.add(rl);
+
+									directMatrix.put(portObjectPair, rl.getDistance());
+									directMatrixLookup.put(portObjectPair, rl);
+
+									continue;
+								}
 
 								AtoBviaCLookupRecord record = recordsMap.get(portIdPair);
 								if (record == null || record.getErrorCode() != null || record.getDistance() < 1.0) {
@@ -211,15 +228,15 @@ public class DistancesLinesToScenarioCopier {
 			}
 		}
 
-//		VersionRecord record = MMXCoreFactory.eINSTANCE.createVersionRecord();
-//		record.setVersion(newID);
-//		record.setCreatedBy(UsernameProvider.getUsername());
-//		record.setCreatedAt(Instant.now());
-//		final Command cmd = SetCommand.create(editingDomain, modelRoot, versionRecordFeature, record);
-//		VersionRecord record = portModel.getDistanceVersionRecord();
-//		cmd.append(SetCommand.create(editingDomain, record, MMXCorePackage.Literals.VERSION_RECORD__CREATED_BY, version.getCreatedBy()));
-//		cmd.append(SetCommand.create(editingDomain, record, MMXCorePackage.Literals.VERSION_RECORD__CREATED_AT, version.getCreatedAt()));
-//		cmd.append(SetCommand.create(editingDomain, record, MMXCorePackage.Literals.VERSION_RECORD__VERSION, version.getIdentifier()));
+		// VersionRecord record = MMXCoreFactory.eINSTANCE.createVersionRecord();
+		// record.setVersion(newID);
+		// record.setCreatedBy(UsernameProvider.getUsername());
+		// record.setCreatedAt(Instant.now());
+		// final Command cmd = SetCommand.create(editingDomain, modelRoot, versionRecordFeature, record);
+		// VersionRecord record = portModel.getDistanceVersionRecord();
+		// cmd.append(SetCommand.create(editingDomain, record, MMXCorePackage.Literals.VERSION_RECORD__CREATED_BY, version.getCreatedBy()));
+		// cmd.append(SetCommand.create(editingDomain, record, MMXCorePackage.Literals.VERSION_RECORD__CREATED_AT, version.getCreatedAt()));
+		// cmd.append(SetCommand.create(editingDomain, record, MMXCorePackage.Literals.VERSION_RECORD__VERSION, version.getIdentifier()));
 
 		return cmd;
 
