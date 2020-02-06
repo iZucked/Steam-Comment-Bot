@@ -193,6 +193,22 @@
                       class="BaseFuelCost">
                 </target>
              </constraint>
+             <constraint
+                   class="com.mmxlabs.models.lng.pricing.validation.BaseFuelPriceExistsConstraint"
+                   id="com.mmxlabs.models.lng.pricing.validation.BaseFuelPriceExistsConstraint"
+                   isEnabledByDefault="true"
+                   lang="java"
+                   mode="Batch"
+                   name="BaseFuelPriceExistsConstraint"
+                   severity="ERROR"
+                   statusCode="1">
+                <message>
+                   {0}
+                </message>
+                <target
+                      class="CostModel">
+                </target>
+             </constraint>
              
          </constraints>
       </constraintProvider>
