@@ -101,6 +101,27 @@ public class LocationsToScenarioCopier {
 
 					}
 
+					Location portLocation = oldPort.getLocation();
+					if (geographicPoint != null && portLocation != null) {
+						String versionObjectTimezone = versionLocation.getGeographicPoint().getTimeZone();
+						if (!Objects.equals(portLocation.getTimeZone().toLowerCase(), versionObjectTimezone.toLowerCase())) {
+							UpdateStep step2 = new UpdateWarning(String.format("Existing port %s has new timezone of %s", oldPort.getName(), versionObjectTimezone), "Update?", cmd -> {
+								cmd.append(SetCommand.create(editingDomain, portLocation, PortPackage.Literals.LOCATION__TIME_ZONE, versionObjectTimezone));
+							});
+							steps.add(step2);
+						}
+
+						if ((Math.abs(portLocation.getLat() - geographicPoint.getLat()) > 0.001) || (Math.abs(portLocation.getLon() - geographicPoint.getLon()) > 0.001)) {
+
+							UpdateStep step2 = new UpdateWarning(
+									String.format("Existing port %s has new lat/lon of (%,.3f, %,.3f)", oldPort.getName(), geographicPoint.getLat(), geographicPoint.getLon()), "Update?", cmd -> {
+										cmd.append(SetCommand.create(editingDomain, portLocation, PortPackage.Literals.LOCATION__LAT, geographicPoint.getLat()));
+										cmd.append(SetCommand.create(editingDomain, portLocation, PortPackage.Literals.LOCATION__LON, geographicPoint.getLon()));
+									});
+							steps.add(step2);
+						}
+					}
+
 				} else {
 					oldPort = PortFactory.eINSTANCE.createPort();
 					oldPort.setLocation(PortFactory.eINSTANCE.createLocation());
@@ -124,7 +145,7 @@ public class LocationsToScenarioCopier {
 						country = " in " + geographicPoint.getCountry();
 						oldPort.getLocation().setTimeZone(geographicPoint.getTimeZone());
 						oldPort.getLocation().setLat(geographicPoint.getLat());
-						oldPort.getLocation().setLat(geographicPoint.getLon());
+						oldPort.getLocation().setLon(geographicPoint.getLon());
 					}
 					UserUpdateStep step = new UserUpdateStep(String.format("Creating new port %s%s. Please review port data.", oldPort.getName(), country), cmd -> {
 						cmd.append(AddCommand.create(editingDomain, portModel, PortPackage.Literals.PORT_MODEL__PORTS, oldPort));
