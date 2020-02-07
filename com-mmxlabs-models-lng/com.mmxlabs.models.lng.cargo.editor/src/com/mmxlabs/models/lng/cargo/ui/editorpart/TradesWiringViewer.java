@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.apache.shiro.SecurityUtils;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.emf.common.command.Command;
@@ -1148,7 +1147,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		loadDateColumn.getColumn().setData(EObjectTableViewer.COLUMN_SORT_PATH, new RowDataEMFPath(false, Type.LOAD_OR_DISCHARGE));
 
 		final SchedulePackage sp = SchedulePackage.eINSTANCE;
-		if (SecurityUtils.getSubject().isPermitted("features:report-arrivaltimes")) {
+		if (LicenseFeatures.isPermitted("features:report-arrivaltimes")) {
 
 			final GridViewerColumn loadScheduledDate = addTradesColumn(loadColumns, "Arriving",
 					new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(sp.getEvent_Start(), editingDomain) {
@@ -1199,7 +1198,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		}, new RowDataEMFPath(false, Type.DISCHARGE));
 		dischargeDateColumn.getColumn().setData(EObjectTableViewer.COLUMN_SORT_PATH, new RowDataEMFPath(false, Type.DISCHARGE_OR_LOAD));
 
-		if (SecurityUtils.getSubject().isPermitted("features:report-arrivaltimes")) {
+		if (LicenseFeatures.isPermitted("features:report-arrivaltimes")) {
 			final GridViewerColumn dischargeScheduledDate = addTradesColumn(loadColumns, "Arriving",
 					new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(sp.getEvent_Start(), editingDomain) {
 
@@ -1221,7 +1220,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		}
 
 		addTradesColumn(dischargeColumns, "Sell At", new ContractManipulator(provider, editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
-		if (SecurityUtils.getSubject().isPermitted("features:report-counterparty")) {
+		if (LicenseFeatures.isPermitted("features:report-counterparty")) {
 			addTradesColumn(dischargeColumns, "Counterparty", new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(pkg.getSlot_Counterparty(), editingDomain) {
 
 				@Override
@@ -1302,7 +1301,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		// BasicAttributeManipulator(SchedulePackage.eINSTANCE.getProfitAndLossContainer_GroupProfitAndLoss(),
 		// editingDomain),
 		// new RowDataEMFPath(true, Type.CARGO_OR_MARKET_OR_OPEN_ALLOCATION));
-		if (SecurityUtils.getSubject().isPermitted("features:report-equity-book")) {
+		if (LicenseFeatures.isPermitted("features:report-equity-book")) {
 			addPNLColumn("P&L (Equity)", CommercialPackage.Literals.BASE_LEGAL_ENTITY__UPSTREAM_BOOK,
 					new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getProfitAndLossContainer_GroupProfitAndLoss(), editingDomain),
 					new RowDataEMFPath(true, Type.CARGO_OR_MARKET_OR_OPEN_ALLOCATION));

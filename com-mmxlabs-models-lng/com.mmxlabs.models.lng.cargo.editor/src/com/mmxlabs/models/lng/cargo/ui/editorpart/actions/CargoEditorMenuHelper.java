@@ -22,7 +22,6 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import org.apache.shiro.SecurityUtils;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -251,7 +250,7 @@ public class CargoEditorMenuHelper {
 
 				final DischargeSlot dischargeSlot = dischargeSlots.get(index);
 				if (dischargeSlot.getCargo() == null) {
-					if (SecurityUtils.getSubject().isPermitted("features:menu-item-markto")) {
+					if (LicenseFeatures.isPermitted("features:menu-item-markto")) {
 						final MenuManager markToMenuManager = new MenuManager("Mark to...", null);
 						if (!dischargeSlot.isFOBSale()) {
 							createSpotMarketMenu(markToMenuManager, SpotType.DES_PURCHASE, dischargeSlot, "");
@@ -653,7 +652,7 @@ public class CargoEditorMenuHelper {
 			final LoadSlot loadSlot = loadSlots.get(index);
 
 			if (loadSlot.getCargo() == null) {
-				if (SecurityUtils.getSubject().isPermitted("features:menu-item-markto")) {
+				if (LicenseFeatures.isPermitted("features:menu-item-markto")) {
 					final MenuManager markToMenuManager = new MenuManager("Mark to...", null);
 					createSpotMarketMenu(markToMenuManager, SpotType.DES_SALE, loadSlot, "");
 					if (!loadSlot.isDESPurchase()) {

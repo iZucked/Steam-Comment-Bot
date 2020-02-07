@@ -16,7 +16,6 @@ import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
-import org.apache.shiro.SecurityUtils;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.MultiValidator;
@@ -1246,7 +1245,7 @@ public final class OptimisationHelper {
 		final Option optStart = dialog.addOption(DataSection.Controls, group, editingDomain, "Start of (dd/mm/yyyy)", "", copy, defaultSettings, DataType.Date, SWTBOT_PERIOD_START,
 				ParametersPackage.eINSTANCE.getUserSettings_PeriodStartDate());
 
-		if (SecurityUtils.getSubject().isPermitted(KnownFeatures.FEATURE_OPTIMISATION_PERIOD)) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_PERIOD)) {
 			// Added a button. Had to extend Option and DataType classes.
 			final Option optToday = dialog.addOption(DataSection.Controls, group, editingDomain, "Today", "Today", copy, defaultSettings, DataType.Button, SWTBOT_PERIOD_TODAY, null);
 			optToday.setListener(new MouseAdapter() {
@@ -1265,7 +1264,7 @@ public final class OptimisationHelper {
 		// TODO set the optToday button size
 		final Option optEnd = dialog.addOption(DataSection.Controls, group, editingDomain, "Up to start of (mm/yyyy)", "", copy, defaultSettings, DataType.MonthYear, SWTBOT_PERIOD_END,
 				ParametersPackage.eINSTANCE.getUserSettings_PeriodEnd());
-		if (SecurityUtils.getSubject().isPermitted(KnownFeatures.FEATURE_OPTIMISATION_PERIOD)) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_PERIOD)) {
 
 			final Option optThreeMonth = dialog.addOption(DataSection.Controls, group, editingDomain, "+3m", "Three months", copy, defaultSettings, DataType.Button, SWTBOT_PERIOD_THREE_MONTH, null);
 			optThreeMonth.setListener(new MouseAdapter() {

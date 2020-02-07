@@ -6,9 +6,6 @@ package com.mmxlabs.lingo.app.headless;
 
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.subject.Subject;
 
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.license.features.pluginxml.PluginRegistryHook;
@@ -76,7 +73,6 @@ public class HeadlessUtils {
 		return options;
 
 	}
-	
 
 	/**
 	 * Logs the user in and initialises the application for their use.
@@ -84,10 +80,6 @@ public class HeadlessUtils {
 	public static void initAccessControl() {
 		// Initialise feature enablements
 		LicenseFeatures.initialiseFeatureEnablements();
-
-		// Login our default user
-		final Subject subject = SecurityUtils.getSubject();
-		subject.login(new UsernamePasswordToken("user", "password"));
 
 		PluginRegistryHook.initialisePluginXMLEnablements();
 

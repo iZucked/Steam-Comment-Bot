@@ -13,7 +13,6 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.function.ToIntFunction;
 
-import org.apache.shiro.SecurityUtils;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -23,6 +22,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 
 import com.google.common.collect.Sets;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.views.standard.econs.EconsOptions.MarginBy;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -154,7 +154,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 			rows.add(createRow(140, "Sale", true, "$", "", false, createSellValuePrice(options, false)));
 			rows.add(createRow(150, "    Price", true, "$", "", false, createSellPrice(options, false)));
 			rows.add(createRow(160, "    Volume", true, "", "", false, createSellVolumeMMBTuPrice(options, false)));
-			if (SecurityUtils.getSubject().isPermitted("features:report-equity-book")) {
+			if (LicenseFeatures.isPermitted("features:report-equity-book")) {
 				rows.add(createRow(170, "Equity P&L", true, "$", "", false, createPNLEquity(options, false)));
 			}
 			rows.add(createRow(180, "Addn. P&L", true, "$", "", false, createPNLAdditional(options, false)));
