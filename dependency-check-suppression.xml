@@ -15,4 +15,11 @@
    <cve>CVE-2010-4647</cve>
 </suppress>
  
+ <suppress>
+   <notes><![CDATA[
+   file name: org.tukaani.xz-1.8.0.v20180207-1613.jar
+   ]]></notes>
+   <cve>CVE-2015-4035</cve>
+</suppress>
+ 
 </suppressions>
