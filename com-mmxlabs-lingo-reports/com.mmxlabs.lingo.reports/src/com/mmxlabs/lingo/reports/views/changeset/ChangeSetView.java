@@ -156,6 +156,110 @@ public class ChangeSetView extends ViewPart {
 
 	private final ChangeSetViewSchedulingRule schedulingRule = new ChangeSetViewSchedulingRule(this);
 
+	final class ChangeSetComparator extends ViewerComparator {
+		
+		final boolean sortByVesselAndDate;
+		
+		public ChangeSetComparator(boolean sortByVesselAndDate) {
+			this.sortByVesselAndDate = sortByVesselAndDate;
+		}
+		
+		@Override
+		public int compare(final Viewer viewer, final Object e1, final Object e2) {
+			final Object original_e1 = e1;
+			final Object original_e2 = e2;
+
+			// If both rows of the same parent group..
+			if (e1 instanceof ChangeSetTableRow && e2 instanceof ChangeSetTableRow) {
+				// Retain original ordering in the datamodel
+				final ChangeSetTableRow r1 = (ChangeSetTableRow) e1;
+				final ChangeSetTableRow r2 = (ChangeSetTableRow) e2;
+				if (r1.eContainer() == r2.eContainer()) {
+					final ChangeSetTableGroup g = (ChangeSetTableGroup) r1.eContainer();
+					if (sortByVesselAndDate) {
+						String r1VesselAfter = getEmptyIfNull(r1.getAfterVesselName());
+						String r2VesselAfter = getEmptyIfNull(r2.getAfterVesselName());
+						int diffVesselAfter =  r1VesselAfter.compareTo(r2VesselAfter);
+						if (diffVesselAfter == 0) {
+							String r1VesselBefore = getEmptyIfNull(r1.getBeforeVesselName());
+							String r2VesselBefore = getEmptyIfNull(r2.getBeforeVesselName());	
+							int diffVesselBefore = r1VesselBefore.compareTo(r2VesselBefore);
+							if (diffVesselBefore != 0) {
+								ZonedDateTime date1 = getDate(r1);
+								ZonedDateTime date2 = getDate(r2);
+								if (date1 != null && date2 != null) {
+									return date1.compareTo(date2);
+								}
+								else if (date1 != null) {
+									return -1;
+								}
+								else if (date2 != null) {
+									return 1;
+								}
+								else {
+									return 0;
+								}
+							}
+							else {
+								return diffVesselBefore;
+							}	
+						}
+						else {
+							return diffVesselAfter;
+						}
+					}
+					else {
+						return g.getRows().indexOf(r1) - g.getRows().indexOf(r2);
+					}
+				}
+			}
+
+			ChangeSetTableGroup g1 = null;
+			ChangeSetTableGroup g2 = null;
+
+			if (e1 instanceof ChangeSetTableGroup) {
+				g1 = (ChangeSetTableGroup) e1;
+			}
+			if (e2 instanceof ChangeSetTableGroup) {
+				g2 = (ChangeSetTableGroup) e2;
+			}
+			if (g1 != null && g2 != null) {
+				// if (insertionPlanFilter.getUserFilters().isEmpty()) {
+				if (!Objects.equal(g1.getGroupObject(), g2.getGroupObject())) {
+					return Double.compare(g2.getGroupSortValue(), g1.getGroupSortValue());
+
+					// }
+				}
+				return -Double.compare(g2.getSortValue(), g1.getSortValue());
+			}
+
+			return super.compare(viewer, original_e1, original_e2);
+		}
+
+		private String getEmptyIfNull(final String str) {
+			return (str == null ? "" : str);
+		}
+
+		private ZonedDateTime getDate(ChangeSetTableRow tableRow) {
+			SlotAllocation slotAllocation = tableRow.getLhsAfter() != null ? tableRow.getLhsAfter().getLoadAllocation() : null;
+			if (slotAllocation == null) {
+				slotAllocation = tableRow.getLhsBefore() != null ? tableRow.getLhsBefore().getLoadAllocation() : null;
+			}
+			if (slotAllocation == null) {
+				slotAllocation =  tableRow.getRhsBefore() != null ? tableRow.getRhsBefore().getDischargeAllocation() : null;
+			}
+			if (slotAllocation == null) {
+				slotAllocation =  tableRow.getRhsAfter() != null ? tableRow.getRhsAfter().getDischargeAllocation() : null;
+			}
+			if (slotAllocation != null && slotAllocation.getSlotVisit() != null) {
+				return slotAllocation.getSlotVisit().getStart();
+			}
+			else {
+				return null;
+			}
+		}
+	}
+
 	public enum ViewMode {
 		COMPARE, OLD_ACTION_SET, NEW_ACTION_SET, INSERTIONS, GENERIC, SANDBOX
 	}
@@ -704,104 +808,7 @@ public class ChangeSetView extends ViewPart {
 
 		viewer.setFilters(filters);
 
-		viewer.setComparator(new ViewerComparator() {
-			@Override
-			public int compare(final Viewer viewer, final Object e1, final Object e2) {
-				final Object original_e1 = e1;
-				final Object original_e2 = e2;
-
-				// If both rows of the same parent group..
-				if (e1 instanceof ChangeSetTableRow && e2 instanceof ChangeSetTableRow) {
-					// Retain original ordering in the datamodel
-					final ChangeSetTableRow r1 = (ChangeSetTableRow) e1;
-					final ChangeSetTableRow r2 = (ChangeSetTableRow) e2;
-					if (r1.eContainer() == r2.eContainer()) {
-						final ChangeSetTableGroup g = (ChangeSetTableGroup) r1.eContainer();
-						if (ChangeSetView.this.sortByVesselAndDate) {
-							if (r1.getAfterVesselName() != null && r2.getAfterVesselName() != null) {
-								int diffVesselAfter = r1.getAfterVesselName().compareTo(r2.getAfterVesselName());
-								if (diffVesselAfter == 0) {
-									if (r1.getBeforeVesselName() != null && r2.getBeforeVesselName() != null) {
-										int diffVesselBefore = r1.getBeforeVesselName().compareTo(r2.getBeforeVesselName());
-										if (diffVesselBefore == 0) {
-											ZonedDateTime date1 = getDate(r1);
-											ZonedDateTime date2 = getDate(r2);
-											if (date1 != null && date2 != null) {
-												int diffDates = date1.compareTo(date2);
-												return diffDates;
-											}
-											else if (date1 != null) {
-												return -1;
-											}
-											else if (date2 != null) {
-												return 1;
-											}
-										}
-										
-									}
-								}
-								return diffVesselAfter;
-							}
-						}
-						else {
-							return g.getRows().indexOf(r1) - g.getRows().indexOf(r2);
-						}
-					}
-				}
-
-				ChangeSetTableGroup g1 = null;
-				ChangeSetTableGroup g2 = null;
-
-				if (e1 instanceof ChangeSetTableGroup) {
-					g1 = (ChangeSetTableGroup) e1;
-				}
-				if (e2 instanceof ChangeSetTableGroup) {
-					g2 = (ChangeSetTableGroup) e2;
-				}
-				if (g1 != null && g2 != null) {
-					// if (insertionPlanFilter.getUserFilters().isEmpty()) {
-					if (!Objects.equal(g1.getGroupObject(), g2.getGroupObject())) {
-						return Double.compare(g2.getGroupSortValue(), g1.getGroupSortValue());
-
-						// }
-					}
-					return -Double.compare(g2.getSortValue(), g1.getSortValue());
-				}
-
-				return super.compare(viewer, original_e1, original_e2);
-			}
-
-			private String getVesselName(ChangeSetTableRow row) {
-				if (row.getAfterVesselName() != null) {
-					return row.getAfterVesselName();
-				}
-				else if (row.getBeforeVesselName() != null) {
-					return row.getBeforeVesselName();
-				}
-				else {
-					return "";
-				}
-			}
-			
-			private ZonedDateTime getDate(ChangeSetTableRow tableRow) {
-				SlotAllocation slotAllocation = tableRow.getLhsAfter() != null ? tableRow.getLhsAfter().getLoadAllocation() : null;
-				if (slotAllocation == null) {
-					slotAllocation = tableRow.getLhsBefore() != null ? tableRow.getLhsBefore().getLoadAllocation() : null;
-				}
-				if (slotAllocation == null) {
-					slotAllocation =  tableRow.getRhsBefore() != null ? tableRow.getRhsBefore().getDischargeAllocation() : null;
-				}
-				if (slotAllocation == null) {
-					slotAllocation =  tableRow.getRhsAfter() != null ? tableRow.getRhsAfter().getDischargeAllocation() : null;
-				}
-				if (slotAllocation != null && slotAllocation.getSlotVisit() != null) {
-					return slotAllocation.getSlotVisit().getStart();
-				}
-				else {
-					return null;
-				}
-			}
-		});
+		viewer.setComparator(new ChangeSetComparator(this.sortByVesselAndDate));
 
 		viewer.addOpenListener(new IOpenListener() {
 
@@ -1259,6 +1266,7 @@ public class ChangeSetView extends ViewPart {
 
 	private void doSortByVesselAndDateToggle() {
 		sortByVesselAndDate = !sortByVesselAndDate;
+		viewer.setComparator(new ChangeSetComparator(this.sortByVesselAndDate));
 		ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
 	}
 	
