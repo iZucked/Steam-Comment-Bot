@@ -177,35 +177,27 @@ public class ChangeSetView extends ViewPart {
 				if (r1.eContainer() == r2.eContainer()) {
 					final ChangeSetTableGroup g = (ChangeSetTableGroup) r1.eContainer();
 					if (sortByVesselAndDate) {
-						String r1VesselAfter = getEmptyIfNull(r1.getAfterVesselName());
-						String r2VesselAfter = getEmptyIfNull(r2.getAfterVesselName());
-						int diffVesselAfter =  r1VesselAfter.compareTo(r2VesselAfter);
-						if (diffVesselAfter == 0) {
-							String r1VesselBefore = getEmptyIfNull(r1.getBeforeVesselName());
-							String r2VesselBefore = getEmptyIfNull(r2.getBeforeVesselName());	
-							int diffVesselBefore = r1VesselBefore.compareTo(r2VesselBefore);
-							if (diffVesselBefore != 0) {
-								ZonedDateTime date1 = getDate(r1);
-								ZonedDateTime date2 = getDate(r2);
-								if (date1 != null && date2 != null) {
-									return date1.compareTo(date2);
-								}
-								else if (date1 != null) {
-									return -1;
-								}
-								else if (date2 != null) {
-									return 1;
-								}
-								else {
-									return 0;
-								}
+						String r1Vessel = getEmptyIfNull(getVesselName(r1));
+						String r2Vessel = getEmptyIfNull(getVesselName(r2));
+						int diffVessel = r1Vessel.compareTo(r2Vessel);
+						if (diffVessel == 0) {
+							ZonedDateTime date1 = getDate(r1);
+							ZonedDateTime date2 = getDate(r2);
+							if (date1 != null && date2 != null) {
+								return date1.compareTo(date2);
+							}
+							else if (date1 != null) {
+								return -1;
+							}
+							else if (date2 != null) {
+								return 1;
 							}
 							else {
-								return diffVesselBefore;
-							}	
+								return 0;
+							}
 						}
 						else {
-							return diffVesselAfter;
+							return diffVessel;
 						}
 					}
 					else {
@@ -236,6 +228,18 @@ public class ChangeSetView extends ViewPart {
 			return super.compare(viewer, original_e1, original_e2);
 		}
 
+		private String getVesselName(ChangeSetTableRow row) {
+			if (row.getAfterVesselName() != null && !row.getAfterVesselName().isEmpty()) {
+				return row.getAfterVesselName();
+			}
+			else if (row.getBeforeVesselName() != null && !row.getBeforeVesselName().isEmpty()) {
+				return row.getBeforeVesselName();
+			}
+			else {
+				return "";
+			}
+		}
+	
 		private String getEmptyIfNull(final String str) {
 			return (str == null ? "" : str);
 		}
