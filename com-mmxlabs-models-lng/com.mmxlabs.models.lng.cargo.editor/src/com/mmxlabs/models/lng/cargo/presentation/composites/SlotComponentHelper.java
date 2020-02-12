@@ -274,10 +274,10 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the hedges feature on Slot
 	 * 
-	 * @generated
+	 * @generated NOT 
 	 */
 	protected void add_hedgesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__HEDGES));
+		// detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__HEDGES));
 	}
 
 	/**
