@@ -28,6 +28,7 @@ import com.mmxlabs.common.util.TriConsumer;
 import com.mmxlabs.jobmanager.jobs.EJobState;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
@@ -57,6 +58,9 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 
 	public static final String ChangeSetViewCreatorService_Topic = "create-change-set-view";
 
+	private static final String LBL_KEPT_OPEN = "(Kept open)";
+	private static final String LBL_LOCKED = "(Locked)";
+
 	private static final Logger log = LoggerFactory.getLogger(InsertSlotContextMenuExtension.class);
 
 	@Override
@@ -66,7 +70,7 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 			return;
 		}
 
-		if (!LicenseFeatures.isPermitted("features:options-suggester")) {
+		if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIONISER)) {
 			return;
 		}
 
@@ -75,7 +79,7 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 
 			if (slot.isLocked()) {
 				action.setEnabled(false);
-				action.setText(action.getText() + " (Kept open)");
+				action.setText(String.format("%s %s", action.getText(), LBL_KEPT_OPEN));
 			}
 
 			menuManager.add(action);
@@ -91,12 +95,14 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 			for (final Slot<?> slot2 : slots) {
 				if (slot2.isLocked()) {
 					action.setEnabled(false);
-					action.setText(action.getText() + " (Kept open)");
+					action.setText(String.format("%s %s", action.getText(), LBL_KEPT_OPEN));
+
 				}
 			}
 			if (slot.getCargo().isLocked()) {
 				action.setEnabled(false);
-				action.setText(action.getText() + " (Locked)");
+				action.setText(String.format("%s %s", action.getText(), LBL_LOCKED));
+
 			}
 			menuManager.add(action);
 		}
@@ -105,7 +111,7 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 	@Override
 	public void contributeToMenu(@NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final IStructuredSelection selection, @NonNull final MenuManager menuManager) {
 
-		if (!LicenseFeatures.isPermitted("features:options-suggester")) {
+		if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIONISER)) {
 			return;
 		}
 		{
@@ -144,7 +150,8 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 				for (final Slot<?> slot : slots) {
 					if (slot.isLocked()) {
 						action.setEnabled(false);
-						action.setText(action.getText() + " (Kept open)");
+						action.setText(String.format("%s %s", action.getText(), LBL_KEPT_OPEN));
+
 						break;
 					}
 				}

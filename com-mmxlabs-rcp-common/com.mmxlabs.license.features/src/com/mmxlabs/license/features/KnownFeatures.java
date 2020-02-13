@@ -7,8 +7,7 @@ package com.mmxlabs.license.features;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
- * This really should not be here.... but a shared place to store feature
- * constants.
+ * This really should not be here.... but a shared place to store feature constants.
  * 
  * @author Simon Goodall
  *
@@ -30,6 +29,8 @@ public final class KnownFeatures {
 	public static final String FEATURE_OPTIMISATION_CHARTER_OUT_GENERATION = "features:optimisation-charter-out-generation";
 	public static final String FEATURE_OPTIMISATION_SIMILARITY = "features:optimisation-similarity";
 	public static final String FEATURE_OPTIMISATION_NO_NOMINALS_IN_PROMPT = "features:no-nominal-in-prompt";
+
+	public static final String FEATURE_OPTIONISER = "features:options-suggester";
 
 	public static final String FEATURE_SHIP_TO_SHIP = "features:shiptoship";
 
@@ -98,8 +99,8 @@ public final class KnownFeatures {
 	public static final String FEATURE_DATAHUB_BASECASE_ARCHIVE = "features:datahub-basecase-archive";
 
 	public static final String FEATURE_DATAHUB_BASECASE_NOTES = "features:datahub-basecase-notes";
-	
+
 	public static final String FEATURE_DATAHUB_STARTUP_CHECK = "features:datahub-lingo-startup-check";
-	
-	public static final String FEATURE_SHOW_TRADING_SHIPPING_SPLIT= "features:headline-trading-shipping-split";
+
+	public static final String FEATURE_SHOW_TRADING_SHIPPING_SPLIT = "features:headline-trading-shipping-split";
 }
