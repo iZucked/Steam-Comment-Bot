@@ -641,8 +641,6 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 						return transformer.createSequences(baseScheduleSpecification, mem, data, injector, true);
 					});
 
-			insertionRunner.setIteration(10_000);
-
 			return new SandboxJob() {
 				@Override
 				public LNGScenarioToOptimiserBridge getScenarioRunner() {
