@@ -268,24 +268,25 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				GridDataFactory.generate(c, 1, 1);
 				c.setLayout(new GridLayout(7, false));
 
-			
 				/*
 				 * toggle for portfolio mode
 				 */
 				final Composite portfolioModeToggle = createPortfolioToggleComposite(c);
 				GridDataFactory.generate(portfolioModeToggle, 1, 1);
 
-				final Composite optioniseModeToggle = createOptioniseToggleComposite(c);
-				GridDataFactory.generate(optioniseModeToggle, 1, 1);
+				final Composite sandboxModeSelector = createSandboxModeComposite(c);
+				GridDataFactory.generate(sandboxModeSelector, 1, 1);
 
-				
+				final Composite generateButton = createRunButton(c);
+				GridDataFactory.generate(generateButton, 1, 1);
+
+				final Composite displayButton = createDisplayButton(c);
+				GridDataFactory.generate(displayButton, 1, 1);
+
 				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_BREAK_EVENS)) {
 					beModeToggle = createUseTargetPNLToggleComposite(c);
 					GridDataFactory.generate(beModeToggle, 1, 1);
 				}
-				
-				final Composite generateButton = createRunButton(c);
-				GridDataFactory.generate(generateButton, 1, 1);
 
 			}
 
@@ -910,7 +911,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		//
 		final ImageDescriptor generateDesc = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "icons/sandbox_generate.gif");
 		Image imageGenerate = generateDesc.createImage();
-		Image imageGreyGenerate = ImageDescriptor.createWithFlags(generateDesc, SWT.IMAGE_GRAY).createImage();
 
 		final Composite generateComposite = new Composite(parent, SWT.NONE);
 		GridDataFactory.generate(generateComposite, 2, 1);
@@ -918,8 +918,8 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		generateComposite.setLayout(new GridLayout(1, true));
 
 		Label generateButton = new Label(generateComposite, SWT.NONE);
-		generateButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).grab(true, false).create());
-		generateButton.setImage(imageGreyGenerate);
+		generateButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).grab(false, false).create());
+		generateButton.setImage(imageGenerate);
 		generateButton.addMouseListener(new MouseAdapter() {
 
 			@Override
@@ -953,27 +953,11 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				}
 			}
 		});
-		generateButton.addMouseTrackListener(new MouseTrackAdapter() {
-
-			@Override
-			public void mouseExit(final MouseEvent e) {
-				generateButton.setImage(imageGreyGenerate);
-			}
-
-			@Override
-			public void mouseEnter(final MouseEvent e) {
-				generateButton.setImage(imageGenerate);
-			}
-		});
 
 		//
 		generateButton.addDisposeListener(e -> {
 			if (imageGenerate != null) {
 				imageGenerate.dispose();
-			}
-
-			if (imageGreyGenerate != null) {
-				imageGreyGenerate.dispose();
 			}
 		});
 
@@ -984,7 +968,56 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		return generateComposite;
 	}
 
-	private Composite createOptioniseToggleComposite(final Composite composite) {
+	private Composite createDisplayButton(final Composite parent) {
+		//
+		final ImageDescriptor generateDesc = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "icons/console_view.gif");
+		Image imageGenerate = generateDesc.createImage();
+
+		final Composite generateComposite = new Composite(parent, SWT.NONE);
+		GridDataFactory.generate(generateComposite, 2, 1);
+
+		generateComposite.setLayout(new GridLayout(1, true));
+
+		Label generateButton = new Label(generateComposite, SWT.NONE);
+		generateButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).grab(false, false).create());
+		generateButton.setImage(imageGenerate);
+		
+		generateButton.setToolTipText("Display results");
+		
+		generateButton.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseDown(final MouseEvent e) {
+				if (isLocked()) {
+					return;
+				}
+				final OptionAnalysisModel m = currentModel;
+				if (m != null) {
+					BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(), () -> {
+						if (m != null && m.getResults() != null) {
+							final AnalyticsSolution data = new AnalyticsSolution(getScenarioInstance(), m.getResults(), m.getName());
+							data.open();
+						}
+					});
+				}
+			}
+		});
+
+		//
+		generateButton.addDisposeListener(e -> {
+			if (imageGenerate != null) {
+				imageGenerate.dispose();
+			}
+		});
+
+		lockedListeners.add(locked -> RunnerHelper.asyncExec(() -> generateButton.setEnabled(currentModel != null && !locked)));
+
+		inputWants.add(m -> generateButton.setEnabled(m != null && !isLocked()));
+
+		return generateComposite;
+	}
+
+	private Composite createSandboxModeComposite(final Composite composite) {
 		final Composite matching = new Composite(composite, SWT.ALL);
 		final GridLayout gridLayoutRadiosMatching = new GridLayout(3, false);
 		matching.setLayout(gridLayoutRadiosMatching);
@@ -1086,7 +1119,8 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		matching.setLayoutData(gdM);
 		Label l = new Label(matching, SWT.NONE);
 		l.setText("Starting point P&&L B/E");
-		l.setToolTipText("When checked use the portfolio P&&L from the starting point scenario to calculate the B/E prices. Otherwise a point-to-point B/E is calculated. Does not apply when optimising.");
+		l.setToolTipText(
+				"When checked use the portfolio P&&L from the starting point scenario to calculate the B/E prices. Otherwise a point-to-point B/E is calculated. Does not apply when optimising.");
 		final Button matchingButton = new Button(matching, SWT.CHECK | SWT.LEFT);
 		matchingButton.setSelection(false);
 		matchingButton.addSelectionListener(new SelectionAdapter() {
