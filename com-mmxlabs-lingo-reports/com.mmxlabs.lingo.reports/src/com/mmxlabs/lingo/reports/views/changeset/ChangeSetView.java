@@ -158,13 +158,13 @@ public class ChangeSetView extends ViewPart {
 	private final ChangeSetViewSchedulingRule schedulingRule = new ChangeSetViewSchedulingRule(this);
 
 	final class ChangeSetComparator extends ViewerComparator {
-		
+
 		final boolean sortByVesselAndDate;
-		
+
 		public ChangeSetComparator(boolean sortByVesselAndDate) {
 			this.sortByVesselAndDate = sortByVesselAndDate;
 		}
-		
+
 		@Override
 		public int compare(final Viewer viewer, final Object e1, final Object e2) {
 			final Object original_e1 = e1;
@@ -186,22 +186,17 @@ public class ChangeSetView extends ViewPart {
 							ZonedDateTime date2 = getDate(r2);
 							if (date1 != null && date2 != null) {
 								return date1.compareTo(date2);
-							}
-							else if (date1 != null) {
+							} else if (date1 != null) {
 								return -1;
-							}
-							else if (date2 != null) {
+							} else if (date2 != null) {
 								return 1;
-							}
-							else {
+							} else {
 								return 0;
 							}
-						}
-						else {
+						} else {
 							return diffVessel;
 						}
-					}
-					else {
+					} else {
 						return g.getRows().indexOf(r1) - g.getRows().indexOf(r2);
 					}
 				}
@@ -232,15 +227,13 @@ public class ChangeSetView extends ViewPart {
 		private String getVesselName(ChangeSetTableRow row) {
 			if (row.getAfterVesselName() != null && !row.getAfterVesselName().isEmpty()) {
 				return row.getAfterVesselName();
-			}
-			else if (row.getBeforeVesselName() != null && !row.getBeforeVesselName().isEmpty()) {
+			} else if (row.getBeforeVesselName() != null && !row.getBeforeVesselName().isEmpty()) {
 				return row.getBeforeVesselName();
-			}
-			else {
+			} else {
 				return "";
 			}
 		}
-	
+
 		private String getEmptyIfNull(final String str) {
 			return (str == null ? "" : str);
 		}
@@ -251,15 +244,14 @@ public class ChangeSetView extends ViewPart {
 				slotAllocation = tableRow.getLhsBefore() != null ? tableRow.getLhsBefore().getLoadAllocation() : null;
 			}
 			if (slotAllocation == null) {
-				slotAllocation =  tableRow.getRhsBefore() != null ? tableRow.getRhsBefore().getDischargeAllocation() : null;
+				slotAllocation = tableRow.getRhsBefore() != null ? tableRow.getRhsBefore().getDischargeAllocation() : null;
 			}
 			if (slotAllocation == null) {
-				slotAllocation =  tableRow.getRhsAfter() != null ? tableRow.getRhsAfter().getDischargeAllocation() : null;
+				slotAllocation = tableRow.getRhsAfter() != null ? tableRow.getRhsAfter().getDischargeAllocation() : null;
 			}
 			if (slotAllocation != null && slotAllocation.getSlotVisit() != null) {
 				return slotAllocation.getSlotVisit().getStart();
-			}
-			else {
+			} else {
 				return null;
 			}
 		}
@@ -863,7 +855,8 @@ public class ChangeSetView extends ViewPart {
 			viewer.getGrid().addMenuDetectListener(listener);
 		}
 
-		eventHandler = event -> {
+		final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
+		eventHandlerCloseScenario = event -> {
 			// event.getProperty(name)
 			final Object o = event.getProperty("org.eclipse.e4.data");
 			if (o instanceof ScenarioInstance) {
@@ -871,8 +864,16 @@ public class ChangeSetView extends ViewPart {
 				onClosingScenario(scenarioInstance);
 			}
 		};
-		final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
-		eventBroker.subscribe(ScenarioServiceUtils.EVENT_CLOSING_SCENARIO_INSTANCE, eventHandler);
+		eventBroker.subscribe(ScenarioServiceUtils.EVENT_CLOSING_SCENARIO_INSTANCE, eventHandlerCloseScenario);
+		eventHandlerCloseSolution = event -> {
+			// event.getProperty(name)
+			final Object o = event.getProperty("org.eclipse.e4.data");
+			if (o instanceof AnalyticsSolution) {
+				final AnalyticsSolution sol = (AnalyticsSolution) o;
+				onClosingAnalyticsSolution(sol);
+			}
+		};
+		eventBroker.subscribe(ScenarioServiceUtils.EVENT_CLOSING_ANALYTICS_SOLUTION, eventHandlerCloseSolution);
 
 		final String secondaryId = getViewSite().getSecondaryId();
 		if (!"Dynamic".equals(secondaryId)) {
@@ -1008,7 +1009,7 @@ public class ChangeSetView extends ViewPart {
 					toggleSortByVesselAndDate.setToolTipText("Toggling sorting by vessel and date");
 					toggleSortByVesselAndDate.setChecked(sortByVesselAndDate);
 					addActionToMenu(toggleSortByVesselAndDate, menu);
-					
+
 					if (showNegativePNLChangesMenu) {
 						final RunnableAction toggleNegativePNL = new RunnableAction("Show negative PNL Changes", ChangeSetView.this::doShowNegativePNLToggle);
 						toggleNegativePNL.setToolTipText("Toggling filtering of negative PNL");
@@ -1158,7 +1159,8 @@ public class ChangeSetView extends ViewPart {
 	@PreDestroy
 	public void dispose() {
 		final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
-		eventBroker.unsubscribe(eventHandler);
+		eventBroker.unsubscribe(eventHandlerCloseScenario);
+		eventBroker.unsubscribe(eventHandlerCloseSolution);
 
 		if (lastParent != null) {
 			lastParent.eAdapters().remove(adapter);
@@ -1281,7 +1283,7 @@ public class ChangeSetView extends ViewPart {
 		viewer.setComparator(new ChangeSetComparator(this.sortByVesselAndDate));
 		ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
 	}
-	
+
 	private void doShowNegativePNLToggle() {
 		showNegativePNLChanges = !showNegativePNLChanges;
 		ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
@@ -1573,7 +1575,8 @@ public class ChangeSetView extends ViewPart {
 	private final String[] altPNLToolTipBaseMode_Insertions = { "Full", "Simple" };
 	private String[] altPNLToolTipBaseMode = altPNLToolTipBaseMode_Default;
 
-	private EventHandler eventHandler;
+	private EventHandler eventHandlerCloseScenario;
+	private EventHandler eventHandlerCloseSolution;
 
 	public void openAnalyticsSolution(final AnalyticsSolution solution, @Nullable final String slotId) {
 		if (lastParent != null) {
@@ -1695,10 +1698,23 @@ public class ChangeSetView extends ViewPart {
 
 	@Inject
 	@Optional
+	public void onClosingAnalyticsSolution(@UIEventTopic(ScenarioServiceUtils.EVENT_CLOSING_ANALYTICS_SOLUTION) final AnalyticsSolution solution) {
+		final ViewState viewState = currentViewState;
+		if (viewState != null && viewState.lastSolution != null //
+				&& ((viewState.lastSolution == solution) || (viewState.lastSolution.getSolution() == solution.getSolution()))) {
+			setEmptyData();
+			// Close view if dynamic
+			if (viewMode != ViewMode.COMPARE) {
+				getSite().getPage().hideView(ChangeSetView.this);
+			}
+		}
+	}
+
+	@Inject
+	@Optional
 	public void onClosingScenario(@UIEventTopic(ScenarioServiceUtils.EVENT_CLOSING_SCENARIO_INSTANCE) final ScenarioInstance scenarioInstance) {
 
-		@NonNull
-		final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+		final @NonNull ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 
 		final Function<ScenarioResult, Boolean> checker = (sr) -> sr != null && (sr.getModelRecord() == modelRecord || sr.getScenarioInstance() == scenarioInstance);
 		final ViewState viewState = currentViewState;

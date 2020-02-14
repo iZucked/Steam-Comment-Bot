@@ -17,6 +17,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CommandStackListener;
@@ -26,6 +27,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.ui.action.RedoAction;
@@ -40,7 +42,6 @@ import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseTrackAdapter;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
@@ -98,11 +99,16 @@ import com.mmxlabs.models.ui.editors.dialogs.DialogValidationSupport;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
+import com.mmxlabs.scenario.service.model.util.ScenarioServiceUtils;
+import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ui.internal.ScenarioServiceSelectionProvider;
 
 public class OptionModellerView extends ScenarioInstanceView implements CommandStackListener {
 
@@ -287,7 +293,8 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 					beModeToggle = createUseTargetPNLToggleComposite(c);
 					GridDataFactory.generate(beModeToggle, 1, 1);
 				}
-
+				final Composite deleteButton = createDeleteResultButton(c);
+				GridDataFactory.generate(deleteButton, 1, 1);
 			}
 
 			{
@@ -337,13 +344,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			}
 		}
 	}
-	//
-	// @Override
-	// protected void doDisplayScenarioInstance(@Nullable final ScenarioInstance scenarioInstance, @Nullable final MMXRootObject rootObject) {
-	// doDisplayScenarioInstance(scenarioInstance, rootObject, null);
-
-	// updateActions(getEditingDomain());
-	// }
 
 	public synchronized void openSandboxScenario(@Nullable final SandboxScenario sandboxScenario) {
 		displayScenarioInstance(sandboxScenario.getScenarioInstance(), sandboxScenario.getRootObject(), sandboxScenario.getSandboxModel());
@@ -471,9 +471,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			}
 		}
 
-		/**
-		 * @since 2.2
-		 */
 		@Override
 		protected synchronized void missedNotifications(final List<Notification> missed) {
 			doValidate();
@@ -495,7 +492,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			}
 		}
 
-		//
 		private @Nullable Pair<Boolean, EnumSet<SectionType>> processNotification(final Notification notification) {
 			if (notification.getEventType() == Notification.REMOVING_ADAPTER) {
 				return null;
@@ -618,17 +614,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 	}
 
-	private OptionAnalysisModel getRootOptionsModel(@Nullable final OptionAnalysisModel optionModel) {
-		OptionAnalysisModel optionAnalysisModel = optionModel;
-		while (optionAnalysisModel != null && optionAnalysisModel.eContainer() != null && optionAnalysisModel.eContainer() instanceof OptionAnalysisModel) {
-			optionAnalysisModel = (OptionAnalysisModel) optionAnalysisModel.eContainer();
-		}
-		if (optionAnalysisModel != null && optionAnalysisModel.getName() == null) {
-			optionAnalysisModel.setName("root");
-		}
-		return optionAnalysisModel;
-	}
-
 	@Override
 	public void setFocus() {
 		updateActions(getEditingDomain());
@@ -682,7 +667,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			}
 			((Composite) c).layout(true);
 		}
-		// c.layout (true);
 	}
 
 	private void doValidate() {
@@ -706,63 +690,36 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				return true;
 			};
 			if (currentModel != null) {
-				// {
-				// boolean baseCaseValid = true;
-				// final BaseCase baseCase = model.getBaseCase();
-				// if (!checker.apply(baseCase)) {
-				// baseCaseValid = false;
-				// } else {
-				// for (final BaseCaseRow row : baseCase.getBaseCase()) {
-				// if (!checker.apply(row)) {
-				// baseCaseValid = false;
-				// } else {
-				// baseCaseValid &= checker.apply(row.getBuyOption());
-				// baseCaseValid &= checker.apply(row.getSellOption());
-				// baseCaseValid &= checker.apply(row.getShipping());
-				// }
-				// if (!baseCaseValid) {
-				// break;
-				// }
-				// }
-				// }
-				// baseCaseComponent.setBaseCaseValid(baseCaseValid);
-				// }
-				{
-					boolean l_partialCaseValid = true;
-					final PartialCase partialCase = currentModel.getPartialCase();
-					if (!checker.apply(partialCase)) {
-						l_partialCaseValid = false;
-					} else {
-						for (final PartialCaseRow row : partialCase.getPartialCase()) {
-							if (!checker.apply(row)) {
-								l_partialCaseValid = false;
-							} else {
-								for (final BuyOption b : row.getBuyOptions()) {
-									l_partialCaseValid &= checker.apply(b);
-								}
-
-								for (final SellOption s : row.getSellOptions()) {
-									l_partialCaseValid &= checker.apply(s);
-								}
-
-								for (final ShippingOption s : row.getShipping()) {
-									l_partialCaseValid &= checker.apply(s);
-								}
+				boolean l_partialCaseValid = true;
+				final PartialCase partialCase = currentModel.getPartialCase();
+				if (!checker.apply(partialCase)) {
+					l_partialCaseValid = false;
+				} else {
+					for (final PartialCaseRow row : partialCase.getPartialCase()) {
+						if (!checker.apply(row)) {
+							l_partialCaseValid = false;
+						} else {
+							for (final BuyOption b : row.getBuyOptions()) {
+								l_partialCaseValid &= checker.apply(b);
 							}
-							if (!l_partialCaseValid) {
-								break;
+
+							for (final SellOption s : row.getSellOptions()) {
+								l_partialCaseValid &= checker.apply(s);
+							}
+
+							for (final ShippingOption s : row.getShipping()) {
+								l_partialCaseValid &= checker.apply(s);
 							}
 						}
+						if (!l_partialCaseValid) {
+							break;
+						}
 					}
-					this.partialCaseValid = l_partialCaseValid;
-					// partialCaseComponent.setPartialCaseValid(partialCaseValid);
 				}
+				this.partialCaseValid = l_partialCaseValid;
 			}
-
 		} finally {
-
 			popExtraValidationContext();
-
 		}
 	}
 
@@ -847,11 +804,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	public OptionAnalysisModel getModel() {
 		return currentModel;
 	}
-	//
-	// public void setModel(final OptionAnalysisModel model) {
-	// this.targetObject = model;
-	// this.currentModel = model;
-	// }
 
 	@Override
 	public synchronized ICommandHandler getDefaultCommandHandler() {
@@ -898,14 +850,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		return commandHandler;
 
 	}
-	//
-	// public WeakReference<OptionAnalysisModel> getCurrentRoot() {
-	// return currentRoot;
-	// }
-
-	// public void setCurrentRoot(final WeakReference<OptionAnalysisModel> currentRoot) {
-	// this.currentRoot = currentRoot;
-	// }
 
 	private Composite createRunButton(final Composite parent) {
 		//
@@ -981,9 +925,9 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		Label generateButton = new Label(generateComposite, SWT.NONE);
 		generateButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).grab(false, false).create());
 		generateButton.setImage(imageGenerate);
-		
+
 		generateButton.setToolTipText("Display results");
-		
+
 		generateButton.addMouseListener(new MouseAdapter() {
 
 			@Override
@@ -1007,6 +951,55 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		generateButton.addDisposeListener(e -> {
 			if (imageGenerate != null) {
 				imageGenerate.dispose();
+			}
+		});
+
+		lockedListeners.add(locked -> RunnerHelper.asyncExec(() -> generateButton.setEnabled(currentModel != null && !locked)));
+
+		inputWants.add(m -> generateButton.setEnabled(m != null && !isLocked()));
+
+		return generateComposite;
+	}
+
+	private Composite createDeleteResultButton(final Composite parent) {
+		//
+		Image imageGenerate = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE);
+
+		final Composite generateComposite = new Composite(parent, SWT.NONE);
+		GridDataFactory.generate(generateComposite, 1, 1);
+
+		generateComposite.setLayout(new GridLayout(1, true));
+
+		Label generateButton = new Label(generateComposite, SWT.NONE);
+		generateButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.RIGHT, SWT.CENTER).grab(false, false).create());
+		generateButton.setImage(imageGenerate);
+
+		generateButton.setToolTipText("Delete current results");
+
+		generateButton.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseDown(final MouseEvent e) {
+				if (isLocked()) {
+					return;
+				}
+				final OptionAnalysisModel m = currentModel;
+				if (m != null) {
+					BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(), () -> {
+						if (m != null && m.getResults() != null) {
+
+							ScenarioResult sr = new ScenarioResult(getScenarioInstance());
+							ServiceHelper.withServiceConsumer(IScenarioServiceSelectionProvider.class, sp -> sp.deselect(sr, false));
+
+							final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
+							eventBroker.post(ScenarioServiceUtils.EVENT_CLOSING_ANALYTICS_SOLUTION, new AnalyticsSolution(getScenarioInstance(), m.getResults(), "dummy-title"));
+
+							final CompoundCommand cmd = new CompoundCommand("Delete sandbox results");
+							cmd.append(DeleteCommand.create(getEditingDomain(), m.getResults()));
+							getEditingDomain().getCommandStack().execute(cmd);
+						}
+					});
+				}
 			}
 		});
 

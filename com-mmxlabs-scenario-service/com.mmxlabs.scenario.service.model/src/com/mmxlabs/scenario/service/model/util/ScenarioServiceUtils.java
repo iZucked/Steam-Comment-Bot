@@ -42,6 +42,8 @@ public final class ScenarioServiceUtils {
 	/**
 	 * Event constant to indicate to parts to close any references to the scenario instance passed in with the event. E.g. the scenario is about to be deleted.
 	 */
+	public static final @NonNull String EVENT_CLOSING_ANALYTICS_SOLUTION = "scenario-service-closing-analytics-solution";
+	
 	public static final @NonNull String EVENT_CLOSING_SCENARIO_INSTANCE = "scenario-service-closing-scenario-instance";
 
 	public static @NonNull String stripFileExtension(@NonNull final String currentName) {
