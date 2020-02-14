@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Model UI
 Bundle-SymbolicName: com.mmxlabs.models.common;singleton:=true
 Automatic-Module-Name: com.mmxlabs.models.common
-Bundle-Version: 4.8.7.qualifier
+Bundle-Version: 4.8.7.RELEASE
 Bundle-Activator: com.mmxlabs.models.common.internal.Activator
 Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
