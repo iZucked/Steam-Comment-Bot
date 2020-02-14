@@ -436,21 +436,18 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 			@Nullable final Object targetElement) {
 		if (insertionModeActive) {
 
-			if (helper.hasActions()) {
-				helper.addSeparator();
-			}
-
 			if (directSelectedRows.isEmpty()) {
 				generateInsertionSubMenus_ExploreAll(helper, viewer);
 
 			}
 			if (!selectedSets.isEmpty() && directSelectedRows.isEmpty()) {
-				generateInsertionSubMenus_FilterSets(helper, viewer, selectedSets, targetElement);
+				// Disabled 2020-02-14 as should be covered by row filter menus
+				// generateInsertionSubMenus_FilterSets(helper, viewer, selectedSets, targetElement);
 			}
 			if (directSelectedRows.size() == 1) {
-				generateInsertionSubMenus_Explore(helper, viewer, directSelectedRows);
 				generateInsertionSubMenus_FilterOn(helper, viewer, false, directSelectedRows);
 				generateInsertionSubMenus_FilterOn(helper, viewer, true, directSelectedRows);
+				generateInsertionSubMenus_Explore(helper, viewer, directSelectedRows);
 			}
 			if (!getUserFilters().isEmpty()) {
 				final SubLocalMenuHelper remove = new SubLocalMenuHelper("Remove filter...");
@@ -480,9 +477,9 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 
 		final SubLocalMenuHelper showFromMenu;
 		if (exclude) {
-			showFromMenu = new SubLocalMenuHelper("Exclude related...");
+			showFromMenu = new SubLocalMenuHelper("Filter out");
 		} else {
-			showFromMenu = new SubLocalMenuHelper("Show related...");
+			showFromMenu = new SubLocalMenuHelper("Filter in");
 		}
 		helper.addSubMenu(showFromMenu);
 

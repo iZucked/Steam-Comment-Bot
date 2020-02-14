@@ -17,8 +17,10 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
@@ -1052,7 +1054,9 @@ public class ChangeSetView extends ViewPart {
 		}
 
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_RE_EVALUATE_SOLUTIONS)) {
-			reEvaluateAction = new RunnableAction("Re-evaluate", () -> {
+			reEvaluateAction = new RunnableAction("Re-evaluate", () ->
+
+			{
 				final AnalyticsSolution solution = currentViewState.lastSolution;
 				// solution.
 				if (solution != null) {
@@ -1344,24 +1348,7 @@ public class ChangeSetView extends ViewPart {
 				final Iterator<?> itr = selection.iterator();
 				while (itr.hasNext()) {
 					final Object obj = itr.next();
-					if (showRelatedChangesMenus) {
-						if (obj instanceof ChangeSetTableGroup) {
-							final ChangeSetTableGroup changeSetTableGroup = (ChangeSetTableGroup) obj;
-							if (insertionPlanFilter.getUserFilters().isEmpty()) {
-								if (insertionPlanFilter.getExpandedGroups().contains(changeSetTableGroup.getGroupObject())) {
-									helper.addAction(new RunnableAction("Hide similar", () -> {
-										insertionPlanFilter.getExpandedGroups().remove(changeSetTableGroup.getGroupObject());
-										ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
-									}));
-								} else {
-									helper.addAction(new RunnableAction("Show similar", () -> {
-										insertionPlanFilter.getExpandedGroups().add(changeSetTableGroup.getGroupObject());
-										ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
-									}));
-								}
-							}
-						}
-					}
+
 					if (obj instanceof ChangeSetTableGroup) {
 						selectedSets.add((ChangeSetTableGroup) obj);
 					} else if (obj instanceof ChangeSetTableRow) {
@@ -1370,173 +1357,204 @@ public class ChangeSetView extends ViewPart {
 						directSelectedRows.add(changeSetRow);
 					}
 				}
-				if (selectedSets.size() == 1) {
-					if (canExportChangeSet) {
-						{
-							final ChangeSetTableGroup changeSetTableGroup = selectedSets.iterator().next();
-							int idx = 0;
-							final ChangeSetTableRoot root = (ChangeSetTableRoot) changeSetTableGroup.eContainer();
-							if (root != null) {
-								idx = root.getGroups().indexOf(changeSetTableGroup);
-							}
-							final String name = columnHelper.getChangeSetColumnLabelProvider().apply(changeSetTableGroup, idx);
-							boolean showSimple = true;
-							if (showAlternativeChangeModel && ChangeSetView.this.viewMode == ViewMode.INSERTIONS) {
-								// Only offer this for dual model insertions.
-								final ScenarioResult scenarioResult = changeSetTableGroup.getCurrentScenario();
-								if (scenarioResult.getResultRoot() instanceof ScheduleModel) {
-									final ScheduleModel scheduleModel = (ScheduleModel) scenarioResult.getResultRoot();
-									if (scheduleModel.eContainer() instanceof SolutionOptionMicroCase) {
-										final BiConsumer<LNGScenarioModel, Schedule> modelCustomiser = EvaluateSolutionSetHelper.createModelCustomiser();
-										helper.addAction(new ExportChangeAction(changeSetTableGroup, name, true, modelCustomiser));
-										showSimple = false;
-									}
-								}
-							}
-							if (showSimple) {
-								BiConsumer<LNGScenarioModel, Schedule> modelCustomiser = null;
-								if (getLastSolution().getSolution() instanceof SandboxResult) {
-									modelCustomiser = EvaluateSolutionSetHelper.createModelCustomiser();
-								}
-
-								helper.addAction(new ExportChangeAction(changeSetTableGroup, name, modelCustomiser));
-							}
-							showMenu = true;
-						}
-						// Experimental code to generate a sandbox scenario.
-						if (ChangeSetView.this.viewMode != ViewMode.COMPARE && ChangeSetView.this.viewMode != ViewMode.OLD_ACTION_SET) {
-							if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_SANDBOX)) {
-								final ChangeSetTableGroup changeSetTableGroup = selectedSets.iterator().next();
-								helper.addAction(new CreateSandboxFromResultAction(changeSetTableGroup, changeSetTableGroup.getDescription()));
-								showMenu = true;
-							}
-						}
-						if (ChangeSetView.this.viewMode == ViewMode.SANDBOX && ChangeSetView.this.showToggleAltPNLBaseAction) {
-
-							final ChangeSetTableGroup changeSetTableGroup = selectedSets.iterator().next();
-							int idx = 0;
-							final ChangeSetTableRoot root = (ChangeSetTableRoot) changeSetTableGroup.eContainer();
-							if (root != null) {
-								idx = root.getGroups().indexOf(changeSetTableGroup);
-							}
-
-							final Action action = new RunnableAction("Compute full change", () -> {
-
-								final ScenarioResult scenarioResult = changeSetTableGroup.getCurrentScenario();
-
-								final EvaluateSolutionSetHelper ssHelper = new EvaluateSolutionSetHelper(scenarioResult.getScenarioDataProvider());
-
-								final AnalyticsSolution solution = currentViewState.lastSolution;
-								if (solution != null && solution.getSolution() instanceof SandboxResult) {
-									final SandboxResult sandboxResult = (SandboxResult) solution.getSolution();
-
-									UserSettings userSettings = null;
-
-									// OtherPNL basePNL = ScheduleFactory.eINSTANCE.createOtherPNL();
-									// {
-									// ScheduleModelKPIUtils.updateOtherPNL(basePNL,
-									// sandboxResult.getBaseOption().getScheduleModel().getSchedule(),
-									// ScheduleModelKPIUtils.Mode.INCREMENT);
-									// }
-
-									final UUIDObject object = solution.getSolution();
-									ssHelper.processSolution(sandboxResult.getBaseOption().getScheduleSpecification(), sandboxResult.getBaseOption().getScheduleModel());
-
-									if (object instanceof AbstractSolutionSet) {
-										final AbstractSolutionSet abstractSolutionSet = (AbstractSolutionSet) object;
-										ssHelper.processExtraData(abstractSolutionSet);
-
-										userSettings = abstractSolutionSet.getUserSettings();
-										for (final SolutionOption opt : abstractSolutionSet.getOptions()) {
-											if (opt.getScheduleModel() == scenarioResult.getResultRoot()) {
-												ssHelper.processSolution(opt.getScheduleSpecification(), opt.getScheduleModel());
-												break;
-											} else if (changeSetTableGroup.getLinkedGroup() != null
-													&& opt.getScheduleModel() == changeSetTableGroup.getLinkedGroup().getCurrentScenario().getResultRoot()) {
-												ssHelper.processSolution(opt.getScheduleSpecification(), opt.getScheduleModel());
-												break;
-											}
-
-											// if (opt instanceof DualModeSolutionOption) {
-											// final DualModeSolutionOption dualModeSolutionOption =
-											// (DualModeSolutionOption) opt;
-											//
-											// final SolutionOptionMicroCase base =
-											// dualModeSolutionOption.getMicroBaseCase();
-											// if (base != null) {
-											// // Re-evaluate from schedule
-											// ssHelper.processExtraData(base);
-											// ssHelper.processSolution(base.getScheduleModel());
-											// // (Experimental version) Re-evaluate from change specification)
-											// // helper.processSolution(base.getScheduleSpecification(),
-											// base.getScheduleModel());
-											// }
-											//
-											// final SolutionOptionMicroCase target =
-											// dualModeSolutionOption.getMicroTargetCase();
-											// if (target != null) {
-											// // Re-evaluate from schedule
-											// ssHelper.processExtraData(target);
-											// ssHelper.processSolution(target.getScheduleModel());
-											// // (Experimental version) Re-evaluate from change specification)
-											// // helper.processSolution(target.getScheduleSpecification(),
-											// target.getScheduleModel());
-											// }
-											//
-											// }
-										}
-									}
-
-									if (userSettings == null) {
-										userSettings = scenarioResult.getTypedRoot(LNGScenarioModel.class).getUserSettings();
-									}
-
-									final UserSettings copy = EcoreUtil.copy(userSettings);
-									final Job job = Job.create("Open solution", monitor -> {
-										ssHelper.generateResults(scenarioResult.getScenarioInstance(), copy, scenarioResult.getScenarioDataProvider().getEditingDomain(), monitor);
-										final ViewState viewState = currentViewState;
-
-										if (viewState != null) {
-											final String id = viewState.getTargetSlotID();
-											RunnerHelper.asyncExec(() -> openAnalyticsSolution(viewState.lastSolution, id));
-										}
-									});
-									job.setUser(true);
-									job.setRule(schedulingRule);
-									job.schedule();
-
-								}
-							});
-							action.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/iu_update_obj.gif"));
-							helper.addAction(action);
-							showMenu = true;
-						}
-					}
+				if (selectedSets.size() == 1 && directSelectedRows.isEmpty()) {
+					showMenu |= createExportSolutionMenu(selectedSets);
+					// If we selected a change set group, create this here, other wise it
+					showMenu |= createSandboxMenu(selectedSets);
 				}
-				if (selectedSets.size() > 1) {
-					if (ChangeSetView.this.viewMode == ViewMode.COMPARE) {
-						helper.addAction(new MergeChangesAction(selectedSets, viewer));
-						showMenu = true;
-					}
-
+				if (ChangeSetView.this.viewMode == ViewMode.SANDBOX && ChangeSetView.this.showToggleAltPNLBaseAction) {
+					showMenu |= createComputeFullSolutionMenus(selectedSets);
 				}
+
+				if (helper.hasActions()) {
+					helper.addSeparator();
+				}
+				showMenu |= createShowGroupRelatedChangesMenu(directSelectedRows, selectedSets);
 
 				if (showUserFilterMenus) {
 					showMenu |= insertionPlanFilter.generateMenus(helper, viewer, directSelectedRows, selectedSets, currentViewState.lastTargetSlot);
 				}
-			} else
-
-			{
-				if (showUserFilterMenus) {
-					if (currentViewState != null) {
-						showMenu |= insertionPlanFilter.generateMenus(helper, viewer, Collections.emptySet(), Collections.emptySet(), currentViewState.lastTargetSlot);
+				if (selectedSets.size() == 1 && directSelectedRows.size() >= 1) {
+					if (helper.hasActions()) {
+						helper.addSeparator();
 					}
+					// If we selected a change set group, create this here, other wise it
+					showMenu |= createSandboxMenu(selectedSets);
+				}
+			} else {
+				if (showUserFilterMenus && currentViewState != null) {
+					showMenu |= insertionPlanFilter.generateMenus(helper, viewer, Collections.emptySet(), Collections.emptySet(), currentViewState.lastTargetSlot);
 				}
 			}
 
 			if (showMenu) {
 				helper.open();
 			}
+		}
+
+		private boolean createShowGroupRelatedChangesMenu(final Set<ChangeSetTableRow> directSelectedRows, final Set<ChangeSetTableGroup> selectedSets) {
+			if (showRelatedChangesMenus && selectedSets.size() == 1 && directSelectedRows.isEmpty()) {
+
+				final ChangeSetTableGroup changeSetTableGroup = selectedSets.iterator().next();
+				if (insertionPlanFilter.getUserFilters().isEmpty()) {
+					if (insertionPlanFilter.getExpandedGroups().contains(changeSetTableGroup.getGroupObject())) {
+						helper.addAction(new RunnableAction("Hide similar", () -> {
+							insertionPlanFilter.getExpandedGroups().remove(changeSetTableGroup.getGroupObject());
+							ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
+						}));
+						return true;
+					} else {
+						helper.addAction(new RunnableAction("Show similar", () -> {
+							insertionPlanFilter.getExpandedGroups().add(changeSetTableGroup.getGroupObject());
+							ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
+						}));
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+
+		private boolean createComputeFullSolutionMenus(final Set<ChangeSetTableGroup> selectedSets) {
+			boolean showMenu;
+			final ChangeSetTableGroup changeSetTableGroup = selectedSets.iterator().next();
+
+			final Action action = new RunnableAction("Compute full change", () -> {
+
+				final ScenarioResult scenarioResult = changeSetTableGroup.getCurrentScenario();
+
+				final EvaluateSolutionSetHelper ssHelper = new EvaluateSolutionSetHelper(scenarioResult.getScenarioDataProvider());
+
+				final AnalyticsSolution solution = currentViewState.lastSolution;
+				if (solution != null && solution.getSolution() instanceof SandboxResult) {
+					final SandboxResult sandboxResult = (SandboxResult) solution.getSolution();
+
+					UserSettings userSettings = null;
+
+					// OtherPNL basePNL = ScheduleFactory.eINSTANCE.createOtherPNL();
+					// {
+					// ScheduleModelKPIUtils.updateOtherPNL(basePNL,
+					// sandboxResult.getBaseOption().getScheduleModel().getSchedule(),
+					// ScheduleModelKPIUtils.Mode.INCREMENT);
+					// }
+
+					final UUIDObject object = solution.getSolution();
+					ssHelper.processSolution(sandboxResult.getBaseOption().getScheduleSpecification(), sandboxResult.getBaseOption().getScheduleModel());
+
+					if (object instanceof AbstractSolutionSet) {
+						final AbstractSolutionSet abstractSolutionSet = (AbstractSolutionSet) object;
+						ssHelper.processExtraData(abstractSolutionSet);
+
+						userSettings = abstractSolutionSet.getUserSettings();
+						for (final SolutionOption opt : abstractSolutionSet.getOptions()) {
+							if (opt.getScheduleModel() == scenarioResult.getResultRoot()) {
+								ssHelper.processSolution(opt.getScheduleSpecification(), opt.getScheduleModel());
+								break;
+							} else if (changeSetTableGroup.getLinkedGroup() != null && opt.getScheduleModel() == changeSetTableGroup.getLinkedGroup().getCurrentScenario().getResultRoot()) {
+								ssHelper.processSolution(opt.getScheduleSpecification(), opt.getScheduleModel());
+								break;
+							}
+
+							// if (opt instanceof DualModeSolutionOption) {
+							// final DualModeSolutionOption dualModeSolutionOption =
+							// (DualModeSolutionOption) opt;
+							//
+							// final SolutionOptionMicroCase base =
+							// dualModeSolutionOption.getMicroBaseCase();
+							// if (base != null) {
+							// // Re-evaluate from schedule
+							// ssHelper.processExtraData(base);
+							// ssHelper.processSolution(base.getScheduleModel());
+							// // (Experimental version) Re-evaluate from change specification)
+							// // helper.processSolution(base.getScheduleSpecification(),
+							// base.getScheduleModel());
+							// }
+							//
+							// final SolutionOptionMicroCase target =
+							// dualModeSolutionOption.getMicroTargetCase();
+							// if (target != null) {
+							// // Re-evaluate from schedule
+							// ssHelper.processExtraData(target);
+							// ssHelper.processSolution(target.getScheduleModel());
+							// // (Experimental version) Re-evaluate from change specification)
+							// // helper.processSolution(target.getScheduleSpecification(),
+							// target.getScheduleModel());
+							// }
+							//
+							// }
+						}
+					}
+
+					if (userSettings == null) {
+						userSettings = scenarioResult.getTypedRoot(LNGScenarioModel.class).getUserSettings();
+					}
+
+					final UserSettings copy = EcoreUtil.copy(userSettings);
+					final Job job = Job.create("Open solution", monitor -> {
+						ssHelper.generateResults(scenarioResult.getScenarioInstance(), copy, scenarioResult.getScenarioDataProvider().getEditingDomain(), monitor);
+						final ViewState viewState = currentViewState;
+
+						if (viewState != null) {
+							final String id = viewState.getTargetSlotID();
+							RunnerHelper.asyncExec(() -> openAnalyticsSolution(viewState.lastSolution, id));
+						}
+					});
+					job.setUser(true);
+					job.setRule(schedulingRule);
+					job.schedule();
+
+				}
+			});
+			action.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/iu_update_obj.gif"));
+			helper.addAction(action);
+			showMenu = true;
+			return showMenu;
+		}
+
+		private boolean createExportSolutionMenu(final Set<ChangeSetTableGroup> selectedSets) {
+			if (canExportChangeSet) {
+				final ChangeSetTableGroup changeSetTableGroup = selectedSets.iterator().next();
+				int idx = 0;
+				final ChangeSetTableRoot root = (ChangeSetTableRoot) changeSetTableGroup.eContainer();
+				if (root != null) {
+					idx = root.getGroups().indexOf(changeSetTableGroup);
+				}
+				final String name = columnHelper.getChangeSetColumnLabelProvider().apply(changeSetTableGroup, idx);
+				boolean showSimple = true;
+				if (showAlternativeChangeModel && ChangeSetView.this.viewMode == ViewMode.INSERTIONS) {
+					// Only offer this for dual model insertions.
+					final ScenarioResult scenarioResult = changeSetTableGroup.getCurrentScenario();
+					if (scenarioResult.getResultRoot() instanceof ScheduleModel) {
+						final ScheduleModel scheduleModel = (ScheduleModel) scenarioResult.getResultRoot();
+						if (scheduleModel.eContainer() instanceof SolutionOptionMicroCase) {
+							final BiConsumer<LNGScenarioModel, Schedule> modelCustomiser = EvaluateSolutionSetHelper.createModelCustomiser();
+							helper.addAction(new ExportChangeAction(changeSetTableGroup, name, true, modelCustomiser));
+							showSimple = false;
+						}
+					}
+				}
+				if (showSimple) {
+					BiConsumer<LNGScenarioModel, Schedule> modelCustomiser = null;
+					if (getLastSolution().getSolution() instanceof SandboxResult) {
+						modelCustomiser = EvaluateSolutionSetHelper.createModelCustomiser();
+					}
+
+					helper.addAction(new ExportChangeAction(changeSetTableGroup, name, modelCustomiser));
+				}
+				return true;
+			}
+			return false;
+		}
+
+		private boolean createSandboxMenu(final Set<ChangeSetTableGroup> selectedSets) {
+			if (ChangeSetView.this.viewMode != ViewMode.COMPARE && ChangeSetView.this.viewMode != ViewMode.OLD_ACTION_SET) {
+				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_SANDBOX)) {
+					final ChangeSetTableGroup changeSetTableGroup = selectedSets.iterator().next();
+					helper.addAction(new CreateSandboxFromResultAction(changeSetTableGroup, changeSetTableGroup.getDescription()));
+					return true;
+				}
+			}
+			return false;
 		}
 
 	}

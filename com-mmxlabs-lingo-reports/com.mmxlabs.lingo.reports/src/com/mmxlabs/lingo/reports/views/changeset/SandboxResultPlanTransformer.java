@@ -4,9 +4,14 @@
  */
 package com.mmxlabs.lingo.reports.views.changeset;
 
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.mmxlabs.lingo.reports.services.ScenarioNotEvaluatedException;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
@@ -45,11 +50,12 @@ public class SandboxResultPlanTransformer {
 			final ScheduleResultListTransformer transformer = new ScheduleResultListTransformer();
 			final UserSettings userSettings = plan.getUserSettings();
 
+			List<ChangeSet> changeSets = new LinkedList<>();
 			for (final SolutionOption option : plan.getOptions()) {
 				final ChangeDescription changeDescription = option.getChangeDescription();
 				final ScenarioResult current = new ScenarioResult(scenarioInstance, option.getScheduleModel());
-//				root.getChangeSets().add(transformer.buildSingleChangeChangeSet(base, current, changeDescription, userSettings));
-				
+				// root.getChangeSets().add(transformer.buildSingleChangeChangeSet(base, current, changeDescription, userSettings));
+
 				ScenarioResult altBase = null;
 				ScenarioResult altCurrent = null;
 				if (option instanceof DualModeSolutionOption) {
@@ -60,12 +66,16 @@ public class SandboxResultPlanTransformer {
 					}
 				}
 				if (plan.isHasDualModeSolutions()) {
-					root.getChangeSets().add(transformer.buildParallelDiffChangeSet(base, current, altBase, altCurrent, changeDescription, userSettings, null));
+					changeSets.add(transformer.buildParallelDiffChangeSet(base, current, altBase, altCurrent, changeDescription, userSettings, null));
 				} else {
-					root.getChangeSets().add(transformer.buildSingleChangeChangeSet(base, current, changeDescription, userSettings, null));
+					changeSets.add(transformer.buildSingleChangeChangeSet(base, current, changeDescription, userSettings, null));
 				}
+
 				monitor.worked(1);
 			}
+
+			Collections.sort(changeSets, (a, b) -> -Long.compare(a.getMetricsToDefaultBase().getPnlDelta(), b.getMetricsToDefaultBase().getPnlDelta()));
+			root.getChangeSets().addAll(changeSets);
 		} finally {
 			monitor.done();
 		}

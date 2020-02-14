@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lingo.reports.views.changeset.actions;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -35,7 +34,6 @@ import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.SellMarket;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
-import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.VesselEventOption;
 import com.mmxlabs.models.lng.analytics.VesselEventReference;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -62,7 +60,7 @@ public class CreateSandboxFromResultAction extends Action {
 	private final String name;
 
 	public CreateSandboxFromResultAction(final ChangeSetTableGroup changeSetTableGroup, final String name) {
-		super("Create as sandbox");
+		super("Create sandbox");
 		this.changeSetTableGroup = changeSetTableGroup;
 		this.name = name;
 	}
