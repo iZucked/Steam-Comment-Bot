@@ -582,10 +582,11 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 		inputWants.forEach(want -> want.accept(model));
 
-		if (model != null && model.getResults() != null) {
-			final AnalyticsSolution data = new AnalyticsSolution(getScenarioInstance(), model.getResults(), model.getName());
-			data.open();
-		}
+		// Disable auto-open results. use the display button!
+		// if (model != null && model.getResults() != null) {
+		// final AnalyticsSolution data = new AnalyticsSolution(getScenarioInstance(), model.getResults(), model.getName());
+		// data.open();
+		// }
 
 		if (currentModel != null) {
 			optionsModelComponent.setInput(Collections.singleton(currentModel));
