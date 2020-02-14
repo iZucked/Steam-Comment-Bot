@@ -108,7 +108,6 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.util.ScenarioServiceUtils;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
-import com.mmxlabs.scenario.service.ui.internal.ScenarioServiceSelectionProvider;
 
 public class OptionModellerView extends ScenarioInstanceView implements CommandStackListener {
 
