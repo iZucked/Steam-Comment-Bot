@@ -1019,7 +1019,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		new Label(matching, SWT.NONE).setText("Mode:");
 		Combo combo = new Combo(matching, SWT.DROP_DOWN);
 		// final Button matchingButton = new Button(matching, SWT.CHECK | SWT.LEFT);
-		combo.setItems("Sandbox", "Optimise", "Optionise");
+		combo.setItems("Define", "Optimise", "Optionise");
 
 		combo.select(0);
 		combo.addSelectionListener(new SelectionAdapter() {
