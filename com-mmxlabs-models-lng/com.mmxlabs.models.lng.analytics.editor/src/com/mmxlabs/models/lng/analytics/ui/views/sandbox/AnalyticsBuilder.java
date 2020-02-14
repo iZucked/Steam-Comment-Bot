@@ -1558,22 +1558,26 @@ public class AnalyticsBuilder {
 	}
 
 	public static Predicate<BuyOption> isFOBPurchase() {
-		return b -> ((b instanceof BuyReference && ((BuyReference) b).getSlot() != null && ((BuyReference) b).getSlot().isDESPurchase() == false)
+		return b -> ((b instanceof BuyReference && ((BuyReference) b).getSlot() != null && ((BuyReference) b).getSlot().isDESPurchase() == false) //
+				|| (b instanceof BuyMarket && ((BuyMarket) b).getMarket() instanceof FOBPurchasesMarket) //
 				|| (b instanceof BuyOpportunity && ((BuyOpportunity) b).isDesPurchase() == false));
 	}
 
 	public static Predicate<BuyOption> isDESPurchase() {
-		return b -> ((b instanceof BuyReference && ((BuyReference) b).getSlot() != null && ((BuyReference) b).getSlot().isDESPurchase() == true)
+		return b -> ((b instanceof BuyReference && ((BuyReference) b).getSlot() != null && ((BuyReference) b).getSlot().isDESPurchase() == true) //
+				|| (b instanceof BuyMarket && ((BuyMarket) b).getMarket() instanceof DESPurchaseMarket) //
 				|| (b instanceof BuyOpportunity && ((BuyOpportunity) b).isDesPurchase() == true));
 	}
 
 	public static Predicate<SellOption> isFOBSale() {
-		return s -> ((s instanceof SellReference && ((SellReference) s).getSlot() != null && ((SellReference) s).getSlot().isFOBSale() == true)
+		return s -> ((s instanceof SellReference && ((SellReference) s).getSlot() != null && ((SellReference) s).getSlot().isFOBSale() == true) //
+				|| (s instanceof SellMarket && ((SellMarket) s).getMarket() instanceof FOBSalesMarket) //
 				|| (s instanceof SellOpportunity && ((SellOpportunity) s).isFobSale() == true));
 	}
 
 	public static Predicate<SellOption> isDESSale() {
-		return s -> ((s instanceof SellReference && ((SellReference) s).getSlot() != null && ((SellReference) s).getSlot().isFOBSale() == false)
+		return s -> ((s instanceof SellReference && ((SellReference) s).getSlot() != null && ((SellReference) s).getSlot().isFOBSale() == false) //
+				|| (s instanceof SellMarket && ((SellMarket) s).getMarket() instanceof DESSalesMarket) //
 				|| (s instanceof SellOpportunity && ((SellOpportunity) s).isFobSale() == false));
 	}
 
