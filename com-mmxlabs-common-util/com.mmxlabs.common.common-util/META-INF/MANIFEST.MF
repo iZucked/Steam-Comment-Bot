@@ -5,7 +5,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-10
 Bundle-SymbolicName: com.mmxlabs.common.common-util
 Automatic-Module-Name: com.mmxlabs.common.common-util
 Bundle-Vendor: Minimax Labs Ltd.
-Bundle-Version: 4.8.7.qualifier
+Bundle-Version: 4.8.8.qualifier
 Import-Package: javax.tools,
  org.eclipse.emf.common.util,
  org.eclipse.emf.ecore.resource.impl,
