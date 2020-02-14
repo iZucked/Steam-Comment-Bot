@@ -450,6 +450,12 @@ public class CargoEconsReportComponent implements IAdaptable {
 							if (scheduleModel != null) {
 								final Schedule schedule = scheduleModel.getSchedule();
 								if (schedule != null) {
+									for (final OpenSlotAllocation openSlotAllocation : schedule.getOpenSlotAllocations()) {
+										if (pSlot == openSlotAllocation.getSlot()) {
+											validObjects.add(openSlotAllocation);
+											break;
+										}
+									}
 									for (final MarketAllocation marketAllocation : schedule.getMarketAllocations()) {
 										if (pSlot == marketAllocation.getSlot()) {
 											validObjects.add(marketAllocation);

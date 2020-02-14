@@ -46,6 +46,7 @@ import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
+import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Purge;
@@ -56,6 +57,7 @@ import com.mmxlabs.models.lng.schedule.SlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.ui.date.DateTimeFormatsProvider;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 
@@ -71,6 +73,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		boolean containsVesselEvent = false;
 		boolean containsGeneratedCharterOut = false;
 		boolean containsStartEvent = false;
+		boolean containsOpenSlot = false;
 
 		if (targets == null || targets.isEmpty()) {
 			containsCargo = true;
@@ -78,6 +81,9 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 			for (final Object target : targets) {
 				if (target instanceof CargoAllocation) {
 					containsCargo = true;
+				}
+				if (target instanceof OpenSlotAllocation) {
+					containsOpenSlot = true;
 				}
 				if (target instanceof StartEvent) {
 					containsStartEvent = true;
@@ -123,6 +129,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		rows.add(createRow(70, "    Canal", true, "$", "", true, createShippingCanalCosts(options, true)));
 		rows.add(createRow(80, "    Boil-off", true, "$", "", true, createShippingBOGTotal(options, true), createBOGColourProvider(options)));
 		rows.add(createRow(90, "    Charter Cost", true, "$", "", true, createShippingCharterCosts(options, true), createCharterFeesColourProvider(options)));
+		
 		if (containsCargo) {
 			final CargoEconsReportRow row = createRow(91, "    $/mmBtu", true, "$", "", true, createShippingCostsByMMBTU(options, true));
 			row.tooltip = () -> {
@@ -158,6 +165,9 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 				rows.add(createRow(170, "Equity P&L", true, "$", "", false, createPNLEquity(options, false)));
 			}
 			rows.add(createRow(180, "Addn. P&L", true, "$", "", false, createPNLAdditional(options, false)));
+		}
+		if (containsOpenSlot) {
+			rows.add(createRow(185, "Cancellation", true, "$", "", true, createCancellationCosts(options, true)));
 		}
 		rows.add(createRow(190, "P&L", true, "$", "", false, createPNLTotal(options, false)));
 		if (containsCargo) {
@@ -756,6 +766,16 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 				}
 			}
 			return 0;
+		}));
+	}
+
+	private @NonNull ICellRenderer createCancellationCosts(final EconsOptions options, final boolean isCost) {
+		return createBasicFormatter(options, isCost, Long.class, DollarsFormat::format, createMappingFunction(Long.class, object -> {
+			if (object instanceof ProfitAndLossContainer) {
+				ProfitAndLossContainer profitAndLossContainer = (ProfitAndLossContainer) object;
+				return ScheduleModelKPIUtils.getCancellationFees(profitAndLossContainer);
+			}
+			return 0L;
 		}));
 	}
 
