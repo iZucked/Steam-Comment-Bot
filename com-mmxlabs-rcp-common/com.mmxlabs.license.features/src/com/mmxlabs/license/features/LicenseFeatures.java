@@ -23,6 +23,8 @@ public class LicenseFeatures {
 
 	private static final Logger LOG = LoggerFactory.getLogger(LicenseFeatures.class);
 
+	private static final String PREFIX_FEATURES = "features:";
+
 	// Extra enablements programatically added. Really for ITS use
 	private static Set<String> extraEnablementsSet = new HashSet<>();
 
@@ -36,9 +38,7 @@ public class LicenseFeatures {
 	}
 
 	public static void initialiseFeatureEnablements(final String... extraEnablements) {
-		for (final String s : extraEnablements) {
-			extraEnablementsSet.add(s);
-		}
+		addFeatureEnablements(extraEnablements);
 
 		class MyFeatureClass {
 
@@ -58,7 +58,7 @@ public class LicenseFeatures {
 						if (featureEnablementExtension != null) {
 							final String feature = featureEnablementExtension.getFeature();
 							if (feature != null) {
-								final String permissionKey = "features:" + clean(feature);
+								final String permissionKey = PREFIX_FEATURES + clean(feature);
 
 								final String expiryDate = featureEnablementExtension.getExpiryDate();
 								if (expiryDate != null) {
@@ -81,13 +81,6 @@ public class LicenseFeatures {
 						}
 					}
 				}
-				for (final String feature : extraEnablementsSet) {
-					if (feature != null) {
-						final String permissionKey = "features:" + clean(feature);
-						enabledFeatures.add(permissionKey);
-
-					}
-				}
 			}
 		}
 		new MyFeatureClass().loadFeatures();
@@ -96,7 +89,7 @@ public class LicenseFeatures {
 
 	public static final boolean isPermitted(@NonNull final String feature) {
 
-		final boolean result = enabledFeatures.contains(feature);
+		final boolean result = enabledFeatures.contains(feature) || extraEnablementsSet.contains(feature);
 
 		if ((!result)) {
 			if (feature.startsWith("feature:")) {
@@ -124,7 +117,8 @@ public class LicenseFeatures {
 
 	public static void addFeatureEnablements(final String... extraEnablements) {
 		for (final String s : extraEnablements) {
-			extraEnablementsSet.add(s);
+			final String permissionKey = PREFIX_FEATURES + clean(s);
+			extraEnablementsSet.add(permissionKey);
 		}
 	}
 
@@ -135,7 +129,8 @@ public class LicenseFeatures {
 	 */
 	public static void removeFeatureEnablements(final String... extraEnablements) {
 		for (final String s : extraEnablements) {
-			extraEnablementsSet.remove(s);
+			final String permissionKey = PREFIX_FEATURES + clean(s);
+			extraEnablementsSet.remove(permissionKey);
 		}
 	}
 }
