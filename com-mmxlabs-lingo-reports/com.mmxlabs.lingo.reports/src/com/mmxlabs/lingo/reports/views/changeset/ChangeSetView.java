@@ -17,10 +17,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
-import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
@@ -104,7 +102,7 @@ import com.mmxlabs.lingo.reports.views.changeset.ChangeSetViewColumnHelper.Vesse
 import com.mmxlabs.lingo.reports.views.changeset.InsertionPlanGrouperAndFilter.GroupMode;
 import com.mmxlabs.lingo.reports.views.changeset.actions.CreateSandboxFromResultAction;
 import com.mmxlabs.lingo.reports.views.changeset.actions.ExportChangeAction;
-import com.mmxlabs.lingo.reports.views.changeset.actions.MergeChangesAction;
+import com.mmxlabs.lingo.reports.views.changeset.actions.UpdateSandboxFromRowsAction;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData;
@@ -115,7 +113,9 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.ActionableSetPlan;
+import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.OptimisationResult;
+import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.SandboxResult;
 import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 import com.mmxlabs.models.lng.analytics.SolutionOption;
@@ -126,6 +126,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -142,12 +143,12 @@ import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
-import com.mmxlabs.rcp.common.actions.CopyToClipboardActionFactory;
 import com.mmxlabs.rcp.common.actions.IAdditionalAttributeProvider;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.rcp.common.dnd.BasicDragSource;
 import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
+import com.mmxlabs.rcp.common.menus.SubLocalMenuHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
@@ -163,7 +164,7 @@ public class ChangeSetView extends ViewPart {
 
 		final boolean sortByVesselAndDate;
 
-		public ChangeSetComparator(boolean sortByVesselAndDate) {
+		public ChangeSetComparator(final boolean sortByVesselAndDate) {
 			this.sortByVesselAndDate = sortByVesselAndDate;
 		}
 
@@ -180,12 +181,12 @@ public class ChangeSetView extends ViewPart {
 				if (r1.eContainer() == r2.eContainer()) {
 					final ChangeSetTableGroup g = (ChangeSetTableGroup) r1.eContainer();
 					if (sortByVesselAndDate) {
-						String r1Vessel = getEmptyIfNull(getVesselName(r1));
-						String r2Vessel = getEmptyIfNull(getVesselName(r2));
-						int diffVessel = r1Vessel.compareTo(r2Vessel);
+						final String r1Vessel = getEmptyIfNull(getVesselName(r1));
+						final String r2Vessel = getEmptyIfNull(getVesselName(r2));
+						final int diffVessel = r1Vessel.compareTo(r2Vessel);
 						if (diffVessel == 0) {
-							ZonedDateTime date1 = getDate(r1);
-							ZonedDateTime date2 = getDate(r2);
+							final ZonedDateTime date1 = getDate(r1);
+							final ZonedDateTime date2 = getDate(r2);
 							if (date1 != null && date2 != null) {
 								return date1.compareTo(date2);
 							} else if (date1 != null) {
@@ -226,7 +227,7 @@ public class ChangeSetView extends ViewPart {
 			return super.compare(viewer, original_e1, original_e2);
 		}
 
-		private String getVesselName(ChangeSetTableRow row) {
+		private String getVesselName(final ChangeSetTableRow row) {
 			if (row.getAfterVesselName() != null && !row.getAfterVesselName().isEmpty()) {
 				return row.getAfterVesselName();
 			} else if (row.getBeforeVesselName() != null && !row.getBeforeVesselName().isEmpty()) {
@@ -240,7 +241,7 @@ public class ChangeSetView extends ViewPart {
 			return (str == null ? "" : str);
 		}
 
-		private ZonedDateTime getDate(ChangeSetTableRow tableRow) {
+		private ZonedDateTime getDate(final ChangeSetTableRow tableRow) {
 			SlotAllocation slotAllocation = tableRow.getLhsAfter() != null ? tableRow.getLhsAfter().getLoadAllocation() : null;
 			if (slotAllocation == null) {
 				slotAllocation = tableRow.getLhsBefore() != null ? tableRow.getLhsBefore().getLoadAllocation() : null;
@@ -713,7 +714,7 @@ public class ChangeSetView extends ViewPart {
 				selectedElements.add(rowData.getLoadSlot());
 				if (rowData.getLoadAllocation() != null) {
 					selectedElements.add(rowData.getLoadAllocation());
-					SlotVisit slotVisit = rowData.getLoadAllocation().getSlotVisit();
+					final SlotVisit slotVisit = rowData.getLoadAllocation().getSlotVisit();
 					selectedElements.add(slotVisit);
 					if (slotVisit != null) {
 						selectedElements.add(slotVisit.getSequence());
@@ -721,7 +722,7 @@ public class ChangeSetView extends ViewPart {
 				}
 				if (rowData.getDischargeAllocation() != null) {
 					selectedElements.add(rowData.getDischargeAllocation());
-					SlotVisit slotVisit = rowData.getDischargeAllocation().getSlotVisit();
+					final SlotVisit slotVisit = rowData.getDischargeAllocation().getSlotVisit();
 					selectedElements.add(slotVisit);
 					if (slotVisit != null) {
 						selectedElements.add(slotVisit.getSequence());
@@ -1054,9 +1055,7 @@ public class ChangeSetView extends ViewPart {
 		}
 
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_RE_EVALUATE_SOLUTIONS)) {
-			reEvaluateAction = new RunnableAction("Re-evaluate", () ->
-
-			{
+			reEvaluateAction = new RunnableAction("Re-evaluate", () -> {
 				final AnalyticsSolution solution = currentViewState.lastSolution;
 				// solution.
 				if (solution != null) {
@@ -1110,7 +1109,7 @@ public class ChangeSetView extends ViewPart {
 					} else {
 						RunnerHelper.syncExec(new ViewUpdateRunnable(newViewState));
 					}
-				} catch (ScenarioNotEvaluatedException cause) {
+				} catch (final ScenarioNotEvaluatedException cause) {
 					RunnerHelper.asyncExec(new Runnable() {
 						public void run() {
 							MessageDialog.openError(activeShell, "Error opening result", cause.getMessage());
@@ -1343,6 +1342,7 @@ public class ChangeSetView extends ViewPart {
 			final GridItem[] items = grid.getSelection();
 			boolean showMenu = false;
 			final Set<ChangeSetTableRow> directSelectedRows = new LinkedHashSet<>();
+			final Set<ChangeSetTableGroup> directSelectedGroups = new LinkedHashSet<>();
 			if (items.length >= 1) {
 				final Set<ChangeSetTableGroup> selectedSets = new LinkedHashSet<>();
 				final Iterator<?> itr = selection.iterator();
@@ -1351,16 +1351,17 @@ public class ChangeSetView extends ViewPart {
 
 					if (obj instanceof ChangeSetTableGroup) {
 						selectedSets.add((ChangeSetTableGroup) obj);
+						directSelectedGroups.add((ChangeSetTableGroup) obj);
 					} else if (obj instanceof ChangeSetTableRow) {
 						final ChangeSetTableRow changeSetRow = (ChangeSetTableRow) obj;
 						selectedSets.add((ChangeSetTableGroup) changeSetRow.eContainer());
 						directSelectedRows.add(changeSetRow);
 					}
 				}
-				if (selectedSets.size() == 1 && directSelectedRows.isEmpty()) {
+				if (directSelectedGroups.size() == 1 || (selectedSets.size() == 1 && directSelectedRows.isEmpty())) {
 					showMenu |= createExportSolutionMenu(selectedSets);
 					// If we selected a change set group, create this here, other wise it
-					showMenu |= createSandboxMenu(selectedSets);
+					showMenu |= createSandboxMenu(directSelectedGroups, directSelectedRows, selectedSets);
 				}
 				if (ChangeSetView.this.viewMode == ViewMode.SANDBOX && ChangeSetView.this.showToggleAltPNLBaseAction) {
 					showMenu |= createComputeFullSolutionMenus(selectedSets);
@@ -1374,12 +1375,12 @@ public class ChangeSetView extends ViewPart {
 				if (showUserFilterMenus) {
 					showMenu |= insertionPlanFilter.generateMenus(helper, viewer, directSelectedRows, selectedSets, currentViewState.lastTargetSlot);
 				}
-				if (selectedSets.size() == 1 && directSelectedRows.size() >= 1) {
+				if (directSelectedGroups.isEmpty() && (selectedSets.size() == 1 && directSelectedRows.size() >= 1)) {
 					if (helper.hasActions()) {
 						helper.addSeparator();
 					}
 					// If we selected a change set group, create this here, other wise it
-					showMenu |= createSandboxMenu(selectedSets);
+					showMenu |= createSandboxMenu(directSelectedGroups, directSelectedRows, selectedSets);
 				}
 			} else {
 				if (showUserFilterMenus && currentViewState != null) {
@@ -1546,11 +1547,33 @@ public class ChangeSetView extends ViewPart {
 			return false;
 		}
 
-		private boolean createSandboxMenu(final Set<ChangeSetTableGroup> selectedSets) {
+		private boolean createSandboxMenu(final Set<ChangeSetTableGroup> directSelectedGroups, final Set<ChangeSetTableRow> directSelectedRows, final Set<ChangeSetTableGroup> selectedSets) {
 			if (ChangeSetView.this.viewMode != ViewMode.COMPARE && ChangeSetView.this.viewMode != ViewMode.OLD_ACTION_SET) {
 				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_SANDBOX)) {
-					final ChangeSetTableGroup changeSetTableGroup = selectedSets.iterator().next();
-					helper.addAction(new CreateSandboxFromResultAction(changeSetTableGroup, changeSetTableGroup.getDescription()));
+
+					final ChangeSetTableGroup changeSetTableGroup;
+					if (directSelectedGroups.size() == 1) {
+						changeSetTableGroup = directSelectedGroups.iterator().next();
+						helper.addAction(new CreateSandboxFromResultAction(changeSetTableGroup.getRows(), changeSetTableGroup.getDescription(), changeSetTableGroup.getBaseScenario()));
+					} else {
+						changeSetTableGroup = selectedSets.iterator().next();
+						helper.addAction(new CreateSandboxFromResultAction(directSelectedRows, changeSetTableGroup.getDescription(), changeSetTableGroup.getBaseScenario()));
+					}
+					if (false) {
+						final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(changeSetTableGroup.getBaseScenario().getScenarioDataProvider());
+						if (analyticsModel.getOptionModels().size() == 1) {
+							final OptionAnalysisModel sandbox = analyticsModel.getOptionModels().get(0);
+							helper.addAction(new UpdateSandboxFromRowsAction(directSelectedRows, "Add rows to existing " + sandbox.getName(), changeSetTableGroup.getBaseScenario(), sandbox));
+						} else if (analyticsModel.getOptionModels().size() > 1) {
+							final SubLocalMenuHelper subMenu = new SubLocalMenuHelper("Add rows to existing");
+							for (final OptionAnalysisModel sandbox : analyticsModel.getOptionModels()) {
+								subMenu.addAction(new UpdateSandboxFromRowsAction(directSelectedRows, sandbox.getName(), changeSetTableGroup.getBaseScenario(), sandbox));
+							}
+							helper.addSubMenu(subMenu);
+						}
+
+					}
+
 					return true;
 				}
 			}
