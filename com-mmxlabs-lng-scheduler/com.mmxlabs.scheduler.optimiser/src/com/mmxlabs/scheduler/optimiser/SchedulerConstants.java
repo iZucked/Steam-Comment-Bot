@@ -63,4 +63,10 @@ public final class SchedulerConstants {
 	 * Constant linked to an integer hours of idle time before a forced cooldown is no longer classed as "forced" (i.e. no longer a violation)
 	 */
 	public static final String COOLDOWN_MIN_IDLE_HOURS = "cooldown-min-idle-hours";
+	
+	public static final String OPTIMISE_PAPER_PNL = "optimise-paper-pnl";
+	public static final String COMPUTE_EXPOSURES = "compute-exposures";
+	public static final String COMPUTE_PAPER_PNL = "compute-paper-pnl";
+	public static final String RE_HEDGE_WITH_PAPERS = "re-hedge-with-papers";
+	public static final String GENERATED_PAPERS_IN_PNL = "generated-papers-in-pnl";
 }

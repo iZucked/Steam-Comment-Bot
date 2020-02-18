@@ -12,11 +12,13 @@ import com.mmxlabs.models.lng.transformer.extensions.contingencytime.Contingency
 import com.mmxlabs.models.lng.transformer.extensions.contracts.ballastbonus.BallastBonusContractTransformerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.contracts.ballastbonus.BallastBonusExporterExtensionFactory;
 import com.mmxlabs.models.lng.transformer.extensions.entities.EntityTransformerExtensionFactory;
-import com.mmxlabs.models.lng.transformer.extensions.exposures.ExposuresOutputScheduleProcessorFactory;
+import com.mmxlabs.models.lng.transformer.extensions.exposures.ExposureDataModule;
+import com.mmxlabs.models.lng.transformer.extensions.exposures.ExposuresExporterExtensionFactory;
 import com.mmxlabs.models.lng.transformer.extensions.fcl.FullCargoLotModule;
 import com.mmxlabs.models.lng.transformer.extensions.inventory.InventoryLevelsOutputScheduleProcessorFactory;
 import com.mmxlabs.models.lng.transformer.extensions.panamaslots.PanamaSlotsModule;
-import com.mmxlabs.models.lng.transformer.extensions.paperdeals.PaperDealsScheduleProcessorFactory;
+import com.mmxlabs.models.lng.transformer.extensions.paperdeals.PaperDealDataModule;
+import com.mmxlabs.models.lng.transformer.extensions.paperdeals.PaperDealsExporterExtensionFactory;
 import com.mmxlabs.models.lng.transformer.extensions.portshipsizeconstraint.PortShipSizeModule;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsModule;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedslots.RestrictedSlotsModule;
@@ -44,6 +46,8 @@ public class TransformerExtensionsActivatorModule extends PeaberryActivationModu
 		install(new ADPTransformerModule());
 		install(new ShippingTypeRequirementModule());
 		install(new FullCargoLotModule());
+		install(new ExposureDataModule());
+		install(new PaperDealDataModule());
 
 		bindService(SimpleContractTransformerFactory.class).export();
 		bindService(BallastBonusContractTransformerFactory.class).export();
@@ -53,12 +57,13 @@ public class TransformerExtensionsActivatorModule extends PeaberryActivationModu
 		bindService(BasicSlotPNLExporterExtensionFactory.class).export();
 		bindService(BallastBonusExporterExtensionFactory.class).export();
 		
+		bindService(ExposuresExporterExtensionFactory.class).export();
+		bindService(PaperDealsExporterExtensionFactory.class).export();
+		
 		bindService(ActualsTransformerFactory.class).export();
 		
 		bindService(VesselAvailabilityEntityTransformerExtensionFactory.class).export();
 		
-		bindService(ExposuresOutputScheduleProcessorFactory.class).export();
-		bindService(PaperDealsScheduleProcessorFactory.class).export();
 		bindService(InventoryLevelsOutputScheduleProcessorFactory.class).export();
 	}
 

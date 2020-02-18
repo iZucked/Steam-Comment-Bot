@@ -4,14 +4,17 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.common.exposures.BasicExposureRecord;
+import com.mmxlabs.common.paperdeals.BasicPaperDealAllocationEntry;
+import com.mmxlabs.common.paperdeals.BasicPaperDealData;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences.HeelValueRecord;
-import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence.HeelRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.CargoValueAnnotation;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
@@ -20,12 +23,14 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * 
  * Also stores information about cargo allocations and load prices, once they have been filled in and updated.
  * 
- * @author hinton
+ * @author hinton, modified by FM
  * 
  */
 public class ProfitAndLossSequences {
 
 	private final Map<IPortSlot, HeelValueRecord> heelValueRecords = new HashMap<>();
+	private final Map<IPortSlot, OptimiserExposureRecords> exposureRecords = new HashMap<>();
+	private final Map<BasicPaperDealData, List<BasicPaperDealAllocationEntry>> paperDealRecords = new HashMap<>();
 	private final Map<IPortSlot, Long> unusedSlotGroupValue = new HashMap<>();
 	private final Map<VoyagePlan, Long> voyagePlanGroupValue = new HashMap<>();
 
@@ -83,10 +88,13 @@ public class ProfitAndLossSequences {
 			return new HeelValueRecord(cost, costUnitPrice, revenue, revenueUnitPrice);
 		}
 	}
+	
+	public static class OptimiserExposureRecords {
+		public final List<BasicExposureRecord> records = new ArrayList<>();
+	}
 
 	public ProfitAndLossSequences(final @NonNull VolumeAllocatedSequences volumeAllocatedSequences) {
 		this.volumeAllocatedSequences = volumeAllocatedSequences;
-
 	}
 
 	public void setUnusedSlotGroupValue(@NonNull final IPortSlot portSlot, final long groupValue) {
@@ -130,5 +138,37 @@ public class ProfitAndLossSequences {
 
 	public HeelValueRecord getPortHeelRecord(final IPortSlot slot) {
 		return heelValueRecords.getOrDefault(slot, new HeelValueRecord(0, 0, 0, 0));
+	}
+	
+	public void addPortExposureRecord(final IPortSlot slot, final List<BasicExposureRecord> records) {
+		if (exposureRecords.get(slot) != null) {
+			final OptimiserExposureRecords existingRecords = exposureRecords.get(slot);
+			existingRecords.records.addAll(records);
+		} else {
+			final OptimiserExposureRecords newRecords = new OptimiserExposureRecords();
+			newRecords.records.addAll(records);
+			exposureRecords.put(slot, newRecords);
+		}
+	}
+	
+	public OptimiserExposureRecords getPortExposureRecord(final IPortSlot slot) {
+		return exposureRecords.get(slot);
+	}
+	
+	public Map<IPortSlot, OptimiserExposureRecords> getPortExposureRecords(){
+		return exposureRecords;
+	}
+	
+	public void setPaperDealRecords(Map<BasicPaperDealData, List<BasicPaperDealAllocationEntry>> paperDealRecords) {
+		this.paperDealRecords.clear();
+		this.paperDealRecords.putAll(paperDealRecords);
+	}
+	
+	public  List<BasicPaperDealAllocationEntry> getPaperDealAllocationEntries(final BasicPaperDealData paperDeal){
+		return paperDealRecords.get(paperDeal);
+	}
+	
+	public  Map<BasicPaperDealData, List<BasicPaperDealAllocationEntry>> getPaperDealRecords(){
+		return paperDealRecords;
 	}
 }

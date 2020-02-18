@@ -266,8 +266,14 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 						final ScheduleModel scheduleModel = pinned.getTypedResult(ScheduleModel.class);
 						if (scheduleModel != null) {
 							final Schedule schedule = scheduleModel.getSchedule();
+							
 							if (schedule != null) {
-								slotAllocations.addAll(schedule.getPaperDealAllocations());
+								for(final PaperDealAllocation paperDealAllocation : schedule.getPaperDealAllocations()) {
+									final PaperDeal pd = paperDealAllocation.getPaperDeal();
+									if (!schedule.getGeneratedPaperDeals().contains(pd)) {
+										slotAllocations.add(paperDealAllocation);
+									}
+								}
 							}
 						}
 					}
@@ -276,8 +282,14 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 						final ScheduleModel scheduleModel = other.getTypedResult(ScheduleModel.class);
 						if (scheduleModel != null) {
 							final Schedule schedule = scheduleModel.getSchedule();
+							
 							if (schedule != null) {
-								slotAllocations.addAll(schedule.getPaperDealAllocations());
+								for(final PaperDealAllocation paperDealAllocation : schedule.getPaperDealAllocations()) {
+									final PaperDeal pd = paperDealAllocation.getPaperDeal();
+									if (!schedule.getGeneratedPaperDeals().contains(pd)) {
+										slotAllocations.add(paperDealAllocation);
+									}
+								}
 							}
 						}
 					}

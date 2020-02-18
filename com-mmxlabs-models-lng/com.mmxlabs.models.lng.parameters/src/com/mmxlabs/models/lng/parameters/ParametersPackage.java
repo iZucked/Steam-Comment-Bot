@@ -197,13 +197,22 @@ public interface ParametersPackage extends EPackage {
 	int USER_SETTINGS__CLEAN_SLATE_OPTIMISATION = 13;
 
 	/**
+	 * The feature id for the '<em><b>Generated Papers In PNL</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int USER_SETTINGS__GENERATED_PAPERS_IN_PNL = 14;
+
+	/**
 	 * The number of structural features of the '<em>User Settings</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS_FEATURE_COUNT = 14;
+	int USER_SETTINGS_FEATURE_COUNT = 15;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.ObjectiveImpl <em>Objective</em>}' class.
@@ -1676,6 +1685,17 @@ public interface ParametersPackage extends EPackage {
 	EAttribute getUserSettings_CleanSlateOptimisation();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.UserSettings#isGeneratedPapersInPNL <em>Generated Papers In PNL</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Generated Papers In PNL</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.UserSettings#isGeneratedPapersInPNL()
+	 * @see #getUserSettings()
+	 * @generated
+	 */
+	EAttribute getUserSettings_GeneratedPapersInPNL();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.UserSettings#isDualMode <em>Dual Mode</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2598,6 +2618,14 @@ public interface ParametersPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute USER_SETTINGS__CLEAN_SLATE_OPTIMISATION = eINSTANCE.getUserSettings_CleanSlateOptimisation();
+
+		/**
+		 * The meta object literal for the '<em><b>Generated Papers In PNL</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute USER_SETTINGS__GENERATED_PAPERS_IN_PNL = eINSTANCE.getUserSettings_GeneratedPapersInPNL();
 
 		/**
 		 * The meta object literal for the '<em><b>Dual Mode</b></em>' attribute feature.

@@ -263,13 +263,22 @@ public interface SchedulePackage extends EPackage {
 	int SCHEDULE__OTHER_PNL = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 9;
 
 	/**
+	 * The feature id for the '<em><b>Generated Paper Deals</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCHEDULE__GENERATED_PAPER_DEALS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 10;
+
+	/**
 	 * The number of structural features of the '<em>Schedule</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 10;
+	int SCHEDULE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 11;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -7045,6 +7054,17 @@ public interface SchedulePackage extends EPackage {
 	EReference getSchedule_OtherPNL();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.schedule.Schedule#getGeneratedPaperDeals <em>Generated Paper Deals</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Generated Paper Deals</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Schedule#getGeneratedPaperDeals()
+	 * @see #getSchedule()
+	 * @generated
+	 */
+	EReference getSchedule_GeneratedPaperDeals();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.Sequence <em>Sequence</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -9615,6 +9635,14 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EReference SCHEDULE__OTHER_PNL = eINSTANCE.getSchedule_OtherPNL();
+
+		/**
+		 * The meta object literal for the '<em><b>Generated Paper Deals</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SCHEDULE__GENERATED_PAPER_DEALS = eINSTANCE.getSchedule_GeneratedPaperDeals();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.SequenceImpl <em>Sequence</em>}' class.

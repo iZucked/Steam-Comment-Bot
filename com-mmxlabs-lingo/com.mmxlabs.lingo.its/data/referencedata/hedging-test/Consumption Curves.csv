@@ -1,0 +1,999 @@
+class,state,15,16,17,18,19,19.5,12,13,14,20
+Large ship,laden,69.7,80.8,91.9,106.8,124.2,139,,,,
+Large ship,ballast,69.7,80.8,91.9,106.8,124.2,139,,,,
+Medium ship,laden,104,116,132,148,166,187,,,,
+Medium ship,ballast,102,113,129,145,166,187,,,,
+Small ship,laden,124,148,163,179,186,197,,,,
+Small ship,ballast,124,148,163,179,186,197,,,,
+M_1,laden,55.1,62.7,71.7,83.2,98.9,107,,,,
+M_1,ballast,53.5,60.6,69.1,78.6,92.2,99.8,,,,
+M_2,laden,55.1,62.7,71.7,83.2,98.9,107,,,,
+M_2,ballast,53.5,60.6,69.1,78.6,92.2,99.8,,,,
+TFDE_1,laden,69.7,80.8,91.9,106.8,124.2,139,,,,
+TFDE_1,ballast,69.7,80.8,91.9,106.8,124.2,139,,,,
+TFDE_2,laden,68.9,75,91,105.8,123,,,,,
+TFDE_2,ballast,68.9,78,88.6,102.1,118.1,,,,,
+M_3,laden,50.4,57.7,66.3,77.5,92.9,,,,,
+M_3,ballast,48.8,55.6,63.7,72.9,86.2,,,,,
+TFDE_3,laden,70,80,92,107,125,135,,,,
+TFDE_3,ballast,78,89,100,112,126,134,,,,
+TFDE_4,laden,82,88,100,116,130,140,,,,
+TFDE_4,ballast,90,98,106,122,128,138,,,,
+TFDE_5,laden,81,91,101,113,127,135,,,,
+TFDE_5,ballast,79,90,100,110,122,130,,,,
+TFDE_6,laden,75,82,92,109,123,135,,,,
+TFDE_6,ballast,82,92,102,113,122,129,,,,
+TFDE_7,laden,76,84.1,90.8,98.8,121.6,129,,,,
+TFDE_7,ballast,74,80.5,87.6,96.5,116.4,126.8,,,,
+Steam_1,laden,104,116,132,148,166,187,,,,
+Steam_1,ballast,102,113,129,145,166,187,,,,
+DFDE_1,laden,85.2,98.1,113.3,126.7,133,140.2,,,,
+DFDE_1,ballast,84.7,93.4,104.7,116.5,124.5,132.6,,,,
+DFDE_2,laden,68,78,90,105,119,126,,,,
+DFDE_2,ballast,84,87,95,105,119,126,,,,
+Steam_2,laden,124,148,163,179,186,197,,,,
+Steam_2,ballast,124,148,163,179,186,197,,,,
+ST_1,laden,104,115,129,143,160,169,,,,
+ST_1,ballast,102,112,123,135,148,155,,,,
+ST_2,laden,131,139,152,175,180,185,,,,
+ST_2,ballast,127,135,150,170,175,180,,,,
+Aamira,laden,110,,,,150,,,,,
+Aamira,ballast,100,,,,140,,,,,
+Abadi,laden,118,125,145,168,185,,84,95,105,194
+Abadi,ballast,115,125,135,152,167,,76,87,97,182
+Adam Lng,laden,84,97,111,127,146,,60,64,74,
+Adam Lng,ballast,87,101,113,126,143,,55,63,74,
+Al Aamriya,laden,120,126,139,153,164,,,,,
+Al Aamriya,ballast,113,122,132,141,152,,,,,
+Al Areesh,laden,118,125,145,168,185,,84,95,105,205
+Al Areesh,ballast,115,125,135,152,167,,76,87,97,190
+Al Bahiya,laden,120,126,139,153,164,,,,,
+Al Bahiya,ballast,113,122,132,141,152,,,,,
+Al Bidda,laden,118,125,145,168,185,,84,95,105,194
+Al Bidda,ballast,115,125,135,152,167,,76,87,97,182
+Al Daayen,laden,118,125,145,168,185,,84,95,105,205
+Al Daayen,ballast,115,125,135,152,167,,76,87,97,190
+Al Dafna,laden,110,,,,150,,,,,
+Al Dafna,ballast,100,,,,140,,,,,
+Al Deebel,laden,118,125,145,168,185,,84,95,105,194
+Al Deebel,ballast,115,125,135,152,167,,76,87,97,182
+Al Gattara,laden,120,126,139,153,164,,,,,
+Al Gattara,ballast,113,122,132,141,152,,,,,
+Al Ghariya,laden,120,126,139,153,164,,,,,
+Al Ghariya,ballast,113,122,132,141,152,,,,,
+Al Gharrafa,laden,120,126,139,153,164,,,,,
+Al Gharrafa,ballast,113,122,132,141,152,,,,,
+Al Ghashamiya,laden,120,126,139,153,164,,,,,
+Al Ghashamiya,ballast,113,122,132,141,152,,,,,
+Al Ghuwairiya,laden,110,,,,150,,,,,
+Al Ghuwairiya,ballast,100,,,,140,,,,,
+Al Hamla,laden,120,126,139,153,164,,,,,
+Al Hamla,ballast,113,122,132,141,152,,,,,
+Al Hamra,laden,118,125,145,168,185,,84,95,105,194
+Al Hamra,ballast,115,125,135,152,167,,76,87,97,182
+Al Huwaila,laden,120,126,139,153,164,,,,,
+Al Huwaila,ballast,113,122,132,141,152,,,,,
+Al Jasra,laden,118,125,145,168,185,,84,95,105,194
+Al Jasra,ballast,115,125,135,152,167,,76,87,97,182
+Al Jassasiya,laden,118,125,145,168,185,,84,95,105,194
+Al Jassasiya,ballast,115,125,135,152,167,,76,87,97,182
+Al Karaana,laden,120,126,139,153,164,,,,,
+Al Karaana,ballast,113,122,132,141,152,,,,,
+Al Kharaitiyat,laden,120,126,139,153,164,,,,,
+Al Kharaitiyat,ballast,113,122,132,141,152,,,,,
+Al Kharsaah,laden,120,126,139,153,164,,,,,
+Al Kharsaah,ballast,113,122,132,141,152,,,,,
+Al Khattiya,laden,120,126,139,153,164,,,,,
+Al Khattiya,ballast,113,122,132,141,152,,,,,
+Al Khaznah,laden,118,125,145,168,185,,84,95,105,194
+Al Khaznah,ballast,115,125,135,152,167,,76,87,97,182
+Al Khor,laden,118,125,145,168,185,,84,95,105,194
+Al Khor,ballast,115,125,135,152,167,,76,87,97,182
+Al Khuwair,laden,120,126,139,153,164,,,,,
+Al Khuwair,ballast,113,122,132,141,152,,,,,
+Al Mafyar,laden,110,,,,150,,,,,
+Al Mafyar,ballast,100,,,,140,,,,,
+Al Marrouna,laden,127,137,148,164,186,,105,114,122,207
+Al Marrouna,ballast,129,140,153,165,180,,97,107,116,197
+Al Mayeda,laden,110,,,,150,,,,,
+Al Mayeda,ballast,100,,,,140,,,,,
+Al Nuaman,laden,120,126,139,153,164,,,,,
+Al Nuaman,ballast,113,122,132,141,152,,,,,
+Al Oraiq,laden,120,126,139,153,164,,,,,
+Al Oraiq,ballast,113,122,132,141,152,,,,,
+Al Rayyan,laden,118,125,145,168,185,,84,95,105,194
+Al Rayyan,ballast,115,125,135,152,167,,76,87,97,182
+Al Rekayyat,laden,120,126,139,153,164,,,,,
+Al Rekayyat,ballast,113,122,132,141,152,,,,,
+Al Ruwais,laden,120,126,139,153,164,,,,,
+Al Ruwais,ballast,113,122,132,141,152,,,,,
+Al Sadd,laden,120,126,139,153,164,,,,,
+Al Sadd,ballast,113,122,132,141,152,,,,,
+Al Safliya,laden,120,126,139,153,164,,,,,
+Al Safliya,ballast,113,122,132,141,152,,,,,
+Al Sahla,laden,120,126,139,153,164,,,,,
+Al Sahla,ballast,113,122,132,141,152,,,,,
+Al Samriya,laden,110,,,,150,,,,,
+Al Samriya,ballast,100,,,,140,,,,,
+Al Shamal,laden,120,126,139,153,164,,,,,
+Al Shamal,ballast,113,122,132,141,152,,,,,
+Al Sheehaniya,laden,120,126,139,153,164,,,,,
+Al Sheehaniya,ballast,113,122,132,141,152,,,,,
+Al Thakhira,laden,118,125,145,168,185,,84,95,105,194
+Al Thakhira,ballast,115,125,135,152,167,,76,87,97,182
+Al Thumama,laden,120,126,139,153,164,,,,,
+Al Thumama,ballast,113,122,132,141,152,,,,,
+Al Utouriya,laden,120,126,139,153,164,,,,,
+Al Utouriya,ballast,113,122,132,141,152,,,,,
+Al Wajbah,laden,118,125,145,168,185,,84,95,105,194
+Al Wajbah,ballast,115,125,135,152,167,,76,87,97,182
+Al Wakrah,laden,118,125,145,168,185,,84,95,105,194
+Al Wakrah,ballast,115,125,135,152,167,,76,87,97,182
+Al Zubarah,laden,118,125,145,168,185,,84,95,105,194
+Al Zubarah,ballast,115,125,135,152,167,,76,87,97,182
+Alto Acrux,laden,118,125,145,168,185,,84,95,105,205
+Alto Acrux,ballast,115,125,135,152,167,,76,87,97,190
+Amadi,laden,127,137,148,164,186,,105,114,122,207
+Amadi,ballast,129,140,153,165,180,,97,107,116,197
+Amali,laden,123,134,146.5,163,180,,,,,195
+Amali,ballast,119,130,142,158,175,,,,,189
+Amani,laden,74,88,101,117,134,,,,,
+Amani,ballast,70,84,96,110,130,,,,,
+Amur River,laden,118,125,145,168,185,,84,95,105,205
+Amur River,ballast,115,125,135,152,167,,76,87,97,190
+Arctic Aurora,laden,74,88,101,117,134,,,,,
+Arctic Aurora,ballast,70,84,96,110,130,,,,,
+Arctic Discoverer,laden,118,125,145,168,185,,84,95,105,194
+Arctic Discoverer,ballast,115,125,135,152,167,,76,87,97,182
+Arctic Lady,laden,118,125,145,168,185,,84,95,105,205
+Arctic Lady,ballast,115,125,135,152,167,,76,87,97,190
+Arctic Princess,laden,118,125,145,168,185,,84,95,105,205
+Arctic Princess,ballast,115,125,135,152,167,,76,87,97,190
+Arctic Spirit,laden,132,148,165,188,207,,,,,226
+Arctic Spirit,ballast,132,148,165,188,207,,,,,226
+Arctic Voyager,laden,118,125,145,168,185,,84,95,105,194
+Arctic Voyager,ballast,115,125,135,152,167,,76,87,97,182
+Arkat,laden,123,134,146.5,163,180,,,,,195
+Arkat,ballast,119,130,142,158,175,,,,,189
+Armada Lng Mediterrana,laden,132,148,165,188,207,,,,,226
+Armada Lng Mediterrana,ballast,132,148,165,188,207,,,,,226
+Arwa Spirit,laden,84,97,111,127,146,,60,64,74,
+Arwa Spirit,ballast,87,101,113,126,143,,55,63,74,
+Aseem,laden,74,88,101,117,134,,,,,
+Aseem,ballast,70,84,96,110,130,,,,,
+Asia Endeavour,laden,74,88,101,117,134,,,,,
+Asia Endeavour,ballast,70,84,96,110,130,,,,,
+Asia Energy,laden,74,88,101,117,134,,,,,
+Asia Energy,ballast,70,84,96,110,130,,,,,
+Asia Excellence,laden,74,88,101,117,134,,,,,
+Asia Excellence,ballast,70,84,96,110,130,,,,,
+Asia Venture,laden,74,88,101,117,134,,,,,
+Asia Venture,ballast,70,84,96,110,130,,,,,
+Asia Vision,laden,74,88,101,117,134,,,,,
+Asia Vision,ballast,70,84,96,110,130,,,,,
+Atlantic Energy,laden,132,148,165,188,207,,,,,226
+Atlantic Energy,ballast,132,148,165,188,207,,,,,226
+BW Pavilion Leeara,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+BW Pavilion Leeara,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Bachir Chihani,laden,132,148,165,188,207,,,,,226
+Bachir Chihani,ballast,132,148,165,188,207,,,,,226
+Baltic Energy,laden,132,148,165,188,207,,,,,226
+Baltic Energy,ballast,132,148,165,188,207,,,,,226
+Barcelona Knutsen,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Barcelona Knutsen,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Bebatik,laden,132,148,165,188,207,,,,,226
+Bebatik,ballast,132,148,165,188,207,,,,,226
+Beidou Star,laden,46.2,53.2,60.9,70.2,83.5,,30.2,34.6,40,87.5
+Beidou Star,ballast,45.6,52.2,59.4,67.4,78.9,,30,34.4,39.7,83
+Belanak,laden,132,148,165,188,207,,,,,226
+Belanak,ballast,132,148,165,188,207,,,,,226
+Berge Arzew,laden,118,125,145,168,185,,84,95,105,194
+Berge Arzew,ballast,115,125,135,152,167,,76,87,97,182
+Bilbao Knutsen,laden,118,125,145,168,185,,84,95,105,194
+Bilbao Knutsen,ballast,115,125,135,152,167,,76,87,97,182
+British Diamond,laden,123,134,146.5,163,180,,,,,195
+British Diamond,ballast,119,130,142,158,175,,,,,189
+British Emerald,laden,74,88,101,117,134,,,,,
+British Emerald,ballast,70,84,96,110,130,,,,,
+British Innovator,laden,118,125,145,168,185,,84,95,105,194
+British Innovator,ballast,115,125,135,152,167,,76,87,97,182
+British Merchant,laden,118,125,145,168,185,,84,95,105,194
+British Merchant,ballast,115,125,135,152,167,,76,87,97,182
+British Ruby,laden,74,88,101,117,134,,,,,
+British Ruby,ballast,70,84,96,110,130,,,,,
+British Sapphire,laden,74,88,101,117,134,,,,,
+British Sapphire,ballast,70,84,96,110,130,,,,,
+British Trader,laden,118,125,145,168,185,,84,95,105,194
+British Trader,ballast,115,125,135,152,167,,76,87,97,182
+Broog,laden,118,125,145,168,185,,84,95,105,194
+Broog,ballast,115,125,135,152,167,,76,87,97,182
+Bu Samra,laden,110,,,,150,,,,,
+Bu Samra,ballast,100,,,,140,,,,,
+Bw Gdf Suez Boston,laden,118,125,145,168,185,,84,95,105,194
+Bw Gdf Suez Boston,ballast,115,125,135,152,167,,76,87,97,182
+Bw Gdf Suez Brussels,laden,84,97,111,127,146,,60,64,74,
+Bw Gdf Suez Brussels,ballast,87,101,113,126,143,,55,63,74,
+Bw Gdf Suez Everett,laden,118,125,145,168,185,,84,95,105,194
+Bw Gdf Suez Everett,ballast,115,125,135,152,167,,76,87,97,182
+Bw Gdf Suez Paris,laden,84,97,111,127,146,,60,64,74,
+Bw Gdf Suez Paris,ballast,87,101,113,126,143,,55,63,74,
+Bw Integrity,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Bw Integrity,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Bw Pavilion Vanda,laden,84,97,111,127,146,,60,64,74,
+Bw Pavilion Vanda,ballast,87,101,113,126,143,,55,63,74,
+Bw Singapore,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Bw Singapore,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Cadiz Knutsen,laden,118,125,145,168,185,,84,95,105,194
+Cadiz Knutsen,ballast,115,125,135,152,167,,76,87,97,182
+Castillo De Santisteban,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Castillo De Santisteban,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Castillo De Villalba,laden,118,125,145,168,185,,84,95,105,194
+Castillo De Villalba,ballast,115,125,135,152,167,,76,87,97,182
+Catalunya Spirit,laden,118,125,145,168,185,,84,95,105,194
+Catalunya Spirit,ballast,115,125,135,152,167,,76,87,97,182
+Celestine River,laden,118,125,145,168,185,,84,95,105,205
+Celestine River,ballast,115,125,135,152,167,,76,87,97,190
+Cesi Gladstone,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Cesi Gladstone,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Cesi Qingdao,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Cesi Qingdao,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Cheikh Bouamama,laden,132,148,165,188,207,,,,,226
+Cheikh Bouamama,ballast,132,148,165,188,207,,,,,226
+Cheikh El Mokrani,laden,132,148,165,188,207,,,,,226
+Cheikh El Mokrani,ballast,132,148,165,188,207,,,,,226
+Christophe De Margerie,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Christophe De Margerie,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Clean Energy,laden,127,137,148,164,186,,105,114,122,207
+Clean Energy,ballast,129,140,153,165,180,,97,107,116,197
+Clean Horizon,laden,84,97,111,127,146,,60,64,74,
+Clean Horizon,ballast,87,101,113,126,143,,55,63,74,
+Clean Ocean,laden,84,97,111,127,146,,60,64,74,
+Clean Ocean,ballast,87,101,113,126,143,,55,63,74,
+Clean Planet,laden,84,97,111,127,146,,60,64,74,
+Clean Planet,ballast,87,101,113,126,143,,55,63,74,
+Clean Vision,laden,84,97,111,127,146,,60,64,74,
+Clean Vision,ballast,87,101,113,126,143,,55,63,74,
+Cool Explorer,laden,84,97,111,127,146,,60,64,74,
+Cool Explorer,ballast,87,101,113,126,143,,55,63,74,
+Cool Runner,laden,84,97,111,127,146,,60,64,74,
+Cool Runner,ballast,87,101,113,126,143,,55,63,74,
+Cool Voyager,laden,84,97,111,127,146,,60,64,74,
+Cool Voyager,ballast,87,101,113,126,143,,55,63,74,
+Corcovado,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Corcovado,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Creole Spirit,laden,46.2,53.2,60.9,70.2,83.5,,30.2,34.6,40,87.5
+Creole Spirit,ballast,45.6,52.2,59.4,67.4,78.9,,30,34.4,39.7,83
+Cubal,laden,74,88,101,117,134,,,,,
+Cubal,ballast,70,84,96,110,130,,,,,
+Cygnus Passage,laden,118,125,145,168,185,,84,95,105,205
+Cygnus Passage,ballast,115,125,135,152,167,,76,87,97,190
+Dapeng Moon,laden,118,125,145,168,185,,84,95,105,205
+Dapeng Moon,ballast,115,125,135,152,167,,76,87,97,190
+Dapeng Star,laden,118,125,145,168,185,,84,95,105,205
+Dapeng Star,ballast,115,125,135,152,167,,76,87,97,190
+Dapeng Sun,laden,118,125,145,168,185,,84,95,105,205
+Dapeng Sun,ballast,115,125,135,152,167,,76,87,97,190
+Disha,laden,118,125,145,168,185,,84,95,105,194
+Disha,ballast,115,125,135,152,167,,76,87,97,182
+Doha,laden,118,125,145,168,185,,84,95,105,194
+Doha,ballast,115,125,135,152,167,,76,87,97,182
+Duhail,laden,120,126,139,153,164,,,,,
+Duhail,ballast,113,122,132,141,152,,,,,
+Dukhan,laden,118,125,145,168,185,,84,95,105,194
+Dukhan,ballast,115,125,135,152,167,,76,87,97,182
+Dwiputra,laden,132,148,165,188,207,,,,,226
+Dwiputra,ballast,132,148,165,188,207,,,,,226
+East Energy,laden,132,148,165,188,207,,,,,226
+East Energy,ballast,132,148,165,188,207,,,,,226
+Echigo Maru,laden,132,148,165,188,207,,,,,226
+Echigo Maru,ballast,132,148,165,188,207,,,,,226
+Ejnan,laden,118,125,145,168,185,,84,95,105,194
+Ejnan,ballast,115,125,135,152,167,,76,87,97,182
+Ekaputra 1,laden,118,125,145,168,185,,84,95,105,194
+Ekaputra 1,ballast,115,125,135,152,167,,76,87,97,182
+Energy Advance,laden,118,125,145,168,185,,84,95,105,205
+Energy Advance,ballast,115,125,135,152,167,,76,87,97,190
+Energy Atlantic,laden,74,88,101,117,134,,,,,
+Energy Atlantic,ballast,70,84,96,110,130,,,,,
+Energy Confidence,laden,127,137,148,164,186,,105,114,122,207
+Energy Confidence,ballast,129,140,153,165,180,,97,107,116,197
+Energy Frontier,laden,118,125,145,168,185,,84,95,105,205
+Energy Frontier,ballast,115,125,135,152,167,,76,87,97,190
+Energy Horizon,laden,127,137,148,164,186,,105,114,122,207
+Energy Horizon,ballast,129,140,153,165,180,,97,107,116,197
+Energy Navigator,laden,118,125,145,168,185,,84,95,105,205
+Energy Navigator,ballast,115,125,135,152,167,,76,87,97,190
+Energy Progress,laden,118,125,145,168,185,,84,95,105,205
+Energy Progress,ballast,115,125,135,152,167,,76,87,97,190
+Esshu Maru,laden,127,137,148,164,186,,105,114,122,207
+Esshu Maru,ballast,129,140,153,165,180,,97,107,116,197
+Excalibur,laden,118,125,145,168,185,,84,95,105,194
+Excalibur,ballast,115,125,135,152,167,,76,87,97,182
+Excel,laden,118,125,145,168,185,,84,95,105,194
+Excel,ballast,115,125,135,152,167,,76,87,97,182
+Excelerate,laden,118,125,145,168,185,,84,95,105,194
+Excelerate,ballast,115,125,135,152,167,,76,87,97,182
+Excellence,laden,118,125,145,168,185,,84,95,105,194
+Excellence,ballast,115,125,135,152,167,,76,87,97,182
+Excelsior,laden,118,125,145,168,185,,84,95,105,194
+Excelsior,ballast,115,125,135,152,167,,76,87,97,182
+Exemplar,laden,127,137,148,164,186,,105,114,122,207
+Exemplar,ballast,129,140,153,165,180,,97,107,116,197
+Expedient,laden,118,125,145,168,185,,84,95,105,205
+Expedient,ballast,115,125,135,152,167,,76,87,97,190
+Experience,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Experience,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Explorer,laden,127,137,148,164,186,,105,114,122,207
+Explorer,ballast,129,140,153,165,180,,97,107,116,197
+Express,laden,127,137,148,164,186,,105,114,122,207
+Express,ballast,129,140,153,165,180,,97,107,116,197
+Exquisite,laden,127,137,148,164,186,,105,114,122,207
+Exquisite,ballast,129,140,153,165,180,,97,107,116,197
+Fortune Fsu,laden,132,148,165,188,207,,,,,226
+Fortune Fsu,ballast,132,148,165,188,207,,,,,226
+Fraiha,laden,120,126,139,153,164,,,,,
+Fraiha,ballast,113,122,132,141,152,,,,,
+Fsru Toscana,laden,118,125,145,168,185,,84,95,105,194
+Fsru Toscana,ballast,115,125,135,152,167,,76,87,97,182
+Fuji Lng,laden,118,125,145,168,185,,84,95,105,205
+Fuji Lng,ballast,115,125,135,152,167,,76,87,97,190
+Fuwairit,laden,118,125,145,168,185,,84,95,105,194
+Fuwairit,ballast,115,125,135,152,167,,76,87,97,182
+Gaea,laden,132,148,165,188,207,,,,,226
+Gaea,ballast,132,148,165,188,207,,,,,226
+Galea,laden,118,125,145,168,185,,84,95,105,194
+Galea,ballast,115,125,135,152,167,,76,87,97,182
+Galicia Spirit,laden,118,125,145,168,185,,84,95,105,194
+Galicia Spirit,ballast,115,125,135,152,167,,76,87,97,182
+Gallina,laden,118,125,145,168,185,,84,95,105,194
+Gallina,ballast,115,125,135,152,167,,76,87,97,182
+Gandria,laden,132,148,165,188,207,,,,,226
+Gandria,ballast,132,148,165,188,207,,,,,226
+Gaselys,laden,123,134,146.5,163,180,,,,,195
+Gaselys,ballast,119,130,142,158,175,,,,,189
+Gaslog Chelsea,laden,123,134,146.5,163,180,,,,,195
+Gaslog Chelsea,ballast,119,130,142,158,175,,,,,189
+Gaslog Geneva,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Gaslog Geneva,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Gaslog Gibraltar,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Gaslog Gibraltar,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Gaslog Glasgow,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Gaslog Glasgow,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Gaslog Greece,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Gaslog Greece,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Gaslog Salem,laden,74,88,101,117,134,,,,,
+Gaslog Salem,ballast,70,84,96,110,130,,,,,
+Gaslog Santiago,laden,74,88,101,117,134,,,,,
+Gaslog Santiago,ballast,70,84,96,110,130,,,,,
+Gaslog Saratoga,laden,74,88,101,117,134,,,,,
+Gaslog Saratoga,ballast,70,84,96,110,130,,,,,
+Gaslog Savannah,laden,74,88,101,117,134,,,,,
+Gaslog Savannah,ballast,70,84,96,110,130,,,,,
+Gaslog Seattle,laden,74,88,101,117,134,,,,,
+Gaslog Seattle,ballast,70,84,96,110,130,,,,,
+Gaslog Shanghai,laden,74,88,101,117,134,,,,,
+Gaslog Shanghai,ballast,70,84,96,110,130,,,,,
+Gaslog Singapore,laden,74,88,101,117,134,,,,,
+Gaslog Singapore,ballast,70,84,96,110,130,,,,,
+Gaslog Skagen,laden,74,88,101,117,134,,,,,
+Gaslog Skagen,ballast,70,84,96,110,130,,,,,
+Gaslog Sydney,laden,74,88,101,117,134,,,,,
+Gaslog Sydney,ballast,70,84,96,110,130,,,,,
+Gdf Suez Cape Ann,laden,123,134,146.5,163,180,,,,,195
+Gdf Suez Cape Ann,ballast,119,130,142,158,175,,,,,189
+Gdf Suez Global Energy,laden,132,148,165,188,207,,,,,226
+Gdf Suez Global Energy,ballast,132,148,165,188,207,,,,,226
+Gdf Suez Point Fortin,laden,127,137,148,164,186,,105,114,122,207
+Gdf Suez Point Fortin,ballast,129,140,153,165,180,,97,107,116,197
+Gemmata,laden,118,125,145,168,185,,84,95,105,194
+Gemmata,ballast,115,125,135,152,167,,76,87,97,182
+Ghasha,laden,118,125,145,168,185,,84,95,105,194
+Ghasha,ballast,115,125,135,152,167,,76,87,97,182
+Gigira Laitebo,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Gigira Laitebo,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Gimi,laden,132,148,165,188,207,,,,,226
+Gimi,ballast,132,148,165,188,207,,,,,226
+Golar Arctic,laden,118,125,145,168,185,,84,95,105,194
+Golar Arctic,ballast,115,125,135,152,167,,76,87,97,182
+Golar Bear,laden,84,97,111,127,146,,60,64,74,
+Golar Bear,ballast,87,101,113,126,143,,55,63,74,
+Golar Celsius,laden,84,97,111,127,146,,60,64,74,
+Golar Celsius,ballast,87,101,113,126,143,,55,63,74,
+Golar Crystal,laden,84,97,111,127,146,,60,64,74,
+Golar Crystal,ballast,87,101,113,126,143,,55,63,74,
+Golar Eskimo,laden,84,97,111,127,146,,60,64,74,
+Golar Eskimo,ballast,87,101,113,126,143,,55,63,74,
+Golar Freeze,laden,132,148,165,188,207,,,,,226
+Golar Freeze,ballast,132,148,165,188,207,,,,,226
+Golar Frost,laden,84,97,111,127,146,,60,64,74,
+Golar Frost,ballast,87,101,113,126,143,,55,63,74,
+Golar Glacier,laden,84,97,111,127,146,,60,64,74,
+Golar Glacier,ballast,87,101,113,126,143,,55,63,74,
+Golar Grand,laden,118,125,145,168,185,,84,95,105,205
+Golar Grand,ballast,115,125,135,152,167,,76,87,97,190
+Golar Ice,laden,84,97,111,127,146,,60,64,74,
+Golar Ice,ballast,87,101,113,126,143,,55,63,74,
+Golar Igloo,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Golar Igloo,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Golar Kelvin,laden,84,97,111,127,146,,60,64,74,
+Golar Kelvin,ballast,87,101,113,126,143,,55,63,74,
+Golar Maria,laden,118,125,145,168,185,,84,95,105,205
+Golar Maria,ballast,115,125,135,152,167,,76,87,97,190
+Golar Mazo,laden,118,125,145,168,185,,84,95,105,194
+Golar Mazo,ballast,115,125,135,152,167,,76,87,97,182
+Golar Nanook,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Golar Nanook,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Golar Penguin,laden,74,88,101,117,134,,,,,
+Golar Penguin,ballast,70,84,96,110,130,,,,,
+Golar Seal,laden,84,97,111,127,146,,60,64,74,
+Golar Seal,ballast,87,101,113,126,143,,55,63,74,
+Golar Snow,laden,84,97,111,127,146,,60,64,74,
+Golar Snow,ballast,87,101,113,126,143,,55,63,74,
+Golar Spirit,laden,132,148,165,188,207,,,,,226
+Golar Spirit,ballast,132,148,165,188,207,,,,,226
+Golar Tundra,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Golar Tundra,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Golar Viking,laden,118,125,145,168,185,,84,95,105,194
+Golar Viking,ballast,115,125,135,152,167,,76,87,97,182
+Golar Winter,laden,118,125,145,168,185,,84,95,105,194
+Golar Winter,ballast,115,125,135,152,167,,76,87,97,182
+Grace Acacia,laden,118,125,145,168,185,,84,95,105,205
+Grace Acacia,ballast,115,125,135,152,167,,76,87,97,190
+Grace Barleria,laden,118,125,145,168,185,,84,95,105,205
+Grace Barleria,ballast,115,125,135,152,167,,76,87,97,190
+Grace Cosmos,laden,118,125,145,168,185,,84,95,105,205
+Grace Cosmos,ballast,115,125,135,152,167,,76,87,97,190
+Grace Dahlia,laden,127,137,148,164,186,,105,114,122,207
+Grace Dahlia,ballast,129,140,153,165,180,,97,107,116,197
+Grace Energy,laden,132,148,165,188,207,,,,,226
+Grace Energy,ballast,132,148,165,188,207,,,,,226
+Grand Aniva,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Grand Aniva,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Grand Elena,laden,118,125,145,168,185,,84,95,105,205
+Grand Elena,ballast,115,125,135,152,167,,76,87,97,190
+Grand Mereya,laden,118,125,145,168,185,,84,95,105,205
+Grand Mereya,ballast,115,125,135,152,167,,76,87,97,190
+Hanjin Muscat,laden,118,125,145,168,185,,84,95,105,194
+Hanjin Muscat,ballast,115,125,135,152,167,,76,87,97,182
+Hanjin Pyeong Taek,laden,132,148,165,188,207,,,,,226
+Hanjin Pyeong Taek,ballast,132,148,165,188,207,,,,,226
+Hanjin Ras Laffan,laden,118,125,145,168,185,,84,95,105,194
+Hanjin Ras Laffan,ballast,115,125,135,152,167,,76,87,97,182
+Hanjin Sur,laden,118,125,145,168,185,,84,95,105,194
+Hanjin Sur,ballast,115,125,135,152,167,,76,87,97,182
+Hilli Episeyo,laden,132,148,165,188,207,,,,,226
+Hilli Episeyo,ballast,132,148,165,188,207,,,,,226
+Hispania Spirit,laden,118,125,145,168,185,,84,95,105,194
+Hispania Spirit,ballast,115,125,135,152,167,,76,87,97,182
+Hoegh Gallant,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Hoegh Gallant,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Hoegh Grace,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Hoegh Grace,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Hyundai Aquapia,laden,118,125,145,168,185,,84,95,105,194
+Hyundai Aquapia,ballast,115,125,135,152,167,,76,87,97,182
+Hyundai Cosmopia,laden,118,125,145,168,185,,84,95,105,194
+Hyundai Cosmopia,ballast,115,125,135,152,167,,76,87,97,182
+Hyundai Ecopia,laden,118,125,145,168,185,,84,95,105,205
+Hyundai Ecopia,ballast,115,125,135,152,167,,76,87,97,190
+Hyundai Greenpia,laden,132,148,165,188,207,,,,,226
+Hyundai Greenpia,ballast,132,148,165,188,207,,,,,226
+Hyundai Oceanpia,laden,118,125,145,168,185,,84,95,105,194
+Hyundai Oceanpia,ballast,115,125,135,152,167,,76,87,97,182
+Hyundai Technopia,laden,118,125,145,168,185,,84,95,105,194
+Hyundai Technopia,ballast,115,125,135,152,167,,76,87,97,182
+Hyundai Utopia,laden,132,148,165,188,207,,,,,226
+Hyundai Utopia,ballast,132,148,165,188,207,,,,,226
+Iberica Knutsen,laden,118,125,145,168,185,,84,95,105,194
+Iberica Knutsen,ballast,115,125,135,152,167,,76,87,97,182
+Ibra Lng,laden,118,125,145,168,185,,84,95,105,205
+Ibra Lng,ballast,115,125,135,152,167,,76,87,97,190
+Ibri Lng,laden,118,125,145,168,185,,84,95,105,205
+Ibri Lng,ballast,115,125,135,152,167,,76,87,97,190
+Independence,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Independence,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Ish,laden,118,125,145,168,185,,84,95,105,194
+Ish,ballast,115,125,135,152,167,,76,87,97,182
+K. Acacia,laden,118,125,145,168,185,,84,95,105,194
+K. Acacia,ballast,115,125,135,152,167,,76,87,97,182
+K. Freesia,laden,118,125,145,168,185,,84,95,105,194
+K. Freesia,ballast,115,125,135,152,167,,76,87,97,182
+K. Jasmine,laden,118,125,145,168,185,,84,95,105,194
+K. Jasmine,ballast,115,125,135,152,167,,76,87,97,182
+K. Mugungwha,laden,118,125,145,168,185,,84,95,105,205
+K. Mugungwha,ballast,115,125,135,152,167,,76,87,97,190
+Kita Lng,laden,84,97,111,127,146,,60,64,74,
+Kita Lng,ballast,87,101,113,126,143,,55,63,74,
+Kumul,laden,120,126,139,153,164,,,,,
+Kumul,ballast,113,122,132,141,152,,,,,
+La Mancha Knutsen,laden,46.2,53.2,60.9,70.2,83.5,,30.2,34.6,40,87.5
+La Mancha Knutsen,ballast,45.6,52.2,59.4,67.4,78.9,,30,34.4,39.7,83
+Lalla Fatma N'Soumer,laden,118,125,145,168,185,,84,95,105,205
+Lalla Fatma N'Soumer,ballast,115,125,135,152,167,,76,87,97,190
+Larbi Ben M'Hidi,laden,132,148,165,188,207,,,,,226
+Larbi Ben M'Hidi,ballast,132,148,165,188,207,,,,,226
+Lena River,laden,74,88,101,117,134,,,,,
+Lena River,ballast,70,84,96,110,130,,,,,
+Lijmiliya,laden,110,,,,150,,,,,
+Lijmiliya,ballast,100,,,,140,,,,,
+Lng Abalamabie,laden,46.2,53.2,60.9,70.2,83.5,,30.2,34.6,40,87.5
+Lng Abalamabie,ballast,45.6,52.2,59.4,67.4,78.9,,30,34.4,39.7,83
+Lng Abuja Ii,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Lng Abuja Ii,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Lng Adamawa,laden,118,125,145,168,185,,84,95,105,194
+Lng Adamawa,ballast,115,125,135,152,167,,76,87,97,182
+Lng Akwa Ibom,laden,118,125,145,168,185,,84,95,105,194
+Lng Akwa Ibom,ballast,115,125,135,152,167,,76,87,97,182
+Lng Aquarius,laden,132,148,165,188,207,,,,,226
+Lng Aquarius,ballast,132,148,165,188,207,,,,,226
+Lng Barka,laden,127,137,148,164,186,,105,114,122,207
+Lng Barka,ballast,129,140,153,165,180,,97,107,116,197
+Lng Bayelsa,laden,118,125,145,168,185,,84,95,105,194
+Lng Bayelsa,ballast,115,125,135,152,167,,76,87,97,182
+Lng Benue,laden,118,125,145,168,185,,84,95,105,194
+Lng Benue,ballast,115,125,135,152,167,,76,87,97,182
+Lng Bonny Ii,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Lng Bonny Ii,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Lng Borno,laden,127,137,148,164,186,,105,114,122,207
+Lng Borno,ballast,129,140,153,165,180,,97,107,116,197
+Lng Capricorn,laden,132,148,165,188,207,,,,,226
+Lng Capricorn,ballast,132,148,165,188,207,,,,,226
+Lng Cross River,laden,118,125,145,168,185,,84,95,105,194
+Lng Cross River,ballast,115,125,135,152,167,,76,87,97,182
+Lng Dream,laden,118,125,145,168,185,,84,95,105,205
+Lng Dream,ballast,115,125,135,152,167,,76,87,97,190
+Lng Ebisu,laden,118,125,145,168,185,,84,95,105,205
+Lng Ebisu,ballast,115,125,135,152,167,,76,87,97,190
+Lng Enugu,laden,118,125,145,168,185,,84,95,105,194
+Lng Enugu,ballast,115,125,135,152,167,,76,87,97,182
+Lng Finima Ii,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Lng Finima Ii,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Lng Flora,laden,132,148,165,188,207,,,,,226
+Lng Flora,ballast,132,148,165,188,207,,,,,226
+Lng Fukurokuju,laden,127,137,148,164,186,,105,114,122,207
+Lng Fukurokuju,ballast,129,140,153,165,180,,97,107,116,197
+Lng Gemini,laden,132,148,165,188,207,,,,,226
+Lng Gemini,ballast,132,148,165,188,207,,,,,226
+Lng Imo,laden,118,125,145,168,185,,84,95,105,205
+Lng Imo,ballast,115,125,135,152,167,,76,87,97,190
+Lng Jamal,laden,118,125,145,168,185,,84,95,105,194
+Lng Jamal,ballast,115,125,135,152,167,,76,87,97,182
+Lng Jupiter,laden,127,137,148,164,186,,105,114,122,207
+Lng Jupiter,ballast,129,140,153,165,180,,97,107,116,197
+Lng Jurojin,laden,127,137,148,164,186,,105,114,122,207
+Lng Jurojin,ballast,129,140,153,165,180,,97,107,116,197
+Lng Kano,laden,118,125,145,168,185,,84,95,105,205
+Lng Kano,ballast,115,125,135,152,167,,76,87,97,190
+Lng Kolt,laden,127,137,148,164,186,,105,114,122,207
+Lng Kolt,ballast,129,140,153,165,180,,97,107,116,197
+Lng Lagos Ii,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Lng Lagos Ii,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Lng Leo,laden,132,148,165,188,207,,,,,226
+Lng Leo,ballast,132,148,165,188,207,,,,,226
+Lng Lerici,laden,132,148,165,188,207,,,,,226
+Lng Lerici,ballast,132,148,165,188,207,,,,,226
+Lng Libra,laden,132,148,165,188,207,,,,,226
+Lng Libra,ballast,132,148,165,188,207,,,,,226
+Lng Lokoja,laden,118,125,145,168,185,,84,95,105,205
+Lng Lokoja,ballast,115,125,135,152,167,,76,87,97,190
+Lng Maleo,laden,132,148,165,188,207,,,,,226
+Lng Maleo,ballast,132,148,165,188,207,,,,,226
+Lng Mars,laden,127,137,148,164,186,,105,114,122,207
+Lng Mars,ballast,129,140,153,165,180,,97,107,116,197
+Lng Ogun,laden,127,137,148,164,186,,105,114,122,207
+Lng Ogun,ballast,129,140,153,165,180,,97,107,116,197
+Lng Ondo,laden,118,125,145,168,185,,84,95,105,205
+Lng Ondo,ballast,115,125,135,152,167,,76,87,97,190
+Lng Oyo,laden,118,125,145,168,185,,84,95,105,194
+Lng Oyo,ballast,115,125,135,152,167,,76,87,97,182
+Lng Pioneer,laden,118,125,145,168,185,,84,95,105,194
+Lng Pioneer,ballast,115,125,135,152,167,,76,87,97,182
+Lng Port-Harcourt Ii,laden,46.2,53.2,60.9,70.2,83.5,,30.2,34.6,40,87.5
+Lng Port-Harcourt Ii,ballast,45.6,52.2,59.4,67.4,78.9,,30,34.4,39.7,83
+Lng Portovenere,laden,132,148,165,188,207,,,,,226
+Lng Portovenere,ballast,132,148,165,188,207,,,,,226
+Lng River Niger,laden,118,125,145,168,185,,84,95,105,194
+Lng River Niger,ballast,115,125,135,152,167,,76,87,97,182
+Lng River Orashi,laden,118,125,145,168,185,,84,95,105,194
+Lng River Orashi,ballast,115,125,135,152,167,,76,87,97,182
+Lng Rivers,laden,118,125,145,168,185,,84,95,105,194
+Lng Rivers,ballast,115,125,135,152,167,,76,87,97,182
+Lng Saturn,laden,127,137,148,164,186,,105,114,122,207
+Lng Saturn,ballast,129,140,153,165,180,,97,107,116,197
+Lng Sokoto,laden,118,125,145,168,185,,84,95,105,194
+Lng Sokoto,ballast,115,125,135,152,167,,76,87,97,182
+Lng Taurus,laden,132,148,165,188,207,,,,,226
+Lng Taurus,ballast,132,148,165,188,207,,,,,226
+Lng Venus,laden,127,137,148,164,186,,105,114,122,207
+Lng Venus,ballast,129,140,153,165,180,,97,107,116,197
+Lng Vesta,laden,132,148,165,188,207,,,,,226
+Lng Vesta,ballast,132,148,165,188,207,,,,,226
+Lng Virgo,laden,132,148,165,188,207,,,,,226
+Lng Virgo,ballast,132,148,165,188,207,,,,,226
+Lobito,laden,74,88,101,117,134,,,,,
+Lobito,ballast,70,84,96,110,130,,,,,
+Lucky Fsu,laden,132,148,165,188,207,,,,,226
+Lucky Fsu,ballast,132,148,165,188,207,,,,,226
+Lusail,laden,118,125,145,168,185,,84,95,105,194
+Lusail,ballast,115,125,135,152,167,,76,87,97,182
+MEGI_176,laden,46.2,53.2,60.9,70.2,83.5,,30.2,34.6,40,87.5
+MEGI_176,ballast,45.6,52.2,59.4,67.4,78.9,,30,34.4,39.7,83
+MG Lindos,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+MG Lindos,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Madrid Spirit,laden,118,125,145,168,185,,84,95,105,194
+Madrid Spirit,ballast,115,125,135,152,167,,76,87,97,182
+Magellan Spirit,laden,84,97,111,127,146,,60,64,74,
+Magellan Spirit,ballast,87,101,113,126,143,,55,63,74,
+Malanje,laden,74,88,101,117,134,,,,,
+Malanje,ballast,70,84,96,110,130,,,,,
+Maran Gas Achilles,laden,46.2,53.2,60.9,70.2,83.5,,30.2,34.6,40,87.5
+Maran Gas Achilles,ballast,45.6,52.2,59.4,67.4,78.9,,30,34.4,39.7,83
+Maran Gas Agamemnon,laden,46.2,53.2,60.9,70.2,83.5,,30.2,34.6,40,87.5
+Maran Gas Agamemnon,ballast,45.6,52.2,59.4,67.4,78.9,,30,34.4,39.7,83
+Maran Gas Alexandria,laden,85,94,102,112,128,,65,65,75,138
+Maran Gas Alexandria,ballast,79,88,99,111,121,,61,61,70,133
+Maran Gas Amphipolis,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Maran Gas Amphipolis,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Maran Gas Apollonia,laden,85,94,102,112,128,,65,65,75,138
+Maran Gas Apollonia,ballast,79,88,99,111,121,,61,61,70,133
+Maran Gas Asclepius,laden,118,125,145,168,185,,84,95,105,194
+Maran Gas Asclepius,ballast,115,125,135,152,167,,76,87,97,182
+Maran Gas Coronis,laden,118,125,145,168,185,,84,95,105,194
+Maran Gas Coronis,ballast,115,125,135,152,167,,76,87,97,182
+Maran Gas Delphi,laden,84,97,111,127,146,,60,64,74,
+Maran Gas Delphi,ballast,87,101,113,126,143,,55,63,74,
+Maran Gas Efessos,laden,84,97,111,127,146,,60,64,74,
+Maran Gas Efessos,ballast,87,101,113,126,143,,55,63,74,
+Maran Gas Hector,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Maran Gas Hector,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Maran Gas Mystras,laden,84,97,111,127,146,,60,64,74,
+Maran Gas Mystras,ballast,87,101,113,126,143,,55,63,74,
+Maran Gas Olympias,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Maran Gas Olympias,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Maran Gas Pericles,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Maran Gas Pericles,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Maran Gas Posidonia,laden,85,94,102,112,128,,65,65,75,138
+Maran Gas Posidonia,ballast,79,88,99,111,121,,61,61,70,133
+Maran Gas Roxana,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Maran Gas Roxana,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Maran Gas Sparta,laden,84,97,111,127,146,,60,64,74,
+Maran Gas Sparta,ballast,87,101,113,126,143,,55,63,74,
+Maran Gas Troy,laden,84,97,111,127,146,,60,64,74,
+Maran Gas Troy,ballast,87,101,113,126,143,,55,63,74,
+Maria Energy,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Maria Energy,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Marib Spirit,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Marib Spirit,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Matthew,laden,132,148,165,188,207,,,,,226
+Matthew,ballast,132,148,165,188,207,,,,,226
+Mekaines,laden,110,,,,150,,,,,
+Mekaines,ballast,100,,,,140,,,,,
+Meridian Spirit,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Meridian Spirit,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Mesaimeer,laden,120,126,139,153,164,,,,,
+Mesaimeer,ballast,113,122,132,141,152,,,,,
+Methane Alison Victoria,laden,118,125,145,168,185,,84,95,105,205
+Methane Alison Victoria,ballast,115,125,135,152,167,,76,87,97,190
+Methane Becki Anne,laden,85,94,102,112,128,,65,65,75,138
+Methane Becki Anne,ballast,79,88,99,111,121,,61,61,70,133
+Methane Heather Sally,laden,118,125,145,168,185,,84,95,105,205
+Methane Heather Sally,ballast,115,125,135,152,167,,76,87,97,190
+Methane Jane Elizabeth,laden,118,125,145,168,185,,84,95,105,205
+Methane Jane Elizabeth,ballast,115,125,135,152,167,,76,87,97,190
+Methane Julia Louise,laden,85,94,102,112,128,,65,65,75,138
+Methane Julia Louise,ballast,79,88,99,111,121,,61,61,70,133
+Methane Kari Elin,laden,118,125,145,168,185,,84,95,105,194
+Methane Kari Elin,ballast,115,125,135,152,167,,76,87,97,182
+Methane Lydon Volney,laden,118,125,145,168,185,,84,95,105,205
+Methane Lydon Volney,ballast,115,125,135,152,167,,76,87,97,190
+Methane Mickie Harper,laden,85,94,102,112,128,,65,65,75,138
+Methane Mickie Harper,ballast,79,88,99,111,121,,61,61,70,133
+Methane Nile Eagle,laden,118,125,145,168,185,,84,95,105,205
+Methane Nile Eagle,ballast,115,125,135,152,167,,76,87,97,190
+Methane Patricia Camila,laden,85,94,102,112,128,,65,65,75,138
+Methane Patricia Camila,ballast,79,88,99,111,121,,61,61,70,133
+Methane Princess,laden,118,125,145,168,185,,84,95,105,194
+Methane Princess,ballast,115,125,135,152,167,,76,87,97,182
+Methane Rita Andrea,laden,118,125,145,168,185,,84,95,105,205
+Methane Rita Andrea,ballast,115,125,135,152,167,,76,87,97,190
+Methane Shirley Elisabeth,laden,118,125,145,168,185,,84,95,105,194
+Methane Shirley Elisabeth,ballast,115,125,135,152,167,,76,87,97,182
+Methane Spirit,laden,84,97,111,127,146,,60,64,74,
+Methane Spirit,ballast,87,101,113,126,143,,55,63,74,
+Methania,laden,132,148,165,188,207,,,,,226
+Methania,ballast,132,148,165,188,207,,,,,226
+Milaha Qatar,laden,118,125,145,168,185,,84,95,105,205
+Milaha Qatar,ballast,115,125,135,152,167,,76,87,97,190
+Milaha Ras Laffan,laden,118,125,145,168,185,,84,95,105,194
+Milaha Ras Laffan,ballast,115,125,135,152,167,,76,87,97,182
+Min Lu,laden,118,125,145,168,185,,84,95,105,205
+Min Lu,ballast,115,125,135,152,167,,76,87,97,190
+Min Rong,laden,118,125,145,168,185,,84,95,105,205
+Min Rong,ballast,115,125,135,152,167,,76,87,97,190
+Mourad Didouche,laden,132,148,165,188,207,,,,,226
+Mourad Didouche,ballast,132,148,165,188,207,,,,,226
+Mozah,laden,110,,,,150,,,,,
+Mozah,ballast,100,,,,140,,,,,
+Mraweh,laden,118,125,145,168,185,,84,95,105,194
+Mraweh,ballast,115,125,135,152,167,,76,87,97,182
+Mubaraz,laden,118,125,145,168,185,,84,95,105,194
+Mubaraz,ballast,115,125,135,152,167,,76,87,97,182
+Murwab,laden,120,126,139,153,164,,,,,
+Murwab,ballast,113,122,132,141,152,,,,,
+Neo Energy,laden,118,125,145,168,185,,84,95,105,205
+Neo Energy,ballast,115,125,135,152,167,,76,87,97,190
+Neptune,laden,118,125,145,168,185,,84,95,105,205
+Neptune,ballast,115,125,135,152,167,,76,87,97,190
+Nizwa Lng,laden,118,125,145,168,185,,84,95,105,205
+Nizwa Lng,ballast,115,125,135,152,167,,76,87,97,190
+Nkossa Ii,laden,132,148,165,188,207,,,,,226
+Nkossa Ii,ballast,132,148,165,188,207,,,,,226
+Northwest Sanderling,laden,132,148,165,188,207,,,,,226
+Northwest Sanderling,ballast,132,148,165,188,207,,,,,226
+Northwest Sandpiper,laden,132,148,165,188,207,,,,,226
+Northwest Sandpiper,ballast,132,148,165,188,207,,,,,226
+Northwest Seaeagle,laden,132,148,165,188,207,,,,,226
+Northwest Seaeagle,ballast,132,148,165,188,207,,,,,226
+Northwest Shearwater,laden,132,148,165,188,207,,,,,226
+Northwest Shearwater,ballast,132,148,165,188,207,,,,,226
+Northwest Snipe,laden,132,148,165,188,207,,,,,226
+Northwest Snipe,ballast,132,148,165,188,207,,,,,226
+Northwest Stormpetrel,laden,132,148,165,188,207,,,,,226
+Northwest Stormpetrel,ballast,132,148,165,188,207,,,,,226
+Northwest Swan,laden,118,125,145,168,185,,84,95,105,194
+Northwest Swan,ballast,115,125,135,152,167,,76,87,97,182
+Nusantara Regas Satu,laden,132,148,165,188,207,,,,,226
+Nusantara Regas Satu,ballast,132,148,165,188,207,,,,,226
+Oak Spirit,laden,46.2,53.2,60.9,70.2,83.5,,30.2,34.6,40,87.5
+Oak Spirit,ballast,45.6,52.2,59.4,67.4,78.9,,30,34.4,39.7,83
+Ob River,laden,118,125,145,168,185,,84,95,105,205
+Ob River,ballast,115,125,135,152,167,,76,87,97,190
+Ocean Quest,laden,132,148,165,188,207,,,,,226
+Ocean Quest,ballast,132,148,165,188,207,,,,,226
+Onaiza,laden,120,126,139,153,164,,,,,
+Onaiza,ballast,113,122,132,141,152,,,,,
+Pacific Arcadia,laden,118,125,145,168,185,,84,95,105,205
+Pacific Arcadia,ballast,115,125,135,152,167,,76,87,97,190
+Pacific Energy,laden,132,148,165,188,207,,,,,226
+Pacific Energy,ballast,132,148,165,188,207,,,,,226
+Pacific Enlighten,laden,118,125,145,168,185,,84,95,105,205
+Pacific Enlighten,ballast,115,125,135,152,167,,76,87,97,190
+Pacific Eurus,laden,118,125,145,168,185,,84,95,105,194
+Pacific Eurus,ballast,115,125,135,152,167,,76,87,97,182
+Pacific Notus,laden,118,125,145,168,185,,84,95,105,194
+Pacific Notus,ballast,115,125,135,152,167,,76,87,97,182
+Palu Lng,laden,84,97,111,127,146,,60,64,74,
+Palu Lng,ballast,87,101,113,126,143,,55,63,74,
+Papua,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Papua,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Pflng Satu,laden,120,126,139,153,164,,,,,
+Pflng Satu,ballast,113,122,132,141,152,,,,,
+Pgn Fsru Lampung,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Pgn Fsru Lampung,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Polar Spirit,laden,132,148,165,188,207,,,,,226
+Polar Spirit,ballast,132,148,165,188,207,,,,,226
+Prachi,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Prachi,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Provalys,laden,123,134,146.5,163,180,,,,,195
+Provalys,ballast,119,130,142,158,175,,,,,189
+Pskov,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Pskov,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Puteri Delima,laden,132,148,165,188,207,,,,,226
+Puteri Delima,ballast,132,148,165,188,207,,,,,226
+Puteri Delima Satu,laden,118,125,145,168,185,,84,95,105,194
+Puteri Delima Satu,ballast,115,125,135,152,167,,76,87,97,182
+Puteri Firus,laden,132,148,165,188,207,,,,,226
+Puteri Firus,ballast,132,148,165,188,207,,,,,226
+Puteri Firus Satu,laden,118,125,145,168,185,,84,95,105,194
+Puteri Firus Satu,ballast,115,125,135,152,167,,76,87,97,182
+Puteri Intan,laden,132,148,165,188,207,,,,,226
+Puteri Intan,ballast,132,148,165,188,207,,,,,226
+Puteri Intan Satu,laden,118,125,145,168,185,,84,95,105,194
+Puteri Intan Satu,ballast,115,125,135,152,167,,76,87,97,182
+Puteri Mutiara Satu,laden,118,125,145,168,185,,84,95,105,194
+Puteri Mutiara Satu,ballast,115,125,135,152,167,,76,87,97,182
+Puteri Nilam,laden,132,148,165,188,207,,,,,226
+Puteri Nilam,ballast,132,148,165,188,207,,,,,226
+Puteri Nilam Satu,laden,118,125,145,168,185,,84,95,105,194
+Puteri Nilam Satu,ballast,115,125,135,152,167,,76,87,97,182
+Puteri Zamrud,laden,132,148,165,188,207,,,,,226
+Puteri Zamrud,ballast,132,148,165,188,207,,,,,226
+Puteri Zamrud Satu,laden,118,125,145,168,185,,84,95,105,194
+Puteri Zamrud Satu,ballast,115,125,135,152,167,,76,87,97,182
+Q-flex,laden,120,126,139,153,164,,,,,
+Q-flex,ballast,113,122,132,141,152,,,,,
+Q-max,laden,110,,,,150,,,,,
+Q-max,ballast,100,,,,140,,,,,
+Raahi,laden,118,125,145,168,185,,84,95,105,194
+Raahi,ballast,115,125,135,152,167,,76,87,97,182
+Ramdane Abane,laden,132,148,165,188,207,,,,,226
+Ramdane Abane,ballast,132,148,165,188,207,,,,,226
+Rasheeda,laden,110,,,,150,,,,,
+Rasheeda,ballast,100,,,,140,,,,,
+Ribera Del Duero Knutsen,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Ribera Del Duero Knutsen,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Rioja Knutsen,laden,46.2,53.2,60.9,70.2,83.5,,30.2,34.6,40,87.5
+Rioja Knutsen,ballast,45.6,52.2,59.4,67.4,78.9,,30,34.4,39.7,83
+Salalah Lng,laden,118,125,145,168,185,,84,95,105,205
+Salalah Lng,ballast,115,125,135,152,167,,76,87,97,190
+Scf Melampus,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Scf Melampus,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Scf Mitre,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Scf Mitre,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Seishu Maru,laden,127,137,148,164,186,,105,114,122,207
+Seishu Maru,ballast,129,140,153,165,180,,97,107,116,197
+Senshu Maru,laden,132,148,165,188,207,,,,,226
+Senshu Maru,ballast,132,148,165,188,207,,,,,226
+Seri Alam,laden,118,125,145,168,185,,84,95,105,205
+Seri Alam,ballast,115,125,135,152,167,,76,87,97,190
+Seri Amanah,laden,118,125,145,168,185,,84,95,105,194
+Seri Amanah,ballast,115,125,135,152,167,,76,87,97,182
+Seri Anggun,laden,118,125,145,168,185,,84,95,105,205
+Seri Anggun,ballast,115,125,135,152,167,,76,87,97,190
+Seri Angkasa,laden,118,125,145,168,185,,84,95,105,194
+Seri Angkasa,ballast,115,125,135,152,167,,76,87,97,182
+Seri Ayu,laden,118,125,145,168,185,,84,95,105,194
+Seri Ayu,ballast,115,125,135,152,167,,76,87,97,182
+Seri Bakti,laden,118,125,145,168,185,,84,95,105,194
+Seri Bakti,ballast,115,125,135,152,167,,76,87,97,182
+Seri Balhaf,laden,74,88,101,117,134,,,,,
+Seri Balhaf,ballast,70,84,96,110,130,,,,,
+Seri Balqis,laden,74,88,101,117,134,,,,,
+Seri Balqis,ballast,70,84,96,110,130,,,,,
+Seri Begawan,laden,127,137,148,164,186,,105,114,122,207
+Seri Begawan,ballast,129,140,153,165,180,,97,107,116,197
+Seri Bijaksana,laden,127,137,148,164,186,,105,114,122,207
+Seri Bijaksana,ballast,129,140,153,165,180,,97,107,116,197
+Seri Camar,laden,127,137,148,164,186,,105,114,122,207
+Seri Camar,ballast,129,140,153,165,180,,97,107,116,197
+Seri Camellia,laden,127,137,148,164,186,,105,114,122,207
+Seri Camellia,ballast,129,140,153,165,180,,97,107,116,197
+Seri Cenderawasih,laden,127,137,148,164,186,,105,114,122,207
+Seri Cenderawasih,ballast,129,140,153,165,180,,97,107,116,197
+Sestao Knutsen,laden,118,125,145,168,185,,84,95,105,194
+Sestao Knutsen,ballast,115,125,135,152,167,,76,87,97,182
+Sevilla Knutsen,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Sevilla Knutsen,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Shagra,laden,110,,,,150,,,,,
+Shagra,ballast,100,,,,140,,,,,
+Shahamah,laden,118,125,145,168,185,,84,95,105,194
+Shahamah,ballast,115,125,135,152,167,,76,87,97,182
+Shen Hai,laden,118,125,145,168,185,,84,95,105,194
+Shen Hai,ballast,115,125,135,152,167,,76,87,97,182
+Simaisma,laden,118,125,145,168,185,,84,95,105,194
+Simaisma,ballast,115,125,135,152,167,,76,87,97,182
+Sk Splendor,laden,118,125,145,168,185,,84,95,105,194
+Sk Splendor,ballast,115,125,135,152,167,,76,87,97,182
+Sk Stellar,laden,118,125,145,168,185,,84,95,105,194
+Sk Stellar,ballast,115,125,135,152,167,,76,87,97,182
+Sk Summit,laden,118,125,145,168,185,,84,95,105,194
+Sk Summit,ballast,115,125,135,152,167,,76,87,97,182
+Sk Sunrise,laden,118,125,145,168,185,,84,95,105,194
+Sk Sunrise,ballast,115,125,135,152,167,,76,87,97,182
+Sk Supreme,laden,118,125,145,168,185,,84,95,105,194
+Sk Supreme,ballast,115,125,135,152,167,,76,87,97,182
+Sohar LNG,laden,118,125,145,168,185,,84,95,105,194
+Sohar LNG,ballast,115,125,135,152,167,,76,87,97,182
+Solaris,laden,74,88,101,117,134,,,,,
+Solaris,ballast,70,84,96,110,130,,,,,
+Sonangol Benguela,laden,127,137,148,164,186,,105,114,122,207
+Sonangol Benguela,ballast,129,140,153,165,180,,97,107,116,197
+Sonangol Etosha,laden,127,137,148,164,186,,105,114,122,207
+Sonangol Etosha,ballast,129,140,153,165,180,,97,107,116,197
+Sonangol Sambizanga,laden,127,137,148,164,186,,105,114,122,207
+Sonangol Sambizanga,ballast,129,140,153,165,180,,97,107,116,197
+South Energy,laden,132,148,165,188,207,,,,,226
+South Energy,ballast,132,148,165,188,207,,,,,226
+Southern Cross,laden,127,137,148,164,186,,105,114,122,207
+Southern Cross,ballast,129,140,153,165,180,,97,107,116,197
+Soyo,laden,74,88,101,117,134,,,,,
+Soyo,ballast,70,84,96,110,130,,,,,
+Spirit Of Hela,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Spirit Of Hela,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Steam_126,laden,132,148,165,188,207,,,,,226
+Steam_126,ballast,132,148,165,188,207,,,,,226
+Steam_138,laden,118,125,145,168,185,,84,95,105,194
+Steam_138,ballast,115,125,135,152,167,,76,87,97,182
+Steam_145,laden,118,125,145,168,185,,84,95,105,205
+Steam_145,ballast,115,125,135,152,167,,76,87,97,190
+Steam_150,laden,127,137,148,164,186,,105,114,122,207
+Steam_150,ballast,129,140,153,165,180,,97,107,116,197
+Stena Blue Sky,laden,118,125,145,168,185,,84,95,105,194
+Stena Blue Sky,ballast,115,125,135,152,167,,76,87,97,182
+Stena Clear Sky,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Stena Clear Sky,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Stena Crystal Sky,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Stena Crystal Sky,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Sunrise,laden,132,148,165,188,207,,,,,226
+Sunrise,ballast,132,148,165,188,207,,,,,226
+Symphonic Breeze,laden,118,125,145,168,185,,84,95,105,205
+Symphonic Breeze,ballast,115,125,135,152,167,,76,87,97,190
+TFDE_145,laden,123,134,146.5,163,180,,,,,195
+TFDE_145,ballast,119,130,142,158,175,,,,,189
+TFDE_155,laden,74,88,101,117,134,,,,,
+TFDE_155,ballast,70,84,96,110,130,,,,,
+TFDE_160,laden,84,97,111,127,146,,60,64,74,
+TFDE_160,ballast,87,101,113,126,143,,55,63,74,
+TFDE_165,laden,85,94,102,112,128,,65,65,75,138
+TFDE_165,ballast,79,88,99,111,121,,61,61,70,133
+TFDE_170,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+TFDE_170,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Taitar No. 1,laden,118,125,145,168,185,,84,95,105,205
+Taitar No. 1,ballast,115,125,135,152,167,,76,87,97,190
+Taitar No. 2,laden,118,125,145,168,185,,84,95,105,205
+Taitar No. 2,ballast,115,125,135,152,167,,76,87,97,190
+Taitar No. 3,laden,118,125,145,168,185,,84,95,105,205
+Taitar No. 3,ballast,115,125,135,152,167,,76,87,97,190
+Taitar No. 4,laden,118,125,145,168,185,,84,95,105,205
+Taitar No. 4,ballast,115,125,135,152,167,,76,87,97,190
+Tangguh Batur,laden,118,125,145,168,185,,84,95,105,194
+Tangguh Batur,ballast,115,125,135,152,167,,76,87,97,182
+Tangguh Foja,laden,74,88,101,117,134,,,,,
+Tangguh Foja,ballast,70,84,96,110,130,,,,,
+Tangguh Hiri,laden,123,134,146.5,163,180,,,,,195
+Tangguh Hiri,ballast,119,130,142,158,175,,,,,189
+Tangguh Jaya,laden,74,88,101,117,134,,,,,
+Tangguh Jaya,ballast,70,84,96,110,130,,,,,
+Tangguh Palung,laden,74,88,101,117,134,,,,,
+Tangguh Palung,ballast,70,84,96,110,130,,,,,
+Tangguh Sago,laden,123,134,146.5,163,180,,,,,195
+Tangguh Sago,ballast,119,130,142,158,175,,,,,189
+Tangguh Towuti,laden,118,125,145,168,185,,84,95,105,194
+Tangguh Towuti,ballast,115,125,135,152,167,,76,87,97,182
+Tembek,laden,120,126,139,153,164,,,,,
+Tembek,ballast,113,122,132,141,152,,,,,
+Tenaga Empat,laden,132,148,165,188,207,,,,,226
+Tenaga Empat,ballast,132,148,165,188,207,,,,,226
+Tenaga Lima,laden,132,148,165,188,207,,,,,226
+Tenaga Lima,ballast,132,148,165,188,207,,,,,226
+Tenaga Satu,laden,132,148,165,188,207,,,,,226
+Tenaga Satu,ballast,132,148,165,188,207,,,,,226
+Tessala,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Tessala,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Trinity Arrow,laden,127,137,148,164,186,,105,114,122,207
+Trinity Arrow,ballast,129,140,153,165,180,,97,107,116,197
+Trinity Glory,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Trinity Glory,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Umm Al Amad,laden,120,126,139,153,164,,,,,
+Umm Al Amad,ballast,113,122,132,141,152,,,,,
+Umm Al Ashtan,laden,118,125,145,168,185,,84,95,105,194
+Umm Al Ashtan,ballast,115,125,135,152,167,,76,87,97,182
+Umm Bab,laden,118,125,145,168,185,,84,95,105,194
+Umm Bab,ballast,115,125,135,152,167,,76,87,97,182
+Umm Slal,laden,110,,,,150,,,,,
+Umm Slal,ballast,100,,,,140,,,,,
+Valencia Knutsen,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Valencia Knutsen,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Velikiy Novgorod,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Velikiy Novgorod,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+West Energy,laden,132,148,165,188,207,,,,,226
+West Energy,ballast,132,148,165,188,207,,,,,226
+Wilenergy,laden,132,148,165,188,207,,,,,226
+Wilenergy,ballast,132,148,165,188,207,,,,,226
+Wilforce,laden,74,88,101,117,134,,,,,
+Wilforce,ballast,70,84,96,110,130,,,,,
+Wilgas,laden,132,148,165,188,207,,,,,226
+Wilgas,ballast,132,148,165,188,207,,,,,226
+Wilpride,laden,74,88,101,117,134,,,,,
+Wilpride,ballast,70,84,96,110,130,,,,,
+Woodside Chaney,laden,120,126,139,153,164,,,,,
+Woodside Chaney,ballast,113,122,132,141,152,,,,,
+Woodside Donaldson,laden,84,97,111,127,146,,60,64,74,
+Woodside Donaldson,ballast,87,101,113,126,143,,55,63,74,
+Woodside Goode,laden,84,97,111,127,146,,60,64,74,
+Woodside Goode,ballast,87,101,113,126,143,,55,63,74,
+Woodside Rees Withers,laden,85.2,98.1,113.3,126.7,133,,66,73.1,79.1,140
+Woodside Rees Withers,ballast,84.7,93.4,104.7,116.5,124.5,,62,73.1,79.1,140
+Woodside Rogers,laden,84,97,111,127,146,,60,64,74,
+Woodside Rogers,ballast,87,101,113,126,143,,55,63,74,
+XDF_174,laden,61.9,73.05,82.9,91.8,103.6,,44.5,44.5,50.3,118.4
+XDF_174,ballast,61.05,71,80.65,90.9,103.05,,46.8,46.8,51.55,115.75
+Yari Lng,laden,84,97,111,127,146,,60,64,74,
+Yari Lng,ballast,87,101,113,126,143,,55,63,74,
+Yenisei River,laden,74,88,101,117,134,,,,,
+Yenisei River,ballast,70,84,96,110,130,,,,,
+Yk Sovereign,laden,132,148,165,188,207,,,,,226
+Yk Sovereign,ballast,132,148,165,188,207,,,,,226
+Zarga,laden,110,,,,150,,,,,
+Zarga,ballast,100,,,,140,,,,,
+Zekreet,laden,118,125,145,168,185,,84,95,105,194
+Zekreet,ballast,115,125,135,152,167,,76,87,97,182

@@ -7,7 +7,6 @@ package com.mmxlabs.scheduler.optimiser.contracts.impl;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Inject;
-import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
@@ -15,7 +14,6 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
-import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
@@ -23,12 +21,6 @@ public final class PricingEventHelper {
 
 	@Inject
 	private ITimeZoneToUtcOffsetProvider timeZoneToUtcOffsetProvider;
-
-	@Inject
-	private IElementDurationProvider durationProvider;
-	
-	@Inject
-	private IPortSlotProvider portSlotProvider;
 	
 	public IPort getLoadTimingPort(@NonNull final ILoadOption loadOption, @NonNull final IDischargeOption dischargeOption) {
 

@@ -15,23 +15,23 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.parser.IExpression;
+import com.mmxlabs.common.parser.RawTreeParser;
+import com.mmxlabs.common.parser.nodes.CommodityNode;
+import com.mmxlabs.common.parser.nodes.ConstantNode;
+import com.mmxlabs.common.parser.nodes.ConversionNode;
+import com.mmxlabs.common.parser.nodes.CurrencyNode;
+import com.mmxlabs.common.parser.nodes.DatedAverageNode;
+import com.mmxlabs.common.parser.nodes.MarkedUpNode;
+import com.mmxlabs.common.parser.nodes.MaxFunctionNode;
+import com.mmxlabs.common.parser.nodes.MinFunctionNode;
+import com.mmxlabs.common.parser.nodes.Node;
+import com.mmxlabs.common.parser.nodes.OperatorNode;
+import com.mmxlabs.common.parser.nodes.SCurveNode;
+import com.mmxlabs.common.parser.nodes.ShiftNode;
+import com.mmxlabs.common.parser.nodes.SplitNode;
 import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
-import com.mmxlabs.models.lng.pricing.parser.Node;
-import com.mmxlabs.models.lng.pricing.parser.RawTreeParser;
-import com.mmxlabs.models.lng.pricing.parseutils.CommodityNode;
-import com.mmxlabs.models.lng.pricing.parseutils.ConstantNode;
-import com.mmxlabs.models.lng.pricing.parseutils.ConversionNode;
-import com.mmxlabs.models.lng.pricing.parseutils.CurrencyNode;
-import com.mmxlabs.models.lng.pricing.parseutils.DatedAverageNode;
 import com.mmxlabs.models.lng.pricing.parseutils.LookupData;
-import com.mmxlabs.models.lng.pricing.parseutils.MarkedUpNode;
-import com.mmxlabs.models.lng.pricing.parseutils.MaxFunctionNode;
-import com.mmxlabs.models.lng.pricing.parseutils.MinFunctionNode;
 import com.mmxlabs.models.lng.pricing.parseutils.Nodes;
-import com.mmxlabs.models.lng.pricing.parseutils.OperatorNode;
-import com.mmxlabs.models.lng.pricing.parseutils.SCurveNode;
-import com.mmxlabs.models.lng.pricing.parseutils.ShiftNode;
-import com.mmxlabs.models.lng.pricing.parseutils.SplitNode;
 
 public class IndexToDate {
 
@@ -195,10 +195,10 @@ public class IndexToDate {
 			}
 		} else if (node instanceof CommodityNode) {
 			final CommodityNode commodityNode = (CommodityNode) node;
-			return new IndexToDateRecords(new IndexDateRecord(commodityNode.getCurve(), date));
+			return new IndexToDateRecords(new IndexDateRecord(lookupData.commodityMap.get(commodityNode.getName().toLowerCase()), date));
 		} else if (node instanceof CurrencyNode) {
 			final CurrencyNode currencyNode = (CurrencyNode) node;
-			return new IndexToDateRecords(new IndexDateRecord(currencyNode.getCurve(), date));
+			return new IndexToDateRecords(new IndexDateRecord(lookupData.currencyMap.get(currencyNode.getName().toLowerCase()), date));
 		} else if (node instanceof ConversionNode) {
 			final ConversionNode conversionNode = (ConversionNode) node;
 			return new EmptyNode();

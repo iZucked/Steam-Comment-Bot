@@ -16,6 +16,8 @@ import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.common.exposures.ExposureEnumerations.AggregationMode;
+import com.mmxlabs.common.exposures.ExposureEnumerations.ValueMode;
 import com.mmxlabs.lingo.reports.views.standard.exposures.ExposureReportView.AssetType;
 import com.mmxlabs.lingo.reports.views.standard.exposures.IndexExposureData.IndexExposureType;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -23,8 +25,6 @@ import com.mmxlabs.models.lng.cargo.DealSet;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
-import com.mmxlabs.models.lng.commercial.parseutils.Exposures.AggregationMode;
-import com.mmxlabs.models.lng.commercial.parseutils.Exposures.ValueMode;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.util.ModelMarketCurveProvider;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -50,7 +50,7 @@ public class ExposuresTransformer {
 	 * @return
 	 */
 	public static IndexExposureData getExposuresByMonth(ScenarioResult scenarioResult, final @NonNull Schedule schedule, final @NonNull YearMonth date, final ValueMode mode,
-			final Collection<Object> filterOn, final String selectedEntity, final int selectedFiscalYear, final AssetType selectedAssetType) {
+			final Collection<Object> filterOn, final String selectedEntity, final int selectedFiscalYear, final AssetType selectedAssetType, final boolean showGenerated) {
 
 		final Map<String, Double> result = new HashMap<>();
 		final Map<String, Map<String, Double>> dealMap = new HashMap<>();
@@ -82,7 +82,7 @@ public class ExposuresTransformer {
 						}
 					}
 					if (selectedFiscalYear != -1) {
-						if (s.getWindowStart().getYear() != selectedFiscalYear) {
+						if (s.getWindowStart() == null || (s.getWindowStart().getYear() != selectedFiscalYear)) {
 							continue;
 						}
 					}
@@ -94,7 +94,7 @@ public class ExposuresTransformer {
 							}
 						}
 						if (detail.getDate().equals(date)) {
-							String indexName = detail.getIndexName().equals("Physical") ? detail.getIndexName() : ModelMarketCurveProvider.getMarketIndexName(pm, detail.getIndexName());
+							String indexName = detail.getIndexName().equalsIgnoreCase("Physical") ? detail.getIndexName() : ModelMarketCurveProvider.getMarketIndexName(pm, detail.getIndexName());
 							if (indexName == null) {
 								continue;
 							}
@@ -130,6 +130,9 @@ public class ExposuresTransformer {
 			for (final PaperDealAllocation paperDealAllocation : schedule.getPaperDealAllocations()) {
 				PaperDeal paperDeal = paperDealAllocation.getPaperDeal();
 				if (paperDeal == null) {
+					continue;
+				}
+				if (!showGenerated && schedule.getGeneratedPaperDeals().contains(paperDeal)) {
 					continue;
 				}
 				if (!filterOn.isEmpty()) {

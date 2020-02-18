@@ -27,6 +27,8 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.IExpression;
+import com.mmxlabs.common.parser.RawTreeParser;
+import com.mmxlabs.common.parser.nodes.Node;
 import com.mmxlabs.common.parser.series.GenericSeriesParsesException;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
@@ -42,8 +44,6 @@ import com.mmxlabs.models.lng.pricing.CharterCurve;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.CurrencyCurve;
 import com.mmxlabs.models.lng.pricing.PricingModel;
-import com.mmxlabs.models.lng.pricing.parser.Node;
-import com.mmxlabs.models.lng.pricing.parser.RawTreeParser;
 import com.mmxlabs.models.lng.pricing.parseutils.LookupData;
 import com.mmxlabs.models.lng.pricing.parseutils.Nodes;
 import com.mmxlabs.models.lng.pricing.ui.autocomplete.ExpressionAnnotationConstants;

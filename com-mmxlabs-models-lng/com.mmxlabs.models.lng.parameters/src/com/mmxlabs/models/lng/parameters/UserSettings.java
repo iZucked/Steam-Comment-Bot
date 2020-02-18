@@ -34,6 +34,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isWithSpotCargoMarkets <em>With Spot Cargo Markets</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#getFloatingDaysLimit <em>Floating Days Limit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isCleanSlateOptimisation <em>Clean Slate Optimisation</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isGeneratedPapersInPNL <em>Generated Papers In PNL</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getUserSettings()
@@ -419,6 +420,32 @@ public interface UserSettings extends EObject {
 	 * @generated
 	 */
 	void setCleanSlateOptimisation(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Generated Papers In PNL</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Generated Papers In PNL</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Generated Papers In PNL</em>' attribute.
+	 * @see #setGeneratedPapersInPNL(boolean)
+	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getUserSettings_GeneratedPapersInPNL()
+	 * @model
+	 * @generated
+	 */
+	boolean isGeneratedPapersInPNL();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.UserSettings#isGeneratedPapersInPNL <em>Generated Papers In PNL</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Generated Papers In PNL</em>' attribute.
+	 * @see #isGeneratedPapersInPNL()
+	 * @generated
+	 */
+	void setGeneratedPapersInPNL(boolean value);
 
 	/**
 	 * Returns the value of the '<em><b>Dual Mode</b></em>' attribute.

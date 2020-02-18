@@ -81,6 +81,7 @@ public class UserSettingsItemProvider
 			addWithSpotCargoMarketsPropertyDescriptor(object);
 			addFloatingDaysLimitPropertyDescriptor(object);
 			addCleanSlateOptimisationPropertyDescriptor(object);
+			addGeneratedPapersInPNLPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -350,6 +351,28 @@ public class UserSettingsItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Generated Papers In PNL feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addGeneratedPapersInPNLPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_UserSettings_generatedPapersInPNL_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_UserSettings_generatedPapersInPNL_feature", "_UI_UserSettings_type"),
+				 ParametersPackage.Literals.USER_SETTINGS__GENERATED_PAPERS_IN_PNL,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Dual Mode feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -446,6 +469,7 @@ public class UserSettingsItemProvider
 			case ParametersPackage.USER_SETTINGS__WITH_SPOT_CARGO_MARKETS:
 			case ParametersPackage.USER_SETTINGS__FLOATING_DAYS_LIMIT:
 			case ParametersPackage.USER_SETTINGS__CLEAN_SLATE_OPTIMISATION:
+			case ParametersPackage.USER_SETTINGS__GENERATED_PAPERS_IN_PNL:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

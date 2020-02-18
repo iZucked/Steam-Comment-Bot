@@ -1,0 +1,3 @@
+name,dayOfTheMonth,lastDayOfTheMonth,settlePeriod,settlePeriodUnit,settleStartMonthsPrior,kind
+Brent_momental_swap,0,false,1,DAYS,0,SettleStrategy
+Jkm_momental_Swap,0,false,1,DAYS,0,SettleStrategy

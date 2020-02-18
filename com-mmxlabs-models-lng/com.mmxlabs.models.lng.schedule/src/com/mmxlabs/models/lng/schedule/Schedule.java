@@ -3,6 +3,7 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule;
+import com.mmxlabs.models.lng.cargo.PaperDeal;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 
@@ -27,6 +28,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getInventoryLevels <em>Inventory Levels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getPaperDealAllocations <em>Paper Deal Allocations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getOtherPNL <em>Other PNL</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getGeneratedPaperDeals <em>Generated Paper Deals</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSchedule()
@@ -203,6 +205,22 @@ public interface Schedule extends MMXObject {
 	 * @generated
 	 */
 	void setOtherPNL(OtherPNL value);
+
+	/**
+	 * Returns the value of the '<em><b>Generated Paper Deals</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.cargo.PaperDeal}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Generated Paper Deals</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Generated Paper Deals</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSchedule_GeneratedPaperDeals()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<PaperDeal> getGeneratedPaperDeals();
 
 } // end of  Schedule
 

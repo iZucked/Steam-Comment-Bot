@@ -43,6 +43,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isWithSpotCargoMarkets <em>With Spot Cargo Markets</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#getFloatingDaysLimit <em>Floating Days Limit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isCleanSlateOptimisation <em>Clean Slate Optimisation</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isGeneratedPapersInPNL <em>Generated Papers In PNL</em>}</li>
  * </ul>
  *
  * @generated
@@ -345,6 +346,26 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * @ordered
 	 */
 	protected boolean cleanSlateOptimisation = CLEAN_SLATE_OPTIMISATION_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isGeneratedPapersInPNL() <em>Generated Papers In PNL</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isGeneratedPapersInPNL()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean GENERATED_PAPERS_IN_PNL_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isGeneratedPapersInPNL() <em>Generated Papers In PNL</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isGeneratedPapersInPNL()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean generatedPapersInPNL = GENERATED_PAPERS_IN_PNL_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -701,6 +722,29 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * @generated
 	 */
 	@Override
+	public boolean isGeneratedPapersInPNL() {
+		return generatedPapersInPNL;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setGeneratedPapersInPNL(boolean newGeneratedPapersInPNL) {
+		boolean oldGeneratedPapersInPNL = generatedPapersInPNL;
+		generatedPapersInPNL = newGeneratedPapersInPNL;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.USER_SETTINGS__GENERATED_PAPERS_IN_PNL, oldGeneratedPapersInPNL, generatedPapersInPNL));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public boolean isDualMode() {
 		return dualMode;
 	}
@@ -777,6 +821,8 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 				return getFloatingDaysLimit();
 			case ParametersPackage.USER_SETTINGS__CLEAN_SLATE_OPTIMISATION:
 				return isCleanSlateOptimisation();
+			case ParametersPackage.USER_SETTINGS__GENERATED_PAPERS_IN_PNL:
+				return isGeneratedPapersInPNL();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -830,6 +876,9 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 				return;
 			case ParametersPackage.USER_SETTINGS__CLEAN_SLATE_OPTIMISATION:
 				setCleanSlateOptimisation((Boolean)newValue);
+				return;
+			case ParametersPackage.USER_SETTINGS__GENERATED_PAPERS_IN_PNL:
+				setGeneratedPapersInPNL((Boolean)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -885,6 +934,9 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 			case ParametersPackage.USER_SETTINGS__CLEAN_SLATE_OPTIMISATION:
 				setCleanSlateOptimisation(CLEAN_SLATE_OPTIMISATION_EDEFAULT);
 				return;
+			case ParametersPackage.USER_SETTINGS__GENERATED_PAPERS_IN_PNL:
+				setGeneratedPapersInPNL(GENERATED_PAPERS_IN_PNL_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -925,6 +977,8 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 				return floatingDaysLimit != FLOATING_DAYS_LIMIT_EDEFAULT;
 			case ParametersPackage.USER_SETTINGS__CLEAN_SLATE_OPTIMISATION:
 				return cleanSlateOptimisation != CLEAN_SLATE_OPTIMISATION_EDEFAULT;
+			case ParametersPackage.USER_SETTINGS__GENERATED_PAPERS_IN_PNL:
+				return generatedPapersInPNL != GENERATED_PAPERS_IN_PNL_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -967,6 +1021,8 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 		result.append(floatingDaysLimit);
 		result.append(", cleanSlateOptimisation: ");
 		result.append(cleanSlateOptimisation);
+		result.append(", generatedPapersInPNL: ");
+		result.append(generatedPapersInPNL);
 		result.append(')');
 		return result.toString();
 	}

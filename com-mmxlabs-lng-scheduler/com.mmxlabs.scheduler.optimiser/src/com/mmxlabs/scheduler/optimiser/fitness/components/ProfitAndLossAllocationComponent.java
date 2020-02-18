@@ -5,12 +5,18 @@
 package com.mmxlabs.scheduler.optimiser.fitness.components;
 
 import java.util.List;
+import java.util.Map;
+
+import javax.inject.Named;
 
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Inject;
+import com.mmxlabs.common.paperdeals.BasicPaperDealAllocationEntry;
+import com.mmxlabs.common.paperdeals.BasicPaperDealData;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -26,6 +32,10 @@ public class ProfitAndLossAllocationComponent extends AbstractSchedulerFitnessCo
 
 	@Inject
 	private IPortSlotProvider portSlotProvider;
+	
+	@Inject
+	@Named(SchedulerConstants.GENERATED_PAPERS_IN_PNL)
+	private boolean generatedPapersInPNL;
 
 	private long accumulator = 0;
 
@@ -79,7 +89,23 @@ public class ProfitAndLossAllocationComponent extends AbstractSchedulerFitnessCo
 	 */
 	@Override
 	public long endEvaluationAndGetCost() {
+		accumulator += computePaperPnL(profitAndLossSequences);
 		profitAndLossSequences = null;
 		return setLastEvaluatedFitness(accumulator / Calculator.ScaleFactor);
+	}
+	
+	private long computePaperPnL(final ProfitAndLossSequences profitAndLossSequences) {
+		long paperPnL = 0;
+		if (generatedPapersInPNL) {
+			final Map<BasicPaperDealData, List<BasicPaperDealAllocationEntry>> paperDealAllocations = profitAndLossSequences.getPaperDealRecords();
+			
+			for (final BasicPaperDealData basicPaperDealData : paperDealAllocations.keySet()) {
+				for (final BasicPaperDealAllocationEntry entry : paperDealAllocations.get(basicPaperDealData)) {
+					paperPnL += entry.getValue();
+				}
+			}
+		}
+		
+		return paperPnL;
 	}
 }

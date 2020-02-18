@@ -17,7 +17,9 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import com.mmxlabs.models.lng.transformer.extensions.contingencytime.ContingencyIdleTimeTransformerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.entities.EntityTransformerExtensionFactory;
+import com.mmxlabs.models.lng.transformer.extensions.exposures.ExposuresExporterExtensionFactory;
 import com.mmxlabs.models.lng.transformer.extensions.panamaslots.PanamaSlotsTransformerFactory;
+import com.mmxlabs.models.lng.transformer.extensions.paperdeals.PaperDealsExporterExtensionFactory;
 import com.mmxlabs.models.lng.transformer.extensions.portshipsizeconstraint.PortShipSizeConstraintCheckerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.portshipsizeconstraint.PortShipSizeTransformerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsConstraintCheckerFactory;
@@ -95,6 +97,8 @@ public class TransformerITSOptimiserInjectorService implements IOptimiserInjecto
 						final List<@NonNull IExporterExtensionFactory> exporterExtensionFactories = new ArrayList<>();
 						exporterExtensionFactories.add(new TradingExporterExtensionFactory());
 						exporterExtensionFactories.add(new BasicSlotPNLExporterExtensionFactory());
+						exporterExtensionFactories.add(new ExposuresExporterExtensionFactory());
+						exporterExtensionFactories.add(new PaperDealsExporterExtensionFactory());
 						bind(TypeLiterals.iterable(IExporterExtensionFactory.class)).toInstance(exporterExtensionFactories);
 
 						final List<@NonNull IPostExportProcessorFactory> postExportExtensionFactories = new ArrayList<>();
@@ -147,6 +151,9 @@ public class TransformerITSOptimiserInjectorService implements IOptimiserInjecto
 					final List<@NonNull IExporterExtensionFactory> exporterExtensionFactories = new ArrayList<>();
 					exporterExtensionFactories.add(new TradingExporterExtensionFactory());
 					exporterExtensionFactories.add(new BasicSlotPNLExporterExtensionFactory());
+					
+					exporterExtensionFactories.add(new ExposuresExporterExtensionFactory());
+					exporterExtensionFactories.add(new PaperDealsExporterExtensionFactory());
 					bind(TypeLiterals.iterable(IExporterExtensionFactory.class)).toInstance(exporterExtensionFactories);
 
 					final List<@NonNull IPostExportProcessorFactory> postExportExtensionFactories = new ArrayList<>();
