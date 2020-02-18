@@ -22,6 +22,7 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.modules.ConstraintCheckerInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.EvaluatedStateConstraintCheckerInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.EvaluationProcessInstantiatorModule;
+import com.mmxlabs.scheduler.optimiser.exposures.ExposuresCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanner;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanner;
 import com.mmxlabs.scheduler.optimiser.manipulators.SequencesManipulatorModule;
@@ -64,6 +65,7 @@ public class LNGEvaluationModule extends AbstractModule {
 		bind(LatenessChecker.class);
 		bind(CapacityViolationChecker.class);
 		bind(ProfitAndLossCalculator.class);
+		bind(ExposuresCalculator.class);
 		bind(ScheduleCalculator.class);
 
 		if (hints != null) {

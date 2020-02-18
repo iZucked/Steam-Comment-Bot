@@ -1,0 +1,4 @@
+name,distance,kind,virtualPort,northEntrance.name,northEntrance.port,northEntrance.kind,southEntrance.name,southEntrance.port,southEntrance.kind
+Direct,0.000,Route,,,,,,,
+Suez canal,102.279,Route,Suez Canal,Suez North,Port Said,EntryPoint,Suez South,Suez,EntryPoint
+Panama canal,39.970,Route,Panama Canal,Panama Northside,"Colon, Panama",EntryPoint,Panama Southside,Balboa,EntryPoint

@@ -23,7 +23,10 @@ import com.mmxlabs.common.parser.series.SeriesParserData;
 import com.mmxlabs.common.parser.series.ShiftFunctionMapper;
 import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.common.time.Months;
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.models.lng.commercial.parseutils.DefaultExposuresCustomiser;
+import com.mmxlabs.models.lng.commercial.parseutils.IExposuresCustomiser;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.DefaultModelEntityMap;
@@ -73,6 +76,8 @@ import com.mmxlabs.scheduler.optimiser.fitness.impl.DefaultEndEventScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IEndEventScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
+import com.mmxlabs.scheduler.optimiser.providers.IExternalDateProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IInternalDateProvider;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.CachingTimeWindowSchedulingCanalDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.ITimeWindowSchedulingCanalDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.PriceIntervalProviderHelper;
@@ -127,6 +132,9 @@ public class LNGTransformerModule extends AbstractModule {
 
 	private final boolean withNoNominalsInPrompt;
 	private final boolean withCharterLength;
+	
+	// auto-hedging mode. If true - use flat curve
+	private final boolean withFlatCurve;
 
 	private @NonNull UserSettings userSettings;
 
@@ -148,6 +156,7 @@ public class LNGTransformerModule extends AbstractModule {
 		this.withSpotCargoMarkets = hints.contains(LNGTransformerHelper.HINT_SPOT_CARGO_MARKETS);
 		this.withNoNominalsInPrompt = hints.contains(LNGTransformerHelper.HINT_NO_NOMINALS_IN_PROMPT);
 		this.withCharterLength = hints.contains(LNGTransformerHelper.HINT_CHARTER_LENGTH);
+		this.withFlatCurve = hints.contains(LNGTransformerHelper.HINT_GENERATED_PAPERS_PNL);
 		assert scenario != null;
 	}
 
@@ -175,8 +184,11 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(LNGScenarioTransformer.class).in(Singleton.class);
 
 		bind(DateAndCurveHelper.class).in(Singleton.class);
+		bind(IInternalDateProvider.class).to(DateAndCurveHelper.class);
 
-		bind(ModelEntityMap.class).to(DefaultModelEntityMap.class).in(Singleton.class);
+		bind(DefaultModelEntityMap.class).in(Singleton.class);
+		bind(ModelEntityMap.class).to(DefaultModelEntityMap.class);
+		bind(IExternalDateProvider.class).to(DefaultModelEntityMap.class);
 
 		bind(ILNGVoyageCalculator.class).to(LNGVoyageCalculator.class);
 		bind(LNGVoyageCalculator.class).in(Singleton.class);
@@ -217,6 +229,19 @@ public class LNGTransformerModule extends AbstractModule {
 
 		bind(IDivertibleFOBShippingTimesCalculator.class).to(DefaultDivertibleFOBShippingTimesCalculator.class);
 		bind(DefaultDivertibleFOBShippingTimesCalculator.class).in(Singleton.class);
+		
+		// <------ Exposures and papers
+		
+		bind(IExposuresCustomiser.class).to(DefaultExposuresCustomiser.class);
+		bind(DefaultExposuresCustomiser.class).in(Singleton.class);
+		
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.OPTIMISE_PAPER_PNL)).toInstance(Boolean.FALSE);
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.COMPUTE_EXPOSURES)).toInstance(LicenseFeatures.isPermitted(KnownFeatures.FEATURE_EXPOSURES));
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.COMPUTE_PAPER_PNL)).toInstance(LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PAPER_DEALS));
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.RE_HEDGE_WITH_PAPERS)).toInstance(Boolean.FALSE);
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.GENERATED_PAPERS_IN_PNL)).toInstance(withFlatCurve);
+		
+		// ----->
 
 		// Register default implementations
 		bind(IProfitAndLossCacheKeyDependencyLinker.class).to(NullCacheKeyDependencyLinker.class);

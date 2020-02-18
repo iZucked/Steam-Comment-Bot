@@ -67,6 +67,8 @@ public final class KnownFeatures {
 	public static final String FEATURE_INVENTORY_MODEL = "features:inventory-model";
 
 	public static final String FEATURE_PAPER_DEALS = "features:paperdeals";
+	
+	public static final String FEATURE_GENERATED_PAPER_DEALS = "features:generated-papers";
 
 	/**
 	 * Enable the charter length evaluation mode

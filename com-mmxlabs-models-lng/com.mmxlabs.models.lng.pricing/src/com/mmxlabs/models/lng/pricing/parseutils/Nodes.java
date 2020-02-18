@@ -7,12 +7,28 @@ package com.mmxlabs.models.lng.pricing.parseutils;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.common.curves.BasicUnitConversionData;
 import com.mmxlabs.common.parser.IExpression;
+import com.mmxlabs.common.parser.RawTreeParser;
+import com.mmxlabs.common.parser.nodes.BreakevenNode;
+import com.mmxlabs.common.parser.nodes.CommodityNode;
+import com.mmxlabs.common.parser.nodes.ConstantNode;
+import com.mmxlabs.common.parser.nodes.ConversionNode;
+import com.mmxlabs.common.parser.nodes.CurrencyNode;
+import com.mmxlabs.common.parser.nodes.DatedAverageNode;
+import com.mmxlabs.common.parser.nodes.MarkedUpNode;
+import com.mmxlabs.common.parser.nodes.MaxFunctionNode;
+import com.mmxlabs.common.parser.nodes.MinFunctionNode;
+import com.mmxlabs.common.parser.nodes.Node;
+import com.mmxlabs.common.parser.nodes.OperatorNode;
+import com.mmxlabs.common.parser.nodes.SCurveNode;
+import com.mmxlabs.common.parser.nodes.ShiftNode;
+import com.mmxlabs.common.parser.nodes.SplitNode;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
-import com.mmxlabs.models.lng.pricing.parser.Node;
-import com.mmxlabs.models.lng.pricing.parser.RawTreeParser;
 
 public class Nodes {
+	
+	
 	/**
 	 * Expands the node tree. Returns a new node if the parentNode has change and needs to be replaced in the upper chain. Returns null if the node does not need replacing (note: the children may
 	 * still have changed).
@@ -135,15 +151,26 @@ public class Nodes {
 		} else if (parentNode.token.equals("*") || parentNode.token.equals("/") || parentNode.token.equals("+") || parentNode.token.equals("-") || parentNode.token.equals("%")) {
 			n = new OperatorNode(parentNode.token);
 		} else if (lookupData.commodityMap.containsKey(parentNode.token.toLowerCase())) {
-			n = new CommodityNode(lookupData.commodityMap.get(parentNode.token.toLowerCase()));
-
+			final CommodityCurve curve = lookupData.commodityMap.get(parentNode.token.toLowerCase());
+			n = new CommodityNode(curve.getName(), curve.getVolumeUnit(), curve.getCurrencyUnit(), curve.getExpression());
 		} else if (lookupData.currencyMap.containsKey(parentNode.token.toLowerCase())) {
-			n = new CurrencyNode(lookupData.currencyMap.get(parentNode.token.toLowerCase()));
+			
+			n = new CurrencyNode(parentNode.token.toLowerCase());
 
 		} else if (lookupData.conversionMap.containsKey(parentNode.token.toLowerCase())) {
-			n = new ConversionNode(parentNode.token, lookupData.conversionMap.get(parentNode.token.toLowerCase()), false);
+			final String from = lookupData.conversionMap.get(parentNode.token.toLowerCase()).getFrom();
+			final String to = lookupData.conversionMap.get(parentNode.token.toLowerCase()).getTo();
+			final double factor = lookupData.conversionMap.get(parentNode.token.toLowerCase()).getFactor();
+			final BasicUnitConversionData uce = new BasicUnitConversionData(from, to, factor);
+			
+			n = new ConversionNode(parentNode.token, uce, false);
 		} else if (lookupData.reverseConversionMap.containsKey(parentNode.token.toLowerCase())) {
-			n = new ConversionNode(parentNode.token, lookupData.reverseConversionMap.get(parentNode.token.toLowerCase()), true);
+			final String from = lookupData.conversionMap.get(parentNode.token.toLowerCase()).getFrom();
+			final String to = lookupData.conversionMap.get(parentNode.token.toLowerCase()).getTo();
+			final double factor = lookupData.conversionMap.get(parentNode.token.toLowerCase()).getFactor();
+			final BasicUnitConversionData uce = new BasicUnitConversionData(from, to, factor);
+			
+			n = new ConversionNode(parentNode.token, uce, true);
 		} else if (parentNode.token.equals("?")) {
 			n = new BreakevenNode();
 		} else {

@@ -38,13 +38,14 @@ import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.builder.IBuilderExtension;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.providers.IInternalDateProvider;
 
 /**
  * Small helper class which is intended to be injected into external {@link ITransformerExtension}s and {@link IBuilderExtension}s to help with date and time conversion. This also has some routines
  * for creating {@link ICurve}s
  * 
  */
-public class DateAndCurveHelper {
+public class DateAndCurveHelper implements IInternalDateProvider{
 
 	@NonNull
 	private final ZonedDateTime earliestTime;

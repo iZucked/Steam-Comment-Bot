@@ -87,11 +87,9 @@ public class ToggleCharterLengthEditorActionDelegate extends ActionDelegate impl
 	}
 
 	private void updateState() {
-		if (currentSettings != null) {
-			currentSettings.eAdapters().remove(notificationAdapter);
-		}
 		if (currentModel != null) {
 			currentSettings = currentModel.getUserSettings();
+			currentModel.eAdapters().add(notificationAdapter);
 		}
 		if (currentSettings != null) {
 			currentSettings.eAdapters().add(notificationAdapter);
@@ -107,7 +105,14 @@ public class ToggleCharterLengthEditorActionDelegate extends ActionDelegate impl
 	public void dispose() {
 		action = null;
 		targetEditor = null;
+		if (currentModel != null) {
+			currentModel.eAdapters().remove(notificationAdapter);
+		}
 		currentModel = null;
+		if (currentSettings != null) {
+			currentSettings.eAdapters().remove(notificationAdapter);
+		}
+		currentSettings = null;
 	}
 
 	@Override

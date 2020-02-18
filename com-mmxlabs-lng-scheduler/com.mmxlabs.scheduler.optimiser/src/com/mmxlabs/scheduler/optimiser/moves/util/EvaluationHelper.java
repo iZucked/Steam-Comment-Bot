@@ -6,12 +6,17 @@ package com.mmxlabs.scheduler.optimiser.moves.util;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+
+import javax.inject.Named;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.paperdeals.BasicPaperDealAllocationEntry;
+import com.mmxlabs.common.paperdeals.BasicPaperDealData;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -25,6 +30,7 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScope;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.CapacityEvaluatedStateChecker;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPermissionConstraintChecker;
@@ -58,6 +64,10 @@ public class EvaluationHelper {
 
 	@Inject
 	private IPhaseOptimisationData phaseOptimisationData;
+	
+	@Inject
+	@Named(SchedulerConstants.GENERATED_PAPERS_IN_PNL)
+	private boolean generatedPapersInPNL;
 
 	private final boolean isReevaluating;
 
@@ -215,6 +225,9 @@ public class EvaluationHelper {
 			assert portSlot != null;
 			sumPNL += scheduledSequences.getUnusedSlotGroupValue(portSlot);
 		}
+		
+		sumPNL += computePaperPnL(scheduledSequences);
+		
 		return sumPNL;
 	}
 
@@ -357,5 +370,19 @@ public class EvaluationHelper {
 	public void setStrictChecking(final boolean strictChecking) {
 		this.strictChecking = strictChecking;
 	}
-
+	
+	private long computePaperPnL(final ProfitAndLossSequences profitAndLossSequences) {
+		long paperPnL = 0;
+		if (generatedPapersInPNL) {
+			final Map<BasicPaperDealData, List<BasicPaperDealAllocationEntry>> paperDealAllocations = profitAndLossSequences.getPaperDealRecords();
+			
+			for (final BasicPaperDealData basicPaperDealData : paperDealAllocations.keySet()) {
+				for (final BasicPaperDealAllocationEntry entry : paperDealAllocations.get(basicPaperDealData)) {
+					paperPnL += entry.getValue();
+				}
+			}
+		}
+		
+		return paperPnL;
+	}
 }

@@ -209,7 +209,22 @@
                       class="CostModel">
                 </target>
              </constraint>
-             
+             <constraint
+                   class="com.mmxlabs.models.lng.pricing.validation.MarketIndexConstraint"
+                   id="com.mmxlabs.models.lng.pricing.validation.MarketIndexConstraint"
+                   isEnabledByDefault="true"
+                   lang="java"
+                   mode="Batch"
+                   name="MarketIndexConstraint"
+                   severity="ERROR"
+                   statusCode="1">
+                <message>
+                   {0}
+                </message>
+                <target
+                      class="MarketIndex">
+                </target>
+             </constraint>
          </constraints>
       </constraintProvider>
    </extension>

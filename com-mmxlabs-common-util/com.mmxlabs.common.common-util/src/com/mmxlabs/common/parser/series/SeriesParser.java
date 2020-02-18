@@ -7,7 +7,6 @@ package com.mmxlabs.common.parser.series;
 import java.io.StringReader;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 

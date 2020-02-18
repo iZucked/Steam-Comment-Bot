@@ -8,7 +8,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.schedule.SlotAllocation;
 
 public interface IExposuresCustomiser {
 
@@ -19,7 +18,7 @@ public interface IExposuresCustomiser {
 	 * @return
 	 */
 	@Nullable
-	String provideExposedPriceExpression(@NonNull Slot slot, SlotAllocation slotAllocation);
+	String provideExposedPriceExpression(@NonNull Slot<?> slot);
 	
-	SlotAllocation getExposed(final SlotAllocation slotAllocation);
+	Slot<?> getExposed(final Slot<?> slot);
 }

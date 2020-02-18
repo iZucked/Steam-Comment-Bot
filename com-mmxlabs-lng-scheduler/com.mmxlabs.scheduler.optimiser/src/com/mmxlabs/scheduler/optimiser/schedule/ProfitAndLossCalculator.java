@@ -8,6 +8,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.schedule;
 
+import java.time.YearMonth;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -19,18 +20,18 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.exposures.BasicExposureRecord;
+import com.mmxlabs.common.paperdeals.BasicPaperDealAllocationEntry;
+import com.mmxlabs.common.paperdeals.BasicPaperDealData;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IElementAnnotationsMap;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
-import com.mmxlabs.scheduler.optimiser.components.IHeelOptionConsumer;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionConsumerPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IHeelOptionSupplier;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionSupplierPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
@@ -47,6 +48,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator.EvaluationMode;
+import com.mmxlabs.scheduler.optimiser.exposures.ExposuresCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences.HeelValueRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
@@ -55,6 +57,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocation
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.CargoValueAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.util.SequenceEvaluationUtils;
+import com.mmxlabs.scheduler.optimiser.paperdeals.PaperDealsCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -92,6 +95,14 @@ public class ProfitAndLossCalculator {
 
 	@Inject
 	private IVesselProvider vesselProvider;
+	
+	@Inject
+	private ExposuresCalculator exposuresCalculator;
+	
+	@Inject
+	private PaperDealsCalculator paperDealsCalculator;
+	
+	 
 
 	@Nullable
 	public ProfitAndLossSequences calculateProfitAndLoss(final @NonNull ISequences sequences, @NonNull final VolumeAllocatedSequences volumeAllocatedSequences,
@@ -176,6 +187,14 @@ public class ProfitAndLossCalculator {
 							lastHeelPricePerMMBTU =	cargoValueAnnotation.getSlotPricePerMMBTu(lastSlot);
 						}
 
+						// Populating exposures record
+						if (annotatedSolution != null) {
+							for (IPortSlot portSlot : cargoValueAnnotation.getSlots()) {
+								final List<BasicExposureRecord> records = exposuresCalculator.calculateExposures(cargoValueAnnotation, portSlot);
+								profitAndLossSequences.addPortExposureRecord(portSlot, records);
+							}
+						}
+						
 						// Store annotations if required
 						if (annotatedSolution != null) {
 							// now add some more data for each load slot
@@ -213,8 +232,15 @@ public class ProfitAndLossCalculator {
 				time += getPlanDuration(plan);
 			}
 		}
+		
+		// Calculating the paper deals allocations and exposures
+		if (annotatedSolution != null) {
+			profitAndLossSequences.setPaperDealRecords(paperDealsCalculator.processPaperDeals(profitAndLossSequences.getPortExposureRecords()));
+		}
+		//
 
 		calculateUnusedSlotPNL(sequences, profitAndLossSequences, annotatedSolution);
+		
 
 		if (annotatedSolution != null && markToMarketProvider != null) {
 			// calculateMarkToMarketPNL(sequences, annotatedSolution);

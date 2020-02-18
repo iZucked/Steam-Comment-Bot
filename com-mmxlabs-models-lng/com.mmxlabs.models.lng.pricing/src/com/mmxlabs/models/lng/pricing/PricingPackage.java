@@ -1736,13 +1736,31 @@ public interface PricingPackage extends EPackage {
 	int MARKET_INDEX__PRICING_CALENDAR = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Bid Curve</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKET_INDEX__BID_CURVE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Offer Curve</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKET_INDEX__OFFER_CURVE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 3;
+
+	/**
 	 * The number of structural features of the '<em>Market Index</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MARKET_INDEX_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
+	int MARKET_INDEX_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.PricingCalendarEntryImpl <em>Calendar Entry</em>}' class.
@@ -3133,6 +3151,28 @@ public interface PricingPackage extends EPackage {
 	EReference getMarketIndex_PricingCalendar();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.pricing.MarketIndex#getBidCurve <em>Bid Curve</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Bid Curve</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.MarketIndex#getBidCurve()
+	 * @see #getMarketIndex()
+	 * @generated
+	 */
+	EReference getMarketIndex_BidCurve();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.pricing.MarketIndex#getOfferCurve <em>Offer Curve</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Offer Curve</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.MarketIndex#getOfferCurve()
+	 * @see #getMarketIndex()
+	 * @generated
+	 */
+	EReference getMarketIndex_OfferCurve();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.PricingCalendarEntry <em>Calendar Entry</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4250,6 +4290,22 @@ public interface PricingPackage extends EPackage {
 		 * @generated
 		 */
 		EReference MARKET_INDEX__PRICING_CALENDAR = eINSTANCE.getMarketIndex_PricingCalendar();
+
+		/**
+		 * The meta object literal for the '<em><b>Bid Curve</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference MARKET_INDEX__BID_CURVE = eINSTANCE.getMarketIndex_BidCurve();
+
+		/**
+		 * The meta object literal for the '<em><b>Offer Curve</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference MARKET_INDEX__OFFER_CURVE = eINSTANCE.getMarketIndex_OfferCurve();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.PricingCalendarEntryImpl <em>Calendar Entry</em>}' class.

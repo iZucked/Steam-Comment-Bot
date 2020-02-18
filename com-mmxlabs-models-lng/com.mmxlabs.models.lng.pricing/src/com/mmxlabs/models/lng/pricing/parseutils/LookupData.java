@@ -10,6 +10,8 @@ import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.common.parser.nodes.MarkedUpNode;
+import com.mmxlabs.common.parser.nodes.Node;
 import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
 import com.mmxlabs.models.lng.pricing.BunkerFuelCurve;
 import com.mmxlabs.models.lng.pricing.CharterCurve;
@@ -17,7 +19,6 @@ import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.CurrencyCurve;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.UnitConversion;
-import com.mmxlabs.models.lng.pricing.parser.Node;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
 
 public class LookupData {

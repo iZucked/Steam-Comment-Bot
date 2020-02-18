@@ -69,6 +69,9 @@ public class LNGTransformerHelper {
 	
 	public static final @NonNull String HINT_PERIOD_SCENARIO = "hint-period-scenario";
 
+	// Turn auto-heding using flat curve on/off
+	public static final @NonNull String HINT_GENERATED_PAPERS_PNL = "hint-generated-papers-pnl";
+	
 	@NonNull
 	public static Set<@NonNull String> getHints(@NonNull final UserSettings userSettings, @NonNull final String @Nullable... initialHints) {
 
@@ -113,6 +116,11 @@ public class LNGTransformerHelper {
 
 		if (userSettings.isNominalOnly()) {
 			hints.add(HINT_NOMINAL_ADP);
+		}
+		if (userSettings.isGeneratedPapersInPNL()) {
+			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_GENERATED_PAPER_DEALS)) {
+				hints.add(HINT_GENERATED_PAPERS_PNL);
+			}
 		}
 
 		return hints;

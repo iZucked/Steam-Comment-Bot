@@ -9,7 +9,6 @@ Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-10
 Export-Package: com.mmxlabs.models.lng.pricing,
  com.mmxlabs.models.lng.pricing.impl,
- com.mmxlabs.models.lng.pricing.parser,
  com.mmxlabs.models.lng.pricing.parseutils,
  com.mmxlabs.models.lng.pricing.util
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",

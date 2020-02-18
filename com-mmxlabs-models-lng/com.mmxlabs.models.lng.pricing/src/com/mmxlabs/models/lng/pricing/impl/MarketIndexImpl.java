@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.models.lng.pricing.impl;
 
+import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -28,6 +29,8 @@ import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.MarketIndexImpl#getSettleCalendar <em>Settle Calendar</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.MarketIndexImpl#getPricingCalendar <em>Pricing Calendar</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.MarketIndexImpl#getBidCurve <em>Bid Curve</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.MarketIndexImpl#getOfferCurve <em>Offer Curve</em>}</li>
  * </ul>
  *
  * @generated
@@ -52,6 +55,26 @@ public class MarketIndexImpl extends NamedObjectImpl implements MarketIndex {
 	 * @ordered
 	 */
 	protected PricingCalendar pricingCalendar;
+
+	/**
+	 * The cached value of the '{@link #getBidCurve() <em>Bid Curve</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBidCurve()
+	 * @generated
+	 * @ordered
+	 */
+	protected CommodityCurve bidCurve;
+
+	/**
+	 * The cached value of the '{@link #getOfferCurve() <em>Offer Curve</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOfferCurve()
+	 * @generated
+	 * @ordered
+	 */
+	protected CommodityCurve offerCurve;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -158,6 +181,86 @@ public class MarketIndexImpl extends NamedObjectImpl implements MarketIndex {
 	 * @generated
 	 */
 	@Override
+	public CommodityCurve getBidCurve() {
+		if (bidCurve != null && bidCurve.eIsProxy()) {
+			InternalEObject oldBidCurve = (InternalEObject)bidCurve;
+			bidCurve = (CommodityCurve)eResolveProxy(oldBidCurve);
+			if (bidCurve != oldBidCurve) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PricingPackage.MARKET_INDEX__BID_CURVE, oldBidCurve, bidCurve));
+			}
+		}
+		return bidCurve;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CommodityCurve basicGetBidCurve() {
+		return bidCurve;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setBidCurve(CommodityCurve newBidCurve) {
+		CommodityCurve oldBidCurve = bidCurve;
+		bidCurve = newBidCurve;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.MARKET_INDEX__BID_CURVE, oldBidCurve, bidCurve));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public CommodityCurve getOfferCurve() {
+		if (offerCurve != null && offerCurve.eIsProxy()) {
+			InternalEObject oldOfferCurve = (InternalEObject)offerCurve;
+			offerCurve = (CommodityCurve)eResolveProxy(oldOfferCurve);
+			if (offerCurve != oldOfferCurve) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PricingPackage.MARKET_INDEX__OFFER_CURVE, oldOfferCurve, offerCurve));
+			}
+		}
+		return offerCurve;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CommodityCurve basicGetOfferCurve() {
+		return offerCurve;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setOfferCurve(CommodityCurve newOfferCurve) {
+		CommodityCurve oldOfferCurve = offerCurve;
+		offerCurve = newOfferCurve;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.MARKET_INDEX__OFFER_CURVE, oldOfferCurve, offerCurve));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case PricingPackage.MARKET_INDEX__SETTLE_CALENDAR:
@@ -166,6 +269,12 @@ public class MarketIndexImpl extends NamedObjectImpl implements MarketIndex {
 			case PricingPackage.MARKET_INDEX__PRICING_CALENDAR:
 				if (resolve) return getPricingCalendar();
 				return basicGetPricingCalendar();
+			case PricingPackage.MARKET_INDEX__BID_CURVE:
+				if (resolve) return getBidCurve();
+				return basicGetBidCurve();
+			case PricingPackage.MARKET_INDEX__OFFER_CURVE:
+				if (resolve) return getOfferCurve();
+				return basicGetOfferCurve();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -185,6 +294,12 @@ public class MarketIndexImpl extends NamedObjectImpl implements MarketIndex {
 			case PricingPackage.MARKET_INDEX__PRICING_CALENDAR:
 				setPricingCalendar((PricingCalendar)newValue);
 				return;
+			case PricingPackage.MARKET_INDEX__BID_CURVE:
+				setBidCurve((CommodityCurve)newValue);
+				return;
+			case PricingPackage.MARKET_INDEX__OFFER_CURVE:
+				setOfferCurve((CommodityCurve)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -203,6 +318,12 @@ public class MarketIndexImpl extends NamedObjectImpl implements MarketIndex {
 			case PricingPackage.MARKET_INDEX__PRICING_CALENDAR:
 				setPricingCalendar((PricingCalendar)null);
 				return;
+			case PricingPackage.MARKET_INDEX__BID_CURVE:
+				setBidCurve((CommodityCurve)null);
+				return;
+			case PricingPackage.MARKET_INDEX__OFFER_CURVE:
+				setOfferCurve((CommodityCurve)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -219,6 +340,10 @@ public class MarketIndexImpl extends NamedObjectImpl implements MarketIndex {
 				return settleCalendar != null;
 			case PricingPackage.MARKET_INDEX__PRICING_CALENDAR:
 				return pricingCalendar != null;
+			case PricingPackage.MARKET_INDEX__BID_CURVE:
+				return bidCurve != null;
+			case PricingPackage.MARKET_INDEX__OFFER_CURVE:
+				return offerCurve != null;
 		}
 		return super.eIsSet(featureID);
 	}

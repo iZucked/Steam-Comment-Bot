@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.schedule.provider;
 
 
+import com.mmxlabs.models.lng.cargo.CargoFactory;
 import java.util.Collection;
 import java.util.List;
 
@@ -120,6 +121,7 @@ public class ScheduleItemProvider
 			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__INVENTORY_LEVELS);
 			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__PAPER_DEAL_ALLOCATIONS);
 			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__OTHER_PNL);
+			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__GENERATED_PAPER_DEALS);
 		}
 		return childrenFeatures;
 	}
@@ -179,6 +181,7 @@ public class ScheduleItemProvider
 			case SchedulePackage.SCHEDULE__INVENTORY_LEVELS:
 			case SchedulePackage.SCHEDULE__PAPER_DEAL_ALLOCATIONS:
 			case SchedulePackage.SCHEDULE__OTHER_PNL:
+			case SchedulePackage.SCHEDULE__GENERATED_PAPER_DEALS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -235,6 +238,16 @@ public class ScheduleItemProvider
 			(createChildParameter
 				(SchedulePackage.Literals.SCHEDULE__OTHER_PNL,
 				 ScheduleFactory.eINSTANCE.createOtherPNL()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SCHEDULE__GENERATED_PAPER_DEALS,
+				 CargoFactory.eINSTANCE.createBuyPaperDeal()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SCHEDULE__GENERATED_PAPER_DEALS,
+				 CargoFactory.eINSTANCE.createSellPaperDeal()));
 	}
 
 }
