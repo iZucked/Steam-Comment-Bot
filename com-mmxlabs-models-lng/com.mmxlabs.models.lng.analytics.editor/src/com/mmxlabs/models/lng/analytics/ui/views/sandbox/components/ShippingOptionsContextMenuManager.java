@@ -76,7 +76,7 @@ public class ShippingOptionsContextMenuManager implements MenuDetectListener {
 		final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
 		final GridItem[] items = grid.getSelection();
 		if (items.length > 0) {
-			mgr.add(new RunnableAction("Delete option(s)", () -> {
+			mgr.add(new RunnableAction("Delete", () -> {
 				final Collection<EObject> c = new LinkedHashSet<>();
 				selection.iterator().forEachRemaining(ee -> c.add((EObject) ee));
 				final CompoundCommand compoundCommand = new CompoundCommand("Delete shipping option");

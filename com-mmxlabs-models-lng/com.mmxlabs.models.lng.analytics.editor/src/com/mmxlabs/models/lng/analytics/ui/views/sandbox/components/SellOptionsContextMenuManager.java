@@ -77,7 +77,7 @@ public class SellOptionsContextMenuManager implements MenuDetectListener {
 		final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
 		final GridItem[] items = grid.getSelection();
 		if (items.length > 0) {
-			mgr.add(new RunnableAction("Delete option(s)", () -> {
+			mgr.add(new RunnableAction("Delete", () -> {
 				final Collection<EObject> c = new LinkedList<>();
 				selection.iterator().forEachRemaining(ee -> c.add((EObject) ee));
 
