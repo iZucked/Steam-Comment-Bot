@@ -1033,7 +1033,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				final OptionAnalysisModel m = currentModel;
 				if (m != null) {
 					int mode = combo.getSelectionIndex();
-					// boolean selection = matchingButton.getSelection();
 					partialCaseComponent.setVisible(mode == 0);
 					if (beModeToggle != null) {
 						beModeToggle.setVisible(mode != 1);
@@ -1055,7 +1054,13 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		inputWants.add(am -> {
 			if (am instanceof OptionAnalysisModel) {
 				OptionAnalysisModel optionAnalysisModel = (OptionAnalysisModel) am;
-				combo.select(optionAnalysisModel.getMode());
+				int mode = optionAnalysisModel.getMode();
+				combo.select(mode);
+				partialCaseComponent.setVisible(mode == 0);
+				if (beModeToggle != null) {
+					beModeToggle.setVisible(mode != 1);
+				}
+				refreshSections(true, EnumSet.of(SectionType.MIDDLE));
 			}
 		});
 
