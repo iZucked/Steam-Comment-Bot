@@ -134,7 +134,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 	private ICommandHandler commandHandler;
 
-	private Composite rhsComposite;
 	private ScrolledComposite lhsScrolledComposite;
 	private BuyOptionsComponent buyComponent;
 	private SellOptionsComponent sellComponent;
@@ -155,9 +154,10 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		mainComposite = new Composite(parent, SWT.NONE);
 		mainComposite.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
-		mainComposite.setLayoutData(GridDataFactory.swtDefaults()//
+		mainComposite.setLayoutData(GridDataFactory.fillDefaults()//
 				.grab(true, true)//
-				.align(SWT.CENTER, SWT.TOP).span(1, 1).create());
+				//.align(SWT.LEFT, SWT.TOP)
+				.span(1, 1).create());
 		mainComposite.setLayout(GridLayoutFactory.fillDefaults()//
 				.equalWidth(false) //
 				.numColumns(5) //
@@ -169,7 +169,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			lhsScrolledComposite.setLayoutData(GridDataFactory.swtDefaults()//
 					.grab(false, true)//
 					.span(3, 1) //
-					.align(SWT.FILL, SWT.FILL).create());
+					.align(SWT.LEFT, SWT.FILL).create());
 			lhsScrolledComposite.setLayout(new GridLayout());
 			lhsScrolledComposite.setExpandHorizontal(true);
 			lhsScrolledComposite.setExpandVertical(true);
@@ -181,7 +181,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			lhsComposite.setLayoutData(GridDataFactory.swtDefaults()//
 					.grab(false, true)//
 					.span(1, 1) //
-					.align(SWT.FILL, SWT.FILL).create());
+					.align(SWT.LEFT, SWT.FILL).create());
 			lhsComposite.setLayout(GridLayoutFactory.fillDefaults()//
 					.equalWidth(false) //
 					.numColumns(1) //
@@ -231,7 +231,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		{
 			centralScrolledComposite = new ScrolledComposite(mainComposite, SWT.H_SCROLL | SWT.V_SCROLL);
 			centralScrolledComposite.setLayoutData(GridDataFactory.swtDefaults()//
-					.grab(false, true)//
+					.grab(true, true)//
 					.align(SWT.FILL, SWT.FILL) //
 					.span(1, 1) //
 					.create());
@@ -649,13 +649,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 					centralScrolledComposite.setMinSize(centralComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 				}
 			}
-
-			packAll(rhsComposite);
 		});
-	}
-
-	public void repackResults() {
-		packAll(rhsComposite);
 	}
 
 	public void packAll(final Control c) {
