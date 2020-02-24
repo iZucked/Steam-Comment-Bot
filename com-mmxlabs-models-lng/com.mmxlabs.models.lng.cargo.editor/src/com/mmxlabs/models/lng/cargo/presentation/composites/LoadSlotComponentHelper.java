@@ -82,6 +82,7 @@ public class LoadSlotComponentHelper extends BaseComponentHelper {
 		add_transferFromEditor(detailComposite, topClass);
 		add_salesDeliveryTypeEditor(detailComposite, topClass);
 		add_desPurchaseDealTypeEditor(detailComposite, topClass);
+		add_volumeCounterPartyEditor(detailComposite, topClass);
 	}
 
 	/**
@@ -162,6 +163,21 @@ public class LoadSlotComponentHelper extends BaseComponentHelper {
 	protected void add_desPurchaseDealTypeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.LOAD_SLOT__DES_PURCHASE_DEAL_TYPE);
 		detailComposite.addInlineEditor(new NonShppedDealTypeInlineEditorWrapper(editor));
+	}
+
+	/**
+	 * Create the editor for the volumeCounterParty feature on LoadSlot
+	 *
+	 * @generated NOT
+	 */
+	protected void add_volumeCounterPartyEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_COUNTER_PARTY_VOLUME)) {
+			// Hide for spot loads
+			if (!CargoPackage.Literals.SPOT_LOAD_SLOT.equals(topClass)) {
+				final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.LOAD_SLOT__VOLUME_COUNTER_PARTY);
+				detailComposite.addInlineEditor(new CounterPartyVolumeTypeInlineEditorWrapper(editor));
+			}
+		}
 	}
 
 	@Override

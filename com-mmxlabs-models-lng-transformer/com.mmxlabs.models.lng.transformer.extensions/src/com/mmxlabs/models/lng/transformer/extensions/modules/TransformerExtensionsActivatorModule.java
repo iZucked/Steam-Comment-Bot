@@ -11,6 +11,7 @@ import com.mmxlabs.models.lng.transformer.extensions.adp.ADPTransformerModule;
 import com.mmxlabs.models.lng.transformer.extensions.contingencytime.ContingencyIdleTimeModule;
 import com.mmxlabs.models.lng.transformer.extensions.contracts.ballastbonus.BallastBonusContractTransformerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.contracts.ballastbonus.BallastBonusExporterExtensionFactory;
+import com.mmxlabs.models.lng.transformer.extensions.counterpartyvolume.CounterPartyVolumeDataModule;
 import com.mmxlabs.models.lng.transformer.extensions.entities.EntityTransformerExtensionFactory;
 import com.mmxlabs.models.lng.transformer.extensions.exposures.ExposureDataModule;
 import com.mmxlabs.models.lng.transformer.extensions.exposures.ExposuresExporterExtensionFactory;
@@ -48,6 +49,7 @@ public class TransformerExtensionsActivatorModule extends PeaberryActivationModu
 		install(new FullCargoLotModule());
 		install(new ExposureDataModule());
 		install(new PaperDealDataModule());
+		install(new CounterPartyVolumeDataModule());
 
 		bindService(SimpleContractTransformerFactory.class).export();
 		bindService(BallastBonusContractTransformerFactory.class).export();

@@ -19,6 +19,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -28,6 +29,7 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.lng.schedule.util.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.transformer.its.RequireFeature;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.types.DESPurchaseDealType;
 import com.mmxlabs.models.lng.types.FOBSaleDealType;
@@ -44,8 +46,9 @@ import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
  *
  */
 @ExtendWith(ShiroRunner.class)
+@RequireFeature(features = {KnownFeatures.FEATURE_COUNTER_PARTY_VOLUME})
 public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
-
+	
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testDES_Purchase_MaxTransfer_MMBTU() throws Exception {
@@ -699,6 +702,138 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 			verifyNoCapacityViolations(cargoAllocation);
 
 		});
+	}
+	
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testDES_Purchase_CPVolume_MinLoadVolume_Match() throws Exception {
+
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPort("Futtsu"), null, entity, "5", 20.0, null) //
+				.withVolumeLimits(2_950_000, 4_000_000, VolumeUnits.MMBTU).build() //
+
+				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPort("Futtsu"), null, entity, "7") //
+				.withVolumeLimits(2_500_000, 4_000_000, VolumeUnits.MMBTU).build() //
+				.build();
+
+		evaluateWithOverrides(new MinMaxVolumeModule(), null, scenarioRunner -> {
+
+			final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
+			final Schedule schedule = scheduleModel.getSchedule();
+			Assertions.assertNotNull(schedule);
+			Assertions.assertEquals(1, schedule.getCargoAllocations().size());
+
+			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
+
+			Assertions.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
+
+			Assertions.assertEquals(2_950_000, cargoAllocation.getLoadAllocation().getEnergyTransferred());
+
+			Assertions.assertEquals(2_950_000, cargoAllocation.getDischargeAllocation().getEnergyTransferred());
+
+			verifyNoCapacityViolations(cargoAllocation);
+		});
+	}
+	
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testDES_Purchase_CPVolume_MaxLoadVolume_Match() throws Exception {
+
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPort("Futtsu"), null, entity, "7", 20.0, null) //
+				.withVolumeLimits(2_950_000, 4_000_000, VolumeUnits.MMBTU).build() //
+
+				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPort("Futtsu"), null, entity, "5") //
+				.withVolumeLimits(2_500_000, 4_000_000, VolumeUnits.MMBTU).build() //
+				.build();
+
+		evaluateWithOverrides(new MinMaxVolumeModule(), null, scenarioRunner -> {
+
+			final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
+			final Schedule schedule = scheduleModel.getSchedule();
+			Assertions.assertNotNull(schedule);
+			Assertions.assertEquals(1, schedule.getCargoAllocations().size());
+
+			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
+
+			Assertions.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
+
+			Assertions.assertEquals(4_000_000, cargoAllocation.getLoadAllocation().getEnergyTransferred());
+
+			Assertions.assertEquals(4_000_000, cargoAllocation.getDischargeAllocation().getEnergyTransferred());
+
+			verifyNoCapacityViolations(cargoAllocation);
+		});
+	}
+	
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testDES_Purchase_CPVolume_MinLoadVolume_UnMatch() throws Exception {
+
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPort("Futtsu"), null, entity, "5", 20.0, null) //
+				.withVolumeLimits(2_950_000, 4_000_000, VolumeUnits.MMBTU).build() //
+
+				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPort("Futtsu"), null, entity, "7") //
+				.withVolumeLimits(3_000_000, 4_000_000, VolumeUnits.MMBTU).build() //
+				.build();
+
+		evaluateWithOverrides(new MinMaxVolumeModule(), null, scenarioRunner -> {
+
+			final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
+			final Schedule schedule = scheduleModel.getSchedule();
+			Assertions.assertNotNull(schedule);
+			Assertions.assertEquals(1, schedule.getCargoAllocations().size());
+
+			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
+
+			Assertions.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
+
+			Assertions.assertEquals(2_950_000, cargoAllocation.getLoadAllocation().getEnergyTransferred());
+
+			Assertions.assertEquals(2_950_000, cargoAllocation.getDischargeAllocation().getEnergyTransferred());
+
+			Assertions.assertTrue(verifySomeCapacityViolations(cargoAllocation));
+		});
+	}
+	
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testDES_Purchase_CPVolume_MaxLoadVolume_UnMatch() throws Exception {
+
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPort("Futtsu"), null, entity, "7", 20.0, null) //
+				.withVolumeLimits(2_950_000, 4_000_000, VolumeUnits.MMBTU).build() //
+
+				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPort("Futtsu"), null, entity, "5") //
+				.withVolumeLimits(2_500_000, 3_900_000, VolumeUnits.MMBTU).build() //
+				.build();
+
+		evaluateWithOverrides(new MinMaxVolumeModule(), null, scenarioRunner -> {
+
+			final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
+			final Schedule schedule = scheduleModel.getSchedule();
+			Assertions.assertNotNull(schedule);
+			Assertions.assertEquals(1, schedule.getCargoAllocations().size());
+
+			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
+
+			Assertions.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
+
+			Assertions.assertEquals(3_900_000, cargoAllocation.getLoadAllocation().getEnergyTransferred());
+
+			Assertions.assertEquals(3_900_000, cargoAllocation.getDischargeAllocation().getEnergyTransferred());
+
+			Assertions.assertTrue(verifySomeCapacityViolations(cargoAllocation));
+		});
+	}
+	
+	private boolean verifySomeCapacityViolations(final SimpleCargoAllocation cargoAllocation) {
+		for (SlotAllocation slotAllocation : cargoAllocation.getCargoAllocation().getSlotAllocations()) {
+			if(!slotAllocation.getSlotVisit().getViolations().isEmpty())
+				return true;
+		}
+		return false;
 	}
 
 	/**

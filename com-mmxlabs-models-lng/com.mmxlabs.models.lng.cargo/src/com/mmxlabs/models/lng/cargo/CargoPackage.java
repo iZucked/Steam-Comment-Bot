@@ -1645,13 +1645,22 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT__DES_PURCHASE_DEAL_TYPE = SLOT_FEATURE_COUNT + 6;
 
 	/**
+	 * The feature id for the '<em><b>Volume Counter Party</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__VOLUME_COUNTER_PARTY = SLOT_FEATURE_COUNT + 7;
+
+	/**
 	 * The number of structural features of the '<em>Load Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 7;
+	int LOAD_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 8;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -3182,6 +3191,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_LOAD_SLOT__DES_PURCHASE_DEAL_TYPE = LOAD_SLOT__DES_PURCHASE_DEAL_TYPE;
+
+	/**
+	 * The feature id for the '<em><b>Volume Counter Party</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__VOLUME_COUNTER_PARTY = LOAD_SLOT__VOLUME_COUNTER_PARTY;
 
 	/**
 	 * The feature id for the '<em><b>Market</b></em>' reference.
@@ -8250,6 +8268,17 @@ public interface CargoPackage extends EPackage {
 	EAttribute getLoadSlot_DesPurchaseDealType();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.LoadSlot#isVolumeCounterParty <em>Volume Counter Party</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Volume Counter Party</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.LoadSlot#isVolumeCounterParty()
+	 * @see #getLoadSlot()
+	 * @generated
+	 */
+	EAttribute getLoadSlot_VolumeCounterParty();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.LoadSlot#getSlotOrDelegateCV() <em>Get Slot Or Delegate CV</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -10938,6 +10967,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute LOAD_SLOT__DES_PURCHASE_DEAL_TYPE = eINSTANCE.getLoadSlot_DesPurchaseDealType();
+
+		/**
+		 * The meta object literal for the '<em><b>Volume Counter Party</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute LOAD_SLOT__VOLUME_COUNTER_PARTY = eINSTANCE.getLoadSlot_VolumeCounterParty();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Delegate CV</b></em>' operation.

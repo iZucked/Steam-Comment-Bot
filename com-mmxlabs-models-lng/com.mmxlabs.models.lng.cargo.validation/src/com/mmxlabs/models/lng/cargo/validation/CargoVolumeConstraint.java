@@ -157,7 +157,6 @@ public class CargoVolumeConstraint extends AbstractModelMultiConstraint {
 				factory.make(ctx, failures);
 			}
 		}
-
 	}
 
 	private int getVesselCapacity(final Cargo cargo) {

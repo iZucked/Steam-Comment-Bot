@@ -24,6 +24,7 @@ import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator.Evaluatio
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord.AllocationMode;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.utils.IBoilOffHelper;
+import com.mmxlabs.scheduler.optimiser.providers.ICounterPartyVolumeProvider;
 
 /**
  * A {@link IVolumeAllocator} implementation that checks (estimated) P&L and decided whether to full load (normal mode) or min load (for cargoes which are loosing money).
@@ -35,6 +36,9 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 
 	@Inject
 	private IBoilOffHelper inPortBoilOffHelper;
+	
+	@Inject
+	private ICounterPartyVolumeProvider counterPartyVolumeProvider;
 
 	@Inject
 	@NotCaching
@@ -121,7 +125,10 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 		final long minTransferPNL = entityValueCalculatorProvider.get()
 				.evaluate(EvaluationMode.Estimate, allocationRecord.resourceVoyagePlan, annotation, allocationRecord.vesselAvailability, allocationRecord.vesselStartTime, null, null).getSecond();
 
-		if (maxTransferPNL >= minTransferPNL) {
+		final boolean counterPartyVolumeOption = counterPartyVolumeProvider.isCounterPartyVolume(loadSlot);
+		// If there's a counterparty option, we would flip the check. Consider the previous setTransferVolume
+		final boolean foo = counterPartyVolumeOption != (maxTransferPNL >= minTransferPNL);
+		if (foo) {
 			setTransferVolume(allocationRecord, slots, annotation, maxTransferVolumeMMBTu, maxTransferVolumeM3);
 		} else {
 			// No need to re-call this.

@@ -39,6 +39,7 @@ import com.mmxlabs.models.lng.types.DESPurchaseDealType;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl#getTransferFrom <em>Transfer From</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl#getSalesDeliveryType <em>Sales Delivery Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl#getDesPurchaseDealType <em>Des Purchase Deal Type</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl#isVolumeCounterParty <em>Volume Counter Party</em>}</li>
  * </ul>
  *
  * @generated
@@ -209,6 +210,26 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 	 * @ordered
 	 */
 	protected boolean desPurchaseDealTypeESet;
+
+	/**
+	 * The default value of the '{@link #isVolumeCounterParty() <em>Volume Counter Party</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isVolumeCounterParty()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean VOLUME_COUNTER_PARTY_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isVolumeCounterParty() <em>Volume Counter Party</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isVolumeCounterParty()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean volumeCounterParty = VOLUME_COUNTER_PARTY_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -551,6 +572,29 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isVolumeCounterParty() {
+		return volumeCounterParty;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setVolumeCounterParty(boolean newVolumeCounterParty) {
+		boolean oldVolumeCounterParty = volumeCounterParty;
+		volumeCounterParty = newVolumeCounterParty;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.LOAD_SLOT__VOLUME_COUNTER_PARTY, oldVolumeCounterParty, volumeCounterParty));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public double getSlotOrDelegateCV() {
@@ -629,6 +673,8 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 				return getSalesDeliveryType();
 			case CargoPackage.LOAD_SLOT__DES_PURCHASE_DEAL_TYPE:
 				return getDesPurchaseDealType();
+			case CargoPackage.LOAD_SLOT__VOLUME_COUNTER_PARTY:
+				return isVolumeCounterParty();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -661,6 +707,9 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 				return;
 			case CargoPackage.LOAD_SLOT__DES_PURCHASE_DEAL_TYPE:
 				setDesPurchaseDealType((DESPurchaseDealType)newValue);
+				return;
+			case CargoPackage.LOAD_SLOT__VOLUME_COUNTER_PARTY:
+				setVolumeCounterParty((Boolean)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -695,6 +744,9 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 			case CargoPackage.LOAD_SLOT__DES_PURCHASE_DEAL_TYPE:
 				unsetDesPurchaseDealType();
 				return;
+			case CargoPackage.LOAD_SLOT__VOLUME_COUNTER_PARTY:
+				setVolumeCounterParty(VOLUME_COUNTER_PARTY_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -721,6 +773,8 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 				return isSetSalesDeliveryType();
 			case CargoPackage.LOAD_SLOT__DES_PURCHASE_DEAL_TYPE:
 				return isSetDesPurchaseDealType();
+			case CargoPackage.LOAD_SLOT__VOLUME_COUNTER_PARTY:
+				return volumeCounterParty != VOLUME_COUNTER_PARTY_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -765,6 +819,8 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 		if (salesDeliveryTypeESet) result.append(salesDeliveryType); else result.append("<unset>");
 		result.append(", desPurchaseDealType: ");
 		if (desPurchaseDealTypeESet) result.append(desPurchaseDealType); else result.append("<unset>");
+		result.append(", volumeCounterParty: ");
+		result.append(volumeCounterParty);
 		result.append(')');
 		return result.toString();
 	}
