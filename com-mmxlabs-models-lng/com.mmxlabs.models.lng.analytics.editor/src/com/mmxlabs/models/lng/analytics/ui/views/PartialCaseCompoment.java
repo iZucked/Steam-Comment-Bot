@@ -150,7 +150,7 @@ public class PartialCaseCompoment extends AbstractSandboxComponent<OptionModelle
 		inputWants.add(partialCaseDiagram::setRoot);
 
 		lockedListeners.add(locked -> {
-			RunnerHelper.asyncExec(() -> partialCaseViewer.getGrid().setEnabled(!locked));
+			RunnerHelper.runAsyncIfControlValid(partialCaseViewer.getGrid(), grid -> grid.setEnabled(!locked));
 		});
 
 		hookDragSource(partialCaseViewer);

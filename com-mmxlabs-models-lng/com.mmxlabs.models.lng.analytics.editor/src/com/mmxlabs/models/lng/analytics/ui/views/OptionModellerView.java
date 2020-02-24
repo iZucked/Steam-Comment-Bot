@@ -905,7 +905,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			}
 		});
 
-		lockedListeners.add(locked -> RunnerHelper.asyncExec(() -> generateButton.setEnabled(currentModel != null && !locked)));
+		lockedListeners.add(locked -> RunnerHelper.runAsyncIfControlValid(generateButton, btn -> btn.setEnabled(currentModel != null && !locked)));
 
 		inputWants.add(m -> generateButton.setEnabled(m != null && !isLocked()));
 
@@ -954,7 +954,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			}
 		});
 
-		lockedListeners.add(locked -> RunnerHelper.asyncExec(() -> generateButton.setEnabled(currentModel != null && !locked)));
+		lockedListeners.add(locked -> RunnerHelper.runAsyncIfControlValid(generateButton, btn -> btn.setEnabled(currentModel != null && !locked)));
 
 		inputWants.add(m -> generateButton.setEnabled(m != null && !isLocked()));
 
@@ -1003,7 +1003,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			}
 		});
 
-		lockedListeners.add(locked -> RunnerHelper.asyncExec(() -> generateButton.setEnabled(currentModel != null && !locked)));
+		lockedListeners.add(locked -> RunnerHelper.runAsyncIfControlValid(generateButton, btn -> btn.setEnabled(currentModel != null && !locked)));
 
 		inputWants.add(m -> generateButton.setEnabled(m != null && !isLocked()));
 
@@ -1045,7 +1045,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			}
 		});
 
-		lockedListeners.add(locked -> RunnerHelper.asyncExec(() -> combo.setEnabled(!locked)));
+		lockedListeners.add(locked -> RunnerHelper.runAsyncIfControlValid(combo, c -> c.setEnabled(!locked)));
 
 		inputWants.add(m -> matching.setEnabled(m != null));
 
@@ -1091,7 +1091,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				}
 			}
 		});
-		lockedListeners.add(locked -> RunnerHelper.asyncExec(() -> matchingButton.setEnabled(!locked)));
+		lockedListeners.add(locked -> RunnerHelper.runAsyncIfControlValid(matchingButton, btn -> btn.setEnabled(!locked)));
 		inputWants.add(m -> matching.setEnabled(m != null));
 
 		inputWants.add(am -> {
@@ -1132,7 +1132,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 		});
 
-		lockedListeners.add(locked -> RunnerHelper.asyncExec(() -> matchingButton.setEnabled(!locked)));
+		lockedListeners.add(locked -> RunnerHelper.runAsyncIfControlValid(matchingButton, btn -> btn.setEnabled(!locked)));
 		inputWants.add(m -> matching.setEnabled(m != null));
 
 		// FIXME: This control does not respond to e.g. Undo() calls.
