@@ -47,6 +47,7 @@ import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstrain
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.AllowedVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.ContractCvConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.CounterPartyVolumeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.DifferentSTSVesselsConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.FOBDESCompatibilityConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenIdleTimeConstraintCheckerFactory;
@@ -426,6 +427,7 @@ public class ScenarioUtils {
 			constraints.add(createConstraint(PortExclusionConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(VesselEventConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(FOBDESCompatibilityConstraintCheckerFactory.NAME, true));
+			constraints.add(createConstraint(CounterPartyVolumeConstraintCheckerFactory.NAME, true));
 
 			constraints.add(createConstraint(OrderedSequenceElementsConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(PortTypeConstraintCheckerFactory.NAME, true));

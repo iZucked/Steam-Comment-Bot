@@ -352,7 +352,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	@NonNull
-	ILoadSlot createLoadSlot(@NonNull String id, @NonNull IPort port, @NonNull ITimeWindow window, long minVolume, long maxVolume, @NonNull ILoadPriceCalculator priceCalculator, int cargoCVValue,
+	ILoadSlot createLoadSlot(@NonNull String id, @NonNull IPort port, @NonNull ITimeWindow window, long minVolume, long maxVolume, boolean counterPartyVolume, @NonNull ILoadPriceCalculator priceCalculator, int cargoCVValue,
 			int durationHours, boolean cooldownSet, boolean cooldownForbidden, boolean purgeScheduled, int pricingDate, @NonNull PricingEventType pricingEvent, boolean slotIsOptional,
 			boolean slotIsLocked, boolean isSpotMarketSlot, boolean isVolumeLimitInM3, boolean isCancelled);
 

@@ -107,7 +107,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		mainFeatures = new ArrayList<>();
 		mainFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Port(), CargoFeatures.getSlot_Entity() });
 		mainFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_MinQuantity(), CargoFeatures.getSlot_MaxQuantity(), CargoFeatures.getSlot_VolumeLimitsUnit(),
-				CargoFeatures.getSlot_OperationalTolerance(), CargoFeatures.getSlot_FullCargoLot() });
+				CargoFeatures.getSlot_OperationalTolerance(), CargoFeatures.getSlot_FullCargoLot(), CargoFeatures.getLoadSlot_VolumeCounterParty() });
 		mainFeatures.add(new EStructuralFeature[] { CargoPackage.Literals.SLOT__COUNTERPARTY, CargoPackage.Literals.SLOT__CN });
 		allFeatures.addAll(getAllFeatures(mainFeatures));
 

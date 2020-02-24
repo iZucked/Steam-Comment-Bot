@@ -330,6 +330,30 @@ public class ScheduleModelUtils {
 		}
 		return slot;
 	}
+	
+	public static DischargeSlot getDischargeSlotFromCargo(final Cargo cargo) {
+		DischargeSlot slot = null;
+		if (cargo != null) {
+			for (final Slot<?> s : cargo.getSlots()) {
+				if (s instanceof DischargeSlot) {
+					slot = (DischargeSlot) s;
+				}
+			}
+		}
+		return slot;
+	}
+	
+	public static LoadSlot getLoadSlotFromCargo(final Cargo cargo) {
+		LoadSlot slot = null;
+		if (cargo != null) {
+			for (final Slot<?> s : cargo.getSlots()) {
+				if (s instanceof LoadSlot) {
+					slot = (LoadSlot) s;
+				}
+			}
+		}
+		return slot;
+	}
 
 	public static String getLoadPortName(final Object allocation) {
 		return getPortNameFromSlot(getLoadSlot(allocation));

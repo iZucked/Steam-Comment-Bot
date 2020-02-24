@@ -32,6 +32,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence.HeelRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
+import com.mmxlabs.scheduler.optimiser.providers.ICounterPartyVolumeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -70,6 +71,9 @@ public class CapacityViolationChecker {
 
 	@Inject
 	private IVesselProvider vesselProvider;
+	
+	@Inject
+	private ICounterPartyVolumeProvider counterPartyVolumeProvider;
 
 	/**
 	 * Calculate the various capacity violation check - min/max load & discharge volumes, max heel, vessel capacity and cooldown. Note the {@link IVolumeAllocator} and {@link LNGVoyageCalculator}
@@ -184,6 +188,7 @@ public class CapacityViolationChecker {
 					addEntryToCapacityViolationAnnotation(annotatedSolution, portSlot, CapacityViolationType.FORCED_COOLDOWN, 0, volumeAllocatedSequence);
 				}
 			} else {
+				// for DES purchase check that the load volume matches the min or the max load volume range
 				// Should be a non-shipped cargo
 				if (portSlot instanceof ILoadOption) {
 					final ILoadOption loadOption = (ILoadOption) portSlot;
@@ -244,6 +249,15 @@ public class CapacityViolationChecker {
 			} else if (commercialVolumeInM3 < portSlot.getMinLoadVolume()) {
 				addEntryToCapacityViolationAnnotation(annotatedSolution, portSlot, CapacityViolationType.MIN_LOAD, portSlot.getMinLoadVolume() - commercialVolumeInM3, volumeAllocatedSequence);
 			}
+			if (counterPartyVolumeProvider.isCounterPartyVolume(portSlot)) {
+				if (commercialVolumeInM3 > portSlot.getMaxLoadVolume()) {
+					addEntryToCapacityViolationAnnotation(annotatedSolution, portSlot, CapacityViolationType.MAX_LOAD, commercialVolumeInM3 - portSlot.getMaxLoadVolume(), volumeAllocatedSequence);
+				} else if (commercialVolumeInM3 < portSlot.getMinLoadVolume()) {
+					addEntryToCapacityViolationAnnotation(annotatedSolution, portSlot, CapacityViolationType.MIN_LOAD, portSlot.getMinLoadVolume() - commercialVolumeInM3, volumeAllocatedSequence);
+				} else if (commercialVolumeInM3 < portSlot.getMaxLoadVolume() && commercialVolumeInM3 > portSlot.getMinLoadVolume()) {
+					addEntryToCapacityViolationAnnotation(annotatedSolution, portSlot, CapacityViolationType.MIN_LOAD, commercialVolumeInM3 - portSlot.getMaxLoadVolume(), volumeAllocatedSequence);
+				}
+			}
 		} else {
 			final long commercialVolumeInMMBTu = allocationAnnotation.getCommercialSlotVolumeInMMBTu(portSlot);
 			// input is set in MMBTu
@@ -253,6 +267,19 @@ public class CapacityViolationChecker {
 			} else if (commercialVolumeInMMBTu < portSlot.getMinLoadVolumeMMBTU()) {
 				final long violationInMMBTu = portSlot.getMinLoadVolumeMMBTU() - commercialVolumeInMMBTu;
 				addEntryToCapacityViolationAnnotation(annotatedSolution, portSlot, CapacityViolationType.MIN_LOAD, getViolationInM3(violationInMMBTu, cargoCV), volumeAllocatedSequence);
+			}
+			
+			if (counterPartyVolumeProvider.isCounterPartyVolume(portSlot)) {
+				if (commercialVolumeInMMBTu > portSlot.getMaxLoadVolumeMMBTU()) {
+					final long violationInMMBTu = commercialVolumeInMMBTu - portSlot.getMaxLoadVolumeMMBTU();
+					addEntryToCapacityViolationAnnotation(annotatedSolution, portSlot, CapacityViolationType.MAX_LOAD, getViolationInM3(violationInMMBTu, cargoCV), volumeAllocatedSequence);
+				} else if (commercialVolumeInMMBTu < portSlot.getMinLoadVolumeMMBTU()) {
+					final long violationInMMBTu = portSlot.getMinLoadVolumeMMBTU() - commercialVolumeInMMBTu;
+					addEntryToCapacityViolationAnnotation(annotatedSolution, portSlot, CapacityViolationType.MIN_LOAD, getViolationInM3(violationInMMBTu, cargoCV), volumeAllocatedSequence);
+				} else if (commercialVolumeInMMBTu < portSlot.getMaxLoadVolumeMMBTU() && commercialVolumeInMMBTu > portSlot.getMinLoadVolumeMMBTU()) {
+					final long violationInMMBTu = commercialVolumeInMMBTu - portSlot.getMaxLoadVolumeMMBTU();
+					addEntryToCapacityViolationAnnotation(annotatedSolution, portSlot, CapacityViolationType.MIN_LOAD, getViolationInM3(violationInMMBTu, cargoCV), volumeAllocatedSequence);
+				}
 			}
 		}
 	}

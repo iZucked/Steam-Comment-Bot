@@ -111,6 +111,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IAllowedVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.ICounterPartyVolumeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDateKeyProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IElementPortProviderEditor;
@@ -392,6 +393,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Inject
 	private IScheduledPurgeProviderEditor scheduledPurgeProvider;
+	
+	@Inject
+	private ICounterPartyVolumeProviderEditor counterPartyVolumeProvider;
 
 	private final List<@NonNull IPortSlot> permittedRoundTripVesselSlots = new LinkedList<>();
 
@@ -456,7 +460,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 */
 	@Override
 	@NonNull
-	public ILoadSlot createLoadSlot(final @NonNull String id, final @NonNull IPort port, final ITimeWindow window, final long minVolumeInM3, final long maxVolumeInM3,
+	public ILoadSlot createLoadSlot(final @NonNull String id, final @NonNull IPort port, final ITimeWindow window, final long minVolumeInM3, final long maxVolumeInM3, final boolean counterPartyVolume, 
 			final ILoadPriceCalculator loadContract, final int cargoCVValue, final int durationHours, final boolean cooldownSet, final boolean cooldownForbidden, boolean purgeScheduled, final int pricingDate,
 			final PricingEventType pricingEvent, final boolean optional, final boolean locked, final boolean isSpotMarketSlot, final boolean isVolumeLimitInM3, final boolean cancelled) {
 
@@ -470,6 +474,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		elementDurationsProvider.setElementDuration(element, durationHours);
 		if (purgeScheduled) {
 			scheduledPurgeProvider.setPurgeScheduled(element, slot);
+		}
+		if (counterPartyVolume) {
+			counterPartyVolumeProvider.setCounterPartyVolume(slot);
 		}
 		return slot;
 	}

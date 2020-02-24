@@ -178,6 +178,24 @@
                </target>
             </constraint>
             <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.LoadSlotVolumeConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.LoadSlotVolumeConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Load Slot Volumes"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <description>
+                  Every slot's minimum and maximum volume should be non-negative, and the minimum should not exceed the maximum.
+               </description>
+               <target
+                     class="Load Slot">
+               </target>
+            </constraint>
+            <constraint
                   class="com.mmxlabs.models.lng.cargo.validation.CargoDateConstraint"
                   id="com.mmxlabs.models.lng.cargo.validation.CargoDateConstraint.cargo_travel_time"
                   lang="Java"

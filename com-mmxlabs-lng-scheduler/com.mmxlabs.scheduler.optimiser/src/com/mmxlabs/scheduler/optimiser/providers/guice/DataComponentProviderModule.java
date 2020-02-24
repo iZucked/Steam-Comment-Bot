@@ -31,6 +31,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ArrayL
 import com.mmxlabs.scheduler.optimiser.providers.*;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultAllowedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultBaseFuelProvider;
+import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultCounterPartyVolumeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultDistanceProviderImpl;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultExtraIdleTimeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultFOBDESCompatibilityProviderEditor;
@@ -356,6 +357,12 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(DefaultScheduledPurgeProvider.class).in(Singleton.class);
 		bind(IScheduledPurgeProvider.class).to(DefaultScheduledPurgeProvider.class);
 		bind(IScheduledPurgeProviderEditor.class).to(DefaultScheduledPurgeProvider.class);
+		
+		//Counterparty volume provider
+		bind(DefaultCounterPartyVolumeProvider.class).in(Singleton.class);
+		bind(ICounterPartyVolumeProvider.class).to(DefaultCounterPartyVolumeProvider.class);
+		bind(ICounterPartyVolumeProviderEditor.class).to(DefaultCounterPartyVolumeProvider.class);
+		
 
 	}
 }
