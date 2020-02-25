@@ -441,8 +441,11 @@ public class ScenarioBuilder {
 		// Currency curves
 
 		pricingModelBuilder.makeCurrencyDataCurve("FX_EUR_USD", "€", "$").addIndexPoint(date, 1.1).build();
-		// Include pence to pound converion
+		// Include pence to pound conversion
 		pricingModelBuilder.makeCurrencyDataCurve("FX_GBP_USD", "p", "$").addIndexPoint(date, 1.3 / 100.0).build();
+
+		// Charter
+		pricingModelBuilder.makeCharterDataCurve("SPOT", "$", "day").addIndexPoint(date, 80_000).build();
 
 	}
 }
