@@ -10,6 +10,8 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.YearMonth;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +29,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.io.CharStreams;
+import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.lngdataserver.integration.models.bunkerfuels.BunkerFuelsVersion;
 import com.mmxlabs.lngdataserver.integration.models.portgroups.PortGroupDefinition;
 import com.mmxlabs.lngdataserver.integration.models.portgroups.PortTypeConstants;
@@ -56,12 +59,24 @@ import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.util.PortModelFinder;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.CostModel;
+import com.mmxlabs.models.lng.pricing.HolidayCalendar;
+import com.mmxlabs.models.lng.pricing.MarketIndex;
+import com.mmxlabs.models.lng.pricing.PricingCalendar;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
+import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.pricing.UnitConversion;
+import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.pricing.importers.HolidayCalendarImporter;
+import com.mmxlabs.models.lng.pricing.importers.PricingCalendarImporter;
+import com.mmxlabs.models.lng.pricing.util.PricingModelBuilder;
+import com.mmxlabs.models.lng.pricing.util.PricingModelFinder;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelBuilder;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.PortCapability;
+import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
+import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.SimpleScenarioDataProvider;
 
@@ -101,7 +116,77 @@ public class ScenarioBuilder {
 		createDefaultCooldownCost("1000000");
 		setDefaultBunkerCosts("400");
 
+		loadDefaultConversionFactors();
+		loadDefaultCalendars();
+
 		return this;
+	}
+
+	private void loadDefaultConversionFactors() throws IOException {
+		PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioDataProvider);
+		{
+			try (InputStream inputStream = LingoDistanceUpdater.class.getResourceAsStream("/Conversion Factors.csv")) {
+
+				DefaultImportContext context = new DefaultImportContext('.');
+				try (CSVReader reader = new CSVReader(',', inputStream)) {
+
+					DefaultClassImporter importer = new DefaultClassImporter();
+					pricingModel.getConversionFactors().addAll((Collection<? extends UnitConversion>) importer.importObjects(PricingPackage.Literals.UNIT_CONVERSION, reader, context));
+				}
+			}
+		}
+	}
+
+	private void loadDefaultCalendars() throws IOException {
+		PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioDataProvider);
+		{
+			try (InputStream inputStream = LingoDistanceUpdater.class.getResourceAsStream("/Holiday Calendars.csv")) {
+
+				DefaultImportContext context = new DefaultImportContext('.');
+				try (CSVReader reader = new CSVReader(',', inputStream)) {
+
+					HolidayCalendarImporter importer = new HolidayCalendarImporter();
+					List<HolidayCalendar> importObjects = importer.importObjects(reader, context);
+					pricingModel.getHolidayCalendars().addAll(importObjects);
+				}
+			}
+		}
+		{
+			try (InputStream inputStream = LingoDistanceUpdater.class.getResourceAsStream("/Pricing Calendars.csv")) {
+
+				DefaultImportContext context = new DefaultImportContext('.');
+				try (CSVReader reader = new CSVReader(',', inputStream)) {
+
+					PricingCalendarImporter importer = new PricingCalendarImporter();
+					List<PricingCalendar> importObjects = importer.importObjects(reader, context);
+					pricingModel.getPricingCalendars().addAll(importObjects);
+				}
+			}
+		}
+		PricingModelFinder pricingModelFinder = new PricingModelFinder(pricingModel);
+
+		{
+			MarketIndex idx = PricingFactory.eINSTANCE.createMarketIndex();
+			idx.setName("Brent");
+			idx.setPricingCalendar(pricingModelFinder.findPricingCalendar("ICE"));
+			idx.setSettleCalendar(pricingModelFinder.findHolidayCalendar("LSE"));
+			pricingModel.getMarketIndices().add(idx);
+		}
+		{
+			MarketIndex idx = PricingFactory.eINSTANCE.createMarketIndex();
+			idx.setName("HH");
+			idx.setPricingCalendar(pricingModelFinder.findPricingCalendar("Socal"));
+			idx.setSettleCalendar(pricingModelFinder.findHolidayCalendar("NYSE"));
+			pricingModel.getMarketIndices().add(idx);
+		}
+		{
+			MarketIndex idx = PricingFactory.eINSTANCE.createMarketIndex();
+			idx.setName("TTF");
+			idx.setPricingCalendar(pricingModelFinder.findPricingCalendar("ICE"));
+			idx.setSettleCalendar(pricingModelFinder.findHolidayCalendar("EURONEXT"));
+			pricingModel.getMarketIndices().add(idx);
+		}
+
 	}
 
 	private ScenarioBuilder setDefaultBunkerCosts(String cost) {
@@ -263,6 +348,7 @@ public class ScenarioBuilder {
 		}
 
 		return this;
+
 	}
 
 	public ScenarioBuilder loadDefaultVessels() throws IOException {
@@ -333,5 +419,30 @@ public class ScenarioBuilder {
 		}
 
 		return this;
+	}
+
+	public void createDummyPricingData() {
+
+		PricingModelBuilder pricingModelBuilder = new PricingModelBuilder(ScenarioModelUtil.getPricingModel(scenarioDataProvider));
+		YearMonth date = YearMonth.from(LocalDate.now().withMonth(1));
+
+		// May want original euro/mwh or pence/therm
+		pricingModelBuilder.makeCommodityDataCurve("TTF", "€", "MWh").addIndexPoint(date, 13.0).build();
+		pricingModelBuilder.createCommodityExpressionCurve("TTF_USD", "$", "mmbtu", "TTF*FX_EUR_USD*MWh_to_mmBtu");
+
+		pricingModelBuilder.makeCommodityDataCurve("NBP", "p", "therm").addIndexPoint(date, 40).build();
+		pricingModelBuilder.createCommodityExpressionCurve("NBP_USD", "$", "mmbtu", "NBP*FX_GBP_USD*Therm_to_mmBtu");
+
+		pricingModelBuilder.makeCommodityDataCurve("HH", "$", "mmBtu").addIndexPoint(date, 3.0).build();
+		pricingModelBuilder.makeCommodityDataCurve("JCC", "$", "bbl").addIndexPoint(date, 74.0).build();
+		pricingModelBuilder.makeCommodityDataCurve("JKM", "$", "mmBtu").addIndexPoint(date, 5.0).build();
+		pricingModelBuilder.makeCommodityDataCurve("Brent", "$", "bbl").addIndexPoint(date, 60.0).build();
+
+		// Currency curves
+
+		pricingModelBuilder.makeCurrencyDataCurve("FX_EUR_USD", "€", "$").addIndexPoint(date, 1.1).build();
+		// Include pence to pound converion
+		pricingModelBuilder.makeCurrencyDataCurve("FX_GBP_USD", "p", "$").addIndexPoint(date, 1.3 / 100.0).build();
+
 	}
 }
