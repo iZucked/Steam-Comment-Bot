@@ -23,6 +23,7 @@ import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.PaperPricingType;
+import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.SettleStrategy;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -142,6 +143,8 @@ public class ExposuresScenarioTests extends AbstractMicroTestCase {
 	private void generateTestPapers() {
 		final CargoModel cm = ScenarioModelUtil.getCargoModel(scenarioDataProvider);
 		pricingModel = ScenarioModelUtil.getPricingModel(scenarioDataProvider);
+		final CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(scenarioDataProvider);
+		entity = commercialModel.getEntities().get(0);
 		cm.getPaperDeals().add(makePaperDeal("BRENT-Buy-2017-Jan", true, "BRENT_ICE", "Brent_momental_swap", YearMonth.of(2017, 1), 237177.00, 1.00));
 		cm.getPaperDeals().add(makePaperDeal("BRENT-Sell-2017-Feb", false, "BRENT_ICE", "Brent_momental_swap", YearMonth.of(2017, 2), 601329.00, 1.00));
 		cm.getPaperDeals().add(makePaperDeal("JKM-Buy-2017-Jan", true, "jkm", "Brent_momental_swap", YearMonth.of(2017, 1), 36954.00, 1.00));
