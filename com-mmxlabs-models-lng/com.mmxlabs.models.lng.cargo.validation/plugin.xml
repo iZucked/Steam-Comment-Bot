@@ -192,7 +192,7 @@
                   Every slot's minimum and maximum volume should be non-negative, and the minimum should not exceed the maximum.
                </description>
                <target
-                     class="Load Slot">
+                     class="LoadSlot">
                </target>
             </constraint>
             <constraint
