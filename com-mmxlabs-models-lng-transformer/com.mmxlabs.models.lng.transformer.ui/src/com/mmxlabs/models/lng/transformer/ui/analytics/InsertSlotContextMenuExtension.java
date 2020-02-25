@@ -56,8 +56,6 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 public class InsertSlotContextMenuExtension implements ITradesTableContextMenuExtension {
 
-	public static final String ChangeSetViewCreatorService_Topic = "create-change-set-view";
-
 	private static final String LBL_KEPT_OPEN = "(Kept open)";
 	private static final String LBL_LOCKED = "(Locked)";
 
@@ -229,7 +227,7 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 					final SlotInsertionOptions plan = (SlotInsertionOptions) jobControl.getJobOutput();
 					if (plan != null) {
 						final AnalyticsSolution data = new AnalyticsSolution(original, plan, pTaskName);
-						data.open();
+						data.openAndSwitchScreen();
 					}
 				}
 			};

@@ -30,7 +30,7 @@ public class AnalyticsSolutionAdapterFactory implements IAdapterFactory {
 			final Object object = fragment.getFragment();
 			if (object instanceof AbstractSolutionSet) {
 				final AbstractSolutionSet solutionSet = (AbstractSolutionSet) object;
-				new AnalyticsSolution(scenarioInstance, solutionSet, solutionSet.getName()).open();
+				new AnalyticsSolution(scenarioInstance, solutionSet, solutionSet.getName()).openAndSwitchScreen();
 			}
 		};
 	}

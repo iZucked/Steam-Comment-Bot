@@ -21,8 +21,6 @@ import com.mmxlabs.rcp.common.actions.RunnableAction;
 
 public class CreateSandboxFromSelectionMenuExtension implements ITradesTableContextMenuExtension {
 
-	public static final String ChangeSetViewCreatorService_Topic = "create-change-set-view";
-
 	private static final Logger log = LoggerFactory.getLogger(CreateSandboxFromSelectionMenuExtension.class);
 
 	@Override

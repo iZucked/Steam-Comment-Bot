@@ -22,19 +22,24 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.lingo.reports.ReportsConstants;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetView;
-import com.mmxlabs.models.lng.analytics.SandboxResult;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
 import com.mmxlabs.rcp.common.RunnerHelper;
 
 public class ChangeSetViewCreatorService {
 
-	public static final String ChangeSetViewCreatorService_Topic = "create-change-set-view";
-
 	private static final Logger log = LoggerFactory.getLogger(ChangeSetViewCreatorService.class);
-	private final EventHandler eventHandler = event -> {
+	private final EventHandler openEventHandler = event -> {
 		try {
 			final AnalyticsSolution solution = (AnalyticsSolution) event.getProperty(IEventBroker.DATA);
-			openView(solution);
+			openView(solution, false);
+		} catch (final Exception e) {
+			log.error("Error handling create change set view event", e);
+		}
+	};
+	private final EventHandler openAndSwitchEventHandler = event -> {
+		try {
+			final AnalyticsSolution solution = (AnalyticsSolution) event.getProperty(IEventBroker.DATA);
+			openView(solution, true);
 		} catch (final Exception e) {
 			log.error("Error handling create change set view event", e);
 		}
@@ -61,7 +66,8 @@ public class ChangeSetViewCreatorService {
 				// Note: The previous code got to a point where the workbench service locator was null during an ITS run.
 				RunnerHelper.asyncExec(() -> {
 					eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
-					eventBroker.subscribe(ChangeSetViewCreatorService_Topic, eventHandler);
+					eventBroker.subscribe(AnalyticsSolution.OPEN_RESULTS_VIEW, openEventHandler);
+					eventBroker.subscribe(AnalyticsSolution.OPEN_RESULTS_VIEW_WITH_SCREEN, openAndSwitchEventHandler);
 				});
 			};
 		}.start();
@@ -69,18 +75,17 @@ public class ChangeSetViewCreatorService {
 
 	public void stop() {
 		if (eventBroker != null) {
-			eventBroker.unsubscribe(eventHandler);
+			eventBroker.unsubscribe(openAndSwitchEventHandler);
+			eventBroker.unsubscribe(openEventHandler);
 			eventBroker = null;
 		}
 	}
 
-	private void openView(final AnalyticsSolution solution) {
+	private void openView(final AnalyticsSolution solution, boolean switchPerspective) {
 		final EPartService partService = PlatformUI.getWorkbench().getService(EPartService.class);
 		final EModelService modelService = PlatformUI.getWorkbench().getService(EModelService.class);
 		final MApplication application = PlatformUI.getWorkbench().getService(MApplication.class);
 
-		// We could also a) add a flag, b) check subtype or request and switch to various perspectives (e.g. compare or sandbox)
-		final boolean switchPerspective = !(solution.getSolution() instanceof SandboxResult);
 		RunnerHelper.asyncExec(() -> {
 			if (switchPerspective) {
 				boolean foundPerspective = false;

@@ -31,6 +31,7 @@ public final class KnownFeatures {
 	public static final String FEATURE_OPTIMISATION_NO_NOMINALS_IN_PROMPT = "features:no-nominal-in-prompt";
 
 	public static final String FEATURE_OPTIONISER = "features:options-suggester";
+	public static final String FEATURE_OPTIONISER_EVENTS = "features:options-suggester-events";
 
 	public static final String FEATURE_SHIP_TO_SHIP = "features:shiptoship";
 

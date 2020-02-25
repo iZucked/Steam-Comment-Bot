@@ -15,6 +15,10 @@ import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 public class AnalyticsSolution {
+
+	public static final String OPEN_RESULTS_VIEW = "OPEN_RESULTS_VIEW";
+	public static final String OPEN_RESULTS_VIEW_WITH_SCREEN = "OPEN_RESULTS_VIEW_WITH_SCREEN";
+
 	private String title;
 	private final String id;
 	private ScenarioInstance scenarioInstance;
@@ -70,6 +74,11 @@ public class AnalyticsSolution {
 
 	public void open() {
 		final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
-		eventBroker.post("create-change-set-view", this);
+		eventBroker.post(OPEN_RESULTS_VIEW, this);
+	}
+
+	public void openAndSwitchScreen() {
+		final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
+		eventBroker.post(OPEN_RESULTS_VIEW_WITH_SCREEN, this);
 	}
 }
