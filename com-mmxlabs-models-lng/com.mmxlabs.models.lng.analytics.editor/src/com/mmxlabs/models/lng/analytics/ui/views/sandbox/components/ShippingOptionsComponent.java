@@ -221,11 +221,9 @@ public class ShippingOptionsComponent extends AbstractSandboxComponent<Object, A
 
 		hookDragSource(shippingOptionsViewer);
 
-		inputWants.add(model -> shippingOptionsViewer.setInput(model));
-		inputWants.add(model -> listener.setModel(model));
-		lockedListeners.add(locked -> {
-			RunnerHelper.asyncExec(() -> shippingOptionsViewer.getGrid().setEnabled(!locked));
-		});
+		inputWants.add(shippingOptionsViewer::setInput);
+		inputWants.add(listener::setModel);
+		lockedListeners.add(locked -> RunnerHelper.runAsyncIfControlValid(shippingOptionsViewer.getGrid(), grid -> grid.setEnabled(!locked)));
 		return shippingOptionsViewer;
 	}
 

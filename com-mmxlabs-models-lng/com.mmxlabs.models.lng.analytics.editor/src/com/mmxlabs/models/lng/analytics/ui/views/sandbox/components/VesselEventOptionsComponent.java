@@ -116,7 +116,7 @@ public class VesselEventOptionsComponent extends AbstractSandboxComponent<Object
 		}
 		inputWants.add(optionsViewer::setInput);
 
-		lockedListeners.add(locked -> RunnerHelper.asyncExec(() -> optionsViewer.getGrid().setEnabled(!locked)));
+		lockedListeners.add(locked -> RunnerHelper.runAsyncIfControlValid(optionsViewer.getGrid(), grid -> grid.setEnabled(!locked)));
 
 		return optionsViewer.getControl();
 	}

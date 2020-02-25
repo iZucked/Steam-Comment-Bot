@@ -116,9 +116,7 @@ public class BuyOptionsComponent extends AbstractSandboxComponent<Object, Abstra
 		}
 		inputWants.add(model -> buyOptionsViewer.setInput(model));
 
-		lockedListeners.add(locked -> {
-			RunnerHelper.asyncExec(() -> buyOptionsViewer.getGrid().setEnabled(!locked));
-		});
+		lockedListeners.add(locked -> RunnerHelper.runAsyncIfControlValid(buyOptionsViewer.getGrid(), grid -> grid.setEnabled(!locked)));
 
 		return buyOptionsViewer.getControl();
 	}
