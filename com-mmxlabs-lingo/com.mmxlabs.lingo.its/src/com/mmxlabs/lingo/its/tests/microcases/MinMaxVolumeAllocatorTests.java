@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -21,6 +22,8 @@ import com.google.inject.Module;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -709,9 +712,10 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 	public void testDES_Purchase_CPVolume_MinLoadVolume_Match() throws Exception {
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5", 20.0, null) //
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5", 20.0, null)//
+				.with(s -> ((LoadSlot)s).setVolumeCounterParty(true))//
 				.withVolumeLimits(2_950_000, 4_000_000, VolumeUnits.MMBTU).build() //
-
+				
 				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
 				.withVolumeLimits(2_500_000, 4_000_000, VolumeUnits.MMBTU).build() //
 				.build();
@@ -741,6 +745,7 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7", 20.0, null) //
+				.with(s -> ((LoadSlot)s).setVolumeCounterParty(true))//
 				.withVolumeLimits(2_950_000, 4_000_000, VolumeUnits.MMBTU).build() //
 
 				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5") //
@@ -772,6 +777,7 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5", 20.0, null) //
+				.with(s -> ((LoadSlot)s).setVolumeCounterParty(true))//
 				.withVolumeLimits(2_950_000, 4_000_000, VolumeUnits.MMBTU).build() //
 
 				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
@@ -803,6 +809,7 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7", 20.0, null) //
+				.with(s -> ((LoadSlot)s).setVolumeCounterParty(true))
 				.withVolumeLimits(2_950_000, 4_000_000, VolumeUnits.MMBTU).build() //
 
 				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5") //
