@@ -140,7 +140,8 @@ public class HttpClientUtil {
 			final String userHome = System.getProperty("eclipse.home.location");
 			if (userHome != null) {
 				try {
-					final File f = new File(new URI(userHome + "/cacerts/"));
+					String uriString = userHome + "/cacerts/".replaceAll(" ", "%20");
+					final File f = new File(new URI(uriString));
 					if (f.exists() && f.isDirectory()) {
 						for (final File certFile : f.listFiles()) {
 							if (certFile.isFile()) {

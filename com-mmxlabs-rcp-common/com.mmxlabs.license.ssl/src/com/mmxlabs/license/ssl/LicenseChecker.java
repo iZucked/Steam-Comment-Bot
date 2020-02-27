@@ -32,9 +32,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.license.ssl.internal.Activator;
 
 /**
- * A simple class to load a license - a SSL certificate from a disk location and
- * verify it has been signed by the "root" key in the embedded keystore and that
- * it is still in date.
+ * A simple class to load a license - a SSL certificate from a disk location and verify it has been signed by the "root" key in the embedded keystore and that it is still in date.
  * 
  * @author Simon Goodall
  */
@@ -291,7 +289,8 @@ public final class LicenseChecker {
 		final String userHome = System.getProperty("eclipse.home.location");
 		if (userHome != null) {
 			try {
-				final File f = new File(new URI(userHome + "/cacerts/"));
+				final String uriString = userHome + "/cacerts/".replaceAll(" ", "%20");
+				final File f = new File(new URI(uriString));
 				if (f.exists() && f.isDirectory()) {
 					for (final File certFile : f.listFiles()) {
 						if (certFile.isFile()) {
