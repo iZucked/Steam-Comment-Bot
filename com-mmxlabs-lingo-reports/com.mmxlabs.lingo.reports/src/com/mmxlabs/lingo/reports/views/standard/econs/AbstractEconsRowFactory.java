@@ -213,7 +213,7 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 			} else if (object instanceof OpenSlotAllocation) {
 				final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) object;
 				return helper.apply(openSlotAllocation);
-			} else  if (object instanceof CharterLengthEvent) {
+			} else if (object instanceof CharterLengthEvent) {
 				final CharterLengthEvent charterLength = (CharterLengthEvent) object;
 				return helper.apply(charterLength);
 			} else if (object instanceof StartEvent) {
@@ -324,15 +324,15 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 		}
 
 		T valueFirst = f.apply((U) first);
-		
+
 		// Negate value first, incase the second case is not present.
 		if (valueFirst != null) {
 			if (valueFirst instanceof Integer) {
 				valueFirst = type.cast(-(int) valueFirst);
 			} else if (valueFirst instanceof Double) {
-				return type.cast(-(double) valueFirst);
+				valueFirst = type.cast(-(double) valueFirst);
 			} else if (valueFirst instanceof Long) {
-				return type.cast(-(long) valueFirst);
+				valueFirst = type.cast(-(long) valueFirst);
 			}
 		}
 
