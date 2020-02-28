@@ -181,11 +181,11 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 						restrictedPorts = spotMarket.getRestrictedPorts();
 					}
 				}
-				if (slot.isRestrictedContractsOverride()) {
+				if (contract == null || slot.isRestrictedContractsOverride()) {
 					isContractsListPermissive = slot.isRestrictedContractsArePermissive();
 					restrictedContracts = slot.getRestrictedContracts();
 				}
-				if (slot.isRestrictedPortsOverride()) {
+				if (contract == null || slot.isRestrictedPortsOverride()) {
 					isPortsListPermissive = slot.isRestrictedPortsArePermissive();
 					restrictedPorts = slot.getRestrictedPorts();
 				}
