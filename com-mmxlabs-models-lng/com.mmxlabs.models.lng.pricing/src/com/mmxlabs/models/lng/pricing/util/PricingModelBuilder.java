@@ -120,5 +120,16 @@ public class PricingModelBuilder {
 			pricingModel.getCharterCurves().add(idx);
 		});
 	}
+	
+	public DataCurveBuilder<BunkerFuelCurve> makeBunkerFuelDataCurve(String name, String currencyUnit, String volumeUnit) {
+		final BunkerFuelCurve curve = PricingFactory.eINSTANCE.createBunkerFuelCurve();
+		curve.setName(name);
+		curve.setCurrencyUnit(currencyUnit);
+		curve.setVolumeUnit(volumeUnit);
+		
+		return new DataCurveBuilder<BunkerFuelCurve>(curve, idx -> {
+			pricingModel.getBunkerFuelCurves().add(idx);
+		});
+	}
 
 }

@@ -34,16 +34,17 @@ import com.mmxlabs.lngdataserver.integration.models.bunkerfuels.BunkerFuelsVersi
 import com.mmxlabs.lngdataserver.integration.models.portgroups.PortGroupDefinition;
 import com.mmxlabs.lngdataserver.integration.models.portgroups.PortTypeConstants;
 import com.mmxlabs.lngdataserver.integration.vessels.model.VesselsVersion;
-import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.DistancesLinesToScenarioCopier;
-import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.LingoDistanceUpdater;
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.LocationsToScenarioCopier;
-import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.UpdateItem;
-import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.UpdateStep;
-import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.UpdateWarning;
-import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.UserUpdateStep;
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.AtoBviaCLookupRecord;
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.LocationsVersion;
 import com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard.SharedScenarioDataUtils;
+import com.mmxlabs.lngdataserver.lng.importers.update.UpdateItem;
+import com.mmxlabs.lngdataserver.lng.importers.update.UpdateStep;
+import com.mmxlabs.lngdataserver.lng.importers.update.UpdateWarning;
+import com.mmxlabs.lngdataserver.lng.importers.update.UserUpdateStep;
+import com.mmxlabs.lngdataserver.lng.importers.vesselsupdate.VesselLinesToScenarioCopier;
+import com.mmxlabs.lngdataserver.lng.importers.vesselsupdate.LingoRefVesselUpdater;
+import com.mmxlabs.lngdataserver.lng.importers.vesselsupdate.VesselsToUpdateItems;
 import com.mmxlabs.lngdataserver.lng.io.bunkerfuels.BunkerFuelsToScenarioImporter;
 import com.mmxlabs.lngdataserver.lng.io.portconfig.PortConfig;
 import com.mmxlabs.lngdataserver.lng.io.portconfig.PortConfigType;
@@ -57,6 +58,7 @@ import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortGroup;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.util.PortModelFinder;
+import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.HolidayCalendar;
@@ -64,10 +66,11 @@ import com.mmxlabs.models.lng.pricing.MarketIndex;
 import com.mmxlabs.models.lng.pricing.PricingCalendar;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
-import com.mmxlabs.models.lng.pricing.UnitConversion;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.pricing.UnitConversion;
 import com.mmxlabs.models.lng.pricing.importers.HolidayCalendarImporter;
 import com.mmxlabs.models.lng.pricing.importers.PricingCalendarImporter;
+import com.mmxlabs.models.lng.pricing.util.CostModelBuilder;
 import com.mmxlabs.models.lng.pricing.util.PricingModelBuilder;
 import com.mmxlabs.models.lng.pricing.util.PricingModelFinder;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -125,7 +128,7 @@ public class ScenarioBuilder {
 	private void loadDefaultConversionFactors() throws IOException {
 		PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioDataProvider);
 		{
-			try (InputStream inputStream = LingoDistanceUpdater.class.getResourceAsStream("/Conversion Factors.csv")) {
+			try (InputStream inputStream = LingoRefVesselUpdater.class.getResourceAsStream("/Conversion Factors.csv")) {
 
 				DefaultImportContext context = new DefaultImportContext('.');
 				try (CSVReader reader = new CSVReader(',', inputStream)) {
@@ -140,7 +143,7 @@ public class ScenarioBuilder {
 	private void loadDefaultCalendars() throws IOException {
 		PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioDataProvider);
 		{
-			try (InputStream inputStream = LingoDistanceUpdater.class.getResourceAsStream("/Holiday Calendars.csv")) {
+			try (InputStream inputStream = LingoRefVesselUpdater.class.getResourceAsStream("/Holiday Calendars.csv")) {
 
 				DefaultImportContext context = new DefaultImportContext('.');
 				try (CSVReader reader = new CSVReader(',', inputStream)) {
@@ -152,7 +155,7 @@ public class ScenarioBuilder {
 			}
 		}
 		{
-			try (InputStream inputStream = LingoDistanceUpdater.class.getResourceAsStream("/Pricing Calendars.csv")) {
+			try (InputStream inputStream = LingoRefVesselUpdater.class.getResourceAsStream("/Pricing Calendars.csv")) {
 
 				DefaultImportContext context = new DefaultImportContext('.');
 				try (CSVReader reader = new CSVReader(',', inputStream)) {
@@ -186,6 +189,13 @@ public class ScenarioBuilder {
 			idx.setSettleCalendar(pricingModelFinder.findHolidayCalendar("EURONEXT"));
 			pricingModel.getMarketIndices().add(idx);
 		}
+		{
+			MarketIndex idx = PricingFactory.eINSTANCE.createMarketIndex();
+			idx.setName("NBP");
+//			idx.setPricingCalendar(pricingModelFinder.findPricingCalendar("???"));
+			idx.setSettleCalendar(pricingModelFinder.findHolidayCalendar("LSE"));
+			pricingModel.getMarketIndices().add(idx);
+		}
 
 	}
 
@@ -208,7 +218,7 @@ public class ScenarioBuilder {
 	}
 
 	public ScenarioBuilder configureDefaultLoadAndDischargePorts() throws IOException {
-		try (InputStream inputStream = LingoDistanceUpdater.class.getResourceAsStream("/port-config.json")) {
+		try (InputStream inputStream = LingoRefVesselUpdater.class.getResourceAsStream("/port-config.json")) {
 			configureLoadAndDischargePorts(inputStream);
 		}
 		return this;
@@ -275,7 +285,7 @@ public class ScenarioBuilder {
 
 		{
 			final LocationsVersion locationsVersion;
-			try (InputStream inputStream = LingoDistanceUpdater.class.getResourceAsStream("/ports.json")) {
+			try (InputStream inputStream = LingoRefVesselUpdater.class.getResourceAsStream("/ports.json")) {
 				locationsVersion = mapper.readValue(inputStream, LocationsVersion.class);
 			}
 
@@ -309,12 +319,12 @@ public class ScenarioBuilder {
 		{
 			final List<AtoBviaCLookupRecord> distanceRecords;
 
-			try (InputStream inputStream = LingoDistanceUpdater.class.getResourceAsStream("/distances.json")) {
+			try (InputStream inputStream = LingoRefVesselUpdater.class.getResourceAsStream("/distances.json")) {
 				distanceRecords = mapper.readValue(inputStream, new TypeReference<List<AtoBviaCLookupRecord>>() {
 				});
 			}
 
-			final CompoundCommand command = DistancesLinesToScenarioCopier.getUpdateCommand(editingDomain, portModel, distanceRecords);
+			final CompoundCommand command = VesselLinesToScenarioCopier.getUpdateCommand(editingDomain, portModel, distanceRecords);
 			command.execute();
 		}
 
@@ -325,7 +335,7 @@ public class ScenarioBuilder {
 			portModel.getPortCountryGroups().forEach(c -> typeMap.put(PortTypeConstants.COUNTRY_GROUP_PREFIX + c.getName(), c));
 			portModel.getPortGroups().forEach(c -> typeMap.put(PortTypeConstants.PORT_GROUP_PREFIX + c.getName(), c));
 
-			try (InputStream inputStream = LingoDistanceUpdater.class.getResourceAsStream("/port-groups.json")) {
+			try (InputStream inputStream = LingoRefVesselUpdater.class.getResourceAsStream("/port-groups.json")) {
 
 				final List<PortGroupDefinition> portGroups = mapper.readValue(inputStream, new TypeReference<List<PortGroupDefinition>>() {
 				});
@@ -363,14 +373,14 @@ public class ScenarioBuilder {
 		mapper.registerModule(new Jdk8Module());
 
 		{
-			try (InputStream inputStream = LingoDistanceUpdater.class.getResourceAsStream("/bunkerfuels.json")) {
+			try (InputStream inputStream = LingoRefVesselUpdater.class.getResourceAsStream("/bunkerfuels.json")) {
 				final BunkerFuelsVersion v = mapper.readValue(inputStream, BunkerFuelsVersion.class);
 				final Command command = BunkerFuelsToScenarioImporter.getUpdateCommand(editingDomain, fleetModel, v);
 				command.execute();
 			}
 		}
 		{
-			try (InputStream inputStream = LingoDistanceUpdater.class.getResourceAsStream("/vessels.json")) {
+			try (InputStream inputStream = LingoRefVesselUpdater.class.getResourceAsStream("/vessels.json")) {
 				final VesselsVersion v = mapper.readValue(inputStream, VesselsVersion.class);
 				final Command command = VesselsToScenarioCopier.getUpdateCommand(editingDomain, fleetModel, portModel, v);
 				command.execute();
@@ -380,7 +390,7 @@ public class ScenarioBuilder {
 	}
 
 	public ScenarioBuilder loadDefaultPortCosts() throws IOException {
-		try (InputStream inputStream = LingoDistanceUpdater.class.getResourceAsStream("/port-costs.json")) {
+		try (InputStream inputStream = LingoRefVesselUpdater.class.getResourceAsStream("/port-costs.json")) {
 			loadPortCosts(inputStream);
 		}
 		return this;
@@ -400,7 +410,7 @@ public class ScenarioBuilder {
 	public ScenarioBuilder loadDefaultCanalCosts() throws IOException {
 
 		{
-			try (InputStream inputStream = LingoDistanceUpdater.class.getResourceAsStream("/suez-tariff.json")) {
+			try (InputStream inputStream = LingoRefVesselUpdater.class.getResourceAsStream("/suez-tariff.json")) {
 				final String json = CharStreams.toString(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
 				final CompoundCommand command = new CompoundCommand();
 				final BiConsumer<CompoundCommand, IScenarioDataProvider> updater = SharedScenarioDataUtils.UpdateJob.createSuezTariffUpdater(json);
@@ -409,7 +419,7 @@ public class ScenarioBuilder {
 			}
 		}
 		{
-			try (InputStream inputStream = LingoDistanceUpdater.class.getResourceAsStream("/panama-tariff.json")) {
+			try (InputStream inputStream = LingoRefVesselUpdater.class.getResourceAsStream("/panama-tariff.json")) {
 				final String json = CharStreams.toString(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
 				final CompoundCommand command = new CompoundCommand();
 				final BiConsumer<CompoundCommand, IScenarioDataProvider> updater = SharedScenarioDataUtils.UpdateJob.createPanamaTariffUpdater(json);
@@ -447,5 +457,19 @@ public class ScenarioBuilder {
 		// Charter
 		pricingModelBuilder.makeCharterDataCurve("SPOT", "$", "day").addIndexPoint(date, 80_000).build();
 
+		// Bunker curve
+		pricingModelBuilder.makeBunkerFuelDataCurve("HFO", "$", "MT").addIndexPoint(date, 400).build();
+		pricingModelBuilder.makeBunkerFuelDataCurve("MGO", "$", "MT").addIndexPoint(date, 600).build();
+
+		// Replace expressions with new curve
+		CostModel costModel = ScenarioModelUtil.getCostModel(scenarioDataProvider);
+		for (BaseFuelCost baseFuelCost : costModel.getBaseFuelCosts()) {
+			if ("MGO".equals(baseFuelCost.getFuel().getName())) {
+				baseFuelCost.setExpression("MGO");
+			}
+			if ("HFO".equals(baseFuelCost.getFuel().getName())) {
+				baseFuelCost.setExpression("HFO");
+			}
+		}
 	}
 }
