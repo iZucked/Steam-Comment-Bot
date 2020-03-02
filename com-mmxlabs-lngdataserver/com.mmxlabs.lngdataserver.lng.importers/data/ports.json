@@ -898,7 +898,7 @@
     "lat" : 31.3700008392334,
     "lon" : 30.295000076293945,
     "country" : "Egypt",
-    "timeZone" : "Asia/Kuwait"
+    "timeZone" : "Africa/Cairo"
   },
   "upstreamID" : "EG0096"
 }, {
@@ -2088,7 +2088,7 @@
     "lat" : 70.68333435058594,
     "lon" : 23.600000381469727,
     "country" : "Norway",
-    "timeZone" : "Europe/Warsaw"
+    "timeZone" : "Europe/Oslo"
   },
   "upstreamID" : "NO0278"
 }, {
@@ -2192,7 +2192,7 @@
     "lat" : 37.935665130615234,
     "lon" : -8.857500076293945,
     "country" : "Portugal",
-    "timeZone" : "Europe/Madrid"
+    "timeZone" : "Europe/Lisbon"
   },
   "upstreamID" : "PT0044"
 }, {
@@ -2519,7 +2519,7 @@
     "lat" : 38.82500076293945,
     "lon" : 26.913333892822266,
     "country" : "Turkey",
-    "timeZone" : "Europe/London"
+    "timeZone" : "Europe/Istanbul"
   },
   "upstreamID" : "TR0183"
 }, {
