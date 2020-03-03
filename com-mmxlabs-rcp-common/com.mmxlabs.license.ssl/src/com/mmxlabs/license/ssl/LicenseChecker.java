@@ -285,28 +285,33 @@ public final class LicenseChecker {
 
 	}
 
+	public static File getCACertsFileFromEclipseHomeURL(String eclipseHomeLocation) throws URISyntaxException {
+		if (eclipseHomeLocation != null) {
+			final String uriString = (eclipseHomeLocation + "/cacerts/").replaceAll(" ", "%20");
+			return new File(new URI(uriString));
+		}
+		return null;
+	}
+
 	private static void importExtraCertsFromHome(final KeyStore keystore) {
 		final String userHome = System.getProperty("eclipse.home.location");
-		if (userHome != null) {
-			try {
-				final String uriString = userHome + "/cacerts/".replaceAll(" ", "%20");
-				final File f = new File(new URI(uriString));
-				if (f.exists() && f.isDirectory()) {
-					for (final File certFile : f.listFiles()) {
-						if (certFile.isFile()) {
-							try (FileInputStream inStream = new FileInputStream(certFile)) {
-								final CertificateFactory factory = CertificateFactory.getInstance("X.509");
-								final X509Certificate cert = (X509Certificate) factory.generateCertificate(inStream);
-								keystore.setCertificateEntry(certFile.getName(), cert);
-							} catch (final Exception e) {
-								log.error("Unable to import certificate " + f.getAbsolutePath(), e);
-							}
+		try {
+			File f = getCACertsFileFromEclipseHomeURL(userHome);
+			if (f != null && f.exists() && f.isDirectory()) {
+				for (final File certFile : f.listFiles()) {
+					if (certFile.isFile()) {
+						try (FileInputStream inStream = new FileInputStream(certFile)) {
+							final CertificateFactory factory = CertificateFactory.getInstance("X.509");
+							final X509Certificate cert = (X509Certificate) factory.generateCertificate(inStream);
+							keystore.setCertificateEntry(certFile.getName(), cert);
+						} catch (final Exception e) {
+							log.error("Unable to import certificate " + f.getAbsolutePath(), e);
 						}
 					}
 				}
-			} catch (final URISyntaxException e1) {
-				// Ignore
 			}
+		} catch (final URISyntaxException e1) {
+			// Ignore
 		}
 	}
 

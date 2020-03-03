@@ -7,7 +7,6 @@ package com.mmxlabs.lngdataserver.server;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.KeyStore;
 import java.security.MessageDigest;
@@ -19,10 +18,8 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.CertificateParsingException;
 import java.security.cert.X509Certificate;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -37,7 +34,6 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
-import javax.swing.text.html.CSS;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.slf4j.Logger;
@@ -50,7 +46,6 @@ import okhttp3.CipherSuite;
 import okhttp3.ConnectionSpec;
 import okhttp3.Handshake;
 import okhttp3.Interceptor;
-import okhttp3.Interceptor.Chain;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -138,28 +133,26 @@ public class HttpClientUtil {
 		{
 
 			final String userHome = System.getProperty("eclipse.home.location");
-			if (userHome != null) {
-				try {
-					String uriString = userHome + "/cacerts/".replaceAll(" ", "%20");
-					final File f = new File(new URI(uriString));
-					if (f.exists() && f.isDirectory()) {
-						for (final File certFile : f.listFiles()) {
-							if (certFile.isFile()) {
-								try (FileInputStream inStream = new FileInputStream(certFile)) {
-									final CertificateFactory factory = CertificateFactory.getInstance("X.509");
-									final X509Certificate cert = (X509Certificate) factory.generateCertificate(inStream);
-									final CertInfo info = CertInfo.from(cert);
-									info.filename = certFile.getAbsolutePath();
-									infos.add(info);
-								} catch (final Exception e) {
-									LOGGER.error("Unable to read certificate " + f.getAbsolutePath(), e);
-								}
+
+			try {
+				File f = LicenseChecker.getCACertsFileFromEclipseHomeURL(userHome);
+				if (f != null && f.exists() && f.isDirectory()) {
+					for (final File certFile : f.listFiles()) {
+						if (certFile.isFile()) {
+							try (FileInputStream inStream = new FileInputStream(certFile)) {
+								final CertificateFactory factory = CertificateFactory.getInstance("X.509");
+								final X509Certificate cert = (X509Certificate) factory.generateCertificate(inStream);
+								final CertInfo info = CertInfo.from(cert);
+								info.filename = certFile.getAbsolutePath();
+								infos.add(info);
+							} catch (final Exception e) {
+								LOGGER.error("Unable to read certificate " + f.getAbsolutePath(), e);
 							}
 						}
 					}
-				} catch (final URISyntaxException e1) {
-					// Ignore
 				}
+			} catch (final URISyntaxException e1) {
+				// Ignore
 			}
 		}
 		return infos;
