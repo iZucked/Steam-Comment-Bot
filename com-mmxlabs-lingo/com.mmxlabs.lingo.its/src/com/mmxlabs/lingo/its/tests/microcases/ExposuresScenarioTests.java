@@ -17,23 +17,35 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.google.common.collect.Lists;
+import com.google.inject.name.Names;
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.PaperPricingType;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.SettleStrategy;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.transformer.its.RequireFeature;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.scenario.CSVImporter;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.IEndEventScheduler;
+import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
+import com.mmxlabs.scheduler.optimiser.peaberry.OptimiserInjectorServiceMaker;
+import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService.ModuleType;
+import com.mmxlabs.scheduler.optimiser.scheduling.EarliestSlotTimeScheduler;
+import com.mmxlabs.scheduler.optimiser.scheduling.ISlotTimeScheduler;
 
 @SuppressWarnings("unused")
 @ExtendWith(value = ShiroRunner.class)
+@RequireFeature(features = {KnownFeatures.FEATURE_GENERATED_PAPER_DEALS, KnownFeatures.FEATURE_PAPER_DEALS, KnownFeatures.FEATURE_EXPOSURES})
 public class ExposuresScenarioTests extends AbstractMicroTestCase {
 	
 	@NonNull
@@ -52,36 +64,18 @@ public class ExposuresScenarioTests extends AbstractMicroTestCase {
 		importer.importPortData(urlRoot);
 		importer.importCostData(urlRoot);
 		importer.importEntityData(urlRoot);
-		importer.importFleetData(urlRoot);
+		importer.importFleetData(urlRoot);  
 		importer.importMarketData(urlRoot);
 		importer.importPromptData(urlRoot);
-		importer.importMarketData(urlRoot);
+		importer.importContractData(urlRoot);
 		importer.importPorfolioData(urlRoot);
 
 		return importer.doImport();
 	}
 	
-
-
-	private static List<String> requiredFeatures = Lists.newArrayList();
-	private static List<String> addedFeatures = new LinkedList<>();
-
-	@BeforeAll
-	public static void hookIn() {
-		for (final String feature : requiredFeatures) {
-			if (!LicenseFeatures.isPermitted("features:" + feature)) {
-				LicenseFeatures.addFeatureEnablements(feature);
-				addedFeatures.add(feature);
-			}
-		}
-	}
-
-	@AfterAll
-	public static void hookOut() {
-		for (final String feature : addedFeatures) {
-			LicenseFeatures.removeFeatureEnablements(feature);
-		}
-		addedFeatures.clear();
+	@Override
+	protected BaseLegalEntity importDefaultEntity() {
+		return commercialModelFinder.findEntity("EntityA");
 	}
 
 	private static final double delta = 0.01;
@@ -93,7 +87,17 @@ public class ExposuresScenarioTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testGeneratedHedgesComputation() throws Exception {
 
-		evaluateWithLSOTest(scenarioRunner -> {
+		final CargoModel cm = ScenarioModelUtil.getCargoModel(scenarioDataProvider);
+		cm.getPaperDeals().clear();
+		
+		IOptimiserInjectorService localOverrides = OptimiserInjectorServiceMaker.begin() //
+				.makeModule() //
+				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.OPTIMISE_PAPER_PNL)).toInstance(Boolean.TRUE)) //
+				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.RE_HEDGE_WITH_PAPERS)).toInstance(Boolean.TRUE)) //
+				.buildOverride(ModuleType.Module_LNGTransformerModule)//
+				.make();
+		
+		evaluateWithOverrides(localOverrides, null, scenarioRunner -> {
 			Assertions.assertNotNull(scenarioRunner);
 
 			// Should be the same as the updateScenario as we have only called ScenarioRunner#init()
@@ -107,20 +111,20 @@ public class ExposuresScenarioTests extends AbstractMicroTestCase {
 			PaperDeal brentSellFeb = null;
 			PaperDeal jkmBuyJan = null;
 			for (final PaperDeal paperDeal : schedule.getGeneratedPaperDeals()) {
-				if ("brent-ice-2017-01_buy".equalsIgnoreCase(paperDeal.getName())) {
+				if ("brent_ice_2017-01_buy".equalsIgnoreCase(paperDeal.getName())) {
 					brentBuyJan = paperDeal;
-				} else if ("brent-ice_2017-02_sell".equalsIgnoreCase(paperDeal.getName())) {
+				} else if ("brent_ice_2017-02_sell".equalsIgnoreCase(paperDeal.getName())) {
 					brentSellFeb = paperDeal;
-				} else if ("jkm_2017-02_buy".equalsIgnoreCase(paperDeal.getName())) {
+				} else if ("jkm_2017-01_buy".equalsIgnoreCase(paperDeal.getName())) {
 					jkmBuyJan = paperDeal;
 				}
 			}
 			Assertions.assertNotNull(brentBuyJan);
-			Assertions.assertEquals(brentBuyJan.getQuantity(), 237160.00, delta);
+			Assertions.assertEquals(brentBuyJan.getQuantity(), 237177.00, delta);
 			Assertions.assertNotNull(brentSellFeb);
-			Assertions.assertEquals(brentSellFeb.getQuantity(), -601320.00, delta);
+			Assertions.assertEquals(brentSellFeb.getQuantity(), 636512.00, delta);
 			Assertions.assertNotNull(jkmBuyJan);
-			Assertions.assertEquals(jkmBuyJan.getQuantity(), 36938.00, delta);
+			Assertions.assertEquals(jkmBuyJan.getQuantity(), 36953.00, delta);
 		});
 	}
 	
@@ -143,8 +147,6 @@ public class ExposuresScenarioTests extends AbstractMicroTestCase {
 	private void generateTestPapers() {
 		final CargoModel cm = ScenarioModelUtil.getCargoModel(scenarioDataProvider);
 		pricingModel = ScenarioModelUtil.getPricingModel(scenarioDataProvider);
-		final CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(scenarioDataProvider);
-		entity = commercialModel.getEntities().get(0);
 		cm.getPaperDeals().add(makePaperDeal("BRENT-Buy-2017-Jan", true, "BRENT_ICE", "Brent_momental_swap", YearMonth.of(2017, 1), 237177.00, 1.00));
 		cm.getPaperDeals().add(makePaperDeal("BRENT-Sell-2017-Feb", false, "BRENT_ICE", "Brent_momental_swap", YearMonth.of(2017, 2), 601329.00, 1.00));
 		cm.getPaperDeals().add(makePaperDeal("JKM-Buy-2017-Jan", true, "jkm", "Brent_momental_swap", YearMonth.of(2017, 1), 36954.00, 1.00));

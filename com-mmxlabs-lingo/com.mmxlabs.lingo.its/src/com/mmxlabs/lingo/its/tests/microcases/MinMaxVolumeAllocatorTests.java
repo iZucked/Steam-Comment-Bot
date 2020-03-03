@@ -795,9 +795,9 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 
 			Assertions.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
 
-			Assertions.assertEquals(2_950_000, cargoAllocation.getLoadAllocation().getEnergyTransferred());
+			Assertions.assertEquals(3_000_000, cargoAllocation.getLoadAllocation().getEnergyTransferred());
 
-			Assertions.assertEquals(2_950_000, cargoAllocation.getDischargeAllocation().getEnergyTransferred());
+			Assertions.assertEquals(3_000_000, cargoAllocation.getDischargeAllocation().getEnergyTransferred());
 
 			Assertions.assertTrue(verifySomeCapacityViolations(cargoAllocation));
 		});
