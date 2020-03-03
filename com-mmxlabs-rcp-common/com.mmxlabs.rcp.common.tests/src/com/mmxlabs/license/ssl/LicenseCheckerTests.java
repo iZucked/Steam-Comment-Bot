@@ -15,7 +15,7 @@ public class LicenseCheckerTests {
 
 		Path tempDir = Files.createTempDirectory("lingo test spaces");
 		try {
-			String location = "file:/" + tempDir.toString().replaceAll("\\\\", "/");
+			String location = "file:///" + tempDir.toString().replaceAll("\\\\", "/");
 			System.out.println(location);
 			File f = LicenseChecker.getCACertsFileFromEclipseHomeURL(location);
 
