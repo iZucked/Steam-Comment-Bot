@@ -33,12 +33,14 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.DistancesLinesToScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.LocationsToScenarioCopier;
-import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.UpdateItem;
-import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.UpdateStep;
-import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.UpdateWarning;
-import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.UserUpdateStep;
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.AtoBviaCLookupRecord;
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.LocationsVersion;
+import com.mmxlabs.lngdataserver.lng.importers.update.UpdateItem;
+import com.mmxlabs.lngdataserver.lng.importers.update.UpdateItemComparator;
+import com.mmxlabs.lngdataserver.lng.importers.update.UpdateItemLabelProvider;
+import com.mmxlabs.lngdataserver.lng.importers.update.UpdateStep;
+import com.mmxlabs.lngdataserver.lng.importers.update.UpdateWarning;
+import com.mmxlabs.lngdataserver.lng.importers.update.UserUpdateStep;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;

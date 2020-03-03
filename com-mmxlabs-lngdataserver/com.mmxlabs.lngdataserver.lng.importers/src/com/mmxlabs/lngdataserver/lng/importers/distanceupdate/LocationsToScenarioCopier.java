@@ -31,6 +31,11 @@ import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.BasicLocatio
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.GeographicPoint;
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.LocationsVersion;
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.RoutingPoint;
+import com.mmxlabs.lngdataserver.lng.importers.update.UpdateError;
+import com.mmxlabs.lngdataserver.lng.importers.update.UpdateItem;
+import com.mmxlabs.lngdataserver.lng.importers.update.UpdateStep;
+import com.mmxlabs.lngdataserver.lng.importers.update.UpdateWarning;
+import com.mmxlabs.lngdataserver.lng.importers.update.UserUpdateStep;
 import com.mmxlabs.models.lng.port.EntryPoint;
 import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.OtherIdentifiers;

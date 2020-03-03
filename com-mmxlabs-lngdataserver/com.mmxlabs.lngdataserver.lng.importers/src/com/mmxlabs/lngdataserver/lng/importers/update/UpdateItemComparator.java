@@ -2,13 +2,10 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
-package com.mmxlabs.lngdataserver.lng.importers.distanceupdate.ui;
+package com.mmxlabs.lngdataserver.lng.importers.update;
 
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
-
-import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.UpdateStep;
-import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.UserUpdateStep;
 
 public class UpdateItemComparator extends ViewerComparator {
 

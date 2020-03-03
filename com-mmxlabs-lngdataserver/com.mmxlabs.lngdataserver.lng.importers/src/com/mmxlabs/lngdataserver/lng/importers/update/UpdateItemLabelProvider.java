@@ -2,15 +2,11 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
-package com.mmxlabs.lngdataserver.lng.importers.distanceupdate.ui;
+package com.mmxlabs.lngdataserver.lng.importers.update;
 
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-
-import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.UpdateError;
-import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.UpdateWarning;
-import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.UserUpdateStep;
 
 /**
  * @author Simon Goodall
