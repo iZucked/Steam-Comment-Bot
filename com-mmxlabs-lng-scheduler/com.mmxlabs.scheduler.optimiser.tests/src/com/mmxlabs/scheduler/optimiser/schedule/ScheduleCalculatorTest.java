@@ -16,6 +16,7 @@ import java.util.List;
 
 import javax.inject.Singleton;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
@@ -83,7 +84,6 @@ import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultBaseFuelProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultDistanceProviderImpl;
-import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultExtraIdleTimeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapBaseFuelCurveEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapRouteExclusionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
@@ -94,7 +94,11 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 public class ScheduleCalculatorTest {
 
+	/**
+	 * This test is currently not relevant.
+	 */
 	@Test
+	@Disabled
 	public void calculateMarkToMarketPNLTest() {
 
 		final IMarkToMarketProvider markToMarketProvider = mock(IMarkToMarketProvider.class);
