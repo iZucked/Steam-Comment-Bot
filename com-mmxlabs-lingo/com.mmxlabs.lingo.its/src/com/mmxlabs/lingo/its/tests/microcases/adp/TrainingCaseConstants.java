@@ -13,5 +13,6 @@ public class TrainingCaseConstants {
 	public static final String VESSEL_LARGE_SHIP = "Large ship";
 	
 	public static final String PORT_DARWIN = "Darwin";
+	public static final String PORT_PLUTO = "Pluto LNG Jetty";
 	public static final String PORT_HIMEJI = "Himeji";
 }
