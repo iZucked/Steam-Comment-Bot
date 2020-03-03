@@ -4,6 +4,11 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers.impl;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
@@ -153,22 +158,42 @@ public class DefaultMaxSlotConstraintDataProviderEditor<P,C> implements IMaxSlot
 	}
 
 	private <T extends IPortSlot> int getUTCMonth(final T slot) {
-		final int lastMonth = calendarMonthMapper.mapChangePointToMonth(timeZoneToUtcOffsetProvider.UTC(slot.getTimeWindow().getInclusiveStart(), slot.getPort()));
-		return lastMonth;
+		//Check for non-hourly timezone.
+		boolean nonHourlyTimezone = false;
+		if (slot.getPort() != null) {
+			String timezone = slot.getPort().getTimeZoneId();
+			LocalDateTime ldt = LocalDateTime.of(2020,1,1,0,0,0);
+			Instant instant = ldt.toInstant(ZoneOffset.UTC);
+			ZoneId zid = ZoneId.of(timezone); 
+			ZonedDateTime zdt = ZonedDateTime.ofInstant(instant, zid);
+			if (zdt.getMinute() != 0) {
+				nonHourlyTimezone = true;
+			}
+		}
+		if (nonHourlyTimezone) {
+			//FIXME: should really be using smaller increments (e.g. every 15 minutes) than 1 hour.
+			//Add an hour to compensate for rounding down to nearest hour when non hourly timezone, before mapping to a month.
+			final int lastMonth = calendarMonthMapper.mapChangePointToMonth(timeZoneToUtcOffsetProvider.UTC(slot.getTimeWindow().getInclusiveStart(), slot.getPort())+1);
+			return lastMonth;			
+		}
+		else {
+			final int lastMonth = calendarMonthMapper.mapChangePointToMonth(timeZoneToUtcOffsetProvider.UTC(slot.getTimeWindow().getInclusiveStart(), slot.getPort()));
+			return lastMonth;
+		}
 	}
 
 	private <T extends IPortSlot> List<ConstraintInfo<P,C,T>> addSlotsPerPeriod(final P contractProfile, final C profileConstraint, final List<T> slots, final int startMonth, final int limit, final int interval, final int step) {
 		if (slots.isEmpty()) {
 			return Collections.emptyList();
 		}
-		Collections.sort(slots, (a, b) -> Integer.compare(a.getTimeWindow().getInclusiveStart(), a.getTimeWindow().getInclusiveStart()));
+		Collections.sort(slots, (a, b) -> Integer.compare(a.getTimeWindow().getInclusiveStart(), b.getTimeWindow().getInclusiveStart()));
 		final int lastMonth = getUTCMonth(slots.get(slots.size() - 1));
 		return addSlotsPerPeriod(contractProfile, profileConstraint, slots, startMonth, lastMonth, limit, interval, step);
 	}
 
 	private <T extends IPortSlot> List<ConstraintInfo<P,C,T>> addSlotsPerPeriod(final P contractProfile, final C profileConstraint, final List<T> slots, final int startMonth, final int endMonthInclusive, final int limit, final int interval, final int step) {
 		final List<ConstraintInfo<P,C,T>> slotsSets = new LinkedList<>();
-		Collections.sort(slots, (a, b) -> Integer.compare(a.getTimeWindow().getInclusiveStart(), a.getTimeWindow().getInclusiveStart()));
+		Collections.sort(slots, (a, b) -> Integer.compare(a.getTimeWindow().getInclusiveStart(), b.getTimeWindow().getInclusiveStart()));
 		for (int month = startMonth; month < (endMonthInclusive + 2) - interval; month = month + step) {
 			final Set<T> slotsSet = new LinkedHashSet<>();
 			for (final T slot : slots) {
