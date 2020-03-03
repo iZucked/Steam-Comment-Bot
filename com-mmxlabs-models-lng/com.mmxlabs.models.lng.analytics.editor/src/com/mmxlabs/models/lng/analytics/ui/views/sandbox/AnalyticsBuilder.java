@@ -188,6 +188,9 @@ public class AnalyticsBuilder {
 			if (buyOpportunity.getDate() != null) {
 				slot.setWindowStart(buyOpportunity.getDate());
 			}
+			slot.setWindowSize(buyOpportunity.getWindowSize());
+			slot.setWindowSizeUnits(buyOpportunity.getWindowSizeUnits());
+
 			if (buyOpportunity.getEntity() != null) {
 				slot.setEntity(buyOpportunity.getEntity());
 			}
@@ -305,7 +308,7 @@ public class AnalyticsBuilder {
 				slot.setWindowSize(originalDischargeSlot.getWindowSize());
 				slot.setWindowSizeUnits(originalDischargeSlot.getWindowSizeUnits());
 				slot.setWindowCounterParty(originalDischargeSlot.isWindowCounterParty());
-				
+
 				// TODO: Copy other params!
 				if (slotMode == SlotMode.CHANGE_PRICE_VARIANT) {
 					slot.setPriceExpression("??");
@@ -347,6 +350,9 @@ public class AnalyticsBuilder {
 			if (sellOpportunity.getDate() != null) {
 				slot.setWindowStart(sellOpportunity.getDate());
 			}
+			slot.setWindowSize(sellOpportunity.getWindowSize());
+			slot.setWindowSizeUnits(sellOpportunity.getWindowSizeUnits());
+
 			if (sellOpportunity.getEntity() != null) {
 				slot.setEntity(sellOpportunity.getEntity());
 			}
@@ -824,7 +830,7 @@ public class AnalyticsBuilder {
 								if (opt.getVessel() != vesselAvailability.getVessel()) {
 									continue;
 								}
-								
+
 								if (opt.getEntity() != vesselAvailability.getEntity()) {
 									continue;
 								}
@@ -1154,7 +1160,7 @@ public class AnalyticsBuilder {
 			if (cm.getEntities().size() == 1) {
 				opt.setEntity(cm.getEntities().get(0));
 			}
-			
+
 			final CompoundCommand cmd = new CompoundCommand();
 			cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt));
 			final Object target = feature.isMany() ? Collections.singletonList(opt) : opt;
@@ -1280,14 +1286,26 @@ public class AnalyticsBuilder {
 			final Port port = buyOpportunity.getPort();
 			if (port != null) {
 				ZonedDateTime t = buyOpportunity.getDate().atStartOfDay(ZoneId.of(port.getLocation().getTimeZone()));
-				if (port.getDefaultWindowSizeUnits() == TimePeriod.HOURS) {
-					t = t.plusHours(port.getDefaultWindowSize());
-				} else if (port.getDefaultWindowSizeUnits() == TimePeriod.DAYS) {
-					t = t.plusDays(port.getDefaultWindowSize());
-				} else if (port.getDefaultWindowSizeUnits() == TimePeriod.MONTHS) {
-					t = t.plusMonths(port.getDefaultWindowSize());
+				if (buyOpportunity.isSpecifyWindow()) {
+					if (buyOpportunity.getWindowSizeUnits() == TimePeriod.HOURS) {
+						t = t.plusHours(buyOpportunity.getWindowSize());
+					} else if (buyOpportunity.getWindowSizeUnits() == TimePeriod.DAYS) {
+						t = t.plusDays(buyOpportunity.getWindowSize());
+					} else if (buyOpportunity.getWindowSizeUnits() == TimePeriod.MONTHS) {
+						t = t.plusMonths(buyOpportunity.getWindowSize());
+					} else {
+						return null;
+					}
 				} else {
-					return null;
+					if (port.getDefaultWindowSizeUnits() == TimePeriod.HOURS) {
+						t = t.plusHours(port.getDefaultWindowSize());
+					} else if (port.getDefaultWindowSizeUnits() == TimePeriod.DAYS) {
+						t = t.plusDays(port.getDefaultWindowSize());
+					} else if (port.getDefaultWindowSizeUnits() == TimePeriod.MONTHS) {
+						t = t.plusMonths(port.getDefaultWindowSize());
+					} else {
+						return null;
+					}
 				}
 				return t;
 			}
@@ -1309,14 +1327,26 @@ public class AnalyticsBuilder {
 				final LocalDate date = sellOpportunity.getDate();
 				if (date != null) {
 					ZonedDateTime t = date.atStartOfDay(ZoneId.of(port.getLocation().getTimeZone()));
-					if (port.getDefaultWindowSizeUnits() == TimePeriod.HOURS) {
-						t = t.plusHours(port.getDefaultWindowSize());
-					} else if (port.getDefaultWindowSizeUnits() == TimePeriod.DAYS) {
-						t = t.plusDays(port.getDefaultWindowSize());
-					} else if (port.getDefaultWindowSizeUnits() == TimePeriod.MONTHS) {
-						t = t.plusMonths(port.getDefaultWindowSize());
+					if (sellOpportunity.isSpecifyWindow()) {
+						if (sellOpportunity.getWindowSizeUnits() == TimePeriod.HOURS) {
+							t = t.plusHours(sellOpportunity.getWindowSize());
+						} else if (sellOpportunity.getWindowSizeUnits() == TimePeriod.DAYS) {
+							t = t.plusDays(sellOpportunity.getWindowSize());
+						} else if (sellOpportunity.getWindowSizeUnits() == TimePeriod.MONTHS) {
+							t = t.plusMonths(sellOpportunity.getWindowSize());
+						} else {
+							return null;
+						}
 					} else {
-						return null;
+						if (port.getDefaultWindowSizeUnits() == TimePeriod.HOURS) {
+							t = t.plusHours(port.getDefaultWindowSize());
+						} else if (port.getDefaultWindowSizeUnits() == TimePeriod.DAYS) {
+							t = t.plusDays(port.getDefaultWindowSize());
+						} else if (port.getDefaultWindowSizeUnits() == TimePeriod.MONTHS) {
+							t = t.plusMonths(port.getDefaultWindowSize());
+						} else {
+							return null;
+						}
 					}
 					return t;
 				}

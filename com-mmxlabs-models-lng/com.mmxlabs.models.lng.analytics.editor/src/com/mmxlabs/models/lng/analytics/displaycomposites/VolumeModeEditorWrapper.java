@@ -53,29 +53,39 @@ public class VolumeModeEditorWrapper extends IInlineEditorEnablementWrapper {
 	@Override
 	protected boolean respondToNotification(final Notification notification) {
 
-		if (rangeFeatures.contains(wrapped.getFeature())) {
-			if (notification.getFeature() == AnalyticsPackage.Literals.BUY_OPPORTUNITY__VOLUME_MODE || notification.getFeature() == AnalyticsPackage.Literals.SELL_OPPORTUNITY__VOLUME_MODE) {
-
-				if (notification.getNewValue() == VolumeMode.NOT_SPECIFIED) {
-					enabled = false;
-				} else if (notification.getNewValue() == VolumeMode.FIXED) {
-					// Just disable the min controls
-					enabled = !(wrapped.getFeature() == AnalyticsPackage.Literals.BUY_OPPORTUNITY__MIN_VOLUME || wrapped.getFeature() == AnalyticsPackage.Literals.SELL_OPPORTUNITY__MIN_VOLUME);
-				} else if (notification.getNewValue() == VolumeMode.RANGE) {
-					enabled = true;
-				}
-				EObject editorTarget = getEditorTarget();
-				if (enabled) {
-					super.display(dialogContext, scenario, editorTarget, range);
-					dialogContext.getDialogController().setEditorVisibility(editorTarget, getFeature(), true);
-					getLabel().pack();
-				} else {
-					super.display(dialogContext, scenario, editorTarget, range);
-					dialogContext.getDialogController().setEditorVisibility(editorTarget, getFeature(), false);
-					getLabel().pack();
-
-				}
+		if (notification.getFeature() == AnalyticsPackage.Literals.BUY_OPPORTUNITY__VOLUME_MODE) {
+			EObject editorTarget = getEditorTarget();
+			if (notification.getNewValue() == VolumeMode.NOT_SPECIFIED) {
+				dialogContext.getDialogController().setEditorVisibility(editorTarget, AnalyticsPackage.Literals.BUY_OPPORTUNITY__MIN_VOLUME, false);
+				dialogContext.getDialogController().setEditorVisibility(editorTarget, AnalyticsPackage.Literals.BUY_OPPORTUNITY__MAX_VOLUME, false);
+				dialogContext.getDialogController().setEditorVisibility(editorTarget, AnalyticsPackage.Literals.BUY_OPPORTUNITY__VOLUME_UNITS, false);
+			} else if (notification.getNewValue() == VolumeMode.FIXED) {
+				dialogContext.getDialogController().setEditorVisibility(editorTarget, AnalyticsPackage.Literals.BUY_OPPORTUNITY__MIN_VOLUME, true);
+				dialogContext.getDialogController().setEditorVisibility(editorTarget, AnalyticsPackage.Literals.BUY_OPPORTUNITY__MAX_VOLUME, false);
+				dialogContext.getDialogController().setEditorVisibility(editorTarget, AnalyticsPackage.Literals.BUY_OPPORTUNITY__VOLUME_UNITS, true);
+			} else if (notification.getNewValue() == VolumeMode.RANGE) {
+				dialogContext.getDialogController().setEditorVisibility(editorTarget, AnalyticsPackage.Literals.BUY_OPPORTUNITY__MIN_VOLUME, true);
+				dialogContext.getDialogController().setEditorVisibility(editorTarget, AnalyticsPackage.Literals.BUY_OPPORTUNITY__MAX_VOLUME, true);
+				dialogContext.getDialogController().setEditorVisibility(editorTarget, AnalyticsPackage.Literals.BUY_OPPORTUNITY__VOLUME_UNITS, true);
 			}
+			dialogContext.getDialogController().updateEditorVisibility();
+		} else if (notification.getFeature() == AnalyticsPackage.Literals.SELL_OPPORTUNITY__VOLUME_MODE) {
+			EObject editorTarget = getEditorTarget();
+			if (notification.getNewValue() == VolumeMode.NOT_SPECIFIED) {
+				dialogContext.getDialogController().setEditorVisibility(editorTarget, AnalyticsPackage.Literals.SELL_OPPORTUNITY__MIN_VOLUME, false);
+				dialogContext.getDialogController().setEditorVisibility(editorTarget, AnalyticsPackage.Literals.SELL_OPPORTUNITY__MAX_VOLUME, false);
+				dialogContext.getDialogController().setEditorVisibility(editorTarget, AnalyticsPackage.Literals.SELL_OPPORTUNITY__VOLUME_UNITS, false);
+			} else if (notification.getNewValue() == VolumeMode.FIXED) {
+				dialogContext.getDialogController().setEditorVisibility(editorTarget, AnalyticsPackage.Literals.SELL_OPPORTUNITY__MIN_VOLUME, true);
+				dialogContext.getDialogController().setEditorVisibility(editorTarget, AnalyticsPackage.Literals.SELL_OPPORTUNITY__MAX_VOLUME, false);
+				dialogContext.getDialogController().setEditorVisibility(editorTarget, AnalyticsPackage.Literals.SELL_OPPORTUNITY__VOLUME_UNITS, true);
+			} else if (notification.getNewValue() == VolumeMode.RANGE) {
+				dialogContext.getDialogController().setEditorVisibility(editorTarget, AnalyticsPackage.Literals.SELL_OPPORTUNITY__MIN_VOLUME, true);
+				dialogContext.getDialogController().setEditorVisibility(editorTarget, AnalyticsPackage.Literals.SELL_OPPORTUNITY__MAX_VOLUME, true);
+				dialogContext.getDialogController().setEditorVisibility(editorTarget, AnalyticsPackage.Literals.SELL_OPPORTUNITY__VOLUME_UNITS, true);
+			}
+			dialogContext.getDialogController().updateEditorVisibility();
+
 		}
 
 		return false;

@@ -106,6 +106,9 @@ public class SellOptionsContextMenuManager implements MenuDetectListener {
 						newSell.setFobSale(slot.isFOBSale());
 						newSell.setPort(slot.getPort());
 						newSell.setDate(slot.getWindowStart());
+						newSell.setSpecifyWindow(true);
+						newSell.setWindowSize(slot.getSchedulingTimeWindow().getSize());
+						newSell.setWindowSizeUnits(slot.getSchedulingTimeWindow().getSizeUnits());
 						if (slot.isSetContract()) {
 							newSell.setContract((SalesContract) slot.getContract());
 						} else {

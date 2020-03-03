@@ -384,22 +384,13 @@ s	 * <!-- end-user-doc -->
 	int BUY_OPPORTUNITY__VOLUME_MODE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
 
 	/**
-	 * The feature id for the '<em><b>Volume Units</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BUY_OPPORTUNITY__VOLUME_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
-
-	/**
 	 * The feature id for the '<em><b>Min Volume</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__MIN_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
+	int BUY_OPPORTUNITY__MIN_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
 
 	/**
 	 * The feature id for the '<em><b>Max Volume</b></em>' attribute.
@@ -408,7 +399,43 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__MAX_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
+	int BUY_OPPORTUNITY__MAX_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
+
+	/**
+	 * The feature id for the '<em><b>Volume Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUY_OPPORTUNITY__VOLUME_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
+
+	/**
+	 * The feature id for the '<em><b>Specify Window</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUY_OPPORTUNITY__SPECIFY_WINDOW = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
+
+	/**
+	 * The feature id for the '<em><b>Window Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUY_OPPORTUNITY__WINDOW_SIZE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
+
+	/**
+	 * The feature id for the '<em><b>Window Size Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUY_OPPORTUNITY__WINDOW_SIZE_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 15;
 
 	/**
 	 * The number of structural features of the '<em>Buy Opportunity</em>' class.
@@ -417,7 +444,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
+	int BUY_OPPORTUNITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 16;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -519,22 +546,13 @@ s	 * <!-- end-user-doc -->
 	int SELL_OPPORTUNITY__VOLUME_MODE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
 
 	/**
-	 * The feature id for the '<em><b>Volume Units</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SELL_OPPORTUNITY__VOLUME_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
-
-	/**
 	 * The feature id for the '<em><b>Min Volume</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__MIN_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
+	int SELL_OPPORTUNITY__MIN_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>Max Volume</b></em>' attribute.
@@ -543,7 +561,43 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__MAX_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
+	int SELL_OPPORTUNITY__MAX_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
+
+	/**
+	 * The feature id for the '<em><b>Volume Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_OPPORTUNITY__VOLUME_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
+
+	/**
+	 * The feature id for the '<em><b>Specify Window</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_OPPORTUNITY__SPECIFY_WINDOW = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
+
+	/**
+	 * The feature id for the '<em><b>Window Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_OPPORTUNITY__WINDOW_SIZE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
+
+	/**
+	 * The feature id for the '<em><b>Window Size Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_OPPORTUNITY__WINDOW_SIZE_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
 
 	/**
 	 * The number of structural features of the '<em>Sell Opportunity</em>' class.
@@ -552,7 +606,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
+	int SELL_OPPORTUNITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 15;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.BuyMarketImpl <em>Buy Market</em>}' class.
@@ -4292,6 +4346,39 @@ s	 * <!-- end-user-doc -->
 	EAttribute getBuyOpportunity_MaxVolume();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.BuyOpportunity#isSpecifyWindow <em>Specify Window</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Specify Window</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BuyOpportunity#isSpecifyWindow()
+	 * @see #getBuyOpportunity()
+	 * @generated
+	 */
+	EAttribute getBuyOpportunity_SpecifyWindow();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.BuyOpportunity#getWindowSize <em>Window Size</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Window Size</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BuyOpportunity#getWindowSize()
+	 * @see #getBuyOpportunity()
+	 * @generated
+	 */
+	EAttribute getBuyOpportunity_WindowSize();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.BuyOpportunity#getWindowSizeUnits <em>Window Size Units</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Window Size Units</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BuyOpportunity#getWindowSizeUnits()
+	 * @see #getBuyOpportunity()
+	 * @generated
+	 */
+	EAttribute getBuyOpportunity_WindowSizeUnits();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.SellOpportunity <em>Sell Opportunity</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4432,6 +4519,39 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	EAttribute getSellOpportunity_MaxVolume();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SellOpportunity#isSpecifyWindow <em>Specify Window</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Specify Window</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SellOpportunity#isSpecifyWindow()
+	 * @see #getSellOpportunity()
+	 * @generated
+	 */
+	EAttribute getSellOpportunity_SpecifyWindow();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getWindowSize <em>Window Size</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Window Size</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SellOpportunity#getWindowSize()
+	 * @see #getSellOpportunity()
+	 * @generated
+	 */
+	EAttribute getSellOpportunity_WindowSize();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getWindowSizeUnits <em>Window Size Units</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Window Size Units</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SellOpportunity#getWindowSizeUnits()
+	 * @see #getSellOpportunity()
+	 * @generated
+	 */
+	EAttribute getSellOpportunity_WindowSizeUnits();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.BuyMarket <em>Buy Market</em>}'.
@@ -6859,6 +6979,30 @@ s	 * <!-- end-user-doc -->
 		EAttribute BUY_OPPORTUNITY__MAX_VOLUME = eINSTANCE.getBuyOpportunity_MaxVolume();
 
 		/**
+		 * The meta object literal for the '<em><b>Specify Window</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BUY_OPPORTUNITY__SPECIFY_WINDOW = eINSTANCE.getBuyOpportunity_SpecifyWindow();
+
+		/**
+		 * The meta object literal for the '<em><b>Window Size</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BUY_OPPORTUNITY__WINDOW_SIZE = eINSTANCE.getBuyOpportunity_WindowSize();
+
+		/**
+		 * The meta object literal for the '<em><b>Window Size Units</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BUY_OPPORTUNITY__WINDOW_SIZE_UNITS = eINSTANCE.getBuyOpportunity_WindowSizeUnits();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.SellOpportunityImpl <em>Sell Opportunity</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -6963,6 +7107,30 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute SELL_OPPORTUNITY__MAX_VOLUME = eINSTANCE.getSellOpportunity_MaxVolume();
+
+		/**
+		 * The meta object literal for the '<em><b>Specify Window</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SELL_OPPORTUNITY__SPECIFY_WINDOW = eINSTANCE.getSellOpportunity_SpecifyWindow();
+
+		/**
+		 * The meta object literal for the '<em><b>Window Size</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SELL_OPPORTUNITY__WINDOW_SIZE = eINSTANCE.getSellOpportunity_WindowSize();
+
+		/**
+		 * The meta object literal for the '<em><b>Window Size Units</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SELL_OPPORTUNITY__WINDOW_SIZE_UNITS = eINSTANCE.getSellOpportunity_WindowSizeUnits();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.BuyMarketImpl <em>Buy Market</em>}' class.

@@ -216,7 +216,7 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 		return changed;
 	}
 
-	private void setControlVisibility(final Control c, final boolean v) {
+	protected void setControlVisibility(final Control c, final boolean v) {
 		c.setVisible(v);
 		if (c instanceof Composite) {
 			final Composite composite = (Composite) c;

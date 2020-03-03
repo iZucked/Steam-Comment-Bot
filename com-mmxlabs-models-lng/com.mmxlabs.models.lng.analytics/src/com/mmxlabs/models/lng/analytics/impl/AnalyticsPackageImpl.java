@@ -835,7 +835,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 */
 	@Override
 	public EAttribute getBuyOpportunity_VolumeUnits() {
-		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(10);
+		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(12);
 	}
 
 	/**
@@ -845,7 +845,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 */
 	@Override
 	public EAttribute getBuyOpportunity_MinVolume() {
-		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(11);
+		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(10);
 	}
 
 	/**
@@ -855,7 +855,37 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 */
 	@Override
 	public EAttribute getBuyOpportunity_MaxVolume() {
-		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(12);
+		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(11);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getBuyOpportunity_SpecifyWindow() {
+		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(13);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getBuyOpportunity_WindowSize() {
+		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(14);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getBuyOpportunity_WindowSizeUnits() {
+		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(15);
 	}
 
 	/**
@@ -965,7 +995,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 */
 	@Override
 	public EAttribute getSellOpportunity_VolumeUnits() {
-		return (EAttribute)sellOpportunityEClass.getEStructuralFeatures().get(9);
+		return (EAttribute)sellOpportunityEClass.getEStructuralFeatures().get(11);
 	}
 
 	/**
@@ -975,7 +1005,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 */
 	@Override
 	public EAttribute getSellOpportunity_MinVolume() {
-		return (EAttribute)sellOpportunityEClass.getEStructuralFeatures().get(10);
+		return (EAttribute)sellOpportunityEClass.getEStructuralFeatures().get(9);
 	}
 
 	/**
@@ -985,7 +1015,37 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 */
 	@Override
 	public EAttribute getSellOpportunity_MaxVolume() {
-		return (EAttribute)sellOpportunityEClass.getEStructuralFeatures().get(11);
+		return (EAttribute)sellOpportunityEClass.getEStructuralFeatures().get(10);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSellOpportunity_SpecifyWindow() {
+		return (EAttribute)sellOpportunityEClass.getEStructuralFeatures().get(12);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSellOpportunity_WindowSize() {
+		return (EAttribute)sellOpportunityEClass.getEStructuralFeatures().get(13);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSellOpportunity_WindowSizeUnits() {
+		return (EAttribute)sellOpportunityEClass.getEStructuralFeatures().get(14);
 	}
 
 	/**
@@ -3093,9 +3153,12 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEAttribute(buyOpportunityEClass, BUY_OPPORTUNITY__CANCELLATION_EXPRESSION);
 		createEAttribute(buyOpportunityEClass, BUY_OPPORTUNITY__MISC_COSTS);
 		createEAttribute(buyOpportunityEClass, BUY_OPPORTUNITY__VOLUME_MODE);
-		createEAttribute(buyOpportunityEClass, BUY_OPPORTUNITY__VOLUME_UNITS);
 		createEAttribute(buyOpportunityEClass, BUY_OPPORTUNITY__MIN_VOLUME);
 		createEAttribute(buyOpportunityEClass, BUY_OPPORTUNITY__MAX_VOLUME);
+		createEAttribute(buyOpportunityEClass, BUY_OPPORTUNITY__VOLUME_UNITS);
+		createEAttribute(buyOpportunityEClass, BUY_OPPORTUNITY__SPECIFY_WINDOW);
+		createEAttribute(buyOpportunityEClass, BUY_OPPORTUNITY__WINDOW_SIZE);
+		createEAttribute(buyOpportunityEClass, BUY_OPPORTUNITY__WINDOW_SIZE_UNITS);
 
 		sellOpportunityEClass = createEClass(SELL_OPPORTUNITY);
 		createEAttribute(sellOpportunityEClass, SELL_OPPORTUNITY__FOB_SALE);
@@ -3107,9 +3170,12 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEAttribute(sellOpportunityEClass, SELL_OPPORTUNITY__CANCELLATION_EXPRESSION);
 		createEAttribute(sellOpportunityEClass, SELL_OPPORTUNITY__MISC_COSTS);
 		createEAttribute(sellOpportunityEClass, SELL_OPPORTUNITY__VOLUME_MODE);
-		createEAttribute(sellOpportunityEClass, SELL_OPPORTUNITY__VOLUME_UNITS);
 		createEAttribute(sellOpportunityEClass, SELL_OPPORTUNITY__MIN_VOLUME);
 		createEAttribute(sellOpportunityEClass, SELL_OPPORTUNITY__MAX_VOLUME);
+		createEAttribute(sellOpportunityEClass, SELL_OPPORTUNITY__VOLUME_UNITS);
+		createEAttribute(sellOpportunityEClass, SELL_OPPORTUNITY__SPECIFY_WINDOW);
+		createEAttribute(sellOpportunityEClass, SELL_OPPORTUNITY__WINDOW_SIZE);
+		createEAttribute(sellOpportunityEClass, SELL_OPPORTUNITY__WINDOW_SIZE_UNITS);
 
 		buyMarketEClass = createEClass(BUY_MARKET);
 		createEReference(buyMarketEClass, BUY_MARKET__MARKET);
@@ -3497,9 +3563,12 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEAttribute(getBuyOpportunity_CancellationExpression(), ecorePackage.getEString(), "cancellationExpression", null, 0, 1, BuyOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getBuyOpportunity_MiscCosts(), ecorePackage.getEInt(), "miscCosts", null, 0, 1, BuyOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getBuyOpportunity_VolumeMode(), this.getVolumeMode(), "volumeMode", null, 0, 1, BuyOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getBuyOpportunity_VolumeUnits(), theTypesPackage.getVolumeUnits(), "volumeUnits", null, 0, 1, BuyOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getBuyOpportunity_MinVolume(), ecorePackage.getEInt(), "minVolume", null, 0, 1, BuyOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getBuyOpportunity_MaxVolume(), ecorePackage.getEInt(), "maxVolume", null, 0, 1, BuyOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getBuyOpportunity_VolumeUnits(), theTypesPackage.getVolumeUnits(), "volumeUnits", null, 0, 1, BuyOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getBuyOpportunity_SpecifyWindow(), ecorePackage.getEBoolean(), "specifyWindow", null, 0, 1, BuyOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getBuyOpportunity_WindowSize(), ecorePackage.getEInt(), "windowSize", null, 1, 1, BuyOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getBuyOpportunity_WindowSizeUnits(), theTypesPackage.getTimePeriod(), "windowSizeUnits", null, 1, 1, BuyOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(sellOpportunityEClass, SellOpportunity.class, "SellOpportunity", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getSellOpportunity_FobSale(), ecorePackage.getEBoolean(), "fobSale", null, 0, 1, SellOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3511,9 +3580,12 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEAttribute(getSellOpportunity_CancellationExpression(), ecorePackage.getEString(), "cancellationExpression", null, 0, 1, SellOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSellOpportunity_MiscCosts(), ecorePackage.getEInt(), "miscCosts", null, 0, 1, SellOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSellOpportunity_VolumeMode(), this.getVolumeMode(), "volumeMode", null, 0, 1, SellOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSellOpportunity_VolumeUnits(), theTypesPackage.getVolumeUnits(), "volumeUnits", null, 0, 1, SellOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSellOpportunity_MinVolume(), ecorePackage.getEInt(), "minVolume", null, 0, 1, SellOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSellOpportunity_MaxVolume(), ecorePackage.getEInt(), "maxVolume", null, 0, 1, SellOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSellOpportunity_VolumeUnits(), theTypesPackage.getVolumeUnits(), "volumeUnits", null, 0, 1, SellOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSellOpportunity_SpecifyWindow(), ecorePackage.getEBoolean(), "specifyWindow", null, 0, 1, SellOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSellOpportunity_WindowSize(), ecorePackage.getEInt(), "windowSize", null, 1, 1, SellOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSellOpportunity_WindowSizeUnits(), theTypesPackage.getTimePeriod(), "windowSizeUnits", null, 1, 1, SellOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(buyMarketEClass, BuyMarket.class, "BuyMarket", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getBuyMarket_Market(), theSpotMarketsPackage.getSpotMarket(), null, "market", null, 0, 1, BuyMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3810,6 +3882,30 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		   source,
 		   new String[] {
 			   "formatString", "#0.###"
+		   });
+		addAnnotation
+		  (getBuyOpportunity_WindowSize(),
+		   source,
+		   new String[] {
+			   "formatString", "##,##0"
+		   });
+		addAnnotation
+		  (getBuyOpportunity_WindowSizeUnits(),
+		   source,
+		   new String[] {
+			   "formatString", "##,##0"
+		   });
+		addAnnotation
+		  (getSellOpportunity_WindowSize(),
+		   source,
+		   new String[] {
+			   "formatString", "##,##0"
+		   });
+		addAnnotation
+		  (getSellOpportunity_WindowSizeUnits(),
+		   source,
+		   new String[] {
+			   "formatString", "##,##0"
 		   });
 	}
 

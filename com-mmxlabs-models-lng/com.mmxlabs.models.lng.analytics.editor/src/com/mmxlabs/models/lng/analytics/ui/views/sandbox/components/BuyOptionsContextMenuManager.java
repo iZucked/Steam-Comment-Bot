@@ -105,6 +105,9 @@ public class BuyOptionsContextMenuManager implements MenuDetectListener {
 						newBuy.setDesPurchase(slot.isDESPurchase());
 						newBuy.setPort(slot.getPort());
 						newBuy.setDate(slot.getWindowStart());
+						newBuy.setSpecifyWindow(true);
+						newBuy.setWindowSize(slot.getSchedulingTimeWindow().getSize());
+						newBuy.setWindowSizeUnits(slot.getSchedulingTimeWindow().getSizeUnits());
 						if (slot.isSetContract()) {
 							newBuy.setContract((PurchaseContract) slot.getContract());
 						} else {

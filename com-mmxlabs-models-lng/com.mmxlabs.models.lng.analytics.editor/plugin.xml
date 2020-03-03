@@ -451,6 +451,18 @@
             id="com.mmxlabs.models.lng.analytics.presentation.composites.FullVesselCharterCompositeFactory"
             inheritable="true">
       </displayCompositeFactory>
+      <displayCompositeFactory
+            eClass="com.mmxlabs.models.lng.analytics.BuyOpportunity"
+            factory="com.mmxlabs.models.lng.analytics.presentation.displaycomposites.BuyOpportunityCompositeFactory"
+            id="com.mmxlabs.models.lng.analytics.presentation.displaycomposites.BuyOpportunityCompositeFactory"
+            inheritable="true">
+      </displayCompositeFactory>
+      <displayCompositeFactory
+            eClass="com.mmxlabs.models.lng.analytics.SellOpportunity"
+            factory="com.mmxlabs.models.lng.analytics.presentation.displaycomposites.SellOpportunityCompositeFactory"
+            id="com.mmxlabs.models.lng.analytics.presentation.displaycomposites.SellOpportunityCompositeFactory"
+            inheritable="true">
+      </displayCompositeFactory>
    </extension>
    <extension
          point="org.eclipse.core.runtime.adapters">

@@ -59,9 +59,12 @@ public class BuyOpportunityItemProvider
 			addCancellationExpressionPropertyDescriptor(object);
 			addMiscCostsPropertyDescriptor(object);
 			addVolumeModePropertyDescriptor(object);
-			addVolumeUnitsPropertyDescriptor(object);
 			addMinVolumePropertyDescriptor(object);
 			addMaxVolumePropertyDescriptor(object);
+			addVolumeUnitsPropertyDescriptor(object);
+			addSpecifyWindowPropertyDescriptor(object);
+			addWindowSizePropertyDescriptor(object);
+			addWindowSizeUnitsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -353,6 +356,72 @@ public class BuyOpportunityItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Specify Window feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addSpecifyWindowPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_BuyOpportunity_specifyWindow_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_BuyOpportunity_specifyWindow_feature", "_UI_BuyOpportunity_type"),
+				 AnalyticsPackage.Literals.BUY_OPPORTUNITY__SPECIFY_WINDOW,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Window Size feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addWindowSizePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_BuyOpportunity_windowSize_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_BuyOpportunity_windowSize_feature", "_UI_BuyOpportunity_type"),
+				 AnalyticsPackage.Literals.BUY_OPPORTUNITY__WINDOW_SIZE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Window Size Units feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addWindowSizeUnitsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_BuyOpportunity_windowSizeUnits_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_BuyOpportunity_windowSizeUnits_feature", "_UI_BuyOpportunity_type"),
+				 AnalyticsPackage.Literals.BUY_OPPORTUNITY__WINDOW_SIZE_UNITS,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns BuyOpportunity.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -396,9 +465,12 @@ public class BuyOpportunityItemProvider
 			case AnalyticsPackage.BUY_OPPORTUNITY__CANCELLATION_EXPRESSION:
 			case AnalyticsPackage.BUY_OPPORTUNITY__MISC_COSTS:
 			case AnalyticsPackage.BUY_OPPORTUNITY__VOLUME_MODE:
-			case AnalyticsPackage.BUY_OPPORTUNITY__VOLUME_UNITS:
 			case AnalyticsPackage.BUY_OPPORTUNITY__MIN_VOLUME:
 			case AnalyticsPackage.BUY_OPPORTUNITY__MAX_VOLUME:
+			case AnalyticsPackage.BUY_OPPORTUNITY__VOLUME_UNITS:
+			case AnalyticsPackage.BUY_OPPORTUNITY__SPECIFY_WINDOW:
+			case AnalyticsPackage.BUY_OPPORTUNITY__WINDOW_SIZE:
+			case AnalyticsPackage.BUY_OPPORTUNITY__WINDOW_SIZE_UNITS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

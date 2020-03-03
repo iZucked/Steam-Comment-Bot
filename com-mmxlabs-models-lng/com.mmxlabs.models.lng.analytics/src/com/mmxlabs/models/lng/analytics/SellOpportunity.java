@@ -8,6 +8,7 @@ import java.time.LocalDate;
 
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -30,9 +31,12 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getCancellationExpression <em>Cancellation Expression</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getMiscCosts <em>Misc Costs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getVolumeMode <em>Volume Mode</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getVolumeUnits <em>Volume Units</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getMinVolume <em>Min Volume</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getMaxVolume <em>Max Volume</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getVolumeUnits <em>Volume Units</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.SellOpportunity#isSpecifyWindow <em>Specify Window</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getWindowSize <em>Window Size</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getWindowSizeUnits <em>Window Size Units</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSellOpportunity()
@@ -357,6 +361,77 @@ public interface SellOpportunity extends UUIDObject, SellOption {
 	 * @generated
 	 */
 	void setMaxVolume(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Specify Window</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Specify Window</em>' attribute.
+	 * @see #setSpecifyWindow(boolean)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSellOpportunity_SpecifyWindow()
+	 * @model
+	 * @generated
+	 */
+	boolean isSpecifyWindow();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.SellOpportunity#isSpecifyWindow <em>Specify Window</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Specify Window</em>' attribute.
+	 * @see #isSpecifyWindow()
+	 * @generated
+	 */
+	void setSpecifyWindow(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Window Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Window Size</em>' attribute.
+	 * @see #setWindowSize(int)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSellOpportunity_WindowSize()
+	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='##,##0'"
+	 * @generated
+	 */
+	int getWindowSize();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getWindowSize <em>Window Size</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Window Size</em>' attribute.
+	 * @see #getWindowSize()
+	 * @generated
+	 */
+	void setWindowSize(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Window Size Units</b></em>' attribute.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.types.TimePeriod}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Window Size Units</em>' attribute.
+	 * @see com.mmxlabs.models.lng.types.TimePeriod
+	 * @see #setWindowSizeUnits(TimePeriod)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSellOpportunity_WindowSizeUnits()
+	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='##,##0'"
+	 * @generated
+	 */
+	TimePeriod getWindowSizeUnits();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getWindowSizeUnits <em>Window Size Units</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Window Size Units</em>' attribute.
+	 * @see com.mmxlabs.models.lng.types.TimePeriod
+	 * @see #getWindowSizeUnits()
+	 * @generated
+	 */
+	void setWindowSizeUnits(TimePeriod value);
 
 } // end of  SellOpportunity
 
