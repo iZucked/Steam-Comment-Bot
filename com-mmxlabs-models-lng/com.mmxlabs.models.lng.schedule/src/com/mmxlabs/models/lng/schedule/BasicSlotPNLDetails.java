@@ -19,7 +19,6 @@ package com.mmxlabs.models.lng.schedule;
  *   <li>{@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getExtraShippingPNL <em>Extra Shipping PNL</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getAdditionalPNL <em>Additional PNL</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getCancellationFees <em>Cancellation Fees</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getHedgingValue <em>Hedging Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getMiscCostsValue <em>Misc Costs Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getExtraUpsidePNL <em>Extra Upside PNL</em>}</li>
  * </ul>
@@ -133,59 +132,6 @@ public interface BasicSlotPNLDetails extends GeneralPNLDetails {
 	 * @generated
 	 */
 	boolean isSetCancellationFees();
-
-	/**
-	 * Returns the value of the '<em><b>Hedging Value</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Hedging Value</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Hedging Value</em>' attribute.
-	 * @see #isSetHedgingValue()
-	 * @see #unsetHedgingValue()
-	 * @see #setHedgingValue(int)
-	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getBasicSlotPNLDetails_HedgingValue()
-	 * @model unsettable="true"
-	 * @generated
-	 */
-	int getHedgingValue();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getHedgingValue <em>Hedging Value</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Hedging Value</em>' attribute.
-	 * @see #isSetHedgingValue()
-	 * @see #unsetHedgingValue()
-	 * @see #getHedgingValue()
-	 * @generated
-	 */
-	void setHedgingValue(int value);
-
-	/**
-	 * Unsets the value of the '{@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getHedgingValue <em>Hedging Value</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isSetHedgingValue()
-	 * @see #getHedgingValue()
-	 * @see #setHedgingValue(int)
-	 * @generated
-	 */
-	void unsetHedgingValue();
-
-	/**
-	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getHedgingValue <em>Hedging Value</em>}' attribute is set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Hedging Value</em>' attribute is set.
-	 * @see #unsetHedgingValue()
-	 * @see #getHedgingValue()
-	 * @see #setHedgingValue(int)
-	 * @generated
-	 */
-	boolean isSetHedgingValue();
 
 	/**
 	 * Returns the value of the '<em><b>Misc Costs Value</b></em>' attribute.

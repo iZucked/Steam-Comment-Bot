@@ -43,7 +43,6 @@ public interface FuelUsage extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='int sum = 0;\nfor (final FuelQuantity fq : getFuels()) {\n\tsum += fq.getCost();\n}\nreturn sum;'"
 	 * @generated
 	 */
 	int getFuelCost();

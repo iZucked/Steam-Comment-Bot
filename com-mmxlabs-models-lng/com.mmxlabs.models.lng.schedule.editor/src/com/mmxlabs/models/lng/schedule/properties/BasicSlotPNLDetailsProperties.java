@@ -39,10 +39,6 @@ public class BasicSlotPNLDetailsProperties {
 				final int cancellationFees = slotPNLDetails.getCancellationFees();
 				DetailPropertyFactoryUtil.addDetailProperty("Cancellation Fees", "", "$", "", cancellationFees, new StringFormatLabelProvider("%,d"), details);
 			}
-			if (slotPNLDetails.isSetHedgingValue()) {
-				final int hedgingValue = slotPNLDetails.getHedgingValue();
-				DetailPropertyFactoryUtil.addDetailProperty("Hedging Value", "", "$", "", hedgingValue, new StringFormatLabelProvider("%,d"), details);
-			}
 			if (slotPNLDetails.isSetMiscCostsValue()) {
 				final int miscCostsValue = slotPNLDetails.getMiscCostsValue();
 				DetailPropertyFactoryUtil.addDetailProperty("Misc Costs Value", "", "$", "", miscCostsValue, new StringFormatLabelProvider("%,d"), details);

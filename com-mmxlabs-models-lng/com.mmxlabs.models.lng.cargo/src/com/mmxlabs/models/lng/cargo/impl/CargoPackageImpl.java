@@ -867,7 +867,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSlot_Hedges() {
+	public EAttribute getSlot_MiscCosts() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(35);
 	}
 
@@ -877,7 +877,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSlot_MiscCosts() {
+	public EAttribute getSlot_CancellationExpression() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(36);
 	}
 
@@ -887,18 +887,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSlot_CancellationExpression() {
-		return (EAttribute)slotEClass.getEStructuralFeatures().get(37);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EReference getSlot_NominatedVessel() {
-		return (EReference)slotEClass.getEStructuralFeatures().get(38);
+		return (EReference)slotEClass.getEStructuralFeatures().get(37);
 	}
 
 	/**
@@ -908,7 +898,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EAttribute getSlot_Locked() {
-		return (EAttribute)slotEClass.getEStructuralFeatures().get(39);
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(38);
 	}
 
 	/**
@@ -918,7 +908,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EAttribute getSlot_Cancelled() {
-		return (EAttribute)slotEClass.getEStructuralFeatures().get(40);
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(39);
 	}
 
 	/**
@@ -928,7 +918,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EAttribute getSlot_WindowCounterParty() {
-		return (EAttribute)slotEClass.getEStructuralFeatures().get(41);
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(40);
 	}
 
 	/**
@@ -3217,7 +3207,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEAttribute(slotEClass, SLOT__RESTRICTED_VESSELS_OVERRIDE);
 		createEReference(slotEClass, SLOT__RESTRICTED_SLOTS);
 		createEAttribute(slotEClass, SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE);
-		createEAttribute(slotEClass, SLOT__HEDGES);
 		createEAttribute(slotEClass, SLOT__MISC_COSTS);
 		createEAttribute(slotEClass, SLOT__CANCELLATION_EXPRESSION);
 		createEReference(slotEClass, SLOT__NOMINATED_VESSEL);
@@ -3636,7 +3625,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		g1.getETypeArguments().add(g2);
 		initEReference(getSlot_RestrictedSlots(), g1, null, "restrictedSlots", null, 0, -1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_RestrictedSlotsArePermissive(), ecorePackage.getEBoolean(), "restrictedSlotsArePermissive", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSlot_Hedges(), ecorePackage.getEInt(), "hedges", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_MiscCosts(), ecorePackage.getEInt(), "miscCosts", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_CancellationExpression(), ecorePackage.getEString(), "cancellationExpression", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSlot_NominatedVessel(), theFleetPackage.getVessel(), null, "nominatedVessel", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -4114,13 +4102,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		   new String[] {
 			   "unit", "days",
 			   "formatString", "###"
-		   });
-		addAnnotation
-		  (getSlot_Hedges(),
-		   source,
-		   new String[] {
-			   "unitPrefix", "$",
-			   "formatString", "-###,###,##0"
 		   });
 		addAnnotation
 		  (getSlot_MiscCosts(),

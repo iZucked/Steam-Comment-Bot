@@ -195,7 +195,6 @@ public class ChangeSetKPIUtil {
 	public static long getCargoOtherPNL(@NonNull final ChangeSetTableRow tableRow, @NonNull final ResultType type) {
 
 		return getRowProfitAndLossValue(tableRow, type, ScheduleModelKPIUtils::getAdditionalProfitAndLoss) //
-				+ getRowProfitAndLossValue(tableRow, type, ScheduleModelKPIUtils::getHedgeValue) //
 				+ getRowProfitAndLossValue(tableRow, type, ScheduleModelKPIUtils::getMiscCostsValue) //
 				- getRowProfitAndLossValue(tableRow, type, ScheduleModelKPIUtils::getCancellationFees);
 	}

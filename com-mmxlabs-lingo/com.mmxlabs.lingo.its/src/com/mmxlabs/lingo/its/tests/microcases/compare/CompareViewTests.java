@@ -321,125 +321,6 @@ public class CompareViewTests {
 
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
-	public void testSlotHedingValue_CargoToOpen() throws Exception {
-		runTest(maker -> {
-			maker.cargoModelBuilder.makeCargo() //
-					// Purchase
-					.makeDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", null) //
-					.withOptional(true) //
-					.withHedgeValue(50000) //
-					.build() //
-					// Sale
-					.makeDESSale("DS", LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5") //
-					.withOptional(true) //
-					.withHedgeValue(60000) //
-					.build() //
-					// Cargo
-					.build();
-
-		}, maker -> {
-			maker.cargoModelBuilder.makeDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", 22.8, null) //
-					.withOptional(true) //
-					.withHedgeValue(50000) //
-					.build();
-
-			maker.cargoModelBuilder.makeDESSale("DS", LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5") //
-					.withOptional(true) //
-					.withHedgeValue(60000) //
-					.build();
-
-		}, changeSetRoot -> {
-			Assertions.assertEquals(1, changeSetRoot.getChangeSets().size());
-
-			ChangeSetToTableTransformer transformer = new ChangeSetToTableTransformer();
-			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, null, SortMode.BY_GROUP);
-
-			final ChangeSetTableGroup changeSet = tableRoot.getGroups().get(0);
-			Assertions.assertEquals(2, changeSet.getRows().size());
-
-			final ChangeSetTableRow row1 = changeSet.getRows().get(0);
-			final ChangeSetTableRow row2 = changeSet.getRows().get(1);
-
-			// Expect 50K for load hedge
-			Assertions.assertEquals(50_000, ChangeSetKPIUtil.getPNL(row1, ResultType.After));
-			// Assertions.assertEquals(-50_000, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.NEW));
-			// Expect 60K for discharge hedge
-			Assertions.assertEquals(60_000, ChangeSetKPIUtil.getPNL(row2, ResultType.After));
-			// Assertions.assertEquals(-60_000, ChangeSetKPIUtil.getCargoOtherPNL(row2, ResultType.NEW));
-
-			// Original cargo is a zero sum P&L
-			Assertions.assertEquals(50_000 + 60_000, ChangeSetKPIUtil.getPNL(row1, ResultType.Before));
-			// Assertions.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.ORIGINAL));
-			Assertions.assertEquals(0, ChangeSetKPIUtil.getPNL(row2, ResultType.Before));
-			// Assertions.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.ORIGINAL));
-
-			// P&L Sanity check -- no missing components in P&L
-			for (final ChangeSetTableRow row : changeSet.getRows()) {
-				Assertions.assertEquals(ChangeSetKPIUtil.getPNL(row, ResultType.Before), ChangeSetKPIUtil.getPNLSum(row, ResultType.Before));
-				Assertions.assertEquals(ChangeSetKPIUtil.getPNL(row, ResultType.After), ChangeSetKPIUtil.getPNLSum(row, ResultType.After));
-			}
-		});
-	}
-
-	@Test
-	@Tag(TestCategories.MICRO_TEST)
-	public void testSlotHedgingValue_OpenToCargo() throws Exception {
-		runTest(maker -> {
-			maker.cargoModelBuilder.makeDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", 22.8, null) //
-					.withOptional(true) //
-					.withHedgeValue(50000) //
-					.build();
-
-			maker.cargoModelBuilder.makeDESSale("DS", LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5") //
-					.withOptional(true) //
-					.withHedgeValue(60000) //
-					.build();
-
-		}, maker -> {
-			maker.cargoModelBuilder.makeCargo() //
-					// Purchase
-					.makeDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", null) //
-					.withOptional(true) //
-					.withHedgeValue(50000) //
-					.build() //
-					// Sale
-					.makeDESSale("DS", LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5") //
-					.withOptional(true) //
-					.withHedgeValue(60000) //
-					.build() //
-					// Cargo
-					.build();
-
-		}, changeSetRoot -> {
-			Assertions.assertEquals(1, changeSetRoot.getChangeSets().size());
-
-			ChangeSetToTableTransformer transformer = new ChangeSetToTableTransformer();
-			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, null, SortMode.BY_GROUP);
-
-			final ChangeSetTableGroup changeSet = tableRoot.getGroups().get(0);
-			Assertions.assertEquals(1, changeSet.getRows().size());
-
-			final ChangeSetTableRow row1 = changeSet.getRows().get(0);
-			assert row1 != null;
-			// Expect 50K for load cancellation and 60K for discharge cancellation
-			Assertions.assertEquals(50_000 + 60_000, ChangeSetKPIUtil.getPNL(row1, ResultType.Before));
-			// Assertions.assertEquals(-50_000 + -60_000, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.ORIGINAL));
-
-			Assertions.assertEquals(50_000 + 60_000, ChangeSetKPIUtil.getPNL(row1, ResultType.After));
-			// Assertions.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.NEW));
-			// Assertions.assertEquals(50_000 + 60_000, ChangeSetKPIUtil.getPNL(row1, ResultType.NEW));
-			// Assertions.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.NEW));
-
-			// P&L Sanity check -- no missing components in P&L
-			for (final ChangeSetTableRow row : changeSet.getRows()) {
-				Assertions.assertEquals(ChangeSetKPIUtil.getPNL(row, ResultType.Before), ChangeSetKPIUtil.getPNLSum(row, ResultType.Before));
-				Assertions.assertEquals(ChangeSetKPIUtil.getPNL(row, ResultType.After), ChangeSetKPIUtil.getPNLSum(row, ResultType.After));
-			}
-		});
-	}
-
-	@Test
-	@Tag(TestCategories.MICRO_TEST)
 	public void testSlotMiscCosts_CargoToOpen() throws Exception {
 		runTest(maker -> {
 			maker.cargoModelBuilder.makeCargo() //
@@ -829,7 +710,7 @@ public class CompareViewTests {
 					// table.setOptions(EcoreUtil.copy(diffOptions));
 					// selectedDataProvider, pinned, others.iterator().next(), table, result.rootObjects, result.equivalancesMap);
 					final ScenarioComparisonTransformer transformer = new ScenarioComparisonTransformer();
-					final ChangeSetRoot root = transformer.createDataModel( result.equivalancesMap, table, pinnedResult, otherResult, new NullProgressMonitor());
+					final ChangeSetRoot root = transformer.createDataModel(result.equivalancesMap, table, pinnedResult, otherResult, new NullProgressMonitor());
 
 					resultChecker.accept(root);
 

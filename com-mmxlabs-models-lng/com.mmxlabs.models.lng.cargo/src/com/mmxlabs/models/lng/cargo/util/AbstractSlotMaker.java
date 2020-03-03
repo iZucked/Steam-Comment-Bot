@@ -61,8 +61,9 @@ public class AbstractSlotMaker<T extends AbstractSlotMaker<T>> {
 	}
 
 	@NonNull
-	public T withDESPurchase(@NonNull final String name, final DESPurchaseDealType dealType, @NonNull final LocalDate windowStart, @NonNull final Port port, @Nullable final PurchaseContract purchaseContract,
-			@Nullable final BaseLegalEntity entity, @Nullable final String priceExpression, final @Nullable Double cv, @Nullable final Vessel nominatedVessel) {
+	public T withDESPurchase(@NonNull final String name, final DESPurchaseDealType dealType, @NonNull final LocalDate windowStart, @NonNull final Port port,
+			@Nullable final PurchaseContract purchaseContract, @Nullable final BaseLegalEntity entity, @Nullable final String priceExpression, final @Nullable Double cv,
+			@Nullable final Vessel nominatedVessel) {
 		final Slot slot = cargoModelBuilder.createDESPurchase(name, dealType, windowStart, port, purchaseContract, entity, priceExpression, cv, nominatedVessel);
 		this.slot = slot;
 		return (T) this;
@@ -134,11 +135,6 @@ public class AbstractSlotMaker<T extends AbstractSlotMaker<T>> {
 
 	public @NonNull T withCancellationFee(final @NonNull String expression) {
 		slot.setCancellationExpression(expression);
-		return (T) this;
-	}
-
-	public @NonNull T withHedgeValue(final int value) {
-		slot.setHedges(value);
 		return (T) this;
 	}
 

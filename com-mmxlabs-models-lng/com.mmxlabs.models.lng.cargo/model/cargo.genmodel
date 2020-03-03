@@ -132,8 +132,6 @@
           propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/restrictedSlots"/>
       <genFeatures createChild="false" propertyDescription="If restrictive, does not allow pairing with the selected"
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/restrictedSlotsArePermissive"/>
-      <genFeatures createChild="false" propertyDescription="Postive or negative hedge value"
-          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/hedges"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/miscCosts"/>
       <genFeatures createChild="false" propertyDescription="Price expression defining cancellation cost"
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/cancellationExpression"/>

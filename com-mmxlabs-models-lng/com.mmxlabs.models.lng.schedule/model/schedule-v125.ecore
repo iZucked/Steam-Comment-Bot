@@ -302,6 +302,8 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="additionalPNL" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="cancellationFees" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
         unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hedgingValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="miscCostsValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
         unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="extraUpsidePNL" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>

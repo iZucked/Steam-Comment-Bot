@@ -256,7 +256,6 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//BasicSlotPNLDetails/extraShippingPNL"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//BasicSlotPNLDetails/additionalPNL"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//BasicSlotPNLDetails/cancellationFees"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//BasicSlotPNLDetails/hedgingValue"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//BasicSlotPNLDetails/miscCostsValue"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//BasicSlotPNLDetails/extraUpsidePNL"/>
     </genClasses>

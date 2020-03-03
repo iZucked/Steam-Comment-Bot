@@ -190,7 +190,6 @@ import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICancellationFeeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IHedgesProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ILoadPriceCalculatorProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ILockedCargoProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IMiscCostsProviderEditor;
@@ -421,10 +420,6 @@ public class LNGScenarioTransformer {
 	@Inject
 	@NonNull
 	private IPortVisitDurationProviderEditor portVisitDurationProviderEditor;
-
-	@Inject
-	@NonNull
-	private IHedgesProviderEditor hedgesProviderEditor;
 
 	@Inject
 	@NonNull
@@ -1810,9 +1805,6 @@ public class LNGScenarioTransformer {
 			slotTransformer.slotTransformed(dischargeSlot, discharge);
 		}
 
-		// set hedging costs in provider
-		setHedgingCosts(dischargeSlot, discharge);
-
 		// set additional misc costs in provider
 		setMiscCosts(dischargeSlot, discharge);
 
@@ -1974,9 +1966,6 @@ public class LNGScenarioTransformer {
 		for (final ISlotTransformer slotTransformer : slotTransformers) {
 			slotTransformer.slotTransformed(loadSlot, load);
 		}
-
-		// set hedging costs in provider
-		setHedgingCosts(loadSlot, load);
 
 		// set additional misc costs in provider
 		setMiscCosts(loadSlot, load);
@@ -3784,13 +3773,6 @@ public class LNGScenarioTransformer {
 			return ERouteOption.SUEZ;
 		}
 		throw new IllegalStateException();
-	}
-
-	private void setHedgingCosts(final Slot slot, final IPortSlot portSlot) {
-		final long hedgingCosts = OptimiserUnitConvertor.convertToInternalFixedCost(slot.getHedges());
-		if (hedgingCosts != 0) {
-			hedgesProviderEditor.setHedgeValue(portSlot, hedgingCosts);
-		}
 	}
 
 	private void setMiscCosts(final Slot slot, final IPortSlot portSlot) {
