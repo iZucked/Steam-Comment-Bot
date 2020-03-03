@@ -21,11 +21,14 @@ import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.name.Names;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.common.curves.ConstantValueLongCurve;
 import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.common.parser.series.CalendarMonthMapper;
+import com.mmxlabs.common.parser.series.SeriesParser;
+import com.mmxlabs.common.parser.series.SeriesParserData;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.MutableTimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
@@ -66,13 +69,17 @@ import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
 import com.mmxlabs.scheduler.optimiser.components.impl.ConstantHeelPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.HeelOptionConsumer;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.CharterRateToCharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VoyagePlanStartDateCharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IExternalDateProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IInternalDateProvider;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 import com.mmxlabs.scheduler.optimiser.shared.SharedDataModule;
 import com.mmxlabs.scheduler.optimiser.shared.SharedPortDistanceDataBuilder;
@@ -339,9 +346,17 @@ public class SimpleSchedulerTest {
 
 					@Override
 					protected void configure() {
+						
+						bind(SeriesParser.class).annotatedWith(Names.named("Commodity")).toInstance(new SeriesParser(new SeriesParserData()));
+						bind(SeriesParser.class).annotatedWith(Names.named("Currency")).toInstance(new SeriesParser(new SeriesParserData()));
+						bind(IExternalDateProvider.class).toInstance(Mockito.mock(IExternalDateProvider.class));
+						bind(IInternalDateProvider.class).toInstance(Mockito.mock(IInternalDateProvider.class));
+
+						
 						bind(CalendarMonthMapper.class).toInstance(Mockito.mock(CalendarMonthMapper.class));
 						bind(VoyagePlanStartDateCharterRateCalculator.class).in(Singleton.class);
 						bind(ICharterRateCalculator.class).to(VoyagePlanStartDateCharterRateCalculator.class);
+						bind(ICharterCostCalculator.class).to(CharterRateToCharterCostCalculator.class);
 					}
 				});
 	}

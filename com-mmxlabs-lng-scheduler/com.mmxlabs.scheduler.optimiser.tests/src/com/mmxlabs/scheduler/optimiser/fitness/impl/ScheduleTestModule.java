@@ -131,6 +131,12 @@ public class ScheduleTestModule extends AbstractModule {
 		// bind(IOptimisationTransformer.class).to(OptimisationTransformer.class).in(Singleton.class);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UsePriceBasedWindowTrimming)).toInstance(Boolean.FALSE);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UseCanalSlotBasedWindowTrimming)).toInstance(Boolean.FALSE);
+		
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.OPTIMISE_PAPER_PNL)).toInstance(Boolean.FALSE);
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.GENERATED_PAPERS_IN_PNL)).toInstance(Boolean.FALSE);
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.COMPUTE_PAPER_PNL)).toInstance(Boolean.FALSE);
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.COMPUTE_EXPOSURES)).toInstance(Boolean.FALSE);
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.RE_HEDGE_WITH_PAPERS)).toInstance(Boolean.FALSE);
 
 		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_ArrivalTimeCache)).toInstance(CacheMode.Off);
 		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocationCache)).toInstance(CacheMode.Off);
@@ -144,7 +150,6 @@ public class ScheduleTestModule extends AbstractModule {
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_SchedulePurges)).toInstance(Boolean.FALSE);
 
 		bind(IPanamaBookingsProvider.class).toInstance(Mockito.mock(IPanamaBookingsProvider.class));
-
 	}
 
 	@Provides
