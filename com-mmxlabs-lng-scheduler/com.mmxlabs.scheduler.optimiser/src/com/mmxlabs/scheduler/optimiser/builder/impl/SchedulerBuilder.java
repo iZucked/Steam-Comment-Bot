@@ -93,7 +93,6 @@ import com.mmxlabs.scheduler.optimiser.components.impl.SplitCharterOutVesselEven
 import com.mmxlabs.scheduler.optimiser.components.impl.SplitCharterOutVesselEventStartPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartRequirement;
-import com.mmxlabs.scheduler.optimiser.components.impl.TotalVolumeLimit;
 import com.mmxlabs.scheduler.optimiser.components.impl.Vessel;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselEvent;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselEventPortSlot;
@@ -105,7 +104,6 @@ import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.IBallastBonusContract;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.CharterRateToCharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IAllowedVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelProviderEditor;
@@ -153,7 +151,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Inject
 	private Injector injector;
-	
+
 	@Inject
 	private IBaseFuelProviderEditor baseFuelProvider;
 
@@ -202,9 +200,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 */
 	private IPort ANYWHERE;
 
-	// @NonNull
-	// private final List<IPort> ports = new LinkedList<>();
-
 	/**
 	 * A field for tracking the time at which the last time window closes
 	 */
@@ -232,12 +227,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@NonNull
 	private final Map<IPortSlot, IPortSlot> reverseAdjacencyConstraints = new HashMap<>();
 
-	@NonNull
-	private final Map<IPort, List<TotalVolumeLimit>> loadLimits = new HashMap<>();
-
-	@NonNull
-	private final Map<IPort, List<TotalVolumeLimit>> dischargeLimits = new HashMap<>();
-
 	/**
 	 * The slots for vessel events which have been generated; these are stored so that in {@link #buildVesselEvents()} they can have some extra post-processing done to set up any constraints
 	 */
@@ -252,134 +241,99 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	private IVesselProviderEditor vesselProvider;
 
 	@Inject
-	@NonNull
 	private IPortProvider portProvider;
 
 	@Inject
-	@NonNull
 	private IElementPortProviderEditor elementPortProvider;
 
 	@Inject
-	@NonNull
 	private IPortSlotProviderEditor portSlotsProvider;
 
 	@Inject
-	@NonNull
 	private IDistanceMatrixProvider portDistanceProvider;
 
 	@Inject
-	@NonNull
 	private IOrderedSequenceElementsDataComponentProviderEditor orderedSequenceElementsEditor;
 
 	@Inject
-	@NonNull
 	private IPortTypeProviderEditor portTypeProvider;
 
 	@Inject
-	@NonNull
 	private IElementDurationProviderEditor elementDurationsProvider;
 
 	@Inject
-	@NonNull
 	private IResourceAllocationConstraintDataComponentProviderEditor resourceAllocationProvider;
 
 	@Inject
-	@NonNull
 	private IStartEndRequirementProviderEditor startEndRequirementProvider;
 
 	@Inject
-	@NonNull
 	private IPortExclusionProviderEditor portExclusionProvider;
 
 	@Inject
-	@NonNull
 	private IRouteExclusionProviderEditor routeExclusionProvider;
 
 	@Inject
-	@NonNull
 	private IReturnElementProviderEditor returnElementProvider;
 
 	@Inject
-	@NonNull
 	private IRouteCostProviderEditor routeCostProvider;
 
 	@Inject
-	@NonNull
-	private ITotalVolumeLimitEditor totalVolumeLimits;
-
-	@Inject
-	@NonNull
 	private IDiscountCurveProviderEditor discountCurveProvider;
 
 	@Inject
-	@NonNull
 	private IPortCostProviderEditor portCostProvider;
 
 	@Inject
-	@NonNull
 	private IPortCVProviderEditor portCVProvider;
 
 	@Inject
-	@NonNull
 	private IPortCVRangeProviderEditor portCVRangeProvider;
 
 	/**
 	 * Keeps track of calculators
 	 */
 	@Inject
-	@NonNull
 	private ICalculatorProviderEditor calculatorProvider;
 
 	@Inject
-	@NonNull
 	private IPortCooldownDataProviderEditor cooldownDataProvider;
 
 	@Inject
-	@NonNull
 	private IOptionalElementsProviderEditor optionalElements;
 
 	@Inject
-	@NonNull
 	private ILockedElementsProviderEditor lockedElements;
 
 	@Inject
-	@NonNull
 	private ISpotMarketSlotsProviderEditor spotMarketSlots;
 
 	@Inject
-	@NonNull
 	private ISpotCharterInMarketProviderEditor spotCharterInMarketProviderEditor;
 
 	@Inject
-	@NonNull
 	private ISlotGroupCountProviderEditor slotGroupCountProvider;
 
 	@Inject
-	@NonNull
 	private IVirtualVesselSlotProviderEditor virtualVesselSlotProviderEditor;
 
 	@Inject
-	@NonNull
 	private IDateKeyProviderEditor dateKeyProviderEditor;
 
 	@Inject
-	@NonNull
 	private ICharterMarketProviderEditor charterMarketProviderEditor;
 
 	@Inject
-	@NonNull
 	private IShortCargoReturnElementProviderEditor shortCargoReturnElementProviderEditor;
 
 	@Inject
-	@NonNull
 	private IMarkToMarketProviderEditor markToMarketProviderEditor;
 
 	@Inject
-	@NonNull
 	private INominatedVesselProviderEditor nominatedVesselProviderEditor;
 
 	@Inject
-	@NonNull
 	private IShippingHoursRestrictionProviderEditor shippingHoursRestrictionProviderEditor;
 
 	@Inject
@@ -393,11 +347,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Inject
 	private IScheduledPurgeProviderEditor scheduledPurgeProvider;
-	
+
 	@Inject
 	private ICounterPartyVolumeProviderEditor counterPartyVolumeProvider;
-
-	private final List<@NonNull IPortSlot> permittedRoundTripVesselSlots = new LinkedList<>();
 
 	@NonNull
 	private final Map<IPort, MarkToMarket> desPurchaseMTMPortMap = new HashMap<>();
@@ -412,13 +364,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	private final Map<IPort, MarkToMarket> fobPurchaseMTMPortMap = new HashMap<>();
 
 	@Inject
-	@NonNull
 	private IPromptPeriodProviderEditor promptPeriodProviderEditor;
 
 	@Inject
-	@NonNull
 	private ICharterRateCalculator charterRateCalculator;
-		
+
 	/**
 	 * Constant used during end date of scenario calculations - {@link #minDaysFromLastEventToEnd} days extra after last date. See code in {@link SchedulerBuilder#getOptimisationData()}
 	 * 
@@ -433,8 +383,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	/**
 	 * Map between a virtual sequence element and the virtual {@link IVesselEvent} instance representing it.
 	 */
-	@NonNull
-	private final Map<ISequenceElement, IVesselAvailability> virtualVesselAvailabilityMap = new HashMap<>();
+
+	private final @NonNull Map<ISequenceElement, IVesselAvailability> virtualVesselAvailabilityMap = new HashMap<>();
 
 	public SchedulerBuilder() {
 		indexingContext.registerType(SequenceElement.class);
@@ -460,9 +410,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 */
 	@Override
 	@NonNull
-	public ILoadSlot createLoadSlot(final @NonNull String id, final @NonNull IPort port, final ITimeWindow window, final long minVolumeInM3, final long maxVolumeInM3, final boolean counterPartyVolume, 
-			final ILoadPriceCalculator loadContract, final int cargoCVValue, final int durationHours, final boolean cooldownSet, final boolean cooldownForbidden, boolean purgeScheduled, final int pricingDate,
-			final PricingEventType pricingEvent, final boolean optional, final boolean locked, final boolean isSpotMarketSlot, final boolean isVolumeLimitInM3, final boolean cancelled) {
+	public ILoadSlot createLoadSlot(final @NonNull String id, final @NonNull IPort port, final ITimeWindow window, final long minVolumeInM3, final long maxVolumeInM3, final boolean counterPartyVolume,
+			final ILoadPriceCalculator loadContract, final int cargoCVValue, final int durationHours, final boolean cooldownSet, final boolean cooldownForbidden, boolean purgeScheduled,
+			final int pricingDate, final PricingEventType pricingEvent, final boolean optional, final boolean locked, final boolean isSpotMarketSlot, final boolean isVolumeLimitInM3,
+			final boolean cancelled) {
 
 		boolean fooLocked = locked || cancelled;
 
@@ -538,8 +489,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		portSlotsProvider.setPortSlot(element, slot);
 
-		addSlotToVolumeConstraints(slot);
-
 		calculatorProvider.addLoadPriceCalculator(priceCalculator);
 
 		return element;
@@ -606,8 +555,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		portSlotsProvider.setPortSlot(element, slot);
 
 		portTypeProvider.setPortType(element, PortType.Discharge);
-
-		addSlotToVolumeConstraints(slot);
 
 		calculatorProvider.addSalesPriceCalculator(priceCalculator);
 
@@ -821,16 +768,16 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		final DefaultVesselAvailability vesselAvailability = new DefaultVesselAvailability(vessel, vesselInstanceType);
 
 		vesselAvailability.setDailyCharterInRate(dailyCharterInRate);
-		
+
 		ICharterCostCalculator charterCostCalculator = injector.getInstance(ICharterCostCalculator.class);
 
 		charterCostCalculator.setCharterRateCurve(dailyCharterInRate);
 		if (charterCostCalculator instanceof CharterRateToCharterCostCalculator) {
-			CharterRateToCharterCostCalculator charterRateToCharterCostCalculator = (CharterRateToCharterCostCalculator)charterCostCalculator;
+			CharterRateToCharterCostCalculator charterRateToCharterCostCalculator = (CharterRateToCharterCostCalculator) charterCostCalculator;
 			charterRateToCharterCostCalculator.initialise(vesselAvailability, this.charterRateCalculator);
 		}
 		vesselAvailability.setCharterCostCalculator(charterCostCalculator);
-		
+
 		vesselAvailability.setStartRequirement(start);
 		vesselAvailability.setEndRequirement(end);
 
@@ -1469,73 +1416,13 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		elementPortProvider.setPortForElement(slot.getPort(), endElement);
 	}
 
-	@Override
-	public void addTotalVolumeConstraint(final Set<IPort> ports, final boolean loads, final boolean discharges, final long maximumTotalVolume, final ITimeWindow timeWindow) {
-		final TotalVolumeLimit limit = new TotalVolumeLimit();
-		limit.setTimeWindow(timeWindow);
-		limit.setVolumeLimit(maximumTotalVolume);
-
-		for (final IPort port : ports) {
-			if (loads) {
-				List<TotalVolumeLimit> limits = loadLimits.get(port);
-				if (limits == null) {
-					limits = new ArrayList<>();
-				}
-				limits.add(limit);
-				loadLimits.put(port, limits);
-			}
-
-			if (discharges) {
-				List<TotalVolumeLimit> limits = dischargeLimits.get(port);
-				if (limits == null) {
-					limits = new ArrayList<>();
-				}
-				limits.add(limit);
-				dischargeLimits.put(port, limits);
-			}
-		}
-
-		for (final ISequenceElement element : sequenceElements) {
-			addSlotToVolumeConstraints(portSlotsProvider.getPortSlot(element));
-		}
-
-		totalVolumeLimits.addTotalVolumeLimit(limit);
-	}
-
-	private void addSlotToVolumeConstraints(final IPortSlot slot) {
-		if (slot == null) {
-			return;
-		}
-		final IPort port = slot.getPort();
-		final List<TotalVolumeLimit> limits;
-		if (slot instanceof ILoadSlot) {
-			limits = loadLimits.get(port);
-		} else if (slot instanceof IDischargeSlot) {
-			limits = dischargeLimits.get(port);
-		} else {
-			return;
-		}
-		if (limits != null) {
-			for (final TotalVolumeLimit limit : limits) {
-				limit.addSlotIfWindowsMatch(slot);
-			}
-		}
-	}
-
-	// @Override
-	// public void setSlotVesselAvailabilityRestriction(final IPortSlot slot, final Set<IVesselAvailability> vesselAvailabilities) {
-	//
-	// assert slot != null;
-	// constrainSlotToVesselAvailabilities(slot, vesselAvailabilities);
-	// }
-
-	@Override
 	/**
 	 * Set a discount curve for the given fitness component name
 	 * 
 	 * @param name
 	 * @param iCurve
 	 */
+	@Override
 	public void setFitnessComponentDiscountCurve(final String name, final ICurve iCurve) {
 		discountCurveProvider.setDiscountCurve(name, iCurve);
 
@@ -1971,8 +1858,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			final IResource resource = vesselProvider.getResource(roundTripCargoVesselAvailability);
 
 			roundTripVesselPermissionProviderEditor.permitElementOnResource(element, slot, resource, roundTripCargoVesselAvailability);
-
-			permittedRoundTripVesselSlots.add(slot);
 
 			if (prevElement != null) {
 				roundTripVesselPermissionProviderEditor.makeBoundPair(prevElement, element);

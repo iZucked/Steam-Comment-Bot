@@ -434,51 +434,6 @@ public interface ISchedulerBuilder {
 	void setVesselInaccessiblePorts(@NonNull IVessel vessel, @NonNull Set<IPort> inaccessiblePorts);
 
 	/**
-	 * Add a global total volume limit
-	 * 
-	 * @param ports
-	 *            The set of ports for which the limit should apply
-	 * @param loads
-	 *            Whether to apply to load slots
-	 * @param discharges
-	 *            Whether to apply to discharge slots
-	 * @param maximumTotalVolume
-	 *            The maximum total quantity which can be allocated to slots in the time window
-	 * @param timeWindow
-	 *            The time window within which the limit applies.
-	 */
-	void addTotalVolumeConstraint(@NonNull Set<IPort> ports, boolean loads, boolean discharges, long maximumTotalVolume, @NonNull ITimeWindow timeWindow);
-
-	// /**
-	// * Constrains the given slot to lie only on the given vessels. Note: Special vessels such as those for DES Purchases and FOB Sales are still permitted.
-	// *
-	// * Note that this does not ensure the compatibility of any other constraints; for example, if you use {@link #setVesselClassInaccessiblePorts(IVesselClass, Set)} to prevent vessels of this class
-	// * from visiting the port for this slot, you will have an unsolvable scenario.
-	// *
-	// * Passing an empty set or null will clear any constraint
-	// *
-	// * @param slot
-	// * the slot to bind to a vessel
-	// * @param vessel
-	// * the vessel to keep this slot on
-	// */
-	// void constrainSlotToVesselAvailabilities(@NonNull IPortSlot slot, @Nullable Set<IVesselAvailability> vessels);
-	//
-	// /**
-	// * Constrains the given slot to lie only on vessels with the given classes.
-	// *
-	// * In the end the slot will be on the union of vessels with these classes and any vessels set with {@link #constrainSlotToVesselAvailabilities(IPortSlot, Set)}.
-	// *
-	// * Passing an empty or null set will clear any constraint.
-	// *
-	// * Calls to this method <em>replace</em> previous calls, rather than combining them.
-	// *
-	// * @param slot
-	// * @param vesselClasses
-	// */
-	// void constrainSlotToVesselClasses(@NonNull IPortSlot slot, @Nullable Set<IVesselClass> vesselClasses);
-
-	/**
 	 * <p>
 	 * Constraints the given port slots to be adjacent to one another in the solution, in the order that they occur as arguments here.
 	 * </p>

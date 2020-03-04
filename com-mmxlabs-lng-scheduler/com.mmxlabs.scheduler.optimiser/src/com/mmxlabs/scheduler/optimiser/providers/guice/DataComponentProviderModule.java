@@ -25,9 +25,6 @@ import com.mmxlabs.optimiser.common.dcproviders.impl.indexed.IndexedLockedElemen
 import com.mmxlabs.optimiser.common.dcproviders.impl.indexed.IndexedOptionalElementsEditor;
 import com.mmxlabs.optimiser.common.dcproviders.impl.indexed.IndexedOrderedSequenceElementsEditor;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitEditor;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitProvider;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ArrayListVolumeAllocationEditor;
 import com.mmxlabs.scheduler.optimiser.providers.*;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultAllowedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultBaseFuelProvider;
@@ -177,10 +174,6 @@ public class DataComponentProviderModule extends AbstractModule {
 		final HashMapRouteCostProviderEditor routeCostProvider = new HashMapRouteCostProviderEditor();
 		bind(IRouteCostProvider.class).toInstance(routeCostProvider);
 		bind(IRouteCostProviderEditor.class).toInstance(routeCostProvider);
-
-		final ITotalVolumeLimitEditor totalVolumeLimits = new ArrayListVolumeAllocationEditor();
-		bind(ITotalVolumeLimitProvider.class).toInstance(totalVolumeLimits);
-		bind(ITotalVolumeLimitEditor.class).toInstance(totalVolumeLimits);
 
 		final IDiscountCurveProviderEditor discountCurveProvider = new HashMapDiscountCurveEditor();
 		bind(IDiscountCurveProvider.class).toInstance(discountCurveProvider);

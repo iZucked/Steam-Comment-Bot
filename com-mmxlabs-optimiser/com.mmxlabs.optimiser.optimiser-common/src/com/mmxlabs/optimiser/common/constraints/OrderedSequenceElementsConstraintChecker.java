@@ -29,8 +29,8 @@ import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
  * 
  */
 public final class OrderedSequenceElementsConstraintChecker implements IPairwiseConstraintChecker {
+
 	@Inject
-	@NonNull
 	private IOrderedSequenceElementsDataComponentProvider provider;
 
 	@NonNull
