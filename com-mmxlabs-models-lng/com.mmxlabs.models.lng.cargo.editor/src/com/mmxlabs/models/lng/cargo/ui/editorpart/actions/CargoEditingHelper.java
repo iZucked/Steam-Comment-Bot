@@ -470,6 +470,33 @@ public class CargoEditingHelper {
 		verifyModel();
 	}
 
+	public void swapCargoVessels(String description, @NonNull List<Cargo> cargoes) {
+		Cargo cargo0 = cargoes.get(0);
+		Cargo cargo1 = cargoes.get(1);
+
+		VesselAssignmentType vat0 = cargo0.getVesselAssignmentType();
+		VesselAssignmentType vat1 = cargo1.getVesselAssignmentType();
+
+		int idx0 = cargo0.getSpotIndex();
+		int idx1 = cargo1.getSpotIndex();
+
+		final CompoundCommand currentWiringCommand = new CompoundCommand(description);
+		currentWiringCommand.append(SetCommand.create(editingDomain, cargo0, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, vat1));
+		currentWiringCommand.append(SetCommand.create(editingDomain, cargo0, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, idx1));
+
+		currentWiringCommand.append(SetCommand.create(editingDomain, cargo1, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, vat0));
+		currentWiringCommand.append(SetCommand.create(editingDomain, cargo1, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, idx0));
+
+		if (currentWiringCommand.isEmpty()) {
+			return;
+		}
+		assert currentWiringCommand.canExecute();
+
+		editingDomain.getCommandStack().execute(currentWiringCommand);
+
+		verifyModel();
+	}
+
 	public void swapCargoDischarges(String description, @NonNull List<Cargo> cargoes) {
 		Slot<?> discharge1 = cargoes.get(0).getSortedSlots().get(1);
 		Slot<?> discharge2 = cargoes.get(1).getSortedSlots().get(1);

@@ -581,7 +581,7 @@ public class CargoEditorMenuHelper {
 	}
 
 	public IMenuListener createMultipleSelectionMenuListener(final Set<Cargo> cargoes, final Set<LoadSlot> loads, final Set<DischargeSlot> discharges, boolean createLoadSpecificOptions,
-			boolean createDischargeSpecificOptions) {
+			boolean createDischargeSpecificOptions, boolean createVesselSpecificOptions) {
 
 		return manager -> {
 
@@ -630,6 +630,14 @@ public class CargoEditorMenuHelper {
 				manager.add(new RunnableAction("Unpair", () -> helper.unpairCargoes("Unpair", cargoes)));
 			}
 			if (canSwap) {
+				if (createVesselSpecificOptions) {
+					boolean hasDESPurchase = cargoes.stream().filter(c -> c.getCargoType() == CargoType.DES).count() > 0;
+					boolean hasFOBSale = cargoes.stream().filter(c -> c.getCargoType() == CargoType.FOB).count() > 0;
+
+					if (!hasDESPurchase && !hasFOBSale) {
+						manager.add(new RunnableAction("Swap vessels", () -> helper.swapCargoVessels("Swap vessels", new ArrayList<>(cargoes))));
+					}
+				}
 				if (createLoadSpecificOptions) {
 					boolean hasDESPurchase = cargoes.stream().filter(c -> c.getCargoType() == CargoType.DES).count() > 0;
 					if (!hasDESPurchase) {

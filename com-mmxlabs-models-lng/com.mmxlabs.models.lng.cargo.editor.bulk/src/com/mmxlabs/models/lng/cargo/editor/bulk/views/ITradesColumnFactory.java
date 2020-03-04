@@ -74,6 +74,9 @@ public interface ITradesColumnFactory {
 		}
 		return false;
 	}
+	public static boolean isVesselColumn(String colname) {
+		return "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.assignment".equals(colname);
+	}
 
 	/**
 	 * 
