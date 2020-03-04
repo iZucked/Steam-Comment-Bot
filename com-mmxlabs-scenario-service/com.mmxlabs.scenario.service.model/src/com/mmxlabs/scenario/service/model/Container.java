@@ -156,7 +156,6 @@ public interface Container extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='int accumulator = 0;\nfor (final Container container : getElements()) {\n\taccumulator += container.getContainedInstanceCount();\n}\nreturn accumulator;'"
 	 * @generated
 	 */
 	int getContainedInstanceCount();

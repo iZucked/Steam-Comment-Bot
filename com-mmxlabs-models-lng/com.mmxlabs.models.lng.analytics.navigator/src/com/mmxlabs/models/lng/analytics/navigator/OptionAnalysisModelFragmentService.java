@@ -19,15 +19,11 @@ import org.eclipse.core.databinding.ObservablesManager;
 import org.eclipse.core.databinding.observable.ChangeEvent;
 import org.eclipse.core.databinding.observable.IChangeListener;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
-import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.databinding.EMFObservables;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EContentAdapter;
-import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
-import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.jface.databinding.swt.DisplayRealm;
 import org.eclipse.ui.PlatformUI;
 
@@ -59,18 +55,9 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 public class OptionAnalysisModelFragmentService {
 
-	private static ComposedAdapterFactory createAdapterFactory() {
-		final List<AdapterFactory> factories = new ArrayList<>();
-		factories.add(new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE));
-		factories.add(new ReflectiveItemProviderAdapterFactory());
-		return new ComposedAdapterFactory(factories);
-	}
-
 	private static final String TYPE_SANDBOX = "fragment-basic-sandbox";
 
 	private final Map<ScenarioModelRecord, ModelAdapter> dataMap = new ConcurrentHashMap<>();
-
-	private ComposedAdapterFactory adapterFactory = createAdapterFactory();
 
 	private final IPostChangeHook loadHook = modelRecord -> {
 		synchronized (dataMap) {
@@ -427,6 +414,8 @@ public class OptionAnalysisModelFragmentService {
 							fragment.setName(artifact.getDisplayName());
 							fragment.setUseCommandStack(false);
 							fragment.setContentType(uuid); // Subvert the use of content type to store UUID
+							// Assume this is the correct type hint.
+							fragment.setTypeHint(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL.getInstanceClassName());
 							fragments.add(fragment);
 						}
 					}

@@ -10,7 +10,11 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.ResourceLocator;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EPackage.Registry;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -58,6 +62,7 @@ public class ScenarioFragmentItemProvider extends ItemProviderAdapter
 			addFragmentPropertyDescriptor(object);
 			addContentTypePropertyDescriptor(object);
 			addUseCommandStackPropertyDescriptor(object);
+			addTypeHintPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -111,6 +116,18 @@ public class ScenarioFragmentItemProvider extends ItemProviderAdapter
 	}
 
 	/**
+	 * This adds a property descriptor for the Type Hint feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addTypeHintPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+				getString("_UI_ScenarioFragment_typeHint_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioFragment_typeHint_feature", "_UI_ScenarioFragment_type"),
+				ScenarioServicePackage.eINSTANCE.getScenarioFragment_TypeHint(), true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+	}
+
+	/**
 	 * This returns ScenarioFragment.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -125,6 +142,34 @@ public class ScenarioFragmentItemProvider extends ItemProviderAdapter
 			final IItemLabelProvider lp = (IItemLabelProvider) ((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory().adapt(fragment, IItemLabelProvider.class);
 			if (lp != null) {
 				return lp.getImage(fragment);
+			}
+		} else {
+			String name = ((ScenarioFragment) object).getTypeHint();
+			if (name != null) {
+				EClass eClass = null;
+				// All registry packages...
+				LOOP_OUTER: for (final Object obj : Registry.INSTANCE.values()) {
+					if (obj instanceof EPackage) {
+						EPackage ePackage = (EPackage) obj;
+						for (final EClassifier e : ePackage.getEClassifiers()) {
+							if (e.getInstanceClass() != null) {
+								if (e.getInstanceClass().getCanonicalName().equals(name)) {
+									eClass = (EClass) e;
+									break LOOP_OUTER;
+								}
+							}
+						}
+					}
+				}
+				if (eClass != null) {
+					EObject instance = eClass.getEPackage().getEFactoryInstance().create(eClass);
+					if (instance != null) {
+						final IItemLabelProvider lp = (IItemLabelProvider) ((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory().adapt(instance, IItemLabelProvider.class);
+						if (lp != null) {
+							return lp.getImage(instance);
+						}
+					}
+				}
 			}
 		}
 
@@ -158,6 +203,7 @@ public class ScenarioFragmentItemProvider extends ItemProviderAdapter
 		case ScenarioServicePackage.SCENARIO_FRAGMENT__NAME:
 		case ScenarioServicePackage.SCENARIO_FRAGMENT__CONTENT_TYPE:
 		case ScenarioServicePackage.SCENARIO_FRAGMENT__USE_COMMAND_STACK:
+		case ScenarioServicePackage.SCENARIO_FRAGMENT__TYPE_HINT:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
 		}
