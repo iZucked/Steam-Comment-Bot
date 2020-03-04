@@ -28,6 +28,7 @@ import org.eclipse.jface.databinding.swt.DisplayRealm;
 import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.models.lng.analytics.AbstractAnalysisModel;
+import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -56,7 +57,9 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 public class OptionAnalysisModelFragmentService {
 
 	private static final String TYPE_SANDBOX = "fragment-basic-sandbox";
+	private static final String TYPE_SOLUTION = "fragment-solution";
 
+	
 	private final Map<ScenarioModelRecord, ModelAdapter> dataMap = new ConcurrentHashMap<>();
 
 	private final IPostChangeHook loadHook = modelRecord -> {
@@ -105,7 +108,6 @@ public class OptionAnalysisModelFragmentService {
 		private final ObservablesManager manager = new ObservablesManager();
 		private final EMFDataBindingContext dbc = new EMFDataBindingContext(DisplayRealm.getRealm(PlatformUI.getWorkbench().getDisplay()));
 
-		// private final ScenarioInstance scenarioInstance;
 		private ScenarioModelRecord modelRecord;
 		private LNGScenarioModel scenarioModel;
 		private final Map<EObject, ScenarioFragment> objectToFragmentMap = new HashMap<>();
@@ -141,7 +143,7 @@ public class OptionAnalysisModelFragmentService {
 				if (fragment.getStorageType() != StorageType.INTERNAL) {
 					continue;
 				}
-				if (TYPE_SANDBOX.equals(fragment.getType())) {
+				if (TYPE_SANDBOX.equals(fragment.getType()) || TYPE_SOLUTION.equals(fragment.getType())) {
 					String uuid = fragment.getKey();
 					uuidToArtifactMap.put(uuid, fragment);
 				}
@@ -185,6 +187,36 @@ public class OptionAnalysisModelFragmentService {
 					}
 					createFragment(fragment, plan, modelReference);
 				}
+				
+				for (final AbstractSolutionSet plan : analyticsModel.getOptimisations()) {
+					String uuid = plan.getUuid();
+					final ModelArtifact artifact;
+					if (uuidToArtifactMap.containsKey(uuid)) {
+						artifact = uuidToArtifactMap.get(uuid);
+						artifact.setDisplayName(plan.getName());
+						seenArtifacts.add(artifact);
+					} else {
+						artifact = ManifestFactory.eINSTANCE.createModelArtifact();
+						artifact.setKey(uuid);
+						artifact.setStorageType(StorageType.INTERNAL);
+						artifact.setType(TYPE_SOLUTION);
+						artifact.setDisplayName(plan.getName());
+						seenArtifacts.add(artifact);
+						uuidToArtifactMap.put(uuid, artifact);
+						modelRecord.getManifest().getModelFragments().add(artifact);
+					}
+					final ScenarioFragment fragment;
+					if (uuidToFragmentMap.containsKey(uuid)) {
+						fragment = uuidToFragmentMap.get(uuid);
+					} else {
+						fragment = ScenarioServiceFactory.eINSTANCE.createScenarioFragment();
+						fragment.setContentType(uuid);
+						uuidToFragmentMap.put(uuid, fragment);
+					}
+					createFragment(fragment, plan, modelReference);
+				}
+				
+				
 				analyticsModel.eAdapters().add(ModelAdapter.this);
 				List<ModelArtifact> allArtifacts = modelRecord.getManifest().getModelFragments();
 				Iterator<ModelArtifact> itr = allArtifacts.iterator();
@@ -274,6 +306,42 @@ public class OptionAnalysisModelFragmentService {
 				}
 				createFragment(fragment, plan, modelRecord.getSharedReference());
 			}
+			if (eObj instanceof AbstractSolutionSet) {
+				AbstractSolutionSet plan = (AbstractSolutionSet) eObj;
+				String uuid = plan.getUuid();
+
+				final ScenarioFragment fragment;
+				if (uuidToFragmentMap.containsKey(uuid)) {
+					fragment = uuidToFragmentMap.get(uuid);
+				} else {
+					fragment = ScenarioServiceFactory.eINSTANCE.createScenarioFragment();
+					fragment.setContentType(uuid);
+					uuidToFragmentMap.put(uuid, fragment);
+				}
+
+				{
+					boolean found = false;
+					List<ModelArtifact> allArtifacts = modelRecord.getManifest().getModelFragments();
+					Iterator<ModelArtifact> itr = allArtifacts.iterator();
+					while (itr.hasNext()) {
+						ModelArtifact artifact = itr.next();
+						if (uuid.equals(artifact.getKey())) {
+							found = true;
+							break;
+						}
+					}
+					if (!found) {
+						ModelArtifact artifact = ManifestFactory.eINSTANCE.createModelArtifact();
+						artifact.setKey(uuid);
+						artifact.setStorageType(StorageType.INTERNAL);
+						artifact.setType(TYPE_SOLUTION);
+						artifact.setDisplayName(plan.getName());
+						uuidToArtifactMap.put(uuid, artifact);
+						modelRecord.getManifest().getModelFragments().add(artifact);
+					}
+				}
+				createFragment(fragment, plan, modelRecord.getSharedReference());
+			}
 		});
 
 		private Consumer<EObject> removeHandler = eObj -> RunnerHelper.asyncExec(() -> {
@@ -293,6 +361,24 @@ public class OptionAnalysisModelFragmentService {
 					}
 				}
 			}
+			
+			
+			if (eObj instanceof AbstractSolutionSet) {
+
+					AbstractSolutionSet plan = (AbstractSolutionSet) eObj;
+					String uuid = plan.getUuid();
+					removeFragment(eObj);
+
+					List<ModelArtifact> allArtifacts = modelRecord.getManifest().getModelFragments();
+					Iterator<ModelArtifact> itr = allArtifacts.iterator();
+					while (itr.hasNext()) {
+						ModelArtifact artifact = itr.next();
+						if (uuid.equals(artifact.getKey())) {
+							itr.remove();
+							uuidToArtifactMap.remove(uuid);
+						}
+					}
+				}
 		});
 
 		@Override
@@ -303,27 +389,20 @@ public class OptionAnalysisModelFragmentService {
 				return;
 			}
 
-			if (notification.getFeature() == AnalyticsPackage.eINSTANCE.getAnalyticsModel_OptionModels()) {
-				if (notification.getEventType() == Notification.ADD) {
-					final EObject eObj = (EObject) notification.getNewValue();
-					addHandler.accept(eObj);
-				} else if (notification.getEventType() == Notification.REMOVE) {
-					final EObject eObj = (EObject) notification.getOldValue();
-					removeHandler.accept(eObj);
-				}
-				// TODO: Handle ADD_/REMOVE_MANY ?
-			}
-			if (notification.getFeature() == AnalyticsPackage.eINSTANCE.getAnalyticsModel_BreakevenModels()) {
-				if (notification.getEventType() == Notification.ADD) {
-					final EObject eObj = (EObject) notification.getNewValue();
-					addHandler.accept(eObj);
+			if (notification.getFeature() == AnalyticsPackage.eINSTANCE.getAnalyticsModel_OptionModels()
+				|| notification.getFeature() == AnalyticsPackage.eINSTANCE.getAnalyticsModel_Optimisations()
+					|| notification.getFeature() == AnalyticsPackage.eINSTANCE.getAnalyticsModel_BreakevenModels()) {
 
+				if (notification.getEventType() == Notification.ADD) {
+					final EObject eObj = (EObject) notification.getNewValue();
+					addHandler.accept(eObj);
 				} else if (notification.getEventType() == Notification.REMOVE) {
 					final EObject eObj = (EObject) notification.getOldValue();
 					removeHandler.accept(eObj);
 				}
 				// TODO: Handle ADD_/REMOVE_MANY ?
 			}
+				 
 		}
 
 		private void removeFragment(final EObject plan) {
@@ -360,7 +439,40 @@ public class OptionAnalysisModelFragmentService {
 				manager.addObservable(objectObserver);
 			});
 		}
+	 
+	
+	private void createFragment(final ScenarioFragment fragment, final AbstractSolutionSet plan, ModelReference modelReference) {
+		if (modelReference == null || fragment == null) {
+			return;
+		}
+		fragment.setFragment(plan);
+		fragment.setName(plan.getName());
+		fragment.setUseCommandStack(false);
+
+		objectToFragmentMap.put(plan, fragment);
+		modelRecord.getScenarioInstance().getFragments().add(fragment);
+		// Create a databinding to keep names in sync
+		dbc.getValidationRealm().exec(() -> {
+			final IObservableValue fragmentObserver = EMFObservables.observeValue(fragment, ScenarioServicePackage.eINSTANCE.getScenarioFragment_Name());
+			final IObservableValue objectObserver = EMFObservables.observeValue(plan, MMXCorePackage.eINSTANCE.getNamedObject_Name());
+
+			objectObserver.addChangeListener(new IChangeListener() {
+
+				@Override
+				public void handleChange(ChangeEvent event) {
+					modelRecord.getSharedReference().setDirty();
+				}
+			});
+
+			dbc.bindValue(fragmentObserver, objectObserver);
+
+			// Add to manager to handle clean up
+			manager.addObservable(fragmentObserver);
+			manager.addObservable(objectObserver);
+		});
 	}
+}
+
 
 	private ScenarioModel model;
 
@@ -416,6 +528,17 @@ public class OptionAnalysisModelFragmentService {
 							fragment.setContentType(uuid); // Subvert the use of content type to store UUID
 							// Assume this is the correct type hint.
 							fragment.setTypeHint(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL.getInstanceClassName());
+							fragments.add(fragment);
+						} else if (TYPE_SOLUTION.equals(artifact.getType())) {
+							String uuid = artifact.getKey();
+							if (seenIds.contains(uuid)) {
+								continue;
+							}
+							final ScenarioFragment fragment = ScenarioServiceFactory.eINSTANCE.createScenarioFragment();
+							fragment.setFragment(null);
+							fragment.setName(artifact.getDisplayName());
+							fragment.setUseCommandStack(false);
+							fragment.setContentType(uuid); // Subvert the use of content type to store UUID
 							fragments.add(fragment);
 						}
 					}
