@@ -1571,7 +1571,16 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ABSTRACT_ANALYSIS_MODEL__EXTENSIONS = MMXCorePackage.NAMED_OBJECT__EXTENSIONS;
+	int ABSTRACT_ANALYSIS_MODEL__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_ANALYSIS_MODEL__UUID = MMXCorePackage.UUID_OBJECT__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1580,7 +1589,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ABSTRACT_ANALYSIS_MODEL__NAME = MMXCorePackage.NAMED_OBJECT__NAME;
+	int ABSTRACT_ANALYSIS_MODEL__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Buys</b></em>' containment reference list.
@@ -1589,7 +1598,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ABSTRACT_ANALYSIS_MODEL__BUYS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 0;
+	int ABSTRACT_ANALYSIS_MODEL__BUYS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Sells</b></em>' containment reference list.
@@ -1598,7 +1607,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ABSTRACT_ANALYSIS_MODEL__SELLS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
+	int ABSTRACT_ANALYSIS_MODEL__SELLS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Events</b></em>' containment reference list.
@@ -1607,7 +1616,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ABSTRACT_ANALYSIS_MODEL__VESSEL_EVENTS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
+	int ABSTRACT_ANALYSIS_MODEL__VESSEL_EVENTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Shipping Templates</b></em>' containment reference list.
@@ -1616,7 +1625,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 3;
+	int ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Abstract Analysis Model</em>' class.
@@ -1625,7 +1634,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
+	int ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl <em>Option Analysis Model</em>}' class.
@@ -1645,6 +1654,15 @@ s	 * <!-- end-user-doc -->
 	 * @ordered
 	 */
 	int OPTION_ANALYSIS_MODEL__EXTENSIONS = ABSTRACT_ANALYSIS_MODEL__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTION_ANALYSIS_MODEL__UUID = ABSTRACT_ANALYSIS_MODEL__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -3256,6 +3274,15 @@ s	 * <!-- end-user-doc -->
 	int VIABILITY_MODEL__EXTENSIONS = ABSTRACT_ANALYSIS_MODEL__EXTENSIONS;
 
 	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VIABILITY_MODEL__UUID = ABSTRACT_ANALYSIS_MODEL__UUID;
+
+	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3538,6 +3565,15 @@ s	 * <!-- end-user-doc -->
 	int MTM_MODEL__EXTENSIONS = ABSTRACT_ANALYSIS_MODEL__EXTENSIONS;
 
 	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MTM_MODEL__UUID = ABSTRACT_ANALYSIS_MODEL__UUID;
+
+	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3809,6 +3845,15 @@ s	 * <!-- end-user-doc -->
 	 * @ordered
 	 */
 	int BREAK_EVEN_ANALYSIS_MODEL__EXTENSIONS = ABSTRACT_ANALYSIS_MODEL__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BREAK_EVEN_ANALYSIS_MODEL__UUID = ABSTRACT_ANALYSIS_MODEL__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.

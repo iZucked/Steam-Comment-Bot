@@ -3514,6 +3514,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		existingVesselCharterOptionEClass.getESuperTypes().add(this.getShippingOption());
 		profitAndLossResultEClass.getESuperTypes().add(this.getAnalysisResultDetail());
 		breakEvenResultEClass.getESuperTypes().add(this.getAnalysisResultDetail());
+		abstractAnalysisModelEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		abstractAnalysisModelEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		optionAnalysisModelEClass.getESuperTypes().add(this.getAbstractAnalysisModel());
 		sandboxResultEClass.getESuperTypes().add(this.getAbstractSolutionSet());

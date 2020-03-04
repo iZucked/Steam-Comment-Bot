@@ -200,7 +200,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="cargoPNL" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AbstractAnalysisModel" abstract="true"
-      eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+      eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="buys" upperBound="-1" eType="#//BuyOption"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="sells" upperBound="-1"
