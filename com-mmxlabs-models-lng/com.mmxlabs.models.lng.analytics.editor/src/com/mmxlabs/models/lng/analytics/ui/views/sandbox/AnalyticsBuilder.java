@@ -1583,8 +1583,28 @@ public class AnalyticsBuilder {
 				}
 			}
 		}
-		Pair<Boolean, Set<AVesselSet<Vessel>>> result = new Pair<Boolean, Set<AVesselSet<Vessel>>>(permitted, expandedVessels);
-		return result;
+		return Pair.of(permitted, expandedVessels);
+	}
+	public static Pair<Boolean, Set<AVesselSet<Vessel>>> getSellVesselRestrictions(final SellOption sell) {
+		final Set<AVesselSet<Vessel>> expandedVessels = new HashSet<>();
+		boolean permitted = false;
+		if (sell instanceof SellReference) {
+			final DischargeSlot slot = ((SellReference) sell).getSlot();
+			if (slot != null) {
+				final List<AVesselSet<Vessel>> allowedVessels = slot.getSlotOrDelegateVesselRestrictions();
+				permitted = slot.getSlotOrDelegateVesselRestrictionsArePermissive();
+				for (final AVesselSet<Vessel> s : allowedVessels) {
+					if (s instanceof Vessel) {
+						expandedVessels.add(s);
+					} else {
+						// This is ok as other impl (VesselGroup and
+						// VesselTypeGroup) only permit contained Vessels
+						expandedVessels.addAll(SetUtils.getObjects(s));
+					}
+				}
+			}
+		}
+		return Pair.of(permitted, expandedVessels);
 	}
 
 	public static Predicate<BuyOption> isFOBPurchase() {

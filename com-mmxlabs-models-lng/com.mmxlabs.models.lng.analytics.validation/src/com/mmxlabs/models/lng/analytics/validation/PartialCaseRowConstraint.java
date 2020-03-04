@@ -105,7 +105,7 @@ public class PartialCaseRowConstraint extends AbstractModelMultiConstraint {
 			}
 			for (ShippingOption opt : partialCaseRow.getShipping()) {
 				if (opt.eContainer() == null) {
-					final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Partial case - uncontained shipping"));
+					final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format("%s - uncontained shipping", viewName)));
 					deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
 					statuses.add(deco);
 				}
