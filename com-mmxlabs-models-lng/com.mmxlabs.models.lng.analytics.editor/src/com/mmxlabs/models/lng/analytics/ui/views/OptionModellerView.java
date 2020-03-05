@@ -66,6 +66,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import com.google.common.base.Objects;
 import com.google.common.collect.Sets;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.util.ToBooleanFunction;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
@@ -445,7 +446,10 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			if (notification.isTouch()) {
 				return;
 			}
-			if (notification.getFeature() == AnalyticsPackage.eINSTANCE.getAnalyticsModel_OptionModels()) {
+			// Sneak a rename detector
+			if (notification.getFeature() == MMXCorePackage.Literals.NAMED_OBJECT__NAME) {
+				refreshSections(true, EnumSet.allOf(SectionType.class));
+			} else if (notification.getFeature() == AnalyticsPackage.eINSTANCE.getAnalyticsModel_OptionModels()) {
 				if (notification.getEventType() == Notification.REMOVE) {
 					if (currentModel != null && notification.getOldValue() == currentModel) {
 						displayScenarioInstance(getScenarioInstance(), getRootObject(), null);
@@ -674,7 +678,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			validationErrors.clear();
 			validationSupport.processStatus(status, validationErrors);
 
-			final Function<EObject, Boolean> checker = o -> {
+			final ToBooleanFunction<EObject> checker = o -> {
 				if (o == null) {
 					return true;
 				}
@@ -689,23 +693,23 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			if (currentModel != null) {
 				boolean l_partialCaseValid = true;
 				final PartialCase partialCase = currentModel.getPartialCase();
-				if (!checker.apply(partialCase)) {
+				if (!checker.accept(partialCase)) {
 					l_partialCaseValid = false;
 				} else {
 					for (final PartialCaseRow row : partialCase.getPartialCase()) {
-						if (!checker.apply(row)) {
+						if (!checker.accept(row)) {
 							l_partialCaseValid = false;
 						} else {
 							for (final BuyOption b : row.getBuyOptions()) {
-								l_partialCaseValid &= checker.apply(b);
+								l_partialCaseValid &= checker.accept(b);
 							}
 
 							for (final SellOption s : row.getSellOptions()) {
-								l_partialCaseValid &= checker.apply(s);
+								l_partialCaseValid &= checker.accept(s);
 							}
 
 							for (final ShippingOption s : row.getShipping()) {
-								l_partialCaseValid &= checker.apply(s);
+								l_partialCaseValid &= checker.accept(s);
 							}
 						}
 						if (!l_partialCaseValid) {
@@ -738,8 +742,12 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			currentCommandStack = editingDomain.getCommandStack();
 			currentCommandStack.addCommandStackListener(this);
 
-			undoAction.update();
-			redoAction.update();
+			if (undoAction != null) {
+				undoAction.update();
+			}
+			if (redoAction != null) {
+				redoAction.update();
+			}
 		}
 	}
 
