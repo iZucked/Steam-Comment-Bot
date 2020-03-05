@@ -113,10 +113,12 @@ import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
+import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.SelectionToSandboxUtil;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.CharterAvailableFromEvent;
 import com.mmxlabs.models.lng.schedule.CharterAvailableToEvent;
@@ -437,11 +439,22 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 
 			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_SANDBOX)) {
 				if (numberOfSchedules == 1) {
+					
+					
+					
 					final IStructuredSelection structuredSelection = viewer.getStructuredSelection();
 					if (SelectionToSandboxUtil.canSelectionBeUsed(structuredSelection)) {
 						final ScenarioResult result = currentSelectedDataProvider.getScenarioResult((EObject) structuredSelection.getFirstElement());
 
 						if (result != null) {
+							
+							ADPModel adpModel = ScenarioModelUtil.getADPModel(result.getScenarioDataProvider());
+							if (adpModel != null) {
+								// Cannot use sandbox with ADP
+								return;
+							}
+							
+							
 							final MenuItem item = new MenuItem(menu, SWT.PUSH);
 							item.setText("Create sandbox");
 

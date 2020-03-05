@@ -34,6 +34,7 @@ import org.eclipse.emf.edit.ui.action.RedoAction;
 import org.eclipse.emf.edit.ui.action.UndoAction;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -68,6 +69,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
+import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.analytics.AbstractAnalysisModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
@@ -156,7 +158,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 		mainComposite.setLayoutData(GridDataFactory.fillDefaults()//
 				.grab(true, true)//
-				//.align(SWT.LEFT, SWT.TOP)
+				// .align(SWT.LEFT, SWT.TOP)
 				.span(1, 1).create());
 		mainComposite.setLayout(GridLayoutFactory.fillDefaults()//
 				.equalWidth(false) //
@@ -584,7 +586,8 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 		// Disable auto-open results. use the display button!
 		// if (model != null && model.getResults() != null) {
-		// final AnalyticsSolution data = new AnalyticsSolution(getScenarioInstance(), model.getResults(), model.getName());
+		// final AnalyticsSolution data = new AnalyticsSolution(getScenarioInstance(),
+		// model.getResults(), model.getName());
 		// data.open();
 		// }
 
@@ -865,6 +868,17 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				if (isLocked()) {
 					return;
 				}
+
+				{
+					ADPModel adpModel = ScenarioModelUtil.getADPModel(getScenarioDataProvider());
+					if (adpModel != null) {
+						MessageDialog.openError(getShell(), "Unable to evaluate", "Sandbox scenarios cannot be used with ADP scenarios");
+						// Cannot use sandbox with ADP
+						return;
+					}
+
+				}
+
 				final OptionAnalysisModel m = currentModel;
 				if (m != null) {
 					int mode = m.getMode();

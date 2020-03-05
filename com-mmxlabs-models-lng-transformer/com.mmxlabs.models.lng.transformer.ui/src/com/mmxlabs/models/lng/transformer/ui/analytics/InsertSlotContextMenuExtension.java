@@ -30,6 +30,7 @@ import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolutionHelper;
@@ -44,6 +45,7 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.ITradesTableContextMenu
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper.NameProvider;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationJobRunner;
@@ -69,6 +71,12 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 		}
 
 		if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIONISER)) {
+			return;
+		}
+
+		ADPModel adpModel = ScenarioModelUtil.getADPModel(scenarioEditingLocation.getScenarioDataProvider());
+		if (adpModel != null) {
+			// Cannot run optioniser is not supported for ADP
 			return;
 		}
 
@@ -112,6 +120,14 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 		if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIONISER)) {
 			return;
 		}
+		
+		ADPModel adpModel = ScenarioModelUtil.getADPModel(scenarioEditingLocation.getScenarioDataProvider());
+		if (adpModel != null) {
+			// Cannot use optioniser with ADP
+			return;
+		}
+		
+		
 		{
 			List<Slot<?>> slots = new LinkedList<>();
 			final Iterator<?> itr = selection.iterator();

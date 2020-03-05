@@ -26,6 +26,7 @@ import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolutionHelper;
@@ -35,6 +36,7 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.events.IVesselEventsTableConte
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper.NameProvider;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationJobRunner;
@@ -59,6 +61,13 @@ public class InsertEventContextMenuExtension implements IVesselEventsTableContex
 		if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIONISER_EVENTS)) {
 			return;
 		}
+
+		ADPModel adpModel = ScenarioModelUtil.getADPModel(scenarioEditingLocation.getScenarioDataProvider());
+		if (adpModel != null) {
+			// Cannot run optioniser is not supported for ADP
+			return;
+		}
+
 		if (vesselEvent instanceof CharterOutEvent) {
 
 			final InsertEventAction action = new InsertEventAction(scenarioEditingLocation, Collections.singletonList(vesselEvent));
@@ -82,6 +91,13 @@ public class InsertEventContextMenuExtension implements IVesselEventsTableContex
 		if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIONISER_EVENTS)) {
 			return;
 		}
+
+		ADPModel adpModel = ScenarioModelUtil.getADPModel(scenarioEditingLocation.getScenarioDataProvider());
+		if (adpModel != null) {
+			// Cannot use optioniser with ADP
+			return;
+		}
+
 		{
 			final List<VesselEvent> events = new LinkedList<>();
 			final Iterator<?> itr = selection.iterator();
