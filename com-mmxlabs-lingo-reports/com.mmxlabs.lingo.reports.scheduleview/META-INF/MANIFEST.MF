@@ -32,7 +32,7 @@ Require-Bundle: org.eclipse.help;bundle-version="3.5.0",
  com.google.guava,
  com.mmxlabs.models.ui;bundle-version="4.9.5",
  com.mmxlabs.models.lng.analytics.editor
-Bundle-RequiredExecutionEnvironment: JavaSE-10
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.lingo.reports.scheduleview.views,
  com.mmxlabs.lingo.reports.scheduleview.views.colourschemes

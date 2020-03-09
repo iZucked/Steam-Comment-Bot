@@ -4,7 +4,7 @@ Bundle-Name: Headless Application
 Bundle-SymbolicName: com.mmxlabs.lingo.app.headless;singleton:=true
 Bundle-Version: 4.9.5.qualifier
 Bundle-Vendor: Minimax Labs Ltd.
-Bundle-RequiredExecutionEnvironment: JavaSE-10
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: com.mmxlabs.models.lng.transformer;bundle-version="[4.9.5,5.0.0)",
  com.mmxlabs.models.lng.scenario.model;bundle-version="[4.9.5,5.0.0)",
  com.mmxlabs.scenario.service.manifest;bundle-version="[4.9.5,5.0.0)",

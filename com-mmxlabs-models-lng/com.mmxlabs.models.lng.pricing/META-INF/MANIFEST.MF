@@ -6,7 +6,7 @@ Bundle-Version: 4.9.5.qualifier
 Bundle-ClassPath: .
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
-Bundle-RequiredExecutionEnvironment: JavaSE-10
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: com.mmxlabs.models.lng.pricing,
  com.mmxlabs.models.lng.pricing.impl,
  com.mmxlabs.models.lng.pricing.parseutils,

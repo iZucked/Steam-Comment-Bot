@@ -11,7 +11,7 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.common.common-util,
  org.eclipse.jface,
  com.mmxlabs.rcp.common
-Bundle-RequiredExecutionEnvironment: JavaSE-10
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: com.mmxlabs.jobmanager.eclipse.jobs.impl,
  com.mmxlabs.jobmanager.eclipse.manager,
  com.mmxlabs.jobmanager.eclipse.manager.impl

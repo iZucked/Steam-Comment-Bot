@@ -5,7 +5,7 @@ Fragment-Host: com.mmxlabs.models.lng.transformer.ui
 Bundle-SymbolicName: com.mmxlabs.models.lng.transformer.ui.tests
 Bundle-Version: 4.9.5.qualifier
 Bundle-Vendor: Minimax Labs Ltd.
-Bundle-RequiredExecutionEnvironment: JavaSE-10
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: org.mockito.mockito-core;bundle-version="1.9.5",
  org.eclipse.swtbot.swt.finder,
  org.apache.log4j;bundle-version="1.2.15",

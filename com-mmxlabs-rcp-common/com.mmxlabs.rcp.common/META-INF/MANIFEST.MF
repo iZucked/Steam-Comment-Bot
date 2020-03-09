@@ -32,7 +32,7 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  com.mmxlabs.models.mmxcore,
  com.mmxlabs.hub;bundle-version="4.9.5",
  com.googlecode.json-simple;bundle-version="1.1.1"
-Bundle-RequiredExecutionEnvironment: JavaSE-10
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.rcp.common,
  com.mmxlabs.rcp.common.actions,

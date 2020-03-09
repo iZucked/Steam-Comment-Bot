@@ -19,7 +19,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.forms,
  com.mmxlabs.license.features,
  org.eclipse.core.expressions
-Bundle-RequiredExecutionEnvironment: JavaSE-10
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
  lib/okhttp-3.14.2.jar,

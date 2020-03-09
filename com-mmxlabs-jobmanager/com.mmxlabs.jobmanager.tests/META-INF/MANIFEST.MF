@@ -12,7 +12,7 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  net.bytebuddy.byte-buddy;bundle-version="1.9.9",
  org.objenesis;bundle-version="2.6.0",
  org.aopalliance;bundle-version="1.0.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-10
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: Minimax Labs Ltd.
 Automatic-Module-Name: com.mmxlabs.jobmanager.tests
