@@ -1312,6 +1312,7 @@ public class LNGScenarioTransformer {
 			}
 
 			configureLoadSlotRestrictions(builder, portAssociation, allDischargePorts, loadSlot, load);
+			usedLoadSlots.add(loadSlot);
 		}
 		for (final LoadSlot loadSlot : extraLoadSlots) {
 			assert loadSlot != null;
@@ -1327,6 +1328,8 @@ public class LNGScenarioTransformer {
 			}
 
 			configureLoadSlotRestrictions(builder, portAssociation, allDischargePorts, loadSlot, load);
+			usedLoadSlots.add(loadSlot);
+
 		}
 
 		for (final DischargeSlot dischargeSlot : cargoModel.getDischargeSlots()) {
@@ -1342,6 +1345,8 @@ public class LNGScenarioTransformer {
 			}
 
 			configureDischargeSlotRestrictions(builder, portAssociation, allLoadPorts, dischargeSlot, discharge);
+			usedDischargeSlots.add(dischargeSlot);
+
 		}
 		for (final DischargeSlot dischargeSlot : extraDischargeSlots) {
 			assert dischargeSlot != null;
@@ -1356,6 +1361,8 @@ public class LNGScenarioTransformer {
 			}
 
 			configureDischargeSlotRestrictions(builder, portAssociation, allLoadPorts, dischargeSlot, discharge);
+			usedDischargeSlots.add(dischargeSlot);
+
 		}
 	}
 

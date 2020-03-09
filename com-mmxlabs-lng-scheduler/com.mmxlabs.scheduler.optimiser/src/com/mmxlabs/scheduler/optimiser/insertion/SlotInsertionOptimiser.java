@@ -259,13 +259,22 @@ public class SlotInsertionOptimiser {
 
 	public @Nullable Pair<ISequences, Long> generate(final List<IPortSlot> portSlots, final SlotInsertionOptimiserInitialState state, final int seed) {
 
+		assert	SequencesHitchHikerHelper.checkValidSequences(state.originalRawSequences);
+
+		
 		final List<ISequenceElement> elements = portSlots.stream() //
 				.map(s -> portSlotProvider.getElement(s)) //
 				.collect(Collectors.toList());
 		final Pair<ISequences, Long> result = insert(state, seed, elements);
 		if (result != null) {
+		assert	SequencesHitchHikerHelper.checkValidSequences(result.getFirst());
 			result.setFirst(undoSpotHelper.undoSpotMarketSwaps(state.originalRawSequences, result.getFirst()));
 		}
+		
+		if (result != null ) {
+			assert	SequencesHitchHikerHelper.checkValidSequences(result.getFirst());
+		}
+		
 		return result;
 	}
 }

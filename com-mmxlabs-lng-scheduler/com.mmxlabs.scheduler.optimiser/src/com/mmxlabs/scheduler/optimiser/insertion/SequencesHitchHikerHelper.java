@@ -35,8 +35,10 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 @NonNullByDefault
 public class SequencesHitchHikerHelper {
+
 	@Inject
 	private IMoveHandlerHelper moveHandlerHelper;
+
 	@Inject
 	private IVesselProvider vesselProvider;
 
@@ -65,8 +67,11 @@ public class SequencesHitchHikerHelper {
 
 		queue.addAll(initialElements);
 
-		// Gather the set of "sequenced" resources - basically anything not a nominal. For sequenced resources, we can just replace the sequence.
-		// For nominals, the sequencing is arbitrary. Nominals can either be on a specific nominal ship or on a sequenced resource, or unused. Thus we can remove them from the nominal if the resource
+		// Gather the set of "sequenced" resources - basically anything not a nominal.
+		// For sequenced resources, we can just replace the sequence.
+		// For nominals, the sequencing is arbitrary. Nominals can either be on a
+		// specific nominal ship or on a sequenced resource, or unused. Thus we can
+		// remove them from the nominal if the resource
 		// is different.
 		// Note - if we do nominal vessel optimisation, this will not work as well.
 		final Set<ISequenceElement> evictedElements = new HashSet<>();
@@ -75,10 +80,13 @@ public class SequencesHitchHikerHelper {
 			final ISequenceElement e = queue.remove(0);
 			seen.add(e);
 
-			// 2017-08-22 - SG - Disable this check as is can cause spot slot to be used multiple time now with change to only mark the segment as evicted rather than whole sequence. Keep an eye on
+			// 2017-08-22 - SG - Disable this check as is can cause spot slot to be used
+			// multiple time now with change to only mark the segment as evicted rather than
+			// whole sequence. Keep an eye on
 			// spot results!
 
-			// // Skip spot slots to avoid unnecessary link ups. It will be included by dependent changes if need be.
+			// // Skip spot slots to avoid unnecessary link ups. It will be included by
+			// dependent changes if need be.
 			// if (spotMarketSlotsProvider.isSpotMarketSlot(e)) {
 			// continue;
 			// }
@@ -99,15 +107,20 @@ public class SequencesHitchHikerHelper {
 				queue.addAll(seg);
 
 				if (isSequencedResource(r)) {
-					// For spot charter's just pull the cargo off and ignore the rest. If a related cargo goes back on then we consider it.
-					// This stops hitch-hikers which make use of the shipping length, but are otherwise unrelated.
-					// Note, if we have a sequence a->b->c and remove cargo b, we may introduce a violation that is fixed by using this shipping length.
-					// Potentially we should see if this is the first or last cargo otherwise fallback to general method.
+					// For spot charter's just pull the cargo off and ignore the rest. If a related
+					// cargo goes back on then we consider it.
+					// This stops hitch-hikers which make use of the shipping length, but are
+					// otherwise unrelated.
+					// Note, if we have a sequence a->b->c and remove cargo b, we may introduce a
+					// violation that is fixed by using this shipping length.
+					// Potentially we should see if this is the first or last cargo otherwise
+					// fallback to general method.
 					if (true || isSpotCharterResource(r)) {
 						evictedElements.addAll(seg);
 						Iterables.addAll(queue, seg);
 					} else {
-						// Add every element in this resource to the queue. We cannot determine whether or not they really are linked, so assume linked change.
+						// Add every element in this resource to the queue. We cannot determine whether
+						// or not they really are linked, so assume linked change.
 						Iterables.addAll(queue, source.getSequence(r));
 						// Mark resource as one to replace
 						seenResource.add(r);
@@ -116,7 +129,8 @@ public class SequencesHitchHikerHelper {
 					assert isNominalResource(r);
 
 					// Nominal cargo, just remove the cargo if it has moved from the nominal.
-					// Note: We assume nominal cargoes are fixed pairing (on the nominal) and can only be assigned to one nominal vessel instance
+					// Note: We assume nominal cargoes are fixed pairing (on the nominal) and can
+					// only be assigned to one nominal vessel instance
 					final Pair<@Nullable IResource, Integer> b = targetLookup.lookup(e);
 					if (b != null && b.getFirst() != null) {
 						final IResource rb = b.getFirst();
@@ -146,14 +160,16 @@ public class SequencesHitchHikerHelper {
 					seenResource.add(r);
 				} else {
 					assert isNominalResource(r);
-					// If it is nominal in the target, then it must have been so in the source and thus no change.
+					// If it is nominal in the target, then it must have been so in the source and
+					// thus no change.
 				}
 			}
 
 			queue.removeAll(seen);
 		}
 
-		// Here we should have *seen* any valid element changes. Therefore any other changes are not linked and can be considered to be a hitch hiker
+		// Here we should have *seen* any valid element changes. Therefore any other
+		// changes are not linked and can be considered to be a hitch hiker
 		{
 			// TODO: Revert other changes.
 
@@ -199,7 +215,8 @@ public class SequencesHitchHikerHelper {
 
 		ISequences revertedSeq = __undoUnrelatedChanges(source, target, initialElements);
 
-		// Loop a few times to make sure we include everything. After first pass it is possible elements moved out of a sequence have not been re-included.
+		// Loop a few times to make sure we include everything. After first pass it is
+		// possible elements moved out of a sequence have not been re-included.
 		for (int i = 0; i < 4; ++i) {
 			final List<ISequenceElement> recheck = new LinkedList<>();
 			for (final ISequenceElement slot : revertedSeq.getUnusedElements()) {
@@ -221,7 +238,8 @@ public class SequencesHitchHikerHelper {
 	}
 
 	/**
-	 * Checks to ensure each element exists only once in the sequences. Multiple occurrences indicates an error in the creation of the sequences.
+	 * Checks to ensure each element exists only once in the sequences. Multiple
+	 * occurrences indicates an error in the creation of the sequences.
 	 * 
 	 * @param sequences
 	 */
