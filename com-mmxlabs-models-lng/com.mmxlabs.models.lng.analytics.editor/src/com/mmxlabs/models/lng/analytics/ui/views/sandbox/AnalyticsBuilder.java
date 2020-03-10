@@ -188,8 +188,11 @@ public class AnalyticsBuilder {
 			if (buyOpportunity.getDate() != null) {
 				slot.setWindowStart(buyOpportunity.getDate());
 			}
-			slot.setWindowSize(buyOpportunity.getWindowSize());
-			slot.setWindowSizeUnits(buyOpportunity.getWindowSizeUnits());
+
+			if (buyOpportunity.isSpecifyWindow()) {
+				slot.setWindowSize(buyOpportunity.getWindowSize());
+				slot.setWindowSizeUnits(buyOpportunity.getWindowSizeUnits());
+			}
 
 			if (buyOpportunity.getEntity() != null) {
 				slot.setEntity(buyOpportunity.getEntity());
@@ -350,8 +353,11 @@ public class AnalyticsBuilder {
 			if (sellOpportunity.getDate() != null) {
 				slot.setWindowStart(sellOpportunity.getDate());
 			}
-			slot.setWindowSize(sellOpportunity.getWindowSize());
-			slot.setWindowSizeUnits(sellOpportunity.getWindowSizeUnits());
+			
+			if (sellOpportunity.isSpecifyWindow()) {
+				slot.setWindowSize(sellOpportunity.getWindowSize());
+				slot.setWindowSizeUnits(sellOpportunity.getWindowSizeUnits());
+			}
 
 			if (sellOpportunity.getEntity() != null) {
 				slot.setEntity(sellOpportunity.getEntity());
@@ -1585,6 +1591,7 @@ public class AnalyticsBuilder {
 		}
 		return Pair.of(permitted, expandedVessels);
 	}
+
 	public static Pair<Boolean, Set<AVesselSet<Vessel>>> getSellVesselRestrictions(final SellOption sell) {
 		final Set<AVesselSet<Vessel>> expandedVessels = new HashSet<>();
 		boolean permitted = false;
