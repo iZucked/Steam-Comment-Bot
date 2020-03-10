@@ -62,7 +62,6 @@ import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.evaluation.VoyagePlanRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
-import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.MinMaxUnconstrainedVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
@@ -70,7 +69,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.CapacityViolationType;
 
 @SuppressWarnings({ "unused", "null" })
 @ExtendWith(value = ShiroRunner.class)
-public class CapacityViolationTests extends AbstractMicroTestCase {
+public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 
 	private static List<String> requiredFeatures = Lists.newArrayList("optimisation-charter-out-generation");
 	private static List<String> addedFeatures = new LinkedList<>();

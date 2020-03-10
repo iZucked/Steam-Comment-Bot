@@ -26,6 +26,7 @@ import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.lingo.its.tests.microcases.MicroCaseUtils;
 import com.mmxlabs.lingo.its.tests.microcases.TimeWindowsTestsUtils;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.EVesselTankState;
@@ -55,36 +56,11 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 @ExtendWith(ShiroRunner.class)
 public class SplitMonthPriceExpressionTests extends AbstractMicroTestCase {
 
-	private static List<String> requiredFeatures = Lists.newArrayList("no-nominal-in-prompt", "optimisation-actionset");
-	private static List<String> addedFeatures = new LinkedList<>();
-
-	private static String vesselName = "vessel";
 	private static String loadName = "load";
 	private static String dischargeName = "discharge";
 
-	@BeforeAll
-	public static void hookIn() {
-		for (final String feature : requiredFeatures) {
-			if (!LicenseFeatures.isPermitted("features:" + feature)) {
-				LicenseFeatures.addFeatureEnablements(feature);
-				addedFeatures.add(feature);
-			}
-		}
-	}
-
-	@AfterAll
-	public static void hookOut() {
-		for (final String feature : addedFeatures) {
-			LicenseFeatures.removeFeatureEnablements(feature);
-		}
-		addedFeatures.clear();
-	}
-
-	@BeforeEach
-	public void constructor() throws Exception {
-
-		super.constructor();
-
+	@Override
+	protected void setPromptDates() {
 		// Set a default prompt in the past
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2014, 1, 1), LocalDate.of(2014, 3, 1));
 	}
@@ -94,7 +70,7 @@ public class SplitMonthPriceExpressionTests extends AbstractMicroTestCase {
 	}
 
 	private VesselAvailability createTestVesselAvailability(final LocalDateTime startStart, final LocalDateTime startEnd, final LocalDateTime endStart) {
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
@@ -125,11 +101,11 @@ public class SplitMonthPriceExpressionTests extends AbstractMicroTestCase {
 		final int splitDay = 15;
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase(loadName, LocalDate.of(2018, 6, 1), portFinder.findPort("Bonny Nigeria"), null, entity, String.format("SPLITMONTH(1, 10, %d)", splitDay)) //
+				.makeFOBPurchase(loadName, LocalDate.of(2018, 6, 1), portFinder.findPortById(InternalDataConstants.PORT_BONNY), null, entity, String.format("SPLITMONTH(1, 10, %d)", splitDay)) //
 				.withWindowStartTime(0) //
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.withWindowSize(30, TimePeriod.DAYS).build() //
-				.makeDESSale(dischargeName, LocalDate.of(2018, 6, 2), portFinder.findPort("Dragon LNG"), null, entity, String.format("SPLITMONTH(1, 10, %d)", splitDay)) //
+				.makeDESSale(dischargeName, LocalDate.of(2018, 6, 2), portFinder.findPortById(InternalDataConstants.PORT_DRAGON), null, entity, String.format("SPLITMONTH(1, 10, %d)", splitDay)) //
 				.withWindowStartTime(0) //
 				.withWindowSize(30, TimePeriod.DAYS).build() //
 				.withVesselAssignment(vesselAvailability, 1).build();
@@ -199,45 +175,30 @@ public class SplitMonthPriceExpressionTests extends AbstractMicroTestCase {
 		final int splitDay = 15;
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase(loadName, LocalDate.of(2018, 6, 1), portFinder.findPort("Bonny Nigeria"), null, entity, String.format("SPLITMONTH(Henry_Hub, JCC, %d)", splitDay), 23.4) //
+				.makeFOBPurchase(loadName, LocalDate.of(2018, 6, 1), portFinder.findPortById(InternalDataConstants.PORT_BONNY), null, entity, String.format("SPLITMONTH(Henry_Hub, JCC, %d)", splitDay),
+						23.4) //
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.withWindowStartTime(0) //
 				.withWindowSize(30, TimePeriod.DAYS).build() //
-				.makeDESSale(dischargeName, LocalDate.of(2018, 6, 2), portFinder.findPort("Dragon LNG"), null, entity, String.format("SPLITMONTH(Henry_Hub, JCC, %d)", splitDay)) //
+				.makeDESSale(dischargeName, LocalDate.of(2018, 6, 2), portFinder.findPortById(InternalDataConstants.PORT_DRAGON), null, entity,
+						String.format("SPLITMONTH(Henry_Hub, JCC, %d)", splitDay)) //
 				.withWindowStartTime(0) //
 				.withWindowSize(30, TimePeriod.DAYS).build() //
 				.withVesselAssignment(vesselAvailability, 1).build();
 
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
 
-		// Create custom index prices
-		final EList<CommodityCurve> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityCurves();
-		CommodityCurve hh = null;
-		CommodityCurve jcc = null;
-		for (final CommodityCurve commodityIndex : commodityIndices) {
-			if (commodityIndex.getName().equals("Henry_Hub")) {
-				hh = commodityIndex;
-			}
-			if (commodityIndex.getName().equals("JCC")) {
-				jcc = commodityIndex;
-			}
-		}
+		pricingModelBuilder.makeCommodityDataCurve("Henry_Hub", "$", "mmBtu") //
+				.addIndexPoint(YearMonth.of(2018, 5), 5) //
+				.addIndexPoint(YearMonth.of(2018, 6), 5) //
+				.addIndexPoint(YearMonth.of(2018, 7), 5) //
+				.build();
 
-		// HH prices
-		assert hh != null;
-		hh.getPoints().clear();
-
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2018, 5), 5);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2018, 6), 5);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2018, 7), 5);
-
-		// JCC prices
-		assert jcc != null;
-		jcc.getPoints().clear();
-
-		pricingModelBuilder.addDataToCommodityIndex(jcc, YearMonth.of(2018, 5), 10);
-		pricingModelBuilder.addDataToCommodityIndex(jcc, YearMonth.of(2018, 6), 10);
-		pricingModelBuilder.addDataToCommodityIndex(jcc, YearMonth.of(2018, 7), 10);
+		pricingModelBuilder.makeCommodityDataCurve("JCC", "$", "mmBtu") //
+				.addIndexPoint(YearMonth.of(2018, 5), 10) //
+				.addIndexPoint(YearMonth.of(2018, 6), 10) //
+				.addIndexPoint(YearMonth.of(2018, 7), 10) //
+				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
@@ -333,13 +294,13 @@ public class SplitMonthPriceExpressionTests extends AbstractMicroTestCase {
 		final String expression = "SPLITMONTH(SPLITMONTH(WEEK_W1,WEEK_W2,8),SPLITMONTH(WEEK_W3,WEEK_W4,22),15)";
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase(loadName, LocalDate.of(2018, 6, 1), portFinder.findPort("Bonny Nigeria"), null, entity, "5", 23.4) //
+				.makeFOBPurchase(loadName, LocalDate.of(2018, 6, 1), portFinder.findPortById(InternalDataConstants.PORT_BONNY), null, entity, "5", 23.4) //
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.withWindowStartTime(0) //
 				.withVisitDuration(24) //
 				.withWindowSize(0, TimePeriod.DAYS) //
 				.build() //
-				.makeDESSale(dischargeName, LocalDate.of(2018, 8, 1), portFinder.findPort("Dragon LNG"), null, entity, expression) //
+				.makeDESSale(dischargeName, LocalDate.of(2018, 8, 1), portFinder.findPortById(InternalDataConstants.PORT_DRAGON), null, entity, expression) //
 				.withWindowStartTime(0) //
 				.withWindowSize(30, TimePeriod.DAYS).build() //
 				.withVesselAssignment(vesselAvailability, 1).build();

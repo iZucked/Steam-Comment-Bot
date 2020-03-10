@@ -17,6 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -59,7 +60,7 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 	public void testSimpleInsertOptionalCharterOutMove() throws Exception {
 
 		// Construct the vessel
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withCharterRate("30000") //
@@ -69,7 +70,7 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 
 		// Construct the charterOutEvent
 		final CharterOutEvent charterOutEvent = cargoModelBuilder //
-				.makeCharterOutEvent("charter_out_test_solo", LocalDateTime.of(2017, 12, 5, 0, 0, 0), LocalDateTime.of(2017, 12, 15, 0, 0, 0), portFinder.findPort("Sabine Pass LNG")) //
+				.makeCharterOutEvent("charter_out_test_solo", LocalDateTime.of(2017, 12, 5, 0, 0, 0), LocalDateTime.of(2017, 12, 15, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS)) //
 				.withHireRate(50_000) //
 				.withOptional(true) //
 				.withDurationInDays(10) //
@@ -128,7 +129,7 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 	public void testSimpleRemoveOptionalCharterOutMove() throws Exception {
 
 		// Construct the vessel
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withCharterRate("30000") //
@@ -138,7 +139,7 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 
 		// Construct the charterOutEvent
 		final CharterOutEvent charterOutEvent = cargoModelBuilder //
-				.makeCharterOutEvent("charter_out_test_solo", LocalDateTime.of(2017, 12, 5, 0, 0, 0), LocalDateTime.of(2017, 12, 15, 0, 0, 0), portFinder.findPort("Sabine Pass LNG")) //
+				.makeCharterOutEvent("charter_out_test_solo", LocalDateTime.of(2017, 12, 5, 0, 0, 0), LocalDateTime.of(2017, 12, 15, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS)) //
 				.withHireRate(50_000) //
 				.withOptional(true) //
 				.withDurationInDays(10) //
@@ -199,7 +200,7 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 	public void testInsertOptionalCharterOutWithRelocationMove() throws Exception {
 
 		// Construct the vessel
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withCharterRate("30000") //
@@ -209,12 +210,12 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 
 		// Construct the charterOutEvent
 		final CharterOutEvent charterOutEvent = cargoModelBuilder //
-				.makeCharterOutEvent("charter_out_test_solo", LocalDateTime.of(2017, 12, 5, 0, 0, 0), LocalDateTime.of(2017, 12, 15, 0, 0, 0), portFinder.findPort("Sabine Pass LNG")) //
+				.makeCharterOutEvent("charter_out_test_solo", LocalDateTime.of(2017, 12, 5, 0, 0, 0), LocalDateTime.of(2017, 12, 15, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS)) //
 				.withHireRate(50_000) //
 				.withOptional(true) //
 				.withDurationInDays(10) //
 				.withAllowedVessels(vessel) //
-				.withRelocatePort(portFinder.findPort("Tobata")) //
+				.withRelocatePort(portFinder.findPortById(InternalDataConstants.PORT_TOBATA)) //
 				.build();
 
 		runTest((injector, scenarioRunner) -> {
@@ -294,7 +295,7 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 	public void testRemoveOptionalCharterOutWithRelocationMove() throws Exception {
 
 		// Construct the vessel
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withCharterRate("30000") //
@@ -304,12 +305,12 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 
 		// Construct the charterOutEvent
 		final CharterOutEvent charterOutEvent = cargoModelBuilder //
-				.makeCharterOutEvent("charter_out_test_solo", LocalDateTime.of(2017, 12, 5, 0, 0, 0), LocalDateTime.of(2017, 12, 15, 0, 0, 0), portFinder.findPort("Sabine Pass LNG")) //
+				.makeCharterOutEvent("charter_out_test_solo", LocalDateTime.of(2017, 12, 5, 0, 0, 0), LocalDateTime.of(2017, 12, 15, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS)) //
 				.withHireRate(50_000) //
 				.withOptional(true) //
 				.withDurationInDays(10) //
 				.withVesselAssignment(vesselAvailability, 1) //
-				.withRelocatePort(portFinder.findPort("Tobata")) //
+				.withRelocatePort(portFinder.findPortById(InternalDataConstants.PORT_TOBATA)) //
 				.build();
 
 		runTest((injector, scenarioRunner) -> {
@@ -366,7 +367,7 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 	public void testExportOptionalCharterOutMove() throws Exception {
 
 		// Construct the vessel
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withCharterRate("30000") //
@@ -376,7 +377,7 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 
 		// Construct the charterOutEvent
 		final CharterOutEvent charterOutEvent = cargoModelBuilder //
-				.makeCharterOutEvent("charter_out_test_solo", LocalDateTime.of(2017, 12, 5, 0, 0, 0), LocalDateTime.of(2017, 12, 15, 0, 0, 0), portFinder.findPort("Sabine Pass LNG")) //
+				.makeCharterOutEvent("charter_out_test_solo", LocalDateTime.of(2017, 12, 5, 0, 0, 0), LocalDateTime.of(2017, 12, 15, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS)) //
 				.withHireRate(50_000) //
 				.withOptional(true) //
 				.withDurationInDays(10) //
@@ -415,7 +416,7 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 	public void testExportOptionalCharterOutWithRelocationMove() throws Exception {
 
 		// Construct the vessel
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withCharterRate("30000") //
@@ -425,12 +426,12 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 
 		// Construct the charterOutEvent
 		final CharterOutEvent charterOutEvent = cargoModelBuilder //
-				.makeCharterOutEvent("charter_out_test_solo", LocalDateTime.of(2017, 12, 5, 0, 0, 0), LocalDateTime.of(2017, 12, 15, 0, 0, 0), portFinder.findPort("Sabine Pass LNG")) //
+				.makeCharterOutEvent("charter_out_test_solo", LocalDateTime.of(2017, 12, 5, 0, 0, 0), LocalDateTime.of(2017, 12, 15, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS)) //
 				.withHireRate(50_000) //
 				.withOptional(true) //
 				.withDurationInDays(10) //
 				.withAllowedVessels(vessel) //
-				.withRelocatePort(portFinder.findPort("Tobata")) //
+				.withRelocatePort(portFinder.findPortById(InternalDataConstants.PORT_TOBATA)) //
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
@@ -465,7 +466,7 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 	public void testExportOptionalCharterOutWithRelocationRemoveMove() throws Exception {
 
 		// Construct the vessel
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withCharterRate("30000") //
@@ -475,12 +476,12 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 
 		// Construct the charterOutEvent
 		final CharterOutEvent charterOutEvent = cargoModelBuilder //
-				.makeCharterOutEvent("charter_out_test_solo", LocalDateTime.of(2017, 12, 5, 0, 0, 0), LocalDateTime.of(2017, 12, 15, 0, 0, 0), portFinder.findPort("Sabine Pass LNG")) //
+				.makeCharterOutEvent("charter_out_test_solo", LocalDateTime.of(2017, 12, 5, 0, 0, 0), LocalDateTime.of(2017, 12, 15, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS)) //
 				.withHireRate(50_000) //
 				.withOptional(true) //
 				.withDurationInDays(10) //
 				.withVesselAssignment(vesselAvailability, 1) //
-				.withRelocatePort(portFinder.findPort("Tobata")) //
+				.withRelocatePort(portFinder.findPortById(InternalDataConstants.PORT_TOBATA)) //
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {

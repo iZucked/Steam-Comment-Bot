@@ -32,6 +32,7 @@
   { "mmxId" : "L_AO_Soyo", "type" : "LOAD", "duration" : 24, "cv" : 23.2 },
   { "mmxId" : "L_DZ_Skikd", "type" : "LOAD", "duration" : 24, "cv" : 23.2 },
   { "mmxId" : "L_DZ_Bethi", "type" : "LOAD", "duration" : 24, "cv" : 23.2 },
+  { "mmxId" : "L_BE_Zeebr", "type" : "LOAD", "duration" : 24, "cv" : 23.2 },
   
   { "mmxId" : "L_CN_Shenz", "type" : "DISCHARGE", "duration" : 24 },
   { "mmxId" : "L_CN_Guang", "type" : "DISCHARGE", "duration" : 24 },

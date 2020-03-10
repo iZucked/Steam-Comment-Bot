@@ -29,6 +29,7 @@ import com.google.inject.name.Named;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -108,20 +109,20 @@ public class LightWeightSchedulerTests extends AbstractMicroTestCase {
 		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
 		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 		charterInMarket_1.setNominal(true);
 
-		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("Bonny", LocalDate.of(2016, 1, 1), portFinder.findPort("Darwin LNG"), null, entity, "5", 22.8).withWindowSize(1, TimePeriod.MONTHS)
+		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("Bonny", LocalDate.of(2016, 1, 1), portFinder.findPortById(InternalDataConstants.PORT_DARWIN), null, entity, "5", 22.8).withWindowSize(1, TimePeriod.MONTHS)
 				.build();
-		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 2, 1), portFinder.findPort("Barcelona LNG"), null, entity, "7")
+		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_BARCELONA), null, entity, "7")
 				.withWindowSize(1, TimePeriod.MONTHS).build();
 
 		// Create cargo 1, cargo 2
 		final Cargo cargo2 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2016, 3, 1), portFinder.findPort("Hammerfest LNG"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2016, 3, 1), portFinder.findPortById(InternalDataConstants.PORT_HAMMERFEST), null, entity, "5") //
 				.withWindowSize(1, TimePeriod.MONTHS).build() //
-				.makeDESSale("D1", LocalDate.of(2016, 4, 1), portFinder.findPort("Incheon"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2016, 4, 1), portFinder.findPortById(InternalDataConstants.PORT_INCHEON), null, entity, "7") //
 				.withWindowSize(1, TimePeriod.MONTHS).build() //
 				.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
 				.withAssignmentFlags(true, false) //
@@ -155,20 +156,20 @@ public class LightWeightSchedulerTests extends AbstractMicroTestCase {
 		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
 		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 		charterInMarket_1.setNominal(true);
 
-		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("Bonny", LocalDate.of(2016, 1, 1), portFinder.findPort("Darwin LNG"), null, entity, "5", 22.8).withWindowSize(1, TimePeriod.MONTHS)
+		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("Bonny", LocalDate.of(2016, 1, 1), portFinder.findPortById(InternalDataConstants.PORT_DARWIN), null, entity, "5", 22.8).withWindowSize(1, TimePeriod.MONTHS)
 				.build();
-		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 2, 1), portFinder.findPort("Barcelona LNG"), null, entity, "7")
+		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_BARCELONA), null, entity, "7")
 				.withWindowSize(1, TimePeriod.MONTHS).build();
 
 		// Create cargo 1, cargo 2
 		final Cargo cargo2 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2016, 3, 1), portFinder.findPort("Hammerfest LNG"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2016, 3, 1), portFinder.findPortById(InternalDataConstants.PORT_HAMMERFEST), null, entity, "5") //
 				.withWindowSize(1, TimePeriod.MONTHS).build() //
-				.makeDESSale("D1", LocalDate.of(2016, 4, 1), portFinder.findPort("Incheon"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2016, 4, 1), portFinder.findPortById(InternalDataConstants.PORT_INCHEON), null, entity, "7") //
 				.withWindowSize(1, TimePeriod.MONTHS).build() //
 				.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
 				.withAssignmentFlags(true, false) //

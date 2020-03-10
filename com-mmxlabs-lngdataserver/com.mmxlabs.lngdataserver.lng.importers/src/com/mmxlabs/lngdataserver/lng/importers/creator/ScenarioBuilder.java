@@ -13,6 +13,7 @@ import java.time.Month;
 import java.time.YearMonth;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -20,6 +21,7 @@ import java.util.function.BiConsumer;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -30,6 +32,8 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.io.CharStreams;
 import com.mmxlabs.common.csv.CSVReader;
+import com.mmxlabs.common.csv.IDeferment;
+import com.mmxlabs.common.csv.IImportContext;
 import com.mmxlabs.lngdataserver.integration.models.bunkerfuels.BunkerFuelsVersion;
 import com.mmxlabs.lngdataserver.integration.models.portgroups.PortGroupDefinition;
 import com.mmxlabs.lngdataserver.integration.models.portgroups.PortTypeConstants;
@@ -47,7 +51,21 @@ import com.mmxlabs.lngdataserver.lng.io.bunkerfuels.BunkerFuelsToScenarioImporte
 import com.mmxlabs.lngdataserver.lng.io.portconfig.PortConfig;
 import com.mmxlabs.lngdataserver.lng.io.portconfig.PortConfigType;
 import com.mmxlabs.lngdataserver.lng.io.vessels.VesselsToScenarioCopier;
+import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.importer.AssignmentImporter;
+import com.mmxlabs.models.lng.cargo.importer.CargoImporter;
+import com.mmxlabs.models.lng.commercial.CommercialModel;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
+import com.mmxlabs.models.lng.commercial.PricingEvent;
+import com.mmxlabs.models.lng.commercial.PurchaseContract;
+import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -59,6 +77,7 @@ import com.mmxlabs.models.lng.port.PortGroup;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.util.PortModelFinder;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
+import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.HolidayCalendar;
@@ -68,6 +87,7 @@ import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.UnitConversion;
+import com.mmxlabs.models.lng.pricing.importers.CommodityIndexImporter;
 import com.mmxlabs.models.lng.pricing.importers.HolidayCalendarImporter;
 import com.mmxlabs.models.lng.pricing.importers.PricingCalendarImporter;
 import com.mmxlabs.models.lng.pricing.util.PricingModelBuilder;
@@ -75,17 +95,27 @@ import com.mmxlabs.models.lng.pricing.util.PricingModelFinder;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelBuilder;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
+import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
+import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
+import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.PortCapability;
+import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
 import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
+import com.mmxlabs.rcp.common.versions.VersionsUtil;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.SimpleScenarioDataProvider;
 
 public class ScenarioBuilder {
 	public static final String DEFAULT_ENTITY_NAME = "Entity";
 
-	private final IScenarioDataProvider scenarioDataProvider;
+	private final @NonNull IScenarioDataProvider scenarioDataProvider;
 
 	private final ScenarioModelBuilder scenarioModelBuilder;
 
@@ -121,7 +151,25 @@ public class ScenarioBuilder {
 		loadDefaultConversionFactors();
 		loadDefaultCalendars();
 
+		initVersionRecords();
+
 		return this;
+	}
+
+	private void initVersionRecords() {
+		final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(scenarioDataProvider);
+		fleetModel.setVesselGroupVersionRecord(VersionsUtil.createNewRecord());
+		fleetModel.setBunkerFuelsVersionRecord(VersionsUtil.createNewRecord());
+		fleetModel.setFleetVersionRecord(VersionsUtil.createNewRecord());
+
+		final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioDataProvider);
+		pricingModel.setMarketCurvesVersionRecord(VersionsUtil.createNewRecord());
+		pricingModel.setSettledPricesVersionRecord(VersionsUtil.createNewRecord());
+
+		final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioDataProvider);
+		portModel.setDistanceVersionRecord(VersionsUtil.createNewRecord());
+		portModel.setPortVersionRecord(VersionsUtil.createNewRecord());
+		portModel.setPortGroupVersionRecord(VersionsUtil.createNewRecord());
 	}
 
 	private void loadDefaultConversionFactors() throws IOException {
@@ -248,7 +296,7 @@ public class ScenarioBuilder {
 		return this;
 	}
 
-	public ScenarioBuilder configureDefaultCommercialModel(final String defaultEntityName) {
+	public ScenarioBuilder configureDefaultCommercialModel(final @NonNull String defaultEntityName) {
 		final LegalEntity entity = scenarioModelBuilder.getCommercialModelBuilder().createEntity(defaultEntityName);
 		scenarioModelBuilder.getCommercialModelBuilder().setTaxRates(entity, LocalDate.of(2000, Month.JANUARY, 1), 0);
 		return this;
@@ -493,5 +541,213 @@ public class ScenarioBuilder {
 			}
 		}
 
+	}
+
+	public void importVesselCharters(InputStream inputStream) throws IOException {
+		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioDataProvider);
+		{
+
+			final DefaultImportContext context = new DefaultImportContext('.');
+			context.setRootObject(scenarioModelBuilder.getLNGScenarioModel());
+			context.registerNamedObjectsFromSubModels();
+			try (CSVReader reader = new CSVReader(',', inputStream)) {
+
+				final DefaultClassImporter importer = new DefaultClassImporter();
+				cargoModel.getVesselAvailabilities().addAll((Collection<? extends VesselAvailability>) importer.importObjects(CargoPackage.Literals.VESSEL_AVAILABILITY, reader, context));
+			}
+			context.run();
+
+		}
+	}
+	public void importAssignments(InputStream inputStream) throws IOException {
+		{
+			
+			final DefaultImportContext context = new DefaultImportContext('.');
+			context.setRootObject(scenarioModelBuilder.getLNGScenarioModel());
+			context.registerNamedObjectsFromSubModels();
+			try (CSVReader reader = new CSVReader(',', inputStream)) {
+				
+				final AssignmentImporter importer = new AssignmentImporter();
+				importer.importAssignments(reader, context);
+			}
+			context.run();
+			
+		}
+	}
+
+	public void importCommodityCurves(InputStream inputStream) throws IOException {
+		final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioDataProvider);
+		{
+
+			final DefaultImportContext context = new DefaultImportContext('.');
+			context.setRootObject(scenarioModelBuilder.getLNGScenarioModel());
+			context.registerNamedObjectsFromSubModels();
+			try (CSVReader reader = new CSVReader(',', inputStream)) {
+
+				final CommodityIndexImporter importer = new CommodityIndexImporter();
+				pricingModel.getCommodityCurves().addAll((Collection<? extends CommodityCurve>) importer.importObjects(PricingPackage.Literals.COMMODITY_CURVE, reader, context));
+			}
+			context.run();
+
+		}
+	}
+
+	public void importSpotMarkets(InputStream inputStream) throws IOException {
+		final SpotMarketsModel spotMarketsModel = ScenarioModelUtil.getSpotMarketsModel(scenarioDataProvider);
+
+		final DefaultImportContext context = new DefaultImportContext('.');
+		context.setRootObject(scenarioModelBuilder.getLNGScenarioModel());
+		context.registerNamedObjectsFromSubModels();
+		try (CSVReader reader = new CSVReader(',', inputStream)) {
+
+			final DefaultClassImporter importer = new DefaultClassImporter();
+
+			final Collection<EObject> markets = (importer.importObjects(SpotMarketsPackage.eINSTANCE.getSpotMarket(), reader, context));
+
+			SpotMarketGroup desPurchaseGroup = null;
+			SpotMarketGroup desSaleGroup = null;
+			SpotMarketGroup fobPurchaseGroup = null;
+			SpotMarketGroup fobSaleGroup = null;
+
+			final List<SpotMarket> desPurchaseMarkets = new LinkedList<>();
+			final List<SpotMarket> desSaleMarkets = new LinkedList<>();
+			final List<SpotMarket> fobPurchaseMarkets = new LinkedList<>();
+			final List<SpotMarket> fobSaleMarkets = new LinkedList<>();
+			for (final EObject market : markets) {
+
+				if (market instanceof SpotMarketGroup) {
+					final SpotMarketGroup group = (SpotMarketGroup) market;
+					switch (group.getType()) {
+					case DES_PURCHASE:
+						desPurchaseGroup = group;
+						break;
+					case DES_SALE:
+						desSaleGroup = group;
+						break;
+					case FOB_PURCHASE:
+						fobPurchaseGroup = group;
+						break;
+					case FOB_SALE:
+						fobSaleGroup = group;
+						break;
+					default:
+						break;
+
+					}
+				} else if (market instanceof DESPurchaseMarket) {
+					desPurchaseMarkets.add((SpotMarket) market);
+				} else if (market instanceof DESSalesMarket) {
+					desSaleMarkets.add((SpotMarket) market);
+				} else if (market instanceof FOBPurchasesMarket) {
+					fobPurchaseMarkets.add((SpotMarket) market);
+				} else if (market instanceof FOBSalesMarket) {
+					fobSaleMarkets.add((SpotMarket) market);
+				}
+
+			}
+			// Set the groups
+			spotMarketsModel.setDesPurchaseSpotMarket(desPurchaseGroup);
+			spotMarketsModel.setDesSalesSpotMarket(desSaleGroup);
+			spotMarketsModel.setFobPurchasesSpotMarket(fobPurchaseGroup);
+			spotMarketsModel.setFobSalesSpotMarket(fobSaleGroup);
+
+			// set the markets
+			if (desPurchaseGroup != null) {
+				desPurchaseGroup.getMarkets().addAll(desPurchaseMarkets);
+			}
+			if (desSaleGroup != null) {
+				desSaleGroup.getMarkets().addAll(desSaleMarkets);
+			}
+			if (fobPurchaseGroup != null) {
+				fobPurchaseGroup.getMarkets().addAll(fobPurchaseMarkets);
+			}
+			if (fobSaleGroup != null) {
+				fobSaleGroup.getMarkets().addAll(fobSaleMarkets);
+			}
+
+			context.run();
+
+		}
+	}
+
+	public void importContracts(InputStream purchaseIS, InputStream salesIS) throws IOException {
+		final CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(scenarioDataProvider);
+		{
+
+			final DefaultImportContext context = new DefaultImportContext('.');
+			context.setRootObject(scenarioModelBuilder.getLNGScenarioModel());
+			context.registerNamedObjectsFromSubModels();
+			try (CSVReader reader = new CSVReader(',', purchaseIS)) {
+
+				final DefaultClassImporter importer = new DefaultClassImporter();
+				commercialModel.getPurchaseContracts().addAll((Collection<? extends PurchaseContract>) importer.importObjects(CommercialPackage.Literals.PURCHASE_CONTRACT, reader, context));
+			}
+			try (CSVReader reader = new CSVReader(',', salesIS)) {
+
+				final DefaultClassImporter importer = new DefaultClassImporter();
+				commercialModel.getSalesContracts().addAll((Collection<? extends SalesContract>) importer.importObjects(CommercialPackage.Literals.SALES_CONTRACT, reader, context));
+			}
+			context.run();
+
+		}
+	}
+
+	public void importCargoes(InputStream inputStream) throws IOException {
+
+		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioDataProvider);
+		final CargoImporter cargoImporter = new CargoImporter();
+		final DefaultImportContext context = new DefaultImportContext('.');
+		context.setRootObject(scenarioModelBuilder.getLNGScenarioModel());
+		context.registerNamedObjectsFromSubModels();
+		try (CSVReader reader = new CSVReader(',', inputStream)) {
+
+			final Collection<EObject> values = cargoImporter.importObjects(CargoPackage.eINSTANCE.getCargo(), reader, context);
+			// COPIED FROM CARGO IMPORTER.
+			for (final EObject object : values) {
+				if (object instanceof Cargo) {
+					cargoModel.getCargoes().add((Cargo) object);
+				} else if (object instanceof LoadSlot) {
+					final LoadSlot loadSlot = (LoadSlot) object;
+					cargoModel.getLoadSlots().add(loadSlot);
+					// Set default pricing event if no delegate or previously set value
+					context.doLater(new IDeferment() {
+						@Override
+						public void run(final IImportContext context) {
+							if (!(loadSlot instanceof SpotSlot) && loadSlot.getContract() == null) {
+								if (loadSlot.getPricingEvent() == null) {
+									loadSlot.setPricingEvent(PricingEvent.START_LOAD);
+								}
+							}
+						}
+
+						@Override
+						public int getStage() {
+							return 0;
+						}
+					});
+				} else if (object instanceof DischargeSlot) {
+					final DischargeSlot dischargeSlot = (DischargeSlot) object;
+					cargoModel.getDischargeSlots().add(dischargeSlot);
+					// Set default pricing event if no delegate or previously set value
+					context.doLater(new IDeferment() {
+
+						@Override
+						public void run(final IImportContext context) {
+							if (!(dischargeSlot instanceof SpotSlot) && dischargeSlot.getContract() == null) {
+								if (dischargeSlot.getPricingEvent() == null) {
+									dischargeSlot.setPricingEvent(PricingEvent.START_DISCHARGE);
+								}
+							}
+						}
+
+						@Override
+						public int getStage() {
+							return IMMXImportContext.STAGE_REFERENCES_RESOLVED;
+						}
+					});
+				}
+			}
+			context.run();
+		}
 	}
 }

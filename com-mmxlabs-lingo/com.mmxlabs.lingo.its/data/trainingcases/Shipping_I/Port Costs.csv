@@ -71,7 +71,7 @@ referenceCapacity,ports,LOADCost,DISCHARGECost,DRYDOCKCost,MAINTENANCECost,TRANS
 ,Negishi,0,89051,0,0,0,PortCost
 ,Niigata-Higashi,0,103735,0,0,0,PortCost
 ,Northeast Gateway,0,0,0,0,0,PortCost
-,Ogishima,0,82622,0,0,0,PortCost
+,Ohgishima,0,82622,0,0,0,PortCost
 ,Oita - LNG Berth,0,98180,0,0,0,PortCost
 ,Pascagoula,0,0,0,0,0,PortCost
 ,Pecem,0,99540,0,0,0,PortCost

@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -38,15 +39,15 @@ public class TravelTimeConstraintCheckerTest extends AbstractMicroTestCase {
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
 
 		@NonNull
-		final Port port1 = portFinder.findPort("Point Fortin");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
 
 		@NonNull
-		final Port port2 = portFinder.findPort("Dominion Cove Point LNG");
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT);
 
 		// Set distance and speed to exact multiple -- quickest travel time is 100 hours
 		scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(port1, port2, 1500, 2000, 2000, true);
@@ -81,15 +82,15 @@ public class TravelTimeConstraintCheckerTest extends AbstractMicroTestCase {
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
 
 		@NonNull
-		final Port port1 = portFinder.findPort("Point Fortin");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
 
 		@NonNull
-		final Port port2 = portFinder.findPort("Dominion Cove Point LNG");
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT);
 
 		// Set distance and speed to exact multiple -- quickest travel time is 100 hours
 		scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(port1, port2, 1500, 2000, 2000, true);
@@ -126,15 +127,15 @@ public class TravelTimeConstraintCheckerTest extends AbstractMicroTestCase {
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
 
 		@NonNull
-		final Port port1 = portFinder.findPort("Point Fortin");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
 
 		@NonNull
-		final Port port2 = portFinder.findPort("Dominion Cove Point LNG");
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT);
 
 		// Set distance and speed to exact multiple -- quickest travel time is 100 hours ( + 36 transit time)
 		scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(port1, port2, 3000, 1500, 3000, true);

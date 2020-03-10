@@ -40,7 +40,7 @@ import com.mmxlabs.models.lng.types.VolumeUnits;
  *
  */
 @ExtendWith(ShiroRunner.class)
-public class MaxVolumeFallthroughTest extends AbstractMicroTestCase {
+public class MaxVolumeFallthroughTest extends AbstractLegacyMicroTestCase {
 
 	@Test
 	@Tag(TestCategories.MICRO_TEST)

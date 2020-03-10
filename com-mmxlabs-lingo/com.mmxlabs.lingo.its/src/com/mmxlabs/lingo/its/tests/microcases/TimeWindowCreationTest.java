@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -54,12 +55,12 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testVesselEvent_Exact() throws Exception {
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
 
 		@NonNull
-		final Port dischargePort = portFinder.findPort("Dominion Cove Point LNG");
+		final Port dischargePort = portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT);
 		final DryDockEvent event = cargoModelBuilder.makeDryDockEvent("drydock", LocalDateTime.of(2015, 12, 11, 0, 0, 0), LocalDateTime.of(2015, 12, 11, 0, 0, 0), dischargePort) //
 				.withDurationInDays(10) //
 				.withVesselAssignment(vesselAvailability, 1) //
@@ -86,12 +87,12 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testVesselEvent_OneDay() throws Exception {
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
 
 		@NonNull
-		final Port dischargePort = portFinder.findPort("Dominion Cove Point LNG");
+		final Port dischargePort = portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT);
 		final DryDockEvent event = cargoModelBuilder.makeDryDockEvent("drydock", LocalDateTime.of(2015, 12, 11, 0, 0, 0), LocalDateTime.of(2015, 12, 11, 23, 0, 0), dischargePort) //
 				.withDurationInDays(10) //
 				.withVesselAssignment(vesselAvailability, 1) //
@@ -118,12 +119,12 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testVesselEvent_OneMonth() throws Exception {
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
 
 		@NonNull
-		final Port dischargePort = portFinder.findPort("Dominion Cove Point LNG");
+		final Port dischargePort = portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT);
 		final DryDockEvent event = cargoModelBuilder.makeDryDockEvent("drydock", LocalDateTime.of(2015, 11, 1, 0, 0, 0), LocalDateTime.of(2015, 11, 30, 23, 0, 0), dischargePort) //
 				.withDurationInDays(10) //
 				.withVesselAssignment(vesselAvailability, 1) //
@@ -157,17 +158,17 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
 
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.withWindowStartTime(0) //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				//
-				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.withWindowStartTime(0) //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
@@ -213,15 +214,15 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
 
-		final LoadSlot loadSlot = cargoModelBuilder.createFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "5", 22.8); //
+		final LoadSlot loadSlot = cargoModelBuilder.createFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8); //
 		loadSlot.setWindowStartTime(0);
 		loadSlot.setWindowSize(0);
 
-		spotMarketsModelBuilder.makeDESSaleMarket("desmarket", portFinder.findPort("Dominion Cove Point LNG"), entity, "7") //
+		spotMarketsModelBuilder.makeDESSaleMarket("desmarket", portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), entity, "7") //
 				.withAvailabilityConstant(1) //
 				.build();
 
@@ -251,17 +252,17 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
 
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.withWindowStartTime(0) //
 				.withWindowSize(23, TimePeriod.HOURS) //
 				.build() //
 				//
-				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.withWindowStartTime(0) //
 				.withWindowSize(23, TimePeriod.HOURS) //
 				.build() //
@@ -306,18 +307,18 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
 
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.withWindowStartTime(0) //
 				.withWindowSize(23, TimePeriod.HOURS) //
 				.withWindowFlex(12, TimePeriod.HOURS) //
 				.build() //
 				//
-				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.withWindowStartTime(0) //
 				.withWindowSize(23, TimePeriod.HOURS) //
 				.withWindowFlex(18, TimePeriod.HOURS) //
@@ -362,7 +363,7 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0), LocalDateTime.of(2016, 1, 1, 23, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2016, 2, 1, 0, 0, 0), LocalDateTime.of(2016, 2, 1, 23, 0, 0)) //
@@ -400,7 +401,7 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
 
-		final LoadSlot loadSlot = cargoModelBuilder.createFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "5", 22.8); //
+		final LoadSlot loadSlot = cargoModelBuilder.createFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8); //
 		loadSlot.setWindowStartTime(0);
 
 		loadSlot.setWindowSize(0);
@@ -436,13 +437,13 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
 
 		@NonNull
-		final FOBPurchasesMarket market = spotMarketsModelBuilder.makeFOBPurchaseMarket("FP-Market", portFinder.findPort("Point Fortin"), entity, "5", 22.3)//
+		final FOBPurchasesMarket market = spotMarketsModelBuilder.makeFOBPurchaseMarket("FP-Market", portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), entity, "5", 22.3)//
 				.withAvailabilityConstant(2) //
 				.build();
 
@@ -450,7 +451,7 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 				.makeMarketFOBPurchase("L1", market, YearMonth.of(2017, 7), market.getNotionalPort()) //
 				.build() //
 				//
-				.makeDESSale("D1", LocalDate.of(2017, 7, 23), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2017, 7, 23), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.withWindowStartTime(0) //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
@@ -510,13 +511,13 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
 
 		@NonNull
-		final FOBPurchasesMarket market = spotMarketsModelBuilder.makeFOBPurchaseMarket("FP-Market", portFinder.findPort("Point Fortin"), entity, "5", 22.3)//
+		final FOBPurchasesMarket market = spotMarketsModelBuilder.makeFOBPurchaseMarket("FP-Market", portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), entity, "5", 22.3)//
 				.withAvailabilityConstant(2) //
 				.build();
 
@@ -524,7 +525,7 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 				.makeMarketFOBPurchase("L1", market, YearMonth.of(2017, 7), market.getNotionalPort()) //
 				.build() //
 				//
-				.makeDESSale("D1", LocalDate.of(2017, 7, 23), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2017, 7, 23), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.withWindowStartTime(0) //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
@@ -602,13 +603,13 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
 
 		@NonNull
-		final FOBPurchasesMarket market = spotMarketsModelBuilder.makeFOBPurchaseMarket("FP-Market", portFinder.findPort("Point Fortin"), entity, "5", 22.3)//
+		final FOBPurchasesMarket market = spotMarketsModelBuilder.makeFOBPurchaseMarket("FP-Market", portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), entity, "5", 22.3)//
 				.withAvailabilityConstant(2) //
 				.build();
 
@@ -616,7 +617,7 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 				.makeMarketFOBPurchase("L1", market, YearMonth.of(2017, 7), market.getNotionalPort()) //
 				.build() //
 				//
-				.makeDESSale("D1", LocalDate.of(2017, 7, 23), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2017, 7, 23), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.withWindowStartTime(0) //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //

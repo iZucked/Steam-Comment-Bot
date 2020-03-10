@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.DateShiftExpressionPriceParameters;
@@ -43,7 +44,7 @@ public class DateShiftSpotMarketTests extends AbstractMicroTestCase {
 				.addIndexPoint(YearMonth.of(2017, 3), 3.0)//
 				.build();
 
-		final DESPurchaseMarket market = spotMarketsModelBuilder.makeDESPurchaseMarket("Market", Lists.newArrayList(portFinder.findPort("Sakai")), entity, "", 22.8) //
+		final DESPurchaseMarket market = spotMarketsModelBuilder.makeDESPurchaseMarket("Market", Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_SAKAI)), entity, "", 22.8) //
 				.with(m -> {
 					final DateShiftExpressionPriceParameters params = CommercialFactory.eINSTANCE.createDateShiftExpressionPriceParameters();
 					params.setPriceExpression("TEST_CURVE");
@@ -57,9 +58,9 @@ public class DateShiftSpotMarketTests extends AbstractMicroTestCase {
 
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeMarketDESPurchase("L1", market, YearMonth.of(2017, 2), portFinder.findPort("Sakai")) //
+				.makeMarketDESPurchase("L1", market, YearMonth.of(2017, 2), portFinder.findPortById(InternalDataConstants.PORT_SAKAI)) //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2017, 2, 1), portFinder.findPort("Sakai"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2017, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7") //
 				.withWindowStartTime(0) //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
@@ -98,7 +99,7 @@ public class DateShiftSpotMarketTests extends AbstractMicroTestCase {
 				.addIndexPoint(YearMonth.of(2017, 3), 3.0)//
 				.build();
 
-		final DESPurchaseMarket market = spotMarketsModelBuilder.makeDESPurchaseMarket("Market", Lists.newArrayList(portFinder.findPort("Sakai")), entity, "", 22.8) //
+		final DESPurchaseMarket market = spotMarketsModelBuilder.makeDESPurchaseMarket("Market", Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_SAKAI)), entity, "", 22.8) //
 				.with(m -> {
 					final DateShiftExpressionPriceParameters params = CommercialFactory.eINSTANCE.createDateShiftExpressionPriceParameters();
 					params.setPriceExpression("TEST_CURVE");
@@ -112,9 +113,9 @@ public class DateShiftSpotMarketTests extends AbstractMicroTestCase {
 
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeMarketDESPurchase("L1", market, YearMonth.of(2017, 2), portFinder.findPort("Sakai")) //
+				.makeMarketDESPurchase("L1", market, YearMonth.of(2017, 2), portFinder.findPortById(InternalDataConstants.PORT_SAKAI)) //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2017, 2, 17), portFinder.findPort("Sakai"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2017, 2, 17), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7") //
 				.withWindowStartTime(0) //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
@@ -154,7 +155,7 @@ public class DateShiftSpotMarketTests extends AbstractMicroTestCase {
 				.addIndexPoint(YearMonth.of(2017, 3), 3.0)//
 				.build();
 
-		final DESPurchaseMarket market = spotMarketsModelBuilder.makeDESPurchaseMarket("Market", Lists.newArrayList(portFinder.findPort("Sakai")), entity, "", 22.8) //
+		final DESPurchaseMarket market = spotMarketsModelBuilder.makeDESPurchaseMarket("Market", Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_SAKAI)), entity, "", 22.8) //
 				.with(m -> {
 					final DateShiftExpressionPriceParameters params = CommercialFactory.eINSTANCE.createDateShiftExpressionPriceParameters();
 					params.setPriceExpression("TEST_CURVE");
@@ -168,9 +169,9 @@ public class DateShiftSpotMarketTests extends AbstractMicroTestCase {
 
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeMarketDESPurchase("L1", market, YearMonth.of(2017, 2), portFinder.findPort("Sakai")) //
+				.makeMarketDESPurchase("L1", market, YearMonth.of(2017, 2), portFinder.findPortById(InternalDataConstants.PORT_SAKAI)) //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2017, 2, 16), portFinder.findPort("Sakai"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2017, 2, 16), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7") //
 				.withWindowStartTime(0) //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
@@ -210,7 +211,7 @@ public class DateShiftSpotMarketTests extends AbstractMicroTestCase {
 				.addIndexPoint(YearMonth.of(2017, 3), 3.0)//
 				.build();
 
-		final DESPurchaseMarket market = spotMarketsModelBuilder.makeDESPurchaseMarket("Market", Lists.newArrayList(portFinder.findPort("Sakai")), entity, "", 22.8) //
+		final DESPurchaseMarket market = spotMarketsModelBuilder.makeDESPurchaseMarket("Market", Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_SAKAI)), entity, "", 22.8) //
 				.with(m -> {
 					final DateShiftExpressionPriceParameters params = CommercialFactory.eINSTANCE.createDateShiftExpressionPriceParameters();
 					params.setPriceExpression("TEST_CURVE");
@@ -224,9 +225,9 @@ public class DateShiftSpotMarketTests extends AbstractMicroTestCase {
 
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeMarketDESPurchase("L1", market, YearMonth.of(2017, 2), portFinder.findPort("Sakai")) //
+				.makeMarketDESPurchase("L1", market, YearMonth.of(2017, 2), portFinder.findPortById(InternalDataConstants.PORT_SAKAI)) //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2017, 2, 17), portFinder.findPort("Sakai"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2017, 2, 17), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7") //
 				.withWindowStartTime(0) //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
@@ -265,7 +266,7 @@ public class DateShiftSpotMarketTests extends AbstractMicroTestCase {
 				.addIndexPoint(YearMonth.of(2017, 3), 3.0)//
 				.build();
 
-		final DESPurchaseMarket market = spotMarketsModelBuilder.makeDESPurchaseMarket("Market", Lists.newArrayList(portFinder.findPort("Sakai")), entity, "", 22.8) //
+		final DESPurchaseMarket market = spotMarketsModelBuilder.makeDESPurchaseMarket("Market", Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_SAKAI)), entity, "", 22.8) //
 				.with(m -> {
 					final DateShiftExpressionPriceParameters params = CommercialFactory.eINSTANCE.createDateShiftExpressionPriceParameters();
 					params.setPriceExpression("TEST_CURVE");
@@ -279,9 +280,9 @@ public class DateShiftSpotMarketTests extends AbstractMicroTestCase {
 
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeMarketDESPurchase("L1", market, YearMonth.of(2017, 2), portFinder.findPort("Sakai")) //
+				.makeMarketDESPurchase("L1", market, YearMonth.of(2017, 2), portFinder.findPortById(InternalDataConstants.PORT_SAKAI)) //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2017, 2, 20), portFinder.findPort("Sakai"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2017, 2, 20), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7") //
 				.withWindowStartTime(0) //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
@@ -320,7 +321,7 @@ public class DateShiftSpotMarketTests extends AbstractMicroTestCase {
 				.addIndexPoint(YearMonth.of(2017, 3), 3.0)//
 				.build();
 
-		final DESPurchaseMarket market = spotMarketsModelBuilder.makeDESPurchaseMarket("Market", Lists.newArrayList(portFinder.findPort("Sakai")), entity, "", 22.8) //
+		final DESPurchaseMarket market = spotMarketsModelBuilder.makeDESPurchaseMarket("Market", Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_SAKAI)), entity, "", 22.8) //
 				.with(m -> {
 					final DateShiftExpressionPriceParameters params = CommercialFactory.eINSTANCE.createDateShiftExpressionPriceParameters();
 					params.setPriceExpression("TEST_CURVE");
@@ -334,9 +335,9 @@ public class DateShiftSpotMarketTests extends AbstractMicroTestCase {
 
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeMarketDESPurchase("L1", market, YearMonth.of(2017, 2), portFinder.findPort("Sakai")) //
+				.makeMarketDESPurchase("L1", market, YearMonth.of(2017, 2), portFinder.findPortById(InternalDataConstants.PORT_SAKAI)) //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2017, 2, 19), portFinder.findPort("Sakai"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2017, 2, 19), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7") //
 				.withWindowStartTime(0) //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
@@ -375,7 +376,7 @@ public class DateShiftSpotMarketTests extends AbstractMicroTestCase {
 				.addIndexPoint(YearMonth.of(2017, 3), 3.0)//
 				.build();
 
-		final DESPurchaseMarket market = spotMarketsModelBuilder.makeDESPurchaseMarket("Market", Lists.newArrayList(portFinder.findPort("Sakai")), entity, "", 22.8) //
+		final DESPurchaseMarket market = spotMarketsModelBuilder.makeDESPurchaseMarket("Market", Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_SAKAI)), entity, "", 22.8) //
 				.with(m -> {
 					final DateShiftExpressionPriceParameters params = CommercialFactory.eINSTANCE.createDateShiftExpressionPriceParameters();
 					params.setPriceExpression("TEST_CURVE");
@@ -389,9 +390,9 @@ public class DateShiftSpotMarketTests extends AbstractMicroTestCase {
 
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeMarketDESPurchase("L1", market, YearMonth.of(2017, 2), portFinder.findPort("Sakai")) //
+				.makeMarketDESPurchase("L1", market, YearMonth.of(2017, 2), portFinder.findPortById(InternalDataConstants.PORT_SAKAI)) //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2017, 2, 9), portFinder.findPort("Sakai"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2017, 2, 9), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7") //
 				.withWindowStartTime(0) //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
@@ -430,7 +431,7 @@ public class DateShiftSpotMarketTests extends AbstractMicroTestCase {
 				.addIndexPoint(YearMonth.of(2017, 3), 3.0)//
 				.build();
 
-		final DESPurchaseMarket market = spotMarketsModelBuilder.makeDESPurchaseMarket("Market", Lists.newArrayList(portFinder.findPort("Sakai")), entity, "", 22.8) //
+		final DESPurchaseMarket market = spotMarketsModelBuilder.makeDESPurchaseMarket("Market", Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_SAKAI)), entity, "", 22.8) //
 				.with(m -> {
 					final DateShiftExpressionPriceParameters params = CommercialFactory.eINSTANCE.createDateShiftExpressionPriceParameters();
 					params.setPriceExpression("TEST_CURVE");
@@ -444,9 +445,9 @@ public class DateShiftSpotMarketTests extends AbstractMicroTestCase {
 
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeMarketDESPurchase("L1", market, YearMonth.of(2017, 2), portFinder.findPort("Sakai")) //
+				.makeMarketDESPurchase("L1", market, YearMonth.of(2017, 2), portFinder.findPortById(InternalDataConstants.PORT_SAKAI)) //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2017, 2, 11), portFinder.findPort("Sakai"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2017, 2, 11), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7") //
 				.withWindowStartTime(0) //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
@@ -485,7 +486,7 @@ public class DateShiftSpotMarketTests extends AbstractMicroTestCase {
 				.addIndexPoint(YearMonth.of(2017, 3), 3.0)//
 				.build();
 
-		final DESPurchaseMarket market = spotMarketsModelBuilder.makeDESPurchaseMarket("Market", Lists.newArrayList(portFinder.findPort("Sakai")), entity, "", 22.8) //
+		final DESPurchaseMarket market = spotMarketsModelBuilder.makeDESPurchaseMarket("Market", Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_SAKAI)), entity, "", 22.8) //
 				.with(m -> {
 					final DateShiftExpressionPriceParameters params = CommercialFactory.eINSTANCE.createDateShiftExpressionPriceParameters();
 					params.setPriceExpression("TEST_CURVE");
@@ -499,9 +500,9 @@ public class DateShiftSpotMarketTests extends AbstractMicroTestCase {
 
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeMarketDESPurchase("L1", market, YearMonth.of(2017, 2), portFinder.findPort("Sakai")) //
+				.makeMarketDESPurchase("L1", market, YearMonth.of(2017, 2), portFinder.findPortById(InternalDataConstants.PORT_SAKAI)) //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2017, 2, 10), portFinder.findPort("Sakai"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2017, 2, 10), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7") //
 				.withWindowStartTime(23) //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //

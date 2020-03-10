@@ -53,29 +53,27 @@ public class CargoMaker {
 			CargoMaker.this.slots.add(slot);
 			return CargoMaker.this;
 		}
-		
+
 		public CargoMakerSlotMaker withWindowCounterParty(boolean counterPartyWindow) {
 			this.slot.setWindowCounterParty(counterPartyWindow);
 			return this;
 		}
-		
+
 		public CargoMakerSlotMaker withSalesDeliveryType(CargoDeliveryType sdt) {
 			if (this.slot instanceof LoadSlot) {
-				LoadSlot ls = (LoadSlot)slot;
+				LoadSlot ls = (LoadSlot) slot;
 				ls.setSalesDeliveryType(sdt);
-			}
-			else {
+			} else {
 				throw new IllegalArgumentException("Slot is not a load slot, so cannot set salesDeliveryType");
 			}
 			return this;
 		}
-		
+
 		public CargoMakerSlotMaker withPurchaseDeliveryType(CargoDeliveryType sdt) {
 			if (this.slot instanceof DischargeSlot) {
-				DischargeSlot ds = (DischargeSlot)slot;
+				DischargeSlot ds = (DischargeSlot) slot;
 				ds.setPurchaseDeliveryType(sdt);
-			}
-			else {
+			} else {
 				throw new IllegalArgumentException("Slot is not a discharge slot, so cannot set purchaseDeliveryType");
 			}
 			return this;
@@ -98,12 +96,6 @@ public class CargoMaker {
 			@Nullable final BaseLegalEntity entity, @Nullable final String priceExpression, final @Nullable Double cv) {
 		final CargoMakerSlotMaker slotMaker = new CargoMakerSlotMaker(cargoModelBuilder);
 		return slotMaker.withFOBPurchase(name, windowStart, port, purchaseContract, entity, priceExpression, cv);
-	}
-
-	public CargoMakerSlotMaker makeDESPurchase(@NonNull final String name, final DESPurchaseDealType dealType, @NonNull final LocalDate windowStart, @NonNull final Port port,
-			@Nullable final PurchaseContract purchaseContract, @Nullable final BaseLegalEntity entity, @Nullable final String priceExpression, @Nullable final Vessel nominatedVessel) {
-		final CargoMakerSlotMaker slotMaker = new CargoMakerSlotMaker(cargoModelBuilder);
-		return slotMaker.withDESPurchase(name, dealType, windowStart, port, purchaseContract, entity, priceExpression, null, nominatedVessel);
 	}
 
 	public CargoMakerSlotMaker makeDESPurchase(@NonNull final String name, final DESPurchaseDealType dealType, @NonNull final LocalDate windowStart, @NonNull final Port port,

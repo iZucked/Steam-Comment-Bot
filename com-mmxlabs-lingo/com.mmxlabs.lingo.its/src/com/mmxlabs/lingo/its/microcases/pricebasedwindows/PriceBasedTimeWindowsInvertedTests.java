@@ -17,7 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
-import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
+import com.mmxlabs.lingo.its.tests.microcases.AbstractLegacyMicroTestCase;
 import com.mmxlabs.lingo.its.tests.microcases.MicroCaseUtils;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -25,7 +25,6 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.its.RequireFeature;
@@ -39,18 +38,16 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 
 @ExtendWith(ShiroRunner.class)
-@RequireFeature(value = { KnownFeatures.FEATURE_OPTIMISATION_NO_NOMINALS_IN_PROMPT, KnownFeatures.FEATURE_OPTIMISATION_ACTIONSET })
+@RequireFeature({ KnownFeatures.FEATURE_OPTIMISATION_NO_NOMINALS_IN_PROMPT })
+public class PriceBasedTimeWindowsInvertedTests extends AbstractLegacyMicroTestCase {
 
-public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
-
-	private static String vesselName = "vessel";
 	private static String loadName = "load";
 	private static String dischargeName = "discharge";
 
 	@Override
 	protected void setPromptDates() {
 		// Set a default prompt in the past
-		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2014, 1, 1), LocalDate.of(2014, 3, 1));
+		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
 	}
 
 	/**
@@ -77,22 +74,19 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 				.withWindowStartTime(0) //
 				.withWindowSize(48, TimePeriod.HOURS).withPricingEvent(PricingEvent.START_LOAD, null).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
-		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
-		final List<CommodityCurve> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityCurves();
-		final CommodityCurve hh = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("Henry_Hub");
-		assert hh != null;
-		@NonNull
-		final CommodityCurve jcc = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("JCC");
-		assert jcc != null;
-		pricingModelBuilder.clearPointsOnCommodityIndex(hh);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 6), salesPrice);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 7), 7.5);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 8), 8.5);
 
-		pricingModelBuilder.clearPointsOnCommodityIndex(jcc);
-		pricingModelBuilder.addDataToCommodityIndex(jcc, YearMonth.of(2016, 6), 6.0);
-		pricingModelBuilder.addDataToCommodityIndex(jcc, YearMonth.of(2016, 7), 5.0);
-		pricingModelBuilder.addDataToCommodityIndex(jcc, YearMonth.of(2016, 8), 7);
+		pricingModelBuilder.makeCommodityDataCurve("Henry_Hub", "$", "mmBtu") //
+				.addIndexPoint(YearMonth.of(2016, 6), salesPrice) //
+				.addIndexPoint(YearMonth.of(2016, 7), 7.5) //
+				.addIndexPoint(YearMonth.of(2016, 8), 8.5) //
+				.build();
+
+		pricingModelBuilder.makeCommodityDataCurve("JCC", "$", "mmBtu") //
+				.addIndexPoint(YearMonth.of(2016, 6), 6.0) //
+				.addIndexPoint(YearMonth.of(2016, 7), 5.0) //
+				.addIndexPoint(YearMonth.of(2016, 8), 7) //
+				.build();
+
 		checkDischargePrice(6.0, salesPrice);
 	}
 
@@ -120,22 +114,19 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 				.withWindowStartTime(0) //
 				.withWindowSize(48, TimePeriod.HOURS).withPricingEvent(PricingEvent.START_LOAD, null).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
-		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
-		final List<CommodityCurve> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityCurves();
-		final CommodityCurve hh = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("Henry_Hub");
-		assert hh != null;
-		@NonNull
-		final CommodityCurve jcc = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("JCC");
-		assert jcc != null;
-		pricingModelBuilder.clearPointsOnCommodityIndex(hh);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 6), salesPrice);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 7), 7.5);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 8), 8.5);
 
-		pricingModelBuilder.clearPointsOnCommodityIndex(jcc);
-		pricingModelBuilder.addDataToCommodityIndex(jcc, YearMonth.of(2016, 6), 6.0);
-		pricingModelBuilder.addDataToCommodityIndex(jcc, YearMonth.of(2016, 7), 5.0);
-		pricingModelBuilder.addDataToCommodityIndex(jcc, YearMonth.of(2016, 8), 7);
+		pricingModelBuilder.makeCommodityDataCurve("Henry_Hub", "$", "mmBtu") //
+				.addIndexPoint(YearMonth.of(2016, 6), salesPrice) //
+				.addIndexPoint(YearMonth.of(2016, 7), 7.5) //
+				.addIndexPoint(YearMonth.of(2016, 8), 8.5) //
+				.build();
+
+		pricingModelBuilder.makeCommodityDataCurve("JCC", "$", "mmBtu") //
+				.addIndexPoint(YearMonth.of(2016, 6), 6.0) //
+				.addIndexPoint(YearMonth.of(2016, 7), 5.0) //
+				.addIndexPoint(YearMonth.of(2016, 8), 7) //
+				.build();
+
 		checkDischargePrice(5.0, 7.5);
 	}
 
@@ -163,22 +154,19 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 				.withWindowStartTime(0) //
 				.withWindowSize(48, TimePeriod.HOURS).withPricingEvent(PricingEvent.START_LOAD, null).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
-		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
-		final List<CommodityCurve> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityCurves();
-		final CommodityCurve hh = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("Henry_Hub");
-		assert hh != null;
-		@NonNull
-		final CommodityCurve jcc = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("JCC");
-		assert jcc != null;
-		pricingModelBuilder.clearPointsOnCommodityIndex(hh);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 6), salesPrice);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 7), 7.5);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 8), 8.5);
 
-		pricingModelBuilder.clearPointsOnCommodityIndex(jcc);
-		pricingModelBuilder.addDataToCommodityIndex(jcc, YearMonth.of(2016, 6), 6.0);
-		pricingModelBuilder.addDataToCommodityIndex(jcc, YearMonth.of(2016, 7), 5.0);
-		pricingModelBuilder.addDataToCommodityIndex(jcc, YearMonth.of(2016, 8), 7);
+		pricingModelBuilder.makeCommodityDataCurve("Henry_Hub", "$", "mmBtu") //
+				.addIndexPoint(YearMonth.of(2016, 6), salesPrice) //
+				.addIndexPoint(YearMonth.of(2016, 7), 7.5) //
+				.addIndexPoint(YearMonth.of(2016, 8), 8.5) //
+				.build();
+
+		pricingModelBuilder.makeCommodityDataCurve("JCC", "$", "mmBtu") //
+				.addIndexPoint(YearMonth.of(2016, 6), 6.0) //
+				.addIndexPoint(YearMonth.of(2016, 7), 5.0) //
+				.addIndexPoint(YearMonth.of(2016, 8), 7) //
+				.build();
+
 		checkDischargePrice(5.0, 7.5);
 	}
 
@@ -206,22 +194,19 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 				.withWindowStartTime(0) //
 				.withWindowSize(48, TimePeriod.HOURS).withPricingEvent(PricingEvent.START_LOAD, null).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
-		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
-		final List<CommodityCurve> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityCurves();
-		final CommodityCurve hh = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("Henry_Hub");
-		assert hh != null;
-		@NonNull
-		final CommodityCurve jcc = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("JCC");
-		assert jcc != null;
-		pricingModelBuilder.clearPointsOnCommodityIndex(hh);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 6), salesPrice);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 7), 7.5);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 8), 8.5);
 
-		pricingModelBuilder.clearPointsOnCommodityIndex(jcc);
-		pricingModelBuilder.addDataToCommodityIndex(jcc, YearMonth.of(2016, 6), 6.0);
-		pricingModelBuilder.addDataToCommodityIndex(jcc, YearMonth.of(2016, 7), 5.0);
-		pricingModelBuilder.addDataToCommodityIndex(jcc, YearMonth.of(2016, 8), 7);
+		pricingModelBuilder.makeCommodityDataCurve("Henry_Hub", "$", "mmBtu") //
+				.addIndexPoint(YearMonth.of(2016, 6), salesPrice) //
+				.addIndexPoint(YearMonth.of(2016, 7), 7.5) //
+				.addIndexPoint(YearMonth.of(2016, 8), 8.5) //
+				.build();
+
+		pricingModelBuilder.makeCommodityDataCurve("JCC", "$", "mmBtu") //
+				.addIndexPoint(YearMonth.of(2016, 6), 6.0) //
+				.addIndexPoint(YearMonth.of(2016, 7), 5.0) //
+				.addIndexPoint(YearMonth.of(2016, 8), 7) //
+				.build();
+
 		checkDischargePrice(6.0, salesPrice);
 	}
 
@@ -249,23 +234,19 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 				.withWindowStartTime(0) //
 				.withWindowSize(48, TimePeriod.HOURS).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
-		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
-		final List<CommodityCurve> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityCurves();
-		final CommodityCurve hh = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("Henry_Hub");
-		assert hh != null;
-		@NonNull
-		final CommodityCurve jcc = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("JCC");
-		assert jcc != null;
 
-		pricingModelBuilder.clearPointsOnCommodityIndex(jcc);
-		pricingModelBuilder.addDataToCommodityIndex(jcc, YearMonth.of(2016, 6), 6.0);
-		pricingModelBuilder.addDataToCommodityIndex(jcc, YearMonth.of(2016, 7), 7.0);
-		pricingModelBuilder.addDataToCommodityIndex(jcc, YearMonth.of(2016, 8), loadPrice);
+		pricingModelBuilder.makeCommodityDataCurve("Henry_Hub", "$", "mmBtu") //
+				.addIndexPoint(YearMonth.of(2016, 6), 6.5) //
+				.addIndexPoint(YearMonth.of(2016, 7), salesPrice) //
+				.addIndexPoint(YearMonth.of(2016, 8), salesPrice) //
+				.build();
 
-		pricingModelBuilder.clearPointsOnCommodityIndex(hh);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 6), 6.5);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 7), salesPrice);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 8), salesPrice);
+		pricingModelBuilder.makeCommodityDataCurve("JCC", "$", "mmBtu") //
+				.addIndexPoint(YearMonth.of(2016, 6), 6.0) //
+				.addIndexPoint(YearMonth.of(2016, 7), 7.0) //
+				.addIndexPoint(YearMonth.of(2016, 8), loadPrice) //
+				.build();
+
 		checkDischargePrice(loadPrice, salesPrice);
 	}
 
@@ -294,23 +275,19 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 				.withWindowStartTime(0) //
 				.withWindowSize(48, TimePeriod.HOURS).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
-		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
-		final List<CommodityCurve> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityCurves();
-		final CommodityCurve hh = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("Henry_Hub");
-		assert hh != null;
-		@NonNull
-		final CommodityCurve jcc = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("JCC");
-		assert jcc != null;
 
-		pricingModelBuilder.clearPointsOnCommodityIndex(jcc);
-		pricingModelBuilder.addDataToCommodityIndex(jcc, YearMonth.of(2016, 6), 6.0);
-		pricingModelBuilder.addDataToCommodityIndex(jcc, YearMonth.of(2016, 7), 7.0);
-		pricingModelBuilder.addDataToCommodityIndex(jcc, YearMonth.of(2016, 8), loadPrice);
+		pricingModelBuilder.makeCommodityDataCurve("Henry_Hub", "$", "mmBtu") //
+				.addIndexPoint(YearMonth.of(2016, 6), 6.5) //
+				.addIndexPoint(YearMonth.of(2016, 7), salesPrice) //
+				.addIndexPoint(YearMonth.of(2016, 8), salesPrice) //
+				.build();
 
-		pricingModelBuilder.clearPointsOnCommodityIndex(hh);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 6), 6.5);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 7), salesPrice);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 8), salesPrice);
+		pricingModelBuilder.makeCommodityDataCurve("JCC", "$", "mmBtu") //
+				.addIndexPoint(YearMonth.of(2016, 6), 6.0) //
+				.addIndexPoint(YearMonth.of(2016, 7), 7.0) //
+				.addIndexPoint(YearMonth.of(2016, 8), loadPrice) //
+				.build();
+
 		checkDischargePrice(7.0, salesPrice);
 	}
 

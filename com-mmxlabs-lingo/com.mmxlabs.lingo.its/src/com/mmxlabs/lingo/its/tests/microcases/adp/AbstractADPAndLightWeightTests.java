@@ -60,19 +60,7 @@ public abstract class AbstractADPAndLightWeightTests extends AbstractMicroTestCa
 		registerService.unregister();
 	}
 
-	// Which scenario data to import
-	@Override
-	public @NonNull IScenarioDataProvider importReferenceData() throws Exception {
-		final IScenarioDataProvider scenarioDataProvider = importReferenceData("/trainingcases/Shipping_I/");
-
-		return scenarioDataProvider;
-	}
-
-	@Override
-	protected BaseLegalEntity importDefaultEntity() {
-		return commercialModelFinder.findEntity("Entity");
-	}
-
+	 
 	protected @NonNull UserSettings createUserSettings() {
 		return createUserSettings(false);
 	}

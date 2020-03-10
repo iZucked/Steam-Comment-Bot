@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -45,9 +46,9 @@ public class FOBDESTimeWindowsTest extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testExactDates() throws Exception {
 		@NonNull
-		final Port dischargePort = portFinder.findPort("Dominion Cove Point LNG");
+		final Port dischargePort = portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT);
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 11), dischargePort, null, entity, "5", null) //
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 11), dischargePort, null, entity, "5", 22.8, null) //
 				.withWindowStartTime(0) //
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), dischargePort, null, entity, "7") //
@@ -84,9 +85,9 @@ public class FOBDESTimeWindowsTest extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testOverlappingDates1() throws Exception {
 		@NonNull
-		final Port dischargePort = portFinder.findPort("Dominion Cove Point LNG");
+		final Port dischargePort = portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT);
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 10), dischargePort, null, entity, "5", null) //
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 10), dischargePort, null, entity, "5", 22.8, null) //
 				.withWindowStartTime(0) //
 				.withWindowSize(2, TimePeriod.DAYS) //
 				.build() //
@@ -126,9 +127,9 @@ public class FOBDESTimeWindowsTest extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testOverlappingDates2() throws Exception {
 		@NonNull
-		final Port dischargePort = portFinder.findPort("Dominion Cove Point LNG");
+		final Port dischargePort = portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT);
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 11), dischargePort, null, entity, "5", null) //
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 11), dischargePort, null, entity, "5", 22.8, null) //
 				.withWindowStartTime(0) //
 				.withWindowSize(48, TimePeriod.HOURS) //
 				.build() //
@@ -170,7 +171,7 @@ public class FOBDESTimeWindowsTest extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testDateOutByOneError() throws Exception {
 		@NonNull
-		final Port dischargePort = portFinder.findPort("Dominion Cove Point LNG");
+		final Port dischargePort = portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT);
 		// final Cargo cargo1 =
 		LoadSlot loadSlot = cargoModelBuilder // .makeCargo() //
 				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 11), dischargePort, null, entity, "5", 22.8, null) //
@@ -206,7 +207,7 @@ public class FOBDESTimeWindowsTest extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testDateOutByTwoError() throws Exception {
 		@NonNull
-		final Port dischargePort = portFinder.findPort("Dominion Cove Point LNG");
+		final Port dischargePort = portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT);
 		// final Cargo cargo1 =
 		LoadSlot loadSlot = cargoModelBuilder // .makeCargo() //
 				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 11), dischargePort, null, entity, "5", 22.8, null) //

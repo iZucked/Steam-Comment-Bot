@@ -77,8 +77,8 @@ import com.mmxlabs.scheduler.optimiser.scheduling.TimeWindowScheduler;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
 @ExtendWith(ShiroRunner.class)
-@RequireFeature(value = { KnownFeatures.FEATURE_PANAMA_CANAL })
-public class DurationConstraintTests extends AbstractMicroTestCase {
+@RequireFeature({ KnownFeatures.FEATURE_PANAMA_CANAL })
+public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 
 	@Override
 	public IScenarioDataProvider importReferenceData() throws Exception {
@@ -199,7 +199,6 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 				// Set time scheduler settings
 				final TimeWindowScheduler scheduler = getScheduler(injector);
 
-
 				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(initialSequences);
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
 
@@ -306,7 +305,6 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 				// Set Time Scheduler Settings
 				final TimeWindowScheduler scheduler = getScheduler(injector);
 
-
 				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(initialSequences);
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
 
@@ -362,7 +360,6 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 				// Set time scheduler settings
 				final TimeWindowScheduler scheduler = getScheduler(injector);
 
-
 				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(initialSequences);
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
 
@@ -405,7 +402,6 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 				// Set time scheduler settings
 				final TimeWindowScheduler scheduler = getScheduler(injector);
 
-
 				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(initialSequences);
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
 
@@ -428,7 +424,7 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 	public void minMaxDurationPriceBasedTrimmingCargoTest() {
 
 		portModelBuilder.setAllExistingPortsToUTC();
-		
+
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailabilityWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
 
 		// Set the end requirement's time window and max duration
@@ -472,7 +468,7 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 
 				final IResource r0 = initialSequences.getResources().get(0);
 				Assertions.assertEquals(3, records.get(r0).size());
-				
+
 				final IPortTimeWindowsRecord ptr_r0_cargo = records.get(r0).get(0);
 				final IPortTimeWindowsRecord ptr_r1_cargo = records.get(r0).get(1);
 				final IPortTimeWindowsRecord ptr_r2_cargo = records.get(r0).get(2);
@@ -489,10 +485,10 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 				Assertions.assertEquals(cargoReturnWindow.getInclusiveStart(), endFirstWindow.getInclusiveStart());
 				Assertions.assertEquals(cargoReturnWindow.getExclusiveEnd(), endFirstWindow.getExclusiveEnd());
 
-				// Expect end window to be clamped to max duration				
+				// Expect end window to be clamped to max duration
 				int maxDurationInHours = 24 * (vesselAvailability.getMaxDuration());
 				Assertions.assertEquals(maxDurationInHours + 1, endFirstWindow.getExclusiveEnd());
-//				Assertions.assertEquals(maxDurationInHours, slotFeasibleTimeWindow.getInclusiveStart());
+				// Assertions.assertEquals(maxDurationInHours, slotFeasibleTimeWindow.getInclusiveStart());
 
 			}
 		});
@@ -706,7 +702,6 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 
 				// Set time scheduler settings
 				final TimeWindowScheduler scheduler = getScheduler(injector);
-
 
 				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(initialSequences);
 			}
@@ -1029,8 +1024,7 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 	}
 
 	/***
-	 * We did see a case where the hire cost only end rule kicked in and ignored the
-	 * max duration and canal booking requirements.
+	 * We did see a case where the hire cost only end rule kicked in and ignored the max duration and canal booking requirements.
 	 * 
 	 * @throws Exception
 	 */
@@ -1125,8 +1119,7 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 	}
 
 	/**
-	 * This test ensures we do not add a cargo to a charter in which would exceed
-	 * max duration even though it is profitable.
+	 * This test ensures we do not add a cargo to a charter in which would exceed max duration even though it is profitable.
 	 * 
 	 * @throws Exception
 	 */

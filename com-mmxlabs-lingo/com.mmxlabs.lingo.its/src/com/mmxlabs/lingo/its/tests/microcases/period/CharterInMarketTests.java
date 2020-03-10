@@ -5,12 +5,8 @@
 package com.mmxlabs.lingo.its.tests.microcases.period;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.YearMonth;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-import org.eclipse.emf.common.util.EList;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -21,35 +17,23 @@ import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.lingo.its.tests.microcases.MicroTestUtils;
 import com.mmxlabs.lngdataserver.data.distances.DataConstants;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
-import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
-import com.mmxlabs.models.lng.commercial.util.CommercialModelFinder;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.util.FleetModelBuilder;
-import com.mmxlabs.models.lng.fleet.util.FleetModelFinder;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
-import com.mmxlabs.models.lng.port.util.PortModelFinder;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelBuilder;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelFinder;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
-import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelBuilder;
-import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
+import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
-import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
-import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 @ExtendWith(ShiroRunner.class)
 public class CharterInMarketTests extends AbstractMicroTestCase {
@@ -69,7 +53,7 @@ public class CharterInMarketTests extends AbstractMicroTestCase {
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
 		// Create the required basic elements
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 2);
 		final CharterInMarket charterInMarket_2 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 2", vessel, entity, "100000", 2);
@@ -78,10 +62,10 @@ public class CharterInMarketTests extends AbstractMicroTestCase {
 
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.withRestrictedVessels(vessel, true) //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.withRestrictedVessels(vessel, true) //
 				.build() //
 				.withVesselAssignment(charterInMarket_1, 1, 0) //
@@ -89,21 +73,21 @@ public class CharterInMarketTests extends AbstractMicroTestCase {
 				.build();
 
 		final Cargo cargo2 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L2", LocalDate.of(2015, 12, 24), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L2", LocalDate.of(2015, 12, 24), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.withRestrictedVessels(vessel, true) //
 				// .withLocked(true) //
 				.build() //
-				.makeDESSale("D2", LocalDate.of(2016, 1, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7").build() //
+				.makeDESSale("D2", LocalDate.of(2016, 1, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7").build() //
 				.withVesselAssignment(charterInMarket_1, 1, 1) //
 				.withAssignmentFlags(true, false) //
 				.build();
 
 		// Create cargo 3, cargo 4
 		final Cargo cargo3 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L3", LocalDate.of(2016, 4, 1), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L3", LocalDate.of(2016, 4, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.withRestrictedVessels(vessel, true) //
 				.build() //
-				.makeDESSale("D3", LocalDate.of(2016, 6, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D3", LocalDate.of(2016, 6, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.withRestrictedVessels(vessel, true) //
 				.build() //
 				.withVesselAssignment(charterInMarket_1, 0, 0) //
@@ -176,7 +160,7 @@ public class CharterInMarketTests extends AbstractMicroTestCase {
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
 		// Create the required basic elements
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 2);
 		final CharterInMarket charterInMarket_2 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 2", vessel, entity, "100000", 2);
@@ -185,10 +169,10 @@ public class CharterInMarketTests extends AbstractMicroTestCase {
 
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.withRestrictedVessels(vessel, true) //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.withRestrictedVessels(vessel, true) //
 				.build() //
 				.withVesselAssignment(charterInMarket_1, 1, 0) //
@@ -196,21 +180,21 @@ public class CharterInMarketTests extends AbstractMicroTestCase {
 				.build();
 
 		final Cargo cargo2 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L2", LocalDate.of(2015, 12, 24), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L2", LocalDate.of(2015, 12, 24), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.withRestrictedVessels(vessel, true) //
 				// .withLocked(true) //
 				.build() //
-				.makeDESSale("D2", LocalDate.of(2016, 1, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7").build() //
+				.makeDESSale("D2", LocalDate.of(2016, 1, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7").build() //
 				.withVesselAssignment(charterInMarket_1, 1, 1) //
 				.withAssignmentFlags(true, false) //
 				.build();
 
 		// Create cargo 3, cargo 4
 		final Cargo cargo3 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L3", LocalDate.of(2015, 4, 1), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L3", LocalDate.of(2015, 4, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.withRestrictedVessels(vessel, true) //
 				.build() //
-				.makeDESSale("D3", LocalDate.of(2015, 6, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D3", LocalDate.of(2015, 6, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.withRestrictedVessels(vessel, true) //
 				.build() //
 				.withVesselAssignment(charterInMarket_1, 0, 0) //
@@ -281,28 +265,24 @@ public class CharterInMarketTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testLongIdleOverPeriodStartWithinCharter() throws Exception {
 
-		//
-		updateDistanceData(scenarioDataProvider, DataConstants.DISTANCES_LATEST_JSON);
-		updatePortsData(scenarioDataProvider, DataConstants.PORTS_LATEST_JSON);
-
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setSafetyHeel(500);
 
 		CharterInMarket charterInMarket = spotMarketsModelBuilder.createCharterInMarket("MKT", vessel, entity, "80000", 1);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2019, 01, 16), portFinder.findPort("Zeebrugge"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2019, 01, 16), portFinder.findPortById(InternalDataConstants.PORT_ZEEBRUGGE), null, entity, "5") //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2019, 1, 20), portFinder.findPort("Isle of Grain"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2019, 1, 20), portFinder.findPortById(InternalDataConstants.PORT_ISLE_OF_GRAIN), null, entity, "7") //
 				.build() //
 				.withVesselAssignment(charterInMarket, 0, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
 
 		final Cargo cargo2 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L2", LocalDate.of(2019, 11, 1), portFinder.findPort("Zeebrugge"), null, entity, "5") //
+				.makeFOBPurchase("L2", LocalDate.of(2019, 11, 1), portFinder.findPortById(InternalDataConstants.PORT_ZEEBRUGGE), null, entity, "5") //
 				.build() //
-				.makeDESSale("D2", LocalDate.of(2019, 11, 7), portFinder.findPort("Isle of Grain"), null, entity, "7") //
+				.makeDESSale("D2", LocalDate.of(2019, 11, 7), portFinder.findPortById(InternalDataConstants.PORT_ISLE_OF_GRAIN), null, entity, "7") //
 				.build() //
 				.withVesselAssignment(charterInMarket, 0, 2) //
 				.withAssignmentFlags(false, false) //

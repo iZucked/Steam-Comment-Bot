@@ -12,37 +12,22 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.google.common.collect.Lists;
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.its.tests.AbstractOptimisationResultTester;
 import com.mmxlabs.lingo.its.tests.ReportTester;
 import com.mmxlabs.lingo.its.tests.ReportTesterHelper;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.models.lng.transformer.its.RequireFeature;
+import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 
+@ExtendWith(ShiroRunner.class)
+// NOTE: This does not work - it is applied too late in the application life-cycle. Instead we need to enable it in the ITS feature.
+@RequireFeature(KnownFeatures.FEATURE_MODULE_DIFF_TOOLS)
 public class ChangeSetsReportTests extends AbstractOptimisationResultTester {
-
-	// NOTE: This does not work - it is applied too late in the application life-cycle. Instead we need to enable it in the ITS feature.
-	private static List<String> requiredFeatures = Lists.newArrayList("difftools");
-	private static List<String> addedFeatures = new LinkedList<>();
-
-	@BeforeAll
-	public static void hookIn() {
-		for (final String feature : requiredFeatures) {
-			if (!LicenseFeatures.isPermitted("features:" + feature)) {
-				LicenseFeatures.addFeatureEnablements(feature);
-				addedFeatures.add(feature);
-			}
-		}
-	}
-
-	@AfterAll
-	public static void hookOut() {
-		for (final String feature : addedFeatures) {
-			LicenseFeatures.removeFeatureEnablements(feature);
-		}
-		addedFeatures.clear();
-	}
 
 	@Test
 	@Tag(TestCategories.REPORT_TEST)

@@ -29,7 +29,7 @@ public class DistanceModelBuilder {
 	// return distanceModel;
 	// }
 
-	public void createDistanceMatrix(RouteOption routeOption) {
+	public void createDistanceMatrix(final RouteOption routeOption) {
 		// DO nothing for now
 
 	}
@@ -93,7 +93,7 @@ public class DistanceModelBuilder {
 		}
 	}
 
-	public boolean setPortToPortDistance(@NonNull Port from, @NonNull Port to, RouteOption routeOption, int distance, boolean biDirectional) {
+	public boolean setPortToPortDistance(@NonNull final Port from, @NonNull final Port to, final RouteOption routeOption, final int distance, final boolean biDirectional) {
 		int setDistance = 0;
 		for (final Route route : portModel.getRoutes()) {
 			if (route.getRouteOption() != routeOption) {
@@ -101,16 +101,17 @@ public class DistanceModelBuilder {
 			}
 			boolean foundForwardDistance = false;
 			boolean foundReverseDistance = false;
-			for (final RouteLine RouteLine : route.getLines()) {
-				if (Objects.equals(RouteLine.getFrom(), from) && Objects.equals(RouteLine.getTo(), to)) {
+			for (final RouteLine routeLine : route.getLines()) {
+				if (Objects.equals(routeLine.getFrom(), from) && Objects.equals(routeLine.getTo(), to)) {
 					foundForwardDistance = true;
-					RouteLine.setDistance(distance);
+					double distance2 = routeLine.getDistance();
+					routeLine.setDistance(distance);
 					++setDistance;
 				}
 				if (biDirectional) {
-					if (Objects.equals(RouteLine.getFrom(), to) && Objects.equals(RouteLine.getTo(), from)) {
+					if (Objects.equals(routeLine.getFrom(), to) && Objects.equals(routeLine.getTo(), from)) {
 						foundReverseDistance = true;
-						RouteLine.setDistance(distance);
+						routeLine.setDistance(distance);
 						++setDistance;
 					}
 				}
@@ -135,5 +136,27 @@ public class DistanceModelBuilder {
 		}
 
 		return biDirectional ? (setDistance == 2) : (setDistance == 1);
+	}
+
+	public void setAllDistances(final RouteOption option, final double distance) {
+		for (final Route route : portModel.getRoutes()) {
+			if (route.getRouteOption() == option) {
+				// Clear all existing.
+				route.getLines().clear();
+
+				for (final Port from : portModel.getPorts()) {
+					for (final Port to : portModel.getPorts()) {
+						if (from == to) {
+							continue;
+						}
+						final RouteLine rl = PortFactory.eINSTANCE.createRouteLine();
+						rl.setFrom(from);
+						rl.setTo(to);
+						rl.setDistance(distance);
+						route.getLines().add(rl);
+					}
+				}
+			}
+		}
 	}
 }

@@ -36,7 +36,7 @@ import com.mmxlabs.models.lng.types.VolumeUnits;
  *
  */
 @ExtendWith(ShiroRunner.class)
-public class MiscCostsTests extends AbstractMicroTestCase {
+public class MiscCostsTests extends AbstractLegacyMicroTestCase {
 
 	@Test
 	@Tag(TestCategories.MICRO_TEST)

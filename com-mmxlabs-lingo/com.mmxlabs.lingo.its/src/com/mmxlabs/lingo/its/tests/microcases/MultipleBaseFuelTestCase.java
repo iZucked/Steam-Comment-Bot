@@ -39,9 +39,9 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 @SuppressWarnings({ "unused", "null" })
-public class MultipleBaseFuelTestCase extends AbstractMicroTestCase {
+public class MultipleBaseFuelTestCase extends AbstractLegacyMicroTestCase {
 
-	private static List<String> requiredFeatures = Lists.newArrayList("no-nominal-in-prompt", "optimisation-actionset");
+	private static List<String> requiredFeatures = Lists.newArrayList("no-nominal-in-prompt");
 	private static List<String> addedFeatures = new LinkedList<>();
 
 	final int ROUNDING_EPSILON = 100;

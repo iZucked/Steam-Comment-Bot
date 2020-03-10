@@ -41,7 +41,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllo
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.MinMaxUnconstrainedVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
-public class InPortBoilOffTests extends AbstractMicroTestCase {
+public class InPortBoilOffTests extends AbstractLegacyMicroTestCase {
 
 	private static List<String> requiredFeatures = Lists.newArrayList("no-nominal-in-prompt", "optimisation-actionset");
 	private static List<String> addedFeatures = new LinkedList<>();

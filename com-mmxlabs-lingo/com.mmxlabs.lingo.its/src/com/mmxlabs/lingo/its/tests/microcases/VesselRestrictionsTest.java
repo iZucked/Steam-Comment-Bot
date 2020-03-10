@@ -9,13 +9,13 @@ import java.time.LocalDateTime;
 import java.time.YearMonth;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
@@ -33,14 +33,14 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.AllowedVesselPermissionC
 @ExtendWith(ShiroRunner.class)
 public class VesselRestrictionsTest extends AbstractMicroTestCase {
 
-//	private static final boolean RESTRICTION_APPLY_TO_NON_SHIPPED_CARGOES = false;
+	// private static final boolean RESTRICTION_APPLY_TO_NON_SHIPPED_CARGOES = false;
 
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testNoRestrictions() throws Exception {
 
 		// Create the required basic elements
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 1);
 
 		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
@@ -53,9 +53,9 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
 				.withAssignmentFlags(false, false) //
@@ -82,8 +82,8 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 	public void testLoadVesselClassRestrictions_NoInstance() throws Exception {
 
 		// Create the required basic elements
-		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
-		final Vessel vessel2 = fleetModelFinder.findVessel("STEAM-138");
+		final Vessel vessel1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
+		final Vessel vessel2 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_138);
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel1, entity, "50000", 1);
 
@@ -97,10 +97,10 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.withRestrictedVessels(vessel2, true).build() //
 				//
-				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				//
 				.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
@@ -127,8 +127,8 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 	public void testLoadVesselClassRestrictions_Fleet() throws Exception {
 
 		// Create the required basic elements
-		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
-		final Vessel vessel2 = fleetModelFinder.findVessel("STEAM-138");
+		final Vessel vessel1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
+		final Vessel vessel2 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_138);
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel1, entity, "50000", 1);
 
@@ -142,10 +142,10 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.withRestrictedVessels(vessel2, true) // <<<<<< Restrict load to alternative vessel
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
 				.withAssignmentFlags(false, false) //
@@ -177,8 +177,8 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 	public void testLoadVesselRestrictions_AutoAllocate_NoPossible() throws Exception {
 
 		// Create the required basic elements
-		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
-		final Vessel vessel2 = fleetModelFinder.findVessel("STEAM-138");
+		final Vessel vessel1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
+		final Vessel vessel2 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_138);
 
 		// final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 1);
 
@@ -192,10 +192,10 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.withRestrictedVessels(vessel1, true) //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				// .withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
 				.withAssignmentFlags(false, false) //
@@ -216,8 +216,8 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 	public void testLoadVesselRestrictions_VesselExists() throws Exception {
 
 		// Create the required basic elements
-		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
-		final Vessel vessel2 = fleetModelFinder.findVessel("STEAM-138");
+		final Vessel vessel1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
+		final Vessel vessel2 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_138);
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel1, entity, "50000", 1);
 
@@ -231,10 +231,10 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.withRestrictedVessels(vessel2, true) //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
 				.withAssignmentFlags(false, false) //
@@ -259,7 +259,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 	public void testLoadVesselRestrictions_NoInstance() throws Exception {
 
 		// Create the required basic elements
-		final Vessel source = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel source = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", source, entity, "50000", 1);
 
@@ -275,10 +275,10 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.withRestrictedVessels(vessel2, true) //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
 				.withAssignmentFlags(false, false) //
@@ -303,8 +303,8 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 	public void testLoadVesselClassRestrictions_SpotOnly() throws Exception {
 
 		// Create the required basic elements
-		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
-		final Vessel vessel2 = fleetModelFinder.findVessel("STEAM-138");
+		final Vessel vessel1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
+		final Vessel vessel2 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_138);
 
 		final CharterCurve charterIndex1 = pricingModelBuilder.createCharterCurve("CharterIndex1", "$", "day", 50_000);
 		// final CharterIndex charterIndex2 = pricingModelBuilder.createCharterIndex("CharterIndex2", "$/day", 100_000);
@@ -321,10 +321,10 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.withRestrictedVessels(vessel2, true) //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
 				.withAssignmentFlags(false, false) //
@@ -350,15 +350,16 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 	public void testDESPurchaseVesselRestrictions_VesselExists() throws Exception {
 
 		// Create the required basic elements
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		// Construct the cargo scenario
-		
+
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeDESPurchase("L1", DESPurchaseDealType.DIVERT_FROM_SOURCE, LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", vessel) //
+				.makeDESPurchase("L1", DESPurchaseDealType.DIVERT_FROM_SOURCE, LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8,
+						vessel) //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.withRestrictedVessels(vessel, true) //
 				.build() //
 				.withAssignmentFlags(false, false) //
@@ -372,23 +373,23 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 			Assertions.assertTrue(checker.checkConstraints(scenarioToOptimiserBridge.getDataTransformer().getInitialSequences(), null));
 		});
 	}
-	
+
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testFOBPurchaseVesselRestrictions_VesselExists() throws Exception {
 
 		// Create the required basic elements
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		// Construct the cargo scenario
 
-		final FOBPurchasesMarket market = spotMarketsModelBuilder.makeFOBPurchaseMarket("FOBP1", portFinder.findPort("Point Fortin"), entity, "5", 22.3).build();
-		
+		final FOBPurchasesMarket market = spotMarketsModelBuilder.makeFOBPurchaseMarket("FOBP1", portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), entity, "5", 22.3).build();
+
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeMarketFOBPurchase("L1", market,YearMonth.of(2015, 12), portFinder.findPort("Point Fortin")) //
+				.makeMarketFOBPurchase("L1", market, YearMonth.of(2015, 12), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.withRestrictedVessels(vessel, true) //
 				.build() //
 				.withAssignmentFlags(false, false) //
@@ -402,27 +403,26 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 			Assertions.assertTrue(checker.checkConstraints(scenarioToOptimiserBridge.getDataTransformer().getInitialSequences(), null));
 		});
 	}
-	
+
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testFOBPurchaseVesselRestrictions_VesselExists2() throws Exception {
 
 		// Create the required basic elements
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		// Construct the cargo scenario
 
-		final FOBPurchasesMarket market = spotMarketsModelBuilder
-				.makeFOBPurchaseMarket("FOBP1", portFinder.findPort("Point Fortin"), entity, "5", 22.3) //
+		final FOBPurchasesMarket market = spotMarketsModelBuilder.makeFOBPurchaseMarket("FOBP1", portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), entity, "5", 22.3) //
 				.with(m -> m.getRestrictedVessels().add(vessel)) //
 				.with(m -> m.setRestrictedVesselsArePermissive(true)) //
 				.build();
-		
+
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeMarketFOBPurchase("L1", market,YearMonth.of(2015, 12), portFinder.findPort("Point Fortin")) //
+				.makeMarketFOBPurchase("L1", market, YearMonth.of(2015, 12), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				.withAssignmentFlags(false, false) //
 				.build();
@@ -442,7 +442,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 	public void testDESPurchaseVesselRestrictions_VesselExists2() throws Exception {
 
 		// Create the required basic elements
-		final Vessel source = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel source = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final Vessel vessel = fleetModelBuilder.createVesselFrom("Vessel1", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 		final Vessel vessel2 = fleetModelBuilder.createVesselFrom("Vessel2", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
@@ -451,9 +451,10 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeDESPurchase("L1", DESPurchaseDealType.DIVERT_FROM_SOURCE, LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", vessel) //
+				.makeDESPurchase("L1", DESPurchaseDealType.DIVERT_FROM_SOURCE, LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8,
+						vessel) //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.withRestrictedVessels(vessel2, true) //
 				.build() //
 				.withAssignmentFlags(false, false) //
@@ -474,16 +475,16 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 	public void testFOBSaleVesselRestrictions_VesselExists() throws Exception {
 
 		// Create the required basic elements
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		// Construct the cargo scenario
 
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.withRestrictedVessels(vessel, true) //
 				.build() //
-				.makeFOBSale("D1", FOBSaleDealType.DIVERT_TO_DEST, LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7", vessel) //
+				.makeFOBSale("D1", FOBSaleDealType.DIVERT_TO_DEST, LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7", vessel) //
 				.build() //
 				.withAssignmentFlags(false, false) //
 				.build();
@@ -503,7 +504,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 	public void testFOBSaleVesselRestrictions_VesselExists2() throws Exception {
 
 		// Create the required basic elements
-		final Vessel source = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel source = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final Vessel vessel = fleetModelBuilder.createVesselFrom("Vessel1", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 		final Vessel vessel2 = fleetModelBuilder.createVesselFrom("Vessel2", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
@@ -512,10 +513,10 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.withRestrictedVessels(vessel2, true) //
 				.build() //
-				.makeFOBSale("D1", FOBSaleDealType.DIVERT_TO_DEST, LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7", vessel) //
+				.makeFOBSale("D1", FOBSaleDealType.DIVERT_TO_DEST, LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7", vessel) //
 				.build() //
 				.withAssignmentFlags(false, false) //
 				.build();
@@ -535,7 +536,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 	public void testDESPurchaseVesselRestrictions_WrongVessel() throws Exception {
 
 		// Create the required basic elements
-		final Vessel source = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel source = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		final Vessel vessel = fleetModelBuilder.createVesselFrom("Vessel1", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 		final Vessel vessel2 = fleetModelBuilder.createVesselFrom("Vessel2", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 
@@ -543,9 +544,10 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeDESPurchase("L1", DESPurchaseDealType.DIVERT_FROM_SOURCE, LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", vessel) //
+				.makeDESPurchase("L1", DESPurchaseDealType.DIVERT_FROM_SOURCE, LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8,
+						vessel) //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.withRestrictedVessels(vessel2, true) //
 				.build() //
 				.withAssignmentFlags(false, false) //
@@ -566,16 +568,17 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 	public void testDESPurchaseVesselRestrictions_WrongVesselClass() throws Exception {
 
 		// Create the required basic elements
-		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
-		final Vessel vessel2 = fleetModelFinder.findVessel("STEAM-138");
+		final Vessel vessel1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
+		final Vessel vessel2 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_138);
 
 		// Construct the cargo scenario
 
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeDESPurchase("L1", DESPurchaseDealType.DIVERT_FROM_SOURCE, LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", vessel1) //
+				.makeDESPurchase("L1", DESPurchaseDealType.DIVERT_FROM_SOURCE, LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8,
+						vessel1) //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.withRestrictedVessels(vessel2, true) //
 				.build() //
 				.withAssignmentFlags(false, false) //
@@ -596,7 +599,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 	public void testFOBSaleVesselRestrictions_WrongVessel() throws Exception {
 
 		// Create the required basic elements
-		final Vessel source = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel source = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final Vessel vessel = fleetModelBuilder.createVesselFrom("Vessel1", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 		final Vessel vessel2 = fleetModelBuilder.createVesselFrom("Vessel2", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
@@ -605,9 +608,9 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.build() //
-				.makeFOBSale("D1", FOBSaleDealType.DIVERT_TO_DEST, LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7", vessel) //
+				.makeFOBSale("D1", FOBSaleDealType.DIVERT_TO_DEST, LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7", vessel) //
 				.withRestrictedVessels(vessel2, true) //
 				.build() //
 				.withAssignmentFlags(false, false) //
@@ -627,8 +630,8 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 	public void testLoad_RestrictedVessel() throws Exception {
 
 		// Create the required basic elements
-		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
-		final Vessel vessel2 = fleetModelFinder.findVessel("STEAM-138");
+		final Vessel vessel1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
+		final Vessel vessel2 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_138);
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel1, entity, "50000", 1);
 
@@ -642,10 +645,10 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.withRestrictedVessels(vessel1, false) // <<<<<< Restrict load to alternative vessel
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
 				.withAssignmentFlags(false, false) //
@@ -664,42 +667,42 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 			Assertions.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), charterInMarket_1, 0, cargo1), null));
 		});
 	}
+
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testLoad_RestrictedVessel_Contract() throws Exception {
-		
+
 		// Create the required basic elements
-		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
-		final Vessel vessel2 = fleetModelFinder.findVessel("STEAM-138");
-		
+		final Vessel vessel1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
+		final Vessel vessel2 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_138);
+
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel1, entity, "50000", 1);
-		
+
 		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel2, entity) //
 				.withCharterRate("80000") //
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0)) //
 				.build();
-		
 
 		PurchaseContract contract = commercialModelBuilder.makeExpressionPurchaseContract("C1", entity, "5");
 		contract.setRestrictedVesselsArePermissive(false);
-		contract.getRestrictedVessels() .add(vessel1);
+		contract.getRestrictedVessels().add(vessel1);
 
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), contract, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), contract, entity, "5") //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
 				.withAssignmentFlags(false, false) //
 				.build();
-		
+
 		evaluateWithLSOTest(scenarioRunner -> {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
-			
+
 			final AllowedVesselPermissionConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
-			
+
 			// Real vessel
 			Assertions.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability1, cargo1), null));
 			// Nominal vessel
@@ -714,8 +717,8 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 	public void testLoad_PermissiveEmptyVessel() throws Exception {
 
 		// Create the required basic elements
-		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
-		final Vessel vessel2 = fleetModelFinder.findVessel("STEAM-138");
+		final Vessel vessel1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
+		final Vessel vessel2 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_138);
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel1, entity, "50000", 1);
 
@@ -729,10 +732,10 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.withRestrictedVessels(true) // <<<<<< Restrict load to alternative vessel
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
 				.withAssignmentFlags(false, false) //
@@ -757,14 +760,14 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 	public void testLoad_PermissiveEmptyVesselContract() throws Exception {
 
 		// Create the required basic elements
-		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
-		final Vessel vessel2 = fleetModelFinder.findVessel("STEAM-138");
+		final Vessel vessel1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
+		final Vessel vessel2 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_138);
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel1, entity, "50000", 1);
 
 		PurchaseContract contract = commercialModelBuilder.makeExpressionPurchaseContract("C1", entity, "5");
 		contract.setRestrictedVesselsArePermissive(true);
-		
+
 		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel2, entity) //
 				.withCharterRate("80000") //
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0)) //
@@ -775,9 +778,9 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), contract, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), contract, entity, "5") //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
 				.withAssignmentFlags(false, false) //
@@ -802,8 +805,8 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 	public void testLoad_RestrictiveEmptyVessel() throws Exception {
 
 		// Create the required basic elements
-		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
-		final Vessel vessel2 = fleetModelFinder.findVessel("STEAM-138");
+		final Vessel vessel1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
+		final Vessel vessel2 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_138);
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel1, entity, "50000", 1);
 
@@ -817,10 +820,10 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.withRestrictedVessels(false) // <<<<<< Restrict load to alternative vessel
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
 				.withAssignmentFlags(false, false) //

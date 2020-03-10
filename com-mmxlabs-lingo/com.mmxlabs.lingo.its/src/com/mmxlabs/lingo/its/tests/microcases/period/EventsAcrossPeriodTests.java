@@ -19,6 +19,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.lingo.its.tests.microcases.MicroTestUtils;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
@@ -60,48 +61,30 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void checkCharterOutEventAcrossPeriod() throws Exception {
 
-		// Load in the basic scenario from CSV
-		final IScenarioDataProvider scenarioDataProvider = importReferenceData();
-		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-
-		// Create finder and builder
-		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(scenarioDataProvider);
-		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(scenarioDataProvider);
-
-		final CommercialModelFinder commercialModelFinder = scenarioModelFinder.getCommercialModelFinder();
-		final FleetModelFinder fleetModelFinder = scenarioModelFinder.getFleetModelFinder();
-		final PortModelFinder portFinder = scenarioModelFinder.getPortModelFinder();
-
-		final CargoModelBuilder cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
-		final FleetModelBuilder fleetModelBuilder = scenarioModelBuilder.getFleetModelBuilder();
-
-		// Create the required basic elements
-		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
-
-		final Vessel vessel_1 = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel_1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final VesselAvailability vesselAvailability_1 = cargoModelBuilder.makeVesselAvailability(vessel_1, entity) //
-				.withStartPort(portFinder.findPort("Point Fortin")) //
+				.withStartPort(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 				.withStartWindow(LocalDateTime.of(2015, 01, 01, 0, 0, 0), LocalDateTime.of(2015, 01, 01, 0, 0, 0)) //
-				.withEndPort(portFinder.findPort("Point Fortin")) //
+				.withEndPort(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 				.withEndWindow(LocalDateTime.of(2015, 9, 01, 0, 0, 0), LocalDateTime.of(2015, 9, 01, 0, 0, 0)) //
 				.build();
 
 		// Create a single charter out event
-		cargoModelBuilder.makeCharterOutEvent("charter-1", LocalDateTime.of(2015, 1, 1, 0, 0, 0), LocalDateTime.of(2015, 1, 1, 0, 0, 0), portFinder.findPort("Point Fortin")) //
-				.withRelocatePort(portFinder.findPort("Isle of Grain")) //
+		cargoModelBuilder.makeCharterOutEvent("charter-1", LocalDateTime.of(2015, 1, 1, 0, 0, 0), LocalDateTime.of(2015, 1, 1, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
+				.withRelocatePort(portFinder.findPortById(InternalDataConstants.PORT_ISLE_OF_GRAIN)) //
 				.withDurationInDays(10) //
 				.withVesselAssignment(vesselAvailability_1, 0) //
 				.build(); //
 
-		cargoModelBuilder.makeCharterOutEvent("charter-2", LocalDateTime.of(2015, 2, 1, 0, 0, 0), LocalDateTime.of(2015, 2, 1, 0, 0, 0), portFinder.findPort("Ras Laffan")) //
-				.withRelocatePort(portFinder.findPort("Isle of Grain")) //
+		cargoModelBuilder.makeCharterOutEvent("charter-2", LocalDateTime.of(2015, 2, 1, 0, 0, 0), LocalDateTime.of(2015, 2, 1, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_RAS_LAFFAN)) //
+				.withRelocatePort(portFinder.findPortById(InternalDataConstants.PORT_ISLE_OF_GRAIN)) //
 				.withDurationInDays(100) //
 				.withVesselAssignment(vesselAvailability_1, 1) //
 				.build(); //
 
-		cargoModelBuilder.makeCharterOutEvent("charter-3", LocalDateTime.of(2015, 7, 1, 0, 0, 0), LocalDateTime.of(2015, 7, 1, 0, 0, 0), portFinder.findPort("Ras Laffan")) //
-				.withRelocatePort(portFinder.findPort("Isle of Grain")) //
+		cargoModelBuilder.makeCharterOutEvent("charter-3", LocalDateTime.of(2015, 7, 1, 0, 0, 0), LocalDateTime.of(2015, 7, 1, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_RAS_LAFFAN)) //
+				.withRelocatePort(portFinder.findPortById(InternalDataConstants.PORT_ISLE_OF_GRAIN)) //
 				.withDurationInDays(10) //
 				.withVesselAssignment(vesselAvailability_1, 2) //
 				.build(); //
@@ -140,7 +123,7 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 				final Port startAt = vesselAvailability.getStartAt();
 				Assertions.assertNotNull(startAt);
 				Assertions.assertEquals("Ras Laffan", startAt.getName());
-				final ZoneId rasLaffanTimeZone = portFinder.findPort("Ras Laffan").getZoneId();
+				final ZoneId rasLaffanTimeZone = portFinder.findPortById(InternalDataConstants.PORT_RAS_LAFFAN).getZoneId();
 				final ZoneId utcTimeZone = ZoneId.of("UTC");
 				// Vessel availabilities always in UTC
 				Assertions.assertEquals(ZonedDateTime.of(2015, 2, 1, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getStartAfterAsDateTime());
@@ -150,7 +133,7 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 				final List<APortSet<Port>> endAt = vesselAvailability.getEndAt();
 				Assertions.assertEquals(1, endAt.size());
 				Assertions.assertEquals("Ras Laffan", endAt.get(0).getName());
-				final ZoneId rasLaffanTimeZone = portFinder.findPort("Ras Laffan").getZoneId();
+				final ZoneId rasLaffanTimeZone = portFinder.findPortById(InternalDataConstants.PORT_RAS_LAFFAN).getZoneId();
 				final ZoneId utcTimeZone = ZoneId.of("UTC");
 				// Vessel availabilities always in UTC
 				Assertions.assertEquals(ZonedDateTime.of(2015, 7, 1, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getEndAfterAsDateTime());
@@ -171,41 +154,23 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void checkDryDockEventAcrossPeriod() throws Exception {
 
-		// Load in the basic scenario from CSV
-		final IScenarioDataProvider scenarioDataProvider = importReferenceData();
-		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-
-		// Create finder and builder
-		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(scenarioDataProvider);
-		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(scenarioDataProvider);
-
-		final CommercialModelFinder commercialModelFinder = scenarioModelFinder.getCommercialModelFinder();
-		final FleetModelFinder fleetModelFinder = scenarioModelFinder.getFleetModelFinder();
-		final PortModelFinder portFinder = scenarioModelFinder.getPortModelFinder();
-
-		final CargoModelBuilder cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
-		final FleetModelBuilder fleetModelBuilder = scenarioModelBuilder.getFleetModelBuilder();
-
-		// Create the required basic elements
-		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
-
-		final Vessel vessel_1 = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel_1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final VesselAvailability vesselAvailability_1 = cargoModelBuilder.makeVesselAvailability(vessel_1, entity) //
-				.withStartPort(portFinder.findPort("Point Fortin")) //
+				.withStartPort(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 				.withStartWindow(LocalDateTime.of(2015, 01, 01, 0, 0, 0), LocalDateTime.of(2015, 01, 01, 0, 0, 0)) //
-				.withEndPort(portFinder.findPort("Point Fortin")) //
+				.withEndPort(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 				.withEndWindow(LocalDateTime.of(2015, 9, 01, 0, 0, 0), LocalDateTime.of(2015, 9, 01, 0, 0, 0)) //
 				.build();
 
-		cargoModelBuilder.makeDryDockEvent("drydock-1", LocalDateTime.of(2015, 1, 1, 0, 0, 0), LocalDateTime.of(2015, 1, 1, 0, 0, 0), portFinder.findPort("Point Fortin")) //
+		cargoModelBuilder.makeDryDockEvent("drydock-1", LocalDateTime.of(2015, 1, 1, 0, 0, 0), LocalDateTime.of(2015, 1, 1, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 				.withVesselAssignment(vesselAvailability_1, 0) //
 				.build(); //
-		cargoModelBuilder.makeDryDockEvent("drydock-2", LocalDateTime.of(2015, 2, 1, 0, 0, 0), LocalDateTime.of(2015, 2, 1, 0, 0, 0), portFinder.findPort("Ras Laffan")) //
+		cargoModelBuilder.makeDryDockEvent("drydock-2", LocalDateTime.of(2015, 2, 1, 0, 0, 0), LocalDateTime.of(2015, 2, 1, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_RAS_LAFFAN)) //
 				.withVesselAssignment(vesselAvailability_1, 1) //
 				.withDurationInDays(100) //
 				.build(); //
-		cargoModelBuilder.makeDryDockEvent("drydock-3", LocalDateTime.of(2015, 7, 1, 0, 0, 0), LocalDateTime.of(2015, 7, 1, 0, 0, 0), portFinder.findPort("Ras Laffan")) //
+		cargoModelBuilder.makeDryDockEvent("drydock-3", LocalDateTime.of(2015, 7, 1, 0, 0, 0), LocalDateTime.of(2015, 7, 1, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_RAS_LAFFAN)) //
 				.withVesselAssignment(vesselAvailability_1, 2) //
 				.build(); //
 
@@ -243,7 +208,7 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 				final Port startAt = vesselAvailability.getStartAt();
 				Assertions.assertNotNull(startAt);
 				Assertions.assertEquals("Ras Laffan", startAt.getName());
-				final ZoneId rasLaffanTimeZone = portFinder.findPort("Ras Laffan").getZoneId();
+				final ZoneId rasLaffanTimeZone = portFinder.findPortById(InternalDataConstants.PORT_RAS_LAFFAN).getZoneId();
 				final ZoneId utcTimeZone = ZoneId.of("UTC");
 				// Vessel availabilities always in UTC
 				Assertions.assertEquals(ZonedDateTime.of(2015, 2, 1, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getStartAfterAsDateTime());
@@ -253,13 +218,13 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 				final List<APortSet<Port>> endAt = vesselAvailability.getEndAt();
 				Assertions.assertEquals(1, endAt.size());
 				Assertions.assertEquals("Ras Laffan", endAt.get(0).getName());
-				final ZoneId rasLaffanTimeZone = portFinder.findPort("Ras Laffan").getZoneId();
+				final ZoneId rasLaffanTimeZone = portFinder.findPortById(InternalDataConstants.PORT_RAS_LAFFAN).getZoneId();
 				final ZoneId utcTimeZone = ZoneId.of("UTC");
 				// Vessel availabilities always in UTC
 				Assertions.assertEquals(ZonedDateTime.of(2015, 7, 1, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getEndAfterAsDateTime());
 				Assertions.assertEquals(ZonedDateTime.of(2015, 7, 1, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getEndByAsDateTime());
 			}
-			// Assert initial state can be evaluted
+			// Assert initial state can be evaluated
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 			// Validate the initial sequences are valid
 			Assertions.assertTrue(MicroTestUtils.evaluateLSOSequences(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
@@ -272,43 +237,26 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.QUICK_TEST)
 	@Tag(TestCategories.MICRO_TEST)
 	public void checkMaintenceEventAcrossPeriod() throws Exception {
-		// Load in the basic scenario from CSV
-		final IScenarioDataProvider scenarioDataProvider = importReferenceData();
-		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
-		// Create finder and builder
-		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(scenarioDataProvider);
-		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(scenarioDataProvider);
-
-		final CommercialModelFinder commercialModelFinder = scenarioModelFinder.getCommercialModelFinder();
-		final FleetModelFinder fleetModelFinder = scenarioModelFinder.getFleetModelFinder();
-		final PortModelFinder portFinder = scenarioModelFinder.getPortModelFinder();
-
-		final CargoModelBuilder cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
-		final FleetModelBuilder fleetModelBuilder = scenarioModelBuilder.getFleetModelBuilder();
-
-		// Create the required basic elements
-		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
-
-		final Vessel vessel_1 = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel_1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final VesselAvailability vesselAvailability_1 = cargoModelBuilder.makeVesselAvailability(vessel_1, entity) //
-				.withStartPort(portFinder.findPort("Point Fortin")) //
+				.withStartPort(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 				.withStartWindow(LocalDateTime.of(2015, 01, 01, 0, 0, 0), LocalDateTime.of(2015, 01, 01, 0, 0, 0)) //
-				.withEndPort(portFinder.findPort("Point Fortin")) //
+				.withEndPort(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 				.withEndWindow(LocalDateTime.of(2015, 9, 01, 0, 0, 0), LocalDateTime.of(2015, 9, 01, 0, 0, 0)) //
 				.build();
 
-		cargoModelBuilder.makeMaintenanceEvent("event-1", LocalDateTime.of(2015, 1, 1, 0, 0, 0), LocalDateTime.of(2015, 1, 1, 0, 0, 0), portFinder.findPort("Point Fortin")) //
+		cargoModelBuilder.makeMaintenanceEvent("event-1", LocalDateTime.of(2015, 1, 1, 0, 0, 0), LocalDateTime.of(2015, 1, 1, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 				.withVesselAssignment(vesselAvailability_1, 0) //
 				.build(); //
 
-		cargoModelBuilder.makeMaintenanceEvent("event-2", LocalDateTime.of(2015, 2, 1, 0, 0, 0), LocalDateTime.of(2015, 2, 1, 0, 0, 0), portFinder.findPort("Ras Laffan")) //
+		cargoModelBuilder.makeMaintenanceEvent("event-2", LocalDateTime.of(2015, 2, 1, 0, 0, 0), LocalDateTime.of(2015, 2, 1, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_RAS_LAFFAN)) //
 				.withVesselAssignment(vesselAvailability_1, 1) //
 				.withDurationInDays(100) //
 				.build(); //
 
-		cargoModelBuilder.makeMaintenanceEvent("event-3", LocalDateTime.of(2015, 7, 1, 0, 0, 0), LocalDateTime.of(2015, 7, 1, 0, 0, 0), portFinder.findPort("Ras Laffan")) //
+		cargoModelBuilder.makeMaintenanceEvent("event-3", LocalDateTime.of(2015, 7, 1, 0, 0, 0), LocalDateTime.of(2015, 7, 1, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_RAS_LAFFAN)) //
 				.withVesselAssignment(vesselAvailability_1, 1) //
 				.build(); //
 
@@ -348,7 +296,7 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 				final Port startAt = vesselAvailability.getStartAt();
 				Assertions.assertNotNull(startAt);
 				Assertions.assertEquals("Ras Laffan", startAt.getName());
-				final ZoneId rasLaffanTimeZone = portFinder.findPort("Ras Laffan").getZoneId();
+				final ZoneId rasLaffanTimeZone = portFinder.findPortById(InternalDataConstants.PORT_RAS_LAFFAN).getZoneId();
 				final ZoneId utcTimeZone = ZoneId.of("UTC");
 				// Vessel availabilities always in UTC
 				Assertions.assertEquals(ZonedDateTime.of(2015, 2, 1, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getStartAfterAsDateTime());
@@ -358,7 +306,7 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 				final List<APortSet<Port>> endAt = vesselAvailability.getEndAt();
 				Assertions.assertEquals(1, endAt.size());
 				Assertions.assertEquals("Ras Laffan", endAt.get(0).getName());
-				final ZoneId rasLaffanTimeZone = portFinder.findPort("Ras Laffan").getZoneId();
+				final ZoneId rasLaffanTimeZone = portFinder.findPortById(InternalDataConstants.PORT_RAS_LAFFAN).getZoneId();
 				final ZoneId utcTimeZone = ZoneId.of("UTC");
 				// Vessel availabilities always in UTC
 				Assertions.assertEquals(ZonedDateTime.of(2015, 7, 1, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getEndAfterAsDateTime());
@@ -378,40 +326,22 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void checkCargoAcrossPeriod() throws Exception {
 
-		// Load in the basic scenario from CSV
-		final IScenarioDataProvider scenarioDataProvider = importReferenceData();
-		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-
-		// Create finder and builder
-		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(scenarioDataProvider);
-		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(scenarioDataProvider);
-
-		final CommercialModelFinder commercialModelFinder = scenarioModelFinder.getCommercialModelFinder();
-		final FleetModelFinder fleetModelFinder = scenarioModelFinder.getFleetModelFinder();
-		final PortModelFinder portFinder = scenarioModelFinder.getPortModelFinder();
-
-		final CargoModelBuilder cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
-		final FleetModelBuilder fleetModelBuilder = scenarioModelBuilder.getFleetModelBuilder();
-
-		// Create the required basic elements
-		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
-
-		final Vessel vessel_1 = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel_1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel_1.setSafetyHeel(1000);
 
 		final VesselAvailability vesselAvailability_1 = cargoModelBuilder.makeVesselAvailability(vessel_1, entity) //
-				.withStartPort(portFinder.findPort("Point Fortin")) //
+				.withStartPort(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 				.withStartWindow(LocalDateTime.of(2015, 01, 01, 0, 0, 0), LocalDateTime.of(2015, 01, 01, 0, 0, 0)) //
-				.withEndPort(portFinder.findPort("Point Fortin")) //
+				.withEndPort(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 				.withEndWindow(LocalDateTime.of(2015, 9, 01, 0, 0, 0), LocalDateTime.of(2015, 9, 01, 0, 0, 0)) //
 				.build();
 
 		cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 1, 1), portFinder.findPort("Ras Laffan"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 1, 1), portFinder.findPortById(InternalDataConstants.PORT_RAS_LAFFAN), null, entity, "5") //
 				.withWindowStartTime(0) //
 				.withWindowSize(0, TimePeriod.DAYS) //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2015, 1, 14), portFinder.findPort("Mina Al Ahmadi"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 1, 14), portFinder.findPortById(InternalDataConstants.PORT_MINA_AL_AHMADI), null, entity, "7") //
 				.withWindowStartTime(0) //
 				.withWindowSize(0, TimePeriod.DAYS) //
 				.build() //
@@ -419,11 +349,11 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 				.withAssignmentFlags(true, false) //
 				.build();
 		cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L2", LocalDate.of(2015, 2, 1), portFinder.findPort("Ras Laffan"), null, entity, "5") //
+				.makeFOBPurchase("L2", LocalDate.of(2015, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_RAS_LAFFAN), null, entity, "5") //
 				.withWindowStartTime(0) //
 				.withWindowSize(0, TimePeriod.DAYS) //
 				.build() //
-				.makeDESSale("D2", LocalDate.of(2015, 4, 1), portFinder.findPort("Mina Al Ahmadi"), null, entity, "7") //
+				.makeDESSale("D2", LocalDate.of(2015, 4, 1), portFinder.findPortById(InternalDataConstants.PORT_MINA_AL_AHMADI), null, entity, "7") //
 				.withWindowStartTime(0) //
 				.withWindowSize(0, TimePeriod.DAYS) //
 				.build() //
@@ -431,11 +361,11 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 				.withAssignmentFlags(true, false) //
 				.build();
 		cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L3", LocalDate.of(2015, 7, 1), portFinder.findPort("Ras Laffan"), null, entity, "5") //
+				.makeFOBPurchase("L3", LocalDate.of(2015, 7, 1), portFinder.findPortById(InternalDataConstants.PORT_RAS_LAFFAN), null, entity, "5") //
 				.withWindowStartTime(0) //
 				.withWindowSize(0, TimePeriod.DAYS) //
 				.build() //
-				.makeDESSale("D3", LocalDate.of(2015, 8, 1), portFinder.findPort("Mina Al Ahmadi"), null, entity, "7") //
+				.makeDESSale("D3", LocalDate.of(2015, 8, 1), portFinder.findPortById(InternalDataConstants.PORT_MINA_AL_AHMADI), null, entity, "7") //
 				.withWindowStartTime(0) //
 				.withWindowSize(0, TimePeriod.DAYS) //
 				.build() //
@@ -476,7 +406,7 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 				final Port startAt = vesselAvailability.getStartAt();
 				Assertions.assertNotNull(startAt);
 				Assertions.assertEquals("Ras Laffan", startAt.getName());
-				final ZoneId rasLaffanTimeZone = portFinder.findPort("Ras Laffan").getZoneId();
+				final ZoneId rasLaffanTimeZone = portFinder.findPortById(InternalDataConstants.PORT_RAS_LAFFAN).getZoneId();
 				final ZoneId utcTimeZone = ZoneId.of("UTC");
 				// Vessel availabilities always in UTC
 				Assertions.assertEquals(ZonedDateTime.of(2015, 2, 1, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getStartAfterAsDateTime());
@@ -487,7 +417,7 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 				final List<APortSet<Port>> endAt = vesselAvailability.getEndAt();
 				Assertions.assertEquals(1, endAt.size());
 				Assertions.assertEquals("Ras Laffan", endAt.get(0).getName());
-				final ZoneId rasLaffanTimeZone = portFinder.findPort("Ras Laffan").getZoneId();
+				final ZoneId rasLaffanTimeZone = portFinder.findPortById(InternalDataConstants.PORT_RAS_LAFFAN).getZoneId();
 				final ZoneId utcTimeZone = ZoneId.of("UTC");
 				// Vessel availabilities always in UTC
 				Assertions.assertEquals(ZonedDateTime.of(2015, 7, 1, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getEndAfterAsDateTime());

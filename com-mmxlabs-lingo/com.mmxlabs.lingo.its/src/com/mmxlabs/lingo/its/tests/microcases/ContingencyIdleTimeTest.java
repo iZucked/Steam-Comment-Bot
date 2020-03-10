@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.Idle;
@@ -37,7 +38,7 @@ public class ContingencyIdleTimeTest extends AbstractIdleTimeTests {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testDataProviderIdleTimeIncrease() throws Exception {
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
@@ -45,9 +46,9 @@ public class ContingencyIdleTimeTest extends AbstractIdleTimeTests {
 
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.withWindowSize(2, TimePeriod.DAYS) //
 				.build() //
 				.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
@@ -101,7 +102,7 @@ public class ContingencyIdleTimeTest extends AbstractIdleTimeTests {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testMatrixValue_1() throws Exception {
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
@@ -110,16 +111,16 @@ public class ContingencyIdleTimeTest extends AbstractIdleTimeTests {
 		// Create cargo 1, cargo 2
 		@SuppressWarnings("unused")
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.withWindowSize(2, TimePeriod.DAYS) //
 				.build() //
 				.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
 				.withAssignmentFlags(false, false) //
 				.build();
 
-		portModelBuilder.setContingencyDelay(portFinder.findPort("Point Fortin"), portFinder.findPort("Dominion Cove Point LNG"), 1);
+		portModelBuilder.setContingencyDelay(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), 1);
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
@@ -139,7 +140,7 @@ public class ContingencyIdleTimeTest extends AbstractIdleTimeTests {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testMatrixValue_2() throws Exception {
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
@@ -148,9 +149,9 @@ public class ContingencyIdleTimeTest extends AbstractIdleTimeTests {
 		// Create cargo 1, cargo 2
 		@SuppressWarnings("unused")
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.withWindowSize(2, TimePeriod.DAYS) //
 				.build() //
 				.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal

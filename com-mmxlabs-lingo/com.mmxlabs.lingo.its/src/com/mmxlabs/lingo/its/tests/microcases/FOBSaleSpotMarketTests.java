@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -45,16 +46,16 @@ public class FOBSaleSpotMarketTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.REGRESSION_TEST)
 	public void testBadPortMatch() throws Exception {
 
-		final FOBSalesMarket market = spotMarketsModelBuilder.makeFOBSaleMarket("FOBSaleMarket", PortModelBuilder.makePortSet(portFinder.findPort("Idku LNG")), entity, "5") //
+		final FOBSalesMarket market = spotMarketsModelBuilder.makeFOBSaleMarket("FOBSaleMarket", PortModelBuilder.makePortSet(portFinder.findPortById(InternalDataConstants.PORT_IDKU)), entity, "5") //
 				.withAvailabilityConstant(0)//
 				.build();
 
 		cargoModelBuilder.makeCargo()//
-				.makeFOBPurchase("L1", LocalDate.of(2015, 6, 1), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 6, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.with(s -> s.setFullCargoLot(true)) //
 				.build() //
 
-				.makeMarketFOBSale("D1", market, YearMonth.of(2015, 6), portFinder.findPort("Idku LNG")) //
+				.makeMarketFOBSale("D1", market, YearMonth.of(2015, 6), portFinder.findPortById(InternalDataConstants.PORT_IDKU)) //
 				.build() //
 
 				.build();
@@ -81,18 +82,18 @@ public class FOBSaleSpotMarketTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.REGRESSION_TEST)
 	public void testRestrictedOptimisation_ExistingSlot() throws Exception {
 
-		final FOBSalesMarket market = spotMarketsModelBuilder.makeFOBSaleMarket("FOBSaleMarket", PortModelBuilder.makePortSet(portFinder.findPort("Point Fortin")), entity, "5") //
+		final FOBSalesMarket market = spotMarketsModelBuilder.makeFOBSaleMarket("FOBSaleMarket", PortModelBuilder.makePortSet(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)), entity, "5") //
 				.withAvailabilityConstant(0)//
 				.build();
 
 		// This cargo can be optimised out
 		final Cargo cargo1 = cargoModelBuilder.makeCargo()//
-				.makeFOBPurchase("L1", LocalDate.of(2015, 6, 2), portFinder.findPort("Point Fortin"), null, entity, "5.1") //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 6, 2), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5.1") //
 				.with(s -> s.setFullCargoLot(true))
 				.withOptional(true)//
 				.build()
 
-				.makeMarketFOBSale("D1", market, YearMonth.of(2015, 6), portFinder.findPort("Point Fortin")) //
+				.makeMarketFOBSale("D1", market, YearMonth.of(2015, 6), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 				.build() //
 
 				.withAssignmentFlags(true, false)//
@@ -102,11 +103,11 @@ public class FOBSaleSpotMarketTests extends AbstractMicroTestCase {
 		final DischargeSlot discharge1 = (DischargeSlot) cargo1.getSlots().get(1);
 
 		final Cargo cargo2 = cargoModelBuilder.makeCargo()//
-				.makeFOBPurchase("L2", LocalDate.of(2015, 6, 2), portFinder.findPort("Idku LNG"), null, entity, "4") //
+				.makeFOBPurchase("L2", LocalDate.of(2015, 6, 2), portFinder.findPortById(InternalDataConstants.PORT_IDKU), null, entity, "4") //
 				.with(s -> s.setFullCargoLot(true))
 				.build() //
 
-				.makeFOBSale("D2", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2015, 6, 2), portFinder.findPort("Idku LNG"), null, entity, "3.9", null) //
+				.makeFOBSale("D2", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2015, 6, 2), portFinder.findPortById(InternalDataConstants.PORT_IDKU), null, entity, "3.9", null) //
 				.withOptional(true) //
 				.build() //
 
@@ -164,17 +165,17 @@ public class FOBSaleSpotMarketTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testUnrestrictedOptimisation_ExistingSlot() throws Exception {
 
-		final FOBSalesMarket market = spotMarketsModelBuilder.makeFOBSaleMarket("FOBSaleMarket", PortModelBuilder.makePortSet(portFinder.findPort("Idku LNG")), entity, "5") //
+		final FOBSalesMarket market = spotMarketsModelBuilder.makeFOBSaleMarket("FOBSaleMarket", PortModelBuilder.makePortSet(portFinder.findPortById(InternalDataConstants.PORT_IDKU)), entity, "5") //
 				.withAvailabilityConstant(0)//
 				.build();
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo()//
-				.makeFOBPurchase("L1", LocalDate.of(2015, 6, 2), portFinder.findPort("Idku LNG"), null, entity, "5.1") //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 6, 2), portFinder.findPortById(InternalDataConstants.PORT_IDKU), null, entity, "5.1") //
 				.with(s -> s.setFullCargoLot(true)) //
 				.withOptional(true)//
 				.build()
 
-				.makeMarketFOBSale("D1", market, YearMonth.of(2015, 6), portFinder.findPort("Idku LNG")) //
+				.makeMarketFOBSale("D1", market, YearMonth.of(2015, 6), portFinder.findPortById(InternalDataConstants.PORT_IDKU)) //
 				.build() //
 
 				.withAssignmentFlags(true, false)//
@@ -184,11 +185,11 @@ public class FOBSaleSpotMarketTests extends AbstractMicroTestCase {
 		final DischargeSlot discharge1 = (DischargeSlot) cargo1.getSlots().get(1);
 
 		final Cargo cargo2 = cargoModelBuilder.makeCargo()//
-				.makeFOBPurchase("L2", LocalDate.of(2015, 6, 2), portFinder.findPort("Idku LNG"), null, entity, "4") //
+				.makeFOBPurchase("L2", LocalDate.of(2015, 6, 2), portFinder.findPortById(InternalDataConstants.PORT_IDKU), null, entity, "4") //
 				.with(s -> s.setFullCargoLot(true)) //
 				.build() //
 
-				.makeFOBSale("D2", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2015, 6, 2), portFinder.findPort("Idku LNG"), null, entity, "3.9", null) //
+				.makeFOBSale("D2", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2015, 6, 2), portFinder.findPortById(InternalDataConstants.PORT_IDKU), null, entity, "3.9", null) //
 				.withOptional(true) //
 				.build() //
 
@@ -242,16 +243,16 @@ public class FOBSaleSpotMarketTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testRestrictedOptimisation_GeneratedSlot() throws Exception {
 
-		final FOBSalesMarket market = spotMarketsModelBuilder.makeFOBSaleMarket("FOBSaleMarket", PortModelBuilder.makePortSet(portFinder.findPort("Point Fortin")), entity, "5") //
+		final FOBSalesMarket market = spotMarketsModelBuilder.makeFOBSaleMarket("FOBSaleMarket", PortModelBuilder.makePortSet(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)), entity, "5") //
 				.withAvailabilityConstant(1)//
 				.build();
 
 		final Cargo cargo2 = cargoModelBuilder.makeCargo()//
-				.makeFOBPurchase("L2", LocalDate.of(2015, 6, 2), portFinder.findPort("Idku LNG"), null, entity, "4") //
+				.makeFOBPurchase("L2", LocalDate.of(2015, 6, 2), portFinder.findPortById(InternalDataConstants.PORT_IDKU), null, entity, "4") //
 				.with(s -> s.setFullCargoLot(true)) //
 				.build() //
 
-				.makeFOBSale("D2", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2015, 6, 2), portFinder.findPort("Idku LNG"), null, entity, "3.9", null) //
+				.makeFOBSale("D2", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2015, 6, 2), portFinder.findPortById(InternalDataConstants.PORT_IDKU), null, entity, "3.9", null) //
 				.withOptional(true) //
 				.build() //
 
@@ -292,16 +293,16 @@ public class FOBSaleSpotMarketTests extends AbstractMicroTestCase {
 
 		lngScenarioModel.setPromptPeriodStart(LocalDate.of(2015, 6, 1));
 
-		final FOBSalesMarket market = spotMarketsModelBuilder.makeFOBSaleMarket("FOBSaleMarket", PortModelBuilder.makePortSet(portFinder.findPort("Idku LNG")), entity, "5") //
+		final FOBSalesMarket market = spotMarketsModelBuilder.makeFOBSaleMarket("FOBSaleMarket", PortModelBuilder.makePortSet(portFinder.findPortById(InternalDataConstants.PORT_IDKU)), entity, "5") //
 				.withAvailabilityConstant(1)//
 				.build();
 
 		final Cargo cargo2 = cargoModelBuilder.makeCargo()//
-				.makeFOBPurchase("L2", LocalDate.of(2015, 6, 2), portFinder.findPort("Idku LNG"), null, entity, "4") //
+				.makeFOBPurchase("L2", LocalDate.of(2015, 6, 2), portFinder.findPortById(InternalDataConstants.PORT_IDKU), null, entity, "4") //
 				.with(s -> s.setFullCargoLot(true)) //
 				.build() //
 
-				.makeFOBSale("D2", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2015, 6, 2), portFinder.findPort("Idku LNG"), null, entity, "3.9", null) //
+				.makeFOBSale("D2", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2015, 6, 2), portFinder.findPortById(InternalDataConstants.PORT_IDKU), null, entity, "3.9", null) //
 				.withOptional(true) //
 				.build() //
 

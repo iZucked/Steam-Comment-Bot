@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.List;
@@ -25,6 +26,7 @@ import com.mmxlabs.lingo.its.tests.microcases.MicroTestUtils;
 import com.mmxlabs.lingo.its.tests.microcases.adp.AbstractADPAndLightWeightTests;
 import com.mmxlabs.lingo.its.tests.microcases.adp.OptimisationEMFTestUtils;
 import com.mmxlabs.lingo.its.tests.microcases.adp.TrainingCaseConstants;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.adp.IntervalType;
 import com.mmxlabs.models.lng.adp.LNGVolumeUnit;
 import com.mmxlabs.models.lng.adp.ext.impl.AbstractSlotTemplateFactory;
@@ -111,6 +113,8 @@ public class PortShipSizeConstraintADPTest extends AbstractADPAndLightWeightTest
 	public void testADPAndLightWeightTabuSearchRespectsConstraint() {
 		Assumptions.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
 
+		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2017, 1, 1), LocalDate.of(2017, 2, 1));
+		
 		//create medium ship which violates the port size constraints for all ports, small ship which does not violate the port ship size constraints.
 		final CharterInMarket defaultCharterInMarket = this.setInvalidSmallVesselValidMediumVesselContracts(150000,210000);
 
@@ -210,14 +214,14 @@ public class PortShipSizeConstraintADPTest extends AbstractADPAndLightWeightTest
 	}
 
 	private CharterInMarket setInvalidSmallVesselValidMediumVesselContracts(int smallShipCapacity, int mediumShipCapacity) {
-		final Vessel vesselSmall = fleetModelFinder.findVessel(TrainingCaseConstants.VESSEL_SMALL_SHIP);
+		final Vessel vesselSmall = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_138);
 		vesselSmall.setCapacity(smallShipCapacity);
-		final Vessel vesselMedium = fleetModelFinder.findVessel(TrainingCaseConstants.VESSEL_MEDIUM_SHIP);
+		final Vessel vesselMedium = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vesselMedium.setCapacity(mediumShipCapacity);
-		final Port darwin = portFinder.findPort(TrainingCaseConstants.PORT_DARWIN);
+		final Port darwin = portFinder.findPortById(InternalDataConstants.PORT_DARWIN);
 		darwin.setMinVesselSize(110000);
 		darwin.setMaxVesselSize(200000);
-		final Port himeji = portFinder.findPort(TrainingCaseConstants.PORT_HIMEJI);
+		final Port himeji = portFinder.findPortById(InternalDataConstants.PORT_HIMEJI);
 		himeji.setMinVesselSize(110000);
 		himeji.setMaxVesselSize(180000);
 		final CharterInMarket defaultCharterInMarket = spotMarketsModelBuilder.createCharterInMarket("ADP Default", vesselSmall, entity, "50000", 0);

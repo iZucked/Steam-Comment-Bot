@@ -132,7 +132,7 @@ New Plymouth,,,0,0,1,0,7,false,24,HOURS,,,,New Plymouth,,L_NZ_NewPl,Pacific/Auck
 Niigata-Higashi,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,Niigata-Higashi,"Niigata-Higashi,Niigata",L_JP_Niiga,Asia/Tokyo,Japan,0,0,Location,Port
 Northeast Gateway,,,0,0,1,0,7,false,24,HOURS,,,,Northeast Gateway,Northeast Gateway Deepwater Port,L_UM_North,America/Chicago,U.S.A. (Offshore),0,0,Location,Port
 Offshore Haldia No.1 (TA),,,0,0,1,0,7,false,24,HOURS,,,,Offshore Haldia No.1 (TA),,L_IN_Haldi,Asia/Kolkata,India,0,0,Location,Port
-Ogishima,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,Ogishima,"Ogishima Tokyo Gas,Ogishima - Tokyo Gas LNG Berth",L_JP_Ohgis,Asia/Tokyo,Japan,0,0,Location,Port
+Ohgishima,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,Ogishima,"Ogishima Tokyo Gas,Ogishima - Tokyo Gas LNG Berth",L_JP_Ohgis,Asia/Tokyo,Japan,0,0,Location,Port
 Oita - LNG Berth,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,Oita - LNG Berth,Oita,L_JP_Oita,Asia/Tokyo,Japan,0,0,Location,Port
 Okinawa,,,0,0,1,0,7,false,24,HOURS,,,,Okinawa,Okinawa LNG,L_JP_Okina,Asia/Tokyo,Japan,0,0,Location,Port
 Ortona,,,0,0,1,0,7,false,24,HOURS,,,,Ortona,Ortona LNG,L_IT_Orton,Europe/Rome,Italy,0,0,Location,Port

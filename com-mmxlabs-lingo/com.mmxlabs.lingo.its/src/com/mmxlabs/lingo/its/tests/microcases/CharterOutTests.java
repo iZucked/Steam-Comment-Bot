@@ -21,6 +21,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
@@ -55,7 +56,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 
 		// Create the required basic elements
 		// Create a vessel and its availability
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setSafetyHeel(500);
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
@@ -66,7 +67,8 @@ public class CharterOutTests extends AbstractMicroTestCase {
 
 		// Construct the charterOutEvent
 		final CharterOutEvent charterOutEvent = cargoModelBuilder //
-				.makeCharterOutEvent("charter_out_test_solo", LocalDateTime.of(2017, 12, 5, 0, 0, 0), LocalDateTime.of(2017, 12, 10, 0, 0, 0), portFinder.findPort("Sabine Pass LNG")) //
+				.makeCharterOutEvent("charter_out_test_solo", LocalDateTime.of(2017, 12, 5, 0, 0, 0), LocalDateTime.of(2017, 12, 10, 0, 0, 0),
+						portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS)) //
 				.withHireRate(500_000) //
 				.withDurationInDays(10) //
 				.withOptional(false) //
@@ -104,7 +106,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 
 		// Create the required basic elements
 		// Create a vessel and its availability
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setSafetyHeel(500);
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
@@ -115,7 +117,8 @@ public class CharterOutTests extends AbstractMicroTestCase {
 
 		// Construct the charterOutEvent
 		final CharterOutEvent charterOutEvent = cargoModelBuilder //
-				.makeCharterOutEvent("charter_out_test_solo", LocalDateTime.of(2017, 12, 5, 0, 0, 0), LocalDateTime.of(2017, 12, 10, 0, 0, 0), portFinder.findPort("Sabine Pass LNG")) //
+				.makeCharterOutEvent("charter_out_test_solo", LocalDateTime.of(2017, 12, 5, 0, 0, 0), LocalDateTime.of(2017, 12, 10, 0, 0, 0),
+						portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS)) //
 				.withHireRate(5_000_000) //
 				.withOptional(true) //
 				.withDurationInDays(10) //
@@ -155,7 +158,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 
 		// Create the required basic elements
 		// Create a vessel and its availability
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setSafetyHeel(0);
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
@@ -166,7 +169,8 @@ public class CharterOutTests extends AbstractMicroTestCase {
 
 		// Construct the charterOutEvent
 		final CharterOutEvent charterOutEvent = cargoModelBuilder //
-				.makeCharterOutEvent("charter_out_test_solo", LocalDateTime.of(2017, 12, 5, 0, 0, 0), LocalDateTime.of(2017, 12, 15, 0, 0, 0), portFinder.findPort("Sabine Pass LNG")) //
+				.makeCharterOutEvent("charter_out_test_solo", LocalDateTime.of(2017, 12, 5, 0, 0, 0), LocalDateTime.of(2017, 12, 15, 0, 0, 0),
+						portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS)) //
 				.withHireRate(500_000) //
 				.withOptional(true) //
 				.withDurationInDays(10) //
@@ -206,7 +210,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 
 		// Create the required basic elements
 		// Create a vessel and its availability
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setSafetyHeel(500);
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
@@ -217,7 +221,8 @@ public class CharterOutTests extends AbstractMicroTestCase {
 
 		// Construct the charterOutEvent
 		final CharterOutEvent charterOutEvent = cargoModelBuilder //
-				.makeCharterOutEvent("charter_out_test_solo", LocalDateTime.of(2017, 12, 24, 0, 0, 0), LocalDateTime.of(2017, 12, 29, 0, 0, 0), portFinder.findPort("Sabine Pass LNG")) //
+				.makeCharterOutEvent("charter_out_test_solo", LocalDateTime.of(2017, 12, 24, 0, 0, 0), LocalDateTime.of(2017, 12, 29, 0, 0, 0),
+						portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS)) //
 				.withHireRate(5_000_000) //
 				.withDurationInDays(10) //
 				.withOptional(false) //
@@ -226,9 +231,9 @@ public class CharterOutTests extends AbstractMicroTestCase {
 
 		// Construct the cargoes
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2017, 12, 4), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2017, 12, 4), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2017, 12, 20), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2017, 12, 20), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				.withVesselAssignment(vesselAvailability, 1) //
 				.withAssignmentFlags(true, false) //
@@ -267,7 +272,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 
 		// Create the required basic elements
 		// Create a vessel and its availability
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setSafetyHeel(0);
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
@@ -278,18 +283,21 @@ public class CharterOutTests extends AbstractMicroTestCase {
 
 		// Construct the charterOutEvent
 		final CharterOutEvent charterOutEvent = cargoModelBuilder //
-				.makeCharterOutEvent("charter_out_test_solo", LocalDateTime.of(2017, 12, 25, 0, 0, 0), LocalDateTime.of(2017, 12, 25, 0, 0, 0), portFinder.findPort("Sabine Pass LNG")) //
+				.makeCharterOutEvent("charter_out_test_solo", LocalDateTime.of(2017, 12, 25, 0, 0, 0), LocalDateTime.of(2017, 12, 25, 0, 0, 0),
+						portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS)) //
 				.withHireRate(50_000_000) //
 				.withOptional(true) //
 				.withDurationInDays(5) //
 				.withAllowedVessels(vessel) //
 				.build();
-
+		
+		portModelBuilder.configureDischargePort(portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS), 24, null, null);
+		
 		// Construct the cargoes
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2017, 12, 4), portFinder.findPort("Sabine Pass LNG"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2017, 12, 4), portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS), null, entity, "5") //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2017, 12, 20), portFinder.findPort("Sabine Pass LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2017, 12, 20), portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS), null, entity, "7") //
 				.build() //
 				.withVesselAssignment(vesselAvailability, 1) //
 				.withAssignmentFlags(true, false) //
@@ -328,7 +336,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 
 		// Create the required basic elements
 		// Create a vessel and its availability
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setSafetyHeel(500);
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
@@ -339,18 +347,21 @@ public class CharterOutTests extends AbstractMicroTestCase {
 
 		// Construct the charterOutEvent
 		final CharterOutEvent charterOutEvent = cargoModelBuilder //
-				.makeCharterOutEvent("charter_out_test_solo", LocalDateTime.of(2017, 12, 25, 0, 0, 0), LocalDateTime.of(2017, 12, 25, 0, 0, 0), portFinder.findPort("Sabine Pass LNG")) //
+				.makeCharterOutEvent("charter_out_test_solo", LocalDateTime.of(2017, 12, 25, 0, 0, 0), LocalDateTime.of(2017, 12, 25, 0, 0, 0),
+						portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS)) //
 				.withHireRate(5_000_000) //
 				.withDurationInDays(5) //
 				.withOptional(true) //
 				.withVesselAssignment(vesselAvailability, 2) //
 				.build();
 
+		portModelBuilder.configureDischargePort(portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS), 24, null, null);
+		
 		// Construct the cargoes
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2017, 12, 4), portFinder.findPort("Sabine Pass LNG"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2017, 12, 4), portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS), null, entity, "5") //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2017, 12, 20), portFinder.findPort("Sabine Pass LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2017, 12, 20), portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS), null, entity, "7") //
 				.build() //
 				.withVesselAssignment(vesselAvailability, 1) //
 				.withAssignmentFlags(true, false) //
@@ -386,7 +397,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 	public void testOptionalCharterOutBest() throws Exception {
 		// Create the required basic elements
 		// Create a vessel and its availability
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setSafetyHeel(0);
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
@@ -397,7 +408,8 @@ public class CharterOutTests extends AbstractMicroTestCase {
 
 		// Construct the charterOutEvents
 		final CharterOutEvent charterOutEvent1 = cargoModelBuilder //
-				.makeCharterOutEvent("charter_out_test_1", LocalDateTime.of(2017, 12, 05, 0, 0, 0), LocalDateTime.of(2017, 12, 05, 0, 0, 0), portFinder.findPort("Sabine Pass LNG")) //
+				.makeCharterOutEvent("charter_out_test_1", LocalDateTime.of(2017, 12, 05, 0, 0, 0), LocalDateTime.of(2017, 12, 05, 0, 0, 0),
+						portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS)) //
 				.withHireRate(5000) //
 				.withOptional(true) //
 				.withDurationInDays(10) //
@@ -406,7 +418,8 @@ public class CharterOutTests extends AbstractMicroTestCase {
 
 		// The best one that should be choose
 		final CharterOutEvent charterOutEvent2 = cargoModelBuilder //
-				.makeCharterOutEvent("charter_out_test_best", LocalDateTime.of(2017, 12, 05, 0, 0, 0), LocalDateTime.of(2017, 12, 05, 0, 0, 0), portFinder.findPort("Sabine Pass LNG")) //
+				.makeCharterOutEvent("charter_out_test_best", LocalDateTime.of(2017, 12, 05, 0, 0, 0), LocalDateTime.of(2017, 12, 05, 0, 0, 0),
+						portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS)) //
 				.withHireRate(50_000) //
 				.withOptional(true) //
 				.withDurationInDays(10) //
@@ -448,7 +461,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 	public void testOptionalCharterOutNoAvailability() throws Exception {
 		// Create the required basic elements
 		// Create a vessel and its availability
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setSafetyHeel(500);
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
@@ -459,7 +472,8 @@ public class CharterOutTests extends AbstractMicroTestCase {
 
 		// Construct the charterOutEvent
 		final CharterOutEvent charterOutEvent = cargoModelBuilder //
-				.makeCharterOutEvent("charter_out_test_solo", LocalDateTime.of(2017, 12, 24, 0, 0, 0), LocalDateTime.of(2017, 12, 29, 0, 0, 0), portFinder.findPort("Sabine Pass LNG")) //
+				.makeCharterOutEvent("charter_out_test_solo", LocalDateTime.of(2017, 12, 24, 0, 0, 0), LocalDateTime.of(2017, 12, 29, 0, 0, 0),
+						portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS)) //
 				.withHireRate(50_000) //
 				.withOptional(true) //
 				.withDurationInDays(10) //
@@ -468,9 +482,9 @@ public class CharterOutTests extends AbstractMicroTestCase {
 
 		// Construct the cargoes
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2017, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2017, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2017, 12, 30), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2017, 12, 30), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				.withVesselAssignment(vesselAvailability, 1) //
 				.withAssignmentFlags(true, false) //
@@ -504,7 +518,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 	public void testExportOptionalCharterOutNotInPeriod() throws Exception {
 
 		// Construct the vessel
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withCharterRate("30000") //
@@ -514,7 +528,8 @@ public class CharterOutTests extends AbstractMicroTestCase {
 
 		// Construct the charterOutEvent
 		final CharterOutEvent charterOutEvent = cargoModelBuilder //
-				.makeCharterOutEvent("charter_out_test_solo", LocalDateTime.of(2018, 3, 1, 0, 0, 0), LocalDateTime.of(2018, 3, 2, 0, 0, 0), portFinder.findPort("Sabine Pass LNG")) //
+				.makeCharterOutEvent("charter_out_test_solo", LocalDateTime.of(2018, 3, 1, 0, 0, 0), LocalDateTime.of(2018, 3, 2, 0, 0, 0),
+						portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS)) //
 				.withHireRate(50_000) //
 				.withOptional(true) //
 				.withDurationInDays(10) //
@@ -562,7 +577,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 	public void testExportOptionalCharterOutInPeriod() throws Exception {
 
 		// Construct the vessel
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(LocalDateTime.of(2017, 12, 1, 0, 0, 0), LocalDateTime.of(2017, 12, 3, 0, 0, 0)) //
@@ -571,7 +586,8 @@ public class CharterOutTests extends AbstractMicroTestCase {
 
 		// Construct the charterOutEvent
 		final CharterOutEvent charterOutEvent = cargoModelBuilder //
-				.makeCharterOutEvent("charter_out_test_solo", LocalDateTime.of(2018, 3, 1, 0, 0, 0), LocalDateTime.of(2018, 3, 2, 0, 0, 0), portFinder.findPort("Sabine Pass LNG")) //
+				.makeCharterOutEvent("charter_out_test_solo", LocalDateTime.of(2018, 3, 1, 0, 0, 0), LocalDateTime.of(2018, 3, 2, 0, 0, 0),
+						portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS)) //
 				.withHireRate(50_000) //
 				.withOptional(true) //
 				.withDurationInDays(10) //

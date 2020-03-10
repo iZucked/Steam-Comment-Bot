@@ -7,27 +7,20 @@ package com.mmxlabs.lingo.its.microcases.pricebasedwindows;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.google.common.collect.Lists;
 import com.google.inject.Injector;
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.license.features.KnownFeatures;
-import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
-import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
+import com.mmxlabs.lingo.its.tests.microcases.AbstractLegacyMicroTestCase;
 import com.mmxlabs.lingo.its.tests.microcases.MicroCaseDateUtils;
 import com.mmxlabs.lingo.its.tests.microcases.MicroCaseUtils;
 import com.mmxlabs.lingo.its.tests.microcases.TimeWindowsTestsUtils;
@@ -63,16 +56,16 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.IntervalData;
-import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.TravelRouteData;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.PriceIntervalProviderHelper;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.TimeWindowsTrimming;
+import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.TravelRouteData;
 import com.mmxlabs.scheduler.optimiser.scheduling.ScheduledTimeWindows;
 import com.mmxlabs.scheduler.optimiser.scheduling.TimeWindowScheduler;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
 @ExtendWith(ShiroRunner.class)
-@RequireFeature(value = { KnownFeatures.FEATURE_OPTIMISATION_NO_NOMINALS_IN_PROMPT, KnownFeatures.FEATURE_OPTIMISATION_ACTIONSET })
-public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
+@RequireFeature({ KnownFeatures.FEATURE_OPTIMISATION_NO_NOMINALS_IN_PROMPT })
+public class PriceBasedTimeWindowsTests extends AbstractLegacyMicroTestCase {
 
 	private static String vesselName = "vessel";
 	private static String loadName = "load";
@@ -80,7 +73,7 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 
 	@Override
 	protected void setPromptDates() {
-		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2014, 1, 1), LocalDate.of(2014, 3, 1));
+		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
 	}
 
 	private VesselAvailability createTestVesselAvailability(final LocalDateTime startStart, final LocalDateTime startEnd, final LocalDateTime endStart) {
@@ -219,19 +212,11 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				.withWindowStartTime(0) //
 				.withWindowSize(5, TimePeriod.HOURS).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
-		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
 
-		final List<CommodityCurve> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityCurves();
-		CommodityCurve hh = null;
-		for (final CommodityCurve commodityIndex : commodityIndices) {
-			if (commodityIndex.getName().equals("Henry_Hub")) {
-				hh = commodityIndex;
-			}
-		}
-		assert hh != null;
-		hh.getPoints().clear();
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 7), 7.5);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 8), 8.5);
+		pricingModelBuilder.makeCommodityDataCurve("Henry_Hub", "$", "mmBtu") //
+				.addIndexPoint(YearMonth.of(2016, 7), 7.5) //
+				.addIndexPoint(YearMonth.of(2016, 8), 8.5) //
+				.build();
 		evaluateWithLSOTest(scenarioRunner -> {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
@@ -292,20 +277,13 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				.withWindowStartTime(0) //
 				.withWindowSize(24, TimePeriod.HOURS).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
-		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
 
-		final EList<CommodityCurve> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityCurves();
-		CommodityCurve hh = null;
-		for (final CommodityCurve commodityIndex : commodityIndices) {
-			if (commodityIndex.getName().equals("Henry_Hub")) {
-				hh = commodityIndex;
-			}
-		}
-		assert hh != null;
-		hh.getPoints().clear();
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 7), 7.5);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 8), 8.5);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 9), 13.5);
+		pricingModelBuilder.makeCommodityDataCurve("Henry_Hub", "$", "mmBtu") //
+				.addIndexPoint(YearMonth.of(2016, 7), 7.5) //
+				.addIndexPoint(YearMonth.of(2016, 8), 8.5) //
+				.addIndexPoint(YearMonth.of(2016, 9), 13.5) //
+				.build();
+
 		evaluateWithLSOTest(scenarioRunner -> {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
@@ -375,20 +353,13 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				.withWindowStartTime(0) //
 				.withWindowSize(23, TimePeriod.HOURS).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
-		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
 
-		final List<CommodityCurve> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityCurves();
-		CommodityCurve hh = null;
-		for (final CommodityCurve commodityIndex : commodityIndices) {
-			if (commodityIndex.getName().equals("Henry_Hub")) {
-				hh = commodityIndex;
-			}
-		}
-		assert hh != null;
-		hh.getPoints().clear();
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 7), 7.5);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 8), 8.5);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 9), 13.5);
+		pricingModelBuilder.makeCommodityDataCurve("Henry_Hub", "$", "mmBtu") //
+				.addIndexPoint(YearMonth.of(2016, 7), 7.5) //
+				.addIndexPoint(YearMonth.of(2016, 8), 8.5) //
+				.addIndexPoint(YearMonth.of(2016, 9), 13.5) //
+				.build();
+
 		evaluateWithLSOTest(scenarioRunner -> {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
@@ -449,19 +420,13 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				.withWindowStartTime(0) //
 				.withWindowSize(24, TimePeriod.HOURS).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
-		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
-		final List<CommodityCurve> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityCurves();
-		CommodityCurve hh = null;
-		for (final CommodityCurve commodityIndex : commodityIndices) {
-			if (commodityIndex.getName().equals("Henry_Hub")) {
-				hh = commodityIndex;
-			}
-		}
-		assert hh != null;
-		hh.getPoints().clear();
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 7), 7.5);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 8), 8.5);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 9), 13.5);
+
+		pricingModelBuilder.makeCommodityDataCurve("Henry_Hub", "$", "mmBtu") //
+				.addIndexPoint(YearMonth.of(2016, 7), 7.5) //
+				.addIndexPoint(YearMonth.of(2016, 8), 8.5) //
+				.addIndexPoint(YearMonth.of(2016, 9), 13.5) //
+				.build();
+
 		evaluateWithLSOTest(scenarioRunner -> {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
@@ -530,19 +495,13 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				.withWindowStartTime(0) //
 				.withWindowSize(3, TimePeriod.MONTHS).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
-		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
-		final List<CommodityCurve> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityCurves();
-		CommodityCurve hh = null;
-		for (final CommodityCurve commodityIndex : commodityIndices) {
-			if (commodityIndex.getName().equals("Henry_Hub")) {
-				hh = commodityIndex;
-			}
-		}
-		assert hh != null;
-		hh.getPoints().clear();
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 7), 7.5);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 8), 8.5);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 9), salesPrice);
+
+		pricingModelBuilder.makeCommodityDataCurve("Henry_Hub", "$", "mmBtu") //
+				.addIndexPoint(YearMonth.of(2016, 7), 7.5) //
+				.addIndexPoint(YearMonth.of(2016, 8), 8.5) //
+				.addIndexPoint(YearMonth.of(2016, 9), salesPrice) //
+				.build();
+
 		evaluateWithLSOTest(scenarioRunner -> {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
@@ -608,19 +567,13 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				.withWindowStartTime(0) //
 				.withWindowSize(24000, TimePeriod.HOURS).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
-		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
-		final List<CommodityCurve> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityCurves();
-		CommodityCurve hh = null;
-		for (final CommodityCurve commodityIndex : commodityIndices) {
-			if (commodityIndex.getName().equals("Henry_Hub")) {
-				hh = commodityIndex;
-			}
-		}
-		assert hh != null;
-		hh.getPoints().clear();
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 7), 7.5);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 8), 8.5);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 9), salesPrice);
+
+		pricingModelBuilder.makeCommodityDataCurve("Henry_Hub", "$", "mmBtu") //
+				.addIndexPoint(YearMonth.of(2016, 7), 7.5) //
+				.addIndexPoint(YearMonth.of(2016, 8), 8.5) //
+				.addIndexPoint(YearMonth.of(2016, 9), salesPrice) //
+				.build();
+
 		evaluateWithLSOTest(scenarioRunner -> {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
@@ -682,19 +635,12 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				.withWindowStartTime(0) //
 				.withWindowSize(0, TimePeriod.HOURS).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
-		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
 
-		final List<CommodityCurve> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityCurves();
-		CommodityCurve hh = null;
-		for (final CommodityCurve commodityIndex : commodityIndices) {
-			if (commodityIndex.getName().equals("Henry_Hub")) {
-				hh = commodityIndex;
-			}
-		}
-		assert hh != null;
-		hh.getPoints().clear();
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 7), 7.5);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 8), 8.5);
+		pricingModelBuilder.makeCommodityDataCurve("Henry_Hub", "$", "mmBtu") //
+				.addIndexPoint(YearMonth.of(2016, 7), 7.5) //
+				.addIndexPoint(YearMonth.of(2016, 8), 8.5) //
+				.build();
+
 		evaluateWithLSOTest(scenarioRunner -> {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();

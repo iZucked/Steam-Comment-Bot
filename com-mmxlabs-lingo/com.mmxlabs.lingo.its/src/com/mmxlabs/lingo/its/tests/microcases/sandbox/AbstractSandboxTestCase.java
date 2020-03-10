@@ -40,17 +40,6 @@ import com.mmxlabs.scenario.service.model.util.ScenarioServiceUtils;
 
 public abstract class AbstractSandboxTestCase extends AbstractMicroTestCase {
 
-	// Make sure we have latest data
-	@Override
-	public @NonNull IScenarioDataProvider importReferenceData() throws Exception {
-		final IScenarioDataProvider scenarioDataProvider = super.importReferenceData();
-		//
-		updateDistanceData(scenarioDataProvider, DataConstants.DISTANCES_LATEST_JSON);
-		updatePortsData(scenarioDataProvider, DataConstants.PORTS_LATEST_JSON);
-
-		return scenarioDataProvider;
-	}
-
 	protected void evaluateSandbox(@NonNull OptionAnalysisModel model) {
 
 		Consumer<IAnalyticsScenarioEvaluator> func = null;

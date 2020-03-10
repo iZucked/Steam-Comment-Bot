@@ -10,14 +10,18 @@ import java.util.Collection;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.util.SimpleCargoAllocation;
+import com.mmxlabs.models.lng.transformer.its.RequireFeature;
+import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 
 /**
@@ -25,6 +29,7 @@ import com.mmxlabs.models.lng.types.VolumeUnits;
  * 
  * @author NSteadman
  */
+@ExtendWith(ShiroRunner.class)
 public class InPortBoilOffLDDUnconstrainedTests extends InPortBoilOffTests {
 
 	public static Collection testCases() {
@@ -72,7 +77,7 @@ public class InPortBoilOffLDDUnconstrainedTests extends InPortBoilOffTests {
 		vessel.setCapacity(vesselCapacity);
 		vessel.setFillCapacity(1.0);
 
-		final Port portC = portFinder.findPort("Petrobras Pecem LNG");
+		final Port portC = portFinder.findPortById(InternalDataConstants.PORT_PECEM);
 
 		cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 4), portA, null, entity, "9") //

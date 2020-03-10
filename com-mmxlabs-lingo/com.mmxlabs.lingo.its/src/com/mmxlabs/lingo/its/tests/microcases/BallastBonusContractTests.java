@@ -53,7 +53,7 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 @SuppressWarnings({ "unused", "null" })
 @ExtendWith(ShiroRunner.class)
-public class BallastBonusContractTests extends AbstractMicroTestCase {
+public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 
 	private static final String TEST_CHARTER_CURVE_NAME = "TestCharterCurve";
 	

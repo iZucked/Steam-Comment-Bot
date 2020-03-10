@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
@@ -27,11 +28,11 @@ public class NoSpotCargoMarketsOptiTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void spotCargoMarketPermitted() throws Exception {
 
-		final Slot load2 = cargoModelBuilder.makeDESPurchase("DP", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2016, 2, 18), portFinder.findPort("Isle of Grain"), null, entity, "1", null, null) //
+		final Slot load2 = cargoModelBuilder.makeDESPurchase("DP", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2016, 2, 18), portFinder.findPortById(InternalDataConstants.PORT_ISLE_OF_GRAIN), null, entity, "1", 22.6, null) //
 				.withOptional(true) //
 				.build();
 
-		final SpotMarket market = spotMarketsModelBuilder.makeDESSaleMarket("IoGMarket", portFinder.findPort("Isle of Grain"), entity, "5") //
+		final SpotMarket market = spotMarketsModelBuilder.makeDESSaleMarket("IoGMarket", portFinder.findPortById(InternalDataConstants.PORT_ISLE_OF_GRAIN), entity, "5") //
 				.withAvailabilityConstant(1) //
 				.build();
 
@@ -48,11 +49,11 @@ public class NoSpotCargoMarketsOptiTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void spotCargoMarket_NotPermitted() throws Exception {
 
-		final Slot load1 = cargoModelBuilder.makeDESPurchase("DP", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2016, 2, 18), portFinder.findPort("Isle of Grain"), null, entity, "1", null, null) //
+		final Slot load1 = cargoModelBuilder.makeDESPurchase("DP", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2016, 2, 18), portFinder.findPortById(InternalDataConstants.PORT_ISLE_OF_GRAIN), null, entity, "1", 22.8, null) //
 				.withOptional(true) //
 				.build();
 
-		spotMarketsModelBuilder.makeDESSaleMarket("IoGMarket", portFinder.findPort("Isle of Grain"), entity, "5") //
+		spotMarketsModelBuilder.makeDESSaleMarket("IoGMarket", portFinder.findPortById(InternalDataConstants.PORT_ISLE_OF_GRAIN), entity, "5") //
 				.withAvailabilityConstant(1) //
 				.build();
 

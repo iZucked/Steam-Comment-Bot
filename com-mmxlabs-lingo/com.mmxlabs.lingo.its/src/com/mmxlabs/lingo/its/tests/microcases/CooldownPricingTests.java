@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortGroup;
@@ -48,11 +49,11 @@ public class CooldownPricingTests extends AbstractMicroTestCase {
 		scenarioModelBuilder.getCostModelBuilder().createCooldownPrice("100000", true, Collections.singleton(portGroup));
 
 		// Set specific rate
-		final Port port1 = portFinder.findPort("Point Fortin");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
 		scenarioModelBuilder.getCostModelBuilder().createCooldownPrice("200000", true, Collections.singleton(port1));
-		final Port port2 = portFinder.findPort("Sakai");
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_SAKAI);
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		evaluateTest(null, null, scenarioRunner -> {
 
@@ -86,15 +87,15 @@ public class CooldownPricingTests extends AbstractMicroTestCase {
 		scenarioModelBuilder.getCostModelBuilder().getCostModel().getCooldownCosts().clear();
 
 		// Set specific rate
-		final Port port1 = portFinder.findPort("Point Fortin");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
 		scenarioModelBuilder.getCostModelBuilder().createCooldownPrice("200000", true, Collections.singleton(port1));
 		// Generic flat rate
 		final PortGroup portGroup = scenarioModelBuilder.getPortModelBuilder().makePortGroup("all-ports", scenarioModelBuilder.getPortModelBuilder().getPortModel().getPorts());
 		scenarioModelBuilder.getCostModelBuilder().createCooldownPrice("100000", true, Collections.singleton(portGroup));
 
-		final Port port2 = portFinder.findPort("Sakai");
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_SAKAI);
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		evaluateTest(null, null, scenarioRunner -> {
 

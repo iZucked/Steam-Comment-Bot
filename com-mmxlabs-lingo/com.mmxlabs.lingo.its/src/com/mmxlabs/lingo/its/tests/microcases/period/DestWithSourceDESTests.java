@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.lingo.its.tests.microcases.MicroTestUtils;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
@@ -45,14 +46,14 @@ public class DestWithSourceDESTests extends AbstractMicroTestCase {
 	public void testDestOnlyDES() {
 
 		cargoModelBuilder.makeCargo()//
-				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2019, 8, 14), portFinder.findPort("Sakai"), null, entity, "5", null) //
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2019, 8, 14), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "5", 22.8, null) //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.withWindowStartTime(0) //
 
 				// .withShippingDaysRestriction() //
 				.build() //
 
-				.makeDESSale("D1", LocalDate.of(2019, 8, 14), portFinder.findPort("Sakai"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2019, 8, 14), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7") //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.withWindowStartTime(0) //
 
@@ -113,12 +114,12 @@ public class DestWithSourceDESTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testDestOnlyDESOpti() {
 
-		cargoModelBuilder.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2019, 8, 14), portFinder.findPort("Sakai"), null, entity, "5", 23.0, null) //
+		cargoModelBuilder.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2019, 8, 14), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "5", 23.0, null) //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.withWindowStartTime(0) //
 				.build();//
 
-		cargoModelBuilder.makeDESSale("D1", LocalDate.of(2019, 8, 14), portFinder.findPort("Sakai"), null, entity, "7") //
+		cargoModelBuilder.makeDESSale("D1", LocalDate.of(2019, 8, 14), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7") //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.withWindowStartTime(0) //
 				.build();
@@ -165,13 +166,13 @@ public class DestWithSourceDESTests extends AbstractMicroTestCase {
 		// Windows mismatch by 1 hour, fail to validate.
 
 		cargoModelBuilder.makeCargo()//
-				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2019, 8, 14), portFinder.findPort("Sakai"), null, entity, "5", null) //
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2019, 8, 14), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "5", 22.8, null) //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.withWindowStartTime(0) //
 				// .withShippingDaysRestriction() //
 				.build() //
 
-				.makeDESSale("D1", LocalDate.of(2019, 8, 14), portFinder.findPort("Sakai"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2019, 8, 14), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7") //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.withWindowStartTime(1) //
 
@@ -221,17 +222,14 @@ public class DestWithSourceDESTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testDestWithSourceOnlyDES() throws Exception {
 
-		// Load in the basic scenario from CSV
-		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-
 		cargoModelBuilder.makeCargo()//
-				.makeDESPurchase("L1", DESPurchaseDealType.DEST_WITH_SOURCE, LocalDate.of(2019, 8, 14), portFinder.findPort("Point Fortin"), null, entity, "5", null) //
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_WITH_SOURCE, LocalDate.of(2019, 8, 14), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8, null) //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.withWindowStartTime(0) //
 				// .withShippingDaysRestriction() //
 				.build() //
 
-				.makeDESSale("D1", LocalDate.of(2019, 8, 14), portFinder.findPort("Sakai"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2019, 8, 14), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7") //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.withWindowStartTime(0) //
 				.build() //
@@ -278,12 +276,13 @@ public class DestWithSourceDESTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testDestWithSourceOnlyDESOpti() throws Exception {
 
-		cargoModelBuilder.makeDESPurchase("L1", DESPurchaseDealType.DEST_WITH_SOURCE, LocalDate.of(2019, 8, 14), portFinder.findPort("Point Fortin"), null, entity, "5", 23.0, null) //
+		cargoModelBuilder
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_WITH_SOURCE, LocalDate.of(2019, 8, 14), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 23.0, null) //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.withWindowStartTime(0) //
 				.build();
 
-		cargoModelBuilder.makeDESSale("D1", LocalDate.of(2019, 8, 14), portFinder.findPort("Sakai"), null, entity, "7") //
+		cargoModelBuilder.makeDESSale("D1", LocalDate.of(2019, 8, 14), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7") //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.withWindowStartTime(0) //
 				.build();
@@ -327,13 +326,14 @@ public class DestWithSourceDESTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testDestWithSourceOnlyDESOptiPositiveFlex() throws Exception {
 
-		cargoModelBuilder.makeDESPurchase("L1", DESPurchaseDealType.DEST_WITH_SOURCE, LocalDate.of(2019, 8, 14), portFinder.findPort("Point Fortin"), null, entity, "5", 23.0, null) //
+		cargoModelBuilder
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_WITH_SOURCE, LocalDate.of(2019, 8, 14), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 23.0, null) //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.withWindowStartTime(0) //
 				.withWindowFlex(1, TimePeriod.HOURS) //
 				.build();
 
-		cargoModelBuilder.makeDESSale("D1", LocalDate.of(2019, 8, 14), portFinder.findPort("Sakai"), null, entity, "7") //
+		cargoModelBuilder.makeDESSale("D1", LocalDate.of(2019, 8, 14), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7") //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.withWindowStartTime(1) //
 				.build();
@@ -383,13 +383,13 @@ public class DestWithSourceDESTests extends AbstractMicroTestCase {
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
 		cargoModelBuilder.makeCargo()//
-				.makeDESPurchase("L1", DESPurchaseDealType.DEST_WITH_SOURCE, LocalDate.of(2019, 8, 14), portFinder.findPort("Point Fortin"), null, entity, "5", null) //
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_WITH_SOURCE, LocalDate.of(2019, 8, 14), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8, null) //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.withWindowStartTime(1) //
 				// .withShippingDaysRestriction() //
 				.build() //
 
-				.makeDESSale("D1", LocalDate.of(2019, 8, 14), portFinder.findPort("Sakai"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2019, 8, 14), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7") //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.withWindowStartTime(0) //
 				.build() //

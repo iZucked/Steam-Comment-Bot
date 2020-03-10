@@ -98,7 +98,7 @@ public final class CargoImportAction extends SimpleImportAction {
 
 		final EditingDomain destEditingDomain = importHooksProvider.getEditingDomain();
 
-		final List<IMappingDescriptor> descriptors = new LinkedList<IMappingDescriptor>();
+		final List<IMappingDescriptor> descriptors = new LinkedList<>();
 		final LNGScenarioModel importModel = LNGScenarioFactory.eINSTANCE.createLNGScenarioModel();
 		importModel.setCargoModel(tmpCargoModel);
 

@@ -16,8 +16,8 @@ import com.mmxlabs.lingo.its.tests.TestMode;
 import com.mmxlabs.lingo.its.tests.TestingModes;
 import com.mmxlabs.lingo.its.tests.microcases.adp.AbstractADPAndLightWeightTests;
 import com.mmxlabs.lingo.its.tests.microcases.adp.OptimisationEMFTestUtils;
-import com.mmxlabs.lingo.its.tests.microcases.adp.TrainingCaseConstants;
 import com.mmxlabs.lingo.its.verifier.OptimiserResultVerifier;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.adp.IntervalType;
 import com.mmxlabs.models.lng.adp.LNGVolumeUnit;
 import com.mmxlabs.models.lng.adp.ext.impl.AbstractSlotTemplateFactory;
@@ -179,13 +179,13 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 	public void tesDESPurchaseADPOptimisation() {
 		Assumptions.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
 
-		final Vessel vesselSmall = fleetModelFinder.findVessel(TrainingCaseConstants.VESSEL_SMALL_SHIP);
+		final Vessel vesselSmall = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_138);
 		final CharterInMarket defaultCharterInMarket = spotMarketsModelBuilder.createCharterInMarket("ADP Default", vesselSmall, entity, "50000", 0);
 		defaultCharterInMarket.setNominal(true);
 		defaultCharterInMarket.setEnabled(false);
 
-		final Port darwin = portFinder.findPort(TrainingCaseConstants.PORT_DARWIN);
-		final Port himeji = portFinder.findPort(TrainingCaseConstants.PORT_HIMEJI);
+		final Port darwin = portFinder.findPortById(InternalDataConstants.PORT_DARWIN);
+		final Port himeji = portFinder.findPortById(InternalDataConstants.PORT_HIMEJI);
 
 		final PurchaseContract purchaseContract = commercialModelBuilder.makeExpressionPurchaseContract("Purchase A", entity, "5");
 		purchaseContract.setMaxQuantity(3_000_000);
@@ -277,7 +277,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 		Assumptions.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
 
 		final CharterInMarket defaultCharterInMarket = setDefaultVesselsAndContracts();
-		final VesselAvailability vesselAvailability = cargoModelFinder.findVesselAvailability(TrainingCaseConstants.VESSEL_MEDIUM_SHIP);
+		final VesselAvailability vesselAvailability = cargoModelFinder.findVesselAvailability(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vesselAvailability.setStartAfter(vesselAvailability.getStartAfter().plusMonths(2));
 		vesselAvailability.setStartBy(vesselAvailability.getStartAfter());
 		final ADPModelBuilder adpModelBuilder = scenarioModelBuilder.initialiseADP(YearMonth.of(2018, 10), YearMonth.of(2019, 10), defaultCharterInMarket);
@@ -325,7 +325,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 		Assumptions.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
 
 		final CharterInMarket defaultCharterInMarket = setDefaultVesselsAndContracts();
-		final VesselAvailability vesselAvailability = cargoModelFinder.findVesselAvailability(TrainingCaseConstants.VESSEL_MEDIUM_SHIP);
+		final VesselAvailability vesselAvailability = cargoModelFinder.findVesselAvailability(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vesselAvailability.setStartAfter(vesselAvailability.getStartAfter().plusMonths(2));
 		vesselAvailability.setStartBy(vesselAvailability.getStartAfter());
 		vesselAvailability.setEndAfter(vesselAvailability.getEndAfter().minusMonths(2));
@@ -374,7 +374,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 		Assumptions.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
 
 		final CharterInMarket defaultCharterInMarket = setDefaultVesselsAndContracts();
-		final VesselAvailability vesselAvailability = cargoModelFinder.findVesselAvailability(TrainingCaseConstants.VESSEL_MEDIUM_SHIP);
+		final VesselAvailability vesselAvailability = cargoModelFinder.findVesselAvailability(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vesselAvailability.setEndAfter(vesselAvailability.getEndAfter().minusMonths(2));
 		vesselAvailability.setEndBy(vesselAvailability.getEndAfter());
 		final ADPModelBuilder adpModelBuilder = scenarioModelBuilder.initialiseADP(YearMonth.of(2018, 10), YearMonth.of(2019, 10), defaultCharterInMarket);
@@ -510,10 +510,10 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 	}
 
 	private CharterInMarket setDefaultVesselsAndContracts() {
-		final Vessel vesselSmall = fleetModelFinder.findVessel(TrainingCaseConstants.VESSEL_SMALL_SHIP);
-		final Vessel vesselMedium = fleetModelFinder.findVessel(TrainingCaseConstants.VESSEL_MEDIUM_SHIP);
-		final Port darwin = portFinder.findPort(TrainingCaseConstants.PORT_DARWIN);
-		final Port himeji = portFinder.findPort(TrainingCaseConstants.PORT_HIMEJI);
+		final Vessel vesselSmall = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_138);
+		final Vessel vesselMedium = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
+		final Port darwin = portFinder.findPortById(InternalDataConstants.PORT_DARWIN);
+		final Port himeji = portFinder.findPortById(InternalDataConstants.PORT_HIMEJI);
 		final CharterInMarket defaultCharterInMarket = spotMarketsModelBuilder.createCharterInMarket("ADP Default", vesselSmall, entity, "50000", 0);
 		defaultCharterInMarket.setNominal(true);
 		defaultCharterInMarket.setEnabled(false);

@@ -31,7 +31,7 @@ import com.mmxlabs.models.lng.types.TimePeriod;
  * @author Simon Goodall
  *
  */
-public class VesselAvailabilityPeriodTests extends AbstractMicroTestCase {
+public class VesselAvailabilityPeriodTests extends AbstractLegacyMicroTestCase {
 
 	/**
 	 * Vessel availability and cargoes are within the period. No change to start/end information.

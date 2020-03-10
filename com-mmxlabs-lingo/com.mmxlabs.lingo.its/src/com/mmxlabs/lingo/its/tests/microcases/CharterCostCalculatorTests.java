@@ -29,8 +29,11 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import com.google.inject.Injector;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
+import com.mmxlabs.lngdataserver.lng.importers.creator.ScenarioBuilder;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
@@ -73,6 +76,18 @@ import com.mmxlabs.scheduler.optimiser.schedule.ShippingCostHelper;
  */
 @ExtendWith(ShiroRunner.class)
 public class CharterCostCalculatorTests extends AbstractMicroTestCase {
+	
+	@Override
+	public @NonNull IScenarioDataProvider importReferenceData() throws Exception {
+		ScenarioBuilder sb = ScenarioBuilder.initialiseBasicScenario();
+		sb.loadDefaultData();
+		return sb.getScenarioDataProvider();
+	}
+
+	@Override
+	protected BaseLegalEntity importDefaultEntity() {
+		return commercialModelFinder.findEntity(ScenarioBuilder.DEFAULT_ENTITY_NAME);
+	}
 	
 	private CharterCurve charterCurve;
 
@@ -120,10 +135,10 @@ public class CharterCostCalculatorTests extends AbstractMicroTestCase {
 		portModelBuilder.setAllExistingPortsToUTC();
 
 		@NonNull
-		final Port port1 = portFinder.findPort("Point Fortin");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
 
 		@NonNull
-		final Port port2 = portFinder.findPort("Dominion Cove Point LNG");
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT);
 
 		// Create the required basic elements
 		final CharterInMarket charterInMarket_1 = createChartInMarket();
@@ -162,10 +177,10 @@ public class CharterCostCalculatorTests extends AbstractMicroTestCase {
 		portModelBuilder.setAllExistingPortsToUTC();
 
 		@NonNull
-		final Port port1 = portFinder.findPort("Point Fortin");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
 
 		@NonNull
-		final Port port2 = portFinder.findPort("Dominion Cove Point LNG");
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT);
 
 		// Create the required basic elements
 		final CharterInMarket charterInMarket_1 = createChartInMarket();
@@ -201,10 +216,10 @@ public class CharterCostCalculatorTests extends AbstractMicroTestCase {
 	@MethodSource("getTestParameters")
 	public void testCargoDifferentMonthTimezoneCharterCost(@NonNull Class<? extends ICharterCostCalculator> charterCostImplClass) throws Exception {
 		@NonNull
-		final Port port1 = portFinder.findPort("Point Fortin");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
 
 		@NonNull
-		final Port port2 = portFinder.findPort("Ogishima - Tokyo Gas LNG Berth");
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_OGISHIMA);
 
 		// Create the required basic elements
 		final CharterInMarket charterInMarket_1 = createChartInMarket();
@@ -240,10 +255,10 @@ public class CharterCostCalculatorTests extends AbstractMicroTestCase {
 	@MethodSource("getTestParameters")
 	public void testCargoZeroDurationDifferentMonthTimezoneCharterCost(@NonNull Class<? extends ICharterCostCalculator> charterCostImplClass) throws Exception {
 		@NonNull
-		final Port port1 = portFinder.findPort("Point Fortin");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
 
 		@NonNull
-		final Port port2 = portFinder.findPort("Ogishima - Tokyo Gas LNG Berth");
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_OGISHIMA);
 
 		// Create the required basic elements
 		final CharterInMarket charterInMarket_1 = createChartInMarket();
@@ -352,7 +367,7 @@ public class CharterCostCalculatorTests extends AbstractMicroTestCase {
 
 		//Convert charterCurve to a map.
 		List<YearMonthPoint> points = charterCurve.getPoints();
-		TreeMap<LocalDateTime, Long> localDateToCharterCost = new TreeMap<LocalDateTime, Long>();
+		TreeMap<LocalDateTime, Long> localDateToCharterCost = new TreeMap<>();
 		
 		for (YearMonthPoint point : points) {
 			int pointMonth = point.getDate().getMonthValue();
@@ -387,7 +402,7 @@ public class CharterCostCalculatorTests extends AbstractMicroTestCase {
 
 		//Convert charterCurve to a map.
 		List<YearMonthPoint> points = charterCurve.getPoints();
-		TreeMap<LocalDateTime, Long> localDateToCharterCost = new TreeMap<LocalDateTime, Long>();
+		TreeMap<LocalDateTime, Long> localDateToCharterCost = new TreeMap<>();
 		
 		for (YearMonthPoint point : points) {
 			int pointMonth = point.getDate().getMonthValue();
@@ -422,7 +437,7 @@ public class CharterCostCalculatorTests extends AbstractMicroTestCase {
 				.addIndexPoint(YearMonth.of(2015, 12), 100000)
 				.addIndexPoint(YearMonth.of(2016, 1), 500000)
 				.addIndexPoint(YearMonth.of(2016, 2), 1000000).build();
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setMaxSpeed(15.0);
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "TestCharterCurve1", 1);	
 		charterInMarket_1.setNominal(false);

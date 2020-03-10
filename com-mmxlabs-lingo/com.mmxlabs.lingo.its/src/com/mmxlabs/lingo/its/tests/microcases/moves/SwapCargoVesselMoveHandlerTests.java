@@ -20,8 +20,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -61,9 +63,9 @@ public class SwapCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 	 */
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
-	public void testSimpleCargoMove() throws Exception {
+	public void testSimpleCargoMove() {
 
-		final Vessel source = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel source = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		final Vessel vessel1 = fleetModelBuilder.createVesselFrom("My Vessel 1", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 		final Vessel vessel2 = fleetModelBuilder.createVesselFrom("My Vessel 2", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 
@@ -75,9 +77,9 @@ public class SwapCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 				.build();
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				.withVesselAssignment(vesselAvailability1, 1) //
 				.withAssignmentFlags(false, false) //
@@ -139,9 +141,9 @@ public class SwapCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
-	public void testNominalCargoMove_ThereAndBackAgain() throws Exception {
+	public void testNominalCargoMove_ThereAndBackAgain() {
 
-		final Vessel source = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel source = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		final Vessel vessel1 = fleetModelBuilder.createVesselFrom("My Vessel 1", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 		final Vessel vessel2 = fleetModelBuilder.createVesselFrom("My Vessel 2", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 
@@ -152,9 +154,9 @@ public class SwapCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", source, entity, "50000", 0);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				.withVesselAssignment(charterInMarket_1, -1, 1) //
 				.withAssignmentFlags(false, false) //
@@ -257,18 +259,18 @@ public class SwapCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 	 */
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
-	public void testCannotMoveDESPurchase() throws Exception {
+	public void testCannotMoveDESPurchase() {
 
-		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
 				.withCharterRate("10000") //
 				.build();
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5", null) //
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "5", 22.8, null) //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				.withAssignmentFlags(false, false) //
 				.build();
@@ -313,17 +315,17 @@ public class SwapCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 	 */
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
-	public void testCannotMoveFOBSale() throws Exception {
-		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
+	public void testCannotMoveFOBSale() {
+		final Vessel vessel1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
 				.withCharterRate("10000") //
 				.build();
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 11), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.build() //
-				.makeFOBSale("D1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2015, 12, 11), portFinder.findPort("Point Fortin"), null, entity, "7", null) //
+				.makeFOBSale("D1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "7", null) //
 				.build() //
 				.withAssignmentFlags(false, false) //
 				.build();
@@ -368,9 +370,9 @@ public class SwapCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 	 */
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
-	public void testInsertCargoMove() throws Exception {
+	public void testInsertCargoMove() {
 
-		final Vessel source = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel source = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final Vessel vessel1 = fleetModelBuilder.createVesselFrom("My Vessel 1", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 		final Vessel vessel2 = fleetModelBuilder.createVesselFrom("My Vessel 2", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
@@ -383,25 +385,25 @@ public class SwapCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 				.build();
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2016, 2, 1), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2016, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2016, 2, 15), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2016, 2, 15), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				.withVesselAssignment(vesselAvailability1, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
 		final Cargo cargo2 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L2", LocalDate.of(2016, 1, 1), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L2", LocalDate.of(2016, 1, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.build() //
-				.makeDESSale("D2", LocalDate.of(2016, 1, 15), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D2", LocalDate.of(2016, 1, 15), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				.withVesselAssignment(vesselAvailability2, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
 		final Cargo cargo3 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L3", LocalDate.of(2016, 3, 1), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L3", LocalDate.of(2016, 3, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.build() //
-				.makeDESSale("D3", LocalDate.of(2016, 3, 15), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D3", LocalDate.of(2016, 3, 15), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				.withVesselAssignment(vesselAvailability2, 2) //
 				.withAssignmentFlags(false, false) //
@@ -471,9 +473,9 @@ public class SwapCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 	 */
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
-	public void testInsertCargoMove_FailsDueToVesselDate() throws Exception {
+	public void testInsertCargoMove_FailsDueToVesselDate() {
 
-		final Vessel source = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel source = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		final Vessel vessel1 = fleetModelBuilder.createVesselFrom("My Vessel 1", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 		final Vessel vessel2 = fleetModelBuilder.createVesselFrom("My Vessel 2", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 
@@ -488,9 +490,9 @@ public class SwapCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 				.build();
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2016, 2, 1), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2016, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2016, 2, 15), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2016, 2, 15), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				.withVesselAssignment(vesselAvailability1, 1) //
 				.withAssignmentFlags(false, false) //
@@ -539,9 +541,9 @@ public class SwapCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 	 */
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
-	public void testInsertCargoMove_FailsDueToSlotVesselRestriction() throws Exception {
+	public void testInsertCargoMove_FailsDueToSlotVesselRestriction() {
 
-		final Vessel source = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel source = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		final Vessel vessel1 = fleetModelBuilder.createVesselFrom("My Vessel 1", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 		final Vessel vessel2 = fleetModelBuilder.createVesselFrom("My Vessel 2", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 
@@ -554,9 +556,9 @@ public class SwapCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 				.build();
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2016, 2, 1), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2016, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2016, 2, 15), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2016, 2, 15), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				// Only allow vessel 1
 				.withRestrictedVessels(vessel1, true) //
 				.build() //
@@ -603,19 +605,19 @@ public class SwapCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
-	public void testSwapWithinSequence() throws Exception {
+	public void testSwapWithinSequence() {
 
-		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
 				.withCharterRate("100000") //
 				.build();
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2017, 2, 1), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2017, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.withWindowSize(3, TimePeriod.MONTHS) //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2017, 2, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2017, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.withWindowSize(3, TimePeriod.MONTHS) //
 				.build() //
 				.withVesselAssignment(vesselAvailability1, 1) //
@@ -623,10 +625,10 @@ public class SwapCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 				.build();
 
 		final Cargo cargo2 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L2", LocalDate.of(2017, 2, 1), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L2", LocalDate.of(2017, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.withWindowSize(3, TimePeriod.MONTHS) //
 				.build() //
-				.makeDESSale("D2", LocalDate.of(2017, 2, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D2", LocalDate.of(2017, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.withWindowSize(3, TimePeriod.MONTHS) //
 				.build() //
 				.withVesselAssignment(vesselAvailability1, 2) //
@@ -682,24 +684,25 @@ public class SwapCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
-	public void testSwapEventWithinSequence() throws Exception {
+	public void testSwapEventWithinSequence() {
 
-		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
 				.withCharterRate("100000") //
 				.build();
 
-		final CharterOutEvent event = cargoModelBuilder.makeCharterOutEvent("CO1", LocalDateTime.of(2017, 2, 1, 0, 0, 0), LocalDateTime.of(2017, 5, 1, 0, 0, 0), portFinder.findPort("Point Fortin")) //
-				.withRelocatePort(portFinder.findPort("Dominion Cove Point LNG")) //
+		final CharterOutEvent event = cargoModelBuilder
+				.makeCharterOutEvent("CO1", LocalDateTime.of(2017, 2, 1, 0, 0, 0), LocalDateTime.of(2017, 5, 1, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
+				.withRelocatePort(portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT)) //
 				.withVesselAssignment(vesselAvailability1, 1) //
 				.build();
 
 		final Cargo cargo2 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L2", LocalDate.of(2017, 2, 1), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L2", LocalDate.of(2017, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.withWindowSize(3, TimePeriod.MONTHS) //
 				.build() //
-				.makeDESSale("D2", LocalDate.of(2017, 2, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D2", LocalDate.of(2017, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.withWindowSize(3, TimePeriod.MONTHS) //
 				.build() //
 				.withVesselAssignment(vesselAvailability1, 2) //

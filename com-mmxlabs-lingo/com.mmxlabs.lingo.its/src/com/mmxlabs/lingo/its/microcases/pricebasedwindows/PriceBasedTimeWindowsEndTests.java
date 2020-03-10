@@ -21,6 +21,7 @@ import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.lingo.its.tests.microcases.MicroCaseUtils;
 import com.mmxlabs.lingo.its.tests.microcases.TimeWindowsTestsUtils;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -49,7 +50,7 @@ import com.mmxlabs.scheduler.optimiser.scheduling.TimeWindowScheduler;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
 @ExtendWith(ShiroRunner.class)
-@RequireFeature(value = { KnownFeatures.FEATURE_OPTIMISATION_NO_NOMINALS_IN_PROMPT, KnownFeatures.FEATURE_OPTIMISATION_ACTIONSET })
+@RequireFeature({ KnownFeatures.FEATURE_OPTIMISATION_NO_NOMINALS_IN_PROMPT })
 public class PriceBasedTimeWindowsEndTests extends AbstractMicroTestCase {
 
 	private static String vesselName = "vessel";
@@ -72,30 +73,24 @@ public class PriceBasedTimeWindowsEndTests extends AbstractMicroTestCase {
 	public void testSimpleWindowsCase() throws Exception {
 
 		// Create the required basic elements
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		final CharterInMarket charterInMarket = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "20000", 1);
 		// Construct the cargo scenario
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase(loadName, LocalDate.of(2016, 7, 1), portFinder.findPort("Bonny Nigeria"), null, entity, "Henry_Hub", 23.4) //
+				.makeFOBPurchase(loadName, LocalDate.of(2016, 7, 1), portFinder.findPortById(InternalDataConstants.PORT_BONNY), null, entity, "Henry_Hub", 23.4) //
 				.withWindowStartTime(0) //
 				.withWindowSize(5, TimePeriod.HOURS).build() //
-				.makeDESSale(dischargeName, LocalDate.of(2016, 8, 21), portFinder.findPort("Incheon"), null, entity, "Henry_Hub") //
+				.makeDESSale(dischargeName, LocalDate.of(2016, 8, 21), portFinder.findPortById(InternalDataConstants.PORT_INCHEON), null, entity, "Henry_Hub") //
 				.withWindowStartTime(0) //
 				.withWindowSize(5, TimePeriod.HOURS).build() //
 				.withVesselAssignment(charterInMarket, 0, 0).build();
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
 
-		List<CommodityCurve> commodityIndices = ScenarioModelUtil.getPricingModel(scenarioDataProvider).getCommodityCurves();
-		CommodityCurve hh = null;
-		for (CommodityCurve commodityIndex : commodityIndices) {
-			if (commodityIndex.getName().equals("Henry_Hub")) {
-				hh = commodityIndex;
-			}
-		}
-		assert hh != null;
-		hh.getPoints().clear();
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 7), 7.5);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 8), 8.5);
+		pricingModelBuilder.makeCommodityDataCurve("Henry_Hub", "$", "mmBtu") //
+				.addIndexPoint(YearMonth.of(2016, 7), 7.5) //
+				.addIndexPoint(YearMonth.of(2016, 8), 8.5) //
+				.build();
+
 		evaluateWithLSOTest(scenarioRunner -> {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();

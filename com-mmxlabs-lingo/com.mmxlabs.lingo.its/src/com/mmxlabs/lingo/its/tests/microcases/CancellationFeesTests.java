@@ -7,14 +7,18 @@ package com.mmxlabs.lingo.its.tests.microcases;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
+import com.mmxlabs.lngdataserver.lng.importers.creator.ScenarioBuilder;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -23,16 +27,29 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 @SuppressWarnings({ "unused", "null" })
 @ExtendWith(ShiroRunner.class)
 public class CancellationFeesTests extends AbstractMicroTestCase {
 
+	@Override
+	public @NonNull IScenarioDataProvider importReferenceData() throws Exception {
+		ScenarioBuilder sb = ScenarioBuilder.initialiseBasicScenario();
+		sb.loadDefaultData();
+		return sb.getScenarioDataProvider();
+	}
+
+	@Override
+	protected BaseLegalEntity importDefaultEntity() {
+		return commercialModelFinder.findEntity(ScenarioBuilder.DEFAULT_ENTITY_NAME);
+	}
+	
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testLoadSlotCancellationFee() throws Exception {
 
-		final LoadSlot loadSlot = cargoModelBuilder.makeFOBPurchase("L2", LocalDate.of(2015, 12, 9), portFinder.findPort("Point Fortin"), null, entity, "5", null) //
+		final LoadSlot loadSlot = cargoModelBuilder.makeFOBPurchase("L2", LocalDate.of(2015, 12, 9), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", null) //
 				.withCancellationFee("1000") //
 				.withOptional(true) //
 				.build();
@@ -63,7 +80,7 @@ public class CancellationFeesTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testDischargeSlotCancellationFee() throws Exception {
 
-		final DischargeSlot loadSlot = cargoModelBuilder.makeDESSale("D2", LocalDate.of(2015, 12, 9), portFinder.findPort("Sakai"), null, entity, "5") //
+		final DischargeSlot loadSlot = cargoModelBuilder.makeDESSale("D2", LocalDate.of(2015, 12, 9), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "5") //
 				.withCancellationFee("1000") //
 				.withOptional(true) //
 				.build();
@@ -95,7 +112,7 @@ public class CancellationFeesTests extends AbstractMicroTestCase {
 		final PurchaseContract contract = commercialModelBuilder.makeExpressionPurchaseContract("Purchase", entity, "5");
 		contract.setCancellationExpression("1000");
 
-		final LoadSlot loadSlot = cargoModelBuilder.makeFOBPurchase("L2", LocalDate.of(2015, 12, 9), portFinder.findPort("Point Fortin"), contract, null, null, null) //
+		final LoadSlot loadSlot = cargoModelBuilder.makeFOBPurchase("L2", LocalDate.of(2015, 12, 9), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), contract, null, null, null) //
 				.withOptional(true) //
 				.build();
 
@@ -128,7 +145,7 @@ public class CancellationFeesTests extends AbstractMicroTestCase {
 		final SalesContract contract = commercialModelBuilder.makeExpressionSalesContract("Sales", entity, "5");
 		contract.setCancellationExpression("1000");
 
-		final DischargeSlot loadSlot = cargoModelBuilder.makeDESSale("D2", LocalDate.of(2015, 12, 9), portFinder.findPort("Sakai"), contract, null, null) //
+		final DischargeSlot loadSlot = cargoModelBuilder.makeDESSale("D2", LocalDate.of(2015, 12, 9), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), contract, null, null) //
 				.withOptional(true) //
 				.build();
 

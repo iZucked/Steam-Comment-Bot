@@ -64,8 +64,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 
 @ExtendWith(ShiroRunner.class)
-@RequireFeature(value = { KnownFeatures.FEATURE_PANAMA_CANAL })
-public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
+@RequireFeature({ KnownFeatures.FEATURE_PANAMA_CANAL })
+public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 
 	@Override
 	public IScenarioDataProvider importReferenceData() throws Exception {

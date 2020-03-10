@@ -59,7 +59,10 @@ public class CostModelBuilder {
 					return;
 				}
 			}
-			throw new IllegalStateException("No existing route cost for vessel");
+			// Throw exception if suez parameter is blank
+			if (source.getVesselOrDelegateSCNT() == 0) {
+				throw new IllegalStateException("No existing route cost for vessel");
+			}
 		};
 	}
 
@@ -68,7 +71,7 @@ public class CostModelBuilder {
 			createOrUpdateBaseFuelCost(bf, expr);
 		}
 	}
-	
+
 	public @NonNull BaseFuelCost createOrUpdateBaseFuelCost(@NonNull final BaseFuel baseFuel, @NonNull final String baseFuelExpression) {
 
 		for (BaseFuelCost baseFuelCost : costModel.getBaseFuelCosts()) {

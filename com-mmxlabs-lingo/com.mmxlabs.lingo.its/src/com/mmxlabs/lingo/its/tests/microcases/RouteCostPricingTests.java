@@ -11,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.lingo.its.ExpectedLongValue;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselGroup;
 import com.mmxlabs.models.lng.port.RouteOption;
@@ -40,7 +41,7 @@ public class RouteCostPricingTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testSuezRouteCostOrder1() throws Exception {
 
-		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		final Vessel vessel2 = fleetModelBuilder.createVesselFrom("vessel2", vessel1, null);
 		final Vessel vessel3 = fleetModelBuilder.createVesselFrom("vessel3", vessel1, null);
 		final Vessel vessel4 = fleetModelBuilder.createVesselFrom("vessel4", vessel1, null);
@@ -96,7 +97,7 @@ public class RouteCostPricingTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testSuezRouteCostOrder2() throws Exception {
 
-		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		final Vessel vessel2 = fleetModelBuilder.createVesselFrom("vessel2", vessel1, null);
 		final Vessel vessel3 = fleetModelBuilder.createVesselFrom("vessel3", vessel1, null);
 		final Vessel vessel4 = fleetModelBuilder.createVesselFrom("vessel4", vessel1, null);
@@ -152,7 +153,7 @@ public class RouteCostPricingTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testPanamaRouteCostOrder1() throws Exception {
 
-		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		final Vessel vessel2 = fleetModelBuilder.createVesselFrom("vessel2", vessel1, null);
 		final Vessel vessel3 = fleetModelBuilder.createVesselFrom("vessel3", vessel1, null);
 		final Vessel vessel4 = fleetModelBuilder.createVesselFrom("vessel4", vessel1, null);
@@ -202,7 +203,7 @@ public class RouteCostPricingTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testPanamaRouteCostOrder2() throws Exception {
 
-		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		final Vessel vessel2 = fleetModelBuilder.createVesselFrom("vessel2", vessel1, null);
 		final Vessel vessel3 = fleetModelBuilder.createVesselFrom("vessel3", vessel1, null);
 		final Vessel vessel4 = fleetModelBuilder.createVesselFrom("vessel4", vessel1, null);

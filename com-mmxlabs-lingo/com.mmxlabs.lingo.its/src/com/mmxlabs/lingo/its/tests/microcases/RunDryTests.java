@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.EVesselTankState;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
@@ -52,7 +53,7 @@ public class RunDryTests extends AbstractMicroTestCase {
 			baseFuel.setEquivalenceFactor(20.0);
 		}
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		fleetModelBuilder.setVesselStateAttributes(vessel, true, 100, 50, 20, 10);
 		fleetModelBuilder.setVesselStateAttributes(vessel, false, 100, 50, 20, 10);
 
@@ -76,8 +77,8 @@ public class RunDryTests extends AbstractMicroTestCase {
 
 		final Vessel vessel = configureVessel();
 
-		final Port port1 = portFinder.findPort("Point Fortin");
-		final Port port2 = portFinder.findPort("Sakai");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_SAKAI);
 
 		distanceModelBuilder.setPortToPortDistance(port1, port2, 10 * 15 * 24, Integer.MAX_VALUE, Integer.MAX_VALUE, true);
 
@@ -110,7 +111,7 @@ public class RunDryTests extends AbstractMicroTestCase {
 
 		portModelBuilder.setAllExistingPortsToUTC();
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		
 		for (final BaseFuel baseFuel : fleetModelFinder.getFleetModel().getBaseFuels()) {
 			baseFuel.setEquivalenceFactor(47.423);
@@ -132,8 +133,8 @@ public class RunDryTests extends AbstractMicroTestCase {
 		//fleetModelBuilder.setVesselStateAttributesCurve(vessel, true, 15.0, 124);
 		//fleetModelBuilder.setVesselStateAttributesCurve(vessel, false, 15.0, 124);
 
-		final Port port1 = portFinder.findPort("Point Fortin");
-		final Port port2 = portFinder.findPort("Sakai");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_SAKAI);
 
 		//distanceModelBuilder.setPortToPortDistance(port1, port2, null, Integer.MAX_VALUE, Integer.MAX_VALUE, true);
 
@@ -147,12 +148,12 @@ public class RunDryTests extends AbstractMicroTestCase {
 				.build();
 		
 		Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2017, 4, 1), portFinder.findPort("Point Fortin"), null, entity, "5", 22.53)
+				.makeFOBPurchase("L1", LocalDate.of(2017, 4, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.53)
 				.withWindowSize(1, TimePeriod.MONTHS)//
 				.withVolumeLimits(140_000, 145_000, VolumeUnits.M3) //
 				.build() //
 				//
-				.makeDESSale("D1", LocalDate.of(2017, 4, 2), portFinder.findPort("Sakai"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2017, 4, 2), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7") //
 				.withWindowSize(1, TimePeriod.MONTHS)//
 				.withVolumeLimits(120_000, 145_000, VolumeUnits.M3) //
 				.build() //
@@ -178,7 +179,7 @@ public class RunDryTests extends AbstractMicroTestCase {
 
 		portModelBuilder.setAllExistingPortsToUTC();
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		
 		for (final BaseFuel baseFuel : fleetModelFinder.getFleetModel().getBaseFuels()) {
 			baseFuel.setEquivalenceFactor(50);
@@ -200,8 +201,8 @@ public class RunDryTests extends AbstractMicroTestCase {
 		fleetModelBuilder.setVesselStateAttributesCurve(vessel, true, 15.0, 80);
 		fleetModelBuilder.setVesselStateAttributesCurve(vessel, false, 15.0, 80);
 
-		final Port port1 = portFinder.findPort("Point Fortin");
-		final Port port2 = portFinder.findPort("Sakai");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_SAKAI);
 
 		distanceModelBuilder.setPortToPortDistance(port1, port2, 10500, Integer.MAX_VALUE, Integer.MAX_VALUE, true);
 
@@ -215,12 +216,12 @@ public class RunDryTests extends AbstractMicroTestCase {
 				.build();
 		
 		Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2017, 4, 1), portFinder.findPort("Point Fortin"), null, entity, "5", 25.0)
+				.makeFOBPurchase("L1", LocalDate.of(2017, 4, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 25.0)
 				.withWindowSize(1, TimePeriod.MONTHS)//
 				.withVolumeLimits(140_000, 145_000, VolumeUnits.M3) //
 				.build() //
 				//
-				.makeDESSale("D1", LocalDate.of(2017, 4, 2), portFinder.findPort("Sakai"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2017, 4, 2), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7") //
 				.withWindowSize(1, TimePeriod.MONTHS)//
 				.withVolumeLimits(120_000, 145_000, VolumeUnits.M3) //
 				.build() //
@@ -251,8 +252,8 @@ public class RunDryTests extends AbstractMicroTestCase {
 
 		final Vessel vessel = configureVessel();
 
-		final Port port1 = portFinder.findPort("Point Fortin");
-		final Port port2 = portFinder.findPort("Sakai");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_SAKAI);
 
 		distanceModelBuilder.setPortToPortDistance(port1, port2, 10 * 15 * 24, Integer.MAX_VALUE, Integer.MAX_VALUE, true);
 
@@ -293,8 +294,8 @@ public class RunDryTests extends AbstractMicroTestCase {
 		fleetModelBuilder.setVesselStateAttributes(vessel, false, 50, 50, 20, 10);
 		costModelBuilder.createOrUpdateBaseFuelCost(vessel.getBaseFuel(), "1000");
 
-		final Port port1 = portFinder.findPort("Point Fortin");
-		final Port port2 = portFinder.findPort("Sakai");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_SAKAI);
 
 		distanceModelBuilder.setPortToPortDistance(port1, port2, 10 * 15 * 24, Integer.MAX_VALUE, Integer.MAX_VALUE, true);
 
@@ -335,8 +336,8 @@ public class RunDryTests extends AbstractMicroTestCase {
 		fleetModelBuilder.setVesselStateAttributes(vessel, true, 50, 50, 20, 10);
 		fleetModelBuilder.setVesselStateAttributes(vessel, false, 50, 50, 20, 10);
 
-		final Port port1 = portFinder.findPort("Point Fortin");
-		final Port port2 = portFinder.findPort("Sakai");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_SAKAI);
 
 		distanceModelBuilder.setPortToPortDistance(port1, port2, 10 * 15 * 24, Integer.MAX_VALUE, Integer.MAX_VALUE, true);
 		costModelBuilder.createOrUpdateBaseFuelCost(vessel.getBaseFuel(), "1");
@@ -374,8 +375,8 @@ public class RunDryTests extends AbstractMicroTestCase {
 
 		final Vessel vessel = configureVessel();
 
-		final Port port1 = portFinder.findPort("Point Fortin");
-		final Port port2 = portFinder.findPort("Sakai");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_SAKAI);
 
 		distanceModelBuilder.setPortToPortDistance(port1, port2, 10 * 15 * 24, Integer.MAX_VALUE, Integer.MAX_VALUE, true);
 
@@ -413,8 +414,8 @@ public class RunDryTests extends AbstractMicroTestCase {
 
 		final Vessel vessel = configureVessel();
 
-		final Port port1 = portFinder.findPort("Point Fortin");
-		final Port port2 = portFinder.findPort("Sakai");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_SAKAI);
 
 		distanceModelBuilder.setPortToPortDistance(port1, port2, 10 * 15 * 24, Integer.MAX_VALUE, Integer.MAX_VALUE, true);
 
@@ -457,8 +458,8 @@ public class RunDryTests extends AbstractMicroTestCase {
 
 		final Vessel vessel = configureVessel();
 
-		final Port port1 = portFinder.findPort("Point Fortin");
-		final Port port2 = portFinder.findPort("Sakai");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_SAKAI);
 
 		final Route route = portFinder.findCanal(RouteOption.SUEZ);
 

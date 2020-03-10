@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lingo.its.tests.microcases.adp.TrainingCaseConstants;
 import com.mmxlabs.lingo.its.verifier.OptimiserDataMapper;
 import com.mmxlabs.lingo.its.verifier.OptimiserResultVerifier;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
@@ -40,8 +41,8 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.fitness.components.NonOptionalSlotFitnessCoreFactory;
 
 @ExtendWith(value = ShiroRunner.class)
-@RequireFeature(value = { KnownFeatures.FEATURE_OPTIMISATION_SIMILARITY, KnownFeatures.FEATURE_OPTIMISATION_HILLCLIMB })
-public class MultiObjectiveSimilarityTests extends AbstractMicroTestCase {
+@RequireFeature({ KnownFeatures.FEATURE_OPTIMISATION_SIMILARITY, KnownFeatures.FEATURE_OPTIMISATION_HILLCLIMB })
+public class MultiObjectiveSimilarityTests extends AbstractLegacyMicroTestCase {
 
 	// Which scenario data to import
 	@Override
@@ -55,7 +56,7 @@ public class MultiObjectiveSimilarityTests extends AbstractMicroTestCase {
 	@NonNull
 	public static IScenarioDataProvider importReferenceData(final String url) throws MalformedURLException {
 
-		final @NonNull String urlRoot = AbstractMicroTestCase.class.getResource(url).toString();
+		final @NonNull String urlRoot = AbstractLegacyMicroTestCase.class.getResource(url).toString();
 		final CSVImporter importer = new CSVImporter();
 		importer.importPortData(urlRoot);
 		importer.importCostData(urlRoot);
@@ -132,18 +133,18 @@ public class MultiObjectiveSimilarityTests extends AbstractMicroTestCase {
 						.withMultipleSolutionCount(2);
 
 				// Solution 1
-				verifier.withSolutionResultChecker(0).withUsedLoad("A_3").onFleetVessel("Small Ship") //
-						.withUsedLoad("S_1").onFleetVessel("Large Ship") //
-						.withUsedLoad("S_4").onFleetVessel("Medium Ship") //
+				verifier.withSolutionResultChecker(0).withUsedLoad("A_3").onFleetVessel(TrainingCaseConstants.VESSEL_SMALL_SHIP) //
+						.withUsedLoad("S_1").onFleetVessel(TrainingCaseConstants.VESSEL_LARGE_SHIP) //
+						.withUsedLoad("S_4").onFleetVessel(TrainingCaseConstants.VESSEL_MEDIUM_SHIP) //
 						.build();
 
 				// Solution 2
-				verifier.withSolutionResultChecker(1).withUsedLoad("A_3").onFleetVessel("Small Ship") //
-						.withUsedLoad("S_1").onFleetVessel("Medium Ship") //
-						.withUsedLoad("S_4").onFleetVessel("Large Ship") //
+				verifier.withSolutionResultChecker(1).withUsedLoad("A_3").onFleetVessel(TrainingCaseConstants.VESSEL_SMALL_SHIP) //
+						.withUsedLoad("S_1").onFleetVessel(TrainingCaseConstants.VESSEL_MEDIUM_SHIP) //
+						.withUsedLoad("S_4").onFleetVessel(TrainingCaseConstants.VESSEL_LARGE_SHIP) //
 						.build();
 
-				verifier.verifyOptimisationResults(result, msg -> Assertions.fail(msg));
+				verifier.verifyOptimisationResults(result, Assertions::fail);
 			});
 		}
 	}

@@ -8,7 +8,6 @@ import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Consumer;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -19,11 +18,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
-import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -55,10 +54,10 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 	public void testDES_Purchase_MaxTransfer_MMBTU() throws Exception {
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5", 20.0, null) //
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "5", 20.0, null) //
 				.withVolumeLimits(3_000_000, 4_000_000, VolumeUnits.MMBTU).build() //
 
-				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.withVolumeLimits(3_500_000, 4_500_000, VolumeUnits.MMBTU).build() //
 				.build();
 
@@ -94,10 +93,10 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 	public void testDES_Purchase_MaxTransfer_M3() throws Exception {
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5", 20.0, null) //
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "5", 20.0, null) //
 				.withVolumeLimits(150_000, 200_000, VolumeUnits.M3).build() //
 
-				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.withVolumeLimits(175_000, 225_000, VolumeUnits.M3).build() //
 
 				.build();
@@ -127,10 +126,10 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 	public void testDES_Purchase_BreakEven() throws Exception {
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7", 20.0, null) //
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7", 20.0, null) //
 				.withVolumeLimits(3_000_000, 4_000_000, VolumeUnits.MMBTU).build() //
 
-				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.withVolumeLimits(3_500_000, 4_500_000, VolumeUnits.MMBTU).build() //
 
 				.build();
@@ -160,11 +159,11 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 	public void testDES_Purchase_MinTransfer() throws Exception {
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7", 20.0, null) //
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7", 20.0, null) //
 				.withVolumeLimits(3_000_000, 4_000_000, VolumeUnits.MMBTU)//
 				.build() //
 
-				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "5") //
 				.withVolumeLimits(3_500_000, 4_500_000, VolumeUnits.MMBTU)//
 				.build() //
 
@@ -196,12 +195,12 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 	public void testDES_Purchase_MinTransfer_withFCL_load() throws Exception {
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7", 20.0, null) //
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7", 20.0, null) //
 				.withVolumeLimits(3_000_000, 4_000_000, VolumeUnits.MMBTU)//
 				.with(s -> s.setFullCargoLot(true))//
 				.build() //
 
-				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "5") //
 				.withVolumeLimits(3_500_000, 4_500_000, VolumeUnits.MMBTU)//
 				.build() //
 
@@ -232,11 +231,11 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 	public void testDES_Purchase_MinTransfer_withFCL_discharge() throws Exception {
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7", 20.0, null) //
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7", 20.0, null) //
 				.withVolumeLimits(3_000_000, 4_000_000, VolumeUnits.MMBTU)//
 				.build() //
 
-				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "5") //
 				.withVolumeLimits(3_500_000, 4_500_000, VolumeUnits.MMBTU)//
 				.with(s -> s.setFullCargoLot(true))//
 				.build() //
@@ -268,10 +267,10 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 	public void testFOB_Sale_MaxTransfer() throws Exception {
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "5", 20.0) //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 20.0) //
 				.withVolumeLimits(3_000_000, 4_000_000, VolumeUnits.MMBTU).build() //
 
-				.makeFOBSale("D1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "7", null) //
+				.makeFOBSale("D1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "7", null) //
 				.withVolumeLimits(3_500_000, 4_500_000, VolumeUnits.MMBTU).build() //
 
 				.build();
@@ -301,10 +300,10 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 	public void testFOB_Sale_BreakEven() throws Exception {
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "7", 20.0) //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "7", 20.0) //
 				.withVolumeLimits(3_000_000, 4_000_000, VolumeUnits.MMBTU).build() //
 
-				.makeFOBSale("D1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "7", null) //
+				.makeFOBSale("D1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "7", null) //
 				.withVolumeLimits(3_500_000, 4_500_000, VolumeUnits.MMBTU).build() //
 
 				.build();
@@ -334,11 +333,11 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 	public void testFOB_Sale_MinTransfer() throws Exception {
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "7", 20.0) //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "7", 20.0) //
 				.withVolumeLimits(3_000_000, 4_000_000, VolumeUnits.MMBTU)//
 				.build() //
 
-				.makeFOBSale("D1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "5", null) //
+				.makeFOBSale("D1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", null) //
 				.withVolumeLimits(3_500_000, 4_500_000, VolumeUnits.MMBTU)//
 				.build() //
 
@@ -369,12 +368,12 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 	public void testFOB_Sale_MinTransfer_withFCL_load() throws Exception {
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "7", 20.0) //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "7", 20.0) //
 				.withVolumeLimits(3_000_000, 4_000_000, VolumeUnits.MMBTU)//
 				.with(s -> s.setFullCargoLot(true))//
 				.build() //
 
-				.makeFOBSale("D1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "5", null) //
+				.makeFOBSale("D1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", null) //
 				.withVolumeLimits(3_500_000, 4_500_000, VolumeUnits.MMBTU)//
 				.build() //
 
@@ -405,11 +404,11 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 	public void testFOB_Sale_MinTransfer_withFCL_discharge() throws Exception {
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "7", 20.0) //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "7", 20.0) //
 				.withVolumeLimits(3_000_000, 4_000_000, VolumeUnits.MMBTU)//
 				.build() //
 
-				.makeFOBSale("D1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "5", null) //
+				.makeFOBSale("D1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", null) //
 				.withVolumeLimits(3_500_000, 4_500_000, VolumeUnits.MMBTU)//
 				.with(s -> s.setFullCargoLot(true))//
 				.build() //
@@ -440,18 +439,18 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testShipped_MaxTransfer() throws Exception {
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		// Very large capacity to cover volume limits
 		vessel.setCapacity(250_000);
 
 		final CharterInMarket market = spotMarketsModelBuilder.createCharterInMarket("default", vessel, entity, "100000", 1);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "5", 20.0) //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 20.0) //
 				.withVolumeLimits(3_500_000, 4_500_000, VolumeUnits.MMBTU)//
 				.build() //
 
-				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.withVolumeLimits(2_500_000, 3_500_000, VolumeUnits.MMBTU)//
 
 				.build() //
@@ -479,15 +478,15 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testShipped_MinTransfer() throws Exception {
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		final CharterInMarket market = spotMarketsModelBuilder.createCharterInMarket("default", vessel, entity, "100000", 1);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "7", 20.0) //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "7", 20.0) //
 				.withVolumeLimits(2_500_000, 4_500_000, VolumeUnits.MMBTU)//
 				.build() //
 
-				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "5") //
 				.withVolumeLimits(2_500_000, 3_500_000, VolumeUnits.MMBTU)//
 
 				.build() //
@@ -515,17 +514,17 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testShipped_MinTransfer_2() throws Exception {
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setCapacity(250_000);
 
 		final CharterInMarket market = spotMarketsModelBuilder.createCharterInMarket("default", vessel, entity, "100000", 1);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "7", 20.0) //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "7", 20.0) //
 				.withVolumeLimits(2_950_000, 4_000_000, VolumeUnits.MMBTU)//
 				.build() //
 
-				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "5") //
 				.withVolumeLimits(10, 4_000_000, VolumeUnits.MMBTU)//
 
 				.build() //
@@ -554,18 +553,18 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testShipped_MinTransfer_withFCL_load() throws Exception {
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setCapacity(100_000);
 		vessel.setFillCapacity(1.0);
 		final CharterInMarket market = spotMarketsModelBuilder.createCharterInMarket("default", vessel, entity, "100000", 1);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "7", 20.0) //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "7", 20.0) //
 				.withVolumeLimits(1_800_000, 4_500_000, VolumeUnits.MMBTU)//
 				.with(s -> s.setFullCargoLot(true))//
 				.build() //
 
-				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "5") //
 				.withVolumeLimits(1_800_000, 3_500_000, VolumeUnits.MMBTU)//
 
 				.build() //
@@ -593,17 +592,17 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testShipped_MinTransfer_withFCL_discharge() throws Exception {
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setCapacity(100_000);
 		vessel.setFillCapacity(1.0);
 		final CharterInMarket market = spotMarketsModelBuilder.createCharterInMarket("default", vessel, entity, "100000", 1);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "7", 20.0) //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "7", 20.0) //
 				.withVolumeLimits(1_800_000, 4_500_000, VolumeUnits.MMBTU)//
 				.build() //
 
-				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "5") //
 				.withVolumeLimits(1_800_000, 3_500_000, VolumeUnits.MMBTU)//
 				.with(s -> s.setFullCargoLot(true))//
 				.build() //
@@ -631,17 +630,17 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testShipped_MinTransfer_WithCVBasedRounding() throws Exception {
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setCapacity(250_000);
 
 		final CharterInMarket market = spotMarketsModelBuilder.createCharterInMarket("default", vessel, entity, "100000", 1);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "7", 23.7) //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "7", 23.7) //
 				.withVolumeLimits(2_950_000, 4_000_000, VolumeUnits.MMBTU)//
 				.build() //
 
-				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "5") //
 				.withVolumeLimits(10, 4_000_000, VolumeUnits.MMBTU)//
 
 				.build() //
@@ -670,17 +669,17 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testShipped_MinTransferM3_WithCVBasedRounding() throws Exception {
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setCapacity(250_000);
 
 		final CharterInMarket market = spotMarketsModelBuilder.createCharterInMarket("default", vessel, entity, "100000", 1);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "7", 23.7) //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "7", 23.7) //
 				.withVolumeLimits(150_000, 200_000, VolumeUnits.M3)//
 				.build() //
 
-				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "5") //
 				.withVolumeLimits(0, 4_000_000, VolumeUnits.MMBTU)//
 
 				.build() //
@@ -710,11 +709,11 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 	public void testDES_Purchase_CPVolume_MinLoadVolume_Match() throws Exception {
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5", 20.0, null)//
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "5", 20.0, null)//
 				.with(s -> ((LoadSlot)s).setVolumeCounterParty(true))//
 				.withVolumeLimits(2_950_000, 4_000_000, VolumeUnits.MMBTU).build() //
 				
-				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.withVolumeLimits(2_500_000, 4_000_000, VolumeUnits.MMBTU).build() //
 				.build();
 
@@ -742,11 +741,11 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 	public void testDES_Purchase_CPVolume_MaxLoadVolume_Match() throws Exception {
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7", 20.0, null) //
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7", 20.0, null) //
 				.with(s -> ((LoadSlot)s).setVolumeCounterParty(true))//
 				.withVolumeLimits(2_950_000, 4_000_000, VolumeUnits.MMBTU).build() //
 
-				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "5") //
 				.withVolumeLimits(2_500_000, 4_000_000, VolumeUnits.MMBTU).build() //
 				.build();
 
@@ -774,11 +773,11 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 	public void testDES_Purchase_CPVolume_MinLoadVolume_UnMatch() throws Exception {
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5", 20.0, null) //
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "5", 20.0, null) //
 				.with(s -> ((LoadSlot)s).setVolumeCounterParty(true))//
 				.withVolumeLimits(2_950_000, 4_000_000, VolumeUnits.MMBTU).build() //
 
-				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.withVolumeLimits(3_000_000, 4_000_000, VolumeUnits.MMBTU).build() //
 				.build();
 
@@ -806,11 +805,11 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 	public void testDES_Purchase_CPVolume_MaxLoadVolume_UnMatch() throws Exception {
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7", 20.0, null) //
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7", 20.0, null) //
 				.with(s -> ((LoadSlot)s).setVolumeCounterParty(true))
 				.withVolumeLimits(2_950_000, 4_000_000, VolumeUnits.MMBTU).build() //
 
-				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "5") //
 				.withVolumeLimits(2_500_000, 3_900_000, VolumeUnits.MMBTU).build() //
 				.build();
 

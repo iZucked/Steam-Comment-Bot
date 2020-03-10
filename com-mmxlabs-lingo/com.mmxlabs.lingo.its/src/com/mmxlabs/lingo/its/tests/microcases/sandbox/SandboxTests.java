@@ -46,7 +46,7 @@ import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 @ExtendWith(ShiroRunner.class)
-@RequireFeature(value = { KnownFeatures.FEATURE_SANDBOX })
+@RequireFeature({ KnownFeatures.FEATURE_SANDBOX })
 public class SandboxTests extends AbstractSandboxTestCase {
 
 	@Override

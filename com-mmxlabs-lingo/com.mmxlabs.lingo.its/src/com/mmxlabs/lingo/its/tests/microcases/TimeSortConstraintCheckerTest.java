@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -34,12 +35,12 @@ public class TimeSortConstraintCheckerTest extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testEventOrder_ConsequetiveEvent() throws Exception {
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
 
 		@NonNull
-		final Port dischargePort = portFinder.findPort("Dominion Cove Point LNG");
+		final Port dischargePort = portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT);
 		final DryDockEvent event1 = cargoModelBuilder.makeDryDockEvent("drydock1", LocalDateTime.of(2015, 12, 1, 0, 0, 0), LocalDateTime.of(2015, 12, 1, 0, 0, 0), dischargePort) //
 				.withDurationInDays(0) //
 				.withVesselAssignment(vesselAvailability, 1) //
@@ -64,12 +65,12 @@ public class TimeSortConstraintCheckerTest extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testEventOrder_OverlappingEvent() throws Exception {
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
 
 		@NonNull
-		final Port dischargePort = portFinder.findPort("Dominion Cove Point LNG");
+		final Port dischargePort = portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT);
 		final DryDockEvent event1 = cargoModelBuilder.makeDryDockEvent("drydock1", LocalDateTime.of(2015, 12, 1, 0, 0, 0), LocalDateTime.of(2015, 12, 2, 0, 0, 0), dischargePort) //
 				.withDurationInDays(0) //
 				.withVesselAssignment(vesselAvailability, 1) //
