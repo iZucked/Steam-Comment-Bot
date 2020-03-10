@@ -299,6 +299,7 @@ public class SlotInsertionOptimiserUnit {
 							}
 						}
 
+						// Make sure option elements are properly hooked into the sequences
 						for (final IPortSlot portSlot : optionElements) {
 							final ISequenceElement e = portSlotProvider.getElement(portSlot);
 
@@ -394,7 +395,7 @@ public class SlotInsertionOptimiserUnit {
 
 			// Step 1: Exhaustive search of non-shipped pairs
 			try {
-				if (true) {
+				{
 					logger.beginStage(SlotInsertionOptimiserLogger.STAGE_NON_SHIPPED_PAIRS);
 
 					for (final Pair<ISequenceElement, ISequenceElement> p : nonShippedPairs) {
