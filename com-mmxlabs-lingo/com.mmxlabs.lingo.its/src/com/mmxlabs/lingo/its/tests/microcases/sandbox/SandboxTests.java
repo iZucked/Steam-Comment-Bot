@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.license.features.KnownFeatures;
-import com.mmxlabs.lngdataserver.lng.importers.creator.InteralDataConstants;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.lngdataserver.lng.importers.creator.ScenarioBuilder;
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.BuyOption;
@@ -69,7 +69,7 @@ public class SandboxTests extends AbstractSandboxTestCase {
 		sandboxBuilder.setPortfolioBreakevenMode(false);
 		sandboxBuilder.setManualSandboxMode();
 
-		final Port port = portFinder.findPortById(InteralDataConstants.PORT_FUTTSU);
+		final Port port = portFinder.findPortById(InternalDataConstants.PORT_FUTTSU);
 
 		final BuyOption buy1 = sandboxBuilder.makeBuyOpportunity(true, port, entity, "5").withCV(22.5).build();
 		final BuyOption buy2 = sandboxBuilder.makeBuyOpportunity(true, port, entity, "6").withCV(22.5).build();
@@ -121,7 +121,7 @@ public class SandboxTests extends AbstractSandboxTestCase {
 		sandboxBuilder.setPortfolioBreakevenMode(false);
 		sandboxBuilder.setManualSandboxMode();
 
-		final Port port = portFinder.findPortById(InteralDataConstants.PORT_FUTTSU);
+		final Port port = portFinder.findPortById(InternalDataConstants.PORT_FUTTSU);
 
 		// Leave dates blank. They should be set automatically
 		final BuyOption buy1 = sandboxBuilder.makeBuyOpportunity(true, port, entity, "5").withCV(22.5).build();
@@ -179,7 +179,7 @@ public class SandboxTests extends AbstractSandboxTestCase {
 		sandboxBuilder.setPortfolioBreakevenMode(true); // Portfolio break even
 		sandboxBuilder.setManualSandboxMode();
 
-		final Port port = portFinder.findPortById(InteralDataConstants.PORT_FUTTSU);
+		final Port port = portFinder.findPortById(InternalDataConstants.PORT_FUTTSU);
 
 		// Leave dates blank. They should be set automatically
 		final BuyOption buy1 = sandboxBuilder.makeBuyOpportunity(true, port, entity, "5").withCV(22.5).build();
@@ -243,14 +243,14 @@ public class SandboxTests extends AbstractSandboxTestCase {
 		sandboxBuilder.setPortfolioBreakevenMode(false);
 		sandboxBuilder.setManualSandboxMode();
 
-		final Vessel vessel = fleetModelFinder.findVessel(InteralDataConstants.REF_VESSEL_STEAM_138);
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_138);
 
 		final ShippingOption shipping1 = sandboxBuilder.makeSimpleCharter(vessel, entity) //
 				.withHireCosts("50000") //
 				.build();
 
-		final Port port1 = portFinder.findPortById(InteralDataConstants.PORT_POINT_FORTIN);
-		final Port port2 = portFinder.findPortById(InteralDataConstants.PORT_FUTTSU);
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_FUTTSU);
 
 		final BuyOption buy1 = sandboxBuilder.makeBuyOpportunity(false, port1, entity, "5").withCV(22.5).build();
 		final SellOption sell1 = sandboxBuilder.makeSellOpportunity(false, port2, entity, "7") //
@@ -323,12 +323,12 @@ public class SandboxTests extends AbstractSandboxTestCase {
 
 		// Create the portfolio data
 
-		Vessel vessel = fleetModelFinder.findVessel(InteralDataConstants.REF_VESSEL_STEAM_138);
+		Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_138);
 		VesselAvailability vesselCharter = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
 
-		LoadSlot existingLoad = cargoModelBuilder.createFOBPurchase("l-1", LocalDate.of(2020, 3, 19), portFinder.findPortById(InteralDataConstants.PORT_ONSLOW), null, entity, "5", 22.8);
-		DischargeSlot existingDischarge = cargoModelBuilder.createDESSale("d-1", LocalDate.of(2020, 3, 29), portFinder.findPortById(InteralDataConstants.PORT_DABHOL), null, entity, "7");
+		LoadSlot existingLoad = cargoModelBuilder.createFOBPurchase("l-1", LocalDate.of(2020, 3, 19), portFinder.findPortById(InternalDataConstants.PORT_ONSLOW), null, entity, "5", 22.8);
+		DischargeSlot existingDischarge = cargoModelBuilder.createDESSale("d-1", LocalDate.of(2020, 3, 29), portFinder.findPortById(InternalDataConstants.PORT_DABHOL), null, entity, "7");
 
 		Cargo cargo = cargoModelBuilder.createCargo(existingLoad, existingDischarge);
 		cargo.setVesselAssignmentType(vesselCharter);
@@ -339,13 +339,13 @@ public class SandboxTests extends AbstractSandboxTestCase {
 		sandboxBuilder.setPortfolioBreakevenMode(false);
 		sandboxBuilder.setOptioniseSandboxMode();
 
-		final BuyOption buy1 = sandboxBuilder.makeBuyOpportunity(true, portFinder.findPortById(InteralDataConstants.PORT_DABHOL), entity, "5") //
+		final BuyOption buy1 = sandboxBuilder.makeBuyOpportunity(true, portFinder.findPortById(InternalDataConstants.PORT_DABHOL), entity, "5") //
 				.withDate(LocalDate.of(2020, 3, 29)) //
 				.withCV(22.5) //
 				.build();
 		final BuyOption buy2 = sandboxBuilder.createBuyReference(existingLoad);
 
-		final SellOption sell1 = sandboxBuilder.makeSellOpportunity(false, portFinder.findPortById(InteralDataConstants.PORT_MAP_TA_PHUT), entity, "5") //
+		final SellOption sell1 = sandboxBuilder.makeSellOpportunity(false, portFinder.findPortById(InternalDataConstants.PORT_MAP_TA_PHUT), entity, "5") //
 				.withDate(LocalDate.of(2020, 3, 28)) //
 				.build();
 		final SellOption sell2 = sandboxBuilder.createSellReference(existingDischarge);

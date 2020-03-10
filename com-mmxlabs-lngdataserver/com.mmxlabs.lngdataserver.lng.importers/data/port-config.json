@@ -119,6 +119,6 @@
   { "mmxId" : "L_NL_Rotte", "type" : "DISCHARGE", "duration" : 24 },
   { "mmxId" : "L_TH_MapTa", "type" : "DISCHARGE", "duration" : 24 },
   { "mmxId" : "L_BE_Zeebr", "type" : "DISCHARGE", "duration" : 24 },
-  { "mmxId" : "L_JO_Aqaba", "type" : "DISCHARGE", "duration" : 24 },
+  { "mmxId" : "L_JO_Aqaba", "type" : "DISCHARGE", "duration" : 24 }
   
 ]

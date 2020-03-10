@@ -7,14 +7,15 @@ package com.mmxlabs.lngdataserver.lng.importers.creator;
  * @author Simon Goodall
  *
  */
-public class InteralDataConstants {
+public class InternalDataConstants {
 
-	private InteralDataConstants() {
+	private InternalDataConstants() {
 
 	}
 
 	// Reference vessels
 	public static final String REF_VESSEL_STEAM_138 = "Steam_138";
+	public static final String REF_VESSEL_STEAM_145 = "Steam_145";
 
 	// Ports
 	public static final String PORT_POINT_FORTIN = "L_TT_Point2";
