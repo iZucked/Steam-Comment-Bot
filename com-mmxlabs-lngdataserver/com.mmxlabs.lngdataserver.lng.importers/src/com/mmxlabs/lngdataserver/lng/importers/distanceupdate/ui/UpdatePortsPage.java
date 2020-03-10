@@ -24,11 +24,13 @@ import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.nebula.widgets.grid.internal.DefaultCellRenderer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.DistancesLinesToScenarioCopier;
@@ -186,6 +188,30 @@ public class UpdatePortsPage extends WizardPage {
 		steps = generatePortUpdateSteps();
 		viewer.setInput(steps);
 
+		Button btn = new Button(holder, SWT.PUSH);
+		btn.setText("Check all");
+		btn.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				for (GridItem itm : viewer.getGrid().getItems()) {
+					itm.setChecked(1, true);
+					Object element = itm.getData();
+					if (element instanceof UpdateWarning) {
+						UpdateWarning updateWarning = (UpdateWarning) element;
+						if (updateWarning.isHasQuickFix()) {
+							updateWarning.setApplyQuickFix(true);
+						}
+					} else if (element instanceof UserUpdateStep) {
+						UserUpdateStep step = (UserUpdateStep) element;
+						if (step.isHasQuickFix()) {
+							step.setApplyQuickFix(true);
+						}
+					}
+				}
+			}
+
+		});
+		
 		setPageComplete(false);
 	}
 
