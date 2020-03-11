@@ -49,7 +49,6 @@ import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
  *
  */
 @ExtendWith(ShiroRunner.class)
-@RequireFeature(features = {KnownFeatures.FEATURE_COUNTER_PARTY_VOLUME})
 public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 	
 	@Test

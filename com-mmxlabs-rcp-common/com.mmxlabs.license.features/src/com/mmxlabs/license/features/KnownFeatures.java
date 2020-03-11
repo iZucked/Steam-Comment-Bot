@@ -70,10 +70,6 @@ public final class KnownFeatures {
 	public static final String FEATURE_PAPER_DEALS = "features:paperdeals";
 	
 	public static final String FEATURE_GENERATED_PAPER_DEALS = "features:generated-papers";
-	/**
-	 * Enable counterparty volume calculations
-	 */
-	public static final String FEATURE_COUNTER_PARTY_VOLUME = "features:counter-party-volume";
 
 	/**
 	 * Enable the charter length evaluation mode

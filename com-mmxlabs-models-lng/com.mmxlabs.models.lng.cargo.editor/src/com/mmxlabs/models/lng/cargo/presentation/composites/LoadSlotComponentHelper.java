@@ -171,12 +171,10 @@ public class LoadSlotComponentHelper extends BaseComponentHelper {
 	 * @generated NOT
 	 */
 	protected void add_volumeCounterPartyEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_COUNTER_PARTY_VOLUME)) {
-			// Hide for spot loads
-			if (!CargoPackage.Literals.SPOT_LOAD_SLOT.equals(topClass)) {
-				final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.LOAD_SLOT__VOLUME_COUNTER_PARTY);
-				detailComposite.addInlineEditor(new CounterPartyVolumeTypeInlineEditorWrapper(editor));
-			}
+		// Hide for spot loads
+		if (!CargoPackage.Literals.SPOT_LOAD_SLOT.equals(topClass)) {
+			final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.LOAD_SLOT__VOLUME_COUNTER_PARTY);
+			detailComposite.addInlineEditor(new CounterPartyVolumeTypeInlineEditorWrapper(editor));
 		}
 	}
 

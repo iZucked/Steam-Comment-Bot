@@ -256,11 +256,7 @@
         defaultValueLiteral="Any" unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="desPurchaseDealType" eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//DESPurchaseDealType"
         unsettable="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeCounterParty" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
-      <eAnnotations source="http://www.mmxlabs.com/models/ui/featureEnablement">
-        <details key="feature" value="counter-party-volume"/>
-      </eAnnotations>
-    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeCounterParty" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eGenericSuperTypes eClassifier="#//Slot">
       <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//PurchaseContract"/>
     </eGenericSuperTypes>

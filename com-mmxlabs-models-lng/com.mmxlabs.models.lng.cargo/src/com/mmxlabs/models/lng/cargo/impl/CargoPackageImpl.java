@@ -4323,12 +4323,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		   new String[] {
 			   "feature", "purge"
 		   });
-		addAnnotation
-		  (getLoadSlot_VolumeCounterParty(),
-		   source,
-		   new String[] {
-			   "feature", "counter-party-volume"
-		   });
 	}
 
 	/**

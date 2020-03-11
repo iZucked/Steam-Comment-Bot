@@ -38,41 +38,39 @@ public class LoadSlotVolumeConstraint extends AbstractModelMultiConstraint {
 	 */
 	@Override
 	public String validate(IValidationContext ctx, final IExtraValidationContext extraContext, List<IStatus> failures) {
-		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_COUNTER_PARTY_VOLUME)) {
-			final EObject object = ctx.getTarget();
-			if (object instanceof Slot) {
-				final EMFEventType eventType = ctx.getEventType();
+		final EObject object = ctx.getTarget();
+		if (object instanceof Slot) {
+			final EMFEventType eventType = ctx.getEventType();
 
-				// This is being triggered by a batch mode validation.
-				if (eventType == EMFEventType.NULL) {
+			// This is being triggered by a batch mode validation.
+			if (eventType == EMFEventType.NULL) {
 
-					final Slot<?> slot = (Slot) object;
-					if (slot instanceof SpotSlot) {
-						return Activator.PLUGIN_ID;
-					}
-					if (slot instanceof LoadSlot) {
-						final LoadSlot loadSlot = (LoadSlot) slot;
-						if (loadSlot.isDESPurchase() && loadSlot.isVolumeCounterParty()) {
-							final String name = slot.getName();
-							
-							final int maxVolume = loadSlot.getSlotOrDelegateMaxQuantity();
-							if (maxVolume == 0 || maxVolume == Integer.MAX_VALUE) {
-								final String failureMessage = String.format("Max volume should NOT be zero for C/P volume.");
+				final Slot<?> slot = (Slot) object;
+				if (slot instanceof SpotSlot) {
+					return Activator.PLUGIN_ID;
+				}
+				if (slot instanceof LoadSlot) {
+					final LoadSlot loadSlot = (LoadSlot) slot;
+					if (loadSlot.isDESPurchase() && loadSlot.isVolumeCounterParty()) {
+						final String name = slot.getName();
 
-								final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(
-										String.format("%s %s", name, failureMessage)));
-								dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__MAX_QUANTITY);
-								failures.add(dsd);
-							}
-							final int minVolume = loadSlot.getSlotOrDelegateMinQuantity();
-							if (minVolume == 0 || minVolume == Integer.MIN_VALUE) {
-								final String failureMessage = String.format("Min volume should NOT be zero for C/P volume.");
+						final int maxVolume = loadSlot.getSlotOrDelegateMaxQuantity();
+						if (maxVolume == 0 || maxVolume == Integer.MAX_VALUE) {
+							final String failureMessage = String.format("Max volume should NOT be zero for C/P volume.");
 
-								final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(
-										String.format("%s %s", name, failureMessage)));
-								dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__MIN_QUANTITY);
-								failures.add(dsd);
-							}
+							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(
+									String.format("%s %s", name, failureMessage)));
+							dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__MAX_QUANTITY);
+							failures.add(dsd);
+						}
+						final int minVolume = loadSlot.getSlotOrDelegateMinQuantity();
+						if (minVolume == 0 || minVolume == Integer.MIN_VALUE) {
+							final String failureMessage = String.format("Min volume should NOT be zero for C/P volume.");
+
+							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(
+									String.format("%s %s", name, failureMessage)));
+							dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__MIN_QUANTITY);
+							failures.add(dsd);
 						}
 					}
 				}

@@ -340,7 +340,7 @@ public interface LoadSlot extends Slot<PurchaseContract> {
 	 * @return the value of the '<em>Volume Counter Party</em>' attribute.
 	 * @see #setVolumeCounterParty(boolean)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getLoadSlot_VolumeCounterParty()
-	 * @model annotation="http://www.mmxlabs.com/models/ui/featureEnablement feature='counter-party-volume'"
+	 * @model
 	 * @generated
 	 */
 	boolean isVolumeCounterParty();
