@@ -91,7 +91,7 @@ public class ExposuresCalculator {
 	@Named(SchedulerConstants.COMPUTE_EXPOSURES)
 	private boolean exposuresEnabled;
 	
-	final LocalDate dateZero = LocalDate.of(2000, 1, 1);
+	//final LocalDate dateZero = LocalDate.of(2000, 1, 1);
 	final long HighScaleFactor = 1_000_000;
 	final int ScaleFactor = 1_000;
 	
@@ -159,8 +159,8 @@ public class ExposuresCalculator {
 		final BasicExposureRecord physical = new BasicExposureRecord();
 		long volumeValue = Calculator.costFromVolume(volumeMMBTU, pricePerMMBTU);
 
-		physical.setVolumeMMBTU((isLong ? -1 : 1) * volumeMMBTU);
-		physical.setVolumeNative((isLong ? -1 : 1) * volumeMMBTU);
+		physical.setVolumeMMBTU((isLong ? 1 : -1) * volumeMMBTU);
+		physical.setVolumeNative((isLong ? 1 : -1) * volumeMMBTU);
 		physical.setUnitPrice(pricePerMMBTU);
 		physical.setVolumeValueNative((isLong ? -1 : 1) * volumeValue);
 		physical.setVolumeUnit("mmBtu");
@@ -255,7 +255,7 @@ public class ExposuresCalculator {
 				}
 				final BasicHolidayCalendar holidays = lookupData.holidayCalendars.get(record.curveName);
 				final BasicPricingCalendar pricingCalendar = lookupData.pricingCalendars.get(record.curveName);
-				applyProRataCorrection(pricingCalendar, holidays, dateZero, exposure);
+				applyProRataCorrection(pricingCalendar, holidays, externalDateProvider.getEarliestTime().toLocalDate(), exposure);
 				results.add(exposure);
 			}
 		}
@@ -531,7 +531,7 @@ public class ExposuresCalculator {
 			// Should really look up actual value from curve...
 			final ISeries series = commodityIndices.getSeries(commodityNode.getName());
 			// The series is in EXTERNAL format
-			final Number evaluate = series.evaluate(Hours.between(dateZero, date));
+			final Number evaluate = series.evaluate(Hours.between(externalDateProvider.getEarliestTime().toLocalDate(), date));
 
 			final int unitPrice = OptimiserUnitConvertor.convertToInternalPrice(evaluate.doubleValue());
 			long nativeVolume = inputRecord.volumeInMMBTU * 10;
@@ -557,7 +557,7 @@ public class ExposuresCalculator {
 
 			// Should really look up actual value from curve...
 			final ISeries series = currencyIndices.getSeries(currencyNode.getName());
-			final Number evaluate = series.evaluate(Hours.between(dateZero, date));
+			final Number evaluate = series.evaluate(Hours.between(externalDateProvider.getEarliestTime().toLocalDate(), date));
 
 			final int unitPrice =  OptimiserUnitConvertor.convertToInternalPrice(evaluate.doubleValue());
 

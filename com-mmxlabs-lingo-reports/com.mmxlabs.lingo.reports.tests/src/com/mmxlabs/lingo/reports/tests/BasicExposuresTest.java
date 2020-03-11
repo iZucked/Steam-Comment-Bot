@@ -794,6 +794,10 @@ public class BasicExposuresTest {
 			}
 			return getDateFromHours(hours, port.getTimeZoneId());
 		}
-		
+
+		@Override
+		public @NonNull ZonedDateTime getEarliestTime() {
+			return ZonedDateTime.of(dateZero, ZoneId.of("UTC"));
+		}
 	}
 }

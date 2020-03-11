@@ -144,4 +144,10 @@ public class DefaultModelEntityMap implements ModelEntityMap, IExternalDateProvi
 		return getDateFromHours(hours, port.getLocation().getTimeZone());
 	}
 
+	@Override
+	public @NonNull ZonedDateTime getEarliestTime() {
+		// TODO Auto-generated method stub
+		return dateHelper.getEarliestTime();
+	}
+
 }

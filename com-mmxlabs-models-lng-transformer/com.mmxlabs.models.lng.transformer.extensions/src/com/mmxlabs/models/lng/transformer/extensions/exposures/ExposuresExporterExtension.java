@@ -94,10 +94,12 @@ public class ExposuresExporterExtension implements IExporterExtension {
 			final int volumeNative = OptimiserUnitConvertor.convertToExternalVolume(record.getVolumeNative());
 			newDetail.setVolumeInNativeUnits(volumeNative);
 			final double volumeValueNative = (double) OptimiserUnitConvertor.convertToExternalFixedCost(record.getVolumeValueNative());
+			final double unitPrice = OptimiserUnitConvertor.convertToExternalPrice(record.getUnitPrice());
 			newDetail.setNativeValue(volumeValueNative);
 			newDetail.setVolumeUnit(record.getVolumeUnit());
 			newDetail.setIndexName(record.getIndexName());
 			newDetail.setDate(YearMonth.from(record.getTime()));
+			newDetail.setUnitPrice(unitPrice);
 
 			slotAllocation.getExposures().add(newDetail);
 		}

@@ -23,4 +23,7 @@ public interface IExternalDateProvider {
      */
     @NonNull
     ZonedDateTime getDateFromHours(final int hours, @Nullable final IPort port);
+    
+    @NonNull
+	ZonedDateTime getEarliestTime();
 }
