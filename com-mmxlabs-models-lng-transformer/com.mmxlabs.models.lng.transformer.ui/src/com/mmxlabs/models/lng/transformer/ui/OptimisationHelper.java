@@ -220,13 +220,7 @@ public final class OptimisationHelper {
 				final String errMessage = "Optimisation does not support break-evens. Replace \"?\" in price expressions.";
 				final Display display = PlatformUI.getWorkbench().getDisplay();
 				if (display != null) {
-					display.syncExec(new Runnable() {
-
-						@Override
-						public void run() {
-							MessageDialog.openError(display.getActiveShell(), "Unable to start optimisation", errMessage);
-						}
-					});
+					display.syncExec(() -> MessageDialog.openError(display.getActiveShell(), "Unable to start optimisation", errMessage));
 				}
 
 				return null;
@@ -280,9 +274,7 @@ public final class OptimisationHelper {
 			if (editingDomain != null) {
 				final CompoundCommand cmd = new CompoundCommand("Update settings");
 				cmd.append(SetCommand.create(editingDomain, root, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_UserSettings(), EcoreUtil.copy(optimisationPlan.getUserSettings())));
-				RunnerHelper.syncExecDisplayOptional(() -> {
-					editingDomain.getCommandStack().execute(cmd);
-				});
+				RunnerHelper.syncExecDisplayOptional(() -> editingDomain.getCommandStack().execute(cmd));
 			}
 
 			planRef[0] = optimisationPlan;
@@ -765,7 +757,7 @@ public final class OptimisationHelper {
 				stage.setName("reduce");
 				plan.getStages().add(stage);
 			}
-			{			
+			{
 				final LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(EcoreUtil.copy(baseConstraintAndFitnessSettings), parallelise);
 				stage.getAnnealingSettings().setEpochLength(epochLength);
 				stage.getAnnealingSettings().setRestarting(shouldUseRestartingLSO);
@@ -785,7 +777,7 @@ public final class OptimisationHelper {
 		} else if (userSettings.getMode() == OptimisationMode.ADP) { // ADP optimiser
 			final LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(EcoreUtil.copy(baseConstraintAndFitnessSettings), parallelise);
 			stage.getAnnealingSettings().setEpochLength(epochLength);
-			stage.getAnnealingSettings().setRestarting(shouldUseRestartingLSO);			
+			stage.getAnnealingSettings().setRestarting(shouldUseRestartingLSO);
 			plan.getStages().add(stage);
 
 			// Add in ADP constraints and objectives
@@ -805,9 +797,9 @@ public final class OptimisationHelper {
 				}
 				
 				plan.getStages().add(stage);
-			} else {	
+			} else {
 				// Normal LSO
-				{			
+				{
 					final LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(EcoreUtil.copy(baseConstraintAndFitnessSettings), parallelise);
 					stage.getAnnealingSettings().setEpochLength(epochLength);
 					stage.getAnnealingSettings().setRestarting(shouldUseRestartingLSO);
@@ -1156,12 +1148,12 @@ public final class OptimisationHelper {
 
 	private static void createTraderBasedInsertionsOption(final UserSettings defaultSettings, final EditingDomain editingDomain, final ParameterModesDialog dialog, final UserSettings copy,
 			final boolean[] optionsAdded) {
-		if (LicenseFeatures.isPermitted("features:trader-based-insertions")) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_TRADER_BASED_INSERIONS)) {
 
 			final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
 			choiceData.addChoice("Off", Boolean.FALSE);
 			choiceData.addChoice("On", Boolean.TRUE);
-			choiceData.enabled = LicenseFeatures.isPermitted("features:trader-based-insertions");
+			choiceData.enabled = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_TRADER_BASED_INSERIONS);
 			if (!choiceData.enabled) {
 				// if not enabled make sure to set setting to false
 				copy.setDualMode(false);
@@ -1191,7 +1183,7 @@ public final class OptimisationHelper {
 		choiceData.addChoice("Off", Boolean.FALSE);
 		choiceData.addChoice("On", Boolean.TRUE);
 
-		choiceData.enabled = LicenseFeatures.isPermitted("features:optimisation-charter-out-generation") && isAllowedGCO(scenario);
+		choiceData.enabled = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_CHARTER_OUT_GENERATION) && isAllowedGCO(scenario);
 		if (choiceData.enabled == false) {
 			// if not enabled make sure to set setting to false
 			copy.setGenerateCharterOuts(false);

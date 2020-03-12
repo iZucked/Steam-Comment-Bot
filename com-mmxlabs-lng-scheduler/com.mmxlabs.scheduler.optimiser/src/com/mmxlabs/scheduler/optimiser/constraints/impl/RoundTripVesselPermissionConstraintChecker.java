@@ -33,11 +33,9 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 public class RoundTripVesselPermissionConstraintChecker implements IPairwiseConstraintChecker {
 
 	@Inject
-	@NonNull
 	private IVesselProvider vesselProvider;
 
 	@Inject
-	@NonNull
 	private IRoundTripVesselPermissionProvider roundTripVesselPermissionProvider;
 
 	@Inject

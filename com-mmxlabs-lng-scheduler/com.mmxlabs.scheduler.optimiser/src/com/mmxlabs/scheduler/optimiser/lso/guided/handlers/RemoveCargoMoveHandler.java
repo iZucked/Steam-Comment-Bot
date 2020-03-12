@@ -70,6 +70,6 @@ public class RemoveCargoMoveHandler implements IGuidedMoveHandler {
 			builder.removeElement(fromResource, e);
 		}
 
-		return new Pair<IMove, Hints>(builder.create(), hints);
+		return Pair.of(builder.create(), hints);
 	}
 }

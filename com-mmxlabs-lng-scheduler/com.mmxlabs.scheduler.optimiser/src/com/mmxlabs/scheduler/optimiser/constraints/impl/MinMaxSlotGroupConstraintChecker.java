@@ -13,7 +13,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -30,13 +29,14 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
  * @author achurchill
  */
 public class MinMaxSlotGroupConstraintChecker implements IPairwiseConstraintChecker {
+
 	@Inject
 	private IMaxSlotCountConstraintDataProvider maxSlotCountConstraintProvider;
 
 	@Inject
 	private IPortSlotProvider portSlotProvider;
 
-	private @NonNull final String name;
+	private final @NonNull String name;
 
 	public MinMaxSlotGroupConstraintChecker(@NonNull final String name) {
 		this.name = name;
@@ -51,11 +51,6 @@ public class MinMaxSlotGroupConstraintChecker implements IPairwiseConstraintChec
 	}
 
 	@Override
-	public String explain(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
-		return null;
-	}
-
-	@Override
 	public @NonNull String getName() {
 		return name;
 	}
@@ -63,27 +58,27 @@ public class MinMaxSlotGroupConstraintChecker implements IPairwiseConstraintChec
 	@Override
 	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources) {
 		final Set<ISequenceElement> unusedSet = getUnusedSet(sequences);
-		final List<ConstraintInfo<?,?,IDischargeOption>> allMinDischargeGroupCounts = maxSlotCountConstraintProvider.getAllMinDischargeGroupCounts();
-		final List<ConstraintInfo<?,?,IDischargeOption>> allMaxDischargeGroupCounts = maxSlotCountConstraintProvider.getAllMaxDischargeGroupCounts();
-		final List<ConstraintInfo<?,?,ILoadOption>> allMinLoadGroupCounts = maxSlotCountConstraintProvider.getAllMinLoadGroupCounts();
-		final List<ConstraintInfo<?,?,ILoadOption>> allMaxLoadGroupCounts = maxSlotCountConstraintProvider.getAllMaxLoadGroupCounts();
+		final List<ConstraintInfo<?, ?, IDischargeOption>> allMinDischargeGroupCounts = maxSlotCountConstraintProvider.getAllMinDischargeGroupCounts();
+		final List<ConstraintInfo<?, ?, IDischargeOption>> allMaxDischargeGroupCounts = maxSlotCountConstraintProvider.getAllMaxDischargeGroupCounts();
+		final List<ConstraintInfo<?, ?, ILoadOption>> allMinLoadGroupCounts = maxSlotCountConstraintProvider.getAllMinLoadGroupCounts();
+		final List<ConstraintInfo<?, ?, ILoadOption>> allMaxLoadGroupCounts = maxSlotCountConstraintProvider.getAllMaxLoadGroupCounts();
 
-		for (final ConstraintInfo<?,?,IDischargeOption> pair : allMinDischargeGroupCounts) {
+		for (final ConstraintInfo<?, ?, IDischargeOption> pair : allMinDischargeGroupCounts) {
 			if (pair.getSlots().stream().filter(s -> !unusedSet.contains(portSlotProvider.getElement(s))).count() < pair.getBound()) {
 				return false;
 			}
 		}
-		for (final ConstraintInfo<?,?,IDischargeOption> pair : allMaxDischargeGroupCounts) {
+		for (final ConstraintInfo<?, ?, IDischargeOption> pair : allMaxDischargeGroupCounts) {
 			if (pair.getSlots().stream().filter(s -> !unusedSet.contains(portSlotProvider.getElement(s))).count() > pair.getBound()) {
 				return false;
 			}
 		}
-		for (final ConstraintInfo<?,?,ILoadOption> pair : allMinLoadGroupCounts) {
+		for (final ConstraintInfo<?, ?, ILoadOption> pair : allMinLoadGroupCounts) {
 			if (pair.getSlots().stream().filter(s -> !unusedSet.contains(portSlotProvider.getElement(s))).count() < pair.getBound()) {
 				return false;
 			}
 		}
-		for (final ConstraintInfo<?,?,ILoadOption> pair : allMaxLoadGroupCounts) {
+		for (final ConstraintInfo<?, ?, ILoadOption> pair : allMaxLoadGroupCounts) {
 			if (pair.getSlots().stream().filter(s -> !unusedSet.contains(portSlotProvider.getElement(s))).count() > pair.getBound()) {
 				return false;
 			}

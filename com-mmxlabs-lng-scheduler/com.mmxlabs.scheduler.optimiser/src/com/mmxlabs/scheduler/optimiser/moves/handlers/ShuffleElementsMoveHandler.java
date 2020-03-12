@@ -26,7 +26,6 @@ import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.RandomHelper;
 import com.mmxlabs.optimiser.common.components.ILookupManager;
-import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
@@ -75,8 +74,6 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 	@Inject
 	private IAlternativeElementProvider alternativeElementProvider;
 
-	private List<@NonNull ISequenceElement> targetElements;
-
 	@Inject
 	private IVirtualVesselSlotProvider virtualVesselSlotProvider;
 
@@ -96,6 +93,8 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 	@Named("shuffleCutoff")
 	private int shuffleCutoff = 0;
 
+	private List<@NonNull ISequenceElement> targetElements;
+	
 	@Inject
 	public void init() {
 		targetElements = new ArrayList<>(optimisationData.getSequenceElements().size());

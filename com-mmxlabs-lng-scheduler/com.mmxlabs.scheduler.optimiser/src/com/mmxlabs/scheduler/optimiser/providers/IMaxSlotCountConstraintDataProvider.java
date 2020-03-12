@@ -10,10 +10,13 @@ import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 
-public interface IMaxSlotCountConstraintDataProvider<P,C> extends IDataComponentProvider {
-	List<ConstraintInfo<P,C,ILoadOption>> getAllMinLoadGroupCounts();
-	List<ConstraintInfo<P,C,ILoadOption>> getAllMaxLoadGroupCounts();
+public interface IMaxSlotCountConstraintDataProvider<P, C> extends IDataComponentProvider {
+	
+	List<ConstraintInfo<P, C, ILoadOption>> getAllMinLoadGroupCounts();
 
-	List<ConstraintInfo<P,C,IDischargeOption>> getAllMinDischargeGroupCounts();
-	List<ConstraintInfo<P,C,IDischargeOption>> getAllMaxDischargeGroupCounts();
+	List<ConstraintInfo<P, C, ILoadOption>> getAllMaxLoadGroupCounts();
+
+	List<ConstraintInfo<P, C, IDischargeOption>> getAllMinDischargeGroupCounts();
+
+	List<ConstraintInfo<P, C, IDischargeOption>> getAllMaxDischargeGroupCounts();
 }

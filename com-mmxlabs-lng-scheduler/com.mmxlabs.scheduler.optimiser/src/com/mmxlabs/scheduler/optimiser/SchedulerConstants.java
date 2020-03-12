@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
@@ -15,6 +14,9 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
  */
 @NonNullByDefault
 public final class SchedulerConstants {
+	/**
+	 * The expected number of threads used by the thread pools.
+	 */
 	public static final String CONCURRENCY_LEVEL = "concurrency-level";
 
 	// Caching constants - used in injection framework

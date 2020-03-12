@@ -17,7 +17,6 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
-import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -40,19 +39,15 @@ public class VirtualVesselConstraintChecker implements IPairwiseConstraintChecke
 	private final String name;
 
 	@Inject
-	@NonNull
 	private IPortTypeProvider portTypeProvider;
 
 	@Inject
-	@NonNull
 	private IVesselProvider vesselProvider;
 
 	@Inject
-	@NonNull
 	private IStartEndRequirementProvider startEndProvider;
 
 	@Inject
-	@NonNull
 	private IVirtualVesselSlotProvider virtualVesselSlotProvider;
 
 	/**
@@ -122,10 +117,6 @@ public class VirtualVesselConstraintChecker implements IPairwiseConstraintChecke
 		}
 
 		return false;
-	}
-
-	@Override
-	public void setOptimisationData(@NonNull final IPhaseOptimisationData optimisationData) {
 	}
 
 	@Override

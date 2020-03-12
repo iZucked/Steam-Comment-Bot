@@ -40,6 +40,7 @@ import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.common.time.Hours;
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.ExtraDataProvider;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
@@ -979,7 +980,7 @@ public class PeriodTransformer {
 		}
 		VesselAssignmentType vesselAssignmentType = cargo.getVesselAssignmentType();
 		if (vesselAssignmentType instanceof CharterInMarket) {
-			if (cargo.getSpotIndex() == NOMINAL_INDEX && LicenseFeatures.isPermitted("features:no-nominal-in-prompt")) {
+			if (cargo.getSpotIndex() == NOMINAL_INDEX && LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_NO_NOMINALS_IN_PROMPT)) {
 				return true;
 			}
 		}

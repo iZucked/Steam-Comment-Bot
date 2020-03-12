@@ -237,7 +237,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	private final IIndexingContext indexingContext = new CheckingIndexingContext();
 
 	@Inject
-	@NonNull
 	private IVesselProviderEditor vesselProvider;
 
 	@Inject

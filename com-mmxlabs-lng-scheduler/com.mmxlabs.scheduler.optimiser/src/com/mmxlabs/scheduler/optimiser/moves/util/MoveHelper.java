@@ -67,7 +67,6 @@ public class MoveHelper implements IMoveHelper {
 	private IPhaseOptimisationData optimisationData;
 
 	@Inject
-	@NonNull
 	private IVesselProvider vesselProvider;
 
 	@Inject
@@ -80,34 +79,27 @@ public class MoveHelper implements IMoveHelper {
 	private IAllowedVesselProvider allowedVesselProvider;
 
 	@Inject
-	@NonNull
 	private IFOBDESCompatibilityProvider fobDesCompatibilityProvider;
 
 	@Inject
 	private IPromptPeriodProvider promptPeriodProvider;
 
 	@Inject
-	@NonNull
 	private IPortExclusionProvider portExclusionProvider;
 
 	@Inject
-	@NonNull
 	private IRoundTripVesselPermissionProvider roundTripVesselPermissionProvider;
 
 	@Inject
-	@NonNull
 	private IResourceAllocationConstraintDataComponentProvider resourceAllocationConstraintDataComponentProvider;
 
 	@Inject
-	@NonNull
 	private IPortSlotProvider portSlotProvider;
 
 	@Inject
-	@NonNull
 	private INominatedVesselProvider nominatedVesselProvider;
 
 	@Inject
-	@NonNull
 	private ILockedElementsProvider lockedElementsProvider;
 
 	public static final String LEGACY_CHECK_RESOURCE = "useLegacyCheck";
@@ -192,13 +184,10 @@ public class MoveHelper implements IMoveHelper {
 				if (vessel == null) {
 					vessel = vesselAvailability.getVessel();
 				}
-				Set<IPort> excludedPorts = portExclusionProvider.getExcludedPorts(vessel);
-
-				if (!excludedPorts.isEmpty()) {
-					if (excludedPorts.contains(portSlot.getPort())) {
-						itr.remove();
-						continue;
-					}
+				final Set<IPort> excludedPorts = portExclusionProvider.getExcludedPorts(vessel);
+				if (!excludedPorts.isEmpty() && excludedPorts.contains(portSlot.getPort())) {
+					itr.remove();
+					continue;
 				}
 			}
 

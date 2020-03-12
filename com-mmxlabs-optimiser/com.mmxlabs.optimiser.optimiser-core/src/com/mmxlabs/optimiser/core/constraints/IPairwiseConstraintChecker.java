@@ -28,7 +28,7 @@ public interface IPairwiseConstraintChecker extends IConstraintChecker {
 	 * @param resource
 	 * @return
 	 */
-	public boolean checkPairwiseConstraint(@NonNull ISequenceElement first, @NonNull ISequenceElement second, @NonNull IResource resource);
+	boolean checkPairwiseConstraint(@NonNull ISequenceElement first, @NonNull ISequenceElement second, @NonNull IResource resource);
 
 	/**
 	 * Return a string explaining why these two items cannot follow one another
@@ -38,6 +38,8 @@ public interface IPairwiseConstraintChecker extends IConstraintChecker {
 	 * @param resource
 	 * @return
 	 */
-	@Nullable
-	public String explain(@NonNull ISequenceElement first, @NonNull ISequenceElement second, @NonNull IResource resource);
+
+	default @Nullable String explain(@NonNull ISequenceElement first, @NonNull ISequenceElement second, @NonNull IResource resource) {
+		return null;
+	}
 }
