@@ -24,6 +24,7 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.lng.types.VolumeUnits;
+import com.mmxlabs.models.lng.types.util.ValidationConstants;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusFactory;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -144,6 +145,7 @@ public class CargoVolumeConstraint extends AbstractModelMultiConstraint {
 
 				final DetailConstraintStatusFactory factory = factoryBase //
 						.copyName() //
+						.withTag(ValidationConstants.TAG_VOLUME_MISMATCH) //
 						.withFormattedMessage("Min load volume greater than max discharge %s", unitsWarning) //
 						.withSeverity(IStatus.WARNING);
 
