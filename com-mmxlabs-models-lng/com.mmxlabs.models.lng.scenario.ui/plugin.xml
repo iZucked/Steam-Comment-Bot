@@ -151,75 +151,10 @@
          <menuContribution
                allPopups="false"
                locationURI="menu:data?after=dataStart">
-            <command
-                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.unified"
-                  label="Import all curves"
-                  style="push">
-            </command>
-            <command
-                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.basefuel"
-                  label="Import base fuel curves"
-                  style="push">
-            </command>
-            <command
-                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.commodity"
-                  label="Import commodity curves"
-                  style="push">
-            </command>
-            <command
-                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.currency"
-                  label="Import currency curves"
-                  style="push">
-            </command>
-            <command
-                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.charter"
-                  label="Import charter curves"
-                  style="push">
-            </command>
-            <command
-                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.portcosts"
-                  label="Import port costs"
-                  style="push">
-            </command>
-            <command
-                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.settledprices"
-                  label="Import settled prices"
-                  style="push">
- 				<visibleWhen
-                     checkEnabled="false">
-                  <test
-                        args="features:paperdeals"
-                        forcePluginActivation="true"
-                        property="com.mmxlabs.license.features.enablement">
-                  </test>
-               </visibleWhen>                  
-            </command>
-            <command
-                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.holidaycalendars"
-                  label="Import holiday calendars"
-                  style="push">
- 				<visibleWhen
-                     checkEnabled="false">
-                  <test
-                        args="features:paperdeals"
-                        forcePluginActivation="true"
-                        property="com.mmxlabs.license.features.enablement">
-                  </test>
-               </visibleWhen>                  
-            </command>
-            <command
-                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.pricingcalendars"
-                  label="Import pricing calendars"
-                  style="push">
- 				<visibleWhen
-                     checkEnabled="false">
-                  <test
-                        args="features:paperdeals"
-                        forcePluginActivation="true"
-                        property="com.mmxlabs.license.features.enablement">
-                  </test>
-               </visibleWhen>                  
-            </command>
+           <menu
+                  id="data_curves"
+                  label="Import curves">
+            </menu>
             <command
                   commandId="com.mmxlabs.models.lng.scenario.import.wizards.paperdeals"
                   label="Import paper deals"
@@ -246,15 +181,24 @@
                   </test>
                </visibleWhen>  
             </command>
-         </menuContribution>
-         <menuContribution
-               allPopups="false"
-               locationURI="menu:data?after=additions">
-            <command
+                    <command
                   commandId="com.mmxlabs.models.lng.scenario.importWizards.BulkImportCargoHandler"
                   label="Import cargoes"
                   style="push">
             </command>
+     
+            <menu
+                  id="data_ref"
+                  label="Other">
+            </menu>
+            <menu
+                  id="data_ref_mmx"
+                  label="LiNGO DB">
+            </menu>
+         </menuContribution>
+         <menuContribution
+               allPopups="false"
+               locationURI="menu:data?after=additions">
             <!--
             <command
                   commandId="com.mmxlabs.models.lng.scenario.ui.import.inventory"
@@ -270,6 +214,83 @@
                </visibleWhen>
             </command>
             !-->
+         </menuContribution>
+         <menuContribution
+               allPopups="false"
+               locationURI="menu:data_curves">
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.unified"
+                  label="Combined curves"
+                  style="push">
+            </command>
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.currency"
+                  label="Currency curves"
+                  style="push">
+            </command>
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.charter"
+                  label="Charter curves"
+                  style="push">
+            </command>
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.commodity"
+                  label="Commodity curves"
+                  style="push">
+            </command>
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.basefuel"
+                  label="Base fuel curves"
+                  style="push">
+            </command>
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.settledprices"
+                  label="Settled prices"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <test
+                        args="features:paperdeals"
+                        forcePluginActivation="true"
+                        property="com.mmxlabs.license.features.enablement">
+                  </test>
+               </visibleWhen>
+            </command>
+         </menuContribution>
+         <menuContribution
+               allPopups="false"
+               locationURI="menu:data_ref">
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.pricingcalendars"
+                  label="Import pricing calendars"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <test
+                        args="features:paperdeals"
+                        forcePluginActivation="true"
+                        property="com.mmxlabs.license.features.enablement">
+                  </test>
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.holidaycalendars"
+                  label="Import holiday calendars"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <test
+                        args="features:paperdeals"
+                        forcePluginActivation="true"
+                        property="com.mmxlabs.license.features.enablement">
+                  </test>
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.portcosts"
+                  label="Import port costs"
+                  style="push">
+            </command>
          </menuContribution>
          <!--
           <menuContribution

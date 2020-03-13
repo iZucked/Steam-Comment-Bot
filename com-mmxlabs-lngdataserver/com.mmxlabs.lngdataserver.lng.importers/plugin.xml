@@ -244,7 +244,7 @@
    </menuContribution>
    <menuContribution
          allPopups="false"
-         locationURI="menu:data?after=additions">
+         locationURI="menu:data_ref_mmx">
       <command
             commandId="com.mmxlabs.datahub.update.distances"
             label="Update Distances"
