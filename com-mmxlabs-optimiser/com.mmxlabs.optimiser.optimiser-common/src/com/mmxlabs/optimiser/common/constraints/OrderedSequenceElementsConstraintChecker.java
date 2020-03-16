@@ -19,10 +19,11 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
-import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 
 /**
- * Implementation of {@link IConstraintChecker} to enforce a specific ordering of sequence elements. This uses a {@link IOrderedSequenceElementsDataComponentProvider} instance to provide the
+ * Implementation of {@link IConstraintChecker} to enforce a specific ordering
+ * of sequence elements. This uses a
+ * {@link IOrderedSequenceElementsDataComponentProvider} instance to provide the
  * constraint data.
  * 
  * @author Simon Goodall
@@ -44,11 +45,6 @@ public final class OrderedSequenceElementsConstraintChecker implements IPairwise
 	@NonNull
 	public String getName() {
 		return name;
-	}
-
-	@Override
-	public void setOptimisationData(@NonNull final IPhaseOptimisationData optimisationData) {
-
 	}
 
 	@Override
@@ -76,7 +72,8 @@ public final class OrderedSequenceElementsConstraintChecker implements IPairwise
 	}
 
 	/**
-	 * Check the given {@link ISequence} ensuring that the expected element follows the preceding element.
+	 * Check the given {@link ISequence} ensuring that the expected element follows
+	 * the preceding element.
 	 * 
 	 * @param sequence
 	 * @param messages
@@ -89,45 +86,26 @@ public final class OrderedSequenceElementsConstraintChecker implements IPairwise
 				{
 					final ISequenceElement expected = provider.getNextElement(prevElement);
 					// If null, any element is allowed to follow.
-					if (expected != null) {
-						if (!expected.equals(element)) {
-							if (messages != null) {
-								final String msg = String.format("Element (%s) is not followed by (%s)", prevElement, expected);
-								messages.add(msg);
-							}
-
-							return false;
-						}
+					if (expected != null && expected != element) {
+						return false;
 					}
 				}
 				{
 					final ISequenceElement expected = provider.getPreviousElement(element);
 					// If null, any element is allowed to follow.
-					if (expected != null) {
-						if (!expected.equals(prevElement)) {
-							if (messages != null) {
-								final String msg = String.format("Element (%s) is not preceeded by (%s)", expected, prevElement);
-								messages.add(msg);
-							}
-
-							return false;
-						}
+					if (expected != null && expected != prevElement) {
+						return false;
 					}
 				}
 			}
 			prevElement = element;
 		}
 
-		// Check that the last element in the sequence has a follow on item.
+		// Check that the last element in the sequence does not have a follow on item.
 		if (prevElement != null) {
 			final ISequenceElement expected = provider.getNextElement(prevElement);
-			// If null, any element is allowed to follow.
+			// If not null, we expected another element, but there is none.
 			if (expected != null) {
-				if (messages != null) {
-					final String msg = String.format("Element (%s) is not followed by (%s)", prevElement, expected);
-					messages.add(msg);
-				}
-
 				return false;
 			}
 		}
@@ -138,21 +116,14 @@ public final class OrderedSequenceElementsConstraintChecker implements IPairwise
 	@Override
 	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
 		final ISequenceElement afterFirst = provider.getNextElement(first);
-		if (afterFirst == null) {
-			final ISequenceElement beforeSecond = provider.getPreviousElement(second);
-			if (beforeSecond == null) {
-				return true;
-			} else {
-				// This should be reflexive anyway.
-				return first.equals(beforeSecond);
-			}
-		} else {
-			return afterFirst.equals(second);
+		if (afterFirst != null && afterFirst != second) {
+			return false;
 		}
-	}
 
-	@Override
-	public String explain(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
-		return null;
+		final ISequenceElement beforeSecond = provider.getPreviousElement(second);
+		if (beforeSecond != null && first != beforeSecond) {
+			return false;
+		}
+		return true;
 	}
 }
