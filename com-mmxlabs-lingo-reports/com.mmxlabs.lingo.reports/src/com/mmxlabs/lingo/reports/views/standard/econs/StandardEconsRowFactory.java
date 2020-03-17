@@ -27,6 +27,7 @@ import com.mmxlabs.lingo.reports.views.standard.econs.EconsOptions.MarginBy;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails;
@@ -47,6 +48,8 @@ import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
+import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
+import com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Purge;
@@ -74,6 +77,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		boolean containsGeneratedCharterOut = false;
 		boolean containsStartEvent = false;
 		boolean containsOpenSlot = false;
+		boolean containsPaperDeals = false;
 
 		if (targets == null || targets.isEmpty()) {
 			containsCargo = true;
@@ -114,6 +118,9 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 						}
 					}
 				}
+				if (target instanceof PaperDealAllocation) {
+					containsPaperDeals = true;
+				}
 			}
 		}
 
@@ -123,13 +130,15 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 			rows.add(createRow(20, "    Price", true, "$", "", true, createBuyPrice(options, true)));
 			rows.add(createRow(30, "    Volume", true, "", "", false, createBuyVolumeMMBTuPrice(options, false)));
 		}
-		rows.add(createRow(40, "Shipping", true, "$", "", true, createShippingCosts(options, true)));
-		rows.add(createRow(50, "    Bunkers", true, "$", "", true, createShippingBunkersTotal(options, true)));
-		rows.add(createRow(60, "    Port", true, "$", "", true, createShippingPortCosts(options, true)));
-		rows.add(createRow(70, "    Canal", true, "$", "", true, createShippingCanalCosts(options, true)));
-		rows.add(createRow(80, "    Boil-off", true, "$", "", true, createShippingBOGTotal(options, true), createBOGColourProvider(options)));
-		rows.add(createRow(90, "    Charter Cost", true, "$", "", true, createShippingCharterCosts(options, true), createCharterFeesColourProvider(options)));
-		
+		if (containsCargo || containsCharterOut || containsCooldown || containsGeneratedCharterOut || containsOpenSlot
+				|| containsPurge || containsStartEvent || containsVesselEvent) {
+			rows.add(createRow(40, "Shipping", true, "$", "", true, createShippingCosts(options, true)));
+			rows.add(createRow(50, "    Bunkers", true, "$", "", true, createShippingBunkersTotal(options, true)));
+			rows.add(createRow(60, "    Port", true, "$", "", true, createShippingPortCosts(options, true)));
+			rows.add(createRow(70, "    Canal", true, "$", "", true, createShippingCanalCosts(options, true)));
+			rows.add(createRow(80, "    Boil-off", true, "$", "", true, createShippingBOGTotal(options, true), createBOGColourProvider(options)));
+			rows.add(createRow(90, "    Charter Cost", true, "$", "", true, createShippingCharterCosts(options, true), createCharterFeesColourProvider(options)));
+		}
 		if (containsCargo) {
 			final CargoEconsReportRow row = createRow(91, "    $/mmBtu", true, "$", "", true, createShippingCostsByMMBTU(options, true));
 			row.tooltip = () -> {
@@ -169,7 +178,10 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		if (containsOpenSlot) {
 			rows.add(createRow(185, "Cancellation", true, "$", "", true, createCancellationCosts(options, true)));
 		}
-		rows.add(createRow(190, "P&L", true, "$", "", false, createPNLTotal(options, false)));
+		if (containsCargo || containsCharterOut || containsCooldown || containsGeneratedCharterOut || containsOpenSlot
+				|| containsPurge || containsStartEvent || containsVesselEvent) {
+			rows.add(createRow(190, "P&L", true, "$", "", false, createPNLTotal(options, false)));
+		}
 		if (containsCargo) {
 			final CargoEconsReportRow row = createRow(200, "Margin", true, "$", "", false, createPNLPerMMBTU(options, false));
 			row.tooltip = () -> {
@@ -341,6 +353,22 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 				}
 			}
 		}
+		if (containsPaperDeals) {
+			rows.add(createRow(3010, "Pricing", false, "", "", false, createEmptyFormatter()));
+			rows.add(createRow(3020, "    Price", false, "", "", false,
+					createPaperDealAllocationFormatter(pda -> String.format("%.3f", pda.getPaperDeal().getPrice()) )));
+			rows.add(createRow(3030, "    Float curve", false, "", "", false,
+					createPaperDealAllocationFormatter(pda -> pda.getPaperDeal().getIndex() )));
+			rows.add(createRow(3040, "    Float price", false, "", "", false,
+					createPaperDealAllocationFormatter(pda -> String.format("%.3f", pda.getEntries().get(0).getPrice()) )));
+			rows.add(createRow(3050, "Quantity", true, "", "", false, createPaperDealVolumeMMBTu(options, false)));
+			rows.add(createRow(3060, "P&L", true, "$", "", false, createPNLTotal(options, false)));
+			rows.add(createRow(3070, "Pricing dates", false, "", "", false, createEmptyFormatter()));
+			rows.add(createRow(3080, "    Start", false, "", "", false,
+					createPaperDealAllocationFormatter(pda -> pda.getPaperDeal().getStartDate().format(DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter()))));
+			rows.add(createRow(3090, "    End", false, "", "", false,
+					createPaperDealAllocationFormatter(pda -> pda.getPaperDeal().getEndDate().format(DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter()))));
+		}
 		return rows;
 	}
 
@@ -506,6 +534,25 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 				cost += allocation.getEnergyTransferred();
 			}
 			return cost;
+		};
+
+		return createBasicFormatter(options, isCost, Long.class, VolumeMMBtuFormat::format, createMappingFunction(Long.class, helper));
+	}
+	
+	private @NonNull ICellRenderer createPaperDealVolumeMMBTu(final EconsOptions options, final boolean isCost) {
+
+		final Function<Object, @Nullable Long> helper = object -> {
+			Long volume = 0L;
+			if (object instanceof PaperDealAllocation) {
+				final PaperDealAllocation paperDealAllocation = (PaperDealAllocation) object;
+
+				
+				
+				for (final PaperDealAllocationEntry allocation : paperDealAllocation.getEntries()) {
+					volume += (int) allocation.getQuantity();
+				}
+			}
+			return volume;
 		};
 
 		return createBasicFormatter(options, isCost, Long.class, VolumeMMBtuFormat::format, createMappingFunction(Long.class, helper));
@@ -753,6 +800,23 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 	}
 
 	private @NonNull ICellRenderer createShippingPurgeCosts(final EconsOptions options, final boolean isCost) {
+		return createBasicFormatter(options, isCost, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, object -> {
+			if (object instanceof EventGrouping) {
+				final EventGrouping eventGrouping = (EventGrouping) object;
+
+				for (final Event evt : eventGrouping.getEvents()) {
+					if (evt instanceof Purge) {
+						final Purge purge = (Purge) evt;
+						final int cost = purge.getCost();
+						return cost;
+					}
+				}
+			}
+			return 0;
+		}));
+	}
+	
+	private @NonNull ICellRenderer createPaperDealStartDate(final EconsOptions options, final boolean isCost) {
 		return createBasicFormatter(options, isCost, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, object -> {
 			if (object instanceof EventGrouping) {
 				final EventGrouping eventGrouping = (EventGrouping) object;

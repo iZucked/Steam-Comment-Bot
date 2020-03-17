@@ -16,6 +16,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
+import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 
@@ -57,6 +58,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowDataImpl#getRhsEvent <em>Rhs Event</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowDataImpl#getLhsGroupProfitAndLoss <em>Lhs Group Profit And Loss</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowDataImpl#getRhsGroupProfitAndLoss <em>Rhs Group Profit And Loss</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowDataImpl#getPaperDealAllocation <em>Paper Deal Allocation</em>}</li>
  * </ul>
  *
  * @generated
@@ -313,6 +315,16 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	protected ProfitAndLossContainer rhsGroupProfitAndLoss;
 
 	/**
+	 * The cached value of the '{@link #getPaperDealAllocation() <em>Paper Deal Allocation</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPaperDealAllocation()
+	 * @generated
+	 * @ordered
+	 */
+	protected PaperDealAllocation paperDealAllocation;
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -336,6 +348,7 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isPrimaryRecord() {
 		return primaryRecord;
 	}
@@ -345,6 +358,7 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPrimaryRecord(boolean newPrimaryRecord) {
 		boolean oldPrimaryRecord = primaryRecord;
 		primaryRecord = newPrimaryRecord;
@@ -357,6 +371,7 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getLhsName() {
 		return lhsName;
 	}
@@ -366,6 +381,7 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLhsName(String newLhsName) {
 		String oldLhsName = lhsName;
 		lhsName = newLhsName;
@@ -378,6 +394,7 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getRhsName() {
 		return rhsName;
 	}
@@ -387,6 +404,7 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setRhsName(String newRhsName) {
 		String oldRhsName = rhsName;
 		rhsName = newRhsName;
@@ -399,6 +417,7 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ChangeSetRowData getLhsLink() {
 		if (lhsLink != null && lhsLink.eIsProxy()) {
 			InternalEObject oldLhsLink = (InternalEObject)lhsLink;
@@ -425,6 +444,7 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLhsLink(ChangeSetRowData newLhsLink) {
 		ChangeSetRowData oldLhsLink = lhsLink;
 		lhsLink = newLhsLink;
@@ -437,6 +457,7 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ChangeSetRowData getRhsLink() {
 		if (rhsLink != null && rhsLink.eIsProxy()) {
 			InternalEObject oldRhsLink = (InternalEObject)rhsLink;
@@ -463,6 +484,7 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setRhsLink(ChangeSetRowData newRhsLink) {
 		ChangeSetRowData oldRhsLink = rhsLink;
 		rhsLink = newRhsLink;
@@ -475,6 +497,7 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LoadSlot getLoadSlot() {
 		if (loadSlot != null && loadSlot.eIsProxy()) {
 			InternalEObject oldLoadSlot = (InternalEObject)loadSlot;
@@ -501,6 +524,7 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLoadSlot(LoadSlot newLoadSlot) {
 		LoadSlot oldLoadSlot = loadSlot;
 		loadSlot = newLoadSlot;
@@ -513,6 +537,7 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public DischargeSlot getDischargeSlot() {
 		if (dischargeSlot != null && dischargeSlot.eIsProxy()) {
 			InternalEObject oldDischargeSlot = (InternalEObject)dischargeSlot;
@@ -539,6 +564,7 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDischargeSlot(DischargeSlot newDischargeSlot) {
 		DischargeSlot oldDischargeSlot = dischargeSlot;
 		dischargeSlot = newDischargeSlot;
@@ -551,6 +577,7 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SlotAllocation getLoadAllocation() {
 		if (loadAllocation != null && loadAllocation.eIsProxy()) {
 			InternalEObject oldLoadAllocation = (InternalEObject)loadAllocation;
@@ -577,6 +604,7 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLoadAllocation(SlotAllocation newLoadAllocation) {
 		SlotAllocation oldLoadAllocation = loadAllocation;
 		loadAllocation = newLoadAllocation;
@@ -589,6 +617,7 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SlotAllocation getDischargeAllocation() {
 		if (dischargeAllocation != null && dischargeAllocation.eIsProxy()) {
 			InternalEObject oldDischargeAllocation = (InternalEObject)dischargeAllocation;
@@ -615,6 +644,7 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDischargeAllocation(SlotAllocation newDischargeAllocation) {
 		SlotAllocation oldDischargeAllocation = dischargeAllocation;
 		dischargeAllocation = newDischargeAllocation;
@@ -627,6 +657,7 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public OpenSlotAllocation getOpenLoadAllocation() {
 		if (openLoadAllocation != null && openLoadAllocation.eIsProxy()) {
 			InternalEObject oldOpenLoadAllocation = (InternalEObject)openLoadAllocation;
@@ -653,6 +684,7 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setOpenLoadAllocation(OpenSlotAllocation newOpenLoadAllocation) {
 		OpenSlotAllocation oldOpenLoadAllocation = openLoadAllocation;
 		openLoadAllocation = newOpenLoadAllocation;
@@ -665,6 +697,7 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public OpenSlotAllocation getOpenDischargeAllocation() {
 		if (openDischargeAllocation != null && openDischargeAllocation.eIsProxy()) {
 			InternalEObject oldOpenDischargeAllocation = (InternalEObject)openDischargeAllocation;
@@ -691,6 +724,7 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setOpenDischargeAllocation(OpenSlotAllocation newOpenDischargeAllocation) {
 		OpenSlotAllocation oldOpenDischargeAllocation = openDischargeAllocation;
 		openDischargeAllocation = newOpenDischargeAllocation;
@@ -703,6 +737,7 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Event getLhsEvent() {
 		if (lhsEvent != null && lhsEvent.eIsProxy()) {
 			InternalEObject oldLhsEvent = (InternalEObject)lhsEvent;
@@ -729,6 +764,7 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLhsEvent(Event newLhsEvent) {
 		Event oldLhsEvent = lhsEvent;
 		lhsEvent = newLhsEvent;
@@ -741,6 +777,7 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Event getRhsEvent() {
 		if (rhsEvent != null && rhsEvent.eIsProxy()) {
 			InternalEObject oldRhsEvent = (InternalEObject)rhsEvent;
@@ -767,6 +804,7 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setRhsEvent(Event newRhsEvent) {
 		Event oldRhsEvent = rhsEvent;
 		rhsEvent = newRhsEvent;
@@ -779,6 +817,7 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ProfitAndLossContainer getLhsGroupProfitAndLoss() {
 		if (lhsGroupProfitAndLoss != null && lhsGroupProfitAndLoss.eIsProxy()) {
 			InternalEObject oldLhsGroupProfitAndLoss = (InternalEObject)lhsGroupProfitAndLoss;
@@ -805,6 +844,7 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLhsGroupProfitAndLoss(ProfitAndLossContainer newLhsGroupProfitAndLoss) {
 		ProfitAndLossContainer oldLhsGroupProfitAndLoss = lhsGroupProfitAndLoss;
 		lhsGroupProfitAndLoss = newLhsGroupProfitAndLoss;
@@ -817,6 +857,7 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ProfitAndLossContainer getRhsGroupProfitAndLoss() {
 		if (rhsGroupProfitAndLoss != null && rhsGroupProfitAndLoss.eIsProxy()) {
 			InternalEObject oldRhsGroupProfitAndLoss = (InternalEObject)rhsGroupProfitAndLoss;
@@ -843,6 +884,7 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setRhsGroupProfitAndLoss(ProfitAndLossContainer newRhsGroupProfitAndLoss) {
 		ProfitAndLossContainer oldRhsGroupProfitAndLoss = rhsGroupProfitAndLoss;
 		rhsGroupProfitAndLoss = newRhsGroupProfitAndLoss;
@@ -855,6 +897,47 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public PaperDealAllocation getPaperDealAllocation() {
+		if (paperDealAllocation != null && paperDealAllocation.eIsProxy()) {
+			InternalEObject oldPaperDealAllocation = (InternalEObject)paperDealAllocation;
+			paperDealAllocation = (PaperDealAllocation)eResolveProxy(oldPaperDealAllocation);
+			if (paperDealAllocation != oldPaperDealAllocation) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ChangesetPackage.CHANGE_SET_ROW_DATA__PAPER_DEAL_ALLOCATION, oldPaperDealAllocation, paperDealAllocation));
+			}
+		}
+		return paperDealAllocation;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PaperDealAllocation basicGetPaperDealAllocation() {
+		return paperDealAllocation;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setPaperDealAllocation(PaperDealAllocation newPaperDealAllocation) {
+		PaperDealAllocation oldPaperDealAllocation = paperDealAllocation;
+		paperDealAllocation = newPaperDealAllocation;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_ROW_DATA__PAPER_DEAL_ALLOCATION, oldPaperDealAllocation, paperDealAllocation));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public ChangeSetRowDataGroup getRowDataGroup() {
 		if (eContainerFeatureID() != ChangesetPackage.CHANGE_SET_ROW_DATA__ROW_DATA_GROUP) return null;
 		return (ChangeSetRowDataGroup)eInternalContainer();
@@ -875,6 +958,7 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setRowDataGroup(ChangeSetRowDataGroup newRowDataGroup) {
 		if (newRowDataGroup != eInternalContainer() || (eContainerFeatureID() != ChangesetPackage.CHANGE_SET_ROW_DATA__ROW_DATA_GROUP && newRowDataGroup != null)) {
 			if (EcoreUtil.isAncestor(this, newRowDataGroup))
@@ -896,6 +980,7 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EventGrouping getEventGrouping() {
 		if (eventGrouping != null && eventGrouping.eIsProxy()) {
 			InternalEObject oldEventGrouping = (InternalEObject)eventGrouping;
@@ -922,6 +1007,7 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEventGrouping(EventGrouping newEventGrouping) {
 		EventGrouping oldEventGrouping = eventGrouping;
 		eventGrouping = newEventGrouping;
@@ -934,6 +1020,7 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getVesselName() {
 		return vesselName;
 	}
@@ -943,6 +1030,7 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVesselName(String newVesselName) {
 		String oldVesselName = vesselName;
 		vesselName = newVesselName;
@@ -955,6 +1043,7 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getVesselShortName() {
 		return vesselShortName;
 	}
@@ -964,6 +1053,7 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVesselShortName(String newVesselShortName) {
 		String oldVesselShortName = vesselShortName;
 		vesselShortName = newVesselShortName;
@@ -976,6 +1066,7 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ChangeSetVesselType getVesselType() {
 		return vesselType;
 	}
@@ -985,6 +1076,7 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVesselType(ChangeSetVesselType newVesselType) {
 		ChangeSetVesselType oldVesselType = vesselType;
 		vesselType = newVesselType == null ? VESSEL_TYPE_EDEFAULT : newVesselType;
@@ -1097,6 +1189,9 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 			case ChangesetPackage.CHANGE_SET_ROW_DATA__RHS_GROUP_PROFIT_AND_LOSS:
 				if (resolve) return getRhsGroupProfitAndLoss();
 				return basicGetRhsGroupProfitAndLoss();
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__PAPER_DEAL_ALLOCATION:
+				if (resolve) return getPaperDealAllocation();
+				return basicGetPaperDealAllocation();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -1168,6 +1263,9 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 				return;
 			case ChangesetPackage.CHANGE_SET_ROW_DATA__RHS_GROUP_PROFIT_AND_LOSS:
 				setRhsGroupProfitAndLoss((ProfitAndLossContainer)newValue);
+				return;
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__PAPER_DEAL_ALLOCATION:
+				setPaperDealAllocation((PaperDealAllocation)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -1241,6 +1339,9 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 			case ChangesetPackage.CHANGE_SET_ROW_DATA__RHS_GROUP_PROFIT_AND_LOSS:
 				setRhsGroupProfitAndLoss((ProfitAndLossContainer)null);
 				return;
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__PAPER_DEAL_ALLOCATION:
+				setPaperDealAllocation((PaperDealAllocation)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -1293,6 +1394,8 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 				return lhsGroupProfitAndLoss != null;
 			case ChangesetPackage.CHANGE_SET_ROW_DATA__RHS_GROUP_PROFIT_AND_LOSS:
 				return rhsGroupProfitAndLoss != null;
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__PAPER_DEAL_ALLOCATION:
+				return paperDealAllocation != null;
 		}
 		return super.eIsSet(featureID);
 	}

@@ -42,6 +42,7 @@ import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.lingo.reports.views.IProvideEditorInputScenario;
 import com.mmxlabs.lingo.reports.views.headline.HeadlineReportTransformer.RowData;
 import com.mmxlabs.lingo.reports.views.standard.KPIReportTransformer;
+import com.mmxlabs.models.lng.analytics.SolutionOption;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -203,6 +204,10 @@ public class HeadlineReportView extends ViewPart {
 					}
 
 					for (final ScenarioResult other : others) {
+						boolean showingOptiResult = false;
+						if (other != null && other.getResultRoot() != null && other.getResultRoot().eContainer() instanceof SolutionOption) {
+							showingOptiResult = true;
+						}
 						final ScheduleModel other_scheduleModel = other.getTypedResult(ScheduleModel.class);
 						if (other_scheduleModel != null) {
 							final Schedule schedule = other_scheduleModel.getSchedule();
@@ -217,6 +222,9 @@ public class HeadlineReportView extends ViewPart {
 									}
 								}
 							}
+						}
+						if (showingOptiResult) {
+							break;
 						}
 					}
 

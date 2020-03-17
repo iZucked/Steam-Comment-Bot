@@ -65,7 +65,6 @@ public class ToggleCharterOutEditorActionDelegate extends ActionDelegate impleme
 		currentSettings = null;
 
 		this.editingDomain = null;
-		this.currentModel = null;
 		this.targetEditor = targetEditor;
 		this.action = action;
 

@@ -3406,6 +3406,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		groupedCharterLengthEventEClass.getESuperTypes().add(this.getEvent());
 		groupedCharterLengthEventEClass.getESuperTypes().add(this.getEventGrouping());
 		groupedCharterLengthEventEClass.getESuperTypes().add(this.getProfitAndLossContainer());
+		paperDealAllocationEClass.getESuperTypes().add(this.getProfitAndLossContainer());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(scheduleModelEClass, ScheduleModel.class, "ScheduleModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

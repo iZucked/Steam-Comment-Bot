@@ -29,7 +29,7 @@ import org.eclipse.emf.ecore.EObject;
  * @model
  * @generated
  */
-public interface PaperDealAllocation extends EObject {
+public interface PaperDealAllocation extends ProfitAndLossContainer {
 	/**
 	 * Returns the value of the '<em><b>Paper Deal</b></em>' reference.
 	 * <!-- begin-user-doc -->

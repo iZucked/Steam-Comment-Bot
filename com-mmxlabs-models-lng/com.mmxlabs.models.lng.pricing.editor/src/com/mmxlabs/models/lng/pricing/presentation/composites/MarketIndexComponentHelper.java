@@ -67,13 +67,14 @@ public class MarketIndexComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editors for features on this class directly, and superclass' features.
 	 *
-	 * @generated NOT
+	 * @generated
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_pricingCalendarEditor(detailComposite, topClass);
 		add_settleCalendarEditor(detailComposite, topClass);
+		add_pricingCalendarEditor(detailComposite, topClass);
+		add_flatCurveEditor(detailComposite, topClass);
 		add_bidCurveEditor(detailComposite, topClass);
 		add_offerCurveEditor(detailComposite, topClass);
 	}
@@ -93,6 +94,17 @@ public class MarketIndexComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_pricingCalendarEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.MARKET_INDEX__PRICING_CALENDAR));
+	}
+
+	/**
+	 * Create the editor for the flatCurve feature on MarketIndex
+	 *
+	 * @generated NOT
+	 */
+	protected void add_flatCurveEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_GENERATED_PAPER_DEALS)) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.MARKET_INDEX__FLAT_CURVE));
+		}
 	}
 
 	/**

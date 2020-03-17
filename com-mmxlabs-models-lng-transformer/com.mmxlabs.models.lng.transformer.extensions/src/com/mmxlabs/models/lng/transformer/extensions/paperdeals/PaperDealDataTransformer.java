@@ -100,7 +100,8 @@ public class PaperDealDataTransformer implements ISlotTransformer {
 						paperDeals.add(basicPaperDealData);
 						modelEntityMap.addModelObject(entry, basicPaperDealData);
 					}
-					final PaperDealsLookupData lookupData = new PaperDealsLookupData(dataHandler.pricingCalendars, dataHandler.holidayCalendars, dataHandler.settledPrices, paperDeals, dataHandler.hedgeCurves);
+					final PaperDealsLookupData lookupData = new PaperDealsLookupData(dataHandler.pricingCalendars, dataHandler.holidayCalendars, //
+							dataHandler.settledPrices, paperDeals, dataHandler.hedgeCurves, dataHandler.marketIndices);
 					paperDealDataProviderEditor.addLookupData(lookupData);
 				}
 			}
@@ -119,6 +120,7 @@ public class PaperDealDataTransformer implements ISlotTransformer {
 		private Map<String, Map<LocalDate, Double>> settledPrices = new HashMap<>();
 		private Map<String, BasicInstrumentData> instruments = new HashMap<>();
 		private Map<String, Map<String, String>> hedgeCurves = new HashMap<>();
+		private Map<String, String> marketIndices = new HashMap<>();
 		
 		public DataHandler(final @NonNull PricingModel pricingModel, final ModelMarketCurveProvider provider) {
 	
@@ -128,6 +130,8 @@ public class PaperDealDataTransformer implements ISlotTransformer {
 				if (marketIndex == null) {
 					continue;
 				}
+				final String marketIndexName = marketIndex.getName().toLowerCase();
+				marketIndices.put(curveName, marketIndexName);
 				if (marketIndex.getPricingCalendar() != null) {
 					pricingCalendars.putIfAbsent(curveName, transformPricingCalendar(marketIndex.getPricingCalendar()));
 				}
@@ -135,13 +139,17 @@ public class PaperDealDataTransformer implements ISlotTransformer {
 					holidayCalendars.putIfAbsent(curveName, transformHolidayCalendar(marketIndex.getSettleCalendar()));
 				}
 				final Map<String, String> buySellCurves = new HashMap<>();
+				if (marketIndex.getFlatCurve() != null) {
+					buySellCurves.put("flat", marketIndex.getFlatCurve().getName().toLowerCase());
+				}
 				if (marketIndex.getBidCurve() != null) {
 					buySellCurves.put("bid", marketIndex.getBidCurve().getName().toLowerCase());
 				}
 				if (marketIndex.getOfferCurve() != null) {
 					buySellCurves.put("offer", marketIndex.getOfferCurve().getName().toLowerCase());
 				}
-				hedgeCurves.put(curveName, buySellCurves);
+				//hedgeCurves.put(curveName, buySellCurves);
+				hedgeCurves.put(marketIndexName, buySellCurves);
 				if (provider != null) {
 					final Map<LocalDate, Double> settlePrices = provider.getSettledPrices(curveName);
 					if (settlePrices != null && !settlePrices.isEmpty()) {

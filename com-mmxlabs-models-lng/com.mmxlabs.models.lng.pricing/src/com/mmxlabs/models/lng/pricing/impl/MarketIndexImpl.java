@@ -29,6 +29,7 @@ import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.MarketIndexImpl#getSettleCalendar <em>Settle Calendar</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.MarketIndexImpl#getPricingCalendar <em>Pricing Calendar</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.MarketIndexImpl#getFlatCurve <em>Flat Curve</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.MarketIndexImpl#getBidCurve <em>Bid Curve</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.MarketIndexImpl#getOfferCurve <em>Offer Curve</em>}</li>
  * </ul>
@@ -55,6 +56,16 @@ public class MarketIndexImpl extends NamedObjectImpl implements MarketIndex {
 	 * @ordered
 	 */
 	protected PricingCalendar pricingCalendar;
+
+	/**
+	 * The cached value of the '{@link #getFlatCurve() <em>Flat Curve</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFlatCurve()
+	 * @generated
+	 * @ordered
+	 */
+	protected CommodityCurve flatCurve;
 
 	/**
 	 * The cached value of the '{@link #getBidCurve() <em>Bid Curve</em>}' reference.
@@ -181,6 +192,46 @@ public class MarketIndexImpl extends NamedObjectImpl implements MarketIndex {
 	 * @generated
 	 */
 	@Override
+	public CommodityCurve getFlatCurve() {
+		if (flatCurve != null && flatCurve.eIsProxy()) {
+			InternalEObject oldFlatCurve = (InternalEObject)flatCurve;
+			flatCurve = (CommodityCurve)eResolveProxy(oldFlatCurve);
+			if (flatCurve != oldFlatCurve) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PricingPackage.MARKET_INDEX__FLAT_CURVE, oldFlatCurve, flatCurve));
+			}
+		}
+		return flatCurve;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CommodityCurve basicGetFlatCurve() {
+		return flatCurve;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setFlatCurve(CommodityCurve newFlatCurve) {
+		CommodityCurve oldFlatCurve = flatCurve;
+		flatCurve = newFlatCurve;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.MARKET_INDEX__FLAT_CURVE, oldFlatCurve, flatCurve));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public CommodityCurve getBidCurve() {
 		if (bidCurve != null && bidCurve.eIsProxy()) {
 			InternalEObject oldBidCurve = (InternalEObject)bidCurve;
@@ -269,6 +320,9 @@ public class MarketIndexImpl extends NamedObjectImpl implements MarketIndex {
 			case PricingPackage.MARKET_INDEX__PRICING_CALENDAR:
 				if (resolve) return getPricingCalendar();
 				return basicGetPricingCalendar();
+			case PricingPackage.MARKET_INDEX__FLAT_CURVE:
+				if (resolve) return getFlatCurve();
+				return basicGetFlatCurve();
 			case PricingPackage.MARKET_INDEX__BID_CURVE:
 				if (resolve) return getBidCurve();
 				return basicGetBidCurve();
@@ -294,6 +348,9 @@ public class MarketIndexImpl extends NamedObjectImpl implements MarketIndex {
 			case PricingPackage.MARKET_INDEX__PRICING_CALENDAR:
 				setPricingCalendar((PricingCalendar)newValue);
 				return;
+			case PricingPackage.MARKET_INDEX__FLAT_CURVE:
+				setFlatCurve((CommodityCurve)newValue);
+				return;
 			case PricingPackage.MARKET_INDEX__BID_CURVE:
 				setBidCurve((CommodityCurve)newValue);
 				return;
@@ -318,6 +375,9 @@ public class MarketIndexImpl extends NamedObjectImpl implements MarketIndex {
 			case PricingPackage.MARKET_INDEX__PRICING_CALENDAR:
 				setPricingCalendar((PricingCalendar)null);
 				return;
+			case PricingPackage.MARKET_INDEX__FLAT_CURVE:
+				setFlatCurve((CommodityCurve)null);
+				return;
 			case PricingPackage.MARKET_INDEX__BID_CURVE:
 				setBidCurve((CommodityCurve)null);
 				return;
@@ -340,6 +400,8 @@ public class MarketIndexImpl extends NamedObjectImpl implements MarketIndex {
 				return settleCalendar != null;
 			case PricingPackage.MARKET_INDEX__PRICING_CALENDAR:
 				return pricingCalendar != null;
+			case PricingPackage.MARKET_INDEX__FLAT_CURVE:
+				return flatCurve != null;
 			case PricingPackage.MARKET_INDEX__BID_CURVE:
 				return bidCurve != null;
 			case PricingPackage.MARKET_INDEX__OFFER_CURVE:

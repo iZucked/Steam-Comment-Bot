@@ -6,6 +6,8 @@ package com.mmxlabs.common.paperdeals;
 
 import java.time.LocalDate;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 /**
  * Basic data equivalent for PaperDeal
  * @author FM
@@ -14,14 +16,13 @@ import java.time.LocalDate;
 public class BasicPaperDealData {
 	private String name;
 	private boolean isBuy; //side of the paper buy or sell
-	private long paperVolumeValue; // cost revenue which paper produces
 	private long paperVolume; // always MMBTU
 	private int paperUnitPrice; // fixed cost per mmbtu
 	private LocalDate start; //also pricing month if type is instrument or calendar
 	private LocalDate end;
 	private String type; //PERIOD_AVG, CALENDAR, INSTRUMENT
 	private BasicInstrumentData instrument; //instrument which is used for settling
-	private String indexName; //name of the curve
+	private final @NonNull String indexName; //name of the curve
 	private String entity; //name of the legal entity
 	private int year; //year of the paper
 	private String notes; //notes
@@ -32,7 +33,6 @@ public class BasicPaperDealData {
 		super();
 		this.name = name;
 		this.isBuy = isBuy;
-		this.paperVolumeValue = (paperVolume * paperUnitPrice) / 1_000_000;
 		this.paperVolume = paperVolume;
 		this.paperUnitPrice = paperUnitPrice;
 		this.start = start;
@@ -52,10 +52,6 @@ public class BasicPaperDealData {
 
 	public boolean isBuy() {
 		return isBuy;
-	}
-
-	public long getPaperVolumeValue() {
-		return paperVolumeValue;
 	}
 
 	public long getPaperVolume() {

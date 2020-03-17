@@ -140,7 +140,6 @@ public abstract class AbstractMicroTestCase {
 		importer.importFleetData(urlRoot);
 		importer.importMarketData(urlRoot);
 		importer.importPromptData(urlRoot);
-		importer.importMarketData(urlRoot);
 
 		return importer.doImport();
 	}

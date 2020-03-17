@@ -21,6 +21,7 @@ import org.eclipse.emf.common.util.EList;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.MarketIndex#getSettleCalendar <em>Settle Calendar</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.MarketIndex#getPricingCalendar <em>Pricing Calendar</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.MarketIndex#getFlatCurve <em>Flat Curve</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.MarketIndex#getBidCurve <em>Bid Curve</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.MarketIndex#getOfferCurve <em>Offer Curve</em>}</li>
  * </ul>
@@ -77,6 +78,28 @@ public interface MarketIndex extends NamedObject {
 	 * @generated
 	 */
 	void setPricingCalendar(PricingCalendar value);
+
+	/**
+	 * Returns the value of the '<em><b>Flat Curve</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Flat Curve</em>' reference.
+	 * @see #setFlatCurve(CommodityCurve)
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getMarketIndex_FlatCurve()
+	 * @model
+	 * @generated
+	 */
+	CommodityCurve getFlatCurve();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.MarketIndex#getFlatCurve <em>Flat Curve</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Flat Curve</em>' reference.
+	 * @see #getFlatCurve()
+	 * @generated
+	 */
+	void setFlatCurve(CommodityCurve value);
 
 	/**
 	 * Returns the value of the '<em><b>Bid Curve</b></em>' reference.

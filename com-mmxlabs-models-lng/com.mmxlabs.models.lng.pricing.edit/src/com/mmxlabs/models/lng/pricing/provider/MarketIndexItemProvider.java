@@ -55,6 +55,7 @@ public class MarketIndexItemProvider extends NamedObjectItemProvider {
 
 			addSettleCalendarPropertyDescriptor(object);
 			addPricingCalendarPropertyDescriptor(object);
+			addFlatCurvePropertyDescriptor(object);
 			addBidCurvePropertyDescriptor(object);
 			addOfferCurvePropertyDescriptor(object);
 		}
@@ -97,6 +98,28 @@ public class MarketIndexItemProvider extends NamedObjectItemProvider {
 				 getString("_UI_MarketIndex_pricingCalendar_feature"),
 				 getString("_UI_MarketIndex_pricingCalendar_description"),
 				 PricingPackage.Literals.MARKET_INDEX__PRICING_CALENDAR,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Flat Curve feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addFlatCurvePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_MarketIndex_flatCurve_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_MarketIndex_flatCurve_feature", "_UI_MarketIndex_type"),
+				 PricingPackage.Literals.MARKET_INDEX__FLAT_CURVE,
 				 true,
 				 false,
 				 true,

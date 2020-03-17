@@ -54,6 +54,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.PropertySheet;
 
+import com.google.common.base.Objects;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.internal.Activator;
@@ -63,6 +64,7 @@ import com.mmxlabs.lingo.reports.views.standard.econs.EconsOptions.MarginBy;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -74,6 +76,8 @@ import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupedCharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
+import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
+import com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry;
 import com.mmxlabs.models.lng.schedule.Purge;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
@@ -497,6 +501,27 @@ public class CargoEconsReportComponent implements IAdaptable {
 				} else if (obj instanceof Purge) {
 					validObjects.add(obj);
 
+				} else if (obj instanceof PaperDeal) {
+					final PaperDeal paperDeal = (PaperDeal) obj;
+					getValidObject(part, (lngScenarioModel) -> {
+						final ScheduleModel scheduleModel = lngScenarioModel.getScheduleModel();
+						if (scheduleModel != null) {
+							final Schedule schedule = scheduleModel.getSchedule();
+							for (final PaperDealAllocation pda : schedule.getPaperDealAllocations()) {
+								if (Objects.equal(paperDeal, pda.getPaperDeal())) {
+									validObjects.add(pda);
+									break;
+								}
+							}
+						}
+					});
+				} else if (obj instanceof PaperDealAllocation) {
+					validObjects.add(obj);
+				} else if (obj instanceof PaperDealAllocationEntry) {
+					EObject objContainer = ((PaperDealAllocationEntry) obj).eContainer();
+					if (objContainer instanceof PaperDealAllocation) {
+						validObjects.add(objContainer);
+					}
 				}
 			}
 
@@ -525,6 +550,8 @@ public class CargoEconsReportComponent implements IAdaptable {
 				aName = ((Event) a).name();
 			} else if (a instanceof DeltaPair) {
 				aName = ((DeltaPair) a).getName();
+			} else if (a instanceof PaperDealAllocation) {
+				aName = ((PaperDealAllocation) a).getPaperDeal().getName();
 			}
 
 			if (b instanceof CargoAllocation) {
@@ -535,6 +562,8 @@ public class CargoEconsReportComponent implements IAdaptable {
 				bName = ((Event) b).name();
 			} else if (b instanceof DeltaPair) {
 				bName = ((DeltaPair) b).getName();
+			} else if (b instanceof PaperDealAllocation) {
+				bName = ((PaperDealAllocation) b).getPaperDeal().getName();
 			}
 
 			if (aName != null && bName != null) {
@@ -697,6 +726,10 @@ public class CargoEconsReportComponent implements IAdaptable {
 			if (object instanceof OpenSlotAllocation) {
 				name = ((OpenSlotAllocation) object).getSlot().getName();
 			}
+			
+			if (object instanceof PaperDealAllocation) {
+				name = ((PaperDealAllocation) object).getPaperDeal().getName();
+			}
 
 			if (!columnGroups.containsKey(name)) {
 				final GridColumnGroup gridColumnGroup = new GridColumnGroup(viewer.getGrid(), SWT.CENTER);
@@ -742,11 +775,18 @@ public class CargoEconsReportComponent implements IAdaptable {
 				vesselEventVisits.add((VesselEventVisit) obj);
 			}
 		}
+		final List<PaperDealAllocation> paperDealAllocations = new ArrayList<>();
+		for (final Object obj : validObjects) {
+			if (obj instanceof PaperDealAllocation) {
+				paperDealAllocations.add((PaperDealAllocation) obj);
+			}
+		}
 
 		final List<Object> otherObjects = new ArrayList<>(validObjects);
 		otherObjects.removeAll(vesselEventVisits);
 		otherObjects.removeAll(cargoAllocations);
 		otherObjects.removeAll(openSlotAllocations);
+		otherObjects.removeAll(paperDealAllocations);
 
 		// Create the row object
 		final List<CargoEconsReportRow> rows = new LinkedList<>();
@@ -998,6 +1038,27 @@ public class CargoEconsReportComponent implements IAdaptable {
 				if (currentSelectedDataProvider != null && currentSelectedDataProvider.isPinnedObject(cargoAllocation)) {
 					gvc.getColumn().setHeaderRenderer(columnImageHeaderCenteredRenderer);
 					gvc.getColumn().setImage(pinImage);
+				}
+			} else if (selectedObject instanceof PaperDealAllocation) {
+				final PaperDealAllocation paperDealAllocation = (PaperDealAllocation) selectedObject;
+				
+				final GridColumnGroup gridColumnGroup = gridColumnGroupsMap.get(paperDealAllocation.getPaperDeal().getName());
+				final GridColumn gc = new GridColumn(gridColumnGroup, SWT.NONE);
+				final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+
+				GridViewerHelper.configureLookAndFeel(gvc);
+				// Mark column for disposal on selection change
+				dataColumns.add(gvc);
+
+				gvc.setLabelProvider(new FieldTypeMapperLabelProvider(selectedObject));
+				gvc.getColumn().setWidth(100);
+				@Nullable
+				final ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
+				if (currentSelectedDataProvider != null && currentSelectedDataProvider.isPinnedObject(paperDealAllocation)) {
+					gvc.getColumn().setHeaderRenderer(columnImageHeaderCenteredRenderer);
+					gvc.getColumn().setImage(pinImage);
+					gvc.getColumn().setText(""); // † <- Use this in copy/paste?
+
 				}
 			}
 		}

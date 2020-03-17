@@ -501,6 +501,8 @@ public class ScheduleSwitch<@Nullable T> extends Switch<T> {
 			case SchedulePackage.PAPER_DEAL_ALLOCATION: {
 				PaperDealAllocation paperDealAllocation = (PaperDealAllocation)theEObject;
 				T result = casePaperDealAllocation(paperDealAllocation);
+				if (result == null) result = caseProfitAndLossContainer(paperDealAllocation);
+				if (result == null) result = caseMMXObject(paperDealAllocation);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}

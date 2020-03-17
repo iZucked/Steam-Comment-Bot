@@ -18,6 +18,7 @@
     </genEnums>
     <genDataTypes ecoreDataType="changeset.ecore#//ScenarioResult"/>
     <genDataTypes ecoreDataType="changeset.ecore#//ChangeDescription"/>
+    <genDataTypes ecoreDataType="changeset.ecore#//UserSettings"/>
     <genClasses ecoreClass="changeset.ecore#//ChangeSetRoot">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRoot/changeSets"/>
     </genClasses>
@@ -33,6 +34,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSet/currentMetrics"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSet/description"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSet/changeDescription"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSet/userSettings"/>
     </genClasses>
     <genClasses ecoreClass="changeset.ecore#//Metrics">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//Metrics/pnl"/>
@@ -74,6 +76,7 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRowData/rhsEvent"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRowData/lhsGroupProfitAndLoss"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRowData/rhsGroupProfitAndLoss"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRowData/paperDealAllocation"/>
     </genClasses>
     <genClasses ecoreClass="changeset.ecore#//ChangeSetTableGroup">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetTableGroup/rows"/>

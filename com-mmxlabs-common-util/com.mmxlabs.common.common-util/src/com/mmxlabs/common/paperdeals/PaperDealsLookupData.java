@@ -29,13 +29,16 @@ public class PaperDealsLookupData {
 	public List<BasicPaperDealData> paperDeals = new ArrayList<>();
 	// Keeps a map of a buy/sell curve name for a given curve
 	public Map<String, Map<String, String>> hedgeCurves = new HashMap<>();
+	// Keeps a map of market index for a given curve name
+	public Map<String, String> marketIndices = new HashMap<>();
 	
 	public PaperDealsLookupData(final Map<String, BasicPricingCalendar> pricingCalendars, final Map<String, BasicHolidayCalendar> holidayCalendars, final Map<String, Map<LocalDate, Double>> settledPrices, //
-			final List<BasicPaperDealData> paperDeals, final Map<String, Map<String, String>> hedgeCurves) {
+			final List<BasicPaperDealData> paperDeals, final Map<String, Map<String, String>> hedgeCurves, final Map<String, String> marketIndices) {
 		this.pricingCalendars = pricingCalendars;
 		this.holidayCalendars = holidayCalendars;
 		this.settledPrices = settledPrices;
 		this.paperDeals = paperDeals;
 		this.hedgeCurves = hedgeCurves;
+		this.marketIndices = marketIndices;
 	}
 }
