@@ -34,6 +34,7 @@ import org.eclipse.ui.views.properties.PropertySheet;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
+import com.mmxlabs.models.lng.analytics.SolutionOption;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
 import com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry;
@@ -55,6 +56,7 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
 public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.workbench.modeling.ISelectionListener {
 
 	private SelectedScenariosService selectedScenariosService;
+	private boolean expand = true;
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -65,16 +67,12 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 		viewer.getGrid().setHeaderVisible(true);
 		viewer.setAutoExpandLevel(AbstractTreeViewer.ALL_LEVELS);
 
-		// final GridViewerColumn gvc0 = createColumn("ID", SchedulePackage.Literals.SLOT_ALLOCATION__SLOT);
-		// gvc0.getColumn().setTree(true);
-
 		final GridViewerColumn gvc1 = createColumn("Date", SchedulePackage.Literals.PAPER_DEAL_ALLOCATION_ENTRY__DATE);
 		gvc1.getColumn().setTree(true);
 		final GridViewerColumn gvc2 = createColumn("Price", SchedulePackage.Literals.PAPER_DEAL_ALLOCATION_ENTRY__PRICE);
 		final GridViewerColumn gvc3 = createColumn("Settled", SchedulePackage.Literals.PAPER_DEAL_ALLOCATION_ENTRY__SETTLED);
 		final GridViewerColumn gvc4 = createColumn("Quantity", SchedulePackage.Literals.PAPER_DEAL_ALLOCATION_ENTRY__QUANTITY);
 		final GridViewerColumn gvc5 = createColumn("Value", SchedulePackage.Literals.PAPER_DEAL_ALLOCATION_ENTRY__VALUE);
-		// viewer.getGrid().footsetFooterVisible(true);
 
 		viewer.setContentProvider(new ITreeContentProvider() {
 
@@ -155,6 +153,19 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 	}
 
 	private void makeActions() {
+		final Action expandCollapseAll = new Action("Collapse", Action.AS_PUSH_BUTTON) {
+			@Override
+			public void run() {
+				expand = !expand;
+				viewer.setAutoExpandLevel(expand ? AbstractTreeViewer.ALL_LEVELS : 0);
+				setText(expand ? "Collapse" : "Expand");
+				getViewSite().getActionBars().updateActionBars();
+				PaperDealsReportView.this.refresh();
+			}
+		};
+		
+		getViewSite().getActionBars().getToolBarManager().add(expandCollapseAll);
+		
 		final Action packColumnsAction = PackActionFactory.createPackColumnsAction(viewer);
 		final Action copyTableAction = new CopyGridToClipboardAction(viewer.getGrid());
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableAction);
@@ -278,6 +289,11 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 						}
 					}
 					for (final ScenarioResult other : others) {
+						boolean showingOptiResult = false;
+						if (other != null && other.getResultRoot() != null && other.getResultRoot().eContainer() instanceof SolutionOption) {
+							slotAllocations.clear();
+							showingOptiResult = true;
+						}
 						@Nullable
 						final ScheduleModel scheduleModel = other.getTypedResult(ScheduleModel.class);
 						if (scheduleModel != null) {
@@ -291,6 +307,9 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 									}
 								}
 							}
+						}
+						if (showingOptiResult) {
+							break;
 						}
 					}
 
@@ -323,7 +342,10 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 	@Override
 	public void setFocus() {
 		ViewerHelper.setFocus(viewer);
-
+	}
+	
+	protected void refresh() {
+		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
 	}
 
 }

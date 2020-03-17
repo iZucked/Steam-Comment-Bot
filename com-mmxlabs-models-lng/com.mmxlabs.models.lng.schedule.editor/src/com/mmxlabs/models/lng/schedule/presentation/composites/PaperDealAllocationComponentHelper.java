@@ -47,6 +47,7 @@ public class PaperDealAllocationComponentHelper extends BaseComponentHelper {
 	 */
 	public PaperDealAllocationComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
+		superClassesHelpers.addAll(registry.getComponentHelpers(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER));
 	}
 	
 	/**

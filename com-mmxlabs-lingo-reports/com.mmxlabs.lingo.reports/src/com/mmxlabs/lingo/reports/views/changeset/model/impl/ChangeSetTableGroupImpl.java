@@ -290,6 +290,7 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<ChangeSetTableRow> getRows() {
 		if (rows == null) {
 			rows = new EObjectContainmentEList<ChangeSetTableRow>(ChangeSetTableRow.class, this, ChangesetPackage.CHANGE_SET_TABLE_GROUP__ROWS);
@@ -302,6 +303,7 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public DeltaMetrics getDeltaMetrics() {
 		return deltaMetrics;
 	}
@@ -326,6 +328,7 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDeltaMetrics(DeltaMetrics newDeltaMetrics) {
 		if (newDeltaMetrics != deltaMetrics) {
 			NotificationChain msgs = null;
@@ -345,6 +348,7 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Metrics getCurrentMetrics() {
 		return currentMetrics;
 	}
@@ -369,6 +373,7 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCurrentMetrics(Metrics newCurrentMetrics) {
 		if (newCurrentMetrics != currentMetrics) {
 			NotificationChain msgs = null;
@@ -388,6 +393,7 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ChangeSet getChangeSet() {
 		if (changeSet != null && changeSet.eIsProxy()) {
 			InternalEObject oldChangeSet = (InternalEObject)changeSet;
@@ -414,6 +420,7 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setChangeSet(ChangeSet newChangeSet) {
 		ChangeSet oldChangeSet = changeSet;
 		changeSet = newChangeSet;
@@ -426,6 +433,7 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getDescription() {
 		return description;
 	}
@@ -435,6 +443,7 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDescription(String newDescription) {
 		String oldDescription = description;
 		description = newDescription;
@@ -447,6 +456,7 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ScenarioResult getBaseScenario() {
 		return baseScenario;
 	}
@@ -456,6 +466,7 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBaseScenario(ScenarioResult newBaseScenario) {
 		ScenarioResult oldBaseScenario = baseScenario;
 		baseScenario = newBaseScenario;
@@ -468,6 +479,7 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ScenarioResult getCurrentScenario() {
 		return currentScenario;
 	}
@@ -477,6 +489,7 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCurrentScenario(ScenarioResult newCurrentScenario) {
 		ScenarioResult oldCurrentScenario = currentScenario;
 		currentScenario = newCurrentScenario;
@@ -489,6 +502,7 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ChangeSetTableGroup getLinkedGroup() {
 		if (linkedGroup != null && linkedGroup.eIsProxy()) {
 			InternalEObject oldLinkedGroup = (InternalEObject)linkedGroup;
@@ -515,6 +529,7 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLinkedGroup(ChangeSetTableGroup newLinkedGroup) {
 		ChangeSetTableGroup oldLinkedGroup = linkedGroup;
 		linkedGroup = newLinkedGroup;
@@ -527,6 +542,7 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getComplexity() {
 		return complexity;
 	}
@@ -536,6 +552,7 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setComplexity(int newComplexity) {
 		int oldComplexity = complexity;
 		complexity = newComplexity;
@@ -548,6 +565,7 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getSortValue() {
 		return sortValue;
 	}
@@ -557,6 +575,7 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSortValue(double newSortValue) {
 		double oldSortValue = sortValue;
 		sortValue = newSortValue;
@@ -569,6 +588,7 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getGroupSortValue() {
 		return groupSortValue;
 	}
@@ -578,6 +598,7 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setGroupSortValue(double newGroupSortValue) {
 		double oldGroupSortValue = groupSortValue;
 		groupSortValue = newGroupSortValue;
@@ -590,6 +611,7 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Object getGroupObject() {
 		return groupObject;
 	}
@@ -599,6 +621,7 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setGroupObject(Object newGroupObject) {
 		Object oldGroupObject = groupObject;
 		groupObject = newGroupObject;
@@ -611,6 +634,7 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isGroupAlternative() {
 		return groupAlternative;
 	}
@@ -620,6 +644,7 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setGroupAlternative(boolean newGroupAlternative) {
 		boolean oldGroupAlternative = groupAlternative;
 		groupAlternative = newGroupAlternative;

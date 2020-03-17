@@ -44,6 +44,7 @@ public class MarketIndexViewerPane extends ScenarioTableViewerPane {
 		addTypicalColumn("Calendar", new SingleReferenceManipulator(PricingPackage.eINSTANCE.getMarketIndex_PricingCalendar(), irvpp, getEditingDomain()));
 		addTypicalColumn("Holidays", new SingleReferenceManipulator(PricingPackage.eINSTANCE.getMarketIndex_SettleCalendar(), irvpp, getEditingDomain()));
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_GENERATED_PAPER_DEALS)) {
+			addTypicalColumn("Flat curve", new SingleReferenceManipulator(PricingPackage.eINSTANCE.getMarketIndex_FlatCurve(), irvpp, getEditingDomain()));
 			addTypicalColumn("Bid curve", new SingleReferenceManipulator(PricingPackage.eINSTANCE.getMarketIndex_BidCurve(), irvpp, getEditingDomain()));
 			addTypicalColumn("Offer curve", new SingleReferenceManipulator(PricingPackage.eINSTANCE.getMarketIndex_OfferCurve(), irvpp, getEditingDomain()));
 		}

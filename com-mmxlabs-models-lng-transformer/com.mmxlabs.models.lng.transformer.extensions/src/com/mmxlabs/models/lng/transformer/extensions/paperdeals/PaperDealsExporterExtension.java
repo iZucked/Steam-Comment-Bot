@@ -20,14 +20,18 @@ import com.mmxlabs.common.paperdeals.BasicPaperDealData;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.PaperPricingType;
+import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.SettleStrategy;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.ExposureDetail;
+import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
 import com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry;
+import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
@@ -37,6 +41,7 @@ import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossAnnotation;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 
@@ -130,7 +135,7 @@ public class PaperDealsExporterExtension implements IExporterExtension {
 					paperDeal.setInstrument(settleStrategy);
 					paperDeal.setIndex(basicPaperDealData.getIndexName());
 					BaseLegalEntity entity = entities.get(basicPaperDealData.getEntity());
-					//FIXME : define with clients a "default" entity
+
 					if (entity == null) {
 						final List<BaseLegalEntity> bles = new ArrayList<>(entities.values());
 						entity = bles.get(0);
@@ -200,7 +205,60 @@ public class PaperDealsExporterExtension implements IExporterExtension {
 			
 			allocation.getEntries().add(entry);
 		}
+		setPandLentries(allocation);
+		
 		return allocation;
+	}
+	
+	private void setPandLentries(final PaperDealAllocation paperDealAllocation) {
+		if (paperDealAllocation instanceof ProfitAndLossContainer) {
+			final PaperDeal paperDeal = paperDealAllocation.getPaperDeal();
+			if (paperDeal == null || paperDeal.getEntity() == null) {
+				return;
+			}
+			final BaseLegalEntity entity = paperDeal.getEntity();
+			final ProfitAndLossContainer container = (ProfitAndLossContainer) paperDealAllocation;
+			
+			int totalGroupValue = 0;
+			int totalGroupValuePreTax = 0;
+			final GroupProfitAndLoss groupProfitAndLoss = ScheduleFactory.eINSTANCE.createGroupProfitAndLoss();
+			container.setGroupProfitAndLoss(groupProfitAndLoss);
+			
+			final Map<BaseEntityBook, int[]> groupProfitMap = new HashMap<>();
+			
+			for (final PaperDealAllocationEntry entry : paperDealAllocation.getEntries()) {
+				
+				final BaseEntityBook entityBook = entity.getTradingBook();
+				//For the time being we assume that entire generated paper deal's allocation value is within the trading book and has no tax
+				final int groupProfit = (int)entry.getValue();
+				final int groupProfitPreTax = (int)entry.getValue();
+
+				if (!groupProfitMap.containsKey(entityBook)) {
+					groupProfitMap.put(entityBook, new int[2]);
+				}
+				groupProfitMap.get(entityBook)[0] += groupProfit;
+				groupProfitMap.get(entityBook)[1] += groupProfitPreTax;
+			}
+			
+			for (final Map.Entry<BaseEntityBook, int[]> e : groupProfitMap.entrySet()) {
+
+				final EntityProfitAndLoss streamData = ScheduleFactory.eINSTANCE.createEntityProfitAndLoss();
+				streamData.setEntity(entity);
+				streamData.setEntityBook(e.getKey());
+				final int groupValue = e.getValue()[0];
+				final int groupValuePreTax = e.getValue()[1];
+
+				streamData.setProfitAndLoss(groupValue);
+				streamData.setProfitAndLossPreTax(groupValuePreTax);
+				totalGroupValue += groupValue;
+				totalGroupValuePreTax += groupValuePreTax;
+
+				groupProfitAndLoss.getEntityProfitAndLosses().add(streamData);
+			}
+
+			groupProfitAndLoss.setProfitAndLoss(totalGroupValue);
+			groupProfitAndLoss.setProfitAndLossPreTax(totalGroupValuePreTax);
+		}
 	}
 
 }

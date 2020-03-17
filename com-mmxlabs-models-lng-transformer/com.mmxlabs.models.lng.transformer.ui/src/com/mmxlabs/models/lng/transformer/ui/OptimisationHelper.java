@@ -908,6 +908,8 @@ public final class OptimisationHelper {
 		to.setBuildActionSets(from.isBuildActionSets());
 
 		to.setFloatingDaysLimit(from.getFloatingDaysLimit());
+		
+		to.setGeneratedPapersInPNL(from.isGeneratedPapersInPNL());
 	}
 
 	public static boolean checkUserSettings(@NonNull final UserSettings to, final boolean quiet) {

@@ -6671,13 +6671,40 @@ public interface SchedulePackage extends EPackage {
 	int PAPER_DEAL_ALLOCATION = 46;
 
 	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL_ALLOCATION__EXTENSIONS = PROFIT_AND_LOSS_CONTAINER__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Group Profit And Loss</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL_ALLOCATION__GROUP_PROFIT_AND_LOSS = PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS;
+
+	/**
+	 * The feature id for the '<em><b>General PNL Details</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL_ALLOCATION__GENERAL_PNL_DETAILS = PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS;
+
+	/**
 	 * The feature id for the '<em><b>Paper Deal</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PAPER_DEAL_ALLOCATION__PAPER_DEAL = 0;
+	int PAPER_DEAL_ALLOCATION__PAPER_DEAL = PROFIT_AND_LOSS_CONTAINER_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -6686,7 +6713,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PAPER_DEAL_ALLOCATION__ENTRIES = 1;
+	int PAPER_DEAL_ALLOCATION__ENTRIES = PROFIT_AND_LOSS_CONTAINER_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Paper Deal Allocation</em>' class.
@@ -6695,7 +6722,34 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PAPER_DEAL_ALLOCATION_FEATURE_COUNT = 2;
+	int PAPER_DEAL_ALLOCATION_FEATURE_COUNT = PROFIT_AND_LOSS_CONTAINER_FEATURE_COUNT + 2;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL_ALLOCATION___GET_UNSET_VALUE__ESTRUCTURALFEATURE = PROFIT_AND_LOSS_CONTAINER___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL_ALLOCATION___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = PROFIT_AND_LOSS_CONTAINER___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL_ALLOCATION___ECONTAINER_OP = PROFIT_AND_LOSS_CONTAINER___ECONTAINER_OP;
 
 	/**
 	 * The number of operations of the '<em>Paper Deal Allocation</em>' class.
@@ -6704,7 +6758,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PAPER_DEAL_ALLOCATION_OPERATION_COUNT = 0;
+	int PAPER_DEAL_ALLOCATION_OPERATION_COUNT = PROFIT_AND_LOSS_CONTAINER_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.PaperDealAllocationEntryImpl <em>Paper Deal Allocation Entry</em>}' class.

@@ -375,8 +375,8 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 			entities = getEntities(schedule);
 			fiscalYears = getFiscalYears(schedule);
-			final YearMonth ymStart = getEarliestExposureDate(scenarioResult.getScenarioDataProvider());
-			final YearMonth ymEnd = getLatestExposureDate(scenarioResult.getScenarioDataProvider());
+			final YearMonth ymStart = getEarliestExposureDate(schedule);
+			final YearMonth ymEnd = getLatestExposureDate(schedule);
 
 			final LNGScenarioModel rootObject = scenarioResult.getTypedRoot(LNGScenarioModel.class);
 			if (rootObject == null) {
@@ -644,7 +644,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		filterAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.tabular", "/icons/filter.gif"));
 		getViewSite().getActionBars().getToolBarManager().add(filterAction);
 
-		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PAPER_DEALS)) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PAPER_DEALS) && LicenseFeatures.isPermitted(KnownFeatures.FEATURE_GENERATED_PAPER_DEALS)) {
 			final Action showGeneratedPaperDeals = new Action("Generated : No", Action.AS_PUSH_BUTTON) {
 				@Override
 				public void run() {
@@ -862,11 +862,9 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		return super.getAdapter(adapter);
 	}
 
-	protected YearMonth getEarliestExposureDate(final IScenarioDataProvider sdp) {
+	protected YearMonth getEarliestExposureDate(final Schedule schedule) {
 		YearMonth result = YearMonth.now();
-
-		final ScheduleModel sm = ScenarioModelUtil.getScheduleModel(sdp);
-		final Schedule schedule = sm.getSchedule();
+		
 		if (schedule != null) {
 			for (final CargoAllocation ca : schedule.getCargoAllocations()) {
 				for (final SlotAllocation sa : ca.getSlotAllocations()) {
@@ -889,12 +887,10 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		}
 		return result;
 	}
-
-	protected YearMonth getLatestExposureDate(final IScenarioDataProvider sdp) {
+	
+	protected YearMonth getLatestExposureDate(final Schedule schedule) {
 		YearMonth result = YearMonth.now();
 
-		final ScheduleModel sm = ScenarioModelUtil.getScheduleModel(sdp);
-		final Schedule schedule = sm.getSchedule();
 		if (schedule != null) {
 			for (final CargoAllocation ca : schedule.getCargoAllocations()) {
 				for (final SlotAllocation sa : ca.getSlotAllocations()) {

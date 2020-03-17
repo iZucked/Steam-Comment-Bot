@@ -224,6 +224,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getChangeSetRoot() {
 		return changeSetRootEClass;
 	}
@@ -233,6 +234,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getChangeSetRoot_ChangeSets() {
 		return (EReference)changeSetRootEClass.getEStructuralFeatures().get(0);
 	}
@@ -242,6 +244,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getChangeSet() {
 		return changeSetEClass;
 	}
@@ -251,6 +254,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getChangeSet_MetricsToDefaultBase() {
 		return (EReference)changeSetEClass.getEStructuralFeatures().get(0);
 	}
@@ -260,6 +264,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getChangeSet_MetricsToAlternativeBase() {
 		return (EReference)changeSetEClass.getEStructuralFeatures().get(1);
 	}
@@ -269,6 +274,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getChangeSet_BaseScenario() {
 		return (EAttribute)changeSetEClass.getEStructuralFeatures().get(2);
 	}
@@ -278,6 +284,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getChangeSet_CurrentScenario() {
 		return (EAttribute)changeSetEClass.getEStructuralFeatures().get(3);
 	}
@@ -287,6 +294,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getChangeSet_AltBaseScenario() {
 		return (EAttribute)changeSetEClass.getEStructuralFeatures().get(4);
 	}
@@ -296,6 +304,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getChangeSet_AltCurrentScenario() {
 		return (EAttribute)changeSetEClass.getEStructuralFeatures().get(5);
 	}
@@ -305,6 +314,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getChangeSet_ChangeSetRowsToDefaultBase() {
 		return (EReference)changeSetEClass.getEStructuralFeatures().get(6);
 	}
@@ -314,6 +324,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getChangeSet_ChangeSetRowsToAlternativeBase() {
 		return (EReference)changeSetEClass.getEStructuralFeatures().get(7);
 	}
@@ -323,6 +334,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getChangeSet_CurrentMetrics() {
 		return (EReference)changeSetEClass.getEStructuralFeatures().get(8);
 	}
@@ -332,6 +344,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getChangeSet_Description() {
 		return (EAttribute)changeSetEClass.getEStructuralFeatures().get(9);
 	}
@@ -341,6 +354,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getChangeSet_ChangeDescription() {
 		return (EAttribute)changeSetEClass.getEStructuralFeatures().get(10);
 	}
@@ -350,6 +364,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getChangeSet_UserSettings() {
 		return (EAttribute)changeSetEClass.getEStructuralFeatures().get(11);
 	}
@@ -359,6 +374,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getMetrics() {
 		return metricsEClass;
 	}
@@ -368,6 +384,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getMetrics_Pnl() {
 		return (EAttribute)metricsEClass.getEStructuralFeatures().get(0);
 	}
@@ -377,6 +394,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getMetrics_Lateness() {
 		return (EAttribute)metricsEClass.getEStructuralFeatures().get(1);
 	}
@@ -386,6 +404,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getMetrics_Capacity() {
 		return (EAttribute)metricsEClass.getEStructuralFeatures().get(2);
 	}
@@ -395,6 +414,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getDeltaMetrics() {
 		return deltaMetricsEClass;
 	}
@@ -404,6 +424,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getDeltaMetrics_PnlDelta() {
 		return (EAttribute)deltaMetricsEClass.getEStructuralFeatures().get(0);
 	}
@@ -413,6 +434,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getDeltaMetrics_LatenessDelta() {
 		return (EAttribute)deltaMetricsEClass.getEStructuralFeatures().get(1);
 	}
@@ -422,6 +444,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getDeltaMetrics_CapacityDelta() {
 		return (EAttribute)deltaMetricsEClass.getEStructuralFeatures().get(2);
 	}
@@ -431,6 +454,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getChangeSetRowDataGroup() {
 		return changeSetRowDataGroupEClass;
 	}
@@ -440,6 +464,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getChangeSetRowDataGroup_Members() {
 		return (EReference)changeSetRowDataGroupEClass.getEStructuralFeatures().get(0);
 	}
@@ -449,6 +474,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getChangeSetRow() {
 		return changeSetRowEClass;
 	}
@@ -458,6 +484,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getChangeSetRow_WiringChange() {
 		return (EAttribute)changeSetRowEClass.getEStructuralFeatures().get(0);
 	}
@@ -467,6 +494,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getChangeSetRow_VesselChange() {
 		return (EAttribute)changeSetRowEClass.getEStructuralFeatures().get(1);
 	}
@@ -476,6 +504,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getChangeSetRow_BeforeData() {
 		return (EReference)changeSetRowEClass.getEStructuralFeatures().get(2);
 	}
@@ -485,6 +514,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getChangeSetRow_AfterData() {
 		return (EReference)changeSetRowEClass.getEStructuralFeatures().get(3);
 	}
@@ -494,6 +524,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getChangeSetRowData() {
 		return changeSetRowDataEClass;
 	}
@@ -503,6 +534,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getChangeSetRowData_PrimaryRecord() {
 		return (EAttribute)changeSetRowDataEClass.getEStructuralFeatures().get(0);
 	}
@@ -512,6 +544,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getChangeSetRowData_RowDataGroup() {
 		return (EReference)changeSetRowDataEClass.getEStructuralFeatures().get(1);
 	}
@@ -521,6 +554,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getChangeSetRowData_EventGrouping() {
 		return (EReference)changeSetRowDataEClass.getEStructuralFeatures().get(2);
 	}
@@ -530,6 +564,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getChangeSetRowData_VesselName() {
 		return (EAttribute)changeSetRowDataEClass.getEStructuralFeatures().get(3);
 	}
@@ -539,6 +574,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getChangeSetRowData_VesselShortName() {
 		return (EAttribute)changeSetRowDataEClass.getEStructuralFeatures().get(4);
 	}
@@ -548,6 +584,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getChangeSetRowData_VesselType() {
 		return (EAttribute)changeSetRowDataEClass.getEStructuralFeatures().get(5);
 	}
@@ -557,6 +594,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getChangeSetRowData_LhsName() {
 		return (EAttribute)changeSetRowDataEClass.getEStructuralFeatures().get(6);
 	}
@@ -566,6 +604,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getChangeSetRowData_RhsName() {
 		return (EAttribute)changeSetRowDataEClass.getEStructuralFeatures().get(7);
 	}
@@ -575,6 +614,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getChangeSetRowData_LhsLink() {
 		return (EReference)changeSetRowDataEClass.getEStructuralFeatures().get(8);
 	}
@@ -584,6 +624,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getChangeSetRowData_RhsLink() {
 		return (EReference)changeSetRowDataEClass.getEStructuralFeatures().get(9);
 	}
@@ -593,6 +634,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getChangeSetRowData_LoadSlot() {
 		return (EReference)changeSetRowDataEClass.getEStructuralFeatures().get(10);
 	}
@@ -602,6 +644,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getChangeSetRowData_DischargeSlot() {
 		return (EReference)changeSetRowDataEClass.getEStructuralFeatures().get(11);
 	}
@@ -611,6 +654,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getChangeSetRowData_LoadAllocation() {
 		return (EReference)changeSetRowDataEClass.getEStructuralFeatures().get(12);
 	}
@@ -620,6 +664,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getChangeSetRowData_DischargeAllocation() {
 		return (EReference)changeSetRowDataEClass.getEStructuralFeatures().get(13);
 	}
@@ -629,6 +674,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getChangeSetRowData_OpenLoadAllocation() {
 		return (EReference)changeSetRowDataEClass.getEStructuralFeatures().get(14);
 	}
@@ -638,6 +684,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getChangeSetRowData_OpenDischargeAllocation() {
 		return (EReference)changeSetRowDataEClass.getEStructuralFeatures().get(15);
 	}
@@ -647,6 +694,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getChangeSetRowData_LhsEvent() {
 		return (EReference)changeSetRowDataEClass.getEStructuralFeatures().get(16);
 	}
@@ -656,6 +704,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getChangeSetRowData_RhsEvent() {
 		return (EReference)changeSetRowDataEClass.getEStructuralFeatures().get(17);
 	}
@@ -665,6 +714,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getChangeSetRowData_LhsGroupProfitAndLoss() {
 		return (EReference)changeSetRowDataEClass.getEStructuralFeatures().get(18);
 	}
@@ -674,6 +724,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getChangeSetRowData_RhsGroupProfitAndLoss() {
 		return (EReference)changeSetRowDataEClass.getEStructuralFeatures().get(19);
 	}
@@ -683,6 +734,17 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public EReference getChangeSetRowData_PaperDealAllocation() {
+		return (EReference)changeSetRowDataEClass.getEStructuralFeatures().get(20);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getChangeSetTableGroup() {
 		return changeSetTableGroupEClass;
 	}
@@ -692,6 +754,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getChangeSetTableGroup_Rows() {
 		return (EReference)changeSetTableGroupEClass.getEStructuralFeatures().get(0);
 	}
@@ -701,6 +764,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getChangeSetTableGroup_DeltaMetrics() {
 		return (EReference)changeSetTableGroupEClass.getEStructuralFeatures().get(1);
 	}
@@ -710,6 +774,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getChangeSetTableGroup_CurrentMetrics() {
 		return (EReference)changeSetTableGroupEClass.getEStructuralFeatures().get(2);
 	}
@@ -719,6 +784,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getChangeSetTableGroup_ChangeSet() {
 		return (EReference)changeSetTableGroupEClass.getEStructuralFeatures().get(3);
 	}
@@ -728,6 +794,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getChangeSetTableGroup_Description() {
 		return (EAttribute)changeSetTableGroupEClass.getEStructuralFeatures().get(4);
 	}
@@ -737,6 +804,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getChangeSetTableGroup_BaseScenario() {
 		return (EAttribute)changeSetTableGroupEClass.getEStructuralFeatures().get(5);
 	}
@@ -746,6 +814,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getChangeSetTableGroup_CurrentScenario() {
 		return (EAttribute)changeSetTableGroupEClass.getEStructuralFeatures().get(6);
 	}
@@ -755,6 +824,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getChangeSetTableGroup_LinkedGroup() {
 		return (EReference)changeSetTableGroupEClass.getEStructuralFeatures().get(7);
 	}
@@ -764,6 +834,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getChangeSetTableGroup_Complexity() {
 		return (EAttribute)changeSetTableGroupEClass.getEStructuralFeatures().get(8);
 	}
@@ -773,6 +844,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getChangeSetTableGroup_SortValue() {
 		return (EAttribute)changeSetTableGroupEClass.getEStructuralFeatures().get(9);
 	}
@@ -782,6 +854,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getChangeSetTableGroup_GroupSortValue() {
 		return (EAttribute)changeSetTableGroupEClass.getEStructuralFeatures().get(10);
 	}
@@ -791,6 +864,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getChangeSetTableGroup_GroupObject() {
 		return (EAttribute)changeSetTableGroupEClass.getEStructuralFeatures().get(11);
 	}
@@ -800,6 +874,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getChangeSetTableGroup_GroupAlternative() {
 		return (EAttribute)changeSetTableGroupEClass.getEStructuralFeatures().get(12);
 	}
@@ -809,6 +884,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getChangeSetTableRow() {
 		return changeSetTableRowEClass;
 	}
@@ -818,6 +894,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getChangeSetTableRow_LhsName() {
 		return (EAttribute)changeSetTableRowEClass.getEStructuralFeatures().get(0);
 	}
@@ -827,6 +904,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getChangeSetTableRow_RhsName() {
 		return (EAttribute)changeSetTableRowEClass.getEStructuralFeatures().get(1);
 	}
@@ -836,6 +914,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getChangeSetTableRow_LhsBefore() {
 		return (EReference)changeSetTableRowEClass.getEStructuralFeatures().get(2);
 	}
@@ -845,6 +924,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getChangeSetTableRow_LhsAfter() {
 		return (EReference)changeSetTableRowEClass.getEStructuralFeatures().get(3);
 	}
@@ -854,6 +934,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getChangeSetTableRow_RhsBefore() {
 		return (EReference)changeSetTableRowEClass.getEStructuralFeatures().get(4);
 	}
@@ -863,6 +944,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getChangeSetTableRow_RhsAfter() {
 		return (EReference)changeSetTableRowEClass.getEStructuralFeatures().get(5);
 	}
@@ -872,6 +954,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getChangeSetTableRow_BeforeVesselName() {
 		return (EAttribute)changeSetTableRowEClass.getEStructuralFeatures().get(6);
 	}
@@ -881,6 +964,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getChangeSetTableRow_BeforeVesselShortName() {
 		return (EAttribute)changeSetTableRowEClass.getEStructuralFeatures().get(7);
 	}
@@ -890,6 +974,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getChangeSetTableRow_AfterVesselName() {
 		return (EAttribute)changeSetTableRowEClass.getEStructuralFeatures().get(8);
 	}
@@ -899,6 +984,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getChangeSetTableRow_AfterVesselShortName() {
 		return (EAttribute)changeSetTableRowEClass.getEStructuralFeatures().get(9);
 	}
@@ -908,6 +994,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getChangeSetTableRow_WiringChange() {
 		return (EAttribute)changeSetTableRowEClass.getEStructuralFeatures().get(10);
 	}
@@ -917,6 +1004,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getChangeSetTableRow_VesselChange() {
 		return (EAttribute)changeSetTableRowEClass.getEStructuralFeatures().get(11);
 	}
@@ -926,6 +1014,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getChangeSetTableRow_PreviousRHS() {
 		return (EReference)changeSetTableRowEClass.getEStructuralFeatures().get(12);
 	}
@@ -935,6 +1024,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getChangeSetTableRow_NextLHS() {
 		return (EReference)changeSetTableRowEClass.getEStructuralFeatures().get(13);
 	}
@@ -944,6 +1034,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getChangeSetTableRow_LhsSlot() {
 		return (EAttribute)changeSetTableRowEClass.getEStructuralFeatures().get(14);
 	}
@@ -953,6 +1044,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getChangeSetTableRow_LhsSpot() {
 		return (EAttribute)changeSetTableRowEClass.getEStructuralFeatures().get(15);
 	}
@@ -962,6 +1054,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getChangeSetTableRow_LhsOptional() {
 		return (EAttribute)changeSetTableRowEClass.getEStructuralFeatures().get(16);
 	}
@@ -971,6 +1064,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getChangeSetTableRow_LhsValid() {
 		return (EAttribute)changeSetTableRowEClass.getEStructuralFeatures().get(17);
 	}
@@ -980,6 +1074,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getChangeSetTableRow_LhsNonShipped() {
 		return (EAttribute)changeSetTableRowEClass.getEStructuralFeatures().get(18);
 	}
@@ -989,6 +1084,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getChangeSetTableRow_RhsSlot() {
 		return (EAttribute)changeSetTableRowEClass.getEStructuralFeatures().get(19);
 	}
@@ -998,6 +1094,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getChangeSetTableRow_RhsSpot() {
 		return (EAttribute)changeSetTableRowEClass.getEStructuralFeatures().get(20);
 	}
@@ -1007,6 +1104,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getChangeSetTableRow_RhsOptional() {
 		return (EAttribute)changeSetTableRowEClass.getEStructuralFeatures().get(21);
 	}
@@ -1016,6 +1114,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getChangeSetTableRow_RhsValid() {
 		return (EAttribute)changeSetTableRowEClass.getEStructuralFeatures().get(22);
 	}
@@ -1025,6 +1124,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getChangeSetTableRow_RhsNonShipped() {
 		return (EAttribute)changeSetTableRowEClass.getEStructuralFeatures().get(23);
 	}
@@ -1034,6 +1134,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getChangeSetTableRow_BeforeVesselType() {
 		return (EAttribute)changeSetTableRowEClass.getEStructuralFeatures().get(24);
 	}
@@ -1043,6 +1144,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getChangeSetTableRow_AfterVesselType() {
 		return (EAttribute)changeSetTableRowEClass.getEStructuralFeatures().get(25);
 	}
@@ -1052,6 +1154,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getChangeSetTableRoot() {
 		return changeSetTableRootEClass;
 	}
@@ -1061,6 +1164,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getChangeSetTableRoot_Groups() {
 		return (EReference)changeSetTableRootEClass.getEStructuralFeatures().get(0);
 	}
@@ -1070,6 +1174,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EEnum getChangeSetVesselType() {
 		return changeSetVesselTypeEEnum;
 	}
@@ -1079,6 +1184,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EDataType getScenarioResult() {
 		return scenarioResultEDataType;
 	}
@@ -1088,6 +1194,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EDataType getChangeDescription() {
 		return changeDescriptionEDataType;
 	}
@@ -1097,6 +1204,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EDataType getUserSettings() {
 		return userSettingsEDataType;
 	}
@@ -1106,6 +1214,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ChangesetFactory getChangesetFactory() {
 		return (ChangesetFactory)getEFactoryInstance();
 	}
@@ -1186,6 +1295,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 		createEReference(changeSetRowDataEClass, CHANGE_SET_ROW_DATA__RHS_EVENT);
 		createEReference(changeSetRowDataEClass, CHANGE_SET_ROW_DATA__LHS_GROUP_PROFIT_AND_LOSS);
 		createEReference(changeSetRowDataEClass, CHANGE_SET_ROW_DATA__RHS_GROUP_PROFIT_AND_LOSS);
+		createEReference(changeSetRowDataEClass, CHANGE_SET_ROW_DATA__PAPER_DEAL_ALLOCATION);
 
 		changeSetTableGroupEClass = createEClass(CHANGE_SET_TABLE_GROUP);
 		createEReference(changeSetTableGroupEClass, CHANGE_SET_TABLE_GROUP__ROWS);
@@ -1333,6 +1443,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 		initEReference(getChangeSetRowData_RhsEvent(), theSchedulePackage.getEvent(), null, "rhsEvent", null, 0, 1, ChangeSetRowData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getChangeSetRowData_LhsGroupProfitAndLoss(), theSchedulePackage.getProfitAndLossContainer(), null, "lhsGroupProfitAndLoss", null, 0, 1, ChangeSetRowData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getChangeSetRowData_RhsGroupProfitAndLoss(), theSchedulePackage.getProfitAndLossContainer(), null, "rhsGroupProfitAndLoss", null, 0, 1, ChangeSetRowData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getChangeSetRowData_PaperDealAllocation(), theSchedulePackage.getPaperDealAllocation(), null, "paperDealAllocation", null, 0, 1, ChangeSetRowData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(changeSetTableGroupEClass, ChangeSetTableGroup.class, "ChangeSetTableGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getChangeSetTableGroup_Rows(), this.getChangeSetTableRow(), null, "rows", null, 0, -1, ChangeSetTableGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

@@ -5,28 +5,21 @@
 package com.mmxlabs.lingo.its.tests.microcases;
 
 import java.time.YearMonth;
-import java.util.LinkedList;
-import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.google.common.collect.Lists;
 import com.google.inject.name.Names;
 import com.mmxlabs.license.features.KnownFeatures;
-import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.PaperPricingType;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
-import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.SettleStrategy;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -36,12 +29,9 @@ import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.scenario.CSVImporter;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.IEndEventScheduler;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
-import com.mmxlabs.scheduler.optimiser.peaberry.OptimiserInjectorServiceMaker;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService.ModuleType;
-import com.mmxlabs.scheduler.optimiser.scheduling.EarliestSlotTimeScheduler;
-import com.mmxlabs.scheduler.optimiser.scheduling.ISlotTimeScheduler;
+import com.mmxlabs.scheduler.optimiser.peaberry.OptimiserInjectorServiceMaker;
 
 @SuppressWarnings("unused")
 @ExtendWith(value = ShiroRunner.class)
@@ -51,13 +41,13 @@ public class ExposuresScenarioTests extends AbstractMicroTestCase {
 	@NonNull
 	@Override
 	public IScenarioDataProvider importReferenceData() throws Exception {
-		return importReferenceData("/referencedata/hedging-test/");
+		return importReferenceDataForExposures("/referencedata/hedging-test/");
 	}
 	
 	private PricingModel pricingModel;
 	
 	@NonNull
-	public static IScenarioDataProvider importReferenceData(final String url) throws Exception {
+	public static IScenarioDataProvider importReferenceDataForExposures(final String url) throws Exception {
 
 		final @NonNull String urlRoot = AbstractMicroTestCase.class.getResource(url).toString();
 		final CSVImporter importer = new CSVImporter();

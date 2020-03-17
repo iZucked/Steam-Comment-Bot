@@ -34,6 +34,7 @@ import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
+import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Purge;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
@@ -241,6 +242,9 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 				return getFromDeltaPair(type, helper, object);
 			} else if (object instanceof List<?>) {
 				return getFromDeltaPairPairList(type, helper, object);
+			} else if (object instanceof PaperDealAllocation) {
+				final PaperDealAllocation paperDealAllocation = (PaperDealAllocation) object;
+				return helper.apply(paperDealAllocation);
 			}
 			return null;
 		};
@@ -404,6 +408,24 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 			}
 			return null;
 		});
+	}
+	
+	protected ICellRenderer createPaperDealAllocationFormatter(final Function<PaperDealAllocation, String> func) {
+		return new BaseFormatter() {
+			@Override
+			public @Nullable String render(final Object object) {
+
+				try {
+					if (object instanceof PaperDealAllocation) {
+						final PaperDealAllocation paperDealAllocation = (PaperDealAllocation) object;
+						return func.apply(paperDealAllocation);
+					}
+				} catch (final NullPointerException e) {
+					// Ignore NPE
+				}
+				return null;
+			}
+		};
 	}
 
 	protected ICellRenderer createFirstPurchaseFormatter(final Function<SlotAllocation, String> func) {

@@ -18,6 +18,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.Triple;
 import com.mmxlabs.common.calendars.BasicPricingCalendar;
 import com.mmxlabs.common.calendars.BasicPricingCalendarEntry;
 import com.mmxlabs.common.curves.BasicCommodityCurveData;
@@ -127,11 +128,19 @@ public class PaperDealsCalculator {
 	 * Create a delta map of hedges and exposures
 	 * @return Map<Pair<Index Name, Month>, Volume>
 	 */
-	private Map<Pair<String, YearMonth>, Long> getDeltaExposuresMap (final Map<Pair<String, YearMonth>, Long> exposures, final Map<Pair<String, YearMonth>, Long> hedges){
-		final Map<Pair<String, YearMonth>, Long> delta = new HashMap<>(exposures);
+	private Map<Triple<String, String, YearMonth>, Long> getDeltaExposuresMap(final Map<Pair<String, YearMonth>, Long> exposures, final Map<Pair<String, YearMonth>, Long> hedges){
+		final Map<Triple<String, String, YearMonth>, Long> delta = new HashMap<>();
 		if (reHedgeWithPapers && paperPnLEnabled && exposuresEnabled) {
+			final PaperDealsLookupData lookupData = paperDealDataProvider.getPaperDealsLookupData();
+			for (final Pair<String, YearMonth> exposurePair : exposures.keySet()) {
+				final String curveName = exposurePair.getFirst();
+				final String marketIndex = lookupData.marketIndices.get(curveName.toLowerCase());
+				delta.merge(new Triple<>(curveName, marketIndex, exposurePair.getSecond()), exposures.get(exposurePair), Long::sum);
+			}
 			for (final Pair<String, YearMonth> hedgePair : hedges.keySet()) {
-				delta.merge(hedgePair, hedges.get(hedgePair), Long::sum);
+				final String curveName = hedgePair.getFirst();
+				final String marketIndex = lookupData.marketIndices.get(curveName.toLowerCase());
+				delta.merge(new Triple<>(curveName, marketIndex, hedgePair.getSecond()), hedges.get(hedgePair), Long::sum);
 			}
 		}
 		return delta;
@@ -144,16 +153,17 @@ public class PaperDealsCalculator {
 	 * Generate paper deals for delta map
 	 * @return
 	 */
-	private List<BasicPaperDealData> generateHedges(final Map<Pair<String, YearMonth>, Long> delta){
+	private List<BasicPaperDealData> generateHedges(final Map<Triple<String, String, YearMonth>, Long> delta){
 		final List<BasicPaperDealData> results = new LinkedList<>();
 		if (reHedgeWithPapers && paperPnLEnabled && exposuresEnabled) {
 			final PaperDealsLookupData lookupData = paperDealDataProvider.getPaperDealsLookupData();
 			final ExposuresLookupData exposuresLookupData = exposureDataProvider.getExposuresLookupData();
-			for (final Pair<String, YearMonth> deltaPair : delta.keySet()) {
-				final long exposure = delta.get(deltaPair);
+			for (final Triple<String, String, YearMonth> deltaTriple : delta.keySet()) {
+				final long exposure = delta.get(deltaTriple);
 				if (exposure != 0 && (exposure > threshold || exposure < -threshold)) {
-					final YearMonth month = deltaPair.getSecond();
-					final String indexName = deltaPair.getFirst();
+					final YearMonth month = deltaTriple.getThird();
+					final String originalCurveName = deltaTriple.getFirst();
+					final String indexName = deltaTriple.getSecond();
 					//No hedging for physical positions
 					if (indexName.equalsIgnoreCase("Physical"))
 						continue;
@@ -168,20 +178,24 @@ public class PaperDealsCalculator {
 					if (exposure > 0) {
 						name = String.format("%s_%s", name, "sell");
 						isBuy = false;
-						curveName = hedgeCurves.get("offer");
+						curveName = hedgeCurves.get("bid");
 					} else {
 						name = String.format("%s_%s", name, "buy");
 						isBuy = true;
-						curveName = hedgeCurves.get("bid");
+						curveName = hedgeCurves.get("offer");
 					}
 					if (curveName == null) {
-						throw new IllegalStateException(String.format("No offer curve found to hedge %s. Check your market index!", curveName));
+						throw new IllegalStateException(String.format("No hedging curve found to hedge %s. Check your market index!", curveName));
+					}
+					final String flatCurve = hedgeCurves.get("flat");
+					if (flatCurve == null) {
+						throw new IllegalStateException(String.format("No flat curve found to hedge %s. Check your market index!", flatCurve));
 					}
 					
 					final LocalDate start = LocalDate.of(month.getYear(), month.getMonthValue(), 1);
 					final LocalDate end = LocalDate.of(month.getYear(), month.getMonthValue(), month.lengthOfMonth());
 					final int startTime = dateProvider.convertTime(start);
-					final ISeries series = commodityIndices.getSeries(curveName);
+					final ISeries series = commodityIndices.getSeries(flatCurve);
 					double price = series.evaluate(startTime).doubleValue();
 					final int paperUnitPrice = OptimiserUnitConvertor.convertToInternalPrice(price);
 					
@@ -192,16 +206,14 @@ public class PaperDealsCalculator {
 					final int year = month.getYear();
 					final String note = "Auto generated paper deal";
 					
-					final BasicCommodityCurveData curveData = exposuresLookupData.commodityMap.get(indexName.toLowerCase());
+					final BasicCommodityCurveData curveData = exposuresLookupData.commodityMap.get(originalCurveName.toLowerCase());
 					long quantity = (isBuy ? -1 : 1) * exposure;
 					if (curveData.getVolumeUnit() != null || !curveData.getVolumeUnit().isEmpty() || !("mmbtu".equalsIgnoreCase(curveData.getVolumeUnit()))) {
 						// Not mmBtu? then the quantity field needs conversion to native units
 						for (final BasicUnitConversionData factor : exposuresLookupData.conversionMap.values()) {
-							if (factor.getTo().equalsIgnoreCase("mmbtu")) {
-								if (factor.getFrom().equalsIgnoreCase(curveData.getVolumeUnit())) {
-									quantity *= factor.getFactor();
-									break;
-								}
+							if (factor.getTo().equalsIgnoreCase("mmbtu") && factor.getFrom().equalsIgnoreCase(curveData.getVolumeUnit())) {
+								quantity *= factor.getFactor();
+								break;
 							}
 						}
 					}
@@ -219,7 +231,7 @@ public class PaperDealsCalculator {
 		final Map<BasicPaperDealData, List<BasicPaperDealAllocationEntry>> paperDealsMap = processOriginalPaperDeals();
 		final Map<Pair<String, YearMonth>, Long> hedges = getHedges(paperDealsMap);
 		final Map<Pair<String, YearMonth>, Long> exposures = getExposures(exposuresMap);
-		final Map<Pair<String, YearMonth>, Long> delta = getDeltaExposuresMap(exposures, hedges);
+		final Map<Triple<String, String, YearMonth>, Long> delta = getDeltaExposuresMap(exposures, hedges);
 		final List<BasicPaperDealData> generatedHedges = generateHedges(delta);
 		final Map<BasicPaperDealData, List<BasicPaperDealAllocationEntry>> generatedPaperDealsMap = processPaperDeals(generatedHedges);
 		paperDealsMap.putAll(generatedPaperDealsMap);
@@ -357,7 +369,7 @@ public class PaperDealsCalculator {
 
 				final int internalPrice = OptimiserUnitConvertor.convertToInternalPrice(price);
 				final long quantity = (isBuy ? 1 : -1) * basicPaperDealData.getPaperVolume() / days;
-				final long value = (quantity * (internalPrice - basicPaperDealData.getPaperUnitPrice())) /1_000_000;
+				long value = (quantity * (basicPaperDealData.getPaperUnitPrice() - internalPrice)) /1_000_000;
 				
 				final BasicPaperDealAllocationEntry entry = new BasicPaperDealAllocationEntry(start, quantity, internalPrice, value, settled);
 

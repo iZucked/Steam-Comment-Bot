@@ -89,7 +89,7 @@ public class ProfitAndLossAllocationComponent extends AbstractSchedulerFitnessCo
 	 */
 	@Override
 	public long endEvaluationAndGetCost() {
-		accumulator += computePaperPnL(profitAndLossSequences);
+		accumulator -= computePaperPnL(profitAndLossSequences);
 		profitAndLossSequences = null;
 		return setLastEvaluatedFitness(accumulator / Calculator.ScaleFactor);
 	}

@@ -72,6 +72,7 @@ public class ChangeSetTableRootImpl extends MinimalEObjectImpl.Container impleme
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<ChangeSetTableGroup> getGroups() {
 		if (groups == null) {
 			groups = new EObjectContainmentEList<ChangeSetTableGroup>(ChangeSetTableGroup.class, this, ChangesetPackage.CHANGE_SET_TABLE_ROOT__GROUPS);

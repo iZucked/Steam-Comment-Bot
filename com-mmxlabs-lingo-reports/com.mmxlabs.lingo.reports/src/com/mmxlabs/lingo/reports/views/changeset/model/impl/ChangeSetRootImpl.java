@@ -68,6 +68,7 @@ public class ChangeSetRootImpl extends MinimalEObjectImpl.Container implements C
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<ChangeSet> getChangeSets() {
 		if (changeSets == null) {
 			changeSets = new EObjectContainmentEList<ChangeSet>(ChangeSet.class, this, ChangesetPackage.CHANGE_SET_ROOT__CHANGE_SETS);

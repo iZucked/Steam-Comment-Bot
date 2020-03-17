@@ -8,11 +8,11 @@
  */
 package com.mmxlabs.scheduler.optimiser.schedule;
 
-import java.time.YearMonth;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Named;
 import javax.inject.Provider;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -21,8 +21,6 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.exposures.BasicExposureRecord;
-import com.mmxlabs.common.paperdeals.BasicPaperDealAllocationEntry;
-import com.mmxlabs.common.paperdeals.BasicPaperDealData;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IElementAnnotationsMap;
@@ -102,7 +100,13 @@ public class ProfitAndLossCalculator {
 	@Inject
 	private PaperDealsCalculator paperDealsCalculator;
 	
-	 
+	@Inject
+	@Named(SchedulerConstants.GENERATED_PAPERS_IN_PNL)
+	private boolean generatedPapersInPNL;
+	
+	@Inject
+	@Named(SchedulerConstants.COMPUTE_EXPOSURES)
+	private boolean exposuresEnabled;
 
 	@Nullable
 	public ProfitAndLossSequences calculateProfitAndLoss(final @NonNull ISequences sequences, @NonNull final VolumeAllocatedSequences volumeAllocatedSequences,
@@ -188,7 +192,7 @@ public class ProfitAndLossCalculator {
 						}
 
 						// Populating exposures record
-						if (annotatedSolution != null) {
+						if (annotatedSolution != null || generatedPapersInPNL || exposuresEnabled) {
 							for (IPortSlot portSlot : cargoValueAnnotation.getSlots()) {
 								final List<BasicExposureRecord> records = exposuresCalculator.calculateExposures(cargoValueAnnotation, portSlot);
 								profitAndLossSequences.addPortExposureRecord(portSlot, records);
@@ -234,7 +238,7 @@ public class ProfitAndLossCalculator {
 		}
 		
 		// Calculating the paper deals allocations and exposures
-		if (annotatedSolution != null) {
+		if (annotatedSolution != null || generatedPapersInPNL) {
 			profitAndLossSequences.setPaperDealRecords(paperDealsCalculator.processPaperDeals(profitAndLossSequences.getPortExposureRecords()));
 		}
 		//

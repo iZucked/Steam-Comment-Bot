@@ -101,7 +101,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		}
 
 		annotatedBestSolution.setGeneralAnnotation(OptimiserConstants.G_AI_iterations, 0);
-		annotatedBestSolution.setGeneralAnnotation(OptimiserConstants.G_AI_runtime, 0l);
+		annotatedBestSolution.setGeneralAnnotation(OptimiserConstants.G_AI_runtime, 0L);
 
 		// For constraint checker changed resources functions, if initial solution is invalid, we want to always perform a full constraint checker set of checks.
 		this.failedInitialConstraintCheckers = false;

@@ -68,8 +68,10 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetVesselType;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
 import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
 import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
+import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
+import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
@@ -1011,6 +1013,23 @@ public class ChangeSetViewColumnHelper {
 					}
 					if (hasDate) {
 						return sb.toString();
+					} else {
+						PaperDealAllocation pda = null;
+						if (tableRow.getLhsBefore() != null && tableRow.getLhsBefore().getPaperDealAllocation() != null) {
+							pda = tableRow.getLhsBefore().getPaperDealAllocation();
+						} else if (tableRow.getLhsAfter() != null && tableRow.getLhsAfter().getPaperDealAllocation() != null) {
+							pda = tableRow.getLhsAfter().getPaperDealAllocation();
+						}
+						if (pda != null && pda.getPaperDeal() != null) {
+							final PaperDeal paperDeal = pda.getPaperDeal();
+							if (paperDeal.getStartDate() != null && paperDeal.getEndDate() != null) {
+								final StringBuilder sb1 = new StringBuilder();
+								sb1.append("Paper deal dates:\n");
+								sb1.append(String.format("First day: %s \n", paperDeal.getStartDate().format(formatter)));
+								sb1.append(String.format("Final day: %s", paperDeal.getEndDate().format(formatter)));
+								return sb1.toString();
+							}
+						}
 					}
 				}
 				return super.getToolTipText(element);
@@ -1078,6 +1097,16 @@ public class ChangeSetViewColumnHelper {
 
 							} else {
 								cell.setText(windowDate);
+							}
+						} else {
+							PaperDealAllocation pda = null;
+							if (tableRow.getLhsBefore() != null && tableRow.getLhsBefore().getPaperDealAllocation() != null) {
+								pda = tableRow.getLhsBefore().getPaperDealAllocation();
+							} else if (tableRow.getLhsAfter() != null && tableRow.getLhsAfter().getPaperDealAllocation() != null) {
+								pda = tableRow.getLhsAfter().getPaperDealAllocation();
+							}
+							if (pda != null && pda.getPaperDeal() != null && pda.getPaperDeal().getStartDate() != null) {
+								cell.setText(pda.getPaperDeal().getStartDate().format(formatter));
 							}
 						}
 

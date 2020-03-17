@@ -11,6 +11,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
+import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 
@@ -45,6 +46,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#getRhsEvent <em>Rhs Event</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#getLhsGroupProfitAndLoss <em>Lhs Group Profit And Loss</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#getRhsGroupProfitAndLoss <em>Rhs Group Profit And Loss</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#getPaperDealAllocation <em>Paper Deal Allocation</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetRowData()
@@ -577,5 +579,27 @@ public interface ChangeSetRowData extends EObject {
 	 * @generated
 	 */
 	void setRhsGroupProfitAndLoss(ProfitAndLossContainer value);
+
+	/**
+	 * Returns the value of the '<em><b>Paper Deal Allocation</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Paper Deal Allocation</em>' reference.
+	 * @see #setPaperDealAllocation(PaperDealAllocation)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetRowData_PaperDealAllocation()
+	 * @model
+	 * @generated
+	 */
+	PaperDealAllocation getPaperDealAllocation();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#getPaperDealAllocation <em>Paper Deal Allocation</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Paper Deal Allocation</em>' reference.
+	 * @see #getPaperDealAllocation()
+	 * @generated
+	 */
+	void setPaperDealAllocation(PaperDealAllocation value);
 
 } // ChangeSetRowData

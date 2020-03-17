@@ -41,6 +41,7 @@ import com.mmxlabs.lingo.reports.views.schedule.EquivalanceGroupBuilder;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
@@ -60,6 +61,8 @@ import com.mmxlabs.models.lng.schedule.GroupedCharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
+import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
+import com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Purge;
@@ -113,6 +116,9 @@ public final class ChangeSetTransformerUtil {
 		}
 		for (final OpenSlotAllocation openSlotAllocation : schedule.getOpenSlotAllocations()) {
 			targets.add(openSlotAllocation);
+		}
+		for (final PaperDealAllocation paperDealAllocation : schedule.getPaperDealAllocations()) {
+			targets.add(paperDealAllocation);
 		}
 		for (final Sequence sequence : schedule.getSequences()) {
 			if (sequence.getSequenceType() == SequenceType.VESSEL //
@@ -332,6 +338,20 @@ public final class ChangeSetTransformerUtil {
 				} else {
 					eventMapper.accept(event);
 				}
+			} else if (target instanceof PaperDealAllocation) {
+				final PaperDealAllocation paperDealAllocation = (PaperDealAllocation) target;
+				final PaperDeal paperDeal = paperDealAllocation.getPaperDeal();
+				final ChangeSetRowDataGroup group = ChangesetFactory.eINSTANCE.createChangeSetRowDataGroup();
+				mappingModel.groups.add(group);
+
+				final ChangeSetRowData row = ChangesetFactory.eINSTANCE.createChangeSetRowData();
+				group.getMembers().add(row);
+				
+				row.setPaperDealAllocation(paperDealAllocation);
+				row.setLhsGroupProfitAndLoss(paperDealAllocation);
+				row.setLhsName(paperDeal.getName());
+				
+				mappingModel.lhsRowMap.put(paperDeal.getName(), row);
 			}
 		}
 
@@ -1162,6 +1182,12 @@ public final class ChangeSetTransformerUtil {
 				// ScheduleModelKPIUtils.getCapacityViolationCount(toSchedule.getOtherPNL());
 
 			}
+			for (final PaperDealAllocation paperDealAllocation : toSchedule.getPaperDealAllocations()) {
+				final GroupProfitAndLoss groupProfitAndLoss = paperDealAllocation.getGroupProfitAndLoss();
+				if (groupProfitAndLoss != null) {
+					pnl += groupProfitAndLoss.getProfitAndLoss();
+				}
+			}
 		}
 
 		currentMetrics.setPnl(pnl);
@@ -1205,6 +1231,12 @@ public final class ChangeSetTransformerUtil {
 				pnl -= fromSchedule.getOtherPNL().getGroupProfitAndLoss().getProfitAndLoss();
 				lateness -= LatenessUtils.getLatenessExcludingFlex(fromSchedule.getOtherPNL());
 
+			}
+			for (final PaperDealAllocation paperDealAllocation : fromSchedule.getPaperDealAllocations()) {
+				final GroupProfitAndLoss groupProfitAndLoss = paperDealAllocation.getGroupProfitAndLoss();
+				if (groupProfitAndLoss != null) {
+					pnl -= groupProfitAndLoss.getProfitAndLoss();
+				}
 			}
 		}
 		deltaMetrics.setPnlDelta(pnl);

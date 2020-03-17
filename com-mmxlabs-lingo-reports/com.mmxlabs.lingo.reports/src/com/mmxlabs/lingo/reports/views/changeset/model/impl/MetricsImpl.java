@@ -114,6 +114,7 @@ public class MetricsImpl extends MinimalEObjectImpl.Container implements Metrics
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public long getPnl() {
 		return pnl;
 	}
@@ -123,6 +124,7 @@ public class MetricsImpl extends MinimalEObjectImpl.Container implements Metrics
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPnl(long newPnl) {
 		long oldPnl = pnl;
 		pnl = newPnl;
@@ -135,6 +137,7 @@ public class MetricsImpl extends MinimalEObjectImpl.Container implements Metrics
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getLateness() {
 		return lateness;
 	}
@@ -144,6 +147,7 @@ public class MetricsImpl extends MinimalEObjectImpl.Container implements Metrics
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLateness(int newLateness) {
 		int oldLateness = lateness;
 		lateness = newLateness;
@@ -156,6 +160,7 @@ public class MetricsImpl extends MinimalEObjectImpl.Container implements Metrics
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getCapacity() {
 		return capacity;
 	}
@@ -165,6 +170,7 @@ public class MetricsImpl extends MinimalEObjectImpl.Container implements Metrics
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCapacity(int newCapacity) {
 		int oldCapacity = capacity;
 		capacity = newCapacity;
