@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.transformer.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -90,12 +89,15 @@ import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 public class LNGSchedulerJobUtils {
 
 	/**
-	 * Label used to prefix optimisation update commands so they can be undone later if possible to avoid a history of commands for each report interval.
+	 * Label used to prefix optimisation update commands so they can be undone later
+	 * if possible to avoid a history of commands for each report interval.
 	 */
 	private static final String LABEL_PREFIX = "Optimised: ";
 
 	/**
-	 * Given the input scenario and am {@link IAnnotatedSolution}, create a new {@link Schedule} and update the related models ( the {@link CargoModel} and {@link AssignmentModel})
+	 * Given the input scenario and am {@link IAnnotatedSolution}, create a new
+	 * {@link Schedule} and update the related models ( the {@link CargoModel} and
+	 * {@link AssignmentModel})
 	 * 
 	 * @param injector
 	 * @param scenario
@@ -148,8 +150,6 @@ public class LNGSchedulerJobUtils {
 			}
 
 			command.append(derive(editingDomain, scenario, schedule, cargoModel, postExportProcessors));
-			// command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_Dirty(), false));
-			// command.append(SetCommand.create(editingDomain, scenario, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_Parameters(), optimiserSettings));
 
 			// Mark schedule as clean
 			command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.Literals.SCHEDULE_MODEL__DIRTY, Boolean.FALSE));
@@ -185,8 +185,6 @@ public class LNGSchedulerJobUtils {
 			postExportProcessors = null;
 		}
 		command.append(derive(editingDomain, scenario, schedule, cargoModel, postExportProcessors));
-		// command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_Dirty(), false));
-		// command.append(SetCommand.create(editingDomain, scenario, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_Parameters(), optimiserSettings));
 
 		// Mark schedule as clean
 		command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.Literals.SCHEDULE_MODEL__DIRTY, Boolean.FALSE));
@@ -241,7 +239,9 @@ public class LNGSchedulerJobUtils {
 	}
 
 	/**
-	 * Given a {@link Schedule}, update the {@link CargoModel} for rewirings and the {@link AssignmentModel} for assignment changes. Back link the {@link CargoModel} to the {@link Schedule}
+	 * Given a {@link Schedule}, update the {@link CargoModel} for rewirings and the
+	 * {@link AssignmentModel} for assignment changes. Back link the
+	 * {@link CargoModel} to the {@link Schedule}
 	 * 
 	 * @param domain
 	 * @param scenario
@@ -255,17 +255,23 @@ public class LNGSchedulerJobUtils {
 			final Iterable<IPostExportProcessor> postExportProcessors) {
 		final CompoundCommand cmd = new CompoundCommand("Update Vessel Assignments");
 
-		// The ElementAssignment needs a cargo linked to a slot. Not all slots will have a cargo until after the command generated here is executed. Therefore build up a map to perform the link. Fall
+		// The ElementAssignment needs a cargo linked to a slot. Not all slots will have
+		// a cargo until after the command generated here is executed. Therefore build
+		// up a map to perform the link. Fall
 		// back to slot.getCargo() is there is no mapping.
 		final Map<LoadSlot, Cargo> slotToCargoMap = new HashMap<>();
 
-		// Maintain a two lists of commands. The null commands are the commands which unset (or set to null) references between cargoes and lots.. The set commands are the commands which then re-set
-		// the new slot/cargo references. They are kept separate to avoid issues where opposite references changes can lead to unexpected results.
+		// Maintain a two lists of commands. The null commands are the commands which
+		// unset (or set to null) references between cargoes and lots.. The set commands
+		// are the commands which then re-set
+		// the new slot/cargo references. They are kept separate to avoid issues where
+		// opposite references changes can lead to unexpected results.
 		final List<Command> setCommands = new LinkedList<>();
 
 		// Set of slots which may not be linked to a cargo
 		final Set<Slot> unsetCargoSlots = new HashSet<>();
-		// Set of slots which really are linked to a cargo. This will later be taken out of the unsetCargoSlots
+		// Set of slots which really are linked to a cargo. This will later be taken out
+		// of the unsetCargoSlots
 		final Set<Slot> setCargoSlots = new HashSet<>();
 
 		// First pass - add in generated slots to the slot containers
@@ -274,7 +280,8 @@ public class LNGSchedulerJobUtils {
 			for (final SlotAllocation slotAllocation : allocation.getSlotAllocations()) {
 
 				final Slot slot = slotAllocation.getSlot();
-				// Slots created in the builder have no container so add it the container now as it is used.
+				// Slots created in the builder have no container so add it the container now as
+				// it is used.
 				if (slot instanceof LoadSlot) {
 					final LoadSlot loadSlot = (LoadSlot) slot;
 					if (slot.eContainer() == null) {
@@ -293,9 +300,10 @@ public class LNGSchedulerJobUtils {
 		}
 		// First pass - add in generated slots to the slot containers
 		for (final OpenSlotAllocation slotAllocation : schedule.getOpenSlotAllocations()) {
-			
-			final Slot slot = slotAllocation.getSlot();
-			// Slots created in the builder have no container so add it the container now as it is used.
+
+			final Slot<?> slot = slotAllocation.getSlot();
+			// Slots created in the builder have no container so add it the container now as
+			// it is used.
 			if (slot instanceof LoadSlot) {
 				final LoadSlot loadSlot = (LoadSlot) slot;
 				if (slot.eContainer() == null) {
@@ -306,18 +314,21 @@ public class LNGSchedulerJobUtils {
 				if (dischargeSlot.eContainer() == null) {
 					cmd.append(AddCommand.create(domain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), dischargeSlot));
 				}
-				
+
 			} else {
 				throw new IllegalStateException("Unsupported slot type");
 			}
 		}
 
-		// Next step: Find the first load in the allocation sequence and use it as the Cargo definition slot.
-		// We may reuse the existing slot, or create a new one. For non-first load slots, remove the cargo definition
+		// Next step: Find the first load in the allocation sequence and use it as the
+		// Cargo definition slot.
+		// We may reuse the existing slot, or create a new one. For non-first load
+		// slots, remove the cargo definition
 
 		// Maintain a list of used cargo objects.
 		final Set<Cargo> usedCargoes = new HashSet<>();
-		// Maintain a list of potentially unused cargoes - once this next step is complete, we need to remove the used cargoes to get the real list
+		// Maintain a list of potentially unused cargoes - once this next step is
+		// complete, we need to remove the used cargoes to get the real list
 		final Set<Cargo> possibleUnusedCargoes = new HashSet<>(cargoModel.getCargoes());
 
 		for (final CargoAllocation allocation : schedule.getCargoAllocations()) {
@@ -337,7 +348,8 @@ public class LNGSchedulerJobUtils {
 				final Slot<?> slot = slotAllocation.getSlot();
 				cargoSlots.add(slot);
 
-				// Slots created in the builder have no container so add it the container now as it is used.
+				// Slots created in the builder have no container so add it the container now as
+				// it is used.
 				if (slot instanceof LoadSlot) {
 					final LoadSlot loadSlot = (LoadSlot) slot;
 
@@ -436,6 +448,8 @@ public class LNGSchedulerJobUtils {
 
 		final Set<Slot> slotsToRemove = new HashSet<>();
 
+		final List<EObject> objectsToDelete = new LinkedList<>();
+
 		// For slots which are no longer used, remove the cargo
 		for (final EObject eObj : schedule.getUnusedElements()) {
 			if (eObj instanceof LoadSlot) {
@@ -447,7 +461,8 @@ public class LNGSchedulerJobUtils {
 					// Sanity check
 					// Unused non-optional slots now handled by optimiser
 					// if (!loadSlot.isOptional()) {
-					// throw new RuntimeException("Non-optional cargo/load is not linked to a cargo");
+					// throw new RuntimeException("Non-optional cargo/load is not linked to a
+					// cargo");
 					// }
 					cmd.append(SetCommand.create(domain, c, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, SetCommand.UNSET_VALUE));
 					cmd.append(SetCommand.create(domain, c, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT, SetCommand.UNSET_VALUE));
@@ -455,11 +470,8 @@ public class LNGSchedulerJobUtils {
 					// Delete command does not work when exporting to a child scenario
 					// cmd.append(DeleteCommand.create(domain, c));
 					// This *should* be okay, but note will skip our command handler framework.
-					cmd.append(new DeleteCommand(domain, Collections.singleton(c)) {
-						protected Map<EObject, Collection<EStructuralFeature.Setting>> findReferences(final Collection<EObject> eObjects) {
-							return EcoreUtil.UsageCrossReferencer.findAll(eObjects, scenario);
-						}
-					});
+					objectsToDelete.add(c);
+
 				}
 			}
 			if (eObj instanceof SpotSlot) {
@@ -467,8 +479,9 @@ public class LNGSchedulerJobUtils {
 				// Market slot, we can remove it.
 				if (spotSlot.getMarket() != null && eObj.eContainer() != null) {
 					// Remove rather than full delete as we may wish to re-use the object later
-					// Note ensure this is also removed from the unused elements list as Remove does not delete other references.
-					slotsToRemove.add((Slot) spotSlot);
+					// Note ensure this is also removed from the unused elements list as Remove does
+					// not delete other references.
+					slotsToRemove.add((Slot<?>) spotSlot);
 
 				}
 			}
@@ -493,7 +506,8 @@ public class LNGSchedulerJobUtils {
 						// Market slot, we can remove it.
 						if (spotSlot.getMarket() != null && slot.eContainer() != null) {
 							// Remove rather than full delete as we may wish to re-use the object later
-							// Note ensure this is also removed from the unused elements list as Remove does not delete other references.
+							// Note ensure this is also removed from the unused elements list as Remove does
+							// not delete other references.
 							if (!setCargoSlots.contains(slot)) {
 								slotsToRemove.add(slot);
 							}
@@ -503,17 +517,22 @@ public class LNGSchedulerJobUtils {
 				cmd.append(SetCommand.create(domain, c, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, SetCommand.UNSET_VALUE));
 				cmd.append(SetCommand.create(domain, c, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT, SetCommand.UNSET_VALUE));
 				cmd.append(SetCommand.create(domain, c, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, SetCommand.UNSET_VALUE));
-				// Delete command does not work when exporting to a child scenario
-				// cmd.append(DeleteCommand.create(domain, c));
-				// This *should* be okay, but note will skip our command handler framework.
-				cmd.append(new DeleteCommand(domain, Collections.singleton(c)) {
-					protected Map<EObject, Collection<EStructuralFeature.Setting>> findReferences(final Collection<EObject> eObjects) {
-						return EcoreUtil.UsageCrossReferencer.findAll(eObjects, scenario);
-					}
-				});
+				objectsToDelete.add(c);
+
 			}
 		}
-		for (final Slot slot : slotsToRemove) {
+
+		// Delete command does not work when exporting to a child scenario
+		// This *should* be okay, but note will skip our command handler framework.
+		if (!objectsToDelete.isEmpty()) {
+			cmd.append(new DeleteCommand(domain, objectsToDelete) {
+				protected Map<EObject, Collection<EStructuralFeature.Setting>> findReferences(final Collection<EObject> eObjects) {
+					return EcoreUtil.UsageCrossReferencer.findAll(eObjects, scenario);
+				}
+			});
+		}
+
+		for (final Slot<?> slot : slotsToRemove) {
 			cmd.append(RemoveCommand.create(domain, slot));
 		}
 
@@ -578,10 +597,12 @@ public class LNGSchedulerJobUtils {
 		// Step 1. Get or derive the initial sequences from the input scenario data
 		final IModifiableSequences mSequences = new ModifiableSequences(rawSequences);
 
-		// Run through the sequences manipulator of things such as start/end port replacement
+		// Run through the sequences manipulator of things such as start/end port
+		// replacement
 
 		final ISequencesManipulator manipulator = injector.getInstance(ISequencesManipulator.class);
-		// this will set the return elements to the right places, and remove the start elements.
+		// this will set the return elements to the right places, and remove the start
+		// elements.
 		manipulator.manipulate(mSequences);
 
 		final EvaluationState state = new EvaluationState();
