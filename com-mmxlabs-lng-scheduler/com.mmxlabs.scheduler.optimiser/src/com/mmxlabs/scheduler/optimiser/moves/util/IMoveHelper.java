@@ -14,6 +14,12 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 
 public interface IMoveHelper {
 
+	/**
+	 * Enable free use of the round trip vessels. 
+	 * @return
+	 */
+	boolean allowRoundTripChanges();
+	
 	boolean legacyCheckResource(ISequenceElement sequenceElement, IResource resource);
 
 	boolean checkResource(@NonNull ISequenceElement element, @Nullable IResource resource);

@@ -27,6 +27,7 @@ import com.google.inject.Module;
 import com.google.inject.util.Modules;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.models.lng.parameters.OptimisationMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
@@ -99,7 +100,7 @@ public class LNGTransformerHelper {
 		} else if (userSettings.isWithSpotCargoMarkets()) {
 			hints.add(HINT_SPOT_CARGO_MARKETS);
 		}
-		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_NO_NOMINALS_IN_PROMPT)) {
+		if (userSettings.getMode() != OptimisationMode.ADP && LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_NO_NOMINALS_IN_PROMPT)) {
 			hints.add(HINT_NO_NOMINALS_IN_PROMPT);
 		}
 		// If HINT_KEEP_NOMINALS_IN_PROMPT is set, override the HINT_NO_NOMINALS_IN_PROMPT hint

@@ -555,6 +555,24 @@ public class ScenarioUtils {
 		}
 	}
 
+	public static void removeAllConstraints(OptimisationPlan plan, String name) {
+		for (OptimisationStage stage : plan.getStages()) {
+			if (stage instanceof ParallelOptimisationStage<?>) {
+				ParallelOptimisationStage<?> parallelOptimisationStage = (ParallelOptimisationStage<?>) stage;
+				stage = parallelOptimisationStage.getTemplate();
+			}
+			if (stage instanceof ConstraintsAndFitnessSettingsStage) {
+				ConstraintAndFitnessSettings settings = ((ConstraintsAndFitnessSettingsStage) stage).getConstraintAndFitnessSettings();
+				removeConstraints(name, settings);
+			}
+		}
+		SolutionBuilderSettings solutionBuilderSettings = plan.getSolutionBuilderSettings();
+		if (solutionBuilderSettings != null) {
+			ConstraintAndFitnessSettings settings = solutionBuilderSettings.getConstraintAndFitnessSettings();
+			removeConstraints(name, settings);
+		}
+	}
+
 	public static void createOrUpdateContraints(String name, boolean enabled, ConstraintAndFitnessSettings settings) {
 		List<Constraint> constraints = settings.getConstraints();
 		for (Constraint constraint : constraints) {
@@ -564,6 +582,11 @@ public class ScenarioUtils {
 			}
 		}
 		constraints.add(createConstraint(name, enabled));
+	}
+
+	public static void removeConstraints(String name, ConstraintAndFitnessSettings settings) {
+		List<Constraint> constraints = settings.getConstraints();
+		constraints.removeIf(constraint -> constraint.getName().equals(name));
 	}
 
 	public static boolean isConstraintInSettings(List<Constraint> constraints, String constraintName) {

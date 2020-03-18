@@ -129,7 +129,9 @@ public class LNGScenarioChainBuilder {
 	}
 
 	@NonNull
-	public static CleanableExecutorService createExecutorService(final int nThreads) {
+	public static CleanableExecutorService createExecutorService(  int nThreads) {
+		// DO NOT COMMIT
+		nThreads = 4;
 		return new SimpleCleanableExecutorService(NamedExecutorService.createFixedPool(nThreads), nThreads);
 	}
 

@@ -97,6 +97,8 @@ import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenIdleTimeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.MinMaxSlotGroupConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPermissionConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.SimilarityFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.VesselUtilisationFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.components.NonOptionalSlotFitnessCoreFactory;
@@ -714,6 +716,15 @@ public final class OptimisationHelper {
 			}
 		}
 
+		// Disable nominal vessel rules (well constraints here...) in ADP
+		if (userSettings.getMode() == OptimisationMode.ADP) {
+			ScenarioUtils.removeAllConstraints(plan, PromptRoundTripVesselPermissionConstraintCheckerFactory.NAME);
+			ScenarioUtils.removeAllConstraints(plan, RoundTripVesselPermissionConstraintCheckerFactory.NAME);
+
+			ScenarioUtils.removeConstraints(PromptRoundTripVesselPermissionConstraintCheckerFactory.NAME, baseConstraintAndFitnessSettings);
+			ScenarioUtils.removeConstraints(RoundTripVesselPermissionConstraintCheckerFactory.NAME, baseConstraintAndFitnessSettings);
+		}
+
 		if (userSettings.isCleanSlateOptimisation() || userSettings.getMode() == OptimisationMode.STRATEGIC) {
 			shouldUseRestartingLSO = false;
 			baseConstraintAndFitnessSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.OFF, periodStartOrDefault, periodEndOrDefault));
@@ -721,15 +732,17 @@ public final class OptimisationHelper {
 			final CleanStateOptimisationStage stage = ScenarioUtils.createDefaultCleanStateParameters(EcoreUtil.copy(baseConstraintAndFitnessSettings));
 			stage.getAnnealingSettings().setEpochLength(epochLength);
 			plan.getStages().add(stage);
+
 			if (!userSettings.isNominalOnly()) {
 				plan.getStages().add(ParametersFactory.eINSTANCE.createResetInitialSequencesStage());
 			} else {
 				// Return here for Nominal only modes
-				if (userSettings.getMode()  == OptimisationMode.ADP) {
+				if (userSettings.getMode() == OptimisationMode.ADP) {
 					ScenarioUtils.createOrUpdateAllConstraints(plan, MinMaxSlotGroupConstraintCheckerFactory.NAME, true);
 					ScenarioUtils.createOrUpdateAllConstraints(plan, LadenIdleTimeConstraintCheckerFactory.NAME, true);
 					ScenarioUtils.createOrUpdateAllObjectives(plan, VesselUtilisationFitnessCoreFactory.NAME, true, 1);
 					ScenarioUtils.createOrUpdateAllObjectives(plan, NonOptionalSlotFitnessCoreFactory.NAME, true, 24_000_000);
+
 				}
 				return LNGScenarioRunnerUtils.createExtendedSettings(plan);
 			}
@@ -769,11 +782,6 @@ public final class OptimisationHelper {
 				stage.getAnnealingSettings().setEpochLength(epochLength);
 				plan.getStages().add(stage);
 			}
-//			{
-//				final ReduceSequencesStage stage = ParametersFactory.eINSTANCE.createReduceSequencesStage();
-//				stage.setName("reduce2");
-//				plan.getStages().add(stage);
-//			}
 		} else if (userSettings.getMode() == OptimisationMode.ADP) { // ADP optimiser
 			final LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(EcoreUtil.copy(baseConstraintAndFitnessSettings), parallelise);
 			stage.getAnnealingSettings().setEpochLength(epochLength);
@@ -787,15 +795,16 @@ public final class OptimisationHelper {
 			ScenarioUtils.createOrUpdateAllObjectives(plan, NonOptionalSlotFitnessCoreFactory.NAME, true, 24_000_000);
 		} else {
 			if (similarityMode != SimilarityMode.OFF) {
-				final MultipleSolutionSimilarityOptimisationStage stage = ScenarioUtils.createDefaultMultipleSolutionSimilarityParameters(EcoreUtil.copy(baseConstraintAndFitnessSettings), parallelise);
+				final MultipleSolutionSimilarityOptimisationStage stage = ScenarioUtils.createDefaultMultipleSolutionSimilarityParameters(EcoreUtil.copy(baseConstraintAndFitnessSettings),
+						parallelise);
 				stage.getAnnealingSettings().setEpochLength(epochLength);
 				stage.getAnnealingSettings().setRestarting(shouldUseRestartingLSO);
-				
+
 				final SimilaritySettings similaritySettings = stage.getConstraintAndFitnessSettings().getSimilaritySettings();
 				if (similaritySettings != null) {
-					 stage.getConstraintAndFitnessSettings().setSimilaritySettings(ScenarioUtils.createUnweightedSimilaritySettings());
+					stage.getConstraintAndFitnessSettings().setSimilaritySettings(ScenarioUtils.createUnweightedSimilaritySettings());
 				}
-				
+
 				plan.getStages().add(stage);
 			} else {
 				// Normal LSO

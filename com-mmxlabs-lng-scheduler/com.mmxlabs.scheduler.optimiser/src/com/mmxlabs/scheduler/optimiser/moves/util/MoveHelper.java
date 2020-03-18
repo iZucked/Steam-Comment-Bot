@@ -14,17 +14,15 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
-import javax.inject.Inject;
-
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintChecker;
 import com.mmxlabs.optimiser.common.dcproviders.ILockedElementsProvider;
-import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -104,9 +102,15 @@ public class MoveHelper implements IMoveHelper {
 
 	public static final String LEGACY_CHECK_RESOURCE = "useLegacyCheck";
 
+	public static final String ALLOW_NOMINAL_REWIRE = "allow-nominal-rewire";
+
 	@Inject
 	@Named(LEGACY_CHECK_RESOURCE)
 	private boolean useLegacyCheck;
+
+	@Inject(optional = true)
+	@Named(ALLOW_NOMINAL_REWIRE)
+	private final boolean allowNominalRewire = true;
 
 	private final @NonNull List<@NonNull IResource> vesselResources = new LinkedList<>();
 	private final @NonNull List<@NonNull IResource> vesselResourcesIncludingRoundTrip = new LinkedList<>();
@@ -140,7 +144,7 @@ public class MoveHelper implements IMoveHelper {
 			}
 
 			if (vesselInstanceType == VesselInstanceType.ROUND_TRIP) {
-				if (!roundTripVesselPermissionProvider.isPermittedOnResource(element, resource)) {
+				if (!allowRoundTripChanges() && !roundTripVesselPermissionProvider.isPermittedOnResource(element, resource)) {
 					itr.remove();
 					continue;
 				}
@@ -162,7 +166,7 @@ public class MoveHelper implements IMoveHelper {
 					}
 				}
 			}
-			if (vesselInstanceType != VesselInstanceType.ROUND_TRIP) {
+			if (vesselInstanceType != VesselInstanceType.ROUND_TRIP || allowRoundTripChanges()) {
 				IVessel vessel = null;
 
 				if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.FLEET || vesselAvailability.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER) {
@@ -424,5 +428,10 @@ public class MoveHelper implements IMoveHelper {
 		@NonNull
 		final VesselInstanceType vesselInstanceType = vesselAvailability.getVesselInstanceType();
 		return (vesselInstanceType == VesselInstanceType.ROUND_TRIP);
+	}
+
+	@Override
+	public boolean allowRoundTripChanges() {
+		return allowNominalRewire;
 	}
 }

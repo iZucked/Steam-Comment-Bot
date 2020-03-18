@@ -173,7 +173,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IMoveGenerator {
 						return new NullMove("SCMG", "Self Insertion"); // stupidity has happened.
 					}
 
-					if (moveHelper.isRoundTripResource(first)) {
+					if (moveHelper.isRoundTripResource(first) && !moveHelper.allowRoundTripChanges()) {
 						// Attempting to move stuff around within a round trip resource. This is forbidden.
 						return new NullMove("SCMG", "Within roundtrip swap"); // stupidity has happened.
 					}

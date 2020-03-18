@@ -42,6 +42,7 @@ import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.lso.ConstrainedMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.lso.moves.ShuffleElements.ShuffleElementsBuilder;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
+import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
 import com.mmxlabs.scheduler.optimiser.providers.Followers;
 import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
@@ -86,6 +87,9 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 	@Inject
 	private IPhaseOptimisationData optimisationData;
 
+	@Inject
+	private IMoveHelper moveHelper;
+	
 	/**
 	 * Experimental parameter to limit the list of returned candidates.
 	 */
@@ -557,7 +561,7 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 
 		// Disable re-wiring on round trips.
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
+		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP && !moveHelper.allowRoundTripChanges()) {
 			return false;
 		}
 
