@@ -55,7 +55,7 @@ public final class ScheduleTools {
 	public static CargoAllocation findCargoAllocationByDischargeID(@NonNull final String dischargeID, @NonNull final Schedule schedule) {
 		for (final CargoAllocation ca : schedule.getCargoAllocations()) {
 			for (final SlotAllocation sa : ca.getSlotAllocations()) {
-				final Slot s = sa.getSlot();
+				final Slot<?> s = sa.getSlot();
 				if (s instanceof DischargeSlot) {
 					if (dischargeID.equals(s.getName())) {
 						return ca;
@@ -124,11 +124,11 @@ public final class ScheduleTools {
 	 * @param slot
 	 * @return
 	 */
-	public static double getPrice(LNGScenarioModel scenario, Slot slot) {
+	public static double getPrice(LNGScenarioModel scenario, Slot<?> slot) {
 		EList<SlotAllocation> slotAllocations = scenario.getScheduleModel().getSchedule().getSlotAllocations();
 		SlotAllocation interestingSlotAllocation = null;
 		for (SlotAllocation slotAllocation : slotAllocations) {
-			if (slotAllocation.getSlot().equals(slot)) {
+			if (slotAllocation.getSlot() == slot) {
 				interestingSlotAllocation = slotAllocation;
 			}
 		}
