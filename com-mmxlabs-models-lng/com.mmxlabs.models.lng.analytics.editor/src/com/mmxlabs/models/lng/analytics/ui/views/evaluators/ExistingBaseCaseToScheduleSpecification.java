@@ -9,7 +9,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +17,8 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.time.Months;
@@ -79,6 +80,7 @@ import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
+@NonNullByDefault
 public class ExistingBaseCaseToScheduleSpecification {
 
 	private final LNGScenarioModel scenarioModel;
@@ -92,9 +94,6 @@ public class ExistingBaseCaseToScheduleSpecification {
 	}
 
 	public ScheduleSpecification generate(final BaseCase baseCase) {
-
-		/////////////////////////////////////////////////// public ScheduleSpecification buildScheduleSpecification(final IScenarioDataProvider scenarioDataProvider,
-		// @Nullable final IAssignableElementDateProviderFactory assignableElementDateProviderFactory) {
 
 		final ModelDistanceProvider modelDistanceProvider = scenarioDataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
 
@@ -126,7 +125,7 @@ public class ExistingBaseCaseToScheduleSpecification {
 		final Map<VesselAvailability, CollectedAssignment> vaMap = new HashMap<>();
 		final Map<Pair<CharterInMarket, Integer>, CollectedAssignment> mktMap = new HashMap<>();
 
-		final Map<AssignableElement, CollectedAssignment> cargoToCollectedAssignmentMap = new HashMap<>();
+		final Map<AssignableElement, @Nullable CollectedAssignment> cargoToCollectedAssignmentMap = new HashMap<>();
 		final List<CollectedAssignment> assignments = AssignmentEditorHelper.collectAssignments(cargoModel, portModel, spotMarketsModel, modelDistanceProvider);
 
 		for (final CollectedAssignment seq : assignments) {
@@ -145,6 +144,14 @@ public class ExistingBaseCaseToScheduleSpecification {
 				}
 			}
 		}
+
+		// Add mapping for non-shipped cargoes
+		for (final Cargo cargo : cargoModel.getCargoes()) {
+			if (cargo.getCargoType() != CargoType.FLEET) {
+				cargoToCollectedAssignmentMap.put(cargo, null);
+			}
+		}
+
 		{
 			// Function to clean up an existing allocation
 			Consumer<Slot<?>> removeExistingAssignment = slot -> {
@@ -235,7 +242,8 @@ public class ExistingBaseCaseToScheduleSpecification {
 						unusedLoads.remove(loadSlot);
 						unusedDischarges.remove(dischargeSlot);
 
-						// Note: The original code would re-use the Cargo if possible, but this probably breaks if we change vessel
+						// Note: The original code would re-use the Cargo if possible, but this probably
+						// breaks if we change vessel
 						removeExistingAssignment.accept(loadSlot);
 						removeExistingAssignment.accept(dischargeSlot);
 
@@ -496,30 +504,35 @@ public class ExistingBaseCaseToScheduleSpecification {
 				}
 				if (assignedObject instanceof Cargo) {
 					final Cargo cargo = (Cargo) assignedObject;
+					// Re-added the non-shipped code path to fix issue respecting locked cargoes
+					// when running optioniser in sandbox
 
-					// if (cargo.getCargoType() == CargoType.FOB || cargo.getCargoType() == CargoType.DES) {
-					// final NonShippedCargoSpecification nonShipedCargoSpecification = CargoFactory.eINSTANCE.createNonShippedCargoSpecification();
-					// for (final Slot<?> slot : cargo.getSortedSlots()) {
-					// final SlotSpecification eventSpecification = CargoFactory.eINSTANCE.createSlotSpecification();
-					// eventSpecification.setSlot(slot);
-					// nonShipedCargoSpecification.getSlotSpecifications().add(eventSpecification);
-					// seenSlots.add(slot);
-					// }
-					// seenCargoes.add(cargo);
-					// scheduleSpecification.getNonShippedCargoSpecifications().add(nonShipedCargoSpecification);
-					// // Create non-shipped spec.
-					// } else {
+					if (cargo.getCargoType() == CargoType.FOB || cargo.getCargoType() == CargoType.DES) {
+						final NonShippedCargoSpecification nonShipedCargoSpecification = CargoFactory.eINSTANCE.createNonShippedCargoSpecification();
+						for (final Slot<?> slot : cargo.getSortedSlots()) {
+							assert !seenSlots.contains(slot);
+							final SlotSpecification eventSpecification = CargoFactory.eINSTANCE.createSlotSpecification();
+							eventSpecification.setSlot(slot);
+							nonShipedCargoSpecification.getSlotSpecifications().add(eventSpecification);
+							seenSlots.add(slot);
+						}
+						seenCargoes.add(cargo);
+						scheduleSpecification.getNonShippedCargoSpecifications().add(nonShipedCargoSpecification);
+						// Create non-shipped spec.
+					} else {
 
-					// Fleet cargo with no vessel allocation....
-					// two open positions - covered below
-					for (final Slot<?> slot : cargo.getSlots()) {
-						if (slot instanceof LoadSlot) {
-							unusedLoads.add((LoadSlot) slot);
-						} else {
-							unusedDischarges.add((DischargeSlot) slot);
+						// Fleet cargo with no vessel allocation....
+						// two open positions - covered below
+						for (final Slot<?> slot : cargo.getSlots()) {
+							if (slot instanceof LoadSlot) {
+								unusedLoads.add((LoadSlot) slot);
+							} else if (slot instanceof DischargeSlot) {
+								unusedDischarges.add((DischargeSlot) slot);
+							} else {
+								assert false;
+							}
 						}
 					}
-					// }
 				} else if (assignedObject instanceof FakeCargo) {
 					final FakeCargo cargo = (FakeCargo) assignedObject;
 
@@ -685,16 +698,19 @@ public class ExistingBaseCaseToScheduleSpecification {
 	}
 
 	private DischargeSlot getOrCreate(final SellOption sellOption) {
+
 		final DischargeSlot original = mapper.getOriginal(sellOption);
 		if (original != null) {
 			return original;
 		}
+
 		final DischargeSlot dischargeSlot_original = AnalyticsBuilder.makeDischargeSlot(sellOption, scenarioModel, SlotMode.ORIGINAL_SLOT);
 		final DischargeSlot dischargeSlot_breakEven = AnalyticsBuilder.makeDischargeSlot(sellOption, scenarioModel, SlotMode.BREAK_EVEN_VARIANT);
 		final DischargeSlot dischargeSlot_changeable = AnalyticsBuilder.makeDischargeSlot(sellOption, scenarioModel, SlotMode.CHANGE_PRICE_VARIANT);
 
 		mapper.addMapping(sellOption, dischargeSlot_original, dischargeSlot_breakEven, dischargeSlot_changeable);
 
+		assert dischargeSlot_original != null;
 		return dischargeSlot_original;
 	}
 
@@ -704,10 +720,14 @@ public class ExistingBaseCaseToScheduleSpecification {
 		if (original != null) {
 			return original;
 		}
+
 		final LoadSlot loadSlot_original = AnalyticsBuilder.makeLoadSlot(buyOption, scenarioModel, SlotMode.ORIGINAL_SLOT);
 		final LoadSlot loadSlot_breakEven = AnalyticsBuilder.makeLoadSlot(buyOption, scenarioModel, SlotMode.BREAK_EVEN_VARIANT);
 		final LoadSlot loadSlot_changeable = AnalyticsBuilder.makeLoadSlot(buyOption, scenarioModel, SlotMode.CHANGE_PRICE_VARIANT);
+
 		mapper.addMapping(buyOption, loadSlot_original, loadSlot_breakEven, loadSlot_changeable);
+
+		assert loadSlot_original != null;
 		return loadSlot_original;
 	}
 
