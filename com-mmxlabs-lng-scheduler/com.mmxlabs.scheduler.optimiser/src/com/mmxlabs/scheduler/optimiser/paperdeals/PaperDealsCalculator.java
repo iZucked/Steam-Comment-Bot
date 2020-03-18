@@ -165,7 +165,9 @@ public class PaperDealsCalculator {
 					final String originalCurveName = deltaTriple.getFirst();
 					final String indexName = deltaTriple.getSecond();
 					//No hedging for physical positions
-					if (indexName.equalsIgnoreCase("Physical"))
+					if (originalCurveName == null || month == null)
+						continue;
+					if (indexName == null || indexName.equalsIgnoreCase("Physical"))
 						continue;
 					
 					final Map<String, String> hedgeCurves = lookupData.hedgeCurves.get(indexName.toLowerCase());
