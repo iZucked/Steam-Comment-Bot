@@ -10,10 +10,9 @@
 	<packaging>pom</packaging>
 
 	<parent>
-		<groupId>com.mmxlabs.parent</groupId>
-		<artifactId>tycho-parent</artifactId>
-		<version>41</version>
-		<relativePath />
+		<groupId>com.mmxlabs.lingo.master</groupId>
+		<artifactId>com.mmxlabs.lingo.master.parent</artifactId>
+		<version>4.8.16-SNAPSHOT</version>
 	</parent>
 
 	<modules>

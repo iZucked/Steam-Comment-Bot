@@ -8,6 +8,13 @@
 	<version>4.8.16-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
+	<parent>
+		<groupId>com.mmxlabs.parent</groupId>
+		<artifactId>tycho-parent</artifactId>
+		<relativePath />
+		<version>41</version>
+	</parent>
+
 	<scm>
 		<connection>scm:git:git@gitlab.com:mmxlabs/LiNGO/LiNGO.git</connection>
 		<developerConnection>scm:git:git@gitlab.com:mmxlabs/LiNGO/LiNGO.git</developerConnection>
