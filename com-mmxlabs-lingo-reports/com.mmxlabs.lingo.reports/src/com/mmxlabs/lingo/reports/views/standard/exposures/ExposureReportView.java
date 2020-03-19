@@ -441,7 +441,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		final List<String> result = new LinkedList<String>();
 		for (final PaperDealAllocation paperDealAllocation : schedule.getPaperDealAllocations()) {
 			final PaperDeal pd = paperDealAllocation.getPaperDeal();
-			if (pd == null && pd.getEntity() == null)
+			if (pd == null || pd.getEntity() == null)
 				continue;
 			final String entity = pd.getEntity().getName();
 			if (!result.contains(entity)) {

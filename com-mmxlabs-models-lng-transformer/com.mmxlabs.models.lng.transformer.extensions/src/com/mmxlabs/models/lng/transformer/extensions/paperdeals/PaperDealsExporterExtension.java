@@ -117,7 +117,7 @@ public class PaperDealsExporterExtension implements IExporterExtension {
 						paperPricingType = PaperPricingType.INSTRUMENT;
 						final BasicInstrumentData basicInstrumentData = basicPaperDealData.getInstrument();
 						if (basicInstrumentData == null) {
-							throw new IllegalStateException(String.format("No pricing instrument %s found!", basicInstrumentData.getName()));
+							throw new IllegalStateException(String.format("No pricing instrument %s found!", basicPaperDealData.getName()));
 						}
 						final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(lngScenarioModel);
 						for (final SettleStrategy ss : pricingModel.getSettleStrategies()) {
