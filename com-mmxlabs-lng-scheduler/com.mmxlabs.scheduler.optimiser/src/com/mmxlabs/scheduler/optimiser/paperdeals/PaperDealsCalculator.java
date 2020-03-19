@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.inject.Named;
 
@@ -68,18 +69,20 @@ public class PaperDealsCalculator {
 	private boolean reHedgeWithPapers;
 	
 	/**
-	 * Get the collection of paper deals allocation and create a map Map<Pair<Index Name, Month>, Volume> hedges
+	 * Get the collection of paper deals allocation and create a map Map<Pair<Market index name, Month>, Volume> hedges
 	 * @param paperDealAllocations
-	 * @return Map<Pair<Index Name, Month>, Volume>
+	 * @return Map<Pair<String, YearMonth>, Long>
 	 */
 	private Map<Pair<String, YearMonth>, Long> getHedges(final Map<BasicPaperDealData, List<BasicPaperDealAllocationEntry>> paperDealAllocations){
 		final Map<Pair<String, YearMonth>, Long> hedges = new HashMap<>();
 		
 		if (reHedgeWithPapers && paperPnLEnabled && exposuresEnabled) {
+			final PaperDealsLookupData lookupData = paperDealDataProvider.getPaperDealsLookupData();
 			for (final BasicPaperDealData basicPaperDealData : paperDealAllocations.keySet()) {
 				for (final BasicPaperDealAllocationEntry entry : paperDealAllocations.get(basicPaperDealData)) {
 					final YearMonth month = YearMonth.from(entry.getDate());
-					final Pair<String, YearMonth> pair = new Pair<>(basicPaperDealData.getIndexName(), month);
+					final String marketIndex = lookupData.marketIndices.get(basicPaperDealData.getIndexName().toLowerCase());
+					final Pair<String, YearMonth> pair = new Pair<>(marketIndex, month);
 					for (BasicExposureRecord record : entry.getExposures()) {
 						hedges.merge(pair, record.getVolumeMMBTU(), Long::sum);
 					}
@@ -90,20 +93,22 @@ public class PaperDealsCalculator {
 	}
 	
 	/**
-	 * Get the list of exposures and create a map of Map<Pair<Index Name, Month>, Volume> exposures
+	 * Get the list of exposures and create a map of Map<Pair<Market index name, Month>, Volume> exposures
 	 * @param List<OptimiserExposureRecords> exposureRecords
-	 * @return Map<Pair<Index Name, Month>, Volume>
+	 * @return Map<Pair<String, YearMonth>, Long>
 	 */
 	private Map<Pair<String, YearMonth>, Long> getExposures(final List<OptimiserExposureRecords> exposureRecords) {
 		final Map<Pair<String, YearMonth>, Long> exposures = new HashMap<>();
 		
 		if (exposuresEnabled) {
+			final PaperDealsLookupData lookupData = paperDealDataProvider.getPaperDealsLookupData();
 			for(final OptimiserExposureRecords records : exposureRecords) {
 				for (final BasicExposureRecord record : records.records) {
 					if (record.getIndexName().equalsIgnoreCase("Physical"))
 						continue;
 					final YearMonth month = YearMonth.from(record.getTime());
-					final Pair<String, YearMonth> pair = new Pair<>(record.getIndexName(), month);
+					final String marketIndex = lookupData.marketIndices.get(record.getIndexName().toLowerCase());
+					final Pair<String, YearMonth> pair = new Pair<>(marketIndex, month);
 					exposures.merge(pair, record.getVolumeMMBTU(), Long::sum);
 				}
 			}
@@ -112,7 +117,7 @@ public class PaperDealsCalculator {
 	}
 	
 	/**
-	 * Get the map of exposures per IPortSlot and create a map of Map<Pair<Index Name, Month>, Volume> exposures
+	 * Get the map of exposures per IPortSlot and create a map of Map<Pair<Market index name, Month>, Volume> exposures
 	 * @param Map<IPortSlot, OptimiserExposureRecords> exposureRecords
 	 * @return Map<Pair<String, YearMonth>, Long>
 	 */
@@ -125,22 +130,15 @@ public class PaperDealsCalculator {
 	} 
 	
 	/**
-	 * Create a delta map of hedges and exposures
-	 * @return Map<Pair<Index Name, Month>, Volume>
+	 * Create a delta map of hedges and exposures Map<Pair<Market Index Name, Month>, Volume>
+	 * @return Map<Pair<String, YearMonth>, Long>
 	 */
-	private Map<Triple<String, String, YearMonth>, Long> getDeltaExposuresMap(final Map<Pair<String, YearMonth>, Long> exposures, final Map<Pair<String, YearMonth>, Long> hedges){
-		final Map<Triple<String, String, YearMonth>, Long> delta = new HashMap<>();
+	private Map<Pair<String, YearMonth>, Long> getDeltaExposuresMap(final Map<Pair<String, YearMonth>, Long> exposures, final Map<Pair<String, YearMonth>, Long> hedges){
+		final Map<Pair<String, YearMonth>, Long> delta = new HashMap<>(exposures);
 		if (reHedgeWithPapers && paperPnLEnabled && exposuresEnabled) {
 			final PaperDealsLookupData lookupData = paperDealDataProvider.getPaperDealsLookupData();
-			for (final Pair<String, YearMonth> exposurePair : exposures.keySet()) {
-				final String curveName = exposurePair.getFirst();
-				final String marketIndex = lookupData.marketIndices.get(curveName.toLowerCase());
-				delta.merge(new Triple<>(curveName, marketIndex, exposurePair.getSecond()), exposures.get(exposurePair), Long::sum);
-			}
 			for (final Pair<String, YearMonth> hedgePair : hedges.keySet()) {
-				final String curveName = hedgePair.getFirst();
-				final String marketIndex = lookupData.marketIndices.get(curveName.toLowerCase());
-				delta.merge(new Triple<>(curveName, marketIndex, hedgePair.getSecond()), hedges.get(hedgePair), Long::sum);
+				delta.merge(hedgePair, hedges.get(hedgePair), Long::sum);
 			}
 		}
 		return delta;
@@ -153,19 +151,18 @@ public class PaperDealsCalculator {
 	 * Generate paper deals for delta map
 	 * @return
 	 */
-	private List<BasicPaperDealData> generateHedges(final Map<Triple<String, String, YearMonth>, Long> delta){
+	private List<BasicPaperDealData> generateHedges(final Map<Pair<String, YearMonth>, Long> delta){
 		final List<BasicPaperDealData> results = new LinkedList<>();
 		if (reHedgeWithPapers && paperPnLEnabled && exposuresEnabled) {
 			final PaperDealsLookupData lookupData = paperDealDataProvider.getPaperDealsLookupData();
 			final ExposuresLookupData exposuresLookupData = exposureDataProvider.getExposuresLookupData();
-			for (final Triple<String, String, YearMonth> deltaTriple : delta.keySet()) {
-				final long exposure = delta.get(deltaTriple);
+			for (final Pair<String, YearMonth> deltaPair : delta.keySet()) {
+				final long exposure = delta.get(deltaPair);
 				if (exposure != 0 && (exposure > threshold || exposure < -threshold)) {
-					final YearMonth month = deltaTriple.getThird();
-					final String originalCurveName = deltaTriple.getFirst();
-					final String indexName = deltaTriple.getSecond();
+					final YearMonth month = deltaPair.getSecond();
+					final String indexName = deltaPair.getFirst();
 					//No hedging for physical positions
-					if (originalCurveName == null || month == null)
+					if (month == null)
 						continue;
 					if (indexName == null || indexName.equalsIgnoreCase("Physical"))
 						continue;
@@ -208,7 +205,7 @@ public class PaperDealsCalculator {
 					final int year = month.getYear();
 					final String note = "Auto generated paper deal";
 					
-					final BasicCommodityCurveData curveData = exposuresLookupData.commodityMap.get(originalCurveName.toLowerCase());
+					final BasicCommodityCurveData curveData = exposuresLookupData.commodityMap.get(flatCurve.toLowerCase());
 					long quantity = (isBuy ? -1 : 1) * exposure;
 					if (curveData.getVolumeUnit() != null || !curveData.getVolumeUnit().isEmpty() || !("mmbtu".equalsIgnoreCase(curveData.getVolumeUnit()))) {
 						// Not mmBtu? then the quantity field needs conversion to native units
@@ -233,7 +230,7 @@ public class PaperDealsCalculator {
 		final Map<BasicPaperDealData, List<BasicPaperDealAllocationEntry>> paperDealsMap = processOriginalPaperDeals();
 		final Map<Pair<String, YearMonth>, Long> hedges = getHedges(paperDealsMap);
 		final Map<Pair<String, YearMonth>, Long> exposures = getExposures(exposuresMap);
-		final Map<Triple<String, String, YearMonth>, Long> delta = getDeltaExposuresMap(exposures, hedges);
+		final Map<Pair<String, YearMonth>, Long> delta = getDeltaExposuresMap(exposures, hedges);
 		final List<BasicPaperDealData> generatedHedges = generateHedges(delta);
 		final Map<BasicPaperDealData, List<BasicPaperDealAllocationEntry>> generatedPaperDealsMap = processPaperDeals(generatedHedges);
 		paperDealsMap.putAll(generatedPaperDealsMap);

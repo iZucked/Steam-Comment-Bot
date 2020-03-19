@@ -355,7 +355,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		}
 		if (containsPaperDeals) {
 			rows.add(createRow(3010, "Pricing", false, "", "", false, createEmptyFormatter()));
-			rows.add(createRow(3020, "    Price", false, "", "", false,
+			rows.add(createRow(3020, "    MtM price", false, "", "", false,
 					createPaperDealAllocationFormatter(pda -> String.format("%.3f", pda.getPaperDeal().getPrice()) )));
 			rows.add(createRow(3030, "    Float curve", false, "", "", false,
 					createPaperDealAllocationFormatter(pda -> pda.getPaperDeal().getIndex() )));
@@ -363,11 +363,8 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 					createPaperDealAllocationFormatter(pda -> String.format("%.3f", pda.getEntries().get(0).getPrice()) )));
 			rows.add(createRow(3050, "Quantity", true, "", "", false, createPaperDealVolumeMMBTu(options, false)));
 			rows.add(createRow(3060, "P&L", true, "$", "", false, createPNLTotal(options, false)));
-			rows.add(createRow(3070, "Pricing dates", false, "", "", false, createEmptyFormatter()));
-			rows.add(createRow(3080, "    Start", false, "", "", false,
+			rows.add(createRow(3080, "Month", false, "", "", false,
 					createPaperDealAllocationFormatter(pda -> pda.getPaperDeal().getStartDate().format(DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter()))));
-			rows.add(createRow(3090, "    End", false, "", "", false,
-					createPaperDealAllocationFormatter(pda -> pda.getPaperDeal().getEndDate().format(DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter()))));
 		}
 		return rows;
 	}
