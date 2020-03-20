@@ -78,13 +78,6 @@
 					</environments>
 				</configuration>
 			</plugin>
-
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-source-plugin</artifactId>
-				<inherited>true</inherited>
-			</plugin>
-
 		</plugins>
 	</build>
 </project>

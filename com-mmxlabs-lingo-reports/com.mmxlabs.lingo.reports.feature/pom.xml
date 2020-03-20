@@ -13,46 +13,4 @@
 	<artifactId>com.mmxlabs.lingo.reports.feature</artifactId>
 	<version>4.8.16-SNAPSHOT</version>
 	<packaging>eclipse-feature</packaging>
-
-	<build>
-		<plugins>
-
-			<plugin>
-				<groupId>org.eclipse.tycho.extras</groupId>
-				<artifactId>tycho-source-feature-plugin</artifactId>
-				<version>${tycho-extras-version}</version>
-				<executions>
-					<execution>
-						<id>source-feature</id>
-						<phase>package</phase>
-						<goals>
-							<goal>source-feature</goal>
-						</goals>
-					</execution>
-				</executions>
-
-				<configuration>
-					<excludes>
-						<plugin id="com.mmxlabs.lingo.reports.doc" />
-					</excludes>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-p2-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>attached-p2-metadata</id>
-						<phase>package</phase>
-						<goals>
-							<goal>p2-metadata</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-		</plugins>
-	</build>
-
 </project>
