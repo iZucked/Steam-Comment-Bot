@@ -38,7 +38,7 @@ Require-Bundle: com.mmxlabs.models.lng.transformer;bundle-version="[4.7.29,5.0.0
  com.fasterxml.jackson.datatype.jackson-datatype-jdk8,
  com.fasterxml.jackson.datatype.jackson-datatype-jsr310,
  com.fasterxml.jackson.core.jackson-core;bundle-version="2.9.2",
- com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.9.2" 
+ com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.9.2"
 Import-Package: org.json
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.mmxlabs.lingo.app.headless.internal.Activator
