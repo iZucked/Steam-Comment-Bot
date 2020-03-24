@@ -203,27 +203,8 @@
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.core.filesystem.macosx"
-         os="macosx"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         fragment="true"
-         unpack="false"/>
-
-   <plugin
          id="org.eclipse.core.filesystem.win32.x86_64"
          os="win32"
-         arch="x86_64"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         fragment="true"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.equinox.security.macosx"
-         os="macosx"
          arch="x86_64"
          download-size="0"
          install-size="0"
@@ -351,16 +332,6 @@
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.ui.cocoa"
-         os="macosx"
-         ws="cocoa"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         fragment="true"
-         unpack="false"/>
-
-   <plugin
          id="org.eclipse.equinox.simpleconfigurator"
          download-size="0"
          install-size="0"
@@ -382,17 +353,6 @@
          id="org.eclipse.swt.gtk.linux.x86_64"
          os="linux"
          ws="gtk"
-         arch="x86_64"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         fragment="true"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.swt.cocoa.macosx.x86_64"
-         os="macosx"
-         ws="cocoa"
          arch="x86_64"
          download-size="0"
          install-size="0"
@@ -462,16 +422,6 @@
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-
-   <plugin
-         id="org.eclipse.equinox.launcher.cocoa.macosx.x86_64"
-         os="macosx"
-         ws="cocoa"
-         arch="x86_64"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         fragment="true"/>
 
    <plugin
          id="org.eclipse.equinox.launcher.gtk.linux.x86_64"
