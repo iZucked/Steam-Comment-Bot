@@ -52,7 +52,7 @@ public class VolumeModeEditorWrapper extends IInlineEditorEnablementWrapper {
 
 	@Override
 	protected boolean respondToNotification(final Notification notification) {
-
+		boolean found = true;
 		if (notification.getFeature() == AnalyticsPackage.Literals.BUY_OPPORTUNITY__VOLUME_MODE) {
 			EObject editorTarget = getEditorTarget();
 			if (notification.getNewValue() == VolumeMode.NOT_SPECIFIED) {
@@ -85,10 +85,11 @@ public class VolumeModeEditorWrapper extends IInlineEditorEnablementWrapper {
 				dialogContext.getDialogController().setEditorVisibility(editorTarget, AnalyticsPackage.Literals.SELL_OPPORTUNITY__VOLUME_UNITS, true);
 			}
 			dialogContext.getDialogController().updateEditorVisibility();
-
+		} else {
+			found = false;
 		}
-
-		return false;
+		enabled = found;
+		return found;
 	}
 
 	@Override
