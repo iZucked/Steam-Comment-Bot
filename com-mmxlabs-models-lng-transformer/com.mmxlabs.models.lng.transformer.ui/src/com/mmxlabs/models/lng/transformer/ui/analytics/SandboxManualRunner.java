@@ -32,18 +32,25 @@ import com.mmxlabs.models.lng.analytics.OpenSell;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.SellOption;
+import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.VesselEventOption;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.BaseCaseToScheduleSpecification;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.ExistingBaseCaseToScheduleSpecification;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.IMapperClass;
+import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.ScheduleSpecification;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.analytics.spec.ScheduleSpecificationHelper;
 import com.mmxlabs.models.lng.transformer.util.ScheduleSpecificationTransformer;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
+import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
@@ -89,7 +96,9 @@ public class SandboxManualRunner {
 			for (final PartialCaseRow r : model.getPartialCase().getPartialCase()) {
 				final BaseCaseRow bcr = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
 
-				// If we mix vessel events AND cargoes in the same row, we ensure we always have a null vessel event combination. Later on this will be handled in the recursive tasks step
+				// If we mix vessel events AND cargoes in the same row, we ensure we always have
+				// a null vessel event combination. Later on this will be handled in the
+				// recursive tasks step
 
 				boolean hasVE = false;
 				if (!r.getVesselEventOptions().isEmpty()) {
@@ -198,8 +207,10 @@ public class SandboxManualRunner {
 				this.bridge = bridge;
 				// Base Case P&L
 				// if (baseSpecification != null) {
-				// final ScheduleSpecificationTransformer transformer = injector.getInstance(ScheduleSpecificationTransformer.class);
-				// final ISequences base = transformer.createSequences(baseSpecification, bridge.getDataTransformer(), false);
+				// final ScheduleSpecificationTransformer transformer =
+				// injector.getInstance(ScheduleSpecificationTransformer.class);
+				// final ISequences base = transformer.createSequences(baseSpecification,
+				// bridge.getDataTransformer(), false);
 				// results.add(base);
 				// }
 				for (final Pair<BaseCase, ScheduleSpecification> p : specifications) {
@@ -291,6 +302,52 @@ public class SandboxManualRunner {
 				if (row.getSellOption() instanceof OpenSell) {
 					row.setSellOption(null);
 				}
+
+				if (row.getBuyOption() != null && row.getSellOption() != null) {
+					BuyOption buyOption = row.getBuyOption();
+					SellOption sellOption = row.getSellOption();
+					if (AnalyticsBuilder.isDESPurchase().test(buyOption) && AnalyticsBuilder.isFOBSale().test(sellOption)) {
+						return;
+					}
+
+					Port buyPort = AnalyticsBuilder.getPort(buyOption);
+					Port sellPort = AnalyticsBuilder.getPort(sellOption);
+					if (AnalyticsBuilder.isDESPurchase().test(buyOption)) {
+
+						if (buyPort != null && buyPort != sellPort) {
+							// Only valid if divertible
+							if (buyOption instanceof BuyReference) {
+								BuyReference buyReference = (BuyReference) buyOption;
+								LoadSlot s = buyReference.getSlot();
+								if (s != null && s.getDesPurchaseDealType() == DESPurchaseDealType.DEST_ONLY) {
+									return;
+								}
+							} else {
+								// Other options are assumed to be DEST_ONLY
+								return;
+							}
+						}
+
+					} else if (AnalyticsBuilder.isFOBSale().test(sellOption)) {
+
+						if (sellPort != null && buyPort != sellPort) {
+							// Only valid if divertible
+							if (sellOption instanceof SellReference) {
+								SellReference sellyReference = (SellReference) sellOption;
+								DischargeSlot s = sellyReference.getSlot();
+								if (s != null && s.getFobSaleDealType() == FOBSaleDealType.SOURCE_ONLY) {
+									return;
+								}
+							} else {
+								// Other options are assumed to be SOURCE_ONLY
+								return;
+							}
+						}
+
+					}
+
+				}
+
 			}
 			filterShipping(copy);
 			tasks.add(copy);
