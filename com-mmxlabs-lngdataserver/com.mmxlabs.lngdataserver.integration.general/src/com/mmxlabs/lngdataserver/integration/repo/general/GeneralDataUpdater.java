@@ -196,7 +196,7 @@ public class GeneralDataUpdater {
 
 				// make sure not everything is blocked in case of consecutive failure
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(5_000);
 				} catch (final InterruptedException e) {
 					throw new RuntimeException(e);
 				}
