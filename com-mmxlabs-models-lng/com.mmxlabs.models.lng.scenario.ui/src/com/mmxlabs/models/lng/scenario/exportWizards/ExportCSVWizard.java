@@ -34,11 +34,20 @@ public class ExportCSVWizard extends Wizard implements IExportWizard {
 	private static final Logger log = LoggerFactory.getLogger(ExportCSVWizard.class);
 
 	private ExportCSVWizardPage exportPage;
+	
+	private boolean isExportScenario = true;
+	
+	public ExportCSVWizard() {
+		this(true);
+	}
+	
+	public ExportCSVWizard(boolean isExportScenario) {
+		this.isExportScenario = isExportScenario;
+	}
 
 	@Override
 	public void init(final IWorkbench workbench, final IStructuredSelection selection) {
-
-		setWindowTitle("CSV Export Wizard");
+		setWindowTitle(isExportScenario ? "CSV Export Wizard" : "All Curves Export Wizard");
 		exportPage = new ExportCSVWizardPage(selection);
 	}
 
@@ -103,7 +112,11 @@ public class ExportCSVWizard extends Wizard implements IExportWizard {
 		}
 
 		String baseURL = directory.toURI().toString() + "/";
-		ExportCSVBundleUtil.exportScenario(scenarioDataProvider, delimiter, decimalSeparator, baseURL);
+		if (isExportScenario) {
+			ExportCSVBundleUtil.exportScenario(scenarioDataProvider, delimiter, decimalSeparator, baseURL);
+		} else {
+			ExportCSVBundleUtil.exportAllCurves(scenarioDataProvider, delimiter, decimalSeparator, baseURL);
+		}
 	}
 
 	@Override

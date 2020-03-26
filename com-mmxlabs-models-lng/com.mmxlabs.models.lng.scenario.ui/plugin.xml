@@ -148,10 +148,11 @@
                   style="push">
             </command>
          </menuContribution>
+         <!-- Data Menu-->
          <menuContribution
                allPopups="false"
                locationURI="menu:data?after=dataStart">
-           <menu
+            <menu
                   id="data_curves"
                   label="Import curves">
             </menu>
@@ -181,7 +182,7 @@
                   </test>
                </visibleWhen>  
             </command>
-                    <command
+            <command
                   commandId="com.mmxlabs.models.lng.scenario.importWizards.BulkImportCargoHandler"
                   label="Import cargoes"
                   style="push">
@@ -195,6 +196,11 @@
                   id="data_ref_mmx"
                   label="LiNGO DB">
             </menu>
+            <command
+                  commandId="com.mmxlabs.shiplingo.platform.models.optimisation.ExportAllCurves"
+                  label="Export combined curves"
+                  style="push">                
+            </command>
          </menuContribution>
          <menuContribution
                allPopups="false"
@@ -315,6 +321,11 @@
                defaultHandler="com.mmxlabs.models.lng.scenario.exportWizards.ExportCSVWizardHandler"
                id="com.mmxlabs.shiplingo.platform.models.optimisation.ExportCSVScenario"
                name="Export Scenario as CSV">
+         </command>
+         <command
+               defaultHandler="com.mmxlabs.models.lng.scenario.exportWizards.ExportCSVWizardHandler"
+               id="com.mmxlabs.shiplingo.platform.models.optimisation.ExportAllCurves"
+               name="Export all curves as CSV">
          </command>
          <command
                defaultHandler="com.mmxlabs.models.lng.scenario.exportWizards.ExportLiNGOScenarioWizardHandler"

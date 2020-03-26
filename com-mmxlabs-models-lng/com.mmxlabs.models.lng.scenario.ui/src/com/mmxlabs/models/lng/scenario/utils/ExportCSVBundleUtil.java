@@ -11,6 +11,7 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -108,6 +109,41 @@ public class ExportCSVBundleUtil {
 					}
 				}
 			}
+		}
+	}
+	
+	public static void exportAllCurves(final IScenarioDataProvider scenarioDataProvider, final char delimiter, final char decimalSeparator, final String baseURL) {
+		final String[] toExport = {"PRICE_CURVES","CHARTER_CURVES","BF_PRICING", "CURRENCY_CURVES"};
+		final LNGScenarioModel scenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
+		final IMMXExportContext context = new DefaultExportContext(scenarioModel, scenarioDataProvider, decimalSeparator);
+
+		final ExtensibleURIConverterImpl uc = new ExtensibleURIConverterImpl();
+
+		// generate export files
+		final UUIDObject modelInstance = ScenarioModelUtil.getPricingModel(scenarioDataProvider);
+		final ISubmodelImporter importer = Activator.getDefault().getImporterRegistry().getSubmodelImporter(modelInstance.eClass());
+		if (importer != null) {
+			final Map<String, Collection<Map<String, String>>> outputs = new HashMap<>();
+
+			importer.exportModel(modelInstance, outputs, context);
+
+			final Collection<Map<String, String>> rows = new HashSet();
+			for (final String key : toExport) {
+				rows.addAll(outputs.get(key));
+			}
+			if (rows != null && !rows.isEmpty()) {
+				final String friendlyName = "AllCurves";
+
+				// export CSV for this file
+				final URI uri = URI.createURI(baseURL + friendlyName + ".csv");
+				try (OutputStreamWriter writer = new OutputStreamWriter(uc.createOutputStream(uri))) {
+					writeCSV(rows, writer, delimiter);
+				} catch (final IOException ex) {
+					// TODO Auto-generated catch block
+					ex.printStackTrace();
+				}
+			}
+			//
 		}
 	}
 
