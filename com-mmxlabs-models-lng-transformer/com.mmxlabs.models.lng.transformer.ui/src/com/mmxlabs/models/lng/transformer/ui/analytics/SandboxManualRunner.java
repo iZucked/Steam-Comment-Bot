@@ -15,10 +15,12 @@ import java.util.stream.Collectors;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Injector;
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
@@ -32,33 +34,33 @@ import com.mmxlabs.models.lng.analytics.OpenSell;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.SellOption;
-import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.VesselEventOption;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.BaseCaseToScheduleSpecification;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.ExistingBaseCaseToScheduleSpecification;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.IMapperClass;
-import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.ScheduleSpecification;
 import com.mmxlabs.models.lng.parameters.UserSettings;
-import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
+import com.mmxlabs.models.lng.transformer.chain.impl.LNGEvaluationTransformerUnit;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.analytics.spec.ScheduleSpecificationHelper;
 import com.mmxlabs.models.lng.transformer.util.ScheduleSpecificationTransformer;
-import com.mmxlabs.models.lng.types.DESPurchaseDealType;
-import com.mmxlabs.models.lng.types.FOBSaleDealType;
+import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
+import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
 
 public class SandboxManualRunner {
-	private static final Logger LOGGER = LoggerFactory.getLogger(LNGSchedulerInsertSlotJobRunner.class);
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(SandboxManualRunner.class);
 
 	private final IScenarioDataProvider originalScenarioDataProvider;
 
@@ -69,7 +71,7 @@ public class SandboxManualRunner {
 
 	private final ScheduleSpecificationHelper helper;
 
-	private @Nullable final ScenarioInstance scenarioInstance;
+	private final @Nullable ScenarioInstance scenarioInstance;
 
 	private final IMapperClass mapper;
 
@@ -191,6 +193,24 @@ public class SandboxManualRunner {
 
 	}
 
+	private boolean checkSequenceSatifiesConstraints(final @NonNull LNGDataTransformer dataTransformer, final @NonNull ISequences rawSequences) {
+
+		final LNGEvaluationTransformerUnit evaluationTransformerUnit = new LNGEvaluationTransformerUnit(dataTransformer, dataTransformer.getInitialSequences(), dataTransformer.getInitialSequences(),
+				dataTransformer.getHints());
+
+		final Injector injector = evaluationTransformerUnit.getInjector();
+
+		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+			scope.enter();
+			final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
+			final EvaluationHelper evaluationHelper = injector.getInstance(EvaluationHelper.class);
+
+			final IModifiableSequences fullSequences = sequencesManipulator.createManipulatedSequences(rawSequences);
+
+			return evaluationHelper.checkConstraints(fullSequences, null);
+		}
+	}
+
 	public IMultiStateResult runSandbox(final IProgressMonitor progressMonitor) {
 
 		final List<String> hints = new LinkedList<>();
@@ -216,11 +236,19 @@ public class SandboxManualRunner {
 				for (final Pair<BaseCase, ScheduleSpecification> p : specifications) {
 					final ScheduleSpecificationTransformer transformer = injector.getInstance(ScheduleSpecificationTransformer.class);
 					final ISequences base = transformer.createSequences(p.getSecond(), bridge.getDataTransformer(), false);
-					results.add(base);
+
+					// Check hard constraints are fine
+					if (checkSequenceSatifiesConstraints(bridge.getDataTransformer(), base)) {
+						results.add(base);
+					}
+
 					progressMonitor.worked(1);
 				}
 			});
-			// Not Really the best
+			if (results.isEmpty()) {
+				return null;
+			}
+			// Not really the best
 			final ISequences base = results.get(0);
 			final List<NonNullPair<ISequences, Map<String, Object>>> solutions = results.stream()//
 					.map(s -> new NonNullPair<ISequences, Map<String, Object>>(s, new HashMap<>())) //
@@ -302,52 +330,6 @@ public class SandboxManualRunner {
 				if (row.getSellOption() instanceof OpenSell) {
 					row.setSellOption(null);
 				}
-
-				if (row.getBuyOption() != null && row.getSellOption() != null) {
-					BuyOption buyOption = row.getBuyOption();
-					SellOption sellOption = row.getSellOption();
-					if (AnalyticsBuilder.isDESPurchase().test(buyOption) && AnalyticsBuilder.isFOBSale().test(sellOption)) {
-						return;
-					}
-
-					Port buyPort = AnalyticsBuilder.getPort(buyOption);
-					Port sellPort = AnalyticsBuilder.getPort(sellOption);
-					if (AnalyticsBuilder.isDESPurchase().test(buyOption)) {
-
-						if (buyPort != null && buyPort != sellPort) {
-							// Only valid if divertible
-							if (buyOption instanceof BuyReference) {
-								BuyReference buyReference = (BuyReference) buyOption;
-								LoadSlot s = buyReference.getSlot();
-								if (s != null && s.getDesPurchaseDealType() == DESPurchaseDealType.DEST_ONLY) {
-									return;
-								}
-							} else {
-								// Other options are assumed to be DEST_ONLY
-								return;
-							}
-						}
-
-					} else if (AnalyticsBuilder.isFOBSale().test(sellOption)) {
-
-						if (sellPort != null && buyPort != sellPort) {
-							// Only valid if divertible
-							if (sellOption instanceof SellReference) {
-								SellReference sellyReference = (SellReference) sellOption;
-								DischargeSlot s = sellyReference.getSlot();
-								if (s != null && s.getFobSaleDealType() == FOBSaleDealType.SOURCE_ONLY) {
-									return;
-								}
-							} else {
-								// Other options are assumed to be SOURCE_ONLY
-								return;
-							}
-						}
-
-					}
-
-				}
-
 			}
 			filterShipping(copy);
 			tasks.add(copy);

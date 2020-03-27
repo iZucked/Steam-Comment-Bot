@@ -43,6 +43,7 @@ import com.mmxlabs.models.lng.parameters.SolutionBuilderSettings;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.chain.impl.InitialSequencesModule;
+import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.InitialPhaseOptimisationDataModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.InputSequencesModule;
@@ -188,7 +189,11 @@ public class ScheduleSpecificationHelper {
 		hints.add(LNGTransformerHelper.HINT_DISABLE_CACHES);
 
 		final SolutionBuilderSettings solutionBuilderSettings = ParametersFactory.eINSTANCE.createSolutionBuilderSettings();
-		solutionBuilderSettings.setConstraintAndFitnessSettings(ParametersFactory.eINSTANCE.createConstraintAndFitnessSettings());
+		solutionBuilderSettings.setConstraintAndFitnessSettings(ScenarioUtils.createDefaultConstraintAndFitnessSettings());
+		// Ignore objectives
+		solutionBuilderSettings.getConstraintAndFitnessSettings().getObjectives().clear();
+		
+		
 		final int cores = LNGScenarioChainBuilder.getNumberOfAvailableCores();
 		final LNGScenarioToOptimiserBridge bridge = new LNGScenarioToOptimiserBridge(scenarioDataProvider, //
 				scenarioInstance, //

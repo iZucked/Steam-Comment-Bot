@@ -26,6 +26,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -40,6 +41,8 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.transformer.its.RequireFeature;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
+import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 @ExtendWith(ShiroRunner.class)
@@ -372,4 +375,206 @@ public class SandboxTests extends AbstractSandboxTestCase {
 		Assertions.assertFalse(result.getOptions().isEmpty());
 	}
 
+	@Test
+	public void testDerive_DESDES() {
+
+		Port futtsu = portFinder.findPortById("L_JP_Futts");
+		Port osaka = portFinder.findPortById("L_JP_Osaka");
+
+		LoadSlot dp1 = cargoModelBuilder.createDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2010, 1, 1), futtsu, null, entity, "5", 22.6, null);
+
+		// Valid match
+		DischargeSlot ds1 = cargoModelBuilder.createDESSale("DS1", LocalDate.of(2010, 1, 1), futtsu, null, entity, "7");
+		// Wrong port
+		DischargeSlot ds2 = cargoModelBuilder.createDESSale("DS2", LocalDate.of(2010, 1, 1), osaka, null, entity, "7");
+		// Wrong window
+		DischargeSlot ds3 = cargoModelBuilder.createDESSale("DS3", LocalDate.of(2010, 2, 1), futtsu, null, entity, "7");
+
+		final SandboxModelBuilder sandboxBuilder = SandboxModelBuilder.createSandbox(ScenarioModelUtil.getAnalyticsModel(scenarioDataProvider));
+
+		sandboxBuilder.setPortfolioMode(false);
+		sandboxBuilder.setPortfolioBreakevenMode(false);
+		sandboxBuilder.setManualSandboxMode();
+
+		final BuyOption buy1 = sandboxBuilder.createBuyReference(dp1);
+
+		final SellOption sell1 = sandboxBuilder.createSellReference(ds1);
+		final SellOption sell2 = sandboxBuilder.createSellReference(ds2);
+		final SellOption sell3 = sandboxBuilder.createSellReference(ds3);
+
+		sandboxBuilder.createBaseCaseRow(buy1, null, null);
+
+		sandboxBuilder.makePartialCaseRow() //
+				.withBuyOptions(buy1) //
+				.withSellOptions(sell1, sell2, sell3) //
+				.build();
+
+		evaluateSandbox(sandboxBuilder.getOptionAnalysisModel());
+
+		final AbstractSolutionSet result = sandboxBuilder.getOptionAnalysisModel().getResults();
+		Assertions.assertNotNull(result);
+
+		// Check expected results size
+		Assertions.assertNotNull(result.getBaseOption());
+		Assertions.assertEquals(1, result.getOptions().size());
+
+		// Check expected extra data items
+		Assertions.assertEquals(0, result.getExtraSlots().size());
+		Assertions.assertEquals(0, result.getExtraCharterInMarkets().size());
+		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
+		Assertions.assertEquals(0, result.getExtraVesselAvailabilities().size());
+		Assertions.assertEquals(0, result.getExtraVesselEvents().size());
+
+		{ // Only valid solution is dp1 to ds1.
+			final SolutionOption option = result.getOptions().get(0);
+
+			final CargoAllocation cargoAllocation = option.getScheduleModel().getSchedule().getCargoAllocations().get(0);
+
+			Assertions.assertSame(dp1, cargoAllocation.getSlotAllocations().get(0).getSlot());
+			Assertions.assertSame(ds1, cargoAllocation.getSlotAllocations().get(1).getSlot());
+
+		}
+	}
+
+	@Test
+	public void testDerive_FOBFOB() {
+
+		Port onslow = portFinder.findPortById("L_AU_Onslo");
+		Port pluto = portFinder.findPortById("L_AU_Pluto");
+
+		LoadSlot fp1 = cargoModelBuilder.createFOBPurchase("FP1", LocalDate.of(2010, 1, 1), onslow, null, entity, "5", 22.6);
+
+		// Valid match
+		DischargeSlot fs1 = cargoModelBuilder.createFOBSale("FS1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2010, 1, 1), onslow, null, entity, "7", null);
+		// Wrong port
+		DischargeSlot fs2 = cargoModelBuilder.createFOBSale("FS2", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2010, 1, 1), pluto, null, entity, "7", null);
+		// Wrong window
+		DischargeSlot fs3 = cargoModelBuilder.createFOBSale("FS3", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2010, 2, 1), onslow, null, entity, "7", null);
+
+		final SandboxModelBuilder sandboxBuilder = SandboxModelBuilder.createSandbox(ScenarioModelUtil.getAnalyticsModel(scenarioDataProvider));
+
+		sandboxBuilder.setPortfolioMode(false);
+		sandboxBuilder.setPortfolioBreakevenMode(false);
+		sandboxBuilder.setManualSandboxMode();
+
+		final BuyOption buy1 = sandboxBuilder.createBuyReference(fp1);
+
+		final SellOption sell1 = sandboxBuilder.createSellReference(fs1);
+		final SellOption sell2 = sandboxBuilder.createSellReference(fs2);
+		final SellOption sell3 = sandboxBuilder.createSellReference(fs3);
+
+		sandboxBuilder.createBaseCaseRow(buy1, null, null);
+
+		sandboxBuilder.makePartialCaseRow() //
+				.withBuyOptions(buy1) //
+				.withSellOptions(sell1, sell2, sell3) //
+				.build();
+
+		evaluateSandbox(sandboxBuilder.getOptionAnalysisModel());
+
+		final AbstractSolutionSet result = sandboxBuilder.getOptionAnalysisModel().getResults();
+		Assertions.assertNotNull(result);
+
+		// Check expected results size
+		Assertions.assertNotNull(result.getBaseOption());
+		Assertions.assertEquals(1, result.getOptions().size());
+
+		// Check expected extra data items
+		Assertions.assertEquals(0, result.getExtraSlots().size());
+		Assertions.assertEquals(0, result.getExtraCharterInMarkets().size());
+		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
+		Assertions.assertEquals(0, result.getExtraVesselAvailabilities().size());
+		Assertions.assertEquals(0, result.getExtraVesselEvents().size());
+
+		{ // Only valid solution is fp1 to fs1.
+			final SolutionOption option = result.getOptions().get(0);
+
+			final CargoAllocation cargoAllocation = option.getScheduleModel().getSchedule().getCargoAllocations().get(0);
+
+			Assertions.assertSame(fp1, cargoAllocation.getSlotAllocations().get(0).getSlot());
+			Assertions.assertSame(fs1, cargoAllocation.getSlotAllocations().get(1).getSlot());
+
+		}
+	}
+
+	@Test
+	public void testDerive_DESDESDivertFromSource() {
+
+		Port onslow = portFinder.findPortById("L_AU_Onslo");
+		Port futtsu = portFinder.findPortById("L_JP_Futts");
+		Port osaka = portFinder.findPortById("L_JP_Osaka");
+
+		Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
+
+		LoadSlot dp1 = cargoModelBuilder.createDESPurchase("DP1", DESPurchaseDealType.DIVERT_FROM_SOURCE, LocalDate.of(2010, 1, 1), onslow, null, entity, "5", 22.6, vessel);
+		dp1.setShippingDaysRestriction(25);
+
+		// Valid but late
+		DischargeSlot ds1 = cargoModelBuilder.createDESSale("DS1", LocalDate.of(2010, 1, 1), futtsu, null, entity, "7");
+		// Valid but late
+		DischargeSlot ds2 = cargoModelBuilder.createDESSale("DS2", LocalDate.of(2010, 1, 1), osaka, null, entity, "7");
+		// Outside of shipping days
+		DischargeSlot ds3 = cargoModelBuilder.createDESSale("DS3", LocalDate.of(2010, 2, 1), futtsu, null, entity, "7");
+
+		final SandboxModelBuilder sandboxBuilder = SandboxModelBuilder.createSandbox(ScenarioModelUtil.getAnalyticsModel(scenarioDataProvider));
+
+		sandboxBuilder.setPortfolioMode(false);
+		sandboxBuilder.setPortfolioBreakevenMode(false);
+		sandboxBuilder.setManualSandboxMode();
+
+		final BuyOption buy1 = sandboxBuilder.createBuyReference(dp1);
+
+		final SellOption sell1 = sandboxBuilder.createSellReference(ds1);
+		final SellOption sell2 = sandboxBuilder.createSellReference(ds2);
+		final SellOption sell3 = sandboxBuilder.createSellReference(ds3);
+
+		sandboxBuilder.createBaseCaseRow(buy1, null, null);
+
+		sandboxBuilder.makePartialCaseRow() //
+				.withBuyOptions(buy1) //
+				.withSellOptions(sell1, sell2, sell3) //
+				.build();
+
+		evaluateSandbox(sandboxBuilder.getOptionAnalysisModel());
+
+		final AbstractSolutionSet result = sandboxBuilder.getOptionAnalysisModel().getResults();
+		Assertions.assertNotNull(result);
+
+		// Check expected results size
+		Assertions.assertNotNull(result.getBaseOption());
+		Assertions.assertEquals(2, result.getOptions().size());
+
+		// Check expected extra data items
+		Assertions.assertEquals(0, result.getExtraSlots().size());
+		Assertions.assertEquals(0, result.getExtraCharterInMarkets().size());
+		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
+		Assertions.assertEquals(0, result.getExtraVesselAvailabilities().size());
+		Assertions.assertEquals(0, result.getExtraVesselEvents().size());
+
+		boolean ds1Solution = false;
+		boolean ds2Solution = false;
+		{
+			final SolutionOption option = result.getOptions().get(0);
+
+			final CargoAllocation cargoAllocation = option.getScheduleModel().getSchedule().getCargoAllocations().get(0);
+
+			Assertions.assertSame(dp1, cargoAllocation.getSlotAllocations().get(0).getSlot());
+			Slot<?> slot = cargoAllocation.getSlotAllocations().get(1).getSlot();
+			ds1Solution |= slot == ds1;
+			ds2Solution |= slot == ds2;
+
+		}
+		{
+			final SolutionOption option = result.getOptions().get(1);
+
+			final CargoAllocation cargoAllocation = option.getScheduleModel().getSchedule().getCargoAllocations().get(0);
+
+			Assertions.assertSame(dp1, cargoAllocation.getSlotAllocations().get(0).getSlot());
+			Slot<?> slot = cargoAllocation.getSlotAllocations().get(1).getSlot();
+			ds1Solution |= slot == ds1;
+			ds2Solution |= slot == ds2;
+		}
+
+		Assertions.assertTrue(ds1Solution && ds2Solution);
+	}
 }
