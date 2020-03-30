@@ -68,6 +68,9 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	/**
 	 */
 	public static final String DATA_END = "dataEnd";
+	
+	public static final String DATA_IMPORT = "dataImport";
+	public static final String DATA_EXPORT = "dataExport";
 
 	private final IWorkbenchWindow window;
 
@@ -433,6 +436,9 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	private MenuManager createDataMenu() {
 		final MenuManager menu = new MenuManager(DATA_MESSAGE, M_DATA);
 		menu.add(new GroupMarker(DATA_START));
+		menu.add(new GroupMarker(DATA_IMPORT));
+		menu.add(new Separator());
+		menu.add(new GroupMarker(DATA_EXPORT));
 		menu.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
 		menu.add(new GroupMarker(DATA_END));
 		return menu;

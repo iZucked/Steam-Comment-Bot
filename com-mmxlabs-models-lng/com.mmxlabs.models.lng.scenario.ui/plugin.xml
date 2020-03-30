@@ -77,6 +77,7 @@
      </extension>
      <extension
            point="org.eclipse.ui.menus">
+           <!-- Disabling the scenario browser import/export menus
          <menuContribution
                allPopups="false"
                locationURI="popup:com.mmxlabs.scenario.service.ui.navigator?after=importers">
@@ -133,32 +134,52 @@
                   </with>
                </visibleWhen>
             </command>
-         </menuContribution>
+         </menuContribution> 
+         -->
          <menuContribution
                allPopups="false"
                locationURI="menu:file?after=additions">
             <command
                   commandId="com.mmxlabs.shiplingo.platform.models.optimisation.ImportCSVScenario"
-                  label="Import Scenario"
+                  label="Import scenario from CSV"
+                  style="push">
+            </command>
+            <menu
+                  id="file_export"
+                  label="Export scenario to">
+            </menu>
+         </menuContribution>
+         <!-- Export menu -->
+         <menuContribution
+               allPopups="false"
+               locationURI="menu:file_export">
+               <command
+                  commandId="com.mmxlabs.shiplingo.platform.models.optimisation.ExportCSVScenario"
+                  label="CSV"
                   style="push">
             </command>
             <command
                   commandId="com.mmxlabs.models.lng.scenario.exportWizards.ExportLiNGOScenarioWizardHandler"
-                  label="Export as .lingo file"
+                  label=".lingo"
                   style="push">
             </command>
          </menuContribution>
          <!-- Data Menu-->
          <menuContribution
                allPopups="false"
-               locationURI="menu:data?after=dataStart">
+               locationURI="menu:data?after=dataImport">
+            <command
+                  commandId="EmptyImportCommand"
+                  label="Import:"
+                  style="push">
+            </command>
             <menu
                   id="data_curves"
-                  label="Import curves">
+                  label="Curves">
             </menu>
             <command
                   commandId="com.mmxlabs.models.lng.scenario.import.wizards.paperdeals"
-                  label="Import paper deals"
+                  label="Paper deals"
                   style="push">
  				<visibleWhen
                      checkEnabled="false">
@@ -171,7 +192,7 @@
             </command>
             <command
                   commandId="com.mmxlabs.models.lng.scenario.import.wizards.nominations"
-                  label="Import nominations"
+                  label="Nominations"
                   style="push">
  				<visibleWhen
                      checkEnabled="false">
@@ -184,10 +205,9 @@
             </command>
             <command
                   commandId="com.mmxlabs.models.lng.scenario.importWizards.BulkImportCargoHandler"
-                  label="Import cargoes"
+                  label="Cargoes"
                   style="push">
             </command>
-     
             <menu
                   id="data_ref"
                   label="Other">
@@ -196,9 +216,18 @@
                   id="data_ref_mmx"
                   label="LiNGO DB">
             </menu>
+         </menuContribution>
+         <menuContribution
+               allPopups="false"
+               locationURI="menu:data?after=dataExport">
+            <command
+                  commandId="EmptyExportCommand"
+                  label="Export:"
+                  style="push">
+            </command>
             <command
                   commandId="com.mmxlabs.shiplingo.platform.models.optimisation.ExportAllCurves"
-                  label="Export combined curves"
+                  label="Combined curves"
                   style="push">                
             </command>
          </menuContribution>
@@ -208,7 +237,7 @@
             <!--
             <command
                   commandId="com.mmxlabs.models.lng.scenario.ui.import.inventory"
-                  label="Import inventory"
+                  label="Inventory"
                   style="push">
                <visibleWhen
                      checkEnabled="false">
@@ -268,7 +297,7 @@
                locationURI="menu:data_ref">
             <command
                   commandId="com.mmxlabs.models.lng.scenario.import.wizards.pricingcalendars"
-                  label="Import pricing calendars"
+                  label="Pricing calendars"
                   style="push">
                <visibleWhen
                      checkEnabled="false">
@@ -281,7 +310,7 @@
             </command>
             <command
                   commandId="com.mmxlabs.models.lng.scenario.import.wizards.holidaycalendars"
-                  label="Import holiday calendars"
+                  label="Holiday calendars"
                   style="push">
                <visibleWhen
                      checkEnabled="false">
@@ -294,7 +323,7 @@
             </command>
             <command
                   commandId="com.mmxlabs.models.lng.scenario.import.wizards.portcosts"
-                  label="Import port costs"
+                  label="Port costs"
                   style="push">
             </command>
          </menuContribution>
@@ -304,7 +333,7 @@
                locationURI="menu:data?after=com.mmxlabs.models.lng.scenario.importWizards.BulkImportCargoHandler">
             <command
                   commandId="com.mmxlabs.models.lng.scenario.mergeWizards.SharedScenarioDataImport"
-                  label="Import Shared Scenario Data"
+                  label="Shared Scenario Data"
                   style="push">
             </command>
          </menuContribution>
