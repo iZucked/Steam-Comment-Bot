@@ -32,11 +32,15 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.license.ssl.internal.Activator;
 
 /**
- * A simple class to load a license - a SSL certificate from a disk location and verify it has been signed by the "root" key in the embedded keystore and that it is still in date.
+ * A simple class to load a license - a SSL certificate from a disk location and
+ * verify it has been signed by the "root" key in the embedded keystore and that
+ * it is still in date.
  * 
  * @author Simon Goodall
  */
 public final class LicenseChecker {
+
+	private static final String LICENSE_FILE_PROPERTY = "lingo.license.file";
 
 	@SuppressWarnings("serial")
 	public static class InvalidLicenseException extends Exception {
@@ -120,7 +124,10 @@ public final class LicenseChecker {
 			// Load the license file
 			KeyStore licenseKeystore = null;
 			{
-				licenseKeystore = getEclipseHomeLicense();
+				licenseKeystore = getLicenseFromSystemProperty();
+				if (licenseKeystore == null) {
+					licenseKeystore = getEclipseHomeLicense();
+				}
 				if (licenseKeystore == null) {
 					licenseKeystore = getUserDataLicense();
 				}
@@ -230,6 +237,32 @@ public final class LicenseChecker {
 				// Maybe better to catch some of these exception types and feedback to user?
 			}
 		}
+		return null;
+	}
+
+	private static KeyStore getLicenseFromSystemProperty() {
+
+		final String licenseFile = System.getProperty(LICENSE_FILE_PROPERTY);
+		if (licenseFile != null) {
+			try {
+				final File f = new File(licenseFile);
+				if (f.exists()) {
+					try {
+						try (InputStream inStream = new FileInputStream(f)) {
+							final KeyStore instance = KeyStore.getInstance("PKCS12");
+							instance.load(inStream, password.toCharArray());
+							return instance;
+						}
+					} catch (final IOException | NoSuchAlgorithmException | KeyStoreException e) {
+						// Ignore
+						// Maybe better to catch some of these exception types and feedback to user?
+					}
+				}
+			} catch (Exception e) {
+				//
+			}
+		}
+
 		return null;
 	}
 
