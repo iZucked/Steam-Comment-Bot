@@ -25,4 +25,10 @@
             restorable="true">
       </view>
    </extension>
+   <extension point="com.mmxlabs.models.common.modelcommandprovider">
+    	<ModelCommandProvider
+          commandProvider="com.mmxlabs.models.lng.analytics.ui.commands.SandboxLoadSlotUpdatingCommandProvider"
+          id="com.mmxlabs.models.lng.analytics.ui.commands.SandboxLoadSlotUpdatingCommandProvider">
+    	</ModelCommandProvider>
+    </extension>
 </plugin>
