@@ -91,6 +91,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.ScrollBar;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Widget;
@@ -2074,7 +2075,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	}
 
 	private enum TimeFilterType {
-		NONE, YEARMONTH, PROMPT
+		NONE, YEARMONTH, PROMPT, CURRENT
 	}
 
 	private class TimePeriodFilter extends ViewerFilter {
@@ -2093,6 +2094,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					return checkYearMonth(row, choice);
 				case PROMPT:
 					return checkPrompt(row, promptMonth);
+				case CURRENT:
+					return checkCurrent(row);
 				}
 			}
 			return false;
@@ -2157,6 +2160,41 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					return true;
 				}
 				if (end.isAfter(today) && end.isBefore(prompt)) {
+					return true;
+				}
+			}
+
+			return result;
+		}
+		
+		private boolean checkCurrent(final RowData row) {
+			final boolean result = false;
+			LocalDate start = null;
+			LocalDate end = null;
+			final LocalDate today = LocalDate.now();
+			final LoadSlot ls = row.getLoadSlot();
+			if (ls != null) {
+				start = ls.getSchedulingTimeWindow().getStart().toLocalDate();
+				end = ls.getSchedulingTimeWindow().getEnd().toLocalDate();
+			}
+			if (start != null && end != null) {
+				if (start.isAfter(today)) {
+					return true;
+				}
+				if (end.isAfter(today)) {
+					return true;
+				}
+			}
+			final DischargeSlot ds = row.getDischargeSlot();
+			if (ds != null) {
+				start = ds.getSchedulingTimeWindow().getStart().toLocalDate();
+				end = ds.getSchedulingTimeWindow().getEnd().toLocalDate();
+			}
+			if (start != null && end != null) {
+				if (start.isAfter(today)) {
+					return true;
+				}
+				if (end.isAfter(today)) {
 					return true;
 				}
 			}
@@ -2289,12 +2327,21 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			};
 			addActionToMenu(dmcaShippedCargos, menu);
 
-			final DefaultMenuCreatorAction dmcaTimePeriod = new DefaultMenuCreatorAction("Months") {
+			final DefaultMenuCreatorAction dmcaTimePeriod = new DefaultMenuCreatorAction("Period") {
 
 				@Override
 				protected void populate(final Menu menu) {
+					
+					final Action currentAction = new Action("Today onwards") {
+						@Override
+						public void run() {
+							monthFilter.type = TimeFilterType.CURRENT;
+							scenarioViewer.refresh(false);
+						}
+					};
+					addActionToMenu(currentAction, menu);
 
-					final Action fooAction = new Action("Prompt") {
+					final Action promptAction = new Action("Today +3m") {
 						@Override
 						public void run() {
 							monthFilter.type = TimeFilterType.PROMPT;
@@ -2302,7 +2349,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 							scenarioViewer.refresh(false);
 						}
 					};
-					addActionToMenu(fooAction, menu);
+					addActionToMenu(promptAction, menu);
+					
+					new MenuItem(menu, SWT.SEPARATOR);
 
 					buildMonth(earliest, latest, menu);
 				}
@@ -2315,6 +2364,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 					while (!yme.isBefore(yms.plusMonths(i))) {
 						final YearMonth ymc = yms.plusMonths(i);
+						if (i != 0 && ymc.getMonthValue() == 1) {
+							new MenuItem(menu, SWT.SEPARATOR);
+						}
 						final Action fooAction = new Action(formatMe(ymc, firstYear != ymc.getYear())) {
 							@Override
 							public void run() {
@@ -2332,7 +2384,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				private String formatMe(final YearMonth val, final boolean showYear) {
 					String result = String.format("%s", val.getMonth().getDisplayName(TextStyle.SHORT, Locale.getDefault()));
 					if (showYear) {
-						result += String.format(" %d", (val.getYear() % 100));
+						result += String.format(" '%d", (val.getYear() % 100));
 					}
 					return result;
 				}
