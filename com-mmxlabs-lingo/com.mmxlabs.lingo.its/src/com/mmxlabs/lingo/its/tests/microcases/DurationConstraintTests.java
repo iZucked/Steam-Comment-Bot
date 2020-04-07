@@ -471,7 +471,8 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
 
 				final IResource r0 = initialSequences.getResources().get(0);
-
+				Assertions.assertEquals(3, records.get(r0).size());
+				
 				final IPortTimeWindowsRecord ptr_r0_cargo = records.get(r0).get(0);
 				final IPortTimeWindowsRecord ptr_r1_cargo = records.get(r0).get(1);
 				final IPortTimeWindowsRecord ptr_r2_cargo = records.get(r0).get(2);
