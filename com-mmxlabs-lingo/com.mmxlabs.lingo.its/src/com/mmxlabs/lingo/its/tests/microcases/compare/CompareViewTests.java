@@ -14,6 +14,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -80,6 +81,7 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
 import com.mmxlabs.models.lng.types.DESPurchaseDealType;
+import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
@@ -485,16 +487,19 @@ public class CompareViewTests {
 			maker.cargoModelBuilder.makeCargo() //
 					// Purchase
 					.makeFOBPurchase("FP1", LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Point Fortin"), null, maker.entity, "5") //
+					.withWindowSize(0, TimePeriod.HOURS) //
 					.withOptional(true) //
 					.withCancellationFee("50000") //
 					.build() //
 					// Sale
 					.makeDESSale("DS1", LocalDate.of(2015, 02, 10), maker.portFinder.findPort("Dahej"), null, maker.entity, "5") //
+					.withWindowSize(0, TimePeriod.HOURS) //
 					.withOptional(true) //
 					.withCancellationFee("60000") //
 					.build() //
 
 					.makeDESSale("DS2", LocalDate.of(2015, 03, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5") //
+					.withWindowSize(0, TimePeriod.HOURS) //
 					.withOptional(true) //
 					.withCancellationFee("70000") //
 					.build() //

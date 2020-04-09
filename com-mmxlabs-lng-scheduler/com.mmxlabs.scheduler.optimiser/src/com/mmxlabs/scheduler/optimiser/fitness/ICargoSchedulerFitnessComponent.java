@@ -12,7 +12,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
+import com.mmxlabs.scheduler.optimiser.evaluation.VoyagePlanRecord;
 
 /**
  * Extension of the {@link IFitnessComponent} interface for use with the {@link CargoSchedulerFitnessCore} to provide fitnesses based on {@link ISequence}s scheduled with an {@link ISequenceScheduler}
@@ -45,7 +45,7 @@ public interface ICargoSchedulerFitnessComponent extends ICargoFitnessComponent 
 	 * @param time
 	 * @return
 	 */
-	boolean nextVoyagePlan(@NonNull final VoyagePlan voyagePlan, final int time);
+	boolean nextVoyagePlan(@NonNull VoyagePlanRecord voyagePlan, int time);
 
 	/**
 	 * Evaluate an object from the sequence, either a VoyageDetails or a PortDetails

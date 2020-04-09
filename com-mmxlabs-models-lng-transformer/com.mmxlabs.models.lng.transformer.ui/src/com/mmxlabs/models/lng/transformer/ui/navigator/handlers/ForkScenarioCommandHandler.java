@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.transformer.ui.navigator.handlers;
 
 import java.io.IOException;
 import java.util.Iterator;
+
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;

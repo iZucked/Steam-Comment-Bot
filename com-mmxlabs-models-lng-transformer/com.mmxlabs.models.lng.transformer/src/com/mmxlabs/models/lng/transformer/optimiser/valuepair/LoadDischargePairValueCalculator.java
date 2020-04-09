@@ -242,7 +242,8 @@ public class LoadDischargePairValueCalculator {
 			if ((nominalVessel != vesselAvailability) || (isValidPair(loadOption, dischargeOption, vesselAvailability, vessels))) {
 				final Pair<IAnnotatedSolution, EvaluationState> result = evaluate(loadOption, dischargeOption, vesselAvailability);
 				if (result != null) {
-					recorder.record(loadOption, dischargeOption, vesselAvailability, result);
+					IResource resource = vesselProvider.getResource(vesselAvailability);
+					recorder.record(loadOption, dischargeOption, resource, result);
 				} else {
 					// System.out.printf("Failed Pair %s -> %s\n", loadOption.getId(), dischargeOption.getId());
 				}

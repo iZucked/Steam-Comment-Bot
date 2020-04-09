@@ -57,6 +57,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scheduler.optimiser.scheduling.PNLBasedWindowTrimmer;
 import com.mmxlabs.scheduler.optimiser.scheduling.ScheduledTimeWindows;
 import com.mmxlabs.scheduler.optimiser.scheduling.TimeWindowScheduler;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
@@ -108,15 +109,16 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 		return scenarioDataProvider;
 	}
 
-	private Cargo createFobDesCargo(final VesselAvailability vesselAvailability, final Port loadPort, final Port dischargePort, final LocalDateTime loadDate, final LocalDateTime dischargeDate) {
+	private Cargo createFobDesCargo(int num, final VesselAvailability vesselAvailability, final Port loadPort, final Port dischargePort, final LocalDateTime loadDate,
+			final LocalDateTime dischargeDate) {
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L", loadDate.toLocalDate(), loadPort, null, entity, "5") //
+				.makeFOBPurchase(String.format("L-%d", num), loadDate.toLocalDate(), loadPort, null, entity, "5") //
 				.withWindowStartTime(0) //
 				.withVisitDuration(24) //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				//
-				.makeDESSale("D", dischargeDate.toLocalDate(), dischargePort, null, entity, "7") //
+				.makeDESSale(String.format("D-%d", num), dischargeDate.toLocalDate(), dischargePort, null, entity, "7") //
 				.withWindowStartTime(dischargeDate.toLocalTime().getHour()) //
 				.withVisitDuration(24) //
 				.withWindowSize(0, TimePeriod.HOURS) //
@@ -154,7 +156,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
 		final LocalDateTime dischargeDate = loadDate.plusDays(13);
 
-		final Cargo cargo = createFobDesCargo(vesselAvailability, port1, port2, loadDate, dischargeDate);
+		final Cargo cargo = createFobDesCargo(1, vesselAvailability, port1, port2, loadDate, dischargeDate);
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
@@ -207,9 +209,9 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
 		final LocalDateTime dischargeDate = loadDate.plusDays(13);
 
-		final Cargo cargo = createFobDesCargo(vesselAvailability, port1, port2, loadDate, dischargeDate);
+		final Cargo cargo = createFobDesCargo(1, vesselAvailability, port1, port2, loadDate, dischargeDate);
 
-		final Cargo cargo2 = createFobDesCargo(vesselAvailability2, port1, port2, loadDate, dischargeDate);
+		final Cargo cargo2 = createFobDesCargo(2, vesselAvailability2, port1, port2, loadDate, dischargeDate);
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
@@ -228,7 +230,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
 				scheduler.setUseCanalBasedWindowTrimming(true);
 				scheduler.setUsePriceBasedWindowTrimming(false);
-				final ScheduledTimeWindows schedule = scheduler.schedule(manipulatedSequences);
+				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(manipulatedSequences);
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
 
 				final IResource r0 = manipulatedSequences.getResources().get(0);
@@ -262,7 +264,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.AUGUST, 1, 0, 0, 0);
 		final LocalDateTime dischargeDate = loadDate.plusDays(10);
 
-		final Cargo cargo = createFobDesCargo(vesselAvailability, port1, port2, loadDate, dischargeDate);
+		final Cargo cargo = createFobDesCargo(1, vesselAvailability, port1, port2, loadDate, dischargeDate);
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
@@ -279,7 +281,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
 				scheduler.setUseCanalBasedWindowTrimming(true);
 				scheduler.setUsePriceBasedWindowTrimming(false);
-				final ScheduledTimeWindows schedule = scheduler.schedule(manipulatedSequences);
+				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(manipulatedSequences);
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
 
 				final IResource r0 = manipulatedSequences.getResources().get(0);
@@ -310,7 +312,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
 		final LocalDateTime dischargeDate = loadDate.plusDays(13);
 
-		final Cargo cargo = createFobDesCargo(vesselAvailability, port1, port2, loadDate, dischargeDate);
+		final Cargo cargo = createFobDesCargo(1, vesselAvailability, port1, port2, loadDate, dischargeDate);
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
@@ -329,7 +331,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
 				scheduler.setUseCanalBasedWindowTrimming(true);
 				scheduler.setUsePriceBasedWindowTrimming(false);
-				final ScheduledTimeWindows schedule = scheduler.schedule(manipulatedSequences);
+				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(manipulatedSequences);
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
 
 				final IResource r0 = manipulatedSequences.getResources().get(0);
@@ -360,7 +362,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
 		final LocalDateTime dischargeDate = loadDate.plusDays(13);
 
-		final Cargo cargo = createFobDesCargo(vesselAvailability, port1, port2, loadDate, dischargeDate);
+		final Cargo cargo = createFobDesCargo(1, vesselAvailability, port1, port2, loadDate, dischargeDate);
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
@@ -377,7 +379,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
 				scheduler.setUseCanalBasedWindowTrimming(true);
 				scheduler.setUsePriceBasedWindowTrimming(false);
-				final ScheduledTimeWindows schedule = scheduler.schedule(manipulatedSequences);
+				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(manipulatedSequences);
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
 
 				final IResource r0 = manipulatedSequences.getResources().get(0);
@@ -407,7 +409,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
 		final LocalDateTime dischargeDate = loadDate.plusDays(13);
 
-		final Cargo cargo = createFobDesCargo(vesselAvailability, port1, port2, loadDate, dischargeDate);
+		final Cargo cargo = createFobDesCargo(1, vesselAvailability, port1, port2, loadDate, dischargeDate);
 
 		cargoModelBuilder.makeCanalBooking(RouteOption.PANAMA, CanalEntry.NORTHSIDE, LocalDate.of(2017, Month.JUNE, 7), cargo.getSortedSlots().get(0));
 
@@ -425,7 +427,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
 				scheduler.setUseCanalBasedWindowTrimming(true);
 				scheduler.setUsePriceBasedWindowTrimming(false);
-				final ScheduledTimeWindows schedule = scheduler.schedule(manipulatedSequences);
+				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(manipulatedSequences);
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
 
 				final IResource r0 = manipulatedSequences.getResources().get(0);
@@ -463,8 +465,8 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
 		final LocalDateTime dischargeDate = loadDate.plusDays(13);
 
-		final Cargo cargo = createFobDesCargo(vesselAvailability, port1, port2, loadDate, dischargeDate);
-		final Cargo cargo2 = createFobDesCargo(vesselAvailability2, port1, port2, loadDate, dischargeDate);
+		final Cargo cargo = createFobDesCargo(1, vesselAvailability, port1, port2, loadDate, dischargeDate);
+		final Cargo cargo2 = createFobDesCargo(2, vesselAvailability2, port1, port2, loadDate, dischargeDate);
 
 		cargoModelBuilder.makeCanalBooking(RouteOption.PANAMA, CanalEntry.NORTHSIDE, LocalDate.of(2017, Month.JUNE, 7), cargo2.getSortedSlots().get(0));
 
@@ -485,7 +487,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
 				scheduler.setUseCanalBasedWindowTrimming(true);
 				scheduler.setUsePriceBasedWindowTrimming(false);
-				final ScheduledTimeWindows schedule = scheduler.schedule(manipulatedSequences);
+				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(manipulatedSequences);
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
 
 				final IResource r0 = manipulatedSequences.getResources().get(0);
@@ -520,7 +522,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
 		final LocalDateTime dischargeDate = loadDate.plusDays(25);
 
-		final Cargo cargo = createFobDesCargo(vesselAvailability, port1, port2, loadDate, dischargeDate);
+		final Cargo cargo = createFobDesCargo(1, vesselAvailability, port1, port2, loadDate, dischargeDate);
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
@@ -539,7 +541,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
 				scheduler.setUseCanalBasedWindowTrimming(true);
 				scheduler.setUsePriceBasedWindowTrimming(false);
-				final ScheduledTimeWindows schedule = scheduler.schedule(manipulatedSequences);
+				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(manipulatedSequences);
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
 
 				final IResource r0 = manipulatedSequences.getResources().get(0);
@@ -573,7 +575,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 		// journey could be made direct
 		final LocalDateTime dischargeDate = loadDate.plusDays(30);
 
-		final Cargo cargo = createFobDesCargo(vesselAvailability, port1, port2, loadDate, dischargeDate);
+		final Cargo cargo = createFobDesCargo(1, vesselAvailability, port1, port2, loadDate, dischargeDate);
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
@@ -590,7 +592,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
 				scheduler.setUseCanalBasedWindowTrimming(true);
 				scheduler.setUsePriceBasedWindowTrimming(false);
-				final ScheduledTimeWindows schedule = scheduler.schedule(manipulatedSequences);
+				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(manipulatedSequences);
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
 
 				final IResource r0 = manipulatedSequences.getResources().get(0);
@@ -625,7 +627,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
 		final LocalDateTime dischargeDate = loadDate.plusDays(10);
 
-		final Cargo cargo = createFobDesCargo(vesselAvailability, port1, port2, loadDate, dischargeDate);
+		final Cargo cargo = createFobDesCargo(1, vesselAvailability, port1, port2, loadDate, dischargeDate);
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
@@ -642,7 +644,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
 				scheduler.setUseCanalBasedWindowTrimming(true);
 				scheduler.setUsePriceBasedWindowTrimming(false);
-				final ScheduledTimeWindows schedule = scheduler.schedule(manipulatedSequences);
+				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(manipulatedSequences);
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
 
 				final IResource r0 = manipulatedSequences.getResources().get(0);
@@ -728,7 +730,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
 				scheduler.setUseCanalBasedWindowTrimming(true);
 				scheduler.setUsePriceBasedWindowTrimming(false);
-				final ScheduledTimeWindows schedule = scheduler.schedule(manipulatedSequences);
+				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(manipulatedSequences);
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
 
 				final IResource r0 = manipulatedSequences.getResources().get(0);
@@ -770,7 +772,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
 		final LocalDateTime dischargeDate = loadDate.plusDays(30);
 
-		final Cargo cargoUnrelevant = createFobDesCargo(vesselAvailability, port1, portUnrelevant, startDate, startDate.plusDays(6));
+		final Cargo cargoUnrelevant = createFobDesCargo(1, vesselAvailability, port1, portUnrelevant, startDate, startDate.plusDays(6));
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L2", loadDate.toLocalDate(), port1, null, entity, "5") //
 				.withWindowStartTime(0) //
@@ -803,7 +805,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
 				scheduler.setUseCanalBasedWindowTrimming(true);
 				scheduler.setUsePriceBasedWindowTrimming(false);
-				final ScheduledTimeWindows schedule = scheduler.schedule(manipulatedSequences);
+				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(manipulatedSequences);
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
 
 				final IResource r0 = manipulatedSequences.getResources().get(0);
@@ -873,7 +875,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
 				scheduler.setUseCanalBasedWindowTrimming(true);
 				scheduler.setUsePriceBasedWindowTrimming(false);
-				final ScheduledTimeWindows schedule = scheduler.schedule(manipulatedSequences);
+				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(manipulatedSequences);
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
 
 				final IResource r0 = manipulatedSequences.getResources().get(0);
@@ -951,7 +953,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
 				scheduler.setUseCanalBasedWindowTrimming(true);
 				scheduler.setUsePriceBasedWindowTrimming(false);
-				final ScheduledTimeWindows schedule = scheduler.schedule(manipulatedSequences);
+				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(manipulatedSequences);
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
 
 				final IResource r0 = manipulatedSequences.getResources().get(0);
@@ -1030,7 +1032,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
 				scheduler.setUseCanalBasedWindowTrimming(true);
 				scheduler.setUsePriceBasedWindowTrimming(false);
-				final ScheduledTimeWindows schedule = scheduler.schedule(manipulatedSequences);
+				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(manipulatedSequences);
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
 
 				final IResource r0 = manipulatedSequences.getResources().get(0);
@@ -1112,7 +1114,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
 				scheduler.setUseCanalBasedWindowTrimming(true);
 				scheduler.setUsePriceBasedWindowTrimming(false);
-				final ScheduledTimeWindows schedule = scheduler.schedule(manipulatedSequences);
+				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(manipulatedSequences);
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
 
 				final IResource r0 = manipulatedSequences.getResources().get(0);
@@ -1186,7 +1188,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
 				scheduler.setUseCanalBasedWindowTrimming(true);
 				scheduler.setUsePriceBasedWindowTrimming(false);
-				final ScheduledTimeWindows schedule = scheduler.schedule(manipulatedSequences);
+				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(manipulatedSequences);
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
 
 				final IResource r0 = manipulatedSequences.getResources().get(0);

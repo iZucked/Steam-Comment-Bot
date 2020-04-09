@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lingo.its.tests.microcases;
 
-import java.net.MalformedURLException;
 import java.time.LocalDate;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -268,6 +267,27 @@ public abstract class AbstractMicroTestCase {
 	public void evaluateTest() {
 		evaluateTest(null, null, runner -> {
 		});
+	}
+
+	public void evaluateTestWith(IOptimiserInjectorService s) {
+		// Create UserSettings
+		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
+		userSettings.setBuildActionSets(false);
+		userSettings.setGenerateCharterOuts(false);
+		userSettings.setShippingOnly(false);
+		userSettings.setSimilarityMode(SimilarityMode.OFF);
+
+		LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null) //
+				.withUserSettings(userSettings) //
+				.withOptimiserInjectorService(s) //
+				.withThreadCount(getThreadCount()) //
+				.buildDefaultRunner();
+
+		try {
+			runnerBuilder.evaluateInitialState();
+		} finally {
+			runnerBuilder.dispose();
+		}
 	}
 
 	public void evaluateTest(@Nullable final Consumer<OptimisationPlan> tweaker, @Nullable final Function<LNGScenarioRunner, IRunnerHook> runnerHookFactory,

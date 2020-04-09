@@ -38,6 +38,7 @@ import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.IBallastBonusContract;
@@ -61,15 +62,15 @@ public class BallastBonusContractTransformer implements IBallastBonusContractTra
 	private Injector injector;
 
 	@Inject
-	@Named(LNGTransformerModule.Parser_Commodity)
+	@Named(SchedulerConstants.Parser_Commodity)
 	private SeriesParser commodityIndices;
 
 	@Inject
-	@Named(LNGTransformerModule.Parser_BaseFuel)
+	@Named(SchedulerConstants.Parser_BaseFuel)
 	private SeriesParser fuelIndices;
 
 	@Inject
-	@Named(LNGTransformerModule.Parser_Charter)
+	@Named(SchedulerConstants.Parser_Charter)
 	private SeriesParser charterIndices;
 
 	@Inject

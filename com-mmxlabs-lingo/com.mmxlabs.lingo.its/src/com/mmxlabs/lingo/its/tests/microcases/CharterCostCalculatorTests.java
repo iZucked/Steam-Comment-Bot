@@ -61,8 +61,8 @@ import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.CharterRateToCharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.WeightedAverageCharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
+import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
-import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService.ModuleType;
 import com.mmxlabs.scheduler.optimiser.peaberry.OptimiserInjectorServiceMaker;
@@ -323,15 +323,15 @@ public class CharterCostCalculatorTests extends AbstractMicroTestCase {
 			final IEvaluationState evaluationState = annotatedSolution.getEvaluationState();
 
 			@NonNull
-			final VolumeAllocatedSequences volumeAllocatedSequences = evaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, VolumeAllocatedSequences.class);
-			Assertions.assertNotNull(volumeAllocatedSequences);
+			final ProfitAndLossSequences profitAndLossSequences = evaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, ProfitAndLossSequences.class);
+			Assertions.assertNotNull(profitAndLossSequences);
 			
 			ShippingCostHelper shippingCostHelper = new ShippingCostHelper();
 			
-			for (VolumeAllocatedSequence vas : volumeAllocatedSequences) {
-				var vps = vas.getVoyagePlans();
+			for (VolumeAllocatedSequence vas : profitAndLossSequences) {
+				var vps = vas.getVoyagePlanRecords();
 				for (var vp : vps) {
-					charterCost += shippingCostHelper.getHireCosts(vp.getFirst());
+					charterCost += shippingCostHelper.getHireCosts(vp.getVoyagePlan());
 				}
 			}
 		}

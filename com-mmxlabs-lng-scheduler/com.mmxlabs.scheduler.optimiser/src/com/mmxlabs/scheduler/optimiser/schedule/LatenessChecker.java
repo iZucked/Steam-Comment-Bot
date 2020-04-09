@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.schedule;
 
+import java.util.List;
+
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -11,21 +13,23 @@ import com.google.inject.Inject;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
-import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.impl.IEndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
+import com.mmxlabs.scheduler.optimiser.evaluation.VoyagePlanRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
 import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
-import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
 
 /**
@@ -34,7 +38,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
 public class LatenessChecker {
 
 	@Inject
-	private IPortSlotProvider portSlotProvider;
+	private IVesselProvider vesselProvider;
 
 	@Inject
 	@NonNull
@@ -65,11 +69,10 @@ public class LatenessChecker {
 	 * @param allocations
 	 * @param annotatedSolution
 	 */
-	public void calculateLateness(final @NonNull VolumeAllocatedSequence volumeAllocatedSequence, @Nullable final IAnnotatedSolution annotatedSolution) {
-		final IResource resource = volumeAllocatedSequence.getResource();
-		assert resource != null;
-		for (final IPortSlot portSlot : volumeAllocatedSequence.getSequenceSlots()) {
-			ITimeWindow tw = getTW(portSlot, resource);
+	public void calculateLateness(final IResource resource, final @NonNull VoyagePlanRecord voyagePlanRecord, @Nullable final IAnnotatedSolution annotatedSolution) {
+		final IPortTimesRecord portTimesRecord = voyagePlanRecord.getPortTimesRecord();
+		for (final IPortSlot portSlot : portTimesRecord.getSlots()) {
+			final ITimeWindow tw = getTW(portSlot, resource);
 			if (tw == null) {
 				continue;
 			}
@@ -78,43 +81,70 @@ public class LatenessChecker {
 			final Interval interval = getInterval(tw);
 
 			// Used by fitness constraint
-			int latenessWithFlexInHours = getLatenessWithFlex(portSlot, tw, volumeAllocatedSequence.getArrivalTime(portSlot));
+			final int latenessWithFlexInHours = getLatenessWithFlex(portSlot, tw, portTimesRecord.getSlotTime(portSlot));
 
 			// Used only for export
-			int latenessWithoutFlexInHours = getLatenessWithoutFlex(portSlot, tw, volumeAllocatedSequence.getArrivalTime(portSlot));
-
-			// Check for max duration violation
-			int latenessMaxDurationInHours = 0;
-			if (portSlot instanceof IEndPortSlot) {
-				latenessMaxDurationInHours = getLatenessMaxDurationInHours(volumeAllocatedSequence, resource);
-				latenessWithoutFlexInHours = Math.max(latenessMaxDurationInHours, latenessWithoutFlexInHours);
-
-				// There is no latenessWith flex for the endEvent
-				latenessWithFlexInHours = Math.max(latenessMaxDurationInHours, latenessWithFlexInHours);
-			}
+			final int latenessWithoutFlexInHours = getLatenessWithoutFlex(portSlot, tw, portTimesRecord.getSlotTime(portSlot));
 
 			// For fitness component
 			final long weightedLateness = getWeightedLateness(interval, latenessWithFlexInHours);
 
 			// For own just add the max duration violation to the general lateness
-			// TODO: report max duration lateness as a separate lateness
-			if (latenessWithFlexInHours != 0 || weightedLateness != 0 || latenessWithoutFlexInHours != 0 || latenessMaxDurationInHours != 0) {
-				volumeAllocatedSequence.addLateness(portSlot, weightedLateness, interval, latenessWithFlexInHours, latenessWithoutFlexInHours);
+			if (latenessWithFlexInHours != 0 || weightedLateness != 0 || latenessWithoutFlexInHours != 0) {
+				voyagePlanRecord.addLateness(portSlot, weightedLateness, interval, latenessWithFlexInHours, latenessWithoutFlexInHours);
 			}
 
 			if (annotatedSolution != null) {
 				final ILatenessAnnotation annotation = new LatenessAnnotation(latenessWithFlexInHours, weightedLateness, interval, latenessWithoutFlexInHours, interval);
-				annotatedSolution.getElementAnnotations().setAnnotation(portSlotProvider.getElement(portSlot), SchedulerConstants.AI_latenessInfo, annotation);
+				setLatenessAnnotationsOnAnnotatedSolution(annotatedSolution, annotation);
+			}
+		}
+	}
+
+	public void calculateLateness(final @NonNull VolumeAllocatedSequence volumeAllocatedSequence, @Nullable final IAnnotatedSolution annotatedSolution) {
+		final IResource resource = volumeAllocatedSequence.getResource();
+		final VesselInstanceType type = vesselProvider.getVesselAvailability(resource).getVesselInstanceType();
+		if (type == VesselInstanceType.FLEET //
+				|| type == VesselInstanceType.TIME_CHARTER //
+				|| type == VesselInstanceType.SPOT_CHARTER) {
+
+			final VoyagePlanRecord vpr = volumeAllocatedSequence.getVoyagePlanRecords().get(volumeAllocatedSequence.getVoyagePlanRecords().size() - 1);
+			final IPortSlot portSlot = vpr.getPortTimesRecord().getFirstSlot();
+
+			int latenessMaxDurationInHours = getLatenessMaxDurationInHours(volumeAllocatedSequence, resource);
+
+			final ITimeWindow tw = getTW(portSlot, resource);
+			if (tw == null) {
+				return;
+			}
+
+			// Where in the scenario does the lateness occur?
+			final Interval interval = getInterval(tw);
+
+			// For fitness component
+			final long weightedLateness = getWeightedLateness(interval, latenessMaxDurationInHours);
+
+			// For own just add the max duration violation to the general lateness
+			if (weightedLateness != 0 || latenessMaxDurationInHours != 0) {
+				volumeAllocatedSequence.addMaxDurationLateness(weightedLateness, interval, latenessMaxDurationInHours);
+			}
+
+			if (annotatedSolution != null) {
+				final ILatenessAnnotation annotation = new LatenessAnnotation(latenessMaxDurationInHours, weightedLateness, interval, latenessMaxDurationInHours, interval);
 				setLatenessAnnotationsOnAnnotatedSolution(annotatedSolution, annotation);
 			}
 		}
 	}
 
 	private int getLatenessMaxDurationInHours(final VolumeAllocatedSequence volumeAllocatedSequence, @NonNull final IResource resource) {
-		final IPortSlot startSlot = volumeAllocatedSequence.getSequenceSlots().get(0);
-		final IPortSlot endSlot = volumeAllocatedSequence.getSequenceSlots().get(volumeAllocatedSequence.getSequenceSlots().size() - 1);
+		final List<VoyagePlanRecord> voyagePlanRecords = volumeAllocatedSequence.getVoyagePlanRecords();
+		final IPortTimesRecord startPortTimesRecord = voyagePlanRecords.get(0).getPortTimesRecord();
+		final IPortSlot startSlot = startPortTimesRecord.getSlots().get(0);
 
-		final int maxDeltaInHours = volumeAllocatedSequence.getArrivalTime(endSlot) - volumeAllocatedSequence.getArrivalTime(startSlot);
+		final IPortTimesRecord endPortTimesRecord = voyagePlanRecords.get(voyagePlanRecords.size() - 1).getPortTimesRecord();
+		final IPortSlot endSlot = endPortTimesRecord.getSlots().get(0);
+
+		final int maxDeltaInHours = endPortTimesRecord.getSlotTime(endSlot) - startPortTimesRecord.getSlotTime(startSlot);
 		int maxDurationInHours = 0;
 
 		final IEndRequirement req = startEndRequirementProvider.getEndRequirement(resource);

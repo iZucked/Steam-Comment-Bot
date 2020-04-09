@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.transformer.ui.analytics;
 
 import java.util.List;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.edit.domain.EditingDomain;
 

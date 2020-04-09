@@ -52,6 +52,7 @@ import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.optimiser.lso.ILocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.builder.impl.SchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.builder.impl.TimeWindowMaker;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
@@ -76,11 +77,15 @@ import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.CharterRateToCharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VoyagePlanStartDateCharterRateCalculator;
+import com.mmxlabs.scheduler.optimiser.entities.EntityBookType;
+import com.mmxlabs.scheduler.optimiser.entities.impl.DefaultEntity;
+import com.mmxlabs.scheduler.optimiser.entities.impl.DefaultEntityBook;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IExternalDateProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IInternalDateProvider;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapEntityProviderEditor;
 import com.mmxlabs.scheduler.optimiser.shared.SharedDataModule;
 import com.mmxlabs.scheduler.optimiser.shared.SharedPortDistanceDataBuilder;
 
@@ -211,6 +216,29 @@ public class SimpleSchedulerTest {
 		builder.createCargo(Lists.<@NonNull IPortSlot> newArrayList(load5, discharge5), false);
 		builder.createCargo(Lists.<@NonNull IPortSlot> newArrayList(load6, discharge6), false);
 		builder.createCargo(Lists.<@NonNull IPortSlot> newArrayList(load7, discharge7), false);
+
+		DefaultEntity entity = new DefaultEntity("Entity", false);
+		injector.injectMembers(entity);
+
+		HashMapEntityProviderEditor entityProviderEditor = injector.getInstance(HashMapEntityProviderEditor.class);
+		entityProviderEditor.setEntityBook(entity, EntityBookType.Shipping, new DefaultEntityBook(entity, EntityBookType.Shipping, new ConstantValueCurve(0)));
+		entityProviderEditor.setEntityBook(entity, EntityBookType.Trading, new DefaultEntityBook(entity, EntityBookType.Trading, new ConstantValueCurve(0)));
+		entityProviderEditor.setEntityBook(entity, EntityBookType.Upstream, new DefaultEntityBook(entity, EntityBookType.Upstream, new ConstantValueCurve(0)));
+
+		entityProviderEditor.setEntityForSlot(entity, load1);
+		entityProviderEditor.setEntityForSlot(entity, load2);
+		entityProviderEditor.setEntityForSlot(entity, load3);
+		entityProviderEditor.setEntityForSlot(entity, load4);
+		entityProviderEditor.setEntityForSlot(entity, load5);
+		entityProviderEditor.setEntityForSlot(entity, load6);
+		entityProviderEditor.setEntityForSlot(entity, load7);
+		entityProviderEditor.setEntityForSlot(entity, discharge1);
+		entityProviderEditor.setEntityForSlot(entity, discharge2);
+		entityProviderEditor.setEntityForSlot(entity, discharge3);
+		entityProviderEditor.setEntityForSlot(entity, discharge4);
+		entityProviderEditor.setEntityForSlot(entity, discharge5);
+		entityProviderEditor.setEntityForSlot(entity, discharge6);
+		entityProviderEditor.setEntityForSlot(entity, discharge7);
 
 		// TODO: Set port durations
 
@@ -347,8 +375,8 @@ public class SimpleSchedulerTest {
 					@Override
 					protected void configure() {
 
-						bind(SeriesParser.class).annotatedWith(Names.named("Commodity")).toInstance(new SeriesParser(new SeriesParserData()));
-						bind(SeriesParser.class).annotatedWith(Names.named("Currency")).toInstance(new SeriesParser(new SeriesParserData()));
+						bind(SeriesParser.class).annotatedWith(Names.named(SchedulerConstants.Parser_Commodity)).toInstance(new SeriesParser(new SeriesParserData()));
+						bind(SeriesParser.class).annotatedWith(Names.named(SchedulerConstants.Parser_Currency)).toInstance(new SeriesParser(new SeriesParserData()));
 						bind(IExternalDateProvider.class).toInstance(Mockito.mock(IExternalDateProvider.class));
 						bind(IInternalDateProvider.class).toInstance(Mockito.mock(IInternalDateProvider.class));
 
@@ -356,6 +384,7 @@ public class SimpleSchedulerTest {
 						bind(VoyagePlanStartDateCharterRateCalculator.class).in(Singleton.class);
 						bind(ICharterRateCalculator.class).to(VoyagePlanStartDateCharterRateCalculator.class);
 						bind(ICharterCostCalculator.class).to(CharterRateToCharterCostCalculator.class);
+						bind(Integer.class).annotatedWith(Names.named(SchedulerConstants.CONCURRENCY_LEVEL)).toInstance(1);
 					}
 				});
 	}

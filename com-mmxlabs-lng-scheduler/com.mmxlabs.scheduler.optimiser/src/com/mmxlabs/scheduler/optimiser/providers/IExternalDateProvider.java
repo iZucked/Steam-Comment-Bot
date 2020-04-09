@@ -3,10 +3,14 @@
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.providers;
+
 import java.time.ZonedDateTime;
+
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+
 /**
  * Useful binding for debugging. Shouldn't be used in the real code.
  *

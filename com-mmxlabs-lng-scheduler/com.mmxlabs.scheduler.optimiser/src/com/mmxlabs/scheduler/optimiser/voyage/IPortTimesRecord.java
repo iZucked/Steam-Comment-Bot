@@ -7,6 +7,7 @@ package com.mmxlabs.scheduler.optimiser.voyage;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.core.IElementAnnotation;
@@ -26,6 +27,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * @author Simon Goodall
  * 
  */
+@NonNullByDefault
 public interface IPortTimesRecord extends IElementAnnotation {
 
 	/**
@@ -33,20 +35,20 @@ public interface IPortTimesRecord extends IElementAnnotation {
 	 * 
 	 * @return
 	 */
-	@NonNull
-	List<@NonNull IPortSlot> getSlots();
 
-	int getSlotTime(@NonNull IPortSlot slot);
+	List<IPortSlot> getSlots();
 
-	int getSlotExtraIdleTime(@NonNull IPortSlot slot);
+	int getSlotTime(IPortSlot slot);
 
-	void setSlotTime(@NonNull IPortSlot slot, int time);
+	int getSlotExtraIdleTime(IPortSlot slot);
 
-	void setSlotExtraIdleTime(@NonNull IPortSlot slot, int time);
+	void setSlotTime(IPortSlot slot, int time);
 
-	int getSlotDuration(@NonNull IPortSlot slot);
+	void setSlotExtraIdleTime(IPortSlot slot, int time);
 
-	void setSlotDuration(@NonNull IPortSlot slot, int duration);
+	int getSlotDuration(IPortSlot slot);
+
+	void setSlotDuration(IPortSlot slot, int duration);
 
 	/**
 	 * Should be expected to do equivalent of "ptr.getSlotTime(ptr.getFirstSlot())"
@@ -55,7 +57,6 @@ public interface IPortTimesRecord extends IElementAnnotation {
 	 */
 	int getFirstSlotTime();
 
-	@NonNull
 	IPortSlot getFirstSlot();
 
 	/**
@@ -63,18 +64,17 @@ public interface IPortTimesRecord extends IElementAnnotation {
 	 * 
 	 * @return
 	 */
+	@Nullable
 	IPortSlot getReturnSlot();
 
 	@Nullable
-	IRouteOptionBooking getRouteOptionBooking(@NonNull IPortSlot slot);
+	IRouteOptionBooking getRouteOptionBooking(IPortSlot slot);
 
-	void setRouteOptionBooking(@NonNull IPortSlot slot, @Nullable IRouteOptionBooking routeOptionSlot);
+	void setRouteOptionBooking(IPortSlot slot, @Nullable IRouteOptionBooking routeOptionSlot);
 
-	void setSlotNextVoyageOptions(@NonNull IPortSlot slot, @NonNull AvailableRouteChoices nextVoyageRoute, PanamaPeriod panamaPeriod);
+	void setSlotNextVoyageOptions(IPortSlot slot, AvailableRouteChoices nextVoyageRoute, PanamaPeriod panamaPeriod);
 
-	@NonNull
-	AvailableRouteChoices getSlotNextVoyageOptions(@NonNull IPortSlot slot);
+	AvailableRouteChoices getSlotNextVoyageOptions(IPortSlot slot);
 
 	PanamaPeriod getSlotNextVoyagePanamaPeriod(IPortSlot portSlot);
-
 }

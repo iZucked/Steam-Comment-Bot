@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lingo.its.tests.microcases;
 
-import java.net.MalformedURLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -177,7 +176,7 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 				scheduler.setUseCanalBasedWindowTrimming(false);
 				scheduler.setUsePriceBasedWindowTrimming(true);
 
-				final ScheduledTimeWindows schedule = scheduler.schedule(initialSequences);
+				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(initialSequences);
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
 
 				final IResource r0 = initialSequences.getResources().get(0);
@@ -218,7 +217,7 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 				scheduler.setUseCanalBasedWindowTrimming(false);
 				scheduler.setUsePriceBasedWindowTrimming(true);
 
-				final ScheduledTimeWindows schedule = scheduler.schedule(initialSequences);
+				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(initialSequences);
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
 
 				final IResource r0 = initialSequences.getResources().get(0);
@@ -261,7 +260,7 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 				scheduler.setUseCanalBasedWindowTrimming(false);
 				scheduler.setUsePriceBasedWindowTrimming(true);
 
-				final ScheduledTimeWindows schedule = scheduler.schedule(initialSequences);
+				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(initialSequences);
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
 
 				final IResource r0 = initialSequences.getResources().get(0);
@@ -319,7 +318,7 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 				scheduler.setUseCanalBasedWindowTrimming(false);
 				scheduler.setUsePriceBasedWindowTrimming(true);
 
-				final ScheduledTimeWindows schedule = scheduler.schedule(initialSequences);
+				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(initialSequences);
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
 
 				final IResource r0 = initialSequences.getResources().get(0);
@@ -483,7 +482,7 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 				scheduler.setUseCanalBasedWindowTrimming(false);
 				scheduler.setUsePriceBasedWindowTrimming(true);
 
-				final ScheduledTimeWindows schedule = scheduler.schedule(initialSequences);
+				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(initialSequences);
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
 
 				final IResource r0 = initialSequences.getResources().get(0);
@@ -587,7 +586,7 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 				scheduler.setUseCanalBasedWindowTrimming(false);
 				scheduler.setUsePriceBasedWindowTrimming(true);
 
-				final ScheduledTimeWindows schedule = scheduler.schedule(initialSequences);
+				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(initialSequences);
 			}
 			final EndEvent endEvent = MicroTestUtils.findVesselEndEvent(lngScenarioModel);
 			final PortVisitLateness lateness = endEvent.getLateness();

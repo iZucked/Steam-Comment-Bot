@@ -144,6 +144,7 @@ import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.builder.impl.TimeWindowMaker;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
@@ -265,22 +266,22 @@ public class LNGScenarioTransformer {
 	private DateAndCurveHelper dateHelper;
 
 	@Inject
-	@Named(LNGTransformerModule.Parser_BaseFuel)
+	@Named(SchedulerConstants.Parser_BaseFuel)
 	@NonNull
 	private SeriesParser baseFuelIndices;
 
 	@Inject
-	@Named(LNGTransformerModule.Parser_Charter)
+	@Named(SchedulerConstants.Parser_Charter)
 	@NonNull
 	private SeriesParser charterIndices;
 
 	@Inject
-	@Named(LNGTransformerModule.Parser_Commodity)
+	@Named(SchedulerConstants.Parser_Commodity)
 	@NonNull
 	private SeriesParser commodityIndices;
 
 	@Inject
-	@Named(LNGTransformerModule.Parser_Currency)
+	@Named(SchedulerConstants.Parser_Currency)
 	@NonNull
 	private SeriesParser currencyIndices;
 
@@ -2128,6 +2129,8 @@ public class LNGScenarioTransformer {
 								desSlot.setMarket(desPurchaseMarket);
 								modelEntityMap.addModelObject(desSlot, desPurchaseSlot);
 
+								desPurchaseSlot.setKey(String.format("DP-%s-%s", market.getName(), yearMonthString));
+
 								for (final ISlotTransformer slotTransformer : slotTransformers) {
 									slotTransformer.slotTransformed(desSlot, desPurchaseSlot);
 								}
@@ -2286,6 +2289,8 @@ public class LNGScenarioTransformer {
 								// Key piece of information
 								fobSlot.setMarket(fobSaleMarket);
 								modelEntityMap.addModelObject(fobSlot, fobSaleSlot);
+
+								fobSaleSlot.setKey(String.format("FS-%s-%s", market.getName(), yearMonthString));
 
 								for (final ISlotTransformer slotTransformer : slotTransformers) {
 									slotTransformer.slotTransformed(fobSlot, fobSaleSlot);
@@ -2455,6 +2460,8 @@ public class LNGScenarioTransformer {
 								desSlot.setRestrictedVesselsArePermissive(desSalesMarket.isRestrictedVesselsArePermissive());
 								modelEntityMap.addModelObject(desSlot, desSalesSlot);
 
+								desSalesSlot.setKey(String.format("DS-%s-%s", market.getName(), yearMonthString));
+
 								for (final ISlotTransformer slotTransformer : slotTransformers) {
 									slotTransformer.slotTransformed(desSlot, desSalesSlot);
 								}
@@ -2592,6 +2599,8 @@ public class LNGScenarioTransformer {
 								// Key piece of information
 								fobSlot.setMarket(fobPurchaseMarket);
 								modelEntityMap.addModelObject(fobSlot, fobPurchaseSlot);
+
+								fobPurchaseSlot.setKey(String.format("FP-%s-%s", market.getName(), yearMonthString));
 
 								for (final ISlotTransformer slotTransformer : slotTransformers) {
 									slotTransformer.slotTransformed(fobSlot, fobPurchaseSlot);

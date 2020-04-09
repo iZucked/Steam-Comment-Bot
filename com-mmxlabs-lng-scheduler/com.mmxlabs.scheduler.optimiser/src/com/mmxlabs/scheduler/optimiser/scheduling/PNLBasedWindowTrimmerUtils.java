@@ -1,0 +1,630 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * All rights reserved.
+ */
+package com.mmxlabs.scheduler.optimiser.scheduling;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
+
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
+
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
+import com.google.inject.Inject;
+import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.Triple;
+import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.optimiser.common.components.impl.MutableTimeWindow;
+import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
+import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
+import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
+import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.components.impl.IEndPortSlot;
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.IPriceIntervalProvider;
+import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
+import com.mmxlabs.scheduler.optimiser.curves.IPriceIntervalProducer;
+import com.mmxlabs.scheduler.optimiser.evaluation.IVoyagePlanEvaluator;
+import com.mmxlabs.scheduler.optimiser.evaluation.NonShippedVoyagePlanCacheKey;
+import com.mmxlabs.scheduler.optimiser.evaluation.PreviousHeelRecord;
+import com.mmxlabs.scheduler.optimiser.evaluation.ScheduledVoyagePlanResult;
+import com.mmxlabs.scheduler.optimiser.evaluation.ShippedVoyagePlanCacheKey;
+import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
+import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.PriceIntervalProviderHelper;
+import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimeWindowsRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimesRecord;
+
+@NonNullByDefault
+public class PNLBasedWindowTrimmerUtils {
+
+	@Inject
+	private IStartEndRequirementProvider startEndRequirementProvider;
+
+	@Inject
+	private IRouteCostProvider routeCostProvider;
+
+	@Inject
+	private IPriceIntervalProducer priceIntervalProducer;
+
+	@Inject
+	private PriceIntervalProviderHelper priceIntervalProviderHelper;
+
+	@Inject
+	private IVesselBaseFuelCalculator vesselBaseFuelCalculator;
+
+	@Inject
+	private IDistanceProvider distanceProvider;
+
+	@Inject
+	private IVesselProvider vesselProvider;
+
+	public int[] computeBasicIntervalsForSlot(final IPortTimeWindowsRecord portTimeWindowsRecord, final IPortSlot slot) {
+		if (slot instanceof ILoadOption) {
+			final ILoadOption load = (ILoadOption) slot;
+			List<int[]> loadPriceIntervals = null;
+
+			if (load.getLoadPriceCalculator() instanceof IPriceIntervalProvider) {
+				if (priceIntervalProviderHelper.isLoadPricingEventTime(load, portTimeWindowsRecord)
+						|| priceIntervalProviderHelper.isPricingDateSpecified(load, PriceIntervalProviderHelper.getPriceEventFromSlotOrContract(load, portTimeWindowsRecord))) {
+
+					// Loading intervals
+					loadPriceIntervals = getLoadPriceIntervalsIndependentOfDischarge(portTimeWindowsRecord, load);
+				} else {
+					loadPriceIntervals = getLoadPriceIntervalsBasedOnDischarge(portTimeWindowsRecord, load);
+				}
+			}
+			if (loadPriceIntervals != null) {
+				final int[] arrivalTimeIntervals = new int[loadPriceIntervals.size()];
+				for (int j = 0; j < arrivalTimeIntervals.length; ++j) {
+					// Each interval is the start of the next price...
+					arrivalTimeIntervals[j] = loadPriceIntervals.get(j)[0];
+				}
+				// .. this means the last interval is an exclusive time
+				arrivalTimeIntervals[arrivalTimeIntervals.length - 1]--;
+				return arrivalTimeIntervals;
+			}
+		} else if (slot instanceof IDischargeOption) {
+			final IDischargeOption discharge = (IDischargeOption) slot;
+			List<int[]> dischargePriceIntervals = null;
+			if (discharge.getDischargePriceCalculator() instanceof IPriceIntervalProvider) {
+				if (priceIntervalProviderHelper.isDischargePricingEventTime(discharge, portTimeWindowsRecord)
+						|| priceIntervalProviderHelper.isPricingDateSpecified(discharge, PriceIntervalProviderHelper.getPriceEventFromSlotOrContract(discharge, portTimeWindowsRecord))) {
+					dischargePriceIntervals = getDischargePriceIntervalsIndependentOfLoad(portTimeWindowsRecord, discharge);
+				} else {
+					dischargePriceIntervals = getDischargePriceIntervalsBasedOnLoad(portTimeWindowsRecord, discharge);
+				}
+			}
+			if (dischargePriceIntervals != null) {
+				final int[] arrivalTimeIntervals = new int[dischargePriceIntervals.size()];
+				for (int j = 0; j < arrivalTimeIntervals.length; ++j) {
+					// Each interval is the start of the next price...
+					arrivalTimeIntervals[j] = dischargePriceIntervals.get(j)[0];
+				}
+				// .. this means the last interval is an exclusive time
+				arrivalTimeIntervals[arrivalTimeIntervals.length - 1]--;
+
+				return arrivalTimeIntervals;
+			}
+
+		}
+		if (slot instanceof IEndPortSlot) {
+			final ITimeWindow tw = portTimeWindowsRecord.getSlotFeasibleTimeWindow(slot);
+			if (tw.getExclusiveEnd() == Integer.MAX_VALUE) {
+				return new int[] { tw.getInclusiveStart() };
+			}
+			return new int[] { tw.getInclusiveStart(), tw.getExclusiveEnd() - 1 };
+
+		} else {
+			final ITimeWindow tw = portTimeWindowsRecord.getSlotFeasibleTimeWindow(slot);
+			return new int[] { tw.getInclusiveStart(), tw.getExclusiveEnd() - 1 };
+		}
+	}
+
+	public List<int[]> getLoadPriceIntervalsIndependentOfDischarge(final IPortTimeWindowsRecord portTimeWindowRecord, final ILoadOption load) {
+		final ITimeWindow loadTimeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(load);
+		return priceIntervalProviderHelper.getFeasibleIntervalSubSet(loadTimeWindow.getInclusiveStart(), loadTimeWindow.getExclusiveEnd(),
+				priceIntervalProducer.getLoadIntervalsIndependentOfDischarge(load, portTimeWindowRecord));
+	}
+
+	public List<int[]> getDischargePriceIntervalsIndependentOfLoad(final IPortTimeWindowsRecord portTimeWindowRecord, final IDischargeOption discharge) {
+		final ITimeWindow dischargeTimeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(discharge);
+		return priceIntervalProviderHelper.getFeasibleIntervalSubSet(dischargeTimeWindow.getInclusiveStart(), dischargeTimeWindow.getExclusiveEnd(),
+				priceIntervalProducer.getDischargeWindowIndependentOfLoad(discharge, portTimeWindowRecord));
+	}
+
+	public List<int[]> getLoadPriceIntervalsBasedOnDischarge(final IPortTimeWindowsRecord portTimeWindowRecord, final ILoadOption load) {
+		final ITimeWindow loadTimeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(load);
+		return priceIntervalProviderHelper.getFeasibleIntervalSubSet(loadTimeWindow.getInclusiveStart(), loadTimeWindow.getExclusiveEnd(),
+				priceIntervalProducer.getLoadIntervalsBasedOnDischarge(load, portTimeWindowRecord));
+	}
+
+	public List<int[]> getDischargePriceIntervalsBasedOnLoad(final IPortTimeWindowsRecord portTimeWindowRecord, final IDischargeOption discharge) {
+		final ITimeWindow dischargeTimeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(discharge);
+		return priceIntervalProviderHelper.getFeasibleIntervalSubSet(dischargeTimeWindow.getInclusiveStart(), dischargeTimeWindow.getExclusiveEnd(),
+				priceIntervalProducer.getDischargeWindowBasedOnLoad(discharge, portTimeWindowRecord));
+	}
+
+	  
+
+	public void computeIntervalsForSlot(final IPortSlot slot, final IVesselAvailability vesselAvailability, final int currentStartTime, final PortTimesRecord _record,
+			final IPortTimeWindowsRecord ptwr, final List<IPortSlot> slots, final int slotIdx, final MinTravelTimeData minTimeData, final int lastSlotArrivalTime, final Set<Integer> times) {
+		final IPortSlot lastSlot = slots.get(slotIdx - 1);
+		final int elementIndex = ptwr.getIndex(lastSlot);
+
+		ITimeWindow slotFeasibleTimeWindow = ptwr.getSlotFeasibleTimeWindow(slot);
+		if (slotFeasibleTimeWindow == null) {
+			slotFeasibleTimeWindow = slot.getTimeWindow();
+		}
+		int twStart = slotFeasibleTimeWindow.getInclusiveStart();
+		int twEnd = slotFeasibleTimeWindow.getExclusiveEnd() - 1;
+
+		{
+			final IVessel vessel = vesselAvailability.getVessel();
+			int calculationCV;
+			AvailableRouteChoices lastRouteChoices = null;
+			lastRouteChoices = AvailableRouteChoices.OPTIMAL;
+			if (elementIndex > 0 && lastSlot != null) {
+				final VesselState vesselState = lastSlot instanceof ILoadOption ? VesselState.Laden : VesselState.Ballast;
+				if (lastSlot instanceof ILoadOption) {
+					final ILoadOption iLoadOption = (ILoadOption) lastSlot;
+					calculationCV = iLoadOption.getCargoCVValue();
+				} else {
+					calculationCV = PNLBasedWindowTrimmer.DEFAULT_CV;
+				}
+				final int nboSpeed = Math.min(Math.max(getNBOSpeed(vessel, vesselState, calculationCV), vessel.getMinSpeed()), vessel.getMaxSpeed());
+
+				final List<@NonNull DistanceMatrixEntry> allDistanceValues = distanceProvider.getDistanceValues(lastSlot.getPort(), slot.getPort(), vessel, lastRouteChoices);
+
+				List<RouteCostRecord> extraTimes = new LinkedList<>();
+				for (final DistanceMatrixEntry dme : allDistanceValues) {
+					if (dme.getDistance() == Integer.MAX_VALUE) {
+						continue;
+					}
+					if (dme.getDistance() == 0) {
+						continue;
+					}
+
+					if (PNLBasedWindowTrimmer.SPEED_STEP_ENABLE && slot instanceof IEndPortSlot) {
+						int minSpeed = nboSpeed;// vessel.getMinSpeed();
+						// round min and max speeds to allow better speed stepping
+						minSpeed = roundUpToNearest(minSpeed, 100);
+						int maxSpeed = vessel.getMaxSpeed();
+
+						// min speed needs to be bounded!
+						minSpeed = Math.min(minSpeed, maxSpeed);
+
+						// loop through speeds and canals
+						int speed = minSpeed;
+
+						int baseTime = lastSlotArrivalTime + ptwr.getSlotDuration(lastSlot) //
+								+ ptwr.getSlotExtraIdleTime(lastSlot) //
+								+ routeCostProvider.getRouteTransitTime(dme.getRoute(), vessel);
+
+						// Window bounds will be taken care of later.
+						PortTimesRecord copy = _record.copy();
+						int[] baseFuelPrices = vesselBaseFuelCalculator.getBaseFuelPrices(vessel, copy.getFirstSlotTime());
+						while (speed <= maxSpeed) {
+							int vesselTravelTimeInHours = Calculator.getTimeFromSpeedDistance(speed, dme.getDistance());
+							final int t = baseTime + vesselTravelTimeInHours;
+							copy.setSlotTime(lastSlot, t);
+
+							if (slotFeasibleTimeWindow.contains(t) && lastSlot instanceof IDischargeOption) {
+
+								IDischargeOption iDischargeOption = (IDischargeOption) lastSlot;
+								int p = iDischargeOption.getDischargePriceCalculator().estimateSalesUnitPrice(iDischargeOption, copy, null);
+								RouteCostRecord rr = new RouteCostRecord();
+								rr.time = t;
+								// Add in canal cost
+								rr.cost += routeCostProvider.getRouteCost(dme.getRoute(), vessel, lastSlotArrivalTime + ptwr.getSlotDuration(lastSlot), CostType.Ballast);
+
+								// Add charter cost
+								rr.cost += vesselAvailability.getCharterCostCalculator().getCharterCost(lastSlotArrivalTime, lastSlotArrivalTime, t - lastSlotArrivalTime);
+								// Assume NBO + FBO
+								{
+									// estimate speed and rate
+									final long rateVoyage = vessel.getConsumptionRate(vesselState).getRate(speed);
+
+									final long requiredTotalFuelMT = (rateVoyage * vesselTravelTimeInHours) / 24L;
+									final long requiredTotalFuelM3 = Calculator.convertMTToM3(requiredTotalFuelMT, calculationCV, vessel.getTravelBaseFuel().getEquivalenceFactor());
+									final long requiredTotalFuelMMBTu = Calculator.convertM3ToMMBTu(requiredTotalFuelM3, calculationCV);
+
+									rr.cost += Calculator.costFromConsumption(requiredTotalFuelMMBTu, p);
+								}
+
+								extraTimes.add(rr);
+							}
+							if (slotFeasibleTimeWindow.contains(t)) {
+
+								RouteCostRecord rr = new RouteCostRecord();
+								rr.time = t;
+								// Add in canal cost
+								rr.cost += routeCostProvider.getRouteCost(dme.getRoute(), vessel, lastSlotArrivalTime + ptwr.getSlotDuration(lastSlot), CostType.Ballast);
+
+								// Add charter cost
+								rr.cost += vesselAvailability.getCharterCostCalculator().getCharterCost(copy.getFirstSlotTime(), lastSlotArrivalTime, t - lastSlotArrivalTime);
+								// Assume NBO + FBO
+								{
+									// estimate speed and rate
+									final long rateVoyage = vessel.getConsumptionRate(vesselState).getRate(speed);
+
+									final long requiredTotalFuelMT = (rateVoyage * vesselTravelTimeInHours) / 24L;
+
+									rr.cost += Calculator.costFromConsumption(requiredTotalFuelMT, baseFuelPrices[vessel.getTravelBaseFuel().getIndex()]);
+								}
+
+								extraTimes.add(rr);
+							}
+
+							// Termination condition.
+							if (speed >= maxSpeed) {
+								break;
+							}
+							// Prepare for next iteration
+							speed += PNLBasedWindowTrimmer.SPEED_STEP_KNOTS_INCREMENT;
+
+							// Clamp to max speed
+							if (speed > maxSpeed) {
+								speed = maxSpeed;
+							}
+						}
+					} else {
+
+						final int nbotravelTime = ptwr.getSlotDuration(lastSlot) //
+								+ Calculator.getTimeFromSpeedDistance(nboSpeed, dme.getDistance()) //
+								+ routeCostProvider.getRouteTransitTime(dme.getRoute(), vessel) //
+								+ ptwr.getSlotExtraIdleTime(lastSlot) //
+						;
+
+						final int t = lastSlotArrivalTime;
+						{
+							final int fastestTime = t + minTimeData.getMinTravelTime(elementIndex - 1);
+							times.add(Math.max(twStart, fastestTime));
+
+							final int nboTime = t + Math.max(nbotravelTime, minTimeData.getTravelTime(dme.getRoute(), elementIndex - 1));
+							if (nboTime < slotFeasibleTimeWindow.getExclusiveEnd()) {
+								times.add(Math.max(twStart, nboTime));
+							}
+						}
+					}
+				}
+
+				if (!extraTimes.isEmpty()) {
+					// Sort cheapest cost first
+					extraTimes.sort((a, b) -> Long.compare(a.cost, b.cost));
+					// Filter out similar results.
+					RouteCostRecord last = null;
+					Iterator<RouteCostRecord> itr = extraTimes.iterator();
+					while (itr.hasNext()) {
+
+						RouteCostRecord next = itr.next();
+						if (last == null) {
+							last = next;
+							continue;
+						}
+						if (
+						// (Math.abs(next.time - last.time) > 6) ||
+						(next.cost - last.cost > PNLBasedWindowTrimmer.SPEED_STEP_COST_DIFF)) {
+							last = next;
+						} else {
+							itr.remove();
+						}
+					}
+					while (extraTimes.size() > PNLBasedWindowTrimmer.SPEED_STEP_RETAIN_COUNT) {
+						extraTimes.remove(PNLBasedWindowTrimmer.SPEED_STEP_RETAIN_COUNT);
+					}
+					// Add remaining times to the array
+					extraTimes.forEach(r -> times.add(r.time));
+				}
+
+			}
+		}
+
+		if (slot instanceof IEndPortSlot) {
+
+			final IResource resource = vesselProvider.getResource(vesselAvailability);
+			final IEndRequirement endRequirement = startEndRequirementProvider.getEndRequirement(resource);
+			if (endRequirement != null) {
+				// Flag this sequence up as a min / max duration case
+				final boolean durationBasedSchedule = endRequirement.isMinDurationSet() || endRequirement.isMaxDurationSet();
+				if (durationBasedSchedule) {
+					// Case 1. We have not used up our min duration.
+					// First try to pad out the end.
+					// Then pad out start.
+					// Then finish at the end.
+					if (endRequirement.isMinDurationSet()) {
+						final int minEndTime = currentStartTime + endRequirement.getMinDurationInHours();
+						if (minEndTime > twEnd) {
+							// Adjust time time windows
+							twStart = Math.max(minEndTime, twStart);
+							twEnd = Math.max(twStart, twEnd);
+						}
+					}
+
+					if (endRequirement.isMaxDurationSet()) {
+						final int maxEndTime = currentStartTime + endRequirement.getMaxDurationInHours();
+						if (maxEndTime < twEnd) {
+							// Reduce end time
+							twEnd = Math.min(maxEndTime, twEnd);
+							// But increase it if needed to meet the start.
+							twEnd = Math.max(twEnd, twStart);
+						}
+					}
+				}
+			}
+		}
+
+		final int pTWStart = twStart;
+		final int pTWEnd = twEnd;
+		{
+			// Remove anything too early or late
+			times.removeIf(t -> t > pTWEnd);
+			times.removeIf(t -> t < pTWStart);
+		}
+		// Ensure the quickest time is added and remove anything too early
+		{
+			int time = lastSlotArrivalTime + minTimeData.getMinTravelTime(elementIndex);
+			time = Math.max(time, pTWStart);
+			times.add(time);
+			final int pTime = time;
+			// Remove anything too early.
+			times.removeIf(t -> t < pTime);
+		}
+	}
+
+	public Map<IPortSlot, Collection<Integer>> computeDefaultIntervals(final List<IPortTimeWindowsRecord> records, final IResource resource, final MinTravelTimeData travelTimeData) {
+		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+
+		final IVessel vessel = vesselAvailability.getVessel();
+		final boolean roundTripCargo = vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP;
+
+		IPortSlot lastSlot = null;
+		int[] lastIntervals = null;
+		AvailableRouteChoices lastRouteChoices = null;
+
+		final Map<IPortSlot, Collection<Integer>> intervalMap = new HashMap<>();
+
+		final List<IPortSlot> slots = new LinkedList<>();
+		final Map<IPortSlot, IPortTimeWindowsRecord> slotToRecords = new HashMap<>();
+
+		// Forward loop. Collect basic arrival intervals and the NBO based speed to next slot (if within window)
+		for (final IPortTimeWindowsRecord record : records) {
+			int calculationCV = PNLBasedWindowTrimmer.DEFAULT_CV;
+			if (roundTripCargo) {
+				lastSlot = null;
+				lastRouteChoices = AvailableRouteChoices.OPTIMAL;
+			}
+
+			for (final IPortSlot slot : record.getSlots()) {
+				slotToRecords.put(slot, record);
+				slots.add(slot);
+
+				final int elementIndex = record.getIndex(slot);
+
+				final Collection<Integer> intervals = new TreeSet<>();
+				for (final int t : computeBasicIntervalsForSlot(record, slot)) {
+					intervals.add(t);
+				}
+
+				final ITimeWindow tw = record.getSlotFeasibleTimeWindow(slot);
+				// Look at NBO speed from the previous slot to this one.
+				if (elementIndex > 0 && lastSlot != null) {
+					if (PNLBasedWindowTrimmer.PRE_FORWARDS_NBO_TIME && lastSlot instanceof ILoadOption) {
+						final VesselState vesselState = lastSlot instanceof ILoadOption ? VesselState.Laden : VesselState.Ballast;
+						if (lastSlot instanceof ILoadOption) {
+							final ILoadOption iLoadOption = (ILoadOption) lastSlot;
+							calculationCV = iLoadOption.getCargoCVValue();
+						}
+						final int nboSpeed = Math.min(Math.max(getNBOSpeed(vessel, vesselState, calculationCV), vessel.getMinSpeed()), vessel.getMaxSpeed());
+
+						final List<@NonNull DistanceMatrixEntry> allDistanceValues = distanceProvider.getDistanceValues(lastSlot.getPort(), slot.getPort(), vessel, lastRouteChoices);
+
+						for (final DistanceMatrixEntry dme : allDistanceValues) {
+							if (dme.getDistance() == Integer.MAX_VALUE) {
+								continue;
+							}
+
+							final int nboTravelTime = (dme.getDistance() == 0) ? 0
+									: Calculator.getTimeFromSpeedDistance(nboSpeed, dme.getDistance()) + routeCostProvider.getRouteTransitTime(dme.getRoute(), vessel);
+
+							final int totalTravelTime = record.getSlotDuration(lastSlot) + nboTravelTime + record.getSlotExtraIdleTime(lastSlot);
+
+							for (final int lastSlotArrivalTime : lastIntervals) {
+								final int fastestArrivalTime = lastSlotArrivalTime + travelTimeData.getTravelTime(dme.getRoute(), elementIndex - 1);
+								if (fastestArrivalTime < tw.getExclusiveEnd()) {
+									intervals.add(Math.max(tw.getInclusiveStart(), fastestArrivalTime));
+								}
+								final int nboBasedArrivalTime = lastSlotArrivalTime + totalTravelTime;
+								if (nboBasedArrivalTime < tw.getExclusiveEnd()) {
+									intervals.add(Math.max(tw.getInclusiveStart(), nboBasedArrivalTime));
+								}
+							}
+						}
+					} else {
+						final List<@NonNull DistanceMatrixEntry> allDistanceValues = distanceProvider.getDistanceValues(lastSlot.getPort(), slot.getPort(), vessel, lastRouteChoices);
+						for (final DistanceMatrixEntry dme : allDistanceValues) {
+							if (dme.getDistance() == Integer.MAX_VALUE) {
+								continue;
+							}
+
+							for (final int lastSlotArrivalTime : lastIntervals) {
+								final int fastestArrivalTime = lastSlotArrivalTime + travelTimeData.getTravelTime(dme.getRoute(), elementIndex - 1);
+								if (fastestArrivalTime < tw.getExclusiveEnd()) {
+									intervals.add(Math.max(tw.getInclusiveStart(), fastestArrivalTime));
+								}
+							}
+						}
+					}
+				}
+				final int[] basicIntervals = CollectionsUtil.integersToIntArray(intervals);
+				intervalMap.put(slot, new HashSet<>(intervals));
+
+				// Update for next iteration.
+				lastRouteChoices = record.getSlotNextVoyageOptions(slot);
+				lastIntervals = basicIntervals;
+
+				lastSlot = slot;
+			}
+		}
+
+		if (!roundTripCargo && PNLBasedWindowTrimmer.PRE_BACKWARDS_NBO_TIME) {
+
+			// Reverse pass, given each arrival time, work out when we would need to arrive at the previous slot if we wanted to use NBO speed.
+			// Work backwards for NBO times
+			for (int i = slots.size() - 1; i > 0; --i) {
+
+				lastSlot = slots.get(i - 1);
+				final IPortSlot slot = slots.get(i);
+				final IPortTimeWindowsRecord record = slotToRecords.get(lastSlot);
+				lastRouteChoices = record.getSlotNextVoyageOptions(lastSlot);
+				final ITimeWindow lTW = record.getSlotFeasibleTimeWindow(lastSlot);
+
+				int calculationCV;
+				final VesselState vesselState = lastSlot instanceof ILoadOption ? VesselState.Laden : VesselState.Ballast;
+				if (lastSlot instanceof ILoadOption) {
+					final ILoadOption iLoadOption = (ILoadOption) lastSlot;
+					calculationCV = iLoadOption.getCargoCVValue();
+					if (!PNLBasedWindowTrimmer.BACKWARDS_NBO_TIME_LADEN) {
+						continue;
+					}
+				} else {
+
+					calculationCV = PNLBasedWindowTrimmer.DEFAULT_CV;
+					if (!PNLBasedWindowTrimmer.BACKWARDS_NBO_TIME_BALLAST) {
+						continue;
+					}
+				}
+				final List<@NonNull DistanceMatrixEntry> allDistanceValues = distanceProvider.getDistanceValues(lastSlot.getPort(), slot.getPort(), vessel, lastRouteChoices);
+				for (final DistanceMatrixEntry dme : allDistanceValues) {
+					if (dme.getDistance() == Integer.MAX_VALUE) {
+						continue;
+					}
+
+					final int nboSpeed = Math.min(Math.max(getNBOSpeed(vessel, vesselState, calculationCV), vessel.getMinSpeed()), vessel.getMaxSpeed());
+					final int nboTravelTime = dme.getDistance() == 0 ? 0
+							: Calculator.getTimeFromSpeedDistance(nboSpeed, dme.getDistance()) + routeCostProvider.getRouteTransitTime(dme.getRoute(), vessel);
+
+					final int totalTravelTime = record.getSlotDuration(lastSlot) + nboTravelTime + record.getSlotExtraIdleTime(lastSlot);
+					for (final int t2 : intervalMap.get(slot)) {
+						final int t = Math.max(0, t2 - totalTravelTime);
+						if (lastSlot.getTimeWindow() == null || (t >= lTW.getInclusiveStart() && t < lTW.getExclusiveEnd())) {
+							intervalMap.get(lastSlot).add(t);
+						}
+					}
+				}
+			}
+		}
+
+		if (!roundTripCargo) {
+
+			final IStartRequirement startRequirement = startEndRequirementProvider.getStartRequirement(resource);
+			final IEndRequirement endRequirement = startEndRequirementProvider.getEndRequirement(resource);
+
+			if (endRequirement != null) {
+				final IPortTimeWindowsRecord firstRecord = records.get(0);
+				final IPortTimeWindowsRecord endRecord = records.get(records.size() - 1);
+
+				final IPortSlot firstSlot = firstRecord.getFirstSlot();
+				final IPortSlot endSlot = endRecord.getFirstSlot();
+
+				final ITimeWindow endFeasibleTW = endRecord.getSlotFeasibleTimeWindow(endSlot);
+
+				//
+				// final int twStart = endFeasibleTW.getInclusiveStart();
+				final int twEndSlotEnd = endFeasibleTW.getExclusiveEnd() - 1;
+				//
+				int newStartTime = -1;
+				if (endRequirement.isMinDurationSet()) {
+					final ITimeWindow startEventFeasibleTimeWindow = firstRecord.getFirstSlotFeasibleTimeWindow();
+					final int earliestStartTime = startEventFeasibleTimeWindow.getInclusiveStart();
+
+					// Add in valid start times to cover min duration to all end dates.
+					for (final int t : intervalMap.get(endSlot)) {
+						final int newT = t - endRequirement.getMinDurationInHours();
+						if (startEventFeasibleTimeWindow.contains(newT)) {
+							intervalMap.get(firstSlot).add(newT);
+						}
+					}
+					// Make sure there is an end time for the min duration from all the start times.
+					for (final int t : intervalMap.get(firstSlot)) {
+						intervalMap.get(endSlot).add(t + endRequirement.getMinDurationInHours());
+						intervalMap.get(endSlot).add(t + endRequirement.getMaxDurationInHours());
+					}
+
+					final int minEndTime = earliestStartTime + endRequirement.getMinDurationInHours();
+					if (minEndTime > twEndSlotEnd) {
+						// Too much time for given end window. Do we have some padding left at start?
+						newStartTime = twEndSlotEnd - endRequirement.getMinDurationInHours();
+
+						if (startRequirement != null && startRequirement.hasTimeRequirement()) {
+							final ITimeWindow startTW = startRequirement.getTimeWindow();
+							if (startTW != null) {
+								final int inclusiveStart = startTW.getInclusiveStart();
+								// Do not start before we are allowed to pick up the vessel
+								newStartTime = Math.max(newStartTime, inclusiveStart);
+							}
+						}
+						newStartTime = Math.max(newStartTime, 0);
+
+						final int pNewStartTime = newStartTime;
+						final Collection<Integer> collection = intervalMap.get(firstSlot);
+						collection.removeIf(t -> t > pNewStartTime);
+
+						// Update start window
+						final ITimeWindow tw = firstRecord.getFirstSlotFeasibleTimeWindow();
+						final MutableTimeWindow ftw = new MutableTimeWindow(Math.min(tw.getInclusiveStart(), pNewStartTime), Math.max(pNewStartTime + 1, tw.getExclusiveEnd()));
+						firstRecord.setSlotFeasibleTimeWindow(firstSlot, ftw);
+					}
+				}
+			}
+		}
+
+		return intervalMap;
+	}
+
+	private int getNBOSpeed(final IVessel vessel, final VesselState vesselState, final int cv) {
+		final long nboRateInM3PerHour = vessel.getNBORate(vesselState);
+		final long nboProvidedInMT = Calculator.convertM3ToMT(nboRateInM3PerHour, cv, vessel.getTravelBaseFuel().getEquivalenceFactor());
+		return vessel.getConsumptionRate(vesselState).getSpeed(nboProvidedInMT);
+	}
+
+	private static int roundUpToNearest(int input, int rounding) {
+		return ((input + (rounding - 1)) / rounding) * rounding;
+	}
+
+}

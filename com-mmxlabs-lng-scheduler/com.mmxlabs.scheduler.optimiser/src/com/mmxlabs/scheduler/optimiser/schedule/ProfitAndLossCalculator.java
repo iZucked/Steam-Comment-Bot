@@ -8,64 +8,50 @@
  */
 package com.mmxlabs.scheduler.optimiser.schedule;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.inject.Named;
-import javax.inject.Provider;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.exposures.BasicExposureRecord;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
-import com.mmxlabs.optimiser.core.IElementAnnotationsMap;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
-import com.mmxlabs.scheduler.optimiser.components.IHeelOptionConsumerPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IHeelOptionSupplierPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
-import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketLoadOption;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketLoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketVesselAvailability;
-import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
-import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator.EvaluationMode;
-import com.mmxlabs.scheduler.optimiser.exposures.ExposuresCalculator;
+import com.mmxlabs.scheduler.optimiser.evaluation.VoyagePlanRecord;
+import com.mmxlabs.scheduler.optimiser.exposures.OptimiserExposureRecords;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
-import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences.HeelValueRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
-import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.CargoValueAnnotation;
-import com.mmxlabs.scheduler.optimiser.fitness.util.SequenceEvaluationUtils;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ICargoValueAnnotation;
 import com.mmxlabs.scheduler.optimiser.paperdeals.PaperDealsCalculator;
-import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
-import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimesRecord;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -74,31 +60,24 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * 
  * @author Simon Goodall
  */
+@NonNullByDefault
 public class ProfitAndLossCalculator {
-
-	@Inject
-	private Provider<IVolumeAllocator> volumeAllocatorProvider;
-
-	@Inject
-	private ICalculatorProvider calculatorProvider;
 
 	@Inject
 	private IPortSlotProvider portSlotProvider;
 
-	@Inject(optional = true)
-	private Provider<IEntityValueCalculator> entityValueCalculatorProvider;
-
-	@Inject(optional = true)
-	private IMarkToMarketProvider markToMarketProvider;
+	@Inject
+	private IEntityValueCalculator entityValueCalculator;
 
 	@Inject
-	private IVesselProvider vesselProvider;
-	
-	@Inject
-	private ExposuresCalculator exposuresCalculator;
-	
+	private IVolumeAllocator volumeAllocator;
+
+	@Inject(optional = true)
+	private @Nullable IMarkToMarketProvider markToMarketProvider;
+
 	@Inject
 	private PaperDealsCalculator paperDealsCalculator;
+
 	
 	@Inject
 	@Named(SchedulerConstants.GENERATED_PAPERS_IN_PNL)
@@ -109,142 +88,35 @@ public class ProfitAndLossCalculator {
 	private boolean exposuresEnabled;
 
 	@Nullable
-	public ProfitAndLossSequences calculateProfitAndLoss(final @NonNull ISequences sequences, @NonNull final VolumeAllocatedSequences volumeAllocatedSequences,
-			final @Nullable IAnnotatedSolution annotatedSolution) {
+	public ProfitAndLossSequences calculateProfitAndLoss(final ISequences sequences, final ProfitAndLossSequences profitAndLossSequences, final @Nullable IAnnotatedSolution annotatedSolution) {
 
-		final ProfitAndLossSequences profitAndLossSequences = new ProfitAndLossSequences(volumeAllocatedSequences);
 		// Some tests cases have no EVC
-		if (entityValueCalculatorProvider == null) {
+		if (entityValueCalculator == null) {
 			return profitAndLossSequences;
 		}
 
-		// 2014-02-12 - SG
-		// Bad hack to allow a custom contract to reset cached data AFTER any charter out generation / break -even code has run.
-		// TODO: Need a better phase system to notify components where we are in the process.
-		{
-			for (final ISalesPriceCalculator shippingCalculator : calculatorProvider.getSalesPriceCalculators()) {
-				shippingCalculator.prepareRealSalesPNL();
-			}
-			for (final ILoadPriceCalculator calculator : calculatorProvider.getLoadPriceCalculators()) {
-				calculator.prepareRealPurchasePNL();
-			}
-		}
-
-		int lastHeelPricePerMMBTU = 0;
-		// int lastHeelCV = 0;
-
-		for (final VolumeAllocatedSequence volumeAllocatedSequence : profitAndLossSequences.getVolumeAllocatedSequences()) {
-			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(volumeAllocatedSequence.getResource());
-			assert vesselAvailability != null;
-
-			if (SequenceEvaluationUtils.shouldIgnoreSequence(sequences.getSequence(volumeAllocatedSequence.getResource()), vesselAvailability)) {
-				continue;
-			}
-			
-			int time = volumeAllocatedSequence.getStartTime();
-
-			// for (final VoyagePlan plan : sequence.getVoyagePlans()) {
-			for (final Pair<VoyagePlan, IPortTimesRecord> entry : volumeAllocatedSequence.getVoyagePlans()) {
-				boolean cargo = false;
-				final VoyagePlan plan = entry.getFirst();
-				final IPortTimesRecord portTimesRecord = entry.getSecond();
-				final IAllocationAnnotation currentAllocation = (portTimesRecord instanceof IAllocationAnnotation) ? (IAllocationAnnotation) portTimesRecord : null;
-				if (plan.getSequence().length >= 2) {
-
-					// Extract list of all the PortDetails encountered
-					final List<@NonNull PortDetails> portDetails = new LinkedList<>();
-					for (final Object obj : plan.getSequence()) {
-						if (obj instanceof PortDetails) {
-							portDetails.add((PortDetails) obj);
-						}
-					}
-
-					// TODO: this logic looks decidedly shaky - plan sequence length could change with logic changes
-					final boolean isDesFobCase = ((vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE
-							|| vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) && plan.getSequence().length == 2);
-					if (currentAllocation != null) {
-						final CargoValueAnnotation cargoValueAnnotation;
-						cargo = true;
-						if (isDesFobCase) {
-							// for now, only handle single load/discharge case
-							assert (currentAllocation.getSlots().size() == 2);
-							final ILoadOption loadSlot = (ILoadOption) currentAllocation.getSlots().get(0);
-							final Pair<@NonNull CargoValueAnnotation, @NonNull Long> p = entityValueCalculatorProvider.get().evaluate(EvaluationMode.FullPNL, plan, currentAllocation,
-									vesselAvailability, currentAllocation.getSlotTime(loadSlot), volumeAllocatedSequences, annotatedSolution);
-							cargoValueAnnotation = p.getFirst();
-							final long cargoGroupValue = p.getSecond();
-							profitAndLossSequences.setVoyagePlanGroupValue(plan, cargoGroupValue);
-							profitAndLossSequences.setCargoValueAnnotation(plan, cargoValueAnnotation);
-
-							// Reset to zero. We Don't expect it to be used anyway
-							lastHeelPricePerMMBTU = 0;
-						} else {
-							final Pair<@NonNull CargoValueAnnotation, @NonNull Long> p = entityValueCalculatorProvider.get().evaluate(EvaluationMode.FullPNL, plan, currentAllocation,
-									vesselAvailability, volumeAllocatedSequence.getStartTime(), volumeAllocatedSequences, annotatedSolution);
-							cargoValueAnnotation = p.getFirst();
-							final long cargoGroupValue = p.getSecond();
-							profitAndLossSequences.setVoyagePlanGroupValue(plan, cargoGroupValue);
-							profitAndLossSequences.setCargoValueAnnotation(plan, cargoValueAnnotation);
-
-							int numSlots = cargoValueAnnotation.getSlots().size();
-							IPortSlot lastSlot = cargoValueAnnotation.getSlots().get(numSlots - 1);
-							lastHeelPricePerMMBTU =	cargoValueAnnotation.getSlotPricePerMMBTu(lastSlot);
-						}
-
-						// Populating exposures record
-						if (annotatedSolution != null || generatedPapersInPNL || exposuresEnabled) {
-							for (IPortSlot portSlot : cargoValueAnnotation.getSlots()) {
-								final List<BasicExposureRecord> records = exposuresCalculator.calculateExposures(cargoValueAnnotation, portSlot);
-								profitAndLossSequences.addPortExposureRecord(portSlot, records);
-							}
-						}
-						
-						// Store annotations if required
-						if (annotatedSolution != null) {
-							// now add some more data for each load slot
-							final IElementAnnotationsMap elementAnnotations = annotatedSolution.getElementAnnotations();
-							final List<@NonNull IPortSlot> slots = currentAllocation.getSlots();
-							for (final IPortSlot portSlot : slots) {
-								final ISequenceElement portElement = portSlotProvider.getElement(portSlot);
-								elementAnnotations.setAnnotation(portElement, SchedulerConstants.AI_cargoValueAllocationInfo, cargoValueAnnotation);
-							}
+		// Calculating the paper deals allocations and exposures
+		final Map<IPortSlot, OptimiserExposureRecords> exposuresMap = new HashMap<>();
+		if (annotatedSolution != null || generatedPapersInPNL || exposuresEnabled) {
+			for (VolumeAllocatedSequence s : profitAndLossSequences) {
+				for (VoyagePlanRecord vpr : s.getVoyagePlanRecords()) {
+					for (IPortSlot portSlot : vpr.getPortTimesRecord().getSlots()) {
+						OptimiserExposureRecords records = vpr.getPortExposureRecord(portSlot);
+						if (records != null) {
+							exposuresMap.put(portSlot, records);
 						}
 					}
 				}
-
-				if (!cargo) {
-					Pair<Map<IPortSlot, HeelValueRecord>, Long> p = entityValueCalculatorProvider.get().evaluateNonCargoPlan(EvaluationMode.FullPNL, plan, portTimesRecord, vesselAvailability, time,
-							volumeAllocatedSequence.getStartTime(), volumeAllocatedSequences, lastHeelPricePerMMBTU, annotatedSolution);
-					final long otherGroupValue = p.getSecond();
-					profitAndLossSequences.setVoyagePlanGroupValue(plan, otherGroupValue);
-
-					// Merge records
-					for (Map.Entry<IPortSlot, HeelValueRecord> e : p.getFirst().entrySet()) {
-						profitAndLossSequences.mergeHeelValueRecord(e.getKey(), e.getValue());
-					}
-					// Lookup last heel price
-					for (IPortSlot slot : portTimesRecord.getSlots()) {
-						if (slot instanceof IHeelOptionConsumerPortSlot) {
-							// Heel consumed, so reset the price
-							lastHeelPricePerMMBTU = 0;
-						}
-						if (slot instanceof IHeelOptionSupplierPortSlot) {
-							lastHeelPricePerMMBTU = profitAndLossSequences.getPortHeelRecord(slot).getCostUnitPrice();
-						}
-					}
-				}
-				time += getPlanDuration(plan);
 			}
+
 		}
-		
 		// Calculating the paper deals allocations and exposures
 		if (annotatedSolution != null || generatedPapersInPNL) {
-			profitAndLossSequences.setPaperDealRecords(paperDealsCalculator.processPaperDeals(profitAndLossSequences.getPortExposureRecords()));
+			profitAndLossSequences.setPaperDealRecords(paperDealsCalculator.processPaperDeals(exposuresMap));
 		}
 		//
 
 		calculateUnusedSlotPNL(sequences, profitAndLossSequences, annotatedSolution);
-		
 
 		if (annotatedSolution != null && markToMarketProvider != null) {
 			// calculateMarkToMarketPNL(sequences, annotatedSolution);
@@ -254,19 +126,17 @@ public class ProfitAndLossCalculator {
 	}
 
 	protected void calculateUnusedSlotPNL(final ISequences sequences, final ProfitAndLossSequences profitAndLossSequences, @Nullable final IAnnotatedSolution annotatedSolution) {
-		@NonNull
-		final VolumeAllocatedSequences volumeAllocatedSequences = profitAndLossSequences.getVolumeAllocatedSequences();
 		for (final ISequenceElement element : sequences.getUnusedElements()) {
 			final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
 			if (portSlot instanceof ILoadOption || portSlot instanceof IDischargeOption) {
 				// Calculate P&L
-				final long groupValue = entityValueCalculatorProvider.get().evaluateUnusedSlot(EvaluationMode.FullPNL, portSlot, volumeAllocatedSequences, annotatedSolution);
+				final long groupValue = entityValueCalculator.evaluateUnusedSlot(portSlot, annotatedSolution);
 				profitAndLossSequences.setUnusedSlotGroupValue(portSlot, groupValue);
 			}
 		}
 	}
 
-	protected void calculateMarkToMarketPNL(final @NonNull ISequences sequences, final @NonNull IAnnotatedSolution annotatedSolution) {
+	protected void calculateMarkToMarketPNL(final ISequences sequences, final IAnnotatedSolution annotatedSolution) {
 		// Mark-to-Market Calculations
 		for (final ISequenceElement element : sequences.getUnusedElements()) {
 			final IMarkToMarket market = markToMarketProvider.getMarketForElement(element);
@@ -332,31 +202,15 @@ public class ProfitAndLossCalculator {
 			}
 			voyagePlan.setIgnoreEnd(false);
 			// Create an allocation annotation.
-			final IAllocationAnnotation allocationAnnotation = volumeAllocatorProvider.get().allocate(vesselAvailability, time, voyagePlan, portTimesRecord);
+			final IAllocationAnnotation allocationAnnotation = volumeAllocator.allocate(vesselAvailability, time, voyagePlan, portTimesRecord, annotatedSolution);
 			if (allocationAnnotation != null) {
 				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_volumeAllocationInfo, allocationAnnotation);
 				// Calculate P&L
-				final Pair<@NonNull CargoValueAnnotation, @NonNull Long> p = entityValueCalculatorProvider.get().evaluate(EvaluationMode.FullPNL, voyagePlan, allocationAnnotation, vesselAvailability,
-						time, null, annotatedSolution);
-				final CargoValueAnnotation cargoValueAnnotation = p.getFirst();
+				final Pair<@NonNull CargoValueAnnotation, @NonNull Long> p = entityValueCalculator.evaluate(voyagePlan, allocationAnnotation, vesselAvailability, time, null, annotatedSolution);
+				final ICargoValueAnnotation cargoValueAnnotation = p.getFirst();
 
 				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_cargoValueAllocationInfo, cargoValueAnnotation);
 			}
 		}
-	}
-
-	private int getPlanDuration(final @NonNull VoyagePlan plan) {
-		return getPartialPlanDuration(plan, 0);
-	}
-
-	private int getPartialPlanDuration(final @NonNull VoyagePlan plan, final int skip) {
-		int planDuration = 0;
-		final IDetailsSequenceElement[] sequence = plan.getSequence();
-		final int k = sequence.length - skip;
-		for (int i = 0; i < k; i++) {
-			final Object o = sequence[i];
-			planDuration += (o instanceof VoyageDetails) ? (((VoyageDetails) o).getPurgeDuration() +((VoyageDetails) o).getIdleTime() + ((VoyageDetails) o).getTravelTime()) : ((PortDetails) o).getOptions().getVisitDuration();
-		}
-		return planDuration;
 	}
 }

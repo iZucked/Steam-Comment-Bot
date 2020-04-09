@@ -15,7 +15,6 @@ import org.json.simple.JSONObject;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.caches.MemoryUsageInfo;
-import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.HeadlessOptimiserJSON;
 import com.mmxlabs.optimiser.common.logging.impl.EvaluationNumberKey;
 import com.mmxlabs.optimiser.lso.logging.FitnessAnnotationLogger;
 import com.mmxlabs.optimiser.lso.logging.GeneralAnnotationLogger;

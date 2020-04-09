@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -121,7 +122,7 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 	}
 
 	@Override
-	public void setSlot(final IPortSlot slot, final ITimeWindow timeWindow, final int duration, final int index) {
+	public void setSlot(final IPortSlot slot, final @Nullable ITimeWindow timeWindow, final int duration, final int index) {
 		final SlotWindowRecord allocation = getOrCreateSlotRecord(slot);
 		allocation.feasibleWindow = timeWindow;
 		allocation.duration = duration;
@@ -141,7 +142,7 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 	}
 
 	@Override
-	public void setReturnSlot(final IPortSlot slot, final ITimeWindow timeWindow, final int duration, final int index) {
+	public void setReturnSlot(final IPortSlot slot, final @Nullable ITimeWindow timeWindow, final int duration, final int index) {
 		setSlot(slot, timeWindow, duration, index);
 		// Return slot should not be in list
 		slots.remove(slot);
@@ -289,4 +290,22 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 	public void setSlotNextVoyagePanamaPeriod(final IPortSlot slot, @NonNull final PanamaPeriod panamaPeriod) {
 		getOrCreateSlotRecord(slot).panamaPeriod = panamaPeriod;
 	}
+
+	public PortTimeWindowsRecord() {
+
+	}
+
+	public PortTimeWindowsRecord(final @NonNull IPortTimeWindowsRecord other) {
+		for (final IPortSlot slot : other.getSlots()) {
+			this.setSlot(slot, other.getSlotFeasibleTimeWindow(slot), other.getSlotDuration(slot), other.getIndex(slot));
+			this.setSlotExtraIdleTime(slot, other.getSlotExtraIdleTime(slot));
+			this.setSlotNextVoyageOptions(slot, other.getSlotNextVoyageOptions(slot), other.getSlotNextVoyagePanamaPeriod(slot));
+			this.setSlotAdditionalPanamaDetails(slot, other.getSlotIsNextVoyageConstrainedPanama(slot), other.getSlotAdditionalPanamaIdleHours(slot));
+		}
+		final IPortSlot otherReturnSlot = other.getReturnSlot();
+		if (otherReturnSlot != null) {
+			this.setReturnSlotFeasibleTimeWindow(otherReturnSlot, other.getSlotFeasibleTimeWindow(otherReturnSlot));
+		}
+	}
+
 }

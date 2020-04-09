@@ -145,6 +145,8 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 
 	public final void setAvailableTime(final int availableTime) {
 		assert availableTime != Integer.MAX_VALUE;
+		assert availableTime < Integer.MAX_VALUE - 100_000; // Check we are not near max value
+
 		assert availableTime >= 0;
 		this.availableTime = availableTime;
 	}
@@ -162,7 +164,7 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 		this.fromPortSlot = fromPortSlot;
 	}
 
-	@Deprecated // Only used for Client E
+	@Deprecated // Only used for Client E and Charter Length Evaluator (so quite important really)
 	public final void setToPortSlot(final @NonNull IPortSlot toPortSlot) {
 		this.toPortSlot = toPortSlot;
 	}

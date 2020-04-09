@@ -116,4 +116,9 @@ public class CopiedModelEntityMap implements ModelEntityMap {
 	public ZonedDateTime getDateFromHours(final int hours, final Port port) {
 		return delegate.getDateFromHours(hours, port);
 	}
+
+	@Override
+	public @NonNull ZonedDateTime getEarliestTime() {
+		return delegate.getEarliestTime();
+	}
 }

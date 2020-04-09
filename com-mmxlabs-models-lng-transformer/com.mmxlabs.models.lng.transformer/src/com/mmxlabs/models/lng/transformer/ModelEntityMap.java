@@ -13,6 +13,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.providers.IExternalDateProvider;
 
 /**
  * Class which maps model entities to classes; the {@link LNGScenarioTransformer} should populate one of these, which maps every PortSlot to the URI of a Slot in the EMF, and similarly for vessels, vessel
@@ -21,7 +22,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
  * @author hinton
  * 
  */
-public interface ModelEntityMap {
+public interface ModelEntityMap extends IExternalDateProvider {
 
 	@Nullable
 	<U> U getModelObject(@NonNull final Object internalObject, @NonNull final Class<? extends U> clz);

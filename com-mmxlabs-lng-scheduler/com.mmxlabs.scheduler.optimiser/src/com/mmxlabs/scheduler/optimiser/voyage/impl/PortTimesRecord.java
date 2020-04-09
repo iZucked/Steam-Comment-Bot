@@ -18,11 +18,16 @@ import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
 /**
- * A small class storing the port arrival time and visit duration for a {@link VoyagePlan}. This class may or may not include the times for the last element in the plan depending on how it is created.
- * For scheduling purposes the end element should be included. Often for pricing purposes the end element can be ignored.
+ * A small class storing the port arrival time and visit duration for a
+ * {@link VoyagePlan}. This class may or may not include the times for the last
+ * element in the plan depending on how it is created. For scheduling purposes
+ * the end element should be included. Often for pricing purposes the end
+ * element can be ignored.
  * 
- * Note, the order slots are added is important. They should be added in scheduled order. The calls to {@link #getFirstSlotTime()} and {@link #getFirstSlot()} are expected to be bound the first slot
- * added to the instance.
+ * Note, the order slots are added is important. They should be added in
+ * scheduled order. The calls to {@link #getFirstSlotTime()} and
+ * {@link #getFirstSlot()} are expected to be bound the first slot added to the
+ * instance.
  * 
  * @author Simon Goodall
  * 
@@ -63,7 +68,9 @@ public final class PortTimesRecord implements IPortTimesRecord {
 		}
 	}
 
-	// Most voyages are load, discharge, next. DES/FOB cargoes have a start, load, discharge end sequence. 4 elements is a good starting point, although LDD etc style cargoes could start to push this
+	// Most voyages are load, discharge, next. DES/FOB cargoes have a start, load,
+	// discharge end sequence. 4 elements is a good starting point, although LDD etc
+	// style cargoes could start to push this
 	// up.
 	private static final int INITIAL_CAPACITY = 4;
 	private final @NonNull Map<IPortSlot, SlotVoyageRecord> slotRecords = new HashMap<>(INITIAL_CAPACITY);
@@ -154,7 +161,9 @@ public final class PortTimesRecord implements IPortTimesRecord {
 
 	@Override
 	public void setSlotTime(final IPortSlot slot, final int time) {
-		
+		assert time != Integer.MAX_VALUE; // Check for max value
+		assert time < Integer.MAX_VALUE - 100_000; // Check we are not near max value
+
 		assert time >= 0;
 		getOrCreateSlotRecord(slot).startTime = time;
 		// Set or update the first port slot and time
@@ -263,5 +272,9 @@ public final class PortTimesRecord implements IPortTimesRecord {
 			return allocation.panamaPeriod;
 		}
 		throw new IllegalArgumentException(UNKNOWN_PORT_SLOT);
+	}
+
+	public @NonNull PortTimesRecord copy() {
+		return new PortTimesRecord(this);
 	}
 }

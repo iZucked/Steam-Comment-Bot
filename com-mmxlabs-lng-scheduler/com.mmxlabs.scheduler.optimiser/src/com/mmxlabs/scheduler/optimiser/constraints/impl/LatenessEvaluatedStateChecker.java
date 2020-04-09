@@ -14,9 +14,11 @@ import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
+import com.mmxlabs.scheduler.optimiser.evaluation.VoyagePlanRecord;
+import com.mmxlabs.scheduler.optimiser.evaluation.VoyagePlanRecord.LatenessRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
-import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
 
 /**
@@ -46,7 +48,7 @@ public final class LatenessEvaluatedStateChecker implements IEvaluatedStateConst
 	@Override
 	public boolean checkConstraints(@NonNull final ISequences rawSequences, @NonNull final ISequences fullSequences, @NonNull final IEvaluationState evaluationState) {
 
-		final VolumeAllocatedSequences volumeAllocatedSequences = evaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, VolumeAllocatedSequences.class);
+		final ProfitAndLossSequences volumeAllocatedSequences = evaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, ProfitAndLossSequences.class);
 		if (volumeAllocatedSequences == null) {
 			return true;
 		}
@@ -55,18 +57,43 @@ public final class LatenessEvaluatedStateChecker implements IEvaluatedStateConst
 		long totalLateness = 0;
 
 		for (final VolumeAllocatedSequence volumeAllocatedSequence : volumeAllocatedSequences) {
+			IPortSlot lastPortSlot = null;
+			for (VoyagePlanRecord vpr : volumeAllocatedSequence.getVoyagePlanRecords()) {
+				lastPortSlot = vpr.getPortTimesRecord().getFirstSlot();
 
-			@NonNull
-			final Set<@NonNull IPortSlot> lateSlotsSet = volumeAllocatedSequence.getLateSlotsSet();
+				final Set<@NonNull IPortSlot> lateSlotsSet = vpr.getLateSlotsSet();
+				boolean newLateness = false;
+				for (final IPortSlot lateSlot : lateSlotsSet) {
+
+					if (lateSlots != null && !lateSlots.contains(lateSlot)) {
+						newLateness = true;
+					}
+					final Interval latenessInterval = vpr.getLatenessInterval(lateSlot);
+					if (latenessInterval != null) {
+						final long lateness = vpr.getLatenessWithFlex(lateSlot);
+						if (latenessInterval == Interval.PROMPT) {
+							promptLateness += lateness;
+						}
+						totalLateness += lateness;
+					}
+					if (lateSlots != null) {
+						if ((promptLateness > initialPromptLateness || totalLateness > initialTotalLateness) || newLateness == true) {
+							return false;
+						}
+					}
+				}
+			}
+			
+			// Check end event
 			boolean newLateness = false;
-			for (final IPortSlot lateSlot : lateSlotsSet) {
-
-				if (lateSlots != null && !lateSlots.contains(lateSlot)) {
+			LatenessRecord maxDurationLatenessRecord = volumeAllocatedSequence.getMaxDurationLatenessRecord();
+			if (lastPortSlot != null && maxDurationLatenessRecord != null) {
+				if (lateSlots != null && !lateSlots.contains(lastPortSlot)) {
 					newLateness = true;
 				}
-				final Interval latenessInterval = volumeAllocatedSequence.getLatenessInterval(lateSlot);
+				final Interval latenessInterval = maxDurationLatenessRecord.interval;
 				if (latenessInterval != null) {
-					final long lateness = volumeAllocatedSequence.getLatenessWithFlex(lateSlot);
+					final long lateness = maxDurationLatenessRecord.latenessWithFlex;
 					if (latenessInterval == Interval.PROMPT) {
 						promptLateness += lateness;
 					}
@@ -78,12 +105,15 @@ public final class LatenessEvaluatedStateChecker implements IEvaluatedStateConst
 					}
 				}
 			}
+
 		}
 		// If this is the first run, then set the initial state
 		if (lateSlots == null) {
 			lateSlots = new HashSet<>();
 			for (final VolumeAllocatedSequence volumeAllocatedSequence : volumeAllocatedSequences) {
-				lateSlots.addAll(volumeAllocatedSequence.getLateSlotsSet());
+				for (VoyagePlanRecord vpr : volumeAllocatedSequence.getVoyagePlanRecords()) {
+					lateSlots.addAll(vpr.getLateSlotsSet());
+				}
 			}
 			initialPromptLateness = promptLateness;
 			initialTotalLateness = totalLateness;

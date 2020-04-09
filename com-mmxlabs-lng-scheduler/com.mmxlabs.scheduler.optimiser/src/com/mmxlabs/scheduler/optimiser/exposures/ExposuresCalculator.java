@@ -71,11 +71,11 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 public class ExposuresCalculator {
 
 	@Inject
-	@Named("Commodity")
+	@Named(SchedulerConstants.Parser_Commodity)
 	private SeriesParser commodityIndices;
 
 	@Inject
-	@Named("Currency")
+	@Named(SchedulerConstants.Parser_Currency)
 	private SeriesParser currencyIndices;
 	
 	@Inject

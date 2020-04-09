@@ -6,6 +6,8 @@ package com.mmxlabs.models.lng.transformer.ui.headless.optimiser;
 
 import java.util.Map;
 
+import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessApplicationOptions;
+
 
 /**
  * Simple class to pass into {@link HeadlessApplicationOptions#parseAndSet(String[], Object)}

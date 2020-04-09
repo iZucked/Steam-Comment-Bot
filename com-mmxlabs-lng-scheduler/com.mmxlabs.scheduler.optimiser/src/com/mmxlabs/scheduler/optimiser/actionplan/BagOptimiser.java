@@ -55,18 +55,23 @@ import com.mmxlabs.scheduler.optimiser.actionplan.independence.ActionSetIndepend
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.SimilarityFitnessCore;
-import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.MetricType;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
- * An "optimiser" to generate the sequence of steps required by a user to go from one {@link ISequences} state to another one. I.e. from a pre-optimised state to an optimised state.
+ * An "optimiser" to generate the sequence of steps required by a user to go
+ * from one {@link ISequences} state to another one. I.e. from a pre-optimised
+ * state to an optimised state.
  * 
- * This process generates changes and groups them into change sets. A change is a single change to move closer to the target state. This may be a single slot swap or moving a cargo pair onto the
- * correct vessel. A change set is the minimal set of changes required to pass the constraint checkers and other criteria (such as positive P&L change). A single change may create invalid solutions.
- * Overall we aim to generate a list of change sets to get between the initial and target solutions.
+ * This process generates changes and groups them into change sets. A change is
+ * a single change to move closer to the target state. This may be a single slot
+ * swap or moving a cargo pair onto the correct vessel. A change set is the
+ * minimal set of changes required to pass the constraint checkers and other
+ * criteria (such as positive P&L change). A single change may create invalid
+ * solutions. Overall we aim to generate a list of change sets to get between
+ * the initial and target solutions.
  * 
  * The process is a constructive stochastic search.
  * 
@@ -177,8 +182,11 @@ public class BagOptimiser {
 	}
 
 	/**
-	 * Performs a constructive stochastic search. Algorithm works as follows: Sample a large number of changesets. Store valid changesets as P For each, p in P While (population of nodes does not
-	 * contain a leaf mode) Add new randomly constructed changesets to end of node Check if nodes are valid Keep the top n valid nodes
+	 * Performs a constructive stochastic search. Algorithm works as follows: Sample
+	 * a large number of changesets. Store valid changesets as P For each, p in P
+	 * While (population of nodes does not contain a leaf mode) Add new randomly
+	 * constructed changesets to end of node Check if nodes are valid Keep the top n
+	 * valid nodes
 	 * 
 	 * @param targetRawSequences
 	 * @param progressMonitor
@@ -191,7 +199,8 @@ public class BagOptimiser {
 
 		final long time1 = System.currentTimeMillis();
 
-		// Prep Fitness cores based on original initial scenario - for lateness/similarity etc.
+		// Prep Fitness cores based on original initial scenario - for
+		// lateness/similarity etc.
 		evaluateSolution(initialRawSequences);
 		final SimilarityState targetSimilarityState = injector.getInstance(SimilarityState.class);
 
@@ -224,14 +233,14 @@ public class BagOptimiser {
 			final IEvaluationState initialEvaluationState = evaluateAndGetScheduledSequences(initialFullSequences);
 
 			assert initialEvaluationState != null;
-			final VolumeAllocatedSequences initialVolumeAllocatedSequences = initialEvaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, VolumeAllocatedSequences.class);
+			final ProfitAndLossSequences initialVolumeAllocatedSequences = initialEvaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, ProfitAndLossSequences.class);
 			assert initialVolumeAllocatedSequences != null;
 			final ProfitAndLossSequences initialProfitAndLossSequences = initialEvaluationState.getData(SchedulerEvaluationProcess.PROFIT_AND_LOSS_SEQUENCES, ProfitAndLossSequences.class);
 			assert initialProfitAndLossSequences != null;
 
 			final long initialUnusedCompulsarySlot = evaluationHelper.calculateUnusedCompulsarySlot(initialRawSequences);
-			final long initialLateness = evaluationHelper.calculateScheduleLateness(initialFullSequences, initialVolumeAllocatedSequences);
-			final long initialCapacity = evaluationHelper.calculateScheduleCapacity(initialFullSequences, initialVolumeAllocatedSequences);
+			final long initialLateness = evaluationHelper.calculateScheduleLateness(initialVolumeAllocatedSequences);
+			final long initialCapacity = evaluationHelper.calculateScheduleCapacity(initialVolumeAllocatedSequences);
 			final long initialPNL = evaluationHelper.calculateSchedulePNL(initialFullSequences, initialProfitAndLossSequences);
 			// Generate the initial set of changes, one level deep
 			final List<ChangeSet> changeSets = new LinkedList<>();
@@ -290,7 +299,8 @@ public class BagOptimiser {
 							break;
 						}
 						actionSetOptimisationData.startNewRun();
-						// main loop - search from a change set root. Will add LEAFs to finalPopulation and others to limitedStates
+						// main loop - search from a change set root. Will add LEAFs to finalPopulation
+						// and others to limitedStates
 						searchChangeSetRoot(progressMonitor, maxLeafs, targetSimilarityState, finalPopulation, promisingLimitedStates, allLimitedStates, savedPopulations, root);
 						if (DEBUG) {
 							System.out.println("evaluations [after rootNode] : " + actionSetOptimisationData.getTotalEvaluations());
@@ -322,7 +332,8 @@ public class BagOptimiser {
 					actionSetOptimisationData.startNewRun();
 					while (savedPopulations.size() > 0 && !shouldTerminate(actionSetOptimisationData) && !shouldTerminateInRun(actionSetOptimisationData)) {
 						checkIfCancelled(progressMonitor);
-						// main loop - search from a change set root. Will add LEAFs to finalPopulation and others to limitedStates
+						// main loop - search from a change set root. Will add LEAFs to finalPopulation
+						// and others to limitedStates
 						searchChangeSetPopulation(progressMonitor, maxLeafs, targetSimilarityState, finalPopulation, promisingLimitedStates, allLimitedStates, savedPopulations,
 								savedPopulations.remove(0));
 						if (DEBUG) {
@@ -348,7 +359,7 @@ public class BagOptimiser {
 					changeSet.setRawSequences(targetRawSequences);
 					final List<ChangeSet> finalSolutionChangeSets = new LinkedList<>(bestSolution.changeSetsAsList);
 					finalSolutionChangeSets.add(changeSet);
-					final JobState finalSolution = new JobState(targetRawSequences, finalSolutionChangeSets, Collections.<Change> emptyList(), new LinkedList<Difference>());
+					final JobState finalSolution = new JobState(targetRawSequences, finalSolutionChangeSets, Collections.<Change>emptyList(), new LinkedList<Difference>());
 					finalSolution.mode = JobStateMode.LEAF;
 					finalPopulation.add(finalSolution);
 					actionSetOptimisationData.numberOfLeafs = finalPopulation.size();
@@ -513,7 +524,8 @@ public class BagOptimiser {
 				allLimitedStates.addAll(states);
 			}
 
-			// TODO: make more efficient - currently adding all branches but could choose based on some distance metric
+			// TODO: make more efficient - currently adding all branches but could choose
+			// based on some distance metric
 			if (foundLeaf(states)) {
 				promisingLimitedStates.addAll(getPromisingBranches(states));
 				bestPopulation.clear();
@@ -535,7 +547,7 @@ public class BagOptimiser {
 		if (actionSetLogger != null) {
 			final int leafs = getLeafs(bestPopulation).size();
 			final JobState best = getBestSolutionForLogger(bestPopulation);
-			List<Difference> diffs = Collections.<Difference> emptyList();
+			List<Difference> diffs = Collections.<Difference>emptyList();
 			if (best != null) {
 				Collections.sort(bestPopulation, new Comparator<JobState>() {
 					@Override
@@ -573,12 +585,18 @@ public class BagOptimiser {
 	// return 1;
 	// }
 	// double prctile = 0.8;
-	// while (prctile > 0.1 && StochasticActionSetUtils.getTotalPNLPerChangeForPercentile(o1.changeSetsAsList, prctile) == StochasticActionSetUtils
+	// while (prctile > 0.1 &&
+	// StochasticActionSetUtils.getTotalPNLPerChangeForPercentile(o1.changeSetsAsList,
+	// prctile) == StochasticActionSetUtils
 	// .getTotalPNLPerChangeForPercentile(o2.changeSetsAsList, prctile)) {
 	// prctile = prctile - 0.1;
 	// }
-	// double a = StochasticActionSetUtils.getTotalPNLPerChangeForPercentile(o1.changeSetsAsList, prctile);
-	// double b = StochasticActionSetUtils.getTotalPNLPerChangeForPercentile(o2.changeSetsAsList, prctile);
+	// double a =
+	// StochasticActionSetUtils.getTotalPNLPerChangeForPercentile(o1.changeSetsAsList,
+	// prctile);
+	// double b =
+	// StochasticActionSetUtils.getTotalPNLPerChangeForPercentile(o2.changeSetsAsList,
+	// prctile);
 	// int compare = Double.compare(a, b);
 	// return compare * -1;
 	// }
@@ -609,7 +627,8 @@ public class BagOptimiser {
 			allLimitedStates.addAll(states);
 		}
 
-		// TODO: make more efficient - currently adding all branches but could choose based on some distance metric
+		// TODO: make more efficient - currently adding all branches but could choose
+		// based on some distance metric
 		if (foundLeaf(states)) {
 			promisingLimitedStates.addAll(getPromisingBranches(states));
 		}
@@ -718,12 +737,18 @@ public class BagOptimiser {
 				// return 1;
 				// }
 				// double prctile = 0.8;
-				// while (prctile > 0.1 && StochasticActionSetUtils.getTotalPNLPerChangeForPercentile(o1.changeSetsAsList, prctile) == StochasticActionSetUtils
+				// while (prctile > 0.1 &&
+				// StochasticActionSetUtils.getTotalPNLPerChangeForPercentile(o1.changeSetsAsList,
+				// prctile) == StochasticActionSetUtils
 				// .getTotalPNLPerChangeForPercentile(o2.changeSetsAsList, prctile)) {
 				// prctile = prctile - 0.1;
 				// }
-				// double a = StochasticActionSetUtils.getTotalPNLPerChangeForPercentile(o1.changeSetsAsList, prctile);
-				// double b = StochasticActionSetUtils.getTotalPNLPerChangeForPercentile(o2.changeSetsAsList, prctile);
+				// double a =
+				// StochasticActionSetUtils.getTotalPNLPerChangeForPercentile(o1.changeSetsAsList,
+				// prctile);
+				// double b =
+				// StochasticActionSetUtils.getTotalPNLPerChangeForPercentile(o2.changeSetsAsList,
+				// prctile);
 				// int compare = Double.compare(a, b);
 				// return compare * -1;
 				return metric(o1, o2);
@@ -954,7 +979,8 @@ public class BagOptimiser {
 	@NonNull
 	protected Collection<JobState> runJobs(@NonNull final SimilarityState similarityState, final List<JobState> sortedJobStates, final JobStore jobStore, final int depthStart, final int depthEnd)
 			throws InterruptedException {
-		// Create a batcher, which produces small batches of jobs that we can then spread among cores
+		// Create a batcher, which produces small batches of jobs that we can then
+		// spread among cores
 		// but keep the progress log accurate and maintain repeatablility
 		final JobBatcher jobBatcher = new JobBatcher(executorService, sortedJobStates, 100, depthStart, depthEnd);
 
@@ -1011,7 +1037,8 @@ public class BagOptimiser {
 		int idx = 1;
 		for (final ChangeSet cs : solution.changeSetsAsList) {
 			final NonNullPair<ISequences, Map<String, Object>> ps = evaluateSolution(cs.getRawSequences());
-			// Ensure this is called directly after evaluate solution so fitnessComponents are in the correct state
+			// Ensure this is called directly after evaluate solution so fitnessComponents
+			// are in the correct state
 			final long currentFitness = fitnessCombiner.calculateFitness(filteredComponents);
 
 			if (currentFitness == lastFitness) {
@@ -1029,7 +1056,8 @@ public class BagOptimiser {
 
 		// Have we found a better solution than the given input?
 		if (fitness < bestSolutionFitness) {
-			// Found better solution, skip remaining action sets which reduce overall fitness
+			// Found better solution, skip remaining action sets which reduce overall
+			// fitness
 			processedSolution = processedSolution.subList(0, bestIdx + 1);
 		}
 		final IMultiStateResult r = new MultiStateResult(processedSolution.get(processedSolution.size() - 1), processedSolution);
@@ -1049,7 +1077,8 @@ public class BagOptimiser {
 	}
 
 	private void updateProgress(final ActionSetOptimisationData actionSetOptimisationData, final int maxEvaluations, final ISimpleProgressMonitor progressMonitor) {
-		// The percent of weighted actual pnl evaluations + constraint failed evaluations that have completed, based on a given total
+		// The percent of weighted actual pnl evaluations + constraint failed
+		// evaluations that have completed, based on a given total
 		final int progress = (((actionSetOptimisationData.actualPNLEvaluations * 100 + actionSetOptimisationData.actualConstraintEvaluations) * 100) / maxEvaluations);
 		while (progress > progressCounter.getTicks()) {
 			progressCounter.increment(progressMonitor);

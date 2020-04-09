@@ -17,10 +17,10 @@ import com.mmxlabs.common.paperdeals.BasicPaperDealData;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.evaluation.VoyagePlanRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * Basic group P&L fitness component
@@ -54,9 +54,9 @@ public class ProfitAndLossAllocationComponent extends AbstractSchedulerFitnessCo
 	}
 
 	@Override
-	public boolean nextVoyagePlan(@NonNull final VoyagePlan voyagePlan, final int time) {
+	public boolean nextVoyagePlan(@NonNull final VoyagePlanRecord vpr, final int time) {
 
-		final long value = profitAndLossSequences.getVoyagePlanGroupValue(voyagePlan);
+		final long value = vpr.getProfitAndLoss();
 		accumulator -= value;
 		return true;
 	}

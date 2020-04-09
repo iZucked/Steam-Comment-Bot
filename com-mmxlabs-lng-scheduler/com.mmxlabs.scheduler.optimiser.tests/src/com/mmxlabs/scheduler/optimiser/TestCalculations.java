@@ -24,9 +24,12 @@ import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.google.inject.name.Names;
 import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.common.curves.ConstantValueLongCurve;
 import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
 import com.mmxlabs.common.parser.series.CalendarMonthMapper;
+import com.mmxlabs.common.parser.series.SeriesParser;
+import com.mmxlabs.common.parser.series.SeriesParserData;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IEvaluationContext;
 import com.mmxlabs.optimiser.core.IResource;
@@ -69,8 +72,17 @@ import com.mmxlabs.scheduler.optimiser.contracts.impl.CharterRateToCharterCostCa
 import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VoyagePlanStartDateCharterRateCalculator;
+import com.mmxlabs.scheduler.optimiser.entities.EntityBookType;
+import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
+import com.mmxlabs.scheduler.optimiser.entities.impl.DefaultEntity;
+import com.mmxlabs.scheduler.optimiser.entities.impl.DefaultEntityBook;
+import com.mmxlabs.scheduler.optimiser.entities.impl.DefaultEntityValueCalculator;
+import com.mmxlabs.scheduler.optimiser.evaluation.DefaultVoyagePlanEvaluator;
+import com.mmxlabs.scheduler.optimiser.evaluation.IVoyagePlanEvaluator;
+import com.mmxlabs.scheduler.optimiser.evaluation.VoyagePlanRecord;
+import com.mmxlabs.scheduler.optimiser.exposures.ExposuresCalculator;
+import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
-import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ExcessIdleTimeComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters;
@@ -86,10 +98,12 @@ import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanner;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanner;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
+import com.mmxlabs.scheduler.optimiser.providers.IExternalDateProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapEntityProviderEditor;
 import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
 import com.mmxlabs.scheduler.optimiser.scheduling.IArrivalTimeScheduler;
 import com.mmxlabs.scheduler.optimiser.shared.SharedDataModule;
@@ -146,6 +160,14 @@ public class TestCalculations {
 
 			final SchedulerBuilder builder = injector.getInstance(SchedulerBuilder.class);
 
+			DefaultEntity entity = new DefaultEntity("Entity", false);
+			injector.injectMembers(entity);
+
+			HashMapEntityProviderEditor entityProviderEditor = injector.getInstance(HashMapEntityProviderEditor.class);
+			entityProviderEditor.setEntityBook(entity, EntityBookType.Shipping, new DefaultEntityBook(entity, EntityBookType.Shipping, new ConstantValueCurve(0)));
+			entityProviderEditor.setEntityBook(entity, EntityBookType.Trading, new DefaultEntityBook(entity, EntityBookType.Trading, new ConstantValueCurve(0)));
+			entityProviderEditor.setEntityBook(entity, EntityBookType.Upstream, new DefaultEntityBook(entity, EntityBookType.Upstream, new ConstantValueCurve(0)));
+
 			final IPort port1 = portBuilder.createPort("port-1", "port-1", "UTC");
 			final IPort port2 = portBuilder.createPort("port-2", "port-2", "UTC");
 			final IPort port3 = portBuilder.createPort("port-3", "port-3", "UTC");
@@ -183,7 +205,7 @@ public class TestCalculations {
 					ballastConsumptionCalculator, 0, ballast_inPortNBORateInM3PerHour);
 			final IStartRequirement startRequirement = builder.createStartRequirement(port1, true, TimeWindowMaker.createInclusiveInclusive(0, 0), null);
 
-			IHeelOptionConsumer heelOptionConsumer = new HeelOptionConsumer(0, 0, VesselTankState.MUST_BE_WARM, new ConstantHeelPriceCalculator(0), false);
+			final IHeelOptionConsumer heelOptionConsumer = new HeelOptionConsumer(0, 0, VesselTankState.MUST_BE_WARM, new ConstantHeelPriceCalculator(0), false);
 			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), true, TimeWindowMaker.createInclusiveInclusive(75, 75), heelOptionConsumer, false);
 
 			final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement, null,
@@ -199,6 +221,9 @@ public class TestCalculations {
 					DEFAULT_VOLUME_LIMIT_IS_M3, false);
 
 			final ICargo cargo1 = builder.createCargo(Lists.newArrayList(loadSlot, dischargeSlot), false);
+
+			entityProviderEditor.setEntityForSlot(entity, loadSlot);
+			entityProviderEditor.setEntityForSlot(entity, dischargeSlot);
 
 			portBuilder.setPortToPortDistance(port1, port2, ERouteOption.DIRECT, 12 * 24);
 			portBuilder.setPortToPortDistance(port2, port3, ERouteOption.DIRECT, 12 * 24);
@@ -241,10 +266,20 @@ public class TestCalculations {
 				expectedPTR2.setSlotDuration(dischargeSlot, 1);
 				expectedPTR2.setReturnSlotTime(portSlotProvider.getPortSlot(endElement), 75);
 
-				Mockito.when(volumeAllocator.allocate(ArgumentMatchers.<IVesselAvailability> any(), Matchers.anyInt(), Matchers.<VoyagePlan> any(), Matchers.<IPortTimesRecord> eq(expectedPTR2)))
-						.thenReturn(allocationAnnotation);
+				Mockito.when(volumeAllocator.allocate(ArgumentMatchers.<IVesselAvailability> any(), Matchers.anyInt(), Matchers.<VoyagePlan> any(), Matchers.<IPortTimesRecord> eq(expectedPTR2),
+						ArgumentMatchers.any())).thenReturn(allocationAnnotation);
+			}
+			final PortTimesRecord expectedPTR3 = new PortTimesRecord();
+			{
+				expectedPTR3.setSlotTime(portSlotProvider.getPortSlot(endElement), 75);
+				expectedPTR3.setSlotDuration(portSlotProvider.getPortSlot(endElement), 0);
+
+				Mockito.when(volumeAllocator.allocate(ArgumentMatchers.<IVesselAvailability> any(), Matchers.anyInt(), Matchers.<VoyagePlan> any(), Matchers.<IPortTimesRecord> eq(expectedPTR3),
+						ArgumentMatchers.any())).thenReturn(null);
 			}
 
+			Mockito.when(allocationAnnotation.getSlots()).thenReturn(Lists.newArrayList(loadSlot, dischargeSlot));
+			Mockito.when(allocationAnnotation.getFirstSlot()).thenReturn(loadSlot);
 			Mockito.when(allocationAnnotation.getSlotCargoCV(loadSlot)).thenReturn(2_000_000);
 			Mockito.when(allocationAnnotation.getSlotCargoCV(dischargeSlot)).thenReturn(2_000_000);
 			Mockito.when(allocationAnnotation.getSlotTime(loadSlot)).thenReturn(25);
@@ -273,27 +308,28 @@ public class TestCalculations {
 
 			final AnnotatedSolution annotatedSolution = new AnnotatedSolution(sequences, state);
 
-			// try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
-			// scope.enter();
 			final ScheduleCalculator scheduler = injector.getInstance(ScheduleCalculator.class);
 
-			Map<IResource, List<IPortTimesRecord>> allPortTimeRecords = CollectionsUtil.makeHashMap(resource, Lists.newArrayList(expectedPTR1, expectedPTR2));
+			final Map<IResource, List<IPortTimesRecord>> allPortTimeRecords = CollectionsUtil.makeHashMap(resource, Lists.newArrayList(expectedPTR1, expectedPTR2, expectedPTR3));
 
-			final VolumeAllocatedSequences volumeAllocatedSequences = scheduler.schedule(sequences, allPortTimeRecords, annotatedSolution);
+			final ProfitAndLossSequences volumeAllocatedSequences = scheduler.schedule(sequences, allPortTimeRecords, annotatedSolution);
 			final VolumeAllocatedSequence volumeAllocatedSequence = volumeAllocatedSequences.getScheduledSequenceForResource(resource);
-			// }
+
 			Assertions.assertNotNull(volumeAllocatedSequences);
 			// TODO: Start checking results
 			{
 				final IPortSlot portSlot = portSlotProvider.getPortSlot(startElement);
-				Assertions.assertEquals(1, volumeAllocatedSequence.getArrivalTime(portSlot));
-				Assertions.assertEquals(0, volumeAllocatedSequence.getVisitDuration(portSlot));
+				final VoyagePlanRecord vpr = volumeAllocatedSequence.getVoyagePlanRecord(portSlot);
+				final IPortTimesRecord ptr = vpr.getPortTimesRecord();
+
+				Assertions.assertEquals(1, ptr.getSlotTime(portSlot));
+				Assertions.assertEquals(0, ptr.getSlotDuration(portSlot));
 			}
 
 			{
 				final IPortSlot portSlot = portSlotProvider.getPortSlot(startElement);
-
-				final VoyageDetails journeyDetails = volumeAllocatedSequence.getVoyageDetailsFrom(portSlot);
+				final VoyagePlanRecord vpr = volumeAllocatedSequence.getVoyagePlanRecord(portSlot);
+				final VoyageDetails journeyDetails = vpr.getVoyageDetailsFrom(portSlot);
 				Assertions.assertNotNull(journeyDetails);
 
 				Assertions.assertEquals(24 * 12, journeyDetails.getOptions().getDistance());
@@ -330,15 +366,18 @@ public class TestCalculations {
 			}
 			{
 				final IPortSlot portSlot = portSlotProvider.getPortSlot(loadElement);
+				final VoyagePlanRecord vpr = volumeAllocatedSequence.getVoyagePlanRecord(portSlot);
+				final IPortTimesRecord ptr = vpr.getPortTimesRecord();
 
-				Assertions.assertEquals(25, volumeAllocatedSequence.getArrivalTime(portSlot));
-				Assertions.assertEquals(1, volumeAllocatedSequence.getVisitDuration(portSlot));
+				Assertions.assertEquals(25, ptr.getSlotTime(portSlot));
+				Assertions.assertEquals(1, ptr.getSlotDuration(portSlot));
 			}
 
 			{
 				final IPortSlot portSlot = portSlotProvider.getPortSlot(loadElement);
+				final VoyagePlanRecord vpr = volumeAllocatedSequence.getVoyagePlanRecord(portSlot);
 
-				final VoyageDetails journeyDetails = volumeAllocatedSequence.getVoyageDetailsFrom(portSlot);
+				final VoyageDetails journeyDetails = vpr.getVoyageDetailsFrom(portSlot);
 				Assertions.assertNotNull(journeyDetails);
 				Assertions.assertEquals(24 * 12, journeyDetails.getOptions().getDistance());
 				Assertions.assertEquals(24, journeyDetails.getTravelTime());
@@ -376,16 +415,18 @@ public class TestCalculations {
 			{
 
 				final IPortSlot portSlot = portSlotProvider.getPortSlot(dischargeElement);
+				final VoyagePlanRecord vpr = volumeAllocatedSequence.getVoyagePlanRecord(portSlot);
+				final IPortTimesRecord ptr = vpr.getPortTimesRecord();
 
-				Assertions.assertEquals(50, volumeAllocatedSequence.getArrivalTime(portSlot));
-				Assertions.assertEquals(1, volumeAllocatedSequence.getVisitDuration(portSlot));
+				Assertions.assertEquals(50, ptr.getSlotTime(portSlot));
+				Assertions.assertEquals(1, ptr.getSlotDuration(portSlot));
 			}
 
 			{
 
 				final IPortSlot portSlot = portSlotProvider.getPortSlot(dischargeElement);
-
-				final VoyageDetails journeyDetails = volumeAllocatedSequence.getVoyageDetailsFrom(portSlot);
+				final VoyagePlanRecord vpr = volumeAllocatedSequence.getVoyagePlanRecord(portSlot);
+				final VoyageDetails journeyDetails = vpr.getVoyageDetailsFrom(portSlot);
 				Assertions.assertNotNull(journeyDetails);
 				Assertions.assertEquals(24 * 12, journeyDetails.getOptions().getDistance());
 				Assertions.assertEquals(24, journeyDetails.getTravelTime());
@@ -424,9 +465,11 @@ public class TestCalculations {
 			{
 
 				final IPortSlot portSlot = portSlotProvider.getPortSlot(endElement);
+				final VoyagePlanRecord vpr = volumeAllocatedSequence.getVoyagePlanRecord(portSlot);
+				final IPortTimesRecord ptr = vpr.getPortTimesRecord();
 
-				Assertions.assertEquals(75, volumeAllocatedSequence.getArrivalTime(portSlot));
-				Assertions.assertEquals(0, volumeAllocatedSequence.getVisitDuration(portSlot));
+				Assertions.assertEquals(75, ptr.getSlotTime(portSlot));
+				Assertions.assertEquals(0, ptr.getSlotDuration(portSlot));
 			}
 		}
 	}
@@ -454,6 +497,13 @@ public class TestCalculations {
 			final SharedPortDistanceDataBuilder portBuilder = injector.getInstance(SharedPortDistanceDataBuilder.class);
 
 			final SchedulerBuilder builder = injector.getInstance(SchedulerBuilder.class);
+			DefaultEntity entity = new DefaultEntity("Entity", false);
+			injector.injectMembers(entity);
+
+			HashMapEntityProviderEditor entityProviderEditor = injector.getInstance(HashMapEntityProviderEditor.class);
+			entityProviderEditor.setEntityBook(entity, EntityBookType.Shipping, new DefaultEntityBook(entity, EntityBookType.Shipping, new ConstantValueCurve(0)));
+			entityProviderEditor.setEntityBook(entity, EntityBookType.Trading, new DefaultEntityBook(entity, EntityBookType.Trading, new ConstantValueCurve(0)));
+			entityProviderEditor.setEntityBook(entity, EntityBookType.Upstream, new DefaultEntityBook(entity, EntityBookType.Upstream, new ConstantValueCurve(0)));
 
 			final IPort port1 = portBuilder.createPort("port-1", "port-1", "UTC");
 			final IPort port2 = portBuilder.createPort("port-2", "port-2", "UTC");
@@ -499,7 +549,7 @@ public class TestCalculations {
 
 			final IStartRequirement startRequirement = builder.createStartRequirement(port1, true, TimeWindowMaker.createInclusiveInclusive(0, 0, 0, false), null);
 
-			IHeelOptionConsumer heelOptionConsumer = new HeelOptionConsumer(0, 0, VesselTankState.MUST_BE_WARM, new ConstantHeelPriceCalculator(0), false);
+			final IHeelOptionConsumer heelOptionConsumer = new HeelOptionConsumer(0, 0, VesselTankState.MUST_BE_WARM, new ConstantHeelPriceCalculator(0), false);
 			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), true, TimeWindowMaker.createInclusiveInclusive(75, 75, 0, false), heelOptionConsumer,
 					false);
 
@@ -516,6 +566,9 @@ public class TestCalculations {
 					DEFAULT_VOLUME_LIMIT_IS_M3, false);
 
 			final ICargo cargo1 = builder.createCargo(Lists.newArrayList(loadSlot, dischargeSlot), false);
+
+			entityProviderEditor.setEntityForSlot(entity, loadSlot);
+			entityProviderEditor.setEntityForSlot(entity, dischargeSlot);
 
 			portBuilder.setPortToPortDistance(port1, port2, ERouteOption.DIRECT, 12 * 25);
 			portBuilder.setPortToPortDistance(port2, port3, ERouteOption.DIRECT, 12 * 25);
@@ -557,10 +610,20 @@ public class TestCalculations {
 				expectedPTR2.setSlotDuration(dischargeSlot, 1);
 				expectedPTR2.setReturnSlotTime(portSlotProvider.getPortSlot(endElement), 75);
 
-				Mockito.when(volumeAllocator.allocate(ArgumentMatchers.<IVesselAvailability> any(), Matchers.anyInt(), Matchers.<VoyagePlan> any(), Matchers.<IPortTimesRecord> eq(expectedPTR2)))
-						.thenReturn(allocationAnnotation);
+				Mockito.when(volumeAllocator.allocate(ArgumentMatchers.<IVesselAvailability> any(), Matchers.anyInt(), Matchers.<VoyagePlan> any(), Matchers.<IPortTimesRecord> eq(expectedPTR2),
+						ArgumentMatchers.any())).thenReturn(allocationAnnotation);
+			}
+			final PortTimesRecord expectedPTR3 = new PortTimesRecord();
+			{
+				expectedPTR3.setSlotTime(portSlotProvider.getPortSlot(endElement), 75);
+				expectedPTR3.setSlotDuration(portSlotProvider.getPortSlot(endElement), 0);
+
+				Mockito.when(volumeAllocator.allocate(ArgumentMatchers.<IVesselAvailability> any(), Matchers.anyInt(), Matchers.<VoyagePlan> any(), Matchers.<IPortTimesRecord> eq(expectedPTR3),
+						ArgumentMatchers.any())).thenReturn(null);
 			}
 
+			Mockito.when(allocationAnnotation.getSlots()).thenReturn(Lists.newArrayList(loadSlot, dischargeSlot));
+			Mockito.when(allocationAnnotation.getFirstSlot()).thenReturn(loadSlot);
 			Mockito.when(allocationAnnotation.getSlotTime(loadSlot)).thenReturn(25);
 			Mockito.when(allocationAnnotation.getSlotDuration(loadSlot)).thenReturn(1);
 
@@ -584,22 +647,25 @@ public class TestCalculations {
 			final IEvaluationState state = Mockito.mock(IEvaluationState.class);
 
 			final AnnotatedSolution annotatedSolution = new AnnotatedSolution(sequences, state);
-			Map<IResource, List<IPortTimesRecord>> allPortTimeRecords = CollectionsUtil.makeHashMap(resource, Lists.newArrayList(expectedPTR1, expectedPTR2));
+			final Map<IResource, List<IPortTimesRecord>> allPortTimeRecords = CollectionsUtil.makeHashMap(resource, Lists.newArrayList(expectedPTR1, expectedPTR2, expectedPTR3));
 
-			final VolumeAllocatedSequences volumeAllocatedSequences = scheduler.schedule(sequences, allPortTimeRecords, annotatedSolution);
+			final ProfitAndLossSequences volumeAllocatedSequences = scheduler.schedule(sequences, allPortTimeRecords, annotatedSolution);
 			Assertions.assertNotNull(volumeAllocatedSequences);
 			final VolumeAllocatedSequence volumeAllocatedSequence = volumeAllocatedSequences.getScheduledSequenceForResource(resource);
 
 			{
 				final IPortSlot portSlot = portSlotProvider.getPortSlot(startElement);
-				Assertions.assertEquals(1, volumeAllocatedSequence.getArrivalTime(portSlot));
-				Assertions.assertEquals(0, volumeAllocatedSequence.getVisitDuration(portSlot));
+				final VoyagePlanRecord vpr = volumeAllocatedSequence.getVoyagePlanRecord(portSlot);
+				final IPortTimesRecord ptr = vpr.getPortTimesRecord();
+
+				Assertions.assertEquals(1, ptr.getSlotTime(portSlot));
+				Assertions.assertEquals(0, ptr.getSlotDuration(portSlot));
 			}
 
 			{
 				final IPortSlot portSlot = portSlotProvider.getPortSlot(startElement);
-
-				final VoyageDetails journeyDetails = volumeAllocatedSequence.getVoyageDetailsFrom(portSlot);
+				final VoyagePlanRecord vpr = volumeAllocatedSequence.getVoyagePlanRecord(portSlot);
+				final VoyageDetails journeyDetails = vpr.getVoyageDetailsFrom(portSlot);
 				Assertions.assertNotNull(journeyDetails);
 				Assertions.assertEquals(25 * 12, journeyDetails.getOptions().getDistance());
 				Assertions.assertEquals(18, journeyDetails.getTravelTime());
@@ -637,15 +703,18 @@ public class TestCalculations {
 			{
 
 				final IPortSlot portSlot = portSlotProvider.getPortSlot(loadElement);
-				Assertions.assertEquals(25, volumeAllocatedSequence.getArrivalTime(portSlot));
-				Assertions.assertEquals(1, volumeAllocatedSequence.getVisitDuration(portSlot));
+				final VoyagePlanRecord vpr = volumeAllocatedSequence.getVoyagePlanRecord(portSlot);
+				final IPortTimesRecord ptr = vpr.getPortTimesRecord();
+
+				Assertions.assertEquals(25, ptr.getSlotTime(portSlot));
+				Assertions.assertEquals(1, ptr.getSlotDuration(portSlot));
 			}
 
 			{
 
 				final IPortSlot portSlot = portSlotProvider.getPortSlot(loadElement);
-
-				final VoyageDetails journeyDetails = volumeAllocatedSequence.getVoyageDetailsFrom(portSlot);
+				final VoyagePlanRecord vpr = volumeAllocatedSequence.getVoyagePlanRecord(portSlot);
+				final VoyageDetails journeyDetails = vpr.getVoyageDetailsFrom(portSlot);
 				Assertions.assertNotNull(journeyDetails);
 				Assertions.assertEquals(25 * 12, journeyDetails.getOptions().getDistance());
 				Assertions.assertEquals(18, journeyDetails.getTravelTime());
@@ -686,13 +755,17 @@ public class TestCalculations {
 			}
 			{
 				final IPortSlot portSlot = portSlotProvider.getPortSlot(dischargeElement);
-				Assertions.assertEquals(50, volumeAllocatedSequence.getArrivalTime(portSlot));
-				Assertions.assertEquals(1, volumeAllocatedSequence.getVisitDuration(portSlot));
+
+				final VoyagePlanRecord vpr = volumeAllocatedSequence.getVoyagePlanRecord(portSlot);
+				final IPortTimesRecord ptr = vpr.getPortTimesRecord();
+
+				Assertions.assertEquals(50, ptr.getSlotTime(portSlot));
+				Assertions.assertEquals(1, ptr.getSlotDuration(portSlot));
 			}
 			{
 				final IPortSlot portSlot = portSlotProvider.getPortSlot(dischargeElement);
-
-				final VoyageDetails journeyDetails = volumeAllocatedSequence.getVoyageDetailsFrom(portSlot);
+				final VoyagePlanRecord vpr = volumeAllocatedSequence.getVoyagePlanRecord(portSlot);
+				final VoyageDetails journeyDetails = vpr.getVoyageDetailsFrom(portSlot);
 				Assertions.assertNotNull(journeyDetails);
 				Assertions.assertEquals(25 * 12, journeyDetails.getOptions().getDistance());
 				Assertions.assertEquals(18, journeyDetails.getTravelTime());
@@ -733,8 +806,12 @@ public class TestCalculations {
 			}
 			{
 				final IPortSlot portSlot = portSlotProvider.getPortSlot(endElement);
-				Assertions.assertEquals(75, volumeAllocatedSequence.getArrivalTime(portSlot));
-				Assertions.assertEquals(0, volumeAllocatedSequence.getVisitDuration(portSlot));
+
+				final VoyagePlanRecord vpr = volumeAllocatedSequence.getVoyagePlanRecord(portSlot);
+				final IPortTimesRecord ptr = vpr.getPortTimesRecord();
+
+				Assertions.assertEquals(75, ptr.getSlotTime(portSlot));
+				Assertions.assertEquals(0, ptr.getSlotDuration(portSlot));
 			}
 		}
 	}
@@ -775,6 +852,14 @@ public class TestCalculations {
 			final SharedPortDistanceDataBuilder portBuilder = injector.getInstance(SharedPortDistanceDataBuilder.class);
 
 			final SchedulerBuilder builder = injector.getInstance(SchedulerBuilder.class);
+
+			DefaultEntity entity = new DefaultEntity("Entity", false);
+			injector.injectMembers(entity);
+
+			HashMapEntityProviderEditor entityProviderEditor = injector.getInstance(HashMapEntityProviderEditor.class);
+			entityProviderEditor.setEntityBook(entity, EntityBookType.Shipping, new DefaultEntityBook(entity, EntityBookType.Shipping, new ConstantValueCurve(0)));
+			entityProviderEditor.setEntityBook(entity, EntityBookType.Trading, new DefaultEntityBook(entity, EntityBookType.Trading, new ConstantValueCurve(0)));
+			entityProviderEditor.setEntityBook(entity, EntityBookType.Upstream, new DefaultEntityBook(entity, EntityBookType.Upstream, new ConstantValueCurve(0)));
 
 			final IPort port1 = portBuilder.createPort("port-1", "port-1", "UTC");
 			final IPort port2 = portBuilder.createPort("port-2", "port-2", "UTC");
@@ -818,7 +903,7 @@ public class TestCalculations {
 					ballastConsumptionCalculator, 0, ballast_inPortNBORateInM3PerHour);
 
 			final IStartRequirement startRequirement = builder.createStartRequirement(port1, true, TimeWindowMaker.createInclusiveInclusive(0, 0), null);
-			IHeelOptionConsumer heelOptionConsumer = new HeelOptionConsumer(0, 0, VesselTankState.MUST_BE_WARM, new ConstantHeelPriceCalculator(0), false);
+			final IHeelOptionConsumer heelOptionConsumer = new HeelOptionConsumer(0, 0, VesselTankState.MUST_BE_WARM, new ConstantHeelPriceCalculator(0), false);
 
 			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), true, TimeWindowMaker.createInclusiveInclusive(75, 75), heelOptionConsumer, false);
 
@@ -835,6 +920,9 @@ public class TestCalculations {
 					DEFAULT_VOLUME_LIMIT_IS_M3, false);
 
 			final ICargo cargo1 = builder.createCargo(Lists.newArrayList(loadSlot, dischargeSlot), false);
+
+			entityProviderEditor.setEntityForSlot(entity, loadSlot);
+			entityProviderEditor.setEntityForSlot(entity, dischargeSlot);
 
 			portBuilder.setPortToPortDistance(port1, port2, ERouteOption.DIRECT, 12 * 25);
 			portBuilder.setPortToPortDistance(port2, port3, ERouteOption.DIRECT, 12 * 25);
@@ -875,9 +963,21 @@ public class TestCalculations {
 				expectedPTR2.setReturnSlotTime(portSlotProvider.getPortSlot(endElement), 75);
 
 				Mockito.when(volumeAllocator.allocate(ArgumentMatchers.<IVesselAvailability> any(), ArgumentMatchers.anyInt(), ArgumentMatchers.<VoyagePlan> any(),
-						ArgumentMatchers.<IPortTimesRecord> eq(expectedPTR2))).thenReturn(allocationAnnotation);
+						ArgumentMatchers.<IPortTimesRecord> eq(expectedPTR2), ArgumentMatchers.any())).thenReturn(allocationAnnotation);
+			}
+			final PortTimesRecord expectedPTR3 = new PortTimesRecord();
+
+			{
+				expectedPTR3.setSlotTime(portSlotProvider.getPortSlot(endElement), 75);
+				expectedPTR3.setSlotDuration(portSlotProvider.getPortSlot(endElement), 0);
+
+				Mockito.when(volumeAllocator.allocate(ArgumentMatchers.<IVesselAvailability> any(), Matchers.anyInt(), Matchers.<VoyagePlan> any(), Matchers.<IPortTimesRecord> eq(expectedPTR3),
+						ArgumentMatchers.any())).thenReturn(null);
 			}
 
+			Mockito.when(allocationAnnotation.getSlots()).thenReturn(Lists.newArrayList(loadSlot, dischargeSlot));
+
+			Mockito.when(allocationAnnotation.getFirstSlot()).thenReturn(loadSlot);
 			Mockito.when(allocationAnnotation.getSlotTime(loadSlot)).thenReturn(25);
 			Mockito.when(allocationAnnotation.getSlotDuration(loadSlot)).thenReturn(1);
 
@@ -897,14 +997,14 @@ public class TestCalculations {
 			// Schedule sequence
 			final ISequences sequences = new Sequences(Collections.singletonList(resource), CollectionsUtil.<IResource, ISequence> makeHashMap(resource, sequence));
 
-			Map<IResource, List<IPortTimesRecord>> allPortTimeRecords = CollectionsUtil.makeHashMap(resource, Lists.newArrayList(expectedPTR1, expectedPTR2));
+			final Map<IResource, List<IPortTimesRecord>> allPortTimeRecords = CollectionsUtil.makeHashMap(resource, Lists.newArrayList(expectedPTR1, expectedPTR2, expectedPTR3));
 
 			final IEvaluationContext context = Mockito.mock(IEvaluationContext.class);
 			final IEvaluationState state = Mockito.mock(IEvaluationState.class);
 
 			final AnnotatedSolution annotatedSolution = new AnnotatedSolution(sequences, state);
 			// TODO: Fix arrival time feed in.
-			final VolumeAllocatedSequences volumeAllocatedSequences = scheduler.schedule(sequences, allPortTimeRecords, annotatedSolution);
+			final ProfitAndLossSequences volumeAllocatedSequences = scheduler.schedule(sequences, allPortTimeRecords, annotatedSolution);
 			Assertions.assertNotNull(volumeAllocatedSequences);
 
 			final VolumeAllocatedSequence volumeAllocatedSequence = volumeAllocatedSequences.getScheduledSequenceForResource(resource);
@@ -912,14 +1012,18 @@ public class TestCalculations {
 			// TODO: Start checking results
 			{
 				final IPortSlot portSlot = portSlotProvider.getPortSlot(startElement);
-				Assertions.assertEquals(1, volumeAllocatedSequence.getArrivalTime(portSlot));
-				Assertions.assertEquals(0, volumeAllocatedSequence.getVisitDuration(portSlot));
+
+				final VoyagePlanRecord vpr = volumeAllocatedSequence.getVoyagePlanRecord(portSlot);
+				final IPortTimesRecord ptr = vpr.getPortTimesRecord();
+
+				Assertions.assertEquals(1, ptr.getSlotTime(portSlot));
+				Assertions.assertEquals(0, ptr.getSlotDuration(portSlot));
 			}
 
 			{
 				final IPortSlot portSlot = portSlotProvider.getPortSlot(startElement);
-
-				final VoyageDetails journeyDetails = volumeAllocatedSequence.getVoyageDetailsFrom(portSlot);
+				final VoyagePlanRecord vpr = volumeAllocatedSequence.getVoyagePlanRecord(portSlot);
+				final VoyageDetails journeyDetails = vpr.getVoyageDetailsFrom(portSlot);
 				Assertions.assertNotNull(journeyDetails);
 				Assertions.assertEquals(25 * 12, journeyDetails.getOptions().getDistance());
 				Assertions.assertEquals(18, journeyDetails.getTravelTime());
@@ -956,14 +1060,17 @@ public class TestCalculations {
 			}
 			{
 				final IPortSlot portSlot = portSlotProvider.getPortSlot(loadElement);
-				Assertions.assertEquals(25, volumeAllocatedSequence.getArrivalTime(portSlot));
-				Assertions.assertEquals(1, volumeAllocatedSequence.getVisitDuration(portSlot));
+				final VoyagePlanRecord vpr = volumeAllocatedSequence.getVoyagePlanRecord(portSlot);
+				final IPortTimesRecord ptr = vpr.getPortTimesRecord();
+
+				Assertions.assertEquals(25, ptr.getSlotTime(portSlot));
+				Assertions.assertEquals(1, ptr.getSlotDuration(portSlot));
 			}
 
 			{
 				final IPortSlot portSlot = portSlotProvider.getPortSlot(loadElement);
-
-				final VoyageDetails journeyDetails = volumeAllocatedSequence.getVoyageDetailsFrom(portSlot);
+				final VoyagePlanRecord vpr = volumeAllocatedSequence.getVoyagePlanRecord(portSlot);
+				final VoyageDetails journeyDetails = vpr.getVoyageDetailsFrom(portSlot);
 				Assertions.assertNotNull(journeyDetails);
 				Assertions.assertEquals(25 * 12, journeyDetails.getOptions().getDistance());
 				Assertions.assertEquals(18, journeyDetails.getTravelTime());
@@ -1007,14 +1114,17 @@ public class TestCalculations {
 			}
 			{
 				final IPortSlot portSlot = portSlotProvider.getPortSlot(dischargeElement);
-				Assertions.assertEquals(50, volumeAllocatedSequence.getArrivalTime(portSlot));
-				Assertions.assertEquals(1, volumeAllocatedSequence.getVisitDuration(portSlot));
+				final VoyagePlanRecord vpr = volumeAllocatedSequence.getVoyagePlanRecord(portSlot);
+				final IPortTimesRecord ptr = vpr.getPortTimesRecord();
+
+				Assertions.assertEquals(50, ptr.getSlotTime(portSlot));
+				Assertions.assertEquals(1, ptr.getSlotDuration(portSlot));
 			}
 
 			{
 				final IPortSlot portSlot = portSlotProvider.getPortSlot(dischargeElement);
-
-				final VoyageDetails journeyDetails = volumeAllocatedSequence.getVoyageDetailsFrom(portSlot);
+				final VoyagePlanRecord vpr = volumeAllocatedSequence.getVoyagePlanRecord(portSlot);
+				final VoyageDetails journeyDetails = vpr.getVoyageDetailsFrom(portSlot);
 				Assertions.assertNotNull(journeyDetails);
 				Assertions.assertEquals(25 * 12, journeyDetails.getOptions().getDistance());
 				Assertions.assertEquals(18, journeyDetails.getTravelTime());
@@ -1057,15 +1167,18 @@ public class TestCalculations {
 			}
 			{
 				final IPortSlot portSlot = portSlotProvider.getPortSlot(endElement);
-				Assertions.assertEquals(75, volumeAllocatedSequence.getArrivalTime(portSlot));
-				Assertions.assertEquals(0, volumeAllocatedSequence.getVisitDuration(portSlot));
+				final VoyagePlanRecord vpr = volumeAllocatedSequence.getVoyagePlanRecord(portSlot);
+				final IPortTimesRecord ptr = vpr.getPortTimesRecord();
+
+				Assertions.assertEquals(75, ptr.getSlotTime(portSlot));
+				Assertions.assertEquals(0, ptr.getSlotDuration(portSlot));
 			}
 		}
 	}
 
 	private Injector createTestInjector(final IVolumeAllocator volumeAllocator, final int[] baseFuelUnitPrices) {
 
-		final Injector injector = Guice.createInjector(new PerChainUnitScopeModule(), new DataComponentProviderModule(), new AbstractModule() {
+		return Guice.createInjector(new PerChainUnitScopeModule(), new DataComponentProviderModule(), new AbstractModule() {
 
 			@Provides
 			@Singleton
@@ -1114,6 +1227,18 @@ public class TestCalculations {
 				bind(SchedulerBuilder.class);
 				bind(ILNGVoyageCalculator.class).to(LNGVoyageCalculator.class);
 				bind(IVoyagePlanOptimiser.class).to(VoyagePlanOptimiser.class);
+				bind(IVoyagePlanEvaluator.class).to(DefaultVoyagePlanEvaluator.class);
+				bind(IEntityValueCalculator.class).to(DefaultEntityValueCalculator.class);
+
+				bind (IExternalDateProvider.class).toInstance(Mockito.mock(IExternalDateProvider.class));
+				bind (ExposuresCalculator.class);
+				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.OPTIMISE_PAPER_PNL)).toInstance(Boolean.FALSE);
+				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.GENERATED_PAPERS_IN_PNL)).toInstance(Boolean.FALSE);
+				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.COMPUTE_PAPER_PNL)).toInstance(Boolean.FALSE);
+				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.COMPUTE_EXPOSURES)).toInstance(Boolean.FALSE);
+				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.RE_HEDGE_WITH_PAPERS)).toInstance(Boolean.FALSE);
+				bind(SeriesParser.class).annotatedWith(Names.named(SchedulerConstants.Parser_Commodity)).toInstance(new SeriesParser(new SeriesParserData()));
+				bind(SeriesParser.class).annotatedWith(Names.named(SchedulerConstants.Parser_Currency)).toInstance(new SeriesParser(new SeriesParserData()));
 
 				bind(IVoyagePlanner.class).to(VoyagePlanner.class);
 
@@ -1129,12 +1254,8 @@ public class TestCalculations {
 
 				bind(VesselBaseFuelCalculator.class).toInstance(baseFuelCalculator);
 
-				bind(boolean.class).annotatedWith(Names.named(IEndEventScheduler.ENABLE_HIRE_COST_ONLY_END_RULE)).toInstance(Boolean.TRUE);
-
 				bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_ArrivalTimeCache)).toInstance(CacheMode.Off);
-				bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocationCache)).toInstance(CacheMode.Off);
-				bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocatedSequenceCache)).toInstance(CacheMode.Off);
-				bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_ProfitandLossCache)).toInstance(CacheMode.Off);
+				bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_VoyagePlanEvaluatorCache)).toInstance(CacheMode.Off);
 				bind(boolean.class).annotatedWith(Names.named("schedule-purges")).toInstance(Boolean.TRUE);
 				bind(boolean.class).annotatedWith(Names.named("hint-lngtransformer-disable-caches")).toInstance(Boolean.TRUE);
 				bind(boolean.class).annotatedWith(Names.named(IEndEventScheduler.ENABLE_HIRE_COST_ONLY_END_RULE)).toInstance(Boolean.TRUE);
@@ -1143,6 +1264,5 @@ public class TestCalculations {
 
 			}
 		});
-		return injector;
 	}
 }

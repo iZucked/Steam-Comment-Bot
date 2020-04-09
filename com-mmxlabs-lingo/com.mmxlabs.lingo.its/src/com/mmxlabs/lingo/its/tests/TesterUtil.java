@@ -84,11 +84,11 @@ public class TesterUtil {
 	}
 
 	@NonNull
-	public static Properties getProperties(final URL propertiesURL, final boolean create) throws MalformedURLException, IOException {
+	public static Properties getProperties(final URL propertiesURL, final boolean create) throws IOException {
 		if (create) {
 			/**
-			 * Extend to save properties in a sorted order for ease of reading
-			 * Copy and paste so much due to private methods. :(
+			 * Extend to save properties in a sorted order for ease of reading Copy and
+			 * paste so much due to private methods. :(
 			 */
 			return new Properties() {
 
@@ -141,7 +141,8 @@ public class TesterUtil {
 							String val = getProperty(key);
 							key = saveConvert(key, true, escUnicode);
 							/*
-							 * No need to escape embedded and trailing spaces for value, hence pass false to flag.
+							 * No need to escape embedded and trailing spaces for value, hence pass false to
+							 * flag.
 							 */
 							val = saveConvert(val, false, escUnicode);
 							bw.write(key + "=" + val);
@@ -152,7 +153,8 @@ public class TesterUtil {
 				}
 
 				/*
-				 * Converts unicodes to encoded &#92;uxxxx and escapes special characters with a preceding slash
+				 * Converts unicodes to encoded &#92;uxxxx and escapes special characters with a
+				 * preceding slash
 				 */
 				private String saveConvert(String theString, boolean escapeSpace, boolean escapeUnicode) {
 					int len = theString.length();
@@ -223,8 +225,7 @@ public class TesterUtil {
 				/**
 				 * Convert a nibble to a hex character
 				 * 
-				 * @param nibble
-				 *            the nibble to convert.
+				 * @param nibble the nibble to convert.
 				 */
 				private char toHex(int nibble) {
 					return hexDigit[(nibble & 0xF)];
@@ -275,7 +276,8 @@ public class TesterUtil {
 	}
 
 	/**
-	 * Test the original (previously generated) fitnesses against the current. Also test that the total of the original and current are equal.
+	 * Test the original (previously generated) fitnesses against the current. Also
+	 * test that the total of the original and current are equal.
 	 */
 	public static void testOriginalAndCurrentFitnesses(final Properties props, final String mapName, final List<Fitness> currentFitnesses) {
 
@@ -302,7 +304,7 @@ public class TesterUtil {
 		}
 
 		// Validation
-		final Set<String> seenFitnesses = new HashSet<String>();
+		final Set<String> seenFitnesses = new HashSet<>();
 		for (final Fitness f : currentFitnesses) {
 
 			// get the values

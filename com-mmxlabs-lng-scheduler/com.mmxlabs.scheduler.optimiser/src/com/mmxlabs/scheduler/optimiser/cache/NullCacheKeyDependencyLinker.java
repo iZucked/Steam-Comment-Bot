@@ -9,13 +9,13 @@ import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
 public final class NullCacheKeyDependencyLinker implements IProfitAndLossCacheKeyDependencyLinker {
 
 	@Override
-	public List<DepCacheKey> link(@NonNull IPortTimesRecord portTimesRecord, @NonNull VolumeAllocatedSequences volumeAllocatedSequences) {
+	public List<DepCacheKey> link(@NonNull IPortTimesRecord portTimesRecord, @NonNull ProfitAndLossSequences volumeAllocatedSequences) {
 		return Collections.emptyList();
 	}
 }

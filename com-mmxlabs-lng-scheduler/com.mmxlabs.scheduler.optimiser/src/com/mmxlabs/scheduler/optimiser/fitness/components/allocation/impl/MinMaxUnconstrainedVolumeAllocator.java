@@ -7,20 +7,22 @@ package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.name.Named;
+import com.mmxlabs.common.Pair;
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
-import com.mmxlabs.scheduler.optimiser.cache.NotCaching;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
-import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator.EvaluationMode;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord.AllocationMode;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.utils.IBoilOffHelper;
@@ -32,6 +34,7 @@ import com.mmxlabs.scheduler.optimiser.providers.ICounterPartyVolumeProvider;
  * @author Simon Goodall
  *
  */
+@NonNullByDefault
 public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAllocator {
 
 	@Inject
@@ -41,16 +44,14 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 	private ICounterPartyVolumeProvider counterPartyVolumeProvider;
 
 	@Inject
-	@NotCaching
-	private Provider<IEntityValueCalculator> entityValueCalculatorProvider;
+	private IEntityValueCalculator entityValueCalculator;
 
 	@Inject
 	@Named(SchedulerConstants.KEY_DEFAULT_MAX_VOLUME_IN_M3)
 	private long defaultMaxVolumeInM3;
 
 	@Override
-	protected @NonNull AllocationAnnotation calculateTransferMode(final AllocationRecord allocationRecord, final @NonNull List<@NonNull IPortSlot> slots, final @NonNull IVessel vessel) {
-		final AllocationAnnotation annotation = createNewAnnotation(allocationRecord, slots);
+	protected IAllocationAnnotation calculateTransferMode(final AllocationRecord maxVolumeRecord, final List<IPortSlot> slots, final IVessel vessel, @Nullable IAnnotatedSolution annotatedSolution) {
 
 		// Note: Calculations in MMBTU
 		final long startVolumeInMMBTu;
@@ -61,8 +62,8 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 		final int defaultCargoCVValue = loadSlot.getCargoCVValue();
 		// Convert startVolume and vesselCapacity into MMBTu
 		if (defaultCargoCVValue > 0) {
-			if (allocationRecord.startVolumeInM3 != Long.MAX_VALUE) {
-				startVolumeInMMBTu = Calculator.convertM3ToMMBTu(allocationRecord.startVolumeInM3, defaultCargoCVValue);
+			if (maxVolumeRecord.startVolumeInM3 != Long.MAX_VALUE) {
+				startVolumeInMMBTu = Calculator.convertM3ToMMBTu(maxVolumeRecord.startVolumeInM3, defaultCargoCVValue);
 			} else {
 				startVolumeInMMBTu = Long.MAX_VALUE;
 			}
@@ -80,7 +81,7 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 		boolean isAllMaxValue = vesselCapacityInMMBTu == Long.MAX_VALUE;
 		if (isAllMaxValue) {
 			for (int i = 0; i < slots.size(); ++i) {
-				isAllMaxValue &= allocationRecord.maxVolumesInMMBtu.get(i) == Long.MAX_VALUE;
+				isAllMaxValue &= maxVolumeRecord.maxVolumesInMMBtu.get(i) == Long.MAX_VALUE;
 			}
 		}
 		if (isAllMaxValue) {
@@ -93,80 +94,105 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 		long maxTransferVolumeM3 = -1;
 		{
 			for (int i = 0; i < slots.size(); ++i) {
-				final long newMinTransferVolumeMMBTU = capValueWithZeroDefault(allocationRecord.maxVolumesInMMBtu.get(i), maxTransferVolumeMMBTu);
-				maxTransferVolumeM3 = getUnroundedM3TransferVolume(allocationRecord, slots, maxTransferVolumeMMBTu, maxTransferVolumeM3, i, newMinTransferVolumeMMBTU, false);
+				final long newMinTransferVolumeMMBTU = capValueWithZeroDefault(maxVolumeRecord.maxVolumesInMMBtu.get(i), maxTransferVolumeMMBTu);
+				maxTransferVolumeM3 = getUnroundedM3TransferVolume(maxVolumeRecord, slots, maxTransferVolumeMMBTu, maxTransferVolumeM3, i, newMinTransferVolumeMMBTU, false);
 				maxTransferVolumeMMBTu = newMinTransferVolumeMMBTU;
 			}
 		}
-		setTransferVolume(allocationRecord, slots, annotation, maxTransferVolumeMMBTu, maxTransferVolumeM3);
-		
-		if (allocationRecord.fullCargoLot) {
-			return annotation;
-		}
-		
-		final long maxTransferPNL = entityValueCalculatorProvider.get()
-				.evaluate(EvaluationMode.Estimate, allocationRecord.resourceVoyagePlan, annotation, allocationRecord.vesselAvailability, allocationRecord.vesselStartTime, null, null).getSecond();
 
+		final AllocationAnnotation maxVolumeAnnotation = createNewAnnotation(maxVolumeRecord, slots);
+
+		setTransferVolume(maxVolumeRecord, slots, maxVolumeAnnotation, maxTransferVolumeMMBTu, maxTransferVolumeM3);
+		// FCL? Always return max load even if loss making.
+		if (maxVolumeRecord.fullCargoLot) {
+			return maxVolumeAnnotation;
+		}
+
+		Pair<@NonNull CargoValueAnnotation, @NonNull Long> maxVolumePair = entityValueCalculator.evaluate(maxVolumeRecord.resourceVoyagePlan, maxVolumeAnnotation, maxVolumeRecord.vesselAvailability,
+				maxVolumeRecord.vesselStartTime, null, null);
+		final long maxTransferPNL = maxVolumePair.getSecond();
+
+		AllocationRecord minVolumeRecord = maxVolumeRecord.mutableCopy();
 		long minTransferVolumeMMBTu = 0;
 		long minTransferVolumeM3 = -1;
 		{
 			for (int i = 0; i < slots.size(); ++i) {
-				final long newMinTransferVolumeMMBTU = Math.max(allocationRecord.minVolumesInMMBtu.get(i), minTransferVolumeMMBTu);
-				minTransferVolumeM3 = getUnroundedM3TransferVolume(allocationRecord, slots, minTransferVolumeMMBTu, minTransferVolumeM3, i, newMinTransferVolumeMMBTU, true);
+				final long newMinTransferVolumeMMBTU = Math.max(minVolumeRecord.minVolumesInMMBtu.get(i), minTransferVolumeMMBTu);
+				minTransferVolumeM3 = getUnroundedM3TransferVolume(minVolumeRecord, slots, minTransferVolumeMMBTu, minTransferVolumeM3, i, newMinTransferVolumeMMBTU, true);
 				minTransferVolumeMMBTu = newMinTransferVolumeMMBTU;
 			}
 			// Max sure lower bound is not higher than the upper bound
 			minTransferVolumeM3 = Math.min(minTransferVolumeM3, maxTransferVolumeM3);
 			minTransferVolumeMMBTu = Math.min(minTransferVolumeMMBTu, maxTransferVolumeMMBTu);
 		}
+		final AllocationAnnotation minVolumeAnnotation = createNewAnnotation(minVolumeRecord, slots);
 
-		setTransferVolume(allocationRecord, slots, annotation, minTransferVolumeMMBTu, minTransferVolumeM3);
+		setTransferVolume(minVolumeRecord, slots, minVolumeAnnotation, minTransferVolumeMMBTu, minTransferVolumeM3);
 
-		final long minTransferPNL = entityValueCalculatorProvider.get()
-				.evaluate(EvaluationMode.Estimate, allocationRecord.resourceVoyagePlan, annotation, allocationRecord.vesselAvailability, allocationRecord.vesselStartTime, null, null).getSecond();
+		Pair<CargoValueAnnotation, Long> minVolumePair = entityValueCalculator.evaluate(minVolumeRecord.resourceVoyagePlan, minVolumeAnnotation, minVolumeRecord.vesselAvailability,
+				minVolumeRecord.vesselStartTime, null, null);
 
+		final long minTransferPNL = minVolumePair.getSecond();
+		// If annotating, then we need to re-evaluate with the solution so we record the
+		// correct output
 		final boolean counterPartyVolumeOption = counterPartyVolumeProvider.isCounterPartyVolume(loadSlot);
 		// If there's a counterparty option, we would flip the check. Consider the previous setTransferVolume
 		final boolean foo = counterPartyVolumeOption != (maxTransferPNL >= minTransferPNL);
 		if (foo) {
-			setTransferVolume(allocationRecord, slots, annotation, maxTransferVolumeMMBTu, maxTransferVolumeM3);
+			if (annotatedSolution != null) {
+				return entityValueCalculator
+						.evaluate(maxVolumeRecord.resourceVoyagePlan, maxVolumeAnnotation, maxVolumeRecord.vesselAvailability, maxVolumeRecord.vesselStartTime, null, annotatedSolution).getFirst();
+			}
+			return maxVolumePair.getFirst();
 		} else {
-			// No need to re-call this.
-			// setTransferVolume(allocationRecord, slots, annotation, minTransferVolumeMMBTu, minTransferVolumeM3);
+			if (annotatedSolution != null) {
+				return entityValueCalculator
+						.evaluate(minVolumeRecord.resourceVoyagePlan, minVolumeAnnotation, minVolumeRecord.vesselAvailability, minVolumeRecord.vesselStartTime, null, annotatedSolution).getFirst();
+			}
+			return minVolumePair.getFirst();
 		}
-
-		return annotation;
 	}
 
 	@Override
-	protected @NonNull AllocationAnnotation calculateShippedMode(final @NonNull AllocationRecord allocationRecord, final @NonNull List<@NonNull IPortSlot> slots, final @NonNull IVessel vessel) {
+	protected IAllocationAnnotation calculateShippedMode(final AllocationRecord allocationRecord, final List<IPortSlot> slots, final IVessel vessel, @Nullable IAnnotatedSolution annotatedSolution) {
 
 		if (slots.size() > 2 || allocationRecord.fullCargoLot) {
 			// Fixed discharge volumes, so no decision to make here.
 			return calculateShippedMode_MaxVolumes(allocationRecord, slots, vessel);
 		}
 
-		final IEntityValueCalculator entityValueCalculator = entityValueCalculatorProvider.get();
-		
-		final AllocationAnnotation minAnnotation = calculateShippedMode_MinVolumes(allocationRecord, slots, vessel);
-		final long minTransferPNL = entityValueCalculator
-				.evaluate(EvaluationMode.Estimate, allocationRecord.resourceVoyagePlan, minAnnotation, allocationRecord.vesselAvailability, allocationRecord.vesselStartTime, null, null).getSecond();
+		final IAllocationAnnotation minAnnotation = calculateShippedMode_MinVolumes(allocationRecord, slots, vessel);
 
-		final AllocationAnnotation maxAnnotation = calculateShippedMode_MaxVolumes(allocationRecord, slots, vessel);
-		final long maxTransferPNL = entityValueCalculator
-				.evaluate(EvaluationMode.Estimate, allocationRecord.resourceVoyagePlan, maxAnnotation, allocationRecord.vesselAvailability, allocationRecord.vesselStartTime, null, null).getSecond();
+		Pair<@NonNull CargoValueAnnotation, @NonNull Long> minVolumePair = entityValueCalculator.evaluate(allocationRecord.resourceVoyagePlan, minAnnotation, allocationRecord.vesselAvailability,
+				allocationRecord.vesselStartTime, null, annotatedSolution);
+		final long minTransferPNL = minVolumePair.getSecond();
+
+		final IAllocationAnnotation maxAnnotation = calculateShippedMode_MaxVolumes(allocationRecord, slots, vessel);
+
+		Pair<CargoValueAnnotation, Long> maxVolumePair = entityValueCalculator.evaluate(allocationRecord.resourceVoyagePlan, maxAnnotation, allocationRecord.vesselAvailability,
+				allocationRecord.vesselStartTime, null, null);
+		final long maxTransferPNL = maxVolumePair.getSecond();
 
 		if (maxTransferPNL >= minTransferPNL) {
-			return maxAnnotation;
+			if (annotatedSolution != null) {
+				return entityValueCalculator
+						.evaluate(allocationRecord.resourceVoyagePlan, maxAnnotation, allocationRecord.vesselAvailability, allocationRecord.vesselStartTime, null, annotatedSolution).getFirst();
+			}
+			return maxVolumePair.getFirst();
 		} else {
-			return minAnnotation;
+			if (annotatedSolution != null) {
+				return entityValueCalculator
+						.evaluate(allocationRecord.resourceVoyagePlan, minAnnotation, allocationRecord.vesselAvailability, allocationRecord.vesselStartTime, null, annotatedSolution).getFirst();
+			}
+			return minVolumePair.getFirst();
 		}
 	}
 
-	protected @NonNull AllocationAnnotation calculateShippedMode_MinVolumes(final AllocationRecord allocationRecord, final @NonNull List<@NonNull IPortSlot> slots, final @NonNull IVessel vessel) {
+	protected AllocationAnnotation calculateShippedMode_MinVolumes(final AllocationRecord allocationRecord, final List<IPortSlot> slots, final IVessel vessel) {
 		assert allocationRecord.allocationMode == AllocationMode.Shipped;
 
-		// Scale factor applied internal mmbtu values *for this method only* to help mitigate m3 <-> mmbtu rounding problems
+		// Scale factor applied internal mmbtu values *for this method only* to help
+		// mitigate m3 <-> mmbtu rounding problems
 		final int scaleFactor = 10;
 		final long scaleFactorL = 10L;
 
@@ -186,14 +212,17 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 		if (inPortBoilOffHelper.isBoilOffCompensation()) {
 			availableCargoSpaceInMMBTU += loadBoilOffInMMBTu;
 		}
-		// how much fuel will be required over and above what we start with in the tanks?
-		// note: this is the fuel consumption plus any heel quantity required at discharge
+		// how much fuel will be required over and above what we start with in the
+		// tanks?
+		// note: this is the fuel consumption plus any heel quantity required at
+		// discharge
 		final long fuelDeficitInMMBTU = Calculator.convertM3ToMMBTu(allocationRecord.requiredFuelVolumeInM3 - allocationRecord.startVolumeInM3 + allocationRecord.minimumEndVolumeInM3,
 				scaleFactor * cargoCV);
 
 		// greedy assumption: always load as much as possible
 		long loadVolumeInMMBTU = Math.min(scaleFactorL * allocationRecord.minVolumesInMMBtu.get(0), availableCargoSpaceInMMBTU);
-		// violate maximum load volume constraint when it has to be done to fuel the vessel
+		// violate maximum load volume constraint when it has to be done to fuel the
+		// vessel
 		if (loadVolumeInMMBTU < fuelDeficitInMMBTU) {
 			loadVolumeInMMBTU = fuelDeficitInMMBTU;
 			// we should never be required to load more than the vessel can fit in its tanks
@@ -284,7 +313,9 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 
 		for (int i = 0; i < slots.size(); i++) {
 			final IPortSlot slot = allocationRecord.slots.get(i);
-			// annotation.setSlotVolumeInMMBTu(slot, Calculator.convertM3ToMMBTu(annotation.getSlotVolumeInM3(slot), annotation.getSlotCargoCV(slot)));
+			// annotation.setSlotVolumeInMMBTu(slot,
+			// Calculator.convertM3ToMMBTu(annotation.getSlotVolumeInM3(slot),
+			// annotation.getSlotCargoCV(slot)));
 			annotation.setCommercialSlotVolumeInM3(slot, (Calculator.convertMMBTuToM3(annotation.getCommercialSlotVolumeInMMBTu(slot), annotation.getSlotCargoCV(slot)) + 5L) / scaleFactorL);
 			annotation.setPhysicalSlotVolumeInM3(slot, (Calculator.convertMMBTuToM3(annotation.getPhysicalSlotVolumeInMMBTu(slot), annotation.getSlotCargoCV(slot)) + 5L) / scaleFactorL);
 

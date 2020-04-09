@@ -51,6 +51,7 @@ public class FOBSaleSpotMarketTests extends AbstractMicroTestCase {
 
 		cargoModelBuilder.makeCargo()//
 				.makeFOBPurchase("L1", LocalDate.of(2015, 6, 1), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.with(s -> s.setFullCargoLot(true)) //
 				.build() //
 
 				.makeMarketFOBSale("D1", market, YearMonth.of(2015, 6), portFinder.findPort("Idku LNG")) //
@@ -87,6 +88,7 @@ public class FOBSaleSpotMarketTests extends AbstractMicroTestCase {
 		// This cargo can be optimised out
 		final Cargo cargo1 = cargoModelBuilder.makeCargo()//
 				.makeFOBPurchase("L1", LocalDate.of(2015, 6, 2), portFinder.findPort("Point Fortin"), null, entity, "5.1") //
+				.with(s -> s.setFullCargoLot(true))
 				.withOptional(true)//
 				.build()
 
@@ -101,6 +103,7 @@ public class FOBSaleSpotMarketTests extends AbstractMicroTestCase {
 
 		final Cargo cargo2 = cargoModelBuilder.makeCargo()//
 				.makeFOBPurchase("L2", LocalDate.of(2015, 6, 2), portFinder.findPort("Idku LNG"), null, entity, "4") //
+				.with(s -> s.setFullCargoLot(true))
 				.build() //
 
 				.makeFOBSale("D2", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2015, 6, 2), portFinder.findPort("Idku LNG"), null, entity, "3.9", null) //
@@ -167,6 +170,7 @@ public class FOBSaleSpotMarketTests extends AbstractMicroTestCase {
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo()//
 				.makeFOBPurchase("L1", LocalDate.of(2015, 6, 2), portFinder.findPort("Idku LNG"), null, entity, "5.1") //
+				.with(s -> s.setFullCargoLot(true)) //
 				.withOptional(true)//
 				.build()
 
@@ -181,6 +185,7 @@ public class FOBSaleSpotMarketTests extends AbstractMicroTestCase {
 
 		final Cargo cargo2 = cargoModelBuilder.makeCargo()//
 				.makeFOBPurchase("L2", LocalDate.of(2015, 6, 2), portFinder.findPort("Idku LNG"), null, entity, "4") //
+				.with(s -> s.setFullCargoLot(true)) //
 				.build() //
 
 				.makeFOBSale("D2", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2015, 6, 2), portFinder.findPort("Idku LNG"), null, entity, "3.9", null) //
@@ -243,6 +248,7 @@ public class FOBSaleSpotMarketTests extends AbstractMicroTestCase {
 
 		final Cargo cargo2 = cargoModelBuilder.makeCargo()//
 				.makeFOBPurchase("L2", LocalDate.of(2015, 6, 2), portFinder.findPort("Idku LNG"), null, entity, "4") //
+				.with(s -> s.setFullCargoLot(true)) //
 				.build() //
 
 				.makeFOBSale("D2", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2015, 6, 2), portFinder.findPort("Idku LNG"), null, entity, "3.9", null) //
@@ -292,6 +298,7 @@ public class FOBSaleSpotMarketTests extends AbstractMicroTestCase {
 
 		final Cargo cargo2 = cargoModelBuilder.makeCargo()//
 				.makeFOBPurchase("L2", LocalDate.of(2015, 6, 2), portFinder.findPort("Idku LNG"), null, entity, "4") //
+				.with(s -> s.setFullCargoLot(true)) //
 				.build() //
 
 				.makeFOBSale("D2", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2015, 6, 2), portFinder.findPort("Idku LNG"), null, entity, "3.9", null) //

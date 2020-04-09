@@ -10,7 +10,6 @@ import java.util.List;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Inject;
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -26,11 +25,10 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.IBreakEvenPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
+import com.mmxlabs.scheduler.optimiser.evaluation.VoyagePlanRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
-import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 public class BreakEvenOptimiser {
 
@@ -151,10 +149,10 @@ public class BreakEvenOptimiser {
 	public long calculateSchedulePNL(@NonNull final ISequences fullSequences, @NonNull final ProfitAndLossSequences scheduledSequences) {
 		long sumPNL = 0;
 
-		for (final VolumeAllocatedSequence volumeAllocatedSequence : scheduledSequences.getVolumeAllocatedSequences()) {
+		for (final VolumeAllocatedSequence volumeAllocatedSequence : scheduledSequences) {
 
-			for (final Pair<VoyagePlan, IPortTimesRecord> p : volumeAllocatedSequence.getVoyagePlans()) {
-				sumPNL += scheduledSequences.getVoyagePlanGroupValue(p.getFirst());
+			for (final VoyagePlanRecord p : volumeAllocatedSequence.getVoyagePlanRecords()) {
+				sumPNL += p.getProfitAndLoss();
 			}
 		}
 

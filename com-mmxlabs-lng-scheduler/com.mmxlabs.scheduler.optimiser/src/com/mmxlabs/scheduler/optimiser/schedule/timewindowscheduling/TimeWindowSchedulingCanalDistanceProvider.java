@@ -49,19 +49,8 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 	private IPortCVProvider portCVProvider;
 
 	@Override
-	public @NonNull TravelRouteData @NonNull [] getMinimumLadenTravelTimes(@NonNull final IPort load, @NonNull final IPort discharge, @NonNull final IVessel vessel, final int ladenStartTime,
-			AvailableRouteChoices availableRouteChoice, boolean isConstrainedPanamaVoyage, int additionalPanamaIdleHours) {
-		return getMinimumTravelTimes(load, discharge, vessel, ladenStartTime, true, availableRouteChoice, isConstrainedPanamaVoyage, additionalPanamaIdleHours);
-	}
-
-	@Override
-	public @NonNull TravelRouteData @NonNull [] getMinimumBallastTravelTimes(@NonNull final IPort load, @NonNull final IPort discharge, @NonNull final IVessel vessel, int ladenStartTime,
-			final AvailableRouteChoices availableRouteChoice, boolean isConstrainedPanamaVoyage, int additionalPanamaIdleHours) {
-		return getMinimumTravelTimes(load, discharge, vessel, ladenStartTime, false, availableRouteChoice, isConstrainedPanamaVoyage, additionalPanamaIdleHours);
-	}
-
-	private @NonNull TravelRouteData @NonNull [] getMinimumTravelTimes(@NonNull final IPort from, @NonNull final IPort to, @NonNull final IVessel vessel, int voyageStartTime, boolean isLaden,
-			final AvailableRouteChoices availableRouteChoice, boolean isConstrainedPanamaVoyage, int additionalPanamaIdleHours) {
+	public @NonNull TravelRouteData @NonNull [] getMinimumTravelTimes(@NonNull final IPort from, @NonNull final IPort to, @NonNull final IVessel vessel, int voyageStartTime,
+			final AvailableRouteChoices availableRouteChoice, boolean isConstrainedPanamaVoyage, int additionalPanamaIdleHours, boolean isLaden) {
 
 		if (from == to) {
 			// shortcut for same port
@@ -204,7 +193,7 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 		// loop through speeds and canals
 		int speed = minSpeed;
 		@NonNull
-		TravelRouteData @NonNull [] ladenRouteTimes = getMinimumTravelTimes(load, discharge, vessel, startTime, false, availableRouteChoice, isConstrainedPanamaVoyage, additionalPanamaIdleHours);
+		TravelRouteData @NonNull [] ladenRouteTimes = getMinimumTravelTimes(load, discharge, vessel, startTime, availableRouteChoice, isConstrainedPanamaVoyage, additionalPanamaIdleHours, isLaden);
 
 		List<Integer> times = new ArrayList<>();
 

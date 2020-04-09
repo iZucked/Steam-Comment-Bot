@@ -44,7 +44,6 @@ import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.cache.CacheMode;
 import com.mmxlabs.scheduler.optimiser.cache.IProfitAndLossCacheKeyDependencyLinker;
-import com.mmxlabs.scheduler.optimiser.cache.NotCaching;
 import com.mmxlabs.scheduler.optimiser.cache.NullCacheKeyDependencyLinker;
 import com.mmxlabs.scheduler.optimiser.calculators.IDivertibleDESShippingTimesCalculator;
 import com.mmxlabs.scheduler.optimiser.calculators.IDivertibleFOBShippingTimesCalculator;
@@ -61,17 +60,11 @@ import com.mmxlabs.scheduler.optimiser.curves.IIntegerIntervalCurve;
 import com.mmxlabs.scheduler.optimiser.curves.IPriceIntervalProducer;
 import com.mmxlabs.scheduler.optimiser.curves.PriceIntervalProducer;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
-import com.mmxlabs.scheduler.optimiser.entities.impl.CachingEntityValueCalculator;
-import com.mmxlabs.scheduler.optimiser.entities.impl.CheckingEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.impl.DefaultEntityValueCalculator;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.CachingVolumeAllocator;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.CheckingVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.UnconstrainedVolumeAllocator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.MinMaxUnconstrainedVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.utils.IBoilOffHelper;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.utils.InPortBoilOffHelper;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.CachingVoyagePlanOptimiser;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.CheckingVPO;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.DefaultEndEventScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IEndEventScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
@@ -82,14 +75,8 @@ import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.CachingTime
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.ITimeWindowSchedulingCanalDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.PriceIntervalProviderHelper;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.TimeWindowSchedulingCanalDistanceProvider;
-import com.mmxlabs.scheduler.optimiser.scheduling.ArrivalTimeScheduler;
-import com.mmxlabs.scheduler.optimiser.scheduling.EarliestSlotTimeScheduler;
 import com.mmxlabs.scheduler.optimiser.scheduling.FeasibleTimeWindowTrimmer;
-import com.mmxlabs.scheduler.optimiser.scheduling.IArrivalTimeScheduler;
-import com.mmxlabs.scheduler.optimiser.scheduling.ISlotTimeScheduler;
 import com.mmxlabs.scheduler.optimiser.scheduling.PortTimesRecordMaker;
-import com.mmxlabs.scheduler.optimiser.scheduling.PriceBasedWindowTrimmer;
-import com.mmxlabs.scheduler.optimiser.scheduling.TimeWindowScheduler;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.util.SchedulerCalculationUtils;
@@ -102,22 +89,7 @@ public class LNGTransformerModule extends AbstractModule {
 
 	public static final String COMMERCIAL_VOLUME_OVERCAPACITY = "COMMERCIAL_VOLUME_OVERCAPACITY";
 
-	private static final int DEFAULT_VPO_CACHE_SIZE = 20_000;
-
 	public static final String EARLIEST_AND_LATEST_TIMES = "earliest-and-latest-times";
-
-	/**
-	 */
-	public static final String Parser_Commodity = "Commodity";
-	/**
-	 */
-	public static final String Parser_BaseFuel = "BaseFuel";
-	/**
-	 */
-	public static final String Parser_Charter = "Charter";
-	/**
-	 */
-	public static final String Parser_Currency = "Currency";
 
 	private final @NonNull LNGScenarioModel scenario;
 
@@ -132,7 +104,7 @@ public class LNGTransformerModule extends AbstractModule {
 
 	private final boolean withNoNominalsInPrompt;
 	private final boolean withCharterLength;
-	
+
 	// auto-hedging mode. If true - use flat curve
 	private final boolean withFlatCurve;
 
@@ -142,12 +114,16 @@ public class LNGTransformerModule extends AbstractModule {
 
 	private int concurrencyLevel;
 
+	@NonNull
+	private final Collection<String> hints;
+
 	/**
 	 * @param concurrencyLevel
 	 */
 	public LNGTransformerModule(@NonNull final IScenarioDataProvider scenarioDataProvider, @NonNull UserSettings userSettings, int concurrencyLevel, @NonNull final Collection<@NonNull String> hints) {
 		this.scenarioDataProvider = scenarioDataProvider;
 		this.concurrencyLevel = concurrencyLevel;
+		this.hints = hints;
 		this.scenario = (LNGScenarioModel) scenarioDataProvider.getScenario();
 		this.userSettings = userSettings;
 		this.shippingOnly = hints.contains(LNGTransformerHelper.HINT_SHIPPING_ONLY);
@@ -197,50 +173,43 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(ICharterRateCalculator.class).to(VoyagePlanStartDateCharterRateCalculator.class);
 
 		bind(ICharterCostCalculator.class).to(CharterRateToCharterCostCalculator.class);
-		
+
 		// <--- Time windows
 
 		bind(SchedulerCalculationUtils.class);
 
 		bind(FeasibleTimeWindowTrimmer.class);
-		bind(PriceBasedWindowTrimmer.class);
 
-		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UsePriceBasedWindowTrimming)).toInstance(Boolean.TRUE);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UseCanalSlotBasedWindowTrimming)).toInstance(Boolean.FALSE);
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UsePriceBasedWindowTrimming)).toInstance(Boolean.TRUE);
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UsePNLBasedWindowTrimming)).toInstance(Boolean.TRUE);
 
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_SchedulePurges)).toInstance(Boolean.FALSE);
 
+		bind(PortTimesRecordMaker.class);
 		bind(PriceIntervalProviderHelper.class);
 		bind(PriceIntervalProducer.class);
-
-		bind(IArrivalTimeScheduler.class).to(ArrivalTimeScheduler.class);
-		bind(TimeWindowScheduler.class);
-		bind(ISlotTimeScheduler.class).to(EarliestSlotTimeScheduler.class);
-
-		bind(PortTimesRecordMaker.class);
-
 		// --->
-
-		bind(IVesselBaseFuelCalculator.class).to(VesselBaseFuelCalculator.class);
 		bind(VesselBaseFuelCalculator.class).in(Singleton.class);
+		bind(IVesselBaseFuelCalculator.class).to(VesselBaseFuelCalculator.class);
 
-		bind(IDivertibleDESShippingTimesCalculator.class).to(DefaultDivertibleDESShippingTimesCalculator.class);
 		bind(DefaultDivertibleDESShippingTimesCalculator.class).in(Singleton.class);
+		bind(IDivertibleDESShippingTimesCalculator.class).to(DefaultDivertibleDESShippingTimesCalculator.class);
 
-		bind(IDivertibleFOBShippingTimesCalculator.class).to(DefaultDivertibleFOBShippingTimesCalculator.class);
 		bind(DefaultDivertibleFOBShippingTimesCalculator.class).in(Singleton.class);
-		
+		bind(IDivertibleFOBShippingTimesCalculator.class).to(DefaultDivertibleFOBShippingTimesCalculator.class);
+
 		// <------ Exposures and papers
-		
+
 		bind(IExposuresCustomiser.class).to(DefaultExposuresCustomiser.class);
 		bind(DefaultExposuresCustomiser.class).in(Singleton.class);
-		
+
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.OPTIMISE_PAPER_PNL)).toInstance(Boolean.FALSE);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.COMPUTE_EXPOSURES)).toInstance(LicenseFeatures.isPermitted(KnownFeatures.FEATURE_EXPOSURES));
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.COMPUTE_PAPER_PNL)).toInstance(LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PAPER_DEALS));
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.RE_HEDGE_WITH_PAPERS)).toInstance(Boolean.FALSE);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.GENERATED_PAPERS_IN_PNL)).toInstance(withFlatCurve);
-		
+
 		// ----->
 
 		// Register default implementations
@@ -249,18 +218,20 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(boolean.class).annotatedWith(Names.named(IEndEventScheduler.ENABLE_HIRE_COST_ONLY_END_RULE)).toInstance(Boolean.TRUE);
 		bind(IEndEventScheduler.class).to(DefaultEndEventScheduler.class);
 
-		bind(IVolumeAllocator.class).annotatedWith(NotCaching.class).to(UnconstrainedVolumeAllocator.class);
-		bind(IEntityValueCalculator.class).annotatedWith(NotCaching.class).to(DefaultEntityValueCalculator.class);
+		bind(boolean.class).annotatedWith(Names.named(COMMERCIAL_VOLUME_OVERCAPACITY)).toInstance(Boolean.FALSE);
+		bind(IVolumeAllocator.class).to(MinMaxUnconstrainedVolumeAllocator.class);
+
+		bind(IEntityValueCalculator.class).to(DefaultEntityValueCalculator.class);
 
 		// Default bindings for caches
-		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_ArrivalTimeCache)).toInstance(CacheMode.On);
-		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_VoyagePlanOptimiserCache)).toInstance(CacheMode.On);
-		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocationCache)).toInstance(CacheMode.Off);
-		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocatedSequenceCache)).toInstance(CacheMode.Off);
-		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_ProfitandLossCache)).toInstance(CacheMode.Off);
+		CacheMode mode = hints.contains(LNGTransformerHelper.HINT_TESTING_IGNORE_CACHE_SETTINGS) ? CacheMode.Off : CacheMode.On;
+
+		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_ArrivalTimeCache)).toInstance(mode);
+		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_PNLTrimmerCache)).toInstance(mode);
+		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_VoyagePlanEvaluatorCache)).toInstance(mode);
 
 		// Default two weeks idle time.
-		if (LicenseFeatures.isPermitted("features:charter-length") && withCharterLength) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_CHARTER_LENGTH) && withCharterLength) {
 			bind(int.class).annotatedWith(Names.named(SchedulerConstants.CHARTER_LENGTH_MIN_IDLE_HOURS)).toInstance(14 * 24);
 			bind(int.class).annotatedWith(Names.named(SchedulerConstants.COOLDOWN_MIN_IDLE_HOURS)).toInstance(14 * 24);
 		} else {
@@ -270,69 +241,13 @@ public class LNGTransformerModule extends AbstractModule {
 	}
 
 	@Provides
-	@Named(COMMERCIAL_VOLUME_OVERCAPACITY)
-	private boolean commercialVolumeOverCapacity() {
-		return false;
-	}
-
-	@Provides
 	private IBoilOffHelper provideInPortBoilOffHelper(@NonNull final Injector injector, @Named(COMMERCIAL_VOLUME_OVERCAPACITY) final boolean toggle) {
 		return new InPortBoilOffHelper(toggle);
 	}
 
 	@Provides
-	@PerChainUnitScope
-	private IVoyagePlanOptimiser provideVoyagePlanOptimiser(Injector injector, final @NonNull VoyagePlanOptimiser delegate,
-			@Named(SchedulerConstants.Key_VoyagePlanOptimiserCache) CacheMode cacheMode) {
-		if (cacheMode == CacheMode.Off || !hintEnableCache) {
-			return delegate;
-		} else {
-			//TODO: replace CachingVoyagePlanOptimiser with new impl
-			final CachingVoyagePlanOptimiser cachingVoyagePlanOptimiser = new CachingVoyagePlanOptimiser(delegate, DEFAULT_VPO_CACHE_SIZE);
-			injector.injectMembers(cachingVoyagePlanOptimiser);
-			if (cacheMode == CacheMode.On) {
-				return cachingVoyagePlanOptimiser;
-			} else {
-				assert cacheMode == CacheMode.Verify;
-				return new CheckingVPO(delegate, cachingVoyagePlanOptimiser);
-			}
-		}
-	}
-
-	@Provides
-	@PerChainUnitScope
-	private IVolumeAllocator provideVolumeAllocator(@NonNull final Injector injector, final @NonNull @NotCaching IVolumeAllocator reference,
-			@Named(SchedulerConstants.Key_VolumeAllocationCache) final CacheMode cacheMode) {
-		if (cacheMode != CacheMode.Off && hintEnableCache) {
-			final CachingVolumeAllocator cacher = new CachingVolumeAllocator(reference);
-			injector.injectMembers(cacher);
-			if (cacheMode == CacheMode.Verify) {
-				return new CheckingVolumeAllocator(reference, cacher);
-			}
-			return cacher;
-		} else {
-			return reference;
-		}
-
-	}
-
-	@Provides
-	@PerChainUnitScope
-	private IEntityValueCalculator provideEntityValueCalculator(final @NonNull Injector injector, final @NonNull @NotCaching IEntityValueCalculator reference,
-			@Named(SchedulerConstants.Key_ProfitandLossCache) final CacheMode cacheMode) {
-
-		if (cacheMode != CacheMode.Off && hintEnableCache) {
-			final CachingEntityValueCalculator cacher = new CachingEntityValueCalculator(reference);
-			injector.injectMembers(cacher);
-			if (cacheMode == CacheMode.Verify) {
-				return new CheckingEntityValueCalculator(reference, cacher);
-			} else {
-				return cacher;
-			}
-		} else {
-			return reference;
-		}
-
+	private IVoyagePlanOptimiser provideVoyagePlanOptimiser(final @NonNull VoyagePlanOptimiser delegate) {
+		return delegate;
 	}
 
 	@Provides
@@ -441,7 +356,7 @@ public class LNGTransformerModule extends AbstractModule {
 	}
 
 	@Provides
-	@Named(Parser_Commodity)
+	@Named(SchedulerConstants.Parser_Commodity)
 	@Singleton
 	private SeriesParser provideCommodityParser(final SeriesParserData seriesParserData) {
 		final SeriesParser parser = new SeriesParser(seriesParserData);
@@ -449,7 +364,7 @@ public class LNGTransformerModule extends AbstractModule {
 	}
 
 	@Provides
-	@Named(Parser_Charter)
+	@Named(SchedulerConstants.Parser_Charter)
 	@Singleton
 	private SeriesParser provideCharterParser(final SeriesParserData seriesParserData) {
 		final SeriesParser parser = new SeriesParser(seriesParserData);
@@ -457,7 +372,7 @@ public class LNGTransformerModule extends AbstractModule {
 	}
 
 	@Provides
-	@Named(Parser_BaseFuel)
+	@Named(SchedulerConstants.Parser_BaseFuel)
 	@Singleton
 	private SeriesParser provideBaseFuelParser(final SeriesParserData seriesParserData) {
 		final SeriesParser parser = new SeriesParser(seriesParserData);
@@ -465,7 +380,7 @@ public class LNGTransformerModule extends AbstractModule {
 	}
 
 	@Provides
-	@Named(Parser_Currency)
+	@Named(SchedulerConstants.Parser_Currency)
 	@Singleton
 	private SeriesParser provideCurrencyParser(final SeriesParserData seriesParserData) {
 		final SeriesParser parser = new SeriesParser(seriesParserData);

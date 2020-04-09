@@ -70,7 +70,7 @@ public interface IVesselAvailability {
 	 * 
 	 * @return charter cost calculator
 	 */	
-	ICharterCostCalculator getCharterCostCalculator();
+	@NonNull ICharterCostCalculator getCharterCostCalculator();
 	
 	/**
 	 * Returns the daily rate at which this vessel can be chartered in.

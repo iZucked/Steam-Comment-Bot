@@ -112,4 +112,9 @@ public class GeneratedCharterLengthPortSlot implements IGeneratedCharterLengthEv
 	public List<IPortSlot> getEventPortSlots() {
 		throw new UnsupportedOperationException();
 	}
+
+	@Override
+	public void setKey(String key) {
+		
+	}
 }

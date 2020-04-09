@@ -21,7 +21,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IEntityProvider;
 @NonNullByDefault
 public abstract class AbstractEntity implements IEntity {
 	@Inject
-	private IEntityProvider enityProvider;
+	private IEntityProvider entityProvider;
 
 	private final String name;
 
@@ -45,17 +45,17 @@ public abstract class AbstractEntity implements IEntity {
 
 	@Override
 	public IEntityBook getShippingBook() {
-		return enityProvider.getEntityBook(this, EntityBookType.Shipping);
+		return entityProvider.getEntityBook(this, EntityBookType.Shipping);
 	}
 
 	@Override
 	public IEntityBook getTradingBook() {
-		return enityProvider.getEntityBook(this, EntityBookType.Trading);
+		return entityProvider.getEntityBook(this, EntityBookType.Trading);
 	}
 
 	@Override
 	public IEntityBook getUpstreamBook() {
-		return enityProvider.getEntityBook(this, EntityBookType.Upstream);
+		return entityProvider.getEntityBook(this, EntityBookType.Upstream);
 	}
 
 	@Override

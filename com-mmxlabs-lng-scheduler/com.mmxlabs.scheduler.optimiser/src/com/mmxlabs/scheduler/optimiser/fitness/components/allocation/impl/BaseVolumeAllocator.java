@@ -8,9 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
@@ -42,9 +44,11 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * @author hinton
  * 
  */
+@NonNullByDefault
 public abstract class BaseVolumeAllocator implements IVolumeAllocator {
+	
 	@Inject(optional = true)
-	private ICustomVolumeAllocator allocationRecordModifier;
+	private @Nullable ICustomVolumeAllocator allocationRecordModifier;
 
 	@Inject
 	private INominatedVesselProvider nominatedVesselProvider;
@@ -64,7 +68,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 	@Override
 	@Nullable
-	public IAllocationAnnotation allocate(final IVesselAvailability vesselAvailability, final int vesselStartTime, final VoyagePlan plan, final IPortTimesRecord portTimesRecord) {
+	public IAllocationAnnotation allocate(final IVesselAvailability vesselAvailability, final int vesselStartTime, final VoyagePlan plan, final IPortTimesRecord portTimesRecord, final @Nullable IAnnotatedSolution annotatedSolution) {
 		final AllocationRecord allocationRecord = createAllocationRecord(vesselAvailability, vesselStartTime, plan, portTimesRecord);
 		if (allocationRecord == null) {
 			return null;
@@ -72,7 +76,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		if (allocationRecordModifier != null) {
 			allocationRecordModifier.modifyAllocationRecord(allocationRecord);
 		}
-		return allocate(allocationRecord);
+		return allocate(allocationRecord, annotatedSolution);
 	}
 
 	@Override

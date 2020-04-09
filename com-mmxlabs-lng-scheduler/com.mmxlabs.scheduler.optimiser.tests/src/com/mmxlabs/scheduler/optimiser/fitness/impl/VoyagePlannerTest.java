@@ -291,11 +291,15 @@ public final class VoyagePlannerTest {
 		Mockito.when(voyagePlanOptimiser.optimise(resource, vessel, new long[] { 0L, 0L }, fuelMap, ccc, portTimesRecord1, expectedBasicSequence1, vpoChoices1, Integer.MAX_VALUE)).thenReturn(testVoyagePlan);
 		Mockito.when(voyagePlanOptimiser.optimise(resource, vessel, new long[] { 0L, 0L }, fuelMap, ccc, portTimesRecord2, expectedBasicSequence2, vpoChoices2, Integer.MAX_VALUE)).thenReturn(testVoyagePlan);
 
-		// Schedule sequence
-		final List<Pair<VoyagePlan, IPortTimesRecord>> plans = planner.makeVoyagePlans(resource, sequence, portTimesRecords);
-
-		Assertions.assertNotNull(plans);
-		Assertions.assertEquals(2, plans.size());
+		
+		Assertions.fail("Test needs to be updated");
+//		// Schedule sequence
+//		final List<Pair<VoyagePlan, IPortTimesRecord>> plans = planner.makeVoyagePlans(resource, sequence, portTimesRecords);
+//
+//		Assertions.assertNotNull(plans);
+//		Assertions.assertEquals(2, plans.size());
+		
+		
 	}
 
 	// /**

@@ -12,8 +12,6 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -45,7 +43,6 @@ import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IElementAnnotation;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
-import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterLengthEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEvent;
@@ -55,6 +52,8 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.util.CargoTypeUtil;
 import com.mmxlabs.scheduler.optimiser.components.util.CargoTypeUtil.DetailedCargoType;
+import com.mmxlabs.scheduler.optimiser.evaluation.VoyagePlanRecord;
+import com.mmxlabs.scheduler.optimiser.evaluation.VoyagePlanRecord.LatenessRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ICargoValueAnnotation;
@@ -92,6 +91,8 @@ public class VisitEventExporter {
 			return null;
 		}
 
+		VoyagePlanRecord vpr = sequence.getVoyagePlanRecord(slot);
+
 		final Port ePort = modelEntityMap.getModelObject(slot.getPort(), Port.class);
 		if (ePort == null) {
 			// Port maybe null for e.g. DES Purchases.
@@ -101,6 +102,8 @@ public class VisitEventExporter {
 		PortVisit portVisit = null;
 
 		CargoAllocation eAllocation = null;
+		boolean isNonShippedCargo = false;
+		boolean checkEndEventLateness = false;
 		if (slot instanceof IDischargeOption || slot instanceof ILoadOption) {
 
 			final SlotVisit sv = ScheduleFactory.eINSTANCE.createSlotVisit();
@@ -109,7 +112,7 @@ public class VisitEventExporter {
 			slotAllocation.setSlotAllocationType(slot instanceof ILoadOption ? SlotAllocationType.PURCHASE : SlotAllocationType.SALE);
 			output.getSlotAllocations().add(slotAllocation);
 			// TODO this will have to look at market-generated slots.
-			final Slot optSlot = modelEntityMap.getModelObject(slot, Slot.class);
+			final Slot<?> optSlot = modelEntityMap.getModelObject(slot, Slot.class);
 			if (optSlot instanceof SpotSlot) {
 				slotAllocation.setSpotMarket(((SpotSlot) optSlot).getMarket());
 			}
@@ -117,13 +120,25 @@ public class VisitEventExporter {
 			portVisit = sv;
 
 			// Output allocation info
-			final ISequenceElement element = portSlotProvider.getElement(slot);
-			// get annotations for this element
-			final Map<String, IElementAnnotation> annotations = annotatedSolution.getElementAnnotations().getAnnotations(element);
-			final ICargoValueAnnotation allocation = (ICargoValueAnnotation) annotations.get(SchedulerConstants.AI_cargoValueAllocationInfo);
+			final ICargoValueAnnotation allocation = vpr.getCargoValueAnnotation();
 
 			eAllocation = allocations.get(slot);
 
+			final DetailedCargoType type = cargoTypeUtil.getDetailedCargoType(allocation.getSlots());
+			{
+				switch (type) {
+				case DES_PURCHASE:
+				case DIVERTIBLE_DES_PURCHASE:
+				case DIVERTIBLE_FOB_SALE:
+				case FOB_SALE:
+				case OPEN_DES_SALE:
+				case OPEN_FOB_PURCHASE:
+					isNonShippedCargo = true;
+					break;
+				default:
+					break;
+				}
+			}
 			if (eAllocation == null) {
 				eAllocation = ScheduleFactory.eINSTANCE.createCargoAllocation();
 				for (final IPortSlot allocationSlot : allocation.getSlots()) {
@@ -132,20 +147,13 @@ public class VisitEventExporter {
 
 				output.getCargoAllocations().add(eAllocation);
 
-				@NonNull
-				final DetailedCargoType type = cargoTypeUtil.getDetailedCargoType(allocation.getSlots());
-
 				CargoType cargoType = null;
 				switch (type) {
 				case DES_PURCHASE:
-					cargoType = CargoType.DES;
-					break;
 				case DIVERTIBLE_DES_PURCHASE:
 					cargoType = CargoType.DES;
 					break;
 				case DIVERTIBLE_FOB_SALE:
-					cargoType = CargoType.FOB;
-					break;
 				case FOB_SALE:
 					cargoType = CargoType.FOB;
 					break;
@@ -179,6 +187,7 @@ public class VisitEventExporter {
 		} else if (slot instanceof IVesselEventPortSlot) {
 			if (slot instanceof IGeneratedCharterOutVesselEventPortSlot) {
 				// GCO logic
+
 				final GeneratedCharterOut generatedCharterOutEvent = ScheduleFactory.eINSTANCE.createGeneratedCharterOut();
 				final IGeneratedCharterOutVesselEvent event = ((IGeneratedCharterOutVesselEventPortSlot) slot).getVesselEvent();
 				generatedCharterOutEvent.setRevenue(OptimiserUnitConvertor.convertToExternalFixedCost(event.getHireOutRevenue()));
@@ -217,6 +226,7 @@ public class VisitEventExporter {
 			} else if (portType == PortType.End) {
 				final EndEvent endEvent = ScheduleFactory.eINSTANCE.createEndEvent();
 				portVisit = endEvent;
+				checkEndEventLateness = true;
 			} else {
 				portVisit = ScheduleFactory.eINSTANCE.createPortVisit();
 			}
@@ -229,14 +239,14 @@ public class VisitEventExporter {
 
 		portVisit.setPort(ePort);
 
-		final int startTime = sequence.getArrivalTime(slot);
-		final int endTime = startTime + sequence.getVisitDuration(slot);
+		final int startTime = vpr.getPortTimesRecord().getSlotTime(slot);
+		final int endTime = startTime + (isNonShippedCargo ? 0 : vpr.getPortTimesRecord().getSlotDuration(slot));
 
 		portVisit.setStart(modelEntityMap.getDateFromHours(startTime, slot.getPort()));
 		// Note, end port may be different for CO event!
 		portVisit.setEnd(modelEntityMap.getDateFromHours(endTime, slot.getPort()));
 		{
-			final Collection<CapacityViolationType> capacityViolations = sequence.getCapacityViolations(slot);
+			final Collection<CapacityViolationType> capacityViolations = vpr.getCapacityViolations(slot);
 			for (final CapacityViolationType violation : capacityViolations) {
 				com.mmxlabs.models.lng.schedule.CapacityViolationType type = null;
 				final CapacityViolationType x = violation;
@@ -270,73 +280,92 @@ public class VisitEventExporter {
 					break;
 				}
 
-				final long volume = OptimiserUnitConvertor.convertToExternalVolume(sequence.getCapacityViolationVolume(violation, slot));
+				final long volume = OptimiserUnitConvertor.convertToExternalVolume(vpr.getCapacityViolationVolume(violation, slot));
 				portVisit.getViolations().put(type, volume);
 			}
 
-			if (sequence.getLatenessWithoutFlex(slot) > 0 || sequence.getLatenessWithFlex(slot) > 0) {
-				final PortVisitLateness portVisitLateness = ScheduleFactory.eINSTANCE.createPortVisitLateness();
-				PortVisitLatenessType type = null;
-				final Interval interval = sequence.getLatenessInterval(slot);
-				switch (interval) {
-				case PROMPT:
-					type = PortVisitLatenessType.PROMPT;
-					break;
-				case MID_TERM:
-					type = PortVisitLatenessType.MID_TERM;
-					break;
-				case BEYOND:
-					type = PortVisitLatenessType.BEYOND;
-					break;
-				}
-				portVisitLateness.setType(type);
-				portVisitLateness.setLatenessInHours(sequence.getLatenessWithoutFlex(slot));
+			PortVisitLateness portVisitLateness = null;
+			if (vpr.getLatenessWithoutFlex(slot) > 0 || vpr.getLatenessWithFlex(slot) > 0) {
+				final Interval interval = vpr.getLatenessInterval(slot);
+				portVisitLateness = createLatenessObject(interval);
+				portVisitLateness.setLatenessInHours(vpr.getLatenessWithoutFlex(slot));
 				portVisit.setLateness(portVisitLateness);
+			}
+			if (checkEndEventLateness) {
+				LatenessRecord record = sequence.getMaxDurationLatenessRecord();
+				if (record != null) {
+					if (portVisitLateness == null) {
+						portVisitLateness = createLatenessObject(record.interval);
+						portVisit.setLateness(portVisitLateness);
+					}
+					int l = portVisitLateness.getLatenessInHours();
+					portVisitLateness.setLatenessInHours(l + record.latenessWithoutFlex);
+				}
+
 			}
 		}
 
 		portVisit.setPortCost(OptimiserUnitConvertor.convertToExternalFixedCost(details.getPortCosts()));
 
 		// Handle FOB/DES stuff
-		if (eAllocation != null) {
-			// FOB/DES can only be a two element pairing
-			if (eAllocation.getSlotAllocations().size() == 2) {
+		// FOB/DES can only be a two element pairing
+		if (isNonShippedCargo && eAllocation != null && eAllocation.getSlotAllocations().size() == 2) {
 
-				// Two elements - must be load and discharge, order undefined
-				SlotAllocation loadAllocation = null;
-				SlotAllocation dischargeAllocation = null;
+			// Two elements - must be load and discharge, order undefined
+			SlotAllocation loadAllocation = null;
+			SlotAllocation dischargeAllocation = null;
 
-				for (final SlotAllocation slotAllocation : eAllocation.getSlotAllocations()) {
-					final Slot s = slotAllocation.getSlot();
-					if (s instanceof LoadSlot) {
-						if (loadAllocation != null) {
-							throw new IllegalStateException("Multiple load slots found in LD cargo");
-						}
-						loadAllocation = slotAllocation;
-					} else if (s instanceof DischargeSlot) {
-						if (dischargeAllocation != null) {
-							throw new IllegalStateException("Multiple discharge slots found in LD cargo");
-						}
-						dischargeAllocation = slotAllocation;
+			for (final SlotAllocation slotAllocation : eAllocation.getSlotAllocations()) {
+				final Slot<?> s = slotAllocation.getSlot();
+				if (s instanceof LoadSlot) {
+					if (loadAllocation != null) {
+						throw new IllegalStateException("Multiple load slots found in LD cargo");
 					}
+					loadAllocation = slotAllocation;
+				} else if (s instanceof DischargeSlot) {
+					if (dischargeAllocation != null) {
+						throw new IllegalStateException("Multiple discharge slots found in LD cargo");
+					}
+					dischargeAllocation = slotAllocation;
 				}
+			}
 
-				assert loadAllocation != null;
-				assert dischargeAllocation != null;
+			assert loadAllocation != null;
+			assert dischargeAllocation != null;
 
-				if (((LoadSlot) loadAllocation.getSlot()).isDESPurchase()) {
-					loadAllocation.getSlotVisit().setPort(dischargeAllocation.getSlotVisit().getPort());
-					loadAllocation.getSlotVisit().setStart(dischargeAllocation.getSlotVisit().getStart());
-					loadAllocation.getSlotVisit().setEnd(dischargeAllocation.getSlotVisit().getEnd());
-				} else if (((DischargeSlot) dischargeAllocation.getSlot()).isFOBSale()) {
-					dischargeAllocation.getSlotVisit().setPort(loadAllocation.getSlotVisit().getPort());
-					dischargeAllocation.getSlotVisit().setStart(loadAllocation.getSlotVisit().getStart());
-					dischargeAllocation.getSlotVisit().setEnd(loadAllocation.getSlotVisit().getEnd());
-				}
+			if (((LoadSlot) loadAllocation.getSlot()).isDESPurchase()) {
+				loadAllocation.getSlotVisit().setPort(dischargeAllocation.getSlotVisit().getPort());
+				loadAllocation.getSlotVisit().setStart(dischargeAllocation.getSlotVisit().getStart());
+				loadAllocation.getSlotVisit().setEnd(dischargeAllocation.getSlotVisit().getEnd());
+			} else if (((DischargeSlot) dischargeAllocation.getSlot()).isFOBSale()) {
+				dischargeAllocation.getSlotVisit().setPort(loadAllocation.getSlotVisit().getPort());
+				dischargeAllocation.getSlotVisit().setStart(loadAllocation.getSlotVisit().getStart());
+				dischargeAllocation.getSlotVisit().setEnd(loadAllocation.getSlotVisit().getEnd());
+
 			}
 		}
 
 		return portVisit;
+
+	}
+
+	private PortVisitLateness createLatenessObject(final Interval interval) {
+		final PortVisitLateness portVisitLateness;
+		portVisitLateness = ScheduleFactory.eINSTANCE.createPortVisitLateness();
+		PortVisitLatenessType type = null;
+		switch (interval) {
+		case PROMPT:
+			type = PortVisitLatenessType.PROMPT;
+			break;
+		case MID_TERM:
+			type = PortVisitLatenessType.MID_TERM;
+			break;
+		case BEYOND:
+			type = PortVisitLatenessType.BEYOND;
+			break;
+		}
+		portVisitLateness.setType(type);
+		return portVisitLateness;
 	}
 
 	private List<FuelQuantity> exportFuelData(final PortDetails details) {

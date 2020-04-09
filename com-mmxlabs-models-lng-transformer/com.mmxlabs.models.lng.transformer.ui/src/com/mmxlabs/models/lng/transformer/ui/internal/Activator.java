@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.transformer.ui.internal;
 import java.util.Collection;
 
 import javax.inject.Inject;
+
 import org.eclipse.osgi.framework.console.CommandProvider;
 import org.eclipse.ui.progress.IProgressConstants2;
 import org.ops4j.peaberry.Export;

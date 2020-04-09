@@ -7,6 +7,7 @@ package com.mmxlabs.scheduler.optimiser.voyage.notional;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelKey;
@@ -42,7 +43,7 @@ public class LDShippingAnnotationHelper {
 		// Load Details
 		shippingAnnotation.loadPort = loadDetails.getOptions().getPortSlot().getPort();
 		final IVessel vessel = loadDetails.getOptions().getVessel();
-		
+
 		shippingAnnotation.loadBunkersInMT += loadDetails.getFuelConsumption(vessel.getInPortBaseFuelInMT());
 		shippingAnnotation.loadHireHours = loadDetails.getOptions().getVisitDuration();
 		shippingAnnotation.loadPortCosts = loadDetails.getPortCosts();
@@ -133,7 +134,10 @@ public class LDShippingAnnotationHelper {
 
 		// Discharge Details
 		shippingAnnotation.returnPort = returnDetails.getOptions().getPortSlot().getPort();
-		shippingAnnotation.nextPortDate = allocationAnnotation.getSlotTime(allocationAnnotation.getReturnSlot());
+		IPortSlot returnSlot = allocationAnnotation.getReturnSlot();
+		if (returnSlot != null) {
+			shippingAnnotation.nextPortDate = allocationAnnotation.getSlotTime(returnSlot);
+		}
 	}
 
 	public static void updateBunkerCosts(final @NonNull LDShippingAnnotation shippingAnnotation, final int refBaseFuelPrice) {

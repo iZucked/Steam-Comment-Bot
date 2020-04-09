@@ -35,14 +35,12 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.CapacityEvaluatedStateChecker;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPermissionConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
+import com.mmxlabs.scheduler.optimiser.evaluation.VoyagePlanRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
-import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.schedule.CapacityViolationChecker;
-import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.CapacityViolationType;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 @PerChainUnitScope
 public class EvaluationHelper {
@@ -64,7 +62,7 @@ public class EvaluationHelper {
 
 	@Inject
 	private IPhaseOptimisationData phaseOptimisationData;
-	
+
 	@Inject
 	@Named(SchedulerConstants.GENERATED_PAPERS_IN_PNL)
 	private boolean generatedPapersInPNL;
@@ -172,7 +170,7 @@ public class EvaluationHelper {
 		return thisUnusedCompulsarySlotCount;
 	}
 
-	public @Nullable Pair<@NonNull VolumeAllocatedSequences, @NonNull IEvaluationState> evaluateSequences(@NonNull final ISequences currentRawSequences, @NonNull final ISequences currentFullSequences,
+	public @Nullable Pair<@NonNull ProfitAndLossSequences, @NonNull IEvaluationState> evaluateSequences(@NonNull final ISequences currentRawSequences, @NonNull final ISequences currentFullSequences,
 			final boolean checkEvaluatedStateCheckers) {
 
 		final IEvaluationState evaluationState = new EvaluationState();
@@ -190,13 +188,13 @@ public class EvaluationHelper {
 			}
 		}
 
-		final VolumeAllocatedSequences volumeAllocatedSequences = evaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, VolumeAllocatedSequences.class);
+		final ProfitAndLossSequences volumeAllocatedSequences = evaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, ProfitAndLossSequences.class);
 		assert volumeAllocatedSequences != null;
 
 		return new Pair<>(volumeAllocatedSequences, evaluationState);
 	}
 
-	public @Nullable ProfitAndLossSequences evaluateSequences(@NonNull final ISequences currentFullSequences, @NonNull final Pair<@NonNull VolumeAllocatedSequences, @NonNull IEvaluationState> p) {
+	public @Nullable ProfitAndLossSequences evaluateSequences(@NonNull final ISequences currentFullSequences, @NonNull final Pair<@NonNull ProfitAndLossSequences, @NonNull IEvaluationState> p) {
 
 		final @NonNull IEvaluationState evaluationState = p.getSecond();
 		for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
@@ -213,9 +211,9 @@ public class EvaluationHelper {
 	public long calculateSchedulePNL(@NonNull final ISequences fullSequences, @NonNull final ProfitAndLossSequences scheduledSequences) {
 		long sumPNL = 0;
 
-		for (final VolumeAllocatedSequence scheduledSequence : scheduledSequences.getVolumeAllocatedSequences()) {
-			for (final Pair<VoyagePlan, IPortTimesRecord> p : scheduledSequence.getVoyagePlans()) {
-				sumPNL += scheduledSequences.getVoyagePlanGroupValue(p.getFirst());
+		for (final VolumeAllocatedSequence scheduledSequence : scheduledSequences) {
+			for (final VoyagePlanRecord p : scheduledSequence.getVoyagePlanRecords()) {
+				sumPNL += p.getProfitAndLoss();
 			}
 		}
 
@@ -225,39 +223,47 @@ public class EvaluationHelper {
 			assert portSlot != null;
 			sumPNL += scheduledSequences.getUnusedSlotGroupValue(portSlot);
 		}
-		
+
 		sumPNL += computePaperPnL(scheduledSequences);
-		
+
 		return sumPNL;
 	}
 
-	public long calculateScheduleLateness(final @NonNull ISequences fullSequences, final @NonNull VolumeAllocatedSequences volumeAllocatedSequences) {
+	public long calculateScheduleLateness(final @NonNull ProfitAndLossSequences volumeAllocatedSequences) {
 		long sumCost = 0;
 
 		for (final VolumeAllocatedSequence volumeAllocatedSequence : volumeAllocatedSequences) {
-			for (final IPortSlot lateSlot : volumeAllocatedSequence.getLateSlotsSet()) {
-				sumCost += volumeAllocatedSequence.getLatenessWithFlex(lateSlot);
+			for (final VoyagePlanRecord vpr : volumeAllocatedSequence.getVoyagePlanRecords()) {
+				for (final IPortSlot lateSlot : vpr.getLateSlotsSet()) {
+					sumCost += vpr.getLatenessWithFlex(lateSlot);
+				}
+			}
+
+			if (volumeAllocatedSequence.getMaxDurationLatenessRecord() != null) {
+				sumCost += volumeAllocatedSequence.getMaxDurationLatenessRecord().latenessWithFlex;
 			}
 		}
+
 		return sumCost;
 	}
 
-	public long calculateScheduleCapacity(final @NonNull ISequences fullSequences, final @NonNull VolumeAllocatedSequences volumeAllocatedSequences) {
+	public long calculateScheduleCapacity(final @NonNull ProfitAndLossSequences volumeAllocatedSequences) {
 		long sumCost = 0;
 		int flexAvail = this.flexibleViolationCount;
 		for (final VolumeAllocatedSequence volumeAllocatedSequence : volumeAllocatedSequences) {
-			for (final IPortSlot portSlot : volumeAllocatedSequence.getSequenceSlots()) {
-				final List<CapacityViolationType> violations = volumeAllocatedSequence.getCapacityViolations(portSlot);
-				for (@NonNull
-				final CapacityViolationType violation : violations) {
-					if (CapacityViolationChecker.isHardViolation(violation)) {
-						++sumCost;
-					} else {
-						if (flexAvail <= 0) {
+			for (final VoyagePlanRecord vpr : volumeAllocatedSequence.getVoyagePlanRecords()) {
+				for (final IPortSlot portSlot : vpr.getPortTimesRecord().getSlots()) {
+					final List<CapacityViolationType> violations = vpr.getCapacityViolations(portSlot);
+					for (final CapacityViolationType violation : violations) {
+						if (CapacityViolationChecker.isHardViolation(violation)) {
 							++sumCost;
 						} else {
-							if (flexAvail != Integer.MAX_VALUE) {
-								--flexAvail;
+							if (flexAvail <= 0) {
+								++sumCost;
+							} else {
+								if (flexAvail != Integer.MAX_VALUE) {
+									--flexAvail;
+								}
 							}
 						}
 					}
@@ -308,29 +314,25 @@ public class EvaluationHelper {
 			return null;
 		}
 
-		final Pair<@NonNull VolumeAllocatedSequences, @NonNull IEvaluationState> p1 = evaluateSequences(currentRawSequences, currentFullSequences, checkEvaluatedStateCheckers);
+		final Pair<@NonNull ProfitAndLossSequences, @NonNull IEvaluationState> p1 = evaluateSequences(currentRawSequences, currentFullSequences, checkEvaluatedStateCheckers);
 		/*
 		 * This is to increase runtime temporarily
 		 */
-		final Pair<@NonNull VolumeAllocatedSequences, @NonNull IEvaluationState> p2 = isReevaluating ? evaluateSequences(currentRawSequences, currentFullSequences, checkEvaluatedStateCheckers) : null;
+		final Pair<@NonNull ProfitAndLossSequences, @NonNull IEvaluationState> p2 = isReevaluating ? evaluateSequences(currentRawSequences, currentFullSequences, checkEvaluatedStateCheckers) : null;
 		if (p1 == null) {
 			return null;
 		}
 
 		boolean failedEvaluation = false;
-		final long thisLateness = calculateScheduleLateness(currentFullSequences, p1.getFirst());
+		final long thisLateness = calculateScheduleLateness(p1.getFirst());
 
 		if (referenceMetrics != null && thisLateness > referenceMetrics[MetricType.LATENESS.ordinal()]) {
 			failedEvaluation = true;
-		} else {
-			// currentLateness = thisLateness;
 		}
 
-		final long thisCapacity = calculateScheduleCapacity(currentFullSequences, p1.getFirst());
+		final long thisCapacity = calculateScheduleCapacity(p1.getFirst());
 		if (referenceMetrics != null && thisCapacity > referenceMetrics[MetricType.CAPACITY.ordinal()]) {
 			failedEvaluation = true;
-		} else {
-			// currentLateness = thisLateness;
 		}
 
 		if (failedEvaluation) {
@@ -347,10 +349,8 @@ public class EvaluationHelper {
 		final ProfitAndLossSequences profitAndLossSequences = evaluateSequences(currentFullSequences, p1);
 		assert profitAndLossSequences != null;
 
-		if (isReevaluating) {
-			if (p2 != null) {
-				evaluateSequences(currentFullSequences, p2);
-			}
+		if (isReevaluating && p2 != null) {
+			evaluateSequences(currentFullSequences, p2);
 		}
 
 		final long thisPNL = calculateSchedulePNL(currentFullSequences, profitAndLossSequences);
@@ -370,19 +370,19 @@ public class EvaluationHelper {
 	public void setStrictChecking(final boolean strictChecking) {
 		this.strictChecking = strictChecking;
 	}
-	
+
 	private long computePaperPnL(final ProfitAndLossSequences profitAndLossSequences) {
 		long paperPnL = 0;
 		if (generatedPapersInPNL) {
 			final Map<BasicPaperDealData, List<BasicPaperDealAllocationEntry>> paperDealAllocations = profitAndLossSequences.getPaperDealRecords();
-			
+
 			for (final BasicPaperDealData basicPaperDealData : paperDealAllocations.keySet()) {
 				for (final BasicPaperDealAllocationEntry entry : paperDealAllocations.get(basicPaperDealData)) {
 					paperPnL += entry.getValue();
 				}
 			}
 		}
-		
+
 		return paperPnL;
 	}
 }

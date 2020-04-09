@@ -22,7 +22,7 @@ import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IPriceIntervalProvider;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.PriceIntervalProviderHelper;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
@@ -55,20 +55,20 @@ public class FixedPriceContract implements ILoadPriceCalculator, ISalesPriceCalc
 
 	@Override
 	public int calculateFOBPricePerMMBTu(final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final int dischargePricePerMMBTu, final IAllocationAnnotation allocationAnnotation,
-			final IVesselAvailability vesselAvailability, final int vesselStartTime, final VoyagePlan plan, @Nullable final VolumeAllocatedSequences volumeAllocatedSequences,
+			final IVesselAvailability vesselAvailability, final int vesselStartTime, final VoyagePlan plan, @Nullable final ProfitAndLossSequences volumeAllocatedSequences,
 			final IDetailTree annotations) {
 		return pricePerMMBTU;
 	}
 
 	@Override
 	public int calculateDESPurchasePricePerMMBTu(final ILoadOption loadOption, final IDischargeSlot dischargeSlot, final int dischargePricePerMMBTu, final IAllocationAnnotation allocationAnnotation,
-			@Nullable final VolumeAllocatedSequences volumeAllocatedSequences, final IDetailTree annotations) {
+			@Nullable final ProfitAndLossSequences volumeAllocatedSequences, final IDetailTree annotations) {
 		return pricePerMMBTU;
 	}
 
 	@Override
 	public int calculatePriceForFOBSalePerMMBTu(final ILoadSlot loadSlot, final IDischargeOption dischargeOption, final int dischargePricePerMMBTu, final IAllocationAnnotation allocationAnnotation,
-			@Nullable final VolumeAllocatedSequences volumeAllocatedSequences, final IDetailTree annotations) {
+			@Nullable final ProfitAndLossSequences volumeAllocatedSequences, final IDetailTree annotations) {
 		return pricePerMMBTU;
 	}
 

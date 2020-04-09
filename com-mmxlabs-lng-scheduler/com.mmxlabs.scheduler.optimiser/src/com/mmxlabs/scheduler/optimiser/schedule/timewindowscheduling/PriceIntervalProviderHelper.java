@@ -85,7 +85,8 @@ public class PriceIntervalProviderHelper {
 	}
 
 	/**
-	 * Produce a list of the difference between purchase and sales price at hour points, when slots in a cargo are not price independent
+	 * Produce a list of the difference between purchase and sales price at hour
+	 * points, when slots in a cargo are not price independent
 	 * 
 	 * @param start
 	 * @param end
@@ -317,7 +318,7 @@ public class PriceIntervalProviderHelper {
 		inputData.includeIdleBunkerCosts = false; // not using this here right now
 
 		ApproximateFuelCosts legFuelCosts = ApproximateVoyageCalculatorHelper.getLegFuelCosts(inputData);
-		
+
 		final long charterCost = Calculator.costFromDailyRateAndTimeInHours(charterRatePerDay, times[1] - times[0]);
 		final long cost = canal.routeCost + legFuelCosts.getBoilOffCost() + legFuelCosts.getJourneyBunkerCost() + charterCost;
 		return cost;
@@ -440,7 +441,8 @@ public class PriceIntervalProviderHelper {
 	}
 
 	/**
-	 * Produce a list of the difference between purchase and sales price at hour points, when slots in a cargo are not price independent
+	 * Produce a list of the difference between purchase and sales price at hour
+	 * points, when slots in a cargo are not price independent
 	 * 
 	 * @param load
 	 * @param discharge
@@ -466,8 +468,7 @@ public class PriceIntervalProviderHelper {
 		return intervals;
 	}
 
-	@NonNull
-	List<int @NonNull []> getFeasibleIntervalSubSet(final int inclusiveStart, final int exclusiveEnd, @NonNull final List<int @NonNull []> intervals) {
+	public @NonNull List<int @NonNull []> getFeasibleIntervalSubSet(final int inclusiveStart, final int exclusiveEnd, @NonNull final List<int @NonNull []> intervals) {
 		final List<int @NonNull []> list = new LinkedList<>();
 		for (int i = 0; i < intervals.size(); i++) {
 			if (list.isEmpty()) {
@@ -531,7 +532,7 @@ public class PriceIntervalProviderHelper {
 		return new Pair<ILoadOption, IDischargeOption>(load, discharge);
 	}
 
-	boolean isLoadPricingEventTime(final @NonNull ILoadOption slot, final @NonNull IPortTimeWindowsRecord portTimeWindowsRecord) {
+	public boolean isLoadPricingEventTime(final @NonNull ILoadOption slot, final @NonNull IPortTimeWindowsRecord portTimeWindowsRecord) {
 		@Nullable
 		final PricingEventType pricingEventType = slot.getLoadPriceCalculator().getCalculatorPricingEventType(slot, portTimeWindowsRecord);
 		final PricingEventType pet = pricingEventType == null ? slot.getPricingEvent() : pricingEventType;
@@ -557,7 +558,7 @@ public class PriceIntervalProviderHelper {
 		return isDischargePricingEventTime(pet);
 	}
 
-	boolean isDischargePricingEventTime(final @NonNull IDischargeOption slot, final @NonNull IPortTimeWindowsRecord portTimeWindowsRecord) {
+	public boolean isDischargePricingEventTime(final @NonNull IDischargeOption slot, final @NonNull IPortTimeWindowsRecord portTimeWindowsRecord) {
 		final PricingEventType pet = slot.getDischargePriceCalculator().getCalculatorPricingEventType(slot, portTimeWindowsRecord) == null ? slot.getPricingEvent()
 				: slot.getDischargePriceCalculator().getCalculatorPricingEventType(slot, portTimeWindowsRecord);
 		return isDischargePricingEventTime(pet);
@@ -631,7 +632,7 @@ public class PriceIntervalProviderHelper {
 		return priceIntervals;
 	}
 
-	void createAndSetTimeWindow(final @NonNull IPortTimeWindowsRecord portTimeWindowRecord, final @NonNull IPortSlot slot, final int start, final int end) {
+	public void createAndSetTimeWindow(final @NonNull IPortTimeWindowsRecord portTimeWindowRecord, final @NonNull IPortSlot slot, final int start, final int end) {
 		final ITimeWindow timeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(slot);
 		final MutableTimeWindow feasibleTimeWindow = new MutableTimeWindow(start, end, timeWindow.getExclusiveEndFlex());
 		portTimeWindowRecord.setSlotFeasibleTimeWindow(slot, feasibleTimeWindow);
@@ -695,7 +696,7 @@ public class PriceIntervalProviderHelper {
 		return date;
 	}
 
-	boolean isPricingDateSpecified(final @NonNull IPortSlot portSlot, final @NonNull PricingEventType pricingEventType) {
+	public boolean isPricingDateSpecified(final @NonNull IPortSlot portSlot, final @NonNull PricingEventType pricingEventType) {
 		if (portSlot instanceof ILoadOption) {
 			return (pricingEventType == PricingEventType.DATE_SPECIFIED || ((ILoadOption) portSlot).getPricingDate() != IPortSlot.NO_PRICING_DATE);
 		} else if (portSlot instanceof IDischargeOption) {
@@ -853,7 +854,8 @@ public class PriceIntervalProviderHelper {
 	}
 
 	/**
-	 * Provides the date range and price for the lowest price period in a given range
+	 * Provides the date range and price for the lowest price period in a given
+	 * range
 	 * 
 	 * @return
 	 */
@@ -866,7 +868,8 @@ public class PriceIntervalProviderHelper {
 	}
 
 	/**
-	 * Provides the date range and price for the lowest price period in a given range
+	 * Provides the date range and price for the lowest price period in a given
+	 * range
 	 * 
 	 * @return
 	 */
@@ -935,7 +938,8 @@ public class PriceIntervalProviderHelper {
 	}
 
 	/**
-	 * Makes sure the end of a time window is in the proper format. Takes as input the inclusive end and outputs the correct format.
+	 * Makes sure the end of a time window is in the proper format. Takes as input
+	 * the inclusive end and outputs the correct format.
 	 * 
 	 * @param end
 	 * @return

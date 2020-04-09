@@ -11,7 +11,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
-import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 /**

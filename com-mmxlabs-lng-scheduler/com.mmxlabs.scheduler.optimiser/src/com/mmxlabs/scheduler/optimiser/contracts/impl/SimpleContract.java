@@ -18,7 +18,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
@@ -45,7 +45,7 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 	 */
 	@Override
 	public int calculateFOBPricePerMMBTu(final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final int dischargePricePerMMBTu, final IAllocationAnnotation allocationAnnotation,
-			final IVesselAvailability vesselAvailability, final int vesselStartTime, final VoyagePlan plan, @Nullable VolumeAllocatedSequences volumeAllocatedSequences, final IDetailTree annotations) {
+			final IVesselAvailability vesselAvailability, final int vesselStartTime, final VoyagePlan plan, @Nullable ProfitAndLossSequences volumeAllocatedSequences, final IDetailTree annotations) {
 
 		if (actualsDataProvider != null && actualsDataProvider.hasActuals(loadSlot)) {
 			return actualsDataProvider.getLNGPricePerMMBTu(loadSlot);
@@ -104,7 +104,7 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 	 */
 	@Override
 	public int calculateDESPurchasePricePerMMBTu(final ILoadOption loadOption, final IDischargeSlot dischargeSlot, final int dischargePricePerMMBTu, final IAllocationAnnotation allocationAnnotation,
-			@Nullable VolumeAllocatedSequences volumeAllocatedSequences, final IDetailTree annotations) {
+			@Nullable ProfitAndLossSequences volumeAllocatedSequences, final IDetailTree annotations) {
 
 		if (actualsDataProvider != null && actualsDataProvider.hasActuals(loadOption)) {
 			return actualsDataProvider.getLNGPricePerMMBTu(loadOption);
@@ -117,7 +117,7 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 	 */
 	@Override
 	public int calculatePriceForFOBSalePerMMBTu(final ILoadSlot loadSlot, final IDischargeOption dischargeOption, final int dischargePricePerMMBTu, final IAllocationAnnotation allocationAnnotation,
-			@Nullable VolumeAllocatedSequences volumeAllocatedSequences, final IDetailTree annotations) {
+			@Nullable ProfitAndLossSequences volumeAllocatedSequences, final IDetailTree annotations) {
 
 		if (actualsDataProvider != null && actualsDataProvider.hasActuals(loadSlot)) {
 			return actualsDataProvider.getLNGPricePerMMBTu(loadSlot);

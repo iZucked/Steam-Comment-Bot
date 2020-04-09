@@ -607,6 +607,6 @@ public class BreakEvenSanboxUnit {
 		assert solution != null;
 		final BreakEvenSandboxEvaluator evaluator = injector.getInstance(BreakEvenSandboxEvaluator.class);
 		final IPortSlot portSlot = dataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(target, IPortSlot.class);
-		return evaluator.evaluate(solution, portSlot, null, 0);
+		return evaluator.evaluate(resource, solution, portSlot, null, 0);
 	}
 }

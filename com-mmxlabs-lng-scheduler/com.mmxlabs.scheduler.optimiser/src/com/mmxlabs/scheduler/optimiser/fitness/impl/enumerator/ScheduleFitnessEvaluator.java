@@ -12,12 +12,12 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.scheduler.optimiser.evaluation.VoyagePlanRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
 import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * The {@link ScheduleFitnessEvaluator} evaluates the linear fitness (using {@link ICargoSchedulerFitnessComponent}s) of a {@link ScheduledSequences} after the {@link ScheduleCalculator} has processed
@@ -72,7 +72,7 @@ public class ScheduleFitnessEvaluator {
 			component.startEvaluation(profitAndLossSequences);
 		}
 
-		for (final VolumeAllocatedSequence sequence : profitAndLossSequences.getVolumeAllocatedSequences()) {
+		for (final VolumeAllocatedSequence sequence : profitAndLossSequences) {
 			if (!iterateSchedulerComponents(components, sequence)) {
 				return false;
 			}
@@ -111,10 +111,10 @@ public class ScheduleFitnessEvaluator {
 			final Object obj = vpItr.nextObject();
 			assert obj != null;
 			final int time = vpItr.getCurrentTime();
-			final VoyagePlan plan = vpItr.getCurrentPlan();
-			assert plan != null;
+			final VoyagePlanRecord vpr = vpItr.getCurrentPlanRecord();
+			assert vpr != null;
 			for (final ICargoSchedulerFitnessComponent component : components) {
-				if (!component.nextVoyagePlan(plan, time)) {
+				if (!component.nextVoyagePlan(vpr, time)) {
 					return false;
 				}
 				if (!component.nextObject(obj, time)) {
@@ -129,11 +129,11 @@ public class ScheduleFitnessEvaluator {
 				assert obj != null;
 
 				final int time = vpItr.getCurrentTime();
-				final VoyagePlan plan = vpItr.getCurrentPlan();
-				assert plan != null;
+				final VoyagePlanRecord vpr = vpItr.getCurrentPlanRecord();
+				assert vpr != null;
 
 				for (final ICargoSchedulerFitnessComponent component : components) {
-					if (!component.nextVoyagePlan(plan, time)) {
+					if (!component.nextVoyagePlan(vpr, time)) {
 						return false;
 					}
 					if (!component.nextObject(obj, time)) {

@@ -221,7 +221,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 				rows.add(createRow(250, "Buy price($/mmBtu)", false, "", "", false,
 						createBasicFormatter(options, false, Double.class, DollarsPerMMBtuFormat::format, createFirstPurchaseTransformer(Double.class, SlotAllocation::getPrice))));
 
-				rows.add(createRow(260, "Sale port", false, "", "", false, createFirstSaleAllocationFormatter(sa -> sa.getPort().getName())));
+				rows.add(createRow(260, "Sale port", false, "", "", false, createFirstSaleAllocationFormatter(sa -> sa.getPort() == null ? "" : sa.getPort().getName())));
 				rows.add(createRow(270, "Sale date", false, "", "", false,
 						createFirstSaleAllocationFormatter(sa -> sa.getSlotVisit().getStart().format(DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter()))));
 				rows.add(createRow(280, "Sale price($/mmBtu)", false, "", "", false,

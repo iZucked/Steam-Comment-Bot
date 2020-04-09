@@ -113,4 +113,10 @@ public class GeneratedCharterOutVesselEventPortSlot implements IGeneratedCharter
 	public List<IPortSlot> getEventPortSlots() {
 		throw new UnsupportedOperationException("Not yet implemented");
 	}
+
+	@Override
+	public void setKey(String key) {
+		// TODO Auto-generated method stub
+		
+	}
 }

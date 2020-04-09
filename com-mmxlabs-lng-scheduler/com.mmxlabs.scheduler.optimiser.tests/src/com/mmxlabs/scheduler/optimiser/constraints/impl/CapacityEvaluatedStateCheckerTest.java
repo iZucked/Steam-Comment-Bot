@@ -8,113 +8,106 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
-import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
-import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
+import com.mmxlabs.scheduler.optimiser.evaluation.VoyagePlanRecord;
+import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
-import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.CapacityViolationType;
 
 @SuppressWarnings("null")
 public class CapacityEvaluatedStateCheckerTest {
 
-	private CapacityEvaluatedStateChecker CESC;
-	private ISequences sequences;
-	private IEvaluationState state;
+	private CapacityEvaluatedStateChecker capacityEvaluatedStateChecker;
 	private PortSlot port;
 	private ArrayList<@NonNull CapacityViolationType> violations;
-	private VolumeAllocatedSequence first;
-	private List<@NonNull IPortSlot> sequenceSlots;
+	private VoyagePlanRecord first;
+	private VolumeAllocatedSequence volumeAllocatedSequence;
 	private ArrayList<VolumeAllocatedSequence> list;
-	private VolumeAllocatedSequences VAS;
+	private ProfitAndLossSequences profitAndLossSequences;
 
 	@BeforeEach
 	public void prepChecker() {
-		CESC = new CapacityEvaluatedStateChecker("Test");
+		capacityEvaluatedStateChecker = new CapacityEvaluatedStateChecker("Test");
 
 		// Check initial state
-		Assertions.assertFalse(CESC.isInitialised());
-		Assertions.assertEquals(0, CESC.getInitialSoftViolations());
-		Assertions.assertNull(CESC.getInitialViolatedSlots());
+		Assertions.assertFalse(capacityEvaluatedStateChecker.isInitialised());
+		Assertions.assertEquals(0, capacityEvaluatedStateChecker.getInitialSoftViolations());
+		Assertions.assertNull(capacityEvaluatedStateChecker.getInitialViolatedSlots());
 
-		sequences = mock(ISequences.class);
 		port = mock(PortSlot.class);
 
-		violations = new ArrayList<@NonNull CapacityViolationType>();
+		violations = new ArrayList<>();
 		violations.add(CapacityViolationType.FORCED_COOLDOWN);
 
-		first = mock(VolumeAllocatedSequence.class);
-		sequenceSlots = new ArrayList<IPortSlot>();
-		sequenceSlots.add(port);
+		first = mock(VoyagePlanRecord.class);
+		volumeAllocatedSequence = mock(VolumeAllocatedSequence.class);
 
+		when(volumeAllocatedSequence.getVoyagePlanRecords()).thenReturn(Collections.singletonList(first));
+		when(first.getCapacityViolations(port)).thenReturn(violations);
+		IPortTimesRecord ptr = mock(IPortTimesRecord.class);
+		
+		when(ptr.getSlots()).thenReturn(Collections.singletonList(port));
+		when(first.getPortTimesRecord()).thenReturn(ptr);
 		when(first.getCapacityViolations(port)).thenReturn(violations);
 
-		list = new ArrayList<VolumeAllocatedSequence>();
-		list.add(first);
-		when(first.getSequenceSlots()).thenReturn(sequenceSlots);
-		// when(first.getCapacityViolationCount(port)).thenReturn((long) violations.size());
+		list = new ArrayList<>();
+		list.add(volumeAllocatedSequence);
 
-		VAS = new VolumeAllocatedSequences(list);
+		profitAndLossSequences = new ProfitAndLossSequences(list);
 
-		state = mock(IEvaluationState.class);
-		when(state.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, VolumeAllocatedSequences.class)).thenReturn(VAS);
-		Assertions.assertTrue(CESC.checkConstraints(sequences, sequences, state));
+		Assertions.assertTrue(capacityEvaluatedStateChecker.checkConstraints(profitAndLossSequences));
 	}
 
 	@Test
 	public void validStep() {
 
 		// Initial Block
-		Assertions.assertTrue(CESC.isInitialised());
-		Assertions.assertEquals(1, CESC.getInitialSoftViolations());
-		Assertions.assertEquals(0, CESC.getInitialViolatedSlots().size());
+		Assertions.assertTrue(capacityEvaluatedStateChecker.isInitialised());
+		Assertions.assertEquals(1, capacityEvaluatedStateChecker.getInitialSoftViolations());
+		Assertions.assertEquals(0, capacityEvaluatedStateChecker.getInitialViolatedSlots().size());
 
 		// Run Again, Valid.
-		Assertions.assertTrue(CESC.checkConstraints(sequences, sequences, state));
-		Assertions.assertTrue(CESC.isInitialised());
-		Assertions.assertEquals(1, CESC.getInitialSoftViolations());
-		Assertions.assertEquals(1, CESC.getCurrentSoftViolations());
-		Assertions.assertEquals(0, CESC.getInitialViolatedSlots().size());
+		Assertions.assertTrue(capacityEvaluatedStateChecker.checkConstraints(profitAndLossSequences));
+		Assertions.assertTrue(capacityEvaluatedStateChecker.isInitialised());
+		Assertions.assertEquals(1, capacityEvaluatedStateChecker.getInitialSoftViolations());
+		Assertions.assertEquals(1, capacityEvaluatedStateChecker.getCurrentSoftViolations());
+		Assertions.assertEquals(0, capacityEvaluatedStateChecker.getInitialViolatedSlots().size());
 	}
 
 	@Test
 	public void increasedViolations() {
 
 		violations.add(CapacityViolationType.FORCED_COOLDOWN);
-		// when(first.getCapacityViolationCount(port)).thenReturn((long) violations.size());
 
 		// Run Again, Increased Violation Count - Fail
-		Assertions.assertFalse(CESC.checkConstraints(sequences, sequences, state));
-		Assertions.assertTrue(CESC.isInitialised());
-		Assertions.assertEquals(1, CESC.getInitialSoftViolations());
-		Assertions.assertEquals(2, CESC.getCurrentSoftViolations());
-		Assertions.assertEquals(0, CESC.getInitialViolatedSlots().size());
+		Assertions.assertFalse(capacityEvaluatedStateChecker.checkConstraints(profitAndLossSequences));
+		Assertions.assertTrue(capacityEvaluatedStateChecker.isInitialised());
+		Assertions.assertEquals(1, capacityEvaluatedStateChecker.getInitialSoftViolations());
+		Assertions.assertEquals(2, capacityEvaluatedStateChecker.getCurrentSoftViolations());
+		Assertions.assertEquals(0, capacityEvaluatedStateChecker.getInitialViolatedSlots().size());
 	}
 
 	@Test
 	public void invalidViolation() {
 
-		violations = new ArrayList<@NonNull CapacityViolationType>();
+		violations = new ArrayList<>();
 		violations.add(CapacityViolationType.MAX_LOAD);
-		// when(first.getCapacityViolationCount(port)).thenReturn((long) violations.size());
 		when(first.getCapacityViolations(port)).thenReturn(violations);
-		// when(first.getCapacityViolationCount(port)).thenReturn((long) violations.size());
 
 		// Run Again, Flagged Capacity Violation
-		Assertions.assertFalse(CESC.checkConstraints(sequences, sequences, state));
-		Assertions.assertTrue(CESC.isInitialised());
-		Assertions.assertEquals(1, CESC.getInitialSoftViolations());
-		Assertions.assertEquals(0, CESC.getCurrentSoftViolations());
-		Assertions.assertEquals(0, CESC.getInitialViolatedSlots().size());
+		Assertions.assertFalse(capacityEvaluatedStateChecker.checkConstraints(profitAndLossSequences));
+		Assertions.assertTrue(capacityEvaluatedStateChecker.isInitialised());
+		Assertions.assertEquals(1, capacityEvaluatedStateChecker.getInitialSoftViolations());
+		Assertions.assertEquals(0, capacityEvaluatedStateChecker.getCurrentSoftViolations());
+		Assertions.assertEquals(0, capacityEvaluatedStateChecker.getInitialViolatedSlots().size());
 	}
 
 }

@@ -29,6 +29,9 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
  */
 public abstract class AdvancedOptimisationTester extends AbstractAdvancedOptimisationTester {
 
+	// No other valid mode at present. All is not supported in this test framework,
+	private static final SimilarityMode[] SIMILARITY_MODES = { SimilarityMode.OFF }; // , SimilarityMode.ALL };
+
 	public List<DynamicNode> makeTests(@NonNull final String scenarioURL, @Nullable final LocalDate periodStart, @Nullable final YearMonth periodEnd, boolean withGCO) {
 		final List<DynamicNode> tests = new LinkedList<>();
 
@@ -48,7 +51,7 @@ public abstract class AdvancedOptimisationTester extends AbstractAdvancedOptimis
 					continue;
 				}
 				final String actionLabel = withActionSets ? "_ActionSets" : "";
-				for (final SimilarityMode similarityMode : SimilarityMode.values()) {
+				for (final SimilarityMode similarityMode : SIMILARITY_MODES) {
 					if (similarityMode == SimilarityMode.ALL) {
 						continue;
 					}

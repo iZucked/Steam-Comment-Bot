@@ -12,8 +12,13 @@ import javax.inject.Singleton;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.annotation.NonNull;
+
 import com.google.inject.AbstractModule;
+import com.google.inject.Injector;
 import com.google.inject.Module;
+import com.google.inject.Provides;
+import com.google.inject.name.Named;
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
@@ -23,6 +28,12 @@ import com.mmxlabs.optimiser.core.modules.ConstraintCheckerInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.EvaluatedStateConstraintCheckerInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.EvaluationProcessInstantiatorModule;
 import com.mmxlabs.scheduler.optimiser.exposures.ExposuresCalculator;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.cache.CacheMode;
+import com.mmxlabs.scheduler.optimiser.evaluation.CachingVoyagePlanEvaluator;
+import com.mmxlabs.scheduler.optimiser.evaluation.CheckingVoyagePlanEvaluator;
+import com.mmxlabs.scheduler.optimiser.evaluation.DefaultVoyagePlanEvaluator;
+import com.mmxlabs.scheduler.optimiser.evaluation.IVoyagePlanEvaluator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanner;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanner;
 import com.mmxlabs.scheduler.optimiser.manipulators.SequencesManipulatorModule;
@@ -39,6 +50,10 @@ import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.IGeneratedCh
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.impl.CharterLengthEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.impl.CleanStateIdleTimeEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.impl.DefaultGeneratedCharterOutEvaluator;
+import com.mmxlabs.scheduler.optimiser.scheduling.IArrivalTimeScheduler;
+import com.mmxlabs.scheduler.optimiser.scheduling.PNLBasedWindowTrimmer;
+import com.mmxlabs.scheduler.optimiser.scheduling.PriceBasedWindowTrimmer;
+import com.mmxlabs.scheduler.optimiser.scheduling.TimeWindowScheduler;
 
 /**
  * This {@link Module} configures the default schedule optimisation classes.
@@ -50,8 +65,13 @@ public class LNGEvaluationModule extends AbstractModule {
 	@NonNull
 	private final Collection<String> hints;
 
+	private final boolean hintEnableCache;
+
+	private static final int DEFAULT_VPE_CACHE_SIZE = 5_000_000;
+
 	public LNGEvaluationModule(@NonNull final Collection<String> hints) {
 		this.hints = hints;
+		this.hintEnableCache = !hints.contains(LNGTransformerHelper.HINT_DISABLE_CACHES);
 	}
 
 	@Override
@@ -68,6 +88,15 @@ public class LNGEvaluationModule extends AbstractModule {
 		bind(ExposuresCalculator.class);
 		bind(ScheduleCalculator.class);
 
+		bind(TimeWindowScheduler.class).in(Singleton.class);
+		bind(PriceBasedWindowTrimmer.class);
+		bind(PNLBasedWindowTrimmer.class).in(Singleton.class);
+		;
+
+		bind(DefaultVoyagePlanEvaluator.class);
+
+		bind(IArrivalTimeScheduler.class).to(TimeWindowScheduler.class);
+
 		if (hints != null) {
 
 			boolean isCleanState = false;
@@ -81,19 +110,20 @@ public class LNGEvaluationModule extends AbstractModule {
 			}
 
 			// GCO and Clean state are not compatible with each other
-			if (!isCleanState && LicenseFeatures.isPermitted("features:optimisation-charter-out-generation") && hints.contains(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS)) {
+			if (!isCleanState && LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_CHARTER_OUT_GENERATION) && hints.contains(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS)) {
 				bind(IGeneratedCharterOutEvaluator.class).to(DefaultGeneratedCharterOutEvaluator.class);
 			}
 
-			if (LicenseFeatures.isPermitted("features:break-evens") && !hints.contains(HINT_PORTFOLIO_BREAKEVEN)) {
+			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_BREAK_EVENS) && !hints.contains(HINT_PORTFOLIO_BREAKEVEN)) {
 				bind(IBreakEvenEvaluator.class).to(DefaultBreakEvenEvaluator.class);
 			}
 
-			if (LicenseFeatures.isPermitted("features:charter-length") && hints.contains(LNGTransformerHelper.HINT_CHARTER_LENGTH)) {
+			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_CHARTER_LENGTH) && hints.contains(LNGTransformerHelper.HINT_CHARTER_LENGTH)) {
 				// See LNGTransformerModule for parameters
 				bind(IGeneratedCharterLengthEvaluator.class).to(CharterLengthEvaluator.class);
 			}
 		}
+
 		// Needed for LegalSequencingChecker
 		if (Platform.isRunning()) {
 			bind(IConstraintCheckerRegistry.class).toProvider(service(IConstraintCheckerRegistry.class).single());
@@ -105,5 +135,27 @@ public class LNGEvaluationModule extends AbstractModule {
 		install(new EvaluatedStateConstraintCheckerInstantiatorModule());
 		install(new EvaluationProcessInstantiatorModule());
 		bind(LegalSequencingChecker.class);
+	}
+
+	@Provides
+	@Singleton
+	private IVoyagePlanEvaluator provideVoyagePlanEvaluator(Injector injector, //
+			final @NonNull DefaultVoyagePlanEvaluator delegate, //
+			@Named(SchedulerConstants.CONCURRENCY_LEVEL) int concurrencyLevel, //
+			@Named(SchedulerConstants.Key_VoyagePlanEvaluatorCache) CacheMode cacheMode //
+	) {
+
+		if (cacheMode == CacheMode.Off || !hintEnableCache) {
+			return delegate;
+		} else {
+			final CachingVoyagePlanEvaluator cache = new CachingVoyagePlanEvaluator(delegate, DEFAULT_VPE_CACHE_SIZE, concurrencyLevel);
+			injector.injectMembers(cache);
+			if (cacheMode == CacheMode.On) {
+				return cache;
+			} else {
+				assert cacheMode == CacheMode.Verify;
+				return new CheckingVoyagePlanEvaluator(delegate, cache);
+			}
+		}
 	}
 }

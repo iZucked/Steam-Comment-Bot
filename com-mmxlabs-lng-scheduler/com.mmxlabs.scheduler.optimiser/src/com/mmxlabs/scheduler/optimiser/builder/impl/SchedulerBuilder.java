@@ -821,7 +821,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			// put end slot into list of slots to patch up later.
 			// Fleet vessels and spot vessels both run to the end of the optimisation if they don't have an end date.
 			if (!vesselInstanceType.equals(VesselInstanceType.SPOT_CHARTER) && !vesselInstanceType.equals(VesselInstanceType.ROUND_TRIP)) {
-				if (end.isMinDurationSet()) {
+				if (end.isMinDurationSet() || end.isMaxDurationSet()) {
 					partiallyOpenEndDateWindows.add((MutableTimeWindow) end.getTimeWindow());
 				} else {
 					fullyOpenEndDateWindows.add((MutableTimeWindow) end.getTimeWindow());

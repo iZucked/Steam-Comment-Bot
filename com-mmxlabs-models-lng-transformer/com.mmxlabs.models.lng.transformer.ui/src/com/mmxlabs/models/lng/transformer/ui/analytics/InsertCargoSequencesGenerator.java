@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.transformer.ui.analytics;
 
 import java.util.List;
+
 import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;

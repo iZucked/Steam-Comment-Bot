@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
@@ -102,6 +104,11 @@ public class MarkToMarketLoadOption implements ILoadOption, IMarkToMarketOption 
 
 	@Override
 	public void setVolumeLimits(boolean volumeInM3, long minVolume, long maxVolume) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void setKey(@NonNull String key) {
 		throw new UnsupportedOperationException();
 	}
 

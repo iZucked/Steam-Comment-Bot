@@ -14,7 +14,6 @@ import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 public class PurgeExporter {
 
@@ -24,8 +23,6 @@ public class PurgeExporter {
 	public @Nullable Purge export(final VoyageDetails voyageDetails, final VolumeAllocatedSequence volumeAllocatedSequence, final int currentTime) {
 
 		if (voyageDetails.isPurgePerformed()) {
-
-//			final long cooldownVolume = voyageDetails.getFuelConsumption(LNGFuelKeys.Cooldown_In_m3);
 
 			Port ePort = modelEntityMap.getModelObject(voyageDetails.getOptions().getToPortSlot().getPort(), Port.class);
 
@@ -40,9 +37,6 @@ public class PurgeExporter {
 			final Purge purge = ScheduleFactory.eINSTANCE.createPurge();
 			purge.setPort(ePort);
 
-			final VoyagePlan voyagePlan = volumeAllocatedSequence.getVoyagePlan(voyageDetails.getOptions().getFromPortSlot());
-
-//			purge.setCost(OptimiserUnitConvertor.convertToExternalFixedCost(voyagePlan.getPurgeCost()));
 			purge.setStart(modelEntityMap.getDateFromHours(currentTime, ePort));
 			purge.setEnd(modelEntityMap.getDateFromHours(currentTime + voyageDetails.getPurgeDuration(), ePort));
 

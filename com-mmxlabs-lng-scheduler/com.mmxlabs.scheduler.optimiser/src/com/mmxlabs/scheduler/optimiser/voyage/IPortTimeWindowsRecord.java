@@ -7,6 +7,7 @@ package com.mmxlabs.scheduler.optimiser.voyage;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IElementAnnotation;
@@ -21,6 +22,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.PanamaPeriod;
  * @author achurchill
  *
  */
+@NonNullByDefault
 public interface IPortTimeWindowsRecord extends IElementAnnotation {
 
 	/**
@@ -28,20 +30,20 @@ public interface IPortTimeWindowsRecord extends IElementAnnotation {
 	 * 
 	 * @return
 	 */
-	@NonNull
-	List<@NonNull IPortSlot> getSlots();
 
-	ITimeWindow getSlotFeasibleTimeWindow(@NonNull IPortSlot slot);
+	List<IPortSlot> getSlots();
 
-	void setSlotFeasibleTimeWindow(@NonNull IPortSlot slot, @NonNull ITimeWindow timeWindow);
+	ITimeWindow getSlotFeasibleTimeWindow(IPortSlot slot);
 
-	int getSlotDuration(@NonNull IPortSlot slot);
+	void setSlotFeasibleTimeWindow(IPortSlot slot, ITimeWindow timeWindow);
 
-	void setSlotDuration(@NonNull IPortSlot slot, int duration);
+	int getSlotDuration(IPortSlot slot);
 
-	int getSlotExtraIdleTime(@NonNull IPortSlot slot);
+	void setSlotDuration(IPortSlot slot, int duration);
 
-	void setSlotExtraIdleTime(@NonNull IPortSlot slot, int extraIdleTime);
+	int getSlotExtraIdleTime(IPortSlot slot);
+
+	void setSlotExtraIdleTime(IPortSlot slot, int extraIdleTime);
 
 	/**
 	 * Should be expected to do equivalent of "ptr.getSlotTime(ptr.getFirstSlot())"
@@ -59,11 +61,11 @@ public interface IPortTimeWindowsRecord extends IElementAnnotation {
 	 */
 	IPortSlot getReturnSlot();
 
-	void setSlot(@NonNull IPortSlot slot, ITimeWindow timeWindow, int duration, int index);
+	void setSlot(IPortSlot slot, ITimeWindow timeWindow, int duration, int index);
 
-	void setReturnSlot(@NonNull IPortSlot slot, ITimeWindow timeWindow, int duration, int index);
+	void setReturnSlot(IPortSlot slot, ITimeWindow timeWindow, int duration, int index);
 
-	int getIndex(@NonNull IPortSlot slot);
+	int getIndex(IPortSlot slot);
 
 	AvailableRouteChoices getSlotNextVoyageOptions(IPortSlot slot);
 
@@ -81,6 +83,6 @@ public interface IPortTimeWindowsRecord extends IElementAnnotation {
 
 	int getSlotAdditionalPanamaIdleHours(IPortSlot slot);
 
-	void setSlotNextVoyagePanamaPeriod(IPortSlot slot, @NonNull PanamaPeriod panamaPeriod);
+	void setSlotNextVoyagePanamaPeriod(IPortSlot slot, PanamaPeriod panamaPeriod);
 
 }

@@ -35,6 +35,7 @@ import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.transformer.util.IntegerIntervalCurveHelper;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
@@ -58,7 +59,7 @@ public class SimpleContractTransformer implements IContractTransformer {
 	private Injector injector;
 
 	@Inject
-	@Named(LNGTransformerModule.Parser_Commodity)
+	@Named(SchedulerConstants.Parser_Commodity)
 	private SeriesParser indices;
 
 	@Inject

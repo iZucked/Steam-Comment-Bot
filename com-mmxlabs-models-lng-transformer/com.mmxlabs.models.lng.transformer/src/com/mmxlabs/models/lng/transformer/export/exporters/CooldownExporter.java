@@ -43,7 +43,7 @@ public class CooldownExporter {
 			cooldown.setPort(ePort);
 			cooldown.setVolume(OptimiserUnitConvertor.convertToExternalVolume(cooldownVolume));
 
-			final VoyagePlan voyagePlan = volumeAllocatedSequence.getVoyagePlan(voyageDetails.getOptions().getFromPortSlot());
+			final VoyagePlan voyagePlan = volumeAllocatedSequence.getVoyagePlanRecord(voyageDetails.getOptions().getFromPortSlot()).getVoyagePlan();
 
 			cooldown.setCost(OptimiserUnitConvertor.convertToExternalFixedCost(voyagePlan.getCooldownCost()));
 			cooldown.setStart(modelEntityMap.getDateFromHours(currentTime, ePort));

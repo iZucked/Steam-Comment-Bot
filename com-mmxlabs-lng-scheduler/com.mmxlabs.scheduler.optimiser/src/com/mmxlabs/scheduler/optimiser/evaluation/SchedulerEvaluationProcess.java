@@ -21,7 +21,6 @@ import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
-import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.schedule.ProfitAndLossCalculator;
 import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
@@ -55,7 +54,7 @@ public class SchedulerEvaluationProcess implements IEvaluationProcess {
 
 	@Inject
 	private IPhaseOptimisationData optimisationData;
-	
+
 	@Override
 	public boolean evaluate(@NonNull final Phase phase, @NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState) {
 		return evaluate(phase, sequences, evaluationState, null);
@@ -72,7 +71,7 @@ public class SchedulerEvaluationProcess implements IEvaluationProcess {
 		if (phase == Phase.Checked_Evaluation) {
 
 			@Nullable
-			final VolumeAllocatedSequences volumeAllocatedSequences = scheduleCalculator.schedule(sequences, solution);
+			final ProfitAndLossSequences volumeAllocatedSequences = scheduleCalculator.schedule(sequences, solution);
 			if (volumeAllocatedSequences == null) {
 				return false;
 			}
@@ -86,7 +85,7 @@ public class SchedulerEvaluationProcess implements IEvaluationProcess {
 
 		} else if (phase == Phase.Final_Evaluation) {
 
-			final VolumeAllocatedSequences volumeAllocatedSequences = evaluationState.getData(VOLUME_ALLOCATED_SEQUENCES, VolumeAllocatedSequences.class);
+			final ProfitAndLossSequences volumeAllocatedSequences = evaluationState.getData(VOLUME_ALLOCATED_SEQUENCES, ProfitAndLossSequences.class);
 			if (volumeAllocatedSequences == null) {
 				return false;
 			}
@@ -115,11 +114,13 @@ public class SchedulerEvaluationProcess implements IEvaluationProcess {
 	@NonNull
 	private Set<@NonNull ISequenceElement> getAllScheduledSequenceElements(@NonNull final IEvaluationState evaluationState, @NonNull final IAnnotatedSolution annotatedSolution) {
 		final Set<@NonNull ISequenceElement> allElements = new HashSet<>();
-		final VolumeAllocatedSequences volumeAllocatedSequences = evaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, VolumeAllocatedSequences.class);
+		final ProfitAndLossSequences volumeAllocatedSequences = evaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, ProfitAndLossSequences.class);
 		assert volumeAllocatedSequences != null;
 		for (final VolumeAllocatedSequence scheduledSequence : volumeAllocatedSequences) {
-			for (final IPortSlot portSlot : scheduledSequence.getSequenceSlots()) {
-				allElements.add(portSlotProvider.getElement(portSlot));
+			for (final VoyagePlanRecord vpr : scheduledSequence.getVoyagePlanRecords()) {
+				for (final IPortSlot portSlot : vpr.getPortTimesRecord().getSlots()) {
+					allElements.add(portSlotProvider.getElement(portSlot));
+				}
 			}
 		}
 		allElements.addAll(optimisationData.getSequenceElements());

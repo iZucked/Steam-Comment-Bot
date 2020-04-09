@@ -758,8 +758,8 @@ public class BasicExposuresTest {
 						bind(IExposureDataProvider.class).to(DefaultExposureDataProvider.class);
 						bind(IExposureDataProviderEditor.class).to(DefaultExposureDataProvider.class);
 						
-						bind(SeriesParser.class).annotatedWith(Names.named("Commodity")).toInstance(commodityParser);
-						bind(SeriesParser.class).annotatedWith(Names.named("Currency")).toInstance(currencyParser);
+						bind(SeriesParser.class).annotatedWith(Names.named(SchedulerConstants.Parser_Commodity)).toInstance(commodityParser);
+						bind(SeriesParser.class).annotatedWith(Names.named(SchedulerConstants.Parser_Currency)).toInstance(currencyParser);
 						
 						bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.COMPUTE_EXPOSURES)).toInstance(Boolean.TRUE);
 					}

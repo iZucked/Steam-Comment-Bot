@@ -88,7 +88,7 @@ public class PanamaSlotsConstraintChecker implements IInitialSequencesConstraint
 		scheduler.setUseCanalBasedWindowTrimming(true);
 		scheduler.setUsePriceBasedWindowTrimming(false);
 
-		final ScheduledTimeWindows schedule = scheduler.schedule(sequences);
+		final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(sequences);
 
 		final Map<IResource, List<IPortTimeWindowsRecord>> trimmedWindows = schedule.getTrimmedTimeWindowsMap();
 
@@ -135,14 +135,14 @@ public class PanamaSlotsConstraintChecker implements IInitialSequencesConstraint
 						final boolean usesNorthBoundDirection = distanceProvider.getRouteOptionDirection(slot.getPort(), ERouteOption.PANAMA) == RouteOptionDirection.NORTHBOUND;
 
 						if (panamaPeriod == PanamaPeriod.Relaxed) {
-							// Record relaxd period slots
+							// Record relaxed period slots
 							if (usesNorthBoundDirection) {
 								currentUnbookedSlotsNorthboundInRelaxed.add(slot);
 							} else {
 								currentUnbookedSlotsSouthboundInRelaxed.add(slot);
 							}
 						}
-						// All slots, ralaxed and strict
+						// All slots, relaxed and strict
 						if (usesNorthBoundDirection) {
 							currentUnbookedSlotsNorthbound.add(slot);
 						} else {

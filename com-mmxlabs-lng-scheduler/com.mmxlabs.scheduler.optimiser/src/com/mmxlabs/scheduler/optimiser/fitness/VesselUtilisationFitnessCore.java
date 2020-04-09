@@ -25,41 +25,42 @@ import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
+import com.mmxlabs.scheduler.optimiser.evaluation.VoyagePlanRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
-import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselSlotCountFitnessProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
- * An {@link IFitnessComponent} and {@link IFitnessCore} combined implementation which applies a reward for using 
- * particular vessels
+ * An {@link IFitnessComponent} and {@link IFitnessCore} combined implementation
+ * which applies a reward for using particular vessels
  * 
  * @author Alex Churchill
  */
 public class VesselUtilisationFitnessCore implements IFitnessCore, IFitnessComponent {
 	public static final String UTILISATION_COST_PER_HOUR = "UtilisationFitnessCostPerHour";
 	public static final String AI_UTILISATION_COST_PER_HOUR = "AI_UtilisationFitnessCostPerHour";
-	
+
 	private final String name;
 
 	@Inject
 	private IVesselProvider vesselProvider;
- 
+
 	@Inject
 	private IPortTypeProvider portTypeProvider;
 
 	@Inject
 	private IVesselSlotCountFitnessProvider vesselInformationProvider;
-	
+
 	private long lastFitness = 0;
 	private long lastHours = 0;
 
 	private List<IResource> resources;
-	private Map<IResource, Integer> fitnessVessels = new HashMap<>();
-	
-	private Map<IResource, Long> perVesselWeight = new HashMap<>();
+	private final Map<IResource, Integer> fitnessVessels = new HashMap<>();
+
+	private final Map<IResource, Long> perVesselWeight = new HashMap<>();
 
 	public VesselUtilisationFitnessCore(final String name) {
 		this.name = name;
@@ -73,11 +74,10 @@ public class VesselUtilisationFitnessCore implements IFitnessCore, IFitnessCompo
 	public void init(@NonNull final IPhaseOptimisationData data) {
 		resources = data.getResources();
 		for (int i = 0; i < resources.size(); i++) {
-			IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resources.get(i));
-			int countForVessel = vesselInformationProvider.getCountForVessel(vesselAvailability);
+			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resources.get(i));
+			final int countForVessel = vesselInformationProvider.getCountForVessel(vesselAvailability);
 			if (countForVessel > 0) {
-				perVesselWeight.put(resources.get(i),
-						vesselInformationProvider.getWeightForVessel(vesselAvailability)*-1L); //-1 for minimise
+				perVesselWeight.put(resources.get(i), vesselInformationProvider.getWeightForVessel(vesselAvailability) * -1L); // -1 for minimise
 				fitnessVessels.put(resources.get(i), countForVessel);
 			}
 		}
@@ -89,7 +89,7 @@ public class VesselUtilisationFitnessCore implements IFitnessCore, IFitnessCompo
 	 * @param sequences
 	 */
 	public void initWithState(@NonNull final ISequences rawSequences) {
-		
+
 	}
 
 	@Override
@@ -99,13 +99,13 @@ public class VesselUtilisationFitnessCore implements IFitnessCore, IFitnessCompo
 
 	@Override
 	public Collection<IFitnessComponent> getFitnessComponents() {
-		return Collections.<IFitnessComponent> singleton(this);
+		return Collections.<IFitnessComponent>singleton(this);
 	}
 
 	@Override
 	public boolean evaluate(@NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState) {
 		@Nullable
-		final VolumeAllocatedSequences volumeAllocatedSequences = evaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, VolumeAllocatedSequences.class);
+		final ProfitAndLossSequences volumeAllocatedSequences = evaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, ProfitAndLossSequences.class);
 		if (volumeAllocatedSequences == null) {
 			return false;
 		}
@@ -116,12 +116,12 @@ public class VesselUtilisationFitnessCore implements IFitnessCore, IFitnessCompo
 	@Override
 	public boolean evaluate(@NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState, @Nullable final Collection<IResource> affectedResources) {
 		@Nullable
-		final VolumeAllocatedSequences volumeAllocatedSequences = evaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, VolumeAllocatedSequences.class);
+		final ProfitAndLossSequences volumeAllocatedSequences = evaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, ProfitAndLossSequences.class);
 		if (volumeAllocatedSequences == null) {
 			return false;
 		}
-		
-		long lastHours = evaluation(volumeAllocatedSequences);
+
+		final long lastHours = evaluation(volumeAllocatedSequences);
 		this.lastFitness = lastHours;
 		this.lastHours = lastHours;
 		return true;
@@ -140,16 +140,15 @@ public class VesselUtilisationFitnessCore implements IFitnessCore, IFitnessCompo
 		}
 	}
 
-	private long evaluation(@Nullable
-			final VolumeAllocatedSequences volumeAllocatedSequences) {
+	private long evaluation(@Nullable final ProfitAndLossSequences volumeAllocatedSequences) {
 		long weight = 0;
-		for (IResource iResource : fitnessVessels.keySet()) {
-			VolumeAllocatedSequence scheduledSequenceForResource = volumeAllocatedSequences.getScheduledSequenceForResource(iResource);
-			long numLoads = scheduledSequenceForResource.getSequenceSlots()
-										.stream()
-										.filter(s->(s instanceof ILoadOption))
-										.count();
-			weight += (Math.min(numLoads, fitnessVessels.get(iResource))*perVesselWeight.get(iResource));
+		for (final IResource iResource : fitnessVessels.keySet()) {
+			final VolumeAllocatedSequence scheduledSequenceForResource = volumeAllocatedSequences.getScheduledSequenceForResource(iResource);
+			long numLoads = 0;
+			for (final VoyagePlanRecord vpr : scheduledSequenceForResource.getVoyagePlanRecords()) {
+				numLoads += vpr.getPortTimesRecord().getSlots().stream().filter(ILoadOption.class::isInstance).count();
+			}
+			weight += (Math.min(numLoads, fitnessVessels.get(iResource)) * perVesselWeight.get(iResource));
 		}
 		return weight;
 	}
@@ -176,5 +175,5 @@ public class VesselUtilisationFitnessCore implements IFitnessCore, IFitnessCompo
 	public IFitnessCore getFitnessCore() {
 		return this;
 	}
-	
+
 }

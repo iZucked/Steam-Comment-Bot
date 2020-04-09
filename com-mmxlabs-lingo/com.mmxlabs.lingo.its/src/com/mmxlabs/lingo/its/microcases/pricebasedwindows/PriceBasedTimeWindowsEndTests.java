@@ -4,24 +4,19 @@
  */
 package com.mmxlabs.lingo.its.microcases.pricebasedwindows;
 
-import java.net.MalformedURLException;
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.google.common.collect.Lists;
-import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.lingo.its.tests.microcases.MicroCaseUtils;
@@ -34,8 +29,10 @@ import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelBuilder;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelFinder;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.inject.modules.InitialPhaseOptimisationDataModule;
+import com.mmxlabs.models.lng.transformer.its.RequireFeature;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScheduleTools;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
@@ -52,74 +49,17 @@ import com.mmxlabs.scheduler.optimiser.scheduling.TimeWindowScheduler;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
 @ExtendWith(ShiroRunner.class)
+@RequireFeature(features = { KnownFeatures.FEATURE_OPTIMISATION_NO_NOMINALS_IN_PROMPT, KnownFeatures.FEATURE_OPTIMISATION_ACTIONSET })
 public class PriceBasedTimeWindowsEndTests extends AbstractMicroTestCase {
-
-	private static List<String> requiredFeatures = Lists.newArrayList("no-nominal-in-prompt", "optimisation-actionset");
-	private static List<String> addedFeatures = new LinkedList<>();
 
 	private static String vesselName = "vessel";
 	private static String loadName = "load";
 	private static String dischargeName = "discharge";
 
-	@BeforeAll
-	public static void hookIn() {
-		for (final String feature : requiredFeatures) {
-			if (!LicenseFeatures.isPermitted("features:" + feature)) {
-				LicenseFeatures.addFeatureEnablements(feature);
-				addedFeatures.add(feature);
-			}
-		}
-	}
-
-	@AfterAll
-	public static void hookOut() {
-		for (final String feature : addedFeatures) {
-			LicenseFeatures.removeFeatureEnablements(feature);
-		}
-		addedFeatures.clear();
-	}
-
-	@BeforeEach
 	@Override
-	public void constructor() throws Exception {
-
-		scenarioDataProvider = importReferenceData();
-		lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-
-		scenarioModelFinder = new ScenarioModelFinder(scenarioDataProvider);
-		scenarioModelBuilder = new ScenarioModelBuilder(scenarioDataProvider);
-
-		commercialModelFinder = scenarioModelFinder.getCommercialModelFinder();
-		fleetModelFinder = scenarioModelFinder.getFleetModelFinder();
-		portFinder = scenarioModelFinder.getPortModelFinder();
-
-		pricingModelBuilder = scenarioModelBuilder.getPricingModelBuilder();
-		cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
-		fleetModelBuilder = scenarioModelBuilder.getFleetModelBuilder();
-		spotMarketsModelBuilder = scenarioModelBuilder.getSpotMarketsModelBuilder();
-
-		entity = commercialModelFinder.findEntity("Shipping");
-
+	protected void setPromptDates() {
 		// Set a default prompt in the past
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2014, 1, 1), LocalDate.of(2014, 3, 1));
-	}
-
-	@AfterEach
-	@Override
-	public void destructor() {
-		lngScenarioModel = null;
-		scenarioModelFinder = null;
-		scenarioModelBuilder = null;
-		commercialModelFinder = null;
-		fleetModelFinder = null;
-		portFinder = null;
-		cargoModelBuilder = null;
-		fleetModelBuilder = null;
-		spotMarketsModelBuilder = null;
-		pricingModelBuilder = null;
-		entity = null;
-
-		super.destructor();
 	}
 
 	/**
@@ -145,7 +85,7 @@ public class PriceBasedTimeWindowsEndTests extends AbstractMicroTestCase {
 				.withVesselAssignment(charterInMarket, 0, 0).build();
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
 
-		List<CommodityCurve> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityCurves();
+		List<CommodityCurve> commodityIndices = ScenarioModelUtil.getPricingModel(scenarioDataProvider).getCommodityCurves();
 		CommodityCurve hh = null;
 		for (CommodityCurve commodityIndex : commodityIndices) {
 			if (commodityIndex.getName().equals("Henry_Hub")) {
@@ -168,11 +108,12 @@ public class PriceBasedTimeWindowsEndTests extends AbstractMicroTestCase {
 					.getInstance(ISequencesManipulator.class);
 			// ISequencesManipulator sequencesManipulator = MicroCaseUtils.getClassFromInjector(scenarioToOptimiserBridge, ISequencesManipulator.class);
 			sequencesManipulator.manipulate(initialSequences);
-			MicroCaseUtils.withInjectorPerChainScope(scenarioToOptimiserBridge, () -> {
-				final TimeWindowScheduler priceBasedSequenceScheduler = MicroCaseUtils.getClassFromChildInjector(scenarioToOptimiserBridge, TimeWindowScheduler.class);
-				// Ensure scheduling with price window trimming is enabled.
+			MicroCaseUtils.withEvaluationInjectorPerChainScope(scenarioToOptimiserBridge, injector -> {
+				final TimeWindowScheduler priceBasedSequenceScheduler = injector.getInstance(TimeWindowScheduler.class);
+				// Ensure scheduling with price window trimming is enabled, but not P&L.
 				priceBasedSequenceScheduler.setUsePriceBasedWindowTrimming(true);
-				ScheduledTimeWindows scheduledTimeWindows = priceBasedSequenceScheduler.schedule(initialSequences);
+				priceBasedSequenceScheduler.setUsePNLBasedWindowTrimming(false);
+				ScheduledTimeWindows scheduledTimeWindows = priceBasedSequenceScheduler.calculateTrimmedWindows(initialSequences);
 
 				// get optimiser objects
 				IPortTimeWindowsRecord loadPortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(loadName, scheduledTimeWindows);

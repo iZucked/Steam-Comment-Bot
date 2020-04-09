@@ -4,7 +4,9 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.function.Consumer;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
@@ -34,5 +36,8 @@ public interface IVoyagePlanOptimiser {
 	@Nullable
 	VoyagePlan optimise(@Nullable IResource resource, IVessel vessel, long[] heelVolumeRangeInM3, int[] baseFuelPricesPerMT, ICharterCostCalculator charterCostCalculator, IPortTimesRecord portTimesRecord,
 			List<IOptionsSequenceElement> basicSequence, List<IVoyagePlanChoice> choices, int startingTime);
+	
+	void iterate(@Nullable IResource resource, IVessel vessel, long[] heelVolumeRangeInM3, int[] baseFuelPricesPerMT, ICharterCostCalculator charterCostCalculator, IPortTimesRecord portTimesRecord,
+			List<IOptionsSequenceElement> basicSequence, List<IVoyagePlanChoice> choices, int startingTime,  Consumer<VoyagePlan> hook);
 
 }

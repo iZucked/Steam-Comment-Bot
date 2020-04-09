@@ -46,7 +46,7 @@ public class SpotDateTests extends AbstractOptimisationResultTester {
 				Assertions.assertNotNull(cargoAllocation);
 
 				for (final SlotAllocation sa : cargoAllocation.getSlotAllocations()) {
-					final Slot s = sa.getSlot();
+					final Slot<?> s = sa.getSlot();
 					if (s instanceof SpotLoadSlot) {
 						final SpotLoadSlot spotLoadSlot = (SpotLoadSlot) s;
 						Assertions.assertEquals(LocalDate.of(2014, 5, 1), spotLoadSlot.getWindowStart());
@@ -58,7 +58,7 @@ public class SpotDateTests extends AbstractOptimisationResultTester {
 				Assertions.assertNotNull(cargoAllocation);
 
 				for (final SlotAllocation sa : cargoAllocation.getSlotAllocations()) {
-					final Slot s = sa.getSlot();
+					final Slot<?> s = sa.getSlot();
 					if (s instanceof SpotLoadSlot) {
 						final SpotLoadSlot spotLoadSlot = (SpotLoadSlot) s;
 						Assertions.assertEquals(LocalDate.of(2014, 6, 1), spotLoadSlot.getWindowStart());

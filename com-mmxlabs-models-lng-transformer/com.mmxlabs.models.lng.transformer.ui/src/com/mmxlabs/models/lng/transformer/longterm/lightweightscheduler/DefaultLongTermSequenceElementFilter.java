@@ -5,7 +5,6 @@
 package com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler;
 
 import com.google.inject.Inject;
-import com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler.ISequenceElementFilter;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;

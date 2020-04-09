@@ -262,8 +262,7 @@ public abstract class AbstractAdvancedOptimisationTester extends AbstractOptimis
 	}
 
 	@NonNull
-	public static IOptimiserInjectorService withCacheSettings(final CacheMode vpoCache, final CacheMode timeWindowCache, final CacheMode volumeCache, final CacheMode pnlCache,
-			final CacheMode volumeSequenceCache) {
+	public static IOptimiserInjectorService withCacheSettings(final CacheMode voyageEvaluatorCache, final CacheMode timeWindowCache, final CacheMode pnlTrimmerCache) {
 
 		return new IOptimiserInjectorService() {
 
@@ -282,11 +281,9 @@ public abstract class AbstractAdvancedOptimisationTester extends AbstractOptimis
 						@Override
 						protected void configure() {
 							// Default bindings for caches
-							bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_VoyagePlanOptimiserCache)).toInstance(vpoCache);
+							bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_VoyagePlanEvaluatorCache)).toInstance(voyageEvaluatorCache);
 							bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_ArrivalTimeCache)).toInstance(timeWindowCache);
-							bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocationCache)).toInstance(volumeCache);
-							bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocatedSequenceCache)).toInstance(volumeSequenceCache);
-							bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_ProfitandLossCache)).toInstance(pnlCache);
+							bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_PNLTrimmerCache)).toInstance(pnlTrimmerCache);
 						}
 					});
 				}
@@ -295,7 +292,7 @@ public abstract class AbstractAdvancedOptimisationTester extends AbstractOptimis
 
 						@Override
 						protected void configure() {
-
+							// Nothing needed here
 						}
 
 						@Provides
