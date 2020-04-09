@@ -5,35 +5,24 @@
 package com.mmxlabs.scheduler.optimiser.scheduling;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.function.BiConsumer;
-import java.util.stream.Collectors;
+
+import javax.inject.Named;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.eclipse.jdt.annotation.Nullable;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import com.google.inject.Inject;
 import com.mmxlabs.common.CollectionsUtil;
-import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.MutableTimeWindow;
-import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
-import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
@@ -41,22 +30,15 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.IEndPortSlot;
-import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IPriceIntervalProvider;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.curves.IPriceIntervalProducer;
-import com.mmxlabs.scheduler.optimiser.evaluation.IVoyagePlanEvaluator;
-import com.mmxlabs.scheduler.optimiser.evaluation.NonShippedVoyagePlanCacheKey;
-import com.mmxlabs.scheduler.optimiser.evaluation.PreviousHeelRecord;
-import com.mmxlabs.scheduler.optimiser.evaluation.ScheduledVoyagePlanResult;
-import com.mmxlabs.scheduler.optimiser.evaluation.ShippedVoyagePlanCacheKey;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
@@ -65,13 +47,13 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.PriceIntervalProviderHelper;
 import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
-import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimeWindowsRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimesRecord;
 
 @NonNullByDefault
 public class PNLBasedWindowTrimmerUtils {
+
+	public static final String ENABLE_BACKWARDS_NBO_CHECK = "ENABLE_BACKWARDS_NBO_CHECK";
 
 	@Inject
 	private IStartEndRequirementProvider startEndRequirementProvider;
@@ -93,6 +75,24 @@ public class PNLBasedWindowTrimmerUtils {
 
 	@Inject
 	private IVesselProvider vesselProvider;
+
+	// Compute best NBO based arrival time in initial interval computation
+	private static final boolean PRE_FORWARDS_NBO_TIME = true; // True fixes P case 1 issue (fixes 6k loss and gains 12k overall)
+
+	// Compute best NBO based departure time in initial interval computation (see next flags)
+	@Inject(optional = true)
+	@Named(ENABLE_BACKWARDS_NBO_CHECK)
+	private boolean PRE_BACKWARDS_NBO_TIME = true;
+
+	// If PRE_BACKWARDS_NBO_TIME is true, then compute for laden or ballast legs?
+	private static final boolean BACKWARDS_NBO_TIME_LADEN = true;
+	private static final boolean BACKWARDS_NBO_TIME_BALLAST = true;
+
+	private final boolean SPEED_STEP_ENABLE = false;
+	private final int SPEED_STEP_RETAIN_COUNT = 5;
+	private final int SPEED_STEP_COST_DIFF = 30_000_000;
+	private final int SPEED_STEP_KNOTS_INCREMENT = OptimiserUnitConvertor.convertToInternalSpeed(.1);
+	private final int DEFAULT_CV = OptimiserUnitConvertor.convertToInternalConversionFactor(22.67);
 
 	public int[] computeBasicIntervalsForSlot(final IPortTimeWindowsRecord portTimeWindowsRecord, final IPortSlot slot) {
 		if (slot instanceof ILoadOption) {
@@ -180,8 +180,6 @@ public class PNLBasedWindowTrimmerUtils {
 				priceIntervalProducer.getDischargeWindowBasedOnLoad(discharge, portTimeWindowRecord));
 	}
 
-	  
-
 	public void computeIntervalsForSlot(final IPortSlot slot, final IVesselAvailability vesselAvailability, final int currentStartTime, final PortTimesRecord _record,
 			final IPortTimeWindowsRecord ptwr, final List<IPortSlot> slots, final int slotIdx, final MinTravelTimeData minTimeData, final int lastSlotArrivalTime, final Set<Integer> times) {
 		final IPortSlot lastSlot = slots.get(slotIdx - 1);
@@ -205,7 +203,7 @@ public class PNLBasedWindowTrimmerUtils {
 					final ILoadOption iLoadOption = (ILoadOption) lastSlot;
 					calculationCV = iLoadOption.getCargoCVValue();
 				} else {
-					calculationCV = PNLBasedWindowTrimmer.DEFAULT_CV;
+					calculationCV = DEFAULT_CV;
 				}
 				final int nboSpeed = Math.min(Math.max(getNBOSpeed(vessel, vesselState, calculationCV), vessel.getMinSpeed()), vessel.getMaxSpeed());
 
@@ -220,7 +218,7 @@ public class PNLBasedWindowTrimmerUtils {
 						continue;
 					}
 
-					if (PNLBasedWindowTrimmer.SPEED_STEP_ENABLE && slot instanceof IEndPortSlot) {
+					if (SPEED_STEP_ENABLE && slot instanceof IEndPortSlot) {
 						int minSpeed = nboSpeed;// vessel.getMinSpeed();
 						// round min and max speeds to allow better speed stepping
 						minSpeed = roundUpToNearest(minSpeed, 100);
@@ -296,7 +294,7 @@ public class PNLBasedWindowTrimmerUtils {
 								break;
 							}
 							// Prepare for next iteration
-							speed += PNLBasedWindowTrimmer.SPEED_STEP_KNOTS_INCREMENT;
+							speed += SPEED_STEP_KNOTS_INCREMENT;
 
 							// Clamp to max speed
 							if (speed > maxSpeed) {
@@ -339,14 +337,14 @@ public class PNLBasedWindowTrimmerUtils {
 						}
 						if (
 						// (Math.abs(next.time - last.time) > 6) ||
-						(next.cost - last.cost > PNLBasedWindowTrimmer.SPEED_STEP_COST_DIFF)) {
+						(next.cost - last.cost > SPEED_STEP_COST_DIFF)) {
 							last = next;
 						} else {
 							itr.remove();
 						}
 					}
-					while (extraTimes.size() > PNLBasedWindowTrimmer.SPEED_STEP_RETAIN_COUNT) {
-						extraTimes.remove(PNLBasedWindowTrimmer.SPEED_STEP_RETAIN_COUNT);
+					while (extraTimes.size() > SPEED_STEP_RETAIN_COUNT) {
+						extraTimes.remove(SPEED_STEP_RETAIN_COUNT);
 					}
 					// Add remaining times to the array
 					extraTimes.forEach(r -> times.add(r.time));
@@ -424,7 +422,7 @@ public class PNLBasedWindowTrimmerUtils {
 
 		// Forward loop. Collect basic arrival intervals and the NBO based speed to next slot (if within window)
 		for (final IPortTimeWindowsRecord record : records) {
-			int calculationCV = PNLBasedWindowTrimmer.DEFAULT_CV;
+			int calculationCV = DEFAULT_CV;
 			if (roundTripCargo) {
 				lastSlot = null;
 				lastRouteChoices = AvailableRouteChoices.OPTIMAL;
@@ -444,7 +442,7 @@ public class PNLBasedWindowTrimmerUtils {
 				final ITimeWindow tw = record.getSlotFeasibleTimeWindow(slot);
 				// Look at NBO speed from the previous slot to this one.
 				if (elementIndex > 0 && lastSlot != null) {
-					if (PNLBasedWindowTrimmer.PRE_FORWARDS_NBO_TIME && lastSlot instanceof ILoadOption) {
+					if (PRE_FORWARDS_NBO_TIME && lastSlot instanceof ILoadOption) {
 						final VesselState vesselState = lastSlot instanceof ILoadOption ? VesselState.Laden : VesselState.Ballast;
 						if (lastSlot instanceof ILoadOption) {
 							final ILoadOption iLoadOption = (ILoadOption) lastSlot;
@@ -502,7 +500,7 @@ public class PNLBasedWindowTrimmerUtils {
 			}
 		}
 
-		if (!roundTripCargo && PNLBasedWindowTrimmer.PRE_BACKWARDS_NBO_TIME) {
+		if (!roundTripCargo && PRE_BACKWARDS_NBO_TIME) {
 
 			// Reverse pass, given each arrival time, work out when we would need to arrive at the previous slot if we wanted to use NBO speed.
 			// Work backwards for NBO times
@@ -519,13 +517,13 @@ public class PNLBasedWindowTrimmerUtils {
 				if (lastSlot instanceof ILoadOption) {
 					final ILoadOption iLoadOption = (ILoadOption) lastSlot;
 					calculationCV = iLoadOption.getCargoCVValue();
-					if (!PNLBasedWindowTrimmer.BACKWARDS_NBO_TIME_LADEN) {
+					if (!BACKWARDS_NBO_TIME_LADEN) {
 						continue;
 					}
 				} else {
 
-					calculationCV = PNLBasedWindowTrimmer.DEFAULT_CV;
-					if (!PNLBasedWindowTrimmer.BACKWARDS_NBO_TIME_BALLAST) {
+					calculationCV = DEFAULT_CV;
+					if (!BACKWARDS_NBO_TIME_BALLAST) {
 						continue;
 					}
 				}

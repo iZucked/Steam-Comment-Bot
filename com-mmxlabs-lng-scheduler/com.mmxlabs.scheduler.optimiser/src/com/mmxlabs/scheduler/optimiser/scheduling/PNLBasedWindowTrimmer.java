@@ -71,18 +71,6 @@ public class PNLBasedWindowTrimmer {
 	public static final int DISCARD_THRESHOLD = 8; // How large does the array need to be before we start discarding
 	public static final int DISCARD_DISTANCE = 48; // How many hours to skip over
 
-	public static final boolean SPEED_STEP_ENABLE = false;
-	public static final int SPEED_STEP_RETAIN_COUNT = 5;
-	public static final int SPEED_STEP_COST_DIFF = 30_000_000;
-	public static final int SPEED_STEP_KNOTS_INCREMENT = OptimiserUnitConvertor.convertToInternalSpeed(.1);
-	public static final int DEFAULT_CV = OptimiserUnitConvertor.convertToInternalConversionFactor(22.67);
-
-	public static final boolean BACKWARDS_NBO_TIME_LADEN = true;
-	public static final boolean BACKWARDS_NBO_TIME_BALLAST = true;
-
-	public static final boolean PRE_FORWARDS_NBO_TIME = true; // True fixes P case 1 issue (fixes 6k loss and gains 12k overall)
-	public static final boolean PRE_BACKWARDS_NBO_TIME = true;
-
 	@Inject
 	private IVoyagePlanEvaluator voyagePlanEvaluator;
 
@@ -302,11 +290,11 @@ public class PNLBasedWindowTrimmer {
 
 			final IPortTimeWindowsRecord portTimeWindowsRecord = trimmedWindows.get(idx);
 
-			// Only schedule cargoes.	
+			// Only schedule cargoes.
 			if (portTimeWindowsRecord.getFirstSlot().getPortType() != PortType.Load) {
 				continue;
 			}
-			
+
 			// Try to find the end interval
 			final IPortSlot nextSlot = portTimeWindowsRecord.getReturnSlot();
 			assert nextSlot != null;

@@ -52,6 +52,7 @@ import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.impl.CleanSt
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.impl.DefaultGeneratedCharterOutEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduling.IArrivalTimeScheduler;
 import com.mmxlabs.scheduler.optimiser.scheduling.PNLBasedWindowTrimmer;
+import com.mmxlabs.scheduler.optimiser.scheduling.PNLBasedWindowTrimmerUtils;
 import com.mmxlabs.scheduler.optimiser.scheduling.PriceBasedWindowTrimmer;
 import com.mmxlabs.scheduler.optimiser.scheduling.TimeWindowScheduler;
 
@@ -91,6 +92,7 @@ public class LNGEvaluationModule extends AbstractModule {
 		bind(TimeWindowScheduler.class).in(Singleton.class);
 		bind(PriceBasedWindowTrimmer.class);
 		bind(PNLBasedWindowTrimmer.class).in(Singleton.class);
+		bind(PNLBasedWindowTrimmerUtils.class).in(Singleton.class);
 		;
 
 		bind(DefaultVoyagePlanEvaluator.class);
