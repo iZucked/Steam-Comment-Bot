@@ -57,11 +57,13 @@ import com.mmxlabs.models.lng.adp.ContractProfile;
 import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
 import com.mmxlabs.models.lng.adp.utils.ADPModelUtil;
+import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.VolumeAttributeManipulator;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
@@ -244,11 +246,27 @@ public class ContractPage extends ADPComposite {
 								final ISelection selection = previewViewer.getSelection();
 								if (selection instanceof IStructuredSelection) {
 									final IStructuredSelection iStructuredSelection = (IStructuredSelection) selection;
-									final CompoundCommand c = new CompoundCommand();
+									final CompoundCommand cc = new CompoundCommand();
 									final Iterator<?> itr = iStructuredSelection.iterator();
 									List<Object> objectsToDelete = Lists.newArrayList(itr);
-									c.append(DeleteCommand.create(editorData.getEditingDomain(), objectsToDelete));
-									editorData.getEditingDomain().getCommandStack().execute(c);
+									final List<Object> extraObjects = new LinkedList<>();
+									for (final Object o : objectsToDelete) {
+										Cargo c = null;
+										if (o instanceof Slot<?>) {
+											c = ((Slot<?>) o).getCargo();
+											extraObjects.add(c);
+										}
+										if (c != null) {
+											for (final Slot<?> s : c.getSlots()) {
+												if (s instanceof SpotSlot) {
+													extraObjects.add(s);
+												}
+											}
+										}
+									}
+									objectsToDelete.addAll(extraObjects);
+									cc.append(DeleteCommand.create(editorData.getEditingDomain(), objectsToDelete));
+									editorData.getEditingDomain().getCommandStack().execute(cc);
 									updatePreviewPaneInput(detailComposite.getInput());
 								}
 							}
