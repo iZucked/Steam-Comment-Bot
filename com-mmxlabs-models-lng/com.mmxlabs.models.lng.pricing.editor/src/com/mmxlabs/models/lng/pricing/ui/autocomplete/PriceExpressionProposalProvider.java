@@ -144,7 +144,20 @@ public class PriceExpressionProposalProvider implements IMMXContentProposalProvi
 				}
 			}
 		}
-
+		{
+			final String proposal = "CAP(";
+			if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
+				final String c = proposal.substring(contents.length());
+				list.add(new ContentProposal(c, proposal + "a,b)", "Function returning the lower value of a or b.", c.length()));
+			}
+		}
+		{
+			final String proposal = "FLOOR(";
+			if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
+				final String c = proposal.substring(contents.length());
+				list.add(new ContentProposal(c, proposal + "a,b)", "Function returning the higher value of a or b.", c.length()));
+			}
+		}
 		{
 			final String proposal = "MIN(";
 			if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {

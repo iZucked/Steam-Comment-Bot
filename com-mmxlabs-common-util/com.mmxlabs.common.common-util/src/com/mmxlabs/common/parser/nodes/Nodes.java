@@ -69,7 +69,11 @@ public class Nodes {
 	public static @NonNull MarkedUpNode markupNodes(@NonNull final Node parentNode, final ExposuresLookupData lookupData) {
 		final @NonNull MarkedUpNode n;
 
-		if (parentNode.token.equalsIgnoreCase("MAX")) {
+		if (parentNode.token.equalsIgnoreCase("CAP")) {
+			n = new MinFunctionNode();
+		} else if (parentNode.token.equalsIgnoreCase("FLOOR")) {
+			n = new MaxFunctionNode();
+		} else if (parentNode.token.equalsIgnoreCase("MAX")) {
 			n = new MaxFunctionNode();
 		} else if (parentNode.token.equalsIgnoreCase("MIN")) {
 			n = new MinFunctionNode();

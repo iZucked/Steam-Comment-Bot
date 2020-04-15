@@ -30,7 +30,7 @@ scan with {: return s.next_token(); :};
 
 /* Terminals (tokens returned by the scanner). */
 terminal            PLUS, MINUS, TIMES, DIVIDE, UPLUS, UMINUS, LPAREN, RPAREN, COMMA, PERCENT, QUESTION;
-terminal			MIN, MAX, SHIFT, DATEDAVG, SPLITMONTH, S;
+terminal			CAP, FLOOR, MIN, MAX, SHIFT, DATEDAVG, SPLITMONTH, S;
 
 terminal Integer    INTEGER;
 terminal Double    NUMBER;
@@ -57,6 +57,8 @@ expr      ::= expr:lhs PLUS expr:rhs         {: RESULT =new SeriesOperatorExpres
              | expr:lhs MINUS expr:rhs        {: RESULT = new SeriesOperatorExpression('-', lhs, rhs);      :}
              | expr:lhs TIMES expr:rhs        {: RESULT = new SeriesOperatorExpression('*', lhs, rhs);       :}
              | expr:lhs DIVIDE expr:rhs        {: RESULT = new SeriesOperatorExpression('/', lhs, rhs);       :}
+             | CAP LPAREN expr:e1 COMMA expr:e2 RPAREN       {: RESULT = new FunctionConstructor(Min.class, e1, e2);       :}
+             | FLOOR LPAREN expr:e1 COMMA expr:e2 RPAREN       {: RESULT = new FunctionConstructor(Max.class, e1, e2);       :}
              | MIN LPAREN expr:e1 COMMA expr:e2 RPAREN       {: RESULT = new FunctionConstructor(Min.class, e1, e2);       :}
              | MAX LPAREN expr:e1 COMMA expr:e2 RPAREN       {: RESULT = new FunctionConstructor(Max.class, e1, e2);       :}
              | INTEGER:lhs PERCENT expr:rhs                 {: RESULT = new SeriesOperatorExpression('%',    new ConstantSeriesExpression(lhs), rhs); :}
