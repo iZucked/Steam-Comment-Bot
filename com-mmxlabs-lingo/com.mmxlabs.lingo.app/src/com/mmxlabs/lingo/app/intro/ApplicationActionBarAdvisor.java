@@ -47,6 +47,10 @@ import org.eclipse.ui.internal.registry.IActionSetDescriptor;
 import org.eclipse.ui.menus.CommandContributionItem;
 import org.eclipse.ui.menus.CommandContributionItemParameter;
 
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.license.ssl.LicenseChecker;
+
 /**
  * 
  * Copy of {@link WorkbenchActionBuilder}. Need to build our own version at some point (rebase on version in history?)
@@ -439,6 +443,9 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		menu.add(new GroupMarker(DATA_IMPORT));
 		menu.add(new Separator());
 		menu.add(new GroupMarker(DATA_EXPORT));
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_REPAIR_DELETE_ALL_EMPTY_CARGOES)) {
+			menu.add(new Separator());
+		}
 		menu.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
 		menu.add(new GroupMarker(DATA_END));
 		return menu;

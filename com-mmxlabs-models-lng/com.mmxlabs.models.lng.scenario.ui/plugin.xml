@@ -249,7 +249,34 @@
                </visibleWhen>
             </command>
             !-->
+            <command
+                  commandId="EmptyCleanUpCommand"
+                  label="Clean-up:"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <test
+                        args="features:repair-delete-all-empty-cargoes"
+                        forcePluginActivation="true"
+                        property="com.mmxlabs.license.features.enablement">
+                  </test>
+               </visibleWhen>  
+            </command>
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.actions.RemoveEmptyCargoesHandler"
+                  label="Remove empty cargoes"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <test
+                        args="features:repair-delete-all-empty-cargoes"
+                        forcePluginActivation="true"
+                        property="com.mmxlabs.license.features.enablement">
+                  </test>
+               </visibleWhen>             
+            </command>
          </menuContribution>
+         
          <menuContribution
                allPopups="false"
                locationURI="menu:data_curves">
@@ -341,6 +368,12 @@
      </extension>
       <extension
             point="org.eclipse.ui.commands">
+            
+         <command
+               defaultHandler="com.mmxlabs.models.lng.scenario.actions.RemoveEmptyCargoesHandler"
+               id="com.mmxlabs.models.lng.scenario.actions.RemoveEmptyCargoesHandler"
+               name="Remove empty cargoes in scenario">
+         </command>
          <command
                defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.ImportCSVWizardHandler"
                id="com.mmxlabs.shiplingo.platform.models.optimisation.ImportCSVScenario"
