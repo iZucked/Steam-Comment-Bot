@@ -15,14 +15,23 @@ import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
 import com.mmxlabs.models.lng.adp.ContractProfile;
+import com.mmxlabs.models.lng.adp.LNGVolumeUnit;
 import com.mmxlabs.models.lng.adp.SubContractProfile;
 import com.mmxlabs.models.lng.adp.ext.ISlotTemplateFactory;
+import com.mmxlabs.models.lng.adp.utils.ADPModelUtil;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.commercial.CommercialFactory;
+import com.mmxlabs.models.lng.commercial.CommercialModel;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ContractType;
+import com.mmxlabs.models.lng.commercial.PurchaseContract;
+import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.types.TimePeriod;
+import com.mmxlabs.models.lng.types.VolumeUnits;
+import com.mmxlabs.models.mmxcore.MMXObject;
 
 public class DistributionModelGeneratorUtil {
 
@@ -77,6 +86,52 @@ public class DistributionModelGeneratorUtil {
 		return slot;
 	}
 
+	public static int getMinContractQuantityInUnits(Contract contract, LNGVolumeUnit desiredVolumeUnit) {
+		int minQuantity = contract.getMinQuantity();
+		VolumeUnits contractVolUnit = contract.getVolumeLimitsUnit();
+		double cv = 22.3; //If sale contract, no CV, so have to use 22.3 as estimated value to be safe.
+		
+		//If purchase contract, must have CV.
+		if (contract instanceof PurchaseContract) {
+			if (((PurchaseContract) contract).isSetCargoCV()) {
+				cv = ((PurchaseContract) contract).getCargoCV();
+			}
+			else {
+				cv = (Double)contract.getUnsetValue(CommercialPackage.Literals.PURCHASE_CONTRACT__CARGO_CV);
+			}
+		}
+
+		switch (desiredVolumeUnit) {
+		case M3:
+			switch (contractVolUnit) {
+			case MMBTU:
+				minQuantity = (int)Math.round(ADPModelUtil.convertMMBTUToM3(minQuantity, cv));
+				break;
+			}
+			break;
+		case MMBTU:
+			switch (contractVolUnit) {
+			case M3:
+				minQuantity = (int)Math.round(ADPModelUtil.convertM3ToMMBTU(minQuantity, cv));
+				break;
+			}
+			break;
+		case MT:
+			//How to convert?
+			switch (contractVolUnit) {
+			case M3:
+				minQuantity = (int)Math.round(ADPModelUtil.convertM3toMT(minQuantity));
+				break;
+			case MMBTU:
+				minQuantity = (int)Math.round(ADPModelUtil.convertM3toMT(ADPModelUtil.convertMMBTUToM3(minQuantity, cv)));
+				break;
+			}
+			break;
+		}
+		
+		return minQuantity;
+	}
+	
 	public static boolean checkContractDate(@NonNull Contract contract, @NonNull LocalDate date) {
 		if (contract.getStartDate() != null) {
 			if (date.isBefore(contract.getStartDate().atDay(1))) {

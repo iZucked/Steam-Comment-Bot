@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.logging.LogManager;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.command.Command;
@@ -29,13 +30,17 @@ import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.util.exceptions.UserFeedbackException;
 import com.mmxlabs.models.lng.adp.ADPFactory;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.FleetProfile;
@@ -66,6 +71,8 @@ import com.mmxlabs.models.lng.types.VolumeUnits;
 
 public class ADPModelUtil {
 
+	private static final Logger logger = LoggerFactory.getLogger(ADPModelUtil.class);
+	
 	public static ADPModel createADPModel(final LNGScenarioModel scenarioModel) {
 		final ADPModel adpModel = ADPFactory.eINSTANCE.createADPModel();
 
@@ -187,9 +194,13 @@ public class ADPModelUtil {
 				return IdentityCommand.INSTANCE;
 			}
 			return cmd;
-		} catch (final InvalidSyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		}
+		catch (final UserFeedbackException ex) {
+			MessageDialog.openError(null, "Error", ex.getMessage());
+			logger.error(ex.getMessage(), ex);
+		}
+		catch (final InvalidSyntaxException e) {
+			logger.error("Invalid syntax: ", e);
 		}
 		return null;
 	}
@@ -346,6 +357,19 @@ public class ADPModelUtil {
 		return volumeInM3;
 	}
 
+	public static double convertM3toMT(double volumeInM3) {
+		double volumeInMT = volumeInM3 * (1.0 / (1380.0 / 600.0 * 1_000_000.0));
+		return volumeInMT;
+	}
+	
+	public static double convertM3ToMMBTU(double volumeInM3, double cv) {
+		return volumeInM3 * cv;
+	}
+
+	public static double convertMMBTUToM3(double volumeInMMBTU, double cv) {
+		return volumeInMMBTU / cv; 
+	}
+	
 	public static void setSlotVolumeFrom(double minVolume, double maxVolume, LNGVolumeUnit volumeUnit, Slot slot, boolean exact) {
 		switch (volumeUnit) {
 		case M3:

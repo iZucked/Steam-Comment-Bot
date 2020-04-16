@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.function.Function;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.util.exceptions.UserFeedbackException;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.CargoSizeDistributionModel;
 import com.mmxlabs.models.lng.adp.ContractProfile;
@@ -38,7 +39,7 @@ public class CargoSizeGenerator implements IProfileGenerator {
 		Function<LocalDate, LocalDate> nextDateGenerator;
 		if (profile.getVolumeUnit() != model.getModelOrContractVolumeUnit()) {
 			// They must match!
-			throw new IllegalArgumentException();
+			throw new UserFeedbackException("Profile volume unit and slot or contract unit must match.");
 		}
 		final int numberOfCargoes = (int) Math.round(profile.getTotalVolume() / model.getModelOrContractVolumePerCargo());
 
@@ -50,13 +51,13 @@ public class CargoSizeGenerator implements IProfileGenerator {
 
 		final Contract contract = profile.getContract();
 		if (contract == null) {
-			throw new IllegalStateException();
+			throw new UserFeedbackException("No contract set.");
 		}
 		int idx = 0;
 
 		final Pair<YearMonth, YearMonth> adpPeriod = ADPModelUtil.getContractProfilePeriod(adpModel, contract);
 		if (adpPeriod == null) {
-			throw new IllegalStateException();
+			throw new UserFeedbackException("ADP period is not set.");
 		}
 		final YearMonth start = adpPeriod.getFirst();
 		final YearMonth end = adpPeriod.getSecond();
@@ -67,7 +68,8 @@ public class CargoSizeGenerator implements IProfileGenerator {
 		while (date.isBefore(endDate)) {
 			if (DistributionModelGeneratorUtil.checkContractDate(contract, date)) {
 				final T slot = DistributionModelGeneratorUtil.generateSlot(factory, profile, subProfile, start, date, idx++);
-				ADPModelUtil.setSlotVolumeFrom(contract.getMinQuantity(), model.getModelOrContractVolumePerCargo(), model.getModelOrContractVolumeUnit(), slot, model.isExact());
+				int minQuantity = DistributionModelGeneratorUtil.getMinContractQuantityInUnits(contract, model.getModelOrContractVolumeUnit());
+				ADPModelUtil.setSlotVolumeFrom(minQuantity, model.getModelOrContractVolumePerCargo(), model.getModelOrContractVolumeUnit(), slot, model.isExact());
 				slots.add(slot);
 			}
 

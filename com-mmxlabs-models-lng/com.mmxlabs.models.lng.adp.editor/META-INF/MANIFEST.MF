@@ -54,6 +54,7 @@ Require-Bundle: org.eclipse.core.runtime,
  com.mmxlabs.models.lng.scenario.ui,
  com.mmxlabs.models.ui.validation,
  com.mmxlabs.optimiser.optimiser-core,
- org.eclipse.core.expressions
+ org.eclipse.core.expressions,
+ org.slf4j.api;bundle-version="1.7.10"
 Bundle-ActivationPolicy: lazy
 Bundle-Module: com.mmxlabs.models.lng.adp.editor.internal.ADPActivatorModule
