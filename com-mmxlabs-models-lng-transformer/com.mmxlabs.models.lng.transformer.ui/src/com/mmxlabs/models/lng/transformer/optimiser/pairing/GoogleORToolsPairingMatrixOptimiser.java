@@ -377,7 +377,7 @@ public class GoogleORToolsPairingMatrixOptimiser<P,C> implements IPairingMatrixO
 		MPVariable[] minDischargeSlotsVars = solver.makeBoolVarArray(minDischargeSlotsInformation.size());
 
 		for (int v = 0; v < minDischargeSlotsInformation.size(); v++) {
-			ConstraintInfo<P, C, IDischargeOption> info = maxDischargeSlotsInformation.get(v);
+			ConstraintInfo<P, C, IDischargeOption> info = minDischargeSlotsInformation.get(v);
 			Set<IDischargeOption> slots = info.getSlots();
 			
 			//Count(loads) <= maxCount.
@@ -426,6 +426,10 @@ public class GoogleORToolsPairingMatrixOptimiser<P,C> implements IPairingMatrixO
 		int totalConstraints = maxLoadSlotsVars.length + minLoadSlotsVars.length + maxDischargeSlotsVars.length + minDischargeSlotsVars.length;
 		
 		System.out.println("total numnber of constraints: "+totalConstraints);
+		System.out.println("Number of min load slot constraints"+minLoadSlotsVars.length);
+		System.out.println("Number of max load slot constraints"+maxLoadSlotsVars.length);
+		System.out.println("Number of min discharge slot constraints"+minDischargeSlotsVars.length);
+		System.out.println("Number of max discharge slot constraints"+maxDischargeSlotsVars.length);
 		System.out.println("#min constraints violated = "+ (totalConstraints - obj.value()));
 		
 		if (resultStatus != MPSolver.ResultStatus.OPTIMAL) {
@@ -446,7 +450,7 @@ public class GoogleORToolsPairingMatrixOptimiser<P,C> implements IPairingMatrixO
 				ConstraintInfo<P, C, ILoadOption> violated = maxLoadSlotsInformation.get(i);
 				violatedConstraints.add(violated);
 				int loadCount = getLoadSlotCount(optimiserRecorder,violated,vars);
-				violated.setViolatedAmount(ConstraintInfo.ViolationType.Max, loadCount - violated.getBound());
+				violated.setViolatedAmount(ConstraintInfo.ViolationType.Max, loadCount);
 			}
 		}
 		for (int i = 0; i < minLoadSlotsVars.length; i++) {
@@ -454,7 +458,7 @@ public class GoogleORToolsPairingMatrixOptimiser<P,C> implements IPairingMatrixO
 				ConstraintInfo<P, C, ILoadOption> violated = minLoadSlotsInformation.get(i);
 				violatedConstraints.add(violated);
 				int loadCount = getLoadSlotCount(optimiserRecorder,violated,vars);
-				violated.setViolatedAmount(ConstraintInfo.ViolationType.Min, violated.getBound() - loadCount);
+				violated.setViolatedAmount(ConstraintInfo.ViolationType.Min, loadCount);
 			}
 		}
 		for (int i = 0; i < maxDischargeSlotsVars.length; i++) {
@@ -462,15 +466,16 @@ public class GoogleORToolsPairingMatrixOptimiser<P,C> implements IPairingMatrixO
 				ConstraintInfo<P, C, IDischargeOption> violated = maxDischargeSlotsInformation.get(i);
 				violatedConstraints.add(violated);
 				int dischargeCount = getDischargeSlotCount(optimiserRecorder,violated,vars);
-				violated.setViolatedAmount(ConstraintInfo.ViolationType.Max, dischargeCount - violated.getBound());
+				violated.setViolatedAmount(ConstraintInfo.ViolationType.Max, dischargeCount);
 			}
 		}
 		for (int i = 0; i < minDischargeSlotsVars.length; i++) {
+			System.out.println("MinDischargeSlotsVars["+i+"]="+minDischargeSlotsVars[i].solutionValue());
 			if (minDischargeSlotsVars[i].solutionValue() < 1.0) {
 				ConstraintInfo<P, C, IDischargeOption> violated = minDischargeSlotsInformation.get(i);
 				violatedConstraints.add(violated);
 				int dischargeCount = getDischargeSlotCount(optimiserRecorder,violated,vars);
-				violated.setViolatedAmount(ConstraintInfo.ViolationType.Min, violated.getBound() - dischargeCount);
+				violated.setViolatedAmount(ConstraintInfo.ViolationType.Min, dischargeCount);
 			}
 		}
 		

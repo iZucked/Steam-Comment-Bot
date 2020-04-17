@@ -81,12 +81,12 @@ public class PeriodDistributionConstraint extends AbstractModelMultiConstraint {
 				for (final YearMonth ym : periodDistribution.getRange()) {
 					sum += counts.getOrDefault(ym, 0L);
 				}
-				if (periodDistribution.getMinCargoes() > sum) {
+	/*			if (periodDistribution.getMinCargoes() > sum) {
 					factory.copyName() //
 							.withObjectAndFeature(periodDistribution, ADPPackage.Literals.PERIOD_DISTRIBUTION__MIN_CARGOES) //
 							.withFormattedMessage("Min cargoes is %d but only %d cargoes in the period", periodDistribution.getMinCargoes(), sum) //
 							.make(ctx, statuses);
-				}
+				}*/
 			}
 		}
 	}
