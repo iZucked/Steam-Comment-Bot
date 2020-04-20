@@ -32,6 +32,7 @@ import com.mmxlabs.models.lng.adp.ContractProfile;
 import com.mmxlabs.models.lng.adp.PeriodDistribution;
 import com.mmxlabs.models.lng.adp.PeriodDistributionProfileConstraint;
 import com.mmxlabs.models.lng.adp.ProfileConstraint;
+import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.adp.utils.ADPModelUtil;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.LightWeightSchedulerStage2Module;
@@ -364,7 +365,7 @@ public class LightWeightOptimisationDataFactory {
 			for (ConstraintInfo<ContractProfile, ProfileConstraint,?> violated : violatedConstraints) {
 				ContractProfile contract = violated.getContractProfile();
 				ProfileConstraint constraint = violated.getProfileConstraint();
-				String sideContract = (contract instanceof PurchaseContract ? "purchase" : "sale");
+				String sideContract = (contract instanceof PurchaseContractProfile ? "purchase" : "sale");
 				errorMessage.append("On ").append(sideContract).append(" contract ").append(contract.getContract().getName()).append(":\r\n");
 				if (constraint instanceof PeriodDistributionProfileConstraint) {
 					PeriodDistributionProfileConstraint pdc = (PeriodDistributionProfileConstraint)constraint;
