@@ -56,10 +56,25 @@ public class ADPConstraintCheckerTests extends AbstractADPAndLightWeightTests {
 		test12Cargoes2Vessels(2,2,1,1,"On purchase contract Purchase A:\r\n" + "Jan Min:2 Max:2 (Min violated, slots used = 1)");
 	}
 	
-	//@Test
-	//public void testInFeasibleNotEnoughLoadSlotsOrSalesSlots() {
-	//}
+	@Test
+	public void testInFeasibleNotEnoughLoadSlotsOrSalesSlots() {
+		test12Cargoes2Vessels(2,2,2,2,"On sale contract Sales A:\r\n" + "Jan Min:2 Max:2 (Min violated, slots used = 1)", "On purchase contract Purchase A:\r\n" + "Jan Min:2 Max:2 (Min violated, slots used = 1)");
+	}
 	
+	@Test
+	public void testInFeasibleTooManySalesSlots() {
+		test12Cargoes2Vessels(1,1,0,0,"On sale contract Sales A:\r\n" + "Jan Min:0 Max:0 (Max violated, slots used = 1)");
+	}
+	
+	@Test
+	public void testInFeasibleTooManyLoadSlots() {
+		test12Cargoes2Vessels(0,0,1,1,"On purchase contract Purchase A:\r\n" + "Jan Min:0 Max:0 (Max violated, slots used = 1)");
+	}
+	
+	@Test
+	public void testInFeasibleTooManyLoadSlotsOrSalesSlots() {
+		test12Cargoes2Vessels(0,0,0,0,"On sale contract Sales A:\r\n" + "Jan Min:0 Max:0 (Max violated, slots used = 1)", "On purchase contract Purchase A:\r\n" + "Jan Min:0 Max:0 (Max violated, slots used = 1)");
+	}
 	
 	/**
 	 * Test has two vessels and 12 cargoes. The cargoes have a wide volume, so with no preference weightings we would expect the cargoes to be put on the largest vessel
@@ -67,7 +82,7 @@ public class ADPConstraintCheckerTests extends AbstractADPAndLightWeightTests {
 	 * @param contraintWeight
 	 * @param targetVessel
 	 */
-	private void test12Cargoes2Vessels(int minLoads, int maxLoads, int minSales, int maxSales, String inExpectedMessageStr) {
+	private void test12Cargoes2Vessels(int minLoads, int maxLoads, int minSales, int maxSales, String...inExpectedMessageStr) {
 		
 		String targetVessel = TrainingCaseConstants.VESSEL_LARGE_SHIP;
 		
@@ -96,7 +111,7 @@ public class ADPConstraintCheckerTests extends AbstractADPAndLightWeightTests {
 
 		final OptimisationPlan optimisationPlan = createOptimisationPlan();
 
-		boolean failedAsExpected = (inExpectedMessageStr == null);
+		boolean failedAsExpected = (inExpectedMessageStr == null || inExpectedMessageStr.length == 0);
 		
 		final LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null) //
 				.withOptimisationPlan(optimisationPlan) //
@@ -120,8 +135,20 @@ public class ADPConstraintCheckerTests extends AbstractADPAndLightWeightTests {
 			});
 		} 
 		catch (InfeasibleSolutionException ex) {
-			failedAsExpected = ex.getMessage().contains(inExpectedMessageStr);
-			ex.printStackTrace();
+			if (inExpectedMessageStr.length > 0) {
+				boolean allFailed = true;
+				for (String expectedError : inExpectedMessageStr) {
+					allFailed = allFailed && ex.getMessage().contains(expectedError);
+				}
+				if (allFailed) {
+					failedAsExpected = allFailed;
+				}
+			}
+			
+			if (!failedAsExpected) {
+				ex.printStackTrace();
+			}
+			
 		}
 		finally {
 			runnerBuilder.dispose();
@@ -139,6 +166,7 @@ public class ADPConstraintCheckerTests extends AbstractADPAndLightWeightTests {
 				.withSlotTemplate(AbstractSlotTemplateFactory.TEMPLATE_GENERIC_DES_PURCHASE) //
 				.withCargoNumberDistributionModel(12) //
 				.build() //
+				.addMonthlyMinMaxCargoConstraint(YearMonth.of(2019, 1), 12, 1, 1) //Force it to want to do exactly 1 cargo per month.
 				.addMonthlyMinMaxCargoConstraint(YearMonth.of(2019, 1), 12, minLoads, maxLoads)
 				//
 				.build();
@@ -151,6 +179,7 @@ public class ADPConstraintCheckerTests extends AbstractADPAndLightWeightTests {
 				.withSlotTemplate(AbstractSlotTemplateFactory.TEMPLATE_GENERIC_DES_SALE) //
 				.withCargoNumberDistributionModel(12) //
 				.build() //
+				.addMonthlyMinMaxCargoConstraint(YearMonth.of(2019, 1), 12, 1, 1) //Force it to want to do exactly 1 cargo per month.
 				.addMonthlyMinMaxCargoConstraint(YearMonth.of(2019, 1), 12, minSales, maxSales)
 				//
 				.build();
