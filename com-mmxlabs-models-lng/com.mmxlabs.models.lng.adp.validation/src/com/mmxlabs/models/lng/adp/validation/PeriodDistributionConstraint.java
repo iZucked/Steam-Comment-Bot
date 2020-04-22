@@ -4,13 +4,14 @@
  */
 package com.mmxlabs.models.lng.adp.validation;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.YearMonth;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import org.eclipse.core.internal.localstore.IsSynchronizedVisitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
@@ -21,6 +22,7 @@ import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.ContractProfile;
 import com.mmxlabs.models.lng.adp.PeriodDistribution;
 import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.types.util.ValidationConstants;
@@ -64,19 +66,28 @@ public class PeriodDistributionConstraint extends AbstractModelMultiConstraint {
 			}
 			if (periodDistribution.isSetMinCargoes()) {
 				final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(extraContext.getScenarioDataProvider());
-				Map<YearMonth, Long> counts;
+				Map<YearMonth, Long> counts = new HashMap<>();
+				List<Slot<?>> slots;
+				
 				if (profile.getContract() instanceof PurchaseContract) {
-					counts = cargoModel.getLoadSlots().stream() //
-							.filter(s -> s.getContract() == profile.getContract())//
-							.map(s -> YearMonth.from(s.getWindowStart())) //
-							.collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+					slots = cargoModel.getLoadSlots().stream().filter(s -> s.getContract() == profile.getContract()).collect(Collectors.<Slot<?>>toList());
 				} else {
-					counts = cargoModel.getDischargeSlots().stream() //
-							.filter(s -> s.getContract() == profile.getContract())//
-							.map(s -> YearMonth.from(s.getWindowStart())) //
-							.collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+					slots = cargoModel.getDischargeSlots().stream().filter(s -> s.getContract() == profile.getContract()).collect(Collectors.<Slot<?>>toList());
 				}
 
+				for (Slot<?> slot : slots) {
+					LocalDate start = slot.getWindowStart();
+					LocalDateTime endTime = start.atStartOfDay().plus(slot.getWindowSize(), slot.getWindowSizeUnits().toTemporalUnit());
+					endTime = endTime.plus(slot.getWindowFlex(), slot.getWindowFlexUnits().toTemporalUnit());
+					LocalDate end = LocalDate.from(endTime);
+					
+					for (LocalDate date = start; date.isBefore(end); date = date.plusMonths(1)) {
+						YearMonth month = YearMonth.from(date);
+						Long count = counts.computeIfAbsent(month, k -> Long.valueOf(0));
+						counts.put(month, count+1);
+					}
+				}
+	
 				long sum = 0;
 				for (final YearMonth ym : periodDistribution.getRange()) {
 					sum += counts.getOrDefault(ym, 0L);
@@ -90,7 +101,7 @@ public class PeriodDistributionConstraint extends AbstractModelMultiConstraint {
 			}
 		}
 	}
-
+	
 	private @Nullable ContractProfile<?, ?> getProfile(final PeriodDistribution periodDistribution, @NonNull final IExtraValidationContext extraContext) {
 
 		EObject container = extraContext.getContainer(periodDistribution);
