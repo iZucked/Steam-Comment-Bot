@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.types;
 
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -241,4 +243,19 @@ public enum TimePeriod implements Enumerator {
 		return literal;
 	}
 
+	/**
+	 * @generated NOT
+	 */
+	public TemporalUnit toTemporalUnit() {
+		switch (this) {
+		case HOURS:
+			return ChronoUnit.HOURS;
+		case DAYS:
+			return ChronoUnit.DAYS;
+		case MONTHS:
+			return ChronoUnit.MONTHS;
+		default:
+			return null;
+		}
+	}
 } //TimePeriod
