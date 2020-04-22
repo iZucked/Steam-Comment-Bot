@@ -470,7 +470,6 @@ public class GoogleORToolsPairingMatrixOptimiser<P,C> implements IPairingMatrixO
 			}
 		}
 		for (int i = 0; i < minDischargeSlotsVars.length; i++) {
-			System.out.println("MinDischargeSlotsVars["+i+"]="+minDischargeSlotsVars[i].solutionValue());
 			if (minDischargeSlotsVars[i].solutionValue() < 1.0) {
 				ConstraintInfo<P, C, IDischargeOption> violated = minDischargeSlotsInformation.get(i);
 				violatedConstraints.add(violated);
