@@ -78,6 +78,7 @@ public class ToggleCharterLengthEditorActionDelegate extends ActionDelegate impl
 
 				try (final IScenarioDataProvider sdp = modelRecord.aquireScenarioDataProvider("ToggleCharterLengthEditorActionDelegate")) {
 					this.currentModel = sdp.getTypedScenario(LNGScenarioModel.class);
+					this.currentModel.eAdapters().add(notificationAdapter);
 					this.currentSettings = currentModel.getUserSettings();
 					this.editingDomain = sdp.getEditingDomain();
 				}
@@ -87,9 +88,11 @@ public class ToggleCharterLengthEditorActionDelegate extends ActionDelegate impl
 	}
 
 	private void updateState() {
+		if (currentSettings != null) {
+			currentSettings.eAdapters().remove(notificationAdapter);
+		}
 		if (currentModel != null) {
 			currentSettings = currentModel.getUserSettings();
-			currentModel.eAdapters().add(notificationAdapter);
 		}
 		if (currentSettings != null) {
 			currentSettings.eAdapters().add(notificationAdapter);
