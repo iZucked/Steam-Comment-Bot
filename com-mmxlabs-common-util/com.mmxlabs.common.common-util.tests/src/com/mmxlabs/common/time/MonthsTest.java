@@ -42,6 +42,20 @@ public class MonthsTest {
 	}
 
 	@Test
+	public void testMonthsBetween() {
+		for (int i = 1; i < 12; i++) {
+			for (int j = i; j < 12; j++) {
+				testMonthsBetween(i,j,1,1,j-i);
+			}
+		}
+	}
+	
+	private void testMonthsBetween(int month1, int day1, int month2, int day2, int expectedMonths) {
+		Assertions.assertEquals(expectedMonths, Months.between(ZonedDateTime.of(2020, month1, day1, 0,0,0,0, ZoneId.of("UTC")),
+				ZonedDateTime.of(2020, month2, day2, 0,0,0,0, ZoneId.of("UTC"))));		
+	}
+	
+	@Test
 	public void testLocalDate() {
 
 		// Same date
