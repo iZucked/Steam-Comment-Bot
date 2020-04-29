@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.ContractProfile;
 import com.mmxlabs.models.lng.adp.PeriodDistribution;
 import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -85,6 +86,20 @@ public class PeriodDistributionConstraint extends AbstractModelMultiConstraint {
 						YearMonth month = YearMonth.from(date);
 						Long count = counts.computeIfAbsent(month, k -> Long.valueOf(0));
 						counts.put(month, count+1);
+					}
+					
+					for (YearMonth ym : periodDistribution.getRange()) {
+						//Check if within the monthly range.
+						if (ym.getMonthValue() == start.getMonthValue() && ym.getYear() == start.getYear()) {
+							if (end.getMonthValue() > ym.getMonthValue() || end.getYear() > ym.getYear()) {
+								//Window + flex must fall within one full calendar month.
+								factory.copyName() //
+								//.withObjectAndFeature(slot, CargoPackage.Literals.SLOT__WINDOW_SIZE) //Makes it go to Trades tab. Not helpful if in ADP tab.
+								.withObjectAndFeature(periodDistribution, ADPPackage.Literals.PERIOD_DISTRIBUTION__RANGE)
+								.withFormattedMessage("Slot %s is constrained by a monthly min max constraint. Time windows spanning more than 1 calendar month are not supported.", slot.getName()) //
+								.make(ctx, statuses);
+							}
+						}
 					}
 				}
 	
