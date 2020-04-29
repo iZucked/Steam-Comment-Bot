@@ -14,7 +14,6 @@ import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.jdt.annotation.Nullable;
@@ -87,6 +86,7 @@ import com.mmxlabs.models.ui.tabular.manipulators.TextualEnumAttributeManipulato
 import com.mmxlabs.models.ui.tabular.manipulators.TextualSingleReferenceManipulator;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
+import com.mmxlabs.rcp.common.ecore.SafeEContentAdapter;
 
 public class ContractPage extends ADPComposite {
 
@@ -391,11 +391,11 @@ public class ContractPage extends ADPComposite {
 		if (scenarioModel != null && adpModel != null) {
 			final CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(scenarioModel);
 			commercialModel.eAdapters().add(commercialModelAdapter);
-			
+
 			final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
 			cargoModel.eAdapters().add(cargoModelAdapter);
-			
-			releaseAdaptersRunnable = () -> { 
+
+			releaseAdaptersRunnable = () -> {
 				commercialModel.eAdapters().remove(commercialModelAdapter);
 				cargoModel.eAdapters().remove(cargoModelAdapter);
 			};
@@ -490,11 +490,9 @@ public class ContractPage extends ADPComposite {
 		}
 	}
 
-	private final AdapterImpl commercialModelAdapter = new EContentAdapter() {
+	private final AdapterImpl commercialModelAdapter = new SafeEContentAdapter() {
 		@Override
-		public void notifyChanged(final org.eclipse.emf.common.notify.Notification msg) {
-
-			super.notifyChanged(msg);
+		public void safeNotifyChanged(final org.eclipse.emf.common.notify.Notification msg) {
 
 			if (msg.isTouch()) {
 				return;
@@ -522,7 +520,7 @@ public class ContractPage extends ADPComposite {
 					}
 				});
 			} else if (msg.getNotifier() instanceof Contract) {
-				RunnerHelper.runNowOrAsync(() -> {
+				RunnerHelper.asyncExec(() -> {
 					if (!objectSelector.getControl().isDisposed()) {
 						objectSelector.refresh(true);
 					}
@@ -531,26 +529,23 @@ public class ContractPage extends ADPComposite {
 		}
 	};
 
-	private final AdapterImpl cargoModelAdapter = new EContentAdapter() {
+	private final AdapterImpl cargoModelAdapter = new SafeEContentAdapter() {
 		@Override
-		public void notifyChanged(final org.eclipse.emf.common.notify.Notification msg) {
-
-			super.notifyChanged(msg);
+		public void safeNotifyChanged(final org.eclipse.emf.common.notify.Notification msg) {
 
 			if (msg.isTouch()) {
 				return;
 			}
 
-			if (msg.getFeature() == CargoPackage.Literals.CARGO_MODEL__LOAD_SLOTS
-					|| msg.getFeature() == CargoPackage.Literals.CARGO_MODEL__DISCHARGE_SLOTS
+			if (msg.getFeature() == CargoPackage.Literals.CARGO_MODEL__LOAD_SLOTS //
+					|| msg.getFeature() == CargoPackage.Literals.CARGO_MODEL__DISCHARGE_SLOTS //
 					|| msg.getNotifier() instanceof Slot<?>) {
-					RunnerHelper.runNowOrAsync(() -> {
-						updatePreviewPaneInput(detailComposite.getInput());
-				});
-			} 
+
+				RunnerHelper.asyncExec(() -> updatePreviewPaneInput(detailComposite.getInput()));
+			}
 		}
 	};
-	
+
 	private Button generateButton;
 
 	private Group previewGroup;
