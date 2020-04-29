@@ -19,6 +19,7 @@ import java.util.Set;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Inject;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.series.CalendarMonthMapper;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
@@ -43,94 +44,94 @@ public class DefaultMaxSlotConstraintDataProviderEditor<P,C> implements IMaxSlot
 	List<ConstraintInfo<P,C,IDischargeOption>> dischargeMaxRestrictions = new LinkedList<>();
 
 	@Override
-	public void addMinLoadSlotsPerMonth(final P contractProfile, final C profileConstraint, final List<ILoadOption> slots, final int startMonth, final int limit) {
+	public void addMinLoadSlotsPerMonth(final P contractProfile, final C profileConstraint, final List<Pair<ILoadOption,Integer>> slots, final int startMonth, final int limit) {
 		loadMinRestrictions.addAll(addSlotsPerPeriod(contractProfile, profileConstraint, slots, startMonth, limit, 1, 1));
 	}
 
 	@Override
-	public void addMaxLoadSlotsPerMonth(final P contractProfile, final C profileConstraint, final List<ILoadOption> slots, final int startMonth, final int limit) {
+	public void addMaxLoadSlotsPerMonth(final P contractProfile, final C profileConstraint, final List<Pair<ILoadOption,Integer>> slots, final int startMonth, final int limit) {
 		loadMaxRestrictions.addAll(addSlotsPerPeriod(contractProfile, profileConstraint, slots, startMonth, limit, 1, 1));
 	}
 
 	@Override
-	public void addMinLoadSlotsPerYear(final P contractProfile, final C profileConstraint, final List<ILoadOption> slots, final int startMonth, final int limit) {
+	public void addMinLoadSlotsPerYear(final P contractProfile, final C profileConstraint, final List<Pair<ILoadOption,Integer>> slots, final int startMonth, final int limit) {
 		loadMinRestrictions.addAll(addSlotsPerPeriod(contractProfile, profileConstraint, slots, startMonth, startMonth + 11, limit, 12, 12));
 	}
 
 	@Override
-	public void addMaxLoadSlotsPerYear(final P contractProfile, final C profileConstraint, final List<ILoadOption> slots, final int startMonth, final int limit) {
+	public void addMaxLoadSlotsPerYear(final P contractProfile, final C profileConstraint, final List<Pair<ILoadOption,Integer>> slots, final int startMonth, final int limit) {
 		loadMaxRestrictions.addAll(addSlotsPerPeriod(contractProfile, profileConstraint, slots, startMonth, startMonth + 11, limit, 12, 12));
 	}
 
 	@Override
-	public void addMinLoadSlotsPerQuarter(final P contractProfile, final C profileConstraint, final List<ILoadOption> slots, final int startMonth, final int limit) {
+	public void addMinLoadSlotsPerQuarter(final P contractProfile, final C profileConstraint, final List<Pair<ILoadOption,Integer>> slots, final int startMonth, final int limit) {
 		loadMinRestrictions.addAll(addSlotsPerPeriod(contractProfile, profileConstraint, slots, startMonth, limit, 3, 3));
 	}
 
 	@Override
-	public void addMaxLoadSlotsPerQuarter(final P contractProfile, final C profileConstraint, final List<ILoadOption> slots, final int startMonth, final int limit) {
+	public void addMaxLoadSlotsPerQuarter(final P contractProfile, final C profileConstraint, final List<Pair<ILoadOption,Integer>> slots, final int startMonth, final int limit) {
 		loadMaxRestrictions.addAll(addSlotsPerPeriod(contractProfile, profileConstraint, slots, startMonth, limit, 3, 3));
 	}
 
 	@Override
-	public void addMinLoadSlotsPerMonthlyPeriod(final P contractProfile, final C profileConstraint, List<ILoadOption> slots, int startMonth, int period, int limit) {
+	public void addMinLoadSlotsPerMonthlyPeriod(final P contractProfile, final C profileConstraint, List<Pair<ILoadOption,Integer>> slots, int startMonth, int period, int limit) {
 		loadMinRestrictions.addAll(addSlotsPerPeriod(contractProfile, profileConstraint, slots, startMonth, limit, period, 1));	}
 
 	@Override
-	public void addMaxLoadSlotsPerMonthlyPeriod(final P contractProfile, final C profileConstraint, List<ILoadOption> slots, int startMonth, int period, int limit) {
+	public void addMaxLoadSlotsPerMonthlyPeriod(final P contractProfile, final C profileConstraint, List<Pair<ILoadOption,Integer>> slots, int startMonth, int period, int limit) {
 		loadMaxRestrictions.addAll(addSlotsPerPeriod(contractProfile, profileConstraint, slots, startMonth, limit, period, 1));	}
 
 	@Override
-	public void addMinDischargeSlotsPerMonth(final P contractProfile, final C profileConstraint, final List<IDischargeOption> slots, final int startMonth, final int limit) {
+	public void addMinDischargeSlotsPerMonth(final P contractProfile, final C profileConstraint, final List<Pair<IDischargeOption,Integer>> slots, final int startMonth, final int limit) {
 		dischargeMinRestrictions.addAll(addSlotsPerPeriod(contractProfile, profileConstraint, slots, startMonth, limit, 1, 1));
 	}
 
 	@Override
-	public void addMaxDischargeSlotsPerMonth(final P contractProfile, final C profileConstraint, final List<IDischargeOption> slots, final int startMonth, final int limit) {
+	public void addMaxDischargeSlotsPerMonth(final P contractProfile, final C profileConstraint, final List<Pair<IDischargeOption,Integer>> slots, final int startMonth, final int limit) {
 		dischargeMaxRestrictions.addAll(addSlotsPerPeriod(contractProfile, profileConstraint, slots, startMonth, limit, 1, 1));
 	}
 
 	@Override
-	public void addMinDischargeSlotsPerYear(final P contractProfile, final C profileConstraint, final List<IDischargeOption> slots, final int startMonth, final int limit) {
+	public void addMinDischargeSlotsPerYear(final P contractProfile, final C profileConstraint, final List<Pair<IDischargeOption,Integer>> slots, final int startMonth, final int limit) {
 		dischargeMinRestrictions.addAll(addSlotsPerPeriod(contractProfile, profileConstraint, slots, startMonth, startMonth + 11, limit, 12, 12));
 	}
 
 	@Override
-	public void addMaxDischargeSlotsPerYear(final P contractProfile, final C profileConstraint, final List<IDischargeOption> slots, final int startMonth, final int limit) {
+	public void addMaxDischargeSlotsPerYear(final P contractProfile, final C profileConstraint, final List<Pair<IDischargeOption,Integer>> slots, final int startMonth, final int limit) {
 		dischargeMaxRestrictions.addAll(addSlotsPerPeriod(contractProfile, profileConstraint, slots, startMonth, startMonth + 11, limit, 12, 12));
 	}
 
 	@Override
-	public void addMinDischargeSlotsPerQuarter(final P contractProfile, final C profileConstraint, final List<IDischargeOption> slots, final int startMonth, final int limit) {
+	public void addMinDischargeSlotsPerQuarter(final P contractProfile, final C profileConstraint, final List<Pair<IDischargeOption,Integer>> slots, final int startMonth, final int limit) {
 		dischargeMinRestrictions.addAll(addSlotsPerPeriod(contractProfile, profileConstraint, slots, startMonth, limit, 3, 3));
 	}
 
 	@Override
-	public void addMaxDischargeSlotsPerQuarter(final P contractProfile, final C profileConstraint, final List<IDischargeOption> slots, final int startMonth, final int limit) {
+	public void addMaxDischargeSlotsPerQuarter(final P contractProfile, final C profileConstraint, final List<Pair<IDischargeOption,Integer>> slots, final int startMonth, final int limit) {
 		dischargeMaxRestrictions.addAll(addSlotsPerPeriod(contractProfile, profileConstraint, slots, startMonth, limit, 3, 3));
 	}
 
 	@Override
-	public void addMinDischargeSlotsPerMonthlyPeriod(final P contractProfile, final C profileConstraint, List<IDischargeOption> slots, int startMonth, int period, int limit) {
+	public void addMinDischargeSlotsPerMonthlyPeriod(final P contractProfile, final C profileConstraint, List<Pair<IDischargeOption,Integer>> slots, int startMonth, int period, int limit) {
 		dischargeMinRestrictions.addAll(addSlotsPerPeriod(contractProfile, profileConstraint, slots, startMonth, limit, period, 1));
 	}
 
 	@Override
-	public void addMaxDischargeSlotsPerMonthlyPeriod(final P contractProfile, final C profileConstraint, List<IDischargeOption> slots, int startMonth, int period, int limit) {
+	public void addMaxDischargeSlotsPerMonthlyPeriod(final P contractProfile, final C profileConstraint, List<Pair<IDischargeOption,Integer>> slots, int startMonth, int period, int limit) {
 		dischargeMaxRestrictions.addAll(addSlotsPerPeriod(contractProfile, profileConstraint, slots, startMonth, limit, period, 1));
 	}
 
 	@Override
-	public void addMinMaxLoadSlotsPerMultiMonthPeriod(final P contractProfile, final C profileConstraint, List<ILoadOption> slots, MonthlyDistributionConstraint monthlyDistributionConstraint) {
+	public void addMinMaxLoadSlotsPerMultiMonthPeriod(final P contractProfile, final C profileConstraint, List<Pair<ILoadOption,Integer>> slots, MonthlyDistributionConstraint monthlyDistributionConstraint) {
 		setMinMaxSlotsPerMultiMonthPeriod(contractProfile, profileConstraint, loadMinRestrictions, loadMaxRestrictions, slots, monthlyDistributionConstraint);
 	}
 	
 	@Override
-	public void addMinMaxDischargeSlotsPerMultiMonthPeriod(final P contractProfile, final C profileConstraint, List<IDischargeOption> slots, MonthlyDistributionConstraint monthlyDistributionConstraint) {
+	public void addMinMaxDischargeSlotsPerMultiMonthPeriod(final P contractProfile, final C profileConstraint, List<Pair<IDischargeOption,Integer>> slots, MonthlyDistributionConstraint monthlyDistributionConstraint) {
 		setMinMaxSlotsPerMultiMonthPeriod(contractProfile, profileConstraint, dischargeMinRestrictions, dischargeMaxRestrictions, slots, monthlyDistributionConstraint);
 	}
 
-	private <T extends IPortSlot> void setMinMaxSlotsPerMultiMonthPeriod(final P contractProfile, final C profileConstraint, List<ConstraintInfo<P,C,T>> minList, List<ConstraintInfo<P,C,T>> maxList, List<T> slots, MonthlyDistributionConstraint monthlyDistributionConstraint) {
+	private <T extends IPortSlot> void setMinMaxSlotsPerMultiMonthPeriod(final P contractProfile, final C profileConstraint, List<ConstraintInfo<P,C,T>> minList, List<ConstraintInfo<P,C,T>> maxList, List<Pair<T,Integer>> slots, MonthlyDistributionConstraint monthlyDistributionConstraint) {
 		for (Row row : monthlyDistributionConstraint.getRows()) {
 			if (row.getMin() != null) {
 				minList.addAll(addSlotsPerCollectionOfMonths(contractProfile, profileConstraint, slots, row.getMonths(), row.getMin()));
@@ -141,20 +142,21 @@ public class DefaultMaxSlotConstraintDataProviderEditor<P,C> implements IMaxSlot
 		}
 	}
 
-	private <T extends IPortSlot> List<ConstraintInfo<P,C,T>> addSlotsPerCollectionOfMonths(final P contractProfile, final C profileConstraint, final List<T> slots, final Collection<Integer> monthsToConsider, final int limit) {
-		final List<ConstraintInfo<P,C,T>> slotsSets = new LinkedList<>();
+	private <T extends IPortSlot> List<ConstraintInfo<P,C,T>> addSlotsPerCollectionOfMonths(final P contractProfile, final C profileConstraint, final List<Pair<T,Integer>> slots, final Collection<Integer> monthsToConsider, final int limit) {
+		final List<ConstraintInfo<P,C,T>> constraints = new LinkedList<>();
 		final Set<T> slotsSet = new LinkedHashSet<>();
 		for (int month : monthsToConsider) {
-			for (final T slot : slots) {
-				if (getUTCMonth(slot) == month) {
-					slotsSet.add(slot);
+			for (final Pair<T,Integer> slot : slots) {
+				//Change to get month number from earliest.
+				if (slot.getSecond() == month) { //Bug here: First slot getUTCMonth(slot) = 2, first month = 3.
+					slotsSet.add(slot.getFirst());
 				}
 			}
 		}
 		if (!slotsSet.isEmpty()) {
-			slotsSets.add(new ConstraintInfo<>(contractProfile,profileConstraint,slotsSet, limit));
+			constraints.add(new ConstraintInfo<>(contractProfile,profileConstraint,slotsSet, limit));
 		}
-		return slotsSets;
+		return constraints;
 	}
 
 	private <T extends IPortSlot> int getUTCMonth(final T slot) {
@@ -182,23 +184,23 @@ public class DefaultMaxSlotConstraintDataProviderEditor<P,C> implements IMaxSlot
 		}
 	}
 
-	private <T extends IPortSlot> List<ConstraintInfo<P,C,T>> addSlotsPerPeriod(final P contractProfile, final C profileConstraint, final List<T> slots, final int startMonth, final int limit, final int interval, final int step) {
+	private <T extends IPortSlot> List<ConstraintInfo<P,C,T>> addSlotsPerPeriod(final P contractProfile, final C profileConstraint, final List<Pair<T,Integer>> slots, final int startMonth, final int limit, final int interval, final int step) {
 		if (slots.isEmpty()) {
 			return Collections.emptyList();
 		}
-		Collections.sort(slots, (a, b) -> Integer.compare(a.getTimeWindow().getInclusiveStart(), b.getTimeWindow().getInclusiveStart()));
-		final int lastMonth = getUTCMonth(slots.get(slots.size() - 1));
+		Collections.sort(slots, (a, b) -> Integer.compare(a.getFirst().getTimeWindow().getInclusiveStart(), b.getFirst().getTimeWindow().getInclusiveStart()));
+		final int lastMonth = slots.get(slots.size() - 1).getSecond();
 		return addSlotsPerPeriod(contractProfile, profileConstraint, slots, startMonth, lastMonth, limit, interval, step);
 	}
 
-	private <T extends IPortSlot> List<ConstraintInfo<P,C,T>> addSlotsPerPeriod(final P contractProfile, final C profileConstraint, final List<T> slots, final int startMonth, final int endMonthInclusive, final int limit, final int interval, final int step) {
+	private <T extends IPortSlot> List<ConstraintInfo<P,C,T>> addSlotsPerPeriod(final P contractProfile, final C profileConstraint, final List<Pair<T,Integer>> slots, final int startMonth, final int endMonthInclusive, final int limit, final int interval, final int step) {
 		final List<ConstraintInfo<P,C,T>> slotsSets = new LinkedList<>();
-		Collections.sort(slots, (a, b) -> Integer.compare(a.getTimeWindow().getInclusiveStart(), b.getTimeWindow().getInclusiveStart()));
+		Collections.sort(slots, (a, b) -> Integer.compare(a.getFirst().getTimeWindow().getInclusiveStart(), b.getFirst().getTimeWindow().getInclusiveStart()));
 		for (int month = startMonth; month < (endMonthInclusive + 2) - interval; month = month + step) {
 			final Set<T> slotsSet = new LinkedHashSet<>();
-			for (final T slot : slots) {
-				if (getUTCMonth(slot) >= month && getUTCMonth(slot) < month + interval) {
-					slotsSet.add(slot);
+			for (final Pair<T,Integer> slot : slots) {
+				if (slot.getSecond() >= month && slot.getSecond() < month + interval) {
+					slotsSet.add(slot.getFirst());
 				}
 			}
 			if (!slotsSet.isEmpty()) {

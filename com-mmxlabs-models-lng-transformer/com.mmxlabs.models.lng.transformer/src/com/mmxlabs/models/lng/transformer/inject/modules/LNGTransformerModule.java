@@ -328,14 +328,14 @@ public class LNGTransformerModule extends AbstractModule {
 			}
 
 			@Override
-			public int mapChangePointToMonth(int date) {
+			public int mapChangePointToMonth(int hoursFromEarliestDateTime) {
 				// Convert internal time units back into UTC date/time
 				@NonNull
 				final ZonedDateTime dateTimeZero = map.getDateFromHours(0, "Etc/UTC");
 
 				final ZonedDateTime startOfYear = dateTimeZero.withDayOfYear(1).withHour(0);
 				@NonNull
-				final ZonedDateTime plusMonths = dateTimeZero.plusHours(date).withDayOfMonth(1);
+				final ZonedDateTime plusMonths = dateTimeZero.plusHours(hoursFromEarliestDateTime).withDayOfMonth(1);
 
 				int m = Months.between(startOfYear, plusMonths);
 
