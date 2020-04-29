@@ -12,7 +12,6 @@ import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
@@ -42,6 +41,7 @@ import com.mmxlabs.models.lng.pricing.ui.editorpart.HolidayCalendarsViewerPane;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.ui.views.ScenarioTableViewerView;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
+import com.mmxlabs.rcp.common.ecore.SafeAdapterImpl;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class HolidayCalendarsView extends ScenarioTableViewerView<HolidayCalendarsViewerPane> {
@@ -51,8 +51,10 @@ public class HolidayCalendarsView extends ScenarioTableViewerView<HolidayCalenda
 	private PricingModel pricingModel;
 	private String lastSelectedCalendar;
 	
-	private Adapter calendarListener = new AdapterImpl() {
-		public void notifyChanged(Notification msg) {
+	private Adapter calendarListener = new SafeAdapterImpl() {
+		
+		@Override
+		public void safeNotifyChanged(Notification msg) {
 			if (msg.isTouch()) {
 				return;
 			}

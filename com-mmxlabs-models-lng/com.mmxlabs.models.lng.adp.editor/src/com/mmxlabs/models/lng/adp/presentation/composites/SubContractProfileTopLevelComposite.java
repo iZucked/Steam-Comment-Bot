@@ -13,7 +13,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -64,6 +63,7 @@ import com.mmxlabs.models.ui.editors.impl.ValidationStatusWrapper;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
 import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
+import com.mmxlabs.rcp.common.ecore.SafeAdapterImpl;
 
 /**
  * 
@@ -411,9 +411,9 @@ public class SubContractProfileTopLevelComposite extends DefaultTopLevelComposit
 	}
 
 	EObject oldValue = null;
-	final Adapter adapter = new AdapterImpl() {
+	final Adapter adapter = new SafeAdapterImpl() {
 		@Override
-		public void notifyChanged(final Notification notification) {
+		public void safeNotifyChanged(final Notification notification) {
 			if (notification.getEventType() == Notification.REMOVING_ADAPTER) {
 				return;
 			}

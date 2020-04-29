@@ -32,6 +32,7 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.ui.date.LocalDateTextFormatter;
+import com.mmxlabs.rcp.common.ecore.SafeAdapterImpl;
 
 /**
  * Based on PromptToolbarEditor
@@ -51,9 +52,9 @@ public class CharterOutParametersToolbarEditor extends ControlContribution {
 
 	private boolean locked = false;
 
-	private final @NonNull AdapterImpl adapter = new AdapterImpl() {
+	private final @NonNull AdapterImpl adapter = new SafeAdapterImpl() {
 		@Override
-		public void notifyChanged(final Notification notification) {
+		public void safeNotifyChanged(final Notification notification) {
 			final Object newValue = notification.getNewValue();
 			if(notification.isTouch()) {
 				return;

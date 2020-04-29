@@ -14,7 +14,6 @@ import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -69,6 +68,7 @@ import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
+import com.mmxlabs.rcp.common.ecore.SafeAdapterImpl;
 
 /**
  */
@@ -93,15 +93,16 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 	private String lastFacility = null;
 	private List<IAlternativeEditorProvider> extensions = new LinkedList<>();
 
-	private Adapter inventoryListener = new AdapterImpl() {
-		public void notifyChanged(Notification msg) {
+	private Adapter inventoryListener = new SafeAdapterImpl() {
+
+		@Override
+		public void safeNotifyChanged(Notification msg) {
 			if (msg.isTouch()) {
 				return;
 			}
 
 			if (msg.getFeature() == CargoPackage.Literals.CARGO_MODEL__INVENTORY_MODELS) {
-				if (inventorySelectionViewer != null && inventorySelectionViewer.getControl() != null 
-						&& !inventorySelectionViewer.getControl().isDisposed()) {
+				if (inventorySelectionViewer != null && inventorySelectionViewer.getControl() != null && !inventorySelectionViewer.getControl().isDisposed()) {
 
 					List<Inventory> models = modelObject.getInventoryModels().stream().filter(i -> i.getName() != null && !i.getName().isEmpty()).collect(Collectors.toList());
 					inventorySelectionViewer.setInput(models);
@@ -133,7 +134,7 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 		initialiseFleetPage(parent);
 		initialiseCharterMaketOverridesPage(parent);
 		initialiseInventoryViewer(parent);
-		initialisePaperDealsPage(parent);		
+		initialisePaperDealsPage(parent);
 		initialiseCargoModelEditorHelpPages();
 	}
 

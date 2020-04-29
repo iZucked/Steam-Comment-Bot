@@ -35,7 +35,6 @@ import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -147,6 +146,7 @@ import com.mmxlabs.rcp.common.actions.IAdditionalAttributeProvider;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.rcp.common.dnd.BasicDragSource;
+import com.mmxlabs.rcp.common.ecore.SafeAdapterImpl;
 import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
 import com.mmxlabs.rcp.common.menus.SubLocalMenuHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -1590,9 +1590,9 @@ public class ChangeSetView extends ViewPart {
 	private EObject lastObject = null;
 	private EStructuralFeature lastParentFeature = null;
 
-	private final Adapter adapter = new AdapterImpl() {
+	private final Adapter adapter = new SafeAdapterImpl() {
 		@Override
-		public void notifyChanged(final org.eclipse.emf.common.notify.Notification msg) {
+		public void safeNotifyChanged(final org.eclipse.emf.common.notify.Notification msg) {
 			if (msg.getEventType() == Notification.REMOVE) {
 				if (msg.getFeature() == lastParentFeature && msg.getOldValue() == lastObject) {
 					setEmptyData();

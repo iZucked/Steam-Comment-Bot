@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor;
 
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -20,6 +21,7 @@ import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
+import com.mmxlabs.rcp.common.ecore.SafeAdapterImpl;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
@@ -33,10 +35,10 @@ public class ToggleCharterLengthEditorActionDelegate extends ActionDelegate impl
 	protected UserSettings currentSettings;
 	protected EditingDomain editingDomain;
 
-	protected AdapterImpl notificationAdapter = new AdapterImpl() {
+	protected AdapterImpl notificationAdapter = new SafeAdapterImpl() {
+
 		@Override
-		public void notifyChanged(final org.eclipse.emf.common.notify.Notification msg) {
-			super.notifyChanged(msg);
+		protected void safeNotifyChanged(Notification msg) {
 			if (msg.isTouch()) {
 				return;
 			}
@@ -46,7 +48,7 @@ public class ToggleCharterLengthEditorActionDelegate extends ActionDelegate impl
 			if (msg.getFeature() == ParametersPackage.eINSTANCE.getUserSettings_WithCharterLength()) {
 				updateState();
 			}
-		};
+		}
 	};
 
 	@Override

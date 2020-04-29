@@ -48,6 +48,7 @@ import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.LocalDateAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.ReadOnlyManipulatorWrapper;
 import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
+import com.mmxlabs.rcp.common.ecore.SafeAdapterImpl;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 public class RouteOptionEditorPane extends ScenarioTableViewerPane {
@@ -66,10 +67,11 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 	private LNGScenarioModel scenarioModel;
 	private CanalBookings canalBookingsModel;
 
-	private final @NonNull AdapterImpl changeListener = new AdapterImpl() {
-		public void notifyChanged(org.eclipse.emf.common.notify.Notification msg) {
+	private final @NonNull AdapterImpl changeListener = new SafeAdapterImpl() {
+		
+		@Override
+		public void safeNotifyChanged(org.eclipse.emf.common.notify.Notification msg) {
 
-			super.notifyChanged(msg);
 			if (msg.getEventType() == Notification.REMOVING_ADAPTER) {
 				return;
 			}

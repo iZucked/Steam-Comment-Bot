@@ -24,13 +24,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 
-import com.mmxlabs.models.lng.nominations.NominationsFactory;
 import com.mmxlabs.models.lng.nominations.NominationsModel;
 import com.mmxlabs.models.lng.nominations.NominationsPackage;
 import com.mmxlabs.models.lng.nominations.NominationsParameters;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.ui.date.LocalDateTextFormatter;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.rcp.common.ecore.SafeAdapterImpl;
 
 /**
  * Displays a start + end date formatted text box on the tool bar, so that the
@@ -53,9 +53,9 @@ public class NominationDatesToolbarEditor extends ControlContribution {
 
 	private boolean locked = false;
 
-	private final @NonNull AdapterImpl adapter = new AdapterImpl() {
+	private final @NonNull AdapterImpl adapter = new SafeAdapterImpl() {
 		@Override
-		public void notifyChanged(final Notification notification) {
+		public void safeNotifyChanged(final Notification notification) {
 			final Object newValue = notification.getNewValue();
 			if (notification.isTouch()) {
 				return;

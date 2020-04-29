@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
+import com.mmxlabs.rcp.common.ecore.SafeAdapterImpl;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
@@ -33,10 +34,9 @@ public class ToggleGeneratedPapersInPNLEditorActionDelegate extends ActionDelega
 	protected UserSettings currentSettings;
 	protected EditingDomain editingDomain;
 
-	protected AdapterImpl notificationAdapter = new AdapterImpl() {
+	protected AdapterImpl notificationAdapter = new SafeAdapterImpl() {
 		@Override
-		public void notifyChanged(final org.eclipse.emf.common.notify.Notification msg) {
-			super.notifyChanged(msg);
+		public void safeNotifyChanged(final org.eclipse.emf.common.notify.Notification msg) {
 			if (msg.isTouch()) {
 				return;
 			}

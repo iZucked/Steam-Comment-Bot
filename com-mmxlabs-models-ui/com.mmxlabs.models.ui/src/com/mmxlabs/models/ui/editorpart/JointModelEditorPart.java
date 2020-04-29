@@ -86,6 +86,7 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.models.ui.valueproviders.ReferenceValueProviderCache;
 import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.ecore.SafeAdapterImpl;
 import com.mmxlabs.rcp.common.editors.IPartGotoTarget;
 import com.mmxlabs.rcp.common.editors.IReasonProvider;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -182,9 +183,9 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 
 	private final @NonNull IScenarioLockListener lockedAdapter = (unusedModelRecord, unusedWriteLocked) -> updateLocked();
 
-	private final @NonNull AdapterImpl scenarioNameAttributeAdapter = new AdapterImpl() {
+	private final @NonNull AdapterImpl scenarioNameAttributeAdapter = new SafeAdapterImpl() {
 		@Override
-		public void notifyChanged(final Notification msg) {
+		public void safeNotifyChanged(final Notification msg) {
 			if (msg.isTouch()) {
 				return;
 			}
