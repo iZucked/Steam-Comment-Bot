@@ -27,6 +27,7 @@ import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDat
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
@@ -51,9 +52,14 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
- * Class to check element to vessel resource restrictions. Note this replicates logic from various constraint checks included {@link ResourceAllocationConstraintChecker},
- * {@link FOBDESCompatibilityConstraintChecker}, {@link PromptRoundTripVesselPermissionConstraintChecker} and {@link VesselEventConstraintChecker}. Consider changes API's to allow re-use. E.g. This
- * class becomes used by a single constraint checker OR the constraint checkers offer up an API to check single elements.
+ * Class to check element to vessel resource restrictions. Note this replicates
+ * logic from various constraint checks included
+ * {@link ResourceAllocationConstraintChecker},
+ * {@link FOBDESCompatibilityConstraintChecker},
+ * {@link PromptRoundTripVesselPermissionConstraintChecker} and
+ * {@link VesselEventConstraintChecker}. Consider changes API's to allow re-use.
+ * E.g. This class becomes used by a single constraint checker OR the constraint
+ * checkers offer up an API to check single elements.
  * 
  * @author Simon Goodall
  *
@@ -108,9 +114,19 @@ public class MoveHelper implements IMoveHelper {
 	@Named(LEGACY_CHECK_RESOURCE)
 	private boolean useLegacyCheck;
 
+////// Derived boolean (from result of @Inject - see next two @Inject statements)
+	private boolean allowNominalRewire = false;
+
 	@Inject(optional = true)
 	@Named(ALLOW_NOMINAL_REWIRE)
-	private final boolean allowNominalRewire = true;
+	private boolean baseAllowNominalRewire = false;
+
+	@Inject
+	public void setAllowRoundTripChanges(@Named(SchedulerConstants.SCENARIO_TYPE_ADP) boolean isADPScenario) {
+		allowNominalRewire = baseAllowNominalRewire || isADPScenario;
+	}
+
+	//////
 
 	private final @NonNull List<@NonNull IResource> vesselResources = new LinkedList<>();
 	private final @NonNull List<@NonNull IResource> vesselResourcesIncludingRoundTrip = new LinkedList<>();
@@ -434,4 +450,5 @@ public class MoveHelper implements IMoveHelper {
 	public boolean allowRoundTripChanges() {
 		return allowNominalRewire;
 	}
+
 }

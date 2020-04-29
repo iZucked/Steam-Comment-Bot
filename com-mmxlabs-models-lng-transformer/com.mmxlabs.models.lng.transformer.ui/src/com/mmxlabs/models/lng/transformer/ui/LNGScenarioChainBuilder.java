@@ -20,6 +20,7 @@ import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.OptimisationResult;
 import com.mmxlabs.models.lng.parameters.BreakEvenOptimisationStage;
+import com.mmxlabs.models.lng.parameters.OptimisationMode;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.OptimisationStage;
 import com.mmxlabs.models.lng.parameters.ParallelOptimisationStage;
@@ -39,14 +40,16 @@ public class LNGScenarioChainBuilder {
 	public static final String PROPERTY_MMX_DISABLE_SECOND_ACTION_SET_RUN = "MMX_DISABLE_SECOND_ACTION_SET_RUN";
 
 	/**
-	 * Creates a {@link IChainRunner} for the "standard" optimisation process (as of 2015/11)
+	 * Creates a {@link IChainRunner} for the "standard" optimisation process (as of
+	 * 2015/11)
 	 * 
 	 * @param childName
 	 * @param dataTransformer
 	 * @param scenarioToOptimiserBridge
 	 * @param optimiserSettings
-	 * @param executorService
-	 *            Optional (for now) {@link CleanableExecutorService} for parallelisation
+	 * @param executorService           Optional (for now)
+	 *                                  {@link CleanableExecutorService} for
+	 *                                  parallelisation
 	 * @param initialHints
 	 * @return
 	 */
@@ -64,18 +67,17 @@ public class LNGScenarioChainBuilder {
 
 		final ChainBuilder builder = new ChainBuilder(dataTransformer);
 		if (createOptimiser) {
-			if (hints.contains(LNGTransformerHelper.HINT_NO_NOMINALS_IN_PROMPT)) {
+			// Disable no nominals in prompt rules for ADP scenarios.
+			if (optimisationPlan.getUserSettings().getMode() != OptimisationMode.ADP && hints.contains(LNGTransformerHelper.HINT_NO_NOMINALS_IN_PROMPT)) {
 				LNGNoNominalInPromptTransformerUnit.chain(builder, optimisationPlan.getUserSettings(), 1);
 			}
 
-			BiConsumer<LNGScenarioToOptimiserBridge, String> exportCallback = (bridge, name) -> {
-				SolutionSetExporterUnit.exportMultipleSolutions(builder, 1, bridge, () -> {
-					final OptimisationResult options = AnalyticsFactory.eINSTANCE.createOptimisationResult();
-					options.setName(name);
-					options.setUserSettings(EcoreUtil.copy(dataTransformer.getUserSettings()));
-					return options;
-				}, false, OptionalLong.empty());
-			};
+			BiConsumer<LNGScenarioToOptimiserBridge, String> exportCallback = (bridge, name) -> SolutionSetExporterUnit.exportMultipleSolutions(builder, 1, bridge, () -> {
+				final OptimisationResult options = AnalyticsFactory.eINSTANCE.createOptimisationResult();
+				options.setName(name);
+				options.setUserSettings(EcoreUtil.copy(dataTransformer.getUserSettings()));
+				return options;
+			}, false, OptionalLong.empty());
 
 			if (!optimisationPlan.getStages().isEmpty()) {
 
