@@ -73,6 +73,10 @@ public class TimeWindowScheduler implements IArrivalTimeScheduler {
 	private boolean usePNLBasedWindowTrimming = false;
 
 	@Inject
+	@Named(SchedulerConstants.SCENARIO_TYPE_ADP)
+	private boolean isADPScenario = false;
+
+	@Inject
 	@Named(SchedulerConstants.Key_UseCanalSlotBasedWindowTrimming)
 	private boolean useCanalBasedWindowTrimming = false;
 
@@ -250,7 +254,7 @@ public class TimeWindowScheduler implements IArrivalTimeScheduler {
 				}
 			} else {
 
-				if (usePNLBasedWindowTrimming) {
+				if (!isADPScenario && usePNLBasedWindowTrimming) {
 					// Use the simple variant. We have computed the necessary values.
 					portTimeRecords.put(resource, portTimesRecordMaker.makeSimpleShippedPortTimesRecords(seqIndex, resource, sequence, trimmedWindows.get(resource), travelTimeData));
 				} else {
@@ -359,7 +363,7 @@ public class TimeWindowScheduler implements IArrivalTimeScheduler {
 			customTrimmer.trimWindows(resource, list, minTimeData);
 		}
 
-		if (usePNLBasedWindowTrimming && pnlBasedWindowTrimmerProvider != null) {
+		if (!isADPScenario && usePNLBasedWindowTrimming && pnlBasedWindowTrimmerProvider != null) {
 			pnlBasedWindowTrimmerProvider.trimWindows(resource, list, minTimeData);
 		} else if (usePriceBasedWindowTrimming && priceBasedWindowTrimmerProvider != null) {
 			priceBasedWindowTrimmerProvider.trimWindows(resource, list, minTimeData);

@@ -27,6 +27,7 @@ import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.commercial.parseutils.DefaultExposuresCustomiser;
 import com.mmxlabs.models.lng.commercial.parseutils.IExposuresCustomiser;
+import com.mmxlabs.models.lng.parameters.OptimisationMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.DefaultModelEntityMap;
@@ -82,7 +83,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.util.SchedulerCalculationUtils;
 
 /**
- * Main entry point to create {@link LNGScenarioTransformer}. This uses injection to populate the data structures.
+ * Main entry point to create {@link LNGScenarioTransformer}. This uses
+ * injection to populate the data structures.
  * 
  */
 public class LNGTransformerModule extends AbstractModule {
@@ -141,6 +143,8 @@ public class LNGTransformerModule extends AbstractModule {
 		install(new ScheduleBuilderModule());
 
 		bind(UserSettings.class).toInstance(userSettings);
+
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.SCENARIO_TYPE_ADP)).toInstance(userSettings.getMode() == OptimisationMode.ADP);
 
 		bind(boolean.class).annotatedWith(Names.named(LNGTransformerHelper.HINT_SHIPPING_ONLY)).toInstance(shippingOnly);
 		bind(boolean.class).annotatedWith(Names.named(LNGTransformerHelper.HINT_DISABLE_CACHES)).toInstance(hintEnableCache);

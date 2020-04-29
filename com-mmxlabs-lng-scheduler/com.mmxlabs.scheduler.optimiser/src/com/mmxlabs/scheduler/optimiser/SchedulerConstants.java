@@ -14,6 +14,10 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
  */
 @NonNullByDefault
 public final class SchedulerConstants {
+	
+	public static final String SCENARIO_TYPE_ADP = "scenario-type-adp";
+
+	
 	/**
 	 * The expected number of threads used by the thread pools.
 	 */
