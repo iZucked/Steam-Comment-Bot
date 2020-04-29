@@ -63,6 +63,7 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.types.util.ValidationConstants;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
@@ -401,6 +402,11 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 
 			final EObject target = dcsd.getTarget();
 
+			if (dcsd.getTag() == ValidationConstants.TAG_ADP) {
+				//Ignore as is coming from the ADP model.
+				return false;
+			}
+			
 			for (final Class<?> clazz : handledClasses) {
 				if (clazz.isInstance(target)) {
 					return true;
@@ -425,7 +431,7 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			final DetailConstraintStatusDecorator dcsd = (DetailConstraintStatusDecorator) status;
 
 			EObject target = dcsd.getTarget();
-
+			
 			// Look in child items for potentially handles classes.
 			{
 				boolean foundTarget = false;

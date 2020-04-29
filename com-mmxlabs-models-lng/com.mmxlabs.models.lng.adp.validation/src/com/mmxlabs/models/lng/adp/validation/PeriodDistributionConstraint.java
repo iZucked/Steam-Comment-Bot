@@ -7,12 +7,15 @@ package com.mmxlabs.models.lng.adp.validation;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.jdt.annotation.NonNull;
@@ -24,6 +27,7 @@ import com.mmxlabs.models.lng.adp.PeriodDistribution;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.types.util.ValidationConstants;
@@ -40,14 +44,17 @@ public class PeriodDistributionConstraint extends AbstractModelMultiConstraint {
 		if (target instanceof PeriodDistribution) {
 			final PeriodDistribution periodDistribution = (PeriodDistribution) target;
 
-			String name = "Unknown adp profile";
+			String name = "<unknown>";
 			final ContractProfile<?, ?> profile = getProfile(periodDistribution, extraContext);
 			if (profile != null && profile.getContract() != null) {
-				name = "ADP profile for " + profile.getContract().getName();
-			}
-
+				final String n = profile.getContract().getName();
+				if (n != null && !n.isEmpty()) {
+					name = n;
+				}
+			}		
+			
 			final DetailConstraintStatusFactory factory = DetailConstraintStatusFactory.makeStatus() //
-					.withName(name) //
+					.withTypedName("ADP profile", name) //
 					.withTag(ValidationConstants.TAG_ADP);
 
 			if (periodDistribution.getRange().isEmpty()) {
@@ -87,19 +94,17 @@ public class PeriodDistributionConstraint extends AbstractModelMultiConstraint {
 						Long count = counts.computeIfAbsent(month, k -> Long.valueOf(0));
 						counts.put(month, count+1);
 					}
-					
-					for (YearMonth ym : periodDistribution.getRange()) {
-						//Check if within the monthly range.
-						if (ym.getMonthValue() == start.getMonthValue() && ym.getYear() == start.getYear()) {
-							if (end.getMonthValue() > ym.getMonthValue() || end.getYear() > ym.getYear()) {
-								//Window + flex must fall within one full calendar month.
-								factory.copyName() //
-								//.withObjectAndFeature(slot, CargoPackage.Literals.SLOT__WINDOW_SIZE) //Makes it go to Trades tab. Not helpful if in ADP tab.
-								.withObjectAndFeature(periodDistribution, ADPPackage.Literals.PERIOD_DISTRIBUTION__RANGE)
-								.withFormattedMessage("Slot %s is constrained by a monthly min max constraint. Time windows spanning more than 1 calendar month are not supported.", slot.getName()) //
-								.make(ctx, statuses);
-							}
-						}
+
+					//Check if completely within the monthly range specified.
+					List<YearMonth> outsideOfRange = fullyWithinOrFullyOutOfRange(periodDistribution.getRange(), start, end);
+
+					//Window + flex must fall either completely in constraint's range or completely out, not half in half out..
+					if (!outsideOfRange.isEmpty()) {
+						factory.copyName() //
+						.withObjectAndFeature(slot, CargoPackage.Literals.SLOT__WINDOW_SIZE) //Makes it go to Trades tab. Not helpful if in ADP tab.
+						.withObjectAndFeature(periodDistribution, ADPPackage.Literals.PERIOD_DISTRIBUTION__RANGE)
+						.withFormattedMessage("Slot %s is constrained by an ADP monthly min max constraint, but it's time window includes %s (outside of the constraint's range).", slot.getName(), outsideOfRange) //
+						.make(ctx, statuses);
 					}
 				}
 	
@@ -117,6 +122,36 @@ public class PeriodDistributionConstraint extends AbstractModelMultiConstraint {
 		}
 	}
 	
+	/**
+	 * Check that the full time window from start to end has corresponding months fully within the range or is completely outside of the range specified.
+	 * @param range
+	 * @param start
+	 * @param end
+	 * @return a list of the year months which are not present in range, if the entire range of start to end is not outside of range.
+	 */
+	private List<YearMonth> fullyWithinOrFullyOutOfRange(EList<YearMonth> range, LocalDate start, LocalDate end) {
+		boolean inRange = false;
+		boolean outRange = false;
+		List<YearMonth> outsideRange = new LinkedList<>();
+		for (LocalDate date = start; !date.isAfter(end); date = date.plusMonths(1)) {
+			YearMonth month = YearMonth.from(date);
+			if (range.contains(month)) {
+				inRange = true;
+			}
+			else {
+				outRange = true;
+				outsideRange.add(month);
+			}
+		}
+		//If partially within range, but partially out, return list of months outside of range for this slot.
+		if (inRange && outRange) { 
+			return outsideRange;
+		}
+		else {
+			return Collections.emptyList();
+		}
+	}
+
 	private @Nullable ContractProfile<?, ?> getProfile(final PeriodDistribution periodDistribution, @NonNull final IExtraValidationContext extraContext) {
 
 		EObject container = extraContext.getContainer(periodDistribution);
