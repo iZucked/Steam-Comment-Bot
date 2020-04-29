@@ -42,7 +42,7 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
-import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
+import com.mmxlabs.models.mmxcore.impl.SafeMMXContentAdapter;
 import com.mmxlabs.models.ui.properties.views.DetailPropertiesViewComponent;
 import com.mmxlabs.rcp.common.ViewerHelper;
 
@@ -198,7 +198,7 @@ public class PNLDetailsReportComponent extends DetailPropertiesViewComponent {
 
 	private final Set<ScheduleModel> hookedSchedules = new HashSet<>();
 
-	private final @NonNull MMXContentAdapter contentAdapter = new MMXContentAdapter() {
+	private final @NonNull SafeMMXContentAdapter contentAdapter = new SafeMMXContentAdapter() {
 
 		@Override
 		public void reallyNotifyChanged(final Notification notification) {
@@ -208,7 +208,7 @@ public class PNLDetailsReportComponent extends DetailPropertiesViewComponent {
 		}
 
 		@Override
-		protected void missedNotifications(final List<Notification> missed) {
+		protected synchronized void missedNotifications(final List<Notification> missed) {
 			ViewerHelper.refresh(viewer, false);
 		}
 	};

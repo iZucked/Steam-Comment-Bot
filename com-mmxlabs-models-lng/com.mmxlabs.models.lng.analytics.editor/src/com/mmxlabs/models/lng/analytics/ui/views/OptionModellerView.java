@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -95,7 +94,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
+import com.mmxlabs.models.mmxcore.impl.SafeMMXContentAdapter;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.dialogs.DialogValidationSupport;
@@ -459,7 +458,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		}
 	};
 
-	private final @NonNull MMXContentAdapter refreshAdapter = new MMXContentAdapter() {
+	private final @NonNull SafeMMXContentAdapter refreshAdapter = new SafeMMXContentAdapter() {
 
 		@Override
 		public void reallyNotifyChanged(final Notification notification) {

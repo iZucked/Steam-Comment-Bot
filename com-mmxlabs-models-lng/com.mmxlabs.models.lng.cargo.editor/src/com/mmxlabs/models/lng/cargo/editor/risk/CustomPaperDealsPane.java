@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.cargo.editor.risk;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -21,7 +20,6 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
@@ -41,15 +39,11 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DealSet;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.SellPaperDeal;
-import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.GroupData;
-import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RowData;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
-import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
+import com.mmxlabs.models.mmxcore.impl.SafeMMXContentAdapter;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.manipulators.LocalDateAttributeManipulator;
@@ -62,28 +56,28 @@ import com.mmxlabs.scenario.service.model.manager.ModelReference;
 public class CustomPaperDealsPane extends ScenarioTableViewerPane {
 
 	private final IScenarioEditingLocation jointModelEditor;
-	private final MMXContentAdapter dealSetsContentAdapter;
-	private final Set<PaperDeal> usedPaperDeals = new HashSet<PaperDeal>();
+	private final SafeMMXContentAdapter dealSetsContentAdapter;
+	private final Set<PaperDeal> usedPaperDeals = new HashSet<>();
 
 	public CustomPaperDealsPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);
 		this.jointModelEditor = location;
 		updatePaperDeals();
-		dealSetsContentAdapter = new MMXContentAdapter() {
-			
+		dealSetsContentAdapter = new SafeMMXContentAdapter() {
+
 			@Override
 			public void reallyNotifyChanged(Notification notification) {
 				updatePaperDeals();
 			}
-			
+
 			@Override
-			protected void missedNotifications(final List<Notification> missed) {
+			protected synchronized void missedNotifications(final List<Notification> missed) {
 				updatePaperDeals();
 			}
-			
+
 		};
 	}
-	
+
 	public void updatePaperDeals() {
 		usedPaperDeals.clear();
 		final IScenarioDataProvider sdp = jointModelEditor.getScenarioDataProvider();
@@ -106,7 +100,7 @@ public class CustomPaperDealsPane extends ScenarioTableViewerPane {
 		addTypicalColumn("Quantity", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_Quantity(), jointModelEditor.getEditingDomain()));
 
 		setTitle("Paper", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
-		
+
 		final DragSource source = new DragSource(getScenarioViewer().getControl(), DND.DROP_MOVE);
 		final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
 		source.setTransfer(types);
@@ -118,12 +112,13 @@ public class CustomPaperDealsPane extends ScenarioTableViewerPane {
 			}
 		});
 	}
-	
+
 	protected LNGScenarioModel getScenarioModel() {
-		if (scenarioEditingLocation == null) return null;
+		if (scenarioEditingLocation == null)
+			return null;
 		return ((LNGScenarioModel) scenarioEditingLocation.getRootObject());
 	}
-	
+
 	protected ScenarioTableViewer constructViewer(final Composite parent) {
 
 		final ScenarioTableViewer scenarioViewer = new ScenarioTableViewer(parent, SWT.FULL_SELECTION | SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, scenarioEditingLocation) {
@@ -153,13 +148,13 @@ public class CustomPaperDealsPane extends ScenarioTableViewerPane {
 
 					@Override
 					public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-						
+
 						if (oldInput instanceof LNGScenarioModel) {
-							final CargoModel cargoModel = ((LNGScenarioModel)oldInput).getCargoModel();
+							final CargoModel cargoModel = ((LNGScenarioModel) oldInput).getCargoModel();
 							cargoModel.eAdapters().remove(dealSetsContentAdapter);
 						}
 						if (newInput instanceof LNGScenarioModel) {
-							final CargoModel cargoModel = ((LNGScenarioModel)newInput).getCargoModel();
+							final CargoModel cargoModel = ((LNGScenarioModel) newInput).getCargoModel();
 							cargoModel.eAdapters().add(dealSetsContentAdapter);
 						}
 					}
@@ -182,10 +177,10 @@ public class CustomPaperDealsPane extends ScenarioTableViewerPane {
 				}, modelReference);
 			}
 		};
-		
+
 		return scenarioViewer;
 	}
-	
+
 	private ICellRenderer createPaperDealTypeFormatter() {
 		return new ICellRenderer() {
 
@@ -220,11 +215,12 @@ public class CustomPaperDealsPane extends ScenarioTableViewerPane {
 			}
 		};
 	}
-	
+
 	@Override
 	protected Action createAddAction(final EReference containment) {
 		return null;
 	}
+
 	@Override
 	protected Action createDeleteAction(@Nullable final Function<Collection<?>, Collection<Object>> callback) {
 		return null;

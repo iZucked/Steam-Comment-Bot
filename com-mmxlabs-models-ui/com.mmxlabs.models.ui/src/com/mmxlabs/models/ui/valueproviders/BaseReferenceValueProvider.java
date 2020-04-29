@@ -18,7 +18,7 @@ import org.eclipse.emf.ecore.util.EContentAdapter;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
+import com.mmxlabs.models.mmxcore.impl.SafeMMXContentAdapter;
 
 /**
  * A basic reference value provider implementation, which extends {@link EContentAdapter} in order to keep up-to-date on changes to the reference values which it is displaying. The idea here is that
@@ -28,7 +28,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
  * @author hinton
  *
  */
-public abstract class BaseReferenceValueProvider extends MMXContentAdapter implements IReferenceValueProvider {
+public abstract class BaseReferenceValueProvider extends SafeMMXContentAdapter implements IReferenceValueProvider {
 	/**
 	 * An attribute used to get the name for objects being rendered. Almost always going to be namedObject name.
 	 */
