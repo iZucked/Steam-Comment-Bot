@@ -23,6 +23,7 @@ import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.rcp.common.ecore.EMFCopier;
 import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
 
 public class OptionsTreeViewerDropTargetListener implements DropTargetListener {
@@ -94,13 +95,13 @@ public class OptionsTreeViewerDropTargetListener implements DropTargetListener {
 
 	private void processBuys(OptionAnalysisModel existing, List<BuyOption> buys) {
 		for (BuyOption buy : buys) {
-			existing.getBuys().add(EcoreUtil.copy(buy));
+			existing.getBuys().add(EMFCopier.copy(buy));
 		}
 	}
 
 	private void processSells(OptionAnalysisModel existing, List<SellOption> sells) {
 		for (SellOption sell : sells) {
-			existing.getSells().add(EcoreUtil.copy(sell));
+			existing.getSells().add(EMFCopier.copy(sell));
 		}
 	}
 
