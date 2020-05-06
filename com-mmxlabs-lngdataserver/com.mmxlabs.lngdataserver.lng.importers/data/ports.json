@@ -2301,8 +2301,8 @@
 }, {
   "mmxId" : "L_SG_Juron",
   "virtual" : false,
-  "name" : "Jurong Marine Base - Singapore",
-  "aliases" : [ "Jurong Marine Base - Singapore Base", "Jurong Marine Base", "Singapore", "Jurong Island, Singapore" ],
+  "name" : "Singapore",
+  "aliases" : [ "Jurong Marine Base - Singapore Base", "Jurong Marine Base", "Jurong Island, Singapore" ],
   "geographicPoint" : {
     "lat" : 1.2999999523162842,
     "lon" : 103.68250274658203,
