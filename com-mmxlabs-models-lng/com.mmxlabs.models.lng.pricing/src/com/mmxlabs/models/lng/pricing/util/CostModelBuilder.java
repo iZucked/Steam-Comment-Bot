@@ -7,7 +7,6 @@ package com.mmxlabs.models.lng.pricing.util;
 import java.util.Collection;
 import java.util.function.BiConsumer;
 
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.fleet.BaseFuel;
@@ -30,6 +29,7 @@ import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.util.SetUtils;
+import com.mmxlabs.rcp.common.ecore.EMFCopier;
 
 public class CostModelBuilder {
 
@@ -43,7 +43,7 @@ public class CostModelBuilder {
 		return (source, destination) -> {
 			for (final RouteCost routeCost : costModel.getRouteCosts()) {
 				if (routeCost.getVessels().contains(source)) {
-					final RouteCost newCost = EcoreUtil.copy(routeCost);
+					final RouteCost newCost = EMFCopier.copy(routeCost);
 					newCost.getVessels().clear();
 					newCost.getVessels().add(destination);
 					costModel.getRouteCosts().add(newCost);
@@ -52,7 +52,7 @@ public class CostModelBuilder {
 			}
 			for (final RouteCost routeCost : costModel.getRouteCosts()) {
 				if (SetUtils.getObjects(routeCost.getVessels()).contains(source)) {
-					final RouteCost newCost = EcoreUtil.copy(routeCost);
+					final RouteCost newCost = EMFCopier.copy(routeCost);
 					newCost.getVessels().clear();
 					newCost.getVessels().add(destination);
 					costModel.getRouteCosts().add(newCost);

@@ -109,6 +109,7 @@ import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.optimiser.common.constraints.LockedUnusedElementsConstraintCheckerFactory;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.rcp.common.ecore.EMFCopier;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
@@ -757,7 +758,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 
 			sandboxResult.setName("SandboxResult");
 			sandboxResult.setHasDualModeSolutions(dualPNLMode);
-			sandboxResult.setUserSettings(EcoreUtil.copy(userSettings));
+			sandboxResult.setUserSettings(EMFCopier.copy(userSettings));
 
 			// Request this now one all other parts have run to get correct data.
 			final ExtraDataProvider extraDataProvider = mapper.getExtraDataProvider();

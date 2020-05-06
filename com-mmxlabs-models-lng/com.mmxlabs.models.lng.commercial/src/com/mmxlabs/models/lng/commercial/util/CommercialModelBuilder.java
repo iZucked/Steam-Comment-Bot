@@ -30,6 +30,7 @@ import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.commercial.TaxRate;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.rcp.common.ecore.EMFCopier;
 
 public class CommercialModelBuilder {
 
@@ -170,9 +171,9 @@ public class CommercialModelBuilder {
 	 * @param rate
 	 */
 	public void setTaxRates(@NonNull final BaseLegalEntity entity, @NonNull final TaxRate rate) {
-		setTaxRate(entity.getTradingBook(), EcoreUtil.copy(rate));
-		setTaxRate(entity.getShippingBook(), EcoreUtil.copy(rate));
-		setTaxRate(entity.getUpstreamBook(), EcoreUtil.copy(rate));
+		setTaxRate(entity.getTradingBook(), EMFCopier.copy(rate));
+		setTaxRate(entity.getShippingBook(), EMFCopier.copy(rate));
+		setTaxRate(entity.getUpstreamBook(), EMFCopier.copy(rate));
 	}
 
 	public @NonNull RuleBasedBallastBonusContract createSimpleLumpSumBallastBonusContract(@NonNull final Port redeliveryPort, @NonNull final String priceExpression) {

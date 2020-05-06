@@ -30,6 +30,7 @@ import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.ui.analytics.spec.ChangeModelToScheduleSpecification;
+import com.mmxlabs.rcp.common.ecore.EMFCopier;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
@@ -65,7 +66,7 @@ public class ChangeDescriptorChangeHandlerService implements IScenarioInstanceCh
 							result.setName(changeDescriptionSource.getName());
 						}
 
-						final UserSettings userSettings = changeDescriptionSource.getUserSettings() != null ? EcoreUtil.copy(changeDescriptionSource.getUserSettings())
+						final UserSettings userSettings = changeDescriptionSource.getUserSettings() != null ? EMFCopier.copy(changeDescriptionSource.getUserSettings())
 								: ScenarioUtils.createDefaultUserSettings();
 
 						result.setUserSettings(userSettings);

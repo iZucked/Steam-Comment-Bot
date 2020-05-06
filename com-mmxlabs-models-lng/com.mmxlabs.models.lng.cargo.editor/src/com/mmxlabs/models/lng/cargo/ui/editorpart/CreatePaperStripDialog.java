@@ -90,6 +90,7 @@ import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IStatusProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
+import com.mmxlabs.rcp.common.ecore.EMFCopier;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
@@ -251,9 +252,9 @@ public class CreatePaperStripDialog extends FormDialog {
 				if (f instanceof EReference && ((EReference) f).isContainment()) {
 					final EReference reference = (EReference) f;
 					if (reference.isMany()) {
-						sample.eSet(f, EcoreUtil.copyAll((Collection<EObject>) selectedObject.eGet(f)));
+						sample.eSet(f, EMFCopier.copyAll((Collection<EObject>) selectedObject.eGet(f)));
 					} else {
-						sample.eSet(f, EcoreUtil.copy((EObject) selectedObject.eGet(f)));
+						sample.eSet(f, EMFCopier.copy((EObject) selectedObject.eGet(f)));
 					}
 					continue;
 				}
@@ -731,9 +732,9 @@ public class CreatePaperStripDialog extends FormDialog {
 						if (feature instanceof EReference && ((EReference) feature).isContainment()) {
 							final EReference reference = (EReference) feature;
 							if (reference.isMany()) {
-								eObj.eSet(feature, EcoreUtil.copyAll((Collection<EObject>) sample.eGet(feature)));
+								eObj.eSet(feature, EMFCopier.copyAll((Collection<EObject>) sample.eGet(feature)));
 							} else {
-								eObj.eSet(feature, EcoreUtil.copy((EObject) sample.eGet(feature)));
+								eObj.eSet(feature, EMFCopier.copy((EObject) sample.eGet(feature)));
 							}
 						} else {
 							eObj.eSet(feature, sample.eGet(feature));

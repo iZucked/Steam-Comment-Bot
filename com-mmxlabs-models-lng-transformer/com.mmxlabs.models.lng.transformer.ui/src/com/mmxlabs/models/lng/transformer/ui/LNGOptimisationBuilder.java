@@ -37,6 +37,7 @@ import com.mmxlabs.models.lng.transformer.ui.strategic.StrategicScenarioModuleHe
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.ecore.EMFCopier;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
@@ -237,7 +238,7 @@ public class LNGOptimisationBuilder {
 		if (this.userSettings == null) {
 			localUserSettings = ScenarioUtils.createDefaultUserSettings();
 		} else {
-			localUserSettings = EcoreUtil.copy(this.userSettings);
+			localUserSettings = EMFCopier.copy(this.userSettings);
 		}
 		if (userSettingsCustomiser != null) {
 			userSettingsCustomiser.accept(localUserSettings);
@@ -378,7 +379,7 @@ public class LNGOptimisationBuilder {
 		}
 		final EditingDomain editingDomain = scenarioDataProvider.getEditingDomain();
 		final CompoundCommand cmd = new CompoundCommand("Update settings");
-		cmd.append(SetCommand.create(editingDomain, lngScenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_UserSettings(), EcoreUtil.copy(p.getUserSettings())));
+		cmd.append(SetCommand.create(editingDomain, lngScenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_UserSettings(), EMFCopier.copy(p.getUserSettings())));
 		RunnerHelper.syncExecDisplayOptional(() -> {
 			editingDomain.getCommandStack().execute(cmd);
 		});

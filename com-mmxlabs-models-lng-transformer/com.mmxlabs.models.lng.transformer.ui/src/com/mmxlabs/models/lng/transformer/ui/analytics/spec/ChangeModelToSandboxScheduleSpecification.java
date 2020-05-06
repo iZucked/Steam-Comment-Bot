@@ -19,7 +19,6 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.time.Hours;
@@ -66,6 +65,7 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
+import com.mmxlabs.rcp.common.ecore.EMFCopier;
 
 public class ChangeModelToSandboxScheduleSpecification {
 
@@ -237,10 +237,10 @@ public class ChangeModelToSandboxScheduleSpecification {
 			newAvailability.setEndBy(oldAvailability.getEndBy());
 		}
 		newAvailability.getEndAt().addAll(oldAvailability.getEndAt());
-		newAvailability.setEndHeel(EcoreUtil.copy(oldAvailability.getEndHeel()));
+		newAvailability.setEndHeel(EMFCopier.copy(oldAvailability.getEndHeel()));
 
 		if (oldAvailability.getBallastBonusContract() != null) {
-			newAvailability.setBallastBonusContract(EcoreUtil.copy(oldAvailability.getBallastBonusContract()));
+			newAvailability.setBallastBonusContract(EMFCopier.copy(oldAvailability.getBallastBonusContract()));
 		}
 		if (oldAvailability.getCharterContract() != null) {
 			newAvailability.setCharterContract(oldAvailability.getCharterContract());

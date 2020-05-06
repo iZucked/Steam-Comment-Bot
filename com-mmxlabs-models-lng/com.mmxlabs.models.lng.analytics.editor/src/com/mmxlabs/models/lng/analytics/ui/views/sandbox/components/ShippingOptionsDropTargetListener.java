@@ -5,7 +5,6 @@
 package com.mmxlabs.models.lng.analytics.ui.views.sandbox.components;
 
 import org.eclipse.emf.common.command.CompoundCommand;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.util.LocalSelectionTransfer;
@@ -22,7 +21,6 @@ import com.mmxlabs.models.lng.analytics.AbstractAnalysisModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
-import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.OptionalSimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
@@ -34,6 +32,7 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
+import com.mmxlabs.rcp.common.ecore.EMFCopier;
 import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
 
 public class ShippingOptionsDropTargetListener implements DropTargetListener {
@@ -130,7 +129,7 @@ public class ShippingOptionsDropTargetListener implements DropTargetListener {
 
 					menuHelper.open();
 				} else if (o instanceof ShippingOption) {
-					ShippingOption opt = (ShippingOption) EcoreUtil.copy((ShippingOption) o);
+					ShippingOption opt = (ShippingOption) EMFCopier.copy((ShippingOption) o);
 
 					scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
 							AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),

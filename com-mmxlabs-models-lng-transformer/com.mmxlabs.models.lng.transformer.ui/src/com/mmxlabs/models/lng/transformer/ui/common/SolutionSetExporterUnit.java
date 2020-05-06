@@ -63,6 +63,7 @@ import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
 import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.ecore.EMFCopier;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
@@ -220,7 +221,7 @@ public class SolutionSetExporterUnit {
 				monitor.worked(1);
 			}
 			if (helper != null) {
-				final UserSettings userSettings = EcoreUtil.copy(plan.getUserSettings());
+				final UserSettings userSettings = EMFCopier.copy(plan.getUserSettings());
 				final EditingDomain originalEditingDomain = scenarioToOptimiserBridge.getScenarioDataProvider().getEditingDomain();
 				helper.generateResults(scenarioToOptimiserBridge.getScenarioInstance(), userSettings, originalEditingDomain, plan);
 			}
@@ -366,7 +367,7 @@ public class SolutionSetExporterUnit {
 		public void applyPostTasks(final @NonNull AbstractSolutionSet solutionSet) {
 
 			if (tradingHelper != null) {
-				final UserSettings copyUserSettings = EcoreUtil.copy(userSettings);
+				final UserSettings copyUserSettings = EMFCopier.copy(userSettings);
 				final EditingDomain originalEditingDomain = bridge.getScenarioDataProvider().getEditingDomain();
 				tradingHelper.generateResults(bridge.getScenarioInstance(), copyUserSettings, originalEditingDomain, solutionSet);
 			}
@@ -394,7 +395,7 @@ public class SolutionSetExporterUnit {
 					ScheduleModelKPIUtils.updateOtherPNL(optionPNL, option.getScheduleModel().getSchedule(), ScheduleModelKPIUtils.Mode.INCREMENT);
 					long b = ScheduleModelKPIUtils.getScheduleProfitAndLoss(option.getScheduleModel().getSchedule());
 
-					OtherPNL copyBasePNL = EcoreUtil.copy(basePNL);
+					OtherPNL copyBasePNL = EMFCopier.copy(basePNL);
 					{
 						Schedule s = dualOption.getMicroBaseCase().getScheduleModel().getSchedule();
 						ScheduleModelKPIUtils.updateOtherPNL(copyBasePNL, s, ScheduleModelKPIUtils.Mode.DECREMENT);

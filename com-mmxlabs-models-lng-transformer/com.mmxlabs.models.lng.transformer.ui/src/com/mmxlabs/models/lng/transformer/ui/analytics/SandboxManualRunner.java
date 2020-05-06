@@ -13,7 +13,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -54,6 +53,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
+import com.mmxlabs.rcp.common.ecore.EMFCopier;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
@@ -291,7 +291,7 @@ public class SandboxManualRunner {
 
 			final OptionAnalysisModel model, final BaseCase baseCase, final List<BaseCase> tasks) {
 		if (listIdx == combinations.size()) {
-			final BaseCase copy = EcoreUtil.copy(baseCase);
+			final BaseCase copy = EMFCopier.copy(baseCase);
 
 			final Set<Object> seenItems = new HashSet<>();
 			final List<BaseCaseRow> data = new LinkedList<>(copy.getBaseCase());

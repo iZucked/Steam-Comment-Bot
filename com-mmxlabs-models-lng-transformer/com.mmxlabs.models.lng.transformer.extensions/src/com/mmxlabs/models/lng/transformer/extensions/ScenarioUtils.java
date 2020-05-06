@@ -10,7 +10,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.time.Months;
@@ -45,6 +44,7 @@ import com.mmxlabs.models.lng.transformer.extensions.shippingtype.ShippingTypeRe
 import com.mmxlabs.optimiser.common.constraints.LockedUnusedElementsConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintCheckerFactory;
+import com.mmxlabs.rcp.common.ecore.EMFCopier;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.AllowedVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.ContractCvConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.CounterPartyVolumeConstraintCheckerFactory;
@@ -119,8 +119,8 @@ public class ScenarioUtils {
 		@NonNull
 		final ConstraintAndFitnessSettings constraintAndFitnessSettings = createDefaultConstraintAndFitnessSettings();
 
-		plan.getStages().add(createDefaultLSOParameters(EcoreUtil.copy(constraintAndFitnessSettings), parallelise));
-		plan.getStages().add(createDefaultHillClimbingParameters(EcoreUtil.copy(constraintAndFitnessSettings), parallelise));
+		plan.getStages().add(createDefaultLSOParameters(EMFCopier.copy(constraintAndFitnessSettings), parallelise));
+		plan.getStages().add(createDefaultHillClimbingParameters(EMFCopier.copy(constraintAndFitnessSettings), parallelise));
 
 		return plan;
 	}

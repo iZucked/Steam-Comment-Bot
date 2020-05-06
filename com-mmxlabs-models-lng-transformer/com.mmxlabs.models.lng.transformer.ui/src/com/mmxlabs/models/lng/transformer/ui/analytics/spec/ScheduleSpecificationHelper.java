@@ -20,7 +20,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -55,6 +54,7 @@ import com.mmxlabs.models.lng.transformer.ui.analytics.viability.ViabilityWindow
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.ecore.EMFCopier;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
@@ -85,7 +85,7 @@ public class ScheduleSpecificationHelper {
 	public synchronized void generateWith(final ScenarioInstance scenarioInstance, final UserSettings userSettings, final EditingDomain editingDomain, Collection<String> initialHints,
 			Consumer<LNGScenarioToOptimiserBridge> action) {
 
-		final UserSettings settings = EcoreUtil.copy(userSettings);
+		final UserSettings settings = EMFCopier.copy(userSettings);
 		settings.unsetPeriodStartDate();
 		settings.unsetPeriodEnd();
 
@@ -180,7 +180,7 @@ public class ScheduleSpecificationHelper {
 	public synchronized void withRunner(final ScenarioInstance scenarioInstance, final UserSettings userSettings, final EditingDomain editingDomain, Collection<String> initialHints,
 			TriConsumer<LNGScenarioToOptimiserBridge, Injector, Integer> action) {
 
-		final UserSettings settings = EcoreUtil.copy(userSettings);
+		final UserSettings settings = EMFCopier.copy(userSettings);
 		settings.unsetPeriodStartDate();
 		settings.unsetPeriodEnd();
 
