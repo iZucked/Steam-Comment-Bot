@@ -88,12 +88,12 @@ public class PeriodDistributionConstraint extends AbstractModelMultiConstraint {
 					LocalDateTime endTime = start.atStartOfDay().plus(slot.getWindowSize(), slot.getWindowSizeUnits().toTemporalUnit());
 					endTime = endTime.plus(slot.getWindowFlex(), slot.getWindowFlexUnits().toTemporalUnit());
 					LocalDate end = LocalDate.from(endTime).minusDays(1);
+					end = end.isBefore(start) ? start : end;
 					
-					for (LocalDate date = start; !date.isAfter(end); date = date.plusMonths(1)) {
-						YearMonth month = YearMonth.from(date);
-						Long count = counts.computeIfAbsent(month, k -> Long.valueOf(0));
-						counts.put(month, count+1);
-					}
+					//We only need to count the month the start date is in, since we disallow slots whose windows "overlap" with constraint ranges.
+					YearMonth month = YearMonth.from(start);
+					Long count = counts.computeIfAbsent(month, k -> Long.valueOf(0));
+					counts.put(month, count+1);
 
 					//Check if completely within the monthly range specified.
 					List<YearMonth> outsideOfRange = fullyWithinOrFullyOutOfRange(periodDistribution.getRange(), start, end);
