@@ -82,11 +82,6 @@ public final class KnownFeatures {
 	// Experimental
 	public static final String FEATURE_TRADER_BASED_INSERIONS = "features:trader-based-insertions";
 
-	/**
-	 * Enable break-even evaluations
-	 */
-	public static final String FEATURE_BREAK_EVENS = "features:break-evens";
-
 	public static final String FEATURE_RE_EVALUATE_SOLUTIONS = "features:re-evaluate-solutions";
 
 	public static final String FEATURE_SANDBOX = "features:sandbox";

@@ -290,7 +290,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				final Composite displayButton = createDisplayButton(c);
 				GridDataFactory.generate(displayButton, 1, 1);
 
-				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_BREAK_EVENS)) {
+				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_SANDBOX)) {
 					beModeToggle = createUseTargetPNLToggleComposite(c);
 					GridDataFactory.generate(beModeToggle, 1, 1);
 				}

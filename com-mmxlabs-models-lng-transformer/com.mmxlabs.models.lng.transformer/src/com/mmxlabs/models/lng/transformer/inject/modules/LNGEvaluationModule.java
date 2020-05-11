@@ -116,7 +116,7 @@ public class LNGEvaluationModule extends AbstractModule {
 				bind(IGeneratedCharterOutEvaluator.class).to(DefaultGeneratedCharterOutEvaluator.class);
 			}
 
-			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_BREAK_EVENS) && !hints.contains(HINT_PORTFOLIO_BREAKEVEN)) {
+			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_SANDBOX) && !hints.contains(HINT_PORTFOLIO_BREAKEVEN)) {
 				bind(IBreakEvenEvaluator.class).to(DefaultBreakEvenEvaluator.class);
 			}
 
