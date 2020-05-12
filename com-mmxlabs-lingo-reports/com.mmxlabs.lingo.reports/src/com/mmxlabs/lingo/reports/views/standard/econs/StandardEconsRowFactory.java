@@ -357,12 +357,13 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		}
 		if (containsPaperDeals) {
 			rows.add(createRow(3010, "Pricing", false, "", "", false, createEmptyFormatter()));
-			rows.add(createRow(3020, "    MtM", false, "", "", false,
-					createPaperDealAllocationFormatter(pda -> String.format("%.3f", getPaperMtMPrice(pda)) )));
-			rows.add(createRow(3030, "    Curve", false, "", "", false,
+			
+			rows.add(createRow(3020, "    Curve", false, "", "", false,
 					createPaperDealAllocationFormatter(pda -> getFloatCurve(pda) )));
-			rows.add(createRow(3040, "    Price", false, "", "", false,
+			rows.add(createRow(3030, "    Price", false, "", "", false,
 					createPaperDealAllocationFormatter(pda -> String.format("%.3f", getPaperFloatPrice(pda)) )));
+			rows.add(createRow(3040, "    MtM", false, "", "", false,
+					createPaperDealAllocationFormatter(pda -> String.format("%.3f", getPaperMtMPrice(pda)) )));
 			rows.add(createRow(3050, "Quantity", true, "", "", false, createPaperDealVolumeMMBTu(options, false)));
 			rows.add(createRow(3060, "P&L", true, "$", "", false, createPNLTotal(options, false)));
 			rows.add(createRow(3080, "Month", false, "", "", false,
