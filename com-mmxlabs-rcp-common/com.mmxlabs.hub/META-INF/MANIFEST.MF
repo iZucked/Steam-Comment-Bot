@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: MMXLabs Hub Support
-Bundle-SymbolicName: com.mmxlabs.hub
+Bundle-SymbolicName: com.mmxlabs.hub;singleton:=true
 Automatic-Module-Name: com.mmxlabs.hub
 Bundle-Version: 4.9.2.qualifier
 Bundle-Vendor: Minimax Labs
@@ -10,3 +10,24 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-10
 Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: .,
+ lib/okhttp-3.14.2.jar,
+ lib/okio-1.17.4.jar,
+ lib/json-20140107.jar
+Eclipse-BuddyPolicy: registered
+Export-Package: okhttp3;version="3.14.2",
+ okhttp3.internal;version="3.14.2",
+ okhttp3.internal.cache;version="3.14.2",
+ okhttp3.internal.cache2;version="3.14.2",
+ okhttp3.internal.connection;version="3.14.2",
+ okhttp3.internal.http;version="3.14.2",
+ okhttp3.internal.http1;version="3.14.2",
+ okhttp3.internal.http2;version="3.14.2",
+ okhttp3.internal.io;version="3.14.2",
+ okhttp3.internal.platform;version="3.14.2",
+ okhttp3.internal.publicsuffix;version="3.14.2",
+ okhttp3.internal.tls;version="3.14.2",
+ okhttp3.internal.ws;version="3.14.2",
+ okio,
+ org.json,
+ org.json.zip
