@@ -23,6 +23,7 @@
 		<module>com.mmxlabs.ganttviewer</module>
 
 		<module>com.mmxlabs.models.common</module>
+		<module>com.mmxlabs.hub</module>
 
 		<module>com.mmxlabs.license.ssl</module>
 		<module>com.mmxlabs.license.features</module>
@@ -31,6 +32,7 @@
 
 		<!-- Test Plugins -->
 		<module>com.mmxlabs.rcp.common.tests</module>
+		<module>com.mmxlabs.hub.tests</module>
 	</modules>
 
 	<build>
