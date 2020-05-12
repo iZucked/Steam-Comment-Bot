@@ -71,84 +71,21 @@ public class Application implements IApplication {
 
 		final String[] appLineArgs = Platform.getApplicationArgs();
 
-		{
-			// Clean up temp folder on start up.
-			final File tempDirectory = ScenarioStorageUtil.getTempDirectory();
-			if (tempDirectory.exists() && tempDirectory.isDirectory()) {
-				final boolean secureDelete = LicenseFeatures.isPermitted(FileDeleter.LICENSE_FEATURE__SECURE_DELETE);
-				try {
-					final Path tempDir = tempDirectory.toPath();
-					Files.walkFileTree(tempDir, new SimpleFileVisitor<Path>() {
-						@Override
-						public FileVisitResult postVisitDirectory(final Path dir, final IOException exc) throws IOException {
-							if (!tempDir.equals(dir)) {
-								dir.toFile().delete();
-							}
-							return FileVisitResult.CONTINUE;
-						}
+		cleanUpTemporaryFolder();
 
-						@Override
-						public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
-							FileDeleter.delete(file.toFile(), secureDelete);
-							return FileVisitResult.CONTINUE;
-						}
-					});
-				} catch (final IOException e) {
-					e.printStackTrace();
-				}
-			}
-			// Sometimes dir disappears? Perhaps the tree-walker check does not work?
-			tempDirectory.mkdirs();
+		// restart the the workbench with the new heap size
+		String heapSize = getHeapSize(appLineArgs);
+		if (heapSize != null) {
+			// Construct new command line with new VM arg and restart workbench
+			System.setProperty(IApplicationContext.EXIT_DATA_PROPERTY, buildCommandLine(heapSize));
+			// This might be surplus to the return statement.
+			System.setProperty("eclipse.exitcode", Integer.toString(24));
+			return org.eclipse.equinox.app.IApplication.EXIT_RELAUNCH;
 		}
 
 		// HAK
-		@NonNull
-		final ISharedDataModelType<@NonNull PortModel> distances = LNGScenarioSharedModelTypes.DISTANCES;
+		final @NonNull ISharedDataModelType<@NonNull PortModel> distances = LNGScenarioSharedModelTypes.DISTANCES;
 
-		if (appLineArgs != null && appLineArgs.length > 0) {
-			// Look for the no-auto-mem command first and skip auto-mem code if so (e.g.
-			// could get here through a relaunch)
-			boolean skipAutoMemory = false;
-			for (final String arg : appLineArgs) {
-				if (arg.equalsIgnoreCase(CMD_NO_AUTO_MEM)) {
-					skipAutoMemory = true;
-					break;
-				}
-			}
-			if (!skipAutoMemory) {
-				for (final String arg : appLineArgs) {
-					if (arg.equals(CMD_AUTO_MEM)) {
-
-						final MBeanServer platformMBeanServer = ManagementFactory.getPlatformMBeanServer();
-						try {
-							// Get total physical memory
-							final Number totalMemory = (Number) platformMBeanServer.getAttribute(new ObjectName("java.lang", "type", "OperatingSystem"), "TotalPhysicalMemorySize");
-							if (totalMemory != null) {
-								// Convert to gigabytes
-								final long gigabytes = totalMemory.longValue() / 1024L / 1024L / 1024L;
-								String heapSize = null;
-								if (gigabytes < 1) {
-									heapSize = "-Xmx512m";
-								} else if (gigabytes < 3) {
-									heapSize = "-Xmx1G";
-								} else {
-									heapSize = String.format("-Xmx%dG", gigabytes - 2);
-								}
-								if (heapSize != null) {
-									// Construct new command line with new VM arg and restart workbench
-									System.setProperty(IApplicationContext.EXIT_DATA_PROPERTY, buildCommandLine(heapSize));
-									// This might be surplus to the return statement.
-									System.setProperty("eclipse.exitcode", Integer.toString(24));
-									return org.eclipse.equinox.app.IApplication.EXIT_RELAUNCH;
-								}
-							}
-						} catch (final Exception e) {
-							e.printStackTrace();
-						}
-					}
-				}
-			}
-		}
 		// Start peaberry activation - only for ITS runs inside eclipse.
 		final String[] bundlesToStart = { "org.eclipse.equinox.common", //
 				"org.eclipse.equinox.ds", //
@@ -166,9 +103,7 @@ public class Application implements IApplication {
 		final Display display = PlatformUI.createDisplay();
 		final LicenseState validity = LicenseChecker.checkLicense();
 		if (validity != LicenseState.Valid) {
-
 			MessageDialog.openError(display.getActiveShell(), "License Error", "Unable to validate license: " + validity.getMessage());
-
 			display.dispose();
 			return IApplication.EXIT_OK;
 		}
@@ -177,9 +112,9 @@ public class Application implements IApplication {
 		WorkbenchStateManager.cleanupWorkbenchState();
 
 		// Check Data Hub to see if user is authorised to use LiNGO
-		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_DATAHUB_STARTUP_CHECK)) {
+		boolean datahubStartupCheck = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_DATAHUB_STARTUP_CHECK);
+		if (datahubStartupCheck) {
 			try {
-
 				ProgressMonitorDialog d = new ProgressMonitorDialog(display.getActiveShell());
 				d.run(true, false, monitor -> {
 					monitor.beginTask("Connecting to Data Hub", IProgressMonitor.UNKNOWN);
@@ -245,7 +180,6 @@ public class Application implements IApplication {
 		final DelayedOpenFileProcessor processor = new DelayedOpenFileProcessor(display);
 
 		// TODO: Handle error conditions better!
-
 		final Location instanceLoc = Platform.getInstanceLocation();
 		try {
 
@@ -279,6 +213,80 @@ public class Application implements IApplication {
 			}
 		}
 		return IApplication.EXIT_OK;
+	}
+
+	private String getHeapSize(String[] appLineArgs) {
+		String heapSize = null;
+
+		if (appLineArgs != null && appLineArgs.length > 0) {
+			// Look for the no-auto-mem command first and skip auto-mem code if so (e.g.
+			// could get here through a relaunch)
+			boolean skipAutoMemory = false;
+			for (final String arg : appLineArgs) {
+				if (arg.equalsIgnoreCase(CMD_NO_AUTO_MEM)) {
+					skipAutoMemory = true;
+					break;
+				}
+			}
+
+			if (!skipAutoMemory) {
+				for (final String arg : appLineArgs) {
+					if (arg.equals(CMD_AUTO_MEM)) {
+
+						final MBeanServer platformMBeanServer = ManagementFactory.getPlatformMBeanServer();
+						try {
+							// Get total physical memory
+							final Number totalMemory = (Number) platformMBeanServer.getAttribute(new ObjectName("java.lang", "type", "OperatingSystem"), "TotalPhysicalMemorySize");
+							if (totalMemory != null) {
+								// Convert to gigabytes
+								final long gigabytes = totalMemory.longValue() / 1024L / 1024L / 1024L;
+								if (gigabytes < 1) {
+									heapSize = "-Xmx512m";
+								} else if (gigabytes < 3) {
+									heapSize = "-Xmx1G";
+								} else {
+									heapSize = String.format("-Xmx%dG", gigabytes - 2);
+								}
+							}
+						} catch (final Exception e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+		}
+
+		return heapSize;
+	}
+
+	private void cleanUpTemporaryFolder() {
+		// Clean up temp folder on start up.
+		final File tempDirectory = ScenarioStorageUtil.getTempDirectory();
+		if (tempDirectory.exists() && tempDirectory.isDirectory()) {
+			final boolean secureDelete = LicenseFeatures.isPermitted(FileDeleter.LICENSE_FEATURE__SECURE_DELETE);
+			try {
+				final Path tempDir = tempDirectory.toPath();
+				Files.walkFileTree(tempDir, new SimpleFileVisitor<Path>() {
+					@Override
+					public FileVisitResult postVisitDirectory(final Path dir, final IOException exc) throws IOException {
+						if (!tempDir.equals(dir)) {
+							dir.toFile().delete();
+						}
+						return FileVisitResult.CONTINUE;
+					}
+
+					@Override
+					public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
+						FileDeleter.delete(file.toFile(), secureDelete);
+						return FileVisitResult.CONTINUE;
+					}
+				});
+			} catch (final IOException e) {
+				e.printStackTrace();
+			}
+		}
+		// Sometimes dir disappears? Perhaps the tree-walker check does not work?
+		tempDirectory.mkdirs();
 	}
 
 	/**
