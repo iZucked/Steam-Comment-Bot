@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.MapMaker;
-import com.mmxlabs.lngdataserver.commons.http.WrappedProgressMonitor;
+import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
 import com.mmxlabs.lngdataserver.server.IUpstreamDetailChangedListener;
 import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
 

@@ -14,9 +14,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.lngdataserver.commons.http.IProgressListener;
-import com.mmxlabs.lngdataserver.commons.http.ProgressRequestBody;
-import com.mmxlabs.lngdataserver.commons.http.ProgressResponseBody;
+import com.mmxlabs.hub.common.http.IProgressListener;
+import com.mmxlabs.hub.common.http.ProgressRequestBody;
+import com.mmxlabs.hub.common.http.ProgressResponseBody;
 import com.mmxlabs.lngdataserver.server.HttpClientUtil;
 import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
 

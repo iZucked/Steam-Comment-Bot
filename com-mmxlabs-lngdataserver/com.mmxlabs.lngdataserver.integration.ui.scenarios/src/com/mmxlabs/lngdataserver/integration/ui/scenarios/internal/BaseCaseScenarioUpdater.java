@@ -25,8 +25,8 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.common.util.URI;
 
 import com.google.common.io.Files;
-import com.mmxlabs.lngdataserver.commons.http.IProgressListener;
-import com.mmxlabs.lngdataserver.commons.http.WrappedProgressMonitor;
+import com.mmxlabs.hub.common.http.IProgressListener;
+import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.BaseCaseRecord;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.BaseCaseServiceClient;
 import com.mmxlabs.lngdataserver.server.IUpstreamDetailChangedListener;

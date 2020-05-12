@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
-package com.mmxlabs.lngdataserver.commons.http;
+package com.mmxlabs.hub.common.http;
 
 import java.io.IOException;
 

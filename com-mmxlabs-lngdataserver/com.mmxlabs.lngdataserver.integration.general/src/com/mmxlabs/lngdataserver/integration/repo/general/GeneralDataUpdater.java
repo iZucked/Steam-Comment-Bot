@@ -30,7 +30,7 @@ import com.google.common.base.Charsets;
 import com.google.common.collect.MapMaker;
 import com.google.common.io.Files;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.lngdataserver.commons.http.WrappedProgressMonitor;
+import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
 import com.mmxlabs.lngdataserver.server.IUpstreamDetailChangedListener;
 import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
 

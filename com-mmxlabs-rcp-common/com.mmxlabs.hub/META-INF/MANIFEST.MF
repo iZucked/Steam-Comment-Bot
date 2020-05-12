@@ -15,7 +15,8 @@ Bundle-ClassPath: .,
  lib/okio-1.17.4.jar,
  lib/json-20140107.jar
 Eclipse-BuddyPolicy: registered
-Export-Package: okhttp3;version="3.14.2",
+Export-Package: com.mmxlabs.hub.common.http,
+ okhttp3;version="3.14.2",
  okhttp3.internal;version="3.14.2",
  okhttp3.internal.cache;version="3.14.2",
  okhttp3.internal.cache2;version="3.14.2",
