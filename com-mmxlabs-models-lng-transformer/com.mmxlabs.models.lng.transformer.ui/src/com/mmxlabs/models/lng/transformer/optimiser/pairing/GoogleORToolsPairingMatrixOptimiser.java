@@ -235,14 +235,6 @@ public class GoogleORToolsPairingMatrixOptimiser<P,C> implements IPairingMatrixO
 		int no_loads = pnl.length;
 		int no_discharges = pnl[0].length;
 
-//		List<Map<String, List<Integer>>> maxDischargeSlotsInformation = pairingData.getMaxDischargeSlots();
-//		List<Map<String, List<Integer>>> minDischargeSlotsInformation = pairingData.getMinDischargeSlots();
-//
-//		List<Map<String, List<Integer>>> maxLoadSlotsInformation = pairingData.getMaxLoadSlots();
-//		List<Map<String, List<Integer>>> minLoadSlotsInformation = pairingData.getMinLoadSlots();
-
-		System.out.println("# loads: " + no_loads);
-		System.out.println("# discharges: " + no_discharges);
 		// Set up non optional penalties - default 0
 		long[][] nonOptionalPenalty = new long[no_loads][no_discharges];
 
@@ -421,27 +413,14 @@ public class GoogleORToolsPairingMatrixOptimiser<P,C> implements IPairingMatrixO
 		}
 		
 		final MPSolver.ResultStatus resultStatus = solver.solve();
-		System.out.println("solver objective value (number of constraints satisfied): " + obj.value());
 
 		int totalConstraints = maxLoadSlotsVars.length + minLoadSlotsVars.length + maxDischargeSlotsVars.length + minDischargeSlotsVars.length;
-		
-		System.out.println("total numnber of constraints: "+totalConstraints);
-		System.out.println("Number of min load slot constraints"+minLoadSlotsVars.length);
-		System.out.println("Number of max load slot constraints"+maxLoadSlotsVars.length);
-		System.out.println("Number of min discharge slot constraints"+minDischargeSlotsVars.length);
-		System.out.println("Number of max discharge slot constraints"+maxDischargeSlotsVars.length);
-		System.out.println("#min constraints violated = "+ (totalConstraints - obj.value()));
 		
 		if (resultStatus != MPSolver.ResultStatus.OPTIMAL) {
 			System.err.println("The problem does not have an optimal solution");
 			// System.exit(1);
 			return null;
 		}
-
-		/** print */
-		System.out.println("Problem solved in: ");
-		System.out.println("\t" + solver.iterations() + " iterations");
-		System.out.println("\t" + solver.wallTime() + " milliseconds");
 
 		List<ConstraintInfo<P, C, ?>> violatedConstraints = new ArrayList<>();
 		
