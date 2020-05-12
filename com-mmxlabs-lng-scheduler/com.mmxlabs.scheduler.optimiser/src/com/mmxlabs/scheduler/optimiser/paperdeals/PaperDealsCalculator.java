@@ -244,7 +244,7 @@ public class PaperDealsCalculator {
 			final PaperDealsLookupData lookupData = paperDealDataProvider.getPaperDealsLookupData();
 			
 			for (final BasicPaperDealData basicPaperDealData : paperDeals) {
-				final Object object = paperDealRecords.put(basicPaperDealData, calculateAllocations(basicPaperDealData, lookupData));
+				final Object object = paperDealRecords.put(basicPaperDealData, calculateAllocations(basicPaperDealData, lookupData, true));
 				assert object == null;
 			}
 		}
@@ -258,14 +258,15 @@ public class PaperDealsCalculator {
 			final PaperDealsLookupData lookupData = paperDealDataProvider.getPaperDealsLookupData();
 			
 			for (final BasicPaperDealData basicPaperDealData : lookupData.paperDeals) {
-				final Object object = paperDealRecords.put(basicPaperDealData, calculateAllocations(basicPaperDealData, lookupData));
+				final Object object = paperDealRecords.put(basicPaperDealData, calculateAllocations(basicPaperDealData, lookupData, false));
 				assert object == null;
 			}
 		}
 		return paperDealRecords;
 	}
 	
-	private List<BasicPaperDealAllocationEntry> calculateAllocations(final BasicPaperDealData basicPaperDealData, final PaperDealsLookupData lookupData){
+	private List<BasicPaperDealAllocationEntry> calculateAllocations(final BasicPaperDealData basicPaperDealData, final PaperDealsLookupData lookupData,
+			final boolean generated){
 		final List<BasicPaperDealAllocationEntry> result = new LinkedList<>();
 		final String curveName = basicPaperDealData.getIndexName();
 		final Map<LocalDate, Double> settledPrices = lookupData.settledPrices.get(curveName);
@@ -328,11 +329,12 @@ public class PaperDealsCalculator {
 			start = getNonWeekendStart(startMonth, startDay);
 			end = start.plusDays(settlingPeriodDurationInDays - 1);
 		}
-		return settlePaper(basicPaperDealData, settledPrices, series, curveData, start, end, exposuresLookupData);
+		return settlePaper(basicPaperDealData, settledPrices, series, curveData, start, end, exposuresLookupData, generated);
 	}
 	
 	private List<BasicPaperDealAllocationEntry> settlePaper(final BasicPaperDealData basicPaperDealData,  final Map<LocalDate, Double> settledPrices, //
-			final ISeries series, final BasicCommodityCurveData curveData, final LocalDate extStart, final LocalDate extEnd, final ExposuresLookupData exposuresLookupData) {
+			final ISeries series, final BasicCommodityCurveData curveData, final LocalDate extStart, final LocalDate extEnd, final ExposuresLookupData exposuresLookupData,
+			final boolean generated) {
 		final List<BasicPaperDealAllocationEntry> result = new LinkedList<>();
 		final boolean isBuy = basicPaperDealData.isBuy();
 		LocalDate start = extStart;
@@ -368,7 +370,12 @@ public class PaperDealsCalculator {
 
 				final int internalPrice = OptimiserUnitConvertor.convertToInternalPrice(price);
 				final long quantity = (isBuy ? 1 : -1) * basicPaperDealData.getPaperVolume() / days;
-				long value = (quantity * (basicPaperDealData.getPaperUnitPrice() - internalPrice)) /1_000_000;
+				long value;
+				if (generated) {
+					value = (quantity * (basicPaperDealData.getPaperUnitPrice() - internalPrice)) /1_000_000;
+				} else {
+					value = (quantity * (internalPrice - basicPaperDealData.getPaperUnitPrice())) /1_000_000;
+				}
 				
 				final BasicPaperDealAllocationEntry entry = new BasicPaperDealAllocationEntry(start, quantity, internalPrice, value, settled);
 

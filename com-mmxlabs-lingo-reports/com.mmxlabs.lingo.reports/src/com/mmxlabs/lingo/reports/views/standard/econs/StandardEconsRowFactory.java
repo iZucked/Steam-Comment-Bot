@@ -53,6 +53,7 @@ import com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Purge;
+import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotAllocationType;
@@ -62,6 +63,7 @@ import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.ui.date.DateTimeFormatsProvider;
+import com.mmxlabs.models.ui.tabular.BaseFormatter;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 
 public class StandardEconsRowFactory extends AbstractEconsRowFactory {
@@ -355,18 +357,55 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		}
 		if (containsPaperDeals) {
 			rows.add(createRow(3010, "Pricing", false, "", "", false, createEmptyFormatter()));
-			rows.add(createRow(3020, "    MtM price", false, "", "", false,
-					createPaperDealAllocationFormatter(pda -> String.format("%.3f", pda.getPaperDeal().getPrice()) )));
-			rows.add(createRow(3030, "    Float curve", false, "", "", false,
-					createPaperDealAllocationFormatter(pda -> pda.getPaperDeal().getIndex() )));
-			rows.add(createRow(3040, "    Float price", false, "", "", false,
-					createPaperDealAllocationFormatter(pda -> String.format("%.3f", pda.getEntries().get(0).getPrice()) )));
+			rows.add(createRow(3020, "    MtM", false, "", "", false,
+					createPaperDealAllocationFormatter(pda -> String.format("%.3f", getPaperMtMPrice(pda)) )));
+			rows.add(createRow(3030, "    Curve", false, "", "", false,
+					createPaperDealAllocationFormatter(pda -> getFloatCurve(pda) )));
+			rows.add(createRow(3040, "    Price", false, "", "", false,
+					createPaperDealAllocationFormatter(pda -> String.format("%.3f", getPaperFloatPrice(pda)) )));
 			rows.add(createRow(3050, "Quantity", true, "", "", false, createPaperDealVolumeMMBTu(options, false)));
 			rows.add(createRow(3060, "P&L", true, "$", "", false, createPNLTotal(options, false)));
 			rows.add(createRow(3080, "Month", false, "", "", false,
 					createPaperDealAllocationFormatter(pda -> pda.getPaperDeal().getStartDate().format(DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter()))));
 		}
 		return rows;
+	}
+
+	private double getPaperMtMPrice(final PaperDealAllocation pda) {
+		double price = 0.0;
+		if (pda.eContainer() instanceof Schedule) {
+			final Schedule schedule = (Schedule) pda.eContainer();
+			if (schedule.getGeneratedPaperDeals().contains(pda.getPaperDeal())) {
+				price = pda.getPaperDeal().getPrice();
+			} else {
+				price = pda.getEntries().get(0).getPrice();
+			}
+		}
+		return price;
+	}
+	
+	private double getPaperFloatPrice(final PaperDealAllocation pda) {
+		double price = 0.0;
+		if (pda.eContainer() instanceof Schedule) {
+			final Schedule schedule = (Schedule) pda.eContainer();
+			if (!schedule.getGeneratedPaperDeals().contains(pda.getPaperDeal())) {
+				price = pda.getPaperDeal().getPrice();
+			} else {
+				price = pda.getEntries().get(0).getPrice();
+			}
+		}
+		return price;
+	}
+	
+	private String getFloatCurve(final PaperDealAllocation pda) {
+		String curveName = "N/A";
+		if (pda.eContainer() instanceof Schedule) {
+			final Schedule schedule = (Schedule) pda.eContainer();
+			if (schedule.getGeneratedPaperDeals().contains(pda.getPaperDeal())) {
+				curveName = pda.getPaperDeal().getIndex();
+			}
+		}
+		return curveName;
 	}
 
 	private int getAverageDailyCharterRate(Event visit, Event travel, Event idle) {
@@ -542,9 +581,6 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 			Long volume = 0L;
 			if (object instanceof PaperDealAllocation) {
 				final PaperDealAllocation paperDealAllocation = (PaperDealAllocation) object;
-
-				
-				
 				for (final PaperDealAllocationEntry allocation : paperDealAllocation.getEntries()) {
 					volume += (int) allocation.getQuantity();
 				}
