@@ -77,7 +77,7 @@ import com.mmxlabs.scheduler.optimiser.scheduling.TimeWindowScheduler;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
 @ExtendWith(ShiroRunner.class)
-@RequireFeature(features = { KnownFeatures.FEATURE_PANAMA_CANAL })
+@RequireFeature(value = { KnownFeatures.FEATURE_PANAMA_CANAL })
 public class DurationConstraintTests extends AbstractMicroTestCase {
 
 	@Override

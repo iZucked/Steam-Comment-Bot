@@ -29,7 +29,7 @@ public class ShiroRunner implements BeforeAllCallback, AfterAllCallback {
 
 		RequireFeature annotation = requiredTestClass.getAnnotation(RequireFeature.class);
 		if (annotation != null) {
-			String[] features = annotation.features();
+			String[] features = annotation.value();
 			if (features != null) {
 				for (String f : features) {
 

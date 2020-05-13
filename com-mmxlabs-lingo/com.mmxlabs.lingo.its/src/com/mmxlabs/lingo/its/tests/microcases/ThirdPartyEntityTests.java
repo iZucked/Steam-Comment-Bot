@@ -59,7 +59,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.NonOptionalSlotFitness
 
 @SuppressWarnings("unused")
 @ExtendWith(ShiroRunner.class)
-@RequireFeature(features = { KnownFeatures.FEATURE_OPTIMISATION_NO_NOMINALS_IN_PROMPT, KnownFeatures.FEATURE_OPTIMISATION_ACTIONSET })
+@RequireFeature(value = { KnownFeatures.FEATURE_OPTIMISATION_NO_NOMINALS_IN_PROMPT, KnownFeatures.FEATURE_OPTIMISATION_ACTIONSET })
 public class ThirdPartyEntityTests extends AbstractMicroTestCase {
 
 	// Which scenario data to import

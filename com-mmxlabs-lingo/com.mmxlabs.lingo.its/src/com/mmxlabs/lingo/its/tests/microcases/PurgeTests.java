@@ -48,7 +48,7 @@ import com.mmxlabs.scheduler.optimiser.peaberry.OptimiserInjectorServiceMaker;
 
 @SuppressWarnings({ "unused", "null" })
 @ExtendWith(ShiroRunner.class)
-@RequireFeature(features = { KnownFeatures.FEATURE_PURGE })
+@RequireFeature(value = { KnownFeatures.FEATURE_PURGE })
 public class PurgeTests extends AbstractMicroTestCase {
 
 	@Test

@@ -35,7 +35,7 @@ import com.mmxlabs.scheduler.optimiser.peaberry.OptimiserInjectorServiceMaker;
 
 @SuppressWarnings("unused")
 @ExtendWith(value = ShiroRunner.class)
-@RequireFeature(features = {KnownFeatures.FEATURE_GENERATED_PAPER_DEALS, KnownFeatures.FEATURE_PAPER_DEALS, KnownFeatures.FEATURE_EXPOSURES})
+@RequireFeature(value = {KnownFeatures.FEATURE_GENERATED_PAPER_DEALS, KnownFeatures.FEATURE_PAPER_DEALS, KnownFeatures.FEATURE_EXPOSURES})
 public class ExposuresScenarioTests extends AbstractMicroTestCase {
 	
 	@NonNull

@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.reports.diff.utils.PNLDeltaUtils;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -21,6 +22,7 @@ import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.lng.schedule.util.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.transformer.its.RequireFeature;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.types.DESPurchaseDealType;
 import com.mmxlabs.models.lng.types.FOBSaleDealType;
@@ -28,6 +30,7 @@ import com.mmxlabs.models.lng.types.VolumeUnits;
 
 @SuppressWarnings({ "unused", "null" })
 @ExtendWith(ShiroRunner.class)
+@RequireFeature(KnownFeatures.FEATURE_SANDBOX)
 public class BreakEvenTests extends AbstractMicroTestCase {
 
 	/**
@@ -43,7 +46,7 @@ public class BreakEvenTests extends AbstractMicroTestCase {
 				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "?", null) //
 				.with(s -> s.setFullCargoLot(true)) //
 				.build() //
-				// 
+				//
 				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
 				.build() //
 				//

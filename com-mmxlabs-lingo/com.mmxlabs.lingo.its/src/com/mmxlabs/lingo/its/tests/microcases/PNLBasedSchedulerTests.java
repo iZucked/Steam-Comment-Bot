@@ -41,7 +41,7 @@ import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService.ModuleType;
 import com.mmxlabs.scheduler.optimiser.peaberry.OptimiserInjectorServiceMaker;
 
-@RequireFeature(features = { KnownFeatures.FEATURE_PANAMA_CANAL })
+@RequireFeature(value = { KnownFeatures.FEATURE_PANAMA_CANAL })
 @ExtendWith(ShiroRunner.class)
 public class PNLBasedSchedulerTests extends AbstractMicroTestCase {
 

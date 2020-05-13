@@ -35,7 +35,7 @@ import com.mmxlabs.models.lng.transformer.ui.analytics.EvaluateSolutionSetHelper
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 @ExtendWith(ShiroRunner.class)
-@RequireFeature(features = { KnownFeatures.FEATURE_SANDBOX })
+@RequireFeature(value = { KnownFeatures.FEATURE_SANDBOX })
 public class SandboxCopyTests extends AbstractSandboxTestCase {
 
 	/**

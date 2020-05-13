@@ -40,7 +40,7 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.fitness.components.NonOptionalSlotFitnessCoreFactory;
 
 @ExtendWith(value = ShiroRunner.class)
-@RequireFeature(features = { KnownFeatures.FEATURE_OPTIMISATION_SIMILARITY, KnownFeatures.FEATURE_OPTIMISATION_HILLCLIMB })
+@RequireFeature(value = { KnownFeatures.FEATURE_OPTIMISATION_SIMILARITY, KnownFeatures.FEATURE_OPTIMISATION_HILLCLIMB })
 public class MultiObjectiveSimilarityTests extends AbstractMicroTestCase {
 
 	// Which scenario data to import
