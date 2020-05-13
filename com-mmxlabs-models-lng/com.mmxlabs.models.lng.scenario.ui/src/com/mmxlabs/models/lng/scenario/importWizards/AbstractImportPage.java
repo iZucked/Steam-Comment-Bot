@@ -42,6 +42,7 @@ public abstract class AbstractImportPage extends WizardPage {
 	private static final String DELIMITER_KEY = "lastDelimiter";
 	private static final String DECIMAL_SEPARATOR_KEY = "lastDecimalSeparator";
 	private static final String SECTION_NAME = "BulkImportPage.section";
+	protected final boolean guided;
 
 	protected Control control = null;
 	// private RadioSelectionGroup dataImportGroup;
@@ -60,12 +61,21 @@ public abstract class AbstractImportPage extends WizardPage {
 	public static final int CHOICE_ALL_SCENARIOS = 0;
 	public static final int CHOICE_CURRENT_SCENARIO = CHOICE_ALL_SCENARIOS + 1;
 	public static final int CHOICE_SELECTED_SCENARIOS = CHOICE_CURRENT_SCENARIO + 1;
-
+	
 	public AbstractImportPage(final String pageName, final ScenarioInstance currentScenario) {
 		super(pageName);
 		this.currentScenario = currentScenario;
+		this.guided = false;
 		setTitle("Select data and scenarios");
-		setDescription("Choose scenario(s) and a file for "+getItemDescription()+" import.");
+		setDescription("Choose scenario(s) and a file for " + getItemDescription() + " import.");
+	}
+
+	public AbstractImportPage(final String pageName, final ScenarioInstance currentScenario, final boolean guided) {
+		super(pageName);
+		this.currentScenario = currentScenario;
+		this.guided = guided;
+		setTitle("Select data and scenarios");
+		setDescription("Choose scenario(s) and a file for " + getItemDescription() + " import.");
 	}
 
 	public abstract String getItemDescription();
@@ -301,6 +311,8 @@ public abstract class AbstractImportPage extends WizardPage {
 				getContainer().updateButtons();
 			}
 		});
+		
+		datafileC.setVisible(!guided);
 
 		// Composite separatorsC = new Composite(container, SWT.BORDER);
 		// final RowLayout l = new RowLayout();//(2, false);
@@ -329,6 +341,8 @@ public abstract class AbstractImportPage extends WizardPage {
 		csvLayoutData.grabExcessHorizontalSpace = true;
 		csvLayoutData.horizontalAlignment = SWT.FILL;
 		csvSelectionGroup.setLayoutData(csvLayoutData);
+		
+		csvSelectionGroup.setVisible(!guided);
 
 		// create a radiobutton group for specifying CSV import
 		decimalSelectionGroup = new RadioSelectionGroup(container, "Decimal separator", SWT.NONE, new String[] { "comma (\",\")", "period (\".\")" }, new int[] { CHOICE_COMMA, CHOICE_PERIOD });
@@ -339,6 +353,8 @@ public abstract class AbstractImportPage extends WizardPage {
 		decimalLayoutData.grabExcessHorizontalSpace = true;
 		decimalLayoutData.horizontalAlignment = SWT.FILL;
 		decimalSelectionGroup.setLayoutData(decimalLayoutData);
+		
+		decimalSelectionGroup.setVisible(!guided);
 
 		// get the default export directory from the settings
 		final IDialogSettings dialogSettings = Activator.getDefault().getDialogSettings();

@@ -9,8 +9,8 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class ImportPricingCalendarsPage extends AbstractImportPage {
 
-	public ImportPricingCalendarsPage(final String pageName, final ScenarioInstance currentScenario) {
-		super(pageName, currentScenario);
+	public ImportPricingCalendarsPage(final String pageName, final ScenarioInstance currentScenario, final boolean guided) {
+		super(pageName, currentScenario, guided);
 	}
 	
 	@Override

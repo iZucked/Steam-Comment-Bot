@@ -35,6 +35,7 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 public abstract class AbstractImportWizard extends Wizard implements IImportWizard {
 
 	private static final Logger log = LoggerFactory.getLogger(AbstractImportWizard.class);
+	protected final boolean guided;
 
 	private AbstractImportPage bip;
 	private List<ScenarioInstance> selectedScenarios;
@@ -46,6 +47,14 @@ public abstract class AbstractImportWizard extends Wizard implements IImportWiza
 	public AbstractImportWizard(final ScenarioInstance scenarioInstance, final String windowTitle) {
 		currentScenario = scenarioInstance;
 		setWindowTitle(windowTitle);
+		guided = false;
+	}
+	
+	public AbstractImportWizard(final ScenarioInstance scenarioInstance, final String windowTitle, final String importFilename) {
+		currentScenario = scenarioInstance;
+		setWindowTitle(windowTitle);
+		this.importFilename = importFilename;
+		guided = true;
 	}
 
 	@Override
@@ -66,15 +75,14 @@ public abstract class AbstractImportWizard extends Wizard implements IImportWiza
 	@Override
 	public boolean performFinish() {
 		selectedScenarios = bip.getSelectedScenarios();
-		importFilename = bip.getImportFilename();
 		csvSeparator = bip.getCsvSeparator();
 		decimalSeparator = bip.getDecimalSeparator();
+		if (!guided)
+			importFilename = bip.getImportFilename();
 
 		bip.saveDirectorySetting();
 
 		final List<ScenarioInstance> scenarios = getSelectedScenarios();
-		final String importFilename = getImportFilename();
-
 		if (scenarios != null && importFilename != null && !"".equals(importFilename)) {
 
 			final WorkspaceModifyOperation operation = new WorkspaceModifyOperation() {
@@ -112,6 +120,10 @@ public abstract class AbstractImportWizard extends Wizard implements IImportWiza
 
 	@Override
 	public boolean canFinish() {
+		if (guided) {
+			final File file = new File(this.importFilename);
+			return file.isFile() && file.canRead();
+		}
 		final File file = new File(bip.getImportFilename());
 		return file.isFile() && file.canRead();
 	}

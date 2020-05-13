@@ -60,12 +60,44 @@
          id="com.mmxlabs.datahub.update.distances"
          name="Update distances">
    </command>
+   <command
+         id="com.mmxlabs.datahub.update.calendars"
+         name="Update Calendars">
+   </command>
 </extension>
  <extension
          point="org.eclipse.ui.handlers">
       <handler
             class="com.mmxlabs.lngdataserver.lng.importers.distanceupdate.ui.DistanceUpdateCommandHandler"
             commandId="com.mmxlabs.datahub.update.distances">
+            <enabledWhen
+              >
+            <and>
+               <with
+                     variable="selection">
+                  <iterate
+                        ifEmpty="false">
+                     <instanceof
+                           value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                     </instanceof>
+                     <not>
+                        <test
+                              forcePluginActivation="true"
+                              property="com.mmxlabs.scenario.service.ui.flags.readonly">
+                        </test>
+                     </not>
+                  </iterate>
+               </with>
+               <count
+                     value="1">
+               </count>
+            </and>
+         </enabledWhen>
+      </handler>
+      
+      <handler
+            class="com.mmxlabs.lngdataserver.lng.importers.calendars.ui.CalendarsUpdateCommandHandler"
+            commandId="com.mmxlabs.datahub.update.calendars">
             <enabledWhen
               >
             <and>
@@ -248,6 +280,11 @@
       <command
             commandId="com.mmxlabs.datahub.update.distances"
             label="Update Distances"
+            style="push">
+      </command>
+      <command
+            commandId="com.mmxlabs.datahub.update.calendars"
+            label="Update Calendars"
             style="push">
       </command>
    </menuContribution>

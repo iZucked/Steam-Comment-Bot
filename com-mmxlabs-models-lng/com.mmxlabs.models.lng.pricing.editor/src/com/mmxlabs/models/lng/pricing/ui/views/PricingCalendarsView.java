@@ -168,7 +168,6 @@ public class PricingCalendarsView extends ScenarioTableViewerView<PricingCalenda
 		label.setText("Calendar: ");
 		
 		calendarSelectionViewer = new ComboViewer(selector);
-		
 		{
 			Button btn = new Button(selector, SWT.PUSH);
 			btn.setText("Edit");
