@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
-package com.mmxlabs.lngdataserver.server;
+package com.mmxlabs.hub.services.user;
 
 import java.util.HashMap;
 import java.util.LinkedList;

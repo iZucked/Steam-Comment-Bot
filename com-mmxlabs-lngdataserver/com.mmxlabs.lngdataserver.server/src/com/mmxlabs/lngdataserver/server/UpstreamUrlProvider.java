@@ -31,6 +31,7 @@ import org.eclipse.swt.widgets.Display;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.hub.common.http.HttpClientUtil;
 import com.mmxlabs.lngdataserver.server.dialogs.AuthDetailsPromptDialog;
 import com.mmxlabs.lngdataserver.server.preferences.StandardDateRepositoryPreferenceConstants;
 import com.mmxlabs.rcp.common.RunnerHelper;

@@ -9,12 +9,15 @@ import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mmxlabs.hub.common.http.HttpClientUtil;
+import com.mmxlabs.hub.services.user.IUserPermissionsService;
+import com.mmxlabs.hub.services.user.UserPermissions;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class UserPermissionsService {
+public class UserPermissionsService implements IUserPermissionsService {
 
 	private static final String USER_PERMISSIONS = "/user/permissions";
 
@@ -58,7 +61,7 @@ public class UserPermissionsService {
 		} catch (IOException e) {
 			// Ignore errors
 		}
-		
+
 	}
 
 	public synchronized void updateUserPermissions() throws IOException {
@@ -89,6 +92,7 @@ public class UserPermissionsService {
 		}
 	}
 
+	@Override
 	public synchronized boolean isPermitted(String service, String permission) {
 		if (!hubSupportsPermissions) {
 			return true;
@@ -107,6 +111,7 @@ public class UserPermissionsService {
 		return false;
 	}
 
+	@Override
 	public boolean hubSupportsPermissions() {
 		return hubSupportsPermissions;
 	}

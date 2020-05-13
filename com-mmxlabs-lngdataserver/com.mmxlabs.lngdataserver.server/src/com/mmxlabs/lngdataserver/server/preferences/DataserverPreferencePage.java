@@ -34,10 +34,10 @@ import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
+import com.mmxlabs.hub.common.http.HttpClientUtil;
+import com.mmxlabs.hub.common.http.HttpClientUtil.CertInfo;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lngdataserver.server.DataServerActivator;
-import com.mmxlabs.lngdataserver.server.HttpClientUtil;
-import com.mmxlabs.lngdataserver.server.HttpClientUtil.CertInfo;
 
 import okhttp3.CipherSuite;
 import okhttp3.OkHttpClient;
