@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
@@ -25,6 +24,8 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.AtoBviaCLookupRecord;
+import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.BasicLocation;
+import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.LocationsVersion;
 import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.OtherIdentifiers;
 import com.mmxlabs.models.lng.port.Port;
@@ -39,9 +40,19 @@ public class DistancesLinesToScenarioCopier {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DistancesLinesToScenarioCopier.class);
 
-	public static CompoundCommand getUpdateCommand(final @NonNull EditingDomain editingDomain, final @NonNull PortModel portModel, final @NonNull List<AtoBviaCLookupRecord> records) {
+	public static CompoundCommand getUpdateCommand(final @NonNull EditingDomain editingDomain, final @NonNull PortModel portModel, LocationsVersion locationsVersion,
+			final @NonNull List<AtoBviaCLookupRecord> records) {
 
 		final CompoundCommand cmd = new CompoundCommand("Update distances");
+
+		Map<String, String> fallbackMapping = new HashMap<>();
+		for (BasicLocation bl : locationsVersion.getLocations()) {
+			String fallbackId = bl.getFallbackUpstreamId();
+			if (fallbackId != null) {
+				fallbackMapping.put(bl.getUpstreamID(), bl.getFallbackUpstreamId());
+			}
+		}
+		//
 
 		// Clear existing route lines before the port delete command
 		for (final Route l_route : portModel.getRoutes()) {
@@ -155,6 +166,25 @@ public class DistancesLinesToScenarioCopier {
 									final AtoBviaCLookupRecord altRecord = recordsMap.get(Pair.of(toID, fromID));
 									if (altRecord != null && altRecord.getErrorCode() == null && altRecord.getDistance() >= 0.0) {
 										record = altRecord;
+									}
+								}
+
+								if (record == null || record.getErrorCode() != null || record.getDistance() < 1.0) {
+
+									if (fallbackMapping.containsKey(fromID)) {
+										final AtoBviaCLookupRecord altRecord = recordsMap.get(Pair.of(fallbackMapping.get(fromID), toID));
+										if (altRecord != null && altRecord.getErrorCode() == null && altRecord.getDistance() >= 0.0) {
+											record = altRecord;
+										}
+									}
+								}
+								if (record == null || record.getErrorCode() != null || record.getDistance() < 1.0) {
+
+									if (fallbackMapping.containsKey(toID)) {
+										final AtoBviaCLookupRecord altRecord = recordsMap.get(Pair.of(fromID, fallbackMapping.get(toID)));
+										if (altRecord != null && altRecord.getErrorCode() == null && altRecord.getDistance() >= 0.0) {
+											record = altRecord;
+										}
 									}
 								}
 

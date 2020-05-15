@@ -19,6 +19,7 @@ public class BasicLocation {
 
 	private String mmxId;
 	private String upstreamID;
+	private String fallbackUpstreamId;
 
 	private boolean virtual = false;
 
@@ -83,6 +84,14 @@ public class BasicLocation {
 
 	public void setVirtual(boolean virtual) {
 		this.virtual = virtual;
+	}
+
+	public String getFallbackUpstreamId() {
+		return fallbackUpstreamId;
+	}
+
+	public void setFallbackUpstreamId(String fallbackUpstreamId) {
+		this.fallbackUpstreamId = fallbackUpstreamId;
 	}
 
 	@Override

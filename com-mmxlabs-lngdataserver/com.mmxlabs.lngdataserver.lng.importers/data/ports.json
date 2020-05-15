@@ -2125,7 +2125,8 @@
     "country" : "Pakistan",
     "timeZone" : "Asia/Karachi"
   },
-  "upstreamID" : "PK0021"
+  "upstreamID" : "PK0021",
+  "fallbackUpstreamId" : "PK0004"
 }, {
   "mmxId" : "L_CP_Colon",
   "virtual" : false,
@@ -3025,7 +3026,8 @@
     "country" : "Australia",
     "timeZone" : "Australia/Darwin"
   },
-  "upstreamID" : "AU0329"
+  "upstreamID" : "AU0438",
+  "fallbackUpstreamId" : "AU0329"
 } ],
   "routingPoints": [
     {

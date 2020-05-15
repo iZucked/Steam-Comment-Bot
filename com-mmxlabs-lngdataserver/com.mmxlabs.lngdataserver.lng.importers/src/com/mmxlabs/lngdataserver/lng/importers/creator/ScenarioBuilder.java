@@ -330,8 +330,8 @@ public class ScenarioBuilder {
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		mapper.registerModule(new JavaTimeModule());
 
+		final LocationsVersion locationsVersion;
 		{
-			final LocationsVersion locationsVersion;
 			try (InputStream inputStream = ScenarioBuilder.class.getResourceAsStream("/ports.json")) {
 				locationsVersion = mapper.readValue(inputStream, LocationsVersion.class);
 			}
@@ -371,7 +371,7 @@ public class ScenarioBuilder {
 				});
 			}
 
-			final CompoundCommand command = DistancesLinesToScenarioCopier.getUpdateCommand(editingDomain, portModel, distanceRecords);
+			final CompoundCommand command = DistancesLinesToScenarioCopier.getUpdateCommand(editingDomain, portModel, locationsVersion, distanceRecords);
 			command.execute();
 		}
 
@@ -559,19 +559,20 @@ public class ScenarioBuilder {
 
 		}
 	}
+
 	public void importAssignments(InputStream inputStream) throws IOException {
 		{
-			
+
 			final DefaultImportContext context = new DefaultImportContext('.');
 			context.setRootObject(scenarioModelBuilder.getLNGScenarioModel());
 			context.registerNamedObjectsFromSubModels();
 			try (CSVReader reader = new CSVReader(',', inputStream)) {
-				
+
 				final AssignmentImporter importer = new AssignmentImporter();
 				importer.importAssignments(reader, context);
 			}
 			context.run();
-			
+
 		}
 	}
 

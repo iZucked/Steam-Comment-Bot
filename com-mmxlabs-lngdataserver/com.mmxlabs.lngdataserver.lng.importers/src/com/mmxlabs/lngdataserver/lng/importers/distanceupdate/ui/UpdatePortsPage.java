@@ -267,7 +267,7 @@ public class UpdatePortsPage extends WizardPage {
 							final EditingDomain editingDomain = modelReference.getEditingDomain();
 
 							{
-								final CompoundCommand command = DistancesLinesToScenarioCopier.getUpdateCommand(editingDomain, portModel, distanceRecords);
+								final CompoundCommand command = DistancesLinesToScenarioCopier.getUpdateCommand(editingDomain, portModel, locationRecords, distanceRecords);
 								monitor.worked(1);
 								monitor.subTask("Apply new matrices");
 								if (!command.canExecute()) {
