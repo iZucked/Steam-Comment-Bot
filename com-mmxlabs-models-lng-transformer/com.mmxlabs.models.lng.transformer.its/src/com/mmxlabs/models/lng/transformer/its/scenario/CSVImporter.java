@@ -134,6 +134,7 @@ public class CSVImporter {
 		dataMap.put(PricingModelImporter.CONVERSION_FACTORS_KEY, createURL(urlRoot, "Conversion Factors.csv"));
 		dataMap.put(PricingModelImporter.SETTLED_PRICES_KEY, createURL(urlRoot, "Settled Prices.csv"));
 		dataMap.put(PricingModelImporter.MARKET_INDEX_KEY, createURL(urlRoot, "Market Indices.csv"));
+		dataMap.put(PricingModelImporter.CURRENCY_CURVE_KEY, createURL(urlRoot, "Currency Curves.csv"));
 	}
 
 	public void importCostData(@NonNull final String urlRoot) throws MalformedURLException {
