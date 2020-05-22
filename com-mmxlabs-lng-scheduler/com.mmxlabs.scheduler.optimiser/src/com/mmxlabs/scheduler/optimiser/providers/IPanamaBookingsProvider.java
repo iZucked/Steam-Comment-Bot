@@ -66,6 +66,12 @@ public interface IPanamaBookingsProvider extends IDataComponentProvider {
 	 */
 	int getNorthboundMaxIdleDays();
 
+	/**
+	 * The amount of days a vessel will idle in front of the canal on a NORTHBOUND in order to try and get a spontaneous booking.
+	 * @return
+	 */
+	int getSouthboundMaxIdleDays();
+	
 	// Sorted
 	ImmutableMap<ECanalEntry, ImmutableList<IRouteOptionBooking>> getAssignedBookings();
 

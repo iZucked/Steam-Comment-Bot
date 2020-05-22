@@ -24,6 +24,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.google.inject.Injector;
 import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.NonLicenseFeatures;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CanalBookings;
@@ -292,7 +293,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 			}
 		});
 	}
-
+	
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void bookingButNoVoyageTest() {
@@ -818,8 +819,174 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
-	public void relaxedLimits_SouthBound_NotAvailable() {
+	public void relaxedLimits_SouthBound_NotEnoughIdleTime() {
 
+		NonLicenseFeatures.setSouthboundIdleTimeRuleEnabled(true);
+		
+		// map into same timezone to make expectations easier
+		portModelBuilder.setAllExistingPortsToUTC();
+
+		lngScenarioModel.setPromptPeriodStart(LocalDate.of(2017, 7, 1));
+
+		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(lngScenarioModel);
+		final CanalBookings canalBookings = cargoModel.getCanalBookings();
+
+		canalBookings.setStrictBoundaryOffsetDays(0);
+		canalBookings.setRelaxedBoundaryOffsetDays(60);
+		canalBookings.setFlexibleBookingAmountNorthbound(1);
+		canalBookings.setFlexibleBookingAmountSouthbound(0);
+
+		//Need at least 5 days of idle time to allow it to go through.
+		canalBookings.setSouthboundMaxIdleDays(5);
+
+		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
+		vesselAvailability.getVessel().setMaxSpeed(16.0);
+
+		@NonNull
+		final Port loadPort = portFinder.findPort("Sabine Pass");
+		@NonNull
+		final Port dischargePort = portFinder.findPort("Quintero");
+
+		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JULY, 1, 0, 0, 0);
+		// journey could be made direct
+		final LocalDateTime dischargeDate = loadDate.plusDays(11);
+
+		// Direct is twice as far as panama
+		distanceModelBuilder.setPortToPortDistance(loadPort, dischargePort, 10 * 16 * 24 * 2, Integer.MAX_VALUE, 10 * 16 * 24, true);
+
+		final LoadSlot loadSlot = cargoModelBuilder.makeFOBPurchase("L", loadDate.toLocalDate(), loadPort, null, entity, "5", 22.6) //
+				.withWindowStartTime(0) //
+				.withVisitDuration(24) //
+				.withWindowSize(0, TimePeriod.HOURS) //
+				.build();
+
+		final DischargeSlot dischargeSlot = cargoModelBuilder.makeDESSale("D", dischargeDate.toLocalDate(), dischargePort, null, entity, "7") //
+				.withWindowStartTime(dischargeDate.toLocalTime().getHour()) //
+				.withVisitDuration(24) //
+				.withWindowSize(0, TimePeriod.HOURS) //
+				.build();
+
+		evaluateWithLSOTest(scenarioRunner -> {
+
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+
+			final Injector injector = MicroTestUtils.createEvaluationInjector(scenarioToOptimiserBridge.getDataTransformer());
+			try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+				scope.enter();
+				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
+				@NonNull
+				final IModifiableSequences manipulatedSequences = sequencesManipulator
+						.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, loadSlot, dischargeSlot));
+
+				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
+				scheduler.setUseCanalBasedWindowTrimming(true);
+				scheduler.setUsePriceBasedWindowTrimming(false);
+				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(manipulatedSequences);
+				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
+
+				final IResource r0 = manipulatedSequences.getResources().get(0);
+
+				final IPortTimeWindowsRecord ptr_r0_cargo = records.get(r0).get(1);
+
+				assertEquals(AvailableRouteChoices.PANAMA_ONLY, ptr_r0_cargo.getSlotNextVoyageOptions(ptr_r0_cargo.getFirstSlot()));
+
+				final PanamaSlotsConstraintChecker checker = new PanamaSlotsConstraintChecker(PanamaSlotsConstraintCheckerFactory.NAME);//
+				injector.injectMembers(checker);
+
+				checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector()), null);
+				assertFalse(checker.checkConstraints(manipulatedSequences, null));
+			}
+		});
+	}
+	
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void relaxedLimits_SouthBound_EnoughIdleTime() {
+
+		NonLicenseFeatures.setSouthboundIdleTimeRuleEnabled(true);
+		
+		// map into same timezone to make expectations easier
+		portModelBuilder.setAllExistingPortsToUTC();
+
+		lngScenarioModel.setPromptPeriodStart(LocalDate.of(2017, 7, 1));
+
+		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(lngScenarioModel);
+		final CanalBookings canalBookings = cargoModel.getCanalBookings();
+
+		canalBookings.setStrictBoundaryOffsetDays(0);
+		canalBookings.setRelaxedBoundaryOffsetDays(60);
+		canalBookings.setFlexibleBookingAmountNorthbound(1);
+		canalBookings.setFlexibleBookingAmountSouthbound(0);
+
+		//Need at least 5 days of idle time to allow it to go through.
+		canalBookings.setSouthboundMaxIdleDays(5);
+
+		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
+		vesselAvailability.getVessel().setMaxSpeed(16.0);
+
+		@NonNull
+		final Port loadPort = portFinder.findPort("Sabine Pass");
+		@NonNull
+		final Port dischargePort = portFinder.findPort("Quintero");
+
+		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JULY, 1, 0, 0, 0);
+		// journey could be made direct
+		final LocalDateTime dischargeDate = loadDate.plusDays(16);
+
+		// Direct is twice as far as panama
+		distanceModelBuilder.setPortToPortDistance(loadPort, dischargePort, 10 * 16 * 24 * 2, Integer.MAX_VALUE, 10 * 16 * 24, true);
+
+		final LoadSlot loadSlot = cargoModelBuilder.makeFOBPurchase("L", loadDate.toLocalDate(), loadPort, null, entity, "5", 22.6) //
+				.withWindowStartTime(0) //
+				.withVisitDuration(24) //
+				.withWindowSize(0, TimePeriod.HOURS) //
+				.build();
+
+		final DischargeSlot dischargeSlot = cargoModelBuilder.makeDESSale("D", dischargeDate.toLocalDate(), dischargePort, null, entity, "7") //
+				.withWindowStartTime(dischargeDate.toLocalTime().getHour()) //
+				.withVisitDuration(24) //
+				.withWindowSize(0, TimePeriod.HOURS) //
+				.build();
+
+		evaluateWithLSOTest(scenarioRunner -> {
+
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+
+			final Injector injector = MicroTestUtils.createEvaluationInjector(scenarioToOptimiserBridge.getDataTransformer());
+			try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+				scope.enter();
+				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
+				@NonNull
+				final IModifiableSequences manipulatedSequences = sequencesManipulator
+						.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, loadSlot, dischargeSlot));
+
+				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
+				scheduler.setUseCanalBasedWindowTrimming(true);
+				scheduler.setUsePriceBasedWindowTrimming(false);
+				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(manipulatedSequences);
+				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
+
+				final IResource r0 = manipulatedSequences.getResources().get(0);
+
+				final IPortTimeWindowsRecord ptr_r0_cargo = records.get(r0).get(1);
+
+				assertEquals(AvailableRouteChoices.PANAMA_ONLY, ptr_r0_cargo.getSlotNextVoyageOptions(ptr_r0_cargo.getFirstSlot()));
+
+				final PanamaSlotsConstraintChecker checker = new PanamaSlotsConstraintChecker(PanamaSlotsConstraintCheckerFactory.NAME);//
+				injector.injectMembers(checker);
+
+				checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector()), null);
+				assertTrue(checker.checkConstraints(manipulatedSequences, null));
+			}
+		});
+	}
+	
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void relaxedLimits_SouthBound_NotAvailable_OldSouthboundLogic() {
+
+		NonLicenseFeatures.setSouthboundIdleTimeRuleEnabled(false);
+		
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
 
@@ -975,6 +1142,9 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void northbound_cant_direct_can_panama() {
 
+		//This test expects the Panama optimisation constraint to fail due to the old southbound panama logic, therefore we use the old logic for it.
+		NonLicenseFeatures.setSouthboundIdleTimeRuleEnabled(false);
+		
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
 

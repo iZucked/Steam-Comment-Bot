@@ -63,7 +63,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimeWindowsRecord;
  * 
  */
 public class FeasibleTimeWindowTrimmer {
-
+	
 	@Inject
 	@Named(SchedulerConstants.Key_UseCanalSlotBasedWindowTrimming)
 	private boolean checkPanamaCanalBookings = false;
@@ -521,7 +521,7 @@ public class FeasibleTimeWindowTrimmer {
 			// No shipping
 			return;
 		}
-
+		
 		final int size = sequence.size();
 		// filters out solutions with less than 2 elements (i.e. spot charters, etc.)
 		if (SequenceEvaluationUtils.shouldIgnoreSequence(sequence, vesselAvailability)) {
@@ -602,22 +602,22 @@ public class FeasibleTimeWindowTrimmer {
 								final int toCanal = visitDuration[index - 1] + panamaBookingsHelper.getTravelTimeToCanal(vessel, prevPortSlot.getPort(), true);
 								final int fromEntryPoint = panamaBookingsHelper.getTravelTimeFromCanalEntry(vessel, routeOptionEntry, portSlot.getPort());
 
-								final boolean northBound = distanceProvider.getRouteOptionDirection(prevPortSlot.getPort(), ERouteOption.PANAMA) == IDistanceProvider.RouteOptionDirection.NORTHBOUND;
+								final boolean northbound = distanceProvider.getRouteOptionDirection(prevPortSlot.getPort(), ERouteOption.PANAMA) == IDistanceProvider.RouteOptionDirection.NORTHBOUND;
 
 								int endTime = windowEndTime[index];
 								if (endTime == Integer.MAX_VALUE) {
 									// No window end, so estimate one. At worst we will travel at min speed.
 									int slowPanamaTime = distanceProvider.getTravelTime(ERouteOption.PANAMA, vessel, prevPortSlot.getPort(), portSlot.getPort(), vesselMinSpeed);
 
-									if (northBound) {
-										slowPanamaTime += panamaBookingsProvider.getNorthboundMaxIdleDays() * 24;
+									if (northbound || this.panamaBookingsHelper.isSouthboundIdleTimeRuleEnabled()) {
+										slowPanamaTime += getMaxIdleDays(northbound) * 24;
 									} else {
 										slowPanamaTime += panamaBookingsProvider.getMarginInHours();
 									}
 									endTime = windowEndTime[index - 1] + visitDuration[index - 1] + slowPanamaTime;
 								}
 								final int latestPanamaTime = endTime - fromEntryPoint
-										- (northBound ? panamaBookingsProvider.getNorthboundMaxIdleDays() * 24 : panamaBookingsProvider.getMarginInHours()); // Include
+										- ((northbound || this.panamaBookingsHelper.isSouthboundIdleTimeRuleEnabled()) ? getMaxIdleDays(northbound) * 24 : panamaBookingsProvider.getMarginInHours()); // Include
 								// 3am?
 
 								PanamaPeriod panamaPeriod;
@@ -630,8 +630,8 @@ public class FeasibleTimeWindowTrimmer {
 									if (windowStartTime[index - 1] + toCanal <= panamaBookingsProvider.getRelaxedBoundary()) {
 										// Reclassify southbound voyages as relaxed. Northbound we leave for the price
 										// based trimmer
-										if (northBound) {
-											final int panamaIdleTime = panamaBookingsProvider.getNorthboundMaxIdleDays() * 24;
+										if (northbound || this.panamaBookingsHelper.isSouthboundIdleTimeRuleEnabled()) {
+											final int panamaIdleTime = getMaxIdleDays(northbound) * 24;
 											currentPortTimeWindowsRecord.setSlotNextVoyageOptions(prevPortSlot, AvailableRouteChoices.OPTIMAL, PanamaPeriod.Beyond);
 											// Notify price based trimmer of variable choice
 											currentPortTimeWindowsRecord.setSlotAdditionalPanamaDetails(p_prevPortSlot, true, panamaIdleTime);
@@ -703,13 +703,13 @@ public class FeasibleTimeWindowTrimmer {
 									if (pass != 0) {
 										// In the first pass, do not set the voyage choice as this may cause problems
 										// further down the line (however, northbound Panama may be allowed)
-										if (northBound) {
-											// if northbound, allow Panama
-											final int panamaIdleTime = panamaBookingsProvider.getNorthboundMaxIdleDays() * 24;
+										if (northbound || this.panamaBookingsHelper.isSouthboundIdleTimeRuleEnabled()) {
+											// if northbound or southbound idle rule turned on also, allow Panama
+											final int panamaIdleTime = getMaxIdleDays(northbound) * 24;
 											travelTimeData.setMinTravelTime(index - 1, Math.min(Math.min(suezTravelTime, directTravelTime), panamaTravelTime + panamaIdleTime));
 											currentPortTimeWindowsRecord.setSlotNextVoyageOptions(p_prevPortSlot, AvailableRouteChoices.OPTIMAL, panamaPeriod);
 											currentPortTimeWindowsRecord.setSlotAdditionalPanamaDetails(p_prevPortSlot, true, panamaIdleTime);
-										} else {
+										} else { //OLD southbound rule:
 											// journey can be made direct (or it does not go across Panama)
 											travelTimeData.setMinTravelTime(index - 1, Math.min(suezTravelTime, directTravelTime));
 											currentPortTimeWindowsRecord.setSlotNextVoyageOptions(p_prevPortSlot, AvailableRouteChoices.EXCLUDE_PANAMA, panamaPeriod);
@@ -766,21 +766,23 @@ public class FeasibleTimeWindowTrimmer {
 
 									if (!foundBooking) {
 
-										final int delayedPanamaTravelTime = panamaTravelTime + panamaBookingsProvider.getNorthboundMaxIdleDays() * 24;
+										final int delayedPanamaTravelTime = panamaTravelTime + getMaxIdleDays(northbound) * 24;
 
-										// if no booking was assigned and we are within the strict boundary, set time to
-										// direct
-										if (!northBound && panamaPeriod == PanamaPeriod.Strict) {
-											travelTimeData.setMinTravelTime(index - 1, Math.min(suezTravelTime, directTravelTime));
-											currentPortTimeWindowsRecord.setSlotNextVoyageOptions(prevPortSlot, AvailableRouteChoices.EXCLUDE_PANAMA, panamaPeriod);
-											changed = true;
+										if (!this.panamaBookingsHelper.isSouthboundIdleTimeRuleEnabled()) {
+											//OLD southbound rule:
+											//If no booking was assigned and we are within the strict boundary, set time to direct
+											if (!northbound && panamaPeriod == PanamaPeriod.Strict) {
+												travelTimeData.setMinTravelTime(index - 1, Math.min(suezTravelTime, directTravelTime));
+												currentPortTimeWindowsRecord.setSlotNextVoyageOptions(prevPortSlot, AvailableRouteChoices.EXCLUDE_PANAMA, panamaPeriod);
+												changed = true;
+											}																		
 										}
-
-										if (northBound && delayedPanamaTravelTime < Math.min(directTravelTime, suezTravelTime)) {
+										
+										if ((northbound || this.panamaBookingsHelper.isSouthboundIdleTimeRuleEnabled()) && delayedPanamaTravelTime < Math.min(directTravelTime, suezTravelTime)) {
 											travelTimeData.setMinTravelTime(index - 1, delayedPanamaTravelTime);
 											currentPortTimeWindowsRecord.setSlotNextVoyageOptions(prevPortSlot, AvailableRouteChoices.PANAMA_ONLY, panamaPeriod);
 											changed = true;
-										} else if (northBound) {
+										} else if (northbound || this.panamaBookingsHelper.isSouthboundIdleTimeRuleEnabled()) {
 											travelTimeData.setMinTravelTime(index - 1, Math.min(directTravelTime, suezTravelTime));
 											currentPortTimeWindowsRecord.setSlotNextVoyageOptions(prevPortSlot, AvailableRouteChoices.EXCLUDE_PANAMA, panamaPeriod);
 											changed = true;
@@ -842,7 +844,7 @@ public class FeasibleTimeWindowTrimmer {
 								@Nullable
 								final ECanalEntry panamaEntry = distanceProvider.getRouteOptionCanalEntrance(prevPortSlot.getPort(), ERouteOption.PANAMA);
 								if (panamaEntry != null) {
-									final boolean northBound = distanceProvider.getRouteOptionDirection(prevPortSlot.getPort(),
+									final boolean northbound = distanceProvider.getRouteOptionDirection(prevPortSlot.getPort(),
 											ERouteOption.PANAMA) == IDistanceProvider.RouteOptionDirection.NORTHBOUND;
 									//
 									final int toCanal = visitDuration[index] + panamaBookingsHelper.getTravelTimeToCanal(vessel, prevPortSlot.getPort(), true);
@@ -854,8 +856,8 @@ public class FeasibleTimeWindowTrimmer {
 										// Calculate latest panama arrival time. This includes excess delays. Will be
 										// adjusted based on available bookings later
 										int latestPanamaTime = endTime - fromEntryPoint;
-										if (northBound) {
-											latestPanamaTime -= panamaBookingsProvider.getNorthboundMaxIdleDays() * 24;
+										if (northbound || this.panamaBookingsHelper.isSouthboundIdleTimeRuleEnabled()) {
+											latestPanamaTime -= getMaxIdleDays(northbound) * 24;
 										} else {
 											latestPanamaTime -= panamaBookingsProvider.getMarginInHours();
 										}
@@ -935,6 +937,15 @@ public class FeasibleTimeWindowTrimmer {
 
 	}
 
+	private int getMaxIdleDays(boolean northbound) {
+		if (northbound) {
+			return panamaBookingsProvider.getNorthboundMaxIdleDays();
+		}
+		else {
+			return panamaBookingsProvider.getSouthboundMaxIdleDays();
+		}
+	}
+	
 	/**
 	 * Check whether we should go through Panama if we've made a booking. For
 	 * example, we shouldn't go through if we will be late through Panama and can

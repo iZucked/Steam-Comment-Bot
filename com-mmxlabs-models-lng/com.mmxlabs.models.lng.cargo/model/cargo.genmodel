@@ -342,6 +342,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CanalBookings/flexibleBookingAmountNorthbound"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CanalBookings/flexibleBookingAmountSouthbound"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CanalBookings/northboundMaxIdleDays"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CanalBookings/southboundMaxIdleDays"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//ScheduleSpecification">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//ScheduleSpecification/vesselScheduleSpecifications"/>

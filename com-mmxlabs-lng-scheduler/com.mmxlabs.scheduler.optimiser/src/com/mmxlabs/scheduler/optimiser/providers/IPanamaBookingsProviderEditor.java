@@ -51,4 +51,6 @@ public interface IPanamaBookingsProviderEditor extends IPanamaBookingsProvider {
 	void setRelaxedBoundary(int boundary);
 
 	void setArrivalMargin(int margin);
+
+	void setSouthboundMaxIdleDays(int maxIdleDays);
 }

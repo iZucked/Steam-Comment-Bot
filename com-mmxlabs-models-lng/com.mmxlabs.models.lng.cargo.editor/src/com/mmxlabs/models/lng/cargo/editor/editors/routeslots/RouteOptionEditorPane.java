@@ -59,6 +59,7 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 	// private FormattedText flexEditorNorthbound;
 	private FormattedText flexEditorSouthbound;
 	private FormattedText maxIdleNorthboundEditor;
+	private FormattedText maxIdleSouthboundEditor;
 	private FormattedText marginEditor;
 
 	private Label todayLabel_Strict;
@@ -77,6 +78,10 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 			}
 			if (msg.getFeature() == CargoPackage.Literals.CANAL_BOOKINGS__NORTHBOUND_MAX_IDLE_DAYS) {
 				maxIdleNorthboundEditor.setValue(msg.getNewValue());
+				return;
+			}
+			if (msg.getFeature() == CargoPackage.Literals.CANAL_BOOKINGS__SOUTHBOUND_MAX_IDLE_DAYS) {
+				maxIdleSouthboundEditor.setValue(msg.getNewValue());
 				return;
 			}
 			if (msg.getFeature() == CargoPackage.Literals.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND) {
@@ -280,6 +285,30 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 				});
 				maxIdleNorthboundEditor.getControl().setToolTipText("The amount of days a vessel will idle at the canal in order to try and get a spontanous booking.");
 
+				final Label lblS = new Label(parametersParent, SWT.NONE);
+				lblS.setText("Southbound maximum idle");
+				lblS.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.CENTER).create());
+
+				final Composite southParent = new Composite(parametersParent, SWT.NONE);
+				southParent.setLayout(GridLayoutFactory.fillDefaults().numColumns(5).equalWidth(false).spacing(3, 0).margins(0, 7).create());
+			
+				maxIdleSouthboundEditor = new FormattedText(southParent);
+				maxIdleSouthboundEditor.setFormatter(new IntegerFormatter());
+				maxIdleSouthboundEditor.getControl().setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).hint(30, SWT.DEFAULT).create());
+				maxIdleSouthboundEditor.getControl().addModifyListener(new ModifyListener() {
+
+					@Override
+					public void modifyText(ModifyEvent e) {
+						Object newValue = maxIdleSouthboundEditor.getValue();
+						if (canalBookingsModel != null && newValue instanceof Integer && !Objects.equals(newValue, canalBookingsModel.getSouthboundMaxIdleDays())) {
+							final Command cmd = SetCommand.create(getEditingDomain(), canalBookingsModel, CargoPackage.eINSTANCE.getCanalBookings_SouthboundMaxIdleDays(), newValue);
+							getEditingDomain().getCommandStack().execute(cmd);
+						}
+					}
+
+				});
+				maxIdleSouthboundEditor.getControl().setToolTipText("The amount of days a vessel will idle at the canal in order to try and get a spontanous booking.");
+	
 				final Label lbl3b = new Label(northParent, SWT.NONE);
 				lbl3b.setText(" days");
 				lbl3b.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).create());
@@ -349,6 +378,7 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 			strictEditor.setValue(canalBookingsModel.getStrictBoundaryOffsetDays());
 			relaxedEditor.setValue(canalBookingsModel.getRelaxedBoundaryOffsetDays());
 			maxIdleNorthboundEditor.setValue(canalBookingsModel.getNorthboundMaxIdleDays());
+			maxIdleSouthboundEditor.setValue(canalBookingsModel.getNorthboundMaxIdleDays());
 			flexEditorSouthbound.setValue(canalBookingsModel.getFlexibleBookingAmountSouthbound());
 			marginEditor.setValue(canalBookingsModel.getArrivalMarginHours());
 			{
@@ -362,6 +392,7 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 			strictEditor.setValue(0);
 			relaxedEditor.setValue(0);
 			maxIdleNorthboundEditor.setValue(0);
+			maxIdleSouthboundEditor.setValue(0);
 			flexEditorSouthbound.setValue(0);
 			marginEditor.setValue(0);
 		}

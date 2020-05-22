@@ -6189,13 +6189,22 @@ public interface CargoPackage extends EPackage {
 	int CANAL_BOOKINGS__NORTHBOUND_MAX_IDLE_DAYS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
 
 	/**
+	 * The feature id for the '<em><b>Southbound Max Idle Days</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKINGS__SOUTHBOUND_MAX_IDLE_DAYS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
+
+	/**
 	 * The number of structural features of the '<em>Canal Bookings</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL_BOOKINGS_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
+	int CANAL_BOOKINGS_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -9678,6 +9687,17 @@ public interface CargoPackage extends EPackage {
 	EAttribute getCanalBookings_NorthboundMaxIdleDays();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CanalBookings#getSouthboundMaxIdleDays <em>Southbound Max Idle Days</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Southbound Max Idle Days</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CanalBookings#getSouthboundMaxIdleDays()
+	 * @see #getCanalBookings()
+	 * @generated
+	 */
+	EAttribute getCanalBookings_SouthboundMaxIdleDays();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.ScheduleSpecification <em>Schedule Specification</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -12039,6 +12059,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CANAL_BOOKINGS__NORTHBOUND_MAX_IDLE_DAYS = eINSTANCE.getCanalBookings_NorthboundMaxIdleDays();
+
+		/**
+		 * The meta object literal for the '<em><b>Southbound Max Idle Days</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CANAL_BOOKINGS__SOUTHBOUND_MAX_IDLE_DAYS = eINSTANCE.getCanalBookings_SouthboundMaxIdleDays();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.ScheduleSpecificationImpl <em>Schedule Specification</em>}' class.
