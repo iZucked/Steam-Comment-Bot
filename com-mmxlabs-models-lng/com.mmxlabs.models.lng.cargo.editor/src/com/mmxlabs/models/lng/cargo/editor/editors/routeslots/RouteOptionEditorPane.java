@@ -33,6 +33,7 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.license.features.NonLicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -84,9 +85,11 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 				maxIdleSouthboundEditor.setValue(msg.getNewValue());
 				return;
 			}
-			if (msg.getFeature() == CargoPackage.Literals.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND) {
-				flexEditorSouthbound.setValue(msg.getNewValue());
-				return;
+			if (!NonLicenseFeatures.isSouthboundIdleTimeRuleEnabled()) {
+				if (msg.getFeature() == CargoPackage.Literals.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND) {
+					flexEditorSouthbound.setValue(msg.getNewValue());
+					return;
+				}
 			}
 			if (msg.getFeature() == CargoPackage.Literals.CANAL_BOOKINGS__RELAXED_BOUNDARY_OFFSET_DAYS) {
 				relaxedEditor.setValue(msg.getNewValue());
@@ -208,7 +211,9 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 				todayLabel_Relaxed.setText("XX/XX/XXXX");
 				todayLabel_Relaxed.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).minSize(1000, -1).create());
 			}
+			if (!NonLicenseFeatures.isSouthboundIdleTimeRuleEnabled())
 			{
+				//Only add it to the GUI if we are using old southbound rules.
 				final Label lbl4 = new Label(parametersParent, SWT.NONE);
 				lbl4.setText("Flexible bookings southbound ");
 				lbl4.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).create());
@@ -285,6 +290,10 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 				});
 				maxIdleNorthboundEditor.getControl().setToolTipText("The amount of days a vessel will idle at the canal in order to try and get a spontanous booking.");
 
+				final Label lbl3b = new Label(northParent, SWT.NONE);
+				lbl3b.setText(" days");
+				lbl3b.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).create());
+				
 				final Label lblS = new Label(parametersParent, SWT.NONE);
 				lblS.setText("Southbound maximum idle");
 				lblS.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.CENTER).create());
@@ -309,10 +318,9 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 				});
 				maxIdleSouthboundEditor.getControl().setToolTipText("The amount of days a vessel will idle at the canal in order to try and get a spontanous booking.");
 	
-				final Label lbl3b = new Label(northParent, SWT.NONE);
-				lbl3b.setText(" days");
-				lbl3b.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).create());
-
+				final Label lbl4b = new Label(southParent, SWT.NONE);
+				lbl4b.setText(" days");
+				lbl4b.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).create());
 			}
 			{
 
@@ -379,7 +387,9 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 			relaxedEditor.setValue(canalBookingsModel.getRelaxedBoundaryOffsetDays());
 			maxIdleNorthboundEditor.setValue(canalBookingsModel.getNorthboundMaxIdleDays());
 			maxIdleSouthboundEditor.setValue(canalBookingsModel.getNorthboundMaxIdleDays());
-			flexEditorSouthbound.setValue(canalBookingsModel.getFlexibleBookingAmountSouthbound());
+			if (!NonLicenseFeatures.isSouthboundIdleTimeRuleEnabled()) {
+				flexEditorSouthbound.setValue(canalBookingsModel.getFlexibleBookingAmountSouthbound());
+			}
 			marginEditor.setValue(canalBookingsModel.getArrivalMarginHours());
 			{
 				final LocalDateTextFormatter formatter = new LocalDateTextFormatter();
@@ -393,7 +403,9 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 			relaxedEditor.setValue(0);
 			maxIdleNorthboundEditor.setValue(0);
 			maxIdleSouthboundEditor.setValue(0);
-			flexEditorSouthbound.setValue(0);
+			if (!NonLicenseFeatures.isSouthboundIdleTimeRuleEnabled()) {
+				flexEditorSouthbound.setValue(0);
+			}
 			marginEditor.setValue(0);
 		}
 
