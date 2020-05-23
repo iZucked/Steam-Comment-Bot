@@ -23,6 +23,7 @@ import com.google.inject.Injector;
 import com.google.inject.name.Names;
 import com.mmxlabs.common.time.Days;
 import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.NonLicenseFeatures;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -1037,6 +1038,11 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void maxDurationWithOpenEndAndHireCostEndRulesTest() throws Exception {
+		
+		if (!NonLicenseFeatures.isSouthboundIdleTimeRuleEnabled()) {
+			return; //This test is only applicable to old South-bound panama rules, as new south-bound idle rule allows existing panama voyages and flags as a warning in validation.
+		}
+		
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
 
@@ -1048,6 +1054,7 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 		cargoModel.getCanalBookings().setRelaxedBoundaryOffsetDays(100);
 
 		cargoModel.getCanalBookings().setFlexibleBookingAmountSouthbound(0);
+			
 		cargoModel.getCanalBookings().setNorthboundMaxIdleDays(5);
 		cargoModel.getCanalBookings().setArrivalMarginHours(12);
 
@@ -1075,8 +1082,8 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 				.withVisitDuration(36) //
 
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2018, Month.FEBRUARY, 1), port2, null, entity, "7") //
-				.withWindowSize(1, TimePeriod.MONTHS) //
+				.makeDESSale("D1", LocalDate.of(2018, Month.FEBRUARY, 15), port2, null, entity, "7") //
+				.withWindowSize(1, TimePeriod.DAYS) //
 				.withVisitDuration(36) //
 
 				.build() //
