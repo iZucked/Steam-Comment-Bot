@@ -365,6 +365,15 @@
             </command>
          </menuContribution>
          !-->
+         <menuContribution
+               allPopups="false"
+               locationURI="menu:window?after=windowCustomStart">
+            <command
+                  commandId="com.mmxlabs.lingo.reports.views.schedule.ConfigureCustomReportsHandler"
+                  label="Reports Manager..."
+                  style="push">
+            </command>
+         </menuContribution>
      </extension>
       <extension
             point="org.eclipse.ui.commands">
@@ -466,7 +475,7 @@
                  description="Update the start of the scenario by removing old data and freezing near-term data."
                  id="com.mmxlabs.models.lng.scenario.ui.rollforward"
                  name="Roll Forward">
-           </command>          
+           </command>
       </extension>
       <extension
             point="org.eclipse.ui.commandImages">

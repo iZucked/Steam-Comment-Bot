@@ -18,7 +18,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.google.common.base.Joiner;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.hub.common.http.HttpClientUtil;
 import com.mmxlabs.hub.common.http.IProgressListener;

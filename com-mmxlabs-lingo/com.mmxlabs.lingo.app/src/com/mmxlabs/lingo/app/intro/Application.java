@@ -44,6 +44,7 @@ import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.license.features.pluginxml.PluginRegistryHook;
 import com.mmxlabs.license.ssl.LicenseChecker;
 import com.mmxlabs.license.ssl.LicenseChecker.LicenseState;
+import com.mmxlabs.lingo.reports.customizable.CustomReportsRegistryHook;
 import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
 import com.mmxlabs.lngdataserver.server.UserPermissionsService;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -334,6 +335,8 @@ public class Application implements IApplication {
 	private void initAccessControl() {
 		PluginRegistryHook.initialisePluginXMLEnablements();
 
+		CustomReportsRegistryHook.initialisePluginXMLEnablements();
+		
 		ReplaceableViewManager.initialiseReplaceableViews();
 	}
 

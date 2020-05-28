@@ -60,6 +60,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.lingo.reports.internal.Activator;
+import com.mmxlabs.lingo.reports.views.AbstractConfigurableGridReportView;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
 import com.mmxlabs.models.ui.tabular.columngeneration.IColumnInfoProvider;
 
@@ -79,6 +80,10 @@ import com.mmxlabs.models.ui.tabular.columngeneration.IColumnInfoProvider;
 public abstract class ColumnConfigurationDialog extends TrayDialog {
 
 	private static int RESET_ID = IDialogConstants.CLIENT_ID + 1;
+	
+	private static int SAVE_ID = RESET_ID + 1;
+	
+	private static int PUBLISH_ID = SAVE_ID + 1;
 
 	/** The list contains columns that are currently visible in viewer */
 	private List<Object> visible;
@@ -91,7 +96,7 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 	private Button upButton, downButton;
 
 	private Button toVisibleBtt, toNonVisibleBtt;
-
+	
 	private Label widthLabel;
 	private Text widthText;
 
@@ -109,6 +114,8 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 
 	final List<CheckboxInfoManager> checkboxInfo = new ArrayList<>();
 
+	AbstractConfigurableGridReportView abstractConfigurableGridReportView;
+	
 	/*
 	 * private Set<String> rowCheckBoxStore; private String[] rowCheckBoxStrings;
 	 * 
@@ -122,6 +129,12 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 	 */
 	public ColumnConfigurationDialog(final Shell parentShell) {
 		super(parentShell);
+	}
+
+	public ColumnConfigurationDialog(final Shell parentShell, AbstractConfigurableGridReportView abstractConfigurableGridReportView) {
+		super(parentShell);
+		this.abstractConfigurableGridReportView = abstractConfigurableGridReportView;
+		
 	}
 
 	@Override
@@ -149,7 +162,7 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 			}
 
 		});
-		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
+		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);	
 	}
 
 	/**
@@ -1199,11 +1212,13 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 	public static class OptionInfo {
 		public final String id;
 		public final String label;
+		public final String type;
 		public Button button = null;
 
-		public OptionInfo(String id, String label) {
+		public OptionInfo(String id, String label, String type) {
 			this.id = id;
 			this.label = label;
+			this.type = type;
 		}
 
 		public static Collection<? extends String> getIds(OptionInfo[] options) {
