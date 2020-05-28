@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2020
+    All rights reserved.
+
+-->
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="com.mmxlabs.lngdataserver.integration.reports.custom.TopCustomReportDataRepository">
+   <implementation class="com.mmxlabs.lngdataserver.integration.reports.custom.TopCustomReportDataRepository"/>
+   <service>
+      <provide interface="com.mmxlabs.lingo.reports.services.ICustomReportDataRepository"/>
+   </service>
+</scr:component>

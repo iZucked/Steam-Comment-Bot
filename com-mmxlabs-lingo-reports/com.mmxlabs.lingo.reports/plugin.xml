@@ -1021,6 +1021,11 @@
             id="com.mmxlabs.lingo.reports.comparescenarios"
             name="Compare Scenarios">
       </command>
+      <command
+            defaultHandler="com.mmxlabs.lingo.reports.views.schedule.ConfigureCustomReportsHandler"
+            id="com.mmxlabs.lingo.reports.views.schedule.ConfigureCustomReportsHandler"
+            name="Configure Custom Reports">
+      </command> 
    </extension>
    <extension
          point="org.eclipse.ui.menus">

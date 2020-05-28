@@ -56,7 +56,6 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
-import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlockManager;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnType;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
@@ -71,7 +70,7 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
  */
 public abstract class AbstractConfigurableScheduleReportView extends AbstractConfigurableGridReportView {
 
-	private final ScheduleBasedReportBuilder builder;
+	protected final ScheduleBasedReportBuilder builder;
 
 	@Inject(optional = true)
 	private Iterable<IScheduleBasedColumnFactoryExtension> columnFactoryExtensions;

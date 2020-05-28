@@ -47,10 +47,11 @@ import org.eclipse.ui.internal.registry.IActionSetDescriptor;
 import org.eclipse.ui.menus.CommandContributionItem;
 import org.eclipse.ui.menus.CommandContributionItemParameter;
 
+import com.mmxlabs.lingo.reports.views.schedule.CustomReportsRegistry;
+
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.license.ssl.LicenseChecker;
-
 /**
  * 
  * Copy of {@link WorkbenchActionBuilder}. Need to build our own version at some point (rebase on version in history?)
@@ -75,7 +76,9 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	
 	public static final String DATA_IMPORT = "dataImport";
 	public static final String DATA_EXPORT = "dataExport";
-
+	public static final String WINDOW_CUSTOM_START = "windowCustomStart";
+	public static final String WINDOW_CUSTOM_END = "windowCustomEnd";
+	
 	private final IWorkbenchWindow window;
 
 	// generic actions
@@ -646,6 +649,9 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		menu.add(new Separator());
 		// addKeyboardShortcuts(menu);
 		menu.add(newWindowAction);
+		menu.add(new Separator());
+		menu.add(new GroupMarker(WINDOW_CUSTOM_START));
+		menu.add(new GroupMarker(WINDOW_CUSTOM_END));
 		final Separator sep = new Separator(IWorkbenchActionConstants.MB_ADDITIONS);
 		// sep.setVisible(!Util.isMac());
 		menu.add(sep);
@@ -926,8 +932,9 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	@Override
 	protected void fillStatusLine(final IStatusLineManager statusLine) {
 		statusLine.add(statusLineItem);
+		CustomReportsRegistry.getInstance().setStatusLineManager(statusLine);
 	}
-
+	
 	/**
 	 * Creates actions (and contribution items) for the menu bar, toolbar and status line.
 	 */
