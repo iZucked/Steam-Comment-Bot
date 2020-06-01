@@ -58,7 +58,9 @@ import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelKey;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.IdleFuelChoice;
 import com.mmxlabs.scheduler.optimiser.voyage.LNGFuelKeys;
+import com.mmxlabs.scheduler.optimiser.voyage.TravelFuelChoice;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
@@ -518,12 +520,19 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 
 		final List<@NonNull IVoyagePlanChoice> vpoChoices = new LinkedList<>();
 		if (!vessel.hasReliqCapability()) {
-			// Add in NBO etc choices (ballast 1)
-			vpoChoices.add(new TravelVoyagePlanChoice(bigSequence.getLaden() == null ? null : bigSequence.getLaden(), bigSequence.getToCharter()));
-			vpoChoices.add(new IdleNBOVoyagePlanChoice(bigSequence.getToCharter()));
-			// Add in NBO etc choices (ballast 2)
-			vpoChoices.add(new TravelVoyagePlanChoice(bigSequence.getToCharter(), bigSequence.getFromCharter()));
-			vpoChoices.add(new IdleNBOVoyagePlanChoice(bigSequence.getFromCharter()));
+			if (checkForNonEmptyHeel(startHeelRangeInM3)) {
+				// Add in NBO etc choices (ballast 1)
+				vpoChoices.add(new TravelVoyagePlanChoice(bigSequence.getLaden() == null ? null : bigSequence.getLaden(), bigSequence.getToCharter()));
+				vpoChoices.add(new IdleNBOVoyagePlanChoice(bigSequence.getToCharter()));
+				// Add in NBO etc choices (ballast 2)
+				vpoChoices.add(new TravelVoyagePlanChoice(bigSequence.getToCharter(), bigSequence.getFromCharter()));
+				vpoChoices.add(new IdleNBOVoyagePlanChoice(bigSequence.getFromCharter()));
+			} else {
+				bigSequence.getToCharter().setIdleFuelChoice(IdleFuelChoice.BUNKERS);
+				bigSequence.getToCharter().setTravelFuelChoice(TravelFuelChoice.BUNKERS);
+				bigSequence.getFromCharter().setIdleFuelChoice(IdleFuelChoice.BUNKERS);
+				bigSequence.getFromCharter().setTravelFuelChoice(TravelFuelChoice.BUNKERS);
+			}
 		} else {
 			// Add in NBO etc choices (ballast 1)
 			vpoChoices.add(new ReliqVoyagePlanChoice(bigSequence.getLaden() == null ? null : bigSequence.getLaden(), bigSequence.getToCharter()));
@@ -535,6 +544,16 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 				bigSequence.getSequence(), vpoChoices, startingTime);
 
 		return newVoyagePlan;
+	}
+	
+	private boolean checkForNonEmptyHeel(final long[] startHeelRangeInM3) {
+		boolean nonEmptyHeel = true;
+		if (startHeelRangeInM3.length == 2) {
+			if (startHeelRangeInM3[0] == 0 && startHeelRangeInM3[1] == 0) {
+				nonEmptyHeel = false;
+			}
+		}
+		return nonEmptyHeel;
 	}
 
 	/**
