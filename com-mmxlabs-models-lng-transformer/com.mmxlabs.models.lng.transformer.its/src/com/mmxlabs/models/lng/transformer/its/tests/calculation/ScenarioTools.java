@@ -22,6 +22,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Injector;
 import com.google.inject.Module;
+import com.google.inject.name.Names;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
@@ -71,7 +72,10 @@ import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
+import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService.ModuleType;
+import com.mmxlabs.scheduler.optimiser.peaberry.OptimiserInjectorServiceMaker;
 
 /**
  * Methods for printing and creating a scenario where a ship travels from port A to port B then back to port A.
@@ -371,8 +375,17 @@ public class ScenarioTools {
 		final UserSettings userSettings = ScenarioUtils.createDefaultUserSettings();
 		userSettings.setGenerateCharterOuts(withCharterOutGeneration);
 		final Set<String> hints = LNGTransformerHelper.getHints(userSettings);
+		
+
+		IOptimiserInjectorService localOverrides = OptimiserInjectorServiceMaker.begin() //
+				.makeModule() //
+				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UsePNLBasedWindowTrimming)).toInstance(Boolean.FALSE)) //
+				.buildOverride(ModuleType.Module_LNGTransformerModule)//
+				.make();
+
+		
 		final LNGDataTransformer dataTransformer = new LNGDataTransformer(scenarioDataProvider, null, userSettings, ScenarioUtils.createDefaultSolutionBuilderSettings(), 1, hints,
-				LNGTransformerHelper.getOptimiserInjectorServices(new TransformerExtensionTestBootstrapModule(), null));
+				LNGTransformerHelper.getOptimiserInjectorServices(new TransformerExtensionTestBootstrapModule(), localOverrides));
 
 		Injector evaluationInjector;
 		{
