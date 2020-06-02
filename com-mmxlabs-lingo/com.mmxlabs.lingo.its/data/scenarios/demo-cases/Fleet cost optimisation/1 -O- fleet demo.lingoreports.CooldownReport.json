@@ -1,0 +1,37 @@
+[ {
+  "Vessel" : "LNG Lagos",
+  "Schedule" : "1 -O- fleet demo",
+  "Cause ID" : "Lagos",
+  "Port" : "Bonny Is",
+  "Time" : "07:00",
+  "ID" : "load-Cargo 143",
+  "Cost" : "0",
+  "Date" : "13/06/11"
+}, {
+  "Vessel" : "LNG Ondo",
+  "Schedule" : "1 -O- fleet demo",
+  "Cause ID" : "discharge-Cargo 128",
+  "Port" : "Bonny Is",
+  "Time" : "02:00",
+  "ID" : "Charter Out - discharge-Cargo 128",
+  "Cost" : "0",
+  "Date" : "21/07/11"
+}, {
+  "Vessel" : "LNG River Niger",
+  "Schedule" : "1 -O- fleet demo",
+  "Cause ID" : "discharge-Cargo 141",
+  "Port" : "Bonny Is",
+  "Time" : "12:00",
+  "ID" : "Charter Out - discharge-Cargo 141",
+  "Cost" : "0",
+  "Date" : "28/06/11"
+}, {
+  "Vessel" : "LNG River Orashi",
+  "Schedule" : "1 -O- fleet demo",
+  "Cause ID" : "RO drydock",
+  "Port" : "Bonny Is",
+  "Time" : "07:00",
+  "ID" : "load-Cargo 200",
+  "Cost" : "0",
+  "Date" : "06/09/11"
+} ]

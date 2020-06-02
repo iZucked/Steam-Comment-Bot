@@ -1,0 +1,131 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
+ * All rights reserved.
+ */
+package com.mmxlabs.rcp.common.actions;
+
+import java.io.IOException;
+
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.nebula.widgets.grid.Grid;
+import org.eclipse.nebula.widgets.grid.GridColumn;
+import org.eclipse.nebula.widgets.grid.GridColumnGroup;
+import org.eclipse.nebula.widgets.grid.GridItem;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+/**
+ * Copies "rendered" table contents into a JSONish format. (Note: keys could be duplicated and we have surplus commas)
+ * 
+ * @author Simon Goodall
+ * 
+ */
+public class CopyGridToJSONUtil {
+
+	protected static final Logger LOG = LoggerFactory.getLogger(CopyGridToJSONUtil.class);
+	protected final Grid table;
+
+	// Set border around everything?
+	private boolean includeAllColumns = false;
+	protected IAdditionalAttributeProvider additionalAttributeProvider = null;
+	protected static final String EOL = System.getProperty("line.separator");
+
+	public CopyGridToJSONUtil(final Grid table, final boolean includeAllColumns) {
+
+		this.table = table;
+		this.includeAllColumns = includeAllColumns;
+	}
+
+	public String convert() {
+		if (additionalAttributeProvider != null) {
+			additionalAttributeProvider.begin();
+		}
+		try {
+			final JSONArray sw = new JSONArray();
+
+			// Note this may be zero if no columns have been defined. However an
+			// implicit column will be created in such cases
+			final int numColumns = table.getColumnCount();
+			try {
+				// Ensure at least 1 column to grab data
+				final int numberOfColumns = Math.max(5, numColumns);
+				final int[] rowOffsets = new int[numberOfColumns];
+
+				for (final GridItem item : table.getItems()) {
+					processTableRow(sw, numberOfColumns, item, rowOffsets);
+				}
+			} catch (final IOException e) {
+				// should not occur, since we use a StringWriter
+				LOG.error(e.getMessage(), e);
+			}
+
+			return new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(sw);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		} finally {
+			if (additionalAttributeProvider != null) {
+				additionalAttributeProvider.done();
+			}
+		}
+	}
+
+	private int @NonNull [] getAllColumns(final @NonNull Grid table) {
+		final int[] indicies = new int[table.getColumnCount()];
+		for (int i = 0; i < indicies.length; ++i) {
+			indicies[i] = i;
+		}
+		return indicies;
+	}
+
+	protected void processTableRow(final JSONArray sw, final int numColumns, final GridItem item, final int[] rowOffsets) throws IOException {
+		// start a row
+		JSONObject rowData = new JSONObject();
+		sw.add(rowData);
+
+		final int[] columnOrder = includeAllColumns ? getAllColumns(table) : table.getColumnOrder();
+		for (int i = 0; i < columnOrder.length; ++i) {
+			final int colIdx = columnOrder[i];
+			final GridColumn column = table.getColumn(colIdx);
+			if (!includeAllColumns && !column.isVisible()) {
+				continue;
+			}
+			// If offset is greater than zero, skip this row
+			if (rowOffsets[colIdx] == 0) {
+				
+				JSONObject colData = rowData;
+				// Get the column group
+				final GridColumnGroup columnGroup = column.getColumnGroup();
+				if (columnGroup != null) {
+					String key = columnGroup.getText();
+					if (key.isEmpty()) {
+						key =  Integer.toString(colIdx);
+					}
+					colData = (JSONObject)rowData.computeIfAbsent(key, k -> new JSONObject());
+				}
+				
+				String text = item.getText(colIdx);
+				if (text != null && !text.isEmpty()) {
+					String key = column.getText();
+					if (key.isEmpty()) {
+						key =  Integer.toString(colIdx);
+					}
+					if (colData.containsKey(key)) {
+						key = key + "-" + colIdx;
+					}
+					colData.put(key, text);
+				}
+
+				i += item.getColumnSpan(colIdx);
+				rowOffsets[colIdx] = item.getRowSpan(colIdx);
+			} else {
+				rowOffsets[colIdx] = rowOffsets[colIdx] - 1;
+			}
+		}
+	}
+}

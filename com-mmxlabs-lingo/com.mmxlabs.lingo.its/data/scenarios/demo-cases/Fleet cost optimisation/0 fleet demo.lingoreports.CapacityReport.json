@@ -1,0 +1,73 @@
+[ {
+  "Type" : "Charter Out",
+  "Issue" : "Forced Cooldown",
+  "Schedule" : "0 fleet demo",
+  "ID" : "Charter Out - Lagos",
+  "Quantity (m³)" : "0"
+}, {
+  "Type" : "Charter Out",
+  "Issue" : "Forced Cooldown",
+  "Schedule" : "0 fleet demo",
+  "ID" : "Charter Out - RO drydock",
+  "Quantity (m³)" : "0"
+}, {
+  "Type" : "Charter Out",
+  "Issue" : "Forced Cooldown",
+  "Schedule" : "0 fleet demo",
+  "ID" : "Charter Out - discharge-Cargo 13",
+  "Quantity (m³)" : "0"
+}, {
+  "Type" : "Charter Out",
+  "Issue" : "Forced Cooldown",
+  "Schedule" : "0 fleet demo",
+  "ID" : "Charter Out - discharge-Cargo 131",
+  "Quantity (m³)" : "0"
+}, {
+  "Type" : "Charter Out",
+  "Issue" : "Forced Cooldown",
+  "Schedule" : "0 fleet demo",
+  "ID" : "Charter Out - discharge-Cargo 132",
+  "Quantity (m³)" : "0"
+}, {
+  "Type" : "Charter Out",
+  "Issue" : "Forced Cooldown",
+  "Schedule" : "0 fleet demo",
+  "ID" : "Charter Out - discharge-Cargo 141",
+  "Quantity (m³)" : "0"
+}, {
+  "Type" : "Charter Out",
+  "Issue" : "Forced Cooldown",
+  "Schedule" : "0 fleet demo",
+  "ID" : "Charter Out - discharge-Cargo 154",
+  "Quantity (m³)" : "0"
+}, {
+  "Type" : "Charter Out",
+  "Issue" : "Forced Cooldown",
+  "Schedule" : "0 fleet demo",
+  "ID" : "Charter Out - discharge-Cargo 174",
+  "Quantity (m³)" : "0"
+}, {
+  "Type" : "Charter Out",
+  "Issue" : "Forced Cooldown",
+  "Schedule" : "0 fleet demo",
+  "ID" : "Charter Out - discharge-Cargo 20",
+  "Quantity (m³)" : "0"
+}, {
+  "Type" : "Charter Out",
+  "Issue" : "Forced Cooldown",
+  "Schedule" : "0 fleet demo",
+  "ID" : "Charter Out - discharge-Cargo 34",
+  "Quantity (m³)" : "0"
+}, {
+  "Type" : "Charter Out",
+  "Issue" : "Forced Cooldown",
+  "Schedule" : "0 fleet demo",
+  "ID" : "Charter Out - discharge-Cargo 6",
+  "Quantity (m³)" : "0"
+}, {
+  "Type" : "Charter Out",
+  "Issue" : "Forced Cooldown",
+  "Schedule" : "0 fleet demo",
+  "ID" : "Charter Out - discharge-Cargo 90",
+  "Quantity (m³)" : "0"
+} ]

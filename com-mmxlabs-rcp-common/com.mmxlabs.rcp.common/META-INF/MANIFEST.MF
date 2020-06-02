@@ -29,7 +29,8 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  com.fasterxml.jackson.core.jackson-core;bundle-version="2.9.2",
  com.fasterxml.jackson.datatype.jackson-datatype-jsr310;bundle-version="2.9.2",
  org.eclipse.e4.core.services,
- com.mmxlabs.models.mmxcore
+ com.mmxlabs.models.mmxcore,
+ com.googlecode.json-simple;bundle-version="1.1.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-10
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.rcp.common,

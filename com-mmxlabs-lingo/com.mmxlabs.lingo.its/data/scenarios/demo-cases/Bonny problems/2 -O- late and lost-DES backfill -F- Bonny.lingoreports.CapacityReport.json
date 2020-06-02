@@ -1,0 +1,19 @@
+[ {
+  "Type" : "Charter Out",
+  "Issue" : "Forced Cooldown",
+  "Schedule" : "2 -O- late and lost-DES backfill -F- Bonny",
+  "ID" : "Charter Out - discharge-cargo-16",
+  "Quantity (m³)" : "0"
+}, {
+  "Type" : "Charter Out",
+  "Issue" : "Forced Cooldown",
+  "Schedule" : "2 -O- late and lost-DES backfill -F- Bonny",
+  "ID" : "Charter Out - discharge-cargo-31",
+  "Quantity (m³)" : "0"
+}, {
+  "Type" : "Load",
+  "Issue" : "Forced Cooldown",
+  "Schedule" : "2 -O- late and lost-DES backfill -F- Bonny",
+  "ID" : "load-cargo-78",
+  "Quantity (m³)" : "0"
+} ]

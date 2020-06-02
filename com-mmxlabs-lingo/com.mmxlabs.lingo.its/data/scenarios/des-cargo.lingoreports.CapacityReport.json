@@ -1,0 +1,19 @@
+[ {
+  "Type" : "Load",
+  "Issue" : "Forced Cooldown",
+  "Schedule" : "des-cargo",
+  "ID" : "load-cargo-21",
+  "Quantity (m³)" : "0"
+}, {
+  "Type" : "Load",
+  "Issue" : "Forced Cooldown",
+  "Schedule" : "des-cargo",
+  "ID" : "load-cargo-32",
+  "Quantity (m³)" : "0"
+}, {
+  "Type" : "Load",
+  "Issue" : "Forced Cooldown",
+  "Schedule" : "des-cargo",
+  "ID" : "load-cargo-78",
+  "Quantity (m³)" : "0"
+} ]

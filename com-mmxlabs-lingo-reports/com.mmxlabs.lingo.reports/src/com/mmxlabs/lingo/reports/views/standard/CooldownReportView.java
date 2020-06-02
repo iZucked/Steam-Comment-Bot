@@ -35,6 +35,7 @@ import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnHandler;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnType;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
+import com.mmxlabs.rcp.common.actions.CopyGridToJSONUtil;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
@@ -197,15 +198,19 @@ public class CooldownReportView extends EMFReportView {
 
 		if (IReportContents.class.isAssignableFrom(adapter)) {
 
-			final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
-			final String contents = util.convert();
-			return (T) new IReportContents() {
+			if (IReportContents.class.isAssignableFrom(adapter)) {
 
-				@Override
-				public String getHTMLContents() {
-					return contents;
-				}
-			};
+				final CopyGridToJSONUtil jsonUtil = new CopyGridToJSONUtil(viewer.getGrid(), true);
+				final String jsonContents = jsonUtil.convert();
+				return (T) new IReportContents() {
+
+					@Override
+					public String getJSONContents() {
+						return jsonContents;
+					}
+				};
+
+			}
 
 		}
 		return super.getAdapter(adapter);

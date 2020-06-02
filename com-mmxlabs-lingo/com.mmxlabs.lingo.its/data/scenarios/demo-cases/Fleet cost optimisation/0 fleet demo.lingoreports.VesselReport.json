@@ -1,0 +1,210 @@
+[ {
+  "Route ($)" : "0",
+  "Sum ($)" : "11,248,362",
+  "Port ($)" : "0",
+  "Cooldown ($)" : "0",
+  "Ballast bonus ($)" : "0",
+  "Scenario" : "0 fleet demo",
+  "Heel Revenue ($)" : "0",
+  "Vessel" : "LNG Kano (162k)",
+  "Base Fuel ($)" : "1,800,762",
+  "Heel Cost ($)" : "0",
+  "Repositioning fee ($)" : "0",
+  "Charter Out (virtual) delta (change set)" : {
+    "Days" : "0.0",
+    "Revenue" : "0"
+  },
+  "LNG ($)" : "9,447,600",
+  "Sum - BOG($)" : "1,800,762",
+  "Charter ($)" : "0"
+}, {
+  "Route ($)" : "0",
+  "Sum ($)" : "8,559,327",
+  "Port ($)" : "0",
+  "Cooldown ($)" : "0",
+  "Ballast bonus ($)" : "0",
+  "Scenario" : "0 fleet demo",
+  "Heel Revenue ($)" : "0",
+  "Vessel" : "LNG Lagos (162k)",
+  "Base Fuel ($)" : "2,631,648",
+  "Heel Cost ($)" : "0",
+  "Repositioning fee ($)" : "0",
+  "Charter Out (virtual) delta (change set)" : {
+    "Days" : "0.0",
+    "Revenue" : "0"
+  },
+  "LNG ($)" : "5,927,679",
+  "Sum - BOG($)" : "2,631,648",
+  "Charter ($)" : "0"
+}, {
+  "Route ($)" : "0",
+  "Sum ($)" : "10,023,979",
+  "Port ($)" : "0",
+  "Cooldown ($)" : "0",
+  "Ballast bonus ($)" : "0",
+  "Scenario" : "0 fleet demo",
+  "Heel Revenue ($)" : "0",
+  "Vessel" : "LNG Lokoja (162k)",
+  "Base Fuel ($)" : "1,404,336",
+  "Heel Cost ($)" : "0",
+  "Repositioning fee ($)" : "0",
+  "Charter Out (virtual) delta (change set)" : {
+    "Days" : "0.0",
+    "Revenue" : "0"
+  },
+  "LNG ($)" : "8,619,643",
+  "Sum - BOG($)" : "1,404,336",
+  "Charter ($)" : "0"
+}, {
+  "Route ($)" : "0",
+  "Sum ($)" : "9,866,132",
+  "Port ($)" : "0",
+  "Cooldown ($)" : "0",
+  "Ballast bonus ($)" : "0",
+  "Scenario" : "0 fleet demo",
+  "Heel Revenue ($)" : "0",
+  "Vessel" : "LNG Ogun (162k)",
+  "Base Fuel ($)" : "686,400",
+  "Heel Cost ($)" : "0",
+  "Repositioning fee ($)" : "0",
+  "Charter Out (virtual) delta (change set)" : {
+    "Days" : "0.0",
+    "Revenue" : "0"
+  },
+  "LNG ($)" : "9,179,732",
+  "Sum - BOG($)" : "686,400",
+  "Charter ($)" : "0"
+}, {
+  "Route ($)" : "0",
+  "Sum ($)" : "10,890,368",
+  "Port ($)" : "0",
+  "Cooldown ($)" : "0",
+  "Ballast bonus ($)" : "0",
+  "Scenario" : "0 fleet demo",
+  "Heel Revenue ($)" : "0",
+  "Vessel" : "LNG Ondo (162k)",
+  "Base Fuel ($)" : "1,389,198",
+  "Heel Cost ($)" : "0",
+  "Repositioning fee ($)" : "0",
+  "Charter Out (virtual) delta (change set)" : {
+    "Days" : "0.0",
+    "Revenue" : "0"
+  },
+  "LNG ($)" : "9,501,170",
+  "Sum - BOG($)" : "1,389,198",
+  "Charter ($)" : "0"
+}, {
+  "Route ($)" : "0",
+  "Sum ($)" : "10,960,159",
+  "Port ($)" : "0",
+  "Cooldown ($)" : "0",
+  "Ballast bonus ($)" : "0",
+  "Scenario" : "0 fleet demo",
+  "Heel Revenue ($)" : "0",
+  "Vessel" : "LNG Oyo (162k)",
+  "Base Fuel ($)" : "2,304,798",
+  "Heel Cost ($)" : "0",
+  "Repositioning fee ($)" : "0",
+  "Charter Out (virtual) delta (change set)" : {
+    "Days" : "0.0",
+    "Revenue" : "0"
+  },
+  "LNG ($)" : "8,655,361",
+  "Sum - BOG($)" : "2,304,798",
+  "Charter ($)" : "0"
+}, {
+  "Route ($)" : "0",
+  "Sum ($)" : "8,782,236",
+  "Port ($)" : "0",
+  "Cooldown ($)" : "0",
+  "Ballast bonus ($)" : "0",
+  "Scenario" : "0 fleet demo",
+  "Heel Revenue ($)" : "0",
+  "Vessel" : "LNG Port Harcourt (162k)",
+  "Base Fuel ($)" : "1,187,850",
+  "Heel Cost ($)" : "0",
+  "Repositioning fee ($)" : "0",
+  "Charter Out (virtual) delta (change set)" : {
+    "Days" : "0.0",
+    "Revenue" : "0"
+  },
+  "LNG ($)" : "7,594,386",
+  "Sum - BOG($)" : "1,187,850",
+  "Charter ($)" : "0"
+}, {
+  "Route ($)" : "0",
+  "Sum ($)" : "10,715,052",
+  "Port ($)" : "0",
+  "Cooldown ($)" : "0",
+  "Ballast bonus ($)" : "0",
+  "Scenario" : "0 fleet demo",
+  "Heel Revenue ($)" : "0",
+  "Vessel" : "LNG River Niger (162k)",
+  "Base Fuel ($)" : "748,599",
+  "Heel Cost ($)" : "0",
+  "Repositioning fee ($)" : "0",
+  "Charter Out (virtual) delta (change set)" : {
+    "Days" : "0.0",
+    "Revenue" : "0"
+  },
+  "LNG ($)" : "9,966,453",
+  "Sum - BOG($)" : "748,599",
+  "Charter ($)" : "0"
+}, {
+  "Route ($)" : "250,000",
+  "Sum ($)" : "10,059,111",
+  "Port ($)" : "0",
+  "Cooldown ($)" : "0",
+  "Ballast bonus ($)" : "0",
+  "Scenario" : "0 fleet demo",
+  "Heel Revenue ($)" : "0",
+  "Vessel" : "LNG River Orashi (162k)",
+  "Base Fuel ($)" : "3,994,059",
+  "Heel Cost ($)" : "0",
+  "Repositioning fee ($)" : "0",
+  "Charter Out (virtual) delta (change set)" : {
+    "Days" : "0.0",
+    "Revenue" : "0"
+  },
+  "LNG ($)" : "5,815,052",
+  "Sum - BOG($)" : "4,244,059",
+  "Charter ($)" : "0"
+}, {
+  "Route ($)" : "0",
+  "Sum ($)" : "10,491,835",
+  "Port ($)" : "0",
+  "Cooldown ($)" : "0",
+  "Ballast bonus ($)" : "0",
+  "Scenario" : "0 fleet demo",
+  "Heel Revenue ($)" : "0",
+  "Vessel" : "LNG Rivers (162k)",
+  "Base Fuel ($)" : "748,599",
+  "Heel Cost ($)" : "0",
+  "Repositioning fee ($)" : "0",
+  "Charter Out (virtual) delta (change set)" : {
+    "Days" : "0.0",
+    "Revenue" : "0"
+  },
+  "LNG ($)" : "9,743,236",
+  "Sum - BOG($)" : "748,599",
+  "Charter ($)" : "0"
+}, {
+  "Route ($)" : "0",
+  "Sum ($)" : "7,317,879",
+  "Port ($)" : "0",
+  "Cooldown ($)" : "0",
+  "Ballast bonus ($)" : "0",
+  "Scenario" : "0 fleet demo",
+  "Heel Revenue ($)" : "0",
+  "Vessel" : "LNG Sokoto (162k)",
+  "Base Fuel ($)" : "2,456,498",
+  "Heel Cost ($)" : "0",
+  "Repositioning fee ($)" : "0",
+  "Charter Out (virtual) delta (change set)" : {
+    "Days" : "0.0",
+    "Revenue" : "0"
+  },
+  "LNG ($)" : "4,861,381",
+  "Sum - BOG($)" : "2,456,498",
+  "Charter ($)" : "0"
+} ]

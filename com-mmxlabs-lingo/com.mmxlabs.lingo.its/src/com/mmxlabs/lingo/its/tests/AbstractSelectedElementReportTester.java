@@ -46,7 +46,7 @@ public abstract class AbstractSelectedElementReportTester extends AbstractOptimi
 		tests.add(DynamicTest.dynamicTest("CargoEconsReport", () -> {
 			Assumptions.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
 			init(scenarioPath, elementID);
-			testReports(ReportTesterHelper.CARGO_ECONS_REPORT_ID, ReportTesterHelper.CARGO_ECONS_REPORT_SHORTNAME, ReportType.REPORT_HTML);
+			testReports(ReportTesterHelper.CARGO_ECONS_REPORT_ID, ReportTesterHelper.CARGO_ECONS_REPORT_SHORTNAME, ReportType.REPORT_JSON);
 		}));
 
 		return tests;

@@ -1,0 +1,31 @@
+[ {
+  "Type" : "Charter Out",
+  "Issue" : "Forced Cooldown",
+  "Schedule" : "0 base",
+  "ID" : "Charter Out - discharge-cargo-24",
+  "Quantity (m³)" : "0"
+}, {
+  "Type" : "Charter Out",
+  "Issue" : "Forced Cooldown",
+  "Schedule" : "0 base",
+  "ID" : "Charter Out - discharge-cargo-48",
+  "Quantity (m³)" : "0"
+}, {
+  "Type" : "Charter Out",
+  "Issue" : "Forced Cooldown",
+  "Schedule" : "0 base",
+  "ID" : "Charter Out - discharge-cargo-5",
+  "Quantity (m³)" : "0"
+}, {
+  "Type" : "Load",
+  "Issue" : "Forced Cooldown",
+  "Schedule" : "0 base",
+  "ID" : "load-cargo-32",
+  "Quantity (m³)" : "0"
+}, {
+  "Type" : "Load",
+  "Issue" : "Forced Cooldown",
+  "Schedule" : "0 base",
+  "ID" : "load-cargo-78",
+  "Quantity (m³)" : "0"
+} ]

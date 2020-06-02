@@ -1,0 +1,25 @@
+[ {
+  "KPI" : "P&L",
+  "Schedule" : "5 charter-in generated - rewire for shorter one -O- -F- -F- base",
+  "Value" : "$73,137,941"
+}, {
+  "KPI" : "Trading P&L",
+  "Schedule" : "5 charter-in generated - rewire for shorter one -O- -F- -F- base",
+  "Value" : "$75,575,011"
+}, {
+  "KPI" : "Shipping P&L",
+  "Schedule" : "5 charter-in generated - rewire for shorter one -O- -F- -F- base",
+  "Value" : "$-2,437,070"
+}, {
+  "KPI" : "Shipping Cost",
+  "Schedule" : "5 charter-in generated - rewire for shorter one -O- -F- -F- base",
+  "Value" : "$44,552,936"
+}, {
+  "KPI" : "Lateness",
+  "Schedule" : "5 charter-in generated - rewire for shorter one -O- -F- -F- base",
+  "Value" : "0d, 0h"
+}, {
+  "KPI" : "Idle Time",
+  "Schedule" : "5 charter-in generated - rewire for shorter one -O- -F- -F- base",
+  "Value" : "378d, 14h"
+} ]

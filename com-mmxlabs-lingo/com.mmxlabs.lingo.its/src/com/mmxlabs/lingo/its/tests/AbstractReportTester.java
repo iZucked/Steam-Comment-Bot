@@ -72,47 +72,47 @@ public abstract class AbstractReportTester extends AbstractOptimisationResultTes
 		tests.add(DynamicTest.dynamicTest("ScheduleSummary", () -> {
 			Assumptions.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
 			init(scenarioURL);
-			testReports(ReportTesterHelper.SCHEDULE_SUMMARY_ID, ReportTesterHelper.SCHEDULE_SUMMARY_SHORTNAME, ReportType.REPORT_HTML);
+			testReports(ReportTesterHelper.SCHEDULE_SUMMARY_ID, ReportTesterHelper.SCHEDULE_SUMMARY_SHORTNAME, ReportType.REPORT_JSON);
 		}));
 		tests.add(DynamicTest.dynamicTest("PortRotations", () -> {
 			Assumptions.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
 			init(scenarioURL);
-			testReports(ReportTesterHelper.PORT_ROTATIONS_ID, ReportTesterHelper.PORT_ROTATIONS_SHORTNAME, ReportType.REPORT_HTML);
+			testReports(ReportTesterHelper.PORT_ROTATIONS_ID, ReportTesterHelper.PORT_ROTATIONS_SHORTNAME, ReportType.REPORT_JSON);
 		}));
 		tests.add(DynamicTest.dynamicTest("LatenessReport", () -> {
 			Assumptions.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
 			init(scenarioURL);
-			testReports(ReportTesterHelper.LATENESS_REPORT_ID, ReportTesterHelper.LATENESS_REPORT_SHORTNAME, ReportType.REPORT_HTML);
+			testReports(ReportTesterHelper.LATENESS_REPORT_ID, ReportTesterHelper.LATENESS_REPORT_SHORTNAME, ReportType.REPORT_JSON);
 		}));
 		tests.add(DynamicTest.dynamicTest("CapacityReport", () -> {
 			Assumptions.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
 			init(scenarioURL);
-			testReports(ReportTesterHelper.CAPACITY_REPORT_ID, ReportTesterHelper.CAPACITY_REPORT_SHORTNAME, ReportType.REPORT_HTML);
+			testReports(ReportTesterHelper.CAPACITY_REPORT_ID, ReportTesterHelper.CAPACITY_REPORT_SHORTNAME, ReportType.REPORT_JSON);
 		}));
 		tests.add(DynamicTest.dynamicTest("VesselReport", () -> {
 			Assumptions.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
 			init(scenarioURL);
-			testReports(ReportTesterHelper.VESSEL_REPORT_ID, ReportTesterHelper.VESSEL_REPORT_SHORTNAME, ReportType.REPORT_HTML);
+			testReports(ReportTesterHelper.VESSEL_REPORT_ID, ReportTesterHelper.VESSEL_REPORT_SHORTNAME, ReportType.REPORT_JSON);
 		}));
 		tests.add(DynamicTest.dynamicTest("CooldownReport", () -> {
 			Assumptions.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
 			init(scenarioURL);
-			testReports(ReportTesterHelper.COOLDOWN_REPORT_ID, ReportTesterHelper.COOLDOWN_REPORT_SHORTNAME, ReportType.REPORT_HTML);
+			testReports(ReportTesterHelper.COOLDOWN_REPORT_ID, ReportTesterHelper.COOLDOWN_REPORT_SHORTNAME, ReportType.REPORT_JSON);
 		}));
 		tests.add(DynamicTest.dynamicTest("HeadlineReport", () -> {
 			Assumptions.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
 			init(scenarioURL);
-			testReports(ReportTesterHelper.HEADLINE_REPORT_ID, ReportTesterHelper.HEADLINE_REPORT_SHORTNAME, ReportType.REPORT_HTML);
+			testReports(ReportTesterHelper.HEADLINE_REPORT_ID, ReportTesterHelper.HEADLINE_REPORT_SHORTNAME, ReportType.REPORT_JSON);
 		}));
 		tests.add(DynamicTest.dynamicTest("KPIReport", () -> {
 			Assumptions.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
 			init(scenarioURL);
-			testReports(ReportTesterHelper.KPI_REPORT_ID, ReportTesterHelper.KPI_REPORT_SHORTNAME, ReportType.REPORT_HTML);
+			testReports(ReportTesterHelper.KPI_REPORT_ID, ReportTesterHelper.KPI_REPORT_SHORTNAME, ReportType.REPORT_JSON);
 		}));
 		tests.add(DynamicTest.dynamicTest("CanalBookingsReport", () -> {
 			Assumptions.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
 			init(scenarioURL);
-			testReports(ReportTesterHelper.CANAL_BOOKINGS_REPORT_ID, ReportTesterHelper.CANAL_BOOKINGS_REPORT_SHORTNAME, ReportType.REPORT_HTML);
+			testReports(ReportTesterHelper.CANAL_BOOKINGS_REPORT_ID, ReportTesterHelper.CANAL_BOOKINGS_REPORT_SHORTNAME, ReportType.REPORT_JSON);
 		}));
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_EXPOSURES)) {
 			tests.add(DynamicTest.dynamicTest("ExposuresReport", () -> {
@@ -125,13 +125,13 @@ public abstract class AbstractReportTester extends AbstractOptimisationResultTes
 		tests.add(DynamicTest.dynamicTest("IncomeStatementRegion", () -> {
 			Assumptions.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
 			init(scenarioURL);
-			testReports(ReportTesterHelper.INCOME_STATEMENT_REGION_REPORT_ID, ReportTesterHelper.INCOME_STATEMENT_REGION_REPORT_SHORTNAME, ReportType.REPORT_HTML);
+			testReports(ReportTesterHelper.INCOME_STATEMENT_REGION_REPORT_ID, ReportTesterHelper.INCOME_STATEMENT_REGION_REPORT_SHORTNAME, ReportType.REPORT_JSON);
 		}));
 		tests.add(DynamicTest.dynamicTest("IncomeStatementContract", () -> {
 			Assumptions.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
 
 			init(scenarioURL);
-			testReports(ReportTesterHelper.INCOME_STATEMENT_CONTRACT_REPORT_ID, ReportTesterHelper.INCOME_STATEMENT_CONTRACT_REPORT_SHORTNAME, ReportType.REPORT_HTML);
+			testReports(ReportTesterHelper.INCOME_STATEMENT_CONTRACT_REPORT_ID, ReportTesterHelper.INCOME_STATEMENT_CONTRACT_REPORT_SHORTNAME, ReportType.REPORT_JSON);
 		}));
 
 		return tests;

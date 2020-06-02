@@ -47,6 +47,7 @@ import com.mmxlabs.models.lng.schedule.Purge;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
+import com.mmxlabs.rcp.common.actions.CopyGridToJSONUtil;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
@@ -550,15 +551,13 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 
 		if (IReportContents.class.isAssignableFrom(adapter)) {
 
-			final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
-			util.setRowHeadersIncluded(true);
-			util.setShowBackgroundColours(true);
-			final String contents = util.convert();
+			final CopyGridToJSONUtil jsonUtil = new CopyGridToJSONUtil(viewer.getGrid(), true);
+			final String jsonContents = jsonUtil.convert();
 			return (T) new IReportContents() {
 
 				@Override
-				public String getHTMLContents() {
-					return contents;
+				public String getJSONContents() {
+					return jsonContents;
 				}
 			};
 

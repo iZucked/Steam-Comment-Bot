@@ -59,14 +59,13 @@ import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnType;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
+import com.mmxlabs.rcp.common.actions.CopyGridToJSONUtil;
 import com.mmxlabs.rcp.common.handlers.TodayHandler;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
- * A customisable report for schedule based data. Extension points define the
- * available columns for all instances and initial state for each instance of
- * this report. Optionally a dialog is available for the user to change the
- * default settings.
+ * A customisable report for schedule based data. Extension points define the available columns for all instances and initial state for each instance of this report. Optionally a dialog is available
+ * for the user to change the default settings.
  */
 public abstract class AbstractConfigurableScheduleReportView extends AbstractConfigurableGridReportView {
 
@@ -77,7 +76,7 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 
 	@Inject(optional = true)
 	private Iterable<IScheduleBasedColumnExtension> columnExtensions;
-	
+
 	@Inject(optional = true)
 	private Iterable<IScheduleBasedColumnOverrideExtension> columnOverrideExtensions;
 
@@ -110,23 +109,33 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 
 		if (IReportContents.class.isAssignableFrom(adapter)) {
 
-			final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
-			util.setShowBackgroundColours(true);
-			util.setShowForegroundColours(true);
-			final String contents = util.convert();
+			final CopyGridToHtmlStringUtil htmlUtil = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
+			htmlUtil.setShowBackgroundColours(true);
+			htmlUtil.setShowForegroundColours(true);
+			final String htmlContents = htmlUtil.convert();
+
+			final CopyGridToJSONUtil jsonUtil = new CopyGridToJSONUtil(viewer.getGrid(), true);
+			final String jsonContents = jsonUtil.convert();
+
 			return (T) new IReportContents() {
 
 				@Override
 				public String getHTMLContents() {
-					return contents;
+					return htmlContents;
+				}
+
+				@Override
+				public String getJSONContents() {
+					return jsonContents;
 				}
 			};
 
 		}
 		return super.getAdapter(adapter);
 	}
-	
+
 	private Table table = null;
+
 	private void saveTable(final Table table) {
 		this.table = table;
 	}
@@ -134,7 +143,7 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 	public Table getTable() {
 		return this.table;
 	}
-	
+
 	private final IScenarioComparisonServiceListener scenarioComparisonServiceListener = new IScenarioComparisonServiceListener() {
 		//
 		// private final Map<Object, ScenarioResult> _elementToInstanceMap = new
@@ -196,8 +205,6 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 		}
 
 	};
-	
-	
 
 	@Override
 	public void initPartControl(final Composite parent) {
@@ -255,13 +262,13 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 		} });
 
 		scenarioComparisonService.triggerListener(scenarioComparisonServiceListener);
-		
-		//Adding an event broker for the snap-to-date event todayHandler
+
+		// Adding an event broker for the snap-to-date event todayHandler
 		IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
-		this.todayHandler = event -> snapTo((LocalDate)  event.getProperty(IEventBroker.DATA));
-	    eventBroker.subscribe(TodayHandler.EVENT_SNAP_TO_DATE, this.todayHandler);
+		this.todayHandler = event -> snapTo((LocalDate) event.getProperty(IEventBroker.DATA));
+		eventBroker.subscribe(TodayHandler.EVENT_SNAP_TO_DATE, this.todayHandler);
 	}
-	
+
 	private void snapTo(LocalDate date) {
 		if (viewer == null) {
 			return;
@@ -274,7 +281,7 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 		if (count <= 0) {
 			return;
 		}
-		
+
 		final GridItem[] items = grid.getItems();
 		int pos = -1;
 		for (GridItem item : items) {
@@ -352,8 +359,7 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 	}
 
 	/**
-	 * Examine the view extension point to determine the default set of columns,
-	 * order,row types and diff options.
+	 * Examine the view extension point to determine the default set of columns, order,row types and diff options.
 	 */
 	@Override
 	protected void setInitialState() {
@@ -499,8 +505,7 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 	}
 
 	/**
-	 * Examine the eclipse registry for defined columns for this report and hook
-	 * them in.
+	 * Examine the eclipse registry for defined columns for this report and hook them in.
 	 */
 	@Override
 	protected void registerReportColumns() {
@@ -515,14 +520,14 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 				handlerMap.put(handlerID, ext.getFactory());
 			}
 		}
-		
+
 		final Map<String, String> nameMap = new HashMap<>();
 		if (columnOverrideExtensions != null) {
 			for (final IScheduleBasedColumnOverrideExtension ext : columnOverrideExtensions) {
 				nameMap.put(ext.getColumnID(), ext.getNameOverride());
 			}
 		}
-		
+
 		// Now find the column definitions themselves.
 		if (columnExtensions != null) {
 

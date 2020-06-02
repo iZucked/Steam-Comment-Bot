@@ -87,6 +87,7 @@ import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
+import com.mmxlabs.rcp.common.actions.CopyGridToJSONUtil;
 import com.mmxlabs.rcp.common.application.BindSelectionListener;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
@@ -602,15 +603,19 @@ public class PNLCalcsReportComponent implements IAdaptable /* extends ViewPart *
 
 		if (IReportContents.class.isAssignableFrom(adapter)) {
 
-			final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
-			final String contents = util.convert();
-			return (T) new IReportContents() {
+			if (IReportContents.class.isAssignableFrom(adapter)) {
 
-				@Override
-				public String getHTMLContents() {
-					return contents;
-				}
-			};
+				final CopyGridToJSONUtil jsonUtil = new CopyGridToJSONUtil(viewer.getGrid(), true);
+				final String jsonContents = jsonUtil.convert();
+				return (T) new IReportContents() {
+
+					@Override
+					public String getJSONContents() {
+						return jsonContents;
+					}
+				};
+
+			}
 
 		}
 		return null;

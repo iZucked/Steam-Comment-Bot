@@ -1,0 +1,25 @@
+[ {
+  "KPI" : "P&L",
+  "Schedule" : "3 -O- dry dock 55 -F- lateness removed -F- base",
+  "Value" : "$77,135,493"
+}, {
+  "KPI" : "Trading P&L",
+  "Schedule" : "3 -O- dry dock 55 -F- lateness removed -F- base",
+  "Value" : "$78,035,867"
+}, {
+  "KPI" : "Shipping P&L",
+  "Schedule" : "3 -O- dry dock 55 -F- lateness removed -F- base",
+  "Value" : "$-900,374"
+}, {
+  "KPI" : "Shipping Cost",
+  "Schedule" : "3 -O- dry dock 55 -F- lateness removed -F- base",
+  "Value" : "$42,984,593"
+}, {
+  "KPI" : "Lateness",
+  "Schedule" : "3 -O- dry dock 55 -F- lateness removed -F- base",
+  "Value" : "0d, 0h"
+}, {
+  "KPI" : "Idle Time",
+  "Schedule" : "3 -O- dry dock 55 -F- lateness removed -F- base",
+  "Value" : "395d, 17h"
+} ]
