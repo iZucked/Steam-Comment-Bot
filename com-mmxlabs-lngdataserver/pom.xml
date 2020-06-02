@@ -16,8 +16,6 @@
 	</parent>
 
 	<modules>
-		<module>com.mmxlabs.lngdataserver.lib</module>
-
 		<module>com.mmxlabs.lngdataserver.commons</module>
 		<module>com.mmxlabs.lngdataserver.server</module>
 
