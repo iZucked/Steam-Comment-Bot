@@ -27,7 +27,6 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.lngdataserver.server,
  com.google.guava,
  com.mmxlabs.lngdataserver.commons,
- com.mmxlabs.lngdataserver.lib,
  com.fasterxml.jackson.datatype.jackson-datatype-jdk8,
  com.mmxlabs.hub
 Service-Component: OSGI-INF/*.xml
