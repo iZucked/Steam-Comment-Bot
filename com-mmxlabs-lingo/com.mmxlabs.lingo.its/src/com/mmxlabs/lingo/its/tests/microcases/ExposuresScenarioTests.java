@@ -95,26 +95,31 @@ public class ExposuresScenarioTests extends AbstractMicroTestCase {
 			Assertions.assertNotNull(schedule);
 			Assertions.assertNotNull(schedule.getGeneratedPaperDeals());
 			Assertions.assertFalse(schedule.getGeneratedPaperDeals().isEmpty());
-			Assertions.assertTrue(schedule.getGeneratedPaperDeals().size() == 3);
+			Assertions.assertTrue(schedule.getGeneratedPaperDeals().size() == 4);
 			
 			PaperDeal brentBuyJan = null;
 			PaperDeal brentSellFeb = null;
 			PaperDeal jkmBuyJan = null;
+			PaperDeal jkmSellFeb = null;
 			for (final PaperDeal paperDeal : schedule.getGeneratedPaperDeals()) {
-				if ("brent_ice_2017-01_buy".equalsIgnoreCase(paperDeal.getName())) {
+				if ("brent_2017-01_buy".equalsIgnoreCase(paperDeal.getName())) {
 					brentBuyJan = paperDeal;
-				} else if ("brent_ice_2017-02_sell".equalsIgnoreCase(paperDeal.getName())) {
+				} else if ("brent_2017-02_sell".equalsIgnoreCase(paperDeal.getName())) {
 					brentSellFeb = paperDeal;
 				} else if ("jkm_2017-01_buy".equalsIgnoreCase(paperDeal.getName())) {
 					jkmBuyJan = paperDeal;
+				} else if ("jkm_2017-02_sell".equalsIgnoreCase(paperDeal.getName())) {
+					jkmSellFeb = paperDeal;
 				}
 			}
 			Assertions.assertNotNull(brentBuyJan);
-			Assertions.assertEquals(brentBuyJan.getQuantity(), 237177.00, delta);
+			Assertions.assertEquals(brentBuyJan.getQuantity(), 237177.0, delta);
 			Assertions.assertNotNull(brentSellFeb);
-			Assertions.assertEquals(brentSellFeb.getQuantity(), 636512.00, delta);
+			Assertions.assertEquals(brentSellFeb.getQuantity(), 601331.0, delta);
 			Assertions.assertNotNull(jkmBuyJan);
-			Assertions.assertEquals(jkmBuyJan.getQuantity(), 36953.00, delta);
+			Assertions.assertEquals(jkmBuyJan.getQuantity(), 3826848.0, delta);
+			Assertions.assertNotNull(jkmSellFeb);
+			Assertions.assertEquals(jkmSellFeb.getQuantity(), 3789894.0, delta);
 		});
 	}
 	
