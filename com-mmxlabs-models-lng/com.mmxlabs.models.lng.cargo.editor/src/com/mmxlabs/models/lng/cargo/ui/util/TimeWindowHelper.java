@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.util;
 
+import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.types.TimePeriod;
 
@@ -13,7 +14,7 @@ public class TimeWindowHelper {
 		if (owner instanceof Slot<?>) {
 			final Slot<?> slot = (Slot<?>) owner;
 			final int size = slot.getWindowSize();
-			final TimePeriod units = slot.getWindowSizeUnits();
+			final TimePeriod units = (TimePeriod) slot.eGetWithDefault(CargoPackage.eINSTANCE.getSlot_WindowSizeUnits());
 			String suffix;
 			switch (units) {
 			case DAYS:
