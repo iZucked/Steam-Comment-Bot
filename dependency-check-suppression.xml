@@ -22,4 +22,11 @@
    <cve>CVE-2015-4035</cve>
 </suppress>
  
+ <suppress>
+   <notes><![CDATA[
+   Ignore MediaWiki vulnerability
+   ]]></notes>
+   <cve>CVE-2020-9382</cve>
+</suppress>
+ 
 </suppressions>
