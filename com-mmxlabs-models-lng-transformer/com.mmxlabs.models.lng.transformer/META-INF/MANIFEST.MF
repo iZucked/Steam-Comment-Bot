@@ -33,7 +33,9 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.fasterxml.jackson.core.jackson-core;bundle-version="2.9.2",
  com.fasterxml.jackson.datatype.jackson-datatype-jdk8,
  com.fasterxml.jackson.datatype.jackson-datatype-jsr310,
- com.mmxlabs.rcp.common
+ com.mmxlabs.rcp.common,
+ com.mmxlabs.models.lng.commercial.editor,
+ com.mmxlabs.hub
 Export-Package: com.mmxlabs.models.lng.transformer,
  com.mmxlabs.models.lng.transformer.chain,
  com.mmxlabs.models.lng.transformer.chain.impl,
@@ -48,9 +50,7 @@ Export-Package: com.mmxlabs.models.lng.transformer,
  com.mmxlabs.models.lng.transformer.shared,
  com.mmxlabs.models.lng.transformer.shared.impl,
  com.mmxlabs.models.lng.transformer.util
-Import-Package: com.mmxlabs.models.lng.commercial.parseutils,
- javax.inject;version="1.0.0",
- org.json,
+Import-Package: javax.inject;version="1.0.0",
  org.slf4j;version="1.6.4"
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.mmxlabs.models.lng.transformer.internal.Activator
