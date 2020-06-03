@@ -45,7 +45,7 @@ public class MonthsTest {
 	public void testMonthsBetween() {
 		for (int i = 1; i < 12; i++) {
 			for (int j = i; j < 12; j++) {
-				testMonthsBetween(i,j,1,1,j-i);
+				testMonthsBetween(i, 1, j, 1, j-i);
 			}
 		}
 	}
