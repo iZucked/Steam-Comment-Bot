@@ -545,7 +545,8 @@ public class CustomReportsManagerDialog extends TrayDialog {
 						displayErrorDialog(errorMsg);
 					}					
 				}
-				this.updateViewWithReportDefinition(this.current);	
+				this.updateViewWithReportDefinition(this.current);
+				this.changesMade = true;
 			}
 		}
 		else {
