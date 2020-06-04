@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
+ * All rights reserved.
+ */
 package com.mmxlabs.lingo.reports.views.schedule;
 
 import static org.ops4j.peaberry.eclipse.EclipseRegistry.eclipseRegistry;
