@@ -11,11 +11,11 @@ import java.time.Instant;
 import org.json.JSONObject;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.common.http.HttpClientUtil;
 import com.mmxlabs.hub.common.http.IProgressListener;
 import com.mmxlabs.hub.common.http.ProgressRequestBody;
 import com.mmxlabs.hub.common.http.ProgressResponseBody;
-import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
 
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
@@ -88,7 +88,6 @@ public class BaseCaseServiceClient {
 		// Check the response
 		try (Response response = httpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
-				response.body().close();
 				if (response.code() == 409) {
 					throw new BasecaseServiceLockedException();
 				}
@@ -161,13 +160,12 @@ public class BaseCaseServiceClient {
 
 		try (Response response = localHttpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
-				response.body().close();
 				throw new IOException(UNEXPECTED_CODE + response);
 			}
 			try (BufferedSource bufferedSource = response.body().source()) {
-				final BufferedSink bufferedSink = Okio.buffer(Okio.sink(file));
-				bufferedSink.writeAll(bufferedSource);
-				bufferedSink.close();
+				try (final BufferedSink bufferedSink = Okio.buffer(Okio.sink(file))) {
+					bufferedSink.writeAll(bufferedSource);
+				}
 			}
 			return true;
 		}
@@ -190,7 +188,6 @@ public class BaseCaseServiceClient {
 
 		try (Response response = httpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
-				response.body().close();
 				// 404 Not found is a valid response if there is no current basecase
 				if (response.code() != 404) {
 					throw new IOException(UNEXPECTED_CODE + response);
@@ -213,7 +210,6 @@ public class BaseCaseServiceClient {
 
 		try (Response response = httpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
-				response.body().close();
 				throw new IOException(UNEXPECTED_CODE + response);
 			}
 			return response.body().string();
@@ -232,7 +228,6 @@ public class BaseCaseServiceClient {
 
 		try (Response response = httpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
-				response.body().close();
 				throw new IOException(UNEXPECTED_CODE + response);
 			}
 			return response.body().string();
@@ -280,7 +275,6 @@ public class BaseCaseServiceClient {
 
 			try (Response response = httpClient.newCall(request).execute()) {
 				if (!response.isSuccessful()) {
-					response.body().close();
 					if (response.code() == 404) {
 						needsLocking = false;
 						isLocked = false;
@@ -345,7 +339,6 @@ public class BaseCaseServiceClient {
 
 			try (Response response = httpClient.newCall(request).execute()) {
 				if (!response.isSuccessful()) {
-					response.body().close();
 					if (response.code() == 404) {
 						return true;
 						// Unsupported API

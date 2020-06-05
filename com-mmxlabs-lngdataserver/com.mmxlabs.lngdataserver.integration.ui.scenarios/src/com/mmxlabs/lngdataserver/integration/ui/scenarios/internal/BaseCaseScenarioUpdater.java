@@ -25,12 +25,13 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.common.util.URI;
 
 import com.google.common.io.Files;
+import com.mmxlabs.hub.IUpstreamDetailChangedListener;
+import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.common.http.IProgressListener;
 import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
+import com.mmxlabs.hub.services.users.UsernameProvider;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.BaseCaseRecord;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.BaseCaseServiceClient;
-import com.mmxlabs.lngdataserver.server.IUpstreamDetailChangedListener;
-import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.manifest.Manifest;
@@ -337,7 +338,7 @@ public class BaseCaseScenarioUpdater {
 			if (modelRoot.isLocked() != isLocked || !Objects.equals(lockedBy, modelRoot.getLockedBy())) {
 				RunnerHelper.syncExecDisplayOptional(() -> {
 					baseCaseVersionsProviderService.setLockedBy(client.getLockedBy());
-					modelRoot.setLockedBy(lockedBy);
+					modelRoot.setLockedBy(UsernameProvider.INSTANCE.getDisplayName(lockedBy));
 					modelRoot.setLocked(isLocked);
 				});
 			}

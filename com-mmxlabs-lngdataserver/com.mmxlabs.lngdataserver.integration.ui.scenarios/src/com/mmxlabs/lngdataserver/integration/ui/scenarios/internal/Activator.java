@@ -14,11 +14,11 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.ServiceTracker;
 
+import com.mmxlabs.hub.IUpstreamServiceChangedListener;
+import com.mmxlabs.hub.UpstreamUrlProvider;
+import com.mmxlabs.hub.IUpstreamServiceChangedListener.Service;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.BaseCaseScenarioService;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.SharedWorkspaceScenarioService;
-import com.mmxlabs.lngdataserver.server.IUpstreamServiceChangedListener;
-import com.mmxlabs.lngdataserver.server.IUpstreamServiceChangedListener.Service;
-import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvider;
 import com.mmxlabs.scenario.service.ui.IBaseCaseVersionsProvider;

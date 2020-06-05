@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+<extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="com.mmxlabs.hub.preferences.DataHubPreferencePage"
+            id="com.mmxlabs.lngdataserver.server.DataserverPreferencePage"
+            name="Data Hub">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="com.mmxlabs.hub.preferences.DataHubPreferenceInitializer">
+      </initializer>
+   </extension>
+   <extension
+         point="org.eclipse.ui.startup">
+      <startup
+            class="com.mmxlabs.hub.internal.PluginStartup">
+      </startup>
+   </extension>
+   <extension
+         point="org.eclipse.core.expressions.propertyTesters">
+      <propertyTester
+            class="com.mmxlabs.hub.services.permissions.HubPermissionsFlagsPropertyTester"
+            id="com.mmxlabs.lngdataserver.server.HubPermissionsFlagsPropertyTester"
+            namespace="com.mmxlabs.hub.permissions"
+            properties="hubsupports,ispermitted"
+            type="java.lang.Object">
+      </propertyTester>
+   </extension>
+</plugin>

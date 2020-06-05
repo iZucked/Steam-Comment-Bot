@@ -22,6 +22,8 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
+import com.mmxlabs.hub.UpstreamUrlProvider;
+import com.mmxlabs.hub.services.permissions.UserPermissionsService;
 import com.mmxlabs.lngdataserver.browser.CompositeNode;
 import com.mmxlabs.lngdataserver.browser.Node;
 import com.mmxlabs.lngdataserver.browser.ui.context.IDataBrowserContextMenuExtension;
@@ -37,8 +39,6 @@ import com.mmxlabs.lngdataserver.lng.io.pricing.PricingFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.io.pricing.ui.PricingFromScenarioImportWizard;
 import com.mmxlabs.lngdataserver.lng.io.pricing.ui.PricingToScenarioImportWizard;
 import com.mmxlabs.lngdataserver.lng.io.vessels.ui.VesselsToScenarioImportWizard;
-import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
-import com.mmxlabs.lngdataserver.server.UserPermissionsService;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;

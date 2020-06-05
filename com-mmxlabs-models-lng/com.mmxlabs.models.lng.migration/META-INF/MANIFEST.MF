@@ -13,7 +13,8 @@ Require-Bundle: com.mmxlabs.models.migration;bundle-version="[4.9.5,5.0.0)",
  com.mmxlabs.scenario.service.manifest;bundle-version="[4.9.5,5.0.0)",
  com.mmxlabs.common.common-util;bundle-version="[4.9.5,5.0.0)",
  com.mmxlabs.rcp.common;bundle-version="[4.9.5,5.0.0)",
- com.mmxlabs.models.lng.nominations
+ com.mmxlabs.models.lng.nominations,
+ com.mmxlabs.hub;bundle-version="4.9.5"
 Export-Package: com.mmxlabs.models.lng.migration,
  com.mmxlabs.models.lng.migration.units
 Automatic-Module-Name: com.mmxlabs.models.lng.migration

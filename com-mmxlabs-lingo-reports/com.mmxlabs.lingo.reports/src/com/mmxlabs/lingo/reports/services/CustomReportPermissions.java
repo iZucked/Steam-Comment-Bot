@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.lingo.reports.services;
 
-import com.mmxlabs.lngdataserver.server.UserPermissionsService;
+import com.mmxlabs.hub.services.permissions.UserPermissionsService;
 
 public class CustomReportPermissions {
 	public static final String serviceName = "teamreports";

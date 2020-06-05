@@ -146,7 +146,7 @@
                      <test
                            args="basecase,publish"
                            forcePluginActivation="true"
-                           property="com.mmxlabs.lngdataserver.server.permissions.ispermitted">
+                           property="com.mmxlabs.hub.permissions.ispermitted">
                         </test>    
                      <not>
                         <test
@@ -181,7 +181,7 @@
                         <test
                            args="basecase,lock"
                            forcePluginActivation="true"
-                           property="com.mmxlabs.lngdataserver.server.permissions.ispermitted">
+                           property="com.mmxlabs.hub.permissions.ispermitted">
                         </test>
                         <test
                               forcePluginActivation="true"
@@ -222,7 +222,7 @@
                        <test
                            args="basecase,unlock"
                            forcePluginActivation="true"
-                           property="com.mmxlabs.lngdataserver.server.permissions.ispermitted">
+                           property="com.mmxlabs.hub.permissions.ispermitted">
                         </test>                     
                        <test
                               forcePluginActivation="true"

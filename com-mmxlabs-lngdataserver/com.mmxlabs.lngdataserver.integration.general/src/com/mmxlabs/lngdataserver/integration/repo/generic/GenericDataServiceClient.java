@@ -19,11 +19,11 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.common.http.HttpClientUtil;
 import com.mmxlabs.hub.common.http.IProgressListener;
 import com.mmxlabs.hub.common.http.ProgressRequestBody;
 import com.mmxlabs.hub.common.http.ProgressResponseBody;
-import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
 
 import okhttp3.Interceptor;
 import okhttp3.MultipartBody;
@@ -67,7 +67,6 @@ public class GenericDataServiceClient {
 		// Check the response
 		try (Response response = httpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
-				response.body().close();
 				if (response.code() == 409) {
 					throw new IOException("Data already exists " + type + "/" + uuid);
 				}
@@ -105,13 +104,12 @@ public class GenericDataServiceClient {
 
 		try (Response response = localHttpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
-				response.body().close();
 				throw new IOException("Unexpected code: " + response);
 			}
 			try (BufferedSource bufferedSource = response.body().source()) {
-				final BufferedSink bufferedSink = Okio.buffer(Okio.sink(file));
-				bufferedSink.writeAll(bufferedSource);
-				bufferedSink.close();
+				try (final BufferedSink bufferedSink = Okio.buffer(Okio.sink(file))) {
+					bufferedSink.writeAll(bufferedSource);
+				}
 				return true;
 			}
 		}

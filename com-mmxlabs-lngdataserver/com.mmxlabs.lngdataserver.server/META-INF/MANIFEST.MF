@@ -27,12 +27,11 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.fasterxml.jackson.core.jackson-databind,
  com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.9.2",
  com.fasterxml.jackson.core.jackson-core;bundle-version="2.9.2",
- org.eclipse.core.expressions
+ org.eclipse.core.expressions,
+ org.eclipse.swt
 Import-Package: org.slf4j,
  org.slf4j.helpers,
  org.slf4j.spi
-Export-Package: com.mmxlabs.lngdataserver.server,
- com.mmxlabs.lngdataserver.server.preferences
 Bundle-Vendor: Minimax Labs Ltd.
 Bundle-Activator: com.mmxlabs.lngdataserver.server.DataServerActivator
 Automatic-Module-Name: com.mmxlabs.lngdataserver.server

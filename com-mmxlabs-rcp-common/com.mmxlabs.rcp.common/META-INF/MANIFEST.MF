@@ -30,6 +30,7 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  com.fasterxml.jackson.datatype.jackson-datatype-jsr310;bundle-version="2.9.2",
  org.eclipse.e4.core.services,
  com.mmxlabs.models.mmxcore,
+ com.mmxlabs.hub;bundle-version="4.9.5",
  com.googlecode.json-simple;bundle-version="1.1.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-10
 Bundle-ActivationPolicy: lazy
@@ -46,7 +47,6 @@ Export-Package: com.mmxlabs.rcp.common,
  com.mmxlabs.rcp.common.json,
  com.mmxlabs.rcp.common.loginject,
  com.mmxlabs.rcp.common.menus,
- com.mmxlabs.rcp.common.user,
  com.mmxlabs.rcp.common.versions,
  com.mmxlabs.rcp.common.viewfactory,
  com.mmxlabs.rcp.common.wizards

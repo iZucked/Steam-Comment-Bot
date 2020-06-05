@@ -12,8 +12,8 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 
+import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.common.http.HttpClientUtil;
-import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
 import com.mmxlabs.rcp.common.RunnerHelper;
 
 import okhttp3.Credentials;
@@ -67,7 +67,6 @@ public class ReportsServiceClient {
 					// error for this code.
 					return "503: Service unavailable - not configured on server, so do not report an error for this code";
 				}
-				response.body().close();
 				throw new IOException("Unexpected code " + response);
 			}
 
@@ -86,13 +85,12 @@ public class ReportsServiceClient {
 
 		try (Response response = httpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
-				response.body().close();
 				throw new IOException("Unexpected code: " + response);
 			}
 			try (BufferedSource bufferedSource = response.body().source()) {
-				BufferedSink bufferedSink = Okio.buffer(Okio.sink(file));
-				bufferedSink.writeAll(bufferedSource);
-				bufferedSink.close();
+				try (BufferedSink bufferedSink = Okio.buffer(Okio.sink(file))) {
+					bufferedSink.writeAll(bufferedSource);
+				}
 			}
 			// TODO: Is it a valid .lingo file?
 			String date = response.headers().get("MMX-CreationDate");

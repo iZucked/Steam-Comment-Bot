@@ -117,7 +117,8 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.fasterxml.jackson.datatype.jackson-datatype-jdk8;bundle-version="2.9.2",
  com.fasterxml.jackson.datatype.jackson-datatype-jsr310;bundle-version="2.9.2",
  com.mmxlabs.lngdataserver.integration.ui.scenarios,
- com.mmxlabs.lngdataserver.server
+ com.mmxlabs.lngdataserver.server,
+ com.mmxlabs.hub
 Import-Package: javax.annotation;version="1.2.0",
  javax.inject;version="1.0.0",
  org.json,

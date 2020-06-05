@@ -14,11 +14,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.common.http.HttpClientUtil;
 import com.mmxlabs.hub.common.http.IProgressListener;
 import com.mmxlabs.hub.common.http.ProgressRequestBody;
 import com.mmxlabs.hub.common.http.ProgressResponseBody;
-import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
 
 import okhttp3.Credentials;
 import okhttp3.Interceptor;
@@ -66,7 +66,6 @@ public class SharedWorkspaceServiceClient {
 		// Check the response
 		try (Response response = httpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
-				response.body().close();
 				if (response.code() == 409) {
 					throw new IOException("Scenario already exists " + path);
 				}
@@ -102,13 +101,12 @@ public class SharedWorkspaceServiceClient {
 
 		try (Response response = localHttpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
-				response.body().close();
 				throw new IOException("Unexpected code: " + response);
 			}
 			try (BufferedSource bufferedSource = response.body().source()) {
-				final BufferedSink bufferedSink = Okio.buffer(Okio.sink(file));
-				bufferedSink.writeAll(bufferedSource);
-				bufferedSink.close();
+				try (final BufferedSink bufferedSink = Okio.buffer(Okio.sink(file))) {
+					bufferedSink.writeAll(bufferedSource);
+				}
 				return true;
 			}
 		}
@@ -126,7 +124,6 @@ public class SharedWorkspaceServiceClient {
 
 		try (Response response = httpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
-				response.body().close();
 				throw new IOException("Unexpected code: " + response);
 			}
 			final String value = response.body().string();

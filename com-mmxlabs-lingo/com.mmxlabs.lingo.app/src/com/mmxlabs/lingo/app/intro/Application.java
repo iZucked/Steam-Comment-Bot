@@ -7,6 +7,7 @@ package com.mmxlabs.lingo.app.intro;
 import java.io.File;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,7 +17,6 @@ import java.nio.file.attribute.BasicFileAttributes;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
@@ -39,14 +39,15 @@ import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
 import com.mmxlabs.common.io.FileDeleter;
+import com.mmxlabs.hub.UpstreamUrlProvider;
+import com.mmxlabs.hub.auth.AuthenticationManager;
+import com.mmxlabs.hub.services.permissions.UserPermissionsService;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.license.features.pluginxml.PluginRegistryHook;
 import com.mmxlabs.license.ssl.LicenseChecker;
 import com.mmxlabs.license.ssl.LicenseChecker.LicenseState;
 import com.mmxlabs.lingo.reports.customizable.CustomReportsRegistryHook;
-import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
-import com.mmxlabs.lngdataserver.server.UserPermissionsService;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.rcp.common.application.DelayedOpenFileProcessor;
@@ -61,6 +62,8 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 @SuppressWarnings("restriction")
 public class Application implements IApplication {
 
+	AuthenticationManager authenticationManager = AuthenticationManager.getInstance();
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -74,8 +77,13 @@ public class Application implements IApplication {
 
 		cleanUpTemporaryFolder();
 
+		// HAK
+		@NonNull
+		final ISharedDataModelType<@NonNull PortModel> distances = LNGScenarioSharedModelTypes.DISTANCES;
+
 		// restart the the workbench with the new heap size
 		String heapSize = getHeapSize(appLineArgs);
+
 		if (heapSize != null) {
 			// Construct new command line with new VM arg and restart workbench
 			System.setProperty(IApplicationContext.EXIT_DATA_PROPERTY, buildCommandLine(heapSize));
@@ -83,9 +91,6 @@ public class Application implements IApplication {
 			System.setProperty("eclipse.exitcode", Integer.toString(24));
 			return org.eclipse.equinox.app.IApplication.EXIT_RELAUNCH;
 		}
-
-		// HAK
-		final @NonNull ISharedDataModelType<@NonNull PortModel> distances = LNGScenarioSharedModelTypes.DISTANCES;
 
 		// Start peaberry activation - only for ITS runs inside eclipse.
 		final String[] bundlesToStart = { "org.eclipse.equinox.common", //
@@ -115,57 +120,31 @@ public class Application implements IApplication {
 		// Check Data Hub to see if user is authorised to use LiNGO
 		boolean datahubStartupCheck = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_DATAHUB_STARTUP_CHECK);
 		if (datahubStartupCheck) {
-			try {
-				ProgressMonitorDialog d = new ProgressMonitorDialog(display.getActiveShell());
-				d.run(true, false, monitor -> {
-					monitor.beginTask("Connecting to Data Hub", IProgressMonitor.UNKNOWN);
-					try {
-						// Small start up delay to wait for hub connection.
-						for (int i = 0; i < 5; ++i) {
-							if (UpstreamUrlProvider.INSTANCE.isAvailable()) {
-								break;
-							}
-							try {
-								Thread.sleep(1000);
-							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-							// Trigger the auth prompt in case this is a first run.
-							// Shouldn't really call directly, but the workbench is not started yet for this
-							// method to find a display
-							UpstreamUrlProvider.INSTANCE.testUpstreamAvailability(display);
-						}
-					} finally {
-						monitor.done();
-					}
-				});
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			if (!UpstreamUrlProvider.INSTANCE.isAvailable()) {
-				MessageDialog.openError(display.getActiveShell(), "", "Unable to connect to Data Hub to valid user permissions. Please try again later.");
+			displayProgressMonitor(display);
 
-				display.dispose();
-				return IApplication.EXIT_OK;
-			}
+			// check if datahub is available
+			if (UpstreamUrlProvider.INSTANCE.isUpstreamAvailable()) {
 
-			// Force permissions refresh
-			try {
-				UserPermissionsService.INSTANCE.updateUserPermissions();
-			} catch (IOException e) {
-				e.printStackTrace();
-				MessageDialog.openError(display.getActiveShell(), "", "Error getting user permissions from Data Hub. Please try again later.");
+				if (!authenticationManager.isAuthenticated()) {
+					authenticationManager.run(display.getActiveShell());
+				}
 
-				display.dispose();
-				return IApplication.EXIT_OK;
-			}
+				// refresh permissions
+				try {
+					UserPermissionsService.INSTANCE.updateUserPermissions();
+				} catch (IOException e) {
+					MessageDialog.openError(display.getActiveShell(), "", "Error getting user permissions from Data Hub. Please try again later.");
+				}
 
-			if (!UserPermissionsService.INSTANCE.isPermitted("lingo", "read")) {
-				MessageDialog.openError(display.getActiveShell(), "", "Not authorised to use LiNGO");
+				if (UserPermissionsService.INSTANCE.hasUserPermissions() && !UserPermissionsService.INSTANCE.isPermitted("lingo", "read")) {
+					System.out.println(UserPermissionsService.INSTANCE.hasUserPermissions());
+					MessageDialog.openError(display.getActiveShell(), "", "User is not authorised to use LiNGO");
+					display.dispose();
+					return IApplication.EXIT_OK;
+				}
 
-				display.dispose();
-				return IApplication.EXIT_OK;
+			} else {
+				MessageDialog.openError(display.getActiveShell(), "", "Unable to connect to DataHub. Please try again later.");
 			}
 		}
 
@@ -288,6 +267,37 @@ public class Application implements IApplication {
 		}
 		// Sometimes dir disappears? Perhaps the tree-walker check does not work?
 		tempDirectory.mkdirs();
+	}
+
+	private void displayProgressMonitor(Display display) {
+		ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(display.getActiveShell());
+		try {
+			progressDialog.run(true, false, monitor -> {
+				waitForHub(display);
+				monitor.done();
+			});
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void waitForHub(Display display) {
+		int timeoutInSeconds = 30;
+		int msInASecond = 1000;
+
+		for (int i = 0; i < timeoutInSeconds; ++i) {
+			if (UpstreamUrlProvider.INSTANCE.isAvailable()) {
+				break;
+			}
+			try {
+				Thread.sleep(msInASecond);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+				Thread.currentThread().interrupt();
+			}
+		}
 	}
 
 	/**

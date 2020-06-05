@@ -19,9 +19,9 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.hub.services.users.UsernameProvider;
 import com.mmxlabs.models.mmxcore.MMXCoreFactory;
 import com.mmxlabs.models.mmxcore.VersionRecord;
-import com.mmxlabs.rcp.common.user.UsernameProvider;
 import com.mmxlabs.scenario.service.manifest.Manifest;
 import com.mmxlabs.scenario.service.manifest.ManifestFactory;
 import com.mmxlabs.scenario.service.manifest.ModelArtifact;
@@ -80,7 +80,7 @@ public abstract class AbstractVersionCommandWrapper implements IWrappedCommandPr
 					String newID = UUID.randomUUID().toString();
 					VersionRecord record = MMXCoreFactory.eINSTANCE.createVersionRecord();
 					record.setVersion(newID);
-					record.setCreatedBy(UsernameProvider.getUsername());
+					record.setCreatedBy(UsernameProvider.INSTANCE.getUserID());
 					record.setCreatedAt(Instant.now());
 					final Command cmd = SetCommand.create(editingDomain, modelRoot, versionRecordFeature, record);
 					appendAndExecute(cmd);
