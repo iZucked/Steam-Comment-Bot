@@ -537,6 +537,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 				else {
 					try {
 						CustomReportsRegistry.getInstance().publishReport(this.current);
+						this.changesMade = true;
 					} catch (Exception e) {
 						String errorMsg = "Problem publishing renamed report \""+this.current.getName()+"\" to DataHub.";
 						logger.error(errorMsg, e);
@@ -544,7 +545,6 @@ public class CustomReportsManagerDialog extends TrayDialog {
 					}					
 				}
 				this.updateViewWithReportDefinition(this.current);
-				this.changesMade = true;
 			}
 		}
 		else {
@@ -588,27 +588,30 @@ public class CustomReportsManagerDialog extends TrayDialog {
 						//Save down, before publishing for user report.
 						CustomReportsRegistry.getInstance().writeToJSON(rd);
 						change.saved = true;
+						this.changesMade = true;
 					}
 				}
-				//Make sure we refresh team reports if team reports selected.
-				this.userReportPublished = true;
 			}
 			try {
 				CustomReportsRegistry.getInstance().publishReport(rd);
+				
+				//Make sure we refresh team reports if team reports selected.
+				this.userReportPublished = true;
+				this.changesMade = true;
+				Change change = this.uuidToChangedReports.get(rd.getUuid());
+				if (change != null) {
+					//If team report or it has already been saved, then set disable discard button again.
+					if (this.teamButton.getSelection() || change.saved)  {
+						this.discardBtn.setEnabled(false);
+					}
+					this.uuidToChangedReports.get(rd.getUuid()).published = true;
+					this.uuidToChangedReports.get(rd.getUuid()).newReport = false;
+				}
 			} catch(Exception e) {
 				String errorMsg = "Problem publishing report \""+rd.getName()+"\" to DataHub.";
 				logger.error(errorMsg, e);
 				displayErrorDialog(errorMsg);
-			}
-			Change change = this.uuidToChangedReports.get(rd.getUuid());
-			if (change != null) {
-				//If team report or it has already been saved, then set disable discard button again.
-				if (this.teamButton.getSelection() || change.saved)  {
-					this.discardBtn.setEnabled(false);
-				}
-				this.uuidToChangedReports.get(rd.getUuid()).published = true;
-				this.uuidToChangedReports.get(rd.getUuid()).newReport = false;
-			}
+			} 	
 		}
 	}
 
