@@ -7,9 +7,8 @@ package com.mmxlabs.lngdataserver.integration.reports.custom;
 import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
+import java.util.Collections;
 import java.util.List;
-
-import org.eclipse.jdt.annotation.Nullable;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -179,22 +178,19 @@ public class CustomReportDataServiceClient {
 	private static final TypeReference<List<CustomReportDataRecord>> TYPE_GDR_LIST = new TypeReference<List<CustomReportDataRecord>>() {
 	};
 
-	public static @Nullable List<CustomReportDataRecord> parseRecordsJSONData(final String jsonData) {
+	public static List<CustomReportDataRecord> parseRecordsJSONData(final String jsonData) {
 		final ObjectMapper mapper = new ObjectMapper();
 		mapper.registerModule(new JavaTimeModule());
 		try {
 			return mapper.readValue(jsonData, TYPE_GDR_LIST);
 		} catch (final JsonParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (final JsonMappingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (final IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return null;
+		return Collections.emptyList();
 	}
 
 }
