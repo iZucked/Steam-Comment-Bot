@@ -63,12 +63,6 @@ public class CustomReportsRegistry {
 		
 	public void setStatusLineManager(IStatusLineManager statusLineManager) {	
 		statusLineManager.add(this.statusLineItem);
-		//For testing purposes.
-		//Display.getDefault().asyncExec(new Runnable() {
-		//	public void run() {
-		//		statusLineItem.setText("Registering team status updater successful!!");
-		//	}
-		//});
 		ServiceHelper.withCheckedServiceConsumer(ICustomReportDataRepository.class, s -> s.registerLocalVersionListener(new Runnable() {
 			@Override
 			public void run() {
@@ -315,7 +309,9 @@ public class CustomReportsRegistry {
 	}
 	
 	public void publishReport(final ScheduleSummaryReportDefinition reportDefinition) throws Exception {
-		ServiceHelper.withCheckedService(ICustomReportDataRepository.class, s -> s.publishReport(reportDefinition));
+		if (!ServiceHelper.withCheckedService(ICustomReportDataRepository.class, s -> s.publishReport(reportDefinition))) {
+			throw new IOException("Error publishing report to datahub");
+		}
 	}
 
 	public List<ColumnBlock> getColumnDefinitions() {
