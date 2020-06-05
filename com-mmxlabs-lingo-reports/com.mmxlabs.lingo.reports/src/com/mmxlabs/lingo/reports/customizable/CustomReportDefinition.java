@@ -2,12 +2,12 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
-package com.mmxlabs.lingo.reports.views.schedule;
+package com.mmxlabs.lingo.reports.customizable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ScheduleSummaryReportDefinition implements Cloneable {
+public class CustomReportDefinition implements Cloneable {
 	String uuid;
 	String name;
 	String type;
@@ -17,7 +17,7 @@ public class ScheduleSummaryReportDefinition implements Cloneable {
 
 	@Override
 	public Object clone() {
-		ScheduleSummaryReportDefinition rd = new ScheduleSummaryReportDefinition();
+		CustomReportDefinition rd = new CustomReportDefinition();
 		rd.uuid = uuid;
 		rd.name = name;
 		rd.type = type;

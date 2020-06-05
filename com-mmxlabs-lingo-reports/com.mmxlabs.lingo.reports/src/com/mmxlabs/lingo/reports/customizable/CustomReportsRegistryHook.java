@@ -20,7 +20,6 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
-import com.mmxlabs.lingo.reports.views.schedule.CustomReportsRegistry;
 
 @SuppressWarnings("restriction")
 public class CustomReportsRegistryHook {

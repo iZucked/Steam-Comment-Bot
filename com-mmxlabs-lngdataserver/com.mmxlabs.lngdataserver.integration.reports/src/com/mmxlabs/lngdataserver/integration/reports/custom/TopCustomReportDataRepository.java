@@ -21,9 +21,9 @@ import org.eclipse.core.runtime.IPath;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
 import com.mmxlabs.common.util.CheckedBiConsumer;
+import com.mmxlabs.lingo.reports.customizable.CustomReportDefinition;
 import com.mmxlabs.lingo.reports.services.CustomReportPermissions;
 import com.mmxlabs.lingo.reports.services.ICustomReportDataRepository;
-import com.mmxlabs.lingo.reports.views.schedule.ScheduleSummaryReportDefinition;
 
 public class TopCustomReportDataRepository implements ICustomReportDataRepository {
 	
@@ -58,7 +58,7 @@ public class TopCustomReportDataRepository implements ICustomReportDataRepositor
 		newLocalVersionCallbacks.add(versionConsumer);
 	}
 
-	protected boolean doPublishOutputStream(final ScheduleSummaryReportDefinition reportDefinition, String uuid, CheckedBiConsumer<ScheduleSummaryReportDefinition, OutputStream, IOException> writeAction) throws Exception {
+	protected boolean doPublishOutputStream(final CustomReportDefinition reportDefinition, String uuid, CheckedBiConsumer<CustomReportDefinition, OutputStream, IOException> writeAction) throws Exception {
 
 		Path p = Files.createTempFile("hub-", ".data");
 		try {
@@ -78,7 +78,7 @@ public class TopCustomReportDataRepository implements ICustomReportDataRepositor
 	}
 
 	@Override
-	public boolean publishReport(final ScheduleSummaryReportDefinition reportDefinition) throws Exception {
+	public boolean publishReport(final CustomReportDefinition reportDefinition) throws Exception {
 		if (CustomReportPermissions.hasCustomReportPublishPermission()) {
 			return doPublishOutputStream(reportDefinition, reportDefinition.getUuid(), CustomReportDataRepository::write);
 		}
@@ -86,7 +86,7 @@ public class TopCustomReportDataRepository implements ICustomReportDataRepositor
 	}
 
 	@Override
-	public List<ScheduleSummaryReportDefinition> getTeamReports() throws IOException{
+	public List<CustomReportDefinition> getTeamReports() throws IOException{
 		
 		final IPath wsPath = ResourcesPlugin.getWorkspace().getRoot().getLocation();		
 		final File directory = new File(wsPath.toOSString() + IPath.SEPARATOR + "team-reports");
@@ -98,7 +98,7 @@ public class TopCustomReportDataRepository implements ICustomReportDataRepositor
 		}
 
 		final Collection<CustomReportDataRecord> records = new ArrayList<CustomReportDataRecord>();
-		final List<ScheduleSummaryReportDefinition> results = new ArrayList<ScheduleSummaryReportDefinition>();
+		final List<CustomReportDefinition> results = new ArrayList<CustomReportDefinition>();
 
 		getRecordsWithCacheOptionality(directory, records);
 		
@@ -135,12 +135,12 @@ public class TopCustomReportDataRepository implements ICustomReportDataRepositor
 		}
 	}
 
-	private void readReportJSONFile(final File directory, final List<ScheduleSummaryReportDefinition> results, //
+	private void readReportJSONFile(final File directory, final List<CustomReportDefinition> results, //
 			final ObjectMapper mapper, final CustomReportDataRecord record) throws IOException {
 		final File repofile = new File(directory, String.format("%s.json", record.getUuid()));
 		if (repofile.exists()) {
-			final ScheduleSummaryReportDefinition definition 
-				= mapper.readValue(repofile, ScheduleSummaryReportDefinition.class);
+			final CustomReportDefinition definition 
+				= mapper.readValue(repofile, CustomReportDefinition.class);
 			results.add(definition);
 		}
 	}
@@ -153,7 +153,7 @@ public class TopCustomReportDataRepository implements ICustomReportDataRepositor
 	}
 
 	@Override
-	public void removeReport(ScheduleSummaryReportDefinition reportDefinition) throws IOException{
+	public void removeReport(CustomReportDefinition reportDefinition) throws IOException{
 		if (CustomReportPermissions.hasCustomReportDeletePermission()) {
 			CustomReportDataRepository.INSTANCE.delete(reportDefinition.getUuid());
 		}

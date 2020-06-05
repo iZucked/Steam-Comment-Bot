@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
-package com.mmxlabs.lingo.reports.views.schedule;
+package com.mmxlabs.lingo.reports.customizable;
 
 import static org.ops4j.peaberry.eclipse.EclipseRegistry.eclipseRegistry;
 
@@ -22,6 +22,9 @@ import com.google.inject.Injector;
 import com.mmxlabs.lingo.reports.components.ReportComponentModule;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.views.AbstractReportBuilder;
+import com.mmxlabs.lingo.reports.views.schedule.IScheduleColumnFactory;
+import com.mmxlabs.lingo.reports.views.schedule.ScheduleBasedReportBuilder;
+import com.mmxlabs.lingo.reports.views.schedule.ScheduleSummaryReport;
 import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedColumnExtension;
 import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedColumnFactoryExtension;
 import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedColumnOverrideExtension;

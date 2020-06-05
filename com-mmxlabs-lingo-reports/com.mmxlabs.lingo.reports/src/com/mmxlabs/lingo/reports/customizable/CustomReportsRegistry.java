@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
-package com.mmxlabs.lingo.reports.views.schedule;
+package com.mmxlabs.lingo.reports.customizable;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmxlabs.lingo.reports.services.CustomReportPermissions;
 import com.mmxlabs.lingo.reports.services.ICustomReportDataRepository;
+import com.mmxlabs.lingo.reports.views.schedule.ScheduleSummaryReport;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.rcp.common.application.E4ModelHelper;
@@ -80,9 +81,9 @@ public class CustomReportsRegistry {
 		try {
 			//Check if reports directory exists, if not create it.
 			checkReportsDirectoryExistsOrCreate();
-			List<ScheduleSummaryReportDefinition> userReportDefinitions = readUserCustomReportDefinitions();
-			List<ScheduleSummaryReportDefinition> teamReportDefinitions = readTeamCustomReportDefinitions();
-			List<ScheduleSummaryReportDefinition> reportDefinitions = new ArrayList<>(userReportDefinitions.size()+teamReportDefinitions.size());
+			List<CustomReportDefinition> userReportDefinitions = readUserCustomReportDefinitions();
+			List<CustomReportDefinition> teamReportDefinitions = readTeamCustomReportDefinitions();
+			List<CustomReportDefinition> reportDefinitions = new ArrayList<>(userReportDefinitions.size()+teamReportDefinitions.size());
 			reportDefinitions.addAll(userReportDefinitions);
 			reportDefinitions.addAll(teamReportDefinitions);
 			writeReportsPluginXMLFile(reportDefinitions);
@@ -92,7 +93,7 @@ public class CustomReportsRegistry {
 		}
 	}
 
-	private void writeReportsPluginXMLFile(List<ScheduleSummaryReportDefinition> reportDefinitions) throws FileNotFoundException {
+	private void writeReportsPluginXMLFile(List<CustomReportDefinition> reportDefinitions) throws FileNotFoundException {
 		File reportsPluginXMLFile = new File(getReportsPluginXMLPath());
 
 		PrintStream out = new PrintStream(reportsPluginXMLFile);
@@ -100,12 +101,12 @@ public class CustomReportsRegistry {
 		writePluginXMLHeader(out);
 		
 		//Write out 
-		for (ScheduleSummaryReportDefinition rd : reportDefinitions) {
+		for (CustomReportDefinition rd : reportDefinitions) {
 			writePluginXMLExtensionInitialState(out, rd);
 		}
 
 		//Write out views section
-		for (ScheduleSummaryReportDefinition rd : reportDefinitions) {
+		for (CustomReportDefinition rd : reportDefinitions) {
 			writePluginXMLExtensionView(out, rd);
 		}
 		
@@ -119,12 +120,12 @@ public class CustomReportsRegistry {
 		return workspaceLocation.toOSString()+IPath.SEPARATOR+USER_REPORTS_DIR+IPath.SEPARATOR+XML_REPORTS_PLUGIN_FILENAME;
 	}
 
-	public List<ScheduleSummaryReportDefinition> readUserCustomReportDefinitions() {
+	public List<CustomReportDefinition> readUserCustomReportDefinitions() {
 		return readCustomReportDefinitions(USER_REPORTS_DIR);
 	}
 	
-	public List<ScheduleSummaryReportDefinition> readTeamCustomReportDefinitions() {
-		List<ScheduleSummaryReportDefinition> reports;
+	public List<CustomReportDefinition> readTeamCustomReportDefinitions() {
+		List<CustomReportDefinition> reports;
 		try {
 			reports = ServiceHelper.withCheckedService(ICustomReportDataRepository.class, s -> s.getTeamReports());
 		}
@@ -155,11 +156,11 @@ public class CustomReportsRegistry {
 		return CustomReportPermissions.hasCustomReportDeletePermission();
 	}
 	
-	public List<ScheduleSummaryReportDefinition> readCustomReportDefinitions(String reportsDirShortName) {
+	public List<CustomReportDefinition> readCustomReportDefinitions(String reportsDirShortName) {
 		//Read in all report definitions.
 		final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();		
 		File reportsDir = new File(workspaceLocation.toOSString()+IPath.SEPARATOR+reportsDirShortName);
-		List<ScheduleSummaryReportDefinition> reportDefinitions = new ArrayList<>();
+		List<CustomReportDefinition> reportDefinitions = new ArrayList<>();
 
 		if (reportsDir.exists()) {
 			File [] files = reportsDir.listFiles(new FilenameFilter() {
@@ -174,7 +175,7 @@ public class CustomReportsRegistry {
 			for (File reportJsonFile : files) {
 				//Read in json object.
 				try {
-					ScheduleSummaryReportDefinition reportDefinition = mapper.readValue(reportJsonFile, ScheduleSummaryReportDefinition.class);
+					CustomReportDefinition reportDefinition = mapper.readValue(reportJsonFile, CustomReportDefinition.class);
 					reportDefinitions.add(reportDefinition);
 				} catch (Exception e) {
 					logger.error("Problem reading file "+reportJsonFile.getName(), e);
@@ -185,7 +186,7 @@ public class CustomReportsRegistry {
 		return reportDefinitions;
 	}
 	
-	private void writePluginXMLExtensionView(PrintStream out, ScheduleSummaryReportDefinition rd) {
+	private void writePluginXMLExtensionView(PrintStream out, CustomReportDefinition rd) {
 		out.print("    <extension\r\n" + 
 		"          point=\"org.eclipse.ui.views\">\r\n" + 
 		"       <view\r\n" + 
@@ -219,7 +220,7 @@ public class CustomReportsRegistry {
 				"<plugin>\r\n");
 	}
 	
-	private void writePluginXMLExtensionInitialState(PrintStream out, ScheduleSummaryReportDefinition ssrd) {
+	private void writePluginXMLExtensionInitialState(PrintStream out, CustomReportDefinition ssrd) {
 		out.print("    <extension\r\n" + 
 				"          point=\"com.mmxlabs.lingo.reports.ScheduleBasedReportInitialState\">\r\n" + 
 				"       <ScheduleBasedReportInitialState\r\n" + 
@@ -253,7 +254,7 @@ public class CustomReportsRegistry {
 		out.print("    </extension>\r\n");
 	}
 	
-	public void writeToJSON(ScheduleSummaryReportDefinition rd) {
+	public void writeToJSON(CustomReportDefinition rd) {
 		//Check if reports directory exists, if not create it.
 		checkReportsDirectoryExistsOrCreate();
 		
@@ -265,7 +266,7 @@ public class CustomReportsRegistry {
 	}
 
 
-	private void writeCustomReportViewToJSON(ScheduleSummaryReportDefinition jsonObject) {
+	private void writeCustomReportViewToJSON(CustomReportDefinition jsonObject) {
 		final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();		
 		File reportsFile = new File(workspaceLocation.toOSString()+IPath.SEPARATOR+USER_REPORTS_DIR+IPath.SEPARATOR+JSON_REPORT_PREFIX+jsonObject.getUuid()+".json");
 
@@ -287,9 +288,9 @@ public class CustomReportsRegistry {
 	}
 
 	public void removeDeletedViews(@NonNull MApplication application, @NonNull EModelService modelService) {
-		List<ScheduleSummaryReportDefinition> reportDefinitions = readUserCustomReportDefinitions();
+		List<CustomReportDefinition> reportDefinitions = readUserCustomReportDefinitions();
 		Set<String> customReportIds = new HashSet<>();
-		for (ScheduleSummaryReportDefinition rd : reportDefinitions) {
+		for (CustomReportDefinition rd : reportDefinitions) {
 			customReportIds.add(rd.getUuid());
 		}
 
@@ -308,7 +309,7 @@ public class CustomReportsRegistry {
 		}
 	}
 	
-	public void publishReport(final ScheduleSummaryReportDefinition reportDefinition) throws Exception {
+	public void publishReport(final CustomReportDefinition reportDefinition) throws Exception {
 		if (!ServiceHelper.withCheckedService(ICustomReportDataRepository.class, s -> s.publishReport(reportDefinition))) {
 			throw new IOException("Error publishing report to datahub");
 		}
@@ -330,7 +331,7 @@ public class CustomReportsRegistry {
 		return defaults.getBlockManager().getBlockIndex((ColumnBlock) columnObj);
 	}
 
-	public void delete(ScheduleSummaryReportDefinition toDelete) {
+	public void delete(CustomReportDefinition toDelete) {
 		final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();		
 		File reportsFile = new File(workspaceLocation.toOSString()+IPath.SEPARATOR+USER_REPORTS_DIR+IPath.SEPARATOR+JSON_REPORT_PREFIX+toDelete.getUuid()+".json");
 		if (!reportsFile.delete()) {
@@ -345,7 +346,7 @@ public class CustomReportsRegistry {
 		ServiceHelper.withCheckedServiceConsumer(ICustomReportDataRepository.class, s -> s.refresh());
 	}
 	
-	public void removeFromDatahub(ScheduleSummaryReportDefinition toDelete) throws Exception {
+	public void removeFromDatahub(CustomReportDefinition toDelete) throws Exception {
 		ServiceHelper.withCheckedServiceConsumer(ICustomReportDataRepository.class, s -> s.removeReport(toDelete));
 	}
 }

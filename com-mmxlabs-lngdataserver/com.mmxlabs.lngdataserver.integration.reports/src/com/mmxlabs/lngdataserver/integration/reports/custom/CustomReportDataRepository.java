@@ -34,8 +34,8 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.mmxlabs.hub.IUpstreamDetailChangedListener;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
+import com.mmxlabs.lingo.reports.customizable.CustomReportDefinition;
 import com.mmxlabs.lingo.reports.services.CustomReportPermissions;
-import com.mmxlabs.lingo.reports.views.schedule.ScheduleSummaryReportDefinition;
 
 public class CustomReportDataRepository {
 
@@ -210,7 +210,7 @@ public class CustomReportDataRepository {
 		}
 	}
 	
-	public static void write(final ScheduleSummaryReportDefinition reportDefinition, final OutputStream os) throws IOException {
+	public static void write(final CustomReportDefinition reportDefinition, final OutputStream os) throws IOException {
 		
 		final ObjectMapper mapper = new ObjectMapper();
 		try {

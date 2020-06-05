@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
+import com.mmxlabs.lingo.reports.customizable.CustomReportDefinition;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.OptionInfo;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlockManager;
@@ -64,21 +65,21 @@ public class ScheduleSummaryReport extends AbstractConfigurableScheduleReportVie
 		*/	
 	}
 
-	public ScheduleSummaryReportDefinition getReportDefinition() {
-		ScheduleSummaryReportDefinition jsonObject = new ScheduleSummaryReportDefinition();
+	public CustomReportDefinition getReportDefinition() {
+		CustomReportDefinition jsonObject = new CustomReportDefinition();
 		if (this.uuid == null) {
 			uuid = UUID_PREFIX+UUID.randomUUID().toString();
 		}
 		System.out.println("UUID = "+uuid);
-		jsonObject.uuid = this.uuid;
+		jsonObject.setUuid(this.uuid);
 				
 		String name = this.getTitle();
 		System.out.println("Name = "+name);
-		jsonObject.name = name;
+		jsonObject.setName(name);
 		
 		String type = this.getClass().getSimpleName();
 		System.out.println("Type = "+type);
-		jsonObject.type = type;
+		jsonObject.setType(type);
 		
 		System.out.println("Filters = ");
 		for (final String option : builder.getRowFilterInfo()) {
@@ -86,7 +87,7 @@ public class ScheduleSummaryReport extends AbstractConfigurableScheduleReportVie
 			if (oi != null) {
 				String rowType = builder.getRowFilterOptionInfo(option).type;
 				System.out.print(rowType + " ");
-				jsonObject.filters.add(rowType);
+				jsonObject.getFilters().add(rowType);
 			}
 			else {
 				System.err.println("Could not find row filter option: "+option);
@@ -99,7 +100,7 @@ public class ScheduleSummaryReport extends AbstractConfigurableScheduleReportVie
 			boolean isVisible = bm.getBlockVisible(block);
 			if (isVisible) { //We are only interested in visible columns.
 				System.out.println("ColumnBlock = "+blockID);
-				jsonObject.columns.add(blockID);
+				jsonObject.getColumns().add(blockID);
 			}
 		}
 		
@@ -108,7 +109,7 @@ public class ScheduleSummaryReport extends AbstractConfigurableScheduleReportVie
 			if (oi != null) {
 				String diffFilter = builder.getDiffFilterOptionInfo(option).type;
 				System.out.println("DiffFilter "+diffFilter);
-				jsonObject.diffOptions.add(diffFilter);
+				jsonObject.getDiffOptions().add(diffFilter);
 			}
 			else {
 				System.err.println("Could not find diff filter option: "+option);

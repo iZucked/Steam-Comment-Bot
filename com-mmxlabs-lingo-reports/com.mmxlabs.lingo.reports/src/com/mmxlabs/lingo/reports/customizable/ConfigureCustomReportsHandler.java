@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
-package com.mmxlabs.lingo.reports.views.schedule;
+package com.mmxlabs.lingo.reports.customizable;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -12,8 +12,6 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.mmxlabs.lingo.reports.customizable.CustomReportsManagerDialog;
 
 public class ConfigureCustomReportsHandler extends AbstractHandler {
 
