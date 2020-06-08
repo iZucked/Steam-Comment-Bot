@@ -14,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.google.inject.name.Names;
 import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -76,6 +77,10 @@ public class ExposuresScenarioTests extends AbstractMicroTestCase {
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testGeneratedHedgesComputation() throws Exception {
+		
+		Assertions.assertTrue(LicenseFeatures.isPermitted(KnownFeatures.FEATURE_EXPOSURES));
+		Assertions.assertTrue(LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PAPER_DEALS));
+		Assertions.assertTrue(LicenseFeatures.isPermitted(KnownFeatures.FEATURE_GENERATED_PAPER_DEALS));
 
 		final CargoModel cm = ScenarioModelUtil.getCargoModel(scenarioDataProvider);
 		cm.getPaperDeals().clear();
