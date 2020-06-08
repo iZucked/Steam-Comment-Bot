@@ -37,6 +37,7 @@ import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 import org.osgi.framework.Bundle;
 
 import com.mmxlabs.lingo.app.Activator;
+import com.mmxlabs.lingo.reports.customizable.CustomReportsRegistry;
 import com.mmxlabs.rcp.common.application.DelayedOpenFileProcessor;
 import com.mmxlabs.scenario.service.ui.editing.ScenarioServiceSaveHook;
 
@@ -106,6 +107,9 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 		// Hook into our save call back before passing on to the platform.
 		boolean ret = ScenarioServiceSaveHook.saveScenarioService();
 
+		// Save latest state of Custom reports.
+		CustomReportsRegistry.getInstance().regenerateReportsPluginXMLFile();
+		
 		return ret && super.preShutdown();
 	}
 

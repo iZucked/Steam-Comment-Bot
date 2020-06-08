@@ -39,8 +39,6 @@ public class CustomReportsRegistryHook {
 			final Bundle bundle = FrameworkUtil.getBundle(CustomReportsRegistryHook.class);
 
 			final IContributor contributor = ContributorFactoryOSGi.createContributor(bundle);
-	
-			CustomReportsRegistry.getInstance().regenerateReportsPluginXMLFile();
 			
 			final String pluginXMLPath = CustomReportsRegistry.getReportsPluginXMLPath();
 			
@@ -52,9 +50,6 @@ public class CustomReportsRegistryHook {
 				} catch (final Exception e) {
 					log.error(e.getMessage(), e);
 				}
-			}
-			else {
-				log.warn("Could not open custom reports plugin.xml file in: "+pluginXMLPath);
 			}
 		}
 	}
