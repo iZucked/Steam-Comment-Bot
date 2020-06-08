@@ -21,6 +21,11 @@ import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 
+/***
+ * Registers Custom Reports with the Show Views of eclipse menu. 
+ * Unfortunately, we still have to find a way to do this without restarting eclipse, but for now this should suffice.
+ * @author Patrick
+ */
 @SuppressWarnings("restriction")
 public class CustomReportsRegistryHook {
 
