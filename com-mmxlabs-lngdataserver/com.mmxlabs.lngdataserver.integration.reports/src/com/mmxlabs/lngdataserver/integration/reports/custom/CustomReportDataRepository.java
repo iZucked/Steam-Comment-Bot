@@ -35,7 +35,6 @@ import com.mmxlabs.hub.IUpstreamDetailChangedListener;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
 import com.mmxlabs.lingo.reports.customizable.CustomReportDefinition;
-import com.mmxlabs.lingo.reports.services.CustomReportPermissions;
 
 public class CustomReportDataRepository {
 
@@ -59,10 +58,7 @@ public class CustomReportDataRepository {
 	private CustomReportDataRepository() {
 		dataList = new ConcurrentLinkedQueue<>();
 		upstreamDetailsChangedListener = dataList::clear;
-		
-		if (CustomReportPermissions.hasCustomReportPermission()) {
-			start();
-		}
+		start();
 	}
 	
 	
@@ -91,12 +87,14 @@ public class CustomReportDataRepository {
 		return new File(String.format("%s/%s.data", dataFolder.getAbsoluteFile(), uuid));
 	}
 
-	public void uploadData(final String uuid, final String contentType, final File dataFile, @Nullable final IProgressMonitor progressMonitor) throws Exception {
+	public boolean uploadData(final String uuid, final String contentType, final File dataFile, @Nullable final IProgressMonitor progressMonitor) throws Exception {
+		String uploadUUID = null;
 		try {
 
 			try {
 				updater.pause();
-				client.upload(uuid, contentType, dataFile, WrappedProgressMonitor.wrapMonitor(progressMonitor));
+				uploadUUID = //
+						client.upload(uuid, contentType, dataFile, WrappedProgressMonitor.wrapMonitor(progressMonitor));
 			} finally {
 				updater.resume();
 			}
@@ -110,6 +108,7 @@ public class CustomReportDataRepository {
 				progressMonitor.done();
 			}
 		}
+		return (uuid.equalsIgnoreCase(uploadUUID));
 	}
 
 	public void delete(final String uuid) throws IOException {
@@ -147,7 +146,7 @@ public class CustomReportDataRepository {
 					}
 
 					client = new CustomReportDataServiceClient();
-					CustomReportDataRepository.this.updater = new CustomReportDataUpdater(dataFolder, client, CustomReportDataRepository.this::update);
+					updater = new CustomReportDataUpdater(dataFolder, client, CustomReportDataRepository.this::update);
 					updater.start();
 				}
 				this.close();

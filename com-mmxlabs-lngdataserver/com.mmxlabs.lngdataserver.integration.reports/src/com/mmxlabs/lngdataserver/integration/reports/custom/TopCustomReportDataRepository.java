@@ -67,8 +67,7 @@ public class TopCustomReportDataRepository implements ICustomReportDataRepositor
 				writeAction.accept(reportDefinition, os);
 			}
 			// Upload it
-			CustomReportDataRepository.INSTANCE.uploadData(uuid, "application/octet-stream", p.toFile(), null);
-			return true;
+			return CustomReportDataRepository.INSTANCE.uploadData(uuid, "application/octet-stream", p.toFile(), null);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
