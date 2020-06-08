@@ -16,6 +16,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.emf.validation.internal.util.Log;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.osgi.framework.Bundle;
@@ -95,14 +96,20 @@ public class CustomReportDataRepository {
 				updater.pause();
 				uploadUUID = //
 						client.upload(uuid, contentType, dataFile, WrappedProgressMonitor.wrapMonitor(progressMonitor));
+			} catch (final Exception e){
+				LOGGER.error(e.getMessage());
 			} finally {
 				updater.resume();
 			}
+			
 			try {
+				updater.pause();
 				updater.refresh();
-			} catch (final Exception e) {
-				e.printStackTrace();
+			} finally {
+				updater.resume();
 			}
+			
+			
 		} finally {
 			if (progressMonitor != null) {
 				progressMonitor.done();
@@ -112,15 +119,13 @@ public class CustomReportDataRepository {
 	}
 
 	public void delete(final String uuid) throws IOException {
-
 		client.deleteData(uuid);
 		try {
+			updater.pause();
 			updater.refresh();
-		} catch (final IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} finally {
+			updater.resume();
 		}
-
 	}
 
 	public void start() {
@@ -210,14 +215,8 @@ public class CustomReportDataRepository {
 	}
 	
 	public static void write(final CustomReportDefinition reportDefinition, final OutputStream os) throws IOException {
-		
 		final ObjectMapper mapper = new ObjectMapper();
-		try {
-			mapper.writerWithDefaultPrettyPrinter().writeValue(os, reportDefinition);
-		} catch (final Exception e) {
-			e.printStackTrace();
-		}
-		
+		mapper.writerWithDefaultPrettyPrinter().writeValue(os, reportDefinition);
 	}
 	
 	public void refresh()  throws IOException {

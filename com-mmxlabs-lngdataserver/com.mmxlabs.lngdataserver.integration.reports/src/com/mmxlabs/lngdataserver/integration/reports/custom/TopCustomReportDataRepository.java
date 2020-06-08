@@ -12,11 +12,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
@@ -24,10 +27,12 @@ import com.mmxlabs.common.util.CheckedBiConsumer;
 import com.mmxlabs.lingo.reports.customizable.CustomReportDefinition;
 import com.mmxlabs.lingo.reports.services.CustomReportPermissions;
 import com.mmxlabs.lingo.reports.services.ICustomReportDataRepository;
+import com.mmxlabs.lingo.reports.views.schedule.ScheduleSummaryReport;
 
 public class TopCustomReportDataRepository implements ICustomReportDataRepository {
 	
 	public static final TopCustomReportDataRepository INSTANCE = new TopCustomReportDataRepository();
+	private static final Logger LOGGER = LoggerFactory.getLogger(TopCustomReportDataRepository.class);
 
 	protected final List<Runnable> newLocalVersionCallbacks = new LinkedList<>();
 
@@ -69,7 +74,7 @@ public class TopCustomReportDataRepository implements ICustomReportDataRepositor
 			// Upload it
 			return CustomReportDataRepository.INSTANCE.uploadData(uuid, "application/octet-stream", p.toFile(), null);
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage());
 			return false;
 		} finally {
 			Files.delete(p);
@@ -87,26 +92,25 @@ public class TopCustomReportDataRepository implements ICustomReportDataRepositor
 	@Override
 	public List<CustomReportDefinition> getTeamReports() throws IOException{
 		
+		final List<CustomReportDefinition> results = new ArrayList<>();
 		final IPath wsPath = ResourcesPlugin.getWorkspace().getRoot().getLocation();		
 		final File directory = new File(wsPath.toOSString() + IPath.SEPARATOR + "team-reports");
 		if (!directory.exists()) {
-			throw new IOException("Team report directory does not exist!");
-		}
-		if (!directory.canRead()) {
-			throw new IOException("LiNGO is not permitted to read from team reports folder! Check user permissions!");
+			return Collections.emptyList();
+		} else if (!directory.canRead()) {
+			throw new IOException(String.format(//
+					"LiNGO is not permitted to read from team reports folder - %s! Check user permissions!",//
+					directory.getAbsolutePath()));
 		}
 
-		final Collection<CustomReportDataRecord> records = new ArrayList<CustomReportDataRecord>();
-		final List<CustomReportDefinition> results = new ArrayList<CustomReportDefinition>();
-
-		getRecordsWithCacheOptionality(directory, records);
+		final Collection<CustomReportDataRecord> records = getRecordsWithCacheOptionality(directory);
 		
 		CustomReportDataRepository.INSTANCE.pause();
 
 		final ObjectMapper mapper = new ObjectMapper();
 		for(final CustomReportDataRecord record : records) {
 			try {
-			readReportJSONFile(directory, results, mapper, record);
+				return readReportJSONFile(directory, mapper, record);
 			} catch (IOException e) {
 				CustomReportDataRepository.INSTANCE.resume();
 				throw e;
@@ -115,33 +119,38 @@ public class TopCustomReportDataRepository implements ICustomReportDataRepositor
 
 		CustomReportDataRepository.INSTANCE.resume();
 
-		return results;
+		return Collections.emptyList();
 	}
 
-	private void getRecordsWithCacheOptionality(final File directory, final Collection<CustomReportDataRecord> records) throws IOException {
+	private Collection<CustomReportDataRecord> getRecordsWithCacheOptionality(final File directory) throws IOException {
+		final Collection<CustomReportDataRecord> records = new ArrayList<>();
 		final File recordsFile = new File(directory.getAbsolutePath() + "/records.json");
 		if (CustomReportPermissions.hasCustomReportReadPermission()) {
 			final Collection<CustomReportDataRecord> temp = CustomReportDataRepository.INSTANCE.getRecords();
 			if (temp != null) {
 				records.addAll(temp);
 			}
-		} else if (recordsFile.exists()) {
+		} else if (recordsFile.exists() && recordsFile.canRead()) {
 			String json = com.google.common.io.Files.toString(recordsFile, Charsets.UTF_8);
 			final List<CustomReportDataRecord> temp = CustomReportDataServiceClient.parseRecordsJSONData(json);
 			if (temp != null) {
 				records.addAll(temp);
 			}
 		}
+		return records;
 	}
 
-	private void readReportJSONFile(final File directory, final List<CustomReportDefinition> results, //
+	private List<CustomReportDefinition> readReportJSONFile(final File directory, //
 			final ObjectMapper mapper, final CustomReportDataRecord record) throws IOException {
+		
+		final List<CustomReportDefinition> results = new ArrayList<>();
 		final File repofile = new File(directory, String.format("%s.json", record.getUuid()));
 		if (repofile.exists()) {
-			final CustomReportDefinition definition 
-				= mapper.readValue(repofile, CustomReportDefinition.class);
+			final CustomReportDefinition definition = //
+					mapper.readValue(repofile, CustomReportDefinition.class);
 			results.add(definition);
 		}
+		return results;
 	}
 
 	@Override

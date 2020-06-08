@@ -123,8 +123,6 @@ public class CustomReportDataUpdater {
 			};
 			background.setSystem(false);
 			background.setUser(true);
-			// background.setPriority(Job.LONG);
-
 			background.schedule();
 			try {
 				background.join();
