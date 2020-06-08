@@ -56,6 +56,9 @@ public class CustomReportsRegistryHook {
 					log.error(e.getMessage(), e);
 				}
 			}
+			//As per SG, do not write any errors or warning if first time startup and no plugin.xml exists and now we write on exit as user may get curious if they
+			//see it in the error log. 
+			//At any rate, if there is an issue accessing/writing (at least, if they have write they will probably have read permission on it also).
 		}
 	}
 	
