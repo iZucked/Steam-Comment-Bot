@@ -48,16 +48,6 @@ public final class KnownFeatures {
 	public static final String FEATURE_PHASE_LIMITED_TESTING = "features:phase-limited-testing";
 
 	/**
-	 * Enable Panama Canal - distances and tariff calculation
-	 */
-	public static final String FEATURE_PANAMA_CANAL = "features:panama-canal";
-
-	/**
-	 * Enable Suez Canal tariff calculation
-	 */
-	public static final String FEATURE_SUEZ_CANAL = "features:suez-canal";
-
-	/**
 	 * Enable the contingency idle time matrix
 	 */
 	public static final String FEATURE_CONTINGENCY_IDLE_TIME = "features:contingency-idle-time";

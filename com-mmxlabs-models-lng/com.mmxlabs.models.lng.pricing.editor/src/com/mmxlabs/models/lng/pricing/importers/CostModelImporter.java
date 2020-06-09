@@ -60,12 +60,8 @@ public class CostModelImporter implements ISubmodelImporter {
 		inputs.put(COOLDOWN_PRICING_KEY, "Cooldown Prices");
 		inputs.put(PORT_COSTS_KEY, "Port Costs");
 		inputs.put(ROUTE_COSTS_KEY, "Route Costs");
-		if (LicenseFeatures.isPermitted("features:panama-canal")) {
-			inputs.put(PANAMA_CANAL_TARIFF_KEY, "Panama Canal Tariff");
-		}
-		if (LicenseFeatures.isPermitted("features:suez-canal")) {
-			inputs.put(SUEZ_CANAL_TARIFF_KEY, "Suez Canal Tariff");
-		}
+		inputs.put(PANAMA_CANAL_TARIFF_KEY, "Panama Canal Tariff");
+		inputs.put(SUEZ_CANAL_TARIFF_KEY, "Suez Canal Tariff");
 	}
 
 	@Inject
@@ -191,19 +187,15 @@ public class CostModelImporter implements ISubmodelImporter {
 		output.put(COOLDOWN_PRICING_KEY, cooldownPriceImporter.exportObjects(costModel.getCooldownCosts(), context));
 		output.put(PORT_COSTS_KEY, portCostImporter.exportObjects(costModel.getPortCosts(), context));
 		output.put(ROUTE_COSTS_KEY, routeCostImporter.exportObjects(costModel.getRouteCosts(), context));
-		if (LicenseFeatures.isPermitted("features:panama-canal")) {
 
-			final PanamaCanalTariff panamaCanalTariff = costModel.getPanamaCanalTariff();
-			if (panamaCanalTariff != null) {
-				output.put(PANAMA_CANAL_TARIFF_KEY, panamaCanalTariffBandImporter.exportTariff(panamaCanalTariff, context));
-			}
+		final PanamaCanalTariff panamaCanalTariff = costModel.getPanamaCanalTariff();
+		if (panamaCanalTariff != null) {
+			output.put(PANAMA_CANAL_TARIFF_KEY, panamaCanalTariffBandImporter.exportTariff(panamaCanalTariff, context));
 		}
-		if (LicenseFeatures.isPermitted("features:suez-canal")) {
 
-			final SuezCanalTariff suezCanalTariff = costModel.getSuezCanalTariff();
-			if (suezCanalTariff != null) {
-				output.put(SUEZ_CANAL_TARIFF_KEY, suezCanalTariffBandImporter.exportTariff(suezCanalTariff, context));
-			}
+		final SuezCanalTariff suezCanalTariff = costModel.getSuezCanalTariff();
+		if (suezCanalTariff != null) {
+			output.put(SUEZ_CANAL_TARIFF_KEY, suezCanalTariffBandImporter.exportTariff(suezCanalTariff, context));
 		}
 	}
 

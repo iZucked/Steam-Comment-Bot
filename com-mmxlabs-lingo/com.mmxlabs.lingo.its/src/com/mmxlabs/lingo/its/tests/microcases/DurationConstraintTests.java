@@ -22,7 +22,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import com.google.inject.Injector;
 import com.google.inject.name.Names;
 import com.mmxlabs.common.time.Days;
-import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -51,7 +50,6 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
-import com.mmxlabs.models.lng.transformer.its.RequireFeature;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
@@ -77,7 +75,6 @@ import com.mmxlabs.scheduler.optimiser.scheduling.TimeWindowScheduler;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
 @ExtendWith(ShiroRunner.class)
-@RequireFeature({ KnownFeatures.FEATURE_PANAMA_CANAL })
 public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 
 	@Override
