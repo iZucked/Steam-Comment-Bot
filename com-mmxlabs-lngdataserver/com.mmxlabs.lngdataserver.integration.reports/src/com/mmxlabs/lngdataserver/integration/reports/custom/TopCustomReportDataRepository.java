@@ -104,13 +104,16 @@ public class TopCustomReportDataRepository implements ICustomReportDataRepositor
 		}
 
 		final Collection<CustomReportDataRecord> records = getRecordsWithCacheOptionality(directory);
-		
+
 		CustomReportDataRepository.INSTANCE.pause();
 
 		final ObjectMapper mapper = new ObjectMapper();
 		for(final CustomReportDataRecord record : records) {
 			try {
-				return readReportJSONFile(directory, mapper, record);
+				CustomReportDefinition customReport = readReportJSONFile(directory, mapper, record);
+				if (customReport != null) {
+					results.add(customReport);
+				}
 			} catch (IOException e) {
 				CustomReportDataRepository.INSTANCE.resume();
 				throw e;
@@ -119,7 +122,7 @@ public class TopCustomReportDataRepository implements ICustomReportDataRepositor
 
 		CustomReportDataRepository.INSTANCE.resume();
 
-		return Collections.emptyList();
+		return results;
 	}
 
 	private Collection<CustomReportDataRecord> getRecordsWithCacheOptionality(final File directory) throws IOException {
@@ -140,17 +143,16 @@ public class TopCustomReportDataRepository implements ICustomReportDataRepositor
 		return records;
 	}
 
-	private List<CustomReportDefinition> readReportJSONFile(final File directory, //
+	private CustomReportDefinition readReportJSONFile(final File directory, //
 			final ObjectMapper mapper, final CustomReportDataRecord record) throws IOException {
-		
-		final List<CustomReportDefinition> results = new ArrayList<>();
+
+		CustomReportDefinition definition = null;
 		final File repofile = new File(directory, String.format("%s.json", record.getUuid()));
 		if (repofile.exists()) {
-			final CustomReportDefinition definition = //
+			definition = //
 					mapper.readValue(repofile, CustomReportDefinition.class);
-			results.add(definition);
 		}
-		return results;
+		return definition;
 	}
 
 	@Override
