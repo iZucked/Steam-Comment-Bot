@@ -5,5 +5,6 @@
 package com.mmxlabs.hub.services.users;
 
 public interface IUserNameProvider {
-	String getUsername();
+
+	String getUserID();
 }
