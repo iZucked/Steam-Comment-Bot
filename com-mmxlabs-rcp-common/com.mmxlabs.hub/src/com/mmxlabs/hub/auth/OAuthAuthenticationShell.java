@@ -45,10 +45,12 @@ public class OAuthAuthenticationShell extends Shell {
 	 * @param args
 	 */
 
-	public void run(Shell shell) {
+	public void run(Shell shell, boolean visible) {
 		try {
-			super.open();
-			super.layout();
+			if (visible) {
+				super.open();
+				super.layout();
+			}
 			while (!super.isDisposed()) {
 				if (!shell.getDisplay().readAndDispatch()) {
 					shell.getDisplay().sleep();
@@ -163,6 +165,8 @@ public class OAuthAuthenticationShell extends Shell {
 					}
 
 					// shutdown shell
+					OAuthAuthenticationShell.this.close();
+				} else if (event.location.contains("/oauth2/logout")) {
 					OAuthAuthenticationShell.this.close();
 				}
 			}

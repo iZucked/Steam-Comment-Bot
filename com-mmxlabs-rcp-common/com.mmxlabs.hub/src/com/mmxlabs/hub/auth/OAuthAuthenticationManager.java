@@ -51,7 +51,8 @@ public class OAuthAuthenticationManager extends AbstractAuthenticationManager {
 	public void run(String upstreamURL, @Nullable Shell optionalShell) {
 		if (!isAuthenticated(upstreamURL)) {
 			String path = UpstreamUrlProvider.OAUTH_LOGIN_PATH;
-			startAuthenticationShell(upstreamURL, path, optionalShell);
+			boolean showAuthenticationShell = true;
+			startAuthenticationShell(upstreamURL, path, optionalShell, showAuthenticationShell);
 		}
 	}
 
@@ -76,7 +77,7 @@ public class OAuthAuthenticationManager extends AbstractAuthenticationManager {
 		return builder;
 	}
 
-	protected void startAuthenticationShell(String upstreamURL, String path, @Nullable Shell optionalShell) {
+	protected void startAuthenticationShell(String upstreamURL, String path, @Nullable Shell optionalShell, boolean visible) {
 		final Display display;
 		if (optionalShell == null) {
 			if (PlatformUI.isWorkbenchRunning()) {
@@ -99,7 +100,9 @@ public class OAuthAuthenticationManager extends AbstractAuthenticationManager {
 					authenticationShellIsOpen.compareAndSet(true, false);
 				});
 
-				authenticationShell.run(shell);
+				if (shell != null) {
+					authenticationShell.run(shell, visible);
+				}
 			});
 		}
 	}
@@ -126,7 +129,8 @@ public class OAuthAuthenticationManager extends AbstractAuthenticationManager {
 	@Override
 	public void logout(String upstreamURL, @Nullable Shell shell) {
 		String path = UpstreamUrlProvider.LOGOUT_PATH;
-		startAuthenticationShell(upstreamURL, path, shell);
+		boolean showAuthenticationShell = true;
+		startAuthenticationShell(upstreamURL, path, shell, showAuthenticationShell);
 		clearCookies(upstreamURL);
 		deleteFromSecurePreferences(ACCESS_TOKEN);
 	}
