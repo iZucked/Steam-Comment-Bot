@@ -30,10 +30,18 @@ public class DataHubServiceProvider {
 		return INSTANCE;
 	}
 
+	private boolean online = false;
+	private boolean loggedIn = false;
+
 	private final Collection<IDataHubStateChangeListener> stateChangeListeners = new ConcurrentLinkedQueue<>();
 
 	private DataHubServiceProvider() {
+		init();
+	}
 
+	public void init() {
+		// Register details changed listener.
+		UpstreamUrlProvider.INSTANCE.registerDetailsChangedLister(() -> fireStateChangedEvent(false, false));
 	}
 
 	public void addDataHubStateListener(final IDataHubStateChangeListener listener) {
@@ -44,7 +52,10 @@ public class DataHubServiceProvider {
 		stateChangeListeners.add(listener);
 	}
 
-	private void fireStateChangedEvent(final boolean online, final boolean loggedIn) {
+	private synchronized void fireStateChangedEvent(final boolean online, final boolean loggedIn) {
+		this.online = online;
+		this.loggedIn = loggedIn;
+		
 		for (final IDataHubStateChangeListener l : stateChangeListeners) {
 			try {
 				l.hubStateChanged(online, loggedIn);
@@ -55,12 +66,11 @@ public class DataHubServiceProvider {
 	}
 
 	public boolean isHubOnline() {
-		// FIXME: This should return true if the hub is online regardless of logged in state.
-		return UpstreamUrlProvider.INSTANCE.isAvailable();
+		return online;
 	}
 
 	public boolean isLoggedIn() {
-		return UpstreamUrlProvider.INSTANCE.isAvailable();
+		return loggedIn;
 	}
 
 	public IUserNameMapping getUserNameMappingService() {
@@ -73,5 +83,17 @@ public class DataHubServiceProvider {
 
 	public IUserPermissionsService getUserPermissionsService() {
 		return UserPermissionsService.INSTANCE;
+	}
+
+	public synchronized void setOnlineState(boolean newOnline) {
+		if (this.online != newOnline) {
+			fireStateChangedEvent(newOnline, newOnline ? this.loggedIn : false);
+		}
+	}
+
+	public synchronized void setLoggedInState(boolean newLoggedIn) {
+		if (this.loggedIn != newLoggedIn) {
+			fireStateChangedEvent(this.online, newLoggedIn);
+		}
 	}
 }

@@ -30,6 +30,8 @@ public class DataHubActivator extends Plugin {
 		super.start(context);
 		plugin = this;
 
+		// Load class
+		DataHubServiceProvider.getInstance();
 		
 		// Trigger class load and property change hooks
 		UpstreamUrlProvider.INSTANCE.isAvailable();

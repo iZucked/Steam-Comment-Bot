@@ -239,8 +239,10 @@ public class UpstreamUrlProvider {
 			baseUrl = stripTrailingForwardSlash(baseUrl);
 
 			if (!testUpstreamAvailability(baseUrl)) {
+				DataHubServiceProvider.getInstance().setOnlineState(false);
 				return false;
 			}
+			DataHubServiceProvider.getInstance().setOnlineState(true);
 
 			Optional<DatahubInformation> upstreamInformation = getUpstreamInformation(baseUrl);
 			if (upstreamInformation.isPresent()) {
@@ -258,12 +260,15 @@ public class UpstreamUrlProvider {
 			}
 
 			if (!authenticationManager.isAuthenticated()) {
+				DataHubServiceProvider.getInstance().setLoggedInState(false);
 				return false;
 			}
 
 			valid = true;
 			currentBaseURL = baseUrl;
 			connectionValid = true;
+			
+			DataHubServiceProvider.getInstance().setLoggedInState(true);
 		} catch (Exception e) {
 			// Ignore...?
 			e.printStackTrace();

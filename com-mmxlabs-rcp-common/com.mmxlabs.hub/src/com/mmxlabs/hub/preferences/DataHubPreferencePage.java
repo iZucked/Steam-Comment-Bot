@@ -39,6 +39,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.hub.DataHubActivator;
+import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.auth.AuthenticationManager;
 import com.mmxlabs.hub.auth.BasicAuthenticationManager;
 import com.mmxlabs.hub.auth.OAuthAuthenticationManager;
@@ -95,11 +96,13 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 				// trigger authentication shell
 				if (button.getText().equals(loginButtonText)) {
 					authenticationManager.run(getShell());
+					UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
 					if (authenticationManager.isAuthenticated()) {
 						button.setText("Logout");
 					}
 				} else if (button.getText().equals(logoutButtonText)) {
 					authenticationManager.logout(getShell());
+					UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
 					if (!authenticationManager.isAuthenticated()) {
 						button.setText("Login");
 					}
