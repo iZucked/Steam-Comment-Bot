@@ -541,12 +541,12 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 				// Add in NBO etc choices (ballast 2)
 				vpoChoices.add(new TravelVoyagePlanChoice(bigSequence.getToCharter(), bigSequence.getFromCharter()));
 				vpoChoices.add(new IdleNBOVoyagePlanChoice(bigSequence.getFromCharter()));
-		} else {
-			bigSequence.getToCharter().setIdleFuelChoice(IdleFuelChoice.BUNKERS);
-			bigSequence.getToCharter().setTravelFuelChoice(TravelFuelChoice.BUNKERS);
-			bigSequence.getFromCharter().setIdleFuelChoice(IdleFuelChoice.BUNKERS);
-			bigSequence.getFromCharter().setTravelFuelChoice(TravelFuelChoice.BUNKERS);
-		}
+			} else {
+				bigSequence.getToCharter().setIdleFuelChoice(IdleFuelChoice.BUNKERS);
+				bigSequence.getToCharter().setTravelFuelChoice(TravelFuelChoice.BUNKERS);
+				bigSequence.getFromCharter().setIdleFuelChoice(IdleFuelChoice.BUNKERS);
+				bigSequence.getFromCharter().setTravelFuelChoice(TravelFuelChoice.BUNKERS);
+			}
 		} else {
 			// Add in NBO etc choices (ballast 1)
 			vpoChoices.add(new ReliqVoyagePlanChoice(bigSequence.getLaden() == null ? null : bigSequence.getLaden(), bigSequence.getToCharter()));
