@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.common.http.HttpClientUtil;
 import com.mmxlabs.hub.common.http.IProgressListener;
@@ -60,10 +61,15 @@ public class DataServiceClient {
 		if (progressListener != null) {
 			requestBody = new ProgressRequestBody(requestBody, progressListener);
 		}
-		final String requestURL = String.format("%s%s", upstreamURL, typeRecord.getUploadURL());
-		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
-				.url(requestURL) //
-				.post(requestBody).build();
+
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(typeRecord.getUploadURL());
+		if (requestBuilder == null) {
+			return;
+		}
+
+		final Request request = requestBuilder //
+				.post(requestBody) //
+				.build();
 
 		// Check the response
 		try (Response response = httpClient.newCall(request).execute()) {
@@ -79,6 +85,12 @@ public class DataServiceClient {
 	}
 
 	public void downloadTo(TypeRecord typeRecord, final String uuid, final File file, final IProgressListener progressListener) throws Exception {
+
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(typeRecord.getDownloadURL(uuid));
+		if (requestBuilder == null) {
+			return;
+		}
+
 		OkHttpClient.Builder clientBuilder = httpClient.newBuilder();
 		if (progressListener != null) {
 			clientBuilder = clientBuilder.addNetworkInterceptor(new Interceptor() {
@@ -89,19 +101,12 @@ public class DataServiceClient {
 				}
 			});
 		}
+
+		final Request request = requestBuilder //
+				.build();
+
 		final OkHttpClient localHttpClient = clientBuilder //
 				.build();
-
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
-		if (upstreamURL == null || upstreamURL.isEmpty()) {
-			return;
-		}
-		final String requestURL = String.format("%s%s", upstreamURL, typeRecord.getDownloadURL(uuid));
-
-		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
-				.url(requestURL) //
-				.build();
-
 		try (Response response = localHttpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
 				throw new IOException("Unexpected code: " + response);
@@ -121,14 +126,12 @@ public class DataServiceClient {
 
 	public Pair<String, Instant> getRecords(TypeRecord typeRecord) throws IOException {
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
-		if (upstreamURL == null || upstreamURL.isEmpty()) {
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(typeRecord.getListURL());
+		if (requestBuilder == null) {
 			return null;
 		}
 
-		final String requestURL = String.format("%s%s", upstreamURL, typeRecord.getListURL());
-		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
-				.url(requestURL) //
+		final Request request = requestBuilder //
 				.build();
 
 		try (Response response = httpClient.newCall(request).execute()) {
@@ -143,13 +146,12 @@ public class DataServiceClient {
 
 	public void deleteData(TypeRecord typeRecord, final String uuid) throws IOException {
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
-		if (upstreamURL == null || upstreamURL.isEmpty()) {
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(typeRecord.getDeleteURL(uuid));
+		if (requestBuilder == null) {
 			return;
 		}
-		final String requestURL = String.format("%s%s", upstreamURL, typeRecord.getDeleteURL(uuid));
-		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
-				.url(requestURL) //
+
+		final Request request = requestBuilder //
 				.delete() //
 				.build();
 
@@ -179,17 +181,13 @@ public class DataServiceClient {
 	}
 
 	protected CompletableFuture<Boolean> notifyOnNewVersion(TypeRecord typeRecord) {
-		final String baseUrl = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
 
-		if (baseUrl == null || baseUrl.isEmpty()) {
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(typeRecord.getVersionNotificationEndpoint());
+		if (requestBuilder == null) {
 			return null;
 		}
-		final String requestURL = baseUrl + typeRecord.getVersionNotificationEndpoint();
-		LOG.debug("Calling url {}", requestURL);
+
 		return CompletableFuture.supplyAsync(() -> {
-			final Request.Builder requestBuilder = UpstreamUrlProvider.INSTANCE.makeRequest() //
-					.url(requestURL) //
-			;
 			final Request request = requestBuilder.build();
 			try (Response response = LONG_POLLING_CLIENT.newCall(request).execute()) {
 				if (response.isSuccessful()) {
@@ -198,9 +196,9 @@ public class DataServiceClient {
 				return Boolean.FALSE;
 			} catch (final IOException e) {
 				// Silently ignore.
-				
+
 				// LOG.error("Error waiting for new version");
-				//throw new RuntimeException("Error waiting for new version");
+				// throw new RuntimeException("Error waiting for new version");
 				return Boolean.FALSE;
 			}
 		});

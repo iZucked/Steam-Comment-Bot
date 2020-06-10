@@ -19,7 +19,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.hub.UpstreamUrlProvider;
+import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.common.http.HttpClientUtil;
 import com.mmxlabs.hub.common.http.IProgressListener;
 import com.mmxlabs.hub.common.http.ProgressRequestBody;
@@ -55,30 +55,34 @@ public class GenericDataServiceClient {
 				.addFormDataPart("contentType", contentType) //
 				.build();
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
 		if (progressListener != null) {
 			requestBody = new ProgressRequestBody(requestBody, progressListener);
 		}
-		final String requestURL = String.format("%s%s/%s/%s", upstreamURL, SCENARIO_UPLOAD_URL, type, uuid);
-		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
-				.url(requestURL) //
-				.post(requestBody).build();
 
-		// Check the response
-		try (Response response = httpClient.newCall(request).execute()) {
-			if (!response.isSuccessful()) {
-				if (response.code() == 409) {
-					throw new IOException("Data already exists " + type + "/" + uuid);
+		final String requestURL = String.format("%s/%s/%s", SCENARIO_UPLOAD_URL, type, uuid);
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(requestURL);
+		if (requestBuilder != null) {
+			final Request request = requestBuilder //
+					.post(requestBody) //
+					.build();
+
+			// Check the response
+			try (Response response = httpClient.newCall(request).execute()) {
+				if (!response.isSuccessful()) {
+					if (response.code() == 409) {
+						throw new IOException("Data already exists " + type + "/" + uuid);
+					}
+
+					throw new IOException("Unexpected code " + response);
 				}
 
-				throw new IOException("Unexpected code " + response);
+				final String jsonData = response.body().string();
+				final JSONObject jsonObject = new JSONObject(jsonData);
+				final String uuidString = jsonObject.getString("uuid");
+				return uuidString;
 			}
-
-			final String jsonData = response.body().string();
-			final JSONObject jsonObject = new JSONObject(jsonData);
-			final String uuidString = jsonObject.getString("uuid");
-			return uuidString;
 		}
+		return null;
 	}
 
 	public boolean downloadTo(final String type, final String uuid, final File file, final IProgressListener progressListener) throws IOException {
@@ -92,27 +96,27 @@ public class GenericDataServiceClient {
 				}
 			});
 		}
-		final OkHttpClient localHttpClient = clientBuilder //
-				.build();
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
-		final String requestURL = String.format("%s%s/%s/%s", upstreamURL, SCENARIO_DOWNLOAD_URL, type, uuid);
+		final String requestURL = String.format("%s/%s/%s", SCENARIO_DOWNLOAD_URL, type, uuid);
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(requestURL);
+		if (requestBuilder != null) {
 
-		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
-				.url(requestURL) //
-				.build();
+			final Request request = requestBuilder.build();
 
-		try (Response response = localHttpClient.newCall(request).execute()) {
-			if (!response.isSuccessful()) {
-				throw new IOException("Unexpected code: " + response);
-			}
-			try (BufferedSource bufferedSource = response.body().source()) {
-				try (final BufferedSink bufferedSink = Okio.buffer(Okio.sink(file))) {
-					bufferedSink.writeAll(bufferedSource);
+			final OkHttpClient localHttpClient = clientBuilder.build();
+			try (Response response = localHttpClient.newCall(request).execute()) {
+				if (!response.isSuccessful()) {
+					throw new IOException("Unexpected code: " + response);
 				}
-				return true;
+				try (BufferedSource bufferedSource = response.body().source()) {
+					try (final BufferedSink bufferedSink = Okio.buffer(Okio.sink(file))) {
+						bufferedSink.writeAll(bufferedSource);
+					}
+					return true;
+				}
 			}
 		}
+		return false;
 	}
 
 	public Pair<String, Instant> getRecords(final Collection<String> types) throws IOException {
@@ -121,17 +125,14 @@ public class GenericDataServiceClient {
 			return null;
 		}
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
-		if (upstreamURL == null || upstreamURL.isEmpty()) {
+		final String typesList = String.join(",", types);
+		final String requestURL = String.format("%s/%s", SCENARIO_LIST_URL, typesList);
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(requestURL);
+		if (requestBuilder == null) {
 			return null;
 		}
 
-		final String typesList = String.join(",", types);
-		final String requestURL = String.format("%s%s/%s", upstreamURL, SCENARIO_LIST_URL, typesList);
-		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
-				.url(requestURL) //
-				.build();
-
+		final Request request = requestBuilder.build();
 		try (Response response = httpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
 				throw new IOException("Unexpected code: " + response);
@@ -143,19 +144,18 @@ public class GenericDataServiceClient {
 			final Instant lastModified = Instant.ofEpochSecond(Long.parseLong(date));
 			final String jsonData = response.body().string();
 			return new Pair<>(jsonData, lastModified);
-
 		}
 	}
 
 	public void deleteData(final String type, final String uuid) throws IOException {
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
-		if (upstreamURL == null || upstreamURL.isEmpty()) {
+		final String requestURL = String.format("%s/%s/%s", SCENARIO_DELETE_URL, type, uuid);
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(requestURL);
+		if (requestBuilder == null) {
 			return;
 		}
-		final String requestURL = String.format("%s%s/%s/%s", upstreamURL, SCENARIO_DELETE_URL, type, uuid);
-		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
-				.url(requestURL) //
+
+		final Request request = requestBuilder //
 				.delete() //
 				.build();
 
@@ -168,12 +168,12 @@ public class GenericDataServiceClient {
 
 	public Instant getLastModified() {
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
-		if (upstreamURL == null || upstreamURL.isEmpty()) {
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(SCENARIO_LAST_MODIFIED_URL);
+		if (requestBuilder == null) {
 			return null;
 		}
-		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
-				.url(upstreamURL + SCENARIO_LAST_MODIFIED_URL) //
+
+		final Request request = requestBuilder //
 				.build();
 
 		try (Response response = httpClient.newCall(request).execute()) {

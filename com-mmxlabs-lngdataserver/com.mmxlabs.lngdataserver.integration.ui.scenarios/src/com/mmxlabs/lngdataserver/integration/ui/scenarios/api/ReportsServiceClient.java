@@ -12,11 +12,12 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 
-import com.mmxlabs.hub.UpstreamUrlProvider;
+import org.eclipse.jdt.annotation.Nullable;
+
+import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.common.http.HttpClientUtil;
 import com.mmxlabs.rcp.common.RunnerHelper;
 
-import okhttp3.Credentials;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -37,18 +38,20 @@ public class ReportsServiceClient {
 			.build();
 
 	private final okhttp3.MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
-	
-	public String uploadReportData(String data, String type, String uuid, String uploadURL, String fileExtension) throws IOException {
+
+	public @Nullable String uploadReportData(String data, String type, String uuid, String uploadURL, String fileExtension) throws IOException {
 
 		RequestBody requestBody = new MultipartBody.Builder() //
 				.setType(MultipartBody.FORM) //
 				.addFormDataPart("report", type + fileExtension, RequestBody.create(mediaType, data))//
 				.build();
-		// String upstreamURL = "http://"
-		String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
 
-		Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
-				.url(upstreamURL + uploadURL + "/" + uuid + "/" + type) //
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(uploadURL + "/" + uuid + "/" + type);
+		if (requestBuilder == null) {
+			return null;
+		}
+
+		Request request = requestBuilder //
 				.post(requestBody).build();
 
 		// Check the response
@@ -77,10 +80,13 @@ public class ReportsServiceClient {
 
 	public boolean downloadTo(String uuid, File file, BiConsumer<File, Instant> callback) throws IOException {
 
-		String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
+		final String requestURL = String.format("%s/%s", REPORT_GET_URL, uuid);
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(requestURL);
+		if (requestBuilder == null) {
+			return false;
+		}
 
-		Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
-				.url(String.format("%s%s/%s", upstreamURL, REPORT_GET_URL, uuid)) //
+		Request request = requestBuilder //
 				.build();
 
 		try (Response response = httpClient.newCall(request).execute()) {

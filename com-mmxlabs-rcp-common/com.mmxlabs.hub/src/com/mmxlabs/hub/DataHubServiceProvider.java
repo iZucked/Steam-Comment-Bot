@@ -4,16 +4,21 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.hub.info.DatahubInformation;
 import com.mmxlabs.hub.services.permissions.IUserPermissionsService;
 import com.mmxlabs.hub.services.permissions.UserPermissionsService;
 import com.mmxlabs.hub.services.users.IUserNameMapping;
 import com.mmxlabs.hub.services.users.IUserNameProvider;
 import com.mmxlabs.hub.services.users.UserNameUpdater;
 import com.mmxlabs.hub.services.users.UsernameProvider;
+
+import okhttp3.Request.Builder;
 
 /**
  * A central place to access Data Hub services
@@ -35,6 +40,8 @@ public class DataHubServiceProvider {
 	private boolean online = false;
 	private boolean loggedIn = false;
 
+	private @Nullable DatahubInformation datahubInformation;
+
 	private final Collection<IDataHubStateChangeListener> stateChangeListeners = new ConcurrentLinkedQueue<>();
 
 	private DataHubServiceProvider() {
@@ -42,8 +49,11 @@ public class DataHubServiceProvider {
 	}
 
 	private void start() {
-		// Register details changed listener.
-		UpstreamUrlProvider.INSTANCE.registerDetailsChangedLister(() -> fireStateChangedEvent(false, false));
+		// Register details changed listener. Clear current state
+		UpstreamUrlProvider.INSTANCE.registerDetailsChangedLister(() -> {
+			datahubInformation = null;
+			fireStateChangedEvent(false, false);
+		});
 	}
 
 	public void addDataHubStateListener(final IDataHubStateChangeListener listener) {
@@ -61,6 +71,8 @@ public class DataHubServiceProvider {
 		this.online = online;
 		this.loggedIn = loggedIn;
 
+		System.out.printf("Hub State - Online: %s Logged In %s\n", online, loggedIn);
+		
 		if (changedToLoggedIn) {
 			// We have changed to online + logged in, so refresh some state
 
@@ -96,6 +108,14 @@ public class DataHubServiceProvider {
 		return online && loggedIn;
 	}
 
+	public @Nullable DatahubInformation getDatahubInformation() {
+		return datahubInformation;
+	}
+
+	public void setDatahubInformation(@Nullable DatahubInformation datahubInformation) {
+		this.datahubInformation = datahubInformation;
+	}
+
 	public IUserNameMapping getUserNameMappingService() {
 		return UsernameProvider.INSTANCE;
 	}
@@ -106,6 +126,10 @@ public class DataHubServiceProvider {
 
 	public IUserPermissionsService getUserPermissionsService() {
 		return UserPermissionsService.INSTANCE;
+	}
+
+	public @Nullable Builder makeRequestBuilder(String urlPath) {
+		return UpstreamUrlProvider.INSTANCE.makeRequestBuilder(urlPath);
 	}
 
 	public synchronized void setOnlineState(final boolean newOnline) {

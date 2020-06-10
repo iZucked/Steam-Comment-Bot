@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import com.mmxlabs.hub.UpstreamUrlProvider;
+import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.common.http.HttpClientUtil;
 
 import okhttp3.MultipartBody;
@@ -42,13 +42,16 @@ public class UserNameUpdater {
 		final ObjectMapper mapper = new ObjectMapper();
 		mapper.registerModule(new Jdk8Module());
 
-		RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM).addFormDataPart("userId", userId).build();
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder("/user/displayname");
+		if (requestBuilder == null) {
+			return userId;
+		}
+		RequestBody requestBody = new MultipartBody.Builder() //
+				.setType(MultipartBody.FORM) //
+				.addFormDataPart("userId", userId) //
+				.build();
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
-
-		final String requestURL = String.format("%s%s", upstreamURL, "/user/displayname");
-		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
-				.url(requestURL) //
+		final Request request = requestBuilder //
 				.post(requestBody).build();
 
 		// Check the response
@@ -70,21 +73,18 @@ public class UserNameUpdater {
 	}
 
 	private static String getCurrentUserId() throws Exception {
-		OkHttpClient.Builder clientBuilder = httpClient.newBuilder();
 
-		final OkHttpClient localHttpClient = clientBuilder //
-				.build();
-
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
-		if (upstreamURL == null || upstreamURL.isEmpty()) {
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder("/user/id");
+		if (requestBuilder == null) {
 			return null;
 		}
-		final String requestURL = String.format("%s%s", upstreamURL, "/user/id");
 
-		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
-				.url(requestURL) //
+		final Request request = requestBuilder //
 				.build();
 
+		OkHttpClient.Builder clientBuilder = httpClient.newBuilder();
+		final OkHttpClient localHttpClient = clientBuilder //
+				.build();
 		try (Response response = localHttpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
 				throw new IOException("Unexpected code: " + response);

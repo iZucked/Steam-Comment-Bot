@@ -20,6 +20,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLPeerUnverifiedException;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceStore;
@@ -43,14 +44,10 @@ import okhttp3.Response;
 /**
  * This class manages connections to the data hub.
  * <p>
- * The base URL is loaded from the preference store, and authentication info
- * requested via the UI for the associated web domain. Call
- * UpstreamUrlProvider.INSTANCE.getBaseURL() to get the base URL for data hub
- * requests.
+ * The base URL is loaded from the preference store, and authentication info requested via the UI for the associated web domain. Call UpstreamUrlProvider.INSTANCE.getBaseURL() to get the base URL for
+ * data hub requests.
  * <p>
- * N.B. {@link #getBaseUrlIfAvailable()} will not work until the
- * UpstreamUrlProvider has finished initialising, which may not happen
- * immediately at program start, or if the connection goes down later.
+ * N.B. {@link #getBaseUrlIfAvailable()} will not work until the UpstreamUrlProvider has finished initialising, which may not happen immediately at program start, or if the connection goes down later.
  * 
  */
 public class UpstreamUrlProvider {
@@ -156,11 +153,9 @@ public class UpstreamUrlProvider {
 	};
 
 	/**
-	 * Returns the current URL for the upstream service, or an empty string if no
-	 * service is currently available.
+	 * Returns the current URL for the upstream service, or an empty string if no service is currently available.
 	 * <p>
-	 * <b>N.B. The caller of this method is responsible for guarding against
-	 * possible failure by checking the return value.</b>
+	 * <b>N.B. The caller of this method is responsible for guarding against possible failure by checking the return value.</b>
 	 * 
 	 * @return
 	 */
@@ -175,32 +170,32 @@ public class UpstreamUrlProvider {
 		return "";
 	}
 
-	/**
-	 * Returns the current URL for the upstream service, trying repeatedly if
-	 * necessary (with 50ms pauses between each).
-	 * <p>
-	 * After maxRetries retries, the method gives up and returns an empty string.
-	 * 
-	 * @param maxRetries
-	 * @return
-	 */
-	public String getBaseUrl(int maxRetries) {
-		String result = getBaseUrlIfAvailable();
-
-		while ((result == null || result.isEmpty()) && maxRetries-- > 0) {
-			// wait 50ms
-			try {
-				Thread.sleep(50);
-			} catch (final InterruptedException e) {
-				// Restore the interrupted status if something happens while asleep
-				Thread.currentThread().interrupt();
-			}
-			// try again
-			result = getBaseUrlIfAvailable();
-		}
-
-		return result;
-	}
+	// /**
+	// * Returns the current URL for the upstream service, trying repeatedly if
+	// * necessary (with 50ms pauses between each).
+	// * <p>
+	// * After maxRetries retries, the method gives up and returns an empty string.
+	// *
+	// * @param maxRetries
+	// * @return
+	// */
+	// public String getBaseUrl(int maxRetries) {
+	// String result = getBaseUrlIfAvailable();
+	//
+	// while ((result == null || result.isEmpty()) && maxRetries-- > 0) {
+	// // wait 50ms
+	// try {
+	// Thread.sleep(50);
+	// } catch (final InterruptedException e) {
+	// // Restore the interrupted status if something happens while asleep
+	// Thread.currentThread().interrupt();
+	// }
+	// // try again
+	// result = getBaseUrlIfAvailable();
+	// }
+	//
+	// return result;
+	// }
 
 	public void registerDetailsChangedLister(final IUpstreamDetailChangedListener listener) {
 		detailListeners.add(listener);
@@ -223,8 +218,7 @@ public class UpstreamUrlProvider {
 	}
 
 	/*
-	 * Gets the Datahub URL from preferences and calls testUpstreamAvailability This
-	 * pings the Datahub
+	 * Gets the Datahub URL from preferences and calls testUpstreamAvailability This pings the Datahub
 	 */
 	public synchronized boolean isUpstreamAvailable(@Nullable final Display optionalDisplay) {
 
@@ -242,7 +236,6 @@ public class UpstreamUrlProvider {
 				DataHubServiceProvider.getInstance().setOnlineState(false);
 				return false;
 			}
-			DataHubServiceProvider.getInstance().setOnlineState(true);
 
 			Optional<DatahubInformation> upstreamInformation = getUpstreamInformation(baseUrl);
 			if (upstreamInformation.isPresent()) {
@@ -250,6 +243,11 @@ public class UpstreamUrlProvider {
 			} else {
 				currentInformation = fallackInformation;
 			}
+
+			// Update current information scheme
+			DataHubServiceProvider.getInstance().setDatahubInformation(currentInformation);
+
+			DataHubServiceProvider.getInstance().setOnlineState(true);
 
 			authenticationManager.updateAuthenticationScheme(baseUrl, currentInformation.getAuthenticationScheme());
 
@@ -267,7 +265,7 @@ public class UpstreamUrlProvider {
 			valid = true;
 			currentBaseURL = baseUrl;
 			connectionValid = true;
-			
+
 			DataHubServiceProvider.getInstance().setLoggedInState(true);
 		} catch (Exception e) {
 			// Ignore...?
@@ -398,7 +396,13 @@ public class UpstreamUrlProvider {
 		}
 	}
 
-	public Builder makeRequest() {
-		return authenticationManager.buildRequest();
+	public @Nullable Builder makeRequestBuilder(@NonNull String urlPath) {
+
+		String baseUrlIfAvailable = getBaseUrlIfAvailable();
+		if (baseUrlIfAvailable.isEmpty()) {
+			return null;
+		}
+
+		return authenticationManager.buildRequest().url(baseUrlIfAvailable + urlPath);
 	}
 }

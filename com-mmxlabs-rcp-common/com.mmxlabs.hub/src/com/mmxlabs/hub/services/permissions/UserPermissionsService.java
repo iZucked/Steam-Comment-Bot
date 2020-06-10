@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.common.http.HttpClientUtil;
 
@@ -72,14 +73,13 @@ public class UserPermissionsService implements IUserPermissionsService {
 
 	public synchronized void updateUserPermissions() throws IOException {
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
-		if (upstreamURL == null || upstreamURL.isEmpty()) {
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(UpstreamUrlProvider.USER_PERMISSIONS_ENDPOINT);
+		if (requestBuilder == null) {
 			return;
 		}
-		hubSupportsPermissions = true;
 
-		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
-				.url(upstreamURL + UpstreamUrlProvider.USER_PERMISSIONS_ENDPOINT) //
+		hubSupportsPermissions = true;
+		final Request request = requestBuilder //
 				.build();
 
 		try (Response response = httpClient.newCall(request).execute()) {
