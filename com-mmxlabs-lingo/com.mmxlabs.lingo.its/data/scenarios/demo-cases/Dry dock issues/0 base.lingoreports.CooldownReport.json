@@ -16,31 +16,4 @@
   "ID" : "load-cargo-78",
   "Cost" : "233,472",
   "Date" : "01/04/11"
-}, {
-  "Vessel" : "Methane Princess",
-  "Schedule" : "0 base",
-  "Cause ID" : "discharge-cargo-24",
-  "Port" : "Point Fortin",
-  "Time" : "20:00",
-  "ID" : "Charter Out - discharge-cargo-24",
-  "Cost" : "209,760",
-  "Date" : "13/01/11"
-}, {
-  "Vessel" : "Methane Princess",
-  "Schedule" : "0 base",
-  "Cause ID" : "discharge-cargo-48",
-  "Port" : "Idku LNG",
-  "Time" : "13:00",
-  "ID" : "Charter Out - discharge-cargo-48",
-  "Cost" : "233,472",
-  "Date" : "31/03/11"
-}, {
-  "Vessel" : "Methane Princess",
-  "Schedule" : "0 base",
-  "Cause ID" : "discharge-cargo-5",
-  "Port" : "Point Fortin",
-  "Time" : "18:00",
-  "ID" : "Charter Out - discharge-cargo-5",
-  "Cost" : "233,472",
-  "Date" : "10/05/11"
 } ]

@@ -95,22 +95,22 @@
   "Charter ($)" : "0"
 }, {
   "Route ($)" : "80,000",
-  "Sum ($)" : "36,273,751",
+  "Sum ($)" : "32,776,918",
   "Port ($)" : "80,000",
-  "Cooldown ($)" : "209,760",
+  "Cooldown ($)" : "0",
   "Ballast bonus ($)" : "0",
   "Scenario" : "5 charter-in generated - rewire for shorter one -O- -F- -F- base",
   "Heel Revenue ($)" : "0",
   "Vessel" : "Methane Princess (138k)",
-  "Base Fuel ($)" : "4,828,249",
+  "Base Fuel ($)" : "0",
   "Heel Cost ($)" : "0",
   "Repositioning fee ($)" : "0",
   "Charter Out (virtual) delta (change set)" : {
     "Days" : "0.0",
     "Revenue" : "0"
   },
-  "LNG ($)" : "3,921,581",
-  "Sum - BOG($)" : "32,352,170",
+  "LNG ($)" : "5,462,757",
+  "Sum - BOG($)" : "27,314,161",
   "Charter ($)" : "27,154,161"
 }, {
   "Route ($)" : "0",
