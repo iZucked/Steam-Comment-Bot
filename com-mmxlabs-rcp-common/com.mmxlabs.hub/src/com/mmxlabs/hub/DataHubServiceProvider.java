@@ -12,6 +12,7 @@ import com.mmxlabs.hub.services.permissions.IUserPermissionsService;
 import com.mmxlabs.hub.services.permissions.UserPermissionsService;
 import com.mmxlabs.hub.services.users.IUserNameMapping;
 import com.mmxlabs.hub.services.users.IUserNameProvider;
+import com.mmxlabs.hub.services.users.UserNameUpdater;
 import com.mmxlabs.hub.services.users.UsernameProvider;
 
 /**
@@ -36,11 +37,15 @@ public class DataHubServiceProvider {
 
 	private final Collection<IDataHubStateChangeListener> stateChangeListeners = new ConcurrentLinkedQueue<>();
 
+	private UserNameUpdater userNameUpdater;
+
 	private DataHubServiceProvider() {
-		init();
+		userNameUpdater = new UserNameUpdater();
+
+		start();
 	}
 
-	public void init() {
+	private void start() {
 		// Register details changed listener.
 		UpstreamUrlProvider.INSTANCE.registerDetailsChangedLister(() -> fireStateChangedEvent(false, false));
 	}
@@ -54,19 +59,24 @@ public class DataHubServiceProvider {
 	}
 
 	private synchronized void fireStateChangedEvent(final boolean online, final boolean loggedIn) {
-		
+
 		if (online && loggedIn && loggedIn != this.loggedIn) {
-			// We have changed to online + logged in, so refresh permissions
+			// We have changed to online + logged in, so refresh some state
+
+			// Update username
+			userNameUpdater.refresh();
+
+			// Update permissions model
 			try {
 				UserPermissionsService.INSTANCE.updateUserPermissions();
 			} catch (IOException e) {
 				LOGGER.error("Error refreshing permissions: " + e.getMessage(), e);
 			}
 		}
-		
+
 		this.online = online;
 		this.loggedIn = loggedIn;
-		
+
 		for (final IDataHubStateChangeListener l : stateChangeListeners) {
 			try {
 				l.hubStateChanged(online, loggedIn);
@@ -82,6 +92,10 @@ public class DataHubServiceProvider {
 
 	public boolean isLoggedIn() {
 		return loggedIn;
+	}
+
+	public boolean isOnlineAndLoggedIn() {
+		return online && loggedIn;
 	}
 
 	public IUserNameMapping getUserNameMappingService() {

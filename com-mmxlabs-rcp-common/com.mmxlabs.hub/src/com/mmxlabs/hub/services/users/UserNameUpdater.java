@@ -27,47 +27,10 @@ public class UserNameUpdater {
 
 	private final IUpstreamDetailChangedListener detailChangedListener = this::refresh;
 
-	private Thread updateThread;
 
 	private static final OkHttpClient httpClient = HttpClientUtil.basicBuilder() //
 			.build();
-
-	public UserNameUpdater() {
-		UpstreamUrlProvider.INSTANCE.registerDetailsChangedLister(detailChangedListener);
-	}
-
-	public void dispose() {
-		UpstreamUrlProvider.INSTANCE.deregisterDetailsChangedLister(detailChangedListener);
-	}
-
-	public void start() {
-		updateThread = new Thread("UserNameUpdaterThread") {
-			@Override
-			public void run() {
-
-				while (true) {
-					refresh();
-
-					try {
-						Thread.sleep(10_000);
-					} catch (final InterruptedException e) {
-						interrupt(); // preserve interruption status
-						return;
-					}
-				}
-			}
-
-		};
-		updateThread.start();
-	}
-
-	public void stop() {
-		if (updateThread != null) {
-			updateThread.interrupt();
-			updateThread = null;
-		}
-	}
-
+ 
 	public void refresh() {
 		final boolean available = UpstreamUrlProvider.INSTANCE.isAvailable();
 		if (available) {

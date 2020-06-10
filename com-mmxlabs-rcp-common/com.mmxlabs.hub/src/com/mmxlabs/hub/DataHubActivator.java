@@ -11,7 +11,6 @@ import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.osgi.framework.BundleContext;
 
 import com.mmxlabs.hub.preferences.DataHubPreferenceConstants;
-import com.mmxlabs.hub.services.users.UserNameUpdater;
 
 public class DataHubActivator extends Plugin {
 	// The plug-in ID
@@ -23,7 +22,6 @@ public class DataHubActivator extends Plugin {
 	 * Storage for preferences.
 	 */
 	private ScopedPreferenceStore preferenceStore;
-	private UserNameUpdater userNameUpdater;
 
 	@Override
 	public void start(final BundleContext context) throws Exception {
@@ -36,14 +34,11 @@ public class DataHubActivator extends Plugin {
 		// Trigger class load and property change hooks
 		UpstreamUrlProvider.INSTANCE.isAvailable();
 
-		userNameUpdater = new UserNameUpdater();
-		userNameUpdater.start();
 	}
 
 	@Override
 	public void stop(final BundleContext context) throws Exception {
 
-		userNameUpdater.stop();
 		plugin = null;
 		super.stop(context);
 	}
