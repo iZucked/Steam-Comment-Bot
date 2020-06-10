@@ -14,6 +14,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.ServiceTracker;
 
+import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.IUpstreamServiceChangedListener;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.IUpstreamServiceChangedListener.Service;
@@ -60,7 +61,7 @@ public class Activator extends AbstractUIPlugin {
 		plugin = this;
 
 		// Ensure something has triggered this class load.
-		UpstreamUrlProvider.INSTANCE.isAvailable();
+		DataHubServiceProvider.getInstance();
 
 		baseCaseVersionsProviderService = new BaseCaseVersionsProviderService();
 		baseCaseVersionsProviderServiceRegistration = getBundle().getBundleContext().registerService(IBaseCaseVersionsProvider.class, baseCaseVersionsProviderService, new Hashtable<>());

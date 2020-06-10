@@ -22,6 +22,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
+import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.services.permissions.UserPermissionsService;
 import com.mmxlabs.lngdataserver.browser.CompositeNode;
@@ -98,7 +99,7 @@ public class DataBrowserContentMenuContribution implements IDataBrowserContextMe
 	@Override
 	public boolean contributeToBaseCaseMenu(@NonNull final MenuManager menuManager) {
 		boolean itemsAdded = false;
-		if (UpstreamUrlProvider.INSTANCE.isAvailable() && BaseCaseServiceClient.INSTANCE.needsLocking()) {
+		if (DataHubServiceProvider.getInstance().isOnlineAndLoggedIn() && BaseCaseServiceClient.INSTANCE.needsLocking()) {
 			if (BaseCaseServiceClient.INSTANCE.isServiceLockedByMe()) {
 
 				// Check user permission
@@ -143,7 +144,7 @@ public class DataBrowserContentMenuContribution implements IDataBrowserContextMe
 			if (firstElement instanceof ScenarioInstance) {
 				final ScenarioInstance scenarioInstance = (ScenarioInstance) firstElement;
 				final Manifest manifest = scenarioInstance.getManifest();
-				if (UpstreamUrlProvider.INSTANCE.isAvailable() && BaseCaseServiceClient.INSTANCE.canPublish()) {
+				if ( DataHubServiceProvider.getInstance().isOnlineAndLoggedIn() && BaseCaseServiceClient.INSTANCE.canPublish()) {
 
 					// Check user permission
 					if (!UserPermissionsService.INSTANCE.hubSupportsPermissions() || UserPermissionsService.INSTANCE.isPermitted("basecase", "publish")) {
@@ -185,7 +186,7 @@ public class DataBrowserContentMenuContribution implements IDataBrowserContextMe
 				}
 			}
 		}
-		if (!itemsAdded && !UpstreamUrlProvider.INSTANCE.isAvailable()) {
+		if (!itemsAdded && !DataHubServiceProvider.getInstance().isOnlineAndLoggedIn()) {
 			final RunnableAction action = new RunnableAction("Please wait...", () -> {
 			});
 			action.setEnabled(false);

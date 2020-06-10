@@ -37,11 +37,7 @@ public class DataHubServiceProvider {
 
 	private final Collection<IDataHubStateChangeListener> stateChangeListeners = new ConcurrentLinkedQueue<>();
 
-	private UserNameUpdater userNameUpdater;
-
 	private DataHubServiceProvider() {
-		userNameUpdater = new UserNameUpdater();
-
 		start();
 	}
 
@@ -60,22 +56,24 @@ public class DataHubServiceProvider {
 
 	private synchronized void fireStateChangedEvent(final boolean online, final boolean loggedIn) {
 
-		if (online && loggedIn && loggedIn != this.loggedIn) {
+		final boolean changedToLoggedIn = online && loggedIn && loggedIn != this.loggedIn;
+
+		this.online = online;
+		this.loggedIn = loggedIn;
+
+		if (changedToLoggedIn) {
 			// We have changed to online + logged in, so refresh some state
 
 			// Update username
-			userNameUpdater.refresh();
+			UserNameUpdater.refreshUserId();
 
 			// Update permissions model
 			try {
 				UserPermissionsService.INSTANCE.updateUserPermissions();
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				LOGGER.error("Error refreshing permissions: " + e.getMessage(), e);
 			}
 		}
-
-		this.online = online;
-		this.loggedIn = loggedIn;
 
 		for (final IDataHubStateChangeListener l : stateChangeListeners) {
 			try {
@@ -110,13 +108,13 @@ public class DataHubServiceProvider {
 		return UserPermissionsService.INSTANCE;
 	}
 
-	public synchronized void setOnlineState(boolean newOnline) {
+	public synchronized void setOnlineState(final boolean newOnline) {
 		if (this.online != newOnline) {
 			fireStateChangedEvent(newOnline, newOnline ? this.loggedIn : false);
 		}
 	}
 
-	public synchronized void setLoggedInState(boolean newLoggedIn) {
+	public synchronized void setLoggedInState(final boolean newLoggedIn) {
 		if (this.loggedIn != newLoggedIn) {
 			fireStateChangedEvent(this.online, newLoggedIn);
 		}

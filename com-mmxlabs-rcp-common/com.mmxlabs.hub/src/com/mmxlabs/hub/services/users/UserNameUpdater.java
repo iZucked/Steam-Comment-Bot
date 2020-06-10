@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import com.mmxlabs.hub.IUpstreamDetailChangedListener;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.common.http.HttpClientUtil;
 
@@ -25,23 +24,17 @@ public class UserNameUpdater {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserNameUpdater.class);
 
-	private final IUpstreamDetailChangedListener detailChangedListener = this::refresh;
-
-
 	private static final OkHttpClient httpClient = HttpClientUtil.basicBuilder() //
 			.build();
- 
-	public void refresh() {
-		final boolean available = UpstreamUrlProvider.INSTANCE.isAvailable();
-		if (available) {
-			try {
-				String userId = getCurrentUserId();
-				if (userId != null) {
-					UsernameProvider.INSTANCE.setUserId(userId);
-				}
-			} catch (Exception e) {
-				// Ignore
+
+	public static void refreshUserId() {
+		try {
+			String userId = getCurrentUserId();
+			if (userId != null) {
+				UsernameProvider.INSTANCE.setUserId(userId);
 			}
+		} catch (Exception e) {
+			// Ignore
 		}
 	}
 
@@ -76,7 +69,7 @@ public class UserNameUpdater {
 		return userId;
 	}
 
-	public String getCurrentUserId() throws Exception {
+	private static String getCurrentUserId() throws Exception {
 		OkHttpClient.Builder clientBuilder = httpClient.newBuilder();
 
 		final OkHttpClient localHttpClient = clientBuilder //

@@ -11,6 +11,7 @@ import java.time.Instant;
 import org.json.JSONObject;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.common.http.HttpClientUtil;
 import com.mmxlabs.hub.common.http.IProgressListener;
@@ -178,7 +179,7 @@ public class BaseCaseServiceClient {
 			return null;
 		}
 
-		if (!UpstreamUrlProvider.INSTANCE.isAvailable()) {
+		if (!DataHubServiceProvider.getInstance().isOnlineAndLoggedIn()) {
 			return null;
 		}
 

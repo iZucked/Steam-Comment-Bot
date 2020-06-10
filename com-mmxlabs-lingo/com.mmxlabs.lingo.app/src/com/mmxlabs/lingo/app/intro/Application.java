@@ -39,6 +39,7 @@ import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
 import com.mmxlabs.common.io.FileDeleter;
+import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.auth.AuthenticationManager;
 import com.mmxlabs.hub.services.permissions.UserPermissionsService;
@@ -67,8 +68,7 @@ public class Application implements IApplication {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.equinox.app.IApplication#start(org.eclipse.equinox.app.
-	 * IApplicationContext)
+	 * @see org.eclipse.equinox.app.IApplication#start(org.eclipse.equinox.app. IApplicationContext)
 	 */
 	@Override
 	public Object start(final IApplicationContext context) {
@@ -120,10 +120,13 @@ public class Application implements IApplication {
 		// Check Data Hub to see if user is authorised to use LiNGO
 		boolean datahubStartupCheck = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_DATAHUB_STARTUP_CHECK);
 		if (datahubStartupCheck) {
+
+			// TODO: Check this works properly with new oauth changes. I.e. the oauth logout may get called without the display from here.
+
 			displayProgressMonitor(display);
 
 			// check if datahub is available
-			if (UpstreamUrlProvider.INSTANCE.isUpstreamAvailable()) {
+			if (DataHubServiceProvider.getInstance().isHubOnline()) {
 
 				if (!authenticationManager.isAuthenticated()) {
 					authenticationManager.run(display.getActiveShell());
@@ -288,7 +291,7 @@ public class Application implements IApplication {
 		int msInASecond = 1000;
 
 		for (int i = 0; i < timeoutInSeconds; ++i) {
-			if (UpstreamUrlProvider.INSTANCE.isAvailable()) {
+			if (DataHubServiceProvider.getInstance().isHubOnline()) {
 				break;
 			}
 			try {
@@ -346,7 +349,7 @@ public class Application implements IApplication {
 		PluginRegistryHook.initialisePluginXMLEnablements();
 
 		CustomReportsRegistryHook.initialisePluginXMLEnablements();
-		
+
 		ReplaceableViewManager.initialiseReplaceableViews();
 	}
 
@@ -386,9 +389,7 @@ public class Application implements IApplication {
 	/**
 	 * Reconstruct command line arguments and modify to suit
 	 * 
-	 * Taken from org.eclipse.ui.internal.ide.actions.OpenWorkspaceAction. This
-	 * required EXIT_RELAUNCH - not EXIT_RESTART to work. Note only works in builds,
-	 * not from within eclipse.
+	 * Taken from org.eclipse.ui.internal.ide.actions.OpenWorkspaceAction. This required EXIT_RELAUNCH - not EXIT_RESTART to work. Note only works in builds, not from within eclipse.
 	 * 
 	 * 
 	 */

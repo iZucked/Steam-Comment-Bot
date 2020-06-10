@@ -30,6 +30,7 @@ import com.google.common.base.Charsets;
 import com.google.common.collect.MapMaker;
 import com.google.common.io.Files;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.IUpstreamDetailChangedListener;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
@@ -225,7 +226,7 @@ public class GeneralDataUpdater {
 	}
 
 	public void refresh() {
-		final boolean available = UpstreamUrlProvider.INSTANCE.isAvailable();
+		final boolean available = DataHubServiceProvider.getInstance().isOnlineAndLoggedIn();
 		if (available) {
 			for (final TypeRecord typeRecord : interestedTypes) {
 				refreshType(typeRecord);

@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.BaseCaseServiceClient;
 import com.mmxlabs.lngdataserver.lng.importers.menus.ScenarioServicePublishAction;
@@ -28,7 +29,7 @@ public class PublishBaseCaseCommandHandler extends AbstractHandler {
 
 	@Override
 	public void setEnabled(final Object evaluationContext) {
-		setBaseEnabled(UpstreamUrlProvider.INSTANCE.isAvailable() && BaseCaseServiceClient.INSTANCE.canPublish());
+		setBaseEnabled(DataHubServiceProvider.getInstance().isOnlineAndLoggedIn() && BaseCaseServiceClient.INSTANCE.canPublish());
 	}
 
 	@Override

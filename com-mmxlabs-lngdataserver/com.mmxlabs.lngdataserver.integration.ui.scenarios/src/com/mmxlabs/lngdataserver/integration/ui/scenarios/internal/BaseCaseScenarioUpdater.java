@@ -25,6 +25,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.common.util.URI;
 
 import com.google.common.io.Files;
+import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.IUpstreamDetailChangedListener;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.common.http.IProgressListener;
@@ -325,7 +326,7 @@ public class BaseCaseScenarioUpdater {
 	}
 
 	public void refresh() throws IOException {
-		final boolean available = UpstreamUrlProvider.INSTANCE.isAvailable();
+		final boolean available =  DataHubServiceProvider.getInstance().isOnlineAndLoggedIn();
 		if (!modelRoot.isOffline() != available) {
 			RunnerHelper.syncExecDisplayOptional(() -> modelRoot.setOffline(!available));
 		}
