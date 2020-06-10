@@ -636,13 +636,14 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 * 
 	 * This method expects either no load or discharge ports, or at least one load and at least one discharge port. Behaviour in any other situation is undefined.
 	 * 
+	 * @param vessel
 	 * @param loadIndices
 	 * @param dischargeIndices
 	 * @param arrivalTimes
 	 * @param sequence
 	 * @return A list of LNG prices, or null if there was no way to establish LNG prices.
 	 */
-	final public int[] getLngEffectivePrices(final List<Integer> loadIndices, final List<Integer> dischargeIndices, final IPortTimesRecord portTimesRecord, final long startHeelVolumeInM3,
+	final public int[] getLngEffectivePrices(final IVessel vessel, final List<Integer> loadIndices, final List<Integer> dischargeIndices, final IPortTimesRecord portTimesRecord, final long startHeelVolumeInM3,
 			final IDetailsSequenceElement... sequence) {
 		// TODO: does not need to be this long
 		final int[] resultPerMMBtu = new int[sequence.length];
@@ -682,7 +683,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			final IDischargeSlot dischargeSlot = (IDischargeSlot) slot;
 
 			// calculate the effective LNG value based on this discharge slot
-			lngValuePerMMBTu = dischargeSlot.getDischargePriceCalculator().estimateSalesUnitPrice(dischargeSlot, portTimesRecord, null);
+			lngValuePerMMBTu = dischargeSlot.getDischargePriceCalculator().estimateSalesUnitPrice(vessel, dischargeSlot, portTimesRecord, null);
 
 			// and apply the value to prices on all preceding voyages
 			for (int j = prevDischargeIndex; j < i; j++) {
@@ -824,7 +825,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		// processing, but this is where the information is being processed.
 		// Can this be moved into the scheduler? If so, we need to ensure the
 		// same price is used in all valid voyage legs.
-		final int[] pricesPerMMBTu = getLngEffectivePrices(loadIndices, dischargeIndices, portTimesRecord, voyagePlan.getStartingHeelInM3(), sequence);
+		final int[] pricesPerMMBTu = getLngEffectivePrices(vessel, loadIndices, dischargeIndices, portTimesRecord, voyagePlan.getStartingHeelInM3(), sequence);
 
 		// set the LNG values for the voyages
 		IHeelOptionSupplierPortSlot heelOptionSupplierPortSlot = null;

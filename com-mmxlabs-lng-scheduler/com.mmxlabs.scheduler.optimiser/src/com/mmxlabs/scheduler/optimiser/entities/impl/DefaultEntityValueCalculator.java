@@ -45,6 +45,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IMarkToMarketOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
@@ -165,7 +166,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 				final IDischargeOption dischargeOption = (IDischargeOption) slot;
 
-				final int slotPricePerMMBtu = dischargeOption.getDischargePriceCalculator().calculateSalesUnitPrice(dischargeOption, cargoPNLData, portSlotDetails);
+				IVessel vessel = vesselAvailability.getVessel();
+				final int slotPricePerMMBtu = dischargeOption.getDischargePriceCalculator().calculateSalesUnitPrice(vessel, dischargeOption, cargoPNLData, portSlotDetails);
 				cargoPNLData.setSlotPricePerMMBTu(slot, slotPricePerMMBtu);
 
 				final long slotValue = Calculator.costFromConsumption(cargoPNLData.getCommercialSlotVolumeInMMBTu(slot), slotPricePerMMBtu);
