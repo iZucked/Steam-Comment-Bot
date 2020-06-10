@@ -48,6 +48,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.impl.TravelVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.IGeneratedCharterOutEvaluator;
 import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
@@ -531,8 +532,9 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 		// vpo.setPortTimesRecord(bigSequence.getPortTimesRecord());
 
 		List<@NonNull IVoyagePlanChoice> vpoChoices = new LinkedList<>();
+		final boolean isCargo = isFirstSequenceElementIsLoadSlot(bigSequence);
 		if (!vessel.hasReliqCapability()) {
-			if (checkForNonEmptyHeel(startHeelVolumeRangeInM3)) {
+			if (isCargo || checkForNonEmptyHeel(startHeelVolumeRangeInM3)) {
 				// Add in NBO etc choices (ballast 1)
 				vpoChoices.add(new TravelVoyagePlanChoice(bigSequence.getLaden() == null ? null : bigSequence.getLaden(), bigSequence.getToCharter()));
 				vpoChoices.add(new IdleNBOVoyagePlanChoice(bigSequence.getToCharter()));
@@ -558,6 +560,17 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 				vpoChoices, startingTime);
 
 		return newVoyagePlan;
+	}
+	
+	private boolean isFirstSequenceElementIsLoadSlot(final ExtendedCharterOutSequence bigSequence) {
+		final IOptionsSequenceElement foo = bigSequence.getSequence().get(0);
+		if (foo instanceof PortOptions) {
+			final PortOptions bar = (PortOptions) foo;
+			if (bar.getPortSlot().getPortType() == PortType.Load) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	private boolean checkForNonEmptyHeel(final long[] startHeelRangeInM3) {
