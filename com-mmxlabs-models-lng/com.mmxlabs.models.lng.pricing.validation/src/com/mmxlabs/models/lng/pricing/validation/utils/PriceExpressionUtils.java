@@ -36,6 +36,7 @@ import com.mmxlabs.common.parser.series.UnknownSeriesException;
 import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
@@ -51,6 +52,7 @@ import com.mmxlabs.models.lng.pricing.util.ModelMarketCurveProvider;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 import com.mmxlabs.models.lng.pricing.validation.internal.Activator;
+import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils.ValidationResult;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusFactory;
@@ -455,5 +457,26 @@ public class PriceExpressionUtils {
 		final Node node = Nodes.expandNode(p, lookupData);
 
 		return node;
+	}
+	
+	public static void validatePriceExpression(final IValidationContext ctx, final List<IStatus> failures, EObject target, String contractName, final LNGPriceCalculatorParameters pricingParams, EAttribute priceExprAttribute,
+			String priceExpr) {
+		if (priceExpr == null || priceExpr.isEmpty()) {
+			addToFailures(ctx, failures, target, String.format("Contract %s| Missing price expression ", contractName), pricingParams, priceExprAttribute);
+		} else {
+			final ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, pricingParams, priceExprAttribute, priceExpr);
+			if (!result.isOk()) {
+				final String message = String.format("[Contract|'%s']: %s", contractName, result.getErrorDetails());
+				addToFailures(ctx, failures, target, message, pricingParams, priceExprAttribute);
+			}
+		}
+	}
+
+	public static void addToFailures(final IValidationContext ctx, final List<IStatus> failures, EObject target, String errorMessage, final LNGPriceCalculatorParameters pricingParams,
+			EAttribute baseExpressionFeature) {
+		final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(errorMessage));
+		dsd.addEObjectAndFeature(target, CommercialPackage.Literals.CONTRACT__PRICE_INFO);
+		dsd.addEObjectAndFeature(pricingParams, baseExpressionFeature);
+		failures.add(dsd);
 	}
 }
