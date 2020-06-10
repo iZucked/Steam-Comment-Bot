@@ -138,7 +138,7 @@ public class SimpleContractTransformer implements IContractTransformer {
 	 *            A string containing a valid price expression interpretable by a {@link SeriesParser}
 	 * @return An internal representation of a price expression contract for use by the optimiser
 	 */
-	private PriceExpressionContract createPriceExpressionContract(final String priceExpression) {
+	protected PriceExpressionContract createPriceExpressionContract(final String priceExpression) {
 
 		final String splitMonthToken = "splitmonth(";
 		boolean isSplitMonth = priceExpression.toLowerCase().contains(splitMonthToken.toLowerCase());
