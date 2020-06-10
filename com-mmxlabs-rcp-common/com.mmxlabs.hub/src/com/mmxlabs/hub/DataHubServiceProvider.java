@@ -1,5 +1,6 @@
 package com.mmxlabs.hub;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -53,6 +54,16 @@ public class DataHubServiceProvider {
 	}
 
 	private synchronized void fireStateChangedEvent(final boolean online, final boolean loggedIn) {
+		
+		if (online && loggedIn && loggedIn != this.loggedIn) {
+			// We have changed to online + logged in, so refresh permissions
+			try {
+				UserPermissionsService.INSTANCE.updateUserPermissions();
+			} catch (IOException e) {
+				LOGGER.error("Error refreshing permissions: " + e.getMessage(), e);
+			}
+		}
+		
 		this.online = online;
 		this.loggedIn = loggedIn;
 		
