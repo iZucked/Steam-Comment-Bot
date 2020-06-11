@@ -25,7 +25,6 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +34,7 @@ import com.mmxlabs.hub.auth.AuthenticationManager;
 import com.mmxlabs.hub.common.http.HttpClientUtil;
 import com.mmxlabs.hub.info.DatahubInformation;
 import com.mmxlabs.hub.preferences.DataHubPreferenceConstants;
+import com.mmxlabs.hub.preferences.DataHubPreferencePage;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -105,7 +105,7 @@ public class UpstreamUrlProvider {
 		baseCaseServiceEnabled = Boolean.TRUE.equals(preferenceStore.getBoolean(DataHubPreferenceConstants.P_ENABLE_BASE_CASE_SERVICE_KEY));
 		teamServiceEnabled = Boolean.TRUE.equals(preferenceStore.getBoolean(DataHubPreferenceConstants.P_ENABLE_TEAM_SERVICE_KEY));
 		forceBasicAuthenticationEnabled = Boolean.TRUE.equals(preferenceStore.getBoolean(DataHubPreferenceConstants.P_FORCE_BASIC_AUTH));
-		AuthenticationManager.getInstance().setForceBasicAuthentication(forceBasicAuthenticationEnabled);
+		authenticationManager.setForceBasicAuthentication(forceBasicAuthenticationEnabled);
 		HttpClientUtil.setDisableSSLHostnameCheck(Boolean.TRUE.equals(preferenceStore.getBoolean(DataHubPreferenceConstants.P_DISABLE_SSL_HOSTNAME_CHECK)));
 
 		// Schedule a "is alive" check every minute....
@@ -142,9 +142,9 @@ public class UpstreamUrlProvider {
 			fireServiceChangedListeners(IUpstreamServiceChangedListener.Service.TeamWorkspace);
 			break;
 		case DataHubPreferenceConstants.P_FORCE_BASIC_AUTH:
-			authenticationManager.logout((Shell) null);
 			forceBasicAuthenticationEnabled = Boolean.TRUE.equals(event.getNewValue());
 			authenticationManager.setForceBasicAuthentication(forceBasicAuthenticationEnabled);
+			DataHubPreferencePage.setButtonText();
 			fireChangedListeners();
 			break;
 		default:
@@ -249,9 +249,9 @@ public class UpstreamUrlProvider {
 			DataHubServiceProvider.getInstance().setOnlineState(true);
 
 			authenticationManager.updateAuthenticationScheme(baseUrl, currentInformation.getAuthenticationScheme());
-			if (!authenticationDialogIsOpen.get() && !authenticationManager.isAuthenticated()) {
-				authenticationDialogIsOpen.compareAndSet(false, true);
-				authenticationManager.run(optionalShell);
+
+			if (!authenticationDialogIsOpen.compareAndSet(false, true) && !authenticationManager.isAuthenticated()) {
+				authenticationManager.run((Shell) null);
 				authenticationDialogIsOpen.compareAndSet(true, false);
 			}
 
