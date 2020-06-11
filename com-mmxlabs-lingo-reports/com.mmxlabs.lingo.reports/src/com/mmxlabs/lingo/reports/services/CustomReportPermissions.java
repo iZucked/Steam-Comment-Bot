@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.lingo.reports.services;
 
+import java.io.IOException;
+
 import com.mmxlabs.hub.services.permissions.UserPermissionsService;
 
 public class CustomReportPermissions {

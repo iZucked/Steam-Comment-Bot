@@ -27,13 +27,13 @@ import com.mmxlabs.common.util.CheckedBiConsumer;
 import com.mmxlabs.lingo.reports.customizable.CustomReportDefinition;
 import com.mmxlabs.lingo.reports.services.CustomReportPermissions;
 import com.mmxlabs.lingo.reports.services.ICustomReportDataRepository;
-import com.mmxlabs.lingo.reports.views.schedule.ScheduleSummaryReport;
 
 public class TopCustomReportDataRepository implements ICustomReportDataRepository {
 	
 	public static final TopCustomReportDataRepository INSTANCE = new TopCustomReportDataRepository();
 	private static final Logger LOGGER = LoggerFactory.getLogger(TopCustomReportDataRepository.class);
-
+	
+	private boolean isFirst = true;
 	protected final List<Runnable> newLocalVersionCallbacks = new LinkedList<>();
 
 	public TopCustomReportDataRepository() {
@@ -133,12 +133,14 @@ public class TopCustomReportDataRepository implements ICustomReportDataRepositor
 			if (temp != null) {
 				records.addAll(temp);
 			}
-		} else if (recordsFile.exists() && recordsFile.canRead()) {
+		}
+		if ((isFirst || records.isEmpty()) && recordsFile.exists() && recordsFile.canRead()) {
 			String json = com.google.common.io.Files.toString(recordsFile, Charsets.UTF_8);
 			final List<CustomReportDataRecord> temp = CustomReportDataServiceClient.parseRecordsJSONData(json);
 			if (temp != null) {
 				records.addAll(temp);
 			}
+			isFirst = false;
 		}
 		return records;
 	}
