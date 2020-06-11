@@ -90,8 +90,7 @@ public class OAuthAuthenticationManager extends AbstractAuthenticationManager {
 			display = optionalShell.getDisplay();
 		}
 
-		if (display != null && authenticationShellIsOpen.compareAndSet(false, true)) {
-
+		if (display != null) {
 			display.syncExec(() -> {
 				Shell shell = optionalShell == null ? display.getActiveShell() : optionalShell;
 				if (shell == null && PlatformUI.isWorkbenchRunning()) {
@@ -106,14 +105,10 @@ public class OAuthAuthenticationManager extends AbstractAuthenticationManager {
 				// Set access token when shell is disposed
 				authenticationShell.addDisposeListener(event -> {
 					storeInSecurePreferences(ACCESS_TOKEN, authenticationShell.getAccessToken());
-					authenticationShellIsOpen.compareAndSet(true, false);
 				});
 
 				if (shell != null) {
 					authenticationShell.run(shell, visible);
-				} else {
-					// Unable to start a shell, so reset the flag
-					authenticationShellIsOpen.compareAndSet(true, false);
 				}
 			});
 		}
