@@ -95,6 +95,8 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent se) {
+				UpstreamUrlProvider.INSTANCE.allowAuthenticationDialogToBeOpened.set(true);
+
 				// trigger authentication shell
 				if (button.getText().equals(loginButtonText)) {
 					UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();

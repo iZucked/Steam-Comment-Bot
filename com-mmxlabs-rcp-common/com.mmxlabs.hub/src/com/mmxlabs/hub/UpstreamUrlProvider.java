@@ -26,6 +26,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -93,6 +94,7 @@ public class UpstreamUrlProvider {
 
 	// this bool ensures that only one authentication shell is launched
 	private final AtomicBoolean authenticationDialogIsOpen = new AtomicBoolean(false);
+	public final AtomicBoolean allowAuthenticationDialogToBeOpened = new AtomicBoolean(true);
 
 	private UpstreamUrlProvider() {
 		if (DataHubActivator.getDefault() != null) {
@@ -250,8 +252,13 @@ public class UpstreamUrlProvider {
 
 			authenticationManager.updateAuthenticationScheme(baseUrl, currentInformation.getAuthenticationScheme());
 
-			if (authenticationDialogIsOpen.compareAndSet(false, true) && !authenticationManager.isAuthenticated()) {
+			if (authenticationDialogIsOpen.compareAndSet(false, true) && allowAuthenticationDialogToBeOpened.get() && !authenticationManager.isAuthenticated()) {
 				authenticationManager.run(optionalShell);
+
+				// this gets reset whenever a user logs in from the preference page
+				if (PlatformUI.isWorkbenchRunning()) {
+					allowAuthenticationDialogToBeOpened.compareAndSet(true, false);
+				}
 				authenticationDialogIsOpen.compareAndSet(true, false);
 			}
 
