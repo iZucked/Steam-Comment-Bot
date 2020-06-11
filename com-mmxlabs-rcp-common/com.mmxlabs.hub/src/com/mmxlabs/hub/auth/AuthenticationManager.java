@@ -1,13 +1,12 @@
 package com.mmxlabs.hub.auth;
 
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.mmxlabs.hub.preferences.DataHubPreferencePage;
 
 import okhttp3.Request;
 import okhttp3.Request.Builder;
@@ -37,10 +36,10 @@ public class AuthenticationManager {
 	private String authenticationScheme = "basic";
 	private String upstreamURL = null;
 
-	private boolean forceBasicAuthentication = false;
+	public AtomicBoolean forceBasicAuthentication = new AtomicBoolean(false);
 
-	public void setForceBasicAuthentication(boolean forceBasicAuthentication) {
-		this.forceBasicAuthentication = forceBasicAuthentication;
+	public synchronized void setForceBasicAuthentication(boolean value) {
+		forceBasicAuthentication.set(value);
 	}
 
 	public synchronized void updateAuthenticationScheme(String upstreamURL, String scheme) {
@@ -55,7 +54,7 @@ public class AuthenticationManager {
 	public boolean isAuthenticated() {
 		boolean authenticated = false;
 
-		if (isOAuthEnabled() && !forceBasicAuthentication) {
+		if (isOAuthEnabled() && !forceBasicAuthentication.get()) {
 			authenticated = oauthAuthenticationManager.isAuthenticated(upstreamURL);
 		} else {
 			authenticated = basicAuthenticationManager.isAuthenticated(upstreamURL);
@@ -65,13 +64,11 @@ public class AuthenticationManager {
 	}
 
 	public void logout(@Nullable Shell shell) {
-		if (isOAuthEnabled() && !forceBasicAuthentication) {
+		if (isOAuthEnabled() && !forceBasicAuthentication.get()) {
 			oauthAuthenticationManager.logout(upstreamURL, shell);
 		} else {
 			basicAuthenticationManager.logout(upstreamURL, shell);
 		}
-		// update the text in the datahub preference page
-		DataHubPreferencePage.setButtonText();
 	}
 
 	public void clearCookies(String url) {
@@ -80,7 +77,7 @@ public class AuthenticationManager {
 	}
 
 	public void run(@Nullable Shell optionalDisplay) {
-		if (isOAuthEnabled() && !forceBasicAuthentication) {
+		if (isOAuthEnabled() && !forceBasicAuthentication.get()) {
 			oauthAuthenticationManager.run(upstreamURL, optionalDisplay);
 		} else {
 			basicAuthenticationManager.run(upstreamURL, optionalDisplay);
@@ -88,7 +85,7 @@ public class AuthenticationManager {
 	}
 
 	protected void startAuthenticationShell(@Nullable Shell optionalDisplay) {
-		if (isOAuthEnabled() && !forceBasicAuthentication) {
+		if (isOAuthEnabled() && !forceBasicAuthentication.get()) {
 			oauthAuthenticationManager.run(upstreamURL, optionalDisplay);
 		} else {
 			basicAuthenticationManager.run(upstreamURL, optionalDisplay);
@@ -100,14 +97,14 @@ public class AuthenticationManager {
 	}
 
 	public Request.Builder buildRequest() {
-		if (isOAuthEnabled() && !forceBasicAuthentication) {
+		if (isOAuthEnabled() && !forceBasicAuthentication.get()) {
 			Optional<Builder> buildRequestWithToken = oauthAuthenticationManager.buildRequestWithToken();
 			if (buildRequestWithToken.isPresent()) {
 				return buildRequestWithToken.get();
 			} else {
 				// Invalidate?
 			}
-		} else if (BASIC.equals(authenticationScheme) || forceBasicAuthentication) {
+		} else if (BASIC.equals(authenticationScheme) || forceBasicAuthentication.get()) {
 			Optional<Builder> buildRequestWithBasicAuth = basicAuthenticationManager.buildRequestWithBasicAuth();
 			if (buildRequestWithBasicAuth.isPresent()) {
 				return buildRequestWithBasicAuth.get();
