@@ -97,7 +97,6 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 			public void widgetSelected(final SelectionEvent se) {
 				// trigger authentication shell
 				if (button.getText().equals(loginButtonText)) {
-					authenticationManager.run(getShell());
 					UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
 					if (authenticationManager.isAuthenticated()) {
 						button.setText("Logout");

@@ -1,6 +1,7 @@
 package com.mmxlabs.hub.auth;
 
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
@@ -24,6 +25,8 @@ abstract class AbstractAuthenticationManager {
 	static final ISecurePreferences PREFERENCES = SecurePreferencesFactory.getDefault();
 
 	private static final String PREFERENCES_NODE = "upstream";
+
+	AtomicBoolean authenticationShellIsOpen = new AtomicBoolean(false);
 
 	public abstract void run(String upstreamURL, @Nullable Shell optionalDisplay);
 
