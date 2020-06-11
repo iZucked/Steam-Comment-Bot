@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: LNG Dataserver Libraries
 Bundle-SymbolicName: com.mmxlabs.lngdataserver.lib;singleton:=true
 Bundle-Version: 4.9.3.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-10
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.12.0",

@@ -33,12 +33,13 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.hub.DataHubServiceProvider;
+import com.mmxlabs.hub.IUpstreamDetailChangedListener;
+import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.SharedScenarioRecord;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.SharedWorkspacePathUtils;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.SharedWorkspaceServiceClient;
-import com.mmxlabs.lngdataserver.server.IUpstreamDetailChangedListener;
-import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.manifest.Manifest;
@@ -395,8 +396,7 @@ public class SharedScenarioUpdater {
 	}
 
 	/**
-	 * UI created folder, so register with the local map to avoid recreating it
-	 * later
+	 * UI created folder, so register with the local map to avoid recreating it later
 	 * 
 	 * @param f
 	 */
@@ -440,7 +440,7 @@ public class SharedScenarioUpdater {
 	}
 
 	public void refresh() throws IOException {
-		final boolean available = UpstreamUrlProvider.INSTANCE.isAvailable();
+		final boolean available = DataHubServiceProvider.getInstance().isOnlineAndLoggedIn();
 		if (!modelRoot.isOffline() != available) {
 			RunnerHelper.syncExecDisplayOptional(() -> modelRoot.setOffline(!available));
 		}

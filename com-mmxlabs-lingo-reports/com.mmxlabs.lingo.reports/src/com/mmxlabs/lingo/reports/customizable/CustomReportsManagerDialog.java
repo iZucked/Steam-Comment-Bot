@@ -63,10 +63,8 @@ import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnUpdater;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.OptionInfo;
-import com.mmxlabs.lingo.reports.views.schedule.CustomReportsRegistry;
 import com.mmxlabs.lingo.reports.views.schedule.ScheduleBasedReportBuilder;
 import com.mmxlabs.lingo.reports.views.schedule.ScheduleSummaryReport;
-import com.mmxlabs.lingo.reports.views.schedule.ScheduleSummaryReportDefinition;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
 import com.mmxlabs.models.ui.tabular.columngeneration.IColumnInfoProvider;
 
@@ -90,9 +88,9 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	/** The list contains columns that are note shown in viewer */
 	private List<ColumnBlock> nonVisible = new ArrayList<>();
 
-	private List<ScheduleSummaryReportDefinition> userReportDefinitions;
+	private List<CustomReportDefinition> userReportDefinitions;
 
-	private List<ScheduleSummaryReportDefinition> teamReportDefinitions;
+	private List<CustomReportDefinition> teamReportDefinitions;
 
 	enum StoreType {
 		User,
@@ -101,7 +99,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	
 	class Change {
 		StoreType storeType;
-		ScheduleSummaryReportDefinition report;
+		CustomReportDefinition report;
 		boolean newReport;
 		boolean saved;
 		boolean published;
@@ -111,9 +109,9 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	
 	private StoreType currentStoreType;
 	
-	private ScheduleSummaryReportDefinition current;
+	private CustomReportDefinition current;
 	
-	private ScheduleSummaryReportDefinition currentBeforeChanges;
+	private CustomReportDefinition currentBeforeChanges;
 	
 	private Button userButton, teamButton;
 	
@@ -475,7 +473,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 				logger.error("Unimplemented mode in protected void CustomReportsManagerDialog.handleDiscardBtn(Event event)");
 			}
 			this.current = this.currentBeforeChanges;
-			this.currentBeforeChanges = (ScheduleSummaryReportDefinition)this.current.clone();
+			this.currentBeforeChanges = (CustomReportDefinition)this.current.clone();
 			updateViewWithReportDefinition(this.current);
 		}
 		
@@ -489,7 +487,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		this.changesMade = false;
 	}
 
-	private void deleteReport(StoreType storeType, ScheduleSummaryReportDefinition toDelete) {
+	private void deleteReport(StoreType storeType, CustomReportDefinition toDelete) {
 		Change change = this.uuidToChangedReports.get(toDelete.getUuid());
 		boolean newReport = (change != null && change.newReport);
 
@@ -539,13 +537,14 @@ public class CustomReportsManagerDialog extends TrayDialog {
 				else {
 					try {
 						CustomReportsRegistry.getInstance().publishReport(this.current);
+						this.changesMade = true;
 					} catch (Exception e) {
 						String errorMsg = "Problem publishing renamed report \""+this.current.getName()+"\" to DataHub.";
 						logger.error(errorMsg, e);
 						displayErrorDialog(errorMsg);
 					}					
 				}
-				this.updateViewWithReportDefinition(this.current);	
+				this.updateViewWithReportDefinition(this.current);
 			}
 		}
 		else {
@@ -568,7 +567,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	protected void handleDeleteBtn(Event event) {
 		IStructuredSelection selected = this.customReportsViewer.getStructuredSelection();
 		if (selected != null && selected.size() == 1) {
-			ScheduleSummaryReportDefinition toDelete = (ScheduleSummaryReportDefinition)selected.getFirstElement();
+			CustomReportDefinition toDelete = (CustomReportDefinition)selected.getFirstElement();
 			StoreType storeType = userButton.getSelection() ? StoreType.User : StoreType.Team;
 			this.deleteReport(storeType, toDelete);
 		}
@@ -578,7 +577,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		IStructuredSelection selected = this.customReportsViewer.getStructuredSelection();
 		if (selected != null && selected.size() == 1) {
 			//Update view with latest.
-			ScheduleSummaryReportDefinition rd = (ScheduleSummaryReportDefinition)selected.getFirstElement();
+			CustomReportDefinition rd = (CustomReportDefinition)selected.getFirstElement();
 			updateReportDefinitionWithChangesFromDialog(rd);
 			if (this.currentStoreType == StoreType.User) {
 				Change change = this.uuidToChangedReports.get(rd.getUuid());
@@ -589,27 +588,30 @@ public class CustomReportsManagerDialog extends TrayDialog {
 						//Save down, before publishing for user report.
 						CustomReportsRegistry.getInstance().writeToJSON(rd);
 						change.saved = true;
+						this.changesMade = true;
 					}
 				}
-				//Make sure we refresh team reports if team reports selected.
-				this.userReportPublished = true;
 			}
 			try {
 				CustomReportsRegistry.getInstance().publishReport(rd);
+				
+				//Make sure we refresh team reports if team reports selected.
+				this.userReportPublished = true;
+				this.changesMade = true;
+				Change change = this.uuidToChangedReports.get(rd.getUuid());
+				if (change != null) {
+					//If team report or it has already been saved, then set disable discard button again.
+					if (this.teamButton.getSelection() || change.saved)  {
+						this.discardBtn.setEnabled(false);
+					}
+					this.uuidToChangedReports.get(rd.getUuid()).published = true;
+					this.uuidToChangedReports.get(rd.getUuid()).newReport = false;
+				}
 			} catch(Exception e) {
 				String errorMsg = "Problem publishing report \""+rd.getName()+"\" to DataHub.";
 				logger.error(errorMsg, e);
 				displayErrorDialog(errorMsg);
-			}
-			Change change = this.uuidToChangedReports.get(rd.getUuid());
-			if (change != null) {
-				//If team report or it has already been saved, then set disable discard button again.
-				if (this.teamButton.getSelection() || change.saved)  {
-					this.discardBtn.setEnabled(false);
-				}
-				this.uuidToChangedReports.get(rd.getUuid()).published = true;
-				this.uuidToChangedReports.get(rd.getUuid()).newReport = false;
-			}
+			} 	
 		}
 	}
 
@@ -617,12 +619,12 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		IStructuredSelection selected = this.customReportsViewer.getStructuredSelection();
 		if (selected != null && selected.size() == 1) {
 			
-			ScheduleSummaryReportDefinition toSave = (ScheduleSummaryReportDefinition)selected.getFirstElement();
+			CustomReportDefinition toSave = (CustomReportDefinition)selected.getFirstElement();
 					
 			//If we are copying from team folder, clone and change UUID.
 			if (teamButton.getSelection()) {
 				//Create report definition object with defaults and save.
-				ScheduleSummaryReportDefinition copy = new ScheduleSummaryReportDefinition();
+				CustomReportDefinition copy = new CustomReportDefinition();
 				
 				copy.setUuid(ScheduleSummaryReport.UUID_PREFIX+UUID.randomUUID().toString());
 				copy.setName(toSave.getName()+" (User Copy)");
@@ -664,7 +666,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 			final String name = dialog.getValue();
 
 			//Create report definition object with defaults and save.
-			ScheduleSummaryReportDefinition reportDefinition = new ScheduleSummaryReportDefinition();
+			CustomReportDefinition reportDefinition = new CustomReportDefinition();
 			
 			reportDefinition.setUuid(ScheduleSummaryReport.UUID_PREFIX+UUID.randomUUID().toString());
 			reportDefinition.setName(name);
@@ -694,7 +696,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		}
 	}
 	
-	private void addChangedReport(ScheduleSummaryReportDefinition rd) {
+	private void addChangedReport(CustomReportDefinition rd) {
 		Change change = new Change();
 		change.report = rd;
 		change.saved = false;
@@ -748,7 +750,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		}
 	}
 	
-	private void updateReportDefinitionWithChangesFromDialog(ScheduleSummaryReportDefinition reportDefinition) {
+	private void updateReportDefinitionWithChangesFromDialog(CustomReportDefinition reportDefinition) {
 		reportDefinition.getColumns().clear();
 		for (ColumnBlock cb : getVisible()) {
 			reportDefinition.getColumns().add(cb.blockID);
@@ -996,7 +998,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	}
 
 	private void handleCustomReportSelection(ISelection selection) {
-		final List<ScheduleSummaryReportDefinition> selectedReports = ((IStructuredSelection) selection).toList();
+		final List<CustomReportDefinition> selectedReports = ((IStructuredSelection) selection).toList();
 		
 		//It is possible in some cases when moving from team to user reports to select more than 1 report, but we are
 		//only interested in the case when 1 report has been selected and the list box itself should in most cases
@@ -1007,7 +1009,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 				updateViewWithReportDefinition(selectedReports.get(0));
 				this.currentStoreType = this.userButton.getSelection() ? StoreType.User : StoreType.Team;
 				this.current = selectedReports.get(0);
-				this.currentBeforeChanges = (ScheduleSummaryReportDefinition)this.current.clone();
+				this.currentBeforeChanges = (CustomReportDefinition)this.current.clone();
 			}
 
 			this.saveBtn.setEnabled(true);
@@ -1086,7 +1088,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		return false;
 	}
 	
-	private void updateViewWithReportDefinition(ScheduleSummaryReportDefinition reportDefinition) {
+	private void updateViewWithReportDefinition(CustomReportDefinition reportDefinition) {
 		HashMap<String, ColumnBlock> blockIdToColumnBlock = new HashMap<>();
 		for (ColumnBlock cb : visible) {
 			blockIdToColumnBlock.put(cb.blockID, cb);
@@ -1130,11 +1132,11 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		this.refreshViewers();
 	}
 	
-	public List<ScheduleSummaryReportDefinition> getUserReportDefinitions() {
+	public List<CustomReportDefinition> getUserReportDefinitions() {
 		return this.userReportDefinitions;
 	}
 	
-	public List<ScheduleSummaryReportDefinition> getTeamReportDefinitions() {
+	public List<CustomReportDefinition> getTeamReportDefinitions() {
 		return this.teamReportDefinitions;
 	}
 	
@@ -1614,7 +1616,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		return new ColumnLabelProvider() {
 			@Override
 			public String getText(final Object element) {
-				return ((ScheduleSummaryReportDefinition)element).getName();
+				return ((CustomReportDefinition)element).getName();
 			}
 
 			@Override
@@ -1624,7 +1626,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 
 			@Override
 			public String getToolTipText(final Object element) {
-				return ((ScheduleSummaryReportDefinition)element).getName();
+				return ((CustomReportDefinition)element).getName();
 			}
 		};
 	}

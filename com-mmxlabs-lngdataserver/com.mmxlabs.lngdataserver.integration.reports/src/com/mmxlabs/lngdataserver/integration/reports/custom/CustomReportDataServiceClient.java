@@ -7,9 +7,8 @@ package com.mmxlabs.lngdataserver.integration.reports.custom;
 import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
+import java.util.Collections;
 import java.util.List;
-
-import org.eclipse.jdt.annotation.Nullable;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -17,11 +16,12 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.hub.DataHubServiceProvider;
+import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.common.http.HttpClientUtil;
 import com.mmxlabs.hub.common.http.IProgressListener;
 import com.mmxlabs.hub.common.http.ProgressRequestBody;
 import com.mmxlabs.hub.common.http.ProgressResponseBody;
-import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
 
 import okhttp3.Interceptor;
 import okhttp3.MultipartBody;
@@ -48,17 +48,20 @@ public class CustomReportDataServiceClient {
 		RequestBody requestBody = new MultipartBody.Builder() //
 				.setType(MultipartBody.FORM) //
 				.addFormDataPart("report", "data.json", RequestBody.create(HttpClientUtil.MEDIA_TYPE_FORM_DATA, file))//
-				.addFormDataPart("uuid", uuid)
-				.addFormDataPart("contentType", contentType) //
+				.addFormDataPart("uuid", uuid).addFormDataPart("contentType", contentType) //
 				.build();
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
 		if (progressListener != null) {
 			requestBody = new ProgressRequestBody(requestBody, progressListener);
 		}
-		final String requestURL = String.format("%s%s/%s", upstreamURL, SCENARIO_UPLOAD_URL, uuid);
-		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
-				.url(requestURL) //
+
+		final String requestURL = String.format("%s/%s", SCENARIO_UPLOAD_URL, uuid);
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(requestURL);
+		if (requestBuilder == null) {
+			return null;
+		}
+
+		final Request request = requestBuilder //
 				.post(requestBody).build();
 
 		// Check the response
@@ -66,7 +69,7 @@ public class CustomReportDataServiceClient {
 			if (!response.isSuccessful()) {
 				response.body().close();
 				if (response.code() == 409) {
-					throw new IOException("Data already exists " +  "/" + uuid);
+					throw new IOException("Data already exists " + "/" + uuid);
 				}
 
 				throw new IOException("Unexpected code " + response);
@@ -89,11 +92,13 @@ public class CustomReportDataServiceClient {
 		final OkHttpClient localHttpClient = clientBuilder //
 				.build();
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
-		final String requestURL = String.format("%s%s/%s", upstreamURL, SCENARIO_ENDPOINT_URL, uuid);
+		final String requestURL = String.format("%s/%s", SCENARIO_ENDPOINT_URL, uuid);
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(requestURL);
+		if (requestBuilder == null) {
+			return false;
+		}
 
-		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
-				.url(requestURL) //
+		final Request request = requestBuilder //
 				.build();
 
 		try (Response response = localHttpClient.newCall(request).execute()) {
@@ -112,13 +117,12 @@ public class CustomReportDataServiceClient {
 
 	public Pair<String, Instant> getRecords() throws IOException {
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
-		if (upstreamURL == null || upstreamURL.isEmpty()) {
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(SCENARIO_ENDPOINT_URL);
+		if (requestBuilder == null) {
 			return null;
 		}
-		final String requestURL = String.format("%s%s", upstreamURL, SCENARIO_ENDPOINT_URL);
-		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
-				.url(requestURL) //
+
+		final Request request = requestBuilder //
 				.build();
 
 		try (Response response = httpClient.newCall(request).execute()) {
@@ -137,13 +141,13 @@ public class CustomReportDataServiceClient {
 
 	public void deleteData(final String uuid) throws IOException {
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
-		if (upstreamURL == null || upstreamURL.isEmpty()) {
+		final String requestURL = String.format("%s/%s", SCENARIO_DELETE_URL, uuid);
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(requestURL);
+		if (requestBuilder == null) {
 			return;
 		}
-		final String requestURL = String.format("%s%s/%s", upstreamURL, SCENARIO_DELETE_URL, uuid);
-		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
-				.url(requestURL) //
+
+		final Request request = requestBuilder //
 				.build();
 
 		try (Response response = httpClient.newCall(request).execute()) {
@@ -155,12 +159,12 @@ public class CustomReportDataServiceClient {
 
 	public Instant getLastModified() {
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
-		if (upstreamURL == null || upstreamURL.isEmpty()) {
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(SCENARIO_LAST_MODIFIED_URL);
+		if (requestBuilder == null) {
 			return null;
 		}
-		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
-				.url(upstreamURL + SCENARIO_LAST_MODIFIED_URL) //
+
+		final Request request = requestBuilder //
 				.build();
 
 		try (Response response = httpClient.newCall(request).execute()) {
@@ -179,22 +183,19 @@ public class CustomReportDataServiceClient {
 	private static final TypeReference<List<CustomReportDataRecord>> TYPE_GDR_LIST = new TypeReference<List<CustomReportDataRecord>>() {
 	};
 
-	public static @Nullable List<CustomReportDataRecord> parseRecordsJSONData(final String jsonData) {
+	public static List<CustomReportDataRecord> parseRecordsJSONData(final String jsonData) {
 		final ObjectMapper mapper = new ObjectMapper();
 		mapper.registerModule(new JavaTimeModule());
 		try {
 			return mapper.readValue(jsonData, TYPE_GDR_LIST);
 		} catch (final JsonParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (final JsonMappingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (final IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return null;
+		return Collections.emptyList();
 	}
 
 }

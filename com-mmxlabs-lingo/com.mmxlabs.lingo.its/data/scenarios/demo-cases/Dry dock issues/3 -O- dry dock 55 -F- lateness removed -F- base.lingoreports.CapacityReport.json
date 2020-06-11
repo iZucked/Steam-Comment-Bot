@@ -1,10 +1,4 @@
 [ {
-  "Type" : "Charter Out",
-  "Issue" : "Forced Cooldown",
-  "Schedule" : "3 -O- dry dock 55 -F- lateness removed -F- base",
-  "ID" : "Charter Out - discharge-cargo-31",
-  "Quantity (m³)" : "0"
-}, {
   "Type" : "Load",
   "Issue" : "Forced Cooldown",
   "Schedule" : "3 -O- dry dock 55 -F- lateness removed -F- base",

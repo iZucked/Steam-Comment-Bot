@@ -1,6 +1,12 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
+ * All rights reserved.
+ */
 package com.mmxlabs.lingo.reports.services;
 
-import com.mmxlabs.lngdataserver.server.UserPermissionsService;
+import java.io.IOException;
+
+import com.mmxlabs.hub.services.permissions.UserPermissionsService;
 
 public class CustomReportPermissions {
 	public static final String serviceName = "teamreports";

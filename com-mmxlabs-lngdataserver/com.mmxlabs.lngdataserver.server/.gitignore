@@ -1,0 +1,3 @@
+mongo_data/diagnostic.data/
+mongod.lock
+com-mmxlabs-lngdataserver/com.mmxlabs.lngdataserver.server/src/*

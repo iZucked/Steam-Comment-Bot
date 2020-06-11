@@ -1022,7 +1022,7 @@
             name="Compare Scenarios">
       </command>
       <command
-            defaultHandler="com.mmxlabs.lingo.reports.views.schedule.ConfigureCustomReportsHandler"
+            defaultHandler="com.mmxlabs.lingo.reports.customizable.ConfigureCustomReportsHandler"
             id="com.mmxlabs.lingo.reports.views.schedule.ConfigureCustomReportsHandler"
             name="Configure Custom Reports">
       </command> 

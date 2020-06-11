@@ -25,13 +25,4 @@
   "ID" : "load-cargo-32",
   "Cost" : "233,244",
   "Date" : "31/12/10"
-}, {
-  "Vessel" : "Methane Princess",
-  "Schedule" : "4 dry dock 70 -O- -F- -F- base",
-  "Cause ID" : "discharge-cargo-31",
-  "Port" : "Punta Europa LNG",
-  "Time" : "22:00",
-  "ID" : "Charter Out - discharge-cargo-31",
-  "Cost" : "233,472",
-  "Date" : "21/03/11"
 } ]

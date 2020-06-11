@@ -132,7 +132,7 @@ public class OpportunityDetailComposite extends DefaultDetailComposite implement
 						|| feature == AnalyticsPackage.Literals.SELL_OPPORTUNITY__WINDOW_SIZE || feature == AnalyticsPackage.Literals.SELL_OPPORTUNITY__WINDOW_SIZE_UNITS) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 
-					if (feature == AnalyticsPackage.Literals.BUY_OPPORTUNITY__WINDOW_SIZE || feature == AnalyticsPackage.Literals.BUY_OPPORTUNITY__WINDOW_SIZE_UNITS) {
+					if (feature == AnalyticsPackage.Literals.BUY_OPPORTUNITY__WINDOW_SIZE || feature == AnalyticsPackage.Literals.SELL_OPPORTUNITY__WINDOW_SIZE) {
 						final Label label = editor.getLabel();
 						if (label != null) {
 							label.setText("Window");

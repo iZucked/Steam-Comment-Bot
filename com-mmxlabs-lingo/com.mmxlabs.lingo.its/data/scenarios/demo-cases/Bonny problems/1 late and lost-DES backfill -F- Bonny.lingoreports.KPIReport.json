@@ -1,11 +1,11 @@
 [ {
   "KPI" : "P&L",
   "Schedule" : "1 late and lost-DES backfill -F- Bonny",
-  "Value" : "$77,760,202"
+  "Value" : "$82,221,115"
 }, {
   "KPI" : "Trading P&L",
   "Schedule" : "1 late and lost-DES backfill -F- Bonny",
-  "Value" : "$85,960,339"
+  "Value" : "$90,421,252"
 }, {
   "KPI" : "Shipping P&L",
   "Schedule" : "1 late and lost-DES backfill -F- Bonny",
@@ -13,7 +13,7 @@
 }, {
   "KPI" : "Shipping Cost",
   "Schedule" : "1 late and lost-DES backfill -F- Bonny",
-  "Value" : "$52,558,766"
+  "Value" : "$48,564,794"
 }, {
   "KPI" : "Lateness",
   "Schedule" : "1 late and lost-DES backfill -F- Bonny",

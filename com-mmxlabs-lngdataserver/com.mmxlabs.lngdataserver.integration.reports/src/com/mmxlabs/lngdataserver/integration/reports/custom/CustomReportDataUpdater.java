@@ -24,9 +24,10 @@ import org.eclipse.core.runtime.jobs.Job;
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.hub.DataHubServiceProvider;
+import com.mmxlabs.hub.IUpstreamDetailChangedListener;
+import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
-import com.mmxlabs.lngdataserver.server.IUpstreamDetailChangedListener;
-import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
 
 public class CustomReportDataUpdater {
 
@@ -96,7 +97,7 @@ public class CustomReportDataUpdater {
 					return;
 				}
 			}
-			
+
 			if (record.getCreationDate() != null) {
 				readyCallback.accept(record);
 			}
@@ -123,8 +124,6 @@ public class CustomReportDataUpdater {
 			};
 			background.setSystem(false);
 			background.setUser(true);
-			// background.setPriority(Job.LONG);
-
 			background.schedule();
 			try {
 				background.join();
@@ -185,10 +184,10 @@ public class CustomReportDataUpdater {
 	}
 
 	public void refresh() throws IOException {
-		final boolean available = UpstreamUrlProvider.INSTANCE.isAvailable();
+		final boolean available = DataHubServiceProvider.getInstance().isOnlineAndLoggedIn();
 
 		if (available) {
-			
+
 			final Instant m = client.getLastModified();
 			if (true || m != null && m.isAfter(lastModified)) {
 				final Pair<String, Instant> recordsPair = client.getRecords();

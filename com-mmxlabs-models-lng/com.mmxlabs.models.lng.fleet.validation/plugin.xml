@@ -209,6 +209,25 @@
                      class="Vessel">
                </target>
             </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.fleet.validation.VesselClassSafetyHeelConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.VesselClassSafetyHeelConstraint"
+                  isEnabledByDefault="true"
+                  lang="Java"
+                  mode="Batch"
+                  name="Safety heel is zero"
+                  severity="WARNING"
+                  statusCode="1">
+               <message>
+                  [Vessel|{0}] Safety heel is zero. Typical value should be at least 300m³.
+               </message>
+               <description>
+                  The safety heel of the vessel should be at least 300m^3.
+               </description>
+               <target
+                     class="Vessel">
+               </target>
+            </constraint>
          </constraints>
       </constraintProvider>
    </extension>

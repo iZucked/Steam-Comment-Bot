@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
+ * All rights reserved.
+ */
 package com.mmxlabs.lingo.reports.customizable;
 
 import java.util.List;
@@ -14,6 +18,10 @@ public class CustomReportNameValidator implements IInputValidator {
 	
 	@Override
 	public String isValid(String name) {
+		if (!name.replaceAll("[^a-zA-Z0-9 \\._]+", "_").equals(name)) {
+			return "Report names can only contain charactors and digits.";
+		}
+		
 		if (this.existingNames.contains(name.toLowerCase())) {
 			return "Cannot use this name as a report already exists with it";
 		}

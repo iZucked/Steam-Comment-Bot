@@ -31,11 +31,10 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.mmxlabs.hub.IUpstreamDetailChangedListener;
+import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
-import com.mmxlabs.lingo.reports.services.CustomReportPermissions;
-import com.mmxlabs.lingo.reports.views.schedule.ScheduleSummaryReportDefinition;
-import com.mmxlabs.lngdataserver.server.IUpstreamDetailChangedListener;
-import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
+import com.mmxlabs.lingo.reports.customizable.CustomReportDefinition;
 
 public class CustomReportDataRepository {
 
@@ -59,10 +58,7 @@ public class CustomReportDataRepository {
 	private CustomReportDataRepository() {
 		dataList = new ConcurrentLinkedQueue<>();
 		upstreamDetailsChangedListener = dataList::clear;
-		
-		if (CustomReportPermissions.hasCustomReportPermission()) {
-			start();
-		}
+		start();
 	}
 	
 	
@@ -91,37 +87,44 @@ public class CustomReportDataRepository {
 		return new File(String.format("%s/%s.data", dataFolder.getAbsoluteFile(), uuid));
 	}
 
-	public void uploadData(final String uuid, final String contentType, final File dataFile, @Nullable final IProgressMonitor progressMonitor) throws Exception {
+	public boolean uploadData(final String uuid, final String contentType, final File dataFile, @Nullable final IProgressMonitor progressMonitor) throws Exception {
+		String uploadUUID = null;
 		try {
 
 			try {
 				updater.pause();
-				client.upload(uuid, contentType, dataFile, WrappedProgressMonitor.wrapMonitor(progressMonitor));
+				uploadUUID = //
+						client.upload(uuid, contentType, dataFile, WrappedProgressMonitor.wrapMonitor(progressMonitor));
+			} catch (final Exception e){
+				LOGGER.error(e.getMessage());
 			} finally {
 				updater.resume();
 			}
+			
 			try {
+				updater.pause();
 				updater.refresh();
-			} catch (final Exception e) {
-				e.printStackTrace();
+			} finally {
+				updater.resume();
 			}
+			
+			
 		} finally {
 			if (progressMonitor != null) {
 				progressMonitor.done();
 			}
 		}
+		return (uuid.equalsIgnoreCase(uploadUUID));
 	}
 
 	public void delete(final String uuid) throws IOException {
-
 		client.deleteData(uuid);
 		try {
+			updater.pause();
 			updater.refresh();
-		} catch (final IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} finally {
+			updater.resume();
 		}
-
 	}
 
 	public void start() {
@@ -147,7 +150,7 @@ public class CustomReportDataRepository {
 					}
 
 					client = new CustomReportDataServiceClient();
-					CustomReportDataRepository.this.updater = new CustomReportDataUpdater(dataFolder, client, CustomReportDataRepository.this::update);
+					updater = new CustomReportDataUpdater(dataFolder, client, CustomReportDataRepository.this::update);
 					updater.start();
 				}
 				this.close();
@@ -210,15 +213,9 @@ public class CustomReportDataRepository {
 		}
 	}
 	
-	public static void write(final ScheduleSummaryReportDefinition reportDefinition, final OutputStream os) throws IOException {
-		
+	public static void write(final CustomReportDefinition reportDefinition, final OutputStream os) throws IOException {
 		final ObjectMapper mapper = new ObjectMapper();
-		try {
-			mapper.writerWithDefaultPrettyPrinter().writeValue(os, reportDefinition);
-		} catch (final Exception e) {
-			e.printStackTrace();
-		}
-		
+		mapper.writerWithDefaultPrettyPrinter().writeValue(os, reportDefinition);
 	}
 	
 	public void refresh()  throws IOException {

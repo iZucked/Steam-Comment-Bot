@@ -1,19 +1,19 @@
 [ {
   "KPI" : "P&L",
   "Schedule" : "0 fleet demo",
-  "Value" : "$1,544,747,067"
+  "Value" : "$1,553,594,504"
 }, {
   "KPI" : "Trading P&L",
   "Schedule" : "0 fleet demo",
-  "Value" : "$1,378,496,471"
+  "Value" : "$1,383,211,617"
 }, {
   "KPI" : "Shipping P&L",
   "Schedule" : "0 fleet demo",
-  "Value" : "$166,250,596"
+  "Value" : "$170,382,887"
 }, {
   "KPI" : "Shipping Cost",
   "Schedule" : "0 fleet demo",
-  "Value" : "$108,914,440"
+  "Value" : "$104,199,290"
 }, {
   "KPI" : "Lateness",
   "Schedule" : "0 fleet demo",
@@ -21,5 +21,5 @@
 }, {
   "KPI" : "Idle Time",
   "Schedule" : "0 fleet demo",
-  "Value" : "523d, 8h"
+  "Value" : "478d, 11h"
 } ]

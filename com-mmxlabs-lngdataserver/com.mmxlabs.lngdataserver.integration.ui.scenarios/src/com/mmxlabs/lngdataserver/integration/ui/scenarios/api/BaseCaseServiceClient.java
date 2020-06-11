@@ -11,11 +11,11 @@ import java.time.Instant;
 import org.json.JSONObject;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.common.http.HttpClientUtil;
 import com.mmxlabs.hub.common.http.IProgressListener;
 import com.mmxlabs.hub.common.http.ProgressRequestBody;
 import com.mmxlabs.hub.common.http.ProgressResponseBody;
-import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
 
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
@@ -79,16 +79,17 @@ public class BaseCaseServiceClient {
 			requestBody = new ProgressRequestBody(requestBody, progressListener);
 		}
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(BASECASE_UPLOAD_URL);
+		if (requestBuilder == null) {
+			return null;
+		}
 
-		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
-				.url(upstreamURL + BASECASE_UPLOAD_URL) //
+		final Request request = requestBuilder //
 				.post(requestBody).build();
 
 		// Check the response
 		try (Response response = httpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
-				response.body().close();
 				if (response.code() == 409) {
 					throw new BasecaseServiceLockedException();
 				}
@@ -111,12 +112,14 @@ public class BaseCaseServiceClient {
 		if (progressListener != null) {
 			requestBody = new ProgressRequestBody(requestBody, progressListener);
 		}
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(BASECASE_UPLOAD_ARCHIVE_URL);
+		if (requestBuilder == null) {
+			return;
+		}
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
-
-		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
-				.url(upstreamURL + BASECASE_UPLOAD_ARCHIVE_URL) //
-				.post(requestBody).build();
+		final Request request = requestBuilder //
+				.post(requestBody) //
+				.build();
 
 		// Check the response
 		try (Response response = httpClient.newCall(request).execute()) {
@@ -154,43 +157,39 @@ public class BaseCaseServiceClient {
 		final OkHttpClient localHttpClient = clientBuilder //
 				.build();
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(String.format("%s%s", BASECASE_DOWNLOAD_URL, uuid));
+		if (requestBuilder == null) {
+			return false;
+		}
 
-		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest().url(String.format("%s%s%s", upstreamURL, BASECASE_DOWNLOAD_URL, uuid)) //
+		final Request request = requestBuilder //
 				.build();
 
 		try (Response response = localHttpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
-				response.body().close();
 				throw new IOException(UNEXPECTED_CODE + response);
 			}
 			try (BufferedSource bufferedSource = response.body().source()) {
-				final BufferedSink bufferedSink = Okio.buffer(Okio.sink(file));
-				bufferedSink.writeAll(bufferedSource);
-				bufferedSink.close();
+				try (final BufferedSink bufferedSink = Okio.buffer(Okio.sink(file))) {
+					bufferedSink.writeAll(bufferedSource);
+				}
 			}
 			return true;
 		}
 	}
 
 	public String getCurrentBaseCase() throws IOException {
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
 
-		if (upstreamURL == null || upstreamURL.isEmpty()) {
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(BASECASE_CURRENT_URL);
+		if (requestBuilder == null) {
 			return null;
 		}
 
-		if (!UpstreamUrlProvider.INSTANCE.isAvailable()) {
-			return null;
-		}
-
-		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
-				.url(upstreamURL + BASECASE_CURRENT_URL) //
+		final Request request = requestBuilder //
 				.build();
 
 		try (Response response = httpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
-				response.body().close();
 				// 404 Not found is a valid response if there is no current basecase
 				if (response.code() != 404) {
 					throw new IOException(UNEXPECTED_CODE + response);
@@ -203,17 +202,16 @@ public class BaseCaseServiceClient {
 
 	public String setCurrentBaseCase(final String uuid) throws IOException {
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
-		if (upstreamURL == null || upstreamURL.isEmpty()) {
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(BASECASE_CURRENT_URL + "/" + uuid);
+		if (requestBuilder == null) {
 			return null;
 		}
-		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
-				.url(upstreamURL + BASECASE_CURRENT_URL + "/" + uuid) //
+
+		final Request request = requestBuilder //
 				.build();
 
 		try (Response response = httpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
-				response.body().close();
 				throw new IOException(UNEXPECTED_CODE + response);
 			}
 			return response.body().string();
@@ -222,17 +220,16 @@ public class BaseCaseServiceClient {
 
 	public String getBaseCaseDetails(final String uuid) throws IOException {
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
-		if (upstreamURL == null || upstreamURL.isEmpty()) {
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(BASECASE_DOWNLOAD_URL + uuid + "/details");
+		if (requestBuilder == null) {
 			return null;
 		}
-		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
-				.url(upstreamURL + BASECASE_DOWNLOAD_URL + uuid + "/details") //
+
+		final Request request = requestBuilder //
 				.build();
 
 		try (Response response = httpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
-				response.body().close();
 				throw new IOException(UNEXPECTED_CODE + response);
 			}
 			return response.body().string();
@@ -268,19 +265,18 @@ public class BaseCaseServiceClient {
 
 	public synchronized void updateLockedState() throws IOException {
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
-		if (upstreamURL == null || upstreamURL.isEmpty()) {
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(LOCK_STATE_URL);
+		if (requestBuilder == null) {
 			return;
 		}
+
 		needsLocking = true;
 		{
-			final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
-					.url(upstreamURL + LOCK_STATE_URL) //
+			final Request request = requestBuilder //
 					.build();
 
 			try (Response response = httpClient.newCall(request).execute()) {
 				if (!response.isSuccessful()) {
-					response.body().close();
 					if (response.code() == 404) {
 						needsLocking = false;
 						isLocked = false;
@@ -307,13 +303,13 @@ public class BaseCaseServiceClient {
 
 	public synchronized boolean lock() throws IOException {
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
-		if (upstreamURL == null || upstreamURL.isEmpty()) {
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(LOCK_URL);
+		if (requestBuilder == null) {
 			return false;
 		}
+
 		{
-			final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
-					.url(upstreamURL + LOCK_URL) //
+			final Request request = requestBuilder //
 					.build();
 
 			try (Response response = httpClient.newCall(request).execute()) {
@@ -334,18 +330,17 @@ public class BaseCaseServiceClient {
 
 	public synchronized boolean unlock() throws IOException {
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
-		if (upstreamURL == null || upstreamURL.isEmpty()) {
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(UNLOCK_URL);
+		if (requestBuilder == null) {
 			return false;
 		}
+
 		{
-			final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
-					.url(upstreamURL + UNLOCK_URL) //
+			final Request request = requestBuilder //
 					.build();
 
 			try (Response response = httpClient.newCall(request).execute()) {
 				if (!response.isSuccessful()) {
-					response.body().close();
 					if (response.code() == 404) {
 						return true;
 						// Unsupported API

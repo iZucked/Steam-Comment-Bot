@@ -14,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.google.inject.name.Names;
 import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -76,6 +77,10 @@ public class ExposuresScenarioTests extends AbstractMicroTestCase {
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testGeneratedHedgesComputation() throws Exception {
+		
+		Assertions.assertTrue(LicenseFeatures.isPermitted(KnownFeatures.FEATURE_EXPOSURES));
+		Assertions.assertTrue(LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PAPER_DEALS));
+		Assertions.assertTrue(LicenseFeatures.isPermitted(KnownFeatures.FEATURE_GENERATED_PAPER_DEALS));
 
 		final CargoModel cm = ScenarioModelUtil.getCargoModel(scenarioDataProvider);
 		cm.getPaperDeals().clear();
@@ -95,26 +100,31 @@ public class ExposuresScenarioTests extends AbstractMicroTestCase {
 			Assertions.assertNotNull(schedule);
 			Assertions.assertNotNull(schedule.getGeneratedPaperDeals());
 			Assertions.assertFalse(schedule.getGeneratedPaperDeals().isEmpty());
-			Assertions.assertTrue(schedule.getGeneratedPaperDeals().size() == 3);
+			Assertions.assertTrue(schedule.getGeneratedPaperDeals().size() == 4);
 			
 			PaperDeal brentBuyJan = null;
 			PaperDeal brentSellFeb = null;
 			PaperDeal jkmBuyJan = null;
+			PaperDeal jkmSellFeb = null;
 			for (final PaperDeal paperDeal : schedule.getGeneratedPaperDeals()) {
-				if ("brent_ice_2017-01_buy".equalsIgnoreCase(paperDeal.getName())) {
+				if ("brent_2017-01_buy".equalsIgnoreCase(paperDeal.getName())) {
 					brentBuyJan = paperDeal;
-				} else if ("brent_ice_2017-02_sell".equalsIgnoreCase(paperDeal.getName())) {
+				} else if ("brent_2017-02_sell".equalsIgnoreCase(paperDeal.getName())) {
 					brentSellFeb = paperDeal;
 				} else if ("jkm_2017-01_buy".equalsIgnoreCase(paperDeal.getName())) {
 					jkmBuyJan = paperDeal;
+				} else if ("jkm_2017-02_sell".equalsIgnoreCase(paperDeal.getName())) {
+					jkmSellFeb = paperDeal;
 				}
 			}
 			Assertions.assertNotNull(brentBuyJan);
-			Assertions.assertEquals(brentBuyJan.getQuantity(), 237177.00, delta);
+			Assertions.assertEquals(brentBuyJan.getQuantity(), 237177.0, delta);
 			Assertions.assertNotNull(brentSellFeb);
-			Assertions.assertEquals(brentSellFeb.getQuantity(), 636512.00, delta);
+			Assertions.assertEquals(brentSellFeb.getQuantity(), 601331.0, delta);
 			Assertions.assertNotNull(jkmBuyJan);
-			Assertions.assertEquals(jkmBuyJan.getQuantity(), 36953.00, delta);
+			Assertions.assertEquals(jkmBuyJan.getQuantity(), 3826848.0, delta);
+			Assertions.assertNotNull(jkmSellFeb);
+			Assertions.assertEquals(jkmSellFeb.getQuantity(), 3789894.0, delta);
 		});
 	}
 	

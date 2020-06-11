@@ -20,8 +20,12 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
-import com.mmxlabs.lingo.reports.views.schedule.CustomReportsRegistry;
 
+/***
+ * Registers Custom Reports with the Show Views of eclipse menu. 
+ * Unfortunately, we still have to find a way to do this without restarting eclipse, but for now this should suffice.
+ * @author Patrick
+ */
 @SuppressWarnings("restriction")
 public class CustomReportsRegistryHook {
 
@@ -40,8 +44,6 @@ public class CustomReportsRegistryHook {
 			final Bundle bundle = FrameworkUtil.getBundle(CustomReportsRegistryHook.class);
 
 			final IContributor contributor = ContributorFactoryOSGi.createContributor(bundle);
-	
-			CustomReportsRegistry.getInstance().regenerateReportsPluginXMLFile();
 			
 			final String pluginXMLPath = CustomReportsRegistry.getReportsPluginXMLPath();
 			
@@ -54,9 +56,9 @@ public class CustomReportsRegistryHook {
 					log.error(e.getMessage(), e);
 				}
 			}
-			else {
-				log.warn("Could not open custom reports plugin.xml file in: "+pluginXMLPath);
-			}
+			//As per SG, do not write any errors or warning if first time startup and no plugin.xml exists and now we write on exit as user may get curious if they
+			//see it in the error log. 
+			//At any rate, if there is an issue accessing/writing (at least, if they have write they will probably have read permission on it also).
 		}
 	}
 	

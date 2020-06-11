@@ -54,6 +54,7 @@ import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.hub.services.users.UsernameProvider;
 import com.mmxlabs.lngdataserver.browser.BrowserFactory;
 import com.mmxlabs.lngdataserver.browser.BrowserPackage;
 import com.mmxlabs.lngdataserver.browser.CompositeNode;
@@ -113,7 +114,7 @@ public class DataBrowser extends ViewPart {
 		if (lockedBy == null) {
 			dataViewerColumn1.getColumn().setText("not locked");
 		} else {
-			dataViewerColumn1.getColumn().setText("  locked by " + lockedBy);
+			dataViewerColumn1.getColumn().setText("  locked by " + UsernameProvider.INSTANCE.getDisplayName(lockedBy));
 		}
 	};
 

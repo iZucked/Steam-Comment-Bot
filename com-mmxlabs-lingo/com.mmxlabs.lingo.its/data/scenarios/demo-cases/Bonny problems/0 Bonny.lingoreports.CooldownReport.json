@@ -7,22 +7,4 @@
   "ID" : "load-cargo-78",
   "Cost" : "233,472",
   "Date" : "23/03/11"
-}, {
-  "Vessel" : "Methane Princess",
-  "Schedule" : "0 Bonny",
-  "Cause ID" : "discharge-cargo-16",
-  "Port" : "Damietta",
-  "Time" : "11:00",
-  "ID" : "Charter Out - discharge-cargo-16",
-  "Cost" : "233,472",
-  "Date" : "07/05/11"
-}, {
-  "Vessel" : "Methane Princess",
-  "Schedule" : "0 Bonny",
-  "Cause ID" : "discharge-cargo-31",
-  "Port" : "Punta Europa LNG",
-  "Time" : "22:00",
-  "ID" : "Charter Out - discharge-cargo-31",
-  "Cost" : "233,472",
-  "Date" : "21/03/11"
 } ]

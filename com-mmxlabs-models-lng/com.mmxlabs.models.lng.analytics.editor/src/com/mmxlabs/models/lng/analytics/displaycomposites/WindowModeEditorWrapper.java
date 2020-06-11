@@ -36,7 +36,7 @@ public class WindowModeEditorWrapper extends IInlineEditorEnablementWrapper {
 	private MMXRootObject scenario;
 	private Collection<EObject> range;
 
-	private Collection<EStructuralFeature> rangeFeatures = Sets.newHashSet( //
+	private final Collection<EStructuralFeature> rangeFeatures = Sets.newHashSet( //
 			AnalyticsPackage.Literals.BUY_OPPORTUNITY__SPECIFY_WINDOW, //
 			AnalyticsPackage.Literals.SELL_OPPORTUNITY__SPECIFY_WINDOW //
 	);
@@ -54,9 +54,9 @@ public class WindowModeEditorWrapper extends IInlineEditorEnablementWrapper {
 			} else {
 				enabled = false;
 			}
-			EObject editorTarget = getEditorTarget();
+			final EObject editorTarget = getEditorTarget();
 			if (enabled) {
-//				super.display(dialogContext, scenario, editorTarget, range);
+				// super.display(dialogContext, scenario, editorTarget, range);
 				if (notification.getFeature() == AnalyticsPackage.Literals.BUY_OPPORTUNITY__SPECIFY_WINDOW) {
 					dialogContext.getDialogController().setEditorVisibility(editorTarget, AnalyticsPackage.Literals.BUY_OPPORTUNITY__WINDOW_SIZE, true);
 					dialogContext.getDialogController().setEditorVisibility(editorTarget, AnalyticsPackage.Literals.BUY_OPPORTUNITY__WINDOW_SIZE_UNITS, true);
@@ -65,7 +65,7 @@ public class WindowModeEditorWrapper extends IInlineEditorEnablementWrapper {
 					dialogContext.getDialogController().setEditorVisibility(editorTarget, AnalyticsPackage.Literals.SELL_OPPORTUNITY__WINDOW_SIZE_UNITS, true);
 				}
 			} else {
-//				super.display(dialogContext, scenario, editorTarget, range);
+				// super.display(dialogContext, scenario, editorTarget, range);
 				if (notification.getFeature() == AnalyticsPackage.Literals.BUY_OPPORTUNITY__SPECIFY_WINDOW) {
 					dialogContext.getDialogController().setEditorVisibility(editorTarget, AnalyticsPackage.Literals.BUY_OPPORTUNITY__WINDOW_SIZE, false);
 					dialogContext.getDialogController().setEditorVisibility(editorTarget, AnalyticsPackage.Literals.BUY_OPPORTUNITY__WINDOW_SIZE_UNITS, false);
@@ -96,10 +96,10 @@ public class WindowModeEditorWrapper extends IInlineEditorEnablementWrapper {
 		if (getFeature() == AnalyticsPackage.Literals.BUY_OPPORTUNITY__SPECIFY_WINDOW || getFeature() == AnalyticsPackage.Literals.SELL_OPPORTUNITY__SPECIFY_WINDOW) {
 			enabled = true;
 		} else if (object instanceof BuyOpportunity) {
-			BuyOpportunity buyOpportunity = (BuyOpportunity) object;
+			final BuyOpportunity buyOpportunity = (BuyOpportunity) object;
 			enabled = buyOpportunity.isSpecifyWindow();
 		} else if (object instanceof SellOpportunity) {
-			SellOpportunity sellOpportunity = (SellOpportunity) object;
+			final SellOpportunity sellOpportunity = (SellOpportunity) object;
 			enabled = sellOpportunity.isSpecifyWindow();
 		}
 
@@ -110,6 +110,21 @@ public class WindowModeEditorWrapper extends IInlineEditorEnablementWrapper {
 			super.display(dialogContext, scenario, object, range);
 			dialogContext.getDialogController().setEditorVisibility(object, getFeature(), false);
 		}
+		
+		// Also update the other fields
+		if (object instanceof BuyOpportunity) {
+			final BuyOpportunity buyOpportunity = (BuyOpportunity) object;
+			if (!buyOpportunity.isSpecifyWindow()) {
+				dialogContext.getDialogController().setEditorVisibility(object, AnalyticsPackage.Literals.BUY_OPPORTUNITY__WINDOW_SIZE, false);
+				dialogContext.getDialogController().setEditorVisibility(object, AnalyticsPackage.Literals.BUY_OPPORTUNITY__WINDOW_SIZE_UNITS, false);
+			}
+		} else if (object instanceof SellOpportunity) {
+			final SellOpportunity sellOpportunity = (SellOpportunity) object;
+			if (!sellOpportunity.isSpecifyWindow()) {
+				dialogContext.getDialogController().setEditorVisibility(object, AnalyticsPackage.Literals.SELL_OPPORTUNITY__WINDOW_SIZE, false);
+				dialogContext.getDialogController().setEditorVisibility(object, AnalyticsPackage.Literals.SELL_OPPORTUNITY__WINDOW_SIZE_UNITS, false);
+			}
+		}
 	}
 
 	@Override
@@ -119,7 +134,7 @@ public class WindowModeEditorWrapper extends IInlineEditorEnablementWrapper {
 	}
 
 	@Override
-	public Object createLayoutData(MMXRootObject root, EObject value, Control control) {
+	public Object createLayoutData(final MMXRootObject root, final EObject value, final Control control) {
 		// TODO Auto-generated method stub
 		return null;
 	}

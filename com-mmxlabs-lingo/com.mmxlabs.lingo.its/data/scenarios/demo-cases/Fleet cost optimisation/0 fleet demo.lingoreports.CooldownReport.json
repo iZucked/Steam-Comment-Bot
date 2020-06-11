@@ -8,60 +8,6 @@
   "Cost" : "0",
   "Date" : "12/06/11"
 }, {
-  "Vessel" : "LNG Lagos",
-  "Schedule" : "0 fleet demo",
-  "Cause ID" : "discharge-Cargo 13",
-  "Port" : "Bonny Is",
-  "Time" : "07:00",
-  "ID" : "Charter Out - discharge-Cargo 13",
-  "Cost" : "0",
-  "Date" : "30/01/11"
-}, {
-  "Vessel" : "LNG Lagos",
-  "Schedule" : "0 fleet demo",
-  "Cause ID" : "discharge-Cargo 154",
-  "Port" : "Bonny Is",
-  "Time" : "22:00",
-  "ID" : "Charter Out - discharge-Cargo 154",
-  "Cost" : "0",
-  "Date" : "21/07/11"
-}, {
-  "Vessel" : "LNG Lokoja",
-  "Schedule" : "0 fleet demo",
-  "Cause ID" : "discharge-Cargo 131",
-  "Port" : "Bonny Is",
-  "Time" : "23:00",
-  "ID" : "Charter Out - discharge-Cargo 131",
-  "Cost" : "0",
-  "Date" : "19/06/11"
-}, {
-  "Vessel" : "LNG Ondo",
-  "Schedule" : "0 fleet demo",
-  "Cause ID" : "discharge-Cargo 20",
-  "Port" : "Bonny Is",
-  "Time" : "23:00",
-  "ID" : "Charter Out - discharge-Cargo 20",
-  "Cost" : "0",
-  "Date" : "08/02/11"
-}, {
-  "Vessel" : "LNG Oyo",
-  "Schedule" : "0 fleet demo",
-  "Cause ID" : "discharge-Cargo 132",
-  "Port" : "Bonny Is",
-  "Time" : "16:00",
-  "ID" : "Charter Out - discharge-Cargo 132",
-  "Cost" : "0",
-  "Date" : "18/07/11"
-}, {
-  "Vessel" : "LNG Port Harcourt",
-  "Schedule" : "0 fleet demo",
-  "Cause ID" : "discharge-Cargo 141",
-  "Port" : "Bonny Is",
-  "Time" : "12:00",
-  "ID" : "Charter Out - discharge-Cargo 141",
-  "Cost" : "0",
-  "Date" : "28/06/11"
-}, {
   "Vessel" : "LNG River Orashi",
   "Schedule" : "0 fleet demo",
   "Cause ID" : "RO drydock",
@@ -70,40 +16,4 @@
   "ID" : "Charter Out - RO drydock",
   "Cost" : "0",
   "Date" : "23/08/11"
-}, {
-  "Vessel" : "LNG River Orashi",
-  "Schedule" : "0 fleet demo",
-  "Cause ID" : "discharge-Cargo 6",
-  "Port" : "Bonny Is",
-  "Time" : "23:00",
-  "ID" : "Charter Out - discharge-Cargo 6",
-  "Cost" : "0",
-  "Date" : "17/01/11"
-}, {
-  "Vessel" : "LNG Sokoto",
-  "Schedule" : "0 fleet demo",
-  "Cause ID" : "discharge-Cargo 174",
-  "Port" : "Bonny Is",
-  "Time" : "08:00",
-  "ID" : "Charter Out - discharge-Cargo 174",
-  "Cost" : "0",
-  "Date" : "17/08/11"
-}, {
-  "Vessel" : "LNG Sokoto",
-  "Schedule" : "0 fleet demo",
-  "Cause ID" : "discharge-Cargo 34",
-  "Port" : "Bonny Is",
-  "Time" : "13:00",
-  "ID" : "Charter Out - discharge-Cargo 34",
-  "Cost" : "0",
-  "Date" : "22/02/11"
-}, {
-  "Vessel" : "LNG Sokoto",
-  "Schedule" : "0 fleet demo",
-  "Cause ID" : "discharge-Cargo 90",
-  "Port" : "Bonny Is",
-  "Time" : "06:00",
-  "ID" : "Charter Out - discharge-Cargo 90",
-  "Cost" : "0",
-  "Date" : "01/05/11"
 } ]

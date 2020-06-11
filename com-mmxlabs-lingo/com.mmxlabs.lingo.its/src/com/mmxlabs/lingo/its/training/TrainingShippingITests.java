@@ -299,8 +299,6 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 
 		final UserSettings userSettings = createUserSettings();
 
-		MicroCaseUtils.storeToFile(scenarioDataProvider, "s1.lingo");
-
 		try (final LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null) //
 				.withOptimisationPlan(createOptimisationPlan(userSettings)) //
 				.withOptimiseHint() //

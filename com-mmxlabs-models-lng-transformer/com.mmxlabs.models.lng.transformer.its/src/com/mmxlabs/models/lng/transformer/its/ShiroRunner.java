@@ -63,6 +63,6 @@ public class ShiroRunner implements BeforeAllCallback, AfterAllCallback {
 
 	private void initAccessControl() {
 		// Initialise feature enablements
-		LicenseFeatures.initialiseFeatureEnablements("optimisation-period", "optimisation-charter-out-generation", "panama-canal", "break-evens");
+		LicenseFeatures.initialiseFeatureEnablements("optimisation-period", "optimisation-charter-out-generation", "break-evens");
 	}
 }
