@@ -12,6 +12,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
@@ -67,13 +68,13 @@ public interface ISalesPriceCalculator extends ICalculator {
 	 * Another variant of {@link #estimateSalesUnitPrice(IDischargeOption, int, IDetailTree)} taking a discharge volume to calculate the exact price. This method should not be called before volume
 	 * decisions have been made.
 	 * 
-	 * @param vessel
+	 * @param vesselAvailability
 	 * @param time
 	 * @param annotations
 	 *            TODO
 	 * @param slot
 	 */
-	default public int calculateSalesUnitPrice(IVessel vessel, IDischargeOption option, IAllocationAnnotation allocationAnnotation, @Nullable IDetailTree annotations) {
+	default public int calculateSalesUnitPrice(IVesselAvailability vesselAvailability, IDischargeOption option, IAllocationAnnotation allocationAnnotation, @Nullable IDetailTree annotations) {
 		return calculateSalesUnitPrice(option, allocationAnnotation, annotations);
 	}
 
