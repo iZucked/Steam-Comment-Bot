@@ -73,10 +73,12 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 	protected static Button button;
 
 	public static void setButtonText() {
-		if (authenticationManager.isAuthenticated()) {
-			button.setText(logoutButtonText);
-		} else {
-			button.setText(loginButtonText);
+		if (!button.isDisposed()) {
+			if (authenticationManager.isAuthenticated()) {
+				button.setText(logoutButtonText);
+			} else {
+				button.setText(loginButtonText);
+			}
 		}
 	}
 
