@@ -251,7 +251,7 @@ public class UpstreamUrlProvider {
 			authenticationManager.updateAuthenticationScheme(baseUrl, currentInformation.getAuthenticationScheme());
 
 			if (!authenticationDialogIsOpen.compareAndSet(false, true) && !authenticationManager.isAuthenticated()) {
-				authenticationManager.run((Shell) null);
+				authenticationManager.run(optionalShell);
 				authenticationDialogIsOpen.compareAndSet(true, false);
 			}
 
