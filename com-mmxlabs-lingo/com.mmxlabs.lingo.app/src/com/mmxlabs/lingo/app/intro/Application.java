@@ -31,6 +31,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.osgi.service.datalocation.Location;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.osgi.framework.BundleContext;
@@ -116,6 +117,16 @@ public class Application implements IApplication {
 
 		initAccessControl();
 		WorkbenchStateManager.cleanupWorkbenchState();
+
+		// Trigger early startup prompt for Data Hub
+		if (UpstreamUrlProvider.INSTANCE.hasADataHubURL()) {
+			Shell shell = new Shell(display);
+			try {
+				UpstreamUrlProvider.INSTANCE.isUpstreamAvailable(shell);
+			} finally {
+				shell.dispose();
+			}
+		}
 
 		// Check Data Hub to see if user is authorised to use LiNGO
 		boolean datahubStartupCheck = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_DATAHUB_STARTUP_CHECK);

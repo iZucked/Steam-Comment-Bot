@@ -214,13 +214,13 @@ public class UpstreamUrlProvider {
 	}
 
 	public synchronized boolean isUpstreamAvailable() {
-		return isUpstreamAvailable((Display) null);
+		return isUpstreamAvailable((Shell) null);
 	}
 
 	/*
 	 * Gets the Datahub URL from preferences and calls testUpstreamAvailability This pings the Datahub
 	 */
-	public synchronized boolean isUpstreamAvailable(@Nullable final Display optionalDisplay) {
+	public synchronized boolean isUpstreamAvailable(@Nullable final Shell optionalShell) {
 
 		boolean valid = false;
 		try {
@@ -237,23 +237,21 @@ public class UpstreamUrlProvider {
 				return false;
 			}
 
-			Optional<DatahubInformation> upstreamInformation = getUpstreamInformation(baseUrl);
+			final Optional<DatahubInformation> upstreamInformation = getUpstreamInformation(baseUrl);
 			if (upstreamInformation.isPresent()) {
 				currentInformation = upstreamInformation.get();
 			} else {
 				currentInformation = fallackInformation;
 			}
-
 			// Update current information scheme
 			DataHubServiceProvider.getInstance().setDatahubInformation(currentInformation);
 
 			DataHubServiceProvider.getInstance().setOnlineState(true);
 
 			authenticationManager.updateAuthenticationScheme(baseUrl, currentInformation.getAuthenticationScheme());
-
 			if (!authenticationDialogIsOpen.get() && !authenticationManager.isAuthenticated()) {
 				authenticationDialogIsOpen.compareAndSet(false, true);
-				authenticationManager.run((Shell) null);
+				authenticationManager.run(optionalShell);
 				authenticationDialogIsOpen.compareAndSet(true, false);
 			}
 
@@ -267,7 +265,7 @@ public class UpstreamUrlProvider {
 			connectionValid = true;
 
 			DataHubServiceProvider.getInstance().setLoggedInState(true);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			// Ignore...?
 			e.printStackTrace();
 		} finally {
@@ -396,13 +394,27 @@ public class UpstreamUrlProvider {
 		}
 	}
 
-	public @Nullable Builder makeRequestBuilder(@NonNull String urlPath) {
+	public @Nullable Builder makeRequestBuilder(@NonNull final String urlPath) {
 
-		String baseUrlIfAvailable = getBaseUrlIfAvailable();
+		final String baseUrlIfAvailable = getBaseUrlIfAvailable();
 		if (baseUrlIfAvailable.isEmpty()) {
 			return null;
 		}
 
 		return authenticationManager.buildRequest().url(baseUrlIfAvailable + urlPath);
+	}
+
+	/**
+	 * Returns true if there is a String representing the HUB url present. Only intended to be used by the application startup check
+	 */
+	public boolean hasADataHubURL() {
+		final String baseUrl = preferenceStore.getString(DataHubPreferenceConstants.P_DATAHUB_URL_KEY);
+		if (baseUrl == null || baseUrl.isEmpty()) {
+			return false;
+		}
+		if (baseUrl.startsWith("http")) {
+			return true;
+		}
+		return false;
 	}
 }

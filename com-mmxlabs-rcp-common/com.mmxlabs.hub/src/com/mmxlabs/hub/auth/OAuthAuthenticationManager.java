@@ -7,6 +7,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,8 +91,16 @@ public class OAuthAuthenticationManager extends AbstractAuthenticationManager {
 		}
 
 		if (display != null && authenticationShellIsOpen.compareAndSet(false, true)) {
+
 			display.syncExec(() -> {
-				final Shell shell = optionalShell == null ? display.getActiveShell() : optionalShell;
+				Shell shell = optionalShell == null ? display.getActiveShell() : optionalShell;
+				if (shell == null && PlatformUI.isWorkbenchRunning()) {
+					IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+					if (activeWorkbenchWindow != null) {
+						shell = activeWorkbenchWindow.getShell();
+					}
+				}
+
 				OAuthAuthenticationShell authenticationShell = new OAuthAuthenticationShell(shell, upstreamURL, path);
 
 				// Set access token when shell is disposed
@@ -102,6 +111,9 @@ public class OAuthAuthenticationManager extends AbstractAuthenticationManager {
 
 				if (shell != null) {
 					authenticationShell.run(shell, visible);
+				} else {
+					// Unable to start a shell, so reset the flag
+					authenticationShellIsOpen.compareAndSet(true, false);
 				}
 			});
 		}
