@@ -136,7 +136,7 @@ public class OAuthAuthenticationManager extends AbstractAuthenticationManager {
 	@Override
 	public void logout(String upstreamURL, @Nullable Shell shell) {
 		String path = UpstreamUrlProvider.LOGOUT_PATH;
-		boolean showAuthenticationShell = true;
+		boolean showAuthenticationShell = false;
 		startAuthenticationShell(upstreamURL, path, shell, showAuthenticationShell);
 		clearCookies(upstreamURL);
 		deleteFromSecurePreferences(ACCESS_TOKEN);
