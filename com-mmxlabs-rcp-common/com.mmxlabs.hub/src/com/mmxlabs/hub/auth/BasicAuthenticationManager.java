@@ -98,11 +98,12 @@ public class BasicAuthenticationManager extends AbstractAuthenticationManager {
 			display = optionalShell.getDisplay();
 		}
 
-		if (display != null) {
+		if (display != null && authenticationShellIsOpen.compareAndSet(false, true)) {
 			display.syncExec(() -> {
 				final Shell shell = optionalShell == null ? display.getActiveShell() : optionalShell;
 				final BasicAuthenticationDialog dialog = new BasicAuthenticationDialog(shell);
 				dialog.setUrl(upstreamURL);
+				dialog.addDisposeListener(() -> authenticationShellIsOpen.compareAndSet(true, false));
 
 				dialog.open();
 
