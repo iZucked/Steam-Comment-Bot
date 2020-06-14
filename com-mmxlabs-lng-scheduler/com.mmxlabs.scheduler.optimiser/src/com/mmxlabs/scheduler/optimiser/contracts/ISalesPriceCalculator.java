@@ -11,6 +11,8 @@ import com.mmxlabs.common.detailtree.IDetailTree;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
@@ -39,13 +41,45 @@ public interface ISalesPriceCalculator extends ICalculator {
 	 * {@link IVoyagePlanOptimiser} and {@link ILNGVoyageCalculator} to value LNG. Final sales price will be calculated using {@link #calculateSalesUnitPrice(IDischargeOption, int, long, IDetailTree)}
 	 * once volume decisions have been made.
 	 * 
+	 * @param vessel
 	 * @param time
 	 * @param annotations
 	 *            TODO
 	 * @param slot
 	 */
+	default public int estimateSalesUnitPrice(IVessel vessel, IDischargeOption option, IPortTimesRecord voyageRecord, @Nullable IDetailTree annotations) {
+		return estimateSalesUnitPrice(option, voyageRecord, annotations);
+	}
+
+	
+	/**
+	 * Find the unit price in dollars per mmbtu for gas at the given slot, at the given time - volume independent. This method should always return a value as it will be used by the
+	 * {@link IVoyagePlanOptimiser} and {@link ILNGVoyageCalculator} to value LNG. Final sales price will be calculated using {@link #calculateSalesUnitPrice(IDischargeOption, int, long, IDetailTree)}
+	 * once volume decisions have been made.
+	 * 
+	 * @param time
+	 * @param annotations
+	 *            TODO
+	 * @param slot
+	 * @deprecated Use version that passes in IVessel.
+	 */
 	public int estimateSalesUnitPrice(IDischargeOption option, IPortTimesRecord voyageRecord, @Nullable IDetailTree annotations);
 
+	/**
+	 * Another variant of {@link #estimateSalesUnitPrice(IDischargeOption, int, IDetailTree)} taking a discharge volume to calculate the exact price. This method should not be called before volume
+	 * decisions have been made.
+	 * 
+	 * @param vesselAvailability
+	 * @param time
+	 * @param annotations
+	 *            TODO
+	 * @param slot
+	 */
+	default public int calculateSalesUnitPrice(IVesselAvailability vesselAvailability, IDischargeOption option, IAllocationAnnotation allocationAnnotation, @Nullable IDetailTree annotations) {
+		return calculateSalesUnitPrice(option, allocationAnnotation, annotations);
+	}
+
+	
 	/**
 	 * Another variant of {@link #estimateSalesUnitPrice(IDischargeOption, int, IDetailTree)} taking a discharge volume to calculate the exact price. This method should not be called before volume
 	 * decisions have been made.
@@ -54,6 +88,7 @@ public interface ISalesPriceCalculator extends ICalculator {
 	 * @param annotations
 	 *            TODO
 	 * @param slot
+	 * @deprecated Use version that passes in IVesselAvailability.
 	 */
 	public int calculateSalesUnitPrice(IDischargeOption option, IAllocationAnnotation allocationAnnotation, @Nullable IDetailTree annotations);
 
