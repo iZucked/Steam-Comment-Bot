@@ -20,7 +20,6 @@ import com.mmxlabs.scheduler.optimiser.curves.IntegerIntervalCurve;
 /**
  * Util class used to create {@link IIntegerIntervalCurve} instances
  * @author achurchill
- *
  */
 public class IntegerIntervalCurveHelper {
 
@@ -112,5 +111,4 @@ public class IntegerIntervalCurveHelper {
 		}
 		return dateAndCurveHelper.convertTime(asDate);
 	}
-
 }

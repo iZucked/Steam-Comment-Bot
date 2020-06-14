@@ -222,7 +222,7 @@ public class SimpleContractTransformer implements IContractTransformer {
 		return contract;
 	}
 
-	private ICurve generateExpressionCurve(final String priceExpression, ISeries parsed) {
+	protected ICurve generateExpressionCurve(final String priceExpression, ISeries parsed) {
 
 		final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
 		if (parsed.getChangePoints().length == 0) {

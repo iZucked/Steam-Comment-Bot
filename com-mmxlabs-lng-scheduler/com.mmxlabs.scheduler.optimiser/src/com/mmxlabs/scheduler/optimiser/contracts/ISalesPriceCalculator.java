@@ -61,6 +61,7 @@ public interface ISalesPriceCalculator extends ICalculator {
 	 * @param annotations
 	 *            TODO
 	 * @param slot
+	 * @deprecated Use version that passes in IVessel.
 	 */
 	public int estimateSalesUnitPrice(IDischargeOption option, IPortTimesRecord voyageRecord, @Nullable IDetailTree annotations);
 
@@ -87,6 +88,7 @@ public interface ISalesPriceCalculator extends ICalculator {
 	 * @param annotations
 	 *            TODO
 	 * @param slot
+	 * @deprecated Use version that passes in IVesselAvailability.
 	 */
 	public int calculateSalesUnitPrice(IDischargeOption option, IAllocationAnnotation allocationAnnotation, @Nullable IDetailTree annotations);
 
