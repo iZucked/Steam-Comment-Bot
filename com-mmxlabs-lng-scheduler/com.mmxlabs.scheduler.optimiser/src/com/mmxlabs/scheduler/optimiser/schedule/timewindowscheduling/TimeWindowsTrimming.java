@@ -269,9 +269,8 @@ public class TimeWindowsTrimming {
 				int voyageStartTime = portTimeWindowRecord.getFirstSlotFeasibleTimeWindow().getInclusiveStart();
 				for (IPortSlot slot : portTimeWindowRecord.getSlots()) {
 					if (portTimeWindowRecord.getSlotIsNextVoyageConstrainedPanama(slot)) {
-						if (distanceProvider.getRouteOptionDirection(load.getPort(), ERouteOption.PANAMA) == RouteOptionDirection.NORTHBOUND
-								||
-								PanamaBookingHelper.isSouthboundIdleTimeRuleEnabled()) {
+						if (PanamaBookingHelper.isSouthboundIdleTimeRuleEnabled() || 
+							distanceProvider.getRouteOptionDirection(load.getPort(), ERouteOption.PANAMA) == RouteOptionDirection.NORTHBOUND) {
 							final int toCanal = panamaBookingHelper.getTravelTimeToCanal(vessel, load.getPort(), true);
 							if (toCanal != Integer.MAX_VALUE) {
 								int estimatedCanalArrival = voyageStartTime + portTimeWindowRecord.getSlotDuration(load) + toCanal;

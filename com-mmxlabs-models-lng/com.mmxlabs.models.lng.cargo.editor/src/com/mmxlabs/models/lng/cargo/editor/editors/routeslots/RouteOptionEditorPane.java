@@ -386,7 +386,7 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 			strictEditor.setValue(canalBookingsModel.getStrictBoundaryOffsetDays());
 			relaxedEditor.setValue(canalBookingsModel.getRelaxedBoundaryOffsetDays());
 			maxIdleNorthboundEditor.setValue(canalBookingsModel.getNorthboundMaxIdleDays());
-			maxIdleSouthboundEditor.setValue(canalBookingsModel.getNorthboundMaxIdleDays());
+			maxIdleSouthboundEditor.setValue(canalBookingsModel.getSouthboundMaxIdleDays());
 			if (!NonLicenseFeatures.isSouthboundIdleTimeRuleEnabled()) {
 				flexEditorSouthbound.setValue(canalBookingsModel.getFlexibleBookingAmountSouthbound());
 			}
