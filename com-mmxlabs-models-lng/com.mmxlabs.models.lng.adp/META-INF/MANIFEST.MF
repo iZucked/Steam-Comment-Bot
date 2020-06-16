@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: com.mmxlabs.models.lng.adp;singleton:=true
 Automatic-Module-Name: com.mmxlabs.models.lng.adp
-Bundle-Version: 4.9.5.qualifier
+Bundle-Version: 4.10.0.RELEASE
 Bundle-ClassPath: .
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
