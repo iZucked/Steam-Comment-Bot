@@ -302,8 +302,7 @@ public class PortTimesRecordMaker {
 				final int extraIdleTime = record.getSlotExtraIdleTime(slot);
 
 				// Pick based on earliest time
-				final int arrivalTime = record.getSlotFeasibleTimeWindow(slot).getInclusiveStart();// timeScheduler.scheduleSlot(resource, slot, record, portTimesRecord,
-																									// lastNextExpectedArrivalTime);
+				final int arrivalTime = Math.max(record.getSlotFeasibleTimeWindow(slot).getInclusiveStart(), lastNextExpectedArrivalTime);
 
 				assert !actualsDataProvider.hasActuals(slot) || actualsDataProvider.getArrivalTime(slot) == arrivalTime;
 
