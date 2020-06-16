@@ -258,7 +258,7 @@ public class TimeWindowScheduler implements IArrivalTimeScheduler {
 					// Use the simple variant. We have computed the necessary values.
 					portTimeRecords.put(resource, portTimesRecordMaker.makeSimpleShippedPortTimesRecords(seqIndex, resource, sequence, trimmedWindows.get(resource), travelTimeData));
 				} else {
-					// Use the more complex variant. Window start is a hint rather than abolute
+					// Use the more complex variant. Window start is a hint rather than absolute
 					// value.
 					portTimeRecords.put(resource, portTimesRecordMaker.calculateShippedPortTimesRecords(seqIndex, resource, sequence, trimmedWindows.get(resource), travelTimeData));
 				}
