@@ -45,7 +45,7 @@
 		<module>com-mmxlabs-lingo</module>
 	</modules>
 
-
+	<!--
 	<pluginRepositories>
 		<pluginRepository>
 			<id>cbi</id>
@@ -75,5 +75,6 @@
 			</plugin>
 		</plugins>
 	</build>
+	-->
 </project>
 
