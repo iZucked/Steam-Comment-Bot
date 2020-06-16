@@ -208,7 +208,8 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 				if (obj instanceof VoyageDetails) {
 					final VoyageDetails details = (VoyageDetails) obj;
 
-					if ((details.getTravelTime() + details.getIdleTime()) > details.getOptions().getAvailableTime()) {
+					if ((details.getTravelTime() + details.getIdleTime() + details.getPurgeDuration()) //
+							> details.getOptions().getAvailableTime()) {
 						// this plan is bad. If the old plan was not bad, we
 						// should stick with the old plan even though this one
 						// costs less. If the old plan was bad, we might as well
