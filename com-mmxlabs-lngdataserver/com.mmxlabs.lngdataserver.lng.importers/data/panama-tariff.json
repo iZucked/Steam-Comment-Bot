@@ -16,7 +16,7 @@
   }, {
     "@class" : "PanamaCanalTariffBand",
     "ladenTariff" : "2.58",
-    "ballastTariff" : 2.26",
+    "ballastTariff" : "2.26",
     "ballastRoundtripTariff" : "1.99",
     "bandStart" : "90000",
     "bandEnd" : "120000"
