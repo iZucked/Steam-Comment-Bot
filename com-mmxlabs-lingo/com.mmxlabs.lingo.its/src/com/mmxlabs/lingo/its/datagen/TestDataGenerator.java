@@ -7,7 +7,9 @@ package com.mmxlabs.lingo.its.datagen;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Properties;
 
+import org.apache.poi.POIDocument;
 import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.lngdataserver.lng.importers.creator.ScenarioBuilder;
@@ -30,6 +32,14 @@ public class TestDataGenerator {
 			IScenarioDataProvider scenarioDataProvider = sb.getScenarioDataProvider();
 
 			ExportCSVBundleUtil.exportScenarioToZip(scenarioDataProvider, tempFile);
+		} else {
+			
+			Properties properties = System.getProperties();
+			for (var e : properties.entrySet()) {
+				System.out.printf("Prop %s -> %s\n",  e.getKey(), e.getValue());
+			}
 		}
+		
+		
 	}
 }
