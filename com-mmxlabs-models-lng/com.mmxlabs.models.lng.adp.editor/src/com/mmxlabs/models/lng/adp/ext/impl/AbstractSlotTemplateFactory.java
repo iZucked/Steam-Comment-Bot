@@ -61,7 +61,7 @@ public class AbstractSlotTemplateFactory implements ISlotTemplateFactory {
 		slot.setContract(contract);
 		slot.setPort(contract.getPreferredPort());
 
-		if (contract.getContractType() == ContractType.DES) {
+		if (subProfile.getContractType() == ContractType.DES) {
 			slot.setDESPurchase(true);
 			slot.setNominatedVessel(subProfile.getNominatedVessel());
 		}
@@ -76,7 +76,7 @@ public class AbstractSlotTemplateFactory implements ISlotTemplateFactory {
 		SalesContract contract = profile.getContract();
 		slot.setContract(contract);
 		slot.setPort(contract.getPreferredPort());
-		if (contract.getContractType() == ContractType.DES) {
+		if (subProfile.getContractType() == ContractType.FOB) {
 			slot.setFOBSale(true);
 			slot.setNominatedVessel(subProfile.getNominatedVessel());
 		}
