@@ -30,6 +30,8 @@ public class TestDataGenerator {
 			final File tempFile = Files.createFile(Path.of(workspace.replaceAll("file:", ""), "testdatabundle.zip")).toFile();
 			final ScenarioBuilder sb = ScenarioBuilder.initialiseBasicScenario();
 			sb.loadDefaultData();
+			sb.createDummyPricingData();
+
 			IScenarioDataProvider scenarioDataProvider = sb.getScenarioDataProvider();
 
 			ExportCSVBundleUtil.exportScenarioToZip(scenarioDataProvider, tempFile);
