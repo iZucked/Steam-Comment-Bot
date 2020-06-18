@@ -18,6 +18,8 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.StringFieldEditor;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -83,10 +85,41 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 		}
 	}
 
+	protected static Label noteLabel;
+
+	void showNoteLabel() {
+		noteLabel.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).create());
+	}
+
+	protected BooleanFieldEditor forceBasicAuth;
+
+	protected StringFieldEditor editor;
+
+	@Override
+	protected void initialize() {
+		super.initialize();
+		forceBasicAuth.setPropertyChangeListener(disableLogin);
+		editor.setPropertyChangeListener(disableLogin);
+	}
+
+	IPropertyChangeListener disableLogin = new IPropertyChangeListener() {
+		@Override
+		public void propertyChange(PropertyChangeEvent event) {
+			// display note and disable login button
+			button.setEnabled(false);
+			noteLabel.setVisible(true);
+		}
+	};
+
+	public static void enableLogin() {
+		button.setEnabled(true);
+		noteLabel.setVisible(false);
+	}
+
 	@Override
 	protected void createFieldEditors() {
 
-		final StringFieldEditor editor = new StringFieldEditor(DataHubPreferenceConstants.P_DATAHUB_URL_KEY, "&URL", getFieldEditorParent());
+		editor = new StringFieldEditor(DataHubPreferenceConstants.P_DATAHUB_URL_KEY, "&URL", getFieldEditorParent());
 		addField(editor);
 
 		button = new Button(getFieldEditorParent(), SWT.PUSH);
@@ -120,7 +153,7 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 
 		setButtonText();
 
-		BooleanFieldEditor forceBasicAuth = new BooleanFieldEditor(DataHubPreferenceConstants.P_FORCE_BASIC_AUTH, "&Force local authentication", getFieldEditorParent());
+		forceBasicAuth = new BooleanFieldEditor(DataHubPreferenceConstants.P_FORCE_BASIC_AUTH, "&Force local authentication", getFieldEditorParent());
 		addField(forceBasicAuth);
 
 		addField(new BooleanFieldEditor(DataHubPreferenceConstants.P_ENABLE_BASE_CASE_SERVICE_KEY, "&Base case sharing", getFieldEditorParent()));
@@ -354,7 +387,8 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 			}
 		});
 
-		final Label noteLabel = new Label(getFieldEditorParent(), SWT.FILL);
+		noteLabel = new Label(getFieldEditorParent(), SWT.FILL);
+		noteLabel.setVisible(false);
 		noteLabel.setText("Note: changes must be applied to take effect");
 		noteLabel.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).create());
 	}

@@ -127,6 +127,7 @@ public class UpstreamUrlProvider {
 		switch (event.getProperty()) {
 		case DataHubPreferenceConstants.P_DATAHUB_URL_KEY:
 			authenticationManager.logout((Shell) null);
+			DataHubPreferencePage.enableLogin();
 			isUpstreamAvailable();
 			fireChangedListeners();
 			break;
@@ -147,6 +148,7 @@ public class UpstreamUrlProvider {
 			forceBasicAuthenticationEnabled = Boolean.TRUE.equals(event.getNewValue());
 			authenticationManager.setForceBasicAuthentication(forceBasicAuthenticationEnabled);
 			DataHubPreferencePage.setButtonText();
+			DataHubPreferencePage.enableLogin();
 			fireChangedListeners();
 			break;
 		default:
