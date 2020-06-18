@@ -265,13 +265,14 @@ public class UpstreamUrlProvider {
 			if (!authenticationManager.isAuthenticated()) {
 				DataHubServiceProvider.getInstance().setLoggedInState(false);
 				return false;
+			} else {
+				DataHubServiceProvider.getInstance().setLoggedInState(true);
 			}
 
 			valid = true;
 			currentBaseURL = baseUrl;
 			connectionValid = true;
 
-			DataHubServiceProvider.getInstance().setLoggedInState(true);
 		} catch (final Exception e) {
 			// Ignore...?
 			e.printStackTrace();
