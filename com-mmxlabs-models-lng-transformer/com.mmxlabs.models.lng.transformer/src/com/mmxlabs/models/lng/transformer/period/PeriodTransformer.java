@@ -908,8 +908,10 @@ public class PeriodTransformer {
 			if (doLockDates) {
 				final SlotAllocation cargoSlotAllocation = slotAllocationMap.get(slot);
 				if (cargoSlotAllocation != null) {
-					slot.setWindowSize(0);
 					slot.setWindowFlex(0);
+					if (!slot.isWindowCounterParty()) {
+						slot.setWindowSize(0);
+					}
 					final ZonedDateTime localStart = cargoSlotAllocation.getSlotVisit().getStart();
 					slot.setWindowStart(localStart.toLocalDate());
 					slot.setWindowStartTime(localStart.getHour());
