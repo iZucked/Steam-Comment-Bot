@@ -243,71 +243,23 @@ public class AllowedVesselAssignmentConstraintTest {
 		Mockito.when(ctx.createFailureStatus(ArgumentMatchers.anyString())).thenReturn(failureStatus);
 
 		System.out.println("AllowedVesselAssignmentConstraintTest: Before new");
-		final AllowedVesselAssignmentConstraint constraint = new AllowedVesselAssignmentConstraint() {
-			@Override
-			public IStatus validate(final IValidationContext ctx) {
-
-				final List<IStatus> statuses = new LinkedList<>();
-				System.out.println("AllowedVesselAssignmentConstraintTest: validate 1");
-
-				final  com.mmxlabs.models.lng.assignment.validation.internal.Activator activator = com.mmxlabs.models.lng.assignment.validation.internal.Activator.getDefault();
-				final IExtraValidationContext extraValidationContext;
-				System.out.println("AllowedVesselAssignmentConstraintTest: validate 2");
-				if (activator == null) {
-					System.out.println("AllowedVesselAssignmentConstraintTest: validate 2a");
-
-					// For unit tests outside of OSGi
-					extraValidationContext = new DefaultExtraValidationContext((IScenarioDataProvider) null, false, false);
-				} else {
-					System.out.println("AllowedVesselAssignmentConstraintTest: validate 2b");
-
-					extraValidationContext = activator.getExtraValidationContext();
-				}
-				
-				System.out.println("AllowedVesselAssignmentConstraintTest: validate 3");
-
-				final String pluginId = validate(ctx, extraValidationContext, statuses);
-				System.out.println("AllowedVesselAssignmentConstraintTest: validate 4");
-
-				if (statuses.isEmpty()) {
-					System.out.println("AllowedVesselAssignmentConstraintTest: validate return success");
-
-					return ctx.createSuccessStatus();
-				} else if (statuses.size() == 1) {
-					System.out.println("AllowedVesselAssignmentConstraintTest: validate first status");
-
-					return statuses.get(0);
-				} else {
-					System.out.println("AllowedVesselAssignmentConstraintTest: validate return multiple");
-
-					int code = IStatus.OK;
-					for (final IStatus status : statuses) {
-						if (status.getSeverity() > code) {
-							code = status.getSeverity();
-						}
-					}
-					System.out.println("AllowedVesselAssignmentConstraintTest: validate return multiple a");
-
-					final MultiStatus multi = new MultiStatus(pluginId, code, null, null);
-					for (final IStatus s : statuses) {
-						multi.add(s);
-					}
-					System.out.println("AllowedVesselAssignmentConstraintTest: validate return multiple b");
-
-					return multi;
-				}
-			}
-		};
+		final AllowedVesselAssignmentConstraint constraint = new AllowedVesselAssignmentConstraint();
 		System.out.println("AllowedVesselAssignmentConstraintTest: After new");
 		System.out.println("AllowedVesselAssignmentConstraintTest: Activator is " + com.mmxlabs.models.lng.assignment.validation.internal.Activator.getDefault());
-		final IStatus status = constraint.validate(ctx);
-		System.out.println("AllowedVesselAssignmentConstraintTest: After validation");
+		try {
+			final IStatus status = constraint.validate(ctx);
 
-		if (expectSuccess) {
-			Assertions.assertTrue(status.isOK(), "Success expected");
-		} else {
-			Assertions.assertFalse(status.isOK(), "Failure expected");
+			System.out.println("AllowedVesselAssignmentConstraintTest: After validation");
 
+			if (expectSuccess) {
+				Assertions.assertTrue(status.isOK(), "Success expected");
+			} else {
+				Assertions.assertFalse(status.isOK(), "Failure expected");
+
+			}
+		} catch (Throwable t) {
+			t.printStackTrace();
+			Assertions.fail(t.getMessage());
 		}
 	}
 
