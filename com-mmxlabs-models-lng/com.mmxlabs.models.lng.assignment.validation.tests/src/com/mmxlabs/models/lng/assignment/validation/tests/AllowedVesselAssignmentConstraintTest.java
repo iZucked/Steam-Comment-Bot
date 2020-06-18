@@ -228,13 +228,19 @@ public class AllowedVesselAssignmentConstraintTest {
 		final IConstraintStatus failureStatus = mock(IConstraintStatus.class);
 		when(failureStatus.getSeverity()).thenReturn(IStatus.ERROR);
 
+		System.out.println("AllowedVesselAssignmentConstraintTest: Before mock context");
+
 		final IValidationContext ctx = Mockito.mock(IValidationContext.class);
 		Mockito.when(ctx.getTarget()).thenReturn(target);
 		Mockito.when(ctx.createSuccessStatus()).thenReturn(successStatus);
 		Mockito.when(ctx.createFailureStatus(ArgumentMatchers.anyString())).thenReturn(failureStatus);
 
+		System.out.println("AllowedVesselAssignmentConstraintTest: Before new");
 		final AllowedVesselAssignmentConstraint constraint = new AllowedVesselAssignmentConstraint();
+		System.out.println("AllowedVesselAssignmentConstraintTest: After new");
+		System.out.println("AllowedVesselAssignmentConstraintTest: Activator is " + com.mmxlabs.models.lng.assignment.validation.internal.Activator.getDefault());
 		final IStatus status = constraint.validate(ctx);
+		System.out.println("AllowedVesselAssignmentConstraintTest: After validation");
 
 		if (expectSuccess) {
 			Assertions.assertTrue(status.isOK(), "Success expected");
