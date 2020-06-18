@@ -29,6 +29,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
@@ -97,10 +98,11 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 			public void widgetSelected(final SelectionEvent se) {
 				UpstreamUrlProvider.INSTANCE.allowAuthenticationDialogToBeOpened.set(true);
 
-				// trigger authentication shell
 				if (button.getText().equals(loginButtonText)) {
-					UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
-					if (authenticationManager.isAuthenticated()) {
+					Shell shell = getShell();
+					if (!authenticationManager.isAuthenticated()) {
+						authenticationManager.run(shell);
+					} else {
 						button.setText("Logout");
 					}
 				} else if (button.getText().equals(logoutButtonText)) {
@@ -110,6 +112,9 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 						button.setText("Login");
 					}
 				}
+
+				// refresh datahub service logged in state
+				UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
 			}
 		});
 
