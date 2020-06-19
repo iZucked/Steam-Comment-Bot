@@ -681,7 +681,7 @@ public class ScheduleModelKPIUtils {
 
 	}
 
-	protected static long getFuelCost(final FuelUsage fuelUser, final Fuel... fuels) {
+	public static long getFuelCost(final FuelUsage fuelUser, final Fuel... fuels) {
 		final Set<Fuel> fuelsOfInterest = Sets.newHashSet(fuels);
 		long sum = 0L;
 		if (fuelUser != null) {
