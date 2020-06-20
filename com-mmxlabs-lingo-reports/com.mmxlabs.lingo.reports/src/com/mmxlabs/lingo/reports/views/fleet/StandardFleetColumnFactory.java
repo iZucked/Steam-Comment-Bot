@@ -23,6 +23,7 @@ import com.mmxlabs.lingo.reports.views.fleet.formatters.GeneratedCharterRevenueF
 import com.mmxlabs.lingo.reports.views.fleet.formatters.HeelCostFormatter;
 import com.mmxlabs.lingo.reports.views.fleet.formatters.HeelRevenueFormatter;
 import com.mmxlabs.lingo.reports.views.fleet.formatters.LNGCostFormatter;
+import com.mmxlabs.lingo.reports.views.fleet.formatters.NOfCargoesFormatter;
 import com.mmxlabs.lingo.reports.views.fleet.formatters.PortCostFormatter;
 import com.mmxlabs.lingo.reports.views.fleet.formatters.RepositioningFeeFormatter;
 import com.mmxlabs.lingo.reports.views.fleet.formatters.TotalWithBOGFormatter;
@@ -95,6 +96,10 @@ public class StandardFleetColumnFactory implements IFleetColumnFactory {
 		case "com.mmxlabs.lingo.reports.components.columns.fleet.repositioning_fee":
 			columnManager.registerColumn(FLEET_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Repositioning fee ($)", null, ColumnType.NORMAL,
 					new RepositioningFeeFormatter(false, CostFormatter.Type.COST), ScheduleReportPackage.Literals.ROW__LINKED_SEQUENCES));
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.fleet.number_cargoes":
+			columnManager.registerColumn(FLEET_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "#Cargoes", null, ColumnType.NORMAL,
+					new NOfCargoesFormatter(), ScheduleReportPackage.Literals.ROW__LINKED_SEQUENCES));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.fleet.total_without_BOG":
 			columnManager.registerColumn(FLEET_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Sum - BOG($)", null, ColumnType.NORMAL,
