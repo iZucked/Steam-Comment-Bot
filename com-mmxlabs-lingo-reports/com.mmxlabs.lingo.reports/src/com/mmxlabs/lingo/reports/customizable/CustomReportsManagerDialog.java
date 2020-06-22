@@ -1563,6 +1563,12 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	}
 
 	public int getColumnIndex(final ColumnBlock columnObj) {
+		if (this.current != null) {
+			int index = this.current.getColumns().indexOf(columnObj.blockID);
+			if (index >= 0) {
+				return index;
+			}
+		}
 		return CustomReportsRegistry.getInstance().getBlockIndex(columnObj);
 	}
 	
