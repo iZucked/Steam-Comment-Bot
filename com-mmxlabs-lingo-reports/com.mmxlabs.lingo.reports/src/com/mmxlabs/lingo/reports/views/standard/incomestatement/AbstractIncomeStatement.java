@@ -9,6 +9,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -288,11 +289,18 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 			}
 
 			public List<IncomeStatementData> createData(final Schedule schedule, final ScenarioResult scenarioResult) {
-				final List<IncomeStatementData> output = new ArrayList<IncomeStatementData>();
+				final List<IncomeStatementData> output = new ArrayList<>();
 
 				IncomeStatementData shippingCostItem = null;
+				EnumMap<LineItems, IncomeStatementData> m = new EnumMap<>(LineItems.class);
 				for (final LineItems lineItem : LineItems.values()) {
+					if (lineItem == LineItems.AvgSalesPrice || lineItem == LineItems.AvgPurchasePrice) {
+						// Skip these, derived later
+						continue;
+					}
+
 					final IncomeStatementData exposures = getIncomeByMonth(scenarioResult, schedule, lineItem);
+					m.put(lineItem, exposures);
 					if (lineItem == LineItems.ShippingCosts) {
 						shippingCostItem = exposures;
 						output.add(exposures);
@@ -308,10 +316,58 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 						overallIncomeMonths.add(key);
 					}
 				}
+				// Avg Purchase Price;
+				computeAvgPrice(schedule, scenarioResult, output, m, LineItems.AvgPurchasePrice, LineItems.PurchaseVolume, LineItems.Costs);
+				// Avg Sales Price;
+				computeAvgPrice(schedule, scenarioResult, output, m, LineItems.AvgSalesPrice, LineItems.SalesVolume, LineItems.Revenues);
 
 				return output;
 			}
 
+			private void computeAvgPrice(final Schedule schedule, final ScenarioResult scenarioResult, final List<IncomeStatementData> output, EnumMap<LineItems, IncomeStatementData> m,
+					LineItems avgDataKey, LineItems volumeData, LineItems valueData) {
+				{
+
+					// Step 1, compute the totals
+					IncomeStatementData volsInMMBTU = m.get(volumeData);
+					IncomeStatementData valuesInDollars = m.get(valueData);
+
+					final Map<YearMonth, Double> exposuresByMonth = new HashMap<>();
+					for (YearMonth key : overallIncomeMonths) {
+						Double volume = volsInMMBTU.valuesByMonth.get(key);
+						Double value = valuesInDollars.valuesByMonth.get(key);
+
+						if (volume != 0.0) {
+							exposuresByMonth.put(key, value / volume);
+						}
+					}
+
+					IncomeStatementData data = new IncomeStatementData(scenarioResult, schedule, avgDataKey, exposuresByMonth);
+					output.add(data);
+
+					// Step 2, compute the contract sub-totals
+					for (IncomeStatementData dVols : volsInMMBTU.children) {
+						for (IncomeStatementData dValues : valuesInDollars.children) {
+							if (dVols.key == dValues.key) {
+
+								final Map<YearMonth, Double> dExposuresByMonth = new HashMap<>();
+
+								for (YearMonth key : overallIncomeMonths) {
+									Double volume = dVols.valuesByMonth.get(key);
+									Double value = dValues.valuesByMonth.get(key);
+
+									if (volume != null && volume != 0.0) {
+										dExposuresByMonth.put(key, value / volume);
+									}
+								}
+								IncomeStatementData data2 = new IncomeStatementData(scenarioResult, schedule, dVols.key, dExposuresByMonth);
+								data.children.add(data2);
+							}
+						}
+					}
+
+				}
+			}
 		};
 	}
 
@@ -399,12 +455,12 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 			case VariableCosts:
 				total += getVariableCost(cargoAllocation);
 				break;
-				
+
 			case SalesVolume: {
 				for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
 					final Slot<?> slot = slotAllocation.getSlot();
 					if (slot instanceof DischargeSlot) {
-						total += slotAllocation.getVolumeTransferred();
+						total += slotAllocation.getEnergyTransferred();
 					}
 				}
 
@@ -414,13 +470,16 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 				for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
 					final Slot<?> slot = slotAllocation.getSlot();
 					if (slot instanceof DischargeSlot) {
-						total += slotAllocation.getVolumeTransferred();
+						total += slotAllocation.getEnergyTransferred();
 					}
 				}
 
 			}
 				break;
-				
+			case AvgPurchasePrice:
+			case AvgSalesPrice:
+				// Computed later
+				break;
 			}
 
 			// Find discharge date
