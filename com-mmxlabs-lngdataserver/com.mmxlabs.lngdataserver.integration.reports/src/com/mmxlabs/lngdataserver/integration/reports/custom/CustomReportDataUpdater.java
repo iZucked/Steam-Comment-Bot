@@ -189,7 +189,7 @@ public class CustomReportDataUpdater {
 		if (available) {
 
 			final Instant m = client.getLastModified();
-			if (true || m != null && m.isAfter(lastModified)) {
+			if (m != null && m.isAfter(lastModified)) {
 				final Pair<String, Instant> recordsPair = client.getRecords();
 				if (recordsPair != null) {
 					final List<CustomReportDataRecord> records = client.parseRecordsJSONData(recordsPair.getFirst());

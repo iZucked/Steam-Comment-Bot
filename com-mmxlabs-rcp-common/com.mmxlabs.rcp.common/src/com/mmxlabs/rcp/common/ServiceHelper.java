@@ -152,20 +152,6 @@ public final class ServiceHelper {
 		}
 	}
 
-	public static <T, E extends Exception> void withCheckedConsumerService(final Class<T> cls, final CheckedConsumer<T, E> withFunc) throws E {
-		final BundleContext bundleContext = FrameworkUtil.getBundle(ServiceHelper.class).getBundleContext();
-		final ServiceReference<T> serviceReference = bundleContext.getServiceReference(cls);
-		if (serviceReference == null) {
-			throw new RuntimeException(MSG_SERVICE_NOT_FOUND);
-		}
-		final T service = bundleContext.getService(serviceReference);
-		try {
-			withFunc.accept(service);
-		} finally {
-			bundleContext.ungetService(serviceReference);
-		}
-	}
-
 	/**
 	 * Loop through all services of requested class. Pass the service instance to the given function. If the function returns false, terminate the loop, otherwise continue to the next service.
 	 * 
