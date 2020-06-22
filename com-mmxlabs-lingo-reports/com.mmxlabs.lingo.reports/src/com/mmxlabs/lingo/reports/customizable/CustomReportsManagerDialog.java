@@ -502,6 +502,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 			if (!newReport) {
 				try {
 					CustomReportsRegistry.getInstance().removeFromDatahub(toDelete);
+					this.teamReportDefinitions.remove(toDelete);
 				}
 				catch (Exception ex) {
 					final String errorMessage = "Error connecting to datahub whilst attempting to remove report \""+toDelete.getName()+"\" from team folder. Please check error log for more details.";
@@ -509,7 +510,10 @@ public class CustomReportsManagerDialog extends TrayDialog {
 					logger.error(errorMessage, ex);
 				}
 			}
-			this.teamReportDefinitions.remove(toDelete);
+			else {
+				//New report.
+				this.teamReportDefinitions.remove(toDelete);
+			}
 			break;
 		default:
 			logger.error("Unimplemented store type for deleteReport method: ", storeType.toString());
