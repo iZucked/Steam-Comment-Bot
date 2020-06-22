@@ -1010,10 +1010,10 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		if (selectedReports.size() == 1 && (selectedReports.get(0) != this.current || modeChanged)) {
 			//Check for unsaved changes to previously selected report.
 			if (selectedReports.size() == 1 && selectedReports.get(0) != this.current && !checkForUnsavedUnpublishedChanges()) {
-				updateViewWithReportDefinition(selectedReports.get(0));
 				this.currentStoreType = this.userButton.getSelection() ? StoreType.User : StoreType.Team;
 				this.current = selectedReports.get(0);
 				this.currentBeforeChanges = (CustomReportDefinition)this.current.clone();
+				updateViewWithReportDefinition(selectedReports.get(0));
 			}
 
 			this.saveBtn.setEnabled(true);
@@ -1541,7 +1541,12 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	}
 
 	private boolean isVisible(ColumnBlock block) {
-		return CustomReportsRegistry.getInstance().isBlockVisible(block);
+		if (this.current != null) {
+			return this.current.getColumns().contains(block.blockID);
+		}
+		else {
+			return CustomReportsRegistry.getInstance().isBlockVisible(block);
+		}
 	}
 	
 	private void loadDefaults() {
