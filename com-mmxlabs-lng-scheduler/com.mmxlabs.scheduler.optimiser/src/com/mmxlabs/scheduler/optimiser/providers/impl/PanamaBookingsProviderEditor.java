@@ -36,6 +36,7 @@ public class PanamaBookingsProviderEditor implements IPanamaBookingsProviderEdit
 	private int strictBoundary;
 	private int relaxedBoundary;
 	private int northboundMaxIdleDays;
+	private int southboundMaxIdleDays;
 	private int relaxedBookingsCountAtEntryA;
 	private int relaxedBookingsCountAtEntryB;
 	private int arrivalMargin;
@@ -154,7 +155,18 @@ public class PanamaBookingsProviderEditor implements IPanamaBookingsProviderEdit
 	public int getNorthboundMaxIdleDays() {
 		return northboundMaxIdleDays;
 	}
-
+	
+	@Override
+	public int getSouthboundMaxIdleDays() {
+		return southboundMaxIdleDays;
+	}
+	
+	@Override
+	public void setSouthboundMaxIdleDays(int maxIdleDays) {
+		southboundMaxIdleDays = maxIdleDays;
+	}
+	
+	
 	@Override
 	public void setNorthboundMaxIdleDays(int maxIdleDays) {
 		northboundMaxIdleDays = maxIdleDays;

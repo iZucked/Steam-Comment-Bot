@@ -22,6 +22,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import com.google.inject.Injector;
 import com.google.inject.name.Names;
 import com.mmxlabs.common.time.Days;
+import com.mmxlabs.license.features.NonLicenseFeatures;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -1021,13 +1022,19 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 	}
 
 	/***
-	 * We did see a case where the hire cost only end rule kicked in and ignored the max duration and canal booking requirements.
+	 * We did see a case where the hire cost only end rule kicked in and ignored the
+	 * max duration and canal booking requirements.
 	 * 
 	 * @throws Exception
 	 */
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void maxDurationWithOpenEndAndHireCostEndRulesTest() throws Exception {
+		
+		if (!NonLicenseFeatures.isSouthboundIdleTimeRuleEnabled()) {
+			return; //This test is only applicable to old South-bound panama rules, as new south-bound idle rule allows existing panama voyages and flags as a warning in validation.
+		}
+		
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
 
@@ -1039,6 +1046,7 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 		cargoModel.getCanalBookings().setRelaxedBoundaryOffsetDays(100);
 
 		cargoModel.getCanalBookings().setFlexibleBookingAmountSouthbound(0);
+			
 		cargoModel.getCanalBookings().setNorthboundMaxIdleDays(5);
 		cargoModel.getCanalBookings().setArrivalMarginHours(12);
 
@@ -1066,8 +1074,8 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 				.withVisitDuration(36) //
 
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2018, Month.FEBRUARY, 1), port2, null, entity, "7") //
-				.withWindowSize(1, TimePeriod.MONTHS) //
+				.makeDESSale("D1", LocalDate.of(2018, Month.FEBRUARY, 15), port2, null, entity, "7") //
+				.withWindowSize(1, TimePeriod.DAYS) //
 				.withVisitDuration(36) //
 
 				.build() //
@@ -1116,7 +1124,8 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 	}
 
 	/**
-	 * This test ensures we do not add a cargo to a charter in which would exceed max duration even though it is profitable.
+	 * This test ensures we do not add a cargo to a charter in which would exceed
+	 * max duration even though it is profitable.
 	 * 
 	 * @throws Exception
 	 */

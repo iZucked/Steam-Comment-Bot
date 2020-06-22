@@ -31,6 +31,7 @@ import com.mmxlabs.scheduler.optimiser.providers.ECanalEntry;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider.RouteOptionDirection;
+import com.mmxlabs.scheduler.optimiser.schedule.PanamaBookingHelper;
 import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
@@ -145,7 +146,7 @@ public class JourneyEventExporter {
 
 				boolean southBound = distanceProvider.getRouteOptionDirection(options.getFromPortSlot().getPort(), ERouteOption.PANAMA) == RouteOptionDirection.SOUTHBOUND;
 				ZonedDateTime latestCanalEntry;
-				if (southBound) {
+				if (southBound && !PanamaBookingHelper.isSouthboundIdleTimeRuleEnabled()) {
 					latestCanalEntry = endTime.minusHours(fromCanalEntry).minusHours(marginHours);
 					journey.setLatestPossibleCanalDateTime(latestCanalEntry.toLocalDateTime());
 					if (latestCanalEntry.toLocalDateTime().getHour() > CanalBookingSlot.BOOKING_HOURS_OFFSET && journey.getRouteOption() == RouteOption.PANAMA) {
