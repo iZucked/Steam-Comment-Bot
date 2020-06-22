@@ -135,15 +135,15 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 					Shell shell = getShell();
 					if (!authenticationManager.isAuthenticated()) {
 						authenticationManager.run(shell);
-					} else {
-						button.setText("Logout");
 					}
 				} else if (button.getText().equals(logoutButtonText)) {
 					authenticationManager.logout(getShell());
-					UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
-					if (!authenticationManager.isAuthenticated()) {
-						button.setText("Login");
-					}
+				}
+
+				if (authenticationManager.isAuthenticated()) {
+					button.setText("Logout");
+				} else {
+					button.setText("Login");
 				}
 
 				// refresh datahub service logged in state
