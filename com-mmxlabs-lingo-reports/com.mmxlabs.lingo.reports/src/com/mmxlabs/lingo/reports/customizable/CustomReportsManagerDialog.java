@@ -481,8 +481,10 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		//Changes undone, so not pending anymore - clear all changes.
 		this.uuidToChangedReports.clear();
 		
-		//Make sure we don't open the dialog after clicking discard again.
-		this.changesMade = false;
+		//Below is only set if changes saved or published already, in which case
+		//we do not want to un-set it as we want LiNGO restarted in that case to
+		//reflect changes in the relevant reports.
+		//this.changesMade = false;
 	}
 
 	private void deleteReport(StoreType storeType, CustomReportDefinition toDelete) {
@@ -537,6 +539,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 				this.current.setName(name);
 				if (this.currentStoreType == StoreType.User) {
 					CustomReportsRegistry.getInstance().writeToJSON(this.current);
+					this.changesMade = true;
 				}
 				else {
 					try {
@@ -648,6 +651,8 @@ public class CustomReportsManagerDialog extends TrayDialog {
 			CustomReportsRegistry.getInstance().writeToJSON(toSave);
 			changesMade = true;
 			this.discardBtn.setEnabled(false);
+			//Prevent discard beyond saved state.
+			this.currentBeforeChanges = (CustomReportDefinition)this.current.clone();
 			this.uuidToChangedReports.get(toSave.getUuid()).saved = true;		
 			this.uuidToChangedReports.get(toSave.getUuid()).newReport = false;
 		}
