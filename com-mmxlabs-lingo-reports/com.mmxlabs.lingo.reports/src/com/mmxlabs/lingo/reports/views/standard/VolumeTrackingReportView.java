@@ -57,11 +57,11 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 
 	private ValueMode mode = ValueMode.VOLUME_MMBTU;
 
-	private enum DisplayMode {
+	private enum DateAggregationMode {
 		DISPLAY_BY_CONTRACT_YEAR, DISPLAY_BY_CALENDAR_YEAR, DISPLAY_BY_MONTH
 	}
 
-	private DisplayMode displayMode = DisplayMode.DISPLAY_BY_CONTRACT_YEAR;
+	private DateAggregationMode dateAggregationMode = DateAggregationMode.DISPLAY_BY_CONTRACT_YEAR;
 
 	public VolumeTrackingReportView() {
 		super("com.mmxlabs.lingo.doc.Reports_VolumeTracking");
@@ -177,7 +177,7 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 				for (final VolumeData d : output) {
 					for (final Temporal ym : d.volumes.keySet()) {
 
-						if (displayMode == DisplayMode.DISPLAY_BY_MONTH) {
+						if (dateAggregationMode == DateAggregationMode.DISPLAY_BY_MONTH) {
 							if (dateRange.getFirst() == null || ((YearMonth) ym).isBefore((YearMonth) dateRange.getFirst())) {
 								dateRange.setFirst(ym);
 							}
@@ -241,10 +241,10 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 						}
 						assert contractName != null;
 						Temporal key;
-						if (displayMode == DisplayMode.DISPLAY_BY_CONTRACT_YEAR) {
+						if (dateAggregationMode == DateAggregationMode.DISPLAY_BY_CONTRACT_YEAR) {
 							final Year year = getContractYear(sa, sa.getSlotVisit().getStart());
 							key = year;
-						} else if (displayMode == DisplayMode.DISPLAY_BY_MONTH) {
+						} else if (dateAggregationMode == DateAggregationMode.DISPLAY_BY_MONTH) {
 							key = YearMonth.from(sa.getSlotVisit().getStart().toLocalDate());
 						} else { // Display by calendar year
 							key = Year.from(sa.getSlotVisit().getStart().toLocalDate());
@@ -335,7 +335,7 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 						return o1.contract.compareTo(o2.contract);
 					}
 				});
-				if (displayMode == DisplayMode.DISPLAY_BY_CONTRACT_YEAR) {
+				if (dateAggregationMode == DateAggregationMode.DISPLAY_BY_CONTRACT_YEAR) {
 					result.add(new ColumnManager<VolumeData>("Month") {
 						@Override
 						public String getTooltip() {
@@ -354,7 +354,7 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 					});
 				}
 				if (dateRange.getFirst() != null) {
-					if (displayMode == DisplayMode.DISPLAY_BY_MONTH) {
+					if (dateAggregationMode == DateAggregationMode.DISPLAY_BY_MONTH) {
 						YearMonth year = (YearMonth) dateRange.getFirst();
 						while (!year.isAfter((YearMonth) dateRange.getSecond())) {
 							final YearMonth fYear = year;
@@ -437,20 +437,20 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 
 		getViewSite().getActionBars().getToolBarManager().add(modeToggle);
 
-		final Action displayModeToggle = new Action("Display:", IAction.AS_PUSH_BUTTON) {
+		final Action displayModeToggle = new Action("Show:", IAction.AS_PUSH_BUTTON) {
 
 			@Override
 			public void run() {
 
-				final int modeIdx = (displayMode.ordinal() + 1) % DisplayMode.values().length;
-				displayMode = DisplayMode.values()[modeIdx];
-				setDisplayModeActionText(this, displayMode);
+				final int modeIdx = (dateAggregationMode.ordinal() + 1) % DateAggregationMode.values().length;
+				dateAggregationMode = DateAggregationMode.values()[modeIdx];
+				setDateAggregationModeActionText(this, dateAggregationMode);
 				getViewSite().getActionBars().updateActionBars();
 				VolumeTrackingReportView.this.refresh();
 
 			}
 		};
-		setDisplayModeActionText(displayModeToggle, displayMode);
+		setDateAggregationModeActionText(displayModeToggle, dateAggregationMode);
 
 		getViewSite().getActionBars().getToolBarManager().add(displayModeToggle);
 
@@ -478,7 +478,7 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 		a.setText("Volume: " + modeStr);
 	}
 
-	private void setDisplayModeActionText(final Action a, final DisplayMode mode) {
+	private void setDateAggregationModeActionText(final Action a, final DateAggregationMode mode) {
 		String modeStr = null;
 		switch (mode) {
 		case DISPLAY_BY_CALENDAR_YEAR:
@@ -496,6 +496,6 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 
 		}
 		assert modeStr != null;
-		a.setText("Display: " + modeStr);
+		a.setText("Show: " + modeStr);
 	}
 }

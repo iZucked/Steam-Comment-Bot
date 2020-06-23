@@ -10,7 +10,7 @@ enum LineItems {
 	AvgSalesPrice("Avg. Sales Price"),
 	Costs("Purchase Costs"), 
 	PurchaseVolume("Purchase Volume"),
-	AvgPurchasePrice("Avg. Pur. Price"),
+	AvgPurchasePrice("Avg. Buy Price"),
 	BOG("BOG"), GrossMargin("Gross Margin"), ShippingCosts("Shipping Costs"), Hire("Hire"), VariableCosts("Variable Costs"), PortCharges("Port Charges"), Ebitda(
 			"Ebitda")
 	
