@@ -331,9 +331,20 @@ public class CustomReportsRegistry {
 		return defaults.getBlockManager().getBlockIndex((ColumnBlock) columnObj);
 	}
 
-	public void delete(CustomReportDefinition toDelete) {
-		final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();		
-		File reportsFile = new File(workspaceLocation.toOSString()+IPath.SEPARATOR+USER_REPORTS_DIR+IPath.SEPARATOR+JSON_REPORT_PREFIX+toDelete.getUuid()+".json");
+	public void deleteUserReport(CustomReportDefinition toDelete) {
+		final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
+		File reportsFile = new File(workspaceLocation.toOSString() + IPath.SEPARATOR + USER_REPORTS_DIR + IPath.SEPARATOR + JSON_REPORT_PREFIX + toDelete.getUuid() + ".json");
+		if (!reportsFile.delete()) {
+			logger.error("Could not delete file: " + reportsFile.toString());
+		}
+
+		// Update reports.xml with all plug-in info in.
+		regenerateReportsPluginXMLFile();
+	}
+
+	public void deleteTeamReport(CustomReportDefinition toDelete) {
+		final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
+		File reportsFile = new File(workspaceLocation.toOSString() + IPath.SEPARATOR + TEAM_REPORTS_DIR + IPath.SEPARATOR + toDelete.getUuid() + ".json");
 		if (!reportsFile.delete()) {
 			logger.error("Could not delete file: "+reportsFile.toString());
 		}

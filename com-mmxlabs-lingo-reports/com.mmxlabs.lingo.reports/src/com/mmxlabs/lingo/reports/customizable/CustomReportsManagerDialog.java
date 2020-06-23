@@ -138,9 +138,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	final Image visibleIcon = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/read_obj.gif").createImage();
 
 	boolean changesMade = false;
-	
-	boolean userReportPublished = false;
-	
+
 	boolean modeChanged = false;
 	
 	private final Comparator<ColumnBlock> comparator = new Comparator<>() {
@@ -494,13 +492,14 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		switch (storeType) {
 		case User:
 			if (!newReport) {
-				CustomReportsRegistry.getInstance().delete(toDelete);
+				CustomReportsRegistry.getInstance().deleteUserReport(toDelete);
 			}
 			this.userReportDefinitions.remove(toDelete);
 			break;
 		case Team:
 			if (!newReport) {
 				try {
+					CustomReportsRegistry.getInstance().deleteTeamReport(toDelete);
 					CustomReportsRegistry.getInstance().removeFromDatahub(toDelete);
 					this.teamReportDefinitions.remove(toDelete);
 				}
@@ -512,6 +511,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 			}
 			else {
 				//New report.
+				CustomReportsRegistry.getInstance().deleteTeamReport(toDelete);
 				this.teamReportDefinitions.remove(toDelete);
 			}
 			break;
@@ -598,9 +598,8 @@ public class CustomReportsManagerDialog extends TrayDialog {
 			}
 			try {
 				CustomReportsRegistry.getInstance().publishReport(rd);
-				
+
 				//Make sure we refresh team reports if team reports selected.
-				this.userReportPublished = true;
 				this.changesMade = true;
 				Change change = this.uuidToChangedReports.get(rd.getUuid());
 				if (change != null) {
@@ -993,10 +992,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 			customReportsViewer.setInput(getUserReportDefinitions());
 		}
 		else {
-			if (this.userReportPublished) {
-				this.teamReportDefinitions = CustomReportsRegistry.getInstance().readTeamCustomReportDefinitions();
-				this.userReportPublished = false; //We have refreshed.
-			}
+			this.teamReportDefinitions = CustomReportsRegistry.getInstance().readTeamCustomReportDefinitions();
 			customReportsViewer.setInput(getTeamReportDefinitions());
 		}
 	}
