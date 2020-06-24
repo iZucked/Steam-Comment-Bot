@@ -134,7 +134,7 @@ public class TopCustomReportDataRepository implements ICustomReportDataRepositor
 				records.addAll(temp);
 			}
 		}
-		if ((isFirst || records.isEmpty()) && recordsFile.exists() && recordsFile.canRead()) {
+		if ((isFirst && records.isEmpty()) && recordsFile.exists() && recordsFile.canRead()) {
 			String json = com.google.common.io.Files.toString(recordsFile, Charsets.UTF_8);
 			final List<CustomReportDataRecord> temp = CustomReportDataServiceClient.parseRecordsJSONData(json);
 			if (temp != null) {

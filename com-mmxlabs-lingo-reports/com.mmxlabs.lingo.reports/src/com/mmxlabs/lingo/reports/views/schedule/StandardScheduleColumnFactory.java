@@ -980,7 +980,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.laden_lng_m3":
 
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Laden LNG (M³)", null, ColumnType.NORMAL, new IntegerFormatter() {
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Laden LNG (m³)", null, ColumnType.NORMAL, new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
 
@@ -991,7 +991,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.laden_lng_mmbtu":
 
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Laden LNG (MMBtu)", null, ColumnType.NORMAL, new IntegerFormatter() {
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Laden LNG (mmBtu)", null, ColumnType.NORMAL, new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
 
@@ -1034,7 +1034,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.ballast_lng_m3":
 
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Ballast LNG (M³)", null, ColumnType.NORMAL, new IntegerFormatter() {
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Ballast LNG (m³)", null, ColumnType.NORMAL, new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
 
@@ -1045,7 +1045,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.ballast_lng_mmbtu":
 
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Ballast LNG (MMBtu)", null, ColumnType.NORMAL, new IntegerFormatter() {
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Ballast LNG (mmBtu)", null, ColumnType.NORMAL, new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
 

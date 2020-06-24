@@ -148,6 +148,7 @@ public class CustomReportDataServiceClient {
 		}
 
 		final Request request = requestBuilder //
+				.delete() //
 				.build();
 
 		try (Response response = httpClient.newCall(request).execute()) {

@@ -138,9 +138,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	final Image visibleIcon = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/read_obj.gif").createImage();
 
 	boolean changesMade = false;
-	
-	boolean userReportPublished = false;
-	
+
 	boolean modeChanged = false;
 	
 	private final Comparator<ColumnBlock> comparator = new Comparator<>() {
@@ -429,18 +427,22 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	
 	protected void handleRefreshBtn(Event event) {
 		if (this.teamButton.getSelection()) {
-			try {
-				CustomReportsRegistry.getInstance().refreshTeamReports();
-			} catch (IOException e) {
-				displayErrorDialog("Could not connect to DataHub to refresh reports.");
-				return;
-			}
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {}
 			
-			this.teamReportDefinitions = CustomReportsRegistry.getInstance().readTeamCustomReportDefinitions();
-			updateReports(false);
+			//Check for changes first.
+			if (!this.checkForUnsavedUnpublishedChanges()) {
+				try {
+					CustomReportsRegistry.getInstance().refreshTeamReports();
+				} catch (IOException e) {
+					displayErrorDialog("Could not connect to DataHub to refresh reports.");
+					return;
+				}
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {}
+
+				this.teamReportDefinitions = CustomReportsRegistry.getInstance().readTeamCustomReportDefinitions();
+				updateReports(false);
+			}
 		}
 	}
 
@@ -483,8 +485,10 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		//Changes undone, so not pending anymore - clear all changes.
 		this.uuidToChangedReports.clear();
 		
-		//Make sure we don't open the dialog after clicking discard again.
-		this.changesMade = false;
+		//Below is only set if changes saved or published already, in which case
+		//we do not want to un-set it as we want LiNGO restarted in that case to
+		//reflect changes in the relevant reports.
+		//this.changesMade = false;
 	}
 
 	private void deleteReport(StoreType storeType, CustomReportDefinition toDelete) {
@@ -494,14 +498,16 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		switch (storeType) {
 		case User:
 			if (!newReport) {
-				CustomReportsRegistry.getInstance().delete(toDelete);
+				CustomReportsRegistry.getInstance().deleteUserReport(toDelete);
 			}
 			this.userReportDefinitions.remove(toDelete);
 			break;
 		case Team:
 			if (!newReport) {
 				try {
+					CustomReportsRegistry.getInstance().deleteTeamReport(toDelete);
 					CustomReportsRegistry.getInstance().removeFromDatahub(toDelete);
+					this.teamReportDefinitions.remove(toDelete);
 				}
 				catch (Exception ex) {
 					final String errorMessage = "Error connecting to datahub whilst attempting to remove report \""+toDelete.getName()+"\" from team folder. Please check error log for more details.";
@@ -509,7 +515,11 @@ public class CustomReportsManagerDialog extends TrayDialog {
 					logger.error(errorMessage, ex);
 				}
 			}
-			this.teamReportDefinitions.remove(toDelete);
+			else {
+				//New report.
+				CustomReportsRegistry.getInstance().deleteTeamReport(toDelete);
+				this.teamReportDefinitions.remove(toDelete);
+			}
 			break;
 		default:
 			logger.error("Unimplemented store type for deleteReport method: ", storeType.toString());
@@ -533,6 +543,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 				this.current.setName(name);
 				if (this.currentStoreType == StoreType.User) {
 					CustomReportsRegistry.getInstance().writeToJSON(this.current);
+					this.changesMade = true;
 				}
 				else {
 					try {
@@ -579,6 +590,8 @@ public class CustomReportsManagerDialog extends TrayDialog {
 			//Update view with latest.
 			CustomReportDefinition rd = (CustomReportDefinition)selected.getFirstElement();
 			updateReportDefinitionWithChangesFromDialog(rd);
+			
+			//Add to team case.
 			if (this.currentStoreType == StoreType.User) {
 				Change change = this.uuidToChangedReports.get(rd.getUuid());
 				if (change != null && !change.saved) {
@@ -591,12 +604,28 @@ public class CustomReportsManagerDialog extends TrayDialog {
 						this.changesMade = true;
 					}
 				}
+				
+				//If we are adding a user report to team, we need to clone it and create a new UUID as per PS, so
+				//that team version appears separately from user version.
+				CustomReportDefinition copy = new CustomReportDefinition();
+				copy.setUuid(ScheduleSummaryReport.UUID_PREFIX+UUID.randomUUID().toString());
+				copy.setName(rd.getName());
+				copy.setType("ScheduleSummaryReport");							
+				updateReportDefinitionWithChangesFromDialog(copy);
+				
+				rd = copy;
 			}
 			try {
-				CustomReportsRegistry.getInstance().publishReport(rd);
 				
+				CustomReportsRegistry.getInstance().publishReport(rd);
+
+				//Add to team case.
+				if (this.currentStoreType == StoreType.User) {
+					this.addChangedReport(rd);
+					this.uuidToChangedReports.get(rd.getUuid()).storeType = StoreType.Team;
+				}
+					
 				//Make sure we refresh team reports if team reports selected.
-				this.userReportPublished = true;
 				this.changesMade = true;
 				Change change = this.uuidToChangedReports.get(rd.getUuid());
 				if (change != null) {
@@ -645,6 +674,8 @@ public class CustomReportsManagerDialog extends TrayDialog {
 			CustomReportsRegistry.getInstance().writeToJSON(toSave);
 			changesMade = true;
 			this.discardBtn.setEnabled(false);
+			//Prevent discard beyond saved state.
+			this.currentBeforeChanges = (CustomReportDefinition)this.current.clone();
 			this.uuidToChangedReports.get(toSave.getUuid()).saved = true;		
 			this.uuidToChangedReports.get(toSave.getUuid()).newReport = false;
 		}
@@ -989,10 +1020,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 			customReportsViewer.setInput(getUserReportDefinitions());
 		}
 		else {
-			if (this.userReportPublished) {
-				this.teamReportDefinitions = CustomReportsRegistry.getInstance().readTeamCustomReportDefinitions();
-				this.userReportPublished = false; //We have refreshed.
-			}
+			this.teamReportDefinitions = CustomReportsRegistry.getInstance().readTeamCustomReportDefinitions();
 			customReportsViewer.setInput(getTeamReportDefinitions());
 		}
 	}
@@ -1006,10 +1034,10 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		if (selectedReports.size() == 1 && (selectedReports.get(0) != this.current || modeChanged)) {
 			//Check for unsaved changes to previously selected report.
 			if (selectedReports.size() == 1 && selectedReports.get(0) != this.current && !checkForUnsavedUnpublishedChanges()) {
-				updateViewWithReportDefinition(selectedReports.get(0));
 				this.currentStoreType = this.userButton.getSelection() ? StoreType.User : StoreType.Team;
 				this.current = selectedReports.get(0);
 				this.currentBeforeChanges = (CustomReportDefinition)this.current.clone();
+				updateViewWithReportDefinition(selectedReports.get(0));
 			}
 
 			this.saveBtn.setEnabled(true);
@@ -1047,7 +1075,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	/**
 	 * Check if there are any unsaved/unpublished changes and ask the user what to do and do it.
 	 * Side effects: either discards the changes or selected the previously selected report.
-	 * @return true, if we went back, false, if we discarded the previously selected report's changes.
+	 * @return true, if we went back, false, if we discarded the previously selected report's changes or there were no unsaved/unpublished changes.
 	 */
 	private boolean checkForUnsavedUnpublishedChanges() {
 		if (this.current != null) {
@@ -1537,7 +1565,12 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	}
 
 	private boolean isVisible(ColumnBlock block) {
-		return CustomReportsRegistry.getInstance().isBlockVisible(block);
+		if (this.current != null) {
+			return this.current.getColumns().contains(block.blockID);
+		}
+		else {
+			return CustomReportsRegistry.getInstance().isBlockVisible(block);
+		}
 	}
 	
 	private void loadDefaults() {
@@ -1559,6 +1592,12 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	}
 
 	public int getColumnIndex(final ColumnBlock columnObj) {
+		if (this.current != null) {
+			int index = this.current.getColumns().indexOf(columnObj.blockID);
+			if (index >= 0) {
+				return index;
+			}
+		}
 		return CustomReportsRegistry.getInstance().getBlockIndex(columnObj);
 	}
 	
