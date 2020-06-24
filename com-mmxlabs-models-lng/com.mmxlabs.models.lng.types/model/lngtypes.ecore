@@ -71,6 +71,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="DESPurchaseDealType">
     <eLiterals name="DEST_ONLY"/>
+    <eLiterals name="DIVERTIBLE" value="3"/>
     <eLiterals name="DEST_WITH_SOURCE" value="1"/>
     <eLiterals name="DIVERT_FROM_SOURCE" value="2"/>
   </eClassifiers>

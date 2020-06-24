@@ -510,6 +510,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 
 		initEEnum(desPurchaseDealTypeEEnum, DESPurchaseDealType.class, "DESPurchaseDealType");
 		addEEnumLiteral(desPurchaseDealTypeEEnum, DESPurchaseDealType.DEST_ONLY);
+		addEEnumLiteral(desPurchaseDealTypeEEnum, DESPurchaseDealType.DIVERTIBLE);
 		addEEnumLiteral(desPurchaseDealTypeEEnum, DESPurchaseDealType.DEST_WITH_SOURCE);
 		addEEnumLiteral(desPurchaseDealTypeEEnum, DESPurchaseDealType.DIVERT_FROM_SOURCE);
 

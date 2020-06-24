@@ -1387,7 +1387,8 @@ public class LNGScenarioTransformer {
 			if (slot.isDESPurchase()) {
 				if (slot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERT_FROM_SOURCE) {
 					// return getTimewindowAsUTCWithFlex(slot);
-				} else if (slot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DEST_WITH_SOURCE) {
+				} else if (slot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DEST_WITH_SOURCE
+						|| slot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERTIBLE) {
 					extendWindows = true;
 				}
 			}
@@ -1493,7 +1494,9 @@ public class LNGScenarioTransformer {
 			@NonNull final LoadSlot loadSlot, @NonNull final ILoadOption load) {
 
 		if (loadSlot.isDESPurchase()) {
-			if (loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DEST_WITH_SOURCE || loadSlot instanceof SpotLoadSlot) {
+			if (loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DEST_WITH_SOURCE//
+					|| loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERTIBLE //
+					|| loadSlot instanceof SpotLoadSlot) {
 				final Set<IPort> marketPorts = new HashSet<>();
 				if (loadSlot instanceof SpotLoadSlot) {
 					final SpotLoadSlot spotLoadSlot = (SpotLoadSlot) loadSlot;
@@ -1866,7 +1869,8 @@ public class LNGScenarioTransformer {
 				// Extend window out to cover whole shipping days restriction
 				localTimeWindow = TimeWindowMaker.createInclusiveExclusive(loadWindow.getInclusiveStart(), loadWindow.getExclusiveEnd() + loadSlot.getSlotOrDelegateShippingDaysRestriction() * 24, 0,
 						false);
-			} else if (loadSlot instanceof SpotLoadSlot || loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DEST_WITH_SOURCE) {
+			} else if (loadSlot instanceof SpotLoadSlot || loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DEST_WITH_SOURCE//
+					|| loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERTIBLE) {
 				// Convert back into a UTC based date and add in TZ flex
 				final int utcStart = timeZoneToUtcOffsetProvider.UTC(loadWindow.getInclusiveStart(), portAssociation.lookup(loadSlot.getPort()));
 				final int utcEnd = timeZoneToUtcOffsetProvider.UTC(loadWindow.getExclusiveEnd(), portAssociation.lookup(loadSlot.getPort()));

@@ -30,6 +30,9 @@ public class DESPurchaseDealTypeInlineEditorFactory implements IInlineEditorFact
 			case DIVERT_FROM_SOURCE:
 				name = "Divert from source";
 				break;
+			case DIVERTIBLE:
+				name = "Divertible";
+				break;
 			default:
 				name = type.getName();
 				break;

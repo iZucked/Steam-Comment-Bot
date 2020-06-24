@@ -43,6 +43,15 @@ public class DivertibleSlotConstraint extends AbstractModelMultiConstraint {
 							dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_Port());
 							failures.add(dsd);
 						}
+					} else if (loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERTIBLE) {
+						if ((loadSlot.getPort() != null && !loadSlot.getPort().getCapabilities().contains(PortCapability.DISCHARGE))) {
+							final String message = String.format("DES Purchase|%s is divertible and needs a discharge port.", loadSlot.getName());
+							final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
+							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status);
+							dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getLoadSlot_DesPurchaseDealType());
+							dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_Port());
+							failures.add(dsd);
+						}
 					} else {
 						if ((loadSlot.getPort() != null && !loadSlot.getPort().getCapabilities().contains(PortCapability.LOAD))) {
 							final String message = String.format("DES Purchase|%s is divertible and needs a load port.", loadSlot.getName());
