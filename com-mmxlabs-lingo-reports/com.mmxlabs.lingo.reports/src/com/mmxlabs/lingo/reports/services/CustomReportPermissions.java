@@ -6,6 +6,7 @@ package com.mmxlabs.lingo.reports.services;
 
 import java.io.IOException;
 
+import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.services.permissions.UserPermissionsService;
 
 public class CustomReportPermissions {
@@ -21,18 +22,21 @@ public class CustomReportPermissions {
 	}
 	
 	public static boolean hasCustomReportPublishPermission() {
-		return (UserPermissionsService.INSTANCE.hubSupportsPermissions())
-				&& UserPermissionsService.INSTANCE.isPermitted(serviceName, rolePublish);
+		return (DataHubServiceProvider.getInstance().isOnlineAndLoggedIn() && (//
+				UserPermissionsService.INSTANCE.hubSupportsPermissions())
+				&& UserPermissionsService.INSTANCE.isPermitted(serviceName, rolePublish));
 	}
 	
 	public static boolean hasCustomReportReadPermission() {
-		return (UserPermissionsService.INSTANCE.hubSupportsPermissions())
-				&& UserPermissionsService.INSTANCE.isPermitted(serviceName, roleRead);
+		return (DataHubServiceProvider.getInstance().isOnlineAndLoggedIn() && (//
+				UserPermissionsService.INSTANCE.hubSupportsPermissions())
+				&& UserPermissionsService.INSTANCE.isPermitted(serviceName, roleRead));
 	}
 	
 	public static boolean hasCustomReportDeletePermission() {
-		return (UserPermissionsService.INSTANCE.hubSupportsPermissions())
-				&& UserPermissionsService.INSTANCE.isPermitted(serviceName, roleDelete);
+		return (DataHubServiceProvider.getInstance().isOnlineAndLoggedIn() && (
+				UserPermissionsService.INSTANCE.hubSupportsPermissions())
+				&& UserPermissionsService.INSTANCE.isPermitted(serviceName, roleDelete));
 	}
 	
 	private CustomReportPermissions() {

@@ -25,7 +25,9 @@ import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.hub.DataHubServiceProvider;
+import com.mmxlabs.hub.IDataHubStateChangeListener;
 import com.mmxlabs.hub.IUpstreamDetailChangedListener;
+import com.mmxlabs.hub.IUpstreamServiceChangedListener;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
 
@@ -38,6 +40,21 @@ public class CustomReportDataUpdater {
 	private final File basePath;
 	private Instant lastModified = Instant.EPOCH;
 	private final IUpstreamDetailChangedListener detailChangedListener = () -> lastModified = Instant.EPOCH; // Reset to trigger refresh
+	private final IUpstreamDetailChangedListener purgeLocalRecords = () -> purgeLocalRecords();
+	private final IDataHubStateChangeListener dataHubStateChangeListener = new IDataHubStateChangeListener() {
+		
+		@Override
+		public void hubStateChanged(boolean online, boolean loggedin, boolean changedToOnlineAndLoggedIn) {
+			if (changedToOnlineAndLoggedIn) {
+				purgeLocalRecords();
+			}
+		}
+		
+		@Override
+		public void hubPermissionsChanged() {
+			
+		}
+	};
 
 	private Thread updateThread;
 	private final ReentrantLock updateLock = new ReentrantLock();
@@ -52,10 +69,25 @@ public class CustomReportDataUpdater {
 		taskExecutor = Executors.newSingleThreadExecutor();
 		oldReports = new ConcurrentHashMap<String, Instant>();
 		UpstreamUrlProvider.INSTANCE.registerDetailsChangedLister(detailChangedListener);
+		UpstreamUrlProvider.INSTANCE.registerDetailsChangedLister(purgeLocalRecords);
+		DataHubServiceProvider.getInstance().addDataHubStateListener(dataHubStateChangeListener);
+	}
+	
+	private void purgeLocalRecords() {
+		if (this.basePath.exists() && this.basePath.canRead() && this.basePath.canWrite() && this.basePath.isDirectory()) {
+			for (final File f : this.basePath.listFiles()) {
+				if (f.exists())
+					f.delete();
+			}
+			oldReports.clear();
+			lastModified = Instant.EPOCH;
+		}
 	}
 
 	public void dispose() {
 		UpstreamUrlProvider.INSTANCE.deregisterDetailsChangedLister(detailChangedListener);
+		UpstreamUrlProvider.INSTANCE.deregisterDetailsChangedLister(purgeLocalRecords);
+		DataHubServiceProvider.getInstance().removeDataHubStateListener(dataHubStateChangeListener);
 		taskExecutor.shutdownNow();
 	}
 

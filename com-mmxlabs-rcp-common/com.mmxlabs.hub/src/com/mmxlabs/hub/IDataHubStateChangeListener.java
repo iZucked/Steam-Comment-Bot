@@ -6,7 +6,7 @@ package com.mmxlabs.hub;
 
 public interface IDataHubStateChangeListener {
 
-	void hubStateChanged(boolean online, boolean loggedin);
+	void hubStateChanged(boolean online, boolean loggedin, boolean changedToOnlineAndLoggedIn);
 
 	void hubPermissionsChanged();
 

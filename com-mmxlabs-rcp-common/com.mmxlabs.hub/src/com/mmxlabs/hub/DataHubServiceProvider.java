@@ -70,14 +70,14 @@ public class DataHubServiceProvider {
 
 	private synchronized void fireStateChangedEvent(final boolean online, final boolean loggedIn) {
 
-		final boolean changedToLoggedIn = online && loggedIn && loggedIn != this.loggedIn;
+		final boolean changedToOnlineAndLoggedIn = online && loggedIn && loggedIn != this.loggedIn;
 
 		this.online = online;
 		this.loggedIn = loggedIn;
 
 		System.out.printf("Hub State - Online: %s Logged In %s\n", online, loggedIn);
 		
-		if (changedToLoggedIn) {
+		if (changedToOnlineAndLoggedIn) {
 			// We have changed to online + logged in, so refresh some state
 
 			// Update username
@@ -93,7 +93,7 @@ public class DataHubServiceProvider {
 
 		for (final IDataHubStateChangeListener l : stateChangeListeners) {
 			try {
-				l.hubStateChanged(online, loggedIn);
+				l.hubStateChanged(online, loggedIn, changedToOnlineAndLoggedIn);
 			} catch (final Exception e) {
 				LOGGER.error("Error in listener: " + e.getMessage(), e);
 			}
