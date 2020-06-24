@@ -27,7 +27,6 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.IDataHubStateChangeListener;
 import com.mmxlabs.hub.IUpstreamDetailChangedListener;
-import com.mmxlabs.hub.IUpstreamServiceChangedListener;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
 
@@ -39,15 +38,13 @@ public class CustomReportDataUpdater {
 
 	private final File basePath;
 	private Instant lastModified = Instant.EPOCH;
-	private final IUpstreamDetailChangedListener detailChangedListener = () -> lastModified = Instant.EPOCH; // Reset to trigger refresh
-	private final IUpstreamDetailChangedListener purgeLocalRecords = () -> purgeLocalRecords();
+	private boolean purgeCache = false;
+	private final IUpstreamDetailChangedListener purgeLocalRecords = () -> purgeCache = true;
 	private final IDataHubStateChangeListener dataHubStateChangeListener = new IDataHubStateChangeListener() {
 		
 		@Override
 		public void hubStateChanged(boolean online, boolean loggedin, boolean changedToOnlineAndLoggedIn) {
-			if (changedToOnlineAndLoggedIn) {
-				purgeLocalRecords();
-			}
+			purgeCache = changedToOnlineAndLoggedIn;
 		}
 		
 		@Override
@@ -68,25 +65,14 @@ public class CustomReportDataUpdater {
 		this.readyCallback = readyCallback;
 		taskExecutor = Executors.newSingleThreadExecutor();
 		oldReports = new ConcurrentHashMap<String, Instant>();
-		UpstreamUrlProvider.INSTANCE.registerDetailsChangedLister(detailChangedListener);
-		UpstreamUrlProvider.INSTANCE.registerDetailsChangedLister(purgeLocalRecords);
+		//FIXME: creates an error
+		//UpstreamUrlProvider.INSTANCE.registerDetailsChangedLister(purgeLocalRecords);
 		DataHubServiceProvider.getInstance().addDataHubStateListener(dataHubStateChangeListener);
-	}
-	
-	private void purgeLocalRecords() {
-		if (this.basePath.exists() && this.basePath.canRead() && this.basePath.canWrite() && this.basePath.isDirectory()) {
-			for (final File f : this.basePath.listFiles()) {
-				if (f.exists())
-					f.delete();
-			}
-			oldReports.clear();
-			lastModified = Instant.EPOCH;
-		}
 	}
 
 	public void dispose() {
-		UpstreamUrlProvider.INSTANCE.deregisterDetailsChangedLister(detailChangedListener);
-		UpstreamUrlProvider.INSTANCE.deregisterDetailsChangedLister(purgeLocalRecords);
+		//FIXME: creates an error
+		//UpstreamUrlProvider.INSTANCE.deregisterDetailsChangedLister(purgeLocalRecords);
 		DataHubServiceProvider.getInstance().removeDataHubStateListener(dataHubStateChangeListener);
 		taskExecutor.shutdownNow();
 	}
@@ -216,6 +202,9 @@ public class CustomReportDataUpdater {
 	}
 
 	public void refresh() throws IOException {
+		if (purgeCache) {
+			purgeLocalRecords();
+		}
 		final boolean available = DataHubServiceProvider.getInstance().isOnlineAndLoggedIn();
 
 		if (available) {
@@ -230,6 +219,18 @@ public class CustomReportDataUpdater {
 					lastModified = recordsPair.getSecond();
 				}
 			}
+		}
+	}
+	
+	private void purgeLocalRecords() {
+		if (basePath.exists() && basePath.canRead() && basePath.canWrite() && basePath.isDirectory()) {
+			for (final File f : this.basePath.listFiles()) {
+				if (f.exists())
+					f.delete();
+			}
+			oldReports.clear();
+			purgeCache = false;
+			lastModified = Instant.EPOCH;
 		}
 	}
 

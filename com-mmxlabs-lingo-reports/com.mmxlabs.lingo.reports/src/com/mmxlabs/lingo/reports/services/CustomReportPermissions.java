@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.lingo.reports.services;
 
-import java.io.IOException;
-
 import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.services.permissions.UserPermissionsService;
 
