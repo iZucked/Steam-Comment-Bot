@@ -6,8 +6,10 @@ package com.mmxlabs.lingo.reports.preferences;
 
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.preference.ComboFieldEditor;
+import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IntegerFieldEditor;
+import org.eclipse.jface.preference.ListEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -61,6 +63,11 @@ public class ReportsPreferencesPage extends FieldEditorPreferencePage implements
 					{ "Days to 1 d.p. (1.5)", Formatters.DurationMode.DECIMAL.name() } };
 			addField(new ComboFieldEditor(PreferenceConstants.P_REPORT_DURATION_FORMAT, "&Duration format:", durationValues, getFieldEditorParent()));
 		}
+
+		final Label label = new Label(getFieldEditorParent(), SWT.WRAP);
+		label.setText("");
+		label.setLayoutData(labelLayoutData.create());
+		addField(new MultiLineTextFieldEditor(PreferenceConstants.REPORT_REGIONS_LIST, "&Regions:", getFieldEditorParent()));
 	}
 
 	/*

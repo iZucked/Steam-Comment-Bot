@@ -8,9 +8,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.emf.common.util.EList;
 
 import com.google.common.collect.Lists;
+import com.mmxlabs.lingo.reports.preferences.PreferenceConstants;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortGroup;
@@ -22,16 +25,23 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class IncomeStatementByRegion extends AbstractIncomeStatement<String> {
 
-	//Hard coded list until we have preferences done.
-	String[] REGIONS = new String[] { "JKTC", Regions.EUROPE.name(), Regions.AMERICAS.name(), Regions.FAR_EAST_AND_MIDDLE_EAST.name(), Regions.OTHER.name() };
-	Map<PortModel, Map<String, String>> portModelToPortToRegionMap = new HashMap<>();
+	private static final String[] DEFAULT_REGIONS = (new String[] { "JKTC", Regions.EUROPE.name(), Regions.AMERICAS.name(), Regions.FAR_EAST_AND_MIDDLE_EAST.name(), Regions.OTHER.name() });
+	private Map<PortModel, Map<String, String>> portModelToPortToRegionMap = new HashMap<>();
 	
 	public IncomeStatementByRegion() {
 		super("com.mmxlabs.lingo.reports.Reports_IncomeStatementByRegion");
 	}
 
 	private String[] getRegions() {	
-		return REGIONS;
+	    IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode("com.mmxlabs.lingo.reports");
+		String regionsList = prefs.get(PreferenceConstants.REPORT_REGIONS_LIST, "");
+		if (!regionsList.isBlank()) {
+			String[] regions = regionsList.split("\r\n");
+			if (regions.length > 0) {
+				return regions;
+			}
+		}
+		return DEFAULT_REGIONS;
 	}
 	
 	private Map<String,String> getPortToRegionMap(PortModel portModel) {
@@ -91,47 +101,6 @@ public class IncomeStatementByRegion extends AbstractIncomeStatement<String> {
 		}
 		
 		return Regions.OTHER.name();
-		
-/*		final Location location = port.getLocation();
-		if (location == null) {
-			return Regions.OTHER;
-		}
-		if (location.getCountry() == null) {
-			return Regions.OTHER;
-		}
-		final String country = location.getCountry().toLowerCase();
-		switch (country) {
-		case "china":
-		case "china, peoples rep":
-		case "taiwan":
-		case "south korea":
-		case "japan":
-		case "australia":
-		case "united arab emirates":
-		case "u.a.e.":
-		case "kuwait":
-		case "pakistan":
-		case "india":
-			return Regions.FAR_EAST_AND_MIDDLE_EAST;
-		case "spain":
-		case "portugal":
-		case "norway":
-		case "united kingdom":
-		case "turkey":
-		case "greece":
-		case "cyprus":
-			return Regions.EUROPE;
-		case "canada":
-		case "chile":
-		case "u.k.":
-		case "u.s.a.":
-		case "argentina":
-		case "brazil":
-			return Regions.AMERICAS;
-		default:
-			return Regions.OTHER;
-		}*/
-		
 	}
 
 	@Override
