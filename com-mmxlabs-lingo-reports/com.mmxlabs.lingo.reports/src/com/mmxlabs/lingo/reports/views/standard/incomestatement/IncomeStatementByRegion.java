@@ -5,28 +5,84 @@
 package com.mmxlabs.lingo.reports.views.standard.incomestatement;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.eclipse.emf.common.util.EList;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortGroup;
+import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.util.SetUtils;
 
-public class IncomeStatementByRegion extends AbstractIncomeStatement<Regions> {
+public class IncomeStatementByRegion extends AbstractIncomeStatement<String> {
 
+	//Hard coded list until we have preferences done.
+	String[] REGIONS = new String[] { "JKTC", Regions.EUROPE.name(), Regions.AMERICAS.name(), Regions.FAR_EAST_AND_MIDDLE_EAST.name(), Regions.OTHER.name() };
+	Map<String, String> portToRegionMap = new HashMap<>();
+	
 	public IncomeStatementByRegion() {
 		super("com.mmxlabs.lingo.reports.Reports_IncomeStatementByRegion");
 	}
 
+	private String[] getRegions() {	
+		return REGIONS;
+	}
+	
+	private Map<String,String> getPortToRegionMap(PortModel portModel) {
+		if (this.portToRegionMap.isEmpty() && portModel != null) {
+			//Compute.
+			String[] regions = this.getRegions();
+			
+			for (String region : regions) {
+				PortGroup regionPG = getPortGroupForRegion(portModel, region);
+				
+				if (regionPG != null) {
+					for (APortSet port : regionPG.getContents()) {
+						this.portToRegionMap.put(port.getName(), region);
+					}
+				}
+			}
+		}
+		
+		return this.portToRegionMap;
+	}
+
+	private PortGroup getPortGroupForRegion(PortModel portModel, String region) {
+		EList<PortGroup> pgs = portModel.getPortGroups();
+		PortGroup regionPG = null;
+		for (PortGroup pg : pgs) {
+			if (region.equalsIgnoreCase(pg.getName())) {
+				regionPG = pg;
+			}
+		}
+		return regionPG;
+	}
+	
 	@Override
-	protected Regions getSubType(final DischargeSlot dischargeSlot) {
+	protected String getSubType(final DischargeSlot dischargeSlot) {	
 		if (dischargeSlot == null) {
-			return Regions.OTHER;
+			return Regions.OTHER.name();
 		}
 		final Port port = dischargeSlot.getPort();
-		if (port == null) {
-			return Regions.OTHER;
+		if (port != null && port.getName() != null) {
+			final PortModel pm = (PortModel)port.eContainer();
+			
+			Map<String,String> portToRegion = getPortToRegionMap(pm);
+			String region = portToRegion.get(port.getName());
+			
+			if (region != null) {
+				return region;
+			}		
 		}
-		final Location location = port.getLocation();
+		
+		return Regions.OTHER.name();
+		
+/*		final Location location = port.getLocation();
 		if (location == null) {
 			return Regions.OTHER;
 		}
@@ -64,12 +120,14 @@ public class IncomeStatementByRegion extends AbstractIncomeStatement<Regions> {
 			return Regions.AMERICAS;
 		default:
 			return Regions.OTHER;
-		}
+		}*/
+		
 	}
 
 	@Override
-	protected Collection<Regions> getSubTypes() {
-		return Lists.newArrayList(Regions.values());
+	protected Collection<String> getSubTypes() {
+		//return Lists.newArrayList(Regions.values());
+		return Lists.newArrayList(this.getRegions());
 	}
 
 	@Override
@@ -79,7 +137,8 @@ public class IncomeStatementByRegion extends AbstractIncomeStatement<Regions> {
 
 	@Override
 	protected void resetData() {
-
+		//Clean out port to region map, in case for some reason data has changed.
+		this.portToRegionMap = new HashMap<>();
 	}
 
 	@Override

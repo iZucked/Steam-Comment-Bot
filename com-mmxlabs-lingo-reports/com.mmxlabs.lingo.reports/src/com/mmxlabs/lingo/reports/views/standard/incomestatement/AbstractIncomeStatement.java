@@ -33,6 +33,7 @@ import com.mmxlabs.lingo.reports.views.standard.SimpleTabularReportView;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
@@ -318,7 +319,7 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 	private IncomeStatementData getIncomeByMonth(final ScenarioResult scenarioResult, final Schedule schedule, final LineItems lineItem) {
 		final CumulativeMap<YearMonth> result = new CumulativeMap<>();
 		final Map<T, CumulativeMap<YearMonth>> subTypeMap = new HashMap<>();
-
+		
 		for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
 
 			double total = 0.0;
