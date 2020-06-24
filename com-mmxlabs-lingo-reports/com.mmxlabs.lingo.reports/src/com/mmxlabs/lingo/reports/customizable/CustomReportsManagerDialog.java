@@ -586,6 +586,8 @@ public class CustomReportsManagerDialog extends TrayDialog {
 			//Update view with latest.
 			CustomReportDefinition rd = (CustomReportDefinition)selected.getFirstElement();
 			updateReportDefinitionWithChangesFromDialog(rd);
+			
+			//Add to team case.
 			if (this.currentStoreType == StoreType.User) {
 				Change change = this.uuidToChangedReports.get(rd.getUuid());
 				if (change != null && !change.saved) {
@@ -598,10 +600,27 @@ public class CustomReportsManagerDialog extends TrayDialog {
 						this.changesMade = true;
 					}
 				}
+				
+				//If we are adding a user report to team, we need to clone it and create a new UUID as per PS, so
+				//that team version appears separately from user version.
+				CustomReportDefinition copy = new CustomReportDefinition();
+				copy.setUuid(ScheduleSummaryReport.UUID_PREFIX+UUID.randomUUID().toString());
+				copy.setName(rd.getName());
+				copy.setType("ScheduleSummaryReport");							
+				updateReportDefinitionWithChangesFromDialog(copy);
+				
+				rd = copy;
 			}
 			try {
+				
 				CustomReportsRegistry.getInstance().publishReport(rd);
 
+				//Add to team case.
+				if (this.currentStoreType == StoreType.User) {
+					this.addChangedReport(rd);
+					this.uuidToChangedReports.get(rd.getUuid()).storeType = StoreType.Team;
+				}
+					
 				//Make sure we refresh team reports if team reports selected.
 				this.changesMade = true;
 				Change change = this.uuidToChangedReports.get(rd.getUuid());
