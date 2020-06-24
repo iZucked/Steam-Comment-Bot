@@ -427,18 +427,22 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	
 	protected void handleRefreshBtn(Event event) {
 		if (this.teamButton.getSelection()) {
-			try {
-				CustomReportsRegistry.getInstance().refreshTeamReports();
-			} catch (IOException e) {
-				displayErrorDialog("Could not connect to DataHub to refresh reports.");
-				return;
-			}
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {}
 			
-			this.teamReportDefinitions = CustomReportsRegistry.getInstance().readTeamCustomReportDefinitions();
-			updateReports(false);
+			//Check for changes first.
+			if (!this.checkForUnsavedUnpublishedChanges()) {
+				try {
+					CustomReportsRegistry.getInstance().refreshTeamReports();
+				} catch (IOException e) {
+					displayErrorDialog("Could not connect to DataHub to refresh reports.");
+					return;
+				}
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {}
+
+				this.teamReportDefinitions = CustomReportsRegistry.getInstance().readTeamCustomReportDefinitions();
+				updateReports(false);
+			}
 		}
 	}
 
@@ -1071,7 +1075,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	/**
 	 * Check if there are any unsaved/unpublished changes and ask the user what to do and do it.
 	 * Side effects: either discards the changes or selected the previously selected report.
-	 * @return true, if we went back, false, if we discarded the previously selected report's changes.
+	 * @return true, if we went back, false, if we discarded the previously selected report's changes or there were no unsaved/unpublished changes.
 	 */
 	private boolean checkForUnsavedUnpublishedChanges() {
 		if (this.current != null) {
