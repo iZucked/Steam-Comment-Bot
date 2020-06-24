@@ -38,6 +38,10 @@ import com.mmxlabs.rcp.common.application.E4ModelHelper;
 
 public class CustomReportsRegistry {
 
+	private static final String TEAM_REPORTS_CATEGORY_ID = "com.mmxlabs.lingo.reports.customizable.team";
+
+	private static final String USER_REPORTS_CATEGORY_ID = "com.mmxlabs.lingo.reports.customizable.user";
+
 	private static final Logger logger = LoggerFactory.getLogger(ScheduleSummaryReport.class);
 	
 	public static final String USER_REPORTS_DIR = "reports";
@@ -83,23 +87,32 @@ public class CustomReportsRegistry {
 			checkReportsDirectoryExistsOrCreate();
 			List<CustomReportDefinition> userReportDefinitions = readUserCustomReportDefinitions();
 			List<CustomReportDefinition> teamReportDefinitions = readTeamCustomReportDefinitions();
-			List<CustomReportDefinition> reportDefinitions = new ArrayList<>(userReportDefinitions.size()+teamReportDefinitions.size());
-			reportDefinitions.addAll(userReportDefinitions);
-			reportDefinitions.addAll(teamReportDefinitions);
-			writeReportsPluginXMLFile(reportDefinitions);
+			writeReportsPluginXMLFile(userReportDefinitions, teamReportDefinitions);
 		}
 		catch (Exception ex) {
 			logger.error("Error updating report definition plugin.xml", ex);
 		}
 	}
 
-	private void writeReportsPluginXMLFile(List<CustomReportDefinition> reportDefinitions) throws FileNotFoundException {
+	private void writeReportsPluginXMLFile(List<CustomReportDefinition> userReportDefinitions, List<CustomReportDefinition> teamReportDefinitions) throws FileNotFoundException {
 		File reportsPluginXMLFile = new File(getReportsPluginXMLPath());
 
 		PrintStream out = new PrintStream(reportsPluginXMLFile);
 
 		writePluginXMLHeader(out);
 		
+		writePluginXMLCategoryExtensionPoint(out, USER_REPORTS_CATEGORY_ID, "User Reports");
+		writePluginXMLCategoryExtensionPoint(out, TEAM_REPORTS_CATEGORY_ID, "Team Reports");
+		
+		writeReportDefinitions(out, USER_REPORTS_CATEGORY_ID, userReportDefinitions);
+		writeReportDefinitions(out, TEAM_REPORTS_CATEGORY_ID, teamReportDefinitions);
+		
+		writePluginXMLFooter(out);
+		
+		out.close();
+	}
+
+	private void writeReportDefinitions(PrintStream out, String categoryId, List<CustomReportDefinition> reportDefinitions) {
 		//Write out 
 		for (CustomReportDefinition rd : reportDefinitions) {
 			writePluginXMLExtensionInitialState(out, rd);
@@ -107,12 +120,8 @@ public class CustomReportsRegistry {
 
 		//Write out views section
 		for (CustomReportDefinition rd : reportDefinitions) {
-			writePluginXMLExtensionView(out, rd);
+			writePluginXMLExtensionView(out, categoryId, rd);
 		}
-		
-		writePluginXMLFooter(out);
-		
-		out.close();
 	}
 
 	public static String getReportsPluginXMLPath() {
@@ -186,11 +195,11 @@ public class CustomReportsRegistry {
 		return reportDefinitions;
 	}
 	
-	private void writePluginXMLExtensionView(PrintStream out, CustomReportDefinition rd) {
+	private void writePluginXMLExtensionView(PrintStream out, String categoryId, CustomReportDefinition rd) {
 		out.print("    <extension\r\n" + 
 		"          point=\"org.eclipse.ui.views\">\r\n" + 
 		"       <view\r\n" + 
-		"             category=\"com.mmxlabs.shiplingo.platform.reports\"\r\n" + 
+		"             category=\""+categoryId+"\"\r\n" + 
 		"             class=\"org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.reports.views.schedule.ScheduleSummaryReport\"\r\n" + 
 		"             icon=\"icons/cview16/exec_statistic_view.gif\"\r\n" + 
 		"             id=\"");
@@ -218,6 +227,21 @@ public class CustomReportsRegistry {
 				"-->\r\n" + 
 				"<?eclipse version=\"3.4\"?>\r\n" + 
 				"<plugin>\r\n");
+	}
+	
+	private void writePluginXMLCategoryExtensionPoint(PrintStream out, String categoryId, String categoryName) {
+		out.print("   <extension\r\n" + 
+				"         point=\"org.eclipse.ui.views\">\r\n" + 
+				"      <category\r\n" + 
+				"            name=\"Reports\"\r\n" + 
+				"            id=\"com.mmxlabs.shiplingo.platform.reports\">\r\n" + 
+				"      </category>\r\n" + 
+				"      <category\r\n" + 
+				"            id=\""+categoryId+"\"\r\n" + 
+				"            name=\""+categoryName+"\">\r\n" + 
+				"      </category>\r\n"+
+				"   </extension>\r\n"); 
+		
 	}
 	
 	private void writePluginXMLExtensionInitialState(PrintStream out, CustomReportDefinition ssrd) {
