@@ -232,10 +232,10 @@ public class CustomReportsRegistry {
 	private void writePluginXMLCategoryExtensionPoint(PrintStream out, String categoryId, String categoryName) {
 		out.print("   <extension\r\n" + 
 				"         point=\"org.eclipse.ui.views\">\r\n" + 
-				"      <category\r\n" + 
-				"            name=\"Reports\"\r\n" + 
-				"            id=\"com.mmxlabs.shiplingo.platform.reports\">\r\n" + 
-				"      </category>\r\n" + 
+//				"      <category\r\n" + 
+//				"            name=\"Reports\"\r\n" + 
+//				"            id=\"com.mmxlabs.shiplingo.platform.reports\">\r\n" + 
+//				"      </category>\r\n" + 
 				"      <category\r\n" + 
 				"            id=\""+categoryId+"\"\r\n" + 
 				"            name=\""+categoryName+"\">\r\n" + 
