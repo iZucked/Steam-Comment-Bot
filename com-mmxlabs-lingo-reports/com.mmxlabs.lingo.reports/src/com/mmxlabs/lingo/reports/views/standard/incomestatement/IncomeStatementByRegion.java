@@ -12,12 +12,10 @@ import org.eclipse.emf.common.util.EList;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortGroup;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.types.APortSet;
-import com.mmxlabs.models.lng.types.util.SetUtils;
 
 public class IncomeStatementByRegion extends AbstractIncomeStatement<String> {
 
