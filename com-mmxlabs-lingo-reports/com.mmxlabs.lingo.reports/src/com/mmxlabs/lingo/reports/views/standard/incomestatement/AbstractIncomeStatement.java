@@ -372,7 +372,7 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 		};
 	}
 
-	private IncomeStatementData getIncomeByMonth(final ScenarioResult scenarioResult, final Schedule schedule, final LineItems lineItem) {
+	protected IncomeStatementData getIncomeByMonth(final ScenarioResult scenarioResult, final Schedule schedule, final LineItems lineItem) {
 		final CumulativeMap<YearMonth> result = new CumulativeMap<>();
 		final Map<T, CumulativeMap<YearMonth>> subTypeMap = new HashMap<>();
 		

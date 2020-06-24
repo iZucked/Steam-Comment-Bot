@@ -15,13 +15,16 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortGroup;
 import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class IncomeStatementByRegion extends AbstractIncomeStatement<String> {
 
 	//Hard coded list until we have preferences done.
 	String[] REGIONS = new String[] { "JKTC", Regions.EUROPE.name(), Regions.AMERICAS.name(), Regions.FAR_EAST_AND_MIDDLE_EAST.name(), Regions.OTHER.name() };
-	Map<String, String> portToRegionMap = new HashMap<>();
+	Map<PortModel, Map<String, String>> portModelToPortToRegionMap = new HashMap<>();
 	
 	public IncomeStatementByRegion() {
 		super("com.mmxlabs.lingo.reports.Reports_IncomeStatementByRegion");
@@ -32,22 +35,31 @@ public class IncomeStatementByRegion extends AbstractIncomeStatement<String> {
 	}
 	
 	private Map<String,String> getPortToRegionMap(PortModel portModel) {
-		if (this.portToRegionMap.isEmpty() && portModel != null) {
-			//Compute.
-			String[] regions = this.getRegions();
+		return this.portModelToPortToRegionMap.get(portModel);
+	}
+
+	private void computePortToRegionMap(PortModel portModel) {
+		//Compute.
+		String[] regions = this.getRegions();
+		Map<String, String> portToRegionMap = new HashMap<>();
+		
+		for (String region : regions) {
+			PortGroup regionPG = getPortGroupForRegion(portModel, region);
 			
-			for (String region : regions) {
-				PortGroup regionPG = getPortGroupForRegion(portModel, region);
-				
-				if (regionPG != null) {
-					for (APortSet port : regionPG.getContents()) {
-						this.portToRegionMap.put(port.getName(), region);
-					}
+			if (regionPG != null) {
+				for (APortSet port : regionPG.getContents()) {
+					portToRegionMap.put(port.getName(), region);
 				}
 			}
 		}
 		
-		return this.portToRegionMap;
+		this.portModelToPortToRegionMap.put(portModel, portToRegionMap);
+	}
+	
+	protected IncomeStatementData getIncomeByMonth(final ScenarioResult scenarioResult, final Schedule schedule, final LineItems lineItem) {
+		PortModel pm = ScenarioModelUtil.getPortModel(scenarioResult.getScenarioDataProvider());
+		this.computePortToRegionMap(pm);
+		return super.getIncomeByMonth(scenarioResult, schedule, lineItem);
 	}
 
 	private PortGroup getPortGroupForRegion(PortModel portModel, String region) {
@@ -130,13 +142,20 @@ public class IncomeStatementByRegion extends AbstractIncomeStatement<String> {
 
 	@Override
 	protected int doCompare(final IncomeStatementData o1, final IncomeStatementData o2) {
-		return ((Enum) o1.key).ordinal() - ((Enum) o2.key).ordinal();
+		if (o1.key instanceof Enum && o2.key instanceof Enum) {
+			return ((Enum)o1.key).ordinal() - ((Enum)o2.key).ordinal();
+		}
+		else {
+			String k1 = (String)o1.key;
+			String k2 = (String)o2.key;
+			return k1.compareTo(k2);
+		}
 	}
 
 	@Override
 	protected void resetData() {
 		//Clean out port to region map, in case for some reason data has changed.
-		this.portToRegionMap = new HashMap<>();
+		this.portModelToPortToRegionMap = new HashMap<>();
 	}
 
 	@Override
