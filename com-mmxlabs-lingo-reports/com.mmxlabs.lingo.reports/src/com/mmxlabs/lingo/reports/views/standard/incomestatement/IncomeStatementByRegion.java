@@ -4,8 +4,11 @@
  */
 package com.mmxlabs.lingo.reports.views.standard.incomestatement;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -25,20 +28,35 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class IncomeStatementByRegion extends AbstractIncomeStatement<String> {
 
-	private static final String[] DEFAULT_REGIONS = (new String[] { "JKTC", Regions.EUROPE.name(), Regions.AMERICAS.name(), Regions.FAR_EAST_AND_MIDDLE_EAST.name(), Regions.OTHER.name() });
+	private static final List<String> DEFAULT_REGIONS = Arrays.asList("JKTC", Regions.EUROPE.name(), Regions.AMERICAS.name(), Regions.FAR_EAST_AND_MIDDLE_EAST.name(), Regions.OTHER.name());
 	private Map<PortModel, Map<String, String>> portModelToPortToRegionMap = new HashMap<>();
+	private String other = Regions.OTHER.name();
 	
 	public IncomeStatementByRegion() {
 		super("com.mmxlabs.lingo.reports.Reports_IncomeStatementByRegion");
 	}
 
-	private String[] getRegions() {	
+	private List<String> getRegions() {	
 	    IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode("com.mmxlabs.lingo.reports");
-		String regionsList = prefs.get(PreferenceConstants.REPORT_REGIONS_LIST, "");
-		if (!regionsList.isBlank()) {
-			String[] regions = regionsList.split("\r\n");
+		String regionsStr = prefs.get(PreferenceConstants.REPORT_REGIONS_LIST, "");
+		if (!regionsStr.isBlank()) {
+			String[] regions = regionsStr.replace("\r", "").split("\n");
 			if (regions.length > 0) {
-				return regions;
+				if (Arrays.stream(regions).anyMatch(k -> k.equalsIgnoreCase(Regions.OTHER.name()))) {
+					//Insure other string matches exactly.
+					for (String region : regions) {
+						if (region.equalsIgnoreCase(Regions.OTHER.name())) {
+							this.other = region;
+						}
+					}
+					return Arrays.asList(regions);
+				}
+				else {
+					List<String> regionsList = new ArrayList<>();
+					regionsList.addAll(Arrays.asList(regions));
+					regionsList.add(Regions.OTHER.name());
+					return regionsList;
+				}
 			}
 		}
 		return DEFAULT_REGIONS;
@@ -50,7 +68,7 @@ public class IncomeStatementByRegion extends AbstractIncomeStatement<String> {
 
 	private void computePortToRegionMap(PortModel portModel) {
 		//Compute.
-		String[] regions = this.getRegions();
+		List<String> regions = this.getRegions();
 		Map<String, String> portToRegionMap = new HashMap<>();
 		
 		for (String region : regions) {
@@ -58,7 +76,7 @@ public class IncomeStatementByRegion extends AbstractIncomeStatement<String> {
 			
 			if (regionPG != null) {
 				for (APortSet port : regionPG.getContents()) {
-					portToRegionMap.put(port.getName(), region);
+					portToRegionMap.put(port.getName().toLowerCase(), region);
 				}
 			}
 		}
@@ -85,27 +103,24 @@ public class IncomeStatementByRegion extends AbstractIncomeStatement<String> {
 	
 	@Override
 	protected String getSubType(final DischargeSlot dischargeSlot) {	
-		if (dischargeSlot == null) {
-			return Regions.OTHER.name();
+		if (dischargeSlot != null) {
+			final Port port = dischargeSlot.getPort();
+			if (port != null && port.getName() != null) {
+				final PortModel pm = (PortModel)port.eContainer();
+
+				Map<String,String> portToRegion = getPortToRegionMap(pm);
+				String region = portToRegion.get(port.getName().toLowerCase());
+
+				if (region != null) {
+					return region;
+				}		
+			}
 		}
-		final Port port = dischargeSlot.getPort();
-		if (port != null && port.getName() != null) {
-			final PortModel pm = (PortModel)port.eContainer();
-			
-			Map<String,String> portToRegion = getPortToRegionMap(pm);
-			String region = portToRegion.get(port.getName());
-			
-			if (region != null) {
-				return region;
-			}		
-		}
-		
-		return Regions.OTHER.name();
+		return other;
 	}
 
 	@Override
 	protected Collection<String> getSubTypes() {
-		//return Lists.newArrayList(Regions.values());
 		return Lists.newArrayList(this.getRegions());
 	}
 
