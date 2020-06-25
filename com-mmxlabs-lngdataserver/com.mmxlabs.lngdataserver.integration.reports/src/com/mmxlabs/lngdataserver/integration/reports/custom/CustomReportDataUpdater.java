@@ -66,13 +66,13 @@ public class CustomReportDataUpdater {
 		taskExecutor = Executors.newSingleThreadExecutor();
 		oldReports = new ConcurrentHashMap<String, Instant>();
 		//FIXME: creates an error
-		//UpstreamUrlProvider.INSTANCE.registerDetailsChangedLister(purgeLocalRecords);
+		UpstreamUrlProvider.INSTANCE.registerDetailsChangedLister(purgeLocalRecords);
 		DataHubServiceProvider.getInstance().addDataHubStateListener(dataHubStateChangeListener);
 	}
 
 	public void dispose() {
 		//FIXME: creates an error
-		//UpstreamUrlProvider.INSTANCE.deregisterDetailsChangedLister(purgeLocalRecords);
+		UpstreamUrlProvider.INSTANCE.deregisterDetailsChangedLister(purgeLocalRecords);
 		DataHubServiceProvider.getInstance().removeDataHubStateListener(dataHubStateChangeListener);
 		taskExecutor.shutdownNow();
 	}

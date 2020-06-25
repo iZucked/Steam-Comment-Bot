@@ -42,6 +42,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.hub.DataHubActivator;
+import com.mmxlabs.hub.IUpstreamDetailChangedListener;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.auth.AuthenticationManager;
 import com.mmxlabs.hub.auth.BasicAuthenticationManager;
@@ -69,13 +70,24 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 	public DataHubPreferencePage() {
 		super(GRID);
 		setPreferenceStore(DataHubActivator.getDefault().getPreferenceStore());
+		UpstreamUrlProvider.INSTANCE.registerDetailsChangedLister(enableLoginListener);
+	}
+	
+	public void dispose() {
+		UpstreamUrlProvider.INSTANCE.deregisterDetailsChangedLister(enableLoginListener);
+		if (forceBasicAuth != null) {
+			forceBasicAuth.dispose();
+		}
+		if (editor != null) {
+			editor.dispose();
+		}
 	}
 
-	protected static String loginButtonText = "Login";
-	protected static String logoutButtonText = "Logout";
-	protected static Button button;
+	protected String loginButtonText = "Login";
+	protected String logoutButtonText = "Logout";
+	protected Button button;
 
-	public static void setButtonText() {
+	public void setButtonText() {
 		if (!button.isDisposed()) {
 			if (authenticationManager.isAuthenticated()) {
 				button.setText(logoutButtonText);
@@ -85,7 +97,7 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 		}
 	}
 
-	protected static Label noteLabel;
+	protected Label noteLabel;
 
 	void showNoteLabel() {
 		noteLabel.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).create());
@@ -111,10 +123,15 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 		}
 	};
 
-	public static void enableLogin() {
+	public void enableLogin() {
 		button.setEnabled(true);
 		noteLabel.setVisible(false);
 	}
+	
+	final private IUpstreamDetailChangedListener enableLoginListener = () -> {
+		setButtonText();
+		enableLogin();
+	};
 
 	@Override
 	protected void createFieldEditors() {
