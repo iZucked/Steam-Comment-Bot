@@ -24,6 +24,13 @@
  
  <suppress>
    <notes><![CDATA[
+   Ignore Jetty 6.x vulnerability
+   ]]></notes>
+   <cve>CVE-2009-5046</cve>
+</suppress>
+ 
+ <suppress>
+   <notes><![CDATA[
    Ignore MediaWiki vulnerability
    ]]></notes>
    <cve>CVE-2020-9382</cve>
