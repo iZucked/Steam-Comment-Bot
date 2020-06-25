@@ -576,11 +576,19 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	}
 	
 	protected void handleDeleteBtn(Event event) {
+		if (this.current != null) {
+			if (!MessageDialog.openQuestion(getShell(), "Are you sure?", "Are you sure you want to delete the report \""+current.getName()+"\"")) {
+				return;
+			}
+		}
+		
 		IStructuredSelection selected = this.customReportsViewer.getStructuredSelection();
 		if (selected != null && selected.size() == 1) {
 			CustomReportDefinition toDelete = (CustomReportDefinition)selected.getFirstElement();
 			StoreType storeType = userButton.getSelection() ? StoreType.User : StoreType.Team;
 			this.deleteReport(storeType, toDelete);
+			this.uuidToChangedReports.remove(current.getUuid());
+			this.current = null;
 		}
 	}
 
@@ -1365,7 +1373,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 			handleVisibleSelection(selection);
 			handleNonVisibleSelection(nonVisibleViewer.getSelection());
 			
-			this.discardBtn.setEnabled(true);
+			onReportModified();
 		}
 	}
 
@@ -1444,7 +1452,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 			handleVisibleSelection(selection);
 			this.updateReportDefinitionWithChangesFromDialog(this.current);
 			this.addChangedReport(this.current);
-			this.discardBtn.setEnabled(true);
+			onReportModified();
 		}
 	}
 
@@ -1470,8 +1478,14 @@ public class CustomReportsManagerDialog extends TrayDialog {
 			this.updateReportDefinitionWithChangesFromDialog(this.current);
 			this.addChangedReport(this.current);
 
-			this.discardBtn.setEnabled(true);
+			onReportModified();
 		}
+	}
+
+	private void onReportModified() {
+		this.discardBtn.setEnabled(true);
+		//this.saveBtn.setEnabled(true);
+		//this.publishBtn.setEnabled(true);
 	}
 	
 	/**
@@ -1499,7 +1513,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 			handleVisibleSelection(visibleViewer.getSelection());
 			handleNonVisibleSelection(nonVisibleViewer.getSelection());
 
-			this.discardBtn.setEnabled(true);
+			onReportModified();
 		}
 	}
 
@@ -1689,7 +1703,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	protected void handleOptionChanged(Event event) {
 		this.updateReportDefinitionWithChangesFromDialog(this.current);
 		this.addChangedReport(this.current);
-		this.discardBtn.setEnabled(true);
+		onReportModified();
 	}
 	
 	protected void refreshCheckboxes() {
