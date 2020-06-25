@@ -26,6 +26,12 @@
    <notes><![CDATA[
    Ignore Jetty 6.x vulnerability
    ]]></notes>
+   <cve>CVE-2009-5045</cve>
+</suppress>
+ <suppress>
+   <notes><![CDATA[
+   Ignore Jetty 6.x vulnerability
+   ]]></notes>
    <cve>CVE-2009-5046</cve>
 </suppress>
  
