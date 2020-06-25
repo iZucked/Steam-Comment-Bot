@@ -87,7 +87,7 @@ public class ReportsPreferencesPage extends FieldEditorPreferencePage implements
 		final String tooltip = "Any journey that cannot be completed at service speed in the available time with this leeway number of days to spare, is considered tight.";
 		//final Label label = new Label(getFieldEditorParent(), SWT.WRAP);
 		//label.setLayoutData(labelLayoutData.create());
-		final IntegerFieldEditor leeway = new IntegerFieldEditor(PreferenceConstants.P_LEEWAY_DAYS, "&Leeway in days:", getFieldEditorParent());
+		final IntegerFieldEditor leeway = new IntegerFieldEditor(PreferenceConstants.P_LEEWAY_DAYS, "&Leeway in days for tight journeys:", getFieldEditorParent());
 		leeway.getTextControl(getFieldEditorParent()).setToolTipText(tooltip);
 		leeway.getLabelControl(getFieldEditorParent()).setToolTipText(tooltip);
 		addField(leeway);
