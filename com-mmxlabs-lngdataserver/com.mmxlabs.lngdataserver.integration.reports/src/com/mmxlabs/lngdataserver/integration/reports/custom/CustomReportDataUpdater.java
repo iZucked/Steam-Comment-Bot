@@ -65,13 +65,11 @@ public class CustomReportDataUpdater {
 		this.readyCallback = readyCallback;
 		taskExecutor = Executors.newSingleThreadExecutor();
 		oldReports = new ConcurrentHashMap<String, Instant>();
-		//FIXME: creates an error
 		UpstreamUrlProvider.INSTANCE.registerDetailsChangedLister(purgeLocalRecords);
 		DataHubServiceProvider.getInstance().addDataHubStateListener(dataHubStateChangeListener);
 	}
 
 	public void dispose() {
-		//FIXME: creates an error
 		UpstreamUrlProvider.INSTANCE.deregisterDetailsChangedLister(purgeLocalRecords);
 		DataHubServiceProvider.getInstance().removeDataHubStateListener(dataHubStateChangeListener);
 		taskExecutor.shutdownNow();
@@ -213,6 +211,7 @@ public class CustomReportDataUpdater {
 			if (m != null && m.isAfter(lastModified)) {
 				final Pair<String, Instant> recordsPair = client.getRecords();
 				if (recordsPair != null) {
+					purgeLocalRecords();
 					final List<CustomReportDataRecord> records = client.parseRecordsJSONData(recordsPair.getFirst());
 					update(records);
 					Files.write(recordsPair.getFirst(), new File(basePath.getAbsolutePath() + "/records.json"), Charsets.UTF_8);
