@@ -610,6 +610,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 						CustomReportsRegistry.getInstance().writeToJSON(rd);
 						change.saved = true;
 						this.changesMade = true;
+						this.saveBtn.setEnabled(false);
 					}
 				}
 				
@@ -644,6 +645,8 @@ public class CustomReportsManagerDialog extends TrayDialog {
 					this.uuidToChangedReports.get(rd.getUuid()).published = true;
 					this.uuidToChangedReports.get(rd.getUuid()).newReport = false;
 				}
+				this.publishBtn.setEnabled(false);
+				
 			} catch(Exception e) {
 				String errorMsg = "Problem publishing report \""+rd.getName()+"\" to DataHub.";
 				logger.error(errorMsg, e);
@@ -686,6 +689,8 @@ public class CustomReportsManagerDialog extends TrayDialog {
 			this.currentBeforeChanges = (CustomReportDefinition)this.current.clone();
 			this.uuidToChangedReports.get(toSave.getUuid()).saved = true;		
 			this.uuidToChangedReports.get(toSave.getUuid()).newReport = false;
+			
+			this.saveBtn.setEnabled(false);
 		}
 	}
 	
@@ -1484,8 +1489,8 @@ public class CustomReportsManagerDialog extends TrayDialog {
 
 	private void onReportModified() {
 		this.discardBtn.setEnabled(true);
-		//this.saveBtn.setEnabled(true);
-		//this.publishBtn.setEnabled(true);
+		this.saveBtn.setEnabled(true);
+		this.publishBtn.setEnabled(true);
 	}
 	
 	/**
