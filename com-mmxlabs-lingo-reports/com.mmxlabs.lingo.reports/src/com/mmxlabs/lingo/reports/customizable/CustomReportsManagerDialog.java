@@ -11,6 +11,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Supplier;
@@ -481,6 +482,8 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		
 		//Have to make some changes to be able to discard again.
 		this.discardBtn.setEnabled(false);
+		this.saveBtn.setEnabled(false);
+		this.publishBtn.setEnabled(false);
 		
 		//Changes undone, so not pending anymore - clear all changes.
 		this.uuidToChangedReports.clear();
@@ -1052,12 +1055,24 @@ public class CustomReportsManagerDialog extends TrayDialog {
 				this.currentBeforeChanges = (CustomReportDefinition)this.current.clone();
 				updateViewWithReportDefinition(selectedReports.get(0));
 			}
-
-			this.saveBtn.setEnabled(true);
-
+			
+			//Determine if report needs save or publish action
+			boolean needsSaving = false;
+			boolean needsPublishing = false;
+			final Change currentChange = uuidToChangedReports.get(current.uuid);
+			if (currentStoreType != null && currentChange != null) {
+				if (currentStoreType == StoreType.User && !currentChange.saved) {
+					needsSaving = true;
+				}
+				if (currentStoreType == StoreType.Team && !currentChange.published) {
+					needsPublishing = true;
+				}
+			}
+				
 			//Only enable publish/write access, if in user mode or if user has team reports publish permission.
 			if (this.userButton.getSelection()) {
 				//User reports mode.
+				this.saveBtn.setEnabled(needsSaving);
 				this.deleteBtn.setEnabled(true);
 				this.copyBtn.setEnabled(true);
 				this.renameBtn.setEnabled(true);		
@@ -1073,10 +1088,13 @@ public class CustomReportsManagerDialog extends TrayDialog {
 				if (CustomReportsRegistry.getInstance().hasTeamReportsReadPermission() &&
 				    CustomReportsRegistry.getInstance().hasTeamReportsPublishPermission()) {
 					this.copyBtn.setEnabled(true);
+					//always allow to copy to user
+					this.saveBtn.setEnabled(true);
 				}
 				if (CustomReportsRegistry.getInstance().hasTeamReportsPublishPermission()) {
-					this.renameBtn.setEnabled(true);			
-					this.publishBtn.setEnabled(true);
+					this.renameBtn.setEnabled(true);	
+					//only publish if report is unpublished
+					this.publishBtn.setEnabled(needsPublishing);
 				}					
 			}
 			
