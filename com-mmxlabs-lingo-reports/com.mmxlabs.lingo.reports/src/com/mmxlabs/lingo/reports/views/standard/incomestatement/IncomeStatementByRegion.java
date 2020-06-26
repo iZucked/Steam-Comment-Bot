@@ -24,6 +24,7 @@ import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class IncomeStatementByRegion extends AbstractIncomeStatement<String> {
@@ -75,7 +76,7 @@ public class IncomeStatementByRegion extends AbstractIncomeStatement<String> {
 			PortGroup regionPG = getPortGroupForRegion(portModel, region);
 			
 			if (regionPG != null) {
-				for (APortSet port : regionPG.getContents()) {
+				for (APortSet port : SetUtils.getObjects(regionPG)) {
 					portToRegionMap.put(port.getName().toLowerCase(), region);
 				}
 			}
