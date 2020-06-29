@@ -595,6 +595,16 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		}
 	}
 
+	private CustomReportDefinition checkForTeamReport(String name) {
+		for (CustomReportDefinition crd : this.teamReportDefinitions) {
+			if (crd.getName().equalsIgnoreCase(name)) {
+				return crd;
+			}
+		}
+		return null;
+	}
+	
+	
 	protected void handlePublishBtn(Event event) {
 		IStructuredSelection selected = this.customReportsViewer.getStructuredSelection();
 		if (selected != null && selected.size() == 1) {
@@ -617,15 +627,34 @@ public class CustomReportsManagerDialog extends TrayDialog {
 					}
 				}
 				
-				//If we are adding a user report to team, we need to clone it and create a new UUID as per PS, so
-				//that team version appears separately from user version.
-				CustomReportDefinition copy = new CustomReportDefinition();
-				copy.setUuid(ScheduleSummaryReport.UUID_PREFIX+UUID.randomUUID().toString());
-				copy.setName(rd.getName());
-				copy.setType("ScheduleSummaryReport");							
-				updateReportDefinitionWithChangesFromDialog(copy);
-				
-				rd = copy;
+				//Check if report with that name already exists and if so prompt the user if they want to overwrite it or cancel.
+				CustomReportDefinition existingReport = this.checkForTeamReport(rd.getName());
+				if (existingReport == null) {
+
+					//If we are adding a user report to team, we need to clone it and create a new UUID as per PS, so
+					//that team version appears separately from user version.
+					CustomReportDefinition copy = new CustomReportDefinition();
+					copy.setUuid(ScheduleSummaryReport.UUID_PREFIX+UUID.randomUUID().toString());
+					copy.setName(rd.getName());
+					copy.setType("ScheduleSummaryReport");							
+					updateReportDefinitionWithChangesFromDialog(copy);
+
+					rd = copy;
+				}
+				else {
+					//If it is already a team report, ask the user if they want to overwrite it with their new one.
+					int overwrite = MessageDialog.open(MessageDialog.QUESTION_WITH_CANCEL, getShell(), "Overwrite existing team report?", 
+							"There is an existing team report "+existingReport.getName()+". Do you want to overwrite this?", SWT.NONE, "Overwrite", "Cancel");
+					
+					if (overwrite == 0) {
+						updateReportDefinitionWithChangesFromDialog(existingReport);
+						rd = existingReport;
+					}
+					else {
+						//Cancel and do nothing.
+						return;
+					}
+				}
 			}
 			try {
 				
