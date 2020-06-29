@@ -104,4 +104,22 @@ public class SandboxConstraintUtils {
 		return true;
 	}
 
+	public static boolean checkCVAgainstBuyAndSell(final BuyOption buy, final SellOption sell) {
+		if (buy == null || sell == null) {
+			return true;
+		}
+		double[] cvRange = AnalyticsBuilder.getCargoCVRange(sell);
+		if (cvRange == null) {
+			return true;
+		}
+		final double cargoCV = AnalyticsBuilder.getCargoCV(buy);
+		if (cargoCV < cvRange[0]) {
+			return false;
+		}
+		if (cvRange[1] > 0.0 && cargoCV > cvRange[1]) {
+			return false;
+		}
+		return true;
+	}
+
 }

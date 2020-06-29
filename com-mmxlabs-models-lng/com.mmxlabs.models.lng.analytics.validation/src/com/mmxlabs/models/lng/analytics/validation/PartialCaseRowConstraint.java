@@ -87,6 +87,13 @@ public class PartialCaseRowConstraint extends AbstractModelMultiConstraint {
 				deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
 				statuses.add(deco);
 			}
+			boolean cv = getCVValid(partialCaseRow);
+			if (!cv) {
+				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+						(IConstraintStatus) ctx.createFailureStatus(String.format("%s - a combination in the row has mismatching cv limits", viewName)), IConstraintStatus.WARNING);
+				deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
+				statuses.add(deco);
+			}
 			boolean ports = getPortRestrictionsValid(partialCaseRow);
 			if (!ports) {
 				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
@@ -148,6 +155,18 @@ public class PartialCaseRowConstraint extends AbstractModelMultiConstraint {
 							return false;
 						}
 					}
+				}
+			}
+		}
+		return true;
+	}
+
+	private boolean getCVValid(PartialCaseRow row) {
+		for (BuyOption buyOption : row.getBuyOptions()) {
+			for (SellOption sellOption : row.getSellOptions()) {
+				boolean checkVolumeAgainstBuyAndSell = SandboxConstraintUtils.checkCVAgainstBuyAndSell(buyOption, sellOption);
+				if (!checkVolumeAgainstBuyAndSell) {
+					return false;
 				}
 			}
 		}

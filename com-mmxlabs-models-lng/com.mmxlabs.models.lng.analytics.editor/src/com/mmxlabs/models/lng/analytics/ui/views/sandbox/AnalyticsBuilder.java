@@ -1492,6 +1492,34 @@ public class AnalyticsBuilder {
 		return 0;
 	}
 
+	public static double[] getCargoCVRange(final SellOption option) {
+		if (option instanceof SellOpportunity) {
+			SellOpportunity sellOpportunity = (SellOpportunity) option;
+			if (sellOpportunity.getPort() != null) {
+				return new double[] { sellOpportunity.getPort().getMinCvValue(), sellOpportunity.getPort().getMaxCvValue() };
+			}
+		} else if (option instanceof SellReference) {
+			final SellReference sellReference = (SellReference) option;
+			final DischargeSlot slot = sellReference.getSlot();
+			if (slot != null) {
+				return new double[] { slot.getSlotOrDelegateMinCv(), slot.getSlotOrDelegateMaxCv()};
+			}
+		} else if (option instanceof SellMarket) {
+			final SellMarket sellMarket = (SellMarket) option;
+			final SpotMarket market = sellMarket.getMarket();
+			if (market instanceof FOBSalesMarket) {
+				final FOBSalesMarket fobSalesMarket = (FOBSalesMarket) market;
+//				return fobSalesMarket.getCv();
+			} else if (market instanceof DESSalesMarket) {
+				final DESSalesMarket desSalesMarket = (DESSalesMarket) market;
+				if (desSalesMarket.getNotionalPort() != null) {
+					return new double[] { desSalesMarket.getNotionalPort().getMinCvValue(), desSalesMarket.getNotionalPort().getMaxCvValue() };
+				}
+			}
+		}
+		return null;
+	}
+
 	public static int[] getBuyVolumeInMMBTU(final BuyOption buy) {
 		final double cargoCV = AnalyticsBuilder.getCargoCV(buy);
 		if (cargoCV == 0) {
