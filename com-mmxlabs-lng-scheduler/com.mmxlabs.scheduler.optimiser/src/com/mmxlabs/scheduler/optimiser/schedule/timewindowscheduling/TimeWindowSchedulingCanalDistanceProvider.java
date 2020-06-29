@@ -57,7 +57,9 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 			return new TravelRouteData[] { new TravelRouteData(0, 0, 0, 0, 0) };
 		}
 
-		if (isConstrainedPanamaVoyage && distanceProvider.getRouteOptionDirection(from, ERouteOption.PANAMA) == RouteOptionDirection.NORTHBOUND) {
+		if (isConstrainedPanamaVoyage && (distanceProvider.getRouteOptionDirection(from, ERouteOption.PANAMA) == RouteOptionDirection.NORTHBOUND
+				||
+				PanamaBookingHelper.isSouthboundIdleTimeRuleEnabled())) {
 			final int toCanal = panamaBookingHelper.getTravelTimeToCanal(vessel, from, true);
 			if (toCanal != Integer.MAX_VALUE) {
 				int estimatedCanalArrival = voyageStartTime + toCanal;

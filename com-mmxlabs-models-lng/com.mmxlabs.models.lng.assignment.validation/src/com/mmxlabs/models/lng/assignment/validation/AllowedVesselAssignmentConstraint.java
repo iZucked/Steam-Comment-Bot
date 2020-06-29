@@ -87,7 +87,7 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelMultiConstra
 				boolean isVesselRestrictionsPermissive = false;
 
 				if (target instanceof Slot) {
-					final Slot slot = (Slot) target;
+					final Slot<?> slot = (Slot<?>) target;
 					allowedVessels = slot.getSlotOrDelegateVesselRestrictions();
 					isVesselRestrictionsPermissive = slot.getSlotOrDelegateVesselRestrictionsArePermissive();
 

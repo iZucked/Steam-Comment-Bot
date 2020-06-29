@@ -170,12 +170,6 @@
           id="com.mmxlabs.models.lng.port.editor.views.PortView"
           name="Ports">
     </view>
-    <view
-          category="com.mmxlabs.models.lng.views.physical"
-          class="com.mmxlabs.models.lng.port.editor.views.PortGroupView"
-          id="com.mmxlabs.models.lng.port.editor.views.PortGroupView"
-          name="Port Groups">
-    </view>
  </extension>
  <extension
        point="org.eclipse.help.contexts">

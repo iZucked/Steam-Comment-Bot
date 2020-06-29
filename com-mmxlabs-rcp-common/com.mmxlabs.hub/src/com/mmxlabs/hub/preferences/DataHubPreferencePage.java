@@ -18,6 +18,8 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.StringFieldEditor;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -29,6 +31,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
@@ -39,6 +42,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.hub.DataHubActivator;
+import com.mmxlabs.hub.IUpstreamDetailChangedListener;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.auth.AuthenticationManager;
 import com.mmxlabs.hub.auth.BasicAuthenticationManager;
@@ -66,13 +70,24 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 	public DataHubPreferencePage() {
 		super(GRID);
 		setPreferenceStore(DataHubActivator.getDefault().getPreferenceStore());
+		UpstreamUrlProvider.INSTANCE.registerDetailsChangedLister(enableLoginListener);
+	}
+	
+	public void dispose() {
+		UpstreamUrlProvider.INSTANCE.deregisterDetailsChangedLister(enableLoginListener);
+		if (forceBasicAuth != null) {
+			forceBasicAuth.dispose();
+		}
+		if (editor != null) {
+			editor.dispose();
+		}
 	}
 
-	protected static String loginButtonText = "Login";
-	protected static String logoutButtonText = "Logout";
-	protected static Button button;
+	protected String loginButtonText = "Login";
+	protected String logoutButtonText = "Logout";
+	protected Button button;
 
-	public static void setButtonText() {
+	public void setButtonText() {
 		if (!button.isDisposed()) {
 			if (authenticationManager.isAuthenticated()) {
 				button.setText(logoutButtonText);
@@ -82,10 +97,48 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 		}
 	}
 
+	protected Label noteLabel;
+
+	void showNoteLabel() {
+		noteLabel.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).create());
+	}
+
+	protected BooleanFieldEditor forceBasicAuth;
+
+	protected StringFieldEditor editor;
+
+	@Override
+	protected void initialize() {
+		super.initialize();
+		if (authenticationManager.isOAuthEnabled()) {
+			forceBasicAuth.setPropertyChangeListener(disableLogin);
+		}
+		editor.setPropertyChangeListener(disableLogin);
+	}
+
+	IPropertyChangeListener disableLogin = new IPropertyChangeListener() {
+		@Override
+		public void propertyChange(PropertyChangeEvent event) {
+			// display note and disable login button
+			button.setEnabled(false);
+			noteLabel.setVisible(true);
+		}
+	};
+
+	public void enableLogin() {
+		button.setEnabled(true);
+		noteLabel.setVisible(false);
+	}
+	
+	final private IUpstreamDetailChangedListener enableLoginListener = () -> {
+		setButtonText();
+		enableLogin();
+	};
+
 	@Override
 	protected void createFieldEditors() {
 
-		final StringFieldEditor editor = new StringFieldEditor(DataHubPreferenceConstants.P_DATAHUB_URL_KEY, "&URL", getFieldEditorParent());
+		editor = new StringFieldEditor(DataHubPreferenceConstants.P_DATAHUB_URL_KEY, "&URL", getFieldEditorParent());
 		addField(editor);
 
 		button = new Button(getFieldEditorParent(), SWT.PUSH);
@@ -97,26 +150,32 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 			public void widgetSelected(final SelectionEvent se) {
 				UpstreamUrlProvider.INSTANCE.allowAuthenticationDialogToBeOpened.set(true);
 
-				// trigger authentication shell
 				if (button.getText().equals(loginButtonText)) {
-					UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
-					if (authenticationManager.isAuthenticated()) {
-						button.setText("Logout");
+					Shell shell = getShell();
+					if (!authenticationManager.isAuthenticated()) {
+						authenticationManager.run(shell);
 					}
 				} else if (button.getText().equals(logoutButtonText)) {
 					authenticationManager.logout(getShell());
-					UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
-					if (!authenticationManager.isAuthenticated()) {
-						button.setText("Login");
-					}
 				}
+
+				if (authenticationManager.isAuthenticated()) {
+					button.setText("Logout");
+				} else {
+					button.setText("Login");
+				}
+
+				// refresh datahub service logged in state
+				UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
 			}
 		});
 
 		setButtonText();
 
-		BooleanFieldEditor forceBasicAuth = new BooleanFieldEditor(DataHubPreferenceConstants.P_FORCE_BASIC_AUTH, "&Force local authentication", getFieldEditorParent());
-		addField(forceBasicAuth);
+		if (authenticationManager.isOAuthEnabled()) {
+			forceBasicAuth = new BooleanFieldEditor(DataHubPreferenceConstants.P_FORCE_BASIC_AUTH, "&Force local authentication", getFieldEditorParent());
+			addField(forceBasicAuth);
+		}
 
 		addField(new BooleanFieldEditor(DataHubPreferenceConstants.P_ENABLE_BASE_CASE_SERVICE_KEY, "&Base case sharing", getFieldEditorParent()));
 		if (LicenseFeatures.isPermitted("features:hub-team-folder")) {
@@ -349,7 +408,8 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 			}
 		});
 
-		final Label noteLabel = new Label(getFieldEditorParent(), SWT.FILL);
+		noteLabel = new Label(getFieldEditorParent(), SWT.FILL);
+		noteLabel.setVisible(false);
 		noteLabel.setText("Note: changes must be applied to take effect");
 		noteLabel.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).create());
 	}

@@ -6,8 +6,11 @@ package com.mmxlabs.lingo.reports.preferences;
 
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.preference.ComboFieldEditor;
+import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IntegerFieldEditor;
+import org.eclipse.jface.preference.ListEditor;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -40,27 +43,66 @@ public class ReportsPreferencesPage extends FieldEditorPreferencePage implements
 	 */
 	@Override
 	public void createFieldEditors() {
+	
+		final Label allSection = new Label(getFieldEditorParent(), SWT.BOLD);
+		allSection.setText("All");
+		allSection.setFont(JFaceResources.getFontRegistry().getBold(JFaceResources.DIALOG_FONT));
+		GridData gd3 = new GridData(GridData.FILL_HORIZONTAL);
+	    gd3.horizontalSpan = 2;
+		allSection.setLayoutData(gd3);
+	
 		final GridDataFactory labelLayoutData = GridDataFactory.fillDefaults().span(2,1).hint(200,SWT.DEFAULT);
-		{
-			final Label label = new Label(getFieldEditorParent(), SWT.WRAP);
-			label.setText("Enter the leeway value (in days) for tight journeys. If a vessel travelling at service speed could not complete a particular journey in the allocated time (taking idle time into account) with that many days to spare, it is considered 'tight'.");
-			label.setLayoutData(labelLayoutData.create());
-			final IntegerFieldEditor leeway = new IntegerFieldEditor(PreferenceConstants.P_LEEWAY_DAYS, "&Leeway in days:", getFieldEditorParent());
-			addField(leeway);
-		}
-		// Spacer to separate the controls
-		final Label spacer = new Label(getFieldEditorParent(), SWT.NONE);
-		{
-			final Label label = new Label(getFieldEditorParent(), SWT.WRAP);
-			label.setText("Choose the format for the event duration columns");
-			label.setLayoutData(labelLayoutData.create());
+		addDurationFormatPreferences(labelLayoutData);
+		
+	    Label separator1 = new Label(getFieldEditorParent(), SWT.HORIZONTAL | SWT.SEPARATOR);
+	    GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+	    gd.horizontalSpan = 2;
+	    separator1.setLayoutData(gd);
+	    
+		final Label scheduleSection = new Label(getFieldEditorParent(), SWT.BOLD);
+		scheduleSection.setText("Schedule");
+		scheduleSection.setFont(JFaceResources.getFontRegistry().getBold(JFaceResources.DIALOG_FONT));
+		GridData gd2 = new GridData(GridData.FILL_HORIZONTAL);
+	    gd2.horizontalSpan = 2;
+		scheduleSection.setLayoutData(gd2);
+		
+		addLeewayDaysPreferences(labelLayoutData);
+		
+	    Label separator2 = new Label(getFieldEditorParent(), SWT.HORIZONTAL | SWT.SEPARATOR);
+	    separator2.setLayoutData(gd);
+	    
+		final Label incomeStatementSection = new Label(getFieldEditorParent(), SWT.BOLD);
+		incomeStatementSection.setText("Income statement");
+		incomeStatementSection.setLayoutData(labelLayoutData.create());
+		incomeStatementSection.setFont(JFaceResources.getFontRegistry().getBold(JFaceResources.DIALOG_FONT));
+			
+		addIncomeStatementRegionsMultilineTextBox();
+	}
 
-			final String[][] durationValues = new String[][] { //
-					{ "Days and  hours (1:12)", Formatters.DurationMode.DAYS_HOURS_COLON.name() }, //
-					{ "Days and hours (1d 12h)", Formatters.DurationMode.DAYS_HOURS_HUMAN.name() }, //
-					{ "Days to 1 d.p. (1.5)", Formatters.DurationMode.DECIMAL.name() } };
-			addField(new ComboFieldEditor(PreferenceConstants.P_REPORT_DURATION_FORMAT, "&Duration format:", durationValues, getFieldEditorParent()));
-		}
+	private void addIncomeStatementRegionsMultilineTextBox() {
+		addField(new MultiLineTextFieldEditor(PreferenceConstants.REPORT_REGIONS_LIST, "&Regions:", getFieldEditorParent()));
+	}
+
+	private void addLeewayDaysPreferences(final GridDataFactory labelLayoutData) {
+		final String tooltip = "Any journey that cannot be completed at service speed in the available time with this leeway number of days to spare, is considered tight.";
+		//final Label label = new Label(getFieldEditorParent(), SWT.WRAP);
+		//label.setLayoutData(labelLayoutData.create());
+		final IntegerFieldEditor leeway = new IntegerFieldEditor(PreferenceConstants.P_LEEWAY_DAYS, "&Leeway in days for tight journeys:", getFieldEditorParent());
+		leeway.getTextControl(getFieldEditorParent()).setToolTipText(tooltip);
+		leeway.getLabelControl(getFieldEditorParent()).setToolTipText(tooltip);
+		addField(leeway);
+	}
+
+	private void addDurationFormatPreferences(final GridDataFactory labelLayoutData) {
+		//final Label label = new Label(getFieldEditorParent(), SWT.WRAP);
+		//label.setText("Choose the format for the event duration columns");
+		//label.setLayoutData(labelLayoutData.create());
+
+		final String[][] durationValues = new String[][] { //
+			{ "Days and  hours (1:12)", Formatters.DurationMode.DAYS_HOURS_COLON.name() }, //
+			{ "Days and hours (1d 12h)", Formatters.DurationMode.DAYS_HOURS_HUMAN.name() }, //
+			{ "Days to 1 d.p. (1.5)", Formatters.DurationMode.DECIMAL.name() } };
+			addField(new ComboFieldEditor(PreferenceConstants.P_REPORT_DURATION_FORMAT, "&Event duration column format:", durationValues, getFieldEditorParent()));
 	}
 
 	/*

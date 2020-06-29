@@ -17,7 +17,6 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.customizable.CustomReportsRegistry;
-import com.mmxlabs.lingo.reports.customizable.CustomReportsRegistryHook;
 import com.mmxlabs.rcp.common.application.E4ModelHelper;
 
 public class WorkbenchChangeProcessor {
@@ -28,6 +27,15 @@ public class WorkbenchChangeProcessor {
 		// Remove ADP view part
 		E4ModelHelper.removeViewPart("com.mmxlabs.models.lng.adp.presentation.views.ADPEditorView", application, modelService);
 
+		//Removed from *.port.editor/plugin.xml
+		//	<view
+		//        category="com.mmxlabs.models.lng.views.physical"
+		//        class="com.mmxlabs.models.lng.port.editor.views.PortGroupView"
+		//        id="com.mmxlabs.models.lng.port.editor.views.PortGroupView"
+		//        name="Port Groups">
+		//  </view>
+  		E4ModelHelper.removeViewPart("com.mmxlabs.models.lng.port.editor.views.PortGroupView", application, modelService);
+		
 		// Added for 3.8.x to 3.9.0 changes
 		// Rename Diff Tools Perspective to Compare
 		for (final MWindow window : application.getChildren()) {

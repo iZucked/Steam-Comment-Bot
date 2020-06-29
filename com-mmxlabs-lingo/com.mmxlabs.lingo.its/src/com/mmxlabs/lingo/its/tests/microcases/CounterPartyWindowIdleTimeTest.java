@@ -88,6 +88,7 @@ public class CounterPartyWindowIdleTimeTest extends AbstractIdleTimeTests {
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testCounterPartyWindowInPeriod() {
+		// This test it to make sure a counterpart cargo in the period boundary still keeps it's window setting.
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 

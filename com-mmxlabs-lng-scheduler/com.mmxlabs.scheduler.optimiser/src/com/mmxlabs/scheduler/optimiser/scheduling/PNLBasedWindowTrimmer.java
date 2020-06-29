@@ -433,7 +433,8 @@ public class PNLBasedWindowTrimmer {
 
 					// Reclassify Panama Northbound as Relaxed, or Beyond based on new timewindow
 					if (ptwr.getSlotIsNextVoyageConstrainedPanama(slot)) {
-						if (distanceProvider.getRouteOptionDirection(slot.getPort(), ERouteOption.PANAMA) == RouteOptionDirection.NORTHBOUND) {
+						if (distanceProvider.getRouteOptionDirection(slot.getPort(), ERouteOption.PANAMA) == RouteOptionDirection.NORTHBOUND ||
+							panamaBookingsHelper.isSouthboundIdleTimeRuleEnabled()) {
 							final int toCanal = panamaBookingsHelper.getTravelTimeToCanal(vesselAvailability.getVessel(), slot.getPort(), true);
 							if (toCanal != Integer.MAX_VALUE) {
 								int estimatedCanalArrival = t + ptwr.getSlotDuration(slot) + toCanal;

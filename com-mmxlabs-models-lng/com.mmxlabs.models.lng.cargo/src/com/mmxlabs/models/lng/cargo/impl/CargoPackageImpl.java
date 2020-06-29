@@ -2577,6 +2577,16 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getCanalBookings_SouthboundMaxIdleDays() {
+		return (EAttribute)canalBookingsEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getScheduleSpecification() {
 		return scheduleSpecificationEClass;
 	}
@@ -3386,6 +3396,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEAttribute(canalBookingsEClass, CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_NORTHBOUND);
 		createEAttribute(canalBookingsEClass, CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND);
 		createEAttribute(canalBookingsEClass, CANAL_BOOKINGS__NORTHBOUND_MAX_IDLE_DAYS);
+		createEAttribute(canalBookingsEClass, CANAL_BOOKINGS__SOUTHBOUND_MAX_IDLE_DAYS);
 
 		scheduleSpecificationEClass = createEClass(SCHEDULE_SPECIFICATION);
 		createEReference(scheduleSpecificationEClass, SCHEDULE_SPECIFICATION__VESSEL_SCHEDULE_SPECIFICATIONS);
@@ -3860,6 +3871,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEAttribute(getCanalBookings_FlexibleBookingAmountNorthbound(), ecorePackage.getEInt(), "flexibleBookingAmountNorthbound", null, 0, 1, CanalBookings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCanalBookings_FlexibleBookingAmountSouthbound(), ecorePackage.getEInt(), "flexibleBookingAmountSouthbound", null, 0, 1, CanalBookings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCanalBookings_NorthboundMaxIdleDays(), ecorePackage.getEInt(), "northboundMaxIdleDays", null, 0, 1, CanalBookings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCanalBookings_SouthboundMaxIdleDays(), ecorePackage.getEInt(), "southboundMaxIdleDays", null, 0, 1, CanalBookings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(scheduleSpecificationEClass, ScheduleSpecification.class, "ScheduleSpecification", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getScheduleSpecification_VesselScheduleSpecifications(), this.getVesselScheduleSpecification(), null, "vesselScheduleSpecifications", null, 0, -1, ScheduleSpecification.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

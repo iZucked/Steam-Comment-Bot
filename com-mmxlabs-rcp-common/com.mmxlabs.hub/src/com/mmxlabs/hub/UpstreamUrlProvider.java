@@ -146,7 +146,6 @@ public class UpstreamUrlProvider {
 		case DataHubPreferenceConstants.P_FORCE_BASIC_AUTH:
 			forceBasicAuthenticationEnabled = Boolean.TRUE.equals(event.getNewValue());
 			authenticationManager.setForceBasicAuthentication(forceBasicAuthenticationEnabled);
-			DataHubPreferencePage.setButtonText();
 			fireChangedListeners();
 			break;
 		default:
@@ -265,13 +264,14 @@ public class UpstreamUrlProvider {
 			if (!authenticationManager.isAuthenticated()) {
 				DataHubServiceProvider.getInstance().setLoggedInState(false);
 				return false;
+			} else {
+				DataHubServiceProvider.getInstance().setLoggedInState(true);
 			}
 
 			valid = true;
 			currentBaseURL = baseUrl;
 			connectionValid = true;
 
-			DataHubServiceProvider.getInstance().setLoggedInState(true);
 		} catch (final Exception e) {
 			// Ignore...?
 			e.printStackTrace();

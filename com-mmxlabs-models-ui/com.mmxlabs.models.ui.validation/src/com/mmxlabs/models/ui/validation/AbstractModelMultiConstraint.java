@@ -50,12 +50,14 @@ public abstract class AbstractModelMultiConstraint extends AbstractModelConstrai
 		final List<IStatus> statuses = new LinkedList<>();
 
 		final Activator activator = Activator.getDefault();
-		final IExtraValidationContext extraValidationContext;
-		if (activator == null) {
-			// For unit tests outside of OSGi
-			extraValidationContext = new DefaultExtraValidationContext((IScenarioDataProvider) null, false, false);
-		} else {
+		
+		IExtraValidationContext extraValidationContext = null;
+		if (activator != null) {
 			extraValidationContext = activator.getExtraValidationContext();
+		}
+		if (extraValidationContext == null) {
+			// Assume unit test!
+			extraValidationContext = new DefaultExtraValidationContext((IScenarioDataProvider) null, false, false);
 		}
 		final String pluginId = validate(ctx, extraValidationContext, statuses);
 
