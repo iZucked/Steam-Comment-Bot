@@ -18,7 +18,7 @@ public class CustomReportNameValidator implements IInputValidator {
 	
 	@Override
 	public String isValid(String name) {
-		if (!name.replaceAll("[^a-zA-Z0-9 \\._]+", "_").equals(name)) {
+		if (!name.replaceAll("[^a-zA-Z0-9() \\._]+", "_").equals(name)) {
 			return "Report names can only contain charactors and digits.";
 		}
 		
@@ -28,7 +28,7 @@ public class CustomReportNameValidator implements IInputValidator {
 		if (name == null || name.isEmpty()) {
 			return "A name must be set";
 		}
-		if ("Schedule Summary".equals(name.trim())) {
+		if ("Schedule Summary".equalsIgnoreCase(name.trim())) {
 			return "Cannot use this name";
 		}
 		return null;

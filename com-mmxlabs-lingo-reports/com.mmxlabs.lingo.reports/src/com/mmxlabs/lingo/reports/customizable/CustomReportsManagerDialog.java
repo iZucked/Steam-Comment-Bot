@@ -658,6 +658,28 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		}
 	}
 
+	private String getUserCopyName(String currentReportName) {
+		int copyNo = 0;
+		
+		String copyName = currentReportName + " (User Copy)";
+		boolean copyNameFound = false;
+		
+		//Check user folder for name.
+		while (!copyNameFound) {
+			copyNameFound = true;
+			for (CustomReportDefinition crd : this.userReportDefinitions) {
+				if (crd.getName().equalsIgnoreCase(copyName)) {
+					copyNo++;
+					copyName = currentReportName + " (User Copy "+Integer.toString(copyNo)+")";
+					copyNameFound = false;
+					break;
+				}
+			}
+		}
+		
+		return copyName;
+	}
+	
 	private void handleSaveBtn(Event event) {
 		IStructuredSelection selected = this.customReportsViewer.getStructuredSelection();
 		if (selected != null && selected.size() == 1) {
@@ -670,7 +692,8 @@ public class CustomReportsManagerDialog extends TrayDialog {
 				CustomReportDefinition copy = new CustomReportDefinition();
 				
 				copy.setUuid(ScheduleSummaryReport.UUID_PREFIX+UUID.randomUUID().toString());
-				copy.setName(toSave.getName()+" (User Copy)");
+				String copyName = getUserCopyName(toSave.getName());
+				copy.setName(copyName);
 				copy.setType("ScheduleSummaryReport");
 							
 				updateReportDefinitionWithChangesFromDialog(copy);
@@ -702,11 +725,22 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	}
 
 	private void handleCopyBtn(Event event) {	
-		createNewViewDefinition(true, "Copy custom report view");
+		String nameHint = null;
+		if (this.current != null) {
+			nameHint = this.current.getName() + " (Copy)";
+		}
+		createNewViewDefinition(true, "Copy custom report view", nameHint);
 	}
 	
 	private void createNewViewDefinition(boolean initialiseWithSelectedReport, String title) {
-		final InputDialog dialog = new InputDialog(this.getShell(), title, "Choose name for the new custom report.", "<Enter a new view name>",
+		createNewViewDefinition(false, "New custom report view", null);
+	}
+	
+	private void createNewViewDefinition(boolean initialiseWithSelectedReport, String title, String nameHint) {
+		if (nameHint == null) {
+			nameHint =  "<Enter a new view name>";
+		}
+		final InputDialog dialog = new InputDialog(this.getShell(), title, "Choose name for the new custom report.", nameHint,
 				getReportNameValidator());
 	
 		if (dialog.open() == Window.OK) {
