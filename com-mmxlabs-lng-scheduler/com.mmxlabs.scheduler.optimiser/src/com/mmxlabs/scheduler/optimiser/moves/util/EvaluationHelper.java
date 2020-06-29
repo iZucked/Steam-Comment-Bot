@@ -34,6 +34,7 @@ import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.CapacityEvaluatedStateChecker;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPermissionConstraintChecker;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.evaluation.VoyagePlanRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
@@ -136,7 +137,26 @@ public class EvaluationHelper {
 				}
 			}
 
-			if (checker.checkConstraints(currentFullSequences, currentChangedResources) == false) {
+			if (!checker.checkConstraints(currentFullSequences, currentChangedResources)) {
+				// Break out
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public boolean checkConstraintsIngoreNominalRules(@NonNull final ISequences currentFullSequences, @Nullable final Collection<@NonNull IResource> currentChangedResources) {
+		// Apply hard constraint checkers
+		for (final IConstraintChecker checker : constraintCheckers) {
+
+			if (checker instanceof PromptRoundTripVesselPermissionConstraintChecker) {
+				continue;
+			}
+			if (checker instanceof RoundTripVesselPermissionConstraintChecker) {
+				continue;
+			}
+
+			if (!checker.checkConstraints(currentFullSequences, currentChangedResources)) {
 				// Break out
 				return false;
 			}
@@ -182,7 +202,7 @@ public class EvaluationHelper {
 
 		if (checkEvaluatedStateCheckers) {
 			for (final IEvaluatedStateConstraintChecker checker : evaluatedStateConstraintCheckers) {
-				if (checker.checkConstraints(currentRawSequences, currentFullSequences, evaluationState) == false) {
+				if (!checker.checkConstraints(currentRawSequences, currentFullSequences, evaluationState)) {
 					return null;
 				}
 			}

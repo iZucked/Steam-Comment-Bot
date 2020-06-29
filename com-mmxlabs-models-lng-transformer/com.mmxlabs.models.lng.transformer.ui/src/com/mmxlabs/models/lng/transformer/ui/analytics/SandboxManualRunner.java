@@ -207,7 +207,7 @@ public class SandboxManualRunner {
 
 			final IModifiableSequences fullSequences = sequencesManipulator.createManipulatedSequences(rawSequences);
 
-			return evaluationHelper.checkConstraints(fullSequences, null);
+			return evaluationHelper.checkConstraintsIngoreNominalRules(fullSequences, null);
 		}
 	}
 

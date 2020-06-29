@@ -176,7 +176,7 @@ public class ScheduleSpecificationTransformer {
 
 			final List<ISequenceElement> elements = new LinkedList<>();
 			for (final SlotSpecification slotSpecification : nonShippedCargoSpecification.getSlotSpecifications()) {
-				final Slot e_slot = slotSpecification.getSlot();
+				final Slot<?> e_slot = slotSpecification.getSlot();
 				final IPortSlot o_slot = mem.getOptimiserObjectNullChecked(e_slot, IPortSlot.class);
 				final ISequenceElement e = portSlotProvider.getElement(o_slot);
 				elements.add(e);

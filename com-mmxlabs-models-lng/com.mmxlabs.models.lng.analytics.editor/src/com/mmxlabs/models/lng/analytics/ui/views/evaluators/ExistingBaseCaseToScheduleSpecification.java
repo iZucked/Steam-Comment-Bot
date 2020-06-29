@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -93,11 +94,19 @@ public class ExistingBaseCaseToScheduleSpecification {
 		this.mapper = mapper;
 	}
 
+	/**
+	 * Take the current scenario starting point and generate a {@link ScheduleSpecification} from it applying the cases defined in the {@link BaseCase}.
+	 * 
+	 * @param baseCase
+	 * @return
+	 */
 	public ScheduleSpecification generate(final BaseCase baseCase) {
 
 		final ModelDistanceProvider modelDistanceProvider = scenarioDataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
 
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioDataProvider);
+
+		// Start by creating maps of current slots to cargo allocations and cargoes to vessels of the CargoModel state
 
 		final Map<Slot<?>, AssignableElement> slotToCargoMap = new HashMap<>();
 		final Collection<LoadSlot> unusedLoads = new LinkedHashSet<>();
@@ -125,6 +134,7 @@ public class ExistingBaseCaseToScheduleSpecification {
 		final Map<VesselAvailability, CollectedAssignment> vaMap = new HashMap<>();
 		final Map<Pair<CharterInMarket, Integer>, CollectedAssignment> mktMap = new HashMap<>();
 
+		// Mapping of cargo to vessel assignment (or null if non-shipped)
 		final Map<AssignableElement, @Nullable CollectedAssignment> cargoToCollectedAssignmentMap = new HashMap<>();
 		final List<CollectedAssignment> assignments = AssignmentEditorHelper.collectAssignments(cargoModel, portModel, spotMarketsModel, modelDistanceProvider);
 
@@ -142,6 +152,7 @@ public class ExistingBaseCaseToScheduleSpecification {
 					final VesselEvent vesselEvent = (VesselEvent) assignedObject;
 					cargoToCollectedAssignmentMap.put(vesselEvent, seq);
 				}
+
 			}
 		}
 
@@ -152,6 +163,7 @@ public class ExistingBaseCaseToScheduleSpecification {
 			}
 		}
 
+		// Now process the base case and update cargo and vessel allocations. Use a FakeCargo to represent a Cargo (this does not have containment side-effects).
 		{
 			// Function to clean up an existing allocation
 			Consumer<Slot<?>> removeExistingAssignment = slot -> {
@@ -161,12 +173,13 @@ public class ExistingBaseCaseToScheduleSpecification {
 					final CollectedAssignment collectedAssignment = cargoToCollectedAssignmentMap.get(cargo);
 					if (collectedAssignment != null) {
 						collectedAssignment.getAssignedObjects().remove(cargo);
-						cargoToCollectedAssignmentMap.remove(cargo);
 					}
+					cargoToCollectedAssignmentMap.remove(cargo);
 				}
 			};
 
 			for (final BaseCaseRow row : baseCase.getBaseCase()) {
+				// This row has a single open buy or sell position on it.
 				if (row.getVesselEventOption() == null
 						&& (row.getBuyOption() == null || row.getSellOption() == null || row.getBuyOption() instanceof OpenBuy || row.getSellOption() instanceof OpenSell)) {
 					Slot<?> slot = null;
@@ -279,8 +292,11 @@ public class ExistingBaseCaseToScheduleSpecification {
 
 							mapper.addMapping(roundTripShippingOption, newMarket);
 						}
-						final CollectedAssignment ca = new CollectedAssignment(Collections.singletonList(assignableElement), newMarket, -1, portModel, modelDistanceProvider, null);
-						mktMap.put(new Pair<>(newMarket, -1), ca);
+
+						final CharterInMarket pMarket = newMarket;
+						Pair<CharterInMarket, Integer> key = new Pair<>(pMarket, -1);
+						CollectedAssignment ca = mktMap.computeIfAbsent(key, k -> new CollectedAssignment(new LinkedList<>(), pMarket, -1, portModel, modelDistanceProvider, null));
+						ca.getAssignedObjects().add(assignableElement);
 						cargoToCollectedAssignmentMap.put(assignableElement, ca);
 
 					} else if (shipping instanceof ExistingCharterMarketOption) {
@@ -410,7 +426,7 @@ public class ExistingBaseCaseToScheduleSpecification {
 
 		{
 			final ScheduleSpecification scheduleSpecification = CargoFactory.eINSTANCE.createScheduleSpecification();
-			final Set<Slot> seenSlots = new HashSet<>();
+			final Set<Slot<?>> seenSlots = new HashSet<>();
 			final Set<AssignableElement> seenCargoes = new HashSet<>();
 			final Set<VesselEvent> seenEvents = new HashSet<>();
 
@@ -423,6 +439,7 @@ public class ExistingBaseCaseToScheduleSpecification {
 						assert cargo.getCargoType() == CargoType.FLEET;
 
 						for (final Slot<?> slot : cargo.getSortedSlots()) {
+							assert slot != null;
 							final SlotSpecification eventSpecification = CargoFactory.eINSTANCE.createSlotSpecification();
 							eventSpecification.setSlot(slot);
 							vesselScheduleSpecification.getEvents().add(eventSpecification);
@@ -434,6 +451,7 @@ public class ExistingBaseCaseToScheduleSpecification {
 						final FakeCargo cargo = (FakeCargo) assignedObject;
 
 						for (final Slot<?> slot : cargo.getSlots()) {
+							assert slot != null;
 							final SlotSpecification eventSpecification = CargoFactory.eINSTANCE.createSlotSpecification();
 							eventSpecification.setSlot(slot);
 							vesselScheduleSpecification.getEvents().add(eventSpecification);
@@ -475,7 +493,9 @@ public class ExistingBaseCaseToScheduleSpecification {
 			}
 
 			final Set<AssignableElement> elements = new LinkedHashSet<>();
-			elements.addAll(cargoModel.getCargoes());
+			// 2020-06-29 - Comment out this line as we re-added existing cargoes
+			// elements.addAll(cargoModel.getCargoes());
+			
 			elements.addAll(cargoToCollectedAssignmentMap.keySet());
 			elements.removeAll(seenCargoes);
 
@@ -535,14 +555,30 @@ public class ExistingBaseCaseToScheduleSpecification {
 					}
 				} else if (assignedObject instanceof FakeCargo) {
 					final FakeCargo cargo = (FakeCargo) assignedObject;
-
 					final NonShippedCargoSpecification nonShipedCargoSpecification = CargoFactory.eINSTANCE.createNonShippedCargoSpecification();
-					for (final Slot slot : cargo.getSlots()) {
+
+					boolean nonShipped = false;
+
+					for (final Slot<?> slot : cargo.getSlots()) {
+						assert slot != null;
 						final SlotSpecification eventSpecification = CargoFactory.eINSTANCE.createSlotSpecification();
 						eventSpecification.setSlot(slot);
 						nonShipedCargoSpecification.getSlotSpecifications().add(eventSpecification);
 						seenSlots.add(slot);
+
+						if (slot instanceof LoadSlot) {
+							nonShipped |= ((LoadSlot) slot).isDESPurchase();
+						}
+						if (slot instanceof DischargeSlot) {
+							nonShipped |= ((DischargeSlot) slot).isFOBSale();
+						}
 					}
+					if (!nonShipped) {
+						// Sanity check!
+						CollectedAssignment collectedAssignment = cargoToCollectedAssignmentMap.get(cargo);
+						throw new IllegalStateException("Shipped cargo in non-shipped code path");
+					}
+
 					seenCargoes.add(cargo);
 					scheduleSpecification.getNonShippedCargoSpecifications().add(nonShipedCargoSpecification);
 					// Create non-shipped spec.
