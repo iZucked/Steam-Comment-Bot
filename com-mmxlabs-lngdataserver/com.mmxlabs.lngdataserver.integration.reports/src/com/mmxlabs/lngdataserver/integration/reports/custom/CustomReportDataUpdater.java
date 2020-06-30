@@ -211,10 +211,13 @@ public class CustomReportDataUpdater {
 			if (m != null && m.isAfter(lastModified)) {
 				final Pair<String, Instant> recordsPair = client.getRecords();
 				if (recordsPair != null) {
-					purgeLocalRecords();
+					final File recordsFile = new File(basePath.getAbsolutePath() + "/records.json");
+					if (recordsFile.exists()) {
+						recordsFile.delete();
+					}
 					final List<CustomReportDataRecord> records = client.parseRecordsJSONData(recordsPair.getFirst());
 					update(records);
-					Files.write(recordsPair.getFirst(), new File(basePath.getAbsolutePath() + "/records.json"), Charsets.UTF_8);
+					Files.write(recordsPair.getFirst(), recordsFile, Charsets.UTF_8);
 					lastModified = recordsPair.getSecond();
 				}
 			}
