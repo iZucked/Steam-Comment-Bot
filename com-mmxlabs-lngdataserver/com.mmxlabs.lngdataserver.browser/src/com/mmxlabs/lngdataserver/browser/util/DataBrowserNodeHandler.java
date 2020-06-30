@@ -87,7 +87,12 @@ public class DataBrowserNodeHandler implements DataExtension {
 				LOGGER.error("Error retrieving " + name.toLowerCase() + " versions");
 			}
 			// register consumer to update on new version
-			repository.registerLocalVersionListener(() -> dataRoot.getActionHandler().refreshLocal());
+			repository.registerLocalVersionListener(() -> {
+				final IDataBrowserActionsHandler handler = dataRoot.getActionHandler();
+				if (handler != null) {
+					handler.refreshLocal();
+				}
+			});
 			dataRoot.getActionHandler().refreshLocal();
 		}
 	}
