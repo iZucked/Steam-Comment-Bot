@@ -165,7 +165,7 @@
  <extension
        point="org.eclipse.ui.views">
     <view
-          category="com.mmxlabs.models.lng.views.physical"
+          category="com.mmxlabs.lngdataserver.views.dataserver"
           class="com.mmxlabs.models.lng.port.editor.views.PortView"
           id="com.mmxlabs.models.lng.port.editor.views.PortView"
           name="Ports">
