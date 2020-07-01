@@ -8,7 +8,7 @@
 <?eclipse version="3.4"?>
 <plugin>
 
-   <extension
+  <!-- <extension
          point="org.eclipse.ui.views">
       <category
             name="Job Manager"
@@ -20,6 +20,6 @@
             category="com.mmxlabs.jobmanager"
             class="com.mmxlabs.jobmanager.views.JobManagerView"
             id="com.mmxlabs.jobcontroller.views.JobManager">
-      </view>
-   </extension>
+      </view> 
+   </extension> -->
 </plugin>

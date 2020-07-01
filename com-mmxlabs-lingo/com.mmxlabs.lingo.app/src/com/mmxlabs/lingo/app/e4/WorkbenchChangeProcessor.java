@@ -64,6 +64,9 @@ public class WorkbenchChangeProcessor {
 		}
 		// View no longer present
 		E4ModelHelper.removeViewPart("com.mmxlabs.lngdataserver.integration.ui.WebNavigatorView", application, modelService);
+
+		//Remove Job Manager.
+		E4ModelHelper.removeViewPart("com.mmxlabs.jobcontroller.views.JobManager", application, modelService);
 		
 		CustomReportsRegistry.getInstance().removeDeletedViews(application, modelService);
 	}
