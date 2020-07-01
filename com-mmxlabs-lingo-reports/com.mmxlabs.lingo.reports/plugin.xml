@@ -43,7 +43,9 @@
       </category>
       <category
             id="com.mmxlabs.scheduleview"
-            name="Schedule Views">
+            name="Schedule">
+<!-- parentCategories don't seem to work            parentCategory="com.mmxlabs.shiplingo.platform.reports">
+-->
       </category>
       <view
             name="Volume Tracking"
@@ -179,6 +181,7 @@
             restorable="true">
       </view>
       <view
+            category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.lingo.reports.views.standard.pnlcalcs.PNLCalcsReport"
             icon="icons/cview16/exec_statistic_view.gif"
             id="com.mmxlabs.lingo.reports.views.standard.pnlcalcs.PNLCalcsReport"
