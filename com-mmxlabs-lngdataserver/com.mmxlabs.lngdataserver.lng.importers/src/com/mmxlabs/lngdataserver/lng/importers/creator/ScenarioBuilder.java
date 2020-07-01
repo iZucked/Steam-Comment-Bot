@@ -365,13 +365,18 @@ public class ScenarioBuilder {
 
 		{
 			final List<AtoBviaCLookupRecord> distanceRecords;
+			final List<AtoBviaCLookupRecord> manualDistanceRecords;
 
 			try (InputStream inputStream = ScenarioBuilder.class.getResourceAsStream("/distances.json")) {
 				distanceRecords = mapper.readValue(inputStream, new TypeReference<List<AtoBviaCLookupRecord>>() {
 				});
 			}
+			try (InputStream inputStream = ScenarioBuilder.class.getResourceAsStream("/distances-manual.json")) {
+				manualDistanceRecords = mapper.readValue(inputStream, new TypeReference<List<AtoBviaCLookupRecord>>() {
+				});
+			}
 
-			final CompoundCommand command = DistancesLinesToScenarioCopier.getUpdateCommand(editingDomain, portModel, locationsVersion, distanceRecords);
+			final CompoundCommand command = DistancesLinesToScenarioCopier.getUpdateCommand(editingDomain, portModel, locationsVersion, distanceRecords, manualDistanceRecords);
 			command.execute();
 		}
 

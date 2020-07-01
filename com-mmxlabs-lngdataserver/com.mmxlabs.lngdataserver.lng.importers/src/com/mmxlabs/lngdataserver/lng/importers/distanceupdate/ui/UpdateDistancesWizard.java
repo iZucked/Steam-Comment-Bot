@@ -22,12 +22,14 @@ public class UpdateDistancesWizard extends Wizard implements IImportWizard {
 	private ModelReference modelReference;
 	private LocationsVersion locationsEntry;
 	private List<AtoBviaCLookupRecord> distancesEntry;
+	private List<AtoBviaCLookupRecord> manualRecords;
 
-	public UpdateDistancesWizard(ModelReference modelReference, LocationsVersion locationsVersion, List<AtoBviaCLookupRecord> distanceRecords) {
+	public UpdateDistancesWizard(ModelReference modelReference, LocationsVersion locationsVersion, List<AtoBviaCLookupRecord> distanceRecords, List<AtoBviaCLookupRecord> manualRecords) {
 		super();
 		this.modelReference = modelReference;
 		this.locationsEntry = locationsVersion;
 		this.distancesEntry = distanceRecords;
+		this.manualRecords = manualRecords;
 		this.setNeedsProgressMonitor(true);
 	}
 
@@ -45,7 +47,7 @@ public class UpdateDistancesWizard extends Wizard implements IImportWizard {
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		setWindowTitle("Distances update wizard"); // NON-NLS-1
 		setNeedsProgressMonitor(true);
-		portPage = new UpdatePortsPage("Review of port and distance changes", modelReference, locationsEntry, distancesEntry);
+		portPage = new UpdatePortsPage("Review of port and distance changes", modelReference, locationsEntry, distancesEntry, manualRecords);
 	}
 
 	@Override

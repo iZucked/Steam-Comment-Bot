@@ -56,16 +56,19 @@ public class UpdatePortsPage extends WizardPage {
 	final ExtensibleURIConverterImpl uc = new ExtensibleURIConverterImpl();
 	private LocationsVersion locationRecords;
 	private List<AtoBviaCLookupRecord> distanceRecords;
+	private List<AtoBviaCLookupRecord> manualRecords;
 
 	private ModelReference modelReference;
 
 	private List<UpdateItem> steps;
 
-	protected UpdatePortsPage(final String pageName, ModelReference modelReference, LocationsVersion locationRecords, List<AtoBviaCLookupRecord> distanceRecords) {
+
+	protected UpdatePortsPage(final String pageName, ModelReference modelReference, LocationsVersion locationRecords, List<AtoBviaCLookupRecord> distanceRecords, List<AtoBviaCLookupRecord> manualRecords) {
 		super(pageName);
 		this.modelReference = modelReference;
 		this.locationRecords = locationRecords;
 		this.distanceRecords = distanceRecords;
+		this.manualRecords = manualRecords;
 
 		setTitle("Review changes");
 	}
@@ -267,7 +270,7 @@ public class UpdatePortsPage extends WizardPage {
 							final EditingDomain editingDomain = modelReference.getEditingDomain();
 
 							{
-								final CompoundCommand command = DistancesLinesToScenarioCopier.getUpdateCommand(editingDomain, portModel, locationRecords, distanceRecords);
+								final CompoundCommand command = DistancesLinesToScenarioCopier.getUpdateCommand(editingDomain, portModel, locationRecords, distanceRecords, manualRecords);
 								monitor.worked(1);
 								monitor.subTask("Apply new matrices");
 								if (!command.canExecute()) {

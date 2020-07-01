@@ -12,6 +12,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.BiFunction;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -19,6 +21,7 @@ import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +44,7 @@ public class DistancesLinesToScenarioCopier {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DistancesLinesToScenarioCopier.class);
 
 	public static CompoundCommand getUpdateCommand(final @NonNull EditingDomain editingDomain, final @NonNull PortModel portModel, LocationsVersion locationsVersion,
-			final @NonNull List<AtoBviaCLookupRecord> records) {
+			final @NonNull List<AtoBviaCLookupRecord> records, List<AtoBviaCLookupRecord> manualRecords) {
 
 		final CompoundCommand cmd = new CompoundCommand("Update distances");
 
@@ -114,9 +117,11 @@ public class DistancesLinesToScenarioCopier {
 				final Map<Pair<String, String>, AtoBviaCLookupRecord> recordsMap = records.stream() // .
 						.collect(Collectors.toMap(r -> Pair.of(r.getFrom(), r.getTo()), r -> r));
 
-				// for (AtoBviaCLookupRecord record : records) {
-				//// record.get
-				// }
+				final Map<Pair<String, String>, AtoBviaCLookupRecord> manualRecordsMap = manualRecords == null ? new HashMap<>()
+						: manualRecords.stream() // .
+								.collect(Collectors.toMap(r -> Pair.of(r.getFrom(), r.getTo()), r -> r));
+
+				BiFunction<String, String, @Nullable AtoBviaCLookupRecord> lookupFunction = makeLookupFunction(recordsMap, manualRecordsMap, fallbackMapping);
 
 				{
 					final Route route = routeMap.get(RouteOption.DIRECT);
@@ -142,8 +147,10 @@ public class DistancesLinesToScenarioCopier {
 								}
 
 								final Pair<Port, Port> portObjectPair = Pair.of(from, to);
-								final Pair<String, String> portIdPair = Pair.of(fromID, toID);
+								final @Nullable String fallbackFromID = fallbackMapping.get(fromID);
+								final @Nullable String fallbackToID = fallbackMapping.get(toID);
 
+								// Check primary id match
 								if (Objects.equals(fromID, toID)) {
 									// Different ports, same upstream code.
 									final RouteLine rl = PortFactoryImpl.eINSTANCE.createRouteLine();
@@ -160,43 +167,31 @@ public class DistancesLinesToScenarioCopier {
 									continue;
 								}
 
-								AtoBviaCLookupRecord record = recordsMap.get(portIdPair);
-								if (record == null || record.getErrorCode() != null || record.getDistance() < 1.0) {
-									// Use reverse distance if this is valid
-									final AtoBviaCLookupRecord altRecord = recordsMap.get(Pair.of(toID, fromID));
-									if (altRecord != null && altRecord.getErrorCode() == null && altRecord.getDistance() >= 0.0) {
-										record = altRecord;
-									}
-								}
-
-								if (record == null || record.getErrorCode() != null || record.getDistance() < 1.0) {
-
-									if (fallbackMapping.containsKey(fromID)) {
-										final AtoBviaCLookupRecord altRecord = recordsMap.get(Pair.of(fallbackMapping.get(fromID), toID));
-										if (altRecord != null && altRecord.getErrorCode() == null && altRecord.getDistance() >= 0.0) {
-											record = altRecord;
-										}
-									}
-								}
-								if (record == null || record.getErrorCode() != null || record.getDistance() < 1.0) {
-
-									if (fallbackMapping.containsKey(toID)) {
-										final AtoBviaCLookupRecord altRecord = recordsMap.get(Pair.of(fromID, fallbackMapping.get(toID)));
-										if (altRecord != null && altRecord.getErrorCode() == null && altRecord.getDistance() >= 0.0) {
-											record = altRecord;
-										}
-									}
-								}
-
+								AtoBviaCLookupRecord record = lookupFunction.apply(fromID, toID);
 								if (record == null) {
+
+									// No distance found, but maybe with the fallback id we have the same port, if so set the distance to zero rather than just missing
+									// We don't do this in the earlier check in case we do have a distance between original id an fallback id that we can use.
+									if ((fallbackFromID != null && Objects.equals(fallbackFromID, toID)) //
+											|| (fallbackToID != null && Objects.equals(fromID, fallbackToID)) //
+											|| (fallbackFromID != null && fallbackToID != null && Objects.equals(fallbackFromID, fallbackToID)) //
+									) {
+										// Different ports, same upstream code.
+										final RouteLine rl = PortFactoryImpl.eINSTANCE.createRouteLine();
+										rl.setFrom(from);
+										rl.setTo(to);
+
+										rl.setDistance(0.0);
+										rl.setErrorCode(null);
+										toAdd.add(rl);
+
+										directMatrix.put(portObjectPair, rl.getDistance());
+										directMatrixLookup.put(portObjectPair, rl);
+									}
+
 									continue;
 								}
-								if (record.getErrorCode() != null) {
-									continue;
-								}
-								if (record.getDistance() < 1.0) {
-									continue;
-								}
+
 								final RouteLine rl = PortFactoryImpl.eINSTANCE.createRouteLine();
 								rl.setFrom(from);
 								rl.setTo(to);
@@ -257,16 +252,6 @@ public class DistancesLinesToScenarioCopier {
 				}
 			}
 		}
-
-		// VersionRecord record = MMXCoreFactory.eINSTANCE.createVersionRecord();
-		// record.setVersion(newID);
-		// record.setCreatedBy(UsernameProvider.getUsername());
-		// record.setCreatedAt(Instant.now());
-		// final Command cmd = SetCommand.create(editingDomain, modelRoot, versionRecordFeature, record);
-		// VersionRecord record = portModel.getDistanceVersionRecord();
-		// cmd.append(SetCommand.create(editingDomain, record, MMXCorePackage.Literals.VERSION_RECORD__CREATED_BY, version.getCreatedBy()));
-		// cmd.append(SetCommand.create(editingDomain, record, MMXCorePackage.Literals.VERSION_RECORD__CREATED_AT, version.getCreatedAt()));
-		// cmd.append(SetCommand.create(editingDomain, record, MMXCorePackage.Literals.VERSION_RECORD__VERSION, version.getIdentifier()));
 
 		return cmd;
 
@@ -378,6 +363,75 @@ public class DistancesLinesToScenarioCopier {
 			}
 		}
 		return toAdd;
+	}
+
+	private static BiFunction<String, String, @Nullable AtoBviaCLookupRecord> makeLookupFunction(Map<Pair<String, String>, AtoBviaCLookupRecord> recordsMap, //
+			Map<Pair<String, String>, AtoBviaCLookupRecord> manualRecordsMap, Map<String, String> fallbackIDMapping) {
+
+		// Test for a valid and usable distance record
+		Predicate<AtoBviaCLookupRecord> isValidRecord = record -> record != null && record.getErrorCode() == null && record.getDistance() >= 0.0;
+
+		// Returns the record if usable, otherwise null
+		BiFunction<String, String, AtoBviaCLookupRecord> getIfValid = (fromID, toID) -> {
+			// Try primary ID pair first of all.
+			AtoBviaCLookupRecord record = recordsMap.get(Pair.of(fromID, toID));
+			if (isValidRecord.test(record)) {
+				return record;
+			}
+			// Try reverse distance
+			record = recordsMap.get(Pair.of(toID, fromID));
+			if (isValidRecord.test(record)) {
+				return record;
+			}
+
+			//// Try again with manual overrides
+
+			// Try primary ID pair first of all.
+
+			record = manualRecordsMap.get(Pair.of(fromID, toID));
+			if (isValidRecord.test(record)) {
+				return record;
+			}
+			// Try reverse distance
+			record = manualRecordsMap.get(Pair.of(toID, fromID));
+			if (isValidRecord.test(record)) {
+				return record;
+			}
+			return null;
+		};
+
+		return (fromID, toID) -> {
+
+			// Try primary ID pair first of all.
+			AtoBviaCLookupRecord record = getIfValid.apply(fromID, toID);
+			if (record != null) {
+				return record;
+			}
+			if (fallbackIDMapping.containsKey(fromID)) {
+				String fallbackFromID = fallbackIDMapping.get(fromID);
+				record = getIfValid.apply(fallbackFromID, toID);
+				if (record != null) {
+					return record;
+				}
+			}
+			if (fallbackIDMapping.containsKey(toID)) {
+				String fallbackToID = fallbackIDMapping.get(toID);
+				record = getIfValid.apply(fromID, fallbackToID);
+				if (record != null) {
+					return record;
+				}
+			}
+			if (fallbackIDMapping.containsKey(fromID) && fallbackIDMapping.containsKey(toID)) {
+				String fallbackFromID = fallbackIDMapping.get(fromID);
+				String fallbackToID = fallbackIDMapping.get(toID);
+
+				record = getIfValid.apply(fallbackFromID, fallbackToID);
+				if (record != null) {
+					return record;
+				}
+			}
+			return null;
+		};
 	}
 
 }

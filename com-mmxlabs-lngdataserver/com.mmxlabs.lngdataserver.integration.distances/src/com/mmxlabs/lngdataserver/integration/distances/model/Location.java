@@ -26,6 +26,8 @@ public class Location {
 	private Map<String, Identifier> otherIdentifiers;
 
 	private String name;
+	
+	private String notes;
 
 	private List<String> aliases;
 
@@ -113,5 +115,13 @@ public class Location {
 		int result = mmxId.hashCode();
 		result = 31 * result + name.hashCode();
 		return result;
+	}
+
+	public String getNotes() {
+		return notes;
+	}
+
+	public void setNotes(String notes) {
+		this.notes = notes;
 	}
 }

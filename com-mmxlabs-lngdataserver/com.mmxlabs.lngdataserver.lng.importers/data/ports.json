@@ -2963,6 +2963,7 @@
   "mmxId" : "L_KR_Borye",
   "virtual" : false,
   "name" : "Boryeong",
+  "notes" : "This is currenty Gunsan, but should really be Ko Jung (KR0058)",
   "geographicPoint" : {
     "lat" : 35.994998931884766,
     "lon" : 126.70916748046875,

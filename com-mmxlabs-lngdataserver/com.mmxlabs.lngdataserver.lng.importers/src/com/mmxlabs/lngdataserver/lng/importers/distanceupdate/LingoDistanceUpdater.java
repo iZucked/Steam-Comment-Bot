@@ -67,7 +67,7 @@ public class LingoDistanceUpdater {
 			distanceRecords = mapper.readValue(inputStream, TYPE_LIST);
 		}
 
-		importIntoScenario(scenarioInstance, locationsVersion, distanceRecords);
+		importIntoScenario(scenarioInstance, locationsVersion, distanceRecords, null);
 	}
 
 	public static void importLocalIntoScenario(final ScenarioInstance scenarioInstance) throws IOException {
@@ -78,17 +78,21 @@ public class LingoDistanceUpdater {
 
 		final LocationsVersion locationsVersion;
 		final List<AtoBviaCLookupRecord> distanceRecords;
+		final List<AtoBviaCLookupRecord> manualDistanceRecords;
 		try (InputStream inputStream = LingoDistanceUpdater.class.getResourceAsStream("/ports.json")) {
 			locationsVersion = mapper.readValue(inputStream, LocationsVersion.class);
 		}
 		try (InputStream inputStream = LingoDistanceUpdater.class.getResourceAsStream("/distances.json")) {
 			distanceRecords = mapper.readValue(inputStream, TYPE_LIST);
 		}
+		try (InputStream inputStream = LingoDistanceUpdater.class.getResourceAsStream("/distances-manual.json")) {
+			manualDistanceRecords = mapper.readValue(inputStream, TYPE_LIST);
+		}
 
-		importIntoScenario(scenarioInstance, locationsVersion, distanceRecords);
+		importIntoScenario(scenarioInstance, locationsVersion, distanceRecords, manualDistanceRecords);
 	}
 
-	public static void importIntoScenario(final ScenarioInstance scenarioInstance, final LocationsVersion locationsVersion, final List<AtoBviaCLookupRecord> distanceRecords) throws IOException {
+	public static void importIntoScenario(final ScenarioInstance scenarioInstance, final LocationsVersion locationsVersion, final List<AtoBviaCLookupRecord> distanceRecords, final List<AtoBviaCLookupRecord> manualRecords) throws IOException {
 		// Check for null inputs
 		if (locationsVersion == null || distanceRecords == null) {
 			return;
@@ -103,7 +107,7 @@ public class LingoDistanceUpdater {
 				modelReference.executeWithLock(true, () -> {
 					try {
 
-						final UpdateDistancesWizard wizard = new UpdateDistancesWizard(modelReference, locationsVersion, distanceRecords);
+						final UpdateDistancesWizard wizard = new UpdateDistancesWizard(modelReference, locationsVersion, distanceRecords, manualRecords);
 						if (activeWorkbenchWindow == null) {
 							// action has been disposed
 							return;

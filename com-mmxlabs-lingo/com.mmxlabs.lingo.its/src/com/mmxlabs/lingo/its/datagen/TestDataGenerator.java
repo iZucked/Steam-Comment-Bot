@@ -27,6 +27,7 @@ public class TestDataGenerator {
 		String workspace = System.getProperty("osgi.instance.area");
 
 		if (workspace != null && !workspace.isEmpty()) {
+			// Note: Currently breaks on windows. Needs a different file:/// prefix
 			final File tempFile = Files.createFile(Path.of(workspace.replaceAll("file:", ""), "testdatabundle.zip")).toFile();
 			final ScenarioBuilder sb = ScenarioBuilder.initialiseBasicScenario();
 			sb.loadDefaultData();
