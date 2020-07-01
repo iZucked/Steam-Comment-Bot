@@ -1095,6 +1095,10 @@
    </extension>
    <extension
          point="org.eclipse.ui.views">
+      <category
+            id="com.mmxlabs.models.lng.views.tools"
+            name="Tools">
+      </category>
       <view
             allowMultiple="false"
             category="com.mmxlabs.shiplingo.platform.reports"
@@ -1104,6 +1108,7 @@
             name="Changes">
       </view>
       <view
+      		category="com.mmxlabs.models.lng.views.tools"
             class="com.mmxlabs.lingo.reports.views.changeset.ChangeSetView"
             icon="icons/cview16/changes_view.gif"
             id="com.mmxlabs.lingo.reports.views.changeset.OptimisationsView"

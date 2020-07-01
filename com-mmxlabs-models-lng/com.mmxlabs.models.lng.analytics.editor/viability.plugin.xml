@@ -18,6 +18,7 @@
    <extension
          point="org.eclipse.ui.views">
       <view
+      		category="com.mmxlabs.models.lng.views.tools"
             class="com.mmxlabs.models.lng.analytics.ui.views.viability.ViabilityView"
             icon="icons/sandbox.gif"
             id="com.mmxlabs.models.lng.analytics.ui.views.viability.ViabilityView"

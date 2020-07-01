@@ -18,6 +18,7 @@
    <extension
          point="org.eclipse.ui.views">
       <view
+      		category="com.mmxlabs.models.lng.views.tools"
             class="com.mmxlabs.models.lng.analytics.ui.views.OptionModellerView"
             icon="icons/sandbox.gif"
             id="com.mmxlabs.models.lng.analytics.ui.views.OptionModellerView"
@@ -25,6 +26,7 @@
             restorable="true">
       </view>
       <view
+      		category="com.mmxlabs.models.lng.views.tools"
             class="com.mmxlabs.models.lng.analytics.ui.views.breakeven.BreakEvenModellerView"
             icon="icons/sandbox.gif"
             id="com.mmxlabs.models.lng.analytics.ui.views.breakeven.BreakEvenModellerView"
