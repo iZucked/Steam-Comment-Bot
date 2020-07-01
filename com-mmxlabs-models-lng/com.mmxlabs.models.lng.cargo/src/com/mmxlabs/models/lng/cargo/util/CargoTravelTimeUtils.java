@@ -85,7 +85,7 @@ public class CargoTravelTimeUtils {
 		if (from != null && from.getPort() != null && to != null && to.getPort() != null) {
 			for (final Route route : allowedRoutes) {
 				assert route != null;
-				final int totalTime = getTimeForRoute(vessel, referenceSpeed, route, from, to, modelDistanceProvider);
+				final int totalTime = getTimeForRoute(vessel, referenceSpeed, route.getRouteOption(), from, to, modelDistanceProvider);
 				if (totalTime < minDuration) {
 					minDuration = totalTime;
 				}
@@ -94,13 +94,13 @@ public class CargoTravelTimeUtils {
 		return minDuration;
 	}
 
-	public static int getTimeForRoute(final @Nullable Vessel vessel, final double referenceSpeed, final @NonNull Route route, final @NonNull Slot<?> fromSlot, final @NonNull Slot<?> toSlot,
+	public static int getTimeForRoute(final @Nullable Vessel vessel, final double referenceSpeed, final @NonNull RouteOption routeOptions, final @NonNull Slot<?> fromSlot, final @NonNull Slot<?> toSlot,
 			ModelDistanceProvider modelDistanceProvider) {
 		final Port fromPort = fromSlot.getPort();
 		final Port toPort = toSlot.getPort();
 		int bufferTime = toSlot.getSlotOrDelegateDaysBuffer() * 24;
 		if (fromPort != null && toPort != null) {
-			int timeForRoute = getTimeForRoute(vessel, referenceSpeed, route, fromPort, toPort, modelDistanceProvider);
+			int timeForRoute = getTimeForRoute(vessel, referenceSpeed, routeOptions, fromPort, toPort, modelDistanceProvider);
 			if (timeForRoute != Integer.MAX_VALUE) {
 				return timeForRoute + bufferTime;
 			}
@@ -112,11 +112,11 @@ public class CargoTravelTimeUtils {
 			return Integer.MAX_VALUE;
 		}
 	}
-
-	private static int getTimeForRoute(final @Nullable Vessel vessel, final double referenceSpeed, final @NonNull Route route, final @NonNull Port fromPort, final @NonNull Port toPort,
+	
+	public static int getTimeForRoute(final @Nullable Vessel vessel, final double referenceSpeed, final @NonNull RouteOption routeOptions, final @NonNull Port fromPort, final @NonNull Port toPort,
 			ModelDistanceProvider modelDistanceProvider) {
 
-		final int distance = getDistance(route, fromPort, toPort, modelDistanceProvider);
+		final int distance = getDistance(routeOptions, fromPort, toPort, modelDistanceProvider);
 		if (distance == Integer.MAX_VALUE) {
 			return Integer.MAX_VALUE;
 		}
@@ -125,7 +125,7 @@ public class CargoTravelTimeUtils {
 		int extraTime = 0;
 		if (vessel != null) {
 			for (final VesselClassRouteParameters vcrp : vessel.getVesselOrDelegateRouteParameters()) {
-				if (vcrp.getRouteOption() == route.getRouteOption()) {
+				if (vcrp.getRouteOption() == routeOptions) {
 					extraTime = vcrp.getExtraTransitTime();
 				}
 			}
@@ -136,9 +136,9 @@ public class CargoTravelTimeUtils {
 
 		return totalTime;
 	}
-
-	private static int getDistance(@NonNull final Route route, @NonNull final Port from, @NonNull final Port to, @NonNull ModelDistanceProvider modelDistanceProvider) {
-		return modelDistanceProvider.getDistance(from, to, route.getRouteOption());
+	
+	private static int getDistance( final @NonNull RouteOption routeOptions, @NonNull final Port from, @NonNull final Port to, @NonNull ModelDistanceProvider modelDistanceProvider) {
+		return modelDistanceProvider.getDistance(from, to,  routeOptions);
 	}
 
 	private static int getContingencyIdleTimeInHours(@NonNull final Port from, @NonNull final Port to, @NonNull ModelDistanceProvider modelDistanceProvider) {

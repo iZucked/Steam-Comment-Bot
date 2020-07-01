@@ -1833,7 +1833,7 @@ public class CargoEditorMenuHelper {
 		final LNGScenarioModel scenarioModel = ScenarioModelUtil.findScenarioModel(scenarioDataProvider);
 		for (final Route route : scenarioModel.getReferenceModel().getPortModel().getRoutes()) {
 			if (route.getRouteOption() == RouteOption.DIRECT) {
-				return CargoTravelTimeUtils.getTimeForRoute(vessel, maxSpeed, route, from, to,
+				return CargoTravelTimeUtils.getTimeForRoute(vessel, maxSpeed, route.getRouteOption(), from, to,
 						scenarioDataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class));
 			}
 		}
