@@ -22,7 +22,7 @@
  <extension
        point="org.eclipse.ui.views">
     <view
-          category="com.mmxlabs.shiplingo.platform.reports"
+          category="com.mmxlabs.lngdataserver.views.dataserver"
           icon="icons/full/obj16/NominationsModelFile.gif"
           class="com.mmxlabs.models.lng.nominations.ui.views.NominationSpecsView"
           id="com.mmxlabs.models.lng.nominations.editor.NominationSpecsView"
@@ -30,7 +30,7 @@
           restorable="true">
     </view>
     <view
-          category="com.mmxlabs.shiplingo.platform.reports"
+          category="com.mmxlabs.lngdataserver.views.dataserver"
           icon="icons/cview16/ihigh_obj.gif"
           class="com.mmxlabs.models.lng.nominations.ui.views.NominationsView"
           id="com.mmxlabs.models.lng.nominations.editor.NominationsView"

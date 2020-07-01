@@ -18,7 +18,7 @@
    <extension
          point="org.eclipse.ui.views">
       <view
-      		category="com.mmxlabs.models.lng.views.tools"
+      		category="com.mmxlabs.lngdataserver.views.dataserver"
             class="com.mmxlabs.models.lng.cargo.editor.risk.DealSetTableEditorView"
             id="com.mmxlabs.models.lng.cargo.editor.risk.DealSetTableEditorView"
             name="Deal Sets"
