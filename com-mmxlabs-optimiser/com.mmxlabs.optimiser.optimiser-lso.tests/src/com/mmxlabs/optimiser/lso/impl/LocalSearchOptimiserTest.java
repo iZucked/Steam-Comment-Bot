@@ -23,8 +23,6 @@ import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 
-import ch.qos.logback.core.encoder.ObjectStreamEncoder;
-
 @SuppressWarnings("null")
 public class LocalSearchOptimiserTest {
 
