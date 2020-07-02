@@ -77,7 +77,7 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 	private int currentEditorIndex = 0;
 	private int tradesViewerPageNumber = -1;
 	private ScenarioTableViewerPane tradesViewer;
-	private VesselViewerPane_Editor vesselViewerPane;
+	private VesselCharterViewerPane_Editor vesselViewerPane;
 	// private VesselClassViewerPane vesselClassViewerPane;
 	private VesselEventViewerPane eventViewerPane;
 	private PaperDealsPane paperDealsPane;
@@ -299,7 +299,7 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 	private void initialiseFleetPage(final Composite parent) {
 		final SashForm sash = new SashForm(parent, SWT.VERTICAL);
 
-		vesselViewerPane = new VesselViewerPane_Editor(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+		vesselViewerPane = new VesselCharterViewerPane_Editor(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		vesselViewerPane.createControl(sash);
 		vesselViewerPane.init(Lists.newArrayList(CargoPackage.eINSTANCE.getCargoModel_VesselAvailabilities()), editorPart.getAdapterFactory(), editorPart.getModelReference());
 
