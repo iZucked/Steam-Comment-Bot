@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -22,7 +23,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Charsets;
 import com.mmxlabs.common.util.CheckedBiConsumer;
 import com.mmxlabs.lingo.reports.customizable.CustomReportDefinition;
 import com.mmxlabs.lingo.reports.services.CustomReportPermissions;
@@ -128,14 +128,21 @@ public class TopCustomReportDataRepository implements ICustomReportDataRepositor
 	private Collection<CustomReportDataRecord> getRecordsWithCacheOptionality(final File directory) throws IOException {
 		final Collection<CustomReportDataRecord> records = new ArrayList<>();
 		final File recordsFile = new File(directory.getAbsolutePath() + "/records.json");
+		final File recordsFileBKP = new File(directory.getAbsolutePath() + "/records.json.bkp");
 		if (CustomReportPermissions.hasCustomReportReadPermission()) {
 			final Collection<CustomReportDataRecord> temp = CustomReportDataRepository.INSTANCE.getRecords();
-			if (temp != null) {
+			if (temp != null && !temp.isEmpty()) {
 				records.addAll(temp);
+				isFirst = false;
 			}
 		}
-		if ((isFirst && records.isEmpty()) && recordsFile.exists() && recordsFile.canRead()) {
-			String json = com.google.common.io.Files.toString(recordsFile, Charsets.UTF_8);
+		
+		if (((isFirst || !CustomReportPermissions.isOnline()) && records.isEmpty()) && (!recordsFile.exists() && recordsFileBKP.exists())) {
+			Files.copy(recordsFileBKP.toPath(), recordsFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+		}
+		
+		if (((isFirst || !CustomReportPermissions.isOnline()) && records.isEmpty()) && recordsFile.exists() && recordsFile.canRead()) {
+			String json = Files.readString(recordsFile.toPath());
 			final List<CustomReportDataRecord> temp = CustomReportDataServiceClient.parseRecordsJSONData(json);
 			if (temp != null) {
 				records.addAll(temp);

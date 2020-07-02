@@ -37,6 +37,10 @@ public class CustomReportPermissions {
 				&& UserPermissionsService.INSTANCE.isPermitted(serviceName, roleDelete));
 	}
 	
+	public static boolean isOnline() {
+		return DataHubServiceProvider.getInstance().isHubOnline();
+	}
+	
 	private CustomReportPermissions() {
 	}
 }
