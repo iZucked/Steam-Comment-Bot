@@ -153,7 +153,13 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
+import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
+import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.models.lng.types.TimePeriod;
+import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.lng.ui.ImageConstants;
 import com.mmxlabs.models.lng.ui.LngUIActivator;
 import com.mmxlabs.models.lng.ui.actions.DuplicateAction;
@@ -1763,6 +1769,40 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), c, CargoPackage.eINSTANCE.getAssignableElement_Locked(), Boolean.FALSE));
 						setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), c, CargoPackage.eINSTANCE.getAssignableElement_SequenceHint(), SetCommand.UNSET_VALUE));
 						setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), c, CargoPackage.eINSTANCE.getAssignableElement_SpotIndex(), SetCommand.UNSET_VALUE));
+						
+						// A Source Only FOB sale needs matching ports on both sides. Market FOB Sales may have a set of valid ports. Automatically update if possible. 
+						if (dischargeSide.getDischargeSlot().getSlotOrDelegateFOBSaleDealType() == FOBSaleDealType.SOURCE_ONLY //
+								&& loadSide.loadSlot.getPort() != dischargeSide.getDischargeSlot().getPort()) {
+							if (dischargeSide.dischargeSlot instanceof SpotSlot) {
+								SpotSlot spotSlot = (SpotSlot) dischargeSide.dischargeSlot;
+								SpotMarket market = spotSlot.getMarket();
+								if (market instanceof FOBSalesMarket) {
+									FOBSalesMarket fobSalesMarket = (FOBSalesMarket) market;
+									if (SetUtils.getObjects(fobSalesMarket.getOriginPorts()).contains(loadSide.getLoadSlot().getPort())) {
+										setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), dischargeSide.getDischargeSlot(), CargoPackage.eINSTANCE.getSlot_Port(), loadSide.loadSlot.getPort()));
+									}
+								}
+								
+							}
+						}
+					}
+					if (c != null && loadSide.loadSlot.isDESPurchase()) {
+						
+						// A Dest Only DES purchase needs matching ports on both sides. Market DES purchases may have a set of valid ports. Automatically update if possible. 
+						if (loadSide.getLoadSlot().getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DEST_ONLY //
+								&& loadSide.loadSlot.getPort() != dischargeSide.getDischargeSlot().getPort()) {
+							if (loadSide.loadSlot instanceof SpotSlot) {
+								SpotSlot spotSlot = (SpotSlot) loadSide.loadSlot;
+								SpotMarket market = spotSlot.getMarket();
+								if (market instanceof DESPurchaseMarket) {
+									DESPurchaseMarket desPurchaseMarket = (DESPurchaseMarket) market;
+									if (SetUtils.getObjects(desPurchaseMarket.getDestinationPorts()).contains(dischargeSide.getDischargeSlot().getPort())) {
+										setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), loadSide.loadSlot , CargoPackage.eINSTANCE.getSlot_Port(), dischargeSide.dischargeSlot.getPort()));
+									}
+								}
+								
+							}
+						}
 					}
 
 					{
