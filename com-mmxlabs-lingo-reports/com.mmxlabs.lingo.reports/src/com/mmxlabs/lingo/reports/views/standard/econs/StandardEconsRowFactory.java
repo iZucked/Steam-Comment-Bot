@@ -706,10 +706,14 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 			} else if (object instanceof List<?>) {
 				final List<DeltaPair> pairs = (List<DeltaPair>) object;
 				final double totalVolume = pairs.stream().mapToDouble(x -> cargoAllocationPerMMBTUVolumeHelper(x.first(), options)).sum();
-				final double totalPNL = pairs.stream().mapToDouble(x -> cargoAllocationPNLPerMMBTUPNLHelper(x.first())).sum();
+				if (totalVolume == 0.0)
+					return 0.0;
 				final double totalOldVolume = pairs.stream().mapToDouble(x -> cargoAllocationPerMMBTUVolumeHelper(x.second(), options)).sum();
+				if (totalOldVolume == 0.0)
+					return 0.0;
+				final double totalPNL = pairs.stream().mapToDouble(x -> cargoAllocationPNLPerMMBTUPNLHelper(x.first())).sum();
 				final double totalOldPNL = pairs.stream().mapToDouble(x -> cargoAllocationPNLPerMMBTUPNLHelper(x.second())).sum();
-				final double value = totalOldVolume == 0.0 ? 0.0 : (double) (totalOldPNL / totalOldVolume) - (double) (totalPNL / totalVolume);
+				final double value = (double) (totalOldPNL / totalOldVolume) - (double) (totalPNL / totalVolume);
 				return value;
 			}
 			return null;
@@ -997,11 +1001,14 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 			} else if (object instanceof List<?>) {
 				final List<DeltaPair> pairs = (List<DeltaPair>) object;
 				final double totalVolume = pairs.stream().filter(Objects::nonNull).mapToDouble(x -> cargoAllocationPerMMBTUVolumeHelper(x.first(), options)).sum();
-				final double totalCost = pairs.stream().filter(Objects::nonNull).mapToDouble(x -> getShippingCost(x.first())).sum();
-
+				if (totalVolume == 0.0)
+					return 0.0;
 				final double totalOldVolume = pairs.stream().filter(Objects::nonNull).mapToDouble(x -> cargoAllocationPerMMBTUVolumeHelper(x.second(), options)).sum();
+				if (totalOldVolume == 0.0)
+					return 0.0;
+				final double totalCost = pairs.stream().filter(Objects::nonNull).mapToDouble(x -> getShippingCost(x.first())).sum();
 				final double totalOldCost = pairs.stream().filter(Objects::nonNull).mapToDouble(x -> getShippingCost(x.second())).sum();
-				final double value = totalOldVolume == 0.0 ? 0.0 : (double) (totalOldCost / totalOldVolume) - (double) (totalCost / totalVolume);
+				final double value = (double) (totalOldCost / totalOldVolume) - (double) (totalCost / totalVolume);
 				return value;
 			}
 			return null;
