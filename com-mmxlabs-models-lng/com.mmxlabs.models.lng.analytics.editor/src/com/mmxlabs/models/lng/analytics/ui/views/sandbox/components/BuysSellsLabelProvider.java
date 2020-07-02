@@ -14,17 +14,10 @@ import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
-import com.mmxlabs.models.lng.analytics.BuyMarket;
-import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.BuyOption;
-import com.mmxlabs.models.lng.analytics.BuyReference;
-import com.mmxlabs.models.lng.analytics.SellMarket;
-import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.SellOption;
-import com.mmxlabs.models.lng.analytics.SellReference;
+import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.DefaultSandboxLabelProvider;
-import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
-import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 
@@ -59,35 +52,24 @@ public class BuysSellsLabelProvider extends DefaultSandboxLabelProvider {
 				}
 			}
 		} else {
+			
 			if (element instanceof BuyOption) {
-				if (
-						(element instanceof BuyOpportunity && ((BuyOpportunity) element).isDesPurchase())
-						|| (element instanceof BuyReference && ((BuyReference) element).getSlot().isDESPurchase())
-					) {
-					return imgDES;
-				} else if ((element instanceof BuyMarket)) {
-					if (((BuyMarket) element).getMarket() instanceof DESPurchaseMarket) {
-						return imgSPOT_DES;
-					}	else {
-						return imgSPOT_FOB;
-					}
+				BuyOption option = (BuyOption) element;
+				boolean isDES = AnalyticsBuilder.isDESPurchase().test(option);
+				boolean isSpot = AnalyticsBuilder.isSpot(option);
+				if (isSpot) {
+					return isDES ? imgSPOT_DES : imgSPOT_FOB;
 				} else {
-					return imgFOB;
+					return isDES ? imgDES : imgFOB;
 				}
 			} else if (element instanceof SellOption) {
-				if (
-						(element instanceof SellOpportunity && ((SellOpportunity) element).isFobSale())
-						|| (element instanceof SellReference && ((SellReference) element).getSlot().isFOBSale())
-						) {
-					return imgFOB;
-				} else if ((element instanceof SellMarket)) {
-					if (((SellMarket) element).getMarket() instanceof FOBSalesMarket) {
-						return imgSPOT_FOB;
-					}	else {
-						return imgSPOT_DES;
-					}
+				SellOption option = (SellOption) element;
+				boolean isDES = AnalyticsBuilder.isDESSale().test(option);
+				boolean isSpot = AnalyticsBuilder.isSpot(option);
+				if (isSpot) {
+					return isDES ? imgSPOT_DES : imgSPOT_FOB;
 				} else {
-					return imgDES;
+					return isDES ? imgDES : imgFOB;
 				}
 			}
 		}

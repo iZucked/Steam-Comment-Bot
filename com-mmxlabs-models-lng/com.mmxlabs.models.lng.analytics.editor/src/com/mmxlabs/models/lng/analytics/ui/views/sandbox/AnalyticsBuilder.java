@@ -67,6 +67,7 @@ import com.mmxlabs.models.lng.cargo.EVesselTankState;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.CargoTravelTimeUtils;
@@ -353,7 +354,7 @@ public class AnalyticsBuilder {
 			if (sellOpportunity.getDate() != null) {
 				slot.setWindowStart(sellOpportunity.getDate());
 			}
-			
+
 			if (sellOpportunity.isSpecifyWindow()) {
 				slot.setWindowSize(sellOpportunity.getWindowSize());
 				slot.setWindowSizeUnits(sellOpportunity.getWindowSizeUnits());
@@ -1502,14 +1503,14 @@ public class AnalyticsBuilder {
 			final SellReference sellReference = (SellReference) option;
 			final DischargeSlot slot = sellReference.getSlot();
 			if (slot != null) {
-				return new double[] { slot.getSlotOrDelegateMinCv(), slot.getSlotOrDelegateMaxCv()};
+				return new double[] { slot.getSlotOrDelegateMinCv(), slot.getSlotOrDelegateMaxCv() };
 			}
 		} else if (option instanceof SellMarket) {
 			final SellMarket sellMarket = (SellMarket) option;
 			final SpotMarket market = sellMarket.getMarket();
 			if (market instanceof FOBSalesMarket) {
 				final FOBSalesMarket fobSalesMarket = (FOBSalesMarket) market;
-//				return fobSalesMarket.getCv();
+				// return fobSalesMarket.getCv();
 			} else if (market instanceof DESSalesMarket) {
 				final DESSalesMarket desSalesMarket = (DESSalesMarket) market;
 				if (desSalesMarket.getNotionalPort() != null) {
@@ -1704,6 +1705,26 @@ public class AnalyticsBuilder {
 		}
 
 		return null;
+	}
+
+	public static boolean isSpot(BuyOption buy) {
+		if (buy instanceof BuyReference) {
+			final BuyReference ref = (BuyReference) buy;
+			return ref.getSlot() instanceof SpotSlot;
+		} else if (buy instanceof BuyMarket) {
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean isSpot(SellOption sell) {
+		if (sell instanceof SellReference) {
+			final SellReference ref = (SellReference) sell;
+			return ref.getSlot() instanceof SpotSlot;
+		} else if (sell instanceof SellMarket) {
+			return true;
+		}
+		return false;
 	}
 
 }
