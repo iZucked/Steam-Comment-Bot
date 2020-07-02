@@ -1268,6 +1268,22 @@ public final class ChangeSetTransformerUtil {
 						final ChangeSetRowData beforeData = beforeGroup.getMembers().get(0);
 						final ChangeSetRowData afterData = afterGroup.getMembers().get(0);
 
+						
+						// Mark up lateness over 24 hours as a structural change.
+						{
+							long beforeLateness = 0L;
+							for (ChangeSetRowData data : row.getBeforeData().getMembers()) {
+								beforeLateness += LatenessUtils.getLatenessExcludingFlex(data.getEventGrouping());
+							}
+							long afterLateness = 0L;
+							for (ChangeSetRowData data : row.getAfterData().getMembers()) {
+								afterLateness += LatenessUtils.getLatenessExcludingFlex(data.getEventGrouping());
+							}
+							if (Math.abs(beforeLateness - afterLateness) > 24) {
+								row.setVesselChange(true);
+							}
+						}
+						
 						// Start / end events are not structural changes.
 						if ((beforeData.getLhsEvent() instanceof StartEvent || beforeData.getLhsEvent() instanceof EndEvent)
 								|| (afterData.getLhsEvent() instanceof StartEvent || afterData.getLhsEvent() instanceof EndEvent)) {
