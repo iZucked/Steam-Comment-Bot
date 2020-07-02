@@ -6,6 +6,7 @@ package com.mmxlabs.lngdataserver.integration.reports.custom;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
@@ -22,7 +23,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
 import com.google.common.base.Charsets;
-import com.google.common.io.Files;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.IDataHubStateChangeListener;
@@ -163,8 +163,8 @@ public class CustomReportDataUpdater {
 		if (f.exists()) {
 			String json;
 			try {
-				json = Files.toString(f, Charsets.UTF_8);
-				final List<CustomReportDataRecord> records = client.parseRecordsJSONData(json);
+				json = Files.readString(f.toPath());
+				final List<CustomReportDataRecord> records = CustomReportDataServiceClient.parseRecordsJSONData(json);
 				if (records != null) {
 					update(records);
 				}
@@ -212,12 +212,17 @@ public class CustomReportDataUpdater {
 				final Pair<String, Instant> recordsPair = client.getRecords();
 				if (recordsPair != null) {
 					final File recordsFile = new File(basePath.getAbsolutePath() + "/records.json");
+					final File recordsFileBKP = new File(basePath.getAbsolutePath() + "/records.json.bkp");
+					
 					if (recordsFile.exists()) {
-						recordsFile.delete();
+						if (recordsFileBKP.exists()) {
+							recordsFileBKP.delete();
+						}
+						recordsFile.renameTo(recordsFileBKP);
 					}
-					final List<CustomReportDataRecord> records = client.parseRecordsJSONData(recordsPair.getFirst());
+					final List<CustomReportDataRecord> records = CustomReportDataServiceClient.parseRecordsJSONData(recordsPair.getFirst());
 					update(records);
-					Files.write(recordsPair.getFirst(), recordsFile, Charsets.UTF_8);
+					Files.writeString(recordsFile.toPath(), recordsPair.getFirst(), Charsets.UTF_8);
 					lastModified = recordsPair.getSecond();
 				}
 			}
