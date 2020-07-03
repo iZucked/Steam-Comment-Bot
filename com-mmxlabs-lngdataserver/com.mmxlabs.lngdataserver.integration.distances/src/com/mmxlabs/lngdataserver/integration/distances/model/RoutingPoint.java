@@ -17,8 +17,6 @@ public class RoutingPoint {
 
 	private String identifier;
 
-	private Location virtualLocation;
-
 	private Set<Location> entryPoints;
 
 	private double distance;
@@ -37,14 +35,6 @@ public class RoutingPoint {
 
 	public void setIdentifier(String identifier) {
 		this.identifier = identifier;
-	}
-
-	public Location getVirtualLocation() {
-		return virtualLocation;
-	}
-
-	public void setVirtualLocation(Location virtualLocation) {
-		this.virtualLocation = virtualLocation;
 	}
 
 	public Set<Location> getEntryPoints() {

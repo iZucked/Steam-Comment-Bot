@@ -371,22 +371,13 @@ public interface PortPackage extends EPackage {
 	int ROUTE__ROUTE_OPTION = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Virtual Port</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ROUTE__VIRTUAL_PORT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 3;
-
-	/**
 	 * The feature id for the '<em><b>North Entrance</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ROUTE__NORTH_ENTRANCE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
+	int ROUTE__NORTH_ENTRANCE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>South Entrance</b></em>' containment reference.
@@ -395,7 +386,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROUTE__SOUTH_ENTRANCE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 5;
+	int ROUTE__SOUTH_ENTRANCE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Distance</b></em>' attribute.
@@ -404,7 +395,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROUTE__DISTANCE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 6;
+	int ROUTE__DISTANCE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of structural features of the '<em>Route</em>' class.
@@ -413,7 +404,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROUTE_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 7;
+	int ROUTE_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -997,22 +988,13 @@ public interface PortPackage extends EPackage {
 	int LOCATION__LON = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 5;
 
 	/**
-	 * The feature id for the '<em><b>Other Identifiers</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOCATION__OTHER_IDENTIFIERS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 6;
-
-	/**
 	 * The number of structural features of the '<em>Location</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LOCATION_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 7;
+	int LOCATION_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1343,52 +1325,6 @@ public interface PortPackage extends EPackage {
 	int CONTINGENCY_MATRIX_ENTRY_OPERATION_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.OtherIdentifiersImpl <em>Other Identifiers</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.port.impl.OtherIdentifiersImpl
-	 * @see com.mmxlabs.models.lng.port.impl.PortPackageImpl#getOtherIdentifiers()
-	 * @generated
-	 */
-	int OTHER_IDENTIFIERS = 11;
-
-	/**
-	 * The feature id for the '<em><b>Identifier</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OTHER_IDENTIFIERS__IDENTIFIER = 0;
-
-	/**
-	 * The feature id for the '<em><b>Provider</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OTHER_IDENTIFIERS__PROVIDER = 1;
-
-	/**
-	 * The number of structural features of the '<em>Other Identifiers</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OTHER_IDENTIFIERS_FEATURE_COUNT = 2;
-
-	/**
-	 * The number of operations of the '<em>Other Identifiers</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OTHER_IDENTIFIERS_OPERATION_COUNT = 0;
-
-	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.RouteOption <em>Route Option</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1396,7 +1332,7 @@ public interface PortPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.port.impl.PortPackageImpl#getRouteOption()
 	 * @generated
 	 */
-	int ROUTE_OPTION = 12;
+	int ROUTE_OPTION = 11;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.CanalEntry <em>Canal Entry</em>}' enum.
@@ -1406,7 +1342,7 @@ public interface PortPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.port.impl.PortPackageImpl#getCanalEntry()
 	 * @generated
 	 */
-	int CANAL_ENTRY = 13;
+	int CANAL_ENTRY = 12;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.port.Port <em>Port</em>}'.
@@ -1644,17 +1580,6 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getRoute_RouteOption();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.port.Route#getVirtualPort <em>Virtual Port</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Virtual Port</em>'.
-	 * @see com.mmxlabs.models.lng.port.Route#getVirtualPort()
-	 * @see #getRoute()
-	 * @generated
-	 */
-	EReference getRoute_VirtualPort();
 
 	/**
 	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.port.Route#getNorthEntrance <em>North Entrance</em>}'.
@@ -1971,17 +1896,6 @@ public interface PortPackage extends EPackage {
 	EAttribute getLocation_Lon();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.port.Location#getOtherIdentifiers <em>Other Identifiers</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Other Identifiers</em>'.
-	 * @see com.mmxlabs.models.lng.port.Location#getOtherIdentifiers()
-	 * @see #getLocation()
-	 * @generated
-	 */
-	EReference getLocation_OtherIdentifiers();
-
-	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.port.Location#getZoneId() <em>Get Zone Id</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2106,38 +2020,6 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getContingencyMatrixEntry_Duration();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.port.OtherIdentifiers <em>Other Identifiers</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Other Identifiers</em>'.
-	 * @see com.mmxlabs.models.lng.port.OtherIdentifiers
-	 * @generated
-	 */
-	EClass getOtherIdentifiers();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.OtherIdentifiers#getIdentifier <em>Identifier</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Identifier</em>'.
-	 * @see com.mmxlabs.models.lng.port.OtherIdentifiers#getIdentifier()
-	 * @see #getOtherIdentifiers()
-	 * @generated
-	 */
-	EAttribute getOtherIdentifiers_Identifier();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.OtherIdentifiers#getProvider <em>Provider</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Provider</em>'.
-	 * @see com.mmxlabs.models.lng.port.OtherIdentifiers#getProvider()
-	 * @see #getOtherIdentifiers()
-	 * @generated
-	 */
-	EAttribute getOtherIdentifiers_Provider();
 
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.port.RouteOption <em>Route Option</em>}'.
@@ -2360,14 +2242,6 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute ROUTE__ROUTE_OPTION = eINSTANCE.getRoute_RouteOption();
-
-		/**
-		 * The meta object literal for the '<em><b>Virtual Port</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ROUTE__VIRTUAL_PORT = eINSTANCE.getRoute_VirtualPort();
 
 		/**
 		 * The meta object literal for the '<em><b>North Entrance</b></em>' containment reference feature.
@@ -2612,14 +2486,6 @@ public interface PortPackage extends EPackage {
 		EAttribute LOCATION__LON = eINSTANCE.getLocation_Lon();
 
 		/**
-		 * The meta object literal for the '<em><b>Other Identifiers</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference LOCATION__OTHER_IDENTIFIERS = eINSTANCE.getLocation_OtherIdentifiers();
-
-		/**
 		 * The meta object literal for the '<em><b>Get Zone Id</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2722,32 +2588,6 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CONTINGENCY_MATRIX_ENTRY__DURATION = eINSTANCE.getContingencyMatrixEntry_Duration();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.port.impl.OtherIdentifiersImpl <em>Other Identifiers</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.port.impl.OtherIdentifiersImpl
-		 * @see com.mmxlabs.models.lng.port.impl.PortPackageImpl#getOtherIdentifiers()
-		 * @generated
-		 */
-		EClass OTHER_IDENTIFIERS = eINSTANCE.getOtherIdentifiers();
-
-		/**
-		 * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute OTHER_IDENTIFIERS__IDENTIFIER = eINSTANCE.getOtherIdentifiers_Identifier();
-
-		/**
-		 * The meta object literal for the '<em><b>Provider</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute OTHER_IDENTIFIERS__PROVIDER = eINSTANCE.getOtherIdentifiers_Provider();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.port.RouteOption <em>Route Option</em>}' enum.

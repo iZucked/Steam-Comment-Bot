@@ -4,14 +4,15 @@
  */
 package com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * @author robert.erdin@gmail.com created on 22/01/17.
  */
+@JsonIgnoreProperties("virtualLocation")
 public class RoutingPoint {
 
 	private String identifier;
-
-	private String virtualLocation;
 
 	private String northernEntry;
 	private String southernEntry;
@@ -32,14 +33,6 @@ public class RoutingPoint {
 
 	public void setIdentifier(String identifier) {
 		this.identifier = identifier;
-	}
-
-	public String getVirtualLocation() {
-		return virtualLocation;
-	}
-
-	public void setVirtualLocation(String virtualLocation) {
-		this.virtualLocation = virtualLocation;
 	}
 
 	public double getDistance() {

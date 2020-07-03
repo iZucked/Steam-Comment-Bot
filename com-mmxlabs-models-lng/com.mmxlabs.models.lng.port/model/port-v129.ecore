@@ -75,6 +75,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="lines" upperBound="-1"
         eType="#//RouteLine" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="routeOption" eType="#//RouteOption"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="virtualPort" eType="#//Port"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="northEntrance" eType="#//EntryPoint"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="southEntrance" eType="#//EntryPoint"
@@ -157,6 +158,8 @@
         <details key="exportFormatString" value="##0.###"/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="otherIdentifiers" upperBound="-1"
+        eType="#//OtherIdentifiers" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="RouteOption">
     <eLiterals name="DIRECT"/>
@@ -198,5 +201,9 @@
         <details key="formatString" value="#0"/>
       </eAnnotations>
     </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OtherIdentifiers">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="identifier" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="provider" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
 </ecore:EPackage>

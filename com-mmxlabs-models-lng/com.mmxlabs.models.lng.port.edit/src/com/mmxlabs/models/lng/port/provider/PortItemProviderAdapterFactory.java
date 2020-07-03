@@ -341,29 +341,6 @@ public class PortItemProviderAdapterFactory extends PortAdapterFactory implement
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.port.OtherIdentifiers} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected OtherIdentifiersItemProvider otherIdentifiersItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.port.OtherIdentifiers}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createOtherIdentifiersAdapter() {
-		if (otherIdentifiersItemProvider == null) {
-			otherIdentifiersItemProvider = new OtherIdentifiersItemProvider(this);
-		}
-
-		return otherIdentifiersItemProvider;
-	}
-
-	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -500,7 +477,6 @@ public class PortItemProviderAdapterFactory extends PortAdapterFactory implement
 		if (entryPointItemProvider != null) entryPointItemProvider.dispose();
 		if (contingencyMatrixItemProvider != null) contingencyMatrixItemProvider.dispose();
 		if (contingencyMatrixEntryItemProvider != null) contingencyMatrixEntryItemProvider.dispose();
-		if (otherIdentifiersItemProvider != null) otherIdentifiersItemProvider.dispose();
 	}
 
 }

@@ -1,26 +1,7 @@
 {
   "createdAt": "2019-12-12T10:35:00.0Z",
-  "locations": [ {
-  "mmxId" : "L_V_Panam",
-  "virtual" : true,
-  "name" : "Panama Canal",
-  "geographicPoint" : {
-    "lat" : 0.0,
-    "lon" : 0.0,
-    "country" : "Panama",
-    "timeZone" : "America/Panama"
-  }
-}, {
-  "mmxId" : "L_V_SuezC",
-  "virtual" : true,
-  "name" : "Suez Canal",
-  "geographicPoint" : {
-    "lat" : 0.0,
-    "lon" : 0.0,
-    "country" : "Egypt",
-    "timeZone" : "Africa/Cairo"
-  }
-}, {
+  "locations": [
+{
   "mmxId" : "L_DZ_Bethi",
   "virtual" : false,
   "name" : "Bethioua",
@@ -3033,14 +3014,12 @@
   "routingPoints": [
     {
       "identifier": "SUZ",
-      "virtualLocation": "L_V_SuezC",
       "northernEntry": "L_CP_PortS",
       "southernEntry": "L_CP_Suez",
       "distance": 102.279
     },
     {
       "identifier": "PAN",
-      "virtualLocation": "L_V_Panam",
       "northernEntry": "L_CP_Colon",
       "southernEntry": "L_CP_Balbo",
       "distance": 39.97

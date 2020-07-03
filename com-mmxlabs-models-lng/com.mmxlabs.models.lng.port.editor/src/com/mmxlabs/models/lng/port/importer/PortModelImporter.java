@@ -267,7 +267,6 @@ public class PortModelImporter implements ISubmodelImporter {
 
 								@Override
 								public void run(@NonNull final IImportContext context) {
-									route.setVirtualPort(tmpRoute.getVirtualPort());
 									route.setDistance(tmpRoute.getDistance());
 								}
 

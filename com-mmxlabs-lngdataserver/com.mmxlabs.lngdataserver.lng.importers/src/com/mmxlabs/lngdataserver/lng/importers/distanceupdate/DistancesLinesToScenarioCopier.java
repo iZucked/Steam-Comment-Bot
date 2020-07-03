@@ -30,7 +30,6 @@ import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.AtoBviaCLook
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.BasicLocation;
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.LocationsVersion;
 import com.mmxlabs.models.lng.port.Location;
-import com.mmxlabs.models.lng.port.OtherIdentifiers;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
@@ -48,12 +47,14 @@ public class DistancesLinesToScenarioCopier {
 
 		final CompoundCommand cmd = new CompoundCommand("Update distances");
 
-		Map<String, String> fallbackMapping = new HashMap<>();
+		Map<String, String> fallbackUpstreaIDMapping = new HashMap<>();
+		Map<String, String> mmxIdToUpstreaIDMapping = new HashMap<>();
 		for (BasicLocation bl : locationsVersion.getLocations()) {
 			String fallbackId = bl.getFallbackUpstreamId();
 			if (fallbackId != null) {
-				fallbackMapping.put(bl.getUpstreamID(), bl.getFallbackUpstreamId());
+				fallbackUpstreaIDMapping.put(bl.getUpstreamID(), bl.getFallbackUpstreamId());
 			}
+			mmxIdToUpstreaIDMapping.put(bl.getMmxId(), bl.getUpstreamID());
 		}
 		//
 
@@ -101,14 +102,8 @@ public class DistancesLinesToScenarioCopier {
 			for (final Port p : portModel.getPorts()) {
 				final Location l = p.getLocation();
 				if (l != null) {
-					for (final OtherIdentifiers oi : l.getOtherIdentifiers()) {
-						if ("abc".equalsIgnoreCase(oi.getProvider()) && !oi.getIdentifier().isEmpty()) {
-							portToId.put(p, oi.getIdentifier());
-						}
-						break;
-					}
+					portToId.put(p, mmxIdToUpstreaIDMapping.get(l.getMmxId()));
 				}
-
 			}
 
 			final Map<Pair<Port, Port>, Double> directMatrix = new HashMap<>();
@@ -121,7 +116,7 @@ public class DistancesLinesToScenarioCopier {
 						: manualRecords.stream() // .
 								.collect(Collectors.toMap(r -> Pair.of(r.getFrom(), r.getTo()), r -> r));
 
-				BiFunction<String, String, @Nullable AtoBviaCLookupRecord> lookupFunction = makeLookupFunction(recordsMap, manualRecordsMap, fallbackMapping);
+				BiFunction<String, String, @Nullable AtoBviaCLookupRecord> lookupFunction = makeLookupFunction(recordsMap, manualRecordsMap, fallbackUpstreaIDMapping);
 
 				{
 					final Route route = routeMap.get(RouteOption.DIRECT);
@@ -147,8 +142,8 @@ public class DistancesLinesToScenarioCopier {
 								}
 
 								final Pair<Port, Port> portObjectPair = Pair.of(from, to);
-								final @Nullable String fallbackFromID = fallbackMapping.get(fromID);
-								final @Nullable String fallbackToID = fallbackMapping.get(toID);
+								final @Nullable String fallbackFromID = fallbackUpstreaIDMapping.get(fromID);
+								final @Nullable String fallbackToID = fallbackUpstreaIDMapping.get(toID);
 
 								// Check primary id match
 								if (Objects.equals(fromID, toID)) {

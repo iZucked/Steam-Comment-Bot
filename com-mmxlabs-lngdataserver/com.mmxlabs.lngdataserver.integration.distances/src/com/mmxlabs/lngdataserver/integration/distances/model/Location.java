@@ -4,9 +4,7 @@
  */
 package com.mmxlabs.lngdataserver.integration.distances.model;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -21,25 +19,19 @@ public class Location {
 
 	private String mmxId;
 
-	private boolean virtual = false;
-
-	private Map<String, Identifier> otherIdentifiers;
-
 	private String name;
-	
+
 	private String notes;
 
 	private List<String> aliases;
 
 	private GeographicPoint geographicPoint;
 
-	public static Location of(String name, String mmxId, String abcId) {
+	public static Location of(String name, String mmxId) {
 		Location result = new Location();
 		result.setName(name);
 		result.setMmxId(mmxId);
-		result.setOtherIdentifiers(new HashMap<>());
 		result.setGeographicPoint(new GeographicPoint());
-		result.getOtherIdentifiers().put("abc", new Identifier(abcId, "abc"));
 		return result;
 	}
 
@@ -49,10 +41,6 @@ public class Location {
 
 	public void setMmxId(String mmxId) {
 		this.mmxId = mmxId;
-	}
-
-	public Map<String, Identifier> getOtherIdentifiers() {
-		return otherIdentifiers;
 	}
 
 	public List<String> getAliases() {
@@ -79,18 +67,6 @@ public class Location {
 		this.geographicPoint = geographicPoint;
 	}
 
-	public void setOtherIdentifiers(Map<String, Identifier> otherIdentifiers) {
-		this.otherIdentifiers = otherIdentifiers;
-	}
-
-	public boolean isVirtual() {
-		return virtual;
-	}
-
-	public void setVirtual(boolean virtual) {
-		this.virtual = virtual;
-	}
-
 	@Override
 	public String toString() {
 		return name + " (" + mmxId + ")";
@@ -105,8 +81,9 @@ public class Location {
 
 		Location port = (Location) o;
 
-		if (!mmxId.equals(port.mmxId))
+		if (!mmxId.equals(port.mmxId)) {
 			return false;
+		}
 		return name.equals(port.name);
 	}
 

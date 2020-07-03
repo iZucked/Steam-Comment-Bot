@@ -5,25 +5,21 @@
 package com.mmxlabs.lngdataserver.lng.io.distances;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Objects;
+import com.mmxlabs.lngdataserver.integration.distances.model.DistancesVersion;
 import com.mmxlabs.lngdataserver.integration.distances.model.GeographicPoint;
-import com.mmxlabs.lngdataserver.integration.distances.model.Identifier;
 import com.mmxlabs.lngdataserver.integration.distances.model.Route;
 import com.mmxlabs.lngdataserver.integration.distances.model.Routes;
 import com.mmxlabs.lngdataserver.integration.distances.model.RoutingPoint;
-import com.mmxlabs.lngdataserver.integration.distances.model.DistancesVersion;
 import com.mmxlabs.models.lng.port.EntryPoint;
 import com.mmxlabs.models.lng.port.Location;
-import com.mmxlabs.models.lng.port.OtherIdentifiers;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.RouteLine;
@@ -32,10 +28,6 @@ import com.mmxlabs.models.lng.port.RouteOption;
 public class DistancesFromScenarioCopier {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DistancesFromScenarioCopier.class);
-
-	// Virtual canal location ids
-	private static final String SuezID = "L_V_SuezC";
-	private static final String PanamID = "L_V_Panam";
 
 	private DistancesFromScenarioCopier() {
 
@@ -97,10 +89,8 @@ public class DistancesFromScenarioCopier {
 
 		final List<com.mmxlabs.lngdataserver.integration.distances.model.Location> locations = new LinkedList<>();
 
-		com.mmxlabs.lngdataserver.integration.distances.model.Location suezLocation = null;
 		com.mmxlabs.lngdataserver.integration.distances.model.Location suezNorthernLocation = null;
 		com.mmxlabs.lngdataserver.integration.distances.model.Location suezSouthernLocation = null;
-		com.mmxlabs.lngdataserver.integration.distances.model.Location panamaLocation = null;
 		com.mmxlabs.lngdataserver.integration.distances.model.Location panamaNorthernLocation = null;
 		com.mmxlabs.lngdataserver.integration.distances.model.Location panamaSouthernLocation = null;
 		for (final Port p : portModel.getPorts()) {
@@ -112,13 +102,6 @@ public class DistancesFromScenarioCopier {
 				versionLocation.setAliases(new ArrayList<>(p.getLocation().getOtherNames()));
 			}
 
-			if (!p.getLocation().getOtherIdentifiers().isEmpty()) {
-				versionLocation.setOtherIdentifiers(new LinkedHashMap<>());
-				for (OtherIdentifiers i : p.getLocation().getOtherIdentifiers()) {
-					versionLocation.getOtherIdentifiers().put(i.getProvider(), new Identifier(i.getIdentifier(), i.getProvider()));
-				}
-			}
-
 			final GeographicPoint gp = new GeographicPoint();
 			gp.setCountry(p.getLocation().getCountry());
 			gp.setLat(p.getLocation().getLat());
@@ -126,14 +109,6 @@ public class DistancesFromScenarioCopier {
 			gp.setTimeZone(p.getLocation().getTimeZone());
 			versionLocation.setGeographicPoint(gp);
 
-			if (SuezID.contentEquals(mmxId)) {
-				versionLocation.setVirtual(true);
-				suezLocation = versionLocation;
-			}
-			if (PanamID.contentEquals(mmxId)) {
-				versionLocation.setVirtual(true);
-				panamaLocation = versionLocation;
-			}
 			if (Objects.equal(suezNorth, mmxId)) {
 				suezNorthernLocation = versionLocation;
 			}
@@ -161,7 +136,6 @@ public class DistancesFromScenarioCopier {
 		{
 			final RoutingPoint rp = new RoutingPoint();
 			rp.setEntryPoints(new LinkedHashSet<>());
-			rp.setVirtualLocation(suezLocation);
 			rp.getEntryPoints().add(suezNorthernLocation);
 			rp.getEntryPoints().add(suezSouthernLocation);
 			rp.setIdentifier("SUZ");
@@ -172,8 +146,6 @@ public class DistancesFromScenarioCopier {
 		{
 			final RoutingPoint rp = new RoutingPoint();
 			rp.setEntryPoints(new LinkedHashSet<>());
-
-			rp.setVirtualLocation(panamaLocation);
 			rp.getEntryPoints().add(panamaNorthernLocation);
 			rp.getEntryPoints().add(panamaSouthernLocation);
 			rp.setIdentifier("PAN");

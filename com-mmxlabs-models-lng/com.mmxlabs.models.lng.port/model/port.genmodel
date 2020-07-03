@@ -51,8 +51,6 @@
     <genClasses ecoreClass="port.ecore#//Route">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//Route/lines"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Route/routeOption"/>
-      <genFeatures notify="false" createChild="false" propertyDescription="Virtual port representing the closest canal entry to another port"
-          propertySortChoices="true" ecoreFeature="ecore:EReference port.ecore#//Route/virtualPort"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//Route/northEntrance"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//Route/southEntrance"/>
       <genFeatures createChild="false" propertyDescription="Distance between canal entry points"
@@ -89,7 +87,6 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Location/country"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Location/lat"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Location/lon"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//Location/otherIdentifiers"/>
       <genOperations ecoreOperation="port.ecore#//Location/getZoneId"/>
       <genOperations ecoreOperation="port.ecore#//Location/getTempMMXID"/>
     </genClasses>
@@ -105,10 +102,6 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference port.ecore#//ContingencyMatrixEntry/fromPort"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference port.ecore#//ContingencyMatrixEntry/toPort"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//ContingencyMatrixEntry/duration"/>
-    </genClasses>
-    <genClasses ecoreClass="port.ecore#//OtherIdentifiers">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//OtherIdentifiers/identifier"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//OtherIdentifiers/provider"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

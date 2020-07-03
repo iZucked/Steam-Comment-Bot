@@ -27,12 +27,10 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngdataserver.integration.distances.model.DistancesVersion;
 import com.mmxlabs.lngdataserver.integration.distances.model.GeographicPoint;
-import com.mmxlabs.lngdataserver.integration.distances.model.Identifier;
 import com.mmxlabs.lngdataserver.integration.distances.model.Routes;
 import com.mmxlabs.lngdataserver.integration.distances.model.RoutingPoint;
 import com.mmxlabs.models.lng.port.EntryPoint;
 import com.mmxlabs.models.lng.port.Location;
-import com.mmxlabs.models.lng.port.OtherIdentifiers;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortCountryGroup;
 import com.mmxlabs.models.lng.port.PortFactory;
@@ -131,18 +129,6 @@ public class DistancesToScenarioCopier {
 
 					countries.add(geographicPoint.getCountry());
 				}
-
-				final List<OtherIdentifiers> otherIdentifiers = new LinkedList<>();
-				if (versionLocation.getOtherIdentifiers() != null) {
-					for (final Map.Entry<String, Identifier> e : versionLocation.getOtherIdentifiers().entrySet()) {
-						final OtherIdentifiers id = PortFactory.eINSTANCE.createOtherIdentifiers();
-						id.setIdentifier(e.getValue().getIdentifier());
-						id.setProvider(e.getValue().getProvider());
-						otherIdentifiers.add(id);
-					}
-				}
-				cmd.append(SetCommand.create(editingDomain, oldPort.getLocation(), PortPackage.Literals.LOCATION__OTHER_IDENTIFIERS, otherIdentifiers));
-
 			}
 
 			final List<RoutingPoint> routingPoints = version.getRoutingPoints();
@@ -197,9 +183,8 @@ public class DistancesToScenarioCopier {
 						final String northSide = t.getNorthernEntry().getMmxId();
 						final String southSide = t.getSouthernEntry().getMmxId();
 						if ((option == RouteOption.SUEZ && t.getIdentifier().equals("SUZ")) || (option == RouteOption.PANAMA && t.getIdentifier().equals("PAN"))) {
-							cmd.append(SetCommand.create(editingDomain, route, PortPackage.Literals.ROUTE__VIRTUAL_PORT, idToPort.get(t.getVirtualLocation().getMmxId())));
-
-							cmd.append(SetCommand.create(editingDomain, route, PortPackage.Literals.ROUTE__DISTANCE, (double) t.getDistance()));
+							
+							cmd.append(SetCommand.create(editingDomain, route, PortPackage.Literals.ROUTE__DISTANCE, t.getDistance()));
 							if (option == RouteOption.SUEZ) {
 								suezDistance = (double) t.getDistance();
 							} else {

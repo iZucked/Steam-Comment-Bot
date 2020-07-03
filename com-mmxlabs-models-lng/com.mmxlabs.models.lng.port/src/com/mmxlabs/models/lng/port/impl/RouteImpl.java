@@ -35,7 +35,6 @@ import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getUuid <em>Uuid</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getLines <em>Lines</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getRouteOption <em>Route Option</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getVirtualPort <em>Virtual Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getNorthEntrance <em>North Entrance</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getSouthEntrance <em>South Entrance</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getDistance <em>Distance</em>}</li>
@@ -93,16 +92,6 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 	 * @ordered
 	 */
 	protected RouteOption routeOption = ROUTE_OPTION_EDEFAULT;
-
-	/**
-	 * The cached value of the '{@link #getVirtualPort() <em>Virtual Port</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVirtualPort()
-	 * @generated
-	 * @ordered
-	 */
-	protected Port virtualPort;
 
 	/**
 	 * The cached value of the '{@link #getNorthEntrance() <em>North Entrance</em>}' containment reference.
@@ -219,46 +208,6 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 		routeOption = newRouteOption == null ? ROUTE_OPTION_EDEFAULT : newRouteOption;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.ROUTE__ROUTE_OPTION, oldRouteOption, routeOption));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Port getVirtualPort() {
-		if (virtualPort != null && virtualPort.eIsProxy()) {
-			InternalEObject oldVirtualPort = (InternalEObject)virtualPort;
-			virtualPort = (Port)eResolveProxy(oldVirtualPort);
-			if (virtualPort != oldVirtualPort) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PortPackage.ROUTE__VIRTUAL_PORT, oldVirtualPort, virtualPort));
-			}
-		}
-		return virtualPort;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Port basicGetVirtualPort() {
-		return virtualPort;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setVirtualPort(Port newVirtualPort) {
-		Port oldVirtualPort = virtualPort;
-		virtualPort = newVirtualPort;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.ROUTE__VIRTUAL_PORT, oldVirtualPort, virtualPort));
 	}
 
 	/**
@@ -406,9 +355,6 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 				return getLines();
 			case PortPackage.ROUTE__ROUTE_OPTION:
 				return getRouteOption();
-			case PortPackage.ROUTE__VIRTUAL_PORT:
-				if (resolve) return getVirtualPort();
-				return basicGetVirtualPort();
 			case PortPackage.ROUTE__NORTH_ENTRANCE:
 				return getNorthEntrance();
 			case PortPackage.ROUTE__SOUTH_ENTRANCE:
@@ -437,9 +383,6 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 				return;
 			case PortPackage.ROUTE__ROUTE_OPTION:
 				setRouteOption((RouteOption)newValue);
-				return;
-			case PortPackage.ROUTE__VIRTUAL_PORT:
-				setVirtualPort((Port)newValue);
 				return;
 			case PortPackage.ROUTE__NORTH_ENTRANCE:
 				setNorthEntrance((EntryPoint)newValue);
@@ -471,9 +414,6 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 			case PortPackage.ROUTE__ROUTE_OPTION:
 				setRouteOption(ROUTE_OPTION_EDEFAULT);
 				return;
-			case PortPackage.ROUTE__VIRTUAL_PORT:
-				setVirtualPort((Port)null);
-				return;
 			case PortPackage.ROUTE__NORTH_ENTRANCE:
 				setNorthEntrance((EntryPoint)null);
 				return;
@@ -501,8 +441,6 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 				return lines != null && !lines.isEmpty();
 			case PortPackage.ROUTE__ROUTE_OPTION:
 				return routeOption != ROUTE_OPTION_EDEFAULT;
-			case PortPackage.ROUTE__VIRTUAL_PORT:
-				return virtualPort != null;
 			case PortPackage.ROUTE__NORTH_ENTRANCE:
 				return northEntrance != null;
 			case PortPackage.ROUTE__SOUTH_ENTRANCE:
