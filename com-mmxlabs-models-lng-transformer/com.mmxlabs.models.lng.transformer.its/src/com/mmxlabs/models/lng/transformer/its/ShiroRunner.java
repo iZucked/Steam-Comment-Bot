@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.its;
@@ -29,7 +29,7 @@ public class ShiroRunner implements BeforeAllCallback, AfterAllCallback {
 
 		RequireFeature annotation = requiredTestClass.getAnnotation(RequireFeature.class);
 		if (annotation != null) {
-			String[] features = annotation.features();
+			String[] features = annotation.value();
 			if (features != null) {
 				for (String f : features) {
 
@@ -63,6 +63,6 @@ public class ShiroRunner implements BeforeAllCallback, AfterAllCallback {
 
 	private void initAccessControl() {
 		// Initialise feature enablements
-		LicenseFeatures.initialiseFeatureEnablements("optimisation-period", "optimisation-charter-out-generation", "panama-canal", "break-evens");
+		LicenseFeatures.initialiseFeatureEnablements("optimisation-period", "optimisation-charter-out-generation", "break-evens");
 	}
 }

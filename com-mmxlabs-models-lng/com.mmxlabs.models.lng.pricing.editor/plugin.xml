@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2019
+    Copyright (C) Minimax Labs Ltd., 2010 - 2020
     All rights reserved.
 
 -->
@@ -425,21 +425,21 @@
  <extension
        point="org.eclipse.ui.views">
     <view
-          category="com.mmxlabs.models.lng.views.physical"
+          category="com.mmxlabs.lngdataserver.views.dataserver"
           class="com.mmxlabs.models.lng.pricing.ui.views.CooldownCostsView"
           id="com.mmxlabs.models.lng.pricing.editor.CooldownCostsView"
           name="Cooldown Costs"
           restorable="true">
     </view>
     <view
-          category="com.mmxlabs.models.lng.views.physical"
+          category="com.mmxlabs.lngdataserver.views.dataserver"
           class="com.mmxlabs.models.lng.pricing.ui.views.PortCostsView"
           id="com.mmxlabs.models.lng.pricing.editor.PortCostsView"
           name="Port Costs"
           restorable="true">
     </view>
     <view
-          category="com.mmxlabs.models.lng.views.physical"
+          category="com.mmxlabs.lngdataserver.views.dataserver"
           class="com.mmxlabs.models.lng.pricing.ui.views.CanalCostsView"
           id="com.mmxlabs.models.lng.pricing.editor.CanalCostsView"
           name="Canal Costs"

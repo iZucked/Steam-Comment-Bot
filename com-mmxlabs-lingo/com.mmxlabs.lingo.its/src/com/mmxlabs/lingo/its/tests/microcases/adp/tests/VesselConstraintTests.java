@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases.adp.tests;
@@ -14,6 +14,7 @@ import com.mmxlabs.lingo.its.tests.microcases.adp.AbstractADPAndLightWeightTests
 import com.mmxlabs.lingo.its.tests.microcases.adp.OptimisationEMFTestUtils;
 import com.mmxlabs.lingo.its.tests.microcases.adp.TrainingCaseConstants;
 import com.mmxlabs.lingo.its.verifier.OptimiserResultVerifier;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.adp.IntervalType;
 import com.mmxlabs.models.lng.adp.LNGVolumeUnit;
 import com.mmxlabs.models.lng.adp.ext.impl.AbstractSlotTemplateFactory;
@@ -134,8 +135,8 @@ public class VesselConstraintTests extends AbstractADPAndLightWeightTests {
 		final Vessel vesselMedium = fleetModelFinder.findVessel(TrainingCaseConstants.VESSEL_MEDIUM_SHIP);
 		final Vessel vesselSmall = fleetModelFinder.findVessel(TrainingCaseConstants.VESSEL_SMALL_SHIP);
 		final Vessel vesselLarge = fleetModelFinder.findVessel(TrainingCaseConstants.VESSEL_LARGE_SHIP);
-		Port pluto = portFinder.findPort(TrainingCaseConstants.PORT_DARWIN);
-		Port himeji = portFinder.findPort(TrainingCaseConstants.PORT_HIMEJI);
+		Port pluto = portFinder.findPortById(InternalDataConstants.PORT_DARWIN);
+		Port himeji = portFinder.findPortById(InternalDataConstants.PORT_HIMEJI);
 		final CharterInMarket defaultCharterInMarket = spotMarketsModelBuilder.createCharterInMarket("ADP Default", vesselMedium, entity, "50000", 0);
 		defaultCharterInMarket.setNominal(true);
 		defaultCharterInMarket.setEnabled(true);

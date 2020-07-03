@@ -1,10 +1,11 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.analytics;
 
 import java.util.List;
+
 import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;

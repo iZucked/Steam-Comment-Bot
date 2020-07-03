@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases;
@@ -53,7 +53,7 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 @SuppressWarnings({ "unused", "null" })
 @ExtendWith(ShiroRunner.class)
-public class BallastBonusContractTests extends AbstractMicroTestCase {
+public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 
 	private static final String TEST_CHARTER_CURVE_NAME = "TestCharterCurve";
 	
@@ -243,7 +243,7 @@ public class BallastBonusContractTests extends AbstractMicroTestCase {
 		final Cargo cargo = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
 		cargo.setVesselAssignmentType(vesselAvailability);
 		final BallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleNotionalJourneyBallastBonusContract(Lists.newLinkedList(Lists.newArrayList(portFinder.findPort("Sakai"))),
-				20.0, "20000", "100", true, Lists.newArrayList(portFinder.findPort("Bonny Nigeria")));
+				20.0, "20000", "100", true, false, Lists.newArrayList(portFinder.findPort("Bonny Nigeria")));
 		vesselAvailability.setBallastBonusContract(ballastBonusContract);
 		evaluateTest(null, null, scenarioRunner -> {
 
@@ -314,7 +314,7 @@ public class BallastBonusContractTests extends AbstractMicroTestCase {
 		final Cargo cargo = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
 		cargo.setVesselAssignmentType(vesselAvailability);
 		final BallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleNotionalJourneyBallastBonusContract(Lists.newLinkedList(Lists.newArrayList(portFinder.findPort("Sakai"))),
-				20.0, "20000", "100", false, Lists.newArrayList(portFinder.findPort("Bonny Nigeria")));
+				20.0, "20000", "100", false, true, Lists.newArrayList(portFinder.findPort("Bonny Nigeria")));
 		vesselAvailability.setBallastBonusContract(ballastBonusContract);
 		evaluateTest(null, null, scenarioRunner -> {
 
@@ -392,7 +392,7 @@ public class BallastBonusContractTests extends AbstractMicroTestCase {
 		final Cargo cargo = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
 		cargo.setVesselAssignmentType(vesselAvailability);
 		final BallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleNotionalJourneyBallastBonusContract(Lists.newLinkedList(Lists.newArrayList(portFinder.findPort("Sakai"))),
-				20.0, "20000", "100", true, Lists.newArrayList(portFinder.findPort("Bonny Nigeria"), portFinder.findPort("Yung An")));
+				20.0, "20000", "100", true, false, Lists.newArrayList(portFinder.findPort("Bonny Nigeria"), portFinder.findPort("Yung An")));
 		vesselAvailability.setBallastBonusContract(ballastBonusContract);
 		evaluateTest(null, null, scenarioRunner -> {
 

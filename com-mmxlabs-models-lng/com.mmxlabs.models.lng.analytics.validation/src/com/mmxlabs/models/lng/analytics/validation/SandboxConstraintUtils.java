@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.validation;
@@ -12,6 +12,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.analytics.SellOption;
+import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -38,13 +39,28 @@ public class SandboxConstraintUtils {
 	}
 
 	public static boolean vesselRestrictionsValid(final BuyOption buy, final SellOption sell, final ShippingOption shippingOption) {
-		if (buy instanceof BuyReference) {
-			final Pair<Boolean, Set<AVesselSet<Vessel>>> restrictedVessels = AnalyticsBuilder.getBuyVesselRestrictions(buy);
-			final boolean permitted = restrictedVessels.getFirst();
-			final Set<AVesselSet<Vessel>> allowedVessels = restrictedVessels.getSecond();
-			final Vessel vessel = AnalyticsBuilder.getVessel(shippingOption);
-			if (!allowedVessels.isEmpty() && vessel != null) {
-				return SetUtils.getObjects(allowedVessels).contains(vessel) && permitted;
+		final Vessel vessel = AnalyticsBuilder.getVessel(shippingOption);
+		if (vessel != null) {
+			if (buy instanceof BuyReference) {
+				final Pair<Boolean, Set<AVesselSet<Vessel>>> restrictedVessels = AnalyticsBuilder.getBuyVesselRestrictions(buy);
+				final boolean permissive = restrictedVessels.getFirst();
+				final Set<AVesselSet<Vessel>> allowedVessels = restrictedVessels.getSecond();
+
+				if (!permissive && allowedVessels.isEmpty()) {
+					// No restrictions
+				} else if (SetUtils.getObjects(allowedVessels).contains(vessel) != permissive) {
+					return false;
+				}
+			}
+			if (sell instanceof SellReference) {
+				final Pair<Boolean, Set<AVesselSet<Vessel>>> restrictedVessels = AnalyticsBuilder.getSellVesselRestrictions(sell);
+				final boolean permissive = restrictedVessels.getFirst();
+				final Set<AVesselSet<Vessel>> allowedVessels = restrictedVessels.getSecond();
+				if (!permissive && allowedVessels.isEmpty()) {
+					// No restrictions
+				} else if (SetUtils.getObjects(allowedVessels).contains(vessel) != permissive) {
+					return false;
+				}
 			}
 		}
 		return true;
@@ -83,6 +99,24 @@ public class SandboxConstraintUtils {
 			return false;
 		}
 		if (sellVolumeInMMBTU[0] > capacityInMMBTU) {
+			return false;
+		}
+		return true;
+	}
+
+	public static boolean checkCVAgainstBuyAndSell(final BuyOption buy, final SellOption sell) {
+		if (buy == null || sell == null) {
+			return true;
+		}
+		double[] cvRange = AnalyticsBuilder.getCargoCVRange(sell);
+		if (cvRange == null) {
+			return true;
+		}
+		final double cargoCV = AnalyticsBuilder.getCargoCV(buy);
+		if (cargoCV < cvRange[0]) {
+			return false;
+		}
+		if (cvRange[1] > 0.0 && cargoCV > cvRange[1]) {
 			return false;
 		}
 		return true;

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.ui.views.sandbox;
@@ -67,6 +67,7 @@ import com.mmxlabs.models.lng.cargo.EVesselTankState;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.CargoTravelTimeUtils;
@@ -188,6 +189,12 @@ public class AnalyticsBuilder {
 			if (buyOpportunity.getDate() != null) {
 				slot.setWindowStart(buyOpportunity.getDate());
 			}
+
+			if (buyOpportunity.isSpecifyWindow()) {
+				slot.setWindowSize(buyOpportunity.getWindowSize());
+				slot.setWindowSizeUnits(buyOpportunity.getWindowSizeUnits());
+			}
+
 			if (buyOpportunity.getEntity() != null) {
 				slot.setEntity(buyOpportunity.getEntity());
 			}
@@ -305,7 +312,7 @@ public class AnalyticsBuilder {
 				slot.setWindowSize(originalDischargeSlot.getWindowSize());
 				slot.setWindowSizeUnits(originalDischargeSlot.getWindowSizeUnits());
 				slot.setWindowCounterParty(originalDischargeSlot.isWindowCounterParty());
-				
+
 				// TODO: Copy other params!
 				if (slotMode == SlotMode.CHANGE_PRICE_VARIANT) {
 					slot.setPriceExpression("??");
@@ -347,6 +354,12 @@ public class AnalyticsBuilder {
 			if (sellOpportunity.getDate() != null) {
 				slot.setWindowStart(sellOpportunity.getDate());
 			}
+
+			if (sellOpportunity.isSpecifyWindow()) {
+				slot.setWindowSize(sellOpportunity.getWindowSize());
+				slot.setWindowSizeUnits(sellOpportunity.getWindowSizeUnits());
+			}
+
 			if (sellOpportunity.getEntity() != null) {
 				slot.setEntity(sellOpportunity.getEntity());
 			}
@@ -824,7 +837,7 @@ public class AnalyticsBuilder {
 								if (opt.getVessel() != vesselAvailability.getVessel()) {
 									continue;
 								}
-								
+
 								if (opt.getEntity() != vesselAvailability.getEntity()) {
 									continue;
 								}
@@ -1154,7 +1167,7 @@ public class AnalyticsBuilder {
 			if (cm.getEntities().size() == 1) {
 				opt.setEntity(cm.getEntities().get(0));
 			}
-			
+
 			final CompoundCommand cmd = new CompoundCommand();
 			cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt));
 			final Object target = feature.isMany() ? Collections.singletonList(opt) : opt;
@@ -1280,14 +1293,26 @@ public class AnalyticsBuilder {
 			final Port port = buyOpportunity.getPort();
 			if (port != null) {
 				ZonedDateTime t = buyOpportunity.getDate().atStartOfDay(ZoneId.of(port.getLocation().getTimeZone()));
-				if (port.getDefaultWindowSizeUnits() == TimePeriod.HOURS) {
-					t = t.plusHours(port.getDefaultWindowSize());
-				} else if (port.getDefaultWindowSizeUnits() == TimePeriod.DAYS) {
-					t = t.plusDays(port.getDefaultWindowSize());
-				} else if (port.getDefaultWindowSizeUnits() == TimePeriod.MONTHS) {
-					t = t.plusMonths(port.getDefaultWindowSize());
+				if (buyOpportunity.isSpecifyWindow()) {
+					if (buyOpportunity.getWindowSizeUnits() == TimePeriod.HOURS) {
+						t = t.plusHours(buyOpportunity.getWindowSize());
+					} else if (buyOpportunity.getWindowSizeUnits() == TimePeriod.DAYS) {
+						t = t.plusDays(buyOpportunity.getWindowSize());
+					} else if (buyOpportunity.getWindowSizeUnits() == TimePeriod.MONTHS) {
+						t = t.plusMonths(buyOpportunity.getWindowSize());
+					} else {
+						return null;
+					}
 				} else {
-					return null;
+					if (port.getDefaultWindowSizeUnits() == TimePeriod.HOURS) {
+						t = t.plusHours(port.getDefaultWindowSize());
+					} else if (port.getDefaultWindowSizeUnits() == TimePeriod.DAYS) {
+						t = t.plusDays(port.getDefaultWindowSize());
+					} else if (port.getDefaultWindowSizeUnits() == TimePeriod.MONTHS) {
+						t = t.plusMonths(port.getDefaultWindowSize());
+					} else {
+						return null;
+					}
 				}
 				return t;
 			}
@@ -1309,14 +1334,26 @@ public class AnalyticsBuilder {
 				final LocalDate date = sellOpportunity.getDate();
 				if (date != null) {
 					ZonedDateTime t = date.atStartOfDay(ZoneId.of(port.getLocation().getTimeZone()));
-					if (port.getDefaultWindowSizeUnits() == TimePeriod.HOURS) {
-						t = t.plusHours(port.getDefaultWindowSize());
-					} else if (port.getDefaultWindowSizeUnits() == TimePeriod.DAYS) {
-						t = t.plusDays(port.getDefaultWindowSize());
-					} else if (port.getDefaultWindowSizeUnits() == TimePeriod.MONTHS) {
-						t = t.plusMonths(port.getDefaultWindowSize());
+					if (sellOpportunity.isSpecifyWindow()) {
+						if (sellOpportunity.getWindowSizeUnits() == TimePeriod.HOURS) {
+							t = t.plusHours(sellOpportunity.getWindowSize());
+						} else if (sellOpportunity.getWindowSizeUnits() == TimePeriod.DAYS) {
+							t = t.plusDays(sellOpportunity.getWindowSize());
+						} else if (sellOpportunity.getWindowSizeUnits() == TimePeriod.MONTHS) {
+							t = t.plusMonths(sellOpportunity.getWindowSize());
+						} else {
+							return null;
+						}
 					} else {
-						return null;
+						if (port.getDefaultWindowSizeUnits() == TimePeriod.HOURS) {
+							t = t.plusHours(port.getDefaultWindowSize());
+						} else if (port.getDefaultWindowSizeUnits() == TimePeriod.DAYS) {
+							t = t.plusDays(port.getDefaultWindowSize());
+						} else if (port.getDefaultWindowSizeUnits() == TimePeriod.MONTHS) {
+							t = t.plusMonths(port.getDefaultWindowSize());
+						} else {
+							return null;
+						}
 					}
 					return t;
 				}
@@ -1456,6 +1493,34 @@ public class AnalyticsBuilder {
 		return 0;
 	}
 
+	public static double[] getCargoCVRange(final SellOption option) {
+		if (option instanceof SellOpportunity) {
+			SellOpportunity sellOpportunity = (SellOpportunity) option;
+			if (sellOpportunity.getPort() != null) {
+				return new double[] { sellOpportunity.getPort().getMinCvValue(), sellOpportunity.getPort().getMaxCvValue() };
+			}
+		} else if (option instanceof SellReference) {
+			final SellReference sellReference = (SellReference) option;
+			final DischargeSlot slot = sellReference.getSlot();
+			if (slot != null) {
+				return new double[] { slot.getSlotOrDelegateMinCv(), slot.getSlotOrDelegateMaxCv() };
+			}
+		} else if (option instanceof SellMarket) {
+			final SellMarket sellMarket = (SellMarket) option;
+			final SpotMarket market = sellMarket.getMarket();
+			if (market instanceof FOBSalesMarket) {
+				final FOBSalesMarket fobSalesMarket = (FOBSalesMarket) market;
+				// return fobSalesMarket.getCv();
+			} else if (market instanceof DESSalesMarket) {
+				final DESSalesMarket desSalesMarket = (DESSalesMarket) market;
+				if (desSalesMarket.getNotionalPort() != null) {
+					return new double[] { desSalesMarket.getNotionalPort().getMinCvValue(), desSalesMarket.getNotionalPort().getMaxCvValue() };
+				}
+			}
+		}
+		return null;
+	}
+
 	public static int[] getBuyVolumeInMMBTU(final BuyOption buy) {
 		final double cargoCV = AnalyticsBuilder.getCargoCV(buy);
 		if (cargoCV == 0) {
@@ -1553,27 +1618,52 @@ public class AnalyticsBuilder {
 				}
 			}
 		}
-		Pair<Boolean, Set<AVesselSet<Vessel>>> result = new Pair<Boolean, Set<AVesselSet<Vessel>>>(permitted, expandedVessels);
-		return result;
+		return Pair.of(permitted, expandedVessels);
+	}
+
+	public static Pair<Boolean, Set<AVesselSet<Vessel>>> getSellVesselRestrictions(final SellOption sell) {
+		final Set<AVesselSet<Vessel>> expandedVessels = new HashSet<>();
+		boolean permitted = false;
+		if (sell instanceof SellReference) {
+			final DischargeSlot slot = ((SellReference) sell).getSlot();
+			if (slot != null) {
+				final List<AVesselSet<Vessel>> allowedVessels = slot.getSlotOrDelegateVesselRestrictions();
+				permitted = slot.getSlotOrDelegateVesselRestrictionsArePermissive();
+				for (final AVesselSet<Vessel> s : allowedVessels) {
+					if (s instanceof Vessel) {
+						expandedVessels.add(s);
+					} else {
+						// This is ok as other impl (VesselGroup and
+						// VesselTypeGroup) only permit contained Vessels
+						expandedVessels.addAll(SetUtils.getObjects(s));
+					}
+				}
+			}
+		}
+		return Pair.of(permitted, expandedVessels);
 	}
 
 	public static Predicate<BuyOption> isFOBPurchase() {
-		return b -> ((b instanceof BuyReference && ((BuyReference) b).getSlot() != null && ((BuyReference) b).getSlot().isDESPurchase() == false)
+		return b -> ((b instanceof BuyReference && ((BuyReference) b).getSlot() != null && ((BuyReference) b).getSlot().isDESPurchase() == false) //
+				|| (b instanceof BuyMarket && ((BuyMarket) b).getMarket() instanceof FOBPurchasesMarket) //
 				|| (b instanceof BuyOpportunity && ((BuyOpportunity) b).isDesPurchase() == false));
 	}
 
 	public static Predicate<BuyOption> isDESPurchase() {
-		return b -> ((b instanceof BuyReference && ((BuyReference) b).getSlot() != null && ((BuyReference) b).getSlot().isDESPurchase() == true)
+		return b -> ((b instanceof BuyReference && ((BuyReference) b).getSlot() != null && ((BuyReference) b).getSlot().isDESPurchase() == true) //
+				|| (b instanceof BuyMarket && ((BuyMarket) b).getMarket() instanceof DESPurchaseMarket) //
 				|| (b instanceof BuyOpportunity && ((BuyOpportunity) b).isDesPurchase() == true));
 	}
 
 	public static Predicate<SellOption> isFOBSale() {
-		return s -> ((s instanceof SellReference && ((SellReference) s).getSlot() != null && ((SellReference) s).getSlot().isFOBSale() == true)
+		return s -> ((s instanceof SellReference && ((SellReference) s).getSlot() != null && ((SellReference) s).getSlot().isFOBSale() == true) //
+				|| (s instanceof SellMarket && ((SellMarket) s).getMarket() instanceof FOBSalesMarket) //
 				|| (s instanceof SellOpportunity && ((SellOpportunity) s).isFobSale() == true));
 	}
 
 	public static Predicate<SellOption> isDESSale() {
-		return s -> ((s instanceof SellReference && ((SellReference) s).getSlot() != null && ((SellReference) s).getSlot().isFOBSale() == false)
+		return s -> ((s instanceof SellReference && ((SellReference) s).getSlot() != null && ((SellReference) s).getSlot().isFOBSale() == false) //
+				|| (s instanceof SellMarket && ((SellMarket) s).getMarket() instanceof DESSalesMarket) //
 				|| (s instanceof SellOpportunity && ((SellOpportunity) s).isFobSale() == false));
 	}
 
@@ -1615,6 +1705,26 @@ public class AnalyticsBuilder {
 		}
 
 		return null;
+	}
+
+	public static boolean isSpot(BuyOption buy) {
+		if (buy instanceof BuyReference) {
+			final BuyReference ref = (BuyReference) buy;
+			return ref.getSlot() instanceof SpotSlot;
+		} else if (buy instanceof BuyMarket) {
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean isSpot(SellOption sell) {
+		if (sell instanceof SellReference) {
+			final SellReference ref = (SellReference) sell;
+			return ref.getSlot() instanceof SpotSlot;
+		} else if (sell instanceof SellMarket) {
+			return true;
+		}
+		return false;
 	}
 
 }

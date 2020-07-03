@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.migration.units;
@@ -15,12 +15,12 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.hub.services.users.UsernameProvider;
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
 import com.mmxlabs.models.migration.MigrationModelRecord;
 import com.mmxlabs.models.migration.utils.EObjectWrapper;
 import com.mmxlabs.models.migration.utils.MetamodelUtils;
-import com.mmxlabs.rcp.common.user.UsernameProvider;
 
 public class MigrateToV104 extends AbstractMigrationUnit {
 
@@ -49,11 +49,11 @@ public class MigrateToV104 extends AbstractMigrationUnit {
 
 		migrate(modelRecord, pricingModel, "marketCurveDataVersion", "marketCurvesVersionRecord");
 		migrate(modelRecord, pricingModel, "settledPricesDataVersion", "settledPricesVersionRecord");
-		
+
 		migrate(modelRecord, portModel, "portDataVersion", "portVersionRecord");
 		migrate(modelRecord, portModel, "portGroupDataVersion", "portGroupVersionRecord");
 		migrate(modelRecord, portModel, "distanceDataVersion", "distanceVersionRecord");
-		
+
 		migrate(modelRecord, fleetModel, "fleetDataVersion", "fleetVersionRecord");
 		migrate(modelRecord, fleetModel, "vesselGroupDataVersion", "vesselGroupVersionRecord");
 		migrate(modelRecord, fleetModel, "bunkerFuelsDataVersion", "bunkerFuelsVersionRecord");
@@ -66,7 +66,7 @@ public class MigrateToV104 extends AbstractMigrationUnit {
 
 		final EObjectWrapper record = (EObjectWrapper) pkgMMXCorePackage.getEFactoryInstance().create(classVersionRecord);
 		record.setAttrib("createdAt", Instant.now());
-		record.setAttrib("createdBy", UsernameProvider.getUsername());
+		record.setAttrib("createdBy", UsernameProvider.INSTANCE.getUserID());
 
 		if (owner.isSetFeature(oldFeature)) {
 			final String version = owner.getAttrib(oldFeature);

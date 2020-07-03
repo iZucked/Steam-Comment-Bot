@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 /**
@@ -52,7 +52,6 @@ public class BasicSlotPNLDetailsItemProvider
 			addExtraShippingPNLPropertyDescriptor(object);
 			addAdditionalPNLPropertyDescriptor(object);
 			addCancellationFeesPropertyDescriptor(object);
-			addHedgingValuePropertyDescriptor(object);
 			addMiscCostsValuePropertyDescriptor(object);
 			addExtraUpsidePNLPropertyDescriptor(object);
 		}
@@ -117,28 +116,6 @@ public class BasicSlotPNLDetailsItemProvider
 				 getString("_UI_BasicSlotPNLDetails_cancellationFees_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_BasicSlotPNLDetails_cancellationFees_feature", "_UI_BasicSlotPNLDetails_type"),
 				 SchedulePackage.Literals.BASIC_SLOT_PNL_DETAILS__CANCELLATION_FEES,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Hedging Value feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addHedgingValuePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_BasicSlotPNLDetails_hedgingValue_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_BasicSlotPNLDetails_hedgingValue_feature", "_UI_BasicSlotPNLDetails_type"),
-				 SchedulePackage.Literals.BASIC_SLOT_PNL_DETAILS__HEDGING_VALUE,
 				 true,
 				 false,
 				 false,
@@ -229,7 +206,6 @@ public class BasicSlotPNLDetailsItemProvider
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__EXTRA_SHIPPING_PNL:
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__ADDITIONAL_PNL:
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__CANCELLATION_FEES:
-			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__HEDGING_VALUE:
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__MISC_COSTS_VALUE:
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__EXTRA_UPSIDE_PNL:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));

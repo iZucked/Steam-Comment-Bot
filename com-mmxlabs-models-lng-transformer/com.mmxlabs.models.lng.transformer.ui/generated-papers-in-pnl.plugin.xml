@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2020
+    All rights reserved.
+
+-->
+<!-- Copyright (C) Minimax Labs Ltd., 2010 - 2015 All rights reserved. -->
+<?eclipse version="3.4"?>
+<plugin>
+ <extension
+            point="org.eclipse.ui.editorActions">
+         <editorContribution
+               id="com.mmxlabs.shiplingo.platform.models.optimisation.editorContributions"
+               targetID="com.mmxlabs.models.lng.demo.scneditor">
+            <action
+                  class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.ToggleGeneratedPapersInPNLEditorActionDelegate"
+                  definitionId="com.mmxlabs.commands.optimisation.togglegeneratedpapersinpnl"
+                  id="com.mmxlabs.shiplingo.platform.models.optimisation.togglegeneratedpapersinpnl"
+                  icon="icons/dollar_ico_16.png"
+                  label="GP PnL"
+                  style="toggle"
+                  toolbarPath="evaluategroup2"
+                  tooltip="Toggle Generated papers in total PnL">
+            </action>
+         </editorContribution>
+      </extension>
+</plugin>

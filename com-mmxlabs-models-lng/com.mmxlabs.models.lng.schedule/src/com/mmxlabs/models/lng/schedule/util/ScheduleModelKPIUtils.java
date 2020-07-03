@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.util;
@@ -103,14 +103,14 @@ public class ScheduleModelKPIUtils {
 			if (openSlotAllocation != null) {
 				totalTradingPNL += getElementTradingPNL(openSlotAllocation);
 				totalShippingPNL += getElementShippingPNL(openSlotAllocation);
-				totalShippingPNL += getElementUpstreamPNL(openSlotAllocation);
+				totalUpstreamPNL += getElementUpstreamPNL(openSlotAllocation);
 			}
 		}
 
 		if (schedule.getOtherPNL() != null) {
 			totalTradingPNL += getElementTradingPNL(schedule.getOtherPNL());
 			totalShippingPNL += getElementShippingPNL(schedule.getOtherPNL());
-			totalShippingPNL += getElementUpstreamPNL(schedule.getOtherPNL());
+			totalUpstreamPNL += getElementUpstreamPNL(schedule.getOtherPNL());
 		}
 
 		final long[] result = new long[PNL_COMPONENT_COUNT];
@@ -306,23 +306,6 @@ public class ScheduleModelKPIUtils {
 			}
 		}
 		return cancellationFees;
-	}
-
-	public static long getHedgeValue(@Nullable final ProfitAndLossContainer profitAndLossContainer) {
-		long hedgeValue = 0;
-		if (profitAndLossContainer != null) {
-			for (final GeneralPNLDetails generalPNLDetails : profitAndLossContainer.getGeneralPNLDetails()) {
-				if (generalPNLDetails instanceof SlotPNLDetails) {
-					final SlotPNLDetails slotPNLDetails = (SlotPNLDetails) generalPNLDetails;
-					for (final GeneralPNLDetails details : slotPNLDetails.getGeneralPNLDetails()) {
-						if (details instanceof BasicSlotPNLDetails) {
-							hedgeValue += ((BasicSlotPNLDetails) details).getHedgingValue();
-						}
-					}
-				}
-			}
-		}
-		return hedgeValue;
 	}
 
 	/**
@@ -698,7 +681,7 @@ public class ScheduleModelKPIUtils {
 
 	}
 
-	protected static long getFuelCost(final FuelUsage fuelUser, final Fuel... fuels) {
+	public static long getFuelCost(final FuelUsage fuelUser, final Fuel... fuels) {
 		final Set<Fuel> fuelsOfInterest = Sets.newHashSet(fuels);
 		long sum = 0L;
 		if (fuelUser != null) {

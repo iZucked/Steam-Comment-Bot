@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.migration.scenario;
@@ -153,10 +153,10 @@ public class ScenarioInstanceMigrator {
 			if (migratedVersion[0] != latestScenarioVersion) {
 				throw new ScenarioMigrationException(String.format("Scenario was not migrated to latest version. Expected %d, currently %d.", latestScenarioVersion, manifest.getScenarioVersion()));
 			}
-			if (migratedVersion[1] != latestClientVersion) {
-				throw new ScenarioMigrationException(
-						String.format("Scenario was not migrated to latest client version. Expected %d, currently %d.", latestClientVersion, manifest.getClientScenarioVersion()));
-			}
+//			if (migratedVersion[1] != latestClientVersion) {
+//				throw new ScenarioMigrationException(
+//						String.format("Scenario was not migrated to latest client version. Expected %d, currently %d.", latestClientVersion, manifest.getClientScenarioVersion()));
+//			}
 
 			// Update manifest
 			{

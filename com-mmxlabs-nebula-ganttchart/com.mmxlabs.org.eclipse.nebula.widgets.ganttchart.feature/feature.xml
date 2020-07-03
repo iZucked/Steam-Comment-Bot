@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2019
+    Copyright (C) Minimax Labs Ltd., 2010 - 2020
     All rights reserved.
 
 -->
 <feature
       id="com.mmxlabs.org.eclipse.nebula.widgets.ganttchart.feature"
       label="Gantt Chart Feature"
-      version="4.8.3.qualifier"
+      version="4.10.1.qualifier"
       provider-name="Minimax Labs Ltd.">
 
    <description url="http://www.example.com/description">

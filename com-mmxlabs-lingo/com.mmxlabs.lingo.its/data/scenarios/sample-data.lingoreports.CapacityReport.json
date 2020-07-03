@@ -1,0 +1,7 @@
+[ {
+  "Type" : "Load",
+  "Issue" : "Forced Cooldown",
+  "Schedule" : "sample-data",
+  "ID" : "load-cargo-78",
+  "Quantity (m³)" : "0"
+} ]

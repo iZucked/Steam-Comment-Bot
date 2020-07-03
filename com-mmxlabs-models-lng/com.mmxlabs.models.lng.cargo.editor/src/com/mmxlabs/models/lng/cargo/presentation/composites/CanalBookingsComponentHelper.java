@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 /**
@@ -76,6 +76,7 @@ public class CanalBookingsComponentHelper extends BaseComponentHelper {
 		add_flexibleBookingAmountNorthboundEditor(detailComposite, topClass);
 		add_flexibleBookingAmountSouthboundEditor(detailComposite, topClass);
 		add_northboundMaxIdleDaysEditor(detailComposite, topClass);
+		add_southboundMaxIdleDaysEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the canalBookingSlots feature on CanalBookings
@@ -135,5 +136,14 @@ public class CanalBookingsComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_northboundMaxIdleDaysEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CANAL_BOOKINGS__NORTHBOUND_MAX_IDLE_DAYS));
+	}
+
+	/**
+	 * Create the editor for the southboundMaxIdleDays feature on CanalBookings
+	 *
+	 * @generated
+	 */
+	protected void add_southboundMaxIdleDaysEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CANAL_BOOKINGS__SOUTHBOUND_MAX_IDLE_DAYS));
 	}
 }

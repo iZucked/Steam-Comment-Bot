@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.analytics;
@@ -607,6 +607,6 @@ public class BreakEvenSanboxUnit {
 		assert solution != null;
 		final BreakEvenSandboxEvaluator evaluator = injector.getInstance(BreakEvenSandboxEvaluator.class);
 		final IPortSlot portSlot = dataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(target, IPortSlot.class);
-		return evaluator.evaluate(solution, portSlot, null, 0);
+		return evaluator.evaluate(resource, solution, portSlot, null, 0);
 	}
 }

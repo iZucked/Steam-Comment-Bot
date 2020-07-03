@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart;
@@ -1373,6 +1373,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 					}
 					boolean loadSide = ITradesColumnFactory.isLoadGroup(blockType);
 					boolean dischargeSide = ITradesColumnFactory.isDischargeGroup(blockType);
+					boolean vesselCol = ITradesColumnFactory.isVesselColumn(handler.block.blockID);
 					for (final Object item : selection.toList()) {
 						Row row = (Row) item;
 						final Cargo cargo = row.getCargo();
@@ -1387,12 +1388,12 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 						}
 					}
 
-					populateMultipleSelectionMenu(cargoes, loads, discharges, selection, loadSide, dischargeSide);
+					populateMultipleSelectionMenu(cargoes, loads, discharges, selection, loadSide, dischargeSide, vesselCol);
 				}
 			}
 
 			private void populateMultipleSelectionMenu(final Set<Cargo> cargoes, Set<LoadSlot> loads, Set<DischargeSlot> discharges, final IStructuredSelection selection, boolean loadSide,
-					boolean dischargeSide) {
+					boolean dischargeSide, boolean vesselCol) {
 				if (menu == null) {
 					menu = mgr.createContextMenu(scenarioViewer.getGrid());
 				}
@@ -1404,7 +1405,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 						item.dispose();
 					}
 				}
-				final IMenuListener listener = menuHelper.createMultipleSelectionMenuListener(cargoes, loads, discharges, loadSide, dischargeSide);
+				final IMenuListener listener = menuHelper.createMultipleSelectionMenuListener(cargoes, loads, discharges, loadSide, dischargeSide, vesselCol);
 				listener.menuAboutToShow(mgr);
 
 				if (contextMenuExtensions != null) {

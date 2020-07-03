@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.impl;
@@ -16,6 +16,7 @@ import com.mmxlabs.models.lng.analytics.VolumeMode;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
@@ -37,9 +38,12 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SellOpportunityImpl#getCancellationExpression <em>Cancellation Expression</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SellOpportunityImpl#getMiscCosts <em>Misc Costs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SellOpportunityImpl#getVolumeMode <em>Volume Mode</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SellOpportunityImpl#getVolumeUnits <em>Volume Units</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SellOpportunityImpl#getMinVolume <em>Min Volume</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SellOpportunityImpl#getMaxVolume <em>Max Volume</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SellOpportunityImpl#getVolumeUnits <em>Volume Units</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SellOpportunityImpl#isSpecifyWindow <em>Specify Window</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SellOpportunityImpl#getWindowSize <em>Window Size</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SellOpportunityImpl#getWindowSizeUnits <em>Window Size Units</em>}</li>
  * </ul>
  *
  * @generated
@@ -196,26 +200,6 @@ public class SellOpportunityImpl extends UUIDObjectImpl implements SellOpportuni
 	protected VolumeMode volumeMode = VOLUME_MODE_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getVolumeUnits() <em>Volume Units</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVolumeUnits()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final VolumeUnits VOLUME_UNITS_EDEFAULT = VolumeUnits.M3;
-
-	/**
-	 * The cached value of the '{@link #getVolumeUnits() <em>Volume Units</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVolumeUnits()
-	 * @generated
-	 * @ordered
-	 */
-	protected VolumeUnits volumeUnits = VOLUME_UNITS_EDEFAULT;
-
-	/**
 	 * The default value of the '{@link #getMinVolume() <em>Min Volume</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -254,6 +238,86 @@ public class SellOpportunityImpl extends UUIDObjectImpl implements SellOpportuni
 	 * @ordered
 	 */
 	protected int maxVolume = MAX_VOLUME_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getVolumeUnits() <em>Volume Units</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVolumeUnits()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final VolumeUnits VOLUME_UNITS_EDEFAULT = VolumeUnits.M3;
+
+	/**
+	 * The cached value of the '{@link #getVolumeUnits() <em>Volume Units</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVolumeUnits()
+	 * @generated
+	 * @ordered
+	 */
+	protected VolumeUnits volumeUnits = VOLUME_UNITS_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isSpecifyWindow() <em>Specify Window</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSpecifyWindow()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean SPECIFY_WINDOW_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isSpecifyWindow() <em>Specify Window</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSpecifyWindow()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean specifyWindow = SPECIFY_WINDOW_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getWindowSize() <em>Window Size</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getWindowSize()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int WINDOW_SIZE_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getWindowSize() <em>Window Size</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getWindowSize()
+	 * @generated
+	 * @ordered
+	 */
+	protected int windowSize = WINDOW_SIZE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getWindowSizeUnits() <em>Window Size Units</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getWindowSizeUnits()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final TimePeriod WINDOW_SIZE_UNITS_EDEFAULT = TimePeriod.HOURS;
+
+	/**
+	 * The cached value of the '{@link #getWindowSizeUnits() <em>Window Size Units</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getWindowSizeUnits()
+	 * @generated
+	 * @ordered
+	 */
+	protected TimePeriod windowSizeUnits = WINDOW_SIZE_UNITS_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -607,6 +671,75 @@ public class SellOpportunityImpl extends UUIDObjectImpl implements SellOpportuni
 	 * @generated
 	 */
 	@Override
+	public boolean isSpecifyWindow() {
+		return specifyWindow;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setSpecifyWindow(boolean newSpecifyWindow) {
+		boolean oldSpecifyWindow = specifyWindow;
+		specifyWindow = newSpecifyWindow;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.SELL_OPPORTUNITY__SPECIFY_WINDOW, oldSpecifyWindow, specifyWindow));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int getWindowSize() {
+		return windowSize;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setWindowSize(int newWindowSize) {
+		int oldWindowSize = windowSize;
+		windowSize = newWindowSize;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.SELL_OPPORTUNITY__WINDOW_SIZE, oldWindowSize, windowSize));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public TimePeriod getWindowSizeUnits() {
+		return windowSizeUnits;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setWindowSizeUnits(TimePeriod newWindowSizeUnits) {
+		TimePeriod oldWindowSizeUnits = windowSizeUnits;
+		windowSizeUnits = newWindowSizeUnits == null ? WINDOW_SIZE_UNITS_EDEFAULT : newWindowSizeUnits;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.SELL_OPPORTUNITY__WINDOW_SIZE_UNITS, oldWindowSizeUnits, windowSizeUnits));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case AnalyticsPackage.SELL_OPPORTUNITY__FOB_SALE:
@@ -630,12 +763,18 @@ public class SellOpportunityImpl extends UUIDObjectImpl implements SellOpportuni
 				return getMiscCosts();
 			case AnalyticsPackage.SELL_OPPORTUNITY__VOLUME_MODE:
 				return getVolumeMode();
-			case AnalyticsPackage.SELL_OPPORTUNITY__VOLUME_UNITS:
-				return getVolumeUnits();
 			case AnalyticsPackage.SELL_OPPORTUNITY__MIN_VOLUME:
 				return getMinVolume();
 			case AnalyticsPackage.SELL_OPPORTUNITY__MAX_VOLUME:
 				return getMaxVolume();
+			case AnalyticsPackage.SELL_OPPORTUNITY__VOLUME_UNITS:
+				return getVolumeUnits();
+			case AnalyticsPackage.SELL_OPPORTUNITY__SPECIFY_WINDOW:
+				return isSpecifyWindow();
+			case AnalyticsPackage.SELL_OPPORTUNITY__WINDOW_SIZE:
+				return getWindowSize();
+			case AnalyticsPackage.SELL_OPPORTUNITY__WINDOW_SIZE_UNITS:
+				return getWindowSizeUnits();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -676,14 +815,23 @@ public class SellOpportunityImpl extends UUIDObjectImpl implements SellOpportuni
 			case AnalyticsPackage.SELL_OPPORTUNITY__VOLUME_MODE:
 				setVolumeMode((VolumeMode)newValue);
 				return;
-			case AnalyticsPackage.SELL_OPPORTUNITY__VOLUME_UNITS:
-				setVolumeUnits((VolumeUnits)newValue);
-				return;
 			case AnalyticsPackage.SELL_OPPORTUNITY__MIN_VOLUME:
 				setMinVolume((Integer)newValue);
 				return;
 			case AnalyticsPackage.SELL_OPPORTUNITY__MAX_VOLUME:
 				setMaxVolume((Integer)newValue);
+				return;
+			case AnalyticsPackage.SELL_OPPORTUNITY__VOLUME_UNITS:
+				setVolumeUnits((VolumeUnits)newValue);
+				return;
+			case AnalyticsPackage.SELL_OPPORTUNITY__SPECIFY_WINDOW:
+				setSpecifyWindow((Boolean)newValue);
+				return;
+			case AnalyticsPackage.SELL_OPPORTUNITY__WINDOW_SIZE:
+				setWindowSize((Integer)newValue);
+				return;
+			case AnalyticsPackage.SELL_OPPORTUNITY__WINDOW_SIZE_UNITS:
+				setWindowSizeUnits((TimePeriod)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -724,14 +872,23 @@ public class SellOpportunityImpl extends UUIDObjectImpl implements SellOpportuni
 			case AnalyticsPackage.SELL_OPPORTUNITY__VOLUME_MODE:
 				setVolumeMode(VOLUME_MODE_EDEFAULT);
 				return;
-			case AnalyticsPackage.SELL_OPPORTUNITY__VOLUME_UNITS:
-				setVolumeUnits(VOLUME_UNITS_EDEFAULT);
-				return;
 			case AnalyticsPackage.SELL_OPPORTUNITY__MIN_VOLUME:
 				setMinVolume(MIN_VOLUME_EDEFAULT);
 				return;
 			case AnalyticsPackage.SELL_OPPORTUNITY__MAX_VOLUME:
 				setMaxVolume(MAX_VOLUME_EDEFAULT);
+				return;
+			case AnalyticsPackage.SELL_OPPORTUNITY__VOLUME_UNITS:
+				setVolumeUnits(VOLUME_UNITS_EDEFAULT);
+				return;
+			case AnalyticsPackage.SELL_OPPORTUNITY__SPECIFY_WINDOW:
+				setSpecifyWindow(SPECIFY_WINDOW_EDEFAULT);
+				return;
+			case AnalyticsPackage.SELL_OPPORTUNITY__WINDOW_SIZE:
+				setWindowSize(WINDOW_SIZE_EDEFAULT);
+				return;
+			case AnalyticsPackage.SELL_OPPORTUNITY__WINDOW_SIZE_UNITS:
+				setWindowSizeUnits(WINDOW_SIZE_UNITS_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -763,12 +920,18 @@ public class SellOpportunityImpl extends UUIDObjectImpl implements SellOpportuni
 				return miscCosts != MISC_COSTS_EDEFAULT;
 			case AnalyticsPackage.SELL_OPPORTUNITY__VOLUME_MODE:
 				return volumeMode != VOLUME_MODE_EDEFAULT;
-			case AnalyticsPackage.SELL_OPPORTUNITY__VOLUME_UNITS:
-				return volumeUnits != VOLUME_UNITS_EDEFAULT;
 			case AnalyticsPackage.SELL_OPPORTUNITY__MIN_VOLUME:
 				return minVolume != MIN_VOLUME_EDEFAULT;
 			case AnalyticsPackage.SELL_OPPORTUNITY__MAX_VOLUME:
 				return maxVolume != MAX_VOLUME_EDEFAULT;
+			case AnalyticsPackage.SELL_OPPORTUNITY__VOLUME_UNITS:
+				return volumeUnits != VOLUME_UNITS_EDEFAULT;
+			case AnalyticsPackage.SELL_OPPORTUNITY__SPECIFY_WINDOW:
+				return specifyWindow != SPECIFY_WINDOW_EDEFAULT;
+			case AnalyticsPackage.SELL_OPPORTUNITY__WINDOW_SIZE:
+				return windowSize != WINDOW_SIZE_EDEFAULT;
+			case AnalyticsPackage.SELL_OPPORTUNITY__WINDOW_SIZE_UNITS:
+				return windowSizeUnits != WINDOW_SIZE_UNITS_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -795,12 +958,18 @@ public class SellOpportunityImpl extends UUIDObjectImpl implements SellOpportuni
 		result.append(miscCosts);
 		result.append(", volumeMode: ");
 		result.append(volumeMode);
-		result.append(", volumeUnits: ");
-		result.append(volumeUnits);
 		result.append(", minVolume: ");
 		result.append(minVolume);
 		result.append(", maxVolume: ");
 		result.append(maxVolume);
+		result.append(", volumeUnits: ");
+		result.append(volumeUnits);
+		result.append(", specifyWindow: ");
+		result.append(specifyWindow);
+		result.append(", windowSize: ");
+		result.append(windowSize);
+		result.append(", windowSizeUnits: ");
+		result.append(windowSizeUnits);
 		result.append(')');
 		return result.toString();
 	}

@@ -1,10 +1,9 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
@@ -15,14 +14,25 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
  */
 @NonNullByDefault
 public final class SchedulerConstants {
+	
+	public static final String SCENARIO_TYPE_ADP = "scenario-type-adp";
+
+	
+	/**
+	 * The expected number of threads used by the thread pools.
+	 */
 	public static final String CONCURRENCY_LEVEL = "concurrency-level";
 
+	// Series parser injector names
+	public static final String Parser_Commodity = "Commodity";
+	public static final String Parser_BaseFuel = "BaseFuel";
+	public static final String Parser_Charter = "Charter";
+	public static final String Parser_Currency = "Currency";
+
 	// Caching constants - used in injection framework
-	public static final String Key_VoyagePlanOptimiserCache = "cache-voyage-plan-optimiser";
+	public static final String Key_VoyagePlanEvaluatorCache = "cache-voyage-plan-evaluator";
 	public static final String Key_ArrivalTimeCache = "cache-arrival-times";
-	public static final String Key_VolumeAllocationCache = "cache-volume-allocation";
-	public static final String Key_VolumeAllocatedSequenceCache = "cache-volume-allocated-sequence";
-	public static final String Key_ProfitandLossCache = "cache-profit-and-loss";
+	public static final String Key_PNLTrimmerCache = "cache-pnl-trimmer-times";
 
 	// Additional Info keys
 	public static final String AI_volumeAllocationInfo = "info-volume-allocation";
@@ -35,7 +45,6 @@ public final class SchedulerConstants {
 	public static final String AI_charterOutProfitAndLoss = "generated-charter-out-profit-and-loss";
 	public static final String AI_profitAndLoss = "element-profit-and-loss";
 	public static final String AI_profitAndLossSlotDetails = "element-profit-and-loss-slot-details";
-	public static final String AI_latenessInfo = "info-lateness";
 	public static final String AI_similarityDifferences = "info-similarity-changes";
 
 	/**
@@ -44,11 +53,11 @@ public final class SchedulerConstants {
 	public static final String G_AI_scheduledSequence = "general-info-scheduleSequence";
 
 	public static final String Key_UsePriceBasedWindowTrimming = "scheduler-use-price-based-window-trimming";
+	public static final String Key_UsePNLBasedWindowTrimming = "scheduler-use-pnl-based-window-trimming";
 	public static final String Key_UseCanalSlotBasedWindowTrimming = "scheduler-use-canal-slot-based-window-trimming";
 
 	public static final String Key_SchedulePurges = "schedule-purges";
 
-	
 	/**
 	 * When there is not other information available, use this capacity limit.
 	 */
@@ -63,4 +72,10 @@ public final class SchedulerConstants {
 	 * Constant linked to an integer hours of idle time before a forced cooldown is no longer classed as "forced" (i.e. no longer a violation)
 	 */
 	public static final String COOLDOWN_MIN_IDLE_HOURS = "cooldown-min-idle-hours";
+
+	public static final String OPTIMISE_PAPER_PNL = "optimise-paper-pnl";
+	public static final String COMPUTE_EXPOSURES = "compute-exposures";
+	public static final String COMPUTE_PAPER_PNL = "compute-paper-pnl";
+	public static final String RE_HEDGE_WITH_PAPERS = "re-hedge-with-papers";
+	public static final String GENERATED_PAPERS_IN_PNL = "generated-papers-in-pnl";
 }

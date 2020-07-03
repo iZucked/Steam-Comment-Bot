@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.extensions.panamaslots;
@@ -28,6 +28,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider.RouteOptionDirection;
 import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.schedule.PanamaBookingHelper;
 import com.mmxlabs.scheduler.optimiser.scheduling.ScheduledTimeWindows;
 import com.mmxlabs.scheduler.optimiser.scheduling.TimeWindowScheduler;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
@@ -87,8 +88,10 @@ public class PanamaSlotsConstraintChecker implements IInitialSequencesConstraint
 
 		scheduler.setUseCanalBasedWindowTrimming(true);
 		scheduler.setUsePriceBasedWindowTrimming(false);
-
-		final ScheduledTimeWindows schedule = scheduler.schedule(sequences);
+		//We only need basic time scheduling otherwise will be slow.
+		scheduler.setUsePNLBasedWindowTrimming(false);
+		
+		final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(sequences);
 
 		final Map<IResource, List<IPortTimeWindowsRecord>> trimmedWindows = schedule.getTrimmedTimeWindowsMap();
 
@@ -135,14 +138,14 @@ public class PanamaSlotsConstraintChecker implements IInitialSequencesConstraint
 						final boolean usesNorthBoundDirection = distanceProvider.getRouteOptionDirection(slot.getPort(), ERouteOption.PANAMA) == RouteOptionDirection.NORTHBOUND;
 
 						if (panamaPeriod == PanamaPeriod.Relaxed) {
-							// Record relaxd period slots
+							// Record relaxed period slots
 							if (usesNorthBoundDirection) {
 								currentUnbookedSlotsNorthboundInRelaxed.add(slot);
 							} else {
 								currentUnbookedSlotsSouthboundInRelaxed.add(slot);
 							}
 						}
-						// All slots, ralaxed and strict
+						// All slots, relaxed and strict
 						if (usesNorthBoundDirection) {
 							currentUnbookedSlotsNorthbound.add(slot);
 						} else {
@@ -204,7 +207,8 @@ public class PanamaSlotsConstraintChecker implements IInitialSequencesConstraint
 				// Otherwise if the current excess is less than or equal to the adjusted flex => accept.
 //				northboundIsValid = countAfterNorthbound == 0 || countAfterNorthbound <= adjustedFlexCountNorthbound;
 			}
-			{
+			if (!PanamaBookingHelper.isSouthboundIdleTimeRuleEnabled()) {
+				//OLD southbound rule.
 				final int countBeforeSouthbound = currentUnbookedSlotsSouthboundInRelaxed.size(); // 0
 				currentUnbookedSlotsSouthboundInRelaxed.removeAll(unbookedSlotsSouthbound);
 				final int countAfterSouthbound = currentUnbookedSlotsSouthboundInRelaxed.size(); // 0
@@ -214,9 +218,11 @@ public class PanamaSlotsConstraintChecker implements IInitialSequencesConstraint
 				final int adjustedCountSouthbound = relaxedSlotCountSouthbound - whitelistedSlotCountSouthbound; // -1
 
 				southboundIsValid = countAfterSouthbound == 0 || countAfterSouthbound <= adjustedCountSouthbound;
-			}
+
 //			return northboundIsValid && southboundIsValid;
-			return southboundIsValid;
+				return southboundIsValid;
+			}
+			
 		} else {
 			unbookedSlotsNorthbound = currentUnbookedSlotsNorthbound;
 			unbookedSlotsSouthbound = currentUnbookedSlotsSouthbound;

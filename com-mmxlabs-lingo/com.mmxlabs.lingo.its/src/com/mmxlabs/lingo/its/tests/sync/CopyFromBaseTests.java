@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.sync;
@@ -30,7 +30,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.mmxlabs.lingo.its.tests.TesterUtil;
-import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
+import com.mmxlabs.lingo.its.tests.microcases.AbstractLegacyMicroTestCase;
 import com.mmxlabs.lngdataserver.data.distances.DataLoader;
 import com.mmxlabs.lngdataserver.integration.distances.model.DistancesVersion;
 import com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard.SharedScenarioDataUtils.DataOptions;
@@ -60,7 +60,7 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.manager.SimpleScenarioDataProvider;
 
 @ExtendWith(value = ShiroRunner.class)
-public class CopyFromBaseTests extends AbstractMicroTestCase {
+public class CopyFromBaseTests extends AbstractLegacyMicroTestCase {
 
 	@Override
 	public @NonNull IScenarioDataProvider importReferenceData() throws Exception {

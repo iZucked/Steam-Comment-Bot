@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.analytics;
@@ -68,6 +68,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.insertion.SequencesHitchHikerHelper;
 import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionEvaluator;
 import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiser;
 import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiserInitialState;
@@ -196,7 +197,8 @@ public class SlotInsertionOptimiserUnit {
 		return run(slotsToInsert, eventsToInsert, stage.getIterations(), logger, monitor);
 	}
 
-	public IMultiStateResult run(final @NonNull List<Slot<?>> slotsToInsert, final List<VesselEvent> eventsToInsert, final int tries, SlotInsertionOptimiserLogger logger, @NonNull final IProgressMonitor monitor) {
+	public IMultiStateResult run(final @NonNull List<Slot<?>> slotsToInsert, final List<VesselEvent> eventsToInsert, final int tries, SlotInsertionOptimiserLogger logger,
+			@NonNull final IProgressMonitor monitor) {
 		try {
 			logger.begin();
 
@@ -232,10 +234,14 @@ public class SlotInsertionOptimiserUnit {
 						final ISequencesManipulator manipulator = injector.getInstance(ISequencesManipulator.class);
 						final EvaluationHelper evaluationHelper = injector.getInstance(EvaluationHelper.class);
 						final ISequences initialRawSequences = injector.getInstance(Key.get(ISequences.class, Names.named(OptimiserConstants.SEQUENCE_TYPE_INITIAL)));
+
+						if (!SequencesHitchHikerHelper.checkValidSequences(initialRawSequences)) {
+							throw new UserFeedbackException("Unable to optionise this scenario. Initial sequences are invalid. Please report issue to Minimax Labs.");
+						}
+
 						state.initialMetrics = evaluationHelper.evaluateState(initialRawSequences, manipulator.createManipulatedSequences(initialRawSequences), null, true, true, null, null);
 						if (state.initialMetrics == null) {
-							throw new UserFeedbackException(
-									"Unable to perform insertion on this scenario. This is most likely caused by late and overlapping cargoes. Please check validation messages.");
+							throw new UserFeedbackException("Unable to optionise this scenario. This is most likely caused by late and overlapping cargoes. Please check validation messages.");
 						}
 						state.originalRawSequences = initialRawSequences;
 						state.lookupManager = new LookupManager();
@@ -243,6 +249,8 @@ public class SlotInsertionOptimiserUnit {
 
 						// Record the initial vessel & cargo pairing
 						for (final IPortSlot portSlot : optionElements) {
+							assert portSlot != null;
+
 							final ISequenceElement e = portSlotProvider.getElement(portSlot);
 							final Pair<@Nullable IResource, @NonNull Integer> lookup = state.lookupManager.lookup(e);
 							final IResource resource = lookup.getFirst();
@@ -266,21 +274,22 @@ public class SlotInsertionOptimiserUnit {
 						// Makes sure target slots are not contained in the solution.
 						final LookupManager lookupManager = new LookupManager(tmpRawSequences);
 						for (final IPortSlot portSlot : optionElements) {
+							assert portSlot != null;
 							final ISequenceElement element = portSlotProvider.getElement(portSlot);
 
 							final @Nullable Pair<IResource, Integer> lookup = lookupManager.lookup(element);
 							if (lookup != null && lookup.getFirst() != null) {
-								@NonNull
-								final IModifiableSequence modifiableSequence = tmpRawSequences.getModifiableSequence(lookup.getFirst());
-								@NonNull
-								final List<ISequenceElement> segment = moveHandlerHelper.extractSegment(modifiableSequence, element);
+
+								final @NonNull IModifiableSequence modifiableSequence = tmpRawSequences.getModifiableSequence(lookup.getFirst());
+								final @NonNull List<ISequenceElement> segment = moveHandlerHelper.extractSegment(modifiableSequence, element);
 								for (final ISequenceElement e : segment) {
+									assert e != null;
 									modifiableSequence.remove(e);
 									tmpRawSequences.getModifiableUnusedElements().add(e);
 
-									// Increment the compulsory slot count to take into account solution change. Otherwise when inserting multiple slots, the first move has to insert all the slots
-									// at
-									// once.
+									// Increment the compulsory slot count to take into account solution change.
+									// Otherwise when inserting multiple slots, the first move has to insert all the
+									// slots at once.
 									if (phaseOptimisationData.isElementRequired(e)) {
 										++state.initialMetrics[MetricType.COMPULSARY_SLOT.ordinal()];
 									}
@@ -289,6 +298,19 @@ public class SlotInsertionOptimiserUnit {
 
 							}
 						}
+
+						// Make sure option elements are properly hooked into the sequences
+						for (final IPortSlot portSlot : optionElements) {
+							final ISequenceElement e = portSlotProvider.getElement(portSlot);
+
+							final var lookup = lookupManager.lookup(e);
+							if (lookup == null) {
+								tmpRawSequences.getModifiableUnusedElements().add(e);
+								lookupManager.updateLookup(tmpRawSequences, null, null);
+							}
+
+						}
+
 						state.startingPointRawSequences = tmpRawSequences;
 					}
 
@@ -310,7 +332,7 @@ public class SlotInsertionOptimiserUnit {
 								isFeasible = validPreceders.size() >= 1;
 							}
 							if (!isFeasible) {
-								throw new UserFeedbackException(String.format("Unable to perform insertion on this scenario. This is caused by the slot %s having no possible pairings.", slotName));
+								throw new UserFeedbackException(String.format("Unable to optionise this scenario. This is caused by the slot %s having no possible pairings.", slotName));
 							}
 						}
 					}
@@ -322,6 +344,14 @@ public class SlotInsertionOptimiserUnit {
 							final boolean isFOBPurchase = portSlot instanceof ILoadSlot;
 							final Followers<ISequenceElement> validFollowers = followersAndPreceders.getValidFollowers(element);
 							for (final ISequenceElement follower : validFollowers) {
+								{
+									// Make sure this is an unused option
+									var l = state.lookupManager.lookup(follower);
+									if (l != null && l.getFirst() != null) {
+										continue;
+									}
+								}
+
 								final IPortSlot followerSlot = portSlotProvider.getPortSlot(follower);
 								if (followerSlot instanceof IDischargeOption) {
 									final IDischargeOption dischargeOption = (IDischargeOption) followerSlot;
@@ -337,6 +367,13 @@ public class SlotInsertionOptimiserUnit {
 							final boolean isDESSale = portSlot instanceof IDischargeSlot;
 							final Followers<ISequenceElement> validPreceders = followersAndPreceders.getValidPreceders(element);
 							for (final ISequenceElement preceder : validPreceders) {
+								{
+									// Make sure this is an unused option
+									var l = state.lookupManager.lookup(preceder);
+									if (l != null && l.getFirst() != null) {
+										continue;
+									}
+								}
 								final IPortSlot precederSlot = portSlotProvider.getPortSlot(preceder);
 								if (precederSlot instanceof ILoadOption) {
 									final ILoadOption loadOption = (ILoadOption) precederSlot;
@@ -354,12 +391,13 @@ public class SlotInsertionOptimiserUnit {
 			}
 
 			final List<Future<Pair<ISequences, Long>>> futures = new LinkedList<>();
+			List<Pair<ISequences, Long>> results = new LinkedList<>();
 
 			// Step 1: Exhaustive search of non-shipped pairs
 			try {
 				{
 					logger.beginStage(SlotInsertionOptimiserLogger.STAGE_NON_SHIPPED_PAIRS);
-					
+
 					for (final Pair<ISequenceElement, ISequenceElement> p : nonShippedPairs) {
 						final ISequenceElement buy = p.getFirst();
 						final ISequenceElement sell = p.getSecond();
@@ -382,7 +420,27 @@ public class SlotInsertionOptimiserUnit {
 
 					logger.doneStage(SlotInsertionOptimiserLogger.STAGE_NON_SHIPPED_PAIRS);
 				}
+				{
+					// Ensure the non-shipped part has completed before we go onto the next stage.
+					// It is *possible* (but not certain) that there is some unexpected interaction
+					// between the solutions in the stages. I've (SG) added this when trying to work
+					// out why an element can be inserted twice. (gitlab #216)
 
+					for (final Future<Pair<ISequences, Long>> f : futures) {
+						if (monitor.isCanceled()) {
+							return null;
+						}
+						try {
+							final Pair<ISequences, Long> s = f.get();
+							if (s != null) {
+								results.add(s);
+							}
+						} catch (final InterruptedException | ExecutionException e) {
+							e.printStackTrace();
+						}
+					}
+					futures.clear();
+				}
 				// Step 2: full search
 				{
 					logger.beginStage(SlotInsertionOptimiserLogger.STAGE_FULL_SEARCH);
@@ -395,10 +453,10 @@ public class SlotInsertionOptimiserUnit {
 							}
 							try {
 								final SlotInsertionOptimiser calculator = injector.getInstance(SlotInsertionOptimiser.class);
-								@Nullable
-								final Pair<ISequences, Long> result = calculator.generate(optionElements, state, pTryNo);
+								final @Nullable Pair<ISequences, Long> result = calculator.generate(optionElements, state, pTryNo);
 
-								// Sometimes due to spot slot equivalence we can obtain solutions which do not change the target elements.
+								// Sometimes due to spot slot equivalence we can obtain solutions which do not
+								// change the target elements.
 								if (result != null) {
 									final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
 									final IMoveHandlerHelper moveHandlerHelper = injector.getInstance(IMoveHandlerHelper.class);
@@ -455,22 +513,21 @@ public class SlotInsertionOptimiserUnit {
 						}));
 					}
 				}
-				List<Pair<ISequences, Long>> results = new LinkedList<>();
 
 				// Block until all futures completed
 				int i = 0;
-				
+
 				for (final Future<Pair<ISequences, Long>> f : futures) {
 					if (monitor.isCanceled()) {
 						return null;
 					}
 					try {
 						final Pair<ISequences, Long> s = f.get();
-						
+
 						if (++i % logger.getLoggingInterval() == 0) {
 							logger.logCurrentMemoryUsage(String.format("Full search iteration %d", i));
 						}
-						
+
 						if (s != null) {
 							results.add(s);
 						}
@@ -479,7 +536,7 @@ public class SlotInsertionOptimiserUnit {
 					}
 				}
 				logger.doneStage(SlotInsertionOptimiserLogger.STAGE_FULL_SEARCH);
-				
+
 				if (monitor.isCanceled()) {
 					return null;
 				}

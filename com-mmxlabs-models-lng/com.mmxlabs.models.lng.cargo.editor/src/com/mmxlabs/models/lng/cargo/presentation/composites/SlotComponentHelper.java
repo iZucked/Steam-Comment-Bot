@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.presentation.composites;
@@ -121,7 +121,6 @@ public class SlotComponentHelper extends BaseComponentHelper {
 		add_restrictedVesselsOverrideEditor(detailComposite, topClass);
 		add_restrictedSlotsEditor(detailComposite, topClass);
 		add_restrictedSlotsArePermissiveEditor(detailComposite, topClass);
-		add_hedgesEditor(detailComposite, topClass);
 		add_miscCostsEditor(detailComposite, topClass);
 		add_cancellationExpressionEditor(detailComposite, topClass);
 		add_nominatedVesselEditor(detailComposite, topClass);
@@ -274,10 +273,10 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the hedges feature on Slot
 	 * 
-	 * @generated
+	 * @generated NOT 
 	 */
 	protected void add_hedgesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__HEDGES));
+		// detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__HEDGES));
 	}
 
 	/**

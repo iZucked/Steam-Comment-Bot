@@ -1,9 +1,10 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.changeset;
 
+import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -34,10 +35,8 @@ import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
@@ -94,17 +93,14 @@ import com.mmxlabs.lingo.reports.services.EDiffOption;
 import com.mmxlabs.lingo.reports.services.IScenarioComparisonServiceListener;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
-import com.mmxlabs.lingo.reports.services.ScenarioComparisonServiceTransformer;
 import com.mmxlabs.lingo.reports.services.ScenarioNotEvaluatedException;
-import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
-import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetKPIUtil.ResultType;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetToTableTransformer.SortMode;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetViewColumnHelper.VesselData;
 import com.mmxlabs.lingo.reports.views.changeset.InsertionPlanGrouperAndFilter.GroupMode;
 import com.mmxlabs.lingo.reports.views.changeset.actions.CreateSandboxFromResultAction;
 import com.mmxlabs.lingo.reports.views.changeset.actions.ExportChangeAction;
-import com.mmxlabs.lingo.reports.views.changeset.actions.MergeChangesAction;
+import com.mmxlabs.lingo.reports.views.changeset.actions.UpdateSandboxFromRowsAction;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData;
@@ -115,7 +111,9 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.ActionableSetPlan;
+import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.OptimisationResult;
+import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.SandboxResult;
 import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 import com.mmxlabs.models.lng.analytics.SolutionOption;
@@ -126,10 +124,12 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.transformer.ui.analytics.EvaluateSolutionSetHelper;
@@ -139,13 +139,16 @@ import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
+import com.mmxlabs.rcp.common.actions.CopyGridToHtmlClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
-import com.mmxlabs.rcp.common.actions.CopyToClipboardActionFactory;
 import com.mmxlabs.rcp.common.actions.IAdditionalAttributeProvider;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.rcp.common.dnd.BasicDragSource;
+import com.mmxlabs.rcp.common.ecore.EMFCopier;
+import com.mmxlabs.rcp.common.ecore.SafeAdapterImpl;
 import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
+import com.mmxlabs.rcp.common.menus.SubLocalMenuHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
@@ -156,6 +159,106 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
 public class ChangeSetView extends ViewPart {
 
 	private final ChangeSetViewSchedulingRule schedulingRule = new ChangeSetViewSchedulingRule(this);
+
+	final class ChangeSetComparator extends ViewerComparator {
+
+		final boolean sortByVesselAndDate;
+
+		public ChangeSetComparator(final boolean sortByVesselAndDate) {
+			this.sortByVesselAndDate = sortByVesselAndDate;
+		}
+
+		@Override
+		public int compare(final Viewer viewer, final Object e1, final Object e2) {
+			final Object original_e1 = e1;
+			final Object original_e2 = e2;
+
+			// If both rows of the same parent group..
+			if (e1 instanceof ChangeSetTableRow && e2 instanceof ChangeSetTableRow) {
+				// Retain original ordering in the datamodel
+				final ChangeSetTableRow r1 = (ChangeSetTableRow) e1;
+				final ChangeSetTableRow r2 = (ChangeSetTableRow) e2;
+				if (r1.eContainer() == r2.eContainer()) {
+					final ChangeSetTableGroup g = (ChangeSetTableGroup) r1.eContainer();
+					if (sortByVesselAndDate) {
+						final String r1Vessel = getEmptyIfNull(getVesselName(r1));
+						final String r2Vessel = getEmptyIfNull(getVesselName(r2));
+						final int diffVessel = r1Vessel.compareTo(r2Vessel);
+						if (diffVessel == 0) {
+							final ZonedDateTime date1 = getDate(r1);
+							final ZonedDateTime date2 = getDate(r2);
+							if (date1 != null && date2 != null) {
+								return date1.compareTo(date2);
+							} else if (date1 != null) {
+								return -1;
+							} else if (date2 != null) {
+								return 1;
+							} else {
+								return 0;
+							}
+						} else {
+							return diffVessel;
+						}
+					} else {
+						return g.getRows().indexOf(r1) - g.getRows().indexOf(r2);
+					}
+				}
+			}
+
+			ChangeSetTableGroup g1 = null;
+			ChangeSetTableGroup g2 = null;
+
+			if (e1 instanceof ChangeSetTableGroup) {
+				g1 = (ChangeSetTableGroup) e1;
+			}
+			if (e2 instanceof ChangeSetTableGroup) {
+				g2 = (ChangeSetTableGroup) e2;
+			}
+			if (g1 != null && g2 != null) {
+				// if (insertionPlanFilter.getUserFilters().isEmpty()) {
+				if (!Objects.equal(g1.getGroupObject(), g2.getGroupObject())) {
+					return Double.compare(g2.getGroupSortValue(), g1.getGroupSortValue());
+
+					// }
+				}
+				return -Double.compare(g2.getSortValue(), g1.getSortValue());
+			}
+
+			return super.compare(viewer, original_e1, original_e2);
+		}
+
+		private String getVesselName(final ChangeSetTableRow row) {
+			if (row.getAfterVesselName() != null && !row.getAfterVesselName().isEmpty()) {
+				return row.getAfterVesselName();
+			} else if (row.getBeforeVesselName() != null && !row.getBeforeVesselName().isEmpty()) {
+				return row.getBeforeVesselName();
+			} else {
+				return "";
+			}
+		}
+
+		private String getEmptyIfNull(final String str) {
+			return (str == null ? "" : str);
+		}
+
+		private ZonedDateTime getDate(final ChangeSetTableRow tableRow) {
+			SlotAllocation slotAllocation = tableRow.getLhsAfter() != null ? tableRow.getLhsAfter().getLoadAllocation() : null;
+			if (slotAllocation == null) {
+				slotAllocation = tableRow.getLhsBefore() != null ? tableRow.getLhsBefore().getLoadAllocation() : null;
+			}
+			if (slotAllocation == null) {
+				slotAllocation = tableRow.getRhsBefore() != null ? tableRow.getRhsBefore().getDischargeAllocation() : null;
+			}
+			if (slotAllocation == null) {
+				slotAllocation = tableRow.getRhsAfter() != null ? tableRow.getRhsAfter().getDischargeAllocation() : null;
+			}
+			if (slotAllocation != null && slotAllocation.getSlotVisit() != null) {
+				return slotAllocation.getSlotVisit().getStart();
+			} else {
+				return null;
+			}
+		}
+	}
 
 	public enum ViewMode {
 		COMPARE, OLD_ACTION_SET, NEW_ACTION_SET, INSERTIONS, GENERIC, SANDBOX
@@ -237,13 +340,8 @@ public class ChangeSetView extends ViewPart {
 			if (ChangeSetView.this.viewMode == ViewMode.COMPARE) {
 				final ScenarioResult target = pin == null ? other : pin;
 				setNewDataData(target, (monitor, targetSlotId) -> {
-					final ScheduleDiffUtils scheduleDiffUtils = new ScheduleDiffUtils();
-					scheduleDiffUtils.setCheckAssignmentDifferences(true);
-					scheduleDiffUtils.setCheckSpotMarketDifferences(true);
-					scheduleDiffUtils.setCheckNextPortDifferences(true);
-					final ScenarioComparisonTransformer transformer = new ScenarioComparisonTransformer();
-					final ChangeSetRoot newRoot = transformer.createDataModel(equivalancesMap, table, pin, other, monitor);
-
+					final PinDiffResultPlanTransformer transformer = new PinDiffResultPlanTransformer();
+					final ChangeSetRoot newRoot = transformer.createDataModel(pin, other, monitor);
 					return new ViewState(newRoot, SortMode.BY_GROUP);
 				}, null);
 			}
@@ -266,6 +364,7 @@ public class ChangeSetView extends ViewPart {
 	private InsertionPlanGrouperAndFilter insertionPlanFilter;
 
 	private boolean showNonStructuralChanges = false;
+	private boolean sortByVesselAndDate = false;
 	private boolean showRelatedChangesMenus = false;
 	private boolean showUserFilterMenus = false;
 	private boolean showNegativePNLChanges = true;
@@ -460,26 +559,10 @@ public class ChangeSetView extends ViewPart {
 				public String getStringContents(final ScenarioResult pin, final ScenarioResult other) {
 					try {
 						columnHelper.setTextualVesselMarkers(true);
-						// Need to refresh the view to trigger creation of the text labels
-						final ScheduleDiffUtils scheduleDiffUtils = new ScheduleDiffUtils();
-						scheduleDiffUtils.setCheckAssignmentDifferences(true);
-						scheduleDiffUtils.setCheckSpotMarketDifferences(true);
-						scheduleDiffUtils.setCheckNextPortDifferences(true);
-
-						final ISelectedDataProvider selectedDataProvider = SelectedScenariosService.createTestingSelectedDataProvider(pin, other);
-						final ScenarioComparisonServiceTransformer.TransformResult result = ScenarioComparisonServiceTransformer.transform(pin, Collections.singletonList(other), selectedDataProvider,
-								scheduleDiffUtils, Collections.emptyList());
-						result.selectedDataProvider = selectedDataProvider;
-						final Table table = result.table;
-
-						// Take a copy of current diff options
-						// table.setOptions(EcoreUtil.copy(diffOptions));
 
 						ChangeSetView.this.setNewDataData(pin, (monitor, targetSlotId) -> {
-
-							final ScenarioComparisonTransformer transformer = new ScenarioComparisonTransformer();
-							final ChangeSetRoot newRoot = transformer.createDataModel(result.equivalancesMap, table, pin, other, monitor);
-
+							final PinDiffResultPlanTransformer transformer = new PinDiffResultPlanTransformer();
+							final ChangeSetRoot newRoot = transformer.createDataModel(pin, other, monitor);
 							return new ViewState(newRoot, SortMode.BY_GROUP);
 						}, false, null);
 						ViewerHelper.refresh(viewer, true);
@@ -632,7 +715,7 @@ public class ChangeSetView extends ViewPart {
 				selectedElements.add(rowData.getDischargeSlot());
 				if (rowData.getLoadAllocation() != null) {
 					selectedElements.add(rowData.getLoadAllocation());
-					SlotVisit slotVisit = rowData.getLoadAllocation().getSlotVisit();
+					final SlotVisit slotVisit = rowData.getLoadAllocation().getSlotVisit();
 					selectedElements.add(slotVisit);
 					if (slotVisit != null) {
 						selectedElements.add(slotVisit.getSequence());
@@ -640,7 +723,7 @@ public class ChangeSetView extends ViewPart {
 				}
 				if (rowData.getDischargeAllocation() != null) {
 					selectedElements.add(rowData.getDischargeAllocation());
-					SlotVisit slotVisit = rowData.getDischargeAllocation().getSlotVisit();
+					final SlotVisit slotVisit = rowData.getDischargeAllocation().getSlotVisit();
 					selectedElements.add(slotVisit);
 					if (slotVisit != null) {
 						selectedElements.add(slotVisit.getSequence());
@@ -726,45 +809,7 @@ public class ChangeSetView extends ViewPart {
 
 		viewer.setFilters(filters);
 
-		viewer.setComparator(new ViewerComparator() {
-			@Override
-			public int compare(final Viewer viewer, final Object e1, final Object e2) {
-				final Object original_e1 = e1;
-				final Object original_e2 = e2;
-
-				// If both rows of the same parent group..
-				if (e1 instanceof ChangeSetTableRow && e2 instanceof ChangeSetTableRow) {
-					// Retain original ordering in the datamodel
-					final ChangeSetTableRow r1 = (ChangeSetTableRow) e1;
-					final ChangeSetTableRow r2 = (ChangeSetTableRow) e2;
-					if (r1.eContainer() == r2.eContainer()) {
-						final ChangeSetTableGroup g = (ChangeSetTableGroup) r1.eContainer();
-						return g.getRows().indexOf(r1) - g.getRows().indexOf(r2);
-					}
-				}
-
-				ChangeSetTableGroup g1 = null;
-				ChangeSetTableGroup g2 = null;
-
-				if (e1 instanceof ChangeSetTableGroup) {
-					g1 = (ChangeSetTableGroup) e1;
-				}
-				if (e2 instanceof ChangeSetTableGroup) {
-					g2 = (ChangeSetTableGroup) e2;
-				}
-				if (g1 != null && g2 != null) {
-					// if (insertionPlanFilter.getUserFilters().isEmpty()) {
-					if (!Objects.equal(g1.getGroupObject(), g2.getGroupObject())) {
-						return Double.compare(g2.getGroupSortValue(), g1.getGroupSortValue());
-
-						// }
-					}
-					return -Double.compare(g2.getSortValue(), g1.getSortValue());
-				}
-
-				return super.compare(viewer, original_e1, original_e2);
-			}
-		});
+		viewer.setComparator(new ChangeSetComparator(this.sortByVesselAndDate));
 
 		viewer.addOpenListener(new IOpenListener() {
 
@@ -814,7 +859,8 @@ public class ChangeSetView extends ViewPart {
 			viewer.getGrid().addMenuDetectListener(listener);
 		}
 
-		eventHandler = event -> {
+		final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
+		eventHandlerCloseScenario = event -> {
 			// event.getProperty(name)
 			final Object o = event.getProperty("org.eclipse.e4.data");
 			if (o instanceof ScenarioInstance) {
@@ -822,8 +868,16 @@ public class ChangeSetView extends ViewPart {
 				onClosingScenario(scenarioInstance);
 			}
 		};
-		final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
-		eventBroker.subscribe(ScenarioServiceUtils.EVENT_CLOSING_SCENARIO_INSTANCE, eventHandler);
+		eventBroker.subscribe(ScenarioServiceUtils.EVENT_CLOSING_SCENARIO_INSTANCE, eventHandlerCloseScenario);
+		eventHandlerCloseSolution = event -> {
+			// event.getProperty(name)
+			final Object o = event.getProperty("org.eclipse.e4.data");
+			if (o instanceof AnalyticsSolution) {
+				final AnalyticsSolution sol = (AnalyticsSolution) o;
+				onClosingAnalyticsSolution(sol);
+			}
+		};
+		eventBroker.subscribe(ScenarioServiceUtils.EVENT_CLOSING_ANALYTICS_SOLUTION, eventHandlerCloseSolution);
 
 		final String secondaryId = getViewSite().getSecondaryId();
 		if (!"Dynamic".equals(secondaryId)) {
@@ -891,7 +945,13 @@ public class ChangeSetView extends ViewPart {
 		getViewSite().getActionBars().getToolBarManager().add(new GroupMarker("start"));
 
 		{
-			copyAction = CopyToClipboardActionFactory.createCopyToHtmlClipboardAction(viewer, true);
+			copyAction = new CopyGridToHtmlClipboardAction(viewer.getGrid(), true, () -> {
+				columnHelper.setTextualVesselMarkers(true);
+				ViewerHelper.refresh(viewer, true);
+			}, () -> {
+				columnHelper.setTextualVesselMarkers(false);
+				ViewerHelper.refresh(viewer, true);
+			});
 			getViewSite().getActionBars().getToolBarManager().add(copyAction);
 		}
 		{
@@ -939,9 +999,7 @@ public class ChangeSetView extends ViewPart {
 								addActionToMenu(mode_Target, menu2);
 								addActionToMenu(mode_TargetComplexity, menu2);
 								addActionToMenu(mode_Complextiy, menu2);
-
-								final int ii = 0;
-							};
+							}
 						};
 						groupModeAction.setToolTipText("Change the grouping choice");
 						addActionToMenu(groupModeAction, menu);
@@ -950,6 +1008,11 @@ public class ChangeSetView extends ViewPart {
 					toggleStructuralChanges.setToolTipText("Toggling filtering of non structural changes");
 					toggleStructuralChanges.setChecked(showNonStructuralChanges);
 					addActionToMenu(toggleStructuralChanges, menu);
+
+					final RunnableAction toggleSortByVesselAndDate = new RunnableAction("Sort by vessel and date", ChangeSetView.this::doSortByVesselAndDateToggle);
+					toggleSortByVesselAndDate.setToolTipText("Toggling sorting by vessel and date");
+					toggleSortByVesselAndDate.setChecked(sortByVesselAndDate);
+					addActionToMenu(toggleSortByVesselAndDate, menu);
 
 					if (showNegativePNLChangesMenu) {
 						final RunnableAction toggleNegativePNL = new RunnableAction("Show negative PNL Changes", ChangeSetView.this::doShowNegativePNLToggle);
@@ -1029,7 +1092,7 @@ public class ChangeSetView extends ViewPart {
 		} else {
 			final Display display = PlatformUI.getWorkbench().getDisplay();
 			final Shell activeShell = display.getActiveShell();
-			
+
 			final ICoreRunnable runnable = (monitor) -> {
 				try {
 					final ViewState newViewState = action.apply(monitor, targetSlotId);
@@ -1047,11 +1110,12 @@ public class ChangeSetView extends ViewPart {
 					} else {
 						RunnerHelper.syncExec(new ViewUpdateRunnable(newViewState));
 					}
-				}
-				catch (ScenarioNotEvaluatedException cause) {
-					RunnerHelper.asyncExec(new Runnable() { public void run() { 
+				} catch (final ScenarioNotEvaluatedException cause) {
+					RunnerHelper.asyncExec(new Runnable() {
+						public void run() {
 							MessageDialog.openError(activeShell, "Error opening result", cause.getMessage());
-					}});
+						}
+					});
 				}
 			};
 
@@ -1099,7 +1163,8 @@ public class ChangeSetView extends ViewPart {
 	@PreDestroy
 	public void dispose() {
 		final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
-		eventBroker.unsubscribe(eventHandler);
+		eventBroker.unsubscribe(eventHandlerCloseScenario);
+		eventBroker.unsubscribe(eventHandlerCloseSolution);
 
 		if (lastParent != null) {
 			lastParent.eAdapters().remove(adapter);
@@ -1217,6 +1282,12 @@ public class ChangeSetView extends ViewPart {
 		ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
 	}
 
+	private void doSortByVesselAndDateToggle() {
+		sortByVesselAndDate = !sortByVesselAndDate;
+		viewer.setComparator(new ChangeSetComparator(this.sortByVesselAndDate));
+		ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
+	}
+
 	private void doShowNegativePNLToggle() {
 		showNegativePNLChanges = !showNegativePNLChanges;
 		ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
@@ -1272,204 +1343,242 @@ public class ChangeSetView extends ViewPart {
 			final GridItem[] items = grid.getSelection();
 			boolean showMenu = false;
 			final Set<ChangeSetTableRow> directSelectedRows = new LinkedHashSet<>();
+			final Set<ChangeSetTableGroup> directSelectedGroups = new LinkedHashSet<>();
 			if (items.length >= 1) {
 				final Set<ChangeSetTableGroup> selectedSets = new LinkedHashSet<>();
 				final Iterator<?> itr = selection.iterator();
 				while (itr.hasNext()) {
 					final Object obj = itr.next();
-					if (showRelatedChangesMenus) {
-						if (obj instanceof ChangeSetTableGroup) {
-							final ChangeSetTableGroup changeSetTableGroup = (ChangeSetTableGroup) obj;
-							if (insertionPlanFilter.getUserFilters().isEmpty()) {
-								if (insertionPlanFilter.getExpandedGroups().contains(changeSetTableGroup.getGroupObject())) {
-									helper.addAction(new RunnableAction("Hide similar", () -> {
-										insertionPlanFilter.getExpandedGroups().remove(changeSetTableGroup.getGroupObject());
-										ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
-									}));
-								} else {
-									helper.addAction(new RunnableAction("Show similar", () -> {
-										insertionPlanFilter.getExpandedGroups().add(changeSetTableGroup.getGroupObject());
-										ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
-									}));
-								}
-							}
-						}
-					}
+
 					if (obj instanceof ChangeSetTableGroup) {
 						selectedSets.add((ChangeSetTableGroup) obj);
+						directSelectedGroups.add((ChangeSetTableGroup) obj);
 					} else if (obj instanceof ChangeSetTableRow) {
 						final ChangeSetTableRow changeSetRow = (ChangeSetTableRow) obj;
 						selectedSets.add((ChangeSetTableGroup) changeSetRow.eContainer());
 						directSelectedRows.add(changeSetRow);
 					}
 				}
-				if (selectedSets.size() == 1) {
-					if (canExportChangeSet) {
-						{
-							final ChangeSetTableGroup changeSetTableGroup = selectedSets.iterator().next();
-							int idx = 0;
-							final ChangeSetTableRoot root = (ChangeSetTableRoot) changeSetTableGroup.eContainer();
-							if (root != null) {
-								idx = root.getGroups().indexOf(changeSetTableGroup);
-							}
-							final String name = columnHelper.getChangeSetColumnLabelProvider().apply(changeSetTableGroup, idx);
-							boolean showSimple = true;
-							if (showAlternativeChangeModel && ChangeSetView.this.viewMode == ViewMode.INSERTIONS) {
-								// Only offer this for dual model insertions.
-								final ScenarioResult scenarioResult = changeSetTableGroup.getCurrentScenario();
-								if (scenarioResult.getResultRoot() instanceof ScheduleModel) {
-									final ScheduleModel scheduleModel = (ScheduleModel) scenarioResult.getResultRoot();
-									if (scheduleModel.eContainer() instanceof SolutionOptionMicroCase) {
-										final BiConsumer<LNGScenarioModel, Schedule> modelCustomiser = EvaluateSolutionSetHelper.createModelCustomiser();
-										helper.addAction(new ExportChangeAction(changeSetTableGroup, name, true, modelCustomiser));
-										showSimple = false;
-									}
-								}
-							}
-							if (showSimple) {
-								BiConsumer<LNGScenarioModel, Schedule> modelCustomiser = null;
-								if (getLastSolution().getSolution() instanceof SandboxResult) {
-									modelCustomiser = EvaluateSolutionSetHelper.createModelCustomiser();
-								}
-
-								helper.addAction(new ExportChangeAction(changeSetTableGroup, name, modelCustomiser));
-							}
-							showMenu = true;
-						}
-						// Experimental code to generate a sandbox scenario.
-						if (ChangeSetView.this.viewMode != ViewMode.COMPARE && ChangeSetView.this.viewMode != ViewMode.OLD_ACTION_SET) {
-							if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_SANDBOX)) {
-								final ChangeSetTableGroup changeSetTableGroup = selectedSets.iterator().next();
-								helper.addAction(new CreateSandboxFromResultAction(changeSetTableGroup, changeSetTableGroup.getDescription()));
-								showMenu = true;
-							}
-						}
-						if (ChangeSetView.this.viewMode == ViewMode.SANDBOX && ChangeSetView.this.showToggleAltPNLBaseAction) {
-
-							final ChangeSetTableGroup changeSetTableGroup = selectedSets.iterator().next();
-							int idx = 0;
-							final ChangeSetTableRoot root = (ChangeSetTableRoot) changeSetTableGroup.eContainer();
-							if (root != null) {
-								idx = root.getGroups().indexOf(changeSetTableGroup);
-							}
-
-							final Action action = new RunnableAction("Compute full change", () -> {
-
-								final ScenarioResult scenarioResult = changeSetTableGroup.getCurrentScenario();
-
-								final EvaluateSolutionSetHelper ssHelper = new EvaluateSolutionSetHelper(scenarioResult.getScenarioDataProvider());
-
-								final AnalyticsSolution solution = currentViewState.lastSolution;
-								if (solution != null && solution.getSolution() instanceof SandboxResult) {
-									final SandboxResult sandboxResult = (SandboxResult) solution.getSolution();
-
-									UserSettings userSettings = null;
-
-									// OtherPNL basePNL = ScheduleFactory.eINSTANCE.createOtherPNL();
-									// {
-									// ScheduleModelKPIUtils.updateOtherPNL(basePNL,
-									// sandboxResult.getBaseOption().getScheduleModel().getSchedule(),
-									// ScheduleModelKPIUtils.Mode.INCREMENT);
-									// }
-
-									final UUIDObject object = solution.getSolution();
-									ssHelper.processSolution(sandboxResult.getBaseOption().getScheduleSpecification(), sandboxResult.getBaseOption().getScheduleModel());
-
-									if (object instanceof AbstractSolutionSet) {
-										final AbstractSolutionSet abstractSolutionSet = (AbstractSolutionSet) object;
-										ssHelper.processExtraData(abstractSolutionSet);
-
-										userSettings = abstractSolutionSet.getUserSettings();
-										for (final SolutionOption opt : abstractSolutionSet.getOptions()) {
-											if (opt.getScheduleModel() == scenarioResult.getResultRoot()) {
-												ssHelper.processSolution(opt.getScheduleSpecification(), opt.getScheduleModel());
-												break;
-											} else if (changeSetTableGroup.getLinkedGroup() != null
-													&& opt.getScheduleModel() == changeSetTableGroup.getLinkedGroup().getCurrentScenario().getResultRoot()) {
-												ssHelper.processSolution(opt.getScheduleSpecification(), opt.getScheduleModel());
-												break;
-											}
-
-											// if (opt instanceof DualModeSolutionOption) {
-											// final DualModeSolutionOption dualModeSolutionOption =
-											// (DualModeSolutionOption) opt;
-											//
-											// final SolutionOptionMicroCase base =
-											// dualModeSolutionOption.getMicroBaseCase();
-											// if (base != null) {
-											// // Re-evaluate from schedule
-											// ssHelper.processExtraData(base);
-											// ssHelper.processSolution(base.getScheduleModel());
-											// // (Experimental version) Re-evaluate from change specification)
-											// // helper.processSolution(base.getScheduleSpecification(),
-											// base.getScheduleModel());
-											// }
-											//
-											// final SolutionOptionMicroCase target =
-											// dualModeSolutionOption.getMicroTargetCase();
-											// if (target != null) {
-											// // Re-evaluate from schedule
-											// ssHelper.processExtraData(target);
-											// ssHelper.processSolution(target.getScheduleModel());
-											// // (Experimental version) Re-evaluate from change specification)
-											// // helper.processSolution(target.getScheduleSpecification(),
-											// target.getScheduleModel());
-											// }
-											//
-											// }
-										}
-									}
-
-									if (userSettings == null) {
-										userSettings = scenarioResult.getTypedRoot(LNGScenarioModel.class).getUserSettings();
-									}
-
-									final UserSettings copy = EcoreUtil.copy(userSettings);
-									final Job job = Job.create("Open solution", monitor -> {
-										ssHelper.generateResults(scenarioResult.getScenarioInstance(), copy, scenarioResult.getScenarioDataProvider().getEditingDomain(), monitor);
-										final ViewState viewState = currentViewState;
-
-										if (viewState != null) {
-											final String id = viewState.getTargetSlotID();
-											RunnerHelper.asyncExec(() -> openAnalyticsSolution(viewState.lastSolution, id));
-										}
-									});
-									job.setUser(true);
-									job.setRule(schedulingRule);
-									job.schedule();
-
-								}
-							});
-							action.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/iu_update_obj.gif"));
-							helper.addAction(action);
-							showMenu = true;
-						}
-					}
+				if (directSelectedGroups.size() == 1 || (selectedSets.size() == 1 && directSelectedRows.isEmpty())) {
+					showMenu |= createExportSolutionMenu(selectedSets);
+					// If we selected a change set group, create this here, other wise it
+					showMenu |= createSandboxMenu(directSelectedGroups, directSelectedRows, selectedSets);
 				}
-				if (selectedSets.size() > 1) {
-					if (ChangeSetView.this.viewMode == ViewMode.COMPARE) {
-						helper.addAction(new MergeChangesAction(selectedSets, viewer));
-						showMenu = true;
-					}
-
+				if (ChangeSetView.this.viewMode == ViewMode.SANDBOX && ChangeSetView.this.showToggleAltPNLBaseAction) {
+					showMenu |= createComputeFullSolutionMenus(selectedSets);
 				}
+
+				if (helper.hasActions()) {
+					helper.addSeparator();
+				}
+				showMenu |= createShowGroupRelatedChangesMenu(directSelectedRows, selectedSets);
 
 				if (showUserFilterMenus) {
 					showMenu |= insertionPlanFilter.generateMenus(helper, viewer, directSelectedRows, selectedSets, currentViewState.lastTargetSlot);
 				}
-			} else
-
-			{
-				if (showUserFilterMenus) {
-					if (currentViewState != null) {
-						showMenu |= insertionPlanFilter.generateMenus(helper, viewer, Collections.emptySet(), Collections.emptySet(), currentViewState.lastTargetSlot);
+				if (directSelectedGroups.isEmpty() && (selectedSets.size() == 1 && directSelectedRows.size() >= 1)) {
+					if (helper.hasActions()) {
+						helper.addSeparator();
 					}
+					// If we selected a change set group, create this here, other wise it
+					showMenu |= createSandboxMenu(directSelectedGroups, directSelectedRows, selectedSets);
+				}
+			} else {
+				if (showUserFilterMenus && currentViewState != null) {
+					showMenu |= insertionPlanFilter.generateMenus(helper, viewer, Collections.emptySet(), Collections.emptySet(), currentViewState.lastTargetSlot);
 				}
 			}
 
 			if (showMenu) {
 				helper.open();
 			}
+		}
+
+		private boolean createShowGroupRelatedChangesMenu(final Set<ChangeSetTableRow> directSelectedRows, final Set<ChangeSetTableGroup> selectedSets) {
+			if (showRelatedChangesMenus && selectedSets.size() == 1 && directSelectedRows.isEmpty()) {
+
+				final ChangeSetTableGroup changeSetTableGroup = selectedSets.iterator().next();
+				if (insertionPlanFilter.getUserFilters().isEmpty()) {
+					if (insertionPlanFilter.getExpandedGroups().contains(changeSetTableGroup.getGroupObject())) {
+						helper.addAction(new RunnableAction("Hide similar", () -> {
+							insertionPlanFilter.getExpandedGroups().remove(changeSetTableGroup.getGroupObject());
+							ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
+						}));
+						return true;
+					} else {
+						helper.addAction(new RunnableAction("Show similar", () -> {
+							insertionPlanFilter.getExpandedGroups().add(changeSetTableGroup.getGroupObject());
+							ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
+						}));
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+
+		private boolean createComputeFullSolutionMenus(final Set<ChangeSetTableGroup> selectedSets) {
+			boolean showMenu;
+			final ChangeSetTableGroup changeSetTableGroup = selectedSets.iterator().next();
+
+			final Action action = new RunnableAction("Compute full change", () -> {
+
+				final ScenarioResult scenarioResult = changeSetTableGroup.getCurrentScenario();
+
+				final EvaluateSolutionSetHelper ssHelper = new EvaluateSolutionSetHelper(scenarioResult.getScenarioDataProvider());
+
+				final AnalyticsSolution solution = currentViewState.lastSolution;
+				if (solution != null && solution.getSolution() instanceof SandboxResult) {
+					final SandboxResult sandboxResult = (SandboxResult) solution.getSolution();
+
+					UserSettings userSettings = null;
+
+					// OtherPNL basePNL = ScheduleFactory.eINSTANCE.createOtherPNL();
+					// {
+					// ScheduleModelKPIUtils.updateOtherPNL(basePNL,
+					// sandboxResult.getBaseOption().getScheduleModel().getSchedule(),
+					// ScheduleModelKPIUtils.Mode.INCREMENT);
+					// }
+
+					final UUIDObject object = solution.getSolution();
+					ssHelper.processSolution(sandboxResult.getBaseOption().getScheduleSpecification(), sandboxResult.getBaseOption().getScheduleModel());
+
+					if (object instanceof AbstractSolutionSet) {
+						final AbstractSolutionSet abstractSolutionSet = (AbstractSolutionSet) object;
+						ssHelper.processExtraData(abstractSolutionSet);
+
+						userSettings = abstractSolutionSet.getUserSettings();
+						for (final SolutionOption opt : abstractSolutionSet.getOptions()) {
+							if (opt.getScheduleModel() == scenarioResult.getResultRoot()) {
+								ssHelper.processSolution(opt.getScheduleSpecification(), opt.getScheduleModel());
+								break;
+							} else if (changeSetTableGroup.getLinkedGroup() != null && opt.getScheduleModel() == changeSetTableGroup.getLinkedGroup().getCurrentScenario().getResultRoot()) {
+								ssHelper.processSolution(opt.getScheduleSpecification(), opt.getScheduleModel());
+								break;
+							}
+
+							// if (opt instanceof DualModeSolutionOption) {
+							// final DualModeSolutionOption dualModeSolutionOption =
+							// (DualModeSolutionOption) opt;
+							//
+							// final SolutionOptionMicroCase base =
+							// dualModeSolutionOption.getMicroBaseCase();
+							// if (base != null) {
+							// // Re-evaluate from schedule
+							// ssHelper.processExtraData(base);
+							// ssHelper.processSolution(base.getScheduleModel());
+							// // (Experimental version) Re-evaluate from change specification)
+							// // helper.processSolution(base.getScheduleSpecification(),
+							// base.getScheduleModel());
+							// }
+							//
+							// final SolutionOptionMicroCase target =
+							// dualModeSolutionOption.getMicroTargetCase();
+							// if (target != null) {
+							// // Re-evaluate from schedule
+							// ssHelper.processExtraData(target);
+							// ssHelper.processSolution(target.getScheduleModel());
+							// // (Experimental version) Re-evaluate from change specification)
+							// // helper.processSolution(target.getScheduleSpecification(),
+							// target.getScheduleModel());
+							// }
+							//
+							// }
+						}
+					}
+
+					if (userSettings == null) {
+						userSettings = scenarioResult.getTypedRoot(LNGScenarioModel.class).getUserSettings();
+					}
+
+					final UserSettings copy = EMFCopier.copy(userSettings);
+					final Job job = Job.create("Open solution", monitor -> {
+						ssHelper.generateResults(scenarioResult.getScenarioInstance(), copy, scenarioResult.getScenarioDataProvider().getEditingDomain(), monitor);
+						final ViewState viewState = currentViewState;
+
+						if (viewState != null) {
+							final String id = viewState.getTargetSlotID();
+							RunnerHelper.asyncExec(() -> openAnalyticsSolution(viewState.lastSolution, id));
+						}
+					});
+					job.setUser(true);
+					job.setRule(schedulingRule);
+					job.schedule();
+
+				}
+			});
+			action.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/iu_update_obj.gif"));
+			helper.addAction(action);
+			showMenu = true;
+			return showMenu;
+		}
+
+		private boolean createExportSolutionMenu(final Set<ChangeSetTableGroup> selectedSets) {
+			if (canExportChangeSet) {
+				final ChangeSetTableGroup changeSetTableGroup = selectedSets.iterator().next();
+				int idx = 0;
+				final ChangeSetTableRoot root = (ChangeSetTableRoot) changeSetTableGroup.eContainer();
+				if (root != null) {
+					idx = root.getGroups().indexOf(changeSetTableGroup);
+				}
+				final String name = columnHelper.getChangeSetColumnLabelProvider().apply(changeSetTableGroup, idx);
+				boolean showSimple = true;
+				if (showAlternativeChangeModel && ChangeSetView.this.viewMode == ViewMode.INSERTIONS) {
+					// Only offer this for dual model insertions.
+					final ScenarioResult scenarioResult = changeSetTableGroup.getCurrentScenario();
+					if (scenarioResult.getResultRoot() instanceof ScheduleModel) {
+						final ScheduleModel scheduleModel = (ScheduleModel) scenarioResult.getResultRoot();
+						if (scheduleModel.eContainer() instanceof SolutionOptionMicroCase) {
+							final BiConsumer<LNGScenarioModel, Schedule> modelCustomiser = EvaluateSolutionSetHelper.createModelCustomiser();
+							helper.addAction(new ExportChangeAction(changeSetTableGroup, name, true, modelCustomiser));
+							showSimple = false;
+						}
+					}
+				}
+				if (showSimple) {
+					BiConsumer<LNGScenarioModel, Schedule> modelCustomiser = null;
+					if (getLastSolution().getSolution() instanceof SandboxResult) {
+						modelCustomiser = EvaluateSolutionSetHelper.createModelCustomiser();
+					}
+
+					helper.addAction(new ExportChangeAction(changeSetTableGroup, name, modelCustomiser));
+				}
+				return true;
+			}
+			return false;
+		}
+
+		private boolean createSandboxMenu(final Set<ChangeSetTableGroup> directSelectedGroups, final Set<ChangeSetTableRow> directSelectedRows, final Set<ChangeSetTableGroup> selectedSets) {
+			if (ChangeSetView.this.viewMode != ViewMode.COMPARE && ChangeSetView.this.viewMode != ViewMode.OLD_ACTION_SET) {
+				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_SANDBOX)) {
+
+					final ChangeSetTableGroup changeSetTableGroup;
+					if (directSelectedGroups.size() == 1) {
+						changeSetTableGroup = directSelectedGroups.iterator().next();
+						helper.addAction(new CreateSandboxFromResultAction(changeSetTableGroup.getRows(), changeSetTableGroup.getDescription(), changeSetTableGroup.getBaseScenario()));
+					} else {
+						changeSetTableGroup = selectedSets.iterator().next();
+						helper.addAction(new CreateSandboxFromResultAction(directSelectedRows, changeSetTableGroup.getDescription(), changeSetTableGroup.getBaseScenario()));
+					}
+					if (false) {
+						final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(changeSetTableGroup.getBaseScenario().getScenarioDataProvider());
+						if (analyticsModel.getOptionModels().size() == 1) {
+							final OptionAnalysisModel sandbox = analyticsModel.getOptionModels().get(0);
+							helper.addAction(new UpdateSandboxFromRowsAction(directSelectedRows, "Add rows to existing " + sandbox.getName(), changeSetTableGroup.getBaseScenario(), sandbox));
+						} else if (analyticsModel.getOptionModels().size() > 1) {
+							final SubLocalMenuHelper subMenu = new SubLocalMenuHelper("Add rows to existing");
+							for (final OptionAnalysisModel sandbox : analyticsModel.getOptionModels()) {
+								subMenu.addAction(new UpdateSandboxFromRowsAction(directSelectedRows, sandbox.getName(), changeSetTableGroup.getBaseScenario(), sandbox));
+							}
+							helper.addSubMenu(subMenu);
+						}
+
+					}
+
+					return true;
+				}
+			}
+			return false;
 		}
 
 	}
@@ -1482,9 +1591,9 @@ public class ChangeSetView extends ViewPart {
 	private EObject lastObject = null;
 	private EStructuralFeature lastParentFeature = null;
 
-	private final Adapter adapter = new AdapterImpl() {
+	private final Adapter adapter = new SafeAdapterImpl() {
 		@Override
-		public void notifyChanged(final org.eclipse.emf.common.notify.Notification msg) {
+		public void safeNotifyChanged(final org.eclipse.emf.common.notify.Notification msg) {
 			if (msg.getEventType() == Notification.REMOVE) {
 				if (msg.getFeature() == lastParentFeature && msg.getOldValue() == lastObject) {
 					setEmptyData();
@@ -1508,7 +1617,8 @@ public class ChangeSetView extends ViewPart {
 	private final String[] altPNLToolTipBaseMode_Insertions = { "Full", "Simple" };
 	private String[] altPNLToolTipBaseMode = altPNLToolTipBaseMode_Default;
 
-	private EventHandler eventHandler;
+	private EventHandler eventHandlerCloseScenario;
+	private EventHandler eventHandlerCloseSolution;
 
 	public void openAnalyticsSolution(final AnalyticsSolution solution, @Nullable final String slotId) {
 		if (lastParent != null) {
@@ -1630,10 +1740,23 @@ public class ChangeSetView extends ViewPart {
 
 	@Inject
 	@Optional
+	public void onClosingAnalyticsSolution(@UIEventTopic(ScenarioServiceUtils.EVENT_CLOSING_ANALYTICS_SOLUTION) final AnalyticsSolution solution) {
+		final ViewState viewState = currentViewState;
+		if (viewState != null && viewState.lastSolution != null //
+				&& ((viewState.lastSolution == solution) || (viewState.lastSolution.getSolution() == solution.getSolution()))) {
+			setEmptyData();
+			// Close view if dynamic
+			if (viewMode != ViewMode.COMPARE) {
+				getSite().getPage().hideView(ChangeSetView.this);
+			}
+		}
+	}
+
+	@Inject
+	@Optional
 	public void onClosingScenario(@UIEventTopic(ScenarioServiceUtils.EVENT_CLOSING_SCENARIO_INSTANCE) final ScenarioInstance scenarioInstance) {
 
-		@NonNull
-		final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+		final @NonNull ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 
 		final Function<ScenarioResult, Boolean> checker = (sr) -> sr != null && (sr.getModelRecord() == modelRecord || sr.getScenarioInstance() == scenarioInstance);
 		final ViewState viewState = currentViewState;

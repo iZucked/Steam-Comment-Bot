@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.scheduling;
@@ -54,7 +54,7 @@ public class PriceBasedWindowTrimmer {
 				setFeasibleTimeWindowsUsingPrevious(portTimeWindowsRecord, travelTimeData, lastFeasibleWindow);
 			}
 
-			timeWindowsTrimming.processCargo(resource, portTimeWindowsRecord, vesselStartTime, portTimeWindowsRecordStart);
+			timeWindowsTrimming.processCargo(resource, portTimeWindowsRecord, vesselStartTime, portTimeWindowsRecordStart, travelTimeData);
 
 			@NonNull
 			final IPortSlot lastSlot = portTimeWindowsRecord.getSlots().get(portTimeWindowsRecord.getSlots().size() - 1);

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.common.csv;
@@ -179,7 +179,8 @@ public class CSVReader implements Closeable {
 		while ((result = readRowFields()) != null) {
 			for (final String value : result.values()) {
 				if (!value.equals("") || !ignoreBlankRows) {
-					return (currentLine = new FieldMap(result));
+					currentLine = new FieldMap(result);
+					return currentLine;
 				}
 			}
 		}

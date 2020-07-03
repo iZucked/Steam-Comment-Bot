@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.ui.views;
@@ -12,7 +12,6 @@ import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
@@ -42,6 +41,7 @@ import com.mmxlabs.models.lng.pricing.ui.editorpart.HolidayCalendarsViewerPane;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.ui.views.ScenarioTableViewerView;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
+import com.mmxlabs.rcp.common.ecore.SafeAdapterImpl;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class HolidayCalendarsView extends ScenarioTableViewerView<HolidayCalendarsViewerPane> {
@@ -51,8 +51,10 @@ public class HolidayCalendarsView extends ScenarioTableViewerView<HolidayCalenda
 	private PricingModel pricingModel;
 	private String lastSelectedCalendar;
 	
-	private Adapter calendarListener = new AdapterImpl() {
-		public void notifyChanged(Notification msg) {
+	private Adapter calendarListener = new SafeAdapterImpl() {
+		
+		@Override
+		public void safeNotifyChanged(Notification msg) {
 			if (msg.isTouch()) {
 				return;
 			}
@@ -60,7 +62,7 @@ public class HolidayCalendarsView extends ScenarioTableViewerView<HolidayCalenda
 			if (msg.getFeature() == PricingPackage.Literals.PRICING_MODEL__HOLIDAY_CALENDARS) {
 				if (calendarSelectionViewer != null) {
 
-					final List<HolidayCalendar> models = pricingModel.getHolidayCalendars().stream().filter(i -> i.getName() != null && !i.getName().isEmpty()).collect(Collectors.toList());
+					List<HolidayCalendar> models = pricingModel.getHolidayCalendars().stream().filter(i -> i.getName() != null && !i.getName().isEmpty()).collect(Collectors.toList());
 					calendarSelectionViewer.setInput(models);
 					HolidayCalendar selectedCalendar = null;
 					if (!models.isEmpty()) {
@@ -96,8 +98,10 @@ public class HolidayCalendarsView extends ScenarioTableViewerView<HolidayCalenda
 			
 			if (this.pricingModel == null) {
 				pricingModel = ScenarioModelUtil.getPricingModel(getScenarioDataProvider());
+				pricingModel.eAdapters().add(calendarListener);
+			} else {
+				pricingModel.eAdapters().add(calendarListener);
 			}
-			pricingModel.eAdapters().add(calendarListener);
 			final List<HolidayCalendar> holidays = pricingModel.getHolidayCalendars();
 			calendarSelectionViewer.setContentProvider(new ArrayContentProvider());
 			calendarSelectionViewer.setLabelProvider(new LabelProvider() {

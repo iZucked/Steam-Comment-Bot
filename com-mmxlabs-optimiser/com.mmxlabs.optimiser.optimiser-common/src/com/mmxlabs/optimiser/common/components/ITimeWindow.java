@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.common.components;
@@ -30,4 +30,13 @@ public interface ITimeWindow {
 	 * @return
 	 */
 	boolean overlaps(@NonNull ITimeWindow other);
+
+	/**
+	 * Return true if t is within the time window bounds
+	 * @param t
+	 * @return
+	 */
+	default boolean contains(int t) {
+		return t >= getInclusiveStart() && t < getExclusiveEnd();
+	}
 }

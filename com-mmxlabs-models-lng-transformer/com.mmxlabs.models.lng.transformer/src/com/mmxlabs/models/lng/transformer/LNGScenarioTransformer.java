@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer;
@@ -144,6 +144,7 @@ import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.builder.impl.TimeWindowMaker;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
@@ -190,7 +191,6 @@ import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICancellationFeeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IHedgesProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ILoadPriceCalculatorProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ILockedCargoProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IMiscCostsProviderEditor;
@@ -266,22 +266,22 @@ public class LNGScenarioTransformer {
 	private DateAndCurveHelper dateHelper;
 
 	@Inject
-	@Named(LNGTransformerModule.Parser_BaseFuel)
+	@Named(SchedulerConstants.Parser_BaseFuel)
 	@NonNull
 	private SeriesParser baseFuelIndices;
 
 	@Inject
-	@Named(LNGTransformerModule.Parser_Charter)
+	@Named(SchedulerConstants.Parser_Charter)
 	@NonNull
 	private SeriesParser charterIndices;
 
 	@Inject
-	@Named(LNGTransformerModule.Parser_Commodity)
+	@Named(SchedulerConstants.Parser_Commodity)
 	@NonNull
 	private SeriesParser commodityIndices;
 
 	@Inject
-	@Named(LNGTransformerModule.Parser_Currency)
+	@Named(SchedulerConstants.Parser_Currency)
 	@NonNull
 	private SeriesParser currencyIndices;
 
@@ -421,10 +421,6 @@ public class LNGScenarioTransformer {
 	@Inject
 	@NonNull
 	private IPortVisitDurationProviderEditor portVisitDurationProviderEditor;
-
-	@Inject
-	@NonNull
-	private IHedgesProviderEditor hedgesProviderEditor;
 
 	@Inject
 	@NonNull
@@ -1317,6 +1313,7 @@ public class LNGScenarioTransformer {
 			}
 
 			configureLoadSlotRestrictions(builder, portAssociation, allDischargePorts, loadSlot, load);
+			usedLoadSlots.add(loadSlot);
 		}
 		for (final LoadSlot loadSlot : extraLoadSlots) {
 			assert loadSlot != null;
@@ -1332,6 +1329,8 @@ public class LNGScenarioTransformer {
 			}
 
 			configureLoadSlotRestrictions(builder, portAssociation, allDischargePorts, loadSlot, load);
+			usedLoadSlots.add(loadSlot);
+
 		}
 
 		for (final DischargeSlot dischargeSlot : cargoModel.getDischargeSlots()) {
@@ -1347,6 +1346,8 @@ public class LNGScenarioTransformer {
 			}
 
 			configureDischargeSlotRestrictions(builder, portAssociation, allLoadPorts, dischargeSlot, discharge);
+			usedDischargeSlots.add(dischargeSlot);
+
 		}
 		for (final DischargeSlot dischargeSlot : extraDischargeSlots) {
 			assert dischargeSlot != null;
@@ -1361,6 +1362,8 @@ public class LNGScenarioTransformer {
 			}
 
 			configureDischargeSlotRestrictions(builder, portAssociation, allLoadPorts, dischargeSlot, discharge);
+			usedDischargeSlots.add(dischargeSlot);
+
 		}
 	}
 
@@ -1384,7 +1387,8 @@ public class LNGScenarioTransformer {
 			if (slot.isDESPurchase()) {
 				if (slot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERT_FROM_SOURCE) {
 					// return getTimewindowAsUTCWithFlex(slot);
-				} else if (slot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DEST_WITH_SOURCE) {
+				} else if (slot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DEST_WITH_SOURCE
+						|| slot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERTIBLE) {
 					extendWindows = true;
 				}
 			}
@@ -1417,74 +1421,6 @@ public class LNGScenarioTransformer {
 			return timeWindow;
 		}
 	}
-
-	// /**
-	// * Return a time window (with flex) in UTC rather than translated to the port local timezone.
-	// *
-	// * @param slot
-	// * @return
-	// */
-	// private ITimeWindow getTimewindowAsUTCWithFlex(final Slot<?> slot) {
-	// LocalDateTime wStart = slot.getWindowStart().atStartOfDay();
-	// if (slot.isSetWindowStartTime()) {
-	// wStart = wStart.withHour(slot.getWindowStartTime());
-	// } else {
-	// wStart = wStart.withHour(slot.getPort().getDefaultStartTime());
-	// }
-	//
-	// final int slotFlex = slot.getWindowFlex();
-	//
-	// final TimePeriod p = slot.getWindowFlexUnits();
-	// LocalDateTime startTime = wStart;
-	// // Probably considering too much here, maybe a days/2 would be better estimate?
-	// // Should probably try to update the matching windows code instead to compute travel time...
-	// if (slot instanceof DischargeSlot) {
-	// startTime = startTime.minusDays(slot.getSlotOrDelegateShippingDaysRestriction());
-	// }
-	// {
-	// if (slotFlex < 0) {
-	// switch (p) {
-	// case DAYS:
-	// startTime = startTime.minusDays(slotFlex).plusHours(1);
-	// break;
-	// case HOURS:
-	// startTime = startTime.minusHours(slotFlex);
-	// break;
-	// case MONTHS:
-	// startTime = startTime.minusMonths(slotFlex).plusHours(1);
-	// break;
-	// default:
-	// break;
-	// }
-	// }
-	// }
-	// LocalDateTime endTime = wStart.plusHours(slot.getWindowSizeInHours());
-	// {
-	// if (slotFlex > 0) {
-	//
-	// switch (p) {
-	// case DAYS:
-	// endTime = endTime.plusDays(slotFlex).minusHours(1);
-	// break;
-	// case HOURS:
-	// endTime = endTime.plusHours(slotFlex);
-	// break;
-	// case MONTHS:
-	// endTime = endTime.plusMonths(slotFlex).minusHours(1);
-	// break;
-	// default:
-	// break;
-	// }
-	// }
-	// }
-	//
-	// // if (slot instanceof LoadSlot) {
-	// // endTime = endTime.plusDays(slot.getSlotOrDelegateShippingDaysRestriction());
-	// // }
-	// //
-	// return TimeWindowMaker.createInclusiveInclusive(dateHelper.convertTime(startTime.atZone(ZoneId.of("Etc/UTC"))), dateHelper.convertTime(endTime.atZone(ZoneId.of("Etc/UTC"))),
-	// slot.getWindowFlex(), false);
-	// }
 
 	public void configureDischargeSlotRestrictions(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation, @NonNull final Set<IPort> allLoadPorts,
 			@NonNull final DischargeSlot dischargeSlot, @NonNull final IDischargeOption discharge) {
@@ -1558,7 +1494,9 @@ public class LNGScenarioTransformer {
 			@NonNull final LoadSlot loadSlot, @NonNull final ILoadOption load) {
 
 		if (loadSlot.isDESPurchase()) {
-			if (loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DEST_WITH_SOURCE || loadSlot instanceof SpotLoadSlot) {
+			if (loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DEST_WITH_SOURCE//
+					|| loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERTIBLE //
+					|| loadSlot instanceof SpotLoadSlot) {
 				final Set<IPort> marketPorts = new HashSet<>();
 				if (loadSlot instanceof SpotLoadSlot) {
 					final SpotLoadSlot spotLoadSlot = (SpotLoadSlot) loadSlot;
@@ -1810,9 +1748,6 @@ public class LNGScenarioTransformer {
 			slotTransformer.slotTransformed(dischargeSlot, discharge);
 		}
 
-		// set hedging costs in provider
-		setHedgingCosts(dischargeSlot, discharge);
-
 		// set additional misc costs in provider
 		setMiscCosts(dischargeSlot, discharge);
 
@@ -1934,7 +1869,8 @@ public class LNGScenarioTransformer {
 				// Extend window out to cover whole shipping days restriction
 				localTimeWindow = TimeWindowMaker.createInclusiveExclusive(loadWindow.getInclusiveStart(), loadWindow.getExclusiveEnd() + loadSlot.getSlotOrDelegateShippingDaysRestriction() * 24, 0,
 						false);
-			} else if (loadSlot instanceof SpotLoadSlot || loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DEST_WITH_SOURCE) {
+			} else if (loadSlot instanceof SpotLoadSlot || loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DEST_WITH_SOURCE//
+					|| loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERTIBLE) {
 				// Convert back into a UTC based date and add in TZ flex
 				final int utcStart = timeZoneToUtcOffsetProvider.UTC(loadWindow.getInclusiveStart(), portAssociation.lookup(loadSlot.getPort()));
 				final int utcEnd = timeZoneToUtcOffsetProvider.UTC(loadWindow.getExclusiveEnd(), portAssociation.lookup(loadSlot.getPort()));
@@ -1956,7 +1892,7 @@ public class LNGScenarioTransformer {
 				builder.setShippingHoursRestriction(load, loadWindow, loadSlot.getSlotOrDelegateShippingDaysRestriction() * 24);
 			}
 		} else {
-			load = builder.createLoadSlot(elementName, portAssociation.lookupNullChecked(loadSlot.getPort()), loadWindow, minVolume, maxVolume, loadPriceCalculator,
+			load = builder.createLoadSlot(elementName, portAssociation.lookupNullChecked(loadSlot.getPort()), loadWindow, minVolume, maxVolume, loadSlot.isVolumeCounterParty(), loadPriceCalculator,
 					OptimiserUnitConvertor.convertToInternalConversionFactor(loadSlot.getSlotOrDelegateCV()), loadSlot.getSchedulingTimeWindow().getDuration(), loadSlot.isSetArriveCold(),
 					loadSlot.isArriveCold(), loadSlot.isSchedulePurge(), slotPricingDate, transformPricingEvent(loadSlot.getSlotOrDelegatePricingEvent()), loadSlot.isOptional(), slotLocked, isSpot,
 					isVolumeLimitInM3, slotCancelled);
@@ -1974,9 +1910,6 @@ public class LNGScenarioTransformer {
 		for (final ISlotTransformer slotTransformer : slotTransformers) {
 			slotTransformer.slotTransformed(loadSlot, load);
 		}
-
-		// set hedging costs in provider
-		setHedgingCosts(loadSlot, load);
 
 		// set additional misc costs in provider
 		setMiscCosts(loadSlot, load);
@@ -2200,6 +2133,8 @@ public class LNGScenarioTransformer {
 								desSlot.setMarket(desPurchaseMarket);
 								modelEntityMap.addModelObject(desSlot, desPurchaseSlot);
 
+								desPurchaseSlot.setKey(String.format("DP-%s-%s", market.getName(), yearMonthString));
+
 								for (final ISlotTransformer slotTransformer : slotTransformers) {
 									slotTransformer.slotTransformed(desSlot, desPurchaseSlot);
 								}
@@ -2358,6 +2293,8 @@ public class LNGScenarioTransformer {
 								// Key piece of information
 								fobSlot.setMarket(fobSaleMarket);
 								modelEntityMap.addModelObject(fobSlot, fobSaleSlot);
+
+								fobSaleSlot.setKey(String.format("FS-%s-%s", market.getName(), yearMonthString));
 
 								for (final ISlotTransformer slotTransformer : slotTransformers) {
 									slotTransformer.slotTransformed(fobSlot, fobSaleSlot);
@@ -2527,6 +2464,8 @@ public class LNGScenarioTransformer {
 								desSlot.setRestrictedVesselsArePermissive(desSalesMarket.isRestrictedVesselsArePermissive());
 								modelEntityMap.addModelObject(desSlot, desSalesSlot);
 
+								desSalesSlot.setKey(String.format("DS-%s-%s", market.getName(), yearMonthString));
+
 								for (final ISlotTransformer slotTransformer : slotTransformers) {
 									slotTransformer.slotTransformed(desSlot, desSalesSlot);
 								}
@@ -2658,12 +2597,14 @@ public class LNGScenarioTransformer {
 								fobSlot.setWindowSizeUnits(TimePeriod.MONTHS);
 
 								final ILoadOption fobPurchaseSlot = builder.createLoadSlot(internalID, notionalIPort, tw, OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity()),
-										OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()), priceCalculator, cargoCVValue, fobSlot.getSchedulingTimeWindow().getDuration(),
+										OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()), false, priceCalculator, cargoCVValue, fobSlot.getSchedulingTimeWindow().getDuration(),
 										fobSlot.isArriveCold(), true, false, IPortSlot.NO_PRICING_DATE, transformPricingEvent(market.getPricingEvent()), true, false, true, isVolumeLimitInM3, false);
 
 								// Key piece of information
 								fobSlot.setMarket(fobPurchaseMarket);
 								modelEntityMap.addModelObject(fobSlot, fobPurchaseSlot);
+
+								fobPurchaseSlot.setKey(String.format("FP-%s-%s", market.getName(), yearMonthString));
 
 								for (final ISlotTransformer slotTransformer : slotTransformers) {
 									slotTransformer.slotTransformed(fobSlot, fobPurchaseSlot);
@@ -3784,13 +3725,6 @@ public class LNGScenarioTransformer {
 			return ERouteOption.SUEZ;
 		}
 		throw new IllegalStateException();
-	}
-
-	private void setHedgingCosts(final Slot slot, final IPortSlot portSlot) {
-		final long hedgingCosts = OptimiserUnitConvertor.convertToInternalFixedCost(slot.getHedges());
-		if (hedgingCosts != 0) {
-			hedgesProviderEditor.setHedgeValue(portSlot, hedgingCosts);
-		}
 	}
 
 	private void setMiscCosts(final Slot slot, final IPortSlot portSlot) {

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.editor.bulk.views;
@@ -73,6 +73,9 @@ public interface ITradesColumnFactory {
 			return true;
 		}
 		return false;
+	}
+	public static boolean isVesselColumn(String colname) {
+		return "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.assignment".equals(colname);
 	}
 
 	/**

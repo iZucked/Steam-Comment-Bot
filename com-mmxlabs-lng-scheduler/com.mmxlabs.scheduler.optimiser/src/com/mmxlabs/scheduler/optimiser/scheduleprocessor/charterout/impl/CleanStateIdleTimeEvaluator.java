@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.impl;
@@ -7,18 +7,18 @@ package com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.impl;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.scheduler.optimiser.Calculator;
-import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEvent;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEventPortSlot;
@@ -38,7 +38,6 @@ import com.mmxlabs.scheduler.optimiser.components.impl.HeelOptionConsumer;
 import com.mmxlabs.scheduler.optimiser.components.impl.HeelOptionSupplier;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.impl.WeightedAverageCharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanChoice;
@@ -47,18 +46,18 @@ import com.mmxlabs.scheduler.optimiser.fitness.impl.IdleNBOVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.ReliqVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.TravelVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
-import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.IGeneratedCharterOutEvaluator;
 import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
-import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelKey;
-import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.IdleFuelChoice;
 import com.mmxlabs.scheduler.optimiser.voyage.LNGFuelKeys;
+import com.mmxlabs.scheduler.optimiser.voyage.TravelFuelChoice;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
@@ -72,6 +71,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * Re-use the generated charter out hooks to perform a "clean state" optimisation. This "charters out" long idle time stretches during a clean state optimisation which would other wise lead to
  * capacity violations and excess idling costs which can adversely affect optimisation performance as such violations and costs are not real and may cause moves to be rejected.
  */
+@NonNullByDefault
 public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluator {
 
 	@Inject
@@ -79,9 +79,6 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 
 	@Inject
 	private Provider<IVolumeAllocator> volumeAllocator;
-
-	@Inject
-	private ICharterMarketProvider charterMarketProvider;
 
 	@Inject
 	private IVesselBaseFuelCalculator vesselBaseFuelCalculator;
@@ -97,15 +94,11 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 
 	private static final double canalChoiceThreshold = 0.1; // percentage improvement required to choose a canal route
 
-	private static final boolean DO_CACHING = false;
-
-	private final int hits = 0;
-
 	private final int minDays = 60;
 
 	@Override
-	public List<Pair<VoyagePlan, IPortTimesRecord>> processSchedule(final int vesselStartTime, final long[] startHeelVolumeRangeInM3, final IVesselAvailability vesselAvailability, final VoyagePlan vp,
-			final IPortTimesRecord portTimesRecord) {
+	public @Nullable List<Pair<VoyagePlan, IPortTimesRecord>> processSchedule(final int vesselStartTime, final long[] startHeelVolumeRangeInM3, final IVesselAvailability vesselAvailability,
+			final VoyagePlan vp, final IPortTimesRecord portTimesRecord, @Nullable IAnnotatedSolution annotatedSolution) {
 		if (!(vesselAvailability.getVesselInstanceType() == VesselInstanceType.FLEET || vesselAvailability.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER)) {
 			return null;
 		}
@@ -139,23 +132,8 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 		final VoyageDetails ballastDetails = (VoyageDetails) currentSequence[ballastIdx];
 		final int availableTime = ballastDetails.getOptions().getAvailableTime();
 		final IPortSlot firstSlot = firstDetails.getOptions().getPortSlot();
-		final int firstStartTime = portTimesRecord.getSlotTime(firstSlot);
 		final IPortSlot slotBeforeCharter = ballastDetails.getOptions().getFromPortSlot();
 		final IPortSlot slotAfterCharter = ballastDetails.getOptions().getToPortSlot();
-		// boolean solutionSeen = false;
-		// List<Pair<VoyagePlan, IPortTimesRecord>> cachedSolution = null;
-		//
-		//// if (DO_CACHING) {
-		//// solutionSeen = isSolutionCached(firstStartTime, startHeelInM3, ballastStartTime, availableTime, firstSlot, slotBeforeCharter, slotAfterCharter, vesselAvailability);
-		//// if (solutionSeen) {
-		//// // try to retrieve solution from cache first
-		//// cachedSolution = getCachedSolution(firstStartTime, startHeelInM3, ballastStartTime, availableTime, firstSlot, slotBeforeCharter, slotAfterCharter, vesselAvailability);
-		//// }
-		//// }
-		//
-		// if (solutionSeen) {
-		// return cachedSolution;
-		// } else
 
 		{
 			// no cached solution, generate a split voyage plan and cache
@@ -163,15 +141,14 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 
 			// Have we found a market?
 			if (gcoMarket == null) {
-				// if (DO_CACHING) {
-				// addCachedSolution(firstStartTime, startHeelInM3, ballastStartTime, availableTime, firstSlot, slotBeforeCharter, slotAfterCharter, vesselAvailability, null, null);
-				// }
+
 				return null;
 			}
 
 			final ExtendedCharterOutSequence bigSequence = constructNewRawSequenceWithCharterOuts(vesselAvailability, currentSequence, gcoMarket, portTimesRecord, ballastIdx, ballastStartTime);
 
-			final VoyagePlan bigVoyagePlan = runVPOOnBigSequence(vesselAvailability.getVessel(), vp, vesselAvailability.getCharterCostCalculator(), startHeelVolumeRangeInM3, bigSequence, vesselStartTime);
+			final VoyagePlan bigVoyagePlan = runVPOOnBigSequence(vesselAvailability.getVessel(), vp, vesselAvailability.getCharterCostCalculator(), startHeelVolumeRangeInM3, bigSequence,
+					vesselStartTime);
 
 			final long remainingHeelInM3 = bigVoyagePlan.getRemainingHeelInM3();
 
@@ -198,14 +175,15 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 			// remaining heel may have been overwritten
 			upToCharterPlan.setRemainingHeelInM3(firstPlanRemainingHeel);
 
-			final IAllocationAnnotation preCharterAllocation = volumeAllocator.get().allocate(vesselAvailability, vesselStartTime, upToCharterPlan, preCharteringTimes);
+			final IAllocationAnnotation preCharterAllocation = volumeAllocator.get().allocate(vesselAvailability, vesselStartTime, upToCharterPlan, preCharteringTimes, annotatedSolution);
 
 			// add on delta to starting heel and remaining heel
 			if (preCharterAllocation != null) {
 				final long delta = preCharterAllocation.getRemainingHeelVolumeInM3() - charterToEndPlan.getStartingHeelInM3();
 				charterToEndPlan.setStartingHeelInM3(charterToEndPlan.getStartingHeelInM3() + delta);
 				charterToEndPlan.setRemainingHeelInM3(charterToEndPlan.getRemainingHeelInM3() + delta);
-				// now we set the heel options on the charter out event as it will be need when the second voyage plan is calculated
+				// now we set the heel options on the charter out event as it will be need when
+				// the second voyage plan is calculated
 				final IGeneratedCharterOutVesselEventPortSlot charter = (IGeneratedCharterOutVesselEventPortSlot) ((PortDetails) charterToEndPlan.getSequence()[0]).getOptions().getPortSlot();
 				setHeelOptions(charter.getVesselEvent(), preCharteringTimes, upToCharterPlan.getSequence(), upToCharterPlan.getRemainingHeelInM3());
 			} else {
@@ -222,21 +200,15 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 			charterToEndPlanStartingHeelRangeInM3[1] = charterToEndPlan.getStartingHeelInM3();
 
 			voyageCalculator.calculateVoyagePlan(charterToEndPlan, vesselAvailability.getVessel(), vesselAvailability.getCharterCostCalculator(), charterToEndPlanStartingHeelRangeInM3,
-					vesselBaseFuelCalculator.getBaseFuelPrices(vesselAvailability.getVessel(), postCharteringTimes), 
-					postCharteringTimes, charterToEndPlan.getSequence());
+					vesselBaseFuelCalculator.getBaseFuelPrices(vesselAvailability.getVessel(), postCharteringTimes), postCharteringTimes, charterToEndPlan.getSequence());
 			// remaining heel may have been overwritten
 			charterToEndPlan.setStartingHeelInM3(secondPlanStartHeel);
 			charterToEndPlan.setRemainingHeelInM3(secondPlanRemainingHeel);
 
-			final List<Pair<VoyagePlan, IPortTimesRecord>> charterPlans = new LinkedList<Pair<VoyagePlan, IPortTimesRecord>>();
+			final List<Pair<VoyagePlan, IPortTimesRecord>> charterPlans = new LinkedList<>();
 			charterPlans.add(new Pair<VoyagePlan, IPortTimesRecord>(upToCharterPlan, preCharterAllocation != null ? preCharterAllocation : preCharteringTimes));
 			charterPlans.add(new Pair<VoyagePlan, IPortTimesRecord>(charterToEndPlan, postCharteringTimes));
-			// if (DO_CACHING) {
-			// setAdditionalDataForCaching(gcoMarket);
-			// if (cachedSolution == null) {
-			// addCachedSolution(firstStartTime, startHeelInM3, ballastStartTime, availableTime, firstSlot, slotBeforeCharter, slotAfterCharter, vesselAvailability, charterPlans, gcoMarket);
-			// }
-			// }
+
 			return charterPlans;
 		}
 	}
@@ -262,7 +234,9 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 		// // set end ports
 		// boolean goingToEnd = false;
 		// final Set<IPort> endPorts = new HashSet<IPort>();
-		// if (nextLoadSlot instanceof EndPortSlot && charterMarketProvider.getCharteringPortsForVesselClass(vesselAvailability.getVessel().getVesselClass()).contains(nextLoad)) {
+		// if (nextLoadSlot instanceof EndPortSlot &&
+		// charterMarketProvider.getCharteringPortsForVesselClass(vesselAvailability.getVessel().getVesselClass()).contains(nextLoad))
+		// {
 		// goingToEnd = true;
 		// endPorts.add(nextLoad);
 		// }
@@ -428,7 +402,8 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 		generatedCharterPortOptions.setVisitDuration(charterOutOption.getCharterDuration());
 		generatedCharterPortOptions.setCargoCVValue(originalBallast.getOptions().getCargoCVValue());
 
-		// final IGeneratedCharterOutVesselEvent charterOutEvent = charterOutPortSlot.getVesselEvent();
+		// final IGeneratedCharterOutVesselEvent charterOutEvent =
+		// charterOutPortSlot.getVesselEvent();
 		// charterOutEvent.setStartPort(charterOutOption.getPort());
 		// charterOutEvent.setEndPort(charterOutOption.getPort());
 		// charterOutEvent.setHireOutRevenue(charterOutOption.getMaxCharteringRevenue());
@@ -481,8 +456,8 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 	 * @param slotsToAdd
 	 * @return
 	 */
-	@NonNull
-	private IPortTimesRecord createPortTimesRecordForExtendedPlan(@NonNull final IPortTimesRecord existing, final Triple<IPortSlot, Integer, Integer>... slotsToAdd) {
+
+	private IPortTimesRecord createPortTimesRecordForExtendedPlan(final IPortTimesRecord existing, final Triple<IPortSlot, Integer, Integer>... slotsToAdd) {
 		final PortTimesRecord newPortsTimeRecord = new PortTimesRecord();
 		// existing
 		for (int i = 0; i < existing.getSlots().size(); i++) {
@@ -498,7 +473,9 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 		}
 		// existing return
 		final IPortSlot returnSlot = existing.getReturnSlot();
-		newPortsTimeRecord.setReturnSlotTime(returnSlot, existing.getSlotTime(returnSlot));
+		if (returnSlot != null) {
+			newPortsTimeRecord.setReturnSlotTime(returnSlot, existing.getSlotTime(returnSlot));
+		}
 		return newPortsTimeRecord;
 	}
 
@@ -520,7 +497,10 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 		// second (... CO -- NL)
 		secondPortsTimeRecord.setSlotTime(existing.getSlots().get(existing.getSlots().size() - 1), existing.getSlotTime(existing.getSlots().get(existing.getSlots().size() - 1)));
 		secondPortsTimeRecord.setSlotDuration(existing.getSlots().get(existing.getSlots().size() - 1), existing.getSlotTime(existing.getSlots().get(existing.getSlots().size() - 1)));
-		secondPortsTimeRecord.setReturnSlotTime(existing.getReturnSlot(), existing.getSlotTime(existing.getReturnSlot()));
+		IPortSlot returnSlot = existing.getReturnSlot();
+		if (returnSlot != null) {
+			secondPortsTimeRecord.setReturnSlotTime(returnSlot, existing.getSlotTime(returnSlot));
+		}
 		return new Pair<IPortTimesRecord, IPortTimesRecord>(firstPortsTimeRecord, secondPortsTimeRecord);
 	}
 
@@ -535,8 +515,8 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 	 * @param startHeelInM3
 	 * @return
 	 */
-	private VoyagePlan runVPOOnBigSequence(@NonNull final IVessel vessel, final VoyagePlan originalVoyagePlan, final ICharterCostCalculator charterCostCalculator, final long[] startHeelVolumeRangeInM3, final ExtendedCharterOutSequence bigSequence,
-			int startingTime) {
+	private @Nullable VoyagePlan runVPOOnBigSequence(final IVessel vessel, final VoyagePlan originalVoyagePlan, final ICharterCostCalculator charterCostCalculator,
+			final long[] startHeelVolumeRangeInM3, final ExtendedCharterOutSequence bigSequence, int startingTime) {
 		// // We will use the VPO to optimise fuel and route choices
 		// vpo.reset();
 		//
@@ -552,13 +532,21 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 		// vpo.setPortTimesRecord(bigSequence.getPortTimesRecord());
 
 		List<@NonNull IVoyagePlanChoice> vpoChoices = new LinkedList<>();
+		final boolean isCargo = isFirstSequenceElementIsLoadSlot(bigSequence);
 		if (!vessel.hasReliqCapability()) {
-			// Add in NBO etc choices (ballast 1)
-			vpoChoices.add(new TravelVoyagePlanChoice(bigSequence.getLaden() == null ? null : bigSequence.getLaden(), bigSequence.getToCharter()));
-			vpoChoices.add(new IdleNBOVoyagePlanChoice(bigSequence.getToCharter()));
-			// Add in NBO etc choices (ballast 2)
-			vpoChoices.add(new TravelVoyagePlanChoice(bigSequence.getToCharter(), bigSequence.getFromCharter()));
-			vpoChoices.add(new IdleNBOVoyagePlanChoice(bigSequence.getFromCharter()));
+			if (isCargo || checkForNonEmptyHeel(startHeelVolumeRangeInM3)) {
+				// Add in NBO etc choices (ballast 1)
+				vpoChoices.add(new TravelVoyagePlanChoice(bigSequence.getLaden() == null ? null : bigSequence.getLaden(), bigSequence.getToCharter()));
+				vpoChoices.add(new IdleNBOVoyagePlanChoice(bigSequence.getToCharter()));
+				// Add in NBO etc choices (ballast 2)
+				vpoChoices.add(new TravelVoyagePlanChoice(bigSequence.getToCharter(), bigSequence.getFromCharter()));
+				vpoChoices.add(new IdleNBOVoyagePlanChoice(bigSequence.getFromCharter()));
+			} else {
+				bigSequence.getToCharter().setIdleFuelChoice(IdleFuelChoice.BUNKERS);
+				bigSequence.getToCharter().setTravelFuelChoice(TravelFuelChoice.BUNKERS);
+				bigSequence.getFromCharter().setIdleFuelChoice(IdleFuelChoice.BUNKERS);
+				bigSequence.getFromCharter().setTravelFuelChoice(TravelFuelChoice.BUNKERS);
+			}
 		} else {
 			// Add in NBO etc choices (ballast 1)
 			vpoChoices.add(new ReliqVoyagePlanChoice(bigSequence.getLaden() == null ? null : bigSequence.getLaden(), bigSequence.getToCharter()));
@@ -568,10 +556,31 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 		// Calculate our new plan
 		// final VoyagePlan newVoyagePlan = vpo.optimise();
 
-		final VoyagePlan newVoyagePlan = vpo.optimise(null, vessel, startHeelVolumeRangeInM3, baseFuelPricesPerMT, charterCostCalculator, bigSequence.getPortTimesRecord(),
-				bigSequence.getSequence(), vpoChoices, startingTime);
+		final VoyagePlan newVoyagePlan = vpo.optimise(null, vessel, startHeelVolumeRangeInM3, baseFuelPricesPerMT, charterCostCalculator, bigSequence.getPortTimesRecord(), bigSequence.getSequence(),
+				vpoChoices, startingTime);
 
 		return newVoyagePlan;
+	}
+	
+	private boolean isFirstSequenceElementIsLoadSlot(final ExtendedCharterOutSequence bigSequence) {
+		final IOptionsSequenceElement foo = bigSequence.getSequence().get(0);
+		if (foo instanceof PortOptions) {
+			final PortOptions bar = (PortOptions) foo;
+			if (bar.getPortSlot().getPortType() == PortType.Load) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private boolean checkForNonEmptyHeel(final long[] startHeelRangeInM3) {
+		boolean nonEmptyHeel = true;
+		if (startHeelRangeInM3.length == 2) {
+			if (startHeelRangeInM3[0] == 0 && startHeelRangeInM3[1] == 0) {
+				nonEmptyHeel = false;
+			}
+		}
+		return nonEmptyHeel;
 	}
 
 	/**
@@ -592,7 +601,7 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 		for (int i = elementsUpToCO - 1; i < vp.getSequence().length; i++) {
 			second[i - (elementsUpToCO - 1)] = vp.getSequence()[i];
 		}
-		return new Pair<IDetailsSequenceElement[], IDetailsSequenceElement[]>(first, second);
+		return Pair.of(first, second);
 	}
 
 	/**
@@ -610,7 +619,7 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 		upToCharterPlan.setSequence(splitSequenceDetails.getFirst());
 		charterToEndPlan.setSequence(splitSequenceDetails.getSecond());
 
-		return new Pair<VoyagePlan, VoyagePlan>(upToCharterPlan, charterToEndPlan);
+		return new Pair<>(upToCharterPlan, charterToEndPlan);
 	}
 
 	private void setPlanParameters(final VoyagePlan bigVoyagePlan, final VoyagePlan charterToEndPlan, final VoyagePlan upToCharterPlan, final VoyagePlan originalVP, final long remainingHeelInM3) {

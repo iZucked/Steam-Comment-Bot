@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.common.constraints;
@@ -174,12 +174,7 @@ public class OrderedSequenceElementsConstraintCheckerTest {
 		final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(r, seq1);
 		final Sequences sequences = new Sequences(Collections.singletonList(r), map);
 
-		final List<String> messages = new LinkedList<String>();
-
-		Assertions.assertFalse(checker.checkConstraints(sequences, null, messages));
-
-		Assertions.assertEquals(1, messages.size());
-
+		Assertions.assertFalse(checker.checkConstraints(sequences, null, null));
 	}
 
 	/**
@@ -202,11 +197,7 @@ public class OrderedSequenceElementsConstraintCheckerTest {
 		final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(r, seq1);
 		final Sequences sequences = new Sequences(Collections.singletonList(r), map);
 
-		final List<String> messages = new LinkedList<String>();
-
-		Assertions.assertFalse(checker.checkConstraints(sequences, null, messages));
-
-		Assertions.assertEquals(1, messages.size());
+		Assertions.assertFalse(checker.checkConstraints(sequences, null, null));
 
 	}
 

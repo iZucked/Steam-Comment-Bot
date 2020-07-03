@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2019
+    Copyright (C) Minimax Labs Ltd., 2010 - 2020
     All rights reserved.
 
 -->
@@ -632,6 +632,7 @@
    <extension
          point="org.eclipse.ui.views">
       <view
+            category="com.mmxlabs.lngdataserver.views.dataserver"
             class="com.mmxlabs.models.lng.cargo.editor.editors.routeslots.RouteOptionsEditorView"
             id="com.mmxlabs.models.lng.cargo.editor.views.RouteOptionsEditorView"
             name="Panama Bookings"

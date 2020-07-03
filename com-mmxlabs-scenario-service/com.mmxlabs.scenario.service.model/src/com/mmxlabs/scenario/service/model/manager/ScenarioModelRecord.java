@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.scenario.service.model.manager;
@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.rcp.common.ServiceHelper;
+import com.mmxlabs.rcp.common.ecore.SafeAdapterImpl;
 import com.mmxlabs.scenario.service.manifest.Manifest;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
@@ -135,8 +136,8 @@ public final class ScenarioModelRecord extends ModelRecord {
 		return scenarioInstance;
 	}
 
-	private final @NonNull AdapterImpl readOnlyAdapter = new AdapterImpl() {
-		public void notifyChanged(final org.eclipse.emf.common.notify.Notification msg) {
+	private final @NonNull AdapterImpl readOnlyAdapter = new SafeAdapterImpl() {
+		public void safeNotifyChanged(final org.eclipse.emf.common.notify.Notification msg) {
 			if (msg.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_Readonly()) {
 				setReadOnly(msg.getNewBooleanValue());
 			}

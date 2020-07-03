@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.microcases.pricebasedwindows;
@@ -7,25 +7,20 @@ package com.mmxlabs.lingo.its.microcases.pricebasedwindows;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.google.common.collect.Lists;
+import com.google.inject.Injector;
 import com.mmxlabs.common.NonNullPair;
-import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
-import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
+import com.mmxlabs.lingo.its.tests.microcases.AbstractLegacyMicroTestCase;
 import com.mmxlabs.lingo.its.tests.microcases.MicroCaseDateUtils;
 import com.mmxlabs.lingo.its.tests.microcases.MicroCaseUtils;
 import com.mmxlabs.lingo.its.tests.microcases.TimeWindowsTestsUtils;
@@ -44,6 +39,7 @@ import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.util.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.transformer.its.RequireFeature;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScheduleTools;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
@@ -60,44 +56,24 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.IntervalData;
-import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.LadenRouteData;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.PriceIntervalProviderHelper;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.TimeWindowsTrimming;
+import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.TravelRouteData;
 import com.mmxlabs.scheduler.optimiser.scheduling.ScheduledTimeWindows;
 import com.mmxlabs.scheduler.optimiser.scheduling.TimeWindowScheduler;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
 @ExtendWith(ShiroRunner.class)
-public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
-
-	private static List<String> requiredFeatures = Lists.newArrayList("no-nominal-in-prompt", "optimisation-actionset");
-	private static List<String> addedFeatures = new LinkedList<>();
+@RequireFeature({ KnownFeatures.FEATURE_OPTIMISATION_NO_NOMINALS_IN_PROMPT })
+public class PriceBasedTimeWindowsTests extends AbstractLegacyMicroTestCase {
 
 	private static String vesselName = "vessel";
 	private static String loadName = "load";
 	private static String dischargeName = "discharge";
 
-	@BeforeAll
-	public static void hookIn() {
-		for (final String feature : requiredFeatures) {
-			if (!LicenseFeatures.isPermitted("features:" + feature)) {
-				LicenseFeatures.addFeatureEnablements(feature);
-				addedFeatures.add(feature);
-			}
-		}
-	}
-
-	@AfterAll
-	public static void hookOut() {
-		for (final String feature : addedFeatures) {
-			LicenseFeatures.removeFeatureEnablements(feature);
-		}
-		addedFeatures.clear();
-	}
-
 	@Override
 	protected void setPromptDates() {
-		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2014, 1, 1), LocalDate.of(2014, 3, 1));
+		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
 	}
 
 	private VesselAvailability createTestVesselAvailability(final LocalDateTime startStart, final LocalDateTime startEnd, final LocalDateTime endStart) {
@@ -140,19 +116,19 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 		evaluateWithLSOTest(scenarioRunner -> {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
-			MicroCaseUtils.withInjectorPerChainScope(scenarioToOptimiserBridge, () -> {
+			MicroCaseUtils.withEvaluationInjectorPerChainScope(scenarioToOptimiserBridge, injector -> {
+				final PriceIntervalProviderHelper priceIntervalProviderHelper = injector.getInstance(PriceIntervalProviderHelper.class);
 
 				// Check spot index has been updated
 				final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
-				final PriceIntervalProviderHelper priceIntervalProviderHelper = MicroCaseUtils.getClassFromChildInjector(scenarioToOptimiserBridge, PriceIntervalProviderHelper.class);
 				/*
 				 * Load data and set up model
 				 */
 				final IntervalData purchase = new IntervalData(0, 10, OptimiserUnitConvertor.convertToInternalPrice(5));
 				final IntervalData sales = new IntervalData(50, 70, OptimiserUnitConvertor.convertToInternalPrice(10));
-				final LadenRouteData[] lrd = new LadenRouteData[2];
-				lrd[0] = new LadenRouteData(52, 71, 0, 1000, 0);
-				lrd[1] = new LadenRouteData(26, 35, OptimiserUnitConvertor.convertToInternalDailyCost(500000), 500, 0);
+				final TravelRouteData[] lrd = new TravelRouteData[2];
+				lrd[0] = new TravelRouteData(52, 71, 0, 1000, 0);
+				lrd[1] = new TravelRouteData(26, 35, OptimiserUnitConvertor.convertToInternalDailyCost(500000), 500, 0);
 				final IVesselAvailability o_vesselAvailability = TimeWindowsTestsUtils.getIVesselAvailabilityWithName(vesselAvailability1.getVessel().getName(),
 						optimiserScenario.getCargoModel().getVesselAvailabilities(), scenarioToOptimiserBridge.getDataTransformer().getModelEntityMap());
 
@@ -201,10 +177,10 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				/*
 				 * Test correct route chosen
 				 */
-				final NonNullPair<LadenRouteData, Long> totalEstimatedJourneyCost = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchase, sales, loadDuration, salesPrice, 0, lrd,
+				final NonNullPair<TravelRouteData, Long> totalEstimatedJourneyCost = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchase, sales, loadDuration, salesPrice, 0, lrd,
 						o_vessel.getNBORate(VesselState.Laden), o_vessel, load.getCargoCVValue(), true);
 				Assertions.assertEquals(totalEstimatedJourneyCost.getFirst(), lrd[0]);
-				final TimeWindowsTrimming timeWindowsTrimming = MicroCaseUtils.getClassFromInjector(scenarioToOptimiserBridge, TimeWindowsTrimming.class);
+				final TimeWindowsTrimming timeWindowsTrimming = injector.getInstance(TimeWindowsTrimming.class);
 				final long charterRate = 0;
 				final int[] findBestBucketPairWithRouteAndBoiloffConsiderations = timeWindowsTrimming.findBestBucketPairWithRouteAndBoiloffConsiderations(o_vesselAvailability.getVessel(), load, lrd,
 						loadDuration, new IntervalData[] { purchase }, new IntervalData[] { sales }, new IntervalData[] { sales }, charterRate);
@@ -236,33 +212,23 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				.withWindowStartTime(0) //
 				.withWindowSize(5, TimePeriod.HOURS).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
-		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
 
-		final List<CommodityCurve> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityCurves();
-		CommodityCurve hh = null;
-		for (final CommodityCurve commodityIndex : commodityIndices) {
-			if (commodityIndex.getName().equals("Henry_Hub")) {
-				hh = commodityIndex;
-			}
-		}
-		assert hh != null;
-		hh.getPoints().clear();
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 7), 7.5);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 8), 8.5);
+		pricingModelBuilder.makeCommodityDataCurve("Henry_Hub", "$", "mmBtu") //
+				.addIndexPoint(YearMonth.of(2016, 7), 7.5) //
+				.addIndexPoint(YearMonth.of(2016, 8), 8.5) //
+				.build();
 		evaluateWithLSOTest(scenarioRunner -> {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
-			MicroCaseUtils.withInjectorPerChainScope(scenarioToOptimiserBridge, () -> {
-
+			MicroCaseUtils.withEvaluationInjectorPerChainScope(scenarioToOptimiserBridge, injector -> {
 				// Check spot index has been updated
 				final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 				@NonNull
 				final ISequences initialSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
-				final TimeWindowScheduler priceBasedSequenceScheduler = MicroCaseUtils.getClassFromChildInjector(scenarioToOptimiserBridge, TimeWindowScheduler.class);
-				// Ensure scheduling with price window trimming is enabled.
-				priceBasedSequenceScheduler.setUsePriceBasedWindowTrimming(true);
-				ScheduledTimeWindows scheduledTimeWindows = priceBasedSequenceScheduler.schedule(initialSequences);
+				final TimeWindowScheduler priceBasedSequenceScheduler = getScheduler(injector);
+
+				ScheduledTimeWindows scheduledTimeWindows = priceBasedSequenceScheduler.calculateTrimmedWindows(initialSequences);
 
 				// get optimiser objects
 				final IPortTimeWindowsRecord loadPortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(loadName, scheduledTimeWindows);
@@ -311,20 +277,13 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				.withWindowStartTime(0) //
 				.withWindowSize(24, TimePeriod.HOURS).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
-		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
 
-		final EList<CommodityCurve> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityCurves();
-		CommodityCurve hh = null;
-		for (final CommodityCurve commodityIndex : commodityIndices) {
-			if (commodityIndex.getName().equals("Henry_Hub")) {
-				hh = commodityIndex;
-			}
-		}
-		assert hh != null;
-		hh.getPoints().clear();
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 7), 7.5);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 8), 8.5);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 9), 13.5);
+		pricingModelBuilder.makeCommodityDataCurve("Henry_Hub", "$", "mmBtu") //
+				.addIndexPoint(YearMonth.of(2016, 7), 7.5) //
+				.addIndexPoint(YearMonth.of(2016, 8), 8.5) //
+				.addIndexPoint(YearMonth.of(2016, 9), 13.5) //
+				.build();
+
 		evaluateWithLSOTest(scenarioRunner -> {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
@@ -332,14 +291,11 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 			// Check spot index has been updated
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
-			MicroCaseUtils.withInjectorPerChainScope(scenarioToOptimiserBridge, () -> {
-
+			MicroCaseUtils.withEvaluationInjectorPerChainScope(scenarioToOptimiserBridge, injector -> {
 				@NonNull
 				final ISequences initialSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
-				final TimeWindowScheduler priceBasedSequenceScheduler = MicroCaseUtils.getClassFromChildInjector(scenarioToOptimiserBridge, TimeWindowScheduler.class);
-				// Ensure scheduling with price window trimming is enabled.
-				priceBasedSequenceScheduler.setUsePriceBasedWindowTrimming(true);
-				ScheduledTimeWindows scheduledTimeWindows = priceBasedSequenceScheduler.schedule(initialSequences);
+				final TimeWindowScheduler priceBasedSequenceScheduler = getScheduler(injector);
+				ScheduledTimeWindows scheduledTimeWindows = priceBasedSequenceScheduler.calculateTrimmedWindows(initialSequences);
 
 				// get optimiser objects
 				final IPortTimeWindowsRecord loadPortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(loadName, scheduledTimeWindows);
@@ -363,6 +319,14 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				Assertions.assertEquals(1216, dischargeFeasibleTimeWindow.getInclusiveStart());
 			});
 		});
+	}
+
+	private TimeWindowScheduler getScheduler(Injector injector) {
+		final TimeWindowScheduler priceBasedSequenceScheduler = injector.getInstance(TimeWindowScheduler.class);
+		// Ensure scheduling with price window trimming is enabled.
+		priceBasedSequenceScheduler.setUsePriceBasedWindowTrimming(true);
+		priceBasedSequenceScheduler.setUsePNLBasedWindowTrimming(false);
+		return priceBasedSequenceScheduler;
 	}
 
 	/**
@@ -389,20 +353,13 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				.withWindowStartTime(0) //
 				.withWindowSize(23, TimePeriod.HOURS).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
-		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
 
-		final List<CommodityCurve> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityCurves();
-		CommodityCurve hh = null;
-		for (final CommodityCurve commodityIndex : commodityIndices) {
-			if (commodityIndex.getName().equals("Henry_Hub")) {
-				hh = commodityIndex;
-			}
-		}
-		assert hh != null;
-		hh.getPoints().clear();
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 7), 7.5);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 8), 8.5);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 9), 13.5);
+		pricingModelBuilder.makeCommodityDataCurve("Henry_Hub", "$", "mmBtu") //
+				.addIndexPoint(YearMonth.of(2016, 7), 7.5) //
+				.addIndexPoint(YearMonth.of(2016, 8), 8.5) //
+				.addIndexPoint(YearMonth.of(2016, 9), 13.5) //
+				.build();
+
 		evaluateWithLSOTest(scenarioRunner -> {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
@@ -410,14 +367,12 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 			// Check spot index has been updated
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
-			MicroCaseUtils.withInjectorPerChainScope(scenarioToOptimiserBridge, () -> {
-
+			MicroCaseUtils.withEvaluationInjectorPerChainScope(scenarioToOptimiserBridge, injector -> {
 				@NonNull
 				final ISequences initialSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
-				final TimeWindowScheduler priceBasedSequenceScheduler = MicroCaseUtils.getClassFromChildInjector(scenarioToOptimiserBridge, TimeWindowScheduler.class);
-				// Ensure scheduling with price window trimming is enabled.
-				priceBasedSequenceScheduler.setUsePriceBasedWindowTrimming(true);
-				ScheduledTimeWindows scheduledTimeWindows = priceBasedSequenceScheduler.schedule(initialSequences);
+				final TimeWindowScheduler priceBasedSequenceScheduler = getScheduler(injector);
+
+				ScheduledTimeWindows scheduledTimeWindows = priceBasedSequenceScheduler.calculateTrimmedWindows(initialSequences);
 				// get optimiser objects
 				final IPortTimeWindowsRecord loadPortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(loadName, scheduledTimeWindows);
 				final IPortTimeWindowsRecord dischargePortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(dischargeName, scheduledTimeWindows);
@@ -465,33 +420,25 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				.withWindowStartTime(0) //
 				.withWindowSize(24, TimePeriod.HOURS).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
-		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
-		final List<CommodityCurve> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityCurves();
-		CommodityCurve hh = null;
-		for (final CommodityCurve commodityIndex : commodityIndices) {
-			if (commodityIndex.getName().equals("Henry_Hub")) {
-				hh = commodityIndex;
-			}
-		}
-		assert hh != null;
-		hh.getPoints().clear();
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 7), 7.5);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 8), 8.5);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 9), 13.5);
+
+		pricingModelBuilder.makeCommodityDataCurve("Henry_Hub", "$", "mmBtu") //
+				.addIndexPoint(YearMonth.of(2016, 7), 7.5) //
+				.addIndexPoint(YearMonth.of(2016, 8), 8.5) //
+				.addIndexPoint(YearMonth.of(2016, 9), 13.5) //
+				.build();
+
 		evaluateWithLSOTest(scenarioRunner -> {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
-
-			MicroCaseUtils.withInjectorPerChainScope(scenarioToOptimiserBridge, () -> {
+			MicroCaseUtils.withEvaluationInjectorPerChainScope(scenarioToOptimiserBridge, injector -> {
 
 				@NonNull
 				final ISequences initialSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
-				final TimeWindowScheduler priceBasedSequenceScheduler = MicroCaseUtils.getClassFromChildInjector(scenarioToOptimiserBridge, TimeWindowScheduler.class);
-				// Ensure scheduling with price window trimming is enabled.
-				priceBasedSequenceScheduler.setUsePriceBasedWindowTrimming(true);
-				ScheduledTimeWindows scheduledTimeWindows = priceBasedSequenceScheduler.schedule(initialSequences);
+				final TimeWindowScheduler priceBasedSequenceScheduler = getScheduler(injector);
+
+				ScheduledTimeWindows scheduledTimeWindows = priceBasedSequenceScheduler.calculateTrimmedWindows(initialSequences);
 
 				// get optimiser objects
 				final IPortTimeWindowsRecord loadPortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(loadName, scheduledTimeWindows);
@@ -548,33 +495,25 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				.withWindowStartTime(0) //
 				.withWindowSize(3, TimePeriod.MONTHS).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
-		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
-		final List<CommodityCurve> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityCurves();
-		CommodityCurve hh = null;
-		for (final CommodityCurve commodityIndex : commodityIndices) {
-			if (commodityIndex.getName().equals("Henry_Hub")) {
-				hh = commodityIndex;
-			}
-		}
-		assert hh != null;
-		hh.getPoints().clear();
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 7), 7.5);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 8), 8.5);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 9), salesPrice);
+
+		pricingModelBuilder.makeCommodityDataCurve("Henry_Hub", "$", "mmBtu") //
+				.addIndexPoint(YearMonth.of(2016, 7), 7.5) //
+				.addIndexPoint(YearMonth.of(2016, 8), 8.5) //
+				.addIndexPoint(YearMonth.of(2016, 9), salesPrice) //
+				.build();
+
 		evaluateWithLSOTest(scenarioRunner -> {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
-			MicroCaseUtils.withInjectorPerChainScope(scenarioToOptimiserBridge, () -> {
-
+			MicroCaseUtils.withEvaluationInjectorPerChainScope(scenarioToOptimiserBridge, injector -> {
 				@NonNull
 				final ISequences initialSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
-				final TimeWindowScheduler priceBasedSequenceScheduler = MicroCaseUtils.getClassFromChildInjector(scenarioToOptimiserBridge, TimeWindowScheduler.class);
-				// Ensure scheduling with price window trimming is enabled.
-				priceBasedSequenceScheduler.setUsePriceBasedWindowTrimming(true);
-				ScheduledTimeWindows scheduledTimeWindows = priceBasedSequenceScheduler.schedule(initialSequences);
+				final TimeWindowScheduler priceBasedSequenceScheduler = getScheduler(injector);
+
+				ScheduledTimeWindows scheduledTimeWindows = priceBasedSequenceScheduler.calculateTrimmedWindows(initialSequences);
 
 				// get optimiser objects
 				final IPortTimeWindowsRecord loadPortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(loadName, scheduledTimeWindows);
@@ -628,31 +567,23 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				.withWindowStartTime(0) //
 				.withWindowSize(24000, TimePeriod.HOURS).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
-		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
-		final List<CommodityCurve> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityCurves();
-		CommodityCurve hh = null;
-		for (final CommodityCurve commodityIndex : commodityIndices) {
-			if (commodityIndex.getName().equals("Henry_Hub")) {
-				hh = commodityIndex;
-			}
-		}
-		assert hh != null;
-		hh.getPoints().clear();
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 7), 7.5);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 8), 8.5);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 9), salesPrice);
+
+		pricingModelBuilder.makeCommodityDataCurve("Henry_Hub", "$", "mmBtu") //
+				.addIndexPoint(YearMonth.of(2016, 7), 7.5) //
+				.addIndexPoint(YearMonth.of(2016, 8), 8.5) //
+				.addIndexPoint(YearMonth.of(2016, 9), salesPrice) //
+				.build();
+
 		evaluateWithLSOTest(scenarioRunner -> {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
-			MicroCaseUtils.withInjectorPerChainScope(scenarioToOptimiserBridge, () -> {
+			MicroCaseUtils.withEvaluationInjectorPerChainScope(scenarioToOptimiserBridge, injector -> {
 
 				final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 				@NonNull
 				final ISequences initialSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
-				final TimeWindowScheduler priceBasedSequenceScheduler = MicroCaseUtils.getClassFromChildInjector(scenarioToOptimiserBridge, TimeWindowScheduler.class);
-				// Ensure scheduling with price window trimming is enabled.
-				priceBasedSequenceScheduler.setUsePriceBasedWindowTrimming(true);
-				ScheduledTimeWindows scheduledTimeWindows = priceBasedSequenceScheduler.schedule(initialSequences);
+				final TimeWindowScheduler priceBasedSequenceScheduler = getScheduler(injector);
+				ScheduledTimeWindows scheduledTimeWindows = priceBasedSequenceScheduler.calculateTrimmedWindows(initialSequences);
 				// get optimiser objects
 				final IPortTimeWindowsRecord loadPortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(loadName, scheduledTimeWindows);
 				final IPortTimeWindowsRecord dischargePortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(dischargeName, scheduledTimeWindows);
@@ -704,33 +635,22 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				.withWindowStartTime(0) //
 				.withWindowSize(0, TimePeriod.HOURS).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
-		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
 
-		final List<CommodityCurve> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityCurves();
-		CommodityCurve hh = null;
-		for (final CommodityCurve commodityIndex : commodityIndices) {
-			if (commodityIndex.getName().equals("Henry_Hub")) {
-				hh = commodityIndex;
-			}
-		}
-		assert hh != null;
-		hh.getPoints().clear();
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 7), 7.5);
-		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 8), 8.5);
+		pricingModelBuilder.makeCommodityDataCurve("Henry_Hub", "$", "mmBtu") //
+				.addIndexPoint(YearMonth.of(2016, 7), 7.5) //
+				.addIndexPoint(YearMonth.of(2016, 8), 8.5) //
+				.build();
+
 		evaluateWithLSOTest(scenarioRunner -> {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
-			MicroCaseUtils.withInjectorPerChainScope(scenarioToOptimiserBridge, () -> {
-
-				@NonNull
-				final ISequences initialSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
-				final TimeWindowScheduler priceBasedSequenceScheduler = MicroCaseUtils.getClassFromChildInjector(scenarioToOptimiserBridge, TimeWindowScheduler.class);
-				// Ensure scheduling with price window trimming is enabled.
-				priceBasedSequenceScheduler.setUsePriceBasedWindowTrimming(true);
-				ScheduledTimeWindows scheduledTimeWindows = priceBasedSequenceScheduler.schedule(initialSequences);
+			MicroCaseUtils.withEvaluationInjectorPerChainScope(scenarioToOptimiserBridge, injector -> {
+				final @NonNull ISequences initialSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
+				final TimeWindowScheduler priceBasedSequenceScheduler = getScheduler(injector);
+				ScheduledTimeWindows scheduledTimeWindows = priceBasedSequenceScheduler.calculateTrimmedWindows(initialSequences);
 
 				// get optimiser objects
 				final IPortTimeWindowsRecord loadPortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(loadName, scheduledTimeWindows);
@@ -832,7 +752,8 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 		CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(cargo1.getLoadName(), ScenarioModelUtil.findSchedule(scenarioDataProvider));
 		SimpleCargoAllocation simpleCargoAllocation = new SimpleCargoAllocation(cargoAllocation);
 
-		// 2018-10-12: This currently fails as the timezone rounding means we end up with the wrong price.
+		// 2018-10-12: This currently fails as the timezone rounding means we end up
+		// with the wrong price.
 		Assertions.assertEquals(12.0, simpleCargoAllocation.getDischargeAllocation().getPrice(), 0.1);
 	}
 

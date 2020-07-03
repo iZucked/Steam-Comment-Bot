@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2019
+    Copyright (C) Minimax Labs Ltd., 2010 - 2020
     All rights reserved.
 
 -->
@@ -422,7 +422,11 @@
          <PluginXMLEnablement
                feature="mtm-action"
                plugin.xml="mtm-action.plugin.xml">
-         </PluginXMLEnablement>      
+         </PluginXMLEnablement>   
+         <PluginXMLEnablement
+               feature="generated-papers"
+               plugin.xml="generated-papers-in-pnl.plugin.xml">
+         </PluginXMLEnablement>        
       </extension>
       <extension
             point="org.eclipse.ui.startup">

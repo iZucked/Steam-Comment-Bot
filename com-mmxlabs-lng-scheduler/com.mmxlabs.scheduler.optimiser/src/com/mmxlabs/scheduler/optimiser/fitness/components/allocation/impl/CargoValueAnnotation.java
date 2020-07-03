@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
@@ -20,8 +20,10 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PanamaPeriod;
 
 /**
- * Implementation of {@link ICargoValueAnnotation} wrapping a pre-existing {@link IAllocationAnnotation} instance adding on the {@link ICargoValueAnnotation} specific data items. Internally very
- * similar to {@link AllocationAnnotation}.
+ * Implementation of {@link ICargoValueAnnotation} wrapping a pre-existing
+ * {@link IAllocationAnnotation} instance adding on the
+ * {@link ICargoValueAnnotation} specific data items. Internally very similar to
+ * {@link AllocationAnnotation}.
  * 
  * @author Simon Goodall.
  * 
@@ -30,6 +32,7 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 
 	private boolean locked;
 	private final IAllocationAnnotation allocationAnnotation;
+	private long totalProfitAndLoss;
 
 	private static class SlotAllocationAnnotation {
 		public long value;
@@ -285,6 +288,16 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 		}
 
 		return false;
+	}
+
+	public long getTotalProfitAndLoss() {
+		return totalProfitAndLoss;
+	}
+
+	public void setTotalProfitAndLoss(long totalProfitAndLoss) {
+		assert !locked;
+
+		this.totalProfitAndLoss = totalProfitAndLoss;
 	}
 
 	@Override

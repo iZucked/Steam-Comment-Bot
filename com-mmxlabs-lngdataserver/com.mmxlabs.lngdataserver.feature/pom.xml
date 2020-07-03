@@ -6,52 +6,9 @@
 	<parent>
 		<artifactId>com.mmxlabs.lngdataserver.parent</artifactId>
 		<groupId>com.mmxlabs.lngdataserver</groupId>
-		<version>4.8.3-SNAPSHOT</version>
+		<version>4.10.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>com.mmxlabs.lngdataserver.feature</artifactId>
 	<packaging>eclipse-feature</packaging>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.eclipse.tycho.extras</groupId>
-				<artifactId>tycho-source-feature-plugin</artifactId>
-				<version>${tycho-extras-version}</version>
-				<executions>
-					<execution>
-						<id>source-feature</id>
-						<phase>package</phase>
-						<goals>
-							<goal>source-feature</goal>
-						</goals>
-						<configuration>
-							<excludes>
-								<plugin id="com.mmxlabs.lngdataserver.lib.source" />
-								<plugin id="com.mmxlabs.lngdataserver.lib" />
-								<plugin id="de.flapdoodle.embed.process.source" />
-								<plugin id="de.flapdoodle.embed.process" />
-								<plugin id="de.flapdoodle.embed.mongo.source" />
-								<plugin id="de.flapdoodle.embed.mongo" />
-								<plugin id="org.apache.commons.lang3,source" />
-								<plugin id="org.apache.commons.lang3" />
-								<plugin id="org.apache.commons.io.source" />
-								<plugin id="org.apache.commons.io" />
-								<plugin id="org.apache.commons.compress.source" />
-								<plugin id="org.apache.commons.compress" />
-								<plugin id="org.apache.commons.collections4.source" />
-								<plugin id="org.apache.commons.collections4" />
-								<plugin id="org.apache.commons.codec.source" />
-								<plugin id="org.apache.commons.codec" />
-								<plugin id="com.fasterxml.jackson.datatype.jackson-datatype-jsr310.source" />
-								<plugin id="com.fasterxml.jackson.datatype.jackson-datatype-jsr310" />
-							</excludes>
-							<labelSuffix></labelSuffix>
-						</configuration>
-					</execution>
-				</executions>
-				<configuration>
-					<labelSuffix></labelSuffix>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+	 
 </project>

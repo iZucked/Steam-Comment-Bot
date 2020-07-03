@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Dataserver: General integrations
 Bundle-SymbolicName: com.mmxlabs.lngdataserver.integration.general;singleton:=true
-Bundle-Version: 4.8.3.qualifier
+Bundle-Version: 4.10.1.qualifier
 Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  org.eclipse.osgi.services,
  org.eclipse.core.resources,
@@ -15,7 +15,7 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  org.eclipse.jface,
  org.eclipse.ui.workbench,
  com.mmxlabs.rcp.common,
- com.mmxlabs.lngdataserver.lib,
+ com.mmxlabs.hub,
  com.google.guava,
  com.mmxlabs.lngdataserver.server,
  com.mmxlabs.lngdataserver.commons,
@@ -28,7 +28,7 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.lngdataserver.browser.ui,
  com.fasterxml.jackson.datatype.jackson-datatype-jdk8,
  com.mmxlabs.license.ssl
-Bundle-RequiredExecutionEnvironment: JavaSE-10
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Import-Package: org.slf4j
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .

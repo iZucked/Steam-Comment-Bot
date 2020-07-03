@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Dataserver Browser UI
 Bundle-SymbolicName: com.mmxlabs.lngdataserver.browser.ui;singleton:=true
-Bundle-Version: 4.8.3.qualifier
+Bundle-Version: 4.10.1.qualifier
 Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  org.eclipse.ui.navigator;bundle-version="3.6.101",
@@ -14,7 +14,7 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.lngdataserver.browser.edit,
  org.eclipse.jface,
  org.eclipse.swt,
- com.mmxlabs.lngdataserver.lib,
+ com.mmxlabs.hub,
  com.mmxlabs.lngdataserver.server,
  org.ops4j.peaberry.eclipse,
  com.google.inject,
@@ -30,9 +30,10 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.models.ui.tabular,
  com.mmxlabs.scenario.service.ui
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-10
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: com.mmxlabs.lngdataserver.browser.ui,
  com.mmxlabs.lngdataserver.browser.ui.context
-Import-Package: org.slf4j
+Import-Package: javax.inject;version="1.0.0",
+ org.slf4j
 Bundle-Activator: com.mmxlabs.lngdataserver.browser.ui.Activator
 Automatic-Module-Name: com.mmxlabs.lngdataserver.browser.ui

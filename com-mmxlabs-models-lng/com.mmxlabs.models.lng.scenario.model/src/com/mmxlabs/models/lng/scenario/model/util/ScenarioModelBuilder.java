@@ -1,12 +1,11 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.scenario.model.util;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.util.UUID;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -20,6 +19,7 @@ import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.util.CommercialModelBuilder;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.util.FleetModelBuilder;
+import com.mmxlabs.models.lng.nominations.NominationsFactory;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.util.DistanceModelBuilder;
 import com.mmxlabs.models.lng.port.util.PortModelBuilder;
@@ -32,6 +32,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
+import com.mmxlabs.models.lng.spotmarkets.SpotType;
 import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelBuilder;
 import com.mmxlabs.rcp.common.versions.VersionsUtil;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
@@ -64,6 +65,7 @@ public final class ScenarioModelBuilder {
 		rootObject.setCargoModel(CargoFactory.eINSTANCE.createCargoModel());
 		rootObject.setScheduleModel(ScheduleFactory.eINSTANCE.createScheduleModel());
 		rootObject.setAnalyticsModel(AnalyticsFactory.eINSTANCE.createAnalyticsModel());
+		rootObject.setNominationsModel(NominationsFactory.eINSTANCE.createNominationsModel());
 
 		final LNGReferenceModel referenceModel = LNGScenarioFactory.eINSTANCE.createLNGReferenceModel();
 		referenceModel.setPortModel(PortFactory.eINSTANCE.createPortModel());
@@ -73,8 +75,18 @@ public final class ScenarioModelBuilder {
 		referenceModel.setCommercialModel(CommercialFactory.eINSTANCE.createCommercialModel());
 		referenceModel.setSpotMarketsModel(SpotMarketsFactory.eINSTANCE.createSpotMarketsModel());
 
+		referenceModel.getSpotMarketsModel().setDesPurchaseSpotMarket(SpotMarketsFactory.eINSTANCE.createSpotMarketGroup());
+		referenceModel.getSpotMarketsModel().setDesSalesSpotMarket(SpotMarketsFactory.eINSTANCE.createSpotMarketGroup());
+		referenceModel.getSpotMarketsModel().setFobPurchasesSpotMarket(SpotMarketsFactory.eINSTANCE.createSpotMarketGroup());
+		referenceModel.getSpotMarketsModel().setFobSalesSpotMarket(SpotMarketsFactory.eINSTANCE.createSpotMarketGroup());
+
+		referenceModel.getSpotMarketsModel().getDesPurchaseSpotMarket().setType(SpotType.DES_PURCHASE);
+		referenceModel.getSpotMarketsModel().getDesSalesSpotMarket().setType(SpotType.DES_SALE);
+		referenceModel.getSpotMarketsModel().getFobPurchasesSpotMarket().setType(SpotType.FOB_PURCHASE);
+		referenceModel.getSpotMarketsModel().getFobSalesSpotMarket().setType(SpotType.FOB_SALE);
+
 		rootObject.setReferenceModel(referenceModel);
-		
+
 		// Initialise version UUIDs
 		referenceModel.getPortModel().setDistanceVersionRecord(VersionsUtil.createNewRecord());
 		referenceModel.getPortModel().setPortVersionRecord(VersionsUtil.createNewRecord());

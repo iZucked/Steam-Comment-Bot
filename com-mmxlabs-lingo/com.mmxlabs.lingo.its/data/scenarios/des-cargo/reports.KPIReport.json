@@ -1,0 +1,25 @@
+[ {
+  "KPI" : "P&L",
+  "Schedule" : "/scenarios/des-cargo/",
+  "Value" : "$72,839,686"
+}, {
+  "KPI" : "Trading P&L",
+  "Schedule" : "/scenarios/des-cargo/",
+  "Value" : "$74,801,891"
+}, {
+  "KPI" : "Shipping P&L",
+  "Schedule" : "/scenarios/des-cargo/",
+  "Value" : "$-1,962,205"
+}, {
+  "KPI" : "Shipping Cost",
+  "Schedule" : "/scenarios/des-cargo/",
+  "Value" : "$42,385,082"
+}, {
+  "KPI" : "Lateness",
+  "Schedule" : "/scenarios/des-cargo/",
+  "Value" : "0d, 0h"
+}, {
+  "KPI" : "Idle Time",
+  "Schedule" : "/scenarios/des-cargo/",
+  "Value" : "520d, 21h"
+} ]

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui;
@@ -21,8 +21,6 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import com.mmxlabs.common.NonNullPair;
-import com.mmxlabs.common.Triple;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.ExtraDataProvider;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -47,8 +45,8 @@ import com.mmxlabs.models.lng.transformer.period.IScenarioEntityMapping;
 import com.mmxlabs.models.lng.transformer.period.InclusionChecker;
 import com.mmxlabs.models.lng.transformer.period.PeriodExporter;
 import com.mmxlabs.models.lng.transformer.period.PeriodTransformer;
-import com.mmxlabs.models.lng.transformer.period.ScenarioEntityMapping;
 import com.mmxlabs.models.lng.transformer.period.PeriodTransformer.PeriodTransformResult;
+import com.mmxlabs.models.lng.transformer.period.ScenarioEntityMapping;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequences;

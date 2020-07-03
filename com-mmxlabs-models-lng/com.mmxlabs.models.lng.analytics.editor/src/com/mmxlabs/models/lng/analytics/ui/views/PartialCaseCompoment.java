@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.ui.views;
@@ -150,7 +150,7 @@ public class PartialCaseCompoment extends AbstractSandboxComponent<OptionModelle
 		inputWants.add(partialCaseDiagram::setRoot);
 
 		lockedListeners.add(locked -> {
-			RunnerHelper.asyncExec(() -> partialCaseViewer.getGrid().setEnabled(!locked));
+			RunnerHelper.runAsyncIfControlValid(partialCaseViewer.getGrid(), grid -> grid.setEnabled(!locked));
 		});
 
 		hookDragSource(partialCaseViewer);

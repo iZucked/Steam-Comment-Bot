@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2019
+    Copyright (C) Minimax Labs Ltd., 2010 - 2020
     All rights reserved.
 
 -->
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="start" deactivate="stop" name="com.mmxlabs.models.lng.analytics.navigator.OptionAnalysisModelFragmentService">
    <implementation class="com.mmxlabs.models.lng.analytics.navigator.OptionAnalysisModelFragmentService"/>
+   <reference bind="bindScenarioModel" cardinality="0..1" interface="com.mmxlabs.scenario.service.ScenarioServiceRegistry" name="ScenarioServiceRegistry" policy="dynamic" unbind="unbindScenarioModel"/>   
 </scr:component>

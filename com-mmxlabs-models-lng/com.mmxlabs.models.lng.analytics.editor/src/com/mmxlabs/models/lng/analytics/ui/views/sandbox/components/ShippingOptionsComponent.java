@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.ui.views.sandbox.components;
@@ -221,11 +221,9 @@ public class ShippingOptionsComponent extends AbstractSandboxComponent<Object, A
 
 		hookDragSource(shippingOptionsViewer);
 
-		inputWants.add(model -> shippingOptionsViewer.setInput(model));
-		inputWants.add(model -> listener.setModel(model));
-		lockedListeners.add(locked -> {
-			RunnerHelper.asyncExec(() -> shippingOptionsViewer.getGrid().setEnabled(!locked));
-		});
+		inputWants.add(shippingOptionsViewer::setInput);
+		inputWants.add(listener::setModel);
+		lockedListeners.add(locked -> RunnerHelper.runAsyncIfControlValid(shippingOptionsViewer.getGrid(), grid -> grid.setEnabled(!locked)));
 		return shippingOptionsViewer;
 	}
 

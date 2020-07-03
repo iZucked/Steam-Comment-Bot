@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.editing;
@@ -7,8 +7,6 @@ package com.mmxlabs.lingo.its.editing;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -18,6 +16,7 @@ import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -43,10 +42,10 @@ public class CargoEditingTests extends AbstractMicroTestCase {
 
 		final CargoEditingHelper helper = new CargoEditingHelper(editingDomain, lngScenarioModel);
 
-		final DryDockEvent vesselEvent = cargoModelBuilder.makeDryDockEvent("DryDock", LocalDateTime.of(2016, 7, 22, 0, 0), LocalDateTime.of(2016, 7, 22, 0, 0), portFinder.findPort("Point Fortin"))
+		final DryDockEvent vesselEvent = cargoModelBuilder.makeDryDockEvent("DryDock", LocalDateTime.of(2016, 7, 22, 0, 0), LocalDateTime.of(2016, 7, 22, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN))
 				.build();
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-138");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_138);
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity).build();
 
 		helper.assignVesselEventToVesselAvailability("Assign event", vesselEvent, vesselAvailability);
@@ -62,9 +61,9 @@ public class CargoEditingTests extends AbstractMicroTestCase {
 
 		final CargoEditingHelper helper = new CargoEditingHelper(editingDomain, lngScenarioModel);
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-138");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_138);
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity).build();
-		final DryDockEvent vesselEvent = cargoModelBuilder.makeDryDockEvent("DryDock", LocalDateTime.of(2016, 7, 22, 0, 0), LocalDateTime.of(2016, 7, 22, 0, 0), portFinder.findPort("Point Fortin"))//
+		final DryDockEvent vesselEvent = cargoModelBuilder.makeDryDockEvent("DryDock", LocalDateTime.of(2016, 7, 22, 0, 0), LocalDateTime.of(2016, 7, 22, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN))//
 				.withVesselAssignment(vesselAvailability, 0)//
 				.build();
 
@@ -81,9 +80,9 @@ public class CargoEditingTests extends AbstractMicroTestCase {
 
 		final CargoEditingHelper helper = new CargoEditingHelper(editingDomain, lngScenarioModel);
 
-		final LoadSlot load = cargoModelBuilder.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2016, 7, 22), portFinder.findPort("Sakai"), null, entity, "5", 20.0, null).build();
+		final LoadSlot load = cargoModelBuilder.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2016, 7, 22), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "5", 20.0, null).build();
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-138");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_138);
 
 		helper.assignNominatedVessel("Assign slot", load, vessel);
 
@@ -98,9 +97,9 @@ public class CargoEditingTests extends AbstractMicroTestCase {
 
 		final CargoEditingHelper helper = new CargoEditingHelper(editingDomain, lngScenarioModel);
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-138");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_138);
 
-		final LoadSlot load = cargoModelBuilder.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2016, 7, 22), portFinder.findPort("Sakai"), null, entity, "5", 20.0, vessel).build();
+		final LoadSlot load = cargoModelBuilder.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2016, 7, 22), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "5", 20.0, vessel).build();
 
 		helper.assignNominatedVessel("Unassign slot", load, null);
 
@@ -115,9 +114,9 @@ public class CargoEditingTests extends AbstractMicroTestCase {
 
 		final CargoEditingHelper helper = new CargoEditingHelper(editingDomain, lngScenarioModel);
 
-		final DischargeSlot discharge = cargoModelBuilder.makeFOBSale("D1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2016, 7, 22), portFinder.findPort("Point Fortin"), null, entity, "5", null).build();
+		final DischargeSlot discharge = cargoModelBuilder.makeFOBSale("D1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2016, 7, 22), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", null).build();
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-138");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_138);
 
 		helper.assignNominatedVessel("Assign slot", discharge, vessel);
 
@@ -132,9 +131,9 @@ public class CargoEditingTests extends AbstractMicroTestCase {
 
 		final CargoEditingHelper helper = new CargoEditingHelper(editingDomain, lngScenarioModel);
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-138");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_138);
 
-		final DischargeSlot discharge = cargoModelBuilder.makeFOBSale("L1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2016, 7, 22), portFinder.findPort("Point Fortin"), null, entity, "5", vessel).build();
+		final DischargeSlot discharge = cargoModelBuilder.makeFOBSale("L1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2016, 7, 22), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", vessel).build();
 
 		helper.assignNominatedVessel("Unassign slot", discharge, null);
 
@@ -203,14 +202,14 @@ public class CargoEditingTests extends AbstractMicroTestCase {
 
 		// Setup code copy-pasted from NominalMarketTest
 		
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setSafetyHeel(500);
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
 				.withAssignmentFlags(true, false) //
@@ -220,9 +219,9 @@ public class CargoEditingTests extends AbstractMicroTestCase {
 		
 		// add some open slots to the model
 		
-		cargoModelBuilder.createFOBPurchase("L2", LocalDate.of(2015, 12, 3), portFinder.findPort("Point Fortin"), null, entity, "5", null);
-		cargoModelBuilder.createFOBPurchase("L3", LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "5", null);
-		cargoModelBuilder.createDESSale("D2", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7");
+		cargoModelBuilder.createFOBPurchase("L2", LocalDate.of(2015, 12, 3), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", null);
+		cargoModelBuilder.createFOBPurchase("L3", LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", null);
+		cargoModelBuilder.createDESSale("D2", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7");
 
 		// run a test on the model
 

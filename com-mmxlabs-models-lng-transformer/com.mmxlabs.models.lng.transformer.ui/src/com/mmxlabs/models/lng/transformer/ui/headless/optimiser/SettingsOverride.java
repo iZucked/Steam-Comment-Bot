@@ -1,10 +1,12 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.headless.optimiser;
 
 import java.util.Map;
+
+import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessApplicationOptions;
 
 
 /**

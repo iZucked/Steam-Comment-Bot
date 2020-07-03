@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.commercial.ui.displaycomposites;
@@ -54,7 +54,7 @@ import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.TaxRate;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
+import com.mmxlabs.models.mmxcore.impl.SafeMMXContentAdapter;
 import com.mmxlabs.models.ui.date.LocalDateTextFormatter;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
@@ -316,7 +316,7 @@ public class LegalEntityBookDetailComposite extends Composite implements IDispla
 	}
 
 	BaseEntityBook oldValue = null;
-	private final @NonNull Adapter adapter = new MMXContentAdapter() {
+	private final @NonNull Adapter adapter = new SafeMMXContentAdapter() {
 
 		@Override
 		public void reallyNotifyChanged(final Notification notification) {

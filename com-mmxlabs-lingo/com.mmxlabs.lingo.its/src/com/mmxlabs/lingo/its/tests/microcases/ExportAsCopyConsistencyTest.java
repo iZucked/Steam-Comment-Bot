@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases;
@@ -14,10 +14,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
-import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.CostModel;
@@ -37,26 +37,24 @@ public class ExportAsCopyConsistencyTest extends AbstractMicroTestCase {
 	@Test
 	@Tag(TestCategories.QUICK_TEST)
 	@Tag(TestCategories.REGRESSION_TEST)
-	public void testExportAsCopyDoesNotDuplicateReferenceListItems() throws Exception {
+	public void testExportAsCopyDoesNotDuplicateReferenceListItems() {
 
 		// Create the required basic elements
 
-		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
-
-		final Vessel vessel_1 = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel_1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final VesselAvailability vesselAvailability_1 = cargoModelBuilder.makeVesselAvailability(vessel_1, entity) //
-				.withStartPort(portFinder.findPort("Point Fortin")) //
+				.withStartPort(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 				.withStartWindow(LocalDateTime.of(2015, 01, 01, 0, 0, 0), LocalDateTime.of(2015, 01, 01, 0, 0, 0)) //
-				.withEndPort(portFinder.findPort("Point Fortin")) //
+				.withEndPort(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 				.withEndWindow(LocalDateTime.of(2015, 06, 01, 0, 0, 0), LocalDateTime.of(2015, 06, 01, 0, 0, 0)) //
 				.build();
 
 		// Create a single charter out event
 		@SuppressWarnings("unused")
 		final CharterOutEvent charterOutEvent = cargoModelBuilder
-				.makeCharterOutEvent("charter-1", LocalDateTime.of(2015, 5, 1, 0, 0, 0), LocalDateTime.of(2015, 5, 1, 0, 0, 0), portFinder.findPort("Ras Laffan")) //
-				.withRelocatePort(portFinder.findPort("Isle of Grain")) //
+				.makeCharterOutEvent("charter-1", LocalDateTime.of(2015, 5, 1, 0, 0, 0), LocalDateTime.of(2015, 5, 1, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_RAS_LAFFAN)) //
+				.withRelocatePort(portFinder.findPortById(InternalDataConstants.PORT_ISLE_OF_GRAIN)) //
 				.withVesselAssignment(vesselAvailability_1, 1) //
 				.withAllowedVessels(vessel_1) //
 				.build(); //
@@ -81,7 +79,7 @@ public class ExportAsCopyConsistencyTest extends AbstractMicroTestCase {
 	@Test
 	@Tag(TestCategories.QUICK_TEST)
 	@Tag(TestCategories.REGRESSION_TEST)
-	public void testExportAsCopyExportsBaseFuelCostsCorrectlyInPeriod() throws Exception {
+	public void testExportAsCopyExportsBaseFuelCostsCorrectlyInPeriod() {
 
 		evaluateWithLSOTest(false, plan -> {
 			plan.getUserSettings().setPeriodStartDate(LocalDate.of(2016, 5, 1));

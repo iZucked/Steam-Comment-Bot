@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.ui.views.sandbox.components;
@@ -116,7 +116,7 @@ public class VesselEventOptionsComponent extends AbstractSandboxComponent<Object
 		}
 		inputWants.add(optionsViewer::setInput);
 
-		lockedListeners.add(locked -> RunnerHelper.asyncExec(() -> optionsViewer.getGrid().setEnabled(!locked)));
+		lockedListeners.add(locked -> RunnerHelper.runAsyncIfControlValid(optionsViewer.getGrid(), grid -> grid.setEnabled(!locked)));
 
 		return optionsViewer.getControl();
 	}

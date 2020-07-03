@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
@@ -8,9 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
+import com.mmxlabs.optimiser.optimiser.lso.parallellso.ILSOJobState;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
@@ -24,6 +27,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
+import com.mmxlabs.scheduler.optimiser.contracts.IBreakEvenPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord.AllocationMode;
@@ -42,9 +46,11 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * @author hinton
  * 
  */
+@NonNullByDefault
 public abstract class BaseVolumeAllocator implements IVolumeAllocator {
+
 	@Inject(optional = true)
-	private ICustomVolumeAllocator allocationRecordModifier;
+	private @Nullable ICustomVolumeAllocator allocationRecordModifier;
 
 	@Inject
 	private INominatedVesselProvider nominatedVesselProvider;
@@ -54,7 +60,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 	@Inject
 	private IActualsDataProvider actualsDataProvider;
-	
+
 	@Inject
 	private IFullCargoLotProviderEditor fullCargoLotProvider;
 
@@ -64,7 +70,8 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 	@Override
 	@Nullable
-	public IAllocationAnnotation allocate(final IVesselAvailability vesselAvailability, final int vesselStartTime, final VoyagePlan plan, final IPortTimesRecord portTimesRecord) {
+	public IAllocationAnnotation allocate(final IVesselAvailability vesselAvailability, final int vesselStartTime, final VoyagePlan plan, final IPortTimesRecord portTimesRecord,
+			final @Nullable IAnnotatedSolution annotatedSolution) {
 		final AllocationRecord allocationRecord = createAllocationRecord(vesselAvailability, vesselStartTime, plan, portTimesRecord);
 		if (allocationRecord == null) {
 			return null;
@@ -72,7 +79,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		if (allocationRecordModifier != null) {
 			allocationRecordModifier.modifyAllocationRecord(allocationRecord);
 		}
-		return allocate(allocationRecord);
+		return allocate(allocationRecord, annotatedSolution);
 	}
 
 	@Override
@@ -205,11 +212,25 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		// TODO: Assert start/end heel match actuals records.
 		final AllocationRecord allocationRecord = new AllocationRecord(vesselAvailability, plan, vesselStartTime, plan.getStartingHeelInM3(), plan.getLNGFuelVolume(), minEndVolumeInM3,
 				maxEndVolumeInM3, slots, portTimesRecord, returnSlot, minVolumesInM3, maxVolumesInM3, minVolumesInMMBtu, maxVolumesInMMBtu, slotCV);
-		
+
 		for (final IPortSlot ps : allocationRecord.slots) {
 			if (fullCargoLotProvider.hasFCLRequirment(ps)) {
 				allocationRecord.fullCargoLot = true;
 				break;
+			}
+			// Check for break-evens - always assume FCL
+			if (ps instanceof ILoadOption) {
+				ILoadOption option = (ILoadOption) ps;
+				if (option.getLoadPriceCalculator() instanceof IBreakEvenPriceCalculator) {
+					allocationRecord.fullCargoLot = true;
+					break;
+				}
+			} else if (ps instanceof IDischargeOption) {
+				IDischargeOption option = (IDischargeOption) ps;
+				if (option.getDischargePriceCalculator() instanceof IBreakEvenPriceCalculator) {
+					allocationRecord.fullCargoLot = true;
+					break;
+				}
 			}
 		}
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.ui.impl;
@@ -216,7 +216,7 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 		return changed;
 	}
 
-	private void setControlVisibility(final Control c, final boolean v) {
+	protected void setControlVisibility(final Control c, final boolean v) {
 		c.setVisible(v);
 		if (c instanceof Composite) {
 			final Composite composite = (Composite) c;

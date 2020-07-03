@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo;
@@ -871,22 +871,13 @@ public interface CargoPackage extends EPackage {
 	int SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 35;
 
 	/**
-	 * The feature id for the '<em><b>Hedges</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT__HEDGES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 36;
-
-	/**
 	 * The feature id for the '<em><b>Misc Costs</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__MISC_COSTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 37;
+	int SLOT__MISC_COSTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 36;
 
 	/**
 	 * The feature id for the '<em><b>Cancellation Expression</b></em>' attribute.
@@ -895,7 +886,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__CANCELLATION_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 38;
+	int SLOT__CANCELLATION_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 37;
 
 	/**
 	 * The feature id for the '<em><b>Nominated Vessel</b></em>' reference.
@@ -904,7 +895,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__NOMINATED_VESSEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 39;
+	int SLOT__NOMINATED_VESSEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 38;
 
 	/**
 	 * The feature id for the '<em><b>Locked</b></em>' attribute.
@@ -913,7 +904,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__LOCKED = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 40;
+	int SLOT__LOCKED = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 39;
 
 	/**
 	 * The feature id for the '<em><b>Cancelled</b></em>' attribute.
@@ -922,7 +913,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__CANCELLED = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 41;
+	int SLOT__CANCELLED = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 40;
 
 	/**
 	 * The feature id for the '<em><b>Window Counter Party</b></em>' attribute.
@@ -931,7 +922,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__WINDOW_COUNTER_PARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 42;
+	int SLOT__WINDOW_COUNTER_PARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 41;
 
 	/**
 	 * The number of structural features of the '<em>Slot</em>' class.
@@ -940,7 +931,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 43;
+	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 42;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1519,15 +1510,6 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE = SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE;
 
 	/**
-	 * The feature id for the '<em><b>Hedges</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_SLOT__HEDGES = SLOT__HEDGES;
-
-	/**
 	 * The feature id for the '<em><b>Misc Costs</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1645,13 +1627,22 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT__DES_PURCHASE_DEAL_TYPE = SLOT_FEATURE_COUNT + 6;
 
 	/**
+	 * The feature id for the '<em><b>Volume Counter Party</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__VOLUME_COUNTER_PARTY = SLOT_FEATURE_COUNT + 7;
+
+	/**
 	 * The number of structural features of the '<em>Load Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 7;
+	int LOAD_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 8;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -2255,15 +2246,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE = SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE;
-
-	/**
-	 * The feature id for the '<em><b>Hedges</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT__HEDGES = SLOT__HEDGES;
 
 	/**
 	 * The feature id for the '<em><b>Misc Costs</b></em>' attribute.
@@ -3058,15 +3040,6 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE = LOAD_SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE;
 
 	/**
-	 * The feature id for the '<em><b>Hedges</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_LOAD_SLOT__HEDGES = LOAD_SLOT__HEDGES;
-
-	/**
 	 * The feature id for the '<em><b>Misc Costs</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3182,6 +3155,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_LOAD_SLOT__DES_PURCHASE_DEAL_TYPE = LOAD_SLOT__DES_PURCHASE_DEAL_TYPE;
+
+	/**
+	 * The feature id for the '<em><b>Volume Counter Party</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__VOLUME_COUNTER_PARTY = LOAD_SLOT__VOLUME_COUNTER_PARTY;
 
 	/**
 	 * The feature id for the '<em><b>Market</b></em>' reference.
@@ -3803,15 +3785,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE = DISCHARGE_SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE;
-
-	/**
-	 * The feature id for the '<em><b>Hedges</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_DISCHARGE_SLOT__HEDGES = DISCHARGE_SLOT__HEDGES;
 
 	/**
 	 * The feature id for the '<em><b>Misc Costs</b></em>' attribute.
@@ -6216,13 +6189,22 @@ public interface CargoPackage extends EPackage {
 	int CANAL_BOOKINGS__NORTHBOUND_MAX_IDLE_DAYS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
 
 	/**
+	 * The feature id for the '<em><b>Southbound Max Idle Days</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKINGS__SOUTHBOUND_MAX_IDLE_DAYS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
+
+	/**
 	 * The number of structural features of the '<em>Canal Bookings</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL_BOOKINGS_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
+	int CANAL_BOOKINGS_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -7876,17 +7858,6 @@ public interface CargoPackage extends EPackage {
 	EAttribute getSlot_RestrictedVesselsOverride();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getHedges <em>Hedges</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Hedges</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.Slot#getHedges()
-	 * @see #getSlot()
-	 * @generated
-	 */
-	EAttribute getSlot_Hedges();
-
-	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getMiscCosts <em>Misc Costs</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8248,6 +8219,17 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getLoadSlot_DesPurchaseDealType();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.LoadSlot#isVolumeCounterParty <em>Volume Counter Party</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Volume Counter Party</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.LoadSlot#isVolumeCounterParty()
+	 * @see #getLoadSlot()
+	 * @generated
+	 */
+	EAttribute getLoadSlot_VolumeCounterParty();
 
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.LoadSlot#getSlotOrDelegateCV() <em>Get Slot Or Delegate CV</em>}' operation.
@@ -9705,6 +9687,17 @@ public interface CargoPackage extends EPackage {
 	EAttribute getCanalBookings_NorthboundMaxIdleDays();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CanalBookings#getSouthboundMaxIdleDays <em>Southbound Max Idle Days</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Southbound Max Idle Days</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CanalBookings#getSouthboundMaxIdleDays()
+	 * @see #getCanalBookings()
+	 * @generated
+	 */
+	EAttribute getCanalBookings_SouthboundMaxIdleDays();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.ScheduleSpecification <em>Schedule Specification</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -10650,14 +10643,6 @@ public interface CargoPackage extends EPackage {
 		EAttribute SLOT__RESTRICTED_VESSELS_OVERRIDE = eINSTANCE.getSlot_RestrictedVesselsOverride();
 
 		/**
-		 * The meta object literal for the '<em><b>Hedges</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SLOT__HEDGES = eINSTANCE.getSlot_Hedges();
-
-		/**
 		 * The meta object literal for the '<em><b>Misc Costs</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -10938,6 +10923,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute LOAD_SLOT__DES_PURCHASE_DEAL_TYPE = eINSTANCE.getLoadSlot_DesPurchaseDealType();
+
+		/**
+		 * The meta object literal for the '<em><b>Volume Counter Party</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute LOAD_SLOT__VOLUME_COUNTER_PARTY = eINSTANCE.getLoadSlot_VolumeCounterParty();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Delegate CV</b></em>' operation.
@@ -12066,6 +12059,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CANAL_BOOKINGS__NORTHBOUND_MAX_IDLE_DAYS = eINSTANCE.getCanalBookings_NorthboundMaxIdleDays();
+
+		/**
+		 * The meta object literal for the '<em><b>Southbound Max Idle Days</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CANAL_BOOKINGS__SOUTHBOUND_MAX_IDLE_DAYS = eINSTANCE.getCanalBookings_SouthboundMaxIdleDays();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.ScheduleSpecificationImpl <em>Schedule Specification</em>}' class.

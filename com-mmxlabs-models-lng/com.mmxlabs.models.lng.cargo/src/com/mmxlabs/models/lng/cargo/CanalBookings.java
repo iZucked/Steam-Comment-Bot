@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 /**
@@ -25,6 +25,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookings#getFlexibleBookingAmountNorthbound <em>Flexible Booking Amount Northbound</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookings#getFlexibleBookingAmountSouthbound <em>Flexible Booking Amount Southbound</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookings#getNorthboundMaxIdleDays <em>Northbound Max Idle Days</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookings#getSouthboundMaxIdleDays <em>Southbound Max Idle Days</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCanalBookings()
@@ -203,5 +204,27 @@ public interface CanalBookings extends MMXObject {
 	 * @generated
 	 */
 	void setNorthboundMaxIdleDays(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Southbound Max Idle Days</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Southbound Max Idle Days</em>' attribute.
+	 * @see #setSouthboundMaxIdleDays(int)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCanalBookings_SouthboundMaxIdleDays()
+	 * @model
+	 * @generated
+	 */
+	int getSouthboundMaxIdleDays();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.CanalBookings#getSouthboundMaxIdleDays <em>Southbound Max Idle Days</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Southbound Max Idle Days</em>' attribute.
+	 * @see #getSouthboundMaxIdleDays()
+	 * @generated
+	 */
+	void setSouthboundMaxIdleDays(int value);
 
 } // CanalBookings

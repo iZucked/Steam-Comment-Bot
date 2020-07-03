@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.scenario.actions.impl;
@@ -7,16 +7,14 @@ package com.mmxlabs.models.lng.scenario.actions.impl;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Calendar;
-import java.util.TimeZone;
 
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
@@ -53,32 +51,32 @@ public class FixVesselEventWindowChangeTest {
 		ZonedDateTime newWindowStart = ZonedDateTime.of(2013, 8, 29, 15, 0, 0, 0, ZoneId.of("UTC"));
 
 		final FixVesselEventWindowChange change = new FixVesselEventWindowChange(event, newWindowStart, domain);
-		Assert.assertSame(event, change.getChangedObject());
+		Assertions.assertSame(event, change.getChangedObject());
 
 		// Check state has not changed
-		Assert.assertEquals(originalStartAfter, event.getStartAfter());
-		Assert.assertEquals(originalStartBy, event.getStartBy());
+		Assertions.assertEquals(originalStartAfter, event.getStartAfter());
+		Assertions.assertEquals(originalStartBy, event.getStartBy());
 
 		final Command command = change.getCommand();
-		Assert.assertNotNull(command);
-		Assert.assertTrue(command.canExecute());
+		Assertions.assertNotNull(command);
+		Assertions.assertTrue(command.canExecute());
 
 		command.execute();
 		{
 			final LocalDateTime changeEventStart = event.getStartAfter();
 
-			Assert.assertEquals(2013, changeEventStart.getYear());
-			Assert.assertEquals(8, changeEventStart.getMonthValue());
-			Assert.assertEquals(29, changeEventStart.getDayOfMonth());
-			Assert.assertEquals(15, changeEventStart.getHour());
+			Assertions.assertEquals(2013, changeEventStart.getYear());
+			Assertions.assertEquals(8, changeEventStart.getMonthValue());
+			Assertions.assertEquals(29, changeEventStart.getDayOfMonth());
+			Assertions.assertEquals(15, changeEventStart.getHour());
 		}
 		{
 			final LocalDateTime changeEventStart = event.getStartBy();
 
-			Assert.assertEquals(2013, changeEventStart.getYear());
-			Assert.assertEquals(8, changeEventStart.getMonthValue());
-			Assert.assertEquals(29, changeEventStart.getDayOfMonth());
-			Assert.assertEquals(15, changeEventStart.getHour());
+			Assertions.assertEquals(2013, changeEventStart.getYear());
+			Assertions.assertEquals(8, changeEventStart.getMonthValue());
+			Assertions.assertEquals(29, changeEventStart.getDayOfMonth());
+			Assertions.assertEquals(15, changeEventStart.getHour());
 		}
 
 	}

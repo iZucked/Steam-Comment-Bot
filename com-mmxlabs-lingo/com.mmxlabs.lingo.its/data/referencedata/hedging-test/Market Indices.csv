@@ -1,0 +1,3 @@
+name,settleCalendar,pricingCalendar,flatCurve,bidCurve,offerCurve,kind
+BRENT,LSE,ICE,BRENT_ICE,BRENT_ICE,BRENT_ICE,MarketIndex
+JKM,,,JKM,JKM,JKM,MarketIndex

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2019
+    Copyright (C) Minimax Labs Ltd., 2010 - 2020
     All rights reserved.
 
 -->
@@ -10,6 +10,7 @@
 <plugin>
 	<extension point="org.eclipse.ui.views">
 		<view class="com.mmxlabs.models.lng.actuals.ui.editorpart.ActualsEditorView"
+		    category="com.mmxlabs.lngdataserver.views.dataserver"
 			id="com.mmxlabs.models.lng.actuals.editor.ActualsEditorView" name="Actuals Editor"
 			restorable="true">
 		</view>

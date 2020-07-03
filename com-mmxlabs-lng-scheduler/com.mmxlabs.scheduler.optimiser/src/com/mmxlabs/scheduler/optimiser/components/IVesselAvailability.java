@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.components;
@@ -70,7 +70,7 @@ public interface IVesselAvailability {
 	 * 
 	 * @return charter cost calculator
 	 */	
-	ICharterCostCalculator getCharterCostCalculator();
+	@NonNull ICharterCostCalculator getCharterCostCalculator();
 	
 	/**
 	 * Returns the daily rate at which this vessel can be chartered in.

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.standard;
@@ -58,6 +58,7 @@ import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
+import com.mmxlabs.rcp.common.actions.CopyGridToJSONUtil;
 import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
@@ -476,15 +477,19 @@ public class KPIReportView extends ViewPart {
 
 		if (IReportContents.class.isAssignableFrom(adapter)) {
 
-			final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
-			final String contents = util.convert();
-			return (T) new IReportContents() {
+			if (IReportContents.class.isAssignableFrom(adapter)) {
 
-				@Override
-				public String getHTMLContents() {
-					return contents;
-				}
-			};
+				final CopyGridToJSONUtil jsonUtil = new CopyGridToJSONUtil(viewer.getGrid(), true);
+				final String jsonContents = jsonUtil.convert();
+				return (T) new IReportContents() {
+
+					@Override
+					public String getJSONContents() {
+						return jsonContents;
+					}
+				};
+
+			}
 		}
 
 		return super.getAdapter(adapter);

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.port.util;
@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.port.util;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.port.CapabilityGroup;
+import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
@@ -34,6 +35,17 @@ public class PortModelFinder {
 			}
 		}
 		throw new IllegalArgumentException("Unknown port " + portName);
+	}
+
+	@NonNull
+	public Port findPortById(@NonNull final String mmxId) {
+		for (final Port port : getPortModel().getPorts()) {
+			Location l = port.getLocation();
+			if (l != null && mmxId.equalsIgnoreCase(l.getMmxId())) {
+				return port;
+			}
+		}
+		throw new IllegalArgumentException("Unknown port " + mmxId);
 	}
 
 	@NonNull

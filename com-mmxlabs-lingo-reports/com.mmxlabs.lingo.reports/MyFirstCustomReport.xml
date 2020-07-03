@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2020
+    All rights reserved.
+
+-->
+<?eclipse version="3.4"?>
+<plugin>
+    <extension
+          point="com.mmxlabs.lingo.reports.ScheduleBasedReportInitialState">
+       <ScheduleBasedReportInitialState
+             customisable="false"
+             id="com.mmxlabs.lingo.reports.MyFirstCustomReport">
+         <InitialRowType
+               rowType="cargo">
+         </InitialRowType>
+         <InitialRowType
+               rowType="long">
+         </InitialRowType>
+         <InitialRowType
+               rowType="short">
+         </InitialRowType>
+         <InitialRowType
+               rowType="virtualcharters">
+         </InitialRowType>
+         <InitialRowType
+               rowType="event">
+         </InitialRowType>
+         <InitialRowType
+               rowType="orphanlegs">
+         </InitialRowType>
+         <InitialRowType
+               rowType="endevents">
+         </InitialRowType>
+         <InitialRowType
+               rowType="charterlength">
+         </InitialRowType>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.schedule">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.l-id">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.d-id">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.type">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.vessel">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.pnl_total">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.pnl_additional">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.buyport">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.loaddate">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.sellport">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.purchasecontract">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.dischargedate">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.buyprice">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.sellprice">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.buyvolume_m3">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.sellvolume_m3">
+         </InitialColumn>
+         <InitialDiffOption
+               option="scenario">
+         </InitialDiffOption>
+         <InitialDiffOption
+               option="vessel">
+         </InitialDiffOption>
+       </ScheduleBasedReportInitialState>
+    </extension>
+    <extension
+          point="org.eclipse.ui.views">
+       <view
+             category="com.mmxlabs.shiplingo.platform.reports"
+             class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.reports.views.schedule.ScheduleSummaryReport"
+             icon="icons/cview16/exec_statistic_view.gif"
+             id="com.mmxlabs.lingo.reports.MyFirstCustomReport"
+             name="My First custom report!"
+             restorable="false">
+       </view>
+    </extension>
+ </plugin>

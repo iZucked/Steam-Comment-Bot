@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.scenario.service.model.impl;
@@ -24,6 +24,7 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioFragmentImpl#getFragment <em>Fragment</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioFragmentImpl#getContentType <em>Content Type</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioFragmentImpl#isUseCommandStack <em>Use Command Stack</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioFragmentImpl#getTypeHint <em>Type Hint</em>}</li>
  * </ul>
  *
  * @generated
@@ -156,6 +157,26 @@ public class ScenarioFragmentImpl extends EObjectImpl implements ScenarioFragmen
 	@Override
 	public void setUseCommandStack(boolean newUseCommandStack) {
 		eSet(ScenarioServicePackage.eINSTANCE.getScenarioFragment_UseCommandStack(), newUseCommandStack);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getTypeHint() {
+		return (String) eGet(ScenarioServicePackage.eINSTANCE.getScenarioFragment_TypeHint(), true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setTypeHint(String newTypeHint) {
+		eSet(ScenarioServicePackage.eINSTANCE.getScenarioFragment_TypeHint(), newTypeHint);
 	}
 
 } //ScenarioFragmentImpl

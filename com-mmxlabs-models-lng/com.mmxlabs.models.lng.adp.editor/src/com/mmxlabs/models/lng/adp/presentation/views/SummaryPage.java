@@ -1,10 +1,9 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.adp.presentation.views;
 
-import java.awt.font.TextLayout.CaretPolicy;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,7 +23,6 @@ import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.internal.handlers.DisplayHelpHandler;
 
 import com.mmxlabs.models.lng.adp.ADPFactory;
 import com.mmxlabs.models.lng.adp.ADPModel;
@@ -41,6 +39,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.ecore.SafeAdapterImpl;
 
 public class SummaryPage extends ADPComposite {
 
@@ -58,14 +57,14 @@ public class SummaryPage extends ADPComposite {
 	/**
 	 * Adapter to list to changes in number of slots on the cargo model.
 	 */
-	private final AdapterImpl cargoAdapter = new AdapterImpl() {
+	private final AdapterImpl cargoAdapter = new SafeAdapterImpl() {
 		@Override
-		public void notifyChanged(final org.eclipse.emf.common.notify.Notification msg) {
+		public void safeNotifyChanged(final org.eclipse.emf.common.notify.Notification msg) {
 			if (msg.isTouch()) {
 				return;
 			}
 			if (msg.getFeature() == CargoPackage.Literals.CARGO_MODEL__LOAD_SLOTS || msg.getFeature() == CargoPackage.Literals.CARGO_MODEL__DISCHARGE_SLOTS) {
-				RunnerHelper.asyncExec(() -> refresh());
+				RunnerHelper.asyncExec(SummaryPage.this::refresh);
 			}
 		}
 	};
@@ -148,7 +147,7 @@ public class SummaryPage extends ADPComposite {
 			});
 
 			createColumn(salesViewer, "Contract", (profile) -> profile.getContract().getName());
-			createColumn(salesViewer, "Num cargoes", (profile) -> Long.toString(editorData.getScenarioModel().getCargoModel().getDischargeSlots().stream() //
+			createColumn(salesViewer, "Cargoes", (profile) -> Long.toString(editorData.getScenarioModel().getCargoModel().getDischargeSlots().stream() //
 					.filter(s -> profile.getContract() == s.getContract()).count()));
 		}
 		{
@@ -227,7 +226,8 @@ public class SummaryPage extends ADPComposite {
 	// EObject target = null;
 	// if (editorData.getAdpModel() != null) {
 	// target = editorData.getAdpModel().getSpotMarketsProfile();
-	// // previewViewer.setInput(editorData.getAdpModel().getFleetProfile().getVesselAvailabilities());
+	// //
+	// previewViewer.setInput(editorData.getAdpModel().getFleetProfile().getVesselAvailabilities());
 	// previewViewer.setInput(null);
 	// }
 	//

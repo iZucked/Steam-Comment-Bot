@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports;
@@ -7,11 +7,11 @@ package com.mmxlabs.lingo.reports;
 public interface IReportContents {
 
 	default String getHTMLContents() {
-		return "HTML version not implemented";
-	};
+		throw new RuntimeException( "HTML version not implemented");
+	}
 
 	default String getJSONContents() {
-		return "JSON version not implemented";
-	};
+		throw new RuntimeException( "JSON version not implemented");
+	}
 
 }

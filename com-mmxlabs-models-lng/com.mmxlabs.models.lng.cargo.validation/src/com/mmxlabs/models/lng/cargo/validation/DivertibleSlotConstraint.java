@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.validation;
@@ -37,6 +37,15 @@ public class DivertibleSlotConstraint extends AbstractModelMultiConstraint {
 					if (loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DEST_ONLY) {
 						if ((loadSlot.getPort() != null && !loadSlot.getPort().getCapabilities().contains(PortCapability.DISCHARGE))) {
 							final String message = String.format("DES Purchase|%s is not divertible and needs a discharge port.", loadSlot.getName());
+							final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
+							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status);
+							dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getLoadSlot_DesPurchaseDealType());
+							dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_Port());
+							failures.add(dsd);
+						}
+					} else if (loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERTIBLE) {
+						if ((loadSlot.getPort() != null && !loadSlot.getPort().getCapabilities().contains(PortCapability.DISCHARGE))) {
+							final String message = String.format("DES Purchase|%s is divertible and needs a discharge port.", loadSlot.getName());
 							final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
 							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status);
 							dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getLoadSlot_DesPurchaseDealType());

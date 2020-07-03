@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases;
@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -21,8 +22,8 @@ import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
-import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -36,15 +37,15 @@ public class FOBSaleOptiTests extends AbstractMicroTestCase {
 	public void divertibleFOBSale_SimpleSwap() throws Exception {
 
 		// Create the required basic elements
-		final Vessel nominatedVessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel nominatedVessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		Cargo cargo1 = cargoModelBuilder.makeCargo()//
-				.makeFOBPurchase("L1", LocalDate.of(2018, 2, 1), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2018, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.with(s -> ((LoadSlot) s).setCargoCV(22.6)) //
 				.withOptional(true)//
 				.build() //
 
-				.makeFOBSale("D1", FOBSaleDealType.DIVERT_TO_DEST, LocalDate.of(2018, 2, 16), portFinder.findPort("Idku LNG"), null, entity, "5", nominatedVessel) //
+				.makeFOBSale("D1", FOBSaleDealType.DIVERT_TO_DEST, LocalDate.of(2018, 2, 16), portFinder.findPortById(InternalDataConstants.PORT_IDKU), null, entity, "5", nominatedVessel) //
 				.with(s -> s.setShippingDaysRestriction(32))//
 				.build() //
 
@@ -53,7 +54,7 @@ public class FOBSaleOptiTests extends AbstractMicroTestCase {
 		LoadSlot load1 = (LoadSlot) cargo1.getSlots().get(0);
 		DischargeSlot discharge1 = (DischargeSlot) cargo1.getSlots().get(1);
 
-		LoadSlot load2 = cargoModelBuilder.makeFOBPurchase("L2", LocalDate.of(2018, 2, 1), portFinder.findPort("Point Fortin"), null, entity, "4", 22.6) //
+		LoadSlot load2 = cargoModelBuilder.makeFOBPurchase("L2", LocalDate.of(2018, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "4", 22.6) //
 				.withOptional(true)//
 				.build();
 
@@ -71,15 +72,15 @@ public class FOBSaleOptiTests extends AbstractMicroTestCase {
 	public void divertibleFOBSale_SimpleSwap_NoDays() throws Exception {
 
 		// Create the required basic elements
-		final Vessel nominatedVessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel nominatedVessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		Cargo cargo1 = cargoModelBuilder.makeCargo()//
-				.makeFOBPurchase("L1", LocalDate.of(2018, 2, 1), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2018, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.with(s -> ((LoadSlot) s).setCargoCV(22.6)) //
 				.withOptional(true)//
 				.build() //
 
-				.makeFOBSale("D1", FOBSaleDealType.DIVERT_TO_DEST, LocalDate.of(2018, 2, 16), portFinder.findPort("Idku LNG"), null, entity, "5", nominatedVessel) //
+				.makeFOBSale("D1", FOBSaleDealType.DIVERT_TO_DEST, LocalDate.of(2018, 2, 16), portFinder.findPortById(InternalDataConstants.PORT_IDKU), null, entity, "5", nominatedVessel) //
 				.with(s -> s.setShippingDaysRestriction(1))//
 				.build() //
 
@@ -88,7 +89,7 @@ public class FOBSaleOptiTests extends AbstractMicroTestCase {
 		LoadSlot load1 = (LoadSlot) cargo1.getSlots().get(0);
 		DischargeSlot discharge1 = (DischargeSlot) cargo1.getSlots().get(1);
 
-		LoadSlot load2 = cargoModelBuilder.makeFOBPurchase("L2", LocalDate.of(2018, 2, 1), portFinder.findPort("Point Fortin"), null, entity, "4", 22.6) //
+		LoadSlot load2 = cargoModelBuilder.makeFOBPurchase("L2", LocalDate.of(2018, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "4", 22.6) //
 				.withOptional(true)//
 				.build();
 
@@ -107,17 +108,17 @@ public class FOBSaleOptiTests extends AbstractMicroTestCase {
 	public void divertibleFOBSale_SimpleSwap_OnlyLadenDays() throws Exception {
 
 		// Create the required basic elements
-		final Vessel nominatedVessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel nominatedVessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		Cargo cargo1 = cargoModelBuilder.makeCargo()//
-				.makeFOBPurchase("L1", LocalDate.of(2018, 2, 1), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2018, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.with(s -> ((LoadSlot) s).setCargoCV(22.6)) //
 				.withWindowStartTime(0) //
 
 				.withOptional(true)//
 				.build() //
 
-				.makeFOBSale("D1", FOBSaleDealType.DIVERT_TO_DEST, LocalDate.of(2018, 2, 16), portFinder.findPort("Idku LNG"), null, entity, "5", nominatedVessel) //
+				.makeFOBSale("D1", FOBSaleDealType.DIVERT_TO_DEST, LocalDate.of(2018, 2, 16), portFinder.findPortById(InternalDataConstants.PORT_IDKU), null, entity, "5", nominatedVessel) //
 				.withWindowStartTime(0) //
 
 				.with(s -> s.setShippingDaysRestriction(16))//
@@ -128,7 +129,7 @@ public class FOBSaleOptiTests extends AbstractMicroTestCase {
 		LoadSlot load1 = (LoadSlot) cargo1.getSlots().get(0);
 		DischargeSlot discharge1 = (DischargeSlot) cargo1.getSlots().get(1);
 
-		LoadSlot load2 = cargoModelBuilder.makeFOBPurchase("L2", LocalDate.of(2018, 2, 1), portFinder.findPort("Point Fortin"), null, entity, "4", 22.6) //
+		LoadSlot load2 = cargoModelBuilder.makeFOBPurchase("L2", LocalDate.of(2018, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "4", 22.6) //
 				.withOptional(true)//
 				.build();
 
@@ -147,14 +148,14 @@ public class FOBSaleOptiTests extends AbstractMicroTestCase {
 	public void divertibleFOBSale_DestWithSourceMismatch() throws Exception {
 
 		cargoModelBuilder.makeCargo()//
-				.makeFOBPurchase("L1", LocalDate.of(2019, 8, 14), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2019, 8, 14), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.with(s -> ((LoadSlot) s).setCargoCV(22.6)) //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.withWindowStartTime(0) //
 
 				.build() //
 
-				.makeFOBSale("D1", FOBSaleDealType.SOURCE_WITH_DEST, LocalDate.of(2019, 8, 14), portFinder.findPort("Sakai"), null, entity, "5", null) //
+				.makeFOBSale("D1", FOBSaleDealType.SOURCE_WITH_DEST, LocalDate.of(2019, 8, 14), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "5", null) //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.withWindowStartTime(1) //
 
@@ -203,14 +204,14 @@ public class FOBSaleOptiTests extends AbstractMicroTestCase {
 	public void divertibleFOBSale_DestWithSourceFlex() throws Exception {
 		
 		cargoModelBuilder.makeCargo()//
-		.makeFOBPurchase("L1", LocalDate.of(2019, 8, 14), portFinder.findPort("Point Fortin"), null, entity, "5") //
+		.makeFOBPurchase("L1", LocalDate.of(2019, 8, 14), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 		.with(s -> ((LoadSlot) s).setCargoCV(22.6)) //
 		.withWindowStartTime(1) //
 		.withWindowSize(0, TimePeriod.HOURS) //
 		
 		.build() //
 		
-		.makeFOBSale("D1", FOBSaleDealType.SOURCE_WITH_DEST, LocalDate.of(2019, 8, 14), portFinder.findPort("Sakai"), null, entity, "5", null) //
+		.makeFOBSale("D1", FOBSaleDealType.SOURCE_WITH_DEST, LocalDate.of(2019, 8, 14), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "5", null) //
 		.withWindowSize(0, TimePeriod.HOURS) //
 		.withWindowFlex(1  , TimePeriod.HOURS)
 		.withWindowStartTime(0) //
@@ -260,14 +261,14 @@ public class FOBSaleOptiTests extends AbstractMicroTestCase {
 	public void divertibleFOBSale_DestWithSource() throws Exception {
 
 		cargoModelBuilder.makeCargo()//
-				.makeFOBPurchase("L1", LocalDate.of(2019, 8, 14), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2019, 8, 14), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.withWindowStartTime(0) //
 
 				.with(s -> ((LoadSlot) s).setCargoCV(22.6)) //
 				.build() //
 
-				.makeFOBSale("D1", FOBSaleDealType.SOURCE_WITH_DEST, LocalDate.of(2019, 8, 14), portFinder.findPort("Sakai"), null, entity, "5", null) //
+				.makeFOBSale("D1", FOBSaleDealType.SOURCE_WITH_DEST, LocalDate.of(2019, 8, 14), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "5", null) //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.withWindowStartTime(0) //
 

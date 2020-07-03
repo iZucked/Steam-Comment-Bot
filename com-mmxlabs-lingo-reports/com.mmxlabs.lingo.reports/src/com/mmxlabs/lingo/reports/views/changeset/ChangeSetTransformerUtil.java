@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.changeset;
@@ -41,6 +41,7 @@ import com.mmxlabs.lingo.reports.views.schedule.EquivalanceGroupBuilder;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
@@ -60,6 +61,8 @@ import com.mmxlabs.models.lng.schedule.GroupedCharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
+import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
+import com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Purge;
@@ -114,6 +117,9 @@ public final class ChangeSetTransformerUtil {
 		for (final OpenSlotAllocation openSlotAllocation : schedule.getOpenSlotAllocations()) {
 			targets.add(openSlotAllocation);
 		}
+		for (final PaperDealAllocation paperDealAllocation : schedule.getPaperDealAllocations()) {
+			targets.add(paperDealAllocation);
+		}
 		for (final Sequence sequence : schedule.getSequences()) {
 			if (sequence.getSequenceType() == SequenceType.VESSEL //
 					|| sequence.getSequenceType() == SequenceType.ROUND_TRIP //
@@ -143,8 +149,6 @@ public final class ChangeSetTransformerUtil {
 					} else if (event instanceof GeneratedCharterOut) {
 						// Keep going!
 					} else if (event instanceof CharterLengthEvent) {
-						continue;
-					} else if (event instanceof GroupedCharterLengthEvent) {
 						// Keep going!
 					} else if (event instanceof SlotVisit) {
 						// Already processed
@@ -327,14 +331,27 @@ public final class ChangeSetTransformerUtil {
 				}
 			} else if (target instanceof Event) {
 				final Event event = (Event) target;
-
 				if (event instanceof CharterLengthEvent) {
 					// Record these events so we can group them up later
 					final CharterLengthEvent charterLengthEvent = (CharterLengthEvent) event;
-					extraEvents.computeIfAbsent(charterLengthEvent.getSequence(), k -> ScheduleFactory.eINSTANCE.createGroupedCharterLengthEvent()).getEvents().add(charterLengthEvent);
+					extraEvents.computeIfAbsent(charterLengthEvent.getSequence(), k -> ScheduleFactory.eINSTANCE.createGroupedCharterLengthEvent()).getEvents().addAll(charterLengthEvent.getEvents());
 				} else {
 					eventMapper.accept(event);
 				}
+			} else if (target instanceof PaperDealAllocation) {
+				final PaperDealAllocation paperDealAllocation = (PaperDealAllocation) target;
+				final PaperDeal paperDeal = paperDealAllocation.getPaperDeal();
+				final ChangeSetRowDataGroup group = ChangesetFactory.eINSTANCE.createChangeSetRowDataGroup();
+				mappingModel.groups.add(group);
+
+				final ChangeSetRowData row = ChangesetFactory.eINSTANCE.createChangeSetRowData();
+				group.getMembers().add(row);
+				
+				row.setPaperDealAllocation(paperDealAllocation);
+				row.setLhsGroupProfitAndLoss(paperDealAllocation);
+				row.setLhsName(paperDeal.getName());
+				
+				mappingModel.lhsRowMap.put(paperDeal.getName(), row);
 			}
 		}
 
@@ -342,10 +359,15 @@ public final class ChangeSetTransformerUtil {
 			long pnl1 = 0L;
 			long pnl2 = 0L;
 			for (final Event e : cle.getEvents()) {
-				final CharterLengthEvent c = (CharterLengthEvent) e;
-				pnl1 += c.getGroupProfitAndLoss().getProfitAndLoss();
-				pnl2 += c.getGroupProfitAndLoss().getProfitAndLossPreTax();
-				cle.setLinkedSequence(c.getSequence());
+				if (e instanceof CharterLengthEvent) {
+					final CharterLengthEvent c = (CharterLengthEvent) e;
+					cle.setLinkedSequence(c.getSequence());
+				}
+				if (e instanceof ProfitAndLossContainer) {
+					ProfitAndLossContainer c = (ProfitAndLossContainer)e;
+					pnl1 += c.getGroupProfitAndLoss().getProfitAndLoss();
+					pnl2 += c.getGroupProfitAndLoss().getProfitAndLossPreTax();
+				}
 			}
 			final GroupProfitAndLoss groupProfitAndLoss = ScheduleFactory.eINSTANCE.createGroupProfitAndLoss();
 			groupProfitAndLoss.setProfitAndLoss(pnl1);
@@ -1160,6 +1182,12 @@ public final class ChangeSetTransformerUtil {
 				// ScheduleModelKPIUtils.getCapacityViolationCount(toSchedule.getOtherPNL());
 
 			}
+			for (final PaperDealAllocation paperDealAllocation : toSchedule.getPaperDealAllocations()) {
+				final GroupProfitAndLoss groupProfitAndLoss = paperDealAllocation.getGroupProfitAndLoss();
+				if (groupProfitAndLoss != null) {
+					pnl += groupProfitAndLoss.getProfitAndLoss();
+				}
+			}
 		}
 
 		currentMetrics.setPnl(pnl);
@@ -1204,6 +1232,12 @@ public final class ChangeSetTransformerUtil {
 				lateness -= LatenessUtils.getLatenessExcludingFlex(fromSchedule.getOtherPNL());
 
 			}
+			for (final PaperDealAllocation paperDealAllocation : fromSchedule.getPaperDealAllocations()) {
+				final GroupProfitAndLoss groupProfitAndLoss = paperDealAllocation.getGroupProfitAndLoss();
+				if (groupProfitAndLoss != null) {
+					pnl -= groupProfitAndLoss.getProfitAndLoss();
+				}
+			}
 		}
 		deltaMetrics.setPnlDelta(pnl);
 		deltaMetrics.setLatenessDelta((int) lateness);
@@ -1234,6 +1268,22 @@ public final class ChangeSetTransformerUtil {
 						final ChangeSetRowData beforeData = beforeGroup.getMembers().get(0);
 						final ChangeSetRowData afterData = afterGroup.getMembers().get(0);
 
+						
+						// Mark up lateness over 24 hours as a structural change.
+						{
+							long beforeLateness = 0L;
+							for (ChangeSetRowData data : row.getBeforeData().getMembers()) {
+								beforeLateness += LatenessUtils.getLatenessExcludingFlex(data.getEventGrouping());
+							}
+							long afterLateness = 0L;
+							for (ChangeSetRowData data : row.getAfterData().getMembers()) {
+								afterLateness += LatenessUtils.getLatenessExcludingFlex(data.getEventGrouping());
+							}
+							if (Math.abs(beforeLateness - afterLateness) > 24) {
+								row.setVesselChange(true);
+							}
+						}
+						
 						// Start / end events are not structural changes.
 						if ((beforeData.getLhsEvent() instanceof StartEvent || beforeData.getLhsEvent() instanceof EndEvent)
 								|| (afterData.getLhsEvent() instanceof StartEvent || afterData.getLhsEvent() instanceof EndEvent)) {
@@ -1308,8 +1358,8 @@ public final class ChangeSetTransformerUtil {
 						a = ChangeSetKPIUtil.getViolations(changeSetTableRow, ResultType.Before);
 						b = ChangeSetKPIUtil.getViolations(changeSetTableRow, ResultType.After);
 						if (a == b) {
-							a = ChangeSetKPIUtil.getLateness(changeSetTableRow, ResultType.Before)[FlexType.WithoutFlex.ordinal()];
-							b = ChangeSetKPIUtil.getLateness(changeSetTableRow, ResultType.After)[FlexType.WithoutFlex.ordinal()];
+							a = ChangeSetKPIUtil.getLateness(changeSetTableRow, ResultType.Before)[FlexType.TotalIfFlexInsufficient.ordinal()];
+							b = ChangeSetKPIUtil.getLateness(changeSetTableRow, ResultType.After)[FlexType.TotalIfFlexInsufficient.ordinal()];
 							if (a == b) {
 								itr.remove();
 							}

@@ -5,14 +5,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mmxlabs.rcp.common</groupId>
 	<artifactId>com.mmxlabs.rcp.common.parent</artifactId>
-	<version>4.8.3-SNAPSHOT</version>
+	<version>4.10.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<parent>
-		<groupId>com.mmxlabs.parent</groupId>
-		<artifactId>tycho-parent</artifactId>
-		<relativePath />
-		<version>40</version>
+		<groupId>com.mmxlabs.lingo.master</groupId>
+		<artifactId>com.mmxlabs.lingo.master.parent</artifactId>
+		<version>4.10.1-SNAPSHOT</version>
 	</parent>
 
 	<modules>
@@ -24,6 +23,7 @@
 		<module>com.mmxlabs.ganttviewer</module>
 
 		<module>com.mmxlabs.models.common</module>
+		<module>com.mmxlabs.hub</module>
 
 		<module>com.mmxlabs.license.ssl</module>
 		<module>com.mmxlabs.license.features</module>
@@ -32,6 +32,7 @@
 
 		<!-- Test Plugins -->
 		<module>com.mmxlabs.rcp.common.tests</module>
+		<module>com.mmxlabs.hub.tests</module>
 	</modules>
 
 	<build>
@@ -74,21 +75,9 @@
 							<ws>win32</ws>
 							<arch>x86_64</arch>
 						</environment>
-						<environment>
-							<os>macosx</os>
-							<ws>cocoa</ws>
-							<arch>x86_64</arch>
-						</environment>
 					</environments>
 				</configuration>
 			</plugin>
-
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-source-plugin</artifactId>
-				<inherited>true</inherited>
-			</plugin>
-
 		</plugins>
 	</build>
 </project>

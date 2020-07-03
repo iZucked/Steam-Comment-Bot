@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2019
+    Copyright (C) Minimax Labs Ltd., 2010 - 2020
     All rights reserved.
 
 -->
@@ -95,10 +95,6 @@
    </extension>
    <extension
          point="org.eclipse.ui.views">
-      <category
-            id="com.mmxlabs.models.lng.views.physical"
-            name="Physical Data">
-      </category>
       <category
             id="com.mmxlabs.models.lng.views.logical"
             name="Logical Data">

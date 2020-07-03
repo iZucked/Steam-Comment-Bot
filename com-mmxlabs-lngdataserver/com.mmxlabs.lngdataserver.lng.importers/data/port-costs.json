@@ -1,0 +1,43 @@
+[ {
+  "@class" : "PortCost",
+  "ports" : [ {
+    "classType" : "http://www.mmxlabs.com/models/lng/port/1//CapabilityGroup",
+    "name" : "All DISCHARGE Ports"
+  }, {
+    "classType" : "http://www.mmxlabs.com/models/lng/port/1//CapabilityGroup",
+    "name" : "All LOAD Ports"
+  } ],
+  "entries" : [ {
+    "@class" : "PortCostEntry",
+    "cost" : "140000"
+  }, {
+    "@class" : "PortCostEntry",
+    "activity" : "DISCHARGE",
+    "cost" : "140000"
+  }, {
+    "@class" : "PortCostEntry",
+    "activity" : "DRYDOCK"
+  }, {
+    "@class" : "PortCostEntry",
+    "activity" : "MAINTENANCE"
+  } ]
+}, {
+  "@class" : "PortCost",
+  "ports" : [ {
+    "classType" : "http://www.mmxlabs.com/models/lng/port/1//CapabilityGroup",
+    "name" : "All DRYDOCK Ports"
+  } ],
+  "entries" : [ {
+    "@class" : "PortCostEntry"
+  }, {
+    "@class" : "PortCostEntry",
+    "activity" : "DISCHARGE"
+  }, {
+    "@class" : "PortCostEntry",
+    "activity" : "DRYDOCK",
+    "cost" : "100000"
+  }, {
+    "@class" : "PortCostEntry",
+    "activity" : "MAINTENANCE"
+  } ]
+} ]

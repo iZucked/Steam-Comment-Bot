@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.scenario.service.model.util.encryption.impl;
@@ -43,12 +43,8 @@ public class CachingSharedCipherProvider implements IScenarioCipherProvider {
 
 					final Display display = PlatformUI.getWorkbench().getDisplay();
 					if (display != null) {
-						display.asyncExec(new Runnable() {
-
-							@Override
-							public void run() {
-								MessageDialog.openError(display.getActiveShell(), "Unable to load cipher", "Unable to load cipher: " + e.getMessage());
-							}
+						display.asyncExec(() -> {
+							MessageDialog.openError(display.getActiveShell(), "Unable to load cipher", "Unable to load cipher: " + e.getMessage());
 						});
 					}
 				}

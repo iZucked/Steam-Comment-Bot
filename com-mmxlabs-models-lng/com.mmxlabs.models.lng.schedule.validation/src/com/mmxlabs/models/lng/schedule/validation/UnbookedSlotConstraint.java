@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.validation;
@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.license.features.NonLicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -76,7 +77,7 @@ public class UnbookedSlotConstraint extends AbstractModelMultiConstraint {
 								if (journey.getCanalBooking() == null) {
 									// No Booking!
 									if (journey.getCanalBookingPeriod() == PanamaBookingPeriod.RELAXED) {
-										if (journey.getCanalEntrance() == CanalEntry.SOUTHSIDE) {
+										if (journey.getCanalEntrance() == CanalEntry.SOUTHSIDE || NonLicenseFeatures.isSouthboundIdleTimeRuleEnabled()) {
 											// ++northboundExcessRelaxedBookings;
 										} else {
 											++southboundExcessRelaxedBookings;
@@ -154,7 +155,7 @@ public class UnbookedSlotConstraint extends AbstractModelMultiConstraint {
 
 							if (journey.getCanalBookingPeriod() == PanamaBookingPeriod.STRICT) {
 								// Northbound is only a warning
-								int severity = journey.getCanalEntrance() == CanalEntry.SOUTHSIDE ? IStatus.WARNING : IStatus.ERROR;
+								int severity = ((journey.getCanalEntrance() == CanalEntry.SOUTHSIDE) || NonLicenseFeatures.isSouthboundIdleTimeRuleEnabled()) ? IStatus.WARNING : IStatus.ERROR;
 								statuses.add(f.withSeverity(severity).make(ctx));
 							} else if (journey.getCanalBookingPeriod() == PanamaBookingPeriod.RELAXED) {
 								statuses.add(f.withSeverity(IStatus.WARNING).make(ctx));

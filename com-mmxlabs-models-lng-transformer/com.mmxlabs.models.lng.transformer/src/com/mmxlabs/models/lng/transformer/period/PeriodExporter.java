@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.period;
@@ -37,6 +37,7 @@ import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.insertion.SequencesHitchHikerHelper;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
@@ -95,7 +96,9 @@ public class PeriodExporter {
 				final ISequence s = periodSequences.getSequence(period_resource);
 				final int size = s.size() - 2;
 
-				// We could just do the next section, however I prefer to keep it as a sanity check where possible and use the more complex code more often so we can pick up problems with it earlier
+				// We could just do the next section, however I prefer to keep it as a sanity
+				// check where possible and use the more complex code more often so we can pick
+				// up problems with it earlier
 				// (i.e. every scenario rather than specific cases).
 
 				// if (size > 0) {
@@ -103,7 +106,8 @@ public class PeriodExporter {
 				// final Pair<IResource, Integer> pair = lookup.get(e.getName());
 				// assert pair != null;
 				// assert pair.getFirst() != null;
-				// periodToCompleteResourceLength.put(period_resource, new Triple<>(pair.getFirst(), pair.getSecond(), size));
+				// periodToCompleteResourceLength.put(period_resource, new
+				// Triple<>(pair.getFirst(), pair.getSecond(), size));
 				// } else
 
 				{
@@ -187,7 +191,8 @@ public class PeriodExporter {
 						assert complete_resource != null;
 						assert key != null;
 
-						// If it is a round trip, there is no coherent segment to extract, rather a set of elements out of an unsorted list. We need to handle these diferrently.
+						// If it is a round trip, there is no coherent segment to extract, rather a set
+						// of elements out of an unsorted list. We need to handle these diferrently.
 						if (period_vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
 							final List<ISequenceElement> elements = new LinkedList<>();
 							if (size > 0) {
@@ -266,6 +271,21 @@ public class PeriodExporter {
 
 						periodToCompleteResourceLength.put(period_resource, new Triple<>(complete_resource, start_idx, end_idx - start_idx));
 					}
+
+					{
+						// Check a resource only occurs once
+						final Set<IResource> seenCompleteResources = new HashSet<>();
+						for (final var e : periodToCompleteResourceLength.entrySet()) {
+							IResource completeResource = e.getValue().getFirst();
+							if (seenCompleteResources.contains(completeResource)) {
+								throw new IllegalStateException("Resource included twice");
+							}
+							seenCompleteResources.add(completeResource);
+						}
+					}
+
+					assert SequencesHitchHikerHelper.checkValidSequences(periodSequences);
+					assert SequencesHitchHikerHelper.checkValidSequences(completeSequences);
 				}
 			}
 		}
@@ -280,7 +300,8 @@ public class PeriodExporter {
 
 			// Elements we have put in
 			final Set<ISequenceElement> usedElements = new HashSet<>();
-			// Elements we have pulled out. Once we have processed the data, removedElements - usedElements == partialSequences.getUnusedElements()
+			// Elements we have pulled out. Once we have processed the data, removedElements
+			// - usedElements == partialSequences.getUnusedElements()
 			final Set<ISequenceElement> removedElements = new HashSet<>();
 
 			// Loop over period solution and modify the complete
@@ -308,7 +329,7 @@ public class PeriodExporter {
 					// Remove it!
 					completeSeq.remove(s);
 					// Mark elements as removed.
-					s.forEach(e -> removedElements.add(e));
+					s.forEach(removedElements::add);
 				} else if (periodToCompleteNominalResourceElements.containsKey(r)) {
 					final Pair<IResource, List<ISequenceElement>> pair = periodToCompleteNominalResourceElements.get(r);
 					for (final ISequenceElement e : pair.getSecond()) {
@@ -316,7 +337,8 @@ public class PeriodExporter {
 						removedElements.add(e);
 					}
 				}
-				// Now if we use the resource, construct a reverse order list of the elements and insert back into the gap. (ignoring start and end elements).
+				// Now if we use the resource, construct a reverse order list of the elements
+				// and insert back into the gap. (ignoring start and end elements).
 				final int size = seq.size() - 2;
 				if (size > 0) {
 					final List<ISequenceElement> toInsert = new LinkedList<>();

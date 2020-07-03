@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 /**
@@ -638,13 +638,22 @@ public interface ChangesetPackage extends EPackage {
 	int CHANGE_SET_ROW_DATA__RHS_GROUP_PROFIT_AND_LOSS = 19;
 
 	/**
+	 * The feature id for the '<em><b>Paper Deal Allocation</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_ROW_DATA__PAPER_DEAL_ALLOCATION = 20;
+
+	/**
 	 * The number of structural features of the '<em>Change Set Row Data</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW_DATA_FEATURE_COUNT = 20;
+	int CHANGE_SET_ROW_DATA_FEATURE_COUNT = 21;
 
 	/**
 	 * The number of operations of the '<em>Change Set Row Data</em>' class.
@@ -1643,6 +1652,17 @@ public interface ChangesetPackage extends EPackage {
 	EReference getChangeSetRowData_RhsGroupProfitAndLoss();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#getPaperDealAllocation <em>Paper Deal Allocation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Paper Deal Allocation</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#getPaperDealAllocation()
+	 * @see #getChangeSetRowData()
+	 * @generated
+	 */
+	EReference getChangeSetRowData_PaperDealAllocation();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup <em>Change Set Table Group</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2614,6 +2634,14 @@ public interface ChangesetPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CHANGE_SET_ROW_DATA__RHS_GROUP_PROFIT_AND_LOSS = eINSTANCE.getChangeSetRowData_RhsGroupProfitAndLoss();
+
+		/**
+		 * The meta object literal for the '<em><b>Paper Deal Allocation</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CHANGE_SET_ROW_DATA__PAPER_DEAL_ALLOCATION = eINSTANCE.getChangeSetRowData_PaperDealAllocation();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableGroupImpl <em>Change Set Table Group</em>}' class.

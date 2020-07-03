@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases;
@@ -14,8 +14,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.EVesselTankState;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -35,7 +37,7 @@ public class CooldownTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testStartEventCooldown() throws Exception {
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setWarmingTime(0);
 		vessel.setCoolingVolume(1000);
 
@@ -52,10 +54,11 @@ public class CooldownTests extends AbstractMicroTestCase {
 
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				//
-				.makeFOBPurchase("L2", LocalDate.of(2017, 12, 2), portFinder.findPort("Point Fortin"), null, entity, "5", null) //
+				.makeFOBPurchase("L2", LocalDate.of(2017, 12, 2), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", null) //
+				.with(s -> ((LoadSlot)s).setCargoCV(22.8)) //
 				.build() //
 				//
-				.makeDESSale("D2", LocalDate.of(2017, 12, 20), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D2", LocalDate.of(2017, 12, 20), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				//
 				.withVesselAssignment(vesselAvailability, 1) //
@@ -81,7 +84,7 @@ public class CooldownTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testStartEventCooldownLumpsum() throws Exception {
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setWarmingTime(0);
 
 		@NonNull
@@ -97,10 +100,10 @@ public class CooldownTests extends AbstractMicroTestCase {
 
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				//
-				.makeFOBPurchase("L2", LocalDate.of(2017, 12, 2), portFinder.findPort("Point Fortin"), null, entity, "5", null) //
+				.makeFOBPurchase("L2", LocalDate.of(2017, 12, 2), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", null) //
 				.build() //
 				//
-				.makeDESSale("D2", LocalDate.of(2017, 12, 20), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D2", LocalDate.of(2017, 12, 20), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				//
 				.withVesselAssignment(vesselAvailability, 1) //

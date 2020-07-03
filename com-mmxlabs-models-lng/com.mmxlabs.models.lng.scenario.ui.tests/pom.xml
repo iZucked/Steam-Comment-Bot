@@ -6,11 +6,11 @@
 	<parent>
 		<artifactId>com.mmxlabs.models.lng.parent</artifactId>
 		<groupId>com.mmxlabs.models.lng</groupId>
-		<version>4.8.3-SNAPSHOT</version>
+		<version>4.10.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>com.mmxlabs.models.lng.scenario.ui.tests</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
-	<version>4.8.3-SNAPSHOT</version>
+	<version>4.10.1-SNAPSHOT</version>
 
 	<build>
 
@@ -30,11 +30,6 @@
 						<environment>
 							<os>win32</os>
 							<ws>win32</ws>
-							<arch>x86_64</arch>
-						</environment>
-						<environment>
-							<os>macosx</os>
-							<ws>cocoa</ws>
 							<arch>x86_64</arch>
 						</environment>
 					</environments>

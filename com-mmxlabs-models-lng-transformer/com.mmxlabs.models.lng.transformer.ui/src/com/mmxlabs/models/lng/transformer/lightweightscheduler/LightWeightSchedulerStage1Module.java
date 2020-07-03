@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.lightweightscheduler;
@@ -40,8 +40,8 @@ import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.providers.ILongTermSlotsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ILongTermSlotsProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IVesselSlotCountFitnessProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselSlotCountFitnessProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashSetLongTermSlotsEditor;
 
 public class LightWeightSchedulerStage1Module extends AbstractModule {

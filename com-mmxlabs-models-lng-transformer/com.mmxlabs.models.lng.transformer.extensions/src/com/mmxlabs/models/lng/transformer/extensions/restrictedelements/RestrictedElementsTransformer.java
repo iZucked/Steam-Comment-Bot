@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.extensions.restrictedelements;
@@ -181,11 +181,11 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 						restrictedPorts = spotMarket.getRestrictedPorts();
 					}
 				}
-				if (slot.isRestrictedContractsOverride()) {
+				if (!(slot instanceof SpotSlot) && (contract == null || slot.isRestrictedContractsOverride())) {
 					isContractsListPermissive = slot.isRestrictedContractsArePermissive();
 					restrictedContracts = slot.getRestrictedContracts();
 				}
-				if (slot.isRestrictedPortsOverride()) {
+				if (!(slot instanceof SpotSlot) && (contract == null || slot.isRestrictedPortsOverride())) {
 					isPortsListPermissive = slot.isRestrictedPortsArePermissive();
 					restrictedPorts = slot.getRestrictedPorts();
 				}

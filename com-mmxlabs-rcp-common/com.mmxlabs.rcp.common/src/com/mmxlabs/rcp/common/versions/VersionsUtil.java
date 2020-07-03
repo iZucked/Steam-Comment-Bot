@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.rcp.common.versions;
@@ -7,9 +7,9 @@ package com.mmxlabs.rcp.common.versions;
 import java.time.Instant;
 import java.util.UUID;
 
+import com.mmxlabs.hub.services.users.UsernameProvider;
 import com.mmxlabs.models.mmxcore.MMXCoreFactory;
 import com.mmxlabs.models.mmxcore.VersionRecord;
-import com.mmxlabs.rcp.common.user.UsernameProvider;
 
 public final class VersionsUtil {
 
@@ -21,7 +21,7 @@ public final class VersionsUtil {
 		VersionRecord record = MMXCoreFactory.eINSTANCE.createVersionRecord();
 
 		record.setCreatedAt(Instant.now());
-		record.setCreatedBy(UsernameProvider.getUsername());
+		record.setCreatedBy(UsernameProvider.INSTANCE.getUserID());
 		record.setVersion(UUID.randomUUID().toString());
 
 		return record;

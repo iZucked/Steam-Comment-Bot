@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.standard;
@@ -7,8 +7,10 @@ package com.mmxlabs.lingo.reports.views.standard;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.Year;
+import java.time.YearMonth;
 import java.time.ZonedDateTime;
 import java.time.format.TextStyle;
+import java.time.temporal.Temporal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -20,6 +22,7 @@ import java.util.Map;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.Viewer;
 
 import com.mmxlabs.common.Equality;
@@ -46,13 +49,19 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
 public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrackingReportView.VolumeData> {
 	private static final Month DEFAULT_MONTH = Month.JANUARY;
 
-	private final Pair<Year, Year> dateRange = new Pair<>();
+	private final Pair<Temporal, Temporal> dateRange = new Pair<>();
 
 	private enum ValueMode {
 		VOLUME_MMBTU, VOLUME_M3, VOLUME_CARGO /* VOLUME_NATIVE -- link to exposures calcs, needs volume unit set on contract */
 	}
 
 	private ValueMode mode = ValueMode.VOLUME_MMBTU;
+
+	private enum DateAggregationMode {
+		DISPLAY_BY_CONTRACT_YEAR, DISPLAY_BY_CALENDAR_YEAR, DISPLAY_BY_MONTH
+	}
+
+	private DateAggregationMode dateAggregationMode = DateAggregationMode.DISPLAY_BY_CONTRACT_YEAR;
 
 	public VolumeTrackingReportView() {
 		super("com.mmxlabs.lingo.doc.Reports_VolumeTracking");
@@ -61,12 +70,12 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 	public static class VolumeData {
 		public final ScenarioResult scenarioResult;
 		public final String contract;
-		public final Map<Year, Long> volumes;
+		public final Map<Temporal, Long> volumes;
 		public final Schedule schedule;
 		private final boolean purchase;
 		public final Month adpMonth;
 
-		public VolumeData(final ScenarioResult scenarioResult, final Schedule schedule, final boolean purchase, final String contract, final Month adpMonth, final Map<Year, Long> volumes) {
+		public VolumeData(final ScenarioResult scenarioResult, final Schedule schedule, final boolean purchase, final String contract, final Month adpMonth, final Map<Temporal, Long> volumes) {
 			this.scenarioResult = scenarioResult;
 			this.schedule = schedule;
 			this.purchase = purchase;
@@ -82,7 +91,7 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 	 * @param calendar
 	 * @return
 	 */
-	private Year getGasYear(SlotAllocation sa, final ZonedDateTime calendar) {
+	private Year getContractYear(SlotAllocation sa, final ZonedDateTime calendar) {
 		final LocalDate utc = calendar.toLocalDate();
 
 		Month gasYearMonth = DEFAULT_MONTH;
@@ -97,7 +106,7 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 		return Year.of(utc.getYear() + yearOffset);
 	}
 
-	private Month getGasYearMonth(SlotAllocation sa) {
+	private Month getContractYearMonth(SlotAllocation sa) {
 
 		Month gasYearMonth = DEFAULT_MONTH;
 		Contract contract = sa.getContract();
@@ -166,12 +175,23 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 					}
 				}
 				for (final VolumeData d : output) {
-					for (final Year ym : d.volumes.keySet()) {
-						if (dateRange.getFirst() == null || ym.isBefore(dateRange.getFirst())) {
-							dateRange.setFirst(ym);
-						}
-						if (dateRange.getSecond() == null || ym.isAfter(dateRange.getSecond())) {
-							dateRange.setSecond(ym);
+					for (final Temporal ym : d.volumes.keySet()) {
+
+						if (dateAggregationMode == DateAggregationMode.DISPLAY_BY_MONTH) {
+							if (dateRange.getFirst() == null || ((YearMonth) ym).isBefore((YearMonth) dateRange.getFirst())) {
+								dateRange.setFirst(ym);
+							}
+							if (dateRange.getSecond() == null || ((YearMonth) ym).isAfter((YearMonth) dateRange.getSecond())) {
+								dateRange.setSecond(ym);
+							}
+						} else {
+
+							if (dateRange.getFirst() == null || ((Year) ym).isBefore((Year) dateRange.getFirst())) {
+								dateRange.setFirst(ym);
+							}
+							if (dateRange.getSecond() == null || ((Year) ym).isAfter((Year) dateRange.getSecond())) {
+								dateRange.setSecond(ym);
+							}
 						}
 					}
 				}
@@ -181,8 +201,8 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 
 			public List<@NonNull VolumeData> createData(final Schedule schedule, final ScenarioResult scenarioResult) {
 				final List<@NonNull VolumeData> output = new ArrayList<>();
-				final Map<String, Map<Year, Long>> purchaseVolumes = new HashMap<>();
-				final Map<String, Map<Year, Long>> salesVolumes = new HashMap<>();
+				final Map<String, Map<Temporal, Long>> purchaseVolumes = new HashMap<>();
+				final Map<String, Map<Temporal, Long>> salesVolumes = new HashMap<>();
 
 				final Map<String, Month> purchaseADPMonth = new HashMap<>();
 				final Map<String, Month> salesADPMonth = new HashMap<>();
@@ -220,20 +240,29 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 							contractName = contract.getName();
 						}
 						assert contractName != null;
-						final Year year = getGasYear(sa, sa.getSlotVisit().getStart());
+						Temporal key;
+						if (dateAggregationMode == DateAggregationMode.DISPLAY_BY_CONTRACT_YEAR) {
+							final Year year = getContractYear(sa, sa.getSlotVisit().getStart());
+							key = year;
+						} else if (dateAggregationMode == DateAggregationMode.DISPLAY_BY_MONTH) {
+							key = YearMonth.from(sa.getSlotVisit().getStart().toLocalDate());
+						} else { // Display by calendar year
+							key = Year.from(sa.getSlotVisit().getStart().toLocalDate());
+						}
+
 						if (sa.getSlotAllocationType() == SlotAllocationType.PURCHASE) {
-							purchaseVolumes.computeIfAbsent(contractName, k -> new HashMap<>()).merge(year, volume, Long::sum);
-							purchaseADPMonth.put(contractName, getGasYearMonth(sa));
+							purchaseVolumes.computeIfAbsent(contractName, k -> new HashMap<>()).merge(key, volume, Long::sum);
+							purchaseADPMonth.put(contractName, getContractYearMonth(sa));
 						} else if (sa.getSlotAllocationType() == SlotAllocationType.SALE) {
-							salesVolumes.computeIfAbsent(contractName, k -> new HashMap<>()).merge(year, volume, Long::sum);
-							salesADPMonth.put(contractName, getGasYearMonth(sa));
+							salesVolumes.computeIfAbsent(contractName, k -> new HashMap<>()).merge(key, volume, Long::sum);
+							salesADPMonth.put(contractName, getContractYearMonth(sa));
 						}
 					}
 				}
-				for (final Map.Entry<String, Map<Year, Long>> e : purchaseVolumes.entrySet()) {
+				for (final Map.Entry<String, Map<Temporal, Long>> e : purchaseVolumes.entrySet()) {
 					output.add(new VolumeData(scenarioResult, schedule, true, e.getKey(), purchaseADPMonth.getOrDefault(e.getKey(), DEFAULT_MONTH), e.getValue()));
 				}
-				for (final Map.Entry<String, Map<Year, Long>> e : salesVolumes.entrySet()) {
+				for (final Map.Entry<String, Map<Temporal, Long>> e : salesVolumes.entrySet()) {
 					output.add(new VolumeData(scenarioResult, schedule, false, e.getKey(), salesADPMonth.getOrDefault(e.getKey(), DEFAULT_MONTH), e.getValue()));
 				}
 
@@ -243,7 +272,7 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 			protected @NonNull VolumeData createDiffData(final VolumeData pinData, final VolumeData otherData) {
 
 				final VolumeData modelData = pinData != null ? pinData : otherData;
-				final Map<Year, Long> volumes = new HashMap<>();
+				final Map<Temporal, Long> volumes = new HashMap<>();
 				final VolumeData newData = new VolumeData(null, null, modelData.purchase, modelData.contract, modelData.adpMonth, volumes);
 
 				if (pinData != null) {
@@ -306,48 +335,78 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 						return o1.contract.compareTo(o2.contract);
 					}
 				});
-				result.add(new ColumnManager<VolumeData>("Month") {
-					@Override
-					public String getTooltip() {
-						return "Contract start month";
-					}
+				if (dateAggregationMode == DateAggregationMode.DISPLAY_BY_CONTRACT_YEAR) {
+					result.add(new ColumnManager<VolumeData>("Month") {
+						@Override
+						public String getTooltip() {
+							return "Contract start month";
+						}
 
-					@Override
-					public String getColumnText(final VolumeData data) {
-						return data.adpMonth.getDisplayName(TextStyle.SHORT, Locale.getDefault());
-					}
+						@Override
+						public String getColumnText(final VolumeData data) {
+							return data.adpMonth.getDisplayName(TextStyle.SHORT, Locale.getDefault());
+						}
 
-					@Override
-					public int compare(final VolumeData o1, final VolumeData o2) {
-						return o1.adpMonth.compareTo(o2.adpMonth);
-					}
-				});
-
+						@Override
+						public int compare(final VolumeData o1, final VolumeData o2) {
+							return o1.adpMonth.compareTo(o2.adpMonth);
+						}
+					});
+				}
 				if (dateRange.getFirst() != null) {
-					Year year = dateRange.getFirst();
-					while (!year.isAfter(dateRange.getSecond())) {
-						final Year fYear = year;
-						result.add(new ColumnManager<VolumeData>(String.format("%d", fYear.getValue())) {
+					if (dateAggregationMode == DateAggregationMode.DISPLAY_BY_MONTH) {
+						YearMonth year = (YearMonth) dateRange.getFirst();
+						while (!year.isAfter((YearMonth) dateRange.getSecond())) {
+							final YearMonth fYear = year;
+							result.add(new ColumnManager<VolumeData>(String.format("%04d-%02d", fYear.getYear(), fYear.getMonthValue() + 1)) {
 
-							@Override
-							public String getTooltip() {
-								return String.format("Contract year starting in %04d", fYear.getValue());
-							}
+								// @Override
+								// public String getTooltip() {
+								// return String.format("Contract year starting in %04d", fYear.getValue());
+								// }
 
-							@Override
-							public String getColumnText(final VolumeData data) {
-								final long result = data.volumes.containsKey(fYear) ? data.volumes.get(fYear) : 0;
-								return String.format("%,d", result);
-							}
+								@Override
+								public String getColumnText(final VolumeData data) {
+									final long result = data.volumes.containsKey(fYear) ? data.volumes.get(fYear) : 0;
+									return String.format("%,d", result);
+								}
 
-							@Override
-							public int compare(final VolumeData o1, final VolumeData o2) {
-								final double result1 = o1.volumes.containsKey(fYear) ? o1.volumes.get(fYear) : 0;
-								final double result2 = o2.volumes.containsKey(fYear) ? o2.volumes.get(fYear) : 0;
-								return Double.compare(result1, result2);
-							}
-						});
-						year = year.plusYears(1);
+								@Override
+								public int compare(final VolumeData o1, final VolumeData o2) {
+									final double result1 = o1.volumes.containsKey(fYear) ? o1.volumes.get(fYear) : 0;
+									final double result2 = o2.volumes.containsKey(fYear) ? o2.volumes.get(fYear) : 0;
+									return Double.compare(result1, result2);
+								}
+							});
+							year = year.plusMonths(1);
+						}
+
+					} else {
+						Year year = (Year) dateRange.getFirst();
+						while (!year.isAfter((Year) dateRange.getSecond())) {
+							final Year fYear = year;
+							result.add(new ColumnManager<VolumeData>(String.format("%d", fYear.getValue())) {
+
+								@Override
+								public String getTooltip() {
+									return String.format("Contract year starting in %04d", fYear.getValue());
+								}
+
+								@Override
+								public String getColumnText(final VolumeData data) {
+									final long result = data.volumes.containsKey(fYear) ? data.volumes.get(fYear) : 0;
+									return String.format("%,d", result);
+								}
+
+								@Override
+								public int compare(final VolumeData o1, final VolumeData o2) {
+									final double result1 = o1.volumes.containsKey(fYear) ? o1.volumes.get(fYear) : 0;
+									final double result2 = o2.volumes.containsKey(fYear) ? o2.volumes.get(fYear) : 0;
+									return Double.compare(result1, result2);
+								}
+							});
+							year = year.plusYears(1);
+						}
 					}
 				}
 
@@ -361,7 +420,7 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 	protected void makeActions() {
 		super.makeActions();
 
-		final Action modeToggle = new Action("Volume:", Action.AS_PUSH_BUTTON) {
+		final Action modeToggle = new Action("Volume:", IAction.AS_PUSH_BUTTON) {
 
 			@Override
 			public void run() {
@@ -377,6 +436,23 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 		setActionText(modeToggle, mode);
 
 		getViewSite().getActionBars().getToolBarManager().add(modeToggle);
+
+		final Action displayModeToggle = new Action("Show:", IAction.AS_PUSH_BUTTON) {
+
+			@Override
+			public void run() {
+
+				final int modeIdx = (dateAggregationMode.ordinal() + 1) % DateAggregationMode.values().length;
+				dateAggregationMode = DateAggregationMode.values()[modeIdx];
+				setDateAggregationModeActionText(this, dateAggregationMode);
+				getViewSite().getActionBars().updateActionBars();
+				VolumeTrackingReportView.this.refresh();
+
+			}
+		};
+		setDateAggregationModeActionText(displayModeToggle, dateAggregationMode);
+
+		getViewSite().getActionBars().getToolBarManager().add(displayModeToggle);
 
 		getViewSite().getActionBars().getToolBarManager().update(true);
 	}
@@ -400,5 +476,26 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 		}
 		assert modeStr != null;
 		a.setText("Volume: " + modeStr);
+	}
+
+	private void setDateAggregationModeActionText(final Action a, final DateAggregationMode mode) {
+		String modeStr = null;
+		switch (mode) {
+		case DISPLAY_BY_CALENDAR_YEAR:
+			modeStr = "Calendar Year";
+			break;
+		case DISPLAY_BY_CONTRACT_YEAR:
+			modeStr = "Contract Year";
+			break;
+		case DISPLAY_BY_MONTH:
+			modeStr = "Monthly";
+			break;
+		default:
+			assert false;
+			break;
+
+		}
+		assert modeStr != null;
+		a.setText("Show: " + modeStr);
 	}
 }

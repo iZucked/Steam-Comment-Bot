@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases.period;
@@ -16,6 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.lingo.its.tests.microcases.MicroTestUtils;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
@@ -32,7 +33,6 @@ import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisat
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 @ExtendWith(ShiroRunner.class)
 public class TrimmedSpotCargoMarketsTests extends AbstractMicroTestCase {
@@ -41,7 +41,7 @@ public class TrimmedSpotCargoMarketsTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void basicMarketTrim() throws Exception {
 
-		final Vessel vessel_1 = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel_1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		// Build some data to evaluate the scenario with
 		// FIXME: Fix issue to avoid needing this.
@@ -51,14 +51,14 @@ public class TrimmedSpotCargoMarketsTests extends AbstractMicroTestCase {
 					.build();
 
 			// Create a single charter out event
-			cargoModelBuilder.makeCharterOutEvent("charter-1", LocalDateTime.of(2015, 1, 1, 0, 0, 0), LocalDateTime.of(2015, 1, 1, 0, 0, 0), portFinder.findPort("Point Fortin")) //
-					.withRelocatePort(portFinder.findPort("Isle of Grain")) //
+			cargoModelBuilder.makeCharterOutEvent("charter-1", LocalDateTime.of(2015, 1, 1, 0, 0, 0), LocalDateTime.of(2015, 1, 1, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
+					.withRelocatePort(portFinder.findPortById(InternalDataConstants.PORT_ISLE_OF_GRAIN)) //
 					.withDurationInDays(10) //
 					.withVesselAssignment(vesselAvailability_1, 0) //
 					.build(); //
 
 		}
-		SpotMarket market = spotMarketsModelBuilder.makeDESSaleMarket("DES-SaleMarket", portFinder.findPort("Point Fortin"), entity, "5") //
+		SpotMarket market = spotMarketsModelBuilder.makeDESSaleMarket("DES-SaleMarket", portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), entity, "5") //
 				.withAvailabilityConstant(5)//
 				.withAvailabilityDate(YearMonth.of(2015, 12), 6) //
 				.build();
@@ -136,7 +136,7 @@ public class TrimmedSpotCargoMarketsTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void basicMarketTrim_PartMonth() throws Exception {
 
-		final Vessel vessel_1 = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel_1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		// Build some data to evaluate the scenario with
 		// FIXME: Fix issue to avoid needing this.
@@ -146,14 +146,14 @@ public class TrimmedSpotCargoMarketsTests extends AbstractMicroTestCase {
 					.build();
 
 			// Create a single charter out event
-			cargoModelBuilder.makeCharterOutEvent("charter-1", LocalDateTime.of(2015, 1, 1, 0, 0, 0), LocalDateTime.of(2015, 1, 1, 0, 0, 0), portFinder.findPort("Point Fortin")) //
-					.withRelocatePort(portFinder.findPort("Isle of Grain")) //
+			cargoModelBuilder.makeCharterOutEvent("charter-1", LocalDateTime.of(2015, 1, 1, 0, 0, 0), LocalDateTime.of(2015, 1, 1, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
+					.withRelocatePort(portFinder.findPortById(InternalDataConstants.PORT_ISLE_OF_GRAIN)) //
 					.withDurationInDays(10) //
 					.withVesselAssignment(vesselAvailability_1, 0) //
 					.build(); //
 
 		}
-		SpotMarket market = spotMarketsModelBuilder.makeDESSaleMarket("DES-SaleMarket", portFinder.findPort("Point Fortin"), entity, "5") //
+		SpotMarket market = spotMarketsModelBuilder.makeDESSaleMarket("DES-SaleMarket", portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), entity, "5") //
 				.withAvailabilityConstant(5)//
 				.withAvailabilityDate(YearMonth.of(2015, 12), 6) //
 				.build();

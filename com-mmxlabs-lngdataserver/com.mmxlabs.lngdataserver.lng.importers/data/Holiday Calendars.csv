@@ -1,0 +1,74 @@
+name,description,date
+LSE,London Stock Exchangee market holidays,
+LSE,New Year day,2019-01-01
+LSE,Good Friday,2019-04-19
+LSE,Easter Monday,2019-04-22
+LSE,Early May Bank Holiday,2019-05-06
+LSE,Late May Bank Holiday,2019-05-27
+LSE,Summer Bank Holiday,2019-08-26
+LSE,Christmas,2019-12-25
+LSE,Boxing Day,2019-12-26
+LSE,New Year day,2020-01-01
+LSE,Good Friday,2020-04-10
+LSE,Easter Monday,2020-04-13
+LSE,Early May Bank Holiday,2020-05-08
+LSE,Late May Bank Holiday,2020-05-25
+LSE,Summer Bank Holiday,2020-08-31
+LSE,Christmas,2020-12-25
+LSE,Boxing Day,2020-12-28
+LSE,New Year day,2021-01-01
+LSE,Good Friday,2021-04-02
+LSE,Easter Monday,2021-04-05
+LSE,Early May Bank Holiday,2021-05-03
+LSE,Late May Bank Holiday,2021-05-31
+LSE,Summer Bank Holiday,2021-08-30
+LSE,Christmas,2021-12-27
+LSE,Boxing Day,2021-12-28
+NYSE,NYSE and NASDAQ holidays,
+NYSE,New Year day,2019-01-01
+NYSE,Martin Luther King Jr Day,2019-01-21
+NYSE,Washington Birthday,2019-02-18
+NYSE,Good Friday,2019-04-19
+NYSE,Memorial Day,2019-05-27
+NYSE,Independece Day,2019-07-04
+NYSE,Labor Day,2019-09-02
+NYSE,Thanksgiving Day,2019-11-28
+NYSE,Christmas Day,2019-12-25
+NYSE,New Year day,2020-01-01
+NYSE,Martin Luther King Jr Day,2020-01-20
+NYSE,Washington Birthday,2020-02-17
+NYSE,Good Friday,2020-04-10
+NYSE,Memorial Day,2020-05-25
+NYSE,Independece Day,2020-07-03
+NYSE,Labor Day,2020-09-07
+NYSE,Thanksgiving Day,2020-11-26
+NYSE,Christmas Day,2020-12-25
+NYSE,New Year day,2021-01-01
+NYSE,Martin Luther King Jr Day,2021-01-18
+NYSE,Washington Birthday,2021-02-15
+NYSE,Good Friday,2021-04-02
+NYSE,Memorial Day,2021-05-31
+NYSE,Independece Day,2021-07-05
+NYSE,Labor Day,2021-09-06
+NYSE,Thanksgiving Day,2021-11-25
+NYSE,Christmas Day,2021-12-24
+EURONEXT,Amsterdam Stock Exchange holidays,
+EURONEXT,Nieuwjaar ,2019-01-01
+EURONEXT,Eerste Paasdag,2019-04-21
+EURONEXT,Tweede Paasdag,2019-04-22
+EURONEXT,Koningsdag ,2019-04-27
+EURONEXT,Hemelvaartsdag ,2019-05-30
+EURONEXT,Eerste Pinksterdag,2019-06-09
+EURONEXT,Tweede Pinksterdag,2019-06-10
+EURONEXT,Eerste Kerstdag,2019-12-25
+EURONEXT,Tweede Kerstdag,2019-12-26
+EURONEXT,Nieuwjaar ,2020-01-01
+EURONEXT,Eerste Paasdag,2020-04-12
+EURONEXT,Tweede Paasdag,2020-04-13
+EURONEXT,Koningsdag ,2020-04-27
+EURONEXT,Bevrijdingsdag ,2020-05-05
+EURONEXT,Hemelvaartsdag ,2020-05-21
+EURONEXT,Eerste Pinksterdag,2020-05-31
+EURONEXT,Tweede Pinksterdag,2020-06-01
+EURONEXT,Eerste Kerstdag,2020-12-25
+EURONEXT,Tweede Kerstdag,2020-12-26

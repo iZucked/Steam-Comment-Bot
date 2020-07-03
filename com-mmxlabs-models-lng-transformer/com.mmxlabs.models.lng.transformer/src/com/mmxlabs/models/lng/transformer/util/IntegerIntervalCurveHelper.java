@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.util;
@@ -20,7 +20,6 @@ import com.mmxlabs.scheduler.optimiser.curves.IntegerIntervalCurve;
 /**
  * Util class used to create {@link IIntegerIntervalCurve} instances
  * @author achurchill
- *
  */
 public class IntegerIntervalCurveHelper {
 
@@ -112,5 +111,4 @@ public class IntegerIntervalCurveHelper {
 		}
 		return dateAndCurveHelper.convertTime(asDate);
 	}
-
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.app.intro;
@@ -7,6 +7,7 @@ package com.mmxlabs.lingo.app.intro;
 import java.io.File;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,7 +17,6 @@ import java.nio.file.attribute.BasicFileAttributes;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
@@ -31,6 +31,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.osgi.service.datalocation.Location;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.osgi.framework.BundleContext;
@@ -39,13 +40,16 @@ import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
 import com.mmxlabs.common.io.FileDeleter;
+import com.mmxlabs.hub.DataHubServiceProvider;
+import com.mmxlabs.hub.UpstreamUrlProvider;
+import com.mmxlabs.hub.auth.AuthenticationManager;
+import com.mmxlabs.hub.services.permissions.UserPermissionsService;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.license.features.pluginxml.PluginRegistryHook;
 import com.mmxlabs.license.ssl.LicenseChecker;
 import com.mmxlabs.license.ssl.LicenseChecker.LicenseState;
-import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
-import com.mmxlabs.lngdataserver.server.UserPermissionsService;
+import com.mmxlabs.lingo.reports.customizable.CustomReportsRegistryHook;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.rcp.common.application.DelayedOpenFileProcessor;
@@ -60,95 +64,35 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 @SuppressWarnings("restriction")
 public class Application implements IApplication {
 
+	AuthenticationManager authenticationManager = AuthenticationManager.getInstance();
+
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.equinox.app.IApplication#start(org.eclipse.equinox.app.
-	 * IApplicationContext)
+	 * @see org.eclipse.equinox.app.IApplication#start(org.eclipse.equinox.app. IApplicationContext)
 	 */
 	@Override
 	public Object start(final IApplicationContext context) {
 
 		final String[] appLineArgs = Platform.getApplicationArgs();
 
-		{
-			// Clean up temp folder on start up.
-			final File tempDirectory = ScenarioStorageUtil.getTempDirectory();
-			if (tempDirectory.exists() && tempDirectory.isDirectory()) {
-				final boolean secureDelete = LicenseFeatures.isPermitted(FileDeleter.LICENSE_FEATURE__SECURE_DELETE);
-				try {
-					final Path tempDir = tempDirectory.toPath();
-					Files.walkFileTree(tempDir, new SimpleFileVisitor<Path>() {
-						@Override
-						public FileVisitResult postVisitDirectory(final Path dir, final IOException exc) throws IOException {
-							if (!tempDir.equals(dir)) {
-								dir.toFile().delete();
-							}
-							return FileVisitResult.CONTINUE;
-						}
-
-						@Override
-						public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
-							FileDeleter.delete(file.toFile(), secureDelete);
-							return FileVisitResult.CONTINUE;
-						}
-					});
-				} catch (final IOException e) {
-					e.printStackTrace();
-				}
-			}
-			// Sometimes dir disappears? Perhaps the tree-walker check does not work?
-			tempDirectory.mkdirs();
-		}
+		cleanUpTemporaryFolder();
 
 		// HAK
 		@NonNull
 		final ISharedDataModelType<@NonNull PortModel> distances = LNGScenarioSharedModelTypes.DISTANCES;
 
-		if (appLineArgs != null && appLineArgs.length > 0) {
-			// Look for the no-auto-mem command first and skip auto-mem code if so (e.g.
-			// could get here through a relaunch)
-			boolean skipAutoMemory = false;
-			for (final String arg : appLineArgs) {
-				if (arg.equalsIgnoreCase(CMD_NO_AUTO_MEM)) {
-					skipAutoMemory = true;
-					break;
-				}
-			}
-			if (!skipAutoMemory) {
-				for (final String arg : appLineArgs) {
-					if (arg.equals(CMD_AUTO_MEM)) {
+		// restart the the workbench with the new heap size
+		String heapSize = getHeapSize(appLineArgs);
 
-						final MBeanServer platformMBeanServer = ManagementFactory.getPlatformMBeanServer();
-						try {
-							// Get total physical memory
-							final Number totalMemory = (Number) platformMBeanServer.getAttribute(new ObjectName("java.lang", "type", "OperatingSystem"), "TotalPhysicalMemorySize");
-							if (totalMemory != null) {
-								// Convert to gigabytes
-								final long gigabytes = totalMemory.longValue() / 1024L / 1024L / 1024L;
-								String heapSize = null;
-								if (gigabytes < 1) {
-									heapSize = "-Xmx512m";
-								} else if (gigabytes < 3) {
-									heapSize = "-Xmx1G";
-								} else {
-									heapSize = String.format("-Xmx%dG", gigabytes - 2);
-								}
-								if (heapSize != null) {
-									// Construct new command line with new VM arg and restart workbench
-									System.setProperty(IApplicationContext.EXIT_DATA_PROPERTY, buildCommandLine(heapSize));
-									// This might be surplus to the return statement.
-									System.setProperty("eclipse.exitcode", Integer.toString(24));
-									return org.eclipse.equinox.app.IApplication.EXIT_RELAUNCH;
-								}
-							}
-						} catch (final Exception e) {
-							e.printStackTrace();
-						}
-					}
-				}
-			}
+		if (heapSize != null) {
+			// Construct new command line with new VM arg and restart workbench
+			System.setProperty(IApplicationContext.EXIT_DATA_PROPERTY, buildCommandLine(heapSize));
+			// This might be surplus to the return statement.
+			System.setProperty("eclipse.exitcode", Integer.toString(24));
+			return org.eclipse.equinox.app.IApplication.EXIT_RELAUNCH;
 		}
+
 		// Start peaberry activation - only for ITS runs inside eclipse.
 		final String[] bundlesToStart = { "org.eclipse.equinox.common", //
 				"org.eclipse.equinox.ds", //
@@ -166,9 +110,7 @@ public class Application implements IApplication {
 		final Display display = PlatformUI.createDisplay();
 		final LicenseState validity = LicenseChecker.checkLicense();
 		if (validity != LicenseState.Valid) {
-
 			MessageDialog.openError(display.getActiveShell(), "License Error", "Unable to validate license: " + validity.getMessage());
-
 			display.dispose();
 			return IApplication.EXIT_OK;
 		}
@@ -176,60 +118,47 @@ public class Application implements IApplication {
 		initAccessControl();
 		WorkbenchStateManager.cleanupWorkbenchState();
 
+		// Trigger early startup prompt for Data Hub
+		if (UpstreamUrlProvider.INSTANCE.hasADataHubURL()) {
+			Shell shell = new Shell(display);
+			try {
+				UpstreamUrlProvider.INSTANCE.isUpstreamAvailable(shell);
+			} finally {
+				shell.dispose();
+			}
+		}
+
 		// Check Data Hub to see if user is authorised to use LiNGO
-		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_DATAHUB_STARTUP_CHECK)) {
-			try {
+		boolean datahubStartupCheck = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_DATAHUB_STARTUP_CHECK);
+		if (datahubStartupCheck) {
 
-				ProgressMonitorDialog d = new ProgressMonitorDialog(display.getActiveShell());
-				d.run(true, false, monitor -> {
-					monitor.beginTask("Connecting to Data Hub", IProgressMonitor.UNKNOWN);
-					try {
-						// Small start up delay to wait for hub connection.
-						for (int i = 0; i < 5; ++i) {
-							if (UpstreamUrlProvider.INSTANCE.isAvailable()) {
-								break;
-							}
-							try {
-								Thread.sleep(1000);
-							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-							// Trigger the auth prompt in case this is a first run.
-							// Shouldn't really call directly, but the workbench is not started yet for this
-							// method to find a display
-							UpstreamUrlProvider.INSTANCE.testUpstreamAvailability(display);
-						}
-					} finally {
-						monitor.done();
-					}
-				});
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			if (!UpstreamUrlProvider.INSTANCE.isAvailable()) {
-				MessageDialog.openError(display.getActiveShell(), "", "Unable to connect to Data Hub to valid user permissions. Please try again later.");
+			// TODO: Check this works properly with new oauth changes. I.e. the oauth logout may get called without the display from here.
 
-				display.dispose();
-				return IApplication.EXIT_OK;
-			}
+			displayProgressMonitor(display);
 
-			// Force permissions refresh
-			try {
-				UserPermissionsService.INSTANCE.updateUserPermissions();
-			} catch (IOException e) {
-				e.printStackTrace();
-				MessageDialog.openError(display.getActiveShell(), "", "Error getting user permissions from Data Hub. Please try again later.");
+			// check if datahub is available
+			if (DataHubServiceProvider.getInstance().isHubOnline()) {
 
-				display.dispose();
-				return IApplication.EXIT_OK;
-			}
+				if (!authenticationManager.isAuthenticated()) {
+					authenticationManager.run(display.getActiveShell());
+				}
 
-			if (!UserPermissionsService.INSTANCE.isPermitted("lingo", "read")) {
-				MessageDialog.openError(display.getActiveShell(), "", "Not authorised to use LiNGO");
+				// refresh permissions
+				try {
+					UserPermissionsService.INSTANCE.updateUserPermissions();
+				} catch (IOException e) {
+					MessageDialog.openError(display.getActiveShell(), "", "Error getting user permissions from Data Hub. Please try again later.");
+				}
 
-				display.dispose();
-				return IApplication.EXIT_OK;
+				if (UserPermissionsService.INSTANCE.hasUserPermissions() && !UserPermissionsService.INSTANCE.isPermitted("lingo", "read")) {
+					System.out.println(UserPermissionsService.INSTANCE.hasUserPermissions());
+					MessageDialog.openError(display.getActiveShell(), "", "User is not authorised to use LiNGO");
+					display.dispose();
+					return IApplication.EXIT_OK;
+				}
+
+			} else {
+				MessageDialog.openError(display.getActiveShell(), "", "Unable to connect to DataHub. Please try again later.");
 			}
 		}
 
@@ -245,7 +174,6 @@ public class Application implements IApplication {
 		final DelayedOpenFileProcessor processor = new DelayedOpenFileProcessor(display);
 
 		// TODO: Handle error conditions better!
-
 		final Location instanceLoc = Platform.getInstanceLocation();
 		try {
 
@@ -279,6 +207,111 @@ public class Application implements IApplication {
 			}
 		}
 		return IApplication.EXIT_OK;
+	}
+
+	private String getHeapSize(String[] appLineArgs) {
+		String heapSize = null;
+
+		if (appLineArgs != null && appLineArgs.length > 0) {
+			// Look for the no-auto-mem command first and skip auto-mem code if so (e.g.
+			// could get here through a relaunch)
+			boolean skipAutoMemory = false;
+			for (final String arg : appLineArgs) {
+				if (arg.equalsIgnoreCase(CMD_NO_AUTO_MEM)) {
+					skipAutoMemory = true;
+					break;
+				}
+			}
+
+			if (!skipAutoMemory) {
+				for (final String arg : appLineArgs) {
+					if (arg.equals(CMD_AUTO_MEM)) {
+
+						final MBeanServer platformMBeanServer = ManagementFactory.getPlatformMBeanServer();
+						try {
+							// Get total physical memory
+							final Number totalMemory = (Number) platformMBeanServer.getAttribute(new ObjectName("java.lang", "type", "OperatingSystem"), "TotalPhysicalMemorySize");
+							if (totalMemory != null) {
+								// Convert to gigabytes
+								final long gigabytes = totalMemory.longValue() / 1024L / 1024L / 1024L;
+								if (gigabytes < 1) {
+									heapSize = "-Xmx512m";
+								} else if (gigabytes < 3) {
+									heapSize = "-Xmx1G";
+								} else {
+									heapSize = String.format("-Xmx%dG", gigabytes - 2);
+								}
+							}
+						} catch (final Exception e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+		}
+
+		return heapSize;
+	}
+
+	private void cleanUpTemporaryFolder() {
+		// Clean up temp folder on start up.
+		final File tempDirectory = ScenarioStorageUtil.getTempDirectory();
+		if (tempDirectory.exists() && tempDirectory.isDirectory()) {
+			final boolean secureDelete = LicenseFeatures.isPermitted(FileDeleter.LICENSE_FEATURE__SECURE_DELETE);
+			try {
+				final Path tempDir = tempDirectory.toPath();
+				Files.walkFileTree(tempDir, new SimpleFileVisitor<Path>() {
+					@Override
+					public FileVisitResult postVisitDirectory(final Path dir, final IOException exc) throws IOException {
+						if (!tempDir.equals(dir)) {
+							dir.toFile().delete();
+						}
+						return FileVisitResult.CONTINUE;
+					}
+
+					@Override
+					public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
+						FileDeleter.delete(file.toFile(), secureDelete);
+						return FileVisitResult.CONTINUE;
+					}
+				});
+			} catch (final IOException e) {
+				e.printStackTrace();
+			}
+		}
+		// Sometimes dir disappears? Perhaps the tree-walker check does not work?
+		tempDirectory.mkdirs();
+	}
+
+	private void displayProgressMonitor(Display display) {
+		ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(display.getActiveShell());
+		try {
+			progressDialog.run(true, false, monitor -> {
+				waitForHub(display);
+				monitor.done();
+			});
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void waitForHub(Display display) {
+		int timeoutInSeconds = 30;
+		int msInASecond = 1000;
+
+		for (int i = 0; i < timeoutInSeconds; ++i) {
+			if (DataHubServiceProvider.getInstance().isHubOnline()) {
+				break;
+			}
+			try {
+				Thread.sleep(msInASecond);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+				Thread.currentThread().interrupt();
+			}
+		}
 	}
 
 	/**
@@ -326,6 +359,8 @@ public class Application implements IApplication {
 	private void initAccessControl() {
 		PluginRegistryHook.initialisePluginXMLEnablements();
 
+		CustomReportsRegistryHook.initialisePluginXMLEnablements();
+
 		ReplaceableViewManager.initialiseReplaceableViews();
 	}
 
@@ -365,9 +400,7 @@ public class Application implements IApplication {
 	/**
 	 * Reconstruct command line arguments and modify to suit
 	 * 
-	 * Taken from org.eclipse.ui.internal.ide.actions.OpenWorkspaceAction. This
-	 * required EXIT_RELAUNCH - not EXIT_RESTART to work. Note only works in builds,
-	 * not from within eclipse.
+	 * Taken from org.eclipse.ui.internal.ide.actions.OpenWorkspaceAction. This required EXIT_RELAUNCH - not EXIT_RESTART to work. Note only works in builds, not from within eclipse.
 	 * 
 	 * 
 	 */

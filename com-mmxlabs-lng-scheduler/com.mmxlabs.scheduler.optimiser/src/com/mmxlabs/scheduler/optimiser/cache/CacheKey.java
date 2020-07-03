@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.cache;
@@ -47,8 +47,9 @@ public final class CacheKey<T> {
 		portTimesRecord.getSlots().forEach(slot -> voyageKeys.add(portTimesRecord.getSlotNextVoyageOptions(slot)));
 		portTimesRecord.getSlots().forEach(slot -> slotTimes.add(portTimesRecord.getSlotTime(slot)));
 		portTimesRecord.getSlots().forEach(slot -> canalBookings.add(portTimesRecord.getRouteOptionBooking(slot)));
-		if (portTimesRecord.getReturnSlot() != null) {
-			slotTimes.add(portTimesRecord.getSlotTime(portTimesRecord.getReturnSlot()));
+		IPortSlot returnSlot = portTimesRecord.getReturnSlot();
+		if (returnSlot != null) {
+			slotTimes.add(portTimesRecord.getSlotTime(returnSlot));
 		}
 		this.hash = Objects.hash(startHeelInM3, vesselAvailability, portTimesRecord.getSlots().stream().map(IPortSlot::getId).collect(Collectors.toList()), portTimesRecord.getFirstSlotTime(),
 				dependencyKeys, slotTimes, canalBookings, voyageKeys);

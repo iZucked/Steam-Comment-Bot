@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases;
@@ -22,7 +22,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import com.google.inject.Injector;
 import com.google.inject.name.Names;
 import com.mmxlabs.common.time.Days;
-import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.NonLicenseFeatures;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -51,7 +51,6 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
-import com.mmxlabs.models.lng.transformer.its.RequireFeature;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
@@ -72,15 +71,12 @@ import com.mmxlabs.scheduler.optimiser.fitness.impl.IEndEventScheduler;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService.ModuleType;
 import com.mmxlabs.scheduler.optimiser.peaberry.OptimiserInjectorServiceMaker;
-import com.mmxlabs.scheduler.optimiser.scheduling.EarliestSlotTimeScheduler;
-import com.mmxlabs.scheduler.optimiser.scheduling.ISlotTimeScheduler;
 import com.mmxlabs.scheduler.optimiser.scheduling.ScheduledTimeWindows;
 import com.mmxlabs.scheduler.optimiser.scheduling.TimeWindowScheduler;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
 @ExtendWith(ShiroRunner.class)
-@RequireFeature(features = { KnownFeatures.FEATURE_PANAMA_CANAL })
-public class DurationConstraintTests extends AbstractMicroTestCase {
+public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 
 	@Override
 	public IScenarioDataProvider importReferenceData() throws Exception {
@@ -127,7 +123,7 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 	}
 
 	private Cargo createFobDesCargo(final VesselAvailability vesselAvailability, final Port loadPort, final Port dischargePort, final LocalDateTime loadDate, final LocalDateTime dischargeDate) {
-		final Cargo cargo = cargoModelBuilder.makeCargo() //
+		return cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L", loadDate.toLocalDate(), loadPort, null, entity, "5") //
 				.withWindowStartTime(0) //
 				.withVisitDuration(24) //
@@ -142,7 +138,6 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 				//
 				.withVesselAssignment(vesselAvailability, 1) //
 				.build();
-		return cargo;
 	}
 
 	private VesselAvailability getDefaultVesselAvailability() {
@@ -200,11 +195,9 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 				final ISequences initialSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 
 				// Set time scheduler settings
-				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
-				scheduler.setUseCanalBasedWindowTrimming(false);
-				scheduler.setUsePriceBasedWindowTrimming(false);
+				final TimeWindowScheduler scheduler = getScheduler(injector);
 
-				final ScheduledTimeWindows schedule = scheduler.schedule(initialSequences);
+				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(initialSequences);
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
 
 				final IResource r0 = initialSequences.getResources().get(0);
@@ -256,11 +249,9 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 				final ISequences initialSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 
 				// Set time scheduler settings
-				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
-				scheduler.setUseCanalBasedWindowTrimming(false);
-				scheduler.setUsePriceBasedWindowTrimming(false);
+				final TimeWindowScheduler scheduler = getScheduler(injector);
 
-				final ScheduledTimeWindows schedule = scheduler.schedule(initialSequences);
+				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(initialSequences);
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
 
 				final IResource r0 = initialSequences.getResources().get(0);
@@ -279,6 +270,14 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 				Assertions.assertEquals(24 * 26, diff);
 			}
 		});
+	}
+
+	private TimeWindowScheduler getScheduler(final Injector injector) {
+		final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
+		scheduler.setUseCanalBasedWindowTrimming(false);
+		scheduler.setUsePriceBasedWindowTrimming(false);
+		scheduler.setUsePNLBasedWindowTrimming(false);
+		return scheduler;
 	}
 
 	@Test
@@ -302,11 +301,9 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 				final ISequences initialSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 
 				// Set Time Scheduler Settings
-				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
-				scheduler.setUseCanalBasedWindowTrimming(false);
-				scheduler.setUsePriceBasedWindowTrimming(false);
+				final TimeWindowScheduler scheduler = getScheduler(injector);
 
-				final ScheduledTimeWindows schedule = scheduler.schedule(initialSequences);
+				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(initialSequences);
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
 
 				final IResource r0 = initialSequences.getResources().get(0);
@@ -359,11 +356,9 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 				final ISequences initialSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 
 				// Set time scheduler settings
-				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
-				scheduler.setUseCanalBasedWindowTrimming(false);
-				scheduler.setUsePriceBasedWindowTrimming(false);
+				final TimeWindowScheduler scheduler = getScheduler(injector);
 
-				final ScheduledTimeWindows schedule = scheduler.schedule(initialSequences);
+				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(initialSequences);
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
 
 				final IResource r0 = initialSequences.getResources().get(0);
@@ -403,11 +398,9 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 				final ISequences initialSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 
 				// Set time scheduler settings
-				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
-				scheduler.setUseCanalBasedWindowTrimming(false);
-				scheduler.setUsePriceBasedWindowTrimming(false);
+				final TimeWindowScheduler scheduler = getScheduler(injector);
 
-				final ScheduledTimeWindows schedule = scheduler.schedule(initialSequences);
+				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(initialSequences);
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
 
 				final IResource r0 = initialSequences.getResources().get(0);
@@ -427,6 +420,8 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void minMaxDurationPriceBasedTrimmingCargoTest() {
+
+		portModelBuilder.setAllExistingPortsToUTC();
 
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailabilityWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
 
@@ -464,26 +459,41 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
 				scheduler.setUseCanalBasedWindowTrimming(false);
 				scheduler.setUsePriceBasedWindowTrimming(true);
+				scheduler.setUsePNLBasedWindowTrimming(true);
 
-				final ScheduledTimeWindows schedule = scheduler.schedule(initialSequences);
+				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(initialSequences);
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
 
 				final IResource r0 = initialSequences.getResources().get(0);
+				Assertions.assertEquals(3, records.get(r0).size());
 
 				final IPortTimeWindowsRecord ptr_r0_cargo = records.get(r0).get(0);
 				final IPortTimeWindowsRecord ptr_r1_cargo = records.get(r0).get(1);
+				final IPortTimeWindowsRecord ptr_r2_cargo = records.get(r0).get(2);
 
-				// Assert expected result (Truncated start AND end windows)
-				Assertions.assertEquals(24 * (vesselAvailability.getMaxDuration()) + 1, ptr_r1_cargo.getSlotFeasibleTimeWindow(ptr_r1_cargo.getReturnSlot()).getExclusiveEnd());
-				Assertions.assertEquals(24 * (vesselAvailability.getMaxDuration()), ptr_r1_cargo.getSlotFeasibleTimeWindow(ptr_r1_cargo.getReturnSlot()).getInclusiveStart());
-
-				Assertions.assertEquals(1, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getExclusiveEnd());
+				// Expect exact start window
 				Assertions.assertEquals(0, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getInclusiveStart());
+				Assertions.assertEquals(1, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getExclusiveEnd());
+
+				// Expect cargo return and last record to have the same windows.
+				Assertions.assertSame(ptr_r1_cargo.getReturnSlot(), ptr_r2_cargo.getFirstSlot());
+				// Assert expected result (Truncated start AND end windows)
+				ITimeWindow cargoReturnWindow = ptr_r1_cargo.getSlotFeasibleTimeWindow(ptr_r1_cargo.getReturnSlot());
+				ITimeWindow endFirstWindow = ptr_r2_cargo.getSlotFeasibleTimeWindow(ptr_r1_cargo.getReturnSlot());
+				Assertions.assertEquals(cargoReturnWindow.getInclusiveStart(), endFirstWindow.getInclusiveStart());
+				Assertions.assertEquals(cargoReturnWindow.getExclusiveEnd(), endFirstWindow.getExclusiveEnd());
+
+				// Expect end window to be clamped to max duration
+				int maxDurationInHours = 24 * (vesselAvailability.getMaxDuration());
+				Assertions.assertEquals(maxDurationInHours + 1, endFirstWindow.getExclusiveEnd());
+				// Assertions.assertEquals(maxDurationInHours, slotFeasibleTimeWindow.getInclusiveStart());
+
 			}
 		});
 	}
 
-	// FIXME: Bad test! (mismatching max-duration and end window, panama not used at all)
+	// FIXME: Bad test! (mismatching max-duration and end window, panama not used at
+	// all)
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void maxDurationWithPanamaBookingTest() {
@@ -527,8 +537,9 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
 				scheduler.setUseCanalBasedWindowTrimming(true);
 				scheduler.setUsePriceBasedWindowTrimming(false);
+				scheduler.setUsePNLBasedWindowTrimming(false);
 
-				final ScheduledTimeWindows schedule = scheduler.schedule(manipulatedSequences);
+				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(manipulatedSequences);
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
 
 				final IResource r0 = manipulatedSequences.getResources().get(0);
@@ -544,7 +555,8 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 
 				// Check expectation
 				final int diff = returnEvent.getExclusiveEnd() - 1 - startEvent.getInclusiveStart();
-				// Max duration should clamp to 90 days, but min end date takes precedence (116 days)
+				// Max duration should clamp to 90 days, but min end date takes precedence (116
+				// days)
 				// assertEquals(24 * 90, diff);
 				Assertions.assertEquals(24 * 116, diff);
 			}
@@ -687,11 +699,9 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 				final ISequences initialSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 
 				// Set time scheduler settings
-				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
-				scheduler.setUseCanalBasedWindowTrimming(false);
-				scheduler.setUsePriceBasedWindowTrimming(false);
+				final TimeWindowScheduler scheduler = getScheduler(injector);
 
-				final ScheduledTimeWindows schedule = scheduler.schedule(initialSequences);
+				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(initialSequences);
 			}
 			final EndEvent endEvent = MicroTestUtils.findVesselEndEvent(lngScenarioModel);
 			final PortVisitLateness lateness = endEvent.getLateness();
@@ -873,8 +883,8 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 
 		// Set the end requirement's time window and max duration
 		vesselAvailability.setMaxDuration(33);
-		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JULY, 30, 0, 0, 0));
-		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JULY, 25, 0, 0, 0));
+		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JUNE, 30, 0, 0, 0));
+		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
 
 		// Construct the cargo
 		@NonNull
@@ -905,7 +915,8 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 		final long minDeltaInSeconds = endTimestamp - startTimestamp;
 		final long minDeltaInHours = (minDeltaInSeconds / 3600);
 
-		if (minDeltaInHours > (vesselAvailability.getMaxDuration() * 24)) {
+		int maxDurationInHours = vesselAvailability.getMaxDuration() * 24;
+		if (minDeltaInHours > maxDurationInHours) {
 			Assertions.assertTrue(false);
 		}
 	}
@@ -914,7 +925,9 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.REGRESSION_TEST)
 	public void maxDurationTrimCausedAssertion() {
 
-		// The following case caused an assertion error as the feasible end window was badly trimmed so that the previous element window end was later than vessel end.
+		// The following case caused an assertion error as the feasible end window was
+		// badly trimmed so that the previous element window end was later than vessel
+		// end.
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		vessel.setMaxSpeed(16.0);
@@ -965,8 +978,9 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
 				scheduler.setUseCanalBasedWindowTrimming(true);
 				scheduler.setUsePriceBasedWindowTrimming(false);
+				scheduler.setUsePNLBasedWindowTrimming(false);
 
-				final ScheduledTimeWindows schedule = scheduler.schedule(initialSequences);
+				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(initialSequences);
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
 
 				final IResource r0 = initialSequences.getResources().get(0);
@@ -994,7 +1008,8 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 					windowEnd[idx.get()] = tw.getExclusiveEnd();
 					idx.getAndIncrement();
 				}
-				// Originally the windowEnd[5] > windowEnd[6] -- but was fixed by the time it was put into a IPortTimeWindowsRecord
+				// Originally the windowEnd[5] > windowEnd[6] -- but was fixed by the time it
+				// was put into a IPortTimeWindowsRecord
 				for (int i = 0; i < idx.get(); ++i) {
 					Assertions.assertTrue(windowStart[i] < windowEnd[i]);
 					if (i > 0) {
@@ -1007,13 +1022,19 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 	}
 
 	/***
-	 * We did see a case where the hire cost only end rule kicked in and ignored the max duration and canal booking requirements.
+	 * We did see a case where the hire cost only end rule kicked in and ignored the
+	 * max duration and canal booking requirements.
 	 * 
 	 * @throws Exception
 	 */
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void maxDurationWithOpenEndAndHireCostEndRulesTest() throws Exception {
+		
+		if (!NonLicenseFeatures.isSouthboundIdleTimeRuleEnabled()) {
+			return; //This test is only applicable to old South-bound panama rules, as new south-bound idle rule allows existing panama voyages and flags as a warning in validation.
+		}
+		
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
 
@@ -1025,6 +1046,7 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 		cargoModel.getCanalBookings().setRelaxedBoundaryOffsetDays(100);
 
 		cargoModel.getCanalBookings().setFlexibleBookingAmountSouthbound(0);
+			
 		cargoModel.getCanalBookings().setNorthboundMaxIdleDays(5);
 		cargoModel.getCanalBookings().setArrivalMarginHours(12);
 
@@ -1052,8 +1074,8 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 				.withVisitDuration(36) //
 
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2018, Month.FEBRUARY, 1), port2, null, entity, "7") //
-				.withWindowSize(1, TimePeriod.MONTHS) //
+				.makeDESSale("D1", LocalDate.of(2018, Month.FEBRUARY, 15), port2, null, entity, "7") //
+				.withWindowSize(1, TimePeriod.DAYS) //
 				.withVisitDuration(36) //
 
 				.build() //
@@ -1065,9 +1087,8 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 		IOptimiserInjectorService localOverrides = OptimiserInjectorServiceMaker.begin() //
 				.makeModule() //
 				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UsePriceBasedWindowTrimming)).toInstance(Boolean.TRUE)) //
+				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UsePNLBasedWindowTrimming)).toInstance(Boolean.TRUE)) //
 				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UseCanalSlotBasedWindowTrimming)).toInstance(Boolean.TRUE)) //
-				.with(binder -> binder.bind(ISlotTimeScheduler.class).to(EarliestSlotTimeScheduler.class)) //
-				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(IEndEventScheduler.ENABLE_HIRE_COST_ONLY_END_RULE)).toInstance(Boolean.TRUE))//
 				.buildOverride(ModuleType.Module_LNGTransformerModule)//
 				.make();
 
@@ -1103,7 +1124,8 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 	}
 
 	/**
-	 * This test ensures we do not add a cargo to a charter in which would exceed max duration even though it is profitable.
+	 * This test ensures we do not add a cargo to a charter in which would exceed
+	 * max duration even though it is profitable.
 	 * 
 	 * @throws Exception
 	 */
@@ -1207,9 +1229,9 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 	private IOptimiserInjectorService makeTimeScheduleRulesModuleService(boolean canalTrimming) {
 		IOptimiserInjectorService localOverrides = OptimiserInjectorServiceMaker.begin() //
 				.makeModule() //
+				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UsePNLBasedWindowTrimming)).toInstance(Boolean.TRUE)) //
 				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UsePriceBasedWindowTrimming)).toInstance(Boolean.TRUE)) //
 				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UseCanalSlotBasedWindowTrimming)).toInstance(canalTrimming)) //
-				.with(binder -> binder.bind(ISlotTimeScheduler.class).to(EarliestSlotTimeScheduler.class)) //
 				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(IEndEventScheduler.ENABLE_HIRE_COST_ONLY_END_RULE)).toInstance(Boolean.TRUE))//
 				.buildOverride(ModuleType.Module_LNGTransformerModule)//
 				.make();

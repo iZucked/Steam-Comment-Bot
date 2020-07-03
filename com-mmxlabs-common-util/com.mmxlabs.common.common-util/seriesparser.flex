@@ -68,6 +68,8 @@ white_space = {new_line} | [ \t\f]
 
 <YYINITIAL>{
 /* keywords - case insensitive! */
+"CAP"              { return symbol("cap",CAP); }
+"FLOOR"            { return symbol("floor",FLOOR); }
 "MIN"              { return symbol("min",MIN); }
 "MAX"            { return symbol("max",MAX); }
 "SHIFT"           { return symbol("shift",SHIFT); }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.analytics;
@@ -70,6 +70,7 @@ import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.rcp.common.ecore.EMFCopier;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiserLogger;
@@ -343,7 +344,7 @@ public class LNGSchedulerInsertSlotJobRunner {
 		// Make sure this is the original, not the optimiser
 		slotInsertionOptions.getSlotsInserted().addAll(targetSlots);
 		slotInsertionOptions.getEventsInserted().addAll(targetEvents);
-		slotInsertionOptions.setUserSettings(EcoreUtil.copy(userSettings));
+		slotInsertionOptions.setUserSettings(EMFCopier.copy(userSettings));
 
 		slotInsertionOptions.setName(AnalyticsSolutionHelper.generateName(slotInsertionOptions));
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2019
+    Copyright (C) Minimax Labs Ltd., 2010 - 2020
     All rights reserved.
 
 -->
@@ -77,6 +77,7 @@
      </extension>
      <extension
            point="org.eclipse.ui.menus">
+           <!-- Disabling the scenario browser import/export menus
          <menuContribution
                allPopups="false"
                locationURI="popup:com.mmxlabs.scenario.service.ui.navigator?after=importers">
@@ -133,96 +134,52 @@
                   </with>
                </visibleWhen>
             </command>
-         </menuContribution>
+         </menuContribution> 
+         -->
          <menuContribution
                allPopups="false"
                locationURI="menu:file?after=additions">
             <command
                   commandId="com.mmxlabs.shiplingo.platform.models.optimisation.ImportCSVScenario"
-                  label="Import Scenario"
+                  label="Import scenario from CSV"
+                  style="push">
+            </command>
+            <menu
+                  id="file_export"
+                  label="Export scenario to">
+            </menu>
+         </menuContribution>
+         <!-- Export menu -->
+         <menuContribution
+               allPopups="false"
+               locationURI="menu:file_export">
+               <command
+                  commandId="com.mmxlabs.shiplingo.platform.models.optimisation.ExportCSVScenario"
+                  label="CSV"
                   style="push">
             </command>
             <command
                   commandId="com.mmxlabs.models.lng.scenario.exportWizards.ExportLiNGOScenarioWizardHandler"
-                  label="Export as .lingo file"
+                  label=".lingo"
                   style="push">
             </command>
          </menuContribution>
+         <!-- Data Menu-->
          <menuContribution
                allPopups="false"
-               locationURI="menu:data?after=dataStart">
+               locationURI="menu:data?after=dataImport">
             <command
-                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.unified"
-                  label="Import all curves"
+                  commandId="EmptyImportCommand"
+                  label="Import:"
                   style="push">
             </command>
-            <command
-                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.basefuel"
-                  label="Import base fuel curves"
-                  style="push">
-            </command>
-            <command
-                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.commodity"
-                  label="Import commodity curves"
-                  style="push">
-            </command>
-            <command
-                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.currency"
-                  label="Import currency curves"
-                  style="push">
-            </command>
-            <command
-                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.charter"
-                  label="Import charter curves"
-                  style="push">
-            </command>
-            <command
-                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.portcosts"
-                  label="Import port costs"
-                  style="push">
-            </command>
-            <command
-                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.settledprices"
-                  label="Import settled prices"
-                  style="push">
- 				<visibleWhen
-                     checkEnabled="false">
-                  <test
-                        args="features:paperdeals"
-                        forcePluginActivation="true"
-                        property="com.mmxlabs.license.features.enablement">
-                  </test>
-               </visibleWhen>                  
-            </command>
-            <command
-                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.holidaycalendars"
-                  label="Import holiday calendars"
-                  style="push">
- 				<visibleWhen
-                     checkEnabled="false">
-                  <test
-                        args="features:paperdeals"
-                        forcePluginActivation="true"
-                        property="com.mmxlabs.license.features.enablement">
-                  </test>
-               </visibleWhen>                  
-            </command>
-            <command
-                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.pricingcalendars"
-                  label="Import pricing calendars"
-                  style="push">
- 				<visibleWhen
-                     checkEnabled="false">
-                  <test
-                        args="features:paperdeals"
-                        forcePluginActivation="true"
-                        property="com.mmxlabs.license.features.enablement">
-                  </test>
-               </visibleWhen>                  
-            </command>
+            <menu
+                  id="data_curves"
+                  label="Curves">
+            </menu>
             <command
                   commandId="com.mmxlabs.models.lng.scenario.import.wizards.paperdeals"
-                  label="Import paper deals"
+                  label="Paper deals"
                   style="push">
  				<visibleWhen
                      checkEnabled="false">
@@ -235,7 +192,7 @@
             </command>
             <command
                   commandId="com.mmxlabs.models.lng.scenario.import.wizards.nominations"
-                  label="Import nominations"
+                  label="Nominations"
                   style="push">
  				<visibleWhen
                      checkEnabled="false">
@@ -246,19 +203,41 @@
                   </test>
                </visibleWhen>  
             </command>
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.importWizards.BulkImportCargoHandler"
+                  label="Cargoes"
+                  style="push">
+            </command>
+            <menu
+                  id="data_ref"
+                  label="Other">
+            </menu>
+            <menu
+                  id="data_ref_mmx"
+                  label="LiNGO DB">
+            </menu>
+         </menuContribution>
+         <menuContribution
+               allPopups="false"
+               locationURI="menu:data?after=dataExport">
+            <command
+                  commandId="EmptyExportCommand"
+                  label="Export:"
+                  style="push">
+            </command>
+            <command
+                  commandId="com.mmxlabs.shiplingo.platform.models.optimisation.ExportAllCurves"
+                  label="Combined curves"
+                  style="push">                
+            </command>
          </menuContribution>
          <menuContribution
                allPopups="false"
                locationURI="menu:data?after=additions">
-            <command
-                  commandId="com.mmxlabs.models.lng.scenario.importWizards.BulkImportCargoHandler"
-                  label="Import cargoes"
-                  style="push">
-            </command>
             <!--
             <command
                   commandId="com.mmxlabs.models.lng.scenario.ui.import.inventory"
-                  label="Import inventory"
+                  label="Inventory"
                   style="push">
                <visibleWhen
                      checkEnabled="false">
@@ -270,6 +249,110 @@
                </visibleWhen>
             </command>
             !-->
+            <command
+                  commandId="EmptyCleanUpCommand"
+                  label="Clean-up:"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <test
+                        args="features:repair-delete-all-empty-cargoes"
+                        forcePluginActivation="true"
+                        property="com.mmxlabs.license.features.enablement">
+                  </test>
+               </visibleWhen>  
+            </command>
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.actions.RemoveEmptyCargoesHandler"
+                  label="Remove empty cargoes"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <test
+                        args="features:repair-delete-all-empty-cargoes"
+                        forcePluginActivation="true"
+                        property="com.mmxlabs.license.features.enablement">
+                  </test>
+               </visibleWhen>             
+            </command>
+         </menuContribution>
+         
+         <menuContribution
+               allPopups="false"
+               locationURI="menu:data_curves">
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.unified"
+                  label="Combined curves"
+                  style="push">
+            </command>
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.currency"
+                  label="Currency curves"
+                  style="push">
+            </command>
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.charter"
+                  label="Charter curves"
+                  style="push">
+            </command>
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.commodity"
+                  label="Commodity curves"
+                  style="push">
+            </command>
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.basefuel"
+                  label="Base fuel curves"
+                  style="push">
+            </command>
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.settledprices"
+                  label="Settled prices"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <test
+                        args="features:paperdeals"
+                        forcePluginActivation="true"
+                        property="com.mmxlabs.license.features.enablement">
+                  </test>
+               </visibleWhen>
+            </command>
+         </menuContribution>
+         <menuContribution
+               allPopups="false"
+               locationURI="menu:data_ref">
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.pricingcalendars"
+                  label="Pricing calendars"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <test
+                        args="features:paperdeals"
+                        forcePluginActivation="true"
+                        property="com.mmxlabs.license.features.enablement">
+                  </test>
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.holidaycalendars"
+                  label="Holiday calendars"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <test
+                        args="features:paperdeals"
+                        forcePluginActivation="true"
+                        property="com.mmxlabs.license.features.enablement">
+                  </test>
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.portcosts"
+                  label="Port costs"
+                  style="push">
+            </command>
          </menuContribution>
          <!--
           <menuContribution
@@ -277,14 +360,29 @@
                locationURI="menu:data?after=com.mmxlabs.models.lng.scenario.importWizards.BulkImportCargoHandler">
             <command
                   commandId="com.mmxlabs.models.lng.scenario.mergeWizards.SharedScenarioDataImport"
-                  label="Import Shared Scenario Data"
+                  label="Shared Scenario Data"
                   style="push">
             </command>
          </menuContribution>
          !-->
+         <menuContribution
+               allPopups="false"
+               locationURI="menu:window?after=windowCustomStart">
+            <command
+                  commandId="com.mmxlabs.lingo.reports.views.schedule.ConfigureCustomReportsHandler"
+                  label="Reports Manager..."
+                  style="push">
+            </command>
+         </menuContribution>
      </extension>
       <extension
             point="org.eclipse.ui.commands">
+            
+         <command
+               defaultHandler="com.mmxlabs.models.lng.scenario.actions.RemoveEmptyCargoesHandler"
+               id="com.mmxlabs.models.lng.scenario.actions.RemoveEmptyCargoesHandler"
+               name="Remove empty cargoes in scenario">
+         </command>
          <command
                defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.ImportCSVWizardHandler"
                id="com.mmxlabs.shiplingo.platform.models.optimisation.ImportCSVScenario"
@@ -294,6 +392,11 @@
                defaultHandler="com.mmxlabs.models.lng.scenario.exportWizards.ExportCSVWizardHandler"
                id="com.mmxlabs.shiplingo.platform.models.optimisation.ExportCSVScenario"
                name="Export Scenario as CSV">
+         </command>
+         <command
+               defaultHandler="com.mmxlabs.models.lng.scenario.exportWizards.ExportCSVWizardHandler"
+               id="com.mmxlabs.shiplingo.platform.models.optimisation.ExportAllCurves"
+               name="Export all curves as CSV">
          </command>
          <command
                defaultHandler="com.mmxlabs.models.lng.scenario.exportWizards.ExportLiNGOScenarioWizardHandler"
@@ -372,7 +475,7 @@
                  description="Update the start of the scenario by removing old data and freezing near-term data."
                  id="com.mmxlabs.models.lng.scenario.ui.rollforward"
                  name="Roll Forward">
-           </command>          
+           </command>
       </extension>
       <extension
             point="org.eclipse.ui.commandImages">

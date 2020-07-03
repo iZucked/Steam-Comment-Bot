@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.analytics.mtm;
@@ -15,24 +15,21 @@ import com.google.inject.Injector;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.transformer.ui.analytics.mtm.MTMSanboxUnit.SingleResult;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
+import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.scheduler.optimiser.Calculator;
-import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadOption;
-import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.impl.BreakEvenLoadPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.impl.BreakEvenSalesPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.evaluation.VoyagePlanRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
-import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.CargoValueAnnotation;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ICargoValueAnnotation;
 import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.schedule.ShippingCostHelper;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
@@ -46,19 +43,21 @@ public class MTMSandboxEvaluator {
 
 	@Inject
 	private EvaluationHelper evaluationHelper;
-	
+
+	@Inject
+	private IVesselProvider vesselProvider;
+
 	@Inject
 	private ShippingCostHelper shippingCostHelper;
 
-	public @Nullable SingleResult evaluate(final ISequences currentRawSequences, final IPortSlot target) {
+	public @Nullable SingleResult evaluate(IResource resource, final ISequences currentRawSequences, final IPortSlot target) {
 		final ISequencesManipulator manipulator = injector.getInstance(ISequencesManipulator.class);
-		
 
 		final @NonNull IModifiableSequences currentFullSequences = manipulator.createManipulatedSequences(currentRawSequences);
 		if (!evaluationHelper.checkConstraints(currentFullSequences, null)) {
 			return null;
 		}
-		final Pair<@NonNull VolumeAllocatedSequences, @NonNull IEvaluationState> p1 = evaluationHelper.evaluateSequences(currentRawSequences, currentFullSequences, true);
+		final Pair<@NonNull ProfitAndLossSequences, @NonNull IEvaluationState> p1 = evaluationHelper.evaluateSequences(currentRawSequences, currentFullSequences, true);
 
 		if (p1 == null) {
 			return null;
@@ -67,41 +66,43 @@ public class MTMSandboxEvaluator {
 		final ProfitAndLossSequences profitAndLossSequences = evaluationHelper.evaluateSequences(currentFullSequences, p1);
 
 		assert profitAndLossSequences != null;
-		
-		final VoyagePlan voyagePlan = p1.getFirst().getVoyagePlan(target);
-		assert voyagePlan != null;
-		final IVesselAvailability va = p1.getFirst().getVesselAvailability(target);
+
+		final IVesselAvailability va = vesselProvider.getVesselAvailability(resource);
 		assert va != null;
 
-		final VolumeAllocatedSequence scheduledSequence = profitAndLossSequences.getVolumeAllocatedSequences().getScheduledSequence(target);
-		final CargoValueAnnotation cargoValueAnnotation = profitAndLossSequences.getCargoValueAnnotation(scheduledSequence.getVoyagePlan(target));
-		final int arrivalTime = scheduledSequence.getArrivalTime(target);
+		final VolumeAllocatedSequence scheduledSequence = profitAndLossSequences.getScheduledSequenceForResource(resource);
+		VoyagePlanRecord vpr = scheduledSequence.getVoyagePlanRecord(target);
+		assert vpr != null;
+		final ICargoValueAnnotation cargoValueAnnotation = scheduledSequence.getVoyagePlanRecord(target).getCargoValueAnnotation();
+
+		final int arrivalTime = vpr.getPortTimesRecord().getSlotTime(target);
 		final long volumeInMMBTU = cargoValueAnnotation.getPhysicalSlotVolumeInMMBTu(target);
+		VoyagePlan voyagePlan = vpr.getVoyagePlan();
+		assert voyagePlan != null;
 		final long shippingCost = shippingCostHelper.getShippingCosts(voyagePlan, va, true);
 
-		
 		final int slotPricePerMMBTu = cargoValueAnnotation.getSlotPricePerMMBTu(target);
-		
+
 		final int shippingCostPerMMBTu = Calculator.getPerMMBTuFromTotalAndVolumeInMMBTu(shippingCost, volumeInMMBTU);
-		
-		//might want different volume for the shipping cost
+
+		// might want different volume for the shipping cost
 		if (target instanceof LoadOption) {
 			final int netbackPrice = slotPricePerMMBTu + shippingCostPerMMBTu;
-			
+
 			return saveResult(netbackPrice, arrivalTime, volumeInMMBTU, shippingCost);
 		}
 		if (target instanceof DischargeOption) {
 			final int netbackPrice = slotPricePerMMBTu - shippingCostPerMMBTu;
-			
+
 			return saveResult(netbackPrice, arrivalTime, volumeInMMBTU, shippingCost);
 		}
-		
+
 		if (cargoValueAnnotation != null) {
 			return saveResult(cargoValueAnnotation.getSlotPricePerMMBTu(target), arrivalTime, volumeInMMBTU, shippingCost);
 		}
 		return null;
 	}
-	
+
 	private SingleResult saveResult(final int price, final int arrivalTime, final long volumeInMMBTU, final long shippingCost) {
 		final SingleResult result = new SingleResult();
 		result.price = price;

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.extensions.redirection;
@@ -31,7 +31,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedCharterInRateCharterCostCalculator;
-import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
@@ -112,7 +112,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 
 	@Override
 	public int calculateFOBPricePerMMBTu(final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final int dischargePricePerMMBTu, final IAllocationAnnotation allocationAnnotation,
-			final IVesselAvailability vesselAvailability, final int vesselStartTime, final VoyagePlan originalPlan, @Nullable VolumeAllocatedSequences volumeAllocatedSequences,
+			final IVesselAvailability vesselAvailability, final int vesselStartTime, final VoyagePlan originalPlan, @Nullable ProfitAndLossSequences volumeAllocatedSequences,
 			final IDetailTree annotation) {
 
 		final int loadTime = allocationAnnotation.getSlotTime(loadSlot);
@@ -360,7 +360,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 
 	@Override
 	public int calculateDESPurchasePricePerMMBTu(final ILoadOption loadOption, final IDischargeSlot dischargeSlot, final int dischargePricePerMMBTu, final IAllocationAnnotation allocationAnnotation,
-			@Nullable VolumeAllocatedSequences volumeAllocatedSequences, final IDetailTree annotations) {
+			@Nullable ProfitAndLossSequences volumeAllocatedSequences, final IDetailTree annotations) {
 		final int transferTime = allocationAnnotation.getSlotTime(dischargeSlot);
 		final long transferVolumeInM3 = allocationAnnotation.getCommercialSlotVolumeInM3(dischargeSlot);
 		return calculateLoadPricePerMMBTu(loadOption, dischargeSlot, transferTime, dischargeSlot.getPort(), dischargePricePerMMBTu, transferVolumeInM3, annotations);
@@ -368,7 +368,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 
 	@Override
 	public int calculatePriceForFOBSalePerMMBTu(final ILoadSlot loadSlot, final IDischargeOption dischargeOption, final int dischargePricePerMMBTu, final IAllocationAnnotation allocationAnnotation,
-			@Nullable VolumeAllocatedSequences volumeAllocatedSequences, final IDetailTree annotations) {
+			@Nullable ProfitAndLossSequences volumeAllocatedSequences, final IDetailTree annotations) {
 		final int transferTime = allocationAnnotation.getSlotTime(loadSlot);
 		final long transferVolumeInM3 = allocationAnnotation.getCommercialSlotVolumeInM3(loadSlot);
 		return calculateLoadPricePerMMBTu(loadSlot, dischargeOption, transferTime, loadSlot.getPort(), dischargePricePerMMBTu, transferVolumeInM3, annotations);

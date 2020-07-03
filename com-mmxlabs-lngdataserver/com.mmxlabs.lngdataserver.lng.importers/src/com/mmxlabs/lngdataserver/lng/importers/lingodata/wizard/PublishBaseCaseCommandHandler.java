@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard;
@@ -19,16 +19,17 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+import com.mmxlabs.hub.DataHubServiceProvider;
+import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.BaseCaseServiceClient;
 import com.mmxlabs.lngdataserver.lng.importers.menus.ScenarioServicePublishAction;
-import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class PublishBaseCaseCommandHandler extends AbstractHandler {
 
 	@Override
 	public void setEnabled(final Object evaluationContext) {
-		setBaseEnabled(UpstreamUrlProvider.INSTANCE.isAvailable() && BaseCaseServiceClient.INSTANCE.canPublish());
+		setBaseEnabled(DataHubServiceProvider.getInstance().isOnlineAndLoggedIn() && BaseCaseServiceClient.INSTANCE.canPublish());
 	}
 
 	@Override

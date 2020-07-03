@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.ui.views;
@@ -32,6 +32,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
@@ -70,6 +71,13 @@ public class CreateSandboxHandler extends AbstractHandler {
 						}
 
 						final @NonNull AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel((LNGScenarioModel) rootObject);
+
+						ADPModel adpModel = ScenarioModelUtil.getADPModel((LNGScenarioModel) rootObject);
+						if (adpModel != null) {
+							MessageDialog.openError(HandlerUtil.getActiveWorkbenchWindow(event).getShell(), "Unable to evaluate", "Sandbox scenarios cannot be used with ADP scenarios");
+							// Cannot use sandbox with ADP
+							continue;
+						}
 
 						final EditingDomain domain = reference.getEditingDomain();
 						final Display display = PlatformUI.getWorkbench().getDisplay();

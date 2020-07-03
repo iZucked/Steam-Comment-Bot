@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.contracts.impl;
@@ -33,7 +33,7 @@ import com.mmxlabs.scheduler.optimiser.curves.IIntegerIntervalCurve;
 import com.mmxlabs.scheduler.optimiser.curves.IPriceIntervalProducer;
 import com.mmxlabs.scheduler.optimiser.curves.IntegerIntervalCurve;
 import com.mmxlabs.scheduler.optimiser.curves.PriceIntervalProducer;
-import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
@@ -125,7 +125,7 @@ public class TestPriceExpressionContract {
 		final int vesselStartTime = 0;
 		final IVesselAvailability vesselAvailability = mock(IVesselAvailability.class);
 		final VoyagePlan plan = new VoyagePlan();
-		final VolumeAllocatedSequences volumeAllocatedSequences = Mockito.mock(VolumeAllocatedSequences.class);
+		final ProfitAndLossSequences volumeAllocatedSequences = Mockito.mock(ProfitAndLossSequences.class);
 
 		final IDetailTree annotations = mock(IDetailTree.class);
 

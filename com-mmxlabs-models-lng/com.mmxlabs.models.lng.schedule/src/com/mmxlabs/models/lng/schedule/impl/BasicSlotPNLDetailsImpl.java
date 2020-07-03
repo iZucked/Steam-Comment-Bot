@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 /**
@@ -24,7 +24,6 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.BasicSlotPNLDetailsImpl#getExtraShippingPNL <em>Extra Shipping PNL</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.BasicSlotPNLDetailsImpl#getAdditionalPNL <em>Additional PNL</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.BasicSlotPNLDetailsImpl#getCancellationFees <em>Cancellation Fees</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.BasicSlotPNLDetailsImpl#getHedgingValue <em>Hedging Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.BasicSlotPNLDetailsImpl#getMiscCostsValue <em>Misc Costs Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.BasicSlotPNLDetailsImpl#getExtraUpsidePNL <em>Extra Upside PNL</em>}</li>
  * </ul>
@@ -100,35 +99,6 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 	 * @ordered
 	 */
 	protected boolean cancellationFeesESet;
-
-	/**
-	 * The default value of the '{@link #getHedgingValue() <em>Hedging Value</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getHedgingValue()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int HEDGING_VALUE_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getHedgingValue() <em>Hedging Value</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getHedgingValue()
-	 * @generated
-	 * @ordered
-	 */
-	protected int hedgingValue = HEDGING_VALUE_EDEFAULT;
-
-	/**
-	 * This is true if the Hedging Value attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean hedgingValueESet;
 
 	/**
 	 * The default value of the '{@link #getMiscCostsValue() <em>Misc Costs Value</em>}' attribute.
@@ -300,56 +270,6 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 	 * @generated
 	 */
 	@Override
-	public int getHedgingValue() {
-		return hedgingValue;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setHedgingValue(int newHedgingValue) {
-		int oldHedgingValue = hedgingValue;
-		hedgingValue = newHedgingValue;
-		boolean oldHedgingValueESet = hedgingValueESet;
-		hedgingValueESet = true;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.BASIC_SLOT_PNL_DETAILS__HEDGING_VALUE, oldHedgingValue, hedgingValue, !oldHedgingValueESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void unsetHedgingValue() {
-		int oldHedgingValue = hedgingValue;
-		boolean oldHedgingValueESet = hedgingValueESet;
-		hedgingValue = HEDGING_VALUE_EDEFAULT;
-		hedgingValueESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, SchedulePackage.BASIC_SLOT_PNL_DETAILS__HEDGING_VALUE, oldHedgingValue, HEDGING_VALUE_EDEFAULT, oldHedgingValueESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isSetHedgingValue() {
-		return hedgingValueESet;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public int getMiscCostsValue() {
 		return miscCostsValue;
 	}
@@ -431,8 +351,6 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 				return getAdditionalPNL();
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__CANCELLATION_FEES:
 				return getCancellationFees();
-			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__HEDGING_VALUE:
-				return getHedgingValue();
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__MISC_COSTS_VALUE:
 				return getMiscCostsValue();
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__EXTRA_UPSIDE_PNL:
@@ -457,9 +375,6 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 				return;
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__CANCELLATION_FEES:
 				setCancellationFees((Integer)newValue);
-				return;
-			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__HEDGING_VALUE:
-				setHedgingValue((Integer)newValue);
 				return;
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__MISC_COSTS_VALUE:
 				setMiscCostsValue((Integer)newValue);
@@ -488,9 +403,6 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__CANCELLATION_FEES:
 				unsetCancellationFees();
 				return;
-			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__HEDGING_VALUE:
-				unsetHedgingValue();
-				return;
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__MISC_COSTS_VALUE:
 				unsetMiscCostsValue();
 				return;
@@ -515,8 +427,6 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 				return additionalPNL != ADDITIONAL_PNL_EDEFAULT;
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__CANCELLATION_FEES:
 				return isSetCancellationFees();
-			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__HEDGING_VALUE:
-				return isSetHedgingValue();
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__MISC_COSTS_VALUE:
 				return isSetMiscCostsValue();
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__EXTRA_UPSIDE_PNL:
@@ -541,8 +451,6 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 		result.append(additionalPNL);
 		result.append(", cancellationFees: ");
 		if (cancellationFeesESet) result.append(cancellationFees); else result.append("<unset>");
-		result.append(", hedgingValue: ");
-		if (hedgingValueESet) result.append(hedgingValue); else result.append("<unset>");
 		result.append(", miscCostsValue: ");
 		if (miscCostsValueESet) result.append(miscCostsValue); else result.append("<unset>");
 		result.append(", extraUpsidePNL: ");

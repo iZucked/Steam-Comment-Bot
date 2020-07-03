@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.changeset;
@@ -35,7 +35,8 @@ public class ChangeSetKPIUtil {
 	}
 
 	public enum FlexType {
-		WithoutFlex, WithFlex
+		TotalIfFlexInsufficient, 
+		TotalIfWithinFlex
 	}
 
 	public static long getPNL(@Nullable final ChangeSetTableRow tableRow, @NonNull final ResultType type) {
@@ -194,7 +195,6 @@ public class ChangeSetKPIUtil {
 	public static long getCargoOtherPNL(@NonNull final ChangeSetTableRow tableRow, @NonNull final ResultType type) {
 
 		return getRowProfitAndLossValue(tableRow, type, ScheduleModelKPIUtils::getAdditionalProfitAndLoss) //
-				+ getRowProfitAndLossValue(tableRow, type, ScheduleModelKPIUtils::getHedgeValue) //
 				+ getRowProfitAndLossValue(tableRow, type, ScheduleModelKPIUtils::getMiscCostsValue) //
 				- getRowProfitAndLossValue(tableRow, type, ScheduleModelKPIUtils::getCancellationFees);
 	}
@@ -202,15 +202,79 @@ public class ChangeSetKPIUtil {
 	public static long getTax(@NonNull final ChangeSetTableRow tableRow, @NonNull final ResultType type) {
 		return getRowProfitAndLossValue(tableRow, type, ScheduleModelKPIUtils::getGroupProfitAndLoss) - getRowProfitAndLossValue(tableRow, type, ScheduleModelKPIUtils::getGroupPreTaxProfitAndLoss);
 	}
+	
+	public static long getFlexAvailableInHours(@NonNull final ChangeSetTableRow tableRow, @NonNull final ResultType type, @NonNull final String slotName) {
 
+		final EventGrouping eventGrouping = getEventGrouping(tableRow, type);
+		long result = 0;
+		
+		if (eventGrouping != null) {
+			result = LatenessUtils.getEventGroupingFlexInHours(eventGrouping, slotName);
+		}
+		
+		return result;	
+	}	
+	
+	public static long getLatenessInHours(@NonNull final ChangeSetTableRow tableRow, @NonNull final ResultType type, @NonNull final String slotName) {
+
+		final EventGrouping eventGrouping = getEventGrouping(tableRow, type);
+		long result = 0;
+		
+		if (eventGrouping != null) {
+			result = LatenessUtils.getEventGroupingLatenessInHours(eventGrouping, slotName);
+		}
+		
+		switch (type) {
+		case After:
+			if (tableRow.getLhsAfter() != null && slotName.equals(tableRow.getLhsName())) {
+				if (tableRow.getLhsAfter().getLhsGroupProfitAndLoss() instanceof OtherPNL) {
+					OtherPNL otherPNL = (OtherPNL) tableRow.getLhsAfter().getLhsGroupProfitAndLoss();
+					result += LatenessUtils.getLatenessInHours(otherPNL);
+				}
+			}
+			if (tableRow.getRhsAfter() != null && slotName.equals(tableRow.getRhsName())) {
+				if (tableRow.getRhsAfter().getLhsGroupProfitAndLoss() instanceof OtherPNL) {
+					OtherPNL otherPNL = (OtherPNL) tableRow.getRhsAfter().getRhsGroupProfitAndLoss();
+					result += LatenessUtils.getLatenessInHours(otherPNL);
+				}
+			}
+			break;
+		case Before:
+			if (tableRow.getLhsBefore() != null && slotName.equals(tableRow.getLhsName())) {
+				if (tableRow.getLhsBefore().getLhsGroupProfitAndLoss() instanceof OtherPNL) {
+					OtherPNL otherPNL = (OtherPNL) tableRow.getLhsBefore().getLhsGroupProfitAndLoss();
+					result += LatenessUtils.getLatenessInHours(otherPNL);
+				}
+			}
+			if (tableRow.getRhsBefore() != null && slotName.equals(tableRow.getRhsName())) {
+				if (tableRow.getRhsBefore().getRhsGroupProfitAndLoss() instanceof OtherPNL) {
+					OtherPNL otherPNL = (OtherPNL) tableRow.getRhsBefore().getRhsGroupProfitAndLoss();
+					result += LatenessUtils.getLatenessInHours(otherPNL);
+				}
+			}
+			break;
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * Get the lateness with and without flex 
+	 * e.g. 1 day window, 5 days flex, 3 days late, WithFlex = 3 days, withoutflex = 0.
+	 * If 6 days late, then WithFlex = Undefined as optimiser doesn't care, WithoutFlex = 6 days
+	 * 
+	 * @param tableRow
+	 * @param type
+	 * @return
+	 */
 	public static long[] getLateness(@NonNull final ChangeSetTableRow tableRow, @NonNull final ResultType type) {
 
 		final EventGrouping eventGrouping = getEventGrouping(tableRow, type);
 
 		final long[] result = new long[FlexType.values().length];
 		if (eventGrouping != null) {
-			result[FlexType.WithFlex.ordinal()] = LatenessUtils.getLatenessAfterFlex(eventGrouping);
-			result[FlexType.WithoutFlex.ordinal()] = LatenessUtils.getLatenessExcludingFlex(eventGrouping);
+			result[FlexType.TotalIfWithinFlex.ordinal()] = LatenessUtils.getLatenessAfterFlex(eventGrouping);
+			result[FlexType.TotalIfFlexInsufficient.ordinal()] = LatenessUtils.getLatenessExcludingFlex(eventGrouping);
 		}
 		
 		switch (type) {
@@ -218,8 +282,8 @@ public class ChangeSetKPIUtil {
 			if (tableRow.getLhsAfter() != null) {
 				if (tableRow.getLhsAfter().getLhsGroupProfitAndLoss() instanceof OtherPNL) {
 					OtherPNL otherPNL = (OtherPNL) tableRow.getLhsAfter().getLhsGroupProfitAndLoss();
-					result[FlexType.WithoutFlex.ordinal()] += LatenessUtils.getLatenessExcludingFlex(otherPNL);
-					result[FlexType.WithFlex.ordinal()] += LatenessUtils.getLatenessExcludingFlex(otherPNL);
+					result[FlexType.TotalIfFlexInsufficient.ordinal()] += LatenessUtils.getLatenessExcludingFlex(otherPNL);
+					result[FlexType.TotalIfWithinFlex.ordinal()] += LatenessUtils.getLatenessExcludingFlex(otherPNL);
 				}
 			}
 			break;
@@ -227,8 +291,8 @@ public class ChangeSetKPIUtil {
 			if (tableRow.getLhsBefore() != null) {
 				if (tableRow.getLhsBefore().getLhsGroupProfitAndLoss() instanceof OtherPNL) {
 					OtherPNL otherPNL = (OtherPNL) tableRow.getLhsBefore().getLhsGroupProfitAndLoss();
-					result[FlexType.WithoutFlex.ordinal()] += LatenessUtils.getLatenessExcludingFlex(otherPNL);
-					result[FlexType.WithFlex.ordinal()] += LatenessUtils.getLatenessExcludingFlex(otherPNL);
+					result[FlexType.TotalIfFlexInsufficient.ordinal()] += LatenessUtils.getLatenessExcludingFlex(otherPNL);
+					result[FlexType.TotalIfWithinFlex.ordinal()] += LatenessUtils.getLatenessExcludingFlex(otherPNL);
 				}
 			}
 			break;

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lngdataserver.integration.vessels.model;
@@ -8,6 +8,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.OptionalDouble;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+@JsonInclude(Include.NON_EMPTY)
 public class VesselTravelAttributes {
 
 	private OptionalDouble nboRate = OptionalDouble.empty();
@@ -40,11 +44,11 @@ public class VesselTravelAttributes {
 		this.idleBaseRate = idleBaseRate;
 	}
 
-	public OptionalDouble getServiceSped() {
+	public OptionalDouble getServiceSpeed() {
 		return serviceSpeed;
 	}
 
-	public void setServiceSped(OptionalDouble serviceSped) {
+	public void setServiceSpeed(OptionalDouble serviceSped) {
 		this.serviceSpeed = serviceSped;
 	}
 

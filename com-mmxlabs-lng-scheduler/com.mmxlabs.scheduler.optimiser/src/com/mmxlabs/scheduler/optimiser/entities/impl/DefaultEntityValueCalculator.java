@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.entities.impl;
@@ -14,7 +14,7 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.collect.Lists;
@@ -30,7 +30,6 @@ import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossAnnotation;
 import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossEntry;
 import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossSlotDetailsAnnotation;
 import com.mmxlabs.scheduler.optimiser.annotations.impl.CancellationAnnotation;
-import com.mmxlabs.scheduler.optimiser.annotations.impl.HedgingAnnotation;
 import com.mmxlabs.scheduler.optimiser.annotations.impl.MiscCostsAnnotation;
 import com.mmxlabs.scheduler.optimiser.annotations.impl.ProfitAndLossAnnotation;
 import com.mmxlabs.scheduler.optimiser.annotations.impl.ProfitAndLossEntry;
@@ -46,6 +45,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IMarkToMarketOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
@@ -53,22 +53,22 @@ import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.impl.Repositioning
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityBook;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
-import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences.HeelValueRecord;
-import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
-import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
+import com.mmxlabs.scheduler.optimiser.evaluation.HeelValueRecord;
+import com.mmxlabs.scheduler.optimiser.evaluation.VoyagePlanRecord.SlotHeelVolumeRecord;
+import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.CargoValueAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ICargoValueAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ICancellationFeeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IEntityProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IHedgesProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IMiscCostsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.schedule.ShippingCostHelper;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
@@ -81,9 +81,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * 
  * @author proshun
  */
+@NonNullByDefault
 public class DefaultEntityValueCalculator implements IEntityValueCalculator {
-
-	protected static final boolean includeTimeCharterInFitness = true;
 
 	@Inject
 	private ITimeZoneToUtcOffsetProvider timeZoneToUtcOffsetProvider;
@@ -96,9 +95,6 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 	@Inject
 	private ShippingCostHelper shippingCostHelper;
-
-	@Inject
-	private IHedgesProvider hedgesProvider;
 
 	@Inject
 	private IMiscCostsProvider miscCostsProvider;
@@ -120,15 +116,15 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 * @return
 	 */
 	@Override
-	public Pair<@NonNull CargoValueAnnotation, @NonNull Long> evaluate(@NonNull final EvaluationMode evaluationMode, @NonNull final VoyagePlan plan,
-			@NonNull final IAllocationAnnotation currentAllocation, @NonNull final IVesselAvailability vesselAvailability, final int vesselStartTime,
-			@Nullable final VolumeAllocatedSequences volumeAllocatedSequences, @Nullable final IAnnotatedSolution annotatedSolution) {
+	public Pair<CargoValueAnnotation, Long> evaluate(final VoyagePlan plan, final IAllocationAnnotation currentAllocation, final IVesselAvailability vesselAvailability, final int vesselStartTime,
+			@Nullable final ProfitAndLossSequences volumeAllocatedSequences, @Nullable final IAnnotatedSolution annotatedSolution) {
 
 		final CargoValueAnnotation cargoPNLData = new CargoValueAnnotation(currentAllocation);
 
 		final List<IPortSlot> slots = cargoPNLData.getSlots();
 
-		// final CargoValueAnnotation cargoPNLData = new CargoValueAnnotation(currentAllocation);
+		// final CargoValueAnnotation cargoPNLData = new
+		// CargoValueAnnotation(currentAllocation);
 		// Note: Solution Export branch - should called infrequently
 
 		// Find elements to attach export data to.
@@ -150,7 +146,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 		// Calculate sales/discharge prices
 		int idx = 0;
-		// Tax time is assumed to by the UTC equivalent of the last discharge time. This may not always be a valid assumption...
+		// Tax time is assumed to by the UTC equivalent of the last discharge time. This
+		// may not always be a valid assumption...
 		int utcEquivTaxTime = 0;
 		final int[] slotPricesPerMMBTu = new int[slots.size()];
 
@@ -168,14 +165,15 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				final IDetailTree portSlotDetails = portSlotDetailTreeMap == null ? null : getPortSlotDetails(portSlotDetailTreeMap, slot);
 
 				final IDischargeOption dischargeOption = (IDischargeOption) slot;
-				final int slotPricePerMMBtu = dischargeOption.getDischargePriceCalculator().calculateSalesUnitPrice(dischargeOption, cargoPNLData, portSlotDetails);
+
+				final int slotPricePerMMBtu = dischargeOption.getDischargePriceCalculator().calculateSalesUnitPrice(vesselAvailability, dischargeOption, cargoPNLData, portSlotDetails);
 				cargoPNLData.setSlotPricePerMMBTu(slot, slotPricePerMMBtu);
+
 				final long slotValue = Calculator.costFromConsumption(cargoPNLData.getCommercialSlotVolumeInMMBTu(slot), slotPricePerMMBtu);
 				cargoPNLData.setSlotValue(slot, slotValue);
 				slotPricesPerMMBTu[idx] = slotPricePerMMBtu;
-
 			}
-			// Last discharge is tax time;
+
 			// Translate into UTC curve
 			utcEquivTaxTime = utcOffsetProvider.UTC(cargoPNLData.getSlotTime(slot), slot.getPort());
 
@@ -252,7 +250,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 		// Calculate transfer pricing etc between entities
 		final Map<IEntityBook, Long> entityPreTaxProfit = new HashMap<>();
-		evaluateCargoPNL(evaluationMode, vesselAvailability, plan, cargoPNLData, entityPreTaxProfit, annotatedSolution, entityBookDetailTreeMap);
+		evaluateCargoPNL(vesselAvailability, plan, cargoPNLData, entityPreTaxProfit, annotatedSolution, entityBookDetailTreeMap);
 
 		// The first load entity
 		IEntity baseEntity = null;
@@ -266,7 +264,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 		assert baseEntity != null;
 
-		// Shipping Entity for non-cargo costings - handle any transfer pricing etc required
+		// Shipping Entity for non-cargo costings - handle any transfer pricing etc
+		// required
 		IEntity shippingEntity = entityProvider.getEntityForVesselAvailability(vesselAvailability);
 		if (shippingEntity == null) {
 			shippingEntity = baseEntity;
@@ -276,8 +275,10 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		assert baseEntity != null;
 		assert shippingEntity != null;
 		{
-			calculateCargoShippingEntityCosts(evaluationMode, entityPreTaxProfit, vesselAvailability, plan, cargoPNLData, baseEntity, shippingEntity, entityBookDetailTreeMap);
+			calculateCargoShippingEntityCosts(entityPreTaxProfit, vesselAvailability, plan, cargoPNLData, baseEntity, shippingEntity, entityBookDetailTreeMap);
 		}
+
+		calculateExtraPreTaxItems(entityPreTaxProfit, vesselAvailability, plan, cargoPNLData, baseEntity, shippingEntity, entityBookDetailTreeMap);
 
 		// Taxed P&L
 		final Map<IEntityBook, Long> entityPostTaxProfit = new HashMap<>();
@@ -286,7 +287,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		}
 
 		// Hook for client specific post tax stuff
-		calculatePostTaxItems(evaluationMode, vesselAvailability, plan, cargoPNLData, entityPostTaxProfit, entityBookDetailTreeMap);
+		calculatePostTaxItems(vesselAvailability, plan, cargoPNLData, entityPostTaxProfit, entityBookDetailTreeMap);
 
 		// Calculate the value for the fitness function
 		processProfitAndLossBooks(true, entityPreTaxProfit, entityPostTaxProfit);
@@ -305,10 +306,10 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			{
 				final List<IProfitAndLossEntry> entries = new LinkedList<>();
 				for (final IEntity entity : seenEntities) {
-					boolean thirdparty = entity.isThirdparty();
+					final boolean thirdparty = entity.isThirdparty();
 
-					List<IEntityBook> books = Lists.newArrayList(entity.getShippingBook(), entity.getTradingBook(), entity.getUpstreamBook());
-					for (IEntityBook book : books) {
+					final List<IEntityBook> books = Lists.newArrayList(entity.getShippingBook(), entity.getTradingBook(), entity.getUpstreamBook());
+					for (final IEntityBook book : books) {
 						final Long postTaxProfit = entityPostTaxProfit.get(book);
 						final Long preTaxProfit = entityPreTaxProfit.get(book);
 						final IDetailTree entityDetails = entityBookDetailTreeMap.get(book);
@@ -324,6 +325,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 						}
 					}
 				}
+
 				final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(entries);
 				annotatedSolution.getElementAnnotations().setAnnotation(exportElement, SchedulerConstants.AI_profitAndLoss, annotation);
 			}
@@ -336,7 +338,14 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			}
 		}
 
+		cargoPNLData.setTotalProfitAndLoss(result);
 		return new Pair<>(cargoPNLData, result);
+	}
+
+	protected void calculateExtraPreTaxItems(Map<IEntityBook, Long> entityPreTaxProfit, IVesselAvailability vesselAvailability, VoyagePlan plan, CargoValueAnnotation cargoPNLData, IEntity baseEntity,
+			IEntity shippingEntity, @Nullable Map<IEntityBook, IDetailTree> entityBookDetailTreeMap) {
+		// Do nothing by default
+
 	}
 
 	/**
@@ -346,7 +355,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 * @param entityPostTaxProfit
 	 */
 
-	protected void processProfitAndLossBooks(boolean isCargo, @NonNull final Map<IEntityBook, Long> entityPreTaxProfit, @NonNull final Map<IEntityBook, Long> entityPostTaxProfit) {
+	protected void processProfitAndLossBooks(final boolean isCargo, final Map<IEntityBook, Long> entityPreTaxProfit, final Map<IEntityBook, Long> entityPostTaxProfit) {
 		// Do nothing by default.
 	}
 
@@ -357,9 +366,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 * @param baseEntity
 	 * @param entityProfit
 	 */
-	protected void evaluateCargoPNL(@NonNull final EvaluationMode evaluationMode, @NonNull IVesselAvailability vesselAvailability, final @NonNull VoyagePlan plan,
-			@NonNull final CargoValueAnnotation cargoPNLData, @NonNull final Map<IEntityBook, Long> entityPreTaxProfit, @Nullable final IAnnotatedSolution annotatedSolution,
-			@Nullable final Map<IEntityBook, IDetailTree> entityBookDetailTreeMap) {
+	protected void evaluateCargoPNL(final IVesselAvailability vesselAvailability, final VoyagePlan plan, final CargoValueAnnotation cargoPNLData, final Map<IEntityBook, Long> entityPreTaxProfit,
+			@Nullable final IAnnotatedSolution annotatedSolution, @Nullable final Map<IEntityBook, IDetailTree> entityBookDetailTreeMap) {
 
 		IEntity baseEntity = null;
 
@@ -371,13 +379,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				baseEntity = entity;
 			}
 
-			final long hedgeValue = hedgesProvider.getHedgeValue(slot);
 			final long miscCostsValue = miscCostsProvider.getCostsValue(slot);
-			addEntityBookProfit(entityPreTaxProfit, entity.getTradingBook(), hedgeValue);
 			addEntityBookProfit(entityPreTaxProfit, entity.getTradingBook(), miscCostsValue);
-			if (hedgeValue != 0 && annotatedSolution != null) {
-				annotatedSolution.getElementAnnotations().setAnnotation(slotProvider.getElement(slot), SchedulerConstants.AI_hedgingValue, new HedgingAnnotation(hedgeValue));
-			}
 			if (miscCostsValue != 0 && annotatedSolution != null) {
 				annotatedSolution.getElementAnnotations().setAnnotation(slotProvider.getElement(slot), SchedulerConstants.AI_miscCostsValue, new MiscCostsAnnotation(miscCostsValue));
 			}
@@ -411,9 +414,9 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 * @return
 	 */
 	@Override
-	public Pair<Map<IPortSlot, HeelValueRecord>, @NonNull Long> evaluateNonCargoPlan(@NonNull final EvaluationMode evaluationMode, final VoyagePlan plan, final IPortTimesRecord portTimesRecord,
-			final IVesselAvailability vesselAvailability, final int planStartTime, final int vesselStartTime, @Nullable final VolumeAllocatedSequences volumeAllocatedSequences,
-			int lastHeelPricePerMMBTU, @Nullable final IAnnotatedSolution annotatedSolution) {
+	public Pair<Map<IPortSlot, HeelValueRecord>, Long> evaluateNonCargoPlan(final VoyagePlan plan, final IPortTimesRecord portTimesRecord, final IVesselAvailability vesselAvailability,
+			final int planStartTime, final int vesselStartTime, @Nullable final ProfitAndLossSequences volumeAllocatedSequences, final int lastHeelPricePerMMBTU,
+			final Map<IPortSlot, SlotHeelVolumeRecord> heelRecords, @Nullable final IAnnotatedSolution annotatedSolution) {
 		final IEntity shippingEntity = entityProvider.getEntityForVesselAvailability(vesselAvailability);
 		if (shippingEntity == null) {
 			// May be null during unit tests
@@ -432,13 +435,13 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		final Map<IEntityBook, Long> entityPreTaxProfit = new HashMap<>();
 		final Map<IEntityBook, Long> entityPostTaxProfit = new HashMap<>();
 
-		Map<IPortSlot, HeelValueRecord> heelMap = new HashMap<>();
+		final Map<IPortSlot, HeelValueRecord> heelMap = new HashMap<>();
 		{
 
 			final PortDetails firstPortDetails = (PortDetails) plan.getSequence()[0];
 			final IPortSlot firstPortSlot = firstPortDetails.getOptions().getPortSlot();
 			isGeneratedCharterOutPlan = firstPortSlot.getPortType() == PortType.GeneratedCharterOut;
-			final long shippingCost = shippingCostHelper.getShippingCosts(plan, vesselAvailability, includeTimeCharterInFitness);
+			final long shippingCost = shippingCostHelper.getShippingCosts(plan, vesselAvailability, true);
 			if (firstPortSlot.getPortType() == PortType.CharterOut || isGeneratedCharterOutPlan) {
 				final ICharterOutVesselEventPortSlot vesselEventPortSlot = (ICharterOutVesselEventPortSlot) firstPortSlot;
 				revenue = vesselEventPortSlot.getVesselEvent().getHireOutRevenue() //
@@ -466,17 +469,17 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				}
 			}
 
-			long[] heel = computeHeelValue(volumeAllocatedSequences, portTimesRecord, heelMap, lastHeelPricePerMMBTU);
-			long heelCost = heel[0];
-			long heelRevenue = heel[1];
+			final long[] heel = computeHeelValue(plan, heelRecords, portTimesRecord, heelMap, lastHeelPricePerMMBTU);
+			final long heelCost = heel[0];
+			final long heelRevenue = heel[1];
 
 			// Calculate the value for the fitness function
-			boolean thirdparty = shippingEntity.isThirdparty();
+			final boolean thirdparty = shippingEntity.isThirdparty();
 			if (!thirdparty) {
 				final IEntityBook shippingBook = shippingEntity.getShippingBook();
 				final int utcEquivTaxTime = utcOffsetProvider.UTC(planStartTime, firstPortDetails.getOptions().getPortSlot().getPort());
-				long preTaxValue = revenue + heelRevenue - shippingCost - additionalCost - heelCost;
-				long postTaxValue = shippingBook.getTaxedProfit(preTaxValue, utcEquivTaxTime);
+				final long preTaxValue = revenue + heelRevenue - shippingCost - additionalCost - heelCost;
+				final long postTaxValue = shippingBook.getTaxedProfit(preTaxValue, utcEquivTaxTime);
 				entityPreTaxProfit.put(shippingBook, preTaxValue);
 				entityPostTaxProfit.put(shippingBook, postTaxValue);
 			}
@@ -497,26 +500,27 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 		// Solution Export branch - should called infrequently
 		if (annotatedSolution != null) {
-
+			assert shippingDetails != null;
 			final IPortSlot firstSlot = ((PortDetails) plan.getSequence()[0]).getOptions().getPortSlot();
 			final ISequenceElement exportElement = slotProvider.getElement(firstSlot);
 
-			// We include LNG costs here, but this may not be desirable - this depends on whether or not we consider the LNG a sunk cost...
+			// We include LNG costs here, but this may not be desirable - this depends on
+			// whether or not we consider the LNG a sunk cost...
 			// Cost is zero as shipping cost is recalculated to obtain annotation
 
-			generateShippingAnnotations(evaluationMode, plan, vesselAvailability, vesselStartTime, annotatedSolution, shippingDetails, shippingEntity, preTaxValue, postTaxValue, planStartTime,
-					exportElement, true);
+			generateShippingAnnotations(plan, vesselAvailability, vesselStartTime, annotatedSolution, shippingDetails, shippingEntity, preTaxValue, postTaxValue, planStartTime, exportElement, true);
 
 		}
 
 		return Pair.of(heelMap, postTaxValue);
 	}
 
-	protected void generateShippingAnnotations(@NonNull final EvaluationMode evaluationMode, final VoyagePlan plan, final IVesselAvailability vesselAvailability, final int vesselStartTime,
-			final IAnnotatedSolution annotatedSolution, IDetailTree shippingDetails, final IEntity shippingEntity, final long preTaxValue, long postTaxValue, final int utcEquivTaxTime,
-			final ISequenceElement exportElement, final boolean includeLNG) {
+	protected void generateShippingAnnotations(final VoyagePlan plan, final IVesselAvailability vesselAvailability, final int vesselStartTime, final IAnnotatedSolution annotatedSolution,
+			final IDetailTree shippingDetails, final IEntity shippingEntity, final long preTaxValue, final long postTaxValue, final int utcEquivTaxTime, final ISequenceElement exportElement,
+			final boolean includeLNG) {
 		{
-			// final long shippingCosts = shippingCostHelper.getShippingCosts(plan, vesselAvailability, true);
+			// final long shippingCosts = shippingCostHelper.getShippingCosts(plan,
+			// vesselAvailability, true);
 			final long shippingTotalPretaxProfit = preTaxValue;
 			final long shippingProfit = shippingEntity.getShippingBook().getTaxedProfit(shippingTotalPretaxProfit, utcEquivTaxTime);
 
@@ -526,7 +530,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		}
 	}
 
-	protected void addEntityBookProfit(@NonNull final Map<IEntityBook, Long> entityBookProfit, @NonNull final IEntityBook entityBook, final long profit) {
+	protected void addEntityBookProfit(final Map<IEntityBook, Long> entityBookProfit, final IEntityBook entityBook, final long profit) {
 		assert entityBook != null;
 		long totalProfit = profit;
 		if (entityBookProfit.containsKey(entityBook)) {
@@ -569,9 +573,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 * @param includeLNG
 	 */
 
-	protected void calculateCargoShippingEntityCosts(@NonNull final EvaluationMode evaluationMode, @NonNull final Map<IEntityBook, Long> entityPreTaxProfit,
-			@NonNull final IVesselAvailability vesselAvailability, @NonNull final VoyagePlan plan, @NonNull final ICargoValueAnnotation cargoPNLData, @NonNull final IEntity tradingEntity,
-			@NonNull final IEntity shippingEntity, @Nullable final Map<IEntityBook, IDetailTree> entityDetailsMap) {
+	protected void calculateCargoShippingEntityCosts(final Map<IEntityBook, Long> entityPreTaxProfit, final IVesselAvailability vesselAvailability, final VoyagePlan plan,
+			final ICargoValueAnnotation cargoPNLData, final IEntity tradingEntity, final IEntity shippingEntity, @Nullable final Map<IEntityBook, IDetailTree> entityDetailsMap) {
 
 		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 			return;
@@ -609,26 +612,24 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 * @param entityDetailTreeMap
 	 * @return
 	 */
-	protected long calculatePostTaxItems(@NonNull final EvaluationMode evaluationMode, @NonNull final IVesselAvailability vesselAvailability, @NonNull final VoyagePlan plan,
-			@NonNull final ICargoValueAnnotation cargoPNLData, @NonNull final Map<IEntityBook, Long> entityPostTaxProfit, @Nullable final Map<IEntityBook, IDetailTree> entityDetailTreeMap) {
+	protected long calculatePostTaxItems(final IVesselAvailability vesselAvailability, final VoyagePlan plan, final ICargoValueAnnotation cargoPNLData,
+			final Map<IEntityBook, Long> entityPostTaxProfit, @Nullable final Map<IEntityBook, IDetailTree> entityDetailTreeMap) {
 		return 0;
 	}
 
 	@Override
-	public long evaluateUnusedSlot(@NonNull final EvaluationMode evaluationMode, @NonNull final IPortSlot portSlot, @Nullable final VolumeAllocatedSequences volumeAllocatedSequences,
-			@Nullable final IAnnotatedSolution annotatedSolution) {
+	public long evaluateUnusedSlot(final IPortSlot portSlot, @Nullable final IAnnotatedSolution annotatedSolution) {
 
 		final IEntity entity = entityProvider.getEntityForSlot(portSlot);
 
 		long result = 0;
 		{
-			final long hedgeValue = hedgesProvider.getHedgeValue(portSlot);
 			final ILongCurve cancellationCurve = cancellationFeeProvider.getCancellationExpression(portSlot);
 			final int pricingTime = timeZoneToUtcOffsetProvider.UTC(portSlot.getTimeWindow().getInclusiveStart(), portSlot);
 			final long cancellationCost = cancellationCurve.getValueAtPoint(pricingTime);
 
 			// Taxed P&L - use time window start as tax date
-			final long preTaxValue = hedgeValue - cancellationCost; // note: cancellation cost positive
+			final long preTaxValue = -cancellationCost; // note: cancellation cost positive
 			final int utcEquivTaxTime = pricingTime;
 			final long postTaxValue = entity.getTradingBook().getTaxedProfit(preTaxValue, utcEquivTaxTime);
 			result = postTaxValue;
@@ -648,58 +649,91 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				if (cancellationCost != 0) {
 					annotatedSolution.getElementAnnotations().setAnnotation(exportElement, SchedulerConstants.AI_cancellationFees, new CancellationAnnotation(cancellationCost));
 				}
-				if (hedgeValue != 0) {
-					annotatedSolution.getElementAnnotations().setAnnotation(exportElement, SchedulerConstants.AI_hedgingValue, new HedgingAnnotation(hedgeValue));
-				}
 			}
 		}
 
 		return result;
 	}
 
-	protected long[] computeHeelValue(VolumeAllocatedSequences volumeAllocatedSequences, IPortTimesRecord portTimesRecord, Map<IPortSlot, HeelValueRecord> heelMap, int lastHeelPricePerMMBTU) {
+	protected long[] computeHeelValue(final VoyagePlan vp, final Map<IPortSlot, SlotHeelVolumeRecord> heelRecords, final IPortTimesRecord portTimesRecord,
+			final Map<IPortSlot, HeelValueRecord> heelMap, final int lastHeelPricePerMMBTU) {
 
 		long heelRevenue = 0;
 		long heelCost = 0;
 
-		if (volumeAllocatedSequences != null) {
-			for (IPortSlot slot : portTimesRecord.getSlots()) {
-				VolumeAllocatedSequence seq = volumeAllocatedSequences.getScheduledSequence(slot);
-				if (slot instanceof IHeelOptionConsumerPortSlot) {
-					IHeelOptionConsumerPortSlot heelOptionConsumerPortSlot = (IHeelOptionConsumerPortSlot) slot;
-					final IHeelOptionConsumer heelOptions = heelOptionConsumerPortSlot.getHeelOptionsConsumer();
+		if (vp != null) {
+			final boolean first = true;
 
-					long currentHeelInM3 = seq.getPortHeelRecord(slot).getHeelAtStartInM3();
-					int heelTime = seq.getArrivalTime(slot);
-
-					final int pricePerMMBTU = heelOptions.isUseLastPrice() ? lastHeelPricePerMMBTU :
-
-							heelOptions.getHeelPriceCalculator().getHeelPrice(currentHeelInM3, heelTime, slot.getPort());
-
-					int cv = seq.getPortDetails(slot).getOptions().getCargoCVValue();
-					final long heelInMMBTU = Calculator.convertM3ToMMBTu(currentHeelInM3, cv);
-					HeelValueRecord record = HeelValueRecord.withRevenue(Calculator.costFromConsumption(heelInMMBTU, pricePerMMBTU), pricePerMMBTU);
-					heelMap.merge(slot, record, HeelValueRecord::merge);
-					heelRevenue += record.getHeelRevenue();
-					heelCost += record.getHeelCost();
+			final PortDetails lastPortDetails = null;
+			for (final IDetailsSequenceElement e : vp.getSequence()) {
+				//
+				if (vp.isIgnoreEnd() && e == vp.getSequence()[vp.getSequence().length - 1]) {
+					continue;
 				}
-				if (slot instanceof IHeelOptionSupplierPortSlot) {
-					IHeelOptionSupplierPortSlot heelOptionSupplierPortSlot = (IHeelOptionSupplierPortSlot) slot;
-					final IHeelOptionSupplier heelOptions = heelOptionSupplierPortSlot.getHeelOptionsSupplier();
 
-					long currentHeelInM3 = seq.getPortHeelRecord(slot).getHeelAtEndInM3();
-					int heelTime = seq.getArrivalTime(slot) + seq.getVisitDuration(slot);
+				if (e instanceof PortDetails) {
 
-					final int pricePerMMBTU = heelOptions.getHeelPriceCalculator().getHeelPrice(currentHeelInM3, heelTime, slot.getPort());
+					final PortDetails portDetails = (PortDetails) e;
+					final IPortSlot slot = portDetails.getOptions().getPortSlot();
 
-					final int cv = heelOptions.getHeelCVValue();
-					final long heelInMMBTU = Calculator.convertM3ToMMBTu(currentHeelInM3, cv);
-					HeelValueRecord record = HeelValueRecord.withCost(Calculator.costFromConsumption(heelInMMBTU, pricePerMMBTU), pricePerMMBTU);
-					heelMap.merge(slot, record, HeelValueRecord::merge);
-					heelRevenue += record.getHeelRevenue();
-					heelCost += record.getHeelCost();
+					if (!portTimesRecord.getSlots().contains(slot)) {
+						continue;
+					}
+
+					if (slot instanceof IHeelOptionConsumerPortSlot) {
+						final IHeelOptionConsumerPortSlot heelOptionConsumerPortSlot = (IHeelOptionConsumerPortSlot) slot;
+						final IHeelOptionConsumer heelOptions = heelOptionConsumerPortSlot.getHeelOptionsConsumer();
+
+						// long currentHeelInM3 = vp.getStartingHeelInM3();
+						long currentHeelInM3 = heelRecords.get(slot).portHeelRecord.getHeelAtStartInM3();
+						if (portTimesRecord instanceof IAllocationAnnotation) {
+							final IAllocationAnnotation iAllocationAnnotation = (IAllocationAnnotation) portTimesRecord;
+							currentHeelInM3 = iAllocationAnnotation.getStartHeelVolumeInM3();
+						}
+
+						final int heelTime = portTimesRecord.getSlotTime(slot);
+
+						final int pricePerMMBTU = heelOptions.isUseLastPrice() ? lastHeelPricePerMMBTU :
+
+								heelOptions.getHeelPriceCalculator().getHeelPrice(currentHeelInM3, heelTime, slot.getPort());
+
+						final int cv = portDetails.getOptions().getCargoCVValue();
+						final long heelInMMBTU = Calculator.convertM3ToMMBTu(currentHeelInM3, cv);
+						final HeelValueRecord record = HeelValueRecord.withRevenue(Calculator.costFromConsumption(heelInMMBTU, pricePerMMBTU), pricePerMMBTU);
+						heelMap.merge(slot, record, HeelValueRecord::merge);
+						heelRevenue += record.getHeelRevenue();
+						heelCost += record.getHeelCost();
+
+					}
+
+					if (slot instanceof IHeelOptionSupplierPortSlot) {
+						final IHeelOptionSupplierPortSlot heelOptionSupplierPortSlot = (IHeelOptionSupplierPortSlot) slot;
+						final IHeelOptionSupplier heelOptions = heelOptionSupplierPortSlot.getHeelOptionsSupplier();
+
+						// This is wrong! should be vp.getStarintHeel in this case.
+						long currentHeelInM3 = heelRecords.get(slot).portHeelRecord.getHeelAtEndInM3();
+
+						// long currentHeelInM3 = vp.getRemainingHeelInM3();
+
+						if (portTimesRecord instanceof IAllocationAnnotation) {
+							final IAllocationAnnotation iAllocationAnnotation = (IAllocationAnnotation) portTimesRecord;
+							currentHeelInM3 = iAllocationAnnotation.getRemainingHeelVolumeInM3();
+						}
+						final int heelTime = portTimesRecord.getSlotTime(slot) + portTimesRecord.getSlotDuration(slot);
+
+						final int pricePerMMBTU = heelOptions.getHeelPriceCalculator().getHeelPrice(currentHeelInM3, heelTime, slot.getPort());
+
+						final int cv = heelOptions.getHeelCVValue();
+						final long heelInMMBTU = Calculator.convertM3ToMMBTu(currentHeelInM3, cv);
+						final HeelValueRecord record = HeelValueRecord.withCost(Calculator.costFromConsumption(heelInMMBTU, pricePerMMBTU), pricePerMMBTU);
+						heelMap.merge(slot, record, HeelValueRecord::merge);
+						heelRevenue += record.getHeelRevenue();
+						heelCost += record.getHeelCost();
+					}
 				}
+
 			}
+
 		}
 		return new long[] { heelCost, heelRevenue };
 	}

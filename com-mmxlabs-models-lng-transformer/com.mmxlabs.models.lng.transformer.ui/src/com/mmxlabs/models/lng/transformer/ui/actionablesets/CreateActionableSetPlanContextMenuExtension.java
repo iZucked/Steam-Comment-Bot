@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.actionablesets;
@@ -9,7 +9,6 @@ import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.model.Category;
 import org.eclipse.emf.validation.model.EvaluationMode;
@@ -24,7 +23,6 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,7 +55,6 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 public class CreateActionableSetPlanContextMenuExtension implements ITradesTableContextMenuExtension {
-	public static final String ChangeSetViewCreatorService_Topic = "create-change-set-view";
 
 	private static final Logger log = LoggerFactory.getLogger(CreateActionableSetPlanContextMenuExtension.class);
 
@@ -157,7 +154,7 @@ public class CreateActionableSetPlanContextMenuExtension implements ITradesTable
 												final ActionableSetPlan plan = (ActionableSetPlan) jobControl.getJobOutput();
 												if (plan != null) {
 													final AnalyticsSolution data = new AnalyticsSolution(instance, plan, "My Action Set");
-													data.open();
+													data.openAndSwitchScreen();
 												}
 											}
 

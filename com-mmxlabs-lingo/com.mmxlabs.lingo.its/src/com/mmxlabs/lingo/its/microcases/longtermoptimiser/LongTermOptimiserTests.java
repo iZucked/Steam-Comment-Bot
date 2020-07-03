@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 ///**
@@ -95,8 +95,8 @@
 //	// lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
 //	// final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
 //	//
-//	// final LoadSlot load_DES1 = cargoModelBuilder.makeDESPurchase("DES_Purchase", false, LocalDate.of(2015, 12, 5), portFinder.findPort("Sakai"), null, entity, "5", 22.8, null).build();
-//	// final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2015, 12, 5), portFinder.findPort("Sakai"), null, entity, "7").build();
+//	// final LoadSlot load_DES1 = cargoModelBuilder.makeDESPurchase("DES_Purchase", false, LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "5", 22.8, null).build();
+//	// final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7").build();
 //	// final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 0);
 //	//
 //	// evaluateWithLSOTest(true, (plan) -> {
@@ -124,19 +124,19 @@
 //		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
 //		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
 //
-//		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+//		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 //		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
 //
-//		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("Bonny", LocalDate.of(2015, 12, 5), portFinder.findPort("Darwin LNG"), null, entity, "5", 22.8)
+//		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("Bonny", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_DARWIN), null, entity, "5", 22.8)
 //				.withWindowSize(1, TimePeriod.MONTHS).build();
-//		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 2, 5), portFinder.findPort("Barcelona LNG"), null, entity, "7")
+//		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 2, 5), portFinder.findPortById(InternalDataConstants.PORT_BARCELONA), null, entity, "7")
 //				.withWindowSize(1, TimePeriod.MONTHS).build();
 //
 //		// Create cargo 1, cargo 2
 //		final Cargo cargo2 = cargoModelBuilder.makeCargo() //
-//				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Hammerfest LNG"), null, entity, "5") //
+//				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_HAMMERFEST), null, entity, "5") //
 //				.withWindowSize(1, TimePeriod.MONTHS).build() //
-//				.makeDESSale("D1", LocalDate.of(2016, 2, 5), portFinder.findPort("Incheon"), null, entity, "7") //
+//				.makeDESSale("D1", LocalDate.of(2016, 2, 5), portFinder.findPortById(InternalDataConstants.PORT_INCHEON), null, entity, "7") //
 //				.withWindowSize(1, TimePeriod.MONTHS).build() //
 //				.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
 //				.withAssignmentFlags(true, false) //
@@ -179,9 +179,9 @@
 //	//
 //	// // Create cargo 1, cargo 2
 //	// final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-//	// .makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+//	// .makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 //	// .build() //
-//	// .makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+//	// .makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 //	// .build() //
 //	// .withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
 //	// .withAssignmentFlags(false, false) //

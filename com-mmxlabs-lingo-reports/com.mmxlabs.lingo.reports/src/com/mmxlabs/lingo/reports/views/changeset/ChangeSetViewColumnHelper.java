@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 /**
@@ -68,13 +68,16 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetVesselType;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
 import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
 import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
+import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.nominations.AbstractNomination;
 import com.mmxlabs.models.lng.nominations.utils.NominationsModelUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
+import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils.ShippingCostType;
 import com.mmxlabs.models.ui.date.DateTimeFormatsProvider;
@@ -135,7 +138,8 @@ public class ChangeSetViewColumnHelper {
 	private GridViewerColumn column_Violations;
 	
 	/**
-	 * Display textual vessel change markers - used for unit testing where graphics are not captured in data dump.
+	 * Display textual vessel change markers - used for unit testing where graphics
+	 * are not captured in data dump.
 	 */
 	private boolean textualVesselMarkers = false;
 
@@ -1026,6 +1030,23 @@ public class ChangeSetViewColumnHelper {
 					}
 					if (hasDate) {
 						return sb.toString();
+					} else {
+						PaperDealAllocation pda = null;
+						if (tableRow.getLhsBefore() != null && tableRow.getLhsBefore().getPaperDealAllocation() != null) {
+							pda = tableRow.getLhsBefore().getPaperDealAllocation();
+						} else if (tableRow.getLhsAfter() != null && tableRow.getLhsAfter().getPaperDealAllocation() != null) {
+							pda = tableRow.getLhsAfter().getPaperDealAllocation();
+						}
+						if (pda != null && pda.getPaperDeal() != null) {
+							final PaperDeal paperDeal = pda.getPaperDeal();
+							if (paperDeal.getStartDate() != null && paperDeal.getEndDate() != null) {
+								final StringBuilder sb1 = new StringBuilder();
+								sb1.append("Paper deal dates:\n");
+								sb1.append(String.format("First day: %s \n", paperDeal.getStartDate().format(formatter)));
+								sb1.append(String.format("Final day: %s", paperDeal.getEndDate().format(formatter)));
+								return sb1.toString();
+							}
+						}
 					}
 				}
 				return super.getToolTipText(element);
@@ -1035,6 +1056,8 @@ public class ChangeSetViewColumnHelper {
 			public void update(final ViewerCell cell) {
 				final Object element = cell.getElement();
 				cell.setText("");
+				cell.setImage(null);
+				cell.setFont(null);
 				if (element instanceof ChangeSetTableRow) {
 					final ChangeSetTableRow tableRow = (ChangeSetTableRow) element;
 
@@ -1092,6 +1115,16 @@ public class ChangeSetViewColumnHelper {
 							} else {
 								cell.setText(windowDate);
 							}
+						} else {
+							PaperDealAllocation pda = null;
+							if (tableRow.getLhsBefore() != null && tableRow.getLhsBefore().getPaperDealAllocation() != null) {
+								pda = tableRow.getLhsBefore().getPaperDealAllocation();
+							} else if (tableRow.getLhsAfter() != null && tableRow.getLhsAfter().getPaperDealAllocation() != null) {
+								pda = tableRow.getLhsAfter().getPaperDealAllocation();
+							}
+							if (pda != null && pda.getPaperDeal() != null && pda.getPaperDeal().getStartDate() != null) {
+								cell.setText(pda.getPaperDeal().getStartDate().format(formatter));
+							}
 						}
 
 					} else {
@@ -1102,7 +1135,7 @@ public class ChangeSetViewColumnHelper {
 						isSpot = tableRow.isRhsSpot();
 
 						if (newDischargeAllocation != null) {
-							final Slot slot = newDischargeAllocation.getSlot();
+							final Slot<?> slot = newDischargeAllocation.getSlot();
 							if (slot != null) {
 								windowStart = slot.getWindowStart();
 							}
@@ -1197,7 +1230,11 @@ public class ChangeSetViewColumnHelper {
 			@Override
 			public void update(final ViewerCell cell) {
 				final Object element = cell.getElement();
+				
 				cell.setText("");
+				cell.setImage(null);
+				cell.setFont(null);
+
 				if (element instanceof ChangeSetTableGroup) {
 
 					cell.setFont(boldFont);
@@ -1304,54 +1341,73 @@ public class ChangeSetViewColumnHelper {
 			public String getToolTipText(final Object element) {
 				if (element instanceof ChangeSetTableRow) {
 					final ChangeSetTableRow change = (ChangeSetTableRow) element;
-
-					final long[] originalLateness = ChangeSetKPIUtil.getLateness(change, ResultType.Before);
-					final long[] newLateness = ChangeSetKPIUtil.getLateness(change, ResultType.After);
-
-					// No lateness
-					if (originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] == 0 && newLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] == 0) {
-						return null;
+					String latenessTooltip = null;
+					String lhsLateness = getLatenessDetailForSlot(change, change.getLhsName());
+					String rhsLateness = getLatenessDetailForSlot(change, change.getRhsName());
+					if (lhsLateness != null) {
+						latenessTooltip = lhsLateness;
 					}
-
-					final boolean originalInFlex = originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] > 0 && originalLateness[ChangeSetKPIUtil.FlexType.WithFlex.ordinal()] == 0;
-					final boolean newInFlex = newLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] > 0 && newLateness[ChangeSetKPIUtil.FlexType.WithFlex.ordinal()] == 0;
-
-					if (originalInFlex != newInFlex) {
-						// Lateness shift between flex and non-flex times.
-						final long delta = newLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] - originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()];
-						final String flexStr;
-						if (originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] == 0) {
-							assert !originalInFlex;
-							flexStr = "within";
-						} else if (delta > 0) {
-							flexStr = "out of";
-						} else {
-							flexStr = "within";
+					if (rhsLateness != null) {
+						if (latenessTooltip != null) {
+							latenessTooltip += "\r\n";
+							latenessTooltip += "\r\n";
 						}
-						// CHECK -- IF Original was zero, then we have moved into the felx time.
-						return String.format("Lateness %s by %d days, %d hours %s flex time", delta > 0 ? "increased" : "decreased", Math.abs(delta) / 24, Math.abs(delta) % 24, flexStr);
+						latenessTooltip += rhsLateness;
 					}
-					if (!originalInFlex) {
-						// if (originalLateWithoutFlex > 0 && newLatenessWithoutFlex > 0) {
-						final long delta = newLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] - originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()];
-						return String.format("Lateness %s by %d days, %d hours", delta > 0 ? "increased" : "decreased", Math.abs(delta) / 24, Math.abs(delta) % 24);
-						// }
-					} else {
-						// if (originalLateWithoutFlex > 0 && newLatenessWithoutFlex > 0) {
-						final long delta = newLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] - originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()];
-						return String.format("Lateness (within flex time) %s by %d days, %d hours", delta > 0 ? "increased" : "decreased", Math.abs(delta) / 24, Math.abs(delta) % 24);
-						// }
-					}
-
+					return latenessTooltip;
 				}
 				return null;
+				
 			}
 
+			private String getLatenessDetailForSlot(@NonNull final ChangeSetTableRow change, final String slotName) {
+				if (slotName == null) {
+					return null;
+				}
+				final long originalLateness = ChangeSetKPIUtil.getLatenessInHours(change, ResultType.Before, slotName);
+				final long originalFlexAvailable = ChangeSetKPIUtil.getFlexAvailableInHours(change, ResultType.Before, slotName);
+				final long newLateness = ChangeSetKPIUtil.getLatenessInHours(change, ResultType.After, slotName);
+				final long newFlexAvailable = ChangeSetKPIUtil.getFlexAvailableInHours(change, ResultType.After, slotName);				
+				final long deltaLateness = newLateness - originalLateness;
+				if (deltaLateness == 0) {
+					return null;
+				}
+				String direction = (deltaLateness > 0 ? " more late." : " less late.");
+				StringBuilder sb = new StringBuilder();
+				sb.append(slotName);
+				sb.append(" is ").append(LatenessUtils.formatLatenessHoursConcise(Math.abs(deltaLateness))).append(direction).append("\n");
+				sb.append("Before:\t").append(LatenessUtils.formatLatenessHoursConcise(originalLateness));
+				if (originalLateness != 0) {
+					sb.append(getFlexString(originalLateness, originalFlexAvailable));
+				}
+				sb.append("\r\nAfter: \t").append(LatenessUtils.formatLatenessHoursConcise(newLateness));
+				if (newLateness != 0) {
+					sb.append(getFlexString(newLateness, newFlexAvailable));
+				}
+				return sb.toString();
+			}
+
+			private String getFlexString(long lateness, long availableFlex) {
+				StringBuilder sb = new StringBuilder();
+				if (availableFlex > 0) {
+					sb.append(" \t(");
+					if (lateness > availableFlex) {
+						sb.append(LatenessUtils.formatLatenessHoursConcise(lateness - availableFlex)).append(" more than flex of ").append(LatenessUtils.formatLatenessHoursConcise(availableFlex)).append(")");
+					}
+					else {
+						sb.append("using flex of ").append(LatenessUtils.formatLatenessHoursConcise(availableFlex)).append(")");
+					}
+				}
+				return sb.toString();
+			}
+			
 			@Override
 			public void update(final ViewerCell cell) {
 				final Object element = cell.getElement();
 				cell.setText("");
 				cell.setForeground(null);
+				cell.setImage(null);
+				cell.setFont(null);
 				if (element instanceof ChangeSetTableGroup) {
 
 					cell.setFont(boldFont);
@@ -1386,14 +1442,14 @@ public class ChangeSetViewColumnHelper {
 					final long[] originalLateness = ChangeSetKPIUtil.getLateness(change, ResultType.Before);
 					final long[] newLateness = ChangeSetKPIUtil.getLateness(change, ResultType.After);
 
-					final boolean originalInFlex = originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] > 0 && originalLateness[ChangeSetKPIUtil.FlexType.WithFlex.ordinal()] == 0;
-					final boolean newInFlex = newLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] > 0 && newLateness[ChangeSetKPIUtil.FlexType.WithFlex.ordinal()] == 0;
+					final boolean originalInFlex = originalLateness[ChangeSetKPIUtil.FlexType.TotalIfFlexInsufficient.ordinal()] > 0 && originalLateness[ChangeSetKPIUtil.FlexType.TotalIfWithinFlex.ordinal()] == 0;
+					final boolean newInFlex = newLateness[ChangeSetKPIUtil.FlexType.TotalIfFlexInsufficient.ordinal()] > 0 && newLateness[ChangeSetKPIUtil.FlexType.TotalIfWithinFlex.ordinal()] == 0;
 
 					String flexStr = "";
 					if (originalInFlex != newInFlex) {
 						// Lateness shift between flex and non-flex times.
-						final long delta = newLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] - originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()];
-						if (originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] == 0) {
+						final long delta = newLateness[ChangeSetKPIUtil.FlexType.TotalIfFlexInsufficient.ordinal()] - originalLateness[ChangeSetKPIUtil.FlexType.TotalIfFlexInsufficient.ordinal()];
+						if (originalLateness[ChangeSetKPIUtil.FlexType.TotalIfFlexInsufficient.ordinal()] == 0) {
 							assert originalInFlex == false;
 							flexStr = " *";
 						} else if (delta > 0) {
@@ -1403,8 +1459,8 @@ public class ChangeSetViewColumnHelper {
 						}
 					}
 					long delta = 0L;
-					delta -= originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()];
-					delta += newLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()];
+					delta -= originalLateness[ChangeSetKPIUtil.FlexType.TotalIfFlexInsufficient.ordinal()];
+					delta += newLateness[ChangeSetKPIUtil.FlexType.TotalIfFlexInsufficient.ordinal()];
 					final long originalDelta = delta;
 					delta = (int) Math.round((double) delta / 24.0);
 					if (delta != 0L) {
@@ -1591,6 +1647,8 @@ public class ChangeSetViewColumnHelper {
 				final Object element = cell.getElement();
 				cell.setText("");
 				cell.setForeground(null);
+				cell.setImage(null);
+				cell.setFont(null);
 				if (element instanceof ChangeSetTableGroup) {
 
 					cell.setFont(boldFont);
@@ -1722,6 +1780,8 @@ public class ChangeSetViewColumnHelper {
 			public void update(final ViewerCell cell) {
 				final Object element = cell.getElement();
 				cell.setText("");
+				cell.setImage(null);
+				cell.setFont(null);
 				if (element instanceof ChangeSetTableGroup) {
 					// ChangeSetNode changeSetNode = (ChangeSetNode) element;
 					final ChangeSetTableGroup changeSet = (ChangeSetTableGroup) element;
@@ -1743,6 +1803,19 @@ public class ChangeSetViewColumnHelper {
 					// }
 					// if (element instanceof ChangeSetTableGroup) {
 
+				} else if (false && element instanceof ChangeSetTableRow) {
+					// DEBUG helper, show P&L sums in label
+					ChangeSetTableRow change = (ChangeSetTableRow) element;
+
+					long pnl = ChangeSetKPIUtil.getPNL(change, ResultType.After) - ChangeSetKPIUtil.getPNL(change, ResultType.Before);
+					long purchase = ChangeSetKPIUtil.getPurchaseCost(change, ResultType.After) - ChangeSetKPIUtil.getPurchaseCost(change, ResultType.Before);
+					long sales = ChangeSetKPIUtil.getSalesRevenue(change, ResultType.After) - ChangeSetKPIUtil.getSalesRevenue(change, ResultType.Before);
+					long shipFOB = ChangeSetKPIUtil.getShipping(change, ResultType.After) - ChangeSetKPIUtil.getShipping(change, ResultType.Before);
+
+					// Note: Missing other PNL components.
+					long computedPNL = sales - purchase - shipFOB;
+//					cell.setText(String.format("%,d", computedPNL));
+					cell.setText(String.format("%,d", pnl - computedPNL));
 				}
 			}
 		};
@@ -1903,6 +1976,7 @@ public class ChangeSetViewColumnHelper {
 			public void update(final ViewerCell cell) {
 				final Object element = cell.getElement();
 				cell.setText("");
+				cell.setImage(null);
 				cell.setFont(null);
 				double delta = 0;
 				if (element instanceof ChangeSetTableGroup) {
@@ -2046,6 +2120,7 @@ public class ChangeSetViewColumnHelper {
 				final Object element = cell.getElement();
 				cell.setText("");
 				cell.setFont(null);
+				cell.setImage(null);
 				long delta = 0;
 				if (element instanceof ChangeSetTableGroup) {
 					cell.setFont(boldFont);
@@ -2128,6 +2203,7 @@ public class ChangeSetViewColumnHelper {
 				final Object element = cell.getElement();
 				cell.setText("");
 				cell.setFont(null);
+				cell.setImage(null);
 				double delta = 0;
 				if (element instanceof ChangeSetTableGroup) {
 					// cell.setFont(boldFont);

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.analytics;
@@ -16,7 +16,6 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import org.apache.http.impl.client.NullBackoffStrategy;
 import org.eclipse.core.runtime.ICoreRunnable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -66,6 +65,7 @@ import com.mmxlabs.models.lng.transformer.ui.analytics.spec.ScheduleSpecificatio
 import com.mmxlabs.models.lng.transformer.ui.common.ScheduleToSequencesTransformer;
 import com.mmxlabs.models.lng.transformer.util.ScheduleSpecificationTransformer;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.rcp.common.ecore.EMFCopier;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
@@ -398,7 +398,7 @@ public class EvaluateSolutionSetHelper {
 								action.accept(opt);
 							}
 
-							final UserSettings copy = EcoreUtil.copy(userSettings);
+							final UserSettings copy = EMFCopier.copy(userSettings);
 							helper.generateResults(scenarioInstance, copy, sdp.getEditingDomain(), monitor);
 							if (open) {
 								new AnalyticsSolution(scenarioInstance, abstractSolutionSet, abstractSolutionSet.getName()).open();

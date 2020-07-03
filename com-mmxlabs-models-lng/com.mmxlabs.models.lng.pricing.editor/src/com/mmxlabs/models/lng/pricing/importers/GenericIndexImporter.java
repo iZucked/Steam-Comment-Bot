@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.importers;
@@ -192,7 +192,7 @@ public abstract class GenericIndexImporter<T extends AbstractYearMonthCurve> ext
 			result.setExpression(row.get(EXPRESSION));
 		} else {
 
-			result.getPoints().addAll(importDatePoints(row, getIgnoreSet(NAME, TYPE_KEY, UNITS, VOLUME_UNITS, CURRENCY_UNITS, EXPRESSION), context));
+			result.getPoints().addAll(importDatePoints(row, getIgnoreSet(NAME, TYPE_KEY, MARKET_INDEX, UNITS, VOLUME_UNITS, CURRENCY_UNITS, EXPRESSION), context));
 		}
 		if (row.containsKey(MARKET_INDEX)) {
 			if (result instanceof CommodityCurve) {

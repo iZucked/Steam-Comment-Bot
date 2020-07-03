@@ -1,10 +1,9 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases;
 
-import java.net.MalformedURLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -20,6 +19,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.google.inject.Injector;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
@@ -59,7 +59,7 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 	public IScenarioDataProvider importReferenceData() throws Exception {
 
 		@NonNull
-		final IScenarioDataProvider scenarioDataProvider = importReferenceData("/referencedata/reference-data-2/");
+		final IScenarioDataProvider scenarioDataProvider = super.importReferenceData();
 
 		final CanalBookings canalBookings = CargoFactory.eINSTANCE.createCanalBookings();
 		@NonNull
@@ -67,23 +67,6 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 		cargoModel.setCanalBookings(canalBookings);
 
 		final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioDataProvider);
-
-		final Optional<Route> potentialPanama = portModel.getRoutes().stream().filter(r -> r.getRouteOption() == RouteOption.PANAMA).findFirst();
-		final Route panama = potentialPanama.get();
-
-		portModel.getPorts().stream().filter(p -> {
-			return "Colon".equals(p.getName()) || "Balboa".equals(p.getName());
-		}).forEach(p -> {
-			final EntryPoint ep = PortFactory.eINSTANCE.createEntryPoint();
-			ep.setPort(p);
-			if (p.getName().equals("Colon")) {
-				ep.setName("North");
-				panama.setNorthEntrance(ep);
-			} else {
-				ep.setName("South");
-				panama.setSouthEntrance(ep);
-			}
-		});
 
 		canalBookings.setStrictBoundaryOffsetDays(30);
 		canalBookings.setRelaxedBoundaryOffsetDays(90);
@@ -119,7 +102,7 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 	}
 
 	private VesselAvailability getDefaultVesselAvailability() {
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setMaxSpeed(16.0);
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
@@ -127,7 +110,7 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 	}
 
 	private VesselAvailability getDefaultVesselAvailabilityWithTW(LocalDateTime windowStart, LocalDateTime windowEnd) {
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setMaxSpeed(16.0);
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withStartWindow(windowStart, windowEnd) //
@@ -136,7 +119,7 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 	}
 
 	private VesselAvailability getVesselAvailabilityWithTW(String vesselName, LocalDateTime windowStart, LocalDateTime windowEnd) {
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setMaxSpeed(16.0);
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withStartWindow(windowStart, windowEnd) //
@@ -145,7 +128,7 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 	}
 
 	private VesselAvailability getVesselAvailabilityWithoutTW(String vesselName) {
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setMaxSpeed(16.0);
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
@@ -177,7 +160,7 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 				scheduler.setUseCanalBasedWindowTrimming(false);
 				scheduler.setUsePriceBasedWindowTrimming(true);
 
-				final ScheduledTimeWindows schedule = scheduler.schedule(initialSequences);
+				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(initialSequences);
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
 
 				final IResource r0 = initialSequences.getResources().get(0);
@@ -218,7 +201,7 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 				scheduler.setUseCanalBasedWindowTrimming(false);
 				scheduler.setUsePriceBasedWindowTrimming(true);
 
-				final ScheduledTimeWindows schedule = scheduler.schedule(initialSequences);
+				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(initialSequences);
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
 
 				final IResource r0 = initialSequences.getResources().get(0);
@@ -261,7 +244,7 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 				scheduler.setUseCanalBasedWindowTrimming(false);
 				scheduler.setUsePriceBasedWindowTrimming(true);
 
-				final ScheduledTimeWindows schedule = scheduler.schedule(initialSequences);
+				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(initialSequences);
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
 
 				final IResource r0 = initialSequences.getResources().get(0);
@@ -291,10 +274,10 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
 
 		@NonNull
-		final Port port1 = portFinder.findPort("Sabine Pass");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
 
 		@NonNull
-		final Port port2 = portFinder.findPort("Manzanillo");
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_MANZANILLO);
 
 		// Construct the cargoes
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
@@ -319,7 +302,7 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 				scheduler.setUseCanalBasedWindowTrimming(false);
 				scheduler.setUsePriceBasedWindowTrimming(true);
 
-				final ScheduledTimeWindows schedule = scheduler.schedule(initialSequences);
+				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(initialSequences);
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
 
 				final IResource r0 = initialSequences.getResources().get(0);
@@ -354,10 +337,10 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 		vesselAvailability2.setEndAfter(LocalDateTime.of(2017, Month.JULY, 25, 0, 0, 0));
 
 		@NonNull
-		final Port port1 = portFinder.findPort("Sabine Pass");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
 
 		@NonNull
-		final Port port2 = portFinder.findPort("Manzanillo");
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_MANZANILLO);
 
 		// Construct the cargoes
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
@@ -410,10 +393,10 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 
 		// Construct the cargo
 		@NonNull
-		final Port port1 = portFinder.findPort("Sabine Pass");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
 
 		@NonNull
-		final Port port2 = portFinder.findPort("Manzanillo");
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_MANZANILLO);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2017, Month.JUNE, 27), port1, null, entity, "7") //
@@ -456,10 +439,10 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 
 		// Construct the cargo
 		@NonNull
-		final Port port1 = portFinder.findPort("Sabine Pass");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
 
 		@NonNull
-		final Port port2 = portFinder.findPort("Manzanillo");
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_MANZANILLO);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2017, Month.JUNE, 15), port1, null, entity, "7") //
@@ -483,7 +466,7 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 				scheduler.setUseCanalBasedWindowTrimming(false);
 				scheduler.setUsePriceBasedWindowTrimming(true);
 
-				final ScheduledTimeWindows schedule = scheduler.schedule(initialSequences);
+				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(initialSequences);
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
 
 				final IResource r0 = initialSequences.getResources().get(0);
@@ -522,10 +505,10 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 
 		// Construct the cargo
 		@NonNull
-		final Port port1 = portFinder.findPort("Sabine Pass");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
 
 		@NonNull
-		final Port port2 = portFinder.findPort("Manzanillo");
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_MANZANILLO);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2017, Month.JUNE, 15), port1, null, entity, "7") //
@@ -567,7 +550,7 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JULY, 10, 0, 0, 0));
 
 		@NonNull
-		final Port port1 = portFinder.findPort("Point Fortin");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
 
 		final DryDockEvent event = cargoModelBuilder.makeDryDockEvent("drydock1", LocalDateTime.of(2017, Month.JULY, 7, 0, 0, 0), LocalDateTime.of(2017, Month.JULY, 7, 0, 0, 0), port1) //
 				.withDurationInDays(1) //
@@ -587,7 +570,7 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 				scheduler.setUseCanalBasedWindowTrimming(false);
 				scheduler.setUsePriceBasedWindowTrimming(true);
 
-				final ScheduledTimeWindows schedule = scheduler.schedule(initialSequences);
+				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(initialSequences);
 			}
 			final EndEvent endEvent = MicroTestUtils.findVesselEndEvent(lngScenarioModel);
 			final PortVisitLateness lateness = endEvent.getLateness();

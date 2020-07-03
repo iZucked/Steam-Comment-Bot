@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
@@ -33,11 +33,9 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 public class RoundTripVesselPermissionConstraintChecker implements IPairwiseConstraintChecker {
 
 	@Inject
-	@NonNull
 	private IVesselProvider vesselProvider;
 
 	@Inject
-	@NonNull
 	private IRoundTripVesselPermissionProvider roundTripVesselPermissionProvider;
 
 	@Inject

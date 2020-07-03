@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.preferences;
@@ -13,4 +13,5 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 public final class PreferenceConstants {
 	public static final String P_LEEWAY_DAYS = "leeway_days";
 	public static final String P_REPORT_DURATION_FORMAT = "report.duration.format";
+	public static final String REPORT_REGIONS_LIST = "report.regions";
 }

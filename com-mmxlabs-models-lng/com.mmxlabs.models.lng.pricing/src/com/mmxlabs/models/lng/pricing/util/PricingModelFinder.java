@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.util;
@@ -9,6 +9,8 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.models.lng.pricing.BunkerFuelCurve;
 import com.mmxlabs.models.lng.pricing.CharterCurve;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
+import com.mmxlabs.models.lng.pricing.HolidayCalendar;
+import com.mmxlabs.models.lng.pricing.PricingCalendar;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 
 public class PricingModelFinder {
@@ -57,5 +59,25 @@ public class PricingModelFinder {
 		}
 
 		throw new IllegalArgumentException("Charter Index not found: " + name);
+	}
+
+	public @NonNull PricingCalendar findPricingCalendar(String name) {
+		for (final PricingCalendar cal : getPricingModel().getPricingCalendars()) {
+			if (name.equals(cal.getName())) {
+				return cal;
+			}
+		}
+
+		throw new IllegalArgumentException("Pricing calendar not found: " + name);
+	}
+
+	public @NonNull HolidayCalendar findHolidayCalendar(String name) {
+		for (final HolidayCalendar cal : getPricingModel().getHolidayCalendars()) {
+			if (name.equals(cal.getName())) {
+				return cal;
+			}
+		}
+
+		throw new IllegalArgumentException("Holiday  calendar not found: " + name);
 	}
 }

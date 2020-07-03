@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 /**
@@ -55,6 +55,9 @@ public class MarketIndexItemProvider extends NamedObjectItemProvider {
 
 			addSettleCalendarPropertyDescriptor(object);
 			addPricingCalendarPropertyDescriptor(object);
+			addFlatCurvePropertyDescriptor(object);
+			addBidCurvePropertyDescriptor(object);
+			addOfferCurvePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -95,6 +98,72 @@ public class MarketIndexItemProvider extends NamedObjectItemProvider {
 				 getString("_UI_MarketIndex_pricingCalendar_feature"),
 				 getString("_UI_MarketIndex_pricingCalendar_description"),
 				 PricingPackage.Literals.MARKET_INDEX__PRICING_CALENDAR,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Flat Curve feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addFlatCurvePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_MarketIndex_flatCurve_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_MarketIndex_flatCurve_feature", "_UI_MarketIndex_type"),
+				 PricingPackage.Literals.MARKET_INDEX__FLAT_CURVE,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Bid Curve feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addBidCurvePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_MarketIndex_bidCurve_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_MarketIndex_bidCurve_feature", "_UI_MarketIndex_type"),
+				 PricingPackage.Literals.MARKET_INDEX__BID_CURVE,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Offer Curve feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addOfferCurvePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_MarketIndex_offerCurve_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_MarketIndex_offerCurve_feature", "_UI_MarketIndex_type"),
+				 PricingPackage.Literals.MARKET_INDEX__OFFER_CURVE,
 				 true,
 				 false,
 				 true,

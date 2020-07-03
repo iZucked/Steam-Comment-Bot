@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.importer;
@@ -28,6 +28,7 @@ public class CanalBookingImporter extends DefaultClassImporter {
 	private static final String KEY_FLEX_COUNT_NORTHBOUND = "flexibilitynorthbound";
 	private static final String KEY_FLEX_COUNT_SOUTHBOUND = "flexibilitysouthbound";
 	private static final String KEY_NORTHBOUND_MAX_IDLE = "northboundmaxidle";
+	private static final String KEY_SOUTHBOUND_MAX_IDLE = "southboundmaxidle";
 	private static final String KEY_MARGIN = "margin";
 
 	private final DefaultAttributeImporter attributeImporter = new DefaultAttributeImporter();
@@ -60,6 +61,11 @@ public class CanalBookingImporter extends DefaultClassImporter {
 				attributeImporter.setAttribute(canalBookings, CargoPackage.Literals.CANAL_BOOKINGS__NORTHBOUND_MAX_IDLE_DAYS, northboundMaxIdle, context);
 			}
 
+			final String southboundMaxIdle = row.get(KEY_SOUTHBOUND_MAX_IDLE);
+			if (southboundMaxIdle != null && !southboundMaxIdle.trim().isEmpty()) {
+				attributeImporter.setAttribute(canalBookings, CargoPackage.Literals.CANAL_BOOKINGS__SOUTHBOUND_MAX_IDLE_DAYS, southboundMaxIdle, context);
+			}
+			
 			final String marginValue = row.get(KEY_MARGIN);
 			if (marginValue != null && !marginValue.trim().isEmpty()) {
 				attributeImporter.setAttribute(canalBookings, CargoPackage.Literals.CANAL_BOOKINGS__ARRIVAL_MARGIN_HOURS, marginValue, context);
@@ -88,6 +94,7 @@ public class CanalBookingImporter extends DefaultClassImporter {
 				rowData.put(KEY_FLEX_COUNT_NORTHBOUND, Integer.toString(canalBookings.getFlexibleBookingAmountNorthbound()));
 				rowData.put(KEY_FLEX_COUNT_SOUTHBOUND, Integer.toString(canalBookings.getFlexibleBookingAmountSouthbound()));
 				rowData.put(KEY_NORTHBOUND_MAX_IDLE, Integer.toString(canalBookings.getNorthboundMaxIdleDays()));
+				rowData.put(KEY_SOUTHBOUND_MAX_IDLE, Integer.toString(canalBookings.getSouthboundMaxIdleDays()));
 				rowData.put(KEY_MARGIN, Integer.toString(canalBookings.getArrivalMarginHours()));
 				exportedObjects.add(rowData);
 			} else {

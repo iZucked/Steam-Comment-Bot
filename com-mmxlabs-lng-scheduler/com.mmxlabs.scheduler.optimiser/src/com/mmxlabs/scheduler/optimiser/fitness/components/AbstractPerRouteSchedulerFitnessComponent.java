@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components;
@@ -13,8 +13,8 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
+import com.mmxlabs.scheduler.optimiser.evaluation.VoyagePlanRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * @author hinton
@@ -58,7 +58,7 @@ public abstract class AbstractPerRouteSchedulerFitnessComponent extends Abstract
 	}
 
 	@Override
-	public boolean nextVoyagePlan(@NonNull final VoyagePlan voyagePlan, final int time) {
+	public boolean nextVoyagePlan(@NonNull final VoyagePlanRecord voyagePlan, final int time) {
 		if (currentResource != null) {
 			return reallyEvaluateVoyagePlan(voyagePlan, time);
 		} else {
@@ -73,7 +73,7 @@ public abstract class AbstractPerRouteSchedulerFitnessComponent extends Abstract
 	 * @param time
 	 * @return
 	 */
-	protected boolean reallyEvaluateVoyagePlan(@NonNull final VoyagePlan voyagePlan, final int time) {
+	protected boolean reallyEvaluateVoyagePlan(@NonNull final VoyagePlanRecord voyagePlan, final int time) {
 		return true;
 	}
 

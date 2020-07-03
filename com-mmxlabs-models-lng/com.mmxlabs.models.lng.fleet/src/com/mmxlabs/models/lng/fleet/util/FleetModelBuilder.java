@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet.util;
@@ -8,7 +8,6 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.fleet.BaseFuel;
@@ -20,6 +19,7 @@ import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselGroup;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.port.RouteOption;
+import com.mmxlabs.rcp.common.ecore.EMFCopier;
 
 public class FleetModelBuilder {
 	private @NonNull final FleetModel fleetModel;
@@ -54,7 +54,7 @@ public class FleetModelBuilder {
 
 	@NonNull
 	public Vessel createVesselFrom(@NonNull final String name, final Vessel source, BiConsumer<Vessel, Vessel> costCloner) {
-		final Vessel copy = EcoreUtil.copy(source);
+		final Vessel copy = EMFCopier.copy(source);
 		copy.setName(name);
 
 		if (costCloner != null) {
@@ -79,8 +79,8 @@ public class FleetModelBuilder {
 		fleetModel.getVessels().add(vessel);
 	}
 
-	public void setRouteParameters(final Vessel vessel, @NonNull final RouteOption routeOption, final int ladenConsumptionRatePerDay, final int ballastConsumptionRatePerDay,
-			final int ladenNBORatePerDay, final int ballastNBORatePerDay, final int canalTransitHours) {
+	public void setRouteParameters(final Vessel vessel, @NonNull final RouteOption routeOption, final double ladenConsumptionRatePerDay, final double ballastConsumptionRatePerDay,
+			final double ladenNBORatePerDay, final double ballastNBORatePerDay, final int canalTransitHours) {
 
 		VesselClassRouteParameters params = null;
 		for (final VesselClassRouteParameters p : vessel.getRouteParameters()) {

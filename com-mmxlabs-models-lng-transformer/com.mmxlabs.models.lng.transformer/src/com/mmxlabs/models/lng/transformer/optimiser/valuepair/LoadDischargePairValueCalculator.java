@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.optimiser.valuepair;
@@ -115,14 +115,25 @@ public class LoadDischargePairValueCalculator {
 		return true;
 	}
 	
+	/**
+	 * Check whether the load and discharge are compatible for at least one of the vessels (apart from the nominal vessel)
+	 * NB: reverted isValidPair as the "updated" code appeared to load+discharge require all the constraints to be satisfied for all 
+	 * vessels in the scenario. This prevented ADP optimisation from being possible with contracts with vessel constraints present on
+	 * the contracts.
+	 * @param load
+	 * @param discharge
+	 * @param vessel
+	 * @param vessels
+	 * @return true, if compatible, false, otherwise.
+	 */
 	private boolean isValidPair(final ILoadOption load, final IDischargeOption discharge, final IVesselAvailability vessel, Collection<IVesselAvailability> vessels) {
 
 		if (!(load instanceof ILoadSlot) && !(discharge instanceof IDischargeSlot)) {
 			return false;
 		}
-		boolean isValid = true;
 		for (final IVesselAvailability v : vessels) {
 			if (v == vessel) continue;
+			boolean isValid = true;
 			for (final IPairwiseConstraintChecker checker : constraintCheckers) {
 				if (!checker.checkPairwiseConstraint(portSlotProvider.getElement(load), portSlotProvider.getElement(discharge), vesselProvider.getResource(v))) {
 					//checker.checkPairwiseConstraint(portSlotProvider.getElement(load), portSlotProvider.getElement(discharge), vesselProvider.getResource(v));
@@ -231,7 +242,8 @@ public class LoadDischargePairValueCalculator {
 			if ((nominalVessel != vesselAvailability) || (isValidPair(loadOption, dischargeOption, vesselAvailability, vessels))) {
 				final Pair<IAnnotatedSolution, EvaluationState> result = evaluate(loadOption, dischargeOption, vesselAvailability);
 				if (result != null) {
-					recorder.record(loadOption, dischargeOption, vesselAvailability, result);
+					IResource resource = vesselProvider.getResource(vesselAvailability);
+					recorder.record(loadOption, dischargeOption, resource, result);
 				} else {
 					// System.out.printf("Failed Pair %s -> %s\n", loadOption.getId(), dischargeOption.getId());
 				}

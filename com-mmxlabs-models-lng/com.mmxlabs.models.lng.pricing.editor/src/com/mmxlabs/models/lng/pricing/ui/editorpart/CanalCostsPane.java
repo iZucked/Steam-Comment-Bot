@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.ui.editorpart;
@@ -14,7 +14,6 @@ import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
@@ -68,6 +67,7 @@ import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.NonEditableColumn;
 import com.mmxlabs.models.ui.tabular.manipulators.MultipleReferenceManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
+import com.mmxlabs.rcp.common.ecore.SafeEContentAdapter;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 /**
@@ -123,10 +123,9 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.lingo.doc.Editor_CanalCosts");
 	}
 
-	private final @NonNull AdapterImpl changeListener = new EContentAdapter() {
-		public void notifyChanged(final org.eclipse.emf.common.notify.Notification msg) {
-			//
-			super.notifyChanged(msg);
+	private final @NonNull AdapterImpl changeListener = new SafeEContentAdapter() {
+		public void safeNotifyChanged(final org.eclipse.emf.common.notify.Notification msg) {
+			
 			if (msg.getEventType() == Notification.REMOVING_ADAPTER) {
 				return;
 			}

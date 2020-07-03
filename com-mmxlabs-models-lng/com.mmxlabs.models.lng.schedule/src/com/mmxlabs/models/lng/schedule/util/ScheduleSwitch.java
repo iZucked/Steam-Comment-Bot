@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.util;
@@ -501,6 +501,8 @@ public class ScheduleSwitch<@Nullable T> extends Switch<T> {
 			case SchedulePackage.PAPER_DEAL_ALLOCATION: {
 				PaperDealAllocation paperDealAllocation = (PaperDealAllocation)theEObject;
 				T result = casePaperDealAllocation(paperDealAllocation);
+				if (result == null) result = caseProfitAndLossContainer(paperDealAllocation);
+				if (result == null) result = caseMMXObject(paperDealAllocation);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}

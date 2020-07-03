@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.util;
@@ -326,6 +326,30 @@ public class ScheduleModelUtils {
 			final OpenSlotAllocation sa = (OpenSlotAllocation) allocation;
 			if (sa.getSlot() instanceof DischargeSlot) {
 				slot = (DischargeSlot) sa.getSlot();
+			}
+		}
+		return slot;
+	}
+	
+	public static DischargeSlot getDischargeSlotFromCargo(final Cargo cargo) {
+		DischargeSlot slot = null;
+		if (cargo != null) {
+			for (final Slot<?> s : cargo.getSlots()) {
+				if (s instanceof DischargeSlot) {
+					slot = (DischargeSlot) s;
+				}
+			}
+		}
+		return slot;
+	}
+	
+	public static LoadSlot getLoadSlotFromCargo(final Cargo cargo) {
+		LoadSlot slot = null;
+		if (cargo != null) {
+			for (final Slot<?> s : cargo.getSlots()) {
+				if (s instanceof LoadSlot) {
+					slot = (LoadSlot) s;
+				}
 			}
 		}
 		return slot;

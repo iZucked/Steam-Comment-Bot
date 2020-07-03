@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2019
+    Copyright (C) Minimax Labs Ltd., 2010 - 2020
     All rights reserved.
 
 -->
@@ -449,6 +449,18 @@
             eClass="com.mmxlabs.models.lng.analytics.FullVesselCharterOption"
             factory="com.mmxlabs.models.lng.analytics.presentation.composites.FullVesselCharterCompositeFactory"
             id="com.mmxlabs.models.lng.analytics.presentation.composites.FullVesselCharterCompositeFactory"
+            inheritable="true">
+      </displayCompositeFactory>
+      <displayCompositeFactory
+            eClass="com.mmxlabs.models.lng.analytics.BuyOpportunity"
+            factory="com.mmxlabs.models.lng.analytics.presentation.displaycomposites.BuyOpportunityCompositeFactory"
+            id="com.mmxlabs.models.lng.analytics.presentation.displaycomposites.BuyOpportunityCompositeFactory"
+            inheritable="true">
+      </displayCompositeFactory>
+      <displayCompositeFactory
+            eClass="com.mmxlabs.models.lng.analytics.SellOpportunity"
+            factory="com.mmxlabs.models.lng.analytics.presentation.displaycomposites.SellOpportunityCompositeFactory"
+            id="com.mmxlabs.models.lng.analytics.presentation.displaycomposites.SellOpportunityCompositeFactory"
             inheritable="true">
       </displayCompositeFactory>
    </extension>

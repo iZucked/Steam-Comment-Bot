@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 /**
@@ -65,6 +65,7 @@ import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.ContractProfile;
 import com.mmxlabs.models.lng.adp.PeriodDistribution;
 import com.mmxlabs.models.lng.adp.PeriodDistributionProfileConstraint;
+import com.mmxlabs.models.lng.adp.utils.ADPModelUtil;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.ColumnLabelProviderFactory;
@@ -198,7 +199,7 @@ public class PeriodDistributionProfileConstraintDetailComposite extends Composit
 								((YearMonth) a).getYear());
 					}, () -> {
 						final List<Object> toAdd = new LinkedList<>();
-						final ADPModel adpModel = getADPModel(oldValue);
+						final ADPModel adpModel = ADPModelUtil.getADPModel(oldValue);
 						if (adpModel != null) {
 							YearMonth start = adpModel.getYearStart();
 							while (start.isBefore(adpModel.getYearEnd())) {
@@ -212,55 +213,7 @@ public class PeriodDistributionProfileConstraintDetailComposite extends Composit
 		}
 		// Use hyphen for consecutive months, comma otherwise
 		rangeColumn.setLabelProvider(ColumnLabelProviderFactory.make(PeriodDistribution.class, "", periodDistribution -> {
-			if (periodDistribution.getRange().isEmpty()) {
-				return "-";
-			}
-			ADPModel m = getADPModel(periodDistribution);
-
-			// Sort the dates
-			List<YearMonth> v = periodDistribution.getRange().stream() //
-					.sorted((a, b) -> a.compareTo(b)) //
-					.collect(Collectors.toCollection(LinkedList::new));
-
-			// Group consecutive elements
-			List<List<YearMonth>> grouped = new LinkedList<>();
-			List<YearMonth> g = new LinkedList<>();
-			grouped.add(g);
-			YearMonth lastYM = null;
-			for (YearMonth ym : v) {
-				if (lastYM == null || lastYM.plusMonths(1).equals(ym)) {
-					g.add(ym);
-				} else {
-					g = new LinkedList<>();
-					grouped.add(g);
-					g.add(ym);
-				}
-				lastYM = ym;
-			}
-			// Label provider for a yearmonth
-			Function<YearMonth, String> lp = (ym) -> {
-				if (m != null && ym.getYear() == m.getYearStart().getYear()) {
-					return String.format("%s", //
-							ym.getMonth().getDisplayName(TextStyle.SHORT, Locale.getDefault()));
-				} else {
-					return String.format("%s '%02d", //
-							ym.getMonth().getDisplayName(TextStyle.SHORT, Locale.getDefault()), //
-							ym.getYear() % 100);
-				}
-			};
-
-			return grouped.stream() //
-					.filter(l -> !l.isEmpty()) //
-					.map(l -> {
-						if (l.size() == 1) {
-							return lp.apply(l.get(0));
-						} else if (l.size() == 2) {
-							return String.format("%s, %s", lp.apply(l.get(0)), lp.apply(l.get(1)));
-						} else {
-							return String.format("%s-%s", lp.apply(l.get(0)), lp.apply(l.get(l.size() - 1)));
-						}
-					}) //
-					.collect(Collectors.joining(", "));
+			return ADPModelUtil.getPeriodDistributionRangeString(periodDistribution);
 		}, colourProvider));
 
 		minCargoesColumn.setLabelProvider(ColumnLabelProviderFactory.make(PeriodDistribution.class, "", periodDistribution -> {
@@ -357,7 +310,7 @@ public class PeriodDistributionProfileConstraintDetailComposite extends Composit
 			{
 
 				final Consumer<LocalMenuHelper> menuCreator = (helper) -> {
-					final ADPModel adpModel = getADPModel(oldValue);
+					final ADPModel adpModel = ADPModelUtil.getADPModel(oldValue);
 					if (adpModel != null) {
 						helper.addAction(new RunnableAction("Monthly", () -> {
 
@@ -582,16 +535,5 @@ public class PeriodDistributionProfileConstraintDetailComposite extends Composit
 	@Override
 	public boolean checkVisibility(final IDialogEditingContext context) {
 		return true;// l.. delegate.checkVisibility(context);
-	}
-
-	private @Nullable ADPModel getADPModel(EObject obj) {
-
-		while (obj != null) {
-			if (obj instanceof ADPModel) {
-				return (ADPModel) obj;
-			}
-			obj = obj.eContainer();
-		}
-		return (ADPModel) obj;
 	}
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.schedule;
@@ -67,16 +67,16 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 
 	public static final String COLUMN_BLOCK_PNL = "com.mmxlabs.lingo.reports.components.columns.schedule.pnl_group";
 
-	public static final OptionInfo ROW_FILTER_LONG_CARGOES = new OptionInfo("ROW_FILTER_LONG_CARGOES", "Longs");
-	public static final OptionInfo ROW_FILTER_SHORT_CARGOES = new OptionInfo("ROW_FILTER_SHORT_CARGOES", "Shorts");
-	public static final OptionInfo ROW_FILTER_VESSEL_START_ROW = new OptionInfo("ROW_FILTER_VESSEL_START_ROW", "Start ballast legs");
-	public static final OptionInfo ROW_FILTER_VESSEL_END_ROW = new OptionInfo("ROW_FILTER_VESSEL_END_ROW", "End event legs");
-	public static final OptionInfo ROW_FILTER_VESSEL_CHARTER_LENGTH = new OptionInfo("ROW_FILTER_VESSEL_CHARTER_LENGTH", "Charter length");
-	public static final OptionInfo ROW_FILTER_VESSEL_EVENT_ROW = new OptionInfo("ROW_FILTER_VESSEL_EVENT_ROW", "Vessel Events");
-	public static final OptionInfo ROW_FILTER_CHARTER_OUT_ROW = new OptionInfo("ROW_FILTER_CHARTER_OUT_ROW", "Charter Outs (Virtual)");
-	public static final OptionInfo ROW_FILTER_CARGO_ROW = new OptionInfo("ROW_FILTER_CARGO_ROW", "Cargoes");
+	public static final OptionInfo ROW_FILTER_LONG_CARGOES = new OptionInfo("ROW_FILTER_LONG_CARGOES", "Longs", "long");
+	public static final OptionInfo ROW_FILTER_SHORT_CARGOES = new OptionInfo("ROW_FILTER_SHORT_CARGOES", "Shorts", "short");
+	public static final OptionInfo ROW_FILTER_VESSEL_START_ROW = new OptionInfo("ROW_FILTER_VESSEL_START_ROW", "Start ballast legs", "orphanlegs");
+	public static final OptionInfo ROW_FILTER_VESSEL_END_ROW = new OptionInfo("ROW_FILTER_VESSEL_END_ROW", "End event legs", "endevents");
+	public static final OptionInfo ROW_FILTER_VESSEL_CHARTER_LENGTH = new OptionInfo("ROW_FILTER_VESSEL_CHARTER_LENGTH", "Charter length", "charterlength");
+	public static final OptionInfo ROW_FILTER_VESSEL_EVENT_ROW = new OptionInfo("ROW_FILTER_VESSEL_EVENT_ROW", "Vessel Events", "event");
+	public static final OptionInfo ROW_FILTER_CHARTER_OUT_ROW = new OptionInfo("ROW_FILTER_CHARTER_OUT_ROW", "Charter Outs (Virtual)", "virtualcharters");
+	public static final OptionInfo ROW_FILTER_CARGO_ROW = new OptionInfo("ROW_FILTER_CARGO_ROW", "Cargoes", "cargo");
 
-	public static final OptionInfo DIFF_FILTER_VESSEL_CHANGES = new OptionInfo("DIFF_FILTER_VESSEL_CHANGES", "Show Vessel Changes");
+	public static final OptionInfo DIFF_FILTER_VESSEL_CHANGES = new OptionInfo("DIFF_FILTER_VESSEL_CHANGES", "Show Vessel Changes", "vessel");
 
 	private final ScheduleDiffUtils scheduleDiffUtils = new ScheduleDiffUtils();
 

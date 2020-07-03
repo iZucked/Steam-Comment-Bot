@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases;
@@ -23,6 +23,7 @@ import com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
+import com.mmxlabs.models.lng.types.TimePeriod;
 
 /**
  * Test cases for updating vessel availabilities in a period optimisation
@@ -30,7 +31,7 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
  * @author Simon Goodall
  *
  */
-public class VesselAvailabilityPeriodTests extends AbstractMicroTestCase {
+public class VesselAvailabilityPeriodTests extends AbstractLegacyMicroTestCase {
 
 	/**
 	 * Vessel availability and cargoes are within the period. No change to start/end information.
@@ -200,9 +201,11 @@ public class VesselAvailabilityPeriodTests extends AbstractMicroTestCase {
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2017, 2, 1), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.withWindowSize(0, TimePeriod.HOURS) //
 				.with(slot -> ((LoadSlot) slot).setCargoCV(22.3)) //
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2017, 3, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				.withVesselAssignment(vesselAvailability, 1) //
 				.withAssignmentFlags(false, false) //
@@ -210,8 +213,10 @@ public class VesselAvailabilityPeriodTests extends AbstractMicroTestCase {
 
 		final Cargo cargo2 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L2", LocalDate.of(2017, 4, 1), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				.makeDESSale("D2", LocalDate.of(2017, 5, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				.withVesselAssignment(vesselAvailability, 2) //
 				.withAssignmentFlags(false, false) //
@@ -279,8 +284,10 @@ public class VesselAvailabilityPeriodTests extends AbstractMicroTestCase {
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2017, 2, 1), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2017, 3, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				.withVesselAssignment(vesselAvailability, 1) //
 				.withAssignmentFlags(false, false) //
@@ -288,8 +295,10 @@ public class VesselAvailabilityPeriodTests extends AbstractMicroTestCase {
 
 		final Cargo cargo2 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L2", LocalDate.of(2017, 4, 1), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				.makeDESSale("D2", LocalDate.of(2017, 5, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				.withVesselAssignment(vesselAvailability, 2) //
 				.withAssignmentFlags(false, false) //

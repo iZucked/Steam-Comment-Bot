@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.scenario.service.model;
@@ -21,6 +21,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioFragment#getFragment <em>Fragment</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioFragment#getContentType <em>Content Type</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioFragment#isUseCommandStack <em>Use Command Stack</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioFragment#getTypeHint <em>Type Hint</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioFragment()
@@ -159,5 +160,27 @@ public interface ScenarioFragment extends EObject {
 	 * @generated
 	 */
 	void setUseCommandStack(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Type Hint</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Type Hint</em>' attribute.
+	 * @see #setTypeHint(String)
+	 * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioFragment_TypeHint()
+	 * @model
+	 * @generated
+	 */
+	String getTypeHint();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ScenarioFragment#getTypeHint <em>Type Hint</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Type Hint</em>' attribute.
+	 * @see #getTypeHint()
+	 * @generated
+	 */
+	void setTypeHint(String value);
 
 } // ScenarioFragment

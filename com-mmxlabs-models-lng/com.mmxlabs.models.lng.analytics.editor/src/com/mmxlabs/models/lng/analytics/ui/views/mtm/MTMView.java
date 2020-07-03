@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.ui.views.mtm;
@@ -43,7 +43,7 @@ import com.mmxlabs.models.lng.analytics.MTMModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
+import com.mmxlabs.models.mmxcore.impl.SafeMMXContentAdapter;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
@@ -215,7 +215,7 @@ public class MTMView extends ScenarioInstanceView implements CommandStackListene
 	/**
 	 * If the current model is deleted, then clear the input
 	 */
-	private final EContentAdapter deletedOptionModelAdapter = new MMXContentAdapter() {
+	private final EContentAdapter deletedOptionModelAdapter = new SafeMMXContentAdapter() {
 
 		@Override
 		protected void missedNotifications(java.util.List<Notification> missed) {

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
@@ -39,4 +39,6 @@ public interface ICargoValueAnnotation extends IAllocationAnnotation {
 	long getSlotUpstreamPNL(@NonNull IPortSlot slot);
 
 	IEntity getSlotEntity(@NonNull IPortSlot slot);
+
+	long getTotalProfitAndLoss();
 }

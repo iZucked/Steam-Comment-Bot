@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 /**
@@ -26,7 +26,6 @@ import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.RandomHelper;
 import com.mmxlabs.optimiser.common.components.ILookupManager;
-import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
@@ -43,6 +42,7 @@ import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.lso.ConstrainedMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.lso.moves.ShuffleElements.ShuffleElementsBuilder;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
+import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
 import com.mmxlabs.scheduler.optimiser.providers.Followers;
 import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
@@ -75,8 +75,6 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 	@Inject
 	private IAlternativeElementProvider alternativeElementProvider;
 
-	private List<@NonNull ISequenceElement> targetElements;
-
 	@Inject
 	private IVirtualVesselSlotProvider virtualVesselSlotProvider;
 
@@ -89,12 +87,17 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 	@Inject
 	private IPhaseOptimisationData optimisationData;
 
+	@Inject
+	private IMoveHelper moveHelper;
+
 	/**
 	 * Experimental parameter to limit the list of returned candidates.
 	 */
-	@com.google.inject.Inject(optional=true)
+	@com.google.inject.Inject(optional = true)
 	@Named("shuffleCutoff")
 	private int shuffleCutoff = 0;
+
+	private List<@NonNull ISequenceElement> targetElements;
 
 	@Inject
 	public void init() {
@@ -130,6 +133,8 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 		// Set of elements already considered in our move. They should no longer
 		// be considered available or in the follower or preceders lists
 		final Set<@NonNull ISequenceElement> touchedElements = new HashSet<>();
+		// Set of removed FOB Sale or DES Purchase elements to avoid removing again later
+		final Set<@NonNull ISequenceElement> removedElements = new HashSet<>();
 		final @NonNull ISequenceElement rawElement = RandomHelper.chooseElementFrom(random, targetElements);
 		final Pair<IResource, Integer> elementPosition = lookupManager.lookup(rawElement);
 		final IResource elementResource = elementPosition.getFirst();
@@ -189,6 +194,7 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 						builder.addTo(precederResource, 1, 1);
 
 						touchedElements.add(follower);
+						removedElements.add(follower);
 						foundMove = true;
 						break;
 					} else {
@@ -289,6 +295,7 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 						builder.addTo(precederResource, 1, 1);
 
 						touchedElements.add(preceder);
+						removedElements.add(preceder);
 						foundMove = true;
 						break;
 					} else {
@@ -409,7 +416,8 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 				if (followersAndPreceders.getValidFollowers(elementMinus2).contains(elementPlus1)) {
 					// We can link the head and tail together directly - no need
 					// to do more.
-					if (removeOrBackfill(builder, elementMinus1, touchedElements, lookupManager, rawSequences, random)) {
+					// Is element already removed? Otherwise attempt to do so.
+					if (removedElements.contains(elementMinus1) || removeOrBackfill(builder, elementMinus1, touchedElements, lookupManager, rawSequences, random)) {
 						touchedElements.add(elementMinus1);
 						return builder.getMove();
 					}
@@ -418,7 +426,8 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 			if (elementSequence.size() > elementPosition.getSecond() + 2) {
 				final ISequenceElement elementPlus2 = elementSequence.get(elementPosition.getSecond() + 2);
 				if (followersAndPreceders.getValidFollowers(elementMinus1).contains(elementPlus2)) {
-					if (removeOrBackfill(builder, elementPlus1, touchedElements, lookupManager, rawSequences, random)) {
+					// Is element already removed? Otherwise attempt to do so.
+					if (removedElements.contains(elementPlus1) || removeOrBackfill(builder, elementPlus1, touchedElements, lookupManager, rawSequences, random)) {
 						touchedElements.add(elementPlus1);
 
 						return builder.getMove();
@@ -448,7 +457,6 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 		if (random.nextBoolean()) {
 			// Find a preceder
 			final Followers<@NonNull ISequenceElement> preceders = followersAndPreceders.getValidPreceders(target);
-			// TODO: randomise
 			for (final ISequenceElement p : shuffleFollowers(preceders, random)) {
 				if (touchedElements.contains(p)) {
 					continue;
@@ -501,7 +509,6 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 		} else {
 			// // Find a follower
 			final Followers<@NonNull ISequenceElement> followers = followersAndPreceders.getValidFollowers(target);
-			// TODO: randomise
 			for (final ISequenceElement f : shuffleFollowers(followers, random)) {
 				if (touchedElements.contains(f)) {
 					continue;
@@ -558,7 +565,7 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 
 		// Disable re-wiring on round trips.
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
+		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP && !moveHelper.allowRoundTripChanges()) {
 			return false;
 		}
 
@@ -579,7 +586,7 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 				}
 			}
 			if (!possibleFillers.isEmpty()) {
-				final HashSet<ISequenceElement> temp = new HashSet<ISequenceElement>();
+				final HashSet<ISequenceElement> temp = new HashSet<>();
 				for (final ISequenceElement e : preceders) {
 					if (checkResource(e, resource)) {
 						temp.add(e);
@@ -589,7 +596,7 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 			}
 			if (!possibleFillers.isEmpty()) {
 
-				final HashSet<ISequenceElement> temp = new HashSet<ISequenceElement>();
+				final HashSet<ISequenceElement> temp = new HashSet<>();
 				for (final ISequenceElement e : rawSequences.getUnusedElements()) {
 					if (checkResource(e, resource)) {
 						temp.add(e);

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lngdataserver.integration.repo.generic;
@@ -25,9 +25,10 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.lngdataserver.commons.http.WrappedProgressMonitor;
-import com.mmxlabs.lngdataserver.server.IUpstreamDetailChangedListener;
-import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
+import com.mmxlabs.hub.DataHubServiceProvider;
+import com.mmxlabs.hub.IUpstreamDetailChangedListener;
+import com.mmxlabs.hub.UpstreamUrlProvider;
+import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
 
 public class GenericDataUpdater {
 
@@ -184,7 +185,7 @@ public class GenericDataUpdater {
 	}
 
 	public void refresh() throws IOException {
-		final boolean available = UpstreamUrlProvider.INSTANCE.isAvailable();
+		final boolean available = DataHubServiceProvider.getInstance().isOnlineAndLoggedIn();
 
 		if (available) {
 			final Instant m = client.getLastModified();

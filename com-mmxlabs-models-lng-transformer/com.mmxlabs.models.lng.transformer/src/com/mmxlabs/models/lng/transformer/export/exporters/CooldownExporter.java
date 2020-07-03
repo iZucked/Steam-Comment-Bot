@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.export.exporters;
@@ -43,7 +43,7 @@ public class CooldownExporter {
 			cooldown.setPort(ePort);
 			cooldown.setVolume(OptimiserUnitConvertor.convertToExternalVolume(cooldownVolume));
 
-			final VoyagePlan voyagePlan = volumeAllocatedSequence.getVoyagePlan(voyageDetails.getOptions().getFromPortSlot());
+			final VoyagePlan voyagePlan = volumeAllocatedSequence.getVoyagePlanRecord(voyageDetails.getOptions().getFromPortSlot()).getVoyagePlan();
 
 			cooldown.setCost(OptimiserUnitConvertor.convertToExternalFixedCost(voyagePlan.getCooldownCost()));
 			cooldown.setStart(modelEntityMap.getDateFromHours(currentTime, ePort));

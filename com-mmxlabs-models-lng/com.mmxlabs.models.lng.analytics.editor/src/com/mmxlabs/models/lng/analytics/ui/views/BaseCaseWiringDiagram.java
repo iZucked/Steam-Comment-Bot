@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 /**
@@ -198,7 +198,9 @@ public class BaseCaseWiringDiagram implements PaintListener {
 					final BuyOption buy = row.getBuyOption();
 					boolean isDES = !AnalyticsBuilder.isShipped(buy);
 					final Color terminalColour = ValidTerminalColour;// : InvalidTerminalColour;
-					drawTerminal(true, isDES, terminalColour, false, buy instanceof BuyMarket, ca, graphics, midpoint);
+					boolean isSpot = AnalyticsBuilder.isSpot(buy);
+
+					drawTerminal(true, isDES, terminalColour, false, isSpot, ca, graphics, midpoint);
 				}
 
 				graphics.setLineWidth(linewidth);
@@ -207,7 +209,8 @@ public class BaseCaseWiringDiagram implements PaintListener {
 					final SellOption sell = row.getSellOption();
 					boolean isFOB = !AnalyticsBuilder.isShipped(sell);
 					final Color terminalColour = ValidTerminalColour;// : InvalidTerminalColour;
-					drawTerminal(false, !isFOB, terminalColour, false, sell instanceof SellMarket, ca, graphics, midpoint);
+					boolean isSpot = AnalyticsBuilder.isSpot(sell);
+					drawTerminal(false, !isFOB, terminalColour, false, isSpot, ca, graphics, midpoint);
 				}
 			}
 		}

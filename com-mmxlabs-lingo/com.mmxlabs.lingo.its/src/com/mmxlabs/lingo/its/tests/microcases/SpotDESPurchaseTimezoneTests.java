@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases;
@@ -16,6 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.moves.AbstractMoveHandlerTest;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -50,29 +51,29 @@ public class SpotDESPurchaseTimezoneTests extends AbstractMoveHandlerTest {
 	public void testSwapCargoLoadWithUnusedLoad() throws Exception {
 
 		// Make a shipped cargo to define the time range.
-		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
 				.withCharterRate("100000") //
 				.build();
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2018, 06, 1), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2018, 06, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2018, 07, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2018, 07, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				.withVesselAssignment(vesselAvailability1, 1) //
 				.withAssignmentFlags(true, false) //
 				.build();
 
 		final DischargeSlot discharge = cargoModelBuilder //
-				.makeDESSale("Discharge", LocalDate.of(2018, 07, 1), portFinder.findPort("Dahej"), null, entity, "5") //
+				.makeDESSale("Discharge", LocalDate.of(2018, 07, 1), portFinder.findPortById(InternalDataConstants.PORT_DAHEJ), null, entity, "5") //
 				.withWindowSize(1, TimePeriod.MONTHS) //
 //				.withWindowSize(31, TimePeriod.DAYS) //
 				.withWindowStartTime(0) //
 				.build();
 
-		SpotMarket market = spotMarketsModelBuilder.makeDESPurchaseMarket("INDIA MKT", Collections.<APortSet<Port>> singletonList(portFinder.findPort("Dahej")), entity, "8", 22.3) //
+		SpotMarket market = spotMarketsModelBuilder.makeDESPurchaseMarket("INDIA MKT", Collections.<APortSet<Port>> singletonList(portFinder.findPortById(InternalDataConstants.PORT_DAHEJ)), entity, "8", 22.3) //
 				.withAvailabilityConstant(1) //
 				.withEnabled(true) //
 				.withVolumeLimits(0, 4_000_000, VolumeUnits.MMBTU) //

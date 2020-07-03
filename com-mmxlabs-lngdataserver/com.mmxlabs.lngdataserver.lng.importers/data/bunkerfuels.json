@@ -1,0 +1,12 @@
+{
+  "fuels" : [
+    {
+      "name" : "HFO",
+      "equivalenceFactor" : 47.423
+    },
+    {
+      "name" : "MGO",
+      "equivalenceFactor" : 43
+    }
+  ]
+}

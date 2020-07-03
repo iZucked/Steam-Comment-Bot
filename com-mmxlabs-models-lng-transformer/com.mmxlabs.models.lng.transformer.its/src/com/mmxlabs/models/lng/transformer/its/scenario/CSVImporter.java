@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.its.scenario;
@@ -133,6 +133,8 @@ public class CSVImporter {
 		dataMap.put(PricingModelImporter.CHARTER_CURVE_KEY, createURL(urlRoot, "Charter Curves.csv"));
 		dataMap.put(PricingModelImporter.CONVERSION_FACTORS_KEY, createURL(urlRoot, "Conversion Factors.csv"));
 		dataMap.put(PricingModelImporter.SETTLED_PRICES_KEY, createURL(urlRoot, "Settled Prices.csv"));
+		dataMap.put(PricingModelImporter.MARKET_INDEX_KEY, createURL(urlRoot, "Market Indices.csv"));
+		dataMap.put(PricingModelImporter.CURRENCY_CURVE_KEY, createURL(urlRoot, "Currency Curves.csv"));
 	}
 
 	public void importCostData(@NonNull final String urlRoot) throws MalformedURLException {

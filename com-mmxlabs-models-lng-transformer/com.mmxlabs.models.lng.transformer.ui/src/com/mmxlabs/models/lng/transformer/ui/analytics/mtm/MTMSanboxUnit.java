@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.analytics.mtm;
@@ -159,26 +159,26 @@ public class MTMSanboxUnit {
 
 				bind(LazyFollowersAndPrecedersProviderImpl.class).in(Singleton.class);
 				bind(IFollowersAndPreceders.class).to(LazyFollowersAndPrecedersProviderImpl.class);
-				
+
 				bind(IBreakEvenEvaluator.class).to(DefaultBreakEvenEvaluator.class);
 			}
 
 			private final Map<Thread, EvaluationHelper> threadCache_EvaluationHelper = new ConcurrentHashMap<>(100);
-			
+
 			@Provides
 			private EvaluationHelper provideEvaluationHelper(final Injector injector, @Named(LNGParameters_EvaluationSettingsModule.OPTIMISER_REEVALUATE) final boolean isReevaluating,
 					@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL) final ISequences initialRawSequences) {
-				
+
 				EvaluationHelper helper = threadCache_EvaluationHelper.get(Thread.currentThread());
 				if (helper == null) {
 					helper = new EvaluationHelper(isReevaluating);
 					injector.injectMembers(helper);
-					
+
 					final ISequencesManipulator manipulator = injector.getInstance(ISequencesManipulator.class);
 					helper.acceptSequences(initialRawSequences, manipulator.createManipulatedSequences(initialRawSequences));
-					
+
 					helper.setFlexibleCapacityViolationCount(Integer.MAX_VALUE);
-	
+
 					threadCache_EvaluationHelper.put(Thread.currentThread(), helper);
 				}
 				return helper;
@@ -221,7 +221,7 @@ public class MTMSanboxUnit {
 						row.getRhsResults().clear();
 						row.getLhsResults().clear();
 						final LoadSlot load;
-	
+
 						if (row.getBuyOption() != null) {
 							load = mapper.getOriginal(row.getBuyOption());
 						} else {
@@ -230,13 +230,13 @@ public class MTMSanboxUnit {
 						if (load == null) {
 							continue;
 						}
-						
+
 						for (final CharterInMarket shipping : model.getNominalMarkets()) {
 
 							if (!shipping.isEnabled()) {
 								continue;
 							}
-	
+
 							for (final SpotMarket market : model.getMarkets()) {
 								final Callable<Runnable> job = () -> {
 									if (monitor.isCanceled()) {
@@ -248,19 +248,19 @@ public class MTMSanboxUnit {
 									ecmo.setSpotIndex(-1);
 									mtmResult.setShipping(ecmo);
 									mtmResult.setTarget(market);
-									
+
 									final InternalResult ret = new InternalResult();
 									DischargeSlot discharge = null;
 									Slot be_target = null;
 									Slot reference_slot = null;
-	
+
 									try {
-	
+
 										String timeZone = "UTC";
 										for (int i = 0; i < 2; ++i) {
-	
+
 											boolean shipped = true;
-	
+
 											if (market instanceof FOBSalesMarket) {
 												shipped = false;
 												discharge = mapper.getSalesMarketOriginal(market, YearMonth.from(load.getWindowStart()));
@@ -287,21 +287,21 @@ public class MTMSanboxUnit {
 											} else {
 												timeZone = discharge.getPort().getLocation().getTimeZone();
 											}
-	
+
 											final SingleResult result = doIt(shipped, shipping, load, discharge, be_target);
 											ret.merge(result);
 											if (!shipped) {
 												// only one iteration.
 												break;
 											}
-											
+
 										}
 										if (ret != null && ret.arrivalTime != Integer.MAX_VALUE) {
 											mtmResult.setEarliestETA(modelEntityMap.getDateFromHours(ret.arrivalTime, timeZone).toLocalDate());
 											mtmResult.setEarliestVolume(OptimiserUnitConvertor.convertToExternalVolume(ret.volumeInMMBTU));
 											mtmResult.setEarliestPrice(OptimiserUnitConvertor.convertToExternalPrice(ret.netbackPrice));
-											mtmResult.setShippingCost(OptimiserUnitConvertor.convertToExternalPrice(
-													Calculator.getPerMMBTuFromTotalAndVolumeInMMBTu(ret.shippingCost, ret.volumeInMMBTU)));
+											mtmResult.setShippingCost(
+													OptimiserUnitConvertor.convertToExternalPrice(Calculator.getPerMMBTuFromTotalAndVolumeInMMBTu(ret.shippingCost, ret.volumeInMMBTU)));
 										}
 										synchronized (row) {
 											if (row.getBuyOption() != null) {
@@ -353,14 +353,13 @@ public class MTMSanboxUnit {
 				scope.exit(thread);
 				threadCache.clear();
 			}
-			
+
 			// Only keeping the best result
 			for (final MTMRow row : model.getRows()) {
-				
-				Map<SpotMarket, List<MTMResult>> grouped = row.getRhsResults().stream()
-						.collect(Collectors.groupingBy(MTMResult::getTarget));
 
-				for(final Map.Entry<SpotMarket, List<MTMResult>> entry : grouped.entrySet() ) {
+				Map<SpotMarket, List<MTMResult>> grouped = row.getRhsResults().stream().collect(Collectors.groupingBy(MTMResult::getTarget));
+
+				for (final Map.Entry<SpotMarket, List<MTMResult>> entry : grouped.entrySet()) {
 					double price = -Double.MAX_VALUE;
 					final List<MTMResult> lmtm = entry.getValue();
 					MTMResult best = null;
@@ -379,18 +378,19 @@ public class MTMSanboxUnit {
 
 	private @Nullable SingleResult doIt(final boolean shipped, final CharterInMarket charterInMarket, final LoadSlot load, final DischargeSlot discharge, final Slot target) {
 		final ModifiableSequences solution;
+		final IResource resource;
 		if (!shipped) {
-			final IResource resource = SequenceHelper.getResource(dataTransformer, load.isDESPurchase() ? load : discharge);
+			resource = SequenceHelper.getResource(dataTransformer, load.isDESPurchase() ? load : discharge);
 			solution = new ModifiableSequences(CollectionsUtil.makeArrayList(resource));
 			SequenceHelper.addFOBDESSequence(solution, dataTransformer, load, discharge);
 		} else {
-			final IResource resource = SequenceHelper.getResource(dataTransformer, charterInMarket, -1);
+			resource = SequenceHelper.getResource(dataTransformer, charterInMarket, -1);
 			solution = new ModifiableSequences(CollectionsUtil.makeArrayList(resource));
 			SequenceHelper.addSequence(solution, injector, charterInMarket, -1, load, discharge);
 		}
 		final MTMSandboxEvaluator evaluator = injector.getInstance(MTMSandboxEvaluator.class);
 		final IPortSlot portSlot = dataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(target, IPortSlot.class);
-		
-		return evaluator.evaluate(solution, portSlot);
+
+		return evaluator.evaluate(resource, solution, portSlot);
 	}
 }

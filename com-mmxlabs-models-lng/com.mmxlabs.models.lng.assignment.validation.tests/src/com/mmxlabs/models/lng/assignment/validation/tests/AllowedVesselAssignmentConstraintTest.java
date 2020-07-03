@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.assignment.validation.tests;
@@ -19,6 +19,7 @@ import com.mmxlabs.models.lng.assignment.validation.AllowedVesselAssignmentConst
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
+import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
@@ -40,6 +41,8 @@ public class AllowedVesselAssignmentConstraintTest {
 		vesselAvailability.setVessel(vessel);
 		cargo.setVesselAssignmentType(vesselAvailability);
 
+		final CargoModel cargoModel = CargoFactory.eINSTANCE.createCargoModel();
+		cargoModel.getCargoes().add(cargo);
 		checkConstraint(cargo, true);
 	}
 
@@ -63,6 +66,10 @@ public class AllowedVesselAssignmentConstraintTest {
 		vesselAvailability.setVessel(vessel1);
 		cargo.setVesselAssignmentType(vesselAvailability);
 
+		final CargoModel cargoModel = CargoFactory.eINSTANCE.createCargoModel();
+		cargoModel.getCargoes().add(cargo);
+		cargoModel.getLoadSlots().add(loadSlot);
+		cargoModel.getDischargeSlots().add(dischargeSlot);
 		checkConstraint(cargo, true);
 	}
 
@@ -86,6 +93,10 @@ public class AllowedVesselAssignmentConstraintTest {
 		vesselAvailability.setVessel(vessel2);
 		cargo.setVesselAssignmentType(vesselAvailability);
 
+		final CargoModel cargoModel = CargoFactory.eINSTANCE.createCargoModel();
+		cargoModel.getCargoes().add(cargo);
+		cargoModel.getLoadSlots().add(loadSlot);
+		cargoModel.getDischargeSlots().add(dischargeSlot);
 		checkConstraint(cargo, false);
 	}
 
@@ -108,6 +119,10 @@ public class AllowedVesselAssignmentConstraintTest {
 		vesselAvailability.setVessel(vessel1);
 		cargo.setVesselAssignmentType(vesselAvailability);
 
+		final CargoModel cargoModel = CargoFactory.eINSTANCE.createCargoModel();
+		cargoModel.getCargoes().add(cargo);
+		cargoModel.getLoadSlots().add(loadSlot);
+		cargoModel.getDischargeSlots().add(dischargeSlot);
 		checkConstraint(cargo, true);
 	}
 
@@ -131,6 +146,10 @@ public class AllowedVesselAssignmentConstraintTest {
 		vesselAvailability.setVessel(vessel1);
 		cargo.setVesselAssignmentType(vesselAvailability);
 
+		final CargoModel cargoModel = CargoFactory.eINSTANCE.createCargoModel();
+		cargoModel.getCargoes().add(cargo);
+		cargoModel.getLoadSlots().add(loadSlot);
+		cargoModel.getDischargeSlots().add(dischargeSlot);
 		checkConstraint(cargo, false);
 	}
 
@@ -153,6 +172,10 @@ public class AllowedVesselAssignmentConstraintTest {
 		charterInMarket.setVessel(vessel1);
 		cargo.setVesselAssignmentType(charterInMarket);
 
+		final CargoModel cargoModel = CargoFactory.eINSTANCE.createCargoModel();
+		cargoModel.getCargoes().add(cargo);
+		cargoModel.getLoadSlots().add(loadSlot);
+		cargoModel.getDischargeSlots().add(dischargeSlot);
 		checkConstraint(cargo, true);
 	}
 
@@ -175,6 +198,11 @@ public class AllowedVesselAssignmentConstraintTest {
 		final CharterInMarket charterInMarket = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
 		charterInMarket.setVessel(vessel1);
 		cargo.setVesselAssignmentType(charterInMarket);
+
+		final CargoModel cargoModel = CargoFactory.eINSTANCE.createCargoModel();
+		cargoModel.getCargoes().add(cargo);
+		cargoModel.getLoadSlots().add(loadSlot);
+		cargoModel.getDischargeSlots().add(dischargeSlot);
 		checkConstraint(cargo, false);
 	}
 
@@ -192,10 +220,14 @@ public class AllowedVesselAssignmentConstraintTest {
 		loadSlot.setRestrictedVesselsArePermissive(true);
 		loadSlot.setRestrictedVesselsOverride(true);
 		// Permitted!
-		CharterInMarket market = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
+		final CharterInMarket market = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
 		market.setVessel(vessel);
 		cargo.setVesselAssignmentType(market);
 
+		final CargoModel cargoModel = CargoFactory.eINSTANCE.createCargoModel();
+		cargoModel.getCargoes().add(cargo);
+		cargoModel.getLoadSlots().add(loadSlot);
+		cargoModel.getDischargeSlots().add(dischargeSlot);
 		checkConstraint(cargo, true);
 	}
 
@@ -214,9 +246,14 @@ public class AllowedVesselAssignmentConstraintTest {
 		loadSlot.setRestrictedVesselsArePermissive(true);
 		loadSlot.setRestrictedVesselsOverride(true);
 		// Not Permitted!
-		CharterInMarket market = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
+		final CharterInMarket market = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
 		market.setVessel(vessel2);
 		cargo.setVesselAssignmentType(market);
+
+		final CargoModel cargoModel = CargoFactory.eINSTANCE.createCargoModel();
+		cargoModel.getCargoes().add(cargo);
+		cargoModel.getLoadSlots().add(loadSlot);
+		cargoModel.getDischargeSlots().add(dischargeSlot);
 
 		checkConstraint(cargo, false);
 	}
@@ -234,13 +271,18 @@ public class AllowedVesselAssignmentConstraintTest {
 		Mockito.when(ctx.createFailureStatus(ArgumentMatchers.anyString())).thenReturn(failureStatus);
 
 		final AllowedVesselAssignmentConstraint constraint = new AllowedVesselAssignmentConstraint();
-		final IStatus status = constraint.validate(ctx);
+		try {
+			final IStatus status = constraint.validate(ctx);
 
-		if (expectSuccess) {
-			Assertions.assertTrue(status.isOK(), "Success expected");
-		} else {
-			Assertions.assertFalse(status.isOK(), "Failure expected");
+			if (expectSuccess) {
+				Assertions.assertTrue(status.isOK(), "Success expected");
+			} else {
+				Assertions.assertFalse(status.isOK(), "Failure expected");
 
+			}
+		} catch (final Throwable t) {
+			t.printStackTrace();
+			Assertions.fail(t.getMessage());
 		}
 	}
 

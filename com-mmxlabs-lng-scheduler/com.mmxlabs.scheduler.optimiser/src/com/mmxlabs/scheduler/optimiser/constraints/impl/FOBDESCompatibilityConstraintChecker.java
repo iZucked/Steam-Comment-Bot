@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
@@ -25,8 +25,12 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
- * A constraint checker which determines whether every port in the sequence is legal for the given vessel. Whether this is the best possible solution is debatable, as it involves a few more lookups
- * than the minimum possible number; we could instead store a map from vessels to excluded <em>elements</em> instead of <em>ports</em>, saving a lookup at the expense of builder complexity.
+ * A constraint checker which determines whether every port in the sequence is
+ * legal for the given vessel. Whether this is the best possible solution is
+ * debatable, as it involves a few more lookups than the minimum possible
+ * number; we could instead store a map from vessels to excluded
+ * <em>elements</em> instead of <em>ports</em>, saving a lookup at the expense
+ * of builder complexity.
  * 
  * @author hinton
  * 
@@ -35,11 +39,9 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 public class FOBDESCompatibilityConstraintChecker implements IPairwiseConstraintChecker {
 
 	@Inject
-	@NonNull
 	private IVesselProvider vesselProvider;
 
 	@Inject
-	@NonNull
 	private IFOBDESCompatibilityProvider fobDesCompatibilityProvider;
 
 	@Inject
@@ -48,7 +50,7 @@ public class FOBDESCompatibilityConstraintChecker implements IPairwiseConstraint
 	@NonNull
 	private final String name;
 
-	public FOBDESCompatibilityConstraintChecker(@NonNull final String name) {
+	public FOBDESCompatibilityConstraintChecker(final @NonNull String name) {
 		super();
 		this.name = name;
 	}

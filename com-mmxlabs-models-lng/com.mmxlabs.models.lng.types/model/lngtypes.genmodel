@@ -38,6 +38,7 @@
     </genEnums>
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="lngtypes.ecore#//DESPurchaseDealType">
       <genEnumLiterals ecoreEnumLiteral="lngtypes.ecore#//DESPurchaseDealType/DEST_ONLY"/>
+      <genEnumLiterals ecoreEnumLiteral="lngtypes.ecore#//DESPurchaseDealType/DIVERTIBLE"/>
       <genEnumLiterals ecoreEnumLiteral="lngtypes.ecore#//DESPurchaseDealType/DEST_WITH_SOURCE"/>
       <genEnumLiterals ecoreEnumLiteral="lngtypes.ecore#//DESPurchaseDealType/DIVERT_FROM_SOURCE"/>
     </genEnums>

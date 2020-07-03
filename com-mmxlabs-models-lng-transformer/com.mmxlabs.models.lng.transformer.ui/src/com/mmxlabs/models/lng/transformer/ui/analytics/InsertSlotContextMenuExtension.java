@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.analytics;
@@ -8,12 +8,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
@@ -23,16 +21,16 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.Lists;
 import com.mmxlabs.common.util.TriConsumer;
 import com.mmxlabs.jobmanager.jobs.EJobState;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolutionHelper;
-import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -43,6 +41,7 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.ITradesTableContextMenu
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper.NameProvider;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationJobRunner;
@@ -55,7 +54,8 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 public class InsertSlotContextMenuExtension implements ITradesTableContextMenuExtension {
 
-	public static final String ChangeSetViewCreatorService_Topic = "create-change-set-view";
+	private static final String LBL_KEPT_OPEN = "(Kept open)";
+	private static final String LBL_LOCKED = "(Locked)";
 
 	private static final Logger log = LoggerFactory.getLogger(InsertSlotContextMenuExtension.class);
 
@@ -66,7 +66,13 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 			return;
 		}
 
-		if (!LicenseFeatures.isPermitted("features:options-suggester")) {
+		if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIONISER)) {
+			return;
+		}
+
+		ADPModel adpModel = ScenarioModelUtil.getADPModel(scenarioEditingLocation.getScenarioDataProvider());
+		if (adpModel != null) {
+			// Cannot run optioniser is not supported for ADP
 			return;
 		}
 
@@ -75,7 +81,7 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 
 			if (slot.isLocked()) {
 				action.setEnabled(false);
-				action.setText(action.getText() + " (Kept open)");
+				action.setText(String.format("%s %s", action.getText(), LBL_KEPT_OPEN));
 			}
 
 			menuManager.add(action);
@@ -91,12 +97,14 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 			for (final Slot<?> slot2 : slots) {
 				if (slot2.isLocked()) {
 					action.setEnabled(false);
-					action.setText(action.getText() + " (Kept open)");
+					action.setText(String.format("%s %s", action.getText(), LBL_KEPT_OPEN));
+
 				}
 			}
 			if (slot.getCargo().isLocked()) {
 				action.setEnabled(false);
-				action.setText(action.getText() + " (Locked)");
+				action.setText(String.format("%s %s", action.getText(), LBL_LOCKED));
+
 			}
 			menuManager.add(action);
 		}
@@ -105,9 +113,17 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 	@Override
 	public void contributeToMenu(@NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final IStructuredSelection selection, @NonNull final MenuManager menuManager) {
 
-		if (!LicenseFeatures.isPermitted("features:options-suggester")) {
+		if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIONISER)) {
 			return;
 		}
+		
+		ADPModel adpModel = ScenarioModelUtil.getADPModel(scenarioEditingLocation.getScenarioDataProvider());
+		if (adpModel != null) {
+			// Cannot use optioniser with ADP
+			return;
+		}
+		
+		
 		{
 			List<Slot<?>> slots = new LinkedList<>();
 			final Iterator<?> itr = selection.iterator();
@@ -144,7 +160,8 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 				for (final Slot<?> slot : slots) {
 					if (slot.isLocked()) {
 						action.setEnabled(false);
-						action.setText(action.getText() + " (Kept open)");
+						action.setText(String.format("%s %s", action.getText(), LBL_KEPT_OPEN));
+
 						break;
 					}
 				}
@@ -222,7 +239,7 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 					final SlotInsertionOptions plan = (SlotInsertionOptions) jobControl.getJobOutput();
 					if (plan != null) {
 						final AnalyticsSolution data = new AnalyticsSolution(original, plan, pTaskName);
-						data.open();
+						data.openAndSwitchScreen();
 					}
 				}
 			};

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.ui.validation;
@@ -15,19 +15,21 @@ import org.osgi.util.tracker.ServiceTracker;
  * 
  */
 public abstract class ValidationPlugin extends AbstractUIPlugin {
+
 	private ServiceTracker<IValidationService, IValidationService> validationDataTracker;
 
 	public IExtraValidationContext getExtraValidationContext() {
 		final IValidationService service = validationDataTracker.getService();
-		if (service == null)
+		if (service == null) {
 			return null;
+		}
 		return service.getExtraContext();
 	}
 
 	@Override
 	public void start(final BundleContext context) throws Exception {
 		super.start(context);
-		validationDataTracker = new ServiceTracker<IValidationService, IValidationService>(context, IValidationService.class, null);
+		validationDataTracker = new ServiceTracker<>(context, IValidationService.class, null);
 		validationDataTracker.open();
 	}
 

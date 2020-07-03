@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.presentation.composites;
@@ -74,6 +74,7 @@ public class ScheduleComponentHelper extends BaseComponentHelper {
 		add_inventoryLevelsEditor(detailComposite, topClass);
 		add_paperDealAllocationsEditor(detailComposite, topClass);
 		add_otherPNLEditor(detailComposite, topClass);
+		add_generatedPaperDealsEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the sequences feature on Schedule
@@ -162,5 +163,14 @@ public class ScheduleComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_otherPNLEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SCHEDULE__OTHER_PNL));
+	}
+
+	/**
+	 * Create the editor for the generatedPaperDeals feature on Schedule
+	 *
+	 * @generated
+	 */
+	protected void add_generatedPaperDealsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SCHEDULE__GENERATED_PAPER_DEALS));
 	}
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.actionplan;
@@ -45,24 +45,22 @@ public class SimilarityState {
 
 			ISequenceElement prev = null;
 			Pair<Integer, Integer> prevCargo = new Pair<>(-2, -2); // start
-			Pair<Integer, Integer> currCargo = new Pair<>(-1, -1); // end
+			Pair<Integer, Integer> currCargo; // end
 			for (final ISequenceElement current : sequence) {
 				assert current != null;
 				if (elementMap.put(current.getIndex(), current) != null) {
 					assert false;
 				}
 				if (prev != null) {
-					if (portTypeProvider.getPortType(prev) == PortType.Load) {
-						if (portTypeProvider.getPortType(current) == PortType.Discharge) {
-							loadDischargeMap.put(prev.getIndex(), current.getIndex());
-							dischargeLoadMap.put(current.getIndex(), prev.getIndex());
-							loadDischargeElementMap.put(prev, current);
-							dischargeLoadElementMap.put(current, prev);
-							currCargo = new Pair<>(prev.getIndex(), current.getIndex());
-							cargoToNextCargoMap.put(prevCargo, currCargo);
-							cargoToPrevCargoMap.put(currCargo, prevCargo);
-							prevCargo = currCargo;
-						}
+					if (portTypeProvider.getPortType(prev) == PortType.Load && portTypeProvider.getPortType(current) == PortType.Discharge) {
+						loadDischargeMap.put(prev.getIndex(), current.getIndex());
+						dischargeLoadMap.put(current.getIndex(), prev.getIndex());
+						loadDischargeElementMap.put(prev, current);
+						dischargeLoadElementMap.put(current, prev);
+						currCargo = new Pair<>(prev.getIndex(), current.getIndex());
+						cargoToNextCargoMap.put(prevCargo, currCargo);
+						cargoToPrevCargoMap.put(currCargo, prevCargo);
+						prevCargo = currCargo;
 					}
 				}
 				elementIdxResourceMap.put(current.getIndex(), resource);

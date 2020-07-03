@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.standard.exposures;
@@ -14,7 +14,10 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
+
+import javax.inject.Named;
 
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
@@ -37,8 +40,11 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.ui.views.properties.PropertySheet;
 
+import com.google.inject.Inject;
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.exposures.ExposureEnumerations.AggregationMode;
+import com.mmxlabs.common.exposures.ExposureEnumerations.ValueMode;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.IReportContents;
@@ -53,9 +59,6 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorAction;
-import com.mmxlabs.models.lng.commercial.parseutils.Exposures;
-import com.mmxlabs.models.lng.commercial.parseutils.Exposures.AggregationMode;
-import com.mmxlabs.models.lng.commercial.parseutils.Exposures.ValueMode;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -72,6 +75,7 @@ import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 
 /**
  */
@@ -93,6 +97,8 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 	protected String selectedEntity;
 	protected int selectedFiscalYear = -1;
 	protected AssetType selectedAssetType = AssetType.NET;
+	
+	protected boolean showGenerated = false;
 
 	// -------------------------------------Transformer class
 	// starts-------------------------------------
@@ -369,8 +375,8 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 			entities = getEntities(schedule);
 			fiscalYears = getFiscalYears(schedule);
-			final YearMonth ymStart = getEarliestExposureDate(scenarioResult.getScenarioDataProvider());
-			final YearMonth ymEnd = getLatestExposureDate(scenarioResult.getScenarioDataProvider());
+			final YearMonth ymStart = getEarliestExposureDate(schedule);
+			final YearMonth ymEnd = getLatestExposureDate(schedule);
 
 			final LNGScenarioModel rootObject = scenarioResult.getTypedRoot(LNGScenarioModel.class);
 			if (rootObject == null) {
@@ -389,7 +395,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		protected List<IndexExposureData> getExposuresByMonth(final Schedule schedule, final ScenarioResult scenarioResult, final YearMonth ymStart, final YearMonth ymEnd, List<Object> selected) {
 			final List<IndexExposureData> output = new LinkedList<>();
 			for (YearMonth cym = ymStart; cym.isBefore(ymEnd.plusMonths(1)); cym = cym.plusMonths(1)) {
-				IndexExposureData exposuresByMonth = ExposuresTransformer.getExposuresByMonth(scenarioResult, schedule, cym, mode, selected, selectedEntity, selectedFiscalYear, selectedAssetType);
+				IndexExposureData exposuresByMonth = ExposuresTransformer.getExposuresByMonth(scenarioResult, schedule, cym, mode, selected, selectedEntity, selectedFiscalYear, selectedAssetType, showGenerated);
 				if (inspectChildrenAndExposures(exposuresByMonth)) {
 					output.add(exposuresByMonth);
 				}
@@ -408,6 +414,9 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		final List<String> result = new LinkedList<String>();
 		for (final PaperDealAllocation paperDealAllocation : schedule.getPaperDealAllocations()) {
 			final PaperDeal pd = paperDealAllocation.getPaperDeal();
+			if (pd == null) {
+				continue;
+			}
 			final String year = String.format("%d", pd.getYear());
 			if (!result.contains(year)) {
 				result.add(year);
@@ -432,7 +441,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		final List<String> result = new LinkedList<String>();
 		for (final PaperDealAllocation paperDealAllocation : schedule.getPaperDealAllocations()) {
 			final PaperDeal pd = paperDealAllocation.getPaperDeal();
-			if (pd.getEntity() == null)
+			if (pd == null || pd.getEntity() == null)
 				continue;
 			final String entity = pd.getEntity().getName();
 			if (!result.contains(entity)) {
@@ -510,14 +519,15 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 	protected final Pair<YearMonth, YearMonth> dateRange = new Pair<>();
 
-	protected Exposures.ValueMode mode = ValueMode.VOLUME_MMBTU;
-	protected Exposures.AggregationMode viewMode = com.mmxlabs.models.lng.commercial.parseutils.Exposures.AggregationMode.BY_MONTH;
+	protected ValueMode mode = ValueMode.VOLUME_MMBTU;
+	protected AggregationMode viewMode = AggregationMode.BY_MONTH;
 	protected boolean selectionMode = false;
 
 	protected ISelection selection;
 
 	public ExposureReportView() {
 		super("com.mmxlabs.lingo.doc.Reports_IndexExposures");
+		showGenerated = false;
 	}
 
 	@Override
@@ -634,12 +644,25 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		filterAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.tabular", "/icons/filter.gif"));
 		getViewSite().getActionBars().getToolBarManager().add(filterAction);
 
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PAPER_DEALS) && LicenseFeatures.isPermitted(KnownFeatures.FEATURE_GENERATED_PAPER_DEALS)) {
+			final Action showGeneratedPaperDeals = new Action("Generated : No", Action.AS_PUSH_BUTTON) {
+				@Override
+				public void run() {
+					showGenerated = !showGenerated;
+					setText(String.format("Generated : %s", showGenerated ? "Yes" : "No"));
+					getViewSite().getActionBars().updateActionBars();
+					ExposureReportView.this.refresh();
+				}
+			};
+			getViewSite().getActionBars().getToolBarManager().add(showGeneratedPaperDeals);
+		}
+		
 		final Action modeToggle = new Action("Units: currency", Action.AS_PUSH_BUTTON) {
 			@Override
 			public void run() {
 
-				final int modeIdx = (mode.ordinal() + 1) % Exposures.ValueMode.values().length;
-				mode = Exposures.ValueMode.values()[modeIdx];
+				final int modeIdx = (mode.ordinal() + 1) % ValueMode.values().length;
+				mode = ValueMode.values()[modeIdx];
 				setUnitsActionText(this);
 				getViewSite().getActionBars().updateActionBars();
 				ExposureReportView.this.refresh();
@@ -649,7 +672,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		setUnitsActionText(modeToggle);
 		getViewSite().getActionBars().getToolBarManager().add(modeToggle);
 
-		final Action selectionToggle = new Action("View: " + (selectionMode ? "Selection" : "All"), Action.AS_CHECK_BOX) {
+		final Action selectionToggle = new Action("View: " + (selectionMode ? "Selection" : "All"), Action.AS_PUSH_BUTTON) {
 			@Override
 			public void run() {
 
@@ -662,12 +685,12 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		};
 		getViewSite().getActionBars().getToolBarManager().add(selectionToggle);
 
-		final Action viewModeToggle = new Action("View mode: Month", Action.AS_PUSH_BUTTON) {
+		final Action viewModeToggle = new Action("Group: Month", Action.AS_PUSH_BUTTON) {
 			@Override
 			public void run() {
 
-				final int modeIdx = (viewMode.ordinal() + 1) % Exposures.AggregationMode.values().length;
-				viewMode = Exposures.AggregationMode.values()[modeIdx];
+				final int modeIdx = (viewMode.ordinal() + 1) % AggregationMode.values().length;
+				viewMode = AggregationMode.values()[modeIdx];
 				setAggregationModeActionText(this);
 				getViewSite().getActionBars().updateActionBars();
 				ExposureReportView.this.refresh();
@@ -823,7 +846,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 		}
 		assert modeStr != null;
-		a.setText("View mode: " + modeStr);
+		a.setText("Group: " + modeStr);
 	}
 
 	@Override
@@ -839,11 +862,9 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		return super.getAdapter(adapter);
 	}
 
-	protected YearMonth getEarliestExposureDate(final IScenarioDataProvider sdp) {
+	protected YearMonth getEarliestExposureDate(final Schedule schedule) {
 		YearMonth result = YearMonth.now();
-
-		final ScheduleModel sm = ScenarioModelUtil.getScheduleModel(sdp);
-		final Schedule schedule = sm.getSchedule();
+		
 		if (schedule != null) {
 			for (final CargoAllocation ca : schedule.getCargoAllocations()) {
 				for (final SlotAllocation sa : ca.getSlotAllocations()) {
@@ -866,12 +887,10 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		}
 		return result;
 	}
-
-	protected YearMonth getLatestExposureDate(final IScenarioDataProvider sdp) {
+	
+	protected YearMonth getLatestExposureDate(final Schedule schedule) {
 		YearMonth result = YearMonth.now();
 
-		final ScheduleModel sm = ScenarioModelUtil.getScheduleModel(sdp);
-		final Schedule schedule = sm.getSchedule();
 		if (schedule != null) {
 			for (final CargoAllocation ca : schedule.getCargoAllocations()) {
 				for (final SlotAllocation sa : ca.getSlotAllocations()) {
@@ -896,7 +915,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 	}
 
 	public enum AssetType {
-		NET("All"), FINANCIAL("Net Index"), PAPER("Paper"), INDEX("Physical Index"), PHYSICAL("Physical");
+		NET("All"), FINANCIAL("Index"), PAPER("Paper"), INDEX("Physical Index"), PHYSICAL("Physical");
 
 		private String value;
 
@@ -917,7 +936,28 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		if (fd.exposures != null && !fd.exposures.isEmpty()) {
 			return true;
 		}
-
 		return false;
+	}
+	
+	@Override
+	protected void applyExpansionOnNewElements(final Object[] expanded, final List<?> rowElements) {
+		final List<Object> newToExpand = new ArrayList<Object>();
+		for (var e : expanded) {
+			if (e instanceof IndexExposureData) {
+				for (var elem : rowElements) {
+					if (elem instanceof IndexExposureData) {
+						final IndexExposureData newE = (IndexExposureData) elem;
+						final IndexExposureData oldE = (IndexExposureData) e;
+						
+						if (newE.date.equals(oldE.date) && Objects.equals(newE.scenarioResult, oldE.scenarioResult)) {
+							newToExpand.add(newE);
+						}
+					}
+				}
+			}
+		}
+		if (!newToExpand.isEmpty()) {
+			viewer.setExpandedElements(newToExpand.toArray());
+		}
 	}
 }

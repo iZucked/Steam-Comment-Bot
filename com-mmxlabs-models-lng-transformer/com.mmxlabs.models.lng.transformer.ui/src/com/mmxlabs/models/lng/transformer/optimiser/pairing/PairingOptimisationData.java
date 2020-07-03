@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.optimiser.pairing;
@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.transformer.optimiser.valuepair.ProfitAndLossRecor
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.providers.ConstraintInfo;
 import com.mmxlabs.scheduler.optimiser.providers.IMaxSlotCountConstraintDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 
@@ -31,7 +32,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
  * @author achurchill
  *
  */
-public class PairingOptimisationData implements ProfitAndLossRecorder {
+public class PairingOptimisationData<P,C> implements ProfitAndLossRecorder {
 	@Inject
 	private IPhaseOptimisationData phaseOptimisationData;
 	@Inject
@@ -84,7 +85,7 @@ public class PairingOptimisationData implements ProfitAndLossRecorder {
 		setMaxLoadGroupCount();
 		setMinLoadGroupCount();
 	}
-
+	
 	@Override
 	public void record(@NonNull final ILoadOption load, @NonNull final IDischargeOption discharge, final long profitAndLoss) {
 		profit[loadMap.get(load)][dischargeMap.get(discharge)] = profitAndLoss;
@@ -192,8 +193,24 @@ public class PairingOptimisationData implements ProfitAndLossRecorder {
 	}
 
 	public void setMaxDischargeGroupCount() {
-		List<Pair<Set<IDischargeOption>, Integer>> allMaxDischargeGroupCounts = maxSlotCountConstraint.getAllMaxDischargeGroupCounts();
+		List<ConstraintInfo<P,C,IDischargeOption>> allMaxDischargeGroupCounts = maxSlotCountConstraint.getAllMaxDischargeGroupCounts();
 		maxDischargeGroupCount = createJSONMapFromConstraint(allMaxDischargeGroupCounts);
+	}
+	
+	public List<ConstraintInfo<P,C,IDischargeOption>> getMaxDischargeGroupCounts() {
+		return maxSlotCountConstraint.getAllMaxDischargeGroupCounts();
+	}
+
+	public List<ConstraintInfo<P,C,IDischargeOption>> getMinDischargeGroupCounts() {
+		return maxSlotCountConstraint.getAllMinDischargeGroupCounts();
+	}
+
+	public List<ConstraintInfo<P,C,ILoadOption>> getMinLoadGroupCounts() {
+		return maxSlotCountConstraint.getAllMinLoadGroupCounts();
+	}
+
+	public List<ConstraintInfo<P,C,ILoadOption>> getMaxLoadGroupCounts() {
+		return maxSlotCountConstraint.getAllMaxLoadGroupCounts();
 	}
 
 	public List<Map<String, List<Integer>>> getMinDischargeGroupCount() {
@@ -201,16 +218,17 @@ public class PairingOptimisationData implements ProfitAndLossRecorder {
 	}
 
 	public void setMinDischargeGroupCount() {
-		List<Pair<Set<IDischargeOption>, Integer>> allMinDischargeGroupCounts = maxSlotCountConstraint.getAllMinDischargeGroupCounts();
+		List<ConstraintInfo<P,C,IDischargeOption>> allMinDischargeGroupCounts = maxSlotCountConstraint.getAllMinDischargeGroupCounts();
 		minDischargeGroupCount = createJSONMapFromConstraint(allMinDischargeGroupCounts);
 		;
 	}
 
-	private List<Map<String, List<Integer>>> createJSONMapFromConstraint(List<Pair<Set<IDischargeOption>, Integer>> allMaxDischargeGroupCounts) {
+	private List<Map<String, List<Integer>>> createJSONMapFromConstraint(List<ConstraintInfo<P,C,IDischargeOption>> allMaxDischargeGroupCounts) {
 		List<Map<String, List<Integer>>> dischargeCountConstraintJSON = new LinkedList<>();
-		for (Pair<Set<IDischargeOption>, Integer> entry : allMaxDischargeGroupCounts) {
-			List<Integer> slots = entry.getFirst().stream().map(dis -> (Integer) getIndex(dis)).collect(Collectors.toList());
-			List<Integer> count = CollectionsUtil.makeLinkedList(entry.getSecond());
+		for (ConstraintInfo<P,C,IDischargeOption> entry : allMaxDischargeGroupCounts) {
+			List<Integer> slots = entry.getSlots().stream().map(dis -> (Integer) getIndex(dis)).collect(Collectors.toList());
+			List<Integer> count = CollectionsUtil.makeLinkedList(entry.getBound());
+			
 			Map<String, List<Integer>> map = new LinkedHashMap<>();
 			map.put("discharges", slots);
 			map.put("count", count);
@@ -224,7 +242,7 @@ public class PairingOptimisationData implements ProfitAndLossRecorder {
 	}
 
 	public void setMaxLoadGroupCount() {
-		List<Pair<Set<ILoadOption>, Integer>> allMaxLoadGroupCounts = maxSlotCountConstraint.getAllMaxLoadGroupCounts();
+		List<ConstraintInfo<P,C,ILoadOption>> allMaxLoadGroupCounts = maxSlotCountConstraint.getAllMaxLoadGroupCounts();
 		maxLoadGroupCount = createLoadJSONMapFromConstraint(allMaxLoadGroupCounts);
 	}
 
@@ -233,16 +251,16 @@ public class PairingOptimisationData implements ProfitAndLossRecorder {
 	}
 
 	public void setMinLoadGroupCount() {
-		List<Pair<Set<ILoadOption>, Integer>> allMinLoadGroupCounts = maxSlotCountConstraint.getAllMinLoadGroupCounts();
+		List<ConstraintInfo<P,C,ILoadOption>> allMinLoadGroupCounts = maxSlotCountConstraint.getAllMinLoadGroupCounts();
 		minLoadGroupCount = createLoadJSONMapFromConstraint(allMinLoadGroupCounts);
 		;
 	}
 
-	private List<Map<String, List<Integer>>> createLoadJSONMapFromConstraint(List<Pair<Set<ILoadOption>, Integer>> allMaxLoadGroupCounts) {
+	private List<Map<String, List<Integer>>> createLoadJSONMapFromConstraint(List<ConstraintInfo<P,C,ILoadOption>> allMaxLoadGroupCounts) {
 		List<Map<String, List<Integer>>> dischargeCountConstraintJSON = new LinkedList<>();
-		for (Pair<Set<ILoadOption>, Integer> entry : allMaxLoadGroupCounts) {
-			List<Integer> slots = entry.getFirst().stream().map(dis -> (Integer) getIndex(dis)).collect(Collectors.toList());
-			List<Integer> count = CollectionsUtil.makeLinkedList(entry.getSecond());
+		for (ConstraintInfo<P,C,ILoadOption> entry : allMaxLoadGroupCounts) {
+			List<Integer> slots = entry.getSlots().stream().map(dis -> (Integer) getIndex(dis)).collect(Collectors.toList());
+			List<Integer> count = CollectionsUtil.makeLinkedList(entry.getBound());
 			Map<String, List<Integer>> map = new LinkedHashMap<>();
 			map.put("loads", slots);
 			map.put("count", count);

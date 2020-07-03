@@ -1,0 +1,139 @@
+[
+  {
+    "name" : "US East Coast",
+    "entries" : [
+      "Port:L_US_Camer",
+      "Port:L_US_Corpu",
+      "Port:L_US_CoveP",
+      "Port:L_US_Elba",
+      "Port:L_US_Evere",
+      "Port:L_US_Freep",
+      "Port:L_US_Golde",
+      "Port:L_US_LakeC",
+      "Port:L_US_Plaqu",
+      "Port:L_US_PortA",
+      "Port:L_US_PortD",
+      "Port:L_US_PortA",
+      "Port:L_US_Sabin"    
+    ]
+  },
+  {
+    "name" : "North Africa",
+    "entries" : [
+      "Port:L_DZ_Arzew",
+      "Port:L_DZ_Bethi",
+      "Port:L_DZ_Skikd",
+      "Port:L_EG_Damie",
+      "Port:L_EG_Idku"
+    ]
+  },
+  {
+    "name" : "West Africa",
+    "entries" : [
+      "Port:L_NG_Bonny",
+      "Port:L_CM_Kribi",
+      "Port:L_AO_Soyo"
+    ]
+  },
+  {
+    "name" : "Northern Europe",
+    "entries" : [
+      "Port:L_NO_Hamme",
+      "Port:L_RU_Shtok"
+    ]
+  },
+  {
+    "name" : "Southeast Asia",
+    "entries" : [
+      "Port:L_ID_Bonta",
+      "Port:L_ID_Tangg",
+      "Port:L_MY_Bintu",
+      "Port:L_PG_PortM"
+    ]
+  },
+  {
+    "name" : "Middle East",
+    "entries" : [
+      "Port:L_QA_RasLa",
+      "Port:L_OM_Qalha",
+      "Port:L_AE_AbuDh",
+      "Port:L_JO_Aqaba",
+      "Port:L_BH_Bahra",
+      "Port:L_AE_Fujai",
+      "Port:L_AE_Jebel",
+      "Port:L_KW_MinaA"      
+    ]
+  },
+  {
+    "name" : "European Atlantic",
+    "entries" : [
+      "Port:L_PT_Sines",
+      "Port:L_ES_Bilba",
+      "Port:L_ES_ElFer",
+      "Port:L_FR_Monto",
+      "Port:L_FR_LeHav",
+      "Port:L_GI_Gibra"
+    ]
+  },
+  {
+    "name" : "Northeastern Europe",
+    "entries" : [
+      "Port:L_LT_Klaip",
+      "Port:L_PL_Swino",
+      "Port:L_ES_ElFer",
+      "Port:L_FR_Monto",
+      "Port:L_FR_LeHav",
+      "Port:L_GI_Gibra"
+    ]
+  },
+  {
+    "name" : "West Atlantic",
+    "entries" : [
+      "Port:L_MX_Altam",
+      "Port:L_JM_PortE",
+      "Port:L_DO_AESAn",
+      "Port:L_PR_Penue",
+      "Port:L_PR_Guaya",
+      "Port:L_SV_Acaju",
+      "Port:L_CP_Colon"
+    ]
+  },
+  {
+    "name" : "Southwest Atlantic",
+    "entries" : [
+      "Port:L_AR_Bahia",
+      "Port:L_AR_Escob",
+      "Port:L_BR_Guana",
+      "Port:L_BR_Pecem",
+      "Port:L_BR_RioGr",
+      "Port:L_BR_Salva",
+      "Port:L_BR_SaoFr"
+    ]
+  },
+  {
+    "name" : "Pacific central Americas",
+    "entries" : [
+      "Port:L_CP_Balbo",
+      "Port:L_MX_Costa",
+      "Port:L_MX_Manza",
+      "Port:L_MX_Rosar" 
+    ]
+  },
+  {
+    "name" : "Pacific south Americas",
+    "entries" : [
+      "Port:L_CL_Mejil",
+      "Port:L_CL_Quint",
+      "Port:L_CL_Talca"
+    ]
+  },
+  {
+    "name" : "JKTC",
+    "entries" : [
+      "PortCountry:Japan",
+      "PortCountry:South Korea",
+      "PortCountry:Taiwan",
+      "PortCountry:China"
+    ]
+  } 
+]

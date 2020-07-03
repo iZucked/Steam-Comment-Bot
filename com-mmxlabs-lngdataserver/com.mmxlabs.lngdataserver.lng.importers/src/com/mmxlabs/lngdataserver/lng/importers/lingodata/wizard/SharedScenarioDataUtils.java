@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard;
@@ -959,7 +959,7 @@ public final class SharedScenarioDataUtils {
 			throws JsonParseException, JsonMappingException, IOException {
 
 		final CargoModel oldCM = ScenarioModelUtil.getCargoModel(target);
-		final List<VesselAvailability> newAvailabilities = mapper.readValue(json, new TypeReference<VesselAvailability>() {
+		final List<VesselAvailability> newAvailabilities = mapper.readValue(json, new TypeReference<List<VesselAvailability>>() {
 		});
 
 		final List<EObject> newData = new LinkedList<>();

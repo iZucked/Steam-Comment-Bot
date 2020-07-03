@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.license.features;
@@ -7,8 +7,7 @@ package com.mmxlabs.license.features;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
- * This really should not be here.... but a shared place to store feature
- * constants.
+ * This really should not be here.... but a shared place to store feature constants.
  * 
  * @author Simon Goodall
  *
@@ -19,6 +18,8 @@ public final class KnownFeatures {
 
 	}
 
+	public static final String FEATURE_MODULE_DIFF_TOOLS = "features:difftools";
+	
 	/**
 	 * Enable parallelisation in optimiser
 	 */
@@ -30,6 +31,9 @@ public final class KnownFeatures {
 	public static final String FEATURE_OPTIMISATION_CHARTER_OUT_GENERATION = "features:optimisation-charter-out-generation";
 	public static final String FEATURE_OPTIMISATION_SIMILARITY = "features:optimisation-similarity";
 	public static final String FEATURE_OPTIMISATION_NO_NOMINALS_IN_PROMPT = "features:no-nominal-in-prompt";
+
+	public static final String FEATURE_OPTIONISER = "features:options-suggester";
+	public static final String FEATURE_OPTIONISER_EVENTS = "features:options-suggester-events";
 
 	public static final String FEATURE_SHIP_TO_SHIP = "features:shiptoship";
 
@@ -44,16 +48,6 @@ public final class KnownFeatures {
 	public static final String FEATURE_PHASE_LIMITED_TESTING = "features:phase-limited-testing";
 
 	/**
-	 * Enable Panama Canal - distances and tariff calculation
-	 */
-	public static final String FEATURE_PANAMA_CANAL = "features:panama-canal";
-
-	/**
-	 * Enable Suez Canal tariff calculation
-	 */
-	public static final String FEATURE_SUEZ_CANAL = "features:suez-canal";
-
-	/**
 	 * Enable the contingency idle time matrix
 	 */
 	public static final String FEATURE_CONTINGENCY_IDLE_TIME = "features:contingency-idle-time";
@@ -66,6 +60,8 @@ public final class KnownFeatures {
 	public static final String FEATURE_INVENTORY_MODEL = "features:inventory-model";
 
 	public static final String FEATURE_PAPER_DEALS = "features:paperdeals";
+	
+	public static final String FEATURE_GENERATED_PAPER_DEALS = "features:generated-papers";
 
 	/**
 	 * Enable the charter length evaluation mode
@@ -77,11 +73,6 @@ public final class KnownFeatures {
 
 	// Experimental
 	public static final String FEATURE_TRADER_BASED_INSERIONS = "features:trader-based-insertions";
-
-	/**
-	 * Enable break-even evaluations
-	 */
-	public static final String FEATURE_BREAK_EVENS = "features:break-evens";
 
 	public static final String FEATURE_RE_EVALUATE_SOLUTIONS = "features:re-evaluate-solutions";
 
@@ -98,8 +89,14 @@ public final class KnownFeatures {
 	public static final String FEATURE_DATAHUB_BASECASE_ARCHIVE = "features:datahub-basecase-archive";
 
 	public static final String FEATURE_DATAHUB_BASECASE_NOTES = "features:datahub-basecase-notes";
-	
+
 	public static final String FEATURE_DATAHUB_STARTUP_CHECK = "features:datahub-lingo-startup-check";
+
+	public static final String FEATURE_SHOW_TRADING_SHIPPING_SPLIT = "features:headline-trading-shipping-split";
 	
-	public static final String FEATURE_SHOW_TRADING_SHIPPING_SPLIT= "features:headline-trading-shipping-split";
+	/**
+	 * Scenario repair features
+	 */
+	
+	public static final String FEATURE_REPAIR_DELETE_ALL_EMPTY_CARGOES = "features:repair-delete-all-empty-cargoes";
 }

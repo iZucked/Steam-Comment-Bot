@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases;
@@ -7,27 +7,24 @@ package com.mmxlabs.lingo.its.tests.microcases;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Optional;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.google.common.collect.Lists;
-import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
-import com.mmxlabs.lngdataserver.data.distances.DataConstants;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
+import com.mmxlabs.lngdataserver.lng.importers.creator.ScenarioBuilder;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.EVesselTankState;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
@@ -44,34 +41,28 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
+import com.mmxlabs.models.lng.transformer.its.RequireFeature;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
 import com.mmxlabs.models.lng.types.TimePeriod;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 @SuppressWarnings("unused")
 @ExtendWith(value = ShiroRunner.class)
+@RequireFeature(value = { KnownFeatures.FEATURE_CHARTER_LENGTH })
 public class CharterLengthTests extends AbstractMicroTestCase {
 
-	private static List<String> requiredFeatures = Lists.newArrayList("charter-length");
-	private static List<String> addedFeatures = new LinkedList<>();
-
-	@BeforeAll
-	public static void hookIn() {
-		for (final String feature : requiredFeatures) {
-			if (!LicenseFeatures.isPermitted("features:" + feature)) {
-				LicenseFeatures.addFeatureEnablements(feature);
-				addedFeatures.add(feature);
-			}
-		}
+	@Override
+	public @NonNull IScenarioDataProvider importReferenceData() throws Exception {
+		ScenarioBuilder sb = ScenarioBuilder.initialiseBasicScenario();
+		sb.loadDefaultData();
+		return sb.getScenarioDataProvider();
 	}
 
-	@AfterAll
-	public static void hookOut() {
-		for (final String feature : addedFeatures) {
-			LicenseFeatures.removeFeatureEnablements(feature);
-		}
-		addedFeatures.clear();
+	@Override
+	protected BaseLegalEntity importDefaultEntity() {
+		return commercialModelFinder.findEntity(ScenarioBuilder.DEFAULT_ENTITY_NAME);
 	}
 
 	/**
@@ -84,7 +75,7 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 	public void testStandardIdleCase() throws Exception {
 
 		// Create the required basic elements
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setSafetyHeel(500);
 
 		final VesselAvailability charter_1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
@@ -96,9 +87,9 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2019, 1, 1), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2019, 1, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2019, 2, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2019, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				.withVesselAssignment(charter_1, 1) //
 				.withAssignmentFlags(false, false) //
@@ -136,7 +127,7 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 	public void testStandardIdleWithCooldownCase() throws Exception {
 
 		// Create the required basic elements
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setSafetyHeel(500);
 
 		final VesselAvailability charter_1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
@@ -149,9 +140,9 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2019, 1, 1), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2019, 1, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2019, 2, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "20") //
+				.makeDESSale("D1", LocalDate.of(2019, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "20") //
 				.build() //
 				.withVesselAssignment(charter_1, 1) //
 				.withAssignmentFlags(false, false) //
@@ -190,13 +181,11 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testWithLateCargoesAfterPeriod() throws Exception {
-		updateDistanceData(scenarioDataProvider, DataConstants.DISTANCES_LATEST_JSON);
-		updatePortsData(scenarioDataProvider, DataConstants.PORTS_LATEST_JSON);
 
 		// Create the required basic elements
-		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel1.setSafetyHeel(500);
-		final Vessel vessel2 = fleetModelFinder.findVessel("STEAM-138");
+		final Vessel vessel2 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_138);
 		vessel2.setSafetyHeel(500);
 
 		final VesselAvailability charter_1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
@@ -211,8 +200,8 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2019, 8, 14), LocalDate.of(2019, 10, 23));
 		scenarioModelBuilder.setScheduleHorizon(LocalDate.of(2020, 4, 1));
 
-		Port loadPort = portFinder.findPort("Onslow");
-		Port dischargePort = portFinder.findPort("Futtsu");
+		Port loadPort = portFinder.findPortById(InternalDataConstants.PORT_ONSLOW);
+		Port dischargePort = portFinder.findPortById(InternalDataConstants.PORT_FUTTSU);
 
 		final Cargo cargoa1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("La1", LocalDate.of(2019, 11, 5), loadPort, null, entity, "5") //
@@ -334,7 +323,7 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 				.build();
 
 		final Slot<?> load2 = cargob1.getSlots().get(0);
-//		final Slot<?> load2 = cargob2.getSlots().get(0);
+		// final Slot<?> load2 = cargob2.getSlots().get(0);
 		// Without charter length, all ok
 		{
 			final Schedule schedule = optimise(false, null, YearMonth.of(2020, 1));

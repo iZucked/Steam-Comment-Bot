@@ -1,0 +1,25 @@
+[ {
+  "KPI" : "P&L",
+  "Schedule" : "0 base",
+  "Value" : "$83,982,922"
+}, {
+  "KPI" : "Trading P&L",
+  "Schedule" : "0 base",
+  "Value" : "$85,074,636"
+}, {
+  "KPI" : "Shipping P&L",
+  "Schedule" : "0 base",
+  "Value" : "$-1,091,714"
+}, {
+  "KPI" : "Shipping Cost",
+  "Schedule" : "0 base",
+  "Value" : "$39,794,893"
+}, {
+  "KPI" : "Lateness",
+  "Schedule" : "0 base",
+  "Value" : "8d, 17h"
+}, {
+  "KPI" : "Idle Time",
+  "Schedule" : "0 base",
+  "Value" : "380d, 9h"
+} ]

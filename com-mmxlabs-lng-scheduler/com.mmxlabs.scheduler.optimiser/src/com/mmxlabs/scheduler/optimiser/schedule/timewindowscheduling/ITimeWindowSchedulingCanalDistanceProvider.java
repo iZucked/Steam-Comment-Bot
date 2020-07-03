@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling;
@@ -34,7 +34,7 @@ public interface ITimeWindowSchedulingCanalDistanceProvider {
 	 * @return
 	 */
 	@NonNull
-	LadenRouteData @NonNull [] getMinimumLadenTravelTimes(@NonNull IPort load, @NonNull IPort discharge, @NonNull IVessel vessel, int ladenStartTime, AvailableRouteChoices availableRouteChoice, boolean isConstrainedPanamaVoyage, int additionalPanamaIdleHours);
+	TravelRouteData @NonNull [] getMinimumTravelTimes(@NonNull IPort load, @NonNull IPort discharge, @NonNull IVessel vessel, int ladenStartTime, AvailableRouteChoices availableRouteChoice, boolean isConstrainedPanamaVoyage, int additionalPanamaIdleHours, boolean isLaden);
 
 	/**
 	 * Get feasible routes for min and max times
@@ -45,7 +45,7 @@ public interface ITimeWindowSchedulingCanalDistanceProvider {
 	 * @return
 	 */
 	@NonNull
-	List<@NonNull Integer> getFeasibleRoutes(@NonNull LadenRouteData @NonNull [] sortedCanalTimes, int minTime, int maxTime);
+	List<@NonNull Integer> getFeasibleRoutes(@NonNull TravelRouteData @NonNull [] sortedCanalTimes, int minTime, int maxTime);
 
 	/**
 	 * Get an array of the min time and cost of the best route we can take
@@ -55,7 +55,7 @@ public interface ITimeWindowSchedulingCanalDistanceProvider {
 	 * @return
 	 */
 	@NonNull
-	LadenRouteData getBestCanalDetails(@NonNull LadenRouteData @NonNull [] sortedCanalTimes, int maxTime);
+	TravelRouteData getBestCanalDetails(@NonNull TravelRouteData @NonNull [] sortedCanalTimes, int maxTime);
 
 	/**
 	 * Return a list of potential end times based on different speeds a vessel can travel and routes it can take
@@ -70,8 +70,4 @@ public interface ITimeWindowSchedulingCanalDistanceProvider {
 	@NonNull
 	List<Integer> getTimeDataForDifferentSpeedsAndRoutes(@NonNull IPort load, @NonNull IPort discharge, @NonNull IVessel vessel, int cv, int startTime, boolean isLaden,
 			AvailableRouteChoices availableRouteChoice, boolean isConstrainedPanamaVoyage, int additionalPanamaIdleHours);
-
-	@NonNull
-	LadenRouteData @NonNull [] getMinimumBallastTravelTimes(@NonNull IPort load, @NonNull IPort discharge, @NonNull IVessel vessel, int ladenStartTime, AvailableRouteChoices availableRouteChoice, boolean isConstrainedPanamaVoyage, int additionalPanamaIdleHours);
-
 }

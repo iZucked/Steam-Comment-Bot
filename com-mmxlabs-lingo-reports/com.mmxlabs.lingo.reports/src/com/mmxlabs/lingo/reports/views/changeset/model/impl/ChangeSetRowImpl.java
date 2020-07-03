@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 /**
@@ -118,6 +118,7 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isWiringChange() {
 		return wiringChange;
 	}
@@ -127,6 +128,7 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setWiringChange(boolean newWiringChange) {
 		boolean oldWiringChange = wiringChange;
 		wiringChange = newWiringChange;
@@ -139,6 +141,7 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isVesselChange() {
 		return vesselChange;
 	}
@@ -148,6 +151,7 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVesselChange(boolean newVesselChange) {
 		boolean oldVesselChange = vesselChange;
 		vesselChange = newVesselChange;
@@ -160,6 +164,7 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ChangeSetRowDataGroup getBeforeData() {
 		return beforeData;
 	}
@@ -184,6 +189,7 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBeforeData(ChangeSetRowDataGroup newBeforeData) {
 		if (newBeforeData != beforeData) {
 			NotificationChain msgs = null;
@@ -203,6 +209,7 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ChangeSetRowDataGroup getAfterData() {
 		return afterData;
 	}
@@ -227,6 +234,7 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setAfterData(ChangeSetRowDataGroup newAfterData) {
 		if (newAfterData != afterData) {
 			NotificationChain msgs = null;

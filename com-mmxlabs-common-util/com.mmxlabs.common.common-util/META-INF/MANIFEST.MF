@@ -1,11 +1,11 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Common-Util
-Bundle-RequiredExecutionEnvironment: JavaSE-10
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-SymbolicName: com.mmxlabs.common.common-util
 Automatic-Module-Name: com.mmxlabs.common.common-util
 Bundle-Vendor: Minimax Labs Ltd.
-Bundle-Version: 4.8.3.qualifier
+Bundle-Version: 4.10.1.qualifier
 Import-Package: javax.tools,
  org.eclipse.emf.common.util,
  org.eclipse.emf.ecore.resource.impl,
@@ -14,6 +14,7 @@ Import-Package: javax.tools,
  org.slf4j;version="[1.6.0,2.0.0)"
 Export-Package: com.mmxlabs.common,
  com.mmxlabs.common.caches,
+ com.mmxlabs.common.calendars,
  com.mmxlabs.common.comparators,
  com.mmxlabs.common.compilation,
  com.mmxlabs.common.concurrent,
@@ -23,6 +24,7 @@ Export-Package: com.mmxlabs.common,
  com.mmxlabs.common.delayedactions.impl,
  com.mmxlabs.common.detailtree,
  com.mmxlabs.common.detailtree.impl,
+ com.mmxlabs.common.exposures,
  com.mmxlabs.common.http,
  com.mmxlabs.common.impl,
  com.mmxlabs.common.indexedobjects,
@@ -30,8 +32,10 @@ Export-Package: com.mmxlabs.common,
  com.mmxlabs.common.io,
  com.mmxlabs.common.json,
  com.mmxlabs.common.options,
+ com.mmxlabs.common.paperdeals,
  com.mmxlabs.common.parser,
  com.mmxlabs.common.parser.arithmetic,
+ com.mmxlabs.common.parser.nodes,
  com.mmxlabs.common.parser.series,
  com.mmxlabs.common.parser.series.functions,
  com.mmxlabs.common.strings,

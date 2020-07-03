@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.ui.editorpart;
@@ -50,6 +50,7 @@ import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
+import com.mmxlabs.rcp.common.ecore.SafeEContentAdapter;
 
 public class UnitConversionEditor extends Dialog {
 
@@ -68,9 +69,8 @@ public class UnitConversionEditor extends Dialog {
 	private final IScenarioEditingLocation scenarioEditingLocation;
 	private DialogValidationSupport dialogValidationSupport;
 	private EObjectTableViewer viewer;
-	private final @NonNull EContentAdapter changeAdapter = new EContentAdapter() {
-		public void notifyChanged(org.eclipse.emf.common.notify.Notification notification) {
-			super.notifyChanged(notification);
+	private final @NonNull EContentAdapter changeAdapter = new SafeEContentAdapter() {
+		public void safeNotifyChanged(org.eclipse.emf.common.notify.Notification notification) {
 			if (pricingModel != null) {
 				validate(pricingModel.getConversionFactors());
 			}

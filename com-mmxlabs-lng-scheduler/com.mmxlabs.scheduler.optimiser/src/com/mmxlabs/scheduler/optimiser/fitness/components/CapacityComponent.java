@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components;
@@ -15,9 +15,9 @@ import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.evaluation.VoyagePlanRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
-import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.CapacityViolationType;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 
@@ -27,34 +27,38 @@ public final class CapacityComponent extends AbstractPerRouteSchedulerFitnessCom
 
 	private long sequenceAccumulator = 0;
 
+	private IResource resource;
+
 	public CapacityComponent(@NonNull final String name, @NonNull final CargoSchedulerFitnessCore core) {
 		super(name, core);
 	}
 
 	@Override
 	protected boolean reallyStartSequence(@NonNull final IResource resource) {
+		this.resource = resource;
 		sequenceAccumulator = 0;
 		return true;
 	}
 
 	@Override
 	protected boolean reallyEvaluateObject(@NonNull final Object object, final int time) {
-		final VolumeAllocatedSequences volumeAllocatedSequences = profitAndLossSequences.getVolumeAllocatedSequences();
 		if (object instanceof PortDetails) {
 			final PortDetails detail = (PortDetails) object;
 
 			@NonNull
 			final IPortSlot portSlot = detail.getOptions().getPortSlot();
-			final VolumeAllocatedSequence volumeAllocatedSequence = volumeAllocatedSequences.getScheduledSequence(portSlot);
+			final VolumeAllocatedSequence volumeAllocatedSequence = profitAndLossSequences.getScheduledSequenceForResource(resource);
 			if (volumeAllocatedSequence != null) {
-				final List<@NonNull CapacityViolationType> capacityViolations = volumeAllocatedSequence.getCapacityViolations(portSlot);
+				final VoyagePlanRecord vpr = volumeAllocatedSequence.getVoyagePlanRecord(portSlot);
+
+				final List<@NonNull CapacityViolationType> capacityViolations = vpr.getCapacityViolations(portSlot);
 				for (final CapacityViolationType cvt : capacityViolations) {
 					if (cvt == CapacityViolationType.MIN_LOAD //
 							|| cvt == CapacityViolationType.MIN_DISCHARGE //
 							|| cvt == CapacityViolationType.MAX_LOAD //
 							|| cvt == CapacityViolationType.MAX_DISCHARGE) {
 
-						long volume = volumeAllocatedSequence.getCapacityViolationVolume(cvt, portSlot);
+						long volume = vpr.getCapacityViolationVolume(cvt, portSlot);
 
 						// Violation may in in mmbtu, so convert to m3 equivalent
 						boolean volumeIsM3;
@@ -64,7 +68,7 @@ public final class CapacityComponent extends AbstractPerRouteSchedulerFitnessCom
 							volumeIsM3 = ((IDischargeOption) portSlot).isVolumeSetInM3();
 						}
 						if (!volumeIsM3) {
-							volume = Calculator.convertMMBTuToM3(volume, volumeAllocatedSequence.getAllocationAnnotation(portSlot).getSlotCargoCV(portSlot));
+							volume = Calculator.convertMMBTuToM3(volume, vpr.getAllocationAnnotation().getSlotCargoCV(portSlot));
 						}
 
 						// Report only if violation is larger than 1000m3
@@ -80,6 +84,7 @@ public final class CapacityComponent extends AbstractPerRouteSchedulerFitnessCom
 
 	@Override
 	protected long endSequenceAndGetCost() {
+		this.resource = null;
 		return sequenceAccumulator;
 	}
 

@@ -1,0 +1,19 @@
+[ {
+  "Type" : "Load",
+  "Issue" : "Forced Cooldown",
+  "Schedule" : "4 dry dock 70 -O- -F- -F- base",
+  "ID" : "load-cargo-21",
+  "Quantity (m³)" : "0"
+}, {
+  "Type" : "Load",
+  "Issue" : "Forced Cooldown",
+  "Schedule" : "4 dry dock 70 -O- -F- -F- base",
+  "ID" : "load-cargo-32",
+  "Quantity (m³)" : "0"
+}, {
+  "Type" : "Load",
+  "Issue" : "Forced Cooldown",
+  "Schedule" : "4 dry dock 70 -O- -F- -F- base",
+  "ID" : "load-cargo-41",
+  "Quantity (m³)" : "0"
+} ]

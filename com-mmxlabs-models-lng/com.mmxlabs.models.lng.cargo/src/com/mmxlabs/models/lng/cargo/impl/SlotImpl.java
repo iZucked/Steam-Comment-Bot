@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.impl;
@@ -89,7 +89,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isRestrictedVesselsOverride <em>Restricted Vessels Override</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getRestrictedSlots <em>Restricted Slots</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isRestrictedSlotsArePermissive <em>Restricted Slots Are Permissive</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getHedges <em>Hedges</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getMiscCosts <em>Misc Costs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getCancellationExpression <em>Cancellation Expression</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getNominatedVessel <em>Nominated Vessel</em>}</li>
@@ -903,26 +902,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * @ordered
 	 */
 	protected boolean restrictedSlotsArePermissive = RESTRICTED_SLOTS_ARE_PERMISSIVE_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getHedges() <em>Hedges</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getHedges()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int HEDGES_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getHedges() <em>Hedges</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getHedges()
-	 * @generated
-	 * @ordered
-	 */
-	protected int hedges = HEDGES_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getMiscCosts() <em>Misc Costs</em>}' attribute.
@@ -2465,29 +2444,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * @generated
 	 */
 	@Override
-	public int getHedges() {
-		return hedges;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setHedges(int newHedges) {
-		int oldHedges = hedges;
-		hedges = newHedges;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__HEDGES, oldHedges, hedges));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public int getMiscCosts() {
 		return miscCosts;
 	}
@@ -3022,8 +2978,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return getRestrictedSlots();
 			case CargoPackage.SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE:
 				return isRestrictedSlotsArePermissive();
-			case CargoPackage.SLOT__HEDGES:
-				return getHedges();
 			case CargoPackage.SLOT__MISC_COSTS:
 				return getMiscCosts();
 			case CargoPackage.SLOT__CANCELLATION_EXPRESSION:
@@ -3160,9 +3114,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return;
 			case CargoPackage.SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE:
 				setRestrictedSlotsArePermissive((Boolean)newValue);
-				return;
-			case CargoPackage.SLOT__HEDGES:
-				setHedges((Integer)newValue);
 				return;
 			case CargoPackage.SLOT__MISC_COSTS:
 				setMiscCosts((Integer)newValue);
@@ -3301,9 +3252,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 			case CargoPackage.SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE:
 				setRestrictedSlotsArePermissive(RESTRICTED_SLOTS_ARE_PERMISSIVE_EDEFAULT);
 				return;
-			case CargoPackage.SLOT__HEDGES:
-				setHedges(HEDGES_EDEFAULT);
-				return;
 			case CargoPackage.SLOT__MISC_COSTS:
 				setMiscCosts(MISC_COSTS_EDEFAULT);
 				return;
@@ -3422,8 +3370,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return restrictedSlots != null && !restrictedSlots.isEmpty();
 			case CargoPackage.SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE:
 				return restrictedSlotsArePermissive != RESTRICTED_SLOTS_ARE_PERMISSIVE_EDEFAULT;
-			case CargoPackage.SLOT__HEDGES:
-				return hedges != HEDGES_EDEFAULT;
 			case CargoPackage.SLOT__MISC_COSTS:
 				return miscCosts != MISC_COSTS_EDEFAULT;
 			case CargoPackage.SLOT__CANCELLATION_EXPRESSION:
@@ -3624,8 +3570,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 		result.append(restrictedVesselsOverride);
 		result.append(", restrictedSlotsArePermissive: ");
 		result.append(restrictedSlotsArePermissive);
-		result.append(", hedges: ");
-		result.append(hedges);
 		result.append(", miscCosts: ");
 		result.append(miscCosts);
 		result.append(", cancellationExpression: ");

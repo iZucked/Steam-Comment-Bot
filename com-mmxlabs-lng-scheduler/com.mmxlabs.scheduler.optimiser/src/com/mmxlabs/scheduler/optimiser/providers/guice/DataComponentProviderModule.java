@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.providers.guice;
@@ -25,115 +25,19 @@ import com.mmxlabs.optimiser.common.dcproviders.impl.indexed.IndexedLockedElemen
 import com.mmxlabs.optimiser.common.dcproviders.impl.indexed.IndexedOptionalElementsEditor;
 import com.mmxlabs.optimiser.common.dcproviders.impl.indexed.IndexedOrderedSequenceElementsEditor;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitEditor;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitProvider;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ArrayListVolumeAllocationEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IAllowedVesselProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IAllowedVesselProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
-import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.ICancellationFeeProvider;
-import com.mmxlabs.scheduler.optimiser.providers.ICancellationFeeProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider;
-import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IDateKeyProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IDateKeyProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IDistanceProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IElementPortProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IElementPortProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IEntityProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IExtraIdleTimeProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IExtraIdleTimeProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IFOBDESCompatibilityProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IFOBDESCompatibilityProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IFullCargoLotProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IFullCargoLotProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IHedgesProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IHedgesProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.ILoadPriceCalculatorProvider;
-import com.mmxlabs.scheduler.optimiser.providers.ILoadPriceCalculatorProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.ILockedCargoProvider;
-import com.mmxlabs.scheduler.optimiser.providers.ILockedCargoProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IMaxSlotConstraintDataProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IMaxSlotCountConstraintDataProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IMiscCostsProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IMiscCostsProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.INextLoadDateProvider;
-import com.mmxlabs.scheduler.optimiser.providers.INextLoadDateProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
-import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IPortCVProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortCVProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IPortCVRangeProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortCVRangeProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IPortCooldownDataProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortCooldownDataProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortCostProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IPortExclusionProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortExclusionProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IPortVisitDurationProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortVisitDurationProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IRoundTripVesselPermissionProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IRoundTripVesselPermissionProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IRouteExclusionProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IRouteExclusionProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IScheduledPurgeProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IScheduledPurgeProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IShortCargoReturnElementProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IShortCargoReturnElementProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.ISlotGroupCountProvider;
-import com.mmxlabs.scheduler.optimiser.providers.ISlotGroupCountProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.ISpotCharterInMarketProvider;
-import com.mmxlabs.scheduler.optimiser.providers.ISpotCharterInMarketProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.ISpotMarketSlotsProvider;
-import com.mmxlabs.scheduler.optimiser.providers.ISpotMarketSlotsProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IVesselCharterInRateProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IVesselSlotCountFitnessProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IVesselSlotCountFitnessProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.*;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultAllowedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultBaseFuelProvider;
+import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultCounterPartyVolumeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultDistanceProviderImpl;
+import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultExposureDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultExtraIdleTimeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultFOBDESCompatibilityProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultLockedCargoProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultLongTermVesselSlotCountFitnessProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultMaxSlotConstraintDataProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultNextLoadDateProvider;
+import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultPaperDealDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultPromptPeriodProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultRoundTripVesselPermissionProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultScheduledPurgeProvider;
@@ -148,7 +52,6 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapDiscountCurveEditor
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapElementPortEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapEntityProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapFullCargoLotProvider;
-import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapHedgesProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapLoadPriceCalculatorProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapMarkToMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapMiscCostsProviderEditor;
@@ -272,10 +175,6 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(IRouteCostProvider.class).toInstance(routeCostProvider);
 		bind(IRouteCostProviderEditor.class).toInstance(routeCostProvider);
 
-		final ITotalVolumeLimitEditor totalVolumeLimits = new ArrayListVolumeAllocationEditor();
-		bind(ITotalVolumeLimitProvider.class).toInstance(totalVolumeLimits);
-		bind(ITotalVolumeLimitEditor.class).toInstance(totalVolumeLimits);
-
 		final IDiscountCurveProviderEditor discountCurveProvider = new HashMapDiscountCurveEditor();
 		bind(IDiscountCurveProvider.class).toInstance(discountCurveProvider);
 		bind(IDiscountCurveProviderEditor.class).toInstance(discountCurveProvider);
@@ -371,10 +270,6 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(DefaultVesselCharterCurveProvider.class).in(Singleton.class);
 		bind(IVesselCharterInRateProvider.class).to(DefaultVesselCharterCurveProvider.class);
 
-		final HashMapHedgesProviderEditor hedgesProviderEditor = new HashMapHedgesProviderEditor();
-		bind(IHedgesProvider.class).toInstance(hedgesProviderEditor);
-		bind(IHedgesProviderEditor.class).toInstance(hedgesProviderEditor);
-
 		final HashMapMiscCostsProviderEditor miscCostsProviderEditor = new HashMapMiscCostsProviderEditor();
 		bind(IMiscCostsProvider.class).toInstance(miscCostsProviderEditor);
 		bind(IMiscCostsProviderEditor.class).toInstance(miscCostsProviderEditor);
@@ -439,9 +334,23 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(IFullCargoLotProvider.class).to(HashMapFullCargoLotProvider.class);
 		bind(IFullCargoLotProviderEditor.class).to(HashMapFullCargoLotProvider.class);
 		
+		bind(DefaultExposureDataProvider.class).in(Singleton.class);
+		bind(IExposureDataProvider.class).to(DefaultExposureDataProvider.class);
+		bind(IExposureDataProviderEditor.class).to(DefaultExposureDataProvider.class);
+		
+		bind(DefaultPaperDealDataProvider.class).in(Singleton.class);
+		bind(IPaperDealDataProvider.class).to(DefaultPaperDealDataProvider.class);
+		bind(IPaperDealDataProviderEditor.class).to(DefaultPaperDealDataProvider.class);
+		
 		bind(DefaultScheduledPurgeProvider.class).in(Singleton.class);
 		bind(IScheduledPurgeProvider.class).to(DefaultScheduledPurgeProvider.class);
 		bind(IScheduledPurgeProviderEditor.class).to(DefaultScheduledPurgeProvider.class);
+		
+		//Counterparty volume provider
+		bind(DefaultCounterPartyVolumeProvider.class).in(Singleton.class);
+		bind(ICounterPartyVolumeProvider.class).to(DefaultCounterPartyVolumeProvider.class);
+		bind(ICounterPartyVolumeProviderEditor.class).to(DefaultCounterPartyVolumeProvider.class);
+		
 
 	}
 }

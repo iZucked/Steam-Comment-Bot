@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.extensions.adp;
@@ -13,8 +13,10 @@ import java.util.stream.Collectors;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Inject;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.series.CalendarMonthMapper;
 import com.mmxlabs.models.lng.adp.ADPModel;
+import com.mmxlabs.models.lng.adp.ContractProfile;
 import com.mmxlabs.models.lng.adp.FleetConstraint;
 import com.mmxlabs.models.lng.adp.FleetProfile;
 import com.mmxlabs.models.lng.adp.MaxCargoConstraint;
@@ -51,7 +53,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.util.SchedulerCalculationUtils;
 public class ADPConstraintsTransformer implements ITransformerExtension {
 
 	@Inject
-	private IMaxSlotConstraintDataProviderEditor maxSlotConstraintDataTransformer;
+	private IMaxSlotConstraintDataProviderEditor maxSlotConstraintEditor;
 
 	@Inject
 	private IVesselSlotCountFitnessProviderEditor longTermVesselSlotCountFitnessProviderEditor;
@@ -108,14 +110,19 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 					slots.add(slot);
 				}
 			}
-			final List<ILoadOption> o_slots = slots.stream() //
-					.map(s -> modelEntityMap.getOptimiserObjectNullChecked(s, ILoadOption.class)) //
+			
+			//TODO: change to pair<IXOption,Integer> //second = month based on calendarMonthMapper.mapChangePointToMonth(dateAndCurveHelper.convertTime(start));
+			
+			
+			final List<Pair<ILoadOption,Integer>> o_slots = slots.stream() //
+					.<Pair<ILoadOption,Integer>>map(s -> Pair.of( modelEntityMap.getOptimiserObjectNullChecked(s, ILoadOption.class), 
+							           calendarMonthMapper.mapChangePointToMonth(dateAndCurveHelper.convertTime(s.getWindowStart())) )) //
 					.collect(Collectors.toList());
 
 			// Forcibly add in the default vessel to the allowed vessels list.
 			// Note: This is *vessel* not market!
-			for (final IPortSlot slot : o_slots) {
-				final Collection<@NonNull IVessel> permittedVessels = allowedVesselProviderEditor.getPermittedVessels(slot);
+			for (final Pair<ILoadOption,Integer> slot : o_slots) {
+				final Collection<@NonNull IVessel> permittedVessels = allowedVesselProviderEditor.getPermittedVessels(slot.getFirst());
 				if (permittedVessels != null) {
 					permittedVessels.add(iDefaultVessel);
 				}
@@ -126,16 +133,16 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 					final MinCargoConstraint minCargoConstraint = (MinCargoConstraint) profileConstraint;
 					switch (minCargoConstraint.getIntervalType()) {
 					case MONTHLY:
-						maxSlotConstraintDataTransformer.addMinLoadSlotsPerMonth(o_slots, startMonth, minCargoConstraint.getMinCargoes());
+						maxSlotConstraintEditor.addMinLoadSlotsPerMonth(contractProfile, profileConstraint, o_slots, startMonth, minCargoConstraint.getMinCargoes());
 						break;
 					case QUARTERLY:
-						maxSlotConstraintDataTransformer.addMinLoadSlotsPerQuarter(o_slots, startMonth, minCargoConstraint.getMinCargoes());
+						maxSlotConstraintEditor.addMinLoadSlotsPerQuarter(contractProfile, profileConstraint, o_slots, startMonth, minCargoConstraint.getMinCargoes());
 						break;
 					case YEARLY:
-						maxSlotConstraintDataTransformer.addMinLoadSlotsPerYear(o_slots, startMonth, minCargoConstraint.getMinCargoes());
+						maxSlotConstraintEditor.addMinLoadSlotsPerYear(contractProfile, profileConstraint, o_slots, startMonth, minCargoConstraint.getMinCargoes());
 						break;
 					case BIMONTHLY:
-						maxSlotConstraintDataTransformer.addMinLoadSlotsPerMonthlyPeriod(o_slots, startMonth, 2, minCargoConstraint.getMinCargoes());
+						maxSlotConstraintEditor.addMinLoadSlotsPerMonthlyPeriod(contractProfile, profileConstraint, o_slots, startMonth, 2, minCargoConstraint.getMinCargoes());
 						break;
 					default:
 						throw new IllegalStateException("Unsupported interval type " + minCargoConstraint.getIntervalType());
@@ -144,16 +151,16 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 					final MaxCargoConstraint maxCargoConstraint = (MaxCargoConstraint) profileConstraint;
 					switch (maxCargoConstraint.getIntervalType()) {
 					case MONTHLY:
-						maxSlotConstraintDataTransformer.addMaxLoadSlotsPerMonth(o_slots, startMonth, maxCargoConstraint.getMaxCargoes());
+						maxSlotConstraintEditor.addMaxLoadSlotsPerMonth(contractProfile, profileConstraint, o_slots, startMonth, maxCargoConstraint.getMaxCargoes());
 						break;
 					case QUARTERLY:
-						maxSlotConstraintDataTransformer.addMaxLoadSlotsPerQuarter(o_slots, startMonth, maxCargoConstraint.getMaxCargoes());
+						maxSlotConstraintEditor.addMaxLoadSlotsPerQuarter(contractProfile, profileConstraint, o_slots, startMonth, maxCargoConstraint.getMaxCargoes());
 						break;
 					case YEARLY:
-						maxSlotConstraintDataTransformer.addMaxLoadSlotsPerYear(o_slots, startMonth, maxCargoConstraint.getMaxCargoes());
+						maxSlotConstraintEditor.addMaxLoadSlotsPerYear(contractProfile, profileConstraint, o_slots, startMonth, maxCargoConstraint.getMaxCargoes());
 						break;
 					case BIMONTHLY:
-						maxSlotConstraintDataTransformer.addMaxLoadSlotsPerMonthlyPeriod(o_slots, startMonth, 2, maxCargoConstraint.getMaxCargoes());
+						maxSlotConstraintEditor.addMaxLoadSlotsPerMonthlyPeriod(contractProfile, profileConstraint, o_slots, startMonth, 2, maxCargoConstraint.getMaxCargoes());
 						break;
 					default:
 						throw new IllegalStateException("Unsupported interval type " + maxCargoConstraint.getIntervalType());
@@ -172,7 +179,7 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 								periodDistribution.isSetMaxCargoes() ? periodDistribution.getMaxCargoes() : null);
 						}
 					}
-					maxSlotConstraintDataTransformer.addMinMaxLoadSlotsPerMultiMonthPeriod(o_slots, monthlyDistributionConstraint);
+					maxSlotConstraintEditor.addMinMaxLoadSlotsPerMultiMonthPeriod(contractProfile, profileConstraint, o_slots, monthlyDistributionConstraint);
 				}
 				else {
 					// Not handled here.
@@ -197,14 +204,17 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 					slots.add(slot);
 				}
 			}
-			final List<IDischargeOption> o_slots = slots.stream() //
-					.map(s -> modelEntityMap.getOptimiserObjectNullChecked(s, IDischargeOption.class)) //
+			
+			//Convert from LNG model slots to optimiser DischargeOptions.
+			final List<Pair<IDischargeOption,Integer>> o_slots = slots.stream() //
+					.<Pair<IDischargeOption,Integer>>map(s -> Pair.of(modelEntityMap.getOptimiserObjectNullChecked(s, IDischargeOption.class),
+							calendarMonthMapper.mapChangePointToMonth(dateAndCurveHelper.convertTime(s.getWindowStart())))) //
 					.collect(Collectors.toList());
 
 			// Forcibly add in the default vessel to the allowed vessels list.
 			// Note: This is *vessel* not market!
-			for (final IPortSlot slot : o_slots) {
-				final Collection<@NonNull IVessel> permittedVessels = allowedVesselProviderEditor.getPermittedVessels(slot);
+			for (final Pair<IDischargeOption,Integer> slot : o_slots) {
+				final Collection<@NonNull IVessel> permittedVessels = allowedVesselProviderEditor.getPermittedVessels(slot.getFirst());
 				if (permittedVessels != null) {
 					permittedVessels.add(iDefaultVessel);
 				}
@@ -215,16 +225,16 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 					final MinCargoConstraint minCargoConstraint = (MinCargoConstraint) profileConstraint;
 					switch (minCargoConstraint.getIntervalType()) {
 					case MONTHLY:
-						maxSlotConstraintDataTransformer.addMinDischargeSlotsPerMonth(o_slots, startMonth, minCargoConstraint.getMinCargoes());
+						maxSlotConstraintEditor.addMinDischargeSlotsPerMonth(contractProfile, profileConstraint, o_slots, startMonth, minCargoConstraint.getMinCargoes());
 						break;
 					case QUARTERLY:
-						maxSlotConstraintDataTransformer.addMinDischargeSlotsPerQuarter(o_slots, startMonth, minCargoConstraint.getMinCargoes());
+						maxSlotConstraintEditor.addMinDischargeSlotsPerQuarter(contractProfile, profileConstraint, o_slots, startMonth, minCargoConstraint.getMinCargoes());
 						break;
 					case YEARLY:
-						maxSlotConstraintDataTransformer.addMinDischargeSlotsPerYear(o_slots, startMonth, minCargoConstraint.getMinCargoes());
+						maxSlotConstraintEditor.addMinDischargeSlotsPerYear(contractProfile, profileConstraint, o_slots, startMonth, minCargoConstraint.getMinCargoes());
 						break;
 					case BIMONTHLY:
-						maxSlotConstraintDataTransformer.addMinDischargeSlotsPerMonthlyPeriod(o_slots, startMonth, 2, minCargoConstraint.getMinCargoes());
+						maxSlotConstraintEditor.addMinDischargeSlotsPerMonthlyPeriod(contractProfile, profileConstraint, o_slots, startMonth, 2, minCargoConstraint.getMinCargoes());
 						break;
 					default:
 						throw new IllegalStateException("Unsupported interval type " + minCargoConstraint.getIntervalType());
@@ -233,16 +243,16 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 					final MaxCargoConstraint maxCargoConstraint = (MaxCargoConstraint) profileConstraint;
 					switch (maxCargoConstraint.getIntervalType()) {
 					case MONTHLY:
-						maxSlotConstraintDataTransformer.addMaxDischargeSlotsPerMonth(o_slots, startMonth, maxCargoConstraint.getMaxCargoes());
+						maxSlotConstraintEditor.addMaxDischargeSlotsPerMonth(contractProfile, profileConstraint, o_slots, startMonth, maxCargoConstraint.getMaxCargoes());
 						break;
 					case QUARTERLY:
-						maxSlotConstraintDataTransformer.addMaxDischargeSlotsPerQuarter(o_slots, startMonth, maxCargoConstraint.getMaxCargoes());
+						maxSlotConstraintEditor.addMaxDischargeSlotsPerQuarter(contractProfile, profileConstraint, o_slots, startMonth, maxCargoConstraint.getMaxCargoes());
 						break;
 					case YEARLY:
-						maxSlotConstraintDataTransformer.addMaxDischargeSlotsPerYear(o_slots, startMonth, maxCargoConstraint.getMaxCargoes());
+						maxSlotConstraintEditor.addMaxDischargeSlotsPerYear(contractProfile, profileConstraint, o_slots, startMonth, maxCargoConstraint.getMaxCargoes());
 						break;
 					case BIMONTHLY:
-						maxSlotConstraintDataTransformer.addMaxDischargeSlotsPerMonthlyPeriod(o_slots, startMonth, 2, maxCargoConstraint.getMaxCargoes());
+						maxSlotConstraintEditor.addMaxDischargeSlotsPerMonthlyPeriod(contractProfile, profileConstraint, o_slots, startMonth, 2, maxCargoConstraint.getMaxCargoes());
 						break;
 					default:
 						throw new IllegalStateException("Unsupported interval type " + maxCargoConstraint.getIntervalType());
@@ -261,7 +271,7 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 								periodDistribution.isSetMaxCargoes() ? periodDistribution.getMaxCargoes() : null);
 						}
 					}
-					maxSlotConstraintDataTransformer.addMinMaxDischargeSlotsPerMultiMonthPeriod(o_slots, monthlyDistributionConstraint);
+					maxSlotConstraintEditor.addMinMaxDischargeSlotsPerMultiMonthPeriod(contractProfile, profileConstraint, o_slots, monthlyDistributionConstraint);
 				} else {
 					// Not handled here.
 				}

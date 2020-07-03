@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases;
@@ -20,6 +20,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import com.google.common.collect.Lists;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
@@ -79,17 +80,17 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 	public void testUnrestrictedCase() throws Exception {
 
 		// Create the required basic elements
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
 		// Construct the cargo scenario
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				// Load
-				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.build() //
 				// Discharge
-				.makeDESSale("D", LocalDate.of(2017, 2, 13), portFinder.findPort("Sakai"), null, entity, "7")//
+				.makeDESSale("D", LocalDate.of(2017, 2, 13), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7")//
 				.build() //
 				// Cargo
 				.withVesselAssignment(charterInMarket_1, -1, 1) //
@@ -110,20 +111,20 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 	public void testRestricted_SlotDischarge_Port() throws Exception {
 
 		// Create the required basic elements
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
 		// Construct the cargo scenario
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				// Load
-				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.build() //
 				// Discharge
-				.makeDESSale("D", LocalDate.of(2017, 2, 13), portFinder.findPort("Sakai"), null, entity, "7")//
+				.makeDESSale("D", LocalDate.of(2017, 2, 13), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7")//
 				.with(s -> s.setRestrictedPortsOverride(true)) //
 				.with(s -> s.setRestrictedPortsArePermissive(false)) //
-				.with(s -> s.getRestrictedPorts().add(portFinder.findPort("Point Fortin"))) //
+				.with(s -> s.getRestrictedPorts().add(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN))) //
 				.build() //
 				// Cargo
 				.withVesselAssignment(charterInMarket_1, -1, 1) //
@@ -146,19 +147,20 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testRestricted_SlotDischarge_Port_Unshipped() throws Exception {
 		// Create the required basic elements
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		// Construct the cargo scenario
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				// Load
-				.makeDESPurchase("L", DESPurchaseDealType.DIVERT_FROM_SOURCE, LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), null, entity, "5", vessel) //
+				.makeDESPurchase("L", DESPurchaseDealType.DIVERT_FROM_SOURCE, LocalDate.of(2017, 1, 13), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8,
+						vessel) //
 				.with(s -> s.setShippingDaysRestriction(60)) //
 				.build() //
 				// Discharge
-				.makeDESSale("D", LocalDate.of(2017, 2, 13), portFinder.findPort("Sakai"), null, entity, "7")//
+				.makeDESSale("D", LocalDate.of(2017, 2, 13), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7")//
 				.with(s -> s.setRestrictedPortsOverride(true)) //
 				.with(s -> s.setRestrictedPortsArePermissive(false)) //
-				.with(s -> s.getRestrictedPorts().add(portFinder.findPort("Point Fortin"))) //
+				.with(s -> s.getRestrictedPorts().add(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN))) //
 				.build() //
 				// Cargo
 				.build();
@@ -181,20 +183,20 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 	public void testRestricted_SlotLoad_Port() throws Exception {
 
 		// Create the required basic elements
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
 		// Construct the cargo scenario
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				// Load
-				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.with(s -> s.setRestrictedPortsOverride(true)) //
 				.with(s -> s.setRestrictedPortsArePermissive(false)) //
-				.with(s -> s.getRestrictedPorts().add(portFinder.findPort("Sakai"))) //
+				.with(s -> s.getRestrictedPorts().add(portFinder.findPortById(InternalDataConstants.PORT_SAKAI))) //
 				.build() //
 				// Discharge
-				.makeDESSale("D", LocalDate.of(2017, 2, 13), portFinder.findPort("Sakai"), null, entity, "7")//
+				.makeDESSale("D", LocalDate.of(2017, 2, 13), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7")//
 				.build() //
 				// Cargo
 				.withVesselAssignment(charterInMarket_1, -1, 1) //
@@ -218,18 +220,18 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 	public void testRestricted_SlotLoad_Port_Unshipped() throws Exception {
 
 		// Create the required basic elements
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		// Construct the cargo scenario
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				// Load
-				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.with(s -> s.setRestrictedPortsOverride(true)) //
 				.with(s -> s.setRestrictedPortsArePermissive(false)) //
-				.with(s -> s.getRestrictedPorts().add(portFinder.findPort("Sakai"))) //
+				.with(s -> s.getRestrictedPorts().add(portFinder.findPortById(InternalDataConstants.PORT_SAKAI))) //
 				.build() //
 				// Discharge
-				.makeFOBSale("D", FOBSaleDealType.SOURCE_WITH_DEST, LocalDate.of(2017, 1, 13), portFinder.findPort("Sakai"), null, entity, "7", null)//
+				.makeFOBSale("D", FOBSaleDealType.SOURCE_WITH_DEST, LocalDate.of(2017, 1, 13), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7", null)//
 				.build() //
 				// Cargo
 				.build();
@@ -252,21 +254,21 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 	public void testRestricted_SlotPurchaseContract_Port() throws Exception {
 
 		// Create the required basic elements
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
 		final PurchaseContract contract = commercialModelBuilder.makeExpressionPurchaseContract("P", entity, "5");
 		contract.setRestrictedPortsArePermissive(false);
-		contract.getRestrictedPorts().add(portFinder.findPort("Sakai"));
+		contract.getRestrictedPorts().add(portFinder.findPortById(InternalDataConstants.PORT_SAKAI));
 
 		// Construct the cargo scenario
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				// Load
-				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), contract, null, null) //
+				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), contract, null, null) //
 				.build() //
 				// Discharge
-				.makeDESSale("D", LocalDate.of(2017, 2, 13), portFinder.findPort("Sakai"), null, entity, "7")//
+				.makeDESSale("D", LocalDate.of(2017, 2, 13), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7")//
 				.build() //
 				// Cargo
 				.withVesselAssignment(charterInMarket_1, -1, 1) //
@@ -290,20 +292,21 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 	public void testRestricted_SlotPurchaseContract_Port_Unshipped() throws Exception {
 
 		// Create the required basic elements
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final PurchaseContract contract = commercialModelBuilder.makeExpressionPurchaseContract("P", entity, "5");
 		contract.setRestrictedPortsArePermissive(false);
-		contract.getRestrictedPorts().add(portFinder.findPort("Sakai"));
+		contract.getRestrictedPorts().add(portFinder.findPortById(InternalDataConstants.PORT_SAKAI));
 
 		// Construct the cargo scenario
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				// Load
-				.makeDESPurchase("L", DESPurchaseDealType.DIVERT_FROM_SOURCE, LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), contract, null, null, vessel) //
+				.makeDESPurchase("L", DESPurchaseDealType.DIVERT_FROM_SOURCE, LocalDate.of(2017, 1, 13), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), contract, null, null, 22.8,
+						vessel) //
 				.with(s -> s.setShippingDaysRestriction(60)) //
 				.build() //
 				// Discharge
-				.makeDESSale("D", LocalDate.of(2017, 2, 13), portFinder.findPort("Sakai"), null, entity, "7")//
+				.makeDESSale("D", LocalDate.of(2017, 2, 13), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7")//
 				.build() //
 				// Cargo
 				.build();
@@ -326,21 +329,21 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 	public void testRestricted_SlotSalesContract_Port() throws Exception {
 
 		// Create the required basic elements
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
 		final SalesContract contract = commercialModelBuilder.makeExpressionSalesContract("P", entity, "7");
 		contract.setRestrictedPortsArePermissive(false);
-		contract.getRestrictedPorts().add(portFinder.findPort("Point Fortin"));
+		contract.getRestrictedPorts().add(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN));
 
 		// Construct the cargo scenario
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				// Load
-				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.build() //
 				// Discharge
-				.makeDESSale("D", LocalDate.of(2017, 2, 13), portFinder.findPort("Sakai"), contract, null, null)//
+				.makeDESSale("D", LocalDate.of(2017, 2, 13), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), contract, null, null)//
 				.build() //
 				// Cargo
 				.withVesselAssignment(charterInMarket_1, -1, 1) //
@@ -364,11 +367,11 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 	public void testRestricted_SlotSalesContract_PortGroup() throws Exception {
 
 		// Create the required basic elements
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
-		final PortGroup g1 = portModelBuilder.makePortGroup("PG1", portFinder.findPort("Point Fortin"), portFinder.findPort("Bonny Nigeria"));
+		final PortGroup g1 = portModelBuilder.makePortGroup("PG1", portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), portFinder.findPortById(InternalDataConstants.PORT_BONNY));
 
 		final SalesContract contract = commercialModelBuilder.makeExpressionSalesContract("P", entity, "7");
 		contract.setRestrictedPortsArePermissive(false);
@@ -377,10 +380,10 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 		// Construct the cargo scenario
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				// Load
-				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.build() //
 				// Discharge
-				.makeDESSale("D", LocalDate.of(2017, 2, 13), portFinder.findPort("Sakai"), contract, null, null)//
+				.makeDESSale("D", LocalDate.of(2017, 2, 13), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), contract, null, null)//
 				.build() //
 				// Cargo
 				.withVesselAssignment(charterInMarket_1, -1, 1) //
@@ -405,15 +408,15 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 
 		final SalesContract contract = commercialModelBuilder.makeExpressionSalesContract("P", entity, "7");
 		contract.setRestrictedPortsArePermissive(false);
-		contract.getRestrictedPorts().add(portFinder.findPort("Point Fortin"));
+		contract.getRestrictedPorts().add(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN));
 
 		// Construct the cargo scenario
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				// Load
-				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.build() //
 				// Discharge
-				.makeFOBSale("D", FOBSaleDealType.SOURCE_WITH_DEST, LocalDate.of(2017, 1, 13), portFinder.findPort("Sakai"), contract, null, null, null)//
+				.makeFOBSale("D", FOBSaleDealType.SOURCE_WITH_DEST, LocalDate.of(2017, 1, 13), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), contract, null, null, null)//
 				.build() //
 				// Cargo
 				.build();
@@ -436,23 +439,23 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 	public void testRestricted_SpotFOBPurchase_Port() throws Exception {
 
 		// Create the required basic elements
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
-		final FOBPurchasesMarket spotMarket = spotMarketsModelBuilder.makeFOBPurchaseMarket("Spot", portFinder.findPort("Point Fortin"), entity, "5", 22.8) //
+		final FOBPurchasesMarket spotMarket = spotMarketsModelBuilder.makeFOBPurchaseMarket("Spot", portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), entity, "5", 22.8) //
 				.withVolumeLimits(0, 3_000_000, VolumeUnits.MMBTU) //
 				.build();
 
-		spotMarket.getRestrictedPorts().add(portFinder.findPort("Sakai"));
+		spotMarket.getRestrictedPorts().add(portFinder.findPortById(InternalDataConstants.PORT_SAKAI));
 
 		// Construct the cargo scenario
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				// Load
-				.makeMarketFOBPurchase("L", spotMarket, YearMonth.of(2017, 1), portFinder.findPort("Point Fortin")) //
+				.makeMarketFOBPurchase("L", spotMarket, YearMonth.of(2017, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 				.build() //
 				// Discharge
-				.makeDESSale("D", LocalDate.of(2017, 2, 13), portFinder.findPort("Sakai"), null, entity, "7")//
+				.makeDESSale("D", LocalDate.of(2017, 2, 13), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7")//
 				.build() //
 				// Cargo
 				.withVesselAssignment(charterInMarket_1, -1, 1) //
@@ -476,23 +479,23 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 	public void testRestricted_SpotFOBPurchase_Port_Unshipped() throws Exception {
 
 		// Create the required basic elements
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
-		final FOBPurchasesMarket spotMarket = spotMarketsModelBuilder.makeFOBPurchaseMarket("Spot", portFinder.findPort("Point Fortin"), entity, "5", 22.8) //
+		final FOBPurchasesMarket spotMarket = spotMarketsModelBuilder.makeFOBPurchaseMarket("Spot", portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), entity, "5", 22.8) //
 				.withVolumeLimits(0, 3_000_000, VolumeUnits.MMBTU) //
 				.build();
 
-		spotMarket.getRestrictedPorts().add(portFinder.findPort("Sakai"));
+		spotMarket.getRestrictedPorts().add(portFinder.findPortById(InternalDataConstants.PORT_SAKAI));
 
 		// Construct the cargo scenario
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				// Load
-				.makeMarketFOBPurchase("L", spotMarket, YearMonth.of(2017, 1), portFinder.findPort("Point Fortin")) //
+				.makeMarketFOBPurchase("L", spotMarket, YearMonth.of(2017, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 				.build() //
 				// Discharge
-				.makeFOBSale("D", FOBSaleDealType.DIVERT_TO_DEST, LocalDate.of(2017, 1, 13), portFinder.findPort("Sakai"), null, entity, "7", null)//
+				.makeFOBSale("D", FOBSaleDealType.DIVERT_TO_DEST, LocalDate.of(2017, 1, 13), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7", null)//
 				.build() //
 				// Cargo
 				.withVesselAssignment(charterInMarket_1, -1, 1) //
@@ -516,23 +519,23 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 	public void testRestricted_SpotDESSale_Port() throws Exception {
 
 		// Create the required basic elements
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
-		final DESSalesMarket spotMarket = spotMarketsModelBuilder.makeDESSaleMarket("Spot", portFinder.findPort("Sakai"), entity, "7") //
+		final DESSalesMarket spotMarket = spotMarketsModelBuilder.makeDESSaleMarket("Spot", portFinder.findPortById(InternalDataConstants.PORT_SAKAI), entity, "7") //
 				.withVolumeLimits(0, 3_000_000, VolumeUnits.MMBTU) //
 				.build();
 
-		spotMarket.getRestrictedPorts().add(portFinder.findPort("Point Fortin"));
+		spotMarket.getRestrictedPorts().add(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN));
 
 		// Construct the cargo scenario
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				// Load
-				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.build() //
 				// Discharge
-				.makeMarketDESSale("D", spotMarket, YearMonth.of(2017, 2), portFinder.findPort("Sakai"))//
+				.makeMarketDESSale("D", spotMarket, YearMonth.of(2017, 2), portFinder.findPortById(InternalDataConstants.PORT_SAKAI))//
 				.build() //
 				// Cargo
 				.withVesselAssignment(charterInMarket_1, -1, 1) //
@@ -556,25 +559,25 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 	public void testRestricted_SpotDESSale_PortGroup() throws Exception {
 
 		// Create the required basic elements
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
-		final DESSalesMarket spotMarket = spotMarketsModelBuilder.makeDESSaleMarket("Spot", portFinder.findPort("Sakai"), entity, "7") //
+		final DESSalesMarket spotMarket = spotMarketsModelBuilder.makeDESSaleMarket("Spot", portFinder.findPortById(InternalDataConstants.PORT_SAKAI), entity, "7") //
 				.withVolumeLimits(0, 3_000_000, VolumeUnits.MMBTU) //
 				.build();
 
-		final PortGroup g1 = portModelBuilder.makePortGroup("PG1", portFinder.findPort("Point Fortin"), portFinder.findPort("Bonny Nigeria"));
+		final PortGroup g1 = portModelBuilder.makePortGroup("PG1", portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), portFinder.findPortById(InternalDataConstants.PORT_BONNY));
 
 		spotMarket.getRestrictedPorts().add(g1);
 
 		// Construct the cargo scenario
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				// Load
-				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.build() //
 				// Discharge
-				.makeMarketDESSale("D", spotMarket, YearMonth.of(2017, 2), portFinder.findPort("Sakai"))//
+				.makeMarketDESSale("D", spotMarket, YearMonth.of(2017, 2), portFinder.findPortById(InternalDataConstants.PORT_SAKAI))//
 				.build() //
 				// Cargo
 				.withVesselAssignment(charterInMarket_1, -1, 1) //
@@ -598,24 +601,25 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 	public void testRestricted_SpotDESSale_Port_Unshipped() throws Exception {
 
 		// Create the required basic elements
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
-		final DESSalesMarket spotMarket = spotMarketsModelBuilder.makeDESSaleMarket("Spot", portFinder.findPort("Sakai"), entity, "7") //
+		final DESSalesMarket spotMarket = spotMarketsModelBuilder.makeDESSaleMarket("Spot", portFinder.findPortById(InternalDataConstants.PORT_SAKAI), entity, "7") //
 				.withVolumeLimits(0, 3_000_000, VolumeUnits.MMBTU) //
 				.build();
 
-		spotMarket.getRestrictedPorts().add(portFinder.findPort("Point Fortin"));
+		spotMarket.getRestrictedPorts().add(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN));
 
 		// Construct the cargo scenario
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				// Load
-				.makeDESPurchase("L", DESPurchaseDealType.DIVERT_FROM_SOURCE, LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), null, entity, "5", vessel) //
+				.makeDESPurchase("L", DESPurchaseDealType.DIVERT_FROM_SOURCE, LocalDate.of(2017, 1, 13), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8,
+						vessel) //
 				.with(s -> s.setShippingDaysRestriction(60)) //
 				.build() //
 				// Discharge
-				.makeMarketDESSale("D", spotMarket, YearMonth.of(2017, 2), portFinder.findPort("Sakai"))//
+				.makeMarketDESSale("D", spotMarket, YearMonth.of(2017, 2), portFinder.findPortById(InternalDataConstants.PORT_SAKAI))//
 				.build() //
 				// Cargo
 				.withVesselAssignment(charterInMarket_1, -1, 1) //
@@ -639,7 +643,7 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 	public void testRestricted_SlotDischarge_Contract() throws Exception {
 
 		// Create the required basic elements
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
@@ -648,11 +652,11 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 		// Construct the cargo scenario
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				// Load
-				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), contract, null, null) //
+				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), contract, null, null) //
 				.with(s -> s.setShippingDaysRestriction(60)) //
 				.build() //
 				// Discharge
-				.makeDESSale("D", LocalDate.of(2017, 2, 13), portFinder.findPort("Sakai"), null, entity, "7")//
+				.makeDESSale("D", LocalDate.of(2017, 2, 13), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7")//
 				.with(s -> s.setRestrictedContractsOverride(true)) //
 				.with(s -> s.setRestrictedContractsArePermissive(false)) //
 				.with(s -> s.getRestrictedContracts().add(contract)) //
@@ -679,7 +683,7 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 	public void testRestricted_SlotDischarge_Contract_Unshipped() throws Exception {
 
 		// Create the required basic elements
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
@@ -688,11 +692,12 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 		// Construct the cargo scenario
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				// Load
-				.makeDESPurchase("L", DESPurchaseDealType.DIVERT_FROM_SOURCE, LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), contract, null, null, vessel) //
+				.makeDESPurchase("L", DESPurchaseDealType.DIVERT_FROM_SOURCE, LocalDate.of(2017, 1, 13), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), contract, null, null, 22.8,
+						vessel) //
 				.with(s -> s.setShippingDaysRestriction(60)) //
 				.build() //
 				// Discharge
-				.makeDESSale("D", LocalDate.of(2017, 2, 13), portFinder.findPort("Sakai"), null, entity, "7")//
+				.makeDESSale("D", LocalDate.of(2017, 2, 13), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7")//
 				.with(s -> s.setRestrictedContractsOverride(true)) //
 				.with(s -> s.setRestrictedContractsArePermissive(false)) //
 				.with(s -> s.getRestrictedContracts().add(contract)) //
@@ -718,7 +723,7 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 	public void testRestricted_SlotLoad_Contract() throws Exception {
 
 		// Create the required basic elements
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
@@ -727,13 +732,13 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 		// Construct the cargo scenario
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				// Load
-				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.with(s -> s.setRestrictedContractsOverride(true)) //
 				.with(s -> s.setRestrictedContractsArePermissive(false)) //
 				.with(s -> s.getRestrictedContracts().add(contract)) //
 				.build() //
 				// Discharge
-				.makeDESSale("D", LocalDate.of(2017, 2, 13), portFinder.findPort("Sakai"), contract, null, null)//
+				.makeDESSale("D", LocalDate.of(2017, 2, 13), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), contract, null, null)//
 				.build() //
 				// Cargo
 				.withVesselAssignment(charterInMarket_1, -1, 1) //
@@ -757,7 +762,7 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 	public void testRestricted_SlotLoad_Contract_Unshipped() throws Exception {
 
 		// Create the required basic elements
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
@@ -766,13 +771,13 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 		// Construct the cargo scenario
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				// Load
-				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.with(s -> s.setRestrictedContractsOverride(true)) //
 				.with(s -> s.setRestrictedContractsArePermissive(false)) //
 				.with(s -> s.getRestrictedContracts().add(contract)) //
 				.build() //
 				// Discharge
-				.makeFOBSale("D", FOBSaleDealType.SOURCE_WITH_DEST, LocalDate.of(2017, 1, 13), portFinder.findPort("Sakai"), contract, null, null, null)//
+				.makeFOBSale("D", FOBSaleDealType.SOURCE_WITH_DEST, LocalDate.of(2017, 1, 13), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), contract, null, null, null)//
 				.build() //
 				// Cargo
 				.build();
@@ -795,7 +800,7 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 	public void testRestricted_SlotPurchaseContract_Contract() throws Exception {
 
 		// Create the required basic elements
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
@@ -808,10 +813,10 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 		// Construct the cargo scenario
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				// Load
-				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), contract, null, null) //
+				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), contract, null, null) //
 				.build() //
 				// Discharge
-				.makeDESSale("D", LocalDate.of(2017, 2, 13), portFinder.findPort("Sakai"), salesContract, null, null)//
+				.makeDESSale("D", LocalDate.of(2017, 2, 13), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), salesContract, null, null)//
 				.build() //
 				// Cargo
 				.withVesselAssignment(charterInMarket_1, -1, 1) //
@@ -835,7 +840,7 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 	public void testRestricted_SlotSalesContract_Contract() throws Exception {
 
 		// Create the required basic elements
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
@@ -849,10 +854,10 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 		// Construct the cargo scenario
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				// Load
-				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), purchaseContract, null, null) //
+				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), purchaseContract, null, null) //
 				.build() //
 				// Discharge
-				.makeDESSale("D", LocalDate.of(2017, 2, 13), portFinder.findPort("Sakai"), contract, null, null)//
+				.makeDESSale("D", LocalDate.of(2017, 2, 13), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), contract, null, null)//
 				.build() //
 				// Cargo
 				.withVesselAssignment(charterInMarket_1, -1, 1) //
@@ -876,13 +881,13 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 	public void testRestricted_SpotFOBPurchase_Contract() throws Exception {
 
 		// Create the required basic elements
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
 		final SalesContract contract = commercialModelBuilder.makeExpressionSalesContract("C", entity, "7");
 
-		final FOBPurchasesMarket spotMarket = spotMarketsModelBuilder.makeFOBPurchaseMarket("Spot", portFinder.findPort("Point Fortin"), entity, "5", 22.8) //
+		final FOBPurchasesMarket spotMarket = spotMarketsModelBuilder.makeFOBPurchaseMarket("Spot", portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), entity, "5", 22.8) //
 				.withVolumeLimits(0, 3_000_000, VolumeUnits.MMBTU) //
 				.build();
 
@@ -891,10 +896,10 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 		// Construct the cargo scenario
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				// Load
-				.makeMarketFOBPurchase("L", spotMarket, YearMonth.of(2017, 1), portFinder.findPort("Point Fortin")) //
+				.makeMarketFOBPurchase("L", spotMarket, YearMonth.of(2017, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 				.build() //
 				// Discharge
-				.makeDESSale("D", LocalDate.of(2017, 2, 13), portFinder.findPort("Sakai"), contract, null, null)//
+				.makeDESSale("D", LocalDate.of(2017, 2, 13), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), contract, null, null)//
 				.build() //
 				// Cargo
 				.withVesselAssignment(charterInMarket_1, -1, 1) //
@@ -918,13 +923,13 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 	public void testRestricted_SpotDESSale_Contract() throws Exception {
 
 		// Create the required basic elements
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
 		final PurchaseContract contract = commercialModelBuilder.makeExpressionPurchaseContract("C", entity, "5");
 
-		final DESSalesMarket spotMarket = spotMarketsModelBuilder.makeDESSaleMarket("Spot", portFinder.findPort("Sakai"), entity, "7") //
+		final DESSalesMarket spotMarket = spotMarketsModelBuilder.makeDESSaleMarket("Spot", portFinder.findPortById(InternalDataConstants.PORT_SAKAI), entity, "7") //
 				.withVolumeLimits(0, 3_000_000, VolumeUnits.MMBTU) //
 				.build();
 
@@ -933,10 +938,10 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 		// Construct the cargo scenario
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				// Load
-				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), contract, null, null) //
+				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), contract, null, null) //
 				.build() //
 				// Discharge
-				.makeMarketDESSale("D", spotMarket, YearMonth.of(2017, 2), portFinder.findPort("Sakai"))//
+				.makeMarketDESSale("D", spotMarket, YearMonth.of(2017, 2), portFinder.findPortById(InternalDataConstants.PORT_SAKAI))//
 				.build() //
 				// Cargo
 				.withVesselAssignment(charterInMarket_1, -1, 1) //

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.util;
@@ -288,6 +288,7 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 			case AnalyticsPackage.ABSTRACT_ANALYSIS_MODEL: {
 				AbstractAnalysisModel abstractAnalysisModel = (AbstractAnalysisModel)theEObject;
 				T result = caseAbstractAnalysisModel(abstractAnalysisModel);
+				if (result == null) result = caseUUIDObject(abstractAnalysisModel);
 				if (result == null) result = caseNamedObject(abstractAnalysisModel);
 				if (result == null) result = caseMMXObject(abstractAnalysisModel);
 				if (result == null) result = defaultCase(theEObject);
@@ -297,6 +298,7 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 				OptionAnalysisModel optionAnalysisModel = (OptionAnalysisModel)theEObject;
 				T result = caseOptionAnalysisModel(optionAnalysisModel);
 				if (result == null) result = caseAbstractAnalysisModel(optionAnalysisModel);
+				if (result == null) result = caseUUIDObject(optionAnalysisModel);
 				if (result == null) result = caseNamedObject(optionAnalysisModel);
 				if (result == null) result = caseMMXObject(optionAnalysisModel);
 				if (result == null) result = defaultCase(theEObject);
@@ -480,6 +482,7 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 				ViabilityModel viabilityModel = (ViabilityModel)theEObject;
 				T result = caseViabilityModel(viabilityModel);
 				if (result == null) result = caseAbstractAnalysisModel(viabilityModel);
+				if (result == null) result = caseUUIDObject(viabilityModel);
 				if (result == null) result = caseNamedObject(viabilityModel);
 				if (result == null) result = caseMMXObject(viabilityModel);
 				if (result == null) result = defaultCase(theEObject);
@@ -501,6 +504,7 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 				MTMModel mtmModel = (MTMModel)theEObject;
 				T result = caseMTMModel(mtmModel);
 				if (result == null) result = caseAbstractAnalysisModel(mtmModel);
+				if (result == null) result = caseUUIDObject(mtmModel);
 				if (result == null) result = caseNamedObject(mtmModel);
 				if (result == null) result = caseMMXObject(mtmModel);
 				if (result == null) result = defaultCase(theEObject);
@@ -522,6 +526,7 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 				BreakEvenAnalysisModel breakEvenAnalysisModel = (BreakEvenAnalysisModel)theEObject;
 				T result = caseBreakEvenAnalysisModel(breakEvenAnalysisModel);
 				if (result == null) result = caseAbstractAnalysisModel(breakEvenAnalysisModel);
+				if (result == null) result = caseUUIDObject(breakEvenAnalysisModel);
 				if (result == null) result = caseNamedObject(breakEvenAnalysisModel);
 				if (result == null) result = caseMMXObject(breakEvenAnalysisModel);
 				if (result == null) result = defaultCase(theEObject);

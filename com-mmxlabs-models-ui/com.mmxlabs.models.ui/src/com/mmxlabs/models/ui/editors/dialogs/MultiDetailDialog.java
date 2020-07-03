@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.ui.editors.dialogs;
@@ -65,6 +65,7 @@ import com.mmxlabs.models.ui.forms.AbstractDataBindingFormDialog;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.models.util.emfpath.EMFUtils;
 import com.mmxlabs.rcp.common.actions.AbstractMenuLockableAction;
+import com.mmxlabs.rcp.common.ecore.EMFCopier;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 enum SetMode {
@@ -367,7 +368,7 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 						// ... otherwise copy the proxy and register that as a counterpart
 						if (!foundExisting) {
 
-							final EObject copy = EcoreUtil.copy(proxy);
+							final EObject copy = EMFCopier.copy(proxy);
 							command.append(AddCommand.create(commandHandler.getEditingDomain(), //
 									original, proxy.eContainingFeature(), copy));
 

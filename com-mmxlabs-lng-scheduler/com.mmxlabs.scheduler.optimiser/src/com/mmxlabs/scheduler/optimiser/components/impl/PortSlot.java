@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
@@ -14,6 +14,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 public abstract class PortSlot implements IPortSlot {
+	private @Nullable String key;
 
 	private @NonNull String id;
 
@@ -23,7 +24,7 @@ public abstract class PortSlot implements IPortSlot {
 
 	private @NonNull PortType portType;
 
-	public PortSlot(@NonNull final String id, PortType portType, @NonNull final IPort port, @Nullable final ITimeWindow timeWindow) {
+	public PortSlot(@NonNull final String id, @NonNull PortType portType, @NonNull final IPort port, @Nullable final ITimeWindow timeWindow) {
 		this.id = id;
 		this.port = port;
 		this.timeWindow = timeWindow;
@@ -38,6 +39,16 @@ public abstract class PortSlot implements IPortSlot {
 
 	public void setId(@NonNull final String id) {
 		this.id = id;
+	}
+
+	@Override
+	@NonNull
+	public String getKey() {
+		return (key != null) ? key : id;
+	}
+
+	public void setKey(@NonNull final String key) {
+		this.key = key;
 	}
 
 	@Override

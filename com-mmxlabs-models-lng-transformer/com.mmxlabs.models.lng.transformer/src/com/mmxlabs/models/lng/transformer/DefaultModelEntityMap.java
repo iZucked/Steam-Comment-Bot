@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer;
@@ -21,15 +21,17 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.providers.IExternalDateProvider;
 
 /**
- * Class which maps model entities to classes; the LNGScenarioTransformer should populate one of these, which maps every PortSlot to the URI of a Slot in the EMF, and similarly for vessels, vessel
- * classes, etc etc.
+ * Class which maps model entities to classes; the LNGScenarioTransformer should
+ * populate one of these, which maps every PortSlot to the URI of a Slot in the
+ * EMF, and similarly for vessels, vessel classes, etc etc.
  * 
  * @author hinton
  * 
  */
-public class DefaultModelEntityMap implements ModelEntityMap {
+public class DefaultModelEntityMap implements ModelEntityMap, IExternalDateProvider {
 
 	@NonNull
 	private final DateAndCurveHelper dateHelper;
@@ -141,6 +143,12 @@ public class DefaultModelEntityMap implements ModelEntityMap {
 			return getDateFromHours(hours, "UTC");
 		}
 		return getDateFromHours(hours, port.getLocation().getTimeZone());
+	}
+
+	@Override
+	public @NonNull ZonedDateTime getEarliestTime() {
+		// TODO Auto-generated method stub
+		return dateHelper.getEarliestTime();
 	}
 
 }

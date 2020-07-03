@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.generatedcharterout;
@@ -36,7 +36,7 @@ public class GeneratedCharterOutTests extends AbstractOptimisationResultTester {
 			Assertions.assertNotNull(schedule);
 
 			List<GeneratedCharterOut> charterOuts = findGCOEvents(schedule.getSequences().get(0));
-			Assertions.assertEquals(charterOuts.size(), 0);
+			Assertions.assertEquals(0, charterOuts.size());
 		});
 	}
 
@@ -54,7 +54,7 @@ public class GeneratedCharterOutTests extends AbstractOptimisationResultTester {
 			Assertions.assertNotNull(schedule);
 
 			List<GeneratedCharterOut> charterOuts = findGCOEvents(schedule.getSequences().get(0));
-			Assertions.assertEquals(charterOuts.size(), 1);
+			Assertions.assertEquals(1, charterOuts.size());
 
 			GeneratedCharterOut gco = charterOuts.get(0);
 			Assertions.assertEquals("Bonny Is", gco.getPort().getName());
@@ -79,7 +79,7 @@ public class GeneratedCharterOutTests extends AbstractOptimisationResultTester {
 			Assertions.assertNotNull(schedule);
 
 			List<GeneratedCharterOut> charterOuts = findGCOEvents(schedule.getSequences().get(0));
-			Assertions.assertEquals(charterOuts.size(), 1);
+			Assertions.assertEquals(1, charterOuts.size());
 
 			GeneratedCharterOut gco = charterOuts.get(0);
 			Assertions.assertEquals("Barcelona", gco.getPort().getName());
@@ -91,7 +91,7 @@ public class GeneratedCharterOutTests extends AbstractOptimisationResultTester {
 	}
 
 	private List<GeneratedCharterOut> findGCOEvents(Sequence sequence) {
-		List<GeneratedCharterOut> charterOuts = new ArrayList<GeneratedCharterOut>();
+		List<GeneratedCharterOut> charterOuts = new ArrayList<>();
 		for (Event e : sequence.getEvents()) {
 			if (e instanceof GeneratedCharterOut) {
 				charterOuts.add((GeneratedCharterOut) e);
@@ -109,7 +109,8 @@ public class GeneratedCharterOutTests extends AbstractOptimisationResultTester {
 			event = charterOut.getNextEvent();
 		}
 		if (event instanceof Journey) {
-			if (!((Journey) event).isLaden()) {
+			Journey journey = (Journey) event;
+			if (!journey.isLaden()) {
 				return true;
 			}
 		}

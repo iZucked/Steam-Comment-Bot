@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.parameters;
@@ -275,6 +275,7 @@ public class ParameterModesDialogTest {
 	}
 
 	@Test
+	@Disabled("Action set not enabled")
 	public void testActionSet_Off_NoPeriod() throws Exception {
 		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
 		settings.unsetPeriodStartDate();
@@ -290,6 +291,7 @@ public class ParameterModesDialogTest {
 	}
 
 	@Test
+	@Disabled("Action set not enabled")
 	public void testActionSet_Low_1mPeriod() throws Exception {
 		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
 		settings.unsetPeriodStartDate();
@@ -317,6 +319,7 @@ public class ParameterModesDialogTest {
 	}
 
 	@Test
+	@Disabled("Action set not enabled")
 	public void testActionSet_Low_3mPeriod() throws Exception {
 		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
 		settings.unsetPeriodStartDate();
@@ -344,6 +347,7 @@ public class ParameterModesDialogTest {
 	}
 
 	@Test
+	@Disabled("Action set not enabled")
 	public void testActionSet_Medium_6mPeriod() throws Exception {
 		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
 		settings.unsetPeriodStartDate();
@@ -371,6 +375,7 @@ public class ParameterModesDialogTest {
 	}
 
 	@Test
+	@Disabled("Action set not enabled")
 	public void testActionSet_High_6mPeriod() throws Exception {
 		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
 		settings.unsetPeriodStartDate();
@@ -398,6 +403,7 @@ public class ParameterModesDialogTest {
 	}
 
 	@Test
+	@Disabled("Action set not enabled")
 	public void testActionSet_Low_4mPeriod() throws Exception {
 		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
 		settings.unsetPeriodStartDate();
@@ -416,6 +422,7 @@ public class ParameterModesDialogTest {
 	}
 
 	@Test
+	@Disabled("Action set not enabled")
 	public void testActionSet_Med_7mPeriod() throws Exception {
 		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
 		settings.unsetPeriodStartDate();
@@ -434,6 +441,7 @@ public class ParameterModesDialogTest {
 	}
 
 	@Test
+	@Disabled("Action set not enabled")
 	public void testActionSet_High_7mPeriod() throws Exception {
 		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
 		settings.unsetPeriodStartDate();

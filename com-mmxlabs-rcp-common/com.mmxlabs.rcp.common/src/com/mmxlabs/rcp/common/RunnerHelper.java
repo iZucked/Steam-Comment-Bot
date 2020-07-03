@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.rcp.common;
@@ -9,6 +9,8 @@ import java.util.function.Function;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
@@ -192,5 +194,25 @@ public final class RunnerHelper {
 			display.asyncExec(runnable);
 		}
 		return true;
+	}
+
+	public static <T extends Control> void runAsyncIfControlValid(@Nullable final T control, @NonNull final Consumer<T> runnable) {
+		runIfControlValid(control, false, runnable);
+	}
+
+	public static <T extends Control> void runSyncIfControlValid(@Nullable final T control, @NonNull final Consumer<T> runnable) {
+		runIfControlValid(control, true, runnable);
+	}
+
+	public static <T extends Control> void runIfControlValid(@Nullable final T control, final boolean syncExec, @NonNull final Consumer<T> runnable) {
+		if (control == null) {
+			return;
+		}
+		final Runnable runnable2 = () -> {
+			if (control != null && !control.isDisposed()) {
+				runnable.accept(control);
+			}
+		};
+		RunnerHelper.exec(runnable2, syncExec);
 	}
 }

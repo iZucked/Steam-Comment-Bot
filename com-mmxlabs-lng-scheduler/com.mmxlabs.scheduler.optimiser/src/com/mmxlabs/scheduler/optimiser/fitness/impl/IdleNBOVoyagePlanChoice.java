@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
@@ -56,9 +56,6 @@ public final class IdleNBOVoyagePlanChoice implements IVoyagePlanChoice {
 
 	@Override
 	public final boolean apply(final int choice) {
-		if (options.getFromPortSlot().getId().contains("149")) {
-			int ii = 0;
-		}
 		
 		this.choice = choice;
 		final IdleFuelChoice idleFuelChoice = IdleFuelChoice.values()[choice];

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.changeset;
@@ -8,8 +8,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
-import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
@@ -22,6 +20,7 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.rcp.common.ecore.EMFCopier;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class ChangeSetToTableTransformer {
@@ -80,8 +79,8 @@ public class ChangeSetToTableTransformer {
 				ChangeSetTransformerUtil.sortRows(changeSetTableGroupRows, targetToSortFirst);
 				changeSetTableGroup.getRows().addAll(changeSetTableGroupRows);
 				changeSetTableRoot.getGroups().add(changeSetTableGroup);
-				changeSetTableGroup.setDeltaMetrics(EcoreUtil.copy(isAlternative ? changeSet.getMetricsToAlternativeBase() : changeSet.getMetricsToDefaultBase()));
-				changeSetTableGroup.setCurrentMetrics(EcoreUtil.copy(changeSet.getCurrentMetrics()));
+				changeSetTableGroup.setDeltaMetrics(EMFCopier.copy(isAlternative ? changeSet.getMetricsToAlternativeBase() : changeSet.getMetricsToDefaultBase()));
+				changeSetTableGroup.setCurrentMetrics(EMFCopier.copy(changeSet.getCurrentMetrics()));
 
 				changeSetTableGroup.setChangeSet(changeSet);
 

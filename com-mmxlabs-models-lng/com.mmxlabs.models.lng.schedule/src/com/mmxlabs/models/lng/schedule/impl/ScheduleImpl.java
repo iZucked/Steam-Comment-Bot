@@ -1,8 +1,9 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.impl;
+import com.mmxlabs.models.lng.cargo.PaperDeal;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -47,6 +48,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getInventoryLevels <em>Inventory Levels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getPaperDealAllocations <em>Paper Deal Allocations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getOtherPNL <em>Other PNL</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getGeneratedPaperDeals <em>Generated Paper Deals</em>}</li>
  * </ul>
  *
  * @generated
@@ -151,6 +153,16 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 	 * @ordered
 	 */
 	protected OtherPNL otherPNL;
+
+	/**
+	 * The cached value of the '{@link #getGeneratedPaperDeals() <em>Generated Paper Deals</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getGeneratedPaperDeals()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<PaperDeal> generatedPaperDeals;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -339,6 +351,19 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 	 * @generated
 	 */
 	@Override
+	public EList<PaperDeal> getGeneratedPaperDeals() {
+		if (generatedPaperDeals == null) {
+			generatedPaperDeals = new EObjectContainmentEList<PaperDeal>(PaperDeal.class, this, SchedulePackage.SCHEDULE__GENERATED_PAPER_DEALS);
+		}
+		return generatedPaperDeals;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case SchedulePackage.SCHEDULE__SEQUENCES:
@@ -359,6 +384,8 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 				return ((InternalEList<?>)getPaperDealAllocations()).basicRemove(otherEnd, msgs);
 			case SchedulePackage.SCHEDULE__OTHER_PNL:
 				return basicSetOtherPNL(null, msgs);
+			case SchedulePackage.SCHEDULE__GENERATED_PAPER_DEALS:
+				return ((InternalEList<?>)getGeneratedPaperDeals()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -391,6 +418,8 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 				return getPaperDealAllocations();
 			case SchedulePackage.SCHEDULE__OTHER_PNL:
 				return getOtherPNL();
+			case SchedulePackage.SCHEDULE__GENERATED_PAPER_DEALS:
+				return getGeneratedPaperDeals();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -443,6 +472,10 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 			case SchedulePackage.SCHEDULE__OTHER_PNL:
 				setOtherPNL((OtherPNL)newValue);
 				return;
+			case SchedulePackage.SCHEDULE__GENERATED_PAPER_DEALS:
+				getGeneratedPaperDeals().clear();
+				getGeneratedPaperDeals().addAll((Collection<? extends PaperDeal>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -485,6 +518,9 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 			case SchedulePackage.SCHEDULE__OTHER_PNL:
 				setOtherPNL((OtherPNL)null);
 				return;
+			case SchedulePackage.SCHEDULE__GENERATED_PAPER_DEALS:
+				getGeneratedPaperDeals().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -517,6 +553,8 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 				return paperDealAllocations != null && !paperDealAllocations.isEmpty();
 			case SchedulePackage.SCHEDULE__OTHER_PNL:
 				return otherPNL != null;
+			case SchedulePackage.SCHEDULE__GENERATED_PAPER_DEALS:
+				return generatedPaperDeals != null && !generatedPaperDeals.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

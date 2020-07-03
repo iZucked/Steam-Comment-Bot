@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases;
@@ -9,32 +9,47 @@ import java.time.YearMonth;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
+import com.mmxlabs.lngdataserver.lng.importers.creator.ScenarioBuilder;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.util.PortModelBuilder;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
-import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
 import com.mmxlabs.models.lng.transformer.extensions.shippingtype.ShippingTypeRequirementConstraintChecker;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
 import com.mmxlabs.models.lng.types.DESPurchaseDealType;
-import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 @ExtendWith(ShiroRunner.class)
 public class CargoShippingTypeRequirementConstraintTest extends AbstractMicroTestCase {
 
+	@Override
+	public @NonNull IScenarioDataProvider importReferenceData() throws Exception {
+		ScenarioBuilder sb = ScenarioBuilder.initialiseBasicScenario();
+		sb.loadDefaultData();
+		return sb.getScenarioDataProvider();
+	}
+
+	@Override
+	protected BaseLegalEntity importDefaultEntity() {
+		return commercialModelFinder.findEntity(ScenarioBuilder.DEFAULT_ENTITY_NAME);
+	}
+	
 	private static Stream<Arguments> provideCargoDeliveryTypeCombinations() {
 		return Stream.of(
 				Arguments.of(CargoDeliveryType.ANY, CargoDeliveryType.ANY),
@@ -89,15 +104,15 @@ public class CargoShippingTypeRequirementConstraintTest extends AbstractMicroTes
 		}
 		
 		final FOBSalesMarket market = spotMarketsModelBuilder.makeFOBSaleMarket("FOBSaleMarket", 
-				PortModelBuilder.makePortSet(portFinder.findPort("Point Fortin")), entity, "5") //
+				PortModelBuilder.makePortSet(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)), entity, "5") //
 				.withAvailabilityConstant(0)//
 				.build();
 
 		cargoModelBuilder.makeCargo()//
-				.makeFOBPurchase("L1", LocalDate.of(2015, 6, 1), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 6, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.withSalesDeliveryType(salesDeliveryType)
 				.build() //
-				.makeMarketFOBSale("D1", market, YearMonth.of(2015, 6), portFinder.findPort("Point Fortin")) //
+				.makeMarketFOBSale("D1", market, YearMonth.of(2015, 6), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 				.withPurchaseDeliveryType(purchaseDeliveryType)//
 				.build() //
 				.build();
@@ -111,14 +126,14 @@ public class CargoShippingTypeRequirementConstraintTest extends AbstractMicroTes
 			purchaseDeliveryType = CargoDeliveryType.ANY;
 		}
 		
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		final CharterInMarket charterInMarket1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 1);
 			
 		cargoModelBuilder.makeCargo()//
-				.makeFOBPurchase("L1", LocalDate.of(2015, 6, 1), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 6, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.withSalesDeliveryType(salesDeliveryType)
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.withPurchaseDeliveryType(purchaseDeliveryType)//
 				.build() //
 				.withVesselAssignment(charterInMarket1, 0, 1)
@@ -135,10 +150,10 @@ public class CargoShippingTypeRequirementConstraintTest extends AbstractMicroTes
 		}
 		
 		cargoModelBuilder.makeCargo()//
-				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "?", null)
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "?", 22.8, null)
 				.withSalesDeliveryType(salesDeliveryType)
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7")
+				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7")
 				.withPurchaseDeliveryType(purchaseDeliveryType)//
 				.build() //
 				.build();

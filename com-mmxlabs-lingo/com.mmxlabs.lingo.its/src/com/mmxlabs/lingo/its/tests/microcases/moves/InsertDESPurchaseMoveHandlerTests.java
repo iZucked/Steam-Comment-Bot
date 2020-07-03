@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases.moves;
@@ -19,6 +19,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -60,11 +61,11 @@ public class InsertDESPurchaseMoveHandlerTests extends AbstractMoveHandlerTest {
 	public void testInsertDESPurchaseMove() throws Exception {
 
 		final LoadSlot load1 = cargoModelBuilder//
-				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5", 22.6, null) //
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "5", 22.6, null) //
 				.build();
 		//
 		final DischargeSlot discharge1 = cargoModelBuilder//
-				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build();
 
 		runTest((injector, scenarioRunner) -> {
@@ -129,16 +130,16 @@ public class InsertDESPurchaseMoveHandlerTests extends AbstractMoveHandlerTest {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testInsertDESPurchaseMove_Fail_VesselRestriction() throws Exception {
 
-		final Vessel source = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel source = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		final Vessel vessel1 = fleetModelBuilder.createVesselFrom("My Vessel 1", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 		final Vessel vessel2 = fleetModelBuilder.createVesselFrom("My Vessel 2", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 
 		final LoadSlot load1 = cargoModelBuilder//
-				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5", 22.6, vessel1) //
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "5", 22.6, vessel1) //
 				.build();
 		//
 		final DischargeSlot discharge1 = cargoModelBuilder//
-				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.withRestrictedVessels(vessel2, true) //
 				.build();
 
@@ -189,11 +190,11 @@ public class InsertDESPurchaseMoveHandlerTests extends AbstractMoveHandlerTest {
 	public void testInsertDESPurchaseMove_Fail_Timewindows() throws Exception {
 
 		final LoadSlot load1 = cargoModelBuilder//
-				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5", 22.6, null) //
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "5", 22.6, null) //
 				.build();
 		//
 		final DischargeSlot discharge1 = cargoModelBuilder//
-				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build();
 
 		runTest((injector, scenarioRunner) -> {

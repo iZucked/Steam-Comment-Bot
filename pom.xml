@@ -5,8 +5,15 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mmxlabs.lingo.master</groupId>
 	<artifactId>com.mmxlabs.lingo.master.parent</artifactId>
-	<version>4.8.3-SNAPSHOT</version>
+	<version>4.10.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
+
+	<parent>
+		<groupId>com.mmxlabs.parent</groupId>
+		<artifactId>tycho-parent</artifactId>
+		<relativePath />
+		<version>42</version>
+	</parent>
 
 	<scm>
 		<connection>scm:git:git@gitlab.com:mmxlabs/LiNGO/LiNGO.git</connection>
@@ -16,7 +23,7 @@
 
 	<ciManagement>
 		<system>Jenkins</system>
-		<url>https://kubera.mmxlabs.lan/jenkins/job/master/job/LiNGO-master/</url>
+		<url>http://build.mmxlabs.com/job/master/job/LiNGO-master/</url>
 	</ciManagement>
 
 	<modules>
@@ -38,5 +45,36 @@
 		<module>com-mmxlabs-lingo</module>
 	</modules>
 
+	<!--
+	<pluginRepositories>
+		<pluginRepository>
+			<id>cbi</id>
+			<url>https://repo.eclipse.org/content/repositories/cbi-releases/
+			</url>
+		</pluginRepository>
+	</pluginRepositories>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.cbi.maven.plugins</groupId>
+				<artifactId>eclipse-jarsigner-plugin</artifactId>
+				<version>1.1.7</version>
+				<executions>
+					<execution>
+						<id>sign</id>
+						<phase>package</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<signerUrl>http://kubera.mmxlabs.lan:3138/jarsigner</signerUrl>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	-->
 </project>
 

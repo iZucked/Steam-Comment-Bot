@@ -3,11 +3,11 @@ Bundle-Description: Parent maven project for core optimisation projects
 Bundle-DocURL: http://www.minimaxlabs.com/
 Bundle-ManifestVersion: 2
 Bundle-Name: Optimiser - LSO
-Bundle-RequiredExecutionEnvironment: JavaSE-10
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-SymbolicName: com.mmxlabs.optimiser.optimiser-lso.tests
 Automatic-Module-Name: com.mmxlabs.optimiser.optimiser-lso.tests
 Bundle-Vendor: Minimax Labs Ltd.
-Bundle-Version: 4.8.3.qualifier
+Bundle-Version: 4.10.1.qualifier
 Fragment-Host: com.mmxlabs.optimiser.optimiser-lso
 Require-Bundle: org.mockito.mockito-core;bundle-version="1.9.5",
  ch.qos.logback.classic;bundle-version="1.0.0",

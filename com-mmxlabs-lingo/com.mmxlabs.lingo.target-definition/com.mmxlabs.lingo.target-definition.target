@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="Lingo Platform Target - (Indigo)" sequenceNumber="4">
+<target name="Lingo Platform Target - (Indigo)" sequenceNumber="7">
 <locations>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="jre.feature.feature.group" version="0.0.0"/>
-<repository location="http://kubera.mmxlabs.lan/nexus/service/local/repositories/releases-v2-unzip/content/com/mmxlabs/jre/jre.p2/10.2.0.2018e/jre.p2-10.2.0.2018e.zip-unzip/" id="mmxlabs-releases"/>
+<repository location="http://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/com/mmxlabs/jre/jre.p2/11.2.0.2020a/jre.p2-11.2.0.2020a.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 </locations>
 </target>

@@ -1,10 +1,10 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.training;
 
-import java.net.MalformedURLException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
@@ -22,11 +22,12 @@ import com.mmxlabs.lingo.its.tests.TestMode;
 import com.mmxlabs.lingo.its.tests.TestingModes;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
+import com.mmxlabs.lingo.its.tests.microcases.MicroCaseUtils;
 import com.mmxlabs.lingo.its.verifier.OptimiserDataMapper;
 import com.mmxlabs.lingo.its.verifier.OptimiserResultVerifier;
 import com.mmxlabs.lingo.its.verifier.SolutionData;
-import com.mmxlabs.lngdataserver.data.distances.DataConstants;
-import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
+import com.mmxlabs.lngdataserver.lng.importers.creator.ScenarioBuilder;
 import com.mmxlabs.models.lng.parameters.OptimisationMode;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
@@ -41,7 +42,6 @@ import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.its.RequireFeature;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
-import com.mmxlabs.models.lng.transformer.its.scenario.CSVImporter;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
@@ -55,44 +55,67 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.fitness.components.NonOptionalSlotFitnessCoreFactory;
 
 @ExtendWith(value = ShiroRunner.class)
-@RequireFeature(features = { KnownFeatures.FEATURE_OPTIMISATION_SIMILARITY, KnownFeatures.FEATURE_OPTIMISATION_HILLCLIMB })
+@RequireFeature(value = { KnownFeatures.FEATURE_OPTIMISATION_SIMILARITY, KnownFeatures.FEATURE_OPTIMISATION_HILLCLIMB })
 public class TrainingShippingITests extends AbstractMicroTestCase {
+
+	private static final String LARGE_SHIP = InternalDataConstants.REF_VESSEL_TFDE_160;
+	private static final String MEDIUM_SHIP = InternalDataConstants.REF_VESSEL_STEAM_145;
+	private static final String SMALL_SHIP = InternalDataConstants.REF_VESSEL_STEAM_138;
 
 	// Which scenario data to import
 	@Override
 	public @NonNull IScenarioDataProvider importReferenceData() throws Exception {
-		final IScenarioDataProvider scenarioDataProvider = importReferenceData("/trainingcases/Shipping_I/");
 
-		updateDistanceData(scenarioDataProvider, DataConstants.DISTANCES_LATEST_JSON);
-		updatePortsData(scenarioDataProvider, DataConstants.PORTS_LATEST_JSON);
+		ScenarioBuilder sb = ScenarioBuilder.initialiseBasicScenario();
+		sb.loadDefaultData();
 
-		return scenarioDataProvider;
+		try (InputStream is = TrainingShippingITests.class.getResourceAsStream("/trainingcases/Shipping_I/Commodity Curves.csv")) {
+			sb.importCommodityCurves(is);
+		}
+		try (InputStream is = TrainingShippingITests.class.getResourceAsStream("/trainingcases/Shipping_I/Vessel Availability.csv")) {
+			sb.importVesselCharters(is);
+		}
+//		try (InputStream is = TrainingShippingITests.class.getResourceAsStream("/trainingcases/Shipping_I/Spot Cargo Markets.csv")) {
+//			sb.importCargoes(is);
+//		}
+		try (InputStream is = TrainingShippingITests.class.getResourceAsStream("/trainingcases/Shipping_I/Cargoes.csv")) {
+			sb.importCargoes(is);
+		}
+		try (InputStream is = TrainingShippingITests.class.getResourceAsStream("/trainingcases/Shipping_I/Assignments.csv")) {
+			sb.importAssignments(is);
+		}
+		return sb.getScenarioDataProvider();
+		// new CargoModelImporter().
+		// updateDistanceData(scenarioDataProvider, DataConstants.DISTANCES_LATEST_JSON);
+		// updatePortsData(scenarioDataProvider, DataConstants.PORTS_LATEST_JSON);
+		//
+		// return scenarioDataProvider;
 	}
-
-	// Override default behaviour to also import portfolio data e.g. cargoes, vessel availabilities, events
-	@NonNull
-	public static IScenarioDataProvider importReferenceData(final String url) throws MalformedURLException {
-
-		final @NonNull String urlRoot = AbstractMicroTestCase.class.getResource(url).toString();
-		final CSVImporter importer = new CSVImporter();
-		importer.importPortData(urlRoot);
-		importer.importCostData(urlRoot);
-		importer.importEntityData(urlRoot);
-		importer.importFleetData(urlRoot);
-		importer.importMarketData(urlRoot);
-		importer.importPromptData(urlRoot);
-		importer.importMarketData(urlRoot);
-
-		// Import cargoes from CSV
-		importer.importPorfolioData(urlRoot);
-
-		return importer.doImport();
-	}
-
-	@Override
-	protected BaseLegalEntity importDefaultEntity() {
-		return commercialModelFinder.findEntity("Entity");
-	}
+	//
+	// // Override default behaviour to also import portfolio data e.g. cargoes, vessel availabilities, events
+	// @NonNull
+	// public static IScenarioDataProvider importReferenceData(final String url) throws MalformedURLException {
+	//
+	// final @NonNull String urlRoot = AbstractMicroTestCase.class.getResource(url).toString();
+	// final CSVImporter importer = new CSVImporter();
+	// importer.importPortData(urlRoot);
+	// importer.importCostData(urlRoot);
+	// importer.importEntityData(urlRoot);
+	// importer.importFleetData(urlRoot);
+	// importer.importMarketData(urlRoot);
+	// importer.importPromptData(urlRoot);
+	// importer.importMarketData(urlRoot);
+	//
+	// // Import cargoes from CSV
+	// importer.importPorfolioData(urlRoot);
+	//
+	// return importer.doImport();
+	// }
+	//
+	// @Override
+	// protected BaseLegalEntity importDefaultEntity() {
+	// return commercialModelFinder.findEntity("Entity");
+	// }
 
 	protected @NonNull UserSettings createUserSettings() {
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
@@ -150,9 +173,9 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 				// Solution 1
 				{
 					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
-							.withAnySolutionResultChecker().withUsedLoad("A_3").onFleetVessel("Small Ship") //
-							.withUsedLoad("S_1").onFleetVessel("Medium Ship") //
-							.withUsedLoad("S_4").onFleetVessel("Large Ship") //
+							.withAnySolutionResultChecker().withUsedLoad("A_3").onFleetVessel(SMALL_SHIP) //
+							.withUsedLoad("S_1").onFleetVessel(MEDIUM_SHIP) //
+							.withUsedLoad("S_4").onFleetVessel(LARGE_SHIP) //
 							.pnlDelta(initialPNL, 944_899, 1_000) //
 							.build();
 
@@ -162,8 +185,8 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 				// Solution 2
 				{
 					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
-							.withAnySolutionResultChecker().withUsedLoad("A_3").onFleetVessel("Small Ship") //
-							.withUsedLoad("S_4").onFleetVessel("Medium Ship") //
+							.withAnySolutionResultChecker().withUsedLoad("A_3").onFleetVessel(SMALL_SHIP) //
+							.withUsedLoad("S_4").onFleetVessel(MEDIUM_SHIP) //
 							.pnlDelta(initialPNL, 610_378, 1_000) //
 							.build();
 
@@ -183,9 +206,9 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 
 		// Make changes to initial data
 		cargoModelFinder.findLoadSlot("PE_1").setWindowSizeUnits(TimePeriod.DAYS);
-		cargoModelFinder.findVesselAvailability("Large ship").setStartAt(portFinder.findPort("Gladstone"));
-		cargoModelFinder.findVesselAvailability("Medium ship").setStartAt(portFinder.findPort("Barcelona"));
-		cargoModelFinder.findVesselAvailability("Small ship").setStartAt(portFinder.findPort("Sabine Pass"));
+		cargoModelFinder.findVesselAvailability(LARGE_SHIP).setStartAt(portFinder.findPortById(InternalDataConstants.PORT_GLADSTONE));
+		cargoModelFinder.findVesselAvailability(MEDIUM_SHIP).setStartAt(portFinder.findPortById(InternalDataConstants.PORT_BARCELONA));
+		cargoModelFinder.findVesselAvailability(SMALL_SHIP).setStartAt(portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS));
 
 		final UserSettings userSettings = createUserSettings();
 
@@ -213,10 +236,10 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 				// Solution 1
 				{
 					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
-							.withAnySolutionResultChecker().withUsedLoad("A_3").onFleetVessel("Small Ship") //
-							.withUsedLoad("BO_1").onFleetVessel("Small Ship") //
-							.withUsedLoad("S_1").onFleetVessel("Medium Ship") //
-							.withUsedLoad("S_4").onFleetVessel("Large Ship") //
+							.withAnySolutionResultChecker().withUsedLoad("A_3").onFleetVessel(SMALL_SHIP) //
+							.withUsedLoad("BO_1").onFleetVessel(SMALL_SHIP) //
+							.withUsedLoad("S_1").onFleetVessel(MEDIUM_SHIP) //
+							.withUsedLoad("S_4").onFleetVessel(LARGE_SHIP) //
 							.violationDelta(initialViolations, -1) //
 							.latenessDelta(initialLateness, -((4 * 24) + 5)) //
 							.pnlDelta(initialPNL, -992_994, 1_000) //
@@ -228,9 +251,9 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 				// Solution 2
 				{
 					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
-							.withAnySolutionResultChecker().withUsedLoad("A_3").onFleetVessel("Small Ship") //
-							.withUsedLoad("BO_1").onFleetVessel("Small Ship") //
-							.withUsedLoad("S_4").onFleetVessel("Medium Ship") //
+							.withAnySolutionResultChecker().withUsedLoad("A_3").onFleetVessel(SMALL_SHIP) //
+							.withUsedLoad("BO_1").onFleetVessel(SMALL_SHIP) //
+							.withUsedLoad("S_4").onFleetVessel(MEDIUM_SHIP) //
 							.violationDelta(initialViolations, -1) //
 							.latenessDelta(initialLateness, -((4 * 24) + 5)) //
 							.pnlDelta(initialPNL, -1_327_515, 1_000) //
@@ -242,7 +265,7 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 				// Solution 3
 				{
 					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner) //
-							.withAnySolutionResultChecker().withUsedLoad("BO_1").onFleetVessel("Small Ship") //
+							.withAnySolutionResultChecker().withUsedLoad("BO_1").onFleetVessel(SMALL_SHIP) //
 							.violationDelta(initialViolations, -1) //
 							.latenessDelta(initialLateness, -((4 * 24) + 5)) //
 							.pnlDelta(initialPNL, -2_144_366, 1_000) //
@@ -265,12 +288,12 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 
 		// Make changes to initial data
 		cargoModelFinder.findLoadSlot("PE_1").setWindowSizeUnits(TimePeriod.DAYS);
-		cargoModelFinder.findVesselAvailability("Large ship").setStartAt(portFinder.findPort("Gladstone"));
-		cargoModelFinder.findVesselAvailability("Medium ship").setStartAt(portFinder.findPort("Barcelona"));
-		cargoModelFinder.findVesselAvailability("Small ship").setStartAt(portFinder.findPort("Sabine Pass"));
+		cargoModelFinder.findVesselAvailability(LARGE_SHIP).setStartAt(portFinder.findPortById(InternalDataConstants.PORT_GLADSTONE));
+		cargoModelFinder.findVesselAvailability(MEDIUM_SHIP).setStartAt(portFinder.findPortById(InternalDataConstants.PORT_BARCELONA));
+		cargoModelFinder.findVesselAvailability(SMALL_SHIP).setStartAt(portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS));
 
 		spotMarketsModelBuilder.getSpotMarketsModel().getCharterInMarkets().clear();
-		final CharterInMarket charterMarket = spotMarketsModelBuilder.createCharterInMarket("CI_10", fleetModelFinder.findVessel("Steam_2"), entity, "21750", 1);
+		final CharterInMarket charterMarket = spotMarketsModelBuilder.createCharterInMarket("CI_10", fleetModelFinder.findVessel(SMALL_SHIP), entity, "21750", 1);
 		charterMarket.setEnabled(true);
 		charterMarket.setNominal(true);
 
@@ -301,10 +324,10 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 				// Solution 1
 				{
 					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
-							.withAnySolutionResultChecker().withUsedLoad("A_3").onFleetVessel("Small Ship") //
+							.withAnySolutionResultChecker().withUsedLoad("A_3").onFleetVessel(SMALL_SHIP) //
 							.withUsedLoad("BO_2").onSpotCharter("CI_10") //
-							.withUsedLoad("S_1").onFleetVessel("Medium Ship") //
-							.withUsedLoad("S_4").onFleetVessel("Large Ship") //
+							.withUsedLoad("S_1").onFleetVessel(MEDIUM_SHIP) //
+							.withUsedLoad("S_4").onFleetVessel(LARGE_SHIP) //
 							.violationDelta(initialViolations, 0) //
 							.latenessDelta(initialLateness, -((4 * 24) + 5)) //
 							.pnlDelta(initialPNL, -147_982, 1_000) //
@@ -316,9 +339,9 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 				// Solution 2
 				{
 					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
-							.withAnySolutionResultChecker().withUsedLoad("A_3").onFleetVessel("Small Ship") //
+							.withAnySolutionResultChecker().withUsedLoad("A_3").onFleetVessel(SMALL_SHIP) //
 							.withUsedLoad("BO_2").onSpotCharter("CI_10") //
-							.withUsedLoad("S_4").onFleetVessel("Medium Ship") //
+							.withUsedLoad("S_4").onFleetVessel(MEDIUM_SHIP) //
 							.violationDelta(initialViolations, 0) //
 							.latenessDelta(initialLateness, -((4 * 24) + 5)) //
 							.pnlDelta(initialPNL, -482_503, 1_000) //
@@ -353,15 +376,15 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
 		// Make changes to initial data
-		final Port p = portFinder.findPort("Corpus Christi");
+		final Port p = portFinder.findPortById(InternalDataConstants.PORT_CORPUS_CHRISTI);
 		p.getCapabilities().add(PortCapability.LOAD);
 		p.setLoadDuration(24);
 		p.setCvValue(22.7);
 		costModelBuilder.createPortCost(Collections.singleton(p), Collections.singleton(PortCapability.LOAD), 140000);
 
-		cargoModelFinder.findVesselAvailability("Large ship").setStartAt(portFinder.findPort("Gladstone"));
-		cargoModelFinder.findVesselAvailability("Medium ship").setStartAt(portFinder.findPort("Barcelona"));
-		cargoModelFinder.findVesselAvailability("Small ship").setStartAt(portFinder.findPort("Sabine Pass"));
+		cargoModelFinder.findVesselAvailability(LARGE_SHIP).setStartAt(portFinder.findPortById(InternalDataConstants.PORT_GLADSTONE));
+		cargoModelFinder.findVesselAvailability(MEDIUM_SHIP).setStartAt(portFinder.findPortById(InternalDataConstants.PORT_BARCELONA));
+		cargoModelFinder.findVesselAvailability(SMALL_SHIP).setStartAt(portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS));
 
 		cargoModelFinder.findLoadSlot("S_3").setArriveCold(false);
 
@@ -373,7 +396,7 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 				.withCancellationFee("10500000") //
 				.build();
 
-		cargoModelBuilder.makeDESSale("New_Discharge", LocalDate.of(2017, 2, 1), portFinder.findPort("Dunkirk"), null, entity, "16%BRENT_ICE") //
+		cargoModelBuilder.makeDESSale("New_Discharge", LocalDate.of(2017, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_DUNKIRK), null, entity, "16%BRENT_ICE") //
 				.withWindowStartTime(0) //
 				.withWindowSize(1, TimePeriod.MONTHS) //
 				.withVisitDuration(36) //
@@ -409,10 +432,10 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 				// Solution 1
 				{
 					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
-							.withAnySolutionResultChecker().withCargo("New_Load", "New_Discharge").onFleetVessel("Small Ship") //
-							.withUsedLoad("A_3").onFleetVessel("Small Ship") //
-							.withUsedLoad("S_1").onFleetVessel("Medium Ship") //
-							.withUsedLoad("S_4").onFleetVessel("Large Ship") //
+							.withAnySolutionResultChecker().withCargo("New_Load", "New_Discharge").onFleetVessel(SMALL_SHIP) //
+							.withUsedLoad("A_3").onFleetVessel(SMALL_SHIP) //
+							.withUsedLoad("S_1").onFleetVessel(MEDIUM_SHIP) //
+							.withUsedLoad("S_4").onFleetVessel(LARGE_SHIP) //
 							.violationDelta(initialViolations, -1) //
 							.latenessDelta(initialLateness, 0) //
 							.pnlDelta(initialPNL, 19_124_719, 1_000) //
@@ -424,7 +447,7 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 				// Solution 2
 				{
 					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
-							.withAnySolutionResultChecker().withCargo("New_Load", "New_Discharge").onFleetVessel("Small Ship") //
+							.withAnySolutionResultChecker().withCargo("New_Load", "New_Discharge").onFleetVessel(SMALL_SHIP) //
 							.violationDelta(initialViolations, -1) //
 							.latenessDelta(initialLateness, 0) //
 							.pnlDelta(initialPNL, 18_179_820, 1_000) //

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.adp.editor;
@@ -15,6 +15,7 @@ import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.ContractProfile;
 import com.mmxlabs.models.lng.adp.FleetConstraint;
 import com.mmxlabs.models.lng.adp.FleetProfile;
+import com.mmxlabs.models.lng.adp.PeriodDistribution;
 import com.mmxlabs.models.lng.adp.ProfileConstraint;
 import com.mmxlabs.models.lng.adp.SubContractProfile;
 import com.mmxlabs.models.lng.adp.presentation.views.ADPEditorViewerPane;
@@ -53,7 +54,8 @@ public class ADPModelEditorContribution extends BaseJointModelEditorContribution
 
 	}
 
-	private static final Class<?>[] handledClasses = { ADPModel.class, ContractProfile.class, SubContractProfile.class, FleetProfile.class, ProfileConstraint.class, FleetConstraint.class };
+	private static final Class<?>[] handledClasses = { ADPModel.class, ContractProfile.class, SubContractProfile.class, FleetProfile.class, ProfileConstraint.class, FleetConstraint.class,
+			PeriodDistribution.class };
 
 	@Override
 	public boolean canHandle(final IStatus status) {
@@ -143,6 +145,9 @@ public class ADPModelEditorContribution extends BaseJointModelEditorContribution
 			return unwrapTarget(object.eContainer());
 		}
 		if (object instanceof FleetConstraint) {
+			return unwrapTarget(object.eContainer());
+		}
+		if (object instanceof PeriodDistribution) {
 			return unwrapTarget(object.eContainer());
 		}
 

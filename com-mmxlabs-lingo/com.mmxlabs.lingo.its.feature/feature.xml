@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2019
+    Copyright (C) Minimax Labs Ltd., 2010 - 2020
     All rights reserved.
 
 -->
 <feature
       id="com.mmxlabs.lingo.its.feature"
       label="Lingo ITS"
-      version="4.8.3.qualifier"
+      version="4.10.1.qualifier"
       provider-name="Minimax Labs Ltd."
       plugin="com.mmxlabs.lingo.app">
 
@@ -71,7 +71,7 @@
          id="com.google.guava"
          download-size="0"
          install-size="0"
-         version="21.0.0.v20170206-1425"
+         version="27.1.0.v20190517-1946"
          unpack="false"/>
 
    <plugin

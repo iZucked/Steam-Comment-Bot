@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.provider;
@@ -54,6 +54,7 @@ public class LoadSlotItemProvider
 			addTransferFromPropertyDescriptor(object);
 			addSalesDeliveryTypePropertyDescriptor(object);
 			addDesPurchaseDealTypePropertyDescriptor(object);
+			addVolumeCounterPartyPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -213,6 +214,28 @@ public class LoadSlotItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Volume Counter Party feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVolumeCounterPartyPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_LoadSlot_volumeCounterParty_feature"),
+				 getString("_UI_LoadSlot_volumeCounterParty_description"),
+				 CargoPackage.Literals.LOAD_SLOT__VOLUME_COUNTER_PARTY,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns LoadSlot.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -255,6 +278,7 @@ public class LoadSlotItemProvider
 			case CargoPackage.LOAD_SLOT__DES_PURCHASE:
 			case CargoPackage.LOAD_SLOT__SALES_DELIVERY_TYPE:
 			case CargoPackage.LOAD_SLOT__DES_PURCHASE_DEAL_TYPE:
+			case CargoPackage.LOAD_SLOT__VOLUME_COUNTER_PARTY:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

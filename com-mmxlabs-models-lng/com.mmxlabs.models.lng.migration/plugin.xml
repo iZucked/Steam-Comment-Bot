@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2019
+    Copyright (C) Minimax Labs Ltd., 2010 - 2020
     All rights reserved.
 
 -->
@@ -10,7 +10,7 @@
    <extension
          point="com.mmxlabs.models.migration.MigrationContext">
       <MigrationContext
-            latestVersion="122"
+            latestVersion="128"
             name="com.mmxlabs.lingo">
       </MigrationContext>
    </extension>
@@ -904,6 +904,48 @@
              from="121"
              id="com.mmxlabs.models.lng.migration.units.MigrateToV122"
              to="122">
+       </MigrationUnit>
+       <MigrationUnit
+             class="com.mmxlabs.models.lng.migration.units.MigrateToV123"
+             context="com.mmxlabs.lingo"
+             from="122"
+             id="com.mmxlabs.models.lng.migration.units.MigrateToV123"
+             to="123">
+       </MigrationUnit>
+       <MigrationUnit
+             class="com.mmxlabs.models.lng.migration.units.MigrateToV124"
+             context="com.mmxlabs.lingo"
+             from="123"
+             id="com.mmxlabs.models.lng.migration.units.MigrateToV124"
+             to="124">
+       </MigrationUnit>
+       <MigrationUnit
+             class="com.mmxlabs.models.lng.migration.units.MigrateToV125"
+             context="com.mmxlabs.lingo"
+             from="124"
+             id="com.mmxlabs.models.lng.migration.units.MigrateToV125"
+             to="125">
+       </MigrationUnit>
+       <MigrationUnit
+             class="com.mmxlabs.models.lng.migration.units.MigrateToV126"
+             context="com.mmxlabs.lingo"
+             from="125"
+             id="com.mmxlabs.models.lng.migration.units.MigrateToV126"
+             to="126">
+       </MigrationUnit>
+       <MigrationUnit
+             class="com.mmxlabs.models.lng.migration.units.MigrateToV127"
+             context="com.mmxlabs.lingo"
+             from="126"
+             id="com.mmxlabs.models.lng.migration.units.MigrateToV127"
+             to="127">
+       </MigrationUnit>
+       <MigrationUnit
+             class="com.mmxlabs.models.lng.migration.units.MigrateToV128"
+             context="com.mmxlabs.lingo"
+             from="127"
+             id="com.mmxlabs.models.lng.migration.units.MigrateToV128"
+             to="128">
        </MigrationUnit>
    </extension>
 </plugin>

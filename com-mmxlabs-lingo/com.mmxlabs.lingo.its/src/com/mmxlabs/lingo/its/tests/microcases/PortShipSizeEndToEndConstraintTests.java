@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases;
@@ -18,6 +18,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -38,7 +39,7 @@ public class PortShipSizeEndToEndConstraintTests extends AbstractMicroTestCase {
 
 	private List<IConstraintChecker> failedConstraints;
 	
-	private static final int vesselCapacity = 15000;
+	private static final int vesselCapacity = 15_000;
 	
 	public static Collection<?> getTestParameters() {
 		return Arrays.asList(new Object[][] {
@@ -56,8 +57,8 @@ public class PortShipSizeEndToEndConstraintTests extends AbstractMicroTestCase {
 	@ParameterizedTest(name = "{0}")
 	@MethodSource("getTestParameters")
 	public void testVesselAvailability(int port1MinVesselSize, int port1MaxVesselSize, int port2MinVesselSize, int port2MaxVesselSize, boolean expectedConstraintCheckResult) {
-		Port port1 = getPort("Point Fortin", port1MinVesselSize, port1MaxVesselSize);
-		Port port2 = getPort("Dominion Cove Point LNG", port2MinVesselSize, port2MaxVesselSize);
+		Port port1 = getPort(InternalDataConstants.PORT_POINT_FORTIN, port1MinVesselSize, port1MaxVesselSize);
+		Port port2 = getPort(InternalDataConstants.PORT_COVE_POINT, port2MinVesselSize, port2MaxVesselSize);
 		
 		Vessel vessel = createVessel(vesselCapacity);
 		
@@ -72,8 +73,8 @@ public class PortShipSizeEndToEndConstraintTests extends AbstractMicroTestCase {
 	@ParameterizedTest(name = "{0}")
 	@MethodSource("getTestParameters")
 	public void testCharterIn(int port1MinVesselSize, int port1MaxVesselSize, int port2MinVesselSize, int port2MaxVesselSize, boolean expectedConstraintCheckResult) {
-		Port port1 = getPort("Point Fortin", port1MinVesselSize, port1MaxVesselSize);
-		Port port2 = getPort("Dominion Cove Point LNG", port2MinVesselSize, port2MaxVesselSize);
+		Port port1 = getPort(InternalDataConstants.PORT_POINT_FORTIN, port1MinVesselSize, port1MaxVesselSize);
+		Port port2 = getPort(InternalDataConstants.PORT_COVE_POINT, port2MinVesselSize, port2MaxVesselSize);
 		
 		Vessel vessel = createVessel(vesselCapacity);
 		
@@ -96,7 +97,7 @@ public class PortShipSizeEndToEndConstraintTests extends AbstractMicroTestCase {
 	}
 
 	private Vessel createVessel(int capacity) {
-		Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setCapacity(capacity);
 		return vessel;
 	}
@@ -129,8 +130,8 @@ public class PortShipSizeEndToEndConstraintTests extends AbstractMicroTestCase {
 		return charterInMarket;
 	}
 	
-	private Port getPort(String name, int minVesselSize, int maxVesselSize) {
-		Port port = portFinder.findPort(name);
+	private Port getPort(String portId, int minVesselSize, int maxVesselSize) {
+		Port port = portFinder.findPortById(portId);
 		if (minVesselSize != 0) port.setMinVesselSize(minVesselSize);
 		if (maxVesselSize != 0) port.setMaxVesselSize(maxVesselSize);
 		return port;

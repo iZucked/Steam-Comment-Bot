@@ -1,0 +1,115 @@
+[ {
+  "Route ($)" : "0",
+  "Sum ($)" : "30,711,413",
+  "Port ($)" : "80,000",
+  "Cooldown ($)" : "0",
+  "Ballast bonus ($)" : "0",
+  "Scenario" : "des-cargo",
+  "Heel Revenue ($)" : "0",
+  "Vessel" : "Bluesky (145k)",
+  "Base Fuel ($)" : "22,916",
+  "Heel Cost ($)" : "0",
+  "Repositioning fee ($)" : "0",
+  "Charter Out (virtual) delta (change set)" : {
+    "Days" : "0.0",
+    "Revenue" : "0"
+  },
+  "LNG ($)" : "6,833,501",
+  "Sum - BOG($)" : "23,877,912",
+  "Charter ($)" : "23,774,996"
+}, {
+  "Route ($)" : "0",
+  "Sum ($)" : "8,289,322",
+  "Port ($)" : "80,000",
+  "Cooldown ($)" : "0",
+  "Ballast bonus ($)" : "0",
+  "Scenario" : "des-cargo",
+  "Heel Revenue ($)" : "0",
+  "Vessel" : "Methane Becki Anne (170k)",
+  "Base Fuel ($)" : "0",
+  "Heel Cost ($)" : "0",
+  "Repositioning fee ($)" : "0",
+  "Charter Out (virtual) delta (change set)" : {
+    "Days" : "0.0",
+    "Revenue" : "0"
+  },
+  "LNG ($)" : "8,209,322",
+  "Sum - BOG($)" : "80,000",
+  "Charter ($)" : "0"
+}, {
+  "Route ($)" : "30,000",
+  "Sum ($)" : "7,415,826",
+  "Port ($)" : "60,000",
+  "Cooldown ($)" : "425,904",
+  "Ballast bonus ($)" : "0",
+  "Scenario" : "des-cargo",
+  "Heel Revenue ($)" : "0",
+  "Vessel" : "Methane Heather Sally (149k)",
+  "Base Fuel ($)" : "1,162,500",
+  "Heel Cost ($)" : "0",
+  "Repositioning fee ($)" : "0",
+  "Charter Out (virtual) delta (change set)" : {
+    "Days" : "0.0",
+    "Revenue" : "0"
+  },
+  "LNG ($)" : "5,737,422",
+  "Sum - BOG($)" : "1,678,404",
+  "Charter ($)" : "0"
+}, {
+  "Route ($)" : "30,000",
+  "Sum ($)" : "7,234,033",
+  "Port ($)" : "80,000",
+  "Cooldown ($)" : "222,300",
+  "Ballast bonus ($)" : "0",
+  "Scenario" : "des-cargo",
+  "Heel Revenue ($)" : "0",
+  "Vessel" : "Methane Julia Louise (170k)",
+  "Base Fuel ($)" : "62,500",
+  "Heel Cost ($)" : "0",
+  "Repositioning fee ($)" : "0",
+  "Charter Out (virtual) delta (change set)" : {
+    "Days" : "0.0",
+    "Revenue" : "0"
+  },
+  "LNG ($)" : "6,839,233",
+  "Sum - BOG($)" : "394,800",
+  "Charter ($)" : "0"
+}, {
+  "Route ($)" : "50,000",
+  "Sum ($)" : "7,256,292",
+  "Port ($)" : "80,000",
+  "Cooldown ($)" : "0",
+  "Ballast bonus ($)" : "0",
+  "Scenario" : "des-cargo",
+  "Heel Revenue ($)" : "0",
+  "Vessel" : "Methane Lydon Volney (149k)",
+  "Base Fuel ($)" : "12,500",
+  "Heel Cost ($)" : "0",
+  "Repositioning fee ($)" : "0",
+  "Charter Out (virtual) delta (change set)" : {
+    "Days" : "0.0",
+    "Revenue" : "0"
+  },
+  "LNG ($)" : "7,113,792",
+  "Sum - BOG($)" : "142,500",
+  "Charter ($)" : "0"
+}, {
+  "Route ($)" : "50,000",
+  "Sum ($)" : "30,501,392",
+  "Port ($)" : "60,000",
+  "Cooldown ($)" : "0",
+  "Ballast bonus ($)" : "0",
+  "Scenario" : "des-cargo",
+  "Heel Revenue ($)" : "0",
+  "Vessel" : "Methane Princess (138k)",
+  "Base Fuel ($)" : "0",
+  "Heel Cost ($)" : "0",
+  "Repositioning fee ($)" : "0",
+  "Charter Out (virtual) delta (change set)" : {
+    "Days" : "0.0",
+    "Revenue" : "0"
+  },
+  "LNG ($)" : "5,791,396",
+  "Sum - BOG($)" : "24,709,996",
+  "Charter ($)" : "24,599,996"
+} ]

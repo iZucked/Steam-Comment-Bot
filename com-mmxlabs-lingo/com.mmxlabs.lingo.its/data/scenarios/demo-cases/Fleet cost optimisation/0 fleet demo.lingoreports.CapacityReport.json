@@ -1,0 +1,13 @@
+[ {
+  "Type" : "Charter Out",
+  "Issue" : "Forced Cooldown",
+  "Schedule" : "0 fleet demo",
+  "ID" : "Charter Out - Lagos",
+  "Quantity (m³)" : "0"
+}, {
+  "Type" : "Charter Out",
+  "Issue" : "Forced Cooldown",
+  "Schedule" : "0 fleet demo",
+  "ID" : "Charter Out - RO drydock",
+  "Quantity (m³)" : "0"
+} ]

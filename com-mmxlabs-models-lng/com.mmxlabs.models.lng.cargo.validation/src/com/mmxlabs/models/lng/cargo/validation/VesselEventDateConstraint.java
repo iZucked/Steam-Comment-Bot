@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.validation;
@@ -29,23 +29,23 @@ public class VesselEventDateConstraint extends AbstractModelConstraint {
 		if (target instanceof VesselEvent) {
 			final VesselEvent vesselEvent = (VesselEvent) target;
 
-			final LocalDateTime start = vesselEvent.getStartAfter();
-			final LocalDateTime end = vesselEvent.getStartBy();
+			final LocalDateTime startAfter = vesselEvent.getStartAfter();
+			final LocalDateTime startBy = vesselEvent.getStartBy();
 
-			if (start == null || end == null) {
-				final String msg = String.format("Vessel event '%s': Start and end dates must both be set.", vesselEvent.getName());
+			if (startAfter == null || startBy == null) {
+				final String msg = String.format("Vessel event '%s': Start after and start by date/times must both be set.", vesselEvent.getName());
                 final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
 
-                if (start == null) {
+                if (startAfter == null) {
 					dcsd.addEObjectAndFeature(vesselEvent, CargoPackage.eINSTANCE.getVesselEvent_StartAfter());
 				}
-				if (end == null) {
+				if (startBy == null) {
 					dcsd.addEObjectAndFeature(vesselEvent, CargoPackage.eINSTANCE.getVesselEvent_StartBy());
 				}
 				return dcsd;
 			} else {
-				if (start.isAfter(end)) {
-					final String msg = String.format("Vessel event '%s': Start date must be on or before the end date.", vesselEvent.getName());
+				if (startAfter.isAfter(startBy)) {
+					final String msg = String.format("Vessel event '%s': Start after date/time must be on or before start by date/time.", vesselEvent.getName());
 					final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
 					dcsd.addEObjectAndFeature(vesselEvent, CargoPackage.eINSTANCE.getVesselEvent_StartAfter());
 					dcsd.addEObjectAndFeature(vesselEvent, CargoPackage.eINSTANCE.getVesselEvent_StartBy());

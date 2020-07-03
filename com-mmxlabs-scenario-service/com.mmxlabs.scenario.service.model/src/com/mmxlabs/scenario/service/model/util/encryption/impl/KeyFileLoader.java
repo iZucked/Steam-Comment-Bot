@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.scenario.service.model.util.encryption.impl;
@@ -17,7 +17,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.common.options.InvalidArgumentException;
-import com.mmxlabs.scenario.service.model.util.encryption.impl.v1.KeyFile;
+import com.mmxlabs.scenario.service.model.util.encryption.impl.v1.KeyFileV1;
+import com.mmxlabs.scenario.service.model.util.encryption.impl.v2.KeyFileV2;
 import com.mmxlabs.scenario.service.model.util.encryption.ui.ExistingPasswordPromptDialog;
 
 /**
@@ -73,18 +74,28 @@ public final class KeyFileLoader {
 			default:
 				throw new InvalidArgumentException("Unknown password type: " + header.passwordType);
 			}
+			DelegatingEMFCipher cipher = new DelegatingEMFCipher();
 
 			// Next check the version of the key file and pass off to the relevant decoder
 			switch (header.version) {
 			case 0: {
 				// Load the key file
-				final KeyFile keyFile = KeyFile.load(fis, password);
+				final KeyFileV1 keyFile = KeyFileV1.load(fis, password);
 				// Return the cipher for encrypting/decrypting content
-				return keyFile.createCipher();
+				cipher.addKeyFile(keyFile, true);
+				break;
+			}
+			case 1: {
+				// Load the key file
+				final KeyFileV2 keyFile = KeyFileV2.load(fis, password);
+				// Return the cipher for encrypting/decrypting content
+				cipher.addKeyFile(keyFile, true);
+				break;
 			}
 			default:
 				throw new InvalidArgumentException("Unknown keyfile version: " + header.version);
 			}
+			return cipher;
 		} finally {
 			// Blank array to avoid password hanging around in memory too long
 			if (password != null) {
@@ -97,15 +108,11 @@ public final class KeyFileLoader {
 
 		final char[][] password = new char[1][];
 		final Display display = PlatformUI.getWorkbench().getDisplay();
-		display.syncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				final ExistingPasswordPromptDialog dialog = new ExistingPasswordPromptDialog(display.getActiveShell());
-				dialog.setBlockOnOpen(true);
-				if (dialog.open() == Window.OK) {
-					password[0] = dialog.getPassword();
-				}
+		display.syncExec(() -> {
+			final ExistingPasswordPromptDialog dialog = new ExistingPasswordPromptDialog(display.getActiveShell());
+			dialog.setBlockOnOpen(true);
+			if (dialog.open() == Window.OK) {
+				password[0] = dialog.getPassword();
 			}
 		});
 

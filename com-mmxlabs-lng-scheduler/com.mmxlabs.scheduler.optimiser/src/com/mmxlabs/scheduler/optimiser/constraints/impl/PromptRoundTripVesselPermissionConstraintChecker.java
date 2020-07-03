@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
@@ -39,11 +39,9 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 public class PromptRoundTripVesselPermissionConstraintChecker implements IPairwiseConstraintChecker {
 
 	@Inject
-	@NonNull
 	private IVesselProvider vesselProvider;
 
 	@Inject
-	@NonNull
 	private IRoundTripVesselPermissionProvider roundTripVesselPermissionProvider;
 
 	@Inject
@@ -171,10 +169,5 @@ public class PromptRoundTripVesselPermissionConstraintChecker implements IPairwi
 			}
 		}
 		return true;
-	}
-
-	@Override
-	public String explain(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
-		return null;
 	}
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2019
+    Copyright (C) Minimax Labs Ltd., 2010 - 2020
     All rights reserved.
 
 -->
@@ -57,11 +57,72 @@
          name="Sync data with base case">
    </command>
    <command
-         defaultHandler="com.mmxlabs.lngdataserver.lng.importers.distanceupdate.ui.DistanceUpdateCommandHandler"
          id="com.mmxlabs.datahub.update.distances"
          name="Update distances">
    </command>
+   <command
+         id="com.mmxlabs.datahub.update.calendars"
+         name="Update Calendars">
+   </command>
 </extension>
+ <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="com.mmxlabs.lngdataserver.lng.importers.distanceupdate.ui.DistanceUpdateCommandHandler"
+            commandId="com.mmxlabs.datahub.update.distances">
+            <enabledWhen
+              >
+            <and>
+               <with
+                     variable="selection">
+                  <iterate
+                        ifEmpty="false">
+                     <instanceof
+                           value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                     </instanceof>
+                     <not>
+                        <test
+                              forcePluginActivation="true"
+                              property="com.mmxlabs.scenario.service.ui.flags.readonly">
+                        </test>
+                     </not>
+                  </iterate>
+               </with>
+               <count
+                     value="1">
+               </count>
+            </and>
+         </enabledWhen>
+      </handler>
+      
+      <handler
+            class="com.mmxlabs.lngdataserver.lng.importers.calendars.ui.CalendarsUpdateCommandHandler"
+            commandId="com.mmxlabs.datahub.update.calendars">
+            <enabledWhen
+              >
+            <and>
+               <with
+                     variable="selection">
+                  <iterate
+                        ifEmpty="false">
+                     <instanceof
+                           value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                     </instanceof>
+                     <not>
+                        <test
+                              forcePluginActivation="true"
+                              property="com.mmxlabs.scenario.service.ui.flags.readonly">
+                        </test>
+                     </not>
+                  </iterate>
+               </with>
+               <count
+                     value="1">
+               </count>
+            </and>
+         </enabledWhen>
+      </handler>
+</extension>          
 <extension
       point="org.eclipse.ui.menus">
    <menuContribution
@@ -85,7 +146,7 @@
                      <test
                            args="basecase,publish"
                            forcePluginActivation="true"
-                           property="com.mmxlabs.lngdataserver.server.permissions.ispermitted">
+                           property="com.mmxlabs.hub.permissions.ispermitted">
                         </test>    
                      <not>
                         <test
@@ -120,7 +181,7 @@
                         <test
                            args="basecase,lock"
                            forcePluginActivation="true"
-                           property="com.mmxlabs.lngdataserver.server.permissions.ispermitted">
+                           property="com.mmxlabs.hub.permissions.ispermitted">
                         </test>
                         <test
                               forcePluginActivation="true"
@@ -161,7 +222,7 @@
                        <test
                            args="basecase,unlock"
                            forcePluginActivation="true"
-                           property="com.mmxlabs.lngdataserver.server.permissions.ispermitted">
+                           property="com.mmxlabs.hub.permissions.ispermitted">
                         </test>                     
                        <test
                               forcePluginActivation="true"
@@ -215,10 +276,15 @@
    </menuContribution>
    <menuContribution
          allPopups="false"
-         locationURI="menu:data?after=additions">
+         locationURI="menu:data_ref_mmx">
       <command
             commandId="com.mmxlabs.datahub.update.distances"
             label="Update Distances"
+            style="push">
+      </command>
+      <command
+            commandId="com.mmxlabs.datahub.update.calendars"
+            label="Update Calendars"
             style="push">
       </command>
    </menuContribution>

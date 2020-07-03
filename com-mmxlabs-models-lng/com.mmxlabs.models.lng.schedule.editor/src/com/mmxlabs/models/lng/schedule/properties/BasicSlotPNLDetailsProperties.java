@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 /**
@@ -38,10 +38,6 @@ public class BasicSlotPNLDetailsProperties {
 			if (slotPNLDetails.isSetCancellationFees()) {
 				final int cancellationFees = slotPNLDetails.getCancellationFees();
 				DetailPropertyFactoryUtil.addDetailProperty("Cancellation Fees", "", "$", "", cancellationFees, new StringFormatLabelProvider("%,d"), details);
-			}
-			if (slotPNLDetails.isSetHedgingValue()) {
-				final int hedgingValue = slotPNLDetails.getHedgingValue();
-				DetailPropertyFactoryUtil.addDetailProperty("Hedging Value", "", "$", "", hedgingValue, new StringFormatLabelProvider("%,d"), details);
 			}
 			if (slotPNLDetails.isSetMiscCostsValue()) {
 				final int miscCostsValue = slotPNLDetails.getMiscCostsValue();

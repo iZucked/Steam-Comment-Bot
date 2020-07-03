@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.ui.views.sandbox.components;
@@ -116,9 +116,7 @@ public class BuyOptionsComponent extends AbstractSandboxComponent<Object, Abstra
 		}
 		inputWants.add(model -> buyOptionsViewer.setInput(model));
 
-		lockedListeners.add(locked -> {
-			RunnerHelper.asyncExec(() -> buyOptionsViewer.getGrid().setEnabled(!locked));
-		});
+		lockedListeners.add(locked -> RunnerHelper.runAsyncIfControlValid(buyOptionsViewer.getGrid(), grid -> grid.setEnabled(!locked)));
 
 		return buyOptionsViewer.getControl();
 	}

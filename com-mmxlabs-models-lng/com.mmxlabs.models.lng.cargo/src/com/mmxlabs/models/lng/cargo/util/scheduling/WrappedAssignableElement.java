@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.util.scheduling;
@@ -310,7 +310,7 @@ public class WrappedAssignableElement {
 		int travelTimeInHours = Integer.MAX_VALUE;
 		if (portModel != null) {
 			for (final Route route : portModel.getRoutes()) {
-				int totalTime = CargoTravelTimeUtils.getTimeForRoute(vessel, maxSpeed, route, from, to, modelDistanceProvider);
+				int totalTime = CargoTravelTimeUtils.getTimeForRoute(vessel, maxSpeed, route.getRouteOption(), from, to, modelDistanceProvider);
 				if (totalTime != Integer.MAX_VALUE) {
 					travelTimeInHours = Math.min(totalTime, travelTimeInHours);
 				}

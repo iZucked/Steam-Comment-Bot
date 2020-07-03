@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases.adp;
@@ -60,19 +60,7 @@ public abstract class AbstractADPAndLightWeightTests extends AbstractMicroTestCa
 		registerService.unregister();
 	}
 
-	// Which scenario data to import
-	@Override
-	public @NonNull IScenarioDataProvider importReferenceData() throws Exception {
-		final IScenarioDataProvider scenarioDataProvider = importReferenceData("/trainingcases/Shipping_I/");
-
-		return scenarioDataProvider;
-	}
-
-	@Override
-	protected BaseLegalEntity importDefaultEntity() {
-		return commercialModelFinder.findEntity("Entity");
-	}
-
+	 
 	protected @NonNull UserSettings createUserSettings() {
 		return createUserSettings(false);
 	}

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 /**
@@ -68,7 +68,7 @@ import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
+import com.mmxlabs.models.mmxcore.impl.SafeMMXContentAdapter;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
@@ -385,7 +385,7 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 	}
 
 	VesselStateAttributes oldValue = null;
-	private final @NonNull Adapter adapter = new MMXContentAdapter() {
+	private final @NonNull Adapter adapter = new SafeMMXContentAdapter() {
 
 		@Override
 		public void reallyNotifyChanged(Notification notification) {

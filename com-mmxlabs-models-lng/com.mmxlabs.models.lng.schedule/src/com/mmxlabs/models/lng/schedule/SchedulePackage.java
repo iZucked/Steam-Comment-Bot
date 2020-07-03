@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule;
@@ -263,13 +263,22 @@ public interface SchedulePackage extends EPackage {
 	int SCHEDULE__OTHER_PNL = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 9;
 
 	/**
+	 * The feature id for the '<em><b>Generated Paper Deals</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCHEDULE__GENERATED_PAPER_DEALS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 10;
+
+	/**
 	 * The number of structural features of the '<em>Schedule</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 10;
+	int SCHEDULE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 11;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -5019,22 +5028,13 @@ public interface SchedulePackage extends EPackage {
 	int BASIC_SLOT_PNL_DETAILS__CANCELLATION_FEES = GENERAL_PNL_DETAILS_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Hedging Value</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BASIC_SLOT_PNL_DETAILS__HEDGING_VALUE = GENERAL_PNL_DETAILS_FEATURE_COUNT + 3;
-
-	/**
 	 * The feature id for the '<em><b>Misc Costs Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASIC_SLOT_PNL_DETAILS__MISC_COSTS_VALUE = GENERAL_PNL_DETAILS_FEATURE_COUNT + 4;
+	int BASIC_SLOT_PNL_DETAILS__MISC_COSTS_VALUE = GENERAL_PNL_DETAILS_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Extra Upside PNL</b></em>' attribute.
@@ -5043,7 +5043,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BASIC_SLOT_PNL_DETAILS__EXTRA_UPSIDE_PNL = GENERAL_PNL_DETAILS_FEATURE_COUNT + 5;
+	int BASIC_SLOT_PNL_DETAILS__EXTRA_UPSIDE_PNL = GENERAL_PNL_DETAILS_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Basic Slot PNL Details</em>' class.
@@ -5052,7 +5052,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BASIC_SLOT_PNL_DETAILS_FEATURE_COUNT = GENERAL_PNL_DETAILS_FEATURE_COUNT + 6;
+	int BASIC_SLOT_PNL_DETAILS_FEATURE_COUNT = GENERAL_PNL_DETAILS_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of operations of the '<em>Basic Slot PNL Details</em>' class.
@@ -6671,13 +6671,40 @@ public interface SchedulePackage extends EPackage {
 	int PAPER_DEAL_ALLOCATION = 46;
 
 	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL_ALLOCATION__EXTENSIONS = PROFIT_AND_LOSS_CONTAINER__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Group Profit And Loss</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL_ALLOCATION__GROUP_PROFIT_AND_LOSS = PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS;
+
+	/**
+	 * The feature id for the '<em><b>General PNL Details</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL_ALLOCATION__GENERAL_PNL_DETAILS = PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS;
+
+	/**
 	 * The feature id for the '<em><b>Paper Deal</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PAPER_DEAL_ALLOCATION__PAPER_DEAL = 0;
+	int PAPER_DEAL_ALLOCATION__PAPER_DEAL = PROFIT_AND_LOSS_CONTAINER_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -6686,7 +6713,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PAPER_DEAL_ALLOCATION__ENTRIES = 1;
+	int PAPER_DEAL_ALLOCATION__ENTRIES = PROFIT_AND_LOSS_CONTAINER_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Paper Deal Allocation</em>' class.
@@ -6695,7 +6722,34 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PAPER_DEAL_ALLOCATION_FEATURE_COUNT = 2;
+	int PAPER_DEAL_ALLOCATION_FEATURE_COUNT = PROFIT_AND_LOSS_CONTAINER_FEATURE_COUNT + 2;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL_ALLOCATION___GET_UNSET_VALUE__ESTRUCTURALFEATURE = PROFIT_AND_LOSS_CONTAINER___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL_ALLOCATION___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = PROFIT_AND_LOSS_CONTAINER___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL_ALLOCATION___ECONTAINER_OP = PROFIT_AND_LOSS_CONTAINER___ECONTAINER_OP;
 
 	/**
 	 * The number of operations of the '<em>Paper Deal Allocation</em>' class.
@@ -6704,7 +6758,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PAPER_DEAL_ALLOCATION_OPERATION_COUNT = 0;
+	int PAPER_DEAL_ALLOCATION_OPERATION_COUNT = PROFIT_AND_LOSS_CONTAINER_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.PaperDealAllocationEntryImpl <em>Paper Deal Allocation Entry</em>}' class.
@@ -7043,6 +7097,17 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getSchedule_OtherPNL();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.schedule.Schedule#getGeneratedPaperDeals <em>Generated Paper Deals</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Generated Paper Deals</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Schedule#getGeneratedPaperDeals()
+	 * @see #getSchedule()
+	 * @generated
+	 */
+	EReference getSchedule_GeneratedPaperDeals();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.Sequence <em>Sequence</em>}'.
@@ -8621,17 +8686,6 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getBasicSlotPNLDetails_CancellationFees();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getHedgingValue <em>Hedging Value</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Hedging Value</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getHedgingValue()
-	 * @see #getBasicSlotPNLDetails()
-	 * @generated
-	 */
-	EAttribute getBasicSlotPNLDetails_HedgingValue();
-
-	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getMiscCostsValue <em>Misc Costs Value</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -9615,6 +9669,14 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EReference SCHEDULE__OTHER_PNL = eINSTANCE.getSchedule_OtherPNL();
+
+		/**
+		 * The meta object literal for the '<em><b>Generated Paper Deals</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SCHEDULE__GENERATED_PAPER_DEALS = eINSTANCE.getSchedule_GeneratedPaperDeals();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.SequenceImpl <em>Sequence</em>}' class.
@@ -10853,14 +10915,6 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute BASIC_SLOT_PNL_DETAILS__CANCELLATION_FEES = eINSTANCE.getBasicSlotPNLDetails_CancellationFees();
-
-		/**
-		 * The meta object literal for the '<em><b>Hedging Value</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute BASIC_SLOT_PNL_DETAILS__HEDGING_VALUE = eINSTANCE.getBasicSlotPNLDetails_HedgingValue();
 
 		/**
 		 * The meta object literal for the '<em><b>Misc Costs Value</b></em>' attribute feature.

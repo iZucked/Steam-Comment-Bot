@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.scenario.service.model;
@@ -689,13 +689,22 @@ public interface ScenarioServicePackage extends EPackage {
 	int SCENARIO_FRAGMENT__USE_COMMAND_STACK = 4;
 
 	/**
+	 * The feature id for the '<em><b>Type Hint</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO_FRAGMENT__TYPE_HINT = 5;
+
+	/**
 	 * The number of structural features of the '<em>Scenario Fragment</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_FRAGMENT_FEATURE_COUNT = 5;
+	int SCENARIO_FRAGMENT_FEATURE_COUNT = 6;
 
 	/**
 	 * The meta object id for the '<em>IScenario Service</em>' data type.
@@ -1228,6 +1237,17 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getScenarioFragment_UseCommandStack();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioFragment#getTypeHint <em>Type Hint</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Type Hint</em>'.
+	 * @see com.mmxlabs.scenario.service.model.ScenarioFragment#getTypeHint()
+	 * @see #getScenarioFragment()
+	 * @generated
+	 */
+	EAttribute getScenarioFragment_TypeHint();
 
 	/**
 	 * Returns the meta object for data type '{@link com.mmxlabs.scenario.service.IScenarioService <em>IScenario Service</em>}'.

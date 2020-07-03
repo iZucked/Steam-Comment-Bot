@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases.sandbox;
@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard.FragmentCopyHandler;
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
@@ -35,7 +36,7 @@ import com.mmxlabs.models.lng.transformer.ui.analytics.EvaluateSolutionSetHelper
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 @ExtendWith(ShiroRunner.class)
-@RequireFeature(features = { KnownFeatures.FEATURE_SANDBOX, KnownFeatures.FEATURE_BREAK_EVENS })
+@RequireFeature({ KnownFeatures.FEATURE_SANDBOX })
 public class SandboxCopyTests extends AbstractSandboxTestCase {
 
 	/**
@@ -52,7 +53,7 @@ public class SandboxCopyTests extends AbstractSandboxTestCase {
 		sandboxBuilder.setPortfolioBreakevenMode(false);
 		sandboxBuilder.setManualSandboxMode();
 
-		final Port port = portFinder.findPort("Futtsu");
+		final Port port = portFinder.findPortById(InternalDataConstants.PORT_FUTTSU);
 
 		final BuyOption buy1 = sandboxBuilder.makeBuyOpportunity(true, port, entity, "5").withCV(22.5).build();
 		final BuyOption buy2 = sandboxBuilder.makeBuyOpportunity(true, port, entity, "6").withCV(22.5).build();
@@ -65,7 +66,7 @@ public class SandboxCopyTests extends AbstractSandboxTestCase {
 		final VesselEventOption event1 = sandboxBuilder.makeCharterOutOpportunity(port, LocalDate.of(2019, 7, 1), 1) //
 				.build();
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-138");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_138);
 
 		final ShippingOption shipping1 = sandboxBuilder.makeSimpleCharter(vessel, entity) //
 				.withHireCosts("50000") //
@@ -122,7 +123,7 @@ public class SandboxCopyTests extends AbstractSandboxTestCase {
 		sandboxBuilder.setPortfolioBreakevenMode(false);
 		sandboxBuilder.setManualSandboxMode();
 
-		final Port port = portFinder.findPort("Futtsu");
+		final Port port = portFinder.findPortById(InternalDataConstants.PORT_FUTTSU);
 
 		DischargeSlot slot = cargoModelBuilder.makeDESSale("DES", LocalDate.of(2019, 7, 1), port, null, entity, "7").build();
 
@@ -149,7 +150,7 @@ public class SandboxCopyTests extends AbstractSandboxTestCase {
 		sandboxBuilder.setPortfolioBreakevenMode(false);
 		sandboxBuilder.setManualSandboxMode();
 
-		final Port port = portFinder.findPort("Futtsu");
+		final Port port = portFinder.findPortById(InternalDataConstants.PORT_FUTTSU);
 
 		final BuyOption buy1 = sandboxBuilder.makeBuyOpportunity(true, port, entity, "5").withCV(22.5).build();
 		final BuyOption buy2 = sandboxBuilder.makeBuyOpportunity(true, port, entity, "6").withCV(22.5).build();

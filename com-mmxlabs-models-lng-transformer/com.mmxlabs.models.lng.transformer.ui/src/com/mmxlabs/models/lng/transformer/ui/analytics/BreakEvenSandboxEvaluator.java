@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.analytics;
@@ -14,6 +14,7 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
+import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
@@ -25,12 +26,11 @@ import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.BreakEvenLoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.BreakEvenSalesPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.evaluation.VoyagePlanRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
-import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.CargoValueAnnotation;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ICargoValueAnnotation;
 import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
-import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 
 @NonNullByDefault
 public class BreakEvenSandboxEvaluator {
@@ -38,22 +38,19 @@ public class BreakEvenSandboxEvaluator {
 	protected static final Logger LOG = LoggerFactory.getLogger(BreakEvenSandboxEvaluator.class);
 
 	@Inject
-	private IPortSlotProvider portSlotProvider;
-
-	@Inject
 	private Injector injector;
 
 	@Inject
 	private EvaluationHelper evaluationHelper;
 
-	public @Nullable Pair<Integer, Integer> evaluate(ISequences currentRawSequences, IPortSlot target, @Nullable ISequenceElement changeTarget, int changeTargetPrice) {
+	public @Nullable Pair<Integer, Integer> evaluate(final IResource resource, final ISequences currentRawSequences, final IPortSlot target, @Nullable final ISequenceElement changeTarget, final int changeTargetPrice) {
 		final ISequencesManipulator manipulator = injector.getInstance(ISequencesManipulator.class);
 
 		final @NonNull IModifiableSequences currentFullSequences = manipulator.createManipulatedSequences(currentRawSequences);
 		if (!evaluationHelper.checkConstraints(currentFullSequences, null)) {
 			return null;
 		}
-		final Pair<@NonNull VolumeAllocatedSequences, @NonNull IEvaluationState> p1 = evaluationHelper.evaluateSequences(currentRawSequences, currentFullSequences, false);
+		final Pair<@NonNull ProfitAndLossSequences, @NonNull IEvaluationState> p1 = evaluationHelper.evaluateSequences(currentRawSequences, currentFullSequences, false);
 
 		if (p1 == null) {
 			return null;
@@ -62,26 +59,27 @@ public class BreakEvenSandboxEvaluator {
 		final ProfitAndLossSequences profitAndLossSequences = evaluationHelper.evaluateSequences(currentFullSequences, p1);
 		assert profitAndLossSequences != null;
 
-		VolumeAllocatedSequence scheduledSequence = profitAndLossSequences.getVolumeAllocatedSequences().getScheduledSequence(target);
-		int arrivalTime = scheduledSequence.getArrivalTime(target);
+		final VolumeAllocatedSequence scheduledSequence = profitAndLossSequences.getScheduledSequenceForResource(resource);
+		final VoyagePlanRecord vpr = scheduledSequence.getVoyagePlanRecord(target);
+		final int arrivalTime = vpr.getPortTimesRecord().getSlotTime(target);
 
 		if (target instanceof LoadOption) {
-			LoadOption loadOption = (LoadOption) target;
-			ILoadPriceCalculator loadPriceCalculator = loadOption.getLoadPriceCalculator();
+			final LoadOption loadOption = (LoadOption) target;
+			final ILoadPriceCalculator loadPriceCalculator = loadOption.getLoadPriceCalculator();
 			if (loadPriceCalculator instanceof BreakEvenLoadPriceCalculator) {
-				BreakEvenLoadPriceCalculator beCalc = (BreakEvenLoadPriceCalculator) loadPriceCalculator;
+				final BreakEvenLoadPriceCalculator beCalc = (BreakEvenLoadPriceCalculator) loadPriceCalculator;
 				return new Pair<>(beCalc.getPrice(), arrivalTime);
 			}
 		}
 		if (target instanceof DischargeOption) {
-			DischargeOption dischargeOption = (DischargeOption) target;
-			ISalesPriceCalculator salesPriceCalculator = dischargeOption.getDischargePriceCalculator();
+			final DischargeOption dischargeOption = (DischargeOption) target;
+			final ISalesPriceCalculator salesPriceCalculator = dischargeOption.getDischargePriceCalculator();
 			if (salesPriceCalculator instanceof BreakEvenSalesPriceCalculator) {
-				BreakEvenSalesPriceCalculator beCalc = (BreakEvenSalesPriceCalculator) salesPriceCalculator;
+				final BreakEvenSalesPriceCalculator beCalc = (BreakEvenSalesPriceCalculator) salesPriceCalculator;
 				return new Pair<>(beCalc.getPrice(), arrivalTime);
 			}
 		}
-		CargoValueAnnotation cargoValueAnnotation = profitAndLossSequences.getCargoValueAnnotation(scheduledSequence.getVoyagePlan(target));
+		final ICargoValueAnnotation cargoValueAnnotation = scheduledSequence.getVoyagePlanRecord(target).getCargoValueAnnotation();
 		if (cargoValueAnnotation != null) {
 			return new Pair<>(cargoValueAnnotation.getSlotPricePerMMBTu(target), arrivalTime);
 		}

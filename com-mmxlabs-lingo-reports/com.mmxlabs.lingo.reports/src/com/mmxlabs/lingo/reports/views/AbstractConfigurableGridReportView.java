@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views;
@@ -13,9 +13,7 @@ import java.util.List;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IMenuListener;
@@ -39,7 +37,6 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
-import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
@@ -48,6 +45,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IMemento;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchActionConstants;
@@ -69,6 +67,7 @@ import com.mmxlabs.lingo.reports.preferences.PreferenceConstants;
 import com.mmxlabs.lingo.reports.services.TransformedSelectedDataProvider;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnUpdater;
+import com.mmxlabs.lingo.reports.views.schedule.ScheduleSummaryReport;
 import com.mmxlabs.lingo.reports.views.schedule.model.CompositeRow;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.RowGroup;
@@ -76,21 +75,19 @@ import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerFilterSupport;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerSortingSupport;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlockManager;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnHandler;
-import com.mmxlabs.models.ui.tabular.columngeneration.IColumnFactory;
 import com.mmxlabs.models.ui.tabular.columngeneration.IColumnInfoProvider;
 import com.mmxlabs.models.ui.tabular.filter.FilterField;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlClipboardAction;
-import com.mmxlabs.rcp.common.actions.IAdditionalAttributeProvider;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
+import com.mmxlabs.rcp.common.ecore.SafeEContentAdapter;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 import com.mmxlabs.scenario.service.ui.navigator.ScenarioServiceNavigator;
 
@@ -254,6 +251,11 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 		// Check ext point to see if we can enable the customise action (created within createPartControl)
 		customisableReport = checkCustomisable();
+		
+		if (!customisableReport) {
+			memento = XMLMemento.createWriteRoot("workbench");
+		}
+		
 		{
 			final Composite container = new Composite(parent, SWT.NONE);
 			// filterField = new FilterField(container);
@@ -345,10 +347,9 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 			// Create default options
 			table.setOptions(ScheduleReportFactory.eINSTANCE.createDiffOptions());
 
-			table.eAdapters().add(new EContentAdapter() {
+			table.eAdapters().add(new SafeEContentAdapter() {
 				@Override
-				public void notifyChanged(final Notification notification) {
-					super.notifyChanged(notification);
+				public void safeNotifyChanged(final Notification notification) {
 					if (notification.getFeature() == ScheduleReportPackage.Literals.DIFF_OPTIONS__FILTER_SELECTED_ELEMENTS) {
 						viewer.refresh();
 					}
@@ -439,108 +440,8 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 			final Action configureColumnsAction = new Action("Configure Contents") {
 				@Override
 				public void run() {
-					final com.mmxlabs.models.ui.tabular.columngeneration.IColumnInfoProvider infoProvider = new ColumnConfigurationDialog.ColumnInfoAdapter() {
-
-						@Override
-						public int getColumnIndex(final Object columnObj) {
-							return getBlockManager().getBlockIndex((ColumnBlock) columnObj);
-						}
-
-						@Override
-						public boolean isColumnVisible(final Object columnObj) {
-							return getBlockManager().getBlockVisible((ColumnBlock) columnObj);
-						}
-
-					};
-
-					final IColumnUpdater updater = new ColumnConfigurationDialog.ColumnUpdaterAdapter() {
-
-						@Override
-						public void setColumnVisible(final Object columnObj, final boolean visible) {
-
-							((ColumnBlock) columnObj).setUserVisible(visible);
-							if (updateScollBarsRunnable != null) {
-								updateScollBarsRunnable.run();
-							}
-
-						}
-
-						@Override
-						public void swapColumnPositions(final Object columnObj1, final Object columnObj2) {
-							getBlockManager().swapBlockOrder((ColumnBlock) columnObj1, (ColumnBlock) columnObj2);
-							viewer.refresh();
-						}
-
-						@Override
-						public Object[] resetColumnStates() {
-							// Hide everything
-							for (final String blockId : getBlockManager().getBlockIDOrder()) {
-								getBlockManager().getBlockByID(blockId).setUserVisible(false);
-							}
-							// Apply the initial state
-							setInitialState();
-							// Return!
-							return getBlockManager().getBlocksInVisibleOrder().toArray();
-						}
-
-					};
-
-					final Image nonVisibleIcon = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/read_obj_disabled.gif").createImage();
-					final Image visibleIcon = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/read_obj.gif").createImage();
-
-					final ColumnConfigurationDialog dialog = new ColumnConfigurationDialog(win.getShell()) {
-
-						@Override
-						protected IColumnInfoProvider getColumnInfoProvider() {
-							return infoProvider;
-						}
-
-						@Override
-						protected ColumnLabelProvider getLabelProvider() {
-							return new ColumnLabelProvider() {
-								@Override
-								public String getText(final Object element) {
-									final ColumnBlock block = (ColumnBlock) element;
-									return block.blockName;
-								}
-
-								@Override
-								public Image getImage(final Object element) {
-									final ColumnBlock block = (ColumnBlock) element;
-									if (block.isModeVisible()) {
-										return visibleIcon;
-									} else {
-										return nonVisibleIcon;
-									}
-								}
-
-								@Override
-								public String getToolTipText(final Object element) {
-									final ColumnBlock block = (ColumnBlock) element;
-									return block.tooltip;
-								}
-							};
-						}
-
-						@Override
-						protected IColumnUpdater getColumnUpdater() {
-							return updater;
-						}
-					};
-					dialog.setColumnsObjs(getBlockManager().getBlocksInVisibleOrder().toArray());
-
-					// See if this report has any additional check items to add
-					addDialogCheckBoxes(dialog);
-					dialog.open();
-
-					// Dialog has been closed, check the output
-					postDialogOpen(dialog);
-					nonVisibleIcon.dispose();
-					visibleIcon.dispose();
-
-					viewer.refresh();
+					openConfigureContentsDialog(win, AbstractConfigurableGridReportView.this);
 				}
-
 			};
 			manager.appendToGroup("additions", configureColumnsAction);
 
@@ -572,7 +473,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 						IWorkbenchPage page = getSite().getPage();
 						String id = getViewSite().getId();
 						try {
-							page.showView(id, name.trim(), IWorkbenchPage.VIEW_ACTIVATE);
+							IViewPart view = page.showView(id, name.trim(), IWorkbenchPage.VIEW_ACTIVATE);
 						} catch (PartInitException e) {
 							e.printStackTrace();
 						}
@@ -586,6 +487,109 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 	}
 
+	private void openConfigureContentsDialog(final IWorkbenchWindow win, final AbstractConfigurableGridReportView reportView) {
+		final com.mmxlabs.models.ui.tabular.columngeneration.IColumnInfoProvider infoProvider = new ColumnConfigurationDialog.ColumnInfoAdapter() {
+
+			@Override
+			public int getColumnIndex(final Object columnObj) {
+				return getBlockManager().getBlockIndex((ColumnBlock) columnObj);
+			}
+
+			@Override
+			public boolean isColumnVisible(final Object columnObj) {
+				return getBlockManager().getBlockVisible((ColumnBlock) columnObj);
+			}
+
+		};
+
+		final IColumnUpdater updater = new ColumnConfigurationDialog.ColumnUpdaterAdapter() {
+
+			@Override
+			public void setColumnVisible(final Object columnObj, final boolean visible) {
+
+				((ColumnBlock) columnObj).setUserVisible(visible);
+				if (updateScollBarsRunnable != null) {
+					updateScollBarsRunnable.run();
+				}
+
+			}
+
+			@Override
+			public void swapColumnPositions(final Object columnObj1, final Object columnObj2) {
+				getBlockManager().swapBlockOrder((ColumnBlock) columnObj1, (ColumnBlock) columnObj2);
+				viewer.refresh();
+			}
+
+			@Override
+			public Object[] resetColumnStates() {
+				// Hide everything
+				for (final String blockId : getBlockManager().getBlockIDOrder()) {
+					getBlockManager().getBlockByID(blockId).setUserVisible(false);
+				}
+				// Apply the initial state
+				setInitialState();
+				// Return!
+				return getBlockManager().getBlocksInVisibleOrder().toArray();
+			}
+
+		};
+
+		final Image nonVisibleIcon = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/read_obj_disabled.gif").createImage();
+		final Image visibleIcon = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/read_obj.gif").createImage();
+
+		final ColumnConfigurationDialog dialog = new ColumnConfigurationDialog(win.getShell(), reportView) {
+
+			@Override
+			protected IColumnInfoProvider getColumnInfoProvider() {
+				return infoProvider;
+			}
+
+			@Override
+			protected ColumnLabelProvider getLabelProvider() {
+				return new ColumnLabelProvider() {
+					@Override
+					public String getText(final Object element) {
+						final ColumnBlock block = (ColumnBlock) element;
+						return block.blockName;
+					}
+
+					@Override
+					public Image getImage(final Object element) {
+						final ColumnBlock block = (ColumnBlock) element;
+						if (block.isModeVisible()) {
+							return visibleIcon;
+						} else {
+							return nonVisibleIcon;
+						}
+					}
+
+					@Override
+					public String getToolTipText(final Object element) {
+						final ColumnBlock block = (ColumnBlock) element;
+						return block.tooltip;
+					}
+				};
+			}
+
+			@Override
+			protected IColumnUpdater getColumnUpdater() {
+				return updater;
+			}
+		};
+		dialog.setColumnsObjs(getBlockManager().getBlocksInVisibleOrder().toArray());
+
+		// See if this report has any additional check items to add
+		addDialogCheckBoxes(dialog);
+		dialog.open();
+
+		// Dialog has been closed, check the output
+		postDialogOpen(dialog);
+		nonVisibleIcon.dispose();
+		visibleIcon.dispose();
+
+		viewer.refresh();
+	}
+	
 	protected void addDialogCheckBoxes(final ColumnConfigurationDialog dialog) {
 
 	}
@@ -730,7 +734,9 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 	private void contributeToActionBars() {
 		final IActionBars bars = getViewSite().getActionBars();
-		fillLocalPullDown(bars.getMenuManager());
+		if (!(this instanceof ScheduleSummaryReport)) {
+			fillLocalPullDown(bars.getMenuManager());
+		}
 		fillLocalToolBar(bars.getToolBarManager());
 	}
 

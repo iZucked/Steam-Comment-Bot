@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.lso.guided.handlers;
@@ -70,6 +70,6 @@ public class RemoveCargoMoveHandler implements IGuidedMoveHandler {
 			builder.removeElement(fromResource, e);
 		}
 
-		return new Pair<IMove, Hints>(builder.create(), hints);
+		return Pair.of(builder.create(), hints);
 	}
 }

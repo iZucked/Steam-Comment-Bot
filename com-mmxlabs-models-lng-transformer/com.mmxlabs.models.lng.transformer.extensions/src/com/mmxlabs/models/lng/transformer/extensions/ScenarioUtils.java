@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.extensions;
@@ -10,7 +10,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.time.Months;
@@ -45,8 +44,10 @@ import com.mmxlabs.models.lng.transformer.extensions.shippingtype.ShippingTypeRe
 import com.mmxlabs.optimiser.common.constraints.LockedUnusedElementsConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintCheckerFactory;
+import com.mmxlabs.rcp.common.ecore.EMFCopier;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.AllowedVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.ContractCvConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.CounterPartyVolumeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.DifferentSTSVesselsConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.FOBDESCompatibilityConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenIdleTimeConstraintCheckerFactory;
@@ -118,8 +119,8 @@ public class ScenarioUtils {
 		@NonNull
 		final ConstraintAndFitnessSettings constraintAndFitnessSettings = createDefaultConstraintAndFitnessSettings();
 
-		plan.getStages().add(createDefaultLSOParameters(EcoreUtil.copy(constraintAndFitnessSettings), parallelise));
-		plan.getStages().add(createDefaultHillClimbingParameters(EcoreUtil.copy(constraintAndFitnessSettings), parallelise));
+		plan.getStages().add(createDefaultLSOParameters(EMFCopier.copy(constraintAndFitnessSettings), parallelise));
+		plan.getStages().add(createDefaultHillClimbingParameters(EMFCopier.copy(constraintAndFitnessSettings), parallelise));
 
 		return plan;
 	}
@@ -426,6 +427,7 @@ public class ScenarioUtils {
 			constraints.add(createConstraint(PortExclusionConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(VesselEventConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(FOBDESCompatibilityConstraintCheckerFactory.NAME, true));
+			constraints.add(createConstraint(CounterPartyVolumeConstraintCheckerFactory.NAME, true));
 
 			constraints.add(createConstraint(OrderedSequenceElementsConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(PortTypeConstraintCheckerFactory.NAME, true));
@@ -553,6 +555,24 @@ public class ScenarioUtils {
 		}
 	}
 
+	public static void removeAllConstraints(OptimisationPlan plan, String name) {
+		for (OptimisationStage stage : plan.getStages()) {
+			if (stage instanceof ParallelOptimisationStage<?>) {
+				ParallelOptimisationStage<?> parallelOptimisationStage = (ParallelOptimisationStage<?>) stage;
+				stage = parallelOptimisationStage.getTemplate();
+			}
+			if (stage instanceof ConstraintsAndFitnessSettingsStage) {
+				ConstraintAndFitnessSettings settings = ((ConstraintsAndFitnessSettingsStage) stage).getConstraintAndFitnessSettings();
+				removeConstraints(name, settings);
+			}
+		}
+		SolutionBuilderSettings solutionBuilderSettings = plan.getSolutionBuilderSettings();
+		if (solutionBuilderSettings != null) {
+			ConstraintAndFitnessSettings settings = solutionBuilderSettings.getConstraintAndFitnessSettings();
+			removeConstraints(name, settings);
+		}
+	}
+
 	public static void createOrUpdateContraints(String name, boolean enabled, ConstraintAndFitnessSettings settings) {
 		List<Constraint> constraints = settings.getConstraints();
 		for (Constraint constraint : constraints) {
@@ -562,6 +582,11 @@ public class ScenarioUtils {
 			}
 		}
 		constraints.add(createConstraint(name, enabled));
+	}
+
+	public static void removeConstraints(String name, ConstraintAndFitnessSettings settings) {
+		List<Constraint> constraints = settings.getConstraints();
+		constraints.removeIf(constraint -> constraint.getName().equals(name));
 	}
 
 	public static boolean isConstraintInSettings(List<Constraint> constraints, String constraintName) {

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 /**
@@ -42,7 +42,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public class PaperDealAllocationImpl extends EObjectImpl implements PaperDealAllocation {
+public class PaperDealAllocationImpl extends ProfitAndLossContainerImpl implements PaperDealAllocation {
 	/**
 	 * The cached value of the '{@link #getPaperDeal() <em>Paper Deal</em>}' reference.
 	 * <!-- begin-user-doc -->

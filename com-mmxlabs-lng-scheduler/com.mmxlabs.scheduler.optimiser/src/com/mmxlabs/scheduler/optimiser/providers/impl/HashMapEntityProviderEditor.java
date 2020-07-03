@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.providers.impl;
@@ -72,7 +72,7 @@ public class HashMapEntityProviderEditor implements IEntityProvider {
 		if (entitiesBooksMap.containsKey(entity)) {
 			map = entitiesBooksMap.get(entity);
 		} else {
-			map = new EnumMap<@NonNull EntityBookType, @NonNull IEntityBook>(EntityBookType.class);
+			map = new EnumMap<>(EntityBookType.class);
 			entitiesBooksMap.put(entity, map);
 		}
 		map.put(bookType, entityBook);

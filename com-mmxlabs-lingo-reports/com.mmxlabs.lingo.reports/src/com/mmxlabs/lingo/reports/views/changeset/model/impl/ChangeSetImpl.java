@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 /**
@@ -266,6 +266,7 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public DeltaMetrics getMetricsToDefaultBase() {
 		return metricsToDefaultBase;
 	}
@@ -290,6 +291,7 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMetricsToDefaultBase(DeltaMetrics newMetricsToDefaultBase) {
 		if (newMetricsToDefaultBase != metricsToDefaultBase) {
 			NotificationChain msgs = null;
@@ -309,6 +311,7 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public DeltaMetrics getMetricsToAlternativeBase() {
 		return metricsToAlternativeBase;
 	}
@@ -333,6 +336,7 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMetricsToAlternativeBase(DeltaMetrics newMetricsToAlternativeBase) {
 		if (newMetricsToAlternativeBase != metricsToAlternativeBase) {
 			NotificationChain msgs = null;
@@ -352,6 +356,7 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ScenarioResult getBaseScenario() {
 		return baseScenario;
 	}
@@ -361,6 +366,7 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBaseScenario(ScenarioResult newBaseScenario) {
 		ScenarioResult oldBaseScenario = baseScenario;
 		baseScenario = newBaseScenario;
@@ -373,6 +379,7 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ScenarioResult getCurrentScenario() {
 		return currentScenario;
 	}
@@ -382,6 +389,7 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCurrentScenario(ScenarioResult newCurrentScenario) {
 		ScenarioResult oldCurrentScenario = currentScenario;
 		currentScenario = newCurrentScenario;
@@ -394,6 +402,7 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ScenarioResult getAltBaseScenario() {
 		return altBaseScenario;
 	}
@@ -403,6 +412,7 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setAltBaseScenario(ScenarioResult newAltBaseScenario) {
 		ScenarioResult oldAltBaseScenario = altBaseScenario;
 		altBaseScenario = newAltBaseScenario;
@@ -415,6 +425,7 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ScenarioResult getAltCurrentScenario() {
 		return altCurrentScenario;
 	}
@@ -424,6 +435,7 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setAltCurrentScenario(ScenarioResult newAltCurrentScenario) {
 		ScenarioResult oldAltCurrentScenario = altCurrentScenario;
 		altCurrentScenario = newAltCurrentScenario;
@@ -436,6 +448,7 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<ChangeSetRow> getChangeSetRowsToDefaultBase() {
 		if (changeSetRowsToDefaultBase == null) {
 			changeSetRowsToDefaultBase = new EObjectContainmentEList<ChangeSetRow>(ChangeSetRow.class, this, ChangesetPackage.CHANGE_SET__CHANGE_SET_ROWS_TO_DEFAULT_BASE);
@@ -448,6 +461,7 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<ChangeSetRow> getChangeSetRowsToAlternativeBase() {
 		if (changeSetRowsToAlternativeBase == null) {
 			changeSetRowsToAlternativeBase = new EObjectContainmentEList<ChangeSetRow>(ChangeSetRow.class, this, ChangesetPackage.CHANGE_SET__CHANGE_SET_ROWS_TO_ALTERNATIVE_BASE);
@@ -460,6 +474,7 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Metrics getCurrentMetrics() {
 		return currentMetrics;
 	}
@@ -484,6 +499,7 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCurrentMetrics(Metrics newCurrentMetrics) {
 		if (newCurrentMetrics != currentMetrics) {
 			NotificationChain msgs = null;
@@ -503,6 +519,7 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getDescription() {
 		return description;
 	}
@@ -512,6 +529,7 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDescription(String newDescription) {
 		String oldDescription = description;
 		description = newDescription;
@@ -524,6 +542,7 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ChangeDescription getChangeDescription() {
 		return changeDescription;
 	}
@@ -533,6 +552,7 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setChangeDescription(ChangeDescription newChangeDescription) {
 		ChangeDescription oldChangeDescription = changeDescription;
 		changeDescription = newChangeDescription;
@@ -545,6 +565,7 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public UserSettings getUserSettings() {
 		return userSettings;
 	}
@@ -554,6 +575,7 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setUserSettings(UserSettings newUserSettings) {
 		UserSettings oldUserSettings = userSettings;
 		userSettings = newUserSettings;

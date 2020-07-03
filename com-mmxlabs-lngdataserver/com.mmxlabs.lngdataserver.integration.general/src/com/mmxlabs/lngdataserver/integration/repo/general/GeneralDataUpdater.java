@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lngdataserver.integration.repo.general;
@@ -30,9 +30,10 @@ import com.google.common.base.Charsets;
 import com.google.common.collect.MapMaker;
 import com.google.common.io.Files;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.lngdataserver.commons.http.WrappedProgressMonitor;
-import com.mmxlabs.lngdataserver.server.IUpstreamDetailChangedListener;
-import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
+import com.mmxlabs.hub.DataHubServiceProvider;
+import com.mmxlabs.hub.IUpstreamDetailChangedListener;
+import com.mmxlabs.hub.UpstreamUrlProvider;
+import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
 
 public class GeneralDataUpdater {
 
@@ -196,7 +197,7 @@ public class GeneralDataUpdater {
 
 				// make sure not everything is blocked in case of consecutive failure
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(5_000);
 				} catch (final InterruptedException e) {
 					throw new RuntimeException(e);
 				}
@@ -225,7 +226,7 @@ public class GeneralDataUpdater {
 	}
 
 	public void refresh() {
-		final boolean available = UpstreamUrlProvider.INSTANCE.isAvailable();
+		final boolean available = DataHubServiceProvider.getInstance().isOnlineAndLoggedIn();
 		if (available) {
 			for (final TypeRecord typeRecord : interestedTypes) {
 				refreshType(typeRecord);

@@ -1,7 +1,7 @@
 vesselassignment,charterindex,assignedobjects,spotindex
-Large ship,1,"A_1,BI_1,S_2,A_2,PF_1,S_1",
-Medium ship,1,"BO_1,H_1,BO_2,PE_1,A_3",
-Small ship,1,"S_3,S_4",
+TFDE_160,1,"A_1,BI_1,S_2,A_2,PF_1,S_1",
+Steam_145,1,"BO_1,H_1,BO_2,PE_1,A_3",
+Steam_138,1,"S_3,S_4",
 CI_1,,,-1
 CI_2,,,-1
 CI_3,,,-1

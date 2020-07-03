@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.analytics;
@@ -11,7 +11,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
-import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 /**

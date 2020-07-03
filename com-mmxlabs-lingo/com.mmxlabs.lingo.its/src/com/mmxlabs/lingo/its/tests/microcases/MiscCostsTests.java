@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases;
@@ -36,7 +36,7 @@ import com.mmxlabs.models.lng.types.VolumeUnits;
  *
  */
 @ExtendWith(ShiroRunner.class)
-public class MiscCostsTests extends AbstractMicroTestCase {
+public class MiscCostsTests extends AbstractLegacyMicroTestCase {
 
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
@@ -46,7 +46,10 @@ public class MiscCostsTests extends AbstractMicroTestCase {
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
-				.withOptionality(true).build();
+				.withStartWindow(LocalDateTime.of(2015, 12, 1, 0, 0, 0)) //
+				.withEndWindow(LocalDateTime.of(2015, 12, 11, 8, 0, 0)) //
+				.withOptionality(true) //
+				.build();
 
 		@NonNull
 		final Port port1 = portFinder.findPort("Point Fortin");
@@ -106,7 +109,10 @@ public class MiscCostsTests extends AbstractMicroTestCase {
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
-				.withOptionality(true).build();
+				.withStartWindow(LocalDateTime.of(2015, 12, 1, 0, 0, 0)) //
+				.withEndWindow(LocalDateTime.of(2015, 12, 11, 8, 0, 0)) //
+				.withOptionality(true)//
+				.build();
 
 		@NonNull
 		final Port port1 = portFinder.findPort("Point Fortin");
@@ -164,7 +170,10 @@ public class MiscCostsTests extends AbstractMicroTestCase {
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
-				.withOptionality(true).build();
+				.withStartWindow(LocalDateTime.of(2015, 12, 1, 0, 0, 0)) //
+				.withEndWindow(LocalDateTime.of(2015, 12, 11, 8, 0, 0)) //
+				.withOptionality(true) //
+				.build();
 
 		@NonNull
 		final Port port1 = portFinder.findPort("Point Fortin");

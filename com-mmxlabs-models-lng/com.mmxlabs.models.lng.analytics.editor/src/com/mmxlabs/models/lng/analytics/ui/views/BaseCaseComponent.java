@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.ui.views;
@@ -144,15 +144,13 @@ public class BaseCaseComponent extends AbstractSandboxComponent<OptionModellerVi
 		final MenuManager mgr = new MenuManager();
 
 		final BaseCaseContextMenuManager listener = new BaseCaseContextMenuManager(baseCaseViewer, scenarioEditingLocation, mgr);
-		inputWants.add(model -> listener.setOptionAnalysisModel(model));
 		baseCaseViewer.getGrid().addMenuDetectListener(listener);
 
-		inputWants.add(model -> baseCaseViewer.setInput(model));
-		inputWants.add(model -> baseCaseDiagram.setRoot(model));
+		inputWants.add(listener::setOptionAnalysisModel);
+		inputWants.add(baseCaseViewer::setInput);
+		inputWants.add(baseCaseDiagram::setRoot);
 
-		lockedListeners.add(locked -> {
-			RunnerHelper.asyncExec(() -> baseCaseViewer.getGrid().setEnabled(!locked));
-		});
+		lockedListeners.add(locked -> RunnerHelper.runAsyncIfControlValid(baseCaseViewer.getGrid(), grid -> grid.setEnabled(!locked)));
 
 		return baseCaseViewer.getGrid();
 	}

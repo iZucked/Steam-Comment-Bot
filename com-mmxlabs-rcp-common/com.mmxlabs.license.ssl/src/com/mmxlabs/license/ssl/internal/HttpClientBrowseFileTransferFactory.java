@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.license.ssl.internal;
@@ -26,7 +26,7 @@ import org.eclipse.ecf.filetransfer.RemoteFileSystemException;
 import org.eclipse.ecf.filetransfer.identity.IFileID;
 import org.eclipse.ecf.filetransfer.service.IRemoteFileSystemBrowser;
 import org.eclipse.ecf.filetransfer.service.IRemoteFileSystemBrowserFactory;
-import org.eclipse.ecf.provider.filetransfer.httpclient4.HttpClientFileSystemBrowser;
+import org.eclipse.ecf.provider.filetransfer.httpclient45.HttpClientFileSystemBrowser;
 import org.eclipse.ecf.provider.filetransfer.identity.FileTransferNamespace;
 import org.eclipse.osgi.util.NLS;
 

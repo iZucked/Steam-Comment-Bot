@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lngdataserver.integration.ui.scenarios.api;
@@ -14,13 +14,12 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.lngdataserver.commons.http.IProgressListener;
-import com.mmxlabs.lngdataserver.commons.http.ProgressRequestBody;
-import com.mmxlabs.lngdataserver.commons.http.ProgressResponseBody;
-import com.mmxlabs.lngdataserver.server.HttpClientUtil;
-import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
+import com.mmxlabs.hub.DataHubServiceProvider;
+import com.mmxlabs.hub.common.http.HttpClientUtil;
+import com.mmxlabs.hub.common.http.IProgressListener;
+import com.mmxlabs.hub.common.http.ProgressRequestBody;
+import com.mmxlabs.hub.common.http.ProgressResponseBody;
 
-import okhttp3.Credentials;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -54,19 +53,22 @@ public class SharedWorkspaceServiceClient {
 				.addFormDataPart("path", path) //
 				.build();
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
 		if (progressListener != null) {
 			requestBody = new ProgressRequestBody(requestBody, progressListener);
 		}
 
-		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
-				.url(upstreamURL + SCENARIO_UPLOAD_URL) //
-				.post(requestBody).build();
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(SCENARIO_UPLOAD_URL);
+		if (requestBuilder == null) {
+			return null;
+		}
+
+		final Request request = requestBuilder //
+				.post(requestBody) //
+				.build();
 
 		// Check the response
 		try (Response response = httpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
-				response.body().close();
 				if (response.code() == 409) {
 					throw new IOException("Scenario already exists " + path);
 				}
@@ -94,21 +96,22 @@ public class SharedWorkspaceServiceClient {
 		final OkHttpClient localHttpClient = clientBuilder //
 				.build();
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(String.format("%s%s", SCENARIO_DOWNLOAD_URL, uuid));
+		if (requestBuilder == null) {
+			return false;
+		}
 
-		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
-				.url(String.format("%s%s%s", upstreamURL, SCENARIO_DOWNLOAD_URL, uuid)) //
+		final Request request = requestBuilder //
 				.build();
 
 		try (Response response = localHttpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
-				response.body().close();
 				throw new IOException("Unexpected code: " + response);
 			}
 			try (BufferedSource bufferedSource = response.body().source()) {
-				final BufferedSink bufferedSink = Okio.buffer(Okio.sink(file));
-				bufferedSink.writeAll(bufferedSource);
-				bufferedSink.close();
+				try (final BufferedSink bufferedSink = Okio.buffer(Okio.sink(file))) {
+					bufferedSink.writeAll(bufferedSource);
+				}
 				return true;
 			}
 		}
@@ -116,17 +119,16 @@ public class SharedWorkspaceServiceClient {
 
 	public String getBaseCaseDetails(final String uuid) throws IOException {
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
-		if (upstreamURL == null || upstreamURL.isEmpty()) {
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(SCENARIO_DOWNLOAD_URL + uuid + "/details");
+		if (requestBuilder == null) {
 			return null;
 		}
-		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
-				.url(upstreamURL + SCENARIO_DOWNLOAD_URL + uuid + "/details") //
+
+		final Request request = requestBuilder //
 				.build();
 
 		try (Response response = httpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
-				response.body().close();
 				throw new IOException("Unexpected code: " + response);
 			}
 			final String value = response.body().string();
@@ -137,12 +139,12 @@ public class SharedWorkspaceServiceClient {
 
 	public Pair<String, Instant> getScenarios() throws IOException {
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
-		if (upstreamURL == null || upstreamURL.isEmpty()) {
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(SCENARIO_LIST_URL);
+		if (requestBuilder == null) {
 			return null;
 		}
-		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
-				.url(upstreamURL + SCENARIO_LIST_URL) //
+
+		final Request request = requestBuilder //
 				.build();
 
 		try (Response response = httpClient.newCall(request).execute()) {
@@ -161,12 +163,12 @@ public class SharedWorkspaceServiceClient {
 
 	public void deleteScenario(final String uuid) throws IOException {
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
-		if (upstreamURL == null || upstreamURL.isEmpty()) {
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(SCENARIO_DELETE_URL + uuid);
+		if (requestBuilder == null) {
 			return;
 		}
-		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
-				.url(upstreamURL + SCENARIO_DELETE_URL + uuid) //
+
+		final Request request = requestBuilder //
 				.delete() //
 				.build();
 
@@ -179,12 +181,12 @@ public class SharedWorkspaceServiceClient {
 
 	public Instant getLastModified() {
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
-		if (upstreamURL == null || upstreamURL.isEmpty()) {
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(SCENARIO_LAST_MODIFIED_URL);
+		if (requestBuilder == null) {
 			return null;
 		}
-		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
-				.url(upstreamURL + SCENARIO_LAST_MODIFIED_URL) //
+
+		final Request request = requestBuilder //
 				.build();
 
 		try (Response response = httpClient.newCall(request).execute()) {
@@ -202,8 +204,8 @@ public class SharedWorkspaceServiceClient {
 
 	public void rename(final String uuid, final String newPath) throws IOException {
 
-		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
-		if (upstreamURL == null || upstreamURL.isEmpty()) {
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(SCENARIO_MOVE_URL + uuid);
+		if (requestBuilder == null) {
 			return;
 		}
 
@@ -211,8 +213,8 @@ public class SharedWorkspaceServiceClient {
 				.setType(MultipartBody.FORM) //
 				.addFormDataPart("path", newPath) //
 				.build();
-		final Request request = UpstreamUrlProvider.INSTANCE.makeRequest() //
-				.url(upstreamURL + SCENARIO_MOVE_URL + uuid) //
+
+		final Request request = requestBuilder //
 				.post(requestBody) //
 				.build();
 

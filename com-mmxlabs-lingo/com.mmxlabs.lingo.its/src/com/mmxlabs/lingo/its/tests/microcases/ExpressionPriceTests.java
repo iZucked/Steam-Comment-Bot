@@ -1,12 +1,11 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.time.ZonedDateTime;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -18,6 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.google.inject.Injector;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
@@ -45,18 +45,18 @@ public class ExpressionPriceTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testSplitMonthInSpotMarketFixedPrices() {
 
-		DESSalesMarket mkt = spotMarketsModelBuilder.makeDESSaleMarket("Market", portFinder.findPort("Chita LNG"), entity, "SPLITMONTH(5,10,15)")
+		DESSalesMarket mkt = spotMarketsModelBuilder.makeDESSaleMarket("Market", portFinder.findPortById(InternalDataConstants.PORT_CHITA), entity, "SPLITMONTH(5,10,15)")
 				.withVolumeLimits(3_000_000, 3_000_000, VolumeUnits.MMBTU) //
 				.build();
 
 		Cargo testCargo = cargoModelBuilder.makeCargo() ///
-				.makeDESPurchase("F1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2018, 6, 1), portFinder.findPort("Chita LNG"), null, entity, "5", null)//
+				.makeDESPurchase("F1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2018, 6, 1), portFinder.findPortById(InternalDataConstants.PORT_CHITA), null, entity, "5", 22.8, null)//
 				.withWindowStartTime(0) //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				//
 				.build() //
 
-				.makeMarketDESSale("D1", mkt, YearMonth.of(2018, 6), portFinder.findPort("Chita LNG")) //
+				.makeMarketDESSale("D1", mkt, YearMonth.of(2018, 6), portFinder.findPortById(InternalDataConstants.PORT_CHITA)) //
 				.build() //
 
 				//
@@ -104,18 +104,18 @@ public class ExpressionPriceTests extends AbstractMicroTestCase {
 				.addIndexPoint(YearMonth.of(2018, 7), 10.0) //
 				.build();
 
-		DESSalesMarket mkt = spotMarketsModelBuilder.makeDESSaleMarket("Market", portFinder.findPort("Chita LNG"), entity, "SPLITMONTH(HHH1,HHH2,15)")
+		DESSalesMarket mkt = spotMarketsModelBuilder.makeDESSaleMarket("Market", portFinder.findPortById(InternalDataConstants.PORT_CHITA), entity, "SPLITMONTH(HHH1,HHH2,15)")
 				.withVolumeLimits(3_000_000, 3_000_000, VolumeUnits.MMBTU) //
 				.build();
 
 		Cargo testCargo = cargoModelBuilder.makeCargo() ///
-				.makeDESPurchase("F1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2018, 6, 1), portFinder.findPort("Chita LNG"), null, entity, "5", null)//
+				.makeDESPurchase("F1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2018, 6, 1), portFinder.findPortById(InternalDataConstants.PORT_CHITA), null, entity, "5", 22.8, null)//
 				.withWindowStartTime(0) //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				//
 				.build() //
 
-				.makeMarketDESSale("D1", mkt, YearMonth.of(2018, 6), portFinder.findPort("Chita LNG")) //
+				.makeMarketDESSale("D1", mkt, YearMonth.of(2018, 6), portFinder.findPortById(InternalDataConstants.PORT_CHITA)) //
 				.build() //
 
 				//
@@ -188,7 +188,7 @@ public class ExpressionPriceTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void test1() {
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
 		// final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
@@ -198,13 +198,13 @@ public class ExpressionPriceTests extends AbstractMicroTestCase {
 				.addIndexPoint(YearMonth.of(2018, 1), 10.0) //
 				.build();
 		Cargo testCargo = cargoModelBuilder.makeCargo() ///
-				.makeFOBPurchase("F1", LocalDate.of(2018, 1, 1), portFinder.findPort("Darwin LNG"), null, entity, "Test")//
+				.makeFOBPurchase("F1", LocalDate.of(2018, 1, 1), portFinder.findPortById(InternalDataConstants.PORT_DARWIN), null, entity, "Test")//
 				.withWindowStartTime(0) //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.withPricingEvent(PricingEvent.START_LOAD, null) //
 				//
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2018, 2, 1), portFinder.findPort("Chita LNG"), null, entity, "Test") //
+				.makeDESSale("D1", LocalDate.of(2018, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_CHITA), null, entity, "Test") //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.withWindowStartTime(0) //
 				.withPricingEvent(PricingEvent.START_LOAD, null) //

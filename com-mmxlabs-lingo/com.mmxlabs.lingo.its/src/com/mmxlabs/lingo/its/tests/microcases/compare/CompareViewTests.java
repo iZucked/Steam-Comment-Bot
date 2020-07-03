@@ -1,10 +1,9 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases.compare;
 
-import java.net.MalformedURLException;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
@@ -14,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -21,16 +21,14 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.google.common.collect.Lists;
-import com.mmxlabs.common.concurrent.CleanableExecutorService;
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
@@ -49,37 +47,24 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
-import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
-import com.mmxlabs.models.lng.commercial.util.CommercialModelBuilder;
-import com.mmxlabs.models.lng.commercial.util.CommercialModelFinder;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.util.FleetModelBuilder;
-import com.mmxlabs.models.lng.fleet.util.FleetModelFinder;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
-import com.mmxlabs.models.lng.port.util.PortModelFinder;
-import com.mmxlabs.models.lng.pricing.util.PricingModelBuilder;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelBuilder;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelFinder;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
-import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelBuilder;
-import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelFinder;
-import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
+import com.mmxlabs.models.lng.transformer.its.RequireFeature;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
-import com.mmxlabs.models.lng.transformer.its.scenario.CSVImporter;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
-import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
-import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
-import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
-import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
+import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.types.DESPurchaseDealType;
+import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
@@ -88,27 +73,8 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 @ExtendWith(ShiroRunner.class)
+@RequireFeature(KnownFeatures.FEATURE_MODULE_DIFF_TOOLS)
 public class CompareViewTests {
-	private static List<String> requiredFeatures = Lists.newArrayList("difftools");
-	private static List<String> addedFeatures = new LinkedList<>();
-
-	@BeforeAll
-	public static void hookIn() {
-		for (final String feature : requiredFeatures) {
-			if (!LicenseFeatures.isPermitted("features:" + feature)) {
-				LicenseFeatures.addFeatureEnablements(feature);
-				addedFeatures.add(feature);
-			}
-		}
-	}
-
-	@AfterAll
-	public static void hookOut() {
-		for (final String feature : addedFeatures) {
-			LicenseFeatures.removeFeatureEnablements(feature);
-		}
-		addedFeatures.clear();
-	}
 
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
@@ -116,11 +82,12 @@ public class CompareViewTests {
 		runTest(maker -> {
 			maker.cargoModelBuilder.makeCargo() //
 					// Purchase
-					.makeDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", null) //
+					.makeDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, maker.entity, "5", 22.8,
+							null) //
 					.withVolumeLimits(3_000_000, 3_000_000, VolumeUnits.MMBTU) //
 					.build() //
 					// Sale
-					.makeDESSale("DS1", LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "7") //
+					.makeDESSale("DS1", LocalDate.of(2015, 01, 10), maker.portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, maker.entity, "7") //
 					.withVolumeLimits(3_000_000, 3_000_000, VolumeUnits.MMBTU) //
 
 					.build() //
@@ -129,12 +96,13 @@ public class CompareViewTests {
 
 			maker.cargoModelBuilder.makeCargo() //
 					// Purchase
-					.makeDESPurchase("DP2", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "3", null) //
+					.makeDESPurchase("DP2", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, maker.entity, "3", 22.8,
+							null) //
 					.withVolumeLimits(3_000_000, 3_000_000, VolumeUnits.MMBTU) //
 
 					.build() //
 					// Sale
-					.makeDESSale("DS2", LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "8") //
+					.makeDESSale("DS2", LocalDate.of(2015, 01, 10), maker.portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, maker.entity, "8") //
 					.withVolumeLimits(3_000_000, 3_000_000, VolumeUnits.MMBTU) //
 
 					.build() //
@@ -144,11 +112,12 @@ public class CompareViewTests {
 		}, maker -> {
 			maker.cargoModelBuilder.makeCargo() //
 					// Purchase
-					.makeDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "3", null) //
+					.makeDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, maker.entity, "3", 22.8,
+							null) //
 					.withVolumeLimits(3_000_000, 3_000_000, VolumeUnits.MMBTU) //
 					.build() //
 					// Sale
-					.makeDESSale("DS2", LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "7") //
+					.makeDESSale("DS2", LocalDate.of(2015, 01, 10), maker.portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, maker.entity, "7") //
 					.withVolumeLimits(3_000_000, 3_000_000, VolumeUnits.MMBTU) //
 					.build() //
 					// Cargo
@@ -156,11 +125,12 @@ public class CompareViewTests {
 
 			maker.cargoModelBuilder.makeCargo() //
 					// Purchase
-					.makeDESPurchase("DP2", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", null) //
+					.makeDESPurchase("DP2", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, maker.entity, "5", 22.8,
+							null) //
 					.withVolumeLimits(3_000_000, 3_000_000, VolumeUnits.MMBTU) //
 					.build() //
 					// Sale
-					.makeDESSale("DS1", LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "8") //
+					.makeDESSale("DS1", LocalDate.of(2015, 01, 10), maker.portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, maker.entity, "8") //
 					.withVolumeLimits(3_000_000, 3_000_000, VolumeUnits.MMBTU) //
 					.build() //
 					// Cargo
@@ -202,12 +172,13 @@ public class CompareViewTests {
 		runTest(maker -> {
 			maker.cargoModelBuilder.makeCargo() //
 					// Purchase
-					.makeDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", null) //
+					.makeDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, maker.entity, "5", 22.8,
+							null) //
 					.withOptional(true) //
 					.withCancellationFee("50000") //
 					.build() //
 					// Sale
-					.makeDESSale("DS", LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5") //
+					.makeDESSale("DS", LocalDate.of(2015, 01, 10), maker.portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, maker.entity, "5") //
 					.withOptional(true) //
 					.withCancellationFee("60000") //
 					.build() //
@@ -215,12 +186,14 @@ public class CompareViewTests {
 					.build();
 
 		}, maker -> {
-			maker.cargoModelBuilder.makeDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", 22.8, null) //
+			maker.cargoModelBuilder
+					.makeDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, maker.entity, "5", 22.8,
+							null) //
 					.withOptional(true) //
 					.withCancellationFee("50000") //
 					.build();
 
-			maker.cargoModelBuilder.makeDESSale("DS", LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5") //
+			maker.cargoModelBuilder.makeDESSale("DS", LocalDate.of(2015, 01, 10), maker.portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, maker.entity, "5") //
 					.withOptional(true) //
 					.withCancellationFee("60000") //
 					.build();
@@ -267,12 +240,14 @@ public class CompareViewTests {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testSlotCancellationFee_OpenToCargo() throws Exception {
 		runTest(maker -> {
-			maker.cargoModelBuilder.makeDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", 22.8, null) //
+			maker.cargoModelBuilder
+					.makeDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, maker.entity, "5", 22.8,
+							null) //
 					.withOptional(true) //
 					.withCancellationFee("50000") //
 					.build();
 
-			maker.cargoModelBuilder.makeDESSale("DS", LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5") //
+			maker.cargoModelBuilder.makeDESSale("DS", LocalDate.of(2015, 01, 10), maker.portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, maker.entity, "5") //
 					.withOptional(true) //
 					.withCancellationFee("60000") //
 					.build();
@@ -280,12 +255,13 @@ public class CompareViewTests {
 		}, maker -> {
 			maker.cargoModelBuilder.makeCargo() //
 					// Purchase
-					.makeDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", null) //
+					.makeDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, maker.entity, "5", 22.8,
+							null) //
 					.withOptional(true) //
 					.withCancellationFee("50000") //
 					.build() //
 					// Sale
-					.makeDESSale("DS", LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5") //
+					.makeDESSale("DS", LocalDate.of(2015, 01, 10), maker.portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, maker.entity, "5") //
 					.withOptional(true) //
 					.withCancellationFee("60000") //
 					.build() //
@@ -321,135 +297,17 @@ public class CompareViewTests {
 
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
-	public void testSlotHedingValue_CargoToOpen() throws Exception {
-		runTest(maker -> {
-			maker.cargoModelBuilder.makeCargo() //
-					// Purchase
-					.makeDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", null) //
-					.withOptional(true) //
-					.withHedgeValue(50000) //
-					.build() //
-					// Sale
-					.makeDESSale("DS", LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5") //
-					.withOptional(true) //
-					.withHedgeValue(60000) //
-					.build() //
-					// Cargo
-					.build();
-
-		}, maker -> {
-			maker.cargoModelBuilder.makeDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", 22.8, null) //
-					.withOptional(true) //
-					.withHedgeValue(50000) //
-					.build();
-
-			maker.cargoModelBuilder.makeDESSale("DS", LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5") //
-					.withOptional(true) //
-					.withHedgeValue(60000) //
-					.build();
-
-		}, changeSetRoot -> {
-			Assertions.assertEquals(1, changeSetRoot.getChangeSets().size());
-
-			ChangeSetToTableTransformer transformer = new ChangeSetToTableTransformer();
-			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, null, SortMode.BY_GROUP);
-
-			final ChangeSetTableGroup changeSet = tableRoot.getGroups().get(0);
-			Assertions.assertEquals(2, changeSet.getRows().size());
-
-			final ChangeSetTableRow row1 = changeSet.getRows().get(0);
-			final ChangeSetTableRow row2 = changeSet.getRows().get(1);
-
-			// Expect 50K for load hedge
-			Assertions.assertEquals(50_000, ChangeSetKPIUtil.getPNL(row1, ResultType.After));
-			// Assertions.assertEquals(-50_000, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.NEW));
-			// Expect 60K for discharge hedge
-			Assertions.assertEquals(60_000, ChangeSetKPIUtil.getPNL(row2, ResultType.After));
-			// Assertions.assertEquals(-60_000, ChangeSetKPIUtil.getCargoOtherPNL(row2, ResultType.NEW));
-
-			// Original cargo is a zero sum P&L
-			Assertions.assertEquals(50_000 + 60_000, ChangeSetKPIUtil.getPNL(row1, ResultType.Before));
-			// Assertions.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.ORIGINAL));
-			Assertions.assertEquals(0, ChangeSetKPIUtil.getPNL(row2, ResultType.Before));
-			// Assertions.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.ORIGINAL));
-
-			// P&L Sanity check -- no missing components in P&L
-			for (final ChangeSetTableRow row : changeSet.getRows()) {
-				Assertions.assertEquals(ChangeSetKPIUtil.getPNL(row, ResultType.Before), ChangeSetKPIUtil.getPNLSum(row, ResultType.Before));
-				Assertions.assertEquals(ChangeSetKPIUtil.getPNL(row, ResultType.After), ChangeSetKPIUtil.getPNLSum(row, ResultType.After));
-			}
-		});
-	}
-
-	@Test
-	@Tag(TestCategories.MICRO_TEST)
-	public void testSlotHedgingValue_OpenToCargo() throws Exception {
-		runTest(maker -> {
-			maker.cargoModelBuilder.makeDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", 22.8, null) //
-					.withOptional(true) //
-					.withHedgeValue(50000) //
-					.build();
-
-			maker.cargoModelBuilder.makeDESSale("DS", LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5") //
-					.withOptional(true) //
-					.withHedgeValue(60000) //
-					.build();
-
-		}, maker -> {
-			maker.cargoModelBuilder.makeCargo() //
-					// Purchase
-					.makeDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", null) //
-					.withOptional(true) //
-					.withHedgeValue(50000) //
-					.build() //
-					// Sale
-					.makeDESSale("DS", LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5") //
-					.withOptional(true) //
-					.withHedgeValue(60000) //
-					.build() //
-					// Cargo
-					.build();
-
-		}, changeSetRoot -> {
-			Assertions.assertEquals(1, changeSetRoot.getChangeSets().size());
-
-			ChangeSetToTableTransformer transformer = new ChangeSetToTableTransformer();
-			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, null, SortMode.BY_GROUP);
-
-			final ChangeSetTableGroup changeSet = tableRoot.getGroups().get(0);
-			Assertions.assertEquals(1, changeSet.getRows().size());
-
-			final ChangeSetTableRow row1 = changeSet.getRows().get(0);
-			assert row1 != null;
-			// Expect 50K for load cancellation and 60K for discharge cancellation
-			Assertions.assertEquals(50_000 + 60_000, ChangeSetKPIUtil.getPNL(row1, ResultType.Before));
-			// Assertions.assertEquals(-50_000 + -60_000, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.ORIGINAL));
-
-			Assertions.assertEquals(50_000 + 60_000, ChangeSetKPIUtil.getPNL(row1, ResultType.After));
-			// Assertions.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.NEW));
-			// Assertions.assertEquals(50_000 + 60_000, ChangeSetKPIUtil.getPNL(row1, ResultType.NEW));
-			// Assertions.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.NEW));
-
-			// P&L Sanity check -- no missing components in P&L
-			for (final ChangeSetTableRow row : changeSet.getRows()) {
-				Assertions.assertEquals(ChangeSetKPIUtil.getPNL(row, ResultType.Before), ChangeSetKPIUtil.getPNLSum(row, ResultType.Before));
-				Assertions.assertEquals(ChangeSetKPIUtil.getPNL(row, ResultType.After), ChangeSetKPIUtil.getPNLSum(row, ResultType.After));
-			}
-		});
-	}
-
-	@Test
-	@Tag(TestCategories.MICRO_TEST)
 	public void testSlotMiscCosts_CargoToOpen() throws Exception {
 		runTest(maker -> {
 			maker.cargoModelBuilder.makeCargo() //
 					// Purchase
-					.makeDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", null) //
+					.makeDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, maker.entity, "5", 22.8,
+							null) //
 					.withOptional(true) //
 					.withMiscCosts(50000) //
 					.build() //
 					// Sale
-					.makeDESSale("DS", LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5") //
+					.makeDESSale("DS", LocalDate.of(2015, 01, 10), maker.portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, maker.entity, "5") //
 					.withOptional(true) //
 					.withMiscCosts(60000) //
 					.build() //
@@ -457,12 +315,14 @@ public class CompareViewTests {
 					.build();
 
 		}, maker -> {
-			maker.cargoModelBuilder.makeDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", 22.8, null) //
+			maker.cargoModelBuilder
+					.makeDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, maker.entity, "5", 22.8,
+							null) //
 					.withOptional(true) //
 					.withMiscCosts(50000) //
 					.build();
 
-			maker.cargoModelBuilder.makeDESSale("DS", LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5") //
+			maker.cargoModelBuilder.makeDESSale("DS", LocalDate.of(2015, 01, 10), maker.portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, maker.entity, "5") //
 					.withOptional(true) //
 					.withMiscCosts(60000) //
 					.build();
@@ -509,12 +369,14 @@ public class CompareViewTests {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testSlotMiscCosts_OpenToCargo() throws Exception {
 		runTest(maker -> {
-			maker.cargoModelBuilder.makeDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", 22.8, null) //
+			maker.cargoModelBuilder
+					.makeDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, maker.entity, "5", 22.8,
+							null) //
 					.withOptional(true) //
 					.withMiscCosts(50000) //
 					.build();
 
-			maker.cargoModelBuilder.makeDESSale("DS", LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5") //
+			maker.cargoModelBuilder.makeDESSale("DS", LocalDate.of(2015, 01, 10), maker.portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, maker.entity, "5") //
 					.withOptional(true) //
 					.withMiscCosts(60000) //
 					.build();
@@ -522,12 +384,13 @@ public class CompareViewTests {
 		}, maker -> {
 			maker.cargoModelBuilder.makeCargo() //
 					// Purchase
-					.makeDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", null) //
+					.makeDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 01, 10), maker.portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, maker.entity, "5", 22.8,
+							null) //
 					.withOptional(true) //
 					.withMiscCosts(50000) //
 					.build() //
 					// Sale
-					.makeDESSale("DS", LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5") //
+					.makeDESSale("DS", LocalDate.of(2015, 01, 10), maker.portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, maker.entity, "5") //
 					.withOptional(true) //
 					.withMiscCosts(60000) //
 					.build() //
@@ -567,25 +430,24 @@ public class CompareViewTests {
 		runTest(maker -> {
 
 			// Create the required basic elements
-			final BaseLegalEntity entity = maker.commercialModelFinder.findEntity("Shipping");
 
-			final Vessel vessel_1 = maker.fleetModelFinder.findVessel("STEAM-145");
+			final Vessel vessel_1 = maker.fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-			final VesselAvailability vesselAvailability = maker.cargoModelBuilder.makeVesselAvailability(vessel_1, entity) //
+			final VesselAvailability vesselAvailability = maker.cargoModelBuilder.makeVesselAvailability(vessel_1, maker.entity) //
 					// .withCharterRate("50000") //
 					.build();
 
-			maker.cargoModelBuilder.makeFOBPurchase("FP1", LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Point Fortin"), null, maker.entity, "5", 22.8) //
+			maker.cargoModelBuilder.makeFOBPurchase("FP1", LocalDate.of(2015, 01, 10), maker.portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, maker.entity, "5", 22.8) //
 					.withOptional(true) //
 					.withCancellationFee("50000") //
 					.build();
 
-			maker.cargoModelBuilder.makeDESSale("DS1", LocalDate.of(2015, 02, 10), maker.portFinder.findPort("Dahej"), null, maker.entity, "5") //
+			maker.cargoModelBuilder.makeDESSale("DS1", LocalDate.of(2015, 02, 10), maker.portFinder.findPortById(InternalDataConstants.PORT_DAHEJ), null, maker.entity, "5") //
 					.withOptional(true) //
 					.withCancellationFee("60000") //
 					.build();
 
-			maker.cargoModelBuilder.makeDESSale("DS2", LocalDate.of(2015, 03, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5") //
+			maker.cargoModelBuilder.makeDESSale("DS2", LocalDate.of(2015, 03, 10), maker.portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, maker.entity, "5") //
 					.withOptional(true) //
 					.withCancellationFee("70000") //
 					.build();
@@ -593,27 +455,29 @@ public class CompareViewTests {
 		}, maker -> {
 
 			// Create the required basic elements
-			final BaseLegalEntity entity = maker.commercialModelFinder.findEntity("Shipping");
 
-			final Vessel vessel_1 = maker.fleetModelFinder.findVessel("STEAM-145");
+			final Vessel vessel_1 = maker.fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-			final VesselAvailability vesselAvailability = maker.cargoModelBuilder.makeVesselAvailability(vessel_1, entity) //
+			final VesselAvailability vesselAvailability = maker.cargoModelBuilder.makeVesselAvailability(vessel_1, maker.entity) //
 					// .withCharterRate("50000") //
 					.build();
 
 			maker.cargoModelBuilder.makeCargo() //
 					// Purchase
-					.makeFOBPurchase("FP1", LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Point Fortin"), null, maker.entity, "5") //
+					.makeFOBPurchase("FP1", LocalDate.of(2015, 01, 10), maker.portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, maker.entity, "5") //
+					.withWindowSize(0, TimePeriod.HOURS) //
 					.withOptional(true) //
 					.withCancellationFee("50000") //
 					.build() //
 					// Sale
-					.makeDESSale("DS1", LocalDate.of(2015, 02, 10), maker.portFinder.findPort("Dahej"), null, maker.entity, "5") //
+					.makeDESSale("DS1", LocalDate.of(2015, 02, 10), maker.portFinder.findPortById(InternalDataConstants.PORT_DAHEJ), null, maker.entity, "5") //
+					.withWindowSize(0, TimePeriod.HOURS) //
 					.withOptional(true) //
 					.withCancellationFee("60000") //
 					.build() //
 
-					.makeDESSale("DS2", LocalDate.of(2015, 03, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5") //
+					.makeDESSale("DS2", LocalDate.of(2015, 03, 10), maker.portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, maker.entity, "5") //
+					.withWindowSize(0, TimePeriod.HOURS) //
 					.withOptional(true) //
 					.withCancellationFee("70000") //
 					.build() //
@@ -664,22 +528,21 @@ public class CompareViewTests {
 		runTest(maker -> {
 
 			// Create the required basic elements
-			final BaseLegalEntity entity = maker.commercialModelFinder.findEntity("Shipping");
 
-			final Vessel vessel_1 = maker.fleetModelFinder.findVessel("STEAM-145");
+			final Vessel vessel_1 = maker.fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-			final VesselAvailability vesselAvailability = maker.cargoModelBuilder.makeVesselAvailability(vessel_1, entity) //
+			final VesselAvailability vesselAvailability = maker.cargoModelBuilder.makeVesselAvailability(vessel_1, maker.entity) //
 					// .withCharterRate("50000") //
 					.build();
 
 			maker.cargoModelBuilder.makeCargo() //
 
 					// Purchase
-					.makeFOBPurchase("FP1", LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Point Fortin"), null, maker.entity, "5") //
+					.makeFOBPurchase("FP1", LocalDate.of(2015, 01, 10), maker.portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, maker.entity, "5") //
 					.withVolumeLimits(1_000_000, 3_000_000, VolumeUnits.MMBTU) //
 					.build() //
 					// Sale 1
-					.makeDESSale("DS1", LocalDate.of(2015, 02, 10), maker.portFinder.findPort("Dahej"), null, maker.entity, "7") //
+					.makeDESSale("DS1", LocalDate.of(2015, 02, 10), maker.portFinder.findPortById(InternalDataConstants.PORT_DAHEJ), null, maker.entity, "7") //
 					.withVolumeLimits(1_000_000, 1_000_000, VolumeUnits.MMBTU) //
 					.build() //
 
@@ -688,34 +551,31 @@ public class CompareViewTests {
 					.build();
 
 			// Sale 2
-			maker.cargoModelBuilder.makeDESSale("DS2", LocalDate.of(2015, 03, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "8") //
+			maker.cargoModelBuilder.makeDESSale("DS2", LocalDate.of(2015, 03, 10), maker.portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, maker.entity, "8") //
 					.withVolumeLimits(1_000_000, 1_000_000, VolumeUnits.MMBTU) //
 					.withCancellationFee("1000000") //
 					.build();
 
 		}, maker -> {
 
-			// Create the required basic elements
-			final BaseLegalEntity entity = maker.commercialModelFinder.findEntity("Shipping");
+			final Vessel vessel_1 = maker.fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-			final Vessel vessel_1 = maker.fleetModelFinder.findVessel("STEAM-145");
-
-			final VesselAvailability vesselAvailability = maker.cargoModelBuilder.makeVesselAvailability(vessel_1, entity) //
+			final VesselAvailability vesselAvailability = maker.cargoModelBuilder.makeVesselAvailability(vessel_1, maker.entity) //
 					.build();
 
 			maker.cargoModelBuilder.makeCargo() //
 					// Purchase
-					.makeFOBPurchase("FP1", LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Point Fortin"), null, maker.entity, "5") //
+					.makeFOBPurchase("FP1", LocalDate.of(2015, 01, 10), maker.portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, maker.entity, "5") //
 					.withVolumeLimits(1_000_000, 3_000_000, VolumeUnits.MMBTU) //
 					.build() //
 
 					// Sale 1
-					.makeDESSale("DS1", LocalDate.of(2015, 02, 10), maker.portFinder.findPort("Dahej"), null, maker.entity, "7") //
+					.makeDESSale("DS1", LocalDate.of(2015, 02, 10), maker.portFinder.findPortById(InternalDataConstants.PORT_DAHEJ), null, maker.entity, "7") //
 					.withVolumeLimits(1_000_000, 1_000_000, VolumeUnits.MMBTU) //
 					.build() //
 
 					// Sale 2
-					.makeDESSale("DS2", LocalDate.of(2015, 03, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "7") //
+					.makeDESSale("DS2", LocalDate.of(2015, 03, 10), maker.portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, maker.entity, "7") //
 					.withVolumeLimits(1_000_000, 1_000_000, VolumeUnits.MMBTU) //
 					.withCancellationFee("1000000") //
 					.build() //
@@ -755,7 +615,7 @@ public class CompareViewTests {
 				totalAfterPNLSum += ChangeSetKPIUtil.getPNLSum(row, ResultType.After);
 
 			}
-			final double roudingDelta = 1.0;
+			final double roudingDelta = 2.0;
 			Assertions.assertEquals(totalBeforePNL, totalBeforePNLSum, roudingDelta);
 			Assertions.assertEquals(totalAfterPNL, totalAfterPNLSum, roudingDelta);
 		});
@@ -829,7 +689,7 @@ public class CompareViewTests {
 					// table.setOptions(EcoreUtil.copy(diffOptions));
 					// selectedDataProvider, pinned, others.iterator().next(), table, result.rootObjects, result.equivalancesMap);
 					final ScenarioComparisonTransformer transformer = new ScenarioComparisonTransformer();
-					final ChangeSetRoot root = transformer.createDataModel( result.equivalancesMap, table, pinnedResult, otherResult, new NullProgressMonitor());
+					final ChangeSetRoot root = transformer.createDataModel(result.equivalancesMap, table, pinnedResult, otherResult, new NullProgressMonitor());
 
 					resultChecker.accept(root);
 
@@ -847,87 +707,87 @@ public class CompareViewTests {
 
 	}
 
-	static class ScenarioMaker {
+	static class ScenarioMaker extends AbstractMicroTestCase {
+		//
+		// protected LNGScenarioModel lngScenarioModel;
+		// protected ScenarioModelFinder scenarioModelFinder;
+		// protected ScenarioModelBuilder scenarioModelBuilder;
+		// protected CommercialModelFinder commercialModelFinder;
+		// protected FleetModelFinder fleetModelFinder;
+		// protected PortModelFinder portFinder;
+		// protected CargoModelBuilder cargoModelBuilder;
+		// protected CommercialModelBuilder commercialModelBuilder;
+		// protected FleetModelBuilder fleetModelBuilder;
+		// protected SpotMarketsModelBuilder spotMarketsModelBuilder;
+		// protected SpotMarketsModelFinder spotMarketsModelFinder;
+		// protected PricingModelBuilder pricingModelBuilder;
+		// protected BaseLegalEntity entity;
+		// private IScenarioDataProvider scenarioDataProvider;
+		//
+		// @NonNull
+		// public IScenarioDataProvider importReferenceData() throws MalformedURLException {
+		// return importReferenceData("/referencedata/reference-data-1/");
+		// }
+		//
+		// @NonNull
+		// public IScenarioDataProvider importReferenceData(final String url) throws MalformedURLException {
+		//
+		// final @NonNull String urlRoot = AbstractMicroTestCase.class.getResource(url).toString();
+		// final CSVImporter importer = new CSVImporter();
+		// importer.importPortData(urlRoot);
+		// importer.importCostData(urlRoot);
+		// importer.importEntityData(urlRoot);
+		// importer.importFleetData(urlRoot);
+		// importer.importMarketData(urlRoot);
+		// importer.importPromptData(urlRoot);
+		// importer.importMarketData(urlRoot);
+		//
+		// return importer.doImport();
+		// }
+		//
+		// @BeforeEach
+		// public void constructor() throws MalformedURLException {
+		//
+		// scenarioDataProvider = importReferenceData();
+		// lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
+		//
+		// scenarioModelFinder = new ScenarioModelFinder(scenarioDataProvider);
+		// scenarioModelBuilder = new ScenarioModelBuilder(scenarioDataProvider);
+		//
+		// commercialModelFinder = scenarioModelFinder.getCommercialModelFinder();
+		// fleetModelFinder = scenarioModelFinder.getFleetModelFinder();
+		// portFinder = scenarioModelFinder.getPortModelFinder();
+		// spotMarketsModelFinder = scenarioModelFinder.getSpotMarketsModelFinder();
+		//
+		// pricingModelBuilder = scenarioModelBuilder.getPricingModelBuilder();
+		// commercialModelBuilder = scenarioModelBuilder.getCommercialModelBuilder();
+		// cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
+		// fleetModelBuilder = scenarioModelBuilder.getFleetModelBuilder();
+		// spotMarketsModelBuilder = scenarioModelBuilder.getSpotMarketsModelBuilder();
+		//
+		// entity = importDefaultEntity();
+		//
+		// }
+		//
+		// protected BaseLegalEntity importDefaultEntity() {
+		// return commercialModelFinder.findEntity("Shipping");
+		// }
 
-		protected LNGScenarioModel lngScenarioModel;
-		protected ScenarioModelFinder scenarioModelFinder;
-		protected ScenarioModelBuilder scenarioModelBuilder;
-		protected CommercialModelFinder commercialModelFinder;
-		protected FleetModelFinder fleetModelFinder;
-		protected PortModelFinder portFinder;
-		protected CargoModelBuilder cargoModelBuilder;
-		protected CommercialModelBuilder commercialModelBuilder;
-		protected FleetModelBuilder fleetModelBuilder;
-		protected SpotMarketsModelBuilder spotMarketsModelBuilder;
-		protected SpotMarketsModelFinder spotMarketsModelFinder;
-		protected PricingModelBuilder pricingModelBuilder;
-		protected BaseLegalEntity entity;
-		private IScenarioDataProvider scenarioDataProvider;
-
-		@NonNull
-		public IScenarioDataProvider importReferenceData() throws MalformedURLException {
-			return importReferenceData("/referencedata/reference-data-1/");
-		}
-
-		@NonNull
-		public IScenarioDataProvider importReferenceData(final String url) throws MalformedURLException {
-
-			final @NonNull String urlRoot = AbstractMicroTestCase.class.getResource(url).toString();
-			final CSVImporter importer = new CSVImporter();
-			importer.importPortData(urlRoot);
-			importer.importCostData(urlRoot);
-			importer.importEntityData(urlRoot);
-			importer.importFleetData(urlRoot);
-			importer.importMarketData(urlRoot);
-			importer.importPromptData(urlRoot);
-			importer.importMarketData(urlRoot);
-
-			return importer.doImport();
-		}
-
-		@BeforeEach
-		public void constructor() throws MalformedURLException {
-
-			scenarioDataProvider = importReferenceData();
-			lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-
-			scenarioModelFinder = new ScenarioModelFinder(scenarioDataProvider);
-			scenarioModelBuilder = new ScenarioModelBuilder(scenarioDataProvider);
-
-			commercialModelFinder = scenarioModelFinder.getCommercialModelFinder();
-			fleetModelFinder = scenarioModelFinder.getFleetModelFinder();
-			portFinder = scenarioModelFinder.getPortModelFinder();
-			spotMarketsModelFinder = scenarioModelFinder.getSpotMarketsModelFinder();
-
-			pricingModelBuilder = scenarioModelBuilder.getPricingModelBuilder();
-			commercialModelBuilder = scenarioModelBuilder.getCommercialModelBuilder();
-			cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
-			fleetModelBuilder = scenarioModelBuilder.getFleetModelBuilder();
-			spotMarketsModelBuilder = scenarioModelBuilder.getSpotMarketsModelBuilder();
-
-			entity = importDefaultEntity();
-
-		}
-
-		protected BaseLegalEntity importDefaultEntity() {
-			return commercialModelFinder.findEntity("Shipping");
-		}
-
-		@AfterEach
-		public void destructor() {
-			lngScenarioModel = null;
-			scenarioModelFinder = null;
-			scenarioModelBuilder = null;
-			commercialModelFinder = null;
-			fleetModelFinder = null;
-			portFinder = null;
-			commercialModelBuilder = null;
-			cargoModelBuilder = null;
-			fleetModelBuilder = null;
-			spotMarketsModelBuilder = null;
-			pricingModelBuilder = null;
-			entity = null;
-		}
+		// @AfterEach
+		// public void destructor() {
+		// lngScenarioModel = null;
+		// scenarioModelFinder = null;
+		// scenarioModelBuilder = null;
+		// commercialModelFinder = null;
+		// fleetModelFinder = null;
+		// portFinder = null;
+		// commercialModelBuilder = null;
+		// cargoModelBuilder = null;
+		// fleetModelBuilder = null;
+		// spotMarketsModelBuilder = null;
+		// pricingModelBuilder = null;
+		// entity = null;
+		// }
 
 		void buildIt(final Consumer<ScenarioMaker> r) {
 			r.accept(this);

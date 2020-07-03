@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.scenario.service.model.provider;
@@ -207,10 +207,10 @@ public class ScenarioServiceItemProvider extends ContainerItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		ScenarioService scenarioService = (ScenarioService)object;
+		ScenarioService scenarioService = (ScenarioService) object;
 		String label = scenarioService.getName();
 		String fullLabel = label == null ? "(untitled)" : label;
-		if (scenarioService.isLocked())  {
+		if (scenarioService.isLocked()) {
 			fullLabel += " (locked by " + scenarioService.getLockedBy() + ")";
 		}
 		return fullLabel;

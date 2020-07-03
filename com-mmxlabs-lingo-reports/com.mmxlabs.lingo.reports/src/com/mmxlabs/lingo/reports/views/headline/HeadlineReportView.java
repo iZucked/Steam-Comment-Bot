@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.headline;
@@ -42,6 +42,7 @@ import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.lingo.reports.views.IProvideEditorInputScenario;
 import com.mmxlabs.lingo.reports.views.headline.HeadlineReportTransformer.RowData;
 import com.mmxlabs.lingo.reports.views.standard.KPIReportTransformer;
+import com.mmxlabs.models.lng.analytics.SolutionOption;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -51,6 +52,7 @@ import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
+import com.mmxlabs.rcp.common.actions.CopyGridToJSONUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
@@ -203,6 +205,10 @@ public class HeadlineReportView extends ViewPart {
 					}
 
 					for (final ScenarioResult other : others) {
+						boolean showingOptiResult = false;
+						if (other != null && other.getResultRoot() != null && other.getResultRoot().eContainer() instanceof SolutionOption) {
+							showingOptiResult = true;
+						}
 						final ScheduleModel other_scheduleModel = other.getTypedResult(ScheduleModel.class);
 						if (other_scheduleModel != null) {
 							final Schedule schedule = other_scheduleModel.getSchedule();
@@ -217,6 +223,9 @@ public class HeadlineReportView extends ViewPart {
 									}
 								}
 							}
+						}
+						if (showingOptiResult) {
+							break;
 						}
 					}
 
@@ -717,15 +726,19 @@ public class HeadlineReportView extends ViewPart {
 
 		if (IReportContents.class.isAssignableFrom(adapter)) {
 
-			final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
-			final String contents = util.convert();
-			return (T) new IReportContents() {
+			if (IReportContents.class.isAssignableFrom(adapter)) {
 
-				@Override
-				public String getHTMLContents() {
-					return contents;
-				}
-			};
+				final CopyGridToJSONUtil jsonUtil = new CopyGridToJSONUtil(viewer.getGrid(), true);
+				final String jsonContents = jsonUtil.convert();
+				return (T) new IReportContents() {
+
+					@Override
+					public String getJSONContents() {
+						return jsonContents;
+					}
+				};
+
+			}
 		}
 
 		return super.getAdapter(adapter);

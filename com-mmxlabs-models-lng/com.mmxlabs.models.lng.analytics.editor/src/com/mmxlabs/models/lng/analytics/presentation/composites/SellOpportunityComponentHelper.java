@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.presentation.composites;
@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.displaycomposites.VolumeModeEditorWrapper;
+import com.mmxlabs.models.lng.analytics.displaycomposites.WindowModeEditorWrapper;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
@@ -76,9 +77,12 @@ public class SellOpportunityComponentHelper extends BaseComponentHelper {
 		add_cancellationExpressionEditor(detailComposite, topClass);
 		add_miscCostsEditor(detailComposite, topClass);
 		add_volumeModeEditor(detailComposite, topClass);
-		add_volumeUnitsEditor(detailComposite, topClass);
 		add_minVolumeEditor(detailComposite, topClass);
 		add_maxVolumeEditor(detailComposite, topClass);
+		add_volumeUnitsEditor(detailComposite, topClass);
+		add_specifyWindowEditor(detailComposite, topClass);
+		add_windowSizeEditor(detailComposite, topClass);
+		add_windowSizeUnitsEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the fobSale feature on SellOpportunity
@@ -186,5 +190,32 @@ public class SellOpportunityComponentHelper extends BaseComponentHelper {
 	protected void add_maxVolumeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.SELL_OPPORTUNITY__MAX_VOLUME);
 		detailComposite.addInlineEditor(new VolumeModeEditorWrapper(editor));
+	}
+
+	/**
+	 * Create the editor for the specifyWindow feature on SellOpportunity
+	 *
+	 * @generated NOT
+	 */
+	protected void add_specifyWindowEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(new WindowModeEditorWrapper(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.SELL_OPPORTUNITY__SPECIFY_WINDOW)));
+	}
+
+	/**
+	 * Create the editor for the windowSize feature on SellOpportunity
+	 *
+	 * @generated
+	 */
+	protected void add_windowSizeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.SELL_OPPORTUNITY__WINDOW_SIZE));
+	}
+
+	/**
+	 * Create the editor for the windowSizeUnits feature on SellOpportunity
+	 *
+	 * @generated
+	 */
+	protected void add_windowSizeUnitsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.SELL_OPPORTUNITY__WINDOW_SIZE_UNITS));
 	}
 }

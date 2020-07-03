@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 /**
@@ -460,14 +460,11 @@ public class MainTableCompoment extends AbstractBreakEvenComponent {
 
 	public void setValid(final boolean valid) {
 		isValid = valid;
-		RunnerHelper.asyncExec(() -> {
-			if (!generateButton.isDisposed()) {
-
-				if (isValid) {
-					generateButton.setBackground(null);
-				} else {
-					generateButton.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_RED));
-				}
+		RunnerHelper.runAsyncIfControlValid(generateButton, btn -> {
+			if (isValid) {
+				btn.setBackground(null);
+			} else {
+				btn.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_RED));
 			}
 		});
 	}

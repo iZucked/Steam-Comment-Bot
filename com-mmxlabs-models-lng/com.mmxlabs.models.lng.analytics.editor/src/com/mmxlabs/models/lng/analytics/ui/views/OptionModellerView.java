@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.ui.views;
@@ -14,9 +14,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CommandStackListener;
@@ -26,12 +26,14 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.ui.action.RedoAction;
 import org.eclipse.emf.edit.ui.action.UndoAction;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -40,7 +42,6 @@ import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseTrackAdapter;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
@@ -64,9 +65,11 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import com.google.common.base.Objects;
 import com.google.common.collect.Sets;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.util.ToBooleanFunction;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
+import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.analytics.AbstractAnalysisModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
@@ -91,18 +94,22 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
+import com.mmxlabs.models.mmxcore.impl.SafeMMXContentAdapter;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.dialogs.DialogValidationSupport;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
+import com.mmxlabs.scenario.service.model.util.ScenarioServiceUtils;
+import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class OptionModellerView extends ScenarioInstanceView implements CommandStackListener {
 
@@ -129,7 +136,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 	private ICommandHandler commandHandler;
 
-	private Composite rhsComposite;
 	private ScrolledComposite lhsScrolledComposite;
 	private BuyOptionsComponent buyComponent;
 	private SellOptionsComponent sellComponent;
@@ -150,9 +156,10 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		mainComposite = new Composite(parent, SWT.NONE);
 		mainComposite.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
-		mainComposite.setLayoutData(GridDataFactory.swtDefaults()//
+		mainComposite.setLayoutData(GridDataFactory.fillDefaults()//
 				.grab(true, true)//
-				.align(SWT.CENTER, SWT.TOP).span(1, 1).create());
+				// .align(SWT.LEFT, SWT.TOP)
+				.span(1, 1).create());
 		mainComposite.setLayout(GridLayoutFactory.fillDefaults()//
 				.equalWidth(false) //
 				.numColumns(5) //
@@ -164,7 +171,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			lhsScrolledComposite.setLayoutData(GridDataFactory.swtDefaults()//
 					.grab(false, true)//
 					.span(3, 1) //
-					.align(SWT.FILL, SWT.FILL).create());
+					.align(SWT.LEFT, SWT.FILL).create());
 			lhsScrolledComposite.setLayout(new GridLayout());
 			lhsScrolledComposite.setExpandHorizontal(true);
 			lhsScrolledComposite.setExpandVertical(true);
@@ -176,7 +183,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			lhsComposite.setLayoutData(GridDataFactory.swtDefaults()//
 					.grab(false, true)//
 					.span(1, 1) //
-					.align(SWT.FILL, SWT.FILL).create());
+					.align(SWT.LEFT, SWT.FILL).create());
 			lhsComposite.setLayout(GridLayoutFactory.fillDefaults()//
 					.equalWidth(false) //
 					.numColumns(1) //
@@ -226,7 +233,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		{
 			centralScrolledComposite = new ScrolledComposite(mainComposite, SWT.H_SCROLL | SWT.V_SCROLL);
 			centralScrolledComposite.setLayoutData(GridDataFactory.swtDefaults()//
-					.grab(false, true)//
+					.grab(true, true)//
 					.align(SWT.FILL, SWT.FILL) //
 					.span(1, 1) //
 					.create());
@@ -268,25 +275,27 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				GridDataFactory.generate(c, 1, 1);
 				c.setLayout(new GridLayout(7, false));
 
-			
 				/*
 				 * toggle for portfolio mode
 				 */
 				final Composite portfolioModeToggle = createPortfolioToggleComposite(c);
 				GridDataFactory.generate(portfolioModeToggle, 1, 1);
 
-				final Composite optioniseModeToggle = createOptioniseToggleComposite(c);
-				GridDataFactory.generate(optioniseModeToggle, 1, 1);
+				final Composite sandboxModeSelector = createSandboxModeComposite(c);
+				GridDataFactory.generate(sandboxModeSelector, 1, 1);
 
-				
-				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_BREAK_EVENS)) {
-					beModeToggle = createUseTargetPNLToggleComposite(c);
-					GridDataFactory.generate(beModeToggle, 1, 1);
-				}
-				
 				final Composite generateButton = createRunButton(c);
 				GridDataFactory.generate(generateButton, 1, 1);
 
+				final Composite displayButton = createDisplayButton(c);
+				GridDataFactory.generate(displayButton, 1, 1);
+
+				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_SANDBOX)) {
+					beModeToggle = createUseTargetPNLToggleComposite(c);
+					GridDataFactory.generate(beModeToggle, 1, 1);
+				}
+				final Composite deleteButton = createDeleteResultButton(c);
+				GridDataFactory.generate(deleteButton, 1, 1);
 			}
 
 			{
@@ -336,13 +345,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			}
 		}
 	}
-	//
-	// @Override
-	// protected void doDisplayScenarioInstance(@Nullable final ScenarioInstance scenarioInstance, @Nullable final MMXRootObject rootObject) {
-	// doDisplayScenarioInstance(scenarioInstance, rootObject, null);
-
-	// updateActions(getEditingDomain());
-	// }
 
 	public synchronized void openSandboxScenario(@Nullable final SandboxScenario sandboxScenario) {
 		displayScenarioInstance(sandboxScenario.getScenarioInstance(), sandboxScenario.getRootObject(), sandboxScenario.getSandboxModel());
@@ -443,7 +445,10 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			if (notification.isTouch()) {
 				return;
 			}
-			if (notification.getFeature() == AnalyticsPackage.eINSTANCE.getAnalyticsModel_OptionModels()) {
+			// Sneak a rename detector
+			if (notification.getFeature() == MMXCorePackage.Literals.NAMED_OBJECT__NAME) {
+				refreshSections(true, EnumSet.allOf(SectionType.class));
+			} else if (notification.getFeature() == AnalyticsPackage.eINSTANCE.getAnalyticsModel_OptionModels()) {
 				if (notification.getEventType() == Notification.REMOVE) {
 					if (currentModel != null && notification.getOldValue() == currentModel) {
 						displayScenarioInstance(getScenarioInstance(), getRootObject(), null);
@@ -453,7 +458,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		}
 	};
 
-	private final @NonNull MMXContentAdapter refreshAdapter = new MMXContentAdapter() {
+	private final @NonNull SafeMMXContentAdapter refreshAdapter = new SafeMMXContentAdapter() {
 
 		@Override
 		public void reallyNotifyChanged(final Notification notification) {
@@ -470,9 +475,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			}
 		}
 
-		/**
-		 * @since 2.2
-		 */
 		@Override
 		protected synchronized void missedNotifications(final List<Notification> missed) {
 			doValidate();
@@ -494,7 +496,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			}
 		}
 
-		//
 		private @Nullable Pair<Boolean, EnumSet<SectionType>> processNotification(final Notification notification) {
 			if (notification.getEventType() == Notification.REMOVING_ADAPTER) {
 				return null;
@@ -586,10 +587,12 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 		inputWants.forEach(want -> want.accept(model));
 
-		if (model != null && model.getResults() != null) {
-			final AnalyticsSolution data = new AnalyticsSolution(getScenarioInstance(), model.getResults(), model.getName());
-			data.open();
-		}
+		// Disable auto-open results. use the display button!
+		// if (model != null && model.getResults() != null) {
+		// final AnalyticsSolution data = new AnalyticsSolution(getScenarioInstance(),
+		// model.getResults(), model.getName());
+		// data.open();
+		// }
 
 		if (currentModel != null) {
 			optionsModelComponent.setInput(Collections.singleton(currentModel));
@@ -615,17 +618,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 		refreshSections(true, EnumSet.allOf(SectionType.class));
 
-	}
-
-	private OptionAnalysisModel getRootOptionsModel(@Nullable final OptionAnalysisModel optionModel) {
-		OptionAnalysisModel optionAnalysisModel = optionModel;
-		while (optionAnalysisModel != null && optionAnalysisModel.eContainer() != null && optionAnalysisModel.eContainer() instanceof OptionAnalysisModel) {
-			optionAnalysisModel = (OptionAnalysisModel) optionAnalysisModel.eContainer();
-		}
-		if (optionAnalysisModel != null && optionAnalysisModel.getName() == null) {
-			optionAnalysisModel.setName("root");
-		}
-		return optionAnalysisModel;
 	}
 
 	@Override
@@ -663,13 +655,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 					centralScrolledComposite.setMinSize(centralComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 				}
 			}
-
-			packAll(rhsComposite);
 		});
-	}
-
-	public void repackResults() {
-		packAll(rhsComposite);
 	}
 
 	public void packAll(final Control c) {
@@ -681,7 +667,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			}
 			((Composite) c).layout(true);
 		}
-		// c.layout (true);
 	}
 
 	private void doValidate() {
@@ -692,7 +677,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			validationErrors.clear();
 			validationSupport.processStatus(status, validationErrors);
 
-			final Function<EObject, Boolean> checker = o -> {
+			final ToBooleanFunction<EObject> checker = o -> {
 				if (o == null) {
 					return true;
 				}
@@ -705,63 +690,36 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				return true;
 			};
 			if (currentModel != null) {
-				// {
-				// boolean baseCaseValid = true;
-				// final BaseCase baseCase = model.getBaseCase();
-				// if (!checker.apply(baseCase)) {
-				// baseCaseValid = false;
-				// } else {
-				// for (final BaseCaseRow row : baseCase.getBaseCase()) {
-				// if (!checker.apply(row)) {
-				// baseCaseValid = false;
-				// } else {
-				// baseCaseValid &= checker.apply(row.getBuyOption());
-				// baseCaseValid &= checker.apply(row.getSellOption());
-				// baseCaseValid &= checker.apply(row.getShipping());
-				// }
-				// if (!baseCaseValid) {
-				// break;
-				// }
-				// }
-				// }
-				// baseCaseComponent.setBaseCaseValid(baseCaseValid);
-				// }
-				{
-					boolean l_partialCaseValid = true;
-					final PartialCase partialCase = currentModel.getPartialCase();
-					if (!checker.apply(partialCase)) {
-						l_partialCaseValid = false;
-					} else {
-						for (final PartialCaseRow row : partialCase.getPartialCase()) {
-							if (!checker.apply(row)) {
-								l_partialCaseValid = false;
-							} else {
-								for (final BuyOption b : row.getBuyOptions()) {
-									l_partialCaseValid &= checker.apply(b);
-								}
-
-								for (final SellOption s : row.getSellOptions()) {
-									l_partialCaseValid &= checker.apply(s);
-								}
-
-								for (final ShippingOption s : row.getShipping()) {
-									l_partialCaseValid &= checker.apply(s);
-								}
+				boolean l_partialCaseValid = true;
+				final PartialCase partialCase = currentModel.getPartialCase();
+				if (!checker.accept(partialCase)) {
+					l_partialCaseValid = false;
+				} else {
+					for (final PartialCaseRow row : partialCase.getPartialCase()) {
+						if (!checker.accept(row)) {
+							l_partialCaseValid = false;
+						} else {
+							for (final BuyOption b : row.getBuyOptions()) {
+								l_partialCaseValid &= checker.accept(b);
 							}
-							if (!l_partialCaseValid) {
-								break;
+
+							for (final SellOption s : row.getSellOptions()) {
+								l_partialCaseValid &= checker.accept(s);
+							}
+
+							for (final ShippingOption s : row.getShipping()) {
+								l_partialCaseValid &= checker.accept(s);
 							}
 						}
+						if (!l_partialCaseValid) {
+							break;
+						}
 					}
-					this.partialCaseValid = l_partialCaseValid;
-					// partialCaseComponent.setPartialCaseValid(partialCaseValid);
 				}
+				this.partialCaseValid = l_partialCaseValid;
 			}
-
 		} finally {
-
 			popExtraValidationContext();
-
 		}
 	}
 
@@ -783,8 +741,12 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			currentCommandStack = editingDomain.getCommandStack();
 			currentCommandStack.addCommandStackListener(this);
 
-			undoAction.update();
-			redoAction.update();
+			if (undoAction != null) {
+				undoAction.update();
+			}
+			if (redoAction != null) {
+				redoAction.update();
+			}
 		}
 	}
 
@@ -846,11 +808,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	public OptionAnalysisModel getModel() {
 		return currentModel;
 	}
-	//
-	// public void setModel(final OptionAnalysisModel model) {
-	// this.targetObject = model;
-	// this.currentModel = model;
-	// }
 
 	@Override
 	public synchronized ICommandHandler getDefaultCommandHandler() {
@@ -897,20 +854,11 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		return commandHandler;
 
 	}
-	//
-	// public WeakReference<OptionAnalysisModel> getCurrentRoot() {
-	// return currentRoot;
-	// }
-
-	// public void setCurrentRoot(final WeakReference<OptionAnalysisModel> currentRoot) {
-	// this.currentRoot = currentRoot;
-	// }
 
 	private Composite createRunButton(final Composite parent) {
 		//
 		final ImageDescriptor generateDesc = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "icons/sandbox_generate.gif");
 		Image imageGenerate = generateDesc.createImage();
-		Image imageGreyGenerate = ImageDescriptor.createWithFlags(generateDesc, SWT.IMAGE_GRAY).createImage();
 
 		final Composite generateComposite = new Composite(parent, SWT.NONE);
 		GridDataFactory.generate(generateComposite, 2, 1);
@@ -918,8 +866,8 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		generateComposite.setLayout(new GridLayout(1, true));
 
 		Label generateButton = new Label(generateComposite, SWT.NONE);
-		generateButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).grab(true, false).create());
-		generateButton.setImage(imageGreyGenerate);
+		generateButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).grab(false, false).create());
+		generateButton.setImage(imageGenerate);
 		generateButton.addMouseListener(new MouseAdapter() {
 
 			@Override
@@ -927,6 +875,17 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				if (isLocked()) {
 					return;
 				}
+
+				{
+					ADPModel adpModel = ScenarioModelUtil.getADPModel(getScenarioDataProvider());
+					if (adpModel != null) {
+						MessageDialog.openError(getShell(), "Unable to evaluate", "Sandbox scenarios cannot be used with ADP scenarios");
+						// Cannot use sandbox with ADP
+						return;
+					}
+
+				}
+
 				final OptionAnalysisModel m = currentModel;
 				if (m != null) {
 					int mode = m.getMode();
@@ -953,16 +912,53 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				}
 			}
 		});
-		generateButton.addMouseTrackListener(new MouseTrackAdapter() {
 
-			@Override
-			public void mouseExit(final MouseEvent e) {
-				generateButton.setImage(imageGreyGenerate);
+		//
+		generateButton.addDisposeListener(e -> {
+			if (imageGenerate != null) {
+				imageGenerate.dispose();
 			}
+		});
+
+		lockedListeners.add(locked -> RunnerHelper.runAsyncIfControlValid(generateButton, btn -> btn.setEnabled(currentModel != null && !locked)));
+
+		inputWants.add(m -> generateButton.setEnabled(m != null && !isLocked()));
+
+		return generateComposite;
+	}
+
+	private Composite createDisplayButton(final Composite parent) {
+		//
+		final ImageDescriptor generateDesc = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "icons/console_view.gif");
+		Image imageGenerate = generateDesc.createImage();
+
+		final Composite generateComposite = new Composite(parent, SWT.NONE);
+		GridDataFactory.generate(generateComposite, 2, 1);
+
+		generateComposite.setLayout(new GridLayout(1, true));
+
+		Label generateButton = new Label(generateComposite, SWT.NONE);
+		generateButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).grab(false, false).create());
+		generateButton.setImage(imageGenerate);
+
+		generateButton.setToolTipText("Display results");
+
+		generateButton.addMouseListener(new MouseAdapter() {
 
 			@Override
-			public void mouseEnter(final MouseEvent e) {
-				generateButton.setImage(imageGenerate);
+			public void mouseDown(final MouseEvent e) {
+				if (isLocked()) {
+					return;
+				}
+				final OptionAnalysisModel m = currentModel;
+				if (m != null) {
+					BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(), () -> {
+						if (m != null && m.getResults() != null) {
+							final AnalyticsSolution data = new AnalyticsSolution(getScenarioInstance(), m.getResults(), m.getName());
+							data.open();
+						}
+					});
+				}
 			}
 		});
 
@@ -971,20 +967,65 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			if (imageGenerate != null) {
 				imageGenerate.dispose();
 			}
-
-			if (imageGreyGenerate != null) {
-				imageGreyGenerate.dispose();
-			}
 		});
 
-		lockedListeners.add(locked -> RunnerHelper.asyncExec(() -> generateButton.setEnabled(currentModel != null && !locked)));
+		lockedListeners.add(locked -> RunnerHelper.runAsyncIfControlValid(generateButton, btn -> btn.setEnabled(currentModel != null && !locked)));
 
 		inputWants.add(m -> generateButton.setEnabled(m != null && !isLocked()));
 
 		return generateComposite;
 	}
 
-	private Composite createOptioniseToggleComposite(final Composite composite) {
+	private Composite createDeleteResultButton(final Composite parent) {
+		//
+		Image imageGenerate = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE);
+
+		final Composite generateComposite = new Composite(parent, SWT.NONE);
+		GridDataFactory.generate(generateComposite, 1, 1);
+
+		generateComposite.setLayout(new GridLayout(1, true));
+
+		Label generateButton = new Label(generateComposite, SWT.NONE);
+		generateButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.RIGHT, SWT.CENTER).grab(false, false).create());
+		generateButton.setImage(imageGenerate);
+
+		generateButton.setToolTipText("Delete current results");
+
+		generateButton.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseDown(final MouseEvent e) {
+				if (isLocked()) {
+					return;
+				}
+				final OptionAnalysisModel m = currentModel;
+				if (m != null) {
+					BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(), () -> {
+						if (m != null && m.getResults() != null) {
+
+							ScenarioResult sr = new ScenarioResult(getScenarioInstance());
+							ServiceHelper.withServiceConsumer(IScenarioServiceSelectionProvider.class, sp -> sp.deselect(sr, false));
+
+							final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
+							eventBroker.post(ScenarioServiceUtils.EVENT_CLOSING_ANALYTICS_SOLUTION, new AnalyticsSolution(getScenarioInstance(), m.getResults(), "dummy-title"));
+
+							final CompoundCommand cmd = new CompoundCommand("Delete sandbox results");
+							cmd.append(DeleteCommand.create(getEditingDomain(), m.getResults()));
+							getEditingDomain().getCommandStack().execute(cmd);
+						}
+					});
+				}
+			}
+		});
+
+		lockedListeners.add(locked -> RunnerHelper.runAsyncIfControlValid(generateButton, btn -> btn.setEnabled(currentModel != null && !locked)));
+
+		inputWants.add(m -> generateButton.setEnabled(m != null && !isLocked()));
+
+		return generateComposite;
+	}
+
+	private Composite createSandboxModeComposite(final Composite composite) {
 		final Composite matching = new Composite(composite, SWT.ALL);
 		final GridLayout gridLayoutRadiosMatching = new GridLayout(3, false);
 		matching.setLayout(gridLayoutRadiosMatching);
@@ -994,7 +1035,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		new Label(matching, SWT.NONE).setText("Mode:");
 		Combo combo = new Combo(matching, SWT.DROP_DOWN);
 		// final Button matchingButton = new Button(matching, SWT.CHECK | SWT.LEFT);
-		combo.setItems("Sandbox", "Optimise", "Optionise");
+		combo.setItems("Define", "Optimise", "Optionise");
 
 		combo.select(0);
 		combo.addSelectionListener(new SelectionAdapter() {
@@ -1007,7 +1048,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				final OptionAnalysisModel m = currentModel;
 				if (m != null) {
 					int mode = combo.getSelectionIndex();
-					// boolean selection = matchingButton.getSelection();
 					partialCaseComponent.setVisible(mode == 0);
 					if (beModeToggle != null) {
 						beModeToggle.setVisible(mode != 1);
@@ -1019,7 +1059,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			}
 		});
 
-		lockedListeners.add(locked -> RunnerHelper.asyncExec(() -> combo.setEnabled(!locked)));
+		lockedListeners.add(locked -> RunnerHelper.runAsyncIfControlValid(combo, c -> c.setEnabled(!locked)));
 
 		inputWants.add(m -> matching.setEnabled(m != null));
 
@@ -1029,7 +1069,13 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		inputWants.add(am -> {
 			if (am instanceof OptionAnalysisModel) {
 				OptionAnalysisModel optionAnalysisModel = (OptionAnalysisModel) am;
-				combo.select(optionAnalysisModel.getMode());
+				int mode = optionAnalysisModel.getMode();
+				combo.select(mode);
+				partialCaseComponent.setVisible(mode == 0);
+				if (beModeToggle != null) {
+					beModeToggle.setVisible(mode != 1);
+				}
+				refreshSections(true, EnumSet.of(SectionType.MIDDLE));
 			}
 		});
 
@@ -1065,7 +1111,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				}
 			}
 		});
-		lockedListeners.add(locked -> RunnerHelper.asyncExec(() -> matchingButton.setEnabled(!locked)));
+		lockedListeners.add(locked -> RunnerHelper.runAsyncIfControlValid(matchingButton, btn -> btn.setEnabled(!locked)));
 		inputWants.add(m -> matching.setEnabled(m != null));
 
 		inputWants.add(am -> {
@@ -1086,7 +1132,8 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		matching.setLayoutData(gdM);
 		Label l = new Label(matching, SWT.NONE);
 		l.setText("Starting point P&&L B/E");
-		l.setToolTipText("When checked use the portfolio P&&L from the starting point scenario to calculate the B/E prices. Otherwise a point-to-point B/E is calculated. Does not apply when optimising.");
+		l.setToolTipText(
+				"When checked use the portfolio P&&L from the starting point scenario to calculate the B/E prices. Otherwise a point-to-point B/E is calculated. Does not apply when optimising.");
 		final Button matchingButton = new Button(matching, SWT.CHECK | SWT.LEFT);
 		matchingButton.setSelection(false);
 		matchingButton.addSelectionListener(new SelectionAdapter() {
@@ -1105,7 +1152,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 		});
 
-		lockedListeners.add(locked -> RunnerHelper.asyncExec(() -> matchingButton.setEnabled(!locked)));
+		lockedListeners.add(locked -> RunnerHelper.runAsyncIfControlValid(matchingButton, btn -> btn.setEnabled(!locked)));
 		inputWants.add(m -> matching.setEnabled(m != null));
 
 		// FIXME: This control does not respond to e.g. Undo() calls.

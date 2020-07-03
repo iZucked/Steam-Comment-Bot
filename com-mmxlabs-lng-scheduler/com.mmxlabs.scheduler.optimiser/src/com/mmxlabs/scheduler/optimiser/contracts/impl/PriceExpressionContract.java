@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.contracts.impl;
@@ -23,8 +23,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
  */
 public class PriceExpressionContract extends SimpleContract implements IPriceIntervalProvider {
 
-	private final @NonNull ICurve expressionCurve;
-	private final @NonNull IIntegerIntervalCurve priceChangeIntervalsInHours;
+	protected final @NonNull ICurve expressionCurve;
+	protected final @NonNull IIntegerIntervalCurve priceChangeIntervalsInHours;
 
 	@Inject
 	private PriceIntervalProviderHelper priceIntervalProviderUtil;
@@ -61,5 +61,4 @@ public class PriceExpressionContract extends SimpleContract implements IPriceInt
 			return null;
 		}
 	}
-
 }

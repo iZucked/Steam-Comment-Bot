@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.standard;
@@ -23,6 +23,7 @@ import org.eclipse.jface.viewers.IFontProvider;
 import org.eclipse.jface.viewers.ITableColorProvider;
 import org.eclipse.jface.viewers.ITableFontProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.viewers.ViewerComparator;
@@ -123,6 +124,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 							}
 						}
 					}
+					final Object[] expanded = viewer.getExpandedElements();
 					final List<T> rowElements = transformer.createData(pinnedPair, otherPairs);
 
 					columnManagers.addAll(transformer.getColumnManagers(selectedDataProvider));
@@ -136,6 +138,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 					ViewerHelper.setInput(viewer, true, rowElements);
 
 					if (!rowElements.isEmpty()) {
+						applyExpansionOnNewElements(expanded, rowElements);
 						if (packColumnsAction != null) {
 							packColumnsAction.run();
 						}
@@ -145,6 +148,15 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 			ViewerHelper.runIfViewerValid(viewer, block, r);
 		}
 	};
+	
+	/**
+	 * Allows to use array of previously expanded elements to expand the newly generated row elements
+	 * @param expanded
+	 * @param rowElements
+	 */
+	protected void applyExpansionOnNewElements(final Object[] expanded, final List<?> rowElements) {
+		
+	}
 
 	public class ViewLabelProvider extends CellLabelProvider implements ITableLabelProvider, ITableFontProvider, ITableColorProvider {
 

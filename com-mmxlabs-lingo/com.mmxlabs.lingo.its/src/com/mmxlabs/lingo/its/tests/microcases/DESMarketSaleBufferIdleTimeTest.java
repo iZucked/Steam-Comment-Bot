@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases;
@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
@@ -25,18 +26,18 @@ public class DESMarketSaleBufferIdleTimeTest extends AbstractIdleTimeTests {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testDESSaleMarketDaysBufferIdleTimeIncrease() {
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final CharterInMarket charterInMarket1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
-		final DESSalesMarket desSalesMarket = spotMarketsModelBuilder.makeDESSaleMarket("D1DESSaleMarket", portFinder.findPort("Dominion Cove Point LNG"), entity, "7")
+		final DESSalesMarket desSalesMarket = spotMarketsModelBuilder.makeDESSaleMarket("D1DESSaleMarket", portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), entity, "7")
 				.withDaysBuffer(100).build();
 		
 		cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.build() //
-				//Replace DES Sale //("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //with:
-				.makeMarketDESSale("D1", desSalesMarket, YearMonth.of(2015, 12), portFinder.findPort("Dominion Cove Point LNG"))
+				//Replace DES Sale //("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //with:
+				.makeMarketDESSale("D1", desSalesMarket, YearMonth.of(2015, 12), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT))
 				.withWindowSize(2, TimePeriod.DAYS) //
 				.build() //
 				.withVesselAssignment(charterInMarket1, -1, 1) // -1 is nominal

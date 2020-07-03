@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.analytics.viability;
@@ -173,26 +173,26 @@ public class ViabilitySanboxUnit {
 
 				bind(LazyFollowersAndPrecedersProviderImpl.class).in(Singleton.class);
 				bind(IFollowersAndPreceders.class).to(LazyFollowersAndPrecedersProviderImpl.class);
-				
+
 				bind(IBreakEvenEvaluator.class).to(DefaultBreakEvenEvaluator.class);
 			}
 
 			private final Map<Thread, EvaluationHelper> threadCache_EvaluationHelper = new ConcurrentHashMap<>(100);
-			
+
 			@Provides
 			private EvaluationHelper provideEvaluationHelper(final Injector injector, @Named(LNGParameters_EvaluationSettingsModule.OPTIMISER_REEVALUATE) final boolean isReevaluating,
 					@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL) final ISequences initialRawSequences) {
-				
+
 				EvaluationHelper helper = threadCache_EvaluationHelper.get(Thread.currentThread());
 				if (helper == null) {
 					helper = new EvaluationHelper(isReevaluating);
 					injector.injectMembers(helper);
-					
+
 					final ISequencesManipulator manipulator = injector.getInstance(ISequencesManipulator.class);
 					helper.acceptSequences(initialRawSequences, manipulator.createManipulatedSequences(initialRawSequences));
-					
+
 					helper.setFlexibleCapacityViolationCount(Integer.MAX_VALUE);
-	
+
 					threadCache_EvaluationHelper.put(Thread.currentThread(), helper);
 				}
 				return helper;
@@ -236,17 +236,16 @@ public class ViabilitySanboxUnit {
 						row.getLhsResults().clear();
 
 						ShippingOption shipping = row.getShipping();
-						
+
 						final VesselAssignmentType vesselAssignment = shippingMap.get(shipping);
 						int vsi = -2;
-						
+
 						if (shipping instanceof ExistingCharterMarketOption) {
 							final ExistingCharterMarketOption ecmo = (ExistingCharterMarketOption) shipping;
 							vsi = ecmo.getSpotIndex();
 						}
-						
+
 						final int vesselSpotIndex = vsi;
-						
 
 						final LoadSlot load;
 
@@ -265,17 +264,23 @@ public class ViabilitySanboxUnit {
 							// if (row.getSellOption() != null) {
 							// if (market instanceof DESPurchaseMarket) {
 							// shipped = false;
-							// load = mapper.getPurchaseMarketBreakEven(market, YearMonth.from(discharge.getWindowStart()));
-							// reference_slot = mapper.getPurchaseMarketOriginal(market, YearMonth.from(discharge.getWindowStart()));
+							// load = mapper.getPurchaseMarketBreakEven(market,
+							// YearMonth.from(discharge.getWindowStart()));
+							// reference_slot = mapper.getPurchaseMarketOriginal(market,
+							// YearMonth.from(discharge.getWindowStart()));
 							// } else if (market instanceof FOBPurchasesMarket) {
 							// if (discharge.isFOBSale()) {
 							// shipped = false;
-							// load = mapper.getPurchaseMarketBreakEven(market, YearMonth.from(discharge.getWindowStart()));
-							// reference_slot = mapper.getPurchaseMarketOriginal(market, YearMonth.from(discharge.getWindowStart()));
+							// load = mapper.getPurchaseMarketBreakEven(market,
+							// YearMonth.from(discharge.getWindowStart()));
+							// reference_slot = mapper.getPurchaseMarketOriginal(market,
+							// YearMonth.from(discharge.getWindowStart()));
 							// } else {
 							// shipped = true;
-							// load = mapper.getPurchaseMarketBreakEven(market, YearMonth.from(discharge.getWindowStart().minusMonths(1)));
-							// reference_slot = mapper.getPurchaseMarketOriginal(market, YearMonth.from(discharge.getWindowStart().minusMonths(1)));
+							// load = mapper.getPurchaseMarketBreakEven(market,
+							// YearMonth.from(discharge.getWindowStart().minusMonths(1)));
+							// reference_slot = mapper.getPurchaseMarketOriginal(market,
+							// YearMonth.from(discharge.getWindowStart().minusMonths(1)));
 							// }
 							// } else {
 							// continue;
@@ -360,9 +365,11 @@ public class ViabilitySanboxUnit {
 										viabilityResult.setLatestPrice(OptimiserUnitConvertor.convertToExternalPrice(ret.latestPrice));
 										// final Pair<Integer, Integer> referencePrice;
 										// if (pReference_slot instanceof DischargeSlot) {
-										// referencePrice = doIt(pShipped, vesselAssignment, pLoad, (DischargeSlot) pReference_slot, pReference_slot, dataTransformer.getInitialSequences());
+										// referencePrice = doIt(pShipped, vesselAssignment, pLoad, (DischargeSlot)
+										// pReference_slot, pReference_slot, dataTransformer.getInitialSequences());
 										// } else {
-										// referencePrice = doIt(pShipped, vesselAssignment, (LoadSlot) pReference_slot, pDischarge, pReference_slot, dataTransformer.getInitialSequences());
+										// referencePrice = doIt(pShipped, vesselAssignment, (LoadSlot) pReference_slot,
+										// pDischarge, pReference_slot, dataTransformer.getInitialSequences());
 										// }
 										// if (referencePrice != null) {
 										// result.setReferencePrice(OptimiserUnitConvertor.convertToExternalPrice(referencePrice.getFirst()));
@@ -436,7 +443,7 @@ public class ViabilitySanboxUnit {
 			final ViabilitySandboxEvaluator evaluator = injector.getInstance(ViabilitySandboxEvaluator.class);
 			final IPortSlot portSlot = dataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(target, IPortSlot.class);
 			final InternalResult res = new InternalResult();
-			res.merge(evaluator.evaluate(solution, portSlot));
+			res.merge(evaluator.evaluate(resource, solution, portSlot));
 			return res;
 		} else {
 			if (vesselAssignment instanceof VesselAvailability) {
@@ -458,7 +465,7 @@ public class ViabilitySanboxUnit {
 			final InsertCargoSequencesGenerator generator = injector.getInstance(InsertCargoSequencesGenerator.class);
 
 			generator.generateOptions(initialSequences, cargoSegment, resource, trimmer, portSlot, (solution) -> {
-				final SingleResult result = evaluator.evaluate(solution, portSlot);
+				final SingleResult result = evaluator.evaluate(resource, solution, portSlot);
 				ret.merge(result);
 				return result != null;
 			});

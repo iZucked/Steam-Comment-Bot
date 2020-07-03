@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.util;
@@ -13,6 +13,7 @@ import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
 import com.mmxlabs.models.lng.pricing.BunkerFuelCurve;
 import com.mmxlabs.models.lng.pricing.CharterCurve;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
+import com.mmxlabs.models.lng.pricing.CurrencyCurve;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.YearMonthPoint;
@@ -85,7 +86,30 @@ public class PricingModelBuilder {
 			pricingModel.getCommodityCurves().add(idx);
 		});
 	}
-	
+
+	public CommodityCurve createCommodityExpressionCurve(String name, String currencyUnit, String volumeUnit, String expression) {
+		final CommodityCurve curve = PricingFactory.eINSTANCE.createCommodityCurve();
+		curve.setName(name);
+		curve.setCurrencyUnit(currencyUnit);
+		curve.setVolumeUnit(volumeUnit);
+		curve.setExpression(expression);
+
+		pricingModel.getCommodityCurves().add(curve);
+
+		return curve;
+	}
+
+	public DataCurveBuilder<CurrencyCurve> makeCurrencyDataCurve(String name, String currencyUnit, String volumeUnit) {
+		final CurrencyCurve curve = PricingFactory.eINSTANCE.createCurrencyCurve();
+		curve.setName(name);
+		curve.setCurrencyUnit(currencyUnit);
+		curve.setVolumeUnit(volumeUnit);
+
+		return new DataCurveBuilder<CurrencyCurve>(curve, idx -> {
+			pricingModel.getCurrencyCurves().add(idx);
+		});
+	}
+
 	public DataCurveBuilder<CharterCurve> makeCharterDataCurve(String name, String currencyUnit, String volumeUnit) {
 		final CharterCurve curve = PricingFactory.eINSTANCE.createCharterCurve();
 		curve.setName(name);
@@ -94,6 +118,17 @@ public class PricingModelBuilder {
 
 		return new DataCurveBuilder<CharterCurve>(curve, idx -> {
 			pricingModel.getCharterCurves().add(idx);
+		});
+	}
+	
+	public DataCurveBuilder<BunkerFuelCurve> makeBunkerFuelDataCurve(String name, String currencyUnit, String volumeUnit) {
+		final BunkerFuelCurve curve = PricingFactory.eINSTANCE.createBunkerFuelCurve();
+		curve.setName(name);
+		curve.setCurrencyUnit(currencyUnit);
+		curve.setVolumeUnit(volumeUnit);
+		
+		return new DataCurveBuilder<BunkerFuelCurve>(curve, idx -> {
+			pricingModel.getBunkerFuelCurves().add(idx);
 		});
 	}
 

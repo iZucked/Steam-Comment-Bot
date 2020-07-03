@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.moves.util;
@@ -14,21 +14,20 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
-import javax.inject.Inject;
-
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintChecker;
 import com.mmxlabs.optimiser.common.dcproviders.ILockedElementsProvider;
-import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
@@ -53,9 +52,14 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
- * Class to check element to vessel resource restrictions. Note this replicates logic from various constraint checks included {@link ResourceAllocationConstraintChecker},
- * {@link FOBDESCompatibilityConstraintChecker}, {@link PromptRoundTripVesselPermissionConstraintChecker} and {@link VesselEventConstraintChecker}. Consider changes API's to allow re-use. E.g. This
- * class becomes used by a single constraint checker OR the constraint checkers offer up an API to check single elements.
+ * Class to check element to vessel resource restrictions. Note this replicates
+ * logic from various constraint checks included
+ * {@link ResourceAllocationConstraintChecker},
+ * {@link FOBDESCompatibilityConstraintChecker},
+ * {@link PromptRoundTripVesselPermissionConstraintChecker} and
+ * {@link VesselEventConstraintChecker}. Consider changes API's to allow re-use.
+ * E.g. This class becomes used by a single constraint checker OR the constraint
+ * checkers offer up an API to check single elements.
  * 
  * @author Simon Goodall
  *
@@ -67,7 +71,6 @@ public class MoveHelper implements IMoveHelper {
 	private IPhaseOptimisationData optimisationData;
 
 	@Inject
-	@NonNull
 	private IVesselProvider vesselProvider;
 
 	@Inject
@@ -80,41 +83,50 @@ public class MoveHelper implements IMoveHelper {
 	private IAllowedVesselProvider allowedVesselProvider;
 
 	@Inject
-	@NonNull
 	private IFOBDESCompatibilityProvider fobDesCompatibilityProvider;
 
 	@Inject
 	private IPromptPeriodProvider promptPeriodProvider;
 
 	@Inject
-	@NonNull
 	private IPortExclusionProvider portExclusionProvider;
 
 	@Inject
-	@NonNull
 	private IRoundTripVesselPermissionProvider roundTripVesselPermissionProvider;
 
 	@Inject
-	@NonNull
 	private IResourceAllocationConstraintDataComponentProvider resourceAllocationConstraintDataComponentProvider;
 
 	@Inject
-	@NonNull
 	private IPortSlotProvider portSlotProvider;
 
 	@Inject
-	@NonNull
 	private INominatedVesselProvider nominatedVesselProvider;
 
 	@Inject
-	@NonNull
 	private ILockedElementsProvider lockedElementsProvider;
 
 	public static final String LEGACY_CHECK_RESOURCE = "useLegacyCheck";
 
+	public static final String ALLOW_NOMINAL_REWIRE = "allow-nominal-rewire";
+
 	@Inject
 	@Named(LEGACY_CHECK_RESOURCE)
 	private boolean useLegacyCheck;
+
+////// Derived boolean (from result of @Inject - see next two @Inject statements)
+	private boolean allowNominalRewire = false;
+
+	@Inject(optional = true)
+	@Named(ALLOW_NOMINAL_REWIRE)
+	private boolean baseAllowNominalRewire = false;
+
+	@Inject
+	public void setAllowRoundTripChanges(@Named(SchedulerConstants.SCENARIO_TYPE_ADP) boolean isADPScenario) {
+		allowNominalRewire = baseAllowNominalRewire || isADPScenario;
+	}
+
+	//////
 
 	private final @NonNull List<@NonNull IResource> vesselResources = new LinkedList<>();
 	private final @NonNull List<@NonNull IResource> vesselResourcesIncludingRoundTrip = new LinkedList<>();
@@ -148,7 +160,7 @@ public class MoveHelper implements IMoveHelper {
 			}
 
 			if (vesselInstanceType == VesselInstanceType.ROUND_TRIP) {
-				if (!roundTripVesselPermissionProvider.isPermittedOnResource(element, resource)) {
+				if (!allowRoundTripChanges() && !roundTripVesselPermissionProvider.isPermittedOnResource(element, resource)) {
 					itr.remove();
 					continue;
 				}
@@ -170,7 +182,7 @@ public class MoveHelper implements IMoveHelper {
 					}
 				}
 			}
-			if (vesselInstanceType != VesselInstanceType.ROUND_TRIP) {
+			if (vesselInstanceType != VesselInstanceType.ROUND_TRIP || allowRoundTripChanges()) {
 				IVessel vessel = null;
 
 				if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.FLEET || vesselAvailability.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER) {
@@ -192,13 +204,10 @@ public class MoveHelper implements IMoveHelper {
 				if (vessel == null) {
 					vessel = vesselAvailability.getVessel();
 				}
-				Set<IPort> excludedPorts = portExclusionProvider.getExcludedPorts(vessel);
-
-				if (!excludedPorts.isEmpty()) {
-					if (excludedPorts.contains(portSlot.getPort())) {
-						itr.remove();
-						continue;
-					}
+				final Set<IPort> excludedPorts = portExclusionProvider.getExcludedPorts(vessel);
+				if (!excludedPorts.isEmpty() && excludedPorts.contains(portSlot.getPort())) {
+					itr.remove();
+					continue;
 				}
 			}
 
@@ -436,4 +445,10 @@ public class MoveHelper implements IMoveHelper {
 		final VesselInstanceType vesselInstanceType = vesselAvailability.getVesselInstanceType();
 		return (vesselInstanceType == VesselInstanceType.ROUND_TRIP);
 	}
+
+	@Override
+	public boolean allowRoundTripChanges() {
+		return allowNominalRewire;
+	}
+
 }

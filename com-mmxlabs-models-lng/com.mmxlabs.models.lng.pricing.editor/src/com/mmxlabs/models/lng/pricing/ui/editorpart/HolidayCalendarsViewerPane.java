@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.ui.editorpart;
@@ -42,6 +42,7 @@ public class HolidayCalendarsViewerPane extends ScenarioTableViewerPane {
 		super.init(path, adapterFactory, modelReference);
 		
 		final EditingDomain editingDomain = getEditingDomain();
+		
 		addTypicalColumn("Date", new LocalDateAttributeManipulator(PricingPackage.eINSTANCE.getHolidayCalendarEntry_Date(), editingDomain));
 		addTypicalColumn("Comment", new BasicAttributeManipulator(PricingPackage.eINSTANCE.getHolidayCalendarEntry_Comment(), editingDomain));
 		

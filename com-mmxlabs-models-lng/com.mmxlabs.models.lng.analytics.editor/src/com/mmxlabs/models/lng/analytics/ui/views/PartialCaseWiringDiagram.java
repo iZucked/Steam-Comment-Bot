@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 /**
@@ -260,7 +260,7 @@ public class PartialCaseWiringDiagram implements PaintListener {
 
 				if (row.getBuyOptions().size() == 1) {
 					final BuyOption option = row.getBuyOptions().get(0);
-					final boolean isSpot = option instanceof BuyMarket;
+					final boolean isSpot = AnalyticsBuilder.isSpot(option);
 
 					final boolean isFOB = AnalyticsBuilder.isShipped(option);
 
@@ -282,8 +282,7 @@ public class PartialCaseWiringDiagram implements PaintListener {
 
 				if (row.getSellOptions().size() == 1) {
 					final SellOption option = row.getSellOptions().get(0);
-					final boolean isSpot = option instanceof SellMarket;
-
+					final boolean isSpot = AnalyticsBuilder.isSpot(option);
 					final boolean isDES = AnalyticsBuilder.isShipped(option);
 
 					final Color terminalColour = ValidTerminalColour;// : InvalidTerminalColour;

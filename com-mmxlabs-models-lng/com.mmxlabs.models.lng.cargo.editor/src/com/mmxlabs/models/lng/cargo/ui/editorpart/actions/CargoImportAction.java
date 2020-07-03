@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.ui.editorpart.actions;
@@ -98,7 +98,7 @@ public final class CargoImportAction extends SimpleImportAction {
 
 		final EditingDomain destEditingDomain = importHooksProvider.getEditingDomain();
 
-		final List<IMappingDescriptor> descriptors = new LinkedList<IMappingDescriptor>();
+		final List<IMappingDescriptor> descriptors = new LinkedList<>();
 		final LNGScenarioModel importModel = LNGScenarioFactory.eINSTANCE.createLNGScenarioModel();
 		importModel.setCargoModel(tmpCargoModel);
 

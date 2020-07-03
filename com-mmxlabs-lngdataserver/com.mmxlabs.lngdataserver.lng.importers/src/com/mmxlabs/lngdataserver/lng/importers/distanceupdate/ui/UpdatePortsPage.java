@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lngdataserver.lng.importers.distanceupdate.ui;
@@ -24,21 +24,25 @@ import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.nebula.widgets.grid.internal.DefaultCellRenderer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.DistancesLinesToScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.LocationsToScenarioCopier;
-import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.UpdateItem;
-import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.UpdateStep;
-import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.UpdateWarning;
-import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.UserUpdateStep;
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.AtoBviaCLookupRecord;
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.LocationsVersion;
+import com.mmxlabs.lngdataserver.lng.importers.update.UpdateItem;
+import com.mmxlabs.lngdataserver.lng.importers.update.UpdateItemComparator;
+import com.mmxlabs.lngdataserver.lng.importers.update.UpdateItemLabelProvider;
+import com.mmxlabs.lngdataserver.lng.importers.update.UpdateStep;
+import com.mmxlabs.lngdataserver.lng.importers.update.UpdateWarning;
+import com.mmxlabs.lngdataserver.lng.importers.update.UserUpdateStep;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -52,16 +56,19 @@ public class UpdatePortsPage extends WizardPage {
 	final ExtensibleURIConverterImpl uc = new ExtensibleURIConverterImpl();
 	private LocationsVersion locationRecords;
 	private List<AtoBviaCLookupRecord> distanceRecords;
+	private List<AtoBviaCLookupRecord> manualRecords;
 
 	private ModelReference modelReference;
 
 	private List<UpdateItem> steps;
 
-	protected UpdatePortsPage(final String pageName, ModelReference modelReference, LocationsVersion locationRecords, List<AtoBviaCLookupRecord> distanceRecords) {
+
+	protected UpdatePortsPage(final String pageName, ModelReference modelReference, LocationsVersion locationRecords, List<AtoBviaCLookupRecord> distanceRecords, List<AtoBviaCLookupRecord> manualRecords) {
 		super(pageName);
 		this.modelReference = modelReference;
 		this.locationRecords = locationRecords;
 		this.distanceRecords = distanceRecords;
+		this.manualRecords = manualRecords;
 
 		setTitle("Review changes");
 	}
@@ -184,6 +191,30 @@ public class UpdatePortsPage extends WizardPage {
 		steps = generatePortUpdateSteps();
 		viewer.setInput(steps);
 
+		Button btn = new Button(holder, SWT.PUSH);
+		btn.setText("Check all");
+		btn.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				for (GridItem itm : viewer.getGrid().getItems()) {
+					itm.setChecked(1, true);
+					Object element = itm.getData();
+					if (element instanceof UpdateWarning) {
+						UpdateWarning updateWarning = (UpdateWarning) element;
+						if (updateWarning.isHasQuickFix()) {
+							updateWarning.setApplyQuickFix(true);
+						}
+					} else if (element instanceof UserUpdateStep) {
+						UserUpdateStep step = (UserUpdateStep) element;
+						if (step.isHasQuickFix()) {
+							step.setApplyQuickFix(true);
+						}
+					}
+				}
+			}
+
+		});
+		
 		setPageComplete(false);
 	}
 
@@ -239,7 +270,7 @@ public class UpdatePortsPage extends WizardPage {
 							final EditingDomain editingDomain = modelReference.getEditingDomain();
 
 							{
-								final CompoundCommand command = DistancesLinesToScenarioCopier.getUpdateCommand(editingDomain, portModel, distanceRecords);
+								final CompoundCommand command = DistancesLinesToScenarioCopier.getUpdateCommand(editingDomain, portModel, locationRecords, distanceRecords, manualRecords);
 								monitor.worked(1);
 								monitor.subTask("Apply new matrices");
 								if (!command.canExecute()) {

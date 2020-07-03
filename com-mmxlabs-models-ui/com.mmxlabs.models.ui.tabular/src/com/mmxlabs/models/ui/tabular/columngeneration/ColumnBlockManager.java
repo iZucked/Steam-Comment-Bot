@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.ui.tabular.columngeneration;
@@ -185,52 +185,53 @@ public class ColumnBlockManager {
 	 * @param order
 	 */
 	public void setVisibleBlockOrder(final List<ColumnBlock> order) {
-		int index = 0;
-		final int[] colOrder = grid.getColumnOrder();
+		if (grid != null) {
+			int index = 0;
+			final int[] colOrder = grid.getColumnOrder();
 
-		final List<ColumnBlock> finalOrder = new ArrayList<ColumnBlock>(order);
+			final List<ColumnBlock> finalOrder = new ArrayList<ColumnBlock>(order);
 
-		// detect any visible blocks missing from the specified order and append them
-		for (final ColumnBlock block : blocks) {
-			if (getBlockVisible(block) && finalOrder.contains(block) == false) {
-				finalOrder.add(block);
+			// detect any visible blocks missing from the specified order and append them
+			for (final ColumnBlock block : blocks) {
+				if (getBlockVisible(block) && finalOrder.contains(block) == false) {
+					finalOrder.add(block);
+				}
 			}
-		}
 
-		// Java won't allow initialising a List<Integer> directly from an int []
-		final List<Integer> missingIndices = new ArrayList<>();
-		for (final int i : colOrder) {
-			missingIndices.add(i);
-		}
-
-		// go through blocks in order
-		for (final ColumnBlock block : finalOrder) {
-			if (block == null) {
-				continue;
+			// Java won't allow initialising a List<Integer> directly from an int []
+			final List<Integer> missingIndices = new ArrayList<>();
+			for (final int i : colOrder) {
+				missingIndices.add(i);
 			}
-			// adding the columns in each block to the grid in the correct order
-			for (final ColumnHandler handler : block.getColumnHandlers()) {
-				final GridColumn column = handler.column.getColumn();
-				// sanity check to make sure nothing is bad
-				if (column != null && column.isDisposed() == false) {
-					// the next column in the grid display will be the given column
-					colOrder[index] = grid.indexOf(column);
-					missingIndices.remove((Object) colOrder[index]);
+
+			// go through blocks in order
+			for (final ColumnBlock block : finalOrder) {
+				if (block == null) {
+					continue;
+				}
+				// adding the columns in each block to the grid in the correct order
+				for (final ColumnHandler handler : block.getColumnHandlers()) {
+					final GridColumn column = handler.column.getColumn();
+					// sanity check to make sure nothing is bad
+					if (column != null && column.isDisposed() == false) {
+						// the next column in the grid display will be the given column
+						colOrder[index] = grid.indexOf(column);
+						missingIndices.remove((Object) colOrder[index]);
+						index += 1;
+					}
+				}
+			}
+
+			// if there are any columns missing from the specified order, something is wrong
+			if (missingIndices.isEmpty() == false) {
+				System.err.println(String.format("Available blocks only account for %d out of %d columns.", index, colOrder.length));
+				for (final int i : missingIndices) {
+					colOrder[index] = i;
 					index += 1;
 				}
 			}
+			grid.setColumnOrder(colOrder);
 		}
-
-		// if there are any columns missing from the specified order, something is wrong
-		if (missingIndices.isEmpty() == false) {
-			System.err.println(String.format("Available blocks only account for %d out of %d columns.", index, colOrder.length));
-			for (final int i : missingIndices) {
-				colOrder[index] = i;
-				index += 1;
-			}
-		}
-
-		grid.setColumnOrder(colOrder);
 	}
 
 	public void swapBlockOrder(final ColumnBlock block1, final ColumnBlock block2) {

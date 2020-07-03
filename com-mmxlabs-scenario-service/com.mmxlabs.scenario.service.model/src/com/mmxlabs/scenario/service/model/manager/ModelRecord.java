@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.scenario.service.model.manager;
@@ -28,28 +28,25 @@ public class ModelRecord {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ModelRecord.class);
 
-	@NonNull
-	protected final Lock referenceLock = new ReentrantLock();
+	protected final @NonNull Lock referenceLock = new ReentrantLock();
 
 	protected int referenceCount = 0;
 
 	protected boolean readOnly = false;
 
-	@Nullable
-	protected InstanceData data = null;
+	protected @Nullable InstanceData data = null;
 
 	private Exception loadFailure;
 
-	@NonNull
-	private final BiFunction<ModelRecord, IProgressMonitor, InstanceData> loadFunction;
+	private final @NonNull BiFunction<ModelRecord, IProgressMonitor, InstanceData> loadFunction;
 
 	/**
 	 * List of model references used for debugging open references.
 	 */
 	protected final List<WeakReference<ModelReference>> referencesList = new LinkedList<>();
 
-	final @NonNull protected ConcurrentLinkedQueue<IScenarioLockListener> lockListeners = new ConcurrentLinkedQueue<>();
-	final @NonNull protected ConcurrentLinkedQueue<IScenarioDirtyListener> dirtyListeners = new ConcurrentLinkedQueue<>();
+	protected final @NonNull ConcurrentLinkedQueue<IScenarioLockListener> lockListeners = new ConcurrentLinkedQueue<>();
+	protected final @NonNull ConcurrentLinkedQueue<IScenarioDirtyListener> dirtyListeners = new ConcurrentLinkedQueue<>();
 
 	protected ModelReference sharedReference = null;
 

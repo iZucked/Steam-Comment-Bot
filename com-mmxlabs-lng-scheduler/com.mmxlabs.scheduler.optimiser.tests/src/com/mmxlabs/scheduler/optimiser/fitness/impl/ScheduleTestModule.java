@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
@@ -50,6 +50,10 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.LatenessEvaluatedStateCh
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselBaseFuelCalculator;
+import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
+import com.mmxlabs.scheduler.optimiser.entities.impl.DefaultEntityValueCalculator;
+import com.mmxlabs.scheduler.optimiser.evaluation.DefaultVoyagePlanEvaluator;
+import com.mmxlabs.scheduler.optimiser.evaluation.IVoyagePlanEvaluator;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcessFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ExcessIdleTimeComponentParameters;
@@ -64,10 +68,8 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.utils.InPor
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.ConstrainedInitialSequenceBuilder;
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.IInitialSequenceBuilder;
 import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProvider;
-import com.mmxlabs.scheduler.optimiser.scheduling.ArrivalTimeScheduler;
-import com.mmxlabs.scheduler.optimiser.scheduling.EarliestSlotTimeScheduler;
 import com.mmxlabs.scheduler.optimiser.scheduling.IArrivalTimeScheduler;
-import com.mmxlabs.scheduler.optimiser.scheduling.ISlotTimeScheduler;
+import com.mmxlabs.scheduler.optimiser.scheduling.TimeWindowScheduler;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
 
@@ -120,22 +122,27 @@ public class ScheduleTestModule extends AbstractModule {
 		bind(IVesselBaseFuelCalculator.class).to(VesselBaseFuelCalculator.class);
 		bind(VesselBaseFuelCalculator.class).in(Singleton.class);
 
+		bind(IEntityValueCalculator.class).to(DefaultEntityValueCalculator.class);
+		bind(IVoyagePlanEvaluator.class).to(DefaultVoyagePlanEvaluator.class);
 		bind(IEndEventScheduler.class).to(DefaultEndEventScheduler.class);
 		bind(IBoilOffHelper.class).toInstance(new InPortBoilOffHelper(true));
 
-		bind(IArrivalTimeScheduler.class).to(ArrivalTimeScheduler.class);
-		bind(ISlotTimeScheduler.class).to(EarliestSlotTimeScheduler.class);
+		bind(IArrivalTimeScheduler.class).to(TimeWindowScheduler.class);
 
 		bind(long.class).annotatedWith(Names.named(SchedulerConstants.KEY_DEFAULT_MAX_VOLUME_IN_M3)).toInstance(OptimiserUnitConvertor.convertToInternalVolume(140_000));
 
-		// bind(IOptimisationTransformer.class).to(OptimisationTransformer.class).in(Singleton.class);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UsePriceBasedWindowTrimming)).toInstance(Boolean.FALSE);
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UsePNLBasedWindowTrimming)).toInstance(Boolean.FALSE);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UseCanalSlotBasedWindowTrimming)).toInstance(Boolean.FALSE);
+		
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.OPTIMISE_PAPER_PNL)).toInstance(Boolean.FALSE);
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.GENERATED_PAPERS_IN_PNL)).toInstance(Boolean.FALSE);
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.COMPUTE_PAPER_PNL)).toInstance(Boolean.FALSE);
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.COMPUTE_EXPOSURES)).toInstance(Boolean.FALSE);
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.RE_HEDGE_WITH_PAPERS)).toInstance(Boolean.FALSE);
 
 		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_ArrivalTimeCache)).toInstance(CacheMode.Off);
-		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocationCache)).toInstance(CacheMode.Off);
-		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocatedSequenceCache)).toInstance(CacheMode.Off);
-		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_ProfitandLossCache)).toInstance(CacheMode.Off);
+		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_VoyagePlanEvaluatorCache)).toInstance(CacheMode.Off);
 		bind(boolean.class).annotatedWith(Names.named("hint-lngtransformer-disable-caches")).toInstance(Boolean.FALSE);
 		bind(boolean.class).annotatedWith(Names.named(IEndEventScheduler.ENABLE_HIRE_COST_ONLY_END_RULE)).toInstance(Boolean.TRUE);
 
@@ -144,14 +151,11 @@ public class ScheduleTestModule extends AbstractModule {
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_SchedulePurges)).toInstance(Boolean.FALSE);
 
 		bind(IPanamaBookingsProvider.class).toInstance(Mockito.mock(IPanamaBookingsProvider.class));
-
 	}
 
 	@Provides
-	private IVoyagePlanOptimiser provideVoyagePlanOptimiser(Injector injector, final @NonNull VoyagePlanOptimiser delegate) {
-		final CachingVoyagePlanOptimiser cachingVoyagePlanOptimiser = new CachingVoyagePlanOptimiser(delegate, DEFAULT_VPO_CACHE_SIZE);
-		injector.injectMembers(cachingVoyagePlanOptimiser);
-		return cachingVoyagePlanOptimiser;
+	private IVoyagePlanOptimiser provideVoyagePlanOptimiser(final @NonNull VoyagePlanOptimiser delegate) {
+		return delegate;
 	}
 
 	@Provides
@@ -262,7 +266,7 @@ public class ScheduleTestModule extends AbstractModule {
 	@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL)
 	private ISequences provideInitialSequences(final IInitialSequenceBuilder sequenceBuilder) {
 
-		final ISequences sequences = sequenceBuilder.createInitialSequences(pData, null, null, Collections.<ISequenceElement, ISequenceElement> emptyMap());
+		final ISequences sequences = sequenceBuilder.createInitialSequences(pData, null, null, Collections.<ISequenceElement, ISequenceElement>emptyMap());
 
 		return sequences;
 	}

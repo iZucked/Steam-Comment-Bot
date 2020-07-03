@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.ui.views.sandbox.components;
@@ -9,7 +9,6 @@ import java.util.LinkedList;
 
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.jdt.annotation.NonNull;
@@ -20,7 +19,6 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridItem;
-import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.events.MenuDetectEvent;
 import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.widgets.Menu;
@@ -38,6 +36,7 @@ import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
+import com.mmxlabs.rcp.common.ecore.EMFCopier;
 
 public class BuyOptionsContextMenuManager implements MenuDetectListener {
 
@@ -77,7 +76,7 @@ public class BuyOptionsContextMenuManager implements MenuDetectListener {
 		final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
 		final GridItem[] items = grid.getSelection();
 		if (items.length > 0) {
-			mgr.add(new RunnableAction("Delete option(s)", () -> {
+			mgr.add(new RunnableAction("Delete", () -> {
 				final Collection<EObject> c = new LinkedList<>();
 				selection.iterator().forEachRemaining(ee -> c.add((EObject) ee));
 				final CompoundCommand compoundCommand = new CompoundCommand("Delete buy option");
@@ -105,6 +104,9 @@ public class BuyOptionsContextMenuManager implements MenuDetectListener {
 						newBuy.setDesPurchase(slot.isDESPurchase());
 						newBuy.setPort(slot.getPort());
 						newBuy.setDate(slot.getWindowStart());
+						newBuy.setSpecifyWindow(true);
+						newBuy.setWindowSize(slot.getSchedulingTimeWindow().getSize());
+						newBuy.setWindowSizeUnits(slot.getSchedulingTimeWindow().getSizeUnits());
 						if (slot.isSetContract()) {
 							newBuy.setContract((PurchaseContract) slot.getContract());
 						} else {
@@ -129,7 +131,7 @@ public class BuyOptionsContextMenuManager implements MenuDetectListener {
 			}
 			if (row instanceof BuyOpportunity) {
 				mgr.add(new RunnableAction("Copy", () -> {
-					final BuyOption copy = EcoreUtil.copy(row);
+					final BuyOption copy = EMFCopier.copy(row);
 					scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
 							AddCommand.create(scenarioEditingLocation.getEditingDomain(), abstractAnalysisModel, AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__BUYS, copy), abstractAnalysisModel,
 							AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__BUYS);

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.chain.impl;
@@ -68,8 +68,6 @@ public class LNGDataTransformer {
 
 	private IMultiStateResult solutionBuilderResult;
 
-	private int concurrencyLevel;
-
 	@SuppressWarnings("null")
 	public LNGDataTransformer(@NonNull final IScenarioDataProvider scenarioDataProvider, @Nullable ExtraDataProvider extraDataProvider, @NonNull final UserSettings userSettings,
 			@NonNull final SolutionBuilderSettings solutionBuilderSettings, int concurrencyLevel, @NonNull final Collection<@NonNull String> hints,
@@ -77,7 +75,6 @@ public class LNGDataTransformer {
 
 		this.userSettings = userSettings;
 		this.solutionBuilderSettings = solutionBuilderSettings;
-		this.concurrencyLevel = concurrencyLevel;
 		this.hints = hints;
 		this.services = services;
 

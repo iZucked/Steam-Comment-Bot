@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2019
+    Copyright (C) Minimax Labs Ltd., 2010 - 2020
     All rights reserved.
 
 -->
@@ -12,21 +12,21 @@
 
 <plugin>
 	<extension point="org.eclipse.ui.views">
-		<view category="com.mmxlabs.models.lng.views.physical"
+		<view category="com.mmxlabs.lngdataserver.views.dataserver"
 			class="com.mmxlabs.models.lng.pricing.ui.views.SettledPricesView"
 			id="com.mmxlabs.models.lng.pricing.editor.SettledPricesView"
 			name="Settled Prices" restorable="true">
 		</view>
 	</extension>
 	<extension point="org.eclipse.ui.views">
-		<view category="com.mmxlabs.models.lng.views.physical"
+		<view category="com.mmxlabs.lngdataserver.views.dataserver"
 			class="com.mmxlabs.models.lng.pricing.ui.views.HolidayCalendarsView"
 			id="com.mmxlabs.models.lng.pricing.editor.HolidayCalendarsView"
 			name="Holiday Calendar" restorable="true">
 		</view>
 	</extension>
 	<extension point="org.eclipse.ui.views">
-		<view category="com.mmxlabs.models.lng.views.physical"
+		<view category="com.mmxlabs.lngdataserver.views.dataserver"
 			class="com.mmxlabs.models.lng.pricing.ui.views.PricingCalendarsView"
 			id="com.mmxlabs.models.lng.pricing.editor.PricingCalendarsView"
 			name="Pricing Calendar" restorable="true">

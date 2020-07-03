@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui;
@@ -16,7 +16,6 @@ import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
-import org.apache.shiro.SecurityUtils;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.MultiValidator;
@@ -25,7 +24,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -91,6 +89,7 @@ import com.mmxlabs.models.ui.validation.IValidationService;
 import com.mmxlabs.models.ui.validation.gui.ValidationStatusDialog;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ServiceHelper;
+import com.mmxlabs.rcp.common.ecore.EMFCopier;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
@@ -98,6 +97,8 @@ import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenIdleTimeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.MinMaxSlotGroupConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPermissionConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.SimilarityFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.VesselUtilisationFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.components.NonOptionalSlotFitnessCoreFactory;
@@ -221,13 +222,7 @@ public final class OptimisationHelper {
 				final String errMessage = "Optimisation does not support break-evens. Replace \"?\" in price expressions.";
 				final Display display = PlatformUI.getWorkbench().getDisplay();
 				if (display != null) {
-					display.syncExec(new Runnable() {
-
-						@Override
-						public void run() {
-							MessageDialog.openError(display.getActiveShell(), "Unable to start optimisation", errMessage);
-						}
-					});
+					display.syncExec(() -> MessageDialog.openError(display.getActiveShell(), "Unable to start optimisation", errMessage));
 				}
 
 				return null;
@@ -280,10 +275,8 @@ public final class OptimisationHelper {
 			final EditingDomain editingDomain = ref.getEditingDomain();
 			if (editingDomain != null) {
 				final CompoundCommand cmd = new CompoundCommand("Update settings");
-				cmd.append(SetCommand.create(editingDomain, root, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_UserSettings(), EcoreUtil.copy(optimisationPlan.getUserSettings())));
-				RunnerHelper.syncExecDisplayOptional(() -> {
-					editingDomain.getCommandStack().execute(cmd);
-				});
+				cmd.append(SetCommand.create(editingDomain, root, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_UserSettings(), EMFCopier.copy(optimisationPlan.getUserSettings())));
+				RunnerHelper.syncExecDisplayOptional(() -> editingDomain.getCommandStack().execute(cmd));
 			}
 
 			planRef[0] = optimisationPlan;
@@ -366,7 +359,7 @@ public final class OptimisationHelper {
 			}
 		};
 
-		final UserSettings copy = EcoreUtil.copy(previousSettings);
+		final UserSettings copy = EMFCopier.copy(previousSettings);
 
 		// Reset disabled features
 		resetDisabledFeatures(copy);
@@ -490,7 +483,7 @@ public final class OptimisationHelper {
 			}
 		};
 
-		final UserSettings copy = EcoreUtil.copy(previousSettings);
+		final UserSettings copy = EMFCopier.copy(previousSettings);
 
 		// Reset disabled features
 		resetDisabledFeatures(copy);
@@ -602,7 +595,7 @@ public final class OptimisationHelper {
 			}
 		};
 
-		final UserSettings copy = EcoreUtil.copy(previousSettings);
+		final UserSettings copy = EMFCopier.copy(previousSettings);
 
 		// Reset disabled features
 		resetDisabledFeatures(copy);
@@ -723,22 +716,33 @@ public final class OptimisationHelper {
 			}
 		}
 
+		// Disable nominal vessel rules (well constraints here...) in ADP
+		if (userSettings.getMode() == OptimisationMode.ADP) {
+			ScenarioUtils.removeAllConstraints(plan, PromptRoundTripVesselPermissionConstraintCheckerFactory.NAME);
+			ScenarioUtils.removeAllConstraints(plan, RoundTripVesselPermissionConstraintCheckerFactory.NAME);
+
+			ScenarioUtils.removeConstraints(PromptRoundTripVesselPermissionConstraintCheckerFactory.NAME, baseConstraintAndFitnessSettings);
+			ScenarioUtils.removeConstraints(RoundTripVesselPermissionConstraintCheckerFactory.NAME, baseConstraintAndFitnessSettings);
+		}
+
 		if (userSettings.isCleanSlateOptimisation() || userSettings.getMode() == OptimisationMode.STRATEGIC) {
 			shouldUseRestartingLSO = false;
 			baseConstraintAndFitnessSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.OFF, periodStartOrDefault, periodEndOrDefault));
 
-			final CleanStateOptimisationStage stage = ScenarioUtils.createDefaultCleanStateParameters(EcoreUtil.copy(baseConstraintAndFitnessSettings));
+			final CleanStateOptimisationStage stage = ScenarioUtils.createDefaultCleanStateParameters(EMFCopier.copy(baseConstraintAndFitnessSettings));
 			stage.getAnnealingSettings().setEpochLength(epochLength);
 			plan.getStages().add(stage);
+
 			if (!userSettings.isNominalOnly()) {
 				plan.getStages().add(ParametersFactory.eINSTANCE.createResetInitialSequencesStage());
 			} else {
 				// Return here for Nominal only modes
-				if (userSettings.getMode()  == OptimisationMode.ADP) {
+				if (userSettings.getMode() == OptimisationMode.ADP) {
 					ScenarioUtils.createOrUpdateAllConstraints(plan, MinMaxSlotGroupConstraintCheckerFactory.NAME, true);
 					ScenarioUtils.createOrUpdateAllConstraints(plan, LadenIdleTimeConstraintCheckerFactory.NAME, true);
 					ScenarioUtils.createOrUpdateAllObjectives(plan, VesselUtilisationFitnessCoreFactory.NAME, true, 1);
 					ScenarioUtils.createOrUpdateAllObjectives(plan, NonOptionalSlotFitnessCoreFactory.NAME, true, 24_000_000);
+
 				}
 				return LNGScenarioRunnerUtils.createExtendedSettings(plan);
 			}
@@ -747,7 +751,7 @@ public final class OptimisationHelper {
 		if (userSettings.getMode() == OptimisationMode.STRATEGIC) { // Strategic optimiser
 			{
 				final int jobCount = 10;// 30
-				final LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(EcoreUtil.copy(baseConstraintAndFitnessSettings), false);
+				final LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(EMFCopier.copy(baseConstraintAndFitnessSettings), false);
 
 				stage.getAnnealingSettings().setInitialTemperature(5_000_000);
 
@@ -766,27 +770,22 @@ public final class OptimisationHelper {
 				stage.setName("reduce");
 				plan.getStages().add(stage);
 			}
-			{			
-				final LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(EcoreUtil.copy(baseConstraintAndFitnessSettings), parallelise);
+			{
+				final LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(EMFCopier.copy(baseConstraintAndFitnessSettings), parallelise);
 				stage.getAnnealingSettings().setEpochLength(epochLength);
 				stage.getAnnealingSettings().setRestarting(shouldUseRestartingLSO);
 				plan.getStages().add(stage);
 			}
 			// Follow by hill-climb stage
 			{
-				final HillClimbOptimisationStage stage = ScenarioUtils.createDefaultHillClimbingParameters(EcoreUtil.copy(baseConstraintAndFitnessSettings), parallelise);
+				final HillClimbOptimisationStage stage = ScenarioUtils.createDefaultHillClimbingParameters(EMFCopier.copy(baseConstraintAndFitnessSettings), parallelise);
 				stage.getAnnealingSettings().setEpochLength(epochLength);
 				plan.getStages().add(stage);
 			}
-//			{
-//				final ReduceSequencesStage stage = ParametersFactory.eINSTANCE.createReduceSequencesStage();
-//				stage.setName("reduce2");
-//				plan.getStages().add(stage);
-//			}
 		} else if (userSettings.getMode() == OptimisationMode.ADP) { // ADP optimiser
-			final LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(EcoreUtil.copy(baseConstraintAndFitnessSettings), parallelise);
+			final LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(EMFCopier.copy(baseConstraintAndFitnessSettings), parallelise);
 			stage.getAnnealingSettings().setEpochLength(epochLength);
-			stage.getAnnealingSettings().setRestarting(shouldUseRestartingLSO);			
+			stage.getAnnealingSettings().setRestarting(shouldUseRestartingLSO);
 			plan.getStages().add(stage);
 
 			// Add in ADP constraints and objectives
@@ -796,37 +795,38 @@ public final class OptimisationHelper {
 			ScenarioUtils.createOrUpdateAllObjectives(plan, NonOptionalSlotFitnessCoreFactory.NAME, true, 24_000_000);
 		} else {
 			if (similarityMode != SimilarityMode.OFF) {
-				final MultipleSolutionSimilarityOptimisationStage stage = ScenarioUtils.createDefaultMultipleSolutionSimilarityParameters(EcoreUtil.copy(baseConstraintAndFitnessSettings), parallelise);
+				final MultipleSolutionSimilarityOptimisationStage stage = ScenarioUtils.createDefaultMultipleSolutionSimilarityParameters(EMFCopier.copy(baseConstraintAndFitnessSettings),
+						parallelise);
 				stage.getAnnealingSettings().setEpochLength(epochLength);
 				stage.getAnnealingSettings().setRestarting(shouldUseRestartingLSO);
-				
+
 				final SimilaritySettings similaritySettings = stage.getConstraintAndFitnessSettings().getSimilaritySettings();
 				if (similaritySettings != null) {
-					 stage.getConstraintAndFitnessSettings().setSimilaritySettings(ScenarioUtils.createUnweightedSimilaritySettings());
+					stage.getConstraintAndFitnessSettings().setSimilaritySettings(ScenarioUtils.createUnweightedSimilaritySettings());
 				}
-				
+
 				plan.getStages().add(stage);
-			} else {	
+			} else {
 				// Normal LSO
-				{			
-					final LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(EcoreUtil.copy(baseConstraintAndFitnessSettings), parallelise);
+				{
+					final LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(EMFCopier.copy(baseConstraintAndFitnessSettings), parallelise);
 					stage.getAnnealingSettings().setEpochLength(epochLength);
 					stage.getAnnealingSettings().setRestarting(shouldUseRestartingLSO);
 					plan.getStages().add(stage);
 				}
 				// Follow by hill-climb stage
 				{
-					final HillClimbOptimisationStage stage = ScenarioUtils.createDefaultHillClimbingParameters(EcoreUtil.copy(baseConstraintAndFitnessSettings), parallelise);
+					final HillClimbOptimisationStage stage = ScenarioUtils.createDefaultHillClimbingParameters(EMFCopier.copy(baseConstraintAndFitnessSettings), parallelise);
 					stage.getAnnealingSettings().setEpochLength(epochLength);
 					plan.getStages().add(stage);
 				}
 			}
 			if (userSettings.isBuildActionSets()) {
 				if (periodStart != null && periodEnd != null) {
-					final ActionPlanOptimisationStage stage = ScenarioUtils.getActionPlanSettings(similarityMode, periodStart, periodEnd, EcoreUtil.copy(baseConstraintAndFitnessSettings));
+					final ActionPlanOptimisationStage stage = ScenarioUtils.getActionPlanSettings(similarityMode, periodStart, periodEnd, EMFCopier.copy(baseConstraintAndFitnessSettings));
 					plan.getStages().add(stage);
 				} else {
-					final ActionPlanOptimisationStage stage = ScenarioUtils.createDefaultActionPlanParameters(EcoreUtil.copy(baseConstraintAndFitnessSettings));
+					final ActionPlanOptimisationStage stage = ScenarioUtils.createDefaultActionPlanParameters(EMFCopier.copy(baseConstraintAndFitnessSettings));
 					plan.getStages().add(stage);
 				}
 			}
@@ -917,6 +917,8 @@ public final class OptimisationHelper {
 		to.setBuildActionSets(from.isBuildActionSets());
 
 		to.setFloatingDaysLimit(from.getFloatingDaysLimit());
+		
+		to.setGeneratedPapersInPNL(from.isGeneratedPapersInPNL());
 	}
 
 	public static boolean checkUserSettings(@NonNull final UserSettings to, final boolean quiet) {
@@ -1157,12 +1159,12 @@ public final class OptimisationHelper {
 
 	private static void createTraderBasedInsertionsOption(final UserSettings defaultSettings, final EditingDomain editingDomain, final ParameterModesDialog dialog, final UserSettings copy,
 			final boolean[] optionsAdded) {
-		if (LicenseFeatures.isPermitted("features:trader-based-insertions")) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_TRADER_BASED_INSERIONS)) {
 
 			final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
 			choiceData.addChoice("Off", Boolean.FALSE);
 			choiceData.addChoice("On", Boolean.TRUE);
-			choiceData.enabled = LicenseFeatures.isPermitted("features:trader-based-insertions");
+			choiceData.enabled = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_TRADER_BASED_INSERIONS);
 			if (!choiceData.enabled) {
 				// if not enabled make sure to set setting to false
 				copy.setDualMode(false);
@@ -1192,7 +1194,7 @@ public final class OptimisationHelper {
 		choiceData.addChoice("Off", Boolean.FALSE);
 		choiceData.addChoice("On", Boolean.TRUE);
 
-		choiceData.enabled = LicenseFeatures.isPermitted("features:optimisation-charter-out-generation") && isAllowedGCO(scenario);
+		choiceData.enabled = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_CHARTER_OUT_GENERATION) && isAllowedGCO(scenario);
 		if (choiceData.enabled == false) {
 			// if not enabled make sure to set setting to false
 			copy.setGenerateCharterOuts(false);
@@ -1246,7 +1248,7 @@ public final class OptimisationHelper {
 		final Option optStart = dialog.addOption(DataSection.Controls, group, editingDomain, "Start of (dd/mm/yyyy)", "", copy, defaultSettings, DataType.Date, SWTBOT_PERIOD_START,
 				ParametersPackage.eINSTANCE.getUserSettings_PeriodStartDate());
 
-		if (SecurityUtils.getSubject().isPermitted(KnownFeatures.FEATURE_OPTIMISATION_PERIOD)) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_PERIOD)) {
 			// Added a button. Had to extend Option and DataType classes.
 			final Option optToday = dialog.addOption(DataSection.Controls, group, editingDomain, "Today", "Today", copy, defaultSettings, DataType.Button, SWTBOT_PERIOD_TODAY, null);
 			optToday.setListener(new MouseAdapter() {
@@ -1265,7 +1267,7 @@ public final class OptimisationHelper {
 		// TODO set the optToday button size
 		final Option optEnd = dialog.addOption(DataSection.Controls, group, editingDomain, "Up to start of (mm/yyyy)", "", copy, defaultSettings, DataType.MonthYear, SWTBOT_PERIOD_END,
 				ParametersPackage.eINSTANCE.getUserSettings_PeriodEnd());
-		if (SecurityUtils.getSubject().isPermitted(KnownFeatures.FEATURE_OPTIMISATION_PERIOD)) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_PERIOD)) {
 
 			final Option optThreeMonth = dialog.addOption(DataSection.Controls, group, editingDomain, "+3m", "Three months", copy, defaultSettings, DataType.Button, SWTBOT_PERIOD_THREE_MONTH, null);
 			optThreeMonth.setListener(new MouseAdapter() {

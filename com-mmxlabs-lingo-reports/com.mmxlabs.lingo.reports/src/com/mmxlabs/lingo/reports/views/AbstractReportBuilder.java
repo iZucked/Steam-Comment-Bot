@@ -1,12 +1,14 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
@@ -35,8 +37,12 @@ public abstract class AbstractReportBuilder {
 	public OptionInfo[] ROW_FILTER_ALL;
 	public OptionInfo[] DIFF_FILTER_ALL;
 
+	private Map<String, OptionInfo> rowFilterToOptionInfo;
+	private Map<String, OptionInfo> diffFilterToOptionInfo;
+	
+	
 	@NonNull
-	public static final OptionInfo DIFF_FILTER_PINNDED_SCENARIO = new OptionInfo("DIFF_FILTER_PINNDED_SCENARIO", "Show Pinned Scenario");
+	public static final OptionInfo DIFF_FILTER_PINNDED_SCENARIO = new OptionInfo("DIFF_FILTER_PINNDED_SCENARIO", "Show Pinned Scenario", "scenario");
 
 	/**
 	 * Replace the existing row filters with the following set.
@@ -120,6 +126,26 @@ public abstract class AbstractReportBuilder {
 		return diffFilterInfo;
 	}
 
+	public OptionInfo getRowFilterOptionInfo(String rowFilterId) {
+		if (this.rowFilterToOptionInfo == null) {
+			this.rowFilterToOptionInfo = new HashMap<>();
+			for (OptionInfo oi : ROW_FILTER_ALL) {
+				this.rowFilterToOptionInfo.put(oi.id, oi);
+			}
+		}
+		return this.rowFilterToOptionInfo.get(rowFilterId);
+	}
+
+	public OptionInfo getDiffFilterOptionInfo(String diffFilterId) {
+		if (this.diffFilterToOptionInfo == null) {
+			this.diffFilterToOptionInfo = new HashMap<>();
+			for (OptionInfo oi : DIFF_FILTER_ALL) {
+				this.diffFilterToOptionInfo.put(oi.id, oi);
+			}
+		}
+		return this.diffFilterToOptionInfo.get(diffFilterId);
+	}
+	
 	public void saveToMemento(final String uniqueConfigKey, final IMemento memento) {
 		final IMemento rowsInfo = memento.createChild(uniqueConfigKey);
 		for (final String option : rowFilterInfo) {

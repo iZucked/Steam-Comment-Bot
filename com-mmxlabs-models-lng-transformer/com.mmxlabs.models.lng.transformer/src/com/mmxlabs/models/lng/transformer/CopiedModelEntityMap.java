@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer;
@@ -115,5 +115,10 @@ public class CopiedModelEntityMap implements ModelEntityMap {
 	@Override
 	public ZonedDateTime getDateFromHours(final int hours, final Port port) {
 		return delegate.getDateFromHours(hours, port);
+	}
+
+	@Override
+	public @NonNull ZonedDateTime getEarliestTime() {
+		return delegate.getEarliestTime();
 	}
 }

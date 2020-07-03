@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.lso.moves;
@@ -41,8 +41,8 @@ public class ShuffleElements implements IMove {
 	 */
 	public static final class ShuffleElementsBuilder {
 
-		private final List<From> froms = new LinkedList<From>();
-		private final List<To> tos = new LinkedList<To>();
+		private final List<From> froms = new LinkedList<>();
+		private final List<To> tos = new LinkedList<>();
 
 		/**
 		 * Add a new {@link From} instruction. Use the {@link ISequenceElement} in the {@link ISequence} for the given {@link IResource} at the specified index position.
@@ -236,7 +236,7 @@ public class ShuffleElements implements IMove {
 		}
 		// Add the new elements
 
-		final List<To> seenTos = new ArrayList<To>(tos.length);
+		final List<To> seenTos = new ArrayList<>(tos.length);
 		for (final To to_ : tos) {
 			// The offset - if we have already interacted with this ISequence, then the indicies may need adjusting
 			int offset = 0;

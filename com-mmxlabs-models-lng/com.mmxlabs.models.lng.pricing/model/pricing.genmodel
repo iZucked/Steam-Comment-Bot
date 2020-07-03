@@ -164,6 +164,9 @@
           propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//MarketIndex/settleCalendar"/>
       <genFeatures notify="false" createChild="false" propertyDescription="Pricing Calendar"
           propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//MarketIndex/pricingCalendar"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//MarketIndex/flatCurve"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//MarketIndex/bidCurve"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//MarketIndex/offerCurve"/>
     </genClasses>
     <genClasses ecoreClass="pricing.ecore#//PricingCalendarEntry">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//PricingCalendarEntry/comment"/>

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.scheduling;
@@ -37,7 +37,9 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimesRecord;
 
 /**
- * The {@link PortTimesRecordMaker} creates the initial {@link IPortTimesRecord}s for a {@link ISequence} and a provided arrival time array from an {@link ISequenceScheduler}
+ * The {@link PortTimesRecordMaker} creates the initial
+ * {@link IPortTimesRecord}s for a {@link ISequence} and a provided arrival time
+ * array from an {@link ISequenceScheduler}
  */
 public class PortTimesRecordMaker {
 
@@ -61,13 +63,15 @@ public class PortTimesRecordMaker {
 
 	@Inject
 	private IEndEventScheduler endEventScheduler;
-	
+
 	@Inject
 	private IElementDurationProvider durationProvider;
 
 	/**
-	 * This method replaces the normal shipped cargo calculation path with one specific to DES purchase or FOB sale cargoes. However this currently merges in behaviour from other classes - such as
-	 * scheduling and volume allocation - which should really stay in those other classes.
+	 * This method replaces the normal shipped cargo calculation path with one
+	 * specific to DES purchase or FOB sale cargoes. However this currently merges
+	 * in behaviour from other classes - such as scheduling and volume allocation -
+	 * which should really stay in those other classes.
 	 * 
 	 * @param resource
 	 * @param sequence
@@ -103,7 +107,8 @@ public class PortTimesRecordMaker {
 			// Determine transfer time
 			if (!startSet && !(thisPortSlot instanceof StartPortSlot)) {
 
-				// Find latest window start for all slots in FOB/DES combo. However if DES divertible, ignore.
+				// Find latest window start for all slots in FOB/DES combo. However if DES
+				// divertible, ignore.
 				@Nullable
 				final ITimeWindow timeWindow = thisPortSlot.getTimeWindow();
 				assert timeWindow != null;
@@ -158,17 +163,16 @@ public class PortTimesRecordMaker {
 	}
 
 	/**
-	 * Returns a list of voyage plans based on breaking up a sequence of vessel real or virtual destinations into single conceptual cargo voyages.
+	 * Returns a list of voyage plans based on breaking up a sequence of vessel real
+	 * or virtual destinations into single conceptual cargo voyages.
 	 * 
 	 * @param resource
 	 * @param sequence
 	 * @param list
 	 * @return
 	 */
-	public final @NonNull List<@NonNull IPortTimesRecord> makeShippedPortTimesRecords(final int seqIndex, final @NonNull IResource resource, final @NonNull ISequence sequence,
-			final List<IPortTimeWindowsRecord> trimmedWindows, final MinTravelTimeData travelTimeData, final ISlotTimeScheduler timeScheduler) {
-
-		timeScheduler.startSequence(resource);
+	public final @NonNull List<@NonNull IPortTimesRecord> calculateShippedPortTimesRecords(final int seqIndex, final @NonNull IResource resource, final @NonNull ISequence sequence,
+			final List<IPortTimeWindowsRecord> trimmedWindows, final MinTravelTimeData travelTimeData) {
 
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 
@@ -182,7 +186,8 @@ public class PortTimesRecordMaker {
 
 		final List<@NonNull IPortTimesRecord> portTimesRecords = new LinkedList<>();
 
-		// The expected arrival based on min travel time as set by the previously seen element.
+		// The expected arrival based on min travel time as set by the previously seen
+		// element.
 		int lastNextExpectedArrivalTime = 0;
 
 		// If non-null, set the return slot time to the next calculated slot and time.
@@ -212,7 +217,8 @@ public class PortTimesRecordMaker {
 				}
 				final int newStartTime = firstRecord.getSlotTime(from);
 				/**
-				 * Min requirement padding In case we don't meet the minimal duration but still have some time left after the end or before the start
+				 * Min requirement padding In case we don't meet the minimal duration but still
+				 * have some time left after the end or before the start
 				 **/
 				final IEndRequirement endReq = vesselAvailability.getEndRequirement();
 				if (endReq.isMinDurationSet()) {
@@ -294,13 +300,9 @@ public class PortTimesRecordMaker {
 
 				final int visitDuration = record.getSlotDuration(slot);
 				final int extraIdleTime = record.getSlotExtraIdleTime(slot);
-				
-				if (extraIdleTime > 0) {
-					final int ii = 0 ;
-				}
-				
+
 				// Pick based on earliest time
-				final int arrivalTime = timeScheduler.scheduleSlot(resource, slot, record, portTimesRecord, lastNextExpectedArrivalTime);
+				final int arrivalTime = Math.max(record.getSlotFeasibleTimeWindow(slot).getInclusiveStart(), lastNextExpectedArrivalTime);
 
 				assert !actualsDataProvider.hasActuals(slot) || actualsDataProvider.getArrivalTime(slot) == arrivalTime;
 
@@ -372,19 +374,101 @@ public class PortTimesRecordMaker {
 						}
 					}
 
-					// Only one voyage plan, we need to set the start time before adjustending end event.
+					// Only one voyage plan, we need to set the start time before adjust ending end
+					// event.
 					if (updateFirstRecordStartTime) {
 						portTimesRecord.setReturnSlotTime(returnSlot, arrivalTime);
 						recordUpdate.run();
 						updateFirstRecordStartTime = false;
 					}
 
-					// FIXME: There is a conflict with this code and the min/max duration code (which assumes end event duration is 0).
+					// FIXME: There is a conflict with this code and the min/max duration code
+					// (which assumes end event duration is 0).
 					// Delegate to the end event schedule to determine correct end time.
 					portTimesRecords.addAll(endEventScheduler.scheduleEndEvent(resource, vesselAvailability, portTimesRecord, arrivalTime, returnSlot));
 
-					// We need to update the start time after the end event is scheduled, to make the min/max duration adjustments
+					// We need to update the start time after the end event is scheduled, to make
+					// the min/max duration adjustments
 					recordUpdate.run();
+				} else {
+					recordToUpdateReturnTime = portTimesRecord;
+				}
+			}
+		}
+
+		return portTimesRecords;
+	}
+
+	/**
+	 * Returns a list of voyage plans based on breaking up a sequence of vessel real
+	 * or virtual destinations into single conceptual cargo voyages. This variant
+	 * assumes there is a IPortTimeWindowsRecord for the end event and the window
+	 * start is the correct time to use.
+	 * 
+	 * @param resource
+	 * @param sequence
+	 * @param list
+	 * @return
+	 */
+	public final @NonNull List<@NonNull IPortTimesRecord> makeSimpleShippedPortTimesRecords(final int seqIndex, final @NonNull IResource resource, final @NonNull ISequence sequence,
+			final List<IPortTimeWindowsRecord> trimmedWindows, final MinTravelTimeData travelTimeData) {
+
+		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+
+		// Check resource type
+		assert vesselAvailability.getVesselInstanceType() == VesselInstanceType.FLEET //
+				|| vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER //
+				|| vesselAvailability.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER //
+				|| vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP;
+
+		final List<@NonNull IPortTimesRecord> portTimesRecords = new LinkedList<>();
+
+		// If non-null, set the return slot time to the next calculated slot and time.
+		PortTimesRecord recordToUpdateReturnTime = null;
+
+		for (final IPortTimeWindowsRecord record : trimmedWindows) {
+			// Create and add record to the list.
+			final PortTimesRecord portTimesRecord = new PortTimesRecord();
+			portTimesRecords.add(portTimesRecord);
+
+			for (final IPortSlot slot : record.getSlots()) {
+				portTimesRecord.setRouteOptionBooking(slot, record.getRouteOptionBooking(slot));
+				portTimesRecord.setSlotNextVoyageOptions(slot, record.getSlotNextVoyageOptions(slot), record.getSlotNextVoyagePanamaPeriod(slot));
+
+				final int visitDuration = record.getSlotDuration(slot);
+				final int extraIdleTime = record.getSlotExtraIdleTime(slot);
+
+				// Pick based on earliest time
+				final int arrivalTime = record.getSlotFeasibleTimeWindow(slot).getInclusiveStart();
+
+				assert !actualsDataProvider.hasActuals(slot) || actualsDataProvider.getArrivalTime(slot) == arrivalTime;
+
+				portTimesRecord.setSlotTime(slot, arrivalTime);
+				portTimesRecord.setSlotDuration(slot, visitDuration);
+				portTimesRecord.setSlotExtraIdleTime(slot, extraIdleTime);
+				// What is the next travel time?
+				if (recordToUpdateReturnTime != null) {
+					recordToUpdateReturnTime.setReturnSlotTime(slot, arrivalTime);
+					recordToUpdateReturnTime = null;
+				}
+			}
+
+			final IPortSlot returnSlot = record.getReturnSlot();
+			if (returnSlot != null) {
+				if (returnSlot.getPortType() == PortType.Round_Trip_Cargo_End) {
+
+					final IPortSlot startPortSlot = portTimesRecord.getSlots().get(0);
+					final IPortSlot prevPortSlot = portTimesRecord.getSlots().get(portTimesRecord.getSlots().size() - 1);
+					final int prevArrivalTime = portTimesRecord.getSlotTime(prevPortSlot);
+					final int prevVisitDuration = portTimesRecord.getSlotDuration(prevPortSlot);
+					final int availableTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), //
+							prevPortSlot.getPort(), startPortSlot.getPort(), //
+							vesselAvailability.getVessel().getMaxSpeed(), //
+							record.getSlotNextVoyageOptions(prevPortSlot) //
+					).getSecond();
+					final int roundTripReturnArrivalTime = prevArrivalTime + prevVisitDuration + availableTime + record.getSlotExtraIdleTime(prevPortSlot);
+
+					portTimesRecord.setReturnSlotTime(returnSlot, roundTripReturnArrivalTime);
 				} else {
 					recordToUpdateReturnTime = portTimesRecord;
 				}

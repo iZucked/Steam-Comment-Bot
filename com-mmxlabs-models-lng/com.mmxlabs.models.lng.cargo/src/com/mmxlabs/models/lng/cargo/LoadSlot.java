@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo;
@@ -24,6 +24,7 @@ import com.mmxlabs.models.lng.types.DESPurchaseDealType;
  *   <li>{@link com.mmxlabs.models.lng.cargo.LoadSlot#getTransferFrom <em>Transfer From</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.LoadSlot#getSalesDeliveryType <em>Sales Delivery Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.LoadSlot#getDesPurchaseDealType <em>Des Purchase Deal Type</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.LoadSlot#isVolumeCounterParty <em>Volume Counter Party</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getLoadSlot()
@@ -331,6 +332,28 @@ public interface LoadSlot extends Slot<PurchaseContract> {
 	 * @generated
 	 */
 	boolean isSetDesPurchaseDealType();
+
+	/**
+	 * Returns the value of the '<em><b>Volume Counter Party</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Volume Counter Party</em>' attribute.
+	 * @see #setVolumeCounterParty(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getLoadSlot_VolumeCounterParty()
+	 * @model
+	 * @generated
+	 */
+	boolean isVolumeCounterParty();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.LoadSlot#isVolumeCounterParty <em>Volume Counter Party</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Volume Counter Party</em>' attribute.
+	 * @see #isVolumeCounterParty()
+	 * @generated
+	 */
+	void setVolumeCounterParty(boolean value);
 
 	/**
 	 * <!-- begin-user-doc -->

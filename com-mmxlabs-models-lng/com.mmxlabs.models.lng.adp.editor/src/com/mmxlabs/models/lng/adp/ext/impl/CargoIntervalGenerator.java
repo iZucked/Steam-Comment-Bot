@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.adp.ext.impl;
@@ -87,7 +87,8 @@ public class CargoIntervalGenerator implements IProfileGenerator {
 
 				for (int i = 0; i < numberOfCargoes; ++i) {
 					final T slot = DistributionModelGeneratorUtil.generateSlot(factory, profile, subProfile, start, date, idx++);
-					ADPModelUtil.setSlotVolumeFrom(contract.getMinQuantity(), model.getModelOrContractVolumePerCargo(), model.getModelOrContractVolumeUnit(), slot, false);
+					int minQuantity = DistributionModelGeneratorUtil.getMinContractQuantityInUnits(contract, model.getModelOrContractVolumeUnit());
+					ADPModelUtil.setSlotVolumeFrom(minQuantity, model.getModelOrContractVolumePerCargo(), model.getModelOrContractVolumeUnit(), slot, false);
 					if (model.getIntervalType() != IntervalType.MONTHLY) {
 						if (model.getIntervalType() == IntervalType.QUARTERLY) {
 							slot.setWindowSize(3);

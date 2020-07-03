@@ -1,9 +1,15 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -11,10 +17,15 @@ import java.util.function.BiConsumer;
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.Assertions;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.google.common.base.Objects;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.lingo.reports.modelbased.annotations.LingoIgnore;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
@@ -321,5 +332,97 @@ public class MicroTestUtils {
 		}
 		Assertions.fail("End Event not found");
 		throw new IllegalStateException();
+	}
+	
+	/**
+	 * Compares two given lists for equality, entry-by-entry, field-by-field. Uses myClass to determine fields. 
+	 * Ignores fields with LingoIgnore annotation.
+	 * @param <T>
+	 * @param etalons
+	 * @param generated
+	 * @param myClass
+	 * @return
+	 */
+	public static <T> boolean compareTLists(List<T> etalons, List<T> generated, Class<T> myClass) {
+		if (etalons.size() != generated.size()) {
+			return false;
+		}
+		
+		int size = etalons.size();
+		int strike = 0;
+		final List<Field> fields = new ArrayList<Field>();
+		for (final Field field : myClass.getFields()) {
+			if (field.getAnnotation(LingoIgnore.class) != null) {
+				continue;
+			}
+			fields.add(field);
+		}
+		
+		for(final T gen : generated) {
+			for (final T et : etalons) {
+		
+				boolean allFieldsEqual = true;
+				for (final Field f : fields) {
+					try {
+						final Object genValue = f.get(gen);
+						final Object etValue = f.get(et);
+						if (!Objects.equal(genValue, etValue)) {
+							allFieldsEqual = false;
+							break;
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+				
+				if (allFieldsEqual) {
+					strike++;
+				}
+			}
+		}
+		
+		return size == strike;
+	}
+	
+	/**
+	 * Locates given fileName JSON file at urlRoot and tries to return a list of given typeRef
+	 * @param <T>
+	 * @param urlRoot full path to the folder
+	 * @param fileName JSON file name
+	 * @param typeRef
+	 * @return List of given typeRef
+	 */
+	public static <T> List<T> getEtalonTList(final String urlRoot, final String fileName, final TypeReference<List<T>> typeRef) {
+		List<T> etalons = Collections.emptyList();
+		final String urlString = String.format("%s/%s", urlRoot, fileName);
+		URL url = null;
+		try {
+			url = new URL(urlString);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Collections.emptyList();
+		}
+		
+		InputStream inputStream = null;
+		
+		try {
+			inputStream = url.openStream();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			return Collections.emptyList();
+		}
+		
+		if (inputStream != null) {
+			final ObjectMapper objectMapper = new ObjectMapper();
+			objectMapper.registerModule(new JavaTimeModule());
+			
+			try {	
+				etalons = objectMapper.readValue(inputStream, typeRef);
+			} catch (final Exception e) {
+				e.printStackTrace();
+				return Collections.emptyList();
+			}
+		}
+		return etalons;
 	}
 }

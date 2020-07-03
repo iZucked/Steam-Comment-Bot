@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.ui.autocomplete;
@@ -144,7 +144,20 @@ public class PriceExpressionProposalProvider implements IMMXContentProposalProvi
 				}
 			}
 		}
-
+		{
+			final String proposal = "CAP(";
+			if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
+				final String c = proposal.substring(contents.length());
+				list.add(new ContentProposal(c, proposal + "a,b)", "Use this to put an upper limit (a or b) on a price expression, e.g. \"CAP(1.1, 115%HH)\" gives 115%HH but no higher than $1.10", c.length()));
+			}
+		}
+		{
+			final String proposal = "FLOOR(";
+			if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
+				final String c = proposal.substring(contents.length());
+				list.add(new ContentProposal(c, proposal + "a,b)", "Use this to put a lower limit (a or b) on a price expression, e.g. \"FLOOR(1.1, 115%HH)\" gives 115%HH but no lower than $1.10", c.length()));
+			}
+		}
 		{
 			final String proposal = "MIN(";
 			if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {

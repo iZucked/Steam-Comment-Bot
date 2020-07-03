@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.ui.views.sandbox.components;
@@ -124,13 +124,9 @@ public class SellOptionsComponent extends AbstractSandboxComponent<Object, Abstr
 			sellOptionsViewer.addDropSupport(DND.DROP_MOVE, types, listener);
 		}
 		inputWants.add(model -> sellOptionsViewer.setInput(model));
-		
 
-		lockedListeners.add(locked -> {
-			RunnerHelper.asyncExec(() -> sellOptionsViewer.getGrid().setEnabled(!locked));
-		});
+		lockedListeners.add(locked -> RunnerHelper.runAsyncIfControlValid(sellOptionsViewer.getGrid(), grid -> grid.setEnabled(!locked)));
 
-		
 		return sellOptionsViewer.getControl();
 	}
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.standard.econs;
@@ -29,9 +29,12 @@ import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
+import com.mmxlabs.models.lng.schedule.GroupedCharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
+import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
+import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Purge;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
@@ -208,6 +211,9 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 			if (object instanceof CargoAllocation) {
 				final CargoAllocation cargoAllocation = (CargoAllocation) object;
 				return helper.apply(cargoAllocation);
+			} else if (object instanceof OpenSlotAllocation) {
+				final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) object;
+				return helper.apply(openSlotAllocation);
 			} else if (object instanceof CharterLengthEvent) {
 				final CharterLengthEvent charterLength = (CharterLengthEvent) object;
 				return helper.apply(charterLength);
@@ -217,7 +223,7 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 			} else if (object instanceof EndEvent) {
 				final EndEvent endEvent = (EndEvent) object;
 				return helper.apply(endEvent);
-			}  else if (object instanceof VesselEvent) {
+			} else if (object instanceof VesselEvent) {
 				final VesselEvent vesselEvent = (VesselEvent) object;
 				return helper.apply(vesselEvent);
 			} else if (object instanceof GeneratedCharterOut) {
@@ -232,10 +238,13 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 			} else if (object instanceof MarketAllocation) {
 				final MarketAllocation marketAllocation = (MarketAllocation) object;
 				return helper.apply(marketAllocation);
-			} else if (object instanceof CargoAllocationPair) {
-				return getFromCargoAllocationPair(type, helper, object);
+			} else if (object instanceof DeltaPair) {
+				return getFromDeltaPair(type, helper, object);
 			} else if (object instanceof List<?>) {
-				return getFromCargoAllocationPairList(type, helper, object);
+				return getFromDeltaPairPairList(type, helper, object);
+			} else if (object instanceof PaperDealAllocation) {
+				final PaperDealAllocation paperDealAllocation = (PaperDealAllocation) object;
+				return helper.apply(paperDealAllocation);
 			}
 			return null;
 		};
@@ -263,7 +272,7 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 			}
 		}, transformer);
 	}
-	
+
 	protected @NonNull ICellRenderer createDoubleDaysFormatter(final EconsOptions options, final boolean isCost, final Function<Object, @Nullable Double> transformer) {
 		return createBasicFormatter(options, isCost, Double.class, new Function<Double, String>() {
 			@Override
@@ -272,14 +281,14 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 			}
 		}, transformer);
 	}
-	
-	protected <T, U> T getFromCargoAllocationPairList(final Class<T> type, final Function<U, T> f, final Object object) {
-		final List<DeltaPair> cargoAllocations = (List<DeltaPair>) object;
+
+	protected <T, U> T getFromDeltaPairPairList(final Class<T> type, final Function<U, T> f, final Object object) {
+		final List<DeltaPair> deltaPairs = (List<DeltaPair>) object;
 
 		if (type == Integer.class) {
 			int acc = 0;
-			for (final DeltaPair cargoAllocation : cargoAllocations) {
-				Integer v = (Integer) getFromCargoAllocationPair(type, f, cargoAllocation);
+			for (final DeltaPair deltaPair : deltaPairs) {
+				Integer v = (Integer) getFromDeltaPair(type, f, deltaPair);
 				if (v != null) {
 					acc += (int) v;
 				}
@@ -287,8 +296,8 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 			return type.cast(acc);
 		} else if (type == Double.class) {
 			double acc = 0;
-			for (final DeltaPair cargoAllocation : cargoAllocations) {
-				Double v = (Double) getFromCargoAllocationPair(type, f, cargoAllocation);
+			for (final DeltaPair deltaPair : deltaPairs) {
+				Double v = (Double) getFromDeltaPair(type, f, deltaPair);
 				if (v != null) {
 					acc += (double) v;
 				}
@@ -296,8 +305,8 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 			return type.cast(acc);
 		} else if (type == Long.class) {
 			long acc = 0;
-			for (final DeltaPair cargoAllocation : cargoAllocations) {
-				Long v = (Long) getFromCargoAllocationPair(type, f, cargoAllocation);
+			for (final DeltaPair deltaPair : deltaPairs) {
+				Long v = (Long) getFromDeltaPair(type, f, deltaPair);
 				if (v != null) {
 					acc += (long) v;
 				}
@@ -307,8 +316,8 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 
 		return null;
 	}
-	
-	protected <T, U> T getFromCargoAllocationPair(final Class<T> type, final Function<U, @Nullable T> f, final Object object) {
+
+	protected <T, U> T getFromDeltaPair(final Class<T> type, final Function<U, @Nullable T> f, final Object object) {
 		Object first = null;
 		Object second = null;
 
@@ -318,17 +327,33 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 			second = deltaPair.second();
 		}
 
-		final T valueFirst = f.apply((U) first);
+		T valueFirst = f.apply((U) first);
+
+		// Negate value first, incase the second case is not present.
+		if (valueFirst != null) {
+			if (valueFirst instanceof Integer) {
+				valueFirst = type.cast(-(int) valueFirst);
+			} else if (valueFirst instanceof Double) {
+				valueFirst = type.cast(-(double) valueFirst);
+			} else if (valueFirst instanceof Long) {
+				valueFirst = type.cast(-(long) valueFirst);
+			}
+		}
 
 		if (second != null) {
 			final T valueSecond = f.apply((U) second);
 			if (valueSecond != null) {
-				if (valueFirst instanceof Integer) {
-					return type.cast(((int) valueSecond - (int) valueFirst));
-				} else if (valueFirst instanceof Double) {
-					return type.cast(((double) valueSecond - (double) valueFirst));
-				} else if (valueFirst instanceof Long) {
-					return type.cast(((long) valueSecond - (long) valueFirst));
+				if (valueFirst == null) {
+					return valueSecond;
+				}
+				if (valueSecond instanceof Integer) {
+					return type.cast(((int) valueSecond + (int) valueFirst));
+				} else if (valueSecond instanceof Double) {
+					return type.cast(((double) valueSecond + (double) valueFirst));
+				} else if (valueSecond instanceof Long) {
+					return type.cast(((long) valueSecond + (long) valueFirst));
+				} else {
+					int ii = 0;
 				}
 			}
 		}
@@ -383,6 +408,24 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 			}
 			return null;
 		});
+	}
+	
+	protected ICellRenderer createPaperDealAllocationFormatter(final Function<PaperDealAllocation, String> func) {
+		return new BaseFormatter() {
+			@Override
+			public @Nullable String render(final Object object) {
+
+				try {
+					if (object instanceof PaperDealAllocation) {
+						final PaperDealAllocation paperDealAllocation = (PaperDealAllocation) object;
+						return func.apply(paperDealAllocation);
+					}
+				} catch (final NullPointerException e) {
+					// Ignore NPE
+				}
+				return null;
+			}
+		};
 	}
 
 	protected ICellRenderer createFirstPurchaseFormatter(final Function<SlotAllocation, String> func) {
@@ -467,7 +510,8 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 		};
 	}
 
-	protected <T> Function<Object, @Nullable T> createFullLegTransformer2(final Class<T> resultType, final int index, final TriFunction<SlotVisit, Journey, Idle, T> func) {
+	protected <T> Function<Object, @Nullable T> createFullLegTransformer2(final Class<T> resultType, final int index,
+			final TriFunction<@Nullable SlotVisit, @Nullable Journey, @Nullable Idle, @Nullable T> func) {
 		return createMappingFunction(resultType, object -> {
 			try {
 				SlotVisit slotVisit = null;
@@ -505,7 +549,7 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 
 				}
 				if (object instanceof EventGrouping) {
-					final EventGrouping eg = (EventGrouping)object;
+					final EventGrouping eg = (EventGrouping) object;
 					for (final Event event : eg.getEvents()) {
 						if (event instanceof SlotVisit) {
 							slotVisit = (SlotVisit) event;
@@ -566,9 +610,4 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 		});
 	}
 
-
-
-
-
-	
 }

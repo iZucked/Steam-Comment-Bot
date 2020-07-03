@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.tests;
@@ -12,6 +12,11 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.common.parser.IExpression;
+import com.mmxlabs.common.parser.ExposuresIndexConversion.BreakEvenType;
+import com.mmxlabs.common.parser.ExposuresIndexConversion.Form;
+import com.mmxlabs.common.parser.RawTreeParser;
+import com.mmxlabs.common.parser.nodes.MarkedUpNode;
+import com.mmxlabs.common.parser.nodes.Node;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesOperatorExpression;
 import com.mmxlabs.common.parser.series.SeriesParser;
@@ -22,13 +27,8 @@ import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.UnitConversion;
 import com.mmxlabs.models.lng.pricing.YearMonthPoint;
-import com.mmxlabs.models.lng.pricing.parser.Node;
-import com.mmxlabs.models.lng.pricing.parser.RawTreeParser;
 import com.mmxlabs.models.lng.pricing.parseutils.IndexConversion;
-import com.mmxlabs.models.lng.pricing.parseutils.IndexConversion.BreakEvenType;
-import com.mmxlabs.models.lng.pricing.parseutils.IndexConversion.Form;
 import com.mmxlabs.models.lng.pricing.parseutils.LookupData;
-import com.mmxlabs.models.lng.pricing.parseutils.MarkedUpNode;
 import com.mmxlabs.models.lng.pricing.parseutils.Nodes;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
@@ -158,7 +158,7 @@ public class IndexConversionsTest {
 		@Nullable
 		MarkedUpNode testGraphRearrangement = testGraphRearrangement(expression, Form.M_X_PLUS_C, 10);
 		String rearrangedExpression = IndexConversion.getExpression(testGraphRearrangement);
-		Assertions.assertEquals("((10.0)-(100.0%((HH)*((FX_EURO_to_USD)*(mwh_to_mmBtu)))))", rearrangedExpression);
+		Assertions.assertEquals("((10.0)-(100.0%((HH)*((fx_euro_to_usd)*(mwh_to_mmBtu)))))", rearrangedExpression);
 		System.out.println(rearrangedExpression);
 		double parseExpression = parseExpression(rearrangedExpression);
 		Assertions.assertEquals(8.37, parseExpression, 0.001);

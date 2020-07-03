@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases;
@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
@@ -50,7 +51,7 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 	public void testFobPurchase_M3() throws Exception {
 
 		@NonNull
-		final LoadSlot e_loadSlot = cargoModelBuilder.makeFOBPurchase("L1", LocalDate.of(2016, 7, 20), portFinder.findPort("Point Fortin"), null, entity, "5", 20.0)
+		final LoadSlot e_loadSlot = cargoModelBuilder.makeFOBPurchase("L1", LocalDate.of(2016, 7, 20), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 20.0)
 				.withVolumeLimits(5_000, 10_000, VolumeUnits.M3)//
 				.build();
 
@@ -78,7 +79,7 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 	public void testFobPurchase_MMBTU() throws Exception {
 
 		@NonNull
-		final LoadSlot e_loadSlot = cargoModelBuilder.makeFOBPurchase("L1", LocalDate.of(2016, 7, 20), portFinder.findPort("Point Fortin"), null, entity, "5", 20.0)
+		final LoadSlot e_loadSlot = cargoModelBuilder.makeFOBPurchase("L1", LocalDate.of(2016, 7, 20), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 20.0)
 				.withVolumeLimits(20 * 5_000, 20 * 10_000, VolumeUnits.MMBTU)//
 				.build();
 
@@ -106,7 +107,7 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 	public void testDESPurchase_M3() throws Exception {
 
 		@NonNull
-		final LoadSlot e_loadSlot = cargoModelBuilder.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2016, 7, 20), portFinder.findPort("Sakai"), null, entity, "5", 20.0, null)
+		final LoadSlot e_loadSlot = cargoModelBuilder.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2016, 7, 20), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "5", 20.0, null)
 				.withVolumeLimits(5_000, 10_000, VolumeUnits.M3)//
 				.build();
 
@@ -134,7 +135,7 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 	public void testDESPurchase_MMBTU() throws Exception {
 
 		@NonNull
-		final LoadSlot e_loadSlot = cargoModelBuilder.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2016, 7, 20), portFinder.findPort("Sakai"), null, entity, "5", 20.0, null)
+		final LoadSlot e_loadSlot = cargoModelBuilder.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2016, 7, 20), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "5", 20.0, null)
 				.withVolumeLimits(20 * 5_000, 20 * 10_000, VolumeUnits.MMBTU)//
 				.build();
 
@@ -162,7 +163,7 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 	public void testDesSale_M3() throws Exception {
 
 		@NonNull
-		final DischargeSlot e_DischargeSlot = cargoModelBuilder.makeDESSale("D1", LocalDate.of(2016, 7, 20), portFinder.findPort("Sakai"), null, entity, "5")
+		final DischargeSlot e_DischargeSlot = cargoModelBuilder.makeDESSale("D1", LocalDate.of(2016, 7, 20), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "5")
 				.withVolumeLimits(5_000, 10_000, VolumeUnits.M3)//
 				.build();
 
@@ -191,7 +192,7 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 	public void testDesSale_MMBTU() throws Exception {
 
 		@NonNull
-		final DischargeSlot e_DischargeSlot = cargoModelBuilder.makeDESSale("D1", LocalDate.of(2016, 7, 20), portFinder.findPort("Sakai"), null, entity, "5")//
+		final DischargeSlot e_DischargeSlot = cargoModelBuilder.makeDESSale("D1", LocalDate.of(2016, 7, 20), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "5")//
 				.withVolumeLimits(20 * 5_000, 20 * 10_000, VolumeUnits.MMBTU)//
 				.build();
 
@@ -221,7 +222,7 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 	public void testFobSale_M3() throws Exception {
 
 		@NonNull
-		final DischargeSlot e_DischargeSlot = cargoModelBuilder.makeFOBSale("D1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2016, 7, 20), portFinder.findPort("Point Fortin"), null, entity, "5", null)//
+		final DischargeSlot e_DischargeSlot = cargoModelBuilder.makeFOBSale("D1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2016, 7, 20), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", null)//
 				.withVolumeLimits(5_000, 10_000, VolumeUnits.M3)//
 				.build();
 
@@ -251,7 +252,7 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 	public void testFobSale_MMBTU() throws Exception {
 
 		@NonNull
-		final DischargeSlot e_DischargeSlot = cargoModelBuilder.makeFOBSale("D1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2016, 7, 20), portFinder.findPort("Point Fortin"), null, entity, "5", null)//
+		final DischargeSlot e_DischargeSlot = cargoModelBuilder.makeFOBSale("D1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2016, 7, 20), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", null)//
 				.withVolumeLimits(20 * 5_000, 20 * 10_000, VolumeUnits.MMBTU)//
 				.build();
 
@@ -287,7 +288,7 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 		contract.setCargoCV(20.0);
 
 		@NonNull
-		final LoadSlot e_loadSlot = cargoModelBuilder.makeFOBPurchase("L1", LocalDate.of(2016, 7, 20), portFinder.findPort("Point Fortin"), contract, null, null, null).build();
+		final LoadSlot e_loadSlot = cargoModelBuilder.makeFOBPurchase("L1", LocalDate.of(2016, 7, 20), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), contract, null, null, null).build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
@@ -319,7 +320,7 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 		contract.setCargoCV(20.0);
 
 		@NonNull
-		final LoadSlot e_loadSlot = cargoModelBuilder.makeFOBPurchase("L1", LocalDate.of(2016, 7, 20), portFinder.findPort("Point Fortin"), contract, null, null, null).build();
+		final LoadSlot e_loadSlot = cargoModelBuilder.makeFOBPurchase("L1", LocalDate.of(2016, 7, 20), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), contract, null, null, null).build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
@@ -351,7 +352,7 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 		contract.setCargoCV(20.0);
 
 		@NonNull
-		final LoadSlot e_loadSlot = cargoModelBuilder.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2016, 7, 20), portFinder.findPort("Sakai"), contract, null, null, null, null).build();
+		final LoadSlot e_loadSlot = cargoModelBuilder.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2016, 7, 20), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), contract, null, null, null, null).build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
@@ -381,7 +382,7 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 		contract.setVolumeLimitsUnit(VolumeUnits.MMBTU);
 		contract.setCargoCV(20.0);
 		@NonNull
-		final LoadSlot e_loadSlot = cargoModelBuilder.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2016, 7, 20), portFinder.findPort("Sakai"), contract, null, null, null, null).build();
+		final LoadSlot e_loadSlot = cargoModelBuilder.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2016, 7, 20), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), contract, null, null, null, null).build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
@@ -411,7 +412,7 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 		contract.setVolumeLimitsUnit(VolumeUnits.M3);
 
 		@NonNull
-		final DischargeSlot e_DischargeSlot = cargoModelBuilder.makeDESSale("D1", LocalDate.of(2016, 7, 20), portFinder.findPort("Sakai"), contract, null, null) //
+		final DischargeSlot e_DischargeSlot = cargoModelBuilder.makeDESSale("D1", LocalDate.of(2016, 7, 20), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), contract, null, null) //
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
@@ -443,7 +444,7 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 		contract.setVolumeLimitsUnit(VolumeUnits.MMBTU);
 
 		@NonNull
-		final DischargeSlot e_DischargeSlot = cargoModelBuilder.makeDESSale("D1", LocalDate.of(2016, 7, 20), portFinder.findPort("Sakai"), contract, null, null)//
+		final DischargeSlot e_DischargeSlot = cargoModelBuilder.makeDESSale("D1", LocalDate.of(2016, 7, 20), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), contract, null, null)//
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
@@ -476,7 +477,7 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 		contract.setVolumeLimitsUnit(VolumeUnits.M3);
 
 		@NonNull
-		final DischargeSlot e_DischargeSlot = cargoModelBuilder.makeFOBSale("D1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2016, 7, 20), portFinder.findPort("Point Fortin"), contract, null, null, null)//
+		final DischargeSlot e_DischargeSlot = cargoModelBuilder.makeFOBSale("D1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2016, 7, 20), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), contract, null, null, null)//
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
@@ -508,7 +509,7 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 		contract.setMaxQuantity(20 * 10_000);
 		contract.setVolumeLimitsUnit(VolumeUnits.MMBTU);
 		@NonNull
-		final DischargeSlot e_DischargeSlot = cargoModelBuilder.makeFOBSale("D1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2016, 7, 20), portFinder.findPort("Point Fortin"), contract, null, null, null)//
+		final DischargeSlot e_DischargeSlot = cargoModelBuilder.makeFOBSale("D1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2016, 7, 20), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), contract, null, null, null)//
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
@@ -538,7 +539,7 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testSpotFobPurchase_M3_Existing() throws Exception {
 
-		final FOBPurchasesMarket market = scenarioModelBuilder.getSpotMarketsModelBuilder().makeFOBPurchaseMarket("Market", portFinder.findPort("Point Fortin"), entity, "5", 20.0)
+		final FOBPurchasesMarket market = scenarioModelBuilder.getSpotMarketsModelBuilder().makeFOBPurchaseMarket("Market", portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), entity, "5", 20.0)
 				.withVolumeLimits(5_000, 10_000, VolumeUnits.M3).build();
 
 		@NonNull
@@ -566,7 +567,7 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testSpotFobPurchase_MMBTU_Existing() throws Exception {
-		final FOBPurchasesMarket market = scenarioModelBuilder.getSpotMarketsModelBuilder().makeFOBPurchaseMarket("Market", portFinder.findPort("Point Fortin"), entity, "5", 20.0)
+		final FOBPurchasesMarket market = scenarioModelBuilder.getSpotMarketsModelBuilder().makeFOBPurchaseMarket("Market", portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), entity, "5", 20.0)
 				.withVolumeLimits(20 * 5_000, 20 * 10_000, VolumeUnits.MMBTU).build();
 
 		@NonNull
@@ -595,11 +596,11 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testSpotDESPurchase_M3_Existing() throws Exception {
 
-		final DESPurchaseMarket market = scenarioModelBuilder.getSpotMarketsModelBuilder().makeDESPurchaseMarket("Market", Collections.singletonList(portFinder.findPort("Sakai")), entity, "5", 20.0)
+		final DESPurchaseMarket market = scenarioModelBuilder.getSpotMarketsModelBuilder().makeDESPurchaseMarket("Market", Collections.singletonList(portFinder.findPortById(InternalDataConstants.PORT_SAKAI)), entity, "5", 20.0)
 				.withVolumeLimits(5_000, 10_000, VolumeUnits.M3).build();
 
 		@NonNull
-		final LoadSlot e_loadSlot = cargoModelBuilder.makeSpotDESPurchase("L1", YearMonth.of(2016, 7), market, portFinder.findPort("Sakai")).build();
+		final LoadSlot e_loadSlot = cargoModelBuilder.makeSpotDESPurchase("L1", YearMonth.of(2016, 7), market, portFinder.findPortById(InternalDataConstants.PORT_SAKAI)).build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
@@ -623,11 +624,11 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testSpotDESPurchase_MMBTU_Existing() throws Exception {
-		final DESPurchaseMarket market = scenarioModelBuilder.getSpotMarketsModelBuilder().makeDESPurchaseMarket("Market", Collections.singletonList(portFinder.findPort("Sakai")), entity, "5", 20.0)
+		final DESPurchaseMarket market = scenarioModelBuilder.getSpotMarketsModelBuilder().makeDESPurchaseMarket("Market", Collections.singletonList(portFinder.findPortById(InternalDataConstants.PORT_SAKAI)), entity, "5", 20.0)
 				.withVolumeLimits(20 * 5_000, 20 * 10_000, VolumeUnits.MMBTU).build();
 
 		@NonNull
-		final LoadSlot e_loadSlot = cargoModelBuilder.makeSpotDESPurchase("L1", YearMonth.of(2016, 7), market, portFinder.findPort("Sakai")).build();
+		final LoadSlot e_loadSlot = cargoModelBuilder.makeSpotDESPurchase("L1", YearMonth.of(2016, 7), market, portFinder.findPortById(InternalDataConstants.PORT_SAKAI)).build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
@@ -652,7 +653,7 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testSpotDesSale_M3_Existing() throws Exception {
 
-		final DESSalesMarket market = scenarioModelBuilder.getSpotMarketsModelBuilder().makeDESSaleMarket("Market", portFinder.findPort("Sakai"), entity, "5")
+		final DESSalesMarket market = scenarioModelBuilder.getSpotMarketsModelBuilder().makeDESSaleMarket("Market", portFinder.findPortById(InternalDataConstants.PORT_SAKAI), entity, "5")
 				.withVolumeLimits(5_000, 10_000, VolumeUnits.M3).build();
 
 		@NonNull
@@ -683,7 +684,7 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testSpotDesSale_MMBTU_Existing() throws Exception {
 
-		final DESSalesMarket market = scenarioModelBuilder.getSpotMarketsModelBuilder().makeDESSaleMarket("Market", portFinder.findPort("Sakai"), entity, "5")
+		final DESSalesMarket market = scenarioModelBuilder.getSpotMarketsModelBuilder().makeDESSaleMarket("Market", portFinder.findPortById(InternalDataConstants.PORT_SAKAI), entity, "5")
 				.withVolumeLimits(20 * 5_000, 20 * 10_000, VolumeUnits.MMBTU).build();
 
 		@NonNull
@@ -715,11 +716,11 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testSpotFobSale_M3_Existing() throws Exception {
 
-		final FOBSalesMarket market = scenarioModelBuilder.getSpotMarketsModelBuilder().makeFOBSaleMarket("Market", Collections.singletonList(portFinder.findPort("Point Fortin")), entity, "5")
+		final FOBSalesMarket market = scenarioModelBuilder.getSpotMarketsModelBuilder().makeFOBSaleMarket("Market", Collections.singletonList(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)), entity, "5")
 				.withVolumeLimits(5_000, 10_000, VolumeUnits.M3).build();
 
 		@NonNull
-		final DischargeSlot e_DischargeSlot = cargoModelBuilder.makeSpotFOBSale("D1", YearMonth.of(2016, 7), market, portFinder.findPort("Point Fortin"))//
+		final DischargeSlot e_DischargeSlot = cargoModelBuilder.makeSpotFOBSale("D1", YearMonth.of(2016, 7), market, portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN))//
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
@@ -746,10 +747,10 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testSpotFobSale_MMBTU_Existing() throws Exception {
-		final FOBSalesMarket market = scenarioModelBuilder.getSpotMarketsModelBuilder().makeFOBSaleMarket("Market", Collections.singletonList(portFinder.findPort("Point Fortin")), entity, "5")
+		final FOBSalesMarket market = scenarioModelBuilder.getSpotMarketsModelBuilder().makeFOBSaleMarket("Market", Collections.singletonList(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)), entity, "5")
 				.withVolumeLimits(20 * 5_000, 20 * 10_000, VolumeUnits.MMBTU).build();
 		@NonNull
-		final DischargeSlot e_DischargeSlot = cargoModelBuilder.makeSpotFOBSale("D1", YearMonth.of(2016, 7), market, portFinder.findPort("Point Fortin"))//
+		final DischargeSlot e_DischargeSlot = cargoModelBuilder.makeSpotFOBSale("D1", YearMonth.of(2016, 7), market, portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN))//
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
@@ -779,11 +780,11 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testSpotFobPurchase_M3_Generated() throws Exception {
 
-		scenarioModelBuilder.getSpotMarketsModelBuilder().makeFOBPurchaseMarket("Market", portFinder.findPort("Point Fortin"), entity, "5", 20.0).withVolumeLimits(5_000, 10_000, VolumeUnits.M3)//
+		scenarioModelBuilder.getSpotMarketsModelBuilder().makeFOBPurchaseMarket("Market", portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), entity, "5", 20.0).withVolumeLimits(5_000, 10_000, VolumeUnits.M3)//
 				.withAvailabilityConstant(1) //
 				.build();
 
-		cargoModelBuilder.makeDESSale("D1", LocalDate.of(2016, 7, 20), portFinder.findPort("Sakai"), null, entity, "5");
+		cargoModelBuilder.makeDESSale("D1", LocalDate.of(2016, 7, 20), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "5");
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
@@ -809,12 +810,12 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testSpotFobPurchase_MMBTU_Generated() throws Exception {
-		scenarioModelBuilder.getSpotMarketsModelBuilder().makeFOBPurchaseMarket("Market", portFinder.findPort("Point Fortin"), entity, "5", 20.0)
+		scenarioModelBuilder.getSpotMarketsModelBuilder().makeFOBPurchaseMarket("Market", portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), entity, "5", 20.0)
 				.withVolumeLimits(20 * 5_000, 20 * 10_000, VolumeUnits.MMBTU)//
 				.withAvailabilityConstant(1) //
 				.build();
 
-		cargoModelBuilder.makeDESSale("D1", LocalDate.of(2016, 7, 20), portFinder.findPort("Sakai"), null, entity, "5");
+		cargoModelBuilder.makeDESSale("D1", LocalDate.of(2016, 7, 20), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "5");
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
@@ -841,12 +842,12 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testSpotDESPurchase_M3_Generated() throws Exception {
 
-		scenarioModelBuilder.getSpotMarketsModelBuilder().makeDESPurchaseMarket("Market", Collections.singletonList(portFinder.findPort("Sakai")), entity, "5", 20.0)
+		scenarioModelBuilder.getSpotMarketsModelBuilder().makeDESPurchaseMarket("Market", Collections.singletonList(portFinder.findPortById(InternalDataConstants.PORT_SAKAI)), entity, "5", 20.0)
 				.withVolumeLimits(5_000, 10_000, VolumeUnits.M3)//
 				.withAvailabilityConstant(1) //
 				.build();
 
-		cargoModelBuilder.makeDESSale("D1", LocalDate.of(2016, 7, 20), portFinder.findPort("Sakai"), null, entity, "5");
+		cargoModelBuilder.makeDESSale("D1", LocalDate.of(2016, 7, 20), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "5");
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
@@ -871,12 +872,12 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testSpotDESPurchase_MMBTU_Generated() throws Exception {
-		scenarioModelBuilder.getSpotMarketsModelBuilder().makeDESPurchaseMarket("Market", Collections.singletonList(portFinder.findPort("Sakai")), entity, "5", 20.0)
+		scenarioModelBuilder.getSpotMarketsModelBuilder().makeDESPurchaseMarket("Market", Collections.singletonList(portFinder.findPortById(InternalDataConstants.PORT_SAKAI)), entity, "5", 20.0)
 				.withVolumeLimits(20 * 5_000, 20 * 10_000, VolumeUnits.MMBTU) //
 				.withAvailabilityConstant(1) //
 				.build();
 
-		cargoModelBuilder.makeDESSale("D1", LocalDate.of(2016, 7, 20), portFinder.findPort("Sakai"), null, entity, "5");
+		cargoModelBuilder.makeDESSale("D1", LocalDate.of(2016, 7, 20), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "5");
 		
 		
 		evaluateWithLSOTest(scenarioRunner -> {
@@ -903,12 +904,12 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testSpotDesSale_M3_Generated() throws Exception {
 
-		scenarioModelBuilder.getSpotMarketsModelBuilder().makeDESSaleMarket("Market", portFinder.findPort("Sakai"), entity, "5")//
+		scenarioModelBuilder.getSpotMarketsModelBuilder().makeDESSaleMarket("Market", portFinder.findPortById(InternalDataConstants.PORT_SAKAI), entity, "5")//
 				.withVolumeLimits(5_000, 10_000, VolumeUnits.M3)//
 				.withAvailabilityConstant(1) //
 				.build();
 
-		cargoModelBuilder.makeFOBPurchase("L1", LocalDate.of(2016, 7, 20), portFinder.findPort("Point Fortin"), null, entity, "5", 20.0);
+		cargoModelBuilder.makeFOBPurchase("L1", LocalDate.of(2016, 7, 20), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 20.0);
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
@@ -935,12 +936,12 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testSpotDesSale_MMBTU_Generated() throws Exception {
 
-		scenarioModelBuilder.getSpotMarketsModelBuilder().makeDESSaleMarket("Market", portFinder.findPort("Sakai"), entity, "5") //
+		scenarioModelBuilder.getSpotMarketsModelBuilder().makeDESSaleMarket("Market", portFinder.findPortById(InternalDataConstants.PORT_SAKAI), entity, "5") //
 				.withVolumeLimits(20 * 5_000, 20 * 10_000, VolumeUnits.MMBTU)//
 				.withAvailabilityConstant(1) //
 				.build();
 
-		cargoModelBuilder.makeFOBPurchase("L1", LocalDate.of(2016, 7, 20), portFinder.findPort("Point Fortin"), null, entity, "5", 20.0);
+		cargoModelBuilder.makeFOBPurchase("L1", LocalDate.of(2016, 7, 20), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 20.0);
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
@@ -968,12 +969,12 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testSpotFobSale_M3_Generated() throws Exception {
 
-		scenarioModelBuilder.getSpotMarketsModelBuilder().makeFOBSaleMarket("Market", Collections.singletonList(portFinder.findPort("Point Fortin")), entity, "5")
+		scenarioModelBuilder.getSpotMarketsModelBuilder().makeFOBSaleMarket("Market", Collections.singletonList(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)), entity, "5")
 				.withVolumeLimits(5_000, 10_000, VolumeUnits.M3)//
 				.withAvailabilityConstant(1) //
 				.build();
 
-		cargoModelBuilder.makeFOBPurchase("L1", LocalDate.of(2016, 7, 20), portFinder.findPort("Point Fortin"), null, entity, "5", 20.0);
+		cargoModelBuilder.makeFOBPurchase("L1", LocalDate.of(2016, 7, 20), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 20.0);
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
@@ -1000,12 +1001,12 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testSpotFobSale_MMBTU_Generated() throws Exception {
-		scenarioModelBuilder.getSpotMarketsModelBuilder().makeFOBSaleMarket("Market", Collections.singletonList(portFinder.findPort("Point Fortin")), entity, "5")
+		scenarioModelBuilder.getSpotMarketsModelBuilder().makeFOBSaleMarket("Market", Collections.singletonList(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)), entity, "5")
 				.withVolumeLimits(20 * 5_000, 20 * 10_000, VolumeUnits.MMBTU)//
 				.withAvailabilityConstant(1) //
 				.build();
 
-		cargoModelBuilder.makeFOBPurchase("L1", LocalDate.of(2016, 7, 20), portFinder.findPort("Point Fortin"), null, entity, "5", 20.0);
+		cargoModelBuilder.makeFOBPurchase("L1", LocalDate.of(2016, 7, 20), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 20.0);
 
 		evaluateWithLSOTest(scenarioRunner -> {
 

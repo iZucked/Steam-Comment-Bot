@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.port.editor.views;
@@ -43,9 +43,6 @@ public class PortView extends ScenarioTableViewerView<PortEditorPane> {
 			pane.init(Arrays.asList(new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_ReferenceModel(), LNGScenarioPackage.eINSTANCE.getLNGReferenceModel_PortModel(),
 					PortPackage.eINSTANCE.getPortModel_Ports() }), null, getModelReference());
 			pane.getViewer().setInput(getRootObject());
-
-			// Add action to merge ports
-			pane.getToolBarManager().appendToGroup("edit", new MergePorts(this, pane.getScenarioViewer()));
 
 			pane.getToolBarManager().update(true);
 		}

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor;
@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
+import com.mmxlabs.rcp.common.ecore.SafeAdapterImpl;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
@@ -33,10 +34,9 @@ public class ToggleCharterOutEditorActionDelegate extends ActionDelegate impleme
 	protected UserSettings currentSettings;
 	protected EditingDomain editingDomain;
 
-	protected AdapterImpl notificationAdapter = new AdapterImpl() {
+	protected AdapterImpl notificationAdapter = new SafeAdapterImpl() {
 		@Override
-		public void notifyChanged(final org.eclipse.emf.common.notify.Notification msg) {
-			super.notifyChanged(msg);
+		public void safeNotifyChanged(final org.eclipse.emf.common.notify.Notification msg) {
 			if (msg.isTouch()) {
 				return;
 			}
@@ -65,7 +65,6 @@ public class ToggleCharterOutEditorActionDelegate extends ActionDelegate impleme
 		currentSettings = null;
 
 		this.editingDomain = null;
-		this.currentModel = null;
 		this.targetEditor = targetEditor;
 		this.action = action;
 
@@ -74,8 +73,8 @@ public class ToggleCharterOutEditorActionDelegate extends ActionDelegate impleme
 			if (editorInput instanceof IScenarioServiceEditorInput) {
 				final IScenarioServiceEditorInput iScenarioServiceEditorInput = (IScenarioServiceEditorInput) editorInput;
 				final ScenarioInstance instance = iScenarioServiceEditorInput.getScenarioInstance();
-				@NonNull
-				final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+				
+				final @NonNull ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
 
 				try (final IScenarioDataProvider sdp = modelRecord.aquireScenarioDataProvider("ToggleCharterOutEditorActionDelegate")) {
 					this.currentModel = sdp.getTypedScenario(LNGScenarioModel.class);
@@ -108,7 +107,14 @@ public class ToggleCharterOutEditorActionDelegate extends ActionDelegate impleme
 	public void dispose() {
 		action = null;
 		targetEditor = null;
+		if (currentModel != null) {
+			currentModel.eAdapters().remove(notificationAdapter);
+		}
 		currentModel = null;
+		if (currentSettings != null) {
+			currentSettings.eAdapters().remove(notificationAdapter);
+		}
+		currentSettings = null;
 	}
 
 	@Override

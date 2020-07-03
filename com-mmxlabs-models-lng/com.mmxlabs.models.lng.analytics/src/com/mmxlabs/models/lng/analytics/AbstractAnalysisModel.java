@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 /**
@@ -8,6 +8,7 @@ package com.mmxlabs.models.lng.analytics;
 
 import com.mmxlabs.models.mmxcore.NamedObject;
 
+import com.mmxlabs.models.mmxcore.UUIDObject;
 import org.eclipse.emf.common.util.EList;
 
 /**
@@ -29,7 +30,7 @@ import org.eclipse.emf.common.util.EList;
  * @model abstract="true"
  * @generated
  */
-public interface AbstractAnalysisModel extends NamedObject {
+public interface AbstractAnalysisModel extends UUIDObject, NamedObject {
 	/**
 	 * Returns the value of the '<em><b>Buys</b></em>' containment reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.analytics.BuyOption}.

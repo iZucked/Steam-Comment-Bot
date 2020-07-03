@@ -1,11 +1,13 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 /**
  */
 package com.mmxlabs.models.lng.pricing.presentation.composites;
 
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -65,13 +67,16 @@ public class MarketIndexComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editors for features on this class directly, and superclass' features.
 	 *
-	 * @generated NOT
+	 * @generated
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_pricingCalendarEditor(detailComposite, topClass);
 		add_settleCalendarEditor(detailComposite, topClass);
+		add_pricingCalendarEditor(detailComposite, topClass);
+		add_flatCurveEditor(detailComposite, topClass);
+		add_bidCurveEditor(detailComposite, topClass);
+		add_offerCurveEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the settleCalendar feature on MarketIndex
@@ -89,5 +94,38 @@ public class MarketIndexComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_pricingCalendarEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.MARKET_INDEX__PRICING_CALENDAR));
+	}
+
+	/**
+	 * Create the editor for the flatCurve feature on MarketIndex
+	 *
+	 * @generated NOT
+	 */
+	protected void add_flatCurveEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_GENERATED_PAPER_DEALS)) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.MARKET_INDEX__FLAT_CURVE));
+		}
+	}
+
+	/**
+	 * Create the editor for the bidCurve feature on MarketIndex
+	 *
+	 * @generated NOT
+	 */
+	protected void add_bidCurveEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_GENERATED_PAPER_DEALS)) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.MARKET_INDEX__BID_CURVE));
+		}
+	}
+
+	/**
+	 * Create the editor for the offerCurve feature on MarketIndex
+	 *
+	 * @generated NOT
+	 */
+	protected void add_offerCurveEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_GENERATED_PAPER_DEALS)) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.MARKET_INDEX__OFFER_CURVE));
+		}
 	}
 }

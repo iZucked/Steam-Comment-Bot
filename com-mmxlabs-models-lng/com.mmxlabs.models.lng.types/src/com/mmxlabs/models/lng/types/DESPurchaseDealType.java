@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.types;
@@ -31,23 +31,31 @@ public enum DESPurchaseDealType implements Enumerator {
 	DEST_ONLY(0, "DEST_ONLY", "DEST_ONLY"),
 
 	/**
-	 * The '<em><b>DEST WITH SOURCE</b></em>' literal object.
+	 * The '<em><b>DIVERTIBLE</b></em>' literal object.
 	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #DEST_WITH_SOURCE_VALUE
+	* <!-- end-user-doc -->
+	 * @see #DIVERTIBLE_VALUE
 	 * @generated
 	 * @ordered
 	 */
-	DEST_WITH_SOURCE(1, "DEST_WITH_SOURCE", "DEST_WITH_SOURCE"),
-
+	DIVERTIBLE(3, "DIVERTIBLE", "DIVERTIBLE"),
 	/**
-	 * The '<em><b>DIVERT FROM SOURCE</b></em>' literal object.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #DIVERT_FROM_SOURCE_VALUE
-	 * @generated
-	 * @ordered
-	 */
+	* The '<em><b>DEST WITH SOURCE</b></em>' literal object.
+	* <!-- begin-user-doc -->
+	* <!-- end-user-doc -->
+	* @see #DEST_WITH_SOURCE_VALUE
+	* @generated
+	* @ordered
+	*/
+	DEST_WITH_SOURCE(1, "DEST_WITH_SOURCE", "DEST_WITH_SOURCE"),
+	/**
+	* The '<em><b>DIVERT FROM SOURCE</b></em>' literal object.
+	* <!-- begin-user-doc -->
+	* <!-- end-user-doc -->
+	* @see #DIVERT_FROM_SOURCE_VALUE
+	* @generated
+	* @ordered
+	*/
 	DIVERT_FROM_SOURCE(2, "DIVERT_FROM_SOURCE", "DIVERT_FROM_SOURCE");
 
 	/**
@@ -64,6 +72,17 @@ public enum DESPurchaseDealType implements Enumerator {
 	 * @ordered
 	 */
 	public static final int DEST_ONLY_VALUE = 0;
+
+	/**
+	 * The '<em><b>DIVERTIBLE</b></em>' literal value.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #DIVERTIBLE
+	 * @model
+	 * @generated
+	 * @ordered
+	 */
+	public static final int DIVERTIBLE_VALUE = 3;
 
 	/**
 	 * The '<em><b>DEST WITH SOURCE</b></em>' literal value.
@@ -101,7 +120,7 @@ public enum DESPurchaseDealType implements Enumerator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private static final DESPurchaseDealType[] VALUES_ARRAY = new DESPurchaseDealType[] { DEST_ONLY, DEST_WITH_SOURCE, DIVERT_FROM_SOURCE, };
+	private static final DESPurchaseDealType[] VALUES_ARRAY = new DESPurchaseDealType[] { DEST_ONLY, DIVERTIBLE, DEST_WITH_SOURCE, DIVERT_FROM_SOURCE, };
 
 	/**
 	 * A public read-only list of all the '<em><b>DES Purchase Deal Type</b></em>' enumerators.
@@ -159,6 +178,8 @@ public enum DESPurchaseDealType implements Enumerator {
 		switch (value) {
 		case DEST_ONLY_VALUE:
 			return DEST_ONLY;
+		case DIVERTIBLE_VALUE:
+			return DIVERTIBLE;
 		case DEST_WITH_SOURCE_VALUE:
 			return DEST_WITH_SOURCE;
 		case DIVERT_FROM_SOURCE_VALUE:

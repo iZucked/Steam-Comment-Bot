@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.analytics;
@@ -24,7 +24,9 @@ import com.mmxlabs.common.util.TriConsumer;
 import com.mmxlabs.jobmanager.jobs.EJobState;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolutionHelper;
@@ -34,6 +36,7 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.events.IVesselEventsTableConte
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper.NameProvider;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationJobRunner;
@@ -46,20 +49,25 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 public class InsertEventContextMenuExtension implements IVesselEventsTableContextMenuExtension {
 
-	public static final String ChangeSetViewCreatorService_Topic = "create-change-set-view";
-
 	private static final Logger log = LoggerFactory.getLogger(InsertEventContextMenuExtension.class);
 
 	@Override
 	public void contributeToMenu(@NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final VesselEvent vesselEvent, @NonNull final MenuManager menuManager) {
 
-		if (!LicenseFeatures.isPermitted("features:options-suggester")) {
+		if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIONISER)) {
 			return;
 		}
 
-		if (!LicenseFeatures.isPermitted("features:options-suggester-events")) {
+		if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIONISER_EVENTS)) {
 			return;
 		}
+
+		ADPModel adpModel = ScenarioModelUtil.getADPModel(scenarioEditingLocation.getScenarioDataProvider());
+		if (adpModel != null) {
+			// Cannot run optioniser is not supported for ADP
+			return;
+		}
+
 		if (vesselEvent instanceof CharterOutEvent) {
 
 			final InsertEventAction action = new InsertEventAction(scenarioEditingLocation, Collections.singletonList(vesselEvent));
@@ -77,12 +85,19 @@ public class InsertEventContextMenuExtension implements IVesselEventsTableContex
 	@Override
 	public void contributeToMenu(@NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final IStructuredSelection selection, @NonNull final MenuManager menuManager) {
 
-		if (!LicenseFeatures.isPermitted("features:options-suggester")) {
+		if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIONISER)) {
 			return;
 		}
-		if (!LicenseFeatures.isPermitted("features:options-suggester-events")) {
+		if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIONISER_EVENTS)) {
 			return;
 		}
+
+		ADPModel adpModel = ScenarioModelUtil.getADPModel(scenarioEditingLocation.getScenarioDataProvider());
+		if (adpModel != null) {
+			// Cannot use optioniser with ADP
+			return;
+		}
+
 		{
 			final List<VesselEvent> events = new LinkedList<>();
 			final Iterator<?> itr = selection.iterator();
@@ -171,7 +186,7 @@ public class InsertEventContextMenuExtension implements IVesselEventsTableContex
 					final SlotInsertionOptions plan = (SlotInsertionOptions) jobControl.getJobOutput();
 					if (plan != null) {
 						final AnalyticsSolution data = new AnalyticsSolution(original, plan, pTaskName);
-						data.open();
+						data.openAndSwitchScreen();
 					}
 				}
 			};

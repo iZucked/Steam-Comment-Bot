@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.scenario.exportWizards;
@@ -16,6 +16,8 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 public class ExportCSVWizardHandler extends AbstractHandler {
+	
+	private final static String EXPORT_SCENARIO_COMMAND_ID = "com.mmxlabs.shiplingo.platform.models.optimisation.ExportCSVScenario";
 
 	protected IStructuredSelection getSelectionToUse(ExecutionEvent event) {
 		
@@ -34,7 +36,8 @@ public class ExportCSVWizardHandler extends AbstractHandler {
 			// action has been disposed
 			return null;
 		}
-		ExportCSVWizard wizard = new ExportCSVWizard();
+		final String id = event.getCommand().getId();
+		ExportCSVWizard wizard = new ExportCSVWizard(id.equalsIgnoreCase(EXPORT_SCENARIO_COMMAND_ID));
 
 		IStructuredSelection selectionToPass = getSelectionToUse(event);
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.validation;
@@ -32,6 +32,7 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public class PartialCaseRowConstraint extends AbstractModelMultiConstraint {
 	public static final String viewName = "Options";
+
 	@Override
 	protected String validate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> statuses) {
 
@@ -47,55 +48,71 @@ public class PartialCaseRowConstraint extends AbstractModelMultiConstraint {
 
 			IScenarioDataProvider scenarioDataProvider = extraContext.getScenarioDataProvider();
 			ModelDistanceProvider modelDistanceProvider = scenarioDataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
-			
-			if (partialCaseRow.getBuyOptions().stream().filter(AnalyticsBuilder.isDESPurchase()).count() > 0
-					&& partialCaseRow.getSellOptions().stream().filter(AnalyticsBuilder.isFOBSale()).count() > 0) {
-				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format("%s - contains row with a DES purchase and a FOB Sale", viewName)));
+
+			long fobPurchaseCount = partialCaseRow.getBuyOptions().stream().filter(AnalyticsBuilder.isFOBPurchase()).count();
+			long desPurchaseCount = partialCaseRow.getBuyOptions().stream().filter(AnalyticsBuilder.isDESPurchase()).count();
+			long fobSaleCount = partialCaseRow.getSellOptions().stream().filter(AnalyticsBuilder.isFOBSale()).count();
+			long desSaleCount = partialCaseRow.getSellOptions().stream().filter(AnalyticsBuilder.isDESSale()).count();
+
+			if (desPurchaseCount > 0 && fobSaleCount > 0) {
+				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+						(IConstraintStatus) ctx.createFailureStatus(String.format("%s - contains row with a DES purchase and a FOB Sale", viewName)));
 				deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
 				statuses.add(deco);
 
 			}
-			if (partialCaseRow.getBuyOptions().stream().filter(AnalyticsBuilder.isFOBPurchase()).count() > 0
-					&& partialCaseRow.getSellOptions().stream().filter(AnalyticsBuilder.isDESSale()).count() > 0
-					&& partialCaseRow.getShipping().stream().filter(AnalyticsBuilder.isNominated()).count() > 0) {
-				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format("%s - contains row with a FOB purchase and a DES Sale and a nominated vessel", viewName)));
+			if (fobPurchaseCount > 0 && desSaleCount > 0 && partialCaseRow.getShipping().stream().filter(AnalyticsBuilder.isNominated()).count() > 0) {
+				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+						(IConstraintStatus) ctx.createFailureStatus(String.format("%s - contains row with a FOB purchase and a DES Sale and a nominated vessel", viewName)));
 				deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
 				statuses.add(deco);
 			}
-			if (partialCaseRow.getBuyOptions().stream().filter(AnalyticsBuilder.isFOBPurchase()).count() > 0
-					&& partialCaseRow.getSellOptions().stream().filter(AnalyticsBuilder.isDESSale()).count() > 0
-					&& partialCaseRow.getShipping().isEmpty()) {
-				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format("%s - contains row with a FOB purchase and a DES Sale and no shipping option", viewName)));
+			if (fobPurchaseCount > 0 && desSaleCount > 0 && partialCaseRow.getShipping().isEmpty()) {
+				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+						(IConstraintStatus) ctx.createFailureStatus(String.format("%s - contains row with a FOB purchase and a DES Sale and no shipping option", viewName)));
 				deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
 				statuses.add(deco);
 			}
 			int lateness = getLateness(portModel, partialCaseRow, modelDistanceProvider);
 			if (lateness < 0) {
-				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format("%s - a combination in the row will create a late cargo", viewName)), IConstraintStatus.WARNING);
+				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+						(IConstraintStatus) ctx.createFailureStatus(String.format("%s - a combination in the row will create a late cargo", viewName)), IConstraintStatus.WARNING);
 				deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
 				statuses.add(deco);
 			}
 			boolean volume = getVolumeValid(partialCaseRow);
 			if (!volume) {
-				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format("%s - a combination in the row has mismatching volume limits", viewName)), IConstraintStatus.WARNING);
+				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+						(IConstraintStatus) ctx.createFailureStatus(String.format("%s - a combination in the row has mismatching volume limits", viewName)), IConstraintStatus.WARNING);
+				deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
+				statuses.add(deco);
+			}
+			boolean cv = getCVValid(partialCaseRow);
+			if (!cv) {
+				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+						(IConstraintStatus) ctx.createFailureStatus(String.format("%s - a combination in the row has mismatching cv limits", viewName)), IConstraintStatus.WARNING);
 				deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
 				statuses.add(deco);
 			}
 			boolean ports = getPortRestrictionsValid(partialCaseRow);
 			if (!ports) {
-				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format("%s - a combination in the row uses a vessel that cannot visit the specified ports", viewName)), IConstraintStatus.WARNING);
+				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+						(IConstraintStatus) ctx.createFailureStatus(String.format("%s - a combination in the row uses a vessel that cannot visit the specified ports", viewName)),
+						IConstraintStatus.WARNING);
 				deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
 				statuses.add(deco);
 			}
 			boolean vessels = getVesselRestrictionsValid(partialCaseRow);
 			if (!vessels) {
-				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format("%s - a combination in the row uses a vessel that is restricted by the load slot", viewName)), IConstraintStatus.WARNING);
+				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+						(IConstraintStatus) ctx.createFailureStatus(String.format("%s - a combination in the row uses a vessel that is restricted by the load slot", viewName)),
+						IConstraintStatus.WARNING);
 				deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
 				statuses.add(deco);
 			}
 			for (ShippingOption opt : partialCaseRow.getShipping()) {
 				if (opt.eContainer() == null) {
-					final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Partial case - uncontained shipping"));
+					final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format("%s - uncontained shipping", viewName)));
 					deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
 					statuses.add(deco);
 				}
@@ -121,7 +138,7 @@ public class PartialCaseRowConstraint extends AbstractModelMultiConstraint {
 		}
 		return 0;
 	}
-	
+
 	private boolean getVolumeValid(PartialCaseRow row) {
 		for (BuyOption buyOption : row.getBuyOptions()) {
 			for (SellOption sellOption : row.getSellOptions()) {
@@ -143,7 +160,19 @@ public class PartialCaseRowConstraint extends AbstractModelMultiConstraint {
 		}
 		return true;
 	}
-	
+
+	private boolean getCVValid(PartialCaseRow row) {
+		for (BuyOption buyOption : row.getBuyOptions()) {
+			for (SellOption sellOption : row.getSellOptions()) {
+				boolean checkVolumeAgainstBuyAndSell = SandboxConstraintUtils.checkCVAgainstBuyAndSell(buyOption, sellOption);
+				if (!checkVolumeAgainstBuyAndSell) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
 	private boolean getPortRestrictionsValid(PartialCaseRow row) {
 		for (BuyOption buyOption : row.getBuyOptions()) {
 			for (SellOption sellOption : row.getSellOptions()) {

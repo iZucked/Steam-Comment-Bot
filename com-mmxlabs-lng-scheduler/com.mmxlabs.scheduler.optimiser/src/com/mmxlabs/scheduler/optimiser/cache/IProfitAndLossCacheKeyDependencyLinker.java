@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.cache;
@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
 /**
@@ -20,5 +20,5 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 public interface IProfitAndLossCacheKeyDependencyLinker {
 
 	@NonNull
-	List<@NonNull DepCacheKey> link(@NonNull IPortTimesRecord portTimesRecord, @NonNull VolumeAllocatedSequences volumeAllocatedSequences);
+	List<@NonNull DepCacheKey> link(@NonNull IPortTimesRecord portTimesRecord, @NonNull ProfitAndLossSequences volumeAllocatedSequences);
 }

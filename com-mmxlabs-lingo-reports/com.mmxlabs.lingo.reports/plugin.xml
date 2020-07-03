@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2019
+    Copyright (C) Minimax Labs Ltd., 2010 - 2020
     All rights reserved.
 
 -->
@@ -43,7 +43,9 @@
       </category>
       <category
             id="com.mmxlabs.scheduleview"
-            name="Schedule Views">
+            name="Schedule">
+<!-- parentCategories don't seem to work            parentCategory="com.mmxlabs.shiplingo.platform.reports">
+-->
       </category>
       <view
             name="Volume Tracking"
@@ -179,6 +181,7 @@
             restorable="true">
       </view>
       <view
+            category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.lingo.reports.views.standard.pnlcalcs.PNLCalcsReport"
             icon="icons/cview16/exec_statistic_view.gif"
             id="com.mmxlabs.lingo.reports.views.standard.pnlcalcs.PNLCalcsReport"
@@ -942,6 +945,10 @@
       <FleetBasedColumn
             handlerID="com.mmxlabs.lingo.reports.views.fleet.StandardFleetColumnFactory"
             id="com.mmxlabs.lingo.reports.components.columns.fleet.charterlength">
+      </FleetBasedColumn>
+      <FleetBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.views.fleet.StandardFleetColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.fleet.number_cargoes">
       </FleetBasedColumn>      
    </extension>
    <extension
@@ -985,6 +992,9 @@
          <InitialColumn
                id="com.mmxlabs.lingo.reports.components.columns.fleet.cooldowncosts">
          </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.fleet.number_cargoes">
+         </InitialColumn>
       </FleetBasedReportInitialState>
    </extension>
    <extension
@@ -1021,6 +1031,11 @@
             id="com.mmxlabs.lingo.reports.comparescenarios"
             name="Compare Scenarios">
       </command>
+      <command
+            defaultHandler="com.mmxlabs.lingo.reports.customizable.ConfigureCustomReportsHandler"
+            id="com.mmxlabs.lingo.reports.views.schedule.ConfigureCustomReportsHandler"
+            name="Configure Custom Reports">
+      </command> 
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -1080,6 +1095,10 @@
    </extension>
    <extension
          point="org.eclipse.ui.views">
+      <category
+            id="com.mmxlabs.models.lng.views.tools"
+            name="Tools">
+      </category>
       <view
             allowMultiple="false"
             category="com.mmxlabs.shiplingo.platform.reports"
@@ -1089,6 +1108,7 @@
             name="Changes">
       </view>
       <view
+      		category="com.mmxlabs.models.lng.views.tools"
             class="com.mmxlabs.lingo.reports.views.changeset.ChangeSetView"
             icon="icons/cview16/changes_view.gif"
             id="com.mmxlabs.lingo.reports.views.changeset.OptimisationsView"

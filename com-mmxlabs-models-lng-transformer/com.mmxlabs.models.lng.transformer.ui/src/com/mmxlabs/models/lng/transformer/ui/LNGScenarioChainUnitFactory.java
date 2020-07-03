@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui;
@@ -9,7 +9,6 @@ import java.time.YearMonth;
 import java.util.OptionalLong;
 import java.util.function.BiConsumer;
 
-import org.apache.shiro.SecurityUtils;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -157,7 +156,7 @@ public class LNGScenarioChainUnitFactory {
 			BreakEvenTransformerUnit.chain(builder, userSettings, stage, 100);
 			return null;
 		} else if (template instanceof HillClimbOptimisationStage) {
-			if (SecurityUtils.getSubject().isPermitted(KnownFeatures.FEATURE_OPTIMISATION_HILLCLIMB)) {
+			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_HILLCLIMB)) {
 				final HillClimbOptimisationStage stage = (HillClimbOptimisationStage) template;
 				if (stage.getAnnealingSettings().getIterations() > 0) {
 					if (template instanceof ParallelHillClimbOptimisationStage) {
@@ -174,7 +173,7 @@ public class LNGScenarioChainUnitFactory {
 			return null;
 		} else if (template instanceof ActionPlanOptimisationStage) {
 			final ActionPlanOptimisationStage stage = (ActionPlanOptimisationStage) template;
-			if (SecurityUtils.getSubject().isPermitted(KnownFeatures.FEATURE_OPTIMISATION_ACTIONSET)) {
+			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_ACTIONSET)) {
 				if (stage.getTotalEvaluations() > 0) {
 					// Run the action set post optimisation
 					final boolean doSecondRun = doSecondActionSetRun(userSettings);

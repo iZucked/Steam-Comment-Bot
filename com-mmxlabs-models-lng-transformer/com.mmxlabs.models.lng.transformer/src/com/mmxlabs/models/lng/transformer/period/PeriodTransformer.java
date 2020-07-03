@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.period;
@@ -40,6 +40,7 @@ import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.common.time.Hours;
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.ExtraDataProvider;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
@@ -907,8 +908,10 @@ public class PeriodTransformer {
 			if (doLockDates) {
 				final SlotAllocation cargoSlotAllocation = slotAllocationMap.get(slot);
 				if (cargoSlotAllocation != null) {
-					slot.setWindowSize(0);
 					slot.setWindowFlex(0);
+					if (!slot.isWindowCounterParty()) {
+						slot.setWindowSize(0);
+					}
 					final ZonedDateTime localStart = cargoSlotAllocation.getSlotVisit().getStart();
 					slot.setWindowStart(localStart.toLocalDate());
 					slot.setWindowStartTime(localStart.getHour());
@@ -979,7 +982,7 @@ public class PeriodTransformer {
 		}
 		VesselAssignmentType vesselAssignmentType = cargo.getVesselAssignmentType();
 		if (vesselAssignmentType instanceof CharterInMarket) {
-			if (cargo.getSpotIndex() == NOMINAL_INDEX && LicenseFeatures.isPermitted("features:no-nominal-in-prompt")) {
+			if (cargo.getSpotIndex() == NOMINAL_INDEX && LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_NO_NOMINALS_IN_PROMPT)) {
 				return true;
 			}
 		}

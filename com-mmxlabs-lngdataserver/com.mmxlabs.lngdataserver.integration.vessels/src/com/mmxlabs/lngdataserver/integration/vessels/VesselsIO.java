@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lngdataserver.integration.vessels;
@@ -10,10 +10,13 @@ import java.io.OutputStream;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.mmxlabs.lngdataserver.integration.general.ModelVersionHeader;
@@ -34,6 +37,7 @@ public class VesselsIO {
 		jsonFactory.configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, false);
 
 		final ObjectMapper objectMapper = new ObjectMapper(jsonFactory);
+		// objectMapper.setSerializationInclusion(Include.NON_NULL);
 
 		objectMapper.registerModule(new Jdk8Module());
 		objectMapper.registerModule(new JavaTimeModule());
@@ -72,9 +76,16 @@ public class VesselsIO {
 
 	public static void write(final VesselsVersion version, final OutputStream os) throws IOException {
 		final ObjectMapper mapper = createObjectMapper();
+
 		final ModelVersionHeader header = new ModelVersionHeader();
+		header.setType(MODEL_TYPE);
 		header.setModelVersion(CURRENT_MODEL_VERSION);
 		mapper.writerWithDefaultPrettyPrinter().writeValue(os, header);
+		mapper.writerWithDefaultPrettyPrinter().writeValue(os, version);
+	}
+
+	public static void writeWithoutHeader(final VesselsVersion version, final OutputStream os) throws IOException {
+		final ObjectMapper mapper = createObjectMapper();
 		mapper.writerWithDefaultPrettyPrinter().writeValue(os, version);
 	}
 
@@ -86,6 +97,7 @@ public class VesselsIO {
 	public static void writeHeader(final OutputStream os) throws IOException {
 		final ObjectMapper mapper = createObjectMapper();
 		final ModelVersionHeader header = new ModelVersionHeader();
+		header.setType(MODEL_TYPE);
 		header.setModelVersion(CURRENT_MODEL_VERSION);
 		mapper.writerWithDefaultPrettyPrinter().writeValue(os, header);
 	}

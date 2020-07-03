@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 /**
@@ -109,6 +109,7 @@ import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.optimiser.common.constraints.LockedUnusedElementsConstraintCheckerFactory;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.rcp.common.ecore.EMFCopier;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
@@ -641,8 +642,6 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 						return transformer.createSequences(baseScheduleSpecification, mem, data, injector, true);
 					});
 
-			insertionRunner.setIteration(10_000);
-
 			return new SandboxJob() {
 				@Override
 				public LNGScenarioToOptimiserBridge getScenarioRunner() {
@@ -724,28 +723,30 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 				try {
 					final List<Future<?>> jobs = new LinkedList<>();
 
-					for (final NonNullPair<ISequences, Map<String, Object>> p : results.getSolutions()) {
+					if (results != null) {
+						List<NonNullPair<ISequences, Map<String, Object>>> solutions = results.getSolutions();
+						for (final NonNullPair<ISequences, Map<String, Object>> p : solutions) {
 
-						jobs.add(executor.submit(() -> {
+							jobs.add(executor.submit(() -> {
 
-							final ISequences seq = p.getFirst();
-							final SolutionOption resultSet = exporter.computeOption(seq);
-							synchronized (sandboxResult) {
-								sandboxResult.getOptions().add(resultSet);
-							}
+								final ISequences seq = p.getFirst();
+								final SolutionOption resultSet = exporter.computeOption(seq);
+								synchronized (sandboxResult) {
+									sandboxResult.getOptions().add(resultSet);
+								}
 
-							return null;
-						}));
-					}
-
-					jobs.forEach(f -> {
-						try {
-							f.get();
-						} catch (final Exception e) {
-
+								return null;
+							}));
 						}
-					});
 
+						jobs.forEach(f -> {
+							try {
+								f.get();
+							} catch (final Exception e) {
+
+							}
+						});
+					}
 					exporter.applyPostTasks(sandboxResult);
 				} finally {
 					executor.shutdown();
@@ -757,15 +758,14 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 
 			sandboxResult.setName("SandboxResult");
 			sandboxResult.setHasDualModeSolutions(dualPNLMode);
-			sandboxResult.setUserSettings(EcoreUtil.copy(userSettings));
-			
+			sandboxResult.setUserSettings(EMFCopier.copy(userSettings));
+
 			// Request this now one all other parts have run to get correct data.
 			final ExtraDataProvider extraDataProvider = mapper.getExtraDataProvider();
 
 			sandboxResult.getCharterInMarketOverrides().addAll(extraDataProvider.extraCharterInMarketOverrides);
 			sandboxResult.getExtraCharterInMarkets().addAll(extraDataProvider.extraCharterInMarkets);
-			
-			
+
 			for (final VesselAvailability va : extraDataProvider.extraVesselAvailabilities) {
 				if (va != null && va.eContainer() == null) {
 					sandboxResult.getExtraVesselAvailabilities().add(va);
@@ -775,7 +775,9 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			sandboxResult.getExtraSlots().addAll(extraDataProvider.extraDischarges);
 			sandboxResult.getExtraVesselEvents().addAll(extraDataProvider.extraVesselEvents);
 
-			// Check that all the spot slot references are properly contained. E.g. Schedule specification may have extra spot slot instances not used in the schedule models.
+			// Check that all the spot slot references are properly contained. E.g. Schedule
+			// specification may have extra spot slot instances not used in the schedule
+			// models.
 			addExtraData(sandboxResult.getBaseOption(), sandboxResult);
 			for (final SolutionOption opt : sandboxResult.getOptions()) {
 				addExtraData(opt, sandboxResult);

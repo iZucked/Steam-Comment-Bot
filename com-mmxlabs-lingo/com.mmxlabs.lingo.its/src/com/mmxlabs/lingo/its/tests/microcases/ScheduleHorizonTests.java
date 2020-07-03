@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases;
@@ -16,6 +16,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -53,15 +54,15 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 		LocalDate horizon = LocalDate.of(2016, 3, 1);
 		scenarioModelBuilder.setScheduleHorizon(horizon);
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				.withVesselAssignment(vesselAvailability, 1) //
 				.withAssignmentFlags(false, false) //
@@ -102,7 +103,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 		LocalDate horizon = LocalDate.of(2016, 3, 1);
 		scenarioModelBuilder.setScheduleHorizon(horizon);
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withOptionality(true) //
@@ -132,16 +133,16 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 		LocalDate horizon = LocalDate.of(2016, 3, 1);
 		scenarioModelBuilder.setScheduleHorizon(horizon);
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0), null) //
 				.build();
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				.withVesselAssignment(vesselAvailability, 1) //
 				.withAssignmentFlags(false, false) //
@@ -187,16 +188,16 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 		LocalDate horizon = LocalDate.of(2016, 3, 1);
 		scenarioModelBuilder.setScheduleHorizon(horizon);
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withEndWindow(LocalDateTime.of(2016, 4, 1, 0, 0, 0), null) //
 				.build();
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				.withVesselAssignment(vesselAvailability, 1) //
 				.withAssignmentFlags(false, false) //
@@ -242,16 +243,16 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 		LocalDate horizon = LocalDate.of(2016, 3, 1);
 		scenarioModelBuilder.setScheduleHorizon(horizon);
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withEndWindow(null, LocalDateTime.of(2016, 4, 1, 0, 0, 0)) //
 				.build();
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				.withVesselAssignment(vesselAvailability, 1) //
 				.withAssignmentFlags(false, false) //
@@ -297,24 +298,24 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 		LocalDate horizon = LocalDate.of(2016, 5, 1);
 		scenarioModelBuilder.setScheduleHorizon(horizon);
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				.withVesselAssignment(vesselAvailability, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
 
 		final Cargo cargo2 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L2", LocalDate.of(2016, 1, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L2", LocalDate.of(2016, 1, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.build() //
-				.makeDESSale("D2", LocalDate.of(2016, 2, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D2", LocalDate.of(2016, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				.withVesselAssignment(vesselAvailability, 2) //
 				.withAssignmentFlags(false, false) //
@@ -370,16 +371,16 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 		LocalDate horizon = LocalDate.of(2016, 5, 1);
 		scenarioModelBuilder.setScheduleHorizon(horizon);
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
 
 		// Get rid of timezone to make testing easier
 		@NonNull
-		Port loadPort = portFinder.findPort("Point Fortin");
+		Port loadPort = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
 		@NonNull
-		Port dischargePort = portFinder.findPort("Dominion Cove Point LNG");
+		Port dischargePort = portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT);
 
 		loadPort.setDefaultStartTime(0);
 		dischargePort.setDefaultStartTime(0);
@@ -456,7 +457,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 		LocalDate horizon = LocalDate.of(2016, 5, 1);
 		scenarioModelBuilder.setScheduleHorizon(horizon);
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withEndWindow(LocalDateTime.of(2016, 4, 16, 0, 0, 0), LocalDateTime.of(2016, 5, 16, 0, 0, 0)) //
@@ -464,9 +465,9 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 
 		// Get rid of timezone to make testing easier
 		@NonNull
-		Port loadPort = portFinder.findPort("Point Fortin");
+		Port loadPort = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
 		@NonNull
-		Port dischargePort = portFinder.findPort("Dominion Cove Point LNG");
+		Port dischargePort = portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT);
 
 		loadPort.setDefaultStartTime(0);
 		dischargePort.setDefaultStartTime(0);
@@ -542,7 +543,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 		LocalDate horizon = LocalDate.of(2016, 5, 1);
 		scenarioModelBuilder.setScheduleHorizon(horizon);
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withEndWindow(LocalDateTime.of(2016, 4, 16, 0, 0, 0), LocalDateTime.of(2016, 5, 16, 0, 0, 0)) //
@@ -550,9 +551,9 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 
 		// Get rid of timezone to make testing easier
 		@NonNull
-		Port loadPort = portFinder.findPort("Point Fortin");
+		Port loadPort = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
 		@NonNull
-		Port dischargePort = portFinder.findPort("Dominion Cove Point LNG");
+		Port dischargePort = portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT);
 
 		loadPort.setDefaultStartTime(0);
 		dischargePort.setDefaultStartTime(0);
@@ -629,7 +630,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 		LocalDate horizon = LocalDate.of(2016, 1, 1);
 		scenarioModelBuilder.setScheduleHorizon(horizon);
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withEndWindow(LocalDateTime.of(2016, 4, 16, 0, 0, 0), LocalDateTime.of(2016, 5, 16, 0, 0, 0)) //
@@ -637,9 +638,9 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 
 		// Get rid of timezone to make testing easier
 		@NonNull
-		Port loadPort = portFinder.findPort("Point Fortin");
+		Port loadPort = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
 		@NonNull
-		Port dischargePort = portFinder.findPort("Dominion Cove Point LNG");
+		Port dischargePort = portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT);
 
 		loadPort.setDefaultStartTime(0);
 		dischargePort.setDefaultStartTime(0);
@@ -719,7 +720,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 		LocalDate horizon = LocalDate.of(2017, 6, 1);
 		scenarioModelBuilder.setScheduleHorizon(horizon);
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withCharterRate("80000") //
@@ -729,9 +730,9 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 
 		// Get rid of timezone to make testing easier
 		@NonNull
-		Port loadPort = portFinder.findPort("Point Fortin");
+		Port loadPort = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
 		@NonNull
-		Port dischargePort = portFinder.findPort("Dominion Cove Point LNG");
+		Port dischargePort = portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT);
 
 		loadPort.setDefaultStartTime(0);
 		dischargePort.setDefaultStartTime(0);

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases;
@@ -41,7 +41,7 @@ import com.mmxlabs.models.lng.types.DESPurchaseDealType;
 import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 
-public class FOBSaleDESPurchaseDurationPricingTests extends AbstractMicroTestCase {
+public class FOBSaleDESPurchaseDurationPricingTests extends AbstractLegacyMicroTestCase {
 
 	private static final String TEST_CURVE_NAME = "TEST_CURVE";
 
@@ -98,7 +98,7 @@ public class FOBSaleDESPurchaseDurationPricingTests extends AbstractMicroTestCas
 		final Vessel nominatedVessel = fleetModelFinder.findVessel("STEAM-145");
 
 		final Cargo cargo = cargoModelBuilder.makeCargo()//
-				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2019, 7, 31), dominionCove, purchaseContract, entity, null, nominatedVessel) //
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2019, 7, 31), dominionCove, purchaseContract, entity, null, 22.6, nominatedVessel) //
 				.with(s -> ((LoadSlot) s).setCargoCV(22.6)) //
 				.with(s -> s.setDuration(25)) //
 				.withPricingEvent(pricingEvent, null) //
@@ -171,7 +171,7 @@ public class FOBSaleDESPurchaseDurationPricingTests extends AbstractMicroTestCas
 		final Vessel nominatedVessel = fleetModelFinder.findVessel("STEAM-145");
 
 		final Cargo cargo = cargoModelBuilder.makeCargo()//
-				.makeDESPurchase("L1", DESPurchaseDealType.DIVERT_FROM_SOURCE, LocalDate.of(2019, 7, 31), pointFortin, purchaseContract, entity, null, nominatedVessel) //
+				.makeDESPurchase("L1", DESPurchaseDealType.DIVERT_FROM_SOURCE, LocalDate.of(2019, 7, 31), pointFortin, purchaseContract, entity, null, 22.6, nominatedVessel) //
 				.with(s -> ((LoadSlot) s).setCargoCV(22.6)) //
 				.with(s -> s.setDuration(25)).withPricingEvent(pricingEvent, null).withOptional(true)//
 				.build() //

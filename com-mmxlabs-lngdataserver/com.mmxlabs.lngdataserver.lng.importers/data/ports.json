@@ -898,7 +898,7 @@
     "lat" : 31.3700008392334,
     "lon" : 30.295000076293945,
     "country" : "Egypt",
-    "timeZone" : "Asia/Kuwait"
+    "timeZone" : "Africa/Cairo"
   },
   "upstreamID" : "EG0096"
 }, {
@@ -2088,7 +2088,7 @@
     "lat" : 70.68333435058594,
     "lon" : 23.600000381469727,
     "country" : "Norway",
-    "timeZone" : "Europe/Warsaw"
+    "timeZone" : "Europe/Oslo"
   },
   "upstreamID" : "NO0278"
 }, {
@@ -2125,7 +2125,8 @@
     "country" : "Pakistan",
     "timeZone" : "Asia/Karachi"
   },
-  "upstreamID" : "PK0021"
+  "upstreamID" : "PK0021",
+  "fallbackUpstreamId" : "PK0004"
 }, {
   "mmxId" : "L_CP_Colon",
   "virtual" : false,
@@ -2192,7 +2193,7 @@
     "lat" : 37.935665130615234,
     "lon" : -8.857500076293945,
     "country" : "Portugal",
-    "timeZone" : "Europe/Madrid"
+    "timeZone" : "Europe/Lisbon"
   },
   "upstreamID" : "PT0044"
 }, {
@@ -2301,8 +2302,8 @@
 }, {
   "mmxId" : "L_SG_Juron",
   "virtual" : false,
-  "name" : "Jurong Marine Base - Singapore",
-  "aliases" : [ "Jurong Marine Base - Singapore Base", "Jurong Marine Base", "Singapore", "Jurong Island, Singapore" ],
+  "name" : "Singapore",
+  "aliases" : [ "Jurong Marine Base - Singapore Base", "Jurong Marine Base", "Jurong Island, Singapore" ],
   "geographicPoint" : {
     "lat" : 1.2999999523162842,
     "lon" : 103.68250274658203,
@@ -2519,7 +2520,7 @@
     "lat" : 38.82500076293945,
     "lon" : 26.913333892822266,
     "country" : "Turkey",
-    "timeZone" : "Europe/London"
+    "timeZone" : "Europe/Istanbul"
   },
   "upstreamID" : "TR0183"
 }, {
@@ -2962,6 +2963,7 @@
   "mmxId" : "L_KR_Borye",
   "virtual" : false,
   "name" : "Boryeong",
+  "notes" : "This is currenty Gunsan, but should really be Ko Jung (KR0058)",
   "geographicPoint" : {
     "lat" : 35.994998931884766,
     "lon" : 126.70916748046875,
@@ -3001,7 +3003,7 @@
     "lat" : -13.786333084106445,
     "lon" : 123.31749725341797,
     "country" : "Australia",
-    "timeZone" : "Australia/Brisbane"
+    "timeZone" : "Australia/Perth"
   },
   "upstreamID" : "AU0436"
 }, {
@@ -3015,6 +3017,18 @@
     "timeZone" : "Australia/Darwin"
   },
   "upstreamID" : "AU0329"
+}, {
+  "mmxId" : "L_AU_Bladi",
+  "virtual" : false,
+  "name" : "Bladin Point",
+  "geographicPoint" : {
+    "lat" : -12.491666793823242,
+    "lon" : 130.8816680908203,
+    "country" : "Australia",
+    "timeZone" : "Australia/Darwin"
+  },
+  "upstreamID" : "AU0438",
+  "fallbackUpstreamId" : "AU0329"
 } ],
   "routingPoints": [
     {

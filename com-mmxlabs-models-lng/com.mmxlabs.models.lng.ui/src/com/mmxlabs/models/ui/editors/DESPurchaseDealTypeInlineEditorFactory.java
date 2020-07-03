@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.ui.editors;
@@ -29,6 +29,9 @@ public class DESPurchaseDealTypeInlineEditorFactory implements IInlineEditorFact
 				break;
 			case DIVERT_FROM_SOURCE:
 				name = "Divert from source";
+				break;
+			case DIVERTIBLE:
+				name = "Divertible";
 				break;
 			default:
 				name = type.getName();

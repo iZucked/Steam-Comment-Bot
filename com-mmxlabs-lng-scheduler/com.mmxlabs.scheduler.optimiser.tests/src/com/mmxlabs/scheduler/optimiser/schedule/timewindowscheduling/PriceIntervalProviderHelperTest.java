@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling;
@@ -57,49 +57,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimeWindowsRecord;
 
 public class PriceIntervalProviderHelperTest {
 
-	/**
-	 * Test that the cheapest option is to go direct meaning: load {0, 0} and discharge {40, 45}
-	 */
-	@Test
-	@Disabled
-	public void testCanalTrimming_MinTimeGreaterThanCheapestOption_NewMethod() {
-		final List<int[]> purchaseIntervals = new ArrayList<>();
-		purchaseIntervals.add(new int[] { 0, 20 });
-		purchaseIntervals.add(new int[] { 5, 25 });
-		purchaseIntervals.add(new int[] { 15, 18 });
-		purchaseIntervals.add(new int[] { 20, Integer.MIN_VALUE });
-
-		final List<int[]> salesIntervals = new ArrayList<>();
-		salesIntervals.add(new int[] { 40, 25 });
-		salesIntervals.add(new int[] { 45, 20 });
-		salesIntervals.add(new int[] { 50, 22 });
-		salesIntervals.add(new int[] { 51, Integer.MIN_VALUE });
-
-		final IPort from = Mockito.mock(IPort.class, "from");
-		final IPort to = Mockito.mock(IPort.class, "to");
-
-		final List<DistanceMatrixEntry> distances = new LinkedList<>();
-		distances.add(new DistanceMatrixEntry(ERouteOption.DIRECT, from, to, 400));
-		distances.add(new DistanceMatrixEntry(ERouteOption.SUEZ, from, to, 300));
-		final TimeWindowsTrimming timeWindowsTrimming = getTimeWindowsTrimming(distances);
-
-		final ILoadOption loadSlot = Mockito.mock(ILoadOption.class);
-		Mockito.when(loadSlot.getMaxLoadVolumeMMBTU()).thenReturn(OptimiserUnitConvertor.convertToInternalVolume(160000 * 22.4));
-		final TimeWindow loadSlotTimeWindow = new TimeWindow(0, 1);
-		Mockito.when(loadSlot.getTimeWindow()).thenReturn(loadSlotTimeWindow);
-		final IDischargeOption dischargeSlot = Mockito.mock(IDischargeOption.class);
-
-		final IPortTimeWindowsRecord portTimesWindowsRecord = Mockito.mock(IPortTimeWindowsRecord.class);
-		Mockito.when(portTimesWindowsRecord.getSlotDuration(ArgumentMatchers.eq(loadSlot))).thenReturn(0);
-		Mockito.when(portTimesWindowsRecord.getSlotFeasibleTimeWindow(ArgumentMatchers.eq(loadSlot))).thenReturn(loadSlotTimeWindow);
-
-		final IVessel vessel = getIVessel(null);
-		final long charterRate = 0;
-		final int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisationAndBoilOff(portTimesWindowsRecord, vessel, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals,
-				salesIntervals, charterRate, false);
-		Assertions.assertArrayEquals(new int[] { 0, 0, 40, 40 }, times);
-	}
-
 	@SuppressWarnings("null")
 	@Test
 	public void testGetTotalEstimatedJourneyCost() {
@@ -108,11 +65,11 @@ public class PriceIntervalProviderHelperTest {
 		final IntervalData sales = new IntervalData(50, 70, 10);
 		final int loadDuration = 0;
 		final int salesPrice = 10;
-		final LadenRouteData[] lrd = new LadenRouteData[2];
-		lrd[0] = new LadenRouteData(20, 30, 0, 300, 0);
-		lrd[1] = new LadenRouteData(10, 15, OptimiserUnitConvertor.convertToInternalDailyCost(500000), 150, 0);
+		final TravelRouteData[] lrd = new TravelRouteData[2];
+		lrd[0] = new TravelRouteData(20, 30, 0, 300, 0);
+		lrd[1] = new TravelRouteData(10, 15, OptimiserUnitConvertor.convertToInternalDailyCost(500000), 150, 0);
 		final IVessel iVessel = getIVessel();
-		final NonNullPair<LadenRouteData, Long> totalEstimatedJourneyCost = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchase, sales, loadDuration, salesPrice, 0, lrd, 10300, iVessel,
+		final NonNullPair<TravelRouteData, Long> totalEstimatedJourneyCost = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchase, sales, loadDuration, salesPrice, 0, lrd, 10300, iVessel,
 				OptimiserUnitConvertor.convertToInternalDailyRate(22), true);
 
 	}
@@ -184,12 +141,12 @@ public class PriceIntervalProviderHelperTest {
 		curve.add(30);
 		curve.add(40);
 
-		final List<int[]> priceIntervals = new LinkedList<>();
-		priceIntervalProviderHelper.buildIntervalsList(loadSlot, curve, null, 0, 50, portTimeWindowsRecord, priceIntervals);
+		final List<int[]> priceIntervals = priceIntervalProviderHelper.buildIntervalsList(loadSlot, curve, 0, 50, portTimeWindowsRecord);
 		final List<int[]> expected = new LinkedList<>();
 		expected.add(new int[] { 0, 15 });
-		expected.add(new int[] { 6, 20 });
-		expected.add(new int[] { 16, 30 });
+		expected.add(new int[] { 20, c.getValueAtPoint(20+24) }); //NB: 24 duration as end of load pricing, 0 hours time shift to UTC.
+		expected.add(new int[] { 30, c.getValueAtPoint(30+24) });
+		expected.add(new int[] { 40, c.getValueAtPoint(40+24) });
 		expected.add(new int[] { 50, Integer.MIN_VALUE });
 
 		for (int i = 0; i < expected.size(); i++) {
@@ -242,12 +199,12 @@ public class PriceIntervalProviderHelperTest {
 		curve.add(30);
 		curve.add(40);
 
-		final List<int[]> priceIntervals = new LinkedList<>();
-		priceIntervalProviderHelper.buildIntervalsList(loadSlot, curve, null, 0, 50, portTimeWindowsRecord, priceIntervals);
+		final List<int[]> priceIntervals = priceIntervalProviderHelper.buildIntervalsList(loadSlot, curve, 0, 50, portTimeWindowsRecord);
 		final List<int[]> expected = new LinkedList<>();
 		expected.add(new int[] { 0, 20 });
-		expected.add(new int[] { 5, 25 });
-		expected.add(new int[] { 15, 30 });
+		expected.add(new int[] { 19, c.getValueAtPoint(19+24+1) }); //NB: 24 duration as end of load pricing, 1 hour time shift to UTC.
+		expected.add(new int[] { 29, c.getValueAtPoint(29+24+1) });
+		expected.add(new int[] { 39, c.getValueAtPoint(39+24+1) });
 		expected.add(new int[] { 50, Integer.MIN_VALUE });
 
 		for (int i = 0; i < expected.size(); i++) {
@@ -300,8 +257,7 @@ public class PriceIntervalProviderHelperTest {
 		curve.add(30);
 		curve.add(40);
 
-		final List<int[]> priceIntervals = new LinkedList<>();
-		priceIntervalProviderHelper.buildIntervalsList(loadSlot, curve, null, 0, 50, portTimeWindowsRecord, priceIntervals);
+		final List<int[]> priceIntervals = priceIntervalProviderHelper.buildIntervalsList(loadSlot, curve, 0, 50, portTimeWindowsRecord);
 		final List<int[]> expected = new LinkedList<>();
 		expected.add(new int[] { 0, 8 });
 		expected.add(new int[] { 50, Integer.MIN_VALUE });
@@ -352,8 +308,7 @@ public class PriceIntervalProviderHelperTest {
 		curve.add(30);
 		curve.add(40);
 
-		final List<int[]> priceIntervals = new LinkedList<>();
-		priceIntervalProviderHelper.buildIntervalsList(loadSlot, curve, null, 0, 50, portTimeWindowsRecord, priceIntervals);
+		final List<int[]> priceIntervals = priceIntervalProviderHelper.buildIntervalsList(loadSlot, curve, 0, 50, portTimeWindowsRecord);
 		final List<int[]> expected = new LinkedList<>();
 		expected.add(new int[] { 0, 5 });
 		expected.add(new int[] { 50, Integer.MIN_VALUE });

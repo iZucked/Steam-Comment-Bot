@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.util;
@@ -45,6 +45,7 @@ import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.ISpotMarket;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
+import com.mmxlabs.scheduler.optimiser.insertion.SequencesHitchHikerHelper;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ISpotMarketSlotsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
@@ -71,8 +72,7 @@ public class ScheduleSpecificationTransformer {
 	private IVirtualVesselSlotProvider virtualVesselSlotProvider;
 
 	@NonNull
-	public ISequences createSequences(@NonNull final ScheduleSpecification scheduleSpecification, final LNGDataTransformer dataTransformer,
-			boolean includeSpotSlots) {
+	public ISequences createSequences(@NonNull final ScheduleSpecification scheduleSpecification, final LNGDataTransformer dataTransformer, boolean includeSpotSlots) {
 
 		@NonNull
 		final ModelEntityMap mem = dataTransformer.getModelEntityMap();
@@ -176,7 +176,7 @@ public class ScheduleSpecificationTransformer {
 
 			final List<ISequenceElement> elements = new LinkedList<>();
 			for (final SlotSpecification slotSpecification : nonShippedCargoSpecification.getSlotSpecifications()) {
-				final Slot e_slot = slotSpecification.getSlot();
+				final Slot<?> e_slot = slotSpecification.getSlot();
 				final IPortSlot o_slot = mem.getOptimiserObjectNullChecked(e_slot, IPortSlot.class);
 				final ISequenceElement e = portSlotProvider.getElement(o_slot);
 				elements.add(e);
@@ -213,7 +213,7 @@ public class ScheduleSpecificationTransformer {
 				final IPortSlot o_slot = mem.getOptimiserObjectNullChecked(e_slot, IPortSlot.class);
 				final ISequenceElement e = portSlotProvider.getElement(o_slot);
 				unusedElements.add(e);
-				
+
 				IVesselAvailability va = virtualVesselSlotProvider.getVesselAvailabilityForElement(e);
 				if (va != null) {
 					IResource resource = vesselProvider.getResource(va);
@@ -228,7 +228,7 @@ public class ScheduleSpecificationTransformer {
 
 					sequences.put(resource, new ListModifiableSequence(elements));
 				}
-				
+
 			} else if (event instanceof VesselEventSpecification) {
 				final VesselEventSpecification vesselEventSpecification = (VesselEventSpecification) event;
 				final VesselEvent e_vesselEvent = vesselEventSpecification.getVesselEvent();
@@ -268,7 +268,8 @@ public class ScheduleSpecificationTransformer {
 		}
 		final ISequences seq = new Sequences(orderedResources, sequences, unusedElements);
 
-		// assert SequencesHitchHikerHelper.checkValidSequences(seq);
+		assert SequencesHitchHikerHelper.checkValidSequences(seq);
+
 		return seq;
 	}
 }

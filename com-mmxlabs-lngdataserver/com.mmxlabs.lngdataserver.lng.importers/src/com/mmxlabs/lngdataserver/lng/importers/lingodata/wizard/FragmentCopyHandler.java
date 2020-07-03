@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard;
@@ -18,7 +18,6 @@ import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.dialogs.ErrorDialog;
@@ -49,6 +48,7 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.ui.analytics.EvaluateSolutionSetHelper;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.ecore.EMFCopier;
 import com.mmxlabs.rcp.common.json.JSONReference;
 import com.mmxlabs.scenario.service.model.ScenarioFragment;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -73,7 +73,7 @@ public class FragmentCopyHandler implements IScenarioFragmentCopyHandler {
 
 				if (target == source) {
 					final ModelReference sourceReference = sourceSDP.getModelReference();
-					final OptionAnalysisModel copyModel = EcoreUtil.copy(sourceModel);
+					final OptionAnalysisModel copyModel = EMFCopier.copy(sourceModel);
 					final LNGScenarioModel targetModel = (LNGScenarioModel) sourceReference.getInstance();
 					final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(targetModel);
 					analyticsModel.getOptionModels().add(copyModel);

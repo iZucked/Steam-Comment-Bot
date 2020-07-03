@@ -1,0 +1,56 @@
+{
+  "@class" : "SuezCanalTariff",
+  "bands" : [ {
+    "@class" : "SuezCanalTariffBand",
+    "ladenTariff" : "7.88",
+    "ballastTariff" : "6.7",
+    "bandEnd" : "5000"
+  }, {
+    "@class" : "SuezCanalTariffBand",
+    "ladenTariff" : "6.13",
+    "ballastTariff" : "5.21",
+    "bandStart" : "5000",
+    "bandEnd" : "10000"
+  }, {
+    "@class" : "SuezCanalTariffBand",
+    "ladenTariff" : "5.3",
+    "ballastTariff" : "4.51",
+    "bandStart" : "10000",
+    "bandEnd" : "20000"
+  }, {
+    "@class" : "SuezCanalTariffBand",
+    "ladenTariff" : "4.1",
+    "ballastTariff" : "3.49",
+    "bandStart" : "20000",
+    "bandEnd" : "40000"
+  }, {
+    "@class" : "SuezCanalTariffBand",
+    "ladenTariff" : "3.8",
+    "ballastTariff" : "3.23",
+    "bandStart" : "40000",
+    "bandEnd" : "70000"
+  }, {
+    "@class" : "SuezCanalTariffBand",
+    "ladenTariff" : "3.63",
+    "ballastTariff" : "3.09",
+    "bandStart" : "70000",
+    "bandEnd" : "120000"
+  }, {
+    "@class" : "SuezCanalTariffBand",
+    "ladenTariff" : "3.53",
+    "ballastTariff" : "3.0",
+    "bandStart" : "120000"
+  } ],
+  "tugBands" : [ {
+    "@class" : "SuezCanalTugBand",
+    "tugs" : "1",
+    "bandEnd" : "90000"
+  }, {
+    "@class" : "SuezCanalTugBand",
+    "tugs" : "2",
+    "bandStart" : "90000"
+  } ],
+  "tugCost" : "13778.78",
+  "fixedCosts" : "16358.62",
+  "sdrToUSD" : "1.38"
+}

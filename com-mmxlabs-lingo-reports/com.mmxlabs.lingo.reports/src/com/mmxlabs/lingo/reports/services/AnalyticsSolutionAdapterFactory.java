@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.services;
@@ -30,7 +30,7 @@ public class AnalyticsSolutionAdapterFactory implements IAdapterFactory {
 			final Object object = fragment.getFragment();
 			if (object instanceof AbstractSolutionSet) {
 				final AbstractSolutionSet solutionSet = (AbstractSolutionSet) object;
-				new AnalyticsSolution(scenarioInstance, solutionSet, solutionSet.getName()).open();
+				new AnalyticsSolution(scenarioInstance, solutionSet, solutionSet.getName()).openAndSwitchScreen();
 			}
 		};
 	}

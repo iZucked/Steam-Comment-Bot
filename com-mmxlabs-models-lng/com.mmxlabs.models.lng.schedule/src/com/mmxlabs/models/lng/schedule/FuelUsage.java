@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule;
@@ -43,7 +43,6 @@ public interface FuelUsage extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='int sum = 0;\nfor (final FuelQuantity fq : getFuels()) {\n\tsum += fq.getCost();\n}\nreturn sum;'"
 	 * @generated
 	 */
 	int getFuelCost();

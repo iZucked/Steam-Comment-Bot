@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
@@ -21,11 +21,14 @@ import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.name.Names;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.common.curves.ConstantValueLongCurve;
 import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.common.parser.series.CalendarMonthMapper;
+import com.mmxlabs.common.parser.series.SeriesParser;
+import com.mmxlabs.common.parser.series.SeriesParserData;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.MutableTimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
@@ -49,6 +52,7 @@ import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.optimiser.lso.ILocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.builder.impl.SchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.builder.impl.TimeWindowMaker;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
@@ -66,14 +70,22 @@ import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
 import com.mmxlabs.scheduler.optimiser.components.impl.ConstantHeelPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.HeelOptionConsumer;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.CharterRateToCharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VoyagePlanStartDateCharterRateCalculator;
+import com.mmxlabs.scheduler.optimiser.entities.EntityBookType;
+import com.mmxlabs.scheduler.optimiser.entities.impl.DefaultEntity;
+import com.mmxlabs.scheduler.optimiser.entities.impl.DefaultEntityBook;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IExternalDateProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IInternalDateProvider;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapEntityProviderEditor;
 import com.mmxlabs.scheduler.optimiser.shared.SharedDataModule;
 import com.mmxlabs.scheduler.optimiser.shared.SharedPortDistanceDataBuilder;
 
@@ -167,20 +179,20 @@ public class SimpleSchedulerTest {
 		final ILoadPriceCalculator purchaseCurve = new FixedPriceContract(5);
 		final ISalesPriceCalculator salesCurve = new FixedPriceContract(200000);
 
-		final ILoadSlot load1 = builder.createLoadSlot("load1", port1, tw1, 0, OptimiserUnitConvertor.convertToInternalVolume(150000), purchaseCurve, 22800, 24, false, false,
-				false, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3, false);
-		final ILoadSlot load2 = builder.createLoadSlot("load2", port1, tw3, 0, OptimiserUnitConvertor.convertToInternalVolume(150000), purchaseCurve, 22800, 24, false, false,
-				false, 		IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3, false);
-		final ILoadSlot load3 = builder.createLoadSlot("load3", port1, tw5, 0, OptimiserUnitConvertor.convertToInternalVolume(150000), purchaseCurve, 22800, 24, false, false,
-				false, 	IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3, false);
-		final ILoadSlot load4 = builder.createLoadSlot("load4", port1, tw4, 0, OptimiserUnitConvertor.convertToInternalVolume(150000), purchaseCurve, 22800, 24, false, false,
-				false, 	IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3, false);
-		final ILoadSlot load5 = builder.createLoadSlot("load5", port3, tw2, 0, OptimiserUnitConvertor.convertToInternalVolume(150000), purchaseCurve, 22800, 24, false, false,
-				false, 	IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3, false);
-		final ILoadSlot load6 = builder.createLoadSlot("load6", port3, tw4, 0, OptimiserUnitConvertor.convertToInternalVolume(150000), purchaseCurve, 22800, 24, false, false,
-				false, 	IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3, false);
-		final ILoadSlot load7 = builder.createLoadSlot("load7", port5, tw6, 0, OptimiserUnitConvertor.convertToInternalVolume(150000), purchaseCurve, 22800, 24, false, false,
-				false, 	IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3, false);
+		final ILoadSlot load1 = builder.createLoadSlot("load1", port1, tw1, 0, OptimiserUnitConvertor.convertToInternalVolume(150000), false, purchaseCurve, 22800, 24, false, false, false,
+				IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3, false);
+		final ILoadSlot load2 = builder.createLoadSlot("load2", port1, tw3, 0, OptimiserUnitConvertor.convertToInternalVolume(150000), false, purchaseCurve, 22800, 24, false, false, false,
+				IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3, false);
+		final ILoadSlot load3 = builder.createLoadSlot("load3", port1, tw5, 0, OptimiserUnitConvertor.convertToInternalVolume(150000), false, purchaseCurve, 22800, 24, false, false, false,
+				IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3, false);
+		final ILoadSlot load4 = builder.createLoadSlot("load4", port1, tw4, 0, OptimiserUnitConvertor.convertToInternalVolume(150000), false, purchaseCurve, 22800, 24, false, false, false,
+				IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3, false);
+		final ILoadSlot load5 = builder.createLoadSlot("load5", port3, tw2, 0, OptimiserUnitConvertor.convertToInternalVolume(150000), false, purchaseCurve, 22800, 24, false, false, false,
+				IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3, false);
+		final ILoadSlot load6 = builder.createLoadSlot("load6", port3, tw4, 0, OptimiserUnitConvertor.convertToInternalVolume(150000), false, purchaseCurve, 22800, 24, false, false, false,
+				IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3, false);
+		final ILoadSlot load7 = builder.createLoadSlot("load7", port5, tw6, 0, OptimiserUnitConvertor.convertToInternalVolume(150000), false, purchaseCurve, 22800, 24, false, false, false,
+				IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3, false);
 
 		final IDischargeSlot discharge1 = builder.createDischargeSlot("discharge1", port2, tw2, 0, OptimiserUnitConvertor.convertToInternalVolume(100000), 0, Long.MAX_VALUE, salesCurve, 24,
 				IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_DISCHARGE, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3, false);
@@ -204,6 +216,29 @@ public class SimpleSchedulerTest {
 		builder.createCargo(Lists.<@NonNull IPortSlot> newArrayList(load5, discharge5), false);
 		builder.createCargo(Lists.<@NonNull IPortSlot> newArrayList(load6, discharge6), false);
 		builder.createCargo(Lists.<@NonNull IPortSlot> newArrayList(load7, discharge7), false);
+
+		DefaultEntity entity = new DefaultEntity("Entity", false);
+		injector.injectMembers(entity);
+
+		HashMapEntityProviderEditor entityProviderEditor = injector.getInstance(HashMapEntityProviderEditor.class);
+		entityProviderEditor.setEntityBook(entity, EntityBookType.Shipping, new DefaultEntityBook(entity, EntityBookType.Shipping, new ConstantValueCurve(0)));
+		entityProviderEditor.setEntityBook(entity, EntityBookType.Trading, new DefaultEntityBook(entity, EntityBookType.Trading, new ConstantValueCurve(0)));
+		entityProviderEditor.setEntityBook(entity, EntityBookType.Upstream, new DefaultEntityBook(entity, EntityBookType.Upstream, new ConstantValueCurve(0)));
+
+		entityProviderEditor.setEntityForSlot(entity, load1);
+		entityProviderEditor.setEntityForSlot(entity, load2);
+		entityProviderEditor.setEntityForSlot(entity, load3);
+		entityProviderEditor.setEntityForSlot(entity, load4);
+		entityProviderEditor.setEntityForSlot(entity, load5);
+		entityProviderEditor.setEntityForSlot(entity, load6);
+		entityProviderEditor.setEntityForSlot(entity, load7);
+		entityProviderEditor.setEntityForSlot(entity, discharge1);
+		entityProviderEditor.setEntityForSlot(entity, discharge2);
+		entityProviderEditor.setEntityForSlot(entity, discharge3);
+		entityProviderEditor.setEntityForSlot(entity, discharge4);
+		entityProviderEditor.setEntityForSlot(entity, discharge5);
+		entityProviderEditor.setEntityForSlot(entity, discharge6);
+		entityProviderEditor.setEntityForSlot(entity, discharge7);
 
 		// TODO: Set port durations
 
@@ -339,9 +374,17 @@ public class SimpleSchedulerTest {
 
 					@Override
 					protected void configure() {
+
+						bind(SeriesParser.class).annotatedWith(Names.named(SchedulerConstants.Parser_Commodity)).toInstance(new SeriesParser(new SeriesParserData()));
+						bind(SeriesParser.class).annotatedWith(Names.named(SchedulerConstants.Parser_Currency)).toInstance(new SeriesParser(new SeriesParserData()));
+						bind(IExternalDateProvider.class).toInstance(Mockito.mock(IExternalDateProvider.class));
+						bind(IInternalDateProvider.class).toInstance(Mockito.mock(IInternalDateProvider.class));
+
 						bind(CalendarMonthMapper.class).toInstance(Mockito.mock(CalendarMonthMapper.class));
 						bind(VoyagePlanStartDateCharterRateCalculator.class).in(Singleton.class);
 						bind(ICharterRateCalculator.class).to(VoyagePlanStartDateCharterRateCalculator.class);
+						bind(ICharterCostCalculator.class).to(CharterRateToCharterCostCalculator.class);
+						bind(Integer.class).annotatedWith(Names.named(SchedulerConstants.CONCURRENCY_LEVEL)).toInstance(1);
 					}
 				});
 	}

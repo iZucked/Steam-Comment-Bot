@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.scheduleview.views.colourschemes;
@@ -10,6 +10,7 @@ import static com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.ColourS
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 
+import com.mmxlabs.license.features.NonLicenseFeatures;
 import com.mmxlabs.lingo.reports.ColourPalette;
 import com.mmxlabs.lingo.reports.ColourPalette.ColourElements;
 import com.mmxlabs.lingo.reports.ColourPalette.ColourPaletteItems;
@@ -136,7 +137,7 @@ public class VesselStateColourScheme extends ColourScheme {
 			if (event instanceof CanalBookingEvent) {
 				CanalBookingEvent canalBookingEvent = (CanalBookingEvent) event;
 				Journey linkedJourney = canalBookingEvent.getLinkedJourney();
-				if (linkedJourney.getCanalBooking() == null && linkedJourney.getCanalEntrance() != CanalEntry.NORTHSIDE) {
+				if (linkedJourney.getCanalBooking() == null && (NonLicenseFeatures.isSouthboundIdleTimeRuleEnabled() || linkedJourney.getCanalEntrance() != CanalEntry.NORTHSIDE)) {
 					if (linkedJourney.getCanalBookingPeriod() == PanamaBookingPeriod.STRICT || linkedJourney.getCanalBookingPeriod() == PanamaBookingPeriod.RELAXED) {
 						return ColourPalette.getInstance().getColour(new RGB(255, 0, 0));
 					}

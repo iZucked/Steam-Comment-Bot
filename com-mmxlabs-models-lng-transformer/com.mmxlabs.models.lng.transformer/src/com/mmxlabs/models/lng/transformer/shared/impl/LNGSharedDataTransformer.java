@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.shared.impl;
@@ -61,9 +61,7 @@ public class LNGSharedDataTransformer {
 
 		orderedKeys.add(RouteOption.DIRECT);
 		orderedKeys.add(RouteOption.SUEZ);
-		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PANAMA_CANAL)) {
-			orderedKeys.add(RouteOption.PANAMA);
-		}
+		orderedKeys.add(RouteOption.PANAMA);
 
 		/*
 		 * Now fill out the distances from the distance model. Firstly we need to create the default distance matrix.

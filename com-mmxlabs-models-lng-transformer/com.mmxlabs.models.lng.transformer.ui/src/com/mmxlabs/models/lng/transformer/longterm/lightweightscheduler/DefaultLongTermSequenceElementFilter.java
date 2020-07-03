@@ -1,11 +1,10 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler;
 
 import com.google.inject.Inject;
-import com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler.ISequenceElementFilter;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;

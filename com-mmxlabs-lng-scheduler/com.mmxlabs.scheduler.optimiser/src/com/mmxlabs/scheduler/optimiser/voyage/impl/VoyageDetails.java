@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
@@ -90,10 +90,12 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 	}
 
 	public void setFuelConsumption(final @NonNull FuelKey fuelKey, final long consumption) {
+		assert consumption >= 0;
 		fuelConsumption.put(fuelKey.getFuelComponent(), fuelKey.getFuelUnit(), consumption);
 	}
 
 	public void setRouteAdditionalConsumption(final @NonNull FuelKey fuelKey, final long consumption) {
+		assert consumption >= 0;
 		routeAdditionalConsumption.put(fuelKey.getFuelComponent(), fuelKey.getFuelUnit(), consumption);
 	}
 

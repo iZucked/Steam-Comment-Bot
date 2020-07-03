@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.provider;
@@ -85,7 +85,6 @@ public class SlotItemProvider
 			addRestrictedVesselsOverridePropertyDescriptor(object);
 			addRestrictedSlotsPropertyDescriptor(object);
 			addRestrictedSlotsArePermissivePropertyDescriptor(object);
-			addHedgesPropertyDescriptor(object);
 			addMiscCostsPropertyDescriptor(object);
 			addCancellationExpressionPropertyDescriptor(object);
 			addNominatedVesselPropertyDescriptor(object);
@@ -889,28 +888,6 @@ public class SlotItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Hedges feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addHedgesPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Slot_hedges_feature"),
-				 getString("_UI_Slot_hedges_description"),
-				 CargoPackage.Literals.SLOT__HEDGES,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This adds a property descriptor for the Misc Costs feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1107,7 +1084,6 @@ public class SlotItemProvider
 			case CargoPackage.SLOT__RESTRICTED_VESSELS_ARE_PERMISSIVE:
 			case CargoPackage.SLOT__RESTRICTED_VESSELS_OVERRIDE:
 			case CargoPackage.SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE:
-			case CargoPackage.SLOT__HEDGES:
 			case CargoPackage.SLOT__MISC_COSTS:
 			case CargoPackage.SLOT__CANCELLATION_EXPRESSION:
 			case CargoPackage.SLOT__LOCKED:

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components;
@@ -13,11 +13,11 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
@@ -28,6 +28,7 @@ import com.mmxlabs.scheduler.optimiser.components.IHeelOptionConsumer;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
 import com.mmxlabs.scheduler.optimiser.components.impl.ConstantHeelPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
@@ -38,15 +39,16 @@ import com.mmxlabs.scheduler.optimiser.components.impl.NotionalEndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.evaluation.VoyagePlanRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
-import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.schedule.LatenessChecker;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
@@ -91,6 +93,7 @@ public class LatenessComponentTest {
 
 		final IStartEndRequirementProvider startEndRequirementProvider = Mockito.mock(IStartEndRequirementProvider.class);
 		final IPortSlotProvider portSlotProvider = Mockito.mock(IPortSlotProvider.class);
+		final IVesselProvider vesselProvider = Mockito.mock(IVesselProvider.class);
 		final IPromptPeriodProvider promptProvider = Mockito.mock(IPromptPeriodProvider.class);
 
 		Injector injector = Guice.createInjector(new AbstractModule() {
@@ -100,6 +103,7 @@ public class LatenessComponentTest {
 				bind(IStartEndRequirementProvider.class).toInstance(startEndRequirementProvider);
 				bind(IPromptPeriodProvider.class).toInstance(promptProvider);
 				bind(IPortSlotProvider.class).toInstance(portSlotProvider);
+				bind(IVesselProvider.class).toInstance(vesselProvider);
 			}
 
 			@Provides
@@ -143,6 +147,8 @@ public class LatenessComponentTest {
 
 		final IResource resource = Mockito.mock(IResource.class);
 		final IVesselAvailability vesselAvailability = Mockito.mock(IVesselAvailability.class);
+		Mockito.when(vesselProvider.getVesselAvailability(resource)).thenReturn(vesselAvailability);
+		Mockito.when(vesselAvailability.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
 
 		final IStartRequirement startRequirement = Mockito.mock(IStartRequirement.class, "Start");
 		final IEndRequirement endRequirement = Mockito.mock(IEndRequirement.class, "End");
@@ -183,17 +189,23 @@ public class LatenessComponentTest {
 		Mockito.when(portTimesRecord.getSlotTime(endSlot)).thenReturn(0);
 		Mockito.when(portTimesRecord.getSlotTime(loadSlot)).thenReturn(loadEndTime - 1 + loadLateTime);
 		Mockito.when(portTimesRecord.getSlotTime(dischargeSlot)).thenReturn(dischargeEndTime - 1 + dischargeLateTime);
-		VolumeAllocatedSequence scheduledSequence = new VolumeAllocatedSequence(resource, vesselAvailability, mockedSequence, voyageStartTime,
-				new LinkedList<Pair<VoyagePlan, IPortTimesRecord>>(Arrays.asList(new Pair<VoyagePlan, IPortTimesRecord>(voyagePlan, portTimesRecord))));
+		
+		Mockito.when(portTimesRecord.getFirstSlot()).thenReturn(startSlot);
+		Mockito.when(portTimesRecord.getSlots()).thenReturn(Lists.newArrayList(startSlot,loadSlot,dischargeSlot,endSlot));
+		
+		VoyagePlanRecord voyagePlanRecord = new VoyagePlanRecord(voyagePlan, portTimesRecord);
+		VolumeAllocatedSequence scheduledSequence = new VolumeAllocatedSequence(resource, mockedSequence, voyageStartTime,
+				new LinkedList<>(Arrays.asList(voyagePlanRecord)));
 
-		final VolumeAllocatedSequences volumeAllocatedSequences = new VolumeAllocatedSequences();
-		volumeAllocatedSequences.add(vesselAvailability, scheduledSequence);
-		final ProfitAndLossSequences profitAndLossSequences = new ProfitAndLossSequences(volumeAllocatedSequences);
+		final ProfitAndLossSequences profitAndLossSequences = new ProfitAndLossSequences();
+		profitAndLossSequences.add(vesselAvailability, scheduledSequence);
 
+		
+		checker.calculateLateness(resource, voyagePlanRecord, null);
 		checker.calculateLateness(scheduledSequence, null);
 		c.startEvaluation(profitAndLossSequences);
 		c.startSequence(resource);
-		c.nextVoyagePlan(voyagePlan, voyageStartTime);
+		c.nextVoyagePlan(voyagePlanRecord, voyageStartTime);
 		c.nextObject(startDetails, 0);
 		c.nextObject(loadDetails, loadEndTime - 1 + loadLateTime);
 		c.nextObject(dischargeDetails, dischargeEndTime - 1 + dischargeLateTime);

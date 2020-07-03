@@ -132,8 +132,6 @@
           propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/restrictedSlots"/>
       <genFeatures createChild="false" propertyDescription="If restrictive, does not allow pairing with the selected"
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/restrictedSlotsArePermissive"/>
-      <genFeatures createChild="false" propertyDescription="Postive or negative hedge value"
-          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/hedges"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/miscCosts"/>
       <genFeatures createChild="false" propertyDescription="Price expression defining cancellation cost"
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/cancellationExpression"/>
@@ -174,6 +172,8 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//LoadSlot/transferFrom"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//LoadSlot/salesDeliveryType"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//LoadSlot/desPurchaseDealType"/>
+      <genFeatures createChild="false" propertyDescription="Counterparty's volume option"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//LoadSlot/volumeCounterParty"/>
       <genOperations ecoreOperation="cargo.ecore#//LoadSlot/getSlotOrDelegateCV"/>
       <genOperations ecoreOperation="cargo.ecore#//LoadSlot/getSlotOrDelegateDeliveryType"/>
       <genOperations ecoreOperation="cargo.ecore#//LoadSlot/getSlotOrDelegateDESPurchaseDealType"/>
@@ -342,6 +342,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CanalBookings/flexibleBookingAmountNorthbound"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CanalBookings/flexibleBookingAmountSouthbound"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CanalBookings/northboundMaxIdleDays"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CanalBookings/southboundMaxIdleDays"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//ScheduleSpecification">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//ScheduleSpecification/vesselScheduleSpecifications"/>

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.editor.risk;
@@ -25,7 +25,6 @@ import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
-import org.eclipse.swt.dnd.DragSourceEvent;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
@@ -46,7 +45,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
-import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
+import com.mmxlabs.models.mmxcore.impl.SafeMMXContentAdapter;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
@@ -63,14 +62,14 @@ import com.mmxlabs.scenario.service.model.manager.ModelReference;
 public class CustomTradeDealsPane extends ScenarioTableViewerPane {
 
 	private final IScenarioEditingLocation jointModelEditor;
-	private final MMXContentAdapter dealSetsContentAdapter;
-	private final Set<Slot> usedSlots = new HashSet<Slot>();
+	private final SafeMMXContentAdapter dealSetsContentAdapter;
+	private final Set<Slot> usedSlots = new HashSet< >();
 
 	public CustomTradeDealsPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);
 		this.jointModelEditor = location;
 		updateSlots();
-		dealSetsContentAdapter = new MMXContentAdapter() {
+		dealSetsContentAdapter = new SafeMMXContentAdapter() {
 			
 			@Override
 			public void reallyNotifyChanged(Notification notification) {
@@ -78,7 +77,7 @@ public class CustomTradeDealsPane extends ScenarioTableViewerPane {
 			}
 			
 			@Override
-			protected void missedNotifications(final List<Notification> missed) {
+			protected synchronized void missedNotifications(final List<Notification> missed) {
 				updateSlots();
 			}
 			

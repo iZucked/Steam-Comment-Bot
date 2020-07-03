@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases.sandbox;
@@ -39,17 +39,6 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.util.ScenarioServiceUtils;
 
 public abstract class AbstractSandboxTestCase extends AbstractMicroTestCase {
-
-	// Make sure we have latest data
-	@Override
-	public @NonNull IScenarioDataProvider importReferenceData() throws Exception {
-		final IScenarioDataProvider scenarioDataProvider = super.importReferenceData();
-		//
-		updateDistanceData(scenarioDataProvider, DataConstants.DISTANCES_LATEST_JSON);
-		updatePortsData(scenarioDataProvider, DataConstants.PORTS_LATEST_JSON);
-
-		return scenarioDataProvider;
-	}
 
 	protected void evaluateSandbox(@NonNull OptionAnalysisModel model) {
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases;
@@ -16,6 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.EVesselTankState;
@@ -48,14 +49,14 @@ import com.mmxlabs.scheduler.optimiser.peaberry.OptimiserInjectorServiceMaker;
 
 @SuppressWarnings({ "unused", "null" })
 @ExtendWith(ShiroRunner.class)
-@RequireFeature(features = { KnownFeatures.FEATURE_PURGE })
+@RequireFeature(value = { KnownFeatures.FEATURE_PURGE })
 public class PurgeTests extends AbstractMicroTestCase {
 
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testPurgeAndCooldownAfterDrydockTightVoyage() {
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setPurgeTime(24);
 		vessel.setMinSpeed(15.0);
 		vessel.setMaxSpeed(15.0);
@@ -68,7 +69,7 @@ public class PurgeTests extends AbstractMicroTestCase {
 				.withEndHeel(50, 50, EVesselTankState.MUST_BE_COLD, null)//
 				.build();
 
-		final DryDockEvent drydock = cargoModelBuilder.makeDryDockEvent("drydock", LocalDateTime.of(2017, 12, 2, 0, 0, 0), LocalDateTime.of(2017, 12, 2, 0, 0, 0), portFinder.findPort("Freeport LNG"))
+		final DryDockEvent drydock = cargoModelBuilder.makeDryDockEvent("drydock", LocalDateTime.of(2017, 12, 2, 0, 0, 0), LocalDateTime.of(2017, 12, 2, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_FREEPORT))
 				.withDurationInDays(5) //
 				.withVesselAssignment(vesselAvailability, 1) //
 				.build();
@@ -76,10 +77,10 @@ public class PurgeTests extends AbstractMicroTestCase {
 		// Load date is too soon and we will be late. Ensure we still schedule a purge
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				//
-				.makeFOBPurchase("L2", LocalDate.of(2017, 12, 8), portFinder.findPort("Point Fortin"), null, entity, "5", null) //
+				.makeFOBPurchase("L2", LocalDate.of(2017, 12, 8), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", null) //
 				.build() //
 				//
-				.makeDESSale("D2", LocalDate.of(2017, 12, 20), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D2", LocalDate.of(2017, 12, 20), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				//
 				.withVesselAssignment(vesselAvailability, 2) //
@@ -130,7 +131,7 @@ public class PurgeTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testPurgeAndCooldownAfterDrydockWithIdle() {
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setPurgeTime(24);
 		vessel.setMinSpeed(15.0);
 		vessel.setMaxSpeed(15.0);
@@ -143,7 +144,7 @@ public class PurgeTests extends AbstractMicroTestCase {
 				.withEndHeel(50, 50, EVesselTankState.MUST_BE_COLD, null)//
 				.build();
 
-		final DryDockEvent drydock = cargoModelBuilder.makeDryDockEvent("drydock", LocalDateTime.of(2017, 12, 2, 0, 0, 0), LocalDateTime.of(2017, 12, 2, 0, 0, 0), portFinder.findPort("Freeport LNG"))
+		final DryDockEvent drydock = cargoModelBuilder.makeDryDockEvent("drydock", LocalDateTime.of(2017, 12, 2, 0, 0, 0), LocalDateTime.of(2017, 12, 2, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_FREEPORT))
 				.withDurationInDays(5) //
 				.withVesselAssignment(vesselAvailability, 1) //
 				.build();
@@ -151,10 +152,10 @@ public class PurgeTests extends AbstractMicroTestCase {
 		// Load date is too soon and we will be late. Ensure we still schedule a purge
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				//
-				.makeFOBPurchase("L2", LocalDate.of(2017, 12, 20), portFinder.findPort("Point Fortin"), null, entity, "5", null) //
+				.makeFOBPurchase("L2", LocalDate.of(2017, 12, 20), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", null) //
 				.build() //
 				//
-				.makeDESSale("D2", LocalDate.of(2017, 12, 30), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D2", LocalDate.of(2017, 12, 30), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				//
 				.withVesselAssignment(vesselAvailability, 2) //
@@ -205,7 +206,7 @@ public class PurgeTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testScheduledPurgeAndCooldownTightVoyage() {
 
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setPurgeTime(24);
 		vessel.setMinSpeed(15.0);
 		vessel.setMaxSpeed(15.0);
@@ -221,11 +222,11 @@ public class PurgeTests extends AbstractMicroTestCase {
 		// Load date is too soon and we will be late. Ensure we still schedule a purge
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				//
-				.makeFOBPurchase("L2", LocalDate.of(2017, 12, 8), portFinder.findPort("Point Fortin"), null, entity, "5", null) //
+				.makeFOBPurchase("L2", LocalDate.of(2017, 12, 8), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", null) //
 				.with(s -> ((LoadSlot) s).setSchedulePurge(true)) //
 				.build() //
 				//
-				.makeDESSale("D2", LocalDate.of(2017, 12, 20), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D2", LocalDate.of(2017, 12, 20), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				//
 				.withVesselAssignment(vesselAvailability, 1) //

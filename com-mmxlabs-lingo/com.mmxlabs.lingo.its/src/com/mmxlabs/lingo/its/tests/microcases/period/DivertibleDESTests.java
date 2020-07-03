@@ -1,13 +1,11 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases.period;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
@@ -15,10 +13,10 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.lingo.its.tests.microcases.MicroTestUtils;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.util.CommercialModelFinder;
@@ -38,12 +36,10 @@ import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
-import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
-import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
+import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.types.DESPurchaseDealType;
-import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
@@ -53,7 +49,7 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
  */
 @ExtendWith(ShiroRunner.class)
 public class DivertibleDESTests extends AbstractMicroTestCase {
-
+	
 	/**
 	 * This test case originally lead to a scenario with no cargoes as the sale was outside the period and des cargoes are based on sales date.
 	 * 
@@ -85,14 +81,14 @@ public class DivertibleDESTests extends AbstractMicroTestCase {
 		// Create the required basic elements
 		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
 
-		final Vessel vessel_1 = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel_1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		cargoModelBuilder.makeCargo()//
-				.makeDESPurchase("L1", DESPurchaseDealType.DIVERT_FROM_SOURCE, LocalDate.of(2015, 4, 1), portFinder.findPort("Bonny Nigeria"), null, entity, "5", vessel_1) //
+				.makeDESPurchase("L1", DESPurchaseDealType.DIVERT_FROM_SOURCE, LocalDate.of(2015, 4, 1), portFinder.findPortById(InternalDataConstants.PORT_BONNY), null, entity, "5", 22.8, vessel_1) //
 				// .withShippingDaysRestriction() //
 				.build() //
 
-				.makeDESSale("D1", LocalDate.of(2015, 6, 1), portFinder.findPort("Barcelona LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 6, 1), portFinder.findPortById(InternalDataConstants.PORT_BARCELONA), null, entity, "7") //
 				.build() //
 
 				.build();

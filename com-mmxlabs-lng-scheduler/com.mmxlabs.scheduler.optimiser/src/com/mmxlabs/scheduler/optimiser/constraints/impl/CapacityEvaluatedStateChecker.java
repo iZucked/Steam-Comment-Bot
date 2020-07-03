@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
@@ -16,15 +16,17 @@ import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
+import com.mmxlabs.scheduler.optimiser.evaluation.VoyagePlanRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
-import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.schedule.CapacityViolationChecker;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.CapacityViolationType;
 
 /**
  * 
- * {@link ICargoSchedulerFitnessComponent} implementation to calculate a fitness based on capacity violations.
+ * {@link ICargoSchedulerFitnessComponent} implementation to calculate a fitness
+ * based on capacity violations.
  * 
  * @author Simon Goodall
  * 
@@ -53,11 +55,15 @@ public final class CapacityEvaluatedStateChecker implements IEvaluatedStateConst
 	@Override
 	public boolean checkConstraints(@NonNull final ISequences rawSequences, @NonNull final ISequences fullSequences, @NonNull final IEvaluationState evaluationState) {
 
-		final VolumeAllocatedSequences volumeAllocatedSequences = evaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, VolumeAllocatedSequences.class);
+		final ProfitAndLossSequences volumeAllocatedSequences = evaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, ProfitAndLossSequences.class);
 
 		if (volumeAllocatedSequences == null) {
 			return true;
 		}
+		return checkConstraints(volumeAllocatedSequences);
+	}
+
+	public boolean checkConstraints(@NonNull final ProfitAndLossSequences volumeAllocatedSequences) {
 
 		// State does not need to be kept, but needed for unit testing
 		totalSoftViolations = 0;
@@ -66,20 +72,20 @@ public final class CapacityEvaluatedStateChecker implements IEvaluatedStateConst
 		allViolations = new ArrayList<>();
 
 		for (final VolumeAllocatedSequence volumeAllocatedSequence : volumeAllocatedSequences) {
-			final List<@NonNull IPortSlot> slots = volumeAllocatedSequence.getSequenceSlots();
 
-			for (final IPortSlot slot : slots) {
-				final List<@NonNull CapacityViolationType> violations = volumeAllocatedSequence.getCapacityViolations(slot);
+			for (final VoyagePlanRecord vpr : volumeAllocatedSequence.getVoyagePlanRecords()) {
+				for (final IPortSlot slot : vpr.getPortTimesRecord().getSlots()) {
+					final List<CapacityViolationType> violations = vpr.getCapacityViolations(slot);
 
-				for (@NonNull
-				final CapacityViolationType violation : violations) {
-					if (CapacityViolationChecker.isHardViolation(violation)) {
-						triggeredViolations.add(violation);
-						currentViolatedSlots.add(slot);
-						allViolations.add(violation);
-					} else {
-						allViolations.add(violation);
-						++totalSoftViolations;
+					for (final CapacityViolationType violation : violations) {
+						if (CapacityViolationChecker.isHardViolation(violation)) {
+							triggeredViolations.add(violation);
+							currentViolatedSlots.add(slot);
+							allViolations.add(violation);
+						} else {
+							allViolations.add(violation);
+							++totalSoftViolations;
+						}
 					}
 				}
 			}
@@ -153,7 +159,9 @@ public final class CapacityEvaluatedStateChecker implements IEvaluatedStateConst
 	}
 
 	/**
-	 * Set the number of flexible slot violations permitted. Integer.MAX_VALUE allows any soft violations. 0 disallows any soft violation (over and above the initial level)
+	 * Set the number of flexible slot violations permitted. Integer.MAX_VALUE
+	 * allows any soft violations. 0 disallows any soft violation (over and above
+	 * the initial level)
 	 * 
 	 * @param flexibleSoftViolations
 	 */

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.apache.shiro.SecurityUtils;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.emf.common.command.Command;
@@ -92,6 +91,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.ScrollBar;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Widget;
@@ -153,7 +153,13 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
+import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
+import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.models.lng.types.TimePeriod;
+import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.lng.ui.ImageConstants;
 import com.mmxlabs.models.lng.ui.LngUIActivator;
 import com.mmxlabs.models.lng.ui.actions.DuplicateAction;
@@ -200,13 +206,9 @@ import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 
 /**
- * Tabular editor displaying cargoes and slots with a custom wiring editor. This
- * implementation is "stupid" in that any changes to the data cause a full
- * update. This has the disadvantage of loosing the current ordering of items.
- * Each row is a cargo. Changing the wiring will re-order slots. The
- * {@link CargoWiringComposite} based view only re-orders slots when requested
- * permitting the original (or at least the wiring at time of opening the
- * editor) wiring to be seem via rows and the current wiring via the wire lines.
+ * Tabular editor displaying cargoes and slots with a custom wiring editor. This implementation is "stupid" in that any changes to the data cause a full update. This has the disadvantage of loosing
+ * the current ordering of items. Each row is a cargo. Changing the wiring will re-order slots. The {@link CargoWiringComposite} based view only re-orders slots when requested permitting the original
+ * (or at least the wiring at time of opening the editor) wiring to be seem via rows and the current wiring via the wire lines.
  * 
  * 
  * @author Simon Goodall
@@ -223,10 +225,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 	protected RootData rootData;
 	/**
-	 * A reference {@link RootData} object. This is used by a
-	 * {@link CargoModelRowTransformer} to retain load/discharge row pairings but
-	 * allow wires to cross rows. Initially null until the first rootData object is
-	 * created. May be "nulled" again to reset state by an action.
+	 * A reference {@link RootData} object. This is used by a {@link CargoModelRowTransformer} to retain load/discharge row pairings but allow wires to cross rows. Initially null until the first
+	 * rootData object is created. May be "nulled" again to reset state by an action.
 	 * 
 	 */
 	protected RootData referenceRootData;
@@ -362,8 +362,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			}
 
 			/**
-			 * Overridden method to convert internal RowData objects into a collection of
-			 * EMF Objects
+			 * Overridden method to convert internal RowData objects into a collection of EMF Objects
 			 */
 			@Override
 			protected void updateSelection(final ISelection selection) {
@@ -746,7 +745,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					}
 				}
 
-				final IMenuListener listener = menuHelper.createMultipleSelectionMenuListener(cargoes, loads, discharges, loadColumns.contains(column), dischargeColumns.contains(column));
+				final IMenuListener listener = menuHelper.createMultipleSelectionMenuListener(cargoes, loads, discharges, loadColumns.contains(column), dischargeColumns.contains(column),
+						assignmentColumn.getColumn() == column);
 				listener.menuAboutToShow(mgr);
 
 				if (contextMenuExtensions != null) {
@@ -872,8 +872,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	}
 
 	/**
-	 * Break up inputString into lines, then break up those input lines into wrapped
-	 * lines lineLength characters long.
+	 * Break up inputString into lines, then break up those input lines into wrapped lines lineLength characters long.
 	 * 
 	 * @param inputString
 	 * @param lineLength
@@ -1021,15 +1020,11 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		// bar
 
 		/*
-		 * copyAction = createCopyAction(); if (copyAction != null) {
-		 * toolbar.appendToGroup(ADD_REMOVE_GROUP, copyAction); } if (actionBars !=
-		 * null) { actionBars.setGlobalActionHandler(ActionFactory.COPY.getId(),
-		 * copyAction); }
+		 * copyAction = createCopyAction(); if (copyAction != null) { toolbar.appendToGroup(ADD_REMOVE_GROUP, copyAction); } if (actionBars != null) {
+		 * actionBars.setGlobalActionHandler(ActionFactory.COPY.getId(), copyAction); }
 		 * 
-		 * pasteAction = createPasteAction(); if (pasteAction != null) {
-		 * toolbar.appendToGroup(ADD_REMOVE_GROUP, pasteAction); } if (actionBars !=
-		 * null) { actionBars.setGlobalActionHandler(ActionFactory.COPY.getId(),
-		 * pasteAction); }
+		 * pasteAction = createPasteAction(); if (pasteAction != null) { toolbar.appendToGroup(ADD_REMOVE_GROUP, pasteAction); } if (actionBars != null) {
+		 * actionBars.setGlobalActionHandler(ActionFactory.COPY.getId(), pasteAction); }
 		 */
 
 		Action copyToClipboardAction = null;
@@ -1076,7 +1071,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		{
 			final AssignmentManipulator assignmentManipulator = new AssignmentManipulator(scenarioEditingLocation);
 			final RowDataEMFPath assignmentPath = new RowDataEMFPath(true, Type.SLOT_OR_CARGO);
-			assignmentColumn = addTradesColumn(loadColumns, "Vessel", new ReadOnlyManipulatorWrapper<>(assignmentManipulator), assignmentPath);
+			assignmentColumn = addTradesColumn(null, "Vessel", new ReadOnlyManipulatorWrapper<>(assignmentManipulator), assignmentPath);
 		}
 		{
 			final BasicAttributeManipulator manipulator = new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain);
@@ -1148,15 +1143,13 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		loadDateColumn.getColumn().setData(EObjectTableViewer.COLUMN_SORT_PATH, new RowDataEMFPath(false, Type.LOAD_OR_DISCHARGE));
 
 		final SchedulePackage sp = SchedulePackage.eINSTANCE;
-		if (SecurityUtils.getSubject().isPermitted("features:report-arrivaltimes")) {
+		if (LicenseFeatures.isPermitted("features:report-arrivaltimes")) {
 
 			final GridViewerColumn loadScheduledDate = addTradesColumn(loadColumns, "Arriving",
 					new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(sp.getEvent_Start(), editingDomain) {
 
 						/**
-						 * FM had to copy the entire code from
-						 * com.mmxlabs.lingo.reports.views.formatters AsLocalDateFormatter from
-						 * getLocalDate() to not create cross dependency
+						 * FM had to copy the entire code from com.mmxlabs.lingo.reports.views.formatters AsLocalDateFormatter from getLocalDate() to not create cross dependency
 						 */
 						@Override
 						public String renderSetValue(final Object owner, final Object object) {
@@ -1199,14 +1192,12 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		}, new RowDataEMFPath(false, Type.DISCHARGE));
 		dischargeDateColumn.getColumn().setData(EObjectTableViewer.COLUMN_SORT_PATH, new RowDataEMFPath(false, Type.DISCHARGE_OR_LOAD));
 
-		if (SecurityUtils.getSubject().isPermitted("features:report-arrivaltimes")) {
+		if (LicenseFeatures.isPermitted("features:report-arrivaltimes")) {
 			final GridViewerColumn dischargeScheduledDate = addTradesColumn(loadColumns, "Arriving",
 					new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(sp.getEvent_Start(), editingDomain) {
 
 						/**
-						 * FM had to copy the entire code from
-						 * com.mmxlabs.lingo.reports.views.formatters AsLocalDateFormatter from
-						 * getLocalDate() to not create cross dependency
+						 * FM had to copy the entire code from com.mmxlabs.lingo.reports.views.formatters AsLocalDateFormatter from getLocalDate() to not create cross dependency
 						 */
 						@Override
 						public String renderSetValue(final Object owner, final Object object) {
@@ -1221,7 +1212,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		}
 
 		addTradesColumn(dischargeColumns, "Sell At", new ContractManipulator(provider, editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
-		if (SecurityUtils.getSubject().isPermitted("features:report-counterparty")) {
+		if (LicenseFeatures.isPermitted("features:report-counterparty")) {
 			addTradesColumn(dischargeColumns, "Counterparty", new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(pkg.getSlot_Counterparty(), editingDomain) {
 
 				@Override
@@ -1302,7 +1293,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		// BasicAttributeManipulator(SchedulePackage.eINSTANCE.getProfitAndLossContainer_GroupProfitAndLoss(),
 		// editingDomain),
 		// new RowDataEMFPath(true, Type.CARGO_OR_MARKET_OR_OPEN_ALLOCATION));
-		if (SecurityUtils.getSubject().isPermitted("features:report-equity-book")) {
+		if (LicenseFeatures.isPermitted("features:report-equity-book")) {
 			addPNLColumn("P&L (Equity)", CommercialPackage.Literals.BASE_LEGAL_ENTITY__UPSTREAM_BOOK,
 					new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getProfitAndLossContainer_GroupProfitAndLoss(), editingDomain),
 					new RowDataEMFPath(true, Type.CARGO_OR_MARKET_OR_OPEN_ALLOCATION));
@@ -1778,6 +1769,40 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), c, CargoPackage.eINSTANCE.getAssignableElement_Locked(), Boolean.FALSE));
 						setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), c, CargoPackage.eINSTANCE.getAssignableElement_SequenceHint(), SetCommand.UNSET_VALUE));
 						setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), c, CargoPackage.eINSTANCE.getAssignableElement_SpotIndex(), SetCommand.UNSET_VALUE));
+						
+						// A Source Only FOB sale needs matching ports on both sides. Market FOB Sales may have a set of valid ports. Automatically update if possible. 
+						if (dischargeSide.getDischargeSlot().getSlotOrDelegateFOBSaleDealType() == FOBSaleDealType.SOURCE_ONLY //
+								&& loadSide.loadSlot.getPort() != dischargeSide.getDischargeSlot().getPort()) {
+							if (dischargeSide.dischargeSlot instanceof SpotSlot) {
+								SpotSlot spotSlot = (SpotSlot) dischargeSide.dischargeSlot;
+								SpotMarket market = spotSlot.getMarket();
+								if (market instanceof FOBSalesMarket) {
+									FOBSalesMarket fobSalesMarket = (FOBSalesMarket) market;
+									if (SetUtils.getObjects(fobSalesMarket.getOriginPorts()).contains(loadSide.getLoadSlot().getPort())) {
+										setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), dischargeSide.getDischargeSlot(), CargoPackage.eINSTANCE.getSlot_Port(), loadSide.loadSlot.getPort()));
+									}
+								}
+								
+							}
+						}
+					}
+					if (c != null && loadSide.loadSlot.isDESPurchase()) {
+						
+						// A Dest Only DES purchase needs matching ports on both sides. Market DES purchases may have a set of valid ports. Automatically update if possible. 
+						if (loadSide.getLoadSlot().getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DEST_ONLY //
+								&& loadSide.loadSlot.getPort() != dischargeSide.getDischargeSlot().getPort()) {
+							if (loadSide.loadSlot instanceof SpotSlot) {
+								SpotSlot spotSlot = (SpotSlot) loadSide.loadSlot;
+								SpotMarket market = spotSlot.getMarket();
+								if (market instanceof DESPurchaseMarket) {
+									DESPurchaseMarket desPurchaseMarket = (DESPurchaseMarket) market;
+									if (SetUtils.getObjects(desPurchaseMarket.getDestinationPorts()).contains(dischargeSide.getDischargeSlot().getPort())) {
+										setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), loadSide.loadSlot , CargoPackage.eINSTANCE.getSlot_Port(), dischargeSide.dischargeSlot.getPort()));
+									}
+								}
+								
+							}
+						}
 					}
 
 					{
@@ -1817,7 +1842,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 							}
 						} else if (swapDischarges) {
 							// Swapping discharges, but we don't have a pair of cargoes, so fall back to non-swap behaviour.
-							
+
 							// Break the existing wiring
 							for (final Slot<?> s : c.getSlots()) {
 								if (s != loadSide.loadSlot) {
@@ -2090,7 +2115,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	}
 
 	private enum TimeFilterType {
-		NONE, YEARMONTH, PROMPT
+		NONE, YEARMONTH, PROMPT, CURRENT
 	}
 
 	private class TimePeriodFilter extends ViewerFilter {
@@ -2109,6 +2134,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					return checkYearMonth(row, choice);
 				case PROMPT:
 					return checkPrompt(row, promptMonth);
+				case CURRENT:
+					return checkCurrent(row);
 				}
 			}
 			return false;
@@ -2179,15 +2206,50 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 			return result;
 		}
+		
+		private boolean checkCurrent(final RowData row) {
+			final boolean result = false;
+			LocalDate start = null;
+			LocalDate end = null;
+			final LocalDate today = LocalDate.now();
+			final LoadSlot ls = row.getLoadSlot();
+			if (ls != null) {
+				start = ls.getSchedulingTimeWindow().getStart().toLocalDate();
+				end = ls.getSchedulingTimeWindow().getEnd().toLocalDate();
+			}
+			if (start != null && end != null) {
+				if (start.isAfter(today)) {
+					return true;
+				}
+				if (end.isAfter(today)) {
+					return true;
+				}
+			}
+			final DischargeSlot ds = row.getDischargeSlot();
+			if (ds != null) {
+				start = ds.getSchedulingTimeWindow().getStart().toLocalDate();
+				end = ds.getSchedulingTimeWindow().getEnd().toLocalDate();
+			}
+			if (start != null && end != null) {
+				if (start.isAfter(today)) {
+					return true;
+				}
+				if (end.isAfter(today)) {
+					return true;
+				}
+			}
+
+			return result;
+		}
 
 	}
 
 	private class FilterMenuAction extends DefaultMenuCreatorAction {
 		/**
-		 * A holder for a menu list of filter actions on different fields for the trades
-		 * wiring table.
+		 * A holder for a menu list of filter actions on different fields for the trades wiring table.
 		 * 
-		 * @param label The label to show in the UI for this menu.
+		 * @param label
+		 *            The label to show in the UI for this menu.
 		 */
 		public FilterMenuAction(final String label) {
 			super(label);
@@ -2305,12 +2367,21 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			};
 			addActionToMenu(dmcaShippedCargos, menu);
 
-			final DefaultMenuCreatorAction dmcaTimePeriod = new DefaultMenuCreatorAction("Months") {
+			final DefaultMenuCreatorAction dmcaTimePeriod = new DefaultMenuCreatorAction("Period") {
 
 				@Override
 				protected void populate(final Menu menu) {
+					
+					final Action currentAction = new Action("Today onwards") {
+						@Override
+						public void run() {
+							monthFilter.type = TimeFilterType.CURRENT;
+							scenarioViewer.refresh(false);
+						}
+					};
+					addActionToMenu(currentAction, menu);
 
-					final Action fooAction = new Action("Prompt") {
+					final Action promptAction = new Action("Today +3m") {
 						@Override
 						public void run() {
 							monthFilter.type = TimeFilterType.PROMPT;
@@ -2318,7 +2389,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 							scenarioViewer.refresh(false);
 						}
 					};
-					addActionToMenu(fooAction, menu);
+					addActionToMenu(promptAction, menu);
+					
+					new MenuItem(menu, SWT.SEPARATOR);
 
 					buildMonth(earliest, latest, menu);
 				}
@@ -2331,6 +2404,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 					while (!yme.isBefore(yms.plusMonths(i))) {
 						final YearMonth ymc = yms.plusMonths(i);
+						if (i != 0 && ymc.getMonthValue() == 1) {
+							new MenuItem(menu, SWT.SEPARATOR);
+						}
 						final Action fooAction = new Action(formatMe(ymc, firstYear != ymc.getYear())) {
 							@Override
 							public void run() {
@@ -2348,7 +2424,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				private String formatMe(final YearMonth val, final boolean showYear) {
 					String result = String.format("%s", val.getMonth().getDisplayName(TextStyle.SHORT, Locale.getDefault()));
 					if (showYear) {
-						result += String.format(" %d", (val.getYear() % 100));
+						result += String.format(" '%d", (val.getYear() % 100));
 					}
 					return result;
 				}
@@ -2373,17 +2449,16 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		private final IEMFPath filterPath;
 
 		/**
-		 * An action which updates the filter on the trades wiring table and refreshes
-		 * the table.
+		 * An action which updates the filter on the trades wiring table and refreshes the table.
 		 * 
-		 * @param label         The label to associate with this action (the feature
-		 *                      from the cargo row it represents).
-		 * @param sourceObject  The source object in the EMF model which holds the list
-		 *                      of possible values for the filter.
-		 * @param sourceFeature The EMF feature of the source object where the list of
-		 *                      possible values resides.
-		 * @param filterPath    The path within a cargo row object of the field which
-		 *                      the table is being filtered on.
+		 * @param label
+		 *            The label to associate with this action (the feature from the cargo row it represents).
+		 * @param sourceObject
+		 *            The source object in the EMF model which holds the list of possible values for the filter.
+		 * @param sourceFeature
+		 *            The EMF feature of the source object where the list of possible values resides.
+		 * @param filterPath
+		 *            The path within a cargo row object of the field which the table is being filtered on.
 		 */
 		public FilterAction(final String label, final EObject sourceObject, final EStructuralFeature sourceFeature, final IEMFPath filterPath) {
 			super(label);
@@ -2487,7 +2562,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		/**
 		 * Subclasses should fill their menu with actions here.
 		 * 
-		 * @param menu the menu which is about to be displayed
+		 * @param menu
+		 *            the menu which is about to be displayed
 		 */
 		protected void populate(final Menu menu) {
 			{
@@ -2664,8 +2740,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	}
 
 	/**
-	 * A combined {@link MouseListener} and {@link MouseMoveListener} to scroll the
-	 * table during wiring operations.
+	 * A combined {@link MouseListener} and {@link MouseMoveListener} to scroll the table during wiring operations.
 	 * 
 	 */
 	private class WiringDiagramMouseListener implements MouseListener, MouseMoveListener {
@@ -2800,7 +2875,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		/**
 		 * Subclasses should fill their menu with actions here.
 		 * 
-		 * @param menu the menu which is about to be displayed
+		 * @param menu
+		 *            the menu which is about to be displayed
 		 */
 		protected void populate(final Menu menu) {
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases;
@@ -17,6 +17,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
+import com.mmxlabs.lngdataserver.lng.importers.creator.ScenarioBuilder;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.commercial.BallastBonusCharterContract;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
@@ -45,12 +47,24 @@ import com.mmxlabs.scheduler.optimiser.moves.util.MetricType;
  */
 @ExtendWith(ShiroRunner.class)
 public class CharterInVesselPositioningFeeTests extends AbstractMicroTestCase {
-	
-	final static String BALLAST_BONUS_LUMP_SUM = "12345";
-	final static String POSITIONING_FEE = "99999";
-	long internalPnlWithRepositioningFee = 0;
-	long internalPnlWithoutRepositioningFee = 0;
-	
+
+	@Override
+	public @NonNull IScenarioDataProvider importReferenceData() throws Exception {
+		ScenarioBuilder sb = ScenarioBuilder.initialiseBasicScenario();
+		sb.loadDefaultData();
+		return sb.getScenarioDataProvider();
+	}
+
+	@Override
+	protected BaseLegalEntity importDefaultEntity() {
+		return commercialModelFinder.findEntity(ScenarioBuilder.DEFAULT_ENTITY_NAME);
+	}
+
+	private static final String BALLAST_BONUS_LUMP_SUM = "12345";
+	private static final String POSITIONING_FEE = "99999";
+	private long internalPnlWithRepositioningFee = 0;
+	private long internalPnlWithoutRepositioningFee = 0;
+
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testCargoOnVessel() throws Exception {
@@ -58,18 +72,18 @@ public class CharterInVesselPositioningFeeTests extends AbstractMicroTestCase {
 		portModelBuilder.setAllExistingPortsToUTC();
 
 		@NonNull
-		final Port port1 = portFinder.findPort("Point Fortin");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
 
 		@NonNull
-		final Port port2 = portFinder.findPort("Dominion Cove Point LNG");
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT);
 
-		//Create Ballast Bonus Charter Contract with entity, no repositioningFee, and lump sum bonus.
+		// Create Ballast Bonus Charter Contract with entity, no repositioningFee, and lump sum bonus.
 		final BallastBonusCharterContract ballastBonusCharterContract = createBallastBonusCharterContract(port1, "");
-		
+
 		// Create the required basic elements
 		final CharterInMarket charterInMarket_1 = createChartInMarket();
 		charterInMarket_1.setCharterContract(ballastBonusCharterContract);
-		
+
 		// Set distance and speed to exact multiple -- quickest travel time is 100 hours
 		scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(port1, port2, 1500, 2000, 2000, true);
 
@@ -88,28 +102,27 @@ public class CharterInVesselPositioningFeeTests extends AbstractMicroTestCase {
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				//
-				.withVesselAssignment(charterInMarket_1, 0, 0) 
-				.build();
-		
+				.withVesselAssignment(charterInMarket_1, 0, 0).build();
+
 		evaluateTest(null, null, scenarioRunner -> {
 			validateStartIdleLoadEvents(scenarioRunner);
-			
+
 			internalPnlWithoutRepositioningFee = calculateInternalPnl(scenarioRunner);
 		});
 
-		//Create Ballast Bonus Charter Contract with entity, repositioningFee, and lump sum bonus.
+		// Create Ballast Bonus Charter Contract with entity, repositioningFee, and lump sum bonus.
 		final BallastBonusCharterContract ballastBonusCharterContract2 = createBallastBonusCharterContract(port1, POSITIONING_FEE);
-		
+
 		charterInMarket_1.setCharterContract(ballastBonusCharterContract2);
-		
+
 		evaluateTest(null, null, scenarioRunner -> {
 			validateStartIdleLoadEvents(scenarioRunner);
-			
+
 			validateRepositioningFeeSet(scenarioRunner);
-			
+
 			internalPnlWithRepositioningFee = calculateInternalPnl(scenarioRunner);
 		});
-		
+
 		long expectedDeltaPnl = -Long.parseLong(POSITIONING_FEE) * 1000;
 		assertEquals(expectedDeltaPnl, internalPnlWithRepositioningFee - internalPnlWithoutRepositioningFee);
 	}
@@ -123,7 +136,7 @@ public class CharterInVesselPositioningFeeTests extends AbstractMicroTestCase {
 		long[] metrics = MicroTestUtils.evaluateMetrics(scenarioToOptimiserBridge.getDataTransformer(), initialSequences);
 
 		long internalPnl = metrics[MetricType.PNL.ordinal()];
-			
+
 		return internalPnl;
 	}
 
@@ -135,12 +148,12 @@ public class CharterInVesselPositioningFeeTests extends AbstractMicroTestCase {
 		final Schedule schedule = ScenarioModelUtil.getScheduleModel(optimiserScenario).getSchedule();
 		final Sequence sequence = schedule.getSequences().get(0);
 		final StartEvent startEvent = (StartEvent) sequence.getEvents().get(0);
-		
+
 		long expectedPosFee = Long.parseLong(POSITIONING_FEE);
 		assertEquals(expectedPosFee, startEvent.getRepositioningFee());
 		assertEquals(-expectedPosFee, startEvent.getGroupProfitAndLoss().getProfitAndLossPreTax());
 	}
-	
+
 	private BallastBonusCharterContract createBallastBonusCharterContract(Port port, String positioningFee) {
 		final BallastBonusCharterContract ballastBonusCharterContract = commercialModelBuilder.createLumpSumBallastBonusCharterContract(port, BALLAST_BONUS_LUMP_SUM, positioningFee);
 		return ballastBonusCharterContract;
@@ -155,23 +168,23 @@ public class CharterInVesselPositioningFeeTests extends AbstractMicroTestCase {
 		final StartEvent startEvent = (StartEvent) sequence.getEvents().get(0);
 		final Idle idle = (Idle) sequence.getEvents().get(1);
 
-		//SlotVist equates to LoadEvent in the GUI.
-		final SlotVisit loadEvent = (SlotVisit)sequence.getEvents().get(2);
+		// SlotVist equates to LoadEvent in the GUI.
+		final SlotVisit loadEvent = (SlotVisit) sequence.getEvents().get(2);
 		Assertions.assertEquals(0, startEvent.getDuration());
 		Assertions.assertEquals(0, idle.getDuration());
-		
-		//Start zone date time of all three events should match.
-		Assertions.assertEquals(startEvent.getStart(),idle.getStart());
-		Assertions.assertEquals(startEvent.getStart(),loadEvent.getStart());
+
+		// Start zone date time of all three events should match.
+		Assertions.assertEquals(startEvent.getStart(), idle.getStart());
+		Assertions.assertEquals(startEvent.getStart(), loadEvent.getStart());
 
 		int slotDuration = loadEvent.getSlotAllocation().getSlot().getDuration();
 		Assertions.assertEquals(24, slotDuration);
 	}
 
 	private CharterInMarket createChartInMarket() {
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setMaxSpeed(15.0);
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 1);	
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 1);
 		charterInMarket_1.setNominal(false);
 		return charterInMarket_1;
 	}
@@ -183,20 +196,19 @@ public class CharterInVesselPositioningFeeTests extends AbstractMicroTestCase {
 		portModelBuilder.setAllExistingPortsToUTC();
 
 		@NonNull
-		final Port port1 = portFinder.findPort("Point Fortin");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
 
 		@NonNull
-		final Port port2 = portFinder.findPort("Dominion Cove Point LNG");
-
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT);
 
 		final CharterInMarket charterInMarket = createChartInMarket();
 		charterInMarket.setMinDuration(30);
 		charterInMarket.setCharterInRate("10000");
-		
-		//Create Ballast Bonus Charter Contract with entity, repositioningFee, and lump sum bonus.
-		final BallastBonusCharterContract ballastBonusCharterContract2 = createBallastBonusCharterContract(port1,POSITIONING_FEE);
+
+		// Create Ballast Bonus Charter Contract with entity, repositioningFee, and lump sum bonus.
+		final BallastBonusCharterContract ballastBonusCharterContract2 = createBallastBonusCharterContract(port1, POSITIONING_FEE);
 		charterInMarket.setCharterContract(ballastBonusCharterContract2);
-		
+
 		// Set distance and speed to exact multiple -- quickest travel time is 100 hours
 		scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(port1, port2, 1500, 2000, 2000, true);
 
@@ -205,12 +217,12 @@ public class CharterInVesselPositioningFeeTests extends AbstractMicroTestCase {
 		evaluateTest(null, null, scenarioRunner -> {
 
 			Schedule schedule = ScenarioModelUtil.getScheduleModel(scenarioRunner.getScenarioDataProvider()).getSchedule();
-			
+
 			validateNoCargo(charterInMarket, schedule);
-			
+
 			validatePnLAsExpected(schedule);
-			
-			//Check internal pnl.
+
+			// Check internal pnl.
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			// Check spot index has been updated
@@ -221,7 +233,7 @@ public class CharterInVesselPositioningFeeTests extends AbstractMicroTestCase {
 			long[] metrics = MicroTestUtils.evaluateMetrics(scenarioToOptimiserBridge.getDataTransformer(), initialSequences);
 
 			long internalPnl = metrics[MetricType.PNL.ordinal()];
-				
+
 			Assertions.assertEquals(0, internalPnl);
 		});
 	}
@@ -239,7 +251,7 @@ public class CharterInVesselPositioningFeeTests extends AbstractMicroTestCase {
 	}
 
 	private void validatePnLAsExpected(Schedule schedule) {
-		//Check pnl is zero.
+		// Check pnl is zero.
 		Assertions.assertEquals(0L, ScheduleModelKPIUtils.getScheduleProfitAndLoss(schedule));
-	}	
+	}
 }

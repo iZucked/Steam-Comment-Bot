@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.scenario.importWizards;
@@ -15,7 +15,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
-import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
@@ -23,7 +22,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.csv.IImportProblem;
-import com.mmxlabs.models.lng.scenario.importWizards.nominations.ImportNominationsWizard;
 import com.mmxlabs.models.lng.ui.actions.ImportAction;
 import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -35,6 +33,7 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 public abstract class AbstractImportWizard extends Wizard implements IImportWizard {
 
 	private static final Logger log = LoggerFactory.getLogger(AbstractImportWizard.class);
+	protected final boolean guided;
 
 	private AbstractImportPage bip;
 	private List<ScenarioInstance> selectedScenarios;
@@ -46,6 +45,14 @@ public abstract class AbstractImportWizard extends Wizard implements IImportWiza
 	public AbstractImportWizard(final ScenarioInstance scenarioInstance, final String windowTitle) {
 		currentScenario = scenarioInstance;
 		setWindowTitle(windowTitle);
+		guided = false;
+	}
+	
+	public AbstractImportWizard(final ScenarioInstance scenarioInstance, final String windowTitle, final String importFilename) {
+		currentScenario = scenarioInstance;
+		setWindowTitle(windowTitle);
+		this.importFilename = importFilename;
+		guided = true;
 	}
 
 	@Override
@@ -66,15 +73,14 @@ public abstract class AbstractImportWizard extends Wizard implements IImportWiza
 	@Override
 	public boolean performFinish() {
 		selectedScenarios = bip.getSelectedScenarios();
-		importFilename = bip.getImportFilename();
 		csvSeparator = bip.getCsvSeparator();
 		decimalSeparator = bip.getDecimalSeparator();
+		if (!guided)
+			importFilename = bip.getImportFilename();
 
 		bip.saveDirectorySetting();
 
 		final List<ScenarioInstance> scenarios = getSelectedScenarios();
-		final String importFilename = getImportFilename();
-
 		if (scenarios != null && importFilename != null && !"".equals(importFilename)) {
 
 			final WorkspaceModifyOperation operation = new WorkspaceModifyOperation() {
@@ -112,6 +118,10 @@ public abstract class AbstractImportWizard extends Wizard implements IImportWiza
 
 	@Override
 	public boolean canFinish() {
+		if (guided) {
+			final File file = new File(this.importFilename);
+			return file.isFile() && file.canRead();
+		}
 		final File file = new File(bip.getImportFilename());
 		return file.isFile() && file.canRead();
 	}

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.schedule;
@@ -16,6 +16,7 @@ import java.util.List;
 
 import javax.inject.Singleton;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
@@ -50,7 +51,6 @@ import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
-import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator.EvaluationMode;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ExcessIdleTimeComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters;
@@ -83,7 +83,6 @@ import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultBaseFuelProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultDistanceProviderImpl;
-import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultExtraIdleTimeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapBaseFuelCurveEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapRouteExclusionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
@@ -94,7 +93,11 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 public class ScheduleCalculatorTest {
 
+	/**
+	 * This test is currently not relevant.
+	 */
 	@Test
+	@Disabled
 	public void calculateMarkToMarketPNLTest() {
 
 		final IMarkToMarketProvider markToMarketProvider = mock(IMarkToMarketProvider.class);
@@ -196,9 +199,8 @@ public class ScheduleCalculatorTest {
 				bind(ITimeZoneToUtcOffsetProvider.class).to(TimeZoneToUtcOffsetProvider.class);
 				bind(IRouteExclusionProvider.class).toInstance(routeExclusionProvider);
 
-				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocationCache)).toInstance(Boolean.FALSE);
-				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocatedSequenceCache)).toInstance(Boolean.FALSE);
-				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_ProfitandLossCache)).toInstance(Boolean.FALSE);
+				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_VoyagePlanEvaluatorCache)).toInstance(Boolean.FALSE);
+				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_ArrivalTimeCache)).toInstance(Boolean.FALSE);
 			}
 		}
 		final Injector injector = Guice.createInjector(new TestModule());
@@ -249,8 +251,8 @@ public class ScheduleCalculatorTest {
 		when(portSlot5.getTimeWindow()).thenReturn(timeWindow);
 
 		Pair<CargoValueAnnotation, Long> p = Mockito.mock(Pair.class);
-		when(entityValueCalculator.evaluate(ArgumentMatchers.eq(EvaluationMode.FullPNL), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.anyInt(),
-				ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn(p);
+		when(entityValueCalculator.evaluate(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.anyInt(), ArgumentMatchers.any(), ArgumentMatchers.any()))
+				.thenReturn(p);
 		final ProfitAndLossCalculator profitAndLossCalculator = new ProfitAndLossCalculator();
 		injector.injectMembers(profitAndLossCalculator);
 
@@ -270,26 +272,26 @@ public class ScheduleCalculatorTest {
 		when(markToMarketProvider.getMarketForElement(element5)).thenReturn(market5);
 
 		final IAllocationAnnotation allocationAnnotation = mock(IAllocationAnnotation.class);
-		when(volumeAllocator.allocate(ArgumentMatchers.<IVesselAvailability> any(), ArgumentMatchers.anyInt(), argThat(new VoyagePlanMatcher(portSlot1)), ArgumentMatchers.<IPortTimesRecord> any()))
-				.thenReturn(allocationAnnotation);
-		when(volumeAllocator.allocate(ArgumentMatchers.<IVesselAvailability> any(), ArgumentMatchers.anyInt(), argThat(new VoyagePlanMatcher(portSlot2)), ArgumentMatchers.<IPortTimesRecord> any()))
-				.thenReturn(allocationAnnotation);
-		when(volumeAllocator.allocate(ArgumentMatchers.<IVesselAvailability> any(), ArgumentMatchers.anyInt(), argThat(new VoyagePlanMatcher(portSlot3)), ArgumentMatchers.<IPortTimesRecord> any()))
-				.thenReturn(allocationAnnotation);
-		when(volumeAllocator.allocate(ArgumentMatchers.<IVesselAvailability> any(), ArgumentMatchers.anyInt(), argThat(new VoyagePlanMatcher(portSlot4)), ArgumentMatchers.<IPortTimesRecord> any()))
-				.thenReturn(allocationAnnotation);
+		when(volumeAllocator.allocate(ArgumentMatchers.<IVesselAvailability> any(), ArgumentMatchers.anyInt(), argThat(new VoyagePlanMatcher(portSlot1)), ArgumentMatchers.<IPortTimesRecord> any(),
+				ArgumentMatchers.any())).thenReturn(allocationAnnotation);
+		when(volumeAllocator.allocate(ArgumentMatchers.<IVesselAvailability> any(), ArgumentMatchers.anyInt(), argThat(new VoyagePlanMatcher(portSlot2)), ArgumentMatchers.<IPortTimesRecord> any(),
+				ArgumentMatchers.any())).thenReturn(allocationAnnotation);
+		when(volumeAllocator.allocate(ArgumentMatchers.<IVesselAvailability> any(), ArgumentMatchers.anyInt(), argThat(new VoyagePlanMatcher(portSlot3)), ArgumentMatchers.<IPortTimesRecord> any(),
+				ArgumentMatchers.any())).thenReturn(allocationAnnotation);
+		when(volumeAllocator.allocate(ArgumentMatchers.<IVesselAvailability> any(), ArgumentMatchers.anyInt(), argThat(new VoyagePlanMatcher(portSlot4)), ArgumentMatchers.<IPortTimesRecord> any(),
+				ArgumentMatchers.any())).thenReturn(allocationAnnotation);
 
 		profitAndLossCalculator.calculateMarkToMarketPNL(sequences, annotatedSolution);
 
 		// Verify that our slots were correctly matched against MTM slots
 		verify(volumeAllocator, times(1)).allocate(ArgumentMatchers.<IVesselAvailability> any(), ArgumentMatchers.anyInt(), argThat(new VoyagePlanMatcher(portSlot1)),
-				argThat(new PortTimesRecordMatcher(portSlot1, 10)));
+				argThat(new PortTimesRecordMatcher(portSlot1, 10)), ArgumentMatchers.any());
 		verify(volumeAllocator, times(1)).allocate(ArgumentMatchers.<IVesselAvailability> any(), ArgumentMatchers.anyInt(), argThat(new VoyagePlanMatcher(portSlot2)),
-				argThat(new PortTimesRecordMatcher(portSlot2, 10)));
+				argThat(new PortTimesRecordMatcher(portSlot2, 10)), ArgumentMatchers.any());
 		verify(volumeAllocator, times(1)).allocate(ArgumentMatchers.<IVesselAvailability> any(), ArgumentMatchers.anyInt(), argThat(new VoyagePlanMatcher(portSlot3)),
-				argThat(new PortTimesRecordMatcher(portSlot3, 10)));
+				argThat(new PortTimesRecordMatcher(portSlot3, 10)), ArgumentMatchers.any());
 		verify(volumeAllocator, times(1)).allocate(ArgumentMatchers.<IVesselAvailability> any(), ArgumentMatchers.anyInt(), argThat(new VoyagePlanMatcher(portSlot4)),
-				argThat(new PortTimesRecordMatcher(portSlot4, 10)));
+				argThat(new PortTimesRecordMatcher(portSlot4, 10)), ArgumentMatchers.any());
 
 		verify(annotations, times(1)).setAnnotation(eq(element1), eq(SchedulerConstants.AI_volumeAllocationInfo), ArgumentMatchers.<IElementAnnotation> anyObject());
 		verify(annotations, times(1)).setAnnotation(eq(element2), eq(SchedulerConstants.AI_volumeAllocationInfo), ArgumentMatchers.<IElementAnnotation> anyObject());

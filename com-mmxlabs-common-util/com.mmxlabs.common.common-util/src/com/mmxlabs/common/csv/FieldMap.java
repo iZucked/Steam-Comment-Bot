@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.common.csv;
@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class FieldMap implements IFieldMap {
-	private Map<String, String> delegate;
+	private final Map<String, String> delegate;
 
 	private String prefix;
 	private FieldMap superMap;
@@ -35,24 +35,24 @@ public class FieldMap implements IFieldMap {
 	}
 
 	@Override
-	public boolean containsKey(Object key) {
+	public boolean containsKey(final Object key) {
 		notifyAccess(key + "");
 		return delegate.containsKey(key);
 	}
 
 	@Override
-	public boolean containsValue(Object value) {
+	public boolean containsValue(final Object value) {
 		return delegate.containsValue(value);
 	}
 
 	@Override
 	public Set<java.util.Map.Entry<String, String>> entrySet() {
-		final Set<java.util.Map.Entry<String, String>> es = new HashSet<Entry<String, String>>();
+		final Set<java.util.Map.Entry<String, String>> es = new HashSet<>();
 		for (final Entry<String, String> de : delegate.entrySet()) {
 			es.add(new Entry<String, String>() {
 
 				@Override
-				public String setValue(String value) {
+				public String setValue(final String value) {
 					return de.setValue(value);
 				}
 
@@ -75,14 +75,15 @@ public class FieldMap implements IFieldMap {
 	}
 
 	@Override
-	public boolean equals(Object o) {
+	public boolean equals(final Object o) {
 		return delegate.equals(o);
 	}
 
 	@Override
-	public String get(Object key) {
-		if (key instanceof String)
+	public String get(final Object key) {
+		if (key instanceof String) {
 			notifyAccess((String) key);
+		}
 		return delegate.get(key);
 	}
 
@@ -102,17 +103,17 @@ public class FieldMap implements IFieldMap {
 	}
 
 	@Override
-	public String put(String key, String value) {
+	public String put(final String key, final String value) {
 		return delegate.put(key, value);
 	}
 
 	@Override
-	public void putAll(Map<? extends String, ? extends String> m) {
+	public void putAll(final Map<? extends String, ? extends String> m) {
 		delegate.putAll(m);
 	}
 
 	@Override
-	public String remove(Object key) {
+	public String remove(final Object key) {
 		return delegate.remove(key);
 	}
 
@@ -127,11 +128,12 @@ public class FieldMap implements IFieldMap {
 	}
 
 	@Override
-	public IFieldMap getSubMap(String keyPrefix) {
+	public IFieldMap getSubMap(final String keyPrefix) {
 		final HashMap<String, String> subDelegate = new HashMap<>();
-		for (final String key : delegate.keySet()) {
+		for (final Map.Entry<String, String> e : delegate.entrySet()) {
+			final String key = e.getKey();
 			if (key.startsWith(keyPrefix)) {
-				subDelegate.put(key.substring(keyPrefix.length()), delegate.get(key));
+				subDelegate.put(key.substring(keyPrefix.length()), e.getValue());
 			}
 		}
 		return new FieldMap(subDelegate, keyPrefix, this);
@@ -147,7 +149,7 @@ public class FieldMap implements IFieldMap {
 		return lastAccessedKey;
 	}
 
-	private Set<String> missedKeys = new HashSet<>();
+	private final Set<String> missedKeys = new HashSet<>();
 
 	private String lastAccessedKey = "";
 
@@ -174,7 +176,7 @@ public class FieldMap implements IFieldMap {
 	/**
 	 */
 	@Override
-	public boolean containsPrefix(String keyPrefix) {
+	public boolean containsPrefix(final String keyPrefix) {
 		for (final String key : delegate.keySet()) {
 			if (key.startsWith(keyPrefix)) {
 				return true;

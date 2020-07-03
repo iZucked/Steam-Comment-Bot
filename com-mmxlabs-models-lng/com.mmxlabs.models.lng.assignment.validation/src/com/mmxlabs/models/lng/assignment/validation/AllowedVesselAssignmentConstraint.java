@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 /**
@@ -87,7 +87,7 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelMultiConstra
 				boolean isVesselRestrictionsPermissive = false;
 
 				if (target instanceof Slot) {
-					final Slot slot = (Slot) target;
+					final Slot<?> slot = (Slot<?>) target;
 					allowedVessels = slot.getSlotOrDelegateVesselRestrictions();
 					isVesselRestrictionsPermissive = slot.getSlotOrDelegateVesselRestrictionsArePermissive();
 

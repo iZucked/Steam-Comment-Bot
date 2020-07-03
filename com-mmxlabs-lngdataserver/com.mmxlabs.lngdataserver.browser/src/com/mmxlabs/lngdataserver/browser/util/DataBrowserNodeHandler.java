@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lngdataserver.browser.util;
@@ -87,7 +87,12 @@ public class DataBrowserNodeHandler implements DataExtension {
 				LOGGER.error("Error retrieving " + name.toLowerCase() + " versions");
 			}
 			// register consumer to update on new version
-			repository.registerLocalVersionListener(() -> dataRoot.getActionHandler().refreshLocal());
+			repository.registerLocalVersionListener(() -> {
+				final IDataBrowserActionsHandler handler = dataRoot.getActionHandler();
+				if (handler != null) {
+					handler.refreshLocal();
+				}
+			});
 			dataRoot.getActionHandler().refreshLocal();
 		}
 	}

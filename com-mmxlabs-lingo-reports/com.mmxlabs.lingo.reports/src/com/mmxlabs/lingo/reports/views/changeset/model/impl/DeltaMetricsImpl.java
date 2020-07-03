@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 /**
@@ -114,6 +114,7 @@ public class DeltaMetricsImpl extends MinimalEObjectImpl.Container implements De
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public long getPnlDelta() {
 		return pnlDelta;
 	}
@@ -123,6 +124,7 @@ public class DeltaMetricsImpl extends MinimalEObjectImpl.Container implements De
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPnlDelta(long newPnlDelta) {
 		long oldPnlDelta = pnlDelta;
 		pnlDelta = newPnlDelta;
@@ -135,6 +137,7 @@ public class DeltaMetricsImpl extends MinimalEObjectImpl.Container implements De
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getLatenessDelta() {
 		return latenessDelta;
 	}
@@ -144,6 +147,7 @@ public class DeltaMetricsImpl extends MinimalEObjectImpl.Container implements De
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLatenessDelta(int newLatenessDelta) {
 		int oldLatenessDelta = latenessDelta;
 		latenessDelta = newLatenessDelta;
@@ -156,6 +160,7 @@ public class DeltaMetricsImpl extends MinimalEObjectImpl.Container implements De
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getCapacityDelta() {
 		return capacityDelta;
 	}
@@ -165,6 +170,7 @@ public class DeltaMetricsImpl extends MinimalEObjectImpl.Container implements De
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCapacityDelta(int newCapacityDelta) {
 		int oldCapacityDelta = capacityDelta;
 		capacityDelta = newCapacityDelta;

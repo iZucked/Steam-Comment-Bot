@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.standard.incomestatement;
@@ -9,6 +9,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -16,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.Viewer;
@@ -24,7 +24,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.PlatformUI;
 
-import com.google.common.collect.Sets;
 import com.mmxlabs.common.CumulativeMap;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.IReportContents;
@@ -35,18 +34,16 @@ import com.mmxlabs.lingo.reports.views.standard.SimpleTabularReportView;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
-import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
-import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
-import com.mmxlabs.models.lng.schedule.Journey;
-import com.mmxlabs.models.lng.schedule.PortVisit;
-import com.mmxlabs.models.lng.schedule.Purge;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
-import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
+import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
+import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils.ShippingCostType;
+import com.mmxlabs.rcp.common.actions.CopyGridToJSONUtil;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
@@ -293,11 +290,18 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 			}
 
 			public List<IncomeStatementData> createData(final Schedule schedule, final ScenarioResult scenarioResult) {
-				final List<IncomeStatementData> output = new ArrayList<IncomeStatementData>();
+				final List<IncomeStatementData> output = new ArrayList<>();
 
 				IncomeStatementData shippingCostItem = null;
+				EnumMap<LineItems, IncomeStatementData> m = new EnumMap<>(LineItems.class);
 				for (final LineItems lineItem : LineItems.values()) {
+					if (lineItem == LineItems.AvgSalesPrice || lineItem == LineItems.AvgPurchasePrice) {
+						// Skip these, derived later
+						continue;
+					}
+
 					final IncomeStatementData exposures = getIncomeByMonth(scenarioResult, schedule, lineItem);
+					m.put(lineItem, exposures);
 					if (lineItem == LineItems.ShippingCosts) {
 						shippingCostItem = exposures;
 						output.add(exposures);
@@ -313,17 +317,65 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 						overallIncomeMonths.add(key);
 					}
 				}
+				// Avg Purchase Price;
+				computeAvgPrice(schedule, scenarioResult, output, m, LineItems.AvgPurchasePrice, LineItems.PurchaseVolume, LineItems.Costs);
+				// Avg Sales Price;
+				computeAvgPrice(schedule, scenarioResult, output, m, LineItems.AvgSalesPrice, LineItems.SalesVolume, LineItems.Revenues);
 
 				return output;
 			}
 
+			private void computeAvgPrice(final Schedule schedule, final ScenarioResult scenarioResult, final List<IncomeStatementData> output, EnumMap<LineItems, IncomeStatementData> m,
+					LineItems avgDataKey, LineItems volumeData, LineItems valueData) {
+				{
+
+					// Step 1, compute the totals
+					IncomeStatementData volsInMMBTU = m.get(volumeData);
+					IncomeStatementData valuesInDollars = m.get(valueData);
+
+					final Map<YearMonth, Double> exposuresByMonth = new HashMap<>();
+					for (YearMonth key : overallIncomeMonths) {
+						Double volume = volsInMMBTU.valuesByMonth.get(key);
+						Double value = valuesInDollars.valuesByMonth.get(key);
+
+						if (volume != 0.0) {
+							exposuresByMonth.put(key, value / volume);
+						}
+					}
+
+					IncomeStatementData data = new IncomeStatementData(scenarioResult, schedule, avgDataKey, exposuresByMonth);
+					output.add(data);
+
+					// Step 2, compute the contract sub-totals
+					for (IncomeStatementData dVols : volsInMMBTU.children) {
+						for (IncomeStatementData dValues : valuesInDollars.children) {
+							if (dVols.key == dValues.key) {
+
+								final Map<YearMonth, Double> dExposuresByMonth = new HashMap<>();
+
+								for (YearMonth key : overallIncomeMonths) {
+									Double volume = dVols.valuesByMonth.get(key);
+									Double value = dValues.valuesByMonth.get(key);
+
+									if (volume != null && volume != 0.0) {
+										dExposuresByMonth.put(key, value / volume);
+									}
+								}
+								IncomeStatementData data2 = new IncomeStatementData(scenarioResult, schedule, dVols.key, dExposuresByMonth);
+								data.children.add(data2);
+							}
+						}
+					}
+
+				}
+			}
 		};
 	}
 
-	private IncomeStatementData getIncomeByMonth(final ScenarioResult scenarioResult, final Schedule schedule, final LineItems lineItem) {
-		final CumulativeMap<YearMonth> result = new CumulativeMap<YearMonth>();
+	protected IncomeStatementData getIncomeByMonth(final ScenarioResult scenarioResult, final Schedule schedule, final LineItems lineItem) {
+		final CumulativeMap<YearMonth> result = new CumulativeMap<>();
 		final Map<T, CumulativeMap<YearMonth>> subTypeMap = new HashMap<>();
-
+		
 		for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
 
 			double total = 0.0;
@@ -332,55 +384,49 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 				for (final Event event : cargoAllocation.getEvents()) {
 					if (event instanceof FuelUsage) {
 						final FuelUsage fuelUsage = (FuelUsage) event;
-						total += getFuelCost(fuelUsage, Fuel.NBO, Fuel.FBO);
+						total += ScheduleModelKPIUtils.getFuelCost(fuelUsage, Fuel.NBO, Fuel.FBO);
 					}
 				}
 				break;
 			case Costs:
 				for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
-					final Slot slot = slotAllocation.getSlot();
+					final Slot<?> slot = slotAllocation.getSlot();
 					if (slot instanceof LoadSlot) {
 						total += slotAllocation.getVolumeValue();
 					}
 				}
 				break;
 			case Ebitda: {
+				// Revenue
 				for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
-					final Slot slot = slotAllocation.getSlot();
-					if (slot instanceof LoadSlot) {
-						total -= slotAllocation.getVolumeValue();
-					}
-				}
-				for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
-					final Slot slot = slotAllocation.getSlot();
+					final Slot<?> slot = slotAllocation.getSlot();
 					if (slot instanceof DischargeSlot) {
 						total += slotAllocation.getVolumeValue();
 					}
 				}
-				total -= getVariableCost(cargoAllocation);
-				for (final Event event : cargoAllocation.getEvents()) {
-					if (event instanceof PortVisit) {
-						final PortVisit portVisit = (PortVisit) event;
-						total -= portVisit.getPortCost();
+
+				// Minus purchase costs
+				for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
+					final Slot<?> slot = slotAllocation.getSlot();
+					if (slot instanceof LoadSlot) {
+						total -= slotAllocation.getVolumeValue();
 					}
 				}
-				for (final Event event : cargoAllocation.getEvents()) {
-					total -= event.getCharterCost();
-				}
+				// Minus ship costs
+				total -= ScheduleModelKPIUtils.calculateEventShippingCost(cargoAllocation, false, false, ShippingCostType.ALL);
 			}
 				break;
 			case GrossMargin: {
 
 				// IT IS OUT BY A few hundred dollars :( - probably internal rounding
 				for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
-					final Slot slot = slotAllocation.getSlot();
+					final Slot<?> slot = slotAllocation.getSlot();
 					if (slot instanceof LoadSlot) {
-						final LoadSlot loadSlot = (LoadSlot) slot;
 						total -= slotAllocation.getVolumeValue();
 					}
 				}
 				for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
-					final Slot slot = slotAllocation.getSlot();
+					final Slot<?> slot = slotAllocation.getSlot();
 					if (slot instanceof DischargeSlot) {
 						total += slotAllocation.getVolumeValue();
 					}
@@ -389,21 +435,14 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 				break;
 			}
 			case Hire:
-				for (final Event event : cargoAllocation.getEvents()) {
-					total += event.getCharterCost();
-				}
+				total += ScheduleModelKPIUtils.calculateEventShippingCost(cargoAllocation, false, false, ShippingCostType.HIRE_COSTS);
 				break;
 			case PortCharges:
-				for (final Event event : cargoAllocation.getEvents()) {
-					if (event instanceof PortVisit) {
-						final PortVisit portVisit = (PortVisit) event;
-						total += portVisit.getPortCost();
-					}
-				}
+				total += ScheduleModelKPIUtils.calculateEventShippingCost(cargoAllocation, false, false, ShippingCostType.PORT_COSTS);
 				break;
 			case Revenues: {
 				for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
-					final Slot slot = slotAllocation.getSlot();
+					final Slot<?> slot = slotAllocation.getSlot();
 					if (slot instanceof DischargeSlot) {
 						total += slotAllocation.getVolumeValue();
 					}
@@ -412,19 +451,35 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 			}
 				break;
 			case ShippingCosts:
-				total += getVariableCost(cargoAllocation);
-				for (final Event event : cargoAllocation.getEvents()) {
-					if (event instanceof PortVisit) {
-						final PortVisit portVisit = (PortVisit) event;
-						total += portVisit.getPortCost();
-					}
-				}
-				for (final Event event : cargoAllocation.getEvents()) {
-					total += event.getCharterCost();
-				}
+				total += ScheduleModelKPIUtils.calculateEventShippingCost(cargoAllocation, false, false, ShippingCostType.ALL);
 				break;
 			case VariableCosts:
 				total += getVariableCost(cargoAllocation);
+				break;
+
+			case SalesVolume: {
+				for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
+					final Slot<?> slot = slotAllocation.getSlot();
+					if (slot instanceof DischargeSlot) {
+						total += slotAllocation.getEnergyTransferred();
+					}
+				}
+
+			}
+				break;
+			case PurchaseVolume: {
+				for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
+					final Slot<?> slot = slotAllocation.getSlot();
+					if (slot instanceof DischargeSlot) {
+						total += slotAllocation.getEnergyTransferred();
+					}
+				}
+
+			}
+				break;
+			case AvgPurchasePrice:
+			case AvgSalesPrice:
+				// Computed later
 				break;
 			}
 
@@ -432,7 +487,7 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 			ZonedDateTime dischargeDate = null;
 			T subType = (T) null;
 			for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
-				final Slot slot = slotAllocation.getSlot();
+				final Slot<?> slot = slotAllocation.getSlot();
 				if (slot instanceof DischargeSlot) {
 					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
 					dischargeDate = slotAllocation.getSlotVisit().getStart();
@@ -469,53 +524,19 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 
 	protected abstract Collection<T> getSubTypes();
 
-	private int getFuelCost(final FuelUsage fuelUser, final Fuel... fuels) {
-		final Set<Fuel> fuelsOfInterest = Sets.newHashSet(fuels);
-		int sum = 0;
-		if (fuelUser != null) {
-			final EList<FuelQuantity> fuelQuantities = fuelUser.getFuels();
-			for (final FuelQuantity fq : fuelQuantities) {
-				if (fuelsOfInterest.contains(fq.getFuel())) {
-					sum += fq.getCost();
-				}
-			}
-		}
-		return sum;
-	}
-
 	/**
 	 */
-	private Integer getVariableCost(final CargoAllocation cargoAllocation) {
+	private Long getVariableCost(final CargoAllocation cargoAllocation) {
 
 		if (cargoAllocation == null) {
 			return null;
 		}
 
-		// Bit of a double count here, but need to decide what to add to the model
-		int shippingCost = 0;
-		for (final Event event : cargoAllocation.getEvents()) {
-
-			if (event instanceof Journey) {
-				final Journey journey = (Journey) event;
-				// Canal Costs
-				shippingCost += journey.getToll();
-			}
-
-			if (event instanceof FuelUsage) {
-				final FuelUsage fuelUsage = (FuelUsage) event;
-				// Base fuel costs
-				shippingCost += getFuelCost(fuelUsage, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
-			}
-
-			if (event instanceof Purge) {
-				final Purge purge = (Purge) event;
-				shippingCost += purge.getCost();
-			}
-			if (event instanceof Cooldown) {
-				final Cooldown cooldown = (Cooldown) event;
-				shippingCost += cooldown.getCost();
-			}
-		}
+		long shippingCost = ScheduleModelKPIUtils.calculateEventShippingCost(cargoAllocation, false, false, ShippingCostType.ALL) //
+				// Take off cost items tallied separately.
+				- ScheduleModelKPIUtils.calculateEventShippingCost(cargoAllocation, false, false, ShippingCostType.HIRE_COSTS) //
+				- ScheduleModelKPIUtils.calculateEventShippingCost(cargoAllocation, false, false, ShippingCostType.PORT_COSTS) //
+		;
 
 		return shippingCost;
 
@@ -550,15 +571,13 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 
 		if (IReportContents.class.isAssignableFrom(adapter)) {
 
-			final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
-			util.setRowHeadersIncluded(true);
-			util.setShowBackgroundColours(true);
-			final String contents = util.convert();
+			final CopyGridToJSONUtil jsonUtil = new CopyGridToJSONUtil(viewer.getGrid(), true);
+			final String jsonContents = jsonUtil.convert();
 			return (T) new IReportContents() {
 
 				@Override
-				public String getHTMLContents() {
-					return contents;
+				public String getJSONContents() {
+					return jsonContents;
 				}
 			};
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lngdataserver.lng.importers.distanceupdate.ui;
@@ -12,15 +12,9 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.LingoDistanceUpdater;
-import com.mmxlabs.lngdataserver.lng.importers.lingodata.LingoDataImporter;
-import com.mmxlabs.models.lng.scenario.exportWizards.ExportCSVWizard;
-import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class DistanceUpdateCommandHandler extends AbstractHandler {

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lingo.app.e4;
@@ -16,6 +16,7 @@ import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.lingo.reports.customizable.CustomReportsRegistry;
 import com.mmxlabs.rcp.common.application.E4ModelHelper;
 
 public class WorkbenchChangeProcessor {
@@ -26,6 +27,15 @@ public class WorkbenchChangeProcessor {
 		// Remove ADP view part
 		E4ModelHelper.removeViewPart("com.mmxlabs.models.lng.adp.presentation.views.ADPEditorView", application, modelService);
 
+		//Removed from *.port.editor/plugin.xml
+		//	<view
+		//        category="com.mmxlabs.models.lng.views.physical"
+		//        class="com.mmxlabs.models.lng.port.editor.views.PortGroupView"
+		//        id="com.mmxlabs.models.lng.port.editor.views.PortGroupView"
+		//        name="Port Groups">
+		//  </view>
+  		E4ModelHelper.removeViewPart("com.mmxlabs.models.lng.port.editor.views.PortGroupView", application, modelService);
+		
 		// Added for 3.8.x to 3.9.0 changes
 		// Rename Diff Tools Perspective to Compare
 		for (final MWindow window : application.getChildren()) {
@@ -54,5 +64,10 @@ public class WorkbenchChangeProcessor {
 		}
 		// View no longer present
 		E4ModelHelper.removeViewPart("com.mmxlabs.lngdataserver.integration.ui.WebNavigatorView", application, modelService);
+
+		//Remove Job Manager.
+		E4ModelHelper.removeViewPart("com.mmxlabs.jobcontroller.views.JobManager", application, modelService);
+		
+		CustomReportsRegistry.getInstance().removeDeletedViews(application, modelService);
 	}
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lngdataserver.integration.reports.exposures;
@@ -14,13 +14,13 @@ import java.util.List;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mmxlabs.common.exposures.ExposureEnumerations.ValueMode;
+import com.mmxlabs.lingo.reports.views.standard.exposures.ExposureReportView.AssetType;
 import com.mmxlabs.lingo.reports.views.standard.exposures.ExposuresTransformer;
 import com.mmxlabs.lingo.reports.views.standard.exposures.IndexExposureData;
-import com.mmxlabs.lingo.reports.views.standard.exposures.ExposureReportView.AssetType;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.commercial.parseutils.Exposures;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -54,7 +54,7 @@ public class ExposuresReportJSONGenerator {
 		for (YearMonth cym = ymStart; cym.isBefore(ymEnd); cym = cym.plusMonths(1)) {
 
 			IndexExposureData exposuresByMonth = 
-					ExposuresTransformer.getExposuresByMonth(scenarioResult, schedule, cym, Exposures.ValueMode.VOLUME_MMBTU,  Collections.emptyList(), null, -1, AssetType.NET);
+					ExposuresTransformer.getExposuresByMonth(scenarioResult, schedule, cym, ValueMode.VOLUME_MMBTU,  Collections.emptyList(), null, -1, AssetType.NET, false);
 
 			if (exposuresByMonth.exposures.size() != 0.0) {
 				temp.add(exposuresByMonth);

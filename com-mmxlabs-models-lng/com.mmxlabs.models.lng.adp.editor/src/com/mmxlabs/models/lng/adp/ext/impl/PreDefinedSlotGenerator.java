@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.adp.ext.impl;
@@ -45,7 +45,8 @@ public class PreDefinedSlotGenerator implements IProfileGenerator {
 			slot.setWindowStart(preDefinedDate.getDate());
 			slot.setWindowSize(model.getWindowSize());
 			slot.setWindowSizeUnits(model.getWindowSizeUnits());
-			ADPModelUtil.setSlotVolumeFrom(contract.getMinQuantity(), model.getModelOrContractVolumePerCargo(), model.getModelOrContractVolumeUnit(), slot, false);
+			int minQuantity = DistributionModelGeneratorUtil.getMinContractQuantityInUnits(contract, model.getModelOrContractVolumeUnit());
+			ADPModelUtil.setSlotVolumeFrom(minQuantity, model.getModelOrContractVolumePerCargo(), model.getModelOrContractVolumeUnit(), slot, false);
 			slots.add(slot);
 		}
 		return slots;

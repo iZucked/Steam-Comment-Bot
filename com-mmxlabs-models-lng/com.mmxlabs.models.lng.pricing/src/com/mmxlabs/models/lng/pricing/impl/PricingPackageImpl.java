@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.impl;
@@ -1408,6 +1408,36 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getMarketIndex_FlatCurve() {
+		return (EReference)marketIndexEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getMarketIndex_BidCurve() {
+		return (EReference)marketIndexEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getMarketIndex_OfferCurve() {
+		return (EReference)marketIndexEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getPricingCalendarEntry() {
 		return pricingCalendarEntryEClass;
 	}
@@ -1762,6 +1792,9 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		marketIndexEClass = createEClass(MARKET_INDEX);
 		createEReference(marketIndexEClass, MARKET_INDEX__SETTLE_CALENDAR);
 		createEReference(marketIndexEClass, MARKET_INDEX__PRICING_CALENDAR);
+		createEReference(marketIndexEClass, MARKET_INDEX__FLAT_CURVE);
+		createEReference(marketIndexEClass, MARKET_INDEX__BID_CURVE);
+		createEReference(marketIndexEClass, MARKET_INDEX__OFFER_CURVE);
 
 		pricingCalendarEntryEClass = createEClass(PRICING_CALENDAR_ENTRY);
 		createEAttribute(pricingCalendarEntryEClass, PRICING_CALENDAR_ENTRY__COMMENT);
@@ -2030,6 +2063,9 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		initEClass(marketIndexEClass, MarketIndex.class, "MarketIndex", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getMarketIndex_SettleCalendar(), this.getHolidayCalendar(), null, "settleCalendar", null, 0, 1, MarketIndex.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getMarketIndex_PricingCalendar(), this.getPricingCalendar(), null, "pricingCalendar", null, 0, 1, MarketIndex.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getMarketIndex_FlatCurve(), this.getCommodityCurve(), null, "flatCurve", null, 0, 1, MarketIndex.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getMarketIndex_BidCurve(), this.getCommodityCurve(), null, "bidCurve", null, 0, 1, MarketIndex.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getMarketIndex_OfferCurve(), this.getCommodityCurve(), null, "offerCurve", null, 0, 1, MarketIndex.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(pricingCalendarEntryEClass, PricingCalendarEntry.class, "PricingCalendarEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getPricingCalendarEntry_Comment(), ecorePackage.getEString(), "comment", null, 0, 1, PricingCalendarEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

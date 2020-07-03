@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 /**
@@ -157,4 +157,16 @@ public class PeriodDistributionProfileConstraintImpl extends ProfileConstraintIm
 		return super.eIsSet(featureID);
 	}
 
+	/**
+	 * @generated NOT
+	 */
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		for (PeriodDistribution dist : this.distributions) {
+			sb.append(dist.toString()).append("\r\n");
+		}
+		return sb.toString();
+	}
+	
 } //PeriodDistributionProfileConstraintImpl

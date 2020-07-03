@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
 package com.mmxlabs.lngdataserver.integration.ui.scenarios.internal;
@@ -33,12 +33,13 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.lngdataserver.commons.http.WrappedProgressMonitor;
+import com.mmxlabs.hub.DataHubServiceProvider;
+import com.mmxlabs.hub.IUpstreamDetailChangedListener;
+import com.mmxlabs.hub.UpstreamUrlProvider;
+import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.SharedScenarioRecord;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.SharedWorkspacePathUtils;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.SharedWorkspaceServiceClient;
-import com.mmxlabs.lngdataserver.server.IUpstreamDetailChangedListener;
-import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.manifest.Manifest;
@@ -387,13 +388,15 @@ public class SharedScenarioUpdater {
 			}
 
 		};
-		updateThread.start();
+
+		// Defer the update thread start to the task executor so the task created in the
+		// #update calls at the of the method do not clash.
+		taskExecutor.submit(() -> updateThread.start());
 
 	}
 
 	/**
-	 * UI created folder, so register with the local map to avoid recreating it
-	 * later
+	 * UI created folder, so register with the local map to avoid recreating it later
 	 * 
 	 * @param f
 	 */
@@ -437,7 +440,7 @@ public class SharedScenarioUpdater {
 	}
 
 	public void refresh() throws IOException {
-		final boolean available = UpstreamUrlProvider.INSTANCE.isAvailable();
+		final boolean available = DataHubServiceProvider.getInstance().isOnlineAndLoggedIn();
 		if (!modelRoot.isOffline() != available) {
 			RunnerHelper.syncExecDisplayOptional(() -> modelRoot.setOffline(!available));
 		}
