@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: MMXLabs Hub Support
 Bundle-SymbolicName: com.mmxlabs.hub;singleton:=true
 Automatic-Module-Name: com.mmxlabs.hub
-Bundle-Version: 4.10.3.qualifier
+Bundle-Version: 4.10.3.RELEASE
 Bundle-Vendor: Minimax Labs
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
