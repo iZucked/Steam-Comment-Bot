@@ -64,7 +64,7 @@ public class VesselAvailabilityMinMaxConstraint extends AbstractModelMultiConstr
 					// Min duration can't be greater than max duration
 					if (vesselAvailability.getCharterOrDelegateMinDuration() != 0 && vesselAvailability.getCharterOrDelegateMaxDuration() != 0) {
 						if (vesselAvailability.getCharterOrDelegateMaxDuration() < vesselAvailability.getCharterOrDelegateMinDuration()) {
-							final String message = String.format("Vessel|%s min duration is superior to the max duration.", vessel.getName());
+							final String message = String.format("Vessel|%s: Charter min duration is greater than max duration.", vessel.getName());
 							createErrorMessage(message, ctx, failures, vesselAvailability, CargoPackage.eINSTANCE.getVesselAvailability_MinDuration(), //
 									CargoPackage.eINSTANCE.getVesselAvailability_MaxDuration(), CargoPackage.eINSTANCE.getCargoModel_VesselAvailabilities());
 						}
@@ -88,8 +88,8 @@ public class VesselAvailabilityMinMaxConstraint extends AbstractModelMultiConstr
 								// AFTER
 								// The max date should be set after the EndAfter date
 								if (vesselAvailability.getEndAfter().isAfter(maxDate)) {
-									final String message = String.format("Vessel|%s max duration is longer than minimum availability dates (%.1f days).", vessel.getName(),
-
+									final String message = String.format("Vessel|%s: Charter max duration of %d days is too short to cover charter start/end dates (%.1f days).", vessel.getName(),
+											maxDuration,
 											(float) Hours.between(vesselAvailability.getStartBy(), vesselAvailability.getEndAfter()) / 24.0f);
 									createErrorMessage(message, ctx, failures, vesselAvailability, CargoPackage.eINSTANCE.getVesselAvailability_MaxDuration(), //
 											CargoPackage.eINSTANCE.getVesselAvailability_EndAfter());
