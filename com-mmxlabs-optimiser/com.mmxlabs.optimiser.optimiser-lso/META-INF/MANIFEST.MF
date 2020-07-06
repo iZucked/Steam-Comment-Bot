@@ -5,7 +5,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-SymbolicName: com.mmxlabs.optimiser.optimiser-lso
 Automatic-Module-Name: com.mmxlabs.optimiser.optimiser-lso
 Bundle-Vendor: Minimax Labs Ltd.
-Bundle-Version: 4.10.3.RELEASE
+Bundle-Version: 4.10.4.qualifier
 Export-Package: com.mmxlabs.optimiser.lso,
  com.mmxlabs.optimiser.lso.impl,
  com.mmxlabs.optimiser.lso.multiobjective.impl,
@@ -17,11 +17,11 @@ Export-Package: com.mmxlabs.optimiser.lso,
  com.mmxlabs.optimiser.lso.multiobjective.modules
 Import-Package: javax.inject;version="[1.0,2)",
  org.slf4j;version="[1.5,2)"
-Require-Bundle: com.mmxlabs.optimiser.optimiser-core;bundle-version="[4.10.3,5.0.0)",
- com.mmxlabs.common.common-util;bundle-version="[4.10.3,5.0.0)",
+Require-Bundle: com.mmxlabs.optimiser.optimiser-core;bundle-version="[4.10.4,5.0.0)",
+ com.mmxlabs.common.common-util;bundle-version="[4.10.4,5.0.0)",
  com.google.inject;bundle-version="3.0.0",
  com.google.guava;bundle-version="13.0.1",
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  org.apache.commons.math;bundle-version="2.1.0",
- com.mmxlabs.optimiser.optimiser-common;bundle-version="[4.10.3,5.0.0)",
+ com.mmxlabs.optimiser.optimiser-common;bundle-version="[4.10.4,5.0.0)",
  com.googlecode.json-simple;bundle-version="1.1.1"
