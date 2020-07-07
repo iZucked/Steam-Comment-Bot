@@ -22,6 +22,11 @@ public class VesselFillVolumeInlineEditor extends NumberInlineEditor {
 	}
 	
 	@Override
+	public void setEditorEnabled(final boolean enabled) {
+		super.setEditorEnabled(false);
+	}
+	
+	@Override
 	protected Object getValue() {
 		if (this.input instanceof Vessel) {
 			Vessel v = (Vessel)this.input;

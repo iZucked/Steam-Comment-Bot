@@ -55,6 +55,8 @@ public interface IInlineEditor {
 	 */
 	Label getLabel();
 
+	default IInlineEditor getProxy() { return this; }
+	
 	/**
 	 */
 	void setEditorLocked(boolean locked);

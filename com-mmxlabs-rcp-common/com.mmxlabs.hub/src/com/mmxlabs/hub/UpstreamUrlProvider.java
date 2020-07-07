@@ -126,7 +126,6 @@ public class UpstreamUrlProvider {
 	private final IPropertyChangeListener listener = event -> {
 		switch (event.getProperty()) {
 		case DataHubPreferenceConstants.P_DATAHUB_URL_KEY:
-			authenticationManager.logout((Shell) null);
 			isUpstreamAvailable();
 			fireChangedListeners();
 			break;

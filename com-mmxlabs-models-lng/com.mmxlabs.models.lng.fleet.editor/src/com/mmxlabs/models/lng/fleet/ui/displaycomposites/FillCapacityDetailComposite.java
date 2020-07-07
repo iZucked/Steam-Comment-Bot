@@ -40,8 +40,8 @@ public class FillCapacityDetailComposite extends DefaultDetailComposite implemen
 			
 			// Special case for fill capacity.
 			final EStructuralFeature feature = editor.getFeature();
-			if (feature == FleetPackage.Literals.VESSEL__FILL_CAPACITY || editor instanceof VesselFillVolumeInlineEditor) {
-				if (editor instanceof VesselFillVolumeInlineEditor) {
+			if (feature == FleetPackage.Literals.VESSEL__FILL_CAPACITY || editor.getProxy() instanceof VesselFillVolumeInlineEditor) {
+				if (editor.getProxy() instanceof VesselFillVolumeInlineEditor) {
 					final Label label = editor.getLabel();
 					if (label != null) {
 						label.setText("");

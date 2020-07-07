@@ -104,6 +104,7 @@ public class VesselComponentHelper extends BaseComponentHelper {
 		add_notesEditor(detailComposite, topClass);
 		add_mmxIdEditor(detailComposite, topClass);
 	}
+	
 	/**
 	 * Create the editor for the shortName feature on Vessel
 	 *

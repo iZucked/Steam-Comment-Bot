@@ -110,9 +110,6 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 	@Override
 	protected void initialize() {
 		super.initialize();
-		if (authenticationManager.isOAuthEnabled()) {
-			forceBasicAuth.setPropertyChangeListener(disableLogin);
-		}
 		editor.setPropertyChangeListener(disableLogin);
 	}
 
@@ -129,10 +126,15 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 		button.setEnabled(true);
 		noteLabel.setVisible(false);
 	}
-	
+
+	public void setForceBasicAuth() {
+		forceBasicAuth.setEnabled(authenticationManager.isOAuthEnabled(), getFieldEditorParent());
+	}
+
 	final private IUpstreamDetailChangedListener enableLoginListener = () -> {
 		setButtonText();
 		enableLogin();
+		setForceBasicAuth();
 	};
 
 	@Override
@@ -172,10 +174,9 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 
 		setButtonText();
 
-		if (authenticationManager.isOAuthEnabled()) {
-			forceBasicAuth = new BooleanFieldEditor(DataHubPreferenceConstants.P_FORCE_BASIC_AUTH, "&Force local authentication", getFieldEditorParent());
-			addField(forceBasicAuth);
-		}
+		forceBasicAuth = new BooleanFieldEditor(DataHubPreferenceConstants.P_FORCE_BASIC_AUTH, "&Force local authentication", getFieldEditorParent());
+		addField(forceBasicAuth);
+		setForceBasicAuth();
 
 		addField(new BooleanFieldEditor(DataHubPreferenceConstants.P_ENABLE_BASE_CASE_SERVICE_KEY, "&Base case sharing", getFieldEditorParent()));
 		if (LicenseFeatures.isPermitted("features:hub-team-folder")) {

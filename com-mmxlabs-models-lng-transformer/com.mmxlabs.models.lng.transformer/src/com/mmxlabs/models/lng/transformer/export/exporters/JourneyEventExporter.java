@@ -33,6 +33,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider.RouteOptionDirection;
 import com.mmxlabs.scheduler.optimiser.schedule.PanamaBookingHelper;
 import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PanamaPeriod;
@@ -50,6 +51,9 @@ public class JourneyEventExporter {
 
 	@Inject
 	private IDistanceProvider distanceProvider;
+	
+	@Inject
+	private IRouteCostProvider routeCostProvider;
 
 	@Inject
 	private IVesselProvider vesselProvider;
@@ -126,11 +130,12 @@ public class JourneyEventExporter {
 			// set latest possible canal date
 			if (canalEntry != null) {
 				final Port eCanalPort = modelEntityMap.getModelObject(canalEntry, Port.class);
-				final int fromCanalEntry = distanceProvider.getTravelTime(options.getRoute(), //
+				final int fromCanalEntry = distanceProvider.getTravelTime(ERouteOption.DIRECT, //
 						voyageDetails.getOptions().getVessel(), //
 						canalEntry, //
 						voyageDetails.getOptions().getToPortSlot().getPort(), //
-						voyageDetails.getOptions().getVessel().getMaxSpeed());
+						voyageDetails.getOptions().getVessel().getMaxSpeed()) + // Add transit time
+						routeCostProvider.getRouteTransitTime(voyageDetails.getOptions().getRoute(), voyageDetails.getOptions().getVessel());
 
 				final ZonedDateTime endTime = modelEntityMap.getDateFromHours(currentTime + options.getAvailableTime(), canalEntry);
 				final int marginHours;
