@@ -16,7 +16,7 @@ import com.mmxlabs.models.lng.nominations.editor.internal.NominationTypeModule;
 
 public class NominationTypeRegistry {
 
-	final static private NominationTypeRegistry instance = new NominationTypeRegistry();
+	private static final NominationTypeRegistry instance = new NominationTypeRegistry();
 	
 	@Inject(optional = true)
 	private Iterable<NominationTypeExtension> nominationTypeExtensions;
