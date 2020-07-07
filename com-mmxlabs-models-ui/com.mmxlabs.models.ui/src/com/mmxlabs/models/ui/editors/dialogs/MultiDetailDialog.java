@@ -693,6 +693,11 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 				public boolean hasLabel() {
 					return true;
 				}
+				
+				@Override
+				public IInlineEditor getProxy() {
+					return proxy;
+				}
 			};
 		}
 	}
