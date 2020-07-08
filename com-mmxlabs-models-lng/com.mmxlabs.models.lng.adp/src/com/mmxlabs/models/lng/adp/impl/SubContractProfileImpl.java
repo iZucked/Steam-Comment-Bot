@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ContractType;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import java.util.Collection;
 import org.eclipse.emf.common.notify.Notification;
@@ -49,6 +50,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.SubContractProfileImpl#getShippingDays <em>Shipping Days</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.SubContractProfileImpl#getCustomAttribs <em>Custom Attribs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.SubContractProfileImpl#getConstraints <em>Constraints</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.adp.impl.SubContractProfileImpl#getWindowSize <em>Window Size</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.adp.impl.SubContractProfileImpl#getWindowSizeUnits <em>Window Size Units</em>}</li>
  * </ul>
  *
  * @generated
@@ -172,6 +175,46 @@ public class SubContractProfileImpl<T extends Slot<U>, U extends Contract> exten
 	 * @ordered
 	 */
 	protected EList<SubProfileConstraint> constraints;
+
+	/**
+	 * The default value of the '{@link #getWindowSize() <em>Window Size</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getWindowSize()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int WINDOW_SIZE_EDEFAULT = 1;
+
+	/**
+	 * The cached value of the '{@link #getWindowSize() <em>Window Size</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getWindowSize()
+	 * @generated
+	 * @ordered
+	 */
+	protected int windowSize = WINDOW_SIZE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getWindowSizeUnits() <em>Window Size Units</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getWindowSizeUnits()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final TimePeriod WINDOW_SIZE_UNITS_EDEFAULT = TimePeriod.MONTHS;
+
+	/**
+	 * The cached value of the '{@link #getWindowSizeUnits() <em>Window Size Units</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getWindowSizeUnits()
+	 * @generated
+	 * @ordered
+	 */
+	protected TimePeriod windowSizeUnits = WINDOW_SIZE_UNITS_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -480,6 +523,52 @@ public class SubContractProfileImpl<T extends Slot<U>, U extends Contract> exten
 	 * @generated
 	 */
 	@Override
+	public int getWindowSize() {
+		return windowSize;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setWindowSize(int newWindowSize) {
+		int oldWindowSize = windowSize;
+		windowSize = newWindowSize;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ADPPackage.SUB_CONTRACT_PROFILE__WINDOW_SIZE, oldWindowSize, windowSize));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public TimePeriod getWindowSizeUnits() {
+		return windowSizeUnits;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setWindowSizeUnits(TimePeriod newWindowSizeUnits) {
+		TimePeriod oldWindowSizeUnits = windowSizeUnits;
+		windowSizeUnits = newWindowSizeUnits == null ? WINDOW_SIZE_UNITS_EDEFAULT : newWindowSizeUnits;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ADPPackage.SUB_CONTRACT_PROFILE__WINDOW_SIZE_UNITS, oldWindowSizeUnits, windowSizeUnits));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case ADPPackage.SUB_CONTRACT_PROFILE__DISTRIBUTION_MODEL:
@@ -519,6 +608,10 @@ public class SubContractProfileImpl<T extends Slot<U>, U extends Contract> exten
 				return basicGetCustomAttribs();
 			case ADPPackage.SUB_CONTRACT_PROFILE__CONSTRAINTS:
 				return getConstraints();
+			case ADPPackage.SUB_CONTRACT_PROFILE__WINDOW_SIZE:
+				return getWindowSize();
+			case ADPPackage.SUB_CONTRACT_PROFILE__WINDOW_SIZE_UNITS:
+				return getWindowSizeUnits();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -557,6 +650,12 @@ public class SubContractProfileImpl<T extends Slot<U>, U extends Contract> exten
 				getConstraints().clear();
 				getConstraints().addAll((Collection<? extends SubProfileConstraint>)newValue);
 				return;
+			case ADPPackage.SUB_CONTRACT_PROFILE__WINDOW_SIZE:
+				setWindowSize((Integer)newValue);
+				return;
+			case ADPPackage.SUB_CONTRACT_PROFILE__WINDOW_SIZE_UNITS:
+				setWindowSizeUnits((TimePeriod)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -593,6 +692,12 @@ public class SubContractProfileImpl<T extends Slot<U>, U extends Contract> exten
 			case ADPPackage.SUB_CONTRACT_PROFILE__CONSTRAINTS:
 				getConstraints().clear();
 				return;
+			case ADPPackage.SUB_CONTRACT_PROFILE__WINDOW_SIZE:
+				setWindowSize(WINDOW_SIZE_EDEFAULT);
+				return;
+			case ADPPackage.SUB_CONTRACT_PROFILE__WINDOW_SIZE_UNITS:
+				setWindowSizeUnits(WINDOW_SIZE_UNITS_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -621,6 +726,10 @@ public class SubContractProfileImpl<T extends Slot<U>, U extends Contract> exten
 				return customAttribs != null;
 			case ADPPackage.SUB_CONTRACT_PROFILE__CONSTRAINTS:
 				return constraints != null && !constraints.isEmpty();
+			case ADPPackage.SUB_CONTRACT_PROFILE__WINDOW_SIZE:
+				return windowSize != WINDOW_SIZE_EDEFAULT;
+			case ADPPackage.SUB_CONTRACT_PROFILE__WINDOW_SIZE_UNITS:
+				return windowSizeUnits != WINDOW_SIZE_UNITS_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -643,6 +752,10 @@ public class SubContractProfileImpl<T extends Slot<U>, U extends Contract> exten
 		result.append(slotTemplateId);
 		result.append(", shippingDays: ");
 		result.append(shippingDays);
+		result.append(", windowSize: ");
+		result.append(windowSize);
+		result.append(", windowSizeUnits: ");
+		result.append(windowSizeUnits);
 		result.append(')');
 		return result.toString();
 	}

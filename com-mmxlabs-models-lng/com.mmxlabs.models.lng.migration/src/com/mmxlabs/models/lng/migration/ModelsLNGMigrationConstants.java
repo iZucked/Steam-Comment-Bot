@@ -42,7 +42,7 @@ public final class ModelsLNGMigrationConstants {
 
 	/**
 	 */
-	public static final String NSURI_ADPModel = "http://www.mmxlabs.com/models/lng/adp1/";
+	public static final String NSURI_ADPModel = "http://www.mmxlabs.com/models/lng/adp/1/";
 	/**
 	 */
 	public static final PackageData PKG_DATA_ADPModel = new PackageData(NSURI_AnalyticsModel, "platform:/plugin/com.mmxlabs.models.lng.adp/model/adp.ecore",

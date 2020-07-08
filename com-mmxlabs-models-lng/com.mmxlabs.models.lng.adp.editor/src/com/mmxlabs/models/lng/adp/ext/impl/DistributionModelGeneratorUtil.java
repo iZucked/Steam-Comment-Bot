@@ -81,8 +81,8 @@ public class DistributionModelGeneratorUtil {
 		// Whole month window based on given date
 		slot.setWindowStart(date.withDayOfMonth(1));
 		slot.setWindowStartTime(0);
-		slot.setWindowSize(1);
-		slot.setWindowSizeUnits(TimePeriod.MONTHS);
+		slot.setWindowSize(subProfile.getWindowSize());
+		slot.setWindowSizeUnits(subProfile.getWindowSizeUnits());
 		return slot;
 	}
 

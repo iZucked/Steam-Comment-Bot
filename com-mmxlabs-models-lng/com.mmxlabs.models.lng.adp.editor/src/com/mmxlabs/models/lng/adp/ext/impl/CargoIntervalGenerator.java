@@ -91,20 +91,12 @@ public class CargoIntervalGenerator implements IProfileGenerator {
 					ADPModelUtil.setSlotVolumeFrom(minQuantity, model.getModelOrContractVolumePerCargo(), model.getModelOrContractVolumeUnit(), slot, false);
 					if (model.getIntervalType() != IntervalType.MONTHLY) {
 						if (model.getIntervalType() == IntervalType.QUARTERLY) {
-							slot.setWindowSize(3);
-							slot.setWindowSizeUnits(TimePeriod.MONTHS);
 						} else if (model.getIntervalType() == IntervalType.WEEKLY) {
 							slot.setWindowStart(date);
-							slot.setWindowSize(7);
-							slot.setWindowSizeUnits(TimePeriod.DAYS);
 						} else if (model.getIntervalType() == IntervalType.YEARLY) {
 							slot.setWindowStart(date);
-							slot.setWindowSize(12);
-							slot.setWindowSizeUnits(TimePeriod.MONTHS);
 						} else if (model.getIntervalType() == IntervalType.BIMONTHLY) {
 							slot.setWindowStart(date);
-							slot.setWindowSize(2);
-							slot.setWindowSizeUnits(TimePeriod.MONTHS);
 						}
 					}
 					slots.add(slot);

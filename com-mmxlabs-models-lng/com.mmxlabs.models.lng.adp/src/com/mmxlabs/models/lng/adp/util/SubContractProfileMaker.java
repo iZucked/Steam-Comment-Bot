@@ -102,8 +102,6 @@ public class SubContractProfileMaker<T extends AbstractContractProfileMaker<T, U
 	public SubContractProfileMaker<T, U, V, W> withPreDefinedDistributionModel(final int windowSize, final TimePeriod windowSizeUnit, final List<LocalDate> dates) {
 
 		final PreDefinedDistributionModel model = ADPFactory.eINSTANCE.createPreDefinedDistributionModel();
-		model.setWindowSize(windowSize);
-		model.setWindowSizeUnits(windowSizeUnit);
 		dates.forEach(d -> {
 			final PreDefinedDate date = ADPFactory.eINSTANCE.createPreDefinedDate();
 			date.setDate(d);

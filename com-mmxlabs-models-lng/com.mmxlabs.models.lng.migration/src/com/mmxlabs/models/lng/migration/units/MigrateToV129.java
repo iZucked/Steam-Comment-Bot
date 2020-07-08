@@ -7,12 +7,15 @@ package com.mmxlabs.models.lng.migration.units;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
 import com.mmxlabs.models.migration.MigrationModelRecord;
 import com.mmxlabs.models.migration.utils.EObjectWrapper;
+import com.mmxlabs.models.migration.utils.MetamodelUtils;
 
 public class MigrateToV129 extends AbstractMigrationUnit {
 
@@ -25,7 +28,6 @@ public class MigrateToV129 extends AbstractMigrationUnit {
 	public int getScenarioSourceVersion() {
 		return 128;
 	}
-
 	@Override
 	public int getScenarioDestinationVersion() {
 		return 129;
@@ -33,7 +35,7 @@ public class MigrateToV129 extends AbstractMigrationUnit {
 
 	@Override
 	protected void doMigration(@NonNull final MigrationModelRecord modelRecord) {
-
+		
 		final EObjectWrapper modelRoot = modelRecord.getModelRoot();
 
 		final EObjectWrapper portModel = modelRoot.getRef("referenceModel").getRef("portModel");
@@ -62,6 +64,45 @@ public class MigrateToV129 extends AbstractMigrationUnit {
 				}
 			}
 		}
-
+		
+		final EPackage adpModelPackage = modelRecord.getMetamodelLoader().getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ADPModel);
+		final EClass preDefinedDistributionModel = MetamodelUtils.getEClass(adpModelPackage, "PreDefinedDistributionModel");
+		
+		final EObjectWrapper adpModel = modelRoot.getRef("adpModel");
+		if (adpModel == null)
+			return;
+		
+		updateContractProfiles(preDefinedDistributionModel, adpModel.getRefAsList("purchaseContractProfiles"));
+		updateContractProfiles(preDefinedDistributionModel, adpModel.getRefAsList("salesContractProfiles"));
+		
+		adpModel.eAllContents().forEachRemaining(obj -> {
+			if (preDefinedDistributionModel.isInstance(obj)) {
+				((EObjectWrapper) obj).unsetFeature("windowSize");
+				((EObjectWrapper) obj).unsetFeature("windowSizeUnits");
+			}
+		});
 	}
-}
+
+	private void updateContractProfiles(final EClass preDefinedDistributionModel, final List<EObjectWrapper> contractProfiles) {
+		if (contractProfiles != null && !contractProfiles.isEmpty()) {
+			contractProfiles.forEach(contractProfile -> {
+
+				final List<EObjectWrapper> subProfiles = contractProfile.getRefAsList("subProfiles");
+				if (subProfiles != null && !subProfiles.isEmpty()) {
+					//grab distribution model and check that it's an instance of predefined distribution model
+					subProfiles.forEach(subProfile ->{
+						final EObjectWrapper distributionModel = subProfile.getRef("distributionModel");
+						if (preDefinedDistributionModel.isInstance(distributionModel)) {
+							subProfile.setAttrib("windowSize", distributionModel.getAttrib("windowSize"));
+							subProfile.setAttrib("windowSizeUnits", distributionModel.getAttrib("windowSizeUnits"));
+
+							distributionModel.unsetFeature("windowSize");
+							distributionModel.unsetFeature("windowSizeUnits");
+						}
+					});
+				}
+
+			});
+		}
+	}
+} 

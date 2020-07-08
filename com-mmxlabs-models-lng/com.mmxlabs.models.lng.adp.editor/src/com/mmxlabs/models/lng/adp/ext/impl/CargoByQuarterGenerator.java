@@ -89,10 +89,7 @@ public class CargoByQuarterGenerator implements IProfileGenerator {
 					final T slot = DistributionModelGeneratorUtil.generateSlot(factory, profile, subProfile, start, date, idx++);
 					int minQuantity = DistributionModelGeneratorUtil.getMinContractQuantityInUnits(contract, model.getModelOrContractVolumeUnit());
 					ADPModelUtil.setSlotVolumeFrom(minQuantity, model.getModelOrContractVolumePerCargo(), model.getModelOrContractVolumeUnit(), slot, false);
-					slot.setWindowSize(3);
-					slot.setWindowSizeUnits(TimePeriod.MONTHS);
 					slots.add(slot);
-
 				}
 			}
 
