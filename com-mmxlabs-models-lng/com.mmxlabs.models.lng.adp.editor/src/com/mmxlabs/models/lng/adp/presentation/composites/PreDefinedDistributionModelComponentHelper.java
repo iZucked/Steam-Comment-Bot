@@ -67,8 +67,6 @@ public class PreDefinedDistributionModelComponentHelper extends BaseComponentHel
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_datesEditor(detailComposite, topClass);
-		add_windowSizeEditor(detailComposite, topClass);
-		add_windowSizeUnitsEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the dates feature on PreDefinedDistributionModel
@@ -77,23 +75,5 @@ public class PreDefinedDistributionModelComponentHelper extends BaseComponentHel
 	 */
 	protected void add_datesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(new PreDefinedDatesInlineEditor(ADPPackage.Literals.PRE_DEFINED_DISTRIBUTION_MODEL__DATES));
-	}
-
-	/**
-	 * Create the editor for the windowSize feature on PreDefinedDistributionModel
-	 *
-	 * @generated
-	 */
-	protected void add_windowSizeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.PRE_DEFINED_DISTRIBUTION_MODEL__WINDOW_SIZE));
-	}
-
-	/**
-	 * Create the editor for the windowSizeUnits feature on PreDefinedDistributionModel
-	 *
-	 * @generated
-	 */
-	protected void add_windowSizeUnitsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.PRE_DEFINED_DISTRIBUTION_MODEL__WINDOW_SIZE_UNITS));
 	}
 }

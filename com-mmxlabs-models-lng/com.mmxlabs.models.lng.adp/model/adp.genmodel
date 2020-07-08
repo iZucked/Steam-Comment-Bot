@@ -68,6 +68,8 @@
       <genFeatures property="None" children="true" createChild="true" propertyDescription="Custom attributes"
           ecoreFeature="ecore:EReference adp.ecore#//SubContractProfile/customAttribs"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//SubContractProfile/constraints"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//SubContractProfile/windowSize"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//SubContractProfile/windowSizeUnits"/>
     </genClasses>
     <genClasses image="false" ecoreClass="adp.ecore#//CustomSubProfileAttributes"/>
     <genClasses image="false" ecoreClass="adp.ecore#//DistributionModel">
@@ -104,8 +106,6 @@
     </genClasses>
     <genClasses ecoreClass="adp.ecore#//PreDefinedDistributionModel">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//PreDefinedDistributionModel/dates"/>
-      <genFeatures createChild="false" propertyDescription="Window size" ecoreFeature="ecore:EAttribute adp.ecore#//PreDefinedDistributionModel/windowSize"/>
-      <genFeatures createChild="false" propertyDescription="Window size unit" ecoreFeature="ecore:EAttribute adp.ecore#//PreDefinedDistributionModel/windowSizeUnits"/>
     </genClasses>
     <genClasses ecoreClass="adp.ecore#//PreDefinedDate">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//PreDefinedDate/date"/>

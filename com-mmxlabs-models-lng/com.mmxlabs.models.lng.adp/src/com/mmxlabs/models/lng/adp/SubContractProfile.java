@@ -11,6 +11,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ContractType;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
@@ -32,6 +33,8 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.adp.SubContractProfile#getShippingDays <em>Shipping Days</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.SubContractProfile#getCustomAttribs <em>Custom Attribs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.SubContractProfile#getConstraints <em>Constraints</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.adp.SubContractProfile#getWindowSize <em>Window Size</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.adp.SubContractProfile#getWindowSizeUnits <em>Window Size Units</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.adp.ADPPackage#getSubContractProfile()
@@ -239,5 +242,56 @@ public interface SubContractProfile<T extends Slot<U>, U extends Contract> exten
 	 * @generated
 	 */
 	EList<SubProfileConstraint> getConstraints();
+
+	/**
+	 * Returns the value of the '<em><b>Window Size</b></em>' attribute.
+	 * The default value is <code>"1"</code>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Window Size</em>' attribute.
+	 * @see #setWindowSize(int)
+	 * @see com.mmxlabs.models.lng.adp.ADPPackage#getSubContractProfile_WindowSize()
+	 * @model default="1" required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='##,##0'"
+	 * @generated
+	 */
+	int getWindowSize();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.adp.SubContractProfile#getWindowSize <em>Window Size</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Window Size</em>' attribute.
+	 * @see #getWindowSize()
+	 * @generated
+	 */
+	void setWindowSize(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Window Size Units</b></em>' attribute.
+	 * The default value is <code>"MONTHS"</code>.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.types.TimePeriod}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Window Size Units</em>' attribute.
+	 * @see com.mmxlabs.models.lng.types.TimePeriod
+	 * @see #setWindowSizeUnits(TimePeriod)
+	 * @see com.mmxlabs.models.lng.adp.ADPPackage#getSubContractProfile_WindowSizeUnits()
+	 * @model default="MONTHS" required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='##,##0'"
+	 * @generated
+	 */
+	TimePeriod getWindowSizeUnits();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.adp.SubContractProfile#getWindowSizeUnits <em>Window Size Units</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Window Size Units</em>' attribute.
+	 * @see com.mmxlabs.models.lng.types.TimePeriod
+	 * @see #getWindowSizeUnits()
+	 * @generated
+	 */
+	void setWindowSizeUnits(TimePeriod value);
 
 } // SubContractProfile

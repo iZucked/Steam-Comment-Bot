@@ -62,54 +62,8 @@ public class PreDefinedDistributionModelItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addWindowSizePropertyDescriptor(object);
-			addWindowSizeUnitsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Window Size feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addWindowSizePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_PreDefinedDistributionModel_windowSize_feature"),
-				 getString("_UI_PreDefinedDistributionModel_windowSize_description"),
-				 ADPPackage.Literals.PRE_DEFINED_DISTRIBUTION_MODEL__WINDOW_SIZE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Window Size Units feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addWindowSizeUnitsPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_PreDefinedDistributionModel_windowSizeUnits_feature"),
-				 getString("_UI_PreDefinedDistributionModel_windowSizeUnits_description"),
-				 ADPPackage.Literals.PRE_DEFINED_DISTRIBUTION_MODEL__WINDOW_SIZE_UNITS,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
 	}
 
 	/**
@@ -178,10 +132,6 @@ public class PreDefinedDistributionModelItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(PreDefinedDistributionModel.class)) {
-			case ADPPackage.PRE_DEFINED_DISTRIBUTION_MODEL__WINDOW_SIZE:
-			case ADPPackage.PRE_DEFINED_DISTRIBUTION_MODEL__WINDOW_SIZE_UNITS:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-				return;
 			case ADPPackage.PRE_DEFINED_DISTRIBUTION_MODEL__DATES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
