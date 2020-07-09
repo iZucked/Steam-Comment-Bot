@@ -41,7 +41,6 @@ import org.osgi.framework.ServiceReference;
 
 import com.mmxlabs.common.io.FileDeleter;
 import com.mmxlabs.hub.DataHubServiceProvider;
-import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.auth.AuthenticationManager;
 import com.mmxlabs.hub.services.permissions.UserPermissionsService;
 import com.mmxlabs.license.features.KnownFeatures;
@@ -119,10 +118,12 @@ public class Application implements IApplication {
 		WorkbenchStateManager.cleanupWorkbenchState();
 
 		// Trigger early startup prompt for Data Hub
-		if (UpstreamUrlProvider.INSTANCE.hasADataHubURL()) {
+		if (DataHubServiceProvider.getInstance().isHubOnline()) {
 			Shell shell = new Shell(display);
 			try {
-				UpstreamUrlProvider.INSTANCE.isUpstreamAvailable(shell);
+				if (!authenticationManager.isAuthenticated()) {
+					authenticationManager.run(shell);
+				}
 			} finally {
 				shell.dispose();
 			}
@@ -132,16 +133,10 @@ public class Application implements IApplication {
 		boolean datahubStartupCheck = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_DATAHUB_STARTUP_CHECK);
 		if (datahubStartupCheck) {
 
-			// TODO: Check this works properly with new oauth changes. I.e. the oauth logout may get called without the display from here.
-
 			displayProgressMonitor(display);
 
 			// check if datahub is available
 			if (DataHubServiceProvider.getInstance().isHubOnline()) {
-
-				if (!authenticationManager.isAuthenticated()) {
-					authenticationManager.run(display.getActiveShell());
-				}
 
 				// refresh permissions
 				try {
