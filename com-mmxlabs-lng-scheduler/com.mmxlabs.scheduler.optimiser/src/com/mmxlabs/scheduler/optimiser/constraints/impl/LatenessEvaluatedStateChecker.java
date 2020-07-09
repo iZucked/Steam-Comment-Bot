@@ -111,8 +111,14 @@ public final class LatenessEvaluatedStateChecker implements IEvaluatedStateConst
 		if (lateSlots == null) {
 			lateSlots = new HashSet<>();
 			for (final VolumeAllocatedSequence volumeAllocatedSequence : volumeAllocatedSequences) {
+				IPortSlot lastPortSlot = null;
 				for (VoyagePlanRecord vpr : volumeAllocatedSequence.getVoyagePlanRecords()) {
 					lateSlots.addAll(vpr.getLateSlotsSet());
+					lastPortSlot = vpr.getPortTimesRecord().getFirstSlot();
+				}
+				LatenessRecord maxDurationLatenessRecord = volumeAllocatedSequence.getMaxDurationLatenessRecord();
+				if (lastPortSlot != null && maxDurationLatenessRecord != null) {
+					lateSlots.add(lastPortSlot);
 				}
 			}
 			initialPromptLateness = promptLateness;
