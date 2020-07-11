@@ -3,13 +3,13 @@ Bundle-ManifestVersion: 2
 Bundle-Name: MMXLabs Hub Support
 Bundle-SymbolicName: com.mmxlabs.hub;singleton:=true
 Automatic-Module-Name: com.mmxlabs.hub
-Bundle-Version: 4.10.4.RELEASE
+Bundle-Version: 4.10.5.qualifier
 Bundle-Vendor: Minimax Labs
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.license.ssl,
- com.mmxlabs.common.common-util;bundle-version="4.10.4",
+ com.mmxlabs.common.common-util;bundle-version="4.10.5",
  org.eclipse.equinox.security,
  com.fasterxml.jackson.core.jackson-databind,
  com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.10.0",
