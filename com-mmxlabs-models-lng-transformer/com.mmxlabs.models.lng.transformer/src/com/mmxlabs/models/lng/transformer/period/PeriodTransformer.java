@@ -95,7 +95,6 @@ import com.mmxlabs.models.lng.transformer.period.InclusionChecker.Position;
 import com.mmxlabs.models.lng.transformer.period.extensions.IPeriodTransformerExtension;
 import com.mmxlabs.models.lng.transformer.util.LNGScenarioUtils;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
-import com.mmxlabs.models.lng.types.DESPurchaseDealType;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -891,7 +890,7 @@ public class PeriodTransformer {
 		for (final Slot<?> slot : cargo.getSlots()) {
 			if (slot instanceof LoadSlot) {
 				final LoadSlot loadSlot = (LoadSlot) slot;
-				if (loadSlot.isDESPurchase() && loadSlot.getDesPurchaseDealType() != DESPurchaseDealType.DEST_WITH_SOURCE) {
+				if (loadSlot.isDESPurchase()) {
 					// Dates defined by other slots
 					continue;
 				}
