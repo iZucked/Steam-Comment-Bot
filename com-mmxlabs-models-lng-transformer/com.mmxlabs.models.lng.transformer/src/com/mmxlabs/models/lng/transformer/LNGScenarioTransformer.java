@@ -171,8 +171,10 @@ import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
 import com.mmxlabs.scheduler.optimiser.components.impl.ConstantHeelPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.DefaultSpotMarket;
 import com.mmxlabs.scheduler.optimiser.components.impl.DefaultVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.impl.DischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.impl.ExpressionHeelPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.HeelOptionConsumer;
+import com.mmxlabs.scheduler.optimiser.components.impl.LoadOption;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
@@ -1433,7 +1435,7 @@ public class LNGScenarioTransformer {
 					final FOBSalesMarket fobSaleMarket = (FOBSalesMarket) spotSlot.getMarket();
 					final Set<Port> portSet = SetUtils.getObjects(fobSaleMarket.getOriginPorts());
 					for (final Port ap : portSet) {
-						final IPort ip = portAssociation.lookup((Port) ap);
+						final IPort ip = portAssociation.lookup(ap);
 						if (ip != null) {
 							marketPorts.add(ip);
 						}
@@ -1451,6 +1453,7 @@ public class LNGScenarioTransformer {
 					final ITimeWindow tw = TimeWindowMaker.createInclusiveInclusive(dateHelper.convertTime(portWindowStart), dateHelper.convertTime(portWindowEnd), 0, false);
 
 					marketPortsMap.put(port, tw);
+					((DischargeOption)discharge).addLocalisedTimeWindow(port, tw);
 				}
 
 				builder.bindLoadSlotsToFOBSale(discharge, marketPortsMap);
@@ -1525,6 +1528,7 @@ public class LNGScenarioTransformer {
 					final ITimeWindow tw = TimeWindowMaker.createInclusiveInclusive(dateHelper.convertTime(portWindowStart), dateHelper.convertTime(portWindowEnd), 0, false);
 
 					marketPortsMap.put(port, tw);
+					((LoadOption)load).addLocalisedTimeWindow(port, tw);
 				}
 
 				// Bind FOB/DES slots to resource

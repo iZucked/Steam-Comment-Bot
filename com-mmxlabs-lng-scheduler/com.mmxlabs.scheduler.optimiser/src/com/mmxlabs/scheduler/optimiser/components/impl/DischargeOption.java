@@ -4,7 +4,11 @@
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.base.Objects;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
@@ -41,6 +45,8 @@ public class DischargeOption extends PortSlot implements IDischargeOption {
 	private int pricingDate = IPortSlot.NO_PRICING_DATE;
 
 	private @NonNull PricingEventType pricingEvent = PricingEventType.START_OF_DISCHARGE;
+	
+	private Map<IPort, ITimeWindow> localisedTimeWindows = new HashMap<>();
 
 	public DischargeOption(final @NonNull String id, final @NonNull IPort port, final ITimeWindow timeWindow, boolean volumeInM3, final long minDischargeVolume, final long maxDischargeVolume,
 			final long minCvValue, final long maxCvValue, final ISalesPriceCalculator priceCalculator) {
@@ -224,4 +230,12 @@ public class DischargeOption extends PortSlot implements IDischargeOption {
 		return volumeSetInM3;
 	}
 
+	public void addLocalisedTimeWindow(@NonNull IPort port, @NonNull ITimeWindow tw) {
+		localisedTimeWindows.put(port, tw);
+	}
+	
+	@Override
+	public @Nullable ITimeWindow getLocalisedTimeWindowForPort(@NonNull IPort port) {
+		return localisedTimeWindows.get(port);
+	}
 }

@@ -20,6 +20,8 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -37,9 +39,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimesRecord;
 
 /**
- * The {@link PortTimesRecordMaker} creates the initial
- * {@link IPortTimesRecord}s for a {@link ISequence} and a provided arrival time
- * array from an {@link ISequenceScheduler}
+ * The {@link PortTimesRecordMaker} creates the initial {@link IPortTimesRecord}s for a {@link ISequence} and a provided arrival time array from an {@link ISequenceScheduler}
  */
 public class PortTimesRecordMaker {
 
@@ -68,10 +68,8 @@ public class PortTimesRecordMaker {
 	private IElementDurationProvider durationProvider;
 
 	/**
-	 * This method replaces the normal shipped cargo calculation path with one
-	 * specific to DES purchase or FOB sale cargoes. However this currently merges
-	 * in behaviour from other classes - such as scheduling and volume allocation -
-	 * which should really stay in those other classes.
+	 * This method replaces the normal shipped cargo calculation path with one specific to DES purchase or FOB sale cargoes. However this currently merges in behaviour from other classes - such as
+	 * scheduling and volume allocation - which should really stay in those other classes.
 	 * 
 	 * @param resource
 	 * @param sequence
@@ -85,10 +83,24 @@ public class PortTimesRecordMaker {
 		assert vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE//
 				|| vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE;
 
-		boolean startSet = false;
-		int startTime = 0;
-
 		final PortTimesRecord portTimesRecord = new PortTimesRecord();
+		
+		// Grab localised time window
+		IPort localisedPort = null;
+		for (final ISequenceElement element : sequence) {
+
+			final IPortSlot thisPortSlot = portSlotProvider.getPortSlot(element);
+			if (thisPortSlot instanceof ILoadSlot) {
+				localisedPort = thisPortSlot.getPort();
+			}
+
+			if (thisPortSlot instanceof IDischargeSlot) {
+				localisedPort = thisPortSlot.getPort();
+			}
+		}
+		
+		boolean startSet = false;
+		int startTime = 0;		
 		for (final ISequenceElement element : sequence) {
 
 			final IPortSlot thisPortSlot = portSlotProvider.getPortSlot(element);
@@ -103,33 +115,53 @@ public class PortTimesRecordMaker {
 			final int loadDuration = durationProvider.getElementDuration(portSlotProvider.getElement(thisPortSlot));
 			portTimesRecord.setSlotDuration(thisPortSlot, loadDuration);
 			portTimesRecord.setSlotExtraIdleTime(thisPortSlot, 0);
-
+		
 			// Determine transfer time
 			if (!startSet && !(thisPortSlot instanceof StartPortSlot)) {
 
 				// Find latest window start for all slots in FOB/DES combo. However if DES
 				// divertible, ignore.
-				@Nullable
-				final ITimeWindow timeWindow = thisPortSlot.getTimeWindow();
+				
+				ITimeWindow timeWindow = thisPortSlot.getTimeWindow();
 				assert timeWindow != null;
+
 				if (thisPortSlot instanceof ILoadOption) {
+
+					ILoadOption loadOption = (ILoadOption) thisPortSlot;
 					// Divertible DES has real time window.
 					if (!shippingHoursRestrictionProvider.isDivertible(element)) {
 						if (actualsDataProvider.hasActuals(thisPortSlot)) {
 							startTime = actualsDataProvider.getArrivalTime(thisPortSlot);
 						} else {
+							if (localisedPort != null && !(loadOption instanceof ILoadSlot)) {
+								ITimeWindow tw = loadOption.getLocalisedTimeWindowForPort(localisedPort);
+								if (tw != null ) {
+									timeWindow = tw;
+								}
+							}
+							
+							
 							final int windowStart = timeWindow.getInclusiveStart();
 							startTime = Math.max(windowStart, startTime);
 						}
 					}
 				}
 				if (thisPortSlot instanceof IDischargeOption) {
+					IDischargeOption dischargeOption = (IDischargeOption) thisPortSlot;
 					if (actualsDataProvider.hasActuals(thisPortSlot)) {
 						startTime = actualsDataProvider.getArrivalTime(thisPortSlot);
 					} else {
 						// Divertible FOB has sales time window
 						// TODO: Consider ship days restriction...
 						if (!shippingHoursRestrictionProvider.isDivertible(element)) {
+							
+							if (localisedPort != null && !(dischargeOption instanceof IDischargeSlot)) {
+								ITimeWindow tw = dischargeOption.getLocalisedTimeWindowForPort(localisedPort);
+								if (tw != null ) {
+									timeWindow = tw;
+								}
+							}
+							
 							final int windowStart = timeWindow.getInclusiveStart();
 							startTime = Math.max(windowStart, startTime);
 						}
@@ -163,8 +195,7 @@ public class PortTimesRecordMaker {
 	}
 
 	/**
-	 * Returns a list of voyage plans based on breaking up a sequence of vessel real
-	 * or virtual destinations into single conceptual cargo voyages.
+	 * Returns a list of voyage plans based on breaking up a sequence of vessel real or virtual destinations into single conceptual cargo voyages.
 	 * 
 	 * @param resource
 	 * @param sequence
@@ -217,8 +248,7 @@ public class PortTimesRecordMaker {
 				}
 				final int newStartTime = firstRecord.getSlotTime(from);
 				/**
-				 * Min requirement padding In case we don't meet the minimal duration but still
-				 * have some time left after the end or before the start
+				 * Min requirement padding In case we don't meet the minimal duration but still have some time left after the end or before the start
 				 **/
 				final IEndRequirement endReq = vesselAvailability.getEndRequirement();
 				if (endReq.isMinDurationSet()) {
@@ -400,10 +430,8 @@ public class PortTimesRecordMaker {
 	}
 
 	/**
-	 * Returns a list of voyage plans based on breaking up a sequence of vessel real
-	 * or virtual destinations into single conceptual cargo voyages. This variant
-	 * assumes there is a IPortTimeWindowsRecord for the end event and the window
-	 * start is the correct time to use.
+	 * Returns a list of voyage plans based on breaking up a sequence of vessel real or virtual destinations into single conceptual cargo voyages. This variant assumes there is a
+	 * IPortTimeWindowsRecord for the end event and the window start is the correct time to use.
 	 * 
 	 * @param resource
 	 * @param sequence
