@@ -80,9 +80,12 @@ public final class LicenseChecker {
 	private static final String CACERTS_TYPE = "JKS"; //$NON-NLS-1$
 
 	public static @Nullable Pair<KeyStore, char[]> loadLocalKeystore() throws Exception {
-
+		
 		// Trigger license check to ensure the data store is created.
-		if (checkLicense() == LicenseState.Valid) {
+		LicenseState state = checkLicense();
+		System.out.println("SG_DEBUG: License State is "+ state);
+
+		if (state == LicenseState.Valid) {
 			final File trustStoreFile = Activator.getDefault().getBundle().getDataFile("local-truststore.jks");
 			final KeyStore keyStore = KeyStore.getInstance("JKS");
 			try (final InputStream astream = new FileInputStream(trustStoreFile)) {
@@ -124,11 +127,15 @@ public final class LicenseChecker {
 			// Load the license file
 			KeyStore licenseKeystore = null;
 			{
+				System.out.println("SG_DEBUG: License try sys property");
+
 				licenseKeystore = getLicenseFromSystemProperty();
 				if (licenseKeystore == null) {
+					System.out.println("SG_DEBUG: License try eclipse home");
 					licenseKeystore = getEclipseHomeLicense();
 				}
 				if (licenseKeystore == null) {
+					System.out.println("SG_DEBUG: License try user home");
 					licenseKeystore = getUserDataLicense();
 				}
 			}
@@ -136,6 +143,8 @@ public final class LicenseChecker {
 			if (licenseKeystore == null) {
 				return LicenseState.KeystoreNotFound;
 			}
+			
+			System.out.println("SG_DEBUG: License found !");
 
 			// Hardcoded alias name in the keystore as part of generation process
 			final Certificate licenseCertificate = licenseKeystore.getCertificate("1");
@@ -154,6 +163,8 @@ public final class LicenseChecker {
 				return LicenseState.Unknown;
 			}
 
+			System.out.println("SG_DEBUG: License is valid");
+			
 			// License is valid, now populate the rest of the keystore
 
 			// Load in existing certificates from default store. We replace the default
@@ -191,7 +202,7 @@ public final class LicenseChecker {
 
 				importExtraCertsFromHome(keyStore);
 				importExtraCertsInstall(keyStore);
-
+				System.out.println("SG_DEBUG: License start savinf");
 				// Create copies of the keystores in a known place on filesystem so we can
 				// reference them
 				final File keyStoreFile = Activator.getDefault().getBundle().getDataFile("local-keystore.jks");
@@ -209,10 +220,15 @@ public final class LicenseChecker {
 					System.setProperty("javax.net.ssl.trustStore", trustStoreFile.toString());
 					System.setProperty("javax.net.ssl.trustStorePassword", password);
 					System.setProperty("javax.net.ssl.trustStoreType", "pkcs12");
+					
+					System.out.println("SG_DEBUG: License check complete");
+					
 					return LicenseState.Valid;
 				}
 			}
 
+			
+			
 		} catch (final CertificateExpiredException e) {
 			return LicenseState.Expired;
 		} catch (final CertificateNotYetValidException e) {
@@ -243,14 +259,17 @@ public final class LicenseChecker {
 	private static KeyStore getLicenseFromSystemProperty() {
 
 		final String licenseFile = System.getProperty(LICENSE_FILE_PROPERTY);
+		System.out.println("SG_DEBUG: License File is " + licenseFile);
 		if (licenseFile != null) {
 			try {
 				final File f = new File(licenseFile);
+				System.out.println("SG_DEBUG: License File exist?  " + f.exists());
 				if (f.exists()) {
 					try {
 						try (InputStream inStream = new FileInputStream(f)) {
 							final KeyStore instance = KeyStore.getInstance("PKCS12");
 							instance.load(inStream, password.toCharArray());
+							System.out.println("SG_DEBUG: License File loaded");
 							return instance;
 						}
 					} catch (final IOException | NoSuchAlgorithmException | KeyStoreException e) {
