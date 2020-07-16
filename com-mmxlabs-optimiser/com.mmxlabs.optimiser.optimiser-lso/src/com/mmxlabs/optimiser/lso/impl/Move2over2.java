@@ -54,7 +54,8 @@ public class Move2over2 implements IMove {
 	 * The breakpoint in the sequence for resource 2; elements before this element remain in sequence, and subsequent elements are moved
 	 */
 	private int resource2Position;
-	private IResource resource1, resource2;
+	private IResource resource1;
+	private IResource resource2;
 
 	@Override
 	@NonNull
@@ -95,22 +96,22 @@ public class Move2over2 implements IMove {
 			if (resource2Position < offset) {
 				return false;
 			}
-			
+
 			final Map<IResource, ISequence> sequenceMap = sequences.getSequences();
-			if (sequenceMap.containsKey(resource1) == false) {
+			if (!sequenceMap.containsKey(resource1)) {
 				return false;
 			}
-			if (sequenceMap.containsKey(resource2) == false) {
+			if (!sequenceMap.containsKey(resource2)) {
 				return false;
 			}
 			final ISequence A = sequenceMap.get(resource1);
 			final ISequence B = sequenceMap.get(resource2);
-			
+
 			// ensure sequences are not of length 0
 			if (resource1Position >= A.size() - 1 && resource2Position >= B.size() - 1) {
 				return false;
 			}
-				
+
 			if (resource1Position >= (A.size() /*-  offset*/)) {
 				return false;
 			}

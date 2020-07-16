@@ -88,8 +88,7 @@ public abstract class AbstractDiscountedFitnessComponent implements IFitnessComp
 	 * @return
 	 */
 	protected final long getDiscountedValue(final int time, final long deltaFitness) {
-		// return deltaFitness;
-		return (long) (discountCurve.getValueAtPoint(time) * deltaFitness);
+		return ((long)discountCurve.getValueAtPoint(time) * deltaFitness);
 	}
 
 	/**

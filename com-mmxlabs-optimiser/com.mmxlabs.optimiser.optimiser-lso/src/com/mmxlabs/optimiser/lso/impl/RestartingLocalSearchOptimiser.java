@@ -93,7 +93,7 @@ public class RestartingLocalSearchOptimiser extends DefaultLocalSearchOptimiser 
 
 			// Apply hard constraint checkers
 			for (final IConstraintChecker checker : getConstraintCheckers()) {
-				if (checker.checkConstraints(potentialFullSequences, move.getAffectedResources()) == false) {
+				if (!checker.checkConstraints(potentialFullSequences, move.getAffectedResources())) {
 					if (loggingDataStore != null) {
 						loggingDataStore.logFailedConstraints(checker, move);
 						if (DO_SEQUENCE_LOGGING) {

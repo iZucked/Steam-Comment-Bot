@@ -21,8 +21,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 
 public class OptimiserTestUtil {
 
-	@NonNull
-	public static IIndexingContext index = new SimpleIndexingContext();
+	public static final @NonNull IIndexingContext index = new SimpleIndexingContext();
 
 	/**
 	 * Create a {@link IModifiableSequence} from an arbitrary list of inputs of the same type.
@@ -38,7 +37,7 @@ public class OptimiserTestUtil {
 
 	@NonNull
 	public static List<ISequenceElement> makeList(final int... integers) {
-		final List<ISequenceElement> elementsList = new ArrayList<ISequenceElement>();
+		final List<ISequenceElement> elementsList = new ArrayList<>();
 		for (final int i : integers) {
 			elementsList.add(new IntegerElement(i));
 		}

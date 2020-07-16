@@ -24,7 +24,6 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 public class IndexedOptionalElementsEditor implements IOptionalElementsProviderEditor {
 
 	private final List<@NonNull ISequenceElement> optionalList = new ArrayList<>();
-//	private final List<@NonNull ISequenceElement> requiredList = new ArrayList<>();
 	private final List<@NonNull ISequenceElement> softRequiredList = new ArrayList<>();
 	private final IIndexBits<ISequenceElement> optionalElements = new ArrayIndexBits<>();
 
@@ -37,19 +36,6 @@ public class IndexedOptionalElementsEditor implements IOptionalElementsProviderE
 	public boolean isElementRequired(final ISequenceElement element) {
 		return !isElementOptional(element);
 	}
-
-//	@Override
-//	public List<@NonNull ISequenceElement> getOptionalElements() {
-//		return Collections.unmodifiableList(optionalList);
-//	}
-
-//	@Override
-//	public List<@NonNull ISequenceElement> getRequiredElements() {
-//		
-//		
-//		
-//		return Collections.unmodifiableList(requiredList);
-//	}
 
 	@Override
 	public List<@NonNull ISequenceElement> getSoftRequiredElements() {
@@ -65,24 +51,14 @@ public class IndexedOptionalElementsEditor implements IOptionalElementsProviderE
 		}
 
 		while (optionalList.remove(element)) {
-			;
 		}
-//		while (requiredList.remove(element)) {
-//			;
-//		}
 		while (softRequiredList.remove(element)) {
-			;
 		}
 		if (isOptional) {
 			optionalList.add(element);
-		} else {
-			// requiredList.add(element);
 		}
 	}
 
-	/**
-	 * @since 2.0
-	 */
 	@Override
 	public void setSoftRequired(final ISequenceElement element, boolean isSoftRequired) {
 		setOptional(element, isSoftRequired);

@@ -4,14 +4,10 @@
  */
 package com.mmxlabs.optimiser.lso.logging;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import org.eclipse.jdt.annotation.NonNull;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import com.google.common.base.Joiner;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
@@ -34,10 +30,6 @@ public class GeneralAnnotationLogger {
 	}
 
 	public void report(int iterations) {
-		// if (rows.size() == 0) {
-		// rows.add(getLatenessColumns(getBestAnnotatedSolution()));
-		// }
-		// rows.add(getLatenessRow(iterations, getBestAnnotatedSolution()));
 		rows.add(getLatenessRow(iterations, getBestAnnotatedSolution()));
 	}
 
@@ -63,35 +55,15 @@ public class GeneralAnnotationLogger {
 		node.addAll(rows);
 	}
 
-	private String getLatenessColumns(IAnnotatedSolution annotatedSolution) {
-		String[] keys = new String[annotatedSolution.getGeneralAnnotationKeys().size() + 1];
-		keys[0] = "iterations";
-		int i = 0;
-		for (String key : annotatedSolution.getGeneralAnnotationKeys()) {
-			keys[++i] = key;
-		}
-		Joiner joiner = Joiner.on(",");
-		return joiner.join(keys);
-	}
-
 	private JSONObject getLatenessRow(int iterations, IAnnotatedSolution annotatedSolution) {
 
 		JSONObject row = new JSONObject();
 		row.put("iterations", iterations);
-
-		// Joiner joiner = Joiner.on(",");
-		String[] latenesses = new String[annotatedSolution.getGeneralAnnotationKeys().size() + 1];
-		int idx = 0;
-		// latenesses[0] = "" + iterations;
 		for (String key : annotatedSolution.getGeneralAnnotationKeys()) {
 			Object o = annotatedSolution.getGeneralAnnotation(key, Object.class);
-			// Integer lateness = annotatedSolution.getGeneralAnnotation(key, Integer.class);
-			// latenesses[++idx] = "" + (lateness == null ? 0 : lateness);
 			if (o instanceof Number) {
-				// latenesses[++idx] = "" + (o == null ? 0 : o);
 				row.put(key, o);
 			} else {
-				// latenesses[++idx] = "0";
 				row.put(key, "0");
 			}
 		}

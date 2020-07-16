@@ -28,7 +28,7 @@ public class SimpleMultiObjectiveLSOMover extends AbstractLSOMover {
 
 	@Inject
 	IMultiObjectiveFitnessEvaluator multiObjectiveFitnessEvaluator;
-	
+
 	@Override
 	public MultiObjectiveJobState search(@NonNull IModifiableSequences rawSequences, @NonNull ILookupManager stateManager, @NonNull Random random, @NonNull IMoveGenerator moveGenerator, long seed,
 			boolean failedInitialConstraintCheckers) {
@@ -56,7 +56,7 @@ public class SimpleMultiObjectiveLSOMover extends AbstractLSOMover {
 			// For constraint checker changed resources functions, if initial solution is invalid, we want to always perform a full constraint checker set of checks until we accept a valid
 			// solution
 			final Collection<@NonNull IResource> changedResources = failedInitialConstraintCheckers ? null : move.getAffectedResources();
-			if (checker.checkConstraints(potentialFullSequences, changedResources) == false) {
+			if (!checker.checkConstraints(potentialFullSequences, changedResources)) {
 				// Break out
 				return new MultiObjectiveJobState(rawSequences, null, null, LSOJobStatus.ConstraintFail, null, seed, move, checker);
 			}
@@ -68,22 +68,21 @@ public class SimpleMultiObjectiveLSOMover extends AbstractLSOMover {
 				return new MultiObjectiveJobState(rawSequences, null, null, LSOJobStatus.EvaluationProcessFail, null, seed, move, null);
 			}
 		}
-		
+
 		// Apply hard constraint checkers
 		for (final IEvaluatedStateConstraintChecker checker : evaluatedStateConstraintCheckers) {
-			if (checker.checkConstraints(rawSequences, potentialFullSequences, evaluationState) == false) {
+			if (!checker.checkConstraints(rawSequences, potentialFullSequences, evaluationState)) {
 				return new MultiObjectiveJobState(rawSequences, null, null, LSOJobStatus.EvaluatedConstraintFail, null, seed, move, checker);
 			}
 		}
 
-		
 		// now evaluate
 		long[] fitnesses = getMultiObjectiveFitnessEvaluator().getCombinedFitnessAndObjectiveValuesForComponentClasses(rawSequences, potentialFullSequences, evaluationState,
 				move.getAffectedResources(), getFitnessComponents());
 
 		return new MultiObjectiveJobState(rawSequences, potentialFullSequences, fitnesses, LSOJobStatus.Pass, evaluationState, seed, move, null);
 	}
-	
+
 	public IMultiObjectiveFitnessEvaluator getMultiObjectiveFitnessEvaluator() {
 		return multiObjectiveFitnessEvaluator;
 	}

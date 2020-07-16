@@ -24,8 +24,7 @@ import com.mmxlabs.optimiser.core.impl.Resource;
 
 public class OptimiserTestUtil {
 
-	@NonNull
-	public static IIndexingContext index = new SimpleIndexingContext();
+	public static final @NonNull IIndexingContext index = new SimpleIndexingContext();
 
 	/**
 	 * Create a {@link IModifiableSequence} from an arbitrary list of inputs of the same type.
@@ -54,7 +53,7 @@ public class OptimiserTestUtil {
 	 * @return
 	 */
 	@NonNull
-	public static IModifiableSequence makeSequence(final @NonNull ISequenceElement...  elements) {
+	public static IModifiableSequence makeSequence(final @NonNull ISequenceElement... elements) {
 		final List<@NonNull ISequenceElement> elementsList = CollectionsUtil.makeArrayList(elements);
 		return new ListModifiableSequence(elementsList);
 	}

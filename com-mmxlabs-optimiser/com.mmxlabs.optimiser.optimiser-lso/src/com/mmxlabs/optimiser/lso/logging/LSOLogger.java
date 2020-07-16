@@ -22,7 +22,6 @@ import com.mmxlabs.common.caches.MemoryUsageInfo;
 import com.mmxlabs.optimiser.common.logging.ILoggingDataStore;
 import com.mmxlabs.optimiser.common.logging.impl.EvaluationNumberKey;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
-import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;
@@ -32,15 +31,15 @@ import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.optimiser.lso.INullMove;
 
 public class LSOLogger implements ILoggingDataStore {
-	
+
 	public static class LoggingParameters {
 		public static final Object ACCEPTED_FITNESS_KEY = "ACCEPTED_FITNESS";
 		private static final Object REJECTED_FITNESS_KEY = "REJECTED_FITNESS";
 		private static final Object HEAP_USAGE_KEY = "HEAP_USAGE";
 
 		public int loggingInterval;
-		public String [] metricsToLog;
-		
+		public String[] metricsToLog;
+
 		public boolean doLogAcceptedFitnesses() {
 			return Arrays.asList(metricsToLog).contains(ACCEPTED_FITNESS_KEY);
 		}
@@ -51,10 +50,10 @@ public class LSOLogger implements ILoggingDataStore {
 
 		public boolean doLogHeapUsage() {
 			return Arrays.asList(metricsToLog).contains(HEAP_USAGE_KEY);
-		}		
-		
+		}
+
 	}
-	
+
 	private Map<String, AtomicInteger> moveMap = new HashMap<>();
 	private Map<String, AtomicInteger> successfulMoveMap = new HashMap<>();
 	private Map<String, Map<String, AtomicInteger>> nullMovesMap = new HashMap<>();
@@ -66,17 +65,10 @@ public class LSOLogger implements ILoggingDataStore {
 
 	private Map<String, Integer> progressKeys = new HashMap<>();
 	private Map<ISequences, SequencesCounts> seenSequencesCount = new HashMap<>();
-	private Map<ISequences, String> constraintsFailedSequences = new HashMap<>();
-	private Map<ISequences, Long> acceptedMovesSequencesFitness = new HashMap<>();
-	private Map<ISequences, Long> rejectedMovesSequencesFitness = new HashMap<>();
-	private Map<ISequences, SequencesCounts> acceptedSequencesCount = new HashMap<>();
-	private Map<ISequences, SequencesCounts> rejectedSequencesCount = new HashMap<>();
-	private List<Pair<Integer, Long>> acceptedSolutionFitnesses = new LinkedList<Pair<Integer, Long>>();
-	private List<Pair<Integer, Long>> rejectedSolutionFitnesses = new LinkedList<Pair<Integer, Long>>();
+	private List<Pair<Integer, Long>> acceptedSolutionFitnesses = new LinkedList<>();
+	private List<Pair<Integer, Long>> rejectedSolutionFitnesses = new LinkedList<>();
 
-	private List<IResource> resourceList = null;
 
-	// private int reportingInterval;
 	private int numberOfMovesTried;
 	private int numberOfMovesAccepted;
 	private int numberOfRejectedMoves;
@@ -86,11 +78,10 @@ public class LSOLogger implements ILoggingDataStore {
 	private IFitnessEvaluator lsafe;
 	private FitnessAnnotationLogger fitnessAnnotationLogger;
 	private GeneralAnnotationLogger generalAnnotationLogger;
-	
+
 	private LoggingParameters loggingParameters;
 
 	public LSOLogger(LoggingParameters parameters, IFitnessEvaluator lsafe, IOptimisationContext context) {
-//		nullMovesMap.put("null", new AtomicInteger(0));
 		progressKeys = getProgressKeysMap();
 		this.loggingParameters = parameters;
 		this.fitnessAnnotationLogger = new FitnessAnnotationLogger(lsafe);
@@ -110,18 +101,18 @@ public class LSOLogger implements ILoggingDataStore {
 	}
 
 	public List<String> getProgressKeys() {
-		return new ArrayList<String>(getProgressKeysMap().keySet());
+		return new ArrayList<>(getProgressKeysMap().keySet());
 	}
 
 	public boolean keyInProgressLog(String key) {
 		return progressKeys.containsKey(key);
 	}
-	
+
 	public void logCurrentJavaHeapUsage(long time) {
 		Runtime runtime = Runtime.getRuntime();
-		
+
 		MemoryUsageInfo info = new MemoryUsageInfo(runtime.freeMemory(), runtime.totalMemory());
-		
+
 		heapUsageMap.put(time, info);
 	}
 
@@ -212,7 +203,7 @@ public class LSOLogger implements ILoggingDataStore {
 	public void logFailedConstraints(String checkerName, String moveName) {
 		Map<String, AtomicInteger> checkerStore;
 		if (!failedConstraintsMovesMap.containsKey(checkerName)) {
-			checkerStore = new HashMap<String, AtomicInteger>();
+			checkerStore = new HashMap<>();
 			failedConstraintsMovesMap.put(checkerName, checkerStore);
 		} else {
 			checkerStore = failedConstraintsMovesMap.get(checkerName);
@@ -233,7 +224,7 @@ public class LSOLogger implements ILoggingDataStore {
 	public void logFailedEvaluatedConstraints(String checkerName, String moveName) {
 		Map<String, AtomicInteger> checkerStore;
 		if (!failedEvaluatedConstraintsMovesMap.containsKey(checkerName)) {
-			checkerStore = new HashMap<String, AtomicInteger>();
+			checkerStore = new HashMap<>();
 			failedEvaluatedConstraintsMovesMap.put(checkerName, checkerStore);
 		} else {
 			checkerStore = failedEvaluatedConstraintsMovesMap.get(checkerName);
@@ -288,12 +279,12 @@ public class LSOLogger implements ILoggingDataStore {
 	}
 
 	public Map<String, Long> getEndProgressResults() {
-		List<String> attributes = new ArrayList<String>(progressKeys.keySet());
+		List<String> attributes = new ArrayList<>(progressKeys.keySet());
 		Collections.sort(attributes);
-		Map<String, Long> finalResults = new HashMap<String, Long>();
+		Map<String, Long> finalResults = new HashMap<>();
 		if (progressLogMap.size() != 0) {
 			for (String key : attributes) {
-				if (key != "time") {
+				if (!key.equals("time")) {
 					finalResults.put(key, progressLogMap.get(getProgressEvaluations().get(getProgressEvaluations().size() - 1))[progressKeys.get(key)]);
 				} else {
 					finalResults.put(key, getFinalTime());
@@ -310,7 +301,7 @@ public class LSOLogger implements ILoggingDataStore {
 	}
 
 	public List<String> getMovesList() {
-		return new ArrayList<String>(moveMap.keySet());
+		return new ArrayList<>(moveMap.keySet());
 	}
 
 	public int getMoveCount(String key) {
@@ -318,7 +309,7 @@ public class LSOLogger implements ILoggingDataStore {
 	}
 
 	public List<String> getNullMovesList() {
-		return new ArrayList<String>(nullMovesMap.keySet());
+		return new ArrayList<>(nullMovesMap.keySet());
 	}
 
 	public int getNullMoveCount(String key) {
@@ -329,17 +320,17 @@ public class LSOLogger implements ILoggingDataStore {
 		}
 		return total;
 	}
-	
-	public List<String> getNullMoveSubKeys(String key){
-		return new ArrayList<String>(nullMovesMap.get(key).keySet());
+
+	public List<String> getNullMoveSubKeys(String key) {
+		return new ArrayList<>(nullMovesMap.get(key).keySet());
 	}
-	
-	public int getSpecificNullMoveCount(String key, String subkey){
+
+	public int getSpecificNullMoveCount(String key, String subkey) {
 		return nullMovesMap.get(key).get(subkey).get();
 	}
 
 	public List<String> getFailedToValidateMovesList() {
-		return new ArrayList<String>(failedToValidateMoveMap.keySet());
+		return new ArrayList<>(failedToValidateMoveMap.keySet());
 	}
 
 	public int getFailedToValidateMoveCount(String key) {
@@ -347,7 +338,7 @@ public class LSOLogger implements ILoggingDataStore {
 	}
 
 	public List<String> getSuccessfulMovesList() {
-		return new ArrayList<String>(successfulMoveMap.keySet());
+		return new ArrayList<>(successfulMoveMap.keySet());
 	}
 
 	public int getSuccessfulMoveCount(String key) {
@@ -355,12 +346,12 @@ public class LSOLogger implements ILoggingDataStore {
 	}
 
 	public List<String> getFailedConstraints() {
-		return new ArrayList<String>(failedConstraintsMovesMap.keySet());
+		return new ArrayList<>(failedConstraintsMovesMap.keySet());
 	}
 
 	// REPLICATED FROM getFailedConstraints
 	public List<String> getFailedEvaluatedConstraints() {
-		return new ArrayList<String>(failedEvaluatedConstraintsMovesMap.keySet());
+		return new ArrayList<>(failedEvaluatedConstraintsMovesMap.keySet());
 	}
 
 	public int getFailedConstraintsMovesTotalCount(String constraint) {
@@ -381,12 +372,12 @@ public class LSOLogger implements ILoggingDataStore {
 	}
 
 	public List<String> getFailedConstraintsMoves(String constraint) {
-		return new ArrayList<String>(failedConstraintsMovesMap.get(constraint).keySet());
+		return new ArrayList<>(failedConstraintsMovesMap.get(constraint).keySet());
 	}
 
 	// REPLICATED FROM getFailedConstraintMoves
 	public List<String> getFailedEvaluatedConstraintsMoves(String constraint) {
-		return new ArrayList<String>(failedEvaluatedConstraintsMovesMap.get(constraint).keySet());
+		return new ArrayList<>(failedEvaluatedConstraintsMovesMap.get(constraint).keySet());
 	}
 
 	public int getFailedConstraintsMovesIndividualCount(String constraint, String move) {
@@ -414,7 +405,7 @@ public class LSOLogger implements ILoggingDataStore {
 	}
 
 	private List<Integer> getFrequencyFromSequencesCounts(Map<ISequences, SequencesCounts> counts, SequenceCountType type) {
-		List<Integer> frequencies = new ArrayList<Integer>();
+		List<Integer> frequencies = new ArrayList<>();
 		for (SequencesCounts s : counts.values()) {
 			frequencies.add(s.getValue(type));
 		}
@@ -433,7 +424,7 @@ public class LSOLogger implements ILoggingDataStore {
 	}
 
 	public List<Integer> getInterestingSequenceFrequencies(Map<ISequences, SequencesCounts> interestingSequences, SequenceCountType type) {
-		List<Integer> frequencies = new ArrayList<Integer>();
+		List<Integer> frequencies = new ArrayList<>();
 		for (SequencesCounts counts : interestingSequences.values()) {
 			int count = counts.getValue(type);
 			if (count > 0) {

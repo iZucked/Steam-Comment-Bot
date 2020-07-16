@@ -67,7 +67,7 @@ public class GeometricThresholder implements IThresholder {
 		}
 	}
 
-	protected final static double acceptanceProbability(final long delta, final double T) {
+	protected static final double acceptanceProbability(final long delta, final double T) {
 		return Math.exp(-delta / T);
 	}
 
@@ -78,8 +78,6 @@ public class GeometricThresholder implements IThresholder {
 			ticks = 0;
 			temperature *= fractionPerEpoch;
 			log.debug("Next epoch, temperature = " + temperature);
-//			System.out.println("Next epoch, temperature = " + temperature);
-
 		}
 	}
 

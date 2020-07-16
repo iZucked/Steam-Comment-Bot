@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.optimiser.lso.logging;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
@@ -21,9 +19,9 @@ public class FitnessAnnotationLogger {
 
 	private LinearSimulatedAnnealingFitnessEvaluator lsafe;
 
-	private final Map<Integer, Map<String, Long>> fitnessComponentTrace = new LinkedHashMap<Integer, Map<String, Long>>();
+	private final Map<Integer, Map<String, Long>> fitnessComponentTrace = new LinkedHashMap<>();
 
-	private final Set<String> componentNames = new TreeSet<String>();
+	private final Set<String> componentNames = new TreeSet<>();
 
 	public FitnessAnnotationLogger(IFitnessEvaluator lsafe) {
 		this.lsafe = (LinearSimulatedAnnealingFitnessEvaluator) lsafe;
@@ -35,7 +33,7 @@ public class FitnessAnnotationLogger {
 
 		componentNames.addAll(componentValues.keySet());
 
-		fitnessComponentTrace.put(iteration, new LinkedHashMap<String, Long>(componentValues));
+		fitnessComponentTrace.put(iteration, new LinkedHashMap<>(componentValues));
 	}
 
 	public void exportData(JSONArray array) {

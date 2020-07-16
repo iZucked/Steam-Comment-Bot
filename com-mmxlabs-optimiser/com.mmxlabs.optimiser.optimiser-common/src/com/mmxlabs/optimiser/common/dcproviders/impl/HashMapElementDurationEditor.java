@@ -26,8 +26,8 @@ public final class HashMapElementDurationEditor implements IElementDurationProvi
 	private int defaultValue;
 
 	public HashMapElementDurationEditor() {
-		this.durations = new HashMap<IResource, Map<ISequenceElement, Integer>>();
-		this.nonResourceDurations = new HashMap<ISequenceElement, Integer>();
+		this.durations = new HashMap<>();
+		this.nonResourceDurations = new HashMap<>();
 		this.defaultValue = 0;
 	}
 
@@ -37,7 +37,7 @@ public final class HashMapElementDurationEditor implements IElementDurationProvi
 		if (durations.containsKey(resource)) {
 			map = durations.get(resource);
 		} else {
-			map = new HashMap<ISequenceElement, Integer>();
+			map = new HashMap<>();
 			durations.put(resource, map);
 		}
 		map.put(element, duration);

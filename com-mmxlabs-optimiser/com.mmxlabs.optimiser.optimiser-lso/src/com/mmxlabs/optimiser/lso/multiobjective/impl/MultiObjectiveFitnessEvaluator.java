@@ -10,11 +10,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import javax.print.attribute.Size2DSyntax;
-
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;

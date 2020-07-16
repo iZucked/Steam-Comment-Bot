@@ -23,12 +23,14 @@ import com.mmxlabs.optimiser.lso.IMoveGenerator;
  */
 public final class LSOJob implements Callable<LSOJobState> {
 	private final long seed;
-	private @NonNull final Injector injector;
+	private final @NonNull Injector injector;
 	private @NonNull ILookupManager stateManager;
 	private @NonNull ISequences rawSequences;
 	private @NonNull IMoveGenerator moveGenerator;
 	private boolean failedInitialConstraintCheckers;
-	public LSOJob(@NonNull final Injector injector, @NonNull final ISequences rawSequences, @NonNull final ILookupManager stateManager, @NonNull IMoveGenerator moveGenerator, final long seed, final boolean failedInitialConstraintCheckers) {
+
+	public LSOJob(@NonNull final Injector injector, @NonNull final ISequences rawSequences, @NonNull final ILookupManager stateManager, @NonNull IMoveGenerator moveGenerator, final long seed,
+			final boolean failedInitialConstraintCheckers) {
 		this.injector = injector;
 		this.rawSequences = rawSequences;
 		this.stateManager = stateManager;
