@@ -72,16 +72,18 @@ public class MultiLineTextFieldEditor extends FieldEditor {
 		if (emptyStringAllowed)
 			result = true;
 
-		if (textField == null)
-			result = false;
-
-		String txt = textField.getText();
-
-		if (txt == null) {
+		if (textField == null) {
 			result = false;
 		}
 		else {
-			result = (txt.trim().length() > 0) || emptyStringAllowed;
+			String txt = textField.getText();
+
+			if (txt == null) {
+				result = false;
+			}
+			else {
+				result = (txt.trim().length() > 0) || emptyStringAllowed;
+			}
 		}
 		
 		// call hook for subclasses
