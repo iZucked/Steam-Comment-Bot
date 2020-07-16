@@ -77,11 +77,13 @@ public class MultiLineTextFieldEditor extends FieldEditor {
 
 		String txt = textField.getText();
 
-		if (txt == null)
+		if (txt == null) {
 			result = false;
-
-		result = (txt.trim().length() > 0) || emptyStringAllowed;
-
+		}
+		else {
+			result = (txt.trim().length() > 0) || emptyStringAllowed;
+		}
+		
 		// call hook for subclasses
 		result = result && doCheckState();
 
