@@ -27,17 +27,12 @@ public final class SimpleCache<K, V> extends AbstractCache<K, V> {
 			queries++;
 			if ((entry != null) && key.equals(entry.getFirst())) {
 				misses = 0;
-				// hits++;
 				return entry.getSecond();
 			} else {
 				final Pair<K, V> value = evaluator.evaluate(key);
 
-				// if (entry == null) memoryMisses++;
-				// else valueMisses++;
-
 				if ((entry == null) || (misses > evictionThreshold)) {
-					this.reference = new SoftReference<Pair<K, V>>(value);
-					// evictions++;
+					this.reference = new SoftReference<>(value);
 					misses = 0;
 				} else {
 					misses++;

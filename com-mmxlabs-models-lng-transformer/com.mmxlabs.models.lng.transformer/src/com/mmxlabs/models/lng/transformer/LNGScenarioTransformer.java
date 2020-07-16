@@ -264,27 +264,22 @@ public class LNGScenarioTransformer {
 	private List<DischargeSlot> extraDischargeSlots;
 
 	@Inject
-	@NonNull
 	private DateAndCurveHelper dateHelper;
 
 	@Inject
 	@Named(SchedulerConstants.Parser_BaseFuel)
-	@NonNull
 	private SeriesParser baseFuelIndices;
 
 	@Inject
 	@Named(SchedulerConstants.Parser_Charter)
-	@NonNull
 	private SeriesParser charterIndices;
 
 	@Inject
 	@Named(SchedulerConstants.Parser_Commodity)
-	@NonNull
 	private SeriesParser commodityIndices;
 
 	@Inject
 	@Named(SchedulerConstants.Parser_Currency)
-	@NonNull
 	private SeriesParser currencyIndices;
 
 	@Inject(optional = true)
@@ -1389,8 +1384,7 @@ public class LNGScenarioTransformer {
 			if (slot.isDESPurchase()) {
 				if (slot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERT_FROM_SOURCE) {
 					// return getTimewindowAsUTCWithFlex(slot);
-				} else if (slot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DEST_WITH_SOURCE
-						|| slot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERTIBLE) {
+				} else if (slot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DEST_WITH_SOURCE || slot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERTIBLE) {
 					extendWindows = true;
 				}
 			}
@@ -1453,7 +1447,7 @@ public class LNGScenarioTransformer {
 					final ITimeWindow tw = TimeWindowMaker.createInclusiveInclusive(dateHelper.convertTime(portWindowStart), dateHelper.convertTime(portWindowEnd), 0, false);
 
 					marketPortsMap.put(port, tw);
-					((DischargeOption)discharge).addLocalisedTimeWindow(port, tw);
+					((DischargeOption) discharge).addLocalisedTimeWindow(port, tw);
 				}
 
 				builder.bindLoadSlotsToFOBSale(discharge, marketPortsMap);
@@ -1528,7 +1522,7 @@ public class LNGScenarioTransformer {
 					final ITimeWindow tw = TimeWindowMaker.createInclusiveInclusive(dateHelper.convertTime(portWindowStart), dateHelper.convertTime(portWindowEnd), 0, false);
 
 					marketPortsMap.put(port, tw);
-					((LoadOption)load).addLocalisedTimeWindow(port, tw);
+					((LoadOption) load).addLocalisedTimeWindow(port, tw);
 				}
 
 				// Bind FOB/DES slots to resource
@@ -1696,10 +1690,6 @@ public class LNGScenarioTransformer {
 			final boolean slotCancelled = dischargeSlot.isCancelled();
 			if (dischargeSlot.isFOBSale()) {
 				final ITimeWindow localTimeWindow;
-				// if (dischargeSlot.isDivertible()) {
-				// // Extend window out to cover whole shipping days restriction
-				// localTimeWindow = builder.createTimeWindow(dischargeWindow.getStart() - dischargeSlot.getShippingDaysRestriction() * 24, dischargeWindow.getEnd());
-				// } else
 
 				if (dischargeSlot instanceof SpotDischargeSlot || dischargeSlot.getSlotOrDelegateFOBSaleDealType() == FOBSaleDealType.SOURCE_WITH_DEST) {
 					// Convert back into a UTC based date and add in TZ flex
@@ -1709,9 +1699,6 @@ public class LNGScenarioTransformer {
 				} else {
 
 					if (dischargeSlot.getSlotOrDelegateFOBSaleDealType() == FOBSaleDealType.DIVERT_TO_DEST) {
-						// final ITimeWindow utcWindow = getTimewindowAsUTCWithFlex(dischargeSlot);
-						// localTimeWindow = TimeWindowMaker.createInclusiveExclusive(utcWindow.getInclusiveStart() - 12, utcWindow.getExclusiveEnd(), dischargeSlot.getWindowFlex(), false);
-						//
 						localTimeWindow = TimeWindowMaker.createInclusiveExclusive(dischargeWindow.getInclusiveStart() - dischargeSlot.getSlotOrDelegateShippingDaysRestriction() * 24,
 								dischargeWindow.getExclusiveEnd(), 0, false);
 
@@ -2057,7 +2044,7 @@ public class LNGScenarioTransformer {
 
 				for (final SpotMarket market : desPurchaseSpotMarket.getMarkets()) {
 					assert market instanceof DESPurchaseMarket;
-					if (market instanceof DESPurchaseMarket && market.isEnabled() == true) {
+					if (market instanceof DESPurchaseMarket && market.isEnabled() ) {
 						final DESPurchaseMarket desPurchaseMarket = (DESPurchaseMarket) market;
 
 						final LNGPriceCalculatorParameters priceInfo = desPurchaseMarket.getPriceInfo();
@@ -2068,7 +2055,7 @@ public class LNGScenarioTransformer {
 						final Set<Port> portSet = SetUtils.getObjects(desPurchaseMarket.getDestinationPorts());
 						final Set<IPort> marketPorts = new HashSet<>();
 						for (final Port ap : portSet) {
-							final IPort ip = portAssociation.lookup((Port) ap);
+							final IPort ip = portAssociation.lookup(ap);
 							if (ip != null) {
 								marketPorts.add(ip);
 							}
@@ -2219,7 +2206,7 @@ public class LNGScenarioTransformer {
 
 				for (final SpotMarket market : fobSalesSpotMarket.getMarkets()) {
 					assert market instanceof FOBSalesMarket;
-					if (market instanceof FOBSalesMarket && market.isEnabled() == true) {
+					if (market instanceof FOBSalesMarket && market.isEnabled() ) {
 						final FOBSalesMarket fobSaleMarket = (FOBSalesMarket) market;
 
 						final LNGPriceCalculatorParameters priceInfo = fobSaleMarket.getPriceInfo();
@@ -2230,7 +2217,7 @@ public class LNGScenarioTransformer {
 						final Set<Port> portSet = SetUtils.getObjects(fobSaleMarket.getOriginPorts());
 						final Set<IPort> marketPorts = new HashSet<>();
 						for (final Port ap : portSet) {
-							final IPort ip = portAssociation.lookup((Port) ap);
+							final IPort ip = portAssociation.lookup(ap);
 							if (ip != null) {
 								marketPorts.add(ip);
 							}
@@ -2370,7 +2357,7 @@ public class LNGScenarioTransformer {
 
 			for (final SpotMarket market : desSalesSpotMarket.getMarkets()) {
 				assert market instanceof DESSalesMarket;
-				if (market instanceof DESSalesMarket && market.isEnabled() == true) {
+				if (market instanceof DESSalesMarket && market.isEnabled()) {
 					final DESSalesMarket desSalesMarket = (DESSalesMarket) market;
 
 					final LNGPriceCalculatorParameters priceInfo = desSalesMarket.getPriceInfo();
@@ -2448,7 +2435,7 @@ public class LNGScenarioTransformer {
 								desSlot.setWindowStartTime(0);
 								// desSlot.setContract(desSalesMarket.getContract());
 								desSlot.setOptional(true);
-								desSlot.setPort((Port) notionalAPort);
+								desSlot.setPort(notionalAPort);
 								desSlot.setWindowSize(1);
 								desSlot.setWindowSizeUnits(TimePeriod.MONTHS);
 
@@ -2510,7 +2497,7 @@ public class LNGScenarioTransformer {
 
 			for (final SpotMarket market : fobPurchaseSpotMarket.getMarkets()) {
 				assert market instanceof FOBPurchasesMarket;
-				if (market instanceof FOBPurchasesMarket && market.isEnabled() == true) {
+				if (market instanceof FOBPurchasesMarket && market.isEnabled()) {
 					final FOBPurchasesMarket fobPurchaseMarket = (FOBPurchasesMarket) market;
 
 					final LNGPriceCalculatorParameters priceInfo = fobPurchaseMarket.getPriceInfo();
@@ -2524,7 +2511,7 @@ public class LNGScenarioTransformer {
 
 					final Port notionalAPort = fobPurchaseMarket.getNotionalPort();
 					assert notionalAPort != null;
-					final IPort notionalIPort = portAssociation.lookupNullChecked((Port) notionalAPort);
+					final IPort notionalIPort = portAssociation.lookupNullChecked(notionalAPort);
 
 					/** Loop over the date range in the optimisation generating market slots */
 					// Get the YearMonth of the earliest date in the scenario.
@@ -2595,7 +2582,7 @@ public class LNGScenarioTransformer {
 								fobSlot.setWindowStart(startTime);
 								fobSlot.setWindowStartTime(0);
 								fobSlot.setOptional(true);
-								fobSlot.setPort((Port) notionalAPort);
+								fobSlot.setPort(notionalAPort);
 								fobSlot.setArriveCold(fobSlot.getPort() == null ? true : !fobSlot.getPort().isAllowCooldown());
 								fobSlot.setWindowSize(1);
 								fobSlot.setWindowSizeUnits(TimePeriod.MONTHS);
@@ -2663,8 +2650,6 @@ public class LNGScenarioTransformer {
 			}
 			if (!valueSet && availability.isSetConstant()) {
 				count = availability.getConstant();
-				valueSet = true;
-
 			}
 		}
 		return count;
@@ -2694,7 +2679,7 @@ public class LNGScenarioTransformer {
 
 					final Set<IPort> marketPorts = new HashSet<>();
 					for (final Port ap : portSet) {
-						final IPort ip = portAssociation.lookup((Port) ap);
+						final IPort ip = portAssociation.lookup(ap);
 						if (ip != null) {
 							marketPorts.add(ip);
 						}
@@ -2728,7 +2713,7 @@ public class LNGScenarioTransformer {
 
 					final Set<IPort> marketPorts = new HashSet<>();
 					for (final Port ap : portSet) {
-						final IPort ip = portAssociation.lookup((Port) ap);
+						final IPort ip = portAssociation.lookup(ap);
 						if (ip != null) {
 							marketPorts.add(ip);
 						}
@@ -2761,7 +2746,7 @@ public class LNGScenarioTransformer {
 
 					final Set<IPort> marketPorts = new HashSet<>();
 					for (final Port ap : portSet) {
-						final IPort ip = portAssociation.lookup((Port) ap);
+						final IPort ip = portAssociation.lookup(ap);
 						if (ip != null) {
 							marketPorts.add(ip);
 						}
@@ -2791,7 +2776,7 @@ public class LNGScenarioTransformer {
 
 					final Set<IPort> marketPorts = new HashSet<>();
 					for (final Port ap : portSet) {
-						final IPort ip = portAssociation.lookup((Port) ap);
+						final IPort ip = portAssociation.lookup(ap);
 						if (ip != null) {
 							marketPorts.add(ip);
 						}
@@ -3123,7 +3108,7 @@ public class LNGScenarioTransformer {
 			 */
 			final Set<IPort> oInaccessiblePorts = new HashSet<>();
 			for (final Port ePort : SetUtils.getObjects(eVessel.getVesselOrDelegateInaccessiblePorts())) {
-				oInaccessiblePorts.add(portAssociation.lookup((Port) ePort));
+				oInaccessiblePorts.add(portAssociation.lookup(ePort));
 			}
 
 			if (!oInaccessiblePorts.isEmpty()) {
@@ -3490,7 +3475,7 @@ public class LNGScenarioTransformer {
 
 					final Set<IPort> marketPorts = new LinkedHashSet<>();
 					for (final Port ap : sortedPortSet) {
-						final IPort ip = portAssociation.lookup((Port) ap);
+						final IPort ip = portAssociation.lookup(ap);
 						if (ip != null) {
 							marketPorts.add(ip);
 						}

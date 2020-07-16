@@ -389,7 +389,9 @@ public class FileScenarioService extends AbstractScenarioService {
 	@Override
 	public ScenarioInstance copyInto(final Container parent, final ScenarioModelRecord sourceRecord, final String name, @Nullable final IProgressMonitor progressMonitor) throws Exception {
 		try {
-			progressMonitor.beginTask("Copy", 1);
+			if (progressMonitor != null) {
+				progressMonitor.beginTask("Copy", 1);
+			}
 			// Create a new UUID
 			final String uuid = EcoreUtil.generateUUID();
 			final URI archiveURI = resolveURI(String.format("./%s.lingo", uuid));
@@ -425,18 +427,24 @@ public class FileScenarioService extends AbstractScenarioService {
 			// Finally add to node in the service model.
 			parent.getElements().add(newInstance);
 
-			progressMonitor.worked(1);
+			if (progressMonitor != null) {
+				progressMonitor.worked(1);
+			}
 
 			return newInstance;
 		} finally {
-			progressMonitor.done();
+			if (progressMonitor != null) {
+				progressMonitor.done();
+			}
 		}
 	}
 
 	@Override
 	public ScenarioInstance copyInto(final Container parent, final IScenarioDataProvider scenarioDataProvider, final String name, @Nullable final IProgressMonitor progressMonitor) throws Exception {
 		try {
-			progressMonitor.beginTask("Copy", 1);
+			if (progressMonitor != null) {
+				progressMonitor.beginTask("Copy", 1);
+			}
 			// Create a new UUID
 			final String uuid = EcoreUtil.generateUUID();
 			final URI archiveURI = resolveURI(String.format("./%s.lingo", uuid));
@@ -477,12 +485,15 @@ public class FileScenarioService extends AbstractScenarioService {
 
 			// Finally add to node in the service model.
 			parent.getElements().add(newInstance);
-
-			progressMonitor.worked(1);
+			if (progressMonitor != null) {
+				progressMonitor.worked(1);
+			}
 
 			return newInstance;
 		} finally {
-			progressMonitor.done();
+			if (progressMonitor != null) {
+				progressMonitor.done();
+			}
 		}
 	}
 

@@ -42,8 +42,6 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 
 	private class Runner extends Job {
 
-		private boolean paused = false;
-
 		public Runner(final String name) {
 			super(name);
 		}
@@ -54,7 +52,7 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 			try {
 				doRunJob(new SubProgressMonitor(monitor, 100) {
 					@Override
-					public void worked(int work) {
+					public void worked(final int work) {
 						super.worked(work);
 						AbstractEclipseJobControl.this.setProgress(progress + work);
 					}
@@ -63,10 +61,6 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 					kill();
 					setJobState(EJobState.CANCELLED);
 					return Status.CANCEL_STATUS;
-				} else if (paused) {
-					setJobState(EJobState.COMPLETED);
-					setProgress(100);
-					return Status.OK_STATUS;
 				}
 				setProgress(100);
 				setJobState(EJobState.COMPLETED);
@@ -81,9 +75,7 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 				setJobState(EJobState.CANCELLED);
 
 				if (System.getProperty("lingo.suppress.dialogs") == null) {
-					RunnerHelper.asyncExec((display) -> {
-						MessageDialog.openInformation(display.getActiveShell(), getName(), e.getMessage());
-					});
+					RunnerHelper.asyncExec(display -> MessageDialog.openInformation(display.getActiveShell(), getName(), e.getMessage()));
 				} else {
 					throw e;
 				}
@@ -98,7 +90,6 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 			} finally {
 				monitor.done();
 			}
-			// return Status.OK_STATUS;
 		}
 
 		@Override
@@ -108,13 +99,13 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 		}
 	}
 
-	private final List<IJobControlListener> listeners = new LinkedList<IJobControlListener>();
+	private final List<IJobControlListener> listeners = new LinkedList<>();
 	private final Runner runner;
 	private EJobState currentState = EJobState.UNKNOWN;
 	private int progress = 0;
 
 	public AbstractEclipseJobControl(final String jobName) {
-		this(jobName, Collections.<QualifiedName, Object>emptyMap());
+		this(jobName, Collections.<QualifiedName, Object> emptyMap());
 	}
 
 	protected abstract void doRunJob(IProgressMonitor progressMonitor);
@@ -156,8 +147,8 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 					if (!mjl.jobStateChanged(this, oldState, newState)) {
 						listeners.remove(mjl);
 					}
-				} catch (Exception e) {
-					LOG.error("Error in job state listener " + e.getMessage(), e);
+				} catch (final Exception e) {
+					LOG.error(String.format("Error in job state listener %s", e.getMessage()), e);
 				}
 			}
 		}
@@ -230,7 +221,7 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 	}
 
 	@Override
-	public EJobState getJobState() {
+	public synchronized EJobState getJobState() {
 		return currentState;
 	}
 
@@ -255,7 +246,7 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 		final int delta = newProgress - progress;
 		progress = newProgress;
 		// Take copy to avoid concurrent modification exceptions.
-		final List<IJobControlListener> copy = new ArrayList<IJobControlListener>(listeners);
+		final List<IJobControlListener> copy = new ArrayList<>(listeners);
 
 		for (final IJobControlListener mjl : copy) {
 			if (!mjl.jobProgressUpdated(this, delta)) {

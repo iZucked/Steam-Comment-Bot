@@ -173,7 +173,7 @@ class HeadlineReportTransformer {
 		Iterable<IHeadlineValueExtender> columnExtendeders = HeadlineValueExtenderExtensionUtil.getColumnExtendeders();
 		if (columnExtendeders != null) {
 			for (ColumnDefinition d : ColumnDefinition.values()) {
-				if (d.getColumnType() == ColumnType.Value) {
+				if (d.getColumnType() == ColumnType.VALUE) {
 					long extra = 0L;
 					for (IHeadlineValueExtender ext : columnExtendeders) {
 						extra += ext.getExtraValue(schedule, scenarioResult, d);

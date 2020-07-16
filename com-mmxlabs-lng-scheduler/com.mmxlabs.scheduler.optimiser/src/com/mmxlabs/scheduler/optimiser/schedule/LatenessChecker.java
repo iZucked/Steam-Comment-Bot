@@ -81,10 +81,10 @@ public class LatenessChecker {
 			final Interval interval = getInterval(tw);
 
 			// Used by fitness constraint
-			final int latenessWithFlexInHours = getLatenessWithFlex(portSlot, tw, portTimesRecord.getSlotTime(portSlot));
+			final int latenessWithFlexInHours = getLatenessWithFlex(tw, portTimesRecord.getSlotTime(portSlot));
 
 			// Used only for export
-			final int latenessWithoutFlexInHours = getLatenessWithoutFlex(portSlot, tw, portTimesRecord.getSlotTime(portSlot));
+			final int latenessWithoutFlexInHours = getLatenessWithoutFlex(tw, portTimesRecord.getSlotTime(portSlot));
 
 			// For fitness component
 			final long weightedLateness = getWeightedLateness(interval, latenessWithFlexInHours);
@@ -180,7 +180,7 @@ public class LatenessChecker {
 		return tw;
 	}
 
-	private int getLatenessWithFlex(@NonNull final IPortSlot portSlot, @Nullable final ITimeWindow tw, final int time) {
+	private int getLatenessWithFlex(@Nullable final ITimeWindow tw, final int time) {
 		if ((tw != null) && (time >= tw.getExclusiveEnd())) {
 			final int latenessInHours = time - tw.getExclusiveEnd() + 1;
 			return latenessInHours;
@@ -188,7 +188,7 @@ public class LatenessChecker {
 		return 0;
 	}
 
-	private int getLatenessWithoutFlex(@NonNull final IPortSlot portSlot, @Nullable final ITimeWindow tw, final int time) {
+	private int getLatenessWithoutFlex(@Nullable final ITimeWindow tw, final int time) {
 		if ((tw != null) && (time >= tw.getExclusiveEndWithoutFlex())) {
 			final int latenessInHours = time - tw.getExclusiveEndWithoutFlex() + 1;
 			return latenessInHours;

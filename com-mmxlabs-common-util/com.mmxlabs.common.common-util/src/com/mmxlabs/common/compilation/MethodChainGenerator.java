@@ -13,6 +13,8 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.CollectionsUtil;
 
@@ -23,6 +25,9 @@ import com.mmxlabs.common.CollectionsUtil;
  * 
  */
 public class MethodChainGenerator implements Opcodes {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(MethodChainGenerator.class);
+
 	private final AtomicInteger counter = new AtomicInteger(0);
 	private static final String GENERATED_CLASS_PREFIX = "GeneratedMethodChain_";
 	private static final String OUTPUT_PACKAGE = "com.mmxlabs.common.compilation";
@@ -45,8 +50,7 @@ public class MethodChainGenerator implements Opcodes {
 		try {
 			return loader.injectAndLoadClass(fqn, cw.toByteArray());
 		} catch (final ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
 		return null;
 	}
@@ -183,13 +187,13 @@ public class MethodChainGenerator implements Opcodes {
 		mv.visitEnd();
 	}
 
-	public static void main(final String args[]) throws Exception {
+	public static void main(final String[] args) throws Exception {
 		final MethodChainGenerator generator = new MethodChainGenerator();
 
 		final Class<? extends ITransformer> tc = generator.createTransformer(CollectionsUtil.makeArrayList(String.class.getMethod("toUpperCase"), String.class.getMethod("toLowerCase")),
 				new InjectableClassLoader(generator.getClass().getClassLoader()));
 		Constructor<? extends ITransformer> constructor = tc.getConstructor();
 		final ITransformer t = constructor.newInstance();
-		System.err.println(t.transform("hello world"));
+		System.out.println(t.transform("hello world"));
 	}
 }
