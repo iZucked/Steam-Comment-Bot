@@ -62,8 +62,6 @@ public class SeriesParser {
 			}
 
 			return (IExpression<ISeries>) parse.value;
-		} catch (final UnknownSeriesException e) {
-			throw e;
 		} catch (final ClassCastException e) {
 			throw new RuntimeException("Syntax error ", e);
 		} catch (final RuntimeException e) {
@@ -100,9 +98,6 @@ public class SeriesParser {
 	}
 
 	public void addSeriesData(@NonNull final String name, final int @NonNull [] points, @NonNull final Number[] values) {
-		if (name == null) {
-			return;
-		}
 		evaluatedSeries.put(name.toLowerCase(), new ISeries() {
 			@Override
 			public int[] getChangePoints() {

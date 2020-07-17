@@ -8,7 +8,6 @@ import static com.mmxlabs.lingo.reports.scheduleview.views.SchedulerViewConstant
 import static com.mmxlabs.lingo.reports.scheduleview.views.SchedulerViewConstants.SCHEDULER_VIEW_COLOUR_SCHEME;
 import static com.mmxlabs.lingo.reports.scheduleview.views.SchedulerViewConstants.Show_Canals;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -85,6 +84,7 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
  */
 public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGanttChartToolTipProvider, IGanttChartColourProvider {
 
+	private static final String DATE_UNKNOWN = "<date unknown>";
 	private final Map<String, IScheduleViewColourScheme> colourSchemesById = new HashMap<>();
 	private final List<IScheduleViewColourScheme> colourSchemes = new ArrayList<>();
 
@@ -129,24 +129,18 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 	public Image getImage(final Object element) {
 		if (element instanceof Sequence) {
 			final Sequence sequence = (Sequence) element;
-			@Nullable
-			final ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
-			if (currentSelectedDataProvider != null) {
-				if (currentSelectedDataProvider.isPinnedObject(sequence)) {
-					return pinImage;
-				}
+			final @Nullable ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
+			if (currentSelectedDataProvider != null && currentSelectedDataProvider.isPinnedObject(sequence)) {
+				return pinImage;
 			}
 		} else if (element instanceof CombinedSequence) {
 			if (element instanceof CombinedSequence) {
 				final CombinedSequence combinedSequence = (CombinedSequence) element;
 				if (!combinedSequence.getSequences().isEmpty()) {
 					final Sequence sequence = combinedSequence.getSequences().get(0);
-					@Nullable
-					final ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
-					if (currentSelectedDataProvider != null) {
-						if (currentSelectedDataProvider.isPinnedObject(sequence)) {
-							return pinImage;
-						}
+					final @Nullable ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
+					if (currentSelectedDataProvider != null && currentSelectedDataProvider.isPinnedObject(sequence)) {
+						return pinImage;
 					}
 				}
 
@@ -219,8 +213,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			final InventoryEvents inventoryEvents = (InventoryEvents) element;
 			return inventoryEvents.getFacility().getName();
 		} else if (element instanceof InventoryChangeEvent) {
-			final InventoryChangeEvent event = (InventoryChangeEvent) element;
-			// return event.to String();
+			// Nothing to do here
 		}
 		return text;
 	}
@@ -308,13 +301,6 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		return DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter().format(date);
 	}
 
-	private String dateToString(final LocalDate date, final String defaultString) {
-		if (date == null) {
-			return defaultString;
-		}
-		return DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter().format(date);
-	}
-
 	private String dateToString(final LocalDateTime date, final String defaultString) {
 		if (date == null) {
 			return defaultString;
@@ -325,14 +311,10 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 	@Override
 	public String getToolTipText(final Object element) {
 		if (element instanceof CharterAvailableFromEvent) {
-			final CharterAvailableFromEvent evt = (CharterAvailableFromEvent) element;
-			final String start = dateToString(evt.getStart());
-			return "";// String.format("%s available from %s", evt.getLinkedSequence().getName(), start);
+			return "";
 		}
 		if (element instanceof CharterAvailableToEvent) {
-			final CharterAvailableToEvent evt = (CharterAvailableToEvent) element;
-			final String start = dateToString(evt.getStart());
-			return "";// String.format("%s available until %s", evt.getLinkedSequence().getName(), start);
+			return "";
 		}
 
 		if (element instanceof Sequence) {
@@ -364,7 +346,6 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 							tt.append("Spot market: " + market.getName() + " \n");
 						} else {
 							// Spot purchase or sale - leave blank?
-							// tt.append("Spot " + (slot instanceof LoadSlot ? "purchase" : "sale") + " \n");
 						}
 						tt.append(" \n");
 					}
@@ -401,7 +382,6 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 				eventText.append("Travel time: " + durationTime + " \n");
 				final Journey journey = (Journey) element;
 				eventText.append(" \n");
-				// if (!journey.getRoute().equalsIgnoreCase(RouteOption.DIRECT.getName())) {
 				eventText.append(String.format("%.1f knots", journey.getSpeed()));
 				for (final FuelQuantity fq : journey.getFuels()) {
 					eventText.append(String.format(" | %s", mapFuel(fq.getFuel())));
@@ -420,18 +400,17 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 							direction = "northbound";
 						}
 						if (canalBooking != null) {
-							eventText.append(String.format("Canal booking: %s %s\n", dateToString(journey.getCanalDateTime(), "<date unknown>"), direction));
+							eventText.append(String.format("Canal booking: %s %s\n", dateToString(journey.getCanalDateTime(), DATE_UNKNOWN), direction));
 						} else {
 							if (journey.getCanalDateTime() != null && journey.getCanalDateTime().equals(journey.getLatestPossibleCanalDateTime())) {
-								eventText.append(String.format("Booking required: %s %s\n", dateToString(journey.getCanalDateTime(), "<date unknown>"), direction));
+								eventText.append(String.format("Booking required: %s %s\n", dateToString(journey.getCanalDateTime(), DATE_UNKNOWN), direction));
 							} else if (journey.getCanalDateTime() != null && journey.getLatestPossibleCanalDateTime() != null
 									&& journey.getLatestPossibleCanalDateTime().isBefore(journey.getCanalDateTime())) {
-								// eventText.append(String.format("Infeasible booking required: %s\n", direction));
 								// May be infeasible. However we do not store hour of day, so checks are not fully accurate
-								eventText.append(String.format("Booking required: %s %s\n", dateToString(journey.getCanalDateTime(), "<date unknown>"), direction));
+								eventText.append(String.format("Booking required: %s %s\n", dateToString(journey.getCanalDateTime(), DATE_UNKNOWN), direction));
 							} else if (journey.getCanalDateTime() != null && journey.getLatestPossibleCanalDateTime() != null) {
-								eventText.append(String.format("Booking required between: %s and %s %s\n", dateToString(journey.getCanalDateTime(), "<date unknown>"),
-										dateToString(journey.getLatestPossibleCanalDateTime(), "<date unknown>"), direction));
+								eventText.append(String.format("Booking required between: %s and %s %s\n", dateToString(journey.getCanalDateTime(), DATE_UNKNOWN),
+										dateToString(journey.getLatestPossibleCanalDateTime(), DATE_UNKNOWN), direction));
 							}
 						}
 					}
@@ -449,16 +428,15 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 					direction = "northbound";
 				}
 				if (canalBooking != null) {
-					eventText.append(String.format("Canal booking: %s %s\n", dateToString(journey.getCanalDateTime(), "<date unknown>"), direction));
+					eventText.append(String.format("Canal booking: %s %s\n", dateToString(journey.getCanalDateTime(), DATE_UNKNOWN), direction));
 				} else {
-					eventText.append(String.format("Booking required: %s %s\n", dateToString(journey.getCanalDateTime(), "<date unknown>"), direction));
+					eventText.append(String.format("Booking required: %s %s\n", dateToString(journey.getCanalDateTime(), DATE_UNKNOWN), direction));
 				}
 			} else if (element instanceof SlotVisit) {
 				final SlotVisit slotVisit = (SlotVisit) element;
 				final Slot<?> slot = ((SlotVisit) element).getSlotAllocation().getSlot();
 				if (slot != null) {
 					eventText.append("Time in port: " + durationTime + " \n");
-					// eventText.append("Window Start: " + dateToString(slot.getWindowStartWithSlotOrPortTime()) + "\n");
 					eventText.append("Window End: " + dateToString(slot.getSchedulingTimeWindow().getEnd()) + "\n");
 					eventText.append(" \n");
 				}
@@ -524,7 +502,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			{
 				final Integer value = getPnL(element);
 				if (value != null) {
-					eventText.append("\nP&L: " + String.format("$%,d", value.intValue()));
+					eventText.append("\nP&L: " + String.format("$%,d", value));
 				}
 			}
 
@@ -548,14 +526,14 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 
 	/**
 	 * Split nOfHours into the number of days and/or hours as a user readable String.
+	 * 
 	 * @param nOfHours
 	 * @return a String
 	 */
 	private String convertHoursToDaysHoursString(int nOfHours) {
 		final int days = nOfHours / 24;
 		final int hours = nOfHours % 24;
-		final String durationTime = days + " day" + (days > 1 || days == 0 ? "s" : "") + ", " + hours + " hour" + (hours > 1 || hours == 0 ? "s" : "");
-		return durationTime;
+		return days + " day" + (days > 1 || days == 0 ? "s" : "") + ", " + hours + " hour" + (hours > 1 || hours == 0 ? "s" : "");
 	}
 
 	@Override
@@ -619,7 +597,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			return base;
 		} else if (element instanceof SlotVisit) {
 			final SlotVisit sv = (SlotVisit) element;
-			return (port == null) ? "" : ("At " + port + " ") + (sv.getSlotAllocation().getSlot() instanceof LoadSlot ? "(Load)" : "(Discharge)"); // + displayTypeName;
+			return (port == null) ? "" : ("At " + port + " ") + (sv.getSlotAllocation().getSlot() instanceof LoadSlot ? "(Load)" : "(Discharge)");
 
 		} else if (element instanceof InventoryChangeEvent) {
 			final InventoryChangeEvent evt = (InventoryChangeEvent) element;
@@ -636,7 +614,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 
 	@Override
 	public Image getToolTipImage(final Object element) {
-		return null;// Display.getDefault().getSystemImage(SWT.ICON_INFORMATION);
+		return null;
 	}
 
 	@Override

@@ -13,12 +13,12 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
-import com.mmxlabs.models.lng.transformer.actionplan.ActionSetLogger;
 import com.mmxlabs.models.lng.transformer.ui.AbstractRunnerHook;
 import com.mmxlabs.optimiser.common.logging.ILoggingDataStore;
 import com.mmxlabs.optimiser.lso.logging.ILoggingProvider;
 import com.mmxlabs.optimiser.lso.logging.LSOLogger;
 import com.mmxlabs.optimiser.lso.logging.LSOLogger.LoggingParameters;
+import com.mmxlabs.scheduler.optimiser.actionplan.ActionSetLogger;
 import com.mmxlabs.scheduler.optimiser.actionplan.BagOptimiser;
 
 /**

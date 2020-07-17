@@ -43,7 +43,7 @@ public class StochasticActionSetUtils {
 	 * @return
 	 */
 	public static Set<ChangeSet> getIdenticalChangeSets(final JobState a, final JobState b) {
-		final Set<ChangeSet> identical = new HashSet<ChangeSet>();
+		final Set<ChangeSet> identical = new HashSet<>();
 		for (final ChangeSet csA : a.changeSetsAsList) {
 			if (b.changeSetsAsSet.contains(csA)) {
 				identical.add(csA);
@@ -60,7 +60,7 @@ public class StochasticActionSetUtils {
 	 * @return
 	 */
 	public static Set<Change> getIdenticalChanges(final ChangeSet a, final ChangeSet b) {
-		final Set<Change> identical = new HashSet<Change>();
+		final Set<Change> identical = new HashSet<>();
 		for (final Change csA : a.changesList) {
 			if (b.changesSet.contains(csA)) {
 				identical.add(csA);
@@ -252,7 +252,7 @@ public class StochasticActionSetUtils {
 		final Map<JobState, Map<JobState, int[]>> matrix = new HashMap<>();
 		final Map<JobState, JobState> closestNeighbourTable = new HashMap<>();
 		for (final JobState jsA : jobStates) {
-			final HashMap<JobState, int[]> jobStateColumn = new HashMap<JobState, int[]>();
+			final HashMap<JobState, int[]> jobStateColumn = new HashMap<>();
 			matrix.put(jsA, jobStateColumn);
 			int[] closestNeighbour = null;
 			for (final JobState jsB : jobStates) {
@@ -307,7 +307,6 @@ public class StochasticActionSetUtils {
 		int changeStringCount = -1;
 		for (final JobState js : jobStates) {
 			++changeStringCount;
-			final ChangeSet cs = js.changeSetsAsList.get(0);
 			for (final Change change : js.changesAsList) {
 				changesString[changeStringCount][changes.get(change)] = 1;
 			}

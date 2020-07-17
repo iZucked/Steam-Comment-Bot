@@ -5,7 +5,7 @@
 package com.mmxlabs.lingo.reports.diff.utils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,16 +16,19 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
-import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 
 public class CapacityViolationDiffUtils {
 
+	private CapacityViolationDiffUtils() {
+
+	}
+
 	public static class CapacityViolationDifferences {
-		public final @NonNull Map<CapacityViolationType, Long> additionSet = new HashMap<>();
-		public final @NonNull Map<CapacityViolationType, Long> intersectSet = new HashMap<>();
-		public final @NonNull Map<CapacityViolationType, Long> subtractionSet = new HashMap<>();
+		public final @NonNull Map<CapacityViolationType, Long> additionSet = new EnumMap<>(CapacityViolationType.class);
+		public final @NonNull Map<CapacityViolationType, Long> intersectSet = new EnumMap<>(CapacityViolationType.class);
+		public final @NonNull Map<CapacityViolationType, Long> subtractionSet = new EnumMap<>(CapacityViolationType.class);
 	}
 
 	public static String checkSlotAllocationForCapacityViolations(final SlotAllocation nonReference, final SlotAllocation reference) {
@@ -33,8 +36,8 @@ public class CapacityViolationDiffUtils {
 			return "";
 		}
 
-		Slot nonReferenceSlot = nonReference.getSlot();
-		Slot referenceSlot = reference.getSlot();
+		Slot<?> nonReferenceSlot = nonReference.getSlot();
+		Slot<?> referenceSlot = reference.getSlot();
 		if (nonReferenceSlot == null || referenceSlot == null) {
 			return "";
 		}
@@ -61,42 +64,40 @@ public class CapacityViolationDiffUtils {
 	}
 
 	private static String createChangedViolationTextFromSet(final Map<CapacityViolationType, Long> map) {
-		String text = "";
+		StringBuilder text = new StringBuilder();
 		if (!map.isEmpty()) {
 			final List<CapacityViolationType> violations = new ArrayList<>(map.keySet());
 			for (int index = 0; index < violations.size(); index++) {
 				if (violations.get(index) != CapacityViolationType.FORCED_COOLDOWN) {
-					text += String.format("%s (%sm³)%s", getUserString(violations.get(index)), map.get(violations.get(index)), (index < violations.size() - 1 ? " , " : ""));
+					text.append(String.format("%s (%sm³)%s", getUserString(violations.get(index)), map.get(violations.get(index)), (index < violations.size() - 1 ? " , " : "")));
 				} else {
-					text += String.format("%s %s", getUserString(violations.get(index)), (index < violations.size() - 1 ? " , " : ""));
+					text.append(String.format("%s %s", getUserString(violations.get(index)), (index < violations.size() - 1 ? " , " : "")));
 				}
 			}
 		}
-		return text;
+		return text.toString();
 	}
 
 	private static String createModifiedViolationTextFromSet(final @NonNull Map<CapacityViolationType, Long> map) {
-		String text = "";
+		StringBuilder text = new StringBuilder();
 		if (!map.isEmpty()) {
 			final List<CapacityViolationType> violations = new ArrayList<>(map.keySet());
 			for (int index = 0; index < violations.size(); index++) {
 				if (violations.get(index) != CapacityViolationType.FORCED_COOLDOWN) {
-					text += String.format("%s (%s%sm³)%s", getUserString(violations.get(index)), map.get(violations.get(index)), map.get(violations.get(index)) > 0 ? "+" : "-",
-							(index < violations.size() - 1 ? " , " : ""));
+					text.append(String.format("%s (%s%sm³)%s", getUserString(violations.get(index)), map.get(violations.get(index)), map.get(violations.get(index)) > 0 ? "+" : "-",
+							(index < violations.size() - 1 ? " , " : "")));
 				} else {
-					text += String.format("%s %s", getUserString(violations.get(index)), (index < violations.size() - 1 ? " , " : ""));
+					text.append(String.format("%s %s", getUserString(violations.get(index)), (index < violations.size() - 1 ? " , " : "")));
 				}
 			}
 		}
-		return text;
+		return text.toString();
 	}
 
 	private static @Nullable EMap<CapacityViolationType, Long> getViolationMap(final SlotAllocation slotAllocation) {
 		final SlotVisit visit = slotAllocation.getSlotVisit();
-		if (visit instanceof CapacityViolationsHolder) {
-			final CapacityViolationsHolder capacityViolationsHolder = (CapacityViolationsHolder) visit;
-			final EMap<CapacityViolationType, Long> violationMap = capacityViolationsHolder.getViolations();
-			return violationMap;
+		if (visit != null) {
+			return visit.getViolations();
 		} else {
 			return null;
 		}
@@ -105,27 +106,35 @@ public class CapacityViolationDiffUtils {
 	private static CapacityViolationDifferences getDifferenceInViolations(final @Nullable EMap<CapacityViolationType, Long> setA, final @Nullable EMap<CapacityViolationType, Long> setB) {
 		final CapacityViolationDifferences differences = new CapacityViolationDifferences();
 		if (setA != null && setB != null) {
-			for (final CapacityViolationType violation : setA.keySet()) {
+
+			for (final Map.Entry<CapacityViolationType, Long> e : setA.entrySet()) {
+				CapacityViolationType violation = e.getKey();
 				if (setB.containsKey(violation)) {
-					if ((long) setA.get(violation) != (long) setB.get(violation)) {
-						differences.intersectSet.put(violation, setB.get(violation) - setA.get(violation));
+					if ((long) e.getValue() != (long) setB.get(violation)) {
+						differences.intersectSet.put(violation, setB.get(violation) - e.getValue());
 					}
 				} else {
-					differences.additionSet.put(violation, setA.get(violation));
+					differences.additionSet.put(violation, e.getValue());
 				}
 			}
-			for (final CapacityViolationType violation : setB.keySet()) {
+
+			for (final Map.Entry<CapacityViolationType, Long> e : setB.entrySet()) {
+				CapacityViolationType violation = e.getKey();
 				if (!setA.containsKey(violation)) {
-					differences.subtractionSet.put(violation, setB.get(violation));
+					differences.subtractionSet.put(violation, e.getValue());
 				}
 			}
 		} else {
-			if (setA == null) {
-				for (final CapacityViolationType violation : setB.keySet())
-					differences.subtractionSet.put(violation, setB.get(violation));
-			} else if (setB == null) {
-				for (final CapacityViolationType violation : setA.keySet())
-					differences.additionSet.put(violation, setA.get(violation));
+			if (setB != null) {
+				for (final Map.Entry<CapacityViolationType, Long> e : setB.entrySet()) {
+					CapacityViolationType violation = e.getKey();
+					differences.subtractionSet.put(violation, e.getValue());
+				}
+			} else if (setA != null) {
+				for (final Map.Entry<CapacityViolationType, Long> e : setA.entrySet()) {
+					CapacityViolationType violation = e.getKey();
+					differences.additionSet.put(violation, e.getValue());
+				}
 			}
 		}
 		return differences;

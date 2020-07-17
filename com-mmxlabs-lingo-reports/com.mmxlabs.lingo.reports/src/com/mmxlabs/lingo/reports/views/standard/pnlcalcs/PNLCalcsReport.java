@@ -91,12 +91,12 @@ public class PNLCalcsReport extends ViewPart {
 				try {
 					return DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter().parse(text);
 				} catch (final Exception e) {
-
+					// Ignore exceptions, fallback to alternative parser
 				}
 				try {
 					return NumberFormat.getInstance().parseObject(text);
 				} catch (final Exception e) {
-
+					// Ignore exceptions
 				}
 				return null;
 			}

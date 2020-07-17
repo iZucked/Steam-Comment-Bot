@@ -27,7 +27,6 @@ import com.mmxlabs.lingo.reports.views.standard.econs.EconsOptions.MarginBy;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails;
@@ -63,7 +62,6 @@ import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.ui.date.DateTimeFormatsProvider;
-import com.mmxlabs.models.ui.tabular.BaseFormatter;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 
 public class StandardEconsRowFactory extends AbstractEconsRowFactory {
@@ -132,8 +130,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 			rows.add(createRow(20, "    Price", true, "$", "", true, createBuyPrice(options, true)));
 			rows.add(createRow(30, "    Volume", true, "", "", false, createBuyVolumeMMBTuPrice(options, false)));
 		}
-		if (containsCargo || containsCharterOut || containsCooldown || containsGeneratedCharterOut || containsOpenSlot
-				|| containsPurge || containsStartEvent || containsVesselEvent) {
+		if (containsCargo || containsCharterOut || containsCooldown || containsGeneratedCharterOut || containsOpenSlot || containsPurge || containsStartEvent || containsVesselEvent) {
 			rows.add(createRow(40, "Shipping", true, "$", "", true, createShippingCosts(options, true)));
 			rows.add(createRow(50, "    Bunkers", true, "$", "", true, createShippingBunkersTotal(options, true)));
 			rows.add(createRow(60, "    Port", true, "$", "", true, createShippingPortCosts(options, true)));
@@ -180,8 +177,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		if (containsOpenSlot) {
 			rows.add(createRow(185, "Cancellation", true, "$", "", true, createCancellationCosts(options, true)));
 		}
-		if (containsCargo || containsCharterOut || containsCooldown || containsGeneratedCharterOut || containsOpenSlot
-				|| containsPurge || containsStartEvent || containsVesselEvent) {
+		if (containsCargo || containsCharterOut || containsCooldown || containsGeneratedCharterOut || containsOpenSlot || containsPurge || containsStartEvent || containsVesselEvent) {
 			rows.add(createRow(190, "P&L", true, "$", "", false, createPNLTotal(options, false)));
 		}
 		if (containsCargo) {
@@ -249,14 +245,9 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 					// Theoretical shipping cost
 					// Real Shipping cost
 
-					// getShippingCost((fu) -> getFuelcost(fu, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT));
-					// rows.add(createRow(200, "Real shipping cost", false, "$", "", true,
-					// createShippingCosts((fu) ->
-					// getShippingCost(StandardPNLCalcRowFactory::getShippingCost(fuelCostFunc) )));
-
-					Function<FuelUsage, Integer> fuelCostFunc = (fu) -> getFuelCost(fu, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
+					Function<FuelUsage, Integer> fuelCostFunc = fu -> getFuelCost(fu, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
 					Function<SlotVisit, Integer> portCostFunc = SlotVisit::getPortCost;
-					Function<Object, Integer> func2 = (object) -> getShippingCost(object, portCostFunc, fuelCostFunc);
+					Function<Object, Integer> func2 = object -> getShippingCost(object, portCostFunc, fuelCostFunc);
 
 					rows.add(createRow(400, "Real shipping cost", false, "$", "", true,
 							createBasicFormatter(options, true, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, func2))));
@@ -267,10 +258,6 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 				if (containsCargo || containsVesselEvent || containsCharterOut || containsGeneratedCharterOut || containsStartEvent) {
 
 					// Spacer
-
-					// rows.add(createRow(400, "Real shipping", false, "", "", false,
-					// createEmptyFormatter()));
-					// rows.add(createRow(410, "", false, "", "", false, createEmptyFormatter()));
 					rows.add(createRow(420, "", false, "", "", false, createEmptyFormatter()));
 
 					for (int legIdx = 0; legIdx < 2; ++legIdx) {
@@ -287,22 +274,10 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 								rows.add(createRow(base + 10, "Ballast leg", false, "", "", false, createEmptyFormatter()));
 							}
 
-							// rows.add(createRow(base + 20, " Speed", false, "", "", false,
-							// createFullLegFormatter2(legIdx, Double.class, SpeedFormat::format, (visit,
-							// travel, idle) -> travel.getSpeed())));
 							rows.add(createRow(base + 20, "    Speed", false, "", "", false, createBasicFormatter(options, true, Double.class, SpeedFormat::format,
 									createFullLegTransformer2(Double.class, legIdx, (visit, travel, idle) -> travel == null ? 0 : travel.getSpeed()))));
 							rows.add(createRow(base + 30, "    Days", false, "", "", false, createDoubleDaysFormatter(options, true, createFullLegTransformer2(Double.class, legIdx,
 									(visit, travel, idle) -> ((getOrZero(visit, Event::getDuration) + getOrZero(travel, Event::getDuration) + getOrZero(idle, Event::getDuration)) / 24.0)))));
-
-							// rows.add(createRow(base + 90, " Route", false, "", "", false,
-							// createFullLegFormatter(legIdx, (travel, idle) ->
-							// getRoute(travel.getRouteOption()))));
-							// rows.add(createRow(base + 91, " Port duration", false, "", "", false,
-							// createFullLegFormatter(legIdx, (travel, idle) -> getPortDuration(travel))));
-							// rows.add(createRow(base + 31, " Port days", false, "", "", false,
-							// createFullLegFormatter2(legIdx, Double.class, DaysFormat::format,
-							// (visit, travel, idle) -> ((getOrZero(visit, Event::getDuration)) / 24.0))));
 
 							rows.add(createRow(base + 40, "    Total BO (mmBtu)", false, "", "", false, createBasicFormatter(options, true, Integer.class, VolumeMMBtuFormat::format,
 									createFullLegTransformer2(Integer.class, legIdx, (visit, travel, idle) -> (getFuelVolume(visit, travel, idle, FuelUnit.MMBTU, Fuel.NBO, Fuel.FBO))))));
@@ -311,7 +286,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 											(visit, travel, idle) -> (getOrZero(visit, Event::getCharterCost) + getOrZero(travel, Event::getCharterCost) + getOrZero(idle, Event::getCharterCost))))));
 
 							rows.add(createRow(base + 51, "    Charter Rate", true, "$", "", true, createBasicFormatter(options, true, Integer.class, DollarsFormat::format,
-									createFullLegTransformer2(Integer.class, legIdx, (visit, travel, idle) -> getAverageDailyCharterRate(visit, travel, idle)))));
+									createFullLegTransformer2(Integer.class, legIdx, StandardEconsRowFactory::getAverageDailyCharterRate))));
 
 							rows.add(createRow(base + 60, "    Bunkers (MT)", false, "", "", false, createBasicFormatter(options, true, Integer.class, VolumeM3Format::format,
 									createFullLegTransformer2(Integer.class, legIdx, (visit, travel, idle) -> (getFuelVolume(visit, travel, idle, FuelUnit.MT, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT))))));
@@ -357,13 +332,10 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		}
 		if (containsPaperDeals) {
 			rows.add(createRow(3010, "Pricing", false, "", "", false, createEmptyFormatter()));
-			
-			rows.add(createRow(3020, "    Curve", false, "", "", false,
-					createPaperDealAllocationFormatter(pda -> getFloatCurve(pda) )));
-			rows.add(createRow(3030, "    Price", false, "", "", false,
-					createPaperDealAllocationFormatter(pda -> String.format("%.3f", getPaperFloatPrice(pda)) )));
-			rows.add(createRow(3040, "    MtM", false, "", "", false,
-					createPaperDealAllocationFormatter(pda -> String.format("%.3f", getPaperMtMPrice(pda)) )));
+
+			rows.add(createRow(3020, "    Curve", false, "", "", false, createPaperDealAllocationFormatter(StandardEconsRowFactory::getFloatCurve)));
+			rows.add(createRow(3030, "    Price", false, "", "", false, createPaperDealAllocationFormatter(pda -> String.format("%.3f", getPaperFloatPrice(pda)))));
+			rows.add(createRow(3040, "    MtM", false, "", "", false, createPaperDealAllocationFormatter(pda -> String.format("%.3f", getPaperMtMPrice(pda)))));
 			rows.add(createRow(3050, "Quantity", true, "", "", false, createPaperDealVolumeMMBTu(options, false)));
 			rows.add(createRow(3060, "P&L", true, "$", "", false, createPNLTotal(options, false)));
 			rows.add(createRow(3080, "Month", false, "", "", false,
@@ -384,7 +356,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		}
 		return price;
 	}
-	
+
 	private double getPaperFloatPrice(final PaperDealAllocation pda) {
 		double price = 0.0;
 		if (pda.eContainer() instanceof Schedule) {
@@ -397,8 +369,8 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		}
 		return price;
 	}
-	
-	private String getFloatCurve(final PaperDealAllocation pda) {
+
+	private static String getFloatCurve(final PaperDealAllocation pda) {
 		String curveName = "N/A";
 		if (pda.eContainer() instanceof Schedule) {
 			final Schedule schedule = (Schedule) pda.eContainer();
@@ -409,10 +381,10 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		return curveName;
 	}
 
-	private int getAverageDailyCharterRate(Event visit, Event travel, Event idle) {
-		double totalCharterCost = getOrZero(visit, Event::getCharterCost) + getOrZero(travel, Event::getCharterCost) + getOrZero(idle, Event::getCharterCost);
-		double totalDuration = getOrZero(visit, Event::getDuration) + getOrZero(travel, Event::getDuration) + getOrZero(idle, Event::getDuration);
-		return totalDuration == 0.0 ? 0 : (int) (totalCharterCost * 24 / totalDuration);
+	private static int getAverageDailyCharterRate(Event visit, Event travel, Event idle) {
+		int totalCharterCost = getOrZero(visit, Event::getCharterCost) + getOrZero(travel, Event::getCharterCost) + getOrZero(idle, Event::getCharterCost);
+		int totalDuration = getOrZero(visit, Event::getDuration) + getOrZero(travel, Event::getDuration) + getOrZero(idle, Event::getDuration);
+		return totalDuration == 0.0 ? 0 : (int) ((double) totalCharterCost * 24.0 / (double) totalDuration);
 	}
 
 	private @Nullable IColorProvider createBOGColourProvider(final EconsOptions options) {
@@ -575,7 +547,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 
 		return createBasicFormatter(options, isCost, Long.class, VolumeMMBtuFormat::format, createMappingFunction(Long.class, helper));
 	}
-	
+
 	private @NonNull ICellRenderer createPaperDealVolumeMMBTu(final EconsOptions options, final boolean isCost) {
 
 		final Function<Object, @Nullable Long> helper = object -> {
@@ -706,15 +678,16 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 			} else if (object instanceof List<?>) {
 				final List<DeltaPair> pairs = (List<DeltaPair>) object;
 				final double totalVolume = pairs.stream().mapToDouble(x -> cargoAllocationPerMMBTUVolumeHelper(x.first(), options)).sum();
-				if (totalVolume == 0.0)
+				if (totalVolume == 0.0) {
 					return 0.0;
+				}
 				final double totalOldVolume = pairs.stream().mapToDouble(x -> cargoAllocationPerMMBTUVolumeHelper(x.second(), options)).sum();
-				if (totalOldVolume == 0.0)
+				if (totalOldVolume == 0.0) {
 					return 0.0;
+				}
 				final double totalPNL = pairs.stream().mapToDouble(x -> cargoAllocationPNLPerMMBTUPNLHelper(x.first())).sum();
 				final double totalOldPNL = pairs.stream().mapToDouble(x -> cargoAllocationPNLPerMMBTUPNLHelper(x.second())).sum();
-				final double value = (double) (totalOldPNL / totalOldVolume) - (double) (totalPNL / totalVolume);
-				return value;
+				return (totalOldPNL / totalOldVolume) - (totalPNL / totalVolume);
 			}
 			return null;
 		};
@@ -845,15 +818,14 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 				for (final Event evt : eventGrouping.getEvents()) {
 					if (evt instanceof Purge) {
 						final Purge purge = (Purge) evt;
-						final int cost = purge.getCost();
-						return cost;
+						return purge.getCost();
 					}
 				}
 			}
 			return 0;
 		}));
 	}
-	
+
 	private @NonNull ICellRenderer createPaperDealStartDate(final EconsOptions options, final boolean isCost) {
 		return createBasicFormatter(options, isCost, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, object -> {
 			if (object instanceof EventGrouping) {
@@ -862,8 +834,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 				for (final Event evt : eventGrouping.getEvents()) {
 					if (evt instanceof Purge) {
 						final Purge purge = (Purge) evt;
-						final int cost = purge.getCost();
-						return cost;
+						return purge.getCost();
 					}
 				}
 			}
@@ -889,8 +860,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 				for (final Event evt : eventGrouping.getEvents()) {
 					if (evt instanceof Cooldown) {
 						final Cooldown cooldown = (Cooldown) evt;
-						final int cost = cooldown.getCost();
-						return cost;
+						return cooldown.getCost();
 					}
 				}
 			}
@@ -973,7 +943,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 			}
 		}
 		if (object instanceof StartEvent) {
-			// TODO
+			// While start events have repositioning fees, this method is used for charter out events where the repositioning fee is a revenue.
 		}
 		return revenue;
 	}
@@ -1008,8 +978,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 					return 0.0;
 				final double totalCost = pairs.stream().filter(Objects::nonNull).mapToDouble(x -> getShippingCost(x.first())).sum();
 				final double totalOldCost = pairs.stream().filter(Objects::nonNull).mapToDouble(x -> getShippingCost(x.second())).sum();
-				final double value = (double) (totalOldCost / totalOldVolume) - (double) (totalCost / totalVolume);
-				return value;
+				return (totalOldCost / totalOldVolume) - (totalCost / totalVolume);
 			}
 			return null;
 		};

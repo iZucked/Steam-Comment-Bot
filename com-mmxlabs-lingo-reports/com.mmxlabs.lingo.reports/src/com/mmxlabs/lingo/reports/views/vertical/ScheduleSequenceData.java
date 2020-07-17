@@ -40,28 +40,26 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
  * 
  */
 public class ScheduleSequenceData {
-	final public @NonNull Sequence[] vessels;
-	final public Sequence fobSales;
-	final public Sequence desPurchases;
-	final public VirtualSequence longLoads;
-	final public VirtualSequence shortDischarges;
-	final public LocalDate start;
-	final public LocalDate end;
-	private final AbstractVerticalReportVisualiser verticalReportVisualiser;
-	final public LNGScenarioModel model;
-	public Set<CanalBookingSlot> usedCanalBookings = new HashSet<>();
-	public IScenarioDataProvider scenarioDataProvider;
+	public final @NonNull Sequence[] vessels;
+	public final Sequence fobSales;
+	public final Sequence desPurchases;
+	public final VirtualSequence longLoads;
+	public final VirtualSequence shortDischarges;
+	public final LocalDate start;
+	public final LocalDate end;
+	public final LNGScenarioModel model;
+	public final Set<CanalBookingSlot> usedCanalBookings = new HashSet<>();
+	public final IScenarioDataProvider scenarioDataProvider;
 
 	/** Extracts the relevant information from the model */
 	public ScheduleSequenceData(final ScenarioResult scenarioResult, final AbstractVerticalReportVisualiser verticalReportVisualiser) {
-		this.scenarioDataProvider = scenarioDataProvider;
+		this.scenarioDataProvider = scenarioResult.getScenarioDataProvider();
 		this.model = scenarioResult == null ? null : scenarioResult.getTypedRoot(LNGScenarioModel.class);
-		this.verticalReportVisualiser = verticalReportVisualiser;
 		final ScheduleModel scheduleModel = (scenarioResult == null ? null : scenarioResult.getTypedResult(ScheduleModel.class));
 		final Schedule schedule = (scheduleModel == null ? null : scheduleModel.getSchedule());
 
 		verticalReportVisualiser.setData(this);
-		
+
 		if (schedule == null) {
 			vessels = null;
 			fobSales = desPurchases = null;
@@ -80,7 +78,7 @@ public class ScheduleSequenceData {
 			for (final Event event : seq.getEvents()) {
 
 				if (event instanceof Journey) {
-					Journey journey = (Journey) event;
+					final Journey journey = (Journey) event;
 					usedCanalBookings.add(journey.getCanalBooking());
 				}
 
@@ -88,8 +86,6 @@ public class ScheduleSequenceData {
 				final LocalDate sDate = verticalReportVisualiser.getLocalDateFor(event.getStart());
 				final LocalDate eDate = verticalReportVisualiser.getLocalDateFor(event.getEnd());
 
-				// final Date sDate = event.getStart();
-				// final Date eDate = event.getEnd();
 				if (startDate == null || startDate.isAfter(sDate)) {
 					startDate = sDate;
 				}
@@ -99,8 +95,8 @@ public class ScheduleSequenceData {
 				// Event window data
 				{
 					if (event instanceof SlotVisit) {
-						SlotVisit slotVisit = (SlotVisit) event;
-						Slot slot = slotVisit.getSlotAllocation().getSlot();
+						final SlotVisit slotVisit = (SlotVisit) event;
+						final Slot<?> slot = slotVisit.getSlotAllocation().getSlot();
 
 						final LocalDate sWDate = verticalReportVisualiser.getLocalDateFor(slot.getSchedulingTimeWindow().getStart());
 
@@ -135,10 +131,8 @@ public class ScheduleSequenceData {
 		// Run this after the interesting event selection to ensure we keep these events.
 		for (final OpenSlotAllocation openSlotAllocation : schedule.getOpenSlotAllocations()) {
 			final LocalDate sDate = verticalReportVisualiser.getLocalDateFor(openSlotAllocation.getSlot().getSchedulingTimeWindow().getStart());
-			final LocalDate eDate = sDate;// verticalReportVisualiser.getLocalDateFor(openSlotAllocation.getSlot().getWindowStartWithSlotOrPortTime());
+			final LocalDate eDate = sDate;
 
-			// final Date sDate = event.getStart();
-			// final Date eDate = event.getEnd();
 			if (startDate == null || startDate.isAfter(sDate)) {
 				startDate = sDate;
 			}
@@ -159,7 +153,7 @@ public class ScheduleSequenceData {
 		Sequence tempDes = null;
 		Sequence tempFob = null;
 
-		final ArrayList<Sequence> vesselList = new ArrayList<Sequence>();
+		final ArrayList<Sequence> vesselList = new ArrayList<>();
 
 		for (final Sequence seq : schedule.getSequences()) {
 			if (seq.getSequenceType() == SequenceType.DES_PURCHASE) {
@@ -180,7 +174,7 @@ public class ScheduleSequenceData {
 		final List<VirtualSlotVisit> shortDischargeList = new ArrayList<>();
 
 		for (final OpenSlotAllocation allocation : schedule.getOpenSlotAllocations()) {
-			final Slot slot = allocation.getSlot();
+			final Slot<?> slot = allocation.getSlot();
 			if (slot instanceof LoadSlot) {
 				longLoadList.add(new VirtualSlotVisit(slot));
 			} else if (slot instanceof DischargeSlot) {

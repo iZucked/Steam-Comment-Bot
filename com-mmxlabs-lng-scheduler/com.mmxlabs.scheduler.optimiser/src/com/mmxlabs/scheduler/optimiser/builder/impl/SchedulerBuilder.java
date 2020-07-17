@@ -336,10 +336,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	private IShippingHoursRestrictionProviderEditor shippingHoursRestrictionProviderEditor;
 
 	@Inject
-	private @NonNull IRoundTripVesselPermissionProviderEditor roundTripVesselPermissionProviderEditor;
+	private IRoundTripVesselPermissionProviderEditor roundTripVesselPermissionProviderEditor;
 
 	@Inject
-	private @NonNull IAllowedVesselProviderEditor allowedVesselProviderEditor;
+	private IAllowedVesselProviderEditor allowedVesselProviderEditor;
 
 	@Inject
 	private IFOBDESCompatibilityProviderEditor fobdesCompatibilityProviderEditor;
@@ -527,9 +527,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			// final String id, final IPort port, final ITimeWindow window,
 			final long minVolume, final long maxVolume, final long minCvValue, final long maxCvValue, final ISalesPriceCalculator priceCalculator, final int pricingDate,
 			final PricingEventType pricingEvent, final boolean optional, final boolean locked, final boolean isSpotMarketSlot, final boolean isVolumeLimitInM3) {
-		// slot.setId(id);
-		// slot.setPort(port);
-		// slot.setTimeWindow(window);
 		slot.setVolumeLimits(isVolumeLimitInM3, minVolume, maxVolume == 0 ? Long.MAX_VALUE : maxVolume);
 		slot.setMinCvValue(minCvValue);
 		slot.setMaxCvValue(maxCvValue);
@@ -945,7 +942,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		// TODO what about return to first load rule?
 
 		int latestDischarge = 0;
-		IPort loadPort = null, dischargePort = null;
+		IPort loadPort = null;
+		IPort dischargePort = null;
 		for (final ICargo cargo : cargoes) {
 			final List<IPortSlot> portSlots = cargo.getPortSlots();
 			if (portSlots.size() > 1) {
@@ -1110,27 +1108,22 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * Generate a new return option for each load port in the solution.
 	 */
 	private void createRoundtripCargoReturnElements() {
-		// for (final IPortSlot portSlot : permittedRoundTripVesselSlots) {
-		for (final IPortSlot portSlot : loadSlots) {
-			if (portSlot instanceof ILoadOption) {
-				final ILoadOption loadOption = (ILoadOption) portSlot;
+		for (final ILoadOption loadOption : loadSlots) {
+			final ISequenceElement loadElement = portSlotsProvider.getElement(loadOption);
 
-				final ISequenceElement loadElement = portSlotsProvider.getElement(loadOption);
+			final String name = "short-return-to-" + loadElement.getName();
+			final IPort port = loadOption.getPort();
+			final RoundTripCargoEnd returnPortSlot = new RoundTripCargoEnd(name, port);
 
-				final String name = "short-return-to-" + loadElement.getName();
-				final IPort port = loadOption.getPort();
-				final RoundTripCargoEnd returnPortSlot = new RoundTripCargoEnd(name, port);
+			final SequenceElement returnElement = new SequenceElement(indexingContext, name);
 
-				final SequenceElement returnElement = new SequenceElement(indexingContext, name);
+			elementDurationsProvider.setElementDuration(returnElement, 0);
 
-				elementDurationsProvider.setElementDuration(returnElement, 0);
+			elementPortProvider.setPortForElement(port, returnElement);
+			portSlotsProvider.setPortSlot(returnElement, returnPortSlot);
+			portTypeProvider.setPortType(returnElement, returnPortSlot.getPortType());
 
-				elementPortProvider.setPortForElement(port, returnElement);
-				portSlotsProvider.setPortSlot(returnElement, returnPortSlot);
-				portTypeProvider.setPortType(returnElement, returnPortSlot.getPortType());
-
-				shortCargoReturnElementProviderEditor.setReturnElement(loadElement, loadOption, returnElement);
-			}
+			shortCargoReturnElementProviderEditor.setReturnElement(loadElement, loadOption, returnElement);
 		}
 	}
 
@@ -1603,7 +1596,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	public void createSlotGroupCount(final Collection<IPortSlot> slots, final int count) {
-		final Collection<ISequenceElement> elements = new ArrayList<ISequenceElement>(slots.size());
+		final Collection<ISequenceElement> elements = new ArrayList<>(slots.size());
 		for (final IPortSlot slot : slots) {
 			elements.add(portSlotsProvider.getElement(slot));
 		}
