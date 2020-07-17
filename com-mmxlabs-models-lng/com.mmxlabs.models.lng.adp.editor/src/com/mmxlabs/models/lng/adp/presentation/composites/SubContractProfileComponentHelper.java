@@ -75,6 +75,8 @@ public class SubContractProfileComponentHelper extends BaseComponentHelper {
 		add_shippingDaysEditor(detailComposite, topClass);
 		add_customAttribsEditor(detailComposite, topClass);
 		add_constraintsEditor(detailComposite, topClass);
+		add_windowSizeEditor(detailComposite, topClass);
+		add_windowSizeUnitsEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the name feature on SubContractProfile
@@ -160,5 +162,23 @@ public class SubContractProfileComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_constraintsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.SUB_CONTRACT_PROFILE__CONSTRAINTS));
+	}
+
+	/**
+	 * Create the editor for the windowSize feature on SubContractProfile
+	 *
+	 * @generated
+	 */
+	protected void add_windowSizeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.SUB_CONTRACT_PROFILE__WINDOW_SIZE));
+	}
+
+	/**
+	 * Create the editor for the windowSizeUnits feature on SubContractProfile
+	 *
+	 * @generated
+	 */
+	protected void add_windowSizeUnitsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.SUB_CONTRACT_PROFILE__WINDOW_SIZE_UNITS));
 	}
 }

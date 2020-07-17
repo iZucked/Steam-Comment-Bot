@@ -4,7 +4,11 @@
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.base.Objects;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
@@ -55,6 +59,8 @@ public class LoadOption extends PortSlot implements ILoadOption {
 	private int pricingDate = IPortSlot.NO_PRICING_DATE;
 
 	private PricingEventType pricingEvent = PricingEventType.START_OF_LOAD;
+
+	private Map<IPort, ITimeWindow> localisedTimeWindows = new HashMap<>();
 
 	/**
 	 * Construct a new load option
@@ -214,5 +220,14 @@ public class LoadOption extends PortSlot implements ILoadOption {
 	@Override
 	public boolean isVolumeSetInM3() {
 		return volumeSetInM3;
+	}
+
+	public void addLocalisedTimeWindow(@NonNull IPort port, @NonNull ITimeWindow tw) {
+		localisedTimeWindows.put(port, tw);
+	}
+
+	@Override
+	public @Nullable ITimeWindow getLocalisedTimeWindowForPort(@NonNull IPort port) {
+		return localisedTimeWindows.get(port);
 	}
 }

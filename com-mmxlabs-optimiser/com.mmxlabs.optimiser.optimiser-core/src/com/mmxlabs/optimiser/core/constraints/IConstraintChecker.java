@@ -57,5 +57,5 @@ public interface IConstraintChecker {
 	 * @param optimisationData
 	 */
 	default void setOptimisationData(@NonNull IPhaseOptimisationData optimisationData) {
-	};
+	}
 }

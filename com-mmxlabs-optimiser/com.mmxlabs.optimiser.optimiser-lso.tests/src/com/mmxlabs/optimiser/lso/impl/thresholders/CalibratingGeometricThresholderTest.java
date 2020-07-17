@@ -17,7 +17,7 @@ public class CalibratingGeometricThresholderTest {
 		final CalibratingGeometricThresholder cgt = new CalibratingGeometricThresholder(random, 20, 0.75, 0.95);
 		cgt.init();
 
-		final int base = 2200;
+		final long base = 2200;
 
 		for (int i = 0; i < 19; i++) {
 			cgt.accept(i + base);

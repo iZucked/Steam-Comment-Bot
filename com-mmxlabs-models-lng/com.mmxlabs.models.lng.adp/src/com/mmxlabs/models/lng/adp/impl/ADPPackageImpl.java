@@ -824,6 +824,26 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getSubContractProfile_WindowSize() {
+		return (EAttribute)subContractProfileEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSubContractProfile_WindowSizeUnits() {
+		return (EAttribute)subContractProfileEClass.getEStructuralFeatures().get(9);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getCustomSubProfileAttributes() {
 		return customSubProfileAttributesEClass;
 	}
@@ -936,26 +956,6 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	@Override
 	public EReference getPreDefinedDistributionModel_Dates() {
 		return (EReference)preDefinedDistributionModelEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getPreDefinedDistributionModel_WindowSize() {
-		return (EAttribute)preDefinedDistributionModelEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getPreDefinedDistributionModel_WindowSizeUnits() {
-		return (EAttribute)preDefinedDistributionModelEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -1391,6 +1391,8 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		createEAttribute(subContractProfileEClass, SUB_CONTRACT_PROFILE__SHIPPING_DAYS);
 		createEReference(subContractProfileEClass, SUB_CONTRACT_PROFILE__CUSTOM_ATTRIBS);
 		createEReference(subContractProfileEClass, SUB_CONTRACT_PROFILE__CONSTRAINTS);
+		createEAttribute(subContractProfileEClass, SUB_CONTRACT_PROFILE__WINDOW_SIZE);
+		createEAttribute(subContractProfileEClass, SUB_CONTRACT_PROFILE__WINDOW_SIZE_UNITS);
 
 		customSubProfileAttributesEClass = createEClass(CUSTOM_SUB_PROFILE_ATTRIBUTES);
 
@@ -1419,8 +1421,6 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 
 		preDefinedDistributionModelEClass = createEClass(PRE_DEFINED_DISTRIBUTION_MODEL);
 		createEReference(preDefinedDistributionModelEClass, PRE_DEFINED_DISTRIBUTION_MODEL__DATES);
-		createEAttribute(preDefinedDistributionModelEClass, PRE_DEFINED_DISTRIBUTION_MODEL__WINDOW_SIZE);
-		createEAttribute(preDefinedDistributionModelEClass, PRE_DEFINED_DISTRIBUTION_MODEL__WINDOW_SIZE_UNITS);
 
 		preDefinedDateEClass = createEClass(PRE_DEFINED_DATE);
 		createEAttribute(preDefinedDateEClass, PRE_DEFINED_DATE__DATE);
@@ -1613,6 +1613,8 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		initEAttribute(getSubContractProfile_ShippingDays(), ecorePackage.getEInt(), "shippingDays", null, 0, 1, SubContractProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSubContractProfile_CustomAttribs(), this.getCustomSubProfileAttributes(), null, "customAttribs", null, 0, 1, SubContractProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSubContractProfile_Constraints(), this.getSubProfileConstraint(), null, "constraints", null, 0, -1, SubContractProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSubContractProfile_WindowSize(), ecorePackage.getEInt(), "windowSize", "1", 1, 1, SubContractProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSubContractProfile_WindowSizeUnits(), theTypesPackage.getTimePeriod(), "windowSizeUnits", "MONTHS", 1, 1, SubContractProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(customSubProfileAttributesEClass, CustomSubProfileAttributes.class, "CustomSubProfileAttributes", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -1643,8 +1645,6 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 
 		initEClass(preDefinedDistributionModelEClass, PreDefinedDistributionModel.class, "PreDefinedDistributionModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getPreDefinedDistributionModel_Dates(), this.getPreDefinedDate(), null, "dates", null, 0, -1, PreDefinedDistributionModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getPreDefinedDistributionModel_WindowSize(), ecorePackage.getEInt(), "windowSize", "1", 1, 1, PreDefinedDistributionModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getPreDefinedDistributionModel_WindowSizeUnits(), theTypesPackage.getTimePeriod(), "windowSizeUnits", "MONTHS", 1, 1, PreDefinedDistributionModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(preDefinedDateEClass, PreDefinedDate.class, "PreDefinedDate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getPreDefinedDate_Date(), theDateTimePackage.getLocalDate(), "date", null, 0, 1, PreDefinedDate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1747,13 +1747,13 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	protected void createNumberFormatAnnotations() {
 		String source = "http://www.mmxlabs.com/models/ui/numberFormat";
 		addAnnotation
-		  (getPreDefinedDistributionModel_WindowSize(),
+		  (getSubContractProfile_WindowSize(),
 		   source,
 		   new String[] {
 			   "formatString", "##,##0"
 		   });
 		addAnnotation
-		  (getPreDefinedDistributionModel_WindowSizeUnits(),
+		  (getSubContractProfile_WindowSizeUnits(),
 		   source,
 		   new String[] {
 			   "formatString", "##,##0"

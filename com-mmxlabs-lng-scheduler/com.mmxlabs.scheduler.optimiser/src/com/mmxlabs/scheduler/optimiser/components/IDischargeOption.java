@@ -5,7 +5,9 @@
 package com.mmxlabs.scheduler.optimiser.components;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 
 /**
@@ -81,4 +83,11 @@ public interface IDischargeOption extends IPortSlot {
 	PricingEventType getPricingEvent();
 
 	// BE long getHedgingPnL();
+	
+	/**
+	 * For a FOB Sale, return the equivalent time window localised for the given port.
+	 * @param port
+	 * @return
+	 */
+	@Nullable ITimeWindow getLocalisedTimeWindowForPort(@NonNull IPort port);
 }

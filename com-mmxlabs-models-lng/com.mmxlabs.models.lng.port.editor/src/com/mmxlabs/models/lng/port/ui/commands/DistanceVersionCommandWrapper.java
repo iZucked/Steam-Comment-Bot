@@ -18,7 +18,6 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.port.EntryPoint;
 import com.mmxlabs.models.lng.port.Location;
-import com.mmxlabs.models.lng.port.OtherIdentifiers;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
@@ -64,8 +63,6 @@ public class DistanceVersionCommandWrapper extends AbstractVersionCommandWrapper
 				if (notification.getNotifier() instanceof RouteLine) {
 					changedRef[0] = true;
 				} else if (notification.getNotifier() instanceof Location) {
-					changedRef[0] = true;
-				} else if (notification.getNotifier() instanceof OtherIdentifiers) {
 					changedRef[0] = true;
 				} else if (notification.getNotifier() instanceof Route) {
 					changedRef[0] = true;
@@ -118,11 +115,6 @@ public class DistanceVersionCommandWrapper extends AbstractVersionCommandWrapper
 						} else if (notifier instanceof Port) {
 							Port port = (Port) notifier;
 							addAdapter(port.getLocation());
-						} else if (notifier instanceof Location) {
-							Location location = (Location) notifier;
-							for (OtherIdentifiers id : location.getOtherIdentifiers()) {
-								addAdapter(id);
-							}
 						}
 					}
 				} else if (target instanceof Route) {

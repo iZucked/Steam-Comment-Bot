@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,11 +23,11 @@ public final class SimpleIndexingContext implements IIndexingContext {
 	/**
 	 * The {@link Map} of indices; each entry maps the type to the next index for objects of that type or (or with that as their closest superclass).
 	 */
-	private final Map<Class<? extends Object>, AtomicInteger> indices = new HashMap<Class<? extends Object>, AtomicInteger>();
+	private final Map<Class<? extends Object>, AtomicInteger> indices = new HashMap<>();
 	/**
 	 * A set to keep track of what types we have complained about indexing as plain Objects
 	 */
-	private final Set<Class<? extends Object>> warnedTypes = new HashSet<Class<? extends Object>>();
+	private final Set<Class<? extends Object>> warnedTypes = new HashSet<>();
 
 	/**
 	 * Flag indicating whether or not this context has been used to generate an index.
@@ -70,14 +71,14 @@ public final class SimpleIndexingContext implements IIndexingContext {
 	 * @param type
 	 * @return
 	 */
-	private final AtomicInteger getLowestSuperclass(final Class<? extends Object> baseType) {
+	private final AtomicInteger getLowestSuperclass(final @NonNull Class<? extends Object> baseType) {
 		{
 			Class<? extends Object> type = baseType;
 
 			while (type != null) {
 				if (indices.containsKey(type)) {
 					if ((type == Object.class) && !warnedTypes.contains(baseType)) {
-						log.warn("Warning: using object index for " + baseType.getSimpleName());
+						log.warn("Warning: using object index for {}", baseType.getSimpleName());
 						warnedTypes.add(baseType);
 					}
 					return indices.get(type);
@@ -89,7 +90,7 @@ public final class SimpleIndexingContext implements IIndexingContext {
 
 			if (indices.containsKey(type)) {
 				if ((type == Object.class) && !warnedTypes.contains(baseType)) {
-					log.warn("Warning: using object index for " + baseType.getSimpleName());
+					log.warn("Warning: using object index for {}", baseType.getSimpleName());
 					warnedTypes.add(baseType);
 				}
 				return indices.get(type);

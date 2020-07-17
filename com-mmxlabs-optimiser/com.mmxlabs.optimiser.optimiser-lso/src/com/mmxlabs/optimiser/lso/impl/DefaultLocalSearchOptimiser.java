@@ -110,7 +110,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 
 		// Apply hard constraint checkers
 		for (final IConstraintChecker checker : getConstraintCheckers()) {
-			if (checker.checkConstraints(potentialFullSequences, null) == false) {
+			if (!checker.checkConstraints(potentialFullSequences, null)) {
 				// Set break point here!
 				// checker.checkConstraints(potentialFullSequences, null);
 
@@ -272,7 +272,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 	protected boolean applyHardEvaluatedConstraintCheckers(final @NonNull IModifiableSequences pinnedPotentialRawSequences, final @NonNull ISequences pinnedCurrentRawSequences, final IMove move,
 			final @NonNull ISequences potentialFullSequences, final @NonNull IEvaluationState evaluationState) {
 		for (final IEvaluatedStateConstraintChecker checker : getEvaluatedStateConstraintCheckers()) {
-			if (checker.checkConstraints(potentialRawSequences, potentialFullSequences, evaluationState) == false) {
+			if (!checker.checkConstraints(potentialRawSequences, potentialFullSequences, evaluationState)) {
 				// Problem evaluating, reject move
 				++numberOfFailedEvaluations;
 
@@ -312,7 +312,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 			// solution
 			final Collection<@NonNull IResource> changedResources = failedInitialConstraintCheckers ? null : move.getAffectedResources();
 
-			if (checker.checkConstraints(potentialFullSequences, changedResources) == false) {
+			if (!checker.checkConstraints(potentialFullSequences, changedResources)) {
 				if (loggingDataStore != null) {
 					loggingDataStore.logFailedConstraints(checker, move);
 					if (DO_SEQUENCE_LOGGING) {

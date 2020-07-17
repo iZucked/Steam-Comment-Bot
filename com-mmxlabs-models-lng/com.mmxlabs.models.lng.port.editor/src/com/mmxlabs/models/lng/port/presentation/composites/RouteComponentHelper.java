@@ -67,7 +67,6 @@ public class RouteComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_linesEditor(detailComposite, topClass);
 		add_routeOptionEditor(detailComposite, topClass);
-		add_virtualPortEditor(detailComposite, topClass);
 		add_northEntranceEditor(detailComposite, topClass);
 		add_southEntranceEditor(detailComposite, topClass);
 		add_distanceEditor(detailComposite, topClass);
@@ -93,10 +92,10 @@ public class RouteComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the virtualPort feature on Route
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_virtualPortEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.ROUTE__VIRTUAL_PORT));
+		// detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.ROUTE__VIRTUAL_PORT));
 	}
 
 	/**

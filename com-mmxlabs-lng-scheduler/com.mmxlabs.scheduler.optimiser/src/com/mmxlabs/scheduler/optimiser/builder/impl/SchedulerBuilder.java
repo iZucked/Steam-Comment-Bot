@@ -754,15 +754,24 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		return createVesselAvailability(vessel, dailyCharterInRate, vesselInstanceType, start, end, null, ballastBonusContract, -1, repositioningFee, isOptional);
 	}
 
+	private IVesselAvailability createVesselAvailability(@NonNull final IVessel vessel, String name, final ILongCurve dailyCharterInRate, final VesselInstanceType vesselInstanceType,
+			final IStartRequirement start, final IEndRequirement end, IBallastBonusContract ballastBonusContract, final ILongCurve repositioningFee, final boolean isOptional) {
+		return createVesselAvailability(vessel, name, dailyCharterInRate, vesselInstanceType, start, end, null, ballastBonusContract, -1, repositioningFee, isOptional);
+	}
+
 	@NonNull
 	private IVesselAvailability createVesselAvailability(@NonNull final IVessel vessel, final ILongCurve dailyCharterInRate, @NonNull final VesselInstanceType vesselInstanceType,
+			@NonNull final IStartRequirement start, @NonNull final IEndRequirement end, @Nullable final ISpotCharterInMarket spotCharterInMarket, IBallastBonusContract ballastBonusContract,
+			final int spotIndex, final ILongCurve positioningFee, final boolean isOptional) {
+		return createVesselAvailability(vessel, vessel.getName(), dailyCharterInRate, vesselInstanceType, start, end, spotCharterInMarket, ballastBonusContract, spotIndex, positioningFee, isOptional);
+	}
+
+	private IVesselAvailability createVesselAvailability(@NonNull final IVessel vessel, String name, final ILongCurve dailyCharterInRate, @NonNull final VesselInstanceType vesselInstanceType,
 			@NonNull final IStartRequirement start, @NonNull final IEndRequirement end, @Nullable final ISpotCharterInMarket spotCharterInMarket, IBallastBonusContract ballastBonusContract,
 			final int spotIndex, final ILongCurve positioningFee, final boolean isOptional) {
 		if (!vessels.contains(vessel)) {
 			throw new IllegalArgumentException("IVessel was not created using this builder");
 		}
-
-		final String name = vessel.getName();// + vesselAvailabilities.size();
 
 		final DefaultVesselAvailability vesselAvailability = new DefaultVesselAvailability(vessel, vesselInstanceType);
 
@@ -1130,8 +1139,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		assert type == VesselInstanceType.DES_PURCHASE || type == VesselInstanceType.FOB_SALE;
 		// create a new resource for each of these guys, and bind them to their resources
 		assert virtualVessel != null;
-		final IVesselAvailability virtualVesselAvailability = createVesselAvailability(virtualVessel, new ZeroLongCurve(), type, createStartRequirement(), createEndRequirement(), null,
-				new ZeroLongCurve(), true);
+		final IVesselAvailability virtualVesselAvailability = createVesselAvailability(virtualVessel, "virtual-" + element.getName(), new ZeroLongCurve(), type, createStartRequirement(),
+				createEndRequirement(), null, new ZeroLongCurve(), true);
 		// Bind every slot to its vessel
 		final IPortSlot portSlot = portSlotsProvider.getPortSlot(element);
 		assert portSlot != null;

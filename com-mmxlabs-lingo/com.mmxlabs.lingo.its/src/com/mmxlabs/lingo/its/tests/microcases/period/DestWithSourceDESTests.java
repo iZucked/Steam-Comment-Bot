@@ -5,6 +5,8 @@
 package com.mmxlabs.lingo.its.tests.microcases.period;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
@@ -16,11 +18,16 @@ import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.lingo.its.tests.microcases.MicroTestUtils;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
@@ -28,6 +35,7 @@ import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
+import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.DESPurchaseDealType;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -429,6 +437,195 @@ public class DestWithSourceDESTests extends AbstractMicroTestCase {
 				}
 			}
 			Assertions.assertTrue(foundCompat);
+		} finally {
+			runner.dispose();
+		}
+	}
+
+	/**
+	 * Test to ensure that the localised time windows are used in scheduling and passed through to the period transformer
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testLocalisedWindowUsed_DestWithSource() throws Exception {
+
+		cargoModelBuilder.makeCargo()//
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_WITH_SOURCE, LocalDate.of(2020, 8, 11), portFinder.findPortById(InternalDataConstants.PORT_SAKHALIN), null, entity, "5", 22.8, null) //
+				.withWindowSize(2, TimePeriod.DAYS) //
+				.withWindowStartTime(7) //
+				// .withShippingDaysRestriction() //
+				.build() //
+
+				.makeDESSale("D1", LocalDate.of(2020, 8, 11), portFinder.findPortById(InternalDataConstants.PORT_SENDAI), null, entity, "7") //
+				.withWindowSize(4, TimePeriod.DAYS) //
+				.withWindowStartTime(6) //
+				.build() //
+
+				.build();
+
+		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
+		userSettings.setBuildActionSets(false);
+		userSettings.setGenerateCharterOuts(false);
+
+		userSettings.setShippingOnly(false);
+		userSettings.setSimilarityMode(SimilarityMode.OFF);
+
+		userSettings.setPeriodStartDate(LocalDate.of(2020, 9, 1));
+		userSettings.setPeriodEnd(YearMonth.of(2020, 12));
+
+		// Generate internal data
+		LNGOptimisationRunnerBuilder runner = LNGOptimisationBuilder.begin(scenarioDataProvider) //
+				.withUserSettings(userSettings) //
+				// .withExtraModule(new TransformerExtensionTestBootstrapModule()) //
+				.withThreadCount(1)//
+				.withOptimiseHint() //
+				.buildDefaultRunner();
+
+		try {
+			runner.evaluateInitialState();
+
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
+
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
+
+			LoadSlot periodLoad = optimiserScenario.getCargoModel().getLoadSlots().get(0);
+			DischargeSlot periodDischarge = optimiserScenario.getCargoModel().getDischargeSlots().get(0);
+
+			// Expect start time to move to 7AM rather than 6AM to match load window start.
+			Assertions.assertEquals(7, periodDischarge.getWindowStartTime());
+			Assertions.assertEquals(periodLoad.getWindowStartTime(), periodDischarge.getWindowStartTime());
+
+		} finally {
+			runner.dispose();
+		}
+	}
+
+	/**
+	 * Test to ensure that the localised time windows are used in scheduling and passed through to the period transformer
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testLocalisedWindowUsed_Divertible() throws Exception {
+
+		cargoModelBuilder.makeCargo()//
+				.makeDESPurchase("L1", DESPurchaseDealType.DIVERTIBLE, LocalDate.of(2020, 8, 11), portFinder.findPortById(InternalDataConstants.PORT_ISLE_OF_GRAIN), null, entity, "5", 22.8, null) //
+				.withWindowSize(2, TimePeriod.DAYS) //
+				.withWindowStartTime(7) //
+				// .withShippingDaysRestriction() //
+				.build() //
+
+				.makeDESSale("D1", LocalDate.of(2020, 8, 11), portFinder.findPortById(InternalDataConstants.PORT_SENDAI), null, entity, "7") //
+				.withWindowSize(4, TimePeriod.DAYS) //
+				.withWindowStartTime(6) //
+				.build() //
+
+				.build();
+
+		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
+		userSettings.setBuildActionSets(false);
+		userSettings.setGenerateCharterOuts(false);
+
+		userSettings.setShippingOnly(false);
+		userSettings.setSimilarityMode(SimilarityMode.OFF);
+
+		userSettings.setPeriodStartDate(LocalDate.of(2020, 9, 1));
+		userSettings.setPeriodEnd(YearMonth.of(2020, 12));
+
+		// Generate internal data
+		LNGOptimisationRunnerBuilder runner = LNGOptimisationBuilder.begin(scenarioDataProvider) //
+				.withUserSettings(userSettings) //
+				// .withExtraModule(new TransformerExtensionTestBootstrapModule()) //
+				.withThreadCount(1)//
+				.withOptimiseHint() //
+				.buildDefaultRunner();
+
+		try {
+			runner.evaluateInitialState();
+
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
+
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
+
+			LoadSlot periodLoad = optimiserScenario.getCargoModel().getLoadSlots().get(0);
+			DischargeSlot periodDischarge = optimiserScenario.getCargoModel().getDischargeSlots().get(0);
+
+			// Expect start time to move to 7AM rather than 6AM to match load window start.
+			Assertions.assertEquals(7, periodDischarge.getWindowStartTime());
+			Assertions.assertEquals(periodLoad.getWindowStartTime(), periodDischarge.getWindowStartTime());
+
+		} finally {
+			runner.dispose();
+		}
+	}
+
+	/**
+	 * Test to ensure that the localised time windows are used in scheduling and passed through to the period transformer
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testLocalisedWindowUsed_SpotMarket_DestOnly() throws Exception {
+
+		List<APortSet<Port>> l = new LinkedList<>();
+		l.add(portFinder.findPortById(InternalDataConstants.PORT_ISLE_OF_GRAIN));
+		l.add(portFinder.findPortById(InternalDataConstants.PORT_SENDAI));
+		DESPurchaseMarket sm = spotMarketsModelBuilder.makeDESPurchaseMarket("MKT2", l, entity, "5", 22.8) //
+
+				.build();
+
+		cargoModelBuilder.makeCargo()//
+				// .makeDESPurchase("L1", DESPurchaseDealType.DIVERTIBLE, LocalDate.of(2020, 8, 11), portFinder.findPortById(InternalDataConstants.PORT_ISLE_OF_GRAIN), null, entity, "5", 22.8, null)
+				// //
+				.makeMarketDESPurchase("L1", sm, YearMonth.of(2020, 9), portFinder.findPortById(InternalDataConstants.PORT_ISLE_OF_GRAIN)) //
+				// .withShippingDaysRestriction() //
+				.build() //
+
+				.makeDESSale("D1", LocalDate.of(2020, 8, 28), portFinder.findPortById(InternalDataConstants.PORT_SENDAI), null, entity, "7") //
+				.withWindowSize(4, TimePeriod.DAYS) //
+				.withWindowStartTime(6) //
+				.build() //
+
+				.build();
+
+		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
+		userSettings.setBuildActionSets(false);
+		userSettings.setGenerateCharterOuts(false);
+
+		userSettings.setShippingOnly(false);
+		userSettings.setSimilarityMode(SimilarityMode.OFF);
+
+		userSettings.setPeriodStartDate(LocalDate.of(2020, 9, 1));
+		userSettings.setPeriodEnd(YearMonth.of(2020, 12));
+
+		// Generate internal data
+		LNGOptimisationRunnerBuilder runner = LNGOptimisationBuilder.begin(scenarioDataProvider) //
+				.withUserSettings(userSettings) //
+				// .withExtraModule(new TransformerExtensionTestBootstrapModule()) //
+				.withThreadCount(1)//
+				.withOptimiseHint() //
+				.buildDefaultRunner();
+
+		try {
+			runner.evaluateInitialState();
+
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
+
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
+
+			LoadSlot periodLoad = optimiserScenario.getCargoModel().getLoadSlots().get(0);
+			DischargeSlot periodDischarge = optimiserScenario.getCargoModel().getDischargeSlots().get(0);
+
+			// Expect start time to move to 7AM rather than 6AM to match load window start.
+			Assertions.assertEquals(0, periodDischarge.getWindowStartTime());
+			Assertions.assertEquals(periodLoad.getWindowStartTime(), periodDischarge.getWindowStartTime());
+
+			Assertions.assertEquals(periodLoad.getWindowStart(), periodDischarge.getWindowStart());
+
 		} finally {
 			runner.dispose();
 		}

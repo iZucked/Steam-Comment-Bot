@@ -34,7 +34,6 @@ public final class ResourceAllocationConstraintChecker implements IPairwiseConst
 	private final String name;
 
 	@Inject
-	@NonNull
 	private IResourceAllocationConstraintDataComponentProvider resourceAllocationConstraintDataComponentProvider;
 
 	public ResourceAllocationConstraintChecker(@NonNull final String name) {
@@ -92,10 +91,6 @@ public final class ResourceAllocationConstraintChecker implements IPairwiseConst
 	}
 
 	@Override
-	public void setOptimisationData(@NonNull final IPhaseOptimisationData optimisationData) {
-	}
-
-	@Override
 	@NonNull
 	public String getName() {
 		return name;
@@ -111,9 +106,7 @@ public final class ResourceAllocationConstraintChecker implements IPairwiseConst
 	public final boolean checkElement(@NonNull final ISequenceElement element, @NonNull final IResource resource) {
 
 		final Collection<IResource> resources = resourceAllocationConstraintDataComponentProvider.getAllowedResources(element);
-		boolean ret = ((resources == null) || resources.contains(resource));
-
-		return ret;
+		return ((resources == null) || resources.contains(resource));
 	}
 
 	@Override

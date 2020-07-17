@@ -27,7 +27,6 @@ import com.mmxlabs.models.lng.port.ContingencyMatrix;
 import com.mmxlabs.models.lng.port.ContingencyMatrixEntry;
 import com.mmxlabs.models.lng.port.EntryPoint;
 import com.mmxlabs.models.lng.port.Location;
-import com.mmxlabs.models.lng.port.OtherIdentifiers;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortCountryGroup;
 import com.mmxlabs.models.lng.port.PortFactory;
@@ -127,19 +126,6 @@ public class PortModelDataCommandProviderTest extends AbstractMicroTestCase {
 		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, location, PortPackage.Literals.LOCATION__TIME_ZONE, "timezone")));
 		checkAndUpdate(portModel, currentVersion, ExpectedChange.DISTANCE);
 
-		final OtherIdentifiers otherID = PortFactory.eINSTANCE.createOtherIdentifiers();
-		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(AddCommand.create(domain, location, PortPackage.Literals.LOCATION__OTHER_IDENTIFIERS, otherID)));
-		checkAndUpdate(portModel, currentVersion, ExpectedChange.DISTANCE);
-
-		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, otherID, PortPackage.Literals.OTHER_IDENTIFIERS__IDENTIFIER, "value")));
-		checkAndUpdate(portModel, currentVersion, ExpectedChange.DISTANCE);
-
-		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, otherID, PortPackage.Literals.OTHER_IDENTIFIERS__PROVIDER, "value")));
-		checkAndUpdate(portModel, currentVersion, ExpectedChange.DISTANCE);
-
-		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(DeleteCommand.create(domain, otherID)));
-		checkAndUpdate(portModel, currentVersion, ExpectedChange.DISTANCE);
-
 		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(DeleteCommand.create(domain, location)));
 		checkAndUpdate(portModel, currentVersion, ExpectedChange.DISTANCE);
 
@@ -166,10 +152,6 @@ public class PortModelDataCommandProviderTest extends AbstractMicroTestCase {
 		checkAndUpdate(portModel, currentVersion, ExpectedChange.DISTANCE);
 
 		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, route, PortPackage.Literals.ROUTE__ROUTE_OPTION, RouteOption.SUEZ)));
-		checkAndUpdate(portModel, currentVersion, ExpectedChange.DISTANCE);
-
-		final Port virtualPort = PortFactory.eINSTANCE.createPort();
-		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, route, PortPackage.Literals.ROUTE__VIRTUAL_PORT, virtualPort)));
 		checkAndUpdate(portModel, currentVersion, ExpectedChange.DISTANCE);
 
 		final EntryPoint north = PortFactory.eINSTANCE.createEntryPoint();

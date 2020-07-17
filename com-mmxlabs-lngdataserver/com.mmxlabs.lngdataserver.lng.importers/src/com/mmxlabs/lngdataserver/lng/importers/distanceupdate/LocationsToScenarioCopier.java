@@ -38,7 +38,6 @@ import com.mmxlabs.lngdataserver.lng.importers.update.UpdateWarning;
 import com.mmxlabs.lngdataserver.lng.importers.update.UserUpdateStep;
 import com.mmxlabs.models.lng.port.EntryPoint;
 import com.mmxlabs.models.lng.port.Location;
-import com.mmxlabs.models.lng.port.OtherIdentifiers;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortCountryGroup;
 import com.mmxlabs.models.lng.port.PortFactory;
@@ -194,34 +193,6 @@ public class LocationsToScenarioCopier {
 
 				}
 				idToPort.put(mmxId, oldPort);
-
-				if (versionLocation.getUpstreamID() != null) {
-					boolean foundMatch = false;
-					for (OtherIdentifiers existingID : oldPort.getLocation().getOtherIdentifiers()) {
-						if (Objects.equals(existingID.getProvider(), "abc")) {
-							foundMatch = true;
-							if (Objects.equals(existingID.getIdentifier(), versionLocation.getUpstreamID())) {
-								// Found match, no further action required
-							} else {
-								// Found provider, wrong distance id
-								UpdateStep step = new UpdateStep(String.format("Update distance code for port %s", oldPort.getName()), cmd -> {
-									cmd.append(SetCommand.create(editingDomain, existingID, PortPackage.Literals.OTHER_IDENTIFIERS__IDENTIFIER, versionLocation.getUpstreamID()));
-								});
-								steps.add(step);
-							}
-						}
-					}
-					if (!foundMatch) {
-						final OtherIdentifiers id = PortFactory.eINSTANCE.createOtherIdentifiers();
-						id.setIdentifier(versionLocation.getUpstreamID());
-						id.setProvider("abc");
-						// No need to tell user about this step
-						UpdateStep step = new UpdateStep(String.format("Update distance code for port %s", oldPort.getName()), cmd -> {
-							cmd.append(AddCommand.create(editingDomain, oldPort.getLocation(), PortPackage.Literals.LOCATION__OTHER_IDENTIFIERS, id));
-						});
-						steps.add(step);
-					}
-				}
 			}
 
 			final List<RoutingPoint> routingPoints = version.getRoutingPoints();
@@ -292,17 +263,9 @@ public class LocationsToScenarioCopier {
 						final String southSide = t.getSouthernEntry();
 						if ((option == RouteOption.SUEZ && t.getIdentifier().equals("SUZ")) || (option == RouteOption.PANAMA && t.getIdentifier().equals("PAN"))) {
 
-							if (!(t.getVirtualLocation() == null || t.getVirtualLocation().isEmpty())) {
-								if (pRoute.getVirtualPort() != idToPort.get(t.getVirtualLocation())) {
-									UpdateStep step = new UserUpdateStep(String.format("Update canal port (%s)", option.getName()), cmd -> {
-										cmd.append(SetCommand.create(editingDomain, pRoute, PortPackage.Literals.ROUTE__VIRTUAL_PORT, idToPort.get(t.getVirtualLocation())));
-									});
-									steps.add(step);
-								}
-							}
 							if (Math.abs(t.getDistance() - route.getDistance()) > 0.1) {
 								UpdateStep step = new UserUpdateStep(String.format("Update canal distance (%s)", option.getName()), cmd -> {
-									cmd.append(SetCommand.create(editingDomain, pRoute, PortPackage.Literals.ROUTE__DISTANCE, (double) t.getDistance()));
+									cmd.append(SetCommand.create(editingDomain, pRoute, PortPackage.Literals.ROUTE__DISTANCE, t.getDistance()));
 								});
 								steps.add(step);
 							}

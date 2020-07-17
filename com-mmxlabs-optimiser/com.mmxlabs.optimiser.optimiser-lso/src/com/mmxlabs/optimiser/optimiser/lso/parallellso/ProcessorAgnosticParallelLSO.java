@@ -102,7 +102,7 @@ public class ProcessorAgnosticParallelLSO extends LocalSearchOptimiser {
 
 		// Apply hard constraint checkers
 		for (final IConstraintChecker checker : getConstraintCheckers()) {
-			if (checker.checkConstraints(potentialFullSequences, null) == false) {
+			if (!checker.checkConstraints(potentialFullSequences, null)) {
 				failedInitialConstraintCheckers = true;
 				break;
 			}
@@ -303,9 +303,4 @@ public class ProcessorAgnosticParallelLSO extends LocalSearchOptimiser {
 		// Prime fitness cores with initial sequences
 		getFitnessEvaluator().setInitialSequences(currentRawSequences, fullSequences, evaluationState);
 	}
-
-	private void updateSequences(@NonNull ISequences pinnedPotentialRawSequences, @NonNull ISequences rawSequences) {
-		pinnedPotentialRawSequences = rawSequences;
-	}
-
 }

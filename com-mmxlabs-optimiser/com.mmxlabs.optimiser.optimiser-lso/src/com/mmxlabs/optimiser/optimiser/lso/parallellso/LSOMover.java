@@ -24,9 +24,10 @@ import com.mmxlabs.optimiser.lso.INullMove;
 
 public class LSOMover extends AbstractLSOMover {
 
-	public LSOJobState search(@NonNull IModifiableSequences rawSequences, @NonNull ILookupManager stateManager, @NonNull Random random, @NonNull IMoveGenerator moveGenerator, long seed, boolean failedInitialConstraintCheckers) {
+	public LSOJobState search(@NonNull IModifiableSequences rawSequences, @NonNull ILookupManager stateManager, @NonNull Random random, @NonNull IMoveGenerator moveGenerator, long seed,
+			boolean failedInitialConstraintCheckers) {
 		final IMove move = moveGenerator.generateMove(rawSequences, stateManager, random);
-		
+
 		// Make sure the generator was able to generate a move
 		if (move == null || move instanceof INullMove) {
 			return new LSOJobState(rawSequences, null, Long.MAX_VALUE, LSOJobStatus.NullMoveFail, null, seed, move, null);
@@ -36,7 +37,7 @@ public class LSOMover extends AbstractLSOMover {
 		if (!move.validate(rawSequences)) {
 			return new LSOJobState(rawSequences, null, Long.MAX_VALUE, LSOJobStatus.CannotValidateFail, null, seed, move, null);
 		}
-		
+
 		move.apply(rawSequences);
 
 		// Apply sequence manipulators
@@ -48,33 +49,33 @@ public class LSOMover extends AbstractLSOMover {
 			// For constraint checker changed resources functions, if initial solution is invalid, we want to always perform a full constraint checker set of checks until we accept a valid
 			// solution
 			final Collection<@NonNull IResource> changedResources = failedInitialConstraintCheckers ? null : move.getAffectedResources();
-			
-			if (checker.checkConstraints(potentialFullSequences, changedResources) == false) {
+
+			if (!checker.checkConstraints(potentialFullSequences, changedResources)) {
 				return new LSOJobState(rawSequences, null, Long.MAX_VALUE, LSOJobStatus.ConstraintFail, null, seed, move, checker);
 			}
 		}
-		
+
 		final IEvaluationState evaluationState = new EvaluationState();
-	
+
 		// check against evaluation processes
 		for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
 			if (!evaluationProcess.evaluate(potentialFullSequences, evaluationState)) {
 				return new LSOJobState(rawSequences, null, Long.MAX_VALUE, LSOJobStatus.EvaluationProcessFail, null, seed, move, evaluationProcess);
 			}
 		}
-		
+
 		// check against evaluated constraints
 		for (final IEvaluatedStateConstraintChecker checker : evaluatedStateConstraintCheckers) {
-			if (checker.checkConstraints(rawSequences, potentialFullSequences, evaluationState) == false) {
+			if (!checker.checkConstraints(rawSequences, potentialFullSequences, evaluationState)) {
 				return new LSOJobState(rawSequences, null, Long.MAX_VALUE, LSOJobStatus.EvaluatedConstraintFail, null, seed, move, checker);
 			}
 		}
-		
+
 		// now evaluate
 		long fitness = evaluateSequencesInTurn(potentialFullSequences, evaluationState, move.getAffectedResources());
 
 		return new LSOJobState(rawSequences, potentialFullSequences, fitness, LSOJobStatus.Pass, evaluationState, seed, move, null);
-		
+
 	}
-	
+
 }

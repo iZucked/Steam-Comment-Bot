@@ -126,10 +126,6 @@ public class PortAdapterFactory extends AdapterFactoryImpl {
 				return createContingencyMatrixEntryAdapter();
 			}
 			@Override
-			public Adapter caseOtherIdentifiers(OtherIdentifiers object) {
-				return createOtherIdentifiersAdapter();
-			}
-			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -324,20 +320,6 @@ public class PortAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createContingencyMatrixEntryAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.port.OtherIdentifiers <em>Other Identifiers</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.port.OtherIdentifiers
-	 * @generated
-	 */
-	public Adapter createOtherIdentifiersAdapter() {
 		return null;
 	}
 

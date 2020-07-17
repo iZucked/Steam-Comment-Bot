@@ -32,8 +32,8 @@ public class ListModifiableSequenceTest {
 	private ListModifiableSequence sequence;
 
 	@BeforeEach
-	public void setUp() throws Exception {
-		sequence = new ListModifiableSequence(new ArrayList<ISequenceElement>(10));
+	public void setUp() {
+		sequence = new ListModifiableSequence(new ArrayList<>(10));
 	}
 
 	@AfterEach
@@ -137,7 +137,7 @@ public class ListModifiableSequenceTest {
 		sequence.add(object1);
 		sequence.add(object2);
 
-		final List<ISequenceElement> segmentList = new LinkedList<ISequenceElement>();
+		final List<ISequenceElement> segmentList = new LinkedList<>();
 		segmentList.add(object3);
 		segmentList.add(object4);
 		final ISegment segment = new ListSegment(segmentList, sequence, 0, 1);
@@ -164,7 +164,7 @@ public class ListModifiableSequenceTest {
 		sequence.add(object1);
 		sequence.add(object2);
 
-		final List<ISequenceElement> segmentList = new LinkedList<ISequenceElement>();
+		final List<ISequenceElement> segmentList = new LinkedList<>();
 		segmentList.add(object3);
 		segmentList.add(object4);
 		final ISegment segment = new ListSegment(segmentList, sequence, 0, 1);
@@ -184,7 +184,7 @@ public class ListModifiableSequenceTest {
 		sequence.add(object1);
 		sequence.add(object2);
 
-		final List<ISequenceElement> segmentList = new LinkedList<ISequenceElement>();
+		final List<ISequenceElement> segmentList = new LinkedList<>();
 		segmentList.add(object3);
 		segmentList.add(object4);
 		final ISegment segment = new ListSegment(segmentList, sequence, 0, 1);
@@ -248,7 +248,7 @@ public class ListModifiableSequenceTest {
 		sequence.add(object3);
 		sequence.add(object4);
 
-		final List<ISequenceElement> segmentList = new LinkedList<ISequenceElement>();
+		final List<ISequenceElement> segmentList = new LinkedList<>();
 		segmentList.add(object2);
 		segmentList.add(object3);
 		final ISegment segment = new ListSegment(segmentList, sequence, 1, 3);
@@ -274,7 +274,7 @@ public class ListModifiableSequenceTest {
 		sequence.add(object1);
 		sequence.add(object4);
 
-		final List<ISequenceElement> segmentList = new LinkedList<ISequenceElement>();
+		final List<ISequenceElement> segmentList = new LinkedList<>();
 		segmentList.add(object2);
 		segmentList.add(object3);
 		final ISegment segment = new ListSegment(segmentList, sequence, 1, 3);

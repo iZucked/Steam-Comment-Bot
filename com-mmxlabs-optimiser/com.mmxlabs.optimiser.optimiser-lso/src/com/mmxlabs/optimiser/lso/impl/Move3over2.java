@@ -104,10 +104,10 @@ public class Move3over2 implements IMove {
 		final Map<IResource, ISequence> sequenceMap = sequences.getSequences();
 
 		// Make sure resources exist
-		if (sequenceMap.containsKey(resource1) == false) {
+		if (!sequenceMap.containsKey(resource1)) {
 			return false;
 		}
-		if (sequenceMap.containsKey(resource2) == false) {
+		if (!sequenceMap.containsKey(resource2)) {
 			return false;
 		}
 

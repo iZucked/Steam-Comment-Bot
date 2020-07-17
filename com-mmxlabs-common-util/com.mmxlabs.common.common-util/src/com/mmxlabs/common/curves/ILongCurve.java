@@ -6,7 +6,6 @@ package com.mmxlabs.common.curves;
 
 import java.util.Collections;
 import java.util.NavigableSet;
-import java.util.Set;
 
 /**
  * An interface for a curve, which uses long precision.

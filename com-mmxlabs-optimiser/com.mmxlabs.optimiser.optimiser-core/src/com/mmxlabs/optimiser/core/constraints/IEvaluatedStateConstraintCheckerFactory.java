@@ -6,8 +6,6 @@ package com.mmxlabs.optimiser.core.constraints;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.google.inject.Injector;
-
 /**
  * Interface defining a factory for creating {@link IConstraintChecker} instances.
  * 

@@ -5,6 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
@@ -115,5 +116,11 @@ public class MarkToMarketDischargeSlot implements IDischargeSlot, IMarkToMarketO
 	@Override
 	public void setKey(@NonNull String key) {
 		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public @Nullable ITimeWindow getLocalisedTimeWindowForPort(@NonNull IPort port) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

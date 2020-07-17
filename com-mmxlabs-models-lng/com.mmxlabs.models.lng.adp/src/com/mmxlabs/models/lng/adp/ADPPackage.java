@@ -641,13 +641,31 @@ public interface ADPPackage extends EPackage {
 	int SUB_CONTRACT_PROFILE__CONSTRAINTS = 7;
 
 	/**
+	 * The feature id for the '<em><b>Window Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUB_CONTRACT_PROFILE__WINDOW_SIZE = 8;
+
+	/**
+	 * The feature id for the '<em><b>Window Size Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUB_CONTRACT_PROFILE__WINDOW_SIZE_UNITS = 9;
+
+	/**
 	 * The number of structural features of the '<em>Sub Contract Profile</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SUB_CONTRACT_PROFILE_FEATURE_COUNT = 8;
+	int SUB_CONTRACT_PROFILE_FEATURE_COUNT = 10;
 
 	/**
 	 * The number of operations of the '<em>Sub Contract Profile</em>' class.
@@ -1425,31 +1443,13 @@ public interface ADPPackage extends EPackage {
 	int PRE_DEFINED_DISTRIBUTION_MODEL__DATES = DISTRIBUTION_MODEL_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Window Size</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PRE_DEFINED_DISTRIBUTION_MODEL__WINDOW_SIZE = DISTRIBUTION_MODEL_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Window Size Units</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PRE_DEFINED_DISTRIBUTION_MODEL__WINDOW_SIZE_UNITS = DISTRIBUTION_MODEL_FEATURE_COUNT + 2;
-
-	/**
 	 * The number of structural features of the '<em>Pre Defined Distribution Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PRE_DEFINED_DISTRIBUTION_MODEL_FEATURE_COUNT = DISTRIBUTION_MODEL_FEATURE_COUNT + 3;
+	int PRE_DEFINED_DISTRIBUTION_MODEL_FEATURE_COUNT = DISTRIBUTION_MODEL_FEATURE_COUNT + 1;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -2569,6 +2569,28 @@ public interface ADPPackage extends EPackage {
 	EReference getSubContractProfile_Constraints();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.adp.SubContractProfile#getWindowSize <em>Window Size</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Window Size</em>'.
+	 * @see com.mmxlabs.models.lng.adp.SubContractProfile#getWindowSize()
+	 * @see #getSubContractProfile()
+	 * @generated
+	 */
+	EAttribute getSubContractProfile_WindowSize();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.adp.SubContractProfile#getWindowSizeUnits <em>Window Size Units</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Window Size Units</em>'.
+	 * @see com.mmxlabs.models.lng.adp.SubContractProfile#getWindowSizeUnits()
+	 * @see #getSubContractProfile()
+	 * @generated
+	 */
+	EAttribute getSubContractProfile_WindowSizeUnits();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.adp.CustomSubProfileAttributes <em>Custom Sub Profile Attributes</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2695,28 +2717,6 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getPreDefinedDistributionModel_Dates();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.adp.PreDefinedDistributionModel#getWindowSize <em>Window Size</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Window Size</em>'.
-	 * @see com.mmxlabs.models.lng.adp.PreDefinedDistributionModel#getWindowSize()
-	 * @see #getPreDefinedDistributionModel()
-	 * @generated
-	 */
-	EAttribute getPreDefinedDistributionModel_WindowSize();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.adp.PreDefinedDistributionModel#getWindowSizeUnits <em>Window Size Units</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Window Size Units</em>'.
-	 * @see com.mmxlabs.models.lng.adp.PreDefinedDistributionModel#getWindowSizeUnits()
-	 * @see #getPreDefinedDistributionModel()
-	 * @generated
-	 */
-	EAttribute getPreDefinedDistributionModel_WindowSizeUnits();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.adp.PreDefinedDate <em>Pre Defined Date</em>}'.
@@ -3505,6 +3505,22 @@ public interface ADPPackage extends EPackage {
 		EReference SUB_CONTRACT_PROFILE__CONSTRAINTS = eINSTANCE.getSubContractProfile_Constraints();
 
 		/**
+		 * The meta object literal for the '<em><b>Window Size</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SUB_CONTRACT_PROFILE__WINDOW_SIZE = eINSTANCE.getSubContractProfile_WindowSize();
+
+		/**
+		 * The meta object literal for the '<em><b>Window Size Units</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SUB_CONTRACT_PROFILE__WINDOW_SIZE_UNITS = eINSTANCE.getSubContractProfile_WindowSizeUnits();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.adp.CustomSubProfileAttributes <em>Custom Sub Profile Attributes</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -3607,22 +3623,6 @@ public interface ADPPackage extends EPackage {
 		 * @generated
 		 */
 		EReference PRE_DEFINED_DISTRIBUTION_MODEL__DATES = eINSTANCE.getPreDefinedDistributionModel_Dates();
-
-		/**
-		 * The meta object literal for the '<em><b>Window Size</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute PRE_DEFINED_DISTRIBUTION_MODEL__WINDOW_SIZE = eINSTANCE.getPreDefinedDistributionModel_WindowSize();
-
-		/**
-		 * The meta object literal for the '<em><b>Window Size Units</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute PRE_DEFINED_DISTRIBUTION_MODEL__WINDOW_SIZE_UNITS = eINSTANCE.getPreDefinedDistributionModel_WindowSizeUnits();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.adp.impl.PreDefinedDateImpl <em>Pre Defined Date</em>}' class.

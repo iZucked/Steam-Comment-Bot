@@ -22,37 +22,35 @@ public class CharSequenceCompilerException extends Exception {
 	/**
 	 * The fully qualified name of the class that was being compiled.
 	 */
-	private Set<String> classNames;
+	private final Set<String> classNames;
 	// Unfortunately, Diagnostic and Collector are not Serializable, so we can't
 	// serialize the collector.
-	transient private DiagnosticCollector<JavaFileObject> diagnostics;
+	private final transient DiagnosticCollector<JavaFileObject> diagnostics;
 
 	public CharSequenceCompilerException(final String message, final Set<String> qualifiedClassNames, final Throwable cause, final DiagnosticCollector<JavaFileObject> diagnostics) {
 		super(message, cause);
-		setClassNames(qualifiedClassNames);
-		setDiagnostics(diagnostics);
-	}
-
-	public CharSequenceCompilerException(final String message, final Set<String> qualifiedClassNames, final DiagnosticCollector<JavaFileObject> diagnostics) {
-		super(message);
-		setClassNames(qualifiedClassNames);
-		setDiagnostics(diagnostics);
-	}
-
-	public CharSequenceCompilerException(final Set<String> qualifiedClassNames, final Throwable cause, final DiagnosticCollector<JavaFileObject> diagnostics) {
-		super(cause);
-		setClassNames(qualifiedClassNames);
-		setDiagnostics(diagnostics);
-	}
-
-	private void setClassNames(final Set<String> qualifiedClassNames) {
 		// create a new HashSet because the set passed in may not
 		// be Serializable. For example, Map.keySet() returns a non-Serializable
 		// set.
 		classNames = new HashSet<>(qualifiedClassNames);
+		this.diagnostics = diagnostics;
 	}
 
-	private void setDiagnostics(final DiagnosticCollector<JavaFileObject> diagnostics) {
+	public CharSequenceCompilerException(final String message, final Set<String> qualifiedClassNames, final DiagnosticCollector<JavaFileObject> diagnostics) {
+		super(message);
+		// create a new HashSet because the set passed in may not
+		// be Serializable. For example, Map.keySet() returns a non-Serializable
+		// set.
+		classNames = new HashSet<>(qualifiedClassNames);
+		this.diagnostics = diagnostics;
+	}
+
+	public CharSequenceCompilerException(final Set<String> qualifiedClassNames, final Throwable cause, final DiagnosticCollector<JavaFileObject> diagnostics) {
+		super(cause);
+		// create a new HashSet because the set passed in may not
+		// be Serializable. For example, Map.keySet() returns a non-Serializable
+		// set.
+		classNames = new HashSet<>(qualifiedClassNames);
 		this.diagnostics = diagnostics;
 	}
 

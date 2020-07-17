@@ -6,7 +6,6 @@ package com.mmxlabs.common.concurrent;
 
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionException;
-import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -43,12 +42,8 @@ public final class NamedExecutorService {
 				}
 				return t;
 			}
-		}, new RejectedExecutionHandler() {
-
-			@Override
-			public void rejectedExecution(final Runnable r, final ThreadPoolExecutor e) {
-				throw new RejectedExecutionException("Task " + r.toString() + " rejected from " + e.toString());
-			}
+		}, (r, e) -> {
+			throw new RejectedExecutionException("Task " + r.toString() + " rejected from " + e.toString());
 		});
 	}
 }

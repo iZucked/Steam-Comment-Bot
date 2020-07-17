@@ -40,8 +40,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.PreDefinedDistributionModelImpl#getDates <em>Dates</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.adp.impl.PreDefinedDistributionModelImpl#getWindowSize <em>Window Size</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.adp.impl.PreDefinedDistributionModelImpl#getWindowSizeUnits <em>Window Size Units</em>}</li>
  * </ul>
  *
  * @generated
@@ -57,42 +55,6 @@ public class PreDefinedDistributionModelImpl extends DistributionModelImpl imple
 	 */
 	protected EList<PreDefinedDate> dates;
 
-	/**
-	 * The default value of the '{@link #getWindowSize() <em>Window Size</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getWindowSize()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int WINDOW_SIZE_EDEFAULT = 1;
-	/**
-	 * The cached value of the '{@link #getWindowSize() <em>Window Size</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getWindowSize()
-	 * @generated
-	 * @ordered
-	 */
-	protected int windowSize = WINDOW_SIZE_EDEFAULT;
-	/**
-	 * The default value of the '{@link #getWindowSizeUnits() <em>Window Size Units</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getWindowSizeUnits()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final TimePeriod WINDOW_SIZE_UNITS_EDEFAULT = TimePeriod.MONTHS;
-	/**
-	 * The cached value of the '{@link #getWindowSizeUnits() <em>Window Size Units</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getWindowSizeUnits()
-	 * @generated
-	 * @ordered
-	 */
-	protected TimePeriod windowSizeUnits = WINDOW_SIZE_UNITS_EDEFAULT;
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -131,52 +93,6 @@ public class PreDefinedDistributionModelImpl extends DistributionModelImpl imple
 	 * @generated
 	 */
 	@Override
-	public int getWindowSize() {
-		return windowSize;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setWindowSize(int newWindowSize) {
-		int oldWindowSize = windowSize;
-		windowSize = newWindowSize;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ADPPackage.PRE_DEFINED_DISTRIBUTION_MODEL__WINDOW_SIZE, oldWindowSize, windowSize));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public TimePeriod getWindowSizeUnits() {
-		return windowSizeUnits;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setWindowSizeUnits(TimePeriod newWindowSizeUnits) {
-		TimePeriod oldWindowSizeUnits = windowSizeUnits;
-		windowSizeUnits = newWindowSizeUnits == null ? WINDOW_SIZE_UNITS_EDEFAULT : newWindowSizeUnits;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ADPPackage.PRE_DEFINED_DISTRIBUTION_MODEL__WINDOW_SIZE_UNITS, oldWindowSizeUnits, windowSizeUnits));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case ADPPackage.PRE_DEFINED_DISTRIBUTION_MODEL__DATES:
@@ -195,10 +111,6 @@ public class PreDefinedDistributionModelImpl extends DistributionModelImpl imple
 		switch (featureID) {
 			case ADPPackage.PRE_DEFINED_DISTRIBUTION_MODEL__DATES:
 				return getDates();
-			case ADPPackage.PRE_DEFINED_DISTRIBUTION_MODEL__WINDOW_SIZE:
-				return getWindowSize();
-			case ADPPackage.PRE_DEFINED_DISTRIBUTION_MODEL__WINDOW_SIZE_UNITS:
-				return getWindowSizeUnits();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -216,12 +128,6 @@ public class PreDefinedDistributionModelImpl extends DistributionModelImpl imple
 				getDates().clear();
 				getDates().addAll((Collection<? extends PreDefinedDate>)newValue);
 				return;
-			case ADPPackage.PRE_DEFINED_DISTRIBUTION_MODEL__WINDOW_SIZE:
-				setWindowSize((Integer)newValue);
-				return;
-			case ADPPackage.PRE_DEFINED_DISTRIBUTION_MODEL__WINDOW_SIZE_UNITS:
-				setWindowSizeUnits((TimePeriod)newValue);
-				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -237,12 +143,6 @@ public class PreDefinedDistributionModelImpl extends DistributionModelImpl imple
 			case ADPPackage.PRE_DEFINED_DISTRIBUTION_MODEL__DATES:
 				getDates().clear();
 				return;
-			case ADPPackage.PRE_DEFINED_DISTRIBUTION_MODEL__WINDOW_SIZE:
-				setWindowSize(WINDOW_SIZE_EDEFAULT);
-				return;
-			case ADPPackage.PRE_DEFINED_DISTRIBUTION_MODEL__WINDOW_SIZE_UNITS:
-				setWindowSizeUnits(WINDOW_SIZE_UNITS_EDEFAULT);
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -257,30 +157,8 @@ public class PreDefinedDistributionModelImpl extends DistributionModelImpl imple
 		switch (featureID) {
 			case ADPPackage.PRE_DEFINED_DISTRIBUTION_MODEL__DATES:
 				return dates != null && !dates.isEmpty();
-			case ADPPackage.PRE_DEFINED_DISTRIBUTION_MODEL__WINDOW_SIZE:
-				return windowSize != WINDOW_SIZE_EDEFAULT;
-			case ADPPackage.PRE_DEFINED_DISTRIBUTION_MODEL__WINDOW_SIZE_UNITS:
-				return windowSizeUnits != WINDOW_SIZE_UNITS_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String toString() {
-		if (eIsProxy()) return super.toString();
-
-		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (windowSize: ");
-		result.append(windowSize);
-		result.append(", windowSizeUnits: ");
-		result.append(windowSizeUnits);
-		result.append(')');
-		return result.toString();
 	}
 
 } //PreDefinedDistributionModelImpl

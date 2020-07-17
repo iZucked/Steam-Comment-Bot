@@ -28,15 +28,11 @@ import com.mmxlabs.optimiser.lso.IMoveGenerator;
 
 public final class RandomMoveGenerator implements IMoveGenerator {
 
-	private final List<IRandomMoveGeneratorUnit> units = new ArrayList<IRandomMoveGeneratorUnit>();
+	private final List<IRandomMoveGeneratorUnit> units = new ArrayList<>();
 
-	private final List<Double> weights = new ArrayList<Double>();
+	private final List<Double> weights = new ArrayList<>();
 
 	private double totalWeight = 0;
-
-	public RandomMoveGenerator() {
-
-	}
 
 	@Override
 	public IMove generateMove(@NonNull ISequences rawSequences, @NonNull ILookupManager stateManager, @NonNull Random random) {

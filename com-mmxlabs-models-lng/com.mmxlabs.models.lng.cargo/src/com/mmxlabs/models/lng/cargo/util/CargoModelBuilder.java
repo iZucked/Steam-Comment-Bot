@@ -140,7 +140,7 @@ public class CargoModelBuilder {
 			@Nullable final PurchaseContract purchaseContract, @Nullable final BaseLegalEntity entity, @Nullable final String priceExpression, @Nullable final Double cv,
 			@Nullable final Vessel nominatedVessel) {
 
-		validatePortCapability(port, dealType == DESPurchaseDealType.DEST_ONLY ? PortCapability.DISCHARGE : PortCapability.LOAD);
+		validatePortCapability(port, (dealType == DESPurchaseDealType.DEST_ONLY || dealType == DESPurchaseDealType.DIVERTIBLE) ? PortCapability.DISCHARGE : PortCapability.LOAD);
 
 		final LoadSlot slot = CargoFactory.eINSTANCE.createLoadSlot();
 		configureSlot(slot, name, windowStart, port, purchaseContract, entity, priceExpression);

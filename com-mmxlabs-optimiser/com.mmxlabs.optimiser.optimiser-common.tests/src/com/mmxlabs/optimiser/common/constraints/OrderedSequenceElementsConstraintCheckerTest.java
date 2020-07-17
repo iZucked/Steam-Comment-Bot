@@ -248,8 +248,6 @@ public class OrderedSequenceElementsConstraintCheckerTest {
 		final ISequenceElement obj2 = Mockito.mock(ISequenceElement.class, "2");
 		final ISequenceElement obj3 = Mockito.mock(ISequenceElement.class, "3");
 		final ISequenceElement obj4 = Mockito.mock(ISequenceElement.class, "4");
-		final ISequenceElement obj5 = Mockito.mock(ISequenceElement.class, "5");
-		final ISequenceElement obj6 = Mockito.mock(ISequenceElement.class, "6");
 
 		provider.setElementOrder(obj2, obj3);
 

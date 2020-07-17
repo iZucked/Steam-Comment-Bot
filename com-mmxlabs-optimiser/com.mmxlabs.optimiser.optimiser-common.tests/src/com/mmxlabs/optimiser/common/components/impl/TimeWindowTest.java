@@ -52,7 +52,6 @@ public class TimeWindowTest {
 		final TimeWindow tw3 = new TimeWindow(20, 21);
 		final TimeWindow tw4 = new TimeWindow(1, 10);
 		final TimeWindow tw5 = new TimeWindow(10, 11);
-		final TimeWindow tw6 = new TimeWindow(11, 12);
 
 		Assertions.assertTrue(tw1.overlaps(tw1)); // Identity
 		Assertions.assertTrue(tw1.overlaps(tw2)); // Equivalence

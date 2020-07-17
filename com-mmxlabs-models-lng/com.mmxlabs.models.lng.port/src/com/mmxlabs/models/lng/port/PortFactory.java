@@ -123,15 +123,6 @@ public interface PortFactory extends EFactory {
 	ContingencyMatrixEntry createContingencyMatrixEntry();
 
 	/**
-	 * Returns a new object of class '<em>Other Identifiers</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Other Identifiers</em>'.
-	 * @generated
-	 */
-	OtherIdentifiers createOtherIdentifiers();
-
-	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

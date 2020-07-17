@@ -58,7 +58,7 @@ public abstract class AbstractLSOMover {
 	@Inject
 	@NonNull
 	private IFitnessCombiner fitnessCombiner;
-	
+
 	@Inject
 	public void initSearchProcesses(@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL) ISequences initialRawSequences) {
 
@@ -68,7 +68,7 @@ public abstract class AbstractLSOMover {
 
 		// Apply hard constraint checkers
 		for (final IConstraintChecker checker : constraintCheckers) {
-			if (checker.checkConstraints(potentialFullSequences, null) == false) {
+			if (!checker.checkConstraints(potentialFullSequences, null)) {
 			}
 		}
 		final IEvaluationState evaluationState = new EvaluationState();
@@ -77,17 +77,18 @@ public abstract class AbstractLSOMover {
 				assert false;
 			}
 		}
-		
+
 		// Apply hard constraint checkers
 		for (final IEvaluatedStateConstraintChecker checker : evaluatedStateConstraintCheckers) {
-			if (checker.checkConstraints(initialRawSequences, potentialFullSequences, evaluationState) == false) {
+			if (!checker.checkConstraints(initialRawSequences, potentialFullSequences, evaluationState)) {
 			}
 		}
-		
+
 		// now evaluate
 		long fitness = evaluateSequencesInTurn(potentialFullSequences, evaluationState, potentialFullSequences.getResources());
 
 	}
+
 	protected long evaluateSequencesInTurn(@NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState, @Nullable final Collection<IResource> affectedResources) {
 
 		// Evaluates the current sequences
@@ -104,11 +105,13 @@ public abstract class AbstractLSOMover {
 		return fitnessCombiner.calculateFitness(getFitnessComponents());
 	}
 
-	public abstract ILSOJobState search(@NonNull IModifiableSequences rawSequences, @NonNull ILookupManager stateManager, @NonNull Random random, @NonNull IMoveGenerator moveGenerator, long seed, boolean failedInitialConstraintCheckers);
-	
+	public abstract ILSOJobState search(@NonNull IModifiableSequences rawSequences, @NonNull ILookupManager stateManager, @NonNull Random random, @NonNull IMoveGenerator moveGenerator, long seed,
+			boolean failedInitialConstraintCheckers);
+
 	public List<IFitnessComponent> getFitnessComponents() {
 		return fitnessComponents;
 	}
+
 	public void setFitnessComponents(List<IFitnessComponent> fitnessComponents) {
 		this.fitnessComponents = fitnessComponents;
 	}

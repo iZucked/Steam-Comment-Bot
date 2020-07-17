@@ -24,7 +24,6 @@ public class OptimisationContextTest {
 	@Test
 	public void testOptimisationContext() {
 
-		final IOptimisationData optimisationData = Mockito.mock(IOptimisationData.class);
 		final ISequences initialSequences = Mockito.mock(ISequences.class);
 
 		final List<@NonNull String> fitnessComponents = Collections.emptyList();
@@ -39,7 +38,6 @@ public class OptimisationContextTest {
 		final OptimisationContext optContext = new OptimisationContext(initialSequences, fitnessComponents, fitnessFunctionRegistry, constraintCheckers, constraintCheckerRegistry,
 				evaluationProcesses, evaluationProcessRegistry, evaluatedStateConstraintCheckers, evaluatedStateConstraintCheckerRegistry);
 
-//		Assertions.assertSame(optimisationData, optContext.getOptimisationData());
 		Assertions.assertSame(initialSequences, optContext.getInputSequences());
 		Assertions.assertSame(fitnessComponents, optContext.getFitnessComponents());
 		Assertions.assertSame(fitnessFunctionRegistry, optContext.getFitnessFunctionRegistry());

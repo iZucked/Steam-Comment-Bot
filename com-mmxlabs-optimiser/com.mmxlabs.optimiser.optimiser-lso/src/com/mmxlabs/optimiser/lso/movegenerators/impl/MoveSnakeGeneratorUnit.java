@@ -40,7 +40,7 @@ public final class MoveSnakeGeneratorUnit implements IRandomMoveGeneratorUnit {
 
 		// randomly pick numChangedResources IResources from the resources list
 		// to generate the froms
-		final List<IResource> froms = new ArrayList<IResource>(resources);
+		final List<IResource> froms = new ArrayList<>(resources);
 		Collections.shuffle(froms, random);
 		int numToRemove = numResources - numChangedResources;
 		while (numToRemove-- > 0) {
@@ -48,12 +48,12 @@ public final class MoveSnakeGeneratorUnit implements IRandomMoveGeneratorUnit {
 		}
 
 		// Create the tos list by shifting (and wrapping) the froms by one place
-		final List<IResource> tos = new ArrayList<IResource>(froms);
+		final List<IResource> tos = new ArrayList<>(froms);
 		Collections.rotate(tos, 1);
 
-		final List<Integer> startPositions = new ArrayList<Integer>(numChangedResources);
-		final List<Integer> endPositions = new ArrayList<Integer>(numChangedResources);
-		final List<Integer> insertPositions = new ArrayList<Integer>(numChangedResources);
+		final List<Integer> startPositions = new ArrayList<>(numChangedResources);
+		final List<Integer> endPositions = new ArrayList<>(numChangedResources);
+		final List<Integer> insertPositions = new ArrayList<>(numChangedResources);
 
 		// Fill in array so set ops don't fail
 		for (int i = 0; i < numChangedResources; ++i) {

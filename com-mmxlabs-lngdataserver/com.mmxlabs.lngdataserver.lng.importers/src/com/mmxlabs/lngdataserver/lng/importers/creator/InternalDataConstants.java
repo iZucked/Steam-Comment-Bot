@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.lngdataserver.lng.importers.creator;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 /**
  * Constants linked to names in the sample data. If the data changes, this needs to be updated.
  * 
@@ -59,6 +57,7 @@ public class InternalDataConstants {
 	public static final String PORT_OGISHIMA = "L_JP_Ohgis";
 	public static final String PORT_TOBATA = "L_JP_Tobat";
 	public static final String PORT_CHITA = "L_JP_Chita";
+	public static final String PORT_SENDAI = "L_JP_Senda";
 
 	// Australia
 	public static final String PORT_ONSLOW = "L_AU_Onslo";

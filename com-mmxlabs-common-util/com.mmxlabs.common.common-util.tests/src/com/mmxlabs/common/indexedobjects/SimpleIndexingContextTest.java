@@ -33,12 +33,12 @@ public class SimpleIndexingContextTest {
 		final C c1 = new C();
 		final Object o1 = new Object();
 
-		Assertions.assertEquals(index.assignIndex(a1), 0);
-		Assertions.assertEquals(index.assignIndex(b1), 0);
-		Assertions.assertEquals(index.assignIndex(c1), 1);// C extends A but is not registered
-		Assertions.assertEquals(index.assignIndex(o1), 0);
-		Assertions.assertEquals(index.assignIndex(a2), 2);
-		Assertions.assertEquals(index.assignIndex(b2), 1);
+		Assertions.assertEquals(0, index.assignIndex(a1));
+		Assertions.assertEquals(0, index.assignIndex(b1));
+		Assertions.assertEquals(1, index.assignIndex(c1));// C extends A but is not registered
+		Assertions.assertEquals(0, index.assignIndex(o1));
+		Assertions.assertEquals(2, index.assignIndex(a2));
+		Assertions.assertEquals(1, index.assignIndex(b2));
 	}
 
 	class A {

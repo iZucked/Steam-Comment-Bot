@@ -28,9 +28,11 @@ public final class Move4over1 implements IMove {
 
 	private IResource resource;
 
-	private int segment1Start = -1, segment1End = -1;
+	private int segment1Start = -1;
+	private int segment1End = -1;
 
-	private int segment2Start = -1, segment2End = -1;
+	private int segment2Start = -1;
+	private int segment2End = -1;
 
 	@Override
 	public final void apply(@NonNull final IModifiableSequences sequences) {
@@ -101,7 +103,7 @@ public final class Move4over1 implements IMove {
 		final Map<IResource, ISequence> sequenceMap = sequences.getSequences();
 
 		// Make sure resource exists
-		if (sequenceMap.containsKey(resource) == false) {
+		if (!sequenceMap.containsKey(resource)) {
 			return false;
 		}
 

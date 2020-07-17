@@ -13,7 +13,6 @@ import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 import com.mmxlabs.models.lng.port.Location;
-import com.mmxlabs.models.lng.port.OtherIdentifiers;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.OtherNamesObject;
@@ -36,7 +35,6 @@ import java.util.Collection;
  *   <li>{@link com.mmxlabs.models.lng.port.impl.LocationImpl#getCountry <em>Country</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.LocationImpl#getLat <em>Lat</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.LocationImpl#getLon <em>Lon</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.port.impl.LocationImpl#getOtherIdentifiers <em>Other Identifiers</em>}</li>
  * </ul>
  *
  * @generated
@@ -151,16 +149,6 @@ public class LocationImpl extends NamedObjectImpl implements Location {
 	 * @ordered
 	 */
 	protected double lon = LON_EDEFAULT;
-
-	/**
-	 * The cached value of the '{@link #getOtherIdentifiers() <em>Other Identifiers</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getOtherIdentifiers()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<OtherIdentifiers> otherIdentifiers;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -312,19 +300,6 @@ public class LocationImpl extends NamedObjectImpl implements Location {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EList<OtherIdentifiers> getOtherIdentifiers() {
-		if (otherIdentifiers == null) {
-			otherIdentifiers = new EObjectContainmentEList<OtherIdentifiers>(OtherIdentifiers.class, this, PortPackage.LOCATION__OTHER_IDENTIFIERS);
-		}
-		return otherIdentifiers;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public ZoneId getZoneId() {
@@ -352,20 +327,6 @@ public class LocationImpl extends NamedObjectImpl implements Location {
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case PortPackage.LOCATION__OTHER_IDENTIFIERS:
-				return ((InternalEList<?>)getOtherIdentifiers()).basicRemove(otherEnd, msgs);
-		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case PortPackage.LOCATION__OTHER_NAMES:
@@ -380,8 +341,6 @@ public class LocationImpl extends NamedObjectImpl implements Location {
 				return getLat();
 			case PortPackage.LOCATION__LON:
 				return getLon();
-			case PortPackage.LOCATION__OTHER_IDENTIFIERS:
-				return getOtherIdentifiers();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -414,10 +373,6 @@ public class LocationImpl extends NamedObjectImpl implements Location {
 			case PortPackage.LOCATION__LON:
 				setLon((Double)newValue);
 				return;
-			case PortPackage.LOCATION__OTHER_IDENTIFIERS:
-				getOtherIdentifiers().clear();
-				getOtherIdentifiers().addAll((Collection<? extends OtherIdentifiers>)newValue);
-				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -448,9 +403,6 @@ public class LocationImpl extends NamedObjectImpl implements Location {
 			case PortPackage.LOCATION__LON:
 				setLon(LON_EDEFAULT);
 				return;
-			case PortPackage.LOCATION__OTHER_IDENTIFIERS:
-				getOtherIdentifiers().clear();
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -475,8 +427,6 @@ public class LocationImpl extends NamedObjectImpl implements Location {
 				return lat != LAT_EDEFAULT;
 			case PortPackage.LOCATION__LON:
 				return lon != LON_EDEFAULT;
-			case PortPackage.LOCATION__OTHER_IDENTIFIERS:
-				return otherIdentifiers != null && !otherIdentifiers.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

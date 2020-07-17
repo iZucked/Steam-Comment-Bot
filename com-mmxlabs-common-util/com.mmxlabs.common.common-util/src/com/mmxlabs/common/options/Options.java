@@ -9,15 +9,20 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mmxlabs.common.Pair;
 
 public final class Options {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(Options.class);
+	
 	private final String optionPrefix;
 	private final Map<String, OptionParser> parsers;
 	private final Map<String, Object> results;
@@ -26,8 +31,8 @@ public final class Options {
 
 	public Options(final String optionPrefix) {
 		this.optionPrefix = optionPrefix;
-		this.parsers = new HashMap<String, OptionParser>();
-		this.results = new HashMap<String, Object>();
+		this.parsers = new HashMap<>();
+		this.results = new HashMap<>();
 	}
 
 	public Options() {
@@ -35,15 +40,15 @@ public final class Options {
 	}
 
 	public List<String> parseAndSet(final String[] args, final Object object) throws InvalidOptionException, InvalidArgumentException {
-		final Map<String, Method> methodMap = new HashMap<String, Method>();
-		final List<Pair<Integer, String>> names = new ArrayList<Pair<Integer, String>>();
+		final Map<String, Method> methodMap = new HashMap<>();
+		final List<Pair<Integer, String>> names = new ArrayList<>();
 		for (final Method m : object.getClass().getMethods()) {
 			if (m.isAnnotationPresent(Option.class)) {
 				final Option option = m.getAnnotation(Option.class);
 
 				final String name = option.name().equals("") ? mangleName(m.getName()) : option.name();
 
-				final boolean hasValue = option.defaultValue().equals(Option.EMPTY_DEFAULT_STRING_HACK) == false;
+				final boolean hasValue = !option.defaultValue().equals(Option.EMPTY_DEFAULT_STRING_HACK);
 
 				final String value = option.defaultValue();
 
@@ -74,16 +79,12 @@ public final class Options {
 
 		final List<String> r = parse(args);
 
-		Collections.sort(names, new Comparator<Pair<Integer, String>>() {
-			@Override
-			public int compare(final Pair<Integer, String> arg0, final Pair<Integer, String> arg1) {
-				final int x = arg0.getFirst().compareTo(arg1.getFirst());
-				if (x == 0) {
-					return arg0.getSecond().compareTo(arg1.getSecond());
-				}
-				return x;
+		Collections.sort(names, (arg0, arg1) -> {
+			final int x = arg0.getFirst().compareTo(arg1.getFirst());
+			if (x == 0) {
+				return arg0.getSecond().compareTo(arg1.getSecond());
 			}
-
+			return x;
 		});
 
 		for (final Pair<Integer, String> p : names) {
@@ -97,7 +98,7 @@ public final class Options {
 			} catch (final IllegalAccessException e) {
 				throw new RuntimeException("@Option used incorrectly for field " + method.getName());
 			} catch (final InvocationTargetException e) {
-				e.printStackTrace();
+				LOGGER.error(e.getMessage(), e);
 
 				throw new RuntimeException("This really should never happen");
 			}
@@ -113,7 +114,7 @@ public final class Options {
 
 		for (final char b : name.toCharArray()) {
 			if (Character.isUpperCase(b)) {
-				if (!(result.length() == 0)) {
+				if (result.length() != 0) {
 					result.append("-");
 				}
 				result.append(Character.toLowerCase(b));
@@ -165,7 +166,6 @@ public final class Options {
 		addOption(new String[] { name }, help, parser);
 	}
 
-	// TODO cleanup
 	@SuppressWarnings("unchecked")
 	public <T> T getOption(final String s) {
 		if (results.containsKey(s)) {
@@ -183,7 +183,7 @@ public final class Options {
 
 	public List<String> parse(final List<String> args) throws InvalidOptionException, InvalidArgumentException {
 		final Iterator<String> it = args.iterator();
-		final List<String> spare = new ArrayList<String>();
+		final List<String> spare = new ArrayList<>();
 		while (it.hasNext()) {
 			final String arg = it.next();
 			if (arg.startsWith(optionPrefix)) {
@@ -228,7 +228,7 @@ public final class Options {
 
 	@Override
 	public String toString() {
-		final StringBuffer sb = new StringBuffer();
+		final StringBuilder sb = new StringBuilder();
 
 		sb.append("{");
 

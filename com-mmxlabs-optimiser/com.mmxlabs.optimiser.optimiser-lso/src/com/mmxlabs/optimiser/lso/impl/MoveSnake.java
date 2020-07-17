@@ -114,7 +114,7 @@ public final class MoveSnake implements IMove {
 		// Check unique froms
 		final Set<@NonNull IResource> froms = new HashSet<>();
 		for (final IResource from : fromResources) {
-			if (froms.add(from) == false) {
+			if (!froms.add(from)) {
 				return false;
 			}
 		}
@@ -122,7 +122,7 @@ public final class MoveSnake implements IMove {
 		// Check unique tos
 		final Set<@NonNull IResource> tos = new HashSet<>();
 		for (final IResource to : toResources) {
-			if (tos.add(to) == false) {
+			if (!tos.add(to)) {
 				return false;
 			}
 		}

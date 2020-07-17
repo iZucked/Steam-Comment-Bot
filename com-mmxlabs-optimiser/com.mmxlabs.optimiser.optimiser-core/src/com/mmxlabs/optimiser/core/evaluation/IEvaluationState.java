@@ -5,7 +5,6 @@
 package com.mmxlabs.optimiser.core.evaluation;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 
 public interface IEvaluationState {
 

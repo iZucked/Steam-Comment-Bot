@@ -178,12 +178,6 @@ public class PortSwitch<@Nullable T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case PortPackage.OTHER_IDENTIFIERS: {
-				OtherIdentifiers otherIdentifiers = (OtherIdentifiers)theEObject;
-				T1 result = caseOtherIdentifiers(otherIdentifiers);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -350,21 +344,6 @@ public class PortSwitch<@Nullable T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseContingencyMatrixEntry(ContingencyMatrixEntry object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Other Identifiers</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Other Identifiers</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T1 caseOtherIdentifiers(OtherIdentifiers object) {
 		return null;
 	}
 

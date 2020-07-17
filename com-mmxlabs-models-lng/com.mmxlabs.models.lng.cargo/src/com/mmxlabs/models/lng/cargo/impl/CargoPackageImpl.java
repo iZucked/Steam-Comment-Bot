@@ -4250,6 +4250,12 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 			   "formatString", "##0"
 		   });
 		addAnnotation
+		  (getPaperDeal_Price(),
+		   source,
+		   new String[] {
+			   "formatString", "-##0.###"
+		   });
+		addAnnotation
 		  (getPaperDeal_Year(),
 		   source,
 		   new String[] {

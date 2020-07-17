@@ -87,7 +87,6 @@ public class LocationComponentHelper extends BaseComponentHelper {
 		add_countryEditor(detailComposite, topClass);
 		add_latEditor(detailComposite, topClass);
 		add_lonEditor(detailComposite, topClass);
-		add_otherIdentifiersEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the mmxId feature on Location

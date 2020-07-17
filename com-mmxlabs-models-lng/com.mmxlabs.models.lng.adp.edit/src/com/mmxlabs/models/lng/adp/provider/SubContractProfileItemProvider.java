@@ -74,6 +74,8 @@ public class SubContractProfileItemProvider
 			addSlotTemplateIdPropertyDescriptor(object);
 			addNominatedVesselPropertyDescriptor(object);
 			addShippingDaysPropertyDescriptor(object);
+			addWindowSizePropertyDescriptor(object);
+			addWindowSizeUnitsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -189,6 +191,50 @@ public class SubContractProfileItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Window Size feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addWindowSizePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SubContractProfile_windowSize_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SubContractProfile_windowSize_feature", "_UI_SubContractProfile_type"),
+				 ADPPackage.Literals.SUB_CONTRACT_PROFILE__WINDOW_SIZE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Window Size Units feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addWindowSizeUnitsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SubContractProfile_windowSizeUnits_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SubContractProfile_windowSizeUnits_feature", "_UI_SubContractProfile_type"),
+				 ADPPackage.Literals.SUB_CONTRACT_PROFILE__WINDOW_SIZE_UNITS,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -262,6 +308,8 @@ public class SubContractProfileItemProvider
 			case ADPPackage.SUB_CONTRACT_PROFILE__CONTRACT_TYPE:
 			case ADPPackage.SUB_CONTRACT_PROFILE__SLOT_TEMPLATE_ID:
 			case ADPPackage.SUB_CONTRACT_PROFILE__SHIPPING_DAYS:
+			case ADPPackage.SUB_CONTRACT_PROFILE__WINDOW_SIZE:
+			case ADPPackage.SUB_CONTRACT_PROFILE__WINDOW_SIZE_UNITS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case ADPPackage.SUB_CONTRACT_PROFILE__DISTRIBUTION_MODEL:
