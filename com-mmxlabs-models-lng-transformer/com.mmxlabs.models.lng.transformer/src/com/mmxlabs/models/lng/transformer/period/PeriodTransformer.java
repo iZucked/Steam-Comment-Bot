@@ -888,6 +888,9 @@ public class PeriodTransformer {
 		}
 
 		for (final Slot<?> slot : cargo.getSlots()) {
+			//Load and discharge window are often part of the pricing for a DES purchase or FOB sale, so if we change
+			//the window, then the price incurred might change, hence we only fix one side of the cargo and leave the
+			//window untouched.
 			if (slot instanceof LoadSlot) {
 				final LoadSlot loadSlot = (LoadSlot) slot;
 				if (loadSlot.isDESPurchase()) {
@@ -934,6 +937,9 @@ public class PeriodTransformer {
 	}
 
 	public void lockDownSlotDates(final Map<Slot<?>, SlotAllocation> slotAllocationMap, final Slot<?> slot, final Set<Slot<?>> lockedSlots, boolean doLockDates) {
+		//Load and discharge window are often part of the pricing for a DES purchase or FOB sale, so if we change
+		//the window, then the price incurred might change, hence we only fix one side of the cargo and leave the
+		//window untouched.
 		if (slot instanceof LoadSlot) {
 			final LoadSlot loadSlot = (LoadSlot) slot;
 			if (loadSlot.isDESPurchase()) {
