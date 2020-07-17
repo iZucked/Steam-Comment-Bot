@@ -7,6 +7,9 @@
  */
 package com.mmxlabs.lingo.reports.views.changeset;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -71,6 +74,7 @@ import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.nominations.AbstractNomination;
+import com.mmxlabs.models.lng.nominations.utils.NominationTypeRegistry;
 import com.mmxlabs.models.lng.nominations.utils.NominationsModelUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
@@ -1501,7 +1505,9 @@ public class ChangeSetViewColumnHelper {
 			@Override
 			public String getToolTipText(final Object element) {
 				if (element instanceof ChangeSetTableRow) {
-					return getNominationBreaksDetail((ChangeSetTableRow)element);
+					ChangeSetTableRow cstr = (ChangeSetTableRow)element;
+					LNGScenarioModel sm = getScenarioModel(cstr);
+					return getNominationBreaksDetail(sm, cstr);
 				}
 				return super.getToolTipText(element);
 			}
@@ -1514,20 +1520,31 @@ public class ChangeSetViewColumnHelper {
 				cell.setFont(boldFont);
 
 				if (element instanceof ChangeSetTableGroup) {
-					cell.setText(getNominationBreaks((ChangeSetTableGroup)element));	
+					ChangeSetTableGroup cstg = (ChangeSetTableGroup)element;
+					cell.setText(getNominationBreaksCountString(getScenarioModel(cstg), cstg));	
 				}
-				if (element instanceof ChangeSetTableRow) {					
-					cell.setText(getNominationBreaks((ChangeSetTableRow)element));
+				if (element instanceof ChangeSetTableRow) {	
+					ChangeSetTableRow cstr = (ChangeSetTableRow)element;
+					cell.setText(getNominationBreaks(getScenarioModel(cstr), cstr));
 				}
 			}
 		};		
 	}
 	
-	private String getNominationBreaks(ChangeSetTableGroup change) {
-		int cnt = 0;
+	private LNGScenarioModel getScenarioModel(ChangeSetTableRow change) {
+		LNGScenarioModel sm = (LNGScenarioModel)((ChangeSetTableGroup)change.eContainer()).getBaseScenario().getResultRoot().eContainer();
+		return sm;
+	}
+
+	private LNGScenarioModel getScenarioModel(ChangeSetTableGroup change) {
 		LNGScenarioModel sm = (LNGScenarioModel)change.getBaseScenario().getResultRoot().eContainer();
+		return sm;
+	}
+
+	private String getNominationBreaksCountString(LNGScenarioModel sm, ChangeSetTableGroup change) {
+		int cnt = 0;
 		for (ChangeSetTableRow row : change.getRows()) {
-			cnt += getNominationBreakCount(row);
+			cnt += getNominationBreakCount(sm, row);
 		}
 		if (cnt > 0) {
 			return Integer.toString(cnt);
@@ -1537,8 +1554,8 @@ public class ChangeSetViewColumnHelper {
 		}
 	}
 	
-	private String getNominationBreaks(ChangeSetTableRow change) {
-		int cnt = getNominationBreakCount(change);
+	private String getNominationBreaks(LNGScenarioModel sm, ChangeSetTableRow change) {
+		int cnt = getNominationBreakCount(sm, change);
 		if (cnt > 0) {
 			return Integer.toString(cnt);
 		}
@@ -1547,11 +1564,10 @@ public class ChangeSetViewColumnHelper {
 		}
 	}
 
-	private String getNominationBreaksDetail(ChangeSetTableRow change) {
+	private String getNominationBreaksDetail(LNGScenarioModel sm, ChangeSetTableRow change) {
 		StringBuilder sb = new StringBuilder();
-		LNGScenarioModel sm = (LNGScenarioModel)((ChangeSetTableGroup)change.eContainer()).getBaseScenario().getResultRoot().eContainer();
-		addNominations(sm, change.getLhsName(), sb);
-		addNominations(sm, change.getRhsName(), sb);
+		addNominations(sm, change.getLhsName(), change.getLhsBefore(), change.getLhsAfter(), sb);
+		addNominations(sm, change.getRhsName(), change.getRhsBefore(), change.getRhsAfter(), sb);
 		if (sb.length() == 0) {
 			return null;
 		}
@@ -1560,8 +1576,8 @@ public class ChangeSetViewColumnHelper {
 		}
 	}
 
-	private void addNominations(LNGScenarioModel sm, String slotName, StringBuilder sb) {
-		List<AbstractNomination> noms = NominationsModelUtils.findNominationsForSlot(sm, slotName);
+	private void addNominations(LNGScenarioModel sm, String slotName, ChangeSetRowData before, ChangeSetRowData after, StringBuilder sb) {
+		List<AbstractNomination> noms = this.getAffectedNominations(sm, slotName, before, after);	
 		if (!noms.isEmpty()) {
 			if (sb.length() > 0) {
 				sb.append("\n");
@@ -1576,14 +1592,97 @@ public class ChangeSetViewColumnHelper {
 		}
 	}
 		
-	private int getNominationBreakCount(ChangeSetTableRow change) {
+	private int getNominationBreakCount(LNGScenarioModel sm, ChangeSetTableRow change) {
 		int cnt = 0;
-		LNGScenarioModel sm = (LNGScenarioModel)((ChangeSetTableGroup)change.eContainer()).getBaseScenario().getResultRoot().eContainer();
-		cnt += NominationsModelUtils.findNominationsForSlot(sm, change.getLhsName()).size();
-		cnt += NominationsModelUtils.findNominationsForSlot(sm, change.getRhsName()).size();
+		cnt += getAffectedNominations(sm, change).size();
 		return cnt;
 	}
 
+	private List<AbstractNomination> getAffectedNominations(LNGScenarioModel sm, ChangeSetTableRow change) {
+		List<AbstractNomination> lhsNoms = getAffectedNominations(sm, change.getLhsName(), change.getLhsBefore(), change.getLhsAfter());
+		List<AbstractNomination> rhsNoms = getAffectedNominations(sm, change.getRhsName(), change.getRhsBefore(), change.getRhsAfter());
+		List<AbstractNomination> affectedNoms = new ArrayList<AbstractNomination>(lhsNoms.size() + rhsNoms.size());
+		affectedNoms.addAll(lhsNoms);
+		affectedNoms.addAll(rhsNoms);
+		return affectedNoms;
+	}
+	
+	private List<AbstractNomination> getAffectedNominations(LNGScenarioModel sm, String slotName, ChangeSetRowData before, ChangeSetRowData after) {
+		List<AbstractNomination> noms = NominationsModelUtils.findNominationsForSlot(sm, slotName);
+		noms = filterAffectedNominations(noms, before, after);		
+		return noms;
+	}
+	
+	private List<AbstractNomination> filterAffectedNominations(List<AbstractNomination> noms, ChangeSetRowData before, ChangeSetRowData after) {
+		List<AbstractNomination> affectedNoms = new ArrayList<AbstractNomination>();
+		for (AbstractNomination n : noms) {
+			String type = n.getType();
+			String[] dependentFields = NominationTypeRegistry.getInstance().getDependentFields(type);
+			if (dependentFields != null && dependentFields.length > 0) {
+				for (String field : dependentFields) {
+					Object fieldBefore = getFieldValue(before, field);
+					Object fieldAfter = getFieldValue(after, field);
+					
+					//If the dependent field has changed, then add to the list of effected nominations.
+					if (!Objects.equals(fieldBefore, fieldAfter)) {
+						affectedNoms.add(n);
+						break; //No need to add it twice.
+					}
+				}
+			}
+			else {
+				//No dependent fields found, so assume affected if any change to slot.
+				affectedNoms.add(n);
+			}
+		}
+		
+		return affectedNoms;
+	}
+	
+	private Object getFieldValue(Object obj, String fieldPath) {
+		try {
+			String[] elementNames = fieldPath.split("\\.");
+			
+			for (String elementName : elementNames) {
+				Class<?> cls = obj.getClass();
+
+				//Is it a method / getter.
+				if (elementName.endsWith("()")) {
+					String methodName = elementName.replace("()","");
+					Method[] methods = cls.getMethods();
+
+					for (Method m : methods) {
+						if (m.getName().equals(methodName)) {
+							obj = m.invoke(obj);
+							break;
+						}
+					}
+				}
+				//Or a field?
+				else {
+					Field[] fields = cls.getFields();
+					for (Field f : fields) {
+						if (f.getName().equals(elementName)) {
+							obj = f.get(obj);
+							break;
+						}
+					}
+				}
+			}
+			
+			//Value found successfully.
+			return obj;
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+	
 	private CellLabelProvider createViolationsDeltaLabelProvider() {
 		return new CellLabelProvider() {
 
