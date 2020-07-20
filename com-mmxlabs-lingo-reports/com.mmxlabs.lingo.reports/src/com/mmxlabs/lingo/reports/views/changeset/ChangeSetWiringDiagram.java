@@ -165,7 +165,7 @@ public class ChangeSetWiringDiagram implements PaintListener {
 
 		// draw paths
 		for (ChangeSetTableGroup changeSet : root.getGroups()) {
-			List<ChangeSetTableRow> rows = changeSet.getRows(); // diffToBase ? changeSet.getChangeSetRowsToBase() : changeSet.getChangeSetRowsToPrevious();
+			List<ChangeSetTableRow> rows = changeSet.getRows();
 			for (final ChangeSetTableRow row : rows) {
 
 				if (!row.isWiringChange()) {
