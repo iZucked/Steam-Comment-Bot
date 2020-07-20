@@ -54,9 +54,10 @@ public class ChangeSetViewCreatorService {
 			public void run() {
 				while (!PlatformUI.isWorkbenchRunning()) {
 					try {
-						Thread.sleep(1000);
+						Thread.sleep(1_000);
 					} catch (final InterruptedException e) {
-						e.printStackTrace();
+						log.error(e.getMessage(), e);
+						Thread.currentThread().interrupt();
 					}
 				}
 
@@ -69,7 +70,7 @@ public class ChangeSetViewCreatorService {
 					eventBroker.subscribe(AnalyticsSolution.OPEN_RESULTS_VIEW, openEventHandler);
 					eventBroker.subscribe(AnalyticsSolution.OPEN_RESULTS_VIEW_WITH_SCREEN, openAndSwitchEventHandler);
 				});
-			};
+			}
 		}.start();
 	}
 
@@ -96,7 +97,7 @@ public class ChangeSetViewCreatorService {
 							partService.switchPerspective(p);
 						} catch (final IllegalStateException e) {
 							// SG: I have seen this happen when we have a modal dialog open (it was the optimisation params).
-							// log.error("Unable to open compare perspective", e);
+							// log.error("Unable to open compare perspective", e)
 						}
 						foundPerspective = true;
 						break;
@@ -124,7 +125,7 @@ public class ChangeSetViewCreatorService {
 					}
 					return;
 				} catch (final PartInitException e) {
-					e.printStackTrace();
+					log.error(e.getMessage(), e);
 				}
 			}
 		});

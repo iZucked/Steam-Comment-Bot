@@ -28,23 +28,18 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 public class PortCvCompatibilityConstraintChecker extends AbstractPairwiseConstraintChecker {
 
 	@Inject
-	@NonNull
 	private IPortTypeProvider portTypeProvider;
 
 	@Inject
-	@NonNull
 	private IPortSlotProvider portSlotProvider;
 
 	@Inject
-	@NonNull
 	private IElementPortProvider portProvider;
 
 	@Inject
-	@NonNull
 	private IActualsDataProvider actualsDataProvider;
 
 	@Inject
-	@NonNull
 	private IPortCVRangeProvider portCVRangeProvider;
 
 	public PortCvCompatibilityConstraintChecker(@NonNull final String name) {

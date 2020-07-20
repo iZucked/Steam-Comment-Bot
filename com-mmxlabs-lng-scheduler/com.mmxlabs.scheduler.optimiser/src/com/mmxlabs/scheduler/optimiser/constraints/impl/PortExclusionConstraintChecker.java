@@ -18,14 +18,12 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
-import com.mmxlabs.optimiser.core.constraints.IResourceElementConstraintChecker;
-import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.providers.IElementPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortExclusionProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IElementPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 /**
@@ -39,23 +37,18 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 public class PortExclusionConstraintChecker implements IPairwiseConstraintChecker {
 
 	@Inject
-	@NonNull
 	private IPortExclusionProvider portExclusionProvider;
 
 	@Inject
-	@NonNull
 	private IVesselProvider vesselProvider;
 
 	@Inject
-	@NonNull
 	private IElementPortProvider portProvider;
 
 	@Inject
-	@NonNull
 	private INominatedVesselProvider nominatedVesselProvider;
 
-	@NonNull
-	private final String name;
+	private final @NonNull String name;
 
 	public PortExclusionConstraintChecker(@NonNull final String name) {
 		super();
@@ -137,11 +130,7 @@ public class PortExclusionConstraintChecker implements IPairwiseConstraintChecke
 
 		return valid;
 	}
-
-	@Override
-	public void setOptimisationData(@NonNull final IPhaseOptimisationData data) {
-	}
-
+ 
 	@Override
 	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
 		if (portExclusionProvider.hasNoExclusions()) {
@@ -162,11 +151,6 @@ public class PortExclusionConstraintChecker implements IPairwiseConstraintChecke
 		}
 
 		return !(exclusions.contains(portProvider.getPortForElement(first)) || exclusions.contains(portProvider.getPortForElement(second)));
-	}
-
-	@Override
-	public String explain(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
-		return null;
 	}
 
 	/**

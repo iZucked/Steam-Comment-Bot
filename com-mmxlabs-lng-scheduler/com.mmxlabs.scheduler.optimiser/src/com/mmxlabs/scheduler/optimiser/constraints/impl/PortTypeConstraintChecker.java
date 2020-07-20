@@ -19,7 +19,6 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
-import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
@@ -40,19 +39,15 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  */
 public final class PortTypeConstraintChecker implements IPairwiseConstraintChecker {
 
-	@NonNull
-	private final String name;
+	private final @NonNull String name;
 
 	@Inject
-	@NonNull
 	private IPortTypeProvider portTypeProvider;
 
 	@Inject
-	@NonNull
 	private IVesselProvider vesselProvider;
 
 	@Inject
-	@NonNull
 	private IOrderedSequenceElementsDataComponentProvider orderedSequenceProvider;
 
 	public PortTypeConstraintChecker(@NonNull final String name) {
@@ -100,10 +95,7 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 
 	}
 
-	@Override
-	public void setOptimisationData(@NonNull final IPhaseOptimisationData optimisationData) {
-	}
-
+ 
 	/**
 	 * Check ISequence for {@link PortType} ordering violations.
 	 * 
@@ -147,8 +139,8 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 		for (final ISequenceElement t : sequence) {
 			final PortType type = portTypeProvider.getPortType(t);
 			if (previous == null) {
-				if ((instanceType == VesselInstanceType.ROUND_TRIP && !(type == PortType.Load || type == PortType.End)) ||
-					(instanceType != VesselInstanceType.ROUND_TRIP && (type != PortType.Start))) {
+				if ((instanceType == VesselInstanceType.ROUND_TRIP && !(type == PortType.Load || type == PortType.End))
+						|| (instanceType != VesselInstanceType.ROUND_TRIP && (type != PortType.Start))) {
 					// must either start with Start and be not a round trip,
 					// or must start with a load or an End and be a round trip.
 

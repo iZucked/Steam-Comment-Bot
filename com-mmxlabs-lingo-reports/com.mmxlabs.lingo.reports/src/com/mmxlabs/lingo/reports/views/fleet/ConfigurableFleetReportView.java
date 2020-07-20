@@ -59,12 +59,11 @@ import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnType;
-import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
-import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.rcp.common.actions.CopyGridToJSONUtil;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
@@ -97,11 +96,9 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 	private Iterable<IFleetBasedReportInitialStateExtension> initialStates;
 
 	@Inject
-	@NonNull
 	private ScenarioComparisonService scenarioComparisonService;
 
 	@Inject
-	@NonNull
 	private SelectedScenariosService selectedScenariosService;
 
 	@Inject
@@ -133,8 +130,8 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 					RowGroup g1 = null;
 					RowGroup g2 = null;
 
-					Boolean firstIsComposite = false;
-					Boolean secondIsComposite = false;
+					boolean firstIsComposite = false;
+					boolean secondIsComposite = false;
 
 					if (e1 instanceof Row) {
 						g1 = ((Row) e1).getRowGroup();
@@ -587,8 +584,8 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 
 	@Override
 	protected void addDialogCheckBoxes(final ColumnConfigurationDialog dialog) {
-		dialog.addCheckBoxInfo("Show rows for", builder.ROW_FILTER_ALL, () -> builder.getRowFilterInfo());
-		dialog.addCheckBoxInfo("In diff mode", builder.DIFF_FILTER_ALL, () -> builder.getDiffFilterInfo());
+		dialog.addCheckBoxInfo("Show rows for", builder.ROW_FILTER_ALL, builder::getRowFilterInfo);
+		dialog.addCheckBoxInfo("In diff mode", builder.DIFF_FILTER_ALL, builder::getDiffFilterInfo);
 	}
 
 	@Override
@@ -675,8 +672,7 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 			if (vesselAvailability != null) {
 				final com.mmxlabs.models.lng.fleet.Vessel vessel = vesselAvailability.getVessel();
 				if (vessel != null) {
-					final String vesselName = vessel.getName();
-					return vesselName;
+					return vessel.getName();
 				}
 			}
 		}
