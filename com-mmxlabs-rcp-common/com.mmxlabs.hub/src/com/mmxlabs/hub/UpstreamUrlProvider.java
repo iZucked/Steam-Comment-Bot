@@ -15,6 +15,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLPeerUnverifiedException;
@@ -25,6 +26,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,6 +35,7 @@ import com.mmxlabs.hub.auth.AuthenticationManager;
 import com.mmxlabs.hub.common.http.HttpClientUtil;
 import com.mmxlabs.hub.info.DatahubInformation;
 import com.mmxlabs.hub.preferences.DataHubPreferenceConstants;
+import com.mmxlabs.hub.preferences.DataHubPreferencePage;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -88,6 +91,10 @@ public class UpstreamUrlProvider {
 	public static final String LOGOUT_PATH = "/logout";
 
 	AuthenticationManager authenticationManager = AuthenticationManager.getInstance();
+
+	// this bool ensures that only one authentication shell is launched
+	private final AtomicBoolean authenticationDialogIsOpen = new AtomicBoolean(false);
+	public final AtomicBoolean allowAuthenticationDialogToBeOpened = new AtomicBoolean(true);
 
 	private UpstreamUrlProvider() {
 		if (DataHubActivator.getDefault() != null) {
@@ -163,6 +170,33 @@ public class UpstreamUrlProvider {
 		return "";
 	}
 
+	// /**
+	// * Returns the current URL for the upstream service, trying repeatedly if
+	// * necessary (with 50ms pauses between each).
+	// * <p>
+	// * After maxRetries retries, the method gives up and returns an empty string.
+	// *
+	// * @param maxRetries
+	// * @return
+	// */
+	// public String getBaseUrl(int maxRetries) {
+	// String result = getBaseUrlIfAvailable();
+	//
+	// while ((result == null || result.isEmpty()) && maxRetries-- > 0) {
+	// // wait 50ms
+	// try {
+	// Thread.sleep(50);
+	// } catch (final InterruptedException e) {
+	// // Restore the interrupted status if something happens while asleep
+	// Thread.currentThread().interrupt();
+	// }
+	// // try again
+	// result = getBaseUrlIfAvailable();
+	// }
+	//
+	// return result;
+	// }
+
 	public void registerDetailsChangedLister(final IUpstreamDetailChangedListener listener) {
 		detailListeners.add(listener);
 	}
@@ -216,7 +250,22 @@ public class UpstreamUrlProvider {
 
 			authenticationManager.updateAuthenticationScheme(baseUrl, currentInformation.getAuthenticationScheme());
 
-			DataHubServiceProvider.getInstance().setLoggedInState(authenticationManager.isAuthenticated());
+			if (authenticationDialogIsOpen.compareAndSet(false, true) && allowAuthenticationDialogToBeOpened.get() && !authenticationManager.isAuthenticated()) {
+				authenticationManager.run(optionalShell);
+
+				// this gets reset whenever a user logs in from the preference page
+				if (PlatformUI.isWorkbenchRunning()) {
+					allowAuthenticationDialogToBeOpened.compareAndSet(true, false);
+				}
+				authenticationDialogIsOpen.compareAndSet(true, false);
+			}
+
+			if (!authenticationManager.isAuthenticated()) {
+				DataHubServiceProvider.getInstance().setLoggedInState(false);
+				return false;
+			} else {
+				DataHubServiceProvider.getInstance().setLoggedInState(true);
+			}
 
 			valid = true;
 			currentBaseURL = baseUrl;
@@ -359,5 +408,19 @@ public class UpstreamUrlProvider {
 		}
 
 		return authenticationManager.buildRequest().url(baseUrlIfAvailable + urlPath);
+	}
+
+	/**
+	 * Returns true if there is a String representing the HUB url present. Only intended to be used by the application startup check
+	 */
+	public boolean hasADataHubURL() {
+		final String baseUrl = preferenceStore.getString(DataHubPreferenceConstants.P_DATAHUB_URL_KEY);
+		if (baseUrl == null || baseUrl.isEmpty()) {
+			return false;
+		}
+		if (baseUrl.startsWith("http")) {
+			return true;
+		}
+		return false;
 	}
 }

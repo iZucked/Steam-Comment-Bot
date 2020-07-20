@@ -42,7 +42,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.hub.DataHubActivator;
-import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.IUpstreamDetailChangedListener;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.auth.AuthenticationManager;
@@ -73,8 +72,7 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 		setPreferenceStore(DataHubActivator.getDefault().getPreferenceStore());
 		UpstreamUrlProvider.INSTANCE.registerDetailsChangedLister(enableLoginListener);
 	}
-
-	@Override
+	
 	public void dispose() {
 		UpstreamUrlProvider.INSTANCE.deregisterDetailsChangedLister(enableLoginListener);
 		if (forceBasicAuth != null) {
@@ -87,23 +85,23 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 
 	protected String loginButtonText = "Login";
 	protected String logoutButtonText = "Logout";
-	protected Button loginButton;
+	protected Button button;
 
-	public void setLoginButtonText() {
-		if (!loginButton.isDisposed()) {
+	public void setButtonText() {
+		if (!button.isDisposed()) {
 			if (authenticationManager.isAuthenticated()) {
-				loginButton.setText(logoutButtonText);
+				button.setText(logoutButtonText);
 			} else {
-				loginButton.setText(loginButtonText);
+				button.setText(loginButtonText);
 			}
 		}
 	}
 
-	public void setLoginButtonEnabled() {
-		loginButton.setEnabled(DataHubServiceProvider.getInstance().isHubOnline());
-	}
-
 	protected Label noteLabel;
+
+	void showNoteLabel() {
+		noteLabel.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).create());
+	}
 
 	protected BooleanFieldEditor forceBasicAuth;
 
@@ -115,41 +113,28 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 		editor.setPropertyChangeListener(disableLogin);
 	}
 
-	/*
-	 * This listener fires whenever the Data Hub URL is modified but the changes have not yet been applied. Login will use the URL from the preferences which is saved only when the Apply button is
-	 * pressed
-	 */
 	IPropertyChangeListener disableLogin = new IPropertyChangeListener() {
 		@Override
 		public void propertyChange(PropertyChangeEvent event) {
 			// display note and disable login button
-			disableLogin();
+			button.setEnabled(false);
+			noteLabel.setVisible(true);
 		}
 	};
 
-	public void disableLogin() {
-		loginButton.setEnabled(false);
-		noteLabel.setVisible(true);
-	}
-
 	public void enableLogin() {
-		loginButton.setEnabled(true);
+		button.setEnabled(true);
 		noteLabel.setVisible(false);
 	}
 
-	public void setForceBasicAuthEnabled() {
+	public void setForceBasicAuth() {
 		forceBasicAuth.setEnabled(authenticationManager.isOAuthEnabled(), getFieldEditorParent());
 	}
 
-	/*
-	 * This listener fires when there are changes to the details in the UpstreamURLProvider: when the Datahub URL, the hostname check or the force local authentication checkbox have been changed and
-	 * the changes have been applied
-	 */
-	private final IUpstreamDetailChangedListener enableLoginListener = () -> {
-		setLoginButtonText();
+	final private IUpstreamDetailChangedListener enableLoginListener = () -> {
+		setButtonText();
 		enableLogin();
-		setLoginButtonEnabled();
-		setForceBasicAuthEnabled();
+		setForceBasicAuth();
 	};
 
 	@Override
@@ -158,26 +143,28 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 		editor = new StringFieldEditor(DataHubPreferenceConstants.P_DATAHUB_URL_KEY, "&URL", getFieldEditorParent());
 		addField(editor);
 
-		loginButton = new Button(getFieldEditorParent(), SWT.PUSH);
-		loginButton.setText("Login");
-		loginButton.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).create());
+		button = new Button(getFieldEditorParent(), SWT.PUSH);
+		button.setText("Login");
+		button.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).create());
 
-		loginButton.addSelectionListener(new SelectionAdapter() {
+		button.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent se) {
-				if (loginButton.getText().equals(loginButtonText)) {
+				UpstreamUrlProvider.INSTANCE.allowAuthenticationDialogToBeOpened.set(true);
+
+				if (button.getText().equals(loginButtonText)) {
 					Shell shell = getShell();
 					if (!authenticationManager.isAuthenticated()) {
 						authenticationManager.run(shell);
 					}
-				} else if (loginButton.getText().equals(logoutButtonText)) {
+				} else if (button.getText().equals(logoutButtonText)) {
 					authenticationManager.logout(getShell());
 				}
 
 				if (authenticationManager.isAuthenticated()) {
-					loginButton.setText("Logout");
+					button.setText("Logout");
 				} else {
-					loginButton.setText("Login");
+					button.setText("Login");
 				}
 
 				// refresh datahub service logged in state
@@ -185,12 +172,11 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 			}
 		});
 
-		setLoginButtonText();
-		setLoginButtonEnabled();
+		setButtonText();
 
 		forceBasicAuth = new BooleanFieldEditor(DataHubPreferenceConstants.P_FORCE_BASIC_AUTH, "&Force local authentication", getFieldEditorParent());
 		addField(forceBasicAuth);
-		setForceBasicAuthEnabled();
+		setForceBasicAuth();
 
 		addField(new BooleanFieldEditor(DataHubPreferenceConstants.P_ENABLE_BASE_CASE_SERVICE_KEY, "&Base case sharing", getFieldEditorParent()));
 		if (LicenseFeatures.isPermitted("features:hub-team-folder")) {
@@ -265,25 +251,25 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 				try (final Response pingResponse = client.newCall(pingRequest).execute()) {
 					if (pingResponse.isSuccessful()) {
 						MessageDialog.openConfirm(getShell(), "Data Hub connection checker", "Connected successfully.");
-						DataHubServiceProvider.getInstance().setOnlineState(true);
+						return;
 					} else {
 						MessageDialog.openError(getShell(), "Data Hub connection checker", "Connection failed - error code is " + pingResponse.message());
-						DataHubServiceProvider.getInstance().setOnlineState(false);
+						return;
 					}
-
 				} catch (final UnknownHostException e) {
 					MessageDialog.openError(getShell(), "Data Hub connection checker", "Connection failed - Unknown host");
+					return;
 				} catch (final SSLPeerUnverifiedException e) {
 					e.printStackTrace();
 					MessageDialog.openError(getShell(), "Data Hub connection checker", "Connection failed - hostname mismatch between SSL certificate and URL");
+					return;
 				} catch (final SSLException e) {
 					MessageDialog.openError(getShell(), "Data Hub connection checker", "Connection failed - SSL Error " + e.getMessage());
+					return;
 				} catch (final IOException e) {
 					MessageDialog.openError(getShell(), "Data Hub connection checker", "Connection failed - Unknown Error " + e.getMessage());
+					return;
 				}
-
-				UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
-				setLoginButtonEnabled();
 			}
 
 			@Override
