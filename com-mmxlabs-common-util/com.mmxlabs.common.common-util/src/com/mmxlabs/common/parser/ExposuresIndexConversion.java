@@ -237,7 +237,7 @@ public class ExposuresIndexConversion {
 	private static <T extends AbstractMarkedUpNode> boolean containsNodeOfType(MarkedUpNode node, Class<T> clazz) {
 		LinkedList<T> nodes = new LinkedList<>();
 		getNodesOfType(node, clazz, nodes);
-		return !nodes.isEmpty;
+		return !nodes.isEmpty();
 	}
 
 	public static <T extends AbstractMarkedUpNode> void getNodesOfType(MarkedUpNode node, Class<T> clazz, Collection<T> nodes) {
