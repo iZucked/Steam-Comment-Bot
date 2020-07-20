@@ -145,8 +145,11 @@ public class OAuthAuthenticationManager extends AbstractAuthenticationManager {
 	@Override
 	public void logout(String upstreamURL, @Nullable Shell shell) {
 		String path = UpstreamUrlProvider.LOGOUT_PATH;
-		boolean showAuthenticationShell = false;
-		startAuthenticationShell(upstreamURL, path, shell, showAuthenticationShell);
+		boolean showAuthenticationShell = true;
+		// only lauch logout browser if user is authenticated. A non-authenticated user would get redirected to the login page
+		if (isAuthenticated(upstreamURL)) {
+			startAuthenticationShell(upstreamURL, path, shell, showAuthenticationShell);
+		}
 		clearCookies(upstreamURL);
 		deleteFromSecurePreferences(ACCESS_TOKEN);
 	}
