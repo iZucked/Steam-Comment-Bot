@@ -54,7 +54,7 @@ public class ExposuresIndexConversion {
 					if (constant != null && (containsCommodity(other) || containsShift(other)) && (!containsConstant(other) && !containsBreakeven(other))) {
 						return Form.X_PLUS_C;
 					}
-					if (other != null && other instanceof OperatorNode) {
+					if (other instanceof OperatorNode) {
 						Pair<MarkedUpNode, MarkedUpNode> otherOperatorChildren = getOperatorChildren((OperatorNode) other);
 						if (otherOperatorChildren != null) {
 							MarkedUpNode nextConstant = operatorChildren.getFirst();
@@ -235,9 +235,9 @@ public class ExposuresIndexConversion {
 	}
 
 	private static <T extends AbstractMarkedUpNode> boolean containsNodeOfType(MarkedUpNode node, Class<T> clazz) {
-		LinkedList<T> nodes = new LinkedList<T>();
+		LinkedList<T> nodes = new LinkedList<>();
 		getNodesOfType(node, clazz, nodes);
-		return nodes.size() > 0;
+		return !nodes.isEmpty;
 	}
 
 	public static <T extends AbstractMarkedUpNode> void getNodesOfType(MarkedUpNode node, Class<T> clazz, Collection<T> nodes) {

@@ -4,11 +4,8 @@
  */
 package com.mmxlabs.common.parser.series;
 
-import java.time.ZonedDateTime;
-
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.IExpression;
 
 public class ConstantSeriesExpression implements IExpression<ISeries> {

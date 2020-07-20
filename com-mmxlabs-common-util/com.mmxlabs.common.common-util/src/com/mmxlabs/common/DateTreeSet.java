@@ -36,18 +36,6 @@ public final class DateTreeSet<T> implements NavigableSet<T> {
 		this.treeSet = new TreeSet<>(comparator);
 	}
 
-	/**
-	 * Copy constructor for {@link #clone()}. Clones internal {@link TreeSet}.
-	 * 
-	 * @param dateTreeSet
-	 */
-	private DateTreeSet(final DateTreeSet<T> dts) {
-		this.transformer = dts.transformer;
-		this.comparator = dts.comparator;
-		// Clone the tree set to make an independent copy.
-		this.treeSet = (TreeSet<Object>) dts.treeSet.clone();
-	}
-
 	@Override
 	public T ceiling(final T arg0) {
 		return (T) treeSet.ceiling(arg0);

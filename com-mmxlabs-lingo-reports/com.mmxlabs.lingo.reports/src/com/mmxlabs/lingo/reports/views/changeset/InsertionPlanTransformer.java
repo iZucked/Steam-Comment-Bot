@@ -5,12 +5,10 @@
 package com.mmxlabs.lingo.reports.views.changeset;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.emf.ecore.EObject;
 
 import com.mmxlabs.lingo.reports.services.ScenarioNotEvaluatedException;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
-import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.ChangeDescription;
 import com.mmxlabs.models.lng.analytics.DualModeSolutionOption;
 import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
@@ -31,7 +29,6 @@ public class InsertionPlanTransformer {
 		try {
 			final ScheduleResultListTransformer transformer = new ScheduleResultListTransformer();
 			monitor.beginTask("Opening solutions", plan.getOptions().size());
-			// boolean first = true;
 			UserSettings userSettings = plan.getUserSettings();
 
 			final ScenarioResult base;
@@ -50,10 +47,7 @@ public class InsertionPlanTransformer {
 			for (final SolutionOption option : plan.getOptions()) {
 				ChangeDescription changeDescription = option.getChangeDescription();
 				final ScenarioResult current = new ScenarioResult(scenarioInstance, option.getScheduleModel());
-				// if (first) {
-				// base = current;
-				// first = false;
-				// } else]
+
 				{
 
 					ScenarioResult altBase = null;
@@ -78,15 +72,5 @@ public class InsertionPlanTransformer {
 		}
 
 		return root;
-
 	}
-
-	private LNGScenarioModel findScenario(final SlotInsertionOptions plan) {
-		EObject container = plan.eContainer();
-		while (container != null && !(container instanceof LNGScenarioModel)) {
-			container = container.eContainer();
-		}
-		return (LNGScenarioModel) container;
-	}
-
 }

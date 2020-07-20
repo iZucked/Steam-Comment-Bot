@@ -13,23 +13,18 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.google.common.collect.Lists;
 import com.mmxlabs.license.features.KnownFeatures;
-import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonServiceTransformer;
@@ -48,7 +43,6 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
@@ -647,20 +641,13 @@ public class CompareViewTests {
 
 		final ScenarioModelRecord pinnedRecord = ScenarioStorageUtil.createFromCopyOf("from", fromDP);
 		final ScenarioModelRecord otherRecord = ScenarioStorageUtil.createFromCopyOf("to", toDP);
-		//
-		// final ModelRecord pinnedRecord = SSDataManager.Instance.getModelRecord(pinned);
-		// final ModelRecord otherRecord = SSDataManager.Instance.getModelRecord(other);
+
 		try {
 			//
 			try (ModelReference fromRef = pinnedRecord.aquireReference("CompareViewTests:1")) {
 				try (ModelReference toRef = otherRecord.aquireReference("CompareViewTests:2")) {
 
 					final List<ICustomRelatedSlotHandler> customRelatedSlotHandlers = new LinkedList<>();
-					// if (customRelatedSlotHandlerExtensions != null) {
-					// for (final ICustomRelatedSlotHandlerExtension h : customRelatedSlotHandlerExtensions) {
-					// customRelatedSlotHandlers.add(h.getInstance());
-					// }
-					// }
 
 					final SelectedDataProviderImpl selectedDataProvider = new SelectedDataProviderImpl();
 					final Function<EObject, Collection<EObject>> getChildren = (scenarioModel) -> {
@@ -689,7 +676,7 @@ public class CompareViewTests {
 					// table.setOptions(EcoreUtil.copy(diffOptions));
 					// selectedDataProvider, pinned, others.iterator().next(), table, result.rootObjects, result.equivalancesMap);
 					final ScenarioComparisonTransformer transformer = new ScenarioComparisonTransformer();
-					final ChangeSetRoot root = transformer.createDataModel(result.equivalancesMap, table, pinnedResult, otherResult, new NullProgressMonitor());
+					final ChangeSetRoot root = transformer.createDataModel(table, pinnedResult, otherResult, new NullProgressMonitor());
 
 					resultChecker.accept(root);
 
@@ -698,96 +685,11 @@ public class CompareViewTests {
 		} finally {
 			pinnedRecord.dispose();
 			otherRecord.dispose();
-			// System.gc();
-			// System.gc();
-			// System.gc();
-			// SSDataManager.Instance.releaseModelRecord(pinned);
-			// SSDataManager.Instance.releaseModelRecord(other);
 		}
 
 	}
 
 	static class ScenarioMaker extends AbstractMicroTestCase {
-		//
-		// protected LNGScenarioModel lngScenarioModel;
-		// protected ScenarioModelFinder scenarioModelFinder;
-		// protected ScenarioModelBuilder scenarioModelBuilder;
-		// protected CommercialModelFinder commercialModelFinder;
-		// protected FleetModelFinder fleetModelFinder;
-		// protected PortModelFinder portFinder;
-		// protected CargoModelBuilder cargoModelBuilder;
-		// protected CommercialModelBuilder commercialModelBuilder;
-		// protected FleetModelBuilder fleetModelBuilder;
-		// protected SpotMarketsModelBuilder spotMarketsModelBuilder;
-		// protected SpotMarketsModelFinder spotMarketsModelFinder;
-		// protected PricingModelBuilder pricingModelBuilder;
-		// protected BaseLegalEntity entity;
-		// private IScenarioDataProvider scenarioDataProvider;
-		//
-		// @NonNull
-		// public IScenarioDataProvider importReferenceData() throws MalformedURLException {
-		// return importReferenceData("/referencedata/reference-data-1/");
-		// }
-		//
-		// @NonNull
-		// public IScenarioDataProvider importReferenceData(final String url) throws MalformedURLException {
-		//
-		// final @NonNull String urlRoot = AbstractMicroTestCase.class.getResource(url).toString();
-		// final CSVImporter importer = new CSVImporter();
-		// importer.importPortData(urlRoot);
-		// importer.importCostData(urlRoot);
-		// importer.importEntityData(urlRoot);
-		// importer.importFleetData(urlRoot);
-		// importer.importMarketData(urlRoot);
-		// importer.importPromptData(urlRoot);
-		// importer.importMarketData(urlRoot);
-		//
-		// return importer.doImport();
-		// }
-		//
-		// @BeforeEach
-		// public void constructor() throws MalformedURLException {
-		//
-		// scenarioDataProvider = importReferenceData();
-		// lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-		//
-		// scenarioModelFinder = new ScenarioModelFinder(scenarioDataProvider);
-		// scenarioModelBuilder = new ScenarioModelBuilder(scenarioDataProvider);
-		//
-		// commercialModelFinder = scenarioModelFinder.getCommercialModelFinder();
-		// fleetModelFinder = scenarioModelFinder.getFleetModelFinder();
-		// portFinder = scenarioModelFinder.getPortModelFinder();
-		// spotMarketsModelFinder = scenarioModelFinder.getSpotMarketsModelFinder();
-		//
-		// pricingModelBuilder = scenarioModelBuilder.getPricingModelBuilder();
-		// commercialModelBuilder = scenarioModelBuilder.getCommercialModelBuilder();
-		// cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
-		// fleetModelBuilder = scenarioModelBuilder.getFleetModelBuilder();
-		// spotMarketsModelBuilder = scenarioModelBuilder.getSpotMarketsModelBuilder();
-		//
-		// entity = importDefaultEntity();
-		//
-		// }
-		//
-		// protected BaseLegalEntity importDefaultEntity() {
-		// return commercialModelFinder.findEntity("Shipping");
-		// }
-
-		// @AfterEach
-		// public void destructor() {
-		// lngScenarioModel = null;
-		// scenarioModelFinder = null;
-		// scenarioModelBuilder = null;
-		// commercialModelFinder = null;
-		// fleetModelFinder = null;
-		// portFinder = null;
-		// commercialModelBuilder = null;
-		// cargoModelBuilder = null;
-		// fleetModelBuilder = null;
-		// spotMarketsModelBuilder = null;
-		// pricingModelBuilder = null;
-		// entity = null;
-		// }
 
 		void buildIt(final Consumer<ScenarioMaker> r) {
 			r.accept(this);

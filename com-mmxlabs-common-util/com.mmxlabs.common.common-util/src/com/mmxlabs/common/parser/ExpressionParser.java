@@ -56,8 +56,8 @@ public class ExpressionParser<T> implements IExpressionParser<T> {
 	}
 
 	private class Operator {
-		final public boolean isUnary;
-		final public char name;
+		public final boolean isUnary;
+		public final char name;
 
 		public Operator(final boolean isUnary, final char name) {
 			super();
@@ -150,7 +150,7 @@ public class ExpressionParser<T> implements IExpressionParser<T> {
 		}
 
 		// handle leftover operators
-		while (operatorStack.isEmpty() == false) {
+		while (!operatorStack.isEmpty()) {
 			final Operator o = operatorStack.pop();
 
 			if (o.isUnary) {
@@ -168,10 +168,6 @@ public class ExpressionParser<T> implements IExpressionParser<T> {
 		final IExpression<T> r = fragmentStack.pop();
 		assert r != null;
 		return r;
-	}
-
-	public static void main(final String args[]) {
-
 	}
 
 	@Override

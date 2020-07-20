@@ -17,6 +17,6 @@ public abstract class AbstractMarkedUpNode implements MarkedUpNode {
 	}
 
 	public List<MarkedUpNode> getChildren() {
-		return Collections.EMPTY_LIST;
+		return Collections.emptyList();
 	}
 }

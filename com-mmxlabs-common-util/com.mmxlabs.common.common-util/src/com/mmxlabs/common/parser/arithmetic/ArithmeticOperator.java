@@ -8,7 +8,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.parser.IExpression;
 
-public class ArithmeticOperator extends ArithmeticExpression {
+public class ArithmeticOperator implements ArithmeticExpression {
 	private IExpression<Double> rhs;
 	private IExpression<Double> lhs;
 	private char op;

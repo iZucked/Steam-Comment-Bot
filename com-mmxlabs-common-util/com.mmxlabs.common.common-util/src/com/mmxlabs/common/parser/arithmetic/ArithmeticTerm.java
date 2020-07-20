@@ -8,7 +8,7 @@ import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-public class ArithmeticTerm extends ArithmeticExpression {
+public class ArithmeticTerm implements ArithmeticExpression {
 	private final @NonNull String term;
 	private final @NonNull Map<@NonNull String, @NonNull Double> variables;
 

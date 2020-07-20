@@ -28,19 +28,19 @@ import com.mmxlabs.scheduler.optimiser.utils.GCStats;
 //osgi> optionise C:/dev/bm/bm.lingo C:/dev/bm/options.json
 public class HeadlessOptioniserRunnerConsoleCommand implements CommandProvider {
 	public static class Options {
-	   int numRuns;
-	   HeadlessOptioniserRunner.Options options;		
+		int numRuns;
+		HeadlessOptioniserRunner.Options options;
 	}
 
 	private static SimpleDateFormat sdfTimestamp = new SimpleDateFormat("yyyyMMdd_HHmmss");
-	
-	public static String COMMAND = "command";
-		
+
+	public static final String COMMAND = "command";
+
 	public void _optionise(CommandInterpreter ci) throws Exception {
-				
-		//Suggest to the jvm to do a gc to clean up the heap before we start off anything.
+
+		// Suggest to the jvm to do a gc to clean up the heap before we start off anything.
 		System.gc();
-		
+
 		String scenarioFileName = null;
 		String paramsFileName = null;
 
@@ -63,126 +63,128 @@ public class HeadlessOptioniserRunnerConsoleCommand implements CommandProvider {
 		final int minThreads = options.minWorkerThreads;
 		final int maxThreads = options.maxWorkerThreads;
 		if (options.turnPerfOptsOn) {
-//			OptOptions.getInstance().setAllOnOff(options.turnPerfOptsOn);
+			// OptOptions.getInstance().setAllOnOff(options.turnPerfOptsOn);
 		}
-		
+
 		File scenarioFile = new File(scenarioFileName);
 		ThreadGroup tg = new ThreadGroup("Console optioniser");
 
 		final String timestampStr = getTimestamp();
 		PrintStream pst = System.out;
-		if (options.filename != null && !options.filename.equals("")) {
-			final String filenameStr = scenarioFile.getAbsolutePath().replace(scenarioFile.getName(), "") + options.filename + "_"+timestampStr+ ".csv";
-			try {
-				pst = new PrintStream(new File(filenameStr));
-			} catch (FileNotFoundException e) {
-				System.err.printf("Error opening options.filename, %s outputting to stdout instead:\n", filenameStr);
-				e.printStackTrace(System.err);
+		PrintStream filePrintStream = null;
+		try {
+			if (options.filename != null && !options.filename.equals("")) {
+				final String filenameStr = scenarioFile.getAbsolutePath().replace(scenarioFile.getName(), "") + options.filename + "_" + timestampStr + ".csv";
+				try {
+					filePrintStream = new PrintStream(new File(filenameStr));
+					pst = filePrintStream;
+				} catch (FileNotFoundException e) {
+					System.err.printf("Error opening options.filename, %s outputting to stdout instead:\n", filenameStr);
+					e.printStackTrace(System.err);
+				}
 			}
-		}
 
-		int totalIterations = options.iterations;
-	
-		pst.println("Run,#Threads,Time(millis),GCTime(millis)");
-		for (int threads = minThreads; threads <= maxThreads; threads *= 2) {
-			//options.iterations = totalIterations / threads;
-			//CleanableExecutorService executorService = null;
-			
-			//if (threads > 1) {
-			//	executorService = LNGOptimisationBuilder.createExecutorService(threads);
-			//}
-			
-			//Do the runs with this set of parameters.
-			for (int run = 1; run <= topOptions.numRuns; run++) {
-				
-				HeadlessOptioniserJSON json = (new HeadlessOptioniserJSONTransformer()).createJSONResultObject(getMachineInfo(), options, scenarioFile, threads);
-		
-				List<Future<SlotInsertionOptimiserLogger>> futures = new ArrayList<>();
-				List<SlotInsertionOptimiserLogger> results = new ArrayList<>();
-				
-				//Do everything in N threads.
-				int startTry = (run - 1) * totalIterations; //every run should start at a different point.
-				SlotInsertionOptimiserLogger logger = new SlotInsertionOptimiserLogger();	
-				
-				CountDownLatch start = new CountDownLatch(1);
-				CountDownLatch finished = new CountDownLatch(threads);
-				
-				for (int t = 0; t < threads; t++) {										
-					final int startTryT = startTry;
-					
-					if (threads > 1) {
-					//	futures.add(executorService.submit(() -> {
+			int totalIterations = options.iterations;
+
+			pst.println("Run,#Threads,Time(millis),GCTime(millis)");
+			for (int threads = minThreads; threads <= maxThreads; threads *= 2) {
+				// options.iterations = totalIterations / threads;
+				// CleanableExecutorService executorService = null;
+
+				// if (threads > 1) {
+				// executorService = LNGOptimisationBuilder.createExecutorService(threads);
+				// }
+
+				// Do the runs with this set of parameters.
+				for (int run = 1; run <= topOptions.numRuns; run++) {
+
+					HeadlessOptioniserJSON json = (new HeadlessOptioniserJSONTransformer()).createJSONResultObject(getMachineInfo(), options, scenarioFile, threads);
+
+					List<Future<SlotInsertionOptimiserLogger>> futures = new ArrayList<>();
+					List<SlotInsertionOptimiserLogger> results = new ArrayList<>();
+
+					// Do everything in N threads.
+					int startTry = (run - 1) * totalIterations; // every run should start at a different point.
+					SlotInsertionOptimiserLogger logger = new SlotInsertionOptimiserLogger();
+
+					CountDownLatch start = new CountDownLatch(1);
+					CountDownLatch finished = new CountDownLatch(threads);
+
+					for (int t = 0; t < threads; t++) {
+						final int startTryT = startTry;
+
+						if (threads > 1) {
+							// futures.add(executorService.submit(() -> {
 							SlotInsertionOptimiserLogger loggerT = new SlotInsertionOptimiserLogger();
 							results.add(loggerT);
 							Runnable r = createNewOptimiserThread(startTryT, options, scenarioFile, loggerT, start, finished);
-					//		r.run();
+							// r.run();
 							Thread thread = new Thread(r);
 							thread.start();
-							//return loggerT;
-					//	}));
+							// return loggerT;
+							// }));
+						} else {
+							start.countDown();
+							Runnable r = createNewOptimiserThread(startTryT, options, scenarioFile, logger, start, finished);
+							r.run();
+						}
+
+						startTry += options.iterations;
 					}
-					else {
+
+					// Start off all the threads.
+					if (threads > 1) {
 						start.countDown();
-						Runnable r = createNewOptimiserThread(startTryT, options, scenarioFile, logger, start, finished);
-						r.run();
 					}
-					
-					startTry += options.iterations;
-				}
-				
-				//Start off all the threads.
-				if (threads > 1) {
-					start.countDown();
-				}
-				
-				//Wait for all threads to complete.
-				finished.await();
-				
-				if (threads > 1) {
-					
-					
-				//	for (var ft : futures) {
-//						results.add(ft.get());
-						//Aggregate up total times.
+
+					// Wait for all threads to complete.
+					finished.await();
+
+					if (threads > 1) {
+
+						// for (var ft : futures) {
+						// results.add(ft.get());
+						// Aggregate up total times.
 						logger.aggregate(results);
-				//	}
-				}
-				
-				//Print out how long the run took.
-				pst.printf("%d,%d,%d,%d\n",run,threads,logger.getRuntime(),GCStats.getGCTimeInMillis());
-		
-				if (options.outputToJSON) {
-					(new HeadlessOptioniserJSONTransformer()).addRunResult(startTry, logger, json);  
+						// }
+					}
 
-					//Write out the result of all runs.
-					try {
-						ObjectMapper mapper1 = new ObjectMapper();
-						mapper1.writerWithDefaultPrettyPrinter().writeValue(new File(scenarioFile.getAbsoluteFile() + "." + UUID.randomUUID().toString() + ".json"), json);
-					} catch (Exception e) {
-						System.err.println("Error writing to file:");
-						e.printStackTrace();
+					// Print out how long the run took.
+					pst.printf("%d,%d,%d,%d\n", run, threads, logger.getRuntime(), GCStats.getGCTimeInMillis());
+
+					if (options.outputToJSON) {
+						(new HeadlessOptioniserJSONTransformer()).addRunResult(startTry, logger, json);
+
+						// Write out the result of all runs.
+						try {
+							ObjectMapper mapper1 = new ObjectMapper();
+							mapper1.writerWithDefaultPrettyPrinter().writeValue(new File(scenarioFile.getAbsoluteFile() + "." + UUID.randomUUID().toString() + ".json"), json);
+						} catch (Exception e) {
+							System.err.println("Error writing to file:");
+							e.printStackTrace();
+						}
 					}
 				}
-			}
 
-			//if (executorService != null) {
-			//	executorService.shutdown();
-			//}
-		}
-		
-		if (pst != System.out) {
-			pst.close();
+				// if (executorService != null) {
+				// executorService.shutdown();
+				// }
+			}
+		} finally {
+			if (filePrintStream != null) {
+				filePrintStream.close();
+			}
 		}
 	}
-	
-	private Runnable createNewOptimiserThread(final int startTry, HeadlessOptioniserRunner.Options options, File scenarioFile, SlotInsertionOptimiserLogger logger,
-			CountDownLatch start, CountDownLatch finished) {
+
+	private Runnable createNewOptimiserThread(final int startTry, HeadlessOptioniserRunner.Options options, File scenarioFile, SlotInsertionOptimiserLogger logger, CountDownLatch start,
+			CountDownLatch finished) {
 		return new Runnable() {
 			@Override
 			public void run() {
 				try {
 					start.await();
-					//Everything from here on single threaded.
+					// Everything from here on single threaded.
 					options.maxWorkerThreads = 1;
 					HeadlessOptioniserRunner runner = new HeadlessOptioniserRunner();
 					runner.run(startTry, scenarioFile, logger, options, null);
@@ -194,19 +196,19 @@ public class HeadlessOptioniserRunnerConsoleCommand implements CommandProvider {
 			}
 		};
 	}
-	
+
 	private String getTimestamp() {
 		return sdfTimestamp.format(new Date());
 	}
-	
+
 	private String getMachineInfo() {
-		String machInfo = "AvailableProcessors:"+Integer.toString(Runtime.getRuntime().availableProcessors());
+		String machInfo = "AvailableProcessors:" + Integer.toString(Runtime.getRuntime().availableProcessors());
 		return machInfo;
 	}
-	
+
 	@Override
 	public String getHelp() {
-		StringBuffer buffer = new StringBuffer();
+		StringBuilder buffer = new StringBuilder();
 		buffer.append("optionise scenario.lingo options.json\n\t");
 		return buffer.toString();
 	}

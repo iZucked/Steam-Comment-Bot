@@ -55,8 +55,7 @@ import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
 import com.mmxlabs.rcp.common.menus.SubLocalMenuHelper;
 
 /**
- * Class to organise insertion plans and optionally filter out related but
- * "poorer" choices
+ * Class to organise insertion plans and optionally filter out related but "poorer" choices
  *
  */
 public class InsertionPlanGrouperAndFilter extends ViewerFilter {
@@ -367,7 +366,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 			}
 		}
 
-		return (tableRoot) -> {
+		return tableRoot -> {
 			if (tableRoot == null) {
 				return;
 			}
@@ -877,28 +876,30 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 								ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
 							}));
 						} else {
+							if (load != null) {
 
-							if (row.isRhsSlot()) {
-								final String label = load.getName() + " to " + row.getRhsName();
-								showFromMenu.addAction(new RunnableAction(label, () -> {
-									final UserFilter f = new UserFilter(label);
-									f.lhsKey = row.getLhsName();
-									f.lhsType = FilterSlotType.BY_ID;
-									f.rhsKey = row.getRhsName();
-									f.rhsType = FilterSlotType.BY_ID;
-									mergeFilter(f);
-									ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
-								}));
-							} else {
-								final String label = load.getName() + " to open";
-								showFromMenu.addAction(new RunnableAction(label, () -> {
-									final UserFilter f = new UserFilter(label);
-									f.lhsKey = row.getLhsName();
-									f.lhsType = FilterSlotType.BY_ID;
-									f.rhsType = FilterSlotType.BY_OPEN;
-									mergeFilter(f);
-									ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
-								}));
+								if (row.isRhsSlot()) {
+									final String label = load.getName() + " to " + row.getRhsName();
+									showFromMenu.addAction(new RunnableAction(label, () -> {
+										final UserFilter f = new UserFilter(label);
+										f.lhsKey = row.getLhsName();
+										f.lhsType = FilterSlotType.BY_ID;
+										f.rhsKey = row.getRhsName();
+										f.rhsType = FilterSlotType.BY_ID;
+										mergeFilter(f);
+										ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
+									}));
+								} else {
+									final String label = load.getName() + " to open";
+									showFromMenu.addAction(new RunnableAction(label, () -> {
+										final UserFilter f = new UserFilter(label);
+										f.lhsKey = row.getLhsName();
+										f.lhsType = FilterSlotType.BY_ID;
+										f.rhsType = FilterSlotType.BY_OPEN;
+										mergeFilter(f);
+										ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
+									}));
+								}
 							}
 						}
 
@@ -927,7 +928,6 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 		final boolean showRHSActions = true;
 
 		{
-			// TODO: Make this delayed?
 			final SubLocalMenuHelper showFromMenu = new SubLocalMenuHelper("Explore related...");
 			helper.addSubMenu(showFromMenu);
 			{
@@ -1082,7 +1082,6 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 						}
 						if (menu != null) {
 							menu.addAction(new RunnableAction(f.getLabel(), () -> {
-								// clearFilter();
 								mergeFilter(f);
 								ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
 							}));

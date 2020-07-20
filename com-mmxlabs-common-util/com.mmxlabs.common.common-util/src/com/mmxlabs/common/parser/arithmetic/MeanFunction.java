@@ -10,7 +10,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.parser.IExpression;
 
-public class MeanFunction extends ArithmeticExpression {
+public class MeanFunction implements ArithmeticExpression {
 	private List<IExpression<@NonNull Double>> arguments;
 
 	public MeanFunction(final List<IExpression<@NonNull Double>> arguments) {

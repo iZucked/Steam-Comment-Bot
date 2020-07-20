@@ -83,8 +83,8 @@ public class SelectedScenariosService {
 		@Override
 		public void commandStackChanged(final EventObject event) {
 			// Only react to changes involving the ScheduleModel
-			final CommandStack commandStack = (CommandStack) event.getSource();
-			final Command mostRecentCommand = commandStack.getMostRecentCommand();
+			final CommandStack eventCommandStack = (CommandStack) event.getSource();
+			final Command mostRecentCommand = eventCommandStack.getMostRecentCommand();
 			if (mostRecentCommand != null) {
 				final Collection<?> commandResult = mostRecentCommand.getResult();
 				for (final Object o : commandResult) {
@@ -99,7 +99,7 @@ public class SelectedScenariosService {
 				}
 			}
 		}
-	};
+	}
 
 	private final @NonNull IScenarioServiceSelectionChangedListener scenarioServiceSelectionChangedListener = new IScenarioServiceSelectionChangedListener() {
 
@@ -170,7 +170,7 @@ public class SelectedScenariosService {
 		assert commandStacks.isEmpty();
 	}
 
-	IPostChangeHook unloadHook = (modelRecord) -> {
+	IPostChangeHook unloadHook = modelRecord -> {
 		detachScenarioInstance(modelRecord);
 		updateSelectedScenarios(false);
 	};
@@ -348,10 +348,9 @@ public class SelectedScenariosService {
 		protected void finalize() throws Throwable {
 			if (ref != null) {
 				ref.close();
-				ref = null;
 			}
 			super.finalize();
-		};
+		}
 
 		@NonNull
 		public ScenarioResult getScenarioResult() {
@@ -407,7 +406,7 @@ public class SelectedScenariosService {
 						}
 					}
 				}
-				{
+				if (scheduleModel != null) {
 					final TreeIterator<EObject> itr = scheduleModel.eAllContents();
 					while (itr.hasNext()) {
 						EObject next = itr.next();
@@ -500,12 +499,16 @@ public class SelectedScenariosService {
 		final SelectedDataProviderImpl provider = new SelectedDataProviderImpl();
 		{
 			final KeyValueRecord record = createKeyValueRecord(pin);
-			provider.addScenario(record.getScenarioResult(), record.getSchedule(), record.getChildren());
-			provider.setPinnedScenarioInstance(pin);
+			if (record != null) {
+				provider.addScenario(record.getScenarioResult(), record.getSchedule(), record.getChildren());
+				provider.setPinnedScenarioInstance(pin);
+			}
 		}
 		{
 			final KeyValueRecord record = createKeyValueRecord(other);
-			provider.addScenario(record.getScenarioResult(), record.getSchedule(), record.getChildren());
+			if (record != null) {
+				provider.addScenario(record.getScenarioResult(), record.getSchedule(), record.getChildren());
+			}
 
 		}
 		return provider;

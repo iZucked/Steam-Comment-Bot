@@ -10,10 +10,6 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 public class BreakevenNode extends AbstractMarkedUpNode {
 	private double constant = 1.0;
 
-	public BreakevenNode() {
-		this.constant = constant;
-	}
-
 	public double getConstant() {
 		return constant;
 	}

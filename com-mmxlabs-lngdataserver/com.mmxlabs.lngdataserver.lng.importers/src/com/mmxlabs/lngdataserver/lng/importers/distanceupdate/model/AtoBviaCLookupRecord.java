@@ -11,6 +11,7 @@ public class AtoBviaCLookupRecord {
 	private String to;
 	private double distance;
 	private String errorCode;
+	private boolean antiPiracy;
 
 	public AtoBviaCLookupRecord() {
 
@@ -78,5 +79,13 @@ public class AtoBviaCLookupRecord {
 
 	public void setErrorCode(String errorCode) {
 		this.errorCode = errorCode;
+	}
+
+	public boolean isAntiPiracy() {
+		return antiPiracy;
+	}
+
+	public void setAntiPiracy(boolean antiPiracy) {
+		this.antiPiracy = antiPiracy;
 	}
 }

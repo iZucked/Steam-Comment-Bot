@@ -16,7 +16,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetTransformerUtil.MappingModel;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
@@ -58,8 +57,7 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class ScenarioComparisonTransformer {
 
-	public ChangeSetRoot createDataModel(final Map<EObject, Set<EObject>> equivalancesMap, @NonNull final Table table, @NonNull final ScenarioResult from, @NonNull final ScenarioResult to,
-			final IProgressMonitor monitor) {
+	public ChangeSetRoot createDataModel(@NonNull final Table table, @NonNull final ScenarioResult from, @NonNull final ScenarioResult to, final IProgressMonitor monitor) {
 		monitor.beginTask("Opening changes", 1);
 		final ChangeSetRoot root = ChangesetFactory.eINSTANCE.createChangeSetRoot();
 		assert root != null;
@@ -182,10 +180,7 @@ public class ScenarioComparisonTransformer {
 
 	private void processRows(@NonNull final Schedule toSchedule, @NonNull final Schedule fromSchedule, @NonNull final List<ChangeSetRow> rows, @NonNull final ChangeSet changeSet) {
 
-		// ChangeSetTransformerUtil.mergeSpots(rows);
 		ChangeSetTransformerUtil.setRowFlags(rows);
-		// ChangeSetTransformerUtil.filterRows(rows);
-		// ChangeSetTransformerUtil.sortRows(rows, null);
 		changeSet.getChangeSetRowsToDefaultBase().addAll(rows);
 		calculateMetrics(changeSet, fromSchedule, toSchedule);
 	}
@@ -287,54 +282,6 @@ public class ScenarioComparisonTransformer {
 		}
 		return targets;
 	}
-	//
-	// public void a() {
-	// if (pass == 0) {
-	// ChangeSetTransformerUtil.createOrUpdateRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, element, isBase, false);
-	// } else if (pass == 1) {
-	// if (r.isReference()) {
-	// ChangeSetTransformerUtil.createOrUpdateRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, element, false, false);
-	//
-	// continue;
-	// }
-	// } else if (pass == 3 && !r.isReference()) {
-	// final Set<EObject> equivalents = equivalancesMap.get(element);
-	// if (equivalents == null) {
-	// continue;
-	// }
-	//
-	// if (element instanceof SlotVisit) {
-	// final SlotVisit slotVisit = (SlotVisit) element;
-	// if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
-	// final LoadSlot loadSlot = (LoadSlot) slotVisit.getSlotAllocation().getSlot();
-	//
-	// for (final EObject e : equivalents) {
-	// if (e instanceof SlotVisit) {
-	// final SlotVisit slotVisit2 = (SlotVisit) e;
-	// final CargoAllocation cargoAllocation = slotVisit2.getSlotAllocation().getCargoAllocation();
-	// if (cargoAllocation.getSlotAllocations().size() != 2) {
-	// throw new RuntimeException("Complex cargoes are not supported");
-	// }
-	// ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, slotVisit2,
-	// (LoadSlot) slotVisit2.getSlotAllocation().getSlot(), false, false);
-	// }
-	// }
-	// }
-	// } else if (element instanceof OpenSlotAllocation) {
-	//
-	// for (final EObject e : equivalents) {
-	// if (e instanceof OpenSlotAllocation) {
-	// final OpenSlotAllocation openSlotAllocation2 = (OpenSlotAllocation) e;
-	// ChangeSetTransformerUtil.createOrUpdateOpenSlotAllocationRow(lhsRowMap, rhsRowMap, rows, openSlotAllocation2, false);
-	// }
-	// }
-	// } else if (element instanceof Event) {
-	// final Event event = (Event) element;
-	// ChangeSetTransformerUtil.createOrUpdateEventRow(lhsRowMap, rhsRowMap, rows, event, false);
-	// }
-	// }
-	// }
-	// }
 
 	private static void calculateMetrics(@NonNull final ChangeSet changeSet, @NonNull final Schedule fromSchedule, @NonNull final Schedule toSchedule) {
 		final Metrics currentMetrics = ChangesetFactory.eINSTANCE.createMetrics();
@@ -347,6 +294,7 @@ public class ScenarioComparisonTransformer {
 		currentMetrics.setPnl(pnl);
 		currentMetrics.setCapacity((int) violations);
 		currentMetrics.setLateness((int) lateness);
+		
 		pnl = 0;
 		violations = 0;
 		lateness = 0;
@@ -356,7 +304,7 @@ public class ScenarioComparisonTransformer {
 			if (afterData != null) {
 				pnl += ChangeSetTransformerUtil.getRowProfitAndLossValue(afterData, ScheduleModelKPIUtils::getGroupProfitAndLoss);
 
-				if (afterData.getMembers().size() > 0) {
+				if (!afterData.getMembers().isEmpty()) {
 					ChangeSetRowData rd = afterData.getMembers().get(0);
 					EventGrouping eventGrouping = rd.getEventGrouping();
 					if (eventGrouping != null) {

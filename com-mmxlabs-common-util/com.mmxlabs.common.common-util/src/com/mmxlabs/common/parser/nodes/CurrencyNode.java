@@ -5,9 +5,6 @@
 package com.mmxlabs.common.parser.nodes;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.eclipse.jdt.annotation.Nullable;
-
-import com.mmxlabs.common.parser.nodes.AbstractMarkedUpNode;
 
 @NonNullByDefault
 public class CurrencyNode extends AbstractMarkedUpNode {

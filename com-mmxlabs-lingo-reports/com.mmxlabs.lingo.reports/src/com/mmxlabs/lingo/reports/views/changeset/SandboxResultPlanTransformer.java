@@ -54,7 +54,6 @@ public class SandboxResultPlanTransformer {
 			for (final SolutionOption option : plan.getOptions()) {
 				final ChangeDescription changeDescription = option.getChangeDescription();
 				final ScenarioResult current = new ScenarioResult(scenarioInstance, option.getScheduleModel());
-				// root.getChangeSets().add(transformer.buildSingleChangeChangeSet(base, current, changeDescription, userSettings));
 
 				ScenarioResult altBase = null;
 				ScenarioResult altCurrent = null;

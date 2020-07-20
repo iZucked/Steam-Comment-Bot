@@ -8,7 +8,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.parser.IExpression;
 
-public class NegationOperator extends ArithmeticExpression {
+public class NegationOperator implements ArithmeticExpression {
 	final IExpression<@NonNull Double> argument;
 
 	public NegationOperator(IExpression<@NonNull Double> argument) {

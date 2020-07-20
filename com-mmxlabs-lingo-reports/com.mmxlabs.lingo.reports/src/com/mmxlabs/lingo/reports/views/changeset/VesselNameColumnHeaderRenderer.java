@@ -61,7 +61,6 @@ public class VesselNameColumnHeaderRenderer extends GridHeaderRenderer {
 		}
 		String columnName = getShortString(column.getText());
 		if (!isWordWrap()) {
-			// x += gc.stringExtent(column.getText()).y;
 			y += gc.stringExtent(columnName).x;
 		} else {
 			int plainTextWidth;
@@ -97,7 +96,7 @@ public class VesselNameColumnHeaderRenderer extends GridHeaderRenderer {
 		// set the font to be used to display the text.
 		gc.setFont(column.getHeaderFont());
 
-		boolean flat = true;//(column.getParent().getCellSelectionEnabled() && !column.getMoveable());
+		boolean flat = true;
 
 		boolean drawSelected = ((isMouseDown() && isHover()));
 
@@ -137,31 +136,17 @@ public class VesselNameColumnHeaderRenderer extends GridHeaderRenderer {
 		
 		gc.setForeground(TableColourPalette.getInstance().getColourFor(TableItems.ColumnHeaders, ColourElements.Foreground));
 
-		// y = bottomMargin;
-
 		if (column.getHeaderControl() == null) {
-			y = getBounds().y + getBounds().height - bottomMargin;// - gc.getFontMetrics().getHeight();
+			y = getBounds().y + getBounds().height - bottomMargin;
 		} else {
-			y = getBounds().y + getBounds().height - bottomMargin - computeControlSize(column).y;// - gc.getFontMetrics().getHeight();
+			y = getBounds().y + getBounds().height - bottomMargin - computeControlSize(column).y;
 		}
 		String columnName = getShortString(column.getText());
 
-		if (!isWordWrap()) {
-//			text = TextUtils.getShortString(gc, text, height);
-			// y -= gc.getFontMetrics().getHeight();
-		}
-
-		// if (column.getAlignment() == SWT.RIGHT) {
-		// int len = gc.stringExtent(text).y;
-		// if (len < width) {
-		// x += width - len;
-		// }
-		// } else if (column.getAlignment() == SWT.CENTER) {
 		int len = gc.stringExtent(columnName).y;
 		if (len < width) {
 			x += (width - len) / 2;
 		}
-		// }
 
 		if (!isWordWrap()) {
 
@@ -176,13 +161,6 @@ public class VesselNameColumnHeaderRenderer extends GridHeaderRenderer {
 			getTextLayout(gc, column);
 			textLayout.setWidth(width < 1 ? 1 : width);
 			textLayout.setText(columnName);
-			// y -= textLayout.getBounds().height;
-			// final Image txtImg = GraphicsUtils.createRotatedText(text, gc.getFont(), gc.getForeground(), gc.getBackground(), SWT.UP);
-			// gc.drawImage(txtImg, getBounds().x + x + pushedDrawingOffset, y + pushedDrawingOffset);
-
-			// remove the first line shift
-			// y += gc.getFontMetrics().getHeight();
-
 			if (column.getParent().isAutoHeight()) {
 				column.getParent().recalculateHeader();
 			}
@@ -192,9 +170,6 @@ public class VesselNameColumnHeaderRenderer extends GridHeaderRenderer {
 			gc.setTransform(t);
 
 			textLayout.draw(gc, 0, 0);
-
-			// textLayout.draw(gc, getBounds().x + x + pushedDrawingOffset, y + pushedDrawingOffset);
-
 		}
 
 		if (column.getSort() != SWT.NONE) {
@@ -276,6 +251,7 @@ public class VesselNameColumnHeaderRenderer extends GridHeaderRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Rectangle getTextBounds(Object value, boolean preferred) {
 		GridColumn column = (GridColumn) value;
 
@@ -287,7 +263,7 @@ public class VesselNameColumnHeaderRenderer extends GridHeaderRenderer {
 
 		GC gc = new GC(column.getParent());
 		gc.setFont(column.getParent().getFont());
-		int y = getBounds().height - bottomMargin;// - gc.getFontMetrics().getHeight();
+		int y = getBounds().height - bottomMargin;
 
 		Rectangle bounds = new Rectangle(x, y, 0, 0);
 		
@@ -316,6 +292,7 @@ public class VesselNameColumnHeaderRenderer extends GridHeaderRenderer {
 	/**
 	 * @return the bounds reserved for the control
 	 */
+	@Override
 	protected Rectangle getControlBounds(Object value, boolean preferred) {
 		Rectangle bounds = getBounds();
 		GridColumn column = (GridColumn) value;
@@ -337,30 +314,9 @@ public class VesselNameColumnHeaderRenderer extends GridHeaderRenderer {
 		if (textLayout == null) {
 			textLayout = new TextLayout(gc.getDevice());
 			textLayout.setFont(gc.getFont());
-			column.getParent().addDisposeListener(new DisposeListener() {
-				public void widgetDisposed(DisposeEvent e) {
-					textLayout.dispose();
-				}
-			});
+			column.getParent().addDisposeListener(e -> textLayout.dispose());
 		}
 		textLayout.setAlignment(column.getAlignment());
-	}
-
-	@Override
-	public Rectangle getBounds() {
-		// TODO Auto-generated method stub
-		return super.getBounds();
-	};
-
-	@Override
-	public Point getSize() {
-		// TODO Auto-generated method stub
-		return super.getSize();
-	}
-
-	public void setBounds(Rectangle bounds) {
-		super.setBounds(bounds);
-		;
 	}
 
 	public String getShortString(String str) {
