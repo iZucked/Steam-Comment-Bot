@@ -187,11 +187,11 @@
     <!-- Some reports are using the hard-coded strings from here -->
     <NominationType
     	type="Buy window" 
-    	dependentFields="getLoadAllocation().getSlotVisit().getStart()">
+    	dependentFields="getLoadAllocation().withinTimeWindow()">
     </NominationType>
     <NominationType
           type="Sell window"
-          dependentFields="getDischargeAllocation().getSlotVisit().getStart()">
+          dependentFields="getDischargeAllocation().withinTimeWindow()">
     </NominationType>
     <NominationType
           type="Vessel"

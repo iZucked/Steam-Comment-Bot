@@ -3,11 +3,15 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule;
+import com.mmxlabs.models.lng.cargo.SchedulingTimeWindow;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.mmxcore.MMXObject;
+
+import java.time.ZonedDateTime;
+
 import org.eclipse.emf.common.util.EList;
 
 /**
@@ -509,6 +513,24 @@ public interface SlotAllocation extends MMXObject {
 	 */
 	String getName();
 
+	/**
+	 * Determine if this slot visit is within the time window.
+	 * @generated NOT
+	 */
+	default boolean withinTimeWindow() {
+		if (getSlotVisit() != null) {
+			ZonedDateTime start = getSlotVisit().getStart();
+			if (start != null) {
+				Slot<?> slot = getSlot();
+				SchedulingTimeWindow window = slot.getSchedulingTimeWindow();
+				if (start != null) {
+					return (!start.isBefore(window.getStartWithFlex()) && !start.isAfter(window.getEndWithFlex()));
+				}
+			}
+		}
+		//No slot or start date date.
+		return false;
+	}
 } // end of  SlotAllocation
 
 // finish type fixing
