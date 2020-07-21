@@ -10,15 +10,14 @@ import com.google.common.base.Objects;
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.VesselState;
 
 /**
- * Default implementation of {@link PortOptions}. This is @link {Cloneable} for use with @link{VoyagePlanOptimiser} use.
+ * Default implementation of {@link PortOptions}.
  * 
  * @author Simon Goodall
  * 
  */
-public final class PortOptions implements Cloneable, IOptionsSequenceElement {
+public final class PortOptions implements IOptionsSequenceElement {
 	private int visitDuration;
 	private IVessel vessel;
 	private @NonNull IPortSlot portSlot;
@@ -29,7 +28,7 @@ public final class PortOptions implements Cloneable, IOptionsSequenceElement {
 
 	}
 
-	public PortOptions(final int visitDuration, final IVessel vessel, @NonNull final IPortSlot portSlot, final VesselState vesselState) {
+	public PortOptions(final int visitDuration, final IVessel vessel, @NonNull final IPortSlot portSlot) {
 		this.portSlot = portSlot;
 		setVisitDuration(visitDuration);
 		setVessel(vessel);
@@ -92,8 +91,7 @@ public final class PortOptions implements Cloneable, IOptionsSequenceElement {
 		return false;
 	}
 
-	@Override
-	public final PortOptions clone() {
+	public final @NonNull PortOptions copy() {
 
 		return new PortOptions(this);
 	}

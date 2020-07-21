@@ -151,7 +151,7 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 
 		// (1) ballast to charter out
 
-		final VoyageOptions dischargeToCharterPortVoyageOptions = originalBallast.getOptions().clone();
+		final VoyageOptions dischargeToCharterPortVoyageOptions = originalBallast.getOptions().copy();
 		dischargeToCharterPortVoyageOptions.setAvailableTime(originalBallast.getTravelTime());
 		dischargeToCharterPortVoyageOptions.setToPortSlot(charterLengthPortSlot);
 
@@ -169,7 +169,7 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 		generatedCharterPortOptions.setCargoCVValue(originalBallast.getOptions().getCargoCVValue());
 
 		// (3) ballast to return port
-		final VoyageOptions charterToReturnPortVoyageOptions = originalBallast.getOptions().clone();
+		final VoyageOptions charterToReturnPortVoyageOptions = originalBallast.getOptions().copy();
 		charterToReturnPortVoyageOptions.setAvailableTime(originalBallast.getIdleTime() + originalBallast.getPurgeDuration());
 		charterToReturnPortVoyageOptions.setFromPortSlot(charterLengthPortSlot);
 		charterToReturnPortVoyageOptions.setRoute(originalBallast.getOptions().getRoute(), 0, 0);

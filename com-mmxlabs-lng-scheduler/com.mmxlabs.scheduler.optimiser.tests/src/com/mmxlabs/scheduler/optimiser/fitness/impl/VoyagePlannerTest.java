@@ -19,7 +19,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.mmxlabs.common.CollectionsUtil;
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
@@ -193,7 +192,7 @@ public final class VoyagePlannerTest {
 
 		// The NBO travel options will have completed the setup of previous
 		// options (options1) filling in distance info.
-		final VoyageOptions expectedVoyageOptions1a = expectedVoyageOptions1.clone();
+		final VoyageOptions expectedVoyageOptions1a = expectedVoyageOptions1.copy();
 		expectedVoyageOptions1a.setRoute(ERouteOption.DIRECT, 400, 0L);
 
 		final VoyageOptions expectedVoyageOptions2 = new VoyageOptions(dischargeSlot1, loadSlot2);
@@ -204,7 +203,7 @@ public final class VoyagePlannerTest {
 		expectedVoyageOptions2.setVesselState(VesselState.Ballast);
 		expectedVoyageOptions2.setNBOSpeed(15000);
 		expectedVoyageOptions2.setShouldBeCold(VesselTankState.MUST_BE_COLD);
-		final VoyageOptions expectedVoyageOptions2a = expectedVoyageOptions2.clone();
+		final VoyageOptions expectedVoyageOptions2a = expectedVoyageOptions2.copy();
 		expectedVoyageOptions2a.setRoute(ERouteOption.DIRECT, 400, 0L);
 
 		final VoyageOptions expectedVoyageOptions3 = new VoyageOptions(loadSlot2, dischargeSlot2);
@@ -215,19 +214,19 @@ public final class VoyagePlannerTest {
 		expectedVoyageOptions3.setVesselState(VesselState.Laden);
 		expectedVoyageOptions3.setNBOSpeed(15000);
 
-		final VoyageOptions expectedVoyageOptions3a = expectedVoyageOptions3.clone();
+		final VoyageOptions expectedVoyageOptions3a = expectedVoyageOptions3.copy();
 		expectedVoyageOptions3a.setRoute(ERouteOption.DIRECT, 400, 0L);
 
-		final PortOptions expectedPortOptions1 = new PortOptions(1, vessel, loadSlot1, VesselState.Ballast);
+		final PortOptions expectedPortOptions1 = new PortOptions(1, vessel, loadSlot1);
 		final PortDetails expectedPortDetails1 = new PortDetails(expectedPortOptions1);
 
-		final PortOptions expectedPortOptions2 = new PortOptions(1, vessel, dischargeSlot1, VesselState.Laden);
+		final PortOptions expectedPortOptions2 = new PortOptions(1, vessel, dischargeSlot1);
 		final PortDetails expectedPortDetails2 = new PortDetails(expectedPortOptions2);
 
-		final PortOptions expectedPortOptions3 = new PortOptions(1, vessel, loadSlot2, VesselState.Ballast);
+		final PortOptions expectedPortOptions3 = new PortOptions(1, vessel, loadSlot2);
 		final PortDetails expectedPortDetails3 = new PortDetails(expectedPortOptions3);
 
-		final PortOptions expectedPortOptions4 = new PortOptions(1, vessel, dischargeSlot2, VesselState.Laden);
+		final PortOptions expectedPortOptions4 = new PortOptions(1, vessel, dischargeSlot2);
 		final PortDetails expectedPortDetails4 = new PortDetails(expectedPortOptions4);
 
 		final VoyageDetails expectedVoyageDetails1 = new VoyageDetails(expectedVoyageOptions1);

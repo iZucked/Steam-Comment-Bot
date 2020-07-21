@@ -22,7 +22,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.TravelFuelChoice;
  * @author Simon Goodall
  * 
  */
-public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
+public final class VoyageOptions implements IOptionsSequenceElement {
 	private int availableTime;
 	private int extraIdleTime;
 	private int distance;
@@ -215,57 +215,27 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 			final VoyageOptions vo = (VoyageOptions) obj;
 
 			// @formatter:off
-			return Objects.equal(charterOutIdleTime, vo.charterOutIdleTime)
-				&& Objects.equal(travelFuelChoice, vo.travelFuelChoice)
-				&& Objects.equal(idleFuelChoice, vo.idleFuelChoice)
-				&& Objects.equal(availableTime, vo.availableTime)
-				&& Objects.equal(extraIdleTime, vo.extraIdleTime)
-				&& Objects.equal(distance, vo.distance)
-				&& Objects.equal(routeCost, vo.routeCost)
-				&& Objects.equal(nboSpeed, vo.nboSpeed)
-				&& Objects.equal(vesselState, vo.vesselState)
-				&& Objects.equal(route, vo.route)
-				&& Objects.equal(vessel, vo.vessel)
-				&& Objects.equal(fromPortSlot, vo.fromPortSlot)
-				&& Objects.equal(toPortSlot, vo.toPortSlot)
-				&& Objects.equal(cargoCV, vo.cargoCV)
-				&& Objects.equal(cooldown, vo.cooldown)
-				&& Objects.equal(shouldBeCold, vo.shouldBeCold)
-				&& Objects.equal(startWarm, vo.startWarm)
-				;
+			return Objects.equal(charterOutIdleTime, vo.charterOutIdleTime) && Objects.equal(travelFuelChoice, vo.travelFuelChoice) && Objects.equal(idleFuelChoice, vo.idleFuelChoice)
+					&& Objects.equal(availableTime, vo.availableTime) && Objects.equal(extraIdleTime, vo.extraIdleTime) && Objects.equal(distance, vo.distance)
+					&& Objects.equal(routeCost, vo.routeCost) && Objects.equal(nboSpeed, vo.nboSpeed) && Objects.equal(vesselState, vo.vesselState) && Objects.equal(route, vo.route)
+					&& Objects.equal(vessel, vo.vessel) && Objects.equal(fromPortSlot, vo.fromPortSlot) && Objects.equal(toPortSlot, vo.toPortSlot) && Objects.equal(cargoCV, vo.cargoCV)
+					&& Objects.equal(cooldown, vo.cooldown) && Objects.equal(shouldBeCold, vo.shouldBeCold) && Objects.equal(startWarm, vo.startWarm);
 			// @formatter:on
 		}
 		return false;
 	}
 
-	@Override
-	public final @NonNull VoyageOptions clone() {
+	public final @NonNull VoyageOptions copy() {
 		return new VoyageOptions(this);
 	}
 
 	@Override
 	public String toString() {
 		// @formatter:off
-		return MoreObjects.toStringHelper(VoyageOptions.class)
-				.add("availableTime", availableTime)
-				.add("extraIdleTime", extraIdleTime)
-				.add("charterOutIdleTime", charterOutIdleTime)
-				.add("charterOutDailyRate", charterOutDailyRate)
-				.add("distance", distance)
-				.add("vessel", vessel)
-				.add("fromPortSlot", fromPortSlot)
-				.add("toPortSlot", toPortSlot)
-				.add("nboSpeed", nboSpeed)
-				.add("travelFuelChoide", travelFuelChoice)
-				.add("idleFuelChoice", idleFuelChoice)
-				.add("cargoCV", cargoCV)
-				.add("cooldown", cooldown)
-				.add("shouldBeCold", shouldBeCold)
-				.add("startWarm", startWarm)
-				.add("route", route)
-				.add("routeCost", routeCost)
-				.add("vesselState", vesselState)
-				.toString();
+		return MoreObjects.toStringHelper(VoyageOptions.class).add("availableTime", availableTime).add("extraIdleTime", extraIdleTime).add("charterOutIdleTime", charterOutIdleTime)
+				.add("charterOutDailyRate", charterOutDailyRate).add("distance", distance).add("vessel", vessel).add("fromPortSlot", fromPortSlot).add("toPortSlot", toPortSlot)
+				.add("nboSpeed", nboSpeed).add("travelFuelChoide", travelFuelChoice).add("idleFuelChoice", idleFuelChoice).add("cargoCV", cargoCV).add("cooldown", cooldown)
+				.add("shouldBeCold", shouldBeCold).add("startWarm", startWarm).add("route", route).add("routeCost", routeCost).add("vesselState", vesselState).toString();
 		// @formatter:on
 	}
 

@@ -257,7 +257,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 					// Skip cast check as we created the object in the first
 					// place
 					final VoyageOptions options = details.getOptions();
-					details.setOptions(options.clone());
+					details.setOptions(options.copy());
 				}
 			}
 		}
@@ -270,7 +270,6 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 		long cost = plan.getBaseFuelCost() + plan.getCooldownCost() + plan.getLngFuelCost();
 		cost += plan.getStartHeelCost();
-		// cost -= plan.getStartHeelCost();
 
 		cost += plan.getTotalRouteCost();
 		return cost;

@@ -358,13 +358,13 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		for (int i = 0; i < ballastIdx; i++) {
 			final Object o = currentSequence[i];
 			if (o instanceof PortDetails) {
-				newRawSequence.add(((PortDetails) o).getOptions().clone());
+				newRawSequence.add(((PortDetails) o).getOptions().copy());
 			} else if (o instanceof VoyageDetails) {
 				final VoyageDetails voyageDetails = (VoyageDetails) o;
-				newRawSequence.add(voyageDetails.getOptions().clone());
+				newRawSequence.add(voyageDetails.getOptions().copy());
 				if (voyageDetails.getOptions().getVesselState() == VesselState.Laden) {
 					ladenRoute = voyageDetails.getOptions().getRoute();
-					bigSequence.setLaden(voyageDetails.getOptions().clone());
+					bigSequence.setLaden(voyageDetails.getOptions().copy());
 				}
 			}
 		}
@@ -433,7 +433,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		newRawSequence.add(dischargeToCharterPortVoyageOptions);
 		newRawSequence.add(generatedCharterPortOptions);
 		newRawSequence.add(charterToReturnPortVoyageOptions);
-		newRawSequence.add(((PortDetails) currentSequence[currentSequence.length - 1]).getOptions().clone());
+		newRawSequence.add(((PortDetails) currentSequence[currentSequence.length - 1]).getOptions().copy());
 		final IPortTimesRecord bigPlanPortTimesRecord = createPortTimesRecordForExtendedPlan(portTimesRecord, charterOutTimesRecord);
 
 		// store data in extended sequence data structure

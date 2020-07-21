@@ -36,43 +36,38 @@ public class SchedulerCalculationUtils {
 	public IVesselAvailability getVesselAvailabilityFromResource(@NonNull final IResource resource) {
 		return vesselProvider.getVesselAvailability(resource);
 	}
-	
+
 	@NonNull
 	public List<IVesselAvailability> getAllVesselAvailabilities() {
-		return vesselProvider.getSortedResources().stream()
-				.map(r->vesselProvider.getVesselAvailability(r)).collect(Collectors.toList());
+		return vesselProvider.getSortedResources().stream().map(r -> vesselProvider.getVesselAvailability(r)).collect(Collectors.toList());
 	}
-
 
 	public long getVesselCharterInRatePerDay(final IVesselAvailability vesselAvailability, final int voyagePlanStartTime) {
 		/*
 		 * final long charterRatePerDay = schedulerCalculationUtils.getVesselCharterInRatePerDay(vesselAvailability, vesselStartTime, purchaseIntervals[purchaseIndex].start);
-
+		 * 
 		 */
-		
-		/*return schedulerCalculationUtils.getVesselCharterInRatePerDay(vesselAvailability, portTimeWindowRecord.getFirstSlotFeasibleTimeWindow().getInclusiveStart(),
-				portTimeWindowRecord.getFirstSlotFeasibleTimeWindow().getInclusiveStart());
-		*/
+
+		/*
+		 * return schedulerCalculationUtils.getVesselCharterInRatePerDay(vesselAvailability, portTimeWindowRecord.getFirstSlotFeasibleTimeWindow().getInclusiveStart(),
+		 * portTimeWindowRecord.getFirstSlotFeasibleTimeWindow().getInclusiveStart());
+		 */
 		final long vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vesselAvailability, voyagePlanStartTime);
 		return vesselCharterInRatePerDay;
 	}
-/*	
- * TODO: replace above method with this one.
-	public long getVesselCharterCost(final IVesselAvailability vesselAvailability, final int vesselStartTime, final int vesselEndTime) {
-		final long vesselCharterInRatePerDay = charterCostCalculator.getCharterCost(vesselAvailability, vesselStartTime, v);
-		return vesselCharterInRatePerDay;
-	}
-	*/
-	
+	/*
+	 * TODO: replace above method with this one. public long getVesselCharterCost(final IVesselAvailability vesselAvailability, final int vesselStartTime, final int vesselEndTime) { final long
+	 * vesselCharterInRatePerDay = charterCostCalculator.getCharterCost(vesselAvailability, vesselStartTime, v); return vesselCharterInRatePerDay; }
+	 */
+
 	/**
-	 * Determines whether the vessel should be considered optional, and consequently the charter
-	 * cost may not be sunk.
+	 * Determines whether the vessel should be considered optional, and consequently the charter cost may not be sunk.
+	 * 
 	 * @param vesselAvailability
 	 * @return
 	 */
 	public static boolean isVesselAvailabilityOptional(IVesselAvailability vesselAvailability) {
-		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP
-				|| vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER
+		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP || vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER
 				|| vesselAvailability.isOptional()) {
 			return true;
 		}
