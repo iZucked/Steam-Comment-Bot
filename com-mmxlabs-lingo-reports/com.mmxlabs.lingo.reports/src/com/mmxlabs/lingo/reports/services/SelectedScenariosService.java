@@ -196,16 +196,12 @@ public class SelectedScenariosService {
 			return;
 		}
 
-		@NonNull
-		final ScenarioModelRecord modelRecord = scenarioResult.getModelRecord();
+		final @NonNull ScenarioModelRecord modelRecord = scenarioResult.getModelRecord();
 		final ModelReference modelReference = modelRecord.aquireReference("SelectedScenariosService:1");
 
 		final CommandStack commandStack = modelReference.getCommandStack();
-		if (commandStack != null) {
-			final MyCommandStackListener l = new MyCommandStackListener(commandStack, scenarioResult);
-			this.commandStacks.put(scenarioResult, l);
-
-		}
+		final MyCommandStackListener l = new MyCommandStackListener(commandStack, scenarioResult);
+		this.commandStacks.put(scenarioResult, l);
 		this.scenarioReferences.put(scenarioResult, modelReference);
 	}
 
