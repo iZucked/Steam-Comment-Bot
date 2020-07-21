@@ -19,6 +19,8 @@ import java.util.Map;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.TreeSelection;
 
 import com.mmxlabs.models.lng.scenario.internal.Activator;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -28,6 +30,7 @@ import com.mmxlabs.models.util.importer.IExtraModelImporter;
 import com.mmxlabs.models.util.importer.IMMXExportContext;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 import com.mmxlabs.models.util.importer.impl.DefaultExportContext;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 /**
@@ -224,6 +227,17 @@ public class ExportCSVBundleUtil {
 			sub = "\"" + sub + "\"";
 		}
 		return sub;
+	}
+	
+	public static String getNameFromSelection(final ISelection selection) {
+		if (selection instanceof TreeSelection) {
+			final TreeSelection selected = (TreeSelection) selection;
+			if (!selected.isEmpty() && selected.getFirstElement() instanceof ScenarioInstance) {
+				final ScenarioInstance si = (ScenarioInstance) selected.getFirstElement();
+				return si.getName();
+			}
+		}
+		return null;
 	}
 
 }

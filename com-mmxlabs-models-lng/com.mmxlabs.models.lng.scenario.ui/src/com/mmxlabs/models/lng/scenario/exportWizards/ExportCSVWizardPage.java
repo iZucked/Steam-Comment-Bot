@@ -27,6 +27,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
 import com.mmxlabs.models.lng.scenario.internal.Activator;
+import com.mmxlabs.models.lng.scenario.utils.ExportCSVBundleUtil;
 import com.mmxlabs.models.lng.scenario.wizards.BulkImportPage.RadioSelectionGroup;
 import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
 import com.mmxlabs.scenario.service.model.Container;
@@ -127,7 +128,7 @@ public class ExportCSVWizardPage extends WizardPage {
 		// get the default export directory from the settings
 		final IDialogSettings dialogSettings = Activator.getDefault().getDialogSettings();
 		final IDialogSettings section = dialogSettings.getSection(SECTION_NAME);
-		final String filter = section == null ? null : section.get(FILTER_KEY);
+		String filter = section == null ? null : section.get(FILTER_KEY);
 		int delimiterValue = CHOICE_COMMA;
 		if (section != null && section.get(DELIMITER_KEY) != null) {
 			delimiterValue = section.getInt(DELIMITER_KEY);
@@ -135,6 +136,14 @@ public class ExportCSVWizardPage extends WizardPage {
 		int decimalValue = CHOICE_PERIOD;
 		if (section != null && section.get(DECIMAL_SEPARATOR_KEY) != null) {
 			decimalValue = section.getInt(DECIMAL_SEPARATOR_KEY);
+		}
+		
+		final String scenarioName = ExportCSVBundleUtil.getNameFromSelection(selection);
+		if (scenarioName != null) {
+			if (filter != null) {
+				filter = filter.substring(0, filter.lastIndexOf('\\'));
+				filter = filter.concat("\\").concat(scenarioName);
+			}
 		}
 		// use it to populate the editor
 		editor.setStringValue(filter);
