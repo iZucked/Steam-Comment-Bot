@@ -40,15 +40,12 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 	private final String name;
 
 	@Inject
-	@NonNull
 	private IPortTypeProvider portTypeProvider;
 
 	@Inject
-	@NonNull
 	private IPortSlotProvider portSlotProvider;
 
 	@Inject
-	@NonNull
 	private IVesselProvider vesselProvider;
 
 	/**
@@ -93,12 +90,7 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 
 		return true;
 	}
-
-	@Override
-	public void setOptimisationData(@NonNull final IPhaseOptimisationData optimisationData) {
-
-	}
-
+ 
 	/**
 	 * Check ISequence for {@link PortType} ordering violations.
 	 * 

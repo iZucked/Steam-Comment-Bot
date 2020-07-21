@@ -19,7 +19,6 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
-import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProvider;
@@ -35,11 +34,9 @@ public class DifferentSTSVesselsConstraintChecker implements IConstraintChecker 
 	private final String name;
 
 	@Inject
-	@NonNull
 	private IPortSlotProvider portSlotProvider;
 
 	@Inject
-	@NonNull
 	private IShipToShipBindingProvider shipBindingProvider;
 
 	public DifferentSTSVesselsConstraintChecker(@NonNull final String name) {
@@ -97,10 +94,4 @@ public class DifferentSTSVesselsConstraintChecker implements IConstraintChecker 
 
 		return true;
 	}
-
-	@Override
-	public void setOptimisationData(@NonNull final IPhaseOptimisationData optimisationData) {
-
-	}
-
 }

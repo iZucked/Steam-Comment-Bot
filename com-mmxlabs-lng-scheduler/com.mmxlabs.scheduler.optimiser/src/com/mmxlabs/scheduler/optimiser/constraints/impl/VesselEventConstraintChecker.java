@@ -29,7 +29,6 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 public class VesselEventConstraintChecker implements IPairwiseConstraintChecker {
 
 	@Inject
-	@NonNull
 	private IVesselProvider vesselProvider;
 
 	@Inject
@@ -50,10 +49,6 @@ public class VesselEventConstraintChecker implements IPairwiseConstraintChecker 
 	}
 
 	public boolean checkSequence(@NonNull final ISequence sequence, @NonNull final IResource resource) {
-		return checkSequence(sequence, resource, null);
-	}
-
-	public boolean checkSequence(@NonNull final ISequence sequence, @NonNull final IResource resource, @Nullable final List<String> messages) {
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 		if (vesselAvailability.getVesselInstanceType() != VesselInstanceType.ROUND_TRIP) {
 			return true;
@@ -84,24 +79,19 @@ public class VesselEventConstraintChecker implements IPairwiseConstraintChecker 
 		} else {
 			loopResources = changedResources;
 		}
-		boolean valid = true;
+
 		for (final IResource resource : loopResources) {
 			final ISequence sequence = sequences.getSequence(resource);
-			if (!checkSequence(sequence, resource, messages)) {
-				if (messages == null) {
-					return false;
-				} else {
-					valid = false;
-				}
+			if (!checkSequence(sequence, resource)) {
+				return false;
 			}
 		}
 
-		return valid;
+		return true;
 	}
 
 	@Override
 	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
-
 		return checkElement(first, resource) && checkElement(second, resource);
 	}
 
@@ -113,10 +103,5 @@ public class VesselEventConstraintChecker implements IPairwiseConstraintChecker 
 			return (vesselAvailability.getVesselInstanceType() == VesselInstanceType.FLEET || vesselAvailability.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER);
 		}
 		return true;
-	}
-
-	@Override
-	public String explain(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
-		return null;
 	}
 }

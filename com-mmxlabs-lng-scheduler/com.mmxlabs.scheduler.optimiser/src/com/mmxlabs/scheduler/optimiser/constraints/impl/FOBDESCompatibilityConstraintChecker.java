@@ -25,12 +25,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
- * A constraint checker which determines whether every port in the sequence is
- * legal for the given vessel. Whether this is the best possible solution is
- * debatable, as it involves a few more lookups than the minimum possible
- * number; we could instead store a map from vessels to excluded
- * <em>elements</em> instead of <em>ports</em>, saving a lookup at the expense
- * of builder complexity.
+ * A constraint checker which determines whether every port in the sequence is legal for the given vessel. Whether this is the best possible solution is debatable, as it involves a few more lookups
+ * than the minimum possible number; we could instead store a map from vessels to excluded <em>elements</em> instead of <em>ports</em>, saving a lookup at the expense of builder complexity.
  * 
  * @author hinton
  * 
@@ -62,10 +58,6 @@ public class FOBDESCompatibilityConstraintChecker implements IPairwiseConstraint
 	}
 
 	public boolean checkSequence(@NonNull final ISequence sequence, @NonNull final IResource resource) {
-		return checkSequence(sequence, resource, null);
-	}
-
-	public boolean checkSequence(@NonNull final ISequence sequence, @NonNull final IResource resource, @Nullable final List<String> messages) {
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE) {
 
@@ -98,12 +90,8 @@ public class FOBDESCompatibilityConstraintChecker implements IPairwiseConstraint
 		boolean valid = true;
 		for (final IResource resource : loopResources) {
 			final ISequence sequence = sequences.getSequence(resource);
-			if (!checkSequence(sequence, resource, messages)) {
-				if (messages == null) {
-					return false;
-				} else {
-					valid = false;
-				}
+			if (!checkSequence(sequence, resource)) {
+				return false;
 			}
 		}
 
@@ -129,10 +117,5 @@ public class FOBDESCompatibilityConstraintChecker implements IPairwiseConstraint
 			return true;
 		}
 		return fobDesCompatibilityProvider.isPermittedOnResource(element, resource);
-	}
-
-	@Override
-	public String explain(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
-		return null;
 	}
 }

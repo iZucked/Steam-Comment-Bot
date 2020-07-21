@@ -46,37 +46,31 @@ public class LadenIdleTimeConstraintChecker implements IPairwiseConstraintChecke
 	/**
 	 * Max allowable idle time
 	 */
-	private static int MAX_IDLE_TIME_HOURS = 9*24;
+	private static int MAX_IDLE_TIME_HOURS = 9 * 24;
 	/**
 	 * Nominal speed
 	 */
-	private static final int MAX_SPEED = 16_000; 
+	private static final int MAX_SPEED = 16_000;
 
 	@NonNull
 	private final String name;
 
 	@Inject
-	@NonNull
 	private IPortSlotProvider portSlotProvider;
 
 	@Inject
-	@NonNull
 	private IPortTypeProvider portTypeProvider;
 
 	@Inject
-	@NonNull
 	private IVesselProvider vesselProvider;
 
 	@Inject
-	@NonNull
 	private IElementDurationProvider elementDurationProvider;
 
 	@Inject
-	@NonNull
 	private IDistanceProvider distanceProvider;
 
 	@Inject
-	@NonNull
 	private IActualsDataProvider actualsDataProvider;
 
 	public LadenIdleTimeConstraintChecker(@NonNull final String name) {
@@ -111,8 +105,8 @@ public class LadenIdleTimeConstraintChecker implements IPairwiseConstraintChecke
 
 	private boolean checkSequence(@NonNull final ISequence sequence, @NonNull final IResource resource) {
 		final Iterator<ISequenceElement> iter = sequence.iterator();
-		ISequenceElement prev, cur;
-		prev = cur = null;
+		ISequenceElement prev = null;
+		ISequenceElement cur = null;
 
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 		final int maxSpeed = vesselAvailability.getVessel().getMaxSpeed();
@@ -167,25 +161,25 @@ public class LadenIdleTimeConstraintChecker implements IPairwiseConstraintChecke
 		if (firstType == PortType.Load && secondType == PortType.Discharge) {
 			final ITimeWindow tw1 = slot1.getTimeWindow();
 			final ITimeWindow tw2 = slot2.getTimeWindow();
-	
+
 			if ((tw1 == null) || (tw2 == null)) {
 				return true; // if the time windows are null, there is no effective constraint
 			}
-	
+
 			final int voyageStartTime = tw1.getExclusiveEnd() - 1 + elementDurationProvider.getElementDuration(first, resource);
-	
+
 			@NonNull
 			Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), slot1.getPort(), slot2.getPort(), MAX_SPEED,
 					AvailableRouteChoices.OPTIMAL);
 			if (quickestTravelTime.getSecond() == Integer.MAX_VALUE) {
 				return false;
 			}
-	
+
 			int travelTime = quickestTravelTime.getSecond();
-	
+
 			final int earliestArrivalTime = voyageStartTime + travelTime;
 			final int idle = Math.max(tw2.getInclusiveStart() - earliestArrivalTime, 0);
-	
+
 			return idle <= MAX_IDLE_TIME_HOURS;
 		}
 		return true;
@@ -210,7 +204,7 @@ public class LadenIdleTimeConstraintChecker implements IPairwiseConstraintChecke
 		return "Excessive idle time : " + slot1.getPort().getName() + " to " + slot2.getPort().getName() + " = " + distance + ", but " + " start of first tw = " + tw1.getInclusiveStart()
 				+ " and end of second = " + tw2.getExclusiveEnd();
 	}
-	
+
 	public void setMaxIdleTimeInHours(int hours) {
 		this.MAX_IDLE_TIME_HOURS = hours;
 	}

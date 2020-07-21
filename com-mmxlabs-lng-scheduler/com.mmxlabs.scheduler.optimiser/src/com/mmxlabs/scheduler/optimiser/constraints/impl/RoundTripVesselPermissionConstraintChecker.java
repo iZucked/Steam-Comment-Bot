@@ -143,9 +143,4 @@ public class RoundTripVesselPermissionConstraintChecker implements IPairwiseCons
 
 		return true;
 	}
-
-	@Override
-	public String explain(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
-		return null;
-	}
 }

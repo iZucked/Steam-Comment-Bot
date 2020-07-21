@@ -14,6 +14,7 @@ import com.google.inject.Inject;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.providers.ISpotMarketSlotsProvider;
 
@@ -22,31 +23,17 @@ import com.mmxlabs.scheduler.optimiser.providers.ISpotMarketSlotsProvider;
  * 
  * @author achurchill
  */
-public class MaxSpotSlotsConstraintChecker implements IPairwiseConstraintChecker {
+public class MaxSpotSlotsConstraintChecker implements IConstraintChecker {
 
 	private static final int MAX_SPOT_COUNT = 4;
 
 	@Inject
-	@NonNull
 	private ISpotMarketSlotsProvider spotMarketSlots;
 
 	private final @NonNull String name;
 
 	public MaxSpotSlotsConstraintChecker(final @NonNull String name) {
 		this.name = name;
-	}
-
-	/**
-	 * Note: this does not make sense for this constraint
-	 */
-	@Override
-	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
-		return true;
-	}
-
-	@Override
-	public String explain(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
-		return null;
 	}
 
 	@Override

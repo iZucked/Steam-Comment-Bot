@@ -26,7 +26,6 @@ import com.mmxlabs.optimiser.core.constraints.IInitialSequencesConstraintChecker
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
-import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -42,7 +41,7 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 public class LadenLegLimitConstraintChecker implements IPairwiseConstraintChecker, IInitialSequencesConstraintChecker {
 
 	private enum Mode {
-		Record, Apply
+		RECORD, APPLY
 	}
 
 	@NonNull
@@ -60,11 +59,12 @@ public class LadenLegLimitConstraintChecker implements IPairwiseConstraintChecke
 	private int maxLadenDuration = 60 * 24;
 
 	private Set<IPortSlot> whitelistedSlots = new HashSet<>();
-	
+
 	@Inject(optional = true) // Marked as optional as this constraint checker is active in the initial sequence builder where we do not have an existing initial solution.
 	@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL)
 	@Nullable
 	private ISequences initialSequences;
+
 	public LadenLegLimitConstraintChecker(@NonNull final String name) {
 		this.name = name;
 	}
@@ -77,7 +77,7 @@ public class LadenLegLimitConstraintChecker implements IPairwiseConstraintChecke
 
 	@Override
 	public boolean checkConstraints(@NonNull final ISequences fullSequences, @Nullable final Collection<@NonNull IResource> changedResources) {
-		return checkConstraints(fullSequences, changedResources, Mode.Apply);
+		return checkConstraints(fullSequences, changedResources, Mode.APPLY);
 	}
 
 	private boolean checkConstraints(@NonNull final ISequences fullSequences, @Nullable final Collection<@NonNull IResource> changedResources, Mode mode) {
@@ -120,7 +120,7 @@ public class LadenLegLimitConstraintChecker implements IPairwiseConstraintChecke
 
 	@Override
 	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, @Nullable final List<String> messages) {
-		return checkConstraints(sequences, changedResources, Mode.Apply);
+		return checkConstraints(sequences, changedResources, Mode.APPLY);
 	}
 
 	/**
@@ -129,14 +129,14 @@ public class LadenLegLimitConstraintChecker implements IPairwiseConstraintChecke
 	 * @param e1
 	 * @param e2
 	 * @param resource
-	 *                     the vessel in question
+	 *            the vessel in question
 	 * @return
 	 */
 	@Override
 	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 
-		return checkPairwiseConstraint(first, second, resource, vesselAvailability.getVessel().getMaxSpeed(), Mode.Apply);
+		return checkPairwiseConstraint(first, second, resource, vesselAvailability.getVessel().getMaxSpeed(), Mode.APPLY);
 	}
 
 	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource, final int resourceMaxSpeed, Mode mode) {
@@ -150,7 +150,7 @@ public class LadenLegLimitConstraintChecker implements IPairwiseConstraintChecke
 		}
 
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE) {
+		if (vesselAvailability.getVesselInstanceType().isNonShipped()) {
 			return true;
 		}
 
@@ -164,9 +164,9 @@ public class LadenLegLimitConstraintChecker implements IPairwiseConstraintChecke
 			assert tw1.getExclusiveEnd() != Integer.MAX_VALUE;
 			if (tw2.getInclusiveStart() - tw1.getExclusiveEnd() > maxLadenDuration) {
 				// Violation! Check whitelist to see if we can ignore it.
-				if (mode == Mode.Apply && !whitelistedSlots.contains(slot1)) {
+				if (mode == Mode.APPLY && !whitelistedSlots.contains(slot1)) {
 					return false;
-				} else if (mode == Mode.Record) {
+				} else if (mode == Mode.RECORD) {
 					whitelistedSlots.add(slot1);
 				}
 			}
@@ -174,11 +174,6 @@ public class LadenLegLimitConstraintChecker implements IPairwiseConstraintChecke
 
 		return true;
 
-	}
-
-	@Override
-	public String explain(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
-		return null;
 	}
 
 	public int getMaxLadenDuration() {
@@ -192,6 +187,6 @@ public class LadenLegLimitConstraintChecker implements IPairwiseConstraintChecke
 	@Override
 	public void sequencesAccepted(@NonNull ISequences rawSequences, @NonNull ISequences fullSequences) {
 		whitelistedSlots.clear();
-		checkConstraints(fullSequences, null, Mode.Record);
+		checkConstraints(fullSequences, null, Mode.RECORD);
 	}
 }

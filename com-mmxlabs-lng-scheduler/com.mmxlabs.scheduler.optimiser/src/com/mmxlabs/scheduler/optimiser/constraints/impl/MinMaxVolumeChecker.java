@@ -18,7 +18,6 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
-import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
@@ -41,15 +40,12 @@ public class MinMaxVolumeChecker implements IPairwiseConstraintChecker {
 	private final String name;
 
 	@Inject
-	@NonNull
 	private IPortSlotProvider portSlotProvider;
 
 	@Inject
-	@NonNull
 	private IVesselProvider vesselProvider;
 
 	@Inject
-	@NonNull
 	private IActualsDataProvider actualsDataProvider;
 
 	public MinMaxVolumeChecker(@NonNull final String name) {
@@ -83,10 +79,8 @@ public class MinMaxVolumeChecker implements IPairwiseConstraintChecker {
 
 	private boolean checkSequence(@NonNull final ISequence sequence, @NonNull final IResource resource) {
 		final Iterator<ISequenceElement> iter = sequence.iterator();
-		ISequenceElement prev, cur;
-		prev = cur = null;
-
-		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+		ISequenceElement prev = null;
+		ISequenceElement cur = null;
 
 		while (iter.hasNext()) {
 			prev = cur;
@@ -103,11 +97,6 @@ public class MinMaxVolumeChecker implements IPairwiseConstraintChecker {
 	@Override
 	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, @Nullable final List<String> messages) {
 		return checkConstraints(sequences, changedResources);
-	}
-
-	@Override
-	public void setOptimisationData(@NonNull final IPhaseOptimisationData optimisationData) {
-
 	}
 
 	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
@@ -138,10 +127,5 @@ public class MinMaxVolumeChecker implements IPairwiseConstraintChecker {
 			}
 		}
 		return true;
-	}
-
-	@Override
-	public String explain(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
-		return null;
 	}
 }

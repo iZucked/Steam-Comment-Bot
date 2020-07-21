@@ -48,5 +48,9 @@ public enum VesselInstanceType {
 	 * Sequence cargoes evaluated on a round trip basis.
 	 * 
 	 */
-	ROUND_TRIP
+	ROUND_TRIP;
+	
+	public boolean isNonShipped() {
+		return this == FOB_SALE || this == DES_PURCHASE;
+	}
 }

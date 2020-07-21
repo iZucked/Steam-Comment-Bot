@@ -22,7 +22,6 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IInitialSequencesConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
-import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
@@ -52,13 +51,13 @@ public class CounterPartyVolumeChecker implements IPairwiseConstraintChecker, II
 
 	@Inject
 	private IVesselProvider vesselProvider;
-	
+
 	@Inject
 	private INominatedVesselProvider nominatedVesselProvider;
 
 	@Inject
 	private IActualsDataProvider actualsDataProvider;
-	
+
 	@Inject
 	private ICounterPartyVolumeProvider counterPartyVolumeProvider;
 
@@ -71,7 +70,7 @@ public class CounterPartyVolumeChecker implements IPairwiseConstraintChecker, II
 	public String getName() {
 		return name;
 	}
-	
+
 	private Set<Pair<IPortSlot, IPortSlot>> pairing = new HashSet();
 
 	@Override
@@ -95,8 +94,8 @@ public class CounterPartyVolumeChecker implements IPairwiseConstraintChecker, II
 
 	private boolean checkSequence(@NonNull final ISequence sequence, @NonNull final IResource resource) {
 		final Iterator<ISequenceElement> iter = sequence.iterator();
-		ISequenceElement prev, cur;
-		prev = cur = null;
+		ISequenceElement prev = null;
+		ISequenceElement cur = null;
 
 		while (iter.hasNext()) {
 			prev = cur;
@@ -113,11 +112,6 @@ public class CounterPartyVolumeChecker implements IPairwiseConstraintChecker, II
 	@Override
 	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, @Nullable final List<String> messages) {
 		return checkConstraints(sequences, changedResources);
-	}
-
-	@Override
-	public void setOptimisationData(@NonNull final IPhaseOptimisationData optimisationData) {
-
 	}
 
 	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource, final boolean record) {
@@ -140,12 +134,13 @@ public class CounterPartyVolumeChecker implements IPairwiseConstraintChecker, II
 		if (slot1 instanceof ILoadOption && slot2 instanceof IDischargeOption) {
 			ILoadOption load = (ILoadOption) slot1;
 			IDischargeOption discharge = (IDischargeOption) slot2;
-			final Pair <IPortSlot, IPortSlot> thisPair = Pair.of(slot1, slot2);
-			if (!pairing.contains(thisPair)){
+			final Pair<IPortSlot, IPortSlot> thisPair = Pair.of(slot1, slot2);
+			if (!pairing.contains(thisPair)) {
 				boolean counterPartyVolume = counterPartyVolumeProvider.isCounterPartyVolume(slot1);
 				if (counterPartyVolume) {
 					// load min >= discharge min
-					final long minLoadVolume = vesselCapacityInM3 == 0? load.getMinLoadVolumeMMBTU() : Math.min(load.getMinLoadVolumeMMBTU(), Calculator.convertM3ToMMBTu(vesselCapacityInM3, load.getCargoCVValue()));
+					final long minLoadVolume = vesselCapacityInM3 == 0 ? load.getMinLoadVolumeMMBTU()
+							: Math.min(load.getMinLoadVolumeMMBTU(), Calculator.convertM3ToMMBTu(vesselCapacityInM3, load.getCargoCVValue()));
 					final boolean minLoadLessThanMinDischarge = minLoadVolume < discharge.getMinDischargeVolumeMMBTU(load.getCargoCVValue());
 					if (minLoadLessThanMinDischarge) {
 						if (record) {
@@ -167,11 +162,6 @@ public class CounterPartyVolumeChecker implements IPairwiseConstraintChecker, II
 			}
 		}
 		return true;
-	}
-
-	@Override
-	public String explain(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
-		return null;
 	}
 
 	@Override

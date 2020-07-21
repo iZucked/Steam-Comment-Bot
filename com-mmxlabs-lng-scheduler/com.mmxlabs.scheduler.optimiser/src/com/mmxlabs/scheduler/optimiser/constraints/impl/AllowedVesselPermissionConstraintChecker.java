@@ -32,15 +32,12 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 public class AllowedVesselPermissionConstraintChecker implements IPairwiseConstraintChecker, IResourceElementConstraintChecker {
 
 	@Inject
-	@NonNull
 	private IVesselProvider vesselProvider;
 
 	@Inject
-	@NonNull
 	private INominatedVesselProvider nominatedVesselProvider;
 
 	@Inject
-	@NonNull
 	private IAllowedVesselProvider allowedVesselProvider;
 
 	@Inject
@@ -64,13 +61,7 @@ public class AllowedVesselPermissionConstraintChecker implements IPairwiseConstr
 	}
 
 	public boolean checkSequence(@NonNull final ISequence sequence, @NonNull final IResource resource) {
-		return checkSequence(sequence, resource, null);
-	}
-
-	public boolean checkSequence(@NonNull final ISequence sequence, @NonNull final IResource resource, @Nullable final List<String> messages) {
-
 		for (final ISequenceElement element : sequence) {
-
 			if (!checkElement(element, resource)) {
 				return false; // fail fast.
 			}
@@ -98,16 +89,12 @@ public class AllowedVesselPermissionConstraintChecker implements IPairwiseConstr
 		for (final IResource resource : loopResources) {
 			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 			// Ignore compatibility on non-shipped cargoes
-			if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
+			if (vesselAvailability.getVesselInstanceType().isNonShipped()) {
 				continue;
 			}
 			final ISequence sequence = sequences.getSequence(resource);
-			if (!checkSequence(sequence, resource, messages)) {
-				if (messages == null) {
-					return false;
-				} else {
-					valid = false;
-				}
+			if (!checkSequence(sequence, resource)) {
+				return false;
 			}
 		}
 
@@ -143,18 +130,15 @@ public class AllowedVesselPermissionConstraintChecker implements IPairwiseConstr
 		} else if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER || vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
 			vessel = vesselAvailability.getVessel();
 			// Vessel events should not be moved onto spot charters
-			if (portTypeProvider.getPortType(element) == PortType.DryDock || portTypeProvider.getPortType(element) == PortType.CharterOut
-					|| portTypeProvider.getPortType(element) == PortType.CharterOut) {
+			if (portTypeProvider.getPortType(element) == PortType.DryDock //
+					|| portTypeProvider.getPortType(element) == PortType.Maintenance //
+					|| portTypeProvider.getPortType(element) == PortType.CharterOut //
+			) {
 				return false;
 			}
-		} else if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
+		} else if (vesselAvailability.getVesselInstanceType().isNonShipped()) {
 			vessel = nominatedVesselProvider.getNominatedVessel(resource);
 		}
 		return allowedVesselProvider.isPermittedOnVessel(portSlot, vessel);
-	}
-
-	@Override
-	public String explain(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
-		return null;
 	}
 }

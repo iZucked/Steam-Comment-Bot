@@ -21,7 +21,6 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
-import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -55,31 +54,24 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 	private final String name;
 
 	@Inject
-	@NonNull
 	private IPortSlotProvider portSlotProvider;
 
 	@Inject
-	@NonNull
 	private IPortTypeProvider portTypeProvider;
 
 	@Inject
-	@NonNull
 	private IVesselProvider vesselProvider;
 
 	@Inject
-	@NonNull
 	private IElementDurationProvider elementDurationProvider;
 
 	@Inject
-	@NonNull
 	private IDistanceProvider distanceProvider;
 
 	@Inject
-	@NonNull
 	private IShippingHoursRestrictionProvider shippingHoursRestrictionProvider;
 
 	@Inject
-	@NonNull
 	private IActualsDataProvider actualsDataProvider;
 
 	public TravelTimeConstraintChecker(@NonNull final String name) {
@@ -114,8 +106,8 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 
 	private boolean checkSequence(@NonNull final ISequence sequence, @NonNull final IResource resource) {
 		final Iterator<ISequenceElement> iter = sequence.iterator();
-		ISequenceElement prev, cur;
-		prev = cur = null;
+		ISequenceElement prev = null;
+		ISequenceElement cur = null;
 
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 		final int maxSpeed = vesselAvailability.getVessel().getMaxSpeed();
@@ -136,12 +128,7 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, @Nullable final List<String> messages) {
 		return checkConstraints(sequences, changedResources);
 	}
-
-	@Override
-	public void setOptimisationData(@NonNull final IPhaseOptimisationData optimisationData) {
-
-	}
-
+ 
 	@Override
 	/**
 	 * Can element 2 be reached from element 1 in accordance with time windows under the best possible circumstances, if using the given resource to service them
@@ -191,7 +178,6 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 				if (secondType == PortType.Discharge) {
 
 					// See ShippingHoursRestrictions otherwise
-					// if (slot1.getPort() == slot2.getPort()) {
 					if (!shippingHoursRestrictionProvider.isDivertible(first)) {
 						if (tw1.getInclusiveStart() <= tw2.getInclusiveStart() && tw1.getExclusiveEnd() > tw2.getInclusiveStart()) {
 							return true;

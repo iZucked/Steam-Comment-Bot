@@ -15,15 +15,14 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
-import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 
 /**
  * An implementation of {@link IPairwiseConstraintChecker} to forbid certain {@link ISequenceElement} pairings
  * 
  */
 public abstract class AbstractPairwiseConstraintChecker implements IPairwiseConstraintChecker {
-	@NonNull
-	protected final String name;
+
+	protected final @NonNull String name;
 
 	public AbstractPairwiseConstraintChecker(@NonNull final String name) {
 		this.name = name;
@@ -87,10 +86,4 @@ public abstract class AbstractPairwiseConstraintChecker implements IPairwiseCons
 
 		return valid;
 	}
-
-	@Override
-	public void setOptimisationData(@NonNull final IPhaseOptimisationData optimisationData) {
-
-	}
-
 }

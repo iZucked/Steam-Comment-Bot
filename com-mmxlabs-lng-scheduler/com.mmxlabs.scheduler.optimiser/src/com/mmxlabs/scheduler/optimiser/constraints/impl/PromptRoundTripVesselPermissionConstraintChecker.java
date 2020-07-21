@@ -156,7 +156,7 @@ public class PromptRoundTripVesselPermissionConstraintChecker implements IPairwi
 		if (!permitted) {
 			return false;
 		}
-		// Not strictly correct - should be first load in cargo sequence;
+		// Not strictly correct - should be first load in cargo sequence
 		if (portType == PortType.Load) {
 			final int endOfPromptPeriod = promptPeriodProvider.getEndOfPromptPeriod();
 			// If timewindow start is in prompt, then we want to remove the cargo.

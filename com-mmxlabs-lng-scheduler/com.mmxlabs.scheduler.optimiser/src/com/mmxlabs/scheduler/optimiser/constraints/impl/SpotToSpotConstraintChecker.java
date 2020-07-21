@@ -25,15 +25,12 @@ import com.mmxlabs.scheduler.optimiser.providers.ISpotMarketSlotsProvider;
 public class SpotToSpotConstraintChecker extends AbstractPairwiseConstraintChecker {
 
 	@Inject
-	@NonNull
 	private IPortSlotProvider portSlotProvider;
 
 	@Inject
-	@NonNull
 	private IActualsDataProvider actualsDataProvider;
 
 	@Inject
-	@NonNull
 	private ISpotMarketSlotsProvider spotMarketSlots;
 
 	public SpotToSpotConstraintChecker(@NonNull final String name) {

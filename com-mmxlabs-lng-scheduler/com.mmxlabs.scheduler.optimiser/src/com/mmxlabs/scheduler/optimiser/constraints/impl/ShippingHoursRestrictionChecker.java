@@ -41,31 +41,24 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 public class ShippingHoursRestrictionChecker implements IPairwiseConstraintChecker {
 
 	@Inject
-	@NonNull
 	private IPortSlotProvider portSlotProvider;
 
 	@Inject
-	@NonNull
 	private INominatedVesselProvider nominatedVesselProvider;
 
 	@Inject
-	@NonNull
 	private IShippingHoursRestrictionProvider shippingHoursRestrictionProvider;
 
 	@Inject
-	@NonNull
 	private IVesselProvider vesselProvider;
 
 	@Inject
-	@NonNull
 	private IActualsDataProvider actualsDataProvider;
 
 	@Inject
-	@NonNull
 	private IDivertibleDESShippingTimesCalculator dischargeTimeCalculator;
 
 	@Inject
-	@NonNull
 	private IDivertibleFOBShippingTimesCalculator fobSaleTimeCalculator;
 
 	@Override
@@ -107,11 +100,6 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 		}
 
 		return true;
-	}
-
-	@Override
-	public void setOptimisationData(@NonNull final IPhaseOptimisationData optimisationData) {
-
 	}
 
 	@Override
@@ -207,10 +195,4 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 		return true;
 
 	}
-
-	@Override
-	public String explain(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
-		return null;
-	}
-
 }

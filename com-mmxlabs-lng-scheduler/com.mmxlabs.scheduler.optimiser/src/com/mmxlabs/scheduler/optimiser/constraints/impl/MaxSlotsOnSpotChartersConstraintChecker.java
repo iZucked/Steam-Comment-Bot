@@ -9,17 +9,16 @@ import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.w3c.dom.views.AbstractView;
 
 import com.google.inject.Inject;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
-import com.mmxlabs.scheduler.optimiser.providers.ISpotMarketSlotsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
@@ -28,9 +27,8 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  * 
  * @author achurchill
  */
-public class MaxSlotsOnSpotChartersConstraintChecker implements IPairwiseConstraintChecker {
+public class MaxSlotsOnSpotChartersConstraintChecker implements IConstraintChecker {
 	@Inject
-	@NonNull
 	private IVesselProvider vesselProvider;
 
 	@Inject
@@ -42,19 +40,6 @@ public class MaxSlotsOnSpotChartersConstraintChecker implements IPairwiseConstra
 
 	public MaxSlotsOnSpotChartersConstraintChecker(final @NonNull String name) {
 		this.name = name;
-	}
-
-	/**
-	 * Note: this does not make sense for this constraint
-	 */
-	@Override
-	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
-		return true;
-	}
-
-	@Override
-	public String explain(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
-		return null;
 	}
 
 	@Override

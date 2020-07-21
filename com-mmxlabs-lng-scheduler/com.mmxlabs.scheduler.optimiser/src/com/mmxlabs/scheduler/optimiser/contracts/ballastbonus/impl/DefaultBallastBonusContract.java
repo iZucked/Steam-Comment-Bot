@@ -13,12 +13,12 @@ import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.IBallastBonusContr
 
 public class DefaultBallastBonusContract implements IBallastBonusContract {
 
-	List<IBallastBonusContractRule> rules;
-	
+	private List<IBallastBonusContractRule> rules;
+
 	public DefaultBallastBonusContract(List<IBallastBonusContractRule> rules) {
 		this.rules = rules;
 	}
-	
+
 	@Override
 	public long calculateBallastBonus(IPortSlot lastSlot, IVesselAvailability vesselAvailability, int time) {
 		for (IBallastBonusContractRule rule : rules) {
@@ -28,12 +28,12 @@ public class DefaultBallastBonusContract implements IBallastBonusContract {
 		}
 		return 0L;
 	}
-	
+
 	@Override
 	public BallastBonusAnnotation annotate(IPortSlot lastSlot, IVesselAvailability vesselAvailability, int time) {
 		return createAnnotation(lastSlot, vesselAvailability, time);
 	}
-	
+
 	private BallastBonusAnnotation createAnnotation(IPortSlot lastSlot, IVesselAvailability vesselAvailability, int time) {
 		BallastBonusAnnotation ballastBonusAnnotation = new BallastBonusAnnotation();
 		for (IBallastBonusContractRule rule : rules) {

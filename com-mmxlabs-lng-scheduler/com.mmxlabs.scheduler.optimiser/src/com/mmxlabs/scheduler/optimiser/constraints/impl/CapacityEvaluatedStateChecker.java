@@ -18,15 +18,14 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.evaluation.VoyagePlanRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
-import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.schedule.CapacityViolationChecker;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.CapacityViolationType;
 
 /**
  * 
- * {@link ICargoSchedulerFitnessComponent} implementation to calculate a fitness
- * based on capacity violations.
+ * {@link ICargoSchedulerFitnessComponent} implementation to calculate a fitness based on capacity violations.
  * 
  * @author Simon Goodall
  * 
@@ -35,9 +34,6 @@ public final class CapacityEvaluatedStateChecker implements IEvaluatedStateConst
 
 	private long initialSoftTotalViolations = 0;
 	private List<CapacityViolationType> initialTriggeredViolations;
-
-	public List<CapacityViolationType> allViolations;
-	public List<CapacityViolationType> initialAllViolations;
 
 	private int totalSoftViolations = 0;
 	private final @NonNull String name;
@@ -69,7 +65,6 @@ public final class CapacityEvaluatedStateChecker implements IEvaluatedStateConst
 		totalSoftViolations = 0;
 		currentViolatedSlots = new HashSet<>();
 		triggeredViolations = new ArrayList<>();
-		allViolations = new ArrayList<>();
 
 		for (final VolumeAllocatedSequence volumeAllocatedSequence : volumeAllocatedSequences) {
 
@@ -81,9 +76,7 @@ public final class CapacityEvaluatedStateChecker implements IEvaluatedStateConst
 						if (CapacityViolationChecker.isHardViolation(violation)) {
 							triggeredViolations.add(violation);
 							currentViolatedSlots.add(slot);
-							allViolations.add(violation);
 						} else {
-							allViolations.add(violation);
 							++totalSoftViolations;
 						}
 					}
@@ -100,14 +93,13 @@ public final class CapacityEvaluatedStateChecker implements IEvaluatedStateConst
 			}
 
 			currentViolatedSlots.removeAll(initialViolatedSlots);
-			if (currentViolatedSlots.size() > 0 || totalSoftViolations > initialSoftTotalViolations) {
+			if (!currentViolatedSlots.isEmpty() || totalSoftViolations > initialSoftTotalViolations) {
 				return false;
 			}
 		} // If this is the first run, then set the initial state
 		else {
 			initialViolatedSlots = currentViolatedSlots;
 			initialSoftTotalViolations = totalSoftViolations;
-			initialAllViolations = allViolations;
 			initialised = true;
 			return true;
 		}
@@ -159,9 +151,7 @@ public final class CapacityEvaluatedStateChecker implements IEvaluatedStateConst
 	}
 
 	/**
-	 * Set the number of flexible slot violations permitted. Integer.MAX_VALUE
-	 * allows any soft violations. 0 disallows any soft violation (over and above
-	 * the initial level)
+	 * Set the number of flexible slot violations permitted. Integer.MAX_VALUE allows any soft violations. 0 disallows any soft violation (over and above the initial level)
 	 * 
 	 * @param flexibleSoftViolations
 	 */

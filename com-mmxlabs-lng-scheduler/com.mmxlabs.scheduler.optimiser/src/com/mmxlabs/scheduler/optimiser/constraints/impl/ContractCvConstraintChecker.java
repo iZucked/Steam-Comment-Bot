@@ -21,15 +21,12 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 public class ContractCvConstraintChecker extends AbstractPairwiseConstraintChecker {
 
 	@Inject
-	@NonNull
 	private IPortTypeProvider portTypeProvider;
 
 	@Inject
-	@NonNull
 	private IPortSlotProvider portSlotProvider;
 
 	@Inject
-	@NonNull
 	private IActualsDataProvider actualsDataProvider;
 
 	public ContractCvConstraintChecker(@NonNull String name) {
