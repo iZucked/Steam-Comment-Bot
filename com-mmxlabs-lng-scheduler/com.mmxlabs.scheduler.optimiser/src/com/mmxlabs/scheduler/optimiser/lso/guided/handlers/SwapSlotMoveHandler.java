@@ -215,6 +215,6 @@ public class SwapSlotMoveHandler implements IGuidedMoveHandler {
 		hints.addSuggestedElements(builder.getElementA());
 		hints.addSuggestedElements(builder.getElementB());
 
-		return new Pair<IMove, Hints>(builder.create(), hints);
+		return new Pair<>(builder.create(), hints);
 	}
 }

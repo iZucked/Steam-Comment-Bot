@@ -25,8 +25,6 @@ import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveHandlerWrapper;
 import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveTypes;
 import com.mmxlabs.scheduler.optimiser.lso.guided.MoveTypesAnnotation;
 import com.mmxlabs.scheduler.optimiser.moves.handlers.ShuffleElementsMoveHandler;
-import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 /**
  * <p>

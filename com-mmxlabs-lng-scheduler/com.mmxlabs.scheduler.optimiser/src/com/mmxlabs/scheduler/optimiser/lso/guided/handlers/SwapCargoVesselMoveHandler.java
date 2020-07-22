@@ -156,14 +156,14 @@ public class SwapCargoVesselMoveHandler implements IGuidedMoveHandler {
 			// TODO: Exclude self
 
 			// Find all possible elements that could be inserted into the gap
-			followersAndPreceders.getValidFollowers(elementBeforeSegment).forEach(f -> suggestedElements.add(f));
-			followersAndPreceders.getValidPreceders(elementAfterSegment).forEach(f -> suggestedElements.add(f));
+			followersAndPreceders.getValidFollowers(elementBeforeSegment).forEach(suggestedElements::add);
+			followersAndPreceders.getValidPreceders(elementAfterSegment).forEach(suggestedElements::add);
 
 			// Add all elements in the sequence to be considered for further change
 			// TODO: Do we really want to do this? Consider issues with long ballast legs -
 			// Maybe just +/- 1 cargo / event rather than whole sequence (which could be quite large?)?
 			// e.g. [segment start - 2 -> segment end + 2)
-			fromSequence.forEach(e -> suggestedElements.add(e));
+			fromSequence.forEach(suggestedElements::add);
 		}
 
 		final InsertSegmentMove.Builder builder = InsertSegmentMove.Builder.newMove();
@@ -178,7 +178,7 @@ public class SwapCargoVesselMoveHandler implements IGuidedMoveHandler {
 			builder.withElements(fromResource, orderedCargoElements) //
 					.withInsertAfter(location.getFirst(), insertionPair.getFirst()); //
 
-			sequences.getSequence(location.getFirst()).forEach(e -> suggestedElements.add(e));
+			sequences.getSequence(location.getFirst()).forEach(suggestedElements::add);
 
 			break;
 		}
@@ -188,6 +188,6 @@ public class SwapCargoVesselMoveHandler implements IGuidedMoveHandler {
 		hints.addSuggestedElements(suggestedElements);
 		hints.getUsedElements().addAll(orderedCargoElements);
 
-		return new Pair<IMove, Hints>(builder.create(), hints);
+		return new Pair<>(builder.create(), hints);
 	}
 }

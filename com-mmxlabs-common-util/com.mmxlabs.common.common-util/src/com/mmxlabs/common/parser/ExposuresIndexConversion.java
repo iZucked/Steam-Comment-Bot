@@ -206,7 +206,7 @@ public class ExposuresIndexConversion {
 		return null;
 	}
 
-	public static Pair<MarkedUpNode, MarkedUpNode> getOperatorChildren(OperatorNode node) {
+	public static @Nullable Pair<MarkedUpNode, MarkedUpNode> getOperatorChildren(OperatorNode node) {
 		List<MarkedUpNode> children = node.getChildren();
 		if (children.size() == 2) {
 			Optional<MarkedUpNode> optionalConstant = children.stream().filter(c -> (c instanceof ConstantNode || c instanceof BreakevenNode)).findFirst();

@@ -126,7 +126,7 @@ public class MoveSlotMoveHandler implements IGuidedMoveHandler {
 			moveComponents.add(removeElementsMove);
 
 			final CompoundMove finalMove = new CompoundMove(moveComponents);
-			return new Pair<IMove, Hints>(finalMove, hints);
+			return new Pair<>(finalMove, hints);
 		}
 
 		return null;
@@ -169,7 +169,7 @@ public class MoveSlotMoveHandler implements IGuidedMoveHandler {
 			// Check for optional restrictions
 			if (options.isStrictOptional() && !helper.isOptional(candidate)) {
 				itr.remove();
-				continue;
+				// continue
 			}
 		}
 		return candidates;

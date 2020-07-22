@@ -203,14 +203,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 					ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_GeneratedCharterOut, ColourPalette.ColourElements.Background)),
 			new LegendItemImpl("Dry-dock/Maintenance", ColourPalette.getInstance().getColourFor(ColourPaletteItems.Event_DryDock, ColourPalette.ColourElements.Background),
 					ColourPalette.getInstance().getColourFor(ColourPaletteItems.Event_Maintenance, ColourPalette.ColourElements.Background)),
-			new LegendItemImpl("Charter Length", ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_CharterLength, ColourPalette.ColourElements.Background))
-	);
-
-	/**
-	 * The constructor.
-	 */
-	public SchedulerView() {
-	}
+			new LegendItemImpl("Charter Length", ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_CharterLength, ColourPalette.ColourElements.Background)));
 
 	@Override
 	public void init(final IViewSite site, IMemento memento) throws PartInitException {
@@ -438,22 +431,19 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 
 			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_SANDBOX)) {
 				if (numberOfSchedules == 1) {
-					
-					
-					
+
 					final IStructuredSelection structuredSelection = viewer.getStructuredSelection();
 					if (SelectionToSandboxUtil.canSelectionBeUsed(structuredSelection)) {
 						final ScenarioResult result = currentSelectedDataProvider.getScenarioResult((EObject) structuredSelection.getFirstElement());
 
 						if (result != null) {
-							
+
 							ADPModel adpModel = ScenarioModelUtil.getADPModel(result.getScenarioDataProvider());
 							if (adpModel != null) {
 								// Cannot use sandbox with ADP
 								return;
 							}
-							
-							
+
 							final MenuItem item = new MenuItem(menu, SWT.PUSH);
 							item.setText("Create sandbox");
 
@@ -556,7 +546,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 						} else if (event instanceof CargoAllocation) {
 							final CargoAllocation allocation = (CargoAllocation) event;
 
-							final List<Object> equivalents = new ArrayList<Object>();
+							final List<Object> equivalents = new ArrayList<>();
 							for (final SlotAllocation sa : allocation.getSlotAllocations()) {
 								equivalents.add(sa.getSlotVisit());
 								equivalents.add(sa.getSlot());
@@ -1217,15 +1207,10 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 						} else if (event instanceof GeneratedCharterOut) {
 							interestingEvents.add(event);
 						} else if (event instanceof SlotVisit) {
-							final SlotVisit slotVisit = (SlotVisit) event;
-							// if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
 							interestingEvents.add(event);
-							// }
 						}
 					}
 				}
-
-				// SchedulerView.this.collectPinModeElements(interestingEvents, isPinned);
 
 				return Collections.singleton(schedule);
 			}

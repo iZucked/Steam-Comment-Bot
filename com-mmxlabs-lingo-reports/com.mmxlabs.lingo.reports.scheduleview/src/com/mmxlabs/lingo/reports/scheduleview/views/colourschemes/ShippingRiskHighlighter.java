@@ -11,7 +11,6 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.swt.graphics.Color;
 
-import com.mmxlabs.ganttviewer.GanttChartViewer;
 import com.mmxlabs.lingo.reports.ColourPalette;
 import com.mmxlabs.lingo.reports.ColourPalette.ColourElements;
 import com.mmxlabs.lingo.reports.ColourPalette.ColourPaletteItems;
@@ -21,23 +20,11 @@ import com.mmxlabs.models.lng.schedule.Journey;
 
 public class ShippingRiskHighlighter extends ColourScheme {
 
-	private GanttChartViewer viewer;
-
 	@Override
 	public String getName() {
 		return "Shipping Risk";
 	}
-
-	@Override
-	public GanttChartViewer getViewer() {
-		return viewer;
-	}
-
-	@Override
-	public void setViewer(final GanttChartViewer viewer) {
-		this.viewer = viewer;
-	}
-
+ 
 	@Override
 	public Color getForeground(final Object element) {
 		return null;

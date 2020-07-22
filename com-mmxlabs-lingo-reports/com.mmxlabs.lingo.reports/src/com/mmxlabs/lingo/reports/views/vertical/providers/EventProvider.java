@@ -35,7 +35,7 @@ public abstract class EventProvider {
 		final ArrayList<@NonNull Event> result = new ArrayList<>();
 
 		for (final Event event : getUnfilteredEvents(date)) {
-			if (filterEventOut(date, event) == false) {
+			if (!filterEventOut(date, event)) {
 				result.add(event);
 			}
 		}

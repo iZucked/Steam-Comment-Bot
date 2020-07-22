@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.lingo.reports.scheduleview.views.colourschemes;
 
-import java.time.ZonedDateTime;
-
 import com.mmxlabs.ganttviewer.GanttChartViewer;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoType;
@@ -82,7 +80,6 @@ public class ColourSchemeUtil {
 	}
 
 	public static boolean isOutsideTimeWindow(final Event ev) {
-		final ZonedDateTime start = ev.getStart();
 		if (ev instanceof VesselEventVisit) {
 			final VesselEventVisit vesselEventVisit = (VesselEventVisit) ev;
 			if (LatenessUtils.isLateExcludingFlex(vesselEventVisit)) {
@@ -95,15 +92,12 @@ public class ColourSchemeUtil {
 
 		if (ev instanceof SlotVisit) {
 			final SlotVisit visit = (SlotVisit) ev;
-			final Slot slot = visit.getSlotAllocation().getSlot();
+			final Slot<?> slot = visit.getSlotAllocation().getSlot();
 			if (slot != null) {
 				if (visit.getStart().isAfter(slot.getSchedulingTimeWindow().getEnd())) {
 					return true;
 				}
 			}
-			// if (visit.getStart().before(visit.getSlotAllocation().getSlot().getWindowStartWithSlotOrPortTime())) {
-			// return true;
-			// }
 		}
 		return false;
 	}
@@ -122,7 +116,7 @@ public class ColourSchemeUtil {
 				final SlotVisit slotVisit = (SlotVisit) obj;
 				final SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
 				if (slotAllocation != null) {
-					Slot slot = slotAllocation.getSlot();
+					Slot<?> slot = slotAllocation.getSlot();
 					if (slot != null) {
 						cargo = slot.getCargo();
 					}
@@ -177,7 +171,7 @@ public class ColourSchemeUtil {
 	 */
 
 	public static boolean isSpot(final SlotVisit visit) {
-		final Slot slot = visit.getSlotAllocation().getSlot();
+		final Slot<?> slot = visit.getSlotAllocation().getSlot();
 		if (slot instanceof SpotSlot) {
 			return true;
 		}
@@ -188,7 +182,7 @@ public class ColourSchemeUtil {
 		boolean isFOB = false;
 		final SlotAllocation slotAllocation = visit.getSlotAllocation();
 		if (slotAllocation != null) {
-			final Slot slot = slotAllocation.getSlot();
+			final Slot<?> slot = slotAllocation.getSlot();
 			if (slot instanceof LoadSlot) {
 				final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
 				if (cargoAllocation != null) {
@@ -202,7 +196,7 @@ public class ColourSchemeUtil {
 	}
 
 	public static boolean isDESPurchaseCargo(final SlotVisit visit) {
-		final Slot slot = visit.getSlotAllocation().getSlot();
+		final Slot<?> slot = visit.getSlotAllocation().getSlot();
 		if (slot instanceof LoadSlot) {
 			return ((LoadSlot) slot).isDESPurchase();
 		} else {

@@ -39,24 +39,20 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  * @since 3.7
  */
 public class SimilarityFitnessCore implements IFitnessCore, IFitnessComponent {
+	private final String name;
+
 	@Inject
 	private ISimilarityComponentParameters similarityComponentParameters;
 
-	private final String name;
-
- 
 	@Inject
 	@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL)
-	@NonNull
 	private ISequences initialRawSequences;
-	
+
 	@Inject
-	@NonNull
 	private ISequencesManipulator sequenceManipulator;
 
 	@Inject
 	@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL)
-	@NonNull
 	private ISequences initialSequences;
 
 	@Inject
@@ -65,8 +61,8 @@ public class SimilarityFitnessCore implements IFitnessCore, IFitnessComponent {
 	private long lastFitness = 0;
 	private int lastDifferences = 0;
 
-	private Map<Integer, Integer> loadDischargeMap = null; // TODO: indexed?
-	private Map<Integer, Integer> loadResourceMap = null; // TODO: indexed?
+	private Map<Integer, Integer> loadDischargeMap = null;
+	private Map<Integer, Integer> loadResourceMap = null;
 	private List<IResource> resources;
 
 	// per optimisation threshold curve constants
@@ -85,10 +81,6 @@ public class SimilarityFitnessCore implements IFitnessCore, IFitnessComponent {
 		this.name = name;
 	}
 
-	public SimilarityFitnessCore(final String name, final boolean threshold) {
-		this.name = name;
-	}
-
 	@Override
 	public void init(@NonNull final IPhaseOptimisationData data) {
 		resources = data.getResources();
@@ -103,22 +95,20 @@ public class SimilarityFitnessCore implements IFitnessCore, IFitnessComponent {
 	public void initWithState(@NonNull final ISequences rawSequences) {
 
 		ISequences fullSequences = sequenceManipulator.createManipulatedSequences(rawSequences);
-		
+
 		for (final IResource resource : resources) {
 			assert resource != null;
 
 			final ISequence sequence = fullSequences.getSequence(resource);
 			ISequenceElement prev = null;
 			for (final ISequenceElement current : sequence) {
-				if (prev != null) {
-					if (getPortType(prev) == PortType.Load) {
-						if (getPortType(current) == PortType.Discharge) {
-							loadDischargeMap.put(prev.getIndex(), current.getIndex());
-						} else {
-							loadDischargeMap.put(prev.getIndex(), null);
-						}
-						loadResourceMap.put(prev.getIndex(), resource.getIndex());
+				if (prev != null && getPortType(prev) == PortType.Load) {
+					if (getPortType(current) == PortType.Discharge) {
+						loadDischargeMap.put(prev.getIndex(), current.getIndex());
+					} else {
+						loadDischargeMap.put(prev.getIndex(), null);
 					}
+					loadResourceMap.put(prev.getIndex(), resource.getIndex());
 				}
 				prev = current;
 			}
@@ -140,11 +130,6 @@ public class SimilarityFitnessCore implements IFitnessCore, IFitnessComponent {
 	}
 
 	@Override
-	public void dispose() {
-
-	}
-
-	@Override
 	public Collection<IFitnessComponent> getFitnessComponents() {
 		return Collections.<IFitnessComponent> singleton(this);
 	}
@@ -162,23 +147,16 @@ public class SimilarityFitnessCore implements IFitnessCore, IFitnessComponent {
 	}
 
 	@Override
-	public void accepted(@NonNull final ISequences sequences, @Nullable final Collection<IResource> affectedResources) {
-
-	}
-
-	@Override
 	public void annotate(@NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState, @NonNull final IAnnotatedSolution solution) {
-		if (solution != null) {
-			evaluation(sequences);
-			solution.setGeneralAnnotation(SchedulerConstants.AI_similarityDifferences, lastDifferences);
-		}
+		evaluation(sequences);
+		solution.setGeneralAnnotation(SchedulerConstants.AI_similarityDifferences, lastDifferences);
 	}
 
 	private void evaluation(@NonNull final ISequences sequences) {
 		int numberOfChanges = 0;
 		if (loadDischargeMap == null) {
-			loadDischargeMap = new HashMap<Integer, Integer>();
-			loadResourceMap = new HashMap<Integer, Integer>();
+			loadDischargeMap = new HashMap<>();
+			loadResourceMap = new HashMap<>();
 			initWithState(initialRawSequences);
 			lastFitness = 0;
 		}
@@ -190,17 +168,15 @@ public class SimilarityFitnessCore implements IFitnessCore, IFitnessComponent {
 				final ISequence sequence = sequences.getSequence(resource);
 				ISequenceElement prev = null;
 				for (final ISequenceElement current : sequence) {
-					if (prev != null) {
-						if (getPortType(prev) == PortType.Load) {
-							final Integer matchedDischarge = loadDischargeMap.get(prev.getIndex());
-							if (matchedDischarge == null && getPortType(current) == PortType.Discharge) {
-								cargoDifferences++;
-							} else if (matchedDischarge != current.getIndex()) {
-								cargoDifferences++;
-							}
-							if (loadResourceMap.get(prev.getIndex()) == null || loadResourceMap.get(prev.getIndex()) != resource.getIndex()) {
-								vesselDifferences++;
-							}
+					if (prev != null && getPortType(prev) == PortType.Load) {
+						final Integer matchedDischarge = loadDischargeMap.get(prev.getIndex());
+						if ((matchedDischarge == null && getPortType(current) == PortType.Discharge) //
+								|| (matchedDischarge != current.getIndex()) //
+						) {
+							cargoDifferences++;
+						}
+						if (loadResourceMap.get(prev.getIndex()) == null || loadResourceMap.get(prev.getIndex()) != resource.getIndex()) {
+							vesselDifferences++;
 						}
 					}
 					prev = current;

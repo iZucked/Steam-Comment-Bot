@@ -64,7 +64,7 @@ public class RouletteWheelMoveGenerator implements IMoveGenerator {
 	public void generateRouletteWheel() {
 		@NonNull
 		final Collection<@NonNull MoveTypes> validGenerators = moveMapper.getSupportedMoveTypes();
-		rouletteWheel = new RouletteWheel(validGenerators, distribution, equalDistributions);
+		rouletteWheel = new RouletteWheel<>(validGenerators, distribution, equalDistributions);
 	}
 
 	@Override

@@ -63,7 +63,6 @@ public class SequencesConstrainedMoveGeneratorUnit implements IMoveGenerator {
 		} else {
 			FOUR_OPT2_MOVES = 1;
 		}
-		// System.out.println("FOUR_OPT2_MOVES:"+FOUR_OPT2_MOVES);
 	}
 
 	class Move2over2A extends Move2over2 {

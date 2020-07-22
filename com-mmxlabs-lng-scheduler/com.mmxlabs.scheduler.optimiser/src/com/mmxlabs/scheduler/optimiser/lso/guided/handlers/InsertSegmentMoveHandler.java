@@ -202,7 +202,7 @@ public class InsertSegmentMoveHandler implements IGuidedMoveHandler {
 			}
 
 			hints.getUsedElements().addAll(orderedCargoElements);
-			return new Pair<IMove, Hints>(builder.create(), hints);
+			return new Pair<>(builder.create(), hints);
 		}
 
 		return null;

@@ -76,7 +76,7 @@ public class InsertFOBSaleMoveHandler implements IGuidedMoveHandler {
 			if (fobPurchaseResource == null) {
 				builder.withUnusedFOBPurchase(possibleFOBPurchase);
 				hints.usedElement(possibleFOBPurchase);
-				return new Pair<IMove, Hints>(builder.create(), hints);
+				return new Pair<>(builder.create(), hints);
 			} else {
 				if (!options.isInsertCanRemove()) {
 					continue;
@@ -115,7 +115,7 @@ public class InsertFOBSaleMoveHandler implements IGuidedMoveHandler {
 				final InsertFOBSaleMove insertionMove = builder.create();
 
 				if (options.isPermitPartialSegments()) {
-					return new Pair<IMove, Hints>(insertionMove, hints);
+					return new Pair<>(insertionMove, hints);
 				} else {
 					// Finally generate the FOB Sale pairing move and a second step to remove the other cargo elements.
 					final List<IMove> moveComponents = new LinkedList<>();
@@ -124,7 +124,7 @@ public class InsertFOBSaleMoveHandler implements IGuidedMoveHandler {
 					moveComponents.add(new RemoveElementsMove(elementsToRemove));
 
 					final CompoundMove finalMove = new CompoundMove(moveComponents);
-					return new Pair<IMove, Hints>(finalMove, hints);
+					return new Pair<>(finalMove, hints);
 				}
 			}
 		}

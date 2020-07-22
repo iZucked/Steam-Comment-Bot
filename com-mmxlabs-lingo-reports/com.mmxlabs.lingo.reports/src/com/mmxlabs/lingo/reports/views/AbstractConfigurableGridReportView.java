@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
@@ -16,15 +17,15 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
-import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.ResourceLocator;
 import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.IElementComparer;
@@ -45,7 +46,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IMemento;
-import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchActionConstants;
@@ -57,7 +57,6 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.XMLMemento;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.ui.views.properties.PropertySheet;
 
 import com.mmxlabs.common.Equality;
@@ -145,9 +144,6 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 		final IMemento configMemento = memento.createChild(getColumnSettingsMementoKey());
 		getBlockManager().saveToMemento(CONFIGURABLE_COLUMNS_ORDER, configMemento);
 		saveConfigState(configMemento);
-		if (getViewSite().getSecondaryId() != null) {
-
-		}
 	}
 
 	protected void saveConfigState(final IMemento configMemento) {
@@ -172,9 +168,6 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 					RowGroup g1 = null;
 					RowGroup g2 = null;
 
-					Boolean firstIsComposite = false;
-					Boolean secondIsComposite = false;
-
 					if (e1 instanceof Row) {
 						g1 = ((Row) e1).getRowGroup();
 					}
@@ -192,8 +185,6 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 							g1 = tmp.getPinnedRow().getRowGroup();
 							e1 = tmp.getPinnedRow();
 						}
-
-						firstIsComposite = true;
 					}
 
 					if (e2 instanceof CompositeRow) {
@@ -206,8 +197,6 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 							g2 = tmp.getPinnedRow().getRowGroup();
 							e2 = tmp.getPinnedRow();
 						}
-
-						secondIsComposite = true;
 					}
 					if (e1 instanceof List) {
 						return Integer.MAX_VALUE;
@@ -218,8 +207,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 					}
 
 					if (g1 == g2) {
-						int res = vc.compare(viewer, e1, e2);
-						return res;
+						return vc.compare(viewer, e1, e2);
 					} else {
 						final Object rd1 = (g1 == null || g1.getRows().isEmpty()) ? e1 : g1.getRows().get(0);
 						final Object rd2 = (g2 == null || g2.getRows().isEmpty()) ? e2 : g2.getRows().get(0);
@@ -230,13 +218,10 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 		}
 
-		propertyChangeListener = new IPropertyChangeListener() {
-			@Override
-			public void propertyChange(final PropertyChangeEvent event) {
-				final String property = event.getProperty();
-				if (PreferenceConstants.P_REPORT_DURATION_FORMAT.equals(property)) {
-					ViewerHelper.refresh(viewer, false);
-				}
+		propertyChangeListener = event -> {
+			final String property = event.getProperty();
+			if (PreferenceConstants.P_REPORT_DURATION_FORMAT.equals(property)) {
+				ViewerHelper.refresh(viewer, false);
 			}
 		};
 		Activator.getPlugin().getPreferenceStore().addPropertyChangeListener(propertyChangeListener);
@@ -251,11 +236,11 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 		// Check ext point to see if we can enable the customise action (created within createPartControl)
 		customisableReport = checkCustomisable();
-		
+
 		if (!customisableReport) {
 			memento = XMLMemento.createWriteRoot("workbench");
 		}
-		
+
 		{
 			final Composite container = new Composite(parent, SWT.NONE);
 			// filterField = new FilterField(container);
@@ -279,26 +264,6 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 					return adaptSelectionFromWidget(list);
 				}
-				//
-				// @Override
-				// protected Object[] getSortedChildren(final Object parent) {
-				// // This is the filtered and sorted children.
-				// // This may be smaller than the original set.
-				// sortData.sortedChildren = super.getSortedChildren(parent);
-				//
-				// sortData.sortedIndices = new int[sortData.sortedChildren == null ? 0 : sortData.sortedChildren.length];
-				// sortData.reverseSortedIndices = new int[sortData.sortedChildren == null ? 0 : sortData.sortedChildren.length];
-				//
-				// Arrays.fill(sortData.sortedIndices, -1);
-				// Arrays.fill(sortData.reverseSortedIndices, -1);
-				//
-				// for (int i = 0; i < sortData.sortedChildren.length; ++i) {
-				// final int rawIndex = table.getRows().indexOf(sortData.sortedChildren[i]);
-				// sortData.sortedIndices[rawIndex] = i;
-				// sortData.reverseSortedIndices[i] = rawIndex;
-				// }
-				// return sortData.sortedChildren;
-				// }
 			};
 			GridViewerHelper.configureLookAndFeel(viewer);
 
@@ -311,10 +276,8 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 			filterField.setFilterSupport(filterSupport);
 
 			getBlockManager().setGrid(viewer.getGrid());
-			
-			
+
 			getBlockManager().setColumnFactory(new DiffingGridTableViewerColumnFactory(viewer, sortingSupport, filterSupport, () -> copyPasteMode, this::applyColour));
-			// filterField.setFilterSupport(viewer.getFilterSupport());
 
 			viewer.getGrid().setLayoutData(new GridData(GridData.FILL_BOTH));
 
@@ -381,7 +344,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 			getSite().setSelectionProvider(viewer);
 			if (handleSelections()) {
 				// Get e4 selection service!
-				final ESelectionService service = (ESelectionService) getSite().getService(ESelectionService.class);
+				final ESelectionService service = getSite().getService(ESelectionService.class);
 				service.addPostSelectionListener(this);
 			}
 		}
@@ -473,7 +436,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 						IWorkbenchPage page = getSite().getPage();
 						String id = getViewSite().getId();
 						try {
-							IViewPart view = page.showView(id, name.trim(), IWorkbenchPage.VIEW_ACTIVATE);
+							page.showView(id, name.trim(), IWorkbenchPage.VIEW_ACTIVATE);
 						} catch (PartInitException e) {
 							e.printStackTrace();
 						}
@@ -534,8 +497,11 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 		};
 
-		final Image nonVisibleIcon = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/read_obj_disabled.gif").createImage();
-		final Image visibleIcon = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/read_obj.gif").createImage();
+		Optional<ImageDescriptor> nonVisibleIconDescriptor = ResourceLocator.imageDescriptorFromBundle(Activator.PLUGIN_ID, "icons/read_obj_disabled.gif");
+		final Image nonVisibleIcon = nonVisibleIconDescriptor.isPresent() ? nonVisibleIconDescriptor.get().createImage() : null;
+
+		Optional<ImageDescriptor> visibleIconDescriptor = ResourceLocator.imageDescriptorFromBundle(Activator.PLUGIN_ID, "icons/read_obj.gif");
+		final Image visibleIcon = visibleIconDescriptor.isPresent() ? visibleIconDescriptor.get().createImage() : null;
 
 		final ColumnConfigurationDialog dialog = new ColumnConfigurationDialog(win.getShell(), reportView) {
 
@@ -584,12 +550,16 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 		// Dialog has been closed, check the output
 		postDialogOpen(dialog);
-		nonVisibleIcon.dispose();
-		visibleIcon.dispose();
+		if (nonVisibleIcon != null) {
+			nonVisibleIcon.dispose();
+		}
+		if (visibleIcon != null) {
+			visibleIcon.dispose();
+		}
 
 		viewer.refresh();
 	}
-	
+
 	protected void addDialogCheckBoxes(final ColumnConfigurationDialog dialog) {
 
 	}
@@ -606,18 +576,19 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 	private Action packColumnsAction;
 	protected CopyGridToHtmlClipboardAction copyTableAction;
-	
+
 	protected void setCopyForegroundColours(final boolean showForegroundColours) {
 		if (copyTableAction != null) {
 			copyTableAction.setShowForegroundColours(showForegroundColours);
 		}
 	}
+
 	protected void setCopyBackgroundColours(final boolean showBackgroundColours) {
 		if (copyTableAction != null) {
 			copyTableAction.setShowBackgroundColours(showBackgroundColours);
 		}
 	}
-	
+
 	private final String helpContextId;
 
 	/**
@@ -701,8 +672,8 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 		viewer.getGrid().setColumnOrder(columnOrder);
 	}
 
-	private final HashMap<Object, Object> equivalents = new HashMap<Object, Object>();
-	private final HashSet<Object> contents = new HashSet<Object>();
+	private final HashMap<Object, Object> equivalents = new HashMap<>();
+	private final HashSet<Object> contents = new HashSet<>();
 	protected Table table;
 	protected boolean copyPasteMode;
 
@@ -721,12 +692,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 	private void hookContextMenu() {
 		final MenuManager menuMgr = new MenuManager("#PopupMenu");
 		menuMgr.setRemoveAllWhenShown(true);
-		menuMgr.addMenuListener(new IMenuListener() {
-			@Override
-			public void menuAboutToShow(final IMenuManager manager) {
-				AbstractConfigurableGridReportView.this.fillContextMenu(manager);
-			}
-		});
+		menuMgr.addMenuListener(AbstractConfigurableGridReportView.this::fillContextMenu);
 		final Menu menu = menuMgr.createContextMenu(viewer.getControl());
 		viewer.getControl().setMenu(menu);
 		getSite().registerContextMenu(menuMgr, viewer);
@@ -766,12 +732,12 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 	private void makeActions() {
 		packColumnsAction = PackActionFactory.createPackColumnsAction(viewer);
 		copyTableAction = new CopyGridToHtmlClipboardAction(viewer.getGrid(), false, () -> setCopyPasteMode(true), () -> setCopyPasteMode(false));
-		
+
 		if (!hasCustomCopyAction()) {
 			getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableAction);
 		}
 	}
-	
+
 	protected boolean hasCustomCopyAction() {
 		return false;
 	}
@@ -828,7 +794,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 			Activator.getPlugin().getPreferenceStore().removePropertyChangeListener(propertyChangeListener);
 		}
 		if (handleSelections()) {
-			final ESelectionService service = (ESelectionService) getSite().getService(ESelectionService.class);
+			final ESelectionService service = getSite().getService(ESelectionService.class);
 			service.removePostSelectionListener(this);
 		}
 		sortingSupport.clearColumnSortOrder();
@@ -888,9 +854,9 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 		}
 		return null;
 	}
-	
+
 	protected void applyColour(ViewerCell cell, ColumnHandler handler, Object element) {
-		
+
 	}
 
 }

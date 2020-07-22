@@ -86,7 +86,6 @@ import com.mmxlabs.models.ui.tabular.renderers.ColumnImageCenterHeaderRenderer;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
-import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.rcp.common.actions.CopyGridToJSONUtil;
 import com.mmxlabs.rcp.common.application.BindSelectionListener;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -118,10 +117,10 @@ public class PNLCalcsReportComponent implements IAdaptable /* extends ViewPart *
 	/**
 	 * List of dynamically generated columns to be disposed on selection changes
 	 */
-	private final List<GridViewerColumn> dataColumns = new LinkedList<GridViewerColumn>();
+	private final List<GridViewerColumn> dataColumns = new LinkedList<>();
 	private final PNLCalcsOptions options = new PNLCalcsOptions();
 
-	private Map<String, GridColumnGroup> gridColumnGroupsMap = new HashMap<String, GridColumnGroup>();
+	private Map<String, GridColumnGroup> gridColumnGroupsMap = new HashMap<>();
 
 	private Image pinImage = null;
 
@@ -389,7 +388,7 @@ public class PNLCalcsReportComponent implements IAdaptable /* extends ViewPart *
 					validObjects.add((((SlotVisit) obj).getSlotAllocation().getCargoAllocation()));
 				} else if (obj instanceof Cargo || obj instanceof Slot || obj instanceof VesselEvent) {
 					Cargo cargo = null;
-					Slot slot = null;
+					Slot<?> slot = null;
 					VesselEvent event = null;
 					if (obj instanceof VesselEvent) {
 						event = (VesselEvent) obj;
@@ -411,7 +410,7 @@ public class PNLCalcsReportComponent implements IAdaptable /* extends ViewPart *
 
 						// TODO: Look up ScheduleModel somehow....
 						final Cargo pCargo = cargo;
-						getValidObject(part, (lngScenarioModel) -> {
+						getValidObject(part, lngScenarioModel -> {
 							final ScheduleModel scheduleModel = lngScenarioModel.getScheduleModel();
 							if (scheduleModel != null) {
 								final Schedule schedule = scheduleModel.getSchedule();
@@ -426,9 +425,9 @@ public class PNLCalcsReportComponent implements IAdaptable /* extends ViewPart *
 							}
 						});
 					} else if (slot != null) {
-						final Slot pSlot = slot;
+						final Slot<?> pSlot = slot;
 
-						getValidObject(part, (lngScenarioModel) -> {
+						getValidObject(part, lngScenarioModel -> {
 							final ScheduleModel scheduleModel = lngScenarioModel.getScheduleModel();
 							if (scheduleModel != null) {
 								final Schedule schedule = scheduleModel.getSchedule();
@@ -445,7 +444,7 @@ public class PNLCalcsReportComponent implements IAdaptable /* extends ViewPart *
 					} else if (event != null) {
 						final VesselEvent pEvent = event;
 
-						getValidObject(part, (lngScenarioModel) -> {
+						getValidObject(part, lngScenarioModel -> {
 							final ScheduleModel scheduleModel = lngScenarioModel.getScheduleModel();
 							if (scheduleModel != null) {
 								final Schedule schedule = scheduleModel.getSchedule();
@@ -595,30 +594,24 @@ public class PNLCalcsReportComponent implements IAdaptable /* extends ViewPart *
 	public <T> T getAdapter(final Class<T> adapter) {
 
 		if (GridTableViewer.class.isAssignableFrom(adapter)) {
-			return (T) viewer;
+			return adapter.cast(viewer);
 		}
 		if (Grid.class.isAssignableFrom(adapter)) {
-			return (T) viewer.getGrid();
+			return adapter.cast(viewer.getGrid());
 		}
-
 		if (IReportContents.class.isAssignableFrom(adapter)) {
 
-			if (IReportContents.class.isAssignableFrom(adapter)) {
-
-				final CopyGridToJSONUtil jsonUtil = new CopyGridToJSONUtil(viewer.getGrid(), true);
-				final String jsonContents = jsonUtil.convert();
-				return (T) new IReportContents() {
-
-					@Override
-					public String getJSONContents() {
-						return jsonContents;
-					}
-				};
-
-			}
+			final CopyGridToJSONUtil jsonUtil = new CopyGridToJSONUtil(viewer.getGrid(), true);
+			final String jsonContents = jsonUtil.convert();
+			return adapter.cast(new IReportContents() {
+				@Override
+				public String getJSONContents() {
+					return jsonContents;
+				}
+			});
 
 		}
-		return null;
+		return adapter.cast(null);
 	}
 
 	public Map<String, GridColumnGroup> createColumnGroups(final Collection<Object> objects) {
@@ -717,7 +710,7 @@ public class PNLCalcsReportComponent implements IAdaptable /* extends ViewPart *
 			// Create a new list to sort the elements and replace the content of the
 			// LinkedHashMap with it (insert-order)
 			sortedObjects.addAll(validObjects);
-			Collections.sort(sortedObjects, (a, b) -> comparator(a, b));
+			Collections.sort(sortedObjects, this::comparator);
 
 			validObjects.clear();
 			validObjects.addAll(sortedObjects);

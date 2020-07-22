@@ -180,6 +180,7 @@ public class HeelOutOfCharterOutTest {
 			System.err.println("Heel limit: " + heelLimit);
 
 			final Journey j = testHeelWithCheaperLNG(heelLimit);
+			Assertions.assertNotNull(j);
 
 			// get the amount of heel used
 			long LNGUsed = 0;

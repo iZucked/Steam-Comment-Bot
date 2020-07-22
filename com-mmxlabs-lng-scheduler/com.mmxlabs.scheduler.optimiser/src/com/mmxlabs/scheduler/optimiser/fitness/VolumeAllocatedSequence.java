@@ -29,7 +29,6 @@ public class VolumeAllocatedSequence {
 
 	// Cached Lookup data
 	private final Map<IPortSlot, VoyagePlanRecord> portSlotToVoyagePlanMap = new HashMap<>();
-	private long weightedLateness;
 	private LatenessRecord record;
 
 	public static @NonNull VolumeAllocatedSequence empty(final @NonNull IResource resource, final @NonNull ISequence sequence) {

@@ -158,7 +158,7 @@ public class InsertVesselEventMoveHandler implements IGuidedMoveHandler {
 		}
 
 		hints.getUsedElements().addAll(orderedElements);
-		return new Pair<IMove, Hints>(builder.create(), hints);
+		return new Pair<>(builder.create(), hints);
 
 	}
 }

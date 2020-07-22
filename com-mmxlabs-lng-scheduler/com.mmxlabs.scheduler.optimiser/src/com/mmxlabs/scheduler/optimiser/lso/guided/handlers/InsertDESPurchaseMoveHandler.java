@@ -82,7 +82,7 @@ public class InsertDESPurchaseMoveHandler implements IGuidedMoveHandler {
 			if (desSaleResouce == null) {
 				builder.withUnusedDESSale(possibleDESSale);
 				hints.getUsedElements().add(possibleDESSale);
-				return new Pair<IMove, Hints>(builder.create(), hints);
+				return new Pair<>(builder.create(), hints);
 
 			} else {
 				if (!options.isInsertCanRemove()) {

@@ -11,14 +11,13 @@ import org.eclipse.swt.widgets.Menu;
 
 import com.mmxlabs.ganttviewer.GanttChartViewer;
 
-public abstract class SchedulerViewAction extends Action implements IMenuCreator  {
+public abstract class SchedulerViewAction extends Action implements IMenuCreator {
 
 	protected final SchedulerView schedulerView;
 	protected GanttChartViewer viewer;
 	protected final EMFScheduleLabelProvider lp;
 	private Menu lastMenu = null;
 
-	
 	public SchedulerViewAction(String name, int type, SchedulerView schedulerView, GanttChartViewer viewer, EMFScheduleLabelProvider lp) {
 		super(name, type);
 		this.schedulerView = schedulerView;
@@ -28,7 +27,7 @@ public abstract class SchedulerViewAction extends Action implements IMenuCreator
 
 	@Override
 	public void run() {
-		
+
 		viewer.setInput(viewer.getInput());
 		schedulerView.redraw();
 	}
@@ -44,15 +43,15 @@ public abstract class SchedulerViewAction extends Action implements IMenuCreator
 			lastMenu.dispose();
 		}
 		lastMenu = new Menu(parent);
-	
+
 		createMenuItems(lastMenu);
-	
+
 		return lastMenu;
 	}
 
 	@Override
 	public Menu getMenu(final Control parent) {
-	
+
 		if (lastMenu != null) {
 			lastMenu.dispose();
 		}
@@ -61,7 +60,7 @@ public abstract class SchedulerViewAction extends Action implements IMenuCreator
 		return lastMenu;
 	}
 
-	abstract protected void createMenuItems(final Menu menu);
+	protected abstract void createMenuItems(final Menu menu);
 
 	@Override
 	public void dispose() {

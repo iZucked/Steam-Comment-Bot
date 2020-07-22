@@ -44,7 +44,7 @@ public class HashMapEventProvider extends EventProvider {
 	}
 
 	public void addEvent(@NonNull final LocalDate date, @NonNull final Event event) {
-		final List<@NonNull Event> list = events.containsKey(date) ? events.get(date) : new ArrayList<@NonNull Event>();
+		final List<@NonNull Event> list = events.containsKey(date) ? events.get(date) : new ArrayList<>();
 		list.add(event);
 		this.events.put(date, list);
 		if (!allEvents.contains(event)) {

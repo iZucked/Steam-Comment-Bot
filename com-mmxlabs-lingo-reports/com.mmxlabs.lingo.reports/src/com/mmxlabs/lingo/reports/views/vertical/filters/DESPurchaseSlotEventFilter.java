@@ -26,7 +26,7 @@ public class DESPurchaseSlotEventFilter extends BaseEventFilter {
 		// Filter out any DES purchases.
 		if (event instanceof SlotVisit) {
 			final SlotVisit slotVisit = (SlotVisit) event;
-			final Slot slot = slotVisit.getSlotAllocation().getSlot();
+			final Slot<?> slot = slotVisit.getSlotAllocation().getSlot();
 			if (slot instanceof LoadSlot) {
 				final LoadSlot loadSlot = (LoadSlot) slot;
 				if (loadSlot.isDESPurchase()) {

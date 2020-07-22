@@ -35,11 +35,9 @@ public abstract class BaseEventFilter implements EventFilter {
 
 	@Override
 	public boolean isEventFiltered(@NonNull final LocalDate date, @NonNull final Event event) {
-		if (filter != null) {
-			// if the previous filter filtered stuff out
-			if (filter.isEventFiltered(date, event) == true) {
-				return true;
-			}
+		// if the previous filter filtered stuff out
+		if (filter != null && filter.isEventFiltered(date, event)) {
+			return true;
 		}
 
 		return isEventDirectlyFiltered(date, event);
