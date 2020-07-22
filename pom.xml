@@ -44,7 +44,17 @@
 		<module>com-mmxlabs-lngdataserver</module>
 		<module>com-mmxlabs-lingo</module>
 	</modules>
-
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-surefire-plugin</artifactId>
+				<configuration>
+					<argLine>-ea -Dosgi.nl=en_GB -Dlingo.suppress.dialogs=true -Dlingo.enc.keyfile=${lingo.enc.keyfile} -Dlingo.license.file=${lingo.license.file}</argLine>
+				</configuration>
+			</plugin> 
+		</plugins> 
+	</build>
 	<!--
 	<pluginRepositories>
 		<pluginRepository>
