@@ -126,17 +126,22 @@ public class OAuthAuthenticationManager extends AbstractAuthenticationManager {
 	public boolean isTokenExpired(String upstreamURL) {
 		boolean expired = false;
 
-		final Request request = buildRequestWithToken().get().url(upstreamURL + UpstreamUrlProvider.URI_AFTER_SUCCESSFULL_AUTHENTICATION) //
-				.build();
+		Optional<Request.Builder> builder = buildRequestWithToken();
 
-		try (Response response = httpClient.newCall(request).execute()) {
-			if (!response.isSuccessful() || response.code() == 403 || response.code() == 401) {
-				expired = true;
-				// token is expired, log the user out
-				logout(upstreamURL, null);
+		if (builder.isPresent()) {
+			final Request request = builder.get().url(upstreamURL + UpstreamUrlProvider.URI_AFTER_SUCCESSFULL_AUTHENTICATION)
+					.build();
+
+			try (Response response = httpClient.newCall(request).execute()) {
+				if (!response.isSuccessful() || response.code() == 403 || response.code() == 401) {
+					expired = true;
+
+					// token is expired, log the user out
+					logout(upstreamURL, null);
+				}
+			} catch (IOException e) {
+				LOGGER.debug(String.format("Unexpected exception: %s", e.getMessage()));
 			}
-		} catch (IOException e) {
-			LOGGER.debug(String.format("Unexpected exception: %s", e.getMessage()));
 		}
 
 		return expired;

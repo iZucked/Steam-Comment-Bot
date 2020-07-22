@@ -170,7 +170,7 @@ public class OAuthAuthenticationShell extends Shell {
 
 					// shutdown shell
 					OAuthAuthenticationShell.this.close();
-				} else if (event.location.contains("/oauth2/logout")) {
+				} else if (event.location.contains("/logout")) {
 					OAuthAuthenticationShell.this.close();
 				}
 			}
