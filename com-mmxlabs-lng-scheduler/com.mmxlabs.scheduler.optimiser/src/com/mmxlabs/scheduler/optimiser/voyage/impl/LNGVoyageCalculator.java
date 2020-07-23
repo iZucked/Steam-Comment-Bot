@@ -272,7 +272,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 						pilotLightConsumptionInMT = Calculator.quantityFromRateTime(pilotLightRateINMTPerDay, additionalRouteTimeInHours) / 24L;
 					}
 
-				} else { //routNBOProvidedInMT > routeRequiredConsumption...therefore will be pure NBO,.
+				} else { //routeNBOProvidedInMT > routeRequiredConsumption...therefore will be pure NBO,.
 					routeDiffInMT = 0;
 					routeFboProvidedInMT = 0;
 					routeFboProvidedInM3 = 0;
