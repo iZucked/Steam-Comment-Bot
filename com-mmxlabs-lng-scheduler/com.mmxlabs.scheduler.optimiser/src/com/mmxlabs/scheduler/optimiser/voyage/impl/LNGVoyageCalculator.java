@@ -272,11 +272,13 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 						pilotLightConsumptionInMT = Calculator.quantityFromRateTime(pilotLightRateINMTPerDay, additionalRouteTimeInHours) / 24L;
 					}
 
-				} else {
+				} else { //routNBOProvidedInMT > routeRequiredConsumption...therefore will be pure NBO,.
 					routeDiffInMT = 0;
 					routeFboProvidedInMT = 0;
 					routeFboProvidedInM3 = 0;
-					pilotLightConsumptionInMT = 0;
+					//NB: Still need pilot light, if running on only NBO as not using bunkers.
+					final long pilotLightRateINMTPerDay = vessel.getPilotLightRate();
+					pilotLightConsumptionInMT = Calculator.quantityFromRateTime(pilotLightRateINMTPerDay, additionalRouteTimeInHours) / 24L;
 				}
 
 				output.setRouteAdditionalConsumption(LNGFuelKeys.NBO_In_m3, routeNboProvidedInM3);
