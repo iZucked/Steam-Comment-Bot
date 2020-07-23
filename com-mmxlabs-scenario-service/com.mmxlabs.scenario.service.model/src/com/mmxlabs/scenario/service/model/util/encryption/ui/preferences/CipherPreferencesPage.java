@@ -5,14 +5,15 @@
 package com.mmxlabs.scenario.service.model.util.encryption.ui.preferences;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.util.Arrays;
 
+import javax.crypto.SecretKey;
+
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -20,8 +21,9 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.PlatformUI;
 
-import com.mmxlabs.scenario.service.model.util.encryption.impl.KeyFileHeader;
-import com.mmxlabs.scenario.service.model.util.encryption.impl.v1.KeyFileV1;
+import com.mmxlabs.scenario.service.model.util.encryption.impl.KeyFileLoader;
+import com.mmxlabs.scenario.service.model.util.encryption.impl.KeyFileUtil;
+import com.mmxlabs.scenario.service.model.util.encryption.impl.keyfiles.KeyFileV2;
 import com.mmxlabs.scenario.service.model.util.encryption.ui.NewPasswordPromptDialog;
 
 /**
@@ -52,7 +54,7 @@ public class CipherPreferencesPage extends PreferencePage implements IWorkbenchP
 
 		final Button btn = new Button(parent, SWT.PUSH);
 		btn.setText("Generate a key");
-		btn.addSelectionListener(new SelectionListener() {
+		btn.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
@@ -61,30 +63,24 @@ public class CipherPreferencesPage extends PreferencePage implements IWorkbenchP
 				dialog.setBlockOnOpen(true);
 				if (dialog.open() == Window.OK) {
 
-					final KeyFileV1 newKey = KeyFileV1.generateKey(256);
+					final SecretKey newKey = KeyFileV2.generateKey(256);
 					final File f = new File("C:/temp/lingo.data");
-					try (FileOutputStream fos = new FileOutputStream(f)) {
-						final KeyFileHeader header = new KeyFileHeader(KeyFileHeader.VERSION__0, KeyFileHeader.PASSWORD_TYPE__DEFAULT, dialog.getName());
-						header.write(fos);
-
-						final char[] password = dialog.getPassword();
-						newKey.save(fos, password);
-						// Zero out array
-						Arrays.fill(password, (char) 0);
+					try {
+						if (f.exists()) {
+							KeyFileLoader.initalise(f);
+						}
+						{
+							final byte[] keyUUID = new byte[KeyFileUtil.UUID_LENGTH];
+							EcoreUtil.generateUUID(keyUUID);
+							KeyFileLoader.addToStore(f, keyUUID, newKey, KeyFileV2.KEYFILE_TYPE);
+						}
 					} catch (final Exception e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				}
 			}
-
-			@Override
-			public void widgetDefaultSelected(final SelectionEvent e) {
-
-			}
 		});
 
-		// TODO Auto-generated method stub
 		return parent;
 	}
 }

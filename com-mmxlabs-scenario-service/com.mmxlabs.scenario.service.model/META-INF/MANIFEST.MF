@@ -16,7 +16,7 @@ Export-Package: com.mmxlabs.scenario.service,
  com.mmxlabs.scenario.service.model.util,
  com.mmxlabs.scenario.service.model.util.encryption,
  com.mmxlabs.scenario.service.model.util.encryption.impl,
- com.mmxlabs.scenario.service.model.util.encryption.impl.v1,
+ com.mmxlabs.scenario.service.model.util.encryption.impl.keyfiles,
  com.mmxlabs.scenario.service.model.util.encryption.ui,
  com.mmxlabs.scenario.service.model.util.extpoint
 Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
