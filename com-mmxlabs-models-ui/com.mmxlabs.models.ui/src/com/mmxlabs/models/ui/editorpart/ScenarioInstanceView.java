@@ -64,9 +64,9 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 
 	private boolean locked;
 
-	private final IScenarioLockListener lockListener = (pModelRecord, writeLocked) -> {
-		RunnerHelper.runNowOrAsync(() -> setLocked(writeLocked || (scenarioInstance != null && scenarioInstance.isReadonly())));
-	};
+	private final IScenarioLockListener lockListener = (pModelRecord, writeLocked) -> RunnerHelper
+			.runNowOrAsync(() -> setLocked(writeLocked || (scenarioInstance != null && scenarioInstance.isReadonly())));
+
 	private IPartListener partListener;
 
 	protected void listenToScenarioSelection() {
@@ -300,7 +300,7 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 		@Override
 		public ModelReference getModelReference() {
 			return ScenarioInstanceView.this.getModelReference();
-		};
+		}
 	};
 
 	@Override
@@ -367,7 +367,7 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 	public void editObject(@Nullable final EObject target) {
 		if (target != null) {
 			final DetailCompositeDialog dcd = new DetailCompositeDialog(this.getShell(), this.getDefaultCommandHandler());
-			dcd.open(this, this.getRootObject(), Collections.singletonList((EObject) target));
+			dcd.open(this, this.getRootObject(), Collections.singletonList(target));
 		}
 	}
 }

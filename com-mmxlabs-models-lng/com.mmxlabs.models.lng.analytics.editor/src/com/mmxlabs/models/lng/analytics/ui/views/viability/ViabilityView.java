@@ -13,7 +13,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStackListener;
@@ -27,7 +26,9 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.resource.ResourceLocator;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
@@ -39,7 +40,6 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.ui.views.properties.PropertySheet;
 
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
@@ -75,7 +75,6 @@ import com.mmxlabs.scenario.service.model.manager.ModelReference;
 public class ViabilityView extends ScenarioInstanceView implements CommandStackListener {
 
 	private ViabilityModel currentModel;
-	private MMXRootObject rootObject;
 	// listens which object is selected
 	private org.eclipse.e4.ui.workbench.modeling.ISelectionListener selectionListener;
 	// selection service from upper class
@@ -88,7 +87,7 @@ public class ViabilityView extends ScenarioInstanceView implements CommandStackL
 
 	private Composite parent;
 
-	private ICommandHandler commandHandler;
+	private ICommandHandler localCommandHandler;
 
 	private MainTableCompoment mainTableComponent;
 
@@ -103,52 +102,47 @@ public class ViabilityView extends ScenarioInstanceView implements CommandStackL
 		mainTableComponent.createControls(this.parent, ViabilityView.this);
 		inputWants.addAll(mainTableComponent.getInputWants());
 
-		final RunnableAction go = new RunnableAction("Generate", Action.AS_PUSH_BUTTON, () -> {
-			BusyIndicator.showWhile(Display.getDefault(), () -> {
-				try {
-					final LNGScenarioModel scenarioModel = (LNGScenarioModel) getRootObject();
-					final ScenarioInstance scenarioInstance = getScenarioInstance();
-					final IScenarioDataProvider sdp = getScenarioDataProvider();
-					if (scenarioModel == null) {
-						return;
-					}
-					final ExecutorService executor = Executors.newFixedThreadPool(1);
-					try {
-						executor.submit(() -> {
-							final ViabilityModel model = ViabilityUtils.createModelFromScenario(scenarioModel, "viabilitymarket");
-							ViabilitySandboxEvaluator.evaluate(sdp, scenarioInstance, model);
-
-							RunnerHelper.asyncExec(() -> {
-								final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(sdp);
-								final EditingDomain editingDomain = sdp.getEditingDomain();
-								// clearing the viability model before the evaluation of the new one
-								// SG - No need for this?
-								// editingDomain.getCommandStack()
-								// .execute(SetCommand.create(editingDomain, analyticsModel, AnalyticsPackage.eINSTANCE.getAnalyticsModel_ViabilityModel(), SetCommand.UNSET_VALUE));
-
-								final CompoundCommand cmd = new CompoundCommand("Create viability matrix");
-								cmd.append(SetCommand.create(editingDomain, analyticsModel, AnalyticsPackage.eINSTANCE.getAnalyticsModel_ViabilityModel(), model));
-								editingDomain.getCommandStack().execute(cmd);
-
-								doDisplayScenarioInstance(scenarioInstance, scenarioModel, model);
-							});
-						}).get();
-					} finally {
-						executor.shutdown();
-					}
-				} catch (final InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (final ExecutionException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+		final RunnableAction go = new RunnableAction("Generate", IAction.AS_PUSH_BUTTON, () -> BusyIndicator.showWhile(Display.getDefault(), () -> {
+			try {
+				final LNGScenarioModel scenarioModel = (LNGScenarioModel) getRootObject();
+				final ScenarioInstance scenarioInstance = getScenarioInstance();
+				final IScenarioDataProvider sdp = getScenarioDataProvider();
+				if (scenarioModel == null) {
+					return;
 				}
-			});
-		});
-		go.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "icons/sandbox_generate.gif"));
+				final ExecutorService executor = Executors.newFixedThreadPool(1);
+				try {
+					executor.submit(() -> {
+						final ViabilityModel model = ViabilityUtils.createModelFromScenario(scenarioModel, "viabilitymarket");
+						ViabilitySandboxEvaluator.evaluate(sdp, scenarioInstance, model);
+
+						RunnerHelper.asyncExec(() -> {
+							final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(sdp);
+							final EditingDomain editingDomain = sdp.getEditingDomain();
+							// clearing the viability model before the evaluation of the new one
+							// SG - No need for this?
+							// editingDomain.getCommandStack()
+							// .execute(SetCommand.create(editingDomain, analyticsModel, AnalyticsPackage.eINSTANCE.getAnalyticsModel_ViabilityModel(), SetCommand.UNSET_VALUE));
+
+							final CompoundCommand cmd = new CompoundCommand("Create viability matrix");
+							cmd.append(SetCommand.create(editingDomain, analyticsModel, AnalyticsPackage.eINSTANCE.getAnalyticsModel_ViabilityModel(), model));
+							editingDomain.getCommandStack().execute(cmd);
+
+							doDisplayScenarioInstance(scenarioInstance, scenarioModel, model);
+						});
+					}).get();
+				} finally {
+					executor.shutdown();
+				}
+			} catch (final InterruptedException | ExecutionException e) {
+				e.printStackTrace();
+			}
+		}));
+
+		ResourceLocator.imageDescriptorFromBundle("com.mmxlabs.models.lng.analytics.editor", "icons/sandbox_generate.gif").ifPresent(go::setImageDescriptor);
 		getViewSite().getActionBars().getToolBarManager().add(go);
 
-		final Action remove = new Action("Remove", Action.AS_PUSH_BUTTON) {
+		final Action remove = new Action("Remove", IAction.AS_PUSH_BUTTON) {
 			@Override
 			public void run() {
 				final LNGScenarioModel scenarioModel = (LNGScenarioModel) getRootObject();
@@ -301,7 +295,7 @@ public class ViabilityView extends ScenarioInstanceView implements CommandStackL
 	private final EContentAdapter deletedOptionModelAdapter = new SafeMMXContentAdapter() {
 
 		@Override
-		protected void missedNotifications(java.util.List<Notification> missed) {
+		protected synchronized void missedNotifications(java.util.List<Notification> missed) {
 			boolean doDisplay = false;
 			for (Notification notification : missed) {
 
@@ -372,12 +366,12 @@ public class ViabilityView extends ScenarioInstanceView implements CommandStackL
 	@Override
 	public synchronized ICommandHandler getDefaultCommandHandler() {
 
-		if (commandHandler == null) {
+		if (localCommandHandler == null) {
 			final ICommandHandler superHandler = super.getDefaultCommandHandler();
 
 			final EditingDomain domain = super.getEditingDomain();
 
-			commandHandler = new ICommandHandler() {
+			localCommandHandler = new ICommandHandler() {
 
 				@Override
 				public void handleCommand(final Command command, final EObject target, final EStructuralFeature feature) {
@@ -411,7 +405,7 @@ public class ViabilityView extends ScenarioInstanceView implements CommandStackL
 			};
 		}
 
-		return commandHandler;
+		return localCommandHandler;
 
 	}
 
@@ -430,28 +424,23 @@ public class ViabilityView extends ScenarioInstanceView implements CommandStackL
 	 */
 	public void listenToSelectionsFrom() {
 
-		selectionListener = new org.eclipse.e4.ui.workbench.modeling.ISelectionListener() {
-
-			@Override
-			public void selectionChanged(final MPart part, final Object selectedObjects) {
-				final IWorkbenchPart e3part = SelectionHelper.getE3Part(part);
-				{
-					// TODO: Ignore navigator
-					if (e3part == ViabilityView.this) {
-						return;
-					}
-					if (e3part instanceof PropertySheet) {
-						return;
-					}
+		selectionListener = (part, selectedObjects) -> {
+			final IWorkbenchPart e3part = SelectionHelper.getE3Part(part);
+			{
+				// TODO: Ignore navigator
+				if (e3part == ViabilityView.this) {
+					return;
 				}
-
-				final ISelection selection = SelectionHelper.adaptSelection(selectedObjects);
-
-				// Find valid, selected objects
-				final LoadSlot validSlot = ViabilityView.this.processSelection(e3part, selection);
-				mainTableComponent.setSelectedLong(validSlot);
-
+				if (e3part instanceof PropertySheet) {
+					return;
+				}
 			}
+
+			final ISelection selection = SelectionHelper.adaptSelection(selectedObjects);
+
+			// Find valid, selected objects
+			final LoadSlot validSlot = ViabilityView.this.processSelection(e3part, selection);
+			mainTableComponent.setSelectedLong(validSlot);
 		};
 		service.addPostSelectionListener(selectionListener);
 	}
@@ -470,8 +459,7 @@ public class ViabilityView extends ScenarioInstanceView implements CommandStackL
 				 * Just the first Load Slot selection now
 				 */
 				if (obj instanceof LoadSlot) {
-					final LoadSlot load = (LoadSlot) obj;
-					return load;
+					return (LoadSlot) obj;
 				}
 			}
 		}

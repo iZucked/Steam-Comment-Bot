@@ -65,7 +65,7 @@ public class MigrateToV83 extends AbstractMigrationUnit {
 			if (ports != null) {
 
 				// Record the first port by ID.
-//				Map<String, EObjectWrapper> firstPort = new HashMap<>();
+				// Map<String, EObjectWrapper> firstPort = new HashMap<>();
 
 				Set<String> seenIDs = new HashSet<>();
 				Set<EObjectWrapper> duplicatePorts = new HashSet<>();
@@ -90,61 +90,61 @@ public class MigrateToV83 extends AbstractMigrationUnit {
 					}
 					if (mmxId == null) {
 						// Some old ITS cases do not distinguish between the niigata's, pick one
-						if (name.toString().toLowerCase().equals("niigata")) {
+						if (name.toString().equalsIgnoreCase("niigata")) {
 							mmxId = "L_JP_Niiga";
 						}
 					}
-//
-//					if (mmxId == null) {
-//						throw new RuntimeException("No ID for " + name);
-//					}
-//					assert mmxId != null;
-//
-//					if (preferredNameMap.containsKey(mmxId)) {
-//						List<String> newNames = new LinkedList<>();
-//						if (otherNamesList != null) {
-//							newNames.addAll(otherNamesList);
-//						}
-//						if (!newNames.contains(name)) {
-//							newNames.add(0, (String) name);
-//							location.setAttrib("otherNames", newNames);
-//						}
-//						String preferredName = preferredNameMap.get(mmxId);
-//						location.setAttrib("name", preferredName);
-//						port.setAttrib("name", preferredName);
-//					}
+					//
+					// if (mmxId == null) {
+					// throw new RuntimeException("No ID for " + name);
+					// }
+					// assert mmxId != null;
+					//
+					// if (preferredNameMap.containsKey(mmxId)) {
+					// List<String> newNames = new LinkedList<>();
+					// if (otherNamesList != null) {
+					// newNames.addAll(otherNamesList);
+					// }
+					// if (!newNames.contains(name)) {
+					// newNames.add(0, (String) name);
+					// location.setAttrib("otherNames", newNames);
+					// }
+					// String preferredName = preferredNameMap.get(mmxId);
+					// location.setAttrib("name", preferredName);
+					// port.setAttrib("name", preferredName);
+					// }
 
-//					if (!seenIDs.add(mmxId)) {
-//
-//						final Map<EObject, Collection<EStructuralFeature.Setting>> usagesByCopy = EcoreUtil.UsageCrossReferencer.findAll(Collections.singleton(port), model);
-//
-//						final Collection<EStructuralFeature.Setting> usages = usagesByCopy.get(port);
-//						if (usages != null) {
-//							for (final EStructuralFeature.Setting setting : usages) {
-//								if (setting.getEObject() != portModel) {
-//									if (setting.getEStructuralFeature().isMany()) {
-//										Collection<?> collection = (Collection<?>) setting.getEObject().eGet(setting.getEStructuralFeature());
-//										if (collection.contains(firstPort.get(mmxId))) {
-//											// Replacement is already in the collection, so just remove it
-//											collection.remove(port);
-//										} else {
-//											EcoreUtil.replace(setting, port, firstPort.get(mmxId));
-//										}
-//									} else {
-//										EcoreUtil.replace(setting, port, firstPort.get(mmxId));
-//									}
-//
-//								}
-//							}
-//						}
-//						duplicatePorts.add(port);
-//						continue;
-//					} else {
-//						// Record this port as an original
-//						firstPort.put(mmxId, port);
-//					}
+					// if (!seenIDs.add(mmxId)) {
+					//
+					// final Map<EObject, Collection<EStructuralFeature.Setting>> usagesByCopy = EcoreUtil.UsageCrossReferencer.findAll(Collections.singleton(port), model);
+					//
+					// final Collection<EStructuralFeature.Setting> usages = usagesByCopy.get(port);
+					// if (usages != null) {
+					// for (final EStructuralFeature.Setting setting : usages) {
+					// if (setting.getEObject() != portModel) {
+					// if (setting.getEStructuralFeature().isMany()) {
+					// Collection<?> collection = (Collection<?>) setting.getEObject().eGet(setting.getEStructuralFeature());
+					// if (collection.contains(firstPort.get(mmxId))) {
+					// // Replacement is already in the collection, so just remove it
+					// collection.remove(port);
+					// } else {
+					// EcoreUtil.replace(setting, port, firstPort.get(mmxId));
+					// }
+					// } else {
+					// EcoreUtil.replace(setting, port, firstPort.get(mmxId));
+					// }
+					//
+					// }
+					// }
+					// }
+					// duplicatePorts.add(port);
+					// continue;
+					// } else {
+					// // Record this port as an original
+					// firstPort.put(mmxId, port);
+					// }
 					if (mmxId != null) {
-					location.setAttrib("mmxId", mmxId);
+						location.setAttrib("mmxId", mmxId);
 					}
 
 					location.setAttrib("timeZone", port.getAttrib("timeZone"));
@@ -251,9 +251,9 @@ public class MigrateToV83 extends AbstractMigrationUnit {
 				EObjectWrapper analyticsModel = model.getRef("analyticsModel");
 				TreeIterator<EObject> itr = analyticsModel.eAllContents();
 				while (itr.hasNext()) {
-					EObject obj = (EObject) itr.next();
+					EObject obj = itr.next();
 					if (class_Journey.isInstance(obj)) {
-						EObjectWrapper journey = (EObjectWrapper)obj;
+						EObjectWrapper journey = (EObjectWrapper) obj;
 						EObjectWrapper entryPoint = journey.getRef("canalEntry");
 						if (entryPoint != null) {
 							if (entryPoint.eContainingFeature().getName().toLowerCase().contains("northentrance")) {
@@ -273,7 +273,7 @@ public class MigrateToV83 extends AbstractMigrationUnit {
 
 		final EObjectWrapper pricingModel = referenceModel.getRef("pricingModel");
 		pricingModel.setAttrib("marketCurveDataVersion", "private-" + EcoreUtil.generateUUID());
-		
+
 		final EObjectWrapper fleetModel = referenceModel.getRef("fleetModel");
 		fleetModel.setAttrib("fleetDataVersion", "private-" + EcoreUtil.generateUUID());
 	}
@@ -334,7 +334,6 @@ public class MigrateToV83 extends AbstractMigrationUnit {
 		map.put("Lumut", "L_BN_Lumut");
 		map.put("Brunei LNG", "L_BN_Lumut");
 		map.put("Brunei", "L_BN_Lumut");
-		map.put("Lumut Terminal, Brunei", "L_BN_Lumut");
 		map.put("Seria Terminal", "L_BN_Seria");
 		map.put("Seria", "L_BN_Seria");
 		map.put("Petrobras Guanabara LNG", "L_BR_Guana");
@@ -461,7 +460,6 @@ public class MigrateToV83 extends AbstractMigrationUnit {
 		map.put("Huelva LNG", "L_ES_Huelv");
 		map.put("Sagunto", "L_ES_Sagun");
 		map.put("Sagunto LNG Terminal", "L_ES_Sagun");
-		map.put("Dunkirk, France", "L_FR_Dunki");
 		map.put("Dunkirk, France", "L_FR_Dunki");
 		map.put("Dunkirk", "L_FR_Dunki");
 		map.put("Fos - Cavaou LNG Terminal", "L_FR_FosCa");
@@ -677,7 +675,6 @@ public class MigrateToV83 extends AbstractMigrationUnit {
 		map.put("Mina Al-Ahmadi", "L_KW_MinaA");
 		map.put("Tripoli, Lebanon", "L_LB_Tripo");
 		map.put("Tripoli", "L_LB_Tripo");
-		map.put("Tripoli, Lebanon", "L_LB_Tripo");
 		map.put("Klaipeda LNG", "L_LT_Klaip");
 		map.put("Klaipeda", "L_LT_Klaip");
 		map.put("Marsa Brega", "L_LY_Marsa");
@@ -688,7 +685,6 @@ public class MigrateToV83 extends AbstractMigrationUnit {
 		map.put("Malta", "L_MT_Malta");
 		map.put("Altamira, Mexico", "L_MX_Altam");
 		map.put("Altamira", "L_MX_Altam");
-		map.put("Altamira, Mexico", "L_MX_Altam");
 		map.put("Costa Azul LNG Terminal", "L_MX_Costa");
 		map.put("Costa Azul", "L_MX_Costa");
 		map.put("Manzanillo, Mexico", "L_MX_Manza");
@@ -752,7 +748,6 @@ public class MigrateToV83 extends AbstractMigrationUnit {
 		map.put("Ras Laffan (Rich)", "L_QA_RasLa");
 		map.put("Ras Laffan (Lean)", "L_QA_RasLa");
 		map.put("Drovyanoy", "L_RU_Drovy");
-		map.put("Sakhalin", "L_RU_Sakha");
 		map.put("Prigorodnoye", "L_RU_Sakha");
 		map.put("Sakhalin", "L_RU_Sakha");
 		map.put("Sakhalin-2", "L_RU_Sakha");
@@ -820,12 +815,10 @@ public class MigrateToV83 extends AbstractMigrationUnit {
 		map.put("Elba Island", "L_US_Elba");
 		map.put("Everett Terminal, Ma", "L_US_Evere");
 		map.put("Everett, Massachusetts, U.S.A.", "L_US_Evere");
-		map.put("Everett, Massachusetts, U.S.A.", "L_US_Evere");
 		map.put("Everett Marine Terminal", "L_US_Evere");
 		map.put("Everett", "L_US_Evere");
 		map.put("Freeport LNG Terminal, Texas, U.S.A.", "L_US_Freep");
 		map.put("Freeport, Tx", "L_US_Freep");
-		map.put("Freeport LNG Terminal, Texas, U.S.A.", "L_US_Freep");
 		map.put("Freeport LNG", "L_US_Freep");
 		map.put("Freeport", "L_US_Freep");
 		map.put("Golden Pass", "L_US_Golde");

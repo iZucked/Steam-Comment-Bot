@@ -13,22 +13,20 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.resource.ResourceLocator;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridColumnGroup;
@@ -47,7 +45,6 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.models.lng.adp.ADPModel;
@@ -137,24 +134,19 @@ public class ContractPage extends ADPComposite {
 					}
 				});
 				objectSelector.setInput(Collections.emptyList());
-				objectSelector.addSelectionChangedListener(new ISelectionChangedListener() {
-
-					@Override
-					public void selectionChanged(final SelectionChangedEvent event) {
-						final ISelection selection = event.getSelection();
-						EObject target = null;
-						if (selection instanceof IStructuredSelection) {
-							final IStructuredSelection iStructuredSelection = (IStructuredSelection) selection;
-							target = (EObject) iStructuredSelection.getFirstElement();
-						}
-						generateButton.setEnabled(target != null);
-						updateDetailPaneInput(target);
+				objectSelector.addSelectionChangedListener(event -> {
+					final ISelection selection = event.getSelection();
+					EObject target = null;
+					if (selection instanceof IStructuredSelection) {
+						final IStructuredSelection iStructuredSelection = (IStructuredSelection) selection;
+						target = (EObject) iStructuredSelection.getFirstElement();
 					}
+					generateButton.setEnabled(target != null);
+					updateDetailPaneInput(target);
 				});
 			}
 			{
 				generateButton = new Button(toolbarComposite, SWT.PUSH);
-				// btn.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).create());
 				generateButton.setText("Re-generate slots");
 				generateButton.setEnabled(false);
 				generateButton.addSelectionListener(new SelectionAdapter() {
@@ -211,7 +203,7 @@ public class ContractPage extends ADPComposite {
 		}
 		{
 
-			rhsScrolledComposite = new ScrolledComposite(mainComposite, SWT.V_SCROLL | SWT.V_SCROLL);
+			rhsScrolledComposite = new ScrolledComposite(mainComposite, SWT.V_SCROLL);
 			rhsScrolledComposite.setLayoutData(GridDataFactory.fillDefaults()//
 					.grab(false, true)//
 					.hint(200, SWT.DEFAULT) //
@@ -294,7 +286,9 @@ public class ContractPage extends ADPComposite {
 								}
 							}
 						};
-						packAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.rcp.common", "/icons/pack.gif"));
+
+						ResourceLocator.imageDescriptorFromBundle("com.mmxlabs.rcp.common", "/icons/pack.gif").ifPresent(packAction::setImageDescriptor);
+
 						removeButtonManager.getToolbarManager().add(packAction);
 					}
 
@@ -307,53 +301,53 @@ public class ContractPage extends ADPComposite {
 
 	private ScenarioTableViewer constructPreviewViewer(final ADPEditorData editorData, final Group previewGroup) {
 
-		final ScenarioTableViewer previewViewer = new ScenarioTableViewer(previewGroup, SWT.V_SCROLL | SWT.MULTI, editorData);
-		previewViewer.init(editorData.getAdapterFactory(), editorData.getModelReference(), new EReference[0]);
-		previewViewer.setContentProvider(new ContentProvider());
-		GridViewerHelper.configureLookAndFeel(previewViewer);
+		final ScenarioTableViewer localPreviewViewer = new ScenarioTableViewer(previewGroup, SWT.V_SCROLL | SWT.MULTI, editorData);
+		localPreviewViewer.init(editorData.getAdapterFactory(), editorData.getModelReference());
+		localPreviewViewer.setContentProvider(new ContentProvider());
+		GridViewerHelper.configureLookAndFeel(localPreviewViewer);
 
-		previewViewer.setStatusProvider(editorData.getStatusProvider());
+		localPreviewViewer.setStatusProvider(editorData.getStatusProvider());
 
-		previewViewer.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
+		localPreviewViewer.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
 		// Enable tooltip support
-		ColumnViewerToolTipSupport.enableFor(previewViewer);
+		ColumnViewerToolTipSupport.enableFor(localPreviewViewer);
 
-		previewViewer.getGrid().setHeaderVisible(true);
+		localPreviewViewer.getGrid().setHeaderVisible(true);
 
-		previewViewer.addTypicalColumn("Name", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editorData.getEditingDomain()));
-		previewViewer.addTypicalColumn("Port",
+		localPreviewViewer.addTypicalColumn("Name", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editorData.getEditingDomain()));
+		localPreviewViewer.addTypicalColumn("Port",
 				new TextualSingleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_Port(), editorData.getReferenceValueProviderCache(), editorData.getEditingDomain()));
 
 		// TODO: Groups
-		final GridColumnGroup windowGroup = new GridColumnGroup(previewViewer.getGrid(), SWT.NONE);
+		final GridColumnGroup windowGroup = new GridColumnGroup(localPreviewViewer.getGrid(), SWT.NONE);
 		windowGroup.setText("Window");
 		GridViewerHelper.configureLookAndFeel(windowGroup);
-		previewViewer.addTypicalColumn("Date", windowGroup, new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowStart(), editorData.getEditingDomain()));
-		previewViewer.addTypicalColumn("Time", windowGroup, new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowStartTime(), editorData.getEditingDomain()));
-		previewViewer.addTypicalColumn("Size", windowGroup, new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowSize(), editorData.getEditingDomain()));
-		previewViewer.addTypicalColumn("Units", windowGroup,
-				new TextualEnumAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowSizeUnits(), editorData.getEditingDomain(), (e) -> mapName((TimePeriod) e)));
-		previewViewer.addTypicalColumn("Duration", windowGroup, new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Duration(), editorData.getEditingDomain()));
+		localPreviewViewer.addTypicalColumn("Date", windowGroup, new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowStart(), editorData.getEditingDomain()));
+		localPreviewViewer.addTypicalColumn("Time", windowGroup, new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowStartTime(), editorData.getEditingDomain()));
+		localPreviewViewer.addTypicalColumn("Size", windowGroup, new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowSize(), editorData.getEditingDomain()));
+		localPreviewViewer.addTypicalColumn("Units", windowGroup,
+				new TextualEnumAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowSizeUnits(), editorData.getEditingDomain(), e -> mapName((TimePeriod) e)));
+		localPreviewViewer.addTypicalColumn("Duration", windowGroup, new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Duration(), editorData.getEditingDomain()));
 
 		// TODO: Groups
-		final GridColumnGroup quantityGroup = new GridColumnGroup(previewViewer.getGrid(), SWT.NONE);
+		final GridColumnGroup quantityGroup = new GridColumnGroup(localPreviewViewer.getGrid(), SWT.NONE);
 		quantityGroup.setText("Quantity");
 		GridViewerHelper.configureLookAndFeel(quantityGroup);
-		previewViewer.addTypicalColumn("Min", quantityGroup, new VolumeAttributeManipulator(CargoPackage.eINSTANCE.getSlot_MinQuantity(), editorData.getEditingDomain()));
-		previewViewer.addTypicalColumn("Max", quantityGroup, new VolumeAttributeManipulator(CargoPackage.eINSTANCE.getSlot_MaxQuantity(), editorData.getEditingDomain()));
-		previewViewer.addTypicalColumn("Units", quantityGroup,
-				new TextualEnumAttributeManipulator(CargoPackage.eINSTANCE.getSlot_VolumeLimitsUnit(), editorData.getEditingDomain(), (e) -> mapName((VolumeUnits) e)));
+		localPreviewViewer.addTypicalColumn("Min", quantityGroup, new VolumeAttributeManipulator(CargoPackage.eINSTANCE.getSlot_MinQuantity(), editorData.getEditingDomain()));
+		localPreviewViewer.addTypicalColumn("Max", quantityGroup, new VolumeAttributeManipulator(CargoPackage.eINSTANCE.getSlot_MaxQuantity(), editorData.getEditingDomain()));
+		localPreviewViewer.addTypicalColumn("Units", quantityGroup,
+				new TextualEnumAttributeManipulator(CargoPackage.eINSTANCE.getSlot_VolumeLimitsUnit(), editorData.getEditingDomain(), e -> mapName((VolumeUnits) e)));
 
-		previewViewer.addDoubleClickListener(event -> {
-			final ISelection selection = previewViewer.getSelection();
+		localPreviewViewer.addDoubleClickListener(event -> {
+			final ISelection selection = localPreviewViewer.getSelection();
 			if (selection instanceof IStructuredSelection) {
 				final IStructuredSelection ss = (IStructuredSelection) selection;
 				DetailCompositeDialogUtil.editSelection(editorData, ss);
-				previewViewer.refresh();
+				localPreviewViewer.refresh();
 			}
 		});
 
-		previewViewer.addSelectionChangedListener(event -> {
+		localPreviewViewer.addSelectionChangedListener(event -> {
 			// Update global action on selection change.
 			if (actionBars != null) {
 				actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), deleteSlotAction);
@@ -361,7 +355,7 @@ public class ContractPage extends ADPComposite {
 			deleteSlotAction.setEnabled(!event.getSelection().isEmpty());
 		});
 		deleteSlotAction.setEnabled(false);
-		return previewViewer;
+		return localPreviewViewer;
 	}
 
 	@Override
