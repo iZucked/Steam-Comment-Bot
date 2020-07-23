@@ -1614,7 +1614,7 @@ public class ChangeSetViewColumnHelper {
 	}
 	
 	private List<AbstractNomination> filterAffectedNominations(List<AbstractNomination> noms, ChangeSetRowData before, ChangeSetRowData after) {
-		List<AbstractNomination> affectedNoms = new ArrayList<AbstractNomination>();
+		List<AbstractNomination> affectedNoms = new ArrayList<>();
 		for (AbstractNomination n : noms) {
 			String type = n.getType();
 			String[] dependentFields = NominationTypeRegistry.getInstance().getDependentFields(type);
@@ -1622,6 +1622,10 @@ public class ChangeSetViewColumnHelper {
 				for (String field : dependentFields) {
 					Object fieldBefore = getFieldValue(before, field);
 					Object fieldAfter = getFieldValue(after, field);
+										
+					//Check for getName() method and use to get string to compare.
+					fieldBefore = getName(fieldBefore);
+					fieldAfter = getName(fieldAfter);
 					
 					//If the dependent field has changed, then add to the list of effected nominations.
 					if (!Objects.equals(fieldBefore, fieldAfter)) {
@@ -1637,6 +1641,35 @@ public class ChangeSetViewColumnHelper {
 		}
 		
 		return affectedNoms;
+	}
+	
+	/**
+	 * Gets the name of the object if possible.
+	 * @param obj
+	 * @return the name of the object.
+	 */
+	private Object getName(Object obj) {
+		try {
+			Class<?> cls = obj.getClass();
+			Method[] methods = cls.getMethods();
+
+			for (Method m : methods) {
+				if (m.getName().equals("getName")) {
+					obj = m.invoke(obj);
+					break;
+				}
+			}
+
+			return obj;
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+
+		return obj;
 	}
 	
 	private Object getFieldValue(Object obj, String fieldPath) {
