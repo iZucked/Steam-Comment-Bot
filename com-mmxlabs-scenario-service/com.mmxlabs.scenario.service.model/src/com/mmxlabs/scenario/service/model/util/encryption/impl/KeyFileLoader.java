@@ -162,7 +162,7 @@ public final class KeyFileLoader {
 			}
 		} catch (final Exception e) {
 			// Fallback!
-			e.printStackTrace();
+		//	e.printStackTrace();
 
 			try (FileInputStream fis = new FileInputStream(keyFileFile)) {
 				readLegacyKeyFile(cipher, fis, true);
@@ -297,8 +297,8 @@ public final class KeyFileLoader {
 	}
 
 	public static void main(final String[] args) throws Exception {
-		final String source = "C:/users/sg/mmxlabs/keyfiles/p/lingo.data";
-		final String dest = "C:/users/sg/mmxlabs/keyfiles/p/lingo.data.p12";
+		final String source = "C:/users/sg/mmxlabs/keyfiles/p/lingo.data.old";
+		final String dest = "C:/users/sg/mmxlabs/keyfiles/p/lingo.data";
 
 		convert(source, dest, ppValue);
 	}
