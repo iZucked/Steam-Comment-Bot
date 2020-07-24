@@ -36,7 +36,6 @@ public class CipherPreferencesPage extends PreferencePage implements IWorkbenchP
 
 	public CipherPreferencesPage() {
 		super();
-		setDescription("Cipher");
 	}
 
 	/*

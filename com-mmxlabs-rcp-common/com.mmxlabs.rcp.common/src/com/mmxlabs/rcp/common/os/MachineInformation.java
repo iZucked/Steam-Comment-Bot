@@ -43,7 +43,6 @@ public class MachineInformation extends PreferencePage implements IWorkbenchPref
 
 	public MachineInformation() {
 		super();
-		setDescription("Machine Information");
 	}
 
 	@Override

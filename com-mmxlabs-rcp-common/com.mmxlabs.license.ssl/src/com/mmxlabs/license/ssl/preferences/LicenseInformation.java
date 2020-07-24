@@ -31,7 +31,6 @@ public class LicenseInformation extends PreferencePage implements IWorkbenchPref
 
 	public LicenseInformation() {
 		super();
-		setDescription("License Information");
 	}
 
 	@Override
