@@ -234,58 +234,60 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				/**
 				 * How much FBO is produced while in the canal (M3)
 				 */
-				long routeFboProvidedInM3;
+				long routeFboProvidedInM3 = 0;
 				/**
 				 * How much FBO is produced while in the canal (MTBFE)
 				 */
-				long routeFboProvidedInMT;
-
-				/**
-				 * How much supplement is needed over and above NBO while in the canal (MTBFE)
-				 */
-				final long routeDiffInMT;
+				long routeFboProvidedInMT = 0;
+				long supplementalBaseInMT = 0;
 
 				/**
 				 * Consumed pilot light
 				 */
 				long pilotLightConsumptionInMT = 0;
 
-				if (routeNboProvidedInMT <= routeRequiredConsumptionInMT) {
+				boolean usePilotLight = false;
+				/**
+				 * How much supplement is needed over and above NBO while in the canal (in MT)
+				 */
+				final long routeDiffInMT = routeRequiredConsumptionInMT - routeNboProvidedInMT;
+
+				if (routeDiffInMT > 0) {
 					// Need to supplement
 					if (options.getTravelFuelChoice() == TravelFuelChoice.NBO_PLUS_FBO) {
-						routeDiffInMT = 0;
-						routeFboProvidedInMT = routeRequiredConsumptionInMT - routeNboProvidedInMT;
+						routeFboProvidedInMT = routeDiffInMT;
 						routeFboProvidedInM3 = Calculator.convertMTToM3(routeFboProvidedInMT, cargoCVValue, equivalenceFactorMMBTuToMT);
+
+						usePilotLight = true;
 					} else {
 						assert options.getTravelFuelChoice() == TravelFuelChoice.NBO_PLUS_BUNKERS;
 
 						// Reliq vessels should not use base fuel supplement.
 						assert (!vessel.hasReliqCapability());
 
-						routeDiffInMT = routeRequiredConsumptionInMT - routeNboProvidedInMT;
-						routeFboProvidedInMT = 0;
-						routeFboProvidedInM3 = 0;
-						pilotLightConsumptionInMT = 0;
-					}
-					if (routeDiffInMT == 0) {
-						final long pilotLightRateINMTPerDay = vessel.getPilotLightRate();
-						pilotLightConsumptionInMT = Calculator.quantityFromRateTime(pilotLightRateINMTPerDay, additionalRouteTimeInHours) / 24L;
+						supplementalBaseInMT = routeDiffInMT;
 					}
 
-				} else { //routeNBOProvidedInMT > routeRequiredConsumption...therefore will be pure NBO,.
-					routeDiffInMT = 0;
-					routeFboProvidedInMT = 0;
-					routeFboProvidedInM3 = 0;
-					//NB: Still need pilot light, if running on only NBO as not using bunkers.
-					final long pilotLightRateINMTPerDay = vessel.getPilotLightRate();
-					pilotLightConsumptionInMT = Calculator.quantityFromRateTime(pilotLightRateINMTPerDay, additionalRouteTimeInHours) / 24L;
+				} else {
+					// ...therefore will be pure NBO regardless of fuel choice
+					assert routeNboProvidedInMT >= routeRequiredConsumptionInMT;
+
+					// NB: Still need pilot light, if running on only NBO as not using bunkers.
+					usePilotLight = true;
+				}
+
+				if (usePilotLight) {
+					final long pilotLightRateInMTPerDay = vessel.getPilotLightRate();
+					if (pilotLightRateInMTPerDay > 0) {
+						pilotLightConsumptionInMT = Calculator.quantityFromRateTime(pilotLightRateInMTPerDay, additionalRouteTimeInHours) / 24L;
+					}
 				}
 
 				output.setRouteAdditionalConsumption(LNGFuelKeys.NBO_In_m3, routeNboProvidedInM3);
 				output.setRouteAdditionalConsumption(LNGFuelKeys.NBO_In_MT, routeNboProvidedInMT);
 				output.setRouteAdditionalConsumption(LNGFuelKeys.FBO_In_m3, routeFboProvidedInM3);
 				output.setRouteAdditionalConsumption(LNGFuelKeys.FBO_In_MT, routeFboProvidedInMT);
-				output.setRouteAdditionalConsumption(vessel.getSupplementalTravelBaseFuelInMT(), routeDiffInMT);
+				output.setRouteAdditionalConsumption(vessel.getSupplementalTravelBaseFuelInMT(), supplementalBaseInMT);
 				output.setRouteAdditionalConsumption(vessel.getPilotLightFuelInMT(), pilotLightConsumptionInMT);
 			} else {
 				// Base fuel only
