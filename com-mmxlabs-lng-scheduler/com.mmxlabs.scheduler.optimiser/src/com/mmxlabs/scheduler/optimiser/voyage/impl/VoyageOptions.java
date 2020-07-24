@@ -35,22 +35,6 @@ public final class VoyageOptions implements IOptionsSequenceElement {
 	private @NonNull TravelFuelChoice travelFuelChoice = TravelFuelChoice.BUNKERS;
 	private @NonNull IdleFuelChoice idleFuelChoice = IdleFuelChoice.BUNKERS;
 
-	public @NonNull IdleFuelChoice getIdleFuelChoice() {
-		return idleFuelChoice;
-	}
-
-	public void setIdleFuelChoice(@NonNull IdleFuelChoice idleFuelChoice) {
-		this.idleFuelChoice = idleFuelChoice;
-	}
-
-	public @NonNull TravelFuelChoice getTravelFuelChoice() {
-		return travelFuelChoice;
-	}
-
-	public void setTravelFuelChoice(@NonNull TravelFuelChoice travelFuelChoice) {
-		this.travelFuelChoice = travelFuelChoice;
-	}
-
 	private boolean charterOutIdleTime;
 
 	private int cargoCV;
@@ -70,7 +54,7 @@ public final class VoyageOptions implements IOptionsSequenceElement {
 	 */
 	private boolean startWarm;
 
-	private ERouteOption route;
+	private @NonNull ERouteOption route = ERouteOption.DIRECT;
 
 	private VesselState vesselState;
 
@@ -99,6 +83,62 @@ public final class VoyageOptions implements IOptionsSequenceElement {
 		setCargoCVValue(options.getCargoCVValue());
 	}
 
+	public final @NonNull VoyageOptions copy() {
+		return new VoyageOptions(this);
+	}
+
+	@Override
+	public final boolean equals(final Object obj) {
+
+		if (obj instanceof VoyageOptions) {
+			final VoyageOptions vo = (VoyageOptions) obj;
+
+			// @formatter:off
+			return Objects.equal(charterOutIdleTime, vo.charterOutIdleTime) //
+					&& Objects.equal(travelFuelChoice, vo.travelFuelChoice) //
+					&& Objects.equal(idleFuelChoice, vo.idleFuelChoice) && Objects.equal(availableTime, vo.availableTime) //
+					&& Objects.equal(extraIdleTime, vo.extraIdleTime) //
+					&& Objects.equal(distance, vo.distance) && Objects.equal(routeCost, vo.routeCost) //
+					&& Objects.equal(nboSpeed, vo.nboSpeed) //
+					&& Objects.equal(vesselState, vo.vesselState) //
+					&& Objects.equal(route, vo.route) //
+					&& Objects.equal(vessel, vo.vessel) //
+					&& Objects.equal(fromPortSlot, vo.fromPortSlot) //
+					&& Objects.equal(toPortSlot, vo.toPortSlot) //
+					&& Objects.equal(cargoCV, vo.cargoCV) //
+					&& Objects.equal(cooldown, vo.cooldown) //
+					&& Objects.equal(shouldBeCold, vo.shouldBeCold) //
+					&& Objects.equal(startWarm, vo.startWarm);
+			// @formatter:on
+		}
+		return false;
+	}
+
+	@Override
+	public String toString() {
+		// @formatter:off
+		return MoreObjects.toStringHelper(VoyageOptions.class) //
+				.add("availableTime", availableTime) //
+				.add("extraIdleTime", extraIdleTime) //
+				.add("charterOutIdleTime", charterOutIdleTime) //
+				.add("charterOutDailyRate", charterOutDailyRate) //
+				.add("distance", distance).add("vessel", vessel) //
+				.add("fromPortSlot", fromPortSlot) //
+				.add("toPortSlot", toPortSlot) //
+				.add("nboSpeed", nboSpeed) //
+				.add("travelFuelChoide", travelFuelChoice) //
+				.add("idleFuelChoice", idleFuelChoice) //
+				.add("cargoCV", cargoCV) //
+				.add("cooldown", cooldown) //
+				.add("shouldBeCold", shouldBeCold) //
+				.add("startWarm", startWarm) //
+				.add("route", route) //
+				.add("routeCost", routeCost) //
+				.add("vesselState", vesselState) //
+				.toString();
+		// @formatter:on
+	}
+
 	public final int getAvailableTime() {
 		return availableTime;
 	}
@@ -123,7 +163,7 @@ public final class VoyageOptions implements IOptionsSequenceElement {
 		return nboSpeed;
 	}
 
-	public final ERouteOption getRoute() {
+	public final @NonNull ERouteOption getRoute() {
 		return route;
 	}
 
@@ -169,7 +209,7 @@ public final class VoyageOptions implements IOptionsSequenceElement {
 		this.toPortSlot = toPortSlot;
 	}
 
-	public final void setRoute(@NonNull final ERouteOption route, final int distance, final long routeCost) {
+	public final void setRoute(final @NonNull ERouteOption route, final int distance, final long routeCost) {
 		this.route = route;
 		this.distance = distance;
 		this.routeCost = routeCost;
@@ -208,37 +248,6 @@ public final class VoyageOptions implements IOptionsSequenceElement {
 		this.startWarm = startWarm;
 	}
 
-	@Override
-	public final boolean equals(final Object obj) {
-
-		if (obj instanceof VoyageOptions) {
-			final VoyageOptions vo = (VoyageOptions) obj;
-
-			// @formatter:off
-			return Objects.equal(charterOutIdleTime, vo.charterOutIdleTime) && Objects.equal(travelFuelChoice, vo.travelFuelChoice) && Objects.equal(idleFuelChoice, vo.idleFuelChoice)
-					&& Objects.equal(availableTime, vo.availableTime) && Objects.equal(extraIdleTime, vo.extraIdleTime) && Objects.equal(distance, vo.distance)
-					&& Objects.equal(routeCost, vo.routeCost) && Objects.equal(nboSpeed, vo.nboSpeed) && Objects.equal(vesselState, vo.vesselState) && Objects.equal(route, vo.route)
-					&& Objects.equal(vessel, vo.vessel) && Objects.equal(fromPortSlot, vo.fromPortSlot) && Objects.equal(toPortSlot, vo.toPortSlot) && Objects.equal(cargoCV, vo.cargoCV)
-					&& Objects.equal(cooldown, vo.cooldown) && Objects.equal(shouldBeCold, vo.shouldBeCold) && Objects.equal(startWarm, vo.startWarm);
-			// @formatter:on
-		}
-		return false;
-	}
-
-	public final @NonNull VoyageOptions copy() {
-		return new VoyageOptions(this);
-	}
-
-	@Override
-	public String toString() {
-		// @formatter:off
-		return MoreObjects.toStringHelper(VoyageOptions.class).add("availableTime", availableTime).add("extraIdleTime", extraIdleTime).add("charterOutIdleTime", charterOutIdleTime)
-				.add("charterOutDailyRate", charterOutDailyRate).add("distance", distance).add("vessel", vessel).add("fromPortSlot", fromPortSlot).add("toPortSlot", toPortSlot)
-				.add("nboSpeed", nboSpeed).add("travelFuelChoide", travelFuelChoice).add("idleFuelChoice", idleFuelChoice).add("cargoCV", cargoCV).add("cooldown", cooldown)
-				.add("shouldBeCold", shouldBeCold).add("startWarm", startWarm).add("route", route).add("routeCost", routeCost).add("vesselState", vesselState).toString();
-		// @formatter:on
-	}
-
 	/**
 	 * @return
 	 */
@@ -267,5 +276,21 @@ public final class VoyageOptions implements IOptionsSequenceElement {
 
 	public void setCargoCVValue(final int cargoCV) {
 		this.cargoCV = cargoCV;
+	}
+
+	public @NonNull IdleFuelChoice getIdleFuelChoice() {
+		return idleFuelChoice;
+	}
+
+	public void setIdleFuelChoice(@NonNull IdleFuelChoice idleFuelChoice) {
+		this.idleFuelChoice = idleFuelChoice;
+	}
+
+	public @NonNull TravelFuelChoice getTravelFuelChoice() {
+		return travelFuelChoice;
+	}
+
+	public void setTravelFuelChoice(@NonNull TravelFuelChoice travelFuelChoice) {
+		this.travelFuelChoice = travelFuelChoice;
 	}
 }

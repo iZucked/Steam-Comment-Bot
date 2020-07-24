@@ -68,7 +68,7 @@ public class VoyageOptionsTest {
 		final int distance = 100;
 		final long cost = 2000L;
 		final VoyageOptions options = new VoyageOptions(Mockito.mock(IPortSlot.class), Mockito.mock(IPortSlot.class));
-		Assertions.assertNull(options.getRoute());
+		Assertions.assertEquals(ERouteOption.DIRECT, options.getRoute()); // Default route for Null analysis
 		options.setRoute(route, distance, cost);
 		Assertions.assertSame(route, options.getRoute());
 		Assertions.assertEquals(distance, options.getDistance());
