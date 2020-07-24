@@ -50,6 +50,8 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.LatenessEvaluatedStateCh
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselBaseFuelCalculator;
+import com.mmxlabs.scheduler.optimiser.curves.IPriceIntervalProducer;
+import com.mmxlabs.scheduler.optimiser.curves.PriceIntervalProducer;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.impl.DefaultEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.evaluation.DefaultVoyagePlanEvaluator;
@@ -68,6 +70,8 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.utils.InPor
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.ConstrainedInitialSequenceBuilder;
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.IInitialSequenceBuilder;
 import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProvider;
+import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.ITimeWindowSchedulingCanalDistanceProvider;
+import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.TimeWindowSchedulingCanalDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.scheduling.IArrivalTimeScheduler;
 import com.mmxlabs.scheduler.optimiser.scheduling.TimeWindowScheduler;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
@@ -128,6 +132,8 @@ public class ScheduleTestModule extends AbstractModule {
 		bind(IBoilOffHelper.class).toInstance(new InPortBoilOffHelper(true));
 
 		bind(IArrivalTimeScheduler.class).to(TimeWindowScheduler.class);
+		bind(IPriceIntervalProducer.class).to(PriceIntervalProducer.class);
+		bind(ITimeWindowSchedulingCanalDistanceProvider.class).to(TimeWindowSchedulingCanalDistanceProvider.class);
 
 		bind(long.class).annotatedWith(Names.named(SchedulerConstants.KEY_DEFAULT_MAX_VOLUME_IN_M3)).toInstance(OptimiserUnitConvertor.convertToInternalVolume(140_000));
 
@@ -141,8 +147,11 @@ public class ScheduleTestModule extends AbstractModule {
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.COMPUTE_EXPOSURES)).toInstance(Boolean.FALSE);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.RE_HEDGE_WITH_PAPERS)).toInstance(Boolean.FALSE);
 
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.SCENARIO_TYPE_ADP)).toInstance(Boolean.FALSE);
+		
 		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_ArrivalTimeCache)).toInstance(CacheMode.Off);
 		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_VoyagePlanEvaluatorCache)).toInstance(CacheMode.Off);
+		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_PNLTrimmerCache)).toInstance(CacheMode.Off);
 		bind(boolean.class).annotatedWith(Names.named("hint-lngtransformer-disable-caches")).toInstance(Boolean.FALSE);
 		bind(boolean.class).annotatedWith(Names.named(IEndEventScheduler.ENABLE_HIRE_COST_ONLY_END_RULE)).toInstance(Boolean.TRUE);
 
