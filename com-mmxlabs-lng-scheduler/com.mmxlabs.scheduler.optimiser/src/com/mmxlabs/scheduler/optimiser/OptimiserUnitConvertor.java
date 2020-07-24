@@ -100,6 +100,16 @@ public final class OptimiserUnitConvertor {
 	}
 
 	/**
+	 * Return external volume using floating point units
+	 * 
+	 * @param volume
+	 * @return
+	 */
+	public static double convertToExternalFloatVolume(final long volume) {
+		return ((double) volume / (double) Calculator.ScaleFactor);
+	}
+
+	/**
 	 * Convert to internal daily rate. This is expected to be larger numbers such as daily charter costs
 	 * 
 	 * @param dailyCost
@@ -147,6 +157,10 @@ public final class OptimiserUnitConvertor {
 
 	public static int convertToExternalFixedCost(final long cost) {
 		return (int) (cost / (long) Calculator.ScaleFactor);
+	}
+
+	public static double convertToExternalFloatFixedCost(final long cost) {
+		return ((double) cost / (double) Calculator.ScaleFactor);
 	}
 
 	public static long convertToInternalPercentage(final double percentage) {

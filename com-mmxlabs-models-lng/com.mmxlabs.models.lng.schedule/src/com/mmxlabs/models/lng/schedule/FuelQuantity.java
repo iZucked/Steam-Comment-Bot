@@ -65,12 +65,12 @@ public interface FuelQuantity extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Cost</em>' attribute.
-	 * @see #setCost(int)
+	 * @see #setCost(double)
 	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getFuelQuantity_Cost()
 	 * @model required="true"
 	 * @generated
 	 */
-	int getCost();
+	double getCost();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.FuelQuantity#getCost <em>Cost</em>}' attribute.
@@ -80,7 +80,7 @@ public interface FuelQuantity extends EObject {
 	 * @see #getCost()
 	 * @generated
 	 */
-	void setCost(int value);
+	void setCost(double value);
 
 	/**
 	 * Returns the value of the '<em><b>Amounts</b></em>' containment reference list.

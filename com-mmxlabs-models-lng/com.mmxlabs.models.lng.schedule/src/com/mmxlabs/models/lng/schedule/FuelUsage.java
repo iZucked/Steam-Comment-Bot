@@ -45,7 +45,7 @@ public interface FuelUsage extends EObject {
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */
-	int getFuelCost();
+	double getFuelCost();
 
 } // end of  FuelUsage
 

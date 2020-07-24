@@ -172,7 +172,7 @@ public class CooldownImpl extends EventImpl implements Cooldown {
 	 * @generated
 	 */
 	@Override
-	public int getFuelCost() {
+	public double getFuelCost() {
 		int sum = 0;
 		for (final FuelQuantity fq : getFuels()) {
 			sum += fq.getCost();

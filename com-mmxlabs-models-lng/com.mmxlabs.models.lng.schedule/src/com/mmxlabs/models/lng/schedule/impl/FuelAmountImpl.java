@@ -56,7 +56,7 @@ public class FuelAmountImpl extends EObjectImpl implements FuelAmount {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int QUANTITY_EDEFAULT = 0;
+	protected static final double QUANTITY_EDEFAULT = 0.0;
 
 	/**
 	 * The cached value of the '{@link #getQuantity() <em>Quantity</em>}' attribute.
@@ -66,7 +66,7 @@ public class FuelAmountImpl extends EObjectImpl implements FuelAmount {
 	 * @generated
 	 * @ordered
 	 */
-	protected int quantity = QUANTITY_EDEFAULT;
+	protected double quantity = QUANTITY_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getUnitPrice() <em>Unit Price</em>}' attribute.
@@ -136,7 +136,7 @@ public class FuelAmountImpl extends EObjectImpl implements FuelAmount {
 	 * @generated
 	 */
 	@Override
-	public int getQuantity() {
+	public double getQuantity() {
 		return quantity;
 	}
 
@@ -146,8 +146,8 @@ public class FuelAmountImpl extends EObjectImpl implements FuelAmount {
 	 * @generated
 	 */
 	@Override
-	public void setQuantity(int newQuantity) {
-		int oldQuantity = quantity;
+	public void setQuantity(double newQuantity) {
+		double oldQuantity = quantity;
 		quantity = newQuantity;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.FUEL_AMOUNT__QUANTITY, oldQuantity, quantity));
@@ -206,7 +206,7 @@ public class FuelAmountImpl extends EObjectImpl implements FuelAmount {
 				setUnit((FuelUnit)newValue);
 				return;
 			case SchedulePackage.FUEL_AMOUNT__QUANTITY:
-				setQuantity((Integer)newValue);
+				setQuantity((Double)newValue);
 				return;
 			case SchedulePackage.FUEL_AMOUNT__UNIT_PRICE:
 				setUnitPrice((Double)newValue);

@@ -109,7 +109,7 @@ public class FuelExportHelper {
 				}
 				if (totalConsumption > 0) {
 					final FuelAmount amount = ScheduleFactory.eINSTANCE.createFuelAmount();
-					amount.setQuantity(OptimiserUnitConvertor.convertToExternalVolume(totalConsumption));
+					amount.setQuantity(OptimiserUnitConvertor.convertToExternalFloatVolume(totalConsumption));
 					amount.setUnit(modelUnits.get(unit));
 					// Average price
 					if (count != 0) {
@@ -123,7 +123,7 @@ public class FuelExportHelper {
 					if (baseFuel != null) {
 						quantity.setBaseFuel(modelEntityMap.getModelObject(baseFuel, BaseFuel.class));
 					}
-					quantity.setCost(OptimiserUnitConvertor.convertToExternalFixedCost(totalCost));
+					quantity.setCost(OptimiserUnitConvertor.convertToExternalFloatFixedCost(totalCost));
 					result.add(quantity);
 				}
 			}

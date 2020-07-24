@@ -110,9 +110,10 @@ public class TotalsTransformer {
 					// add up fuel components from mixture
 					for (final FuelQuantity fq : mix.getFuels()) {
 						Long sumSoFar = totalFuelCosts.get(fq.getFuel());
-						if (sumSoFar == null)
-							sumSoFar = 0l;
-						totalFuelCosts.put(fq.getFuel(), sumSoFar + fq.getCost());
+						if (sumSoFar == null) {
+							sumSoFar = 0L;
+						}
+						totalFuelCosts.put(fq.getFuel(), sumSoFar + Math.round(fq.getCost()));
 						totalCost += fq.getCost();
 					}
 				}
@@ -133,7 +134,7 @@ public class TotalsTransformer {
 					lateness += LatenessUtils.getLatenessInHours(visit);
 					final SlotAllocation slotAllocation = visit.getSlotAllocation();
 					if (slotAllocation.getSlot() != null) {
-						final Slot slot = slotAllocation.getSlot();
+						final Slot<?> slot = slotAllocation.getSlot();
 						final int minQuantity = slot.getSlotOrDelegateMinQuantity();
 						final int maxQuantity = slot.getSlotOrDelegateMaxQuantity();
 						if (maxQuantity != 0 && maxQuantity < slotAllocation.getVolumeTransferred()) {

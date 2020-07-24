@@ -595,7 +595,7 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 	 * @generated
 	 */
 	@Override
-	public int getFuelCost() {
+	public double getFuelCost() {
 		int sum = 0;
 		for (final FuelQuantity fq : getFuels()) {
 			sum += fq.getCost();

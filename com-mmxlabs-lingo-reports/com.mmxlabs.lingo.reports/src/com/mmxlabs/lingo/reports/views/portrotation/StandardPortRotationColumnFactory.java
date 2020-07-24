@@ -323,9 +323,9 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, builder.getEmptyFuelsColumnBlockFactory());
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.fuelcost":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Fuel Cost", null, ColumnType.NORMAL, new IntegerFormatter() {
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Fuel Cost", null, ColumnType.NORMAL, new NumberOfDPFormatter(0) {
 				@Override
-				public Integer getIntValue(final Object object) {
+				public Double getDoubleValue(final Object object) {
 					if (object instanceof FuelUsage) {
 						return ((FuelUsage) object).getFuelCost();
 					} else {

@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.schedule.impl;
 import java.lang.reflect.InvocationTargetException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
@@ -688,8 +687,8 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public int getFuelCost() {
-		int sum = 0;
+	public double getFuelCost() {
+		double sum = 0.0;
 		for (final FuelQuantity u : getFuels()) {
 			sum += u.getCost();
 		}

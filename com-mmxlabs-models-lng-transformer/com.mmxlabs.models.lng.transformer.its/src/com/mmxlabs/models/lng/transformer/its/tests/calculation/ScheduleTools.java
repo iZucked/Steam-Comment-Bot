@@ -67,7 +67,7 @@ public final class ScheduleTools {
 		return null;
 	}
 
-	public static int getFuelQuantity(@NonNull final Fuel fuel, @NonNull final FuelUnit unit, @NonNull final FuelUsage fuelUsage) {
+	public static double getFuelQuantity(@NonNull final Fuel fuel, @NonNull final FuelUnit unit, @NonNull final FuelUsage fuelUsage) {
 		for (final FuelQuantity fq : fuelUsage.getFuels()) {
 			if (fq.getFuel().equals(fuel)) {
 				for (final FuelAmount fa : fq.getAmounts()) {
@@ -78,7 +78,7 @@ public final class ScheduleTools {
 			}
 
 		}
-		return 0;
+		return 0.0;
 	}
 
 	public static double getFuelConsumption(final List<FuelConsumption> consumptions, final double speed) {

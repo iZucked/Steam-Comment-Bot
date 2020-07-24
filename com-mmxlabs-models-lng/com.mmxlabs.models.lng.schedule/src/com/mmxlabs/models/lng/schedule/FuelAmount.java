@@ -62,12 +62,12 @@ public interface FuelAmount extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Quantity</em>' attribute.
-	 * @see #setQuantity(int)
+	 * @see #setQuantity(double)
 	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getFuelAmount_Quantity()
 	 * @model required="true"
 	 * @generated
 	 */
-	int getQuantity();
+	double getQuantity();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.FuelAmount#getQuantity <em>Quantity</em>}' attribute.
@@ -77,7 +77,7 @@ public interface FuelAmount extends EObject {
 	 * @see #getQuantity()
 	 * @generated
 	 */
-	void setQuantity(int value);
+	void setQuantity(double value);
 
 	/**
 	 * Returns the value of the '<em><b>Unit Price</b></em>' attribute.

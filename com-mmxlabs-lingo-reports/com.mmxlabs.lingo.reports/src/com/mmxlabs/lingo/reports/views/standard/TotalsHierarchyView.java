@@ -7,7 +7,7 @@ package com.mmxlabs.lingo.reports.views.standard;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +15,6 @@ import java.util.Map;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
-import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
@@ -98,7 +97,6 @@ public class TotalsHierarchyView extends ViewPart {
 			final Runnable r = new Runnable() {
 				@Override
 				public void run() {
-					int numberOfSchedules = others.size() + (pinned == null ? 0 : 1);
 					List<ScenarioResult> instances = new LinkedList<>(others);
 					if (pinned != null) {
 						instances.add(0, pinned);
@@ -125,12 +123,10 @@ public class TotalsHierarchyView extends ViewPart {
 								if (schedule != null) {
 									final String scheduleName = other.getModelRecord().getName();
 
-									// final String scheduleName = schedule.getName();
 									// don't sum costs and profits, because it's meaningless
 									// (profits already include costs)
 									final TreeData group = new TreeData(scheduleName, true);
 									group.addChild(createCostsTreeData(schedule));
-									// group.addChild(createProfitTreeData(schedule));
 									dummy.addChild(group);
 
 								}
@@ -155,7 +151,7 @@ public class TotalsHierarchyView extends ViewPart {
 		final String name;
 		final boolean nonValued;
 		final long cost;
-		final List<TreeData> children = new ArrayList<TreeData>();
+		final List<TreeData> children = new ArrayList<>();
 		private TreeData parent;
 		private String label = "";
 
@@ -163,11 +159,6 @@ public class TotalsHierarchyView extends ViewPart {
 			this.name = name;
 			this.nonValued = nonValued;
 			this.cost = 0;
-		}
-
-		public TreeData(final String name, final String misc) {
-			this(name, true);
-			this.label = misc;
 		}
 
 		public TreeData(final String name) {
@@ -222,77 +213,6 @@ public class TotalsHierarchyView extends ViewPart {
 		}
 	}
 
-	// private TreeData createTreeData(final Collection<Schedule> schedules) {
-	// final TreeData dummy = new TreeData("");
-	//
-	// if (schedules.size() == 1) {
-	// final Schedule schedule = schedules.iterator().next();
-	// dummy.addChild(createCostsTreeData(schedule));
-	// // dummy.addChild(createProfitTreeData(schedule));
-	// } else {
-	// for (final Schedule schedule : schedules) {
-	// final String scheduleName = object.getScenarioInstance(schedule).getName();
-	// // final String scheduleName = schedule.getName();
-	// // don't sum costs and profits, because it's meaningless
-	// // (profits already include costs)
-	// final TreeData group = new TreeData(scheduleName, true);
-	// group.addChild(createCostsTreeData(schedule));
-	// // group.addChild(createProfitTreeData(schedule));
-	// dummy.addChild(group);
-	// }
-	// }
-	// return dummy;
-	// }
-
-	// private TreeData createProfitTreeData(final Schedule schedule) {
-	// final TreeData top = new TreeData("Total Profit");
-	// final Map<Entity, TreeData> byEntity = new HashMap<Entity, TreeData>();
-	// if (schedule != null) {
-	// for (final BookedRevenue revenue : schedule.getRevenue()) {
-	// final Entity e = revenue.getEntity();
-	// if ((e == null) || !(e instanceof GroupEntity)) {
-	// continue;
-	// }
-	//
-	// TreeData td = byEntity.get(e);
-	// if (td == null) {
-	// td = new TreeData(e.getName());
-	// top.addChild(td);
-	// byEntity.put(e, td);
-	// }
-	//
-	// final TreeData rd = new TreeData(revenue.getName(), revenue.getValue());
-	// td.addChild(rd);
-	// for (final Detail d : revenue.getDetails().getChildren()) {
-	// rd.addChild(createDetailTreeData(d));
-	// }
-	//
-	// // for (final LineItem item : revenue.getLineItems()) {
-	// // final TreeData li = new TreeData(item.getName(),
-	// // item.getValue());
-	// // rd.addChild(li);
-	// // }
-	//
-	// // rd.addChild(new TreeData("Tax", -revenue.getTaxCost()));
-	// // assert (rd.getCost() == revenue.getTaxedValue());
-	// // TODO this does not take account of ownership proportion
-	// }
-	// }
-	// return top;
-	// }
-
-	// /**
-	// * @param details
-	// * @return
-	// */
-	// private TreeData createDetailTreeData(final Detail details) {
-	// final TreeData top = new TreeData(details.getName(), details.getValue());
-	// for (final Detail d : details.getChildren()) {
-	// top.addChild(createDetailTreeData(d));
-	// }
-	// return top;
-	// }
-
 	/**
 	 * Extract cost information from the schedule and put it in the treedata
 	 * 
@@ -306,8 +226,8 @@ public class TotalsHierarchyView extends ViewPart {
 			return top;
 		}
 
-		final Map<Fuel, TreeData> fleetFuelUsages = new HashMap<Fuel, TreeData>();
-		final Map<Fuel, TreeData> spotFuelUsages = new HashMap<Fuel, TreeData>();
+		final Map<Fuel, TreeData> fleetFuelUsages = new EnumMap<>(Fuel.class);
+		final Map<Fuel, TreeData> spotFuelUsages = new EnumMap<>(Fuel.class);
 
 		final TreeData fleetLNG = new TreeData("Fleet Vessels");
 		final TreeData spotLNG = new TreeData("Spot Vessels");
@@ -343,8 +263,7 @@ public class TotalsHierarchyView extends ViewPart {
 		}
 
 		for (final Sequence seq : schedule.getSequences()) {
-			// final AllocatedVessel av = seq.getVessel();
-			final Map<Fuel, TreeData> vesselFuelUsage = new HashMap<Fuel, TreeData>();
+			final Map<Fuel, TreeData> vesselFuelUsage = new EnumMap<>(Fuel.class);
 
 			final Map<Fuel, TreeData> fuelUsages = seq.isSpotVessel() ? spotFuelUsages : fleetFuelUsages;
 
@@ -368,7 +287,7 @@ public class TotalsHierarchyView extends ViewPart {
 						if (fq.getCost() == 0) {
 							continue;
 						}
-						final TreeData eventUsage = new TreeData(name, fq.getCost());
+						final TreeData eventUsage = new TreeData(name, Math.round(fq.getCost()));
 						vesselFuelUsage.get(fq.getFuel()).addChild(eventUsage);
 					}
 				}
@@ -387,7 +306,6 @@ public class TotalsHierarchyView extends ViewPart {
 
 		// Now do canal costs
 		for (final Sequence seq : schedule.getSequences()) {
-			// final AllocatedVessel av = seq.getVessel();
 			final TreeData thisVessel = new TreeData(seq.getName());
 			(!seq.isSpotVessel() ? fleetCanalCosts : spotCanalCosts).addChild(thisVessel);
 
@@ -395,8 +313,8 @@ public class TotalsHierarchyView extends ViewPart {
 				if (event instanceof Journey) {
 					final Journey j = (Journey) event;
 					if (j.getToll() > 0) {
-						final TreeData thisLeg = new TreeData(
-								(j.isLaden() ? "Laden" : "Ballast") + " voyage from " + j.getPort().getName() + " to " + j.getDestination().getName() + " via " + PortModelLabeller.getName(j.getRouteOption()), j.getToll());
+						final TreeData thisLeg = new TreeData((j.isLaden() ? "Laden" : "Ballast") + " voyage from " + j.getPort().getName() + " to " + j.getDestination().getName() + " via "
+								+ PortModelLabeller.getName(j.getRouteOption()), j.getToll());
 						thisVessel.addChild(thisLeg);
 					}
 				}
@@ -439,43 +357,19 @@ public class TotalsHierarchyView extends ViewPart {
 	@Override
 	public void createPartControl(final Composite parent) {
 
-		selectedScenariosService = (SelectedScenariosService) getSite().getService(SelectedScenariosService.class);
+		selectedScenariosService = getSite().getService(SelectedScenariosService.class);
 
 		this.viewer = new TreeViewer(parent, SWT.FULL_SELECTION | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
-
-		// autopack and set alternating colours - disabled because no longer
-		// required
-		// viewer.getTree().addListener(SWT.Expand, new Listener() {
-		// @Override
-		// public void handleEvent(final Event e) {
-		// getSite().getShell().getDisplay().asyncExec(new Runnable() {
-		// @Override
-		// public void run() {
-		// final Tree t = (Tree) e.widget;
-		// for (final TreeColumn c : t.getColumns()) {
-		// c.pack();
-		// }
-		//
-		// // colour(t.getItem(0), true);
-		// }
-		// //
-		// // private void colour(final TreeItem item, boolean oddness) {
-		// // item.setBackground(oddness ?
-		// Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_IN)
-		// // }
-		// });
-		// }
-		// });
 
 		viewer.setContentProvider(new ITreeContentProvider() {
 			@Override
 			public void inputChanged(final Viewer arg0, final Object arg1, final Object arg2) {
-
+				// Nothing to do
 			}
 
 			@Override
 			public void dispose() {
-
+				// Nothing to do
 			}
 
 			@Override
@@ -491,13 +385,7 @@ public class TotalsHierarchyView extends ViewPart {
 			@Override
 			public Object[] getElements(final Object object) {
 				if (object instanceof TreeData) {
-					final TreeData data = (TreeData) object;
-					// if (data.getParent() == null) {
-					// return new Object[]{object};
-					// } else {
 					return getChildren(object); // argh.
-					// }
-
 				} else {
 					return new Object[] {};
 				}
@@ -544,15 +432,7 @@ public class TotalsHierarchyView extends ViewPart {
 		makeActions();
 		hookContextMenu();
 		contributeToActionBars();
-		//
-		// getSite().getPage().addSelectionListener("com.mmxlabs.rcp.navigator",
-		// this);
-		//
-		// final ISelection selection = getSite().getWorkbenchWindow()
-		// .getSelectionService()
-		// .getSelection("com.mmxlabs.rcp.navigator");
-		//
-		// selectionChanged(null, selection);
+
 		selectedScenariosService.addListener(selectedScenariosServiceListener);
 		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
 	}
@@ -565,12 +445,7 @@ public class TotalsHierarchyView extends ViewPart {
 	private void hookContextMenu() {
 		final MenuManager menuMgr = new MenuManager("#PopupMenu");
 		menuMgr.setRemoveAllWhenShown(true);
-		menuMgr.addMenuListener(new IMenuListener() {
-			@Override
-			public void menuAboutToShow(final IMenuManager manager) {
-				TotalsHierarchyView.this.fillContextMenu(manager);
-			}
-		});
+		menuMgr.addMenuListener(TotalsHierarchyView.this::fillContextMenu);
 		final Menu menu = menuMgr.createContextMenu(viewer.getControl());
 		viewer.getControl().setMenu(menu);
 		getSite().registerContextMenu(menuMgr, viewer);

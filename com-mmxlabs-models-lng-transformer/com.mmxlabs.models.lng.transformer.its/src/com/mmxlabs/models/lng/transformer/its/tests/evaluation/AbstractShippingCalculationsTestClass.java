@@ -6,7 +6,7 @@ package com.mmxlabs.models.lng.transformer.its.tests.evaluation;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -84,7 +84,8 @@ public class AbstractShippingCalculationsTestClass {
 			return event.getCharterCost();
 		case FUEL_COSTS: {
 			if (event instanceof FuelUsage)
-				return ((FuelUsage) event).getFuelCost();
+				// Rounding!
+				return (int)((FuelUsage) event).getFuelCost();
 			else
 				return 0;
 		}
@@ -245,8 +246,7 @@ public class AbstractShippingCalculationsTestClass {
 		}
 
 		if (container != null) {
-			final GroupProfitAndLoss data = container.getGroupProfitAndLoss();
-			return data;
+			return container.getGroupProfitAndLoss();
 		}
 
 		return null;
@@ -439,7 +439,7 @@ public class AbstractShippingCalculationsTestClass {
 
 	public class SequenceTester {
 		/** The expected values for each event in the sequence, keyed by expected field */
-		private final Map<Expectations, Integer[]> expectedArrays = new HashMap<>();
+		private final Map<Expectations, Integer[]> expectedArrays = new EnumMap<>(Expectations.class);
 		/** The expected PnL values for each PnL group */
 		private Integer[] expectedPnlValues = null;
 		/** The expected classes of each event in the sequence */
