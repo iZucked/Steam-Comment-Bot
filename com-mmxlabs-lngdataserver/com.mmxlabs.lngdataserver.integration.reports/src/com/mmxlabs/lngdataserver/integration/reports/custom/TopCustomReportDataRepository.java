@@ -152,12 +152,12 @@ public class TopCustomReportDataRepository implements ICustomReportDataRepositor
 		return records;
 	}
 
-	private CustomReportDefinition readReportJSONFile(final File directory, //
+	private synchronized CustomReportDefinition readReportJSONFile(final File directory, //
 			final ObjectMapper mapper, final CustomReportDataRecord record) throws IOException {
 
 		CustomReportDefinition definition = null;
 		final File repofile = new File(directory, String.format("%s.json", record.getUuid()));
-		if (repofile.exists()) {
+		if (repofile.exists() && repofile.canRead()) {
 			definition = //
 					mapper.readValue(repofile, CustomReportDefinition.class);
 		}

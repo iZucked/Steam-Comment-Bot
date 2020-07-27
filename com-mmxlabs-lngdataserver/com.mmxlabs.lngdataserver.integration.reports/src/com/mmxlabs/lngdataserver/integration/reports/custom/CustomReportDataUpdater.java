@@ -160,7 +160,7 @@ public class CustomReportDataUpdater {
 
 	public void start() {
 		final File f = new File(basePath.getAbsolutePath() + "/records.json");
-		if (f.exists()) {
+		if (f.exists() && f.canRead()) {
 			String json;
 			try {
 				json = Files.readString(f.toPath());
@@ -199,7 +199,7 @@ public class CustomReportDataUpdater {
 		updateThread.start();
 	}
 
-	public void refresh() throws IOException {
+	public synchronized void refresh() throws IOException {
 		if (purgeCache) {
 			purgeLocalRecords();
 		}
@@ -229,7 +229,7 @@ public class CustomReportDataUpdater {
 		}
 	}
 	
-	private void purgeLocalRecords() {
+	private synchronized void purgeLocalRecords() {
 		if (basePath.exists() && basePath.canRead() && basePath.canWrite() && basePath.isDirectory()) {
 			for (final File f : this.basePath.listFiles()) {
 				if (f.exists())
