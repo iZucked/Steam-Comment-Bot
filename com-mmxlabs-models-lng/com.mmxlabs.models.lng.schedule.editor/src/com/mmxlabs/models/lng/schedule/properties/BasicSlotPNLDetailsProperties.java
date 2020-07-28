@@ -43,6 +43,10 @@ public class BasicSlotPNLDetailsProperties {
 				final int miscCostsValue = slotPNLDetails.getMiscCostsValue();
 				DetailPropertyFactoryUtil.addDetailProperty("Misc Costs Value", "", "$", "", miscCostsValue, new StringFormatLabelProvider("%,d"), details);
 			}
+			{
+				final String referenceCurves = slotPNLDetails.getReferenceCurves();
+				DetailPropertyFactoryUtil.addDetailProperty("Curve(s)", "", "", "", referenceCurves, new StringFormatLabelProvider("%s"), details);
+			}
 		}
 	}
 }

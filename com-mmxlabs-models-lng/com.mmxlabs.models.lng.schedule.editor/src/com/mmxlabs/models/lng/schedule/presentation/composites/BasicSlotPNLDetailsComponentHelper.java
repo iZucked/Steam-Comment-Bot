@@ -70,6 +70,7 @@ public class BasicSlotPNLDetailsComponentHelper extends BaseComponentHelper {
 		add_cancellationFeesEditor(detailComposite, topClass);
 		add_miscCostsValueEditor(detailComposite, topClass);
 		add_extraUpsidePNLEditor(detailComposite, topClass);
+		add_referenceCurvesEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the extraShippingPNL feature on BasicSlotPNLDetails
@@ -113,5 +114,14 @@ public class BasicSlotPNLDetailsComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_extraUpsidePNLEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.BASIC_SLOT_PNL_DETAILS__EXTRA_UPSIDE_PNL));
+	}
+
+	/**
+	 * Create the editor for the referenceCurves feature on BasicSlotPNLDetails
+	 *
+	 * @generated
+	 */
+	protected void add_referenceCurvesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.BASIC_SLOT_PNL_DETAILS__REFERENCE_CURVES));
 	}
 }

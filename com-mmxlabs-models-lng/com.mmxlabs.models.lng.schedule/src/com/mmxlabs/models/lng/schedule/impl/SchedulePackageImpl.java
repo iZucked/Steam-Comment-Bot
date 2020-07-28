@@ -2215,6 +2215,16 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	@Override
+	public EAttribute getBasicSlotPNLDetails_ReferenceCurves() {
+		return (EAttribute)basicSlotPNLDetailsEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getEventGrouping() {
 		return eventGroupingEClass;
 	}
@@ -3204,6 +3214,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEAttribute(basicSlotPNLDetailsEClass, BASIC_SLOT_PNL_DETAILS__CANCELLATION_FEES);
 		createEAttribute(basicSlotPNLDetailsEClass, BASIC_SLOT_PNL_DETAILS__MISC_COSTS_VALUE);
 		createEAttribute(basicSlotPNLDetailsEClass, BASIC_SLOT_PNL_DETAILS__EXTRA_UPSIDE_PNL);
+		createEAttribute(basicSlotPNLDetailsEClass, BASIC_SLOT_PNL_DETAILS__REFERENCE_CURVES);
 
 		eventGroupingEClass = createEClass(EVENT_GROUPING);
 		createEReference(eventGroupingEClass, EVENT_GROUPING__EVENTS);
@@ -3617,6 +3628,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEAttribute(getBasicSlotPNLDetails_CancellationFees(), ecorePackage.getEInt(), "cancellationFees", null, 0, 1, BasicSlotPNLDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getBasicSlotPNLDetails_MiscCostsValue(), ecorePackage.getEInt(), "miscCostsValue", null, 0, 1, BasicSlotPNLDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getBasicSlotPNLDetails_ExtraUpsidePNL(), ecorePackage.getEInt(), "extraUpsidePNL", null, 0, 1, BasicSlotPNLDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getBasicSlotPNLDetails_ReferenceCurves(), ecorePackage.getEString(), "referenceCurves", null, 0, 1, BasicSlotPNLDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(eventGroupingEClass, EventGrouping.class, "EventGrouping", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getEventGrouping_Events(), this.getEvent(), null, "events", null, 1, -1, EventGrouping.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

@@ -21,6 +21,7 @@ package com.mmxlabs.models.lng.schedule;
  *   <li>{@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getCancellationFees <em>Cancellation Fees</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getMiscCostsValue <em>Misc Costs Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getExtraUpsidePNL <em>Extra Upside PNL</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getReferenceCurves <em>Reference Curves</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getBasicSlotPNLDetails()
@@ -211,5 +212,27 @@ public interface BasicSlotPNLDetails extends GeneralPNLDetails {
 	 * @generated
 	 */
 	void setExtraUpsidePNL(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Reference Curves</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Reference Curves</em>' attribute.
+	 * @see #setReferenceCurves(String)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getBasicSlotPNLDetails_ReferenceCurves()
+	 * @model
+	 * @generated
+	 */
+	String getReferenceCurves();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getReferenceCurves <em>Reference Curves</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Reference Curves</em>' attribute.
+	 * @see #getReferenceCurves()
+	 * @generated
+	 */
+	void setReferenceCurves(String value);
 
 } // BasicSlotPNLDetails

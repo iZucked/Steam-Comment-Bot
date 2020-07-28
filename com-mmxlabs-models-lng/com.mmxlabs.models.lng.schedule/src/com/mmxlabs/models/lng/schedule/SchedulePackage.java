@@ -5046,13 +5046,22 @@ public interface SchedulePackage extends EPackage {
 	int BASIC_SLOT_PNL_DETAILS__EXTRA_UPSIDE_PNL = GENERAL_PNL_DETAILS_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Reference Curves</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASIC_SLOT_PNL_DETAILS__REFERENCE_CURVES = GENERAL_PNL_DETAILS_FEATURE_COUNT + 5;
+
+	/**
 	 * The number of structural features of the '<em>Basic Slot PNL Details</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASIC_SLOT_PNL_DETAILS_FEATURE_COUNT = GENERAL_PNL_DETAILS_FEATURE_COUNT + 5;
+	int BASIC_SLOT_PNL_DETAILS_FEATURE_COUNT = GENERAL_PNL_DETAILS_FEATURE_COUNT + 6;
 
 	/**
 	 * The number of operations of the '<em>Basic Slot PNL Details</em>' class.
@@ -8708,6 +8717,17 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getBasicSlotPNLDetails_ExtraUpsidePNL();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getReferenceCurves <em>Reference Curves</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Reference Curves</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getReferenceCurves()
+	 * @see #getBasicSlotPNLDetails()
+	 * @generated
+	 */
+	EAttribute getBasicSlotPNLDetails_ReferenceCurves();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.EventGrouping <em>Event Grouping</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -10931,6 +10951,14 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute BASIC_SLOT_PNL_DETAILS__EXTRA_UPSIDE_PNL = eINSTANCE.getBasicSlotPNLDetails_ExtraUpsidePNL();
+
+		/**
+		 * The meta object literal for the '<em><b>Reference Curves</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BASIC_SLOT_PNL_DETAILS__REFERENCE_CURVES = eINSTANCE.getBasicSlotPNLDetails_ReferenceCurves();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.EventGroupingImpl <em>Event Grouping</em>}' class.

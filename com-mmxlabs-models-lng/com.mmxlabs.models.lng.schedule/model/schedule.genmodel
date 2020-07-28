@@ -258,6 +258,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//BasicSlotPNLDetails/cancellationFees"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//BasicSlotPNLDetails/miscCostsValue"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//BasicSlotPNLDetails/extraUpsidePNL"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//BasicSlotPNLDetails/referenceCurves"/>
     </genClasses>
     <genClasses ecoreClass="schedule.ecore#//EventGrouping">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//EventGrouping/events"/>

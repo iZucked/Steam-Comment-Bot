@@ -26,6 +26,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.BasicSlotPNLDetailsImpl#getCancellationFees <em>Cancellation Fees</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.BasicSlotPNLDetailsImpl#getMiscCostsValue <em>Misc Costs Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.BasicSlotPNLDetailsImpl#getExtraUpsidePNL <em>Extra Upside PNL</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.BasicSlotPNLDetailsImpl#getReferenceCurves <em>Reference Curves</em>}</li>
  * </ul>
  *
  * @generated
@@ -148,6 +149,26 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 	 * @ordered
 	 */
 	protected int extraUpsidePNL = EXTRA_UPSIDE_PNL_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getReferenceCurves() <em>Reference Curves</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getReferenceCurves()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String REFERENCE_CURVES_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getReferenceCurves() <em>Reference Curves</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getReferenceCurves()
+	 * @generated
+	 * @ordered
+	 */
+	protected String referenceCurves = REFERENCE_CURVES_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -343,6 +364,29 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 	 * @generated
 	 */
 	@Override
+	public String getReferenceCurves() {
+		return referenceCurves;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setReferenceCurves(String newReferenceCurves) {
+		String oldReferenceCurves = referenceCurves;
+		referenceCurves = newReferenceCurves;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.BASIC_SLOT_PNL_DETAILS__REFERENCE_CURVES, oldReferenceCurves, referenceCurves));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__EXTRA_SHIPPING_PNL:
@@ -355,6 +399,8 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 				return getMiscCostsValue();
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__EXTRA_UPSIDE_PNL:
 				return getExtraUpsidePNL();
+			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__REFERENCE_CURVES:
+				return getReferenceCurves();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -381,6 +427,9 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 				return;
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__EXTRA_UPSIDE_PNL:
 				setExtraUpsidePNL((Integer)newValue);
+				return;
+			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__REFERENCE_CURVES:
+				setReferenceCurves((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -409,6 +458,9 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__EXTRA_UPSIDE_PNL:
 				setExtraUpsidePNL(EXTRA_UPSIDE_PNL_EDEFAULT);
 				return;
+			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__REFERENCE_CURVES:
+				setReferenceCurves(REFERENCE_CURVES_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -431,6 +483,8 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 				return isSetMiscCostsValue();
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__EXTRA_UPSIDE_PNL:
 				return extraUpsidePNL != EXTRA_UPSIDE_PNL_EDEFAULT;
+			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__REFERENCE_CURVES:
+				return REFERENCE_CURVES_EDEFAULT == null ? referenceCurves != null : !REFERENCE_CURVES_EDEFAULT.equals(referenceCurves);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -455,6 +509,8 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 		if (miscCostsValueESet) result.append(miscCostsValue); else result.append("<unset>");
 		result.append(", extraUpsidePNL: ");
 		result.append(extraUpsidePNL);
+		result.append(", referenceCurves: ");
+		result.append(referenceCurves);
 		result.append(')');
 		return result.toString();
 	}

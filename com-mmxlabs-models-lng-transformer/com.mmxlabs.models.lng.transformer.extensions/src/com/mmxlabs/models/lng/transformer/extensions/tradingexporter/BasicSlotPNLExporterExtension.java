@@ -4,8 +4,20 @@
  */
 package com.mmxlabs.models.lng.transformer.extensions.tradingexporter;
 
+import java.util.Collection;
+
 import com.google.inject.Inject;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
+import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
+import com.mmxlabs.models.lng.commercial.parseutils.IExposuresCustomiser;
+import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
+import com.mmxlabs.models.lng.pricing.CommodityCurve;
+import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.pricing.util.ModelMarketCurveProvider;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -36,6 +48,12 @@ public class BasicSlotPNLExporterExtension implements IExporterExtension {
 
 	@Inject
 	private IOptimisationData optimisationData;
+	
+	@Inject
+	private IExposuresCustomiser exposureCustomiser;
+	
+	@Inject
+	private LNGScenarioModel lngScenarioModel;
 
 	@Inject
 	private ExporterExtensionUtils exporterExtensionUtils;
@@ -80,7 +98,8 @@ public class BasicSlotPNLExporterExtension implements IExporterExtension {
 						if (cancellationAnnotation != null) {
 							details.setCancellationFees(OptimiserUnitConvertor.convertToExternalFixedCost(cancellationAnnotation.getCancellationFees()));
 						}
-
+						final String referenceCurves = getCurves(modelSlot);
+						details.setReferenceCurves(referenceCurves);
 						ExporterExtensionUtils.addSlotPNLDetails(profitAndLossContainer, modelSlot, details);
 					}
 				}
@@ -90,5 +109,31 @@ public class BasicSlotPNLExporterExtension implements IExporterExtension {
 		modelEntityMap = null;
 		outputSchedule = null;
 		annotatedSolution = null;
+	}
+	
+	public String getCurves(final Slot<?> slot) {
+
+		if (lngScenarioModel != null) {
+			final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(lngScenarioModel);
+			final ModelMarketCurveProvider mmCurveProvider = new ModelMarketCurveProvider(pricingModel);
+
+			if (slot != null) {
+				String priceExpression = exposureCustomiser.provideExposedPriceExpression(slot);
+
+				final Collection<AbstractYearMonthCurve> curves = mmCurveProvider.getLinkedCurves(priceExpression);
+
+				final StringBuilder results = new StringBuilder();
+				for (AbstractYearMonthCurve curve : curves) {
+					if (curve instanceof CommodityCurve) {
+						results.append(',').append(curve.getName());
+					}
+				}
+				if (results.length() != 0){
+					return results.deleteCharAt(0).toString();
+				}
+			}
+		}
+
+		return "N/A";
 	}
 }

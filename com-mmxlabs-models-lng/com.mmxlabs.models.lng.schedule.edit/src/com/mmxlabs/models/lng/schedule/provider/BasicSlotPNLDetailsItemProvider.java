@@ -54,6 +54,7 @@ public class BasicSlotPNLDetailsItemProvider
 			addCancellationFeesPropertyDescriptor(object);
 			addMiscCostsValuePropertyDescriptor(object);
 			addExtraUpsidePNLPropertyDescriptor(object);
+			addReferenceCurvesPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -169,6 +170,28 @@ public class BasicSlotPNLDetailsItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Reference Curves feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addReferenceCurvesPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_BasicSlotPNLDetails_referenceCurves_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_BasicSlotPNLDetails_referenceCurves_feature", "_UI_BasicSlotPNLDetails_type"),
+				 SchedulePackage.Literals.BASIC_SLOT_PNL_DETAILS__REFERENCE_CURVES,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns BasicSlotPNLDetails.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -208,6 +231,7 @@ public class BasicSlotPNLDetailsItemProvider
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__CANCELLATION_FEES:
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__MISC_COSTS_VALUE:
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__EXTRA_UPSIDE_PNL:
+			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__REFERENCE_CURVES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
