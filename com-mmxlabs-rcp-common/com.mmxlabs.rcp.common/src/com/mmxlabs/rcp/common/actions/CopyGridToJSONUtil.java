@@ -4,20 +4,18 @@
  */
 package com.mmxlabs.rcp.common.actions;
 
-import java.io.IOException;
-
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridColumnGroup;
 import org.eclipse.nebula.widgets.grid.GridItem;
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mmxlabs.rcp.common.json.SimpleOrderedJSONObject;
 
 /**
  * Copies "rendered" table contents into a JSONish format. (Note: keys could be duplicated and we have surplus commas)
@@ -51,21 +49,17 @@ public class CopyGridToJSONUtil {
 			// Note this may be zero if no columns have been defined. However an
 			// implicit column will be created in such cases
 			final int numColumns = table.getColumnCount();
-			try {
-				// Ensure at least 1 column to grab data
-				final int numberOfColumns = Math.max(5, numColumns);
-				final int[] rowOffsets = new int[numberOfColumns];
 
-				for (final GridItem item : table.getItems()) {
-					processTableRow(sw, numberOfColumns, item, rowOffsets);
-				}
-			} catch (final IOException e) {
-				// should not occur, since we use a StringWriter
-				LOG.error(e.getMessage(), e);
+			// Ensure at least 1 column to grab data
+			final int numberOfColumns = Math.max(5, numColumns);
+			final int[] rowOffsets = new int[numberOfColumns];
+
+			for (final GridItem item : table.getItems()) {
+				processTableRow(sw, item, rowOffsets);
 			}
 
 			return new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(sw);
-		} catch (JsonProcessingException e) {
+		} catch (final JsonProcessingException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		} finally {
@@ -83,9 +77,9 @@ public class CopyGridToJSONUtil {
 		return indicies;
 	}
 
-	protected void processTableRow(final JSONArray sw, final int numColumns, final GridItem item, final int[] rowOffsets) throws IOException {
+	protected void processTableRow(final JSONArray sw, final GridItem item, final int[] rowOffsets) {
 		// start a row
-		JSONObject rowData = new JSONObject();
+		final SimpleOrderedJSONObject rowData = new SimpleOrderedJSONObject();
 		sw.add(rowData);
 
 		final int[] columnOrder = includeAllColumns ? getAllColumns(table) : table.getColumnOrder();
@@ -97,23 +91,23 @@ public class CopyGridToJSONUtil {
 			}
 			// If offset is greater than zero, skip this row
 			if (rowOffsets[colIdx] == 0) {
-				
-				JSONObject colData = rowData;
+
+				SimpleOrderedJSONObject colData = rowData;
 				// Get the column group
 				final GridColumnGroup columnGroup = column.getColumnGroup();
 				if (columnGroup != null) {
 					String key = columnGroup.getText();
 					if (key.isEmpty()) {
-						key =  Integer.toString(colIdx);
+						key = Integer.toString(colIdx);
 					}
-					colData = (JSONObject)rowData.computeIfAbsent(key, k -> new JSONObject());
+					colData = (SimpleOrderedJSONObject) rowData.computeIfAbsent(key, k -> new SimpleOrderedJSONObject());
 				}
-				
-				String text = item.getText(colIdx);
+
+				final String text = item.getText(colIdx);
 				if (text != null && !text.isEmpty()) {
 					String key = column.getText();
 					if (key.isEmpty()) {
-						key =  Integer.toString(colIdx);
+						key = Integer.toString(colIdx);
 					}
 					if (colData.containsKey(key)) {
 						key = key + "-" + colIdx;
