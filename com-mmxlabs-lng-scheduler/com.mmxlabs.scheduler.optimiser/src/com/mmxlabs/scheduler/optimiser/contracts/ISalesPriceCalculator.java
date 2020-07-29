@@ -19,6 +19,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * An interface for sales contract price calculations. This calculator only have access to sequence and time information, because it will be used to calculate shipping costs.
@@ -70,12 +71,13 @@ public interface ISalesPriceCalculator extends ICalculator {
 	 * decisions have been made.
 	 * 
 	 * @param vesselAvailability
-	 * @param time
+	 * @param option
+	 * @param allocationAnnotation
+	 * @param voyagePlan
 	 * @param annotations
-	 *            TODO
-	 * @param slot
+	 * @return
 	 */
-	default public int calculateSalesUnitPrice(IVesselAvailability vesselAvailability, IDischargeOption option, IAllocationAnnotation allocationAnnotation, @Nullable IDetailTree annotations) {
+	default public int calculateSalesUnitPrice(IVesselAvailability vesselAvailability, IDischargeOption option, IAllocationAnnotation allocationAnnotation, VoyagePlan voyagePlan, @Nullable IDetailTree annotations) {
 		return calculateSalesUnitPrice(option, allocationAnnotation, annotations);
 	}
 
