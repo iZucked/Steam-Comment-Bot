@@ -206,7 +206,6 @@ public class LNGTransformerModule extends AbstractModule {
 		// <------ Exposures and papers
 
 		bind(IExposuresCustomiser.class).to(DefaultExposuresCustomiser.class);
-		bind(DefaultExposuresCustomiser.class).in(Singleton.class);
 
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.OPTIMISE_PAPER_PNL)).toInstance(Boolean.FALSE);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.COMPUTE_EXPOSURES)).toInstance(LicenseFeatures.isPermitted(KnownFeatures.FEATURE_EXPOSURES));
