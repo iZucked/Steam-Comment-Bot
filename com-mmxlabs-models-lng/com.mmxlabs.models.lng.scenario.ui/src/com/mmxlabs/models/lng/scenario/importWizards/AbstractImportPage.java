@@ -57,10 +57,6 @@ public abstract class AbstractImportPage extends WizardPage {
 	public static final int CHOICE_COMMA = 0;
 	public static final int CHOICE_SEMICOLON = CHOICE_COMMA + 1;
 	public static final int CHOICE_PERIOD = CHOICE_COMMA + 1;
-
-	public static final int CHOICE_ALL_SCENARIOS = 0;
-	public static final int CHOICE_CURRENT_SCENARIO = CHOICE_ALL_SCENARIOS + 1;
-	public static final int CHOICE_SELECTED_SCENARIOS = CHOICE_CURRENT_SCENARIO + 1;
 	
 	public AbstractImportPage(final String pageName, final ScenarioInstance currentScenario) {
 		super(pageName);
@@ -105,7 +101,7 @@ public abstract class AbstractImportPage extends WizardPage {
 	protected List<ScenarioInstance> getAllAvailableScenarioInstances() {
 		final List<ScenarioInstance> result = new LinkedList<ScenarioInstance>();
 
-		for (final ScenarioService service : getLocalServices()) {
+		for (final ScenarioService service : ImportUtils.getLocalServices()) {
 			result.addAll(getAllDescendantScenarioInstances(service));
 		}
 
@@ -142,7 +138,7 @@ public abstract class AbstractImportPage extends WizardPage {
 	public List<ScenarioInstance> getSelectedScenarios() {
 
 		switch (scenarioSelectionGroup.getSelectedValue()) {
-		case CHOICE_ALL_SCENARIOS: { // "All Scenarios"
+		case ImportUtils.CHOICE_ALL_SCENARIOS: { // "All Scenarios"
 			return getAllAvailableScenarioInstances();
 		}
 		case 1: { // "Current Scenario"
@@ -166,116 +162,6 @@ public abstract class AbstractImportPage extends WizardPage {
 
 	public char getDecimalSeparator() {
 		return (decimalSelectionGroup.getSelectedValue() == CHOICE_COMMA ? ',' : '.');
-	}
-
-	/**
-	 * Returns a list of all scenario services currently available.
-	 * 
-	 * @return
-	 */
-	private List<ScenarioService> getServices() {
-		final ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry> tracker = new ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry>(
-				Activator.getDefault().getBundle().getBundleContext(), ScenarioServiceRegistry.class, null);
-		tracker.open();
-		final ScenarioModel scenarioModel = tracker.getService().getScenarioModel();
-		tracker.close();
-
-		return scenarioModel.getScenarioServices();
-	}
-
-	private List<ScenarioService> getLocalServices() {
-		final List<ScenarioService> localServices = new LinkedList<>();
-
-		for (final ScenarioService ss : getServices()) {
-			if (ss.isLocal()) {
-				localServices.add(ss);
-			}
-		}
-		return localServices;
-	}
-
-	/*
-	 * Is there *really* no standard JFace way to bind a radio button group to a single variable?
-	 */
-
-	public static class RadioSelectionGroup extends Composite {
-		int selectedIndex = -1;
-		final ArrayList<Button> buttons = new ArrayList<Button>();
-		final Group group;
-		final int[] values;
-
-		public RadioSelectionGroup(final Composite parent, final String title, final int style, final String[] labels, final int[] values) {
-			super(parent, style);
-
-			final GridLayout layout = new GridLayout(1, true);
-			// layout.marginRight = 0;
-			layout.marginWidth = 0;
-			setLayout(layout);
-			// GridData gd = new GridData();
-			// gd.verticalIndent = 0;
-			// gd.horizontalIndent = 0;
-			// gd.grabExcessHorizontalSpace = true;
-			// setLayoutData(gd);
-
-			group = new Group(this, style);
-			for (final String label : labels) {
-				addButton(label);
-			}
-			final GridLayout gl = new GridLayout(1, false);
-			gl.marginLeft = 0;
-			gl.marginRight = 0;
-			gl.marginWidth = 0;
-			setLayout(gl);
-			group.setLayout(new GridLayout(labels.length, false));
-			// GridData groupLayoutData = new GridData();
-			// group.setLayoutData(groupLayoutData);
-			group.setText(title);
-			this.values = values;
-		}
-
-		public Button addButton(final String text) {
-			final int index = buttons.size();
-
-			final Button button = new Button(group, SWT.RADIO);
-			buttons.add(button);
-
-			button.setText(text);
-			// GridData gd = new GridData();
-			// // gd.verticalIndent = 0;
-			// // gd.horizontalIndent = 0;
-			// // gd.grabExcessHorizontalSpace = true;
-			// button.setLayoutData(gd);
-			button.addSelectionListener(new SelectionListener() {
-
-				@Override
-				public void widgetSelected(final SelectionEvent e) {
-					if (button.getSelection()) {
-						RadioSelectionGroup.this.selectedIndex = index;
-					}
-				}
-
-				@Override
-				public void widgetDefaultSelected(final SelectionEvent e) {
-				}
-
-			});
-
-			return button;
-		}
-
-		public int getSelectedIndex() {
-			return selectedIndex;
-		}
-
-		public void setSelectedIndex(final int value) {
-			buttons.get(value).setSelection(true);
-			selectedIndex = value;
-		}
-
-		public int getSelectedValue() {
-			return values[getSelectedIndex()];
-		}
-
 	}
 
 	@Override
@@ -376,10 +262,11 @@ public abstract class AbstractImportPage extends WizardPage {
 		if (currentScenario != null) {
 			final String currentScenarioOption = String.format("Current ('%s')", currentScenario.getName());
 			scenarioSelectionGroup = new RadioSelectionGroup(container, "Scenarios", SWT.NONE, new String[] { "All", currentScenarioOption, "Selected" },
-					new int[] { CHOICE_ALL_SCENARIOS, CHOICE_CURRENT_SCENARIO, CHOICE_SELECTED_SCENARIOS });
+					new int[] { ImportUtils.CHOICE_ALL_SCENARIOS, ImportUtils.CHOICE_CURRENT_SCENARIO, ImportUtils.CHOICE_SELECTED_SCENARIOS });
 			selectedOnlyIndex = 2;
 		} else {
-			scenarioSelectionGroup = new RadioSelectionGroup(container, "Scenarios", SWT.NONE, new String[] { "All", "Selected" }, new int[] { CHOICE_ALL_SCENARIOS, CHOICE_SELECTED_SCENARIOS });
+			scenarioSelectionGroup = new RadioSelectionGroup(container, "Scenarios", SWT.NONE, 
+					new String[] { "All", "Selected" }, new int[] { ImportUtils.CHOICE_ALL_SCENARIOS, ImportUtils.CHOICE_SELECTED_SCENARIOS });
 			selectedOnlyIndex = 1;
 		}
 		scenarioSelectionGroup.setSelectedIndex(1);
@@ -406,7 +293,7 @@ public abstract class AbstractImportPage extends WizardPage {
 		scenarioTreeViewer.setContentProvider(new ScenarioContentProvider());
 		scenarioTreeViewer.setLabelProvider(new ScenarioLabelProvider());
 		scenarioTreeViewer.setAutoExpandLevel(3);
-		scenarioTreeViewer.setInput(getLocalServices());
+		scenarioTreeViewer.setInput(ImportUtils.getLocalServices());
 		final GridData viewerLayoutData = new GridData();
 		viewerLayoutData.grabExcessVerticalSpace = true;
 		viewerLayoutData.grabExcessHorizontalSpace = true;

@@ -9,6 +9,7 @@ Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: com.mmxlabs.models.lng.scenario.exportWizards,
  com.mmxlabs.models.lng.scenario.importWizards,
+ com.mmxlabs.models.lng.scenario.importWizards.canalcosts,
  com.mmxlabs.models.lng.scenario.importWizards.holidaycalendars,
  com.mmxlabs.models.lng.scenario.importWizards.pricingcalendars,
  com.mmxlabs.models.lng.scenario.mergeWizards,
@@ -39,7 +40,7 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.models.lng.nominations.editor
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.mmxlabs.models.lng.scenario.internal.Activator
-Import-Package: com.google.inject;version="1.3.0",
+Import-Package: com.google.inject;version="1.4.0",
  org.slf4j;version="1.6.4"
 Service-Component: OSGI-INF/*.xml
 Automatic-Module-Name: com.mmxlabs.models.lng.scenario.ui

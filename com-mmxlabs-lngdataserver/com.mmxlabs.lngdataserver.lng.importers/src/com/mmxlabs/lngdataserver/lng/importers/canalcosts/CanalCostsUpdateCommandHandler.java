@@ -14,6 +14,7 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -23,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.io.CharStreams;
 import com.mmxlabs.lngdataserver.lng.importers.creator.ScenarioBuilder;
 import com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard.SharedScenarioDataUtils;
+import com.mmxlabs.models.lng.scenario.importWizards.canalcosts.ImportCanalCostsWizard;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
@@ -44,17 +46,15 @@ public class CanalCostsUpdateCommandHandler extends AbstractHandler {
 		final Shell shell = HandlerUtil.getActiveShell(event);
 		final IScenarioServiceEditorInput editor = (IScenarioServiceEditorInput) HandlerUtil.getActiveEditorInput(event);
 		
-		final ScenarioInstance scenarioInstance = editor.getScenarioInstance();		
-		final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
-		final IScenarioDataProvider scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ScenarioDataProvider:1");
+		final ScenarioInstance scenarioInstance = editor.getScenarioInstance();
+		
+		BiConsumer<CompoundCommand, IScenarioDataProvider> suezCostsUpdater = null;
+		BiConsumer<CompoundCommand, IScenarioDataProvider> panamaCostsUpdater = null;
 		
 		{
 			try (InputStream inputStream = ScenarioBuilder.class.getResourceAsStream("/suez-tariff.json")) {
 				final String json = CharStreams.toString(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-				final CompoundCommand command = new CompoundCommand();
-				final BiConsumer<CompoundCommand, IScenarioDataProvider> updater = SharedScenarioDataUtils.UpdateJob.createSuezTariffUpdater(json);
-				updater.accept(command, scenarioDataProvider);
-				command.execute();
+				suezCostsUpdater = SharedScenarioDataUtils.UpdateJob.createSuezTariffUpdater(json);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -62,15 +62,23 @@ public class CanalCostsUpdateCommandHandler extends AbstractHandler {
 		{
 			try (InputStream inputStream = ScenarioBuilder.class.getResourceAsStream("/panama-tariff.json")) {
 				final String json = CharStreams.toString(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-				final CompoundCommand command = new CompoundCommand();
-				final BiConsumer<CompoundCommand, IScenarioDataProvider> updater = SharedScenarioDataUtils.UpdateJob.createPanamaTariffUpdater(json);
-				updater.accept(command, scenarioDataProvider);
-				command.execute();
+				panamaCostsUpdater = SharedScenarioDataUtils.UpdateJob.createPanamaTariffUpdater(json);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 		
+		if (panamaCostsUpdater == null || suezCostsUpdater == null) {
+			return null;
+		}
+		
+		final ImportCanalCostsWizard importCanalCostsWizard = 
+				new ImportCanalCostsWizard(scenarioInstance, "Canal Costs Import", panamaCostsUpdater, suezCostsUpdater);
+		importCanalCostsWizard.init(activeWorkbenchWindow.getWorkbench(), null);
+		
+		final WizardDialog dialog = new WizardDialog(shell, importCanalCostsWizard);
+		dialog.create();
+		dialog.open();
 
 		return null;
 	}
