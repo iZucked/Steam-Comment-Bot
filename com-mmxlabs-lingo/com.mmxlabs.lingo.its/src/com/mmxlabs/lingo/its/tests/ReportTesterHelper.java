@@ -5,6 +5,7 @@
 package com.mmxlabs.lingo.its.tests;
 
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -24,6 +25,7 @@ import org.eclipse.ui.internal.E4PartWrapper;
 import org.eclipse.ui.internal.e4.compatibility.CompatibilityView;
 import org.junit.jupiter.api.Assertions;
 
+import com.mmxlabs.lingo.its.tests.AbstractReportTester.ReportType;
 import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.ReportsConstants;
 import com.mmxlabs.lingo.reports.views.IProvideEditorInputScenario;
@@ -32,15 +34,14 @@ import com.mmxlabs.lingo.reports.views.fleet.ConfigurableFleetReportView;
 import com.mmxlabs.lingo.reports.views.headline.HeadlineReportView;
 import com.mmxlabs.lingo.reports.views.portrotation.PortRotationReportView;
 import com.mmxlabs.lingo.reports.views.schedule.ScheduleSummaryReport;
-import com.mmxlabs.lingo.reports.views.standard.VolumeIssuesReportView;
 import com.mmxlabs.lingo.reports.views.standard.CooldownReportView;
 import com.mmxlabs.lingo.reports.views.standard.KPIReportView;
 import com.mmxlabs.lingo.reports.views.standard.LatenessReportView;
+import com.mmxlabs.lingo.reports.views.standard.VolumeIssuesReportView;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
-import com.mmxlabs.scheduler.optimiser.peaberry.OptimiserInjectorServiceMaker;
 
 /**
  * Helper class to open up a view, set the scenario selection provider to the given instance and adapt the result to a {@link IReportContents} instance.
@@ -49,6 +50,31 @@ import com.mmxlabs.scheduler.optimiser.peaberry.OptimiserInjectorServiceMaker;
  * 
  */
 public class ReportTesterHelper {
+
+	public static class ReportRecord {
+		private final String reportID;
+		private final String fileNameCode;
+		private final ReportType reportType;
+
+		public ReportRecord(final String reportID, final String fileNameCode, final ReportType reportType) {
+			this.reportID = reportID;
+			this.fileNameCode = fileNameCode;
+			this.reportType = reportType;
+
+		}
+
+		public String getReportID() {
+			return reportID;
+		}
+
+		public String getFileNameCode() {
+			return fileNameCode;
+		}
+
+		public ReportType getReportType() {
+			return reportType;
+		}
+	}
 
 	public static final String SCHEDULE_SUMMARY_ID = ScheduleSummaryReport.ID;
 	public static final String SCHEDULE_SUMMARY_SHORTNAME = "ScheduleSummary";
@@ -94,9 +120,37 @@ public class ReportTesterHelper {
 
 	public static final String INCOME_STATEMENT_REGION_REPORT_ID = "com.mmxlabs.lingo.reports.views.standard.incomestatement.IncomeStatementByRegion";
 	public static final String INCOME_STATEMENT_REGION_REPORT_SHORTNAME = "IncomeStatementRegion";
-	
+
 	public static final String INCOME_STATEMENT_CONTRACT_REPORT_ID = "com.mmxlabs.lingo.reports.views.standard.incomestatement.IncomeStatementByContract";
 	public static final String INCOME_STATEMENT_CONTRACT_REPORT_SHORTNAME = "IncomeStatementContract";
+
+	public static List<ReportRecord> createReportTests() {
+		final List<ReportRecord> reports = new LinkedList<>();
+
+		reports.add(new ReportRecord(ReportTesterHelper.VERTICAL_REPORT_ID, ReportTesterHelper.VERTICAL_REPORT_SHORTNAME, ReportType.REPORT_HTML));
+		reports.add(new ReportRecord(ReportTesterHelper.SCHEDULE_SUMMARY_ID, ReportTesterHelper.SCHEDULE_SUMMARY_SHORTNAME, ReportType.REPORT_JSON));
+		reports.add(new ReportRecord(ReportTesterHelper.PORT_ROTATIONS_ID, ReportTesterHelper.PORT_ROTATIONS_SHORTNAME, ReportType.REPORT_JSON));
+		reports.add(new ReportRecord(ReportTesterHelper.LATENESS_REPORT_ID, ReportTesterHelper.LATENESS_REPORT_SHORTNAME, ReportType.REPORT_JSON));
+		reports.add(new ReportRecord(ReportTesterHelper.CAPACITY_REPORT_ID, ReportTesterHelper.CAPACITY_REPORT_SHORTNAME, ReportType.REPORT_JSON));
+		reports.add(new ReportRecord(ReportTesterHelper.VESSEL_REPORT_ID, ReportTesterHelper.VESSEL_REPORT_SHORTNAME, ReportType.REPORT_JSON));
+		reports.add(new ReportRecord(ReportTesterHelper.COOLDOWN_REPORT_ID, ReportTesterHelper.COOLDOWN_REPORT_SHORTNAME, ReportType.REPORT_JSON));
+		reports.add(new ReportRecord(ReportTesterHelper.HEADLINE_REPORT_ID, ReportTesterHelper.HEADLINE_REPORT_SHORTNAME, ReportType.REPORT_JSON));
+		reports.add(new ReportRecord(ReportTesterHelper.KPI_REPORT_ID, ReportTesterHelper.KPI_REPORT_SHORTNAME, ReportType.REPORT_JSON));
+		reports.add(new ReportRecord(ReportTesterHelper.CANAL_BOOKINGS_REPORT_ID, ReportTesterHelper.CANAL_BOOKINGS_REPORT_SHORTNAME, ReportType.REPORT_JSON));
+		reports.add(new ReportRecord(ReportTesterHelper.EXPOSURES_REPORT_ID, ReportTesterHelper.EXPOSURES_REPORT_SHORTNAME, ReportType.REPORT_HTML));
+		reports.add(new ReportRecord(ReportTesterHelper.INCOME_STATEMENT_REGION_REPORT_ID, ReportTesterHelper.INCOME_STATEMENT_REGION_REPORT_SHORTNAME, ReportType.REPORT_JSON));
+		reports.add(new ReportRecord(ReportTesterHelper.INCOME_STATEMENT_CONTRACT_REPORT_ID, ReportTesterHelper.INCOME_STATEMENT_CONTRACT_REPORT_SHORTNAME, ReportType.REPORT_JSON));
+
+		return reports;
+	}
+
+	public static List<ReportRecord> createSelectedElementReportTests() {
+		final List<ReportRecord> reports = new LinkedList<>();
+		reports.add(new ReportRecord(ReportTesterHelper.CARGO_ECONS_REPORT_ID, ReportTesterHelper.CARGO_ECONS_REPORT_SHORTNAME, ReportType.REPORT_JSON));
+
+		return reports;
+	}
+	
 	
 	@FunctionalInterface
 	interface IScenarioSelection {
@@ -176,7 +230,7 @@ public class ReportTesterHelper {
 	}
 
 	@Nullable
-	public IReportContents getReportContents(final String reportID, final @NonNull IScenarioSelection callable, final @NonNull IScenarioSelection cleanUp) throws InterruptedException {
+	public IReportContents getReportContents(final String reportID, final @Nullable IScenarioSelection callable, final @Nullable IScenarioSelection cleanUp) throws InterruptedException {
 
 		// Get reference to the selection provider service
 
@@ -217,12 +271,13 @@ public class ReportTesterHelper {
 				Thread.sleep(1000);
 				Thread.yield();
 
-				RunnerHelper.exec(() -> {
-					callable.updateSelection(view[0], provider);
-				}, true);
-				Thread.yield();
-				Thread.sleep(1000);
-
+				if (callable != null) {
+					RunnerHelper.exec(() -> {
+						callable.updateSelection(view[0], provider);
+					}, true);
+					Thread.yield();
+					Thread.sleep(1000);
+				}
 				// Step 3, obtain report contents
 				Display.getDefault().syncExec(new Runnable() {
 
@@ -249,9 +304,11 @@ public class ReportTesterHelper {
 					}
 				});
 			} finally {
-				RunnerHelper.exec(() -> {
-					cleanUp.updateSelection(view[0], provider);
-				}, true);
+				if (cleanUp != null) {
+					RunnerHelper.exec(() -> {
+						cleanUp.updateSelection(view[0], provider);
+					}, true);
+				}
 			}
 
 			return contents[0];

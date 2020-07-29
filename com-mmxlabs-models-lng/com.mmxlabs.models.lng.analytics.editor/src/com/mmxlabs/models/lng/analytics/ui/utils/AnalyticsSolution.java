@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.analytics.ui.utils;
 
+import java.util.UUID;
+
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.ui.PlatformUI;
@@ -34,6 +36,14 @@ public class AnalyticsSolution {
 		@NonNull
 		ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
 		this.modelReference = modelRecord.aquireReference("AnalyticsSolution:1");
+	}
+
+	public AnalyticsSolution(final ScenarioModelRecord modelRecord, final UUIDObject solution, final String title) {
+		this.solution = solution;
+		id = UUID.randomUUID().toString() + title;
+		this.title = title;
+
+		this.modelReference = modelRecord.aquireReference("AnalyticsSolution:2");
 	}
 
 	@Override

@@ -1630,7 +1630,8 @@ public class ChangeSetView extends ViewPart {
 
 		this.viewMode = ViewMode.OLD_ACTION_SET;
 
-		final ScenarioInstance target = solution.getScenarioInstance();
+		final ScenarioInstance scenarioInstance = solution.getScenarioInstance();
+		final Object target = solution;
 		final EObject plan = solution.getSolution();
 		setPartName(solution.getTitle());
 
@@ -1648,7 +1649,7 @@ public class ChangeSetView extends ViewPart {
 				final OptimisationResultPlanTransformer transformer = new OptimisationResultPlanTransformer();
 				// Sorting by Group as the label provider uses the provided ordering for
 				// indexing
-				final ViewState viewState = new ViewState(transformer.createDataModel(target, (OptimisationResult) plan, monitor), SortMode.BY_GROUP);
+				final ViewState viewState = new ViewState(transformer.createDataModel(scenarioInstance, (OptimisationResult) plan, monitor), SortMode.BY_GROUP);
 				viewState.lastSolution = solution;
 				return viewState;
 			}, slotId);
@@ -1661,7 +1662,7 @@ public class ChangeSetView extends ViewPart {
 				final SandboxResult sandboxResult = (SandboxResult) plan;
 				// Sorting by Group as the label provider uses the provided ordering for
 				// indexing
-				final ViewState viewState = new ViewState(transformer.createDataModel(target, sandboxResult, monitor), SortMode.BY_PNL);
+				final ViewState viewState = new ViewState(transformer.createDataModel(scenarioInstance, sandboxResult, monitor), SortMode.BY_PNL);
 				viewState.lastSolution = solution;
 				viewState.allTargetSlots.clear();
 				// viewState.allTargetSlots.addAll(sandboxResult.getExtraSlots());
@@ -1671,7 +1672,7 @@ public class ChangeSetView extends ViewPart {
 			setViewMode(ViewMode.NEW_ACTION_SET, false);
 			setNewDataData(target, (monitor, targetSlotId) -> {
 				final ActionableSetPlanTransformer transformer = new ActionableSetPlanTransformer();
-				final ViewState viewState = new ViewState(transformer.createDataModel(target, (ActionableSetPlan) plan, monitor), SortMode.BY_GROUP);
+				final ViewState viewState = new ViewState(transformer.createDataModel(scenarioInstance, (ActionableSetPlan) plan, monitor), SortMode.BY_GROUP);
 				viewState.lastSolution = solution;
 				return viewState;
 			}, slotId);
@@ -1714,7 +1715,7 @@ public class ChangeSetView extends ViewPart {
 				viewState.allTargetSlots.addAll(slotInsertionOptions.getSlotsInserted());
 
 				final InsertionPlanTransformer transformer = new InsertionPlanTransformer();
-				final ChangeSetRoot newRoot = transformer.createDataModel(target, slotInsertionOptions, monitor, pTargetSlot);
+				final ChangeSetRoot newRoot = transformer.createDataModel(scenarioInstance, slotInsertionOptions, monitor, pTargetSlot);
 
 				viewState.postProcess = insertionPlanFilter.processChangeSetRoot(newRoot, pTargetSlot);
 

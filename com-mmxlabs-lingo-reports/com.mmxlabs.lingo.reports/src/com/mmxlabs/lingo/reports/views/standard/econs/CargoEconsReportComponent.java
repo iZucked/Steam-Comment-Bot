@@ -96,8 +96,7 @@ import com.mmxlabs.models.ui.tabular.renderers.ColumnImageCenterHeaderRenderer;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
-import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
-import com.mmxlabs.rcp.common.actions.CopyGridToJSONUtil;
+import com.mmxlabs.rcp.common.actions.CopyTransposedGridToJSONUtil;
 import com.mmxlabs.rcp.common.application.BindSelectionListener;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
@@ -681,7 +680,7 @@ public class CargoEconsReportComponent implements IAdaptable {
 			dummyDataCol.getColumn().dispose();
 			if (IReportContents.class.isAssignableFrom(adapter)) {
 
-				final CopyGridToJSONUtil jsonUtil = new CopyGridToJSONUtil(viewer.getGrid(), true);
+				final CopyTransposedGridToJSONUtil jsonUtil = new CopyTransposedGridToJSONUtil(viewer.getGrid(), true);
 				final String jsonContents = jsonUtil.convert();
 				return (T) new IReportContents() {
 

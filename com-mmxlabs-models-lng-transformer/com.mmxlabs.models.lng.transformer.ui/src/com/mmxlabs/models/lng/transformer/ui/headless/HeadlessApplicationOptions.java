@@ -66,9 +66,9 @@ public class HeadlessApplicationOptions {
 	/** 
 	 * A {@link UserSettings} object to create the algorithm's config data from, if no config file is provided.
 	 */
-	private UserSettingsImpl userSettings;
+	private UserSettings userSettings;
 	
-	private UserSettingsImpl bundledUserSettings;
+	private UserSettings bundledUserSettings;
 	private boolean attemptedToReadBundledSettings = false;
 	
 	public boolean isLoggingExportRequired() {
@@ -157,7 +157,7 @@ public class HeadlessApplicationOptions {
 		}
 	}	
 	
-	private UserSettingsImpl getBundledUserSettings() {
+	private UserSettings getBundledUserSettings() {
 		if (attemptedToReadBundledSettings) {
 			return bundledUserSettings;
 		}
@@ -200,7 +200,7 @@ public class HeadlessApplicationOptions {
 	 * Provides the user settings content from the userSettings field or by loading it from a "bundled" user settings file.
 	 * @return
 	 */
-	public UserSettingsImpl getUserSettingsContent() {
+	public UserSettings getUserSettingsContent() {
 		if (userSettings != null) {
 			return userSettings;
 		}
@@ -213,7 +213,7 @@ public class HeadlessApplicationOptions {
 		return getBundledUserSettings();		
 	}
 	
-	public void setUserSettings(UserSettingsImpl settings) {
+	public void setUserSettings(UserSettings settings) {
 		userSettings = settings;
 	}
 }

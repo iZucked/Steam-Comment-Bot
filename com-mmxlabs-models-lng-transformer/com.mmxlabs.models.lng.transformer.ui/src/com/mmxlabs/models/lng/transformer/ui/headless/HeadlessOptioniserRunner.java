@@ -54,13 +54,13 @@ public class HeadlessOptioniserRunner {
 
 		public boolean exportResults = false;
 		public boolean turnPerfOptsOn = true;
-		
+
 		public boolean outputToJSON = true;
 	}
 
 	/**
-	 * Runs the optioniser on the specified scenario, using the specified starting seed, with the specified options. 
-	 * The optioniser output is logged to the logger, which can then be used to extract information about the optioniser run.
+	 * Runs the optioniser on the specified scenario, using the specified starting seed, with the specified options. The optioniser output is logged to the logger, which can then be used to extract
+	 * information about the optioniser run.
 	 * 
 	 * @param startTry
 	 * @param lingoFile
@@ -69,18 +69,17 @@ public class HeadlessOptioniserRunner {
 	 * @param completedHook
 	 * @throws Exception
 	 */
-	public void run(final int startTry, final File lingoFile, final SlotInsertionOptimiserLogger logger, final Options options, final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook)
-			throws Exception {
+	public void run(final int startTry, final File lingoFile, final SlotInsertionOptimiserLogger logger, final Options options,
+			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook) throws Exception {
 		// Get the root object
 		ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(lingoFile.toURI().toURL(), (modelRecord, scenarioDataProvider) -> {
 			run(startTry, logger, options, modelRecord, scenarioDataProvider, completedHook);
 		});
 	}
-	
-	
-	public void runFromCSVDirectory(final int startTry, final File csvDirectory, final SlotInsertionOptimiserLogger logger, final Options options, 
+
+	public void runFromCSVDirectory(final int startTry, final File csvDirectory, final SlotInsertionOptimiserLogger logger, final Options options,
 			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook) {
-				
+
 		try {
 			URL urlRoot = csvDirectory.toURI().toURL();
 			ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, scenarioCipherProvider -> {
@@ -93,9 +92,8 @@ public class HeadlessOptioniserRunner {
 			e1.printStackTrace();
 			return;
 		}
-		
-		
-	}	
+
+	}
 
 	public void run(final int startTry, final SlotInsertionOptimiserLogger logger, final Options options, final ScenarioModelRecord scenarioModelRecord, @NonNull final IScenarioDataProvider sdp,
 			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook) {
@@ -140,7 +138,9 @@ public class HeadlessOptioniserRunner {
 
 		final IMultiStateResult results = insertionRunner.runInsertion(logger, new NullProgressMonitor());
 		// Includes starting solution, so take off one.
-		logger.setSolutionsFound(results.getSolutions().size() - 1);
+		if (logger != null) {
+			logger.setSolutionsFound(results.getSolutions().size() - 1);
+		}
 
 		if (options.exportResults) {
 			insertionRunner.exportSolutions(results, 0L, new NullProgressMonitor());

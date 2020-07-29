@@ -197,10 +197,12 @@ public class SlotInsertionOptimiserUnit {
 		return run(slotsToInsert, eventsToInsert, stage.getIterations(), logger, monitor);
 	}
 
-	public IMultiStateResult run(final @NonNull List<Slot<?>> slotsToInsert, final List<VesselEvent> eventsToInsert, final int tries, SlotInsertionOptimiserLogger logger,
+	public IMultiStateResult run(final @NonNull List<Slot<?>> slotsToInsert, final List<VesselEvent> eventsToInsert, final int tries, @Nullable SlotInsertionOptimiserLogger logger,
 			@NonNull final IProgressMonitor monitor) {
 		try {
-			logger.begin();
+			if (logger != null) {
+				logger.begin();
+			}
 
 			@NonNull
 			final ModelEntityMap modelEntityMap = dataTransformer.getModelEntityMap();
@@ -396,8 +398,9 @@ public class SlotInsertionOptimiserUnit {
 			// Step 1: Exhaustive search of non-shipped pairs
 			try {
 				{
-					logger.beginStage(SlotInsertionOptimiserLogger.STAGE_NON_SHIPPED_PAIRS);
-
+					if (logger != null) {
+						logger.beginStage(SlotInsertionOptimiserLogger.STAGE_NON_SHIPPED_PAIRS);
+					}
 					for (final Pair<ISequenceElement, ISequenceElement> p : nonShippedPairs) {
 						final ISequenceElement buy = p.getFirst();
 						final ISequenceElement sell = p.getSecond();
@@ -417,8 +420,9 @@ public class SlotInsertionOptimiserUnit {
 							return null;
 						}));
 					}
-
-					logger.doneStage(SlotInsertionOptimiserLogger.STAGE_NON_SHIPPED_PAIRS);
+					if (logger != null) {
+						logger.doneStage(SlotInsertionOptimiserLogger.STAGE_NON_SHIPPED_PAIRS);
+					}
 				}
 				{
 					// Ensure the non-shipped part has completed before we go onto the next stage.
@@ -443,7 +447,9 @@ public class SlotInsertionOptimiserUnit {
 				}
 				// Step 2: full search
 				{
-					logger.beginStage(SlotInsertionOptimiserLogger.STAGE_FULL_SEARCH);
+					if (logger != null) {
+						logger.beginStage(SlotInsertionOptimiserLogger.STAGE_FULL_SEARCH);
+					}
 					for (int tryNo = 0; tryNo < tries; ++tryNo) {
 						final int pTryNo = tryNo;
 
@@ -524,10 +530,12 @@ public class SlotInsertionOptimiserUnit {
 					try {
 						final Pair<ISequences, Long> s = f.get();
 
-						if (++i % logger.getLoggingInterval() == 0) {
-							logger.logCurrentMemoryUsage(String.format("Full search iteration %d", i));
-						}
+						if (logger != null) {
 
+							if (++i % logger.getLoggingInterval() == 0) {
+								logger.logCurrentMemoryUsage(String.format("Full search iteration %d", i));
+							}
+						}
 						if (s != null) {
 							results.add(s);
 						}
@@ -535,7 +543,9 @@ public class SlotInsertionOptimiserUnit {
 						e.printStackTrace();
 					}
 				}
-				logger.doneStage(SlotInsertionOptimiserLogger.STAGE_FULL_SEARCH);
+				if (logger != null) {
+					logger.doneStage(SlotInsertionOptimiserLogger.STAGE_FULL_SEARCH);
+				}
 
 				if (monitor.isCanceled()) {
 					return null;
@@ -543,8 +553,10 @@ public class SlotInsertionOptimiserUnit {
 				if (results.isEmpty()) {
 					throw new UserFeedbackException("No feasible solutions found.");
 				}
-				logger.beginStage(SlotInsertionOptimiserLogger.STAGE_PROCESS_SOLUTIONS);
+				if (logger != null) {
 
+					logger.beginStage(SlotInsertionOptimiserLogger.STAGE_PROCESS_SOLUTIONS);
+				}
 				// Reduce result to unique solutions
 				results = results.parallelStream().distinct().collect(Collectors.toList());
 
@@ -636,12 +648,17 @@ public class SlotInsertionOptimiserUnit {
 
 				solutions.add(0, new NonNullPair<ISequences, Map<String, Object>>(inputState.getBestSolution().getFirst(), new HashMap<>()));
 
-				logger.doneStage(SlotInsertionOptimiserLogger.STAGE_PROCESS_SOLUTIONS);
+				if (logger != null) {
 
+					logger.doneStage(SlotInsertionOptimiserLogger.STAGE_PROCESS_SOLUTIONS);
+				}
 				return new MultiStateResult(inputState.getBestSolution(), solutions);
 			} finally {
 				monitor.done();
-				logger.done();
+				if (logger != null) {
+
+					logger.done();
+				}
 			}
 
 		} finally {

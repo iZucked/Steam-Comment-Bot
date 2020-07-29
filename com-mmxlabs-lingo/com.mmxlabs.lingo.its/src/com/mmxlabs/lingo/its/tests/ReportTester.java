@@ -43,8 +43,7 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
- * Helper class to open up a view, set the scenario selection provider to the
- * given instance and adapt the result to a {@link IReportContents} instance.
+ * Helper class to open up a view, set the scenario selection provider to the given instance and adapt the result to a {@link IReportContents} instance.
  * 
  * @author Simon Goodall
  * 
@@ -53,6 +52,87 @@ public class ReportTester {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ReportTester.class);
 	private static final UnaryOperator<String> stripWhitespace = s -> s.replaceAll("\\s+", "").replaceAll("\r\n", "").replaceAll("\n", "");
+
+	public static String generateReportsWithElement(final ScenarioModelRecord modelRecord, @NonNull final IScenarioDataProvider scenarioDataProvider, final String reportID, final ReportType type,
+			final String elementID) throws Exception {
+
+		Assumptions.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
+
+		// A side-effect is the initial evaluation.
+		LNGScenarioRunnerCreator.withLegacyEvaluationRunner(scenarioDataProvider, true, runner -> {
+		});
+
+		Object target = null;
+		final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(scenarioDataProvider);
+		final Schedule schedule = scheduleModel.getSchedule();
+		if (schedule != null) {
+			for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
+				if (elementID.equals(cargoAllocation.getName())) {
+					target = cargoAllocation;
+					break;
+				}
+			}
+		}
+
+		Assertions.assertNotNull("Target element not found", elementID);
+		final Object pTarget = target;
+
+		Display.getDefault().syncExec(() -> {
+			final ESelectionService selectionService = PlatformUI.getWorkbench().getService(ESelectionService.class);
+			Assertions.assertNotNull(selectionService);
+			selectionService.setPostSelection(pTarget);
+		});
+
+		final ReportTesterHelper reportTester = new ReportTesterHelper();
+		final ScenarioResult scenarioResult = new ScenarioResult(modelRecord, ScenarioModelUtil.getScheduleModel(scenarioDataProvider));
+		final IReportContents reportContents = reportTester.getReportContents(scenarioResult, reportID);
+
+		Assertions.assertNotNull(reportContents);
+		final String actualContents;
+
+		switch (type) {
+		case REPORT_HTML:
+			actualContents = reportContents.getHTMLContents();
+			break;
+		case REPORT_JSON:
+			actualContents = reportContents.getJSONContents();
+			break;
+		default:
+			throw new IllegalArgumentException();
+		}
+		Assertions.assertNotNull(actualContents);
+		return actualContents;
+	}
+
+	public static String generateReports(final ScenarioModelRecord modelRecord, @NonNull final IScenarioDataProvider scenarioDataProvider, final String reportID, final ReportType type)
+			throws Exception {
+
+		Assumptions.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
+
+		// A side-effect is the initial evaluation.
+		LNGScenarioRunnerCreator.withLegacyEvaluationRunner(scenarioDataProvider, true, runner -> {
+		});
+
+		final ReportTesterHelper reportTester = new ReportTesterHelper();
+		final ScenarioResult scenarioResult = new ScenarioResult(modelRecord, ScenarioModelUtil.getScheduleModel(scenarioDataProvider));
+		final IReportContents reportContents = reportTester.getReportContents(scenarioResult, reportID);
+
+		Assertions.assertNotNull(reportContents);
+		final String actualContents;
+
+		switch (type) {
+		case REPORT_HTML:
+			actualContents = reportContents.getHTMLContents();
+			break;
+		case REPORT_JSON:
+			actualContents = reportContents.getJSONContents();
+			break;
+		default:
+			throw new IllegalArgumentException();
+		}
+		Assertions.assertNotNull(actualContents);
+		return actualContents;
+	}
 
 	public static void testReportsWithElement(final ScenarioModelRecord instance, @NonNull final IScenarioDataProvider scenarioDataProvider, final URL scenarioURL, final String reportID,
 			final String shortName, final ReportType type, final String elementID, @Nullable final Consumer<ScenarioModelRecord> preAction) throws Exception {
@@ -329,5 +409,19 @@ public class ReportTester {
 			LOG.warn("Actual " + actualContents);
 			Assertions.assertEquals(expectedOutput, actualContents);
 		}
+	}
+
+	public static String generatePinDiffReport(String reportID, ScenarioResult pinResult, ScenarioResult refResult) throws Exception {
+
+		final ReportTesterHelper reportTester = new ReportTesterHelper();
+		final String result[] = new String[1];
+
+		reportTester.runReportTest(reportID, null, null, IReportContentsGenerator.class, generator -> result[0] = generator.getStringContents(pinResult, refResult));
+
+		Assertions.assertNotNull(result[0]);
+		final String actualContents = result[0];
+		Assertions.assertNotNull(actualContents);
+		return actualContents;
+
 	}
 }
