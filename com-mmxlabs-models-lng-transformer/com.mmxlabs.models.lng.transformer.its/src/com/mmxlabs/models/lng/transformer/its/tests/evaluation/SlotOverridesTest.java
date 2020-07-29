@@ -113,7 +113,7 @@ public class SlotOverridesTest {
 			return parentInjector.getInstance(clz);
 		}
 
-		public List<Slot> getRestrictedFollowerSlots(final Slot slot) {
+		public List<Slot<?>> getRestrictedFollowerSlots(final Slot<?> slot) {
 			final IPortSlotProvider psProvider = getProvider(IPortSlotProvider.class);
 
 			// pull the load slot out of the transformed data
@@ -122,7 +122,7 @@ public class SlotOverridesTest {
 			final ISequenceElement element = psProvider.getElement(oSlot);
 			final IRestrictedElementsProvider reProvider = getProvider(IRestrictedElementsProvider.class);
 
-			final ArrayList<Slot> result = new ArrayList<Slot>();
+			final ArrayList<Slot<?>> result = new ArrayList<>();
 			for (final ISequenceElement restricted : reProvider.getRestrictedFollowerElements(element)) {
 				final IPortSlot restrictedSlot = psProvider.getPortSlot(restricted);
 				result.add(getModelObject(restrictedSlot, Slot.class));
@@ -131,7 +131,7 @@ public class SlotOverridesTest {
 			return result;
 		}
 
-		public List<Slot> getRestrictedPrecedingSlots(final @NonNull Slot slot) {
+		public List<Slot<?>> getRestrictedPrecedingSlots(final @NonNull Slot<?> slot) {
 			final IPortSlotProvider psProvider = getProvider(IPortSlotProvider.class);
 
 			// pull the load slot out of the transformed data
@@ -140,7 +140,7 @@ public class SlotOverridesTest {
 			final ISequenceElement element = psProvider.getElement(oSlot);
 			final IRestrictedElementsProvider reProvider = getProvider(IRestrictedElementsProvider.class);
 
-			final ArrayList<Slot> result = new ArrayList<>();
+			final ArrayList<Slot<?>> result = new ArrayList<>();
 			for (final ISequenceElement restricted : reProvider.getRestrictedPrecedingElements(element)) {
 				final IPortSlot restrictedSlot = psProvider.getPortSlot(restricted);
 				result.add(getModelObject(restrictedSlot, Slot.class));
@@ -159,7 +159,7 @@ public class SlotOverridesTest {
 		final LegalEntity eEntity = msc.addEntity("Override Entity");
 
 		// override the first slot's entity
-		final Slot eSlot = msc.cargo.getSortedSlots().get(0);
+		final Slot<?> eSlot = msc.cargo.getSortedSlots().get(0);
 		eSlot.setEntity(eEntity);
 
 		// build the optimiser data
@@ -183,7 +183,7 @@ public class SlotOverridesTest {
 		final LegalEntity dummyEntity = msc.addEntity("Override Entity");
 
 		// don't override the first slot's entity
-		final Slot eSlot = msc.cargo.getSortedSlots().get(0);
+		final Slot<?> eSlot = msc.cargo.getSortedSlots().get(0);
 		// expect the entity from the contract
 		final BaseLegalEntity eEntity = eSlot.getContract().getEntity();
 
@@ -211,7 +211,7 @@ public class SlotOverridesTest {
 
 		// override the discharge slot's min & max CV
 		final DischargeSlot eSlot = (DischargeSlot) msc.cargo.getSortedSlots().get(1);
-		final SalesContract eSalesContract = (SalesContract) eSlot.getContract();
+		final SalesContract eSalesContract = eSlot.getContract();
 		eSalesContract.setMinCvValue(CONTRACT_MIN_CV);
 		eSalesContract.setMaxCvValue(CONTRACT_MAX_CV);
 		eSlot.setMinCvValue(SLOT_MIN_CV);
@@ -241,7 +241,7 @@ public class SlotOverridesTest {
 
 		// override the discharge slot's min & max CV
 		final DischargeSlot eSlot = (DischargeSlot) msc.cargo.getSortedSlots().get(1);
-		final SalesContract eSalesContract = (SalesContract) eSlot.getContract();
+		final SalesContract eSalesContract = eSlot.getContract();
 		eSalesContract.setMinCvValue(CONTRACT_MIN_CV);
 		eSalesContract.setMaxCvValue(CONTRACT_MAX_CV);
 
@@ -283,8 +283,8 @@ public class SlotOverridesTest {
 
 	public <T> void assertArrayEqualsCollection(final T[] expected, final Collection<T> actual) {
 		Assertions.assertEquals(expected.length, actual.size());
-		final HashSet<T> expectedSet = new HashSet<T>();
-		final HashSet<T> remainder = new HashSet<T>();
+		final HashSet<T> expectedSet = new HashSet<>();
+		final HashSet<T> remainder = new HashSet<>();
 
 		for (int i = 0; i < expected.length; i++) {
 			expectedSet.add(expected[i]);
@@ -302,11 +302,11 @@ public class SlotOverridesTest {
 	}
 
 	class MultipleCargoCreator extends MinimalScenarioCreator {
-		final public Cargo[] cargoes = new Cargo[3];
-		final public Port[] loadPorts = new Port[3];
-		final public Port[] dischargePorts = new Port[3];
-		final public LoadSlot[] loadSlots = new LoadSlot[3];
-		final public DischargeSlot[] dischargeSlots = new DischargeSlot[3];
+		public final Cargo[] cargoes = new Cargo[3];
+		public final Port[] loadPorts = new Port[3];
+		public final Port[] dischargePorts = new Port[3];
+		public final LoadSlot[] loadSlots = new LoadSlot[3];
+		public final DischargeSlot[] dischargeSlots = new DischargeSlot[3];
 
 		public MultipleCargoCreator() {
 			super();
@@ -466,7 +466,7 @@ public class SlotOverridesTest {
 
 		// override the discharge slot's delivery type
 		final DischargeSlot eSlot = (DischargeSlot) msc.cargo.getSortedSlots().get(1);
-		final SalesContract eSalesContract = (SalesContract) eSlot.getContract();
+		final SalesContract eSalesContract = eSlot.getContract();
 		eSalesContract.setPurchaseDeliveryType(CargoDeliveryType.NOT_SHIPPED);
 		eSlot.setPurchaseDeliveryType(CargoDeliveryType.SHIPPED);
 

@@ -86,7 +86,7 @@ public class StsScenarioCreator extends DefaultScenarioCreator {
 		final int loadTransferDuration = 2 * getTravelTime(loadPort, transferPort, RouteOption.DIRECT, (int) maxSpeed);
 		final int transferDischargeDuration = 2 * getTravelTime(transferPort, dischargePort, RouteOption.DIRECT, (int) maxSpeed);
 
-		loadCargo = cargoCreator.createDefaultCargo(null, loadPort, transferPort, null, loadTransferDuration);
+		loadCargo = cargoCreator.createDefaultCargo("cargo", loadPort, transferPort, null, loadTransferDuration);
 
 		DischargeSlot loadTransferSlot = (DischargeSlot) loadCargo.getSortedSlots().get(1);
 

@@ -8,8 +8,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
 
-import javax.swing.text.rtf.RTFEditorKit;
-
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.junit.jupiter.api.Assumptions;

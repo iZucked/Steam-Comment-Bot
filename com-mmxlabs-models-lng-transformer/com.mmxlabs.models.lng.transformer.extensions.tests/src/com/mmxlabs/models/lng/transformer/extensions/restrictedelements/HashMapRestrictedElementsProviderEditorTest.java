@@ -16,7 +16,6 @@ public class HashMapRestrictedElementsProviderEditorTest {
 
 	@Test
 	public void testSimplePrecede() {
-		final String name = "name";
 
 		final HashMapRestrictedElementsProviderEditor provider = new HashMapRestrictedElementsProviderEditor();
 
@@ -36,7 +35,6 @@ public class HashMapRestrictedElementsProviderEditorTest {
 
 	@Test
 	public void testMergePrecede() {
-		final String name = "name";
 
 		final HashMapRestrictedElementsProviderEditor provider = new HashMapRestrictedElementsProviderEditor();
 
@@ -61,7 +59,6 @@ public class HashMapRestrictedElementsProviderEditorTest {
 
 	@Test
 	public void testSimpleFollower() {
-		final String name = "name";
 
 		final HashMapRestrictedElementsProviderEditor provider = new HashMapRestrictedElementsProviderEditor();
 

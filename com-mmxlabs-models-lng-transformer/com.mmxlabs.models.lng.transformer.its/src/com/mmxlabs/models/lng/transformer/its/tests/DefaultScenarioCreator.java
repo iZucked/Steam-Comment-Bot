@@ -7,13 +7,14 @@ package com.mmxlabs.models.lng.transformer.its.tests;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.jupiter.api.Assertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +29,6 @@ import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
-import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
@@ -62,7 +62,6 @@ import com.mmxlabs.models.lng.pricing.YearMonthPoint;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelBuilder;
 import com.mmxlabs.models.lng.schedule.Journey;
-import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
@@ -115,13 +114,9 @@ public class DefaultScenarioCreator {
 
 	public final @NonNull ScenarioModelBuilder scenarioModelBuilder;
 
-	/** A list of canal costs that will be added to every class of vessel when the scenario is retrieved for use. */
-	// private final ArrayList<VesselClassCost> canalCostsForAllVesselClasses = new ArrayList<VesselClassCost>();
-
 	public final String timeZone;
 	protected final @NonNull CommercialModelBuilder commercialModelBuilder;
 	private final SpotMarketsModelBuilder spotMarketsModelBuilder;
-	private final CargoModelBuilder cargoModelBuilder;
 
 	SimpleScenarioDataProvider dataProvider;
 
@@ -136,7 +131,6 @@ public class DefaultScenarioCreator {
 		this.timeZone = timeZone;
 		scenarioModelBuilder = ScenarioModelBuilder.instantiate();
 		scenario = scenarioModelBuilder.getLNGScenarioModel();
-		cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
 		commercialModelBuilder = scenarioModelBuilder.getCommercialModelBuilder();
 		spotMarketsModelBuilder = scenarioModelBuilder.getSpotMarketsModelBuilder();
 
@@ -230,7 +224,7 @@ public class DefaultScenarioCreator {
 		public static final int spotCharterCount = 0;
 		public static final double defaultMinSpeed = 10;
 		public static final double defaultMaxSpeed = 10;
-		public final static int baseFuelUnitPrice = 10;
+		public static final int baseFuelUnitPrice = 10;
 		final double eqivFactor = 1;
 		final int speed = 10;
 		final int defaultCapacity = 10000;
@@ -288,7 +282,7 @@ public class DefaultScenarioCreator {
 
 			final DefaultVesselStateAttributesCreator dvsac = new DefaultVesselStateAttributesCreator();
 
-			final CharterInMarket charterInMarket = spotMarketsModelBuilder.createCharterInMarket("market-" + vessel.getName(), vessel, shippingEntity, "0", spotCharterCount);
+			spotMarketsModelBuilder.createCharterInMarket("market-" + vessel.getName(), vessel, shippingEntity, "0", spotCharterCount);
 
 			vessel.setLadenAttributes(dvsac.createVesselStateAttributes(defaultMinSpeed, defaultMaxSpeed));
 			vessel.setBallastAttributes(dvsac.createVesselStateAttributes(defaultMinSpeed, defaultMaxSpeed));
@@ -522,7 +516,7 @@ public class DefaultScenarioCreator {
 	public class DefaultCargoCreator {
 		int defaultWindowSize = 0;
 
-		public Cargo createDefaultCargo(final String name, final Port loadPort, final Port dischargePort, LocalDateTime loadTime, final int travelTimeInHours) {
+		public Cargo createDefaultCargo(@NonNull String prefix, final Port loadPort, final Port dischargePort, LocalDateTime loadTime, final int travelTimeInHours) {
 
 			// if load time is not specified, set it to the current datetime
 			if (loadTime == null) {
@@ -533,13 +527,13 @@ public class DefaultScenarioCreator {
 			return scenarioModelBuilder.getCargoModelBuilder() //
 					.makeCargo()//
 					//
-					.makeFOBPurchase("load", loadTime.toLocalDate(), loadPort, purchaseContract, null, null) //
+					.makeFOBPurchase(prefix + "load", loadTime.toLocalDate(), loadPort, purchaseContract, null, null) //
 					.withWindowStartTime(loadTime.getHour()) //
 					.withWindowSize(defaultWindowSize, TimePeriod.HOURS) //
 					.withVolumeLimits(0, Integer.MAX_VALUE, VolumeUnits.M3) //
 					.build() //
 					//
-					.makeDESSale("discharge", dischargeTime.toLocalDate(), dischargePort, salesContract, null, null) //
+					.makeDESSale(prefix +  "discharge", dischargeTime.toLocalDate(), dischargePort, salesContract, null, null) //
 					.withWindowStartTime(dischargeTime.getHour()) //
 					.withWindowSize(defaultWindowSize, TimePeriod.HOURS) //
 					.withVolumeLimits(0, Integer.MAX_VALUE, VolumeUnits.M3) //
@@ -749,38 +743,20 @@ public class DefaultScenarioCreator {
 	 * A vessel class has a list of inaccessible ports. This method can add to that list if the given vessel class has already been added to the scenario. Note that that this method does not check to
 	 * see if the ports are already in the scenario.
 	 * 
-	 * @param vc
+	 * @param vessel
 	 *            The vessel class to add the constraint to.
 	 * @param inaccessiblePorts
 	 *            The ports to make inaccessible.
 	 * @return If the ports are added successfully the method will return true. If the vessel class is not in the scenario it will return false.
 	 */
-	public boolean addInaccessiblePortsOnVessel(final Vessel vc, final Port[] inaccessiblePorts) {
-
-		final FleetModel fleetModel = scenario.getReferenceModel().getFleetModel();
-		if (scenarioFleetModelContainsVessel(vc)) {
-
-			for (final Vessel v : fleetModel.getVessels()) {
-				if (v.equals(vc)) {
-					v.setInaccessiblePortsOverride(true);
-					v.getInaccessiblePorts().addAll(Arrays.asList(inaccessiblePorts));
-				}
-
-				return true;
-			}
-		}
-		return false;
+	public void addInaccessiblePortsOnVessel(final Vessel vessel, final Port[] inaccessiblePorts) {
+		vessel.setInaccessiblePortsOverride(true);
+		vessel.getInaccessiblePorts().addAll(Arrays.asList(inaccessiblePorts));
 	}
 
 	protected boolean scenarioFleetModelContainsVessel(final Vessel vessel) {
+		return scenarioModelBuilder.getFleetModelBuilder().getFleetModel().getVessels().contains(vessel);
 
-		for (final Vessel v : scenarioModelBuilder.getFleetModelBuilder().getFleetModel().getVessels()) {
-			if (v.equals(vessel)) {
-				return true;
-			}
-		}
-
-		return false;
 	}
 
 	/**
@@ -793,14 +769,14 @@ public class DefaultScenarioCreator {
 	 *            The list of vessels to add.
 	 * @return True if the vessels were added to the cargo's allowed vessel list. False if the cargo was not in the scenario.
 	 */
-	public boolean addAllowedVesselsOnCargo(final Cargo cargo, final ArrayList<Vessel> allowedVessels) {
+	public boolean addAllowedVesselsOnCargo(final Cargo cargo, final List<Vessel> allowedVessels) {
 
 		final CargoModel cargoModel = scenario.getCargoModel();
 		if (cargoModel.getCargoes().contains(cargo)) {
 
 			for (final Cargo c : cargoModel.getCargoes()) {
-				if (c.equals(cargo)) {
-					for (final Slot s : c.getSlots()) {
+				if (c == cargo) {
+					for (final Slot<?> s : c.getSlots()) {
 						s.getRestrictedVessels().addAll(allowedVessels);
 						s.setRestrictedVesselsArePermissive(true);
 					}

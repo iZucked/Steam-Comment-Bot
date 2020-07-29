@@ -10,14 +10,10 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import javax.swing.text.rtf.RTFEditorKit;
-
 import org.eclipse.jdt.annotation.Nullable;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Assumptions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.params.provider.MethodSource;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;

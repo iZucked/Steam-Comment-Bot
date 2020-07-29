@@ -103,7 +103,7 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 			loadTime = date.plusHours(getMarginHours(port, loadPort)).withZoneSameInstant(loadPort.getZoneId()).toLocalDateTime();
 		}
 
-		return cargoCreator.createDefaultCargo(null, loadPort, dischargePort, loadTime, getMarginHours(loadPort, dischargePort));
+		return cargoCreator.createDefaultCargo("cargo", loadPort, dischargePort, loadTime, getMarginHours(loadPort, dischargePort));
 	}
 
 	public int getMarginHours(final Port startPort, final Port endPort) {
@@ -153,8 +153,8 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 		Port port = null;
 
 		final EList<Cargo> cargoes = scenario.getCargoModel().getCargoes();
-		for (final Cargo cargo : cargoes) {
-			final EList<Slot<?>> slots = cargo.getSortedSlots();
+		for (final Cargo c : cargoes) {
+			final EList<Slot<?>> slots = c.getSortedSlots();
 			final Slot<?> slot = slots.get(slots.size() - 1);
 			final ZonedDateTime slotDate = slot.getSchedulingTimeWindow().getEnd();
 
@@ -192,8 +192,8 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 		Port port = null;
 
 		final EList<Cargo> cargoes = scenario.getCargoModel().getCargoes();
-		for (final Cargo cargo : cargoes) {
-			final EList<Slot<?>> slots = cargo.getSortedSlots();
+		for (final Cargo c : cargoes) {
+			final EList<Slot<?>> slots = c.getSortedSlots();
 			final Slot<?> slot = slots.get(0);
 			final ZonedDateTime slotDate = slot.getSchedulingTimeWindow().getStart();
 

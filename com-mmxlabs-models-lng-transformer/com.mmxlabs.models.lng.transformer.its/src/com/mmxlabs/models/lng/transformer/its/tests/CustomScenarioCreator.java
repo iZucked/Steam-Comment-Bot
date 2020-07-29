@@ -8,9 +8,7 @@ import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -308,48 +306,6 @@ public class CustomScenarioCreator extends DefaultScenarioCreator {
 		for (final Vessel vc : fleetModel.getVessels()) {
 			scenarioModelBuilder.getFleetModelBuilder().setRouteParameters(vc, canalOption, canalTransitFuelDays, canalTransitFuelDays, canalNBORateDays, canalNBORateDays, canalTransitTime);
 			scenarioModelBuilder.getCostModelBuilder().createRouteCost(vc, canalOption, canalLadenCost, canalUnladenCost);
-		}
-	}
-
-	/**
-	 * A vessel class has a list of inaccessible ports. This method can add to that list if the given vessel class has already been added to the scenario. Note that that this method does not check to
-	 * see if the ports are already in the scenario.
-	 * 
-	 * @param vc
-	 *            The vessel class to add the constraint to.
-	 * @param inaccessiblePorts
-	 *            The ports to make inaccessible.
-	 * @return If the ports are added successfully the method will return true. If the vessel class is not in the scenario it will return false.
-	 */
-	public boolean addInaccessiblePortsOnVessel(final Vessel vc, final Port[] inaccessiblePorts) {
-
-		if (scenarioFleetModelContainsVessel(vc)) {
-			FleetModel fleetModel = scenarioModelBuilder.getFleetModelBuilder().getFleetModel();
-			for (final Vessel v : fleetModel.getVessels()) {
-				if (v.equals(vc)) {
-					v.getVesselOrDelegateInaccessiblePorts().addAll(Arrays.asList(inaccessiblePorts));
-				}
-
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * Each cargo has a list of vessels that has all vessels that are allowed to carry the cargo. (If empty there are no restrictions.) This method can add to that list. Note that no checks are made
-	 * to see if the given vessels are already in the scenario.
-	 * 
-	 * @param cargo
-	 *            The cargo to add the constraint to.
-	 * @param allowedVessels
-	 *            The list of vessels to add.
-	 */
-	public void addAllowedVesselsOnCargo(final Cargo cargo, final List<Vessel> allowedVessels) {
-
-		for (final Slot s : cargo.getSlots()) {
-			s.getRestrictedVessels().addAll(allowedVessels);
-			s.setRestrictedVesselsArePermissive(true);
 		}
 	}
 

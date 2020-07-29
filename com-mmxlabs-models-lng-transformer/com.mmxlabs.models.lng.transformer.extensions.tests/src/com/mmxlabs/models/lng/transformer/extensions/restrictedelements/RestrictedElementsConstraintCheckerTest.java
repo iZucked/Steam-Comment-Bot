@@ -87,7 +87,7 @@ public class RestrictedElementsConstraintCheckerTest {
 		Mockito.verify(restrictedElementsProvider).getRestrictedFollowerElements(element2);
 		Mockito.verify(restrictedElementsProvider).getRestrictedPrecedingElements(element1);
 		// Early fail in && means we should not get this invocation
-		// Mockito.verify(provider).getRestrictedPrecedingElements(element2);
+		// Mockito.verify(provider).getRestrictedPrecedingElements(element2)
 
 		Mockito.verifyNoMoreInteractions(restrictedElementsProvider);
 	}
