@@ -53,7 +53,7 @@ public class ScheduleSequenceData {
 
 	/** Extracts the relevant information from the model */
 	public ScheduleSequenceData(final ScenarioResult scenarioResult, final AbstractVerticalReportVisualiser verticalReportVisualiser) {
-		this.scenarioDataProvider = scenarioResult.getScenarioDataProvider();
+		this.scenarioDataProvider =  scenarioResult == null ? null : scenarioResult.getScenarioDataProvider();
 		this.model = scenarioResult == null ? null : scenarioResult.getTypedRoot(LNGScenarioModel.class);
 		final ScheduleModel scheduleModel = (scenarioResult == null ? null : scenarioResult.getTypedResult(ScheduleModel.class));
 		final Schedule schedule = (scheduleModel == null ? null : scheduleModel.getSchedule());
