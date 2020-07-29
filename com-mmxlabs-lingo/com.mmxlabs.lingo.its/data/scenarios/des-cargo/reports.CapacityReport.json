@@ -1,19 +1,19 @@
 [ {
-  "Type" : "Load",
-  "Issue" : "Forced Cooldown",
   "Schedule" : "/scenarios/des-cargo/",
   "ID" : "load-cargo-21",
-  "Quantity (m³)" : "0"
-}, {
   "Type" : "Load",
   "Issue" : "Forced Cooldown",
+  "Quantity (m³)" : "0"
+}, {
   "Schedule" : "/scenarios/des-cargo/",
   "ID" : "load-cargo-32",
-  "Quantity (m³)" : "0"
-}, {
   "Type" : "Load",
   "Issue" : "Forced Cooldown",
+  "Quantity (m³)" : "0"
+}, {
   "Schedule" : "/scenarios/des-cargo/",
   "ID" : "load-cargo-78",
+  "Type" : "Load",
+  "Issue" : "Forced Cooldown",
   "Quantity (m³)" : "0"
 } ]

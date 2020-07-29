@@ -1,25 +1,25 @@
 [ {
-  "KPI" : "P&L",
   "Schedule" : "des-cargo",
+  "KPI" : "P&L",
   "Value" : "$69,846,958"
 }, {
-  "KPI" : "Trading P&L",
   "Schedule" : "des-cargo",
+  "KPI" : "Trading P&L",
   "Value" : "$71,801,411"
 }, {
-  "KPI" : "Shipping P&L",
   "Schedule" : "des-cargo",
+  "KPI" : "Shipping P&L",
   "Value" : "$-1,954,453"
 }, {
-  "KPI" : "Shipping Cost",
   "Schedule" : "des-cargo",
+  "KPI" : "Shipping Cost",
   "Value" : "$42,385,082"
 }, {
-  "KPI" : "Lateness",
   "Schedule" : "des-cargo",
+  "KPI" : "Lateness",
   "Value" : "0d, 0h"
 }, {
-  "KPI" : "Idle Time",
   "Schedule" : "des-cargo",
+  "KPI" : "Idle Time",
   "Value" : "520d, 21h"
 } ]

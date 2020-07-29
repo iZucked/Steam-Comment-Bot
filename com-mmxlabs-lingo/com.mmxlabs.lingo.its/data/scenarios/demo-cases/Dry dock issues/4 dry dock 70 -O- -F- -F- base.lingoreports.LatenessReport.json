@@ -1,15 +1,15 @@
 [ {
+  "Schedule" : "4 dry dock 70 -O- -F- -F- base",
+  "ID" : "discharge-cargo-41",
   "Type" : "Discharge",
-  "Scheduled time" : "03/05/11 21:00",
-  "Start by" : "01/05/11 14:00",
-  "Schedule" : "4 dry dock 70 -O- -F- -F- base",
   "Lateness" : " 2d,  7h",
-  "ID" : "discharge-cargo-41"
+  "Start by" : "01/05/11 14:00",
+  "Scheduled time" : "03/05/11 21:00"
 }, {
-  "Type" : "Load",
-  "Scheduled time" : "21/04/11 10:00",
-  "Start by" : "01/04/11 14:00",
   "Schedule" : "4 dry dock 70 -O- -F- -F- base",
+  "ID" : "load-cargo-41",
+  "Type" : "Load",
   "Lateness" : "19d, 20h",
-  "ID" : "load-cargo-41"
+  "Start by" : "01/04/11 14:00",
+  "Scheduled time" : "21/04/11 10:00"
 } ]

@@ -1,13 +1,13 @@
 [ {
-  "Type" : "Load",
-  "Issue" : "Forced Cooldown",
   "Schedule" : "0 base",
   "ID" : "load-cargo-32",
-  "Quantity (m³)" : "0"
-}, {
   "Type" : "Load",
   "Issue" : "Forced Cooldown",
+  "Quantity (m³)" : "0"
+}, {
   "Schedule" : "0 base",
   "ID" : "load-cargo-78",
+  "Type" : "Load",
+  "Issue" : "Forced Cooldown",
   "Quantity (m³)" : "0"
 } ]

@@ -1,25 +1,25 @@
 [ {
-  "KPI" : "P&L",
   "Schedule" : "sample-data",
+  "KPI" : "P&L",
   "Value" : "$80,579,774"
 }, {
-  "KPI" : "Trading P&L",
   "Schedule" : "sample-data",
+  "KPI" : "Trading P&L",
   "Value" : "$88,779,911"
 }, {
-  "KPI" : "Shipping P&L",
   "Schedule" : "sample-data",
+  "KPI" : "Shipping P&L",
   "Value" : "$-8,200,137"
 }, {
-  "KPI" : "Shipping Cost",
   "Schedule" : "sample-data",
+  "KPI" : "Shipping Cost",
   "Value" : "$50,206,130"
 }, {
-  "KPI" : "Lateness",
   "Schedule" : "sample-data",
+  "KPI" : "Lateness",
   "Value" : "28d, 18h"
 }, {
-  "KPI" : "Idle Time",
   "Schedule" : "sample-data",
+  "KPI" : "Idle Time",
   "Value" : "551d, 11h"
 } ]

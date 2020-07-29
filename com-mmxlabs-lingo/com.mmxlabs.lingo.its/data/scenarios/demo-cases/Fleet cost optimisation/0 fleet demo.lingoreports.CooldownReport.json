@@ -1,19 +1,19 @@
 [ {
+  "Schedule" : "0 fleet demo",
   "Vessel" : "LNG Lagos",
-  "Schedule" : "0 fleet demo",
   "Cause ID" : "Lagos",
-  "Port" : "Bonny Is",
-  "Time" : "10:00",
   "ID" : "Charter Out - Lagos",
-  "Cost" : "0",
-  "Date" : "12/06/11"
-}, {
-  "Vessel" : "LNG River Orashi",
-  "Schedule" : "0 fleet demo",
-  "Cause ID" : "RO drydock",
+  "Date" : "12/06/11",
+  "Time" : "10:00",
   "Port" : "Bonny Is",
-  "Time" : "13:00",
+  "Cost" : "0"
+}, {
+  "Schedule" : "0 fleet demo",
+  "Vessel" : "LNG River Orashi",
+  "Cause ID" : "RO drydock",
   "ID" : "Charter Out - RO drydock",
-  "Cost" : "0",
-  "Date" : "23/08/11"
+  "Date" : "23/08/11",
+  "Time" : "13:00",
+  "Port" : "Bonny Is",
+  "Cost" : "0"
 } ]

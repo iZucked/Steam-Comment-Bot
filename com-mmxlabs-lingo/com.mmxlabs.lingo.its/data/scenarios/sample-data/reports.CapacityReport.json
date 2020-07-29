@@ -1,7 +1,7 @@
 [ {
-  "Type" : "Load",
-  "Issue" : "Forced Cooldown",
   "Schedule" : "/scenarios/sample-data/",
   "ID" : "cargo-78",
+  "Type" : "Load",
+  "Issue" : "Forced Cooldown",
   "Quantity (m³)" : "0"
 } ]
