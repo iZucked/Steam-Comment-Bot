@@ -1617,6 +1617,7 @@ public class ChangeSetViewColumnHelper {
 		List<AbstractNomination> affectedNoms = new ArrayList<>();
 		for (AbstractNomination n : noms) {
 			String type = n.getType();
+			String nominatedValue = n.getNominatedValue();
 			String[] dependentFields = NominationTypeRegistry.getInstance().getDependentFields(type);
 			if (dependentFields != null && dependentFields.length > 0) {
 				for (String field : dependentFields) {
@@ -1624,7 +1625,12 @@ public class ChangeSetViewColumnHelper {
 					Object fieldAfter = getFieldValue(after, field);
 										
 					//Check for getName() method and use to get string to compare.
-					fieldBefore = getName(fieldBefore);
+					if (nominatedValue == null) {
+						fieldBefore = getName(fieldBefore);
+					}
+					else {
+						fieldBefore = nominatedValue;
+					}
 					fieldAfter = getName(fieldAfter);
 					
 					//If the dependent field has changed, then add to the list of effected nominations.

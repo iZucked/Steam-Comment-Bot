@@ -39,6 +39,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *   <li>{@link com.mmxlabs.models.lng.nominations.impl.AbstractNominationImpl#getAlertDate <em>Alert Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.nominations.impl.AbstractNominationImpl#getSpecUuid <em>Spec Uuid</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.nominations.impl.AbstractNominationImpl#isDeleted <em>Deleted</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.nominations.impl.AbstractNominationImpl#getNominatedValue <em>Nominated Value</em>}</li>
  * </ul>
  *
  * @generated
@@ -190,6 +191,26 @@ public abstract class AbstractNominationImpl extends AbstractNominationSpecImpl 
 	 * @ordered
 	 */
 	protected boolean deleted = DELETED_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getNominatedValue() <em>Nominated Value</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getNominatedValue()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String NOMINATED_VALUE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getNominatedValue() <em>Nominated Value</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getNominatedValue()
+	 * @generated
+	 * @ordered
+	 */
+	protected String nominatedValue = NOMINATED_VALUE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -435,6 +456,29 @@ public abstract class AbstractNominationImpl extends AbstractNominationSpecImpl 
 	 * @generated
 	 */
 	@Override
+	public String getNominatedValue() {
+		return nominatedValue;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setNominatedValue(String newNominatedValue) {
+		String oldNominatedValue = nominatedValue;
+		nominatedValue = newNominatedValue;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, NominationsPackage.ABSTRACT_NOMINATION__NOMINATED_VALUE, oldNominatedValue, nominatedValue));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case NominationsPackage.ABSTRACT_NOMINATION__NOMINEE_ID:
@@ -449,6 +493,8 @@ public abstract class AbstractNominationImpl extends AbstractNominationSpecImpl 
 				return getSpecUuid();
 			case NominationsPackage.ABSTRACT_NOMINATION__DELETED:
 				return isDeleted();
+			case NominationsPackage.ABSTRACT_NOMINATION__NOMINATED_VALUE:
+				return getNominatedValue();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -478,6 +524,9 @@ public abstract class AbstractNominationImpl extends AbstractNominationSpecImpl 
 				return;
 			case NominationsPackage.ABSTRACT_NOMINATION__DELETED:
 				setDeleted((Boolean)newValue);
+				return;
+			case NominationsPackage.ABSTRACT_NOMINATION__NOMINATED_VALUE:
+				setNominatedValue((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -509,6 +558,9 @@ public abstract class AbstractNominationImpl extends AbstractNominationSpecImpl 
 			case NominationsPackage.ABSTRACT_NOMINATION__DELETED:
 				setDeleted(DELETED_EDEFAULT);
 				return;
+			case NominationsPackage.ABSTRACT_NOMINATION__NOMINATED_VALUE:
+				setNominatedValue(NOMINATED_VALUE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -533,6 +585,8 @@ public abstract class AbstractNominationImpl extends AbstractNominationSpecImpl 
 				return isSetSpecUuid();
 			case NominationsPackage.ABSTRACT_NOMINATION__DELETED:
 				return deleted != DELETED_EDEFAULT;
+			case NominationsPackage.ABSTRACT_NOMINATION__NOMINATED_VALUE:
+				return NOMINATED_VALUE_EDEFAULT == null ? nominatedValue != null : !NOMINATED_VALUE_EDEFAULT.equals(nominatedValue);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -599,6 +653,8 @@ public abstract class AbstractNominationImpl extends AbstractNominationSpecImpl 
 		if (specUuidESet) result.append(specUuid); else result.append("<unset>");
 		result.append(", deleted: ");
 		result.append(deleted);
+		result.append(", nominatedValue: ");
+		result.append(nominatedValue);
 		result.append(')');
 		return result.toString();
 	}

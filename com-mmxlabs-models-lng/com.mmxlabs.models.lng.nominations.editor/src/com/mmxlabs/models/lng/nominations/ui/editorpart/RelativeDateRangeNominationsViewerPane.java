@@ -590,6 +590,19 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 				return NominationsModelUtils.getRemark(getScenarioModel(), (AbstractNomination) object);
 			}
 		});
+
+		addTypicalColumn("Nominated Value", new StringAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNominationSpec_Remark(), jointModelEditor.getEditingDomain()) {
+			@Override
+			public boolean canEdit(final Object object) {
+				return false;
+			}
+
+			@Override
+			public String render(final Object object) {
+				return NominationsModelUtils.getNominatedValue(getScenarioModel(), (AbstractNomination) object);
+			}
+		});
+
 		
 		ScenarioTableViewer stv = this.getScenarioViewer();
 		stv.getSortingSupport().sortColumnsBy(nomineeIdColumn.getColumn());
