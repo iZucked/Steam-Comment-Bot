@@ -358,7 +358,7 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 						YearMonth year = (YearMonth) dateRange.getFirst();
 						while (!year.isAfter((YearMonth) dateRange.getSecond())) {
 							final YearMonth fYear = year;
-							result.add(new ColumnManager<VolumeData>(String.format("%04d-%02d", fYear.getYear(), fYear.getMonthValue() + 1)) {
+							result.add(new ColumnManager<VolumeData>(String.format("%04d-%02d", fYear.getYear(), fYear.getMonthValue())) {
 
 								// @Override
 								// public String getTooltip() {
