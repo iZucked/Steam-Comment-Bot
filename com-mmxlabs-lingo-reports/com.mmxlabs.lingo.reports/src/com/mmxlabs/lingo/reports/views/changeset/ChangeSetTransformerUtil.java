@@ -78,6 +78,7 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.mmxcore.NamedObject;
 
@@ -947,7 +948,13 @@ public final class ChangeSetTransformerUtil {
 		}
 		if (slot instanceof SpotSlot) {
 			final SpotMarket market = ((SpotSlot) slot).getMarket();
-			return String.format("%s-%s", market.getName(), format(slot.getWindowStart()));
+			final int windowSize = slot.getWindowSize();
+			String formattedWindowStart = format(slot.getWindowStart());
+			if (windowSize > 1 && slot.getWindowSizeUnits() == TimePeriod.MONTHS) {
+				String formattedWindowPeriodEnd = format(slot.getWindowStart().plusMonths(windowSize));
+				formattedWindowStart = String.format("%s-%s", formattedWindowStart, formattedWindowPeriodEnd);
+			}
+			return String.format("%s-%s", market.getName(), formattedWindowStart);
 		}
 		return slot.getName();
 	}
