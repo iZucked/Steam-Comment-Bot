@@ -6,10 +6,12 @@ package com.mmxlabs.models.lng.nominations.utils;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
@@ -24,12 +26,16 @@ import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.fleet.FleetModel;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.nominations.AbstractNomination;
 import com.mmxlabs.models.lng.nominations.AbstractNominationSpec;
 import com.mmxlabs.models.lng.nominations.DatePeriodPrior;
 import com.mmxlabs.models.lng.nominations.NominationsFactory;
 import com.mmxlabs.models.lng.nominations.NominationsModel;
 import com.mmxlabs.models.lng.nominations.Side;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -89,35 +95,36 @@ public class NominationsModelUtils {
 	public static List<AbstractNomination> findNominationsForSlot(final LNGScenarioModel sm, @Nullable final Slot<?> slot) {
 		if (slot != null && slot.getName() != null) {
 			final String name = slot.getName();
-			final NominationsModel nm = sm.getNominationsModel();
-			final List<AbstractNomination> nominations = new ArrayList<>();
-
-			// Check specific slot nominations.
-			for (final AbstractNomination nomination : nm.getNominations()) {
-				if (nomination.getSide() == Side.BUY && slot instanceof LoadSlot && Objects.equals(nomination.getNomineeId(), name)) {
-					nominations.add(nomination);
-				}
-				if (nomination.getSide() == Side.SELL && slot instanceof DischargeSlot && Objects.equals(nomination.getNomineeId(), name)) {
-					nominations.add(nomination);
-				}
-			}
-
-			// If none there, check nominations generated from specifications.
-			final List<AbstractNomination> generatedNominations = generateNominationsForAllDates(sm);
-			for (final AbstractNomination nomination : generatedNominations) {
-				if (nomination.getSide() == Side.BUY && slot instanceof LoadSlot && Objects.equals(nomination.getNomineeId(), name)) {
-					nominations.add(nomination);
-				}
-				if (nomination.getSide() == Side.SELL && slot instanceof DischargeSlot && Objects.equals(nomination.getNomineeId(), name)) {
-					nominations.add(nomination);
-				}
-			}
-
-			return nominations;
+			return findNominationsForSlot(sm, name);
 		}
 
 		// None found.
 		return Collections.emptyList();
+	}
+
+	public static List<AbstractNomination> findNominationsForSlot(final LNGScenarioModel sm, final String name) {		
+		if (name == null) { 
+			return Collections.emptyList();
+		}
+		final NominationsModel nm = sm.getNominationsModel();
+		final List<AbstractNomination> nominations = new ArrayList<>();
+
+		// Check specific slot nominations.
+		for (final AbstractNomination nomination : nm.getNominations()) {
+			if (Objects.equals(nomination.getNomineeId(), name)) {
+				nominations.add(nomination);
+			}
+		}
+
+		// If none there, check nominations generated from specifications.
+		final List<AbstractNomination> generatedNominations = generateNominationsForAllDates(sm);
+		for (final AbstractNomination nomination : generatedNominations) {
+			if (Objects.equals(nomination.getNomineeId(), name)) {
+				nominations.add(nomination);
+			}
+		}
+
+		return nominations;
 	}
 
 	public static String mapName(final com.mmxlabs.models.lng.nominations.Side e) {
@@ -363,7 +370,7 @@ public class NominationsModelUtils {
 		}
 		return null;
 	}
-
+	
 	public static DischargeSlot findDischargeSlot(@NonNull final LNGScenarioModel scenarioModel, @NonNull final String nomineeId) {
 		final CargoModel model = ScenarioModelUtil.getCargoModel(scenarioModel);
 		for (final DischargeSlot s : model.getDischargeSlots()) {
@@ -599,5 +606,35 @@ public class NominationsModelUtils {
 			}
 		}
 		return false;
+	}
+
+	public static String getNominatedValue(LNGScenarioModel scenarioModel, AbstractNomination object) {
+		if (object != null && object.getNominatedValue() != null) {
+			return object.getNominatedValue();
+		}
+		else {
+			return "";
+		}
+ 	}
+
+	public static @NonNull List<String> getPossibleNominatedValues(LNGScenarioModel scenarioModel, AbstractNomination nomination) {
+		if (nomination.getType() == null) {
+			return Collections.emptyList();
+		}
+		else if (nomination.getType().toLowerCase().contains("port")) {
+			PortModel pm = scenarioModel.getReferenceModel().getPortModel();
+			List<Port> ports = pm.getPorts();
+			List<String> portNames = ports.stream().map(p -> p.getName()).collect(Collectors.toUnmodifiableList());
+			return portNames;
+		}
+		else if (nomination.getType().toLowerCase().contains("vessel")) {
+			FleetModel fm = scenarioModel.getReferenceModel().getFleetModel();
+			List<Vessel> vessel = fm.getVessels();
+			List<String> vesselNames = vessel.stream().map(v -> v.getName()).collect(Collectors.toUnmodifiableList());
+			return vesselNames;		
+		}
+		else {
+			return Collections.emptyList();
+		}
 	}
 }

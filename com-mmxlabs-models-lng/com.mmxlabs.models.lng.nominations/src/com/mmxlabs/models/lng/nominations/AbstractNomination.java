@@ -23,6 +23,7 @@ import java.time.LocalDate;
  *   <li>{@link com.mmxlabs.models.lng.nominations.AbstractNomination#getAlertDate <em>Alert Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.nominations.AbstractNomination#getSpecUuid <em>Spec Uuid</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.nominations.AbstractNomination#isDeleted <em>Deleted</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.nominations.AbstractNomination#getNominatedValue <em>Nominated Value</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.nominations.NominationsPackage#getAbstractNomination()
@@ -267,5 +268,27 @@ public interface AbstractNomination extends AbstractNominationSpec {
 	 * @generated
 	 */
 	void setDeleted(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Nominated Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Nominated Value</em>' attribute.
+	 * @see #setNominatedValue(String)
+	 * @see com.mmxlabs.models.lng.nominations.NominationsPackage#getAbstractNomination_NominatedValue()
+	 * @model
+	 * @generated
+	 */
+	String getNominatedValue();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.nominations.AbstractNomination#getNominatedValue <em>Nominated Value</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Nominated Value</em>' attribute.
+	 * @see #getNominatedValue()
+	 * @generated
+	 */
+	void setNominatedValue(String value);
 
 } // AbstractNomination

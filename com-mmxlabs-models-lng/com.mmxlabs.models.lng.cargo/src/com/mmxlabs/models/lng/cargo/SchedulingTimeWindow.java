@@ -9,9 +9,29 @@ import java.time.ZonedDateTime;
 import com.mmxlabs.models.lng.types.TimePeriod;
 
 public interface SchedulingTimeWindow {
+	/**
+	 * Inclusive start.
+	 * @return
+	 */
 	ZonedDateTime getStart();
+	
+	/**
+	 * Inclusive end.
+	 * ZonedDateTime getEnd();
+	 * @return
+	 */
 	ZonedDateTime getEnd();
+	
+	/**
+	 * Inclusive start.
+	 * @return
+	 */
 	ZonedDateTime getStartWithFlex();
+	
+	/**
+	 * Inclusive end.
+	 * @return
+	 */
 	ZonedDateTime getEndWithFlex();
 	
 	int getSize();

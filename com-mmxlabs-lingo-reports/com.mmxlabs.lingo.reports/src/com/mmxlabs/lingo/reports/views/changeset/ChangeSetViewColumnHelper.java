@@ -7,10 +7,13 @@
  */
 package com.mmxlabs.lingo.reports.views.changeset;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -70,6 +73,10 @@ import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
 import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.nominations.AbstractNomination;
+import com.mmxlabs.models.lng.nominations.utils.NominationTypeRegistry;
+import com.mmxlabs.models.lng.nominations.utils.NominationsModelUtils;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
@@ -119,7 +126,9 @@ public class ChangeSetViewColumnHelper {
 	private GridViewerColumn violationColumn;
 
 	private GridViewerColumn latenessColumn;
-
+	
+	private GridViewerColumn nominationBreaksColumn;
+	
 	private ChangeSetWiringDiagram diagram;
 
 	public ChangeSetWiringDiagram getDiagram() {
@@ -131,7 +140,7 @@ public class ChangeSetViewColumnHelper {
 	private GridViewerColumn column_Lateness;
 
 	private GridViewerColumn column_Violations;
-
+	
 	/**
 	 * Display textual vessel change markers - used for unit testing where graphics
 	 * are not captured in data dump.
@@ -458,8 +467,9 @@ public class ChangeSetViewColumnHelper {
 			this.violationColumn = column_Violations;
 
 			this.violationColumn.getColumn().setVisible(showCompareColumns);
-
 		}
+
+		createNominationBreaksColumn();
 
 		// Space col
 		createSpacerColumn();
@@ -607,6 +617,17 @@ public class ChangeSetViewColumnHelper {
 			gvc.getColumn().setCellRenderer(createCellRenderer());
 		}
 
+	}
+
+	private void createNominationBreaksColumn() {
+		nominationBreaksColumn = new GridViewerColumn(viewer, SWT.CENTER);
+		nominationBreaksColumn.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
+		nominationBreaksColumn.getColumn().setText("Noms");
+		nominationBreaksColumn.getColumn().setHeaderTooltip("Number of nominations potentially affected.");
+		nominationBreaksColumn.getColumn().setWidth(50);
+		nominationBreaksColumn.setLabelProvider(createNominationBreaksLabelProvider());
+		nominationBreaksColumn.getColumn().setCellRenderer(createCellRenderer());
+		nominationBreaksColumn.getColumn().setVisible(showCompareColumns);
 	}
 
 	public static class VesselData {
@@ -1478,6 +1499,229 @@ public class ChangeSetViewColumnHelper {
 
 	}
 
+	private CellLabelProvider createNominationBreaksLabelProvider() {
+		return new CellLabelProvider() {
+
+			@Override
+			public String getToolTipText(final Object element) {
+				if (element instanceof ChangeSetTableRow) {
+					ChangeSetTableRow cstr = (ChangeSetTableRow)element;
+					LNGScenarioModel sm = getScenarioModel(cstr);
+					return getNominationBreaksDetail(sm, cstr);
+				}
+				return super.getToolTipText(element);
+			}
+			
+			@Override
+			public void update(ViewerCell cell) {
+				final Object element = cell.getElement();
+				cell.setText("");
+				cell.setForeground(null);
+				cell.setFont(boldFont);
+
+				if (element instanceof ChangeSetTableGroup) {
+					ChangeSetTableGroup cstg = (ChangeSetTableGroup)element;
+					cell.setText(getNominationBreaksCountString(getScenarioModel(cstg), cstg));	
+				}
+				if (element instanceof ChangeSetTableRow) {	
+					ChangeSetTableRow cstr = (ChangeSetTableRow)element;
+					cell.setText(getNominationBreaks(getScenarioModel(cstr), cstr));
+				}
+			}
+		};		
+	}
+	
+	private LNGScenarioModel getScenarioModel(ChangeSetTableRow change) {
+		LNGScenarioModel sm = (LNGScenarioModel)((ChangeSetTableGroup)change.eContainer()).getBaseScenario().getResultRoot().eContainer();
+		return sm;
+	}
+
+	private LNGScenarioModel getScenarioModel(ChangeSetTableGroup change) {
+		LNGScenarioModel sm = (LNGScenarioModel)change.getBaseScenario().getResultRoot().eContainer();
+		return sm;
+	}
+
+	private String getNominationBreaksCountString(LNGScenarioModel sm, ChangeSetTableGroup change) {
+		int cnt = 0;
+		for (ChangeSetTableRow row : change.getRows()) {
+			cnt += getNominationBreakCount(sm, row);
+		}
+		if (cnt > 0) {
+			return Integer.toString(cnt);
+		}
+		else {
+			return "";
+		}
+	}
+	
+	private String getNominationBreaks(LNGScenarioModel sm, ChangeSetTableRow change) {
+		int cnt = getNominationBreakCount(sm, change);
+		if (cnt > 0) {
+			return Integer.toString(cnt);
+		}
+		else {
+			return "";
+		}
+	}
+
+	private String getNominationBreaksDetail(LNGScenarioModel sm, ChangeSetTableRow change) {
+		StringBuilder sb = new StringBuilder();
+		addNominations(sm, change.getLhsName(), change.getLhsBefore(), change.getLhsAfter(), sb);
+		addNominations(sm, change.getRhsName(), change.getRhsBefore(), change.getRhsAfter(), sb);
+		if (sb.length() == 0) {
+			return null;
+		}
+		else {
+			return sb.toString();
+		}
+	}
+
+	private void addNominations(LNGScenarioModel sm, String slotName, ChangeSetRowData before, ChangeSetRowData after, StringBuilder sb) {
+		List<AbstractNomination> noms = this.getAffectedNominations(sm, slotName, before, after);	
+		if (!noms.isEmpty()) {
+			if (sb.length() > 0) {
+				sb.append("\n");
+			}
+			sb.append(slotName).append(": ");
+			for (var n : noms) {
+				if (sb.charAt(sb.length()-2) != ':') {
+					sb.append(", ");
+				}
+				sb.append(n.getType());
+			}
+		}
+	}
+		
+	private int getNominationBreakCount(LNGScenarioModel sm, ChangeSetTableRow change) {
+		int cnt = 0;
+		cnt += getAffectedNominations(sm, change).size();
+		return cnt;
+	}
+
+	private List<AbstractNomination> getAffectedNominations(LNGScenarioModel sm, ChangeSetTableRow change) {
+		List<AbstractNomination> lhsNoms = getAffectedNominations(sm, change.getLhsName(), change.getLhsBefore(), change.getLhsAfter());
+		List<AbstractNomination> rhsNoms = getAffectedNominations(sm, change.getRhsName(), change.getRhsBefore(), change.getRhsAfter());
+		List<AbstractNomination> affectedNoms = new ArrayList<AbstractNomination>(lhsNoms.size() + rhsNoms.size());
+		affectedNoms.addAll(lhsNoms);
+		affectedNoms.addAll(rhsNoms);
+		return affectedNoms;
+	}
+	
+	private List<AbstractNomination> getAffectedNominations(LNGScenarioModel sm, String slotName, ChangeSetRowData before, ChangeSetRowData after) {
+		List<AbstractNomination> noms = NominationsModelUtils.findNominationsForSlot(sm, slotName);
+		noms = filterAffectedNominations(noms, before, after);		
+		return noms;
+	}
+	
+	private List<AbstractNomination> filterAffectedNominations(List<AbstractNomination> noms, ChangeSetRowData before, ChangeSetRowData after) {
+		List<AbstractNomination> affectedNoms = new ArrayList<>();
+		for (AbstractNomination n : noms) {
+			String type = n.getType();
+			String nominatedValue = n.getNominatedValue();
+			String[] dependentFields = NominationTypeRegistry.getInstance().getDependentFields(type);
+			if (dependentFields != null && dependentFields.length > 0) {
+				for (String field : dependentFields) {
+					Object fieldBefore = getFieldValue(before, field);
+					Object fieldAfter = getFieldValue(after, field);
+										
+					//Check for getName() method and use to get string to compare.
+					if (nominatedValue == null) {
+						fieldBefore = getName(fieldBefore);
+					}
+					else {
+						fieldBefore = nominatedValue;
+					}
+					fieldAfter = getName(fieldAfter);
+					
+					//If the dependent field has changed, then add to the list of effected nominations.
+					if (!Objects.equals(fieldBefore, fieldAfter)) {
+						affectedNoms.add(n);
+						break; //No need to add it twice.
+					}
+				}
+			}
+			else {
+				//No dependent fields found, so assume affected if any change to slot.
+				affectedNoms.add(n);
+			}
+		}
+		
+		return affectedNoms;
+	}
+	
+	/**
+	 * Gets the name of the object if possible.
+	 * @param obj
+	 * @return the name of the object.
+	 */
+	private Object getName(Object obj) {
+		try {
+			Class<?> cls = obj.getClass();
+			Method[] methods = cls.getMethods();
+
+			for (Method m : methods) {
+				if (m.getName().equals("getName")) {
+					obj = m.invoke(obj);
+					break;
+				}
+			}
+
+			return obj;
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+
+		return obj;
+	}
+	
+	private Object getFieldValue(Object obj, String fieldPath) {
+		try {
+			String[] elementNames = fieldPath.split("\\.");
+			
+			for (String elementName : elementNames) {
+				Class<?> cls = obj.getClass();
+
+				//Is it a method / getter.
+				if (elementName.endsWith("()")) {
+					String methodName = elementName.replace("()","");
+					Method[] methods = cls.getMethods();
+
+					for (Method m : methods) {
+						if (m.getName().equals(methodName)) {
+							obj = m.invoke(obj);
+							break;
+						}
+					}
+				}
+				//Or a field?
+				else {
+					Field[] fields = cls.getFields();
+					for (Field f : fields) {
+						if (f.getName().equals(elementName)) {
+							obj = f.get(obj);
+							break;
+						}
+					}
+				}
+			}
+			
+			//Value found successfully.
+			return obj;
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+	
 	private CellLabelProvider createViolationsDeltaLabelProvider() {
 		return new CellLabelProvider() {
 

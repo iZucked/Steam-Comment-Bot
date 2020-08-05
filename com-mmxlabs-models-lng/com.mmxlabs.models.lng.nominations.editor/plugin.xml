@@ -186,25 +186,32 @@
     <!-- Removed:  "Source port", "Destination port" as redundant: -->
     <!-- Some reports are using the hard-coded strings from here -->
     <NominationType
-    	type="Buy window">
+    	type="Buy window" 
+    	dependentFields="getLoadAllocation().withinTimeWindow()">
     </NominationType>
     <NominationType
-          type="Sell window">
+          type="Sell window"
+          dependentFields="getDischargeAllocation().withinTimeWindow()">
     </NominationType>
     <NominationType
-          type="Vessel">
+          type="Vessel"
+          dependentFields="getVesselName()">
     </NominationType>
-        <NominationType
-          type="Load volume">
+    <NominationType
+          type="Load volume"
+          dependentFields="getLoadAllocation().getVolumeTransferred()">
     </NominationType>
      <NominationType
-          type="Discharge volume">
+          type="Discharge volume"
+          dependentFields="getDischargeAllocation().getVolumeTransferred()">
     </NominationType>
     <NominationType
-          type="Load port">
+          type="Load port"
+          dependentFields="getLoadAllocation().getPort()">
     </NominationType>
     <NominationType
-          type="Discharge port">
+          type="Discharge port"
+          dependentFields="getDischargeAllocation().getPort()">
     </NominationType>
     <NominationType
           type="Cancellation">

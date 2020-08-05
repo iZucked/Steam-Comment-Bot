@@ -92,6 +92,7 @@ public class AbstractNominationComponentHelper extends BaseComponentHelper {
 			specComponentHelper.add_counterpartyEditor(detailComposite, topClass);
 			specComponentHelper.add_remarkEditor(detailComposite, topClass);
 			add_doneEditor(detailComposite, topClass);
+			add_nominatedValueEditor(detailComposite, topClass);
 		}
 	}
 
@@ -164,5 +165,22 @@ public class AbstractNominationComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_deletedEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, NominationsPackage.Literals.ABSTRACT_NOMINATION__DELETED));
+	}
+
+	/**
+	 * Create the editor for the nominatedValue feature on AbstractNomination
+	 *
+	 * @generated
+	 */
+	protected void add_nominatedValueEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(new TextualSuggestionInlineEditor(NominationsPackage.Literals.ABSTRACT_NOMINATION__NOMINATED_VALUE,  (rootObject, target) -> {
+			if (rootObject instanceof LNGScenarioModel && target instanceof AbstractNomination) {
+				final LNGScenarioModel scenarioModel = (LNGScenarioModel)rootObject;
+				final AbstractNomination nomination = (AbstractNomination)target;
+				return NominationsModelUtils.getPossibleNominatedValues(scenarioModel, nomination);
+			}
+			else {
+				return Collections.emptyList();
+			}}));
 	}
 }

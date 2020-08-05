@@ -17,6 +17,7 @@ import com.mmxlabs.models.datetime.DateTimePackage;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.nominations.AbstractAuditItem;
+import com.mmxlabs.models.lng.nominations.AbstractNominatedValue;
 import com.mmxlabs.models.lng.nominations.AbstractNomination;
 import com.mmxlabs.models.lng.nominations.AbstractNominationSpec;
 import com.mmxlabs.models.lng.nominations.AuditItemType;
@@ -99,6 +100,13 @@ public class NominationsPackageImpl extends EPackageImpl implements NominationsP
 	 * @generated
 	 */
 	private EClass nominationsParametersEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass abstractNominatedValueEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -450,6 +458,16 @@ public class NominationsPackageImpl extends EPackageImpl implements NominationsP
 	 * @generated
 	 */
 	@Override
+	public EAttribute getAbstractNomination_NominatedValue() {
+		return (EAttribute)abstractNominationEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getNominationsParameters() {
 		return nominationsParametersEClass;
 	}
@@ -472,6 +490,16 @@ public class NominationsPackageImpl extends EPackageImpl implements NominationsP
 	@Override
 	public EAttribute getNominationsParameters_EndDate() {
 		return (EAttribute)nominationsParametersEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getAbstractNominatedValue() {
+		return abstractNominatedValueEClass;
 	}
 
 	/**
@@ -555,10 +583,13 @@ public class NominationsPackageImpl extends EPackageImpl implements NominationsP
 		createEAttribute(abstractNominationEClass, ABSTRACT_NOMINATION__ALERT_DATE);
 		createEAttribute(abstractNominationEClass, ABSTRACT_NOMINATION__SPEC_UUID);
 		createEAttribute(abstractNominationEClass, ABSTRACT_NOMINATION__DELETED);
+		createEAttribute(abstractNominationEClass, ABSTRACT_NOMINATION__NOMINATED_VALUE);
 
 		nominationsParametersEClass = createEClass(NOMINATIONS_PARAMETERS);
 		createEAttribute(nominationsParametersEClass, NOMINATIONS_PARAMETERS__START_DATE);
 		createEAttribute(nominationsParametersEClass, NOMINATIONS_PARAMETERS__END_DATE);
+
+		abstractNominatedValueEClass = createEClass(ABSTRACT_NOMINATED_VALUE);
 
 		// Create enums
 		datePeriodPriorEEnum = createEEnum(DATE_PERIOD_PRIOR);
@@ -638,10 +669,13 @@ public class NominationsPackageImpl extends EPackageImpl implements NominationsP
 		initEAttribute(getAbstractNomination_AlertDate(), theDateTimePackage.getLocalDate(), "alertDate", null, 0, 1, AbstractNomination.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getAbstractNomination_SpecUuid(), ecorePackage.getEString(), "specUuid", null, 0, 1, AbstractNomination.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getAbstractNomination_Deleted(), ecorePackage.getEBoolean(), "deleted", "false", 0, 1, AbstractNomination.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAbstractNomination_NominatedValue(), ecorePackage.getEString(), "nominatedValue", null, 0, 1, AbstractNomination.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(nominationsParametersEClass, NominationsParameters.class, "NominationsParameters", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getNominationsParameters_StartDate(), theDateTimePackage.getLocalDate(), "startDate", null, 0, 1, NominationsParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getNominationsParameters_EndDate(), theDateTimePackage.getLocalDate(), "endDate", null, 0, 1, NominationsParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(abstractNominatedValueEClass, AbstractNominatedValue.class, "AbstractNominatedValue", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		// Initialize enums and add enum literals
 		initEEnum(datePeriodPriorEEnum, DatePeriodPrior.class, "DatePeriodPrior");
