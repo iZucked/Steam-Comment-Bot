@@ -47,6 +47,19 @@
                </message>
             </constraint>
             <constraint
+                  class="com.mmxlabs.models.lng.nominations.validation.NominatedValueConstraint"
+                  id="com.mmxlabs.models.lng.nominations.validation.NominatedValueConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Nominated Value Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+            </constraint>
+            <constraint
                   class="com.mmxlabs.models.lng.nominations.validation.NominationDatesConstraint"
                   id="com.mmxlabs.models.lng.nominations.validation.NominationDatesConstraint"
                   isEnabledByDefault="true"
