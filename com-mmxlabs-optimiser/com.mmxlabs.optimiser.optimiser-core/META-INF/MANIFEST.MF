@@ -6,11 +6,11 @@ Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-SymbolicName: com.mmxlabs.optimiser.optimiser-core;singleton:=true
 Automatic-Module-Name: com.mmxlabs.optimiser.optimiser-core
 Bundle-Vendor: Minimax Labs Ltd.
-Bundle-Version: 4.10.9.RELEASE
+Bundle-Version: 4.10.10.qualifier
 Import-Package: javax.inject;version="[1.0,2)"
 Service-Component: OSGI-INF/*.xml
 Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
- com.mmxlabs.common.common-util;bundle-version="[4.10.9,5.0.0)",
+ com.mmxlabs.common.common-util;bundle-version="[4.10.10,5.0.0)",
  com.google.guava;bundle-version="13.0.1",
  com.google.inject;bundle-version="3.0.0",
  org.eclipse.ui;bundle-version="3.109.0",
