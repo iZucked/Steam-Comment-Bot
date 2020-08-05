@@ -38,6 +38,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -265,6 +266,11 @@ public class CargoImporter extends DefaultClassImporter {
 			} else if (o instanceof DischargeSlot) {
 				discharge = (DischargeSlot) o;
 			}
+		}
+		
+		//Both slots can't be spot
+		if (load instanceof SpotSlot && discharge instanceof SpotSlot) {
+			return new ImportResults(cargo, false);
 		}
 
 		// fix missing names

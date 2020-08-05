@@ -544,6 +544,22 @@
                </target>
             </constraint>
             <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.CargoSpotSlotsConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.CargoSpotSlotsConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Cargo Spot Slots Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="Cargo">
+               </target>
+            </constraint>
+            <constraint
                   class="com.mmxlabs.models.lng.cargo.validation.LoadSlotCVConstraint"
                   id="com.mmxlabs.models.lng.cargo.validation.LoadSlotCVConstraint"
                   isEnabledByDefault="true"

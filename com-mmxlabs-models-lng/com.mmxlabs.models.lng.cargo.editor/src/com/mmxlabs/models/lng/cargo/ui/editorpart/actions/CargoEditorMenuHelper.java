@@ -1088,6 +1088,9 @@ public class CargoEditorMenuHelper {
 	}
 
 	void createSpotMarketMenu(final IMenuManager manager, final SpotType spotType, final Slot<?> source, final String marketMenuSuffix) {
+		if (source instanceof SpotSlot) {
+			return;
+		}
 		final SpotMarketsModel pricingModel = scenarioModel.getReferenceModel().getSpotMarketsModel();
 		final Collection<SpotMarket> validMarkets = new LinkedList<>();
 		String menuName = "";
@@ -1132,6 +1135,10 @@ public class CargoEditorMenuHelper {
 	}
 
 	void createBulkSpotMarketMenu(final IMenuManager manager, final SpotType spotType, final Collection<Slot<?>> sourceSlots, final String marketMenuSuffix) {
+		for (final Slot<?> slot : sourceSlots) {
+			if (slot instanceof SpotSlot)
+				return;
+		}
 		final SpotMarketsModel pricingModel = scenarioModel.getReferenceModel().getSpotMarketsModel();
 		final Collection<SpotMarket> validMarkets = new LinkedList<>();
 		String menuName = "";

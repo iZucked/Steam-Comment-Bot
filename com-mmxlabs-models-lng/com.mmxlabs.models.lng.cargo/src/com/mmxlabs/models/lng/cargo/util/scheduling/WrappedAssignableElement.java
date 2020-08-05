@@ -86,13 +86,24 @@ public class WrappedAssignableElement {
 		}
 	}
 	
+	private final int countSpotSlots(final List<Slot<?>> sortedSlots) {
+		int i = 0;
+		for (final Slot<?> slot : sortedSlots) {
+			if (slot instanceof SpotSlot) {
+				i++;
+			}
+		}
+		return i;
+	}
+	
 	private void initFromCargo(final AssignableElement cargo, final PortModel portModel, ModelDistanceProvider modelDistanceProvider,
 			final IAssignableElementDateProvider dateProvider) {
 		final List<Slot<?>> sortedSlots = getSortedSlots(cargo);
 		assert sortedSlots != null;
+		assert countSpotSlots(sortedSlots) <= 1;
 		Slot<?> firstSlot = getFirstSlot(sortedSlots);
 		Slot<?> lastSlot = getLastSlot(sortedSlots);
-
+		
 		final ZonedDateTime minEndDate = getMinEndDate(cargo, portModel, modelDistanceProvider, dateProvider, sortedSlots);
 		final ZonedDateTime maxStartDate = getMaxStartDate(cargo, portModel, modelDistanceProvider, dateProvider, sortedSlots);
 
