@@ -23,6 +23,7 @@ import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.editors.impl.TextInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.TextualSuggestionInlineEditor;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
@@ -173,7 +174,7 @@ public class AbstractNominationComponentHelper extends BaseComponentHelper {
 	 * @generated
 	 */
 	protected void add_nominatedValueEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(new TextualSuggestionInlineEditor(NominationsPackage.Literals.ABSTRACT_NOMINATION__NOMINATED_VALUE,  (rootObject, target) -> {
+	/*	detailComposite.addInlineEditor(new TextualSuggestionInlineEditor(NominationsPackage.Literals.ABSTRACT_NOMINATION__NOMINATED_VALUE,  (rootObject, target) -> {
 			if (rootObject instanceof LNGScenarioModel && target instanceof AbstractNomination) {
 				final LNGScenarioModel scenarioModel = (LNGScenarioModel)rootObject;
 				final AbstractNomination nomination = (AbstractNomination)target;
@@ -181,6 +182,7 @@ public class AbstractNominationComponentHelper extends BaseComponentHelper {
 			}
 			else {
 				return Collections.emptyList();
-			}}));
+			}}));*/
+		detailComposite.addInlineEditor(new TextInlineEditor(NominationsPackage.Literals.ABSTRACT_NOMINATION__NOMINATED_VALUE));
 	}
 }
