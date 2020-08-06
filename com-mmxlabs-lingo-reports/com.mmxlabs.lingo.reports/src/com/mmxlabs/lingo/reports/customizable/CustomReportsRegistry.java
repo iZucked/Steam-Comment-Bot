@@ -134,14 +134,16 @@ public class CustomReportsRegistry {
 	}
 	
 	public List<CustomReportDefinition> readTeamCustomReportDefinitions() {
-		List<CustomReportDefinition> reports;
+		List<CustomReportDefinition> reports = new ArrayList<>();
+		List<CustomReportDefinition> fromHub;
 		try {
-			reports = ServiceHelper.withCheckedService(ICustomReportDataRepository.class, s -> s.getTeamReports());
+			fromHub = ServiceHelper.withCheckedService(ICustomReportDataRepository.class, s -> s.getTeamReports());
 		}
 		catch (Throwable ex) {
 			logger.error("Something went wrong reading team reports", ex);
-			reports = Collections.emptyList();
+			fromHub = Collections.emptyList();
 		}
+		reports.addAll(fromHub);
 		return reports;
 	}
 
