@@ -455,11 +455,36 @@ public class CargoEditingHelper {
 	public void swapCargoLoads(String description, @NonNull List<Cargo> cargoes) {
 		Slot<?> load1 = cargoes.get(0).getSortedSlots().get(0);
 		Slot<?> load2 = cargoes.get(1).getSortedSlots().get(0);
+		Slot<?> discharge1 = cargoes.get(0).getSortedSlots().get(1);
+		Slot<?> discharge2 = cargoes.get(1).getSortedSlots().get(1);
+		boolean cargo1Valid = true;
+		boolean cargo2Valid = true;
 
 		final CompoundCommand currentWiringCommand = new CompoundCommand(description);
-		currentWiringCommand.append(SetCommand.create(editingDomain, load1, CargoPackage.Literals.SLOT__CARGO, load2.getCargo()));
-		currentWiringCommand.append(SetCommand.create(editingDomain, load2, CargoPackage.Literals.SLOT__CARGO, load1.getCargo()));
-
+		
+		if ((load1 instanceof SpotSlot) && (discharge2 instanceof SpotSlot)) {
+			currentWiringCommand.append(SetCommand.create(editingDomain, load1, CargoPackage.eINSTANCE.getSlot_Cargo(), SetCommand.UNSET_VALUE));
+			currentWiringCommand.append(SetCommand.create(editingDomain, discharge2, CargoPackage.eINSTANCE.getSlot_Cargo(), SetCommand.UNSET_VALUE));
+			cargo2Valid = false;
+		} else {
+			currentWiringCommand.append(SetCommand.create(editingDomain, load1, CargoPackage.Literals.SLOT__CARGO, load2.getCargo()));
+		}
+		
+		if ((load2 instanceof SpotSlot) && (discharge1 instanceof SpotSlot)) {
+			currentWiringCommand.append(SetCommand.create(editingDomain, load2, CargoPackage.eINSTANCE.getSlot_Cargo(), SetCommand.UNSET_VALUE));
+			currentWiringCommand.append(SetCommand.create(editingDomain, discharge1, CargoPackage.eINSTANCE.getSlot_Cargo(), SetCommand.UNSET_VALUE));
+			cargo1Valid = false;
+		} else {
+			currentWiringCommand.append(SetCommand.create(editingDomain, load2, CargoPackage.Literals.SLOT__CARGO, load1.getCargo()));
+		}
+		
+		if (!cargo1Valid) {
+			currentWiringCommand.append(DeleteCommand.create(editingDomain, load1.getCargo()));
+		}
+		if (!cargo2Valid) {
+			currentWiringCommand.append(DeleteCommand.create(editingDomain, load2.getCargo()));
+		}
+		
 		if (currentWiringCommand.isEmpty()) {
 			return;
 		}
@@ -498,12 +523,37 @@ public class CargoEditingHelper {
 	}
 
 	public void swapCargoDischarges(String description, @NonNull List<Cargo> cargoes) {
+		Slot<?> load1 = cargoes.get(0).getSortedSlots().get(0);
+		Slot<?> load2 = cargoes.get(1).getSortedSlots().get(0);
 		Slot<?> discharge1 = cargoes.get(0).getSortedSlots().get(1);
 		Slot<?> discharge2 = cargoes.get(1).getSortedSlots().get(1);
+		boolean cargo1Valid = true;
+		boolean cargo2Valid = true;
 
 		final CompoundCommand currentWiringCommand = new CompoundCommand(description);
-		currentWiringCommand.append(SetCommand.create(editingDomain, discharge1, CargoPackage.Literals.SLOT__CARGO, discharge2.getCargo()));
-		currentWiringCommand.append(SetCommand.create(editingDomain, discharge2, CargoPackage.Literals.SLOT__CARGO, discharge1.getCargo()));
+		
+		if ((load1 instanceof SpotSlot) && (discharge2 instanceof SpotSlot)) {
+			currentWiringCommand.append(SetCommand.create(editingDomain, load1, CargoPackage.eINSTANCE.getSlot_Cargo(), SetCommand.UNSET_VALUE));
+			currentWiringCommand.append(SetCommand.create(editingDomain, discharge2, CargoPackage.eINSTANCE.getSlot_Cargo(), SetCommand.UNSET_VALUE));
+			cargo1Valid = false;
+		} else {
+			currentWiringCommand.append(SetCommand.create(editingDomain, discharge2, CargoPackage.Literals.SLOT__CARGO, discharge1.getCargo()));
+		}
+		
+		if ((load2 instanceof SpotSlot) && (discharge1 instanceof SpotSlot)) {
+			currentWiringCommand.append(SetCommand.create(editingDomain, load2, CargoPackage.eINSTANCE.getSlot_Cargo(), SetCommand.UNSET_VALUE));
+			currentWiringCommand.append(SetCommand.create(editingDomain, discharge1, CargoPackage.eINSTANCE.getSlot_Cargo(), SetCommand.UNSET_VALUE));
+			cargo2Valid = false;
+		} else {
+			currentWiringCommand.append(SetCommand.create(editingDomain, discharge1, CargoPackage.Literals.SLOT__CARGO, discharge2.getCargo()));
+		}
+		
+		if (!cargo1Valid) {
+			currentWiringCommand.append(DeleteCommand.create(editingDomain, discharge1.getCargo()));
+		}
+		if (!cargo2Valid) {
+			currentWiringCommand.append(DeleteCommand.create(editingDomain, discharge2.getCargo()));
+		}
 
 		if (currentWiringCommand.isEmpty()) {
 			return;
