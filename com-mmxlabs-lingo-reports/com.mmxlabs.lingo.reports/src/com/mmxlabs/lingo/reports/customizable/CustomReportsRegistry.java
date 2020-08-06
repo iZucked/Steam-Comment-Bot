@@ -135,7 +135,7 @@ public class CustomReportsRegistry {
 	
 	public List<CustomReportDefinition> readTeamCustomReportDefinitions() {
 		List<CustomReportDefinition> reports = new ArrayList<>();
-		List<CustomReportDefinition> fromHub;
+		List<CustomReportDefinition> fromHub = new ArrayList<>();
 		try {
 			fromHub = ServiceHelper.withCheckedService(ICustomReportDataRepository.class, s -> s.getTeamReports());
 		}
