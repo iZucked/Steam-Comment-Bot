@@ -364,11 +364,13 @@ public class CustomReportsRegistry {
 	}
 
 	public void deleteTeamReport(CustomReportDefinition toDelete) {
+		//FIXME: @Farukh to move below code block to correct place in ICustomReportDataRepository implementation file
 		final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
 		File reportsFile = new File(workspaceLocation.toOSString() + IPath.SEPARATOR + TEAM_REPORTS_DIR + IPath.SEPARATOR + toDelete.getUuid() + ".json");
-		if (!reportsFile.delete()) {
+		if (reportsFile.exists() && !reportsFile.delete()) {
 			logger.error("Could not delete file: "+reportsFile.toString());
 		}
+		//FIXME: end
 		
 		//Update reports.xml with all plug-in info in.
 		regenerateReportsPluginXMLFile();

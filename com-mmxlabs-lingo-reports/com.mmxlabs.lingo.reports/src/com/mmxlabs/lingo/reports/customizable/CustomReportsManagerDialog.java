@@ -456,6 +456,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	
 	private void discardCurrentlySelectedChanges() {
 		Change change = this.uuidToChangedReports.get(this.current.getUuid());
+		String uuidDiscarded = this.current.getUuid();
 		boolean newReport = (change != null && change.newReport);
 		if (newReport) {
 			//Remove newly created, but unsaved report.
@@ -484,8 +485,9 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		this.saveBtn.setEnabled(false);
 		this.publishBtn.setEnabled(false);
 		
-		//Changes undone, so not pending anymore - clear all changes.
-		this.uuidToChangedReports.clear();
+		//Changes undone, so not pending anymore - clear the discarded change only (as could be two changes
+		//e.g. in the case where new report, copy without saving both.
+		this.uuidToChangedReports.remove(uuidDiscarded);
 		
 		//Below is only set if changes saved or published already, in which case
 		//we do not want to un-set it as we want LiNGO restarted in that case to
