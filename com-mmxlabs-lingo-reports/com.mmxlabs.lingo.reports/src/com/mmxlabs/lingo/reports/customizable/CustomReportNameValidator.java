@@ -22,7 +22,7 @@ public class CustomReportNameValidator implements IInputValidator {
 	@Override
 	public String isValid(String name) {
 		if (!name.replaceAll("[^a-zA-Z0-9() \\._]+", "_").equals(name)) {
-			return "Report names can only contain charactors and digits.";
+			return "Report names can only contain characters and digits.";
 		}
 		
 		if (this.existingNames.contains(name.toLowerCase())) {
