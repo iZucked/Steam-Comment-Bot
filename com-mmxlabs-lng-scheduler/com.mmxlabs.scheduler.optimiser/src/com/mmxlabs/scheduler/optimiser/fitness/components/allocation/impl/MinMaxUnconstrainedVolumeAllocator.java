@@ -39,7 +39,7 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 
 	@Inject
 	private IBoilOffHelper inPortBoilOffHelper;
-	
+
 	@Inject
 	private ICounterPartyVolumeProvider counterPartyVolumeProvider;
 
@@ -190,7 +190,7 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 
 	protected AllocationAnnotation calculateShippedMode_MinVolumes(final AllocationRecord allocationRecord, final List<IPortSlot> slots, final IVessel vessel) {
 		assert allocationRecord.allocationMode == AllocationMode.Shipped;
-
+		int ii = 1;
 		// Scale factor applied internal mmbtu values *for this method only* to help
 		// mitigate m3 <-> mmbtu rounding problems
 		final int scaleFactor = 10;
@@ -212,23 +212,24 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 		if (inPortBoilOffHelper.isBoilOffCompensation()) {
 			availableCargoSpaceInMMBTU += loadBoilOffInMMBTu;
 		}
-		// how much fuel will be required over and above what we start with in the
-		// tanks?
-		// note: this is the fuel consumption plus any heel quantity required at
-		// discharge
-		final long fuelDeficitInMMBTU = Calculator.convertM3ToMMBTu(allocationRecord.requiredFuelVolumeInM3 - allocationRecord.startVolumeInM3 + allocationRecord.minimumEndVolumeInM3,
-				scaleFactor * cargoCV);
 
 		// greedy assumption: always load as much as possible
 		long loadVolumeInMMBTU = Math.min(scaleFactorL * allocationRecord.minVolumesInMMBtu.get(0), availableCargoSpaceInMMBTU);
-		// violate maximum load volume constraint when it has to be done to fuel the
-		// vessel
-		if (loadVolumeInMMBTU < fuelDeficitInMMBTU) {
-			loadVolumeInMMBTU = fuelDeficitInMMBTU;
-			// we should never be required to load more than the vessel can fit in its tanks
-			// assert (loadVolume <= availableCargoSpace);
+		{
+			// how much fuel will be required over and above what we start with in the
+			// tanks?
+			// note: this is the fuel consumption plus any heel quantity required at
+			// discharge
+			final long fuelDeficitInMMBTU = Calculator.convertM3ToMMBTu(allocationRecord.requiredFuelVolumeInM3 - allocationRecord.startVolumeInM3 + allocationRecord.minimumEndVolumeInM3,
+					scaleFactor * cargoCV);
+			// violate maximum load volume constraint when it has to be done to fuel the
+			// vessel
+			if (loadVolumeInMMBTU < fuelDeficitInMMBTU) {
+				loadVolumeInMMBTU = fuelDeficitInMMBTU;
+				// we should never be required to load more than the vessel can fit in its tanks
+				// assert (loadVolume <= availableCargoSpace);
+			}
 		}
-
 		// the amount of LNG available for discharge
 		long unusedVolumeInMMBTU = loadVolumeInMMBTU
 				+ Calculator.convertM3ToMMBTu(allocationRecord.startVolumeInM3 - allocationRecord.minimumEndVolumeInM3 - allocationRecord.requiredFuelVolumeInM3, scaleFactor * cargoCV);
@@ -264,7 +265,13 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 				// Use up the full heel range before short loading....
 				final long additionalEndHeelInMMBtu = allocationRecord.maximumEndVolumeInM3 == Long.MAX_VALUE ? unusedVolumeInMMBTU
 						: Calculator.convertM3ToMMBTu(allocationRecord.maximumEndVolumeInM3 - allocationRecord.minimumEndVolumeInM3, scaleFactor * cargoCV);
-				loadVolumeInMMBTU -= Math.max(0, unusedVolumeInMMBTU - additionalEndHeelInMMBtu);
+				long excessLoadVolumeInMMBTU = Math.max(0, unusedVolumeInMMBTU - additionalEndHeelInMMBtu);
+				if (excessLoadVolumeInMMBTU > loadVolumeInMMBTU) {
+					// Can't short load all the volume!
+					loadVolumeInMMBTU = 0;
+				} else {
+					loadVolumeInMMBTU -= excessLoadVolumeInMMBTU;
+				}
 			}
 		}
 
