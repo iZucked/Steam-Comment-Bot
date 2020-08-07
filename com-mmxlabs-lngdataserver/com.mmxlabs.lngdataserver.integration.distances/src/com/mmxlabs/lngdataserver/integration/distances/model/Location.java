@@ -7,6 +7,7 @@ package com.mmxlabs.lngdataserver.integration.distances.model;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -15,6 +16,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "mmxId")
+@JsonIgnoreProperties({"virtual", "otherIdentifiers"})
 public class Location {
 
 	private String mmxId;

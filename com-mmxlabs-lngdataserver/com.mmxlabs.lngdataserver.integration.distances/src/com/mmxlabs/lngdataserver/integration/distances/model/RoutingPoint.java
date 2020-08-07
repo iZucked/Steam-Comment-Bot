@@ -9,10 +9,13 @@ import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * @author robert.erdin@gmail.com created on 22/01/17.
  */
+@JsonIgnoreProperties("virtualLocation")
 public class RoutingPoint {
 
 	private String identifier;
