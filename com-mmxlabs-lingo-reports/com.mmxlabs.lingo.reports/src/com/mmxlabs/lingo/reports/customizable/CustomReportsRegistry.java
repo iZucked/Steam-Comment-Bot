@@ -355,7 +355,7 @@ public class CustomReportsRegistry {
 	public void deleteUserReport(CustomReportDefinition toDelete) {
 		final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
 		File reportsFile = new File(workspaceLocation.toOSString() + IPath.SEPARATOR + USER_REPORTS_DIR + IPath.SEPARATOR + JSON_REPORT_PREFIX + toDelete.getUuid() + ".json");
-		if (!reportsFile.delete()) {
+		if (reportsFile.exists() && !reportsFile.delete()) {
 			logger.error("Could not delete file: " + reportsFile.toString());
 		}
 
