@@ -134,7 +134,7 @@ public class PartialCaseDropTargetListener implements DropTargetListener {
 						final PartialCaseRow row = AnalyticsFactory.eINSTANCE.createPartialCaseRow();
 						final CompoundCommand cmd = new CompoundCommand();
 						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel.getPartialCase(), AnalyticsPackage.Literals.PARTIAL_CASE__PARTIAL_CASE, row));
-						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__VESSEL_EVENT_OPTIONS, option));
+						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__VESSEL_EVENT_OPTIONS, collection));
 						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, optionAnalysisModel, null);
 					}
 				} else if (o instanceof BuyOption) {
