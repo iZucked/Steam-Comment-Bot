@@ -15,6 +15,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -1532,13 +1533,23 @@ public class ChangeSetViewColumnHelper {
 	}
 	
 	private LNGScenarioModel getScenarioModel(ChangeSetTableRow change) {
-		LNGScenarioModel sm = (LNGScenarioModel)((ChangeSetTableGroup)change.eContainer()).getBaseScenario().getResultRoot().eContainer();
-		return sm;
+		if (change.eContainer() instanceof ChangeSetTableGroup) {
+			LNGScenarioModel sm = getScenarioModel((ChangeSetTableGroup)change.eContainer());
+			return sm;
+		}
+		else {
+			return null;
+		}
 	}
 
 	private LNGScenarioModel getScenarioModel(ChangeSetTableGroup change) {
-		LNGScenarioModel sm = (LNGScenarioModel)change.getBaseScenario().getResultRoot().eContainer();
-		return sm;
+		if (change.getBaseScenario() != null && change.getBaseScenario().getTypedRoot(LNGScenarioModel.class) != null) {
+			LNGScenarioModel sm = (LNGScenarioModel)change.getBaseScenario().getTypedRoot(LNGScenarioModel.class);
+			return sm;
+		}
+		else {
+			return null;
+		}
 	}
 
 	private String getNominationBreaksCountString(LNGScenarioModel sm, ChangeSetTableGroup change) {
@@ -1608,9 +1619,14 @@ public class ChangeSetViewColumnHelper {
 	}
 	
 	private List<AbstractNomination> getAffectedNominations(LNGScenarioModel sm, String slotName, ChangeSetRowData before, ChangeSetRowData after) {
-		List<AbstractNomination> noms = NominationsModelUtils.findNominationsForSlot(sm, slotName);
-		noms = filterAffectedNominations(noms, before, after);		
-		return noms;
+		if (sm != null) {
+			List<AbstractNomination> noms = NominationsModelUtils.findNominationsForSlot(sm, slotName);
+			noms = filterAffectedNominations(noms, before, after);		
+			return noms;
+		}
+		else {
+			return Collections.emptyList();
+		}
 	}
 	
 	private List<AbstractNomination> filterAffectedNominations(List<AbstractNomination> noms, ChangeSetRowData before, ChangeSetRowData after) {
@@ -1634,7 +1650,7 @@ public class ChangeSetViewColumnHelper {
 					fieldAfter = getName(fieldAfter);
 					
 					//If the dependent field has changed, then add to the list of effected nominations.
-					if (!Objects.equals(fieldBefore, fieldAfter)) {
+					if (fieldBefore != null && fieldAfter != null && !Objects.equals(fieldBefore, fieldAfter)) {
 						affectedNoms.add(n);
 						break; //No need to add it twice.
 					}
@@ -1656,13 +1672,15 @@ public class ChangeSetViewColumnHelper {
 	 */
 	private Object getName(Object obj) {
 		try {
-			Class<?> cls = obj.getClass();
-			Method[] methods = cls.getMethods();
+			if (obj != null) {
+				Class<?> cls = obj.getClass();
+				Method[] methods = cls.getMethods();
 
-			for (Method m : methods) {
-				if (m.getName().equals("getName")) {
-					obj = m.invoke(obj);
-					break;
+				for (Method m : methods) {
+					if (m.getName().equals("getName")) {
+						obj = m.invoke(obj);
+						break;
+					}
 				}
 			}
 
@@ -1683,29 +1701,34 @@ public class ChangeSetViewColumnHelper {
 			String[] elementNames = fieldPath.split("\\.");
 			
 			for (String elementName : elementNames) {
-				Class<?> cls = obj.getClass();
+				if (obj != null) {
+					Class<?> cls = obj.getClass();
 
-				//Is it a method / getter.
-				if (elementName.endsWith("()")) {
-					String methodName = elementName.replace("()","");
-					Method[] methods = cls.getMethods();
+					//Is it a method / getter.
+					if (elementName.endsWith("()")) {
+						String methodName = elementName.replace("()","");
+						Method[] methods = cls.getMethods();
 
-					for (Method m : methods) {
-						if (m.getName().equals(methodName)) {
-							obj = m.invoke(obj);
-							break;
+						for (Method m : methods) {
+							if (m.getName().equals(methodName)) {
+								obj = m.invoke(obj);
+								break;
+							}
+						}
+					}
+					//Or a field?
+					else {
+						Field[] fields = cls.getFields();
+						for (Field f : fields) {
+							if (f.getName().equals(elementName)) {
+								obj = f.get(obj);
+								break;
+							}
 						}
 					}
 				}
-				//Or a field?
 				else {
-					Field[] fields = cls.getFields();
-					for (Field f : fields) {
-						if (f.getName().equals(elementName)) {
-							obj = f.get(obj);
-							break;
-						}
-					}
+					break;
 				}
 			}
 			
