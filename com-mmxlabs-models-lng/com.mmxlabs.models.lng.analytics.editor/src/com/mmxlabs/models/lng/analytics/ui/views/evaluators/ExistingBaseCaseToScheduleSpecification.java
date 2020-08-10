@@ -51,6 +51,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoType;
+import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.EVesselTankState;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -414,7 +415,11 @@ public class ExistingBaseCaseToScheduleSpecification {
 						cargoToCollectedAssignmentMap.put(assignableElement, ca);
 
 					} else {
-						assert false;
+						if (shipping == null && assignableElement instanceof CharterOutEvent) {
+							// Open charter out event.
+						} else {
+							assert false;
+						}
 					}
 
 				} else {
