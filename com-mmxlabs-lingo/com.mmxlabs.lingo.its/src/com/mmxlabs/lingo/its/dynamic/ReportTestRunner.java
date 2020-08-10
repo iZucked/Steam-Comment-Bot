@@ -57,7 +57,7 @@ public class ReportTestRunner {
 										Files.writeString(reportFile.toPath(), actual);
 									} else if (TestingModes.ReportTestMode == TestMode.Run) {
 										final String expected = Files.readString(reportFile.toPath());
-										Assertions.assertEquals(expected, actual);
+										Assertions.assertEquals(expected.replaceAll("\\r\\n", "\n"), actual.replaceAll("\\r\\n", "\n"));
 									}
 								});
 							}));
@@ -109,7 +109,7 @@ public class ReportTestRunner {
 											Files.writeString(reportFile.toPath(), actual);
 										} else if (TestingModes.ReportTestMode == TestMode.Run) {
 											final String expected = Files.readString(reportFile.toPath());
-											Assertions.assertTrue(expected.contentEquals(actual));
+											Assertions.assertEquals(expected.replaceAll("\\r\\n", "\n"), actual.replaceAll("\\r\\n", "\n"));
 										}
 									});
 								}));

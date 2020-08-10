@@ -227,7 +227,7 @@ public class OptimisationTestRunner {
 		Assertions.assertNotNull(compareViewContent);
 
 		if (checkFitnesses) {
-			Assertions.assertTrue(existingCompareContent.contentEquals(compareViewContent));
+			Assertions.assertEquals(existingCompareContent.replaceAll("\\r\\n", "\n"), compareViewContent.replaceAll("\\r\\n", "\n"));
 		}
 
 		if (saveFitnesses) {
