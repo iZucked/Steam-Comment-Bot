@@ -79,9 +79,11 @@ import com.mmxlabs.models.lng.nominations.utils.NominationTypeRegistry;
 import com.mmxlabs.models.lng.nominations.utils.NominationsModelUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
+import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils.ShippingCostType;
@@ -176,7 +178,7 @@ public class ChangeSetViewColumnHelper {
 		this.textualVesselMarkers = textualVesselMarkers;
 	}
 
-	private ImageDescriptor getImageDescriptor(String path) {
+	private ImageDescriptor getImageDescriptor(final String path) {
 		final ImageDescriptor imageDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.lingo.reports", path);
 		return imageDescriptor;
 	}
@@ -226,7 +228,7 @@ public class ChangeSetViewColumnHelper {
 		columnExtenders = ChangeSetColumnValueExtenderExtensionUtil.getColumnExtendeders();
 	}
 
-	public void makeColumns(InsertionPlanGrouperAndFilter insertionPlanFilter) {
+	public void makeColumns(final InsertionPlanGrouperAndFilter insertionPlanFilter) {
 		// Create columns
 		{
 			column_SetName = new GridViewerColumn(viewer, SWT.CENTER);
@@ -826,19 +828,30 @@ public class ChangeSetViewColumnHelper {
 							boolean foundTarget = false;
 							if (renderMode == SlotIDRenderMode.LHS_IN_TARGET) {
 								if (changeSetTableRow.getLhsAfter() != null) {
-									if (viewState.allTargetSlots.contains(changeSetTableRow.getLhsAfter().getLoadSlot())) {
+									if (viewState.allTargetElements.contains(changeSetTableRow.getLhsAfter().getLoadSlot())) {
 										found = true;
-										if (changeSetTableRow.getLhsAfter().getLoadSlot() == viewState.lastTargetSlot) {
+										if (changeSetTableRow.getLhsAfter().getLoadSlot() == viewState.lastTargetElement) {
 											foundTarget = true;
+										}
+									} else {
+										final Event lhsEvent = changeSetTableRow.getLhsAfter().getLhsEvent();
+										if (lhsEvent instanceof VesselEventVisit) {
+											final VesselEventVisit vesselEventVisit = (VesselEventVisit) lhsEvent;
+											if (viewState.allTargetElements.contains(vesselEventVisit.getVesselEvent())) {
+												found = true;
+												if (vesselEventVisit.getVesselEvent() == viewState.lastTargetElement) {
+													foundTarget = true;
+												}
+											}
 										}
 									}
 								}
 							}
 							if (renderMode == SlotIDRenderMode.RHS_IN_TARGET) {
 								if (changeSetTableRow.getRhsAfter() != null) {
-									if (viewState.allTargetSlots.contains(changeSetTableRow.getRhsAfter().getDischargeSlot())) {
+									if (viewState.allTargetElements.contains(changeSetTableRow.getRhsAfter().getDischargeSlot())) {
 										found = true;
-										if (changeSetTableRow.getRhsAfter().getDischargeSlot() == viewState.lastTargetSlot) {
+										if (changeSetTableRow.getRhsAfter().getDischargeSlot() == viewState.lastTargetElement) {
 											foundTarget = true;
 										}
 									}
@@ -1278,14 +1291,14 @@ public class ChangeSetViewColumnHelper {
 				if (element instanceof ChangeSetTableRow) {
 					ChangeSetTableRow change = (ChangeSetTableRow) element;
 					if (showAlt && change.eContainer() instanceof ChangeSetTableGroup) {
-						ChangeSetTableGroup thisGroup = (ChangeSetTableGroup) change.eContainer();
-						ChangeSetTableGroup altGroup = thisGroup.getLinkedGroup();
+						final ChangeSetTableGroup thisGroup = (ChangeSetTableGroup) change.eContainer();
+						final ChangeSetTableGroup altGroup = thisGroup.getLinkedGroup();
 						if (altGroup != null) {
-							boolean checkLHS = change.getLhsName() != null && change.getLhsName().isEmpty();
-							String name = checkLHS ? change.getLhsName() : change.getRhsName();
+							final boolean checkLHS = change.getLhsName() != null && change.getLhsName().isEmpty();
+							final String name = checkLHS ? change.getLhsName() : change.getRhsName();
 							change = null;
 							if (name != null) {
-								for (ChangeSetTableRow row : altGroup.getRows()) {
+								for (final ChangeSetTableRow row : altGroup.getRows()) {
 									if (checkLHS) {
 										if (name.equals(row.getLhsName())) {
 											change = row;
@@ -1347,8 +1360,8 @@ public class ChangeSetViewColumnHelper {
 				if (element instanceof ChangeSetTableRow) {
 					final ChangeSetTableRow change = (ChangeSetTableRow) element;
 					String latenessTooltip = null;
-					String lhsLateness = getLatenessDetailForSlot(change, change.getLhsName());
-					String rhsLateness = getLatenessDetailForSlot(change, change.getRhsName());
+					final String lhsLateness = getLatenessDetailForSlot(change, change.getLhsName());
+					final String rhsLateness = getLatenessDetailForSlot(change, change.getRhsName());
 					if (lhsLateness != null) {
 						latenessTooltip = lhsLateness;
 					}
@@ -1377,8 +1390,8 @@ public class ChangeSetViewColumnHelper {
 				if (deltaLateness == 0) {
 					return null;
 				}
-				String direction = (deltaLateness > 0 ? " more late." : " less late.");
-				StringBuilder sb = new StringBuilder();
+				final String direction = (deltaLateness > 0 ? " more late." : " less late.");
+				final StringBuilder sb = new StringBuilder();
 				sb.append(slotName);
 				sb.append(" is ").append(LatenessUtils.formatLatenessHoursConcise(Math.abs(deltaLateness))).append(direction).append("\n");
 				sb.append("Before:\t").append(LatenessUtils.formatLatenessHoursConcise(originalLateness));
@@ -1392,8 +1405,8 @@ public class ChangeSetViewColumnHelper {
 				return sb.toString();
 			}
 
-			private String getFlexString(long lateness, long availableFlex) {
-				StringBuilder sb = new StringBuilder();
+			private String getFlexString(final long lateness, final long availableFlex) {
+				final StringBuilder sb = new StringBuilder();
 				if (availableFlex > 0) {
 					sb.append(" \t(");
 					if (lateness > availableFlex) {
@@ -1506,35 +1519,35 @@ public class ChangeSetViewColumnHelper {
 			@Override
 			public String getToolTipText(final Object element) {
 				if (element instanceof ChangeSetTableRow) {
-					ChangeSetTableRow cstr = (ChangeSetTableRow)element;
-					LNGScenarioModel sm = getScenarioModel(cstr);
+					final ChangeSetTableRow cstr = (ChangeSetTableRow)element;
+					final LNGScenarioModel sm = getScenarioModel(cstr);
 					return getNominationBreaksDetail(sm, cstr);
 				}
 				return super.getToolTipText(element);
 			}
 			
 			@Override
-			public void update(ViewerCell cell) {
+			public void update(final ViewerCell cell) {
 				final Object element = cell.getElement();
 				cell.setText("");
 				cell.setForeground(null);
 				cell.setFont(boldFont);
 
 				if (element instanceof ChangeSetTableGroup) {
-					ChangeSetTableGroup cstg = (ChangeSetTableGroup)element;
+					final ChangeSetTableGroup cstg = (ChangeSetTableGroup)element;
 					cell.setText(getNominationBreaksCountString(getScenarioModel(cstg), cstg));	
 				}
 				if (element instanceof ChangeSetTableRow) {	
-					ChangeSetTableRow cstr = (ChangeSetTableRow)element;
+					final ChangeSetTableRow cstr = (ChangeSetTableRow)element;
 					cell.setText(getNominationBreaks(getScenarioModel(cstr), cstr));
 				}
 			}
 		};		
 	}
 	
-	private LNGScenarioModel getScenarioModel(ChangeSetTableRow change) {
+	private LNGScenarioModel getScenarioModel(final ChangeSetTableRow change) {
 		if (change.eContainer() instanceof ChangeSetTableGroup) {
-			LNGScenarioModel sm = getScenarioModel((ChangeSetTableGroup)change.eContainer());
+			final LNGScenarioModel sm = getScenarioModel((ChangeSetTableGroup)change.eContainer());
 			return sm;
 		}
 		else {
@@ -1542,9 +1555,9 @@ public class ChangeSetViewColumnHelper {
 		}
 	}
 
-	private LNGScenarioModel getScenarioModel(ChangeSetTableGroup change) {
+	private LNGScenarioModel getScenarioModel(final ChangeSetTableGroup change) {
 		if (change.getBaseScenario() != null && change.getBaseScenario().getTypedRoot(LNGScenarioModel.class) != null) {
-			LNGScenarioModel sm = (LNGScenarioModel)change.getBaseScenario().getTypedRoot(LNGScenarioModel.class);
+			final LNGScenarioModel sm = (LNGScenarioModel)change.getBaseScenario().getTypedRoot(LNGScenarioModel.class);
 			return sm;
 		}
 		else {
@@ -1552,9 +1565,9 @@ public class ChangeSetViewColumnHelper {
 		}
 	}
 
-	private String getNominationBreaksCountString(LNGScenarioModel sm, ChangeSetTableGroup change) {
+	private String getNominationBreaksCountString(final LNGScenarioModel sm, final ChangeSetTableGroup change) {
 		int cnt = 0;
-		for (ChangeSetTableRow row : change.getRows()) {
+		for (final ChangeSetTableRow row : change.getRows()) {
 			cnt += getNominationBreakCount(sm, row);
 		}
 		if (cnt > 0) {
@@ -1565,8 +1578,8 @@ public class ChangeSetViewColumnHelper {
 		}
 	}
 	
-	private String getNominationBreaks(LNGScenarioModel sm, ChangeSetTableRow change) {
-		int cnt = getNominationBreakCount(sm, change);
+	private String getNominationBreaks(final LNGScenarioModel sm, final ChangeSetTableRow change) {
+		final int cnt = getNominationBreakCount(sm, change);
 		if (cnt > 0) {
 			return Integer.toString(cnt);
 		}
@@ -1575,8 +1588,8 @@ public class ChangeSetViewColumnHelper {
 		}
 	}
 
-	private String getNominationBreaksDetail(LNGScenarioModel sm, ChangeSetTableRow change) {
-		StringBuilder sb = new StringBuilder();
+	private String getNominationBreaksDetail(final LNGScenarioModel sm, final ChangeSetTableRow change) {
+		final StringBuilder sb = new StringBuilder();
 		addNominations(sm, change.getLhsName(), change.getLhsBefore(), change.getLhsAfter(), sb);
 		addNominations(sm, change.getRhsName(), change.getRhsBefore(), change.getRhsAfter(), sb);
 		if (sb.length() == 0) {
@@ -1587,14 +1600,14 @@ public class ChangeSetViewColumnHelper {
 		}
 	}
 
-	private void addNominations(LNGScenarioModel sm, String slotName, ChangeSetRowData before, ChangeSetRowData after, StringBuilder sb) {
-		List<AbstractNomination> noms = this.getAffectedNominations(sm, slotName, before, after);	
+	private void addNominations(final LNGScenarioModel sm, final String slotName, final ChangeSetRowData before, final ChangeSetRowData after, final StringBuilder sb) {
+		final List<AbstractNomination> noms = this.getAffectedNominations(sm, slotName, before, after);	
 		if (!noms.isEmpty()) {
 			if (sb.length() > 0) {
 				sb.append("\n");
 			}
 			sb.append(slotName).append(": ");
-			for (var n : noms) {
+			for (final var n : noms) {
 				if (sb.charAt(sb.length()-2) != ':') {
 					sb.append(", ");
 				}
@@ -1603,22 +1616,22 @@ public class ChangeSetViewColumnHelper {
 		}
 	}
 		
-	private int getNominationBreakCount(LNGScenarioModel sm, ChangeSetTableRow change) {
+	private int getNominationBreakCount(final LNGScenarioModel sm, final ChangeSetTableRow change) {
 		int cnt = 0;
 		cnt += getAffectedNominations(sm, change).size();
 		return cnt;
 	}
 
-	private List<AbstractNomination> getAffectedNominations(LNGScenarioModel sm, ChangeSetTableRow change) {
-		List<AbstractNomination> lhsNoms = getAffectedNominations(sm, change.getLhsName(), change.getLhsBefore(), change.getLhsAfter());
-		List<AbstractNomination> rhsNoms = getAffectedNominations(sm, change.getRhsName(), change.getRhsBefore(), change.getRhsAfter());
-		List<AbstractNomination> affectedNoms = new ArrayList<AbstractNomination>(lhsNoms.size() + rhsNoms.size());
+	private List<AbstractNomination> getAffectedNominations(final LNGScenarioModel sm, final ChangeSetTableRow change) {
+		final List<AbstractNomination> lhsNoms = getAffectedNominations(sm, change.getLhsName(), change.getLhsBefore(), change.getLhsAfter());
+		final List<AbstractNomination> rhsNoms = getAffectedNominations(sm, change.getRhsName(), change.getRhsBefore(), change.getRhsAfter());
+		final List<AbstractNomination> affectedNoms = new ArrayList<AbstractNomination>(lhsNoms.size() + rhsNoms.size());
 		affectedNoms.addAll(lhsNoms);
 		affectedNoms.addAll(rhsNoms);
 		return affectedNoms;
 	}
 	
-	private List<AbstractNomination> getAffectedNominations(LNGScenarioModel sm, String slotName, ChangeSetRowData before, ChangeSetRowData after) {
+	private List<AbstractNomination> getAffectedNominations(final LNGScenarioModel sm, final String slotName, final ChangeSetRowData before, final ChangeSetRowData after) {
 		if (sm != null) {
 			List<AbstractNomination> noms = NominationsModelUtils.findNominationsForSlot(sm, slotName);
 			noms = filterAffectedNominations(noms, before, after);		
@@ -1629,14 +1642,14 @@ public class ChangeSetViewColumnHelper {
 		}
 	}
 	
-	private List<AbstractNomination> filterAffectedNominations(List<AbstractNomination> noms, ChangeSetRowData before, ChangeSetRowData after) {
-		List<AbstractNomination> affectedNoms = new ArrayList<>();
-		for (AbstractNomination n : noms) {
-			String type = n.getType();
-			String nominatedValue = n.getNominatedValue();
-			String[] dependentFields = NominationTypeRegistry.getInstance().getDependentFields(type);
+	private List<AbstractNomination> filterAffectedNominations(final List<AbstractNomination> noms, final ChangeSetRowData before, final ChangeSetRowData after) {
+		final List<AbstractNomination> affectedNoms = new ArrayList<>();
+		for (final AbstractNomination n : noms) {
+			final String type = n.getType();
+			final String nominatedValue = n.getNominatedValue();
+			final String[] dependentFields = NominationTypeRegistry.getInstance().getDependentFields(type);
 			if (dependentFields != null && dependentFields.length > 0) {
-				for (String field : dependentFields) {
+				for (final String field : dependentFields) {
 					Object fieldBefore = getFieldValue(before, field);
 					Object fieldAfter = getFieldValue(after, field);
 										
@@ -1673,10 +1686,10 @@ public class ChangeSetViewColumnHelper {
 	private Object getName(Object obj) {
 		try {
 			if (obj != null) {
-				Class<?> cls = obj.getClass();
-				Method[] methods = cls.getMethods();
+				final Class<?> cls = obj.getClass();
+				final Method[] methods = cls.getMethods();
 
-				for (Method m : methods) {
+				for (final Method m : methods) {
 					if (m.getName().equals("getName")) {
 						obj = m.invoke(obj);
 						break;
@@ -1685,31 +1698,31 @@ public class ChangeSetViewColumnHelper {
 			}
 
 			return obj;
-		} catch (IllegalAccessException e) {
+		} catch (final IllegalAccessException e) {
 			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
+		} catch (final IllegalArgumentException e) {
 			e.printStackTrace();
-		} catch (InvocationTargetException e) {
+		} catch (final InvocationTargetException e) {
 			e.printStackTrace();
 		}
 
 		return obj;
 	}
 	
-	private Object getFieldValue(Object obj, String fieldPath) {
+	private Object getFieldValue(Object obj, final String fieldPath) {
 		try {
-			String[] elementNames = fieldPath.split("\\.");
+			final String[] elementNames = fieldPath.split("\\.");
 			
-			for (String elementName : elementNames) {
+			for (final String elementName : elementNames) {
 				if (obj != null) {
-					Class<?> cls = obj.getClass();
+					final Class<?> cls = obj.getClass();
 
 					//Is it a method / getter.
 					if (elementName.endsWith("()")) {
-						String methodName = elementName.replace("()","");
-						Method[] methods = cls.getMethods();
+						final String methodName = elementName.replace("()","");
+						final Method[] methods = cls.getMethods();
 
-						for (Method m : methods) {
+						for (final Method m : methods) {
 							if (m.getName().equals(methodName)) {
 								obj = m.invoke(obj);
 								break;
@@ -1718,8 +1731,8 @@ public class ChangeSetViewColumnHelper {
 					}
 					//Or a field?
 					else {
-						Field[] fields = cls.getFields();
-						for (Field f : fields) {
+						final Field[] fields = cls.getFields();
+						for (final Field f : fields) {
 							if (f.getName().equals(elementName)) {
 								obj = f.get(obj);
 								break;
@@ -1734,11 +1747,11 @@ public class ChangeSetViewColumnHelper {
 			
 			//Value found successfully.
 			return obj;
-		} catch (IllegalAccessException e) {
+		} catch (final IllegalAccessException e) {
 			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
+		} catch (final IllegalArgumentException e) {
 			e.printStackTrace();
-		} catch (InvocationTargetException e) {
+		} catch (final InvocationTargetException e) {
 			e.printStackTrace();
 		}
 
@@ -1933,7 +1946,7 @@ public class ChangeSetViewColumnHelper {
 		});
 	}
 
-	private CellLabelProvider createCSLabelProvider(InsertionPlanGrouperAndFilter insertionPlanFilter) {
+	private CellLabelProvider createCSLabelProvider(final InsertionPlanGrouperAndFilter insertionPlanFilter) {
 
 		return new CellLabelProvider() {
 
@@ -1966,15 +1979,15 @@ public class ChangeSetViewColumnHelper {
 
 				} else if (false && element instanceof ChangeSetTableRow) {
 					// DEBUG helper, show P&L sums in label
-					ChangeSetTableRow change = (ChangeSetTableRow) element;
+					final ChangeSetTableRow change = (ChangeSetTableRow) element;
 
-					long pnl = ChangeSetKPIUtil.getPNL(change, ResultType.After) - ChangeSetKPIUtil.getPNL(change, ResultType.Before);
-					long purchase = ChangeSetKPIUtil.getPurchaseCost(change, ResultType.After) - ChangeSetKPIUtil.getPurchaseCost(change, ResultType.Before);
-					long sales = ChangeSetKPIUtil.getSalesRevenue(change, ResultType.After) - ChangeSetKPIUtil.getSalesRevenue(change, ResultType.Before);
-					long shipFOB = ChangeSetKPIUtil.getShipping(change, ResultType.After) - ChangeSetKPIUtil.getShipping(change, ResultType.Before);
+					final long pnl = ChangeSetKPIUtil.getPNL(change, ResultType.After) - ChangeSetKPIUtil.getPNL(change, ResultType.Before);
+					final long purchase = ChangeSetKPIUtil.getPurchaseCost(change, ResultType.After) - ChangeSetKPIUtil.getPurchaseCost(change, ResultType.Before);
+					final long sales = ChangeSetKPIUtil.getSalesRevenue(change, ResultType.After) - ChangeSetKPIUtil.getSalesRevenue(change, ResultType.Before);
+					final long shipFOB = ChangeSetKPIUtil.getShipping(change, ResultType.After) - ChangeSetKPIUtil.getShipping(change, ResultType.Before);
 
 					// Note: Missing other PNL components.
-					long computedPNL = sales - purchase - shipFOB;
+					final long computedPNL = sales - purchase - shipFOB;
 //					cell.setText(String.format("%,d", computedPNL));
 					cell.setText(String.format("%,d", pnl - computedPNL));
 				}
@@ -2613,7 +2626,7 @@ public class ChangeSetViewColumnHelper {
 		return null;
 	}
 
-	public void showAlternativePNLColumn(boolean showAlternativePNLBase) {
+	public void showAlternativePNLColumn(final boolean showAlternativePNLBase) {
 		this.showAlternativePNLBase = showAlternativePNLBase;
 		if (altPNLBaseColumn != null) {
 			RunnerHelper.asyncExec(() -> altPNLBaseColumn.getColumn().setVisible(this.showAlternativePNLBase));

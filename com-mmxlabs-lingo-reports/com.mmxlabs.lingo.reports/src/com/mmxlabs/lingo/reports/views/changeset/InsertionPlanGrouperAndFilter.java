@@ -46,6 +46,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
@@ -172,12 +173,14 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 	}
 
 	private static class ChangeSetMetadata {
-		public int changeCount;
-		public Object sendTo;
+		public final int changeCount;
+		public final Object sendTo;
 		private final GroupMode mode;
 
-		public ChangeSetMetadata(final GroupMode mode) {
+		public ChangeSetMetadata(final GroupMode mode, Object sendTo, int changeCount) {
 			this.mode = mode;
+			this.sendTo = sendTo;
+			this.changeCount = changeCount;
 		}
 
 		@Override
@@ -375,9 +378,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 			for (final ChangeSetTableGroup tableGroup : tableRoot.getGroups()) {
 				final Pair<String, Object> p = getDestination(tableGroup, target);
 				final String label = p.getFirst();
-				final ChangeSetMetadata key = new ChangeSetMetadata(groupMode);
-				key.sendTo = p.getSecond();
-				key.changeCount = tableGroup.getComplexity();
+				final ChangeSetMetadata key = new ChangeSetMetadata(groupMode, p.getSecond(), tableGroup.getComplexity());
 
 				tableGroup.setDescription(label);
 				grouper.computeIfAbsent(key, k -> new LinkedList<ChangeSetTableGroup>()).add(tableGroup);
@@ -393,7 +394,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 				final List<ChangeSetTableGroup> groups = e.getValue();
 				try {
 					Collections.sort(groups, (a, b) -> Long.compare(b.getDeltaMetrics().getPnlDelta(), a.getDeltaMetrics().getPnlDelta()));
-				} catch (NullPointerException ee) {
+				} catch (final NullPointerException ee) {
 					// Ignore sort issues
 				}
 
@@ -1186,7 +1187,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 
 	}
 
-	public boolean isUnexpandedInsertionGroup(ChangeSetTableGroup changeSetTableGroup) {
+	public boolean isUnexpandedInsertionGroup(final ChangeSetTableGroup changeSetTableGroup) {
 
 		if (!insertionModeActive) {
 			return false;
@@ -1203,6 +1204,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 		final ChangeSet changeSet = tableGroup.getChangeSet();
 		Object sendTo = null;
 		// TODO: Does this need to check alternative base?
+		LOOP_OUTER:
 		for (final ChangeSetRow row : changeSet.getChangeSetRowsToDefaultBase()) {
 			final ChangeSetRowDataGroup afterData = row.getAfterData();
 			if (afterData == null) {
@@ -1232,14 +1234,17 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 					} else {
 						sendTo = loadSlot.getName();
 					}
+				} else if (rowData.getLhsEvent() instanceof VesselEventVisit && ((VesselEventVisit) rowData.getLhsEvent()).getVesselEvent() == target) {
+					final VesselEventVisit v = ((VesselEventVisit) rowData.getLhsEvent());
+					sendTo = v.name();
 				}
 				if (sendTo != null) {
-					break;
+					break LOOP_OUTER;
 				}
 			}
 		}
 		if (sendTo == null) {
-			return new Pair<>("?", null);
+			return new Pair<>("?", new Object());
 		}
 		if (sendTo instanceof String) {
 			return new Pair<>((String) sendTo, sendTo);

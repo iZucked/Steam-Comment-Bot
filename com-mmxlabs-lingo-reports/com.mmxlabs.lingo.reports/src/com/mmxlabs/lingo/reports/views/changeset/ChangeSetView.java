@@ -272,8 +272,8 @@ public class ChangeSetView extends ViewPart {
 		public ChangeSetTableRoot tableRootDefault;
 
 		public @Nullable AnalyticsSolution lastSolution;
-		public @Nullable NamedObject lastTargetSlot;
-		public final Collection<Slot> allTargetSlots = new HashSet<>();
+		public @Nullable NamedObject lastTargetElement;
+		public final Collection<NamedObject> allTargetElements = new HashSet<>();
 
 		public final SortMode displaySortMode;
 		public Consumer<ChangeSetTableRoot> postProcess = cs -> {
@@ -285,16 +285,16 @@ public class ChangeSetView extends ViewPart {
 		}
 
 		public @Nullable String getTargetSlotID() {
-			if (lastTargetSlot != null) {
-				return lastTargetSlot.getName();
+			if (lastTargetElement != null) {
+				return lastTargetElement.getName();
 			}
 			return null;
 		}
 
 		public void dispose() {
-			this.allTargetSlots.clear();
+			this.allTargetElements.clear();
 			this.lastSolution = null;
-			this.lastTargetSlot = null;
+			this.lastTargetElement = null;
 			this.root = null;
 			this.tableRootDefault = null;
 			this.tableRootAlternative = null;
@@ -303,10 +303,6 @@ public class ChangeSetView extends ViewPart {
 	}
 
 	private ViewState currentViewState = null;
-
-	private static final String KEY_RESTORE_ANALYTICS_SOLUTION = "restore-analytics-solution-from-tags";
-
-	private static final boolean RE_SORT_ON_FILTER = false;
 
 	private GridTreeViewer viewer;
 
@@ -1021,15 +1017,15 @@ public class ChangeSetView extends ViewPart {
 						addActionToMenu(toggleNegativePNL, menu);
 					}
 					if (showChangeTargetMenu) {
-						if (currentViewState != null && currentViewState.allTargetSlots.size() > 1) {
+						if (currentViewState != null && currentViewState.allTargetElements.size() > 1) {
 
 							final AbstractMenuAction targetMenu = new AbstractMenuAction("Target... ") {
 								@Override
 								protected void populate(final Menu menu2) {
 
-									for (final Slot target : currentViewState.allTargetSlots) {
+									for (final NamedObject target : currentViewState.allTargetElements) {
 										final RunnableAction action = new RunnableAction(target.getName(), SWT.PUSH, () -> openAnalyticsSolution(currentViewState.lastSolution, target.getName()));
-										if (currentViewState.lastTargetSlot == target) {
+										if (currentViewState.lastTargetElement == target) {
 											action.setChecked(true);
 											action.setEnabled(false);
 										}
@@ -1097,8 +1093,8 @@ public class ChangeSetView extends ViewPart {
 				try {
 					final ViewState newViewState = action.apply(monitor, targetSlotId);
 					final ChangeSetToTableTransformer changeSetToTableTransformer = new ChangeSetToTableTransformer();
-					newViewState.tableRootAlternative = changeSetToTableTransformer.createViewDataModel(newViewState.root, true, newViewState.lastTargetSlot, newViewState.displaySortMode);
-					newViewState.tableRootDefault = changeSetToTableTransformer.createViewDataModel(newViewState.root, false, newViewState.lastTargetSlot, newViewState.displaySortMode);
+					newViewState.tableRootAlternative = changeSetToTableTransformer.createViewDataModel(newViewState.root, true, newViewState.lastTargetElement, newViewState.displaySortMode);
+					newViewState.tableRootDefault = changeSetToTableTransformer.createViewDataModel(newViewState.root, false, newViewState.lastTargetElement, newViewState.displaySortMode);
 
 					changeSetToTableTransformer.bindModels(newViewState.tableRootDefault, newViewState.tableRootAlternative);
 
@@ -1374,7 +1370,7 @@ public class ChangeSetView extends ViewPart {
 				showMenu |= createShowGroupRelatedChangesMenu(directSelectedRows, selectedSets);
 
 				if (showUserFilterMenus) {
-					showMenu |= insertionPlanFilter.generateMenus(helper, viewer, directSelectedRows, selectedSets, currentViewState.lastTargetSlot);
+					showMenu |= insertionPlanFilter.generateMenus(helper, viewer, directSelectedRows, selectedSets, currentViewState.lastTargetElement);
 				}
 				if (directSelectedGroups.isEmpty() && (selectedSets.size() == 1 && directSelectedRows.size() >= 1)) {
 					if (helper.hasActions()) {
@@ -1385,7 +1381,7 @@ public class ChangeSetView extends ViewPart {
 				}
 			} else {
 				if (showUserFilterMenus && currentViewState != null) {
-					showMenu |= insertionPlanFilter.generateMenus(helper, viewer, Collections.emptySet(), Collections.emptySet(), currentViewState.lastTargetSlot);
+					showMenu |= insertionPlanFilter.generateMenus(helper, viewer, Collections.emptySet(), Collections.emptySet(), currentViewState.lastTargetElement);
 				}
 			}
 
@@ -1664,7 +1660,7 @@ public class ChangeSetView extends ViewPart {
 				// indexing
 				final ViewState viewState = new ViewState(transformer.createDataModel(scenarioInstance, sandboxResult, monitor), SortMode.BY_PNL);
 				viewState.lastSolution = solution;
-				viewState.allTargetSlots.clear();
+				viewState.allTargetElements.clear();
 				// viewState.allTargetSlots.addAll(sandboxResult.getExtraSlots());
 				return viewState;
 			}, slotId);
@@ -1710,9 +1706,10 @@ public class ChangeSetView extends ViewPart {
 				}
 				final ViewState viewState = new ViewState(null, SortMode.BY_PNL_PER_CHANGE);
 				viewState.lastSolution = solution;
-				viewState.lastTargetSlot = pTargetSlot;
-				viewState.allTargetSlots.clear();
-				viewState.allTargetSlots.addAll(slotInsertionOptions.getSlotsInserted());
+				viewState.lastTargetElement = pTargetSlot;
+				viewState.allTargetElements.clear();
+				viewState.allTargetElements.addAll(slotInsertionOptions.getSlotsInserted());
+				viewState.allTargetElements.addAll(slotInsertionOptions.getEventsInserted());
 
 				final InsertionPlanTransformer transformer = new InsertionPlanTransformer();
 				final ChangeSetRoot newRoot = transformer.createDataModel(scenarioInstance, slotInsertionOptions, monitor, pTargetSlot);
@@ -1734,7 +1731,7 @@ public class ChangeSetView extends ViewPart {
 
 	public NamedObject getLastSlot() {
 		if (currentViewState != null) {
-			return currentViewState.lastTargetSlot;
+			return currentViewState.lastTargetElement;
 		}
 		return null;
 	}
