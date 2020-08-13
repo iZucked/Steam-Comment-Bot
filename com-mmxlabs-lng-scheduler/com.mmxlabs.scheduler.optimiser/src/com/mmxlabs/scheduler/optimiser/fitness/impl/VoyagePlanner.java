@@ -916,6 +916,7 @@ public class VoyagePlanner implements IVoyagePlanner {
 							assert endHeelInM3 >= 0;
 						} else {
 							voyagePlansMap.add(Pair.of(plan, portTimesRecord));
+							voyagePlansList.add(plan);
 						}
 						if (isRoundTripSequence) {
 							voyagePlansList.get(voyagePlansList.size() - 1).setIgnoreEnd(false);
