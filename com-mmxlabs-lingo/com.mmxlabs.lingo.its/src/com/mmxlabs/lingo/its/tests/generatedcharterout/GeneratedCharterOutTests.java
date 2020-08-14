@@ -36,7 +36,14 @@ public class GeneratedCharterOutTests extends AbstractOptimisationResultTester {
 			Assertions.assertNotNull(schedule);
 
 			List<GeneratedCharterOut> charterOuts = findGCOEvents(schedule.getSequences().get(0));
-			Assertions.assertEquals(0, charterOuts.size());
+			Assertions.assertEquals(1, charterOuts.size());
+
+			GeneratedCharterOut gco = charterOuts.get(0);
+			Assertions.assertEquals("Bonny Is", gco.getPort().getName());
+			Assertions.assertEquals(5382, gco.getDuration());
+			Assertions.assertEquals(12558000, gco.getGroupProfitAndLoss().getProfitAndLoss());
+			Assertions.assertFalse(ballastBeforeOrAfter(gco, true)); // ballast before
+			Assertions.assertFalse(ballastBeforeOrAfter(gco, false)); // ballast after
 		});
 	}
 
@@ -54,14 +61,31 @@ public class GeneratedCharterOutTests extends AbstractOptimisationResultTester {
 			Assertions.assertNotNull(schedule);
 
 			List<GeneratedCharterOut> charterOuts = findGCOEvents(schedule.getSequences().get(0));
-			Assertions.assertEquals(1, charterOuts.size());
-
-			GeneratedCharterOut gco = charterOuts.get(0);
-			Assertions.assertEquals("Bonny Is", gco.getPort().getName());
-			Assertions.assertEquals(1319, gco.getDuration());
-			Assertions.assertEquals(5221041, gco.getGroupProfitAndLoss().getProfitAndLoss());
-			Assertions.assertTrue(ballastBeforeOrAfter(gco, true)); // ballast before
-			Assertions.assertFalse(ballastBeforeOrAfter(gco, false)); // no ballast after
+			Assertions.assertEquals(3, charterOuts.size());
+			{
+				GeneratedCharterOut gco = charterOuts.get(0);
+				Assertions.assertEquals("Bonny Is", gco.getPort().getName());
+				Assertions.assertEquals(5382, gco.getDuration());
+				Assertions.assertEquals(12558000, gco.getGroupProfitAndLoss().getProfitAndLoss());
+				Assertions.assertFalse(ballastBeforeOrAfter(gco, true)); // ballast before
+				Assertions.assertFalse(ballastBeforeOrAfter(gco, false)); // no ballast after
+			}
+			{
+				GeneratedCharterOut gco = charterOuts.get(1);
+				Assertions.assertEquals("Bonny Is", gco.getPort().getName());
+				Assertions.assertEquals(1343, gco.getDuration());
+				Assertions.assertEquals(5316041, gco.getGroupProfitAndLoss().getProfitAndLoss());
+				Assertions.assertTrue(ballastBeforeOrAfter(gco, true)); // ballast before
+				Assertions.assertFalse(ballastBeforeOrAfter(gco, false)); // no ballast after
+			}
+			{
+				GeneratedCharterOut gco = charterOuts.get(2);
+				Assertions.assertEquals("Barcelona", gco.getPort().getName());
+				Assertions.assertEquals(913, gco.getDuration());
+				Assertions.assertEquals(4565000, gco.getGroupProfitAndLoss().getProfitAndLoss());
+				Assertions.assertTrue(ballastBeforeOrAfter(gco, true)); // ballast before
+				Assertions.assertFalse(ballastBeforeOrAfter(gco, false)); // no ballast after
+			}
 		});
 	}
 
@@ -79,14 +103,24 @@ public class GeneratedCharterOutTests extends AbstractOptimisationResultTester {
 			Assertions.assertNotNull(schedule);
 
 			List<GeneratedCharterOut> charterOuts = findGCOEvents(schedule.getSequences().get(0));
-			Assertions.assertEquals(1, charterOuts.size());
+			Assertions.assertEquals(2, charterOuts.size());
 
-			GeneratedCharterOut gco = charterOuts.get(0);
-			Assertions.assertEquals("Barcelona", gco.getPort().getName());
-			Assertions.assertEquals(1305, gco.getDuration());
-			Assertions.assertEquals(4893750, gco.getGroupProfitAndLoss().getProfitAndLoss());
-			Assertions.assertTrue(ballastBeforeOrAfter(gco, true)); // ballast before
-			Assertions.assertTrue(ballastBeforeOrAfter(gco, false)); // ballast after
+			{
+				GeneratedCharterOut gco = charterOuts.get(0);
+				Assertions.assertEquals("Barcelona", gco.getPort().getName());
+				Assertions.assertEquals(1329, gco.getDuration());
+				Assertions.assertEquals(4983750, gco.getGroupProfitAndLoss().getProfitAndLoss());
+				Assertions.assertTrue(ballastBeforeOrAfter(gco, true)); // ballast before
+				Assertions.assertTrue(ballastBeforeOrAfter(gco, false)); // ballast after
+			}
+			{
+				GeneratedCharterOut gco = charterOuts.get(1);
+				Assertions.assertEquals("Barcelona", gco.getPort().getName());
+				Assertions.assertEquals(913, gco.getDuration());
+				Assertions.assertEquals(4565000, gco.getGroupProfitAndLoss().getProfitAndLoss());
+				Assertions.assertTrue(ballastBeforeOrAfter(gco, true)); // ballast before
+				Assertions.assertFalse(ballastBeforeOrAfter(gco, false)); // ballast after
+			}
 		});
 	}
 
