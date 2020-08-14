@@ -80,19 +80,19 @@ public class AuthenticationManager {
 		oauthAuthenticationManager.clearCookies(url);
 	}
 
-	public void run(@Nullable Shell optionalDisplay) {
+	public void run(@Nullable Shell optionalShell) {
 		if (isOAuthEnabled() && !forceBasicAuthentication.get()) {
-			oauthAuthenticationManager.run(upstreamURL, optionalDisplay);
+			oauthAuthenticationManager.run(upstreamURL, optionalShell);
 		} else {
-			basicAuthenticationManager.run(upstreamURL, optionalDisplay);
+			basicAuthenticationManager.run(upstreamURL, optionalShell);
 		}
 	}
 
-	protected void startAuthenticationShell(@Nullable Shell optionalDisplay) {
+	protected void startAuthenticationShell(@Nullable Shell optionalShell) {
 		if (isOAuthEnabled() && !forceBasicAuthentication.get()) {
-			oauthAuthenticationManager.run(upstreamURL, optionalDisplay);
+			oauthAuthenticationManager.run(upstreamURL, optionalShell);
 		} else {
-			basicAuthenticationManager.run(upstreamURL, optionalDisplay);
+			basicAuthenticationManager.run(upstreamURL, optionalShell);
 		}
 	}
 
