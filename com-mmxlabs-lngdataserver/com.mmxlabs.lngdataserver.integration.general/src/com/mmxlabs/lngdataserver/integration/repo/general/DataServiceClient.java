@@ -124,7 +124,11 @@ public class DataServiceClient {
 		}
 	}
 
-	public Pair<String, Instant> getRecords(TypeRecord typeRecord) throws IOException {
+	public @Nullable Pair<String, Instant> getRecords(TypeRecord typeRecord) throws IOException {
+
+		if (!DataHubServiceProvider.getInstance().isOnlineAndLoggedIn()) {
+			return null;
+		}
 
 		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(typeRecord.getListURL());
 		if (requestBuilder == null) {
@@ -181,6 +185,10 @@ public class DataServiceClient {
 	}
 
 	protected CompletableFuture<Boolean> notifyOnNewVersion(TypeRecord typeRecord) {
+
+		if (!DataHubServiceProvider.getInstance().isOnlineAndLoggedIn()) {
+			return null;
+		}
 
 		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(typeRecord.getVersionNotificationEndpoint());
 		if (requestBuilder == null) {
