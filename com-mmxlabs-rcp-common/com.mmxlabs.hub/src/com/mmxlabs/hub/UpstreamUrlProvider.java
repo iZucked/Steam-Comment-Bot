@@ -83,8 +83,9 @@ public class UpstreamUrlProvider {
 	public static final String URI_AFTER_SUCCESSFULL_AUTHENTICATION = "/authenticated";
 	public static final String OAUTH_LOGIN_PATH = "/oauth2/authorization/azure";
 	public static final String BASIC_LOGIN_PATH = "/api/login";
+	public static final String BASIC_LOGIN_FORM_PATH = "/login/local";
 	public static final String USER_PERMISSIONS_ENDPOINT = "/user/permissions";
-	public static final String HOME_PATH = "/ui/#/dashboard";
+	public static final String HOME_PATH = "/ui/";
 	public static final String LOGOUT_PATH = "/logout";
 
 	AuthenticationManager authenticationManager = AuthenticationManager.getInstance();

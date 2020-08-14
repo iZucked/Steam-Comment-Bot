@@ -147,14 +147,10 @@ public class OAuthAuthenticationShell extends Shell {
 				 * if the user is already logged in, the hub sometimes redirects the browser
 				 * straight to /ui/#/dashboard. If this happens we just shutdown the browser
 				 */
-				if (event.location.contains(UpstreamUrlProvider.HOME_PATH)) {
+				if (event.location.contains(baseUrl + UpstreamUrlProvider.HOME_PATH) || event.location.contains(UpstreamUrlProvider.BASIC_LOGIN_FORM_PATH) || event.location.contains("/logout")) {
 					OAuthAuthenticationShell.this.close();
-				}
-
-				String cookie = Browser.getCookie("JSESSIONID", baseUrl);
-
-				// TODO: this is very unsafe because it only checks the uri
-				if (event.location.contains(baseUrl + UpstreamUrlProvider.URI_AFTER_SUCCESSFULL_AUTHENTICATION)) {
+				} else if (event.location.contains(baseUrl + UpstreamUrlProvider.URI_AFTER_SUCCESSFULL_AUTHENTICATION)) {
+					String cookie = Browser.getCookie("JSESSIONID", baseUrl);
 
 					// get access token from datahub
 					final Request request = AuthenticationManager.buildRequestWithoutAuthentication().url(baseUrl + UpstreamUrlProvider.TOKEN_ENDPOINT).addHeader("Cookie", "JSESSIONID=" + cookie)
@@ -167,10 +163,6 @@ public class OAuthAuthenticationShell extends Shell {
 					} catch (IOException e) {
 						MessageDialog.openError(OAuthAuthenticationShell.this, "", "Unable to authenticate with the DataHub. Please try again");
 					}
-
-					// shutdown shell
-					OAuthAuthenticationShell.this.close();
-				} else if (event.location.contains("/logout")) {
 					OAuthAuthenticationShell.this.close();
 				}
 			}
