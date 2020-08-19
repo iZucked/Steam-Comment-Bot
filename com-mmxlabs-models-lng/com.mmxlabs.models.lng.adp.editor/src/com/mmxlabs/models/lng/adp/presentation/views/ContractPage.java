@@ -461,25 +461,27 @@ public class ContractPage extends ADPComposite {
 	}
 
 	private void updatePreviewPaneInput(final EObject target) {
-		if (previewViewer != null) {
-			if (target instanceof PurchaseContractProfile) {
-				final PurchaseContractProfile purchaseContractProfile = (PurchaseContractProfile) target;
-				final List<Object> o = new LinkedList<>();
-				for (LoadSlot s : editorData.getScenarioModel().getCargoModel().getLoadSlots()) {
-					if (s.getContract() == purchaseContractProfile.getContract()) {
-						o.add(s);
+		if (editorData != null && editorData.getScenarioModel() != null) {
+			if (previewViewer != null) {
+				if (target instanceof PurchaseContractProfile) {
+					final PurchaseContractProfile purchaseContractProfile = (PurchaseContractProfile) target;
+					final List<Object> o = new LinkedList<>();
+					for (LoadSlot s : editorData.getScenarioModel().getCargoModel().getLoadSlots()) {
+						if (s.getContract() == purchaseContractProfile.getContract()) {
+							o.add(s);
+						}
 					}
-				}
-				previewViewer.setInput(o);
-			} else if (target instanceof SalesContractProfile) {
-				final SalesContractProfile salesContractProfile = (SalesContractProfile) target;
-				final List<Object> o = new LinkedList<>();
-				for (DischargeSlot s : editorData.getScenarioModel().getCargoModel().getDischargeSlots()) {
-					if (s.getContract() == salesContractProfile.getContract()) {
-						o.add(s);
+					previewViewer.setInput(o);
+				} else if (target instanceof SalesContractProfile) {
+					final SalesContractProfile salesContractProfile = (SalesContractProfile) target;
+					final List<Object> o = new LinkedList<>();
+					for (DischargeSlot s : editorData.getScenarioModel().getCargoModel().getDischargeSlots()) {
+						if (s.getContract() == salesContractProfile.getContract()) {
+							o.add(s);
+						}
 					}
+					previewViewer.setInput(o);
 				}
-				previewViewer.setInput(o);
 			}
 		}
 	}

@@ -182,8 +182,12 @@ public class SummaryPage extends ADPComposite {
 
 	@Override
 	public void refresh() {
-		purchasesViewer.refresh();
-		salesViewer.refresh();
+		if (purchasesViewer != null) {
+			purchasesViewer.refresh();
+		}
+		if (salesViewer != null) {
+			salesViewer.refresh();
+		}
 	}
 
 	@Override
