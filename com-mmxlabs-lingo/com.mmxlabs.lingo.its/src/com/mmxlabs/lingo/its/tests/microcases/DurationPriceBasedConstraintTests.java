@@ -159,6 +159,7 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
 				scheduler.setUseCanalBasedWindowTrimming(false);
 				scheduler.setUsePriceBasedWindowTrimming(true);
+				scheduler.setUsePNLBasedWindowTrimming(true);
 
 				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(initialSequences);
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
@@ -166,12 +167,12 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 				final IResource r0 = initialSequences.getResources().get(0);
 				final IPortTimeWindowsRecord ptr_r0_cargo = records.get(r0).get(0);
 
-				// Assert expected result (Truncated end window)
-				Assertions.assertEquals(24 * 26 + 1, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getReturnSlot()).getExclusiveEnd());
-				Assertions.assertEquals(24 * 24, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getReturnSlot()).getInclusiveStart());
-
 				Assertions.assertEquals(1, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getExclusiveEnd());
 				Assertions.assertEquals(0, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getInclusiveStart());
+
+				// Expect to return as soon as possible, (i.e. 25th)
+				Assertions.assertEquals(24 * 24, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getReturnSlot()).getInclusiveStart());
+				Assertions.assertEquals(24 * 24 + 1, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getReturnSlot()).getExclusiveEnd());
 			}
 		});
 	}
@@ -209,8 +210,9 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 				final IPortTimeWindowsRecord ptr_r0_cargo = records.get(r0).get(0);
 
 				// Assert expected result (Truncated start window)
+				// Start as early as possible
 				Assertions.assertEquals(24 * 19 + 1, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getExclusiveEnd());
-				Assertions.assertEquals(0, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getInclusiveStart());
+				Assertions.assertEquals(24 * 19, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getInclusiveStart());
 
 				Assertions.assertEquals(24 * 24 + 1, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getReturnSlot()).getExclusiveEnd());
 				Assertions.assertEquals(24 * 24, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getReturnSlot()).getInclusiveStart());
@@ -243,6 +245,7 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
 				scheduler.setUseCanalBasedWindowTrimming(false);
 				scheduler.setUsePriceBasedWindowTrimming(true);
+				scheduler.setUsePNLBasedWindowTrimming(true);
 
 				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(initialSequences);
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
@@ -251,12 +254,14 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 
 				final IPortTimeWindowsRecord ptr_r0_cargo = records.get(r0).get(0);
 
-				// Assert expected result (Truncated start AND end windows)
-				Assertions.assertEquals(24 * 39 + 1, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getReturnSlot()).getExclusiveEnd());
+				// Start as late as possible
+				Assertions.assertEquals(24 * 19, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getInclusiveStart());
+				Assertions.assertEquals(24 * 19 + 1, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getExclusiveEnd());
+
+				// Assert Expect to return on 25th (early as possible - still > min duration)
+				Assertions.assertEquals(24 * 24 + 1, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getReturnSlot()).getExclusiveEnd());
 				Assertions.assertEquals(24 * 24, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getReturnSlot()).getInclusiveStart());
 
-				Assertions.assertEquals(24 * 19 + 1, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getExclusiveEnd());
-				Assertions.assertEquals(0, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getInclusiveStart());
 			}
 		});
 	}
@@ -301,20 +306,25 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
 				scheduler.setUseCanalBasedWindowTrimming(false);
 				scheduler.setUsePriceBasedWindowTrimming(true);
+				scheduler.setUsePNLBasedWindowTrimming(true);
 
 				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(initialSequences);
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
 
 				final IResource r0 = initialSequences.getResources().get(0);
 
+				final IPortTimeWindowsRecord ptr_r0_cargo = records.get(r0).get(0);
+				// Pick up vessel as late as possible ( ie. the 20th)
+				Assertions.assertEquals(24 * 19 + 1, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getExclusiveEnd());
+				Assertions.assertEquals(24 * 19, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getInclusiveStart());
+
 				final IPortTimeWindowsRecord ptr_r1_cargo = records.get(r0).get(1);
 				// Assert expected result (Truncated start AND end windows)
-				Assertions.assertEquals(24 * 37 + 6, ptr_r1_cargo.getSlotFeasibleTimeWindow(ptr_r1_cargo.getReturnSlot()).getExclusiveEnd());
-				Assertions.assertEquals(24 * 37 + 5, ptr_r1_cargo.getSlotFeasibleTimeWindow(ptr_r1_cargo.getReturnSlot()).getInclusiveStart());
+				int startPlus20Days = 24 * 19 + 24 * 20;
+				Assertions.assertTrue(ptr_r1_cargo.getSlotFeasibleTimeWindow(ptr_r1_cargo.getReturnSlot()).getInclusiveStart() <= startPlus20Days);
+				// Assertions.assertEquals(24 * 37 + 6, ptr_r1_cargo.getSlotFeasibleTimeWindow(ptr_r1_cargo.getReturnSlot()).getExclusiveEnd());
+				// Assertions.assertEquals(24 * 37 + 5, ptr_r1_cargo.getSlotFeasibleTimeWindow(ptr_r1_cargo.getReturnSlot()).getInclusiveStart());
 
-				final IPortTimeWindowsRecord ptr_r0_cargo = records.get(r0).get(0);
-				Assertions.assertEquals(24 * 19 + 1, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getExclusiveEnd());
-				Assertions.assertEquals(0, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getInclusiveStart());
 			}
 		});
 	}
@@ -471,14 +481,17 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 
 				final IResource r0 = initialSequences.getResources().get(0);
 
-				final IPortTimeWindowsRecord ptr_r1_cargo = records.get(r0).get(1);
-				// Assert expected result (Truncated end window)
-				Assertions.assertEquals(24 * 25 + 6, ptr_r1_cargo.getSlotFeasibleTimeWindow(ptr_r1_cargo.getReturnSlot()).getExclusiveEnd());
-				Assertions.assertEquals(24 * 25 + 5, ptr_r1_cargo.getSlotFeasibleTimeWindow(ptr_r1_cargo.getReturnSlot()).getInclusiveStart());
-
 				final IPortTimeWindowsRecord ptr_r0_cargo = records.get(r0).get(0);
 				Assertions.assertEquals(1, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getExclusiveEnd());
 				Assertions.assertEquals(0, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getInclusiveStart());
+
+				// Assert expected result within max duration
+				final IPortTimeWindowsRecord ptr_r1_cargo = records.get(r0).get(1);
+				Assertions.assertTrue(ptr_r1_cargo.getSlotFeasibleTimeWindow(ptr_r1_cargo.getReturnSlot()).getInclusiveStart() < 24 * 26 - 1);
+
+				// Assertions.assertEquals(24 * 25 + 6, ptr_r1_cargo.getSlotFeasibleTimeWindow(ptr_r1_cargo.getReturnSlot()).getExclusiveEnd());
+				// Assertions.assertEquals(24 * 25 + 5, ptr_r1_cargo.getSlotFeasibleTimeWindow(ptr_r1_cargo.getReturnSlot()).getInclusiveStart());
+
 			}
 		});
 	}
