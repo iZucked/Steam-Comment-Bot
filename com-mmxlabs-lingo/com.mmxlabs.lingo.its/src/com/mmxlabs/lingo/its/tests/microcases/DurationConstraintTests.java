@@ -15,6 +15,7 @@ import java.util.function.Consumer;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -483,10 +484,9 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 				Assertions.assertEquals(cargoReturnWindow.getInclusiveStart(), endFirstWindow.getInclusiveStart());
 				Assertions.assertEquals(cargoReturnWindow.getExclusiveEnd(), endFirstWindow.getExclusiveEnd());
 
-				// Expect end window to be clamped to max duration
 				int maxDurationInHours = 24 * (vesselAvailability.getMaxDuration());
-				Assertions.assertEquals(maxDurationInHours + 1, endFirstWindow.getExclusiveEnd());
-				// Assertions.assertEquals(maxDurationInHours, slotFeasibleTimeWindow.getInclusiveStart());
+				// This is false as we cannot meet the max duration.
+				Assertions.assertFalse( endFirstWindow.getInclusiveStart() <= maxDurationInHours );
 
 			}
 		});
@@ -1027,6 +1027,7 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Disabled("Hire cost end rule is being removed")
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void maxDurationWithOpenEndAndHireCostEndRulesTest() throws Exception {
