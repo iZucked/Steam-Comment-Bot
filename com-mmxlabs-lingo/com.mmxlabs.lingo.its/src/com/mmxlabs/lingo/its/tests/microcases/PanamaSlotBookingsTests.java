@@ -727,6 +727,8 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
 				scheduler.setUseCanalBasedWindowTrimming(true);
 				scheduler.setUsePriceBasedWindowTrimming(false);
+				scheduler.setUsePNLBasedWindowTrimming(false);
+				
 				final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(manipulatedSequences);
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
 
