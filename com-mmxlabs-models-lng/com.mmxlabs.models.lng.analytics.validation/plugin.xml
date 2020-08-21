@@ -237,6 +237,22 @@
                      class="OptionalSimpleVesselCharterOption">
                </target>
             </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.analytics.validation.ExistingCharterMarketOptionConstraint"
+                  id="com.mmxlabs.models.lng.analytics.validation.ExistingCharterMarketOptionConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="ExistingCharterMarketOptionConstraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="ExistingCharterMarketOption">
+               </target>
+            </constraint>
          </constraints>
       </constraintProvider>
    </extension>
