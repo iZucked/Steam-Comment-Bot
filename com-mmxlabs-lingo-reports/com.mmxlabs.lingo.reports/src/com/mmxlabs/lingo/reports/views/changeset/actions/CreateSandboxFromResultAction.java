@@ -7,6 +7,7 @@ package com.mmxlabs.lingo.reports.views.changeset.actions;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -31,9 +32,11 @@ import com.mmxlabs.models.lng.analytics.OpenSell;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.PartialCase;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
+import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.SellMarket;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
+import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.VesselEventOption;
 import com.mmxlabs.models.lng.analytics.VesselEventReference;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -50,6 +53,7 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
@@ -58,9 +62,9 @@ public class CreateSandboxFromResultAction extends Action {
 
 	private final Collection<ChangeSetTableRow> selectedRows;
 	private final String name;
-	private ScenarioResult baseScenarioResult;
+	private final ScenarioResult baseScenarioResult;
 
-	public CreateSandboxFromResultAction(final Collection<ChangeSetTableRow> selectedRows, final String name, ScenarioResult baseScenarioResult) {
+	public CreateSandboxFromResultAction(final Collection<ChangeSetTableRow> selectedRows, final String name, final ScenarioResult baseScenarioResult) {
 
 		super("Create sandbox");
 		this.selectedRows = selectedRows;
@@ -83,7 +87,7 @@ public class CreateSandboxFromResultAction extends Action {
 		final Map<LoadSlot, BuyOption> buyOptions = new HashMap<>();
 		final Map<DischargeSlot, SellOption> sellOptions = new HashMap<>();
 		final Map<VesselEvent, VesselEventOption> eventOptions = new HashMap<>();
-		final Map<Pair<CharterInMarket, Integer>, ExistingCharterMarketOption> roundTripMap = new HashMap<>();
+		final Map<Pair<CharterInMarket, Integer>, ShippingOption> roundTripMap = new HashMap<>();
 		final Map<VesselAvailability, ExistingVesselCharterOption> vesselAvailOptionMap = new HashMap<>();
 
 		final Function<VesselAvailability, ExistingVesselCharterOption> availOptionComputer = (va) -> {
@@ -147,6 +151,45 @@ public class CreateSandboxFromResultAction extends Action {
 			return ref;
 		});
 
+		Function<Sequence, Optional<ShippingOption>> shippingOptionFunc = sequence -> {
+			if (sequence != null) {
+				if (sequence.getCharterInMarket() != null) {
+					final CharterInMarket charterInMarket = sequence.getCharterInMarket();
+					final Pair<CharterInMarket, Integer> key = new Pair<>(charterInMarket, sequence.getSpotIndex());
+					if (roundTripMap.containsKey(key)) {
+						return Optional.of(roundTripMap.get(key));
+					} else {
+						if (!(charterInMarket.eContainer() instanceof SpotMarketsModel)) {
+							if (sequence.getSpotIndex() < 0) {
+								final RoundTripShippingOption option = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
+								option.setVessel(charterInMarket.getVessel());
+								option.setEntity(charterInMarket.getEntity());
+								option.setHireCost(charterInMarket.getCharterInRate());
+								newModel.getShippingTemplates().add(option);
+								roundTripMap.put(key, option);
+								return Optional.of(option);
+							} else {
+								// We do not expect a charter in market outside the spot markets model - unless it is roundtrip.
+								throw new IllegalStateException();
+							}
+						} else {
+							final ExistingCharterMarketOption opt = AnalyticsFactory.eINSTANCE.createExistingCharterMarketOption();
+							opt.setCharterInMarket(charterInMarket);
+							opt.setSpotIndex(sequence.getSpotIndex());
+							newModel.getShippingTemplates().add(opt);
+							roundTripMap.put(key, opt);
+							return Optional.of(opt);
+						}
+					}
+				} else if (sequence.getVesselAvailability() != null) {
+					final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
+					final ExistingVesselCharterOption opt = vesselAvailOptionMap.computeIfAbsent(vesselAvailability, availOptionComputer);
+					return Optional.of(opt);
+				}
+			}
+			return Optional.empty();
+		};
+
 		final LNGScenarioModel scenarioModel = baseScenarioResult.getTypedRoot(LNGScenarioModel.class);
 		assert scenarioModel != null;
 
@@ -154,6 +197,7 @@ public class CreateSandboxFromResultAction extends Action {
 		baseCase.setKeepExistingScenario(true);
 		baseCase.setProfitAndLoss(ScheduleModelKPIUtils.getScheduleProfitAndLoss(ScenarioModelUtil.getScheduleModel(scenarioModel).getSchedule()));
 
+		// Stage 1, generate the before case (i.e. the pin)
 		for (final ChangeSetTableRow row : selectedRows) {
 			final BaseCaseRow bRow = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
 			if (row.isWiringChange() || row.isVesselChange()) {
@@ -167,7 +211,7 @@ public class CreateSandboxFromResultAction extends Action {
 						}
 						final Event evt = lhsData.getLhsEvent();
 						if (evt instanceof VesselEventVisit) {
-							VesselEventVisit vesselEventVisit = (VesselEventVisit) evt;
+							final VesselEventVisit vesselEventVisit = (VesselEventVisit) evt;
 							bRow.setVesselEventOption(eventGetter.apply(vesselEventVisit.getVesselEvent()));
 						}
 					}
@@ -176,29 +220,7 @@ public class CreateSandboxFromResultAction extends Action {
 						final SlotAllocation originalLoadAllocation = rhsData.getLoadAllocation();
 						if (originalLoadAllocation != null) {
 							final Sequence sequence = originalLoadAllocation.getSlotVisit().getSequence();
-
-							if (sequence != null) {
-								if (sequence.getCharterInMarket() != null) {
-									final CharterInMarket charterInMarket = sequence.getCharterInMarket();
-									final Pair<CharterInMarket, Integer> key = new Pair<>(charterInMarket, sequence.getSpotIndex());
-									if (roundTripMap.containsKey(key)) {
-										final ExistingCharterMarketOption opt = roundTripMap.get(key);
-										bRow.setShipping(opt);
-									} else {
-										final ExistingCharterMarketOption opt = AnalyticsFactory.eINSTANCE.createExistingCharterMarketOption();
-										opt.setCharterInMarket(charterInMarket);
-										opt.setSpotIndex(sequence.getSpotIndex());
-										newModel.getShippingTemplates().add(opt);
-										bRow.setShipping(opt);
-										roundTripMap.put(key, opt);
-									}
-
-								} else if (sequence.getVesselAvailability() != null) {
-									final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
-									final ExistingVesselCharterOption opt = vesselAvailOptionMap.computeIfAbsent(vesselAvailability, availOptionComputer);
-									bRow.setShipping(opt);
-								}
-							}
+							shippingOptionFunc.apply(sequence).ifPresent(bRow::setShipping);
 						}
 					}
 				}
@@ -224,6 +246,8 @@ public class CreateSandboxFromResultAction extends Action {
 		final PartialCase partialCase = AnalyticsFactory.eINSTANCE.createPartialCase();
 		partialCase.setKeepExistingScenario(true);
 
+		// Stage 2, generate the after case (i.e. the diff/other)
+		// This code is pretty similar to stage 1.
 		for (final ChangeSetTableRow row : selectedRows) {
 			final PartialCaseRow pRow = AnalyticsFactory.eINSTANCE.createPartialCaseRow();
 			if (row.isWiringChange() || row.isVesselChange()) {
@@ -233,36 +257,17 @@ public class CreateSandboxFromResultAction extends Action {
 
 						final Event evt = lhsData.getLhsEvent();
 						if (evt instanceof VesselEventVisit) {
-							VesselEventVisit vesselEventVisit = (VesselEventVisit) evt;
+							final VesselEventVisit vesselEventVisit = (VesselEventVisit) evt;
 							pRow.getVesselEventOptions().add(eventGetter.apply(vesselEventVisit.getVesselEvent()));
 						}
 
 						final SlotAllocation loadAllocation = lhsData.getLoadAllocation();
 						if (loadAllocation != null) {
 							final LoadSlot slot = (LoadSlot) loadAllocation.getSlot();
+							// TODO: Not sure why we have a null check here, it may be a bug
+							// as this will avoid creating an OpenBuy
 							if (slot != null) {
-								if (buyOptions.containsKey(slot)) {
-									pRow.getBuyOptions().add(buyOptions.get(slot));
-								} else {
-									if (slot instanceof SpotSlot) {
-										final SpotSlot spotSlot = (SpotSlot) slot;
-										final BuyMarket ref = AnalyticsFactory.eINSTANCE.createBuyMarket();
-										if (slot.isDESPurchase()) {
-											ref.setMarket(spotSlot.getMarket());
-										} else {
-											ref.setMarket(spotSlot.getMarket());
-										}
-										pRow.getBuyOptions().add(ref);
-
-										newModel.getBuys().add(ref);
-										buyOptions.put(slot, ref);
-									} else {
-										final BuyReference ref = AnalyticsFactory.eINSTANCE.createBuyReference();
-										ref.setSlot(slot);
-										pRow.getBuyOptions().add(ref);
-										buyOptions.put(slot, ref);
-									}
-								}
+								pRow.getBuyOptions().add(buyGetter.apply(slot));
 							}
 						}
 					}
@@ -284,28 +289,7 @@ public class CreateSandboxFromResultAction extends Action {
 						final SlotAllocation originalLoadAllocation = lhsData.getLoadAllocation();
 						if (originalLoadAllocation != null) {
 							final Sequence sequence = originalLoadAllocation.getSlotVisit().getSequence();
-							if (sequence != null) {
-								if (sequence.getCharterInMarket() != null) {
-									final CharterInMarket charterInMarket = sequence.getCharterInMarket();
-									final Pair<CharterInMarket, Integer> key = new Pair<>(charterInMarket, sequence.getSpotIndex());
-									if (roundTripMap.containsKey(key)) {
-										final ExistingCharterMarketOption opt = roundTripMap.get(key);
-										pRow.getShipping().add(opt);
-									} else {
-										final ExistingCharterMarketOption opt = AnalyticsFactory.eINSTANCE.createExistingCharterMarketOption();
-										opt.setCharterInMarket(charterInMarket);
-										opt.setSpotIndex(sequence.getSpotIndex());
-										newModel.getShippingTemplates().add(opt);
-										pRow.getShipping().add(opt);
-										roundTripMap.put(key, opt);
-									}
-
-								} else if (sequence.getVesselAvailability() != null) {
-									final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
-									final ExistingVesselCharterOption opt = vesselAvailOptionMap.computeIfAbsent(vesselAvailability, availOptionComputer);
-									pRow.getShipping().add(opt);
-								}
-							}
+							shippingOptionFunc.apply(sequence).ifPresent(pRow.getShipping()::add);
 						}
 					}
 				}
