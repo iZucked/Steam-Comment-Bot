@@ -24,9 +24,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import com.mmxlabs.models.lng.scenario.importWizards.ImportUtils;
-import com.mmxlabs.models.lng.scenario.importWizards.RadioSelectionGroup;
 import com.mmxlabs.models.lng.scenario.ui.ScenarioContentProvider;
 import com.mmxlabs.models.lng.scenario.ui.ScenarioLabelProvider;
+import com.mmxlabs.rcp.common.controls.RadioSelectionGroup;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;

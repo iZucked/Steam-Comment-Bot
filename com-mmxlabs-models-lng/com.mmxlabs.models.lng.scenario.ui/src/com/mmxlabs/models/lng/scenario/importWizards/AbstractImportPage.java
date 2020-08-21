@@ -25,16 +25,13 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Group;
-import org.osgi.util.tracker.ServiceTracker;
 
 import com.mmxlabs.models.lng.scenario.internal.Activator;
 import com.mmxlabs.models.lng.scenario.ui.ScenarioContentProvider;
 import com.mmxlabs.models.lng.scenario.ui.ScenarioLabelProvider;
-import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
+import com.mmxlabs.rcp.common.controls.RadioSelectionGroup;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.ScenarioModel;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 
 public abstract class AbstractImportPage extends WizardPage {
@@ -313,7 +310,7 @@ public abstract class AbstractImportPage extends WizardPage {
 		});
 
 		// only enable the scenario tree when the appropriate radio button is selected
-		final Button selectedOnlyButton = scenarioSelectionGroup.buttons.get(selectedOnlyIndex);
+		final Button selectedOnlyButton = scenarioSelectionGroup.getButtons().get(selectedOnlyIndex);
 		scenarioTreeViewer.getTree().setEnabled(selectedOnlyButton.getSelection());
 		selectedOnlyButton.addSelectionListener(new SelectionListener() {
 			@Override

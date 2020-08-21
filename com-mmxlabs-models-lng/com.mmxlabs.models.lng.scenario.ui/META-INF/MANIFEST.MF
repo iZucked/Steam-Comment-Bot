@@ -13,6 +13,7 @@ Export-Package: com.mmxlabs.models.lng.scenario.exportWizards,
  com.mmxlabs.models.lng.scenario.importWizards.holidaycalendars,
  com.mmxlabs.models.lng.scenario.importWizards.pricingcalendars,
  com.mmxlabs.models.lng.scenario.mergeWizards,
+ com.mmxlabs.models.lng.scenario.ui,
  com.mmxlabs.models.lng.scenario.ui.importers,
  com.mmxlabs.models.lng.scenario.utils,
  com.mmxlabs.models.lng.scenario.wizards

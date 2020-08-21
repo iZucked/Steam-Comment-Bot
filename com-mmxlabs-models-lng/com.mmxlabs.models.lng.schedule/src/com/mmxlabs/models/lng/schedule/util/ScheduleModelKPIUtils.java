@@ -574,6 +574,19 @@ public class ScheduleModelKPIUtils {
 	public enum TotalType {
 		QUANTITY_M3, QUANTITY_MMBTU, QUANTITY_MT, COST
 	}
+	
+	public static Integer getEventBallastBonus(final @Nullable EventGrouping grouping) {
+		int total = 0;
+		for (final Event event : grouping.getEvents()) {
+			if (event instanceof StartEvent) {
+				total += ((StartEvent) event).getRepositioningFee();
+			}
+			if (event instanceof EndEvent) {
+				total += ((EndEvent) event).getBallastBonusFee();
+			}
+		}
+		return total;
+	}
 
 	public static Long calculateEventShippingCost(final @Nullable EventGrouping grouping, final boolean includeAllLNG, final boolean includeRevenue, final ShippingCostType costType) {
 		long hours = 0;
