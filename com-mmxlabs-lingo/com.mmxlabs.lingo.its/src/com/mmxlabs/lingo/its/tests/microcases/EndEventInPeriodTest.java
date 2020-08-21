@@ -11,6 +11,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -91,8 +92,8 @@ public class EndEventInPeriodTest extends AbstractMicroTestCase {
 					for (final Event e : s.getEvents()) {
 						if (e instanceof EndEvent) {
 							endDate[0] = e.getEnd();
-							// Expect some sort of duration here
-							Assertions.assertNotEquals(e.getStart(), e.getEnd());
+							// No longer expect some sort of duration here as the hire cost only rule is not in the user scenario
+							Assertions.assertEquals(e.getStart(), e.getEnd());
 							break LOOP_SEARCH;
 						}
 					}
