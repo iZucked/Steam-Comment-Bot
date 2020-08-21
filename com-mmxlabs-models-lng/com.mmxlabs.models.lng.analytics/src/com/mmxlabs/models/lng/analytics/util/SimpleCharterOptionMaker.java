@@ -4,26 +4,20 @@
  */
 package com.mmxlabs.models.lng.analytics.util;
 
-import java.time.LocalDate;
 import java.util.function.Consumer;
 
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
-import com.mmxlabs.models.lng.analytics.SellOpportunity;
-import com.mmxlabs.models.lng.analytics.VolumeMode;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
-import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.types.VolumeUnits;
 
 public class SimpleCharterOptionMaker {
-	@NonNull
-	protected final SandboxModelBuilder builder;
 
-	protected SimpleVesselCharterOption option = null;
+	protected final @NonNull  SandboxModelBuilder builder;
+
+	protected final @NonNull SimpleVesselCharterOption option;
 
 	public SimpleCharterOptionMaker(@NonNull final SandboxModelBuilder builder) {
 		this.builder = builder;

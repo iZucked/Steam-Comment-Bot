@@ -15,6 +15,7 @@ import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard.FragmentCopyHandler;
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
+import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
@@ -23,6 +24,7 @@ import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.SolutionOption;
 import com.mmxlabs.models.lng.analytics.VesselEventOption;
+import com.mmxlabs.models.lng.analytics.services.IAnalyticsScenarioEvaluator;
 import com.mmxlabs.models.lng.analytics.util.SandboxModelBuilder;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
@@ -32,6 +34,7 @@ import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.transformer.its.RequireFeature;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
+import com.mmxlabs.models.lng.transformer.ui.analytics.AnalyticsScenarioEvaluator;
 import com.mmxlabs.models.lng.transformer.ui.analytics.EvaluateSolutionSetHelper;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
@@ -39,6 +42,10 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 @RequireFeature({ KnownFeatures.FEATURE_SANDBOX })
 public class SandboxCopyTests extends AbstractSandboxTestCase {
 
+	static {
+		AnalyticsPackage einstance = AnalyticsPackage.eINSTANCE;
+	}
+	
 	/**
 	 * Check basic source sandbox data copies across ok.
 	 * 
@@ -87,6 +94,85 @@ public class SandboxCopyTests extends AbstractSandboxTestCase {
 
 			// Make equivalent data in new SDP
 			new CargoModelBuilder(ScenarioModelUtil.getCargoModel(targetSDP)).makeDESSale("DES", LocalDate.of(2019, 7, 1), port, null, entity, "7").build();
+
+			OptionAnalysisModel targetModel = FragmentCopyHandler.copySandboxModelWithJSON(scenarioDataProvider, sandboxBuilder.getOptionAnalysisModel(), targetSDP);
+			Assertions.assertNotNull(targetModel);
+
+			Assertions.assertEquals(sourceModel.getBuys().size(), targetModel.getBuys().size());
+			Assertions.assertEquals(sourceModel.getSells().size(), targetModel.getSells().size());
+			Assertions.assertEquals(sourceModel.getVesselEvents().size(), targetModel.getVesselEvents().size());
+			Assertions.assertEquals(sourceModel.getShippingTemplates().size(), targetModel.getShippingTemplates().size());
+
+			Assertions.assertEquals(sourceModel.getBaseCase().getBaseCase().size(), targetModel.getBaseCase().getBaseCase().size());
+			Assertions.assertEquals(sourceModel.getPartialCase().getPartialCase().size(), targetModel.getPartialCase().getPartialCase().size());
+
+			for (int i = 0; i < sourceModel.getBaseCase().getBaseCase().size(); ++i) {
+
+				BaseCaseRow sourceRow = sourceModel.getBaseCase().getBaseCase().get(i);
+				BaseCaseRow targetRow = targetModel.getBaseCase().getBaseCase().get(i);
+
+			}
+
+			for (int i = 0; i < sourceModel.getPartialCase().getPartialCase().size(); ++i) {
+
+				PartialCaseRow sourceRow = sourceModel.getPartialCase().getPartialCase().get(i);
+				PartialCaseRow targetRow = targetModel.getPartialCase().getPartialCase().get(i);
+
+			}
+		}
+	}
+
+	/**
+	 * Test case to ensure generated solution with a round-trip shipping option works correctly.
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void testCopyWithRoundtrip() throws Exception {
+
+		final SandboxModelBuilder sandboxBuilder = SandboxModelBuilder.createSandbox(ScenarioModelUtil.getAnalyticsModel(scenarioDataProvider));
+
+		sandboxBuilder.setPortfolioMode(false);
+		sandboxBuilder.setPortfolioBreakevenMode(false);
+		sandboxBuilder.setManualSandboxMode();
+
+		final Port portFuttsu = portFinder.findPortById(InternalDataConstants.PORT_FUTTSU);
+		final Port portBonny = portFinder.findPortById(InternalDataConstants.PORT_BONNY);
+
+		final BuyOption buy1 = sandboxBuilder.makeBuyOpportunity(false, portBonny, entity, "5").withCV(22.5).build();
+		final BuyOption buy2 = sandboxBuilder.makeBuyOpportunity(true, portFuttsu, entity, "6").withCV(22.5).build();
+		final BuyOption buy3 = sandboxBuilder.createOpenBuy();
+
+		final SellOption sell1 = sandboxBuilder.makeSellOpportunity(false, portFuttsu, entity, "7") //
+				.withDate(LocalDate.of(2019, 7, 1)) //
+				.build();
+
+		final VesselEventOption event1 = sandboxBuilder.makeCharterOutOpportunity(portFuttsu, LocalDate.of(2019, 7, 1), 1) //
+				.build();
+
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_138);
+
+		final ShippingOption shipping1 = sandboxBuilder.createRoundtripOption(vessel, entity, "50000");
+
+		DischargeSlot slot = cargoModelBuilder.makeDESSale("DES", LocalDate.of(2019, 7, 1), portFuttsu, null, entity, "7").build();
+
+		sandboxBuilder.createSellReference(slot);
+
+		sandboxBuilder.createBaseCaseRow(buy1, sell1, shipping1);
+		sandboxBuilder.createPartialCaseRow(buy2, sell1, null);
+		sandboxBuilder.createPartialCaseRow(event1, shipping1);
+
+		OptionAnalysisModel sourceModel = sandboxBuilder.getOptionAnalysisModel();
+
+		// Evaluate initial case
+		IAnalyticsScenarioEvaluator evaluator = new AnalyticsScenarioEvaluator();
+		evaluator.runSandboxOptions(scenarioDataProvider, null, sourceModel, sourceModel::setResults, false);
+
+		// Create a second copy!
+		try (IScenarioDataProvider targetSDP = importReferenceData()) {
+
+			// Make equivalent data in new SDP
+			new CargoModelBuilder(ScenarioModelUtil.getCargoModel(targetSDP)).makeDESSale("DES", LocalDate.of(2019, 7, 1), portFuttsu, null, entity, "7").build();
 
 			OptionAnalysisModel targetModel = FragmentCopyHandler.copySandboxModelWithJSON(scenarioDataProvider, sandboxBuilder.getOptionAnalysisModel(), targetSDP);
 

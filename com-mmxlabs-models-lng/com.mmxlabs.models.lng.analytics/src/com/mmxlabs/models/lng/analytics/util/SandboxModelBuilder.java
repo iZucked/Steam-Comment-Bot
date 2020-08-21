@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.analytics.OpenBuy;
 import com.mmxlabs.models.lng.analytics.OpenSell;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
+import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.SellMarket;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
@@ -139,10 +140,21 @@ public class SandboxModelBuilder {
 		final CharterOutOpportunityMaker maker = new CharterOutOpportunityMaker(this);
 		return maker.create(port, date, duration);
 	}
-
+	
 	public SimpleCharterOptionMaker makeSimpleCharter(final Vessel vessel, final BaseLegalEntity entity) {
 		final SimpleCharterOptionMaker maker = new SimpleCharterOptionMaker(this);
 		return maker.create(vessel, entity);
+	}
+
+	public RoundTripShippingOption createRoundtripOption(final Vessel vessel, final BaseLegalEntity entity, final String hireCost) {
+		final RoundTripShippingOption option = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
+		option.setEntity(entity);
+		option.setVessel(vessel);
+		option.setHireCost(hireCost);
+		
+		optionAnalysisModel.getShippingTemplates().add(option);
+		
+		return option;
 	}
 
 	public FullCharterOptionMaker makeFullCharter(final Vessel vessel, final BaseLegalEntity entity) {
