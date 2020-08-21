@@ -4,14 +4,18 @@
  */
 package com.mmxlabs.models.lng.schedule.util;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.google.common.collect.Sets;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -25,9 +29,11 @@ import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
+import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelAmount;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUnit;
+import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
@@ -417,4 +423,117 @@ public class ScheduleModelUtils {
 		return null;
 	}
 
+	private static int getFuelCost(final FuelUsage fuelUser, final Fuel... fuels) {
+		final Set<Fuel> fuelsOfInterest = Sets.newHashSet(fuels);
+		int sum = 0;
+		if (fuelUser != null) {
+			final EList<FuelQuantity> fuelQuantities = fuelUser.getFuels();
+			for (final FuelQuantity fq : fuelQuantities) {
+				if (fuelsOfInterest.contains(fq.getFuel())) {
+					sum += fq.getCost();
+				}
+			}
+		}
+		return sum;
+	}
+	
+	/**
+	 * Returns the journey legs' duration in days (rounded to the next full integer)
+	 * @param cargoAllocation
+	 * @return 0-Laden; 1-Ballast; 2-Laden(Idle); 3-Ballast(Idle); 4-Discharge; 5-Loading; 6-Total
+	 * 
+	 */
+	public static int[] getJourneyDays(final CargoAllocation cargoAllocation, final boolean includeCharterOutInBallastIdle) {
+		int[] result = new int[7];
+		if (cargoAllocation != null) {
+			Event lastEvent = null;
+			for (final Event e : cargoAllocation.getEvents()) {
+				lastEvent = e;
+				if (e instanceof Journey) {
+					if (((Journey) e).isLaden()) {
+						result[0] = e.getDuration();
+					} else {
+						result[1] = e.getDuration();
+					}
+				} else if (e instanceof Idle) {
+					if (((Idle) e).isLaden()) {
+						result[2] = e.getDuration();
+					} else {
+						result[3] = e.getDuration();
+					}
+				} else if (e instanceof SlotVisit) {
+					final SlotVisit s = (SlotVisit) e;
+					final SlotAllocation sa = s.getSlotAllocation();
+					if (sa.getSlot() instanceof DischargeSlot) {
+						result[4] = e.getDuration();
+					} else if (sa.getSlot() instanceof LoadSlot) {
+						result[5] = e.getDuration();
+					}
+				}
+			}
+			if (lastEvent != null && includeCharterOutInBallastIdle) {
+				final Event ne = lastEvent.getNextEvent();
+				if (ne instanceof CharterLengthEvent) {
+					result[3] += ne.getDuration();
+				}
+			}
+		}
+		for (int i = 0; i < 6; i++) {
+			result[6] += result[i];
+		}
+		for (int i = 0; i < 7; i++) {
+			result[i] = (int) Math.ceil(result[i] / 24.0);
+		}
+		return result;
+	}
+
+	/**
+	 * Returns the journey legs' duration in days (real values)
+	 * @param cargoAllocation
+	 * @return 0-Laden; 1-Ballast; 2-Laden(Idle); 3-Ballast(Idle); 4-Discharge; 5-Loading; 6-Total
+	 * 
+	 */
+	public static double[] getRawJourneyDays(final CargoAllocation cargoAllocation, final boolean includeCharterOutInBallastIdle) {
+		double[] result = new double[7];
+		if (cargoAllocation != null) {
+			Event lastEvent = null;
+			for (final Event e : cargoAllocation.getEvents()) {
+				lastEvent = e;
+				if (e instanceof Journey) {
+					if (((Journey) e).isLaden()) {
+						result[0] = e.getDuration();
+					} else {
+						result[1] = e.getDuration();
+					}
+				} else if (e instanceof Idle) {
+					if (((Idle) e).isLaden()) {
+						result[2] = e.getDuration();
+					} else {
+						result[3] = e.getDuration();
+					}
+				} else if (e instanceof SlotVisit) {
+					final SlotVisit s = (SlotVisit) e;
+					final SlotAllocation sa = s.getSlotAllocation();
+					if (sa.getSlot() instanceof DischargeSlot) {
+						result[4] = e.getDuration();
+					} else if (sa.getSlot() instanceof LoadSlot) {
+						result[5] = e.getDuration();
+					}
+				}
+			}
+			if (lastEvent != null && includeCharterOutInBallastIdle) {
+				final Event ne = lastEvent.getNextEvent();
+				if (ne instanceof CharterLengthEvent) {
+					result[3] += ne.getDuration();
+				}
+			}
+		}
+		for (int i = 0; i < 6; i++) {
+			result[6] += result[i];
+		}
+		for (int i = 0; i < 7; i++) {
+			result[i] = result[i] / 24.0;
+		}
+		return result;
+	}
 }

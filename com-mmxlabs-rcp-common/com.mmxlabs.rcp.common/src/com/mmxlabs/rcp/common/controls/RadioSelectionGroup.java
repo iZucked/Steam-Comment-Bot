@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Group;
 public class RadioSelectionGroup extends Composite {
 	int selectedIndex = -1;
 	final ArrayList<Button> buttons = new ArrayList<Button>();
+	
 	final Group group;
 	final int[] values;
 
@@ -27,14 +28,8 @@ public class RadioSelectionGroup extends Composite {
 		super(parent, style);
 
 		final GridLayout layout = new GridLayout(1, true);
-		// layout.marginRight = 0;
 		layout.marginWidth = 0;
 		setLayout(layout);
-		// GridData gd = new GridData();
-		// gd.verticalIndent = 0;
-		// gd.horizontalIndent = 0;
-		// gd.grabExcessHorizontalSpace = true;
-		// setLayoutData(gd);
 
 		group = new Group(this, style);
 		for (final String label : labels) {
@@ -46,8 +41,6 @@ public class RadioSelectionGroup extends Composite {
 		gl.marginWidth = 0;
 		setLayout(gl);
 		group.setLayout(new GridLayout(labels.length, false));
-		// GridData groupLayoutData = new GridData();
-		// group.setLayoutData(groupLayoutData);
 		group.setText(title);
 		this.values = values;
 	}
@@ -59,11 +52,6 @@ public class RadioSelectionGroup extends Composite {
 		buttons.add(button);
 
 		button.setText(text);
-		// GridData gd = new GridData();
-		// // gd.verticalIndent = 0;
-		// // gd.horizontalIndent = 0;
-		// // gd.grabExcessHorizontalSpace = true;
-		// button.setLayoutData(gd);
 		button.addSelectionListener(new SelectionListener() {
 
 			@Override
@@ -95,4 +83,7 @@ public class RadioSelectionGroup extends Composite {
 		return values[getSelectedIndex()];
 	}
 
+	public ArrayList<Button> getButtons() {
+		return buttons;
+	}
 }
