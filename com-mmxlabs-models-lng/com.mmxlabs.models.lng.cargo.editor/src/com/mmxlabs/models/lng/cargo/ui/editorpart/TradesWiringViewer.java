@@ -1100,6 +1100,21 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 		addTradesColumn(loadColumns, "Port", new SingleReferenceManipulator(pkg.getSlot_Port(), provider, editingDomain), new RowDataEMFPath(false, Type.LOAD));
 		addTradesColumn(loadColumns, "Buy At", new ContractManipulator(provider, editingDomain), new RowDataEMFPath(false, Type.LOAD));
+		if (LicenseFeatures.isPermitted("features:report-load-counterparty")) {
+			addTradesColumn(loadColumns, "Counterparty", new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(pkg.getSlot_Counterparty(), editingDomain) {
+
+				@Override
+				protected String renderSetValue(final Object container, final Object setValue) {
+					return setValue == null ? "" : setValue.toString();
+				}
+
+				@Override
+				public boolean isValueUnset(final Object object) {
+					return false;
+				}
+
+			}), new RowDataEMFPath(false, Type.LOAD));
+		}
 		addTradesColumn(loadColumns, "Price",
 				new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getSlotAllocation_Price(), editingDomain) {
 
@@ -1212,7 +1227,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		}
 
 		addTradesColumn(dischargeColumns, "Sell At", new ContractManipulator(provider, editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
-		if (LicenseFeatures.isPermitted("features:report-counterparty")) {
+		if (LicenseFeatures.isPermitted("features:report-discharge-counterparty")) {
 			addTradesColumn(dischargeColumns, "Counterparty", new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(pkg.getSlot_Counterparty(), editingDomain) {
 
 				@Override
