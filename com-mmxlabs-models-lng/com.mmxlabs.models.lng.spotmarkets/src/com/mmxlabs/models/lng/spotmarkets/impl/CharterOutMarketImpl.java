@@ -41,9 +41,9 @@ import com.mmxlabs.models.mmxcore.NamedObject;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterOutMarketImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterOutMarketImpl#getCharterOutRate <em>Charter Out Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterOutMarketImpl#getMinCharterOutDuration <em>Min Charter Out Duration</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterOutMarketImpl#getMaxCharterOutDuration <em>Max Charter Out Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterOutMarketImpl#getAvailablePorts <em>Available Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterOutMarketImpl#getVessels <em>Vessels</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterOutMarketImpl#getMaxCharterOutDuration <em>Max Charter Out Duration</em>}</li>
  * </ul>
  *
  * @generated
@@ -120,26 +120,6 @@ public class CharterOutMarketImpl extends SpotCharterMarketImpl implements Chart
 	protected int minCharterOutDuration = MIN_CHARTER_OUT_DURATION_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getAvailablePorts() <em>Available Ports</em>}' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getAvailablePorts()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<APortSet<Port>> availablePorts;
-
-	/**
-	 * The cached value of the '{@link #getVessels() <em>Vessels</em>}' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVessels()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<AVesselSet<Vessel>> vessels;
-
-	/**
 	 * The default value of the '{@link #getMaxCharterOutDuration() <em>Max Charter Out Duration</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -167,6 +147,26 @@ public class CharterOutMarketImpl extends SpotCharterMarketImpl implements Chart
 	 * @ordered
 	 */
 	protected boolean maxCharterOutDurationESet;
+
+	/**
+	 * The cached value of the '{@link #getAvailablePorts() <em>Available Ports</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAvailablePorts()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<APortSet<Port>> availablePorts;
+
+	/**
+	 * The cached value of the '{@link #getVessels() <em>Vessels</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVessels()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<AVesselSet<Vessel>> vessels;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -413,12 +413,12 @@ public class CharterOutMarketImpl extends SpotCharterMarketImpl implements Chart
 				return getCharterOutRate();
 			case SpotMarketsPackage.CHARTER_OUT_MARKET__MIN_CHARTER_OUT_DURATION:
 				return getMinCharterOutDuration();
+			case SpotMarketsPackage.CHARTER_OUT_MARKET__MAX_CHARTER_OUT_DURATION:
+				return getMaxCharterOutDuration();
 			case SpotMarketsPackage.CHARTER_OUT_MARKET__AVAILABLE_PORTS:
 				return getAvailablePorts();
 			case SpotMarketsPackage.CHARTER_OUT_MARKET__VESSELS:
 				return getVessels();
-			case SpotMarketsPackage.CHARTER_OUT_MARKET__MAX_CHARTER_OUT_DURATION:
-				return getMaxCharterOutDuration();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -445,6 +445,9 @@ public class CharterOutMarketImpl extends SpotCharterMarketImpl implements Chart
 			case SpotMarketsPackage.CHARTER_OUT_MARKET__MIN_CHARTER_OUT_DURATION:
 				setMinCharterOutDuration((Integer)newValue);
 				return;
+			case SpotMarketsPackage.CHARTER_OUT_MARKET__MAX_CHARTER_OUT_DURATION:
+				setMaxCharterOutDuration((Integer)newValue);
+				return;
 			case SpotMarketsPackage.CHARTER_OUT_MARKET__AVAILABLE_PORTS:
 				getAvailablePorts().clear();
 				getAvailablePorts().addAll((Collection<? extends APortSet<Port>>)newValue);
@@ -452,9 +455,6 @@ public class CharterOutMarketImpl extends SpotCharterMarketImpl implements Chart
 			case SpotMarketsPackage.CHARTER_OUT_MARKET__VESSELS:
 				getVessels().clear();
 				getVessels().addAll((Collection<? extends AVesselSet<Vessel>>)newValue);
-				return;
-			case SpotMarketsPackage.CHARTER_OUT_MARKET__MAX_CHARTER_OUT_DURATION:
-				setMaxCharterOutDuration((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -480,14 +480,14 @@ public class CharterOutMarketImpl extends SpotCharterMarketImpl implements Chart
 			case SpotMarketsPackage.CHARTER_OUT_MARKET__MIN_CHARTER_OUT_DURATION:
 				setMinCharterOutDuration(MIN_CHARTER_OUT_DURATION_EDEFAULT);
 				return;
+			case SpotMarketsPackage.CHARTER_OUT_MARKET__MAX_CHARTER_OUT_DURATION:
+				unsetMaxCharterOutDuration();
+				return;
 			case SpotMarketsPackage.CHARTER_OUT_MARKET__AVAILABLE_PORTS:
 				getAvailablePorts().clear();
 				return;
 			case SpotMarketsPackage.CHARTER_OUT_MARKET__VESSELS:
 				getVessels().clear();
-				return;
-			case SpotMarketsPackage.CHARTER_OUT_MARKET__MAX_CHARTER_OUT_DURATION:
-				unsetMaxCharterOutDuration();
 				return;
 		}
 		super.eUnset(featureID);
@@ -509,12 +509,12 @@ public class CharterOutMarketImpl extends SpotCharterMarketImpl implements Chart
 				return CHARTER_OUT_RATE_EDEFAULT == null ? charterOutRate != null : !CHARTER_OUT_RATE_EDEFAULT.equals(charterOutRate);
 			case SpotMarketsPackage.CHARTER_OUT_MARKET__MIN_CHARTER_OUT_DURATION:
 				return minCharterOutDuration != MIN_CHARTER_OUT_DURATION_EDEFAULT;
+			case SpotMarketsPackage.CHARTER_OUT_MARKET__MAX_CHARTER_OUT_DURATION:
+				return isSetMaxCharterOutDuration();
 			case SpotMarketsPackage.CHARTER_OUT_MARKET__AVAILABLE_PORTS:
 				return availablePorts != null && !availablePorts.isEmpty();
 			case SpotMarketsPackage.CHARTER_OUT_MARKET__VESSELS:
 				return vessels != null && !vessels.isEmpty();
-			case SpotMarketsPackage.CHARTER_OUT_MARKET__MAX_CHARTER_OUT_DURATION:
-				return isSetMaxCharterOutDuration();
 		}
 		return super.eIsSet(featureID);
 	}

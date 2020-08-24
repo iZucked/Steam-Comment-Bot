@@ -660,16 +660,6 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 */
 	@Override
 	public EReference getCharterOutMarket_AvailablePorts() {
-		return (EReference)charterOutMarketEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EReference getCharterOutMarket_Vessels() {
 		return (EReference)charterOutMarketEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -679,8 +669,18 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * @generated
 	 */
 	@Override
+	public EReference getCharterOutMarket_Vessels() {
+		return (EReference)charterOutMarketEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EAttribute getCharterOutMarket_MaxCharterOutDuration() {
-		return (EAttribute)charterOutMarketEClass.getEStructuralFeatures().get(4);
+		return (EAttribute)charterOutMarketEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -956,9 +956,9 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		charterOutMarketEClass = createEClass(CHARTER_OUT_MARKET);
 		createEAttribute(charterOutMarketEClass, CHARTER_OUT_MARKET__CHARTER_OUT_RATE);
 		createEAttribute(charterOutMarketEClass, CHARTER_OUT_MARKET__MIN_CHARTER_OUT_DURATION);
+		createEAttribute(charterOutMarketEClass, CHARTER_OUT_MARKET__MAX_CHARTER_OUT_DURATION);
 		createEReference(charterOutMarketEClass, CHARTER_OUT_MARKET__AVAILABLE_PORTS);
 		createEReference(charterOutMarketEClass, CHARTER_OUT_MARKET__VESSELS);
-		createEAttribute(charterOutMarketEClass, CHARTER_OUT_MARKET__MAX_CHARTER_OUT_DURATION);
 
 		charterInMarketEClass = createEClass(CHARTER_IN_MARKET);
 		createEReference(charterInMarketEClass, CHARTER_IN_MARKET__VESSEL);
@@ -1108,6 +1108,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		initEClass(charterOutMarketEClass, CharterOutMarket.class, "CharterOutMarket", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCharterOutMarket_CharterOutRate(), ecorePackage.getEString(), "charterOutRate", null, 0, 1, CharterOutMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCharterOutMarket_MinCharterOutDuration(), ecorePackage.getEInt(), "minCharterOutDuration", null, 1, 1, CharterOutMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCharterOutMarket_MaxCharterOutDuration(), ecorePackage.getEInt(), "maxCharterOutDuration", null, 1, 1, CharterOutMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		g1 = createEGenericType(theTypesPackage.getAPortSet());
 		g2 = createEGenericType(thePortPackage.getPort());
 		g1.getETypeArguments().add(g2);
@@ -1116,7 +1117,6 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		g2 = createEGenericType(theFleetPackage.getVessel());
 		g1.getETypeArguments().add(g2);
 		initEReference(getCharterOutMarket_Vessels(), g1, null, "vessels", null, 0, -1, CharterOutMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getCharterOutMarket_MaxCharterOutDuration(), ecorePackage.getEInt(), "maxCharterOutDuration", null, 1, 1, CharterOutMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(charterInMarketEClass, CharterInMarket.class, "CharterInMarket", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCharterInMarket_Vessel(), theFleetPackage.getVessel(), null, "vessel", null, 0, 1, CharterInMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

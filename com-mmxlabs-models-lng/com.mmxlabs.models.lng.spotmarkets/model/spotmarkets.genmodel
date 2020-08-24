@@ -76,9 +76,9 @@
     <genClasses ecoreClass="spotmarkets.ecore#//CharterOutMarket">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterOutMarket/charterOutRate"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterOutMarket/minCharterOutDuration"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterOutMarket/maxCharterOutDuration"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//CharterOutMarket/availablePorts"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//CharterOutMarket/vessels"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterOutMarket/maxCharterOutDuration"/>
     </genClasses>
     <genClasses ecoreClass="spotmarkets.ecore#//CharterInMarket">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//CharterInMarket/vessel"/>

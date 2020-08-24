@@ -25,9 +25,9 @@ import com.mmxlabs.models.mmxcore.NamedObject;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterOutMarket#getCharterOutRate <em>Charter Out Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterOutMarket#getMinCharterOutDuration <em>Min Charter Out Duration</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterOutMarket#getMaxCharterOutDuration <em>Max Charter Out Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterOutMarket#getAvailablePorts <em>Available Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterOutMarket#getVessels <em>Vessels</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterOutMarket#getMaxCharterOutDuration <em>Max Charter Out Duration</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getCharterOutMarket()

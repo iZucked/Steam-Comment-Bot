@@ -69,9 +69,9 @@ public class CharterOutMarketComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_charterOutRateEditor(detailComposite, topClass);
 		add_minCharterOutDurationEditor(detailComposite, topClass);
+		add_maxCharterOutDurationEditor(detailComposite, topClass);
 		add_availablePortsEditor(detailComposite, topClass);
 		add_vesselsEditor(detailComposite, topClass);
-		add_maxCharterOutDurationEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the minCharterOutDuration feature on CharterOutMarket

@@ -1313,13 +1313,22 @@ public interface SpotMarketsPackage extends EPackage {
 	int CHARTER_OUT_MARKET__MIN_CHARTER_OUT_DURATION = SPOT_CHARTER_MARKET_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Max Charter Out Duration</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_MARKET__MAX_CHARTER_OUT_DURATION = SPOT_CHARTER_MARKET_FEATURE_COUNT + 4;
+
+	/**
 	 * The feature id for the '<em><b>Available Ports</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_MARKET__AVAILABLE_PORTS = SPOT_CHARTER_MARKET_FEATURE_COUNT + 4;
+	int CHARTER_OUT_MARKET__AVAILABLE_PORTS = SPOT_CHARTER_MARKET_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Vessels</b></em>' reference list.
@@ -1328,16 +1337,7 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_MARKET__VESSELS = SPOT_CHARTER_MARKET_FEATURE_COUNT + 5;
-
-	/**
-	 * The feature id for the '<em><b>Max Charter Out Duration</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHARTER_OUT_MARKET__MAX_CHARTER_OUT_DURATION = SPOT_CHARTER_MARKET_FEATURE_COUNT + 6;
+	int CHARTER_OUT_MARKET__VESSELS = SPOT_CHARTER_MARKET_FEATURE_COUNT + 6;
 
 	/**
 	 * The number of structural features of the '<em>Charter Out Market</em>' class.

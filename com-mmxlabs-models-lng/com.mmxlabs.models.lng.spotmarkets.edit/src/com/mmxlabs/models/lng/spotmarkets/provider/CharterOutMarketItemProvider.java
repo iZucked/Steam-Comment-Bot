@@ -55,9 +55,9 @@ public class CharterOutMarketItemProvider
 			addNamePropertyDescriptor(object);
 			addCharterOutRatePropertyDescriptor(object);
 			addMinCharterOutDurationPropertyDescriptor(object);
+			addMaxCharterOutDurationPropertyDescriptor(object);
 			addAvailablePortsPropertyDescriptor(object);
 			addVesselsPropertyDescriptor(object);
-			addMaxCharterOutDurationPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
