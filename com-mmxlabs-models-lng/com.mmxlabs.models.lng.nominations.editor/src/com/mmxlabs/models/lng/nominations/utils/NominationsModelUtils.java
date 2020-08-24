@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.nominations.utils;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,6 +19,9 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -34,6 +39,7 @@ import com.mmxlabs.models.lng.nominations.DatePeriodPrior;
 import com.mmxlabs.models.lng.nominations.NominationsFactory;
 import com.mmxlabs.models.lng.nominations.NominationsModel;
 import com.mmxlabs.models.lng.nominations.Side;
+import com.mmxlabs.models.lng.nominations.presentation.composites.TimeWindowHolder;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -43,6 +49,8 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public class NominationsModelUtils {
 
+	private static final NumberFormat volumeFormatter = NumberFormat.getIntegerInstance();
+	
 	public static NominationsModel createNominationsModel() {
 		final NominationsModel nominationsModel = NominationsFactory.eINSTANCE.createNominationsModel();
 		nominationsModel.setNominationParameters(NominationsFactory.eINSTANCE.createNominationsParameters());
@@ -583,6 +591,20 @@ public class NominationsModelUtils {
 		}
 		return false;
 	}
+	
+	public static Integer getNominatedVolumeValue(AbstractNomination n) {
+		String nomValue = n.getNominatedValue();
+		if (nomValue != null && !nomValue.isBlank()) {
+			try {
+				Number volNum = volumeFormatter.parse(nomValue);
+				return volNum.intValue();
+			}
+			catch (ParseException e) {
+				//Will return Integer.MAX_VALUE below.
+			}
+		}
+		return Integer.MAX_VALUE;
+	}
 
 	public static boolean trimmedEquals(String str1, String str2) {
 		if (str1 != null && str2 != null) {
@@ -608,13 +630,20 @@ public class NominationsModelUtils {
 		return false;
 	}
 
-	public static String getNominatedValue(LNGScenarioModel scenarioModel, AbstractNomination object) {
-		if (object != null && object.getNominatedValue() != null) {
-			return object.getNominatedValue();
+	public static String getNominatedValue(LNGScenarioModel scenarioModel, AbstractNomination nomination) {
+		if (nomination != null && nomination.getNominatedValue() != null) {
+			String nominatedValueJSON = nomination.getNominatedValue();
+			Object object = getNominatedValueObjectFromJSON(nomination.getType(), nomination.getNominatedValue());
+			if (object != null && !(object instanceof String)) {
+				return object.toString();
+			}
+			else if (object != null && object instanceof String){
+				return (String)object;
+			}
 		}
-		else {
-			return "";
-		}
+		
+		//If no suitable value can be found, return empty string.
+		return "";
  	}
 
 	public static @NonNull List<String> getPossibleNominatedValues(LNGScenarioModel scenarioModel, AbstractNomination nomination) {
@@ -635,6 +664,54 @@ public class NominationsModelUtils {
 		}
 		else {
 			return Collections.emptyList();
+		}
+	}
+
+	public static Object getNominatedValueObjectFromJSON(String nominationType, String value) {
+		if (nominationType.toLowerCase().contains("window")) {
+			//Need a complex object for the time window.
+			ObjectMapper mapper = new ObjectMapper();
+			TimeWindowHolder nominatedObject = null;
+			boolean failed = false;
+			try {
+				nominatedObject = mapper.readValue(value, TimeWindowHolder.class);
+			} catch (JsonMappingException e) {
+				failed = true;
+			} catch (JsonProcessingException e) {
+				failed = true;
+			}
+			if (failed) {
+				return value;
+			}
+			else {
+				return nominatedObject;
+			}
+		}
+		else {
+			//Everything else just a simple string for now.
+			return value;
+		}
+	}
+	
+	public static String getNominatedValueJSONString(String nominationType, Object nominatedValueObject) {
+		//if (nominationType.toLowerCase().contains("window")) {
+		if (!(nominatedValueObject instanceof String)) {
+			//Need a complex object for the time window.
+			ObjectMapper mapper = new ObjectMapper();
+			try {
+				String nominatedObjectJSONString = mapper.writeValueAsString(nominatedValueObject);
+				return nominatedObjectJSONString;
+			} catch (JsonMappingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JsonProcessingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return "";
+		}
+		else {
+			return ((String)nominatedValueObject);
 		}
 	}
 }

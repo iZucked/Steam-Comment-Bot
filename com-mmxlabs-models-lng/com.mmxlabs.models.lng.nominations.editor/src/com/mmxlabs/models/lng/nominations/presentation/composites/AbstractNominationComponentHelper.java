@@ -12,18 +12,26 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.nebula.widgets.formattedtext.ITextFormatter;
+import org.eclipse.nebula.widgets.formattedtext.NumberFormatter;
+import org.eclipse.nebula.widgets.formattedtext.StringFormatter;
 
 import com.mmxlabs.models.lng.nominations.AbstractNomination;
 import com.mmxlabs.models.lng.nominations.ContractNomination;
 import com.mmxlabs.models.lng.nominations.NominationsPackage;
+import com.mmxlabs.models.lng.nominations.presentation.composites.NominatedValueInlineEditor.NominatedValueMode;
+import com.mmxlabs.models.lng.nominations.presentation.composites.NominatedValueInlineEditor.NominatedValueProvider;
 import com.mmxlabs.models.lng.nominations.utils.NominationsModelUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.editors.impl.TextInlineEditor;
+import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.TextualSuggestionInlineEditor;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
@@ -36,6 +44,8 @@ public class AbstractNominationComponentHelper extends BaseComponentHelper {
 	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
 	protected AbstractNominationSpecComponentHelper specComponentHelper;
 
+	protected IInlineEditor nominationTypeEditor;
+	
 	/**
 	 * Construct a new instance, using the platform adapter manager
 	 *
@@ -174,15 +184,54 @@ public class AbstractNominationComponentHelper extends BaseComponentHelper {
 	 * @generated
 	 */
 	protected void add_nominatedValueEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-	/*	detailComposite.addInlineEditor(new TextualSuggestionInlineEditor(NominationsPackage.Literals.ABSTRACT_NOMINATION__NOMINATED_VALUE,  (rootObject, target) -> {
-			if (rootObject instanceof LNGScenarioModel && target instanceof AbstractNomination) {
-				final LNGScenarioModel scenarioModel = (LNGScenarioModel)rootObject;
-				final AbstractNomination nomination = (AbstractNomination)target;
-				return NominationsModelUtils.getPossibleNominatedValues(scenarioModel, nomination);
-			}
-			else {
-				return Collections.emptyList();
-			}}));*/
-		detailComposite.addInlineEditor(new TextInlineEditor(NominationsPackage.Literals.ABSTRACT_NOMINATION__NOMINATED_VALUE));
+		detailComposite.addInlineEditor(new NominatedValueInlineEditor(NominationsPackage.Literals.ABSTRACT_NOMINATION__NOMINATED_VALUE, 
+			new NominatedValueProvider() {
+				@Override
+				public @NonNull List<String> getPossibleValues(MMXRootObject rootObject, Notifier target) {
+					if (rootObject instanceof LNGScenarioModel && target instanceof AbstractNomination) {
+						final LNGScenarioModel scenarioModel = (LNGScenarioModel)rootObject;
+						final AbstractNomination nomination = (AbstractNomination)target;
+						return NominationsModelUtils.getPossibleNominatedValues(scenarioModel, nomination);
+					}
+					else {
+						return Collections.emptyList();
+					}
+				}
+
+				@Override
+				public @NonNull ITextFormatter getTextFormatter(String nominationType) {
+					if (nominationType != null && nominationType.toLowerCase().contains("volume")) {
+						return new NumberFormatter("##,###,###");
+					}
+					
+					if (nominationType != null && nominationType.toLowerCase().contains("window")) {
+						//TODO formatted date time + window string.
+						return new DateWindowFormatter();
+					}												
+					
+					//Everything else just a string.
+					return new StringFormatter();
+				}
+				
+				@Override
+				public @NonNull NominatedValueMode getMode(MMXRootObject rootObject, Notifier target) {
+					if (rootObject instanceof LNGScenarioModel && target instanceof AbstractNomination) {
+						final LNGScenarioModel scenarioModel = (LNGScenarioModel)rootObject;
+						final AbstractNomination nomination = (AbstractNomination)target;
+						
+						if (nomination != null && nomination.getType() != null && 
+							(nomination.getType().toLowerCase().contains("port") ||
+							nomination.getType().toLowerCase().contains("vessel"))) {
+							return NominatedValueMode.Picker;
+						}
+						else {
+							return NominatedValueMode.FormattedText;
+						}
+					}
+				
+					return NominatedValueMode.FormattedText;
+				}	
+		}));
+		//detailComposite.addInlineEditor(new TextInlineEditor(NominationsPackage.Literals.ABSTRACT_NOMINATION__NOMINATED_VALUE));
 	}
 }

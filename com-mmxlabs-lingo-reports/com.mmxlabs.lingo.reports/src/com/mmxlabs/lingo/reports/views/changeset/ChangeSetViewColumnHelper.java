@@ -73,8 +73,10 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
 import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
 import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
+import com.mmxlabs.models.lng.cargo.SchedulingTimeWindow;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.nominations.AbstractNomination;
+import com.mmxlabs.models.lng.nominations.presentation.composites.TimeWindowHolder;
 import com.mmxlabs.models.lng.nominations.utils.NominationTypeRegistry;
 import com.mmxlabs.models.lng.nominations.utils.NominationsModelUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -1642,40 +1644,102 @@ public class ChangeSetViewColumnHelper {
 		}
 	}
 	
-	private List<AbstractNomination> filterAffectedNominations(final List<AbstractNomination> noms, final ChangeSetRowData before, final ChangeSetRowData after) {
-		final List<AbstractNomination> affectedNoms = new ArrayList<>();
-		for (final AbstractNomination n : noms) {
-			final String type = n.getType();
-			final String nominatedValue = n.getNominatedValue();
-			final String[] dependentFields = NominationTypeRegistry.getInstance().getDependentFields(type);
-			if (dependentFields != null && dependentFields.length > 0) {
-				for (final String field : dependentFields) {
-					Object fieldBefore = getFieldValue(before, field);
-					Object fieldAfter = getFieldValue(after, field);
-										
-					//Check for getName() method and use to get string to compare.
-					if (nominatedValue == null) {
-						fieldBefore = getName(fieldBefore);
-					}
-					else {
-						fieldBefore = nominatedValue;
-					}
-					fieldAfter = getName(fieldAfter);
-					
-					//If the dependent field has changed, then add to the list of effected nominations.
-					if (fieldBefore != null && fieldAfter != null && !Objects.equals(fieldBefore, fieldAfter)) {
-						affectedNoms.add(n);
-						break; //No need to add it twice.
+	private List<AbstractNomination> filterAffectedNominations(List<AbstractNomination> noms, ChangeSetRowData before, ChangeSetRowData after) {
+		List<AbstractNomination> affectedNoms = new ArrayList<>();
+		for (AbstractNomination n : noms) {
+			String type = n.getType();
+			String nominatedValue = n.getNominatedValue();
+			
+			//If no nominated value specified yet, then no nomination break.
+			if (nominatedValue != null && !nominatedValue.isBlank()) {
+				String[] dependentFields = NominationTypeRegistry.getInstance().getDependentFields(type);
+				if (dependentFields != null && dependentFields.length > 0) {
+					for (String field : dependentFields) {
+						Object fieldBefore = getFieldValue(before, field);
+						Object fieldAfter = getFieldValue(after, field);
+
+						if (type.toLowerCase().contains("volume")) {
+							int nominatedVolume = NominationsModelUtils.getNominatedVolumeValue(n);
+							if (fieldBefore instanceof Integer) {
+								fieldBefore = Boolean.valueOf(((Integer)fieldBefore) >= nominatedVolume);
+							}
+							if (fieldAfter instanceof Integer) {
+								fieldAfter = Boolean.valueOf(((Integer)fieldAfter) >= nominatedVolume);			
+							}
+						}
+						else if (type.toLowerCase().contains("window")) {
+							Object nominatedObject = NominationsModelUtils.getNominatedValueObjectFromJSON(type, nominatedValue);
+							if (nominatedObject instanceof TimeWindowHolder) {
+								TimeWindowHolder nominatedTimeWindow = (TimeWindowHolder)nominatedObject;
+								SlotAllocation beforeSA = getSlotAllocation(type, before);
+								SlotAllocation afterSA = getSlotAllocation(type, before);
+								
+								if (beforeSA != null) {
+									fieldBefore = withinNominationTimeWindow(beforeSA, nominatedTimeWindow);
+								}
+								if (afterSA != null) {
+									fieldAfter = withinNominationTimeWindow(afterSA, nominatedTimeWindow);
+								}
+							}
+							//Else must be empty string, so ignore it.
+						}
+						else {
+							fieldBefore = nominatedValue;
+						}
+						fieldAfter = getName(fieldAfter);
+
+						//If condition broken after-would.
+						if (fieldBefore instanceof Boolean && fieldAfter instanceof Boolean && 
+							fieldAfter.equals(Boolean.FALSE)) {
+							affectedNoms.add(n);
+							break;
+						}
+						//Else if values different from nominated value.
+						else if (!(fieldBefore instanceof Boolean && fieldAfter instanceof Boolean) && 
+								fieldBefore != null && fieldAfter != null && 
+								(!Objects.equals(fieldBefore, fieldAfter))) {
+							affectedNoms.add(n);
+							break; //No need to add it twice.
+						}
 					}
 				}
-			}
-			else {
-				//No dependent fields found, so assume affected if any change to slot.
-				affectedNoms.add(n);
-			}
-		}
+				else {
+					//No dependent fields found, so assume affected if any change to slot.
+					affectedNoms.add(n);
+				}
+			} //End if nominatedValue not blank.
+		} //End for each nomination.
 		
 		return affectedNoms;
+	}
+	
+	private SlotAllocation getSlotAllocation(String type, ChangeSetRowData rowData) {
+		if (type.toLowerCase().contains("buy")) {
+			return rowData.getLoadAllocation();
+		}
+		else if (type.toLowerCase().contains("sell")) {
+			return rowData.getDischargeAllocation();
+		}
+		return null;
+	}
+
+	/**
+	 * Determine if this slot visit is within the time window.
+	 * @generated NOT
+	 */
+	boolean withinNominationTimeWindow(SlotAllocation slotAllocation, @NonNull TimeWindowHolder window) {
+		if (slotAllocation != null && slotAllocation.getSlotVisit() != null) {
+			ZonedDateTime start = slotAllocation.getSlotVisit().getStart();
+			if (start != null) {
+				Slot<?> slot = slotAllocation.getSlot();
+				if (start != null) {
+					return (!start.toLocalDate().isBefore(window.getWindowStart()) && 
+							!start.toLocalDate().isAfter(window.getWindowEnd()));
+				}
+			}
+		}
+		//No slot or start date date.
+		return false;
 	}
 	
 	/**

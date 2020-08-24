@@ -195,15 +195,15 @@
     </NominationType>
     <NominationType
           type="Vessel"
-          dependentFields="getVesselName()">
+          dependentFields="getVesselShortName()">
     </NominationType>
     <NominationType
           type="Load volume"
-          dependentFields="getLoadAllocation().getVolumeTransferred()">
+          dependentFields="getLoadAllocation().getEnergyTransferred()">
     </NominationType>
      <NominationType
           type="Discharge volume"
-          dependentFields="getDischargeAllocation().getVolumeTransferred()">
+          dependentFields="getDischargeAllocation().getEnergyTransferred()">
     </NominationType>
     <NominationType
           type="Load port"
