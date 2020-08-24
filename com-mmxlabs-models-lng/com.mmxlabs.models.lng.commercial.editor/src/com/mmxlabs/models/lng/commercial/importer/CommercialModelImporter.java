@@ -37,7 +37,6 @@ public class CommercialModelImporter implements ISubmodelImporter {
 	public static final String SALES_CON_KEY = "SALES";
 	public static final String PURCHASE_CON_KEY = "PURCHASE";
 	public static final String CHARTER_CON_KEY = "CHARTER";
-	final static Map<String, String> inputs = new LinkedHashMap<String, String>();
 
 	@Inject
 	private IImporterRegistry importerRegistry;
@@ -47,14 +46,6 @@ public class CommercialModelImporter implements ISubmodelImporter {
 	private IClassImporter purchaseImporter;
 	private IClassImporter salesImporter;
 	private IClassImporter charterImporter;
-
-	static {
-		inputs.put(ENTITIES_KEY, "Entities");
-		inputs.put(ENTITY_BOOKS_KEY, "Entity Books");
-		inputs.put(PURCHASE_CON_KEY, "Purchase Contracts");
-		inputs.put(SALES_CON_KEY, "Sales Contracts");
-		inputs.put(CHARTER_CON_KEY, "Charter Contracts");
-	}
 
 	/**
 	 */
@@ -71,7 +62,7 @@ public class CommercialModelImporter implements ISubmodelImporter {
 	private void registryInit() {
 		if (importerRegistry != null) {
 
-			entityBookImporter = new LegalEntityBookImporter();// (LegalEntityBookImporter) importerRegistry.getClassImporter(CommercialPackage.eINSTANCE.getLegalEntity());
+			entityBookImporter = new LegalEntityBookImporter();
 			entityImporter = importerRegistry.getClassImporter(CommercialPackage.eINSTANCE.getLegalEntity());
 			purchaseImporter = importerRegistry.getClassImporter(CommercialPackage.eINSTANCE.getPurchaseContract());
 			salesImporter = importerRegistry.getClassImporter(CommercialPackage.eINSTANCE.getSalesContract());
@@ -81,6 +72,14 @@ public class CommercialModelImporter implements ISubmodelImporter {
 
 	@Override
 	public Map<String, String> getRequiredInputs() {
+		final Map<String, String> inputs = new LinkedHashMap<>();
+
+		inputs.put(ENTITIES_KEY, "Entities");
+		inputs.put(ENTITY_BOOKS_KEY, "Entity Books");
+		inputs.put(PURCHASE_CON_KEY, "Purchase Contracts");
+		inputs.put(SALES_CON_KEY, "Sales Contracts");
+		inputs.put(CHARTER_CON_KEY, "Charter Contracts");
+
 		return inputs;
 	}
 
@@ -93,8 +92,10 @@ public class CommercialModelImporter implements ISubmodelImporter {
 				if (entity instanceof BaseLegalEntity) {
 					final BaseLegalEntity baseLegalEntity = (BaseLegalEntity) entity;
 					commercial.getEntities().add(baseLegalEntity);
-					// Ensure a book exists. Note the LegalEntityBookImporter will overwrite this data if needed.
-					// A post model importer may be a more robust way of ensuring books exist should implementations change.
+					// Ensure a book exists. Note the LegalEntityBookImporter will overwrite this
+					// data if needed.
+					// A post model importer may be a more robust way of ensuring books exist should
+					// implementations change.
 					if (baseLegalEntity.getShippingBook() == null) {
 						baseLegalEntity.setShippingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
 					}

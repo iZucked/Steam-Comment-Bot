@@ -28,27 +28,20 @@ import com.mmxlabs.models.util.importer.ISubmodelImporter;
 import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 
 /**
- * Used when importing nominations and nominations specifications from CSV when importing an entire scenario.
+ * Used when importing nominations and nominations specifications from CSV when
+ * importing an entire scenario.
  */
 public class NominationsModelImporter implements ISubmodelImporter {
 
 	public static final String NOMINATIONS_KEY = "NOMINATIONS";
 	public static final String NOMINATION_SPECS_KEY = "NOMINATION_SPECS";
-	
-	final static Map<String, String> inputs = new LinkedHashMap<>();
 
 	@Inject
 	private IImporterRegistry importerRegistry;
 
 	private IClassImporter nominationsImporter;
 	private IClassImporter nominationSpecsImporter;
-	
-	static {
-		//These names are also used for forming the filenames of .csv files exported.
-		inputs.put(NOMINATIONS_KEY, "Nominations");
-		inputs.put(NOMINATION_SPECS_KEY, "Nomination Specs");
-	}
-	
+
 	public NominationsModelImporter() {
 		final Activator activator = Activator.getDefault();
 		if (activator != null) {
@@ -67,19 +60,25 @@ public class NominationsModelImporter implements ISubmodelImporter {
 
 	@Override
 	public Map<String, String> getRequiredInputs() {
+		final Map<String, String> inputs = new LinkedHashMap<>();
+
+		// These names are also used for forming the filenames of .csv files exported.
+		inputs.put(NOMINATIONS_KEY, "Nominations");
+		inputs.put(NOMINATION_SPECS_KEY, "Nomination Specs");
+
 		return inputs;
 	}
 
-	@Override	
+	@Override
 	public UUIDObject importModel(final Map<String, CSVReader> inputs, final IMMXImportContext context) {
 		final NominationsModel nominationsModel = NominationsModelUtils.createNominationsModel();
 		if (inputs.containsKey(NOMINATIONS_KEY)) {
-			nominationsModel.getNominations().addAll((Collection<? extends AbstractNomination>)
-					nominationsImporter.importObjects(NominationsPackage.eINSTANCE.getAbstractNomination(), inputs.get(NOMINATIONS_KEY), context));
+			nominationsModel.getNominations()
+					.addAll((Collection<? extends AbstractNomination>) nominationsImporter.importObjects(NominationsPackage.eINSTANCE.getAbstractNomination(), inputs.get(NOMINATIONS_KEY), context));
 		}
 		if (inputs.containsKey(NOMINATION_SPECS_KEY)) {
-			nominationsModel.getNominationSpecs().addAll((Collection<? extends AbstractNominationSpec>)
-					nominationSpecsImporter.importObjects(NominationsPackage.eINSTANCE.getAbstractNominationSpec(), inputs.get(NOMINATION_SPECS_KEY), context));
+			nominationsModel.getNominationSpecs().addAll((Collection<? extends AbstractNominationSpec>) nominationSpecsImporter.importObjects(NominationsPackage.eINSTANCE.getAbstractNominationSpec(),
+					inputs.get(NOMINATION_SPECS_KEY), context));
 		}
 		return nominationsModel;
 	}

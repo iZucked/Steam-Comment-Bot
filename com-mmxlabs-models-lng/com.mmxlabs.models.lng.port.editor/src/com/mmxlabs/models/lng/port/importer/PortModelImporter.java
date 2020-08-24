@@ -68,20 +68,6 @@ public class PortModelImporter implements ISubmodelImporter {
 	public static final String CANAL_PORTS_KEY = "CANALPORTS";
 	public static final String CONTINGENCY_MATRIX_KEY = "CONTINGENCY_MATRIX";
 
-	public static final Map<String, String> inputs = new LinkedHashMap<>();
-
-	static {
-		inputs.put(PORT_KEY, "Ports");
-		inputs.put(PORT_GROUP_KEY, "Port Groups");
-		inputs.put(DISTANCES_KEY, "Distance Matrix");
-		inputs.put(SUEZ_KEY, "Suez Distance Matrix");
-		inputs.put(CANAL_PORTS_KEY, "Canal Ports");
-		inputs.put(PANAMA_KEY, "Panama Distance Matrix");
-		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_CONTINGENCY_IDLE_TIME)) {
-			inputs.put(CONTINGENCY_MATRIX_KEY, "Contingency Matrix");
-		}
-	}
-
 	@Inject
 	private IImporterRegistry importerRegistry;
 
@@ -125,6 +111,18 @@ public class PortModelImporter implements ISubmodelImporter {
 
 	@Override
 	public Map<String, String> getRequiredInputs() {
+		final Map<String, String> inputs = new LinkedHashMap<>();
+
+		inputs.put(PORT_KEY, "Ports");
+		inputs.put(PORT_GROUP_KEY, "Port Groups");
+		inputs.put(DISTANCES_KEY, "Distance Matrix");
+		inputs.put(SUEZ_KEY, "Suez Distance Matrix");
+		inputs.put(CANAL_PORTS_KEY, "Canal Ports");
+		inputs.put(PANAMA_KEY, "Panama Distance Matrix");
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_CONTINGENCY_IDLE_TIME)) {
+			inputs.put(CONTINGENCY_MATRIX_KEY, "Contingency Matrix");
+		}
+
 		return inputs;
 	}
 
@@ -139,7 +137,8 @@ public class PortModelImporter implements ISubmodelImporter {
 			final CSVReader reader = inputs.get(PORT_KEY);
 			result.getPorts().addAll((Collection<? extends Port>) portImporter.importObjects(PortPackage.eINSTANCE.getPort(), reader, context));
 
-			// Register country groups before port groups for backward compatibility - untyped PortGroup names will replace newer country group names
+			// Register country groups before port groups for backward compatibility -
+			// untyped PortGroup names will replace newer country group names
 			// Create country groups
 			final Set<String> countries = portModel.getPorts().stream() //
 					.map(Port::getLocation) //
@@ -179,7 +178,8 @@ public class PortModelImporter implements ISubmodelImporter {
 			result.getPortGroups().addAll((Collection<? extends PortGroup>) portGroupImporter.importObjects(PortPackage.eINSTANCE.getPortGroup(), reader, context));
 		}
 
-		// Needs to be called before the canals are programmatically created because the DefaultClassImporter calls
+		// Needs to be called before the canals are programmatically created because the
+		// DefaultClassImporter calls
 		// context.registerNamedObject((NamedObject) o);
 		if (inputs.containsKey(CANAL_PORTS_KEY)) {
 			importedRoutes.addAll(canalPortsImporter.importObjects(PortPackage.Literals.ROUTE, inputs.get(CANAL_PORTS_KEY), context).stream().map(e -> (Route) e).collect(Collectors.toList()));
@@ -262,7 +262,8 @@ public class PortModelImporter implements ISubmodelImporter {
 							if (route.getSouthEntrance() != null) {
 								context.registerNamedObject(route.getSouthEntrance());
 							}
-							// tmpRoute will not have these set yet, wait until references stages has run to link up
+							// tmpRoute will not have these set yet, wait until references stages has run to
+							// link up
 							context.doLater(new IDeferment() {
 
 								@Override
@@ -328,7 +329,6 @@ public class PortModelImporter implements ISubmodelImporter {
 			} else if (r.getRouteOption() == RouteOption.PANAMA) {
 				output.put(PANAMA_KEY, result);
 			} else {
-				inputs.put(r.getName(), r.getName());
 				output.put(r.getName(), result);
 			}
 		}

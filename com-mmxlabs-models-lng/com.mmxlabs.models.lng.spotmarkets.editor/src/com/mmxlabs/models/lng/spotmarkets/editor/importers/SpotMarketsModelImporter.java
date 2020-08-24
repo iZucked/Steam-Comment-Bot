@@ -43,16 +43,9 @@ import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 /**
  */
 public class SpotMarketsModelImporter implements ISubmodelImporter {
-	private static final HashMap<String, String> inputs = new HashMap<String, String>();
 	public static final String CHARTER_PRICING_KEY = "CHARTER_PRICING";
 	public static final String SPOT_CARGO_MARKETS_KEY = "SPOT_CARGO_MARKETS";
 	public static final String SPOT_CARGO_MARKETS_AVAILABILITY_KEY = "SPOT_CARGO_MARKETS_AVAILABILITY";
-
-	static {
-		inputs.put(CHARTER_PRICING_KEY, "Charter Markets");
-		inputs.put(SPOT_CARGO_MARKETS_KEY, "Spot Cargo Markets");
-		// inputs.put(SPOT_CARGO_MARKETS_AVAILABILITY_KEY, "Spot Cargo Markets Availability");
-	}
 
 	@Inject
 	private IImporterRegistry importerRegistry;
@@ -78,14 +71,18 @@ public class SpotMarketsModelImporter implements ISubmodelImporter {
 	private void registryInit() {
 		if (importerRegistry != null) {
 
-			charterPriceImporter = new CharterMarketImporter();// importerRegistry.getClassImporter(SpotMarketsPackage.eINSTANCE.getCharterCostModel());
+			charterPriceImporter = new CharterMarketImporter();
 			spotCargoMarketImporter = importerRegistry.getClassImporter(SpotMarketsPackage.eINSTANCE.getSpotMarket());
-			// spotCargoMarketAvailabilityImporter = importerRegistry.getClassImporter(SpotMarketsPackage.eINSTANCE.getSpotAvailability());
 		}
 	}
 
 	@Override
 	public Map<String, String> getRequiredInputs() {
+		final HashMap<String, String> inputs = new HashMap<>();
+
+		inputs.put(CHARTER_PRICING_KEY, "Charter Markets");
+		inputs.put(SPOT_CARGO_MARKETS_KEY, "Spot Cargo Markets");
+
 		return inputs;
 	}
 

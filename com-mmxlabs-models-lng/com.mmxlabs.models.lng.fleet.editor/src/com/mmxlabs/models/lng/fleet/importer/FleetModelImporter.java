@@ -56,15 +56,6 @@ public class FleetModelImporter implements ISubmodelImporter {
 
 	private final FuelCurveImporter fuelCurveImporter = new FuelCurveImporter();
 
-	private static final Map<String, String> inputs = new HashMap<String, String>();
-
-	static {
-		inputs.put(VESSELS_KEY, "Vessels");
-		inputs.put(GROUPS_KEY, "Vessel Groups");
-		inputs.put(FUELS_KEY, "Base Fuels");
-		inputs.put(CURVES_KEY, "Consumption Curves");
-	}
-
 	/**
 	 */
 	public FleetModelImporter() {
@@ -87,6 +78,14 @@ public class FleetModelImporter implements ISubmodelImporter {
 
 	@Override
 	public Map<String, String> getRequiredInputs() {
+
+		final Map<String, String> inputs = new HashMap<>();
+
+		inputs.put(VESSELS_KEY, "Vessels");
+		inputs.put(GROUPS_KEY, "Vessel Groups");
+		inputs.put(FUELS_KEY, "Base Fuels");
+		inputs.put(CURVES_KEY, "Consumption Curves");
+
 		return inputs;
 	}
 

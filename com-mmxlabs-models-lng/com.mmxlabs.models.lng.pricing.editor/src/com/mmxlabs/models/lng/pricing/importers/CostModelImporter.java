@@ -49,20 +49,11 @@ import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 /**
  */
 public class CostModelImporter implements ISubmodelImporter {
-	private static final Map<String, String> inputs = new HashMap<>();
 	public static final String COOLDOWN_PRICING_KEY = "COOLDOWN_PRICING";
 	public static final String PORT_COSTS_KEY = "PORT_COSTS";
 	public static final String ROUTE_COSTS_KEY = "ROTUE_COSTS";
 	public static final String PANAMA_CANAL_TARIFF_KEY = "PANAMA_CANAL_TARIFF";
 	public static final String SUEZ_CANAL_TARIFF_KEY = "SUEZ_CANAL_TARIFF";
-
-	static {
-		inputs.put(COOLDOWN_PRICING_KEY, "Cooldown Prices");
-		inputs.put(PORT_COSTS_KEY, "Port Costs");
-		inputs.put(ROUTE_COSTS_KEY, "Route Costs");
-		inputs.put(PANAMA_CANAL_TARIFF_KEY, "Panama Canal Tariff");
-		inputs.put(SUEZ_CANAL_TARIFF_KEY, "Suez Canal Tariff");
-	}
 
 	@Inject
 	private IImporterRegistry importerRegistry;
@@ -95,6 +86,14 @@ public class CostModelImporter implements ISubmodelImporter {
 
 	@Override
 	public Map<String, String> getRequiredInputs() {
+
+		final Map<String, String> inputs = new HashMap<>();
+		inputs.put(COOLDOWN_PRICING_KEY, "Cooldown Prices");
+		inputs.put(PORT_COSTS_KEY, "Port Costs");
+		inputs.put(ROUTE_COSTS_KEY, "Route Costs");
+		inputs.put(PANAMA_CANAL_TARIFF_KEY, "Panama Canal Tariff");
+		inputs.put(SUEZ_CANAL_TARIFF_KEY, "Suez Canal Tariff");
+
 		return inputs;
 	}
 

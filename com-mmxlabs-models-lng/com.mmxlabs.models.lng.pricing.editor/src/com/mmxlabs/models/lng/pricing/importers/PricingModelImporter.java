@@ -39,7 +39,7 @@ import com.mmxlabs.rcp.common.versions.VersionsUtil;
 /**
  */
 public class PricingModelImporter implements ISubmodelImporter {
-	private static final HashMap<String, String> inputs = new HashMap<String, String>();
+
 	public static final String PRICE_CURVE_KEY = "PRICE_CURVES";
 	public static final String CHARTER_CURVE_KEY = "CHARTER_CURVES";
 	public static final String BASEFUEL_PRICING_KEY = "BF_PRICING";
@@ -50,21 +50,6 @@ public class PricingModelImporter implements ISubmodelImporter {
 	public static final String PRICING_CALENDAR_KEY = "PRICING_CALENDAR_KEY";
 	public static final String SETTLE_STRATEGY_KEY = "SETTLE_STRATEGY_KEY";
 	public static final String MARKET_INDEX_KEY = "MARKET_INDEX_KEY";
-
-	static {
-		inputs.put(PRICE_CURVE_KEY, "Commodity Curves");
-		inputs.put(CHARTER_CURVE_KEY, "Charter Curves");
-		inputs.put(BASEFUEL_PRICING_KEY, "Base Fuel Curves");
-		inputs.put(CURRENCY_CURVE_KEY, "Currency Curves");
-		if (LicenseFeatures.isPermitted("features:paperdeals")) {
-			inputs.put(SETTLED_PRICES_KEY, "Settled Prices");
-			inputs.put(HOLIDAY_CALENDAR_KEY, "Holiday Calendars");
-			inputs.put(SETTLE_STRATEGY_KEY, "Settle Strategies");
-			inputs.put(MARKET_INDEX_KEY, "Market Indices");
-			inputs.put(PRICING_CALENDAR_KEY, "Pricing Calendars");
-		}
-		inputs.put(CONVERSION_FACTORS_KEY, "Conversion Factors");
-	}
 
 	@Inject
 	private IImporterRegistry importerRegistry;
@@ -109,6 +94,20 @@ public class PricingModelImporter implements ISubmodelImporter {
 
 	@Override
 	public Map<String, String> getRequiredInputs() {
+		final HashMap<String, String> inputs = new HashMap<>();
+		inputs.put(PRICE_CURVE_KEY, "Commodity Curves");
+		inputs.put(CHARTER_CURVE_KEY, "Charter Curves");
+		inputs.put(BASEFUEL_PRICING_KEY, "Base Fuel Curves");
+		inputs.put(CURRENCY_CURVE_KEY, "Currency Curves");
+		if (LicenseFeatures.isPermitted("features:paperdeals")) {
+			inputs.put(SETTLED_PRICES_KEY, "Settled Prices");
+			inputs.put(HOLIDAY_CALENDAR_KEY, "Holiday Calendars");
+			inputs.put(SETTLE_STRATEGY_KEY, "Settle Strategies");
+			inputs.put(MARKET_INDEX_KEY, "Market Indices");
+			inputs.put(PRICING_CALENDAR_KEY, "Pricing Calendars");
+		}
+		inputs.put(CONVERSION_FACTORS_KEY, "Conversion Factors");
+
 		return inputs;
 	}
 
@@ -161,7 +160,7 @@ public class PricingModelImporter implements ISubmodelImporter {
 	private void importMarketIndices(PricingModel pricingModel, CSVReader csvReader, @NonNull IMMXImportContext context) {
 		pricingModel.getMarketIndices().addAll((Collection<? extends MarketIndex>) marketIndexImporter.importObjects(PricingPackage.eINSTANCE.getMarketIndex(), csvReader, context));
 	}
-	
+
 	private void importSettleStrategies(PricingModel pricingModel, CSVReader csvReader, @NonNull IMMXImportContext context) {
 		pricingModel.getSettleStrategies().addAll((Collection<? extends SettleStrategy>) settleStrategyImporter.importObjects(PricingPackage.eINSTANCE.getSettleStrategy(), csvReader, context));
 	}
@@ -173,11 +172,11 @@ public class PricingModelImporter implements ISubmodelImporter {
 	private void importSettledPrices(final PricingModel pricing, final CSVReader csvReader, final IMMXImportContext context) {
 		pricing.getSettledPrices().addAll((Collection<? extends DatePointContainer>) settledPricesImporter.importObjects(PricingPackage.eINSTANCE.getDatePointContainer(), csvReader, context));
 	}
-	
+
 	private void importIndexHolidays(final PricingModel pricing, final CSVReader csvReader, final IMMXImportContext context) {
 		pricing.getHolidayCalendars().addAll(holidayCalendarImporter.importObjects(csvReader, context));
 	}
-	
+
 	private void importPricingCalendars(final PricingModel pricing, final CSVReader csvReader, final IMMXImportContext context) {
 		pricing.getPricingCalendars().addAll(pricingCalendarImporter.importObjects(csvReader, context));
 	}

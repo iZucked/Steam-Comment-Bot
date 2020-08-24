@@ -56,7 +56,6 @@ public class CargoModelImporter implements ISubmodelImporter {
 
 	private IClassImporter cargoGroupImporter;
 
-	private final @NonNull Map<String, String> inputs = new HashMap<>();
 	private IClassImporter vesselAvailabilityImporter;
 	private IClassImporter vesselEventImporter;
 	private IClassImporter paperDealsImporter;
@@ -65,16 +64,6 @@ public class CargoModelImporter implements ISubmodelImporter {
 	public static final @NonNull String CANAL_BOOKINGS_KEY = "CANAL_BOOKINGS";
 	public static final @NonNull String VESSEL_AVAILABILITY_KEY = "VESSELSAVAILABILITIES";
 	public static final @NonNull String PAPER_DEALS_KEY = "PAPER_DEALS";
-	{
-		inputs.put(CARGO_KEY, "Cargoes");
-		inputs.put(CARGO_GROUP_KEY, "Cargo Groups");
-		inputs.put(VESSEL_AVAILABILITY_KEY, "Vessel Availability");
-		inputs.put(EVENTS_KEY, "Events");
-		inputs.put(CANAL_BOOKINGS_KEY, "Canal Bookings");
-		if (LicenseFeatures.isPermitted("features:paperdeals")) {
-			inputs.put(PAPER_DEALS_KEY, "Paper Deals");
-		}
-	}
 
 	/**
 	 */
@@ -101,6 +90,17 @@ public class CargoModelImporter implements ISubmodelImporter {
 
 	@Override
 	public Map<String, String> getRequiredInputs() {
+		final @NonNull Map<String, String> inputs = new HashMap<>();
+
+		inputs.put(CARGO_KEY, "Cargoes");
+		inputs.put(CARGO_GROUP_KEY, "Cargo Groups");
+		inputs.put(VESSEL_AVAILABILITY_KEY, "Vessel Availability");
+		inputs.put(EVENTS_KEY, "Events");
+		inputs.put(CANAL_BOOKINGS_KEY, "Canal Bookings");
+		if (LicenseFeatures.isPermitted("features:paperdeals")) {
+			inputs.put(PAPER_DEALS_KEY, "Paper Deals");
+		}
+
 		return inputs;
 	}
 
