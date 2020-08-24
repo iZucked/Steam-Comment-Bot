@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.lng.schedule.util;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -408,7 +406,7 @@ public class ScheduleModelUtils {
 		return getPortFromSlot(getDischargeSlot(allocation));
 	}
 
-	private static Port getPortFromSlot(final Slot<?> slot) {
+	public static Port getPortFromSlot(final Slot<?> slot) {
 		if (slot != null) {
 			return slot.getPort() != null ? slot.getPort() : null;
 		}
