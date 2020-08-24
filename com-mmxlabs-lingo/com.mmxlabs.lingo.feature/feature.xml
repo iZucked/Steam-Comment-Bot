@@ -88,6 +88,10 @@
          id="com.google.ortools.feature"
          version="0.0.0"/>
 
+   <includes
+         id="com.mmxlabs.lngdataserver.feature"
+         version="0.0.0"/>
+
    <plugin
          id="com.mmxlabs.lingo.app"
          download-size="0"
@@ -129,6 +133,7 @@
          install-size="0"
          version="0.0.0"
          unpack="false"/>
+
    <plugin
          id="org.apache.batik.constants"
          download-size="0"
@@ -156,4 +161,5 @@
          install-size="0"
          version="0.0.0"
          unpack="false"/>
+
 </feature>
