@@ -15,7 +15,6 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.mmxlabs.models.lng.nominations.editor.internal.NominationTypeExtension;
 import com.mmxlabs.models.lng.nominations.editor.internal.NominationTypeModule;
-import com.mmxlabs.models.lng.port.Port;
 
 public class NominationTypeRegistry {
 
