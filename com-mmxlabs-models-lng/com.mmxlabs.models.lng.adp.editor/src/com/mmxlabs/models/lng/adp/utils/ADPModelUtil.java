@@ -505,12 +505,8 @@ public class ADPModelUtil {
 		YearMonth start = adpModel.getYearStart();
 		if (contract.isSetStartDate()) {
 			final YearMonth contractStart = contract.getStartDate();
-			if (contractStart.equals(start)) {
+			if (!contractStart.isBefore(start)) {
 				start = contractStart;
-			} else if (contractStart.isAfter(start)) {
-				start = contractStart;
-			} else {
-				start = start.plusYears(1);
 			}
 		} else {
 			int contractYearStartMonth = contract.getContractYearStart() + 1;
