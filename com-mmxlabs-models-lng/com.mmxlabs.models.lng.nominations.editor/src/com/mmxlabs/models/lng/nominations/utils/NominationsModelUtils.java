@@ -8,7 +8,6 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -22,7 +21,6 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -632,12 +630,11 @@ public class NominationsModelUtils {
 
 	public static String getNominatedValue(LNGScenarioModel scenarioModel, AbstractNomination nomination) {
 		if (nomination != null && nomination.getNominatedValue() != null) {
-			String nominatedValueJSON = nomination.getNominatedValue();
 			Object object = getNominatedValueObjectFromJSON(nomination.getType(), nomination.getNominatedValue());
 			if (object != null && !(object instanceof String)) {
 				return object.toString();
 			}
-			else if (object != null && object instanceof String){
+			else if (object instanceof String){
 				return (String)object;
 			}
 		}

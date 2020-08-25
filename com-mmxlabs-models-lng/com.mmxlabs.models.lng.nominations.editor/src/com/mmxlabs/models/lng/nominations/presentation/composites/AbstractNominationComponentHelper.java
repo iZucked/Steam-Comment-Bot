@@ -181,7 +181,7 @@ public class AbstractNominationComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the nominatedValue feature on AbstractNomination
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_nominatedValueEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(new NominatedValueInlineEditor(NominationsPackage.Literals.ABSTRACT_NOMINATION__NOMINATED_VALUE, 
@@ -222,14 +222,14 @@ public class AbstractNominationComponentHelper extends BaseComponentHelper {
 						if (nomination != null && nomination.getType() != null && 
 							(nomination.getType().toLowerCase().contains("port") ||
 							nomination.getType().toLowerCase().contains("vessel"))) {
-							return NominatedValueMode.Picker;
+							return NominatedValueMode.PICKER;
 						}
 						else {
-							return NominatedValueMode.FormattedText;
+							return NominatedValueMode.FORMATTED_TEXT;
 						}
 					}
 				
-					return NominatedValueMode.FormattedText;
+					return NominatedValueMode.FORMATTED_TEXT;
 				}	
 		}));
 		//detailComposite.addInlineEditor(new TextInlineEditor(NominationsPackage.Literals.ABSTRACT_NOMINATION__NOMINATED_VALUE));
