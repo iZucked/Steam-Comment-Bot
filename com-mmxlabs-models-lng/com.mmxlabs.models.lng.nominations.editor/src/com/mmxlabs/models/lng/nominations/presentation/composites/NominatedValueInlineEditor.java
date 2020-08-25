@@ -26,7 +26,6 @@ import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.nebula.widgets.formattedtext.FormattedText;
 import org.eclipse.nebula.widgets.formattedtext.ITextFormatter;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -38,18 +37,16 @@ import com.mmxlabs.models.lng.nominations.AbstractNomination;
 import com.mmxlabs.models.lng.nominations.NominationsPackage;
 import com.mmxlabs.models.lng.nominations.utils.NominationsModelUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.autocomplete.AutoCompleteHelper;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
-import com.mmxlabs.models.ui.editors.impl.IInlineEditorExternalNotificationListener;
 import com.mmxlabs.models.ui.editors.impl.UnsettableInlineEditor;
 
 public class NominatedValueInlineEditor extends UnsettableInlineEditor {
 	
 	public enum NominatedValueMode {
-		Picker,
-		FormattedText
-	};
+		PICKER,
+		FORMATTED_TEXT
+	}
 	
 	public interface NominatedValueProvider {
 		@NonNull NominatedValueMode getMode(MMXRootObject rootObject, Notifier target);
@@ -133,38 +130,17 @@ public class NominatedValueInlineEditor extends UnsettableInlineEditor {
 		editor.getControl().setEnabled(feature.isChangeable() && isEditorEnabled());
 		editor.getControl().addModifyListener(e -> {
 			editor.getControl().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-			final String text = editor.getControl().getText().toLowerCase();
-			
+			final String text = editor.getControl().getText().toLowerCase();		
 			if (text.isEmpty()) {
 				doSetValue(SetCommand.UNSET_VALUE, false);
 			} else {
 				switch (this.suggestions.getMode(rootObject, target)) {
-				case Picker:
-				{
-					final List<String> possibleValues = getPossibleValues(rootObject, target);
-					final int indexOf = getLowerValues(possibleValues).indexOf(text);
-					if (indexOf >= 0) {
-						doSetValue(possibleValues.get(indexOf), false);
-					} else {
-						// Mark control as invalid
-						editor.getControl().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_RED));
-					}
-				}
-				break;
-				case FormattedText:
-				{
-					Object object = editor.getValue();
-					//Should always be a nomination..
-					if (target instanceof AbstractNomination) {
-						//Convert from JSON string to java String value.
-						AbstractNomination nomination = (AbstractNomination) target;
-						String nominationType = nomination.getType();
-						String jsonString = NominationsModelUtils.getNominatedValueJSONString(nominationType, object);
-						doSetValue(jsonString, false);	
-						//doSetValue(editor.getControl().getText(), false);	
-					}
-				}
-				break;
+				case PICKER:
+					setPickerValue(text);
+					break;
+				case FORMATTED_TEXT:
+					setFormattedTextValue();
+					break;
 				}
 			}
 		});
@@ -201,6 +177,29 @@ public class NominatedValueInlineEditor extends UnsettableInlineEditor {
 
 		return super.wrapControl(editor.getControl());
 
+	}
+
+	private void setFormattedTextValue() {
+		Object object = editor.getValue();
+		//Should always be a nomination..
+		if (target instanceof AbstractNomination) {
+			//Convert from JSON string to java String value.
+			AbstractNomination nomination = (AbstractNomination) target;
+			String nominationType = nomination.getType();
+			String jsonString = NominationsModelUtils.getNominatedValueJSONString(nominationType, object);
+			doSetValue(jsonString, false);	
+		}
+	}
+
+	private void setPickerValue(final String text) {
+		final List<String> possibleValues = getPossibleValues(rootObject, target);
+		final int indexOf = getLowerValues(possibleValues).indexOf(text);
+		if (indexOf >= 0) {
+			doSetValue(possibleValues.get(indexOf), false);
+		} else {
+			// Mark control as invalid
+			editor.getControl().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_RED));
+		}
 	}
 
 	protected IContentProposalProvider createProposalProvider() {
@@ -268,7 +267,7 @@ public class NominatedValueInlineEditor extends UnsettableInlineEditor {
 		final List<String> possibleValues = getPossibleValues(rootObject, target);
 		final List<String> lowerPossibleValues = getLowerValues(possibleValues);
 		if (value instanceof String) {
-			editor.getControl().setText((String) valueStr);
+			editor.getControl().setText(valueStr);
 		} else {
 			final int curIndex = possibleValues.indexOf(value);
 			if (curIndex == -1) {
@@ -281,10 +280,10 @@ public class NominatedValueInlineEditor extends UnsettableInlineEditor {
 			editor.getControl().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
 		} else {
 			switch (this.suggestions.getMode(rootObject, target)) {
-			case Picker:
+			case PICKER:
 				editor.getControl().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_RED));
 				break;
-			case FormattedText:
+			case FORMATTED_TEXT:
 				editor.getControl().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
 				break;
 			}			
