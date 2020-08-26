@@ -124,6 +124,10 @@ public class GenericDataServiceClient {
 		if (types.isEmpty()) {
 			return null;
 		}
+		
+		if (!DataHubServiceProvider.getInstance().isOnlineAndLoggedIn()) {
+			return null;
+		}
 
 		final String typesList = String.join(",", types);
 		final String requestURL = String.format("%s/%s", SCENARIO_LIST_URL, typesList);
