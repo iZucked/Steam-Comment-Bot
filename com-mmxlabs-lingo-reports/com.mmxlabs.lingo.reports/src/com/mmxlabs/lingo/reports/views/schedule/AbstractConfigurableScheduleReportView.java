@@ -10,6 +10,7 @@ package com.mmxlabs.lingo.reports.views.schedule;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -56,6 +57,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
+import com.mmxlabs.models.ui.tabular.columngeneration.ColumnHandler;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnType;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
@@ -108,6 +110,30 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 		}
 
 		if (IReportContents.class.isAssignableFrom(adapter)) {
+			// Set a more repeatable sort order
+			{
+				final ColumnBlock[] initialReverseSortOrder = { //
+						getBlockManager().getBlockByID("com.mmxlabs.lingo.reports.components.columns.schedule.id") //
+				};
+
+				// go through in reverse order as latest is set to primary sort
+				for (final ColumnBlock block : initialReverseSortOrder) {
+					if (block != null) {
+						final List<ColumnHandler> handlers = block.getColumnHandlers();
+						for (final ColumnHandler handler : handlers) {
+							if (handler.column != null) {
+								sortingSupport.sortColumnsBy(handler.column.getColumn());
+							}
+						}
+					}
+				}
+				
+				// Sort columns by ID
+				List<String> blockIDOrder = new ArrayList<>(getBlockManager().getBlockIDOrder());
+				Collections.sort(blockIDOrder);
+				getBlockManager().setBlockIDOrder(blockIDOrder);
+				
+			}
 
 			final CopyGridToHtmlStringUtil htmlUtil = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
 			htmlUtil.setShowBackgroundColours(true);
