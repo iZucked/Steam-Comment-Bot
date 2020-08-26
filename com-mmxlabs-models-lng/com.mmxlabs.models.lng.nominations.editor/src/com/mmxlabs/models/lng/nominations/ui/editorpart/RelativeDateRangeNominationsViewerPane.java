@@ -410,6 +410,9 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 			@Override
 			public void run() {
 				final IStructuredSelection selection = (IStructuredSelection) getLastSelection();
+				
+				//The below code fixes an issue to do with the fact that both the nomination and the slot are selected at the same time.
+				//Below we get back to the nomination when duplicate selection is selected from the Nominations view.
 				ArrayList<EObject> nominations = new ArrayList<>();
 				
 				if (selection instanceof TreeSelection) {
