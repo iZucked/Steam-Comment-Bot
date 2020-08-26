@@ -90,6 +90,11 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 
 	private EventHandler todayHandler;
 
+	/*
+	 * Field to allow subclasses of specific reports to only include visible columns rather than everything
+	 */
+	protected boolean includeAllColumnsForITS = true;
+
 	protected AbstractConfigurableScheduleReportView(final String id, final ScheduleBasedReportBuilder builder) {
 		super(id);
 
@@ -127,20 +132,20 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 						}
 					}
 				}
-				
+
 				// Sort columns by ID
 				List<String> blockIDOrder = new ArrayList<>(getBlockManager().getBlockIDOrder());
 				Collections.sort(blockIDOrder);
 				getBlockManager().setBlockIDOrder(blockIDOrder);
-				
+
 			}
 
-			final CopyGridToHtmlStringUtil htmlUtil = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
+			final CopyGridToHtmlStringUtil htmlUtil = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, includeAllColumnsForITS);
 			htmlUtil.setShowBackgroundColours(true);
 			htmlUtil.setShowForegroundColours(true);
 			final String htmlContents = htmlUtil.convert();
 
-			final CopyGridToJSONUtil jsonUtil = new CopyGridToJSONUtil(viewer.getGrid(), true);
+			final CopyGridToJSONUtil jsonUtil = new CopyGridToJSONUtil(viewer.getGrid(), includeAllColumnsForITS);
 			final String jsonContents = jsonUtil.convert();
 
 			return (T) new IReportContents() {
