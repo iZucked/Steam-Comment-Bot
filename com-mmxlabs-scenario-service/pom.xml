@@ -26,7 +26,6 @@
 		<module>com.mmxlabs.scenario.service.manifest.edit</module>
 
 		<module>com.mmxlabs.scenario.service.file</module>
-		<module>com.mmxlabs.scenario.service.dirscan</module>
 
 		<module>com.mmxlabs.scenario.service.tests</module>
 
