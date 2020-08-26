@@ -18,7 +18,7 @@ import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
  * 
  */
 public class DuplicateAction extends ScenarioModifyingAction {
-	private IScenarioEditingLocation part;
+	protected IScenarioEditingLocation part;
 
 	public DuplicateAction(final IScenarioEditingLocation part) {
 		super("Duplicate selection");

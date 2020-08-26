@@ -25,6 +25,7 @@ import org.eclipse.e4.ui.workbench.modeling.ISelectionListener;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.edit.command.AddCommand;
@@ -72,9 +73,11 @@ import com.mmxlabs.models.lng.nominations.utils.NominationsModelUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction;
+import com.mmxlabs.models.lng.ui.actions.DuplicateAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.ui.date.LocalDateTextFormatter;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerColumnProvider;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
@@ -396,7 +399,45 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 		final Action[] extraActions = duplicateAction == null ? new Action[0] : new Action[] { duplicateAction };
 		return AddModelAction.create(containment.getEReferenceType(), getAddContext(containment), extraActions, this.getViewer());
 	}
-		
+
+	/**
+	 * Return an action which duplicates the selection
+	 * 
+	 * @return
+	 */
+	protected @Nullable Action createDuplicateAction() {
+		final DuplicateAction result = new DuplicateAction(getJointModelEditorPart()) {
+			@Override
+			public void run() {
+				final IStructuredSelection selection = (IStructuredSelection) getLastSelection();
+				ArrayList<EObject> nominations = new ArrayList<>();
+				
+				if (selection instanceof TreeSelection) {
+					TreeSelection treeSelection = (TreeSelection)selection;
+					TreePath[] paths = treeSelection.getPathsFor(selection.getFirstElement());
+					for (TreePath path : paths) {
+						for (int i = 0; i < path.getSegmentCount(); i++) {
+							Object obj = path.getSegment(i);
+							if (obj instanceof AbstractNomination) {
+								nominations.add((EObject)obj);
+							}
+						}
+					}
+				}
+				
+				DetailCompositeDialogUtil.editInlock(part, () -> {
+					final DetailCompositeDialog dcd = new DetailCompositeDialog(part.getShell(), part.getDefaultCommandHandler());
+					dcd.setReturnDuplicates(true);
+					return dcd.open(part, part.getRootObject(), nominations);
+				});
+			}
+		};
+		scenarioViewer.addSelectionChangedListener(result);
+		return result;
+	}
+	
+	
+	
 	@Override
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final ModelReference modelReference) {
 		super.init(path, adapterFactory, modelReference);
