@@ -91,20 +91,22 @@ public class NameUniquenessConstraint extends AbstractModelMultiConstraint {
 				final Set<String> temp = new HashSet<String>();
 				for (final EObject no : objects) {
 					final String n = (String) no.eGet(nameAttribute);
-					if (temp.contains(n)) {
-						bad.add(n);
+					if (n != null) {
+						if (temp.contains(n.toLowerCase())) {
+							bad.add(n);
+						}
+						temp.add(n.toLowerCase());
 					}
-					temp.add(n);
 					if (otherNamesAttribute != null) {
 						final Collection<String> names = (Collection<String>) no.eGet(otherNamesAttribute);
 						for (final String ns : names) {
-							if (n.equals(ns)) {
+							if (n != null && n.equalsIgnoreCase(ns)) {
 								continue;
 							}
-							if (temp.contains(ns)) {
+							if (temp.contains(ns.toLowerCase())) {
 								bad.add(ns);
 							}
-							temp.add(ns);
+							temp.add(ns.toLowerCase());
 						}
 					}
 				}
@@ -113,7 +115,7 @@ public class NameUniquenessConstraint extends AbstractModelMultiConstraint {
 			final String name = (String) target.eGet(nameAttribute);
 			if (bad.contains(name)) {
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
-						(IConstraintStatus) ctx.createFailureStatus(target.eClass().getName() + " has non-unique name " + name));
+						(IConstraintStatus) ctx.createFailureStatus(target.eClass().getName() + " has non-unique name (names are case insensitive) " + name));
 				dsd.addEObjectAndFeature(target, nameAttribute);
 				statuses.add(dsd);
 				return;
@@ -126,7 +128,7 @@ public class NameUniquenessConstraint extends AbstractModelMultiConstraint {
 					}
 					if (bad.contains(ns)) {
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
-								(IConstraintStatus) ctx.createFailureStatus(target.eClass().getName() + " " + name + " has non-unique other name " + ns));
+								(IConstraintStatus) ctx.createFailureStatus(target.eClass().getName() + " " + name + " has non-unique other name (names are case insensitive) " + ns));
 						dsd.addEObjectAndFeature(target, nameAttribute);
 						statuses.add(dsd);
 						return;
