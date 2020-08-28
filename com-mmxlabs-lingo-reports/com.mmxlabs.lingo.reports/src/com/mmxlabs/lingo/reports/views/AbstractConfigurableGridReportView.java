@@ -408,44 +408,47 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 			};
 			manager.appendToGroup("additions", configureColumnsAction);
 
-			final Action newViewPartAction = new Action("New view...") {
-				@Override
-				public void run() {
+			//No new button for Schedule Summary Report as we want people to use custom reports.
+			if (!(this instanceof ScheduleSummaryReport)) {
+				final Action newViewPartAction = new Action("New view...") {
+					@Override
+					public void run() {
 
-					final InputDialog dialog = new InputDialog(getSite().getShell(), "New view", "Choose name for view. This view persists until explicitly closed.", getPartName(),
-							new IInputValidator() {
+						final InputDialog dialog = new InputDialog(getSite().getShell(), "New view", "Choose name for view. This view persists until explicitly closed.", getPartName(),
+								new IInputValidator() {
 
-								@Override
-								public String isValid(String newText) {
-									if (newText == null || newText.isEmpty()) {
-										return "A name must be set";
-									}
-									// FIXME: Should really look this up rather than hard-code.
-									if ("Port Rotation".equals(newText.trim())) {
-										return "Cannot use this name";
-									}
-									if ("Schedule Summary".equals(newText.trim())) {
-										return "Cannot use this name";
-									}
-
-									return null;
+							@Override
+							public String isValid(String newText) {
+								if (newText == null || newText.isEmpty()) {
+									return "A name must be set";
 								}
-							});
-					if (dialog.open() == Window.OK) {
-						final String name = dialog.getValue();
-						IWorkbenchPage page = getSite().getPage();
-						String id = getViewSite().getId();
-						try {
-							page.showView(id, name.trim(), IWorkbenchPage.VIEW_ACTIVATE);
-						} catch (PartInitException e) {
-							e.printStackTrace();
+								// FIXME: Should really look this up rather than hard-code.
+								if ("Port Rotation".equals(newText.trim())) {
+									return "Cannot use this name";
+								}
+								if ("Schedule Summary".equals(newText.trim())) {
+									return "Cannot use this name";
+								}
+
+								return null;
+							}
+						});
+						if (dialog.open() == Window.OK) {
+							final String name = dialog.getValue();
+							IWorkbenchPage page = getSite().getPage();
+							String id = getViewSite().getId();
+							try {
+								page.showView(id, name.trim(), IWorkbenchPage.VIEW_ACTIVATE);
+							} catch (PartInitException e) {
+								e.printStackTrace();
+							}
 						}
 					}
-				}
 
-			};
-			newViewPartAction.setDescription("Create a new version of this view. The new view settings will be lost if the view is closed");
-			manager.appendToGroup("additions", newViewPartAction);
+				};
+				newViewPartAction.setDescription("Create a new version of this view. The new view settings will be lost if the view is closed");
+				manager.appendToGroup("additions", newViewPartAction);
+			}
 		}
 
 	}
