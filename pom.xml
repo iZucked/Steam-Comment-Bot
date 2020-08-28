@@ -12,7 +12,7 @@
 		<groupId>com.mmxlabs.parent</groupId>
 		<artifactId>tycho-parent</artifactId>
 		<relativePath />
-		<version>42</version>
+		<version>43</version>
 	</parent>
 
 	<scm>
@@ -45,16 +45,24 @@
 		<module>com-mmxlabs-lingo</module>
 	</modules>
 	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-surefire-plugin</artifactId>
-				<configuration>
-					<argLine>-ea -Dosgi.nl=en_GB -Dlingo.suppress.dialogs=true -Dlingo.enc.keyfile=${lingo.enc.keyfile} -Dlingo.license.file=${lingo.license.file}</argLine>
-				</configuration>
-			</plugin> 
-		</plugins> 
-	</build>
+	<plugins>
+		<plugin>
+			<groupId>org.eclipse.tycho</groupId>
+			<artifactId>tycho-surefire-plugin</artifactId>
+			<configuration>
+				<argLine>-ea -Dosgi.nl=en_GB -Dlingo.suppress.dialogs=true -Dlingo.enc.keyfile=${lingo.enc.keyfile} -Dlingo.license.file=${lingo.license.file}</argLine>
+
+				<dependencies>
+					<!-- avoid CNFE in Surefire when looking for JUnitPlatformProvider -->
+					<dependency>
+						<artifactId>org.junit</artifactId>
+						<type>eclipse-plugin</type>
+					</dependency>
+				</dependencies>
+			</configuration>
+		</plugin>
+	</plugins>
+</build>
 	<!--
 	<pluginRepositories>
 		<pluginRepository>

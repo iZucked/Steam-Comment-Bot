@@ -704,7 +704,11 @@ public class LNGScenarioTransformer {
 				}
 				cooldownCalculator = new CooldownLumpSumCalculator(cooldownCurve);
 			} else {
-				cooldownCalculator = new CooldownPriceIndexedCalculator(dateHelper.generateExpressionCurve(price.getExpression(), commodityIndices));
+				final StepwiseIntegerCurve expression = dateHelper.generateExpressionCurve(price.getExpression(), commodityIndices);
+				if (expression == null) {
+					throw new IllegalStateException("Unable to parse cooldown curve");
+				}
+				cooldownCalculator = new CooldownPriceIndexedCalculator(expression);
 			}
 			injector.injectMembers(cooldownCalculator);
 
@@ -1958,7 +1962,7 @@ public class LNGScenarioTransformer {
 		}
 
 		if (isPermissive || !restrictedVessels.isEmpty()) {
-			List<@NonNull IVessel> permittedVessels = new LinkedList<>();
+			final List<@NonNull IVessel> permittedVessels = new LinkedList<>();
 
 			for (final Vessel e_vessel : SetUtils.getObjects(restrictedVessels)) {
 				final IVessel o_vessel = vesselAssociation.lookupNullChecked(e_vessel);
@@ -2044,7 +2048,7 @@ public class LNGScenarioTransformer {
 
 				for (final SpotMarket market : desPurchaseSpotMarket.getMarkets()) {
 					assert market instanceof DESPurchaseMarket;
-					if (market instanceof DESPurchaseMarket && market.isEnabled() ) {
+					if (market instanceof DESPurchaseMarket && market.isEnabled()) {
 						final DESPurchaseMarket desPurchaseMarket = (DESPurchaseMarket) market;
 
 						final LNGPriceCalculatorParameters priceInfo = desPurchaseMarket.getPriceInfo();
@@ -2206,7 +2210,7 @@ public class LNGScenarioTransformer {
 
 				for (final SpotMarket market : fobSalesSpotMarket.getMarkets()) {
 					assert market instanceof FOBSalesMarket;
-					if (market instanceof FOBSalesMarket && market.isEnabled() ) {
+					if (market instanceof FOBSalesMarket && market.isEnabled()) {
 						final FOBSalesMarket fobSaleMarket = (FOBSalesMarket) market;
 
 						final LNGPriceCalculatorParameters priceInfo = fobSaleMarket.getPriceInfo();
@@ -3748,13 +3752,13 @@ public class LNGScenarioTransformer {
 			heelPriceCalculator = new IHeelPriceCalculator() {
 
 				@Override
-				public int getHeelPrice(long heelVolume, int localTime, @NonNull IPort port) {
+				public int getHeelPrice(final long heelVolume, final int localTime, @NonNull final IPort port) {
 					// Should be using last heel price, not computing a new one
 					throw new IllegalStateException();
 				}
 
 				@Override
-				public int getHeelPrice(long heelVolumeInM3, int utcTime) {
+				public int getHeelPrice(final long heelVolumeInM3, final int utcTime) {
 					// Should be using last heel price, not computing a new one
 					throw new IllegalStateException();
 				}
@@ -3828,9 +3832,10 @@ public class LNGScenarioTransformer {
 	private void buildRouteEntryPoints(final PortModel portModel, final Association<Port, IPort> portAssociation) {
 		portModel.getRoutes().forEach(r -> {
 			if (r.getNorthEntrance() != null && r.getSouthEntrance() != null) {
-				if (r.getNorthEntrance().getPort() != null && r.getSouthEntrance().getPort() != null) {
-					distanceProviderEditor.setEntryPointsForRouteOption(mapRouteOption(r), portAssociation.lookup(r.getNorthEntrance().getPort()),
-							portAssociation.lookup(r.getSouthEntrance().getPort()));
+				final Port northPort = r.getNorthEntrance().getPort();
+				final Port southPort = r.getSouthEntrance().getPort();
+				if (northPort != null && southPort != null) {
+					distanceProviderEditor.setEntryPointsForRouteOption(mapRouteOption(r), portAssociation.lookupNullChecked(northPort), portAssociation.lookupNullChecked(southPort));
 				}
 			}
 		});

@@ -151,6 +151,12 @@ public class PeriodTransformer {
 	private InclusionChecker inclusionChecker;
 
 	public static class PeriodTransformResult {
+		public PeriodTransformResult(final @NonNull IScenarioDataProvider sdp, final @NonNull EditingDomain editingDomain, final @Nullable ExtraDataProvider extraDataProvider) {
+			this.sdp = sdp;
+			this.editingDomain = editingDomain;
+			this.extraDataProvider = extraDataProvider;
+		}
+
 		public @NonNull IScenarioDataProvider sdp;
 		public @NonNull EditingDomain editingDomain;
 		public @Nullable ExtraDataProvider extraDataProvider;
@@ -375,10 +381,7 @@ public class PeriodTransformer {
 		// Clear this date as we have fixed everything and it will conflict with rules in schedule transformer.
 		output.unsetSchedulingEndDate();
 
-		PeriodTransformResult r = new PeriodTransformResult();
-		r.sdp = outputDataProvider;
-		r.editingDomain = internalDomain;
-		r.extraDataProvider = p.getSecond();
+		PeriodTransformResult r = new PeriodTransformResult(outputDataProvider, internalDomain, p.getSecond());
 
 		return r;
 	}
@@ -888,9 +891,9 @@ public class PeriodTransformer {
 		}
 
 		for (final Slot<?> slot : cargo.getSlots()) {
-			//Load and discharge window are often part of the pricing for a DES purchase or FOB sale, so if we change
-			//the window, then the price incurred might change, hence we only fix one side of the cargo and leave the
-			//window untouched.
+			// Load and discharge window are often part of the pricing for a DES purchase or FOB sale, so if we change
+			// the window, then the price incurred might change, hence we only fix one side of the cargo and leave the
+			// window untouched.
 			if (slot instanceof LoadSlot) {
 				final LoadSlot loadSlot = (LoadSlot) slot;
 				if (loadSlot.isDESPurchase()) {
@@ -937,9 +940,9 @@ public class PeriodTransformer {
 	}
 
 	public void lockDownSlotDates(final Map<Slot<?>, SlotAllocation> slotAllocationMap, final Slot<?> slot, final Set<Slot<?>> lockedSlots, boolean doLockDates) {
-		//Load and discharge window are often part of the pricing for a DES purchase or FOB sale, so if we change
-		//the window, then the price incurred might change, hence we only fix one side of the cargo and leave the
-		//window untouched.
+		// Load and discharge window are often part of the pricing for a DES purchase or FOB sale, so if we change
+		// the window, then the price incurred might change, hence we only fix one side of the cargo and leave the
+		// window untouched.
 		if (slot instanceof LoadSlot) {
 			final LoadSlot loadSlot = (LoadSlot) slot;
 			if (loadSlot.isDESPurchase()) {

@@ -77,7 +77,11 @@
 							<artifactId>com.mmxlabs.models.lng.cargo.editor</artifactId>
 							<version>0.0.0</version>
 						</dependency>
-
+						<!-- avoid CNFE in Surefire when looking for JUnitPlatformProvider -->
+						<dependency>
+							<artifactId>org.junit</artifactId>
+							<type>eclipse-plugin</type>
+						</dependency>
 					</dependencies>
 
 				</configuration>

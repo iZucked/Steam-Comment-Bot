@@ -24,6 +24,7 @@ import com.mmxlabs.models.lng.transformer.export.FuelExportHelper;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
@@ -184,8 +185,9 @@ public class JourneyEventExporter {
 		}
 
 		// set canal booking if present
-		if (portTimesRecord.getRouteOptionBooking(fromPortSlot) != null) {
-			final CanalBookingSlot canalBookingSlot = modelEntityMap.getModelObject(portTimesRecord.getRouteOptionBooking(fromPortSlot), CanalBookingSlot.class);
+		IRouteOptionBooking routeOptionBooking = portTimesRecord.getRouteOptionBooking(fromPortSlot);
+		if (routeOptionBooking != null) {
+			final CanalBookingSlot canalBookingSlot = modelEntityMap.getModelObject(routeOptionBooking, CanalBookingSlot.class);
 			final ECanalEntry canalEntry = distanceProvider.getRouteOptionCanalEntrance(fromPortSlot.getPort(), options.getRoute());
 
 			final IPort canalEntryPort = distanceProvider.getRouteOptionEntryPort(options.getRoute(), canalEntry);
