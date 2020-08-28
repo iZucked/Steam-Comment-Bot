@@ -2228,7 +2228,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			LocalDate end = null;
 			final LocalDate today = LocalDate.now();
 			final LoadSlot ls = row.getLoadSlot();
-			if (ls != null) {
+			if (ls != null && ls.getSchedulingTimeWindow().getStart() != null &&//
+					ls.getSchedulingTimeWindow().getEnd() != null) {
 				start = ls.getSchedulingTimeWindow().getStart().toLocalDate();
 				end = ls.getSchedulingTimeWindow().getEnd().toLocalDate();
 			}
@@ -2241,7 +2242,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				}
 			}
 			final DischargeSlot ds = row.getDischargeSlot();
-			if (ds != null) {
+			if (ds != null && ds.getSchedulingTimeWindow().getStart() != null &&//
+					ds.getSchedulingTimeWindow().getEnd() != null) {
 				start = ds.getSchedulingTimeWindow().getStart().toLocalDate();
 				end = ds.getSchedulingTimeWindow().getEnd().toLocalDate();
 			}
