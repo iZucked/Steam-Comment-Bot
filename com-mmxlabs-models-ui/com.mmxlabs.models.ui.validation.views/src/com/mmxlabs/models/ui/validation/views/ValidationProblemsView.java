@@ -236,10 +236,13 @@ public class ValidationProblemsView extends ViewPart {
 						}
 					}
 					if (element instanceof ScenarioModelRecord) {
-						final IStatus status = (IStatus) iStructuredSelection.getFirstElement();
-						final ScenarioModelRecord record = (ScenarioModelRecord) element;
-						openEditor(map.get(record), status);
-						openViews(map.get(record), status);
+						Object firstElement = iStructuredSelection.getFirstElement();
+						if (firstElement instanceof IStatus) {
+							final IStatus status = (IStatus) firstElement;
+							final ScenarioModelRecord record = (ScenarioModelRecord) element;
+							openEditor(map.get(record), status);
+							openViews(map.get(record), status);
+						}
 					}
 				}
 			}
