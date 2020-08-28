@@ -700,6 +700,8 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 	private void contributeToActionBars() {
 		final IActionBars bars = getViewSite().getActionBars();
+		
+		//If this is not a custom report (we know if the title is Schedule Summary this is the original view), then allow new + configure menu.
 		if (!(this instanceof ScheduleSummaryReport) || "Schedule Summary".equals(this.getTitle())) {
 			fillLocalPullDown(bars.getMenuManager());
 		}
