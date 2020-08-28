@@ -133,10 +133,12 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 					}
 				}
 
-				// Sort columns by ID
-				List<String> blockIDOrder = new ArrayList<>(getBlockManager().getBlockIDOrder());
-				Collections.sort(blockIDOrder);
-				getBlockManager().setBlockIDOrder(blockIDOrder);
+				if (includeAllColumnsForITS) {
+					// Sort columns by ID
+					List<String> blockIDOrder = new ArrayList<>(getBlockManager().getBlockIDOrder());
+					Collections.sort(blockIDOrder);
+					getBlockManager().setBlockIDOrder(blockIDOrder);
+				}
 
 			}
 
