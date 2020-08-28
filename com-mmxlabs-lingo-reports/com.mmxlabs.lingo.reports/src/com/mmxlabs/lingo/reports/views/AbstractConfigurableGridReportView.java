@@ -700,7 +700,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 	private void contributeToActionBars() {
 		final IActionBars bars = getViewSite().getActionBars();
-		if (!(this instanceof ScheduleSummaryReport)) {
+		if (!(this instanceof ScheduleSummaryReport) || "Schedule Summary".equals(this.getTitle())) {
 			fillLocalPullDown(bars.getMenuManager());
 		}
 		fillLocalToolBar(bars.getToolBarManager());
