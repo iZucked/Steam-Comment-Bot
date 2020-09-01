@@ -57,6 +57,10 @@ public final class KeyFileLoader {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(KeyFileLoader.class);
 
+	private static final String KEYFILE_LEGACY = "lingo.data";
+
+	private static final String KEYFILE_CURRENT = "lingo.pks";
+
 	private static final String KEYSTORE_TYPE = "PKCS12";
 
 	private static final String ENC_KEY_FILE_PROPERTY = "lingo.enc.keyfile";
@@ -74,7 +78,7 @@ public final class KeyFileLoader {
 
 	private static final char[] ppValue = new char[] { 'U', 'n', 'i', 'c', 'o', 'r', 'n', '1', '4' };
 
-	public static URIConverter.Cipher loadCipher(final String keyFileName) throws Exception {
+	public static URIConverter.Cipher loadCipher() throws Exception {
 
 		// Try to find the key file
 
@@ -82,19 +86,19 @@ public final class KeyFileLoader {
 		File keyFileFile = getEncFilePropertyDataKeyFile();
 		if (keyFileFile == null) {
 			// Look in instance area - e.g. workspace folder / runtime folder
-			keyFileFile = getInstanceDataKeyFile(keyFileName);
+			keyFileFile = getInstanceDataKeyFile();
 		}
 		if (keyFileFile == null) {
 			// Look in eclipse top of installation directory
-			keyFileFile = getEclipseDataKeyFile(keyFileName);
+			keyFileFile = getEclipseDataKeyFile();
 		}
 		if (keyFileFile == null) {
 			// Look in <user home>/mmxlabs
-			keyFileFile = getUserDataAKeyFile(keyFileName);
+			keyFileFile = getUserDataAKeyFile();
 		}
 		if (keyFileFile == null) {
 			// Look in <user home>/LiNGO
-			keyFileFile = getUserDataBKeyFile(keyFileName);
+			keyFileFile = getUserDataBKeyFile();
 		}
 
 		if (keyFileFile == null) {
@@ -162,7 +166,7 @@ public final class KeyFileLoader {
 			}
 		} catch (final Exception e) {
 			// Fallback!
-		//	e.printStackTrace();
+			// e.printStackTrace();
 
 			try (FileInputStream fis = new FileInputStream(keyFileFile)) {
 				readLegacyKeyFile(cipher, fis, true);
@@ -226,11 +230,18 @@ public final class KeyFileLoader {
 		return password[0];
 	}
 
-	private static File getUserDataAKeyFile(final String keyFileName) {
+	private static File getUserDataAKeyFile() {
 
 		final String userHome = System.getProperty("user.home");
 		if (userHome != null) {
-			final File f = new File(userHome + "/mmxlabs/" + keyFileName);
+			final File f = new File(userHome + "/mmxlabs/" + KEYFILE_CURRENT);
+			if (f.exists()) {
+				return f;
+			}
+		}
+		// Fallback to legacy
+		if (userHome != null) {
+			final File f = new File(userHome + "/mmxlabs/" + KEYFILE_LEGACY);
 			if (f.exists()) {
 				return f;
 			}
@@ -238,11 +249,18 @@ public final class KeyFileLoader {
 		return null;
 	}
 
-	private static File getUserDataBKeyFile(final String keyFileName) {
+	private static File getUserDataBKeyFile() {
 
 		final String userHome = System.getProperty("user.home");
 		if (userHome != null) {
-			final File f = new File(userHome + "/LiNGO/" + keyFileName);
+			final File f = new File(userHome + "/LiNGO/" + KEYFILE_CURRENT);
+			if (f.exists()) {
+				return f;
+			}
+		}
+		// Fallback to legacy
+		if (userHome != null) {
+			final File f = new File(userHome + "/LiNGO/" + KEYFILE_LEGACY);
 			if (f.exists()) {
 				return f;
 			}
@@ -250,12 +268,22 @@ public final class KeyFileLoader {
 		return null;
 	}
 
-	private static File getInstanceDataKeyFile(final String keyFileName) {
+	private static File getInstanceDataKeyFile() {
 
 		final String userHome = System.getProperty("osgi.instance.area");
 		if (userHome != null) {
 			try {
-				final URL u = new URL(userHome + "/" + keyFileName);
+				final URL u = new URL(userHome + "/" + KEYFILE_CURRENT);
+				final File f = new File(u.getFile());
+				if (f.exists()) {
+					return f;
+				}
+			} catch (final MalformedURLException e) {
+				// Ignore
+			}
+			// Fallback to legacy filename
+			try {
+				final URL u = new URL(userHome + "/" + KEYFILE_LEGACY);
 				final File f = new File(u.getFile());
 				if (f.exists()) {
 					return f;
@@ -267,12 +295,23 @@ public final class KeyFileLoader {
 		return null;
 	}
 
-	private static File getEclipseDataKeyFile(final String keyFileName) {
+	private static File getEclipseDataKeyFile() {
 
 		final String userHome = System.getProperty("eclipse.home.location");
 		if (userHome != null) {
 			try {
-				final URL u = new URL(userHome + "/" + keyFileName);
+				final URL u = new URL(userHome + "/" + KEYFILE_CURRENT);
+				final File f = new File(u.getFile());
+				if (f.exists()) {
+					return f;
+				}
+			} catch (final MalformedURLException e) {
+				// Ignore
+			}
+			// Fallback to legacy filename
+
+			try {
+				final URL u = new URL(userHome + "/" + KEYFILE_LEGACY);
 				final File f = new File(u.getFile());
 				if (f.exists()) {
 					return f;
@@ -288,17 +327,25 @@ public final class KeyFileLoader {
 
 		final String encKeyFile = System.getProperty(ENC_KEY_FILE_PROPERTY);
 		if (encKeyFile != null) {
-			final File f = new File(encKeyFile);
-			if (f.exists()) {
-				return f;
+			if (encKeyFile.endsWith(".data")) {
+				final File f = new File(encKeyFile.replaceAll("\\.data", ".pks"));
+				if (f.exists()) {
+					return f;
+				}
+			}
+			{
+				final File f = new File(encKeyFile);
+				if (f.exists()) {
+					return f;
+				}
 			}
 		}
 		return null;
 	}
 
 	public static void main(final String[] args) throws Exception {
-		final String source = "C:/users/sg/mmxlabs/keyfiles/p/lingo.data.old";
-		final String dest = "C:/users/sg/mmxlabs/keyfiles/p/lingo.data";
+		final String source = "C:/users/sg/mmxlabs/keyfiles/p/lingo.data";
+		final String dest = "C:/users/sg/mmxlabs/keyfiles/p/lingo.pks";
 
 		convert(source, dest, ppValue);
 	}

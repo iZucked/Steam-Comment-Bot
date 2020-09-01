@@ -32,7 +32,7 @@ public class CachingSharedCipherProvider implements IScenarioCipherProvider {
 
 		if (cipher == null) {
 			try {
-				cipher = KeyFileLoader.loadCipher("lingo.data");
+				cipher = KeyFileLoader.loadCipher();
 			} catch (final FileNotFoundException e) {
 				cipher = new PassthoughCipher();
 				// Ignore
