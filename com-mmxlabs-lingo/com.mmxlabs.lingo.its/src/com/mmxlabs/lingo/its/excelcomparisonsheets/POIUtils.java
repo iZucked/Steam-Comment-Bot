@@ -7,6 +7,7 @@ package com.mmxlabs.lingo.its.excelcomparisonsheets;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -14,7 +15,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 public class POIUtils {
 
 	public abstract class ExcelCell <T> {
-		int cellType;
+		CellType cellType;
 		T value;
 		
 		public ExcelCell(T value) {
@@ -27,7 +28,7 @@ public class POIUtils {
 	public class NumericExcelCell extends ExcelCell<Double> {
 		public NumericExcelCell(Double value) {
 			super(value);
-			cellType = Cell.CELL_TYPE_NUMERIC;
+			cellType = CellType.NUMERIC;
 		}
 		
 		public void setValue(Cell cell) {
@@ -39,7 +40,7 @@ public class POIUtils {
 	public class StringExcelCell extends ExcelCell<String> {
 		public StringExcelCell(String value) {
 			super(value);
-			cellType = Cell.CELL_TYPE_STRING;
+			cellType = CellType.STRING;
 		}
 		
 		public void setValue(Cell cell) {
@@ -50,7 +51,7 @@ public class POIUtils {
 	public class FormulaExcelCell extends ExcelCell<String> {
 		public FormulaExcelCell(String value) {
 			super(value);
-			cellType = Cell.CELL_TYPE_FORMULA;
+			cellType = CellType.FORMULA;
 		}
 		
 		public void setValue(Cell cell) {
@@ -84,7 +85,7 @@ public class POIUtils {
 		final Row row = sheet.createRow(rowNo - 1);
 		for (int i = 0; i < text.length; i++) {
 			final Cell cell = row.createCell(i);
-			cell.setCellType(Cell.CELL_TYPE_STRING);
+			cell.setCellType(CellType.STRING);
 			cell.setCellValue(text[i]);
 		}
 	}
