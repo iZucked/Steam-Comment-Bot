@@ -105,6 +105,7 @@
     "minSpeed" : 12.0,
     "maxSpeed" : 20.0,
     "warmingTime" : 24,
+    "safetyHeel" : 500,
     "pilotLightRate" : 1.0,
     "hasReliqCapacity" : false
   }, {
@@ -180,6 +181,7 @@
     "minSpeed" : 15.0,
     "maxSpeed" : 19.0,
     "warmingTime" : 24,
+    "safetyHeel" : 500,
     "pilotLightRate" : 1.0,
     "hasReliqCapacity" : false
   }, {
@@ -237,6 +239,7 @@
     "minSpeed" : 15.0,
     "maxSpeed" : 19.0,
     "warmingTime" : 24,
+    "safetyHeel" : 500,
     "pilotLightRate" : 1.0,
     "hasReliqCapacity" : false
   }, {
@@ -326,6 +329,7 @@
     "minSpeed" : 15.0,
     "maxSpeed" : 20.0,
     "warmingTime" : 24,
+    "safetyHeel" : 500,
     "pilotLightRate" : 1.0,
     "hasReliqCapacity" : false
   }, {
@@ -433,6 +437,7 @@
     "minSpeed" : 12.0,
     "maxSpeed" : 20.0,
     "warmingTime" : 24,
+    "safetyHeel" : 500,
     "pilotLightRate" : 1.0,
     "hasReliqCapacity" : false
   }, {
@@ -540,6 +545,7 @@
     "minSpeed" : 12.0,
     "maxSpeed" : 20.0,
     "warmingTime" : 24,
+    "safetyHeel" : 500,
     "pilotLightRate" : 1.0,
     "hasReliqCapacity" : false
   }, {
@@ -647,6 +653,7 @@
     "minSpeed" : 12.0,
     "maxSpeed" : 20.0,
     "warmingTime" : 24,
+    "safetyHeel" : 500,
     "pilotLightRate" : 1.0,
     "hasReliqCapacity" : false
   }, {
@@ -736,6 +743,7 @@
     "minSpeed" : 15.0,
     "maxSpeed" : 20.0,
     "warmingTime" : 24,
+    "safetyHeel" : 500,
     "pilotLightRate" : 1.0,
     "hasReliqCapacity" : false
   }, {
@@ -819,6 +827,7 @@
     "minSpeed" : 15.0,
     "maxSpeed" : 19.0,
     "warmingTime" : 24,
+    "safetyHeel" : 500,
     "pilotLightRate" : 1.0,
     "hasReliqCapacity" : false
   }, {
@@ -920,6 +929,7 @@
     "minSpeed" : 12.0,
     "maxSpeed" : 19.0,
     "warmingTime" : 24,
+    "safetyHeel" : 500,
     "pilotLightRate" : 1.0,
     "hasReliqCapacity" : false
   }, {
@@ -1027,6 +1037,7 @@
     "minSpeed" : 12.0,
     "maxSpeed" : 20.0,
     "warmingTime" : 24,
+    "safetyHeel" : 500,
     "pilotLightRate" : 1.0,
     "hasReliqCapacity" : false
   }, {
@@ -1134,6 +1145,7 @@
     "minSpeed" : 12.0,
     "maxSpeed" : 20.0,
     "warmingTime" : 24,
+    "safetyHeel" : 500,
     "pilotLightRate" : 1.0,
     "hasReliqCapacity" : false
   }, {
@@ -1241,6 +1253,7 @@
     "minSpeed" : 12.0,
     "maxSpeed" : 20.0,
     "warmingTime" : 24,
+    "safetyHeel" : 500,
     "pilotLightRate" : 1.0,
     "hasReliqCapacity" : false
   } ]
