@@ -36,6 +36,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.PBEParameterSpec;
 
 import org.eclipse.emf.ecore.resource.URIConverter;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
@@ -76,7 +77,9 @@ public final class KeyFileLoader {
 	 */
 	private static final String OID_MMXLABS_KEYFILE_TYPE = "2.0.1.0.2";
 
-	private static final char[] ppValue = new char[] { 'U', 'n', 'i', 'c', 'o', 'r', 'n', '1', '4' };
+	private static final char[] ppLegacyValue = new char[] { 'U', 'n', 'i', 'c', 'o', 'r', 'n', '1', '4' };
+	
+	private static final char[] ppCurrentValue = new char[] { 'q', 'u', 'o', 'x', '1', 'E', 'e', 'w', 'u' ,'V'};
 
 	public static URIConverter.Cipher loadCipher() throws Exception {
 
@@ -110,10 +113,10 @@ public final class KeyFileLoader {
 
 			final KeyStore keyStore = KeyStore.getInstance(KEYSTORE_TYPE);
 			try (final InputStream astream = new FileInputStream(keyFileFile)) {
-				keyStore.load(astream, ppValue);
+				keyStore.load(astream, ppCurrentValue);
 			}
 
-			final ProtectionParameter pp = new PasswordProtection(ppValue);
+			final ProtectionParameter pp = new PasswordProtection(ppCurrentValue);
 
 			final List<Pair<Integer, IKeyFile>> keyFiles = new LinkedList<>();
 			final Iterator<String> itr = keyStore.aliases().asIterator();
@@ -184,7 +187,7 @@ public final class KeyFileLoader {
 			// Determine the password protecting the keyfile
 			switch (header.passwordType) {
 			case KeyFileHeader.PASSWORD_TYPE__DEFAULT: {
-				password = new char[] { 'U', 'n', 'i', 'c', 'o', 'r', 'n', '1', '4' };
+				password = ppLegacyValue;
 				break;
 			}
 			case KeyFileHeader.PASSWORD_TYPE__PROMPT: {
@@ -344,12 +347,31 @@ public final class KeyFileLoader {
 	}
 
 	public static void main(final String[] args) throws Exception {
-		final String source = "C:/users/sg/mmxlabs/keyfiles/p/lingo.data";
-		final String dest = "C:/users/sg/mmxlabs/keyfiles/p/lingo.pks";
+		generate("c:/temp/lingo.pks");
 
-		convert(source, dest, ppValue);
+		
+//		final String source = "C:/users/sg/mmxlabs/keyfiles/p/lingo.data";
+//		final String dest = "C:/users/sg/mmxlabs/keyfiles/p/lingo.pks";
+//		convert(source, dest, ppLegacyValue);
 	}
 
+	public static void generate(String out) {
+		final SecretKey newKey = KeyFileV2.generateKey(256);
+		final File f = new File(out);
+		try {
+			if (!f.exists()) {
+				KeyFileLoader.initalise(f);
+			}
+			{
+				final byte[] keyUUID = new byte[KeyFileUtil.UUID_LENGTH];
+				EcoreUtil.generateUUID(keyUUID);
+				KeyFileLoader.addToStore(f, keyUUID, newKey, KeyFileV2.KEYFILE_TYPE);
+			}
+		} catch (final Exception e1) {
+			e1.printStackTrace();
+		}
+	}
+	
 	public static void convert(final String in, final String out, final char[] pw) throws Exception {
 
 		initalise(new File(out));
@@ -396,19 +418,19 @@ public final class KeyFileLoader {
 
 		// Save
 		try (FileOutputStream os = new FileOutputStream(f)) {
-			keyStore.store(os, ppValue);
+			keyStore.store(os, ppCurrentValue);
 		}
 	}
 
 	public static void addToStore(File f, byte[] keyUUID, SecretKey key, String type) throws KeyStoreException, IOException, NoSuchAlgorithmException, CertificateException {
 		final KeyStore keyStore = KeyStore.getInstance(KEYSTORE_TYPE);
 		try (FileInputStream is = new FileInputStream(f)) {
-			keyStore.load(is, ppValue);
+			keyStore.load(is, ppCurrentValue);
 		}
 
 		int nextRevision = 1 + keyStore.size();
 		{
-			final PasswordProtection pp = ppGen.apply(ppValue);
+			final PasswordProtection pp = ppGen.apply(ppCurrentValue);
 
 			final Set<Attribute> attribs = new HashSet<>();
 			attribs.add(new PKCS12Attribute(OID_MMXLABS_KEYFILE_REVISION, Integer.toString(nextRevision)));
@@ -420,7 +442,7 @@ public final class KeyFileLoader {
 
 		// Save
 		try (FileOutputStream os = new FileOutputStream(f)) {
-			keyStore.store(os, ppValue);
+			keyStore.store(os, ppCurrentValue);
 		}
 
 	}
