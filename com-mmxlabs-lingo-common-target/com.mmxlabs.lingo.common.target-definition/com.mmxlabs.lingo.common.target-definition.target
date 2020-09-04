@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><?pde version="3.8"?><target name="LiNGO Common Platform Target - (Mars SR1)" sequenceNumber="66">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><?pde version="3.8"?><target name="LiNGO Common Platform Target - (Mars SR1)" sequenceNumber="68">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.equinox.compendium.sdk.feature.group" version="0.0.0"/>
@@ -70,16 +70,9 @@
 <unit id="org.apache.commons.logging.source" version="1.1.1.v201101211721"/>
 <unit id="org.apache.commons.math" version="0.0.0"/>
 <unit id="org.apache.commons.math.source" version="0.0.0"/>
+<unit id="org.apache.commons.compress" version="1.18.0.v20181121-2221"/>
 <unit id="org.apache.log4j" version="0.0.0"/>
 <unit id="org.apache.log4j.source" version="0.0.0"/>
-<unit id="org.apache.poi" version="3.9.0.v201405241750"/>
-<unit id="org.apache.poi.ooxml" version="3.9.0.v201405241905"/>
-<unit id="org.apache.poi.ooxml.schemas" version="3.9.0.v201405241750"/>
-<unit id="org.apache.poi.ooxml.schemas.source" version="3.9.0.v201405241750"/>
-<unit id="org.apache.poi.ooxml.source" version="3.9.0.v201405241905"/>
-<unit id="org.apache.poi.source" version="3.9.0.v201405241750"/>
-<unit id="org.apache.xmlbeans" version="2.3.0.v201605172150"/>
-<unit id="org.apache.xmlbeans.source" version="2.3.0.v201605172150"/>
 <unit id="org.dom4j" version="1.6.1.v20190321-1528"/>
 <unit id="org.dom4j.source" version="1.6.1.v20190321-1528"/>
 <unit id="org.hamcrest" version="1.1.0.v20090501071000"/>
@@ -127,7 +120,6 @@
 <unit id="net.bytebuddy.byte-buddy" version="1.9.9"/>
 <unit id="net.bytebuddy.byte-buddy-agent" version="1.9.9"/>
 <unit id="org.apache.commons.collections4" version="4.1.0"/>
-<unit id="org.apache.commons.compress" version="1.15.0"/>
 <unit id="org.apache.commons.io" version="2.6.0"/>
 <unit id="org.apache.commons.lang3" version="3.7.0"/>
 <unit id="org.apache.commons.math3" version="3.5.0"/>
@@ -143,7 +135,9 @@
 <unit id="org.swtchart" version="0.10.0.v20160212"/>
 <unit id="org.swtchart.ext" version="0.10.0.v20160212"/>
 <unit id="com.google.guava" version="25.1.0.jre"/>
-<repository id="mmxlabs-releases" location="http://nexus.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/p2/repository/mmxlabs-external/1.0.28/mmxlabs-external-1.0.28-p2-repo.zip-unzip/"/>
+<unit id="org.apache.servicemix.bundles.poi" version="0.0.0"/>
+<unit id="org.apache.servicemix.bundles.xmlbeans" version="0.0.0"/>
+<repository id="mmxlabs-releases" location="http://nexus.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/p2/repository/mmxlabs-external/1.0.31/mmxlabs-external-1.0.31-p2-repo.zip-unzip/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.mmxlabs.models.datetime.feature.feature.group" version="0.0.0"/>
