@@ -1511,13 +1511,6 @@
          unpack="false"/>
 
    <plugin
-         id="org.apache.xmlbeans"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.eclipse.equinox.security.win32.x86_64"
          os="win32"
          arch="x86_64"
@@ -1621,6 +1614,13 @@
 
    <plugin
          id="org.apache.commons.math3"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.servicemix.bundles.xmlbeans"
          download-size="0"
          install-size="0"
          version="0.0.0"

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><?pde version="3.8"?><target name="LiNGO Common Platform Target - (Mars SR1)" sequenceNumber="67">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><?pde version="3.8"?><target name="LiNGO Common Platform Target - (Mars SR1)" sequenceNumber="68">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.equinox.compendium.sdk.feature.group" version="0.0.0"/>
@@ -73,8 +73,6 @@
 <unit id="org.apache.commons.compress" version="1.18.0.v20181121-2221"/>
 <unit id="org.apache.log4j" version="0.0.0"/>
 <unit id="org.apache.log4j.source" version="0.0.0"/>
-<unit id="org.apache.xmlbeans" version="2.3.0.v201605172150"/>
-<unit id="org.apache.xmlbeans.source" version="2.3.0.v201605172150"/>
 <unit id="org.dom4j" version="1.6.1.v20190321-1528"/>
 <unit id="org.dom4j.source" version="1.6.1.v20190321-1528"/>
 <unit id="org.hamcrest" version="1.1.0.v20090501071000"/>
@@ -138,7 +136,8 @@
 <unit id="org.swtchart.ext" version="0.10.0.v20160212"/>
 <unit id="com.google.guava" version="25.1.0.jre"/>
 <unit id="org.apache.servicemix.bundles.poi" version="0.0.0"/>
-<repository id="mmxlabs-releases" location="http://nexus.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/p2/repository/mmxlabs-external/1.0.30/mmxlabs-external-1.0.30-p2-repo.zip-unzip/"/>
+<unit id="org.apache.servicemix.bundles.xmlbeans" version="0.0.0"/>
+<repository id="mmxlabs-releases" location="http://nexus.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/p2/repository/mmxlabs-external/1.0.31/mmxlabs-external-1.0.31-p2-repo.zip-unzip/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.mmxlabs.models.datetime.feature.feature.group" version="0.0.0"/>
