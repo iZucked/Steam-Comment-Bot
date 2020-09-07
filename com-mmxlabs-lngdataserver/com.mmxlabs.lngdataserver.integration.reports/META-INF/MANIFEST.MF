@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Dataserver: LiNGO - Hub Reports integration
 Bundle-SymbolicName: com.mmxlabs.lngdataserver.integration.reports;singleton:=true
 Automatic-Module-Name: com.mmxlabs.lngdataserver.integration.reports
-Bundle-Version: 4.10.14.RELEASE
+Bundle-Version: 4.10.15.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
@@ -17,13 +17,13 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.models.lng.port,
  com.mmxlabs.models.lng.schedule,
  com.mmxlabs.lingo.reports,
- com.mmxlabs.models.ui.tabular;bundle-version="4.10.14",
+ com.mmxlabs.models.ui.tabular;bundle-version="4.10.15",
  com.mmxlabs.models.lng.cargo.editor,
  com.mmxlabs.lngdataserver.integration.ui.scenarios,
- com.mmxlabs.scenario.service.ui;bundle-version="4.10.14",
- com.mmxlabs.rcp.common;bundle-version="4.10.14",
- com.mmxlabs.models.lng.commercial.editor;bundle-version="4.10.14",
- com.mmxlabs.models.lng.nominations.editor;bundle-version="4.10.14",
+ com.mmxlabs.scenario.service.ui;bundle-version="4.10.15",
+ com.mmxlabs.rcp.common;bundle-version="4.10.15",
+ com.mmxlabs.models.lng.commercial.editor;bundle-version="4.10.15",
+ com.mmxlabs.models.lng.nominations.editor;bundle-version="4.10.15",
  com.mmxlabs.lngdataserver.server,
  com.google.guava,
  com.mmxlabs.lngdataserver.commons,
