@@ -34,9 +34,9 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.util.SimpleCargoAllocation;
-import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScheduleTools;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.MinMaxUnconstrainedVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
@@ -85,7 +85,7 @@ public class InPortBoilOffTests extends AbstractLegacyMicroTestCase {
 					}
 
 					@Provides
-					@Named(LNGTransformerModule.COMMERCIAL_VOLUME_OVERCAPACITY)
+					@Named(SchedulerConstants.COMMERCIAL_VOLUME_OVERCAPACITY)
 					private boolean commercialVolumeOverCapacity() {
 						return activateOverride;
 					}

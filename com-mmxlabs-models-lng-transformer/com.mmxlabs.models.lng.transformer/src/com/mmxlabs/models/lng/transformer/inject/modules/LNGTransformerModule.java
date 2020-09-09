@@ -89,8 +89,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.util.SchedulerCalculationUtils;
  */
 public class LNGTransformerModule extends AbstractModule {
 
-	public static final String COMMERCIAL_VOLUME_OVERCAPACITY = "COMMERCIAL_VOLUME_OVERCAPACITY";
-
 	public static final String EARLIEST_AND_LATEST_TIMES = "earliest-and-latest-times";
 
 	private final @NonNull LNGScenarioModel scenario;
@@ -221,7 +219,7 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(boolean.class).annotatedWith(Names.named(IEndEventScheduler.ENABLE_HIRE_COST_ONLY_END_RULE)).toInstance(Boolean.TRUE);
 		bind(IEndEventScheduler.class).to(DefaultEndEventScheduler.class);
 
-		bind(boolean.class).annotatedWith(Names.named(COMMERCIAL_VOLUME_OVERCAPACITY)).toInstance(Boolean.FALSE);
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.COMMERCIAL_VOLUME_OVERCAPACITY)).toInstance(Boolean.FALSE);
 		bind(IVolumeAllocator.class).to(MinMaxUnconstrainedVolumeAllocator.class);
 
 		bind(IEntityValueCalculator.class).to(DefaultEntityValueCalculator.class);
@@ -244,7 +242,7 @@ public class LNGTransformerModule extends AbstractModule {
 	}
 
 	@Provides
-	private IBoilOffHelper provideInPortBoilOffHelper(@NonNull final Injector injector, @Named(COMMERCIAL_VOLUME_OVERCAPACITY) final boolean toggle) {
+	private IBoilOffHelper provideInPortBoilOffHelper(@NonNull final Injector injector, @Named(SchedulerConstants.COMMERCIAL_VOLUME_OVERCAPACITY) final boolean toggle) {
 		return new InPortBoilOffHelper(toggle);
 	}
 

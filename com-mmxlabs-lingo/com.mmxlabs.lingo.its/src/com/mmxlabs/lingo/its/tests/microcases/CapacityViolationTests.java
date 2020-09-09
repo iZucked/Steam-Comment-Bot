@@ -54,6 +54,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.CapacityEvaluatedStateChecker;
 import com.mmxlabs.scheduler.optimiser.evaluation.HeelRecord;
@@ -104,7 +105,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 					}
 
 					@Provides
-					@Named(LNGTransformerModule.COMMERCIAL_VOLUME_OVERCAPACITY)
+					@Named(SchedulerConstants.COMMERCIAL_VOLUME_OVERCAPACITY)
 					private boolean commercialVolumeOverCapacity() {
 						return activateOverride;
 					}

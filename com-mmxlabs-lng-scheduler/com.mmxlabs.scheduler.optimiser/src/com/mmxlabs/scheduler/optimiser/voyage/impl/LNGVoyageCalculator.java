@@ -61,6 +61,10 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	public static final int STATE_COLD_NO_VOYAGE = 4; // Vessel ends cold. There was no voyage. We are still at discharge port. Can pick heel...
 
 	@Inject
+	@Named(SchedulerConstants.COMMERCIAL_VOLUME_OVERCAPACITY)
+	private boolean adjustForLoadPortBOG;
+
+	@Inject
 	private ITimeZoneToUtcOffsetProvider timeZoneToUtcOffsetProvider;
 
 	@Inject
@@ -90,7 +94,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	@Named(SchedulerConstants.Key_SchedulePurges)
 	private boolean purgeSchedulingEnabled;
 
-	public void setTimeZoneToUtcOffsetProvider(ITimeZoneToUtcOffsetProvider timeZoneToUtcOffsetProvider) {
+	public void setTimeZoneToUtcOffsetProvider(final ITimeZoneToUtcOffsetProvider timeZoneToUtcOffsetProvider) {
 		this.timeZoneToUtcOffsetProvider = timeZoneToUtcOffsetProvider;
 	}
 
@@ -117,7 +121,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		 * How much of the time given to us by the scheduler has to be spent travelling by an alternative route.
 		 */
 		final int additionalRouteTimeInHours = routeCostProvider.getRouteTransitTime(options.getRoute(), vessel);
-		int extraIdleTime = options.getExtraIdleTime();
+		final int extraIdleTime = options.getExtraIdleTime();
 
 		/**
 		 * How much time is available to cover the distance, excluding time which must be spent traversing any canals
@@ -389,7 +393,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		if (options.getTravelFuelChoice() != TravelFuelChoice.BUNKERS) {
 			nboHours = travelTimeInHours;
 			boolean ranDry = false;
-			long totalTravelTimeNBOInM3 = Calculator.quantityFromRateTime(nboRateInM3PerDay, nboHours) / 24L;
+			final long totalTravelTimeNBOInM3 = Calculator.quantityFromRateTime(nboRateInM3PerDay, nboHours) / 24L;
 			if (totalTravelTimeNBOInM3 > nboAvailableInM3 // NBO Exceeds available quantity
 					|| requiredConsumptionInMT > nboAvailableInMT) { // Not enough gas onboard to cover the fuel requirements
 				// Ran dry
@@ -855,7 +859,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 						}
 					}
 				}
-				for (FuelKey fk : vessel.getVoyageFuelKeys()) {
+				for (final FuelKey fk : vessel.getVoyageFuelKeys()) {
 
 					final IBaseFuel bf = fk.getBaseFuel();
 					if (bf != IBaseFuel.LNG) {
@@ -872,7 +876,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 					}
 				}
 
-				for (FuelKey fk : vessel.getTravelFuelKeys()) {
+				for (final FuelKey fk : vessel.getTravelFuelKeys()) {
 					final IBaseFuel bf = fk.getBaseFuel();
 					final int unitPrice = baseFuelPricesPerMT[bf.getIndex()];
 					details.setFuelUnitPrice(fk.getFuelComponent(), unitPrice);
@@ -969,7 +973,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	}
 
 	private void calculateCharterCosts(final ICharterCostCalculator charterCostCalculator, final IDetailsSequenceElement[] sequence, final IPortTimesRecord portTimesRecord) {
-		int voyagePlanStartTimeUTC = timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getFirstSlotTime(), portTimesRecord.getFirstSlot());
+		final int voyagePlanStartTimeUTC = timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getFirstSlotTime(), portTimesRecord.getFirstSlot());
 		final int offset = sequence.length > 1 ? 1 : 0;
 		int time = portTimesRecord.getFirstSlotTime();
 		for (int i = 0; i < sequence.length - offset; ++i) {
@@ -1000,10 +1004,10 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			} else {
 				assert element instanceof PortDetails;
 				final PortDetails details = (PortDetails) element;
-				int eventStartTime = time;
-				int duration = details.getOptions().getVisitDuration();
+				final int eventStartTime = time;
+				final int duration = details.getOptions().getVisitDuration();
 
-				long charterCost = charterCostCalculator.getCharterCost(voyagePlanStartTimeUTC, eventStartTime, duration);
+				final long charterCost = charterCostCalculator.getCharterCost(voyagePlanStartTimeUTC, eventStartTime, duration);
 				details.setCharterCost(charterCost);
 				time += duration;
 			}
@@ -1259,15 +1263,26 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		return endHeelState;
 	}
 
-	protected int checkCargoCapacityViolations(final long startHeelInM3, final long lngCommitmentInM3, final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final long cargoCapacityInM3,
-			final long heelLevelInM3, final long[] remainingHeelRangeInM3, final IDetailsSequenceElement[] sequence) {
+	protected int checkCargoCapacityViolations(final long startHeelInM3, final long baseLNGCommitmentInM3, final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot,
+			final long baseCargoCapacityInM3, final long heelLevelInM3, final long[] remainingHeelRangeInM3, final IDetailsSequenceElement[] sequence) {
 
 		// TODO: Needs fixing for LDD!
 		// NOTE: Strict checking may be too much for actuals
 
-		int violationsCount = 0;
+		final long loadPortBOGInM3;
+		if (adjustForLoadPortBOG) {
+			loadPortBOGInM3 = ((PortDetails) sequence[0]).getFuelConsumption(LNGFuelKeys.NBO_In_m3);
+		} else {
+			loadPortBOGInM3 = 0L;
+		}
+		// If we model load port BOG on top of max load volume, then model an increase in vessel capacity so we can leave the load port with a full ship load.
+		final long cargoCapacityInM3 = baseCargoCapacityInM3 + loadPortBOGInM3;
+
+		final long lngCommitmentInM3 = baseLNGCommitmentInM3;
+
 		final long minLoadVolumeInM3 = loadSlot.getMinLoadVolume();
 		long maxLoadVolumeInM3 = loadSlot.getMaxLoadVolume();
+
 		final long minDischargeVolumeInM3 = dischargeSlot.getMinDischargeVolume(loadSlot.getCargoCVValue());
 		long maxDischargeVolumeInM3 = dischargeSlot.getMaxDischargeVolume(loadSlot.getCargoCVValue());
 
@@ -1277,6 +1292,8 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		if (maxDischargeVolumeInM3 == 0) {
 			maxDischargeVolumeInM3 = Long.MAX_VALUE;
 		}
+
+		int violationsCount = 0;
 		// We cannot load more than is available or which would exceed
 		// vessel capacity.
 		final long upperLoadLimitInM3 = Math.min(cargoCapacityInM3 - startHeelInM3, maxLoadVolumeInM3);
@@ -1323,7 +1340,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 						final IDischargeOption dischargeOption = (IDischargeOption) portSlot;
 						final int cargoCVValue = portDetails.getOptions().getCargoCVValue();
 						// Check for Long.MAX_VALUE and keep heel positive
-						long maxDischargeVolume = dischargeOption.getMaxDischargeVolume(cargoCVValue);
+						final long maxDischargeVolume = dischargeOption.getMaxDischargeVolume(cargoCVValue);
 						if (maxDischargeVolume == Long.MAX_VALUE) {
 							heelInM3 = 0;
 						} else {
@@ -1485,7 +1502,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		final long requiredConsumptionInMT = Calculator.quantityFromRateTime(consumptionRateInMTPerDay, visitDuration) / 24L;
 
 		final long minBaseFuelConsumptionInMT = Calculator.quantityFromRateTime(vessel.getMinBaseFuelConsumptionInMTPerDay(), visitDuration) / 24L;
-		FuelKey fk = vessel.getInPortBaseFuelInMT();
+		final FuelKey fk = vessel.getInPortBaseFuelInMT();
 		if (minBaseFuelConsumptionInMT > requiredConsumptionInMT) {
 			details.setFuelConsumption(fk, minBaseFuelConsumptionInMT);
 		} else {
@@ -1501,7 +1518,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	/**
 	 * API for unit testing
 	 */
-	public void setPortCooldownProvider(IPortCooldownDataProvider portCooldownDataProvider) {
+	public void setPortCooldownProvider(final IPortCooldownDataProvider portCooldownDataProvider) {
 		this.portCooldownDataProvider = portCooldownDataProvider;
 	}
 
