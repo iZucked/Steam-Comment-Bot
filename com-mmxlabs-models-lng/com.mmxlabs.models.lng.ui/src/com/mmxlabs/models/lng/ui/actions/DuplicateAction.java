@@ -30,11 +30,12 @@ public class DuplicateAction extends ScenarioModifyingAction {
 	@Override
 	public void run() {
 		final IStructuredSelection selection = (IStructuredSelection) getLastSelection();
+		//We edit in lock to stop evaluation/optimisation/concurrent changes as EMF not thread safe and commands should be executed in the UI thread.
 		DetailCompositeDialogUtil.editInlock(part, () -> {
 			final DetailCompositeDialog dcd = new DetailCompositeDialog(part.getShell(), part.getDefaultCommandHandler());
+			//We are duplicating the current object.
 			dcd.setReturnDuplicates(true);
 			return dcd.open(part, part.getRootObject(), selection.toList());
-
 		});
 	}
 
