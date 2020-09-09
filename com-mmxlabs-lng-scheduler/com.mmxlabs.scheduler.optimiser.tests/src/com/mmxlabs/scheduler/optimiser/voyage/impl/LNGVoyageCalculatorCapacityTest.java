@@ -14,6 +14,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.voyage.LNGFuelKeys;
 
 public class LNGVoyageCalculatorCapacityTest {
 
@@ -218,4 +219,37 @@ public class LNGVoyageCalculatorCapacityTest {
 		Assertions.assertEquals(1, violationCountC);
 	}
 
+	/**
+	 * When we add load BOG above the final loaded quantity, we hit an issue where we would break vessel capacity. This test makes sure there is no violation.
+	 * See FogBugz 5061 and gitlab 287 
+	 */
+	@Test
+	public void testCheckCargoCapacityViolations_ExcessBOG() {
+		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
+		calc.setAdjustForLoadPortBOG(true);
+
+		// Strictly one of these should be an *Option variant, but it does not matter for this code.
+		final LoadSlot loadSlot = new LoadSlot("load", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), true, 0L, 0L, Mockito.mock(ILoadPriceCalculator.class), 1_000_000, false, false);
+		final DischargeSlot dischargeSlot = new DischargeSlot("discharge", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), true, 0L, 0L, Mockito.mock(ISalesPriceCalculator.class), 0, 0);
+
+		// Replace value above
+		loadSlot.setVolumeLimits(true, 158_000_000L, 178_000_000L);
+		dischargeSlot.setVolumeLimits(true, 135_000_000L, 178_000_000L);
+
+		// No voyage, no boil-off or heel requirements.
+		long startHeel = 300_000L;
+		long endHeel = 0;
+		long lngCommitmentInM3 = 0;
+		final long[] remainingHeelInM3 = new long[2];
+
+		// E.g. nominal vessel capacity.
+		long cargoCapacityInM3 = 158_244_000L;
+
+		PortDetails details = new PortDetails(new PortOptions(loadSlot));
+		details.setFuelConsumption(LNGFuelKeys.NBO_In_m3, 300_000L);
+		IDetailsSequenceElement[] sequence = new IDetailsSequenceElement[] { details };
+		// Lower vessel capacity should trigger issues on just load limit
+		final int violationCount = calc.checkCargoCapacityViolations(startHeel, lngCommitmentInM3, loadSlot, dischargeSlot, cargoCapacityInM3, endHeel, remainingHeelInM3, sequence);
+		Assertions.assertEquals(0, violationCount);
+	}
 }

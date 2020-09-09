@@ -1608,4 +1608,12 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		return storage;
 	}
 
+	public boolean isAdjustForLoadPortBOG() {
+		return adjustForLoadPortBOG;
+	}
+
+	public void setAdjustForLoadPortBOG(boolean adjustForLoadPortBOG) {
+		this.adjustForLoadPortBOG = adjustForLoadPortBOG;
+	}
+
 }
