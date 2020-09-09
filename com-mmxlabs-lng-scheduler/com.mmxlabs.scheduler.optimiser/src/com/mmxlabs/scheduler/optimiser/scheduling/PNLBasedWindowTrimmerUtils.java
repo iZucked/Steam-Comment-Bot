@@ -558,6 +558,8 @@ public class PNLBasedWindowTrimmerUtils {
 		}
 
 		if (!roundTripCargo && PRE_BACKWARDS_NBO_TIME) {
+			
+			final IStartRequirement startRequirement = startEndRequirementProvider.getStartRequirement(resource);
 
 			// Reverse pass, given each arrival time, work out when we would need to arrive at the previous slot if we wanted to use NBO speed.
 			// Work backwards for NBO times
@@ -584,6 +586,18 @@ public class PNLBasedWindowTrimmerUtils {
 						continue;
 					}
 				}
+
+				if (i == 1) {
+					// Remove the start time of 0 as it is typically a default value that is not
+					// much use
+					if (startRequirement != null && !startRequirement.hasTimeRequirement()) {
+						Collection<TimeChoice> choices = intervalMap.get(lastSlot);
+						if (choices.size() > 1) {
+							choices.removeIf(t -> t.time == 0);
+						}
+					}
+				}
+
 				final List<@NonNull DistanceMatrixEntry> allDistanceValues = distanceProvider.getDistanceValues(lastSlot.getPort(), slot.getPort(), vessel, lastRouteChoices);
 				for (final DistanceMatrixEntry dme : allDistanceValues) {
 					if (dme.getDistance() == Integer.MAX_VALUE) {
