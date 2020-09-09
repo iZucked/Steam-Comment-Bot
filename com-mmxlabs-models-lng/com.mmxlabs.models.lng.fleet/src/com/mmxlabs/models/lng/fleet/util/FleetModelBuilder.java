@@ -134,6 +134,24 @@ public class FleetModelBuilder {
 		return vessel;
 
 	}
+	public @NonNull Vessel createVessel(@NonNull final String vesselName, Vessel referenceVessel) {
+		
+		final Vessel vessel = FleetFactory.eINSTANCE.createVessel();
+		
+		final VesselStateAttributes laden = FleetFactory.eINSTANCE.createVesselStateAttributes();
+		final VesselStateAttributes ballast = FleetFactory.eINSTANCE.createVesselStateAttributes();
+		
+		vessel.setLadenAttributes(laden);
+		vessel.setBallastAttributes(ballast);
+		
+		vessel.setName(vesselName);
+		vessel.setReference(referenceVessel);
+		
+		fleetModel.getVessels().add(vessel);
+		
+		return vessel;
+		
+	}
 
 	public void setVesselStateAttributes(final @NonNull Vessel vessel, final boolean isLaden, final int nboRate, final int idleNBORate, final int idleBaseRate, final int portConsumptionRate) {
 		final VesselStateAttributes attributes = isLaden ? vessel.getLadenAttributes() : vessel.getBallastAttributes();
