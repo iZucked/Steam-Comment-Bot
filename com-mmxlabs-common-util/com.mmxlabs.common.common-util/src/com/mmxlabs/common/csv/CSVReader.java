@@ -9,6 +9,8 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -36,6 +38,8 @@ public class CSVReader implements Closeable {
 	private final Set<String> unusedHeaders = new HashSet<>();
 
 	private final char separator;
+	private static final  String UTF8_BOM = new String("\uFEFF".getBytes(StandardCharsets.UTF_8));
+	private static final String EMPTY_CHARACTER = new String("\u0000".getBytes(StandardCharsets.UTF_8));
 
 	private BufferedReader reader;
 	private int lineNumber = 1;
@@ -53,6 +57,9 @@ public class CSVReader implements Closeable {
 		if (headerLine == null) {
 			return;
 		}
+		//UTF-8 BOM can only be in at the start.
+		//Empty characters will be embedded to separate the normal characters
+		headerLine[0] = headerLine[0].replace(UTF8_BOM, "").replace(EMPTY_CHARACTER, "");
 		for (int i = 0; i < headerLine.length; i++) {
 			final String lc = headerLine[i].toLowerCase();
 			originalHeaderLine.put(lc, headerLine[i]);
