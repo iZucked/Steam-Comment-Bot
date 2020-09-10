@@ -48,7 +48,7 @@ import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
  */
 @ExtendWith(ShiroRunner.class)
 public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
-	
+
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testDES_Purchase_MaxTransfer_MMBTU() throws Exception {
@@ -188,7 +188,7 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 			verifyNoCapacityViolations(cargoAllocation);
 		});
 	}
-	
+
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 
@@ -225,7 +225,7 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 			verifyNoCapacityViolations(cargoAllocation);
 		});
 	}
-	
+
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testDES_Purchase_MinTransfer_withFCL_discharge() throws Exception {
@@ -362,7 +362,7 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 			verifyNoCapacityViolations(cargoAllocation);
 		});
 	}
-	
+
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testFOB_Sale_MinTransfer_withFCL_load() throws Exception {
@@ -398,7 +398,7 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 			verifyNoCapacityViolations(cargoAllocation);
 		});
 	}
-	
+
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testFOB_Sale_MinTransfer_withFCL_discharge() throws Exception {
@@ -548,7 +548,7 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 
 		});
 	}
-	
+
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testShipped_MinTransfer_withFCL_load() throws Exception {
@@ -581,13 +581,13 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
 			Assertions.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
 
-			Assertions.assertEquals(2_000_000, cargoAllocation.getLoadAllocation().getEnergyTransferred());
-			Assertions.assertEquals(2_000_000 / 20, cargoAllocation.getLoadAllocation().getVolumeTransferred());
+			Assertions.assertEquals(2_000_000 - (vessel.getSafetyHeel() * 20), cargoAllocation.getLoadAllocation().getEnergyTransferred());
+			Assertions.assertEquals(2_000_000 / 20 - vessel.getSafetyHeel(), cargoAllocation.getLoadAllocation().getVolumeTransferred());
 
 			verifyNoCapacityViolations(cargoAllocation);
 		});
 	}
-	
+
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testShipped_MinTransfer_withFCL_discharge() throws Exception {
@@ -619,8 +619,8 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
 			Assertions.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
 
-			Assertions.assertEquals(2_000_000, cargoAllocation.getLoadAllocation().getEnergyTransferred());
-			Assertions.assertEquals(2_000_000 / 20, cargoAllocation.getLoadAllocation().getVolumeTransferred());
+			Assertions.assertEquals(2_000_000 - (vessel.getSafetyHeel() * 20), cargoAllocation.getLoadAllocation().getEnergyTransferred());
+			Assertions.assertEquals(2_000_000 / 20 - vessel.getSafetyHeel(), cargoAllocation.getLoadAllocation().getVolumeTransferred());
 
 			verifyNoCapacityViolations(cargoAllocation);
 		});
@@ -703,16 +703,16 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 
 		});
 	}
-	
+
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testDES_Purchase_CPVolume_MinLoadVolume_Match() throws Exception {
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "5", 20.0, null)//
-				.with(s -> ((LoadSlot)s).setVolumeCounterParty(true))//
+				.with(s -> ((LoadSlot) s).setVolumeCounterParty(true))//
 				.withVolumeLimits(2_950_000, 4_000_000, VolumeUnits.MMBTU).build() //
-				
+
 				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.withVolumeLimits(2_500_000, 4_000_000, VolumeUnits.MMBTU).build() //
 				.build();
@@ -735,14 +735,14 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 			verifyNoCapacityViolations(cargoAllocation);
 		});
 	}
-	
+
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testDES_Purchase_CPVolume_MaxLoadVolume_Match() throws Exception {
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7", 20.0, null) //
-				.with(s -> ((LoadSlot)s).setVolumeCounterParty(true))//
+				.with(s -> ((LoadSlot) s).setVolumeCounterParty(true))//
 				.withVolumeLimits(2_950_000, 4_000_000, VolumeUnits.MMBTU).build() //
 
 				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "5") //
@@ -767,14 +767,14 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 			verifyNoCapacityViolations(cargoAllocation);
 		});
 	}
-	
+
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testDES_Purchase_CPVolume_MinLoadVolume_UnMatch() throws Exception {
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "5", 20.0, null) //
-				.with(s -> ((LoadSlot)s).setVolumeCounterParty(true))//
+				.with(s -> ((LoadSlot) s).setVolumeCounterParty(true))//
 				.withVolumeLimits(2_950_000, 4_000_000, VolumeUnits.MMBTU).build() //
 
 				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
@@ -799,15 +799,14 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 			Assertions.assertTrue(verifySomeCapacityViolations(cargoAllocation));
 		});
 	}
-	
+
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testDES_Purchase_CPVolume_MaxLoadVolume_UnMatch() throws Exception {
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7", 20.0, null) //
-				.with(s -> ((LoadSlot)s).setVolumeCounterParty(true))
-				.withVolumeLimits(2_950_000, 4_000_000, VolumeUnits.MMBTU).build() //
+				.with(s -> ((LoadSlot) s).setVolumeCounterParty(true)).withVolumeLimits(2_950_000, 4_000_000, VolumeUnits.MMBTU).build() //
 
 				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "5") //
 				.withVolumeLimits(2_500_000, 3_900_000, VolumeUnits.MMBTU).build() //
@@ -831,10 +830,10 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 			Assertions.assertTrue(verifySomeCapacityViolations(cargoAllocation));
 		});
 	}
-	
+
 	private boolean verifySomeCapacityViolations(final SimpleCargoAllocation cargoAllocation) {
 		for (SlotAllocation slotAllocation : cargoAllocation.getCargoAllocation().getSlotAllocations()) {
-			if(!slotAllocation.getSlotVisit().getViolations().isEmpty())
+			if (!slotAllocation.getSlotVisit().getViolations().isEmpty())
 				return true;
 		}
 		return false;
