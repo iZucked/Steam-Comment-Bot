@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>com.mmxlabs.scheduler</groupId>
 		<artifactId>com.mmxlabs.scheduler.parent</artifactId>
-		<version>4.10.15-SNAPSHOT</version>
+		<version>4.10.15.RELEASE</version>
 	</parent>
 	<properties>
 		<sonar.junit.reportPaths>
