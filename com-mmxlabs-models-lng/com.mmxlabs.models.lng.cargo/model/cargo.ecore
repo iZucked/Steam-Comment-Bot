@@ -651,6 +651,7 @@
       </eAnnotations>
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
         <details key="formatString" value="-##0.###"/>
+        <details key="exportFormatString" value="##0.###"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="pricingType" eType="#//PaperPricingType"/>

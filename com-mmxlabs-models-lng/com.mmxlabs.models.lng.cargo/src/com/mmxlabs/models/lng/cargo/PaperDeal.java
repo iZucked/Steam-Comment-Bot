@@ -288,7 +288,7 @@ public interface PaperDeal extends NamedObject {
 	 * @see #setPrice(double)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getPaperDeal_Price()
 	 * @model annotation="http://www.mmxlabs.com/models/pricing/expressionType type='commodity'"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='-##0.###'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='-##0.###' exportFormatString='##0.###'"
 	 * @generated
 	 */
 	double getPrice();
