@@ -8,7 +8,6 @@ import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.CollectionsUtil;
@@ -83,27 +82,26 @@ public class CommercialModelBuilder {
 		return contract;
 	}
 
-	
-	public @NonNull PurchaseContract makeDateShiftExpressionPurchaseContract(@NonNull final String name, @NonNull final BaseLegalEntity entity, @NonNull final String expression,
-			int value, boolean specificDay) {
+	public @NonNull PurchaseContract makeDateShiftExpressionPurchaseContract(@NonNull final String name, @NonNull final BaseLegalEntity entity, @NonNull final String expression, int value,
+			boolean specificDay) {
 		final PurchaseContract contract = CommercialFactory.eINSTANCE.createPurchaseContract();
 		contract.setName(name);
 		contract.setEntity(entity);
-		
+
 		final DateShiftExpressionPriceParameters params = CommercialFactory.eINSTANCE.createDateShiftExpressionPriceParameters();
 		params.setPriceExpression(expression);
 		params.setSpecificDay(specificDay);
 		params.setValue(value);
-		
+
 		contract.setPriceInfo(params);
-		
+
 		commercialModel.getPurchaseContracts().add(contract);
 
 		return contract;
 	}
 
-	public @NonNull SalesContract makeDateShiftExpressionSalesContract(@NonNull final String name, @NonNull final BaseLegalEntity entity, @NonNull final String expression,
-			int value, boolean specificDay) {
+	public @NonNull SalesContract makeDateShiftExpressionSalesContract(@NonNull final String name, @NonNull final BaseLegalEntity entity, @NonNull final String expression, int value,
+			boolean specificDay) {
 		final SalesContract contract = CommercialFactory.eINSTANCE.createSalesContract();
 		contract.setName(name);
 		contract.setEntity(entity);
@@ -112,14 +110,14 @@ public class CommercialModelBuilder {
 		params.setPriceExpression(expression);
 		params.setSpecificDay(specificDay);
 		params.setValue(value);
-		
+
 		contract.setPriceInfo(params);
 		contract.setPricingEvent(PricingEvent.START_DISCHARGE);
 		commercialModel.getSalesContracts().add(contract);
 
 		return contract;
 	}
-	
+
 	public void setTaxRates(@NonNull final BaseLegalEntity entity, @NonNull final LocalDate date, final float taxRate) {
 		final List<BaseEntityBook> books = CollectionsUtil.makeArrayList(entity.getTradingBook(), entity.getShippingBook(), entity.getUpstreamBook());
 		for (final BaseEntityBook entityBook : books) {
@@ -188,20 +186,21 @@ public class CommercialModelBuilder {
 		return ballastBonusContract;
 	}
 
-	public @NonNull BallastBonusCharterContract createLumpSumBallastBonusCharterContract(@NonNull final Port redeliveryPort,
-			@NonNull final String priceExpression, @NonNull final String repositioningFee) {
-		
+	public @NonNull BallastBonusCharterContract createLumpSumBallastBonusCharterContract(@NonNull final Port redeliveryPort, @NonNull final String priceExpression,
+			@NonNull final String repositioningFee) {
+
 		final BallastBonusContract ballastBonusContract = createSimpleLumpSumBallastBonusContract(redeliveryPort, priceExpression);
-		
+
 		final BallastBonusCharterContract ballastBonusCharterContract = CommercialFactory.eINSTANCE.createSimpleBallastBonusCharterContract();
 		ballastBonusCharterContract.setRepositioningFee(repositioningFee);
 		ballastBonusCharterContract.setBallastBonusContract(ballastBonusContract);
-		
+
 		return ballastBonusCharterContract;
 	}
-	
+
 	public @NonNull RuleBasedBallastBonusContract createSimpleNotionalJourneyBallastBonusContract(final @NonNull Collection<@NonNull APortSet<Port>> redeliveryPorts, final double speed,
-			final @NonNull String hireExpression, final @NonNull String fuelExpression, final boolean includeCanalFees, final boolean includeCanalTime ,final @NonNull Collection<@NonNull APortSet<Port>> returnPorts) {
+			final @NonNull String hireExpression, final @NonNull String fuelExpression, final boolean includeCanalFees, final boolean includeCanalTime,
+			final @NonNull Collection<@NonNull APortSet<Port>> returnPorts) {
 
 		final NotionalJourneyBallastBonusContractLine notionalJourneyBallastBonusContractLine = CommercialFactory.eINSTANCE.createNotionalJourneyBallastBonusContractLine();
 		notionalJourneyBallastBonusContractLine.getRedeliveryPorts().addAll(redeliveryPorts);
@@ -229,6 +228,23 @@ public class CommercialModelBuilder {
 		commercialModel.getEntities().add(entity);
 
 		return entity;
+
+	}
+
+	/**
+	 * Initialise an entity created elsewhere with standard bits and add to the data model
+	 * 
+	 * @param entity
+	 * @param name
+	 */
+	public void addAndInitEntity(@NonNull BaseLegalEntity entity, @NonNull final String name) {
+		entity.setName(name);
+
+		entity.setShippingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
+		entity.setTradingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
+		entity.setUpstreamBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
+
+		commercialModel.getEntities().add(entity);
 
 	}
 }
