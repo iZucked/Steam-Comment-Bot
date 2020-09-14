@@ -11,7 +11,7 @@ public final class TestingModes {
 	}
 
 	// Never commit as true
-	public static final TestMode ReportTestMode = TestMode.Generate;
+	public static final TestMode ReportTestMode = TestMode.Run;
 
 	/**
 	 * Toggle between storing fitness names and values in a properties file and testing the current fitnesses against the stored values. Should be run as part of a plugin test.
