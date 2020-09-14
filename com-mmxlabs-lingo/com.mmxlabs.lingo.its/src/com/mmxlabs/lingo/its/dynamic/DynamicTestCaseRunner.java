@@ -15,8 +15,6 @@ import org.junit.jupiter.api.DynamicNode;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.TestFactory;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.mmxlabs.lingo.its.tests.ReportTesterHelper.ReportRecord;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 
@@ -57,7 +55,7 @@ public abstract class DynamicTestCaseRunner {
 
 	@TestFactory
 	@Tag(TestCategories.REPORT_TEST)
-	public List<DynamicNode> runReportTests() throws JsonParseException, JsonMappingException, IOException {
+	public List<DynamicNode> runReportTests() throws IOException {
 		return ReportTestRunner.runReportTests(getBaseDirectory(), getExtraReports());
 	}
 
