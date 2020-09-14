@@ -24,7 +24,7 @@ public class FleetModelFinder {
 	@NonNull
 	public Vessel findVessel(@NonNull final String vesselName) {
 		for (final Vessel vessel : getFleetModel().getVessels()) {
-			if (vesselName.equals(vessel.getName())) {
+			if (vesselName.equalsIgnoreCase(vessel.getName())) {
 				return vessel;
 			}
 		}
