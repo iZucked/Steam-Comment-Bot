@@ -3,11 +3,11 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Sopt Markets Validation Tests
 Fragment-Host: com.mmxlabs.models.lng.spotmarkets.validation
 Bundle-SymbolicName: com.mmxlabs.models.lng.spotmarkets.validation.tests
-Bundle-Version: 4.10.16.qualifier
+Bundle-Version: 4.10.17.qualifier
 Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
- com.mmxlabs.models.lng.spotmarkets;bundle-version="[4.10.16,5.0.0)",
- com.mmxlabs.models.ui.validation;bundle-version="[4.10.16,5.0.0)",
+ com.mmxlabs.models.lng.spotmarkets;bundle-version="[4.10.17,5.0.0)",
+ com.mmxlabs.models.ui.validation;bundle-version="[4.10.17,5.0.0)",
  org.mockito.mockito-core;bundle-version="1.9.5",
  javax.annotation;bundle-version="1.2.0",
  net.bytebuddy.byte-buddy;bundle-version="1.9.9",
