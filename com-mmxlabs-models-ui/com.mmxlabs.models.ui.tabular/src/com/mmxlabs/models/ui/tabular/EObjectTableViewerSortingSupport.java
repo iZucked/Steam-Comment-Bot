@@ -16,10 +16,8 @@ import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.util.emfpath.EMFPath;
 import com.mmxlabs.models.util.emfpath.IEMFPath;
@@ -31,8 +29,6 @@ import com.mmxlabs.models.util.emfpath.IEMFPath;
  * 
  */
 public class EObjectTableViewerSortingSupport {
-	private static final Logger log = LoggerFactory.getLogger(new Object() {
-	}.getClass().getEnclosingClass());
 
 	/**
 	 * Overridding sort order of objects. Any change in column sort order will set this back to null.
@@ -72,10 +68,7 @@ public class EObjectTableViewerSortingSupport {
 
 		getColumnSortOrder().add(tColumn);
 
-		column.getColumn().addSelectionListener(new SelectionListener() {
-			@Override
-			public void widgetDefaultSelected(final SelectionEvent e) {
-			}
+		column.getColumn().addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
@@ -205,8 +198,8 @@ public class EObjectTableViewerSortingSupport {
 							rightOwner = path.get((EObject) rightObject);
 						} else if (data instanceof EMFPath[]) {
 
-							leftOwner = null;// leftObject;
-							rightOwner = null;// rightObject;
+							leftOwner = null;
+							rightOwner = null;
 
 							EMFPath[] paths = (EMFPath[]) data;
 							for (final EMFPath p : paths) {
@@ -231,8 +224,8 @@ public class EObjectTableViewerSortingSupport {
 						}
 
 					}
-					final Comparable left = renderer.getComparable(leftOwner);
-					final Comparable right = renderer.getComparable(rightOwner);
+					final Comparable<Object> left = renderer.getComparable(leftOwner);
+					final Comparable<Object> right = renderer.getComparable(rightOwner);
 
 					if (left == right) {
 						continue;
