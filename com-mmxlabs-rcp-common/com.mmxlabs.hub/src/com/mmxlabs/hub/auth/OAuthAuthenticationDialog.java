@@ -5,8 +5,11 @@
 package com.mmxlabs.hub.auth;
 
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.browser.LocationAdapter;
@@ -15,14 +18,15 @@ import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.common.http.HttpClientUtil;
@@ -31,62 +35,53 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class OAuthAuthenticationShell extends Shell {
+public class OAuthAuthenticationDialog extends Window {
 
 	private static Browser browser;
 	private String accessToken;
 	private static final OkHttpClient httpClient = HttpClientUtil.basicBuilder().build();
 
-	private Image logo;
+	private String baseUrl;
+	private String fragment;
+
+	private List<Runnable> disposeHandlers = new LinkedList<>();
 
 	public String getAccessToken() {
 		return accessToken;
 	}
 
-	/**
-	 * Launch the application.
-	 *
-	 * @param args
-	 */
+	public OAuthAuthenticationDialog(Shell shell, final String baseUrl, String fragment) {
+		super(shell);
+		//
+		this.baseUrl = baseUrl;
+		this.fragment = fragment;
 
-	public void run(Shell shell, boolean visible) {
-		try {
-			if (visible) {
-				super.open();
-				super.layout();
-			}
-			while (!super.isDisposed()) {
-				if (!shell.getDisplay().readAndDispatch()) {
-					shell.getDisplay().sleep();
-				}
-			}
-			super.dispose();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		setShellStyle(SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL | SWT.MAX | SWT.RESIZE | getDefaultOrientation());
+		setBlockOnOpen(true);
 	}
 
-	/**
-	 * Create the shell.
-	 *
-	 * @param display, url
-	 */
-	public OAuthAuthenticationShell(Shell shell, final String baseUrl, String fragment) {
-		super(shell, SWT.SHELL_TRIM);
+	@Override
+	protected void configureShell(Shell newShell) {
 
-		this.logo = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.lingo.app", "icons/logo-square-128.png").createImage();
+		super.configureShell(newShell);
+		newShell.setSize(640, 480);
+	}
 
-		setImage(this.logo);
-		setLayout(new GridLayout(2, false));
+	@Override
+	protected Control createContents(Composite _parent) {
 
-		ToolBar toolBar = new ToolBar(this, SWT.FLAT | SWT.RIGHT);
+		_parent.setLayout(new FillLayout());
+		Composite parent = new Composite(_parent, SWT.DEFAULT | SWT.BORDER);
+		parent.setLayout(new GridLayout(1, false));
+
+		ToolBar toolBar = new ToolBar(parent, SWT.FLAT | SWT.RIGHT);
 		toolBar.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 
 		ToolItem tltmBack = new ToolItem(toolBar, SWT.NONE);
 		ToolItem tltmForward = new ToolItem(toolBar, SWT.NONE);
 		ToolItem tltmRefresh = new ToolItem(toolBar, SWT.NONE);
 
-		Text txtLocation = new Text(this, SWT.BORDER);
+		Text txtLocation = new Text(parent, SWT.BORDER);
 		txtLocation.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -103,9 +98,9 @@ public class OAuthAuthenticationShell extends Shell {
 		txtLocation.setEnabled(false);
 		txtLocation.setEditable(false);
 
-		browser = new Browser(this, SWT.NONE);
+		browser = new Browser(parent, SWT.NONE);
 
-		GridData gd_browser = new GridData(SWT.FILL, SWT.FILL, false, false, 2, 1);
+		GridData gd_browser = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 		gd_browser.heightHint = 691;
 		browser.setLayoutData(gd_browser);
 
@@ -142,13 +137,11 @@ public class OAuthAuthenticationShell extends Shell {
 				if (event.top) {
 					txtLocation.setText(event.location);
 				}
-
 				/*
-				 * if the user is already logged in, the hub sometimes redirects the browser
-				 * straight to /ui/#/dashboard. If this happens we just shutdown the browser
+				 * if the user is already logged in, the hub sometimes redirects the browser straight to /ui/#/dashboard. If this happens we just shutdown the browser
 				 */
 				if (event.location.contains(baseUrl + UpstreamUrlProvider.HOME_PATH) || event.location.contains(UpstreamUrlProvider.BASIC_LOGIN_FORM_PATH) || event.location.contains("/logout")) {
-					OAuthAuthenticationShell.this.close();
+					OAuthAuthenticationDialog.this.close();
 				} else if (event.location.contains(baseUrl + UpstreamUrlProvider.URI_AFTER_SUCCESSFULL_AUTHENTICATION)) {
 					String cookie = Browser.getCookie("JSESSIONID", baseUrl);
 
@@ -161,36 +154,31 @@ public class OAuthAuthenticationShell extends Shell {
 							accessToken = response.body().string();
 						}
 					} catch (IOException e) {
-						MessageDialog.openError(OAuthAuthenticationShell.this, "", "Unable to authenticate with the DataHub. Please try again");
+						MessageDialog.openError(getShell(), "", "Unable to authenticate with the DataHub. Please try again");
 					}
-					OAuthAuthenticationShell.this.close();
+
+					OAuthAuthenticationDialog.this.close();
 				}
 			}
 		});
 
 		browser.setUrl(baseUrl + fragment);
-		createContents();
+
+		return parent;
 	}
 
 	@Override
-	public void dispose() {
-		if (this.logo != null) {
-			this.logo.dispose();
-			this.logo = null;
+	public boolean close() {
+		try {
+			disposeHandlers.forEach(Runnable::run);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		super.dispose();
+		disposeHandlers.clear();
+		return super.close();
 	}
 
-	/**
-	 * Create contents of the shell.
-	 */
-	protected void createContents() {
-		setText("LiNGO Login");
-		setSize(640, 780);
-	}
-
-	@Override
-	protected void checkSubclass() {
-		// Disable the check that prevents subclassing of SWT components
+	public void addDisposeListener(Runnable hook) {
+		disposeHandlers.add(hook);
 	}
 }

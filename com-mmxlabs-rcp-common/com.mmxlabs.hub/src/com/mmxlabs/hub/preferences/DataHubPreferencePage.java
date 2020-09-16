@@ -19,7 +19,6 @@ import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -38,16 +37,12 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.hub.DataHubActivator;
 import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.IUpstreamDetailChangedListener;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.auth.AuthenticationManager;
-import com.mmxlabs.hub.auth.BasicAuthenticationManager;
-import com.mmxlabs.hub.auth.OAuthAuthenticationManager;
 import com.mmxlabs.hub.common.http.HttpClientUtil;
 import com.mmxlabs.hub.common.http.HttpClientUtil.CertInfo;
 import com.mmxlabs.license.features.LicenseFeatures;
@@ -60,13 +55,14 @@ import okhttp3.TlsVersion;
 
 public class DataHubPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
-	static AuthenticationManager authenticationManager = AuthenticationManager.getInstance();
-	BasicAuthenticationManager basicAuthenticationManager = BasicAuthenticationManager.getInstance();
-	OAuthAuthenticationManager oauthAuthenticationManager = OAuthAuthenticationManager.getInstance();
+	private static AuthenticationManager authenticationManager = AuthenticationManager.getInstance();
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(DataHubPreferencePage.class);
-
-	final OkHttpClient client = HttpClientUtil.basicBuilder().build();
+	/*
+	 * This listener fires whenever the Data Hub URL is modified but the changes have not yet been applied. Login will use the URL from the preferences which is saved only when the Apply button is
+	 * pressed
+	 */
+	// display note and disable login button
+	private IPropertyChangeListener disableLogin = event -> disableLogin();
 
 	public DataHubPreferencePage() {
 		super(GRID);
@@ -115,18 +111,6 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 		editor.setPropertyChangeListener(disableLogin);
 	}
 
-	/*
-	 * This listener fires whenever the Data Hub URL is modified but the changes have not yet been applied. Login will use the URL from the preferences which is saved only when the Apply button is
-	 * pressed
-	 */
-	IPropertyChangeListener disableLogin = new IPropertyChangeListener() {
-		@Override
-		public void propertyChange(PropertyChangeEvent event) {
-			// display note and disable login button
-			disableLogin();
-		}
-	};
-
 	public void disableLogin() {
 		loginButton.setEnabled(false);
 		noteLabel.setVisible(true);
@@ -166,7 +150,7 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 			@Override
 			public void widgetSelected(final SelectionEvent se) {
 				if (loginButton.getText().equals(loginButtonText)) {
-					Shell shell = getShell();
+					final Shell shell = getShell();
 					if (!authenticationManager.isAuthenticated()) {
 						authenticationManager.run(shell);
 					}
@@ -334,7 +318,7 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 
 			}
 		});
-		btnCheckLocalSSL.addSelectionListener(new SelectionListener() {
+		btnCheckLocalSSL.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
@@ -354,14 +338,9 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 				}
 
 			}
-
-			@Override
-			public void widgetDefaultSelected(final SelectionEvent e) {
-
-			}
 		});
 
-		btnCheckHubSSLCompatibility.addSelectionListener(new SelectionListener() {
+		btnCheckHubSSLCompatibility.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
@@ -416,11 +395,6 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 				lbl.setText(sb.toString());
 
 			}
-
-			@Override
-			public void widgetDefaultSelected(final SelectionEvent e) {
-
-			}
 		});
 
 		noteLabel = new Label(getFieldEditorParent(), SWT.FILL);
@@ -431,7 +405,7 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 
 	@Override
 	public void init(final IWorkbench workbench) {
-
+		// Nothing needed here
 	}
 
 }

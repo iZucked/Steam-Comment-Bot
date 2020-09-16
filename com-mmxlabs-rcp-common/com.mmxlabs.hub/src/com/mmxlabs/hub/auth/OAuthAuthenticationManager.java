@@ -9,10 +9,7 @@ import java.util.Optional;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.browser.Browser;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +23,7 @@ public class OAuthAuthenticationManager extends AbstractAuthenticationManager {
 	private static final Logger LOGGER = LoggerFactory.getLogger(OAuthAuthenticationManager.class);
 	private static final String ACCESS_TOKEN = "access_token";
 
-	public static OAuthAuthenticationManager instance = null;
+	private static OAuthAuthenticationManager instance = null;
 
 	private OAuthAuthenticationManager() {
 	}
@@ -39,11 +36,11 @@ public class OAuthAuthenticationManager extends AbstractAuthenticationManager {
 	}
 
 	@Override
-	public boolean isAuthenticated(String upstreamURL) {
+	public boolean isAuthenticated(final String upstreamURL) {
 
 		boolean authenticated = false;
 
-		Optional<String> token = retrieveFromSecurePreferences(ACCESS_TOKEN);
+		final Optional<String> token = retrieveFromSecurePreferences(ACCESS_TOKEN);
 
 		if (token.isPresent() && !isTokenExpired(upstreamURL)) {
 			authenticated = true;
@@ -53,11 +50,10 @@ public class OAuthAuthenticationManager extends AbstractAuthenticationManager {
 	}
 
 	@Override
-	public void run(String upstreamURL, @Nullable Shell optionalShell) {
+	public void run(final String upstreamURL, @Nullable final Shell optionalShell) {
 		if (!isAuthenticated(upstreamURL)) {
-			String path = UpstreamUrlProvider.OAUTH_LOGIN_PATH;
-			boolean showAuthenticationShell = true;
-			startAuthenticationShell(upstreamURL, path, optionalShell, showAuthenticationShell);
+			final String path = UpstreamUrlProvider.OAUTH_LOGIN_PATH;
+			startAuthenticationShell(upstreamURL, path, optionalShell);
 		}
 	}
 
@@ -82,55 +78,26 @@ public class OAuthAuthenticationManager extends AbstractAuthenticationManager {
 		return builder;
 	}
 
-	protected void startAuthenticationShell(String upstreamURL, String path, @Nullable Shell optionalShell, boolean visible) {
-		final Display display;
-		if (optionalShell == null) {
-			if (PlatformUI.isWorkbenchRunning()) {
-				display = PlatformUI.getWorkbench().getDisplay();
-			} else {
-				display = null;
-			}
-		} else {
-			display = optionalShell.getDisplay();
-		}
+	protected void startAuthenticationShell(final String upstreamURL, final String path, @Nullable final Shell optionalShell) {
 
-		if (display != null && authenticationShellIsOpen.compareAndSet(false, true)) {
-
-			display.syncExec(() -> {
-				Shell shell = optionalShell == null ? display.getActiveShell() : optionalShell;
-				if (shell == null && PlatformUI.isWorkbenchRunning()) {
-					IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-					if (activeWorkbenchWindow != null) {
-						shell = activeWorkbenchWindow.getShell();
-					}
-				}
-
-				OAuthAuthenticationShell authenticationShell = new OAuthAuthenticationShell(shell, upstreamURL, path);
-
-				// Set access token when shell is disposed
-				authenticationShell.addDisposeListener(event -> {
-					storeInSecurePreferences(ACCESS_TOKEN, authenticationShell.getAccessToken());
-					authenticationShellIsOpen.compareAndSet(true, false);
-				});
-
-				if (shell != null) {
-					authenticationShell.run(shell, visible);
-				} else {
-					// Unable to start a shell, so reset the flag
-					authenticationShellIsOpen.compareAndSet(true, false);
-				}
+		if (authenticationShellIsOpen.compareAndSet(false, true)) {
+			final OAuthAuthenticationDialog authenticationShell = new OAuthAuthenticationDialog(optionalShell, upstreamURL, path);
+			// Set access token when shell is disposed
+			authenticationShell.addDisposeListener(() -> {
+				storeInSecurePreferences(ACCESS_TOKEN, authenticationShell.getAccessToken());
+				authenticationShellIsOpen.compareAndSet(true, false);
 			});
+			authenticationShell.open();
 		}
 	}
 
-	public boolean isTokenExpired(String upstreamURL) {
+	public boolean isTokenExpired(final String upstreamURL) {
 		boolean expired = false;
 
-		Optional<Request.Builder> builder = buildRequestWithToken();
+		final Optional<Request.Builder> builder = buildRequestWithToken();
 
 		if (builder.isPresent()) {
-			final Request request = builder.get().url(upstreamURL + UpstreamUrlProvider.URI_AFTER_SUCCESSFULL_AUTHENTICATION)
-					.build();
+			final Request request = builder.get().url(upstreamURL + UpstreamUrlProvider.URI_AFTER_SUCCESSFULL_AUTHENTICATION).build();
 
 			try (Response response = httpClient.newCall(request).execute()) {
 				if (!response.isSuccessful() || response.code() == 403 || response.code() == 401) {
@@ -139,7 +106,7 @@ public class OAuthAuthenticationManager extends AbstractAuthenticationManager {
 					// token is expired, log the user out
 					logout(upstreamURL, null);
 				}
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				LOGGER.debug(String.format("Unexpected exception: %s", e.getMessage()));
 			}
 		}
@@ -148,16 +115,15 @@ public class OAuthAuthenticationManager extends AbstractAuthenticationManager {
 	}
 
 	@Override
-	public void logout(String upstreamURL, @Nullable Shell shell) {
-		String path = UpstreamUrlProvider.LOGOUT_PATH;
-		boolean showAuthenticationShell = false;
-		startAuthenticationShell(upstreamURL, path, shell, showAuthenticationShell);
+	public void logout(final String upstreamURL, @Nullable final Shell shell) {
+		final String path = UpstreamUrlProvider.LOGOUT_PATH;
+		startAuthenticationShell(upstreamURL, path, shell);
 		clearCookies(upstreamURL);
 		deleteFromSecurePreferences(ACCESS_TOKEN);
 	}
 
 	@Override
-	public void clearCookies(String url) {
+	public void clearCookies(final String url) {
 		// delete cookie from swt browser
 		// doesn't work if the user clicks "stay logged in"
 		Browser.setCookie("JSESSIONID", url);

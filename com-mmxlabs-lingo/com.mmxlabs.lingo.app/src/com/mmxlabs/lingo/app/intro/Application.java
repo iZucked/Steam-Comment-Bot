@@ -31,7 +31,6 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.osgi.service.datalocation.Location;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.osgi.framework.BundleContext;
@@ -41,6 +40,7 @@ import org.osgi.framework.ServiceReference;
 
 import com.mmxlabs.common.io.FileDeleter;
 import com.mmxlabs.hub.DataHubServiceProvider;
+import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.auth.AuthenticationManager;
 import com.mmxlabs.hub.services.permissions.UserPermissionsService;
 import com.mmxlabs.license.features.KnownFeatures;
@@ -82,7 +82,7 @@ public class Application implements IApplication {
 		final ISharedDataModelType<@NonNull PortModel> distances = LNGScenarioSharedModelTypes.DISTANCES;
 
 		// restart the the workbench with the new heap size
-		String heapSize = getHeapSize(appLineArgs);
+		final String heapSize = getHeapSize(appLineArgs);
 
 		if (heapSize != null) {
 			// Construct new command line with new VM arg and restart workbench
@@ -119,18 +119,16 @@ public class Application implements IApplication {
 
 		// Trigger early startup prompt for Data Hub
 		if (DataHubServiceProvider.getInstance().isHubOnline()) {
-			Shell shell = new Shell(display);
-			try {
-				if (!authenticationManager.isAuthenticated()) {
-					authenticationManager.run(shell);
-				}
-			} finally {
-				shell.dispose();
+			if (!authenticationManager.isAuthenticated()) {
+				authenticationManager.run(null);
 			}
+			
+			// Re-test online status
+			UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
 		}
-
+		
 		// Check Data Hub to see if user is authorised to use LiNGO
-		boolean datahubStartupCheck = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_DATAHUB_STARTUP_CHECK);
+		final boolean datahubStartupCheck = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_DATAHUB_STARTUP_CHECK);
 		if (datahubStartupCheck) {
 
 			displayProgressMonitor(display);
@@ -141,12 +139,11 @@ public class Application implements IApplication {
 				// refresh permissions
 				try {
 					UserPermissionsService.INSTANCE.updateUserPermissions();
-				} catch (IOException e) {
+				} catch (final IOException e) {
 					MessageDialog.openError(display.getActiveShell(), "", "Error getting user permissions from Data Hub. Please try again later.");
 				}
 
 				if (UserPermissionsService.INSTANCE.hasUserPermissions() && !UserPermissionsService.INSTANCE.isPermitted("lingo", "read")) {
-					System.out.println(UserPermissionsService.INSTANCE.hasUserPermissions());
 					MessageDialog.openError(display.getActiveShell(), "", "User is not authorised to use LiNGO");
 					display.dispose();
 					return IApplication.EXIT_OK;
@@ -162,7 +159,6 @@ public class Application implements IApplication {
 		try {
 			cleanupP2();
 		} catch (final Exception e) {
-
 			e.printStackTrace();
 		}
 
@@ -204,7 +200,7 @@ public class Application implements IApplication {
 		return IApplication.EXIT_OK;
 	}
 
-	private String getHeapSize(String[] appLineArgs) {
+	private String getHeapSize(final String[] appLineArgs) {
 		String heapSize = null;
 
 		if (appLineArgs != null && appLineArgs.length > 0) {
@@ -278,23 +274,23 @@ public class Application implements IApplication {
 		tempDirectory.mkdirs();
 	}
 
-	private void displayProgressMonitor(Display display) {
-		ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(display.getActiveShell());
+	private void displayProgressMonitor(final Display display) {
+		final ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(display.getActiveShell());
 		try {
 			progressDialog.run(true, false, monitor -> {
 				waitForHub(display);
 				monitor.done();
 			});
-		} catch (InvocationTargetException e) {
+		} catch (final InvocationTargetException e) {
 			e.printStackTrace();
-		} catch (InterruptedException e) {
+		} catch (final InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
 
-	private void waitForHub(Display display) {
-		int timeoutInSeconds = 30;
-		int msInASecond = 1000;
+	private void waitForHub(final Display display) {
+		final int timeoutInSeconds = 30;
+		final int msInASecond = 1000;
 
 		for (int i = 0; i < timeoutInSeconds; ++i) {
 			if (DataHubServiceProvider.getInstance().isHubOnline()) {
@@ -302,7 +298,7 @@ public class Application implements IApplication {
 			}
 			try {
 				Thread.sleep(msInASecond);
-			} catch (InterruptedException e) {
+			} catch (final InterruptedException e) {
 				e.printStackTrace();
 				Thread.currentThread().interrupt();
 			}

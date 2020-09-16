@@ -8,9 +8,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.services.users.UsernameProvider;
@@ -91,27 +89,11 @@ public class BasicAuthenticationManager extends AbstractAuthenticationManager {
 
 	protected void startAuthenticationShell(final String upstreamURL, @Nullable final Shell optionalShell) {
 
-		final Display display;
-		if (optionalShell == null) {
-			if (PlatformUI.isWorkbenchRunning()) {
-				display = PlatformUI.getWorkbench().getDisplay();
-			} else {
-				display = null;
-			}
-		} else {
-			display = optionalShell.getDisplay();
-		}
-
-		if (display != null && authenticationShellIsOpen.compareAndSet(false, true)) {
-			display.syncExec(() -> {
-				final Shell shell = optionalShell == null ? display.getActiveShell() : optionalShell;
-				final BasicAuthenticationDialog dialog = new BasicAuthenticationDialog(shell);
-				dialog.setUrl(upstreamURL);
-				dialog.addDisposeListener(() -> authenticationShellIsOpen.compareAndSet(true, false));
-
-				dialog.open();
-
-			});
+		if (authenticationShellIsOpen.compareAndSet(false, true)) {
+			final BasicAuthenticationDialog dialog = new BasicAuthenticationDialog(optionalShell);
+			dialog.setUrl(upstreamURL);
+			dialog.addDisposeListener(() -> authenticationShellIsOpen.compareAndSet(true, false));
+			dialog.open();
 		}
 	}
 
