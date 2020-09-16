@@ -202,6 +202,10 @@ public class BaseCaseServiceClient {
 
 	public String setCurrentBaseCase(final String uuid) throws IOException {
 
+		if (!DataHubServiceProvider.getInstance().isOnlineAndLoggedIn()) {
+			return null;
+		}
+
 		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(BASECASE_CURRENT_URL + "/" + uuid);
 		if (requestBuilder == null) {
 			return null;
@@ -265,6 +269,10 @@ public class BaseCaseServiceClient {
 
 	public synchronized void updateLockedState() throws IOException {
 
+		if (!DataHubServiceProvider.getInstance().isOnlineAndLoggedIn()) {
+			return;
+		}
+
 		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(LOCK_STATE_URL);
 		if (requestBuilder == null) {
 			return;
@@ -303,6 +311,10 @@ public class BaseCaseServiceClient {
 
 	public synchronized boolean lock() throws IOException {
 
+		if (!DataHubServiceProvider.getInstance().isOnlineAndLoggedIn()) {
+			return false;
+		}
+
 		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(LOCK_URL);
 		if (requestBuilder == null) {
 			return false;
@@ -329,6 +341,9 @@ public class BaseCaseServiceClient {
 	}
 
 	public synchronized boolean unlock() throws IOException {
+		if (!DataHubServiceProvider.getInstance().isOnlineAndLoggedIn()) {
+			return false;
+		}
 
 		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(UNLOCK_URL);
 		if (requestBuilder == null) {
