@@ -45,7 +45,6 @@ public class OAuthAuthenticationManager extends AbstractAuthenticationManager {
 		if (token.isPresent() && !isTokenExpired(upstreamURL)) {
 			authenticated = true;
 		}
-
 		return authenticated;
 	}
 
@@ -79,7 +78,6 @@ public class OAuthAuthenticationManager extends AbstractAuthenticationManager {
 	}
 
 	protected void startAuthenticationShell(final String upstreamURL, final String path, @Nullable final Shell optionalShell) {
-
 		if (authenticationShellIsOpen.compareAndSet(false, true)) {
 			final OAuthAuthenticationDialog authenticationShell = new OAuthAuthenticationDialog(optionalShell, upstreamURL, path);
 			// Set access token when shell is disposed

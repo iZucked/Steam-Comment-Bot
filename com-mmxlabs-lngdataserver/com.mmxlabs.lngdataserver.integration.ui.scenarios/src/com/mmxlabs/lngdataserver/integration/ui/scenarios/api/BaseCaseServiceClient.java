@@ -42,6 +42,7 @@ public class BaseCaseServiceClient {
 	private static final String LOCK_URL = "/scenarios/v1/basecase/lock";
 	private static final String LOCK_STATE_URL = "/scenarios/v1/basecase/lockState";
 	private static final String UNLOCK_URL = "/scenarios/v1/basecase/unlock";
+	private static final String FORCE_UNLOCK_URL = "/scenarios/v1/basecase/forceunlock";
 
 	private final OkHttpClient httpClient = HttpClientUtil.basicBuilder()//
 			.build();
@@ -371,6 +372,32 @@ public class BaseCaseServiceClient {
 
 	public boolean needsLocking() {
 		return needsLocking;
+	}
+
+	public synchronized boolean forceUnlock() throws IOException {
+
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(FORCE_UNLOCK_URL);
+		if (requestBuilder == null) {
+			return false;
+		}
+
+		{
+			final Request request = requestBuilder //
+					.build();
+
+			try (Response response = httpClient.newCall(request).execute()) {
+				if (!response.isSuccessful()) {
+					if (response.code() == 404) {
+						return true;
+						// Unsupported API
+					}
+					throw new IOException(UNEXPECTED_CODE + response);
+				}
+				return true;
+			} finally {
+				updateLockedState();
+			}
+		}
 	}
 
 }

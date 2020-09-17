@@ -52,7 +52,6 @@ public class OAuthAuthenticationDialog extends Window {
 
 	public OAuthAuthenticationDialog(Shell shell, final String baseUrl, String fragment) {
 		super(shell);
-		//
 		this.baseUrl = baseUrl;
 		this.fragment = fragment;
 
@@ -62,7 +61,8 @@ public class OAuthAuthenticationDialog extends Window {
 
 	@Override
 	protected void configureShell(Shell newShell) {
-
+		newShell.setText("Data Hub OAuth Login");
+		newShell.setData("oauthShellId"); // this id is used in swtbot tests
 		super.configureShell(newShell);
 		newShell.setSize(640, 480);
 	}
@@ -103,6 +103,7 @@ public class OAuthAuthenticationDialog extends Window {
 		GridData gd_browser = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 		gd_browser.heightHint = 691;
 		browser.setLayoutData(gd_browser);
+		browser.setData("oauthBrowserId"); // this id is used in swtbot tests
 
 		/* Add event handling */
 		tltmBack.addSelectionListener(new SelectionAdapter() {
