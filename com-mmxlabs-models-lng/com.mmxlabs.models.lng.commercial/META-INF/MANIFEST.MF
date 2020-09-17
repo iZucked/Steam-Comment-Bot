@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: com.mmxlabs.models.lng.commercial;singleton:=true
 Automatic-Module-Name: com.mmxlabs.models.lng.commercial
-Bundle-Version: 4.10.17.qualifier
+Bundle-Version: 4.10.17.RELEASE
 Bundle-ClassPath: .
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
