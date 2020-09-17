@@ -7,7 +7,7 @@ package com.mmxlabs.hub;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -60,8 +60,8 @@ public class UpstreamUrlProvider {
 	public static final UpstreamUrlProvider INSTANCE = new UpstreamUrlProvider();
 
 	private final IPreferenceStore preferenceStore;
-	private final Set<IUpstreamDetailChangedListener> detailListeners = new HashSet<>();
-	private final Set<IUpstreamServiceChangedListener> workspaceListeners = new HashSet<>();
+	private final Set<IUpstreamDetailChangedListener> detailListeners = new LinkedHashSet<>();
+	private final Set<IUpstreamServiceChangedListener> workspaceListeners = new LinkedHashSet<>();
 
 	private boolean baseCaseServiceEnabled = false;
 	private boolean teamServiceEnabled = false;
