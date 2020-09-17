@@ -121,4 +121,9 @@ public class BasicAuthenticationManager extends AbstractAuthenticationManager {
 	public void clearCookies(final String url) {
 		// Nothing to do
 	}
+
+	public void withCredentials(String username, String password) {
+		storeInSecurePreferences("username", username);
+		storeInSecurePreferences("password", password);		
+	}
 }

@@ -75,6 +75,11 @@ public class AuthenticationManager {
 		}
 	}
 
+	public void logoutAll(@Nullable Shell shell) {
+		oauthAuthenticationManager.logout(upstreamURL, shell);
+		basicAuthenticationManager.logout(upstreamURL, shell);
+	}
+
 	public void clearCookies(String url) {
 		basicAuthenticationManager.clearCookies(url);
 		oauthAuthenticationManager.clearCookies(url);
