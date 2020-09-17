@@ -130,6 +130,7 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 	 * the changes have been applied
 	 */
 	private final IUpstreamDetailChangedListener enableLoginListener = () -> {
+		UpstreamUrlProvider.INSTANCE.updateOnlineStatus();
 		setLoginButtonText();
 		enableLogin();
 		setLoginButtonEnabled();

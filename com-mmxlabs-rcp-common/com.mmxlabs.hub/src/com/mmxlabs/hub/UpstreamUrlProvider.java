@@ -103,7 +103,9 @@ public class UpstreamUrlProvider {
 		forceBasicAuthenticationEnabled = Boolean.TRUE.equals(preferenceStore.getBoolean(DataHubPreferenceConstants.P_FORCE_BASIC_AUTH));
 		authenticationManager.setForceBasicAuthentication(forceBasicAuthenticationEnabled);
 		HttpClientUtil.setDisableSSLHostnameCheck(Boolean.TRUE.equals(preferenceStore.getBoolean(DataHubPreferenceConstants.P_DISABLE_SSL_HOSTNAME_CHECK)));
+	}
 
+	public void start() {
 		// Schedule a "is alive" check every minute....
 		scheduler.scheduleAtFixedRate(this::isUpstreamAvailable, 1, 1, TimeUnit.MINUTES);
 		// ... and do one now as first invocation can be a bit delayed.
@@ -182,6 +184,44 @@ public class UpstreamUrlProvider {
 
 	public synchronized boolean isUpstreamAvailable() {
 		return isUpstreamAvailable((Shell) null);
+	}
+
+	/*
+	 * Gets the Datahub URL from preferences and calls testUpstreamAvailability This pings the Datahub
+	 */
+	public synchronized void updateOnlineStatus() {
+
+		try {
+
+			String baseUrl = preferenceStore.getString(DataHubPreferenceConstants.P_DATAHUB_URL_KEY);
+			if (baseUrl == null || baseUrl.isEmpty()) {
+				DataHubServiceProvider.getInstance().setOnlineState(false);
+				return;
+			}
+
+			baseUrl = stripTrailingForwardSlash(baseUrl);
+
+			if (!testUpstreamAvailability(baseUrl)) {
+				DataHubServiceProvider.getInstance().setOnlineState(false);
+				return;
+			}
+
+			final Optional<DatahubInformation> upstreamInformation = getUpstreamInformation(baseUrl);
+			if (upstreamInformation.isPresent()) {
+				currentInformation = upstreamInformation.get();
+			} else {
+				currentInformation = fallackInformation;
+			}
+
+			// Update current information scheme
+			DataHubServiceProvider.getInstance().setDatahubInformation(currentInformation);
+
+			DataHubServiceProvider.getInstance().setOnlineState(true);
+			authenticationManager.updateAuthenticationScheme(baseUrl, currentInformation.getAuthenticationScheme());
+
+		} catch (Exception e) {
+			// 	Ignore exceptions
+		}
 	}
 
 	/*
