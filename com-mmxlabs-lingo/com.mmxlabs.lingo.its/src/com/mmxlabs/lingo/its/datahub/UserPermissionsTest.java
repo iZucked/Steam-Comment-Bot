@@ -5,6 +5,7 @@ import java.io.File;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.DockerComposeContainer;
 import org.testcontainers.containers.wait.Wait;
@@ -13,9 +14,11 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import com.mmxlabs.hub.DataHubActivator;
 import com.mmxlabs.hub.preferences.DataHubPreferenceConstants;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.BaseCaseServiceClient;
 
 @Testcontainers
+@Tag(TestCategories.HUB_TEST)
 public class UserPermissionsTest {
 
 	@Container

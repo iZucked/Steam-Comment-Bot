@@ -12,6 +12,7 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,10 +20,12 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import com.mmxlabs.hub.DataHubActivator;
 import com.mmxlabs.hub.preferences.DataHubPreferenceConstants;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.reports.customizable.CustomReportDefinition;
 import com.mmxlabs.lingo.reports.customizable.CustomReportsRegistry;
 
 @Testcontainers
+@Tag(TestCategories.HUB_TEST)
 public class CustomUserReportsTests {
 
 	static final Logger logger = LoggerFactory.getLogger(CustomUserReportsTests.class);

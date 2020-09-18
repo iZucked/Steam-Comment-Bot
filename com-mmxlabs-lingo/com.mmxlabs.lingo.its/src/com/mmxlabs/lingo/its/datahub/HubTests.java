@@ -13,6 +13,7 @@ import org.hamcrest.Matcher;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,8 +26,10 @@ import com.mmxlabs.hub.DataHubActivator;
 import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.auth.AuthenticationManager;
 import com.mmxlabs.hub.preferences.DataHubPreferenceConstants;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 
 @Testcontainers
+@Tag(TestCategories.HUB_TEST)
 public class HubTests {
 
 	static final Logger logger = LoggerFactory.getLogger(HubTests.class);
