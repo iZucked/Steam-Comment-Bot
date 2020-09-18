@@ -25,12 +25,12 @@
    </license>
 
    <includes
-         id="com.mmxlabs.lingo.feature"
-         version="0.0.0"/>
-
-   <includes
          id="com.mmxlabs.models.lng.transformer.its.feature"
          version="0.0.0"/>
+
+   <requires>
+      <import feature="com.mmxlabs.lingo.feature" version="0.0.0" match="greaterOrEqual"/>
+   </requires>
 
    <plugin
          id="com.mmxlabs.lingo.its"
