@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>com.mmxlabs.models.lng.transformer.parent</artifactId>
 		<groupId>com.mmxlabs.models.lng.transformer</groupId>
-		<version>4.10.18-SNAPSHOT</version>
+		<version>4.10.18.RELEASE</version>
 	</parent>
 	<artifactId>com.mmxlabs.models.lng.transformer.extensions.tests</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
