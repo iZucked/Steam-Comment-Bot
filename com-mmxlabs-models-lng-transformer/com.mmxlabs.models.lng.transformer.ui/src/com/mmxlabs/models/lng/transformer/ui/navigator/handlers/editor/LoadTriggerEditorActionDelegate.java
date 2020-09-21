@@ -65,7 +65,7 @@ public class LoadTriggerEditorActionDelegate implements IEditorActionDelegate, I
 								LoadTriggerHelper loadTriggerHelper = new LoadTriggerHelper();
 								loadTriggerHelper.doMatchAndMoveLoadTrigger(copyScenario, globalLoadTrigger, cargoVolume, startDate);
 								try {
-									final String name = InventoryFileName.getName(startDate, "", "_load_trigger");
+									final String name = InventoryFileName.getName(scenarioInstance.getName(), "_load_trigger");
 									final IScenarioDataProvider scenarioDataProvider =  SimpleScenarioDataProvider.make(EcoreUtil.copy(modelRecord.getManifest()), copyScenario);
 									scenarioService.copyInto(scenarioInstance, scenarioDataProvider, name, new NullProgressMonitor());
 								} catch (final Exception e) {
