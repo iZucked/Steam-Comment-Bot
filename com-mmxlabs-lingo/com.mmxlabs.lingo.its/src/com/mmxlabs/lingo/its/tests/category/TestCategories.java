@@ -10,6 +10,8 @@ public final class TestCategories {
 	}
 
 	public static final String MICRO_TEST = "com.mmxlabs.lingo.its.tests.category.MicroTest";
+	
+	public static final String HUB_TEST = "com.mmxlabs.lingo.its.tests.category.HubTest";
 
 	public static final String QUICK_TEST = "com.mmxlabs.lingo.its.tests.category.QuickTest";
 	public static final String REPORT_TEST = "com.mmxlabs.lingo.its.tests.category.ReportTest";

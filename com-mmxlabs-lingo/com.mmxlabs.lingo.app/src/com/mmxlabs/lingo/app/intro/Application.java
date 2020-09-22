@@ -117,6 +117,8 @@ public class Application implements IApplication {
 		initAccessControl();
 		WorkbenchStateManager.cleanupWorkbenchState();
 
+		UpstreamUrlProvider.INSTANCE.updateOnlineStatus(); 
+
 		// Trigger early startup prompt for Data Hub
 		if (DataHubServiceProvider.getInstance().isHubOnline()) {
 			if (!authenticationManager.isAuthenticated()) {
@@ -164,6 +166,9 @@ public class Application implements IApplication {
 
 		final DelayedOpenFileProcessor processor = new DelayedOpenFileProcessor(display);
 
+		// Defer the background polling a little
+		UpstreamUrlProvider.INSTANCE.start();
+		
 		// TODO: Handle error conditions better!
 		final Location instanceLoc = Platform.getInstanceLocation();
 		try {
