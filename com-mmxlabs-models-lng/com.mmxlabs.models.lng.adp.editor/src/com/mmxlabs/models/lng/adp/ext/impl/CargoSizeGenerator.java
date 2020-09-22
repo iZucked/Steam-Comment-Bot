@@ -73,7 +73,7 @@ public class CargoSizeGenerator implements IProfileGenerator {
 		
 		LocalDate date = startDate;
 		int i = 0;
-		while (date.isBefore(endDate)) {
+		while (date.isBefore(endDate) && i < numberOfCargoes) {
 			if (DistributionModelGeneratorUtil.checkContractDate(contract, date)) {
 				final T slot = DistributionModelGeneratorUtil.generateSlot(factory, profile, subProfile, start, date, idx++);
 				int minQuantity = DistributionModelGeneratorUtil.getMinContractQuantityInUnits(contract, model.getModelOrContractVolumeUnit());
