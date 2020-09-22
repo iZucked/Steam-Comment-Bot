@@ -225,6 +225,15 @@ public class NominationsModelUtils {
 			return Collections.emptyList();
 		}
 	}
+	
+	public static NominationsModel getNominationsModel(@NonNull final IScenarioEditingLocation jointModelEditor) {
+		final LNGScenarioModel scenarioModel = ScenarioModelUtil.findScenarioModel(jointModelEditor.getScenarioDataProvider());
+		if (scenarioModel != null) {
+			return scenarioModel.getNominationsModel();
+		}
+		//Otherwise doesn't exist.
+		return null;
+	}
 
 	private static List<AbstractNomination> generateNominations(final LNGScenarioModel scenarioModel, LocalDate startDate, LocalDate endDate) {
 

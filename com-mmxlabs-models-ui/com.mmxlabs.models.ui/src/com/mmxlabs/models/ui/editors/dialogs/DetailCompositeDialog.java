@@ -912,7 +912,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		}
 	}
 
-	public int open(final IScenarioEditingLocation location, final MMXRootObject rootObject, final List<EObject> objects, final boolean locked) {
+	public int open(final IScenarioEditingLocation location, final MMXRootObject rootObject, final Collection<EObject> objects, final boolean locked) {
 		this.location = location;
 		final IScenarioEditingLocation sel = location;
 		dialogValidationSupport = new DialogValidationSupport(sel.getExtraValidationContext());

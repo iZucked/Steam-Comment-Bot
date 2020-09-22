@@ -28,10 +28,12 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.ETypedElement;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.equinox.log.Logger;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
@@ -60,12 +62,14 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorAction;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.nominations.AbstractNomination;
 import com.mmxlabs.models.lng.nominations.ContractNomination;
+import com.mmxlabs.models.lng.nominations.NominationsFactory;
 import com.mmxlabs.models.lng.nominations.NominationsModel;
 import com.mmxlabs.models.lng.nominations.NominationsPackage;
 import com.mmxlabs.models.lng.nominations.SlotNomination;
@@ -75,6 +79,7 @@ import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction;
 import com.mmxlabs.models.lng.ui.actions.DuplicateAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.date.LocalDateTextFormatter;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
@@ -90,9 +95,12 @@ import com.mmxlabs.models.ui.tabular.manipulators.StringAttributeManipulator;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 
 public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsViewerPane implements ISelectionListener {
 
+	private final static org.slf4j.@NonNull Logger logger =  LoggerFactory.getLogger(RelativeDateRangeNominationsViewerPane.class);
+	
 	private final Set<String> nominationTypeFilter = new TreeSet<>();
 
 	private class FilterMenuAction extends DefaultMenuCreatorAction {
@@ -422,15 +430,41 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 						for (int i = 0; i < path.getSegmentCount(); i++) {
 							Object obj = path.getSegment(i);
 							if (obj instanceof AbstractNomination) {
-								nominations.add((EObject)obj);
+								nominations.add((AbstractNomination)obj);
 							}
 						}
 					}
 				}
+				/*
+				//Copy the objects.
+				Collection<EObject> duplicatedNoms = EcoreUtil.copyAll(nominations);
+
+				//Create the add command.
+				EditingDomain domain = part.getDefaultCommandHandler().getEditingDomain();
+				Object owner = NominationsModelUtils.getNominationsModel(jointModelEditor);
+				Object feature = NominationsPackage.ABSTRACT_NOMINATION;
+				Command createCmd = AddCommand.create(domain, owner, feature, duplicatedNoms);
+				Object nominationsListFeature = NominationsPackage.NOMINATIONS_MODEL__NOMINATIONS;
+				Command addCmd = AddCommand.create(domain, owner, nominationsListFeature, duplicatedNoms);
+				CompoundCommand cmd = new CompoundCommand("Duplicate nomination(s).");
+				cmd.append(createCmd);
+				cmd.append(addCmd);
 				
-				DetailCompositeDialogUtil.editInlock(part, () -> {
+				try {				
+					DetailCompositeDialogUtil.editNewMultiObjectWithUndoOnCancel(part, duplicatedNoms, cmd);
+				}
+				catch (Throwable e) {
+					logger.error("There was a problem duplicating the selection:", e);	
+				}
+			*/
+				DetailCompositeDialogUtil.editInlock(
+				part, () -> { //editInLock stops other validation/evaluations/optimisation/concurrent access to the data model.
+					//EMF not thread safe. Any interaction with data model should be done within the UI thread ideally.
+					//(Command stack checks it is the display thread via an assertion).
+					//Two locks: single display thread + editor lock.
+					//Consider using the timeout if editing the model (tryLock)
 					final DetailCompositeDialog dcd = new DetailCompositeDialog(part.getShell(), part.getDefaultCommandHandler());
-					dcd.setReturnDuplicates(true);
+					dcd.setReturnDuplicates(true); //That we are duplicating the current object.
 					return dcd.open(part, part.getRootObject(), nominations);
 				});
 			}
