@@ -426,6 +426,10 @@
          <PluginXMLEnablement
                feature="generated-papers"
                plugin.xml="generated-papers-in-pnl.plugin.xml">
+         </PluginXMLEnablement>
+         <PluginXMLEnablement
+               feature="load-trigger"
+               plugin.xml="load-trigger.plugin.xml">
          </PluginXMLEnablement>        
       </extension>
       <extension
