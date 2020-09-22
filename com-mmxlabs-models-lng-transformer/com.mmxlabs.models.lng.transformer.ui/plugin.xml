@@ -349,16 +349,6 @@
                   toolbarPath="forkgroup"
                   tooltip="Fork scenario and continue editing">
             </action>
-            <action
-            	  class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.LoadTriggerEditorActionDelegate"
-            	  definitionId="com.mmxlabs.lng.transformer.ui.navigator.handlers.editor.LoadTriggerEditorActionDelegate"
-            	  disabledIcon="icons/inventory.gif"
-            	  icon="icons/inventory.gif"
-            	  id="com.mmxlabs.inventory.LoadTrigger"
-            	  label="Load trigger"
-            	  toolbarPath="additions-end"
-            	  tooltip="Generate new scenario from a load trigger">
-           	</action>
          </editorContribution>
       </extension>
       
@@ -436,6 +426,10 @@
          <PluginXMLEnablement
                feature="generated-papers"
                plugin.xml="generated-papers-in-pnl.plugin.xml">
+         </PluginXMLEnablement>
+         <PluginXMLEnablement
+               feature="load-trigger"
+               plugin.xml="load-trigger.plugin.xml">
          </PluginXMLEnablement>        
       </extension>
       <extension
