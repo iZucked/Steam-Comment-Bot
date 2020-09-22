@@ -72,7 +72,7 @@ public class CargoNumberGenerator implements IProfileGenerator {
 		final LocalDate endDate = end.atDay(1);
 
 		int months = Months.between(startDate, endDate);
-		boolean integerMultiples = numberOfCargoes%months == 0;
+		boolean integerMultiples = numberOfCargoes % months == 0;
 		int div = numberOfCargoes/months;
 
 		while (date.isBefore(endDate) && generatedSlots < numberOfCargoes) {
