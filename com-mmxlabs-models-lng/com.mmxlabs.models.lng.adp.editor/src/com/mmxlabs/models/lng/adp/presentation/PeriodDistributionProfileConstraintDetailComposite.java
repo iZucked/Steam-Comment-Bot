@@ -143,7 +143,7 @@ public class PeriodDistributionProfileConstraintDetailComposite extends Composit
 		lblComposite.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).equalWidth(false).create());
 		lblComposite.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 
-		tableViewer = new GridTableViewer(this, SWT.FULL_SELECTION | SWT.V_SCROLL);
+		tableViewer = new GridTableViewer(this, SWT.FULL_SELECTION | SWT.V_SCROLL | SWT.H_SCROLL);
 
 		final ColumnViewerEditorActivationStrategy actSupport = new ColumnViewerEditorActivationStrategy(tableViewer) {
 			@Override
