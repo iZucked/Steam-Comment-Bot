@@ -22,6 +22,10 @@ import com.mmxlabs.models.lng.adp.SubContractProfile;
 import com.mmxlabs.models.lng.adp.validation.internal.Activator;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.commercial.CommercialModel;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.PurchaseContract;
+import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.types.util.ValidationConstants;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
@@ -93,7 +97,23 @@ public class ADPModelConstraint extends AbstractModelMultiConstraint {
 						.withMessage("No existing slots for ADP: re-generate slots") //
 						.make(ctx, statuses);
 			}
-
+			CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(extraContext.getScenarioDataProvider());
+			for (PurchaseContract purchaseContract: commercialModel.getPurchaseContracts()) {
+				if (purchaseContract.getPreferredPort() == null) {
+					factory.copyName() //
+							.withObjectAndFeature(adpModel, CommercialPackage.Literals.CONTRACT__PREFERRED_PORT) //
+							.withMessage(String.format("Default port required for purchase contract %s", purchaseContract.getName())) //
+							.make(ctx, statuses);
+				}
+			}
+			for (SalesContract salesContract: commercialModel.getSalesContracts()) {
+				if (salesContract.getPreferredPort() == null) {
+					factory.copyName() //
+							.withObjectAndFeature(adpModel, CommercialPackage.Literals.CONTRACT__PREFERRED_PORT) //
+							.withMessage(String.format("Default port required for sales contract %s", salesContract.getName())) //
+							.make(ctx, statuses);
+				}
+			}
 		}
 
 		return Activator.PLUGIN_ID;
