@@ -8,9 +8,10 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.BiFunction;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.time.Months;
 import com.mmxlabs.common.util.exceptions.UserFeedbackException;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.CargoSizeDistributionModel;
@@ -36,18 +37,14 @@ public class CargoSizeGenerator implements IProfileGenerator {
 		final CargoSizeDistributionModel model = (CargoSizeDistributionModel) subProfile.getDistributionModel();
 		final List<T> slots = new LinkedList<>();
 
-		Function<LocalDate, LocalDate> nextDateGenerator;
+		BiFunction<LocalDate, Integer, LocalDate> nextDateGenerator;
 		if (profile.getVolumeUnit() != model.getModelOrContractVolumeUnit()) {
 			// They must match!
 			throw new UserFeedbackException("Profile volume unit and slot or contract unit must match.");
 		}
 		final int numberOfCargoes = (int) Math.round(profile.getTotalVolume() / model.getModelOrContractVolumePerCargo());
-
-		if (numberOfCargoes == 12) {
-			nextDateGenerator = date -> date.plusMonths(1);
-		} else {
-			nextDateGenerator = date -> date.plusDays(Math.max(1, (int) 365 / numberOfCargoes));
-		}
+		
+		
 
 		final Contract contract = profile.getContract();
 		if (contract == null) {
@@ -62,18 +59,29 @@ public class CargoSizeGenerator implements IProfileGenerator {
 		final YearMonth start = adpPeriod.getFirst();
 		final YearMonth end = adpPeriod.getSecond();
 
-		LocalDate date = start.atDay(1);
+		LocalDate startDate = start.atDay(1);
 		final LocalDate endDate = end.atDay(1);
-
-		while (date.isBefore(endDate)) {
+		
+		int months = Months.between(startDate, endDate);
+		if (numberOfCargoes % months == 0) {
+			int div = numberOfCargoes/months;
+			nextDateGenerator = (date, i) -> i % div == 0 ? date.plusMonths(1) : date;
+		} else {
+			int dateSpacing = Math.max(1, 365 / numberOfCargoes);
+			nextDateGenerator = (date, i) -> date.plusDays(dateSpacing);
+		}
+		
+		LocalDate date = startDate;
+		int i = 0;
+		while (date.isBefore(endDate) && i < numberOfCargoes) {
 			if (DistributionModelGeneratorUtil.checkContractDate(contract, date)) {
 				final T slot = DistributionModelGeneratorUtil.generateSlot(factory, profile, subProfile, start, date, idx++);
 				int minQuantity = DistributionModelGeneratorUtil.getMinContractQuantityInUnits(contract, model.getModelOrContractVolumeUnit());
 				ADPModelUtil.setSlotVolumeFrom(minQuantity, model.getModelOrContractVolumePerCargo(), model.getModelOrContractVolumeUnit(), slot, model.isExact());
 				slots.add(slot);
 			}
-
-			final LocalDate nextDate = nextDateGenerator.apply(date);
+			i++;
+			final LocalDate nextDate = nextDateGenerator.apply(date, i);
 			date = nextDate;
 		}
 		return slots;

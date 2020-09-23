@@ -11,6 +11,7 @@ import java.util.List;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.time.Days;
+import com.mmxlabs.common.time.Months;
 import com.mmxlabs.common.util.exceptions.UserFeedbackException;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.CargoNumberDistributionModel;
@@ -66,8 +67,13 @@ public class CargoNumberGenerator implements IProfileGenerator {
 		int generatedSlots = 0;
 		
 		int idx = 0;
+		int i = 0;
 		LocalDate date = startDate;
 		final LocalDate endDate = end.atDay(1);
+
+		int months = Months.between(startDate, endDate);
+		boolean integerMultiples = numberOfCargoes % months == 0;
+		int div = numberOfCargoes/months;
 
 		while (date.isBefore(endDate) && generatedSlots < numberOfCargoes) {
 			if (DistributionModelGeneratorUtil.checkContractDate(contract, date)) {
@@ -77,9 +83,11 @@ public class CargoNumberGenerator implements IProfileGenerator {
 				slots.add(slot);
 				generatedSlots++;
 			}
-			
-			if (numberOfCargoes == 12 && start.plusYears(1).equals(end)) {
-				date = date.plusMonths(1);
+			i++;
+			if (integerMultiples) {
+				if (i % div == 0) {
+					date = date.plusMonths(1);
+				}
 			}
 			else {
 				daysFromStart += spacing;
@@ -88,5 +96,4 @@ public class CargoNumberGenerator implements IProfileGenerator {
 		}
 		return slots;
 	}
-
 }
