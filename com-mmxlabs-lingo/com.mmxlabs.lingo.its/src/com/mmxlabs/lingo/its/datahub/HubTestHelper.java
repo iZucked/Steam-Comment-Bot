@@ -52,7 +52,6 @@ public class HubTestHelper {
 	public void asBaseCaseUser() {
 		BasicAuthenticationManager.getInstance().withCredentials("u_basecase", "u_basecase");
 		UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
-
 	}
 
 	public void asSuperUser() {

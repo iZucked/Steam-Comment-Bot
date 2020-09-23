@@ -73,6 +73,9 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 	@Override
 	public void dispose() {
 		UpstreamUrlProvider.INSTANCE.deregisterDetailsChangedLister(enableLoginListener);
+		if (loginButton != null) {
+			loginButton.dispose();
+		}
 		if (forceBasicAuth != null) {
 			forceBasicAuth.dispose();
 		}
@@ -145,7 +148,6 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 
 		loginButton = new Button(getFieldEditorParent(), SWT.PUSH);
 		loginButton.setText("Login");
-		loginButton.setData("loginButtonId"); // this id is used in swtbot tests
 		loginButton.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).create());
 
 		loginButton.addSelectionListener(new SelectionAdapter() {
