@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.waits.Conditions;
 import org.hamcrest.Matcher;
 import org.junit.jupiter.api.AfterAll;
@@ -50,7 +51,7 @@ public class BasicAuthenticationTests {
 
 	// @formatter:off
 	@Container
-	public static GenericContainer datahubContainer = new FixedHostPortGenericContainer("docker.mmxlabs.com/datahub-v-single:1.7.1-SNAPSHOT")
+	public static GenericContainer datahubContainer = new FixedHostPortGenericContainer("docker.mmxlabs.com/datahub-v:1.8.1-SNAPSHOT")
 	.withFixedExposedPort(availablePort, DATAHUB_PORT)
 	.withExposedPorts(DATAHUB_PORT)
 	.withEnv("PORT", Integer.toString(DATAHUB_PORT))
@@ -113,11 +114,11 @@ public class BasicAuthenticationTests {
 	@Test
 	public void testBasicAuthenticationLogin() throws InterruptedException {
 		openDatahubPreferencePage();
-		if ("Logout".equals(bot.buttonWithId("loginButtonId").getText())) {
-			bot.buttonWithId("loginButtonId").click();
-			bot.shellWithId("basicAuthShellId").close();
+		try {
+			bot.button("Logout").click();
+		} catch (WidgetNotFoundException e) {
+			bot.button("Login").click();
 		}
-		bot.button("Login").click();
 		Matcher<Shell> basicLoginShellMatcher = withText("Data Hub Basic Login");
 		bot.waitUntil(Conditions.waitForShell(basicLoginShellMatcher));
 		bot.textWithLabel("Username: ").setText("philippe");
