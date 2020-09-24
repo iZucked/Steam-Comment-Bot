@@ -45,6 +45,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//DeltaMetrics/pnlDelta"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//DeltaMetrics/latenessDelta"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//DeltaMetrics/capacityDelta"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//DeltaMetrics/nominalVesselDelta"/>
     </genClasses>
     <genClasses ecoreClass="changeset.ecore#//ChangeSetRowDataGroup">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRowDataGroup/members"/>

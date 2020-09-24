@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics#getPnlDelta <em>Pnl Delta</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics#getLatenessDelta <em>Lateness Delta</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics#getCapacityDelta <em>Capacity Delta</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics#getNominalVesselDelta <em>Nominal Vessel Delta</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getDeltaMetrics()
@@ -104,5 +105,27 @@ public interface DeltaMetrics extends EObject {
 	 * @generated
 	 */
 	void setCapacityDelta(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Nominal Vessel Delta</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Nominal Vessel Delta</em>' attribute.
+	 * @see #setNominalVesselDelta(int)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getDeltaMetrics_NominalVesselDelta()
+	 * @model
+	 * @generated
+	 */
+	int getNominalVesselDelta();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics#getNominalVesselDelta <em>Nominal Vessel Delta</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Nominal Vessel Delta</em>' attribute.
+	 * @see #getNominalVesselDelta()
+	 * @generated
+	 */
+	void setNominalVesselDelta(int value);
 
 } // DeltaMetrics

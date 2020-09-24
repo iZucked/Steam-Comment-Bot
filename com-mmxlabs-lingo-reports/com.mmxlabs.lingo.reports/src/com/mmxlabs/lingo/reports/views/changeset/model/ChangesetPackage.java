@@ -328,13 +328,22 @@ public interface ChangesetPackage extends EPackage {
 	int DELTA_METRICS__CAPACITY_DELTA = 2;
 
 	/**
+	 * The feature id for the '<em><b>Nominal Vessel Delta</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DELTA_METRICS__NOMINAL_VESSEL_DELTA = 3;
+
+	/**
 	 * The number of structural features of the '<em>Delta Metrics</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DELTA_METRICS_FEATURE_COUNT = 3;
+	int DELTA_METRICS_FEATURE_COUNT = 4;
 
 	/**
 	 * The number of operations of the '<em>Delta Metrics</em>' class.
@@ -1367,6 +1376,17 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getDeltaMetrics_CapacityDelta();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics#getNominalVesselDelta <em>Nominal Vessel Delta</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Nominal Vessel Delta</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics#getNominalVesselDelta()
+	 * @see #getDeltaMetrics()
+	 * @generated
+	 */
+	EAttribute getDeltaMetrics_NominalVesselDelta();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowDataGroup <em>Change Set Row Data Group</em>}'.
@@ -2444,6 +2464,14 @@ public interface ChangesetPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute DELTA_METRICS__CAPACITY_DELTA = eINSTANCE.getDeltaMetrics_CapacityDelta();
+
+		/**
+		 * The meta object literal for the '<em><b>Nominal Vessel Delta</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DELTA_METRICS__NOMINAL_VESSEL_DELTA = eINSTANCE.getDeltaMetrics_NominalVesselDelta();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowDataGroupImpl <em>Change Set Row Data Group</em>}' class.

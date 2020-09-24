@@ -455,6 +455,16 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * @generated
 	 */
 	@Override
+	public EAttribute getDeltaMetrics_NominalVesselDelta() {
+		return (EAttribute)deltaMetricsEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getChangeSetRowDataGroup() {
 		return changeSetRowDataGroupEClass;
 	}
@@ -1264,6 +1274,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 		createEAttribute(deltaMetricsEClass, DELTA_METRICS__PNL_DELTA);
 		createEAttribute(deltaMetricsEClass, DELTA_METRICS__LATENESS_DELTA);
 		createEAttribute(deltaMetricsEClass, DELTA_METRICS__CAPACITY_DELTA);
+		createEAttribute(deltaMetricsEClass, DELTA_METRICS__NOMINAL_VESSEL_DELTA);
 
 		changeSetRowDataGroupEClass = createEClass(CHANGE_SET_ROW_DATA_GROUP);
 		createEReference(changeSetRowDataGroupEClass, CHANGE_SET_ROW_DATA_GROUP__MEMBERS);
@@ -1412,6 +1423,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 		initEAttribute(getDeltaMetrics_PnlDelta(), ecorePackage.getELong(), "pnlDelta", null, 0, 1, DeltaMetrics.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDeltaMetrics_LatenessDelta(), ecorePackage.getEInt(), "latenessDelta", null, 0, 1, DeltaMetrics.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDeltaMetrics_CapacityDelta(), ecorePackage.getEInt(), "capacityDelta", null, 0, 1, DeltaMetrics.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDeltaMetrics_NominalVesselDelta(), ecorePackage.getEInt(), "nominalVesselDelta", null, 0, 1, DeltaMetrics.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(changeSetRowDataGroupEClass, ChangeSetRowDataGroup.class, "ChangeSetRowDataGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getChangeSetRowDataGroup_Members(), this.getChangeSetRowData(), this.getChangeSetRowData_RowDataGroup(), "members", null, 0, -1, ChangeSetRowDataGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

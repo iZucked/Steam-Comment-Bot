@@ -1851,6 +1851,24 @@ public class ChangeSetViewColumnHelper {
 						}
 						sb.append(String.format("Resolved %s violation%s", generateDisplayString(tmp), tmp.size() > 1 ? "s" : ""));
 					}
+
+					//Check for nominal vessel changes.
+					final long nominalVesselCountBefore = ChangeSetKPIUtil.getNominalVesselCount(change, ResultType.Before);
+					final long nominalVesselCountAfter = ChangeSetKPIUtil.getNominalVesselCount(change, ResultType.After);
+					final long nominalVesselDelta = nominalVesselCountAfter - nominalVesselCountBefore;
+					String vesselBefore = change.getBeforeVesselShortName();
+					String vesselAfter = change.getAfterVesselShortName();
+					if (nominalVesselDelta > 0) {
+						if (sb.length() > 0) {
+							//Place nominal vessel changes explanation on a new line.
+							sb.append("\r\n");
+						}
+						sb.append("Nominal vessel change: ");
+						sb.append(vesselBefore);
+						sb.append(" changed to ");
+						sb.append(vesselAfter);
+					}
+					
 					return sb.toString();
 
 				}
@@ -1888,12 +1906,22 @@ public class ChangeSetViewColumnHelper {
 				cell.setImage(null);
 				cell.setFont(null);
 				if (element instanceof ChangeSetTableGroup) {
-
 					cell.setFont(boldFont);
 
 					final ChangeSetTableGroup group = (ChangeSetTableGroup) element;
 					final Metrics scenarioMetrics = group.getCurrentMetrics();
 					final DeltaMetrics deltaMetrics = group.getDeltaMetrics();
+					
+					//Check for nominal vessel changes.
+					long nominalVesselCountBefore = 0;
+					long nominalVesselCountAfter = 0;
+					for (ChangeSetTableRow tr : ((ChangeSetTableGroup) element).getRows()) {
+						nominalVesselCountBefore += ChangeSetKPIUtil.getNominalVesselCount(tr, ResultType.Before);
+						nominalVesselCountAfter += ChangeSetKPIUtil.getNominalVesselCount(tr, ResultType.After);
+					}
+					
+					final long nominalVesselDelta = nominalVesselCountAfter - nominalVesselCountBefore;
+					
 					if (deltaMetrics != null) {
 						if (deltaMetrics.getCapacityDelta() != 0) {
 							if (textualVesselMarkers) {
@@ -1912,6 +1940,11 @@ public class ChangeSetViewColumnHelper {
 							}
 						}
 					}
+					
+					if (nominalVesselDelta != 0) {
+						String volText = cell.getText();
+						cell.setText(volText + " " + nominalVesselDelta);
+					}
 				}
 				if (element instanceof ChangeSetTableRow) {
 					final ChangeSetTableRow change = (ChangeSetTableRow) element;
@@ -1919,13 +1952,18 @@ public class ChangeSetViewColumnHelper {
 					final long f = ChangeSetKPIUtil.getViolations(change, ResultType.Before);
 					final long t = ChangeSetKPIUtil.getViolations(change, ResultType.After);
 
+					//Check for nominal vessel changes.
+					final long nominalVesselCountBefore = ChangeSetKPIUtil.getNominalVesselCount(change, ResultType.Before);
+					final long nominalVesselCountAfter = ChangeSetKPIUtil.getNominalVesselCount(change, ResultType.After);
+					final long nominalVesselDelta = nominalVesselCountAfter - nominalVesselCountBefore;
+					
 					final long delta = t - f;
-					if (delta != 0) {
-
+					
+					if (delta != 0 || nominalVesselDelta != 0) {
 						if (textualVesselMarkers) {
-							cell.setText(String.format("%s %d", delta < 0 ? "↓" : "↑", Math.abs(delta)));
+							cell.setText(String.format("%s %d %d", delta < 0 ? "↓" : "↑", Math.abs(delta), nominalVesselDelta));
 						} else {
-							cell.setText(String.format("%d", Math.abs(delta)));
+							cell.setText(String.format("%d %d", Math.abs(delta), nominalVesselDelta));
 						}
 
 						if (delta < 0) {

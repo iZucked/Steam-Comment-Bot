@@ -13,6 +13,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetVesselType;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.OtherPNL;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
@@ -323,5 +324,18 @@ public class ChangeSetKPIUtil {
 		pnl += getTax(tableRow, type);
 		pnl += getUpstreamPNL(tableRow, type);
 		return pnl;
+	}
+
+	public static long getNominalVesselCount(@NonNull ChangeSetTableRow change, @NonNull ResultType type) {
+		switch (type) {
+		case Before:
+			ChangeSetVesselType vesselTypeBefore = change.getBeforeVesselType();
+			return vesselTypeBefore == ChangeSetVesselType.NOMINAL ? 1 : 0;
+		case After:
+			ChangeSetVesselType vesselTypeAfter = change.getAfterVesselType();
+			return vesselTypeAfter == ChangeSetVesselType.NOMINAL ? 1 : 0;			
+		default:
+			throw new IllegalArgumentException("Not supported ResultType: "+type.toString());
+		}
 	}
 }
