@@ -131,30 +131,14 @@ public class SummaryPage extends ADPComposite {
 					.filter(s -> profile.getContract() == s.getContract()).count()));
 			
 			createColumn(purchasesViewer, "Usable cargoes", (profile) -> {
-				final EList<ProfileConstraint>  constraints = profile.getConstraints();
+				final EList<ProfileConstraint> constraints = profile.getConstraints();
 				if (constraints.isEmpty()) {
 					return Long.toString(editorData.getScenarioModel().getCargoModel().getLoadSlots().stream() //
 							.filter(s -> profile.getContract() == s.getContract()).count());
 				} else {
 					final ADPModel adpModel = editorData.getAdpModel();
 					final Contract contract = profile.getContract();
-					final Pair<YearMonth, YearMonth> adpPeriod = ADPModelUtil.getContractProfilePeriod(adpModel, contract);
-					final YearMonth start = adpPeriod.getFirst();
-					final YearMonth endExclusive = adpPeriod.getSecond();
-					final YearMonth endInclusive = endExclusive.minusMonths(1);
-					int months = Months.between(start, endExclusive);
-					OptionalInt explicitMaxCargo = constraints.stream() //
-							.map(c -> ((PeriodDistributionProfileConstraintImpl) c).getDistributions().stream() //
-									.filter(profileConstraint -> profileConstraint.isSetMaxCargoes() && profileConstraint.getRange().size() == months) //
-									.map(profileConstraint -> new Pair<List<YearMonth>, Integer> (profileConstraint.getRange().stream().sorted((a,b) -> a.compareTo(b)).collect(Collectors.toCollection(ArrayList::new)), profileConstraint.getMaxCargoes())) //
-									.filter(pair -> {
-										List<YearMonth> orderedDates = pair.getFirst();
-										return orderedDates.get(0).equals(start) && orderedDates.get(orderedDates.size()-1).equals(endInclusive); //
-									}).mapToInt(Pair<List<YearMonth>, Integer>::getSecond) //
-									.min() //
-							).filter(OptionalInt::isPresent)
-							.mapToInt(OptionalInt::getAsInt)
-							.min();
+					final OptionalInt explicitMaxCargo = calculateExplicitMaxCargo(adpModel, contract, constraints);
 					if (explicitMaxCargo.isPresent()) {
 						return Integer.toString(explicitMaxCargo.getAsInt());
 					} else {
@@ -193,8 +177,27 @@ public class SummaryPage extends ADPComposite {
 			});
 
 			createColumn(salesViewer, "Contract", (profile) -> profile.getContract().getName());
-			createColumn(salesViewer, "Cargoes", (profile) -> Long.toString(editorData.getScenarioModel().getCargoModel().getDischargeSlots().stream() //
+			createColumn(salesViewer, "Generated cargoes", (profile) -> Long.toString(editorData.getScenarioModel().getCargoModel().getDischargeSlots().stream() //
 					.filter(s -> profile.getContract() == s.getContract()).count()));
+			createColumn(salesViewer, "Usable cargoes", (profile) -> {
+				final EList<ProfileConstraint> constraints = profile.getConstraints();
+				if (constraints.isEmpty()) {
+					return Long.toString(editorData.getScenarioModel().getCargoModel().getDischargeSlots().stream() //
+							.filter(s -> profile.getContract() == s.getContract()).count());
+				} else {
+					final ADPModel adpModel = editorData.getAdpModel();
+					final Contract contract = profile.getContract();
+					final OptionalInt explicitMaxCargo = calculateExplicitMaxCargo(adpModel, contract, constraints);
+					if (explicitMaxCargo.isPresent()) {
+						return Integer.toString(explicitMaxCargo.getAsInt());
+					} else {
+						return Long.toString(editorData.getScenarioModel().getCargoModel().getDischargeSlots().stream() //
+								.filter(s -> profile.getContract() == s.getContract()).count());
+					}
+				}
+				
+			});
+					
 			
 		}
 		{
@@ -301,6 +304,28 @@ public class SummaryPage extends ADPComposite {
 		});
 		col.getColumn().setWidth(100);
 		col.getColumn().setText(name);
+	}
+	
+	private OptionalInt calculateExplicitMaxCargo(final ADPModel adpModel, final Contract contract, final EList<ProfileConstraint> constraints) {
+		final Pair<YearMonth, YearMonth> adpPeriod = ADPModelUtil.getContractProfilePeriod(adpModel, contract);
+		final YearMonth start = adpPeriod.getFirst();
+		final YearMonth endExclusive = adpPeriod.getSecond();
+		final YearMonth endInclusive = endExclusive.minusMonths(1);
+		int months = Months.between(start, endExclusive);
+		return constraints.stream() //
+				.map(c -> ((PeriodDistributionProfileConstraintImpl) c).getDistributions().stream() //
+						.filter(profileConstraint -> profileConstraint.isSetMaxCargoes() && profileConstraint.getRange().size() == months) //
+						.map(profileConstraint -> new Pair<List<YearMonth>, Integer> (profileConstraint.getRange().stream() //
+								.sorted((a,b) -> a.compareTo(b)) //
+								.collect(Collectors.toCollection(ArrayList::new)), profileConstraint.getMaxCargoes()) //
+						).filter(pair -> {
+							List<YearMonth> orderedDates = pair.getFirst();
+							return orderedDates.get(0).equals(start) && orderedDates.get(orderedDates.size()-1).equals(endInclusive);
+						}).mapToInt(Pair<List<YearMonth>, Integer>::getSecond) //
+						.min() //
+				).filter(OptionalInt::isPresent)
+				.mapToInt(OptionalInt::getAsInt)
+				.min();
 	}
 
 }
