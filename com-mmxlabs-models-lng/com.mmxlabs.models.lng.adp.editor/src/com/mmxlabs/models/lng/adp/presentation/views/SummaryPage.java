@@ -41,6 +41,7 @@ import com.mmxlabs.models.lng.adp.impl.PeriodDistributionProfileConstraintImpl;
 import com.mmxlabs.models.lng.adp.utils.ADPModelUtil;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
@@ -132,19 +133,20 @@ public class SummaryPage extends ADPComposite {
 			
 			createColumn(purchasesViewer, "Usable cargoes", (profile) -> {
 				final EList<ProfileConstraint> constraints = profile.getConstraints();
+				final long generatedCargoes = editorData.getScenarioModel().getCargoModel().getLoadSlots().stream() //
+						.filter(s -> profile.getContract() == s.getContract()) //
+						.count();
 				if (constraints.isEmpty()) {
-					return Long.toString(editorData.getScenarioModel().getCargoModel().getLoadSlots().stream() //
-							.filter(s -> profile.getContract() == s.getContract()).count());
+					return Long.toString(generatedCargoes);
 				} else {
 					final ADPModel adpModel = editorData.getAdpModel();
 					final Contract contract = profile.getContract();
 					final OptionalInt explicitMaxCargo = calculateExplicitMaxCargo(adpModel, contract, constraints);
 					if (explicitMaxCargo.isPresent()) {
-						return Integer.toString(explicitMaxCargo.getAsInt());
+						long usableCargoes = Math.min(explicitMaxCargo.getAsInt(), generatedCargoes);
+						return Long.toString(usableCargoes);
 					} else {
-						return Long.toString(editorData.getScenarioModel().getCargoModel().getLoadSlots().stream() //
-								.filter(s -> profile.getContract() == s.getContract())//
-								.count());
+						return Long.toString(generatedCargoes);
 					}
 				}
 			});
@@ -181,18 +183,20 @@ public class SummaryPage extends ADPComposite {
 					.filter(s -> profile.getContract() == s.getContract()).count()));
 			createColumn(salesViewer, "Usable cargoes", (profile) -> {
 				final EList<ProfileConstraint> constraints = profile.getConstraints();
+				final long generatedCargoes = editorData.getScenarioModel().getCargoModel().getDischargeSlots().stream() //
+						.filter(s -> profile.getContract() == s.getContract())//
+						.count();
 				if (constraints.isEmpty()) {
-					return Long.toString(editorData.getScenarioModel().getCargoModel().getDischargeSlots().stream() //
-							.filter(s -> profile.getContract() == s.getContract()).count());
+					return Long.toString(generatedCargoes);
 				} else {
 					final ADPModel adpModel = editorData.getAdpModel();
 					final Contract contract = profile.getContract();
 					final OptionalInt explicitMaxCargo = calculateExplicitMaxCargo(adpModel, contract, constraints);
 					if (explicitMaxCargo.isPresent()) {
-						return Integer.toString(explicitMaxCargo.getAsInt());
+						long usableCargoes = Math.min(explicitMaxCargo.getAsInt(), generatedCargoes);
+						return Long.toString(usableCargoes);
 					} else {
-						return Long.toString(editorData.getScenarioModel().getCargoModel().getDischargeSlots().stream() //
-								.filter(s -> profile.getContract() == s.getContract()).count());
+						return Long.toString(generatedCargoes);
 					}
 				}
 				
