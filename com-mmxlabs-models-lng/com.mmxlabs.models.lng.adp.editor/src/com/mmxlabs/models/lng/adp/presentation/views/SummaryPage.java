@@ -41,7 +41,6 @@ import com.mmxlabs.models.lng.adp.impl.PeriodDistributionProfileConstraintImpl;
 import com.mmxlabs.models.lng.adp.utils.ADPModelUtil;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
@@ -128,33 +127,40 @@ public class SummaryPage extends ADPComposite {
 			});
 			
 			createColumn(purchasesViewer, "Contract", (profile) -> profile.getContract() == null ? "<unknown>" : profile.getContract().getName());
-			createColumn(purchasesViewer, "Num cargoes", (profile) -> Long.toString(editorData.getScenarioModel().getCargoModel().getLoadSlots().stream() //
+			createColumn(purchasesViewer, "Generated cargoes", (profile) -> Long.toString(editorData.getScenarioModel().getCargoModel().getLoadSlots().stream() //
 					.filter(s -> profile.getContract() == s.getContract()).count()));
 			
 			createColumn(purchasesViewer, "Usable cargoes", (profile) -> {
 				final EList<ProfileConstraint>  constraints = profile.getConstraints();
 				if (constraints.isEmpty()) {
 					return Long.toString(editorData.getScenarioModel().getCargoModel().getLoadSlots().stream() //
-							.filter(s-> profile.getContract() == s.getContract()).count());
+							.filter(s -> profile.getContract() == s.getContract()).count());
 				} else {
 					final ADPModel adpModel = editorData.getAdpModel();
 					final Contract contract = profile.getContract();
 					final Pair<YearMonth, YearMonth> adpPeriod = ADPModelUtil.getContractProfilePeriod(adpModel, contract);
 					final YearMonth start = adpPeriod.getFirst();
-					final YearMonth end = adpPeriod.getSecond();
-					int months = Months.between(start, end);
-					PeriodDistributionProfileConstraintImpl firstConstraint = (PeriodDistributionProfileConstraintImpl) constraints.get(0);
-					OptionalInt explicitMaxCargo = firstConstraint.getDistributions().stream() //
-							.filter(p -> p.isSetMaxCargoes() && p.getRange().size() == months) //
-							.map(p -> new Pair<List<YearMonth>, Integer> (p.getRange().stream().sorted((a,b) -> a.compareTo(b)).collect(Collectors.toCollection(ArrayList::new)), p.getMaxCargoes())) //
-							.filter(pair -> pair.getFirst().get(0).equals(start) && pair.getFirst().get(pair.getFirst().size()-1).equals(end.minusMonths(1))) //
-							.mapToInt(pair -> pair.getSecond()) //
+					final YearMonth endExclusive = adpPeriod.getSecond();
+					final YearMonth endInclusive = endExclusive.minusMonths(1);
+					int months = Months.between(start, endExclusive);
+					OptionalInt explicitMaxCargo = constraints.stream() //
+							.map(c -> ((PeriodDistributionProfileConstraintImpl) c).getDistributions().stream() //
+									.filter(profileConstraint -> profileConstraint.isSetMaxCargoes() && profileConstraint.getRange().size() == months) //
+									.map(profileConstraint -> new Pair<List<YearMonth>, Integer> (profileConstraint.getRange().stream().sorted((a,b) -> a.compareTo(b)).collect(Collectors.toCollection(ArrayList::new)), profileConstraint.getMaxCargoes())) //
+									.filter(pair -> {
+										List<YearMonth> orderedDates = pair.getFirst();
+										return orderedDates.get(0).equals(start) && orderedDates.get(orderedDates.size()-1).equals(endInclusive); //
+									}).mapToInt(Pair<List<YearMonth>, Integer>::getSecond) //
+									.min() //
+							).filter(OptionalInt::isPresent)
+							.mapToInt(OptionalInt::getAsInt)
 							.min();
 					if (explicitMaxCargo.isPresent()) {
 						return Integer.toString(explicitMaxCargo.getAsInt());
 					} else {
 						return Long.toString(editorData.getScenarioModel().getCargoModel().getLoadSlots().stream() //
-								.filter(s-> profile.getContract() == s.getContract()).count());
+								.filter(s -> profile.getContract() == s.getContract())//
+								.count());
 					}
 				}
 			});
@@ -189,6 +195,7 @@ public class SummaryPage extends ADPComposite {
 			createColumn(salesViewer, "Contract", (profile) -> profile.getContract().getName());
 			createColumn(salesViewer, "Cargoes", (profile) -> Long.toString(editorData.getScenarioModel().getCargoModel().getDischargeSlots().stream() //
 					.filter(s -> profile.getContract() == s.getContract()).count()));
+			
 		}
 		{
 
