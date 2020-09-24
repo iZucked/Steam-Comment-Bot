@@ -131,7 +131,7 @@ public class SummaryPage extends ADPComposite {
 			createColumn(purchasesViewer, "Generated cargoes", (profile) -> Long.toString(editorData.getScenarioModel().getCargoModel().getLoadSlots().stream() //
 					.filter(s -> profile.getContract() == s.getContract()).count()));
 			
-			createColumn(purchasesViewer, "Usable cargoes", (profile) -> {
+			createColumn(purchasesViewer, "Cargo options", (profile) -> {
 				final EList<ProfileConstraint> constraints = profile.getConstraints();
 				final long generatedCargoes = editorData.getScenarioModel().getCargoModel().getLoadSlots().stream() //
 						.filter(s -> profile.getContract() == s.getContract()) //
@@ -181,7 +181,7 @@ public class SummaryPage extends ADPComposite {
 			createColumn(salesViewer, "Contract", (profile) -> profile.getContract().getName());
 			createColumn(salesViewer, "Generated cargoes", (profile) -> Long.toString(editorData.getScenarioModel().getCargoModel().getDischargeSlots().stream() //
 					.filter(s -> profile.getContract() == s.getContract()).count()));
-			createColumn(salesViewer, "Usable cargoes", (profile) -> {
+			createColumn(salesViewer, "Cargo options", (profile) -> {
 				final EList<ProfileConstraint> constraints = profile.getConstraints();
 				final long generatedCargoes = editorData.getScenarioModel().getCargoModel().getDischargeSlots().stream() //
 						.filter(s -> profile.getContract() == s.getContract())//
