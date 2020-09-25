@@ -913,6 +913,10 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 	}
 
 	public int open(final IScenarioEditingLocation location, final MMXRootObject rootObject, final Collection<EObject> objects, final boolean locked) {
+		return open(location, rootObject, null, objects, locked);
+	}
+	
+	public int open(final IScenarioEditingLocation location, final MMXRootObject rootObject, final EObject eContainerOverride, final Collection<EObject> objects, final boolean locked) {
 		this.location = location;
 		final IScenarioEditingLocation sel = location;
 		dialogValidationSupport = new DialogValidationSupport(sel.getExtraValidationContext());
@@ -921,6 +925,8 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		lockedForEditing = locked | location.getScenarioInstance().isReadonly();
 		this.inputs.clear();
 		this.inputs.addAll(objects);
+
+		//What are these used for?
 		this.originalToDuplicate.clear();
 		this.duplicateToOriginal.clear();
 
@@ -930,6 +936,8 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 				final EditingDomain editingDomain = commandHandler.getEditingDomain();
 				if (returnDuplicates) {
 					final CompoundCommand adder = new CompoundCommand();
+
+					//Create's the command somehow.
 					for (final Map.Entry<EObject, EObject> entry : originalToDuplicate.entrySet()) {
 						final EObject original = entry.getKey();
 						final EObject duplicate = entry.getValue();

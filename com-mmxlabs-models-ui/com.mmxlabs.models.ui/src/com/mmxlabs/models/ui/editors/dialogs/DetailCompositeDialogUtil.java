@@ -7,7 +7,6 @@ package com.mmxlabs.models.ui.editors.dialogs;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -21,10 +20,10 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
-import org.eclipse.swt.widgets.Shell;
 
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
+import com.mmxlabs.scenario.service.model.util.MMXAdaptersAwareCommandStack;
 
 public class DetailCompositeDialogUtil {
 
@@ -196,7 +195,7 @@ public class DetailCompositeDialogUtil {
 					try {
 						
 						final CommandStack commandStack = scenarioEditingLocation.getEditingDomain().getCommandStack();
-						commandStack.execute(setCommand); //Exception here?
+						commandStack.execute(setCommand);								
 						Command undoCommand = commandStack.getMostRecentCommand();
 						
 						if (target.size() == 1) {
@@ -208,7 +207,12 @@ public class DetailCompositeDialogUtil {
 									if (commandStack.getUndoCommand() != undoCommand) {
 										throw new IllegalStateException("Command stack has changed");
 									}
-									commandStack.undo();
+									if (commandStack instanceof MMXAdaptersAwareCommandStack) {
+										((MMXAdaptersAwareCommandStack)commandStack).undo(false);
+									}
+									else {
+										commandStack.undo();
+									}
 								}
 							}
 							return ret;
@@ -223,7 +227,12 @@ public class DetailCompositeDialogUtil {
 										if (commandStack.getUndoCommand() != undoCommand) {
 											throw new IllegalStateException("Command stack has changed");
 										}
-										commandStack.undo();
+										if (commandStack instanceof MMXAdaptersAwareCommandStack) {
+											((MMXAdaptersAwareCommandStack)commandStack).undo(false);
+										}
+										else {
+											commandStack.undo();
+										}
 									}
 								}
 								return ret;

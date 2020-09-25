@@ -720,4 +720,13 @@ public class NominationsModelUtils {
 			return ((String)nominatedValueObject);
 		}
 	}
+
+	public static String toStringSummary(LNGScenarioModel sm, AbstractNomination n) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(n.getNomineeId()).append(":").append(n.getType()).append(":").append(n.getDueDate()).append(":").append(n.getRemark());
+		if (n.getNominatedValue() != null && !n.getNominatedValue().isBlank() && sm != null) {
+			sb.append("=").append(getNominatedValue(sm, n));
+		}
+		return sb.toString();
+	}
 }
