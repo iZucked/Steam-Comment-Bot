@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -25,13 +26,17 @@ import org.eclipse.e4.ui.workbench.modeling.ISelectionListener;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.ETypedElement;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.equinox.log.Logger;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
@@ -60,12 +65,14 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorAction;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.nominations.AbstractNomination;
 import com.mmxlabs.models.lng.nominations.ContractNomination;
+import com.mmxlabs.models.lng.nominations.NominationsFactory;
 import com.mmxlabs.models.lng.nominations.NominationsModel;
 import com.mmxlabs.models.lng.nominations.NominationsPackage;
 import com.mmxlabs.models.lng.nominations.SlotNomination;
@@ -75,6 +82,7 @@ import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction;
 import com.mmxlabs.models.lng.ui.actions.DuplicateAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.date.LocalDateTextFormatter;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
@@ -90,9 +98,12 @@ import com.mmxlabs.models.ui.tabular.manipulators.StringAttributeManipulator;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 
 public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsViewerPane implements ISelectionListener {
 
+	private final static org.slf4j.@NonNull Logger logger =  LoggerFactory.getLogger(RelativeDateRangeNominationsViewerPane.class);
+	
 	private final Set<String> nominationTypeFilter = new TreeSet<>();
 
 	private class FilterMenuAction extends DefaultMenuCreatorAction {
@@ -409,7 +420,7 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 		final DuplicateAction result = new DuplicateAction(getJointModelEditorPart()) {
 			@Override
 			public void run() {
-				final IStructuredSelection selection = (IStructuredSelection) getLastSelection();
+				final ISelection selection = getLastSelection();
 				
 				//The below code fixes an issue to do with the fact that both the nomination and the slot are selected at the same time.
 				//Below we get back to the nomination when duplicate selection is selected from the Nominations view.
@@ -417,22 +428,55 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 				
 				if (selection instanceof TreeSelection) {
 					TreeSelection treeSelection = (TreeSelection)selection;
-					TreePath[] paths = treeSelection.getPathsFor(selection.getFirstElement());
-					for (TreePath path : paths) {
-						for (int i = 0; i < path.getSegmentCount(); i++) {
-							Object obj = path.getSegment(i);
-							if (obj instanceof AbstractNomination) {
-								nominations.add((EObject)obj);
+					Iterator<?> it = treeSelection.iterator();
+					
+					while (it.hasNext()) {
+						Object element = it.next();
+						TreePath[] paths = treeSelection.getPathsFor(element);
+						for (TreePath path : paths) {
+							for (int i = 0; i < path.getSegmentCount(); i++) {
+								Object obj = path.getSegment(i);
+								if (obj instanceof AbstractNomination) {
+									nominations.add((AbstractNomination)obj);
+								}
 							}
 						}
 					}
 				}
 				
-				DetailCompositeDialogUtil.editInlock(part, () -> {
-					final DetailCompositeDialog dcd = new DetailCompositeDialog(part.getShell(), part.getDefaultCommandHandler());
-					dcd.setReturnDuplicates(true);
-					return dcd.open(part, part.getRootObject(), nominations);
-				});
+				//In case somehow we select nothing and manage to duplicate somehow.
+				if (nominations.isEmpty()) return;
+					
+				//Copy the objects.
+				Collection<EObject> duplicatedNoms = EcoreUtil.copyAll(nominations);
+
+				//Create the add command.
+				EditingDomain domain = part.getDefaultCommandHandler().getEditingDomain();
+				NominationsModel owner = NominationsModelUtils.getNominationsModel(jointModelEditor);
+				EStructuralFeature nominationsListFeature = NominationsPackage.eINSTANCE.getNominationsModel_Nominations();
+				//Object nominationsListFeature = NominationsPackage.NOMINATIONS_MODEL__NOMINATIONS;
+				Command addCmd = AddCommand.create(domain, owner, nominationsListFeature, duplicatedNoms);
+				
+				try {		
+					//addCmd.execute();
+					DetailCompositeDialogUtil.editNewMultiObjectWithUndoOnCancel(part, duplicatedNoms, addCmd);
+				
+					//printNominations();
+				}
+				catch (Throwable e) {
+					logger.error("There was a problem duplicating the selection:", e);	
+				}
+			}
+
+			protected void printNominations() {
+				//Print out nominations.
+				NominationsModel nm = NominationsModelUtils.getNominationsModel(jointModelEditor);
+				LNGScenarioModel sm = ScenarioModelUtil.findScenarioModel(jointModelEditor.getScenarioDataProvider());
+				EList<AbstractNomination> noms = nm.getNominations();
+				int i = 0; 
+				for (AbstractNomination n : noms) {
+					System.out.println("Nomination: "+(i++)+" "+NominationsModelUtils.toStringSummary(sm, n));
+				}
 			}
 		};
 		scenarioViewer.addSelectionChangedListener(result);
