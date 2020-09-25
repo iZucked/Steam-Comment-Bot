@@ -25,7 +25,6 @@ import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.DeltaMetricsImpl#getPnlDelta <em>Pnl Delta</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.DeltaMetricsImpl#getLatenessDelta <em>Lateness Delta</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.DeltaMetricsImpl#getCapacityDelta <em>Capacity Delta</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.DeltaMetricsImpl#getNominalVesselDelta <em>Nominal Vessel Delta</em>}</li>
  * </ul>
  *
  * @generated
@@ -90,26 +89,6 @@ public class DeltaMetricsImpl extends MinimalEObjectImpl.Container implements De
 	 * @ordered
 	 */
 	protected int capacityDelta = CAPACITY_DELTA_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getNominalVesselDelta() <em>Nominal Vessel Delta</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getNominalVesselDelta()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int NOMINAL_VESSEL_DELTA_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getNominalVesselDelta() <em>Nominal Vessel Delta</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getNominalVesselDelta()
-	 * @generated
-	 * @ordered
-	 */
-	protected int nominalVesselDelta = NOMINAL_VESSEL_DELTA_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -205,29 +184,6 @@ public class DeltaMetricsImpl extends MinimalEObjectImpl.Container implements De
 	 * @generated
 	 */
 	@Override
-	public int getNominalVesselDelta() {
-		return nominalVesselDelta;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setNominalVesselDelta(int newNominalVesselDelta) {
-		int oldNominalVesselDelta = nominalVesselDelta;
-		nominalVesselDelta = newNominalVesselDelta;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.DELTA_METRICS__NOMINAL_VESSEL_DELTA, oldNominalVesselDelta, nominalVesselDelta));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case ChangesetPackage.DELTA_METRICS__PNL_DELTA:
@@ -236,8 +192,6 @@ public class DeltaMetricsImpl extends MinimalEObjectImpl.Container implements De
 				return getLatenessDelta();
 			case ChangesetPackage.DELTA_METRICS__CAPACITY_DELTA:
 				return getCapacityDelta();
-			case ChangesetPackage.DELTA_METRICS__NOMINAL_VESSEL_DELTA:
-				return getNominalVesselDelta();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -258,9 +212,6 @@ public class DeltaMetricsImpl extends MinimalEObjectImpl.Container implements De
 				return;
 			case ChangesetPackage.DELTA_METRICS__CAPACITY_DELTA:
 				setCapacityDelta((Integer)newValue);
-				return;
-			case ChangesetPackage.DELTA_METRICS__NOMINAL_VESSEL_DELTA:
-				setNominalVesselDelta((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -283,9 +234,6 @@ public class DeltaMetricsImpl extends MinimalEObjectImpl.Container implements De
 			case ChangesetPackage.DELTA_METRICS__CAPACITY_DELTA:
 				setCapacityDelta(CAPACITY_DELTA_EDEFAULT);
 				return;
-			case ChangesetPackage.DELTA_METRICS__NOMINAL_VESSEL_DELTA:
-				setNominalVesselDelta(NOMINAL_VESSEL_DELTA_EDEFAULT);
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -304,8 +252,6 @@ public class DeltaMetricsImpl extends MinimalEObjectImpl.Container implements De
 				return latenessDelta != LATENESS_DELTA_EDEFAULT;
 			case ChangesetPackage.DELTA_METRICS__CAPACITY_DELTA:
 				return capacityDelta != CAPACITY_DELTA_EDEFAULT;
-			case ChangesetPackage.DELTA_METRICS__NOMINAL_VESSEL_DELTA:
-				return nominalVesselDelta != NOMINAL_VESSEL_DELTA_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -326,8 +272,6 @@ public class DeltaMetricsImpl extends MinimalEObjectImpl.Container implements De
 		result.append(latenessDelta);
 		result.append(", capacityDelta: ");
 		result.append(capacityDelta);
-		result.append(", nominalVesselDelta: ");
-		result.append(nominalVesselDelta);
 		result.append(')');
 		return result.toString();
 	}
