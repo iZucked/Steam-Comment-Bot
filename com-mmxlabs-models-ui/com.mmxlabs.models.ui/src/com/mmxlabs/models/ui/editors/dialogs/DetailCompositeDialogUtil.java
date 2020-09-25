@@ -58,7 +58,7 @@ public class DetailCompositeDialogUtil {
 								if (commandStack.getUndoCommand() != undoCommand) {
 									throw new IllegalStateException("Command stack has changed");
 								}
-								commandStack.undo();
+								undoCommand(commandStack);
 							}
 						}
 						return ret;
@@ -85,7 +85,7 @@ public class DetailCompositeDialogUtil {
 				final CommandStack commandStack = scenarioEditingLocation.getEditingDomain().getCommandStack();
 				// If not ok, revert state;
 				assert commandStack.getUndoCommand() == undoCommand;
-				commandStack.undo();
+				undoCommand(commandStack);
 			}
 		});
 	}
@@ -207,12 +207,7 @@ public class DetailCompositeDialogUtil {
 									if (commandStack.getUndoCommand() != undoCommand) {
 										throw new IllegalStateException("Command stack has changed");
 									}
-									if (commandStack instanceof MMXAdaptersAwareCommandStack) {
-										((MMXAdaptersAwareCommandStack)commandStack).undo(false);
-									}
-									else {
-										commandStack.undo();
-									}
+									undoCommand(commandStack);
 								}
 							}
 							return ret;
@@ -227,12 +222,7 @@ public class DetailCompositeDialogUtil {
 										if (commandStack.getUndoCommand() != undoCommand) {
 											throw new IllegalStateException("Command stack has changed");
 										}
-										if (commandStack instanceof MMXAdaptersAwareCommandStack) {
-											((MMXAdaptersAwareCommandStack)commandStack).undo(false);
-										}
-										else {
-											commandStack.undo();
-										}
+										undoCommand(commandStack);
 									}
 								}
 								return ret;
@@ -251,6 +241,15 @@ public class DetailCompositeDialogUtil {
 			return Window.CANCEL;
 		} finally {
 			executor.shutdownNow();
+		}
+	}
+
+	protected static void undoCommand(final CommandStack commandStack) {
+		if (commandStack instanceof MMXAdaptersAwareCommandStack) {
+			((MMXAdaptersAwareCommandStack)commandStack).undo(false);
+		}
+		else {
+			commandStack.undo();
 		}
 	}
 }
