@@ -1858,7 +1858,7 @@ public class ChangeSetViewColumnHelper {
 					final long nominalVesselDelta = nominalVesselCountAfter - nominalVesselCountBefore;
 					String vesselBefore = change.getBeforeVesselShortName();
 					String vesselAfter = change.getAfterVesselShortName();
-					if (nominalVesselDelta > 0) {
+					if (nominalVesselDelta != 0) {
 						if (sb.length() > 0) {
 							//Place nominal vessel changes explanation on a new line.
 							sb.append("\r\n");
