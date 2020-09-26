@@ -41,6 +41,7 @@ public class BasicAuthenticationDialog extends Dialog {
 	@Override
 	protected void configureShell(final Shell newShell) {
 		super.configureShell(newShell);
+		newShell.setData("basicAuthShellId"); // this id is used in swtbot tests
 		newShell.setText("Data Hub Basic Login");
 	}
 
