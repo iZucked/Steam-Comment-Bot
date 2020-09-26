@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Spot Markets Validation
 Bundle-SymbolicName: com.mmxlabs.models.lng.spotmarkets.validation;singleton:=true
-Bundle-Version: 4.10.20.qualifier
+Bundle-Version: 4.10.20.RELEASE
 Bundle-Activator: com.mmxlabs.models.lng.spotmarkets.validation.internal.Activator
 Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",

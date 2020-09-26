@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: com.mmxlabs.models.lng.cargo.edit;singleton:=true
 Automatic-Module-Name: com.mmxlabs.models.lng.cargo.edit
-Bundle-Version: 4.10.20.qualifier
+Bundle-Version: 4.10.20.RELEASE
 Bundle-ClassPath: .
 Bundle-Activator: com.mmxlabs.models.lng.cargo.provider.CargoEditPlugin$Implementation
 Bundle-Vendor: %providerName
