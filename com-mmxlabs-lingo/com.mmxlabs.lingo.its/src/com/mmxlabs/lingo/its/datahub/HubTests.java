@@ -24,7 +24,6 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import com.mmxlabs.hub.DataHubActivator;
-import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.auth.AuthenticationManager;
 import com.mmxlabs.hub.preferences.DataHubPreferenceConstants;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
@@ -34,12 +33,14 @@ import com.mmxlabs.lingo.its.tests.category.TestCategories;
 public class HubTests {
 
 	static final Logger logger = LoggerFactory.getLogger(HubTests.class);
+	static final String oauthHubContainer = "datahub-oauth";
+	static final String basicHubContainer = "datahub-basic";
 
 	// @formatter:off
 	@Container
-	public static DockerComposeContainer datahubContainer = new DockerComposeContainer(new File("data/docker/docker-compose.yml"))
-	.withExposedService("datahub-oauth", 8090)
-	.withExposedService("datahub-basic", 8091)
+	public static final DockerComposeContainer<?> datahubContainer = new DockerComposeContainer(new File("data/docker/docker-compose.yml"))
+	.withExposedService(oauthHubContainer, 8090)
+	.withExposedService(basicHubContainer, 8091)
 	.waitingFor("datahub-oauth", Wait.forHttp("/ping").forStatusCode(200))
 	.withLocalCompose(true);
 	// @formatter:on
@@ -52,22 +53,19 @@ public class HubTests {
 	static String basicUpstreamUrl;
 	static String oauthUpstreamUrl;
 
-	private static DataHubServiceProvider datahubServiceProvider = DataHubServiceProvider.getInstance();
 	private static AuthenticationManager authenticationManager = AuthenticationManager.getInstance();
-	private static HubTestHelper hubHelper;
 
 	@BeforeAll
 	private static void beforeAll() {
-		datahubBasicHost = datahubContainer.getServiceHost("datahub-basic", 8091);
-		datahubBasicPort = datahubContainer.getServicePort("datahub-basic", 8091);
-		datahubOAuthHost = datahubContainer.getServiceHost("datahub-oauth", 8090);
-		datahubOAuthPort = datahubContainer.getServicePort("datahub-oauth", 8090);
+		datahubBasicHost = datahubContainer.getServiceHost(basicHubContainer, 8091);
+		datahubBasicPort = datahubContainer.getServicePort(basicHubContainer, 8091);
+		datahubOAuthHost = datahubContainer.getServiceHost(oauthHubContainer, 8090);
+		datahubOAuthPort = datahubContainer.getServicePort(oauthHubContainer, 8090);
 
 		basicUpstreamUrl = String.format("http://%s:%s", datahubBasicHost, datahubBasicPort);
 		oauthUpstreamUrl = String.format("http://%s:%s", datahubOAuthHost, datahubOAuthPort);
 		bot = new SWTWorkbenchBot();
 		setDatahubUrl(basicUpstreamUrl);
-		// SWTBotPreferences.PLAYBACK_DELAY = 500;
 	}
 
 	public static void setDatahubUrl(String upstreamUrl) {
