@@ -62,6 +62,7 @@ public class OAuthAuthenticationDialog extends Window {
 	@Override
 	protected void configureShell(Shell newShell) {
 		newShell.setText("Data Hub OAuth Login");
+		newShell.setData("oauthShellId"); // this id is used in swtbot tests
 		super.configureShell(newShell);
 		newShell.setSize(640, 480);
 	}

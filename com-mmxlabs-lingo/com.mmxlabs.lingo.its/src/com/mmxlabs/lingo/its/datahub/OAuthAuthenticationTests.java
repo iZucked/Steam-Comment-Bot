@@ -9,7 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
-import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotBrowser;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -50,7 +49,7 @@ public class OAuthAuthenticationTests {
 	@Container
 	// we need a fixed port for this test because we cannot programatically modify the redirection-url on Azure
 	// AD has port 8090 - 8099 set for testing purposes
-	public static GenericContainer datahubContainer = new FixedHostPortGenericContainer("docker.mmxlabs.com/datahub-v:1.8.1-SNAPSHOT")
+	public static GenericContainer datahubContainer = new FixedHostPortGenericContainer("docker.mmxlabs.com/datahub-v-single:1.7.1-SNAPSHOT")
 	.withFixedExposedPort(availablePort, DATAHUB_PORT)
 	.withExposedPorts(DATAHUB_PORT)
 	.withEnv("PORT", Integer.toString(DATAHUB_PORT))
@@ -105,7 +104,7 @@ public class OAuthAuthenticationTests {
 	@Test
 	public void checkDatahubConnection() {
 		// force update online state refresh
-		UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
+		boolean isAvailable = UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
 		assertTrue(datahubServiceProvider.isHubOnline());
 	}
 
@@ -114,12 +113,12 @@ public class OAuthAuthenticationTests {
 	public void oauthAuthenticationLogin() throws InterruptedException {
 		openDatahubPreferencePage();
 		// logout if necessary
-		try {
-			bot.button("Logout").click();
-		} catch (WidgetNotFoundException e) {
-			bot.button("Login").click();
+		if ("Logout".equals(bot.buttonWithId("loginButtonId").getText())) {
+			bot.buttonWithId("loginButtonId").click();
+			bot.shellWithId("oauthShellId").close();
 		}
-		SWTBotBrowser browser = bot.browser();
+		bot.button("Login").click();
+		SWTBotBrowser browser = bot.browserWithId("oauthBrowserId");
 		browser.waitForPageLoaded();
 
 		// if the test is failing to often it might be because clickUserAnotherAccount is running before the page is loaded. In that case increase the sleep below
