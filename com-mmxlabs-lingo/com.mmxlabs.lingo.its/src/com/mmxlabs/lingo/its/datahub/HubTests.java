@@ -1,5 +1,7 @@
-/***Copyright(C)Minimax Labs Ltd.,2010-2020*All rights reserved.*/package com.mmxlabs.lingo.its.datahub;
-
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
+ * All rights reserved.
+ */
 import static org.eclipse.swtbot.swt.finder.matchers.WidgetMatcherFactory.withText;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
