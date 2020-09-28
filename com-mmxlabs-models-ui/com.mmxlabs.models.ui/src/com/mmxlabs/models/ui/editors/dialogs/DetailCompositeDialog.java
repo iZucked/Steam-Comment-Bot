@@ -928,6 +928,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 
 		try {
 			final int value = open();
+			
 			if (value == OK) {
 				final EditingDomain editingDomain = commandHandler.getEditingDomain();
 				if (returnDuplicates) {
@@ -966,7 +967,6 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 					}
 
 				} else {
-
 					final CompoundCommand cc = new CompoundCommand();
 
 					if (editingDomain instanceof CommandProviderAwareEditingDomain) {
@@ -989,8 +989,8 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 					}
 
 					final boolean isExecutable = finalCommand.canExecute();
+					
 					if (isExecutable) {
-
 						executeFinalCommand(finalCommand);
 
 					} else {
