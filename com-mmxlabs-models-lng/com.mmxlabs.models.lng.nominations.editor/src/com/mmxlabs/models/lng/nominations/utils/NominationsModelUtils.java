@@ -225,6 +225,15 @@ public class NominationsModelUtils {
 			return Collections.emptyList();
 		}
 	}
+	
+	public static NominationsModel getNominationsModel(@NonNull final IScenarioEditingLocation jointModelEditor) {
+		final LNGScenarioModel scenarioModel = ScenarioModelUtil.findScenarioModel(jointModelEditor.getScenarioDataProvider());
+		if (scenarioModel != null) {
+			return scenarioModel.getNominationsModel();
+		}
+		//Otherwise doesn't exist.
+		return null;
+	}
 
 	private static List<AbstractNomination> generateNominations(final LNGScenarioModel scenarioModel, LocalDate startDate, LocalDate endDate) {
 
@@ -710,5 +719,14 @@ public class NominationsModelUtils {
 		else {
 			return ((String)nominatedValueObject);
 		}
+	}
+
+	public static String toStringSummary(LNGScenarioModel sm, AbstractNomination n) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(n.getNomineeId()).append(":").append(n.getType()).append(":").append(n.getDueDate()).append(":").append(n.getRemark());
+		if (n.getNominatedValue() != null && !n.getNominatedValue().isBlank() && sm != null) {
+			sb.append("=").append(getNominatedValue(sm, n));
+		}
+		return sb.toString();
 	}
 }

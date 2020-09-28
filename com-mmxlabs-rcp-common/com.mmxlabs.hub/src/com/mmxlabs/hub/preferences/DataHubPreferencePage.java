@@ -112,6 +112,7 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 	protected void initialize() {
 		super.initialize();
 		editor.setPropertyChangeListener(disableLogin);
+		forceBasicAuth.setPropertyChangeListener(disableLogin);
 	}
 
 	public void disableLogin() {
