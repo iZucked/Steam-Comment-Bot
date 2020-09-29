@@ -1830,46 +1830,72 @@ public class ChangeSetViewColumnHelper {
 				if (element instanceof ChangeSetTableRow) {
 					final ChangeSetTableRow change = (ChangeSetTableRow) element;
 
-					final Set<CapacityViolationType> beforeViolatios = ScheduleModelKPIUtils.getCapacityViolations(ChangeSetKPIUtil.getEventGrouping(change, ResultType.Before));
-					final Set<CapacityViolationType> afterViolatios = ScheduleModelKPIUtils.getCapacityViolations(ChangeSetKPIUtil.getEventGrouping(change, ResultType.After));
-
-					final Set<CapacityViolationType> tmp = new HashSet<>(afterViolatios);
-					tmp.removeAll(beforeViolatios);
-					final StringBuilder sb = new StringBuilder();
-					boolean newLine = false;
-					if (!tmp.isEmpty()) {
-						sb.append(String.format("Caused %s violation%s", generateDisplayString(tmp), tmp.size() > 1 ? "s" : ""));
-						newLine = true;
-					}
-					tmp.clear();
-					tmp.addAll(beforeViolatios);
-					tmp.removeAll(afterViolatios);
-					if (!tmp.isEmpty()) {
-						if (newLine) {
-							sb.append("\n");
-						}
-						sb.append(String.format("Resolved %s violation%s", generateDisplayString(tmp), tmp.size() > 1 ? "s" : ""));
-					}
+					final Set<CapacityViolationType> beforeViolations = ScheduleModelKPIUtils.getCapacityViolations(ChangeSetKPIUtil.getEventGrouping(change, ResultType.Before));
+					final Set<CapacityViolationType> afterViolations = ScheduleModelKPIUtils.getCapacityViolations(ChangeSetKPIUtil.getEventGrouping(change, ResultType.After));
 
 					//Check for nominal vessel changes.
 					final long nominalVesselCountBefore = ChangeSetKPIUtil.getNominalVesselCount(change, ResultType.Before);
 					final long nominalVesselCountAfter = ChangeSetKPIUtil.getNominalVesselCount(change, ResultType.After);
 					final long nominalVesselDelta = nominalVesselCountAfter - nominalVesselCountBefore;
+				
 					String vesselBefore = change.getBeforeVesselShortName();
 					String vesselAfter = change.getAfterVesselShortName();
+
+					long capacityDelta = afterViolations.size() - beforeViolations.size();
+
+					long netDelta = capacityDelta + nominalVesselDelta;
+					
+					final Set<CapacityViolationType> tmp = new HashSet<>(afterViolations);
+					tmp.removeAll(beforeViolations);
+					final StringBuilder sb = new StringBuilder();
+				
+					if (!tmp.isEmpty() || nominalVesselDelta > 0) {
+						int addedIssues = tmp.size();
+						if (nominalVesselDelta > 0) {
+							addedIssues += Math.abs(nominalVesselDelta);
+						}
+						sb.append(String.format("Added %d issue%s:\r\n", addedIssues, addedIssues > 1 ? "s" : ""));
+						if (nominalVesselDelta > 0) {
+							sb.append("Nominal vessel change: ");
+							sb.append(vesselBefore);
+							sb.append(" changed to ");
+							sb.append(vesselAfter);
+							sb.append("\r\n");
+						}
+					}
+					if (!tmp.isEmpty()) {
+						sb.append(String.format("%s", generateDisplayString(tmp)));
+					}
+					tmp.clear();
+					tmp.addAll(beforeViolations);
+					tmp.removeAll(afterViolations);
+
+					if (!tmp.isEmpty() || nominalVesselDelta < 0) {
+						int resolvedIssues = tmp.size();
+						if (nominalVesselDelta < 0) {
+							resolvedIssues += Math.abs(nominalVesselDelta);
+						}
+						sb.append(String.format("Resolved %d issue%s:\r\n", resolvedIssues, resolvedIssues > 1 ? "s" : ""));
+						if (nominalVesselDelta < 0) {
+							sb.append("Nominal vessel change: ");
+							sb.append(vesselBefore);
+							sb.append(" changed to ");
+							sb.append(vesselAfter);
+							sb.append("\r\n");
+						}
+					}
+					if (!tmp.isEmpty()) {
+						sb.append(String.format("%s", generateDisplayString(tmp)));
+					}
+					
 					if (nominalVesselDelta != 0) {
 						if (sb.length() > 0) {
 							//Place nominal vessel changes explanation on a new line.
 							sb.append("\r\n");
 						}
-						sb.append("Nominal vessel change: ");
-						sb.append(vesselBefore);
-						sb.append(" changed to ");
-						sb.append(vesselAfter);
 					}
 					
 					return sb.toString();
-
 				}
 
 				return super.getToolTipText(element);
@@ -1920,29 +1946,35 @@ public class ChangeSetViewColumnHelper {
 					}
 					
 					final long nominalVesselDelta = nominalVesselCountAfter - nominalVesselCountBefore;
-					
+					long netDelta = 0;
+					long deltaCapacity = 0;
 					if (deltaMetrics != null) {
-						if (deltaMetrics.getCapacityDelta() != 0) {
-							if (textualVesselMarkers) {
-								cell.setText(
-										String.format("%s%d", deltaMetrics.getCapacityDelta() < 0 ? "↓" : deltaMetrics.getCapacityDelta() == 0 ? "" : "↑", Math.abs(deltaMetrics.getCapacityDelta())));
-							} else {
-								cell.setText(String.format("%d", Math.abs(deltaMetrics.getCapacityDelta())));
-							}
-							if (deltaMetrics.getCapacityDelta() < 0) {
-								cell.setImage(imageGreenArrowDown);
-							} else if (deltaMetrics.getCapacityDelta() > 0) {
-								cell.setImage(imageRedArrowUp);
-							}
-							if (deltaMetrics.getCapacityDelta() > 0) {
-								cell.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_RED));
-							}
-						}
+						deltaCapacity = deltaMetrics.getCapacityDelta();
+						netDelta = deltaCapacity + nominalVesselDelta;
 					}
 					
-					if (nominalVesselDelta != 0) {
-						String volText = cell.getText();
-						cell.setText(volText + " " + nominalVesselDelta);
+					if (nominalVesselDelta != 0 || deltaCapacity != 0) {
+							if (textualVesselMarkers) {
+								cell.setText(
+										String.format("%s%s%d", deltaMetrics.getCapacityDelta() < 0 ? "↓" : 
+											deltaMetrics.getCapacityDelta() == 0 ? "" : "↑", 
+													nominalVesselDelta < 0 ? "↓" : 
+														nominalVesselDelta == 0 ? "" : "↑",
+													Math.abs(netDelta)));
+							} else {
+								cell.setText(String.format("%d", Math.abs(netDelta)));
+							}
+							if (netDelta < 0) {
+								cell.setImage(imageGreenArrowDown);
+							} else if (netDelta > 0) {
+								cell.setImage(imageRedArrowUp);
+							}
+							if (netDelta > 0) {
+								cell.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_RED));
+							}
+							if (netDelta < 0) {
+								cell.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_GREEN));
+							}
 					}
 				}
 				if (element instanceof ChangeSetTableRow) {
@@ -1957,18 +1989,23 @@ public class ChangeSetViewColumnHelper {
 					final long nominalVesselDelta = nominalVesselCountAfter - nominalVesselCountBefore;
 					
 					final long delta = t - f;
+					final long netDelta = delta + nominalVesselDelta;
 					
 					if (delta != 0 || nominalVesselDelta != 0) {
-						if (textualVesselMarkers) {
-							cell.setText(String.format("%s %d %d", delta < 0 ? "↓" : "↑", Math.abs(delta), nominalVesselDelta));
-						} else {
-							cell.setText(String.format("%d %d", Math.abs(delta), nominalVesselDelta));
-						}
-
-						if (delta < 0) {
-							cell.setImage(imageGreenArrowDown);
-						} else {
-							cell.setImage(imageRedArrowUp);
+					//	if (textualVesselMarkers) {
+							cell.setText(String.format("%s%s %d", delta < 0 ? "↓" : (delta > 0? "↑" : ""), 
+									nominalVesselDelta < 0 ? "↓" : (nominalVesselDelta > 0 ? "↑" : ""), 
+											Math.abs(netDelta)));
+					//	} else {
+					//		cell.setText(String.format("%d", netDelta));
+					//	}
+						
+						if (netDelta < 0) {
+							cell.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_GREEN));
+							//cell.setImage(imageGreenArrowDown);
+						} else if (netDelta > 0) {
+							cell.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_RED));
+							//cell.setImage(imageRedArrowUp);
 						}
 					}
 
