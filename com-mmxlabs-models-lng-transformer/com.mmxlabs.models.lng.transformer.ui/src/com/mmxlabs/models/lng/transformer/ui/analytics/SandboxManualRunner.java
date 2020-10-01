@@ -25,6 +25,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.BaseCase;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
+import com.mmxlabs.models.lng.analytics.BuyMarket;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.BuyReference;
@@ -32,6 +33,7 @@ import com.mmxlabs.models.lng.analytics.OpenBuy;
 import com.mmxlabs.models.lng.analytics.OpenSell;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
+import com.mmxlabs.models.lng.analytics.SellMarket;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.VesselEventOption;
@@ -266,6 +268,7 @@ public class SandboxManualRunner {
 	}
 
 	private static void filterTasks(final List<BaseCase> tasks) {
+		removeAllSpotBuySpotSellCargoes(tasks);
 		final Set<BaseCase> duplicates = new HashSet<>();
 		for (final BaseCase baseCase1 : tasks) {
 			DUPLICATE_TEST: for (final BaseCase baseCase2 : tasks) {
@@ -285,6 +288,18 @@ public class SandboxManualRunner {
 			}
 		}
 		tasks.removeAll(duplicates);
+	}
+
+	private static void removeAllSpotBuySpotSellCargoes(final List<BaseCase> tasks) {
+		for (final BaseCase bc : tasks) {
+			for (int i = 0; i < bc.getBaseCase().size(); i++) {
+				final BaseCaseRow bcRow = bc.getBaseCase().get(i);
+				if (bcRow.getBuyOption() instanceof BuyMarket && bcRow.getSellOption() instanceof SellMarket) {
+					tasks.remove(bc);
+					break;
+				}
+			}
+		}
 	}
 
 	private static void recursiveTaskCreator(final int listIdx, final List<List<Runnable>> combinations,
@@ -320,6 +335,10 @@ public class SandboxManualRunner {
 					return;
 				}
 				if (row.getSellOption() != null && !seenItems.add(row.getSellOption())) {
+					return;
+				}
+				if ((row.getBuyOption() instanceof OpenBuy && row.getSellOption() instanceof OpenSell)
+						|| (row.getBuyOption() instanceof BuyMarket && row.getSellOption() instanceof SellMarket)) {
 					return;
 				}
 				// Replace open options with null reference for eval code.
