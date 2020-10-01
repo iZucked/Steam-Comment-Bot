@@ -18,6 +18,8 @@ import com.mmxlabs.models.lng.adp.CargoSizeDistributionModel;
 import com.mmxlabs.models.lng.adp.ContractProfile;
 import com.mmxlabs.models.lng.adp.DistributionModel;
 import com.mmxlabs.models.lng.adp.LNGVolumeUnit;
+import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
+import com.mmxlabs.models.lng.adp.SalesContractProfile;
 import com.mmxlabs.models.lng.adp.SubContractProfile;
 import com.mmxlabs.models.lng.adp.validation.internal.Activator;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -97,21 +99,24 @@ public class ADPModelConstraint extends AbstractModelMultiConstraint {
 						.withMessage("No existing slots for ADP: re-generate slots") //
 						.make(ctx, statuses);
 			}
-			CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(extraContext.getScenarioDataProvider());
-			for (PurchaseContract purchaseContract: commercialModel.getPurchaseContracts()) {
-				if (purchaseContract.getPreferredPort() == null) {
-					factory.copyName() //
-							.withObjectAndFeature(adpModel, CommercialPackage.Literals.CONTRACT__PREFERRED_PORT) //
-							.withMessage(String.format("Default port required for purchase contract %s", purchaseContract.getName())) //
-							.make(ctx, statuses);
+			for (final PurchaseContractProfile purchaseContractProfile : adpModel.getPurchaseContractProfiles()) {
+				for (final SubContractProfile subContractProfile : purchaseContractProfile.getSubProfiles()) {
+					if (subContractProfile.getPort() == null) {
+						factory.copyName() //
+								.withObjectAndFeature(adpModel, ADPPackage.Literals.SUB_CONTRACT_PROFILE__PORT) //
+								.withMessage(String.format("Port required for purchase contract %s", purchaseContractProfile.getContract().getName())) //
+								.make(ctx, statuses);
+					}
 				}
 			}
-			for (SalesContract salesContract: commercialModel.getSalesContracts()) {
-				if (salesContract.getPreferredPort() == null) {
-					factory.copyName() //
-							.withObjectAndFeature(adpModel, CommercialPackage.Literals.CONTRACT__PREFERRED_PORT) //
-							.withMessage(String.format("Default port required for sales contract %s", salesContract.getName())) //
-							.make(ctx, statuses);
+			for (final SalesContractProfile salesContractProfile : adpModel.getSalesContractProfiles()) {
+				for (final SubContractProfile subContractProfile : salesContractProfile.getSubProfiles()) {
+					if (subContractProfile.getPort() == null) {
+						factory.copyName() //
+								.withObjectAndFeature(adpModel, ADPPackage.Literals.SUB_CONTRACT_PROFILE__PORT) //
+								.withMessage(String.format("Port required for sales contract %s", salesContractProfile.getContract().getName())) //
+								.make(ctx, statuses);
+					}
 				}
 			}
 		}

@@ -76,6 +76,7 @@ public class SubContractProfileItemProvider
 			addShippingDaysPropertyDescriptor(object);
 			addWindowSizePropertyDescriptor(object);
 			addWindowSizeUnitsPropertyDescriptor(object);
+			addPortPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -230,6 +231,28 @@ public class SubContractProfileItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Port feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPortPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SubContractProfile_port_feature"),
+				 getString("_UI_SubContractProfile_port_description"),
+				 ADPPackage.Literals.SUB_CONTRACT_PROFILE__PORT,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}

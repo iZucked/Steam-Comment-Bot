@@ -205,6 +205,12 @@
          id="com.mmxlabs.models.lng.adp.presentation.valueproviders.SubContractProfileValueProviderFactory"
          referenceEClass="com.mmxlabs.models.lng.adp.SubContractProfile">
    </valueProvider>
+   <valueProvider
+          factory="com.mmxlabs.models.lng.adp.presentation.valueproviders.SubContractProfilePortValueProviderFactory"
+          id="com.mmxlabs.models.lng.adp.presentation.valueproviders.SubContractProfilePortValueProviderFactory"
+          ownerEClass="com.mmxlabs.models.lng.adp.SubContractProfile"
+          referenceEClass="com.mmxlabs.models.lng.port.Port">
+   </valueProvider>
 </extension>
 <extension
       point="com.mmxlabs.license.features.PluginXMLEnablement">

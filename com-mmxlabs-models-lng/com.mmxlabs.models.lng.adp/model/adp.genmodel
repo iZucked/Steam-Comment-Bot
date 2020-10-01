@@ -70,6 +70,8 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//SubContractProfile/constraints"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//SubContractProfile/windowSize"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//SubContractProfile/windowSizeUnits"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="Port" propertySortChoices="true"
+          ecoreFeature="ecore:EReference adp.ecore#//SubContractProfile/port"/>
     </genClasses>
     <genClasses image="false" ecoreClass="adp.ecore#//CustomSubProfileAttributes"/>
     <genClasses image="false" ecoreClass="adp.ecore#//DistributionModel">

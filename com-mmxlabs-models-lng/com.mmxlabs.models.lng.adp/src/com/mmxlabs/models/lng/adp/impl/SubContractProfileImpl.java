@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ContractType;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import java.util.Collection;
@@ -52,6 +53,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.SubContractProfileImpl#getConstraints <em>Constraints</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.SubContractProfileImpl#getWindowSize <em>Window Size</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.SubContractProfileImpl#getWindowSizeUnits <em>Window Size Units</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.adp.impl.SubContractProfileImpl#getPort <em>Port</em>}</li>
  * </ul>
  *
  * @generated
@@ -215,6 +217,16 @@ public class SubContractProfileImpl<T extends Slot<U>, U extends Contract> exten
 	 * @ordered
 	 */
 	protected TimePeriod windowSizeUnits = WINDOW_SIZE_UNITS_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getPort() <em>Port</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPort()
+	 * @generated
+	 * @ordered
+	 */
+	protected Port port;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -569,6 +581,46 @@ public class SubContractProfileImpl<T extends Slot<U>, U extends Contract> exten
 	 * @generated
 	 */
 	@Override
+	public Port getPort() {
+		if (port != null && port.eIsProxy()) {
+			InternalEObject oldPort = (InternalEObject)port;
+			port = (Port)eResolveProxy(oldPort);
+			if (port != oldPort) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ADPPackage.SUB_CONTRACT_PROFILE__PORT, oldPort, port));
+			}
+		}
+		return port;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Port basicGetPort() {
+		return port;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setPort(Port newPort) {
+		Port oldPort = port;
+		port = newPort;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ADPPackage.SUB_CONTRACT_PROFILE__PORT, oldPort, port));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case ADPPackage.SUB_CONTRACT_PROFILE__DISTRIBUTION_MODEL:
@@ -612,6 +664,9 @@ public class SubContractProfileImpl<T extends Slot<U>, U extends Contract> exten
 				return getWindowSize();
 			case ADPPackage.SUB_CONTRACT_PROFILE__WINDOW_SIZE_UNITS:
 				return getWindowSizeUnits();
+			case ADPPackage.SUB_CONTRACT_PROFILE__PORT:
+				if (resolve) return getPort();
+				return basicGetPort();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -656,6 +711,9 @@ public class SubContractProfileImpl<T extends Slot<U>, U extends Contract> exten
 			case ADPPackage.SUB_CONTRACT_PROFILE__WINDOW_SIZE_UNITS:
 				setWindowSizeUnits((TimePeriod)newValue);
 				return;
+			case ADPPackage.SUB_CONTRACT_PROFILE__PORT:
+				setPort((Port)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -698,6 +756,9 @@ public class SubContractProfileImpl<T extends Slot<U>, U extends Contract> exten
 			case ADPPackage.SUB_CONTRACT_PROFILE__WINDOW_SIZE_UNITS:
 				setWindowSizeUnits(WINDOW_SIZE_UNITS_EDEFAULT);
 				return;
+			case ADPPackage.SUB_CONTRACT_PROFILE__PORT:
+				setPort((Port)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -730,6 +791,8 @@ public class SubContractProfileImpl<T extends Slot<U>, U extends Contract> exten
 				return windowSize != WINDOW_SIZE_EDEFAULT;
 			case ADPPackage.SUB_CONTRACT_PROFILE__WINDOW_SIZE_UNITS:
 				return windowSizeUnits != WINDOW_SIZE_UNITS_EDEFAULT;
+			case ADPPackage.SUB_CONTRACT_PROFILE__PORT:
+				return port != null;
 		}
 		return super.eIsSet(featureID);
 	}
