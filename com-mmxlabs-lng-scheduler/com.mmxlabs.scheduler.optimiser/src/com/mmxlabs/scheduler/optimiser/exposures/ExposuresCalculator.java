@@ -484,7 +484,7 @@ public class ExposuresCalculator {
 
 					final int constant = const_c0.getConstant();
 					if (constant == 0.0) {
-						return new Pair<>(value, modify((ExposureRecords) c0, c -> new ExposureRecord(c.curveName, c.currencyUnit, c.unitPrice, 0, 0, 0, c.date, const_c0.getNewVolumeUnit())));
+						return new Pair<>(value, modify((ExposureRecords) c0, c -> new ExposureRecord(c.curveName, c.currencyUnit, c.unitPrice, 0, 0, 0, c.date, c.volumeUnit)));
 					} else {
 						return new Pair<>(value, modify((ExposureRecords) c1, c -> {
 							final long nativeVolume = c.nativeVolume == 0 ? 0 : divideConstantByVolume(constant, c.nativeVolume);
