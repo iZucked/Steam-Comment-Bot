@@ -20,6 +20,7 @@ import java.security.cert.X509Certificate;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -70,6 +71,12 @@ public class HttpClientUtil {
 
 	public static OkHttpClient.Builder basicBuilder() {
 		final OkHttpClient.Builder builder = CLIENT.newBuilder();
+
+		// Set generous timeouts. Library defaults are 10 seconds
+		builder.connectTimeout(20, TimeUnit.SECONDS) //
+				.readTimeout(1, TimeUnit.MINUTES) //
+				.writeTimeout(1, TimeUnit.MINUTES) //
+		;
 
 		builder.hostnameVerifier(new HostnameVerifier() {
 
