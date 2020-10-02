@@ -231,32 +231,12 @@ public class ExposuresCalculator {
 				exposure.setTime(record.date);
 				exposure.setUnitPrice(record.unitPrice);
 				exposure.setVolumeMMBTU(isLong ? -record.mmbtuVolume /10: record.mmbtuVolume/10);
+				exposure.setVolumeNative(isLong ? -record.nativeVolume /10: record.nativeVolume/10);
+				exposure.setVolumeValueNative(isLong ? -record.nativeValue /10: record.nativeValue/10);
 
-				// Is the record unit in mmBtu? Then either it always was mmBtu OR we have
-				// converted the native units to mmBtu
-				if (record.volumeUnit == null || record.volumeUnit.isEmpty() || MMBTU.equalsIgnoreCase(record.volumeUnit)) {
-					exposure.setVolumeNative(isLong ? -record.nativeVolume /10: record.nativeVolume/10);
-					exposure.setVolumeValueNative(isLong ? -record.nativeValue /10: record.nativeValue/10);
-				} else {
-					// Not mmBtu? then the mmBtu field is still really native units
-					exposure.setVolumeNative(isLong ? -record.mmbtuVolume /10: record.mmbtuVolume/10);
-					// Perform units conversion - compute mmBtu equivalent of exposed native volume
-					long mmbtuVolume = record.mmbtuVolume/10;
-					for (final BasicUnitConversionData factor : lookupData.conversionMap.values()) {
-						if (factor.getTo().equalsIgnoreCase(MMBTU)) {
-							if (factor.getFrom().equalsIgnoreCase(record.volumeUnit)) {
-								mmbtuVolume /= factor.getFactor();
-								break;
-							}
-						}
-					}
-					exposure.setVolumeMMBTU(isLong ? -mmbtuVolume : mmbtuVolume);
-					final long nativeValue = multiplyVolumeByConstant(exposure.getVolumeNative(), exposure.getUnitPrice());
-					exposure.setVolumeValueNative(nativeValue);
-				}
 				final BasicHolidayCalendar holidays = lookupData.holidayCalendars.get(record.curveName);
 				final BasicPricingCalendar pricingCalendar = lookupData.pricingCalendars.get(record.curveName);
-				applyProRataCorrection(pricingCalendar, holidays, externalDateProvider.getEarliestTime().toLocalDate(), exposure);
+				applyProRataCorrection(pricingCalendar, holidays, exposure);
 				results.add(exposure);
 			}
 		}
@@ -656,7 +636,7 @@ public class ExposuresCalculator {
 		return (constantA * constantB) / HighScaleFactor;
 	}
 	
-	private void applyProRataCorrection(final BasicPricingCalendar pricingCalendar, final BasicHolidayCalendar holidays, final LocalDate cutoff, final BasicExposureRecord exposure) {
+	private void applyProRataCorrection(final BasicPricingCalendar pricingCalendar, final BasicHolidayCalendar holidays, final BasicExposureRecord exposure) {
 		if (pricingCalendar == null && holidays == null) {
 			return;
 		}
@@ -670,7 +650,7 @@ public class ExposuresCalculator {
 			}
 		}
 		{
-			double proRataCorrection = getProRataCoefficient(pricingEntry, holidays, cutoff);
+			double proRataCorrection = getProRataCoefficient(pricingEntry, holidays, LocalDate.of(2000, 1, 1));
 			long correction = OptimiserUnitConvertor.convertToInternalConversionFactor(proRataCorrection);
 			exposure.setVolumeMMBTU(multiplyVolumeByConstant(exposure.getVolumeMMBTU(), correction));
 			exposure.setVolumeNative(multiplyVolumeByConstant(exposure.getVolumeNative(), correction));
