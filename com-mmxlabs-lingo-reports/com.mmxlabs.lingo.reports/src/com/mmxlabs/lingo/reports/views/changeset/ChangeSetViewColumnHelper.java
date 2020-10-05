@@ -883,43 +883,31 @@ public class ChangeSetViewColumnHelper {
 			}
 			
 			@Override
-			protected int drawImages(final GC gc, GridItem item, int x, int insideMargin, boolean issuesChange, int capacityDelta, int nominalVesselDelta) {
+			protected int drawImages(final GC gc, GridItem item, int x, int insideMargin, boolean issuesChange, int addedIssues, int resolvedIssues) {
 				Image image =  imageGreenArrowDown;
-		        if ((issuesChange && (capacityDelta == 0 && nominalVesselDelta == 0)) 
-		        	|| Math.abs(capacityDelta) > 0 || Math.abs(nominalVesselDelta) > 0) {
+		        if (issuesChange) {
 		        	//Default case, places single arrow in the middle. 
 		        	int y = getBounds().y;
 		            y += (getBounds().height - image.getBounds().height)/2;
-		            int y2 = y;
+		            
+		            assert(addedIssues >= 0);
+		            assert(resolvedIssues >= 0);
 		            
 		            //If two arrows, adjust y position.
-		            if ((Math.abs(capacityDelta) > 0 && Math.abs(nominalVesselDelta) > 0) ||
-		                //Issues change, but deltas both zero.
-		            	(issuesChange && (capacityDelta == 0 && nominalVesselDelta == 0)))
+		            if (addedIssues > 0 && resolvedIssues > 0)
 		            {
 		            	y = getBounds().y;
 		            	y += (getBounds().height - (image.getBounds().height*2)) /2;
-		            	y2 = y + image.getBounds().height;		           		            
-		            }
+		            	int y2 = y + image.getBounds().height;		           		            
 		            
-		            if ((issuesChange && (capacityDelta == 0 && nominalVesselDelta == 0))) {
-						gc.drawImage(imageRedArrowUp, getBounds().x + x, y);						
+		            	gc.drawImage(imageRedArrowUp, getBounds().x + x, y);						
 						gc.drawImage(imageGreenArrowDown, getBounds().x + x, y2);
 		            }
-		            else {
-		            	if (capacityDelta < 0) {
-		            		gc.drawImage(imageGreenArrowDown, getBounds().x + x, y);
-		            	}
-		            	else if (capacityDelta > 0) {
-		            		gc.drawImage(imageRedArrowUp, getBounds().x + x, y);						
-		            	}
-
-		            	if (nominalVesselDelta < 0) {
-		            		gc.drawImage(imageGreenArrowDown, getBounds().x + x, y2);
-		            	}
-		            	else if (nominalVesselDelta > 0) {
-		            		gc.drawImage(imageRedArrowUp, getBounds().x + x, y2);						
-		            	}				
+		            else if (resolvedIssues > 0) {
+		            	gc.drawImage(imageGreenArrowDown, getBounds().x + x, y);
+		            }
+		            else if (addedIssues > 0) {
+		            	gc.drawImage(imageRedArrowUp, getBounds().x + x, y);									
 		            }
 					x += image.getBounds().width + insideMargin;
 		        }
@@ -2071,7 +2059,33 @@ public class ChangeSetViewColumnHelper {
 		final int nominalVesselCountAfter = (int)ChangeSetKPIUtil.getNominalVesselCount(change, ResultType.After);
 		return (!beforeViolations.equals(afterViolations)) || (nominalVesselCountBefore != nominalVesselCountAfter);
 	}
-    
+
+	static int getNOfAddedIssues(ChangeSetTableRow change) {
+		final Set<CapacityViolationType> beforeViolations = ScheduleModelKPIUtils.getCapacityViolations(ChangeSetKPIUtil.getEventGrouping(change, ResultType.Before));
+		final Set<CapacityViolationType> afterViolations = ScheduleModelKPIUtils.getCapacityViolations(ChangeSetKPIUtil.getEventGrouping(change, ResultType.After));
+		final int nominalVesselCountBefore = (int)ChangeSetKPIUtil.getNominalVesselCount(change, ResultType.Before);
+		final int nominalVesselCountAfter = (int)ChangeSetKPIUtil.getNominalVesselCount(change, ResultType.After);
+		afterViolations.removeAll(beforeViolations);
+		int addedIssues = afterViolations.size();
+		if (nominalVesselCountAfter > nominalVesselCountBefore) {
+			addedIssues++;
+		}
+		return addedIssues;
+	}
+
+	static int getNOfResolvedIssues(ChangeSetTableRow change) {
+		final Set<CapacityViolationType> beforeViolations = ScheduleModelKPIUtils.getCapacityViolations(ChangeSetKPIUtil.getEventGrouping(change, ResultType.Before));
+		final Set<CapacityViolationType> afterViolations = ScheduleModelKPIUtils.getCapacityViolations(ChangeSetKPIUtil.getEventGrouping(change, ResultType.After));
+		final int nominalVesselCountBefore = (int)ChangeSetKPIUtil.getNominalVesselCount(change, ResultType.Before);
+		final int nominalVesselCountAfter = (int)ChangeSetKPIUtil.getNominalVesselCount(change, ResultType.After);
+		beforeViolations.removeAll(afterViolations);
+		int resolvedIssues = beforeViolations.size();
+		if (nominalVesselCountAfter < nominalVesselCountBefore) {
+			resolvedIssues++;
+		}
+		return resolvedIssues;
+	}
+	
 	static int getCapacityDelta(ChangeSetTableRow change) {
 		final Set<CapacityViolationType> beforeViolations = ScheduleModelKPIUtils.getCapacityViolations(ChangeSetKPIUtil.getEventGrouping(change, ResultType.Before));
 		final Set<CapacityViolationType> afterViolations = ScheduleModelKPIUtils.getCapacityViolations(ChangeSetKPIUtil.getEventGrouping(change, ResultType.After));

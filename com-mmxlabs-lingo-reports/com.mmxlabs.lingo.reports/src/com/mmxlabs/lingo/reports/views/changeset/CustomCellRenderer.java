@@ -208,17 +208,14 @@ public class CustomCellRenderer extends GridCellRenderer
 				final Object data = item.getData();
 
 				if (data instanceof ChangeSetTableGroup) {
-/*					int capacityDelta = getCapacityDelta((ChangeSetTableGroup)data);
-					int nominalVesselDelta = getNominalVesselDelta((ChangeSetTableGroup)data);
-					drawImages(gc, gridItem, capacityDelta, nominalVesselDelta);*/
 					x = drawSingleImage(gc, item, x);
 				}
 
 				if (data instanceof ChangeSetTableRow) {
 					boolean issuesChange = ChangeSetViewColumnHelper.isIssueChange((ChangeSetTableRow)data);
-					int capacityDelta = ChangeSetViewColumnHelper.getCapacityDelta((ChangeSetTableRow)data);
-					int nominalVesselDelta = ChangeSetViewColumnHelper.getNominalVesselDelta((ChangeSetTableRow)data);
-					x = drawImages(gc, item, x, insideMargin, issuesChange, capacityDelta, nominalVesselDelta);
+					int addedIssues = ChangeSetViewColumnHelper.getNOfAddedIssues((ChangeSetTableRow)data);
+					int resolvedIssues = ChangeSetViewColumnHelper.getNOfResolvedIssues((ChangeSetTableRow)data);
+					x = drawImages(gc, item, x, insideMargin, issuesChange, addedIssues, resolvedIssues);
 				}
 			}
 			
@@ -362,7 +359,7 @@ public class CustomCellRenderer extends GridCellRenderer
 		return x;
 	}
 
-    protected int drawImages(GC gc, GridItem gridItem, int x, int insideMargin, boolean issuesChange, int capacityDelta, int nominalVesselDelta) {
+    protected int drawImages(GC gc, GridItem gridItem, int x, int insideMargin, boolean issuesChange, int addedIssues, int resolvedIssues) {
 		//By default do nothing. Overriden for specific issue column.
     	return x;
 	}
