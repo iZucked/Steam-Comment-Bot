@@ -42,10 +42,7 @@ import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridColumnGroup;
 import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.nebula.widgets.grid.internal.DefaultCellRenderer;
-import org.eclipse.nebula.widgets.grid.internal.TextUtils;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.TreeEvent;
@@ -56,12 +53,9 @@ import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.graphics.TextLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
-import com.google.common.base.Joiner;
 import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.common.util.ToLongTriFunction;
 import com.mmxlabs.license.features.LicenseFeatures;
@@ -1897,8 +1891,6 @@ public class ChangeSetViewColumnHelper {
 					String vesselAfter = change.getAfterVesselShortName();
 
 					long capacityDelta = afterViolations.size() - beforeViolations.size();
-
-					long netDelta = capacityDelta + nominalVesselDelta;
 					
 					final Set<CapacityViolationType> tmp = new HashSet<>(afterViolations);
 					tmp.removeAll(beforeViolations);
@@ -2000,7 +1992,6 @@ public class ChangeSetViewColumnHelper {
 					cell.setFont(boldFont);
 
 					final ChangeSetTableGroup group = (ChangeSetTableGroup) element;
-					final Metrics scenarioMetrics = group.getCurrentMetrics();
 					final DeltaMetrics deltaMetrics = group.getDeltaMetrics();
 					
 					//Check for nominal vessel changes.
