@@ -16,6 +16,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 
 public class DefaultADPProfileProvider extends AbstractADPProfileProvider {
@@ -42,6 +43,8 @@ public class DefaultADPProfileProvider extends AbstractADPProfileProvider {
 		final PurchaseContractProfile profile = createGenericModel(contract, volume * 12, unit);
 
 		final SubContractProfile<LoadSlot, PurchaseContract> subProfile = createCargoNumberSubProfile(contract, contract.getContractType(), "Volume", 12, volume, unit);
+		subProfile.setPort(contract.getPreferredPort());
+		
 		profile.getSubProfiles().add(subProfile);
 
 		return profile;
@@ -59,6 +62,8 @@ public class DefaultADPProfileProvider extends AbstractADPProfileProvider {
 		final SalesContractProfile profile = createGenericModel(contract, volume * 12, unit);
 
 		final SubContractProfile<DischargeSlot, SalesContract> subProfile = createCargoNumberSubProfile(contract, contract.getContractType(), "Volume", 12, volume, unit);
+		subProfile.setPort(contract.getPreferredPort());
+		
 		profile.getSubProfiles().add(subProfile);
 
 		return profile;

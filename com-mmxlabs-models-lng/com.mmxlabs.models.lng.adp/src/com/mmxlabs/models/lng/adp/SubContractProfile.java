@@ -6,15 +6,15 @@
  */
 package com.mmxlabs.models.lng.adp;
 
-import com.mmxlabs.models.lng.cargo.Slot;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ContractType;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.TimePeriod;
-import com.mmxlabs.models.lng.types.VolumeUnits;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -35,6 +35,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.adp.SubContractProfile#getConstraints <em>Constraints</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.SubContractProfile#getWindowSize <em>Window Size</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.SubContractProfile#getWindowSizeUnits <em>Window Size Units</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.adp.SubContractProfile#getPort <em>Port</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.adp.ADPPackage#getSubContractProfile()
@@ -293,5 +294,27 @@ public interface SubContractProfile<T extends Slot<U>, U extends Contract> exten
 	 * @generated
 	 */
 	void setWindowSizeUnits(TimePeriod value);
+
+	/**
+	 * Returns the value of the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Port</em>' reference.
+	 * @see #setPort(Port)
+	 * @see com.mmxlabs.models.lng.adp.ADPPackage#getSubContractProfile_Port()
+	 * @model required="true"
+	 * @generated
+	 */
+	Port getPort();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.adp.SubContractProfile#getPort <em>Port</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Port</em>' reference.
+	 * @see #getPort()
+	 * @generated
+	 */
+	void setPort(Port value);
 
 } // SubContractProfile

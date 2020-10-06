@@ -659,13 +659,22 @@ public interface ADPPackage extends EPackage {
 	int SUB_CONTRACT_PROFILE__WINDOW_SIZE_UNITS = 9;
 
 	/**
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUB_CONTRACT_PROFILE__PORT = 10;
+
+	/**
 	 * The number of structural features of the '<em>Sub Contract Profile</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SUB_CONTRACT_PROFILE_FEATURE_COUNT = 10;
+	int SUB_CONTRACT_PROFILE_FEATURE_COUNT = 11;
 
 	/**
 	 * The number of operations of the '<em>Sub Contract Profile</em>' class.
@@ -2591,6 +2600,17 @@ public interface ADPPackage extends EPackage {
 	EAttribute getSubContractProfile_WindowSizeUnits();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.adp.SubContractProfile#getPort <em>Port</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Port</em>'.
+	 * @see com.mmxlabs.models.lng.adp.SubContractProfile#getPort()
+	 * @see #getSubContractProfile()
+	 * @generated
+	 */
+	EReference getSubContractProfile_Port();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.adp.CustomSubProfileAttributes <em>Custom Sub Profile Attributes</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3519,6 +3539,14 @@ public interface ADPPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SUB_CONTRACT_PROFILE__WINDOW_SIZE_UNITS = eINSTANCE.getSubContractProfile_WindowSizeUnits();
+
+		/**
+		 * The meta object literal for the '<em><b>Port</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SUB_CONTRACT_PROFILE__PORT = eINSTANCE.getSubContractProfile_Port();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.adp.CustomSubProfileAttributes <em>Custom Sub Profile Attributes</em>}' class.

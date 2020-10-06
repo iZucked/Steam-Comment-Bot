@@ -4,13 +4,18 @@
  */
 package com.mmxlabs.models.lng.adp.presentation.views;
 
+import java.time.YearMonth;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -24,11 +29,18 @@ import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.PlatformUI;
 
+import com.google.ortools.linearsolver.MPConstraint;
+import com.google.ortools.linearsolver.MPObjective;
+import com.google.ortools.linearsolver.MPSolver;
+import com.google.ortools.linearsolver.MPVariable;
 import com.mmxlabs.models.lng.adp.ADPFactory;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.ContractProfile;
+import com.mmxlabs.models.lng.adp.PeriodDistribution;
+import com.mmxlabs.models.lng.adp.ProfileConstraint;
 import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
+import com.mmxlabs.models.lng.adp.impl.PeriodDistributionProfileConstraintImpl;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
@@ -115,9 +127,48 @@ public class SummaryPage extends ADPComposite {
 					return super.getElements(inputElement);
 				}
 			});
-			createColumn(purchasesViewer, "Contract", (profile) -> profile.getContract() == null ? "<unknown>" : profile.getContract().getName());
-			createColumn(purchasesViewer, "Num cargoes", (profile) -> Long.toString(editorData.getScenarioModel().getCargoModel().getLoadSlots().stream() //
+			
+			createColumn(purchasesViewer, "Contract", profile -> profile.getContract() == null ? "<unknown>" : profile.getContract().getName());
+			createColumn(purchasesViewer, "Generated cargoes", profile -> Long.toString(editorData.getScenarioModel().getCargoModel().getLoadSlots().stream() //
 					.filter(s -> profile.getContract() == s.getContract()).count()));
+			
+			createColumn(purchasesViewer, "Max cargoes", profile -> {
+				final EList<ProfileConstraint> constraints = profile.getConstraints();
+				if (constraints.isEmpty()) {
+					return Long.toString(editorData.getScenarioModel().getCargoModel().getLoadSlots().stream() //
+							.filter(s -> profile.getContract() == s.getContract()) //
+							.count());
+				} else {				
+					HashMap<YearMonth, Long> variableBounds = new HashMap<YearMonth, Long>();
+					editorData.getScenarioModel().getCargoModel().getLoadSlots().stream() //
+							.filter(slot -> profile.getContract() == slot.getContract())
+							.forEach(slot -> {
+								YearMonth ym = YearMonth.from(slot.getWindowStart());
+								Long currentBound = variableBounds.get(ym);
+								if (currentBound == null) {
+									variableBounds.put(ym, 1L);
+								} else {
+									variableBounds.put(ym, variableBounds.get(ym)+1);
+								}
+							});
+					MPSolver solver = createSolver();
+					buildProblem(solver, variableBounds, constraints);
+					if (solver.numConstraints() == 0) {
+						return Long.toString(variableBounds.values().stream().collect(Collectors.summingLong(Long::longValue)));
+					} else {
+						final MPSolver.ResultStatus resultStatus = solver.solve();
+						if (resultStatus != MPSolver.ResultStatus.OPTIMAL) {
+							final Double bestBound = Math.floor(solver.objective().bestBound());
+							final long longBestBound = bestBound.longValue();
+							return Long.toString(longBestBound);
+						} else {
+							final Double objVal = solver.objective().value();
+							final long longObjVal = objVal.longValue();
+							return Long.toString(longObjVal);
+						}
+					}
+				}
+			});
 		}
 		{
 			salesViewer = new GridTableViewer(mainComposite);
@@ -146,9 +197,47 @@ public class SummaryPage extends ADPComposite {
 				}
 			});
 
-			createColumn(salesViewer, "Contract", (profile) -> profile.getContract().getName());
-			createColumn(salesViewer, "Cargoes", (profile) -> Long.toString(editorData.getScenarioModel().getCargoModel().getDischargeSlots().stream() //
+			createColumn(salesViewer, "Contract", profile -> profile.getContract().getName());
+			createColumn(salesViewer, "Generated cargoes", profile -> Long.toString(editorData.getScenarioModel().getCargoModel().getDischargeSlots().stream() //
 					.filter(s -> profile.getContract() == s.getContract()).count()));
+			createColumn(salesViewer, "Max cargoes", profile -> {
+				final EList<ProfileConstraint> constraints = profile.getConstraints();				
+				if (constraints.isEmpty()) {
+					return Long.toString(editorData.getScenarioModel().getCargoModel().getDischargeSlots().stream() //
+							.filter(s -> profile.getContract() == s.getContract())//
+							.count());
+				} else {
+					HashMap<YearMonth, Long> trivialBounds = new HashMap<YearMonth, Long>();
+					editorData.getScenarioModel().getCargoModel().getDischargeSlots().stream() //
+							.filter(slot -> profile.getContract() == slot.getContract())
+							.forEach(slot -> {
+								YearMonth ym = YearMonth.from(slot.getWindowStart());
+								Long currentBound = trivialBounds.get(ym);
+								if (currentBound == null) {
+									trivialBounds.put(ym, 1L);
+								} else {
+									trivialBounds.put(ym, trivialBounds.get(ym)+1);
+								}
+							});
+					MPSolver solver = createSolver();
+					buildProblem(solver, trivialBounds, constraints);
+					if (solver.numConstraints() == 0) {
+						return Long.toString(trivialBounds.values().stream().collect(Collectors.summingLong(Long::longValue)));
+					} else {
+						final MPSolver.ResultStatus resultStatus = solver.solve();
+						if (resultStatus != MPSolver.ResultStatus.OPTIMAL) {
+							final Double bestBound = Math.floor(solver.objective().bestBound());
+							final long longBestBound = bestBound.longValue();
+							return Long.toString(longBestBound);
+						} else {
+							final Double objVal = solver.objective().value();
+							final long longObjVal = objVal.longValue();
+							return Long.toString(longObjVal);
+						}
+					}
+				}
+				
+			});
 		}
 		{
 
@@ -250,10 +339,43 @@ public class SummaryPage extends ADPComposite {
 				}
 				return "";
 			}
-
 		});
 		col.getColumn().setWidth(100);
 		col.getColumn().setText(name);
 	}
-
+	
+	private void buildProblem(MPSolver solver, HashMap<YearMonth, Long> variableBounds, final EList<ProfileConstraint> constraints) {
+		HashMap<YearMonth, MPVariable> dateToMPVarMap = new HashMap<YearMonth, MPVariable>();
+		MPObjective obj = solver.objective();
+		obj.setMaximization();
+		variableBounds.forEach((ym, upperbound) -> {
+			MPVariable mpVar = solver.makeIntVar(0, upperbound, "");
+			dateToMPVarMap.put(ym, mpVar);
+			obj.setCoefficient(mpVar, 1);
+		});
+		constraints.forEach(constraint -> ((PeriodDistributionProfileConstraintImpl) constraint).getDistributions().stream() //
+				.filter(PeriodDistribution::isSetMaxCargoes)
+				.forEach(profileConstraint -> {
+					final EList<YearMonth> range = profileConstraint.getRange();
+					if (range.size() == 1) {
+						final YearMonth ym = range.get(0);
+						final long upperbound = profileConstraint.getMaxCargoes();
+						if (variableBounds.get(ym) > upperbound) {
+							variableBounds.put(ym, upperbound);
+							dateToMPVarMap.get(ym).setUb(upperbound);
+						}
+					} else {
+						MPConstraint mpConstraint = solver.makeConstraint(0, profileConstraint.getMaxCargoes());
+						range.forEach(ym -> mpConstraint.setCoefficient(dateToMPVarMap.get(ym), 1));
+					}
+				}));
+	}
+	
+	private static @NonNull MPSolver createSolver() {
+		try {
+			return new MPSolver("LNGSolver", MPSolver.OptimizationProblemType.valueOf("CBC_MIXED_INTEGER_PROGRAMMING"));
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException(e);
+		}
+	}
 }

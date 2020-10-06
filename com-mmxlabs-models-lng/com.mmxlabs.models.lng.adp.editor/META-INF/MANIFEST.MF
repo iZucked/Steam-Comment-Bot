@@ -58,3 +58,4 @@ Require-Bundle: org.eclipse.core.runtime,
  org.slf4j.api;bundle-version="1.7.10"
 Bundle-ActivationPolicy: lazy
 Bundle-Module: com.mmxlabs.models.lng.adp.editor.internal.ADPActivatorModule
+Import-Package: com.google.ortools.linearsolver

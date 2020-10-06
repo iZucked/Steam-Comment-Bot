@@ -844,6 +844,16 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getSubContractProfile_Port() {
+		return (EReference)subContractProfileEClass.getEStructuralFeatures().get(10);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getCustomSubProfileAttributes() {
 		return customSubProfileAttributesEClass;
 	}
@@ -1393,6 +1403,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		createEReference(subContractProfileEClass, SUB_CONTRACT_PROFILE__CONSTRAINTS);
 		createEAttribute(subContractProfileEClass, SUB_CONTRACT_PROFILE__WINDOW_SIZE);
 		createEAttribute(subContractProfileEClass, SUB_CONTRACT_PROFILE__WINDOW_SIZE_UNITS);
+		createEReference(subContractProfileEClass, SUB_CONTRACT_PROFILE__PORT);
 
 		customSubProfileAttributesEClass = createEClass(CUSTOM_SUB_PROFILE_ATTRIBUTES);
 
@@ -1517,6 +1528,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		CommercialPackage theCommercialPackage = (CommercialPackage)EPackage.Registry.INSTANCE.getEPackage(CommercialPackage.eNS_URI);
 		FleetPackage theFleetPackage = (FleetPackage)EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI);
 		TypesPackage theTypesPackage = (TypesPackage)EPackage.Registry.INSTANCE.getEPackage(TypesPackage.eNS_URI);
+		PortPackage thePortPackage = (PortPackage)EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI);
 
 		// Create type parameters
 		ETypeParameter contractProfileEClass_T = addETypeParameter(contractProfileEClass, "T");
@@ -1615,6 +1627,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		initEReference(getSubContractProfile_Constraints(), this.getSubProfileConstraint(), null, "constraints", null, 0, -1, SubContractProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSubContractProfile_WindowSize(), ecorePackage.getEInt(), "windowSize", "1", 1, 1, SubContractProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSubContractProfile_WindowSizeUnits(), theTypesPackage.getTimePeriod(), "windowSizeUnits", "MONTHS", 1, 1, SubContractProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSubContractProfile_Port(), thePortPackage.getPort(), null, "port", null, 1, 1, SubContractProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(customSubProfileAttributesEClass, CustomSubProfileAttributes.class, "CustomSubProfileAttributes", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 

@@ -14,8 +14,8 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.adp.ADPPackage;
-import com.mmxlabs.models.lng.adp.presentation.editors.NominatedVesselEditorWrapper;
 import com.mmxlabs.models.lng.adp.presentation.editors.ShippingDaysRestrictionInlineEditorChangedListener;
+import com.mmxlabs.models.lng.port.ui.editorpart.TextualPortReferenceInlineEditor;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
@@ -77,6 +77,7 @@ public class SubContractProfileComponentHelper extends BaseComponentHelper {
 		add_constraintsEditor(detailComposite, topClass);
 		add_windowSizeEditor(detailComposite, topClass);
 		add_windowSizeUnitsEditor(detailComposite, topClass);
+		add_portEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the name feature on SubContractProfile
@@ -180,5 +181,14 @@ public class SubContractProfileComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_windowSizeUnitsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.SUB_CONTRACT_PROFILE__WINDOW_SIZE_UNITS));
+	}
+
+	/**
+	 * Create the editor for the port feature on SubContractProfile
+	 *
+	 * @generated NOT using custom editor
+	 */
+	protected void add_portEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(new TextualPortReferenceInlineEditor(ADPPackage.Literals.SUB_CONTRACT_PROFILE__PORT));
 	}
 }

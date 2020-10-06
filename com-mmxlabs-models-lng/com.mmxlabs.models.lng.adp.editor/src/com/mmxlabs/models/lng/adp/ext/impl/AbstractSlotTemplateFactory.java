@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.adp.ext.impl;
 
 import java.time.YearMonth;
 
+import com.mmxlabs.common.util.exceptions.UserFeedbackException;
 import com.mmxlabs.models.lng.adp.ContractProfile;
 import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
@@ -19,6 +20,7 @@ import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ContractType;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
+import com.mmxlabs.models.lng.port.Port;
 
 public class AbstractSlotTemplateFactory implements ISlotTemplateFactory {
 
@@ -59,8 +61,12 @@ public class AbstractSlotTemplateFactory implements ISlotTemplateFactory {
 		PurchaseContract contract = profile.getContract();
 
 		slot.setContract(contract);
-		slot.setPort(contract.getPreferredPort());
-
+		final Port port = subProfile.getPort();
+		if (port == null) {
+			throw new UserFeedbackException("A port must be provided when generating slots.");
+		}
+		slot.setPort(port);
+		
 		if (subProfile.getContractType() == ContractType.DES) {
 			slot.setDESPurchase(true);
 			slot.setNominatedVessel(subProfile.getNominatedVessel());
@@ -75,7 +81,11 @@ public class AbstractSlotTemplateFactory implements ISlotTemplateFactory {
 
 		SalesContract contract = profile.getContract();
 		slot.setContract(contract);
-		slot.setPort(contract.getPreferredPort());
+		final Port port = subProfile.getPort();
+		if (port == null) {
+			throw new UserFeedbackException("A port must be provided when generating slots.");
+		}
+		slot.setPort(port);
 		if (subProfile.getContractType() == ContractType.FOB) {
 			slot.setFOBSale(true);
 			slot.setNominatedVessel(subProfile.getNominatedVessel());
