@@ -12,10 +12,13 @@ import org.eclipse.swt.widgets.Menu;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoType;
+import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Row;
 import com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart.BulkTradesTablePane;
 import com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart.ColumnFilters;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorAction;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 
 public class ShippedCargoBasedFilterHandler implements ITradesBasedFilterHandler {
@@ -30,6 +33,7 @@ public class ShippedCargoBasedFilterHandler implements ITradesBasedFilterHandler
 				final Action nonShippedAction = new RunnableAction("Non Shipped", () -> addCargoFilter(activeFilters, viewer, ShippedCargoFilterOption.NON_SHIPPED));
 				final Action desAction = new RunnableAction("DES", () -> addCargoFilter(activeFilters, viewer, ShippedCargoFilterOption.DES));
 				final Action fobAction = new RunnableAction("FOB", () -> addCargoFilter(activeFilters, viewer, ShippedCargoFilterOption.FOB));
+				final Action nominalAction = new RunnableAction("Nominal", () -> addCargoFilter(activeFilters, viewer, ShippedCargoFilterOption.NOMINAL));
 
 				// Detect currently selected option (if any)
 				for (final ITradesBasedFilterHandler f : activeFilters) {
@@ -51,6 +55,9 @@ public class ShippedCargoBasedFilterHandler implements ITradesBasedFilterHandler
 							case FOB:
 								fobAction.setChecked(true);
 								break;
+							case NOMINAL:
+								nominalAction.setChecked(true);
+								break;
 							default:
 								break;
 							}
@@ -62,6 +69,7 @@ public class ShippedCargoBasedFilterHandler implements ITradesBasedFilterHandler
 				addActionToMenu(nonShippedAction, menu);
 				addActionToMenu(desAction, menu);
 				addActionToMenu(fobAction, menu);
+				addActionToMenu(nominalAction, menu);
 
 			}
 
@@ -113,7 +121,7 @@ public class ShippedCargoBasedFilterHandler implements ITradesBasedFilterHandler
 	}
 
 	private enum ShippedCargoFilterOption {
-		NONE, SHIPPED, NON_SHIPPED, DES, FOB
+		NONE, SHIPPED, NON_SHIPPED, DES, FOB, NOMINAL
 	}
 
 	private class CargoBasedFilterHandler implements ITradesBasedFilterHandler {
@@ -160,6 +168,21 @@ public class ShippedCargoBasedFilterHandler implements ITradesBasedFilterHandler
 					return cargo != null && cargoType == CargoType.DES;
 				case FOB:
 					return cargo != null && cargoType == CargoType.FOB;
+				case NOMINAL:
+					if (cargo != null) {
+						final VesselAssignmentType cargoVesselAT = cargo.getVesselAssignmentType();
+						final CharterInMarket cargoCharterInMarket;
+						if (cargoVesselAT instanceof CharterInMarket) {
+							cargoCharterInMarket = (CharterInMarket) cargoVesselAT;
+						} else if (cargoVesselAT instanceof CharterInMarketOverride) {
+							cargoCharterInMarket = ((CharterInMarketOverride) cargoVesselAT).getCharterInMarket();
+						} else {
+							return false;
+						}
+						return cargoCharterInMarket.isNominal();
+					} else {
+						return false;
+					}
 				}
 			}
 			return false;

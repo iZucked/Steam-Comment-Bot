@@ -112,6 +112,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CargoType;
+import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -153,12 +154,13 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.types.DESPurchaseDealType;
 import com.mmxlabs.models.lng.types.FOBSaleDealType;
-import com.mmxlabs.models.lng.types.TimePeriod;
+import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.lng.ui.ImageConstants;
 import com.mmxlabs.models.lng.ui.LngUIActivator;
@@ -2095,7 +2097,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	}
 
 	private enum ShippedCargoFilterOption {
-		NONE, SHIPPED, NON_SHIPPED, DES, FOB
+		NONE, SHIPPED, NON_SHIPPED, DES, FOB, NOMINAL
 	}
 
 	private class ShippedCargoFilter extends ViewerFilter {
@@ -2124,6 +2126,21 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				return cargo != null && cargoType == CargoType.DES;
 			case FOB:
 				return cargo != null && cargoType == CargoType.FOB;
+			case NOMINAL:
+				if (cargo != null) {
+					final VesselAssignmentType cargoVesselAT = cargo.getVesselAssignmentType();
+					final CharterInMarket cargoCharterInMarket;
+					if (cargoVesselAT instanceof CharterInMarket) {
+						cargoCharterInMarket = (CharterInMarket) cargoVesselAT;
+					} else if (cargoVesselAT instanceof CharterInMarketOverride) {
+						cargoCharterInMarket = ((CharterInMarketOverride) cargoVesselAT).getCharterInMarket();
+					} else {
+						return false;
+					}
+					return cargoCharterInMarket.isNominal();
+				} else {
+					return false;
+				}
 			}
 			return false;
 		}
@@ -2376,10 +2393,18 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 							scenarioViewer.refresh(false);
 						}
 					};
+					final Action nominalsAction = new Action("Nominal") {
+						@Override
+						public void run() {
+							shippedCargoFilter.option = ShippedCargoFilterOption.NOMINAL;
+							scenarioViewer.refresh(false);
+						}
+					};
 					addActionToMenu(cargoesAction, menu);
 					addActionToMenu(openAction, menu);
 					addActionToMenu(longsAction, menu);
 					addActionToMenu(shortsAction, menu);
+					addActionToMenu(nominalsAction, menu);
 				}
 			};
 			addActionToMenu(dmcaShippedCargos, menu);
