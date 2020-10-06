@@ -70,6 +70,8 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  */
 public class ExposuresCalculator {
 
+	private static final String MMBTU = "mmbtu";
+
 	@Inject
 	@Named(SchedulerConstants.Parser_Commodity)
 	private SeriesParser commodityIndices;
@@ -91,7 +93,6 @@ public class ExposuresCalculator {
 	@Named(SchedulerConstants.COMPUTE_EXPOSURES)
 	private boolean exposuresEnabled;
 	
-	//final LocalDate dateZero = LocalDate.of(2000, 1, 1);
 	final long HighScaleFactor = 1_000_000;
 	final int ScaleFactor = 1_000;
 	
@@ -230,32 +231,12 @@ public class ExposuresCalculator {
 				exposure.setTime(record.date);
 				exposure.setUnitPrice(record.unitPrice);
 				exposure.setVolumeMMBTU(isLong ? -record.mmbtuVolume /10: record.mmbtuVolume/10);
+				exposure.setVolumeNative(isLong ? -record.nativeVolume /10: record.nativeVolume/10);
+				exposure.setVolumeValueNative(isLong ? -record.nativeValue /10: record.nativeValue/10);
 
-				// Is the record unit in mmBtu? Then either it always was mmBtu OR we have
-				// converted the native units to mmBtu
-				if (record.volumeUnit == null || record.volumeUnit.isEmpty() || "mmbtu".equalsIgnoreCase(record.volumeUnit)) {
-					exposure.setVolumeNative(isLong ? -record.nativeVolume /10: record.nativeVolume/10);
-					exposure.setVolumeValueNative(isLong ? -record.nativeValue /10: record.nativeValue/10);
-				} else {
-					// Not mmBtu? then the mmBtu field is still really native units
-					exposure.setVolumeNative(isLong ? -record.mmbtuVolume /10: record.mmbtuVolume/10);
-					// Perform units conversion - compute mmBtu equivalent of exposed native volume
-					long mmbtuVolume = record.mmbtuVolume/10;
-					for (final BasicUnitConversionData factor : lookupData.conversionMap.values()) {
-						if (factor.getTo().equalsIgnoreCase("mmbtu")) {
-							if (factor.getFrom().equalsIgnoreCase(record.volumeUnit)) {
-								mmbtuVolume /= factor.getFactor();
-								break;
-							}
-						}
-					}
-					exposure.setVolumeMMBTU(isLong ? -mmbtuVolume : mmbtuVolume);
-					final long nativeValue = multiplyVolumeByConstant(exposure.getVolumeNative(), exposure.getUnitPrice());
-					exposure.setVolumeValueNative(nativeValue);
-				}
 				final BasicHolidayCalendar holidays = lookupData.holidayCalendars.get(record.curveName);
 				final BasicPricingCalendar pricingCalendar = lookupData.pricingCalendars.get(record.curveName);
-				applyProRataCorrection(pricingCalendar, holidays, externalDateProvider.getEarliestTime().toLocalDate(), exposure);
+				applyProRataCorrection(pricingCalendar, holidays, exposure);
 				results.add(exposure);
 			}
 		}
@@ -362,7 +343,7 @@ public class ExposuresCalculator {
 			final Pair<Integer, IExposureNode> baseNodeData = getExposureNode(inputRecord, scurveNode.getBase(), date, lookupData);
 
 			double timesValue;
-			double foo = baseNodeData.getFirst() / HighScaleFactor;
+			double foo = baseNodeData.getFirst() / (double)HighScaleFactor;
 			if (foo < scurveNode.getLowerThan()) {
 				timesValue = scurveNode.getA1();
 			} else if (foo > scurveNode.getHigherThan()) {
@@ -443,12 +424,12 @@ public class ExposuresCalculator {
 					final Constant const_c1 = (Constant) c1;
 					final int constant = const_c1.getConstant();
 					return new Pair<>((int) multiplyConstantByConstant(pc0.getFirst(), pc1.getFirst()), modify((ExposureRecords) c0,
-							c -> new ExposureRecord(c.curveName, c.currencyUnit, c.unitPrice, multiplyVolumeByConstant(c.nativeVolume, constant), multiplyVolumeByConstant(c.nativeValue, constant), multiplyVolumeByConstant(c.mmbtuVolume, constant), c.date, const_c1.getNewVolumeUnit())));
+							c -> new ExposureRecord(c.curveName, c.currencyUnit, c.unitPrice, multiplyVolumeByConstant(c.nativeVolume, constant), multiplyVolumeByConstant(c.nativeValue, constant), multiplyVolumeByConstant(c.mmbtuVolume, constant), c.date, c.volumeUnit)));
 				} else if (c0 instanceof Constant && c1 instanceof ExposureRecords) {
 					final Constant const_c0 = (Constant) c0;
 					final int constant = ((Constant) c0).getConstant();
 					return new Pair<>((int) multiplyConstantByConstant(pc0.getFirst(), pc1.getFirst()), modify((ExposureRecords) c1,
-							c -> new ExposureRecord(c.curveName, c.currencyUnit, c.unitPrice, multiplyVolumeByConstant(c.nativeVolume, constant), multiplyVolumeByConstant(c.nativeValue, constant), multiplyVolumeByConstant(c.mmbtuVolume, constant), c.date, const_c0.getNewVolumeUnit())));
+							c -> new ExposureRecord(c.curveName, c.currencyUnit, c.unitPrice, multiplyVolumeByConstant(c.nativeVolume, constant), multiplyVolumeByConstant(c.nativeValue, constant), multiplyVolumeByConstant(c.mmbtuVolume, constant), c.date, c.volumeUnit)));
 				} else {
 					return new Pair<>((int) multiplyConstantByConstant(pc0.getFirst(), pc1.getFirst()), merge((ExposureRecords) c0, (ExposureRecords) c1, (c_0, c_1) -> new ExposureRecord(c_0.curveName, c_0.currencyUnit, c_0.unitPrice,
 							(c_0.nativeVolume * c_1.nativeVolume)/10, (c_0.nativeValue * c_1.nativeValue)/10, (c_0.mmbtuVolume * c_1.mmbtuVolume)/10, c_0.date, c_0.volumeUnit)));
@@ -468,13 +449,13 @@ public class ExposuresCalculator {
 
 					final int constant = const_c1.getConstant();
 					if (constant == 0.0) {
-						return new Pair<>(value, modify((ExposureRecords) c0, c -> new ExposureRecord(c.curveName, c.currencyUnit, c.unitPrice, 0, 0, 0, c.date, const_c1.getNewVolumeUnit())));
+						return new Pair<>(value, modify((ExposureRecords) c0, c -> new ExposureRecord(c.curveName, c.currencyUnit, c.unitPrice, 0, 0, 0, c.date, c.volumeUnit)));
 					} else {
 						return new Pair<>(value, modify((ExposureRecords) c0, c -> {
 									final long nativeVolume = divideVolumeByConstant(c.nativeVolume, constant);
 									final long nativeValue = divideVolumeByConstant(c.nativeValue, constant);
 									final long mmbtuVolume = divideVolumeByConstant(c.mmbtuVolume, constant);
-									return new ExposureRecord(c.curveName, c.currencyUnit, c.unitPrice, nativeVolume, nativeValue, mmbtuVolume, c.date, const_c1.getNewVolumeUnit());
+									return new ExposureRecord(c.curveName, c.currencyUnit, c.unitPrice, nativeVolume, nativeValue, mmbtuVolume, c.date, c.volumeUnit);
 								}));
 					}
 				} else if (c0 instanceof Constant && c1 instanceof ExposureRecords) {
@@ -483,7 +464,7 @@ public class ExposuresCalculator {
 
 					final int constant = const_c0.getConstant();
 					if (constant == 0.0) {
-						return new Pair<>(value, modify((ExposureRecords) c0, c -> new ExposureRecord(c.curveName, c.currencyUnit, c.unitPrice, 0, 0, 0, c.date, const_c0.getNewVolumeUnit())));
+						return new Pair<>(value, modify((ExposureRecords) c0, c -> new ExposureRecord(c.curveName, c.currencyUnit, c.unitPrice, 0, 0, 0, c.date, c.volumeUnit)));
 					} else {
 						return new Pair<>(value, modify((ExposureRecords) c1, c -> {
 							final long nativeVolume = c.nativeVolume == 0 ? 0 : divideConstantByVolume(constant, c.nativeVolume);
@@ -539,7 +520,7 @@ public class ExposuresCalculator {
 			// Perform units conversion.
 			final String u = commodityNode.getVolumeUnit();
 			for (final BasicUnitConversionData factor : lookupData.conversionMap.values()) {
-				if (factor.getTo().equalsIgnoreCase("mmbtu")) {
+				if (factor.getTo().equalsIgnoreCase(MMBTU)) {
 					if (factor.getFrom().equalsIgnoreCase(u)) {
 						nativeVolume *= factor.getFactor();
 						break;
@@ -655,7 +636,7 @@ public class ExposuresCalculator {
 		return (constantA * constantB) / HighScaleFactor;
 	}
 	
-	private void applyProRataCorrection(final BasicPricingCalendar pricingCalendar, final BasicHolidayCalendar holidays, final LocalDate cutoff, final BasicExposureRecord exposure) {
+	private void applyProRataCorrection(final BasicPricingCalendar pricingCalendar, final BasicHolidayCalendar holidays, final BasicExposureRecord exposure) {
 		if (pricingCalendar == null && holidays == null) {
 			return;
 		}
@@ -669,7 +650,7 @@ public class ExposuresCalculator {
 			}
 		}
 		{
-			double proRataCorrection = getProRataCoefficient(pricingEntry, holidays, cutoff);
+			double proRataCorrection = getProRataCoefficient(pricingEntry, holidays, LocalDate.of(2000, 1, 1));
 			long correction = OptimiserUnitConvertor.convertToInternalConversionFactor(proRataCorrection);
 			exposure.setVolumeMMBTU(multiplyVolumeByConstant(exposure.getVolumeMMBTU(), correction));
 			exposure.setVolumeNative(multiplyVolumeByConstant(exposure.getVolumeNative(), correction));

@@ -12,8 +12,6 @@ import org.eclipse.emf.validation.EMFEventType;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
-import com.mmxlabs.license.features.KnownFeatures;
-import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -45,7 +43,7 @@ public class LoadSlotVolumeConstraint extends AbstractModelMultiConstraint {
 			// This is being triggered by a batch mode validation.
 			if (eventType == EMFEventType.NULL) {
 
-				final Slot<?> slot = (Slot) object;
+				final Slot<?> slot = (Slot<?>) object;
 				if (slot instanceof SpotSlot) {
 					return Activator.PLUGIN_ID;
 				}

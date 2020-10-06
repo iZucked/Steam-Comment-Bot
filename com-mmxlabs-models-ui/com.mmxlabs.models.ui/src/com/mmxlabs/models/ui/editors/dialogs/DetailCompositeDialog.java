@@ -911,12 +911,8 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 			sel.popExtraValidationContext();
 		}
 	}
-
-	public int open(final IScenarioEditingLocation location, final MMXRootObject rootObject, final Collection<EObject> objects, final boolean locked) {
-		return open(location, rootObject, null, objects, locked);
-	}
 	
-	public int open(final IScenarioEditingLocation location, final MMXRootObject rootObject, final EObject eContainerOverride, final Collection<EObject> objects, final boolean locked) {
+	public int open(final IScenarioEditingLocation location, final MMXRootObject rootObject, final Collection<EObject> objects, final boolean locked) {
 		this.location = location;
 		final IScenarioEditingLocation sel = location;
 		dialogValidationSupport = new DialogValidationSupport(sel.getExtraValidationContext());
@@ -932,6 +928,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 
 		try {
 			final int value = open();
+			
 			if (value == OK) {
 				final EditingDomain editingDomain = commandHandler.getEditingDomain();
 				if (returnDuplicates) {
@@ -970,7 +967,6 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 					}
 
 				} else {
-
 					final CompoundCommand cc = new CompoundCommand();
 
 					if (editingDomain instanceof CommandProviderAwareEditingDomain) {
@@ -993,8 +989,8 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 					}
 
 					final boolean isExecutable = finalCommand.canExecute();
+					
 					if (isExecutable) {
-
 						executeFinalCommand(finalCommand);
 
 					} else {

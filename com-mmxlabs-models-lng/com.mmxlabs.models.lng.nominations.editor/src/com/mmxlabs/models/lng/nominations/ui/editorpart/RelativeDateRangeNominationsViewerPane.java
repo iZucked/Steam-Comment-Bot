@@ -172,6 +172,7 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 			//if (!getControl().isDisposed()) {
 			//	refresh(true);
 			//}
+			ViewerHelper.refresh(viewer, false);
 		}
 
 		/**
@@ -447,9 +448,9 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 				//In case somehow we select nothing and manage to duplicate somehow.
 				if (nominations.isEmpty()) return;
 					
-				//Copy the objects.
-				Collection<EObject> duplicatedNoms = EcoreUtil.copyAll(nominations);
-
+				//Create new UIDs and if generated nomination, null out specUUId for generated nominations.
+				Collection<EObject> duplicatedNoms = NominationsModelUtils.duplicateNominations(nominations);
+				
 				//Create the add command.
 				EditingDomain domain = part.getDefaultCommandHandler().getEditingDomain();
 				NominationsModel owner = NominationsModelUtils.getNominationsModel(jointModelEditor);

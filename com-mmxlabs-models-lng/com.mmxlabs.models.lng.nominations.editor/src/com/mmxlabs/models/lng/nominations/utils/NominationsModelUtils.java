@@ -8,13 +8,17 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -42,6 +46,7 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
@@ -728,5 +733,28 @@ public class NominationsModelUtils {
 			sb.append("=").append(getNominatedValue(sm, n));
 		}
 		return sb.toString();
+	}
+
+	public static Collection<EObject> duplicateNominations(ArrayList<EObject> nominations) {
+		//Copy the objects.
+		Collection<EObject> duplicatedNoms = EcoreUtil.copyAll(nominations);
+		
+		for (EObject duplicateNom : duplicatedNoms) {
+			
+			if (duplicateNom instanceof AbstractNomination) {
+				AbstractNomination dn = (AbstractNomination)duplicateNom;
+
+				//Create new UIDs and if generated nomination. 
+				((UUIDObjectImpl)dn).setUuid(UUID.randomUUID().toString());
+
+				if (dn.getSpecUuid() != null) {
+					//Null out specUUId as this will no longer be a generated nomination after duplication.
+					dn.setSpecUuid(null);
+					dn.unsetSpecUuid();
+				}
+			}
+		}
+		
+		return duplicatedNoms;
 	}
 }

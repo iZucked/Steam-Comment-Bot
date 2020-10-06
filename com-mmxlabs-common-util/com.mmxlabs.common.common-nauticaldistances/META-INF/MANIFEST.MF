@@ -8,7 +8,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-SymbolicName: com.mmxlabs.common.common-nauticaldistances
 Automatic-Module-Name: com.mmxlabs.common.common-nauticaldistances
 Bundle-Vendor: Minimax Labs Ltd.
-Bundle-Version: 4.10.20.qualifier
+Bundle-Version: 4.10.23.qualifier
 Export-Package: com.mmxlabs.common.nauticaldistances
 Import-Package: javax.imageio,
  org.slf4j;version="[1.5,2)"

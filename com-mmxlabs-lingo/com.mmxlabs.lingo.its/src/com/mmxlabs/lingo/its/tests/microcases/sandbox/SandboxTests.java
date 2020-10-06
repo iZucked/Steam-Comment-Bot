@@ -16,7 +16,9 @@ import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.lngdataserver.lng.importers.creator.ScenarioBuilder;
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
+import com.mmxlabs.models.lng.analytics.BuyMarket;
 import com.mmxlabs.models.lng.analytics.BuyOption;
+import com.mmxlabs.models.lng.analytics.SellMarket;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.SolutionOption;
@@ -39,6 +41,7 @@ import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.transformer.its.RequireFeature;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.types.DESPurchaseDealType;
@@ -576,5 +579,51 @@ public class SandboxTests extends AbstractSandboxTestCase {
 		}
 
 		Assertions.assertTrue(ds1Solution && ds2Solution);
+	}
+	
+	/**
+	 * Simple Spot buy to spot sell.
+	 */
+	@Test
+	public void testSpotToSpot() {
+		final SandboxModelBuilder sandboxBuilder = SandboxModelBuilder.createSandbox(ScenarioModelUtil.getAnalyticsModel(scenarioDataProvider));
+		
+
+		sandboxBuilder.setPortfolioMode(false);
+		sandboxBuilder.setPortfolioBreakevenMode(false);
+		sandboxBuilder.setManualSandboxMode();
+		
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
+		
+		final ShippingOption shipping = sandboxBuilder.createRoundtripOption(vessel, importDefaultEntity(), "30000");
+
+		final Port pFuttsu = portFinder.findPortById(InternalDataConstants.PORT_FUTTSU);
+		final Port pDarwin = portFinder.findPortById(InternalDataConstants.PORT_DARWIN);
+		
+		final SpotMarket fobPurchaseAustralia = spotMarketsModelBuilder.makeFOBPurchaseMarket("FOB Purchase Australia", //
+				pDarwin, importDefaultEntity(), "5", 23.3).build();
+		final SpotMarket desSaleJapan = spotMarketsModelBuilder.makeDESSaleMarket("DES Sale Japan", //
+				pFuttsu, importDefaultEntity(), "10").build();
+		
+		final BuyMarket buyMarket1 = sandboxBuilder.createBuyMarketOption(fobPurchaseAustralia);
+		final SellMarket sellMarket1 = sandboxBuilder.createSellMarketOption(desSaleJapan);
+
+		sandboxBuilder.createPartialCaseRow(buyMarket1, sellMarket1, shipping);
+
+		evaluateSandbox(sandboxBuilder.getOptionAnalysisModel());
+
+		final AbstractSolutionSet result = sandboxBuilder.getOptionAnalysisModel().getResults();
+		Assertions.assertNotNull(result);
+
+		// Check expected results size
+		Assertions.assertNotNull(result.getBaseOption());
+		Assertions.assertEquals(0, result.getOptions().size());
+
+		// Check expected extra data items
+		Assertions.assertEquals(0, result.getExtraSlots().size());
+		Assertions.assertEquals(0, result.getExtraCharterInMarkets().size());
+		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
+		Assertions.assertEquals(0, result.getExtraVesselAvailabilities().size());
+		Assertions.assertEquals(0, result.getExtraVesselEvents().size());
 	}
 }
