@@ -21,7 +21,7 @@ import okhttp3.Response;
 public class OAuthAuthenticationManager extends AbstractAuthenticationManager {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(OAuthAuthenticationManager.class);
-	private static final String ACCESS_TOKEN = "access_token";
+	public static final String COOKIE = "cookie";
 
 	private static OAuthAuthenticationManager instance = null;
 
@@ -40,9 +40,9 @@ public class OAuthAuthenticationManager extends AbstractAuthenticationManager {
 
 		boolean authenticated = false;
 
-		final Optional<String> token = retrieveFromSecurePreferences(ACCESS_TOKEN);
+		final Optional<String> token = retrieveFromSecurePreferences(COOKIE);
 
-		if (token.isPresent() && !isTokenExpired(upstreamURL)) {
+		if (token.isPresent() && !isTokenValid(upstreamURL)) {
 			authenticated = true;
 		}
 		return authenticated;
@@ -60,7 +60,7 @@ public class OAuthAuthenticationManager extends AbstractAuthenticationManager {
 	 * Create a request builder with Authorization header.
 	 */
 	public Optional<Request.Builder> buildRequestWithToken() {
-		final Optional<String> token = retrieveFromSecurePreferences(ACCESS_TOKEN);
+		final Optional<String> token = retrieveFromSecurePreferences(COOKIE);
 		Optional<Request.Builder> builder;
 
 		if (token.isPresent()) {
@@ -82,15 +82,20 @@ public class OAuthAuthenticationManager extends AbstractAuthenticationManager {
 			final OAuthAuthenticationDialog authenticationShell = new OAuthAuthenticationDialog(optionalShell, upstreamURL, path);
 			// Set access token when shell is disposed
 			authenticationShell.addDisposeListener(() -> {
-				storeInSecurePreferences(ACCESS_TOKEN, authenticationShell.getAccessToken());
 				authenticationShellIsOpen.compareAndSet(true, false);
 			});
 			authenticationShell.open();
 		}
 	}
 
-	public boolean isTokenExpired(final String upstreamURL) {
-		boolean expired = false;
+	/**
+	 * Checks if the SSO token (in the form of a cookie) is valid by making a request to the hub
+	 *
+	 * @param upstreamURL
+	 * @return true is the token is valid, false otherwise
+	 */
+	public boolean isTokenValid(final String upstreamURL) {
+		boolean valid = false;
 
 		final Optional<Request.Builder> builder = buildRequestWithToken();
 
@@ -98,8 +103,8 @@ public class OAuthAuthenticationManager extends AbstractAuthenticationManager {
 			final Request request = builder.get().url(upstreamURL + UpstreamUrlProvider.URI_AFTER_SUCCESSFULL_AUTHENTICATION).build();
 
 			try (Response response = httpClient.newCall(request).execute()) {
-				if (!response.isSuccessful() || response.code() == 403 || response.code() == 401) {
-					expired = true;
+				if (!response.isSuccessful()) {
+					valid = true;
 
 					// token is expired, log the user out
 					logout(upstreamURL, null);
@@ -109,7 +114,7 @@ public class OAuthAuthenticationManager extends AbstractAuthenticationManager {
 			}
 		}
 
-		return expired;
+		return valid;
 	}
 
 	@Override
@@ -117,11 +122,12 @@ public class OAuthAuthenticationManager extends AbstractAuthenticationManager {
 		final String path = UpstreamUrlProvider.LOGOUT_PATH;
 		startAuthenticationShell(upstreamURL, path, shell);
 		clearCookies(upstreamURL);
-		deleteFromSecurePreferences(ACCESS_TOKEN);
 	}
 
 	@Override
 	public void clearCookies(final String url) {
+		// delete sso cookie from secure preferences
+		deleteFromSecurePreferences(COOKIE);
 		// delete cookie from swt browser
 		// doesn't work if the user clicks "stay logged in"
 		Browser.setCookie("JSESSIONID", url);
