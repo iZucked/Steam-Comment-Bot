@@ -4,11 +4,9 @@
  */
 package com.mmxlabs.hub.auth;
 
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
@@ -32,23 +30,16 @@ import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.common.http.HttpClientUtil;
 
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 public class OAuthAuthenticationDialog extends Window {
 
 	private static Browser browser;
-	private String accessToken;
 	private static final OkHttpClient httpClient = HttpClientUtil.basicBuilder().build();
 
 	private String baseUrl;
 	private String fragment;
 
 	private List<Runnable> disposeHandlers = new LinkedList<>();
-
-	public String getAccessToken() {
-		return accessToken;
-	}
 
 	public OAuthAuthenticationDialog(Shell shell, final String baseUrl, String fragment) {
 		super(shell);
@@ -146,17 +137,8 @@ public class OAuthAuthenticationDialog extends Window {
 				} else if (event.location.contains(baseUrl + UpstreamUrlProvider.URI_AFTER_SUCCESSFULL_AUTHENTICATION)) {
 					String cookie = Browser.getCookie("JSESSIONID", baseUrl);
 
-					// get access token from datahub
-					final Request request = AuthenticationManager.buildRequestWithoutAuthentication().url(baseUrl + UpstreamUrlProvider.TOKEN_ENDPOINT).addHeader("Cookie", "JSESSIONID=" + cookie)
-							.build();
-
-					try (Response response = httpClient.newCall(request).execute()) {
-						if (response.isSuccessful()) {
-							accessToken = response.body().string();
-						}
-					} catch (IOException e) {
-						MessageDialog.openError(getShell(), "", "Unable to authenticate with the DataHub. Please try again");
-					}
+					// store sso cookie in secure preferences for later use
+					AuthenticationManager.getInstance().storeInSecurePreferences(OAuthAuthenticationManager.COOKIE, "JSESSIONID=" + cookie);
 
 					OAuthAuthenticationDialog.this.close();
 				}
