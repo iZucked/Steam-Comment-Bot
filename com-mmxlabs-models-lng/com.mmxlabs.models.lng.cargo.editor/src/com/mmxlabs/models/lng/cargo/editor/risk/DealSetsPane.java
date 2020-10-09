@@ -8,10 +8,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -34,6 +37,7 @@ import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
@@ -47,6 +51,14 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DealSet;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorAction;
+import com.mmxlabs.models.lng.commercial.CommercialFactory;
+import com.mmxlabs.models.lng.commercial.CommercialModel;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
+import com.mmxlabs.models.lng.commercial.PurchaseContract;
+import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction;
@@ -242,12 +254,41 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 	@Override
 	protected Action createAddAction(final EReference containment) {
 		final Action generateFromCargoesAction = createDealSetsFromCargoesAction();
-		final Action[] extraActions = generateFromCargoesAction == null ? new Action[0] : new Action[] { generateFromCargoesAction };
+		final Action generateFromContractsAction = createDealSetsFromContractsAction();
+		
+		final List<Action> actionList = new LinkedList<Action>();
+		if (generateFromCargoesAction != null) {
+			actionList.add(generateFromCargoesAction);
+		}
+		if (generateFromContractsAction != null) {
+			actionList.add(generateFromContractsAction);
+		}
+		final Action[] extraActions = actionList.toArray(new Action[0]);
+		
 		return AddModelAction.create(containment.getEReferenceType(), getAddContext(containment), extraActions);
 	}
 	
+	private Action createDealSetsFromContractsAction() {
+		return new DefaultMenuCreatorAction("From contracts") {
+			
+			@Override
+			protected void populate(Menu menu) {
+				final Action generateFromPurchaseContractsAction = createDealSetsFromPurchaseContractsAction();
+				final Action generateFromSalesContractsAction = createDealSetsFromSalesContractsAction();
+				addActionToMenu(generateFromPurchaseContractsAction, menu);
+				addActionToMenu(generateFromSalesContractsAction, menu);
+				
+			}
+			
+			@Override
+			public void run() {
+				
+			}
+		};
+	}
+	
 	private Action createDealSetsFromCargoesAction() {
-		return new RunnableAction("Generate from cargoes", new Runnable() {
+		return new RunnableAction("From cargoes", new Runnable() {
 			
 			@Override
 			public void run() {
@@ -270,6 +311,88 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 				}
 			}
 		});
+	}
+	
+	private Action createDealSetsFromIndexAction() {
+		return new RunnableAction("From index", new Runnable() {
+			
+			@Override
+			public void run() {
+				final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(jointModelEditor.getScenarioDataProvider());
+				final EditingDomain ed = scenarioEditingLocation.getEditingDomain();
+				final Set<Slot> usedSlots = updateSlots(jointModelEditor.getScenarioDataProvider());
+				
+				Cargo c = cargoModel.getCargoes().get(0);
+				Slot s = c.getSlots().get(0);
+				PurchaseContract con = (PurchaseContract) s.getContract();
+				final CompoundCommand cmd = new CompoundCommand();
+				for(final Cargo cargo : cargoModel.getCargoes()) {
+					if (checkContainment(cargo, usedSlots)) continue;
+					final DealSet ds = CargoFactory.eINSTANCE.createDealSet();
+					ds.setName(String.format("%s_%s", cargo.getLoadName(), "set"));
+					cmd.append(AddCommand.create(ed, cargoModel, CargoPackage.Literals.CARGO_MODEL__DEAL_SETS, ds));
+					for (final Slot<?> slot : cargo.getSlots()) {
+						if (slot instanceof SpotSlot) continue;
+						cmd.append(AddCommand.create(ed, ds, CargoPackage.Literals.DEAL_SET__SLOTS, slot));
+					}
+				}
+				if(!cmd.isEmpty()) {
+					scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, null, null);
+				}
+			}
+		});
+	}
+	
+	private Action createDealSetsFromPurchaseContractsAction() {
+		return new RunnableAction("From purchase contracts", new Runnable() {
+			
+			@Override
+			public void run() {
+				final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(jointModelEditor.getScenarioDataProvider());
+				final CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(jointModelEditor.getScenarioDataProvider());
+				
+				final EditingDomain ed = scenarioEditingLocation.getEditingDomain();
+				final CompoundCommand cmd = new CompoundCommand();
+				populateContractGeneratedDealSets(cmd, commercialModel.getPurchaseContracts(), cargoModel, ed, "purchase");
+				if (!cmd.isEmpty()) {
+					scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd,  null, null);
+				}
+			}
+		});
+	}
+	
+	private Action createDealSetsFromSalesContractsAction() {
+		return new RunnableAction("From sales contracts", new Runnable() {
+			
+			@Override
+			public void run() {
+				final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(jointModelEditor.getScenarioDataProvider());
+				final CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(jointModelEditor.getScenarioDataProvider());
+				final EditingDomain ed = scenarioEditingLocation.getEditingDomain();
+				final CompoundCommand cmd = new CompoundCommand();
+				populateContractGeneratedDealSets(cmd, commercialModel.getSalesContracts(), cargoModel, ed, "sales");
+				if (!cmd.isEmpty()) {
+					scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd,  null, null);
+				}
+			}
+		});
+	}
+	
+	private void populateContractGeneratedDealSets(final CompoundCommand cmd, final List<? extends Contract> contracts, final CargoModel cargoModel, final EditingDomain ed, final String suffix) {
+		for (final Contract contract : contracts) {
+			final List<Slot<?>> usedSlots = cargoModel.getCargoes().stream() //
+					.flatMap(cargo -> cargo.getSlots().stream() //
+							.filter(slot -> (!(slot instanceof SpotSlot)) && slot.getContract() == contract) //
+					).collect(Collectors.toList());
+			if (!usedSlots.isEmpty()) {
+				final DealSet dealSet = CargoFactory.eINSTANCE.createDealSet();
+				dealSet.setName(String.format("%s_%s_set", contract.getName(), suffix));
+				cmd.append(AddCommand.create(ed, cargoModel, CargoPackage.Literals.CARGO_MODEL__DEAL_SETS, dealSet));
+				for (final Slot<?> slot : usedSlots) {
+					cmd.append(AddCommand.create(ed,  dealSet, CargoPackage.Literals.DEAL_SET__SLOTS, slot));
+				}
+			}
+		}
 	}
 	
 	private Set<Slot> updateSlots(final IScenarioDataProvider sdp) {
