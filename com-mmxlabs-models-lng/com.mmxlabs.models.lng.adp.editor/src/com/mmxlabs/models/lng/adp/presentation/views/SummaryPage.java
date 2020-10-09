@@ -35,6 +35,9 @@ import com.google.ortools.linearsolver.MPVariable;
 import com.mmxlabs.models.lng.adp.ADPFactory;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.ContractProfile;
+import com.mmxlabs.models.lng.adp.IntervalType;
+import com.mmxlabs.models.lng.adp.MaxCargoConstraint;
+import com.mmxlabs.models.lng.adp.MinCargoConstraint;
 import com.mmxlabs.models.lng.adp.PeriodDistribution;
 import com.mmxlabs.models.lng.adp.PeriodDistributionProfileConstraint;
 import com.mmxlabs.models.lng.adp.ProfileConstraint;
@@ -344,7 +347,7 @@ public class SummaryPage extends ADPComposite {
 	}
 	
 	private void buildProblem(MPSolver solver, HashMap<YearMonth, Long> variableBounds, final List<ProfileConstraint> constraints) {
-		HashMap<YearMonth, MPVariable> dateToMPVarMap = new HashMap<YearMonth, MPVariable>();
+		final HashMap<YearMonth, MPVariable> dateToMPVarMap = new HashMap<YearMonth, MPVariable>();
 		MPObjective obj = solver.objective();
 		obj.setMaximization();
 		variableBounds.forEach((ym, upperbound) -> {
@@ -352,22 +355,56 @@ public class SummaryPage extends ADPComposite {
 			dateToMPVarMap.put(ym, mpVar);
 			obj.setCoefficient(mpVar, 1);
 		});
-		constraints.stream().filter(PeriodDistributionProfileConstraint.class::isInstance).forEach(constraint -> ((PeriodDistributionProfileConstraint) constraint).getDistributions().stream() //
-				.filter(PeriodDistribution::isSetMaxCargoes)
-				.forEach(profileConstraint -> {
-					final List<YearMonth> range = profileConstraint.getRange();
-					if (range.size() == 1) {
-						final YearMonth ym = range.get(0);
-						final long upperbound = profileConstraint.getMaxCargoes();
-						if (variableBounds.get(ym) > upperbound) {
-							variableBounds.put(ym, upperbound);
-							dateToMPVarMap.get(ym).setUb(upperbound);
-						}
-					} else {
-						MPConstraint mpConstraint = solver.makeConstraint(0, profileConstraint.getMaxCargoes());
-						range.forEach(ym -> mpConstraint.setCoefficient(dateToMPVarMap.get(ym), 1));
-					}
-				}));
+		
+		for (final ProfileConstraint constraint : constraints) {
+			if (constraint instanceof PeriodDistributionProfileConstraint) {
+				((PeriodDistributionProfileConstraint) constraint).getDistributions().stream() //
+						.filter(PeriodDistribution::isSetMaxCargoes) //
+						.forEach(profileConstraint -> {
+							final List<YearMonth> range = profileConstraint.getRange();
+							if (range.size() == 1) {
+								final YearMonth ym = range.get(0);
+								final long upperbound = profileConstraint.getMaxCargoes();
+								if (variableBounds.get(ym) > upperbound) {
+									variableBounds.put(ym, upperbound);
+									dateToMPVarMap.get(ym).setUb(upperbound);
+								}
+							} else {
+								final MPConstraint mpConstraint = solver.makeConstraint(0, profileConstraint.getMaxCargoes());
+								range.forEach(ym -> mpConstraint.setCoefficient(dateToMPVarMap.get(ym), 1));
+							}
+						});
+			} else if (constraint instanceof MaxCargoConstraint) {
+				final MaxCargoConstraint maxCargoConstraint = (MaxCargoConstraint) constraint;
+				final IntervalType intervalType = maxCargoConstraint.getIntervalType();
+				final long maxCargoes = maxCargoConstraint.getMaxCargoes();
+				if (intervalType == IntervalType.YEARLY) {
+					final MPConstraint mpConstraint = solver.makeConstraint(0, maxCargoes);
+					dateToMPVarMap.values().forEach(mpVar -> mpConstraint.setCoefficient(mpVar, 1));
+				} else if (intervalType == IntervalType.MONTHLY) {
+					variableBounds.entrySet().stream() //
+							.filter(mapEntry -> mapEntry.getValue() > maxCargoes) //
+							.forEach(mapEntry -> dateToMPVarMap.get(mapEntry.getKey()).setUb(maxCargoes));
+				}
+			}
+		}
+
+//		constraints.stream().filter(PeriodDistributionProfileConstraint.class::isInstance).forEach(constraint -> ((PeriodDistributionProfileConstraint) constraint).getDistributions().stream() //
+//				.filter(PeriodDistribution::isSetMaxCargoes)
+//				.forEach(profileConstraint -> {
+//					final List<YearMonth> range = profileConstraint.getRange();
+//					if (range.size() == 1) {
+//						final YearMonth ym = range.get(0);
+//						final long upperbound = profileConstraint.getMaxCargoes();
+//						if (variableBounds.get(ym) > upperbound) {
+//							variableBounds.put(ym, upperbound);
+//							dateToMPVarMap.get(ym).setUb(upperbound);
+//						}
+//					} else {
+//						MPConstraint mpConstraint = solver.makeConstraint(0, profileConstraint.getMaxCargoes());
+//						range.forEach(ym -> mpConstraint.setCoefficient(dateToMPVarMap.get(ym), 1));
+//					}
+//				}));
 	}
 	
 	private static @NonNull MPSolver createSolver() {
