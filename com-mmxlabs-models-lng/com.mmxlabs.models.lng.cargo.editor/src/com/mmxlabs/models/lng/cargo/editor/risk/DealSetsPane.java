@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -52,13 +51,8 @@ import com.mmxlabs.models.lng.cargo.DealSet;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorAction;
-import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
-import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
-import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
-import com.mmxlabs.models.lng.commercial.PurchaseContract;
-import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction;
@@ -295,36 +289,6 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 				final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(jointModelEditor.getScenarioDataProvider());
 				final EditingDomain ed = scenarioEditingLocation.getEditingDomain();
 				final Set<Slot> usedSlots = updateSlots(jointModelEditor.getScenarioDataProvider());
-				final CompoundCommand cmd = new CompoundCommand();
-				for(final Cargo cargo : cargoModel.getCargoes()) {
-					if (checkContainment(cargo, usedSlots)) continue;
-					final DealSet ds = CargoFactory.eINSTANCE.createDealSet();
-					ds.setName(String.format("%s_%s", cargo.getLoadName(), "set"));
-					cmd.append(AddCommand.create(ed, cargoModel, CargoPackage.Literals.CARGO_MODEL__DEAL_SETS, ds));
-					for (final Slot<?> slot : cargo.getSlots()) {
-						if (slot instanceof SpotSlot) continue;
-						cmd.append(AddCommand.create(ed, ds, CargoPackage.Literals.DEAL_SET__SLOTS, slot));
-					}
-				}
-				if(!cmd.isEmpty()) {
-					scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, null, null);
-				}
-			}
-		});
-	}
-	
-	private Action createDealSetsFromIndexAction() {
-		return new RunnableAction("From index", new Runnable() {
-			
-			@Override
-			public void run() {
-				final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(jointModelEditor.getScenarioDataProvider());
-				final EditingDomain ed = scenarioEditingLocation.getEditingDomain();
-				final Set<Slot> usedSlots = updateSlots(jointModelEditor.getScenarioDataProvider());
-				
-				Cargo c = cargoModel.getCargoes().get(0);
-				Slot s = c.getSlots().get(0);
-				PurchaseContract con = (PurchaseContract) s.getContract();
 				final CompoundCommand cmd = new CompoundCommand();
 				for(final Cargo cargo : cargoModel.getCargoes()) {
 					if (checkContainment(cargo, usedSlots)) continue;
