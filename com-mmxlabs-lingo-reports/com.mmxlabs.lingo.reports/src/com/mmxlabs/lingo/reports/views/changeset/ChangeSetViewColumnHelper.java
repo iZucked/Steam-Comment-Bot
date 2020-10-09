@@ -1877,53 +1877,60 @@ public class ChangeSetViewColumnHelper {
 				
 					String vesselBefore = change.getBeforeVesselShortName();
 					String vesselAfter = change.getAfterVesselShortName();
+					String vesselAfterType = "";
+					ChangeSetVesselType afterVesselType = change.getAfterVesselType();
+
+					switch(afterVesselType) { 	
+						case FLEET:
+							vesselAfterType = "charter ";
+						case MARKET: 
+							vesselAfterType = "market vessel ";
+					}
 
 					long capacityDelta = afterViolations.size() - beforeViolations.size();
 					
-					final Set<CapacityViolationType> tmp = new HashSet<>(afterViolations);
-					tmp.removeAll(beforeViolations);
+					final Set<CapacityViolationType> newViolations = new HashSet<>(afterViolations);
+					newViolations.removeAll(beforeViolations);
 					final StringBuilder sb = new StringBuilder();
 				
-					if (!tmp.isEmpty() || nominalVesselDelta > 0) {
-						int addedIssues = tmp.size();
+					if (!newViolations.isEmpty() || nominalVesselDelta > 0) {
+						int addedIssues = newViolations.size();
 						if (nominalVesselDelta > 0) {
 							addedIssues += Math.abs(nominalVesselDelta);
 						}
-						sb.append(String.format("Added %d issue%s:\r\n", addedIssues, addedIssues > 1 ? "s" : ""));
+						sb.append(String.format("Added:\r\n"));
 						if (nominalVesselDelta > 0) {
-							sb.append("-Nominal vessel change: ");
-							sb.append(vesselBefore);
-							sb.append(" changed to ");
+							sb.append("- Nominal cargo ");
+							sb.append("moved to " + vesselAfterType + "'");
 							sb.append(vesselAfter);
-							sb.append("\r\n");
+							sb.append("'\r\n");
 						}
 					}
-					if (!tmp.isEmpty()) {
-						sb.append(String.format("%s", generateDisplayString(tmp)));
+					if (!newViolations.isEmpty()) {
+						sb.append(String.format("%s", generateDisplayString(newViolations)));
 					}
-					tmp.clear();
-					tmp.addAll(beforeViolations);
-					tmp.removeAll(afterViolations);
+					newViolations.clear();
+					newViolations.addAll(beforeViolations);
+					newViolations.removeAll(afterViolations);
 
-					if (!tmp.isEmpty() || nominalVesselDelta < 0) {
-						int resolvedIssues = tmp.size();
+					if (!newViolations.isEmpty() || nominalVesselDelta < 0) {
+						int resolvedIssues = newViolations.size();
 						if (nominalVesselDelta < 0) {
 							resolvedIssues += Math.abs(nominalVesselDelta);
 						}
 						if (sb.length() > 0) {
 							sb.append("\r\n");
 						}
-						sb.append(String.format("Resolved %d issue%s:\r\n", resolvedIssues, resolvedIssues > 1 ? "s" : ""));
+						sb.append(String.format("Resolved:\r\n"));
 						if (nominalVesselDelta < 0) {
-							sb.append("-Nominal vessel change: ");
-							sb.append(vesselBefore);
-							sb.append(" changed to ");
-							sb.append(vesselAfter);
+							sb.append("- Nominal cargo ");
+							sb.append("moved to " + vesselAfterType);
+							sb.append("'" + vesselAfter + "'");
 							sb.append("\r\n");
 						}
 					}
-					if (!tmp.isEmpty()) {
-						sb.append(String.format("%s", generateDisplayString(tmp)));
+					if (!newViolations.isEmpty()) {
+						sb.append(String.format("%s", generateDisplayString(newViolations)));
 					}
 					
 					if (nominalVesselDelta != 0) {
@@ -1941,15 +1948,15 @@ public class ChangeSetViewColumnHelper {
 
 			private final Map<CapacityViolationType, String> nameMap = new HashMap<>();
 			{
-				nameMap.put(CapacityViolationType.FORCED_COOLDOWN, "forced cooldown");
-				nameMap.put(CapacityViolationType.LOST_HEEL, "lost heel");
-				nameMap.put(CapacityViolationType.MAX_DISCHARGE, "max discharge volume");
-				nameMap.put(CapacityViolationType.MAX_HEEL, "max heel");
-				nameMap.put(CapacityViolationType.MAX_LOAD, "max load volume");
-				nameMap.put(CapacityViolationType.MIN_DISCHARGE, "min discharge volume");
-				nameMap.put(CapacityViolationType.MIN_HEEL, "min heel");
-				nameMap.put(CapacityViolationType.MIN_LOAD, "min load volume");
-				nameMap.put(CapacityViolationType.VESSEL_CAPACITY, "vessel capacity");
+				nameMap.put(CapacityViolationType.FORCED_COOLDOWN, "Forced cooldown");
+				nameMap.put(CapacityViolationType.LOST_HEEL, "Lost heel");
+				nameMap.put(CapacityViolationType.MAX_DISCHARGE, "Max discharge");
+				nameMap.put(CapacityViolationType.MAX_HEEL, "Max heel");
+				nameMap.put(CapacityViolationType.MAX_LOAD, "Max load");
+				nameMap.put(CapacityViolationType.MIN_DISCHARGE, "Min discharge");
+				nameMap.put(CapacityViolationType.MIN_HEEL, "Min heel");
+				nameMap.put(CapacityViolationType.MIN_LOAD, "Min load");
+				nameMap.put(CapacityViolationType.VESSEL_CAPACITY, "Vessel capacity");
 			}
 
 			private String generateDisplayString(final Set<CapacityViolationType> tmp) {
@@ -1963,8 +1970,9 @@ public class ChangeSetViewColumnHelper {
 					if (sb.length() > 0) {
 						sb.append("\r\n");
 					}
-					sb.append("-Violation of ");
+					sb.append("- ");
 					sb.append(violation);
+					sb.append(" violation");
 				}
 				return sb.toString();
 			}
