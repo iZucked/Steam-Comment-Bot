@@ -14,7 +14,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -37,10 +36,10 @@ import com.mmxlabs.models.lng.adp.ADPFactory;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.ContractProfile;
 import com.mmxlabs.models.lng.adp.PeriodDistribution;
+import com.mmxlabs.models.lng.adp.PeriodDistributionProfileConstraint;
 import com.mmxlabs.models.lng.adp.ProfileConstraint;
 import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
-import com.mmxlabs.models.lng.adp.impl.PeriodDistributionProfileConstraintImpl;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
@@ -133,7 +132,7 @@ public class SummaryPage extends ADPComposite {
 					.filter(s -> profile.getContract() == s.getContract()).count()));
 			
 			createColumn(purchasesViewer, "Max cargoes", profile -> {
-				final EList<ProfileConstraint> constraints = profile.getConstraints();
+				final List<ProfileConstraint> constraints = profile.getConstraints();
 				if (constraints.isEmpty()) {
 					return Long.toString(editorData.getScenarioModel().getCargoModel().getLoadSlots().stream() //
 							.filter(s -> profile.getContract() == s.getContract()) //
@@ -201,7 +200,7 @@ public class SummaryPage extends ADPComposite {
 			createColumn(salesViewer, "Generated cargoes", profile -> Long.toString(editorData.getScenarioModel().getCargoModel().getDischargeSlots().stream() //
 					.filter(s -> profile.getContract() == s.getContract()).count()));
 			createColumn(salesViewer, "Max cargoes", profile -> {
-				final EList<ProfileConstraint> constraints = profile.getConstraints();				
+				final List<ProfileConstraint> constraints = profile.getConstraints();				
 				if (constraints.isEmpty()) {
 					return Long.toString(editorData.getScenarioModel().getCargoModel().getDischargeSlots().stream() //
 							.filter(s -> profile.getContract() == s.getContract())//
@@ -344,7 +343,7 @@ public class SummaryPage extends ADPComposite {
 		col.getColumn().setText(name);
 	}
 	
-	private void buildProblem(MPSolver solver, HashMap<YearMonth, Long> variableBounds, final EList<ProfileConstraint> constraints) {
+	private void buildProblem(MPSolver solver, HashMap<YearMonth, Long> variableBounds, final List<ProfileConstraint> constraints) {
 		HashMap<YearMonth, MPVariable> dateToMPVarMap = new HashMap<YearMonth, MPVariable>();
 		MPObjective obj = solver.objective();
 		obj.setMaximization();
@@ -353,10 +352,10 @@ public class SummaryPage extends ADPComposite {
 			dateToMPVarMap.put(ym, mpVar);
 			obj.setCoefficient(mpVar, 1);
 		});
-		constraints.forEach(constraint -> ((PeriodDistributionProfileConstraintImpl) constraint).getDistributions().stream() //
+		constraints.stream().filter(PeriodDistributionProfileConstraint.class::isInstance).forEach(constraint -> ((PeriodDistributionProfileConstraint) constraint).getDistributions().stream() //
 				.filter(PeriodDistribution::isSetMaxCargoes)
 				.forEach(profileConstraint -> {
-					final EList<YearMonth> range = profileConstraint.getRange();
+					final List<YearMonth> range = profileConstraint.getRange();
 					if (range.size() == 1) {
 						final YearMonth ym = range.get(0);
 						final long upperbound = profileConstraint.getMaxCargoes();
@@ -373,7 +372,7 @@ public class SummaryPage extends ADPComposite {
 	
 	private static @NonNull MPSolver createSolver() {
 		try {
-			return new MPSolver("LNGSolver", MPSolver.OptimizationProblemType.valueOf("CBC_MIXED_INTEGER_PROGRAMMING"));
+			return new MPSolver("ADPSummaryPageSolver", MPSolver.OptimizationProblemType.valueOf("CBC_MIXED_INTEGER_PROGRAMMING"));
 		} catch (IllegalArgumentException e) {
 			throw new RuntimeException(e);
 		}
