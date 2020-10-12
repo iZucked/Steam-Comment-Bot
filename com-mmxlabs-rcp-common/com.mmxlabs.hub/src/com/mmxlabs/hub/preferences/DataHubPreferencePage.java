@@ -13,6 +13,7 @@ import java.util.Set;
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLPeerUnverifiedException;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.preference.BooleanFieldEditor;
@@ -40,6 +41,7 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
 import com.mmxlabs.hub.DataHubActivator;
 import com.mmxlabs.hub.DataHubServiceProvider;
+import com.mmxlabs.hub.IDataHubStateChangeListener;
 import com.mmxlabs.hub.IUpstreamDetailChangedListener;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.auth.AuthenticationManager;
@@ -72,6 +74,9 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 
 	@Override
 	public void dispose() {
+
+		DataHubServiceProvider.getInstance().removeDataHubStateListener(stateChangeListener);
+
 		UpstreamUrlProvider.INSTANCE.deregisterDetailsChangedLister(enableLoginListener);
 		if (forceBasicAuth != null) {
 			forceBasicAuth.dispose();
@@ -84,6 +89,7 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 	protected String loginButtonText = "Login";
 	protected String logoutButtonText = "Logout";
 	protected Button loginButton;
+	protected Button refreshButton;
 
 	public void setLoginButtonText() {
 		if (!loginButton.isDisposed()) {
@@ -138,20 +144,56 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 		setForceBasicAuthEnabled();
 	};
 
+	private @NonNull IDataHubStateChangeListener stateChangeListener = new IDataHubStateChangeListener() {
+
+		@Override
+		public void hubStateChanged(boolean online, boolean loggedin, boolean changedToOnlineAndLoggedIn) {
+
+			if (!getControl().isDisposed()) {
+				getShell().getDisplay().asyncExec(() -> {
+					if (loginButton != null && !loginButton.isDisposed()) {
+						getShell().getDisplay().asyncExec(() -> loginButton.setEnabled(online));
+
+						if (loggedin) {
+							loginButton.setText("Logout");
+						} else {
+							loginButton.setText("Login");
+						}
+						// forceBasicAuth has no dispose check, so assume it will be valid if the login button is valid.
+						if (forceBasicAuth != null) {
+							forceBasicAuth.setEnabled(authenticationManager.isOAuthEnabled(), getFieldEditorParent());
+						}
+					}
+				});
+			}
+		}
+
+		@Override
+		public void hubPermissionsChanged() {
+			// Nothing needed here
+		}
+
+	};
+
 	@Override
 	protected void createFieldEditors() {
 
 		editor = new StringFieldEditor(DataHubPreferenceConstants.P_DATAHUB_URL_KEY, "&URL", getFieldEditorParent());
 		addField(editor);
 
-		loginButton = new Button(getFieldEditorParent(), SWT.PUSH);
+		Composite c = new Composite(getFieldEditorParent(), SWT.NONE);
+		c.setLayout(new GridLayout(2, true));
+		c.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).create());
+
+		loginButton = new Button(c, SWT.PUSH);
 		loginButton.setText("Login");
 		loginButton.setData("loginButtonId"); // this id is used in swtbot tests
-		loginButton.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).create());
+		loginButton.setLayoutData(GridDataFactory.fillDefaults().span(1, 1).create());
 
 		loginButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent se) {
+
 				if (loginButton.getText().equals(loginButtonText)) {
 					final Shell shell = getShell();
 					if (!authenticationManager.isAuthenticated()) {
@@ -174,6 +216,19 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 
 		setLoginButtonText();
 		setLoginButtonEnabled();
+
+		refreshButton = new Button(c, SWT.PUSH);
+		refreshButton.setText("Check connection state");
+		refreshButton.setData("refreshButtonId"); // this id is used in swtbot tests
+		refreshButton.setLayoutData(GridDataFactory.fillDefaults().span(1, 1).create());
+
+		refreshButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(final SelectionEvent se) {
+				// trigger refresh datahub service logged in state
+				UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
+			}
+		});
 
 		forceBasicAuth = new BooleanFieldEditor(DataHubPreferenceConstants.P_FORCE_BASIC_AUTH, "&Force local authentication", getFieldEditorParent());
 		addField(forceBasicAuth);
@@ -295,7 +350,7 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 		lbl.setText("");
 		lbl.setLayoutData(GridDataFactory.fillDefaults().span(2, 5).minSize(250, 300).hint(250, 300).create());
 
-		btnCheckRemoteSSL.addSelectionListener(new SelectionListener() {
+		btnCheckRemoteSSL.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
@@ -313,11 +368,6 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 				} catch (final Exception e1) {
 					e1.printStackTrace();
 				}
-
-			}
-
-			@Override
-			public void widgetDefaultSelected(final SelectionEvent e) {
 
 			}
 		});
@@ -404,6 +454,8 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 		noteLabel.setVisible(false);
 		noteLabel.setText("Note: changes must be applied to take effect");
 		noteLabel.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).create());
+
+		DataHubServiceProvider.getInstance().addDataHubStateListener(stateChangeListener);
 	}
 
 	@Override
