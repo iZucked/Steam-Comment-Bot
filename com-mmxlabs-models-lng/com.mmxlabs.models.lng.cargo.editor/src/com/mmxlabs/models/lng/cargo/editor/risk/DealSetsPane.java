@@ -15,6 +15,8 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
+
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EReference;
@@ -22,6 +24,7 @@ import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.util.LocalSelectionTransfer;
@@ -43,6 +46,8 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -51,9 +56,14 @@ import com.mmxlabs.models.lng.cargo.DealSet;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorAction;
+import com.mmxlabs.models.lng.cargo.util.IExposuresCustomiser;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
+import com.mmxlabs.models.lng.pricing.CommodityCurve;
+import com.mmxlabs.models.lng.pricing.util.ModelMarketCurveProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction;
 import com.mmxlabs.models.lng.ui.actions.ScenarioModifyingAction;
@@ -68,10 +78,15 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 public class DealSetsPane extends ScenarioTableViewerPane {
 
 	private final IScenarioEditingLocation jointModelEditor;
+	
+	@Inject
+	private IExposuresCustomiser exposuresCustomiser;
 
 	public DealSetsPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);
 		this.jointModelEditor = location;
+		final Injector injector = Guice.createInjector(new DealSetsEditorProviderModule());
+		injector.injectMembers(this);
 	}
 
 	@Override
@@ -249,13 +264,21 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 	protected Action createAddAction(final EReference containment) {
 		final Action generateFromCargoesAction = createDealSetsFromCargoesAction();
 		final Action generateFromContractsAction = createDealSetsFromContractsAction();
+		final Action generateFromCurvesAction = createDealSetsFromCurvesAction();
+		final Action generateFromIndicesAction = createDealSetsFromIndicesAction();
 		
-		final List<Action> actionList = new LinkedList<Action>();
+		final List<Action> actionList = new LinkedList<>();
 		if (generateFromCargoesAction != null) {
 			actionList.add(generateFromCargoesAction);
 		}
 		if (generateFromContractsAction != null) {
 			actionList.add(generateFromContractsAction);
+		}
+		if (generateFromCurvesAction != null) {
+			actionList.add(generateFromCurvesAction);
+		}
+		if (generateFromIndicesAction != null) {
+			actionList.add(generateFromIndicesAction);
 		}
 		final Action[] extraActions = actionList.toArray(new Action[0]);
 		
@@ -305,6 +328,109 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 				}
 			}
 		});
+	}
+	
+	private Action createDealSetsFromCurvesAction() {
+		return new RunnableAction("From curves", new Runnable() {
+			@Override
+			public void run() {
+				final IScenarioDataProvider scenarioDataProvider = jointModelEditor.getScenarioDataProvider();
+				final ModelMarketCurveProvider mmCurveProvider = getMarketCurveProvider(scenarioDataProvider);
+				final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioDataProvider);
+				final EditingDomain ed = scenarioEditingLocation.getEditingDomain();
+				final Map<String, List<Slot<?>>> curveToSlotMap = new HashMap<>();
+
+				
+				cargoModel.getCargoes().stream() //
+						.flatMap(cargo -> cargo.getSlots().stream().filter(slot -> (!(slot instanceof SpotSlot))))
+						.forEach(slot -> {
+							final String priceExpression = exposuresCustomiser.provideExposedPriceExpression(slot);
+							final Collection<AbstractYearMonthCurve> curves = mmCurveProvider.getLinkedCurves(priceExpression);
+							String result = null;
+							// This does not account for multiple curves in the expression
+							for (final AbstractYearMonthCurve curve : curves) {
+								result = curve.getName();
+							}
+							if (result != null) {
+								List<Slot<?>> slotList = curveToSlotMap.get(result);
+								if (slotList == null) {
+									slotList = new LinkedList<>();
+									curveToSlotMap.put(result, slotList);
+								}
+								slotList.add(slot);
+							}
+						});
+				final CompoundCommand cmd = new CompoundCommand();
+				curveToSlotMap.forEach((curveName, slots) -> {
+					final DealSet dealSet = CargoFactory.eINSTANCE.createDealSet();
+					dealSet.setName(String.format("%s_curve_set", curveName));
+					cmd.append(AddCommand.create(ed, cargoModel, CargoPackage.Literals.CARGO_MODEL__DEAL_SETS, dealSet));
+					slots.forEach(slot -> cmd.append(AddCommand.create(ed, dealSet, CargoPackage.Literals.DEAL_SET__SLOTS, slot)));
+				});
+				if (!cmd.isEmpty()) {
+					scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, null, null);
+				}
+			}
+		});
+	}
+	
+	private Action createDealSetsFromIndicesAction() {
+		return new RunnableAction("From indices", new Runnable() {
+			@Override
+			public void run() {
+				final IScenarioDataProvider scenarioDataProvider = jointModelEditor.getScenarioDataProvider();
+				final ModelMarketCurveProvider mmCurveProvider = getMarketCurveProvider(scenarioDataProvider);
+				final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioDataProvider);
+				final EditingDomain ed = scenarioEditingLocation.getEditingDomain();
+				final Map<String, List<Slot<?>>> indexToSlotMap = new HashMap<>();
+
+				
+				cargoModel.getCargoes().stream() //
+						.flatMap(cargo -> cargo.getSlots().stream().filter(slot -> (!(slot instanceof SpotSlot))))
+						.forEach(slot -> {
+							final String priceExpression = exposuresCustomiser.provideExposedPriceExpression(slot);
+							final Collection<AbstractYearMonthCurve> curves = mmCurveProvider.getLinkedCurves(priceExpression);
+							String result = null;
+							// This does not account for multiple curves in the expression
+							for (final AbstractYearMonthCurve curve : curves) {
+								if (curve instanceof CommodityCurve) {
+									CommodityCurve comCurve = (CommodityCurve) curve;
+									if (comCurve.isSetMarketIndex()) {
+										result = comCurve.getMarketIndex().getName();
+									}
+								}
+							}
+							if (result != null) {
+								List<Slot<?>> slotList = indexToSlotMap.get(result);
+								if (slotList == null) {
+									slotList = new LinkedList<>();
+									indexToSlotMap.put(result, slotList);
+								}
+								slotList.add(slot);
+							}
+						});
+				final CompoundCommand cmd = new CompoundCommand();
+				indexToSlotMap.forEach((curveName, slots) -> {
+					final DealSet dealSet = CargoFactory.eINSTANCE.createDealSet();
+					dealSet.setName(String.format("%s_index_set", curveName));
+					cmd.append(AddCommand.create(ed, cargoModel, CargoPackage.Literals.CARGO_MODEL__DEAL_SETS, dealSet));
+					slots.forEach(slot -> cmd.append(AddCommand.create(ed, dealSet, CargoPackage.Literals.DEAL_SET__SLOTS, slot)));
+				});
+				if (!cmd.isEmpty()) {
+					scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, null, null);
+				}
+			}
+		});
+	}
+	
+	private @NonNull ModelMarketCurveProvider getMarketCurveProvider(final @NonNull IScenarioDataProvider scenarioDataProvider) {
+		if (scenarioDataProvider != null) {
+			final ModelMarketCurveProvider provider = scenarioDataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.MARKET_CURVES, ModelMarketCurveProvider.class);
+			if (provider != null) {
+				return provider;
+			}
+		}
+		throw new IllegalStateException("Unable to get market curve provider");
 	}
 	
 	private Action createDealSetsFromPurchaseContractsAction() {
