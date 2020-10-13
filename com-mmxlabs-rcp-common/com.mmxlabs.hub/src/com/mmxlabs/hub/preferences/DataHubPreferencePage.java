@@ -65,7 +65,8 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 	 */
 	// display note and disable login button
 	private IPropertyChangeListener disableLogin = event -> disableLogin();
-
+	private boolean detailsValid = true;
+	
 	public DataHubPreferencePage() {
 		super(GRID);
 		setPreferenceStore(DataHubActivator.getDefault().getPreferenceStore());
@@ -119,12 +120,20 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 	}
 
 	public void disableLogin() {
+		
+		detailsValid = false;
+		
 		loginButton.setEnabled(false);
+		refreshButton.setEnabled(false);
 		noteLabel.setVisible(true);
 	}
 
 	public void enableLogin() {
+		
+		detailsValid = true;
+		
 		loginButton.setEnabled(true);
+		refreshButton.setEnabled(true);
 		noteLabel.setVisible(false);
 	}
 
@@ -137,6 +146,9 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 	 * the changes have been applied
 	 */
 	private final IUpstreamDetailChangedListener enableLoginListener = () -> {
+
+		detailsValid = true;
+		
 		UpstreamUrlProvider.INSTANCE.updateOnlineStatus();
 		setLoginButtonText();
 		enableLogin();
@@ -149,6 +161,11 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 		@Override
 		public void hubStateChanged(boolean online, boolean loggedin, boolean changedToOnlineAndLoggedIn) {
 
+			// Do not update state if we are waiting for the user to press "apply"
+			if (!detailsValid) {
+				return;
+			}
+			
 			if (!getControl().isDisposed()) {
 				getShell().getDisplay().asyncExec(() -> {
 					if (loginButton != null && !loginButton.isDisposed()) {
