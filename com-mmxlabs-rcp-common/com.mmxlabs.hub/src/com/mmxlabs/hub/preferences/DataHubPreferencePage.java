@@ -38,6 +38,8 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.hub.DataHubActivator;
 import com.mmxlabs.hub.DataHubServiceProvider;
@@ -56,6 +58,9 @@ import okhttp3.Response;
 import okhttp3.TlsVersion;
 
 public class DataHubPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+	
+	
+	private static Logger LOGGER = LoggerFactory.getLogger(DataHubPreferencePage.class);
 
 	private static AuthenticationManager authenticationManager = AuthenticationManager.getInstance();
 
@@ -66,7 +71,7 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 	// display note and disable login button
 	private IPropertyChangeListener disableLogin = event -> disableLogin();
 	private boolean detailsValid = true;
-	
+
 	public DataHubPreferencePage() {
 		super(GRID);
 		setPreferenceStore(DataHubActivator.getDefault().getPreferenceStore());
@@ -120,18 +125,18 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 	}
 
 	public void disableLogin() {
-		
+
 		detailsValid = false;
-		
+
 		loginButton.setEnabled(false);
 		refreshButton.setEnabled(false);
 		noteLabel.setVisible(true);
 	}
 
 	public void enableLogin() {
-		
+
 		detailsValid = true;
-		
+
 		loginButton.setEnabled(true);
 		refreshButton.setEnabled(true);
 		noteLabel.setVisible(false);
@@ -148,7 +153,7 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 	private final IUpstreamDetailChangedListener enableLoginListener = () -> {
 
 		detailsValid = true;
-		
+
 		UpstreamUrlProvider.INSTANCE.updateOnlineStatus();
 		setLoginButtonText();
 		enableLogin();
@@ -165,11 +170,11 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 			if (!detailsValid) {
 				return;
 			}
-			
+
 			if (!getControl().isDisposed()) {
-				getShell().getDisplay().asyncExec(() -> {
+				Display.getDefault().asyncExec(() -> {
 					if (loginButton != null && !loginButton.isDisposed()) {
-						getShell().getDisplay().asyncExec(() -> loginButton.setEnabled(online));
+						loginButton.setEnabled(online);
 
 						if (loggedin) {
 							loginButton.setText("Logout");
@@ -235,7 +240,7 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 		setLoginButtonEnabled();
 
 		refreshButton = new Button(c, SWT.PUSH);
-		refreshButton.setText("Check connection state");
+		refreshButton.setText("Check connection");
 		refreshButton.setData("refreshButtonId"); // this id is used in swtbot tests
 		refreshButton.setLayoutData(GridDataFactory.fillDefaults().span(1, 1).create());
 
@@ -243,7 +248,29 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 			@Override
 			public void widgetSelected(final SelectionEvent se) {
 				// trigger refresh datahub service logged in state
-				UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
+				UpstreamUrlProvider.OnlineState state = UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
+				UpstreamUrlProvider.StateReason reason = state.getReason();
+				String msg = null;
+				switch (reason) {
+				case EMPTY_URL:
+					msg = "Data Hub URL is empty";
+					break;
+				case INVALID_URL:
+					msg = "Data Hub URL is not valid or unreachable";
+					break;
+				case UNKNOWN_ERROR:
+					msg = state.getMessage()  + " (see error log for details)";
+					LOGGER.error( state.getException().getMessage(),  state.getException());
+					break;
+				case HUB_ONLINE:
+					msg = "Data Hub connection successful";
+					break;
+				default:
+					break;
+				}
+				if (msg != null) {
+					MessageDialog.openError(getShell(), "Connection check", msg);
+				}
 			}
 		});
 

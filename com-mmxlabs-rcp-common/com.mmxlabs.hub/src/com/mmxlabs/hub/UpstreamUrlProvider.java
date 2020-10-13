@@ -24,6 +24,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.swt.custom.ST;
 import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -182,7 +183,51 @@ public class UpstreamUrlProvider {
 		workspaceListeners.remove(listener);
 	}
 
-	public synchronized boolean isUpstreamAvailable() {
+	public enum StateReason {
+		UNKNOWN_ERROR, EMPTY_URL, INVALID_URL, HUB_ONLINE
+	}
+
+	public static class OnlineState {
+		private final StateReason reason;
+		private final String message;
+		private final Exception exception;
+
+		public OnlineState(final StateReason reason, final String message, final Exception exception) {
+			this.reason = reason;
+			this.message = message;
+			this.exception = exception;
+		}
+
+		public static OnlineState emptyURL() {
+			return new OnlineState(StateReason.EMPTY_URL, null, null);
+		}
+
+		public static OnlineState invalidURL() {
+			return new OnlineState(StateReason.INVALID_URL, null, null);
+		}
+
+		public static OnlineState online() {
+			return new OnlineState(StateReason.HUB_ONLINE, null, null);
+		}
+
+		public static OnlineState error(final String msg, final Exception e) {
+			return new OnlineState(StateReason.UNKNOWN_ERROR, msg, e);
+		}
+
+		public StateReason getReason() {
+			return reason;
+		}
+
+		public String getMessage() {
+			return message;
+		}
+
+		public Exception getException() {
+			return exception;
+		}
+	}
+
+	public synchronized OnlineState isUpstreamAvailable() {
 		return isUpstreamAvailable((Shell) null);
 	}
 
@@ -201,7 +246,7 @@ public class UpstreamUrlProvider {
 
 			baseUrl = stripTrailingForwardSlash(baseUrl);
 
-			if (!testUpstreamAvailability(baseUrl)) {
+			if (testUpstreamAvailability(baseUrl).getReason() != StateReason.HUB_ONLINE) {
 				DataHubServiceProvider.getInstance().setOnlineState(false);
 				return;
 			}
@@ -218,30 +263,32 @@ public class UpstreamUrlProvider {
 
 			DataHubServiceProvider.getInstance().setOnlineState(true);
 			authenticationManager.updateAuthenticationScheme(baseUrl, currentInformation.getAuthenticationScheme());
-
-		} catch (Exception e) {
-			// 	Ignore exceptions
+		} catch (final Exception e) {
+			// Ignore exceptions
 		}
 	}
 
 	/*
 	 * Gets the Datahub URL from preferences and calls testUpstreamAvailability This pings the Datahub
 	 */
-	public synchronized boolean isUpstreamAvailable(@Nullable final Shell optionalShell) {
+	public synchronized OnlineState isUpstreamAvailable(@Nullable final Shell optionalShell) {
 
 		boolean valid = false;
 		try {
 
 			String baseUrl = preferenceStore.getString(DataHubPreferenceConstants.P_DATAHUB_URL_KEY);
 			if (baseUrl == null || baseUrl.isEmpty()) {
-				return false;
+				return OnlineState.emptyURL();
 			}
 
 			baseUrl = stripTrailingForwardSlash(baseUrl);
 
-			if (!testUpstreamAvailability(baseUrl)) {
-				DataHubServiceProvider.getInstance().setOnlineState(false);
-				return false;
+			{
+				final OnlineState state = testUpstreamAvailability(baseUrl);
+				if (state.getReason() != StateReason.HUB_ONLINE) {
+					DataHubServiceProvider.getInstance().setOnlineState(false);
+					return state;
+				}
 			}
 
 			final Optional<DatahubInformation> upstreamInformation = getUpstreamInformation(baseUrl);
@@ -263,9 +310,11 @@ public class UpstreamUrlProvider {
 			currentBaseURL = baseUrl;
 			connectionValid = true;
 
+			return OnlineState.online();
 		} catch (final Exception e) {
 			// Ignore...?
 			e.printStackTrace();
+			return OnlineState.error("Unknown error", e);
 		} finally {
 			// Set state to invalid if we didn't complete the checks successfully
 			if (!valid) {
@@ -273,7 +322,6 @@ public class UpstreamUrlProvider {
 				currentBaseURL = null;
 			}
 		}
-		return true;
 	}
 
 	public static String stripTrailingForwardSlash(String baseUrl) {
@@ -283,54 +331,59 @@ public class UpstreamUrlProvider {
 		return baseUrl;
 	}
 
-	public boolean testUpstreamAvailability(final String url) {
+	public @NonNull OnlineState testUpstreamAvailability(final String url) {
 
-		if (url == null || url.isEmpty() || !url.startsWith("http") || url.charAt(url.length() - 1) == '/') {
-			return false;
+		if (url == null || url.isEmpty()) {
+			return OnlineState.emptyURL();
+		}
+		if (!url.startsWith("http") || url.charAt(url.length() - 1) == '/') {
+			return OnlineState.invalidURL();
 		}
 
 		final Request pingRequest = new Request.Builder().url(url + "/ping").get().build();
 
 		try (final Response pingResponse = httpClient.newCall(pingRequest).execute()) {
 			if (pingResponse.isSuccessful()) {
-				return true;
+				return OnlineState.online();
 			}
 		} catch (final UnknownHostException e) {
 			if (!reportedError.containsKey(url)) {
 				reportedError.put(url, new Object());
 				LOGGER.error("Error finding Data Hub host", e);
 			}
-			return false;
+			return OnlineState.error("Error finding Data Hub host", e);
 		} catch (final SSLPeerUnverifiedException e) {
 			if (!reportedError.containsKey(url)) {
 				reportedError.put(url, new Object());
 				LOGGER.error("Error SSL server hostname mismatch", e);
 			}
-			return false;
+			return OnlineState.error("Error SSL server hostname mismatch", e);
 		} catch (final SSLException e) {
 			if (!reportedError.containsKey(url)) {
 				reportedError.put(url, new Object());
 				LOGGER.error("Error validating server SSL certificates", e);
 			}
-			return false;
+			return OnlineState.error("Error validating server SSL certificates", e);
+
 		} catch (final SocketTimeoutException e) {
 			if (!reportedError.containsKey(url)) {
 				reportedError.put(url, new Object());
 				LOGGER.warn("Connection attempt to upstream server timed out", e);
 			}
-			return false;
+			return OnlineState.error("Connection attempt to upstream server timed out", e);
+
 		} catch (final IOException e) {
 			if (!reportedError.containsKey(url)) {
 				reportedError.put(url, new Object());
 				LOGGER.error("Error reaching upstream server", e);
 			}
-			return false;
+			return OnlineState.error("Error reaching upstream server", e);
 		}
 
 		// Clear any logged errors
 		reportedError.remove(url);
 
-		return true;
+		return OnlineState.online();
 	}
 
 	public boolean isAvailable() {
