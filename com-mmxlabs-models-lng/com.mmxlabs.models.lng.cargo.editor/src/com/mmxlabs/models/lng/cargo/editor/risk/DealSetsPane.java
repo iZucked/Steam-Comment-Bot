@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -45,9 +46,15 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
+import org.ops4j.peaberry.Peaberry;
+import org.ops4j.peaberry.eclipse.EclipseRegistry;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -56,6 +63,7 @@ import com.mmxlabs.models.lng.cargo.DealSet;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorAction;
+import com.mmxlabs.models.lng.cargo.util.DefaultExposuresCustomiser;
 import com.mmxlabs.models.lng.cargo.util.IExposuresCustomiser;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.Contract;
@@ -80,12 +88,14 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 	private final IScenarioEditingLocation jointModelEditor;
 	
 	@Inject
-	private IExposuresCustomiser exposuresCustomiser;
+	private Iterable<IExposuresCustomiser> exposuresCustomisers;
 
 	public DealSetsPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);
 		this.jointModelEditor = location;
-		final Injector injector = Guice.createInjector(new DealSetsEditorProviderModule());
+
+		final BundleContext bc = FrameworkUtil.getBundle(DealSetsPane.class).getBundleContext();
+		final Injector injector = Guice.createInjector(Peaberry.osgiModule(bc, EclipseRegistry.eclipseRegistry()), new DealSetsEditorProviderModule());
 		injector.injectMembers(this);
 	}
 
@@ -268,20 +278,19 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 		final Action generateFromIndicesAction = createDealSetsFromIndicesAction();
 		
 		final List<Action> actionList = new LinkedList<>();
-		if (generateFromCargoesAction != null) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_DEAL_SETS_GENERATE_FROM_CARGOES)) {
 			actionList.add(generateFromCargoesAction);
 		}
-		if (generateFromContractsAction != null) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_DEAL_SETS_GENERATE_FROM_CONTRACTS)) {
 			actionList.add(generateFromContractsAction);
 		}
-		if (generateFromCurvesAction != null) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_DEAL_SETS_GENERATE_FROM_CURVES)) {
 			actionList.add(generateFromCurvesAction);
 		}
-		if (generateFromIndicesAction != null) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_DEAL_SETS_GENERATE_FROM_INDICES)) {
 			actionList.add(generateFromIndicesAction);
 		}
 		final Action[] extraActions = actionList.toArray(new Action[0]);
-		
 		return AddModelAction.create(containment.getEReferenceType(), getAddContext(containment), extraActions);
 	}
 	
@@ -294,12 +303,10 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 				final Action generateFromSalesContractsAction = createDealSetsFromSalesContractsAction();
 				addActionToMenu(generateFromPurchaseContractsAction, menu);
 				addActionToMenu(generateFromSalesContractsAction, menu);
-				
 			}
 			
 			@Override
 			public void run() {
-				
 			}
 		};
 	}
@@ -340,24 +347,24 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 				final EditingDomain ed = scenarioEditingLocation.getEditingDomain();
 				final Map<String, List<Slot<?>>> curveToSlotMap = new HashMap<>();
 
+				final Iterator<IExposuresCustomiser> iterExposuresCustomisers = exposuresCustomisers.iterator();
+				final IExposuresCustomiser exposuresCustomiser = iterExposuresCustomisers.hasNext() ? iterExposuresCustomisers.next(): new DefaultExposuresCustomiser();
 				
 				cargoModel.getCargoes().stream() //
 						.flatMap(cargo -> cargo.getSlots().stream().filter(slot -> (!(slot instanceof SpotSlot))))
 						.forEach(slot -> {
 							final String priceExpression = exposuresCustomiser.provideExposedPriceExpression(slot);
 							final Collection<AbstractYearMonthCurve> curves = mmCurveProvider.getLinkedCurves(priceExpression);
-							String result = null;
-							// This does not account for multiple curves in the expression
 							for (final AbstractYearMonthCurve curve : curves) {
-								result = curve.getName();
-							}
-							if (result != null) {
-								List<Slot<?>> slotList = curveToSlotMap.get(result);
-								if (slotList == null) {
-									slotList = new LinkedList<>();
-									curveToSlotMap.put(result, slotList);
+								final String curveName = curve.getName();
+								if (curveName != null) {
+									List <Slot<?>> slotList = curveToSlotMap.get(curveName);
+									if (slotList == null) {
+										slotList = new LinkedList<>();
+										curveToSlotMap.put(curveName, slotList);
+									}
+									slotList.add(slot);
 								}
-								slotList.add(slot);
 							}
 						});
 				final CompoundCommand cmd = new CompoundCommand();
@@ -384,29 +391,26 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 				final EditingDomain ed = scenarioEditingLocation.getEditingDomain();
 				final Map<String, List<Slot<?>>> indexToSlotMap = new HashMap<>();
 
+				final Iterator<IExposuresCustomiser> iterExposuresCustomisers = exposuresCustomisers.iterator();
+				final IExposuresCustomiser exposuresCustomiser = iterExposuresCustomisers.hasNext() ? iterExposuresCustomisers.next(): new DefaultExposuresCustomiser();
 				
 				cargoModel.getCargoes().stream() //
 						.flatMap(cargo -> cargo.getSlots().stream().filter(slot -> (!(slot instanceof SpotSlot))))
 						.forEach(slot -> {
 							final String priceExpression = exposuresCustomiser.provideExposedPriceExpression(slot);
-							final Collection<AbstractYearMonthCurve> curves = mmCurveProvider.getLinkedCurves(priceExpression);
-							String result = null;
-							// This does not account for multiple curves in the expression
-							for (final AbstractYearMonthCurve curve : curves) {
+							for (final AbstractYearMonthCurve curve : mmCurveProvider.getLinkedCurves(priceExpression)) {
 								if (curve instanceof CommodityCurve) {
 									CommodityCurve comCurve = (CommodityCurve) curve;
 									if (comCurve.isSetMarketIndex()) {
-										result = comCurve.getMarketIndex().getName();
+										String marketIndexName = comCurve.getMarketIndex().getName();
+										List <Slot<?>> slotList = indexToSlotMap.get(marketIndexName);
+										if (slotList == null) {
+											slotList = new LinkedList<>();
+											indexToSlotMap.put(marketIndexName, slotList);
+										}
+										slotList.add(slot);
 									}
 								}
-							}
-							if (result != null) {
-								List<Slot<?>> slotList = indexToSlotMap.get(result);
-								if (slotList == null) {
-									slotList = new LinkedList<>();
-									indexToSlotMap.put(result, slotList);
-								}
-								slotList.add(slot);
 							}
 						});
 				final CompoundCommand cmd = new CompoundCommand();
