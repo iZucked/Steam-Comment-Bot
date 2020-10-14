@@ -112,7 +112,6 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CargoType;
-import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -132,10 +131,10 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorActi
 import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.ITradesTableContextMenuExtension;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.TradesTableContextMenuExtensionUtil;
 import com.mmxlabs.models.lng.cargo.ui.util.TimeWindowHelper;
+import com.mmxlabs.models.lng.cargo.util.CargoEditorFilterUtils;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.SlotContractParams;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
@@ -154,13 +153,11 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.types.DESPurchaseDealType;
 import com.mmxlabs.models.lng.types.FOBSaleDealType;
-import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.lng.ui.ImageConstants;
 import com.mmxlabs.models.lng.ui.LngUIActivator;
@@ -2034,248 +2031,47 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		}
 	}
 
-	private enum CargoFilterOption {
-		NONE, CARGO, LONG, SHORT, OPEN
-	}
-
 	private class TradesCargoFilter extends ViewerFilter {
-		private CargoFilterOption option = CargoFilterOption.NONE;
+		private CargoEditorFilterUtils.CargoFilterOption option = CargoEditorFilterUtils.CargoFilterOption.NONE;
 
 		@Override
 		public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
-			RowData row = null;
-			Cargo cargo = null;
 			if (element instanceof RowData) {
-				row = (RowData) element;
-				cargo = row.getCargo();
+				final RowData row = (RowData) element;
+				return CargoEditorFilterUtils.cargoTradesFilter(this.option, row.getCargo(), row.getLoadSlot(), row.getDischargeSlot(), filtersOpenContracts);
+			} else {
+				return false;
 			}
-			switch (option) {
-			case NONE:
-				return true;
-			case CARGO:
-				return cargo != null;
-			case LONG:
-				return isLong(row, cargo);
-			case SHORT:
-				return isShort(row, cargo);
-			case OPEN:
-				return isLong(row, cargo) || isShort(row, cargo);
-			}
-			return false;
 		}
-
-		private boolean isShort(final RowData row, final Cargo cargo) {
-			if (row != null && cargo == null && row.getDischargeSlot() != null) {
-				return true;
-			} else if (row != null && cargo != null && row.getDischargeSlot() != null && row.getLoadSlot() instanceof SpotSlot) {
-				return true;
-			} else if (row != null && cargo != null && row.getDischargeSlot() != null && row.getLoadSlot() != null) {
-				final LoadSlot load = row.getLoadSlot();
-				final Contract contract = load.getContract();
-				if (contract != null && contract.getName() != null) {
-					return filtersOpenContracts.contains(contract.getName().toLowerCase());
-				}
-			}
-			return false;
-		}
-
-		private boolean isLong(final RowData row, final Cargo cargo) {
-			if (row != null && cargo == null && row.getLoadSlot() != null) {
-				return true;
-			} else if (row != null && cargo != null && row.getLoadSlot() != null && row.getDischargeSlot() instanceof SpotSlot) {
-				return true;
-			} else if (row != null && cargo != null && row.getLoadSlot() != null && row.getDischargeSlot() != null) {
-				final DischargeSlot discharge = row.getDischargeSlot();
-				final Contract contract = discharge.getContract();
-				if (contract != null && contract.getName() != null) {
-					return filtersOpenContracts.contains(contract.getName().toLowerCase());
-				}
-			}
-			return false;
-		}
-
-	}
-
-	private enum ShippedCargoFilterOption {
-		NONE, SHIPPED, NON_SHIPPED, DES, FOB, NOMINAL
 	}
 
 	private class ShippedCargoFilter extends ViewerFilter {
-		private ShippedCargoFilterOption option = ShippedCargoFilterOption.NONE;
+		private CargoEditorFilterUtils.ShippedCargoFilterOption option = CargoEditorFilterUtils.ShippedCargoFilterOption.NONE;
 
 		@Override
 		public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
-			RowData row = null;
-			Cargo cargo = null;
-			CargoType cargoType = null;
 			if (element instanceof RowData) {
-				row = (RowData) element;
-				cargo = row.getCargo();
-				if (cargo != null) {
-					cargoType = cargo.getCargoType();
-				}
+				return CargoEditorFilterUtils.shippedCargoFilter(this.option, ((RowData) element).getCargo());
+			} else {
+				return false;
 			}
-			switch (option) {
-			case NONE:
-				return true;
-			case SHIPPED:
-				return cargo != null && cargoType == CargoType.FLEET;
-			case NON_SHIPPED:
-				return cargo != null && cargoType != CargoType.FLEET;
-			case DES:
-				return cargo != null && cargoType == CargoType.DES;
-			case FOB:
-				return cargo != null && cargoType == CargoType.FOB;
-			case NOMINAL:
-				if (cargo != null) {
-					final VesselAssignmentType cargoVesselAT = cargo.getVesselAssignmentType();
-					final CharterInMarket cargoCharterInMarket;
-					if (cargoVesselAT instanceof CharterInMarket) {
-						cargoCharterInMarket = (CharterInMarket) cargoVesselAT;
-					} else if (cargoVesselAT instanceof CharterInMarketOverride) {
-						cargoCharterInMarket = ((CharterInMarketOverride) cargoVesselAT).getCharterInMarket();
-					} else {
-						return false;
-					}
-					return cargoCharterInMarket.isNominal();
-				} else {
-					return false;
-				}
-			}
-			return false;
 		}
 	}
 
-	private enum TimeFilterType {
-		NONE, YEARMONTH, PROMPT, CURRENT
-	}
-
 	private class TimePeriodFilter extends ViewerFilter {
-		private TimeFilterType type = TimeFilterType.NONE;
+		private CargoEditorFilterUtils.TimeFilterOption option = CargoEditorFilterUtils.TimeFilterOption.NONE;
 		private YearMonth choice = null;
 		private int promptMonth = 3;
 
 		@Override
 		public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
-			if (type == TimeFilterType.NONE)
-				return true;
 			if (element instanceof RowData) {
 				final RowData row = (RowData) element;
-				switch (type) {
-				case YEARMONTH:
-					return checkYearMonth(row, choice);
-				case PROMPT:
-					return checkPrompt(row, promptMonth);
-				case CURRENT:
-					return checkCurrent(row);
-				}
+				return CargoEditorFilterUtils.timePeriodFilter(option, row.getLoadSlot(), row.getDischargeSlot(), choice, promptMonth);
+			} else {
+				return false;
 			}
-			return false;
 		}
-
-		private boolean checkYearMonth(final RowData row, final YearMonth choice) {
-			LocalDate start = null;
-			LocalDate end = null;
-			final LoadSlot ls = row.getLoadSlot();
-			if (ls != null) {
-				start = ls.getSchedulingTimeWindow().getStart().toLocalDate();
-				end = ls.getSchedulingTimeWindow().getEnd().toLocalDate();
-			}
-			if ((start != null) && (end != null)) {
-				final YearMonth yms = YearMonth.from(start);
-				final YearMonth yme = YearMonth.from(end);
-				if ((yms.equals(choice)) || (yme.equals(choice))) {
-					return true;
-				}
-			}
-			final DischargeSlot ds = row.getDischargeSlot();
-			if (ds != null) {
-				start = ds.getSchedulingTimeWindow().getStart().toLocalDate();
-				end = ds.getSchedulingTimeWindow().getEnd().toLocalDate();
-			}
-			if ((start != null) && (end != null)) {
-				final YearMonth yms = YearMonth.from(start);
-				final YearMonth yme = YearMonth.from(end);
-				if ((yms.equals(choice)) || (yme.equals(choice))) {
-					return true;
-				}
-			}
-			return false;
-		}
-
-		private boolean checkPrompt(final RowData row, final int month) {
-			final boolean result = false;
-			LocalDate start = null;
-			LocalDate end = null;
-			final LocalDate today = LocalDate.now();
-			final LocalDate prompt = today.plusMonths(month);
-			final LoadSlot ls = row.getLoadSlot();
-			if (ls != null) {
-				start = ls.getSchedulingTimeWindow().getStart().toLocalDate();
-				end = ls.getSchedulingTimeWindow().getEnd().toLocalDate();
-			}
-			if (start != null && end != null) {
-				if (start.isAfter(today) && start.isBefore(prompt)) {
-					return true;
-				}
-				if (end.isAfter(today) && end.isBefore(prompt)) {
-					return true;
-				}
-			}
-			final DischargeSlot ds = row.getDischargeSlot();
-			if (ds != null) {
-				start = ds.getSchedulingTimeWindow().getStart().toLocalDate();
-				end = ds.getSchedulingTimeWindow().getEnd().toLocalDate();
-			}
-			if (start != null && end != null) {
-				if (start.isAfter(today) && start.isBefore(prompt)) {
-					return true;
-				}
-				if (end.isAfter(today) && end.isBefore(prompt)) {
-					return true;
-				}
-			}
-
-			return result;
-		}
-		
-		private boolean checkCurrent(final RowData row) {
-			final boolean result = false;
-			LocalDate start = null;
-			LocalDate end = null;
-			final LocalDate today = LocalDate.now();
-			final LoadSlot ls = row.getLoadSlot();
-			if (ls != null && ls.getSchedulingTimeWindow().getStart() != null &&//
-					ls.getSchedulingTimeWindow().getEnd() != null) {
-				start = ls.getSchedulingTimeWindow().getStart().toLocalDate();
-				end = ls.getSchedulingTimeWindow().getEnd().toLocalDate();
-			}
-			if (start != null && end != null) {
-				if (start.isAfter(today)) {
-					return true;
-				}
-				if (end.isAfter(today)) {
-					return true;
-				}
-			}
-			final DischargeSlot ds = row.getDischargeSlot();
-			if (ds != null && ds.getSchedulingTimeWindow().getStart() != null &&//
-					ds.getSchedulingTimeWindow().getEnd() != null) {
-				start = ds.getSchedulingTimeWindow().getStart().toLocalDate();
-				end = ds.getSchedulingTimeWindow().getEnd().toLocalDate();
-			}
-			if (start != null && end != null) {
-				if (start.isAfter(today)) {
-					return true;
-				}
-				if (end.isAfter(today)) {
-					return true;
-				}
-			}
-
-			return result;
-		}
-
 	}
 
 	private class FilterMenuAction extends DefaultMenuCreatorAction {
@@ -2308,9 +2104,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				@Override
 				public void run() {
 					tradesFilter.clear();
-					tradesCargoFilter.option = CargoFilterOption.NONE;
-					shippedCargoFilter.option = ShippedCargoFilterOption.NONE;
-					monthFilter.type = TimeFilterType.NONE;
+					tradesCargoFilter.option = CargoEditorFilterUtils.CargoFilterOption.NONE;
+					shippedCargoFilter.option = CargoEditorFilterUtils.ShippedCargoFilterOption.NONE;
+					monthFilter.option = CargoEditorFilterUtils.TimeFilterOption.NONE;
 					extraFiltersProvider.clear();
 					scenarioViewer.refresh(false);
 				}
@@ -2328,28 +2124,28 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					final Action cargoesAction = new Action("Cargoes only") {
 						@Override
 						public void run() {
-							tradesCargoFilter.option = CargoFilterOption.CARGO;
+							tradesCargoFilter.option = CargoEditorFilterUtils.CargoFilterOption.CARGO;
 							scenarioViewer.refresh(false);
 						}
 					};
 					final Action openAction = new Action("Open only") {
 						@Override
 						public void run() {
-							tradesCargoFilter.option = CargoFilterOption.OPEN;
+							tradesCargoFilter.option = CargoEditorFilterUtils.CargoFilterOption.OPEN;
 							scenarioViewer.refresh(false);
 						}
 					};
 					final Action longsAction = new Action("Longs") {
 						@Override
 						public void run() {
-							tradesCargoFilter.option = CargoFilterOption.LONG;
+							tradesCargoFilter.option = CargoEditorFilterUtils.CargoFilterOption.LONG;
 							scenarioViewer.refresh(false);
 						}
 					};
 					final Action shortsAction = new Action("Shorts") {
 						@Override
 						public void run() {
-							tradesCargoFilter.option = CargoFilterOption.SHORT;
+							tradesCargoFilter.option = CargoEditorFilterUtils.CargoFilterOption.SHORT;
 							scenarioViewer.refresh(false);
 						}
 					};
@@ -2368,35 +2164,35 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					final Action cargoesAction = new Action("Shipped") {
 						@Override
 						public void run() {
-							shippedCargoFilter.option = ShippedCargoFilterOption.SHIPPED;
+							shippedCargoFilter.option = CargoEditorFilterUtils.ShippedCargoFilterOption.SHIPPED;
 							scenarioViewer.refresh(false);
 						}
 					};
 					final Action openAction = new Action("Non Shipped") {
 						@Override
 						public void run() {
-							shippedCargoFilter.option = ShippedCargoFilterOption.NON_SHIPPED;
+							shippedCargoFilter.option = CargoEditorFilterUtils.ShippedCargoFilterOption.NON_SHIPPED;
 							scenarioViewer.refresh(false);
 						}
 					};
 					final Action longsAction = new Action("FOB") {
 						@Override
 						public void run() {
-							shippedCargoFilter.option = ShippedCargoFilterOption.FOB;
+							shippedCargoFilter.option = CargoEditorFilterUtils.ShippedCargoFilterOption.FOB;
 							scenarioViewer.refresh(false);
 						}
 					};
 					final Action shortsAction = new Action("DES") {
 						@Override
 						public void run() {
-							shippedCargoFilter.option = ShippedCargoFilterOption.DES;
+							shippedCargoFilter.option = CargoEditorFilterUtils.ShippedCargoFilterOption.DES;
 							scenarioViewer.refresh(false);
 						}
 					};
 					final Action nominalsAction = new Action("Nominal") {
 						@Override
 						public void run() {
-							shippedCargoFilter.option = ShippedCargoFilterOption.NOMINAL;
+							shippedCargoFilter.option = CargoEditorFilterUtils.ShippedCargoFilterOption.NOMINAL;
 							scenarioViewer.refresh(false);
 						}
 					};
@@ -2417,7 +2213,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					final Action currentAction = new Action("Today onwards") {
 						@Override
 						public void run() {
-							monthFilter.type = TimeFilterType.CURRENT;
+							monthFilter.option = CargoEditorFilterUtils.TimeFilterOption.CURRENT;
 							scenarioViewer.refresh(false);
 						}
 					};
@@ -2426,7 +2222,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					final Action promptAction = new Action("Today +3m") {
 						@Override
 						public void run() {
-							monthFilter.type = TimeFilterType.PROMPT;
+							monthFilter.option = CargoEditorFilterUtils.TimeFilterOption.PROMPT;
 							monthFilter.promptMonth = 3;
 							scenarioViewer.refresh(false);
 						}
@@ -2453,7 +2249,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 							@Override
 							public void run() {
 								monthFilter.choice = ymc;
-								monthFilter.type = TimeFilterType.YEARMONTH;
+								monthFilter.option = CargoEditorFilterUtils.TimeFilterOption.YEARMONTH;
 								scenarioViewer.refresh(false);
 							}
 						};
