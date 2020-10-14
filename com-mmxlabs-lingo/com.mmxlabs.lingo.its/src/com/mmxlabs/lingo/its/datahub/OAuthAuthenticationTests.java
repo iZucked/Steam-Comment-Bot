@@ -25,6 +25,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.UpstreamUrlProvider;
+import com.mmxlabs.hub.UpstreamUrlProvider.StateReason;
 import com.mmxlabs.hub.auth.OAuthAuthenticationManager;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 
@@ -104,7 +105,7 @@ public class OAuthAuthenticationTests {
 	@Test
 	public void checkDatahubConnection() {
 		// force update online state refresh
-		boolean isAvailable = UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
+		boolean isAvailable = UpstreamUrlProvider.INSTANCE.isUpstreamAvailable().getReason() == StateReason.HUB_ONLINE;
 		assertTrue(datahubServiceProvider.isHubOnline());
 	}
 

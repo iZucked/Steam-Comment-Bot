@@ -17,7 +17,6 @@ import com.mmxlabs.models.lng.adp.CargoNumberDistributionModel;
 import com.mmxlabs.models.lng.adp.CargoSizeDistributionModel;
 import com.mmxlabs.models.lng.adp.ContractProfile;
 import com.mmxlabs.models.lng.adp.IntervalType;
-import com.mmxlabs.models.lng.adp.LNGVolumeUnit;
 import com.mmxlabs.models.lng.adp.PreDefinedDate;
 import com.mmxlabs.models.lng.adp.PreDefinedDistributionModel;
 import com.mmxlabs.models.lng.adp.ProfileVesselRestriction;
@@ -43,6 +42,7 @@ public class SubContractProfileMaker<T extends AbstractContractProfileMaker<T, U
 		this.contractProfile = contractProfile;
 		this.parent = parent;
 		this.subContractProfile = ADPFactory.eINSTANCE.createSubContractProfile();
+		this.subContractProfile.setPort(contractProfile.getContract().getPreferredPort());
 	}
 
 	@NonNull
@@ -152,5 +152,4 @@ public class SubContractProfileMaker<T extends AbstractContractProfileMaker<T, U
 		subContractProfile.setDistributionModel(model);
 		return this;
 	}
-
 }

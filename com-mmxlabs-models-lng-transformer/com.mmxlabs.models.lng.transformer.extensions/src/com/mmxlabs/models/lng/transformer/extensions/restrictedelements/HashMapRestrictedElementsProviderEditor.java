@@ -44,14 +44,14 @@ public class HashMapRestrictedElementsProviderEditor implements IRestrictedEleme
 			if (followerMap.containsKey(element)) {
 				followerMap.get(element).addAll(restrictedFollowers);
 			} else {
-				followerMap.put(element, new HashSet<ISequenceElement>(restrictedFollowers));
+				followerMap.put(element, new HashSet<>(restrictedFollowers));
 			}
 		}
 		if (restrictedPreceders != null) {
 			if (precedingMap.containsKey(element)) {
 				precedingMap.get(element).addAll(restrictedPreceders);
 			} else {
-				precedingMap.put(element, new HashSet<ISequenceElement>(restrictedPreceders));
+				precedingMap.put(element, new HashSet<>(restrictedPreceders));
 			}
 		}
 

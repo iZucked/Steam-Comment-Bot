@@ -98,6 +98,7 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.editor.PreferenceConstants;
 import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.CargoBulkEditorPackage;
 import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Row;
 import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Table;
@@ -122,6 +123,7 @@ import com.mmxlabs.models.lng.cargo.editor.bulk.views.ShippedCargoBasedFilterHan
 import com.mmxlabs.models.lng.cargo.editor.bulk.views.TimePeriodTradesBasedFilterHandler;
 import com.mmxlabs.models.lng.cargo.editor.bulk.views.TradesBasedColumnFactory;
 import com.mmxlabs.models.lng.cargo.editor.bulk.views.VesselsTradesBasedFilterHandler;
+import com.mmxlabs.models.lng.cargo.presentation.CargoEditorPlugin;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.PromptToolbarEditor;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.CargoEditingCommands;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.CargoEditorMenuHelper;
@@ -956,7 +958,41 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 			registerHandler(handler, true);
 		}
 		{
-			final CargoTradesBasedFilterHandler handler = new CargoTradesBasedFilterHandler();
+			final IPreferenceStore cargoEditorPreferenceStore = CargoEditorPlugin.getPlugin().getPreferenceStore();
+			final Set<String> filtersOpenContracts = new HashSet<>();
+			final IPropertyChangeListener propertyChangeListener = event -> {
+				final String property = event.getProperty();
+				if (PreferenceConstants.P_CONTRACTS_TO_CONSIDER_OPEN.equals(property)) {
+					final String value = cargoEditorPreferenceStore.getString(property);
+					filtersOpenContracts.clear();
+					if (value != null) {
+						if (value.contains(",")) {
+							final String[] split = value.split(",");
+							for (final String str : split) {
+								filtersOpenContracts.add(str.trim().toLowerCase());
+							}
+						} else {
+							filtersOpenContracts.add(value.trim().toLowerCase());
+						}
+						filtersOpenContracts.remove("");
+					}
+					viewer.refresh();
+				}
+			};
+			cargoEditorPreferenceStore.addPropertyChangeListener(propertyChangeListener);
+			final String value = cargoEditorPreferenceStore.getString(PreferenceConstants.P_CONTRACTS_TO_CONSIDER_OPEN);
+			if (value != null) {
+				if (value.contains(",")) {
+					final String[] split = value.split(",");
+					for (final String str : split) {
+						filtersOpenContracts.add(str.trim().toLowerCase());
+					}
+				} else {
+					filtersOpenContracts.add(value.trim().toLowerCase());
+				}
+				filtersOpenContracts.remove("");
+			}
+			final CargoTradesBasedFilterHandler handler = new CargoTradesBasedFilterHandler(filtersOpenContracts);
 			registerHandler(handler, true);
 		}
 		{

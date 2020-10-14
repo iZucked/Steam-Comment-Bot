@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.analytics.ui.views.evaluators;
 import java.util.function.Consumer;
 
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
@@ -72,6 +73,7 @@ public class WhatIfEvaluator {
 		EditingDomain editingDomain = scenarioEditingLocation.getEditingDomain();
 		IScenarioDataProvider sdp = scenarioEditingLocation.getScenarioDataProvider();
 		ScenarioInstance scenarioInstance = scenarioEditingLocation.getScenarioInstance();
+		EObject scenario = sdp.getScenario();
 
 		final long a = System.currentTimeMillis();
 
@@ -88,7 +90,7 @@ public class WhatIfEvaluator {
 			if (!cmd.isEmpty()) {
 				RunnerHelper.asyncExec(() -> {
 					editingDomain.getCommandStack().execute(cmd);
-					EMFUtils.checkValidContainment(sdp.getScenario());
+					EMFUtils.checkValidContainment(scenario);
 
 					if (sandboxResult != null) {
 						final AnalyticsSolution data = new AnalyticsSolution(scenarioInstance, sandboxResult, sandboxResult.getName());

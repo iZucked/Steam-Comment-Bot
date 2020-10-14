@@ -14,12 +14,11 @@ import java.util.Set;
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.widgets.Menu;
 
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Row;
 import com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart.BulkTradesTablePane;
 import com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart.ColumnFilters;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorAction;
+import com.mmxlabs.models.lng.cargo.util.CargoEditorFilterUtils;
 
 public class TimePeriodTradesBasedFilterHandler implements ITradesBasedFilterHandler {
 
@@ -38,8 +37,16 @@ public class TimePeriodTradesBasedFilterHandler implements ITradesBasedFilterHan
 
 			@Override
 			protected void populate(final Menu menu) {
+				final Action currentAction = new Action("Today onwards") {
+					@Override
+					public void run() {
+						activeFilters.add(new TimePeriodFilterHandler(CargoEditorFilterUtils.TimeFilterOption.CURRENT));
+						viewer.getScenarioViewer().refresh();
+					}
+				};
+				addActionToMenu(currentAction, menu);
 				
-				final Action fooAction = new Action("Prompt") {
+				final Action promptAction = new Action("Prompt") {
 					@Override
 					public void run() {
 						final Iterator<ITradesBasedFilterHandler> itr = activeFilters.iterator();
@@ -49,11 +56,11 @@ public class TimePeriodTradesBasedFilterHandler implements ITradesBasedFilterHan
 								itr.remove();
 							}
 						}
-						activeFilters.add(new TimePeriodFilterHandler(TimeFilterType.PROMPT, 3));
+						activeFilters.add(new TimePeriodFilterHandler(CargoEditorFilterUtils.TimeFilterOption.PROMPT, 3));
 						viewer.getScenarioViewer().refresh();
 					}
 				};
-				addActionToMenu(fooAction, menu);
+				addActionToMenu(promptAction, menu);
 
 				buildMonth(start, end, menu);
 			}
@@ -76,7 +83,7 @@ public class TimePeriodTradesBasedFilterHandler implements ITradesBasedFilterHan
 									itr.remove();
 								}
 							}
-							activeFilters.add(new TimePeriodFilterHandler(TimeFilterType.YEARMONTH, ymc));
+							activeFilters.add(new TimePeriodFilterHandler(CargoEditorFilterUtils.TimeFilterOption.YEARMONTH, ymc));
 							viewer.getScenarioViewer().refresh();
 						}
 					};
@@ -127,28 +134,24 @@ public class TimePeriodTradesBasedFilterHandler implements ITradesBasedFilterHan
 		return true;
 	}
 	
-	private enum TimeFilterType {
-		NONE, YEARMONTH, PROMPT
-	}
-	
 	private class TimePeriodFilterHandler implements ITradesBasedFilterHandler {
 		
-		private TimeFilterType type = TimeFilterType.NONE;
+		private CargoEditorFilterUtils.TimeFilterOption option = CargoEditorFilterUtils.TimeFilterOption.NONE;
 		private YearMonth choice = null;
 		private int promptMonth = 3;
 
-		public TimePeriodFilterHandler(TimeFilterType type) {
-			this.type = type;
+		public TimePeriodFilterHandler(CargoEditorFilterUtils.TimeFilterOption option) {
+			this.option = option;
 		}
 		
-		public TimePeriodFilterHandler(TimeFilterType type, YearMonth choice) {
-			this.type = type;
+		public TimePeriodFilterHandler(CargoEditorFilterUtils.TimeFilterOption option, YearMonth choice) {
+			this.option = option;
 			this.choice = choice;
 		}
 		
-		public TimePeriodFilterHandler(TimeFilterType type, int promtMonth) {
-			this.type = type;
-			this.promptMonth = promtMonth;
+		public TimePeriodFilterHandler(CargoEditorFilterUtils.TimeFilterOption option, int promptMonth) {
+			this.option = option;
+			this.promptMonth = promptMonth;
 		}
 
 		@Override
@@ -173,90 +176,17 @@ public class TimePeriodTradesBasedFilterHandler implements ITradesBasedFilterHan
 
 		@Override
 		public boolean isRowVisible(Row row) {
-			if (type == TimeFilterType.NONE)
-				return true;
 			if (row != null) {
-				switch (type) {
-				case YEARMONTH:
-					return checkYearMonth(row, choice);
-				case PROMPT:
-					return checkPrompt(row, promptMonth);
-				}
+				return CargoEditorFilterUtils.timePeriodFilter(option, row.getLoadSlot(), row.getDischargeSlot(), choice, promptMonth);
+			} else {
+				return false;
 			}
-			return false;
 		}
 
 		@Override
 		public boolean isDefaultFilter() {
 			return false;
 		}
-		
-		private boolean checkYearMonth(final Row row, final YearMonth choice) {
-			LocalDate start = null;
-			LocalDate end = null;
-			final LoadSlot ls = row.getLoadSlot();
-			if (ls != null) {
-				start = ls.getSchedulingTimeWindow().getStart().toLocalDate();
-				end = ls.getSchedulingTimeWindow().getEnd().toLocalDate();
-			}
-			if ((start != null) && (end != null)) {
-				final YearMonth yms = YearMonth.from(start);
-				final YearMonth yme = YearMonth.from(end);
-				if ((yms.equals(choice)) || (yme.equals(choice))) {
-					return true;
-				}
-			}
-			final DischargeSlot ds = row.getDischargeSlot();
-			if (ds != null) {
-				start = ds.getSchedulingTimeWindow().getStart().toLocalDate();
-				end = ds.getSchedulingTimeWindow().getEnd().toLocalDate();
-			}
-			if ((start != null) && (end != null)) {
-				final YearMonth yms = YearMonth.from(start);
-				final YearMonth yme = YearMonth.from(end);
-				if ((yms.equals(choice)) || (yme.equals(choice))) {
-					return true;
-				}
-			}
-			return false;
-		}
-
-		private boolean checkPrompt(final Row row, final int month) {
-			final boolean result = false;
-			LocalDate start = null;
-			LocalDate end = null;
-			final LocalDate today = LocalDate.now();
-			final LocalDate prompt = today.plusMonths(month);
-			final LoadSlot ls = row.getLoadSlot();
-			if (ls != null) {
-				start = ls.getSchedulingTimeWindow().getStart().toLocalDate();
-				end = ls.getSchedulingTimeWindow().getEnd().toLocalDate();
-			}
-			if (start != null && end != null) {
-				if (start.isAfter(today) && start.isBefore(prompt)) {
-					return true;
-				}
-				if (end.isAfter(today) && end.isBefore(prompt)) {
-					return true;
-				}
-			}
-			final DischargeSlot ds = row.getDischargeSlot();
-			if (ds != null) {
-				start = ds.getSchedulingTimeWindow().getStart().toLocalDate();
-				end = ds.getSchedulingTimeWindow().getEnd().toLocalDate();
-			}
-			if (start != null && end != null) {
-				if (start.isAfter(today) && start.isBefore(prompt)) {
-					return true;
-				}
-				if (end.isAfter(today) && end.isBefore(prompt)) {
-					return true;
-				}
-			}
-
-			return result;
-		}
-
 	}
 
 }

@@ -5,9 +5,9 @@
     All rights reserved.
 
 -->
-<?eclipse version="3.4"?>
 <plugin>
-<extension
+
+   <extension
          point="org.eclipse.ui.preferencePages">
       <page
             class="com.mmxlabs.hub.preferences.DataHubPreferencePage"
@@ -37,4 +37,13 @@
             type="java.lang.Object">
       </propertyTester>
    </extension>
+   <extension
+         id="com.mmxlabs.hub.fragment"
+         point="org.eclipse.e4.workbench.model">
+      <fragment
+            uri="fragment.e4xmi"
+            apply="always">
+      </fragment>
+   </extension>
+
 </plugin>

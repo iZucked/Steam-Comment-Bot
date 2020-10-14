@@ -479,7 +479,7 @@ public final class OptimisationHelper {
 			protected void configureShell(final org.eclipse.swt.widgets.Shell newShell) {
 
 				super.configureShell(newShell);
-				newShell.setText("Insertion Settings");
+				newShell.setText("Optioniser Settings");
 			}
 		};
 
