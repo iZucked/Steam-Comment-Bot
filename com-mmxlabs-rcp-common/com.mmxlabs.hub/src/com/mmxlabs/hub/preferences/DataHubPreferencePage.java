@@ -227,10 +227,12 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 					authenticationManager.logout(getShell());
 				}
 
-				if (authenticationManager.isAuthenticated()) {
-					loginButton.setText("Logout");
-				} else {
-					loginButton.setText("Login");
+				if (!loginButton.isDisposed()) {
+					if (authenticationManager.isAuthenticated()) {
+						loginButton.setText("Logout");
+					} else {
+						loginButton.setText("Login");
+					}
 				}
 
 				// refresh datahub service logged in state
