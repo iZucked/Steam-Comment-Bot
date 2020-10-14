@@ -10,15 +10,11 @@ import java.util.Set;
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.widgets.Menu;
 
-import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.CargoType;
-import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Row;
 import com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart.BulkTradesTablePane;
 import com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart.ColumnFilters;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorAction;
-import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
-import com.mmxlabs.models.lng.types.VesselAssignmentType;
+import com.mmxlabs.models.lng.cargo.util.CargoEditorFilterUtils;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 
 public class ShippedCargoBasedFilterHandler implements ITradesBasedFilterHandler {
@@ -29,17 +25,17 @@ public class ShippedCargoBasedFilterHandler implements ITradesBasedFilterHandler
 			@Override
 			protected void populate(final Menu menu) {
 
-				final Action shippedAction = new RunnableAction("Shipped", () -> addCargoFilter(activeFilters, viewer, ShippedCargoFilterOption.SHIPPED));
-				final Action nonShippedAction = new RunnableAction("Non Shipped", () -> addCargoFilter(activeFilters, viewer, ShippedCargoFilterOption.NON_SHIPPED));
-				final Action desAction = new RunnableAction("DES", () -> addCargoFilter(activeFilters, viewer, ShippedCargoFilterOption.DES));
-				final Action fobAction = new RunnableAction("FOB", () -> addCargoFilter(activeFilters, viewer, ShippedCargoFilterOption.FOB));
-				final Action nominalAction = new RunnableAction("Nominal", () -> addCargoFilter(activeFilters, viewer, ShippedCargoFilterOption.NOMINAL));
+				final Action shippedAction = new RunnableAction("Shipped", () -> addCargoFilter(activeFilters, viewer, CargoEditorFilterUtils.ShippedCargoFilterOption.SHIPPED));
+				final Action nonShippedAction = new RunnableAction("Non Shipped", () -> addCargoFilter(activeFilters, viewer, CargoEditorFilterUtils.ShippedCargoFilterOption.NON_SHIPPED));
+				final Action desAction = new RunnableAction("DES", () -> addCargoFilter(activeFilters, viewer, CargoEditorFilterUtils.ShippedCargoFilterOption.DES));
+				final Action fobAction = new RunnableAction("FOB", () -> addCargoFilter(activeFilters, viewer, CargoEditorFilterUtils.ShippedCargoFilterOption.FOB));
+				final Action nominalAction = new RunnableAction("Nominal", () -> addCargoFilter(activeFilters, viewer, CargoEditorFilterUtils.ShippedCargoFilterOption.NOMINAL));
 
 				// Detect currently selected option (if any)
 				for (final ITradesBasedFilterHandler f : activeFilters) {
 					if (f instanceof CargoBasedFilterHandler) {
 						final CargoBasedFilterHandler filter = (CargoBasedFilterHandler) f;
-						final ShippedCargoFilterOption currentOption = filter.option;
+						final CargoEditorFilterUtils.ShippedCargoFilterOption currentOption = filter.option;
 						// If any action is selected, then check it.
 						if (currentOption != null) {
 							switch (currentOption) {
@@ -80,7 +76,7 @@ public class ShippedCargoBasedFilterHandler implements ITradesBasedFilterHandler
 		return action;
 	}
 
-	private void addCargoFilter(final Set<ITradesBasedFilterHandler> activeFilters, final BulkTradesTablePane viewer, final ShippedCargoFilterOption option) {
+	private void addCargoFilter(final Set<ITradesBasedFilterHandler> activeFilters, final BulkTradesTablePane viewer, final CargoEditorFilterUtils.ShippedCargoFilterOption option) {
 		final Iterator<ITradesBasedFilterHandler> itr = activeFilters.iterator();
 		while (itr.hasNext()) {
 			final ITradesBasedFilterHandler filter = itr.next();
@@ -120,15 +116,11 @@ public class ShippedCargoBasedFilterHandler implements ITradesBasedFilterHandler
 		return true;
 	}
 
-	private enum ShippedCargoFilterOption {
-		NONE, SHIPPED, NON_SHIPPED, DES, FOB, NOMINAL
-	}
-
 	private class CargoBasedFilterHandler implements ITradesBasedFilterHandler {
 
-		private final ShippedCargoFilterOption option;
+		private final CargoEditorFilterUtils.ShippedCargoFilterOption option;
 
-		public CargoBasedFilterHandler(final ShippedCargoFilterOption p) {
+		public CargoBasedFilterHandler(final CargoEditorFilterUtils.ShippedCargoFilterOption p) {
 			this.option = p;
 		}
 
@@ -155,37 +147,10 @@ public class ShippedCargoBasedFilterHandler implements ITradesBasedFilterHandler
 		@Override
 		public boolean isRowVisible(final Row row) {
 			if (row != null) {
-				final Cargo cargo = row.getCargo();
-				final CargoType cargoType = (cargo != null ? cargo.getCargoType() : null);
-				switch (option) {
-				case NONE:
-					return true;
-				case SHIPPED:
-					return cargo != null && cargoType == CargoType.FLEET;
-				case NON_SHIPPED:
-					return cargo != null && cargoType != CargoType.FLEET;
-				case DES:
-					return cargo != null && cargoType == CargoType.DES;
-				case FOB:
-					return cargo != null && cargoType == CargoType.FOB;
-				case NOMINAL:
-					if (cargo != null) {
-						final VesselAssignmentType cargoVesselAT = cargo.getVesselAssignmentType();
-						final CharterInMarket cargoCharterInMarket;
-						if (cargoVesselAT instanceof CharterInMarket) {
-							cargoCharterInMarket = (CharterInMarket) cargoVesselAT;
-						} else if (cargoVesselAT instanceof CharterInMarketOverride) {
-							cargoCharterInMarket = ((CharterInMarketOverride) cargoVesselAT).getCharterInMarket();
-						} else {
-							return false;
-						}
-						return cargoCharterInMarket.isNominal();
-					} else {
-						return false;
-					}
-				}
+				return CargoEditorFilterUtils.shippedCargoFilter(this.option, row.getCargo());
+			} else {
+				return false;
 			}
-			return false;
 		}
 		
 		@Override
