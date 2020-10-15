@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.commercial.parseutils;
+package com.mmxlabs.models.lng.cargo.util;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;

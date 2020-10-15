@@ -60,8 +60,16 @@ public final class KnownFeatures {
 	public static final String FEATURE_INVENTORY_MODEL = "features:inventory-model";
 
 	public static final String FEATURE_PAPER_DEALS = "features:paperdeals";
-	
+
 	public static final String FEATURE_GENERATED_PAPER_DEALS = "features:generated-papers";
+
+	public static final String FEATURE_DEAL_SETS_GENERATE_FROM_CARGOES = "features:deal-sets-generate-from-cargoes";
+
+	public static final String FEATURE_DEAL_SETS_GENERATE_FROM_CONTRACTS = "features:deal-sets-generate-from-contracts";
+
+	public static final String FEATURE_DEAL_SETS_GENERATE_FROM_CURVES = "features:deal-sets-generate-from-curves";
+
+	public static final String FEATURE_DEAL_SETS_GENERATE_FROM_INDICES = "features:deal-sets-generate-from-indices";
 
 	/**
 	 * Enable the charter length evaluation mode
@@ -93,7 +101,7 @@ public final class KnownFeatures {
 	public static final String FEATURE_DATAHUB_STARTUP_CHECK = "features:datahub-lingo-startup-check";
 
 	public static final String FEATURE_SHOW_TRADING_SHIPPING_SPLIT = "features:headline-trading-shipping-split";
-	
+
 	/**
 	 * Scenario repair features
 	 */

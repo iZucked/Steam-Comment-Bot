@@ -16,7 +16,7 @@ import com.mmxlabs.common.curves.BasicCommodityCurveData;
 import com.mmxlabs.common.curves.BasicUnitConversionData;
 import com.mmxlabs.common.exposures.ExposuresLookupData;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.commercial.parseutils.IExposuresCustomiser;
+import com.mmxlabs.models.lng.cargo.util.IExposuresCustomiser;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.HolidayCalendar;
 import com.mmxlabs.models.lng.pricing.MarketIndex;
