@@ -118,9 +118,9 @@ public class ExposuresScenarioTests extends AbstractMicroTestCase {
 				}
 			}
 			Assertions.assertNotNull(brentBuyJan);
-			Assertions.assertEquals(brentBuyJan.getQuantity(), 237177.0, delta);
+			Assertions.assertEquals(brentBuyJan.getQuantity(), 42724.0, delta);
 			Assertions.assertNotNull(brentSellFeb);
-			Assertions.assertEquals(brentSellFeb.getQuantity(), 601331.0, delta);
+			Assertions.assertEquals(brentSellFeb.getQuantity(), 108321.0, delta);
 			Assertions.assertNotNull(jkmBuyJan);
 			Assertions.assertEquals(jkmBuyJan.getQuantity(), 3826848.0, delta);
 			Assertions.assertNotNull(jkmSellFeb);
