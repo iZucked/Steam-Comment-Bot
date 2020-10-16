@@ -190,6 +190,8 @@
   <eClassifiers xsi:type="ecore:EClass" name="GeneratedCharterOut" eSuperTypes="#//PortVisit #//ProfitAndLossContainer #//EventGrouping">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="revenue" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="charterOutMarket" lowerBound="1"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.ecore#//CharterOutMarket"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CharterLengthEvent" eSuperTypes="#//PortVisit #//ProfitAndLossContainer #//EventGrouping #//FuelUsage">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="duration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>

@@ -27,6 +27,7 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.spotmarkets.CharterOutMarket;
 
 /**
  * <!-- begin-user-doc -->
@@ -40,6 +41,7 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.GeneratedCharterOutImpl#getGeneralPNLDetails <em>General PNL Details</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.GeneratedCharterOutImpl#getEvents <em>Events</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.GeneratedCharterOutImpl#getRevenue <em>Revenue</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.GeneratedCharterOutImpl#getCharterOutMarket <em>Charter Out Market</em>}</li>
  * </ul>
  *
  * @generated
@@ -94,6 +96,16 @@ public class GeneratedCharterOutImpl extends PortVisitImpl implements GeneratedC
 	 * @ordered
 	 */
 	protected int revenue = REVENUE_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getCharterOutMarket() <em>Charter Out Market</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCharterOutMarket()
+	 * @generated
+	 * @ordered
+	 */
+	protected CharterOutMarket charterOutMarket;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -214,6 +226,46 @@ public class GeneratedCharterOutImpl extends PortVisitImpl implements GeneratedC
 	 * @generated
 	 */
 	@Override
+	public CharterOutMarket getCharterOutMarket() {
+		if (charterOutMarket != null && charterOutMarket.eIsProxy()) {
+			InternalEObject oldCharterOutMarket = (InternalEObject)charterOutMarket;
+			charterOutMarket = (CharterOutMarket)eResolveProxy(oldCharterOutMarket);
+			if (charterOutMarket != oldCharterOutMarket) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.GENERATED_CHARTER_OUT__CHARTER_OUT_MARKET, oldCharterOutMarket, charterOutMarket));
+			}
+		}
+		return charterOutMarket;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CharterOutMarket basicGetCharterOutMarket() {
+		return charterOutMarket;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setCharterOutMarket(CharterOutMarket newCharterOutMarket) {
+		CharterOutMarket oldCharterOutMarket = charterOutMarket;
+		charterOutMarket = newCharterOutMarket;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.GENERATED_CHARTER_OUT__CHARTER_OUT_MARKET, oldCharterOutMarket, charterOutMarket));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case SchedulePackage.GENERATED_CHARTER_OUT__GROUP_PROFIT_AND_LOSS:
@@ -240,6 +292,9 @@ public class GeneratedCharterOutImpl extends PortVisitImpl implements GeneratedC
 				return getEvents();
 			case SchedulePackage.GENERATED_CHARTER_OUT__REVENUE:
 				return getRevenue();
+			case SchedulePackage.GENERATED_CHARTER_OUT__CHARTER_OUT_MARKET:
+				if (resolve) return getCharterOutMarket();
+				return basicGetCharterOutMarket();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -267,6 +322,9 @@ public class GeneratedCharterOutImpl extends PortVisitImpl implements GeneratedC
 			case SchedulePackage.GENERATED_CHARTER_OUT__REVENUE:
 				setRevenue((Integer)newValue);
 				return;
+			case SchedulePackage.GENERATED_CHARTER_OUT__CHARTER_OUT_MARKET:
+				setCharterOutMarket((CharterOutMarket)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -291,6 +349,9 @@ public class GeneratedCharterOutImpl extends PortVisitImpl implements GeneratedC
 			case SchedulePackage.GENERATED_CHARTER_OUT__REVENUE:
 				setRevenue(REVENUE_EDEFAULT);
 				return;
+			case SchedulePackage.GENERATED_CHARTER_OUT__CHARTER_OUT_MARKET:
+				setCharterOutMarket((CharterOutMarket)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -311,6 +372,8 @@ public class GeneratedCharterOutImpl extends PortVisitImpl implements GeneratedC
 				return events != null && !events.isEmpty();
 			case SchedulePackage.GENERATED_CHARTER_OUT__REVENUE:
 				return revenue != REVENUE_EDEFAULT;
+			case SchedulePackage.GENERATED_CHARTER_OUT__CHARTER_OUT_MARKET:
+				return charterOutMarket != null;
 		}
 		return super.eIsSet(featureID);
 	}

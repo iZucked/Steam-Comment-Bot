@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.schedule;
 
+import com.mmxlabs.models.lng.spotmarkets.CharterOutMarket;
+
 
 /**
  * <!-- begin-user-doc -->
@@ -15,6 +17,7 @@ package com.mmxlabs.models.lng.schedule;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.GeneratedCharterOut#getRevenue <em>Revenue</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.GeneratedCharterOut#getCharterOutMarket <em>Charter Out Market</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getGeneratedCharterOut()
@@ -47,6 +50,28 @@ public interface GeneratedCharterOut extends PortVisit, ProfitAndLossContainer, 
 	 * @generated
 	 */
 	void setRevenue(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Charter Out Market</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Charter Out Market</em>' reference.
+	 * @see #setCharterOutMarket(CharterOutMarket)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getGeneratedCharterOut_CharterOutMarket()
+	 * @model required="true"
+	 * @generated
+	 */
+	CharterOutMarket getCharterOutMarket();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.GeneratedCharterOut#getCharterOutMarket <em>Charter Out Market</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Charter Out Market</em>' reference.
+	 * @see #getCharterOutMarket()
+	 * @generated
+	 */
+	void setCharterOutMarket(CharterOutMarket value);
 
 } // end of  GeneratedCharterOut
 

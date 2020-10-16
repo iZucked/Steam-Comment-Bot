@@ -53,6 +53,7 @@ public class GeneratedCharterOutItemProvider
 			addGroupProfitAndLossPropertyDescriptor(object);
 			addEventsPropertyDescriptor(object);
 			addRevenuePropertyDescriptor(object);
+			addCharterOutMarketPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -119,6 +120,28 @@ public class GeneratedCharterOutItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Charter Out Market feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCharterOutMarketPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_GeneratedCharterOut_charterOutMarket_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_GeneratedCharterOut_charterOutMarket_feature", "_UI_GeneratedCharterOut_type"),
+				 SchedulePackage.Literals.GENERATED_CHARTER_OUT__CHARTER_OUT_MARKET,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}

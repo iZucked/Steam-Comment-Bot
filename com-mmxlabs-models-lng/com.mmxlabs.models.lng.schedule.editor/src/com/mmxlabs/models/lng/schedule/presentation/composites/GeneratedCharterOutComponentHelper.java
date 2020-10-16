@@ -66,6 +66,7 @@ public class GeneratedCharterOutComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_revenueEditor(detailComposite, topClass);
+		add_charterOutMarketEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the revenue feature on GeneratedCharterOut
@@ -74,5 +75,14 @@ public class GeneratedCharterOutComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_revenueEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.GENERATED_CHARTER_OUT__REVENUE));
+	}
+
+	/**
+	 * Create the editor for the charterOutMarket feature on GeneratedCharterOut
+	 *
+	 * @generated
+	 */
+	protected void add_charterOutMarketEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.GENERATED_CHARTER_OUT__CHARTER_OUT_MARKET));
 	}
 }

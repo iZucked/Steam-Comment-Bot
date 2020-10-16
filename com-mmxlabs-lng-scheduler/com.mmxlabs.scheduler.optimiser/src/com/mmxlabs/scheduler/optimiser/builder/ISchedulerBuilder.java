@@ -43,6 +43,7 @@ import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
+import com.mmxlabs.scheduler.optimiser.components.ISpotCharterOutMarket;
 import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
@@ -515,7 +516,7 @@ public interface ISchedulerBuilder {
 	 * @param maxDuration
 	 *            The maximum duration in hours a charter out can be.
 	 */
-	void createCharterOutCurve(@NonNull IVessel vessel, @NonNull ILongCurve charterOutCurve, int minDuration, int maxDuration, @NonNull Set<IPort> allowedPorts);
+	void createCharterOutCurve(@NonNull IVessel vessel, @NonNull ILongCurve charterOutCurve, int minDuration, int maxDuration, @NonNull Set<IPort> allowedPorts, @NonNull ISpotCharterOutMarket market);
 
 	/**
 	 * Set a flag to indicate that the given {@link IPortSlot} is to be treated as "soft required". That is generally optional, but not entirely. For example a fitness component may penalise such

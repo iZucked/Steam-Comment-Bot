@@ -147,6 +147,7 @@ import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.builder.impl.TimeWindowMaker;
+import com.mmxlabs.scheduler.optimiser.components.DefaultSpotCharterOutMarket;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -3465,6 +3466,10 @@ public class LNGScenarioTransformer {
 				}
 
 				if (eCharterOutMarket.getCharterOutRate() != null) {
+					
+					final DefaultSpotCharterOutMarket iCharterOutMarket = new DefaultSpotCharterOutMarket(eCharterOutMarket.getName());
+					
+					modelEntityMap.addModelObject(eCharterOutMarket, iCharterOutMarket);
 					final ILongCurve charterOutCurve = dateHelper.generateLongExpressionCurve(eCharterOutMarket.getCharterOutRate(), charterIndices);
 					assert charterOutCurve != null;
 
@@ -3485,7 +3490,7 @@ public class LNGScenarioTransformer {
 						}
 					}
 					for (final Vessel eVessel : SetUtils.getObjects(eCharterOutMarket.getVessels())) {
-						builder.createCharterOutCurve(vesselAssociation.lookupNullChecked(eVessel), charterOutCurve, minDuration, maxDuration, marketPorts);
+						builder.createCharterOutCurve(vesselAssociation.lookupNullChecked(eVessel), charterOutCurve, minDuration, maxDuration, marketPorts, iCharterOutMarket);
 					}
 				}
 			}

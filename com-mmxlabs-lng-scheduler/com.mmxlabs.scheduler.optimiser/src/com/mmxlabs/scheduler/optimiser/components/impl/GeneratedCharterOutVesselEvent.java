@@ -15,6 +15,7 @@ import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEven
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionConsumer;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionSupplier;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.ISpotCharterOutMarket;
 
 @NonNullByDefault
 public class GeneratedCharterOutVesselEvent implements IGeneratedCharterOutVesselEvent {
@@ -26,13 +27,15 @@ public class GeneratedCharterOutVesselEvent implements IGeneratedCharterOutVesse
 	private long repositioning;
 	private long ballastBonus;
 	private long hireCost;
+	private ISpotCharterOutMarket market;
 
-	public GeneratedCharterOutVesselEvent(@Nullable ITimeWindow timeWindow, IPort startPort, IPort endPort, final IHeelOptionConsumer heelConsumer, IHeelOptionSupplier heelSupplier) {
+	public GeneratedCharterOutVesselEvent(@Nullable ITimeWindow timeWindow, IPort startPort, IPort endPort, final IHeelOptionConsumer heelConsumer, IHeelOptionSupplier heelSupplier, ISpotCharterOutMarket market) {
 		this.timeWindow = timeWindow;
 		this.startPort = startPort;
 		this.endPort = endPort;
 		this.heelConsumer = heelConsumer;
 		this.heelSupplier = heelSupplier;
+		this.market = market;
 	}
 
 	@Override
@@ -112,6 +115,7 @@ public class GeneratedCharterOutVesselEvent implements IGeneratedCharterOutVesse
 			return this.durationHours == other.durationHours //
 					&& this.repositioning == other.repositioning //
 					&& this.ballastBonus == other.ballastBonus //
+					&& this.market == other.market //
 					// && Objects.equals(this.startPort, other.startPort) //
 					// && Objects.equals(this.endPort, other.endPort) //
 					&& Objects.equals(this.heelConsumer, other.heelConsumer) //
@@ -151,5 +155,10 @@ public class GeneratedCharterOutVesselEvent implements IGeneratedCharterOutVesse
 	@Override
 	public void setHeelSupplier(@NonNull IHeelOptionSupplier heelSupplier) {
 		this.heelSupplier = heelSupplier;
+	}
+
+	@Override
+	public ISpotCharterOutMarket getCharterOutMarket() {
+		return this.market;
 	}
 }

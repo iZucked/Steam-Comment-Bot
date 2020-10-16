@@ -1094,6 +1094,16 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	@Override
+	public EReference getGeneratedCharterOut_CharterOutMarket() {
+		return (EReference)generatedCharterOutEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getCharterLengthEvent() {
 		return charterLengthEventEClass;
 	}
@@ -3148,6 +3158,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		generatedCharterOutEClass = createEClass(GENERATED_CHARTER_OUT);
 		createEAttribute(generatedCharterOutEClass, GENERATED_CHARTER_OUT__REVENUE);
+		createEReference(generatedCharterOutEClass, GENERATED_CHARTER_OUT__CHARTER_OUT_MARKET);
 
 		charterLengthEventEClass = createEClass(CHARTER_LENGTH_EVENT);
 		createEAttribute(charterLengthEventEClass, CHARTER_LENGTH_EVENT__DURATION);
@@ -3561,6 +3572,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		initEClass(generatedCharterOutEClass, GeneratedCharterOut.class, "GeneratedCharterOut", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getGeneratedCharterOut_Revenue(), ecorePackage.getEInt(), "revenue", null, 1, 1, GeneratedCharterOut.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getGeneratedCharterOut_CharterOutMarket(), theSpotMarketsPackage.getCharterOutMarket(), null, "charterOutMarket", null, 1, 1, GeneratedCharterOut.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(charterLengthEventEClass, CharterLengthEvent.class, "CharterLengthEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCharterLengthEvent_Duration(), ecorePackage.getEInt(), "duration", null, 0, 1, CharterLengthEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

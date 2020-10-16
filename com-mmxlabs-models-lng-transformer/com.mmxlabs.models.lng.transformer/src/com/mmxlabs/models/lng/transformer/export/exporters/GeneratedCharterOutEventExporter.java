@@ -27,6 +27,13 @@ public class GeneratedCharterOutEventExporter {
 	@Inject
 	private ModelEntityMap modelEntityMap;
 
+	/**
+	 * Current logic lives in VisitEventExporter
+	 * @param voyageDetails
+	 * @param volumeAllocatedSequence
+	 * @param currentTime
+	 * @return
+	 */
 	public GeneratedCharterOut export(final VoyageDetails voyageDetails, final VolumeAllocatedSequence volumeAllocatedSequence, final int currentTime) {
 		@NonNull
 		final VoyageOptions options = voyageDetails.getOptions();
@@ -45,6 +52,8 @@ public class GeneratedCharterOutEventExporter {
 		event.setStart(modelEntityMap.getDateFromHours(currentTime, options.getToPortSlot().getPort()));
 		event.setEnd(modelEntityMap.getDateFromHours(currentTime + voyageDetails.getIdleTime(), options.getToPortSlot().getPort()));
 
+		//Create a provider for charter markets by name
+		//event.setCharterOutMarket(value);
 		return event;
 	}
 }

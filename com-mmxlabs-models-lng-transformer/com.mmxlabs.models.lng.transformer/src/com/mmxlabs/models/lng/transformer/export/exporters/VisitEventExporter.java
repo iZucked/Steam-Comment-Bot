@@ -8,7 +8,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -36,12 +35,11 @@ import com.mmxlabs.models.lng.schedule.SlotAllocationType;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.spotmarkets.CharterOutMarket;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.export.FuelExportHelper;
 import com.mmxlabs.models.lng.transformer.export.IPortSlotEventProvider;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
-import com.mmxlabs.optimiser.core.IElementAnnotation;
-import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterLengthEventPortSlot;
@@ -57,7 +55,6 @@ import com.mmxlabs.scheduler.optimiser.evaluation.VoyagePlanRecord.LatenessRecor
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ICargoValueAnnotation;
-import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.CapacityViolationType;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
@@ -72,9 +69,7 @@ public class VisitEventExporter {
 
 	@Inject
 	private ModelEntityMap modelEntityMap;
-
-	@Inject
-	private IPortSlotProvider portSlotProvider;
+	
 	@Inject
 	private IPortSlotEventProvider portSlotEventProvider;
 
@@ -187,11 +182,11 @@ public class VisitEventExporter {
 		} else if (slot instanceof IVesselEventPortSlot) {
 			if (slot instanceof IGeneratedCharterOutVesselEventPortSlot) {
 				// GCO logic
-
 				final GeneratedCharterOut generatedCharterOutEvent = ScheduleFactory.eINSTANCE.createGeneratedCharterOut();
 				final IGeneratedCharterOutVesselEvent event = ((IGeneratedCharterOutVesselEventPortSlot) slot).getVesselEvent();
+				final CharterOutMarket ecom = modelEntityMap.getModelObject(event.getCharterOutMarket(), CharterOutMarket.class);
+				generatedCharterOutEvent.setCharterOutMarket(ecom);
 				generatedCharterOutEvent.setRevenue(OptimiserUnitConvertor.convertToExternalFixedCost(event.getHireOutRevenue()));
-
 				portVisit = generatedCharterOutEvent;
 				portSlotEventProvider.addEventToPortSlot(slot, GeneratedCharterOut.class, generatedCharterOutEvent);
 			} else if (slot instanceof IGeneratedCharterLengthEventPortSlot) {

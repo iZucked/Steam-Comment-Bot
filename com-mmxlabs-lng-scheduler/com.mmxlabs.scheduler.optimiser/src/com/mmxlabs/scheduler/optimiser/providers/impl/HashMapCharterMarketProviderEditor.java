@@ -22,6 +22,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.common.curves.ILongCurve;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.ISpotCharterOutMarket;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDateKeyProvider;
@@ -42,13 +43,16 @@ public class HashMapCharterMarketProviderEditor implements ICharterMarketProvide
 		private final ILongCurve priceCurve;
 
 		private int maxDuration;
+		
+		private final ISpotCharterOutMarket market;
 
-		public DefaultCharterMarketOptions(final int dateKey, final int minDuration, final int maxDuration, final Set<IPort> allowedPorts, final ILongCurve priceCurve) {
+		public DefaultCharterMarketOptions(final int dateKey, final int minDuration, final int maxDuration, final Set<IPort> allowedPorts, final ILongCurve priceCurve, final ISpotCharterOutMarket market) {
 			this.dateKey = dateKey;
 			this.minDuration = minDuration;
 			this.maxDuration = maxDuration;
 			this.allowedPorts = allowedPorts;
 			this.priceCurve = priceCurve;
+			this.market = market;
 		}
 
 		@Override
@@ -80,6 +84,11 @@ public class HashMapCharterMarketProviderEditor implements ICharterMarketProvide
 		public @NonNull Set<@NonNull IPort> getAllowedPorts() {
 			return this.allowedPorts;
 		}
+
+		@Override
+		public ISpotCharterOutMarket getMarket() {
+			return this.market;
+		}
 	}
 
 	/**
@@ -91,12 +100,14 @@ public class HashMapCharterMarketProviderEditor implements ICharterMarketProvide
 		public int minDuration;
 		public int maxDuration;
 		public Set<IPort> ports;
+		public ISpotCharterOutMarket market;
 
-		public CharterOutData(final ILongCurve curve, final int minDuration, final int maxDuration, final Set<@NonNull IPort> ports) {
+		public CharterOutData(final ILongCurve curve, final int minDuration, final int maxDuration, final Set<@NonNull IPort> ports, final ISpotCharterOutMarket market) {
 			this.curve = curve;
 			this.minDuration = minDuration;
 			this.maxDuration = maxDuration;
 			this.ports = ports;
+			this.market = market;
 		}
 
 	}
@@ -127,13 +138,13 @@ public class HashMapCharterMarketProviderEditor implements ICharterMarketProvide
 	}
 
 	@Override
-	public void addCharterInOption(final @NonNull IVessel vessel, final @NonNull ILongCurve curve) {
-		addOptions(charterInOptions, vessel, curve, 0, Integer.MAX_VALUE, Collections.emptySet());
+	public void addCharterInOption(final @NonNull IVessel vessel, final @NonNull ILongCurve curve, final @NonNull ISpotCharterOutMarket market) {
+		addOptions(charterInOptions, vessel, curve, 0, Integer.MAX_VALUE, Collections.emptySet(), market);
 	}
 
 	@Override
-	public void addCharterOutOption(final @NonNull IVessel vessel, final @NonNull ILongCurve curve, final int minDuration, final int maxDuration, final @NonNull Set<@NonNull IPort> allowedPorts) {
-		addOptions(charterOutOptions, vessel, curve, minDuration, maxDuration, allowedPorts);
+	public void addCharterOutOption(final @NonNull IVessel vessel, final @NonNull ILongCurve curve, final int minDuration, final int maxDuration, final @NonNull Set<@NonNull IPort> allowedPorts, final @NonNull ISpotCharterOutMarket market) {
+		addOptions(charterOutOptions, vessel, curve, minDuration, maxDuration, allowedPorts, market);
 	}
 
 	private Collection<@NonNull CharterMarketOptions> getOptions(final Map<@NonNull IVessel, @NonNull List<@NonNull CharterOutData>> options, final IVessel vessel, final int dateKey) {
@@ -146,7 +157,8 @@ public class HashMapCharterMarketProviderEditor implements ICharterMarketProvide
 				final int minDuration = p.minDuration;
 				final int maxDuration = p.maxDuration;
 				final Set<IPort> ports = p.ports;
-				result.add(new DefaultCharterMarketOptions(dateKey, minDuration, maxDuration, ports, curve));
+				final ISpotCharterOutMarket market = p.market;
+				result.add(new DefaultCharterMarketOptions(dateKey, minDuration, maxDuration, ports, curve, market));
 			}
 			return result;
 		}
@@ -155,7 +167,7 @@ public class HashMapCharterMarketProviderEditor implements ICharterMarketProvide
 	}
 
 	private void addOptions(final Map<@NonNull IVessel, @NonNull List<@NonNull CharterOutData>> options, final IVessel vessel, final ILongCurve curve, final int minDuration,
-			final int maxDuration, final Set<@NonNull IPort> allowedPorts) {
+			final int maxDuration, final Set<@NonNull IPort> allowedPorts, final @NonNull ISpotCharterOutMarket market) {
 		final @NonNull List<@NonNull CharterOutData> entry;
 		final @NonNull Set<@NonNull IPort> vesselCharteringPorts;
 		if (options.containsKey(vessel)) {
@@ -168,7 +180,7 @@ public class HashMapCharterMarketProviderEditor implements ICharterMarketProvide
 			charteringPortsForVesselMap.put(vessel, vesselCharteringPorts);
 		}
 
-		final @NonNull CharterOutData p = new CharterOutData(curve, minDuration, maxDuration, allowedPorts);
+		final @NonNull CharterOutData p = new CharterOutData(curve, minDuration, maxDuration, allowedPorts, market);
 		entry.add(p);
 		vesselCharteringPorts.addAll(allowedPorts);
 	}
