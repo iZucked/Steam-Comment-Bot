@@ -46,6 +46,7 @@ import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.IDataHubStateChangeListener;
 import com.mmxlabs.hub.IUpstreamDetailChangedListener;
 import com.mmxlabs.hub.UpstreamUrlProvider;
+import com.mmxlabs.hub.UpstreamUrlProvider.StateReason;
 import com.mmxlabs.hub.auth.AuthenticationManager;
 import com.mmxlabs.hub.common.http.HttpClientUtil;
 import com.mmxlabs.hub.common.http.HttpClientUtil.CertInfo;
@@ -84,9 +85,6 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 		DataHubServiceProvider.getInstance().removeDataHubStateListener(stateChangeListener);
 
 		UpstreamUrlProvider.INSTANCE.deregisterDetailsChangedLister(enableLoginListener);
-		if (loginButton != null) {
-			loginButton.dispose();
-		}
 		if (forceBasicAuth != null) {
 			forceBasicAuth.dispose();
 		}
@@ -147,9 +145,6 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 
 	public void setForceBasicAuthEnabled() {
 		forceBasicAuth.setEnabled(authenticationManager.isOAuthEnabled(), getFieldEditorParent());
-		if (!authenticationManager.isOAuthEnabled()) {
-			getPreferenceStore().setValue(DataHubPreferenceConstants.P_FORCE_BASIC_AUTH, true);
-		}
 	}
 
 	/*
@@ -215,6 +210,7 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 
 		loginButton = new Button(c, SWT.PUSH);
 		loginButton.setText("Login");
+		loginButton.setData("loginButtonId"); // this id is used in swtbot tests
 		loginButton.setLayoutData(GridDataFactory.fillDefaults().span(1, 1).create());
 
 		loginButton.addSelectionListener(new SelectionAdapter() {
@@ -230,12 +226,10 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 					authenticationManager.logout(getShell());
 				}
 
-				if (!loginButton.isDisposed()) {
-					if (authenticationManager.isAuthenticated()) {
-						loginButton.setText("Logout");
-					} else {
-						loginButton.setText("Login");
-					}
+				if (authenticationManager.isAuthenticated()) {
+					loginButton.setText("Logout");
+				} else {
+					loginButton.setText("Login");
 				}
 
 				// refresh datahub service logged in state
@@ -248,6 +242,7 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 
 		refreshButton = new Button(c, SWT.PUSH);
 		refreshButton.setText("Check connection");
+		refreshButton.setData("refreshButtonId"); // this id is used in swtbot tests
 		refreshButton.setLayoutData(GridDataFactory.fillDefaults().span(1, 1).create());
 
 		refreshButton.addSelectionListener(new SelectionAdapter() {
@@ -257,7 +252,6 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 				UpstreamUrlProvider.OnlineState state = UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
 				UpstreamUrlProvider.StateReason reason = state.getReason();
 				String msg = null;
-				boolean isError = true;
 				switch (reason) {
 				case EMPTY_URL:
 					msg = "Data Hub URL is empty";
@@ -271,15 +265,16 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 					break;
 				case HUB_ONLINE:
 					msg = "Data Hub connection successful";
-					isError = false;
 					break;
 				default:
 					break;
 				}
-				if (!isError) {
-					MessageDialog.openInformation(getShell(), "Connection check", msg);
-				} else if (msg != null) {
-					MessageDialog.openError(getShell(), "Connection check", msg);
+				if (msg != null) {
+					if (reason == StateReason.HUB_ONLINE) {
+						MessageDialog.openInformation(getShell(), "Connection check", msg);
+					} else {
+						MessageDialog.openError(getShell(), "Connection check", msg);
+					}
 				}
 			}
 		});
