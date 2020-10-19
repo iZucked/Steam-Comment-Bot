@@ -119,8 +119,10 @@ public class DataHubStatusTrimContribution {
 	}
 
 	private void setLabelTextAndToolTip(final Label myLabel, final boolean online, final boolean loggedin) {
-		myLabel.setToolTipText(dataHubStatusToolTipText(online, loggedin));
-		myLabel.setImage(dataHubStatusImage(online, loggedin));
+		if (!myLabel.isDisposed()) {
+			myLabel.setToolTipText(dataHubStatusToolTipText(online, loggedin));
+			myLabel.setImage(dataHubStatusImage(online, loggedin));
+		}
 	}
 	
 	@PreDestroy
