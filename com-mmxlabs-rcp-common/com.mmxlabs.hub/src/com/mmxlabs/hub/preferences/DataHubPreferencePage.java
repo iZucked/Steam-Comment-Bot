@@ -212,7 +212,7 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 
 		loginButton = new Button(c, SWT.PUSH);
 		loginButton.setText("Login");
-		loginButton.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).create());
+		loginButton.setLayoutData(GridDataFactory.fillDefaults().span(1, 1).create());
 
 		loginButton.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -245,7 +245,6 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 
 		refreshButton = new Button(c, SWT.PUSH);
 		refreshButton.setText("Check connection");
-		refreshButton.setData("refreshButtonId"); // this id is used in swtbot tests
 		refreshButton.setLayoutData(GridDataFactory.fillDefaults().span(1, 1).create());
 
 		refreshButton.addSelectionListener(new SelectionAdapter() {
@@ -255,6 +254,7 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 				UpstreamUrlProvider.OnlineState state = UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
 				UpstreamUrlProvider.StateReason reason = state.getReason();
 				String msg = null;
+				boolean isError = true;
 				switch (reason) {
 				case EMPTY_URL:
 					msg = "Data Hub URL is empty";
@@ -268,11 +268,14 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 					break;
 				case HUB_ONLINE:
 					msg = "Data Hub connection successful";
+					isError = false;
 					break;
 				default:
 					break;
 				}
-				if (msg != null) {
+				if (!isError) {
+					MessageDialog.openInformation(getShell(), "Connection check", msg);
+				} else if (msg != null) {
 					MessageDialog.openError(getShell(), "Connection check", msg);
 				}
 			}
