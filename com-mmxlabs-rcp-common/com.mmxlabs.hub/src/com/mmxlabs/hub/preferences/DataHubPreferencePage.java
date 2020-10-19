@@ -147,6 +147,9 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 
 	public void setForceBasicAuthEnabled() {
 		forceBasicAuth.setEnabled(authenticationManager.isOAuthEnabled(), getFieldEditorParent());
+		if (!authenticationManager.isOAuthEnabled()) {
+			getPreferenceStore().setValue(DataHubPreferenceConstants.P_FORCE_BASIC_AUTH, true);
+		}
 	}
 
 	/*
