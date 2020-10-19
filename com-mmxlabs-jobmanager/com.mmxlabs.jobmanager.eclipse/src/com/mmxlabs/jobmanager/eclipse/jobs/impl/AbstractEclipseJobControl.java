@@ -82,10 +82,23 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 				return Status.CANCEL_STATUS;
 
 			} catch (final Exception | Error e) {
-				LOG.error(e.getMessage(), e);
+				
+				boolean visualStudioError = false;
+				if (e instanceof NoClassDefFoundError) {
+					NoClassDefFoundError noClassDefFoundError = (NoClassDefFoundError) e;
+					if (noClassDefFoundError.getMessage().contains("ortools")) {
+						visualStudioError = true;
+					}
+				}
+				
 				kill();
 				setJobState(EJobState.CANCELLED);
 
+				if (visualStudioError) {
+					throw new RuntimeException("Microsoft Visual C++ Redistributable 2019 not found. Please install the latest version from the Microsoft website.");
+				}
+				LOG.error(e.getMessage(), e);
+				
 				throw new RuntimeException(e);
 			} finally {
 				monitor.done();
