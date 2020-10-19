@@ -9,7 +9,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
+import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
+import org.eclipse.swtbot.swt.finder.waits.ICondition;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotBrowser;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -81,6 +84,10 @@ public class OAuthAuthenticationTests {
 		System.out.println(upstreamUrl);
 		bot = new SWTWorkbenchBot();
 		HubTestHelper.setDatahubUrl(upstreamUrl);
+		// slow down tests by 500ms
+		SWTBotPreferences.PLAYBACK_DELAY = 500;
+		// increase timeout to 10 seconds
+		SWTBotPreferences.TIMEOUT = 10000;
 	}
 
 	/*
@@ -96,6 +103,9 @@ public class OAuthAuthenticationTests {
 		bot.resetWorkbench();
 	}
 
+	/**
+	 * Helper function to open the datahub preference page
+	 */
 	public static void openDatahubPreferencePage() {
 		// for some reason the shell isn't focus so we activate it here
 		bot.menu("Window").menu("Preferences").click();
@@ -103,17 +113,45 @@ public class OAuthAuthenticationTests {
 		bot.tree().getTreeItem("Data Hub").select().expand().click();
 	}
 
+	public static ICondition waitUntilAuthenticated() {
+		return new ICondition() {
+
+			@Override
+			public boolean test() throws Exception {
+				return datahubServiceProvider.isLoggedIn();
+			}
+
+			@Override
+			public void init(SWTBot bot) {
+				// nop
+			}
+
+			@Override
+			public String getFailureMessage() {
+				return "Timed out waiting for user to be authenticated";
+			}
+		};
+	}
+
+	/**
+	 * If this test fails all other tests will fail too because the hub is not online
+	 */
 	@Test
 	public void checkDatahubConnection() {
-		// force update online state refresh
-		boolean isAvailable = UpstreamUrlProvider.INSTANCE.isUpstreamAvailable().getReason() == StateReason.HUB_ONLINE;
+		assertTrue(UpstreamUrlProvider.INSTANCE.isUpstreamAvailable().getReason() == StateReason.HUB_ONLINE);
 		assertTrue(datahubServiceProvider.isHubOnline());
 	}
 
+	/**
+	 * Test OAuth login by executing JavaScript in the browser. Because bot.browser() returns void type we cannot use bot.waitUntil() conditions to check the contents of the page.
+	 * bot.waitForPageLoaded() doesn't work for this use case because the url doesn't change during the authentication process
+	 *
+	 * If the tests fail to often try increasing the sleep time
+	 */
 	@Test
-	// we need to sleep in this test because we're waiting for the page microsoft login page to load
 	public void oauthAuthenticationLogin() throws InterruptedException {
 		openDatahubPreferencePage();
+
 		// logout if necessary
 		try {
 			bot.button("Logout").click();
@@ -121,30 +159,31 @@ public class OAuthAuthenticationTests {
 			bot.button("Login").click();
 		}
 		SWTBotBrowser browser = bot.browser();
-		browser.waitForPageLoaded();
+		Thread.sleep(2000);
 
-		// if the test is failing to often it might be because clickUserAnotherAccount is running before the page is loaded. In that case increase the sleep below
-		Thread.sleep(3000);
+		// click on "use another account" button
 		browser.execute(HubTestHelper.clickUserAnotherAccount);
-		Thread.sleep(500);
+		Thread.sleep(2000);
 
 		// fill in the email input
 		browser.execute(HubTestHelper.fillEmail);
 		browser.execute(HubTestHelper.focusEmail);
 		browser.execute(HubTestHelper.clickNext);
-		Thread.sleep(500);
+		Thread.sleep(2000);
 
 		// fill in the password input
 		browser.execute(HubTestHelper.fillPassword);
 		browser.execute(HubTestHelper.focusPassword);
 		browser.execute(HubTestHelper.clickNext);
-
 		Thread.sleep(2000);
+
 		// click yes on "stay signed in?" page
 		browser.execute(HubTestHelper.clickNext);
 
-		// force update online state refresh
-		Thread.sleep(5000);
+		// wait until authenticated status updates
+		bot.waitUntil(waitUntilAuthenticated());
+
 		assertTrue(datahubServiceProvider.isLoggedIn());
+
 	}
 }

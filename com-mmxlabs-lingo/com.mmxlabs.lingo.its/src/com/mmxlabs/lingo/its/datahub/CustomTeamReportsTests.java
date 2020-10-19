@@ -85,6 +85,8 @@ public class CustomTeamReportsTests {
 		}
 		// force trigger refresh
 		UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
+		// increase timeout to 10 seconds
+		// SWTBotPreferences.TIMEOUT = 10000;
 	}
 
 	@AfterAll
@@ -123,20 +125,35 @@ public class CustomTeamReportsTests {
 		});
 	}
 
+	/**
+	 * Helper function to delete all user reports
+	 */
 	public static void deleteUserReports() {
 		List<CustomReportDefinition> userReports = CustomReportsRegistry.getInstance().readUserCustomReportDefinitions();
 		userReports.forEach(userReport -> CustomReportsRegistry.getInstance().deleteUserReport(userReport));
 	}
 
+	/**
+	 * Helper function to open the user reports dialog
+	 */
 	public void openUserReportsManager() {
 		bot.menu("Window").menu("Reports Manager...").click();
 	}
 
+	/**
+	 * Helper function the opent the team reports manager
+	 */
 	public void openTeamReportsManager() {
 		bot.menu("Window").menu("Reports Manager...").click();
 		bot.radio("Team reports").click();
 	}
 
+	/**
+	 * Helper function to create a user report
+	 *
+	 * @param name,
+	 *            the name of the user report
+	 */
 	public void createUserReport(String name) {
 		bot.button("New").click();
 		bot.textWithLabel("Choose name for the new custom report.").setText(name);
@@ -144,6 +161,12 @@ public class CustomTeamReportsTests {
 		bot.button("Save").click();
 	}
 
+	/**
+	 * Helper function to create a custom team report
+	 *
+	 * @param name,
+	 *            the name of the team report
+	 */
 	public void createCustomTeamReport(String name) {
 		bot.button("New").click();
 		bot.textWithLabel("Choose name for the new custom report.").setText(name);
@@ -151,12 +174,16 @@ public class CustomTeamReportsTests {
 		bot.button("Publish").click();
 	}
 
+	/**
+	 * Create a team report then refresh the team reports and check if the table contains the new report
+	 *
+	 * @throws IOException
+	 */
 	@Test
-	public void createTeamReport() throws InterruptedException, IOException {
+	public void createTeamReport() throws IOException {
 		openTeamReportsManager();
 		createCustomTeamReport("test1");
 		CustomReportsRegistry.getInstance().refreshTeamReports();
-		Thread.sleep(2000);
 		List<CustomReportDefinition> teamReports = CustomReportsRegistry.getInstance().readTeamCustomReportDefinitions();
 		// @formatter:off
 		Optional<CustomReportDefinition> optionalTeamReport = teamReports.stream()
@@ -168,8 +195,14 @@ public class CustomTeamReportsTests {
 		assertTrue(bot.table().containsItem("test1"));
 	}
 
+	/**
+	 * Create a user report then add the user report to team reports
+	 *
+	 * @throws InterruptedException
+	 * @throws IOException
+	 */
 	@Test
-	public void createUserReportThenAddToTeam() throws InterruptedException, IOException {
+	public void createUserReportThenAddToTeam() throws IOException {
 		openUserReportsManager();
 		createUserReport("test2");
 
@@ -177,9 +210,7 @@ public class CustomTeamReportsTests {
 		bot.table().select("test2");
 		bot.button("Add to Team").click();
 		bot.button("OK").click();
-		Thread.sleep(2000);
 		CustomReportsRegistry.getInstance().refreshTeamReports();
-		Thread.sleep(3000);
 		List<CustomReportDefinition> teamReports = CustomReportsRegistry.getInstance().readTeamCustomReportDefinitions();
 		// @formatter:off
 		Optional<CustomReportDefinition> optionalTeamReport = teamReports.stream()
@@ -190,19 +221,26 @@ public class CustomTeamReportsTests {
 		assertTrue(optionalTeamReport.isPresent());
 	}
 
+	/**
+	 * Create a team report then copy it and save
+	 *
+	 * @throws IOException
+	 */
 	@Test
-	public void copyTeamReport() throws InterruptedException {
+	public void copyTeamReport() throws IOException {
 		openTeamReportsManager();
 		createCustomTeamReport("test3");
 		bot.table().select("test3");
 
-		// we need to sleep between ok and publish otherwise this test fails
-		// this is because clicking ok writes the file to disk and publish should only happen once this is finished
 		bot.button("Copy").click();
 		bot.button("OK").click();
-		Thread.sleep(1000);
 		bot.button("Publish").click();
-		Thread.sleep(1000);
+		// FIXME @Farukh fix team report issue where readTeamCustomReportDefinitions doesn't return the correct number of reports until the team reports dialog is closed
+		// when fixed remove the two lines below
+		bot.button("OK").click();
+		bot.button("Later").click();
+		// end FIXME
+		CustomReportsRegistry.getInstance().refreshTeamReports();
 		List<CustomReportDefinition> teamReports = CustomReportsRegistry.getInstance().readTeamCustomReportDefinitions();
 		// @formatter:off
 		Long numberOfTeamReports = teamReports.stream()
@@ -211,6 +249,11 @@ public class CustomTeamReportsTests {
 		assertTrue(Objects.equals(numberOfTeamReports, 2L));
 	}
 
+	/**
+	 * Create a team report if then logout from the datahub and check if report is still available
+	 *
+	 * @throws IOException
+	 */
 	@Test
 	public void teamReports_areAvailable_whenLoggedOut() throws IOException {
 		openTeamReportsManager();
@@ -229,6 +272,9 @@ public class CustomTeamReportsTests {
 		}
 	}
 
+	/**
+	 * Create a team report, select it and check that the copy, rename and delete buttons are enabled
+	 */
 	@Test
 	public void copyRenameDeleteAndAddtoTeam_areEnabled_whenReportIsSelected() {
 		openTeamReportsManager();
@@ -240,6 +286,9 @@ public class CustomTeamReportsTests {
 		assertTrue(bot.button("Add to User").isEnabled());
 	}
 
+	/**
+	 * Create a team report. make a change to the rows and check if the revert and publish buttons are enabled
+	 */
 	@Test
 	public void revertAndPublish_areEnabled_whenRowIsChanged() {
 		openTeamReportsManager();
@@ -251,18 +300,9 @@ public class CustomTeamReportsTests {
 		bot.button("Revert").click();
 	}
 
-	@Test
-	public void revertAndPublish_areEnabled_whenDiffIsChanged() {
-		openTeamReportsManager();
-		createCustomTeamReport("test7");
-		bot.table().select("test7");
-		bot.tableWithLabel("Disabled Columns").select("Ballast Canal Date");
-		bot.button("Show").click();
-		assertTrue(bot.button("Revert").isEnabled());
-		assertTrue(bot.button("Publish").isEnabled());
-		bot.button("Revert").click();
-	}
-
+	/**
+	 * Create a team report, make a change to a disabled column and check if the revert and publish buttons are enabled
+	 */
 	@Test
 	public void revertAndPublish_areEnabled_whenDisabledColumnIsChanged() {
 		openTeamReportsManager();
@@ -275,6 +315,9 @@ public class CustomTeamReportsTests {
 		bot.button("Revert").click();
 	}
 
+	/**
+	 * Create a team report, make a change to an enabled column and check if the rever and publish buttons are enabled
+	 */
 	@Test
 	public void revertAndPublish_areEnabled_whenEnabledColumnIsChanged() {
 		openTeamReportsManager();
@@ -287,8 +330,13 @@ public class CustomTeamReportsTests {
 		bot.button("Revert").click();
 	}
 
+	/**
+	 * Create a team report, rename it and check if the new name appears in the report table
+	 *
+	 * @throws IOException
+	 */
 	@Test
-	public void renameTeamReport() throws InterruptedException, IOException {
+	public void renameTeamReport() throws IOException {
 		openTeamReportsManager();
 		createCustomTeamReport("test11");
 		bot.table().select("test11");
@@ -297,7 +345,6 @@ public class CustomTeamReportsTests {
 		bot.button("OK").click();
 
 		CustomReportsRegistry.getInstance().refreshTeamReports();
-		Thread.sleep(3000);
 		List<CustomReportDefinition> teamReports = CustomReportsRegistry.getInstance().readTeamCustomReportDefinitions();
 		// @formatter:off
 		Optional<CustomReportDefinition> optionalTeamReport = teamReports.stream()
@@ -309,16 +356,19 @@ public class CustomTeamReportsTests {
 		assertTrue(bot.table().containsItem("test11.2"));
 	}
 
+	/**
+	 * Create a team report, delete it and check if it's in the report table
+	 *
+	 * @throws IOException
+	 */
 	@Test
-	public void deleteTeamReport() throws InterruptedException, IOException {
+	public void deleteTeamReport() throws IOException {
 		openTeamReportsManager();
 		createCustomTeamReport("test12");
 		bot.table().select("test12");
 		bot.button("Delete").click();
 		bot.button("Yes").click();
-		Thread.sleep(2000);
 		CustomReportsRegistry.getInstance().refreshTeamReports();
-		Thread.sleep(3000);
 		List<CustomReportDefinition> teamReports = CustomReportsRegistry.getInstance().readTeamCustomReportDefinitions();
 		// @formatter:off
 		Long numberOfTeamReports = teamReports.stream()
