@@ -673,6 +673,7 @@ public class AnnotatedSolutionExporter {
 						lastEvent = idle;
 					}
 				} else {
+					// We should NOT get here
 					final GeneratedCharterOut event = gcoDetailsExporter.export(details, scheduledSequence, voyage_currentTime);
 					if (event != null) {
 						events.add(event);

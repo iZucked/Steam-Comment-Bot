@@ -54,4 +54,6 @@ public interface IGeneratedCharterOutVesselEvent extends ICharterOutVesselEvent 
 	void setHeelConsumer(IHeelOptionConsumer heelConsumer);
 
 	void setHeelSupplier(IHeelOptionSupplier heelSupplier);
+	
+	ISpotCharterOutMarket getCharterOutMarket();
 }

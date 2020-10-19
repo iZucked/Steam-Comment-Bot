@@ -384,7 +384,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 				/* Start / End Port */ charterOutOption.getPort(), //
 				/* Hire Revenue */ charterOutOption.getMaxCharteringRevenue(), //
 				/* Repositioning */ 0, /* Duration */ charterOutOption.getCharterDuration(), //
-				heelOptionConsumer, heelOptionSupplier);
+				heelOptionConsumer, heelOptionSupplier, charterOutOption.getOption().getMarket());
 
 		// copy port times record
 		final Triple<IPortSlot, Integer, Integer> charterOutTimesRecord = new Triple<>(charterOutPortSlot, charterOutOption.getCharterStartTime(), charterOutOption.getCharterDuration());

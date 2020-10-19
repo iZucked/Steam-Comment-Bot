@@ -19,6 +19,7 @@ import com.mmxlabs.scheduler.optimiser.components.IHeelOptionConsumer;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionSupplier;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.ISpotCharterOutMarket;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 @NonNullByDefault
@@ -29,9 +30,9 @@ public class GeneratedCharterOutVesselEventPortSlot implements IGeneratedCharter
 	private GeneratedCharterOutVesselEvent event;
 
 	public GeneratedCharterOutVesselEventPortSlot(String id, @Nullable ITimeWindow timeWindow, IPort port, long maxCharteringRevenue, long repositioningFee, int durationInHours,
-			IHeelOptionConsumer heelConsumer, IHeelOptionSupplier heelSupplier) {
+			IHeelOptionConsumer heelConsumer, IHeelOptionSupplier heelSupplier, ISpotCharterOutMarket market) {
 		this.id = id;
-		this.event = new GeneratedCharterOutVesselEvent(timeWindow, port, port, heelConsumer, heelSupplier);
+		this.event = new GeneratedCharterOutVesselEvent(timeWindow, port, port, heelConsumer, heelSupplier, market);
 		this.event.setHireOutRevenue(maxCharteringRevenue);
 		this.event.setRepositioning(repositioningFee);
 		this.event.setDurationHours(durationInHours);

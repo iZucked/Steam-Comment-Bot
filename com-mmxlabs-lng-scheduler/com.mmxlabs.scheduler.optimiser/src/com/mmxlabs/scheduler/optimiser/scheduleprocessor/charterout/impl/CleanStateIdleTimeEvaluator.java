@@ -19,6 +19,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.components.DefaultSpotCharterOutMarket;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEvent;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEventPortSlot;
@@ -99,6 +100,10 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 	@Override
 	public @Nullable List<Pair<VoyagePlan, IPortTimesRecord>> processSchedule(final int vesselStartTime, final long[] startHeelVolumeRangeInM3, final IVesselAvailability vesselAvailability,
 			final VoyagePlan vp, final IPortTimesRecord portTimesRecord, @Nullable IAnnotatedSolution annotatedSolution) {
+		
+		if (true)
+			throw new UnsupportedOperationException("This should NOT really be used at the moment");
+		
 		if (!(vesselAvailability.getVesselInstanceType() == VesselInstanceType.FLEET || vesselAvailability.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER)) {
 			return null;
 		}
@@ -258,6 +263,7 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 				if (availableCharteringTime >= minDays * 24) {
 					gcoo.setToCharterPort(toCharterPort);
 					gcoo.setFromCharterPort(fromCharterPort);
+					// This shouldn't be null
 					gcoo.setOption(null);
 					gcoo.setCharterDuration(availableCharteringTime);
 					gcoo.setPort(charterOutPort);
@@ -354,13 +360,14 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 		HeelOptionSupplier heelOptionSupplier = new HeelOptionSupplier(0, 0, originalBallast.getOptions().getCargoCVValue(), new ConstantHeelPriceCalculator(0));
 
 		// now update port slot
+		final String id = String.format("gco-%s-%s", originalBallast.getOptions().getFromPortSlot().getPort(), originalBallast.getOptions().getToPortSlot().getPort());
 		final GeneratedCharterOutVesselEventPortSlot charterOutPortSlot = new GeneratedCharterOutVesselEventPortSlot(
 
-				/* ID */ String.format("gco-%s-%s", originalBallast.getOptions().getFromPortSlot().getPort(), originalBallast.getOptions().getToPortSlot().getPort()), //
+				/* ID */ id, //
 				/* Time window */ null, /* Start / End Port */ charterOutOption.getPort(), //
 				/* Hire Revenue */ charterOutOption.getMaxCharteringRevenue(), //
 				/* Repositioning */ 0, /* Duration */ charterOutOption.getCharterDuration(), //
-				heelOptionConsumer, heelOptionSupplier //
+				heelOptionConsumer, heelOptionSupplier, new DefaultSpotCharterOutMarket(id) //
 		);
 		// injector.injectMembers(charterOutPortSlot);
 

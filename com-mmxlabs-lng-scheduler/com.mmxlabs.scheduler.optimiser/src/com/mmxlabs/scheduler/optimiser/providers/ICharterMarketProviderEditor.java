@@ -10,15 +10,16 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.curves.ILongCurve;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.ISpotCharterOutMarket;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 
 /**
  */
 public interface ICharterMarketProviderEditor extends ICharterMarketProvider {
 
-	void addCharterInOption(@NonNull IVessel vessel, @NonNull ILongCurve charterInCurve);
+	void addCharterInOption(@NonNull IVessel vessel, @NonNull ILongCurve charterInCurve, @NonNull ISpotCharterOutMarket market);
 
-	void addCharterOutOption(@NonNull IVessel vessel, @NonNull ILongCurve charterOutCurve, int minDuration, int maxDuration, @NonNull Set<@NonNull IPort> allowedPorts);
+	void addCharterOutOption(@NonNull IVessel vessel, @NonNull ILongCurve charterOutCurve, int minDuration, int maxDuration, @NonNull Set<@NonNull IPort> allowedPorts, @NonNull ISpotCharterOutMarket market);
 
 	void setCharterOutStartTime(int startTime);
 	

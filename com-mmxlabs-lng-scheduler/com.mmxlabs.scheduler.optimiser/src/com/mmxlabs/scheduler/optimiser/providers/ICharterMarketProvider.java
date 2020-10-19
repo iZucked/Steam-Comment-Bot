@@ -11,6 +11,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.ISpotCharterOutMarket;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 
 /**
@@ -35,6 +36,8 @@ public interface ICharterMarketProvider extends IDataComponentProvider {
 		int getCharterPrice();
 
 		int getCharterPrice(int date);
+		
+		ISpotCharterOutMarket getMarket();
 
 		@NonNull
 		Set<@NonNull IPort> getAllowedPorts();

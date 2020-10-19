@@ -61,6 +61,7 @@ import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
+import com.mmxlabs.scheduler.optimiser.components.ISpotCharterOutMarket;
 import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
@@ -1633,8 +1634,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	/**
 	 */
 	@Override
-	public void createCharterOutCurve(@NonNull final IVessel vessel, @NonNull final ILongCurve charterOutCurve, final int minDuration, final int maxDuration, final Set<IPort> ports) {
-		charterMarketProviderEditor.addCharterOutOption(vessel, charterOutCurve, minDuration, maxDuration, ports);
+	public void createCharterOutCurve(@NonNull final IVessel vessel, @NonNull final ILongCurve charterOutCurve, final int minDuration, final int maxDuration, final Set<IPort> ports, final @NonNull ISpotCharterOutMarket market) {
+		charterMarketProviderEditor.addCharterOutOption(vessel, charterOutCurve, minDuration, maxDuration, ports, market);
 	}
 
 	@Override

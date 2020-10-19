@@ -3706,13 +3706,22 @@ public interface SchedulePackage extends EPackage {
 	int GENERATED_CHARTER_OUT__REVENUE = PORT_VISIT_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Charter Out Market</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT__CHARTER_OUT_MARKET = PORT_VISIT_FEATURE_COUNT + 4;
+
+	/**
 	 * The number of structural features of the '<em>Generated Charter Out</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int GENERATED_CHARTER_OUT_FEATURE_COUNT = PORT_VISIT_FEATURE_COUNT + 4;
+	int GENERATED_CHARTER_OUT_FEATURE_COUNT = PORT_VISIT_FEATURE_COUNT + 5;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -7512,6 +7521,17 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getGeneratedCharterOut_Revenue();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.GeneratedCharterOut#getCharterOutMarket <em>Charter Out Market</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Charter Out Market</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.GeneratedCharterOut#getCharterOutMarket()
+	 * @see #getGeneratedCharterOut()
+	 * @generated
+	 */
+	EReference getGeneratedCharterOut_CharterOutMarket();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.CharterLengthEvent <em>Charter Length Event</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -10007,6 +10027,14 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute GENERATED_CHARTER_OUT__REVENUE = eINSTANCE.getGeneratedCharterOut_Revenue();
+
+		/**
+		 * The meta object literal for the '<em><b>Charter Out Market</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference GENERATED_CHARTER_OUT__CHARTER_OUT_MARKET = eINSTANCE.getGeneratedCharterOut_CharterOutMarket();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.CharterLengthEventImpl <em>Charter Length Event</em>}' class.
