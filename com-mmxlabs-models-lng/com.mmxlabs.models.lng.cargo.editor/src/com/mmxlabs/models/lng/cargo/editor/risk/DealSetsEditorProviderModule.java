@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
+ * All rights reserved.
+ */
 package com.mmxlabs.models.lng.cargo.editor.risk;
 
 import static org.ops4j.peaberry.Peaberry.service;
