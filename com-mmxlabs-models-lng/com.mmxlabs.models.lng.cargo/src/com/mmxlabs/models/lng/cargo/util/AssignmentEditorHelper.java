@@ -236,7 +236,12 @@ public class AssignmentEditorHelper {
 			} else if (vesselAssignmentType instanceof VesselAvailability) {
 				final VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
 				// Groupings should have been pre-created
-				fleetGrouping.get(vesselAvailability).add(assignableElement);
+				List<AssignableElement> list = fleetGrouping.get(vesselAvailability);
+				if (list == null) {
+					// Unexpected state, cannot continue (can happen if a vesselAvailability has been deleted)
+					return null;
+				}
+				list.add(assignableElement);
 			} else if (vesselAssignmentType instanceof CharterInMarketOverride) {
 				final CharterInMarketOverride charterInMarketOverride = (CharterInMarketOverride) vesselAssignmentType;
 				marketOverridesGrouping.computeIfAbsent(charterInMarketOverride, k -> new LinkedList<>()).add(assignableElement);
