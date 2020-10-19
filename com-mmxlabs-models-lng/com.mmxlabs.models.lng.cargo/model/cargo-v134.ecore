@@ -1,0 +1,694 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="cargo" nsURI="http://www.mmxlabs.com/models/lng/cargo/1/" nsPrefix="lng.cargo">
+  <eClassifiers xsi:type="ecore:EClass" name="CargoModel" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="loadSlots" upperBound="-1"
+        eType="#//LoadSlot" containment="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/mmxcore/validation/NamedObject">
+        <details key="nonUniqueChildren" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dischargeSlots" upperBound="-1"
+        eType="#//DischargeSlot" containment="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/mmxcore/validation/NamedObject">
+        <details key="nonUniqueChildren" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cargoes" upperBound="-1"
+        eType="#//Cargo" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cargoGroups" upperBound="-1"
+        eType="#//CargoGroup" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vesselAvailabilities" upperBound="-1"
+        eType="#//VesselAvailability" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vesselEvents" upperBound="-1"
+        eType="#//VesselEvent" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vesselTypeGroups" upperBound="-1"
+        eType="#//VesselTypeGroup" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inventoryModels" upperBound="-1"
+        eType="#//Inventory" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="canalBookings" eType="#//CanalBookings"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="charterInMarketOverrides"
+        upperBound="-1" eType="#//CharterInMarketOverride" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="paperDeals" upperBound="-1"
+        eType="#//PaperDeal" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dealSets" upperBound="-1"
+        eType="#//DealSet" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Cargo" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject #//AssignableElement">
+    <eOperations name="getCargoType" lowerBound="1" eType="#//CargoType"/>
+    <eOperations name="getSortedSlots" upperBound="-1">
+      <eGenericType eClassifier="#//Slot">
+        <eTypeArguments/>
+      </eGenericType>
+    </eOperations>
+    <eOperations name="getLoadName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="allowRewiring" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="slots" upperBound="-1"
+        eOpposite="#//Slot/cargo">
+      <eGenericType eClassifier="#//Slot">
+        <eTypeArguments/>
+      </eGenericType>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Slot" abstract="true" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ITimezoneProvider">
+    <eAnnotations source="http://www.mmxlabs.com/models/featureOverride"/>
+    <eTypeParameters name="T">
+      <eBounds eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//Contract"/>
+    </eTypeParameters>
+    <eOperations name="getSlotOrDelegateMinQuantity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eOperations name="getSlotOrDelegateMaxQuantity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eOperations name="getSlotOrDelegateOperationalTolerance" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eOperations name="getSlotOrDelegateVolumeLimitsUnit" eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//VolumeUnits"/>
+    <eOperations name="getSlotOrDelegateEntity" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BaseLegalEntity"/>
+    <eOperations name="getSlotOrDelegateCancellationExpression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eOperations name="getSlotOrDelegatePricingEvent" eType="ecore:EEnum ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//PricingEvent"/>
+    <eOperations name="getPricingDateAsDateTime" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//DateTime"/>
+    <eOperations name="getSlotContractParams" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//SlotContractParams"/>
+    <eOperations name="getSlotOrDelegateCounterparty" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eOperations name="getSlotOrDelegateCN" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eOperations name="getSlotOrDelegateShippingDaysRestriction" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eOperations name="getSlotOrDelegateFullCargoLot" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="getSlotOrDelegateContractRestrictionsArePermissive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="getSlotOrDelegatePortRestrictionsArePermissive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="getSlotOrDelegateVesselRestrictionsArePermissive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="getSlotOrDelegateContractRestrictions" upperBound="-1" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//Contract"/>
+    <eOperations name="getSlotOrDelegatePortRestrictions" upperBound="-1">
+      <eGenericType eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet">
+        <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
+      </eGenericType>
+    </eOperations>
+    <eOperations name="getSlotOrDelegateVesselRestrictions" upperBound="-1">
+      <eGenericType eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselSet">
+        <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>
+      </eGenericType>
+    </eOperations>
+    <eOperations name="getSchedulingTimeWindow" eType="#//SchedulingTimeWindow"/>
+    <eOperations name="getSlotOrDelegateDaysBuffer" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contract" lowerBound="1"
+        unsettable="true">
+      <eGenericType eTypeParameter="#//Slot/T"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="counterparty" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cn" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="port" lowerBound="1" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="windowStart" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="windowStartTime" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="windowSize" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" unsettable="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="formatString" value="##,##0"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="windowSizeUnits" lowerBound="1"
+        eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//TimePeriod"
+        unsettable="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="formatString" value="##,##0"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="windowFlex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="formatString" value="##0"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="windowFlexUnits" lowerBound="1"
+        eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//TimePeriod"
+        defaultValueLiteral="HOURS">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="formatString" value="##,##0"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="duration" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" unsettable="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="formatString" value="##,##0"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeLimitsUnit" lowerBound="1"
+        eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//VolumeUnits"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minQuantity" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" unsettable="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="formatString" value="#,###,##0"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxQuantity" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="140000"
+        unsettable="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="formatString" value="#,###,##0"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operationalTolerance" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" unsettable="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="scale" value="100"/>
+        <details key="formatString" value="##0.#"/>
+        <details key="unit" value="%"/>
+        <details key="exportFormatString" value="#.###"/>
+        <details key="unitPrefix" value="±"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fullCargoLot" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="optional" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="priceExpression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        unsettable="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
+        <details key="type" value="commodity"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cargo" eType="#//Cargo"
+        eOpposite="#//Cargo/slots"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pricingEvent" eType="ecore:EEnum ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//PricingEvent"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pricingDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="notes" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="shippingDaysRestriction"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" unsettable="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="days"/>
+        <details key="formatString" value="###"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entity" lowerBound="1"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BaseLegalEntity"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="restrictedContracts" upperBound="-1"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//Contract"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="restrictedContractsArePermissive"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="restrictedContractsOverride"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="restrictedPorts" upperBound="-1">
+      <eGenericType eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet">
+        <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
+      </eGenericType>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="restrictedPortsArePermissive"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="restrictedPortsOverride"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="restrictedVessels" upperBound="-1">
+      <eGenericType eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselSet">
+        <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>
+      </eGenericType>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="restrictedVesselsArePermissive"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="restrictedVesselsOverride"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="restrictedSlots" upperBound="-1">
+      <eGenericType eClassifier="#//Slot">
+        <eTypeArguments/>
+      </eGenericType>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="restrictedSlotsArePermissive"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="miscCosts" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unitPrefix" value="$"/>
+        <details key="formatString" value="-###,###,##0"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cancellationExpression"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" unsettable="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
+        <details key="type" value="commodity"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nominatedVessel" eType="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="locked" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cancelled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="windowCounterParty" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LoadSlot">
+    <eAnnotations source="http://www.mmxlabs.com/models/featureOverride"/>
+    <eOperations name="getSlotOrDelegateCV" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eOperations name="getSlotOrDelegateDeliveryType" eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//CargoDeliveryType"/>
+    <eOperations name="getSlotOrDelegateDESPurchaseDealType" eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//DESPurchaseDealType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cargoCV" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" unsettable="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="formatString" value="#0.###"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="schedulePurge" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/featureEnablement">
+        <details key="feature" value="purge"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="arriveCold" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="DESPurchase" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transferFrom" eType="#//DischargeSlot"
+        eOpposite="#//DischargeSlot/transferTo"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="salesDeliveryType" eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//CargoDeliveryType"
+        defaultValueLiteral="Any" unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="desPurchaseDealType" eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//DESPurchaseDealType"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeCounterParty" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eGenericSuperTypes eClassifier="#//Slot">
+      <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//PurchaseContract"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DischargeSlot">
+    <eAnnotations source="http://www.mmxlabs.com/models/featureOverride"/>
+    <eOperations name="getSlotOrDelegateMinCv" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eOperations name="getSlotOrDelegateMaxCv" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eOperations name="getSlotOrDelegateDeliveryType" eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//CargoDeliveryType"/>
+    <eOperations name="getSlotOrDelegateFOBSaleDealType" eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//FOBSaleDealType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="FOBSale" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="PurchaseDeliveryType" eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//CargoDeliveryType"
+        defaultValueLiteral="Any" unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transferTo" eType="#//LoadSlot"
+        eOpposite="#//LoadSlot/transferFrom"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minCvValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
+        unsettable="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="formatString" value="#0.###"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxCvValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
+        unsettable="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="formatString" value="#0.###"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fobSaleDealType" eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//FOBSaleDealType"
+        unsettable="true"/>
+    <eGenericSuperTypes eClassifier="#//Slot">
+      <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//SalesContract"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SpotSlot" abstract="true" interface="true"
+      eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="market" lowerBound="1"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.ecore#//SpotMarket"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SpotLoadSlot" eSuperTypes="#//LoadSlot #//SpotSlot">
+    <eAnnotations source="http://www.mmxlabs.com/models/featureOverride"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SpotDischargeSlot" eSuperTypes="#//DischargeSlot #//SpotSlot">
+    <eAnnotations source="http://www.mmxlabs.com/models/featureOverride"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="CargoType">
+    <eLiterals name="FLEET" literal="Shipped"/>
+    <eLiterals name="FOB" value="1"/>
+    <eLiterals name="DES" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CargoGroup" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cargoes" upperBound="-1"
+        eType="#//Cargo"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VesselAvailability" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//VesselAssignmentType">
+    <eOperations name="getStartByAsDateTime" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//DateTime"/>
+    <eOperations name="getStartAfterAsDateTime" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//DateTime"/>
+    <eOperations name="getEndByAsDateTime" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//DateTime"/>
+    <eOperations name="getEndAfterAsDateTime" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//DateTime"/>
+    <eOperations name="getCharterOrDelegateBallastBonusContract" lowerBound="1" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BallastBonusContract"/>
+    <eOperations name="getCharterOrDelegateMinDuration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eOperations name="getCharterOrDelegateMaxDuration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eOperations name="getCharterOrDelegateEntity" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BaseLegalEntity"/>
+    <eOperations name="getCharterOrDelegateRepositioningFee" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eOperations name="jsonid" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fleet" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="optional" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vessel" eType="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="charterNumber" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="1">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="formatString" value="#0"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entity" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BaseLegalEntity"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="timeCharterRate" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" unsettable="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="$/day"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
+        <details key="type" value="charter"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="startAt" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startAfter" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDateTime"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startBy" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDateTime"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="endAt" upperBound="-1">
+      <eGenericType eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet">
+        <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
+      </eGenericType>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="endAfter" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDateTime"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="endBy" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDateTime"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="startHeel" lowerBound="1"
+        eType="#//StartHeelOptions" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="endHeel" eType="#//EndHeelOptions"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="forceHireCostOnlyEndRule"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="repositioningFee" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" unsettable="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="$/day"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
+        <details key="type" value="charter"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ballastBonusContract" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BallastBonusContract"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="charterContract" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//CharterContract"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minDuration" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" unsettable="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="days"/>
+        <details key="formatString" value="##0"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxDuration" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" unsettable="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="days"/>
+        <details key="formatString" value="##0"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VesselEvent" abstract="true" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ITimezoneProvider #//AssignableElement">
+    <eOperations name="getStartByAsDateTime" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//DateTime"/>
+    <eOperations name="getStartAfterAsDateTime" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//DateTime"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="durationInDays" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="days"/>
+        <details key="formatString" value="##0"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="allowedVessels" upperBound="-1">
+      <eGenericType eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselSet">
+        <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>
+      </eGenericType>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="port" lowerBound="1" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startAfter" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDateTime"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startBy" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDateTime"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MaintenanceEvent" eSuperTypes="#//VesselEvent"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DryDockEvent" eSuperTypes="#//VesselEvent"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CharterOutEvent" eSuperTypes="#//VesselEvent">
+    <eOperations name="getEndPort" lowerBound="1" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="optional" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="relocateTo" lowerBound="1"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hireRate" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="$/day"/>
+        <details key="formatString" value="###,##0"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
+        <details key="type" value="charter"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ballastBonus" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="$"/>
+        <details key="formatString" value="##,###,##0"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="repositioningFee" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="$"/>
+        <details key="formatString" value="##,###,##0"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="requiredHeel" lowerBound="1"
+        eType="#//EndHeelOptions" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="availableHeel" lowerBound="1"
+        eType="#//StartHeelOptions" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AssignableElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sequenceHint" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vesselAssignmentType" eType="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//VesselAssignmentType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="spotIndex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="locked" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="VesselType">
+    <eLiterals name="Owned"/>
+    <eLiterals name="Time_Chartered" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VesselTypeGroup">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="vesselType" lowerBound="1"
+        eType="#//VesselType"/>
+    <eGenericSuperTypes eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselSet">
+      <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EndHeelOptions">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tankState" eType="#//EVesselTankState"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minimumEndHeel" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="m³"/>
+        <details key="formatString" value="###,##0.###"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maximumEndHeel" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="m³"/>
+        <details key="formatString" value="###,##0.###"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="useLastHeelPrice" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="priceExpression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
+        <details key="type" value="commodity"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="EVesselTankState">
+    <eLiterals name="EITHER"/>
+    <eLiterals name="MUST_BE_COLD" value="1"/>
+    <eLiterals name="MUST_BE_WARM" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StartHeelOptions" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cvValue" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="mmBtu/m³"/>
+        <details key="formatString" value="#0.######"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minVolumeAvailable" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="m³"/>
+        <details key="formatString" value="###,##0.###"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxVolumeAvailable" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="m³"/>
+        <details key="formatString" value="###,##0.###"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="priceExpression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
+        <details key="type" value="commodity"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InventoryEventRow">
+    <eOperations name="getReliableVolume" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="endDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="period" eType="#//InventoryFrequency"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="counterParty" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="reliability" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
+        defaultValueLiteral="100.0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volume" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="forecastDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeLow" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeHigh" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InventoryCapacityRow">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minVolume" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxVolume" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Inventory" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="port" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="feeds" upperBound="-1"
+        eType="#//InventoryEventRow" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="offtakes" upperBound="-1"
+        eType="#//InventoryEventRow" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="capacities" upperBound="-1"
+        eType="#//InventoryCapacityRow" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="facilityType" eType="#//InventoryFacilityType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="InventoryFacilityType">
+    <eLiterals name="Upstream" literal="Upstream"/>
+    <eLiterals name="Hub" value="1" literal="Hub"/>
+    <eLiterals name="Downstream" value="2" literal="Downstream"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="InventoryFrequency">
+    <eLiterals name="Cargo"/>
+    <eLiterals name="Hourly" value="1"/>
+    <eLiterals name="Daily" value="2"/>
+    <eLiterals name="Monthly" value="3"/>
+    <eLiterals name="Level" value="4"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CanalBookingSlot" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="routeOption" lowerBound="1"
+        eType="ecore:EEnum ../../com.mmxlabs.models.lng.port/model/port.ecore#//RouteOption"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="canalEntrance" eType="ecore:EEnum ../../com.mmxlabs.models.lng.port/model/port.ecore#//CanalEntry"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="bookingDate" lowerBound="1"
+        eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="slot" eType="#//Slot"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="notes" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CanalBookings" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="canalBookingSlots" upperBound="-1"
+        eType="#//CanalBookingSlot" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="strictBoundaryOffsetDays"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="relaxedBoundaryOffsetDays"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="arrivalMarginHours" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="flexibleBookingAmountNorthbound"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="flexibleBookingAmountSouthbound"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="northboundMaxIdleDays"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="southboundMaxIdleDays"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ScheduleSpecification">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vesselScheduleSpecifications"
+        upperBound="-1" eType="#//VesselScheduleSpecification" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nonShippedCargoSpecifications"
+        upperBound="-1" eType="#//NonShippedCargoSpecification" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="openEvents" upperBound="-1"
+        eType="#//ScheduleSpecificationEvent" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NonShippedCargoSpecification">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="slotSpecifications" upperBound="-1"
+        eType="#//SlotSpecification" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VesselScheduleSpecification">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vesselAllocation" eType="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//VesselAssignmentType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="spotIndex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="events" upperBound="-1"
+        eType="#//ScheduleSpecificationEvent" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ScheduleSpecificationEvent"/>
+  <eClassifiers xsi:type="ecore:EClass" name="VesselEventSpecification" eSuperTypes="#//ScheduleSpecificationEvent">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vesselEvent" eType="#//VesselEvent"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VoyageSpecification" eSuperTypes="#//ScheduleSpecificationEvent"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SlotSpecification" eSuperTypes="#//ScheduleSpecificationEvent">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="slot" eType="#//Slot"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CharterInMarketOverride" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//VesselAssignmentType">
+    <eOperations name="getStartDateAsDateTime" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//DateTime"/>
+    <eOperations name="getEndDateAsDateTime" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//DateTime"/>
+    <eOperations name="getLocalOrDelegateMinDuration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eOperations name="getLocalOrDelegateMaxDuration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="charterInMarket" eType="ecore:EClass ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.ecore#//CharterInMarket"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="spotIndex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="startHeel" lowerBound="1"
+        eType="#//StartHeelOptions" unsettable="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDateTime"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="endPort" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="endDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDateTime"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="endHeel" eType="#//EndHeelOptions"
+        unsettable="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="includeBallastBonus" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minDuration" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" unsettable="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="days"/>
+        <details key="formatString" value="##0"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxDuration" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" unsettable="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="days"/>
+        <details key="formatString" value="##0"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PaperDeal" abstract="true" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="price" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
+        <details key="type" value="commodity"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="formatString" value="-##0.###"/>
+        <details key="exportFormatString" value="##0.###"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pricingType" eType="#//PaperPricingType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="index" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
+        <details key="type" value="commodity"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="instrument" eType="ecore:EClass ../../com.mmxlabs.models.lng.pricing/model/pricing.ecore#//SettleStrategy"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="quantity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pricingMonth" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//YearMonth"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="endDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entity" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BaseLegalEntity"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="year" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="formatString" value="####"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BuyPaperDeal" eSuperTypes="#//PaperDeal"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SellPaperDeal" eSuperTypes="#//PaperDeal"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DealSet" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="slots" upperBound="-1">
+      <eGenericType eClassifier="#//Slot">
+        <eTypeArguments/>
+      </eGenericType>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="paperDeals" upperBound="-1"
+        eType="#//PaperDeal"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="SchedulingTimeWindow" instanceClassName="com.mmxlabs.models.lng.cargo.SchedulingTimeWindow"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="PaperPricingType">
+    <eLiterals name="PERIOD_AVG" literal="PERIOD_AVG"/>
+    <eLiterals name="CALENDAR" value="1"/>
+    <eLiterals name="INSTRUMENT" value="2"/>
+  </eClassifiers>
+</ecore:EPackage>
