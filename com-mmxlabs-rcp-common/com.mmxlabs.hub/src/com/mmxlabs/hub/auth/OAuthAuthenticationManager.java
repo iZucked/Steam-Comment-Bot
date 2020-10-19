@@ -67,7 +67,7 @@ public class OAuthAuthenticationManager extends AbstractAuthenticationManager {
 			// @formatter:off
 			builder = Optional.of( //
 					new Request.Builder() //
-							.header("Authorization", "Bearer " + token.get()) //
+							.header("Cookie", token.get()) //
 							.header("cache-control", "no-cache")); //
 			// @formatter:on
 		} else {

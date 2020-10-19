@@ -144,11 +144,11 @@ public class DataHubStatusTrimContribution {
 	private Image dataHubStatusImage(boolean online, boolean loggedin) {
 		Display display = Display.getDefault();
 		if (online && loggedin) {
-			return new Image(display, DataHubStatusTrimContribution.class.getResourceAsStream("/icons/connectedauth.gif"));
+			return new Image(display, DataHubStatusTrimContribution.class.getResourceAsStream("/icons/connectedauth.png"));
 		}
 		if (online && !loggedin) {
-			return new Image(display, DataHubStatusTrimContribution.class.getResourceAsStream("/icons/connectednotauth.gif"));
+			return new Image(display, DataHubStatusTrimContribution.class.getResourceAsStream("/icons/connectednotauth.png"));
 		}
-		return new Image(display, DataHubStatusTrimContribution.class.getResourceAsStream("/icons/disconnected.gif"));
+		return new Image(display, DataHubStatusTrimContribution.class.getResourceAsStream("/icons/disconnected.png"));
 	}
 }
