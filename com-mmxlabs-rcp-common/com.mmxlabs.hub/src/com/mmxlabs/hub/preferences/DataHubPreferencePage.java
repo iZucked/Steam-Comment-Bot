@@ -48,6 +48,7 @@ import com.mmxlabs.hub.IUpstreamDetailChangedListener;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.UpstreamUrlProvider.StateReason;
 import com.mmxlabs.hub.auth.AuthenticationManager;
+import com.mmxlabs.hub.auth.OAuthAuthenticationManager;
 import com.mmxlabs.hub.common.http.HttpClientUtil;
 import com.mmxlabs.hub.common.http.HttpClientUtil.CertInfo;
 import com.mmxlabs.license.features.LicenseFeatures;
@@ -59,8 +60,7 @@ import okhttp3.Response;
 import okhttp3.TlsVersion;
 
 public class DataHubPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
-	
-	
+
 	private static Logger LOGGER = LoggerFactory.getLogger(DataHubPreferencePage.class);
 
 	private static AuthenticationManager authenticationManager = AuthenticationManager.getInstance();
@@ -260,18 +260,33 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 					msg = "Data Hub URL is not valid or unreachable";
 					break;
 				case UNKNOWN_ERROR:
-					msg = state.getMessage()  + " (see error log for details)";
-					LOGGER.error( state.getException().getMessage(),  state.getException());
+					msg = state.getMessage() + " (see error log for details)";
+					LOGGER.error(state.getException().getMessage(), state.getException());
 					break;
 				case HUB_ONLINE:
-					msg = "Data Hub connection successful";
+					msg = "Data Hub is online";
 					break;
 				default:
 					break;
 				}
 				if (msg != null) {
 					if (reason == StateReason.HUB_ONLINE) {
-						MessageDialog.openInformation(getShell(), "Connection check", msg);
+
+						boolean oAuthEnabled = authenticationManager.isOAuthEnabled() && !authenticationManager.forceBasicAuthentication.get();
+						if (oAuthEnabled) {
+							if (OAuthAuthenticationManager.getInstance().hasToken()) {
+								boolean tokenValid = OAuthAuthenticationManager.getInstance().isTokenValid(UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable());
+								if (!tokenValid) {
+									MessageDialog.openError(getShell(), "Connection check", msg + "\n\nInvalid/Expired SSO token found.");
+								} else {
+									MessageDialog.openInformation(getShell(), "Connection check", msg + "\n\nValid SSO token found.");
+								}
+							} else {
+								MessageDialog.openError(getShell(), "Connection check", msg + "\n\nNo SSO token found.");
+							}
+						} else {
+							MessageDialog.openInformation(getShell(), "Connection check", msg);
+						}
 					} else {
 						MessageDialog.openError(getShell(), "Connection check", msg);
 					}

@@ -77,6 +77,10 @@ public class OAuthAuthenticationManager extends AbstractAuthenticationManager {
 		return builder;
 	}
 
+	public boolean hasToken() {
+		return retrieveFromSecurePreferences(COOKIE).isPresent();
+	}
+	
 	protected void startAuthenticationShell(final String upstreamURL, final String path, @Nullable final Shell optionalShell) {
 		if (authenticationShellIsOpen.compareAndSet(false, true)) {
 			final OAuthAuthenticationDialog authenticationShell = new OAuthAuthenticationDialog(optionalShell, upstreamURL, path);
