@@ -42,7 +42,7 @@ public class OAuthAuthenticationManager extends AbstractAuthenticationManager {
 
 		final Optional<String> token = retrieveFromSecurePreferences(COOKIE);
 
-		if (token.isPresent() && !isTokenValid(upstreamURL)) {
+		if (token.isPresent() && isTokenValid(upstreamURL)) {
 			authenticated = true;
 		}
 		return authenticated;
@@ -107,9 +107,9 @@ public class OAuthAuthenticationManager extends AbstractAuthenticationManager {
 			final Request request = builder.get().url(upstreamURL + UpstreamUrlProvider.URI_AFTER_SUCCESSFULL_AUTHENTICATION).build();
 
 			try (Response response = httpClient.newCall(request).execute()) {
-				if (!response.isSuccessful()) {
+				if (response.isSuccessful()) {
 					valid = true;
-
+				} else {
 					// token is expired, log the user out
 					logout(upstreamURL, null);
 				}
