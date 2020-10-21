@@ -154,18 +154,29 @@ public class SummaryPage extends ADPComposite {
 					Object solver = createSolver();
 					if (solver != null) {
 						MPSolver mpSolver = (MPSolver) solver;
-						buildProblem(mpSolver, variableBounds, constraints);
+						try {
+							buildProblem(mpSolver, variableBounds, constraints);
+						} catch (Exception e) {
+							return Long.toString(calculateNaiveSummaryBound(variableBounds, constraints));
+						} catch (Error e) {
+							return Long.toString(calculateNaiveSummaryBound(variableBounds, constraints));
+						}
 						if (mpSolver.numConstraints() == 0) {
 							return Long.toString(variableBounds.values().stream().collect(Collectors.summingLong(Long::longValue)));
 						} else {
-							final MPSolver.ResultStatus resultStatus = mpSolver.solve();
-							if (resultStatus != MPSolver.ResultStatus.OPTIMAL) {
-								final Double bestBound = Math.floor(mpSolver.objective().bestBound());
-								return Long.toString(bestBound.longValue());
-							} else {
-								final Double objVal = mpSolver.objective().value();
-								return Long.toString(objVal.longValue());
+							try {
+								final MPSolver.ResultStatus resultStatus = mpSolver.solve();
+								if (resultStatus != MPSolver.ResultStatus.OPTIMAL) {
+									final Double bestBound = Math.floor(mpSolver.objective().bestBound());
+									return Long.toString(bestBound.longValue());
+								} else {
+									final Double objVal = mpSolver.objective().value();
+									return Long.toString(objVal.longValue());
+								}
+							} catch (Exception e) {
+							} catch (Error e) {
 							}
+							return Long.toString(calculateNaiveSummaryBound(variableBounds, constraints));
 						}
 					} else {
 						return Long.toString(calculateNaiveSummaryBound(variableBounds, constraints));
@@ -225,18 +236,29 @@ public class SummaryPage extends ADPComposite {
 					Object solver = createSolver();
 					if (solver != null) {
 						MPSolver mpSolver = (MPSolver) solver;
-						buildProblem(mpSolver, trivialBounds, constraints);
+						try {
+							buildProblem(mpSolver, trivialBounds, constraints);
+						} catch (Exception e){
+							return Long.toString(calculateNaiveSummaryBound(trivialBounds, constraints));
+						} catch (Error e) {
+							return Long.toString(calculateNaiveSummaryBound(trivialBounds, constraints));
+						}
 						if (mpSolver.numConstraints() == 0) {
 							return Long.toString(trivialBounds.values().stream().collect(Collectors.summingLong(Long::longValue)));
 						} else {
-							final MPSolver.ResultStatus resultStatus = mpSolver.solve();
-							if (resultStatus != MPSolver.ResultStatus.OPTIMAL) {
-								final Double bestBound = Math.floor(mpSolver.objective().bestBound());
-								return Long.toString(bestBound.longValue());
-							} else {
-								final Double objVal = mpSolver.objective().value();
-								return Long.toString(objVal.longValue());
+							try {
+								final MPSolver.ResultStatus resultStatus = mpSolver.solve();
+								if (resultStatus != MPSolver.ResultStatus.OPTIMAL) {
+									final Double bestBound = Math.floor(mpSolver.objective().bestBound());
+									return Long.toString(bestBound.longValue());
+								} else {
+									final Double objVal = mpSolver.objective().value();
+									return Long.toString(objVal.longValue());
+								}
+							} catch (Exception e) {
+							} catch (Error e) {
 							}
+							return Long.toString(calculateNaiveSummaryBound(trivialBounds, constraints));
 						}
 					} else {
 						return Long.toString(calculateNaiveSummaryBound(trivialBounds, constraints));
