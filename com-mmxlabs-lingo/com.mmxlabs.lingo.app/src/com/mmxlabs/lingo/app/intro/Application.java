@@ -121,10 +121,8 @@ public class Application implements IApplication {
 
 		// Trigger early startup prompt for Data Hub
 		if (DataHubServiceProvider.getInstance().isHubOnline()) {
-			if (!authenticationManager.isAuthenticated()) {
-				authenticationManager.run(null);
-			}
-			
+			authenticationManager.run(null);
+
 			// Re-test online status
 			UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
 		}
