@@ -70,12 +70,16 @@ public class HttpClientUtil {
 	private static final OkHttpClient CLIENT = new OkHttpClient.Builder().build();
 
 	public static OkHttpClient.Builder basicBuilder() {
+		// Set generous timeouts. Library defaults are 10 seconds
+		return basicBuilder(20, 1, 1);
+	}
+
+	public static OkHttpClient.Builder basicBuilder(final int connectTimeout, final int readTimeout, final int writeTimeout) {
 		final OkHttpClient.Builder builder = CLIENT.newBuilder();
 
-		// Set generous timeouts. Library defaults are 10 seconds
-		builder.connectTimeout(20, TimeUnit.SECONDS) //
-				.readTimeout(1, TimeUnit.MINUTES) //
-				.writeTimeout(1, TimeUnit.MINUTES) //
+		builder.connectTimeout(connectTimeout, TimeUnit.SECONDS) //
+				.readTimeout(readTimeout, TimeUnit.MINUTES) //
+				.writeTimeout(writeTimeout, TimeUnit.MINUTES) //
 		;
 
 		builder.hostnameVerifier(new HostnameVerifier() {

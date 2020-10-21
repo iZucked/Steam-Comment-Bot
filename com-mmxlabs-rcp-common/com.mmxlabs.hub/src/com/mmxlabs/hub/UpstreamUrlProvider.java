@@ -47,13 +47,17 @@ import okhttp3.Response;
  * data hub requests.
  * <p>
  * N.B. {@link #getBaseUrlIfAvailable()} will not work until the UpstreamUrlProvider has finished initialising, which may not happen immediately at program start, or if the connection goes down later.
- * 
+ *
  */
 public class UpstreamUrlProvider {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UpstreamUrlProvider.class);
 
-	private final OkHttpClient httpClient = HttpClientUtil.basicBuilder().build();
+	// initialise http client with small connection timeout
+	private static final int CONNECTION_TIMEOUT_IN_SECONDS = 5;
+	private static final int READ_TIMEOUT_IN_SECONDS = 1;
+	private static final int WRITE_TIMEOUT_IN_SECONDS = 1;
+	private final OkHttpClient httpClient = HttpClientUtil.basicBuilder(CONNECTION_TIMEOUT_IN_SECONDS, READ_TIMEOUT_IN_SECONDS, WRITE_TIMEOUT_IN_SECONDS).build();
 
 	// Avoids repeated error reporting
 	private static final ConcurrentHashMap<String, Object> reportedError = new ConcurrentHashMap<>();
