@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.browser.Browser;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,7 +89,13 @@ public class OAuthAuthenticationManager extends AbstractAuthenticationManager {
 			authenticationShell.addDisposeListener(() -> {
 				authenticationShellIsOpen.compareAndSet(true, false);
 			});
-			authenticationShell.open();
+			try { 
+				authenticationShell.open();
+			} catch (Exception e) {
+				// Make sure we have cleared the setting.
+				authenticationShellIsOpen.set(false);
+				throw e;
+			}
 		}
 	}
 
@@ -111,7 +118,7 @@ public class OAuthAuthenticationManager extends AbstractAuthenticationManager {
 					valid = true;
 				} else {
 					// token is expired, log the user out
-					logout(upstreamURL, null);
+					Display.getDefault().asyncExec(() -> logout(upstreamURL, null));
 				}
 			} catch (final IOException e) {
 				LOGGER.debug(String.format("Unexpected exception: %s", e.getMessage()));
