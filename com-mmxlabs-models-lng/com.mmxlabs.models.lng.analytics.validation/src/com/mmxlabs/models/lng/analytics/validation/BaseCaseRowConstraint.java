@@ -94,9 +94,15 @@ public class BaseCaseRowConstraint extends AbstractModelMultiConstraint {
 				deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 				statuses.add(deco);
 			}
-			if (baseCaseRow.getShipping() != null && !SandboxConstraintUtils.portRestrictionsValid(baseCaseRow.getBuyOption(), baseCaseRow.getSellOption(), baseCaseRow.getShipping())) {
+			if (baseCaseRow.getShipping() != null && !SandboxConstraintUtils.vesselPortRestrictionsValid(baseCaseRow.getBuyOption(), baseCaseRow.getSellOption(), baseCaseRow.getShipping())) {
 				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
 						(IConstraintStatus) ctx.createFailureStatus("Starting point - shipping option cannot visit a port in this cargo"));
+				deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
+				statuses.add(deco);
+			}
+			if (baseCaseRow.getShipping() != null && !SandboxConstraintUtils.portRestrictionsValid(baseCaseRow.getBuyOption(), baseCaseRow.getSellOption())) {
+				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+						(IConstraintStatus) ctx.createFailureStatus("Starting point - buy or sell does not have a compatible port in this cargo"));
 				deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 				statuses.add(deco);
 			}

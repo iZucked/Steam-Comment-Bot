@@ -94,12 +94,23 @@ public class PartialCaseRowConstraint extends AbstractModelMultiConstraint {
 				deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
 				statuses.add(deco);
 			}
-			boolean ports = getPortRestrictionsValid(partialCaseRow);
-			if (!ports) {
+			boolean vesselPorts = getVesselPortRestrictionsValid(partialCaseRow);
+			if (!vesselPorts) {
 				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
 						(IConstraintStatus) ctx.createFailureStatus(String.format("%s - a combination in the row uses a vessel that cannot visit the specified ports", viewName)),
 						IConstraintStatus.WARNING);
 				deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
+				statuses.add(deco);
+			}
+			boolean ports = getPortRestrictionsValid(partialCaseRow);
+			if (!ports) {
+				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+						(IConstraintStatus) ctx.createFailureStatus(String.format("%s - a combination in the row has incompatible port restrictions", viewName)),
+						IConstraintStatus.WARNING);
+				deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
+				deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__BUY_OPTIONS);
+				deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS);
+
 				statuses.add(deco);
 			}
 			boolean vessels = getVesselRestrictionsValid(partialCaseRow);
@@ -173,17 +184,29 @@ public class PartialCaseRowConstraint extends AbstractModelMultiConstraint {
 		return true;
 	}
 
-	private boolean getPortRestrictionsValid(PartialCaseRow row) {
+	private boolean getVesselPortRestrictionsValid(PartialCaseRow row) {
 		for (BuyOption buyOption : row.getBuyOptions()) {
 			for (SellOption sellOption : row.getSellOptions()) {
 				for (ShippingOption option : row.getShipping()) {
 					// test shipping only
 					if (AnalyticsBuilder.isFOBPurchase().test(buyOption) && AnalyticsBuilder.isDESSale().test(sellOption) && AnalyticsBuilder.isShipped(option)) {
-						boolean vesselVolume = SandboxConstraintUtils.portRestrictionsValid(buyOption, sellOption, option);
+						boolean vesselVolume = SandboxConstraintUtils.vesselPortRestrictionsValid(buyOption, sellOption, option);
 						if (!vesselVolume) {
 							return false;
 						}
 					}
+				}
+			}
+		}
+		return true;
+	}
+
+	private boolean getPortRestrictionsValid(PartialCaseRow row) {
+		for (BuyOption buyOption : row.getBuyOptions()) {
+			for (SellOption sellOption : row.getSellOptions()) {
+				boolean valid = SandboxConstraintUtils.portRestrictionsValid(buyOption, sellOption);
+				if (!valid) {
+					return false;
 				}
 			}
 		}

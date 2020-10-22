@@ -1642,6 +1642,45 @@ public class AnalyticsBuilder {
 		}
 		return Pair.of(permitted, expandedVessels);
 	}
+	public static Pair<Boolean, Set<APortSet<Port>>> getBuyPortRestrictions(final BuyOption buy) {
+		final Set<APortSet<Port>> expandedPorts = new HashSet<>();
+		boolean permitted = false;
+		if (buy instanceof BuyReference) {
+			final LoadSlot slot = ((BuyReference) buy).getSlot();
+			if (slot != null) {
+				final List<APortSet<Port>> allowedPorts = slot.getSlotOrDelegatePortRestrictions();
+				permitted = slot.getSlotOrDelegatePortRestrictionsArePermissive();
+				for (final APortSet<Port> s : allowedPorts) {
+					if (s instanceof Port) {
+						expandedPorts.add(s);
+					} else {
+						expandedPorts.addAll(SetUtils.getObjects(s));
+					}
+				}
+			}
+		}
+		return Pair.of(permitted, expandedPorts);
+	}
+	
+	public static Pair<Boolean, Set<APortSet<Port>>> getSellPortRestrictions(final SellOption sell) {
+		final Set<APortSet<Port>> expandedPorts = new HashSet<>();
+		boolean permitted = false;
+		if (sell instanceof SellReference) {
+			final DischargeSlot slot = ((SellReference) sell).getSlot();
+			if (slot != null) {
+				final List<APortSet<Port>> allowedPorts = slot.getSlotOrDelegatePortRestrictions();
+				permitted = slot.getSlotOrDelegatePortRestrictionsArePermissive();
+				for (final APortSet<Port> s : allowedPorts) {
+					if (s instanceof Port) {
+						expandedPorts.add(s);
+					} else {
+						expandedPorts.addAll(SetUtils.getObjects(s));
+					}
+				}
+			}
+		}
+		return Pair.of(permitted, expandedPorts);
+	}
 
 	public static Predicate<BuyOption> isFOBPurchase() {
 		return b -> ((b instanceof BuyReference && ((BuyReference) b).getSlot() != null && ((BuyReference) b).getSlot().isDESPurchase() == false) //

@@ -23,7 +23,7 @@ import com.mmxlabs.models.lng.types.util.SetUtils;
 
 public class SandboxConstraintUtils {
 
-	public static boolean portRestrictionsValid(final BuyOption buy, final SellOption sell, final ShippingOption shippingOption) {
+	public static boolean vesselPortRestrictionsValid(final BuyOption buy, final SellOption sell, final ShippingOption shippingOption) {
 		final Collection<APortSet<Port>> portRestrictions = AnalyticsBuilder.getPortRestrictions(shippingOption);
 		final Port buyPort = AnalyticsBuilder.getPort(buy);
 		final Port sellPort = AnalyticsBuilder.getPort(sell);
@@ -61,6 +61,34 @@ public class SandboxConstraintUtils {
 				} else if (SetUtils.getObjects(allowedVessels).contains(vessel) != permissive) {
 					return false;
 				}
+			}
+		}
+		return true;
+	}
+
+	public static boolean portRestrictionsValid(final BuyOption buy, final SellOption sell) {
+
+		if (buy instanceof BuyReference) {
+			final Port port = AnalyticsBuilder.getPort(sell);
+			final Pair<Boolean, Set<APortSet<Port>>> restrictedPorts = AnalyticsBuilder.getBuyPortRestrictions(buy);
+			final boolean permissive = restrictedPorts.getFirst();
+			final Set<APortSet<Port>> allowedPorts = restrictedPorts.getSecond();
+
+			if (!permissive && allowedPorts.isEmpty()) {
+				// No restrictions
+			} else if (SetUtils.getObjects(allowedPorts).contains(port) != permissive) {
+				return false;
+			}
+		}
+		if (sell instanceof SellReference) {
+			final Port port = AnalyticsBuilder.getPort(buy);
+			final Pair<Boolean, Set<APortSet<Port>>> restrictedPorts = AnalyticsBuilder.getSellPortRestrictions(sell);
+			final boolean permissive = restrictedPorts.getFirst();
+			final Set<APortSet<Port>> allowedPorts = restrictedPorts.getSecond();
+			if (!permissive && allowedPorts.isEmpty()) {
+				// No restrictions
+			} else if (SetUtils.getObjects(allowedPorts).contains(port) != permissive) {
+				return false;
 			}
 		}
 		return true;
