@@ -10,6 +10,7 @@ import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -34,6 +35,7 @@ import com.mmxlabs.models.lng.adp.PeriodDistributionProfileConstraint;
 import com.mmxlabs.models.lng.adp.ProfileConstraint;
 import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.adp.utils.ADPModelUtil;
+import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.LightWeightSchedulerStage2Module;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ICargoToCargoCostCalculator;
@@ -362,35 +364,56 @@ public class LightWeightOptimisationDataFactory {
 			
 			errorMessage.append("Some constraints cannot be satisifed:\r\n\r\n");
 			
+			Map<Contract, Set<String>> contractsToConstraintErrMsgs = new HashMap<>();
+			
 			for (ConstraintInfo<ContractProfile, ProfileConstraint,?> violated : violatedConstraints) {
 				ContractProfile contract = violated.getContractProfile();
 				ProfileConstraint constraint = violated.getProfileConstraint();
+				
 				String sideContract = (contract instanceof PurchaseContractProfile ? "purchase" : "sale");
-				errorMessage.append("On ").append(sideContract).append(" contract ").append(contract.getContract().getName()).append(":\r\n");
+				Set<String> contractConstraints = contractsToConstraintErrMsgs.get(contract.getContract());
+				if (contractConstraints == null) {
+					contractConstraints = new HashSet<String>();
+					contractsToConstraintErrMsgs.put(contract.getContract(), contractConstraints);
+				}
+		
+				StringBuilder constraintName = new StringBuilder();
+				
 				if (constraint instanceof PeriodDistributionProfileConstraint) {
 					PeriodDistributionProfileConstraint pdc = (PeriodDistributionProfileConstraint)constraint;
 					for (PeriodDistribution pd : pdc.getDistributions()) {
 						if (pd.getMinCargoes() == violated.getBound() || pd.getMaxCargoes() == violated.getBound()) {
-							errorMessage.append(ADPModelUtil.getPeriodDistributionRangeString(pd));
+							constraintName.append(ADPModelUtil.getPeriodDistributionRangeString(pd));
 							if (pd.isSetMinCargoes()) {
-								errorMessage.append(" Min:").append(pd.getMinCargoes());
+								constraintName.append(" Min:").append(pd.getMinCargoes());
 							}
 							if (pd.isSetMaxCargoes()) {
-								errorMessage.append(" Max:").append(pd.getMaxCargoes());
+								constraintName.append(" Max:").append(pd.getMaxCargoes());
 							}
 							if (violated.getViolationType() == ViolationType.Min) {
-								errorMessage.append(" (Min violated, slots used = ").append(violated.getViolatedAmount()).append(")");
+								constraintName.append(" (Min violated, slots used = ").append(violated.getViolatedAmount()).append(")");
 							}
 							else if (violated.getViolationType() == ViolationType.Max) {
-								errorMessage.append(" (Max violated, slots used = ").append(violated.getViolatedAmount()).append(")");
+								constraintName.append(" (Max violated, slots used = ").append(violated.getViolatedAmount()).append(")");
 							}
-							errorMessage.append("\r\n");
+							constraintName.append("\r\n");
 						}
 					}
-					errorMessage.append("\r\n");					
+					constraintName.append("\r\n");					
 				}
 				else {
-					errorMessage.append(constraint.toString()).append("\r\n");
+					constraintName.append(constraint.toString()).append("\r\n");
+				}
+				
+				contractConstraints.add(constraintName.toString());
+			}
+			
+			for (Contract contract : contractsToConstraintErrMsgs.keySet()) {
+				String sideContract = (contract instanceof PurchaseContract ? "purchase" : "sale");	
+				errorMessage.append("On ").append(sideContract).append(" contract ").append(contract.getName()).append(":\r\n");
+				Set<String> contractConstraints = contractsToConstraintErrMsgs.get(contract);
+				for (String constraintName : contractConstraints) {
+					errorMessage.append(constraintName);
 				}
 			}
 			
