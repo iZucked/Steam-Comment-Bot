@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><?pde version="3.8"?><target name="LiNGO Common Platform Target - (Mars SR1)" sequenceNumber="68">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><?pde version="3.8"?><target name="LiNGO Common Platform Target - (Mars SR1)" sequenceNumber="69">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.equinox.compendium.sdk.feature.group" version="0.0.0"/>
@@ -147,7 +147,7 @@
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.google.ortools.feature.feature.group" version="0.0.0"/>
-<repository id="mmxlabs-releases" location="http://nexus.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/google/ortools/com.google.ortools.p2/7.5.7466.jdk11/com.google.ortools.p2-7.5.7466.jdk11.zip-unzip"/>
+<repository id="mmxlabs-releases" location="http://nexus.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/google/ortools/com.google.ortools.p2/7.5.7466.jdk11v2/com.google.ortools.p2-7.5.7466.jdk11v2.zip-unzip"/>
 </location>
 </locations>
 </target>
