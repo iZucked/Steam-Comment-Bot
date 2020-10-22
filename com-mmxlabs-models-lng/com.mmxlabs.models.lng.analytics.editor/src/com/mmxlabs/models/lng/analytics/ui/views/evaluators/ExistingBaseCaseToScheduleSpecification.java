@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNullByDefault;
@@ -88,10 +89,12 @@ public class ExistingBaseCaseToScheduleSpecification {
 	private final LNGScenarioModel scenarioModel;
 	private final IMapperClass mapper;
 	private final IScenarioDataProvider scenarioDataProvider;
+	private final Set<String> usedIDs;
 
 	public ExistingBaseCaseToScheduleSpecification(final IScenarioDataProvider scenarioDataProvider, final IMapperClass mapper) {
 		this.scenarioDataProvider = scenarioDataProvider;
 		this.scenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
+		this.usedIDs = getUsedSlotIDs(scenarioModel);
 		this.mapper = mapper;
 	}
 
@@ -744,10 +747,17 @@ public class ExistingBaseCaseToScheduleSpecification {
 		if (original != null) {
 			return original;
 		}
-
-		final DischargeSlot dischargeSlot_original = AnalyticsBuilder.makeDischargeSlot(sellOption, scenarioModel, SlotMode.ORIGINAL_SLOT);
-		final DischargeSlot dischargeSlot_breakEven = AnalyticsBuilder.makeDischargeSlot(sellOption, scenarioModel, SlotMode.BREAK_EVEN_VARIANT);
-		final DischargeSlot dischargeSlot_changeable = AnalyticsBuilder.makeDischargeSlot(sellOption, scenarioModel, SlotMode.CHANGE_PRICE_VARIANT);
+		this.usedIDs.addAll(
+				mapper.getExtraDataProvider().extraDischarges.stream()
+				.map(DischargeSlot::getName)
+				.collect(Collectors.toSet()));
+		this.usedIDs.addAll(
+				mapper.getExtraDataProvider().extraLoads.stream()
+				.map(LoadSlot::getName)
+				.collect(Collectors.toSet()));
+		final DischargeSlot dischargeSlot_original = AnalyticsBuilder.makeDischargeSlot(sellOption, scenarioModel, SlotMode.ORIGINAL_SLOT, this.usedIDs);
+		final DischargeSlot dischargeSlot_breakEven = AnalyticsBuilder.makeDischargeSlot(sellOption, scenarioModel, SlotMode.BREAK_EVEN_VARIANT, this.usedIDs);
+		final DischargeSlot dischargeSlot_changeable = AnalyticsBuilder.makeDischargeSlot(sellOption, scenarioModel, SlotMode.CHANGE_PRICE_VARIANT, this.usedIDs);
 
 		mapper.addMapping(sellOption, dischargeSlot_original, dischargeSlot_breakEven, dischargeSlot_changeable);
 
@@ -761,10 +771,17 @@ public class ExistingBaseCaseToScheduleSpecification {
 		if (original != null) {
 			return original;
 		}
-
-		final LoadSlot loadSlot_original = AnalyticsBuilder.makeLoadSlot(buyOption, scenarioModel, SlotMode.ORIGINAL_SLOT);
-		final LoadSlot loadSlot_breakEven = AnalyticsBuilder.makeLoadSlot(buyOption, scenarioModel, SlotMode.BREAK_EVEN_VARIANT);
-		final LoadSlot loadSlot_changeable = AnalyticsBuilder.makeLoadSlot(buyOption, scenarioModel, SlotMode.CHANGE_PRICE_VARIANT);
+		this.usedIDs.addAll(
+				mapper.getExtraDataProvider().extraDischarges.stream()
+				.map(DischargeSlot::getName)
+				.collect(Collectors.toSet()));
+		this.usedIDs.addAll(
+				mapper.getExtraDataProvider().extraLoads.stream()
+				.map(LoadSlot::getName)
+				.collect(Collectors.toSet()));
+		final LoadSlot loadSlot_original = AnalyticsBuilder.makeLoadSlot(buyOption, scenarioModel, SlotMode.ORIGINAL_SLOT, this.usedIDs);
+		final LoadSlot loadSlot_breakEven = AnalyticsBuilder.makeLoadSlot(buyOption, scenarioModel, SlotMode.BREAK_EVEN_VARIANT, this.usedIDs);
+		final LoadSlot loadSlot_changeable = AnalyticsBuilder.makeLoadSlot(buyOption, scenarioModel, SlotMode.CHANGE_PRICE_VARIANT, this.usedIDs);
 
 		mapper.addMapping(buyOption, loadSlot_original, loadSlot_breakEven, loadSlot_changeable);
 
@@ -799,5 +816,15 @@ public class ExistingBaseCaseToScheduleSpecification {
 		}
 		throw new IllegalArgumentException();
 	}
-
+	
+	private static Set<String> getUsedSlotIDs(final LNGScenarioModel lngScenarioModel) {
+		final Set<String> usedIDs = new HashSet<>();
+		usedIDs.addAll(lngScenarioModel.getCargoModel().getLoadSlots().stream()
+				.map(LoadSlot::getName)
+				.collect(Collectors.toSet()));
+		usedIDs.addAll(lngScenarioModel.getCargoModel().getDischargeSlots().stream()
+				.map(DischargeSlot::getName)
+				.collect(Collectors.toSet()));
+		return usedIDs;
+	}
 }

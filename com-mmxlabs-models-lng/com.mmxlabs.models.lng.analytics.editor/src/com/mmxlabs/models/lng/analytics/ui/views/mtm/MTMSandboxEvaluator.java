@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -44,12 +45,12 @@ public class MTMSandboxEvaluator {
 	private static final ShippingOptionDescriptionFormatter SHIPPING_OPTION_DESCRIPTION_FORMATTER = new ShippingOptionDescriptionFormatter();
 
 	protected static void buildFullScenario(final LNGScenarioModel clone, final MTMModel clonedModel, final IMapperClass mapper) {
-
+		final Set<String> usedIDs = getUsedSlotIDs(clone);
 		final Set<YearMonth> loadDates = new HashSet<>();
 		for (final BuyOption buy : clonedModel.getBuys()) {
-			final LoadSlot loadSlot_original = AnalyticsBuilder.makeLoadSlot(buy, clone, SlotMode.ORIGINAL_SLOT);
-			final LoadSlot loadSlot_breakEven = AnalyticsBuilder.makeLoadSlot(buy, clone, SlotMode.BREAK_EVEN_VARIANT);
-			final LoadSlot loadSlot_changeable = AnalyticsBuilder.makeLoadSlot(buy, clone, SlotMode.CHANGE_PRICE_VARIANT);
+			final LoadSlot loadSlot_original = AnalyticsBuilder.makeLoadSlot(buy, clone, SlotMode.ORIGINAL_SLOT, usedIDs);
+			final LoadSlot loadSlot_breakEven = AnalyticsBuilder.makeLoadSlot(buy, clone, SlotMode.BREAK_EVEN_VARIANT, usedIDs);
+			final LoadSlot loadSlot_changeable = AnalyticsBuilder.makeLoadSlot(buy, clone, SlotMode.CHANGE_PRICE_VARIANT, usedIDs);
 			mapper.addMapping(buy, loadSlot_original, loadSlot_breakEven, loadSlot_changeable);
 
 			final LocalDate windowStart = loadSlot_original.getWindowStart();
@@ -63,9 +64,9 @@ public class MTMSandboxEvaluator {
 		final Set<YearMonth> dischargeDates = new HashSet<>();
 
 		for (final SellOption sell : clonedModel.getSells()) {
-			final DischargeSlot dischargeSlot_original = AnalyticsBuilder.makeDischargeSlot(sell, clone, SlotMode.ORIGINAL_SLOT);
-			final DischargeSlot dischargeSlot_breakEven = AnalyticsBuilder.makeDischargeSlot(sell, clone, SlotMode.BREAK_EVEN_VARIANT);
-			final DischargeSlot dischargeSlot_changeable = AnalyticsBuilder.makeDischargeSlot(sell, clone, SlotMode.CHANGE_PRICE_VARIANT);
+			final DischargeSlot dischargeSlot_original = AnalyticsBuilder.makeDischargeSlot(sell, clone, SlotMode.ORIGINAL_SLOT, usedIDs);
+			final DischargeSlot dischargeSlot_breakEven = AnalyticsBuilder.makeDischargeSlot(sell, clone, SlotMode.BREAK_EVEN_VARIANT, usedIDs);
+			final DischargeSlot dischargeSlot_changeable = AnalyticsBuilder.makeDischargeSlot(sell, clone, SlotMode.CHANGE_PRICE_VARIANT, usedIDs);
 
 			mapper.addMapping(sell, dischargeSlot_original, dischargeSlot_breakEven, dischargeSlot_changeable);
 
@@ -83,9 +84,9 @@ public class MTMSandboxEvaluator {
 						|| market instanceof DESPurchaseMarket) {
 					final BuyMarket m = AnalyticsFactory.eINSTANCE.createBuyMarket();
 					m.setMarket(market);
-					final LoadSlot slot_original = AnalyticsBuilder.makeLoadSlot(m, clone, SlotMode.ORIGINAL_SLOT);
-					final LoadSlot slot_breakEven = AnalyticsBuilder.makeLoadSlot(m, clone, SlotMode.BREAK_EVEN_VARIANT);
-					final LoadSlot slot_changable = AnalyticsBuilder.makeLoadSlot(m, clone, SlotMode.CHANGE_PRICE_VARIANT);
+					final LoadSlot slot_original = AnalyticsBuilder.makeLoadSlot(m, clone, SlotMode.ORIGINAL_SLOT, usedIDs);
+					final LoadSlot slot_breakEven = AnalyticsBuilder.makeLoadSlot(m, clone, SlotMode.BREAK_EVEN_VARIANT, usedIDs);
+					final LoadSlot slot_changable = AnalyticsBuilder.makeLoadSlot(m, clone, SlotMode.CHANGE_PRICE_VARIANT, usedIDs);
 
 					slot_original.setWindowStart(date.atDay(1));
 					slot_original.setWindowSize(1);
@@ -107,9 +108,9 @@ public class MTMSandboxEvaluator {
 						|| market instanceof DESSalesMarket){
 					final SellMarket m = AnalyticsFactory.eINSTANCE.createSellMarket();
 					m.setMarket(market);
-					final DischargeSlot slot_original = AnalyticsBuilder.makeDischargeSlot(m, clone, SlotMode.ORIGINAL_SLOT);
-					final DischargeSlot slot_breakEven = AnalyticsBuilder.makeDischargeSlot(m, clone, SlotMode.BREAK_EVEN_VARIANT);
-					final DischargeSlot slot_changable = AnalyticsBuilder.makeDischargeSlot(m, clone, SlotMode.CHANGE_PRICE_VARIANT);
+					final DischargeSlot slot_original = AnalyticsBuilder.makeDischargeSlot(m, clone, SlotMode.ORIGINAL_SLOT, usedIDs);
+					final DischargeSlot slot_breakEven = AnalyticsBuilder.makeDischargeSlot(m, clone, SlotMode.BREAK_EVEN_VARIANT, usedIDs);
+					final DischargeSlot slot_changable = AnalyticsBuilder.makeDischargeSlot(m, clone, SlotMode.CHANGE_PRICE_VARIANT, usedIDs);
 
 					slot_original.setWindowStart(date.atDay(1));
 					slot_original.setWindowSize(1);
@@ -155,6 +156,17 @@ public class MTMSandboxEvaluator {
 		ServiceHelper.<IAnalyticsScenarioEvaluator> withServiceConsumer(IAnalyticsScenarioEvaluator.class, evaluator -> {
 			evaluator.evaluateMTMSandbox(scenarioDataProvider, scenarioInstance, userSettings, model, mapper);
 		});
+	}
+	
+	private static Set<String> getUsedSlotIDs(final LNGScenarioModel lngScenarioModel) {
+		final Set<String> usedIDs = new HashSet<>();
+		usedIDs.addAll(lngScenarioModel.getCargoModel().getLoadSlots().stream()
+				.map(LoadSlot::getName)
+				.collect(Collectors.toSet()));
+		usedIDs.addAll(lngScenarioModel.getCargoModel().getDischargeSlots().stream()
+				.map(DischargeSlot::getName)
+				.collect(Collectors.toSet()));
+		return usedIDs;
 	}
 
 }

@@ -106,20 +106,23 @@ public class AnalyticsBuilder {
 	private static final double DEFAULT_MAX_VOLUME = 140_000;
 
 	public static @Nullable LoadSlot makeLoadSlot(final @Nullable BuyOption buy, final @NonNull LNGScenarioModel lngScenarioModel) {
-		return makeLoadSlot(buy, lngScenarioModel, SlotMode.ORIGINAL_SLOT);
+		return makeLoadSlot(buy, lngScenarioModel, SlotMode.ORIGINAL_SLOT, null);
 	}
 
-	public static @Nullable LoadSlot makeLoadSlot(final @Nullable BuyOption buy, final @NonNull LNGScenarioModel lngScenarioModel, final SlotMode slotMode) {
+	public static @Nullable LoadSlot makeLoadSlot(final @Nullable BuyOption buy, final @NonNull LNGScenarioModel lngScenarioModel, final SlotMode slotMode, Set<String> usedIDStrings) {
 
 		final String baseName = buyOptionDescriptionFormatter.render(buy);
 
 		// Get existing names
-		final Set<String> usedIDStrings = new HashSet<>();
-		for (final LoadSlot lSlot : lngScenarioModel.getCargoModel().getLoadSlots()) {
-			usedIDStrings.add(lSlot.getName());
+		if (usedIDStrings == null) {
+			usedIDStrings = new HashSet<>();
+			for (final LoadSlot lSlot : lngScenarioModel.getCargoModel().getLoadSlots()) {
+				usedIDStrings.add(lSlot.getName());
+			}
 		}
 
 		final String id = getUniqueID(baseName, usedIDStrings);
+		usedIDStrings.add(id);
 
 		if (buy instanceof BuyReference) {
 			final LoadSlot originalLoadSlot = ((BuyReference) buy).getSlot();
@@ -281,19 +284,22 @@ public class AnalyticsBuilder {
 	}
 
 	public static @Nullable DischargeSlot makeDischargeSlot(final @Nullable SellOption sell, final @NonNull LNGScenarioModel lngScenarioModel) {
-		return makeDischargeSlot(sell, lngScenarioModel, SlotMode.ORIGINAL_SLOT);
+		return makeDischargeSlot(sell, lngScenarioModel, SlotMode.ORIGINAL_SLOT, null);
 	}
 
-	public static @Nullable DischargeSlot makeDischargeSlot(final @Nullable SellOption sell, final @NonNull LNGScenarioModel lngScenarioModel, final SlotMode slotMode) {
+	public static @Nullable DischargeSlot makeDischargeSlot(final @Nullable SellOption sell, final @NonNull LNGScenarioModel lngScenarioModel, final SlotMode slotMode, Set<String> usedIDStrings) {
 		final String baseName = sellOptionDescriptionFormatter.render(sell);
 
 		// Get existing names
-		final Set<String> usedIDStrings = new HashSet<>();
-		for (final DischargeSlot dSlot : lngScenarioModel.getCargoModel().getDischargeSlots()) {
-			usedIDStrings.add(dSlot.getName());
+		if (usedIDStrings == null) {
+			usedIDStrings = new HashSet<>();
+			for (final LoadSlot lSlot : lngScenarioModel.getCargoModel().getLoadSlots()) {
+				usedIDStrings.add(lSlot.getName());
+			}
 		}
 
 		final String id = getUniqueID(baseName, usedIDStrings);
+		usedIDStrings.add(id);
 
 		if (sell instanceof SellReference) {
 

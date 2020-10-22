@@ -209,7 +209,7 @@ public class SandboxManualRunner {
 
 			final IModifiableSequences fullSequences = sequencesManipulator.createManipulatedSequences(rawSequences);
 
-			return evaluationHelper.checkConstraintsIngoreNominalRules(fullSequences, null);
+			return evaluationHelper.checkConstraintsForRelaxedConstraints(fullSequences, null);
 		}
 	}
 
@@ -315,16 +315,26 @@ public class SandboxManualRunner {
 				if (row.getVesselEventOption() != null && !seenItems.add(row.getVesselEventOption())) {
 					return;
 				}
+				//final BuyOption buyOption = row.getBuyOption();
 				if (row.getVesselEventOption() != null) {
 					if (row.getBuyOption() != null) {
+						
 						final BaseCaseRow extra = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
-						extra.setBuyOption(row.getBuyOption());
+						BuyOption buyOption = row.getBuyOption();
+						if (buyOption instanceof BuyMarket) {
+							buyOption = EMFCopier.copy(row.getBuyOption());
+						}
+						extra.setBuyOption(buyOption);
 						copy.getBaseCase().add(extra);
 						data.add(extra);
 					}
 					if (row.getSellOption() != null) {
 						final BaseCaseRow extra = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
-						extra.setSellOption(row.getSellOption());
+						SellOption sellOption = row.getSellOption();
+						if (sellOption instanceof SellMarket) {
+							sellOption = EMFCopier.copy(row.getSellOption());
+						}
+						extra.setSellOption(sellOption);
 						copy.getBaseCase().add(extra);
 						data.add(extra);
 					}
