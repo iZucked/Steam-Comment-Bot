@@ -17,6 +17,7 @@ import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.paperdeals.BasicPaperDealAllocationEntry;
 import com.mmxlabs.common.paperdeals.BasicPaperDealData;
+import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintChecker;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -145,7 +146,13 @@ public class EvaluationHelper {
 		return true;
 	}
 
-	public boolean checkConstraintsIngoreNominalRules(@NonNull final ISequences currentFullSequences, @Nullable final Collection<@NonNull IResource> currentChangedResources) {
+	/**
+	 * To be used only for Manual Sandbox, when user expects results similar to manual rewiring
+	 * @param currentFullSequences
+	 * @param currentChangedResources
+	 * @return
+	 */
+	public boolean checkConstraintsForRelaxedConstraints(@NonNull final ISequences currentFullSequences, @Nullable final Collection<@NonNull IResource> currentChangedResources) {
 		// Apply hard constraint checkers
 		for (final IConstraintChecker checker : constraintCheckers) {
 
@@ -153,6 +160,9 @@ public class EvaluationHelper {
 				continue;
 			}
 			if (checker instanceof RoundTripVesselPermissionConstraintChecker) {
+				continue;
+			}
+			if (checker instanceof OrderedSequenceElementsConstraintChecker) {
 				continue;
 			}
 

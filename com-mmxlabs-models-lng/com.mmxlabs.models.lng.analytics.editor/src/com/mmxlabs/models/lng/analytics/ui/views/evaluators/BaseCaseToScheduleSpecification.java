@@ -5,6 +5,9 @@
 package com.mmxlabs.models.lng.analytics.ui.views.evaluators;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.EList;
 
@@ -55,10 +58,12 @@ public class BaseCaseToScheduleSpecification {
 
 	private final LNGScenarioModel scenarioModel;
 	private final IMapperClass mapper;
+	private final Set<String> usedIDs;
 
 	public BaseCaseToScheduleSpecification(final LNGScenarioModel scenarioModel, final IMapperClass mapper) {
 		this.scenarioModel = scenarioModel;
 		this.mapper = mapper;
+		this.usedIDs = getUsedSlotIDs(scenarioModel);
 	}
 
 	public ScheduleSpecification generate(final BaseCase baseCase) {
@@ -370,11 +375,19 @@ public class BaseCaseToScheduleSpecification {
 		if (original != null) {
 			return original;
 		}
-		final DischargeSlot dischargeSlot_original = AnalyticsBuilder.makeDischargeSlot(sellOption, scenarioModel, SlotMode.ORIGINAL_SLOT);
+		this.usedIDs.addAll(
+				mapper.getExtraDataProvider().extraDischarges.stream()
+				.map(DischargeSlot::getName)
+				.collect(Collectors.toSet()));
+		this.usedIDs.addAll(
+				mapper.getExtraDataProvider().extraLoads.stream()
+				.map(LoadSlot::getName)
+				.collect(Collectors.toSet()));
+		final DischargeSlot dischargeSlot_original = AnalyticsBuilder.makeDischargeSlot(sellOption, scenarioModel, SlotMode.ORIGINAL_SLOT, this.usedIDs);
 
 		if (mapper.isCreateBEOptions()) {
-			final DischargeSlot dischargeSlot_breakEven = AnalyticsBuilder.makeDischargeSlot(sellOption, scenarioModel, SlotMode.BREAK_EVEN_VARIANT);
-			final DischargeSlot dischargeSlot_changeable = AnalyticsBuilder.makeDischargeSlot(sellOption, scenarioModel, SlotMode.CHANGE_PRICE_VARIANT);
+			final DischargeSlot dischargeSlot_breakEven = AnalyticsBuilder.makeDischargeSlot(sellOption, scenarioModel, SlotMode.BREAK_EVEN_VARIANT, this.usedIDs);
+			final DischargeSlot dischargeSlot_changeable = AnalyticsBuilder.makeDischargeSlot(sellOption, scenarioModel, SlotMode.CHANGE_PRICE_VARIANT, this.usedIDs);
 			mapper.addMapping(sellOption, dischargeSlot_original, dischargeSlot_breakEven, dischargeSlot_changeable);
 		} else {
 			mapper.addMapping(sellOption, dischargeSlot_original, null, null);
@@ -389,10 +402,18 @@ public class BaseCaseToScheduleSpecification {
 		if (original != null) {
 			return original;
 		}
-		final LoadSlot loadSlot_original = AnalyticsBuilder.makeLoadSlot(buyOption, scenarioModel, SlotMode.ORIGINAL_SLOT);
+		this.usedIDs.addAll(
+				mapper.getExtraDataProvider().extraDischarges.stream()
+				.map(DischargeSlot::getName)
+				.collect(Collectors.toSet()));
+		this.usedIDs.addAll(
+				mapper.getExtraDataProvider().extraLoads.stream()
+				.map(LoadSlot::getName)
+				.collect(Collectors.toSet()));
+		final LoadSlot loadSlot_original = AnalyticsBuilder.makeLoadSlot(buyOption, scenarioModel, SlotMode.ORIGINAL_SLOT, this.usedIDs);
 		if (mapper.isCreateBEOptions()) {
-			final LoadSlot loadSlot_breakEven = AnalyticsBuilder.makeLoadSlot(buyOption, scenarioModel, SlotMode.BREAK_EVEN_VARIANT);
-			final LoadSlot loadSlot_changeable = AnalyticsBuilder.makeLoadSlot(buyOption, scenarioModel, SlotMode.CHANGE_PRICE_VARIANT);
+			final LoadSlot loadSlot_breakEven = AnalyticsBuilder.makeLoadSlot(buyOption, scenarioModel, SlotMode.BREAK_EVEN_VARIANT, this.usedIDs);
+			final LoadSlot loadSlot_changeable = AnalyticsBuilder.makeLoadSlot(buyOption, scenarioModel, SlotMode.CHANGE_PRICE_VARIANT, this.usedIDs);
 			mapper.addMapping(buyOption, loadSlot_original, loadSlot_breakEven, loadSlot_changeable);
 		} else {
 			mapper.addMapping(buyOption, loadSlot_original, null, null);
@@ -426,6 +447,17 @@ public class BaseCaseToScheduleSpecification {
 			return buyOpportunity.getDate() == null;
 		}
 		throw new IllegalArgumentException();
+	}
+	
+	private static Set<String> getUsedSlotIDs(final LNGScenarioModel lngScenarioModel) {
+		final Set<String> usedIDs = new HashSet<>();
+		usedIDs.addAll(lngScenarioModel.getCargoModel().getLoadSlots().stream()
+				.map(LoadSlot::getName)
+				.collect(Collectors.toSet()));
+		usedIDs.addAll(lngScenarioModel.getCargoModel().getDischargeSlots().stream()
+				.map(DischargeSlot::getName)
+				.collect(Collectors.toSet()));
+		return usedIDs;
 	}
 
 }
