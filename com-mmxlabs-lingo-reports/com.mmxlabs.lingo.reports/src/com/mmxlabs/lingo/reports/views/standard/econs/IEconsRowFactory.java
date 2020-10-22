@@ -11,6 +11,12 @@ import org.eclipse.jdt.annotation.Nullable;
 
 public interface IEconsRowFactory {
 
+	enum RowType {
+		COST, // Lower values are better
+		REVENUE, // Higher values are better
+		OTHER // Other data types
+	}
+
 	default Collection<CargoEconsReportRow> createRows(@NonNull EconsOptions options) {
 		return createRows(options, null);
 	}

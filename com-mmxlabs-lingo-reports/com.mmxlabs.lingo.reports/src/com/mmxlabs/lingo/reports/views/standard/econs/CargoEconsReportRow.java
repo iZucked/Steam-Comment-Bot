@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 
 import org.eclipse.jface.viewers.IColorProvider;
 
+import com.mmxlabs.lingo.reports.views.standard.econs.IEconsRowFactory.RowType;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 
 public class CargoEconsReportRow {
@@ -18,7 +19,6 @@ public class CargoEconsReportRow {
 	public String suffixUnit;
 	public ICellRenderer formatter;
 	public IColorProvider colourProvider;
-	public boolean isCost;
 	
 	public Supplier<String> tooltip;
 }

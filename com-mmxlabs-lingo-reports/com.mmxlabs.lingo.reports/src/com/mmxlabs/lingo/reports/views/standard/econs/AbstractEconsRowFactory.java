@@ -29,7 +29,6 @@ import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
-import com.mmxlabs.models.lng.schedule.GroupedCharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
@@ -55,14 +54,14 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 	private Image cellImageRedArrowUp;
 
 	protected final class BasicEconsFormatter<T> extends EconsFormatter {
-		private final boolean isCost;
+		private final RowType rowType;
 		private final EconsOptions options;
 		private final Function<T, String> formatter;
 		private final Function<Object, @Nullable T> transformer;
 		private final Class<T> type;
 
-		protected BasicEconsFormatter(boolean isCost, EconsOptions options, Function<T, String> formatter, Function<Object, @Nullable T> transformer, Class<T> type) {
-			this.isCost = isCost;
+		protected BasicEconsFormatter(RowType rowType, EconsOptions options, Function<T, String> formatter, Function<Object, @Nullable T> transformer, Class<T> type) {
+			this.rowType = rowType;
 			this.options = options;
 			this.formatter = formatter;
 			this.transformer = transformer;
@@ -77,7 +76,7 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 					final Number value = (Number) t;
 					if (value.doubleValue() != 0.0) {
 						final boolean isNegative = value.doubleValue() < 0.0;
-						if (isCost) {
+						if (rowType == RowType.COST) {
 							return isNegative ? cellImageGreenArrowDown : cellImageRedArrowUp;
 						} else {
 							return isNegative ? cellImageRedArrowDown : cellImageGreenArrowUp;
@@ -187,12 +186,12 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 	}
 
 	protected static CargoEconsReportRow createRow(final int order, final @NonNull String name, final boolean includeUnits, final @NonNull String prefixUnit, final String suffixUnit,
-			final boolean isCost, final @NonNull ICellRenderer renderer) {
-		return createRow(order, name, true, prefixUnit, suffixUnit, isCost, renderer, null);
+			final @NonNull ICellRenderer renderer) {
+		return createRow(order, name, true, prefixUnit, suffixUnit, renderer, null);
 	}
 
 	protected static CargoEconsReportRow createRow(final int order, final @NonNull String name, final boolean includeUnits, final @NonNull String prefixUnit, final String suffixUnit,
-			final boolean isCost, final @NonNull ICellRenderer formatter, @Nullable final IColorProvider colourProvider) {
+			final @NonNull ICellRenderer formatter, @Nullable final IColorProvider colourProvider) {
 		final CargoEconsReportRow row = new CargoEconsReportRow();
 		row.order = order;
 		row.name = name;
@@ -201,7 +200,6 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 		row.suffixUnit = suffixUnit;
 		row.formatter = formatter;
 		row.colourProvider = colourProvider;
-		row.isCost = isCost;
 
 		return row;
 	}
@@ -250,13 +248,13 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 		};
 	}
 
-	protected <T> @NonNull ICellRenderer createBasicFormatter(final EconsOptions options, final boolean isCost, final Class<T> type, final Function<T, String> formatter,
+	protected <T> @NonNull ICellRenderer createBasicFormatter(final EconsOptions options, final RowType rowType, final Class<T> type, final Function<T, String> formatter,
 			final Function<Object, @Nullable T> transformer) {
-		return new BasicEconsFormatter<T>(isCost, options, formatter, transformer, type);
+		return new BasicEconsFormatter<T>(rowType, options, formatter, transformer, type);
 	}
 
-	protected @NonNull ICellRenderer createIntegerDaysFormatter(final EconsOptions options, final boolean isCost, final Function<Object, @Nullable Integer> transformer) {
-		return createBasicFormatter(options, isCost, Integer.class, new Function<Integer, String>() {
+	protected @NonNull ICellRenderer createIntegerDaysFormatter(final EconsOptions options, final RowType rowType, final Function<Object, @Nullable Integer> transformer) {
+		return createBasicFormatter(options, rowType, Integer.class, new Function<Integer, String>() {
 			@Override
 			public String apply(Integer days) {
 				return Formatters.formatAsDays(DurationMode.DAYS_HOURS_HUMAN, days * 24);
@@ -264,8 +262,8 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 		}, transformer);
 	}
 
-	protected @NonNull ICellRenderer createIntegerDaysFromHoursFormatter(final EconsOptions options, final boolean isCost, final Function<Object, @Nullable Integer> transformer) {
-		return createBasicFormatter(options, isCost, Integer.class, new Function<Integer, String>() {
+	protected @NonNull ICellRenderer createIntegerDaysFromHoursFormatter(final EconsOptions options, final RowType rowType, final Function<Object, @Nullable Integer> transformer) {
+		return createBasicFormatter(options, rowType, Integer.class, new Function<Integer, String>() {
 			@Override
 			public String apply(Integer hours) {
 				return Formatters.formatAsDays(DurationMode.DAYS_HOURS_HUMAN, hours);
@@ -273,8 +271,8 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 		}, transformer);
 	}
 
-	protected @NonNull ICellRenderer createDoubleDaysFormatter(final EconsOptions options, final boolean isCost, final Function<Object, @Nullable Double> transformer) {
-		return createBasicFormatter(options, isCost, Double.class, new Function<Double, String>() {
+	protected @NonNull ICellRenderer createDoubleDaysFormatter(final EconsOptions options, final RowType rowType, final Function<Object, @Nullable Double> transformer) {
+		return createBasicFormatter(options, rowType, Double.class, new Function<Double, String>() {
 			@Override
 			public String apply(Double days) {
 				return Formatters.formatAsDays(DurationMode.DAYS_HOURS_HUMAN, days * 24);
@@ -409,7 +407,7 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 			return null;
 		});
 	}
-	
+
 	protected ICellRenderer createPaperDealAllocationFormatter(final Function<PaperDealAllocation, String> func) {
 		return new BaseFormatter() {
 			@Override

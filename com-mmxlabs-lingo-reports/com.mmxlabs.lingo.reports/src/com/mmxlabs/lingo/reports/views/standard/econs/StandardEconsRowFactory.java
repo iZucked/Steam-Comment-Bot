@@ -126,20 +126,20 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 
 		final List<CargoEconsReportRow> rows = new LinkedList<>();
 		if (containsCargo) {
-			rows.add(createRow(10, "Purchase", true, "$", "", true, createBuyValuePrice(options, true)));
-			rows.add(createRow(20, "    Price", true, "$", "", true, createBuyPrice(options, true)));
-			rows.add(createRow(30, "    Volume", true, "", "", false, createBuyVolumeMMBTuPrice(options, false)));
+			rows.add(createRow(10, "Purchase", true, "$", "", createBuyValuePrice(options, RowType.COST)));
+			rows.add(createRow(20, "    Price", true, "$", "", createBuyPrice(options, RowType.COST)));
+			rows.add(createRow(30, "    Volume", true, "", "", createBuyVolumeMMBTuPrice(options, RowType.COST)));
 		}
 		if (containsCargo || containsCharterOut || containsCooldown || containsGeneratedCharterOut || containsOpenSlot || containsPurge || containsStartEvent || containsVesselEvent) {
-			rows.add(createRow(40, "Shipping", true, "$", "", true, createShippingCosts(options, true)));
-			rows.add(createRow(50, "    Bunkers", true, "$", "", true, createShippingBunkersTotal(options, true)));
-			rows.add(createRow(60, "    Port", true, "$", "", true, createShippingPortCosts(options, true)));
-			rows.add(createRow(70, "    Canal", true, "$", "", true, createShippingCanalCosts(options, true)));
-			rows.add(createRow(80, "    Boil-off", true, "$", "", true, createShippingBOGTotal(options, true), createBOGColourProvider(options)));
-			rows.add(createRow(90, "    Charter Cost", true, "$", "", true, createShippingCharterCosts(options, true), createCharterFeesColourProvider(options)));
+			rows.add(createRow(40, "Shipping", true, "$", "", createShippingCosts(options, RowType.COST)));
+			rows.add(createRow(50, "    Bunkers", true, "$", "", createShippingBunkersTotal(options, RowType.COST)));
+			rows.add(createRow(60, "    Port", true, "$", "", createShippingPortCosts(options, RowType.COST)));
+			rows.add(createRow(70, "    Canal", true, "$", "", createShippingCanalCosts(options, RowType.COST)));
+			rows.add(createRow(80, "    Boil-off", true, "$", "", createShippingBOGTotal(options, RowType.COST), createBOGColourProvider(options)));
+			rows.add(createRow(90, "    Charter Cost", true, "$", "", createShippingCharterCosts(options, RowType.COST), createCharterFeesColourProvider(options)));
 		}
 		if (containsCargo) {
-			final CargoEconsReportRow row = createRow(91, "    $/mmBtu", true, "$", "", true, createShippingCostsByMMBTU(options, true));
+			final CargoEconsReportRow row = createRow(91, "    $/mmBtu", true, "$", "", createShippingCostsByMMBTU(options, RowType.COST));
 			row.tooltip = () -> {
 				switch (options.marginBy) {
 				case PURCHASE_VOLUME:
@@ -154,34 +154,34 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 			rows.add(row);
 		}
 		if (containsPurge) {
-			rows.add(createRow(92, "    Purge Cost", true, "$", "", true, createShippingPurgeCosts(options, true)));
+			rows.add(createRow(92, "    Purge Cost", true, "$", "", createShippingPurgeCosts(options, RowType.COST)));
 		}
 		if (containsCooldown) {
-			rows.add(createRow(93, "    Cooldown Cost", true, "$", "", true, createShippingCooldownCosts(options, true)));
+			rows.add(createRow(93, "    Cooldown Cost", true, "$", "", createShippingCooldownCosts(options, RowType.COST)));
 		}
 		if (containsCharterOut) {
-			rows.add(createRow(100, "Charter Revenue", true, "$", "", false, createShippingCharterRevenue(options, false)));
-			rows.add(createRow(110, "Repositioning", true, "$", "", true, createShippingRepositioning(options, true)));
-			rows.add(createRow(120, "Ballast bonus", true, "$", "", false, createShippingBallastBonus(options, false)));
-			rows.add(createRow(130, "Charter Duration", true, "", "", false, createCharterDays(options, false)));
+			rows.add(createRow(100, "Charter Revenue", true, "$", "", createShippingCharterRevenue(options, RowType.REVENUE)));
+			rows.add(createRow(110, "Repositioning", true, "$", "", createShippingRepositioning(options, RowType.COST)));
+			rows.add(createRow(120, "Ballast bonus", true, "$", "", createShippingBallastBonus(options, RowType.REVENUE)));
+			rows.add(createRow(130, "Charter Duration", true, "", "", createCharterDays(options, RowType.REVENUE)));
 		}
 		if (containsCargo) {
-			rows.add(createRow(140, "Sale", true, "$", "", false, createSellValuePrice(options, false)));
-			rows.add(createRow(150, "    Price", true, "$", "", false, createSellPrice(options, false)));
-			rows.add(createRow(160, "    Volume", true, "", "", false, createSellVolumeMMBTuPrice(options, false)));
+			rows.add(createRow(140, "Sale", true, "$", "", createSellValuePrice(options, RowType.REVENUE)));
+			rows.add(createRow(150, "    Price", true, "$", "", createSellPrice(options, RowType.REVENUE)));
+			rows.add(createRow(160, "    Volume", true, "", "", createSellVolumeMMBTuPrice(options, RowType.REVENUE)));
 			if (LicenseFeatures.isPermitted("features:report-equity-book")) {
-				rows.add(createRow(170, "Equity P&L", true, "$", "", false, createPNLEquity(options, false)));
+				rows.add(createRow(170, "Equity P&L", true, "$", "", createPNLEquity(options, RowType.REVENUE)));
 			}
-			rows.add(createRow(180, "Addn. P&L", true, "$", "", false, createPNLAdditional(options, false)));
+			rows.add(createRow(180, "Addn. P&L", true, "$", "", createPNLAdditional(options, RowType.REVENUE)));
 		}
 		if (containsOpenSlot) {
-			rows.add(createRow(185, "Cancellation", true, "$", "", true, createCancellationCosts(options, true)));
+			rows.add(createRow(185, "Cancellation", true, "$", "", createCancellationCosts(options, RowType.COST)));
 		}
 		if (containsCargo || containsCharterOut || containsCooldown || containsGeneratedCharterOut || containsOpenSlot || containsPurge || containsStartEvent || containsVesselEvent) {
-			rows.add(createRow(190, "P&L", true, "$", "", false, createPNLTotal(options, false)));
+			rows.add(createRow(190, "P&L", true, "$", "", createPNLTotal(options, RowType.REVENUE)));
 		}
 		if (containsCargo) {
-			final CargoEconsReportRow row = createRow(200, "Margin", true, "$", "", false, createPNLPerMMBTU(options, false));
+			final CargoEconsReportRow row = createRow(200, "Margin", true, "$", "", createPNLPerMMBTU(options, RowType.REVENUE));
 			row.tooltip = () -> {
 				switch (options.marginBy) {
 				case PURCHASE_VOLUME:
@@ -197,50 +197,50 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 
 			if (options.showPnLCalcs) {
 				// Pnl calcs start.
-				rows.add(createRow(205, "", false, "", "", false, createEmptyFormatter()));
+				rows.add(createRow(205, "", false, "", "", createEmptyFormatter()));
 
-				rows.add(createRow(206, "Buy port", false, "", "", false, createFirstPurchaseFormatter(sa -> sa.getPort() != null ? sa.getPort().getName() : "")));
-				rows.add(createRow(210, "Buy date", false, "", "", false,
+				rows.add(createRow(206, "Buy port", false, "", "", createFirstPurchaseFormatter(sa -> sa.getPort() != null ? sa.getPort().getName() : "")));
+				rows.add(createRow(210, "Buy date", false, "", "",
 						createFirstPurchaseFormatter(sa -> sa.getSlotVisit().getStart().format(DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter()))));
-				rows.add(createRow(220, "Buy volume (m3)", false, "", "", false,
-						createBasicFormatter(options, false, Integer.class, VolumeM3Format::format, createFirstPurchaseTransformer(Integer.class, SlotAllocation::getVolumeTransferred))));
-				rows.add(createRow(230, "Buy volume (mmBtu)", false, "", "", false,
-						createBasicFormatter(options, false, Integer.class, VolumeMMBtuFormat::format, createFirstPurchaseTransformer(Integer.class, SlotAllocation::getEnergyTransferred))));
+				rows.add(createRow(220, "Buy volume (m3)", false, "", "",
+						createBasicFormatter(options, RowType.COST, Integer.class, VolumeM3Format::format, createFirstPurchaseTransformer(Integer.class, SlotAllocation::getVolumeTransferred))));
+				rows.add(createRow(230, "Buy volume (mmBtu)", false, "", "",
+						createBasicFormatter(options, RowType.COST, Integer.class, VolumeMMBtuFormat::format, createFirstPurchaseTransformer(Integer.class, SlotAllocation::getEnergyTransferred))));
 				// CV should have units: mmbtu/m^3, although since not shown in slot editor,
 				// will not show here?
-				rows.add(createRow(240, "Buy CV (mmBtu/m3)", false, "", "", false,
-						createBasicFormatter(options, false, Double.class, CVFormat::format, createFullLegTransformer2(Double.class, 0, (visit, travel, idle) -> {
+				rows.add(createRow(240, "Buy CV (mmBtu/m3)", false, "", "",
+						createBasicFormatter(options, RowType.COST, Double.class, CVFormat::format, createFullLegTransformer2(Double.class, 0, (visit, travel, idle) -> {
 							if (visit != null && visit.getSlotAllocation() != null) {
 								return visit.getSlotAllocation().getCv();
 							} else {
 								return 0.0;
 							}
 						}))));
-				rows.add(createRow(250, "Buy price($/mmBtu)", false, "", "", false,
-						createBasicFormatter(options, false, Double.class, DollarsPerMMBtuFormat::format, createFirstPurchaseTransformer(Double.class, SlotAllocation::getPrice))));
+				rows.add(createRow(250, "Buy price($/mmBtu)", false, "", "",
+						createBasicFormatter(options, RowType.COST, Double.class, DollarsPerMMBtuFormat::format, createFirstPurchaseTransformer(Double.class, SlotAllocation::getPrice))));
 
-				rows.add(createRow(260, "Sale port", false, "", "", false, createFirstSaleAllocationFormatter(sa -> sa.getPort() == null ? "" : sa.getPort().getName())));
-				rows.add(createRow(270, "Sale date", false, "", "", false,
+				rows.add(createRow(260, "Sale port", false, "", "", createFirstSaleAllocationFormatter(sa -> sa.getPort() == null ? "" : sa.getPort().getName())));
+				rows.add(createRow(270, "Sale date", false, "", "",
 						createFirstSaleAllocationFormatter(sa -> sa.getSlotVisit().getStart().format(DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter()))));
-				rows.add(createRow(280, "Sale price($/mmBtu)", false, "", "", false,
-						createBasicFormatter(options, false, Double.class, DollarsPerMMBtuFormat::format, createFirstSaleTransformer(Double.class, SlotAllocation::getPrice))));
-				rows.add(createRow(290, "Sale volume (m3)", false, "", "", false,
-						createBasicFormatter(options, false, Integer.class, VolumeM3Format::format, createFirstSaleTransformer(Integer.class, SlotAllocation::getVolumeTransferred))));
-				rows.add(createRow(300, "Sale volume (mmBtu)", false, "", "", false,
-						createBasicFormatter(options, false, Integer.class, VolumeMMBtuFormat::format, createFirstSaleTransformer(Integer.class, SlotAllocation::getEnergyTransferred))));
+				rows.add(createRow(280, "Sale price($/mmBtu)", false, "", "",
+						createBasicFormatter(options, RowType.REVENUE, Double.class, DollarsPerMMBtuFormat::format, createFirstSaleTransformer(Double.class, SlotAllocation::getPrice))));
+				rows.add(createRow(290, "Sale volume (m3)", false, "", "",
+						createBasicFormatter(options, RowType.REVENUE, Integer.class, VolumeM3Format::format, createFirstSaleTransformer(Integer.class, SlotAllocation::getVolumeTransferred))));
+				rows.add(createRow(300, "Sale volume (mmBtu)", false, "", "",
+						createBasicFormatter(options, RowType.REVENUE, Integer.class, VolumeMMBtuFormat::format, createFirstSaleTransformer(Integer.class, SlotAllocation::getEnergyTransferred))));
 
 				// Omit the following rows for now as duplicated elsewhere.
 				if (false) {
 					// Spacer
-					rows.add(createRow(310, "", false, "", "", false, createEmptyFormatter()));
+					rows.add(createRow(310, "", false, "", "", createEmptyFormatter()));
 
-					rows.add(createRow(320, "Purchase cost", false, "", "", true,
-							createBasicFormatter(options, true, Integer.class, DollarsFormat::format, createFirstPurchaseTransformer(Integer.class, SlotAllocation::getVolumeValue))));
-					rows.add(createRow(330, "Sales revenue", false, "", "", false,
-							createBasicFormatter(options, false, Integer.class, DollarsFormat::format, createFirstSaleTransformer(Integer.class, SlotAllocation::getVolumeValue))));
+					rows.add(createRow(320, "Purchase cost", false, "", "",
+							createBasicFormatter(options, RowType.COST, Integer.class, DollarsFormat::format, createFirstPurchaseTransformer(Integer.class, SlotAllocation::getVolumeValue))));
+					rows.add(createRow(330, "Sales revenue", false, "", "",
+							createBasicFormatter(options, RowType.REVENUE, Integer.class, DollarsFormat::format, createFirstSaleTransformer(Integer.class, SlotAllocation::getVolumeValue))));
 					// Equity
-					rows.add(createRow(340, "Equity", false, "", "", false, createEmptyFormatter()));
-					rows.add(createRow(350, "Theoretical shipping cost", false, "", "", false, createEmptyFormatter()));
+					rows.add(createRow(340, "Equity", false, "", "", createEmptyFormatter()));
+					rows.add(createRow(350, "Theoretical shipping cost", false, "", "", createEmptyFormatter()));
 
 					// Theoretical shipping cost
 					// Real Shipping cost
@@ -249,16 +249,16 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 					Function<SlotVisit, Integer> portCostFunc = SlotVisit::getPortCost;
 					Function<Object, Integer> func2 = object -> getShippingCost(object, portCostFunc, fuelCostFunc);
 
-					rows.add(createRow(400, "Real shipping cost", false, "$", "", true,
-							createBasicFormatter(options, true, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, func2))));
-					rows.add(createRow(405, "PNL", false, "$", "", false,
-							createBasicFormatter(options, false, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, StandardEconsRowFactory::getPNLValue))));
+					rows.add(createRow(400, "Real shipping cost", false, "$", "",
+							createBasicFormatter(options, RowType.COST, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, func2))));
+					rows.add(createRow(405, "PNL", false, "$", "",
+							createBasicFormatter(options, RowType.REVENUE, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, StandardEconsRowFactory::getPNLValue))));
 				}
 
 				if (containsCargo || containsVesselEvent || containsCharterOut || containsGeneratedCharterOut || containsStartEvent) {
 
 					// Spacer
-					rows.add(createRow(420, "", false, "", "", false, createEmptyFormatter()));
+					rows.add(createRow(420, "", false, "", "", createEmptyFormatter()));
 
 					for (int legIdx = 0; legIdx < 2; ++legIdx) {
 						final int base = 1000 + 1000 * legIdx;
@@ -266,64 +266,63 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 						// Only show ballast leg for anything other than a cargo.
 						if (containsCargo || legIdx == 1) {
 							if (legIdx == 0) {
-								rows.add(createRow(base + 10, "Laden leg", false, "", "", false, createEmptyFormatter()));
+								rows.add(createRow(base + 10, "Laden leg", false, "", "", createEmptyFormatter()));
 							} else {
 								if (containsCargo) {
-									rows.add(createRow(base + 9, "", false, "", "", false, createEmptyFormatter()));
+									rows.add(createRow(base + 9, "", false, "", "", createEmptyFormatter()));
 								}
-								rows.add(createRow(base + 10, "Ballast leg", false, "", "", false, createEmptyFormatter()));
+								rows.add(createRow(base + 10, "Ballast leg", false, "", "", createEmptyFormatter()));
 							}
 
-							rows.add(createRow(base + 20, "    Speed", false, "", "", false, createBasicFormatter(options, true, Double.class, SpeedFormat::format,
+							rows.add(createRow(base + 20, "    Speed", false, "", "", createBasicFormatter(options, RowType.COST, Double.class, SpeedFormat::format,
 									createFullLegTransformer2(Double.class, legIdx, (visit, travel, idle) -> travel == null ? 0 : travel.getSpeed()))));
-							rows.add(createRow(base + 30, "    Days", false, "", "", false, createDoubleDaysFormatter(options, true, createFullLegTransformer2(Double.class, legIdx,
+							rows.add(createRow(base + 30, "    Days", false, "", "", createDoubleDaysFormatter(options, RowType.COST, createFullLegTransformer2(Double.class, legIdx,
 									(visit, travel, idle) -> ((getOrZero(visit, Event::getDuration) + getOrZero(travel, Event::getDuration) + getOrZero(idle, Event::getDuration)) / 24.0)))));
 
-							rows.add(createRow(base + 40, "    Total BO (mmBtu)", false, "", "", false, createBasicFormatter(options, true, Integer.class, VolumeMMBtuFormat::format,
+							rows.add(createRow(base + 40, "    Total BO (mmBtu)", false, "", "", createBasicFormatter(options, RowType.COST, Integer.class, VolumeMMBtuFormat::format,
 									createFullLegTransformer2(Integer.class, legIdx, (visit, travel, idle) -> (getFuelVolume(visit, travel, idle, FuelUnit.MMBTU, Fuel.NBO, Fuel.FBO))))));
-							rows.add(createRow(base + 50, "    Charter Cost", true, "$", "", true,
-									createBasicFormatter(options, true, Integer.class, DollarsFormat::format, createFullLegTransformer2(Integer.class, legIdx,
+							rows.add(createRow(base + 50, "    Charter Cost", true, "$", "",
+									createBasicFormatter(options, RowType.COST, Integer.class, DollarsFormat::format, createFullLegTransformer2(Integer.class, legIdx,
 											(visit, travel, idle) -> (getOrZero(visit, Event::getCharterCost) + getOrZero(travel, Event::getCharterCost) + getOrZero(idle, Event::getCharterCost))))));
 
-							rows.add(createRow(base + 51, "    Charter Rate", true, "$", "", true, createBasicFormatter(options, true, Integer.class, DollarsFormat::format,
+							rows.add(createRow(base + 51, "    Charter Rate", true, "$", "", createBasicFormatter(options, RowType.COST, Integer.class, DollarsFormat::format,
 									createFullLegTransformer2(Integer.class, legIdx, StandardEconsRowFactory::getAverageDailyCharterRate))));
 
-							rows.add(createRow(base + 60, "    Bunkers (MT)", false, "", "", false, createBasicFormatter(options, true, Integer.class, VolumeM3Format::format,
+							rows.add(createRow(base + 60, "    Bunkers (MT)", false, "", "", createBasicFormatter(options, RowType.COST, Integer.class, VolumeM3Format::format,
 									createFullLegTransformer2(Integer.class, legIdx, (visit, travel, idle) -> (getFuelVolume(visit, travel, idle, FuelUnit.MT, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT))))));
-							rows.add(createRow(base + 70, "    Bunkers cost", false, "", "", false, createBasicFormatter(options, true, Integer.class, DollarsFormat::format,
+							rows.add(createRow(base + 70, "    Bunkers cost", false, "", "", createBasicFormatter(options, RowType.COST, Integer.class, DollarsFormat::format,
 									createFullLegTransformer2(Integer.class, legIdx, (visit, travel, idle) -> (getFuelCost(visit, travel, idle, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT))))));
-							rows.add(createRow(base + 80, "    Port Costs ", false, "", "", false, createBasicFormatter(options, true, Integer.class, DollarsFormat::format,
+							rows.add(createRow(base + 80, "    Port Costs ", false, "", "", createBasicFormatter(options, RowType.COST, Integer.class, DollarsFormat::format,
 									createFullLegTransformer2(Integer.class, legIdx, (visit, travel, idle) -> getPortCost(visit)))));
-							rows.add(createRow(base + 90, "    Route", false, "", "", false, createBasicFormatter(options, false, String.class, Object::toString,
+							rows.add(createRow(base + 90, "    Route", false, "", "", createBasicFormatter(options, RowType.OTHER, String.class, Object::toString,
 									createFullLegTransformer2(String.class, legIdx, (visit, travel, idle) -> travel == null ? "" : getRoute(travel.getRouteOption())))));
-							rows.add(createRow(base + 100, "    Canal Cost", true, "$", "", true, createBasicFormatter(options, true, Integer.class, DollarsFormat::format,
+							rows.add(createRow(base + 100, "    Canal Cost", true, "$", "", createBasicFormatter(options, RowType.COST, Integer.class, DollarsFormat::format,
 									createFullLegTransformer2(Integer.class, legIdx, (visit, travel, idle) -> (getOrZero(travel, Journey::getToll))))));
 
-							rows.add(createRow(base + 110, "    Total cost ($)", true, "$", "", true,
-									createBasicFormatter(options, true, Long.class, DollarsFormat::format, createFullLegTransformer2(Long.class, legIdx,
+							rows.add(createRow(base + 110, "    Total cost ($)", true, "$", "",
+									createBasicFormatter(options, RowType.COST, Long.class, DollarsFormat::format, createFullLegTransformer2(Long.class, legIdx,
 											(visit, travel, idle) -> (getEventShippingCost(visit) + getEventShippingCost(travel) + getEventShippingCost(idle))))));
-							rows.add(createRow(base + 120, "    Idle days", false, "", "", false,
-									createDoubleDaysFormatter(options, true, createFullLegTransformer2(Double.class, legIdx, (visit, travel, idle) -> (getOrZero(idle, Event::getDuration) / 24.0))),
-									greyColourProvider));
+							rows.add(createRow(base + 120, "    Idle days", false, "", "", createDoubleDaysFormatter(options, RowType.COST,
+									createFullLegTransformer2(Double.class, legIdx, (visit, travel, idle) -> (getOrZero(idle, Event::getDuration) / 24.0))), greyColourProvider));
 							rows.add(
-									createRow(base + 130, "    Idle BO", false, "", "", false,
-											createBasicFormatter(options, true, Integer.class, VolumeMMBtuFormat::format,
+									createRow(base + 130, "    Idle BO", false, "", "",
+											createBasicFormatter(options, RowType.COST, Integer.class, VolumeMMBtuFormat::format,
 													createFullLegTransformer2(Integer.class, legIdx, (visit, travel, idle) -> (getFuelVolume(idle, FuelUnit.MMBTU, Fuel.NBO, Fuel.FBO)))),
 											greyColourProvider));
-							rows.add(createRow(base + 140, "    Idle charter", true, "$", "", true, createBasicFormatter(options, true, Integer.class, DollarsFormat::format,
+							rows.add(createRow(base + 140, "    Idle charter", true, "$", "", createBasicFormatter(options, RowType.COST, Integer.class, DollarsFormat::format,
 									createFullLegTransformer2(Integer.class, legIdx, (visit, travel, idle) -> (getOrZero(idle, Event::getCharterCost)))), greyColourProvider));
-							rows.add(createRow(base + 150, "    Idle bunkers", false, "", "", false,
-									createBasicFormatter(options, true, Integer.class, VolumeM3Format::format,
+							rows.add(createRow(base + 150, "    Idle bunkers", false, "", "",
+									createBasicFormatter(options, RowType.COST, Integer.class, VolumeM3Format::format,
 											createFullLegTransformer2(Integer.class, legIdx, (visit, travel, idle) -> (getFuelVolume(idle, FuelUnit.MT, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT)))),
 									greyColourProvider));
 
 							rows.add(
-									createRow(base + 160, "    Idle bunkers cost", false, "", "", false,
-											createBasicFormatter(options, true, Integer.class, DollarsFormat::format,
+									createRow(base + 160, "    Idle bunkers cost", false, "", "",
+											createBasicFormatter(options, RowType.COST, Integer.class, DollarsFormat::format,
 													createFullLegTransformer2(Integer.class, legIdx, (visit, travel, idle) -> (getFuelCost(idle, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT)))),
 											greyColourProvider));
 
-							rows.add(createRow(base + 170, "    Total idle cost ($)", false, "", "", true, createBasicFormatter(options, true, Long.class, DollarsFormat::format,
+							rows.add(createRow(base + 170, "    Total idle cost ($)", false, "", "", createBasicFormatter(options, RowType.COST, Long.class, DollarsFormat::format,
 									createFullLegTransformer2(Long.class, legIdx, (visit, travel, idle) -> (getEventShippingCost(idle)))), greyColourProvider));
 						}
 					}
@@ -331,14 +330,14 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 			}
 		}
 		if (containsPaperDeals) {
-			rows.add(createRow(3010, "Pricing", false, "", "", false, createEmptyFormatter()));
+			rows.add(createRow(3010, "Pricing", false, "", "", createEmptyFormatter()));
 
-			rows.add(createRow(3020, "    Curve", false, "", "", false, createPaperDealAllocationFormatter(StandardEconsRowFactory::getFloatCurve)));
-			rows.add(createRow(3030, "    Price", false, "", "", false, createPaperDealAllocationFormatter(pda -> String.format("%.3f", getPaperFloatPrice(pda)))));
-			rows.add(createRow(3040, "    MtM", false, "", "", false, createPaperDealAllocationFormatter(pda -> String.format("%.3f", getPaperMtMPrice(pda)))));
-			rows.add(createRow(3050, "Quantity", true, "", "", false, createPaperDealVolumeMMBTu(options, false)));
-			rows.add(createRow(3060, "P&L", true, "$", "", false, createPNLTotal(options, false)));
-			rows.add(createRow(3080, "Month", false, "", "", false,
+			rows.add(createRow(3020, "    Curve", false, "", "", createPaperDealAllocationFormatter(StandardEconsRowFactory::getFloatCurve)));
+			rows.add(createRow(3030, "    Price", false, "", "", createPaperDealAllocationFormatter(pda -> String.format("%.3f", getPaperFloatPrice(pda)))));
+			rows.add(createRow(3040, "    MtM", false, "", "", createPaperDealAllocationFormatter(pda -> String.format("%.3f", getPaperMtMPrice(pda)))));
+			rows.add(createRow(3050, "Quantity", true, "", "", createPaperDealVolumeMMBTu(options, RowType.REVENUE)));
+			rows.add(createRow(3060, "P&L", true, "$", "", createPNLTotal(options, RowType.REVENUE)));
+			rows.add(createRow(3080, "Month", false, "", "",
 					createPaperDealAllocationFormatter(pda -> pda.getPaperDeal().getStartDate().format(DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter()))));
 		}
 		return rows;
@@ -437,7 +436,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		};
 	}
 
-	private @NonNull ICellRenderer createBuyValuePrice(final EconsOptions options, final boolean isCost) {
+	private @NonNull ICellRenderer createBuyValuePrice(final EconsOptions options, final RowType rowType) {
 
 		final Function<Object, Long> helper = object -> {
 			Long cost = 0L;
@@ -457,10 +456,10 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 			return cost;
 		};
 
-		return createBasicFormatter(options, isCost, Long.class, DollarsFormat::format, createMappingFunction(Long.class, helper));
+		return createBasicFormatter(options, rowType, Long.class, DollarsFormat::format, createMappingFunction(Long.class, helper));
 	}
 
-	private @NonNull ICellRenderer createBuyPrice(final EconsOptions options, final boolean isCost) {
+	private @NonNull ICellRenderer createBuyPrice(final EconsOptions options, final RowType rowType) {
 		final Function<Object, Double> helper = object -> {
 			if (object instanceof CargoAllocation) {
 				final CargoAllocation cargoAllocation = (CargoAllocation) object;
@@ -478,10 +477,10 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 			return 0.0;
 		};
 
-		return createBasicFormatter(options, isCost, Double.class, DollarsPerMMBtuFormat::format, createMappingFunction(Double.class, helper));
+		return createBasicFormatter(options, rowType, Double.class, DollarsPerMMBtuFormat::format, createMappingFunction(Double.class, helper));
 	}
 
-	private @NonNull ICellRenderer createSellPrice(final EconsOptions options, final boolean isCost) {
+	private @NonNull ICellRenderer createSellPrice(final EconsOptions options, final RowType rowType) {
 		final Function<Object, Double> helper = object -> {
 			if (object instanceof CargoAllocation) {
 				final CargoAllocation cargoAllocation = (CargoAllocation) object;
@@ -499,10 +498,10 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 			return 0.0;
 		};
 
-		return createBasicFormatter(options, isCost, Double.class, DollarsPerMMBtuFormat::format, createMappingFunction(Double.class, helper));
+		return createBasicFormatter(options, rowType, Double.class, DollarsPerMMBtuFormat::format, createMappingFunction(Double.class, helper));
 	}
 
-	private @NonNull ICellRenderer createSellValuePrice(final EconsOptions options, final boolean isCost) {
+	private @NonNull ICellRenderer createSellValuePrice(final EconsOptions options, final RowType rowType) {
 
 		final Function<Object, @Nullable Long> helper = object -> {
 			Long cost = 0L;
@@ -522,10 +521,10 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 			return cost;
 		};
 
-		return createBasicFormatter(options, isCost, Long.class, DollarsFormat::format, createMappingFunction(Long.class, helper));
+		return createBasicFormatter(options, rowType, Long.class, DollarsFormat::format, createMappingFunction(Long.class, helper));
 	}
 
-	private @NonNull ICellRenderer createBuyVolumeMMBTuPrice(final EconsOptions options, final boolean isCost) {
+	private @NonNull ICellRenderer createBuyVolumeMMBTuPrice(final EconsOptions options, final RowType rowType) {
 
 		final Function<Object, @Nullable Long> helper = object -> {
 			Long cost = 0L;
@@ -545,10 +544,10 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 			return cost;
 		};
 
-		return createBasicFormatter(options, isCost, Long.class, VolumeMMBtuFormat::format, createMappingFunction(Long.class, helper));
+		return createBasicFormatter(options, rowType, Long.class, VolumeMMBtuFormat::format, createMappingFunction(Long.class, helper));
 	}
 
-	private @NonNull ICellRenderer createPaperDealVolumeMMBTu(final EconsOptions options, final boolean isCost) {
+	private @NonNull ICellRenderer createPaperDealVolumeMMBTu(final EconsOptions options, final RowType rowType) {
 
 		final Function<Object, @Nullable Long> helper = object -> {
 			Long volume = 0L;
@@ -561,10 +560,10 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 			return volume;
 		};
 
-		return createBasicFormatter(options, isCost, Long.class, VolumeMMBtuFormat::format, createMappingFunction(Long.class, helper));
+		return createBasicFormatter(options, rowType, Long.class, VolumeMMBtuFormat::format, createMappingFunction(Long.class, helper));
 	}
 
-	private @NonNull ICellRenderer createSellVolumeMMBTuPrice(final EconsOptions options, final boolean isCost) {
+	private @NonNull ICellRenderer createSellVolumeMMBTuPrice(final EconsOptions options, final RowType rowType) {
 		final Function<Object, @Nullable Long> helper = object -> {
 			Long cost = 0L;
 			if (object instanceof CargoAllocation) {
@@ -583,7 +582,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 			return cost;
 		};
 
-		return createBasicFormatter(options, isCost, Long.class, VolumeMMBtuFormat::format, createMappingFunction(Long.class, helper));
+		return createBasicFormatter(options, rowType, Long.class, VolumeMMBtuFormat::format, createMappingFunction(Long.class, helper));
 	}
 
 	private static double cargoAllocationPerMMBTUVolumeHelper(final Object object, final EconsOptions options) {
@@ -631,7 +630,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		return (double) pnl;
 	}
 
-	private @NonNull ICellRenderer createPNLPerMMBTU(final EconsOptions options, final boolean isCost) {
+	private @NonNull ICellRenderer createPNLPerMMBTU(final EconsOptions options, final RowType rowType) {
 
 		final Function<Object, @Nullable Double> helper = object -> {
 			if (object instanceof CargoAllocation) {
@@ -692,19 +691,19 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 			return null;
 		};
 
-		return createBasicFormatter(options, isCost, Double.class, DollarsPerMMBtuFormat::format, transformer);
+		return createBasicFormatter(options, rowType, Double.class, DollarsPerMMBtuFormat::format, transformer);
 	}
 
-	private @NonNull ICellRenderer createPNLTotal(final EconsOptions options, final boolean isCost) {
-		return createBasicFormatter(options, isCost, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, StandardEconsRowFactory::getPNLValue));
+	private @NonNull ICellRenderer createPNLTotal(final EconsOptions options, final RowType rowType) {
+		return createBasicFormatter(options, rowType, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, StandardEconsRowFactory::getPNLValue));
 	}
 
-	private @NonNull ICellRenderer createPNLEquity(final EconsOptions options, final boolean isCost) {
-		return createBasicFormatter(options, isCost, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, StandardEconsRowFactory::getEquityPNLValue));
+	private @NonNull ICellRenderer createPNLEquity(final EconsOptions options, final RowType rowType) {
+		return createBasicFormatter(options, rowType, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, StandardEconsRowFactory::getEquityPNLValue));
 	}
 
-	private @NonNull ICellRenderer createPNLAdditional(final EconsOptions options, final boolean isCost) {
-		return createBasicFormatter(options, isCost, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, StandardEconsRowFactory::getAdditionalPNLValue));
+	private @NonNull ICellRenderer createPNLAdditional(final EconsOptions options, final RowType rowType) {
+		return createBasicFormatter(options, rowType, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, StandardEconsRowFactory::getAdditionalPNLValue));
 	}
 
 	private static int genericShippingBOGTotalHelper(final Object object) {
@@ -724,8 +723,8 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 
 	}
 
-	private @NonNull ICellRenderer createShippingBOGTotal(final EconsOptions options, final boolean isCost) {
-		return createBasicFormatter(options, isCost, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, StandardEconsRowFactory::genericShippingBOGTotalHelper));
+	private @NonNull ICellRenderer createShippingBOGTotal(final EconsOptions options, final RowType rowType) {
+		return createBasicFormatter(options, rowType, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, StandardEconsRowFactory::genericShippingBOGTotalHelper));
 	}
 
 	private static int genericShippingBunkersTotalHelper(final Object object) {
@@ -745,8 +744,8 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		return 0;
 	}
 
-	private @NonNull ICellRenderer createShippingBunkersTotal(final EconsOptions options, final boolean isCost) {
-		return createBasicFormatter(options, isCost, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, StandardEconsRowFactory::genericShippingBunkersTotalHelper));
+	private @NonNull ICellRenderer createShippingBunkersTotal(final EconsOptions options, final RowType rowType) {
+		return createBasicFormatter(options, rowType, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, StandardEconsRowFactory::genericShippingBunkersTotalHelper));
 	}
 
 	private static int genericShippingPortCostsHelper(final Object object) {
@@ -767,9 +766,9 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		return 0;
 	}
 
-	private @NonNull ICellRenderer createShippingPortCosts(final EconsOptions options, final boolean isCost) {
+	private @NonNull ICellRenderer createShippingPortCosts(final EconsOptions options, final RowType rowType) {
 
-		return createBasicFormatter(options, isCost, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, StandardEconsRowFactory::genericShippingPortCostsHelper));
+		return createBasicFormatter(options, rowType, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, StandardEconsRowFactory::genericShippingPortCostsHelper));
 	}
 
 	private static int genericShippingCanalCostsHelper(final Object object) {
@@ -788,8 +787,8 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		return 0;
 	}
 
-	private @NonNull ICellRenderer createShippingCanalCosts(final EconsOptions options, final boolean isCost) {
-		return createBasicFormatter(options, isCost, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, StandardEconsRowFactory::genericShippingCanalCostsHelper));
+	private @NonNull ICellRenderer createShippingCanalCosts(final EconsOptions options, final RowType rowType) {
+		return createBasicFormatter(options, rowType, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, StandardEconsRowFactory::genericShippingCanalCostsHelper));
 	}
 
 	private static int genericShippingCharterCostsHelper(final Object object) {
@@ -806,12 +805,12 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		return 0;
 	}
 
-	private @NonNull ICellRenderer createShippingCharterCosts(final EconsOptions options, final boolean isCost) {
-		return createBasicFormatter(options, isCost, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, StandardEconsRowFactory::genericShippingCharterCostsHelper));
+	private @NonNull ICellRenderer createShippingCharterCosts(final EconsOptions options, final RowType rowType) {
+		return createBasicFormatter(options, rowType, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, StandardEconsRowFactory::genericShippingCharterCostsHelper));
 	}
 
-	private @NonNull ICellRenderer createShippingPurgeCosts(final EconsOptions options, final boolean isCost) {
-		return createBasicFormatter(options, isCost, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, object -> {
+	private @NonNull ICellRenderer createShippingPurgeCosts(final EconsOptions options, final RowType rowType) {
+		return createBasicFormatter(options, rowType, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, object -> {
 			if (object instanceof EventGrouping) {
 				final EventGrouping eventGrouping = (EventGrouping) object;
 
@@ -826,8 +825,8 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		}));
 	}
 
-	private @NonNull ICellRenderer createPaperDealStartDate(final EconsOptions options, final boolean isCost) {
-		return createBasicFormatter(options, isCost, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, object -> {
+	private @NonNull ICellRenderer createPaperDealStartDate(final EconsOptions options, final RowType rowType) {
+		return createBasicFormatter(options, rowType, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, object -> {
 			if (object instanceof EventGrouping) {
 				final EventGrouping eventGrouping = (EventGrouping) object;
 
@@ -842,8 +841,8 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		}));
 	}
 
-	private @NonNull ICellRenderer createCancellationCosts(final EconsOptions options, final boolean isCost) {
-		return createBasicFormatter(options, isCost, Long.class, DollarsFormat::format, createMappingFunction(Long.class, object -> {
+	private @NonNull ICellRenderer createCancellationCosts(final EconsOptions options, final RowType rowType) {
+		return createBasicFormatter(options, rowType, Long.class, DollarsFormat::format, createMappingFunction(Long.class, object -> {
 			if (object instanceof ProfitAndLossContainer) {
 				ProfitAndLossContainer profitAndLossContainer = (ProfitAndLossContainer) object;
 				return ScheduleModelKPIUtils.getCancellationFees(profitAndLossContainer);
@@ -852,8 +851,8 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		}));
 	}
 
-	private @NonNull ICellRenderer createShippingCooldownCosts(final EconsOptions options, final boolean isCost) {
-		return createBasicFormatter(options, isCost, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, object -> {
+	private @NonNull ICellRenderer createShippingCooldownCosts(final EconsOptions options, final RowType rowType) {
+		return createBasicFormatter(options, rowType, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, object -> {
 			if (object instanceof EventGrouping) {
 				final EventGrouping eventGrouping = (EventGrouping) object;
 
@@ -885,9 +884,10 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		return revenue;
 	}
 
-	private @NonNull ICellRenderer createShippingCharterRevenue(final EconsOptions options, final boolean isCost) {
+	private @NonNull ICellRenderer createShippingCharterRevenue(final EconsOptions options, final RowType rowType) {
 
-		return createBasicFormatter(options, isCost, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, StandardEconsRowFactory::vesselEventVisitShippingCharterRevenueHelper));
+		return createBasicFormatter(options, rowType, Integer.class, DollarsFormat::format,
+				createMappingFunction(Integer.class, StandardEconsRowFactory::vesselEventVisitShippingCharterRevenueHelper));
 	}
 
 	private static long vesselEventVisitShippingBallastBonusHelper(final Object object) {
@@ -907,8 +907,8 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		return ballastBonus;
 	}
 
-	private @NonNull ICellRenderer createShippingBallastBonus(final EconsOptions options, final boolean isCost) {
-		return createBasicFormatter(options, isCost, Long.class, DollarsFormat::format, createMappingFunction(Long.class, StandardEconsRowFactory::vesselEventVisitShippingBallastBonusHelper));
+	private @NonNull ICellRenderer createShippingBallastBonus(final EconsOptions options, final RowType rowType) {
+		return createBasicFormatter(options, rowType, Long.class, DollarsFormat::format, createMappingFunction(Long.class, StandardEconsRowFactory::vesselEventVisitShippingBallastBonusHelper));
 	}
 
 	private static int vesselEventVisitCharterDurationInHoursHelper(final Object object) {
@@ -928,8 +928,8 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		return durationInHours;
 	}
 
-	private @NonNull ICellRenderer createCharterDays(final EconsOptions options, final boolean isCost) {
-		return createIntegerDaysFromHoursFormatter(options, isCost, createMappingFunction(Integer.class, StandardEconsRowFactory::vesselEventVisitCharterDurationInHoursHelper));
+	private @NonNull ICellRenderer createCharterDays(final EconsOptions options, final RowType rowType) {
+		return createIntegerDaysFromHoursFormatter(options, rowType, createMappingFunction(Integer.class, StandardEconsRowFactory::vesselEventVisitCharterDurationInHoursHelper));
 	}
 
 	private static int vesselEventVisitShippingRepositioningHelper(final Object object) {
@@ -948,11 +948,11 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		return revenue;
 	}
 
-	private @NonNull ICellRenderer createShippingRepositioning(final EconsOptions options, final boolean isCost) {
-		return createBasicFormatter(options, isCost, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, StandardEconsRowFactory::vesselEventVisitShippingRepositioningHelper));
+	private @NonNull ICellRenderer createShippingRepositioning(final EconsOptions options, final RowType rowType) {
+		return createBasicFormatter(options, rowType, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, StandardEconsRowFactory::vesselEventVisitShippingRepositioningHelper));
 	}
 
-	private @NonNull ICellRenderer createShippingCostsByMMBTU(final EconsOptions options, final boolean isCost) {
+	private @NonNull ICellRenderer createShippingCostsByMMBTU(final EconsOptions options, final RowType rowType) {
 
 		final Function<Object, @Nullable Double> helper = object -> getShippingCostByMMBTU(options, object);
 
@@ -983,11 +983,11 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 			return null;
 		};
 
-		return createBasicFormatter(options, isCost, Double.class, DollarsPerMMBtuFormat::format, transformer);
+		return createBasicFormatter(options, rowType, Double.class, DollarsPerMMBtuFormat::format, transformer);
 	}
 
-	private @NonNull ICellRenderer createShippingCosts(final EconsOptions options, final boolean isCost) {
-		return createBasicFormatter(options, isCost, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, StandardEconsRowFactory::getShippingCost));
+	private @NonNull ICellRenderer createShippingCosts(final EconsOptions options, final RowType rowType) {
+		return createBasicFormatter(options, rowType, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, StandardEconsRowFactory::getShippingCost));
 	}
 
 	private static Double getShippingCostByMMBTU(final EconsOptions options, final Object object) {
