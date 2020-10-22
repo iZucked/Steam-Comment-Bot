@@ -96,7 +96,8 @@ public class ADPModelConstraint extends AbstractModelMultiConstraint {
 					if (subContractProfile.getPort() == null) {
 						factory.copyName() //
 								.withObjectAndFeature(adpModel, ADPPackage.Literals.SUB_CONTRACT_PROFILE__PORT) //
-								.withMessage(String.format("Port required for purchase contract %s", purchaseContractProfile.getContract().getName())) //
+								.withMessage(String.format("Purchase contract %s profile will generate slots without ports", purchaseContractProfile.getContract().getName())) //
+								.withSeverity(IStatus.WARNING) //
 								.make(ctx, statuses);
 					}
 				}
@@ -106,7 +107,8 @@ public class ADPModelConstraint extends AbstractModelMultiConstraint {
 					if (subContractProfile.getPort() == null) {
 						factory.copyName() //
 								.withObjectAndFeature(adpModel, ADPPackage.Literals.SUB_CONTRACT_PROFILE__PORT) //
-								.withMessage(String.format("Port required for sales contract %s", salesContractProfile.getContract().getName())) //
+								.withMessage(String.format("Sales contract %s profile will generate slots without ports", salesContractProfile.getContract().getName())) //
+								.withSeverity(IStatus.WARNING) //
 								.make(ctx, statuses);
 					}
 				}
