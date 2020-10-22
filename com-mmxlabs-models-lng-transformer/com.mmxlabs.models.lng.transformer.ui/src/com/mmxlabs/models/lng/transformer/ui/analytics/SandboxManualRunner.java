@@ -315,7 +315,6 @@ public class SandboxManualRunner {
 				if (row.getVesselEventOption() != null && !seenItems.add(row.getVesselEventOption())) {
 					return;
 				}
-				//final BuyOption buyOption = row.getBuyOption();
 				if (row.getVesselEventOption() != null) {
 					if (row.getBuyOption() != null) {
 						
