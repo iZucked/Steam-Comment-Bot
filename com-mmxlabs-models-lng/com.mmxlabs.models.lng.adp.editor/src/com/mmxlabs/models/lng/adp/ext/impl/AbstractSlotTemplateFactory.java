@@ -62,9 +62,6 @@ public class AbstractSlotTemplateFactory implements ISlotTemplateFactory {
 
 		slot.setContract(contract);
 		final Port port = subProfile.getPort();
-		if (port == null) {
-			throw new UserFeedbackException("A port must be provided when generating slots.");
-		}
 		slot.setPort(port);
 		
 		if (subProfile.getContractType() == ContractType.DES) {
@@ -82,9 +79,6 @@ public class AbstractSlotTemplateFactory implements ISlotTemplateFactory {
 		SalesContract contract = profile.getContract();
 		slot.setContract(contract);
 		final Port port = subProfile.getPort();
-		if (port == null) {
-			throw new UserFeedbackException("A port must be provided when generating slots.");
-		}
 		slot.setPort(port);
 		if (subProfile.getContractType() == ContractType.FOB) {
 			slot.setFOBSale(true);
