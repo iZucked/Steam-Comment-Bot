@@ -375,7 +375,7 @@ public class LightWeightOptimisationDataFactory {
 
 			StringBuilder errorMessage = new StringBuilder();
 			
-			errorMessage.append("Some constraints for the contracts below cannot be satisfied:\r\n\r\n");
+			errorMessage.append("Some contract constraints cannot be satisfied:\r\n\r\n");
 			
 			Map<Contract, Set<String>> contractsToConstraintErrMsgs = new HashMap<>();
 			
@@ -428,11 +428,11 @@ public class LightWeightOptimisationDataFactory {
 					int utilized = violated.getViolatedAmount();
 					int bound = 0;
 					if (violated.getViolationType() == ViolationType.Min) {
-						minMaxStr = "min";
+						minMaxStr = "minimum";
 						bound = row.getMin();
 					}
 					else if (violated.getViolationType() == ViolationType.Max) {
-						minMaxStr = "max";
+						minMaxStr = "maximum";
 						bound = row.getMax();
 					}
 					String constraintStr = this.getViolationMsg(monthsStr, minMaxStr, bound, utilized);
@@ -522,7 +522,12 @@ public class LightWeightOptimisationDataFactory {
 
 	private String getViolationMsg(String monthsStr, String minMaxStr, int bound, int utilizable) {
 		//During [Jan-Mar], a min of 3 is required but 0 of the following are used
-		return "During "+monthsStr+", a "+minMaxStr+" of "+bound+" is required but "+utilizable+" of the following are used";
+		//"none" instead of zero and also "minimum of X slots is ..." instead of "min of X is..."
+		String utilizableStr = "none";
+		if (utilizable > 0) {
+			utilizableStr += Integer.toString(utilizable);
+		}
+		return "During "+monthsStr+", a "+minMaxStr+" of "+bound+" slots is required but "+utilizableStr+" of the following are used";
 	}
 	
 	protected String getYearMonthString(YearMonth ym) {
