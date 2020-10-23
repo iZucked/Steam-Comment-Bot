@@ -373,7 +373,7 @@ public class LightWeightOptimisationDataFactory {
 
 			StringBuilder errorMessage = new StringBuilder();
 			
-			errorMessage.append("Some constraints cannot be satisifed:\r\n\r\n");
+			errorMessage.append("Some constraints for the contracts below cannot be satisfied:\r\n\r\n");
 			
 			Map<Contract, Set<String>> contractsToConstraintErrMsgs = new HashMap<>();
 			
@@ -473,10 +473,10 @@ public class LightWeightOptimisationDataFactory {
 			}
 			
 			for (Contract contract : contractsToConstraintErrMsgs.keySet()) {
-				String sideContract = (contract instanceof PurchaseContract ? "purchase" : "sale");	
+				String sideContract = (contract instanceof PurchaseContract ? "(Buy)" : "(Sell)");	
 				Set<String> contractConstraints = contractsToConstraintErrMsgs.get(contract);
 				for (String constraintName : contractConstraints) {
-					errorMessage.append("On ").append(sideContract).append(" contract ").append(contract.getName()).append(":\r\n");
+					errorMessage.append(contract.getName()).append(" ").append(sideContract).append(":\r\n");
 					errorMessage.append(constraintName);
 				}
 			}
