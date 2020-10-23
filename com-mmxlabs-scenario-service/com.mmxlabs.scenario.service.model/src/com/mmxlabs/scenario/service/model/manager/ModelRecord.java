@@ -238,6 +238,8 @@ public class ModelRecord {
 	public void dispose() {
 		// Right now we are asserting that we have been cleaned-up properly
 		if (data != null) {
+			// One known cause of this is the force closure of base case editor when a new scenario is downloaded.
+			
 			LOG.error("ModelRecord #disposed before unloaded");
 		}
 		// assert data == null;
