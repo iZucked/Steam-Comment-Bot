@@ -175,7 +175,7 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 												.convertTime(m)))
 								.collect(Collectors.toList());
 						if (!months.isEmpty() && (periodDistribution.isSetMinCargoes() || periodDistribution.isSetMaxCargoes())) {
-						monthlyDistributionConstraint.addRow(months, periodDistribution.isSetMinCargoes() ? periodDistribution.getMinCargoes() : null ,
+						monthlyDistributionConstraint.addRow(months, periodDistribution.getRange(), periodDistribution.isSetMinCargoes() ? periodDistribution.getMinCargoes() : null ,
 								periodDistribution.isSetMaxCargoes() ? periodDistribution.getMaxCargoes() : null);
 						}
 					}
@@ -267,10 +267,11 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 												.convertTime(m)))
 								.collect(Collectors.toList());
 						if (!months.isEmpty() && (periodDistribution.isSetMinCargoes() || periodDistribution.isSetMaxCargoes())) {
-							monthlyDistributionConstraint.addRow(months, periodDistribution.isSetMinCargoes() ? periodDistribution.getMinCargoes() : null ,
+							monthlyDistributionConstraint.addRow(months, periodDistribution.getRange(), periodDistribution.isSetMinCargoes() ? periodDistribution.getMinCargoes() : null ,
 								periodDistribution.isSetMaxCargoes() ? periodDistribution.getMaxCargoes() : null);
 						}
 					}
+					
 					maxSlotConstraintEditor.addMinMaxDischargeSlotsPerMultiMonthPeriod(contractProfile, profileConstraint, o_slots, monthlyDistributionConstraint);
 				} else {
 					// Not handled here.

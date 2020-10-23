@@ -134,15 +134,16 @@ public class DefaultMaxSlotConstraintDataProviderEditor<P,C> implements IMaxSlot
 	private <T extends IPortSlot> void setMinMaxSlotsPerMultiMonthPeriod(final P contractProfile, final C profileConstraint, List<ConstraintInfo<P,C,T>> minList, List<ConstraintInfo<P,C,T>> maxList, List<Pair<T,Integer>> slots, MonthlyDistributionConstraint monthlyDistributionConstraint) {
 		for (Row row : monthlyDistributionConstraint.getRows()) {
 			if (row.getMin() != null) {
-				minList.addAll(addSlotsPerCollectionOfMonths(contractProfile, profileConstraint, slots, row.getMonths(), row.getMin()));
+				minList.addAll(addSlotsPerCollectionOfMonths(contractProfile, profileConstraint, slots, row, row.getMin()));
 			}
 			if (row.getMax() != null) {
-				maxList.addAll(addSlotsPerCollectionOfMonths(contractProfile, profileConstraint, slots, row.getMonths(), row.getMax()));
+				maxList.addAll(addSlotsPerCollectionOfMonths(contractProfile, profileConstraint, slots, row, row.getMax()));
 			}
 		}
 	}
 
-	private <T extends IPortSlot> List<ConstraintInfo<P,C,T>> addSlotsPerCollectionOfMonths(final P contractProfile, final C profileConstraint, final List<Pair<T,Integer>> slots, final Collection<Integer> monthsToConsider, final int limit) {
+	private <T extends IPortSlot> List<ConstraintInfo<P,C,T>> addSlotsPerCollectionOfMonths(final P contractProfile, final C profileConstraint, final List<Pair<T,Integer>> slots, final Row row, final int limit) {
+		final Collection<Integer> monthsToConsider = row.getMonths();
 		final List<ConstraintInfo<P,C,T>> constraints = new LinkedList<>();
 		final Set<T> slotsSet = new LinkedHashSet<>();
 		for (int month : monthsToConsider) {
@@ -154,7 +155,7 @@ public class DefaultMaxSlotConstraintDataProviderEditor<P,C> implements IMaxSlot
 			}
 		}
 		if (!slotsSet.isEmpty()) {
-			constraints.add(new ConstraintInfo<>(contractProfile,profileConstraint,slotsSet, limit));
+			constraints.add(new ConstraintInfo<>(contractProfile,profileConstraint, slotsSet, limit, row));
 		}
 		return constraints;
 	}

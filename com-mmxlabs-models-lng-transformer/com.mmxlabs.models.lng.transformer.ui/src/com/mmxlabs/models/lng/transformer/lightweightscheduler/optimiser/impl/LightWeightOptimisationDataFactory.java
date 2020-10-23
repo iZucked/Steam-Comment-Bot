@@ -8,6 +8,8 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -15,6 +17,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -23,6 +26,8 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Injector;
@@ -35,8 +40,12 @@ import com.mmxlabs.models.lng.adp.PeriodDistributionProfileConstraint;
 import com.mmxlabs.models.lng.adp.ProfileConstraint;
 import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.adp.utils.ADPModelUtil;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.LightWeightSchedulerStage2Module;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ICargoToCargoCostCalculator;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ICargoVesselRestrictionsMatrixProducer;
@@ -60,6 +69,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.util.MonthlyDistributionConstraint.Row;
 import com.mmxlabs.scheduler.optimiser.providers.ConstraintInfo;
 import com.mmxlabs.scheduler.optimiser.providers.ILongTermSlotsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -370,49 +380,87 @@ public class LightWeightOptimisationDataFactory {
 				ContractProfile contract = violated.getContractProfile();
 				ProfileConstraint constraint = violated.getProfileConstraint();
 				
-				String sideContract = (contract instanceof PurchaseContractProfile ? "purchase" : "sale");
 				Set<String> contractConstraints = contractsToConstraintErrMsgs.get(contract.getContract());
 				if (contractConstraints == null) {
 					contractConstraints = new HashSet<String>();
 					contractsToConstraintErrMsgs.put(contract.getContract(), contractConstraints);
 				}
 		
-				StringBuilder constraintName = new StringBuilder();
+				StringBuilder constraintDetails = new StringBuilder();
 				
 				if (constraint instanceof PeriodDistributionProfileConstraint) {
 					PeriodDistributionProfileConstraint pdc = (PeriodDistributionProfileConstraint)constraint;
 					for (PeriodDistribution pd : pdc.getDistributions()) {
-						if (pd.getMinCargoes() == violated.getBound() || pd.getMaxCargoes() == violated.getBound()) {
-							constraintName.append(ADPModelUtil.getPeriodDistributionRangeString(pd));
-							if (pd.isSetMinCargoes()) {
-								constraintName.append(" Min:").append(pd.getMinCargoes());
+						if (violated.getMonths() == null) {
+							if (pd.getMinCargoes() == violated.getBound() || pd.getMaxCargoes() == violated.getBound()) {
+								constraintDetails.append(ADPModelUtil.getPeriodDistributionRangeString(pd));
+								if (pd.isSetMinCargoes()) {
+									constraintDetails.append(" Min:").append(pd.getMinCargoes());
+								}
+								if (pd.isSetMaxCargoes()) {
+									constraintDetails.append(" Max:").append(pd.getMaxCargoes());
+								}
+								if (violated.getViolationType() == ViolationType.Min) {
+									constraintDetails.append(" (Min violated, slots used = ").append(violated.getViolatedAmount()).append(")");
+								}
+								else if (violated.getViolationType() == ViolationType.Max) {
+									constraintDetails.append(" (Max violated, slots used = ").append(violated.getViolatedAmount()).append(")");
+								}
+								constraintDetails.append("\r\n");
 							}
-							if (pd.isSetMaxCargoes()) {
-								constraintName.append(" Max:").append(pd.getMaxCargoes());
-							}
-							if (violated.getViolationType() == ViolationType.Min) {
-								constraintName.append(" (Min violated, slots used = ").append(violated.getViolatedAmount()).append(")");
-							}
-							else if (violated.getViolationType() == ViolationType.Max) {
-								constraintName.append(" (Max violated, slots used = ").append(violated.getViolatedAmount()).append(")");
-							}
-							constraintName.append("\r\n");
+							contractConstraints.add(constraintDetails.toString());
+						}
+					}								
+				}
+
+				if (violated.getMonths() != null) {
+					Row row = (Row)violated.getMonths();
+					List<YearMonth> yearMonths = row.getYearMonths();
+					
+					if (yearMonths.size() > 0) constraintDetails.append("[");
+					for (YearMonth ym : yearMonths) {
+						if (constraintDetails.charAt(constraintDetails.length()-1) != '[') {
+							constraintDetails.append(", ");
+						}
+						String yearMonthStr = String.format("%s '%02d", //
+								ym.getMonth().getDisplayName(TextStyle.SHORT, Locale.getDefault()), //
+								ym.getYear() % 100);
+						constraintDetails.append(yearMonthStr);
+					}
+					if (yearMonths.size() > 0) constraintDetails.append("]");
+					
+					LNGScenarioModel sm = this.getScenarioModel(contract);
+
+					if (violated.getViolationType() == ViolationType.Min) {
+						constraintDetails.append(" Violated minimum of ").append(row.getMin());
+						constraintDetails.append(" (Slots used = ").append(violated.getViolatedAmount()).append(")");
+					}
+					else if (violated.getViolationType() == ViolationType.Max) {
+						constraintDetails.append(" Violated maximum of ").append(row.getMax());
+						constraintDetails.append(" (Slots used = ").append(violated.getViolatedAmount()).append(")");
+					}
+
+					constraintDetails.append(" on slots::\r\n");
+					for (var o : violated.getSlots()) {					
+						IPortSlot slot = (IPortSlot)o;
+						Slot emfSlot = getEMFSlot(sm,slot);
+						if (emfSlot.getSchedulingTimeWindow().getSize() > 0) {
+							constraintDetails.append(" "+emfSlot.getName()+" \t"+emfSlot.getSchedulingTimeWindow().getStart().toLocalDate()+" +"+emfSlot.getSchedulingTimeWindow().getSize()+emfSlot.getSchedulingTimeWindow().getSizeUnits().toString()+"\r\n");
+						}
+						else {
+							constraintDetails.append(" "+emfSlot.getName()+" \t"+emfSlot.getSchedulingTimeWindow().getStart().toLocalDate()+"\r\n");
 						}
 					}
-					constraintName.append("\r\n");					
+					constraintDetails.append("\r\n");										
+					contractConstraints.add(constraintDetails.toString());
 				}
-				else {
-					constraintName.append(constraint.toString()).append("\r\n");
-				}
-				
-				contractConstraints.add(constraintName.toString());
 			}
 			
 			for (Contract contract : contractsToConstraintErrMsgs.keySet()) {
 				String sideContract = (contract instanceof PurchaseContract ? "purchase" : "sale");	
-				errorMessage.append("On ").append(sideContract).append(" contract ").append(contract.getName()).append(":\r\n");
 				Set<String> contractConstraints = contractsToConstraintErrMsgs.get(contract);
 				for (String constraintName : contractConstraints) {
+					errorMessage.append("On ").append(sideContract).append(" contract ").append(contract.getName()).append(":\r\n");
 					errorMessage.append(constraintName);
 				}
 			}
@@ -423,6 +471,39 @@ public class LightWeightOptimisationDataFactory {
 		return pairingsMatrix;
 	}
 
+	private LNGScenarioModel getScenarioModel(ContractProfile cp) {
+		EObject root = cp;
+		while (root.eContainer() != null) {
+			if (root.eContainer() instanceof LNGScenarioModel) {
+				return (LNGScenarioModel)root.eContainer();
+			}
+			root = root.eContainer();
+		}
+		return null;
+	}
+	
+	private Slot<?> getEMFSlot(LNGScenarioModel sm, IPortSlot slot) {
+		String id = slot.getId();
+		id = id.substring(3);
+		EList<LoadSlot> ls = sm.getCargoModel().getLoadSlots();
+		
+		for (var s : ls) {
+			if (s.getName().equals(id)) {
+				return s;
+			}
+		}
+		
+		EList<DischargeSlot> ds = sm.getCargoModel().getDischargeSlots();
+		
+		for (var s : ds) {
+			if (s.getName().equals(id)) {
+				return s;
+			}
+		}
+		
+		return null;
+	}
+	
 	private Collection<IPortSlot> getLongTermSlots() {
 		@NonNull
 		final Collection<IPortSlot> longTermSlots = longTermSlotsProvider.getLongTermSlots();

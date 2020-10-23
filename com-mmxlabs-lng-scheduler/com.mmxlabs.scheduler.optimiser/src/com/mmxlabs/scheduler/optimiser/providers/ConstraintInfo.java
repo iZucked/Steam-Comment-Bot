@@ -10,6 +10,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 public class ConstraintInfo<P, C, T extends IPortSlot> {
 	P contractProfile;
 	C profileConstraint;
+	Object months;
 	Set<T> slots;
 	int bound;
 	public enum ViolationType {
@@ -24,6 +25,11 @@ public class ConstraintInfo<P, C, T extends IPortSlot> {
 		this.profileConstraint = profileConstraint;
 		this.slots = slots;
 		this.bound = bound;
+	}
+	
+	public ConstraintInfo(final P contractProfile, final C profileConstraint, final Set<T> slots, int bound, final Object months) {
+		this(contractProfile, profileConstraint, slots, bound);
+		this.months = months;
 	}
 	
 	public void setViolatedAmount(ViolationType vt, int violatedAmount) {
@@ -53,6 +59,10 @@ public class ConstraintInfo<P, C, T extends IPortSlot> {
 	
 	public C getProfileConstraint() {
 		return profileConstraint;
+	}
+
+	public Object getMonths() {
+		return months;
 	}
 }
 
