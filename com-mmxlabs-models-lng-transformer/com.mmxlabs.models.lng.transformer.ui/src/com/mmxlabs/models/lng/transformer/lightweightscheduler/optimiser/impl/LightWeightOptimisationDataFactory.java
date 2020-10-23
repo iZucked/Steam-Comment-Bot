@@ -440,7 +440,7 @@ public class LightWeightOptimisationDataFactory {
 						constraintDetails.append(" (Slots used = ").append(violated.getViolatedAmount()).append(")");
 					}
 
-					constraintDetails.append(" on slots::\r\n");
+					constraintDetails.append(" on slots:\r\n");
 					for (var o : violated.getSlots()) {					
 						IPortSlot slot = (IPortSlot)o;
 						Slot emfSlot = getEMFSlot(sm,slot);
