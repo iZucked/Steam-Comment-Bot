@@ -12,6 +12,7 @@ import java.time.YearMonth;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -417,18 +418,33 @@ public class LightWeightOptimisationDataFactory {
 					Row row = (Row)violated.getMonths();
 					List<YearMonth> yearMonths = row.getYearMonths();
 					
-					if (yearMonths.size() > 0) constraintDetails.append("[");
-					for (YearMonth ym : yearMonths) {
+					if (yearMonths.size() > 0) {
+						constraintDetails.append("[");
+					}
+
+					if (yearMonths.size() > 2 && isContigous(row)) {
 						if (constraintDetails.charAt(constraintDetails.length()-1) != '[') {
 							constraintDetails.append(", ");
 						}
-						String yearMonthStr = String.format("%s '%02d", //
-								ym.getMonth().getDisplayName(TextStyle.SHORT, Locale.getDefault()), //
-								ym.getYear() % 100);
-						constraintDetails.append(yearMonthStr);
+						YearMonth ym0 = yearMonths.get(0);
+						YearMonth ym1 = yearMonths.get(yearMonths.size()-1);
+						String yearMonthStrFirst = getYearMonthString(ym0);						
+						String yearMonthStrLast = getYearMonthString(ym1);						
+						constraintDetails.append(yearMonthStrFirst+"-"+yearMonthStrLast);
 					}
-					if (yearMonths.size() > 0) constraintDetails.append("]");
-					
+					else {
+						for (YearMonth ym : yearMonths) {
+							if (constraintDetails.charAt(constraintDetails.length()-1) != '[') {
+								constraintDetails.append(", ");
+							}
+							String yearMonthStr = getYearMonthString(ym);
+							constraintDetails.append(yearMonthStr);
+						}
+					}
+					if (yearMonths.size() > 0) {
+						constraintDetails.append("]");
+					}
+				
 					LNGScenarioModel sm = this.getScenarioModel(contract);
 
 					if (violated.getViolationType() == ViolationType.Min) {
@@ -469,6 +485,25 @@ public class LightWeightOptimisationDataFactory {
 		}
 		
 		return pairingsMatrix;
+	}
+
+	protected String getYearMonthString(YearMonth ym) {
+		String yearMonthStr = String.format("%s '%02d", //
+				ym.getMonth().getDisplayName(TextStyle.SHORT, Locale.getDefault()), //
+				ym.getYear() % 100);
+		return yearMonthStr;
+	}
+
+	private boolean isContigous(Row row) {
+		int maxGap = 1;
+		int lastMonth = row.getMonths().get(0);
+		for (int month : row.getMonths()) {
+			if (month > lastMonth+1) {
+				maxGap = 2;
+			}
+			lastMonth = month;
+		}
+		return maxGap == 1;
 	}
 
 	private LNGScenarioModel getScenarioModel(ContractProfile cp) {
