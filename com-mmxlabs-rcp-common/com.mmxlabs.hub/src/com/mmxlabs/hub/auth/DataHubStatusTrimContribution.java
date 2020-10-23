@@ -7,6 +7,7 @@ package com.mmxlabs.hub.auth;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
+import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
@@ -18,6 +19,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.dialogs.PreferencesUtil;
 
 import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.IDataHubStateChangeListener;
@@ -25,7 +27,6 @@ import com.mmxlabs.hub.IDataHubStateChangeListener;
 public class DataHubStatusTrimContribution {
 	
 	protected IDataHubStateChangeListener listener;
-	private static AuthenticationManager authenticationManager = AuthenticationManager.getInstance();
 
 	@PostConstruct
 	protected Control createControl(Composite parent) {
@@ -73,17 +74,18 @@ public class DataHubStatusTrimContribution {
 				
 				@Override
 				public void mouseDown(MouseEvent e) {
-					if (DataHubServiceProvider.getInstance().isHubOnline()) {
-						final Shell shell = e.display.getActiveShell();
-						if (!authenticationManager.isAuthenticated()) {
-							authenticationManager.run(shell);
-						}
-					}
+					// Nothing to do here. No one is here but us robots
 				}
 				
 				@Override
 				public void mouseDoubleClick(MouseEvent e) {
-					// Nothing to do here. No one is here, but robots
+					if (!DataHubServiceProvider.getInstance().isOnlineAndLoggedIn()) {
+						final Shell shell = e.display.getActiveShell();
+						PreferenceDialog dialog = PreferencesUtil.createPreferenceDialogOn(shell, 
+								"com.mmxlabs.lngdataserver.server.DataserverPreferencePage", 
+								new String[] {"com.mmxlabs.lngdataserver.server.DataserverPreferencePage"}, null);
+						dialog.open();
+					}
 				}
 
 				@Override
@@ -132,12 +134,12 @@ public class DataHubStatusTrimContribution {
 	}
 	
 	private String dataHubStatusToolTipText(boolean online, boolean loggedin) {
-		String result = " Not connected";
+		String result = " Not connected\n Double click to check connection settings";
 		if (online && loggedin) {
 			result = " Connected and logged in";
 		}
 		if (online && !loggedin) {
-			result = " Connected and logged out\n Click to connect";
+			result = " Connected and logged out\n Double click to check connection settings";
 		}
 		
 		return result;
