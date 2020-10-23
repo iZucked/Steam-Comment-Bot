@@ -7,6 +7,8 @@ package com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.impl;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.format.TextStyle;
@@ -418,54 +420,27 @@ public class LightWeightOptimisationDataFactory {
 					Row row = (Row)violated.getMonths();
 					List<YearMonth> yearMonths = row.getYearMonths();
 					
-					if (yearMonths.size() > 0) {
-						constraintDetails.append("[");
-					}
-
-					if (yearMonths.size() > 2 && isContigous(row)) {
-						if (constraintDetails.charAt(constraintDetails.length()-1) != '[') {
-							constraintDetails.append(", ");
-						}
-						YearMonth ym0 = yearMonths.get(0);
-						YearMonth ym1 = yearMonths.get(yearMonths.size()-1);
-						String yearMonthStrFirst = getYearMonthString(ym0);						
-						String yearMonthStrLast = getYearMonthString(ym1);						
-						constraintDetails.append(yearMonthStrFirst+"-"+yearMonthStrLast);
-					}
-					else {
-						for (YearMonth ym : yearMonths) {
-							if (constraintDetails.charAt(constraintDetails.length()-1) != '[') {
-								constraintDetails.append(", ");
-							}
-							String yearMonthStr = getYearMonthString(ym);
-							constraintDetails.append(yearMonthStr);
-						}
-					}
-					if (yearMonths.size() > 0) {
-						constraintDetails.append("]");
-					}
+					String monthsStr = getMonthsString(row, yearMonths);
 				
 					LNGScenarioModel sm = this.getScenarioModel(contract);
 
+					String minMaxStr = "";
+					int utilized = violated.getViolatedAmount();
+					int bound = 0;
 					if (violated.getViolationType() == ViolationType.Min) {
-						constraintDetails.append(" Violated minimum of ").append(row.getMin());
-						constraintDetails.append(" (Slots used = ").append(violated.getViolatedAmount()).append(")");
+						minMaxStr = "min";
+						bound = row.getMin();
 					}
 					else if (violated.getViolationType() == ViolationType.Max) {
-						constraintDetails.append(" Violated maximum of ").append(row.getMax());
-						constraintDetails.append(" (Slots used = ").append(violated.getViolatedAmount()).append(")");
+						minMaxStr = "max";
+						bound = row.getMax();
 					}
-
-					constraintDetails.append(" on slots:\r\n");
+					String constraintStr = this.getViolationMsg(monthsStr, minMaxStr, bound, utilized);
+					constraintDetails.append(constraintStr).append("\r\n");
 					for (var o : violated.getSlots()) {					
 						IPortSlot slot = (IPortSlot)o;
 						Slot emfSlot = getEMFSlot(sm,slot);
-						if (emfSlot.getSchedulingTimeWindow().getSize() > 0) {
-							constraintDetails.append(" "+emfSlot.getName()+" \t"+emfSlot.getSchedulingTimeWindow().getStart().toLocalDate()+" +"+emfSlot.getSchedulingTimeWindow().getSize()+emfSlot.getSchedulingTimeWindow().getSizeUnits().toString()+"\r\n");
-						}
-						else {
-							constraintDetails.append(" "+emfSlot.getName()+" \t"+emfSlot.getSchedulingTimeWindow().getStart().toLocalDate()+"\r\n");
-						}
+						getSlotDetails(constraintDetails, emfSlot);
 					}
 					constraintDetails.append("\r\n");										
 					contractConstraints.add(constraintDetails.toString());
@@ -487,6 +462,69 @@ public class LightWeightOptimisationDataFactory {
 		return pairingsMatrix;
 	}
 
+	protected void getSlotDetails(StringBuilder constraintDetails, Slot emfSlot) {
+		constraintDetails.append(" "+emfSlot.getName()+" \t"+getSlotStartDateString(emfSlot)+getTimeWindowString(emfSlot)+"\r\n");
+	}
+
+	protected String getTimeWindowString(Slot emfSlot) {
+		String timeWindowString = "";
+		if (emfSlot.getSchedulingTimeWindow().getSize() > 0) {
+			timeWindowString += " +"+emfSlot.getSchedulingTimeWindow().getSize();
+			switch (emfSlot.getSchedulingTimeWindow().getSizeUnits()) {
+			case HOURS:
+				timeWindowString += "h";
+				break;
+			case DAYS:
+				timeWindowString += "d";
+				break;
+			case MONTHS:
+				timeWindowString += "m";
+				break;
+			}
+		}
+		return timeWindowString;
+	}
+	
+	protected @NonNull String getSlotStartDateString(Slot emfSlot) {
+		return emfSlot.getSchedulingTimeWindow().getStart().toLocalDate().toString().replace("-", "/");
+	}
+
+	protected String getMonthsString(Row row, List<YearMonth> yearMonths) {
+		StringBuilder constraintDetails = new StringBuilder();
+		if (yearMonths.size() > 0) {
+			constraintDetails.append("[");
+		}
+
+		if (yearMonths.size() > 2 && isContigous(row)) {
+			if (constraintDetails.charAt(constraintDetails.length()-1) != '[') {
+				constraintDetails.append(", ");
+			}
+			YearMonth ym0 = yearMonths.get(0);
+			YearMonth ym1 = yearMonths.get(yearMonths.size()-1);
+			String yearMonthStrFirst = getYearMonthString(ym0);						
+			String yearMonthStrLast = getYearMonthString(ym1);						
+			constraintDetails.append(yearMonthStrFirst+"-"+yearMonthStrLast);
+		}
+		else {
+			for (YearMonth ym : yearMonths) {
+				if (constraintDetails.charAt(constraintDetails.length()-1) != '[') {
+					constraintDetails.append(", ");
+				}
+				String yearMonthStr = getYearMonthString(ym);
+				constraintDetails.append(yearMonthStr);
+			}
+		}
+		if (yearMonths.size() > 0) {
+			constraintDetails.append("]");
+		}
+		return constraintDetails.toString();
+	}
+
+	private String getViolationMsg(String monthsStr, String minMaxStr, int bound, int utilizable) {
+		//During [Jan-Mar], a min of 3 is required but 0 of the following are used
+		return "During "+monthsStr+", a "+minMaxStr+" of "+bound+" is required but "+utilizable+" of the following are used";
+	}
+	
 	protected String getYearMonthString(YearMonth ym) {
 		String yearMonthStr = String.format("%s '%02d", //
 				ym.getMonth().getDisplayName(TextStyle.SHORT, Locale.getDefault()), //
