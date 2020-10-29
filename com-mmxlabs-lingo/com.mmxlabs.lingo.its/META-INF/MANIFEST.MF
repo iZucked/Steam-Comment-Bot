@@ -75,7 +75,8 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  org.hamcrest;bundle-version="1.1.0",
  net.bytebuddy.byte-buddy;bundle-version="1.9.9",
  org.aopalliance;bundle-version="1.0.0",
- org.objenesis;bundle-version="2.6.0"
+ org.objenesis;bundle-version="2.6.0",
+ org.slf4j.api;bundle-version="1.7.10"
 Bundle-ClassPath: data/,
  .,
  junit-jupiter-1.14.3.jar,
