@@ -91,7 +91,7 @@ public class DataHubStatusTrimContribution {
 				@Override
 				public void mouseUp(MouseEvent e) {
 					// When mouse is up it means that the cat caught it and threw it in the air to catch like a peanut.
-					// Is cat going to catch the mouse, or is it going to be some a misfortune for cat, but a life changing
+					// Is cat going to catch the mouse, or is it going to be a misfortune for cat, but a life changing
 					// slip for the mouse?
 					// We are not going to find that out. Mouse might became an alcoholic or a drug addict. It might start selling
 					// it's body for cheap drugs and end up in the cell, or rotting somewhere behind the dump.
@@ -114,8 +114,8 @@ public class DataHubStatusTrimContribution {
 				// we don't care about permission change
 			}
 		};
-		
-		DataHubServiceProvider.getInstance().addDataHubStateListener(listener);
+		IDataHubStateChangeListener pListener = listener;
+		DataHubServiceProvider.getInstance().addDataHubStateListener(pListener);
 		
 		return control;
 	}
@@ -129,8 +129,9 @@ public class DataHubStatusTrimContribution {
 	
 	@PreDestroy
 	public void dispose() {
-		if (listener != null)
-			DataHubServiceProvider.getInstance().removeDataHubStateListener(listener);
+		IDataHubStateChangeListener pListener = listener;
+		if (pListener != null)
+			DataHubServiceProvider.getInstance().removeDataHubStateListener(pListener);
 	}
 	
 	private String dataHubStatusToolTipText(boolean online, boolean loggedin) {

@@ -64,9 +64,9 @@ public class Activator extends AbstractUIPlugin {
 		DataHubServiceProvider.getInstance();
 
 		baseCaseVersionsProviderService = new BaseCaseVersionsProviderService();
-		baseCaseVersionsProviderServiceRegistration = getBundle().getBundleContext().registerService(IBaseCaseVersionsProvider.class, baseCaseVersionsProviderService, new Hashtable<>());
+		baseCaseVersionsProviderServiceRegistration = getBundle().getBundleContext().registerService(IBaseCaseVersionsProvider.class, getBaseCaseVersionsProviderService(), new Hashtable<>());
 
-		scenarioVersionsService = new ScenarioVersionsService(baseCaseVersionsProviderService);
+		scenarioVersionsService = new ScenarioVersionsService(getBaseCaseVersionsProviderService());
 		scenarioVersionsServiceRegistration = getBundle().getBundleContext().registerService(IScenarioVersionService.class, scenarioVersionsService, new Hashtable<>());
 
 		scenarioCipherProviderTracker = new ServiceTracker<IScenarioCipherProvider, IScenarioCipherProvider>(context, IScenarioCipherProvider.class, null) {
@@ -161,7 +161,7 @@ public class Activator extends AbstractUIPlugin {
 				// Already enabled
 				return;
 			}
-			baseCaseService = new BaseCaseScenarioService(baseCaseVersionsProviderService);
+			baseCaseService = new BaseCaseScenarioService(getBaseCaseVersionsProviderService());
 
 			if (scenarioCipherProviderTracker != null) {
 
@@ -249,5 +249,9 @@ public class Activator extends AbstractUIPlugin {
 			}
 		}
 
+	}
+
+	public BaseCaseVersionsProviderService getBaseCaseVersionsProviderService() {
+		return baseCaseVersionsProviderService;
 	}
 }

@@ -75,7 +75,7 @@ public class BaseCaseToScheduleSpecification {
 			if (row.getVesselEventOption() == null && (row.getBuyOption() == null || row.getSellOption() == null)) {
 				SlotSpecification slotSpecification = CargoFactory.eINSTANCE.createSlotSpecification();
 
-				Slot slot = null;
+				Slot<?> slot = null;
 				if (row.getBuyOption() != null) {
 					slot = getOrCreate(row.getBuyOption());
 				} else if (row.getSellOption() != null) {
