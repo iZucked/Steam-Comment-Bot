@@ -83,7 +83,7 @@
 					<application>com.mmxlabs.lingo.app.application</application>
 
 					<useUIHarness>true</useUIHarness>
-					<useUIThread>true</useUIThread>
+					<useUIThread>false</useUIThread>
 
 					<argLine>-ea -Dosgi.nl=en_GB -Dlingo.suppress.dialogs=true -Dlingo.enc.keyfile=${lingo.enc.keyfile} -Dlingo.license.file=${lingo.license.file}</argLine>
 
