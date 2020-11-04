@@ -31,11 +31,12 @@ import com.mmxlabs.hub.services.users.UsernameProvider;
 import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.IBaseCaseVersionsProvider.IBaseCaseChanged;
+import com.mmxlabs.scenario.service.ui.IScenarioVersionService.IChangedListener;
 
-public class BaseCaseStatusTrimContribution {
+public class ReferenceDataStatusTrimContribution {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(BaseCaseStatusTrimContribution.class);
-	protected IBaseCaseChanged listener;
+	private static final Logger LOGGER = LoggerFactory.getLogger(ReferenceDataStatusTrimContribution.class);
+	protected IChangedListener listener;
 	private final Activator plugin = Activator.getDefault();
 	
 	private static class BCSVersionRecord{
@@ -99,20 +100,20 @@ public class BaseCaseStatusTrimContribution {
 			}
 		});
 		
-		final BaseCaseVersionsProviderService service = plugin.getBaseCaseVersionsProviderService();
+		final ScenarioVersionsService service = plugin.getScenarioVersionsService();
 		myRecord = getSaved();
-		listener = new IBaseCaseChanged() {
+		listener = new IChangedListener() {
 
 			@Override
 			public void changed() {
 				Display.getDefault().asyncExec(() -> {
 					if (service != null) {
-						setLabelTextAndToolTip(myLabel, bcChanged(service.getBaseCase()));
+						//setLabelTextAndToolTip(myLabel, bcChanged(service.getBaseCase()));
 					}
 				});
 			}
 		};
-		IBaseCaseChanged pListener = listener;
+		IChangedListener pListener = listener;
 		if (service != null && pListener != null) {
 			service.addChangedListener(pListener);
 		}
@@ -166,8 +167,8 @@ public class BaseCaseStatusTrimContribution {
 	
 	@PreDestroy
 	public void dispose() {
-		IBaseCaseChanged pListener = listener;
-		BaseCaseVersionsProviderService service = plugin.getBaseCaseVersionsProviderService();
+		IChangedListener pListener = listener;
+		ScenarioVersionsService service = plugin.getScenarioVersionsService();
 		if (service != null && pListener != null) {
 			service.removeChangedListener(pListener);
 		}
@@ -227,8 +228,8 @@ public class BaseCaseStatusTrimContribution {
 	private Image dataHubStatusImage(final boolean changed) {
 		Display display = Display.getDefault();
 		if (changed && !myRecord.isDismissed) {
-			return new Image(display, BaseCaseStatusTrimContribution.class.getResourceAsStream("/icons/base-flag-green.png"));
+			return new Image(display, ReferenceDataStatusTrimContribution.class.getResourceAsStream("/icons/base-flag-green.png"));
 		}
-		return new Image(display, BaseCaseStatusTrimContribution.class.getResourceAsStream("/icons/base-flag.png"));
+		return new Image(display, ReferenceDataStatusTrimContribution.class.getResourceAsStream("/icons/base-flag.png"));
 	}
 }

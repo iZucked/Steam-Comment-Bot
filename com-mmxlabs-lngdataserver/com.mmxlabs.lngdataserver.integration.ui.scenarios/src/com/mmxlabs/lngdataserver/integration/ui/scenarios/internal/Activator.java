@@ -254,4 +254,8 @@ public class Activator extends AbstractUIPlugin {
 	public BaseCaseVersionsProviderService getBaseCaseVersionsProviderService() {
 		return baseCaseVersionsProviderService;
 	}
+	
+	public ScenarioVersionsService getScenarioVersionsService() {
+		return scenarioVersionsService;
+	}
 }
