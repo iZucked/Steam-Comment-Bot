@@ -6,6 +6,10 @@ package com.mmxlabs.lngdataserver.integration.ui.scenarios.internal;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -15,7 +19,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -27,25 +30,29 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmxlabs.common.util.exceptions.UserFeedbackException;
-import com.mmxlabs.hub.services.users.UsernameProvider;
-import com.mmxlabs.scenario.service.model.Metadata;
+import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
+import com.mmxlabs.scenario.service.manifest.Manifest;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.ui.IBaseCaseVersionsProvider.IBaseCaseChanged;
-import com.mmxlabs.scenario.service.ui.IScenarioVersionService.IChangedListener;
 
 public class ReferenceDataStatusTrimContribution {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ReferenceDataStatusTrimContribution.class);
-	protected IChangedListener listener;
+	protected IBaseCaseChanged listener;
 	private final Activator plugin = Activator.getDefault();
 	
-	private static class BCSVersionRecord{
-		public String currentUUID = "";
-		public String publisher = "";
+	private static final List<String> types = getBaseCaseTypesToCheck();
+	
+	private class RDSRecords {
+		public Map<String, String> typeVersion = new HashMap<String, String>();
 		public boolean isDismissed = false;
 	}
 	
-	BCSVersionRecord myRecord = new BCSVersionRecord();
+	private RDSRecords currentRecords;
+	private RDSRecords newRecords;
+
 
 	@PostConstruct
 	protected Control createControl(Composite parent) {
@@ -91,7 +98,7 @@ public class ReferenceDataStatusTrimContribution {
 			
 			@Override
 			public void mouseDown(MouseEvent e) {
-				dismissNotification(myLabel);
+				// No need for this
 			}
 			
 			@Override
@@ -100,20 +107,20 @@ public class ReferenceDataStatusTrimContribution {
 			}
 		});
 		
-		final ScenarioVersionsService service = plugin.getScenarioVersionsService();
-		myRecord = getSaved();
-		listener = new IChangedListener() {
+		final BaseCaseVersionsProviderService service = plugin.getBaseCaseVersionsProviderService();
+		currentRecords = getSaved();
+		listener = new IBaseCaseChanged() {
 
 			@Override
 			public void changed() {
 				Display.getDefault().asyncExec(() -> {
 					if (service != null) {
-						//setLabelTextAndToolTip(myLabel, bcChanged(service.getBaseCase()));
+						setLabelTextAndToolTip(myLabel, bcChanged(service.getBaseCase()));
 					}
 				});
 			}
 		};
-		IChangedListener pListener = listener;
+		IBaseCaseChanged pListener = listener;
 		if (service != null && pListener != null) {
 			service.addChangedListener(pListener);
 		}
@@ -123,29 +130,25 @@ public class ReferenceDataStatusTrimContribution {
 	
 	private boolean bcChanged(ScenarioInstance si) {
 		if (si != null) {
-			boolean uuidChanged = false;
-			String uuid = "";
-			if (myRecord.currentUUID != "") {
-				uuid = si.getUuid();
-				if (!uuid.equalsIgnoreCase(myRecord.currentUUID)) {
-					uuidChanged = true;
-				}
-			} else {
-				uuid = si.getUuid();
-				uuidChanged = true;
+			boolean versionChanged = false;
+			final Manifest mf = si.getManifest();
+			newRecords = new RDSRecords();
+			if (mf != null) {
+				newRecords.typeVersion = ScenarioStorageUtil.extractScenarioDataVersions(mf);
 			}
-			if (uuidChanged) {
-				final Metadata md = si.getMetadata();
-				if (md != null) {
-					final String foo = UsernameProvider.INSTANCE.getDisplayName(md.getCreator());
-					final String publisher = foo == null ? md.getCreator() : foo;
-					if (!myRecord.publisher.equals(publisher)) {
-						myRecord.isDismissed = false;
-						myRecord.currentUUID = uuid;
-						myRecord.publisher = publisher;
-						saveRecord(myRecord);
-						return true;
+			if (!types.isEmpty() && currentRecords != null && !newRecords.typeVersion.isEmpty()) {
+				for (final String type : types) {
+					final String cV = currentRecords.typeVersion.get(type);
+					final String nV = newRecords.typeVersion.get(type);
+					if (nV != null && (cV == null || !cV.equalsIgnoreCase(nV))) {
+						versionChanged = true;
+						break;
 					}
+				}
+				if (versionChanged) {
+					currentRecords = newRecords;
+					saveRecord(currentRecords);
+					return true;
 				}
 			}
 		}
@@ -153,28 +156,28 @@ public class ReferenceDataStatusTrimContribution {
 	}
 	
 	private void dismissNotification(final Label myLabel) {
-		myRecord.isDismissed = true;
-		saveRecord(myRecord);
+		currentRecords.isDismissed = true;
+		saveRecord(currentRecords);
 		setLabelTextAndToolTip(myLabel, false);
 	}
 
 	private void setLabelTextAndToolTip(final Label myLabel, final boolean changed) {
 		if (!myLabel.isDisposed()) {
 			myLabel.setToolTipText(dataHubStatusToolTipText(changed));
-			myLabel.setImage(dataHubStatusImage(changed));
+			//myLabel.setImage(dataHubStatusImage(changed));
 		}
 	}
 	
 	@PreDestroy
 	public void dispose() {
-		IChangedListener pListener = listener;
-		ScenarioVersionsService service = plugin.getScenarioVersionsService();
+		IBaseCaseChanged pListener = listener;
+		BaseCaseVersionsProviderService service = plugin.getBaseCaseVersionsProviderService();
 		if (service != null && pListener != null) {
 			service.removeChangedListener(pListener);
 		}
 	}
 	
-	private void saveRecord(final BCSVersionRecord myRecord) {
+	private void saveRecord(final RDSRecords myRecord) {
 		final File recordsFile = getRecordFile();
 		final ObjectMapper mapper = new ObjectMapper();
 		try {
@@ -184,19 +187,21 @@ public class ReferenceDataStatusTrimContribution {
 		}
 	}
 	
-	private BCSVersionRecord getSaved() {
-		BCSVersionRecord result = myRecord;
+	private RDSRecords getSaved() {
+		RDSRecords result = new RDSRecords();
 		final File recordsFile = getRecordFile();
 		if (recordsFile.exists() && recordsFile.canRead()) {
 			try {
 				final String json = Files.readString(recordsFile.toPath());
 				if (json != null && !json.isEmpty()) {
 					final ObjectMapper mapper = new ObjectMapper();
-					result = mapper.readValue(json, BCSVersionRecord.class);
+					result = mapper.readValue(json, RDSRecords.class);
 				}
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage());
 			}
+		} else {
+			
 		}
 		return result;
 	}
@@ -210,7 +215,7 @@ public class ReferenceDataStatusTrimContribution {
 			dirExists = directory.mkdirs();
 		}
 		if (dirExists) {
-			return new File(directory.getAbsolutePath() + "/records.json");
+			return new File(directory.getAbsolutePath() + "/refdata.json");
 		}
 
 		throw new UserFeedbackException(String.format(//
@@ -219,17 +224,33 @@ public class ReferenceDataStatusTrimContribution {
 	}
 	
 	private String dataHubStatusToolTipText(final boolean changed) {
-		if (changed && !myRecord.isDismissed) {
-			return String.format("New base case was published by %s %nRight click to dismiss", myRecord.publisher);
+		if (changed && !currentRecords.isDismissed) {
+			return "New reference data is available! \nRight click on the scenario to update. \nDouble click to dismiss.";
 		}
-		return "You have the latest base case \nor you have dismissed the notification";
+		return "You have the latest reference data \nor you have dismissed the notification";
 	}
 	
-	private Image dataHubStatusImage(final boolean changed) {
-		Display display = Display.getDefault();
-		if (changed && !myRecord.isDismissed) {
-			return new Image(display, ReferenceDataStatusTrimContribution.class.getResourceAsStream("/icons/base-flag-green.png"));
+//	private Image dataHubStatusImage(final boolean changed) {
+//		Display display = Display.getDefault();
+//		if (changed && !myRecord.isDismissed) {
+//			return new Image(display, ReferenceDataStatusTrimContribution.class.getResourceAsStream("/icons/base-flag-green.png"));
+//		}
+//		return new Image(display, ReferenceDataStatusTrimContribution.class.getResourceAsStream("/icons/base-flag.png"));
+//	}
+	
+	public static final List<String> getBaseCaseTypesToCheck() {
+		final List<String> types = new LinkedList<>();
+		types.add(LNGScenarioSharedModelTypes.MARKET_CURVES.getID());
+		if (LicenseFeatures.isPermitted("features:hub-sync-distances")) {
+			types.add(LNGScenarioSharedModelTypes.DISTANCES.getID());
+			types.add(LNGScenarioSharedModelTypes.LOCATIONS.getID());
+			types.add(LNGScenarioSharedModelTypes.PORT_GROUPS.getID());
 		}
-		return new Image(display, ReferenceDataStatusTrimContribution.class.getResourceAsStream("/icons/base-flag.png"));
+		if (LicenseFeatures.isPermitted("features:hub-sync-vessels")) {
+			types.add(LNGScenarioSharedModelTypes.BUNKER_FUELS.getID());
+			types.add(LNGScenarioSharedModelTypes.FLEET.getID());
+			types.add(LNGScenarioSharedModelTypes.VESSEL_GROUPS.getID());
+		}
+		return types;
 	}
 }
