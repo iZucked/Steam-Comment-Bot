@@ -19,6 +19,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -124,7 +125,7 @@ public class ReferenceDataStatusTrimContribution {
 		if (service != null && pListener != null) {
 			service.addChangedListener(pListener);
 		}
-		
+		control.redraw();
 		return control;
 	}
 	
@@ -164,7 +165,7 @@ public class ReferenceDataStatusTrimContribution {
 	private void setLabelTextAndToolTip(final Label myLabel, final boolean changed) {
 		if (!myLabel.isDisposed()) {
 			myLabel.setToolTipText(dataHubStatusToolTipText(changed));
-			//myLabel.setImage(dataHubStatusImage(changed));
+			myLabel.setImage(dataHubStatusImage(changed));
 		}
 	}
 	
@@ -230,13 +231,13 @@ public class ReferenceDataStatusTrimContribution {
 		return "You have the latest reference data \nor you have dismissed the notification";
 	}
 	
-//	private Image dataHubStatusImage(final boolean changed) {
-//		Display display = Display.getDefault();
-//		if (changed && !myRecord.isDismissed) {
-//			return new Image(display, ReferenceDataStatusTrimContribution.class.getResourceAsStream("/icons/base-flag-green.png"));
-//		}
-//		return new Image(display, ReferenceDataStatusTrimContribution.class.getResourceAsStream("/icons/base-flag.png"));
-//	}
+	private Image dataHubStatusImage(final boolean changed) {
+		Display display = Display.getDefault();
+		if (changed && !currentRecords.isDismissed) {
+			return new Image(display, ReferenceDataStatusTrimContribution.class.getResourceAsStream("/icons/circle_orange.png"));
+		}
+		return new Image(display, ReferenceDataStatusTrimContribution.class.getResourceAsStream("/icons/circle_green.png"));
+	}
 	
 	public static final List<String> getBaseCaseTypesToCheck() {
 		final List<String> types = new LinkedList<>();

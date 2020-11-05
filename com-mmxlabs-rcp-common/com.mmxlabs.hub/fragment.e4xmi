@@ -4,5 +4,6 @@
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_B5YkUAlhEeubZYeiYJ0UFg" featurename="children" parentElementId="org.eclipse.ui.trim.status" positionInList="">
     <elements xsi:type="menu:ToolControl" xmi:id="_GfvEYAlhEeubZYeiYJ0UFg" elementId="com.mmxlabs.hub.toolcontrol.status" contributionURI="bundleclass://com.mmxlabs.hub/com.mmxlabs.hub.auth.DataHubStatusTrimContribution"/>
     <elements xsi:type="menu:ToolControl" xmi:id="_Xp2f0B0REeulo-dwKm842g" elementId="com.mmxlabs.lngdataserver.integration.ui.scenarios.basecasestatustrimcontribution" contributionURI="bundleclass://com.mmxlabs.lngdataserver.integration.ui.scenarios/com.mmxlabs.lngdataserver.integration.ui.scenarios.internal.BaseCaseStatusTrimContribution"/>
+    <elements xsi:type="menu:ToolControl" xmi:id="_wZpuIB9FEeulo-dwKm842g" elementId="com.mmxlabs.lngdataserver.integration.ui.scenarios.referencedatastatustrimcontribution" contributionURI="bundleclass://com.mmxlabs.lngdataserver.integration.ui.scenarios/com.mmxlabs.lngdataserver.integration.ui.scenarios.internal.ReferenceDataStatusTrimContribution"/>
   </fragments>
 </fragment:ModelFragments>
