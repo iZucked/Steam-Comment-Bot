@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.pde.ui.JunitLaunchConfig">
+    <setAttribute key="additional_plugins">
+        <setEntry value="org.eclipse.jdt.junit5.runtime:1.0.700.v20191009-0503:default:true:default:default"/>
+    </setAttribute>
+    <booleanAttribute key="append.args" value="true"/>
+    <booleanAttribute key="askclear" value="false"/>
+    <booleanAttribute key="automaticAdd" value="false"/>
+    <booleanAttribute key="automaticValidate" value="false"/>
+    <stringAttribute key="bootstrap" value=""/>
+    <stringAttribute key="checked" value="[NONE]"/>
+    <booleanAttribute key="clearConfig" value="true"/>
+    <booleanAttribute key="clearws" value="true"/>
+    <booleanAttribute key="clearwslog" value="false"/>
+    <stringAttribute key="configLocation" value="${workspace_loc}/.metadata/.plugins/org.eclipse.pde.core/pde-junit"/>
+    <booleanAttribute key="default" value="false"/>
+    <stringAttribute key="featureDefaultLocation" value="workspace"/>
+    <stringAttribute key="featurePluginResolution" value="workspace"/>
+    <booleanAttribute key="includeOptional" value="true"/>
+    <stringAttribute key="location" value="${workspace_loc}/../junit-workspace"/>
+    <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+        <listEntry value="/com.mmxlabs.lingo.its"/>
+    </listAttribute>
+    <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+        <listEntry value="4"/>
+    </listAttribute>
+    <listAttribute key="org.eclipse.debug.ui.favoriteGroups">
+        <listEntry value="org.eclipse.debug.ui.launchGroup.debug"/>
+        <listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
+    </listAttribute>
+    <stringAttribute key="org.eclipse.jdt.junit.CONTAINER" value=""/>
+    <stringAttribute key="org.eclipse.jdt.junit.EXCLUDE_TAGS" value=""/>
+    <booleanAttribute key="org.eclipse.jdt.junit.HAS_EXCLUDE_TAGS" value="false"/>
+    <booleanAttribute key="org.eclipse.jdt.junit.HAS_INCLUDE_TAGS" value="false"/>
+    <stringAttribute key="org.eclipse.jdt.junit.INCLUDE_TAGS" value="com.mmxlabs.lingo.its.tests.category.ReportTest"/>
+    <booleanAttribute key="org.eclipse.jdt.junit.KEEPRUNNING_ATTR" value="false"/>
+    <stringAttribute key="org.eclipse.jdt.junit.TEST_KIND" value="org.eclipse.jdt.junit.loader.junit5"/>
+    <stringAttribute key="org.eclipse.jdt.junit.TEST_UNIQUE_ID" value="[engine:junit-jupiter]/[class:com.mmxlabs.lingo.its.datahub.OAuthAuthenticationTests]"/>
+    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="true"/>
+    <stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-11"/>
+    <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.mmxlabs.lingo.its.datahub.OAuthAuthenticationTests"/>
+    <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-os ${target.os} -ws ${target.ws} -arch ${target.arch} -nl ${target.nl} -consoleLog -console"/>
+    <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="com.mmxlabs.lingo.its"/>
+    <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.pde.ui.workbenchClasspathProvider"/>
+    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-ea -Xmx3G -Dlingo.suppress.dialogs=true"/>
+    <stringAttribute key="pde.version" value="3.3"/>
+    <stringAttribute key="product" value="com.mmxlabs.lingo.product.product"/>
+    <booleanAttribute key="run_in_ui_thread" value="false"/>
+    <setAttribute key="selected_features">
+        <setEntry value="com.google.ortools.feature:default"/>
+        <setEntry value="com.mmxlabs.common.util.feature:default"/>
+        <setEntry value="com.mmxlabs.jobmanager.feature:default"/>
+        <setEntry value="com.mmxlabs.lingo.feature:default"/>
+        <setEntry value="com.mmxlabs.lingo.its.feature:default"/>
+        <setEntry value="com.mmxlabs.lingo.platform.feature:default"/>
+        <setEntry value="com.mmxlabs.lingo.reports.feature:default"/>
+        <setEntry value="com.mmxlabs.lngdataserver.feature:default"/>
+        <setEntry value="com.mmxlabs.models.datetime.feature:default"/>
+        <setEntry value="com.mmxlabs.models.lng.feature:default"/>
+        <setEntry value="com.mmxlabs.models.lng.transformer.feature:default"/>
+        <setEntry value="com.mmxlabs.models.lng.transformer.its.feature:default"/>
+        <setEntry value="com.mmxlabs.models.migration.feature:default"/>
+        <setEntry value="com.mmxlabs.models.mmxcore.runtime.feature:default"/>
+        <setEntry value="com.mmxlabs.models.ui.runtime.feature:default"/>
+        <setEntry value="com.mmxlabs.optimiser.feature:default"/>
+        <setEntry value="com.mmxlabs.org.eclipse.nebula.widgets.ganttchart.feature:default"/>
+        <setEntry value="com.mmxlabs.rcp.common.feature:default"/>
+        <setEntry value="com.mmxlabs.scenario.service.feature:default"/>
+        <setEntry value="com.mmxlabs.scheduler.optimiser.feature:default"/>
+    </setAttribute>
+    <setAttribute key="selected_target_bundles">
+        <setEntry value="com.google.guava@default:default"/>
+        <setEntry value="com.google.inject@default:default"/>
+        <setEntry value="com.googlecode.json-simple@default:default"/>
+        <setEntry value="com.ibm.icu@default:default"/>
+        <setEntry value="com.jcraft.jsch@default:default"/>
+        <setEntry value="javax.activation@default:default"/>
+        <setEntry value="javax.annotation@default:default"/>
+        <setEntry value="javax.el@default:default"/>
+        <setEntry value="javax.inject@default:default"/>
+        <setEntry value="javax.servlet.jsp@default:default"/>
+        <setEntry value="javax.servlet@default:default"/>
+        <setEntry value="javax.wsdl@default:default"/>
+        <setEntry value="javax.xml.bind@default:default"/>
+        <setEntry value="javax.xml.soap@default:default"/>
+        <setEntry value="javax.xml.stream@default:default"/>
+        <setEntry value="javax.xml.ws@default:default"/>
+        <setEntry value="javax.xml@default:default"/>
+        <setEntry value="net.bytebuddy.byte-buddy-agent@default:default"/>
+        <setEntry value="net.bytebuddy.byte-buddy@default:default"/>
+        <setEntry value="org.aopalliance@default:default"/>
+        <setEntry value="org.apache.batik.css@default:default"/>
+        <setEntry value="org.apache.batik.util@default:default"/>
+        <setEntry value="org.apache.commons.jxpath@default:default"/>
+        <setEntry value="org.apache.commons.logging*1.1.1.v201101211721@default:default"/>
+        <setEntry value="org.apache.commons.logging*1.2.0.v20180409-1502@default:default"/>
+        <setEntry value="org.apache.commons.math@default:default"/>
+        <setEntry value="org.apache.felix.gogo.command@default:default"/>
+        <setEntry value="org.apache.felix.gogo.runtime@default:default"/>
+        <setEntry value="org.apache.felix.gogo.shell@default:default"/>
+        <setEntry value="org.apache.felix.scr@1:true"/>
+        <setEntry value="org.apache.httpcomponents.httpclient@default:default"/>
+        <setEntry value="org.apache.httpcomponents.httpcore@default:default"/>
+        <setEntry value="org.apache.jasper.glassfish@default:default"/>
+        <setEntry value="org.apache.log4j@default:default"/>
+        <setEntry value="org.apache.lucene.analyzers-common@default:default"/>
+        <setEntry value="org.apache.lucene.analyzers-smartcn@default:default"/>
+        <setEntry value="org.apache.lucene.core@default:default"/>
+        <setEntry value="org.apache.poi@default:default"/>
+        <setEntry value="org.apache.shiro.core@default:default"/>
+        <setEntry value="org.apiguardian@default:default"/>
+        <setEntry value="org.eclipse.compare.core@default:default"/>
+        <setEntry value="org.eclipse.core.commands@default:default"/>
+        <setEntry value="org.eclipse.core.contenttype@default:default"/>
+        <setEntry value="org.eclipse.core.databinding.beans@default:default"/>
+        <setEntry value="org.eclipse.core.databinding.observable@default:default"/>
+        <setEntry value="org.eclipse.core.databinding.property@default:default"/>
+        <setEntry value="org.eclipse.core.databinding@default:default"/>
+        <setEntry value="org.eclipse.core.expressions@default:default"/>
+        <setEntry value="org.eclipse.core.filebuffers@default:default"/>
+        <setEntry value="org.eclipse.core.filesystem.win32.x86_64@default:false"/>
+        <setEntry value="org.eclipse.core.filesystem@default:default"/>
+        <setEntry value="org.eclipse.core.jobs@default:default"/>
+        <setEntry value="org.eclipse.core.net.win32.x86_64@default:false"/>
+        <setEntry value="org.eclipse.core.net@default:default"/>
+        <setEntry value="org.eclipse.core.resources.win32.x86_64@default:false"/>
+        <setEntry value="org.eclipse.core.resources@default:default"/>
+        <setEntry value="org.eclipse.core.runtime@default:true"/>
+        <setEntry value="org.eclipse.core.variables@default:default"/>
+        <setEntry value="org.eclipse.e4.core.commands@default:default"/>
+        <setEntry value="org.eclipse.e4.core.contexts@default:default"/>
+        <setEntry value="org.eclipse.e4.core.di.annotations@default:default"/>
+        <setEntry value="org.eclipse.e4.core.di.extensions.supplier@default:default"/>
+        <setEntry value="org.eclipse.e4.core.di.extensions@default:default"/>
+        <setEntry value="org.eclipse.e4.core.di@default:default"/>
+        <setEntry value="org.eclipse.e4.core.services@default:default"/>
+        <setEntry value="org.eclipse.e4.emf.xpath@default:default"/>
+        <setEntry value="org.eclipse.e4.ui.bindings@default:default"/>
+        <setEntry value="org.eclipse.e4.ui.css.core@default:default"/>
+        <setEntry value="org.eclipse.e4.ui.css.swt.theme@default:default"/>
+        <setEntry value="org.eclipse.e4.ui.css.swt@default:default"/>
+        <setEntry value="org.eclipse.e4.ui.di@default:default"/>
+        <setEntry value="org.eclipse.e4.ui.model.workbench@default:default"/>
+        <setEntry value="org.eclipse.e4.ui.services@default:default"/>
+        <setEntry value="org.eclipse.e4.ui.widgets@default:default"/>
+        <setEntry value="org.eclipse.e4.ui.workbench.addons.swt@default:default"/>
+        <setEntry value="org.eclipse.e4.ui.workbench.renderers.swt@default:default"/>
+        <setEntry value="org.eclipse.e4.ui.workbench.swt@default:default"/>
+        <setEntry value="org.eclipse.e4.ui.workbench3@default:default"/>
+        <setEntry value="org.eclipse.e4.ui.workbench@default:default"/>
+        <setEntry value="org.eclipse.ecf.filetransfer@default:default"/>
+        <setEntry value="org.eclipse.ecf.identity@default:default"/>
+        <setEntry value="org.eclipse.ecf.provider.filetransfer.efs@default:default"/>
+        <setEntry value="org.eclipse.ecf.provider.filetransfer.httpclient4.ssl@default:false"/>
+        <setEntry value="org.eclipse.ecf.provider.filetransfer.httpclient4@default:default"/>
+        <setEntry value="org.eclipse.ecf.provider.filetransfer@default:default"/>
+        <setEntry value="org.eclipse.ecf.ssl@default:false"/>
+        <setEntry value="org.eclipse.ecf@default:default"/>
+        <setEntry value="org.eclipse.emf.common.ui@default:default"/>
+        <setEntry value="org.eclipse.emf.common@default:default"/>
+        <setEntry value="org.eclipse.emf.compare@default:default"/>
+        <setEntry value="org.eclipse.emf.databinding.edit@default:default"/>
+        <setEntry value="org.eclipse.emf.databinding@default:default"/>
+        <setEntry value="org.eclipse.emf.doc@default:default"/>
+        <setEntry value="org.eclipse.emf.ecore.change.edit@default:default"/>
+        <setEntry value="org.eclipse.emf.ecore.change@default:default"/>
+        <setEntry value="org.eclipse.emf.ecore.edit@default:default"/>
+        <setEntry value="org.eclipse.emf.ecore.editor@default:default"/>
+        <setEntry value="org.eclipse.emf.ecore.xmi@default:default"/>
+        <setEntry value="org.eclipse.emf.ecore@default:default"/>
+        <setEntry value="org.eclipse.emf.edit.ui@default:default"/>
+        <setEntry value="org.eclipse.emf.edit@default:default"/>
+        <setEntry value="org.eclipse.emf.example.installer@default:default"/>
+        <setEntry value="org.eclipse.emf.mapping.ecore.editor@default:default"/>
+        <setEntry value="org.eclipse.emf.mapping.ecore2ecore.editor@default:default"/>
+        <setEntry value="org.eclipse.emf.mapping.ecore2ecore@default:default"/>
+        <setEntry value="org.eclipse.emf.mapping.ecore2xml.ui@default:default"/>
+        <setEntry value="org.eclipse.emf.mapping.ecore2xml@default:default"/>
+        <setEntry value="org.eclipse.emf.mapping.ecore@default:default"/>
+        <setEntry value="org.eclipse.emf.mapping.ui@default:default"/>
+        <setEntry value="org.eclipse.emf.mapping@default:default"/>
+        <setEntry value="org.eclipse.emf.query.doc@default:default"/>
+        <setEntry value="org.eclipse.emf.query.examples@default:default"/>
+        <setEntry value="org.eclipse.emf.query@default:default"/>
+        <setEntry value="org.eclipse.emf.validation.doc@default:default"/>
+        <setEntry value="org.eclipse.emf.validation.examples@default:default"/>
+        <setEntry value="org.eclipse.emf.validation.ui.ide@default:default"/>
+        <setEntry value="org.eclipse.emf.validation.ui@default:default"/>
+        <setEntry value="org.eclipse.emf.validation@default:default"/>
+        <setEntry value="org.eclipse.emf@default:default"/>
+        <setEntry value="org.eclipse.equinox.app@default:default"/>
+        <setEntry value="org.eclipse.equinox.bidi@default:default"/>
+        <setEntry value="org.eclipse.equinox.cm@default:default"/>
+        <setEntry value="org.eclipse.equinox.common@2:true"/>
+        <setEntry value="org.eclipse.equinox.concurrent@default:default"/>
+        <setEntry value="org.eclipse.equinox.console@default:default"/>
+        <setEntry value="org.eclipse.equinox.coordinator@default:default"/>
+        <setEntry value="org.eclipse.equinox.device@default:default"/>
+        <setEntry value="org.eclipse.equinox.ds@2:true"/>
+        <setEntry value="org.eclipse.equinox.event@2:true"/>
+        <setEntry value="org.eclipse.equinox.frameworkadmin.equinox@default:default"/>
+        <setEntry value="org.eclipse.equinox.frameworkadmin@default:default"/>
+        <setEntry value="org.eclipse.equinox.http.registry@default:default"/>
+        <setEntry value="org.eclipse.equinox.http.servlet@default:default"/>
+        <setEntry value="org.eclipse.equinox.http.servletbridge@default:default"/>
+        <setEntry value="org.eclipse.equinox.io@default:default"/>
+        <setEntry value="org.eclipse.equinox.ip@default:default"/>
+        <setEntry value="org.eclipse.equinox.jsp.jasper.registry@default:default"/>
+        <setEntry value="org.eclipse.equinox.jsp.jasper@default:default"/>
+        <setEntry value="org.eclipse.equinox.launcher.win32.win32.x86_64@default:false"/>
+        <setEntry value="org.eclipse.equinox.launcher@default:default"/>
+        <setEntry value="org.eclipse.equinox.metatype@default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.artifact.repository@default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.core@default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.engine@default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.garbagecollector@default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.jarprocessor@default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.metadata.repository@default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.metadata@default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.repository@default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.touchpoint.eclipse@default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.touchpoint.natives@default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.transport.ecf@default:default"/>
+        <setEntry value="org.eclipse.equinox.preferences@default:default"/>
+        <setEntry value="org.eclipse.equinox.registry@default:default"/>
+        <setEntry value="org.eclipse.equinox.security.ui@default:default"/>
+        <setEntry value="org.eclipse.equinox.security.win32.x86_64@default:false"/>
+        <setEntry value="org.eclipse.equinox.security@default:default"/>
+        <setEntry value="org.eclipse.equinox.servletbridge@default:default"/>
+        <setEntry value="org.eclipse.equinox.simpleconfigurator.manipulator@default:default"/>
+        <setEntry value="org.eclipse.equinox.simpleconfigurator@1:true"/>
+        <setEntry value="org.eclipse.equinox.supplement@default:default"/>
+        <setEntry value="org.eclipse.equinox.transforms.hook@default:false"/>
+        <setEntry value="org.eclipse.equinox.transforms.xslt@default:default"/>
+        <setEntry value="org.eclipse.equinox.useradmin@default:default"/>
+        <setEntry value="org.eclipse.equinox.util@default:default"/>
+        <setEntry value="org.eclipse.equinox.weaving.caching.j9@default:default"/>
+        <setEntry value="org.eclipse.equinox.weaving.caching@default:default"/>
+        <setEntry value="org.eclipse.equinox.weaving.hook@default:false"/>
+        <setEntry value="org.eclipse.equinox.wireadmin@default:default"/>
+        <setEntry value="org.eclipse.help.base@default:default"/>
+        <setEntry value="org.eclipse.help.ui@default:default"/>
+        <setEntry value="org.eclipse.help.webapp@default:default"/>
+        <setEntry value="org.eclipse.help@default:default"/>
+        <setEntry value="org.eclipse.jface.databinding@default:default"/>
+        <setEntry value="org.eclipse.jface.text@default:default"/>
+        <setEntry value="org.eclipse.jface@default:default"/>
+        <setEntry value="org.eclipse.jsch.core@default:default"/>
+        <setEntry value="org.eclipse.jsch.ui@default:default"/>
+        <setEntry value="org.eclipse.nebula.widgets.formattedtext@default:default"/>
+        <setEntry value="org.eclipse.nebula.widgets.grid@default:default"/>
+        <setEntry value="org.eclipse.osgi.compatibility.state@default:false"/>
+        <setEntry value="org.eclipse.osgi.services@default:default"/>
+        <setEntry value="org.eclipse.osgi.util@default:default"/>
+        <setEntry value="org.eclipse.osgi@-1:true"/>
+        <setEntry value="org.eclipse.platform@default:default"/>
+        <setEntry value="org.eclipse.rcp@default:default"/>
+        <setEntry value="org.eclipse.swt.win32.win32.x86_64@default:false"/>
+        <setEntry value="org.eclipse.swt@default:default"/>
+        <setEntry value="org.eclipse.text@default:default"/>
+        <setEntry value="org.eclipse.ui.console@default:default"/>
+        <setEntry value="org.eclipse.ui.editors@default:default"/>
+        <setEntry value="org.eclipse.ui.forms@default:default"/>
+        <setEntry value="org.eclipse.ui.ide@default:default"/>
+        <setEntry value="org.eclipse.ui.intro@default:default"/>
+        <setEntry value="org.eclipse.ui.navigator@default:default"/>
+        <setEntry value="org.eclipse.ui.views.log@default:default"/>
+        <setEntry value="org.eclipse.ui.views.properties.tabbed@default:default"/>
+        <setEntry value="org.eclipse.ui.views@default:default"/>
+        <setEntry value="org.eclipse.ui.win32@default:false"/>
+        <setEntry value="org.eclipse.ui.workbench.texteditor@default:default"/>
+        <setEntry value="org.eclipse.ui.workbench@default:default"/>
+        <setEntry value="org.eclipse.ui@default:default"/>
+        <setEntry value="org.eclipse.update.configurator@3:true"/>
+        <setEntry value="org.hamcrest.core@default:default"/>
+        <setEntry value="org.hamcrest.integration@default:default"/>
+        <setEntry value="org.hamcrest.library@default:default"/>
+        <setEntry value="org.hamcrest.text@default:default"/>
+        <setEntry value="org.hamcrest@default:default"/>
+        <setEntry value="org.junit.jupiter.api@default:default"/>
+        <setEntry value="org.junit.jupiter.engine@default:default"/>
+        <setEntry value="org.junit.platform.commons@default:default"/>
+        <setEntry value="org.junit.platform.engine@default:default"/>
+        <setEntry value="org.junit@default:default"/>
+        <setEntry value="org.mockito.mockito-core@default:default"/>
+        <setEntry value="org.objectweb.asm@default:default"/>
+        <setEntry value="org.objenesis@default:default"/>
+        <setEntry value="org.opentest4j@default:default"/>
+        <setEntry value="org.ops4j.peaberry.activation@1:true"/>
+        <setEntry value="org.ops4j.peaberry.eclipse@default:default"/>
+        <setEntry value="org.ops4j.peaberry@default:default"/>
+        <setEntry value="org.sat4j.core@default:default"/>
+        <setEntry value="org.sat4j.pb@default:default"/>
+        <setEntry value="org.slf4j.api*1.7.10.v20170428-1633@default:default"/>
+        <setEntry value="org.slf4j.api*1.7.2.v20121108-1250@default:default"/>
+        <setEntry value="org.swtchart@default:default"/>
+        <setEntry value="org.tukaani.xz@default:default"/>
+        <setEntry value="org.w3c.css.sac@default:default"/>
+        <setEntry value="org.w3c.dom.events@default:default"/>
+        <setEntry value="org.w3c.dom.smil@default:default"/>
+        <setEntry value="org.w3c.dom.svg@default:default"/>
+    </setAttribute>
+    <setAttribute key="selected_workspace_bundles">
+        <setEntry value="com.mmxlabs.common.common-util@default:default"/>
+        <setEntry value="com.mmxlabs.ganttviewer@default:default"/>
+        <setEntry value="com.mmxlabs.jobmanager.eclipse@default:default"/>
+        <setEntry value="com.mmxlabs.jobmanager@default:default"/>
+        <setEntry value="com.mmxlabs.license.features@default:default"/>
+        <setEntry value="com.mmxlabs.license.ssl@default:default"/>
+        <setEntry value="com.mmxlabs.lingo.app@default:default"/>
+        <setEntry value="com.mmxlabs.lingo.doc@default:default"/>
+        <setEntry value="com.mmxlabs.lingo.extensions@default:true"/>
+        <setEntry value="com.mmxlabs.lingo.its@default:true"/>
+        <setEntry value="com.mmxlabs.lingo.product@default:default"/>
+        <setEntry value="com.mmxlabs.lingo.reports.scheduleview@default:default"/>
+        <setEntry value="com.mmxlabs.lingo.reports@default:default"/>
+        <setEntry value="com.mmxlabs.lingo.ui@default:default"/>
+        <setEntry value="com.mmxlabs.models.common@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.actuals.edit@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.actuals.editor@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.actuals@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.adp.edit@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.adp.editor@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.adp.validation@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.adp@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.analytics.edit@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.analytics.editor@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.analytics.navigator@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.analytics.validation@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.analytics@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.assignment.validation@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.cargo.edit@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.cargo.editor@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.cargo.validation@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.cargo@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.commercial.edit@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.commercial.editor@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.commercial.validation@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.commercial@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.fleet.edit@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.fleet.editor@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.fleet.validation@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.fleet@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.liveevaluator@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.migration@default:true"/>
+        <setEntry value="com.mmxlabs.models.lng.parameters.edit@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.parameters@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.port.edit@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.port.editor@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.port.validation@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.port@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.pricing.edit@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.pricing.editor@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.pricing.validation@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.pricing@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.scenario.model.edit@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.scenario.model@default:true"/>
+        <setEntry value="com.mmxlabs.models.lng.scenario.ui@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.schedule.edit@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.schedule.editor@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.schedule.validation@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.schedule@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.spotmarkets.edit@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.spotmarkets.editor@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.spotmarkets.validation@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.spotmarkets@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.transformer.extensions@default:true"/>
+        <setEntry value="com.mmxlabs.models.lng.transformer.its@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.transformer.ui@default:true"/>
+        <setEntry value="com.mmxlabs.models.lng.transformer@default:true"/>
+        <setEntry value="com.mmxlabs.models.lng.types.edit@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.types@default:default"/>
+        <setEntry value="com.mmxlabs.models.lng.ui@default:default"/>
+        <setEntry value="com.mmxlabs.models.migration.scenario@default:true"/>
+        <setEntry value="com.mmxlabs.models.migration@default:true"/>
+        <setEntry value="com.mmxlabs.models.mmxcore.edit@default:default"/>
+        <setEntry value="com.mmxlabs.models.mmxcore.validation@default:default"/>
+        <setEntry value="com.mmxlabs.models.mmxcore@default:default"/>
+        <setEntry value="com.mmxlabs.models.ui.properties.edit@default:default"/>
+        <setEntry value="com.mmxlabs.models.ui.properties@default:default"/>
+        <setEntry value="com.mmxlabs.models.ui.tabular@default:default"/>
+        <setEntry value="com.mmxlabs.models.ui.validation.views@default:default"/>
+        <setEntry value="com.mmxlabs.models.ui.validation@default:default"/>
+        <setEntry value="com.mmxlabs.models.ui@default:default"/>
+        <setEntry value="com.mmxlabs.models.util@default:default"/>
+        <setEntry value="com.mmxlabs.optimiser.optimiser-common@default:true"/>
+        <setEntry value="com.mmxlabs.optimiser.optimiser-core@default:true"/>
+        <setEntry value="com.mmxlabs.optimiser.optimiser-ga@default:true"/>
+        <setEntry value="com.mmxlabs.optimiser.optimiser-lso@default:true"/>
+        <setEntry value="com.mmxlabs.org.eclipse.nebula.widgets.ganttchart@default:default"/>
+        <setEntry value="com.mmxlabs.rcp.common@default:default"/>
+        <setEntry value="com.mmxlabs.rcp.logger@default:false"/>
+        <setEntry value="com.mmxlabs.scenario.service.file@default:default"/>
+        <setEntry value="com.mmxlabs.scenario.service.manifest.edit@default:default"/>
+        <setEntry value="com.mmxlabs.scenario.service.manifest@default:default"/>
+        <setEntry value="com.mmxlabs.scenario.service.model.edit@default:default"/>
+        <setEntry value="com.mmxlabs.scenario.service.model@default:default"/>
+        <setEntry value="com.mmxlabs.scenario.service.ui@default:default"/>
+        <setEntry value="com.mmxlabs.scenario.service.util@default:default"/>
+        <setEntry value="com.mmxlabs.scheduler.optimiser@default:true"/>
+    </setAttribute>
+    <booleanAttribute key="show_selected_only" value="false"/>
+    <stringAttribute key="timestamp" value="1554123527423"/>
+    <booleanAttribute key="tracing" value="false"/>
+    <booleanAttribute key="useCustomFeatures" value="true"/>
+    <booleanAttribute key="useDefaultConfig" value="true"/>
+    <booleanAttribute key="useDefaultConfigArea" value="false"/>
+    <booleanAttribute key="useProduct" value="true"/>
+</launchConfiguration>

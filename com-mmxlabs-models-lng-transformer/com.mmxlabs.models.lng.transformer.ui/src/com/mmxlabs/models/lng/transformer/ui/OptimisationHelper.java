@@ -1469,6 +1469,10 @@ public final class OptimisationHelper {
 			if (value instanceof UserSettings) {
 				final UserSettings userSettings = (UserSettings) value;
 
+				if (userSettings.isCleanSlateOptimisation() && userSettings.isShippingOnly()) {
+					return ValidationStatus.error("Shipping only must be disabled if clean slate optimisation is on.");
+				}
+				
 				if (userSettings.getMode() == OptimisationMode.ADP || userSettings.getMode() == OptimisationMode.STRATEGIC) {
 					final String mode = (userSettings.getMode() == OptimisationMode.ADP) ? "ADP" : "strategic";
 					if (userSettings.getPeriodStartDate() != null || userSettings.getPeriodEnd() != null) {

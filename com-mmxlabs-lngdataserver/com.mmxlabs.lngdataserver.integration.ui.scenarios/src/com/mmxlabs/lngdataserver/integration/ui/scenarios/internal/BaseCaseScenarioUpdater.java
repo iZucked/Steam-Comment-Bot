@@ -23,14 +23,18 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.common.util.URI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.io.Files;
+import com.mmxlabs.common.io.FileDeleter;
 import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.IUpstreamDetailChangedListener;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.common.http.IProgressListener;
 import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
 import com.mmxlabs.hub.services.users.UsernameProvider;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.BaseCaseRecord;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.BaseCaseServiceClient;
 import com.mmxlabs.rcp.common.RunnerHelper;
@@ -49,6 +53,8 @@ import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvide
 import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
 
 public class BaseCaseScenarioUpdater {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(BaseCaseScenarioUpdater.class);
 
 	private final BaseCaseServiceClient client;
 	private final BaseCaseVersionsProviderService baseCaseVersionsProviderService;
@@ -83,6 +89,15 @@ public class BaseCaseScenarioUpdater {
 		final Set<String> existingUUIDS = new HashSet<>();
 		recursiveUUIDCollector(modelRoot, existingUUIDS);
 
+		final Set<String> existingFilenames = new HashSet<>();
+		{
+			for (var child : basePath.listFiles()) {
+				if (child.isFile() && child.getName().endsWith(".lingo")) {
+					existingFilenames.add(child.getName());
+				}
+			}
+		}
+
 		if (record != null) {
 			final String uuid = record.uuid;
 			final String name = record.originalName;
@@ -91,6 +106,9 @@ public class BaseCaseScenarioUpdater {
 
 			taskExecutor.execute(new AddScenarioTask(parent, name, record));
 			existingUUIDS.remove(uuid);
+
+			existingFilenames.remove(uuid + ".lingo");
+
 		}
 
 		// Clean up deleted items
@@ -105,9 +123,11 @@ public class BaseCaseScenarioUpdater {
 				SSDataManager.Instance.releaseModelRecord(scenarioInstance);
 				mapping.remove(uuid);
 
-				// TODO: Move .lingo file into delete queue
 			}
 		}
+
+		// TODO: Move .lingo file into delete queue;
+		existingFilenames.forEach(uuid -> taskExecutor.execute(new DeleteScenarioTask(uuid)));
 	}
 
 	private void recursiveUUIDCollector(final Container parent, final Collection<String> uuids) {
@@ -166,6 +186,27 @@ public class BaseCaseScenarioUpdater {
 						baseCaseVersionsProviderService.setBaseCase(instance);
 					}
 				});
+			}
+		}
+	}
+
+	private class DeleteScenarioTask implements Runnable {
+		private final String uuid;
+
+		public DeleteScenarioTask(final String uuid) {
+			this.uuid = uuid;
+		}
+
+		@Override
+		public void run() {
+			final File f = new File(String.format("%s%s%s", basePath, File.separator, uuid));
+			if (f.exists()) {
+				final boolean secureDelete = LicenseFeatures.isPermitted(FileDeleter.LICENSE_FEATURE__SECURE_DELETE);
+				try {
+					FileDeleter.delete(f, secureDelete);
+				} catch (Exception e) {
+					LOGGER.error("Error deleting old base case file", e);
+				}
 			}
 		}
 	}
@@ -326,14 +367,14 @@ public class BaseCaseScenarioUpdater {
 	}
 
 	public void refresh() throws IOException {
-		final boolean available =  DataHubServiceProvider.getInstance().isOnlineAndLoggedIn();
+		final boolean available = DataHubServiceProvider.getInstance().isOnlineAndLoggedIn();
 		if (!modelRoot.isOffline() != available) {
 			RunnerHelper.syncExecDisplayOptional(() -> modelRoot.setOffline(!available));
 		}
 
 		if (available) {
 			client.updateLockedState();
-			
+
 			boolean isLocked = client.isServiceLocked();
 			String lockedBy = client.getLockedBy();
 			if (modelRoot.isLocked() != isLocked || !Objects.equals(lockedBy, modelRoot.getLockedBy())) {
