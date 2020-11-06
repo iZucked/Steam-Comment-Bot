@@ -29,7 +29,8 @@ public class NonShippedSlotConstraint extends AbstractModelMultiConstraint {
 		final EObject target = ctx.getTarget();
 		if (target instanceof LoadSlot) {
 			final LoadSlot loadSlot = (LoadSlot) target;
-			if (loadSlot.isDESPurchase() && loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DEST_WITH_SOURCE) {
+			if (loadSlot.isDESPurchase() && (loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DEST_WITH_SOURCE
+					|| loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERTIBLE)) {
 				String type = "DES Purchase";
 				String name = loadSlot.getName();
 				if (loadSlot.getSlotOrDelegateContractRestrictions().isEmpty() && loadSlot.getSlotOrDelegatePortRestrictions().isEmpty()) {
