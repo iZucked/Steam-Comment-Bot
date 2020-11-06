@@ -68,15 +68,15 @@ public class LNGScenarioChainBuilder {
 
 		final ChainBuilder builder = new ChainBuilder(dataTransformer);
 		if (createOptimiser) {
-			if (optimisationPlan.getUserSettings().getMode() == OptimisationMode.ADP && !optimisationPlan.getUserSettings().isCleanSlateOptimisation()) {
-				LNGCheckForViolatedConstraintsUnit.chain(builder, optimisationPlan.getUserSettings(), 1);
-			}
-			
 			// Disable no nominals in prompt rules for ADP scenarios.
 			if (optimisationPlan.getUserSettings().getMode() != OptimisationMode.ADP && hints.contains(LNGTransformerHelper.HINT_NO_NOMINALS_IN_PROMPT)) {
 				LNGNoNominalInPromptTransformerUnit.chain(builder, optimisationPlan.getUserSettings(), 1);
 			}
 
+			if (optimisationPlan.getUserSettings().getMode() == OptimisationMode.ADP && !optimisationPlan.getUserSettings().isCleanSlateOptimisation()) {
+				LNGCheckForViolatedConstraintsUnit.chain(builder, optimisationPlan.getUserSettings(), 1);
+			}
+			
 			BiConsumer<LNGScenarioToOptimiserBridge, String> exportCallback = (bridge, name) -> SolutionSetExporterUnit.exportMultipleSolutions(builder, 1, bridge, () -> {
 				final OptimisationResult options = AnalyticsFactory.eINSTANCE.createOptimisationResult();
 				options.setName(name);
