@@ -27,7 +27,7 @@ public class CheckForViolatedConstraints {
 		List<IConstraintChecker> failedConstraints = new ArrayList<>();
 		// Apply hard constraint checkers
 		for (final IConstraintChecker checker : constraintCheckers) {
-			if (!checker.checkConstraints(rawSequences, null) && checker instanceof MinMaxSlotGroupConstraintChecker) {
+			if (checker instanceof MinMaxSlotGroupConstraintChecker && !checker.checkConstraints(rawSequences, null)) {
 				failedConstraints.add(checker);				
 			}
 		}
