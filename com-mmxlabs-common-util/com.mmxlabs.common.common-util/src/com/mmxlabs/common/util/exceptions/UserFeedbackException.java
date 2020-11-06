@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.common.util.exceptions;
 
+import java.util.List;
+
 import org.eclipse.jdt.annotation.NonNull;
 
 /**
@@ -15,8 +17,19 @@ import org.eclipse.jdt.annotation.NonNull;
  */
 public class UserFeedbackException extends RuntimeException {
 	private static final long serialVersionUID = 8927498775203781300L;
-
+	private List<Object> additionalInfo = null;
+	
 	public UserFeedbackException(@NonNull String message) {
 		super(message);
+		this.additionalInfo = null;
+	}
+	
+	public UserFeedbackException(@NonNull String message, List<Object> additionalInfo) {
+		super(message);
+		this.additionalInfo = additionalInfo;
+	}
+	
+	public List<Object> getAdditionalInfo() {
+		return additionalInfo;
 	}
 }

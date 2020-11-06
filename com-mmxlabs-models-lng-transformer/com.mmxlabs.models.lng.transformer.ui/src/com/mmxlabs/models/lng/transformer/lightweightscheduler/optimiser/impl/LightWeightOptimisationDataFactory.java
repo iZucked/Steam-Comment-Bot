@@ -377,84 +377,7 @@ public class LightWeightOptimisationDataFactory {
 			
 			errorMessage.append("Some contract constraints cannot be satisfied:\r\n\r\n");
 			
-			Map<Contract, Set<String>> contractsToConstraintErrMsgs = new HashMap<>();
-			
-			for (ConstraintInfo<ContractProfile, ProfileConstraint,?> violated : violatedConstraints) {
-				ContractProfile contract = violated.getContractProfile();
-				ProfileConstraint constraint = violated.getProfileConstraint();
-				
-				Set<String> contractConstraints = contractsToConstraintErrMsgs.get(contract.getContract());
-				if (contractConstraints == null) {
-					contractConstraints = new HashSet<String>();
-					contractsToConstraintErrMsgs.put(contract.getContract(), contractConstraints);
-				}
-		
-				StringBuilder constraintDetails = new StringBuilder();
-				
-				if (constraint instanceof PeriodDistributionProfileConstraint) {
-					PeriodDistributionProfileConstraint pdc = (PeriodDistributionProfileConstraint)constraint;
-					for (PeriodDistribution pd : pdc.getDistributions()) {
-						if (violated.getMonths() == null) {
-							if (pd.getMinCargoes() == violated.getBound() || pd.getMaxCargoes() == violated.getBound()) {
-								constraintDetails.append(ADPModelUtil.getPeriodDistributionRangeString(pd));
-								if (pd.isSetMinCargoes()) {
-									constraintDetails.append(" Min:").append(pd.getMinCargoes());
-								}
-								if (pd.isSetMaxCargoes()) {
-									constraintDetails.append(" Max:").append(pd.getMaxCargoes());
-								}
-								if (violated.getViolationType() == ViolationType.Min) {
-									constraintDetails.append(" (Min violated, slots used = ").append(violated.getViolatedAmount()).append(")");
-								}
-								else if (violated.getViolationType() == ViolationType.Max) {
-									constraintDetails.append(" (Max violated, slots used = ").append(violated.getViolatedAmount()).append(")");
-								}
-								constraintDetails.append("\r\n");
-							}
-							contractConstraints.add(constraintDetails.toString());
-						}
-					}								
-				}
-
-				if (violated.getMonths() != null) {
-					Row row = (Row)violated.getMonths();
-					List<YearMonth> yearMonths = row.getYearMonths();
-					
-					String monthsStr = getMonthsString(row, yearMonths);
-				
-					LNGScenarioModel sm = this.getScenarioModel(contract);
-
-					String minMaxStr = "";
-					int utilized = violated.getViolatedAmount();
-					int bound = 0;
-					if (violated.getViolationType() == ViolationType.Min) {
-						minMaxStr = "minimum";
-						bound = row.getMin();
-					}
-					else if (violated.getViolationType() == ViolationType.Max) {
-						minMaxStr = "maximum";
-						bound = row.getMax();
-					}
-					String constraintStr = this.getViolationMsg(monthsStr, minMaxStr, bound, utilized);
-					constraintDetails.append(constraintStr).append("\r\n");
-					for (var o : violated.getSlots()) {					
-						IPortSlot slot = (IPortSlot)o;
-						Slot emfSlot = getEMFSlot(sm,slot);
-						getSlotDetails(constraintDetails, emfSlot);
-					}
-					constraintDetails.append("\r\n");										
-					contractConstraints.add(constraintDetails.toString());
-				}
-			}
-			
-			for (Contract contract : contractsToConstraintErrMsgs.keySet()) {
-				String sideContract = (contract instanceof PurchaseContract ? "(Buy)" : "(Sell)");	
-				Set<String> contractConstraints = contractsToConstraintErrMsgs.get(contract);
-				for (String constraintName : contractConstraints) {
-					errorMessage.append(contract.getName()).append(" ").append(sideContract).append(":\r\n");
-					errorMessage.append(constraintName);
-				}
-			}
+			addViolatedConstraintDetails(violatedConstraints, errorMessage);
 			
 			throw new InfeasibleSolutionException(errorMessage.toString());
 		}
@@ -462,11 +385,93 @@ public class LightWeightOptimisationDataFactory {
 		return pairingsMatrix;
 	}
 
-	protected void getSlotDetails(StringBuilder constraintDetails, Slot emfSlot) {
+	public static <C,P> void addViolatedConstraintDetails(final List violatedConstraints, StringBuilder errorMessage) {
+		Map<Contract, Set<String>> contractsToConstraintErrMsgs = new HashMap<>();
+		
+		for (Object obj : violatedConstraints) {
+			ConstraintInfo<?, ?,?> violated = (ConstraintInfo<?,?,?>)obj;
+			ContractProfile contract = (ContractProfile)violated.getContractProfile();
+			ProfileConstraint constraint = (ProfileConstraint)violated.getProfileConstraint();
+			
+			Set<String> contractConstraints = contractsToConstraintErrMsgs.get(contract.getContract());
+			if (contractConstraints == null) {
+				contractConstraints = new HashSet<String>();
+				contractsToConstraintErrMsgs.put(contract.getContract(), contractConstraints);
+			}
+
+			StringBuilder constraintDetails = new StringBuilder();
+			
+			if (constraint instanceof PeriodDistributionProfileConstraint) {
+				PeriodDistributionProfileConstraint pdc = (PeriodDistributionProfileConstraint)constraint;
+				for (PeriodDistribution pd : pdc.getDistributions()) {
+					if (violated.getMonths() == null) {
+						if (pd.getMinCargoes() == violated.getBound() || pd.getMaxCargoes() == violated.getBound()) {
+							constraintDetails.append(ADPModelUtil.getPeriodDistributionRangeString(pd));
+							if (pd.isSetMinCargoes()) {
+								constraintDetails.append(" Min:").append(pd.getMinCargoes());
+							}
+							if (pd.isSetMaxCargoes()) {
+								constraintDetails.append(" Max:").append(pd.getMaxCargoes());
+							}
+							if (violated.getViolationType() == ViolationType.Min) {
+								constraintDetails.append(" (Min violated, slots used = ").append(violated.getViolatedAmount()).append(")");
+							}
+							else if (violated.getViolationType() == ViolationType.Max) {
+								constraintDetails.append(" (Max violated, slots used = ").append(violated.getViolatedAmount()).append(")");
+							}
+							constraintDetails.append("\r\n");
+						}
+						contractConstraints.add(constraintDetails.toString());
+					}
+				}								
+			}
+
+			if (violated.getMonths() != null) {
+				Row row = (Row)violated.getMonths();
+				List<YearMonth> yearMonths = row.getYearMonths();
+				
+				String monthsStr = getMonthsString(row, yearMonths);
+			
+				LNGScenarioModel sm = getScenarioModel(contract);
+
+				String minMaxStr = "";
+				int utilized = violated.getViolatedAmount();
+				int bound = 0;
+				if (violated.getViolationType() == ViolationType.Min) {
+					minMaxStr = "minimum";
+					bound = row.getMin();
+				}
+				else if (violated.getViolationType() == ViolationType.Max) {
+					minMaxStr = "maximum";
+					bound = row.getMax();
+				}
+				String constraintStr = getViolationMsg(monthsStr, minMaxStr, bound, utilized);
+				constraintDetails.append(constraintStr).append("\r\n");
+				for (var o : violated.getSlots()) {					
+					IPortSlot slot = (IPortSlot)o;
+					Slot emfSlot = getEMFSlot(sm,slot);
+					getSlotDetails(constraintDetails, emfSlot);
+				}
+				constraintDetails.append("\r\n");										
+				contractConstraints.add(constraintDetails.toString());
+			}
+		}
+		
+		for (Contract contract : contractsToConstraintErrMsgs.keySet()) {
+			String sideContract = (contract instanceof PurchaseContract ? "(Buy)" : "(Sell)");	
+			Set<String> contractConstraints = contractsToConstraintErrMsgs.get(contract);
+			for (String constraintName : contractConstraints) {
+				errorMessage.append(contract.getName()).append(" ").append(sideContract).append(":\r\n");
+				errorMessage.append(constraintName);
+			}
+		}
+	}
+
+	protected static void getSlotDetails(StringBuilder constraintDetails, Slot emfSlot) {
 		constraintDetails.append(" "+emfSlot.getName()+" \t"+getSlotStartDateString(emfSlot)+getTimeWindowString(emfSlot)+"\r\n");
 	}
 
-	protected String getTimeWindowString(Slot emfSlot) {
+	protected static String getTimeWindowString(Slot emfSlot) {
 		String timeWindowString = "";
 		if (emfSlot.getSchedulingTimeWindow().getSize() > 0) {
 			timeWindowString += " +"+emfSlot.getSchedulingTimeWindow().getSize();
@@ -485,11 +490,11 @@ public class LightWeightOptimisationDataFactory {
 		return timeWindowString;
 	}
 	
-	protected @NonNull String getSlotStartDateString(Slot emfSlot) {
+	protected static @NonNull String getSlotStartDateString(Slot emfSlot) {
 		return emfSlot.getSchedulingTimeWindow().getStart().toLocalDate().toString().replace("-", "/");
 	}
 
-	protected String getMonthsString(Row row, List<YearMonth> yearMonths) {
+	protected static String getMonthsString(Row row, List<YearMonth> yearMonths) {
 		StringBuilder constraintDetails = new StringBuilder();
 		if (yearMonths.size() > 0) {
 			constraintDetails.append("[");
@@ -520,7 +525,7 @@ public class LightWeightOptimisationDataFactory {
 		return constraintDetails.toString();
 	}
 
-	private String getViolationMsg(String monthsStr, String minMaxStr, int bound, int utilizable) {
+	private static String getViolationMsg(String monthsStr, String minMaxStr, int bound, int utilizable) {
 		//During [Jan-Mar], a min of 3 is required but 0 of the following are used
 		//"none" instead of zero and also "minimum of X slots is ..." instead of "min of X is..."
 		String utilizableStr = "none";
@@ -530,14 +535,14 @@ public class LightWeightOptimisationDataFactory {
 		return "During "+monthsStr+", a "+minMaxStr+" of "+bound+" slots is required but "+utilizableStr+" of the following are used";
 	}
 	
-	protected String getYearMonthString(YearMonth ym) {
+	protected static String getYearMonthString(YearMonth ym) {
 		String yearMonthStr = String.format("%s '%02d", //
 				ym.getMonth().getDisplayName(TextStyle.SHORT, Locale.getDefault()), //
 				ym.getYear() % 100);
 		return yearMonthStr;
 	}
 
-	private boolean isContigous(Row row) {
+	private static boolean isContigous(Row row) {
 		int maxGap = 1;
 		int lastMonth = row.getMonths().get(0);
 		for (int month : row.getMonths()) {
@@ -549,7 +554,7 @@ public class LightWeightOptimisationDataFactory {
 		return maxGap == 1;
 	}
 
-	private LNGScenarioModel getScenarioModel(ContractProfile cp) {
+	private static LNGScenarioModel getScenarioModel(ContractProfile cp) {
 		EObject root = cp;
 		while (root.eContainer() != null) {
 			if (root.eContainer() instanceof LNGScenarioModel) {
@@ -560,7 +565,7 @@ public class LightWeightOptimisationDataFactory {
 		return null;
 	}
 	
-	private Slot<?> getEMFSlot(LNGScenarioModel sm, IPortSlot slot) {
+	private static Slot<?> getEMFSlot(LNGScenarioModel sm, IPortSlot slot) {
 		String id = slot.getId();
 		id = id.substring(3);
 		EList<LoadSlot> ls = sm.getCargoModel().getLoadSlots();

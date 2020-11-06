@@ -32,6 +32,7 @@ import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGEvaluationTransformerUnit;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGNoNominalInPromptTransformerUnit;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
+import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.impl.LNGCheckForViolatedConstraintsUnit;
 import com.mmxlabs.models.lng.transformer.ui.common.SolutionSetExporterUnit;
 
 public class LNGScenarioChainBuilder {
@@ -67,6 +68,10 @@ public class LNGScenarioChainBuilder {
 
 		final ChainBuilder builder = new ChainBuilder(dataTransformer);
 		if (createOptimiser) {
+			if (optimisationPlan.getUserSettings().getMode() == OptimisationMode.ADP && !optimisationPlan.getUserSettings().isCleanSlateOptimisation()) {
+				LNGCheckForViolatedConstraintsUnit.chain(builder, optimisationPlan.getUserSettings(), 1);
+			}
+			
 			// Disable no nominals in prompt rules for ADP scenarios.
 			if (optimisationPlan.getUserSettings().getMode() != OptimisationMode.ADP && hints.contains(LNGTransformerHelper.HINT_NO_NOMINALS_IN_PROMPT)) {
 				LNGNoNominalInPromptTransformerUnit.chain(builder, optimisationPlan.getUserSettings(), 1);
