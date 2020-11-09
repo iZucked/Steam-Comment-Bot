@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Port Validation Tests
 Fragment-Host: com.mmxlabs.models.lng.port.validation
 Bundle-SymbolicName: com.mmxlabs.models.lng.port.validation.tests
-Bundle-Version: 4.10.27.qualifier
+Bundle-Version: 4.10.27.RELEASE
 Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.models.lng.fleet;bundle-version="[4.10.27,5.0.0)",
