@@ -32,9 +32,8 @@ public class CheckForViolatedConstraints {
 			}
 		}
 		
-		if (failedConstraints.size() > 0) {
+		if (!failedConstraints.isEmpty()) {
 			List<Object> failedConstraintInfos = getConstraintInfo(rawSequences, failedConstraints);
-
 			String errorMessage = "Some ADP constraints cannot be satisfied without manual pairing or an ADP clean slate optimisation:\r\n\r\n";
 			throw new UserFeedbackException(errorMessage, failedConstraintInfos);
 		}
@@ -46,10 +45,8 @@ public class CheckForViolatedConstraints {
 		for (IConstraintChecker fc : failedConstraints) {
 			if (fc instanceof IConstraintInfoGetter) {
 				IConstraintInfoGetter fcig = (IConstraintInfoGetter)fc;
-				List<Object> fcis = fcig.getFailedConstraintInfos(rawSequences, null);
-				for (Object fci : fcis) {
-					cis.add((ConstraintInfo<?, ?, ?>) fci);
-				}
+				@NonNull List<Object> fcis = fcig.getFailedConstraintInfos(rawSequences, null);
+				cis.addAll(fcis);
 			}
 		}
 		return cis;

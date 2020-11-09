@@ -10,5 +10,5 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 
 public interface IConstraintInfoGetter {
-	public List<Object> getFailedConstraintInfos(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources);
+	public @NonNull List<Object> getFailedConstraintInfos(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources);
 }

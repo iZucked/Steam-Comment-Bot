@@ -18,6 +18,8 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.mmxlabs.common.util.exceptions.UserFeedbackException;
+import com.mmxlabs.models.lng.adp.ContractProfile;
+import com.mmxlabs.models.lng.adp.ProfileConstraint;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.transformer.chain.ChainBuilder;
 import com.mmxlabs.models.lng.transformer.chain.IChainLink;
@@ -91,13 +93,9 @@ public class LNGCheckForViolatedConstraintsUnit implements ILNGStateTransformerU
 				new LNGParameters_EvaluationSettingsModule(dataTransformer.getUserSettings(), dataTransformer.getSolutionBuilderSettings().getConstraintAndFitnessSettings()), services,
 				IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
-
 		injector = dataTransformer.getInjector().createChildInjector(modules);
-		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
-			scope.enter();
-			violatedConstraintChecker = injector.getInstance(CheckForViolatedConstraints.class);
-			inputState = new MultiStateResult(inputSequences, new HashMap<>());
-		}
+		violatedConstraintChecker = injector.getInstance(CheckForViolatedConstraints.class);
+		inputState = new MultiStateResult(inputSequences, new HashMap<>());
 	}
 
 	@NonNull
@@ -140,9 +138,13 @@ public class LNGCheckForViolatedConstraintsUnit implements ILNGStateTransformerU
 	private String getErrorMessageDetails(List<Object> cis) {
 		StringBuilder errorMessage = new StringBuilder();
 		
-		List<ConstraintInfo<?,?,?>> failedConstraintInfos = new ArrayList<>();
+		List<ConstraintInfo<ContractProfile, ProfileConstraint,?>> failedConstraintInfos = new ArrayList<>();
 		for (var ci : cis) {
-			failedConstraintInfos.add((ConstraintInfo<?,?,?>)ci);
+			if (ci instanceof ConstraintInfo<?,?,?> 
+			&& ((ConstraintInfo) ci).getContractProfile() instanceof ContractProfile 
+			&& ((ConstraintInfo) ci).getProfileConstraint() instanceof ProfileConstraint) {
+				failedConstraintInfos.add((ConstraintInfo<ContractProfile, ProfileConstraint,?>)ci);
+			}
 		}
 		
 		LightWeightOptimisationDataFactory.addViolatedConstraintDetails(failedConstraintInfos, errorMessage);

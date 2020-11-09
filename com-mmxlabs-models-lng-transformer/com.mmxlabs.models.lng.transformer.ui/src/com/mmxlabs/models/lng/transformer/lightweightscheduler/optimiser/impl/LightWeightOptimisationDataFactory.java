@@ -375,7 +375,7 @@ public class LightWeightOptimisationDataFactory {
 
 			StringBuilder errorMessage = new StringBuilder();
 			
-			errorMessage.append("Some contract constraints cannot be satisfied:\r\n\r\n");
+			errorMessage.append("Some contract constraints cannot be satisfied:\n\n");
 			
 			addViolatedConstraintDetails(violatedConstraints, errorMessage);
 			
@@ -385,75 +385,77 @@ public class LightWeightOptimisationDataFactory {
 		return pairingsMatrix;
 	}
 
-	public static <C,P> void addViolatedConstraintDetails(final List violatedConstraints, StringBuilder errorMessage) {
+	public static void addViolatedConstraintDetails(final List<ConstraintInfo<ContractProfile, ProfileConstraint,?>> violatedConstraints, StringBuilder errorMessage) {
 		Map<Contract, Set<String>> contractsToConstraintErrMsgs = new HashMap<>();
 		
-		for (Object obj : violatedConstraints) {
-			ConstraintInfo<?, ?,?> violated = (ConstraintInfo<?,?,?>)obj;
-			ContractProfile contract = (ContractProfile)violated.getContractProfile();
-			ProfileConstraint constraint = (ProfileConstraint)violated.getProfileConstraint();
-			
-			Set<String> contractConstraints = contractsToConstraintErrMsgs.get(contract.getContract());
-			if (contractConstraints == null) {
-				contractConstraints = new HashSet<String>();
-				contractsToConstraintErrMsgs.put(contract.getContract(), contractConstraints);
-			}
+		if (violatedConstraints == null) {
+			return;
+		}
+		
+		for (ConstraintInfo<ContractProfile, ProfileConstraint,?> obj : violatedConstraints) {
+			if (obj instanceof ConstraintInfo<?,?,?>) {
+				ConstraintInfo<ContractProfile,ProfileConstraint,?> violated = obj;//(ConstraintInfo<?,?,?>)obj;
+				ContractProfile contract = (ContractProfile)violated.getContractProfile();
+				ProfileConstraint constraint = (ProfileConstraint)violated.getProfileConstraint();
 
-			StringBuilder constraintDetails = new StringBuilder();
-			
-			if (constraint instanceof PeriodDistributionProfileConstraint) {
-				PeriodDistributionProfileConstraint pdc = (PeriodDistributionProfileConstraint)constraint;
-				for (PeriodDistribution pd : pdc.getDistributions()) {
-					if (violated.getMonths() == null) {
-						if (pd.getMinCargoes() == violated.getBound() || pd.getMaxCargoes() == violated.getBound()) {
-							constraintDetails.append(ADPModelUtil.getPeriodDistributionRangeString(pd));
-							if (pd.isSetMinCargoes()) {
-								constraintDetails.append(" Min:").append(pd.getMinCargoes());
+				Set<String> contractConstraints = contractsToConstraintErrMsgs.computeIfAbsent(contract.getContract(), key -> new HashSet<String>());
+
+				StringBuilder constraintDetails = new StringBuilder();
+
+				if (constraint instanceof PeriodDistributionProfileConstraint) {
+					PeriodDistributionProfileConstraint pdc = (PeriodDistributionProfileConstraint)constraint;
+					for (PeriodDistribution pd : pdc.getDistributions()) {
+						if (violated.getMonths() == null) {
+							if (pd.getMinCargoes() == violated.getBound() || pd.getMaxCargoes() == violated.getBound()) {
+								constraintDetails.append(ADPModelUtil.getPeriodDistributionRangeString(pd));
+								if (pd.isSetMinCargoes()) {
+									constraintDetails.append(" Min:").append(pd.getMinCargoes());
+								}
+								if (pd.isSetMaxCargoes()) {
+									constraintDetails.append(" Max:").append(pd.getMaxCargoes());
+								}
+								if (violated.getViolationType() == ViolationType.Min) {
+									constraintDetails.append(" (Min violated, slots used = ").append(violated.getViolatedAmount()).append(")");
+								}
+								else if (violated.getViolationType() == ViolationType.Max) {
+									constraintDetails.append(" (Max violated, slots used = ").append(violated.getViolatedAmount()).append(")");
+								}
+								constraintDetails.append("\n");
 							}
-							if (pd.isSetMaxCargoes()) {
-								constraintDetails.append(" Max:").append(pd.getMaxCargoes());
-							}
-							if (violated.getViolationType() == ViolationType.Min) {
-								constraintDetails.append(" (Min violated, slots used = ").append(violated.getViolatedAmount()).append(")");
-							}
-							else if (violated.getViolationType() == ViolationType.Max) {
-								constraintDetails.append(" (Max violated, slots used = ").append(violated.getViolatedAmount()).append(")");
-							}
-							constraintDetails.append("\r\n");
+							contractConstraints.add(constraintDetails.toString());
 						}
-						contractConstraints.add(constraintDetails.toString());
+					}								
+				}
+
+				if (violated.getMonths() != null) {
+					Row row = (Row)violated.getMonths();
+					List<YearMonth> yearMonths = row.getYearMonths();
+
+					String monthsStr = getMonthsString(row, yearMonths);
+
+					LNGScenarioModel sm = getScenarioModel(contract);
+
+					String minMaxStr = "";
+					int utilized = violated.getViolatedAmount();
+					int bound = 0;
+					if (violated.getViolationType() == ViolationType.Min) {
+						minMaxStr = "minimum";
+						bound = row.getMin();
 					}
-				}								
-			}
-
-			if (violated.getMonths() != null) {
-				Row row = (Row)violated.getMonths();
-				List<YearMonth> yearMonths = row.getYearMonths();
-				
-				String monthsStr = getMonthsString(row, yearMonths);
-			
-				LNGScenarioModel sm = getScenarioModel(contract);
-
-				String minMaxStr = "";
-				int utilized = violated.getViolatedAmount();
-				int bound = 0;
-				if (violated.getViolationType() == ViolationType.Min) {
-					minMaxStr = "minimum";
-					bound = row.getMin();
+					else if (violated.getViolationType() == ViolationType.Max) {
+						minMaxStr = "maximum";
+						bound = row.getMax();
+					}
+					String constraintStr = getViolationMsg(monthsStr, minMaxStr, bound, utilized);
+					constraintDetails.append(constraintStr).append("\n");
+					for (var o : violated.getSlots()) {					
+						IPortSlot slot = (IPortSlot)o;
+						Slot emfSlot = getEMFSlot(sm,slot);
+						getSlotDetails(constraintDetails, emfSlot);
+					}
+					constraintDetails.append("\n");										
+					contractConstraints.add(constraintDetails.toString());
 				}
-				else if (violated.getViolationType() == ViolationType.Max) {
-					minMaxStr = "maximum";
-					bound = row.getMax();
-				}
-				String constraintStr = getViolationMsg(monthsStr, minMaxStr, bound, utilized);
-				constraintDetails.append(constraintStr).append("\r\n");
-				for (var o : violated.getSlots()) {					
-					IPortSlot slot = (IPortSlot)o;
-					Slot emfSlot = getEMFSlot(sm,slot);
-					getSlotDetails(constraintDetails, emfSlot);
-				}
-				constraintDetails.append("\r\n");										
-				contractConstraints.add(constraintDetails.toString());
 			}
 		}
 		
@@ -461,14 +463,14 @@ public class LightWeightOptimisationDataFactory {
 			String sideContract = (contract instanceof PurchaseContract ? "(Buy)" : "(Sell)");	
 			Set<String> contractConstraints = contractsToConstraintErrMsgs.get(contract);
 			for (String constraintName : contractConstraints) {
-				errorMessage.append(contract.getName()).append(" ").append(sideContract).append(":\r\n");
+				errorMessage.append(contract.getName()).append(" ").append(sideContract).append(":\n");
 				errorMessage.append(constraintName);
 			}
 		}
 	}
 
 	protected static void getSlotDetails(StringBuilder constraintDetails, Slot emfSlot) {
-		constraintDetails.append(" "+emfSlot.getName()+" \t"+getSlotStartDateString(emfSlot)+getTimeWindowString(emfSlot)+"\r\n");
+		constraintDetails.append(" "+emfSlot.getName()+" \t"+getSlotStartDateString(emfSlot)+getTimeWindowString(emfSlot)+"\n");
 	}
 
 	protected static String getTimeWindowString(Slot emfSlot) {
