@@ -115,6 +115,7 @@ public class ExposuresExporterExtension implements IExporterExtension {
 			newDetail.setIndexName(record.getIndexName());
 			newDetail.setDate(YearMonth.from(record.getTime()));
 			newDetail.setUnitPrice(unitPrice);
+			newDetail.setCurrencyUnit(record.getCurrencyUnit());
 
 			slotAllocation.getExposures().add(newDetail);
 		}

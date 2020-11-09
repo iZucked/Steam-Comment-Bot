@@ -167,6 +167,7 @@ public class ExposuresCalculator {
 		physical.setVolumeUnit("mmBtu");
 		physical.setIndexName("Physical");
 		physical.setTime(arrivalTime);
+		physical.setCurrencyUnit("$");
 
 		return physical;
 	}
