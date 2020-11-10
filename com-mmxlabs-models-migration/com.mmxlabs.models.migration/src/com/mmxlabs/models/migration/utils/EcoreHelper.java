@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
@@ -58,8 +59,15 @@ public class EcoreHelper {
 			// TODO: There may well be a better way to do this. (I hope so...)
 
 			// Use an XML parser to parse document
-			final SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
+			SAXParserFactory factory = SAXParserFactory.newInstance();
+			// This setting will protect you against Denial of Service attack and remote file access.
+			factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+			// By disabling DTD, almost all XXE attacks will be prevented.
+			factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
 
+			
+			final SAXParser parser = factory.newSAXParser();
+			
 			// Use handler to intercept the parsing an extract the NS URI attribute from document root.
 			final DefaultHandler handler = new DefaultHandler() {
 
