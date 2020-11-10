@@ -21,6 +21,7 @@ import com.mmxlabs.common.util.exceptions.UserFeedbackException;
 import com.mmxlabs.models.lng.adp.ContractProfile;
 import com.mmxlabs.models.lng.adp.ProfileConstraint;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.chain.ChainBuilder;
 import com.mmxlabs.models.lng.transformer.chain.IChainLink;
 import com.mmxlabs.models.lng.transformer.chain.ILNGStateTransformerUnit;
@@ -147,7 +148,8 @@ public class LNGCheckForViolatedConstraintsUnit implements ILNGStateTransformerU
 			}
 		}
 		
-		LightWeightOptimisationDataFactory.addViolatedConstraintDetails(failedConstraintInfos, errorMessage);
+		ModelEntityMap mem = this.injector.getInstance(ModelEntityMap.class);
+		LightWeightOptimisationDataFactory.addViolatedConstraintDetails(mem, failedConstraintInfos, errorMessage);
 		
 		return errorMessage.toString();
 	}

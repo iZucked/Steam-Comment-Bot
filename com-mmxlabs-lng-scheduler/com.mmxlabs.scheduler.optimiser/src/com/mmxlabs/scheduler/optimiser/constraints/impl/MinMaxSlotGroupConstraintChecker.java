@@ -99,7 +99,7 @@ public class MinMaxSlotGroupConstraintChecker implements IPairwiseConstraintChec
 		return new HashSet<>(sequences.getUnusedElements());
 	}
 
-	public @NonNull List<Object> getFailedConstraintInfos(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources) {
+	public @NonNull List<@NonNull Object> getFailedConstraintInfos(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources) {
 		List<Object> failedConstraintInfos = new ArrayList<>();
 		final Set<ISequenceElement> unusedSet = getUnusedSet(sequences);
 		final List<ConstraintInfo<?, ?, IDischargeOption>> allMinDischargeGroupCounts = maxSlotCountConstraintProvider.getAllMinDischargeGroupCounts();
