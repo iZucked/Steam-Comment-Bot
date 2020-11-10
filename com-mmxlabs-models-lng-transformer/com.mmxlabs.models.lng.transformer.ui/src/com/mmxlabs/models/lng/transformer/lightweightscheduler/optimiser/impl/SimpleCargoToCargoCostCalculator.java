@@ -22,13 +22,11 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.impl.PricingEventHelper;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
-import com.mmxlabs.scheduler.optimiser.providers.IVesselCharterInRateProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
@@ -40,7 +38,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.util.SchedulerCalculationUtils;
 public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalculator {
 
 	@Inject
-	IDistanceProvider distanceProvider;
+	private IDistanceProvider distanceProvider;
 
 	@Inject
 	private IVesselBaseFuelCalculator vesselBaseFuelCalculator;
@@ -57,19 +55,12 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 	@Inject
 	private IVesselProvider vesselProvider;
 
-	@Inject
-	IVesselCharterInRateProvider vesselCharterInRateProvider;
-
-	@Inject
-	PricingEventHelper pricingEventHelper;
-
 	private long calculateNonCharterVariableCosts(final ILoadSlot loadA, final IDischargeSlot dischargeA, final IPortSlot vesselEventA, final IPortSlot startSlotB, final IVesselAvailability vessel) {
 		assert ((loadA != null && dischargeA != null) || vesselEventA != null);
 		final int startA = loadA != null ? loadA.getTimeWindow().getInclusiveStart() : vesselEventA.getTimeWindow().getInclusiveStart();
 		final int endA = dischargeA != null ? dischargeA.getTimeWindow().getInclusiveStart()
 				: vesselEventA.getTimeWindow().getInclusiveStart() //
 						+ elementDurationProvider.getElementDuration(portSlotProvider.getElement(vesselEventA), vesselProvider.getResource(vessel));
-		final int startB = startSlotB.getTimeWindow().getInclusiveStart();
 
 		// if discharge is null use the vessel event (as it must be a vessel event)
 		final IPort endAPort = getEndPort(dischargeA, vesselEventA);
@@ -88,6 +79,7 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 
 		ApproximateFuelCosts legFuelCosts = null;
 		if (loadA != null) {
+			assert dischargeA != null;
 			final ApproximateFuelCostLegData inputData = new ApproximateFuelCostLegData();
 			inputData.salesPrice = dischargeA.getDischargePriceCalculator().getEstimatedSalesPrice(loadA, dischargeA, endA);
 			inputData.boiloffRateM3 = vessel.getVessel().getNBORate(VesselState.Ballast);
@@ -127,6 +119,9 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 				ApproximateVoyageCalculatorHelper.getLegFuelCosts(inputData);
 			}
 		}
+
+		assert legFuelCosts != null;
+
 		return legFuelCosts.getTotalCost() + routeCostProvider.getRouteCost(quickestTravelTimeAToB.getFirst(), vessel.getVessel(), endA, CostType.RoundTripBallast);
 	}
 
@@ -170,11 +165,9 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 						if (cargoA == cargoB) {
 							costs[cargoMap.get(cargoA)][cargoMap.get(cargoB)][vesselMap.get(vessel)] = 0L;
 						} else {
-							long cost = -Long.MIN_VALUE;
-
-							cost = calculateNonCharterVariableCosts(loadA, dischargeA, vesselEventA, endSlot, vessel);
+							long cost = calculateNonCharterVariableCosts(loadA, dischargeA, vesselEventA, endSlot, vessel);
 							// Sanity check, should it be an exception ?
-							assert (cost != -Long.MIN_VALUE);
+							assert (cost != Long.MAX_VALUE);
 
 							costs[cargoMap.get(cargoA)][cargoMap.get(cargoB)][vesselMap.get(vessel)] = cost;
 						}
@@ -186,8 +179,7 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 	}
 
 	/**
-	 * Note: includes duration. Between two consecutive cargoes. Including the
-	 * contingency.
+	 * Note: includes duration. Between two consecutive cargoes. Including the contingency.
 	 * 
 	 * @param cargoes
 	 * @param vessels
@@ -202,7 +194,7 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 			final IPortSlot vesselEventA = getVesselEvent(cargoA);
 			if (dischargeA != null || vesselEventA != null) {
 				// if discharge is null use the vessel event (as it must be a vessel event)
-				// final IPort endAPort = getEndPort(dischargeA, vesselEventA);
+
 				final IPortSlot endAPortSlot = getEndPortSlot(dischargeA, vesselEventA);
 				for (final List<IPortSlot> cargoB : cargoes) {
 					if (cargoA == cargoB) {
@@ -211,13 +203,13 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 					for (final IVesselAvailability vessel : vessels) {
 						final int endADuration = dischargeA != null ? elementDurationProvider.getElementDuration(portSlotProvider.getElement(dischargeA), vesselProvider.getResource(vessel)) : 0;
 						IPortSlot startB = cargoB.get(0);
-						
+
 						if (startB instanceof IVesselEventPortSlot) {
 							final IVesselEventPortSlot iVesselEventPortSlot = (IVesselEventPortSlot) startB;
-							
+
 							startB = iVesselEventPortSlot.getEventPortSlots().get(0);
 						}
-						
+
 						@NonNull
 						final Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTimeAToB = distanceProvider.getQuickestTravelTimeWithContingency(vessel.getVessel(), endAPortSlot, startB,
 								vessel.getVessel().getMaxSpeed(), AvailableRouteChoices.OPTIMAL);
@@ -231,8 +223,7 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 	}
 
 	/**
-	 * Note: includes duration. Between load and discharge slots within the cargo.
-	 * Including the contingency.
+	 * Note: includes duration. Between load and discharge slots within the cargo. Including the contingency.
 	 * 
 	 * @param cargoes
 	 * @param vessels
@@ -252,10 +243,9 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 					final int duration = elementDurationProvider.getElementDuration(portSlotProvider.getElement(vesselEventA), vesselProvider.getResource(vessel));
 					times[cargoMap.get(cargoA)][vesselMap.get(vessel)] = duration;
 				} else {
-
-					@NonNull
-					final
-					Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTimeAToB = distanceProvider.getQuickestTravelTimeWithContingency(vessel.getVessel(), loadA, dischargeA,
+					assert loadA != null;
+					assert dischargeA != null;
+					final @NonNull Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTimeAToB = distanceProvider.getQuickestTravelTimeWithContingency(vessel.getVessel(), loadA, dischargeA,
 							vessel.getVessel().getMaxSpeed(), AvailableRouteChoices.OPTIMAL);
 
 					times[cargoMap.get(cargoA)][vesselMap.get(vessel)] = quickestTravelTimeAToB.getSecond()

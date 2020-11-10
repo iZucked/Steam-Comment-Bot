@@ -38,17 +38,17 @@ import com.google.inject.Injector;
 import com.mmxlabs.common.Pair;
 
 public class WorkbenchStateManager {
+
 	@Inject
 	private Iterable<ViewPartRewriteExtension> extensions;
 
 	private File getWorkbenchStateFile() {
 		for (final Bundle bundle : Platform.getBundles("org.eclipse.ui.workbench", null)) {
 			IPath path = Platform.getStateLocation(bundle);
-			if (path == null) {
-				return null;
+			if (path != null) {
+				path = path.append("workbench.xml");
+				return path.toFile();
 			}
-			path = path.append("workbench.xml");
-			return path.toFile();
 		}
 		return null;
 	}
@@ -108,11 +108,11 @@ public class WorkbenchStateManager {
 				if (changed) {
 					// write the content back over original state
 					final TransformerFactory transformerFactory = TransformerFactory.newInstance();
-					
+
 					transformerFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
 					transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
 					transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
-					
+
 					final Transformer transformer = transformerFactory.newTransformer();
 					final DOMSource source = new DOMSource(document);
 					final StreamResult result = new StreamResult(stateFile);
