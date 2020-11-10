@@ -5,13 +5,16 @@
 package com.mmxlabs.scheduler.optimiser.providers;
 
 import java.util.Set;
+
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 
 public class ConstraintInfo<P, C, T extends IPortSlot> {
 	P contractProfile;
 	C profileConstraint;
 	Object months;
-	Set<T> slots;
+	Set<@NonNull T> slots;
 	int bound;
 	public enum ViolationType {
 		Min, Max
@@ -45,7 +48,7 @@ public class ConstraintInfo<P, C, T extends IPortSlot> {
 		return violatedAmount;
 	}
 	
-	public Set<T> getSlots() {
+	public Set<@NonNull T> getSlots() {
 		return slots;
 	}
 	
