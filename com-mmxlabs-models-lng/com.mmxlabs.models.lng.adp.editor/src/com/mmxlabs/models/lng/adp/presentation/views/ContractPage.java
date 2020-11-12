@@ -4,10 +4,18 @@
  */
 package com.mmxlabs.models.lng.adp.presentation.views;
 
+import java.time.LocalDate;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.Optional;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -54,18 +62,24 @@ import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
 import com.mmxlabs.models.lng.adp.utils.ADPModelUtil;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.Inventory;
+import com.mmxlabs.models.lng.cargo.InventoryCapacityRow;
+import com.mmxlabs.models.lng.cargo.InventoryEventRow;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.VolumeAttributeManipulator;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.types.TimePeriod;
@@ -99,6 +113,8 @@ public class ContractPage extends ADPComposite {
 	private ScenarioTableViewer previewViewer;
 
 	private IActionBars actionBars;
+	
+	private Button generateFromInventoryButton;
 
 	public ContractPage(final Composite parent, final int style, final ADPEditorData editorData, IActionBars actionBars) {
 		super(parent, style);
@@ -178,6 +194,157 @@ public class ContractPage extends ADPComposite {
 						}
 						updateDetailPaneInput(input);
 
+					}
+				});
+			}
+			
+			{
+				generateFromInventoryButton = new Button(toolbarComposite, SWT.PUSH);
+				generateFromInventoryButton.setText("Generate slots from inventory");
+				generateFromInventoryButton.setEnabled(true);
+				generateFromInventoryButton.addSelectionListener(new SelectionAdapter() {
+
+					@Override
+					public void widgetSelected(final SelectionEvent e) {
+						final LNGScenarioModel scenarioModel = editorData.getScenarioModel();
+						final List<Inventory> inventoryModels = scenarioModel.getCargoModel().getInventoryModels();
+						final LocalDate startDate = editorData.adpModel.getYearStart().atDay(1);
+						final List<LoadSlot> newLoadSlots = new LinkedList<>();
+						final CompoundCommand cmd = new CompoundCommand("Generate inventory based ADP slots");
+						for (final Inventory currentInventory : inventoryModels) {
+							final Optional<PurchaseContract> pcFetch = ScenarioModelUtil.getCommercialModel(scenarioModel).getPurchaseContracts().stream() //
+									.filter(c -> currentInventory.getPort().equals(c.getPreferredPort())) //
+									.findFirst();
+							assert pcFetch.isPresent();
+							final PurchaseContract chosenPurchaseContract = pcFetch.get();
+						
+							final TreeMap<LocalDate, InventoryDailyEvent> insAndOuts = getInventoryInsAndOuts(currentInventory, scenarioModel);
+						
+							int totalInventoryVolume = 0;
+							// int globalLoadTrigger = 158000;
+							int cargoVolume = 160000;
+							BaseLegalEntity[] entities = null;
+							if (currentInventory.getName().equals("Gorgon")) {
+								BaseLegalEntity caplTapl = null;
+								BaseLegalEntity exxon = null;
+								BaseLegalEntity shell = null;
+								BaseLegalEntity ogg = null;
+								BaseLegalEntity tgg = null;
+								BaseLegalEntity jera = null;
+								for (BaseLegalEntity entity : scenarioModel.getReferenceModel().getCommercialModel().getEntities()) {
+									String entityName = entity.getName();
+									if (entityName.equals("CAPL/TAPL")) {
+										caplTapl = entity;
+									} else if (entityName.equals("Exxon")) {
+										exxon = entity;
+									} else if (entityName.equals("Shell")) {
+										shell = entity;
+									} else if (entityName.equals("OGG")) {
+										ogg = entity;
+									} else if (entityName.equals("TGG")) {
+										tgg = entity;
+									} else if (entityName.equals("JERA")) {
+										jera = entity;
+									}
+								}
+								entities = new BaseLegalEntity[]{caplTapl, exxon, shell, ogg, tgg, jera};
+							} else if (currentInventory.getName().equals("Wheatstone")) {
+								BaseLegalEntity caplTapl = null;
+								BaseLegalEntity woodside = null;
+								BaseLegalEntity pew = null;
+								BaseLegalEntity kuf = null;
+								BaseLegalEntity qew = null;
+								for (BaseLegalEntity entity : scenarioModel.getReferenceModel().getCommercialModel().getEntities()) {
+									String entityName = entity.getName();
+									if (entityName.equals("CAPL/TAPL")) {
+										caplTapl = entity;
+									} else if (entityName.equals("Woodside")) {
+										woodside = entity;
+									} else if (entityName.equals("PEW")) {
+										pew = entity;
+									} else if (entityName.equals("KUF")) {
+										kuf = entity;
+									} else if (entityName.equals("QEW")) {
+										qew = entity;
+									}
+								}
+								entities = new BaseLegalEntity[]{caplTapl, woodside, pew, kuf, qew};
+							}
+							assert entities != null;
+							for (BaseLegalEntity entity : entities) {
+								assert entity != null;
+							}
+						
+							while (insAndOuts.firstKey().isBefore(startDate)) {
+								final InventoryDailyEvent event = insAndOuts.remove(insAndOuts.firstKey());
+								totalInventoryVolume += event.netVolumeIn;
+							}
+							insAndOuts.firstEntry().getValue().addVolume(totalInventoryVolume);
+							Port inventoryPort = currentInventory.getPort();
+							Set<LocalDate> flaggedDates = new HashSet<>();
+							scenarioModel.getCargoModel().getLoadSlots().stream() //
+									.forEach(s -> {
+										if (s.getPort().equals(inventoryPort)) {
+											flaggedDates.add(s.getWindowStart());
+										}
+									});
+						
+							//final List<LocalDate> loadDates = new LinkedList<>();
+							
+							int runningVolume = 0;
+							
+							int idx = 0;
+							for (final Entry<LocalDate, InventoryDailyEvent> entry : insAndOuts.entrySet()) {
+								final InventoryDailyEvent dailyEvent = entry.getValue();
+								runningVolume += dailyEvent.netVolumeIn;
+								int tempRunningVolume = runningVolume - cargoVolume;
+								if (tempRunningVolume > dailyEvent.minVolume && !flaggedDates.contains(entry.getKey())) {
+									final String nextName = currentInventory.getName()+"-"+Integer.toString(idx);
+									runningVolume = tempRunningVolume;
+									// loadDates.add(entry.getKey());
+									final LoadSlot slot = CargoFactory.eINSTANCE.createLoadSlot();
+									slot.setPort(currentInventory.getPort());
+									newLoadSlots.add(slot);
+									slot.setWindowStart(entry.getKey());
+									slot.setVolumeLimitsUnit(VolumeUnits.M3);
+									slot.setMinQuantity(cargoVolume);
+									slot.setMaxQuantity(cargoVolume);
+									slot.setName(nextName);
+									slot.setWindowSize(3);
+									slot.setWindowSizeUnits(TimePeriod.DAYS);
+									slot.setContract(chosenPurchaseContract);
+									slot.setEntity(entities[idx%entities.length]);
+									++idx;
+								}	
+							}
+							
+						}
+						if (!newLoadSlots.isEmpty()) {
+							cmd.append(AddCommand.create(editorData.getEditingDomain(), ScenarioModelUtil.getCargoModel(scenarioModel), CargoPackage.Literals.CARGO_MODEL__LOAD_SLOTS, newLoadSlots));
+							editorData.getDefaultCommandHandler().handleCommand(cmd, null, null);
+						//	int i = 0;
+						//updateDetailPaneInput(object);
+						}
+						
+						
+//						CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
+//						final CompoundCommand cmd = new CompoundCommand("Generate inventory based ADP slots");
+//						final Bundle bundle = FrameworkUtil.getBundle(ADPModelUtil.class);
+//						final BundleContext bundleContext = bundle.getBundleContext();
+//						Collection<ServiceReference<IProfileGenerator>> serviceReferences;
+//						try {
+//							serviceReferences = bundleContext.getServiceReferences(IProfileGenerator.class, null);
+//							final List<IProfileGenerator> generators = new LinkedList<>();
+//							
+//							for (final ServiceReference<IProfileGenerator> ref : serviceReferences) {
+//								generators.add(bundleContext.getService(ref));
+//							}
+//						} catch (final UserFeedbackException ex) {
+//							MessageDialog.openError(null, "Error", ex.getMessage());
+////							Logger.error(ex.getMessage(), ex);
+//						} catch (final InvalidSyntaxException ee) {
+////							Logger.error("Invalid syntax: ", ee);
+//						}
 					}
 				});
 			}
@@ -599,5 +766,64 @@ public class ContractPage extends ADPComposite {
 
 	public void setSelectedProfile(ContractProfile<?, ?> p) {
 		objectSelector.setSelection(new StructuredSelection(p.getContract()));
+	}
+	
+	// Returns a tree map where each key value pair represents the date of some activity and the sum total of gas moved
+	private TreeMap<LocalDate, InventoryDailyEvent> getInventoryInsAndOuts(Inventory inventory, LNGScenarioModel scenarioModel) {
+		List<InventoryCapacityRow> capacities = inventory.getCapacities();
+		
+		TreeMap<LocalDate, InventoryCapacityRow> capcityTreeMap = 
+				capacities.stream()
+				.collect(Collectors.toMap(InventoryCapacityRow::getDate,
+							c -> c,
+							(oldValue, newValue) -> newValue,
+							TreeMap::new));
+		
+		TreeMap<LocalDate, InventoryDailyEvent> insAndOuts = new TreeMap<>();
+		
+		// add all feeds to map
+		List<InventoryEventRow> feeds = inventory.getFeeds();
+		int feedSize = feeds.size();
+		addNetVolumes(inventory.getFeeds(), capcityTreeMap, insAndOuts, Function.identity());
+		List<InventoryEventRow> offtakes = inventory.getOfftakes();
+		int i = offtakes.size();
+		addNetVolumes(inventory.getOfftakes(), capcityTreeMap, insAndOuts, a -> -a);
+		Port inventoryPort = inventory.getPort();
+		scenarioModel.getCargoModel().getLoadSlots().forEach(s -> {
+			if (inventoryPort.equals(s.getPort())) {
+				InventoryDailyEvent inventoryDailyEvent = insAndOuts.get(s.getWindowStart());
+				if (inventoryDailyEvent == null) {
+					inventoryDailyEvent = new InventoryDailyEvent();
+					inventoryDailyEvent.date = s.getWindowStart();
+					InventoryCapacityRow capacityRow = capcityTreeMap.get(s.getWindowStart()) == null //
+							? capcityTreeMap.lowerEntry(s.getWindowStart()).getValue() //
+							: capcityTreeMap.get(s.getWindowStart());
+					inventoryDailyEvent.minVolume = capacityRow.getMinVolume();
+					inventoryDailyEvent.maxVolume = capacityRow.getMaxVolume();
+					insAndOuts.put(s.getWindowStart(), inventoryDailyEvent);
+				}
+				inventoryDailyEvent.addVolume(-s.getMaxQuantity());
+			}
+		});
+		return insAndOuts;
+	}
+	
+	private void addNetVolumes(List<InventoryEventRow> events, TreeMap<LocalDate, InventoryCapacityRow> capcityTreeMap, TreeMap<LocalDate, InventoryDailyEvent> insAndOuts, Function<Integer, Integer> volumeFunction) {
+		for (InventoryEventRow inventoryEventRow : events) {
+			if (inventoryEventRow.getStartDate() != null) {
+				InventoryDailyEvent inventoryDailyEvent = insAndOuts.get(inventoryEventRow.getStartDate());
+				if (inventoryDailyEvent == null) {
+					inventoryDailyEvent = new InventoryDailyEvent();
+					inventoryDailyEvent.date = inventoryEventRow.getStartDate();
+					InventoryCapacityRow capacityRow = capcityTreeMap.get(inventoryDailyEvent.date) == null //
+							? capcityTreeMap.lowerEntry(inventoryDailyEvent.date).getValue() //
+							: capcityTreeMap.get(inventoryDailyEvent.date);
+					inventoryDailyEvent.minVolume = capacityRow.getMinVolume();
+					inventoryDailyEvent.maxVolume = capacityRow.getMaxVolume();
+					insAndOuts.put(inventoryEventRow.getStartDate(), inventoryDailyEvent);
+				}
+				inventoryDailyEvent.addVolume(volumeFunction.apply(inventoryEventRow.getReliableVolume()));
+			}
+		}
 	}
 }
