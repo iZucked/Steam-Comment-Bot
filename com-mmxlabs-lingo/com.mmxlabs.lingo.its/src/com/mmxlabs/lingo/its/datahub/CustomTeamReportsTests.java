@@ -101,7 +101,6 @@ public class CustomTeamReportsTests {
 		deleteAllReports();
 		basicAuthenticationManager.logout(upstreamUrl, (Shell) null);
 		bot.resetWorkbench();
-		bot.button("Cancel").click();
 		bot = null;
 	}
 
