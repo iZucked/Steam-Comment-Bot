@@ -4,9 +4,11 @@
  */
 package com.mmxlabs.models.lng.adp.presentation.views;
 
+import java.time.Period;
 import java.time.YearMonth;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -160,7 +162,12 @@ public class SummaryPage extends ADPComposite {
 								}
 							});
 					Long solverBound = calculateConstrainedProfileBound(variableBounds, constraints);
-					maxCargoes = solverBound != null ? solverBound : calculateNaiveSummaryBound(variableBounds, constraints);
+					if (solverBound != null) {
+						maxCargoes = solverBound;
+					} else {
+						final ADPPeriod adpPeriod = new ADPPeriod(editorData.getAdpModel());
+						maxCargoes = calculateNaiveSummaryBound(variableBounds, constraints, adpPeriod);
+					}
 				}
 				acc.accumulate(maxCargoes);
 				return maxCargoes.toString();
@@ -222,7 +229,12 @@ public class SummaryPage extends ADPComposite {
 								}
 							});
 					final Long solverBound = calculateConstrainedProfileBound(variableBounds, constraints);
-					maxCargoes = solverBound != null ? solverBound : calculateNaiveSummaryBound(variableBounds, constraints);
+					if (solverBound != null) {
+						maxCargoes = solverBound;
+					} else {
+						final ADPPeriod adpPeriod = new ADPPeriod(editorData.getAdpModel());
+						maxCargoes = calculateNaiveSummaryBound(variableBounds, constraints, adpPeriod);
+					}
 				}
 				acc.accumulate(maxCargoes);
 				return maxCargoes.toString();
@@ -258,7 +270,7 @@ public class SummaryPage extends ADPComposite {
 
 	}
 	
-	private long calculateNaiveSummaryBound(final Map<YearMonth, Long> variableBounds, final List<ProfileConstraint> constraints) {
+	private long calculateNaiveSummaryBound(final Map<YearMonth, Long> variableBounds, final List<ProfileConstraint> constraints, final ADPPeriod adpPeriod) {
 		final int numVars = variableBounds.size();
 		Long fullCoverBound = Long.MAX_VALUE;
 		for (final ProfileConstraint constraint : constraints) {
@@ -271,10 +283,11 @@ public class SummaryPage extends ADPComposite {
 						final long upperbound = distribution.getMaxCargoes();
 						if (rangeSize == 1) {
 							final YearMonth ym = range.get(0);
-							if (variableBounds.get(ym) > upperbound) {
+							Long variableBound = variableBounds.get(ym);
+							if (variableBound != null && variableBound > upperbound) {
 								variableBounds.put(ym, upperbound);
 							}
-						} else if (rangeSize == numVars && upperbound < fullCoverBound) {
+						} else if (adpPeriod.equalsRange(range) && upperbound < fullCoverBound) {
 							fullCoverBound = upperbound;
 						}
 					}
@@ -428,13 +441,19 @@ public class SummaryPage extends ADPComposite {
 							if (range.size() == 1) {
 								final YearMonth ym = range.get(0);
 								final long upperbound = profileConstraint.getMaxCargoes();
-								if (variableBounds.get(ym) > upperbound) {
+								Long variableBound = variableBounds.get(ym);
+								if (variableBound != null && variableBounds.get(ym) > upperbound) {
 									variableBounds.put(ym, upperbound);
 									dateToMPVarMap.get(ym).setUb(upperbound);
 								}
 							} else {
 								final MPConstraint mpConstraint = solver.makeConstraint(0, profileConstraint.getMaxCargoes());
-								range.forEach(ym -> mpConstraint.setCoefficient(dateToMPVarMap.get(ym), 1));
+								range.forEach(ym -> {
+									MPVariable mpVar = dateToMPVarMap.get(ym);
+									if (mpVar != null) {
+										mpConstraint.setCoefficient(mpVar, 1);
+									}
+								});
 							}
 						});
 			} else if (constraint instanceof MaxCargoConstraint) {
@@ -455,7 +474,7 @@ public class SummaryPage extends ADPComposite {
 			}
 		}
 	}
-	
+
 	private static Object createSolver() {
 		try {
 			return new MPSolver("ADPSummaryPageSolver", MPSolver.OptimizationProblemType.valueOf("CBC_MIXED_INTEGER_PROGRAMMING"));
@@ -463,5 +482,39 @@ public class SummaryPage extends ADPComposite {
 			// or tools error, skip
 		}
 		return null;
+	}
+
+	private class ADPPeriod {
+		private final YearMonth adpStart;
+		private final YearMonth adpInclusiveEnd;
+		private final int monthCount;
+
+		public ADPPeriod(final ADPModel adpModel) {
+			this.adpStart = adpModel.getYearStart();
+			final YearMonth adpEnd = adpModel.getYearEnd();
+			Period p = Period.between(this.adpStart.atDay(1), adpEnd.atDay(1));
+			this.monthCount = 12*p.getYears() + p.getMonths();
+			this.adpInclusiveEnd = adpEnd.minusMonths(1);
+		}
+
+		public boolean equalsRange(final List<YearMonth> range) {
+			if (this.monthCount == range.size()) {
+				Iterator<YearMonth> rangeIter = range.iterator();
+				if (rangeIter.hasNext()) {
+					YearMonth earliestMonth = rangeIter.next();
+					YearMonth latestMonth = earliestMonth;
+					while (rangeIter.hasNext()) {
+						final YearMonth nextMonth = rangeIter.next();
+						if (nextMonth.isBefore(earliestMonth)) {
+							earliestMonth = nextMonth;
+						} else if (nextMonth.isAfter(latestMonth)) {
+							latestMonth = nextMonth;
+						}
+					}
+					return this.adpStart.equals(earliestMonth) && this.adpInclusiveEnd.equals(latestMonth);
+				}
+			}
+			return false;
+		}
 	}
 }
