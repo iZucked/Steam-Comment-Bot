@@ -213,7 +213,7 @@ public class CargoVolumeConstraint extends AbstractModelMultiConstraint {
 						final Vessel vessel = loadSlot.getNominatedVessel();
 						if (vessel != null) {
 							// get the capacity directly
-							return vessel.getVesselOrDelegateCapacity();
+							return (int) (vessel.getVesselOrDelegateCapacity() * vessel.getFillCapacity());
 						}
 					}
 				}
@@ -222,18 +222,21 @@ public class CargoVolumeConstraint extends AbstractModelMultiConstraint {
 		}
 
 		int capacity = -1;
+		double fillCapacity = 0.985;
 		if (vesselAssignmentType instanceof VesselAvailability) {
 			final VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
 
 			final Vessel vessel = vesselAvailability.getVessel();
 			if (vessel != null) {
 				capacity = vessel.getVesselOrDelegateCapacity();
+				fillCapacity = vessel.getFillCapacity();
 			}
 		} else if (vesselAssignmentType instanceof CharterInMarket) {
 			final CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
 			final Vessel vessel = charterInMarket.getVessel();
 			if (vessel != null) {
 				capacity = vessel.getVesselOrDelegateCapacity();
+				fillCapacity = vessel.getFillCapacity();
 			}
 		} else if (vesselAssignmentType instanceof CharterInMarketOverride) {
 			final CharterInMarketOverride charterInMarketOverride = (CharterInMarketOverride) vesselAssignmentType;
@@ -241,12 +244,13 @@ public class CargoVolumeConstraint extends AbstractModelMultiConstraint {
 			final Vessel vessel = charterInMarket.getVessel();
 			if (vessel != null) {
 				capacity = vessel.getVesselOrDelegateCapacity();
+				fillCapacity = vessel.getFillCapacity();
 			}
 		} else {
 			// Can't do much here, no capacity...
 			return -1;
 		}
-		return capacity;
+		return (int) (capacity * fillCapacity);
 	}
 
 	private void checkMinAndMaxVolumesAgainstVesselCapacity(DetailConstraintStatusFactory factoryBase, final IValidationContext ctx, final List<IStatus> failures, final Cargo cargo, LoadSlot loadSlot,
@@ -259,7 +263,7 @@ public class CargoVolumeConstraint extends AbstractModelMultiConstraint {
 
 				final DetailConstraintStatusFactory factory = factoryBase//
 						.copyName() //
-						.withMessage("minimum load volume is greater than the capacity of current vessel assignment") //
+						.withMessage("Minimum load volume is greater than the capacity of current vessel assignment") //
 						.withSeverity(IStatus.WARNING);
 
 				for (final Slot<?> slot : cargo.getSlots()) {
@@ -273,7 +277,7 @@ public class CargoVolumeConstraint extends AbstractModelMultiConstraint {
 
 				final DetailConstraintStatusFactory factory = factoryBase//
 						.copyName() //
-						.withMessage("minimum discharge volume is greater than the capacity of current vessel assignment") //
+						.withMessage("Minimum discharge volume is greater than the capacity of current vessel assignment") //
 						.withSeverity(IStatus.WARNING);
 
 				for (final Slot<?> slot : cargo.getSlots()) {
