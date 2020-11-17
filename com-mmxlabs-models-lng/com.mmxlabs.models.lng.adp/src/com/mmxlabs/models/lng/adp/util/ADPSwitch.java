@@ -300,6 +300,30 @@ public class ADPSwitch<@Nullable T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case ADPPackage.INVENTORY_PROFILE: {
+				InventoryProfile inventoryProfile = (InventoryProfile)theEObject;
+				T1 result = caseInventoryProfile(inventoryProfile);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ADPPackage.RELATIVE_ENTITLEMENT_ELEMENT: {
+				RelativeEntitlementElement relativeEntitlementElement = (RelativeEntitlementElement)theEObject;
+				T1 result = caseRelativeEntitlementElement(relativeEntitlementElement);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ADPPackage.ALLOCATION_ELEMENT: {
+				AllocationElement allocationElement = (AllocationElement)theEObject;
+				T1 result = caseAllocationElement(allocationElement);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ADPPackage.INVENTORY_ADP_ENTITY_ROW: {
+				InventoryADPEntityRow inventoryADPEntityRow = (InventoryADPEntityRow)theEObject;
+				T1 result = caseInventoryADPEntityRow(inventoryADPEntityRow);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -766,6 +790,66 @@ public class ADPSwitch<@Nullable T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseTargetCargoesOnVesselConstraint(TargetCargoesOnVesselConstraint object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Inventory Profile</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Inventory Profile</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseInventoryProfile(InventoryProfile object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Relative Entitlement Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Relative Entitlement Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseRelativeEntitlementElement(RelativeEntitlementElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Allocation Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Allocation Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseAllocationElement(AllocationElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Inventory ADP Entity Row</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Inventory ADP Entity Row</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseInventoryADPEntityRow(InventoryADPEntityRow object) {
 		return null;
 	}
 

@@ -30,6 +30,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//ADPModel/purchaseContractProfiles"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//ADPModel/salesContractProfiles"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//ADPModel/fleetProfile"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adp.ecore#//ADPModel/inventoryProfiles"/>
     </genClasses>
     <genClasses ecoreClass="adp.ecore#//FleetProfile">
       <genFeatures property="None" children="true" createChild="true" propertyDescription="Fleet constraints"
@@ -169,6 +170,27 @@
           ecoreFeature="ecore:EAttribute adp.ecore#//TargetCargoesOnVesselConstraint/targetNumberOfCargoes"/>
       <genFeatures createChild="false" propertyDescription="Interval type" ecoreFeature="ecore:EAttribute adp.ecore#//TargetCargoesOnVesselConstraint/intervalType"/>
       <genFeatures createChild="false" propertyDescription="Weight" ecoreFeature="ecore:EAttribute adp.ecore#//TargetCargoesOnVesselConstraint/weight"/>
+    </genClasses>
+    <genClasses ecoreClass="adp.ecore#//InventoryProfile">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adp.ecore#//InventoryProfile/relativeEntitlements"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adp.ecore#//InventoryProfile/inventory"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adp.ecore#//InventoryProfile/generatedSlots"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//InventoryProfile/volume"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adp.ecore#//InventoryProfile/initialAllocations"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adp.ecore#//InventoryProfile/entityTable"/>
+    </genClasses>
+    <genClasses ecoreClass="adp.ecore#//RelativeEntitlementElement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adp.ecore#//RelativeEntitlementElement/entity"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//RelativeEntitlementElement/entitlement"/>
+    </genClasses>
+    <genClasses ecoreClass="adp.ecore#//AllocationElement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adp.ecore#//AllocationElement/entity"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//AllocationElement/allocation"/>
+    </genClasses>
+    <genClasses ecoreClass="adp.ecore#//InventoryADPEntityRow">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adp.ecore#//InventoryADPEntityRow/entity"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//InventoryADPEntityRow/initialAllocation"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//InventoryADPEntityRow/relativeEntitlement"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

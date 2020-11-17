@@ -202,6 +202,22 @@ public class ADPAdapterFactory extends AdapterFactoryImpl {
 				return createTargetCargoesOnVesselConstraintAdapter();
 			}
 			@Override
+			public Adapter caseInventoryProfile(InventoryProfile object) {
+				return createInventoryProfileAdapter();
+			}
+			@Override
+			public Adapter caseRelativeEntitlementElement(RelativeEntitlementElement object) {
+				return createRelativeEntitlementElementAdapter();
+			}
+			@Override
+			public Adapter caseAllocationElement(AllocationElement object) {
+				return createAllocationElementAdapter();
+			}
+			@Override
+			public Adapter caseInventoryADPEntityRow(InventoryADPEntityRow object) {
+				return createInventoryADPEntityRowAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -660,6 +676,62 @@ public class ADPAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createTargetCargoesOnVesselConstraintAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.InventoryProfile <em>Inventory Profile</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.adp.InventoryProfile
+	 * @generated
+	 */
+	public Adapter createInventoryProfileAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.RelativeEntitlementElement <em>Relative Entitlement Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.adp.RelativeEntitlementElement
+	 * @generated
+	 */
+	public Adapter createRelativeEntitlementElementAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.AllocationElement <em>Allocation Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.adp.AllocationElement
+	 * @generated
+	 */
+	public Adapter createAllocationElementAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.InventoryADPEntityRow <em>Inventory ADP Entity Row</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.adp.InventoryADPEntityRow
+	 * @generated
+	 */
+	public Adapter createInventoryADPEntityRowAdapter() {
 		return null;
 	}
 

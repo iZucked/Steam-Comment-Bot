@@ -262,6 +262,42 @@ public interface ADPFactory extends EFactory {
 	TargetCargoesOnVesselConstraint createTargetCargoesOnVesselConstraint();
 
 	/**
+	 * Returns a new object of class '<em>Inventory Profile</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Inventory Profile</em>'.
+	 * @generated
+	 */
+	InventoryProfile createInventoryProfile();
+
+	/**
+	 * Returns a new object of class '<em>Relative Entitlement Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Relative Entitlement Element</em>'.
+	 * @generated
+	 */
+	RelativeEntitlementElement createRelativeEntitlementElement();
+
+	/**
+	 * Returns a new object of class '<em>Allocation Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Allocation Element</em>'.
+	 * @generated
+	 */
+	AllocationElement createAllocationElement();
+
+	/**
+	 * Returns a new object of class '<em>Inventory ADP Entity Row</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Inventory ADP Entity Row</em>'.
+	 * @generated
+	 */
+	InventoryADPEntityRow createInventoryADPEntityRow();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

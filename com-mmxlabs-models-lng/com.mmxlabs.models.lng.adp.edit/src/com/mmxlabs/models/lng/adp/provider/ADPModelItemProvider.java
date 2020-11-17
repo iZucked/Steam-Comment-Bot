@@ -66,6 +66,7 @@ public class ADPModelItemProvider
 
 			addYearStartPropertyDescriptor(object);
 			addYearEndPropertyDescriptor(object);
+			addInventoryProfilesPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -110,6 +111,28 @@ public class ADPModelItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Inventory Profiles feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addInventoryProfilesPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_ADPModel_inventoryProfiles_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_ADPModel_inventoryProfiles_feature", "_UI_ADPModel_type"),
+				 ADPPackage.Literals.ADP_MODEL__INVENTORY_PROFILES,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}

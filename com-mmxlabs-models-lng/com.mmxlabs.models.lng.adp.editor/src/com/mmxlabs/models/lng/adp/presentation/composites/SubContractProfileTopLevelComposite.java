@@ -86,6 +86,8 @@ public class SubContractProfileTopLevelComposite extends DefaultTopLevelComposit
 	private List<ISubProfileConstraintFactory> subProfileConstraintFactories;
 	private Collection<ServiceReference<ISubProfileConstraintFactory>> subProfileConstraintFactoriesServiceReferences;
 	private Composite distributionModelComposite;
+	
+	private Group inventoryComposite;
 
 	public SubContractProfileTopLevelComposite(final Composite parent, final int style, final IDialogEditingContext dialogContext, final FormToolkit toolkit) {
 		super(parent, style, dialogContext, toolkit);
@@ -214,6 +216,10 @@ public class SubContractProfileTopLevelComposite extends DefaultTopLevelComposit
 
 			}
 
+		}
+		{
+			inventoryComposite = new Group(this, SWT.NONE);
+			inventoryComposite.setText("Inventory");
 		}
 		final boolean displayDeleteButton = false;
 		if (displayDeleteButton && object instanceof SubContractProfile<?, ?>) { // Create a toolbar for remove buttons

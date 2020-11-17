@@ -10,6 +10,7 @@ import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.ADPPackage;
 
 import com.mmxlabs.models.lng.adp.FleetProfile;
+import com.mmxlabs.models.lng.adp.InventoryProfile;
 import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
@@ -26,6 +27,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
@@ -41,6 +43,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.ADPModelImpl#getPurchaseContractProfiles <em>Purchase Contract Profiles</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.ADPModelImpl#getSalesContractProfiles <em>Sales Contract Profiles</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.ADPModelImpl#getFleetProfile <em>Fleet Profile</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.adp.impl.ADPModelImpl#getInventoryProfiles <em>Inventory Profiles</em>}</li>
  * </ul>
  *
  * @generated
@@ -115,6 +118,16 @@ public class ADPModelImpl extends UUIDObjectImpl implements ADPModel {
 	 * @ordered
 	 */
 	protected FleetProfile fleetProfile;
+
+	/**
+	 * The cached value of the '{@link #getInventoryProfiles() <em>Inventory Profiles</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getInventoryProfiles()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<InventoryProfile> inventoryProfiles;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -281,6 +294,19 @@ public class ADPModelImpl extends UUIDObjectImpl implements ADPModel {
 	 * @generated
 	 */
 	@Override
+	public EList<InventoryProfile> getInventoryProfiles() {
+		if (inventoryProfiles == null) {
+			inventoryProfiles = new EObjectResolvingEList<InventoryProfile>(InventoryProfile.class, this, ADPPackage.ADP_MODEL__INVENTORY_PROFILES);
+		}
+		return inventoryProfiles;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case ADPPackage.ADP_MODEL__PURCHASE_CONTRACT_PROFILES:
@@ -312,6 +338,8 @@ public class ADPModelImpl extends UUIDObjectImpl implements ADPModel {
 			case ADPPackage.ADP_MODEL__FLEET_PROFILE:
 				if (resolve) return getFleetProfile();
 				return basicGetFleetProfile();
+			case ADPPackage.ADP_MODEL__INVENTORY_PROFILES:
+				return getInventoryProfiles();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -342,6 +370,10 @@ public class ADPModelImpl extends UUIDObjectImpl implements ADPModel {
 			case ADPPackage.ADP_MODEL__FLEET_PROFILE:
 				setFleetProfile((FleetProfile)newValue);
 				return;
+			case ADPPackage.ADP_MODEL__INVENTORY_PROFILES:
+				getInventoryProfiles().clear();
+				getInventoryProfiles().addAll((Collection<? extends InventoryProfile>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -369,6 +401,9 @@ public class ADPModelImpl extends UUIDObjectImpl implements ADPModel {
 			case ADPPackage.ADP_MODEL__FLEET_PROFILE:
 				setFleetProfile((FleetProfile)null);
 				return;
+			case ADPPackage.ADP_MODEL__INVENTORY_PROFILES:
+				getInventoryProfiles().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -391,6 +426,8 @@ public class ADPModelImpl extends UUIDObjectImpl implements ADPModel {
 				return salesContractProfiles != null && !salesContractProfiles.isEmpty();
 			case ADPPackage.ADP_MODEL__FLEET_PROFILE:
 				return fleetProfile != null;
+			case ADPPackage.ADP_MODEL__INVENTORY_PROFILES:
+				return inventoryProfiles != null && !inventoryProfiles.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

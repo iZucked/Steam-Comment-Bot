@@ -89,6 +89,10 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 			case ADPPackage.PERIOD_DISTRIBUTION_PROFILE_CONSTRAINT: return createPeriodDistributionProfileConstraint();
 			case ADPPackage.PERIOD_DISTRIBUTION: return createPeriodDistribution();
 			case ADPPackage.TARGET_CARGOES_ON_VESSEL_CONSTRAINT: return createTargetCargoesOnVesselConstraint();
+			case ADPPackage.INVENTORY_PROFILE: return createInventoryProfile();
+			case ADPPackage.RELATIVE_ENTITLEMENT_ELEMENT: return createRelativeEntitlementElement();
+			case ADPPackage.ALLOCATION_ELEMENT: return createAllocationElement();
+			case ADPPackage.INVENTORY_ADP_ENTITY_ROW: return createInventoryADPEntityRow();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -412,6 +416,50 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 	public TargetCargoesOnVesselConstraint createTargetCargoesOnVesselConstraint() {
 		TargetCargoesOnVesselConstraintImpl targetCargoesOnVesselConstraint = new TargetCargoesOnVesselConstraintImpl();
 		return targetCargoesOnVesselConstraint;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public InventoryProfile createInventoryProfile() {
+		InventoryProfileImpl inventoryProfile = new InventoryProfileImpl();
+		return inventoryProfile;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public RelativeEntitlementElement createRelativeEntitlementElement() {
+		RelativeEntitlementElementImpl relativeEntitlementElement = new RelativeEntitlementElementImpl();
+		return relativeEntitlementElement;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public AllocationElement createAllocationElement() {
+		AllocationElementImpl allocationElement = new AllocationElementImpl();
+		return allocationElement;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public InventoryADPEntityRow createInventoryADPEntityRow() {
+		InventoryADPEntityRowImpl inventoryADPEntityRow = new InventoryADPEntityRowImpl();
+		return inventoryADPEntityRow;
 	}
 
 	/**

@@ -26,6 +26,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.adp.ADPModel#getPurchaseContractProfiles <em>Purchase Contract Profiles</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.ADPModel#getSalesContractProfiles <em>Sales Contract Profiles</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.ADPModel#getFleetProfile <em>Fleet Profile</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.adp.ADPModel#getInventoryProfiles <em>Inventory Profiles</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.adp.ADPPackage#getADPModel()
@@ -142,5 +143,17 @@ public interface ADPModel extends UUIDObject {
 	 * @generated
 	 */
 	void setFleetProfile(FleetProfile value);
+
+	/**
+	 * Returns the value of the '<em><b>Inventory Profiles</b></em>' reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.adp.InventoryProfile}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Inventory Profiles</em>' reference list.
+	 * @see com.mmxlabs.models.lng.adp.ADPPackage#getADPModel_InventoryProfiles()
+	 * @model
+	 * @generated
+	 */
+	EList<InventoryProfile> getInventoryProfiles();
 
 } // ADPModel

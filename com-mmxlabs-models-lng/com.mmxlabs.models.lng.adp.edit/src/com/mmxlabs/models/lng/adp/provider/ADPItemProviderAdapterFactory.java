@@ -693,6 +693,98 @@ public class ADPItemProviderAdapterFactory extends ADPAdapterFactory implements 
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.InventoryProfile} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected InventoryProfileItemProvider inventoryProfileItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.adp.InventoryProfile}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createInventoryProfileAdapter() {
+		if (inventoryProfileItemProvider == null) {
+			inventoryProfileItemProvider = new InventoryProfileItemProvider(this);
+		}
+
+		return inventoryProfileItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.RelativeEntitlementElement} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected RelativeEntitlementElementItemProvider relativeEntitlementElementItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.adp.RelativeEntitlementElement}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createRelativeEntitlementElementAdapter() {
+		if (relativeEntitlementElementItemProvider == null) {
+			relativeEntitlementElementItemProvider = new RelativeEntitlementElementItemProvider(this);
+		}
+
+		return relativeEntitlementElementItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.AllocationElement} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected AllocationElementItemProvider allocationElementItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.adp.AllocationElement}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createAllocationElementAdapter() {
+		if (allocationElementItemProvider == null) {
+			allocationElementItemProvider = new AllocationElementItemProvider(this);
+		}
+
+		return allocationElementItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.InventoryADPEntityRow} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected InventoryADPEntityRowItemProvider inventoryADPEntityRowItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.adp.InventoryADPEntityRow}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createInventoryADPEntityRowAdapter() {
+		if (inventoryADPEntityRowItemProvider == null) {
+			inventoryADPEntityRowItemProvider = new InventoryADPEntityRowItemProvider(this);
+		}
+
+		return inventoryADPEntityRowItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -844,6 +936,10 @@ public class ADPItemProviderAdapterFactory extends ADPAdapterFactory implements 
 		if (periodDistributionProfileConstraintItemProvider != null) periodDistributionProfileConstraintItemProvider.dispose();
 		if (periodDistributionItemProvider != null) periodDistributionItemProvider.dispose();
 		if (targetCargoesOnVesselConstraintItemProvider != null) targetCargoesOnVesselConstraintItemProvider.dispose();
+		if (inventoryProfileItemProvider != null) inventoryProfileItemProvider.dispose();
+		if (relativeEntitlementElementItemProvider != null) relativeEntitlementElementItemProvider.dispose();
+		if (allocationElementItemProvider != null) allocationElementItemProvider.dispose();
+		if (inventoryADPEntityRowItemProvider != null) inventoryADPEntityRowItemProvider.dispose();
 	}
 
 }

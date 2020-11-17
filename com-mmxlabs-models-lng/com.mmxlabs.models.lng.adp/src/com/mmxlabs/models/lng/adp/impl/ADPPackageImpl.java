@@ -6,11 +6,21 @@
  */
 package com.mmxlabs.models.lng.adp.impl;
 
-import com.mmxlabs.models.datetime.DateTimePackage;
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.EGenericType;
+import org.eclipse.emf.ecore.EOperation;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.ETypeParameter;
+import org.eclipse.emf.ecore.impl.EPackageImpl;
 
+import com.mmxlabs.models.datetime.DateTimePackage;
 import com.mmxlabs.models.lng.adp.ADPFactory;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.ADPPackage;
+import com.mmxlabs.models.lng.adp.AllocationElement;
 import com.mmxlabs.models.lng.adp.CargoByQuarterDistributionModel;
 import com.mmxlabs.models.lng.adp.CargoIntervalDistributionModel;
 import com.mmxlabs.models.lng.adp.CargoNumberDistributionModel;
@@ -25,6 +35,9 @@ import com.mmxlabs.models.lng.adp.FleetConstraint;
 import com.mmxlabs.models.lng.adp.FleetProfile;
 import com.mmxlabs.models.lng.adp.FlowType;
 import com.mmxlabs.models.lng.adp.IntervalType;
+import com.mmxlabs.models.lng.adp.InventoryADPEntityRow;
+import com.mmxlabs.models.lng.adp.InventoryProfile;
+import com.mmxlabs.models.lng.adp.LNGVolumeUnit;
 import com.mmxlabs.models.lng.adp.MaxCargoConstraint;
 import com.mmxlabs.models.lng.adp.MinCargoConstraint;
 import com.mmxlabs.models.lng.adp.PeriodDistribution;
@@ -33,11 +46,10 @@ import com.mmxlabs.models.lng.adp.PreDefinedDate;
 import com.mmxlabs.models.lng.adp.PreDefinedDistributionModel;
 import com.mmxlabs.models.lng.adp.ProfileConstraint;
 import com.mmxlabs.models.lng.adp.ProfileVesselRestriction;
-import com.mmxlabs.models.lng.adp.LNGVolumeUnit;
 import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
+import com.mmxlabs.models.lng.adp.RelativeEntitlementElement;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
 import com.mmxlabs.models.lng.adp.ShippingOption;
-
 import com.mmxlabs.models.lng.adp.SubContractProfile;
 import com.mmxlabs.models.lng.adp.SubProfileConstraint;
 import com.mmxlabs.models.lng.adp.SupplyFromFlow;
@@ -45,27 +57,14 @@ import com.mmxlabs.models.lng.adp.SupplyFromProfileFlow;
 import com.mmxlabs.models.lng.adp.SupplyFromSpotFlow;
 import com.mmxlabs.models.lng.adp.TargetCargoesOnVesselConstraint;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
-
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.types.TypesPackage;
-
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EEnum;
-import org.eclipse.emf.ecore.EGenericType;
-import org.eclipse.emf.ecore.EOperation;
-import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.EReference;
-
-import org.eclipse.emf.ecore.ETypeParameter;
-import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -296,6 +295,34 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass inventoryProfileEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass relativeEntitlementElementEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass allocationElementEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass inventoryADPEntityRowEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EEnum intervalTypeEEnum = null;
 
 	/**
@@ -436,6 +463,16 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	@Override
 	public EReference getADPModel_FleetProfile() {
 		return (EReference)adpModelEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getADPModel_InventoryProfiles() {
+		return (EReference)adpModelEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -1324,6 +1361,176 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getInventoryProfile() {
+		return inventoryProfileEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getInventoryProfile_RelativeEntitlements() {
+		return (EReference)inventoryProfileEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getInventoryProfile_Inventory() {
+		return (EReference)inventoryProfileEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getInventoryProfile_GeneratedSlots() {
+		return (EReference)inventoryProfileEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getInventoryProfile_Volume() {
+		return (EAttribute)inventoryProfileEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getInventoryProfile_InitialAllocations() {
+		return (EReference)inventoryProfileEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getInventoryProfile_EntityTable() {
+		return (EReference)inventoryProfileEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getRelativeEntitlementElement() {
+		return relativeEntitlementElementEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getRelativeEntitlementElement_Entity() {
+		return (EReference)relativeEntitlementElementEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getRelativeEntitlementElement_Entitlement() {
+		return (EAttribute)relativeEntitlementElementEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getAllocationElement() {
+		return allocationElementEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getAllocationElement_Entity() {
+		return (EReference)allocationElementEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getAllocationElement_Allocation() {
+		return (EAttribute)allocationElementEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getInventoryADPEntityRow() {
+		return inventoryADPEntityRowEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getInventoryADPEntityRow_Entity() {
+		return (EReference)inventoryADPEntityRowEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getInventoryADPEntityRow_InitialAllocation() {
+		return (EAttribute)inventoryADPEntityRowEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getInventoryADPEntityRow_RelativeEntitlement() {
+		return (EAttribute)inventoryADPEntityRowEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EEnum getIntervalType() {
 		return intervalTypeEEnum;
 	}
@@ -1373,6 +1580,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		createEReference(adpModelEClass, ADP_MODEL__PURCHASE_CONTRACT_PROFILES);
 		createEReference(adpModelEClass, ADP_MODEL__SALES_CONTRACT_PROFILES);
 		createEReference(adpModelEClass, ADP_MODEL__FLEET_PROFILE);
+		createEReference(adpModelEClass, ADP_MODEL__INVENTORY_PROFILES);
 
 		fleetProfileEClass = createEClass(FLEET_PROFILE);
 		createEReference(fleetProfileEClass, FLEET_PROFILE__CONSTRAINTS);
@@ -1492,6 +1700,27 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		createEAttribute(targetCargoesOnVesselConstraintEClass, TARGET_CARGOES_ON_VESSEL_CONSTRAINT__INTERVAL_TYPE);
 		createEAttribute(targetCargoesOnVesselConstraintEClass, TARGET_CARGOES_ON_VESSEL_CONSTRAINT__WEIGHT);
 
+		inventoryProfileEClass = createEClass(INVENTORY_PROFILE);
+		createEReference(inventoryProfileEClass, INVENTORY_PROFILE__RELATIVE_ENTITLEMENTS);
+		createEReference(inventoryProfileEClass, INVENTORY_PROFILE__INVENTORY);
+		createEReference(inventoryProfileEClass, INVENTORY_PROFILE__GENERATED_SLOTS);
+		createEAttribute(inventoryProfileEClass, INVENTORY_PROFILE__VOLUME);
+		createEReference(inventoryProfileEClass, INVENTORY_PROFILE__INITIAL_ALLOCATIONS);
+		createEReference(inventoryProfileEClass, INVENTORY_PROFILE__ENTITY_TABLE);
+
+		relativeEntitlementElementEClass = createEClass(RELATIVE_ENTITLEMENT_ELEMENT);
+		createEReference(relativeEntitlementElementEClass, RELATIVE_ENTITLEMENT_ELEMENT__ENTITY);
+		createEAttribute(relativeEntitlementElementEClass, RELATIVE_ENTITLEMENT_ELEMENT__ENTITLEMENT);
+
+		allocationElementEClass = createEClass(ALLOCATION_ELEMENT);
+		createEReference(allocationElementEClass, ALLOCATION_ELEMENT__ENTITY);
+		createEAttribute(allocationElementEClass, ALLOCATION_ELEMENT__ALLOCATION);
+
+		inventoryADPEntityRowEClass = createEClass(INVENTORY_ADP_ENTITY_ROW);
+		createEReference(inventoryADPEntityRowEClass, INVENTORY_ADP_ENTITY_ROW__ENTITY);
+		createEAttribute(inventoryADPEntityRowEClass, INVENTORY_ADP_ENTITY_ROW__INITIAL_ALLOCATION);
+		createEAttribute(inventoryADPEntityRowEClass, INVENTORY_ADP_ENTITY_ROW__RELATIVE_ENTITLEMENT);
+
 		// Create enums
 		intervalTypeEEnum = createEEnum(INTERVAL_TYPE);
 		lngVolumeUnitEEnum = createEEnum(LNG_VOLUME_UNIT);
@@ -1591,6 +1820,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		initEReference(getADPModel_PurchaseContractProfiles(), this.getPurchaseContractProfile(), null, "purchaseContractProfiles", null, 0, -1, ADPModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getADPModel_SalesContractProfiles(), this.getSalesContractProfile(), null, "salesContractProfiles", null, 0, -1, ADPModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getADPModel_FleetProfile(), this.getFleetProfile(), null, "fleetProfile", null, 0, 1, ADPModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getADPModel_InventoryProfiles(), this.getInventoryProfile(), null, "inventoryProfiles", null, 0, -1, ADPModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(fleetProfileEClass, FleetProfile.class, "FleetProfile", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getFleetProfile_Constraints(), this.getFleetConstraint(), null, "constraints", null, 0, -1, FleetProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1727,6 +1957,27 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		initEAttribute(getTargetCargoesOnVesselConstraint_TargetNumberOfCargoes(), ecorePackage.getEInt(), "targetNumberOfCargoes", null, 0, 1, TargetCargoesOnVesselConstraint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getTargetCargoesOnVesselConstraint_IntervalType(), this.getIntervalType(), "intervalType", "YEARLY", 0, 1, TargetCargoesOnVesselConstraint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getTargetCargoesOnVesselConstraint_Weight(), ecorePackage.getEInt(), "weight", null, 0, 1, TargetCargoesOnVesselConstraint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(inventoryProfileEClass, InventoryProfile.class, "InventoryProfile", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getInventoryProfile_RelativeEntitlements(), this.getRelativeEntitlementElement(), null, "relativeEntitlements", null, 0, -1, InventoryProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getInventoryProfile_Inventory(), theCargoPackage.getInventory(), null, "inventory", null, 0, 1, InventoryProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getInventoryProfile_GeneratedSlots(), theCargoPackage.getLoadSlot(), null, "generatedSlots", null, 0, -1, InventoryProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getInventoryProfile_Volume(), ecorePackage.getEInt(), "volume", null, 0, 1, InventoryProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getInventoryProfile_InitialAllocations(), this.getAllocationElement(), null, "initialAllocations", null, 0, -1, InventoryProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getInventoryProfile_EntityTable(), this.getInventoryADPEntityRow(), null, "entityTable", null, 0, -1, InventoryProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(relativeEntitlementElementEClass, RelativeEntitlementElement.class, "RelativeEntitlementElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getRelativeEntitlementElement_Entity(), theCommercialPackage.getBaseLegalEntity(), null, "entity", null, 0, 1, RelativeEntitlementElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRelativeEntitlementElement_Entitlement(), ecorePackage.getEDouble(), "entitlement", null, 0, 1, RelativeEntitlementElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(allocationElementEClass, AllocationElement.class, "AllocationElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getAllocationElement_Entity(), theCommercialPackage.getBaseLegalEntity(), null, "entity", null, 0, 1, AllocationElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAllocationElement_Allocation(), ecorePackage.getEInt(), "allocation", null, 0, 1, AllocationElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(inventoryADPEntityRowEClass, InventoryADPEntityRow.class, "InventoryADPEntityRow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getInventoryADPEntityRow_Entity(), theCommercialPackage.getBaseLegalEntity(), null, "entity", null, 0, 1, InventoryADPEntityRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getInventoryADPEntityRow_InitialAllocation(), ecorePackage.getEString(), "initialAllocation", null, 0, 1, InventoryADPEntityRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getInventoryADPEntityRow_RelativeEntitlement(), ecorePackage.getEDouble(), "relativeEntitlement", null, 0, 1, InventoryADPEntityRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(intervalTypeEEnum, IntervalType.class, "IntervalType");

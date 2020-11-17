@@ -10,6 +10,8 @@
         upperBound="-1" eType="#//SalesContractProfile" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="fleetProfile" eType="#//FleetProfile"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inventoryProfiles" upperBound="-1"
+        eType="#//InventoryProfile"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FleetProfile">
     <eStructuralFeatures xsi:type="ecore:EReference" name="constraints" upperBound="-1"
@@ -207,5 +209,30 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="intervalType" eType="#//IntervalType"
         defaultValueLiteral="YEARLY"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="weight" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InventoryProfile">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="relativeEntitlements" upperBound="-1"
+        eType="#//RelativeEntitlementElement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inventory" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//Inventory"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="generatedSlots" upperBound="-1"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//LoadSlot"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volume" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="initialAllocations" upperBound="-1"
+        eType="#//AllocationElement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entityTable" upperBound="-1"
+        eType="#//InventoryADPEntityRow"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RelativeEntitlementElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entity" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BaseLegalEntity"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="entitlement" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AllocationElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entity" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BaseLegalEntity"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="allocation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InventoryADPEntityRow">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entity" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BaseLegalEntity"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="initialAllocation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="relativeEntitlement" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
   </eClassifiers>
 </ecore:EPackage>
