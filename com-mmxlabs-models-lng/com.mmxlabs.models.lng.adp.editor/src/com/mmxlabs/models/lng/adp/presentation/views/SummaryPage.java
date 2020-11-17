@@ -13,8 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.atomic.LongAccumulator;
-import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
@@ -47,6 +46,9 @@ import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
@@ -115,7 +117,7 @@ public class SummaryPage extends ADPComposite {
 						final ADPModel adpModel = (ADPModel) inputElement;
 						final Set<Contract> contracts = new HashSet<>();
 						adpModel.getPurchaseContractProfiles().stream().map(PurchaseContractProfile::getContract).forEach(contracts::add);
-						final List<Object> profiles = new LinkedList<>();
+						final LinkedList<Object> profiles = new LinkedList<>();
 						profiles.addAll(adpModel.getPurchaseContractProfiles());
 						final CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(editorData.getScenarioDataProvider());
 						for (final PurchaseContract c : commercialModel.getPurchaseContracts()) {
@@ -126,50 +128,27 @@ public class SummaryPage extends ADPComposite {
 								profiles.add(p);
 							}
 						}
-						profiles.add(profiles);
-						return profiles.toArray();
+						profiles.add(null);
+						Object[] profileObjects = profiles.toArray();
+						profiles.removeLast();
+						profileObjects[profileObjects.length-1] = profiles;
+						return profileObjects;
 					}
 					return super.getElements(inputElement);
 				}
 			});
 			
-			createColumn(purchasesViewer, "Contract", (profile, acc) -> profile.getContract() == null ? "<unknown>" : profile.getContract().getName());
-			createColumn(purchasesViewer, "Generated cargoes", (profile, acc) -> {
-					long generatedCargoes = editorData.getScenarioModel().getCargoModel().getLoadSlots().stream() //
+			createColumn(purchasesViewer, "Contract", (profile) -> profile.getContract() == null ? "<unknown>" : profile.getContract().getName());
+			createColumn(purchasesViewer, "Generated cargoes", (profile) -> {
+					final long generatedCargoes = editorData.getScenarioModel().getCargoModel().getLoadSlots().stream() //
 							.filter(s -> profile.getContract() == s.getContract()).count();
-					acc.accumulate(generatedCargoes);
 					return Long.toString(generatedCargoes);
 				});
 			
-			createColumn(purchasesViewer, "Max cargoes", (profile, acc) -> {
-				final Long maxCargoes;
-				final List<ProfileConstraint> constraints = profile.getConstraints();
-				if (constraints.isEmpty()) {
-					maxCargoes = editorData.getScenarioModel().getCargoModel().getLoadSlots().stream() //
-							.filter(s -> profile.getContract() == s.getContract()) //
-							.count();
-				} else {
-					final Map<YearMonth, Long> variableBounds = new HashMap<>();
-					editorData.getScenarioModel().getCargoModel().getLoadSlots().stream() //
-							.filter(slot -> profile.getContract() == slot.getContract()) //
-							.forEach(slot -> {
-								final YearMonth ym = YearMonth.from(slot.getWindowStart());
-								final Long currentBound = variableBounds.get(ym);
-								if (currentBound == null) {
-									variableBounds.put(ym, 1L);
-								} else {
-									variableBounds.put(ym, currentBound+1L);
-								}
-							});
-					Long solverBound = calculateConstrainedProfileBound(variableBounds, constraints);
-					if (solverBound != null) {
-						maxCargoes = solverBound;
-					} else {
-						final ADPPeriod adpPeriod = new ADPPeriod(editorData.getAdpModel());
-						maxCargoes = calculateNaiveSummaryBound(variableBounds, constraints, adpPeriod);
-					}
-				}
-				acc.accumulate(maxCargoes);
+			createColumn(purchasesViewer, "Max cargoes", (profile) -> {
+				final List<LoadSlot> slots = editorData.getScenarioModel().getCargoModel().getLoadSlots();
+				final PurchaseContractProfile purchaseProfile = (PurchaseContractProfile) profile;
+				final Long maxCargoes = calculateMaxCargoesBound(purchaseProfile, slots);
 				return maxCargoes.toString();
 			});
 		}
@@ -183,7 +162,7 @@ public class SummaryPage extends ADPComposite {
 						final ADPModel adpModel = (ADPModel) inputElement;
 						final Set<Contract> contracts = new HashSet<>();
 						adpModel.getSalesContractProfiles().stream().map(SalesContractProfile::getContract).forEach(contracts::add);
-						final List<Object> profiles = new LinkedList<>();
+						final LinkedList<Object> profiles = new LinkedList<>();
 						profiles.addAll(adpModel.getSalesContractProfiles());
 						final CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(editorData.getScenarioDataProvider());
 						for (final SalesContract c : commercialModel.getSalesContracts()) {
@@ -194,49 +173,26 @@ public class SummaryPage extends ADPComposite {
 								profiles.add(p);
 							}
 						}
-						profiles.add(profiles);
-						return profiles.toArray();
+						profiles.add(null);
+						Object[] profileObjects = profiles.toArray();
+						profiles.removeLast();
+						profileObjects[profileObjects.length-1] = profiles;
+						return profileObjects;
 					}
 					return super.getElements(inputElement);
 				}
 			});
 
-			createColumn(salesViewer, "Contract", (profile, acc) -> profile.getContract().getName());
-			createColumn(salesViewer, "Generated cargoes", (profile, acc) -> {
-				long generatedCargoes = editorData.getScenarioModel().getCargoModel().getDischargeSlots().stream() //
+			createColumn(salesViewer, "Contract", (profile) -> profile.getContract().getName());
+			createColumn(salesViewer, "Generated cargoes", (profile) -> {
+				final long generatedCargoes = editorData.getScenarioModel().getCargoModel().getDischargeSlots().stream() //
 						.filter(s -> profile.getContract() == s.getContract()).count();
-				acc.accumulate(generatedCargoes);
 				return Long.toString(generatedCargoes);
 				});
-			createColumn(salesViewer, "Max cargoes", (profile, acc) -> {
-				final List<ProfileConstraint> constraints = profile.getConstraints();
-				final Long maxCargoes;
-				if (constraints.isEmpty()) {
-					maxCargoes = editorData.getScenarioModel().getCargoModel().getDischargeSlots().stream() //
-							.filter(s -> profile.getContract() == s.getContract()) //
-							.count();
-				} else {
-					final Map<YearMonth, Long> variableBounds = new HashMap<>();
-					editorData.getScenarioModel().getCargoModel().getDischargeSlots().stream() //
-							.filter(slot -> profile.getContract() == slot.getContract()) //
-							.forEach(slot -> {
-								final YearMonth ym = YearMonth.from(slot.getWindowStart());
-								final Long currentBound = variableBounds.get(ym);
-								if (currentBound == null) {
-									variableBounds.put(ym, 1L);
-								} else {
-									variableBounds.put(ym, currentBound+1L);
-								}
-							});
-					final Long solverBound = calculateConstrainedProfileBound(variableBounds, constraints);
-					if (solverBound != null) {
-						maxCargoes = solverBound;
-					} else {
-						final ADPPeriod adpPeriod = new ADPPeriod(editorData.getAdpModel());
-						maxCargoes = calculateNaiveSummaryBound(variableBounds, constraints, adpPeriod);
-					}
-				}
-				acc.accumulate(maxCargoes);
+			createColumn(salesViewer, "Max cargoes", (profile) -> {
+				final List<DischargeSlot> slots = editorData.getScenarioModel().getCargoModel().getDischargeSlots();
+				final SalesContractProfile salesProfile = (SalesContractProfile) profile;
+				final Long maxCargoes = calculateMaxCargoesBound(salesProfile, slots);
 				return maxCargoes.toString();
 			});
 		}
@@ -267,11 +223,38 @@ public class SummaryPage extends ADPComposite {
 
 			}
 		}
+	}
 
+	private <U extends Contract, V extends Slot<U>> Long calculateMaxCargoesBound(ContractProfile<V, U> profile, List<V> slots) {
+		final List<ProfileConstraint> constraints = profile.getConstraints();
+		final Long maxCargoes;
+		if (constraints.isEmpty()) {
+			maxCargoes = slots.stream().filter(s -> profile.getContract() == s.getContract()).count();
+		} else {
+			final Map<YearMonth, Long> variableBounds = new HashMap<>();
+			slots.stream() //
+					.filter(slot -> profile.getContract() == slot.getContract()) //
+					.forEach(slot -> {
+						final YearMonth ym = YearMonth.from(slot.getWindowStart());
+						final Long currentBound = variableBounds.get(ym);
+						if (currentBound == null) {
+							variableBounds.put(ym, 1L);
+						} else {
+							variableBounds.put(ym, currentBound+1L);
+						}
+					});
+			final Long solverBound = calculateConstrainedProfileBound(variableBounds, constraints);
+			if (solverBound != null) {
+				maxCargoes = solverBound;
+			} else {
+				final ADPPeriod adpPeriod = new ADPPeriod(editorData.getAdpModel());
+				maxCargoes = calculateNaiveSummaryBound(variableBounds, constraints, adpPeriod);
+			}
+		}
+		return maxCargoes;
 	}
 	
 	private long calculateNaiveSummaryBound(final Map<YearMonth, Long> variableBounds, final List<ProfileConstraint> constraints, final ADPPeriod adpPeriod) {
-		final int numVars = variableBounds.size();
 		Long fullCoverBound = Long.MAX_VALUE;
 		for (final ProfileConstraint constraint : constraints) {
 			if (constraint instanceof PeriodDistributionProfileConstraint) {
@@ -370,20 +353,45 @@ public class SummaryPage extends ADPComposite {
 	//
 	// }
 
-	private void createColumn(final GridTableViewer viewer, final String name, final BiFunction<ContractProfile<?, ?>, LongAccumulator, String> labelProvider) {
+	private void createColumn(final GridTableViewer viewer, final String name, final Function<ContractProfile<?, ?>, String> labelProvider) {
 		final GridViewerColumn col = new GridViewerColumn(viewer, SWT.NONE);
-		final LongAccumulator acc = new LongAccumulator(Long::sum, 0);
 		col.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 		col.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(final Object element) {
 				if (element instanceof ContractProfile<?, ?>) {
-					return labelProvider.apply((ContractProfile<?, ?>) element, acc);
+					return labelProvider.apply((ContractProfile<?, ?>) element);
 				} else if (element instanceof List) {
 					if (name.equals("Contract")) {
 						return "Total";
 					} else {
-						return Long.toString(acc.get());
+						final List<?> profiles = (List<?>) element;
+						if (profiles.isEmpty())
+							return "0";
+						if (name.equals("Generated cargoes")) {
+							final Set<Contract> contractsOfInterest = profiles.stream().map(p-> (ContractProfile<?,?>) p).map(ContractProfile::getContract).collect(Collectors.toSet());
+							final ContractProfile<?,?> firstProfile = (ContractProfile<?,?>) profiles.get(0);
+							final long generatedCargoes;
+							if (firstProfile instanceof PurchaseContractProfile) {
+								generatedCargoes = editorData.getScenarioModel().getCargoModel().getLoadSlots().stream() //
+										.map(LoadSlot::getContract).filter(contractsOfInterest::contains).count();
+							} else {
+								generatedCargoes = editorData.getScenarioModel().getCargoModel().getDischargeSlots().stream() //
+										.map(DischargeSlot::getContract).filter(contractsOfInterest::contains).count();
+							}
+							return Long.toString(generatedCargoes);
+						} else {
+							final ContractProfile<?,?> firstProfile = (ContractProfile<?,?>) profiles.get(0);
+							final Long maxCargoesTotal;
+							if (firstProfile instanceof PurchaseContractProfile) {
+								final List<LoadSlot> slots = editorData.getScenarioModel().getCargoModel().getLoadSlots();
+								maxCargoesTotal = profiles.stream().mapToLong(p -> calculateMaxCargoesBound((PurchaseContractProfile) p, slots)).sum();
+							} else {
+								final List<DischargeSlot> slots = editorData.getScenarioModel().getCargoModel().getDischargeSlots();
+								maxCargoesTotal = profiles.stream().mapToLong(p -> calculateMaxCargoesBound((SalesContractProfile) p, slots)).sum();
+							}
+							return maxCargoesTotal.toString();
+						}
 					}
 				}
 				return "";
