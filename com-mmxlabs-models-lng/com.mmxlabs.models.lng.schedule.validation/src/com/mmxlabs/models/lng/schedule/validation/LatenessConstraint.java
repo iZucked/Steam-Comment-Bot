@@ -14,6 +14,7 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.ui.util.AssignmentLabelProvider;
 import com.mmxlabs.models.lng.schedule.EndEvent;
@@ -68,8 +69,9 @@ public class LatenessConstraint extends AbstractModelMultiConstraint {
 				} else if (target instanceof EndEvent) {
 					final EndEvent event = (EndEvent) target;
 					obj = event.getSequence().getVesselAvailability();
+					String vesselName = ((VesselAvailability) obj).getVessel().getName();
 					feature = CargoPackage.Literals.VESSEL_AVAILABILITY__END_BY;
-					message = "Schedule has vessel travelling after it is no longer available.";
+					message = (vesselName != null? "'"+vesselName+"'" : "Vessel") + " is travelling after it is no longer available.";
 				} else {
 					message = "Late arrival in schedule.";
 				}

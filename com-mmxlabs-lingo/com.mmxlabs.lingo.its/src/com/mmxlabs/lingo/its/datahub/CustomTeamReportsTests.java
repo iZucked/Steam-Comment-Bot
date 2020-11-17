@@ -17,6 +17,7 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,10 +29,12 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.auth.BasicAuthenticationManager;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.reports.customizable.CustomReportDefinition;
 import com.mmxlabs.lingo.reports.customizable.CustomReportsRegistry;
 
 @Testcontainers
+@Tag(TestCategories.HUB_TEST)
 public class CustomTeamReportsTests {
 	// Team reports require the lingo user to be authenticated. We can use either basic auth or oauth. We arbitrarily decide to use basic
 	private static BasicAuthenticationManager basicAuthenticationManager = BasicAuthenticationManager.getInstance();
@@ -98,7 +101,6 @@ public class CustomTeamReportsTests {
 		deleteAllReports();
 		basicAuthenticationManager.logout(upstreamUrl, (Shell) null);
 		bot.resetWorkbench();
-		bot.button("Cancel").click();
 		bot = null;
 	}
 

@@ -175,12 +175,13 @@ public class PaperDealsExporterExtension implements IExporterExtension {
 					newDetail.setVolumeInMMBTU(volumeMMBTU);
 					final int volumeNative = OptimiserUnitConvertor.convertToExternalVolume(record.getVolumeNative());
 					newDetail.setVolumeInNativeUnits(volumeNative);
-					final int externalVolumeValueNative = (int) Calculator.costFromVolume(volumeNative, record.getUnitPrice());
-					final double volumeValueNative = OptimiserUnitConvertor.convertToExternalPrice(externalVolumeValueNative);
+					final double volumeValueNative = (double) OptimiserUnitConvertor.convertToExternalFixedCost(record.getVolumeValueNative());
 					newDetail.setNativeValue(volumeValueNative);
 					newDetail.setVolumeUnit(record.getVolumeUnit());
 					newDetail.setIndexName(record.getIndexName());
 					newDetail.setDate(YearMonth.from(record.getTime()));
+					newDetail.setUnitPrice(OptimiserUnitConvertor.convertToExternalPrice(record.getUnitPrice()));
+					newDetail.setCurrencyUnit(record.getCurrencyUnit());
 	
 					entry.getExposures().add(newDetail);
 				}

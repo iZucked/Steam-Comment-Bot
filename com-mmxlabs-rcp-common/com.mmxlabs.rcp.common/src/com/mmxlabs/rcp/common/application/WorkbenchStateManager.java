@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -37,17 +38,17 @@ import com.google.inject.Injector;
 import com.mmxlabs.common.Pair;
 
 public class WorkbenchStateManager {
+
 	@Inject
 	private Iterable<ViewPartRewriteExtension> extensions;
 
 	private File getWorkbenchStateFile() {
 		for (final Bundle bundle : Platform.getBundles("org.eclipse.ui.workbench", null)) {
 			IPath path = Platform.getStateLocation(bundle);
-			if (path == null) {
-				return null;
+			if (path != null) {
+				path = path.append("workbench.xml");
+				return path.toFile();
 			}
-			path = path.append("workbench.xml");
-			return path.toFile();
 		}
 		return null;
 	}
@@ -84,7 +85,13 @@ public class WorkbenchStateManager {
 			try (FileInputStream input = new FileInputStream(stateFile)) {
 
 				final DocumentBuilderFactory docbf = DocumentBuilderFactory.newInstance();
+				// By disabling DTD, almost all XXE attacks will be prevented.
+				docbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+				// This setting will protect you against Denial of Service attack and remote file access.
+				docbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+
 				docbf.setNamespaceAware(true);
+
 				final DocumentBuilder docbuilder = docbf.newDocumentBuilder();
 				final Document document = docbuilder.parse(input);
 
@@ -101,6 +108,11 @@ public class WorkbenchStateManager {
 				if (changed) {
 					// write the content back over original state
 					final TransformerFactory transformerFactory = TransformerFactory.newInstance();
+
+					transformerFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+					transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+					transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
+
 					final Transformer transformer = transformerFactory.newTransformer();
 					final DOMSource source = new DOMSource(document);
 					final StreamResult result = new StreamResult(stateFile);

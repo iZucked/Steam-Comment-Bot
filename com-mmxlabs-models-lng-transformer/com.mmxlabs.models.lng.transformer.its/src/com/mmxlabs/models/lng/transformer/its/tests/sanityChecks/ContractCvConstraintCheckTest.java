@@ -15,17 +15,15 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.ContractCvConstraintChec
 
 @ExtendWith(ShiroRunner.class)
 public class ContractCvConstraintCheckTest {
-	final private float lowCv = 22f;
-	final private float highCv = 24f;
-	final private float midCv = (lowCv + highCv) / 2f;
+	private static final float LOW_CV = 22f;
+	private static final float HIGH_CV = 24f;
+	private static final float MID_CV = (LOW_CV + HIGH_CV) / 2f;
 
 	public SuboptimalScenarioTester differentCvScenario() {
-		SuboptimalScenarioTester result = new SuboptimalScenarioTester() {
-			{
-				((LoadSlot) smallToLargeCargo.getSlots().get(0)).setCargoCV(lowCv);
-				((LoadSlot) largeToSmallCargo.getSlots().get(0)).setCargoCV(highCv);
-			}
-		};
+		SuboptimalScenarioTester result = new SuboptimalScenarioTester();
+
+		((LoadSlot) result.smallToLargeCargo.getSlots().get(0)).setCargoCV(LOW_CV);
+		((LoadSlot) result.largeToSmallCargo.getSlots().get(0)).setCargoCV(HIGH_CV);
 
 		return result;
 	}
@@ -39,17 +37,17 @@ public class ContractCvConstraintCheckTest {
 
 		// check that the constraints aren't violated when CV values fall within specified ranges
 		// (the stl cargo has CV of lowCv, and the lts cargo has CV of highCv)
-		stlContract.setMinCvValue(lowCv - 1);
-		stlContract.setMaxCvValue(midCv);
+		stlContract.setMinCvValue(LOW_CV - 1);
+		stlContract.setMaxCvValue(MID_CV);
 		sst.testConstraintCheckerPasses(new ContractCvConstraintChecker("ContractCvConstraintChecker"));
 
 		// check that the constraints are violated when one CV value is too high
-		stlContract.setMaxCvValue(lowCv - 1);
+		stlContract.setMaxCvValue(LOW_CV - 1);
 		sst.testConstraintCheckerFails(new ContractCvConstraintChecker("ContractCvConstraintChecker"));
 
 		// check that the constraints are violated when one CV value is too low
 		stlContract.unsetMaxCvValue();
-		stlContract.setMinCvValue(midCv);
+		stlContract.setMinCvValue(MID_CV);
 		sst.testConstraintCheckerFails(new ContractCvConstraintChecker("ContractCvConstraintChecker"));
 
 		// check that the constraints aren't violated when the contracts don't have specified ranges
@@ -66,7 +64,7 @@ public class ContractCvConstraintCheckTest {
 	public void testNoConstraintsOptimisation() {
 		// generate a suboptimal scenario in which the small->large cargo has a low CV and the large->small cargo has a high CV
 		final SuboptimalScenarioTester sst = differentCvScenario();
-		((LoadSlot) sst.largeToSmallCargo.getSlots().get(0)).setCargoCV(highCv);
+		((LoadSlot) sst.largeToSmallCargo.getSlots().get(0)).setCargoCV(HIGH_CV);
 
 		DischargeSlot dischargeSlot1 = (DischargeSlot) sst.largeToSmallCargo.getSlots().get(1);
 		DischargeSlot dischargeSlot2 = (DischargeSlot) sst.smallToLargeCargo.getSlots().get(1);
@@ -94,7 +92,7 @@ public class ContractCvConstraintCheckTest {
 		// prohibit the PnL-optimal rewiring by setting the sales contract on the STL cargo to have a
 		// max CV value which is too low for the LTS cargo
 		SalesContract contract = (SalesContract) sst.smallToLargeCargo.getSlots().get(1).getContract();
-		contract.setMaxCvValue(midCv);
+		contract.setMaxCvValue(MID_CV);
 
 		// test that the optimiser doesn't produce the prohibited wiring
 		sst.testSuboptimalWiringProduced();

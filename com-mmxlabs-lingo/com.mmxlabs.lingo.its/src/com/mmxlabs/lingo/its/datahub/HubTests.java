@@ -13,6 +13,7 @@ import java.io.File;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
+import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 import org.eclipse.swtbot.swt.finder.waits.Conditions;
 import org.hamcrest.Matcher;
 import org.junit.jupiter.api.AfterAll;
@@ -70,6 +71,8 @@ public class HubTests {
 		oauthUpstreamUrl = String.format("http://%s:%s", datahubOAuthHost, datahubOAuthPort);
 		bot = new SWTWorkbenchBot();
 		setDatahubUrl(basicUpstreamUrl);
+		// keyboard layout necessary as we type text in tests: https://wiki.eclipse.org/SWTBot/Keyboard_Layouts
+		SWTBotPreferences.KEYBOARD_LAYOUT = "EN_US";
 	}
 
 	public static void setDatahubUrl(String upstreamUrl) {

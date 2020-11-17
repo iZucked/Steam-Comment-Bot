@@ -22,7 +22,6 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteOption;
@@ -868,14 +867,8 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		// Remove default vessel
-		final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(scenario);
-
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenario);
 		cargoModel.getVesselAvailabilities().clear();
-
-		// Cannot null as final
-		// msc.vessel = null;
-		// msc.vesselAvailability = null;
 
 		// Set up a charter index curve
 		final int charterRatePerDay = 240;
@@ -1226,13 +1219,13 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
-		final Slot loadSlot = msc.cargo.getSlots().get(0);
+		final Slot<?> loadSlot = msc.cargo.getSlots().get(0);
 		final LocalDateTime loadDate = loadSlot.getSchedulingTimeWindow().getStart().toLocalDateTime();
 
 		final double maxSpeed = msc.vessel.getVesselOrDelegateMaxSpeed();
 		final int firstIdle = 1;
-		Integer travelTime = msc.getTravelTime(msc.originPort, msc.loadPort, RouteOption.DIRECT, (int) maxSpeed);
-		final LocalDateTime startAfterDate = loadDate.minusHours(5 * travelTime);
+		long travelTime = msc.getTravelTime(msc.originPort, msc.loadPort, RouteOption.DIRECT, (int) maxSpeed);
+		final LocalDateTime startAfterDate = loadDate.minusHours(5L * travelTime);
 		final LocalDateTime startByDate = loadDate.minusHours(travelTime + firstIdle);
 
 		msc.vesselAvailability.setStartAfter(startAfterDate);
