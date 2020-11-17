@@ -203,7 +203,7 @@ public class MarketSlotConstraint extends AbstractModelMultiConstraint {
 					if (!destinationPorts.contains(spotLoadSlot.getPort())) {
 
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
-								(IConstraintStatus) ctx.createFailureStatus("[Market model|" + spotLoadSlot.getName() + "] DES purchase port is not a market port."), IStatus.WARNING);
+								(IConstraintStatus) ctx.createFailureStatus("[Market model|" + spotLoadSlot.getName() + "] DES purchase port is not a market port."), IStatus.ERROR);
 						dsd.addEObjectAndFeature(spotLoadSlot, CargoPackage.eINSTANCE.getSlot_Port());
 						failures.add(dsd);
 
@@ -215,8 +215,8 @@ public class MarketSlotConstraint extends AbstractModelMultiConstraint {
 
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
 								(IConstraintStatus) ctx.createFailureStatus(
-										"[Market model|" + spotLoadSlot.getName() + "] FOB Purchase Port does not match market port of " + fobPurchasesMarket.getNotionalPort().getName() + "."),
-								IStatus.WARNING);
+										"[Market model|" + spotLoadSlot.getName() + "] FOB Purchase port does not match market port of " + fobPurchasesMarket.getNotionalPort().getName() + "."),
+								IStatus.ERROR);
 						dsd.addEObjectAndFeature(spotLoadSlot, CargoPackage.eINSTANCE.getSlot_Port());
 						failures.add(dsd);
 
@@ -233,8 +233,8 @@ public class MarketSlotConstraint extends AbstractModelMultiConstraint {
 
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
 								(IConstraintStatus) ctx.createFailureStatus(
-										"[Market model|" + spotDischargeSlot.getName() + "] DES sales Port does not match market port of '" + desSalesMarket.getNotionalPort().getName() + "'."),
-								IStatus.WARNING);
+										"[Market model|" + spotDischargeSlot.getName() + "] DES sales port does not match market port of '" + desSalesMarket.getNotionalPort().getName() + "'."),
+								IStatus.ERROR);
 						dsd.addEObjectAndFeature(spotDischargeSlot, CargoPackage.eINSTANCE.getSlot_Port());
 						failures.add(dsd);
 
@@ -247,7 +247,7 @@ public class MarketSlotConstraint extends AbstractModelMultiConstraint {
 					if (!originPorts.contains(spotDischargeSlot.getPort())) {
 
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
-								(IConstraintStatus) ctx.createFailureStatus("[Market model|" + spotDischargeSlot.getName() + "] FOB sale port does not match market ports"), IStatus.WARNING);
+								(IConstraintStatus) ctx.createFailureStatus("[Market model|" + spotDischargeSlot.getName() + "] FOB sale port does not match market ports"), IStatus.ERROR);
 						dsd.addEObjectAndFeature(spotDischargeSlot, CargoPackage.eINSTANCE.getSlot_Port());
 						failures.add(dsd);
 
