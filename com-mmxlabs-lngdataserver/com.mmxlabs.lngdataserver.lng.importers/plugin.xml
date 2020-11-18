@@ -64,6 +64,11 @@
          id="com.mmxlabs.datahub.update.calendars"
          name="Update Calendars">
    </command>
+   <command
+          defaultHandler="com.mmxlabs.lngdataserver.lng.importers.merge.MergeScenarioCommandHandler"
+          id="com.mmxlabs.lngdataserver.lng.importers.merge.MergeBaseCase"
+          name="Merge scenario into...">
+   </command>
 </extension>
  <extension
          point="org.eclipse.ui.handlers">
@@ -315,6 +320,17 @@
       </command>
    </menuContribution>
 </extension>
+<extension point="org.eclipse.ui.menus">   
+            <menuContribution
+               allPopups="false"
+               locationURI="menu:data?after=dataEnd">
+            <command
+                  commandId="com.mmxlabs.lngdataserver.lng.importers.merge.MergeBaseCase"
+                  label="Merge scenario into..."
+                  style="push">
+            </command>                   
+         </menuContribution>
+   </extension>
 <extension
       point="org.eclipse.core.expressions.propertyTesters">
    <propertyTester
