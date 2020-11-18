@@ -321,16 +321,32 @@
    </menuContribution>
 </extension>
 <extension point="org.eclipse.ui.menus">   
-            <menuContribution
-               allPopups="false"
-               locationURI="menu:data?after=dataEnd">
-            <command
-                  commandId="com.mmxlabs.lngdataserver.lng.importers.merge.MergeBaseCase"
-                  label="Merge scenario into..."
-                  style="push">
-            </command>                   
-         </menuContribution>
-   </extension>
+   <menuContribution
+         allPopups="false"
+         locationURI="popup:com.mmxlabs.scenario.service.ui.navigator?before=optimisation">
+      <command
+            commandId="com.mmxlabs.lngdataserver.lng.importers.merge.MergeBaseCase"
+            style="push"
+            tooltip="Merge another scenario into this one.">
+            <visibleWhen
+                        checkEnabled="false">
+                     <and>
+                        <with variable="selection">
+                           <iterate
+                                 ifEmpty="false">
+                              <instanceof
+                                    value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                              </instanceof>
+                           </iterate>
+                        </with>
+                        <count
+                              value="1">
+                        </count>
+                     </and>
+                  </visibleWhen>
+      </command>
+   </menuContribution>
+</extension>
 <extension
       point="org.eclipse.core.expressions.propertyTesters">
    <propertyTester
