@@ -112,7 +112,7 @@ public class CreateActionableSetPlanContextMenuExtension implements ITradesTable
 					final Set<String> existingNames = new HashSet<>();
 					instance.getFragments().forEach(f -> existingNames.add(f.getName()));
 					instance.getElements().forEach(f -> existingNames.add(f.getName()));
-					final UserSettings userSettings = OptimisationHelper.promptForUserSettings(root, false, true, false, new NameProvider("Action set", existingNames));
+					final UserSettings userSettings = OptimisationHelper.promptForUserSettings(root, false, true, false, new NameProvider("Action set", existingNames), null);
 					new Thread("CreateActionableSetThread") {
 
 						@Override

@@ -497,4 +497,51 @@
                plugin.xml="roll-forward-plugin.xml">
          </PluginXMLEnablement>
       </extension>
+<extension
+      point="org.eclipse.ui.commands">
+   <command
+         defaultHandler="com.mmxlabs.models.lng.scenario.actions.CreateLongTermCommandHandler"
+         id="com.mmxlabs.models.lng.scenarii.ui.lt.create"
+         name="Convert to LT scenario">
+   </command>
+</extension>      
+<extension
+      point="org.eclipse.ui.menus">
+   <menuContribution
+         allPopups="false"
+         locationURI="popup:com.mmxlabs.scenario.service.ui.navigator?before=optimisation">
+      <command
+            commandId="com.mmxlabs.models.lng.scenarii.ui.lt.create"
+            style="push"
+            tooltip="Convert to Long Term scenario">
+            <visibleWhen
+                        checkEnabled="false">
+                     <and>
+                        <with
+                              variable="selection">
+                           <iterate
+                                 ifEmpty="false">
+                              <instanceof
+                                    value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                              </instanceof>
+                                                   <not><test
+                          property="com.mmxlabs.scenario.service.ui.flags.readonly"
+                          forcePluginActivation="true">
+                     </test></not>
+
+                           </iterate>
+                        </with>
+                        <count
+                              value="1">
+                        </count>
+						<test
+	                        args="features:longterm"
+	                        forcePluginActivation="true"
+                        	property="com.mmxlabs.license.features.enablement">
+						</test>
+                     </and>
+                  </visibleWhen>
+      </command>
+   </menuContribution>
+</extension>      
 </plugin>

@@ -50,6 +50,8 @@ import com.mmxlabs.models.mmxcore.impl.MMXRootObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getAdpModel <em>Adp Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getAdpModels <em>Adp Models</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getNominationsModel <em>Nominations Model</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#isLongTerm <em>Long Term</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#isAnonymised <em>Anonymised</em>}</li>
  * </ul>
  *
  * @generated
@@ -213,6 +215,46 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 * @ordered
 	 */
 	protected NominationsModel nominationsModel;
+
+	/**
+	 * The default value of the '{@link #isLongTerm() <em>Long Term</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isLongTerm()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean LONG_TERM_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isLongTerm() <em>Long Term</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isLongTerm()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean longTerm = LONG_TERM_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isAnonymised() <em>Anonymised</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isAnonymised()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean ANONYMISED_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isAnonymised() <em>Anonymised</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isAnonymised()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean anonymised = ANONYMISED_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -892,6 +934,52 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 * @generated
 	 */
 	@Override
+	public boolean isLongTerm() {
+		return longTerm;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setLongTerm(boolean newLongTerm) {
+		boolean oldLongTerm = longTerm;
+		longTerm = newLongTerm;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__LONG_TERM, oldLongTerm, longTerm));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isAnonymised() {
+		return anonymised;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setAnonymised(boolean newAnonymised) {
+		boolean oldAnonymised = anonymised;
+		anonymised = newAnonymised;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__ANONYMISED, oldAnonymised, anonymised));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__CARGO_MODEL:
@@ -956,6 +1044,10 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__NOMINATIONS_MODEL:
 				if (resolve) return getNominationsModel();
 				return basicGetNominationsModel();
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__LONG_TERM:
+				return isLongTerm();
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ANONYMISED:
+				return isAnonymised();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -1006,6 +1098,12 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__NOMINATIONS_MODEL:
 				setNominationsModel((NominationsModel)newValue);
 				return;
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__LONG_TERM:
+				setLongTerm((Boolean)newValue);
+				return;
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ANONYMISED:
+				setAnonymised((Boolean)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -1054,6 +1152,12 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__NOMINATIONS_MODEL:
 				setNominationsModel((NominationsModel)null);
 				return;
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__LONG_TERM:
+				setLongTerm(LONG_TERM_EDEFAULT);
+				return;
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ANONYMISED:
+				setAnonymised(ANONYMISED_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -1090,6 +1194,10 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 				return adpModels != null && !adpModels.isEmpty();
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__NOMINATIONS_MODEL:
 				return nominationsModel != null;
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__LONG_TERM:
+				return longTerm != LONG_TERM_EDEFAULT;
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ANONYMISED:
+				return anonymised != ANONYMISED_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -1110,6 +1218,10 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 		result.append(promptPeriodEnd);
 		result.append(", schedulingEndDate: ");
 		if (schedulingEndDateESet) result.append(schedulingEndDate); else result.append("<unset>");
+		result.append(", longTerm: ");
+		result.append(longTerm);
+		result.append(", anonymised: ");
+		result.append(anonymised);
 		result.append(')');
 		return result.toString();
 	}

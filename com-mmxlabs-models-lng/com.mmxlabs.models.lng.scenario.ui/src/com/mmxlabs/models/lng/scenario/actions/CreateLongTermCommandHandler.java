@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.adp.actions;
+package com.mmxlabs.models.lng.scenario.actions;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -22,21 +22,15 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import com.mmxlabs.models.lng.adp.ADPModel;
-import com.mmxlabs.models.lng.adp.utils.ADPModelUtil;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
-import org.eclipse.core.expressions.IEvaluationContext;
-import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
-import com.mmxlabs.scenario.service.ui.OpenScenarioUtils;
-import com.mmxlabs.scenario.service.ui.editing.ScenarioServiceEditorInput;
 
-public class CreateADPCommandHandler extends AbstractHandler {
+public class CreateLongTermCommandHandler extends AbstractHandler {
 
 	@Override
 	public void setEnabled(Object evaluationContext) {
@@ -65,10 +59,10 @@ public class CreateADPCommandHandler extends AbstractHandler {
 					final ScenarioInstance instance = (ScenarioInstance) element;
 					final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
 
-					try (ModelReference ref = modelRecord.aquireReferenceIfLoaded("CreateADPCommandHandler:setEnabled")) {
+					try (ModelReference ref = modelRecord.aquireReferenceIfLoaded("CreateLongTermCommandHandler:setEnabled")) {
 						if (ref != null) {
 							final LNGScenarioModel scenarioModel = (LNGScenarioModel) ref.getInstance();
-							enabled = scenarioModel.getAdpModel() == null && !scenarioModel.isLongTerm();
+							enabled = !scenarioModel.isLongTerm() && scenarioModel.getAdpModel() == null;
 							break;
 						}
 					}
@@ -99,7 +93,7 @@ public class CreateADPCommandHandler extends AbstractHandler {
 						if (element instanceof ScenarioInstance) {
 							final ScenarioInstance instance = (ScenarioInstance) element;
 							try {
-								createADPModelIfMissing(instance);
+								setLongTermMode(instance);
 							} catch (final Exception e) {
 								exceptions[0] = e;
 							}
@@ -111,43 +105,28 @@ public class CreateADPCommandHandler extends AbstractHandler {
 		});
 
 		if (exceptions[0] != null) {
-			throw new ExecutionException("Unable to create ADP models: " + exceptions[0], exceptions[0]);
+			throw new ExecutionException("Unable to set LT mode: " + exceptions[0], exceptions[0]);
 		}
 
 		return null;
 
 	}
 
-	private void createADPModelIfMissing(final ScenarioInstance scenarioInstance) throws IOException {
+	private void setLongTermMode(final ScenarioInstance scenarioInstance) throws IOException {
 		final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 
-		try (IScenarioDataProvider scenarioDataProvider = modelRecord.aquireScenarioDataProvider("CreateADPCommandHandler:createADPModelIfMissing")) {
+		try (IScenarioDataProvider scenarioDataProvider = modelRecord.aquireScenarioDataProvider("CreateLongTermCommandHandler:setLongTermMode")) {
 			final LNGScenarioModel scenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-			if (scenarioModel.getAdpModel() != null || scenarioModel.isLongTerm()) {
+			if (scenarioModel.isLongTerm() || scenarioModel.getAdpModel() != null) {
 				// Do not replace
 				return;
 			}
 
-			// Close all open editors
-			final ScenarioServiceEditorInput editorInput = new ScenarioServiceEditorInput(scenarioInstance);
-			boolean eopenEditor = OpenScenarioUtils.closeEditors(editorInput);
-
 			final EditingDomain editingDomain = scenarioDataProvider.getEditingDomain();
-			final ADPModel model = ADPModelUtil.createADPModel(scenarioModel);
-			final CompoundCommand cmd = new CompoundCommand("Create ADP");
-			cmd.append(SetCommand.create(editingDomain, scenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_AdpModel(), model));
+			final CompoundCommand cmd = new CompoundCommand("Enable Long Term mode");
+			cmd.append(SetCommand.create(editingDomain, scenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_LongTerm(), Boolean.TRUE));
+
 			editingDomain.getCommandStack().execute(cmd);
-
-			if (eopenEditor) {
-				RunnerHelper.asyncExec(() -> {
-					try {
-						OpenScenarioUtils.openEditor(editorInput);
-					} catch (Exception e) {
-
-					}
-				});
-
-			}
 		}
 	}
 }

@@ -268,6 +268,26 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * @generated
 	 */
 	@Override
+	public EAttribute getLNGScenarioModel_LongTerm() {
+		return (EAttribute)lngScenarioModelEClass.getEStructuralFeatures().get(12);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getLNGScenarioModel_Anonymised() {
+		return (EAttribute)lngScenarioModelEClass.getEStructuralFeatures().get(13);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getLNGReferenceModel() {
 		return lngReferenceModelEClass;
 	}
@@ -374,6 +394,8 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 		createEReference(lngScenarioModelEClass, LNG_SCENARIO_MODEL__ADP_MODEL);
 		createEReference(lngScenarioModelEClass, LNG_SCENARIO_MODEL__ADP_MODELS);
 		createEReference(lngScenarioModelEClass, LNG_SCENARIO_MODEL__NOMINATIONS_MODEL);
+		createEAttribute(lngScenarioModelEClass, LNG_SCENARIO_MODEL__LONG_TERM);
+		createEAttribute(lngScenarioModelEClass, LNG_SCENARIO_MODEL__ANONYMISED);
 
 		lngReferenceModelEClass = createEClass(LNG_REFERENCE_MODEL);
 		createEReference(lngReferenceModelEClass, LNG_REFERENCE_MODEL__PORT_MODEL);
@@ -445,6 +467,8 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 		initEReference(getLNGScenarioModel_AdpModel(), theADPPackage.getADPModel(), null, "adpModel", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getLNGScenarioModel_AdpModels(), theADPPackage.getADPModel(), null, "adpModels", null, 0, -1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getLNGScenarioModel_NominationsModel(), theNominationsPackage.getNominationsModel(), null, "nominationsModel", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getLNGScenarioModel_LongTerm(), ecorePackage.getEBoolean(), "longTerm", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getLNGScenarioModel_Anonymised(), ecorePackage.getEBoolean(), "anonymised", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(lngReferenceModelEClass, LNGReferenceModel.class, "LNGReferenceModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getLNGReferenceModel_PortModel(), thePortPackage.getPortModel(), null, "portModel", null, 0, 1, LNGReferenceModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

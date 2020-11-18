@@ -16,6 +16,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 public final class SchedulerConstants {
 	
 	public static final String SCENARIO_TYPE_ADP = "scenario-type-adp";
+	public static final String SCENARIO_TYPE_LONG_TERM = "scenario-type-long-term";
 
 	
 	/**

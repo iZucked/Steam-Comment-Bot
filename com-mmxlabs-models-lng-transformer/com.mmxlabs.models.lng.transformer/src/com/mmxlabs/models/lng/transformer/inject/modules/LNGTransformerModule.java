@@ -83,8 +83,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.util.SchedulerCalculationUtils;
 
 /**
- * Main entry point to create {@link LNGScenarioTransformer}. This uses
- * injection to populate the data structures.
+ * Main entry point to create {@link LNGScenarioTransformer}. This uses injection to populate the data structures.
  * 
  */
 public class LNGTransformerModule extends AbstractModule {
@@ -134,6 +133,8 @@ public class LNGTransformerModule extends AbstractModule {
 		this.withCharterLength = hints.contains(LNGTransformerHelper.HINT_CHARTER_LENGTH);
 		this.withFlatCurve = hints.contains(LNGTransformerHelper.HINT_GENERATED_PAPERS_PNL);
 		assert scenario != null;
+		// Temporary check to make sure the UI is correctly configured.
+		assert scenario.isLongTerm() == (userSettings.getMode() == OptimisationMode.LONG_TERM);
 	}
 
 	@Override
@@ -143,6 +144,7 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(UserSettings.class).toInstance(userSettings);
 
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.SCENARIO_TYPE_ADP)).toInstance(userSettings.getMode() == OptimisationMode.ADP);
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.SCENARIO_TYPE_LONG_TERM)).toInstance(userSettings.getMode() == OptimisationMode.LONG_TERM);
 
 		bind(boolean.class).annotatedWith(Names.named(LNGTransformerHelper.HINT_SHIPPING_ONLY)).toInstance(shippingOnly);
 		bind(boolean.class).annotatedWith(Names.named(LNGTransformerHelper.HINT_DISABLE_CACHES)).toInstance(hintEnableCache);

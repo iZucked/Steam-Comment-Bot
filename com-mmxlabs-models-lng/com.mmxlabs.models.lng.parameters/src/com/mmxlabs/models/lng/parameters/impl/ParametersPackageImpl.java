@@ -1558,6 +1558,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		addEEnumLiteral(optimisationModeEEnum, OptimisationMode.SHORT_TERM);
 		addEEnumLiteral(optimisationModeEEnum, OptimisationMode.ADP);
 		addEEnumLiteral(optimisationModeEEnum, OptimisationMode.STRATEGIC);
+		addEEnumLiteral(optimisationModeEEnum, OptimisationMode.LONG_TERM);
 
 		// Create resource
 		createResource(eNS_URI);

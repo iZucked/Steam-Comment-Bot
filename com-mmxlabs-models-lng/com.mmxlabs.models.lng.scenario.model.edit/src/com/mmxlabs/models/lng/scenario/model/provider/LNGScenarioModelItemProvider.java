@@ -62,6 +62,8 @@ public class LNGScenarioModelItemProvider
 			addPromptPeriodStartPropertyDescriptor(object);
 			addPromptPeriodEndPropertyDescriptor(object);
 			addSchedulingEndDatePropertyDescriptor(object);
+			addLongTermPropertyDescriptor(object);
+			addAnonymisedPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -128,6 +130,50 @@ public class LNGScenarioModelItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Long Term feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addLongTermPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_LNGScenarioModel_longTerm_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_LNGScenarioModel_longTerm_feature", "_UI_LNGScenarioModel_type"),
+				 LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_LongTerm(),
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Anonymised feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addAnonymisedPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_LNGScenarioModel_anonymised_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_LNGScenarioModel_anonymised_feature", "_UI_LNGScenarioModel_type"),
+				 LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_Anonymised(),
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -210,6 +256,8 @@ public class LNGScenarioModelItemProvider
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PROMPT_PERIOD_START:
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PROMPT_PERIOD_END:
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SCHEDULING_END_DATE:
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__LONG_TERM:
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ANONYMISED:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__CARGO_MODEL:

@@ -50,7 +50,15 @@ public enum OptimisationMode implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	STRATEGIC(2, "STRATEGIC", "STRATEGIC");
+	STRATEGIC(2, "STRATEGIC", "STRATEGIC"), /**
+	 * The '<em><b>LONG TERM</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #LONG_TERM_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	LONG_TERM(3, "LONG_TERM", "LONG_TERM");
 
 	/**
 	 * The '<em><b>SHORT TERM</b></em>' literal value.
@@ -98,6 +106,17 @@ public enum OptimisationMode implements Enumerator {
 	public static final int STRATEGIC_VALUE = 2;
 
 	/**
+	 * The '<em><b>LONG TERM</b></em>' literal value.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #LONG_TERM
+	 * @model
+	 * @generated
+	 * @ordered
+	 */
+	public static final int LONG_TERM_VALUE = 3;
+
+	/**
 	 * An array of all the '<em><b>Optimisation Mode</b></em>' enumerators.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -108,6 +127,7 @@ public enum OptimisationMode implements Enumerator {
 			SHORT_TERM,
 			ADP,
 			STRATEGIC,
+			LONG_TERM,
 		};
 
 	/**
@@ -167,6 +187,7 @@ public enum OptimisationMode implements Enumerator {
 			case SHORT_TERM_VALUE: return SHORT_TERM;
 			case ADP_VALUE: return ADP;
 			case STRATEGIC_VALUE: return STRATEGIC;
+			case LONG_TERM_VALUE: return LONG_TERM;
 		}
 		return null;
 	}
