@@ -78,6 +78,7 @@ public final class KnownFeatures {
 
 	public static final String FEATURE_ADP = "features:adp";
 	public static final String FEATURE_STRATEGIC = "features:optimisation-strategic";
+	public static final String FEATURE_LONG_TERM = "features:longterm";
 
 	// Experimental
 	public static final String FEATURE_TRADER_BASED_INSERIONS = "features:trader-based-insertions";

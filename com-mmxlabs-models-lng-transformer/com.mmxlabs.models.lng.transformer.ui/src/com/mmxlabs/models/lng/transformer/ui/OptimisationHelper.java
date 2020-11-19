@@ -384,8 +384,10 @@ public final class OptimisationHelper {
 
 			// Create optimisation mode
 			{
-				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_ADP) && forADP //
+				if ((LicenseFeatures.isPermitted(KnownFeatures.FEATURE_ADP) && forADP) //
 						|| LicenseFeatures.isPermitted(KnownFeatures.FEATURE_STRATEGIC) //
+						|| (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_LONG_TERM) && scenario != null && scenario.isLongTerm())
+				//
 				) {
 					final OptionGroup group = dialog.createGroup(DataSection.General, "Mode");
 					createOptimisationModeOption(defaultSettings, editingDomain, scenario, dialog, copy, group, forADP, optionsAdded);
@@ -1516,7 +1518,9 @@ public final class OptimisationHelper {
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_ADP) && forADP) {
 			createADPCleanStateOption(defaultSettings, optionsAdded, editingDomain, dialog, copy, scenarioContainsForbiddedADPEvents, adpVesselEventIssueMsg, group);
 		}
-		createNominalOnlyOption(defaultSettings, optionsAdded, editingDomain, dialog, copy, scenarioContainsForbiddedADPEvents, adpVesselEventIssueMsg, group);
+		if (!(scenario != null && scenario.isLongTerm())) {
+			createNominalOnlyOption(defaultSettings, optionsAdded, editingDomain, dialog, copy, scenarioContainsForbiddedADPEvents, adpVesselEventIssueMsg, group);
+		}
 	}
 
 	private static void createSimilarityModeOption(final UserSettings defaultSettings, final EditingDomain editingDomain, final ParameterModesDialog dialog, final UserSettings copy,
