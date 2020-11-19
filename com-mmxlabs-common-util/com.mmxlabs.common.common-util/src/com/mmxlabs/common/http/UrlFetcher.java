@@ -34,7 +34,7 @@ public class UrlFetcher {
 	 * @throws ClientProtocolException
 	 * @throws IOException
 	 */
-	public static String fetchUrlContent(final String url) throws AuthenticationException, IOException {
+	public static String fetchURLContent(final String url) throws AuthenticationException, IOException {
 		return fetchURLContent(url, null, null);
 	}
 
