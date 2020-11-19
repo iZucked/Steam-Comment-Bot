@@ -190,6 +190,22 @@
                      class="PortModel">
                </target>
             </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.port.validation.RouteConstraint"
+                  id="com.mmxlabs.models.lng.port.validation.RouteConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="RouteConstraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="Route">
+               </target>
+            </constraint>
          </constraints>
       </constraintProvider>
    </extension>
