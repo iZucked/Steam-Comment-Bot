@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.reports.views.portrotation;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -19,6 +20,7 @@ import org.eclipse.swt.widgets.Composite;
 import com.google.inject.Inject;
 import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
+import com.mmxlabs.lingo.reports.ReportContents;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
@@ -90,6 +92,11 @@ public class PortRotationReportView extends AbstractConfigurableGridReportView {
 	};
 
 	private IScenarioInstanceElementCollector elementCollector;
+
+	/*
+	 * Field to allow subclasses of specific reports to only include visible columns rather than everything
+	 */
+	protected boolean includeAllColumnsForITS = true;
 
 	@Inject
 	public PortRotationReportView(final PortRotationBasedReportBuilder builder) {
@@ -307,17 +314,35 @@ public class PortRotationReportView extends AbstractConfigurableGridReportView {
 	public <T> T getAdapter(final Class<T> adapter) {
 
 		if (IReportContents.class.isAssignableFrom(adapter)) {
+			// Set a more repeatable sort order
+			{
+				final ColumnBlock[] initialReverseSortOrder = { getBlockManager().getBlockByID("com.mmxlabs.lingo.reports.components.columns.portrotation.startdate"),
+						getBlockManager().getBlockByID("com.mmxlabs.lingo.reports.components.columns.portrotation.vessel"),
+						getBlockManager().getBlockByID("com.mmxlabs.lingo.reports.components.columns.portrotation.schedule") };
+
+				if (includeAllColumnsForITS) {
+					// Sort columns by ID
+					List<String> blockIDOrder = new ArrayList<>(getBlockManager().getBlockIDOrder());
+					Collections.sort(blockIDOrder);
+					getBlockManager().setBlockIDOrder(blockIDOrder);
+				}
+
+				// go through in reverse order as latest is set to primary sort
+				for (final ColumnBlock block : initialReverseSortOrder) {
+					if (block != null) {
+						final List<ColumnHandler> handlers = block.getColumnHandlers();
+						for (final ColumnHandler handler : handlers) {
+							if (handler.column != null) {
+								sortingSupport.sortColumnsBy(handler.column.getColumn());
+							}
+						}
+					}
+				}
+			}
 
 			final CopyGridToJSONUtil jsonUtil = new CopyGridToJSONUtil(viewer.getGrid(), true);
 			final String jsonContents = jsonUtil.convert();
-			return (T) new IReportContents() {
-
-				@Override
-				public String getJSONContents() {
-					return jsonContents;
-				}
-			};
-
+			return adapter.cast(ReportContents.makeJSON(jsonContents));
 		}
 		return super.getAdapter(adapter);
 	}

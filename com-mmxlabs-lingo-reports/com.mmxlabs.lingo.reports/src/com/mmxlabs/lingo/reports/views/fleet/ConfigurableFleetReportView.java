@@ -9,6 +9,7 @@ package com.mmxlabs.lingo.reports.views.fleet;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -34,6 +35,7 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
+import com.mmxlabs.lingo.reports.ReportContents;
 import com.mmxlabs.lingo.reports.components.GroupAlternatingRowCellRenderer;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.services.EDiffOption;
@@ -61,6 +63,7 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
+import com.mmxlabs.models.ui.tabular.columngeneration.ColumnHandler;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnType;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
@@ -100,6 +103,11 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 
 	@Inject
 	private SelectedScenariosService selectedScenariosService;
+
+	/*
+	 * Field to allow subclasses of specific reports to only include visible columns rather than everything
+	 */
+	protected boolean includeAllColumnsForITS = true;
 
 	@Inject
 	public ConfigurableFleetReportView(final FleetBasedReportBuilder builder) {
@@ -244,20 +252,35 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 		// }
 
 		if (IReportContents.class.isAssignableFrom(adapter)) {
-
-			if (IReportContents.class.isAssignableFrom(adapter)) {
-
-				final CopyGridToJSONUtil jsonUtil = new CopyGridToJSONUtil(viewer.getGrid(), true);
-				final String jsonContents = jsonUtil.convert();
-				return (T) new IReportContents() {
-
-					@Override
-					public String getJSONContents() {
-						return jsonContents;
-					}
+			// Set a more repeatable sort order
+			{
+				final ColumnBlock[] initialReverseSortOrder = { //
+						getBlockManager().getBlockByID("com.mmxlabs.lingo.reports.components.columns.fleet.vessel") //
 				};
 
+				if (includeAllColumnsForITS) {
+					// Sort columns by ID
+					List<String> blockIDOrder = new ArrayList<>(getBlockManager().getBlockIDOrder());
+					Collections.sort(blockIDOrder);
+					getBlockManager().setBlockIDOrder(blockIDOrder);
+				}
+
+				// go through in reverse order as latest is set to primary sort
+				for (final ColumnBlock block : initialReverseSortOrder) {
+					if (block != null) {
+						final List<ColumnHandler> handlers = block.getColumnHandlers();
+						for (final ColumnHandler handler : handlers) {
+							if (handler.column != null) {
+								sortingSupport.sortColumnsBy(handler.column.getColumn());
+							}
+						}
+					}
+				}
 			}
+
+			final CopyGridToJSONUtil jsonUtil = new CopyGridToJSONUtil(viewer.getGrid(), true);
+			final String jsonContents = jsonUtil.convert();
+			return adapter.cast(ReportContents.makeJSON(jsonContents));
 		}
 
 		return super.getAdapter(adapter);
