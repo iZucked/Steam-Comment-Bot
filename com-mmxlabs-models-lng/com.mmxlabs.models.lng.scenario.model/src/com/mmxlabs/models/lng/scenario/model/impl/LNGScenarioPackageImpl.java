@@ -248,7 +248,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * @generated
 	 */
 	@Override
-	public EReference getLNGScenarioModel_AdpModels() {
+	public EReference getLNGScenarioModel_NominationsModel() {
 		return (EReference)lngScenarioModelEClass.getEStructuralFeatures().get(10);
 	}
 
@@ -258,18 +258,8 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * @generated
 	 */
 	@Override
-	public EReference getLNGScenarioModel_NominationsModel() {
-		return (EReference)lngScenarioModelEClass.getEStructuralFeatures().get(11);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EAttribute getLNGScenarioModel_LongTerm() {
-		return (EAttribute)lngScenarioModelEClass.getEStructuralFeatures().get(12);
+		return (EAttribute)lngScenarioModelEClass.getEStructuralFeatures().get(11);
 	}
 
 	/**
@@ -279,7 +269,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 */
 	@Override
 	public EAttribute getLNGScenarioModel_Anonymised() {
-		return (EAttribute)lngScenarioModelEClass.getEStructuralFeatures().get(13);
+		return (EAttribute)lngScenarioModelEClass.getEStructuralFeatures().get(12);
 	}
 
 	/**
@@ -392,7 +382,6 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 		createEReference(lngScenarioModelEClass, LNG_SCENARIO_MODEL__USER_SETTINGS);
 		createEReference(lngScenarioModelEClass, LNG_SCENARIO_MODEL__ANALYTICS_MODEL);
 		createEReference(lngScenarioModelEClass, LNG_SCENARIO_MODEL__ADP_MODEL);
-		createEReference(lngScenarioModelEClass, LNG_SCENARIO_MODEL__ADP_MODELS);
 		createEReference(lngScenarioModelEClass, LNG_SCENARIO_MODEL__NOMINATIONS_MODEL);
 		createEAttribute(lngScenarioModelEClass, LNG_SCENARIO_MODEL__LONG_TERM);
 		createEAttribute(lngScenarioModelEClass, LNG_SCENARIO_MODEL__ANONYMISED);
@@ -465,7 +454,6 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 		initEReference(getLNGScenarioModel_UserSettings(), theParametersPackage.getUserSettings(), null, "userSettings", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getLNGScenarioModel_AnalyticsModel(), theAnalyticsPackage.getAnalyticsModel(), null, "analyticsModel", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getLNGScenarioModel_AdpModel(), theADPPackage.getADPModel(), null, "adpModel", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getLNGScenarioModel_AdpModels(), theADPPackage.getADPModel(), null, "adpModels", null, 0, -1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getLNGScenarioModel_NominationsModel(), theNominationsPackage.getNominationsModel(), null, "nominationsModel", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getLNGScenarioModel_LongTerm(), ecorePackage.getEBoolean(), "longTerm", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getLNGScenarioModel_Anonymised(), ecorePackage.getEBoolean(), "anonymised", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

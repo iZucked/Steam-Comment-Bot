@@ -181,22 +181,13 @@ public interface LNGScenarioPackage extends EPackage {
 	int LNG_SCENARIO_MODEL__ADP_MODEL = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 9;
 
 	/**
-	 * The feature id for the '<em><b>Adp Models</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LNG_SCENARIO_MODEL__ADP_MODELS = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 10;
-
-	/**
 	 * The feature id for the '<em><b>Nominations Model</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_SCENARIO_MODEL__NOMINATIONS_MODEL = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 11;
+	int LNG_SCENARIO_MODEL__NOMINATIONS_MODEL = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 10;
 
 	/**
 	 * The feature id for the '<em><b>Long Term</b></em>' attribute.
@@ -205,7 +196,7 @@ public interface LNGScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_SCENARIO_MODEL__LONG_TERM = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 12;
+	int LNG_SCENARIO_MODEL__LONG_TERM = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 11;
 
 	/**
 	 * The feature id for the '<em><b>Anonymised</b></em>' attribute.
@@ -214,7 +205,7 @@ public interface LNGScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_SCENARIO_MODEL__ANONYMISED = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 13;
+	int LNG_SCENARIO_MODEL__ANONYMISED = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 12;
 
 	/**
 	 * The number of structural features of the '<em>Model</em>' class.
@@ -223,7 +214,7 @@ public interface LNGScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_SCENARIO_MODEL_FEATURE_COUNT = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 14;
+	int LNG_SCENARIO_MODEL_FEATURE_COUNT = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 13;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -507,17 +498,6 @@ public interface LNGScenarioPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getLNGScenarioModel_AdpModel();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getAdpModels <em>Adp Models</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Adp Models</em>'.
-	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getAdpModels()
-	 * @see #getLNGScenarioModel()
-	 * @generated
-	 */
-	EReference getLNGScenarioModel_AdpModels();
 
 	/**
 	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getNominationsModel <em>Nominations Model</em>}'.

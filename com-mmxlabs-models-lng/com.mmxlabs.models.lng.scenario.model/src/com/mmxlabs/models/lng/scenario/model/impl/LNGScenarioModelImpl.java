@@ -48,7 +48,6 @@ import com.mmxlabs.models.mmxcore.impl.MMXRootObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getUserSettings <em>User Settings</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getAnalyticsModel <em>Analytics Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getAdpModel <em>Adp Model</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getAdpModels <em>Adp Models</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getNominationsModel <em>Nominations Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#isLongTerm <em>Long Term</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#isAnonymised <em>Anonymised</em>}</li>
@@ -195,16 +194,6 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 * @ordered
 	 */
 	protected ADPModel adpModel;
-
-	/**
-	 * The cached value of the '{@link #getAdpModels() <em>Adp Models</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getAdpModels()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<ADPModel> adpModels;
 
 	/**
 	 * The cached value of the '{@link #getNominationsModel() <em>Nominations Model</em>}' containment reference.
@@ -853,19 +842,6 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 * @generated
 	 */
 	@Override
-	public EList<ADPModel> getAdpModels() {
-		if (adpModels == null) {
-			adpModels = new EObjectContainmentEList.Resolving<ADPModel>(ADPModel.class, this, LNGScenarioPackage.LNG_SCENARIO_MODEL__ADP_MODELS);
-		}
-		return adpModels;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public NominationsModel getNominationsModel() {
 		if (nominationsModel != null && nominationsModel.eIsProxy()) {
 			InternalEObject oldNominationsModel = (InternalEObject)nominationsModel;
@@ -996,8 +972,6 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 				return basicSetAnalyticsModel(null, msgs);
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ADP_MODEL:
 				return basicSetAdpModel(null, msgs);
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ADP_MODELS:
-				return ((InternalEList<?>)getAdpModels()).basicRemove(otherEnd, msgs);
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__NOMINATIONS_MODEL:
 				return basicSetNominationsModel(null, msgs);
 		}
@@ -1039,8 +1013,6 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ADP_MODEL:
 				if (resolve) return getAdpModel();
 				return basicGetAdpModel();
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ADP_MODELS:
-				return getAdpModels();
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__NOMINATIONS_MODEL:
 				if (resolve) return getNominationsModel();
 				return basicGetNominationsModel();
@@ -1090,10 +1062,6 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 				return;
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ADP_MODEL:
 				setAdpModel((ADPModel)newValue);
-				return;
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ADP_MODELS:
-				getAdpModels().clear();
-				getAdpModels().addAll((Collection<? extends ADPModel>)newValue);
 				return;
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__NOMINATIONS_MODEL:
 				setNominationsModel((NominationsModel)newValue);
@@ -1146,9 +1114,6 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ADP_MODEL:
 				setAdpModel((ADPModel)null);
 				return;
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ADP_MODELS:
-				getAdpModels().clear();
-				return;
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__NOMINATIONS_MODEL:
 				setNominationsModel((NominationsModel)null);
 				return;
@@ -1190,8 +1155,6 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 				return analyticsModel != null;
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ADP_MODEL:
 				return adpModel != null;
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ADP_MODELS:
-				return adpModels != null && !adpModels.isEmpty();
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__NOMINATIONS_MODEL:
 				return nominationsModel != null;
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__LONG_TERM:

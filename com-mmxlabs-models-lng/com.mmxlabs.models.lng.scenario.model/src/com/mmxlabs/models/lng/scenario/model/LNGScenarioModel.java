@@ -38,7 +38,6 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getUserSettings <em>User Settings</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getAnalyticsModel <em>Analytics Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getAdpModel <em>Adp Model</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getAdpModels <em>Adp Models</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getNominationsModel <em>Nominations Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#isLongTerm <em>Long Term</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#isAnonymised <em>Anonymised</em>}</li>
@@ -335,22 +334,6 @@ public interface LNGScenarioModel extends MMXRootObject {
 	 * @generated
 	 */
 	void setAdpModel(ADPModel value);
-
-	/**
-	 * Returns the value of the '<em><b>Adp Models</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.adp.ADPModel}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Adp Models</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Adp Models</em>' containment reference list.
-	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGScenarioModel_AdpModels()
-	 * @model containment="true" resolveProxies="true"
-	 * @generated
-	 */
-	EList<ADPModel> getAdpModels();
 
 	/**
 	 * Returns the value of the '<em><b>Nominations Model</b></em>' containment reference.

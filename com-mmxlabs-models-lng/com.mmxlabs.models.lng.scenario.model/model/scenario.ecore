@@ -21,9 +21,6 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="adpModel" eType="ecore:EClass ../../com.mmxlabs.models.lng.adp/model/adp.ecore#//ADPModel"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="adpModels" upperBound="-1"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.adp/model/adp.ecore#//ADPModel"
-        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="nominationsModel" eType="ecore:EClass ../../com.mmxlabs.models.lng.nominations/model/nominations.ecore#//NominationsModel"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="longTerm" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>

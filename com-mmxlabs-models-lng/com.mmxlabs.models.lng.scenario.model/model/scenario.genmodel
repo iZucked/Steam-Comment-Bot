@@ -22,7 +22,6 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scenario.ecore#//LNGScenarioModel/userSettings"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scenario.ecore#//LNGScenarioModel/analyticsModel"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scenario.ecore#//LNGScenarioModel/adpModel"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scenario.ecore#//LNGScenarioModel/adpModels"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scenario.ecore#//LNGScenarioModel/nominationsModel"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.ecore#//LNGScenarioModel/longTerm"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.ecore#//LNGScenarioModel/anonymised"/>
