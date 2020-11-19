@@ -6,7 +6,7 @@
 	<parent>
 		<artifactId>com.mmxlabs.rcp.common.parent</artifactId>
 		<groupId>com.mmxlabs.rcp.common</groupId>
-		<version>4.10.28.RELEASE</version>
+		<version>4.10.29-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>com.mmxlabs.rcp.common</artifactId>
