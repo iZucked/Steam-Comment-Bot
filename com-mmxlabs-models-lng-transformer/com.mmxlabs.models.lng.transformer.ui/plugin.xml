@@ -430,6 +430,10 @@
          <PluginXMLEnablement
                feature="load-trigger"
                plugin.xml="load-trigger.plugin.xml">
+         </PluginXMLEnablement>  
+         <PluginXMLEnablement
+               feature="anonymise-scenario"
+               plugin.xml="anonymise-scenario.plugin.xml">
          </PluginXMLEnablement>        
       </extension>
       <extension
