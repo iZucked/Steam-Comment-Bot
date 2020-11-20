@@ -16,8 +16,8 @@
             <action
                   class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.ToggleAnonymiseScenarioEditorActionDelegate"
                   definitionId="com.mmxlabs.commands.toggleanonymisescenario"
-                  disabledIcon="icons/letter_d.png"
-                  icon="icons/letter_a.png"
+                  disabledIcon="icons/mask.png"
+                  icon="icons/mask.png"
                   id="com.mmxlabs.shiplingo.platform.models.toggleanonymisescenario"
                   label="Toggle scenario anonymisation"
                   style="toggle"
