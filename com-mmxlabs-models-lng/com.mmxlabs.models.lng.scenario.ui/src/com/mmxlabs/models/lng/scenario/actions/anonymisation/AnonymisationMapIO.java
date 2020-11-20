@@ -62,21 +62,19 @@ public class AnonymisationMapIO {
 
 		try (InputStream inputStream = new FileInputStream(file)){
 			return EncryptionUtils.decrypt(inputStream, AnonymisationMapIO::readRecords);
-		} catch (Exception e1) {
-			e1.printStackTrace();
-			return Collections.emptyList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ArrayList<AnonymisationRecord>();
 		}
 	}
 	
 	private static List<AnonymisationRecord> readRecords(final InputStream is) throws IOException {
 		final ObjectMapper mapper = createObjectMapper();
-		List<AnonymisationRecord> records = mapper.readValue(is, new TypeReference<List<AnonymisationRecord>>() {});
-		
-		return records;
+		return mapper.readValue(is, new TypeReference<List<AnonymisationRecord>>() {});
 	}
 
 	public static List<AnonymisationRecord> readCSV(final String fileName) throws Exception{
-		final List<AnonymisationRecord> records = new ArrayList();
+		final List<AnonymisationRecord> records = new ArrayList<>();
 		try(FileCSVReader reader = new FileCSVReader(new File(fileName))){
 			Map<String, String> row;
 			while ((row = reader.readRow(true)) != null) {

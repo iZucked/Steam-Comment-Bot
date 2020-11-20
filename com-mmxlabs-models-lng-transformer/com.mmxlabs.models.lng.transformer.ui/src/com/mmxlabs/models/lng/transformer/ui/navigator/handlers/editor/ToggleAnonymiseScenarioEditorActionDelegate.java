@@ -142,6 +142,9 @@ public class ToggleAnonymiseScenarioEditorActionDelegate extends ActionDelegate 
 		final LNGScenarioModel scenarioModel = currentModel;
 		final EditingDomain ed = editingDomain;
 		final List<AnonymisationRecord> records = AnonymisationMapIO.read(AnonymisationMapIO.anonyMapFile);
+		if (records.isEmpty()) {
+			//Show dialog which says that automatic naming will be applied
+		}
 		for (final AnonymisationRecord r : records) {
 			usedIDStrings.add(r.newName);
 		}
