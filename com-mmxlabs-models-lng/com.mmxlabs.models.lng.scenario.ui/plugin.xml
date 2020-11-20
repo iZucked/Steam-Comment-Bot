@@ -230,6 +230,19 @@
                   label="Combined curves"
                   style="push">                
             </command>
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.export.wizards.anonymisationmap"
+                  label="Anonymisation map"
+                  style="push">
+                  <visibleWhen
+                     checkEnabled="false">
+                  <test
+                        args="features:anonymise-scenario"
+                        forcePluginActivation="true"
+                        property="com.mmxlabs.license.features.enablement">
+                  </test>
+               </visibleWhen>
+            </command>
          </menuContribution>
          <menuContribution
                allPopups="false"
@@ -353,6 +366,19 @@
                   label="Port costs"
                   style="push">
             </command>
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.anonymisationmap"
+                  label="Anonymisation map"
+                  style="push">
+                  <visibleWhen
+                     checkEnabled="false">
+                  <test
+                        args="features:anonymise-scenario"
+                        forcePluginActivation="true"
+                        property="com.mmxlabs.license.features.enablement">
+                  </test>
+               </visibleWhen>
+            </command>
          </menuContribution>
          <!--
           <menuContribution
@@ -442,6 +468,16 @@
                defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.portcosts.ImportPortCostsHandler"
                id="com.mmxlabs.models.lng.scenario.import.wizards.portcosts"
                name="Import port costs from CSV">
+         </command>
+         <command
+               defaultHandler="com.mmxlabs.models.lng.scenario.actions.anonymisation.ImportAnonymisationMapHandler"
+               id="com.mmxlabs.models.lng.scenario.import.wizards.anonymisationmap"
+               name="Import anonymisation map from CSV">
+         </command>
+         <command
+               defaultHandler="com.mmxlabs.models.lng.scenario.actions.anonymisation.ExportAnonymisationMapHandler"
+               id="com.mmxlabs.models.lng.scenario.export.wizards.anonymisationmap"
+               name="Export anonymisation map to CSV">
          </command>
          <command
                defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.nominations.ImportNominationsHandler"
