@@ -50,34 +50,34 @@ public class ADPConstraintCheckerTests extends AbstractADPAndLightWeightTests {
 
 	@Test
 	public void testInFeasibleNotEnoughSalesSlots() {
-		test12Cargoes2Vessels(1, 1, 2, 2, "On sale contract Sales A:\r\n" + "Jan Min:2 Max:2 (Min violated, slots used = 1)");
+		test12Cargoes2Vessels(1, 1, 2, 2, "Sales A", "Jan", "a minimum of 2 slots");
 	}
 
 	@Test
 	public void testInFeasibleNotEnoughLoadSlots() {
-		test12Cargoes2Vessels(2, 2, 1, 1, "On purchase contract Purchase A:\r\n" + "Jan Min:2 Max:2 (Min violated, slots used = 1)");
+		test12Cargoes2Vessels(2, 2, 1, 1, "Purchase A", "Jan", "a minimum of 2 slots");
 	}
 
 	@Test
 	public void testInFeasibleNotEnoughLoadSlotsOrSalesSlots() {
-		test12Cargoes2Vessels(2, 2, 2, 2, "On sale contract Sales A:\r\n" + "Jan Min:2 Max:2 (Min violated, slots used = 1)",
-				"On purchase contract Purchase A:\r\n" + "Jan Min:2 Max:2 (Min violated, slots used = 1)");
+		test12Cargoes2Vessels(2, 2, 2, 2, "Sales A", "Jan", "a minimum of 2 slots",
+				"Purchase A", "a minimum of 2 slots");
 	}
 
 	@Test
 	public void testInFeasibleTooManySalesSlots() {
-		test12Cargoes2Vessels(1, 1, 0, 0, "On sale contract Sales A:\r\n" + "Jan Min:0 Max:0 (Max violated, slots used = 1)");
+		test12Cargoes2Vessels(1, 1, 0, 0, "Sales A", "Jan", "a maximum of 0 slots");
 	}
 
 	@Test
 	public void testInFeasibleTooManyLoadSlots() {
-		test12Cargoes2Vessels(0, 0, 1, 1, "On purchase contract Purchase A:\r\n" + "Jan Min:0 Max:0 (Max violated, slots used = 1)");
+		test12Cargoes2Vessels(0, 0, 1, 1, "Purchase A", "Jan", "a maximum of 0 slots");
 	}
 
 	@Test
 	public void testInFeasibleTooManyLoadSlotsOrSalesSlots() {
-		test12Cargoes2Vessels(0, 0, 0, 0, "On sale contract Sales A:\r\n" + "Jan Min:0 Max:0 (Max violated, slots used = 1)",
-				"On purchase contract Purchase A:\r\n" + "Jan Min:0 Max:0 (Max violated, slots used = 1)");
+		test12Cargoes2Vessels(0, 0, 0, 0, "Sales A", "Jan", "a maximum of 0 slots",
+				"Purchase A", "a maximum of 0 slots");
 	}
 
 	/**
