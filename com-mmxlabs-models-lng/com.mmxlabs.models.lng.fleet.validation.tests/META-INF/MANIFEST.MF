@@ -3,12 +3,12 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Fleet Validation Tests
 Fragment-Host: com.mmxlabs.models.lng.fleet.validation
 Bundle-SymbolicName: com.mmxlabs.models.lng.fleet.validation.tests
-Bundle-Version: 4.10.29.RELEASE
+Bundle-Version: 4.10.30.qualifier
 Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
- com.mmxlabs.models.lng.fleet;bundle-version="[4.10.29,5.0.0)",
- com.mmxlabs.models.lng.port;bundle-version="[4.10.29,5.0.0)",
- com.mmxlabs.models.ui.validation;bundle-version="[4.10.29,5.0.0)",
+ com.mmxlabs.models.lng.fleet;bundle-version="[4.10.30,5.0.0)",
+ com.mmxlabs.models.lng.port;bundle-version="[4.10.30,5.0.0)",
+ com.mmxlabs.models.ui.validation;bundle-version="[4.10.30,5.0.0)",
  org.mockito.mockito-core;bundle-version="1.9.5",
  net.bytebuddy.byte-buddy;bundle-version="1.7.8",
  org.objenesis;bundle-version="2.6.0",
