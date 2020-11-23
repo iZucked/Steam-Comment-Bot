@@ -1,10 +1,10 @@
 package com.mmxlabs.models.lng.scenario.actions.anonymisation;
 
 public enum AnonymisationRecordType{
-	LS, //Load Slot
-	DS, //Discharge Slot
-	PC, //Purchase Contract
-	SC, //Sales Contract
-	VN, //Vessel name
-	VS; //Vessel short name
+	BuyID, //Load Slot
+	SellID, //Discharge Slot
+	BuyContractID, //Purchase Contract
+	SellContractID, //Sales Contract
+	VesselID, //Vessel name
+	VesselShortID; //Vessel short name
 }

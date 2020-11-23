@@ -9,23 +9,23 @@ public class AnonymisationRecord {
 		this.oldName = oldName;
 		this.newName = newName;
 		switch (type) {
-		case "LS":
-			this.type = AnonymisationRecordType.LS;
+		case "BuyID":
+			this.type = AnonymisationRecordType.BuyID;
 			break;
-		case "DS":
-			this.type = AnonymisationRecordType.DS;
+		case "SellID":
+			this.type = AnonymisationRecordType.SellID;
 			break;
-		case "PC":
-			this.type = AnonymisationRecordType.PC;
+		case "BuyContractID":
+			this.type = AnonymisationRecordType.BuyContractID;
 			break;
-		case "SC":
-			this.type = AnonymisationRecordType.SC;
+		case "SellContractID":
+			this.type = AnonymisationRecordType.SellContractID;
 			break;
-		case "VN":
-			this.type = AnonymisationRecordType.VN;
+		case "VesselID":
+			this.type = AnonymisationRecordType.VesselID;
 			break;
-		case "VS":
-			this.type = AnonymisationRecordType.VS;
+		case "VesseShortID":
+			this.type = AnonymisationRecordType.VesselShortID;
 			break;
 		default:
 			throw new IllegalStateException("Type must be provided. Allowed types are: LS for load slot; DS for discharge slot; \n PC for purchase contract; SC for sales contract; \n VS for vessel.");

@@ -25,8 +25,8 @@ public class ImportAnonymisationMapHandler extends AbstractHandler {
 		if (importFileName.isEmpty()) {
 			return null;
 		}
-		String message;
-		List<AnonymisationRecord> records = new ArrayList();
+		String message = "";
+		List<AnonymisationRecord> records = new ArrayList<>();
 		try {
 			records.addAll(AnonymisationMapIO.readCSV(importFileName));
 		} catch (Exception e) {
@@ -34,7 +34,7 @@ public class ImportAnonymisationMapHandler extends AbstractHandler {
 		}
 		
 		if (records.isEmpty()) {
-			message = "Anonymisation map is empty";
+			message = "Anonymisation map is empty. \n" + message;
 		} else {
 			message = AnonymisationMapIO.write(records, AnonymisationMapIO.anonyMapFile);
 		}

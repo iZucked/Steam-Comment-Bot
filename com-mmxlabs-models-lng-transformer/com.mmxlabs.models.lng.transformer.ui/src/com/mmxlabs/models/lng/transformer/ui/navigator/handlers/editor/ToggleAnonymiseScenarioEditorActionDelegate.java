@@ -60,12 +60,12 @@ public class ToggleAnonymiseScenarioEditorActionDelegate extends ActionDelegate 
 	protected EditingDomain editingDomain;
 	private static final Set<String> usedIDStrings = new HashSet<>();
 	
-	private static final String VN = "Vessel";
-	private static final String VS = "VSL";
-	private static final String LS = "Purchase";
-	private static final String DS = "Sale";
-	private static final String PC = "Purchase contract";
-	private static final String SC = "Sales contract";
+	private static final String VesselID = "Vessel";
+	private static final String VesselShortID = "VSL";
+	private static final String BuyID = "Purchase";
+	private static final String SellID = "Sale";
+	private static final String BuyContractID = "Purchase contract";
+	private static final String SellContractID = "Sales contract";
 
 	protected AdapterImpl notificationAdapter = new SafeAdapterImpl() {
 
@@ -179,8 +179,8 @@ public class ToggleAnonymiseScenarioEditorActionDelegate extends ActionDelegate 
 			final CompoundCommand renameCommand, Function<RFEntry, Command> renameFunction) {
 		final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(currentModel);
 		for (final Vessel v : fleetModel.getVessels()) {
-			renameCommand.append(renameFunction.apply(new RFEntry(editingDomain, records, v, v.getName(), MMXCorePackage.Literals.NAMED_OBJECT__NAME, VN, AnonymisationRecordType.VN)));
-			renameCommand.append(renameFunction.apply(new RFEntry(editingDomain, records, v, v.getShortName(), FleetPackage.Literals.VESSEL__SHORT_NAME, VS, AnonymisationRecordType.VS)));
+			renameCommand.append(renameFunction.apply(new RFEntry(editingDomain, records, v, v.getName(), MMXCorePackage.Literals.NAMED_OBJECT__NAME, VesselID, AnonymisationRecordType.VesselID)));
+			renameCommand.append(renameFunction.apply(new RFEntry(editingDomain, records, v, v.getShortName(), FleetPackage.Literals.VESSEL__SHORT_NAME, VesselShortID, AnonymisationRecordType.VesselShortID)));
 		}
 	}
 	
@@ -192,10 +192,10 @@ public class ToggleAnonymiseScenarioEditorActionDelegate extends ActionDelegate 
 			for(final Slot<?> s : c.getSlots()) {
 				if (!(s instanceof SpotSlot)) {
 					if (s instanceof LoadSlot) {
-						renameCommand.append(renameFunction.apply(new RFEntry(editingDomain, records, s, s.getName(), MMXCorePackage.Literals.NAMED_OBJECT__NAME, LS, AnonymisationRecordType.LS)));
+						renameCommand.append(renameFunction.apply(new RFEntry(editingDomain, records, s, s.getName(), MMXCorePackage.Literals.NAMED_OBJECT__NAME, BuyID, AnonymisationRecordType.BuyID)));
 						usedSlots.add(s);
 					} else {
-						renameCommand.append(renameFunction.apply(new RFEntry(editingDomain, records, s, s.getName(), MMXCorePackage.Literals.NAMED_OBJECT__NAME, DS, AnonymisationRecordType.DS)));
+						renameCommand.append(renameFunction.apply(new RFEntry(editingDomain, records, s, s.getName(), MMXCorePackage.Literals.NAMED_OBJECT__NAME, SellID, AnonymisationRecordType.SellID)));
 						usedSlots.add(s);
 					}
 				}
@@ -203,13 +203,13 @@ public class ToggleAnonymiseScenarioEditorActionDelegate extends ActionDelegate 
 		}
 		for (final Slot<?> s : cargoModel.getLoadSlots()) {
 			if (!(s instanceof SpotSlot) && !(usedSlots.contains(s))) {
-				renameCommand.append(renameFunction.apply(new RFEntry(editingDomain, records, s, s.getName(), MMXCorePackage.Literals.NAMED_OBJECT__NAME, LS, AnonymisationRecordType.LS)));
+				renameCommand.append(renameFunction.apply(new RFEntry(editingDomain, records, s, s.getName(), MMXCorePackage.Literals.NAMED_OBJECT__NAME, BuyID, AnonymisationRecordType.BuyID)));
 				usedSlots.add(s);
 			}
 		}
 		for (final Slot<?> s : cargoModel.getDischargeSlots()) {
 			if (!(s instanceof SpotSlot) && !(usedSlots.contains(s))) {
-				renameCommand.append(renameFunction.apply(new RFEntry(editingDomain, records, s, s.getName(), MMXCorePackage.Literals.NAMED_OBJECT__NAME, DS, AnonymisationRecordType.DS)));
+				renameCommand.append(renameFunction.apply(new RFEntry(editingDomain, records, s, s.getName(), MMXCorePackage.Literals.NAMED_OBJECT__NAME, SellID, AnonymisationRecordType.SellID)));
 				usedSlots.add(s);
 			}
 		}
@@ -219,10 +219,10 @@ public class ToggleAnonymiseScenarioEditorActionDelegate extends ActionDelegate 
 			final CompoundCommand renameCommand, Function<RFEntry, Command> renameFunction) {
 		final CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(currentModel);
 		for (final PurchaseContract c : commercialModel.getPurchaseContracts()) {
-			renameCommand.append(renameFunction.apply(new RFEntry(editingDomain, records, c, c.getName(), MMXCorePackage.Literals.NAMED_OBJECT__NAME, PC, AnonymisationRecordType.PC)));
+			renameCommand.append(renameFunction.apply(new RFEntry(editingDomain, records, c, c.getName(), MMXCorePackage.Literals.NAMED_OBJECT__NAME, BuyContractID, AnonymisationRecordType.BuyContractID)));
 		}
 		for (final SalesContract c : commercialModel.getSalesContracts()) {
-			renameCommand.append(renameFunction.apply(new RFEntry(editingDomain, records, c, c.getName(), MMXCorePackage.Literals.NAMED_OBJECT__NAME, SC, AnonymisationRecordType.SC)));
+			renameCommand.append(renameFunction.apply(new RFEntry(editingDomain, records, c, c.getName(), MMXCorePackage.Literals.NAMED_OBJECT__NAME, SellContractID, AnonymisationRecordType.SellContractID)));
 		}
 	}
 	
@@ -261,9 +261,9 @@ public class ToggleAnonymiseScenarioEditorActionDelegate extends ActionDelegate 
 
 	private static String suggestNewName(final String prefix) {
 		int counter = 0;
-		String suggestedName = prefix + counter++;
+		String suggestedName = String.format("%s %d", prefix, counter++);
 		while(usedIDStrings.contains(suggestedName)) {
-			suggestedName = prefix + counter++;
+			suggestedName = String.format("%s %d", prefix, counter++);
 		}
 		usedIDStrings.add(suggestedName);
 		return suggestedName;
