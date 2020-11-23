@@ -20,9 +20,12 @@ import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionDelegate;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -144,7 +147,14 @@ public class ToggleAnonymiseScenarioEditorActionDelegate extends ActionDelegate 
 		final List<AnonymisationRecord> records = AnonymisationMapIO.read(AnonymisationMapIO.anonyMapFile);
 		if (records.isEmpty()) {
 			//Show dialog which says that automatic naming will be applied
+			final Shell shell = PlatformUI.getWorkbench().getDisplay().getActiveShell();
+			final MessageDialog dialog = new MessageDialog(shell, "Anonymisation", null, "Default naming generation will be applied!", 0, 0, "OK","Cancel") ;
+			dialog.create();
+			if (dialog.open() == 1) {
+				return;
+			}
 		}
+		usedIDStrings.clear();
 		for (final AnonymisationRecord r : records) {
 			usedIDStrings.add(r.newName);
 		}
