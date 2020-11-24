@@ -179,7 +179,7 @@ public class VesselComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the fillCapacity feature on Vessel
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_fillVolumeReadOnlyEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(new VesselFillVolumeInlineEditor(FleetPackage.Literals.VESSEL__CAPACITY));

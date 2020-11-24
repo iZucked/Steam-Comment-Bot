@@ -1085,6 +1085,8 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		createFeatureOverrideAnnotations();
 		// http://www.mmxlabs.com/models/ui/featureEnablement
 		createFeatureEnablementAnnotations();
+		// http://www.mmxlabs.com/models/validation
+		createValidationAnnotations();
 		// http://www.mmxlabs.com/models/csv
 		createCsvAnnotations();
 		// http://www.mmxlabs.com/models/featureOverrideByContainer
@@ -1328,6 +1330,22 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		   source,
 		   new String[] {
 			   "feature", "reliq-support"
+		   });
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://www.mmxlabs.com/models/validation</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createValidationAnnotations() {
+		String source = "http://www.mmxlabs.com/models/validation";
+		addAnnotation
+		  (getVessel_Notes(),
+		   source,
+		   new String[] {
+			   "ignore", "true"
 		   });
 	}
 

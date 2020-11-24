@@ -1555,6 +1555,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		// Create annotations
 		// http://www.mmxlabs.com/models/ui/numberFormat
 		createNumberFormatAnnotations();
+		// http://www.mmxlabs.com/models/validation
+		createValidationAnnotations();
 		// http://www.mmxlabs.com/models/pricing/expressionType
 		createExpressionTypeAnnotations();
 		// slotContractParams
@@ -1657,6 +1659,22 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		   source,
 		   new String[] {
 			   "unit", "$/day"
+		   });
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://www.mmxlabs.com/models/validation</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createValidationAnnotations() {
+		String source = "http://www.mmxlabs.com/models/validation";
+		addAnnotation
+		  (getContract_Notes(),
+		   source,
+		   new String[] {
+			   "ignore", "true"
 		   });
 	}
 

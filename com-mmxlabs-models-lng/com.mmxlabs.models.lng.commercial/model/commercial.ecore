@@ -84,7 +84,11 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="priceInfo" lowerBound="1"
         eType="#//LNGPriceCalculatorParameters" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="notes" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="notes" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.mmxlabs.com/models/validation">
+        <details key="ignore" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="contractType" eType="#//ContractType"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="pricingEvent" lowerBound="1"
         eType="#//PricingEvent"/>
