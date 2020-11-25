@@ -108,4 +108,17 @@ public final class KnownFeatures {
 	 */
 	
 	public static final String FEATURE_REPAIR_DELETE_ALL_EMPTY_CARGOES = "features:repair-delete-all-empty-cargoes";
+	
+	/** 
+	 * Headline report entries
+	 */
+	
+	public static final String FEATURE_HEADLINE_CHARTER_LENGTH = "features:headline-charter-length";
+	public static final String FEATURE_HEADLINE_NOMINALS = "features:headline-nominals";
+	public static final String FEATURE_HEADLINE_UPSIDE = "features:report-headline-upside";
+	public static final String FEATURE_HEADLINE_SALES_REVENUE = "features:headline-sales-revenue";
+	public static final String FEATURE_HEADLINE_EQUITY_BOOK = "features:report-equity-book";
+	public static final String FEATURE_HEADLINE_IDLE_DAYS = "features:headline-idle-days";
+	public static final String FEATURE_HEADLINE_PURCHASE_COST = "features:headline-purchase-cost";
+	
 }
