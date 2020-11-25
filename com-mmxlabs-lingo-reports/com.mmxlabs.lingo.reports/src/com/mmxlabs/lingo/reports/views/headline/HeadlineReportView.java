@@ -127,7 +127,9 @@ public class HeadlineReportView extends ViewPart {
 		//
 		LABEL_LATENESS(ColumnType.LABEL, "Late", null), VALUE_LATENESS(ColumnType.VALUE, 5200l, KPIReportTransformer.TYPE_TIME), //
 		//
-		LABEL_VIOLATIONS(ColumnType.LABEL, "Issues", null), VALUE_VIOLATIONS(ColumnType.VALUE, 100l, ""); //
+		LABEL_VIOLATIONS(ColumnType.LABEL, "Issues", null), VALUE_VIOLATIONS(ColumnType.VALUE, 100l, ""), //
+		//
+		LABEL_NOMINALS(ColumnType.LABEL, "Nominals", null), VALUE_NOMINALS(ColumnType.VALUE, 100l, "");
 
 		private final ColumnType columnType;
 		private final Object labelOrDefaultLong;
@@ -289,6 +291,8 @@ public class HeadlineReportView extends ViewPart {
 				return d.purchaseCost;
 			case VALUE_SALES_REVENUE:
 				return d.salesRevenue;
+			case VALUE_NOMINALS:
+				return d.nominals;
 			default:
 				break;
 
@@ -437,6 +441,13 @@ public class HeadlineReportView extends ViewPart {
 						color = SWT.COLOR_BLACK;
 					} else {
 						color = (d.salesRevenue - pinD.salesRevenue) >= 0 ? SWT.COLOR_DARK_GREEN : SWT.COLOR_RED;
+					}
+					break;
+				case VALUE_NOMINALS:
+					if (pinD == null) {
+						color = SWT.COLOR_BLACK;
+					} else {
+						color = (d.nominals - pinD.nominals) > 0 ? SWT.COLOR_RED : SWT.COLOR_DARK_GREEN;
 					}
 					break;
 				default:
