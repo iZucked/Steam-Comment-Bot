@@ -30,6 +30,7 @@ import com.google.common.collect.MapMaker;
 import com.mmxlabs.hub.IUpstreamDetailChangedListener;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
+import com.mmxlabs.rcp.common.locking.WellKnownTriggers;
 
 public class GenericDataRepository {
 
@@ -48,7 +49,7 @@ public class GenericDataRepository {
 	private final List<String> initialTypes = new LinkedList<>();
 
 	private final IUpstreamDetailChangedListener upstreamDetailsChangedListener;
-	
+
 	private GenericDataRepository() {
 		dataMap = new MapMaker() //
 				.concurrencyLevel(4) //
@@ -157,7 +158,7 @@ public class GenericDataRepository {
 					synchronized (initialTypes) {
 						GenericDataRepository.this.updater = new GenericDataUpdater(dataFolder, client, initialTypes, GenericDataRepository.this::update);
 					}
-					updater.start();
+					WellKnownTriggers.WORKSPACE_DATA_ENCRYPTION_CHECK.delayUntilTriggered(() -> updater.start());
 				}
 				this.close();
 				return workspace;

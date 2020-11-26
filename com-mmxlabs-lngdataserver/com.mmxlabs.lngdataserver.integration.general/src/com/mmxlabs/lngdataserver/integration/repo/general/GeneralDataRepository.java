@@ -30,6 +30,7 @@ import com.google.common.collect.MapMaker;
 import com.mmxlabs.hub.IUpstreamDetailChangedListener;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
+import com.mmxlabs.rcp.common.locking.WellKnownTriggers;
 
 public class GeneralDataRepository {
 
@@ -154,7 +155,7 @@ public class GeneralDataRepository {
 					synchronized (initialTypes) {
 						GeneralDataRepository.this.updater = new GeneralDataUpdater(dataFolder, client, initialTypes, GeneralDataRepository.this::update);
 					}
-					updater.start();
+					WellKnownTriggers.WORKSPACE_DATA_ENCRYPTION_CHECK.delayUntilTriggered(() -> updater.start());
 				}
 				this.close();
 				return workspace;

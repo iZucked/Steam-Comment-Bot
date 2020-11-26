@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.BiConsumer;
@@ -22,6 +23,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
+import com.google.common.cache.CacheStats;
 import com.google.common.cache.LoadingCache;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
@@ -100,7 +102,7 @@ public class PNLBasedWindowTrimmer {
 	@Named("hint-lngtransformer-disable-caches")
 	private boolean hintEnableCache;
 
-	private static final boolean recordCacheStats = false;
+	private static final boolean recordCacheStats = true;
 
 	private final LoadingCache<PNLTrimmerCacheKey, List<Pair<ScheduledPlanInput, ScheduledVoyagePlanResult>>> cache;
 
@@ -453,6 +455,12 @@ public class PNLBasedWindowTrimmer {
 			return doComputeVoyagePlanResults(key);
 		} else {
 			final List<Pair<ScheduledPlanInput, ScheduledVoyagePlanResult>> result = cache.getUnchecked(key);
+			if (new Random().nextDouble() < 0.0001) {
+				CacheStats stats = cache.stats();
+				System.out.println("PNL Trimmer: " + stats + " " + (100.0 * stats.hitRate()));
+//				cache.
+
+			}
 			if (cacheMode == CacheMode.Verify) {
 				final List<Pair<ScheduledPlanInput, ScheduledVoyagePlanResult>> expected = doComputeVoyagePlanResults(key);
 				assert Objects.equals(result, expected);

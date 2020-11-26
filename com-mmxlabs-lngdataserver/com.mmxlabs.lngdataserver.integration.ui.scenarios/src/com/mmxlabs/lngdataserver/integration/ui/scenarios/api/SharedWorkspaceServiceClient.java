@@ -5,6 +5,7 @@
 package com.mmxlabs.lngdataserver.integration.ui.scenarios.api;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.LinkedList;
@@ -19,6 +20,7 @@ import com.mmxlabs.hub.common.http.HttpClientUtil;
 import com.mmxlabs.hub.common.http.IProgressListener;
 import com.mmxlabs.hub.common.http.ProgressRequestBody;
 import com.mmxlabs.hub.common.http.ProgressResponseBody;
+import com.mmxlabs.scenario.service.model.util.encryption.DataStreamReencrypter;
 
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
@@ -27,9 +29,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import okio.BufferedSink;
 import okio.BufferedSource;
-import okio.Okio;
 
 public class SharedWorkspaceServiceClient {
 
@@ -82,7 +82,7 @@ public class SharedWorkspaceServiceClient {
 		}
 	}
 
-	public boolean downloadTo(final String uuid, final File file, final IProgressListener progressListener) throws IOException {
+	public boolean downloadTo(final String uuid, final File file, final IProgressListener progressListener) throws Exception {
 		OkHttpClient.Builder clientBuilder = httpClient.newBuilder();
 		if (progressListener != null) {
 			clientBuilder = clientBuilder.addNetworkInterceptor(new Interceptor() {
@@ -108,11 +108,11 @@ public class SharedWorkspaceServiceClient {
 			if (!response.isSuccessful()) {
 				throw new IOException("Unexpected code: " + response);
 			}
-			try (BufferedSource bufferedSource = response.body().source()) {
-				try (final BufferedSink bufferedSink = Okio.buffer(Okio.sink(file))) {
-					bufferedSink.writeAll(bufferedSource);
+			try (FileOutputStream out = new FileOutputStream(file)) {
+				try (BufferedSource bufferedSource = response.body().source()) {
+					DataStreamReencrypter.reencryptScenario(bufferedSource.inputStream(), out);
+					return true;
 				}
-				return true;
 			}
 		}
 	}

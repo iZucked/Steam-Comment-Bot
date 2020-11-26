@@ -60,6 +60,7 @@ public final class ScenarioServiceRegistry {
 		scenarioService.notifyReady(() -> {
 			// Add to EMF model -- note, this can be blocking!
 			new Thread() {
+				@Override
 				public void run() {
 					ScenarioService serviceModel = scenarioService.getServiceModel();
 					// Avoid concurrent adds

@@ -43,6 +43,10 @@ public class Triple<A, B, C> {
 		this.third = copy.getThird();
 	}
 
+	public static <A, B, C> Triple<A, B, C> of(A first, B second, C third) {
+		return new Triple<>(first, second, third);
+	}
+
 	public final A getFirst() {
 		return first;
 	}

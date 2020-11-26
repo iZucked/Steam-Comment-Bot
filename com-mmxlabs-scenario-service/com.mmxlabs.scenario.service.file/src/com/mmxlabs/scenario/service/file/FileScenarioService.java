@@ -50,6 +50,7 @@ import com.google.common.io.Files;
 import com.mmxlabs.common.io.FileDeleter;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.rcp.common.ServiceHelper;
+import com.mmxlabs.rcp.common.locking.WellKnownTriggers;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.file.internal.Activator;
 import com.mmxlabs.scenario.service.file.internal.FileScenarioServiceBackup;
@@ -110,18 +111,21 @@ public class FileScenarioService extends AbstractScenarioService {
 
 		storeURI = URI.createFileURI(workspaceLocation + modelURIString);
 
-		// Initial model load
-		new Thread(() -> {
-			// Trigger workspace backup before the full initialisation
-			try {
-				backupWorkspace();
-			} catch (final Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			getServiceModel();
-			setReady();
-		}).start();
+		WellKnownTriggers.WORKSPACE_DATA_ENCRYPTION_CHECK.delayUntilTriggered(() -> {
+			// Initial model load
+			new Thread(() -> {
+
+				// Trigger workspace backup before the full initialisation
+				try {
+					backupWorkspace();
+				} catch (final Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				getServiceModel();
+				setReady();
+			}).start();
+		});
 	}
 
 	/**

@@ -40,4 +40,12 @@
          </adapter>
       </factory>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="com.mmxlabs.scenario.service.model.util.encryption.ui.preferences.KeyfileInformation"
+            id="com.mmxlabs.scenario.service.model.util.encryption.ui.preferences.KeyfileInformation"
+            name="Encryption Info">
+      </page>
+   </extension>
 </plugin>
