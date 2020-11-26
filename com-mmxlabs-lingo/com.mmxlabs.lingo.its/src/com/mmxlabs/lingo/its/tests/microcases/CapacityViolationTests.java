@@ -29,6 +29,7 @@ import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.EVesselTankState;
@@ -148,9 +149,9 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 
 		// Create cargo 1
 		cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 10), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 10), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				.withVesselAssignment(vesselAvailability1, 1) // -1 is nominal
 				.withAssignmentFlags(false, false) //
@@ -163,9 +164,9 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 	public void testMultipleCapacityConstraints() throws Exception {
 		initCommonData1();
 
-		final LoadSlot loadSlot = cargoModelBuilder.makeFOBPurchase("L2", LocalDate.of(2015, 12, 9), portFinder.findPort("Point Fortin"), null, entity, "5", null).build();
+		final LoadSlot loadSlot = cargoModelBuilder.makeFOBPurchase("L2", LocalDate.of(2015, 12, 9), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", null).build();
 
-		final DischargeSlot dischargeSlot = cargoModelBuilder.makeDESSale("D2", LocalDate.of(2015, 12, 20), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+		final DischargeSlot dischargeSlot = cargoModelBuilder.makeDESSale("D2", LocalDate.of(2015, 12, 20), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build();
 
 		@NonNull
@@ -206,9 +207,9 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testViableCapacityConstraintSwap() throws Exception {
 		initCommonData1();
-		final LoadSlot loadSlot = cargoModelBuilder.makeFOBPurchase("L2", LocalDate.of(2015, 12, 6), portFinder.findPort("Point Fortin"), null, entity, "5", null).build();
+		final LoadSlot loadSlot = cargoModelBuilder.makeFOBPurchase("L2", LocalDate.of(2015, 12, 6), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", null).build();
 
-		final DischargeSlot dischargeSlot = cargoModelBuilder.makeDESSale("D2", LocalDate.of(2015, 12, 20), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+		final DischargeSlot dischargeSlot = cargoModelBuilder.makeDESSale("D2", LocalDate.of(2015, 12, 20), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build();
 
 		optimiseWithLSOTest(scenarioRunner -> {
@@ -240,11 +241,11 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testInvalidCapacityConstraint() throws Exception {
 		initCommonData1();
-		final LoadSlot loadSlot = cargoModelBuilder.makeFOBPurchase("L2", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", null)
+		final LoadSlot loadSlot = cargoModelBuilder.makeFOBPurchase("L2", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", null)
 				.withVolumeLimits(100000, 150000, VolumeUnits.M3)//
 				.build();
 
-		final DischargeSlot dischargeSlot = cargoModelBuilder.makeDESSale("D2", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+		final DischargeSlot dischargeSlot = cargoModelBuilder.makeDESSale("D2", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.withVolumeLimits(200000, 250000, VolumeUnits.M3).build();
 
 		optimiseWithLSOTest(scenarioRunner -> {
@@ -715,7 +716,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 				.withEndHeel(0, 0, EVesselTankState.MUST_BE_WARM, null) //
 				.build();
 
-		cargoModelBuilder.makeDryDockEvent("DD", LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0), portFinder.findPort("Point Fortin")) //
+		cargoModelBuilder.makeDryDockEvent("DD", LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 				.withDurationInDays(10) //
 				.withVesselAssignment(vesselAvailability1, 1) //
 				.build();
@@ -786,7 +787,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 				.withEndHeel(500, 500, EVesselTankState.MUST_BE_COLD, "10") //
 				.build();
 
-		cargoModelBuilder.makeDryDockEvent("DD", LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0), portFinder.findPort("Point Fortin")) //
+		cargoModelBuilder.makeDryDockEvent("DD", LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 				.withDurationInDays(10) //
 				.withVesselAssignment(vesselAvailability1, 1) //
 				.build();
@@ -857,11 +858,11 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 				.withEndWindow(LocalDateTime.of(2017, 5, 8, 0, 0, 0)) //
 				.withStartHeel(500, 600, 22.8, "5.0") //
 				.withEndHeel(1000, 1000, EVesselTankState.MUST_BE_COLD, "10") //
-				.withStartPort(portFinder.findPort("Point Fortin")) //
-				.withEndPort(portFinder.findPort("Point Fortin")) //
+				.withStartPort(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
+				.withEndPort(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 				.build();
 
-		cargoModelBuilder.makeCharterOutEvent("DD", LocalDateTime.of(2017, 3, 7, 0, 0, 0), LocalDateTime.of(2017, 3, 7, 0, 0, 0), portFinder.findPort("Point Fortin")) //
+		cargoModelBuilder.makeCharterOutEvent("DD", LocalDateTime.of(2017, 3, 7, 0, 0, 0), LocalDateTime.of(2017, 3, 7, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 				.withDurationInDays(10) //
 				.withRequiredHeelOptions(500, 500, EVesselTankState.MUST_BE_COLD, "6") //
 				.withAvailableHeelOptions(1000, 7000, 22.8, "7.5") //
@@ -973,17 +974,17 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 				.withEndWindow(LocalDateTime.of(2017, 5, 8, 0, 0, 0)) //
 				.withStartHeel(500, 5_000, 22.5, "5.0") //
 				.withEndHeel(1_000, 1_000, EVesselTankState.MUST_BE_COLD, "10") //
-				.withStartPort(portFinder.findPort("Point Fortin")) //
-				.withEndPort(portFinder.findPort("Point Fortin")) //
+				.withStartPort(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
+				.withEndPort(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 				.build();
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2017, 3, 15), portFinder.findPort("Point Fortin"), null, entity, "5", 22.5) //
+				.makeFOBPurchase("L1", LocalDate.of(2017, 3, 15), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.5) //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.withVolumeLimits(140_000, 145_000, VolumeUnits.M3) //
 				.build() //
 				//
-				.makeDESSale("D1", LocalDate.of(2017, 4, 5), portFinder.findPort("Isle of Grain"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2017, 4, 5), portFinder.findPortById(InternalDataConstants.PORT_ISLE_OF_GRAIN), null, entity, "7") //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.withVolumeLimits(120_000, 145_000, VolumeUnits.M3) //
 				.build() //
@@ -1060,9 +1061,9 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 
 						final HeelRecord heelRecord = vpr.getHeelVolumeRecords().get(dischargePortSlot).portHeelRecord;
 						Assertions.assertNotNull(heelRecord);
-						Assertions.assertEquals(141_173_334, heelRecord.getHeelAtStartInM3());
+						Assertions.assertEquals(141_172_500, heelRecord.getHeelAtStartInM3());
 						// Includes boil-off
-						Assertions.assertEquals(5_268_333, heelRecord.getHeelAtEndInM3());
+						Assertions.assertEquals(5_261_666, heelRecord.getHeelAtEndInM3());
 
 						final HeelValueRecord heelValueRecord = vpr.getHeelValueRecord(dischargePortSlot);
 						Assertions.assertNotNull(heelValueRecord);
@@ -1107,17 +1108,17 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 				.withEndWindow(LocalDateTime.of(2017, 4, 4, 0, 0, 0), LocalDateTime.of(2017, 4, 6, 0, 0, 0)) //
 				.withStartHeel(500, 5_000, 22.5, "5.0") //
 				.withEndHeel(1_000, 1_000, EVesselTankState.MUST_BE_COLD, "10") //
-				.withStartPort(portFinder.findPort("Point Fortin")) //
-				.withEndPort(portFinder.findPort("Isle of Grain")) //
+				.withStartPort(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
+				.withEndPort(portFinder.findPortById(InternalDataConstants.PORT_ISLE_OF_GRAIN)) //
 				.build();
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2017, 3, 15), portFinder.findPort("Point Fortin"), null, entity, "5", 22.5) //
+				.makeFOBPurchase("L1", LocalDate.of(2017, 3, 15), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.5) //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.withVolumeLimits(140_000, 145_000, VolumeUnits.M3) //
 				.build() //
 				//
-				.makeDESSale("D1", LocalDate.of(2017, 4, 5), portFinder.findPort("Isle of Grain"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2017, 4, 5), portFinder.findPortById(InternalDataConstants.PORT_ISLE_OF_GRAIN), null, entity, "7") //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.withVolumeLimits(120_000, 145_000, VolumeUnits.M3) //
 				.build() //
@@ -1197,7 +1198,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 
 						final HeelRecord heelRecord = vpr.getHeelVolumeRecords().get(dischargePortSlot).portHeelRecord;
 						Assertions.assertNotNull(heelRecord);
-						Assertions.assertEquals(141_173_334, heelRecord.getHeelAtStartInM3());
+						Assertions.assertEquals(141_172_500, heelRecord.getHeelAtStartInM3());
 						// Includes boil-off
 						Assertions.assertEquals(1_000_000, heelRecord.getHeelAtEndInM3());
 
@@ -1243,17 +1244,17 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 				.withEndWindow(LocalDateTime.of(2017, 4, 4, 0, 0, 0), LocalDateTime.of(2017, 4, 6, 0, 0, 0)) //
 				.withStartHeel(500, 5_000, 22.5, "5.0") //
 				.withEndHeel(1_000, 1_000, EVesselTankState.MUST_BE_COLD, true) //
-				.withStartPort(portFinder.findPort("Point Fortin")) //
-				.withEndPort(portFinder.findPort("Isle of Grain")) //
+				.withStartPort(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
+				.withEndPort(portFinder.findPortById(InternalDataConstants.PORT_ISLE_OF_GRAIN)) //
 				.build();
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2017, 3, 15), portFinder.findPort("Point Fortin"), null, entity, "5", 22.5) //
+				.makeFOBPurchase("L1", LocalDate.of(2017, 3, 15), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.5) //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.withVolumeLimits(140_000, 145_000, VolumeUnits.M3) //
 				.build() //
 				//
-				.makeDESSale("D1", LocalDate.of(2017, 4, 5), portFinder.findPort("Isle of Grain"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2017, 4, 5), portFinder.findPortById(InternalDataConstants.PORT_ISLE_OF_GRAIN), null, entity, "7") //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.withVolumeLimits(120_000, 145_000, VolumeUnits.M3) //
 				.build() //
@@ -1331,7 +1332,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 
 						final HeelRecord heelRecord = vpr.getHeelVolumeRecords().get(dischargePortSlot).portHeelRecord;
 						Assertions.assertNotNull(heelRecord);
-						Assertions.assertEquals(141_173_334, heelRecord.getHeelAtStartInM3());
+						Assertions.assertEquals(141_172_500, heelRecord.getHeelAtStartInM3());
 						// Includes boil-off
 						Assertions.assertEquals(1_000_000, heelRecord.getHeelAtEndInM3());
 
@@ -1378,11 +1379,11 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 				.withEndWindow(LocalDateTime.of(2017, 5, 8, 0, 0, 0)) //
 				.withStartHeel(500, 600, 22.8, "5.0") //
 				.withEndHeel(1000, 1000, EVesselTankState.MUST_BE_COLD, "10") //
-				.withStartPort(portFinder.findPort("Point Fortin")) //
-				.withEndPort(portFinder.findPort("Point Fortin")) //
+				.withStartPort(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
+				.withEndPort(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 				.build();
 
-		cargoModelBuilder.makeCharterOutEvent("DD", LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0), portFinder.findPort("Point Fortin")) //
+		cargoModelBuilder.makeCharterOutEvent("DD", LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 				.withDurationInDays(10) //
 				.withRequiredHeelOptions(500, 500, EVesselTankState.MUST_BE_COLD, "6") //
 				.withAvailableHeelOptions(1000, 1000, 22.8, "7.5") //
@@ -1485,12 +1486,12 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 				.withEndWindow(LocalDateTime.of(2017, 5, 8, 0, 0, 0)) //
 				.withStartHeel(500, 600, 22.8, "5.0") //
 				.withEndHeel(1000, 1000, EVesselTankState.MUST_BE_COLD, "10") //
-				.withStartPort(portFinder.findPort("Point Fortin")) //
-				.withEndPort(portFinder.findPort("Isle of Grain")) //
+				.withStartPort(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
+				.withEndPort(portFinder.findPortById(InternalDataConstants.PORT_ISLE_OF_GRAIN)) //
 				.build();
 
-		cargoModelBuilder.makeCharterOutEvent("DD", LocalDateTime.of(2017, 3, 7, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0), portFinder.findPort("Point Fortin")) //
-				.withRelocatePort(portFinder.findPort("Isle of Grain")).withDurationInDays(10) //
+		cargoModelBuilder.makeCharterOutEvent("DD", LocalDateTime.of(2017, 3, 7, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
+				.withRelocatePort(portFinder.findPortById(InternalDataConstants.PORT_ISLE_OF_GRAIN)).withDurationInDays(10) //
 				.withRequiredHeelOptions(500, 500, EVesselTankState.MUST_BE_COLD, "6") //
 				.withAvailableHeelOptions(1000, 7000, 22.8, "7.5") //
 				.withVesselAssignment(vesselAvailability1, 1) //
@@ -1624,24 +1625,24 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 
 		@NonNull
 		final CharterOutMarket charterOutMarket = spotMarketsModelBuilder.createCharterOutMarket("CharterMarket", vessel, "50000", 10);
-		charterOutMarket.getAvailablePorts().add(portFinder.findPort("Sakai"));
+		charterOutMarket.getAvailablePorts().add(portFinder.findPortById(InternalDataConstants.PORT_SAKAI));
 
 		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 6, 8, 0, 0, 0)) //
 				.withStartHeel(500, 5_000, 22.5, "5.0") //
 				.withEndHeel(1_000, 1_000, EVesselTankState.MUST_BE_COLD, "10") //
-				.withStartPort(portFinder.findPort("Point Fortin")) //
-				.withEndPort(portFinder.findPort("Point Fortin")) //
+				.withStartPort(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
+				.withEndPort(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 				.build();
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2017, 3, 15), portFinder.findPort("Point Fortin"), null, entity, "5", 22.5) //
+				.makeFOBPurchase("L1", LocalDate.of(2017, 3, 15), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.5) //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.withVolumeLimits(140_000, 145_000, VolumeUnits.M3) //
 				.build() //
 				//
-				.makeDESSale("D1", LocalDate.of(2017, 4, 5), portFinder.findPort("Isle of Grain"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2017, 4, 5), portFinder.findPortById(InternalDataConstants.PORT_ISLE_OF_GRAIN), null, entity, "7") //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.withVolumeLimits(120_000, 145_000, VolumeUnits.M3) //
 				.build() //
@@ -1721,9 +1722,9 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 
 						final HeelRecord heelRecord = vpr.getHeelVolumeRecords().get(dischargePortSlot).portHeelRecord;
 						Assertions.assertNotNull(heelRecord);
-						Assertions.assertEquals(141_173_334, heelRecord.getHeelAtStartInM3());
+						Assertions.assertEquals(141_172_500, heelRecord.getHeelAtStartInM3());
 						// Includes boil-off
-						Assertions.assertEquals(12_874_577, heelRecord.getHeelAtEndInM3());
+						Assertions.assertEquals(17_038_196, heelRecord.getHeelAtEndInM3());
 
 						final HeelValueRecord heelValueRecord = vpr.getHeelValueRecord(dischargePortSlot);
 						Assertions.assertNotNull(heelValueRecord);
@@ -1742,14 +1743,14 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 					final HeelRecord heelRecord = vpr.getHeelVolumeRecords().get(gcoSlot).portHeelRecord;
 					Assertions.assertNotNull(heelRecord);
 					Assertions.assertNotNull(heelRecord);
-					Assertions.assertEquals(7_568_595, heelRecord.getHeelAtStartInM3());
+					Assertions.assertEquals(8_124_748, heelRecord.getHeelAtStartInM3());
 					// Includes boil-off
-					Assertions.assertEquals(7_568_595, heelRecord.getHeelAtEndInM3());
-
+					Assertions.assertEquals(8_124_748, heelRecord.getHeelAtEndInM3());
+					
 					final HeelValueRecord heelValueRecord = vpr.getHeelValueRecord(gcoSlot);
 					Assertions.assertNotNull(heelValueRecord);
-					Assertions.assertEquals(7_568.595 * 22.5 * 7.0, heelValueRecord.getHeelCost() / 1000L, 1.0);
-					Assertions.assertEquals(7_568.595 * 22.5 * 7.0, heelValueRecord.getHeelRevenue() / 1000L, 1.0);
+					Assertions.assertEquals(8_124.748 * 22.5 * 7.0, heelValueRecord.getHeelCost() / 1000L, 1.0);
+					Assertions.assertEquals(8_124.748 * 22.5 * 7.0, heelValueRecord.getHeelRevenue() / 1000L, 1.0);
 
 				}
 				{
@@ -1786,24 +1787,24 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 
 		@NonNull
 		final CharterOutMarket charterOutMarket = spotMarketsModelBuilder.createCharterOutMarket("CharterMarket", vessel, "50000", 10);
-		charterOutMarket.getAvailablePorts().add(portFinder.findPort("Sakai"));
+		charterOutMarket.getAvailablePorts().add(portFinder.findPortById(InternalDataConstants.PORT_SAKAI));
 
 		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 6, 8, 0, 0, 0)) //
 				.withStartHeel(500, 5_000, 22.5, "5.0") //
 				.withEndHeel(1_000, 1_000, EVesselTankState.MUST_BE_COLD, true) //
-				.withStartPort(portFinder.findPort("Point Fortin")) //
-				.withEndPort(portFinder.findPort("Point Fortin")) //
+				.withStartPort(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
+				.withEndPort(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 				.build();
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2017, 3, 15), portFinder.findPort("Point Fortin"), null, entity, "5", 22.5) //
+				.makeFOBPurchase("L1", LocalDate.of(2017, 3, 15), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.5) //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.withVolumeLimits(140_000, 145_000, VolumeUnits.M3) //
 				.build() //
 				//
-				.makeDESSale("D1", LocalDate.of(2017, 4, 5), portFinder.findPort("Isle of Grain"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2017, 4, 5), portFinder.findPortById(InternalDataConstants.PORT_ISLE_OF_GRAIN), null, entity, "7") //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.withVolumeLimits(120_000, 145_000, VolumeUnits.M3) //
 				.build() //
@@ -1881,9 +1882,9 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 
 						final HeelRecord heelRecord = vpr.getHeelVolumeRecords().get(dischargePortSlot).portHeelRecord;
 						Assertions.assertNotNull(heelRecord);
-						Assertions.assertEquals(141_173_334, heelRecord.getHeelAtStartInM3());
+						Assertions.assertEquals(141_172_500, heelRecord.getHeelAtStartInM3());
 						// Includes boil-off
-						Assertions.assertEquals(12_874_577, heelRecord.getHeelAtEndInM3());
+						Assertions.assertEquals(17_038_196, heelRecord.getHeelAtEndInM3());
 
 						final HeelValueRecord heelValueRecord = vpr.getHeelValueRecord(dischargePortSlot);
 						Assertions.assertNotNull(heelValueRecord);
@@ -1901,14 +1902,14 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 
 					final HeelRecord heelRecord = vpr.getHeelVolumeRecords().get(gcoSlot).portHeelRecord;
 					Assertions.assertNotNull(heelRecord);
-					Assertions.assertEquals(7_568_595, heelRecord.getHeelAtStartInM3());
+					Assertions.assertEquals(8_124_748, heelRecord.getHeelAtStartInM3());
 					// Includes boil-off
-					Assertions.assertEquals(7_568_595, heelRecord.getHeelAtEndInM3());
-
+					Assertions.assertEquals(8_124_748, heelRecord.getHeelAtEndInM3());
+					
 					final HeelValueRecord heelValueRecord = vpr.getHeelValueRecord(gcoSlot);
 					Assertions.assertNotNull(heelValueRecord);
-					Assertions.assertEquals(7_568.595 * 22.5 * 7.0, heelValueRecord.getHeelCost() / 1000L, 1.0);
-					Assertions.assertEquals(7_568.595 * 22.5 * 7.0, heelValueRecord.getHeelRevenue() / 1000L, 1.0);
+					Assertions.assertEquals(8_124.748 * 22.5 * 7.0, heelValueRecord.getHeelCost() / 1000L, 1.0);
+					Assertions.assertEquals(8_124.748 * 22.5 * 7.0, heelValueRecord.getHeelRevenue() / 1000L, 1.0);
 
 				}
 				{
@@ -1943,15 +1944,15 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 
 		@NonNull
 		final CharterOutMarket charterOutMarket = spotMarketsModelBuilder.createCharterOutMarket("CharterMarket", vessel, "50000", 10);
-		// charterOutMarket.getAvailablePorts().add(portFinder.findPort("Sakai"));
+		// charterOutMarket.getAvailablePorts().add(portFinder.findPortById(InternalDataConstants.PORT_SAKAI));
 
 		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 6, 8, 0, 0, 0)) //
 				.withStartHeel(500, 5_000, 22.5, "5.0") //
 				.withEndHeel(0, 0, EVesselTankState.MUST_BE_WARM, "10") //
-				.withStartPort(portFinder.findPort("Point Fortin")) //
-				.withEndPort(portFinder.findPort("Sakai")) //
+				.withStartPort(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
+				.withEndPort(portFinder.findPortById(InternalDataConstants.PORT_SAKAI)) //
 				.build();
 
 		evaluateWithLSOTest(true, p -> p.getUserSettings().setGenerateCharterOuts(true), null, scenarioRunner -> {
@@ -2047,15 +2048,15 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 
 		@NonNull
 		final CharterOutMarket charterOutMarket = spotMarketsModelBuilder.createCharterOutMarket("CharterMarket", vessel, "50000", 10);
-		charterOutMarket.getAvailablePorts().add(portFinder.findPort("Point Fortin"));
+		charterOutMarket.getAvailablePorts().add(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN));
 
 		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 6, 8, 0, 0, 0)) //
 				.withStartHeel(500, 5_000, 22.5, "5.0") //
 				.withEndHeel(0, 0, EVesselTankState.MUST_BE_WARM, "10") //
-				.withStartPort(portFinder.findPort("Point Fortin")) //
-				.withEndPort(portFinder.findPort("Sakai")) //
+				.withStartPort(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
+				.withEndPort(portFinder.findPortById(InternalDataConstants.PORT_SAKAI)) //
 				.build();
 
 		evaluateWithLSOTest(true, p -> p.getUserSettings().setGenerateCharterOuts(true), null, scenarioRunner -> {
@@ -2171,17 +2172,17 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 				.withEndWindow(LocalDateTime.of(2017, 5, 8, 0, 0, 0)) //
 				.withStartHeel(500, 5_000, 22.5, "5.0") //
 				.withEndHeel(1_000, 1_000, EVesselTankState.MUST_BE_COLD, "10") //
-				.withStartPort(portFinder.findPort("Point Fortin")) //
-				.withEndPort(portFinder.findPort("Point Fortin")) //
+				.withStartPort(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
+				.withEndPort(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 				.build();
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2017, 3, 15), portFinder.findPort("Point Fortin"), null, entity, "5", 22.5) //
+				.makeFOBPurchase("L1", LocalDate.of(2017, 3, 15), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.5) //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.withVolumeLimits(140_000, 145_000, VolumeUnits.M3) //
 				.build() //
 				//
-				.makeDESSale("D1", LocalDate.of(2017, 4, 5), portFinder.findPort("Isle of Grain"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2017, 4, 5), portFinder.findPortById(InternalDataConstants.PORT_ISLE_OF_GRAIN), null, entity, "7") //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.withVolumeLimits(120_000, 145_000, VolumeUnits.M3) //
 				.build() //
@@ -2190,12 +2191,12 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 				.build();
 
 		final Cargo cargo2 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2017, 5, 15), portFinder.findPort("Point Fortin"), null, entity, "5", 22.5) //
+				.makeFOBPurchase("L1", LocalDate.of(2017, 5, 15), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.5) //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.withVolumeLimits(140_000, 145_000, VolumeUnits.M3) //
 				.build() //
 				//
-				.makeDESSale("D1", LocalDate.of(2017, 6, 5), portFinder.findPort("Isle of Grain"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2017, 6, 5), portFinder.findPortById(InternalDataConstants.PORT_ISLE_OF_GRAIN), null, entity, "7") //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.withVolumeLimits(120_000, 145_000, VolumeUnits.M3) //
 				.build() //
@@ -2272,9 +2273,9 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 
 						final HeelRecord heelRecord = vpr.getHeelVolumeRecords().get(dischargePortSlot1).portHeelRecord;
 						Assertions.assertNotNull(heelRecord);
-						Assertions.assertEquals(141_173_334, heelRecord.getHeelAtStartInM3());
+						Assertions.assertEquals(141_172_500, heelRecord.getHeelAtStartInM3());
 						// Includes boil-off
-						Assertions.assertEquals(5_514_166, heelRecord.getHeelAtEndInM3());
+						Assertions.assertEquals(5_507_500, heelRecord.getHeelAtEndInM3());
 
 						final HeelValueRecord heelValueRecord = vpr.getHeelValueRecord(dischargePortSlot1);
 						Assertions.assertNotNull(heelValueRecord);
@@ -2311,9 +2312,9 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 
 						final HeelRecord heelRecord = vpr.getHeelVolumeRecords().get(dischargePortSlot2).portHeelRecord;
 						Assertions.assertNotNull(heelRecord);
-						Assertions.assertEquals(141_173_334, heelRecord.getHeelAtStartInM3());
+						Assertions.assertEquals(141_172_500, heelRecord.getHeelAtStartInM3());
 						// Includes boil-off
-						Assertions.assertEquals(4_141_502, heelRecord.getHeelAtEndInM3());
+						Assertions.assertEquals(4_126_471, heelRecord.getHeelAtEndInM3());
 
 						final HeelValueRecord heelValueRecord = vpr.getHeelValueRecord(dischargePortSlot2);
 						Assertions.assertNotNull(heelValueRecord);
@@ -2373,10 +2374,10 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 
 			// Create a nominal cargo in the prompt
 			final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-					.makeFOBPurchase("L1", LocalDate.of(2017, 9, 2), portFinder.findPort("Point Fortin"), null, entity, "5") //
+					.makeFOBPurchase("L1", LocalDate.of(2017, 9, 2), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 					.withVolumeLimits(3_000_000, 4_000_000, VolumeUnits.M3) //
 					.build() //
-					.makeDESSale("D1", LocalDate.of(2017, 10, 2), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+					.makeDESSale("D1", LocalDate.of(2017, 10, 2), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 					.withVolumeLimits(0, 140_000, VolumeUnits.M3) //
 					.build() //
 					.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal

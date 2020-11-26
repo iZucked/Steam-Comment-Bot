@@ -1,1 +1,9 @@
-[ ]
+[ {
+  "Schedule" : "des-cargo",
+  "ID" : "load-cargo-66",
+  "Type" : "Load",
+  "Vessel" : "Methane Becki Anne",
+  "Lateness" : "17h",
+  "Start by" : "16/05/11 14:00",
+  "Scheduled time" : "17/05/11 07:00"
+} ]

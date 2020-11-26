@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
@@ -60,11 +61,11 @@ public class MaxVolumeFallthroughTest extends AbstractLegacyMicroTestCase {
 
 		final Cargo e_cargo = cargoModelBuilder.makeCargo() //
 
-				.makeFOBPurchase("L1", LocalDate.of(2016, 7, 20), portFinder.findPort("Point Fortin"), purchaseContract, null, null, 20.0)//
+				.makeFOBPurchase("L1", LocalDate.of(2016, 7, 20), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), purchaseContract, null, null, 20.0)//
 				.withVolumeLimits(5_000, 15_000, VolumeUnits.M3)//
 				.build() //
 				//
-				.makeDESSale("D1", LocalDate.of(2016, 8, 20), portFinder.findPort("Sakai"), salesContract, null, null) //
+				.makeDESSale("D1", LocalDate.of(2016, 8, 20), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), salesContract, null, null) //
 				.withVolumeLimits(5_000, 100_000, VolumeUnits.M3)//
 				.build() //
 				//
@@ -104,11 +105,11 @@ public class MaxVolumeFallthroughTest extends AbstractLegacyMicroTestCase {
 
 		final Cargo e_cargo = cargoModelBuilder.makeCargo() //
 
-				.makeFOBPurchase("L1", LocalDate.of(2016, 7, 20), portFinder.findPort("Point Fortin"), purchaseContract, null, null, 20.0)//
+				.makeFOBPurchase("L1", LocalDate.of(2016, 7, 20), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), purchaseContract, null, null, 20.0)//
 				.withVolumeLimits(5_000, 100_000, VolumeUnits.M3)//
 				.build() //
 				//
-				.makeDESSale("D1", LocalDate.of(2016, 8, 20), portFinder.findPort("Sakai"), salesContract, null, null) //
+				.makeDESSale("D1", LocalDate.of(2016, 8, 20), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), salesContract, null, null) //
 				.withVolumeLimits(5_000, 15_000, VolumeUnits.M3)//
 				.build() //
 				//
@@ -151,11 +152,11 @@ public class MaxVolumeFallthroughTest extends AbstractLegacyMicroTestCase {
 
 		final Cargo e_cargo = cargoModelBuilder.makeCargo() //
 
-				.makeFOBPurchase("L1", LocalDate.of(2016, 7, 20), portFinder.findPort("Point Fortin"), purchaseContract, null, null, 20.0)//
+				.makeFOBPurchase("L1", LocalDate.of(2016, 7, 20), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), purchaseContract, null, null, 20.0)//
 				.withVolumeLimits(5_000, null, VolumeUnits.M3)//
 				.build() //
 				//
-				.makeDESSale("D1", LocalDate.of(2016, 8, 20), portFinder.findPort("Sakai"), salesContract, null, null) //
+				.makeDESSale("D1", LocalDate.of(2016, 8, 20), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), salesContract, null, null) //
 				.withVolumeLimits(5_000, 100_000, VolumeUnits.M3)//
 				.build() //
 				//
@@ -198,11 +199,11 @@ public class MaxVolumeFallthroughTest extends AbstractLegacyMicroTestCase {
 
 		final Cargo e_cargo = cargoModelBuilder.makeCargo() //
 
-				.makeFOBPurchase("L1", LocalDate.of(2016, 7, 20), portFinder.findPort("Point Fortin"), purchaseContract, null, null, 20.0)//
+				.makeFOBPurchase("L1", LocalDate.of(2016, 7, 20), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), purchaseContract, null, null, 20.0)//
 				.withVolumeLimits(5_000, 100_000, VolumeUnits.M3)//
 				.build() //
 				//
-				.makeDESSale("D1", LocalDate.of(2016, 8, 20), portFinder.findPort("Sakai"), salesContract, null, null) //
+				.makeDESSale("D1", LocalDate.of(2016, 8, 20), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), salesContract, null, null) //
 				.withVolumeLimits(5_000, null, VolumeUnits.M3)//
 				.build() //
 				//
@@ -235,7 +236,7 @@ public class MaxVolumeFallthroughTest extends AbstractLegacyMicroTestCase {
 				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0), null) //
 				.build();
 
-		final FOBPurchasesMarket purchaseMarket = spotMarketsModelBuilder.makeFOBPurchaseMarket("PurchaseMarket", portFinder.findPort("Point Fortin"), entity, "5", 20.0) //
+		final FOBPurchasesMarket purchaseMarket = spotMarketsModelBuilder.makeFOBPurchaseMarket("PurchaseMarket", portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), entity, "5", 20.0) //
 				.withVolumeLimits(0, 14_000, VolumeUnits.M3) //
 				.build();
 		final SalesContract salesContract = commercialModelBuilder.makeExpressionSalesContract("SalesContract", entity, "7");
@@ -243,11 +244,11 @@ public class MaxVolumeFallthroughTest extends AbstractLegacyMicroTestCase {
 
 		final Cargo e_cargo = cargoModelBuilder.makeCargo() //
 
-				.makeMarketFOBPurchase("L1", purchaseMarket, YearMonth.of(2016, 7), portFinder.findPort("Point Fortin"))//
+				.makeMarketFOBPurchase("L1", purchaseMarket, YearMonth.of(2016, 7), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN))//
 				.withVolumeLimits(5_000, null, VolumeUnits.M3)//
 				.build() //
 				//
-				.makeDESSale("D1", LocalDate.of(2016, 8, 20), portFinder.findPort("Sakai"), salesContract, null, null) //
+				.makeDESSale("D1", LocalDate.of(2016, 8, 20), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), salesContract, null, null) //
 				.withVolumeLimits(5_000, 100_000, VolumeUnits.M3)//
 				.build() //
 				//
@@ -286,17 +287,17 @@ public class MaxVolumeFallthroughTest extends AbstractLegacyMicroTestCase {
 		final PurchaseContract purchaseContract = commercialModelBuilder.makeExpressionPurchaseContract("PurchaseContract", entity, "5");
 		purchaseContract.setMaxQuantity(14_000);
 
-		final DESSalesMarket salesMarket = spotMarketsModelBuilder.makeDESSaleMarket("SalesMarket", portFinder.findPort("Point Fortin"), entity, "5") //
+		final DESSalesMarket salesMarket = spotMarketsModelBuilder.makeDESSaleMarket("SalesMarket", portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), entity, "5") //
 				.withVolumeLimits(0, 14_000, VolumeUnits.M3) //
 				.build();
 
 		final Cargo e_cargo = cargoModelBuilder.makeCargo() //
 
-				.makeFOBPurchase("L1", LocalDate.of(2016, 7, 20), portFinder.findPort("Point Fortin"), purchaseContract, null, null, 20.0)//
+				.makeFOBPurchase("L1", LocalDate.of(2016, 7, 20), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), purchaseContract, null, null, 20.0)//
 				.withVolumeLimits(5_000, 100_000, VolumeUnits.M3)//
 				.build() //
 				//
-				.makeMarketDESSale("D1", salesMarket, YearMonth.of(2016, 8), portFinder.findPort("Sakai")) //
+				.makeMarketDESSale("D1", salesMarket, YearMonth.of(2016, 8), portFinder.findPortById(InternalDataConstants.PORT_SAKAI)) //
 				.withVolumeLimits(5_000, null, VolumeUnits.M3)//
 				.build() //
 				//
@@ -332,11 +333,11 @@ public class MaxVolumeFallthroughTest extends AbstractLegacyMicroTestCase {
 
 		final Cargo e_cargo = cargoModelBuilder.makeCargo() //
 
-				.makeFOBPurchase("L1", LocalDate.of(2016, 7, 20), portFinder.findPort("Point Fortin"), null, entity, "5", 20.0)//
+				.makeFOBPurchase("L1", LocalDate.of(2016, 7, 20), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 20.0)//
 				.withVolumeLimits(5_000, null, VolumeUnits.M3)//
 				.build() //
 				//
-				.makeDESSale("D1", LocalDate.of(2016, 8, 20), portFinder.findPort("Sakai"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2016, 8, 20), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7") //
 				.withVolumeLimits(5_000, 100_000, VolumeUnits.M3)//
 				.build() //
 				//
@@ -374,11 +375,11 @@ public class MaxVolumeFallthroughTest extends AbstractLegacyMicroTestCase {
 
 		final Cargo e_cargo = cargoModelBuilder.makeCargo() //
 
-				.makeFOBPurchase("L1", LocalDate.of(2016, 7, 20), portFinder.findPort("Point Fortin"), null, entity, "5", 20.0)//
+				.makeFOBPurchase("L1", LocalDate.of(2016, 7, 20), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 20.0)//
 				.withVolumeLimits(5_000, 100_000, VolumeUnits.M3)//
 				.build() //
 				//
-				.makeDESSale("D1", LocalDate.of(2016, 8, 20), portFinder.findPort("Sakai"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2016, 8, 20), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7") //
 				.withVolumeLimits(5_000, null, VolumeUnits.M3)//
 				.build() //
 				//
@@ -411,11 +412,11 @@ public class MaxVolumeFallthroughTest extends AbstractLegacyMicroTestCase {
 
 		final Cargo e_cargo = cargoModelBuilder.makeCargo() //
 
-				.makeFOBPurchase("L1", LocalDate.of(2016, 7, 20), portFinder.findPort("Point Fortin"), null, entity, "5", 20.0)//
+				.makeFOBPurchase("L1", LocalDate.of(2016, 7, 20), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 20.0)//
 				.withVolumeLimits(5_000, 100_000, VolumeUnits.M3)//
 				.build() //
 				//
-				.makeFOBSale("D1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2016, 8, 20), portFinder.findPort("Point Fortin"), null, entity, "7", vessel) //
+				.makeFOBSale("D1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2016, 8, 20), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "7", vessel) //
 				.withVolumeLimits(5_000, null, VolumeUnits.M3)//
 				.build() //
 				//
@@ -447,11 +448,11 @@ public class MaxVolumeFallthroughTest extends AbstractLegacyMicroTestCase {
 
 		final Cargo e_cargo = cargoModelBuilder.makeCargo() //
 
-				.makeFOBPurchase("L1", LocalDate.of(2016, 7, 20), portFinder.findPort("Point Fortin"), null, entity, "5", 20.0)//
+				.makeFOBPurchase("L1", LocalDate.of(2016, 7, 20), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 20.0)//
 				.withVolumeLimits(5_000, null, VolumeUnits.M3)//
 				.build() //
 				//
-				.makeFOBSale("D1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2016, 8, 20), portFinder.findPort("Point Fortin"), null, entity, "7", vessel) //
+				.makeFOBSale("D1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2016, 8, 20), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "7", vessel) //
 				.withVolumeLimits(5_000, 100_000, VolumeUnits.M3)//
 				.build() //
 				//
@@ -480,11 +481,11 @@ public class MaxVolumeFallthroughTest extends AbstractLegacyMicroTestCase {
 
 		final Cargo e_cargo = cargoModelBuilder.makeCargo() //
 
-				.makeFOBPurchase("L1", LocalDate.of(2016, 7, 20), portFinder.findPort("Point Fortin"), null, entity, "5", 20.0)//
+				.makeFOBPurchase("L1", LocalDate.of(2016, 7, 20), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 20.0)//
 				.withVolumeLimits(5_000, 200_000, VolumeUnits.M3)//
 				.build() //
 				//
-				.makeFOBSale("D1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2016, 8, 20), portFinder.findPort("Point Fortin"), null, entity, "7", null) //
+				.makeFOBSale("D1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2016, 8, 20), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "7", null) //
 				.withVolumeLimits(5_000, null, VolumeUnits.M3)//
 				.build() //
 				//
@@ -513,11 +514,11 @@ public class MaxVolumeFallthroughTest extends AbstractLegacyMicroTestCase {
 
 		final Cargo e_cargo = cargoModelBuilder.makeCargo() //
 
-				.makeFOBPurchase("L1", LocalDate.of(2016, 7, 20), portFinder.findPort("Point Fortin"), null, entity, "5", 20.0)//
+				.makeFOBPurchase("L1", LocalDate.of(2016, 7, 20), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 20.0)//
 				.withVolumeLimits(5_000, null, VolumeUnits.M3)//
 				.build() //
 				//
-				.makeFOBSale("D1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2016, 8, 20), portFinder.findPort("Point Fortin"), null, entity, "7", null) //
+				.makeFOBSale("D1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2016, 8, 20), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "7", null) //
 				.withVolumeLimits(5_000, 200_000, VolumeUnits.M3)//
 				.build() //
 				//
@@ -546,11 +547,11 @@ public class MaxVolumeFallthroughTest extends AbstractLegacyMicroTestCase {
 
 		final Cargo e_cargo = cargoModelBuilder.makeCargo() //
 
-				.makeFOBPurchase("L1", LocalDate.of(2016, 7, 20), portFinder.findPort("Point Fortin"), null, entity, "5", 20.0)//
+				.makeFOBPurchase("L1", LocalDate.of(2016, 7, 20), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 20.0)//
 				.withVolumeLimits(5_000, null, VolumeUnits.M3)//
 				.build() //
 				//
-				.makeFOBSale("D1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2016, 8, 20), portFinder.findPort("Point Fortin"), null, entity, "7", null) //
+				.makeFOBSale("D1", FOBSaleDealType.SOURCE_ONLY, LocalDate.of(2016, 8, 20), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "7", null) //
 				.withVolumeLimits(5_000, null, VolumeUnits.M3)//
 				.build() //
 				//
@@ -582,11 +583,11 @@ public class MaxVolumeFallthroughTest extends AbstractLegacyMicroTestCase {
 
 		final Cargo e_cargo = cargoModelBuilder.makeCargo() //
 
-				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2016, 7, 20), portFinder.findPort("Sakai"), null, entity, "5", 20.0, vessel)//
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2016, 7, 20), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "5", 20.0, vessel)//
 				.withVolumeLimits(5_000, 100_000, VolumeUnits.M3)//
 				.build() //
 				//
-				.makeDESSale("D1", LocalDate.of(2016, 8, 20), portFinder.findPort("Sakai"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2016, 8, 20), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7") //
 				.withVolumeLimits(5_000, null, VolumeUnits.M3)//
 				.build() //
 				//
@@ -618,11 +619,11 @@ public class MaxVolumeFallthroughTest extends AbstractLegacyMicroTestCase {
 
 		final Cargo e_cargo = cargoModelBuilder.makeCargo() //
 
-				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2016, 7, 20), portFinder.findPort("Sakai"), null, entity, "5", 20.0, vessel)//
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2016, 7, 20), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "5", 20.0, vessel)//
 				.withVolumeLimits(5_000, null, VolumeUnits.M3)//
 				.build() //
 				//
-				.makeDESSale("D1", LocalDate.of(2016, 8, 20), portFinder.findPort("Sakai"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2016, 8, 20), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7") //
 				.withVolumeLimits(5_000, 100_000, VolumeUnits.M3)//
 				.build() //
 				//
@@ -651,11 +652,11 @@ public class MaxVolumeFallthroughTest extends AbstractLegacyMicroTestCase {
 
 		final Cargo e_cargo = cargoModelBuilder.makeCargo() //
 
-				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2016, 7, 20), portFinder.findPort("Sakai"), null, entity, "5", 20.0, null)//
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2016, 7, 20), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "5", 20.0, null)//
 				.withVolumeLimits(5_000, null, VolumeUnits.M3)//
 				.build() //
 				//
-				.makeDESSale("D1", LocalDate.of(2016, 8, 20), portFinder.findPort("Sakai"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2016, 8, 20), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7") //
 				.withVolumeLimits(5_000, null, VolumeUnits.M3)//
 				.build() //
 				//
@@ -684,11 +685,11 @@ public class MaxVolumeFallthroughTest extends AbstractLegacyMicroTestCase {
 
 		final Cargo e_cargo = cargoModelBuilder.makeCargo() //
 
-				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2016, 7, 20), portFinder.findPort("Sakai"), null, entity, "5", 20.0, null)//
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2016, 7, 20), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "5", 20.0, null)//
 				.withVolumeLimits(5_000, 200_000, VolumeUnits.M3)//
 				.build() //
 				//
-				.makeDESSale("D1", LocalDate.of(2016, 8, 20), portFinder.findPort("Sakai"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2016, 8, 20), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7") //
 				.withVolumeLimits(5_000, null, VolumeUnits.M3)//
 				.build() //
 				//
@@ -717,11 +718,11 @@ public class MaxVolumeFallthroughTest extends AbstractLegacyMicroTestCase {
 
 		final Cargo e_cargo = cargoModelBuilder.makeCargo() //
 
-				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2016, 7, 20), portFinder.findPort("Sakai"), null, entity, "5", 20.0, null)//
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2016, 7, 20), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "5", 20.0, null)//
 				.withVolumeLimits(5_000, null, VolumeUnits.M3)//
 				.build() //
 				//
-				.makeDESSale("D1", LocalDate.of(2016, 8, 20), portFinder.findPort("Sakai"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2016, 8, 20), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7") //
 				.withVolumeLimits(5_000, 200_000, VolumeUnits.M3)//
 				.build() //
 				//

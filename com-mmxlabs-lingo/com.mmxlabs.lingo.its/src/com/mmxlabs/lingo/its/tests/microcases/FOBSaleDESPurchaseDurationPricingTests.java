@@ -19,6 +19,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.commercial.ContractType;
@@ -56,7 +57,7 @@ public class FOBSaleDESPurchaseDurationPricingTests extends AbstractLegacyMicroT
 		// Set up with different price on next contract month.
 		final CommodityCurve priceCurve = createPriceCurve();
 
-		final Port pointFortin = portFinder.findPort("Point Fortin");
+		final Port pointFortin = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
 
 		final PurchaseContract purchaseContract = createPurchaseContract(pointFortin, ContractType.FOB);
 
@@ -88,7 +89,7 @@ public class FOBSaleDESPurchaseDurationPricingTests extends AbstractLegacyMicroT
 		// Set up with different price on next contract month.
 		final CommodityCurve priceCurve = createPriceCurve();
 
-		final Port dominionCove = portFinder.findPort("Dominion Cove Point LNG");
+		final Port dominionCove = portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT);
 
 		final PurchaseContract purchaseContract = createPurchaseContract(dominionCove, ContractType.DES);
 
@@ -123,11 +124,11 @@ public class FOBSaleDESPurchaseDurationPricingTests extends AbstractLegacyMicroT
 		// Set up with different price on next contract month.
 		final CommodityCurve priceCurve = createPriceCurve();
 
-		final Port pointFortin = portFinder.findPort("Point Fortin");
+		final Port pointFortin = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
 
 		final PurchaseContract purchaseContract = createPurchaseContract(pointFortin, ContractType.FOB);
 
-		final Port idkuLNG = portFinder.findPort("Idku LNG");
+		final Port idkuLNG = portFinder.findPortById(InternalDataConstants.PORT_IDKU);
 
 		final SalesContract salesContract = createSalesContract(idkuLNG, ContractType.FOB);
 
@@ -159,11 +160,11 @@ public class FOBSaleDESPurchaseDurationPricingTests extends AbstractLegacyMicroT
 		// Set up with different price on next contract month.
 		final CommodityCurve priceCurve = createPriceCurve();
 
-		final Port pointFortin = portFinder.findPort("Point Fortin");
+		final Port pointFortin = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
 
 		final PurchaseContract purchaseContract = createPurchaseContract(pointFortin, ContractType.DES);
 
-		final Port dominionCove = portFinder.findPort("Dominion Cove Point LNG");
+		final Port dominionCove = portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT);
 
 		final SalesContract salesContract = createSalesContract(dominionCove, ContractType.DES);
 

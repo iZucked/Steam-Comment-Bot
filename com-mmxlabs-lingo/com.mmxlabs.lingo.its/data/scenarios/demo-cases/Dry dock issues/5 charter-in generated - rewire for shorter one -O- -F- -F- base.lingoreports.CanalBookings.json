@@ -1,3 +1,33 @@
 [ {
-  "Pre-booked" : "No"
+  "Schedule" : "5 charter-in generated - rewire for shorter one -O- -F- -F- base",
+  "Pre-booked" : "No",
+  "Canal" : "PANAMA",
+  "Canal Entry" : "Northside",
+  "Date" : "11/02/11",
+  "Event" : "load-cargo-48",
+  "Next Slot" : "discharge-cargo-48 15/03/11",
+  "Next Slot Port" : "Pyeongtaek",
+  "Next Slot Window Start" : "15/03/11",
+  "Next Slot Window End" : "15/03/11",
+  "Period" : "Open"
+}, {
+  "Schedule" : "5 charter-in generated - rewire for shorter one -O- -F- -F- base",
+  "Pre-booked" : "No",
+  "Canal" : "PANAMA",
+  "Canal Entry" : "Southside",
+  "Date" : "30/05/11",
+  "Event" : "discharge-cargo-9",
+  "Next Slot" : "load-cargo-60 06/06/11",
+  "Next Slot Port" : "Point Fortin",
+  "Next Slot Window Start" : "06/06/11",
+  "Next Slot Window End" : "06/06/11",
+  "Period" : "Open"
+}, {
+  "Schedule" : "5 charter-in generated - rewire for shorter one -O- -F- -F- base",
+  "Pre-booked" : "No",
+  "Canal" : "PANAMA",
+  "Canal Entry" : "Southside",
+  "Date" : "14/06/11",
+  "Event" : "discharge-cargo-28",
+  "Period" : "Open"
 } ]

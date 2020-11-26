@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -52,10 +53,10 @@ public class MiscCostsTests extends AbstractLegacyMicroTestCase {
 				.build();
 
 		@NonNull
-		final Port port1 = portFinder.findPort("Point Fortin");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
 
 		@NonNull
-		final Port port2 = portFinder.findPort("Dominion Cove Point LNG");
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT);
 
 		// Set distance and speed to exact multiple -- quickest travel time is 100 hours
 		scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(port1, port2, 1500, 2000, 2000, true);
@@ -115,10 +116,10 @@ public class MiscCostsTests extends AbstractLegacyMicroTestCase {
 				.build();
 
 		@NonNull
-		final Port port1 = portFinder.findPort("Point Fortin");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
 
 		@NonNull
-		final Port port2 = portFinder.findPort("Dominion Cove Point LNG");
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT);
 
 		// Set distance and speed to exact multiple -- quickest travel time is 100 hours
 		scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(port1, port2, 1500, 2000, 2000, true);
@@ -176,10 +177,10 @@ public class MiscCostsTests extends AbstractLegacyMicroTestCase {
 				.build();
 
 		@NonNull
-		final Port port1 = portFinder.findPort("Point Fortin");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
 
 		@NonNull
-		final Port port2 = portFinder.findPort("Dominion Cove Point LNG");
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT);
 
 		// Set distance and speed to exact multiple -- quickest travel time is 100 hours
 		scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(port1, port2, 1500, 2000, 2000, true);

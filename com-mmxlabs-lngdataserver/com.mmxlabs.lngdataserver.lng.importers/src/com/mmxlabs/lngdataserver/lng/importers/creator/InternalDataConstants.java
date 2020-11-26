@@ -40,15 +40,18 @@ public class InternalDataConstants {
 	public static final String PORT_PECEM = "L_BR_Pecem";
 	public static final String PORT_DUNKIRK = "L_FR_Dunki";
 	public static final String PORT_ZEEBRUGGE = "L_BE_Zeebr";
+	public static final String PORT_DAS_ISLAND = "L_AE_AbuDh";
 	
 	public static final String PORT_ISLE_OF_GRAIN = "L_GB_Isleo";
 	public static final String PORT_DRAGON = "L_GB_Drago";
 
 	// US
+	public static final String PORT_CAMERON = "L_US_Camer";
 	public static final String PORT_FREEPORT = "L_US_Freep";
 	public static final String PORT_COVE_POINT = "L_US_CoveP";
 	public static final String PORT_SABINE_PASS = "L_US_Sabin";
 	public static final String PORT_CORPUS_CHRISTI = "L_US_Corpu";
+	public static final String PORT_BROWNSVILLE = "L_US_Brown";
 
 	// Japan
 	public static final String PORT_FUTTSU = "L_JP_Futts";

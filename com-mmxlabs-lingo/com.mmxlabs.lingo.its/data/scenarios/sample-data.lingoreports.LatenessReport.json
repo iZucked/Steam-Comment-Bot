@@ -2,14 +2,24 @@
   "Schedule" : "sample-data",
   "ID" : "discharge-cargo-22",
   "Type" : "Discharge",
-  "Lateness" : "10d, 19h",
-  "Start by" : "07/03/11 14:00",
-  "Scheduled time" : "18/03/11 09:00"
+  "Vessel" : "Charter Ship",
+  "Lateness" : "16d,  0h",
+  "Start by" : "08/03/11 14:00",
+  "Scheduled time" : "24/03/11 14:00"
 }, {
   "Schedule" : "sample-data",
   "ID" : "load-cargo-22",
   "Type" : "Load",
-  "Lateness" : "17d, 23h",
-  "Start by" : "11/02/11 14:00",
-  "Scheduled time" : "01/03/11 13:00"
+  "Vessel" : "Charter Ship",
+  "Lateness" : "20d,  1h",
+  "Start by" : "12/02/11 14:00",
+  "Scheduled time" : "04/03/11 15:00"
+}, {
+  "Schedule" : "sample-data",
+  "ID" : "load-cargo-9",
+  "Type" : "Load",
+  "Vessel" : "Charter Ship",
+  "Lateness" : " 3d,  8h",
+  "Start by" : "13/04/11 14:00",
+  "Scheduled time" : "16/04/11 22:00"
 } ]

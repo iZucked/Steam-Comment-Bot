@@ -1,13 +1,13 @@
-type,availability.constant,availability.kind,markets,kind,name,enabled,minQuantity,maxQuantity,volumeLimitsUnit,pricingEvent,priceInfo.priceExpression,priceInfo.specificDay,priceInfo.value,priceInfo.kind,entity,restrictedPorts,restrictedContracts,notionalPort,availability.curve.2016-08,availability.curve.2016-09,availability.curve.2016-10,availability.curve.2016-11,originPorts
-DES Purchase,,SpotAvailability,,SpotMarketGroup,,,,,,,,,,,,,,,,,,,
-DES Sale,,SpotAvailability,"DES_China,DES_Pakistan,DES_Argentina,DES_Egypt,DES_Japan,DES_Brazil,DES_NWE",SpotMarketGroup,,,,,,,,,,,,,,,,,,,
-FOB Purchase,,SpotAvailability,,SpotMarketGroup,,,,,,,,,,,,,,,,,,,
-FOB Sale,,SpotAvailability,FOB_SPL,SpotMarketGroup,,,,,,,,,,,,,,,,,,,
-,3,SpotAvailability,,DESSalesMarket,DES_China,TRUE,0,4000000,MMBTU,START_DISCHARGE,12,FALSE,0,DateShiftExpressionPriceParameters,Entity,,,Shenzhen,,,,,
-,3,SpotAvailability,,DESSalesMarket,DES_Pakistan,TRUE,0,4000000,MMBTU,START_DISCHARGE,12,FALSE,0,DateShiftExpressionPriceParameters,Entity,,,Karachi,,,,,
-,3,SpotAvailability,,DESSalesMarket,DES_Argentina,TRUE,0,3100000,MMBTU,START_DISCHARGE,12,FALSE,0,DateShiftExpressionPriceParameters,Entity,,,Bahia Blanca,0,0,0,0,
-,3,SpotAvailability,,DESSalesMarket,DES_Egypt,TRUE,0,4000000,MMBTU,START_DISCHARGE,12,FALSE,0,DateShiftExpressionPriceParameters,Entity,,,Ain Sokhna,,,,,
-,3,SpotAvailability,,DESSalesMarket,DES_Japan,TRUE,0,4000000,MMBTU,START_DISCHARGE,12,FALSE,0,DateShiftExpressionPriceParameters,Entity,,,Himeji,,,,,
-,3,SpotAvailability,,DESSalesMarket,DES_Brazil,TRUE,0,4000000,MMBTU,START_DISCHARGE,12,FALSE,0,DateShiftExpressionPriceParameters,Entity,,,Pecem,0,0,0,,
-,3,SpotAvailability,,DESSalesMarket,DES_NWE,TRUE,0,4000000,MMBTU,START_DISCHARGE,12,FALSE,0,DateShiftExpressionPriceParameters,Entity,,,Dunkirk,,,,,
-,23,SpotAvailability,,FOBSalesMarket,FOB_SPL,TRUE,0,4000000,MMBTU,START_LOAD,13,FALSE,0,DateShiftExpressionPriceParameters,Entity,,,,,,,,Sabine Pass
+type,availability.constant,availability.kind,markets,kind,name,enabled,minQuantity,maxQuantity,volumeLimitsUnit,pricingEvent,restrictedContractsArePermissive,restrictedPortsArePermissive,restrictedVesselsArePermissive,mtm,daysBuffer,priceInfo.priceExpression,priceInfo.specificDay,priceInfo.value,priceInfo.kind,entity,restrictedContracts,restrictedPorts,restrictedVessels,notionalPort,availability.curve.2016-08,availability.curve.2016-09,availability.curve.2016-10,availability.curve.2016-11,originPorts
+DES Purchase,,SpotAvailability,,SpotMarketGroup,,,,,,,,,,,,,,,,,,,,,,,,,
+DES Sale,,SpotAvailability,"DES_China,DES_Pakistan,DES_Argentina,DES_Egypt,DES_Japan,DES_Brazil,DES_NWE",SpotMarketGroup,,,,,,,,,,,,,,,,,,,,,,,,,
+FOB Purchase,,SpotAvailability,,SpotMarketGroup,,,,,,,,,,,,,,,,,,,,,,,,,
+FOB Sale,,SpotAvailability,FOB_SPL,SpotMarketGroup,,,,,,,,,,,,,,,,,,,,,,,,,
+,3,SpotAvailability,,DESSalesMarket,DES_China,true,0,4000000,MMBTU,START_DISCHARGE,false,false,false,false,0,12,false,0,DateShiftExpressionPriceParameters,Entity,,,,Shenzhen,,,,,
+,3,SpotAvailability,,DESSalesMarket,DES_Pakistan,true,0,4000000,MMBTU,START_DISCHARGE,false,false,false,false,0,12,false,0,DateShiftExpressionPriceParameters,Entity,,,,Karachi,,,,,
+,3,SpotAvailability,,DESSalesMarket,DES_Argentina,true,0,3100000,MMBTU,START_DISCHARGE,false,false,false,false,0,12,false,0,DateShiftExpressionPriceParameters,Entity,,,,Bahia Blanca,0,0,0,0,
+,3,SpotAvailability,,DESSalesMarket,DES_Egypt,true,0,4000000,MMBTU,START_DISCHARGE,false,false,false,false,0,12,false,0,DateShiftExpressionPriceParameters,Entity,,,,Ain Sokhna,,,,,
+,3,SpotAvailability,,DESSalesMarket,DES_Japan,true,0,4000000,MMBTU,START_DISCHARGE,false,false,false,false,0,12,false,0,DateShiftExpressionPriceParameters,Entity,,,,Himeji,,,,,
+,3,SpotAvailability,,DESSalesMarket,DES_Brazil,true,0,4000000,MMBTU,START_DISCHARGE,false,false,false,false,0,12,false,0,DateShiftExpressionPriceParameters,Entity,,,,Pecem,0,0,0,,
+,3,SpotAvailability,,DESSalesMarket,DES_NWE,true,0,4000000,MMBTU,START_DISCHARGE,false,false,false,false,0,12,false,0,DateShiftExpressionPriceParameters,Entity,,,,Dunkirk,,,,,
+,23,SpotAvailability,,FOBSalesMarket,FOB_SPL,true,0,4000000,MMBTU,START_LOAD,false,false,false,false,,13,false,0,DateShiftExpressionPriceParameters,Entity,,,,,,,,,Sabine Pass

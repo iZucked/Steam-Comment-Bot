@@ -1,3 +1,25 @@
 [ {
-  "Pre-booked" : "No"
+  "Schedule" : "des-cargo",
+  "Pre-booked" : "No",
+  "Canal" : "PANAMA",
+  "Canal Entry" : "Southside",
+  "Date" : "03/02/11",
+  "Event" : "discharge-cargo-70",
+  "Next Slot" : "load-cargo-48 07/02/11",
+  "Next Slot Port" : "Point Fortin",
+  "Next Slot Window Start" : "07/02/11",
+  "Next Slot Window End" : "07/02/11",
+  "Period" : "Open"
+}, {
+  "Schedule" : "des-cargo",
+  "Pre-booked" : "No",
+  "Canal" : "PANAMA",
+  "Canal Entry" : "Southside",
+  "Date" : "26/03/11",
+  "Event" : "discharge-cargo-22",
+  "Next Slot" : "load-cargo-12 13/04/11",
+  "Next Slot Port" : "Point Fortin",
+  "Next Slot Window Start" : "13/04/11",
+  "Next Slot Window End" : "13/04/11",
+  "Period" : "Open"
 } ]

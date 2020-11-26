@@ -25,6 +25,7 @@ import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -130,9 +131,9 @@ public class InPortBoilOffTests extends AbstractLegacyMicroTestCase {
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 7, 0, 0), LocalDateTime.of(2015, 12, 4, 13, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2015, 12, 30, 0, 0, 0)).build();
 
-		portA = portFinder.findPort("Point Fortin");
+		portA = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
 
-		portB = portFinder.findPort("Dominion Cove Point LNG");
+		portB = portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT);
 		portB.setDefaultStartTime(4);
 		portB.setDefaultWindowSize(0);
 	}

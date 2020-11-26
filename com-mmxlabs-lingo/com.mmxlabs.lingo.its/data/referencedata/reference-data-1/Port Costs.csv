@@ -1,2 +1,0 @@
-referenceCapacity,ports,entries,LOADCost,DISCHARGECost,DRYDOCKCost,MAINTENANCECost,TRANSFERCost,kind
-,"All LOAD Ports,All DISCHARGE Ports",,10000,10000,0,0,0,PortCost

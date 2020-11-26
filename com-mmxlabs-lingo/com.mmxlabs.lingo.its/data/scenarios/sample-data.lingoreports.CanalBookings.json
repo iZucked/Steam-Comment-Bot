@@ -1,3 +1,13 @@
 [ {
-  "Pre-booked" : "No"
+  "Schedule" : "sample-data",
+  "Pre-booked" : "No",
+  "Canal" : "PANAMA",
+  "Canal Entry" : "Northside",
+  "Date" : "11/02/11",
+  "Event" : "load-cargo-48",
+  "Next Slot" : "discharge-cargo-48 15/03/11",
+  "Next Slot Port" : "Pyeongtaek",
+  "Next Slot Window Start" : "15/03/11",
+  "Next Slot Window End" : "15/03/11",
+  "Period" : "Open"
 } ]

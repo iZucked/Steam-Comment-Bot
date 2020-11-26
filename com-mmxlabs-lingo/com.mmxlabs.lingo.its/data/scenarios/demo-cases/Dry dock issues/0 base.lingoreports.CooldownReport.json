@@ -5,8 +5,8 @@
   "ID" : "load-cargo-32",
   "Date" : "31/12/10",
   "Time" : "07:00",
-  "Port" : "Punta Europa LNG",
-  "Cost" : "233,244"
+  "Port" : "Punta Europa",
+  "Cost" : "231,198"
 }, {
   "Schedule" : "0 base",
   "Vessel" : "Methane Heather Sally",
@@ -15,5 +15,5 @@
   "Date" : "01/04/11",
   "Time" : "07:00",
   "Port" : "Damietta",
-  "Cost" : "233,472"
+  "Cost" : "231,424"
 } ]

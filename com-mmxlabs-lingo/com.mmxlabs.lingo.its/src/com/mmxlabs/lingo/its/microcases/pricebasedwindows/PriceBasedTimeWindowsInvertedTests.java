@@ -19,6 +19,7 @@ import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractLegacyMicroTestCase;
 import com.mmxlabs.lingo.its.tests.microcases.MicroCaseUtils;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -66,11 +67,11 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractLegacyMicroTestC
 		// Construct the cargo scenario
 		final double salesPrice = 8.6;
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase(loadName, LocalDate.of(2016, 6, 30), portFinder.findPort("Bonny Nigeria"), null, entity, "JCC", 23.4) //
+				.makeFOBPurchase(loadName, LocalDate.of(2016, 6, 30), portFinder.findPortById(InternalDataConstants.PORT_BONNY), null, entity, "JCC", 23.4) //
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.withWindowStartTime(0) //
 				.withWindowSize(48, TimePeriod.HOURS).build() //
-				.makeDESSale(dischargeName, LocalDate.of(2016, 7, 31), portFinder.findPort("Dragon LNG"), null, entity, "Henry_Hub") //
+				.makeDESSale(dischargeName, LocalDate.of(2016, 7, 31), portFinder.findPortById(InternalDataConstants.PORT_DRAGON), null, entity, "Henry_Hub") //
 				.withWindowStartTime(0) //
 				.withWindowSize(48, TimePeriod.HOURS).withPricingEvent(PricingEvent.START_LOAD, null).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
@@ -106,11 +107,11 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractLegacyMicroTestC
 		// Construct the cargo scenario
 		final double salesPrice = 8.55;
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase(loadName, LocalDate.of(2016, 6, 30), portFinder.findPort("Bonny Nigeria"), null, entity, "JCC", 23.4) //
+				.makeFOBPurchase(loadName, LocalDate.of(2016, 6, 30), portFinder.findPortById(InternalDataConstants.PORT_BONNY), null, entity, "JCC", 23.4) //
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.withWindowStartTime(0) //
 				.withWindowSize(48, TimePeriod.HOURS).build() //
-				.makeDESSale(dischargeName, LocalDate.of(2016, 7, 31), portFinder.findPort("Dragon LNG"), null, entity, "Henry_Hub") //
+				.makeDESSale(dischargeName, LocalDate.of(2016, 7, 31), portFinder.findPortById(InternalDataConstants.PORT_DRAGON), null, entity, "Henry_Hub") //
 				.withWindowStartTime(0) //
 				.withWindowSize(48, TimePeriod.HOURS).withPricingEvent(PricingEvent.START_LOAD, null).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
@@ -146,11 +147,11 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractLegacyMicroTestC
 		// Construct the cargo scenario
 		final double salesPrice = 8.6;
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase(loadName, LocalDate.of(2016, 6, 30), portFinder.findPort("Bonny Nigeria"), null, entity, "JCC", 23.4) //
+				.makeFOBPurchase(loadName, LocalDate.of(2016, 6, 30), portFinder.findPortById(InternalDataConstants.PORT_BONNY), null, entity, "JCC", 23.4) //
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.withWindowStartTime(0) //
 				.withWindowSize(800, TimePeriod.HOURS).build() //
-				.makeDESSale(dischargeName, LocalDate.of(2016, 7, 31), portFinder.findPort("Dragon LNG"), null, entity, "Henry_Hub") //
+				.makeDESSale(dischargeName, LocalDate.of(2016, 7, 31), portFinder.findPortById(InternalDataConstants.PORT_DRAGON), null, entity, "Henry_Hub") //
 				.withWindowStartTime(0) //
 				.withWindowSize(48, TimePeriod.HOURS).withPricingEvent(PricingEvent.START_LOAD, null).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
@@ -186,11 +187,11 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractLegacyMicroTestC
 		// Construct the cargo scenario
 		final double salesPrice = 8.8;
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase(loadName, LocalDate.of(2016, 6, 30), portFinder.findPort("Bonny Nigeria"), null, entity, "JCC", 23.4) //
+				.makeFOBPurchase(loadName, LocalDate.of(2016, 6, 30), portFinder.findPortById(InternalDataConstants.PORT_BONNY), null, entity, "JCC", 23.4) //
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.withWindowStartTime(0) //
 				.withWindowSize(800, TimePeriod.HOURS).build() //
-				.makeDESSale(dischargeName, LocalDate.of(2016, 7, 31), portFinder.findPort("Dragon LNG"), null, entity, "Henry_Hub") //
+				.makeDESSale(dischargeName, LocalDate.of(2016, 7, 31), portFinder.findPortById(InternalDataConstants.PORT_DRAGON), null, entity, "Henry_Hub") //
 				.withWindowStartTime(0) //
 				.withWindowSize(48, TimePeriod.HOURS).withPricingEvent(PricingEvent.START_LOAD, null).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
@@ -226,11 +227,11 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractLegacyMicroTestC
 		final double loadPrice = 6.999;
 		final double salesPrice = 7.5;
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase(loadName, LocalDate.of(2016, 6, 30), portFinder.findPort("Bonny Nigeria"), null, entity, "JCC", 23.4) //
+				.makeFOBPurchase(loadName, LocalDate.of(2016, 6, 30), portFinder.findPortById(InternalDataConstants.PORT_BONNY), null, entity, "JCC", 23.4) //
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.withWindowStartTime(0) //
 				.withWindowSize(0, TimePeriod.HOURS).withPricingEvent(PricingEvent.START_DISCHARGE, null).build() //
-				.makeDESSale(dischargeName, LocalDate.of(2016, 7, 31), portFinder.findPort("Dragon LNG"), null, entity, "Henry_Hub") //
+				.makeDESSale(dischargeName, LocalDate.of(2016, 7, 31), portFinder.findPortById(InternalDataConstants.PORT_DRAGON), null, entity, "Henry_Hub") //
 				.withWindowStartTime(0) //
 				.withWindowSize(48, TimePeriod.HOURS).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
@@ -267,11 +268,11 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractLegacyMicroTestC
 		final double loadPrice = 6.9999;
 		final double salesPrice = 7.5;
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase(loadName, LocalDate.of(2016, 6, 30), portFinder.findPort("Bonny Nigeria"), null, entity, "JCC", 23.4) //
+				.makeFOBPurchase(loadName, LocalDate.of(2016, 6, 30), portFinder.findPortById(InternalDataConstants.PORT_BONNY), null, entity, "JCC", 23.4) //
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.withWindowStartTime(0) //
 				.withWindowSize(0, TimePeriod.HOURS).withPricingEvent(PricingEvent.START_DISCHARGE, null).build() //
-				.makeDESSale(dischargeName, LocalDate.of(2016, 7, 31), portFinder.findPort("Dragon LNG"), null, entity, "Henry_Hub") //
+				.makeDESSale(dischargeName, LocalDate.of(2016, 7, 31), portFinder.findPortById(InternalDataConstants.PORT_DRAGON), null, entity, "Henry_Hub") //
 				.withWindowStartTime(0) //
 				.withWindowSize(48, TimePeriod.HOURS).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();

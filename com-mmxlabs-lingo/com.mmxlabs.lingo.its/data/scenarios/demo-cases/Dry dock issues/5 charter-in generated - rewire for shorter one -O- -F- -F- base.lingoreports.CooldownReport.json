@@ -5,17 +5,17 @@
   "ID" : "load-cargo-21",
   "Date" : "21/12/10",
   "Time" : "07:00",
-  "Port" : "Punta Europa LNG",
-  "Cost" : "233,244"
+  "Port" : "Punta Europa",
+  "Cost" : "231,198"
 }, {
   "Schedule" : "5 charter-in generated - rewire for shorter one -O- -F- -F- base",
   "Vessel" : "Methane Heather Sally",
   "Cause ID" : "Dry Dock",
   "ID" : "load-cargo-66",
   "Date" : "16/05/11",
-  "Time" : "07:00",
-  "Port" : "Punta Europa LNG",
-  "Cost" : "233,472"
+  "Time" : "14:00",
+  "Port" : "Punta Europa",
+  "Cost" : "231,424"
 }, {
   "Schedule" : "5 charter-in generated - rewire for shorter one -O- -F- -F- base",
   "Vessel" : "Methane Julia Louise",
@@ -23,6 +23,6 @@
   "ID" : "load-cargo-32",
   "Date" : "31/12/10",
   "Time" : "07:00",
-  "Port" : "Punta Europa LNG",
-  "Cost" : "233,244"
+  "Port" : "Punta Europa",
+  "Cost" : "231,198"
 } ]

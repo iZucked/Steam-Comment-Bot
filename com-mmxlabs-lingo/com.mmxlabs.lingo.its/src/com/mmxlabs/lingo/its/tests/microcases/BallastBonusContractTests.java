@@ -13,12 +13,14 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -56,7 +58,7 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 
 	private static final String TEST_CHARTER_CURVE_NAME = "TestCharterCurve";
-	
+
 	@Override
 	protected int getThreadCount() {
 		return 4;
@@ -64,7 +66,12 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 
 	@Override
 	public IScenarioDataProvider importReferenceData() throws Exception {
-		return importReferenceData("/referencedata/reference-data-simple-distances/");
+		return importReferenceData("/referencedata/reference-data-2/");
+	}
+
+	@BeforeEach
+	public void setSimpleDistances() {
+		distanceModelBuilder.setAllDistances(RouteOption.DIRECT, 1000.0);
 	}
 
 	@Test
@@ -80,10 +87,11 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 				.withEndWindow(LocalDateTime.of(2016, 2, 6, 0, 0, 0, 0))//
 				.build();
 
-		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", 22.8) //
+		final LoadSlot load_FOB1 = cargoModelBuilder
+				.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8) //
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.build();
-		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 1, 5), portFinder.findPort("Sakai"), null, entity, "7").build();
+		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 1, 5), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7").build();
 		final CapabilityGroup allDischarge = portFinder.getPortModel().getSpecialPortGroups().stream().filter(p -> p.getName().equals("All DISCHARGE Ports")).findFirst().get();
 		vesselAvailability.getEndAt().add(allDischarge);
 		@NonNull
@@ -119,19 +127,21 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 				.withEndWindow(LocalDateTime.of(2016, 2, 6, 0, 0, 0, 0))//
 				.build();
 
-		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", 22.8)//
+		final LoadSlot load_FOB1 = cargoModelBuilder
+				.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8)//
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.build();
-		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 1, 5), portFinder.findPort("Sakai"), null, entity, "7").build();
+		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 1, 5), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7").build();
 		final CapabilityGroup allDischarge = portFinder.getPortModel().getSpecialPortGroups().stream().filter(p -> p.getName().equals("All DISCHARGE Ports")).findFirst().get();
 		vesselAvailability.getEndAt().add(allDischarge);
 		@NonNull
 		final Cargo cargo = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
 		cargo.setVesselAssignmentType(vesselAvailability);
-		
+
 		createCharterPriceCurve();
-		
-		final BallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPort("Sakai"), TEST_CHARTER_CURVE_NAME);
+
+		final BallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_SAKAI),
+				TEST_CHARTER_CURVE_NAME);
 		vesselAvailability.setBallastBonusContract(ballastBonusContract);
 		evaluateTest(null, null, scenarioRunner -> {
 
@@ -152,13 +162,10 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 	}
 
 	private CharterCurve createCharterPriceCurve() {
-		return pricingModelBuilder.makeCharterDataCurve(TEST_CHARTER_CURVE_NAME, "$", "mmBtu") 
-				.addIndexPoint(YearMonth.of(2015, 12), 100000) 
-				.addIndexPoint(YearMonth.of(2016, 1), 500000) 
-				.addIndexPoint(YearMonth.of(2016, 2), 1000000)
-				.build();
+		return pricingModelBuilder.makeCharterDataCurve(TEST_CHARTER_CURVE_NAME, "$", "mmBtu").addIndexPoint(YearMonth.of(2015, 12), 100000).addIndexPoint(YearMonth.of(2016, 1), 500000)
+				.addIndexPoint(YearMonth.of(2016, 2), 1000000).build();
 	}
-	
+
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testLumpSumBallastBonusOn_NotMatching() throws Exception {
@@ -172,16 +179,17 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 				.withEndWindow(LocalDateTime.of(2016, 2, 6, 0, 0, 0, 0))//
 				.build();
 
-		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", 22.8)//
+		final LoadSlot load_FOB1 = cargoModelBuilder
+				.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8)//
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.build();
-		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 1, 5), portFinder.findPort("Sakai"), null, entity, "7").build();
+		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 1, 5), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7").build();
 		final CapabilityGroup allDischarge = portFinder.getPortModel().getSpecialPortGroups().stream().filter(p -> p.getName().equals("All DISCHARGE Ports")).findFirst().get();
 		vesselAvailability.getEndAt().add(allDischarge);
 		@NonNull
 		final Cargo cargo = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
 		cargo.setVesselAssignmentType(vesselAvailability);
-		final BallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPort("Point Fortin"), "1000000");
+		final BallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), "1000000");
 		vesselAvailability.setBallastBonusContract(ballastBonusContract);
 		evaluateTest(null, null, scenarioRunner -> {
 
@@ -232,18 +240,20 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 				.withEndWindow(LocalDateTime.of(2016, 2, 6, 0, 0, 0, 0))//
 				.build();
 
-		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", 22.8)//
+		final LoadSlot load_FOB1 = cargoModelBuilder
+				.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8)//
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.build();
-		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 1, 5), portFinder.findPort("Sakai"), null, entity, "7").build();
+		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 1, 5), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7").build();
 		final CapabilityGroup allDischarge = portFinder.getPortModel().getSpecialPortGroups().stream().filter(p -> p.getName().equals("All DISCHARGE Ports")).findFirst().get();
 		portFinder.getPortModel().getPorts().forEach(p -> System.out.println(p.getName()));
 		vesselAvailability.getEndAt().add(allDischarge);
 		@NonNull
 		final Cargo cargo = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
 		cargo.setVesselAssignmentType(vesselAvailability);
-		final BallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleNotionalJourneyBallastBonusContract(Lists.newLinkedList(Lists.newArrayList(portFinder.findPort("Sakai"))),
-				20.0, "20000", "100", true, false, Lists.newArrayList(portFinder.findPort("Bonny Nigeria")));
+		final BallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleNotionalJourneyBallastBonusContract(
+				Lists.newLinkedList(Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_SAKAI))), 20.0, "20000", "100", true, false,
+				Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_BONNY)));
 		vesselAvailability.setBallastBonusContract(ballastBonusContract);
 		evaluateTest(null, null, scenarioRunner -> {
 
@@ -288,11 +298,15 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 		fuelConsumption.add(fc1);
 		fuelConsumption.add(fc2);
 		fuelConsumption.add(fc3);
-		vessel.setMaxSpeed(20);
 
-		distanceModelBuilder.setPortToPortDistance(portFinder.findPort("Sakai"), portFinder.findPort("Bonny Nigeria"), RouteOption.DIRECT, 1008, true);
-		distanceModelBuilder.setPortToPortDistance(portFinder.findPort("Sakai"), portFinder.findPort("Bonny Nigeria"), RouteOption.SUEZ, 96, true);
-		distanceModelBuilder.setPortToPortDistance(portFinder.findPort("Sakai"), portFinder.findPort("Bonny Nigeria"), RouteOption.PANAMA, 800, true);
+		// Make sure curves cross the speed range.
+		assert fc1.getSpeed() <= vessel.getMinSpeed();
+		assert fc3.getSpeed() >= vessel.getMaxSpeed();
+
+		distanceModelBuilder.setPortToPortDistance(portFinder.findPortById(InternalDataConstants.PORT_SAKAI), portFinder.findPortById(InternalDataConstants.PORT_BONNY), RouteOption.DIRECT, 1008,
+				true);
+		distanceModelBuilder.setPortToPortDistance(portFinder.findPortById(InternalDataConstants.PORT_SAKAI), portFinder.findPortById(InternalDataConstants.PORT_BONNY), RouteOption.SUEZ, 96, true);
+		distanceModelBuilder.setPortToPortDistance(portFinder.findPortById(InternalDataConstants.PORT_SAKAI), portFinder.findPortById(InternalDataConstants.PORT_BONNY), RouteOption.PANAMA, 800, true);
 
 		this.fleetModelBuilder.setRouteParameters(vessel, RouteOption.SUEZ, 90, 90, 90, 90, 36);
 		this.fleetModelBuilder.setRouteParameters(vessel, RouteOption.PANAMA, 90, 90, 90, 90, 36);
@@ -303,35 +317,36 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 				.withEndWindow(LocalDateTime.of(2016, 2, 6, 0, 0, 0, 0))//
 				.build();
 
-		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", 22.8)//
+		final LoadSlot load_FOB1 = cargoModelBuilder
+				.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8)//
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.build();
-		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 1, 5), portFinder.findPort("Sakai"), null, entity, "7").build();
+		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 1, 5), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7").build();
 		final CapabilityGroup allDischarge = portFinder.getPortModel().getSpecialPortGroups().stream().filter(p -> p.getName().equals("All DISCHARGE Ports")).findFirst().get();
 		portFinder.getPortModel().getPorts().forEach(p -> System.out.println(p.getName()));
 		vesselAvailability.getEndAt().add(allDischarge);
 		@NonNull
 		final Cargo cargo = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
 		cargo.setVesselAssignmentType(vesselAvailability);
-		final BallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleNotionalJourneyBallastBonusContract(Lists.newLinkedList(Lists.newArrayList(portFinder.findPort("Sakai"))),
-				20.0, "20000", "100", false, true, Lists.newArrayList(portFinder.findPort("Bonny Nigeria")));
+		final BallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleNotionalJourneyBallastBonusContract(
+				Lists.newLinkedList(Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_SAKAI))), 20.0, "20000", "100", false, true,
+				Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_BONNY)));
 		vesselAvailability.setBallastBonusContract(ballastBonusContract);
 		evaluateTest(null, null, scenarioRunner -> {
 
 			final EndEvent end = getEndEvent(vesselAvailability);
-			
+
 			for (GeneralPNLDetails details : end.getGeneralPNLDetails()) {
 				if (details instanceof BallastBonusFeeDetails) {
-					
-					BallastBonusFeeDetails bbDetails = (BallastBonusFeeDetails)details;
-					NotionalJourneyContractDetails cDetails = (NotionalJourneyContractDetails)bbDetails.getMatchingBallastBonusContractDetails();
-					
+
+					BallastBonusFeeDetails bbDetails = (BallastBonusFeeDetails) details;
+					NotionalJourneyContractDetails cDetails = (NotionalJourneyContractDetails) bbDetails.getMatchingBallastBonusContractDetails();
+
 					int totalFuelCost = cDetails.getTotalFuelCost();
 					Assertions.assertEquals(15166, totalFuelCost);
 				}
 			}
 
-			
 			final @Nullable Schedule schedule = scenarioRunner.getSchedule();
 			assert schedule != null;
 
@@ -343,13 +358,11 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 			final List<SlotAllocation> slotAllocations = scenarioRunner.getSchedule().getSlotAllocations();
 			long endEventPNL = -48_499;
 			Assertions.assertEquals(endEventPNL, end.getGroupProfitAndLoss().getProfitAndLoss());
-			Assertions.assertEquals(cargoPNL + endEventPNL, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));			
-			
+			Assertions.assertEquals(cargoPNL + endEventPNL, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
+
 		});
 	}
 
-	
-	
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testNotionalJourneyBallastBonusOn_Matching_FindBestOption() throws Exception {
@@ -381,18 +394,20 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 				.withEndWindow(LocalDateTime.of(2016, 2, 6, 0, 0, 0, 0))//
 				.build();
 
-		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", 22.8)//
+		final LoadSlot load_FOB1 = cargoModelBuilder
+				.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8)//
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.build();
-		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 1, 5), portFinder.findPort("Sakai"), null, entity, "7").build();
+		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 1, 5), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7").build();
 		final CapabilityGroup allDischarge = portFinder.getPortModel().getSpecialPortGroups().stream().filter(p -> p.getName().equals("All DISCHARGE Ports")).findFirst().get();
 		portFinder.getPortModel().getPorts().forEach(p -> System.out.println(p.getName()));
 		vesselAvailability.getEndAt().add(allDischarge);
 		@NonNull
 		final Cargo cargo = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
 		cargo.setVesselAssignmentType(vesselAvailability);
-		final BallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleNotionalJourneyBallastBonusContract(Lists.newLinkedList(Lists.newArrayList(portFinder.findPort("Sakai"))),
-				20.0, "20000", "100", true, false, Lists.newArrayList(portFinder.findPort("Bonny Nigeria"), portFinder.findPort("Yung An")));
+		final BallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleNotionalJourneyBallastBonusContract(
+				Lists.newLinkedList(Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_SAKAI))), 20.0, "20000", "100", true, false,
+				Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_BONNY), portFinder.findPortById(InternalDataConstants.PORT_YUNG_AN)));
 		vesselAvailability.setBallastBonusContract(ballastBonusContract);
 		evaluateTest(null, null, scenarioRunner -> {
 
@@ -422,16 +437,17 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		vessel.setCapacity(140_000);
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 1);
-		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", 22.8)//
+		final LoadSlot load_FOB1 = cargoModelBuilder
+				.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8)//
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.build();
-		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 1, 5), portFinder.findPort("Sakai"), null, entity, "7").build();
+		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 1, 5), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7").build();
 		final CapabilityGroup allDischarge = portFinder.getPortModel().getSpecialPortGroups().stream().filter(p -> p.getName().equals("All DISCHARGE Ports")).findFirst().get();
 		BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
 		@NonNull
 		final Cargo cargo = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
 		cargo.setVesselAssignmentType(charterInMarket_1);
-		final BallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPort("Sakai"), "2000000");
+		final BallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_SAKAI), "2000000");
 		SimpleBallastBonusCharterContract s = CommercialFactory.eINSTANCE.createSimpleBallastBonusCharterContract();
 		s.setBallastBonusContract(ballastBonusContract);
 		charterInMarket_1.setCharterContract(s);
@@ -464,16 +480,17 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 		vessel.setCapacity(140_000);
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 1);
-		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", 22.8)//
+		final LoadSlot load_FOB1 = cargoModelBuilder
+				.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8)//
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.build();
-		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 1, 5), portFinder.findPort("Sakai"), null, entity, "7").build();
+		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 1, 5), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7").build();
 		final CapabilityGroup allDischarge = portFinder.getPortModel().getSpecialPortGroups().stream().filter(p -> p.getName().equals("All DISCHARGE Ports")).findFirst().get();
 		BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
 		@NonNull
 		final Cargo cargo = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
 		cargo.setVesselAssignmentType(charterInMarket_1);
-		final BallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPort("Point Fortin"), "2000000");
+		final BallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), "2000000");
 		SimpleBallastBonusCharterContract s = CommercialFactory.eINSTANCE.createSimpleBallastBonusCharterContract();
 		s.setBallastBonusContract(ballastBonusContract);
 		charterInMarket_1.setCharterContract(s);
@@ -507,8 +524,9 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 				.withEndWindow(LocalDateTime.of(2016, 2, 6, 0, 0, 0, 0))//
 				.build();
 
-		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", 22.8).build();
-		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 1, 5), portFinder.findPort("Sakai"), null, entity, "7").build();
+		final LoadSlot load_FOB1 = cargoModelBuilder
+				.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8).build();
+		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 1, 5), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7").build();
 		final CapabilityGroup allDischarge = portFinder.getPortModel().getSpecialPortGroups().stream().filter(p -> p.getName().equals("All DISCHARGE Ports")).findFirst().get();
 		vesselAvailability.getEndAt().add(allDischarge);
 
@@ -516,7 +534,7 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 		@NonNull
 		final Cargo cargo = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
 		cargo.setVesselAssignmentType(vesselAvailability);
-		final BallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPort("Sakai"), "2000000");
+		final BallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_SAKAI), "2000000");
 		SimpleBallastBonusCharterContract s = CommercialFactory.eINSTANCE.createSimpleBallastBonusCharterContract();
 		s.setBallastBonusContract(ballastBonusContract);
 		vesselAvailability.setCharterContract(s);
@@ -550,8 +568,9 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 				.withEndWindow(LocalDateTime.of(2016, 2, 6, 0, 0, 0, 0))//
 				.build();
 
-		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", 22.8).build();
-		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 1, 5), portFinder.findPort("Sakai"), null, entity, "7").build();
+		final LoadSlot load_FOB1 = cargoModelBuilder
+				.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8).build();
+		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 1, 5), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7").build();
 		final CapabilityGroup allDischarge = portFinder.getPortModel().getSpecialPortGroups().stream().filter(p -> p.getName().equals("All DISCHARGE Ports")).findFirst().get();
 		vesselAvailability.getEndAt().add(allDischarge);
 
@@ -559,7 +578,7 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 		@NonNull
 		final Cargo cargo = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
 		cargo.setVesselAssignmentType(vesselAvailability);
-		final BallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPort("Point Fortin"), "2000000");
+		final BallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), "2000000");
 		SimpleBallastBonusCharterContract s = CommercialFactory.eINSTANCE.createSimpleBallastBonusCharterContract();
 		s.setBallastBonusContract(ballastBonusContract);
 		vesselAvailability.setCharterContract(s);
@@ -592,12 +611,13 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 1);
 
-		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", 22.8).build();
-		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 1, 5), portFinder.findPort("Sakai"), null, entity, "7").build();
+		final LoadSlot load_FOB1 = cargoModelBuilder
+				.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8).build();
+		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 1, 5), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7").build();
 
 		BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
 		@NonNull
-		final BallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPort("Sakai"), "2000000");
+		final BallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_SAKAI), "2000000");
 		SimpleBallastBonusCharterContract s = CommercialFactory.eINSTANCE.createSimpleBallastBonusCharterContract();
 		s.setBallastBonusContract(ballastBonusContract);
 		charterInMarket_1.setCharterContract(s);

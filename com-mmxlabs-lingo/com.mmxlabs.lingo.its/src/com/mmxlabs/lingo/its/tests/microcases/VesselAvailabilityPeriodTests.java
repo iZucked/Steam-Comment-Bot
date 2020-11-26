@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.EVesselTankState;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -52,22 +53,22 @@ public class VesselAvailabilityPeriodTests extends AbstractLegacyMicroTestCase {
 				.build();
 
 		@NonNull
-		RuleBasedBallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPort("Sakai"), "1000000");
+		RuleBasedBallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_SAKAI), "1000000");
 		vesselAvailability.setBallastBonusContract(ballastBonusContract);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2017, 2, 1), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2017, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2017, 3, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2017, 3, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				.withVesselAssignment(vesselAvailability, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
 
 		final Cargo cargo2 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L2", LocalDate.of(2017, 4, 1), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L2", LocalDate.of(2017, 4, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.build() //
-				.makeDESSale("D2", LocalDate.of(2017, 5, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D2", LocalDate.of(2017, 5, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				.withVesselAssignment(vesselAvailability, 2) //
 				.withAssignmentFlags(false, false) //
@@ -124,22 +125,22 @@ public class VesselAvailabilityPeriodTests extends AbstractLegacyMicroTestCase {
 				.build();
 
 		@NonNull
-		RuleBasedBallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPort("Sakai"), "1000000");
+		RuleBasedBallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_SAKAI), "1000000");
 		vesselAvailability.setBallastBonusContract(ballastBonusContract);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2017, 2, 1), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2017, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2017, 3, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2017, 3, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				.withVesselAssignment(vesselAvailability, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
 
 		final Cargo cargo2 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L2", LocalDate.of(2017, 4, 1), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L2", LocalDate.of(2017, 4, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.build() //
-				.makeDESSale("D2", LocalDate.of(2017, 5, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D2", LocalDate.of(2017, 5, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				.withVesselAssignment(vesselAvailability, 2) //
 				.withAssignmentFlags(false, false) //
@@ -196,15 +197,15 @@ public class VesselAvailabilityPeriodTests extends AbstractLegacyMicroTestCase {
 				.build();
 
 		@NonNull
-		RuleBasedBallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPort("Sakai"), "1000000");
+		RuleBasedBallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_SAKAI), "1000000");
 		vesselAvailability.setBallastBonusContract(ballastBonusContract);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2017, 2, 1), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2017, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.with(slot -> ((LoadSlot) slot).setCargoCV(22.3)) //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2017, 3, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2017, 3, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				.withVesselAssignment(vesselAvailability, 1) //
@@ -212,10 +213,10 @@ public class VesselAvailabilityPeriodTests extends AbstractLegacyMicroTestCase {
 				.build();
 
 		final Cargo cargo2 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L2", LocalDate.of(2017, 4, 1), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L2", LocalDate.of(2017, 4, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
-				.makeDESSale("D2", LocalDate.of(2017, 5, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D2", LocalDate.of(2017, 5, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				.withVesselAssignment(vesselAvailability, 2) //
@@ -279,14 +280,14 @@ public class VesselAvailabilityPeriodTests extends AbstractLegacyMicroTestCase {
 				.build();
 
 		@NonNull
-		RuleBasedBallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPort("Sakai"), "1000000");
+		RuleBasedBallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_SAKAI), "1000000");
 		vesselAvailability.setBallastBonusContract(ballastBonusContract);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2017, 2, 1), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L1", LocalDate.of(2017, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2017, 3, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2017, 3, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				.withVesselAssignment(vesselAvailability, 1) //
@@ -294,10 +295,10 @@ public class VesselAvailabilityPeriodTests extends AbstractLegacyMicroTestCase {
 				.build();
 
 		final Cargo cargo2 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L2", LocalDate.of(2017, 4, 1), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.makeFOBPurchase("L2", LocalDate.of(2017, 4, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
-				.makeDESSale("D2", LocalDate.of(2017, 5, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.makeDESSale("D2", LocalDate.of(2017, 5, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				.withVesselAssignment(vesselAvailability, 2) //

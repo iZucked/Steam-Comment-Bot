@@ -1,4 +1,4 @@
-entity,type,kind,01/01/2016
-Entity,Shipping,SimpleEntityBook,0
-Entity,Trading,SimpleEntityBook,0
-Entity,Upstream,SimpleEntityBook,0
+kind,entity,type,2016-01-01
+SimpleEntityBook,Entity,shipping,0.0000
+SimpleEntityBook,Entity,trading,0.0000
+SimpleEntityBook,Entity,upstream,0.0000

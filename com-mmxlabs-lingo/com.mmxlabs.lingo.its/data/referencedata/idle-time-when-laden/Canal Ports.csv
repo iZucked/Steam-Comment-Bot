@@ -1,4 +1,0 @@
-name,kind,northEntrance.name,northEntrance.kind,southEntrance.name,southEntrance.kind
-Direct,Route,,,,
-Suez canal,Route,Suez North,EntryPoint,Suez South,EntryPoint
-Panama canal,Route,Panama Northside,EntryPoint,Panama Southside,EntryPoint
