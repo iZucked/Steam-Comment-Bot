@@ -114,6 +114,20 @@ public class LocationsToScenarioCopier {
 							});
 							steps.add(step2);
 						}
+						
+						if (!Objects.equals(oldPort.getLocation().getCountry(), geographicPoint.getCountry()) ) {
+							UpdateStep step = new UpdateStep( "Update country)",   cmd -> {
+								cmd.append(SetCommand.create(editingDomain, oldPort.getLocation(),  PortPackage.Literals.LOCATION__COUNTRY, geographicPoint.getCountry()));
+							});
+							steps.add(step);
+						}
+						if (!Objects.equals(oldPort.getLocation().getName(), versionLocation.getName()) ) {
+							UpdateStep step = new UpdateStep( "Update location name)",   cmd -> {
+								cmd.append(SetCommand.create(editingDomain, oldPort.getLocation(),  MMXCorePackage.Literals.NAMED_OBJECT__NAME, versionLocation.getName()));
+							});
+							steps.add(step);
+						}
+						 
 
 						if ((Math.abs(portLocation.getLat() - geographicPoint.getLat()) > 0.001) || (Math.abs(portLocation.getLon() - geographicPoint.getLon()) > 0.001)) {
 
