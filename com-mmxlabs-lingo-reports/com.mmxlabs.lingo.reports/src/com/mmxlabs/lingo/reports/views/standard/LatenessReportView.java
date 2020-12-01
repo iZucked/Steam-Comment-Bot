@@ -27,12 +27,12 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
+import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.ui.tabular.BaseFormatter;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnHandler;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnType;
-import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.rcp.common.actions.CopyGridToJSONUtil;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
@@ -50,8 +50,28 @@ public class LatenessReportView extends EMFReportView {
 		final SchedulePackage sp = SchedulePackage.eINSTANCE;
 
 		addColumn("id", "ID", ColumnType.NORMAL, Formatters.objectFormatter, sp.getEvent__Name());
-
 		addColumn("type", "Type", ColumnType.NORMAL, Formatters.objectFormatter, sp.getEvent__Type());
+
+		addColumn("vesselID", "Vessel", ColumnType.NORMAL, new BaseFormatter() {
+			@Override
+			public String render(final Object object) {
+
+				if (object instanceof Event) {
+					return ScheduleModelUtils.getVessel(((Event) object).getSequence()).getName();
+				}
+				return "";
+			}
+
+			@Override
+			public Comparable<?> getComparable(final Object object) {
+
+				if (object instanceof Event) {
+					return ScheduleModelUtils.getVessel(((Event) object).getSequence()).getName();
+				}
+
+				return super.getComparable(object);
+			}
+		});
 		addColumn("lateness", "Lateness", ColumnType.NORMAL, new BaseFormatter() {
 			@Override
 			public String render(final Object object) {
