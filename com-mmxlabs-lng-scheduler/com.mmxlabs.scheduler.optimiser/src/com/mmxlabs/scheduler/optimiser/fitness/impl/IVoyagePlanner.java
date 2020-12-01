@@ -37,6 +37,6 @@ public interface IVoyagePlanner {
 	 * @param startHeelVolumeInM3
 	 * @return An optimised VoyagePlan
 	 */
-	void makeShippedVoyagePlans(IResource resource, ICharterCostCalculator charterCostCalculator, IPortTimesRecord portTimesRecord, long[] initialHeelVolumeRangeInM3, int lastCV, int startingTime, boolean lastPlan,
+	void makeShippedVoyagePlans(IResource resource, ICharterCostCalculator charterCostCalculator, IPortTimesRecord portTimesRecord, long[] initialHeelVolumeRangeInM3, int lastCV, boolean lastPlan,
 			boolean evaluateAll, boolean extendedEvaluation, Consumer<List<Pair<VoyagePlan, IPortTimesRecord>>> hook, @Nullable IAnnotatedSolution annotatedSolution);
 }

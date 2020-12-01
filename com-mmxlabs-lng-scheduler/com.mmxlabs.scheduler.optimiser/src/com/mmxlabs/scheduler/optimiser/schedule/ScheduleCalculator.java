@@ -217,13 +217,13 @@ public class ScheduleCalculator {
 		if (portTimesRecord == null) {
 			return VolumeAllocatedSequence.empty(resource, sequence);
 		}
-		final int vesselStartTime = portTimesRecord.getFirstSlotTime();
 
-		final ScheduledVoyagePlanResult result = voyagePlanEvaluator.evaluateNonShipped(resource, vesselAvailability, vesselStartTime, //
+		final ScheduledVoyagePlanResult result = voyagePlanEvaluator.evaluateNonShipped(resource, vesselAvailability, //
 				portTimesRecord, //
-				true, //annotatedSolution != null, // Keep solutions for export
+				true, // annotatedSolution != null, // Keep solutions for export
 				annotatedSolution);
 
+		final int vesselStartTime = portTimesRecord.getFirstSlotTime();
 		return new VolumeAllocatedSequence(resource, sequence, vesselStartTime, result.voyagePlans);
 	}
 

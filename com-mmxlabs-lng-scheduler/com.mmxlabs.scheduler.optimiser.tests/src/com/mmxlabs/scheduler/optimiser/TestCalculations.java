@@ -14,7 +14,6 @@ import javax.inject.Singleton;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
-import org.mockito.Matchers;
 import org.mockito.Mockito;
 
 import com.google.common.collect.Lists;
@@ -266,7 +265,7 @@ public class TestCalculations {
 				expectedPTR2.setSlotDuration(dischargeSlot, 1);
 				expectedPTR2.setReturnSlotTime(portSlotProvider.getPortSlot(endElement), 75);
 
-				Mockito.when(volumeAllocator.allocate(ArgumentMatchers.<IVesselAvailability> any(), Matchers.anyInt(), Matchers.<VoyagePlan> any(), Matchers.<IPortTimesRecord> eq(expectedPTR2),
+				Mockito.when(volumeAllocator.allocate(ArgumentMatchers.<IVesselAvailability> any(), ArgumentMatchers.<VoyagePlan> any(), ArgumentMatchers.<IPortTimesRecord> eq(expectedPTR2),
 						ArgumentMatchers.any())).thenReturn(allocationAnnotation);
 			}
 			final PortTimesRecord expectedPTR3 = new PortTimesRecord();
@@ -274,7 +273,7 @@ public class TestCalculations {
 				expectedPTR3.setSlotTime(portSlotProvider.getPortSlot(endElement), 75);
 				expectedPTR3.setSlotDuration(portSlotProvider.getPortSlot(endElement), 0);
 
-				Mockito.when(volumeAllocator.allocate(ArgumentMatchers.<IVesselAvailability> any(), Matchers.anyInt(), Matchers.<VoyagePlan> any(), Matchers.<IPortTimesRecord> eq(expectedPTR3),
+				Mockito.when(volumeAllocator.allocate(ArgumentMatchers.<IVesselAvailability> any(), ArgumentMatchers.<VoyagePlan> any(), ArgumentMatchers.<IPortTimesRecord> eq(expectedPTR3),
 						ArgumentMatchers.any())).thenReturn(null);
 			}
 
@@ -610,7 +609,7 @@ public class TestCalculations {
 				expectedPTR2.setSlotDuration(dischargeSlot, 1);
 				expectedPTR2.setReturnSlotTime(portSlotProvider.getPortSlot(endElement), 75);
 
-				Mockito.when(volumeAllocator.allocate(ArgumentMatchers.<IVesselAvailability> any(), Matchers.anyInt(), Matchers.<VoyagePlan> any(), Matchers.<IPortTimesRecord> eq(expectedPTR2),
+				Mockito.when(volumeAllocator.allocate(ArgumentMatchers.<IVesselAvailability> any(), ArgumentMatchers.<VoyagePlan> any(), ArgumentMatchers.<IPortTimesRecord> eq(expectedPTR2),
 						ArgumentMatchers.any())).thenReturn(allocationAnnotation);
 			}
 			final PortTimesRecord expectedPTR3 = new PortTimesRecord();
@@ -618,7 +617,7 @@ public class TestCalculations {
 				expectedPTR3.setSlotTime(portSlotProvider.getPortSlot(endElement), 75);
 				expectedPTR3.setSlotDuration(portSlotProvider.getPortSlot(endElement), 0);
 
-				Mockito.when(volumeAllocator.allocate(ArgumentMatchers.<IVesselAvailability> any(), Matchers.anyInt(), Matchers.<VoyagePlan> any(), Matchers.<IPortTimesRecord> eq(expectedPTR3),
+				Mockito.when(volumeAllocator.allocate(ArgumentMatchers.<IVesselAvailability> any(), ArgumentMatchers.<VoyagePlan> any(), ArgumentMatchers.<IPortTimesRecord> eq(expectedPTR3),
 						ArgumentMatchers.any())).thenReturn(null);
 			}
 
@@ -962,8 +961,8 @@ public class TestCalculations {
 				expectedPTR2.setSlotDuration(dischargeSlot, 1);
 				expectedPTR2.setReturnSlotTime(portSlotProvider.getPortSlot(endElement), 75);
 
-				Mockito.when(volumeAllocator.allocate(ArgumentMatchers.<IVesselAvailability> any(), ArgumentMatchers.anyInt(), ArgumentMatchers.<VoyagePlan> any(),
-						ArgumentMatchers.<IPortTimesRecord> eq(expectedPTR2), ArgumentMatchers.any())).thenReturn(allocationAnnotation);
+				Mockito.when(volumeAllocator.allocate(ArgumentMatchers.<IVesselAvailability> any(), ArgumentMatchers.<VoyagePlan> any(), ArgumentMatchers.<IPortTimesRecord> eq(expectedPTR2),
+						ArgumentMatchers.any())).thenReturn(allocationAnnotation);
 			}
 			final PortTimesRecord expectedPTR3 = new PortTimesRecord();
 
@@ -971,7 +970,7 @@ public class TestCalculations {
 				expectedPTR3.setSlotTime(portSlotProvider.getPortSlot(endElement), 75);
 				expectedPTR3.setSlotDuration(portSlotProvider.getPortSlot(endElement), 0);
 
-				Mockito.when(volumeAllocator.allocate(ArgumentMatchers.<IVesselAvailability> any(), Matchers.anyInt(), Matchers.<VoyagePlan> any(), Matchers.<IPortTimesRecord> eq(expectedPTR3),
+				Mockito.when(volumeAllocator.allocate(ArgumentMatchers.<IVesselAvailability> any(), ArgumentMatchers.<VoyagePlan> any(), ArgumentMatchers.<IPortTimesRecord> eq(expectedPTR3),
 						ArgumentMatchers.any())).thenReturn(null);
 			}
 
@@ -1230,8 +1229,8 @@ public class TestCalculations {
 				bind(IVoyagePlanEvaluator.class).to(DefaultVoyagePlanEvaluator.class);
 				bind(IEntityValueCalculator.class).to(DefaultEntityValueCalculator.class);
 
-				bind (IExternalDateProvider.class).toInstance(Mockito.mock(IExternalDateProvider.class));
-				bind (ExposuresCalculator.class);
+				bind(IExternalDateProvider.class).toInstance(Mockito.mock(IExternalDateProvider.class));
+				bind(ExposuresCalculator.class);
 				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.OPTIMISE_PAPER_PNL)).toInstance(Boolean.FALSE);
 				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.GENERATED_PAPERS_IN_PNL)).toInstance(Boolean.FALSE);
 				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.COMPUTE_PAPER_PNL)).toInstance(Boolean.FALSE);
@@ -1249,8 +1248,8 @@ public class TestCalculations {
 				bind(IVesselBaseFuelCalculator.class).to(VesselBaseFuelCalculator.class);
 				final VesselBaseFuelCalculator baseFuelCalculator = Mockito.mock(VesselBaseFuelCalculator.class);
 
-				Mockito.when(baseFuelCalculator.getBaseFuelPrices(ArgumentMatchers.any(IVessel.class), Matchers.any(IPortTimesRecord.class))).thenReturn(baseFuelUnitPrices);
-				Mockito.when(baseFuelCalculator.getBaseFuelPrices(ArgumentMatchers.any(IVessel.class), Matchers.anyInt())).thenReturn(baseFuelUnitPrices);
+				Mockito.when(baseFuelCalculator.getBaseFuelPrices(ArgumentMatchers.any(IVessel.class), ArgumentMatchers.any(IPortTimesRecord.class))).thenReturn(baseFuelUnitPrices);
+				Mockito.when(baseFuelCalculator.getBaseFuelPrices(ArgumentMatchers.any(IVessel.class), ArgumentMatchers.anyInt())).thenReturn(baseFuelUnitPrices);
 
 				bind(VesselBaseFuelCalculator.class).toInstance(baseFuelCalculator);
 

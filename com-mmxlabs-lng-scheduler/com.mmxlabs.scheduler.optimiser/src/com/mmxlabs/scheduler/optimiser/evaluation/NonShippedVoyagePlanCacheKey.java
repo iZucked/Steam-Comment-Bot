@@ -28,7 +28,6 @@ public final class NonShippedVoyagePlanCacheKey {
 
 	public final IResource resource;
 	public final IVesselAvailability vesselAvailability;
-	public final int vesselStartTime;
 	public final IPortTimesRecord portTimesRecord;
 	public final boolean keepDetails;
 
@@ -36,12 +35,10 @@ public final class NonShippedVoyagePlanCacheKey {
 
 	private final int hash;
 
-	public NonShippedVoyagePlanCacheKey(final IResource resource, final IVesselAvailability vesselAvailability, final int vesselStartTime, final IPortTimesRecord portTimesRecord,
-			final boolean keepDetails) {
+	public NonShippedVoyagePlanCacheKey(final IResource resource, final IVesselAvailability vesselAvailability, final IPortTimesRecord portTimesRecord, final boolean keepDetails) {
 
 		this.resource = resource;
 		this.vesselAvailability = vesselAvailability;
-		this.vesselStartTime = vesselStartTime;
 		this.portTimesRecord = portTimesRecord;
 		this.keepDetails = keepDetails;
 		portTimesRecord.getSlots().forEach(slot -> slotTimes.add(portTimesRecord.getSlotTime(slot)));

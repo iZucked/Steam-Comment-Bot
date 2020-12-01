@@ -76,7 +76,6 @@ public class DefaultVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 
 	@Override
 	public ScheduledVoyagePlanResult evaluateNonShipped(final IResource resource, final IVesselAvailability vesselAvailability, //
-			final int vesselStartTime, //
 			final IPortTimesRecord portTimesRecord, //
 			final boolean keepDetails, //
 			@Nullable final IAnnotatedSolution annotatedSolution) {
@@ -92,7 +91,7 @@ public class DefaultVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 			cargoValueAnnotation = (ICargoValueAnnotation) allocationAnnotation;
 		}
 		if (cargoValueAnnotation == null) {
-			final Pair<CargoValueAnnotation, Long> pp = entityValueCalculator.evaluate(vp, allocationAnnotation, vesselAvailability, vesselStartTime, null, annotatedSolution);
+			final Pair<CargoValueAnnotation, Long> pp = entityValueCalculator.evaluate(vp, allocationAnnotation, vesselAvailability, null, annotatedSolution);
 			cargoValueAnnotation = pp.getFirst();
 		}
 		assert cargoValueAnnotation != null;
@@ -141,6 +140,23 @@ public class DefaultVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 	}
 
 	@Override
+	public List<ScheduledVoyagePlanResult> evaluateRoundTrip(final IResource resource, //
+			final IVesselAvailability vesselAvailability, //
+			final ICharterCostCalculator charterCostCalculator, //
+			final IPortTimesRecord initialPortTimesRecord, //
+			final boolean returnAll, //
+			final boolean keepDetails, //
+			@Nullable final IAnnotatedSolution annotatedSolution) {
+
+		// Some defaults for a round trip
+		final int vesselStartTime = 0;
+		final PreviousHeelRecord previousHeelRecord = new PreviousHeelRecord();
+		final boolean lastPlan = true;
+
+		return evaluateShipped(resource, vesselAvailability, charterCostCalculator, vesselStartTime, previousHeelRecord, initialPortTimesRecord, lastPlan, returnAll, keepDetails, annotatedSolution);
+	}
+
+	@Override
 	public List<ScheduledVoyagePlanResult> evaluateShipped(final IResource resource, //
 			final IVesselAvailability vesselAvailability, //
 			final ICharterCostCalculator charterCostCalculator, //
@@ -185,10 +201,10 @@ public class DefaultVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 					allocationAnnotation = (IAllocationAnnotation) pp.getSecond();
 				}
 				if (allocationAnnotation == null) {
-					allocationAnnotation = volumeAllocator.allocate(vesselAvailability, vesselStartTime, vp, ptr, annotatedSolution);
+					allocationAnnotation = volumeAllocator.allocate(vesselAvailability, vp, ptr, annotatedSolution);
 				}
 				if (cargoValueAnnotation == null && allocationAnnotation != null) {
-					final Pair<CargoValueAnnotation, Long> p = entityValueCalculator.evaluate(vp, allocationAnnotation, vesselAvailability, vesselStartTime, null, annotatedSolution);
+					final Pair<CargoValueAnnotation, Long> p = entityValueCalculator.evaluate(vp, allocationAnnotation, vesselAvailability, null, annotatedSolution);
 					cargoValueAnnotation = p.getFirst();
 				}
 
@@ -223,8 +239,8 @@ public class DefaultVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 				// Non-cargo codepath
 				if (allocationAnnotation == null) {
 					assert vpr == null;
-					final Pair<Map<IPortSlot, HeelValueRecord>, @NonNull Long> p = entityValueCalculator.evaluateNonCargoPlan(vp, ptr, vesselAvailability, ptr.getFirstSlotTime(), vesselStartTime,
-							null, lastHeelPrice, heelVolumeRecords, annotatedSolution);
+					final Pair<Map<IPortSlot, HeelValueRecord>, @NonNull Long> p = entityValueCalculator.evaluateNonCargoPlan(vp, ptr, vesselAvailability, vesselStartTime, ptr.getFirstSlotTime(),
+							lastHeelPrice, heelVolumeRecords, annotatedSolution);
 
 					result.lastHeelVolumeInM3 = vp.getRemainingHeelInM3();
 					metrics[MetricType.PNL.ordinal()] += p.getSecond();
@@ -321,7 +337,7 @@ public class DefaultVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 			heelVolumeRangeInM3[1] = previousHeelRecord.heelVolumeInM3;
 		}
 
-		voyagePlanner.makeShippedVoyagePlans(resource, charterCostCalculator, initialPortTimesRecord, heelVolumeRangeInM3, previousHeelRecord.lastCV, vesselStartTime, lastPlan, returnAll, true, hook,
+		voyagePlanner.makeShippedVoyagePlans(resource, charterCostCalculator, initialPortTimesRecord, heelVolumeRangeInM3, previousHeelRecord.lastCV, lastPlan, returnAll, true, hook,
 				annotatedSolution);
 
 		return results;

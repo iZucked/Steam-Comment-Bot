@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -34,10 +33,10 @@ public interface IVoyagePlanOptimiser {
 	 * @return
 	 */
 	@Nullable
-	VoyagePlan optimise(@Nullable IResource resource, IVessel vessel, long[] heelVolumeRangeInM3, int[] baseFuelPricesPerMT, ICharterCostCalculator charterCostCalculator, IPortTimesRecord portTimesRecord,
-			List<IOptionsSequenceElement> basicSequence, List<IVoyagePlanChoice> choices, int startingTime);
-	
+	VoyagePlan optimise(@Nullable IResource resource, IVessel vessel, long[] heelVolumeRangeInM3, int[] baseFuelPricesPerMT, ICharterCostCalculator charterCostCalculator,
+			IPortTimesRecord portTimesRecord, List<IOptionsSequenceElement> basicSequence, List<IVoyagePlanChoice> choices);
+
 	void iterate(@Nullable IResource resource, IVessel vessel, long[] heelVolumeRangeInM3, int[] baseFuelPricesPerMT, ICharterCostCalculator charterCostCalculator, IPortTimesRecord portTimesRecord,
-			List<IOptionsSequenceElement> basicSequence, List<IVoyagePlanChoice> choices, int startingTime,  Consumer<VoyagePlan> hook);
+			List<IOptionsSequenceElement> basicSequence, List<IVoyagePlanChoice> choices, Consumer<VoyagePlan> hook);
 
 }

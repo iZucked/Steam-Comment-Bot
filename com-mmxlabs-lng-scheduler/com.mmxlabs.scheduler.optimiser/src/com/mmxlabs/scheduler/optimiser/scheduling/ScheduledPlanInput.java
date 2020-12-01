@@ -10,7 +10,7 @@ import com.mmxlabs.scheduler.optimiser.evaluation.PreviousHeelRecord;
 
 public class ScheduledPlanInput {
 
-	private final int sequenceStartTime;
+	private final int vesselStartTime;
 	private final int planStartTime;
 
 	public int getPlanStartTime() {
@@ -19,15 +19,15 @@ public class ScheduledPlanInput {
 
 	private final PreviousHeelRecord previousHeelRecord;
 
-	public ScheduledPlanInput(final int sequenceStartTime, final int planStartTime, final @Nullable PreviousHeelRecord previousHeelRecord) {
+	public ScheduledPlanInput(final int vesselStartTime, final int planStartTime, final @Nullable PreviousHeelRecord previousHeelRecord) {
 
 		this.planStartTime = planStartTime;
 		this.previousHeelRecord = previousHeelRecord;
-		this.sequenceStartTime = sequenceStartTime;
+		this.vesselStartTime = vesselStartTime;
 	}
 
-	public int getSequenceStartTime() {
-		return sequenceStartTime;
+	public int getVesselStartTime() {
+		return vesselStartTime;
 	}
 
 	public @Nullable PreviousHeelRecord getPreviousHeelRecord() {

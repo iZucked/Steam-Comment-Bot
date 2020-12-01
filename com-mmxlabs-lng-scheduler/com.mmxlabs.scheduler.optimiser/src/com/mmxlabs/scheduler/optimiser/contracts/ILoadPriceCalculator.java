@@ -52,7 +52,7 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * @return
 	 */
 	public int calculateFOBPricePerMMBTu(@NonNull ILoadSlot loadSlot, @NonNull IDischargeSlot dischargeSlot, int dischargePricePerMMBTu, @NonNull IAllocationAnnotation allocationAnnotation,
-			@NonNull IVesselAvailability vesselAvailability, int vesselStartTime, @NonNull VoyagePlan plan, @Nullable ProfitAndLossSequences volumeAllocatedSequences,
+			@NonNull IVesselAvailability vesselAvailability, @NonNull VoyagePlan plan, @Nullable ProfitAndLossSequences volumeAllocatedSequences,
 			@Nullable IDetailTree annotations);
 
 	/**
@@ -101,7 +101,7 @@ public interface ILoadPriceCalculator extends ICalculator {
 	static final long @NonNull [] EMPTY_ADDITIONAL_PNL_RESULT = new long[ADDITIONAL_PNL_COMPONENT_SIZE];
 
 	default long @NonNull [] calculateAdditionalProfitAndLoss(@NonNull ILoadOption loadOption, @NonNull IAllocationAnnotation allocationAnnotation, int @NonNull [] slotPricesPerMMBTu,
-			@NonNull IVesselAvailability vesselAvailability, int vesselStartTime, @NonNull VoyagePlan plan, @Nullable ProfitAndLossSequences volumeAllocatedSequences,
+			@NonNull IVesselAvailability vesselAvailability, @NonNull VoyagePlan plan, @Nullable ProfitAndLossSequences volumeAllocatedSequences,
 			@Nullable IDetailTree annotations) {
 		return EMPTY_ADDITIONAL_PNL_RESULT;
 	}

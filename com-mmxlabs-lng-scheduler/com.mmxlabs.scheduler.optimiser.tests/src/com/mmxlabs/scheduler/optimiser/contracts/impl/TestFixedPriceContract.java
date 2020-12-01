@@ -10,7 +10,6 @@ import org.mockito.Mockito;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
-import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
@@ -26,10 +25,9 @@ public class TestFixedPriceContract {
 		final IDischargeSlot dischargeOption = Mockito.mock(IDischargeSlot.class);
 		final IAllocationAnnotation allocationAnnotation = Mockito.mock(IAllocationAnnotation.class);
 		final IVesselAvailability vesselAvailability = Mockito.mock(IVesselAvailability.class);
-		final ProfitAndLossSequences volumeAllocatedSequences = Mockito.mock(ProfitAndLossSequences.class);
 		final VoyagePlan voyagePlan = new VoyagePlan();
 
 		final FixedPriceContract contract = new FixedPriceContract(35353);
-		assert (contract.calculateFOBPricePerMMBTu(loadOption, dischargeOption, 0, allocationAnnotation, vesselAvailability, 0, voyagePlan, volumeAllocatedSequences, null) == 35353);
+		assert (contract.calculateFOBPricePerMMBTu(loadOption, dischargeOption, 0, allocationAnnotation, vesselAvailability, voyagePlan, null, null) == 35353);
 	}
 }

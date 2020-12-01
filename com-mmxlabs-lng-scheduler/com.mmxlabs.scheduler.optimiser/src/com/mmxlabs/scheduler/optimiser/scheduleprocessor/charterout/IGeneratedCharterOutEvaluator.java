@@ -20,6 +20,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 public interface IGeneratedCharterOutEvaluator {
 
 	@Nullable
-	List<@NonNull Pair<VoyagePlan, IPortTimesRecord>> processSchedule(int vesselStartTime, long[] startHeelVolumeRangeInM3, IVesselAvailability vesselAvailability, VoyagePlan vp,
-			IPortTimesRecord portTimesRecord, @Nullable IAnnotatedSolution annotatedSolution);
+	List<@NonNull Pair<VoyagePlan, IPortTimesRecord>> processSchedule(long[] startHeelVolumeRangeInM3, IVesselAvailability vesselAvailability, VoyagePlan vp, IPortTimesRecord portTimesRecord,
+			@Nullable IAnnotatedSolution annotatedSolution);
 }

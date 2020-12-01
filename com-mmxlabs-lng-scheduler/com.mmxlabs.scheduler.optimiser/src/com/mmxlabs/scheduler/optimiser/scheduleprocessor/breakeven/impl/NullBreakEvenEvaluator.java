@@ -23,7 +23,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 public class NullBreakEvenEvaluator implements IBreakEvenEvaluator {
 
 	@Override
-	public Pair<VoyagePlan, IAllocationAnnotation> processSchedule(final int vesselStartTime, final IVesselAvailability vesselAvailability, final VoyagePlan vp, final IPortTimesRecord portTimesRecord,
+	public Pair<VoyagePlan, IAllocationAnnotation> processSchedule(final IVesselAvailability vesselAvailability, final VoyagePlan vp, final IPortTimesRecord portTimesRecord,
 			@Nullable IAnnotatedSolution annotatedSolution) {
 		// Does nothing
 		return null;

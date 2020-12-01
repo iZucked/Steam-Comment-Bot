@@ -20,7 +20,6 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
-import com.mmxlabs.scheduler.optimiser.contracts.IBreakEvenPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IPriceIntervalProvider;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
@@ -51,7 +50,7 @@ public class ChangeablePriceCalculator implements ISalesPriceCalculator, ILoadPr
 	}
 
 	private Integer getPrice() {
-		Integer v =  price.get();
+		Integer v = price.get();
 		if (v == null) {
 			return 0;
 		}
@@ -104,20 +103,19 @@ public class ChangeablePriceCalculator implements ISalesPriceCalculator, ILoadPr
 
 	@Override
 	public int calculateFOBPricePerMMBTu(@NonNull ILoadSlot loadSlot, @NonNull IDischargeSlot dischargeSlot, int dischargePricePerMMBTu, @NonNull IAllocationAnnotation allocationAnnotation,
-			@NonNull IVesselAvailability vesselAvailability, int vesselStartTime, @NonNull VoyagePlan plan, @Nullable ProfitAndLossSequences volumeAllocatedSequences,
-			@Nullable IDetailTree annotations) {
+			@NonNull IVesselAvailability vesselAvailability, @NonNull VoyagePlan plan, @Nullable ProfitAndLossSequences profitAndLossSequences, @Nullable IDetailTree annotations) {
 		return getPrice();
 	}
 
 	@Override
 	public int calculateDESPurchasePricePerMMBTu(@NonNull ILoadOption loadOption, @NonNull IDischargeSlot dischargeSlot, int dischargePricePerMMBTu,
-			@NonNull IAllocationAnnotation allocationAnnotation, @Nullable ProfitAndLossSequences volumeAllocatedSequences, @Nullable IDetailTree annotations) {
+			@NonNull IAllocationAnnotation allocationAnnotation, @Nullable ProfitAndLossSequences profitAndLossSequences, @Nullable IDetailTree annotations) {
 		return getPrice();
 	}
 
 	@Override
 	public int calculatePriceForFOBSalePerMMBTu(@NonNull ILoadSlot loadSlot, @NonNull IDischargeOption dischargeOption, int dischargePricePerMMBTu, @NonNull IAllocationAnnotation allocationAnnotation,
-			@Nullable ProfitAndLossSequences volumeAllocatedSequences, @Nullable IDetailTree annotations) {
+			@Nullable ProfitAndLossSequences profitAndLossSequences, @Nullable IDetailTree annotations) {
 		return getPrice();
 	}
 }

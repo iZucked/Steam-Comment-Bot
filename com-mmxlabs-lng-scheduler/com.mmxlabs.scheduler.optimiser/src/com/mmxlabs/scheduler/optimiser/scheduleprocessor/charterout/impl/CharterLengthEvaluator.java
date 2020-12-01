@@ -75,8 +75,8 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 	private int minIdleTimeInHours;
 
 	@Override
-	public @Nullable List<Pair<VoyagePlan, IPortTimesRecord>> processSchedule(final int vesselStartTime, final long[] startHeelVolumeRangeInM3, final IVesselAvailability vesselAvailability,
-			final VoyagePlan vp, final IPortTimesRecord portTimesRecord, @Nullable IAnnotatedSolution annotatedSolution) {
+	public @Nullable List<Pair<VoyagePlan, IPortTimesRecord>> processSchedule(final long[] startHeelVolumeRangeInM3, final IVesselAvailability vesselAvailability, final VoyagePlan vp,
+			final IPortTimesRecord portTimesRecord, @Nullable IAnnotatedSolution annotatedSolution) {
 		if (!(vesselAvailability.getVesselInstanceType() == VesselInstanceType.FLEET //
 				|| vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER //
 				|| vesselAvailability.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER)) {
@@ -118,7 +118,7 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 			return null;
 		}
 
-		return generateNewVoyagePlans(vesselAvailability, vp, portTimesRecord, vesselStartTime, currentSequence, ballastIdx, ballastStartTime, annotatedSolution);
+		return generateNewVoyagePlans(vesselAvailability, vp, portTimesRecord, currentSequence, ballastIdx, ballastStartTime, annotatedSolution);
 	}
 
 	/**
@@ -132,8 +132,7 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 	 * @return
 	 */
 	private List<Pair<VoyagePlan, IPortTimesRecord>> generateNewVoyagePlans(final @NonNull IVesselAvailability vesselAvailability, final VoyagePlan originalPlan,
-			final IPortTimesRecord originalPortTimesRecord, final int vesselStartTime, final Object[] currentSequence, final int ballastIdx, final int ballastStartTime,
-			@Nullable IAnnotatedSolution annotatedSolution) {
+			final IPortTimesRecord originalPortTimesRecord, final Object[] currentSequence, final int ballastIdx, final int ballastStartTime, @Nullable IAnnotatedSolution annotatedSolution) {
 
 		// Now insert elements from the charter out option
 		final VoyageDetails originalBallast = (VoyageDetails) currentSequence[ballastIdx];
@@ -276,7 +275,7 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 			long remainingHeelInM32 = remainingHeelInM3 + idleBOGInM3;
 			currentPlan.setRemainingHeelInM3(remainingHeelInM32);
 
-			final IAllocationAnnotation allocation = volumeAllocator.get().allocate(vesselAvailability, vesselStartTime, currentPlan, portTimesRecord1, annotatedSolution);
+			final IAllocationAnnotation allocation = volumeAllocator.get().allocate(vesselAvailability, currentPlan, portTimesRecord1, annotatedSolution);
 			if (allocation == null) {
 				charterPlans.add(new Pair<VoyagePlan, IPortTimesRecord>(currentPlan, portTimesRecord1));
 				startHeelRangeInM3[0] = remainingHeelInM3;
