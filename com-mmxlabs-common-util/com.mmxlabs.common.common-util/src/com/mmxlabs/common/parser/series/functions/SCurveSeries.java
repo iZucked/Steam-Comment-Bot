@@ -8,18 +8,18 @@ import com.mmxlabs.common.parser.series.ISeries;
 
 public class SCurveSeries implements ISeries {
 	private final ISeries base;
-	private final double lowerThan;
-	private final double higherThan;
+	private final double firstThreshold;
+	private final double secondThreshold ;
 	private final ISeries lowerSeries;
-	private final ISeries series;
+	private final ISeries middleSeries;
 	private final ISeries higherSeries;
 
-	public SCurveSeries(final ISeries base, final double lowerThan, final double higherThan, final ISeries lowerSeries, final ISeries series, final ISeries higherSeries) {
+	public SCurveSeries(final ISeries base, final double firstThreshold, final double secondThreshold, final ISeries lowerSeries, final ISeries series, final ISeries higherSeries) {
 		this.base = base;
-		this.lowerThan = lowerThan;
-		this.higherThan = higherThan;
+		this.firstThreshold = firstThreshold;
+		this.secondThreshold = secondThreshold;
 		this.lowerSeries = lowerSeries;
-		this.series = series;
+		this.middleSeries = series;
 		this.higherSeries = higherSeries;
 	}
 
@@ -33,11 +33,11 @@ public class SCurveSeries implements ISeries {
 	public Number evaluate(final int point) {
 
 		final Number baseValue = base.evaluate(point);
-		if (baseValue.doubleValue() < lowerThan) {
+		if (baseValue.doubleValue() < firstThreshold) {
 			return lowerSeries.evaluate(point);
-		} else if (baseValue.doubleValue() > higherThan) {
+		} else if (baseValue.doubleValue() > secondThreshold ) {
 			return higherSeries.evaluate(point);
 		}
-		return series.evaluate(point);
+		return middleSeries.evaluate(point);
 	}
 }
