@@ -330,12 +330,6 @@ public class PNLBasedWindowTrimmer {
 			return doComputeVoyagePlanResults(key);
 		} else {
 			final List<Pair<ScheduledPlanInput, ScheduledVoyagePlanResult>> result = shippedCache.getUnchecked(key);
-			if (new Random().nextDouble() < 0.0001) {
-				CacheStats stats = cache.stats();
-				System.out.println("PNL Trimmer: " + stats + " " + (100.0 * stats.hitRate()));
-//				cache.
-
-			}
 			if (cacheMode == CacheMode.Verify) {
 				final List<Pair<ScheduledPlanInput, ScheduledVoyagePlanResult>> expected = doComputeVoyagePlanResults(key);
 				assert Objects.equals(result, expected);
