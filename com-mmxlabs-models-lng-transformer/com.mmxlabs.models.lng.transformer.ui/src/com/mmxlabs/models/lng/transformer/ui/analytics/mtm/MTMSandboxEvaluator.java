@@ -83,7 +83,7 @@ public class MTMSandboxEvaluator {
 
 		final int slotPricePerMMBTu = cargoValueAnnotation.getSlotPricePerMMBTu(target);
 
-		final int shippingCostPerMMBTu = Calculator.getPerMMBTuFromTotalAndVolumeInMMBTu(shippingCost, volumeInMMBTU);
+		final int shippingCostPerMMBTu = volumeInMMBTU == 0 ? 0 : Calculator.getPerMMBTuFromTotalAndVolumeInMMBTu(shippingCost, volumeInMMBTU);
 
 		// might want different volume for the shipping cost
 		if (target instanceof LoadOption) {

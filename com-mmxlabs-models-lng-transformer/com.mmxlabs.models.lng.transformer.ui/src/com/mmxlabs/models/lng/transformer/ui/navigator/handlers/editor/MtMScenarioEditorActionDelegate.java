@@ -50,6 +50,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.CargoEditingCommands;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.CargoEditorMenuHelper;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -58,6 +59,10 @@ import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
+import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
+import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
+import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -355,6 +360,29 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 			});
 			
 		}
+		progressMonitor.worked(100);
+		progressMonitor.subTask("Evaluating the scenario");
+		
+		final OptimisationPlan optimisationPlan = OptimisationHelper.getOptimiserSettings(scenarioModel, true, null, false, false, null);
+		assert optimisationPlan != null;
+
+		// Hack: Add on shipping only hint to avoid generating spot markets during eval.
+		final LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(sdp, instance) //
+				.withThreadCount(1) //
+				.withOptimisationPlan(optimisationPlan) //
+				.withHints(LNGTransformerHelper.HINT_SHIPPING_ONLY) //
+				.buildDefaultRunner();
+
+		try {
+			sdp.setLastEvaluationFailed(true);
+			runnerBuilder.evaluateInitialState();
+			sdp.setLastEvaluationFailed(false);
+		} catch (final Exception e) {
+			System.out.print(e.getMessage() + "\n");
+		} finally {
+			runnerBuilder.dispose();
+		}
+		
 		progressMonitor.done();
 	}
 

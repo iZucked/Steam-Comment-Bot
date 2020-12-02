@@ -301,7 +301,8 @@ public class MTMSanboxUnit {
 											mtmResult.setEarliestVolume(OptimiserUnitConvertor.convertToExternalVolume(ret.volumeInMMBTU));
 											mtmResult.setEarliestPrice(OptimiserUnitConvertor.convertToExternalPrice(ret.netbackPrice));
 											mtmResult.setShippingCost(
-													OptimiserUnitConvertor.convertToExternalPrice(Calculator.getPerMMBTuFromTotalAndVolumeInMMBTu(ret.shippingCost, ret.volumeInMMBTU)));
+													OptimiserUnitConvertor.convertToExternalPrice(ret.volumeInMMBTU == 0 ? 0 : //
+														Calculator.getPerMMBTuFromTotalAndVolumeInMMBTu(ret.shippingCost, ret.volumeInMMBTU)));
 										}
 										synchronized (row) {
 											if (row.getBuyOption() != null) {

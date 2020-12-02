@@ -63,7 +63,7 @@ public class SpotMarketConstraint extends AbstractModelConstraint {
 			if (spotMarket.getMaxQuantity() != 0 && spotMarket.getMinQuantity() != 0) {
 				if (spotMarket.getMaxQuantity() < spotMarket.getMinQuantity()) {
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
-							(IConstraintStatus) ctx.createFailureStatus("Min quantity should be less than or equal to max quantity."));
+							(IConstraintStatus) ctx.createFailureStatus("Minimum volume should be less than or equal to maximum volume."));
 					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getSpotMarket_MinQuantity());
 					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getSpotMarket_MaxQuantity());
 					failures.add(dsd);
@@ -71,7 +71,7 @@ public class SpotMarketConstraint extends AbstractModelConstraint {
 			}
 
 			if (spotMarket.getMaxQuantity() == 0) {
-				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Max quantity should be greater than zero."));
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Maximum volume should be greater than zero."));
 				dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getSpotMarket_MinQuantity());
 				dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getSpotMarket_MaxQuantity());
 				failures.add(dsd);
@@ -150,6 +150,14 @@ public class SpotMarketConstraint extends AbstractModelConstraint {
 				if (!foundLoadPort) {
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("A load port must be set"));
 					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getFOBSalesMarket_OriginPorts());
+					failures.add(dsd);
+				}
+			}
+			if (spotMarket.isMtm()) {
+				if (spotMarket.getMinQuantity() == 0) {
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
+							(IConstraintStatus) ctx.createFailureStatus("MtM markets require a minimum volume"));
+					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getSpotMarket_MinQuantity());
 					failures.add(dsd);
 				}
 			}
