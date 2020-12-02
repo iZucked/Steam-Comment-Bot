@@ -6,6 +6,7 @@ package com.mmxlabs.lngdataserver.lng.importers.merge;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -65,45 +66,80 @@ public class MergeScenarioTool {
 
 	private static final Logger logger = LoggerFactory.getLogger(MergeScenarioTool.class);
 
+	private List<MergeMapping> purchaseContractMappings;
+	private List<MergeMapping> salesContractMappings;
 	
-	public void doIt(IScenarioDataProvider sourceSDP, ScenarioInstance target) {
+	
+	
+	public void doIt(ScenarioInstance source, ScenarioInstance target) {
 
-		LNGScenarioModel sm = (LNGScenarioModel) EcoreUtil.copy(sourceSDP.getScenario());
+		final ScenarioModelRecord sourceModelRecord = SSDataManager.Instance.getModelRecord(source);
+		try (IScenarioDataProvider scenarioDataProvider = sourceModelRecord.aquireScenarioDataProvider("MergeScenarioTool.doIt")) {
+			final LNGScenarioModel scenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
-		CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sm);
-		CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(sm);
+			LNGScenarioModel sm = (LNGScenarioModel) EcoreUtil.copy(scenarioModel);
 
-		//Merge purchase contracts		
-		mergePurchaseContracts(sm, cargoModel, commercialModel, "Pluto 2021", "Pluto");
-		mergePurchaseContracts(sm, cargoModel, commercialModel, "NWS 2021", "NWS");
-		mergePurchaseContracts(sm, cargoModel, commercialModel, "Wheatstone 2021", "Wheatstone");
+			if (sm != null) {
+				CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sm);
+				CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(sm);
+/*
+				//Merge purchase contracts		
+				mergePurchaseContracts(sm, cargoModel, commercialModel, "Pluto 2021", "Pluto");
+				mergePurchaseContracts(sm, cargoModel, commercialModel, "NWS 2021", "NWS");
+				mergePurchaseContracts(sm, cargoModel, commercialModel, "Wheatstone 2021", "Wheatstone");
 
-		//Merge sales contracts
-		renameSalesContract(sm, cargoModel, commercialModel, "JERA", "Jera");
-		renameSalesContract(sm, cargoModel, commercialModel, "RWE DES", "RWE");
-		renameSalesContract(sm, cargoModel, commercialModel, "Pluto TMA (KEPA & TGP)", "Pluto TMA KEPA TGP");
-		mergeSalesContracts(sm, cargoModel, commercialModel, "Pluto TMA KEPA", "Pluto TMA KEPA TGP");
-		mergeSalesContracts(sm, cargoModel, commercialModel, "Pluto TMA TGP", "Pluto TMA KEPA TGP");		
-		// TODO: Rename RWF_FOB_CC  to  RWE CC FOB ???
-		//mergeSalesContracts(sm, cargoModel, commercialModel, "RWE CC FOB", "RWF_FOB CC");	
-		mergeSalesContracts(sm, cargoModel, commercialModel, "Pluto TG DES", "TG");
-		mergeSalesContracts(sm, cargoModel, commercialModel, "Pluto TG FOB", "TG", true);
-		mergeSalesContracts(sm, cargoModel, commercialModel, "Pluto KE FOB", "KE", true);	
-		renameSalesContract(sm, cargoModel, commercialModel, "Uncommitted Asia", "TBA_Asia");		
-		
-		ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(target);
-		modelRecord.executeWithProvider(sdp -> {
-			try {
-				createCargoUpdater(sm).accept(sdp);
+				//Merge sales contracts
+				renameSalesContract(sm, cargoModel, commercialModel, "JERA", "Jera");
+				renameSalesContract(sm, cargoModel, commercialModel, "RWE DES", "RWE");
+				renameSalesContract(sm, cargoModel, commercialModel, "Pluto TMA (KEPA & TGP)", "Pluto TMA KEPA TGP");
+				mergeSalesContracts(sm, cargoModel, commercialModel, "Pluto TMA KEPA", "Pluto TMA KEPA TGP");
+				mergeSalesContracts(sm, cargoModel, commercialModel, "Pluto TMA TGP", "Pluto TMA KEPA TGP");		
+				// TODO: Rename RWF_FOB_CC  to  RWE CC FOB ???
+				//mergeSalesContracts(sm, cargoModel, commercialModel, "RWE CC FOB", "RWF_FOB CC");	
+				mergeSalesContracts(sm, cargoModel, commercialModel, "Pluto TG DES", "TG");
+				mergeSalesContracts(sm, cargoModel, commercialModel, "Pluto TG FOB", "TG", true);
+				mergeSalesContracts(sm, cargoModel, commercialModel, "Pluto KE FOB", "KE", true);	
+				renameSalesContract(sm, cargoModel, commercialModel, "Uncommitted Asia", "TBA_Asia");		
+*/
+				for (MergeMapping cm : this.purchaseContractMappings) {
+					switch (cm.getTargetName()) {
+					case "Add":
+						break;
+					case "Ignore":
+						break;
+					default:
+						mergePurchaseContracts(sm, cargoModel, commercialModel, cm.getSourceName(), cm.getTargetName());
+						break;
+					}
+				}
+				
+				for (MergeMapping cm : this.salesContractMappings) {
+					switch (cm.getTargetName()) {
+					case "Add":
+						break;
+					case "Ignore":
+						break;
+					default:
+						mergeSalesContracts(sm, cargoModel, commercialModel, cm.getSourceName(), cm.getTargetName());
+						break;
+					}
+				}
+				
+				ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(target);
+				modelRecord.executeWithProvider(sdp -> {
+					try {
+						createCargoUpdater(sm).accept(sdp);
 
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				});
+
+				logger.info("Finished ADP merge.");
 			}
-
-		});
-		
-		logger.info("Finished ADP merge.");
+		}
 	}
 
 	private void renameSalesContract(LNGScenarioModel sm, CargoModel cargoModel, CommercialModel commercialModel, String oldName, String newName) {
@@ -158,7 +194,6 @@ public class MergeScenarioTool {
 			if (isLoadWithOldContract(load, oldContractName)) {
 				load.setContract(newPurchaseContract);
 			}
-
 		}
 
 		List<EObject> oldContracts = new LinkedList<>();
@@ -319,31 +354,36 @@ public class MergeScenarioTool {
 			fm.getVessels().forEach(ctx::registerType);
 			fm.getVesselGroups().forEach(ctx::registerType);
 
-			final CommercialModel cm = ScenarioModelUtil.getCommercialModel(target);
-			cm.getPurchaseContracts().forEach(ctx::registerType);
-			cm.getSalesContracts().forEach(ctx::registerType);
-			cm.getEntities().forEach(ctx::registerType);
+			final CommercialModel targetCM = ScenarioModelUtil.getCommercialModel(target);
+			targetCM.getPurchaseContracts().forEach(ctx::registerType);
+			targetCM.getSalesContracts().forEach(ctx::registerType);
+			targetCM.getEntities().forEach(ctx::registerType);
 
 			List<SalesContract> extraSales = new LinkedList<>();
+			Map<String, MergeAction> salesContractActions = getActions(this.salesContractMappings);
+			Map<String, MergeAction> purchaseContractActions = getActions(this.purchaseContractMappings);
 			sourceLSM.getReferenceModel().getCommercialModel().getSalesContracts().forEach(c -> {
-				for (SalesContract sc : cm.getSalesContracts()) {
-					if (c.getName().equals(sc.getName())) {
-						return;
-					}
+				MergeAction ma = salesContractActions.get(c.getName());
+				switch (ma.getMergeType()) {
+				case Add:
+					extraSales.add(c);
+					break;
+				case Overwrite:
+					extraSales.add(c);					
+					break;
 				}
-				extraSales.add(c);
 			});
 			List<PurchaseContract> extraPurchases = new LinkedList<>();
 			sourceLSM.getReferenceModel().getCommercialModel().getPurchaseContracts().forEach(c -> {
-				if (c.getName().startsWith("Pluto")) {
-					// return;
+				MergeAction ma = purchaseContractActions.get(c.getName());
+				switch (ma.getMergeType()) {
+				case Add:
+					extraPurchases.add(c);
+					break;
+				case Overwrite:
+					extraPurchases.add(c);					
+					break;
 				}
-				for (PurchaseContract sc : cm.getPurchaseContracts()) {
-					if (c.getName().equals(sc.getName())) {
-						return;
-					}
-				}
-				extraPurchases.add(c);
 			});
 
 			final SpotMarketsModel smm = ScenarioModelUtil.getSpotMarketsModel(target);
@@ -429,10 +469,10 @@ public class MergeScenarioTool {
 
 				// Add in the new contracts
 				if (!newPurchaseContracts.isEmpty()) {
-					cmd.append(AddCommand.create(editingDomain, cm, CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS, newPurchaseContracts));
+					cmd.append(AddCommand.create(editingDomain, targetCM, CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS, newPurchaseContracts));
 				}
 				if (!newSalesContracts.isEmpty()) {
-					cmd.append(AddCommand.create(editingDomain, cm, CommercialPackage.Literals.COMMERCIAL_MODEL__SALES_CONTRACTS, newSalesContracts));
+					cmd.append(AddCommand.create(editingDomain, targetCM, CommercialPackage.Literals.COMMERCIAL_MODEL__SALES_CONTRACTS, newSalesContracts));
 				}
 
 				// Finally import the new positions.
@@ -480,5 +520,28 @@ public class MergeScenarioTool {
 			}
 		};
 
+	}
+
+	private Map<String, MergeAction> getActions(List<MergeMapping> mappings) {
+		Map<String, MergeAction> sourceToAction = new HashMap<>();
+		for (MergeMapping cm : mappings) {
+			MergeType mt = MergeType.Map;
+			try {
+				MergeType.valueOf(cm.getTargetName());
+			}
+			catch (IllegalArgumentException e) {
+				//Ignore, as we just map it.
+			}
+			sourceToAction.put(cm.getSourceName(), new MergeAction(mt, cm.getSourceName(), cm.getTargetName()));
+		}
+		return sourceToAction;
+	}
+
+	public void setPurchaseContractMappings(List<MergeMapping> purchaseContractMappings) {
+		this.purchaseContractMappings = purchaseContractMappings;
+	}
+
+	public void setSalesContractMappings(List<MergeMapping> salesContractMappings) {
+		this.salesContractMappings = salesContractMappings;
 	}
 }

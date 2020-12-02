@@ -67,7 +67,7 @@
    <command
           defaultHandler="com.mmxlabs.lngdataserver.lng.importers.merge.MergeScenarioCommandHandler"
           id="com.mmxlabs.lngdataserver.lng.importers.merge.MergeBaseCase"
-          name="Merge scenario into...">
+          name="Merge into...">
    </command>
 </extension>
  <extension
@@ -327,7 +327,7 @@
       <command
             commandId="com.mmxlabs.lngdataserver.lng.importers.merge.MergeBaseCase"
             style="push"
-            tooltip="Merge another scenario into this one.">
+            tooltip="Merge into this scenario...">
             <visibleWhen
                         checkEnabled="false">
                      <and>
