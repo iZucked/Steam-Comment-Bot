@@ -3,6 +3,7 @@ package com.mmxlabs.lngdataserver.lng.importers.merge;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -63,14 +64,15 @@ public class MergeHelper implements Closeable {
 	final LNGScenarioModel targetLNGScenario;
 	final EditingDomain editingDomain;
 	final ObjectMapper jsonWriter;
-	final ObjectMapper jsonReader;
+	ObjectMapper jsonReader;
 	final List<Pair<JSONReference, String>> missingReferences = new LinkedList<>();
 	final Set<Cargo> cargoesToAdd = new HashSet<>();
 	final Set<Cargo> cargoesToRemove = new HashSet<>();
 	final List<ToAddLater> cmdsToAddLater = new ArrayList<>();
 	final List<ToReplaceLater> cmdsToReplaceLater = new ArrayList<>();
+	final List<ToRemoveLater> cmdsToRemoveLater = new ArrayList<>();
 	
-	final EMFDeserializationContext ctx;
+	EMFDeserializationContext ctx;
 	
 	public MergeHelper(ScenarioInstance sourceScenarioInstance, ScenarioInstance targetScenarioInstance) {
 		this.sourceScenarioInstance = sourceScenarioInstance;
@@ -82,11 +84,12 @@ public class MergeHelper implements Closeable {
 		this.editingDomain = targetScenarioDataProvider.getEditingDomain();
 		this.jsonWriter = new ObjectMapper();
 		this.jsonWriter.registerModule(new EMFJacksonModule());
-		ctx = new EMFDeserializationContext(BeanDeserializerFactory.instance);
 		this.jsonReader = createJSONReader();
 	}
 
 	private ObjectMapper createJSONReader() {
+		ctx = new EMFDeserializationContext(BeanDeserializerFactory.instance);
+		
 		ctx.setMissingFeatureHandler((ref, lbl) -> {
 			System.out.println("Unknown reference " + ref.getName() + " " + ref.getGlobalId() + " " + ref.getClassType());
 
@@ -134,6 +137,9 @@ public class MergeHelper implements Closeable {
 	}
 	
 	public void merge(CompoundCommand cmd, Pair<NamedObjectGetter, List<MergeMapping>> mapping, ModelGetter mg, EStructuralFeature feature) throws JsonProcessingException {
+		
+		//this.jsonReader = createJSONReader();
+		
 		NamedObjectGetter namedObjectGetter = mapping.getFirst();
 		Map<String, MergeAction> mergeActions = getActions(mapping.getSecond());
 		List<? extends NamedObject> namedObjects = namedObjectGetter.getNamedObjects(this.sourceLNGScenario);
@@ -175,7 +181,7 @@ public class MergeHelper implements Closeable {
 		
 		replace(cmd, mg, feature, toReplace);
 		
-		runDeferredActions(feature);
+		//runDeferredActions(feature);
 		
 		if (!missingReferences.isEmpty()) {
 			// Revert change if there are missing references
@@ -240,6 +246,21 @@ public class MergeHelper implements Closeable {
 		}
 	}
 	
+	class ToRemoveLater extends ToAddLater {
+		public ToRemoveLater(Object owner, EStructuralFeature feature, List<Object> toDel) {
+			super(owner, feature, toDel);
+		}
+		
+		/**
+		 * Execute now!
+		 * @param cmd
+		 */
+		@Override
+		public void createCmdNow(CompoundCommand cmd) {
+			cmd.append(RemoveCommand.create(editingDomain, owner, feature, toAdd));
+		}
+	}
+	
 	
 	class ToReplaceLater extends ToAddLater {
 		Object oldObject;
@@ -261,6 +282,7 @@ public class MergeHelper implements Closeable {
 		 * Execute now!
 		 * @param cmd
 		 */
+		@Override
 		public void createCmdNow(CompoundCommand cmd) {
 			cmd.append(ReplaceCommand.create(editingDomain, owner, feature, oldObject, this.toAdd));
 		}
@@ -275,6 +297,15 @@ public class MergeHelper implements Closeable {
 		}
 	}
 
+	private void remove(CompoundCommand cmd, ModelGetter mg, EStructuralFeature feature, List<Object> toAdd) {
+		if (!toAdd.isEmpty()) {
+			Object owner = mg.getModel(targetScenarioDataProvider);
+			//cmd.append(AddCommand.create(editingDomain, owner, feature, toAdd));
+			this.cmdsToRemoveLater.add(new ToRemoveLater(owner, feature, toAdd));
+		}
+	}
+
+	
 	private void replace(CompoundCommand cmd, ModelGetter mg, EStructuralFeature feature, List<Pair<Object, Object>> toReplace) {
 		if (!toReplace.isEmpty()) {				
 			Object owner = mg.getModel(targetScenarioDataProvider);
@@ -399,33 +430,43 @@ public class MergeHelper implements Closeable {
 	}
 
 	public void execute(CompoundCommand cmd) throws JsonMappingException, JsonProcessingException {
-			
-		//Now create add commands.
-		for (ToAddLater toAdd : this.cmdsToAddLater) {
-			toAdd.createCmdNow(cmd);
+
+		addRemoveCargoes(cmd);
+		
+		ctx.runDeferredActions();
+		
+		//Create remove commands.
+		for (ToRemoveLater toRemove : this.cmdsToRemoveLater) {
+			toRemove.createCmdNow(cmd);
 		}
 		
 		//Now create replace commands.
 		for (ToReplaceLater toReplace : this.cmdsToReplaceLater) {
 			toReplace.createCmdNow(cmd);
 		}
-
-		addRemoveCargoes(cmd);
+		
+		//Now create add commands.
+		for (ToAddLater toAdd : this.cmdsToAddLater) {
+			toAdd.createCmdNow(cmd);
+		}
+		
 		
 		editingDomain.getCommandStack().execute(cmd);
 	}
 
 	public void addRemoveCargoes(CompoundCommand cmd) throws JsonMappingException, JsonProcessingException {
+		
+		//this.jsonReader = createJSONReader();
+		
 		if (!this.cargoesToRemove.isEmpty()) {
-			cmd.append(RemoveCommand.create(editingDomain, this.targetLNGScenario.getCargoModel(), CargoPackage.Literals.CARGO_MODEL__CARGOES, this.cargoesToRemove));	
+			remove(cmd, s -> this.targetLNGScenario.getCargoModel(), CargoPackage.Literals.CARGO_MODEL__CARGOES, Arrays.asList(this.cargoesToRemove.toArray()));	
 		}
 		if (!this.cargoesToAdd.isEmpty()) {
+						
 			final String toAddJSON = jsonWriter.writerWithDefaultPrettyPrinter().writeValueAsString(this.cargoesToAdd);		
 			final List<Cargo> cargoTarget = jsonReader.readValue(toAddJSON, new TypeReference<List<Cargo>>() {});
 			
-			ctx.runDeferredActions();
-			
-			cmd.append(AddCommand.create(editingDomain, this.targetLNGScenario.getCargoModel(), CargoPackage.Literals.CARGO_MODEL__CARGOES, this.cargoesToAdd));
+			add(cmd, s-> this.targetLNGScenario.getCargoModel(), CargoPackage.Literals.CARGO_MODEL__CARGOES, Arrays.asList(cargoTarget.toArray()));
 		}		
 	}
 }
