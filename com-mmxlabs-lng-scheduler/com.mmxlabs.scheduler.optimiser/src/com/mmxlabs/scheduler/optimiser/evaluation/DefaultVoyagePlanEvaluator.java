@@ -463,7 +463,7 @@ public class DefaultVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 					}
 				}
 				if (recordHeel) {
-					assert currentHeelInM3 >= 0;
+					assert currentHeelInM3 + IVoyagePlanner.ROUNDING_EPSILON >= 0;
 					final long startHeelInM3 = currentHeelInM3;
 
 					for (final FuelKey fuel : LNGFuelKeys.Travel_LNG_In_m3) {
