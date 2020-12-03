@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import org.eclipse.emf.common.command.Command;
@@ -21,6 +22,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.ReplaceCommand;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.dialogs.MessageDialog;
 
@@ -35,6 +37,7 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.CargoEditingHelper;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
@@ -64,15 +67,16 @@ public class MergeHelper implements Closeable {
 	final LNGScenarioModel targetLNGScenario;
 	final EditingDomain editingDomain;
 	final ObjectMapper jsonWriter;
-	ObjectMapper jsonReader;
+	final ObjectMapper jsonReader;
 	final List<Pair<JSONReference, String>> missingReferences = new LinkedList<>();
 	final Set<Cargo> cargoesToAdd = new HashSet<>();
 	final Set<Cargo> cargoesToRemove = new HashSet<>();
 	final List<ToAddLater> cmdsToAddLater = new ArrayList<>();
 	final List<ToReplaceLater> cmdsToReplaceLater = new ArrayList<>();
 	final List<ToRemoveLater> cmdsToRemoveLater = new ArrayList<>();
-	
-	EMFDeserializationContext ctx;
+	final List<ToSetLater> cmdsToSetLater = new ArrayList<>();
+	final EMFDeserializationContext ctx;
+	final CargoEditingHelper cargoEditingHelper;
 	
 	public MergeHelper(ScenarioInstance sourceScenarioInstance, ScenarioInstance targetScenarioInstance) {
 		this.sourceScenarioInstance = sourceScenarioInstance;
@@ -84,11 +88,12 @@ public class MergeHelper implements Closeable {
 		this.editingDomain = targetScenarioDataProvider.getEditingDomain();
 		this.jsonWriter = new ObjectMapper();
 		this.jsonWriter.registerModule(new EMFJacksonModule());
+		this.ctx = new EMFDeserializationContext(BeanDeserializerFactory.instance);
 		this.jsonReader = createJSONReader();
+		this.cargoEditingHelper = new CargoEditingHelper(editingDomain, targetLNGScenario);
 	}
 
 	private ObjectMapper createJSONReader() {
-		ctx = new EMFDeserializationContext(BeanDeserializerFactory.instance);
 		
 		ctx.setMissingFeatureHandler((ref, lbl) -> {
 			System.out.println("Unknown reference " + ref.getName() + " " + ref.getGlobalId() + " " + ref.getClassType());
@@ -158,16 +163,26 @@ public class MergeHelper implements Closeable {
 					break;
 									
 				case Overwrite:
-					toReplace.add(Pair.of(targetNamedObjects.get(no.getName()), cloneEObject(no)));			
-					if (addCargoIfSlot(no)) {
-						List<? extends NamedObject> tnos = namedObjectGetter.getNamedObjects(targetLNGScenario);
-						addCargoToRemoveIfSlot(tnos, no);
-					}
+					//Replace object in target, with version from source:
+					EObject oldObjectToOverwrite = targetNamedObjects.get(name);
+					EObject newObjectToReplaceWith = cloneEObject(no); //Clone to get rid of references to source scenario.
+					toReplace.add(Pair.of(oldObjectToOverwrite, newObjectToReplaceWith));	
+					
+					//Add the cargo as well if there is one if it is a slot.
+					addCargoIfSlot(no);
+					
+					//Remove any cargo if it is a slot.
+					removeCargoOnOldObjectIfSlot(oldObjectToOverwrite);
+					
+					//Clean up rest of references on target scenario:
+					updateReferencesViaCmd(this.targetLNGScenario, mg.getModel(this.targetScenarioDataProvider), feature, oldObjectToOverwrite, newObjectToReplaceWith);
 					break;
 					
 				case Map:
-					EObject targetObject = cloneEObject(targetNamedObjects.get(ma.getTargetName()));
-					updateReferences(no, targetObject);
+					//FIXME: A bit flaky perhaps, but seems to work and need to like this in case source does not have target object in it.
+					EObject oldObject = no;
+					EObject newObjectInTarget = cloneEObject(targetNamedObjects.get(ma.getTargetName()));
+					updateReferencesViaSet(this.sourceLNGScenario, no, newObjectInTarget);
 					break;
 				
 				case Ignore:
@@ -212,17 +227,43 @@ public class MergeHelper implements Closeable {
 		}
 	}
 
-	private void runDeferredActions(EStructuralFeature feature) {
-		if (feature == FleetPackage.Literals.FLEET_MODEL__VESSELS) {
-			ctx.runDeferredActions();
+	private void removeCargoOnOldObjectIfSlot(EObject oldObject) {
+		if (oldObject instanceof Slot<?>) {
+			Slot<?> targetSlot = (Slot<?>)oldObject;
+			if (targetSlot.getCargo() != null) {
+				this.cargoesToRemove.add(targetSlot.getCargo());
+			}
 		}
 	}
 
-	class ToAddLater {
+	abstract class AbstractToExecuteLater {
 		Object owner; 
 		EStructuralFeature feature;
-		List<Object> toAdd;
+		List<Object> values;
 		
+		/**
+		 * @param owner
+		 * @param cmd
+		 * @param mg
+		 * @param feature
+		 * @param values
+		 */
+		public AbstractToExecuteLater(Object owner, EStructuralFeature feature, List<Object> values) {
+			super();
+			this.owner = owner;
+			this.feature = feature;
+			this.values = values;
+		}	
+		
+		/**
+		 * Execute now!
+		 * @param cmd
+		 */
+		abstract public void createCmdNow(CompoundCommand cmd);
+	}
+	
+	class ToAddLater extends AbstractToExecuteLater {
+
 		/**
 		 * @param owner
 		 * @param cmd
@@ -231,10 +272,7 @@ public class MergeHelper implements Closeable {
 		 * @param toAdd
 		 */
 		public ToAddLater(Object owner, EStructuralFeature feature, List<Object> toAdd) {
-			super();
-			this.owner = owner;
-			this.feature = feature;
-			this.toAdd = toAdd;
+			super(owner, feature, toAdd);
 		}
 			
 		/**
@@ -242,11 +280,11 @@ public class MergeHelper implements Closeable {
 		 * @param cmd
 		 */
 		public void createCmdNow(CompoundCommand cmd) {
-			cmd.append(AddCommand.create(editingDomain, owner, feature, toAdd));
+			cmd.append(AddCommand.create(editingDomain, owner, feature, values));
 		}
 	}
 	
-	class ToRemoveLater extends ToAddLater {
+	class ToRemoveLater extends AbstractToExecuteLater {
 		public ToRemoveLater(Object owner, EStructuralFeature feature, List<Object> toDel) {
 			super(owner, feature, toDel);
 		}
@@ -257,12 +295,11 @@ public class MergeHelper implements Closeable {
 		 */
 		@Override
 		public void createCmdNow(CompoundCommand cmd) {
-			cmd.append(RemoveCommand.create(editingDomain, owner, feature, toAdd));
+			cmd.append(RemoveCommand.create(editingDomain, owner, feature, values));
 		}
 	}
 	
-	
-	class ToReplaceLater extends ToAddLater {
+	class ToReplaceLater extends AbstractToExecuteLater {
 		Object oldObject;
 
 		/**
@@ -284,7 +321,36 @@ public class MergeHelper implements Closeable {
 		 */
 		@Override
 		public void createCmdNow(CompoundCommand cmd) {
-			cmd.append(ReplaceCommand.create(editingDomain, owner, feature, oldObject, this.toAdd));
+			cmd.append(ReplaceCommand.create(editingDomain, owner, feature, oldObject, this.values));
+		}
+	}
+
+	class ToSetLater extends AbstractToExecuteLater {
+		Object value;
+		
+		/**
+		 * @param owner
+		 * @param cmd
+		 * @param mg
+		 * @param feature
+		 * @param value
+		 */
+		public ToSetLater(Object owner, EStructuralFeature feature, Object value) {
+			super(owner, feature, null);
+			this.value = value;
+		}
+		
+		/**
+		 * Execute now!
+		 * @param cmd
+		 */
+		@Override
+		public void createCmdNow(CompoundCommand cmd) {
+			Object newValue = value;
+			if (value == null) {
+				newValue = SetCommand.UNSET_VALUE;
+			}			
+			cmd.append(SetCommand.create(editingDomain, owner, feature, newValue));
 		}
 	}
 	
@@ -292,33 +358,31 @@ public class MergeHelper implements Closeable {
 	private void add(CompoundCommand cmd, ModelGetter mg, EStructuralFeature feature, List<Object> toAdd) {
 		if (!toAdd.isEmpty()) {
 			Object owner = mg.getModel(targetScenarioDataProvider);
-			//cmd.append(AddCommand.create(editingDomain, owner, feature, toAdd));
 			this.cmdsToAddLater.add(new ToAddLater(owner, feature, toAdd));
 		}
 	}
 
-	private void remove(CompoundCommand cmd, ModelGetter mg, EStructuralFeature feature, List<Object> toAdd) {
-		if (!toAdd.isEmpty()) {
+	private void remove(CompoundCommand cmd, ModelGetter mg, EStructuralFeature feature, List<Object> toRemove) {
+		if (!toRemove.isEmpty()) {
 			Object owner = mg.getModel(targetScenarioDataProvider);
-			//cmd.append(AddCommand.create(editingDomain, owner, feature, toAdd));
-			this.cmdsToRemoveLater.add(new ToRemoveLater(owner, feature, toAdd));
+			this.cmdsToRemoveLater.add(new ToRemoveLater(owner, feature, toRemove));
 		}
 	}
 
+	private void set(CompoundCommand cmd, ModelGetter mg, EStructuralFeature feature, Object newValue) {
+		Object owner = mg.getModel(targetScenarioDataProvider);
+		this.cmdsToSetLater.add(new ToSetLater(owner, feature, newValue));
+	}
 	
 	private void replace(CompoundCommand cmd, ModelGetter mg, EStructuralFeature feature, List<Pair<Object, Object>> toReplace) {
-		if (!toReplace.isEmpty()) {				
-			Object owner = mg.getModel(targetScenarioDataProvider);
-			for (Pair<Object,Object> replace : toReplace) {
-				Object oldObject = replace.getFirst();
-				Object newObject = replace.getSecond();
-				//cmd.append(ReplaceCommand.create(editingDomain, owner, feature, oldObject, Collections.singleton(newObject)));
-				this.cmdsToReplaceLater.add(new ToReplaceLater(owner, feature, oldObject, Collections.singletonList(newObject)));
-			}
+		Object owner = mg.getModel(targetScenarioDataProvider);
+		for (Pair<Object,Object> replace : toReplace) {
+			Object oldObject = replace.getFirst();  //The target version
+			Object newObject = replace.getSecond(); //The source version to replace it.
+			this.cmdsToReplaceLater.add(new ToReplaceLater(owner, feature, oldObject, Collections.singletonList(newObject)));
 		}
 	}
 
-	
 	private EObject cloneEObject(EObject sourceObject) throws JsonProcessingException {
 		//to ask Simon: any reason why we cannot use ECoreUtils.copy for this?
 		final String toAddJSON = jsonWriter.writerWithDefaultPrettyPrinter().writeValueAsString(sourceObject);		
@@ -334,14 +398,6 @@ public class MergeHelper implements Closeable {
 		return objectMap;
 	}
 
-	private void addCargoToRemoveIfSlot(List<? extends NamedObject> tnos, NamedObject no) {
-		for (var tno : tnos) {
-			if (tno instanceof Slot<?> && ((Slot<?>)tno).getCargo() != null) {
-				this.cargoesToRemove.add(((Slot<?>)tno).getCargo());
-			}
-		}
-	}
-
 	private boolean addCargoIfSlot(NamedObject no) throws JsonMappingException, JsonProcessingException {
 		if (no instanceof Slot<?> && ((Slot<?>)no).getCargo() != null) {
 			Cargo cargo = ((Slot<?>)no).getCargo();
@@ -351,45 +407,58 @@ public class MergeHelper implements Closeable {
 		return false;
 	}
 	
-	private void updateReferences(EObject oldPC, EObject newPurchaseContract) {
-		
-		/*
-		 * This should be already done by the code below???
-		for (LoadSlot load : cargoModel.getLoadSlots()) {
-			if (isLoadWithOldContract(load, oldContractName)) {
-				load.setContract(newPurchaseContract);
-			}
-		}*/
-
-		List<EObject> oldContracts = Collections.singletonList(oldPC);
-		
-		final Map<EObject, Collection<EStructuralFeature.Setting>> usagesByCopy = EcoreUtil.UsageCrossReferencer.findAll(oldContracts, this.sourceLNGScenario);
+	private void updateReferencesViaSet(LNGScenarioModel model, EObject oldObject, EObject newObject) {
+		List<EObject> oldContracts = Collections.singletonList(oldObject);
+		final Map<EObject, Collection<EStructuralFeature.Setting>> usagesByCopy = EcoreUtil.UsageCrossReferencer.findAll(oldContracts, model);
 		for (EObject oldContract : oldContracts) {
 			final Collection<EStructuralFeature.Setting> usages = usagesByCopy.get(oldContract);
 			if (usages != null) {
 				for (final EStructuralFeature.Setting setting : usages) {
-			//		if (setting.getEStructuralFeature() != CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS) {
-						if (setting.getEStructuralFeature().isMany()) {
-							Collection<?> collection = (Collection<?>) setting.getEObject().eGet(setting.getEStructuralFeature());
-							if (collection.contains(newPurchaseContract)) {
-								// Replacement is already in the collection, so just remove it
-								collection.remove(oldContract);
-							} else {
-								EcoreUtil.replace(setting, oldContract, newPurchaseContract);
-							}
+					if (setting.getEStructuralFeature().isMany()) {
+						Collection<?> collection = (Collection<?>) setting.getEObject().eGet(setting.getEStructuralFeature());
+						if (collection.contains(newObject)) {
+							// Replacement is already in the collection, so just remove it
+							collection.remove(oldContract);
 						} else {
-							EcoreUtil.replace(setting, oldContract, newPurchaseContract);
+							EcoreUtil.replace(setting, oldContract, newObject);
 						}
+					} else {
+						EcoreUtil.replace(setting, oldContract, newObject);
 					}
-			//	}
+				}
 			}
 		}
-		
-		//We'll do it above, as see no reason why not.
-		//commercialModel.getPurchaseContracts().remove(oldPC);
-		
 	}
-
+	
+	private void updateReferencesViaCmd(LNGScenarioModel model, Object owner, EStructuralFeature ownerFeature, EObject oldObject, EObject newObject) {
+		List<EObject> oldContracts = Collections.singletonList(oldObject);
+		final Map<EObject, Collection<EStructuralFeature.Setting>> usagesByCopy = EcoreUtil.UsageCrossReferencer.findAll(oldContracts, model);
+		for (EObject oldContract : oldContracts) {
+			final Collection<EStructuralFeature.Setting> usages = usagesByCopy.get(oldContract);
+			if (usages != null) {
+				for (final EStructuralFeature.Setting setting : usages) {
+					
+					//We don't want to add twice in the owner collection (Ignore cargoes also as dealt with separately)
+					if (setting.getEStructuralFeature() != ownerFeature && !(setting.getEObject() instanceof Cargo)) {
+						if (setting.getEStructuralFeature().isMany()) {
+							Collection<?> collection = (Collection<?>) setting.getEObject().eGet(setting.getEStructuralFeature());
+							if (collection.contains(newObject)) {
+								// Replacement is already in the collection, so just remove it
+								this.cmdsToRemoveLater.add(new ToRemoveLater(setting.getEObject(), setting.getEStructuralFeature(), Collections.singletonList(oldObject)));
+							} else {
+								this.cmdsToReplaceLater.add(new ToReplaceLater(setting.getEObject(), setting.getEStructuralFeature(), oldObject, Collections.singletonList(newObject)));
+							}
+						} else {
+							//Use set command, as replace cmd only for collections.
+							this.cmdsToSetLater.add(new ToSetLater(setting.getEObject(), setting.getEStructuralFeature(), newObject));
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	
 	@Override
 	public void close() throws IOException {
 		this.sourceScenarioDataProvider.close();
@@ -449,20 +518,23 @@ public class MergeHelper implements Closeable {
 		for (ToAddLater toAdd : this.cmdsToAddLater) {
 			toAdd.createCmdNow(cmd);
 		}
-		
+
+		//Now create set commands.
+		for (ToSetLater toSet : this.cmdsToSetLater) {
+			toSet.createCmdNow(cmd);
+		}
 		
 		editingDomain.getCommandStack().execute(cmd);
 	}
 
 	public void addRemoveCargoes(CompoundCommand cmd) throws JsonMappingException, JsonProcessingException {
 		
-		//this.jsonReader = createJSONReader();
-		
 		if (!this.cargoesToRemove.isEmpty()) {
-			remove(cmd, s -> this.targetLNGScenario.getCargoModel(), CargoPackage.Literals.CARGO_MODEL__CARGOES, Arrays.asList(this.cargoesToRemove.toArray()));	
+			//remove(cmd, s -> this.targetLNGScenario.getCargoModel(), CargoPackage.Literals.CARGO_MODEL__CARGOES, Arrays.asList(this.cargoesToRemove.toArray()));	
+			//Removeing or unpairing a cargo is more complicated than just above, so...
+			cargoEditingHelper.unpairCargoes(cmd, this.cargoesToRemove);
 		}
-		if (!this.cargoesToAdd.isEmpty()) {
-						
+		if (!this.cargoesToAdd.isEmpty()) {			
 			final String toAddJSON = jsonWriter.writerWithDefaultPrettyPrinter().writeValueAsString(this.cargoesToAdd);		
 			final List<Cargo> cargoTarget = jsonReader.readValue(toAddJSON, new TypeReference<List<Cargo>>() {});
 			
