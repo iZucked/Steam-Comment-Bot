@@ -1,7 +1,7 @@
 package com.mmxlabs.lngdataserver.lng.importers.merge;
 
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 
 public interface IScenarioDependent {
-	public void update(ScenarioInstance target, ScenarioInstance source);
+	public void update(String targetName, String sourceName, LNGScenarioModel target, LNGScenarioModel source);
 }

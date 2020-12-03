@@ -45,6 +45,7 @@ public class MergeScenarioWizardDataMapperPage extends WizardPage implements ISc
 	private NamedObjectGetter namedObjectGetter;
 	private ModelGetter modelGetter;
 	private EStructuralFeature feature;
+	private List<TableColumn> tableColumns = new ArrayList<>();
 	
 	public MergeScenarioWizardDataMapperPage(String title, NamedObjectGetter namedObjectGetter, ModelGetter modelGetter, EStructuralFeature feature) {
 		super(title, title, null);
@@ -93,9 +94,7 @@ public class MergeScenarioWizardDataMapperPage extends WizardPage implements ISc
 	}
 
 	@Override
-	public void update(ScenarioInstance target, ScenarioInstance source) {
-		//TODO: clean out columns.
-		
+	public void update(String targetName, String sourceName, LNGScenarioModel target, LNGScenarioModel source) {
 		if (source != null && target != null) {
 			List<String> sourceContracts = getItemNames(source, this.namedObjectGetter);
 			List<String> targetContracts = getItemNames(target, this.namedObjectGetter);
@@ -106,14 +105,23 @@ public class MergeScenarioWizardDataMapperPage extends WizardPage implements ISc
 			table.setHeaderVisible(true);
 			mergeTableViewer.setContentProvider(ArrayContentProvider.getInstance().getInstance());
 
-			String[] titles = { "Source:"+source.getName(), "Target:"+target.getName(), "Info" };
+			String[] titles = { "Source:"+sourceName, "Target:"+targetName, "Info" };
 
-			for (int loopIndex = 0; loopIndex < titles.length; loopIndex++) {
-				TableColumn column = new TableColumn(table, SWT.NONE);
-				column.setWidth(200);
-				column.setText(titles[loopIndex]);
+			for (int i = 0; i < titles.length; i++) {
 				
-				if (loopIndex == 1) {
+				//Only create new column if none already present.
+				TableColumn column = this.tableColumns.size() > i ? this.tableColumns.get(i) : null;
+				boolean newCol = false;
+				
+				if (column == null) {
+					column = new TableColumn(table, SWT.NONE);
+					column.setWidth(200);
+					newCol = true;
+					this.tableColumns.add(column);
+				}
+				column.setText(titles[i]);
+
+				if (i == 1 && newCol) {
 					TableViewerColumn viewerColumn = new TableViewerColumn(this.mergeTableViewer, column);
 					viewerColumn.setLabelProvider(new ColumnLabelProvider());
 					viewerColumn.setEditingSupport(new EditingSupport(mergeTableViewer) {
@@ -180,10 +188,16 @@ public class MergeScenarioWizardDataMapperPage extends WizardPage implements ISc
 						}
 
 						@Override
-						protected void setValue(Object element, Object index) {
-							String values[] = getValues(element);
-							((MergeMapping)element).targetName = values[(Integer)index];
-							getViewer().update(element, null);
+						protected void setValue(Object element, Object valueIndex) {
+							if (valueIndex instanceof Integer) {
+								int index = (Integer)valueIndex;
+								if (index < 0) return;
+								String values[] = getValues(element);
+								if (index >= 0 && index < values.length) {
+									((MergeMapping)element).targetName = values[index];
+									getViewer().update(element, null);
+								}
+							}
 						}			
 					});
 				}
@@ -253,37 +267,31 @@ public class MergeScenarioWizardDataMapperPage extends WizardPage implements ISc
 		return cms;
 	}
 	
-	protected List<String> getDiff(ScenarioInstance source, ScenarioInstance target, NamedObjectGetter itemGetter) {
+	protected List<String> getDiff(LNGScenarioModel sm, LNGScenarioModel tm, NamedObjectGetter itemGetter) {
 		List<String> diffs = new ArrayList<>();
-		final ScenarioModelRecord sourceModelRecord = SSDataManager.Instance.getModelRecord(source);
-		try (IScenarioDataProvider scenarioDataProvider = sourceModelRecord.aquireScenarioDataProvider("MergeScenarioWizardContractMapperPage.getDiff1")) {
-			final LNGScenarioModel sm = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-
-			final ScenarioModelRecord targetModelRecord = SSDataManager.Instance.getModelRecord(target);
-			try (IScenarioDataProvider scenarioDataProvider2 = targetModelRecord.aquireScenarioDataProvider("MergeScenarioWizardContractMapperPage.getDiff2")) {
-				final LNGScenarioModel tm = scenarioDataProvider2.getTypedScenario(LNGScenarioModel.class);
-
-				if (sm != null && tm != null) {
-					List<?> emfObjectsS = itemGetter.getNamedObjects(sm);
-					List<?> emfObjectsT = itemGetter.getNamedObjects(tm);
-					for (var o : emfObjectsS) {
-						String name = ((NamedObject)o).getName();
-						Optional<?> oT = emfObjectsT.stream().filter(ot -> ((NamedObject)ot).getName().equals(name)).findFirst();
-						if (oT.isPresent()) {
-							if (!isJSONEqual((EObject)o, (EObject)oT.get())) {
-								diffs.add("Source different from target version.");
-							}
-							else {
-								diffs.add("");
-							}
-						}
-						else {
-							diffs.add("Not present in target.");
-						}
+		
+		if (sm != null && tm != null) {
+			List<?> emfObjectsS = itemGetter.getNamedObjects(sm);
+			List<?> emfObjectsT = itemGetter.getNamedObjects(tm);
+			
+			for (var o : emfObjectsS) {
+				String name = ((NamedObject)o).getName();
+				Optional<?> oT = emfObjectsT.stream().filter(ot -> ((NamedObject)ot).getName().equals(name)).findFirst();
+				
+				if (oT.isPresent()) {
+					if (!isJSONEqual((EObject)o, (EObject)oT.get())) {
+						diffs.add("Source different from target version.");
 					}
+					else {
+						diffs.add("");
+					}
+				}
+				else {
+					diffs.add("Not present in target.");
 				}
 			}
 		}
+		
 		return diffs;
 	}
 
@@ -327,17 +335,12 @@ public class MergeScenarioWizardDataMapperPage extends WizardPage implements ISc
 		return false;
 	}
 	
-	private List<String> getItemNames(ScenarioInstance source, NamedObjectGetter namedItemsGetter) {
+	private List<String> getItemNames(LNGScenarioModel sm, NamedObjectGetter namedItemsGetter) {
 		List<String> names = new ArrayList<>();
-		final ScenarioModelRecord sourceModelRecord = SSDataManager.Instance.getModelRecord(source);
-		try (IScenarioDataProvider scenarioDataProvider = sourceModelRecord.aquireScenarioDataProvider("MergeScenarioWizardContractMapperPage.getItems")) {
-			final LNGScenarioModel sm = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-
-			if (sm != null) {
-				List<? extends NamedObject> namedObjects = namedItemsGetter.getNamedObjects(sm);
-				for (NamedObject no : namedObjects) {
-					names.add(no.getName());
-				}
+		if (sm != null) {
+			List<? extends NamedObject> namedObjects = namedItemsGetter.getNamedObjects(sm);
+			for (NamedObject no : namedObjects) {
+				names.add(no.getName());
 			}
 		}
 		return names;
