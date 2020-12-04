@@ -31,6 +31,8 @@ import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.LumpSumBallastBonusContractLine;
+import com.mmxlabs.models.lng.commercial.MontlyBallastBonusContractLine;
+import com.mmxlabs.models.lng.commercial.NextPortType;
 import com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
@@ -228,6 +230,13 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass montlyBallastBonusContractLineEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EEnum contractTypeEEnum = null;
 
 	/**
@@ -236,6 +245,13 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	private EEnum pricingEventEEnum = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum nextPortTypeEEnum = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -1191,6 +1207,56 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	@Override
+	public EClass getMontlyBallastBonusContractLine() {
+		return montlyBallastBonusContractLineEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getMontlyBallastBonusContractLine_Month() {
+		return (EAttribute)montlyBallastBonusContractLineEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getMontlyBallastBonusContractLine_BallastBonusTo() {
+		return (EAttribute)montlyBallastBonusContractLineEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getMontlyBallastBonusContractLine_BallastBonusPctFuel() {
+		return (EAttribute)montlyBallastBonusContractLineEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getMontlyBallastBonusContractLine_BallastBonusPctCharter() {
+		return (EAttribute)montlyBallastBonusContractLineEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EEnum getContractType() {
 		return contractTypeEEnum;
 	}
@@ -1203,6 +1269,16 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	@Override
 	public EEnum getPricingEvent() {
 		return pricingEventEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EEnum getNextPortType() {
+		return nextPortTypeEEnum;
 	}
 
 	/**
@@ -1346,9 +1422,16 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 
 		simpleBallastBonusCharterContractEClass = createEClass(SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT);
 
+		montlyBallastBonusContractLineEClass = createEClass(MONTLY_BALLAST_BONUS_CONTRACT_LINE);
+		createEAttribute(montlyBallastBonusContractLineEClass, MONTLY_BALLAST_BONUS_CONTRACT_LINE__MONTH);
+		createEAttribute(montlyBallastBonusContractLineEClass, MONTLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_TO);
+		createEAttribute(montlyBallastBonusContractLineEClass, MONTLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_PCT_FUEL);
+		createEAttribute(montlyBallastBonusContractLineEClass, MONTLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_PCT_CHARTER);
+
 		// Create enums
 		contractTypeEEnum = createEEnum(CONTRACT_TYPE);
 		pricingEventEEnum = createEEnum(PRICING_EVENT);
+		nextPortTypeEEnum = createEEnum(NEXT_PORT_TYPE);
 	}
 
 	/**
@@ -1408,6 +1491,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		simpleCharterContractEClass.getESuperTypes().add(this.getCharterContract());
 		ballastBonusCharterContractEClass.getESuperTypes().add(this.getCharterContract());
 		simpleBallastBonusCharterContractEClass.getESuperTypes().add(this.getBallastBonusCharterContract());
+		montlyBallastBonusContractLineEClass.getESuperTypes().add(this.getBallastBonusContractLine());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(commercialModelEClass, CommercialModel.class, "CommercialModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1537,6 +1621,12 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 
 		initEClass(simpleBallastBonusCharterContractEClass, SimpleBallastBonusCharterContract.class, "SimpleBallastBonusCharterContract", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
+		initEClass(montlyBallastBonusContractLineEClass, MontlyBallastBonusContractLine.class, "MontlyBallastBonusContractLine", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getMontlyBallastBonusContractLine_Month(), theDateTimePackage.getYearMonth(), "month", null, 0, 1, MontlyBallastBonusContractLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMontlyBallastBonusContractLine_BallastBonusTo(), this.getNextPortType(), "ballastBonusTo", null, 0, 1, MontlyBallastBonusContractLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMontlyBallastBonusContractLine_BallastBonusPctFuel(), ecorePackage.getEBigDecimal(), "ballastBonusPctFuel", null, 0, 1, MontlyBallastBonusContractLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMontlyBallastBonusContractLine_BallastBonusPctCharter(), ecorePackage.getEBigDecimal(), "ballastBonusPctCharter", null, 0, 1, MontlyBallastBonusContractLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		// Initialize enums and add enum literals
 		initEEnum(contractTypeEEnum, ContractType.class, "ContractType");
 		addEEnumLiteral(contractTypeEEnum, ContractType.BOTH);
@@ -1548,6 +1638,11 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		addEEnumLiteral(pricingEventEEnum, PricingEvent.END_LOAD);
 		addEEnumLiteral(pricingEventEEnum, PricingEvent.START_DISCHARGE);
 		addEEnumLiteral(pricingEventEEnum, PricingEvent.END_DISCHARGE);
+
+		initEEnum(nextPortTypeEEnum, NextPortType.class, "NextPortType");
+		addEEnumLiteral(nextPortTypeEEnum, NextPortType.UNKNOWN);
+		addEEnumLiteral(nextPortTypeEEnum, NextPortType.LOAD_PORT);
+		addEEnumLiteral(nextPortTypeEEnum, NextPortType.NEAREST_PORT);
 
 		// Create resource
 		createResource(eNS_URI);

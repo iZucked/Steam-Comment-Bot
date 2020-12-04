@@ -19,6 +19,11 @@
       <genEnumLiterals ecoreEnumLiteral="commercial.ecore#//PricingEvent/START_DISCHARGE"/>
       <genEnumLiterals ecoreEnumLiteral="commercial.ecore#//PricingEvent/END_DISCHARGE"/>
     </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="commercial.ecore#//NextPortType">
+      <genEnumLiterals ecoreEnumLiteral="commercial.ecore#//NextPortType/Unknown"/>
+      <genEnumLiterals ecoreEnumLiteral="commercial.ecore#//NextPortType/LoadPort"/>
+      <genEnumLiterals ecoreEnumLiteral="commercial.ecore#//NextPortType/NearestPort"/>
+    </genEnums>
     <genClasses ecoreClass="commercial.ecore#//CommercialModel">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//CommercialModel/entities"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//CommercialModel/salesContracts"/>
@@ -142,5 +147,11 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//BallastBonusCharterContract/repositioningFee"/>
     </genClasses>
     <genClasses ecoreClass="commercial.ecore#//SimpleBallastBonusCharterContract"/>
+    <genClasses ecoreClass="commercial.ecore#//MontlyBallastBonusContractLine">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//MontlyBallastBonusContractLine/month"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//MontlyBallastBonusContractLine/ballastBonusTo"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//MontlyBallastBonusContractLine/ballastBonusPctFuel"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//MontlyBallastBonusContractLine/ballastBonusPctCharter"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>

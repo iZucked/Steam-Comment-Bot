@@ -85,6 +85,7 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE: return createNotionalJourneyBallastBonusContractLine();
 			case CommercialPackage.SIMPLE_CHARTER_CONTRACT: return createSimpleCharterContract();
 			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT: return createSimpleBallastBonusCharterContract();
+			case CommercialPackage.MONTLY_BALLAST_BONUS_CONTRACT_LINE: return createMontlyBallastBonusContractLine();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -102,6 +103,8 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 				return createContractTypeFromString(eDataType, initialValue);
 			case CommercialPackage.PRICING_EVENT:
 				return createPricingEventFromString(eDataType, initialValue);
+			case CommercialPackage.NEXT_PORT_TYPE:
+				return createNextPortTypeFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -119,6 +122,8 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 				return convertContractTypeToString(eDataType, instanceValue);
 			case CommercialPackage.PRICING_EVENT:
 				return convertPricingEventToString(eDataType, instanceValue);
+			case CommercialPackage.NEXT_PORT_TYPE:
+				return convertNextPortTypeToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -294,6 +299,17 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public MontlyBallastBonusContractLine createMontlyBallastBonusContractLine() {
+		MontlyBallastBonusContractLineImpl montlyBallastBonusContractLine = new MontlyBallastBonusContractLineImpl();
+		return montlyBallastBonusContractLine;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public ContractType createContractTypeFromString(EDataType eDataType, String initialValue) {
 		ContractType result = ContractType.get(initialValue);
 		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
@@ -326,6 +342,26 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * @generated
 	 */
 	public String convertPricingEventToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NextPortType createNextPortTypeFromString(EDataType eDataType, String initialValue) {
+		NextPortType result = NextPortType.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertNextPortTypeToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 

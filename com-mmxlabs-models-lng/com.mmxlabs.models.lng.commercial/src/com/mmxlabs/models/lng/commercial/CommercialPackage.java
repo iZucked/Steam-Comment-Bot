@@ -2065,6 +2065,70 @@ public interface CommercialPackage extends EPackage {
 	int SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT_FEATURE_COUNT = BALLAST_BONUS_CHARTER_CONTRACT_FEATURE_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.MontlyBallastBonusContractLineImpl <em>Montly Ballast Bonus Contract Line</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.MontlyBallastBonusContractLineImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getMontlyBallastBonusContractLine()
+	 * @generated
+	 */
+	int MONTLY_BALLAST_BONUS_CONTRACT_LINE = 24;
+
+	/**
+	 * The feature id for the '<em><b>Redelivery Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MONTLY_BALLAST_BONUS_CONTRACT_LINE__REDELIVERY_PORTS = BALLAST_BONUS_CONTRACT_LINE__REDELIVERY_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Month</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MONTLY_BALLAST_BONUS_CONTRACT_LINE__MONTH = BALLAST_BONUS_CONTRACT_LINE_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Ballast Bonus To</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MONTLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_TO = BALLAST_BONUS_CONTRACT_LINE_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Ballast Bonus Pct Fuel</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MONTLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_PCT_FUEL = BALLAST_BONUS_CONTRACT_LINE_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Ballast Bonus Pct Charter</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MONTLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_PCT_CHARTER = BALLAST_BONUS_CONTRACT_LINE_FEATURE_COUNT + 3;
+
+	/**
+	 * The number of structural features of the '<em>Montly Ballast Bonus Contract Line</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MONTLY_BALLAST_BONUS_CONTRACT_LINE_FEATURE_COUNT = BALLAST_BONUS_CONTRACT_LINE_FEATURE_COUNT + 4;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2072,7 +2136,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getContractType()
 	 * @generated
 	 */
-	int CONTRACT_TYPE = 24;
+	int CONTRACT_TYPE = 25;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.PricingEvent <em>Pricing Event</em>}' enum.
@@ -2082,7 +2146,17 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getPricingEvent()
 	 * @generated
 	 */
-	int PRICING_EVENT = 25;
+	int PRICING_EVENT = 26;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.NextPortType <em>Next Port Type</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.NextPortType
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getNextPortType()
+	 * @generated
+	 */
+	int NEXT_PORT_TYPE = 27;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.CommercialModel <em>Model</em>}'.
@@ -3029,6 +3103,60 @@ public interface CommercialPackage extends EPackage {
 	EClass getSimpleBallastBonusCharterContract();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.MontlyBallastBonusContractLine <em>Montly Ballast Bonus Contract Line</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Montly Ballast Bonus Contract Line</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.MontlyBallastBonusContractLine
+	 * @generated
+	 */
+	EClass getMontlyBallastBonusContractLine();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.MontlyBallastBonusContractLine#getMonth <em>Month</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Month</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.MontlyBallastBonusContractLine#getMonth()
+	 * @see #getMontlyBallastBonusContractLine()
+	 * @generated
+	 */
+	EAttribute getMontlyBallastBonusContractLine_Month();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.MontlyBallastBonusContractLine#getBallastBonusTo <em>Ballast Bonus To</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Ballast Bonus To</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.MontlyBallastBonusContractLine#getBallastBonusTo()
+	 * @see #getMontlyBallastBonusContractLine()
+	 * @generated
+	 */
+	EAttribute getMontlyBallastBonusContractLine_BallastBonusTo();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.MontlyBallastBonusContractLine#getBallastBonusPctFuel <em>Ballast Bonus Pct Fuel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Ballast Bonus Pct Fuel</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.MontlyBallastBonusContractLine#getBallastBonusPctFuel()
+	 * @see #getMontlyBallastBonusContractLine()
+	 * @generated
+	 */
+	EAttribute getMontlyBallastBonusContractLine_BallastBonusPctFuel();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.MontlyBallastBonusContractLine#getBallastBonusPctCharter <em>Ballast Bonus Pct Charter</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Ballast Bonus Pct Charter</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.MontlyBallastBonusContractLine#getBallastBonusPctCharter()
+	 * @see #getMontlyBallastBonusContractLine()
+	 * @generated
+	 */
+	EAttribute getMontlyBallastBonusContractLine_BallastBonusPctCharter();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3047,6 +3175,16 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 */
 	EEnum getPricingEvent();
+
+	/**
+	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.commercial.NextPortType <em>Next Port Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Next Port Type</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.NextPortType
+	 * @generated
+	 */
+	EEnum getNextPortType();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -3823,6 +3961,48 @@ public interface CommercialPackage extends EPackage {
 		EClass SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT = eINSTANCE.getSimpleBallastBonusCharterContract();
 
 		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.MontlyBallastBonusContractLineImpl <em>Montly Ballast Bonus Contract Line</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.MontlyBallastBonusContractLineImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getMontlyBallastBonusContractLine()
+		 * @generated
+		 */
+		EClass MONTLY_BALLAST_BONUS_CONTRACT_LINE = eINSTANCE.getMontlyBallastBonusContractLine();
+
+		/**
+		 * The meta object literal for the '<em><b>Month</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MONTLY_BALLAST_BONUS_CONTRACT_LINE__MONTH = eINSTANCE.getMontlyBallastBonusContractLine_Month();
+
+		/**
+		 * The meta object literal for the '<em><b>Ballast Bonus To</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MONTLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_TO = eINSTANCE.getMontlyBallastBonusContractLine_BallastBonusTo();
+
+		/**
+		 * The meta object literal for the '<em><b>Ballast Bonus Pct Fuel</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MONTLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_PCT_FUEL = eINSTANCE.getMontlyBallastBonusContractLine_BallastBonusPctFuel();
+
+		/**
+		 * The meta object literal for the '<em><b>Ballast Bonus Pct Charter</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MONTLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_PCT_CHARTER = eINSTANCE.getMontlyBallastBonusContractLine_BallastBonusPctCharter();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}' enum.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -3841,6 +4021,16 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EEnum PRICING_EVENT = eINSTANCE.getPricingEvent();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.NextPortType <em>Next Port Type</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.NextPortType
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getNextPortType()
+		 * @generated
+		 */
+		EEnum NEXT_PORT_TYPE = eINSTANCE.getNextPortType();
 
 	}
 

@@ -433,6 +433,29 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.MontlyBallastBonusContractLine} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MontlyBallastBonusContractLineItemProvider montlyBallastBonusContractLineItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.MontlyBallastBonusContractLine}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMontlyBallastBonusContractLineAdapter() {
+		if (montlyBallastBonusContractLineItemProvider == null) {
+			montlyBallastBonusContractLineItemProvider = new MontlyBallastBonusContractLineItemProvider(this);
+		}
+
+		return montlyBallastBonusContractLineItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -573,6 +596,7 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 		if (notionalJourneyBallastBonusContractLineItemProvider != null) notionalJourneyBallastBonusContractLineItemProvider.dispose();
 		if (simpleCharterContractItemProvider != null) simpleCharterContractItemProvider.dispose();
 		if (simpleBallastBonusCharterContractItemProvider != null) simpleBallastBonusCharterContractItemProvider.dispose();
+		if (montlyBallastBonusContractLineItemProvider != null) montlyBallastBonusContractLineItemProvider.dispose();
 	}
 
 }
