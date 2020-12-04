@@ -35,17 +35,15 @@ import com.mmxlabs.models.lng.schedule.SlotAllocationType;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 
-public class ScheduleReportJSONGenerator {
+public class ScheduleReportJSONGeneratorV1 {
 
-	private static ScheduleReportModel createScheduleReportModel(Event e, String type, String subType, String vesselName) {
-		ScheduleReportModel scheduleReportModel = new ScheduleReportModel();
+	private static ScheduleReportModelV1 createScheduleReportModel(Event e, String type, String vesselName) {
+		ScheduleReportModelV1 scheduleReportModel = new ScheduleReportModelV1();
 		scheduleReportModel.setStartDate(e.getStart().toLocalDate());
 		scheduleReportModel.setEndDate(e.getEnd().toLocalDate());
 		scheduleReportModel.setType(type);
-		scheduleReportModel.setSubType(subType);
 		scheduleReportModel.setVesselName(vesselName);
 		scheduleReportModel.setName("" + e.name());
-		scheduleReportModel.setLabel("");
 
 		if (e instanceof Journey) {
 			Journey journey = (Journey) e;
@@ -75,9 +73,9 @@ public class ScheduleReportJSONGenerator {
 		return scheduleReportModel;
 	}
 
-	public static List<ScheduleReportModel> createScheduleData(ScheduleModel scheduleModel) {
+	public static List<ScheduleReportModelV1> createScheduleData(ScheduleModel scheduleModel) {
 
-		List<ScheduleReportModel> schedulesReportModels = new LinkedList<>();
+		List<ScheduleReportModelV1> schedulesReportModels = new LinkedList<>();
 
 		for (Sequence sequence : scheduleModel.getSchedule().getSequences()) {
 			String vesselName;
@@ -103,42 +101,29 @@ public class ScheduleReportJSONGenerator {
 
 			List<Event> visitJourneys = sequence.getEvents().stream().filter(x -> x instanceof SlotVisit).collect(Collectors.toList());
 			List<Event> charterJourneys = sequence.getEvents().stream().filter(x -> x instanceof GeneratedCharterOut).collect(Collectors.toList());
-			List<Event> charterLengthJourneys = sequence.getEvents().stream().filter(x -> x instanceof CharterLengthEvent).collect(Collectors.toList());
 			List<VesselEventVisit> vesselEvents = sequence.getEvents().stream().filter(x -> x instanceof VesselEventVisit).map(x -> (VesselEventVisit) x).collect(Collectors.toList());
 
 			for (Event ladenJourney : ladenJourneys) {
-				schedulesReportModels.add(createScheduleReportModel(ladenJourney, "laden", "", vesselName));
+				schedulesReportModels.add(createScheduleReportModel(ladenJourney, "laden", vesselName));
 			}
 
 			for (Event ballastJourney : ballastJourneys) {
-				schedulesReportModels.add(createScheduleReportModel(ballastJourney, "ballast", "", vesselName));
+				schedulesReportModels.add(createScheduleReportModel(ballastJourney, "ballast", vesselName));
 			}
 
 			for (Event idleJourney : ladenIdleJourneys) {
-				schedulesReportModels.add(createScheduleReportModel(idleJourney, "idle", "ladenidle", vesselName));
+				schedulesReportModels.add(createScheduleReportModel(idleJourney, "idle", vesselName));
 			}
 			for (Event idleJourney : ballastIdleJourneys) {
-				schedulesReportModels.add(createScheduleReportModel(idleJourney, "idle", "ballastidle", vesselName));
+				schedulesReportModels.add(createScheduleReportModel(idleJourney, "idle", vesselName));
 			}
 
 			for (Event visitJourney : visitJourneys) {
-				String subType = "";
-				if (visitJourney instanceof SlotVisit) {
-					SlotVisit slotVisit = (SlotVisit) visitJourney;
-					if (slotVisit.getSlotAllocation().getSlotAllocationType() == SlotAllocationType.PURCHASE) {
-						subType = "load";
-					} else if (slotVisit.getSlotAllocation().getSlotAllocationType() == SlotAllocationType.SALE) {
-						subType = "discharge";
-					}
-				}
-				schedulesReportModels.add(createScheduleReportModel(visitJourney, "visit", subType, vesselName));
+				schedulesReportModels.add(createScheduleReportModel(visitJourney, "visit", vesselName));
 			}
 
 			for (Event charterJourney : charterJourneys) {
-				schedulesReportModels.add(createScheduleReportModel(charterJourney, "generatedcharterout", "", vesselName));
-			}
-			for (Event charterJourney : charterLengthJourneys) {
-				schedulesReportModels.add(createScheduleReportModel(charterJourney, "charterlength", "", vesselName));
+				schedulesReportModels.add(createScheduleReportModel(charterJourney, "generatedcharterout", vesselName));
 			}
 			for (VesselEventVisit eventVisit : vesselEvents) {
 				VesselEvent event = eventVisit.getVesselEvent();
@@ -150,14 +135,14 @@ public class ScheduleReportJSONGenerator {
 				} else if (event instanceof MaintenanceEvent) {
 					type = "maintenance";
 				}
-				schedulesReportModels.add(createScheduleReportModel(eventVisit, type, "", vesselName));
+				schedulesReportModels.add(createScheduleReportModel(eventVisit, type, vesselName));
 			}
 		}
 
 		return schedulesReportModels;
 	}
 
-	private static void jsonOutput(List<ScheduleReportModel> scheduleReportModels) {
+	private static void jsonOutput(List<ScheduleReportModelV1> scheduleReportModels) {
 		ObjectMapper objectMapper = new ObjectMapper();
 		try {
 			objectMapper.writeValue(new File("/tmp/user.json"), scheduleReportModels);

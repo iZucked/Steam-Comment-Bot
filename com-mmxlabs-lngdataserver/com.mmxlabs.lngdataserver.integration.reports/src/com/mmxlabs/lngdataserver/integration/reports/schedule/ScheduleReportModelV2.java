@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import java.time.LocalDate;
 
-public class ScheduleReportModel {
+public class ScheduleReportModelV2 {
 	private String vesselName;
 	private String name;
 	private String type;

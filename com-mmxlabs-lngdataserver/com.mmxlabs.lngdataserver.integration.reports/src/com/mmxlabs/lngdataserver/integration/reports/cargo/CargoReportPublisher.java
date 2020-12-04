@@ -4,24 +4,31 @@
  */
 package com.mmxlabs.lngdataserver.integration.reports.cargo;
 
-import java.io.OutputStream;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.SupportedReportFormats;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.DefaultReportContent;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.IReportContent;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.IReportPublisherExtension;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.UnsupportedReportException;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public class CargoReportPublisher implements IReportPublisherExtension {
 
 	@Override
-	public void publishReport(IScenarioDataProvider scenarioDataProvider, ScheduleModel scheduleModel, OutputStream outputStream) throws Exception {
-		List<CargoReportModel> ilpModels = CargoReportJSONGenerator.createReportData(scheduleModel);
+	public IReportContent publishReport(final SupportedReportFormats supportedFormats, final IScenarioDataProvider scenarioDataProvider, final ScheduleModel scheduleModel) throws Exception {
 
-		ObjectMapper objectMapper = new ObjectMapper();
+		final List<String> versions = supportedFormats.getVersionsFor(getReportType());
 
-		objectMapper.writeValue(outputStream, ilpModels);
-
+		if (versions.isEmpty() || versions.contains("1")) {
+			final List<CargoReportModel> models = CargoReportJSONGenerator.createReportData(scheduleModel);
+			final ObjectMapper objectMapper = new ObjectMapper();
+			final String content = objectMapper.writeValueAsString(models);
+			return new DefaultReportContent(getReportType(), "1", content);
+		}
+		throw new UnsupportedReportException();
 	}
 
 	@Override

@@ -24,7 +24,7 @@ import com.google.inject.TypeLiteral;
  */
 public class ReportPublisherExtensionUtil {
 
-	public static Iterable<IReportPublisherExtension> getContextMenuExtensions() {
+	public static Iterable<IReportPublisherExtension> getReportPublishers() {
 
 		Injector injector = Guice.createInjector(new ContextMenuExtensionsModule());
 		Iterable<ReportPublisherExtensionPoint> extensions = injector.getInstance(Key.get(new TypeLiteral<Iterable<ReportPublisherExtensionPoint>>() {
