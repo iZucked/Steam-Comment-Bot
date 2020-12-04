@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -41,17 +42,19 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 public class MergeScenarioWizardDataMapperPage extends WizardPage implements IScenarioDependent {
 	
-	private TableViewer mergeTableViewer;
-	private NamedObjectGetter namedObjectGetter;
+	protected TableViewer mergeTableViewer;
+	private NamedObjectListGetter namedObjectGetter;
 	private ModelGetter modelGetter;
 	private EStructuralFeature feature;
 	private List<TableColumn> tableColumns = new ArrayList<>();
-	
-	public MergeScenarioWizardDataMapperPage(String title, NamedObjectGetter namedObjectGetter, ModelGetter modelGetter, EStructuralFeature feature) {
+	private final ObjectMapper mapper = new ObjectMapper();
+
+	public MergeScenarioWizardDataMapperPage(String title, NamedObjectListGetter namedObjectGetter, ModelGetter modelGetter, EStructuralFeature feature) {
 		super(title, title, null);
 		this.namedObjectGetter = namedObjectGetter;
 		this.modelGetter = modelGetter;
 		this.feature = feature;
+		mapper.registerModule(new EMFJacksonModule());
 	}
 	
 	public ModelGetter getModelGetter() {
@@ -62,7 +65,7 @@ public class MergeScenarioWizardDataMapperPage extends WizardPage implements ISc
 		return this.feature;
 	}
 	
-	public Pair<NamedObjectGetter, List<MergeMapping>> getMergeMappings() {
+	private Pair<NamedObjectListGetter, List<MergeMapping>> getMergeMappings() {
 		List<MergeMapping> mm = Collections.emptyList();
 		if (mergeTableViewer.getInput() instanceof List) {
 			mm = (List<MergeMapping>)mergeTableViewer.getInput();
@@ -75,16 +78,11 @@ public class MergeScenarioWizardDataMapperPage extends WizardPage implements ISc
 		final Composite container = new Composite(parent, SWT.NONE | SWT.BORDER);
 		mergeTableViewer = new TableViewer(container, SWT.BORDER | SWT.FULL_SELECTION);
 		container.setLayout(new FillLayout());	
-		initialize();
-		dialogChanged();
 		setControl(container);
+		dialogChanged();
 	}
 
-	private void initialize() {
-
-	}
-
-	private void dialogChanged() {
+	protected void dialogChanged() {
 		updateStatus(null);
 	}
 
@@ -255,8 +253,8 @@ public class MergeScenarioWizardDataMapperPage extends WizardPage implements ISc
 		for (int i = 0; i < sourceContracts.size(); i++) {
 			MergeMapping cm = new MergeMapping();
 			cm.sourceName = sourceContracts.get(i);
-			if (targetContracts.contains(cm.sourceName)) {
-				cm.targetName = cm.sourceName;
+			if (contains(targetContracts, cm)) {
+				cm.targetName = getNameInList(targetContracts, cm);
 			}
 			else {
 				cm.targetName = "Add";
@@ -266,20 +264,41 @@ public class MergeScenarioWizardDataMapperPage extends WizardPage implements ISc
 		}
 		return cms;
 	}
+
+	private boolean contains(List<String> targetContracts, MergeMapping cm) {
+		String name = cm.sourceName.toLowerCase();
+		for (var tc : targetContracts) {
+			if (tc.toLowerCase().equals(name)) {
+				return true;
+			}
+		}
+		return false;
+	}
 	
-	protected List<String> getDiff(LNGScenarioModel sm, LNGScenarioModel tm, NamedObjectGetter itemGetter) {
+	private String getNameInList(List<String> targetContracts, MergeMapping cm) {
+		String name = cm.sourceName.toLowerCase();
+		for (var tc : targetContracts) {
+			if (tc.toLowerCase().equals(name)) {
+				return tc;
+			}
+		}
+		throw new IllegalArgumentException("Bug detected: Please contract Minimax Support to fix.");
+	}
+	
+	
+	protected List<String> getDiff(LNGScenarioModel sm, LNGScenarioModel tm, NamedObjectListGetter itemGetter) {
 		List<String> diffs = new ArrayList<>();
 		
 		if (sm != null && tm != null) {
-			List<?> emfObjectsS = itemGetter.getNamedObjects(sm);
-			List<?> emfObjectsT = itemGetter.getNamedObjects(tm);
+			List<? extends EObject> emfObjectsS = getEObjects(sm);
+			List<? extends EObject> emfObjectsT = getEObjects(tm);
 			
 			for (var o : emfObjectsS) {
-				String name = ((NamedObject)o).getName();
-				Optional<?> oT = emfObjectsT.stream().filter(ot -> ((NamedObject)ot).getName().equals(name)).findFirst();
+				String name = getName(o);
+				Optional<? extends EObject> oT = emfObjectsT.stream().filter(ot -> getName(ot).equals(name)).findFirst();
 				
 				if (oT.isPresent()) {
-					if (!isJSONEqual((EObject)o, (EObject)oT.get())) {
+					if (!isJSONEqual(o, oT.get())) {
 						diffs.add("Source different from target version.");
 					}
 					else {
@@ -295,10 +314,22 @@ public class MergeScenarioWizardDataMapperPage extends WizardPage implements ISc
 		return diffs;
 	}
 
+	protected String getName(Object o) {
+		if (o instanceof NamedObject) {
+			String name = ((NamedObject)o).getName();
+			return name;
+		}
+		else {
+			return "Unknown";
+		}
+	}
+
+	protected List<? extends EObject> getEObjects(LNGScenarioModel sm) {
+		List<? extends NamedObject> emfObjects = namedObjectGetter.getNamedObjects(sm);
+		return emfObjects;
+	}
+
 	private boolean isJSONEqual(EObject o1, EObject o2) {
-		final ObjectMapper mapper = new ObjectMapper();
-		mapper.registerModule(new EMFJacksonModule());
-		
 		try {
 			String o1Str = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(o1);
 
@@ -335,7 +366,7 @@ public class MergeScenarioWizardDataMapperPage extends WizardPage implements ISc
 		return false;
 	}
 	
-	private List<String> getItemNames(LNGScenarioModel sm, NamedObjectGetter namedItemsGetter) {
+	protected List<String> getItemNames(LNGScenarioModel sm, NamedObjectListGetter namedItemsGetter) {
 		List<String> names = new ArrayList<>();
 		if (sm != null) {
 			List<? extends NamedObject> namedObjects = namedItemsGetter.getNamedObjects(sm);
@@ -344,5 +375,12 @@ public class MergeScenarioWizardDataMapperPage extends WizardPage implements ISc
 			}
 		}
 		return names;
+	}
+
+	public void merge(CompoundCommand cmd, MergeHelper mergeHelper) throws Exception {
+		Pair<NamedObjectListGetter, List<MergeMapping>> mapping = this.getMergeMappings();
+		ModelGetter mg = this.getModelGetter();
+		EStructuralFeature feature = this.getFeature();
+		mergeHelper.merge(cmd, mapping, mg, feature);
 	}
 }

@@ -4,26 +4,26 @@
  */
 package com.mmxlabs.lngdataserver.lng.importers.merge;
 
-import java.util.List;
-
 import org.eclipse.emf.common.command.CompoundCommand;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.custom.BusyIndicator;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IExportWizard;
 import org.eclipse.ui.IWorkbench;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.common.Pair;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
+import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 
@@ -70,6 +70,9 @@ public class MergeScenarioWizard extends Wizard implements IExportWizard {
 				s -> ScenarioModelUtil.findReferenceModel(s).getFleetModel().getVessels(), s -> ScenarioModelUtil.getFleetModel(s), 
 				FleetPackage.Literals.FLEET_MODEL__VESSELS); 
 				
+		//Vessel charter page.
+		vesselCharterMapperPage = new MergeScenarioWizardVesselAvailabilityMapperPage("Map fleet charters to target");
+		
 		//Spot markets.
 		fobBuySpotMarketsMapperPage = new MergeScenarioWizardDataMapperPage("Map FOB buy spot markets to target", 
 				s -> ScenarioModelUtil.getSpotMarketsModel(s).getFobPurchasesSpotMarket().getMarkets(), s -> ScenarioModelUtil.getSpotMarketsModel(s), 
@@ -90,7 +93,7 @@ public class MergeScenarioWizard extends Wizard implements IExportWizard {
 				SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__CHARTER_IN_MARKETS);
 		charterOutMarketMapperPage = new MergeScenarioWizardDataMapperPage("Map charter out markets to target", 
 				s -> ScenarioModelUtil.getSpotMarketsModel(s).getCharterOutMarkets(), s -> ScenarioModelUtil.getSpotMarketsModel(s), 
-				SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKETS);
+				SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKETS);		
 		
 		//Load + discharge slots.
 		loadSlotMapperPage = new MergeScenarioWizardDataMapperPage("Map load slots of cargoes to target",
@@ -104,10 +107,12 @@ public class MergeScenarioWizard extends Wizard implements IExportWizard {
 		super.addPages();
 		
 		addPage(sourceSelectorPage);
+				
 		addPage(purchaseContractMapperPage);
 		addPage(salesContractMapperPage);
 		
 		addPage(vesselMapperPage);
+		addPage(this.vesselCharterMapperPage);
 		
 		addPage(fobBuySpotMarketsMapperPage);
 		addPage(fobSellSpotMarketsMapperPage);
@@ -133,18 +138,21 @@ public class MergeScenarioWizard extends Wizard implements IExportWizard {
 			@Override
 			public void run() {
 				try (MergeHelper mergeHelper = new MergeHelper(getSourceScenarioInstance(), getTargetScenarioInstance())) {
-					CompoundCommand cmd = new CompoundCommand();
+					CompoundCommand cmd = new CompoundCommand(String.format("Merge %s into %s",getSourceScenarioInstance().getName(), getTargetScenarioInstance().getName()));
 					for (IWizardPage page : pages) {			
 						if (page instanceof MergeScenarioWizardDataMapperPage) {
 							MergeScenarioWizardDataMapperPage mapperPage = (MergeScenarioWizardDataMapperPage)page;
-							Pair<NamedObjectGetter, List<MergeMapping>> mapping = mapperPage.getMergeMappings();
-							ModelGetter mg = mapperPage.getModelGetter();
-							EStructuralFeature feature = mapperPage.getFeature();
-							mergeHelper.merge(cmd, mapping, mg, feature);
+							mapperPage.merge(cmd, mergeHelper);
 						}
 					}
 
-					mergeHelper.execute(cmd);		
+					RunnerHelper.syncExec(() -> {
+						try {
+							mergeHelper.execute(cmd);
+						} catch (Exception e) {
+							exceptions[0] = e;
+						}
+					});		
 				} catch (final Exception e) {
 					exceptions[0] = e;
 				}

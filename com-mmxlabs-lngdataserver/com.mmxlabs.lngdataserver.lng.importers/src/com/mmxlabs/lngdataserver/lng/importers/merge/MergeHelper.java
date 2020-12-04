@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -30,10 +31,12 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.BeanDeserializerFactory;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.CargoEditingHelper;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
@@ -135,35 +138,40 @@ public class MergeHelper implements Closeable {
 		return sourceModelRecord.aquireScenarioDataProvider("MergeHelper.getLNGScenarioModel");
 	}
 	
-	public void merge(CompoundCommand cmd, Pair<NamedObjectGetter, List<MergeMapping>> mapping, ModelGetter mg, EStructuralFeature feature) throws JsonProcessingException {
+	public void merge(CompoundCommand cmd, Pair<NamedObjectListGetter, List<MergeMapping>> mapping, ModelGetter mg, EStructuralFeature feature) throws JsonProcessingException {
+		Pair<EObjectListGetter, List<MergeMapping>> mapping2 = Pair.of(mapping.getFirst(), mapping.getSecond());
+		merge(cmd, mapping2, x -> ((NamedObject)x).getName(), mg, feature);
+	}
+	
+	public void merge(CompoundCommand cmd, Pair<EObjectListGetter, List<MergeMapping>> mapping, EObjectNameGetter ng, ModelGetter mg, EStructuralFeature feature) throws JsonProcessingException {
 		
 		//this.jsonReader = createJSONReader();
 		
-		NamedObjectGetter namedObjectGetter = mapping.getFirst();
+		EObjectListGetter eObjectGetter = mapping.getFirst();
 		Map<String, MergeAction> mergeActions = getActions(mapping.getSecond());
-		List<? extends NamedObject> namedObjects = namedObjectGetter.getNamedObjects(this.sourceLNGScenario);
-		Map<String, NamedObject> targetNamedObjects = getNamedObjectMap(this.targetLNGScenario, namedObjectGetter);
+		List<? extends EObject> eObjects = eObjectGetter.getEObjects(this.sourceLNGScenario);
+		Map<String, EObject> nameToEObjects = getNamedObjectMap(this.targetLNGScenario, eObjectGetter, ng);
 		List<Object> toAdd = new LinkedList<>();
 		List<Pair<Object,Object>> toReplace = new LinkedList<>();
 
-		for (NamedObject no : namedObjects) {
-			String name = no.getName();
+		for (EObject eo : eObjects) {
+			String name = ng.getName(eo);
 			MergeAction ma = mergeActions.get(name);
 			if (ma != null) {
 				switch (ma.getMergeType()) {
 				case Add:
-					toAdd.add(cloneEObject(no));
-					addCargoIfSlot(no);
+					toAdd.add(cloneEObject(eo));
+					addCargoIfSlot(eo);
 					break;
 									
 				case Overwrite:
 					//Replace object in target, with version from source:
-					EObject oldObjectToOverwrite = targetNamedObjects.get(name);
-					EObject newObjectToReplaceWith = cloneEObject(no); //Clone to get rid of references to source scenario.
+					EObject oldObjectToOverwrite = nameToEObjects.get(name);
+					EObject newObjectToReplaceWith = cloneEObject(eo); //Clone to get rid of references to source scenario.
 					toReplace.add(Pair.of(oldObjectToOverwrite, newObjectToReplaceWith));	
 					
 					//Add the cargo as well if there is one if it is a slot.
-					addCargoIfSlot(no);
+					addCargoIfSlot(eo);
 					
 					//Remove any cargo if it is a slot.
 					removeCargoOnOldObjectIfSlot(oldObjectToOverwrite);
@@ -173,10 +181,10 @@ public class MergeHelper implements Closeable {
 					break;
 					
 				case Map:
-					//FIXME: A bit flaky perhaps, but seems to work and need to like this in case source does not have target object in it.
-					EObject oldObject = no;
-					EObject newObjectInTarget = cloneEObject(targetNamedObjects.get(ma.getTargetName()));
-					updateReferencesViaSet(this.sourceLNGScenario, no, newObjectInTarget);
+					//FIXME: A bit flaky perhaps, but seems to work and needs to be like this in case source does not have target object in it.
+					EObject oldObject = eo;
+					EObject newObjectInTarget = cloneEObject(nameToEObjects.get(ma.getTargetName()));
+					updateReferencesViaSet(this.sourceLNGScenario, eo, newObjectInTarget);
 					break;
 				
 				case Ignore:
@@ -221,6 +229,40 @@ public class MergeHelper implements Closeable {
 		}
 	}
 
+	void updateVesselAvailabilityStartEndDates(CompoundCommand cmd) {
+		List<VesselAvailability> sourceVas = this.sourceLNGScenario.getCargoModel().getVesselAvailabilities();
+		List<VesselAvailability> targetVas = this.targetLNGScenario.getCargoModel().getVesselAvailabilities();
+		
+		for (VesselAvailability v : sourceVas) {
+			Optional<VesselAvailability> tva = targetVas.stream().filter(va -> va.getVessel().getName().equals(v.getVessel().getName())).findFirst();
+
+			if (tva.isPresent()) {
+				//Check end by is latest one.
+				if (tva.get().isSetEndBy() && v.isSetEndBy() && tva.get().getEndBy().isBefore(v.getEndBy())) {
+					if (v.isSetEndBy()) {
+						cmd.append(SetCommand.create(editingDomain, tva.get(), CargoPackage.Literals.VESSEL_AVAILABILITY__END_BY, v.getEndBy()));
+					}
+				}
+				if (tva.get().isSetEndAfter() && v.isSetEndAfter() && tva.get().getEndAfter().isBefore(v.getEndAfter())) {
+					if (v.isSetEndAfter()) {
+						cmd.append(SetCommand.create(editingDomain, tva.get(), CargoPackage.Literals.VESSEL_AVAILABILITY__END_AFTER, v.getEndAfter()));
+					}
+				}
+				//Check start after 
+				if (tva.get().isSetStartBy() && v.isSetStartBy() && tva.get().getStartBy().isAfter(v.getStartBy())) {
+					if (v.isSetStartBy()) {
+						cmd.append(SetCommand.create(editingDomain, tva.get(), CargoPackage.Literals.VESSEL_AVAILABILITY__START_BY, v.getStartBy()));
+					}
+				}
+				if (tva.get().isSetStartAfter() && v.isSetStartAfter() && tva.get().getStartAfter().isAfter(v.getStartAfter())) {
+					if (v.isSetStartAfter()) {
+						cmd.append(SetCommand.create(editingDomain, tva.get(), CargoPackage.Literals.VESSEL_AVAILABILITY__START_AFTER, v.getStartAfter()));
+					}
+				}
+			}
+		}
+	}
+	
 	private void removeCargoOnOldObjectIfSlot(EObject oldObject) {
 		if (oldObject instanceof Slot<?>) {
 			Slot<?> targetSlot = (Slot<?>)oldObject;
@@ -383,16 +425,17 @@ public class MergeHelper implements Closeable {
 		return (EObject)jsonReader.readValue(toAddJSON, sourceObject.eClass().getInstanceClass());
 	}
 	
-	private Map<String,NamedObject> getNamedObjectMap(LNGScenarioModel lngScenario, NamedObjectGetter namedObjectGetter) {
-		Map<String, NamedObject> objectMap = new HashMap<>();
-		List<? extends NamedObject> os = namedObjectGetter.getNamedObjects(lngScenario);
+	private Map<String, EObject> getNamedObjectMap(LNGScenarioModel lngScenario, EObjectListGetter eObjectGetter, EObjectNameGetter ng) {
+		Map<String, EObject> objectMap = new HashMap<>();
+		List<? extends EObject> os = eObjectGetter.getEObjects(lngScenario);
 		for (var o : os) {
-			objectMap.put(o.getName(), o);
+			objectMap.put(ng.getName(o), o);
 		}
 		return objectMap;
 	}
 
-	private boolean addCargoIfSlot(NamedObject no) throws JsonMappingException, JsonProcessingException {
+
+	private boolean addCargoIfSlot(EObject no) throws JsonMappingException, JsonProcessingException {
 		if (no instanceof Slot<?> && ((Slot<?>)no).getCargo() != null) {
 			Cargo cargo = ((Slot<?>)no).getCargo();
 			this.cargoesToAdd.add(cargo);	
@@ -433,7 +476,7 @@ public class MergeHelper implements Closeable {
 				for (final EStructuralFeature.Setting setting : usages) {
 					
 					//We don't want to add twice in the owner collection (Ignore cargoes also as dealt with separately)
-					if (setting.getEStructuralFeature() != ownerFeature && !(setting.getEObject() instanceof Cargo)) {
+					if (setting.getEStructuralFeature() != ownerFeature && (!(setting.getEObject() instanceof Cargo) || ownerFeature == CargoPackage.Literals.CARGO_MODEL__VESSEL_AVAILABILITIES)) {
 						if (setting.getEStructuralFeature().isMany()) {
 							Collection<?> collection = (Collection<?>) setting.getEObject().eGet(setting.getEStructuralFeature());
 							if (collection.contains(newObject)) {
@@ -517,10 +560,19 @@ public class MergeHelper implements Closeable {
 		for (ToSetLater toSet : this.cmdsToSetLater) {
 			toSet.createCmdNow(cmd);
 		}
-		
+	
+		//FIXME: if base fuels changed, then may need to explicitly 
+		setCommandProvidersEnabled(false); //Needed so that Undo in Edit menu works.
 		editingDomain.getCommandStack().execute(cmd);
+		setCommandProvidersEnabled(true);  //Have to re-enable after.
 	}
-
+	
+	private void setCommandProvidersEnabled(boolean enabled) {
+		if (editingDomain instanceof CommandProviderAwareEditingDomain) {
+			((CommandProviderAwareEditingDomain)editingDomain).setAdaptersEnabled(enabled);
+		}
+	}
+	
 	public void addRemoveCargoes(CompoundCommand cmd) throws JsonMappingException, JsonProcessingException {
 		
 		if (!this.cargoesToRemove.isEmpty()) {
