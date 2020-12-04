@@ -635,7 +635,8 @@ public class ChangeSetViewColumnHelper {
 
 	public static class VesselData {
 
-		public VesselData(final String name, final String shortName, final ChangeSetVesselType vesselType) {
+		public VesselData(final String name, final String shortName, final ChangeSetVesselType vesselType, final int charterNubmer) {
+			this.charterNumber = charterNubmer;
 			this.name = name;
 			this.shortName = shortName;
 			this.type = vesselType;
@@ -644,6 +645,7 @@ public class ChangeSetViewColumnHelper {
 		public final String name;
 		public final String shortName;
 		public final ChangeSetVesselType type;
+		public final Integer charterNumber;
 
 		@Override
 		public int hashCode() {
@@ -680,7 +682,12 @@ public class ChangeSetViewColumnHelper {
 
 		final Map<ChangeSetVesselType, List<VesselData>> colData = data.stream() //
 				.filter(a -> a.name != null && !a.name.isEmpty()) // Ignore empty names
-				.sorted((a, b) -> (a.name.compareTo(b.name))) // Sort alphabetically
+				.sorted((a, b) -> {
+					int c = a.name.compareTo(b.name);
+					if (c==0) 
+						c= a.charterNumber.compareTo(b.charterNumber);
+					return c;
+				}) // Sort alphabetically
 				.collect(Collectors.groupingBy(d -> d.type)); // Group by type
 
 		boolean showSpacer = true;
@@ -720,7 +727,7 @@ public class ChangeSetViewColumnHelper {
 						gvc.getColumn().setHeaderTooltip(d.name);
 						gvc.getColumn().setWidth(22);
 						gvc.getColumn().setResizeable(false);
-						gvc.setLabelProvider(createVesselLabelProvider(d.name));
+						gvc.setLabelProvider(createVesselLabelProvider(d.name, d.charterNumber));
 						gvc.getColumn().setHeaderRenderer(new VesselNameColumnHeaderRenderer());
 						gvc.getColumn().setCellRenderer(createCellRenderer());
 						gvc.getColumn().setDetail(true);
@@ -2229,7 +2236,7 @@ public class ChangeSetViewColumnHelper {
 
 	}
 
-	private CellLabelProvider createVesselLabelProvider(@NonNull final String name) {
+	private CellLabelProvider createVesselLabelProvider(@NonNull final String name, @NonNull final Integer charterNumber) {
 		return new CellLabelProvider() {
 
 			@Override
@@ -2239,13 +2246,15 @@ public class ChangeSetViewColumnHelper {
 				final Object element = cell.getElement();
 				if (element instanceof ChangeSetTableRow) {
 					final ChangeSetTableRow changeSetRow = (ChangeSetTableRow) element;
-
-					if (name.equals(changeSetRow.getAfterVesselName())) {
+					final String fullName = String.format("%s %d", name, charterNumber);
+					final String aVesselName = String.format("%s %d", changeSetRow.getAfterVesselName(), changeSetRow.getAfterVesselCharterNumber());
+					final String bVesselName = String.format("%s %d", changeSetRow.getBeforeVesselName(), changeSetRow.getBeforeVesselCharterNumber());
+					if (fullName.equals(aVesselName)) {
 						cell.setImage(imageClosedCircle);
 						if (textualVesselMarkers) {
 							cell.setText("●");
 						}
-					} else if (name.equals(changeSetRow.getBeforeVesselName())) {
+					} else if (fullName.equals(bVesselName)) {
 						cell.setImage(imageOpenCircle);
 						if (textualVesselMarkers) {
 							cell.setText("○");
@@ -2258,11 +2267,13 @@ public class ChangeSetViewColumnHelper {
 			public String getToolTipText(final Object element) {
 				if (element instanceof ChangeSetTableRow) {
 					final ChangeSetTableRow changeSetRow = (ChangeSetTableRow) element;
-
-					if (name.equals(changeSetRow.getAfterVesselName())) {
+					final String fullName = String.format("%s %d", name, charterNumber);
+					final String aVesselName = String.format("%s (%d)", changeSetRow.getAfterVesselName(), changeSetRow.getAfterVesselCharterNumber());
+					final String bVesselName = String.format("%s (%d)", changeSetRow.getBeforeVesselName(), changeSetRow.getBeforeVesselCharterNumber());
+					if (fullName.equals(aVesselName)) {
 						return name;
 					}
-					if (name.equals(changeSetRow.getBeforeVesselName())) {
+					if (fullName.equals(bVesselName)) {
 						return name;
 					}
 				}

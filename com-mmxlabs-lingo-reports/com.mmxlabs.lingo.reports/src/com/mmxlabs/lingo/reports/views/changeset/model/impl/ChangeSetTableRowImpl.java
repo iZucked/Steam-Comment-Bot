@@ -53,6 +53,8 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableRowImpl#isRhsNonShipped <em>Rhs Non Shipped</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableRowImpl#getBeforeVesselType <em>Before Vessel Type</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableRowImpl#getAfterVesselType <em>After Vessel Type</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableRowImpl#getBeforeVesselCharterNumber <em>Before Vessel Charter Number</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableRowImpl#getAfterVesselCharterNumber <em>After Vessel Charter Number</em>}</li>
  * </ul>
  *
  * @generated
@@ -517,6 +519,46 @@ public class ChangeSetTableRowImpl extends MinimalEObjectImpl.Container implemen
 	 * @ordered
 	 */
 	protected ChangeSetVesselType afterVesselType = AFTER_VESSEL_TYPE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getBeforeVesselCharterNumber() <em>Before Vessel Charter Number</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBeforeVesselCharterNumber()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int BEFORE_VESSEL_CHARTER_NUMBER_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getBeforeVesselCharterNumber() <em>Before Vessel Charter Number</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBeforeVesselCharterNumber()
+	 * @generated
+	 * @ordered
+	 */
+	protected int beforeVesselCharterNumber = BEFORE_VESSEL_CHARTER_NUMBER_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getAfterVesselCharterNumber() <em>After Vessel Charter Number</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAfterVesselCharterNumber()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int AFTER_VESSEL_CHARTER_NUMBER_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getAfterVesselCharterNumber() <em>After Vessel Charter Number</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAfterVesselCharterNumber()
+	 * @generated
+	 * @ordered
+	 */
+	protected int afterVesselCharterNumber = AFTER_VESSEL_CHARTER_NUMBER_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1287,6 +1329,52 @@ public class ChangeSetTableRowImpl extends MinimalEObjectImpl.Container implemen
 	 * @generated
 	 */
 	@Override
+	public int getBeforeVesselCharterNumber() {
+		return beforeVesselCharterNumber;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setBeforeVesselCharterNumber(int newBeforeVesselCharterNumber) {
+		int oldBeforeVesselCharterNumber = beforeVesselCharterNumber;
+		beforeVesselCharterNumber = newBeforeVesselCharterNumber;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_TABLE_ROW__BEFORE_VESSEL_CHARTER_NUMBER, oldBeforeVesselCharterNumber, beforeVesselCharterNumber));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int getAfterVesselCharterNumber() {
+		return afterVesselCharterNumber;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setAfterVesselCharterNumber(int newAfterVesselCharterNumber) {
+		int oldAfterVesselCharterNumber = afterVesselCharterNumber;
+		afterVesselCharterNumber = newAfterVesselCharterNumber;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_TABLE_ROW__AFTER_VESSEL_CHARTER_NUMBER, oldAfterVesselCharterNumber, afterVesselCharterNumber));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case ChangesetPackage.CHANGE_SET_TABLE_ROW__PREVIOUS_RHS:
@@ -1383,6 +1471,10 @@ public class ChangeSetTableRowImpl extends MinimalEObjectImpl.Container implemen
 				return getBeforeVesselType();
 			case ChangesetPackage.CHANGE_SET_TABLE_ROW__AFTER_VESSEL_TYPE:
 				return getAfterVesselType();
+			case ChangesetPackage.CHANGE_SET_TABLE_ROW__BEFORE_VESSEL_CHARTER_NUMBER:
+				return getBeforeVesselCharterNumber();
+			case ChangesetPackage.CHANGE_SET_TABLE_ROW__AFTER_VESSEL_CHARTER_NUMBER:
+				return getAfterVesselCharterNumber();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -1472,6 +1564,12 @@ public class ChangeSetTableRowImpl extends MinimalEObjectImpl.Container implemen
 				return;
 			case ChangesetPackage.CHANGE_SET_TABLE_ROW__AFTER_VESSEL_TYPE:
 				setAfterVesselType((ChangeSetVesselType)newValue);
+				return;
+			case ChangesetPackage.CHANGE_SET_TABLE_ROW__BEFORE_VESSEL_CHARTER_NUMBER:
+				setBeforeVesselCharterNumber((Integer)newValue);
+				return;
+			case ChangesetPackage.CHANGE_SET_TABLE_ROW__AFTER_VESSEL_CHARTER_NUMBER:
+				setAfterVesselCharterNumber((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -1563,6 +1661,12 @@ public class ChangeSetTableRowImpl extends MinimalEObjectImpl.Container implemen
 			case ChangesetPackage.CHANGE_SET_TABLE_ROW__AFTER_VESSEL_TYPE:
 				setAfterVesselType(AFTER_VESSEL_TYPE_EDEFAULT);
 				return;
+			case ChangesetPackage.CHANGE_SET_TABLE_ROW__BEFORE_VESSEL_CHARTER_NUMBER:
+				setBeforeVesselCharterNumber(BEFORE_VESSEL_CHARTER_NUMBER_EDEFAULT);
+				return;
+			case ChangesetPackage.CHANGE_SET_TABLE_ROW__AFTER_VESSEL_CHARTER_NUMBER:
+				setAfterVesselCharterNumber(AFTER_VESSEL_CHARTER_NUMBER_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -1627,6 +1731,10 @@ public class ChangeSetTableRowImpl extends MinimalEObjectImpl.Container implemen
 				return beforeVesselType != BEFORE_VESSEL_TYPE_EDEFAULT;
 			case ChangesetPackage.CHANGE_SET_TABLE_ROW__AFTER_VESSEL_TYPE:
 				return afterVesselType != AFTER_VESSEL_TYPE_EDEFAULT;
+			case ChangesetPackage.CHANGE_SET_TABLE_ROW__BEFORE_VESSEL_CHARTER_NUMBER:
+				return beforeVesselCharterNumber != BEFORE_VESSEL_CHARTER_NUMBER_EDEFAULT;
+			case ChangesetPackage.CHANGE_SET_TABLE_ROW__AFTER_VESSEL_CHARTER_NUMBER:
+				return afterVesselCharterNumber != AFTER_VESSEL_CHARTER_NUMBER_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -1681,6 +1789,10 @@ public class ChangeSetTableRowImpl extends MinimalEObjectImpl.Container implemen
 		result.append(beforeVesselType);
 		result.append(", afterVesselType: ");
 		result.append(afterVesselType);
+		result.append(", beforeVesselCharterNumber: ");
+		result.append(beforeVesselCharterNumber);
+		result.append(", afterVesselCharterNumber: ");
+		result.append(afterVesselCharterNumber);
 		result.append(')');
 		return result.toString();
 	}

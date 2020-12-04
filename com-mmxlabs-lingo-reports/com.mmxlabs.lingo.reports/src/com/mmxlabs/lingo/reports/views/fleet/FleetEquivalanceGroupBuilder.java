@@ -176,8 +176,10 @@ public class FleetEquivalanceGroupBuilder {
 				spotMarket = sequence.getCharterInMarket().getName();
 				spotIndex = String.valueOf(sequence.getSpotIndex());
 			}
-			
-			return "sequence-" + sequence.getName() + spotMarket + spotIndex;
+			if (sequence.getVesselAvailability() != null) {
+				spotIndex = String.valueOf(sequence.getVesselAvailability().getCharterNumber());
+			}
+			return String.format("sequence-%s✡︎%s✡︎%s", sequence.getName(), spotMarket, spotIndex);
 		}
 		return element.toString();
 	}

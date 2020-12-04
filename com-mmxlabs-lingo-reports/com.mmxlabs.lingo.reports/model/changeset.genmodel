@@ -77,6 +77,7 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRowData/lhsGroupProfitAndLoss"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRowData/rhsGroupProfitAndLoss"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRowData/paperDealAllocation"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRowData/vesselCharterNumber"/>
     </genClasses>
     <genClasses ecoreClass="changeset.ecore#//ChangeSetTableGroup">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetTableGroup/rows"/>
@@ -120,6 +121,8 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/rhsNonShipped"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/beforeVesselType"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/afterVesselType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/beforeVesselCharterNumber"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/afterVesselCharterNumber"/>
     </genClasses>
     <genClasses ecoreClass="changeset.ecore#//ChangeSetTableRoot">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetTableRoot/groups"/>

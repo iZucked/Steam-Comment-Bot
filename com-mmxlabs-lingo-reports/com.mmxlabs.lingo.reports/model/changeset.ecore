@@ -74,6 +74,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="rhsGroupProfitAndLoss"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//ProfitAndLossContainer"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="paperDealAllocation" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//PaperDealAllocation"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="vesselCharterNumber" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="ScenarioResult" instanceClassName="com.mmxlabs.scenario.service.ui.ScenarioResult"/>
   <eClassifiers xsi:type="ecore:EClass" name="ChangeSetTableGroup">
@@ -124,6 +125,10 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="rhsNonShipped" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="beforeVesselType" eType="#//ChangeSetVesselType"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="afterVesselType" eType="#//ChangeSetVesselType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="beforeVesselCharterNumber"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="afterVesselCharterNumber"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ChangeSetTableRoot">
     <eStructuralFeatures xsi:type="ecore:EReference" name="groups" upperBound="-1"

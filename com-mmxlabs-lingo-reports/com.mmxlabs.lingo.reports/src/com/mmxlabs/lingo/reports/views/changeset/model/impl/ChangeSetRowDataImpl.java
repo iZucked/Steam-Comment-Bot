@@ -59,6 +59,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowDataImpl#getLhsGroupProfitAndLoss <em>Lhs Group Profit And Loss</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowDataImpl#getRhsGroupProfitAndLoss <em>Rhs Group Profit And Loss</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowDataImpl#getPaperDealAllocation <em>Paper Deal Allocation</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowDataImpl#getVesselCharterNumber <em>Vessel Charter Number</em>}</li>
  * </ul>
  *
  * @generated
@@ -323,6 +324,26 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * @ordered
 	 */
 	protected PaperDealAllocation paperDealAllocation;
+
+	/**
+	 * The default value of the '{@link #getVesselCharterNumber() <em>Vessel Charter Number</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVesselCharterNumber()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int VESSEL_CHARTER_NUMBER_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getVesselCharterNumber() <em>Vessel Charter Number</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVesselCharterNumber()
+	 * @generated
+	 * @ordered
+	 */
+	protected int vesselCharterNumber = VESSEL_CHARTER_NUMBER_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -938,6 +959,29 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * @generated
 	 */
 	@Override
+	public int getVesselCharterNumber() {
+		return vesselCharterNumber;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setVesselCharterNumber(int newVesselCharterNumber) {
+		int oldVesselCharterNumber = vesselCharterNumber;
+		vesselCharterNumber = newVesselCharterNumber;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_ROW_DATA__VESSEL_CHARTER_NUMBER, oldVesselCharterNumber, vesselCharterNumber));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public ChangeSetRowDataGroup getRowDataGroup() {
 		if (eContainerFeatureID() != ChangesetPackage.CHANGE_SET_ROW_DATA__ROW_DATA_GROUP) return null;
 		return (ChangeSetRowDataGroup)eInternalContainer();
@@ -1192,6 +1236,8 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 			case ChangesetPackage.CHANGE_SET_ROW_DATA__PAPER_DEAL_ALLOCATION:
 				if (resolve) return getPaperDealAllocation();
 				return basicGetPaperDealAllocation();
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__VESSEL_CHARTER_NUMBER:
+				return getVesselCharterNumber();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -1266,6 +1312,9 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 				return;
 			case ChangesetPackage.CHANGE_SET_ROW_DATA__PAPER_DEAL_ALLOCATION:
 				setPaperDealAllocation((PaperDealAllocation)newValue);
+				return;
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__VESSEL_CHARTER_NUMBER:
+				setVesselCharterNumber((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -1342,6 +1391,9 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 			case ChangesetPackage.CHANGE_SET_ROW_DATA__PAPER_DEAL_ALLOCATION:
 				setPaperDealAllocation((PaperDealAllocation)null);
 				return;
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__VESSEL_CHARTER_NUMBER:
+				setVesselCharterNumber(VESSEL_CHARTER_NUMBER_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -1396,6 +1448,8 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 				return rhsGroupProfitAndLoss != null;
 			case ChangesetPackage.CHANGE_SET_ROW_DATA__PAPER_DEAL_ALLOCATION:
 				return paperDealAllocation != null;
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__VESSEL_CHARTER_NUMBER:
+				return vesselCharterNumber != VESSEL_CHARTER_NUMBER_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -1422,6 +1476,8 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 		result.append(lhsName);
 		result.append(", rhsName: ");
 		result.append(rhsName);
+		result.append(", vesselCharterNumber: ");
+		result.append(vesselCharterNumber);
 		result.append(')');
 		return result.toString();
 	}
