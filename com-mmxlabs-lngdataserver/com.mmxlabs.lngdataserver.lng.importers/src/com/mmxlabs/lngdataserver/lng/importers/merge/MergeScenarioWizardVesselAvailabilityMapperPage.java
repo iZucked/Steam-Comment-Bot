@@ -37,6 +37,7 @@ public class MergeScenarioWizardVesselAvailabilityMapperPage extends MergeScenar
 		checkBox = new Button(composite, SWT.CHECK);
 		checkBox.setLayoutData(GridDataFactory.swtDefaults().create());
 		checkBox.setText("Take earliest/latest start end dates and update target fleet charters.");
+		checkBox.setSelection(true);
 		dialogChanged();
 		setControl(composite);
 	}

@@ -74,6 +74,7 @@ public class MergeHelper implements Closeable {
 	final List<ToSetLater> cmdsToSetLater = new ArrayList<>();
 	final EMFDeserializationContext ctx;
 	final CargoEditingHelper cargoEditingHelper;
+	final Map<EObject,Boolean> overwrittenObjects = new HashMap<>();
 	
 	public MergeHelper(ScenarioInstance sourceScenarioInstance, ScenarioInstance targetScenarioInstance) {
 		this.sourceScenarioInstance = sourceScenarioInstance;
@@ -161,7 +162,12 @@ public class MergeHelper implements Closeable {
 				switch (ma.getMergeType()) {
 				case Add:
 					toAdd.add(cloneEObject(eo));
+					
+					//Add the cargo 
 					addCargoIfSlot(eo);
+					
+					//Remove any cargo if the other slot is a 
+					removeCargoOnOtherSlotIfInTargetAlready(eo);
 					break;
 									
 				case Overwrite:
@@ -178,6 +184,8 @@ public class MergeHelper implements Closeable {
 					
 					//Clean up rest of references on target scenario:
 					updateReferencesViaCmd(this.targetLNGScenario, mg.getModel(this.targetScenarioDataProvider), feature, oldObjectToOverwrite, newObjectToReplaceWith);
+					
+					this.overwrittenObjects.put(oldObjectToOverwrite, Boolean.TRUE);
 					break;
 					
 				case Map:
@@ -263,6 +271,61 @@ public class MergeHelper implements Closeable {
 		}
 	}
 	
+	private void removeCargoOnOtherSlotIfInTargetAlready(EObject newObject) {
+		if (newObject instanceof Slot<?>) {
+			Slot<?> sourceSlot = (Slot<?>)newObject;
+			
+			if (sourceSlot.getCargo() != null) {
+				List<Slot<?>> slotsInTarget = getAllSlots(this.targetLNGScenario);
+				Slot<?> otherSlotInSource = this.getOtherSlotInCargo(sourceSlot.getCargo(),sourceSlot);
+				Slot<?> otherSlotInTarget = getSlotInList(otherSlotInSource, slotsInTarget);
+				 
+				if (otherSlotInTarget != null) {
+					boolean otherSlotNotOverwritten = isOverwrittenEObjectInTarget(otherSlotInTarget);
+					if (!otherSlotNotOverwritten) {
+						//Do not add the source cargo in the case where one of the slots is overwritten but not the other,
+						//otherwise we get nameless cargo errors etc which user has no way of removing.
+						this.cargoesToAdd.remove(sourceSlot.getCargo());
+						sourceSlot.setCargo(null);
+						otherSlotInSource.setCargo(null);
+					}
+				}
+			}
+		}
+	}
+	
+	private Slot<?> getOtherSlotInCargo(Cargo cargo, Slot<?> sourceSlot) {
+		Optional<Slot<?>> otherSlot = cargo.getSlots().stream().filter(s -> !s.getName().equalsIgnoreCase(sourceSlot.getName())).findFirst();
+		if (otherSlot.isPresent()) {
+			return otherSlot.get();
+		}
+		else {
+			return null;
+		}
+	}
+
+	private boolean isOverwrittenEObjectInTarget(EObject otherSlot) {
+		return (this.overwrittenObjects.get(otherSlot) != null);
+	}
+
+	private Slot<?> getSlotInList(Slot<?> sourceSlot, List<Slot<?>> slotsInTarget) {
+		//Find source slot in target.
+		Optional<Slot<?>> targetSlot = slotsInTarget.stream().filter(s -> s.getName().equalsIgnoreCase(sourceSlot.getName())).findFirst();
+		if (targetSlot.isPresent()) {
+			return targetSlot.get();
+		}
+		
+		//Find other slot from cargo in target.
+		return null;
+	}
+
+	private List<Slot<?>> getAllSlots(LNGScenarioModel lngScenario) {
+		List<Slot<?>> allSlots = new ArrayList<>();
+		allSlots.addAll(lngScenario.getCargoModel().getLoadSlots());
+		allSlots.addAll(lngScenario.getCargoModel().getDischargeSlots());
+		return allSlots;
+	}
+
 	private void removeCargoOnOldObjectIfSlot(EObject oldObject) {
 		if (oldObject instanceof Slot<?>) {
 			Slot<?> targetSlot = (Slot<?>)oldObject;
