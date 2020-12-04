@@ -62,7 +62,6 @@ import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
-import com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Purge;
@@ -212,9 +211,11 @@ public final class ChangeSetTransformerUtil {
 			if (event instanceof EventGrouping) {
 				row.setEventGrouping((EventGrouping) event);
 			}
-			row.setVesselName(ChangeSetTransformerUtil.getName(event.getSequence()));
-			row.setVesselShortName(ChangeSetTransformerUtil.getShortName(event.getSequence()));
-			row.setVesselType(ChangeSetTransformerUtil.getVesselType(event.getSequence()));
+			final Sequence sequence = event.getSequence();
+			row.setVesselName(ChangeSetTransformerUtil.getName(sequence));
+			row.setVesselShortName(ChangeSetTransformerUtil.getShortName(sequence));
+			row.setVesselType(ChangeSetTransformerUtil.getVesselType(sequence));
+			row.setVesselCharterNumber(ChangeSetTransformerUtil.getCharterNumber(sequence));
 		};
 		for (final EObject target : targets) {
 			if (target instanceof CargoAllocation) {
@@ -245,9 +246,11 @@ public final class ChangeSetTransformerUtil {
 					if (i == 0) {
 						row.setLhsGroupProfitAndLoss(cargoAllocation);
 						row.setEventGrouping(cargoAllocation);
-						row.setVesselName(ChangeSetTransformerUtil.getName(cargoAllocation.getSequence()));
-						row.setVesselShortName(ChangeSetTransformerUtil.getShortName(cargoAllocation.getSequence()));
-						row.setVesselType(ChangeSetTransformerUtil.getVesselType(cargoAllocation.getSequence()));
+						final Sequence sequence = cargoAllocation.getSequence();
+						row.setVesselName(ChangeSetTransformerUtil.getName(sequence));
+						row.setVesselShortName(ChangeSetTransformerUtil.getShortName(sequence));
+						row.setVesselType(ChangeSetTransformerUtil.getVesselType(sequence));
+						row.setVesselCharterNumber(ChangeSetTransformerUtil.getCharterNumber(sequence));
 					}
 
 					if (i < loadAllocations.size()) {
@@ -934,6 +937,22 @@ public final class ChangeSetTransformerUtil {
 			} else {
 				return "";
 			}
+		}
+		throw new NullPointerException();
+	}
+	
+	@NonNull
+	public static Integer getCharterNumber(@NonNull final Sequence sequence) {
+		if (sequence.isSetVesselAvailability()) {
+			return getCharterNumber(sequence.getVesselAvailability());
+		}
+		return 0;
+	}
+	
+	@NonNull
+	public static Integer getCharterNumber(@Nullable final VesselAssignmentType t) {
+		if (t instanceof VesselAvailability) {
+			return ((VesselAvailability) t).getCharterNumber();
 		}
 		throw new NullPointerException();
 	}

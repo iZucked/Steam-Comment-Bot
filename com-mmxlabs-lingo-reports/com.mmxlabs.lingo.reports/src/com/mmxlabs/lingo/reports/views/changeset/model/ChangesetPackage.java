@@ -647,13 +647,22 @@ public interface ChangesetPackage extends EPackage {
 	int CHANGE_SET_ROW_DATA__PAPER_DEAL_ALLOCATION = 20;
 
 	/**
+	 * The feature id for the '<em><b>Vessel Charter Number</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_ROW_DATA__VESSEL_CHARTER_NUMBER = 21;
+
+	/**
 	 * The number of structural features of the '<em>Change Set Row Data</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW_DATA_FEATURE_COUNT = 21;
+	int CHANGE_SET_ROW_DATA_FEATURE_COUNT = 22;
 
 	/**
 	 * The number of operations of the '<em>Change Set Row Data</em>' class.
@@ -1055,13 +1064,31 @@ public interface ChangesetPackage extends EPackage {
 	int CHANGE_SET_TABLE_ROW__AFTER_VESSEL_TYPE = 25;
 
 	/**
+	 * The feature id for the '<em><b>Before Vessel Charter Number</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_TABLE_ROW__BEFORE_VESSEL_CHARTER_NUMBER = 26;
+
+	/**
+	 * The feature id for the '<em><b>After Vessel Charter Number</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_TABLE_ROW__AFTER_VESSEL_CHARTER_NUMBER = 27;
+
+	/**
 	 * The number of structural features of the '<em>Change Set Table Row</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_TABLE_ROW_FEATURE_COUNT = 26;
+	int CHANGE_SET_TABLE_ROW_FEATURE_COUNT = 28;
 
 	/**
 	 * The number of operations of the '<em>Change Set Table Row</em>' class.
@@ -1663,6 +1690,17 @@ public interface ChangesetPackage extends EPackage {
 	EReference getChangeSetRowData_PaperDealAllocation();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#getVesselCharterNumber <em>Vessel Charter Number</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Vessel Charter Number</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#getVesselCharterNumber()
+	 * @see #getChangeSetRowData()
+	 * @generated
+	 */
+	EAttribute getChangeSetRowData_VesselCharterNumber();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup <em>Change Set Table Group</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2110,6 +2148,28 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getChangeSetTableRow_AfterVesselType();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getBeforeVesselCharterNumber <em>Before Vessel Charter Number</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Before Vessel Charter Number</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getBeforeVesselCharterNumber()
+	 * @see #getChangeSetTableRow()
+	 * @generated
+	 */
+	EAttribute getChangeSetTableRow_BeforeVesselCharterNumber();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getAfterVesselCharterNumber <em>After Vessel Charter Number</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>After Vessel Charter Number</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getAfterVesselCharterNumber()
+	 * @see #getChangeSetTableRow()
+	 * @generated
+	 */
+	EAttribute getChangeSetTableRow_AfterVesselCharterNumber();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRoot <em>Change Set Table Root</em>}'.
@@ -2644,6 +2704,14 @@ public interface ChangesetPackage extends EPackage {
 		EReference CHANGE_SET_ROW_DATA__PAPER_DEAL_ALLOCATION = eINSTANCE.getChangeSetRowData_PaperDealAllocation();
 
 		/**
+		 * The meta object literal for the '<em><b>Vessel Charter Number</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHANGE_SET_ROW_DATA__VESSEL_CHARTER_NUMBER = eINSTANCE.getChangeSetRowData_VesselCharterNumber();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableGroupImpl <em>Change Set Table Group</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2974,6 +3042,22 @@ public interface ChangesetPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CHANGE_SET_TABLE_ROW__AFTER_VESSEL_TYPE = eINSTANCE.getChangeSetTableRow_AfterVesselType();
+
+		/**
+		 * The meta object literal for the '<em><b>Before Vessel Charter Number</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHANGE_SET_TABLE_ROW__BEFORE_VESSEL_CHARTER_NUMBER = eINSTANCE.getChangeSetTableRow_BeforeVesselCharterNumber();
+
+		/**
+		 * The meta object literal for the '<em><b>After Vessel Charter Number</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHANGE_SET_TABLE_ROW__AFTER_VESSEL_CHARTER_NUMBER = eINSTANCE.getChangeSetTableRow_AfterVesselCharterNumber();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableRootImpl <em>Change Set Table Root</em>}' class.

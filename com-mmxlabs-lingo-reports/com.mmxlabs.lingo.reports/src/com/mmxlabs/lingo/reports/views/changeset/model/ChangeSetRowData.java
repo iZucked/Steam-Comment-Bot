@@ -47,6 +47,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#getLhsGroupProfitAndLoss <em>Lhs Group Profit And Loss</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#getRhsGroupProfitAndLoss <em>Rhs Group Profit And Loss</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#getPaperDealAllocation <em>Paper Deal Allocation</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#getVesselCharterNumber <em>Vessel Charter Number</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetRowData()
@@ -601,5 +602,27 @@ public interface ChangeSetRowData extends EObject {
 	 * @generated
 	 */
 	void setPaperDealAllocation(PaperDealAllocation value);
+
+	/**
+	 * Returns the value of the '<em><b>Vessel Charter Number</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Vessel Charter Number</em>' attribute.
+	 * @see #setVesselCharterNumber(int)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetRowData_VesselCharterNumber()
+	 * @model
+	 * @generated
+	 */
+	int getVesselCharterNumber();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#getVesselCharterNumber <em>Vessel Charter Number</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Vessel Charter Number</em>' attribute.
+	 * @see #getVesselCharterNumber()
+	 * @generated
+	 */
+	void setVesselCharterNumber(int value);
 
 } // ChangeSetRowData

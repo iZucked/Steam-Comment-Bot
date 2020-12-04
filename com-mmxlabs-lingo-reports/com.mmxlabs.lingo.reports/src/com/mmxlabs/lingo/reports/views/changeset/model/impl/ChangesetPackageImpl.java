@@ -745,6 +745,16 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * @generated
 	 */
 	@Override
+	public EAttribute getChangeSetRowData_VesselCharterNumber() {
+		return (EAttribute)changeSetRowDataEClass.getEStructuralFeatures().get(21);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getChangeSetTableGroup() {
 		return changeSetTableGroupEClass;
 	}
@@ -1155,6 +1165,26 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * @generated
 	 */
 	@Override
+	public EAttribute getChangeSetTableRow_BeforeVesselCharterNumber() {
+		return (EAttribute)changeSetTableRowEClass.getEStructuralFeatures().get(26);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getChangeSetTableRow_AfterVesselCharterNumber() {
+		return (EAttribute)changeSetTableRowEClass.getEStructuralFeatures().get(27);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getChangeSetTableRoot() {
 		return changeSetTableRootEClass;
 	}
@@ -1296,6 +1326,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 		createEReference(changeSetRowDataEClass, CHANGE_SET_ROW_DATA__LHS_GROUP_PROFIT_AND_LOSS);
 		createEReference(changeSetRowDataEClass, CHANGE_SET_ROW_DATA__RHS_GROUP_PROFIT_AND_LOSS);
 		createEReference(changeSetRowDataEClass, CHANGE_SET_ROW_DATA__PAPER_DEAL_ALLOCATION);
+		createEAttribute(changeSetRowDataEClass, CHANGE_SET_ROW_DATA__VESSEL_CHARTER_NUMBER);
 
 		changeSetTableGroupEClass = createEClass(CHANGE_SET_TABLE_GROUP);
 		createEReference(changeSetTableGroupEClass, CHANGE_SET_TABLE_GROUP__ROWS);
@@ -1339,6 +1370,8 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 		createEAttribute(changeSetTableRowEClass, CHANGE_SET_TABLE_ROW__RHS_NON_SHIPPED);
 		createEAttribute(changeSetTableRowEClass, CHANGE_SET_TABLE_ROW__BEFORE_VESSEL_TYPE);
 		createEAttribute(changeSetTableRowEClass, CHANGE_SET_TABLE_ROW__AFTER_VESSEL_TYPE);
+		createEAttribute(changeSetTableRowEClass, CHANGE_SET_TABLE_ROW__BEFORE_VESSEL_CHARTER_NUMBER);
+		createEAttribute(changeSetTableRowEClass, CHANGE_SET_TABLE_ROW__AFTER_VESSEL_CHARTER_NUMBER);
 
 		changeSetTableRootEClass = createEClass(CHANGE_SET_TABLE_ROOT);
 		createEReference(changeSetTableRootEClass, CHANGE_SET_TABLE_ROOT__GROUPS);
@@ -1444,6 +1477,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 		initEReference(getChangeSetRowData_LhsGroupProfitAndLoss(), theSchedulePackage.getProfitAndLossContainer(), null, "lhsGroupProfitAndLoss", null, 0, 1, ChangeSetRowData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getChangeSetRowData_RhsGroupProfitAndLoss(), theSchedulePackage.getProfitAndLossContainer(), null, "rhsGroupProfitAndLoss", null, 0, 1, ChangeSetRowData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getChangeSetRowData_PaperDealAllocation(), theSchedulePackage.getPaperDealAllocation(), null, "paperDealAllocation", null, 0, 1, ChangeSetRowData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getChangeSetRowData_VesselCharterNumber(), ecorePackage.getEInt(), "vesselCharterNumber", null, 0, 1, ChangeSetRowData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(changeSetTableGroupEClass, ChangeSetTableGroup.class, "ChangeSetTableGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getChangeSetTableGroup_Rows(), this.getChangeSetTableRow(), null, "rows", null, 0, -1, ChangeSetTableGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1487,6 +1521,8 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 		initEAttribute(getChangeSetTableRow_RhsNonShipped(), ecorePackage.getEBoolean(), "rhsNonShipped", null, 0, 1, ChangeSetTableRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getChangeSetTableRow_BeforeVesselType(), this.getChangeSetVesselType(), "beforeVesselType", null, 0, 1, ChangeSetTableRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getChangeSetTableRow_AfterVesselType(), this.getChangeSetVesselType(), "afterVesselType", null, 0, 1, ChangeSetTableRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getChangeSetTableRow_BeforeVesselCharterNumber(), ecorePackage.getEInt(), "beforeVesselCharterNumber", null, 0, 1, ChangeSetTableRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getChangeSetTableRow_AfterVesselCharterNumber(), ecorePackage.getEInt(), "afterVesselCharterNumber", null, 0, 1, ChangeSetTableRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(changeSetTableRootEClass, ChangeSetTableRoot.class, "ChangeSetTableRoot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getChangeSetTableRoot_Groups(), this.getChangeSetTableGroup(), null, "groups", null, 0, -1, ChangeSetTableRoot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

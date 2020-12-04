@@ -252,6 +252,17 @@ public class ReportTester {
 			});
 		});
 	}
+	
+	public static void testVesselReportDiffs(final URL pinScenarioURL, final URL refScenarioURL, final String reportID, final String shortName, final String extension) throws Exception {
+
+		ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(pinScenarioURL, (pinModelRecord, pinScenarioDataProvider) -> {
+			ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(refScenarioURL, (refModelRecord, refScenarioDataProvider) -> {
+				ReportTester.testPinDiffReports(pinModelRecord, pinScenarioDataProvider, refModelRecord, refScenarioDataProvider, pinScenarioURL, reportID,
+						shortName, "html");
+
+			});
+		});
+	}
 
 	public static void testPinDiffReports(final ScenarioModelRecord pinInstance, final IScenarioDataProvider pinModelDataProvider, final ScenarioModelRecord refInstance,
 			final IScenarioDataProvider refModelDataProvider, final URL scenarioURL, final String reportID, final String shortName, final String extension) throws Exception {

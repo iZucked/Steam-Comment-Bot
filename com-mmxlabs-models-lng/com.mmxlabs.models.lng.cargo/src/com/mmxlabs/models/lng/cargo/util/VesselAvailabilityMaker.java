@@ -238,6 +238,12 @@ public class VesselAvailabilityMaker {
 		vesselAvailability.setMaxDuration(durationInDays);
 		return this;
 	}
+	
+	@NonNull
+	public VesselAvailabilityMaker withCharterNumber(final int charterNumber) {
+		vesselAvailability.setCharterNumber(charterNumber);
+		return this;
+	}
 
 	@NonNull
 	public VesselAvailability build() {
