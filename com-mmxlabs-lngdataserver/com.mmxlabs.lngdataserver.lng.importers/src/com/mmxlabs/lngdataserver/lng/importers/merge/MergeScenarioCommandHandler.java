@@ -18,10 +18,15 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class MergeScenarioCommandHandler extends AbstractHandler {
 
+	public MergeScenarioCommandHandler() {
+		//Feature for this is called "merge-tool"...
+	}
+	
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		IWorkbenchWindow activeWorkbenchWindow = HandlerUtil.getActiveWorkbenchWindow(event);
