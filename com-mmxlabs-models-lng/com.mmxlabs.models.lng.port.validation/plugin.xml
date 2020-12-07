@@ -206,6 +206,38 @@
                      class="Route">
                </target>
             </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.port.validation.LocationNameUniquenessConstraint"
+                  id="com.mmxlabs.models.lng.port.validation.LocationNameUniquenessConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="LocationNameUniquenessConstraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="Location">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.port.validation.LocationMMXIDConstraint"
+                  id="com.mmxlabs.models.lng.port.validation.LocationMMXIDConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="LocationMMXIDConstraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="Location">
+               </target>
+            </constraint>
          </constraints>
       </constraintProvider>
    </extension>
