@@ -120,7 +120,7 @@ public class DetailConstraintStatusDecorator implements IDetailConstraintStatus 
 		if (objectMap.containsKey(obj)) {
 			features = objectMap.get(obj);
 		} else {
-			features = new HashSet<EStructuralFeature>();
+			features = new HashSet<>();
 			objectMap.put(obj, features);
 		}
 		features.add(feature);
