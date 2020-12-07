@@ -141,6 +141,12 @@
          inheritable="true"
          modelClass="com.mmxlabs.models.lng.adp.InventoryProfile">
    </componentHelper>
+   <componentHelper
+         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.MultipleInventoryProfileComponentHelper"
+         id="com.mmxlabs.models.lng.adp.presentation.composites.MultipleInventoryProfileComponentHelper"
+         inheritable="true"
+         modelClass="com.mmxlabs.models.lng.adp.MultipleInventoryProfile">
+   </componentHelper>
 </extension>
 <extension
       point="com.mmxlabs.models.ui.displaycompositefactories">
@@ -158,6 +164,12 @@
          inheritable="true">
    </displayCompositeFactory>
    -->
+   <displayCompositeFactory
+         eClass="com.mmxlabs.models.lng.adp.MultipleInventoryProfile"
+         factory="com.mmxlabs.models.lng.adp.presentation.composites.MultipleInventoryProfileDetailCompositeFactory"
+         id="com.mmxlabs.models.lng.adp.presentation.composites.MultipleInventoryProfileDetailCompositeFactory"
+         inheritable="true">
+   </displayCompositeFactory>
    <displayCompositeFactory
          eClass="com.mmxlabs.models.lng.adp.InventoryProfile"
          factory="com.mmxlabs.models.lng.adp.presentation.composites.InventoryProfileDetailCompositeFactory"

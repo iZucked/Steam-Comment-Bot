@@ -13,6 +13,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
@@ -21,7 +22,9 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -31,27 +34,16 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.adp.impl.InventoryProfileImpl#getRelativeEntitlements <em>Relative Entitlements</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.InventoryProfileImpl#getInventory <em>Inventory</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.InventoryProfileImpl#getGeneratedSlots <em>Generated Slots</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.InventoryProfileImpl#getVolume <em>Volume</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.adp.impl.InventoryProfileImpl#getInitialAllocations <em>Initial Allocations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.InventoryProfileImpl#getEntityTable <em>Entity Table</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.adp.impl.InventoryProfileImpl#getWindowSize <em>Window Size</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class InventoryProfileImpl extends EObjectImpl implements InventoryProfile {
-	/**
-	 * The cached value of the '{@link #getRelativeEntitlements() <em>Relative Entitlements</em>}' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getRelativeEntitlements()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<RelativeEntitlementElement> relativeEntitlements;
-
 	/**
 	 * The cached value of the '{@link #getInventory() <em>Inventory</em>}' reference.
 	 * <!-- begin-user-doc -->
@@ -63,7 +55,7 @@ public class InventoryProfileImpl extends EObjectImpl implements InventoryProfil
 	protected Inventory inventory;
 
 	/**
-	 * The cached value of the '{@link #getGeneratedSlots() <em>Generated Slots</em>}' reference list.
+	 * The cached value of the '{@link #getGeneratedSlots() <em>Generated Slots</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getGeneratedSlots()
@@ -93,17 +85,7 @@ public class InventoryProfileImpl extends EObjectImpl implements InventoryProfil
 	protected int volume = VOLUME_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getInitialAllocations() <em>Initial Allocations</em>}' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getInitialAllocations()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<AllocationElement> initialAllocations;
-
-	/**
-	 * The cached value of the '{@link #getEntityTable() <em>Entity Table</em>}' reference list.
+	 * The cached value of the '{@link #getEntityTable() <em>Entity Table</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getEntityTable()
@@ -111,6 +93,26 @@ public class InventoryProfileImpl extends EObjectImpl implements InventoryProfil
 	 * @ordered
 	 */
 	protected EList<InventoryADPEntityRow> entityTable;
+
+	/**
+	 * The default value of the '{@link #getWindowSize() <em>Window Size</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getWindowSize()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int WINDOW_SIZE_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getWindowSize() <em>Window Size</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getWindowSize()
+	 * @generated
+	 * @ordered
+	 */
+	protected int windowSize = WINDOW_SIZE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -129,19 +131,6 @@ public class InventoryProfileImpl extends EObjectImpl implements InventoryProfil
 	@Override
 	protected EClass eStaticClass() {
 		return ADPPackage.Literals.INVENTORY_PROFILE;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EList<RelativeEntitlementElement> getRelativeEntitlements() {
-		if (relativeEntitlements == null) {
-			relativeEntitlements = new EObjectResolvingEList<RelativeEntitlementElement>(RelativeEntitlementElement.class, this, ADPPackage.INVENTORY_PROFILE__RELATIVE_ENTITLEMENTS);
-		}
-		return relativeEntitlements;
 	}
 
 	/**
@@ -192,7 +181,7 @@ public class InventoryProfileImpl extends EObjectImpl implements InventoryProfil
 	@Override
 	public EList<LoadSlot> getGeneratedSlots() {
 		if (generatedSlots == null) {
-			generatedSlots = new EObjectResolvingEList<LoadSlot>(LoadSlot.class, this, ADPPackage.INVENTORY_PROFILE__GENERATED_SLOTS);
+			generatedSlots = new EObjectContainmentEList.Resolving<LoadSlot>(LoadSlot.class, this, ADPPackage.INVENTORY_PROFILE__GENERATED_SLOTS);
 		}
 		return generatedSlots;
 	}
@@ -226,22 +215,9 @@ public class InventoryProfileImpl extends EObjectImpl implements InventoryProfil
 	 * @generated
 	 */
 	@Override
-	public EList<AllocationElement> getInitialAllocations() {
-		if (initialAllocations == null) {
-			initialAllocations = new EObjectResolvingEList<AllocationElement>(AllocationElement.class, this, ADPPackage.INVENTORY_PROFILE__INITIAL_ALLOCATIONS);
-		}
-		return initialAllocations;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EList<InventoryADPEntityRow> getEntityTable() {
 		if (entityTable == null) {
-			entityTable = new EObjectResolvingEList<InventoryADPEntityRow>(InventoryADPEntityRow.class, this, ADPPackage.INVENTORY_PROFILE__ENTITY_TABLE);
+			entityTable = new EObjectContainmentEList.Resolving<InventoryADPEntityRow>(InventoryADPEntityRow.class, this, ADPPackage.INVENTORY_PROFILE__ENTITY_TABLE);
 		}
 		return entityTable;
 	}
@@ -252,10 +228,47 @@ public class InventoryProfileImpl extends EObjectImpl implements InventoryProfil
 	 * @generated
 	 */
 	@Override
+	public int getWindowSize() {
+		return windowSize;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setWindowSize(int newWindowSize) {
+		int oldWindowSize = windowSize;
+		windowSize = newWindowSize;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ADPPackage.INVENTORY_PROFILE__WINDOW_SIZE, oldWindowSize, windowSize));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case ADPPackage.INVENTORY_PROFILE__GENERATED_SLOTS:
+				return ((InternalEList<?>)getGeneratedSlots()).basicRemove(otherEnd, msgs);
+			case ADPPackage.INVENTORY_PROFILE__ENTITY_TABLE:
+				return ((InternalEList<?>)getEntityTable()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case ADPPackage.INVENTORY_PROFILE__RELATIVE_ENTITLEMENTS:
-				return getRelativeEntitlements();
 			case ADPPackage.INVENTORY_PROFILE__INVENTORY:
 				if (resolve) return getInventory();
 				return basicGetInventory();
@@ -263,10 +276,10 @@ public class InventoryProfileImpl extends EObjectImpl implements InventoryProfil
 				return getGeneratedSlots();
 			case ADPPackage.INVENTORY_PROFILE__VOLUME:
 				return getVolume();
-			case ADPPackage.INVENTORY_PROFILE__INITIAL_ALLOCATIONS:
-				return getInitialAllocations();
 			case ADPPackage.INVENTORY_PROFILE__ENTITY_TABLE:
 				return getEntityTable();
+			case ADPPackage.INVENTORY_PROFILE__WINDOW_SIZE:
+				return getWindowSize();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -280,10 +293,6 @@ public class InventoryProfileImpl extends EObjectImpl implements InventoryProfil
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case ADPPackage.INVENTORY_PROFILE__RELATIVE_ENTITLEMENTS:
-				getRelativeEntitlements().clear();
-				getRelativeEntitlements().addAll((Collection<? extends RelativeEntitlementElement>)newValue);
-				return;
 			case ADPPackage.INVENTORY_PROFILE__INVENTORY:
 				setInventory((Inventory)newValue);
 				return;
@@ -294,13 +303,12 @@ public class InventoryProfileImpl extends EObjectImpl implements InventoryProfil
 			case ADPPackage.INVENTORY_PROFILE__VOLUME:
 				setVolume((Integer)newValue);
 				return;
-			case ADPPackage.INVENTORY_PROFILE__INITIAL_ALLOCATIONS:
-				getInitialAllocations().clear();
-				getInitialAllocations().addAll((Collection<? extends AllocationElement>)newValue);
-				return;
 			case ADPPackage.INVENTORY_PROFILE__ENTITY_TABLE:
 				getEntityTable().clear();
 				getEntityTable().addAll((Collection<? extends InventoryADPEntityRow>)newValue);
+				return;
+			case ADPPackage.INVENTORY_PROFILE__WINDOW_SIZE:
+				setWindowSize((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -314,9 +322,6 @@ public class InventoryProfileImpl extends EObjectImpl implements InventoryProfil
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case ADPPackage.INVENTORY_PROFILE__RELATIVE_ENTITLEMENTS:
-				getRelativeEntitlements().clear();
-				return;
 			case ADPPackage.INVENTORY_PROFILE__INVENTORY:
 				setInventory((Inventory)null);
 				return;
@@ -326,11 +331,11 @@ public class InventoryProfileImpl extends EObjectImpl implements InventoryProfil
 			case ADPPackage.INVENTORY_PROFILE__VOLUME:
 				setVolume(VOLUME_EDEFAULT);
 				return;
-			case ADPPackage.INVENTORY_PROFILE__INITIAL_ALLOCATIONS:
-				getInitialAllocations().clear();
-				return;
 			case ADPPackage.INVENTORY_PROFILE__ENTITY_TABLE:
 				getEntityTable().clear();
+				return;
+			case ADPPackage.INVENTORY_PROFILE__WINDOW_SIZE:
+				setWindowSize(WINDOW_SIZE_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -344,18 +349,16 @@ public class InventoryProfileImpl extends EObjectImpl implements InventoryProfil
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case ADPPackage.INVENTORY_PROFILE__RELATIVE_ENTITLEMENTS:
-				return relativeEntitlements != null && !relativeEntitlements.isEmpty();
 			case ADPPackage.INVENTORY_PROFILE__INVENTORY:
 				return inventory != null;
 			case ADPPackage.INVENTORY_PROFILE__GENERATED_SLOTS:
 				return generatedSlots != null && !generatedSlots.isEmpty();
 			case ADPPackage.INVENTORY_PROFILE__VOLUME:
 				return volume != VOLUME_EDEFAULT;
-			case ADPPackage.INVENTORY_PROFILE__INITIAL_ALLOCATIONS:
-				return initialAllocations != null && !initialAllocations.isEmpty();
 			case ADPPackage.INVENTORY_PROFILE__ENTITY_TABLE:
 				return entityTable != null && !entityTable.isEmpty();
+			case ADPPackage.INVENTORY_PROFILE__WINDOW_SIZE:
+				return windowSize != WINDOW_SIZE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -372,6 +375,8 @@ public class InventoryProfileImpl extends EObjectImpl implements InventoryProfil
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (volume: ");
 		result.append(volume);
+		result.append(", windowSize: ");
+		result.append(windowSize);
 		result.append(')');
 		return result.toString();
 	}

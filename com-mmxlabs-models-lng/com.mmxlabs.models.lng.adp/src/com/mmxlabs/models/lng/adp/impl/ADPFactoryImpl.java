@@ -90,9 +90,11 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 			case ADPPackage.PERIOD_DISTRIBUTION: return createPeriodDistribution();
 			case ADPPackage.TARGET_CARGOES_ON_VESSEL_CONSTRAINT: return createTargetCargoesOnVesselConstraint();
 			case ADPPackage.INVENTORY_PROFILE: return createInventoryProfile();
-			case ADPPackage.RELATIVE_ENTITLEMENT_ELEMENT: return createRelativeEntitlementElement();
-			case ADPPackage.ALLOCATION_ELEMENT: return createAllocationElement();
 			case ADPPackage.INVENTORY_ADP_ENTITY_ROW: return createInventoryADPEntityRow();
+			case ADPPackage.MARKET_ALLOCATION_ROW: return createMarketAllocationRow();
+			case ADPPackage.CONTRACT_ALLOCATION_ROW: return createContractAllocationRow();
+			case ADPPackage.MULTIPLE_INVENTORY_PROFILE: return createMultipleInventoryProfile();
+			case ADPPackage.INVENTORY_SUBPROFILE: return createInventorySubprofile();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -435,31 +437,53 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 	 * @generated
 	 */
 	@Override
-	public RelativeEntitlementElement createRelativeEntitlementElement() {
-		RelativeEntitlementElementImpl relativeEntitlementElement = new RelativeEntitlementElementImpl();
-		return relativeEntitlementElement;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public AllocationElement createAllocationElement() {
-		AllocationElementImpl allocationElement = new AllocationElementImpl();
-		return allocationElement;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public InventoryADPEntityRow createInventoryADPEntityRow() {
 		InventoryADPEntityRowImpl inventoryADPEntityRow = new InventoryADPEntityRowImpl();
 		return inventoryADPEntityRow;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public MarketAllocationRow createMarketAllocationRow() {
+		MarketAllocationRowImpl marketAllocationRow = new MarketAllocationRowImpl();
+		return marketAllocationRow;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ContractAllocationRow createContractAllocationRow() {
+		ContractAllocationRowImpl contractAllocationRow = new ContractAllocationRowImpl();
+		return contractAllocationRow;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public MultipleInventoryProfile createMultipleInventoryProfile() {
+		MultipleInventoryProfileImpl multipleInventoryProfile = new MultipleInventoryProfileImpl();
+		return multipleInventoryProfile;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public InventorySubprofile createInventorySubprofile() {
+		InventorySubprofileImpl inventorySubprofile = new InventorySubprofileImpl();
+		return inventorySubprofile;
 	}
 
 	/**

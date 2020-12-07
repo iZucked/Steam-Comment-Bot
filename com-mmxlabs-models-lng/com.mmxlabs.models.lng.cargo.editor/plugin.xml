@@ -187,6 +187,11 @@
  <extension
        point="com.mmxlabs.models.ui.valueproviders">
     <valueProvider
+          factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.InventoryValueProviderFactory"
+          id="com.mmxlabs.models.lng.cargo.ui.valueproviders.InventoryValueProviderFactory"
+          referenceEClass="com.mmxlabs.models.lng.cargo.Inventory">
+    </valueProvider>
+    <valueProvider
           factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.SlotPortValueProviderFactory"
           id="com.mmxlabs.models.lng.cargo.editor.slotRestrictedPortProvider"
           ownerEClass="com.mmxlabs.models.lng.cargo.Slot"

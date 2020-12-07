@@ -4,7 +4,9 @@ package com.mmxlabs.models.lng.adp.provider;
 
 
 import com.mmxlabs.models.lng.adp.ADPPackage;
-import com.mmxlabs.models.lng.adp.AllocationElement;
+import com.mmxlabs.models.lng.adp.ContractAllocationRow;
+
+import com.mmxlabs.models.lng.fleet.FleetFactory;
 
 import java.util.Collection;
 import java.util.List;
@@ -13,6 +15,8 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.common.util.ResourceLocator;
+
+import org.eclipse.emf.ecore.EStructuralFeature;
 
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IChildCreationExtender;
@@ -27,12 +31,12 @@ import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.adp.AllocationElement} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.adp.ContractAllocationRow} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class AllocationElementItemProvider 
+public class ContractAllocationRowItemProvider 
 	extends ItemProviderAdapter
 	implements
 		IEditingDomainItemProvider,
@@ -46,7 +50,7 @@ public class AllocationElementItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AllocationElementItemProvider(AdapterFactory adapterFactory) {
+	public ContractAllocationRowItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -61,26 +65,26 @@ public class AllocationElementItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addEntityPropertyDescriptor(object);
-			addAllocationPropertyDescriptor(object);
+			addContractPropertyDescriptor(object);
+			addWeightPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Entity feature.
+	 * This adds a property descriptor for the Contract feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addEntityPropertyDescriptor(Object object) {
+	protected void addContractPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_AllocationElement_entity_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_AllocationElement_entity_feature", "_UI_AllocationElement_type"),
-				 ADPPackage.Literals.ALLOCATION_ELEMENT__ENTITY,
+				 getString("_UI_ContractAllocationRow_contract_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_ContractAllocationRow_contract_feature", "_UI_ContractAllocationRow_type"),
+				 ADPPackage.Literals.CONTRACT_ALLOCATION_ROW__CONTRACT,
 				 true,
 				 false,
 				 true,
@@ -90,19 +94,19 @@ public class AllocationElementItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Allocation feature.
+	 * This adds a property descriptor for the Weight feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addAllocationPropertyDescriptor(Object object) {
+	protected void addWeightPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_AllocationElement_allocation_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_AllocationElement_allocation_feature", "_UI_AllocationElement_type"),
-				 ADPPackage.Literals.ALLOCATION_ELEMENT__ALLOCATION,
+				 getString("_UI_ContractAllocationRow_weight_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_ContractAllocationRow_weight_feature", "_UI_ContractAllocationRow_type"),
+				 ADPPackage.Literals.CONTRACT_ALLOCATION_ROW__WEIGHT,
 				 true,
 				 false,
 				 false,
@@ -112,14 +116,44 @@ public class AllocationElementItemProvider
 	}
 
 	/**
-	 * This returns AllocationElement.gif.
+	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
+	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
+	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
+		if (childrenFeatures == null) {
+			super.getChildrenFeatures(object);
+			childrenFeatures.add(ADPPackage.Literals.CONTRACT_ALLOCATION_ROW__VESSELS);
+		}
+		return childrenFeatures;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	protected EStructuralFeature getChildFeature(Object object, Object child) {
+		// Check the type of the specified child object and return the proper feature to use for
+		// adding (see {@link AddCommand}) it as a child.
+
+		return super.getChildFeature(object, child);
+	}
+
+	/**
+	 * This returns ContractAllocationRow.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/AllocationElement"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/ContractAllocationRow"));
 	}
 
 	/**
@@ -130,8 +164,8 @@ public class AllocationElementItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		AllocationElement allocationElement = (AllocationElement)object;
-		return getString("_UI_AllocationElement_type") + " " + allocationElement.getAllocation();
+		ContractAllocationRow contractAllocationRow = (ContractAllocationRow)object;
+		return getString("_UI_ContractAllocationRow_type") + " " + contractAllocationRow.getWeight();
 	}
 
 
@@ -146,9 +180,12 @@ public class AllocationElementItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(AllocationElement.class)) {
-			case ADPPackage.ALLOCATION_ELEMENT__ALLOCATION:
+		switch (notification.getFeatureID(ContractAllocationRow.class)) {
+			case ADPPackage.CONTRACT_ALLOCATION_ROW__WEIGHT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+			case ADPPackage.CONTRACT_ALLOCATION_ROW__VESSELS:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
 		super.notifyChanged(notification);
@@ -164,6 +201,11 @@ public class AllocationElementItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ADPPackage.Literals.CONTRACT_ALLOCATION_ROW__VESSELS,
+				 FleetFactory.eINSTANCE.createVessel()));
 	}
 
 	/**

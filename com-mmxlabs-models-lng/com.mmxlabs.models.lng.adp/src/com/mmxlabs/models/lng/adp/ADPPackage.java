@@ -137,7 +137,7 @@ public interface ADPPackage extends EPackage {
 	int ADP_MODEL__FLEET_PROFILE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
-	 * The feature id for the '<em><b>Inventory Profiles</b></em>' reference list.
+	 * The feature id for the '<em><b>Inventory Profiles</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -146,13 +146,22 @@ public interface ADPPackage extends EPackage {
 	int ADP_MODEL__INVENTORY_PROFILES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
+	 * The feature id for the '<em><b>Multiple Inventories Profile</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ADP_MODEL__MULTIPLE_INVENTORIES_PROFILE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ADP_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+	int ADP_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -2105,31 +2114,22 @@ public interface ADPPackage extends EPackage {
 	int INVENTORY_PROFILE = 31;
 
 	/**
-	 * The feature id for the '<em><b>Relative Entitlements</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INVENTORY_PROFILE__RELATIVE_ENTITLEMENTS = 0;
-
-	/**
 	 * The feature id for the '<em><b>Inventory</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int INVENTORY_PROFILE__INVENTORY = 1;
+	int INVENTORY_PROFILE__INVENTORY = 0;
 
 	/**
-	 * The feature id for the '<em><b>Generated Slots</b></em>' reference list.
+	 * The feature id for the '<em><b>Generated Slots</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int INVENTORY_PROFILE__GENERATED_SLOTS = 2;
+	int INVENTORY_PROFILE__GENERATED_SLOTS = 1;
 
 	/**
 	 * The feature id for the '<em><b>Volume</b></em>' attribute.
@@ -2138,25 +2138,25 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int INVENTORY_PROFILE__VOLUME = 3;
+	int INVENTORY_PROFILE__VOLUME = 2;
 
 	/**
-	 * The feature id for the '<em><b>Initial Allocations</b></em>' reference list.
+	 * The feature id for the '<em><b>Entity Table</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int INVENTORY_PROFILE__INITIAL_ALLOCATIONS = 4;
+	int INVENTORY_PROFILE__ENTITY_TABLE = 3;
 
 	/**
-	 * The feature id for the '<em><b>Entity Table</b></em>' reference list.
+	 * The feature id for the '<em><b>Window Size</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int INVENTORY_PROFILE__ENTITY_TABLE = 5;
+	int INVENTORY_PROFILE__WINDOW_SIZE = 4;
 
 	/**
 	 * The number of structural features of the '<em>Inventory Profile</em>' class.
@@ -2165,7 +2165,7 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int INVENTORY_PROFILE_FEATURE_COUNT = 6;
+	int INVENTORY_PROFILE_FEATURE_COUNT = 5;
 
 	/**
 	 * The number of operations of the '<em>Inventory Profile</em>' class.
@@ -2177,98 +2177,6 @@ public interface ADPPackage extends EPackage {
 	int INVENTORY_PROFILE_OPERATION_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.RelativeEntitlementElementImpl <em>Relative Entitlement Element</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.adp.impl.RelativeEntitlementElementImpl
-	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getRelativeEntitlementElement()
-	 * @generated
-	 */
-	int RELATIVE_ENTITLEMENT_ELEMENT = 32;
-
-	/**
-	 * The feature id for the '<em><b>Entity</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int RELATIVE_ENTITLEMENT_ELEMENT__ENTITY = 0;
-
-	/**
-	 * The feature id for the '<em><b>Entitlement</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int RELATIVE_ENTITLEMENT_ELEMENT__ENTITLEMENT = 1;
-
-	/**
-	 * The number of structural features of the '<em>Relative Entitlement Element</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int RELATIVE_ENTITLEMENT_ELEMENT_FEATURE_COUNT = 2;
-
-	/**
-	 * The number of operations of the '<em>Relative Entitlement Element</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int RELATIVE_ENTITLEMENT_ELEMENT_OPERATION_COUNT = 0;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.AllocationElementImpl <em>Allocation Element</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.adp.impl.AllocationElementImpl
-	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getAllocationElement()
-	 * @generated
-	 */
-	int ALLOCATION_ELEMENT = 33;
-
-	/**
-	 * The feature id for the '<em><b>Entity</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALLOCATION_ELEMENT__ENTITY = 0;
-
-	/**
-	 * The feature id for the '<em><b>Allocation</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALLOCATION_ELEMENT__ALLOCATION = 1;
-
-	/**
-	 * The number of structural features of the '<em>Allocation Element</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALLOCATION_ELEMENT_FEATURE_COUNT = 2;
-
-	/**
-	 * The number of operations of the '<em>Allocation Element</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALLOCATION_ELEMENT_OPERATION_COUNT = 0;
-
-	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.InventoryADPEntityRowImpl <em>Inventory ADP Entity Row</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2276,7 +2184,7 @@ public interface ADPPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getInventoryADPEntityRow()
 	 * @generated
 	 */
-	int INVENTORY_ADP_ENTITY_ROW = 34;
+	int INVENTORY_ADP_ENTITY_ROW = 32;
 
 	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
@@ -2306,13 +2214,40 @@ public interface ADPPackage extends EPackage {
 	int INVENTORY_ADP_ENTITY_ROW__RELATIVE_ENTITLEMENT = 2;
 
 	/**
+	 * The feature id for the '<em><b>Market Allocation Rows</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_ADP_ENTITY_ROW__MARKET_ALLOCATION_ROWS = 3;
+
+	/**
+	 * The feature id for the '<em><b>Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_ADP_ENTITY_ROW__PORTS = 4;
+
+	/**
+	 * The feature id for the '<em><b>Contract Allocation Rows</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_ADP_ENTITY_ROW__CONTRACT_ALLOCATION_ROWS = 5;
+
+	/**
 	 * The number of structural features of the '<em>Inventory ADP Entity Row</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int INVENTORY_ADP_ENTITY_ROW_FEATURE_COUNT = 3;
+	int INVENTORY_ADP_ENTITY_ROW_FEATURE_COUNT = 6;
 
 	/**
 	 * The number of operations of the '<em>Inventory ADP Entity Row</em>' class.
@@ -2324,6 +2259,226 @@ public interface ADPPackage extends EPackage {
 	int INVENTORY_ADP_ENTITY_ROW_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.MarketAllocationRowImpl <em>Market Allocation Row</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.adp.impl.MarketAllocationRowImpl
+	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getMarketAllocationRow()
+	 * @generated
+	 */
+	int MARKET_ALLOCATION_ROW = 33;
+
+	/**
+	 * The feature id for the '<em><b>Market</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKET_ALLOCATION_ROW__MARKET = 0;
+
+	/**
+	 * The feature id for the '<em><b>Weight</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKET_ALLOCATION_ROW__WEIGHT = 1;
+
+	/**
+	 * The feature id for the '<em><b>Vessels</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKET_ALLOCATION_ROW__VESSELS = 2;
+
+	/**
+	 * The number of structural features of the '<em>Market Allocation Row</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKET_ALLOCATION_ROW_FEATURE_COUNT = 3;
+
+	/**
+	 * The number of operations of the '<em>Market Allocation Row</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKET_ALLOCATION_ROW_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.ContractAllocationRowImpl <em>Contract Allocation Row</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.adp.impl.ContractAllocationRowImpl
+	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getContractAllocationRow()
+	 * @generated
+	 */
+	int CONTRACT_ALLOCATION_ROW = 34;
+
+	/**
+	 * The feature id for the '<em><b>Contract</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_ALLOCATION_ROW__CONTRACT = 0;
+
+	/**
+	 * The feature id for the '<em><b>Weight</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_ALLOCATION_ROW__WEIGHT = 1;
+
+	/**
+	 * The feature id for the '<em><b>Vessels</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_ALLOCATION_ROW__VESSELS = 2;
+
+	/**
+	 * The number of structural features of the '<em>Contract Allocation Row</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_ALLOCATION_ROW_FEATURE_COUNT = 3;
+
+	/**
+	 * The number of operations of the '<em>Contract Allocation Row</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_ALLOCATION_ROW_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.MultipleInventoryProfileImpl <em>Multiple Inventory Profile</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.adp.impl.MultipleInventoryProfileImpl
+	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getMultipleInventoryProfile()
+	 * @generated
+	 */
+	int MULTIPLE_INVENTORY_PROFILE = 35;
+
+	/**
+	 * The feature id for the '<em><b>Window Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MULTIPLE_INVENTORY_PROFILE__WINDOW_SIZE = 0;
+
+	/**
+	 * The feature id for the '<em><b>Volume Flex</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MULTIPLE_INVENTORY_PROFILE__VOLUME_FLEX = 1;
+
+	/**
+	 * The feature id for the '<em><b>Inventories</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MULTIPLE_INVENTORY_PROFILE__INVENTORIES = 2;
+
+	/**
+	 * The feature id for the '<em><b>Full Cargo Lot Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MULTIPLE_INVENTORY_PROFILE__FULL_CARGO_LOT_VALUE = 3;
+
+	/**
+	 * The number of structural features of the '<em>Multiple Inventory Profile</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MULTIPLE_INVENTORY_PROFILE_FEATURE_COUNT = 4;
+
+	/**
+	 * The number of operations of the '<em>Multiple Inventory Profile</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MULTIPLE_INVENTORY_PROFILE_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.InventorySubprofileImpl <em>Inventory Subprofile</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.adp.impl.InventorySubprofileImpl
+	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getInventorySubprofile()
+	 * @generated
+	 */
+	int INVENTORY_SUBPROFILE = 36;
+
+	/**
+	 * The feature id for the '<em><b>Inventory</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_SUBPROFILE__INVENTORY = 0;
+
+	/**
+	 * The feature id for the '<em><b>Entity Table</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_SUBPROFILE__ENTITY_TABLE = 1;
+
+	/**
+	 * The number of structural features of the '<em>Inventory Subprofile</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_SUBPROFILE_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>Inventory Subprofile</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_SUBPROFILE_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.IntervalType <em>Interval Type</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2331,7 +2486,7 @@ public interface ADPPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getIntervalType()
 	 * @generated
 	 */
-	int INTERVAL_TYPE = 35;
+	int INTERVAL_TYPE = 37;
 
 
 	/**
@@ -2342,7 +2497,7 @@ public interface ADPPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getLNGVolumeUnit()
 	 * @generated
 	 */
-	int LNG_VOLUME_UNIT = 36;
+	int LNG_VOLUME_UNIT = 38;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.adp.ADPModel <em>Model</em>}'.
@@ -2410,15 +2565,26 @@ public interface ADPPackage extends EPackage {
 	EReference getADPModel_FleetProfile();
 
 	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.adp.ADPModel#getInventoryProfiles <em>Inventory Profiles</em>}'.
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.adp.ADPModel#getInventoryProfiles <em>Inventory Profiles</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Inventory Profiles</em>'.
+	 * @return the meta object for the containment reference list '<em>Inventory Profiles</em>'.
 	 * @see com.mmxlabs.models.lng.adp.ADPModel#getInventoryProfiles()
 	 * @see #getADPModel()
 	 * @generated
 	 */
 	EReference getADPModel_InventoryProfiles();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.adp.ADPModel#getMultipleInventoriesProfile <em>Multiple Inventories Profile</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Multiple Inventories Profile</em>'.
+	 * @see com.mmxlabs.models.lng.adp.ADPModel#getMultipleInventoriesProfile()
+	 * @see #getADPModel()
+	 * @generated
+	 */
+	EReference getADPModel_MultipleInventoriesProfile();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.adp.FleetProfile <em>Fleet Profile</em>}'.
@@ -3367,17 +3533,6 @@ public interface ADPPackage extends EPackage {
 	EClass getInventoryProfile();
 
 	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.adp.InventoryProfile#getRelativeEntitlements <em>Relative Entitlements</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Relative Entitlements</em>'.
-	 * @see com.mmxlabs.models.lng.adp.InventoryProfile#getRelativeEntitlements()
-	 * @see #getInventoryProfile()
-	 * @generated
-	 */
-	EReference getInventoryProfile_RelativeEntitlements();
-
-	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.adp.InventoryProfile#getInventory <em>Inventory</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3389,10 +3544,10 @@ public interface ADPPackage extends EPackage {
 	EReference getInventoryProfile_Inventory();
 
 	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.adp.InventoryProfile#getGeneratedSlots <em>Generated Slots</em>}'.
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.adp.InventoryProfile#getGeneratedSlots <em>Generated Slots</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Generated Slots</em>'.
+	 * @return the meta object for the containment reference list '<em>Generated Slots</em>'.
 	 * @see com.mmxlabs.models.lng.adp.InventoryProfile#getGeneratedSlots()
 	 * @see #getInventoryProfile()
 	 * @generated
@@ -3411,21 +3566,10 @@ public interface ADPPackage extends EPackage {
 	EAttribute getInventoryProfile_Volume();
 
 	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.adp.InventoryProfile#getInitialAllocations <em>Initial Allocations</em>}'.
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.adp.InventoryProfile#getEntityTable <em>Entity Table</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Initial Allocations</em>'.
-	 * @see com.mmxlabs.models.lng.adp.InventoryProfile#getInitialAllocations()
-	 * @see #getInventoryProfile()
-	 * @generated
-	 */
-	EReference getInventoryProfile_InitialAllocations();
-
-	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.adp.InventoryProfile#getEntityTable <em>Entity Table</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Entity Table</em>'.
+	 * @return the meta object for the containment reference list '<em>Entity Table</em>'.
 	 * @see com.mmxlabs.models.lng.adp.InventoryProfile#getEntityTable()
 	 * @see #getInventoryProfile()
 	 * @generated
@@ -3433,68 +3577,15 @@ public interface ADPPackage extends EPackage {
 	EReference getInventoryProfile_EntityTable();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.adp.RelativeEntitlementElement <em>Relative Entitlement Element</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.adp.InventoryProfile#getWindowSize <em>Window Size</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Relative Entitlement Element</em>'.
-	 * @see com.mmxlabs.models.lng.adp.RelativeEntitlementElement
+	 * @return the meta object for the attribute '<em>Window Size</em>'.
+	 * @see com.mmxlabs.models.lng.adp.InventoryProfile#getWindowSize()
+	 * @see #getInventoryProfile()
 	 * @generated
 	 */
-	EClass getRelativeEntitlementElement();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.adp.RelativeEntitlementElement#getEntity <em>Entity</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Entity</em>'.
-	 * @see com.mmxlabs.models.lng.adp.RelativeEntitlementElement#getEntity()
-	 * @see #getRelativeEntitlementElement()
-	 * @generated
-	 */
-	EReference getRelativeEntitlementElement_Entity();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.adp.RelativeEntitlementElement#getEntitlement <em>Entitlement</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Entitlement</em>'.
-	 * @see com.mmxlabs.models.lng.adp.RelativeEntitlementElement#getEntitlement()
-	 * @see #getRelativeEntitlementElement()
-	 * @generated
-	 */
-	EAttribute getRelativeEntitlementElement_Entitlement();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.adp.AllocationElement <em>Allocation Element</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Allocation Element</em>'.
-	 * @see com.mmxlabs.models.lng.adp.AllocationElement
-	 * @generated
-	 */
-	EClass getAllocationElement();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.adp.AllocationElement#getEntity <em>Entity</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Entity</em>'.
-	 * @see com.mmxlabs.models.lng.adp.AllocationElement#getEntity()
-	 * @see #getAllocationElement()
-	 * @generated
-	 */
-	EReference getAllocationElement_Entity();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.adp.AllocationElement#getAllocation <em>Allocation</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Allocation</em>'.
-	 * @see com.mmxlabs.models.lng.adp.AllocationElement#getAllocation()
-	 * @see #getAllocationElement()
-	 * @generated
-	 */
-	EAttribute getAllocationElement_Allocation();
+	EAttribute getInventoryProfile_WindowSize();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.adp.InventoryADPEntityRow <em>Inventory ADP Entity Row</em>}'.
@@ -3538,6 +3629,211 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getInventoryADPEntityRow_RelativeEntitlement();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.adp.InventoryADPEntityRow#getMarketAllocationRows <em>Market Allocation Rows</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Market Allocation Rows</em>'.
+	 * @see com.mmxlabs.models.lng.adp.InventoryADPEntityRow#getMarketAllocationRows()
+	 * @see #getInventoryADPEntityRow()
+	 * @generated
+	 */
+	EReference getInventoryADPEntityRow_MarketAllocationRows();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.adp.InventoryADPEntityRow#getPorts <em>Ports</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Ports</em>'.
+	 * @see com.mmxlabs.models.lng.adp.InventoryADPEntityRow#getPorts()
+	 * @see #getInventoryADPEntityRow()
+	 * @generated
+	 */
+	EReference getInventoryADPEntityRow_Ports();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.adp.InventoryADPEntityRow#getContractAllocationRows <em>Contract Allocation Rows</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Contract Allocation Rows</em>'.
+	 * @see com.mmxlabs.models.lng.adp.InventoryADPEntityRow#getContractAllocationRows()
+	 * @see #getInventoryADPEntityRow()
+	 * @generated
+	 */
+	EReference getInventoryADPEntityRow_ContractAllocationRows();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.adp.MarketAllocationRow <em>Market Allocation Row</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Market Allocation Row</em>'.
+	 * @see com.mmxlabs.models.lng.adp.MarketAllocationRow
+	 * @generated
+	 */
+	EClass getMarketAllocationRow();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.adp.MarketAllocationRow#getMarket <em>Market</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Market</em>'.
+	 * @see com.mmxlabs.models.lng.adp.MarketAllocationRow#getMarket()
+	 * @see #getMarketAllocationRow()
+	 * @generated
+	 */
+	EReference getMarketAllocationRow_Market();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.adp.MarketAllocationRow#getWeight <em>Weight</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Weight</em>'.
+	 * @see com.mmxlabs.models.lng.adp.MarketAllocationRow#getWeight()
+	 * @see #getMarketAllocationRow()
+	 * @generated
+	 */
+	EAttribute getMarketAllocationRow_Weight();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.adp.MarketAllocationRow#getVessels <em>Vessels</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Vessels</em>'.
+	 * @see com.mmxlabs.models.lng.adp.MarketAllocationRow#getVessels()
+	 * @see #getMarketAllocationRow()
+	 * @generated
+	 */
+	EReference getMarketAllocationRow_Vessels();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.adp.ContractAllocationRow <em>Contract Allocation Row</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Contract Allocation Row</em>'.
+	 * @see com.mmxlabs.models.lng.adp.ContractAllocationRow
+	 * @generated
+	 */
+	EClass getContractAllocationRow();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.adp.ContractAllocationRow#getContract <em>Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Contract</em>'.
+	 * @see com.mmxlabs.models.lng.adp.ContractAllocationRow#getContract()
+	 * @see #getContractAllocationRow()
+	 * @generated
+	 */
+	EReference getContractAllocationRow_Contract();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.adp.ContractAllocationRow#getWeight <em>Weight</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Weight</em>'.
+	 * @see com.mmxlabs.models.lng.adp.ContractAllocationRow#getWeight()
+	 * @see #getContractAllocationRow()
+	 * @generated
+	 */
+	EAttribute getContractAllocationRow_Weight();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.adp.ContractAllocationRow#getVessels <em>Vessels</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Vessels</em>'.
+	 * @see com.mmxlabs.models.lng.adp.ContractAllocationRow#getVessels()
+	 * @see #getContractAllocationRow()
+	 * @generated
+	 */
+	EReference getContractAllocationRow_Vessels();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.adp.MultipleInventoryProfile <em>Multiple Inventory Profile</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Multiple Inventory Profile</em>'.
+	 * @see com.mmxlabs.models.lng.adp.MultipleInventoryProfile
+	 * @generated
+	 */
+	EClass getMultipleInventoryProfile();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.adp.MultipleInventoryProfile#getWindowSize <em>Window Size</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Window Size</em>'.
+	 * @see com.mmxlabs.models.lng.adp.MultipleInventoryProfile#getWindowSize()
+	 * @see #getMultipleInventoryProfile()
+	 * @generated
+	 */
+	EAttribute getMultipleInventoryProfile_WindowSize();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.adp.MultipleInventoryProfile#getVolumeFlex <em>Volume Flex</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Volume Flex</em>'.
+	 * @see com.mmxlabs.models.lng.adp.MultipleInventoryProfile#getVolumeFlex()
+	 * @see #getMultipleInventoryProfile()
+	 * @generated
+	 */
+	EAttribute getMultipleInventoryProfile_VolumeFlex();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.adp.MultipleInventoryProfile#getInventories <em>Inventories</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Inventories</em>'.
+	 * @see com.mmxlabs.models.lng.adp.MultipleInventoryProfile#getInventories()
+	 * @see #getMultipleInventoryProfile()
+	 * @generated
+	 */
+	EReference getMultipleInventoryProfile_Inventories();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.adp.MultipleInventoryProfile#getFullCargoLotValue <em>Full Cargo Lot Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Full Cargo Lot Value</em>'.
+	 * @see com.mmxlabs.models.lng.adp.MultipleInventoryProfile#getFullCargoLotValue()
+	 * @see #getMultipleInventoryProfile()
+	 * @generated
+	 */
+	EAttribute getMultipleInventoryProfile_FullCargoLotValue();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.adp.InventorySubprofile <em>Inventory Subprofile</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Inventory Subprofile</em>'.
+	 * @see com.mmxlabs.models.lng.adp.InventorySubprofile
+	 * @generated
+	 */
+	EClass getInventorySubprofile();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.adp.InventorySubprofile#getInventory <em>Inventory</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Inventory</em>'.
+	 * @see com.mmxlabs.models.lng.adp.InventorySubprofile#getInventory()
+	 * @see #getInventorySubprofile()
+	 * @generated
+	 */
+	EReference getInventorySubprofile_Inventory();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.adp.InventorySubprofile#getEntityTable <em>Entity Table</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Entity Table</em>'.
+	 * @see com.mmxlabs.models.lng.adp.InventorySubprofile#getEntityTable()
+	 * @see #getInventorySubprofile()
+	 * @generated
+	 */
+	EReference getInventorySubprofile_EntityTable();
 
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.adp.IntervalType <em>Interval Type</em>}'.
@@ -3633,12 +3929,20 @@ public interface ADPPackage extends EPackage {
 		EReference ADP_MODEL__FLEET_PROFILE = eINSTANCE.getADPModel_FleetProfile();
 
 		/**
-		 * The meta object literal for the '<em><b>Inventory Profiles</b></em>' reference list feature.
+		 * The meta object literal for the '<em><b>Inventory Profiles</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference ADP_MODEL__INVENTORY_PROFILES = eINSTANCE.getADPModel_InventoryProfiles();
+
+		/**
+		 * The meta object literal for the '<em><b>Multiple Inventories Profile</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ADP_MODEL__MULTIPLE_INVENTORIES_PROFILE = eINSTANCE.getADPModel_MultipleInventoriesProfile();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.adp.impl.FleetProfileImpl <em>Fleet Profile</em>}' class.
@@ -4415,14 +4719,6 @@ public interface ADPPackage extends EPackage {
 		EClass INVENTORY_PROFILE = eINSTANCE.getInventoryProfile();
 
 		/**
-		 * The meta object literal for the '<em><b>Relative Entitlements</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference INVENTORY_PROFILE__RELATIVE_ENTITLEMENTS = eINSTANCE.getInventoryProfile_RelativeEntitlements();
-
-		/**
 		 * The meta object literal for the '<em><b>Inventory</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -4431,7 +4727,7 @@ public interface ADPPackage extends EPackage {
 		EReference INVENTORY_PROFILE__INVENTORY = eINSTANCE.getInventoryProfile_Inventory();
 
 		/**
-		 * The meta object literal for the '<em><b>Generated Slots</b></em>' reference list feature.
+		 * The meta object literal for the '<em><b>Generated Slots</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -4447,15 +4743,7 @@ public interface ADPPackage extends EPackage {
 		EAttribute INVENTORY_PROFILE__VOLUME = eINSTANCE.getInventoryProfile_Volume();
 
 		/**
-		 * The meta object literal for the '<em><b>Initial Allocations</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference INVENTORY_PROFILE__INITIAL_ALLOCATIONS = eINSTANCE.getInventoryProfile_InitialAllocations();
-
-		/**
-		 * The meta object literal for the '<em><b>Entity Table</b></em>' reference list feature.
+		 * The meta object literal for the '<em><b>Entity Table</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -4463,56 +4751,12 @@ public interface ADPPackage extends EPackage {
 		EReference INVENTORY_PROFILE__ENTITY_TABLE = eINSTANCE.getInventoryProfile_EntityTable();
 
 		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.adp.impl.RelativeEntitlementElementImpl <em>Relative Entitlement Element</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.adp.impl.RelativeEntitlementElementImpl
-		 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getRelativeEntitlementElement()
-		 * @generated
-		 */
-		EClass RELATIVE_ENTITLEMENT_ELEMENT = eINSTANCE.getRelativeEntitlementElement();
-
-		/**
-		 * The meta object literal for the '<em><b>Entity</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Window Size</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference RELATIVE_ENTITLEMENT_ELEMENT__ENTITY = eINSTANCE.getRelativeEntitlementElement_Entity();
-
-		/**
-		 * The meta object literal for the '<em><b>Entitlement</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute RELATIVE_ENTITLEMENT_ELEMENT__ENTITLEMENT = eINSTANCE.getRelativeEntitlementElement_Entitlement();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.adp.impl.AllocationElementImpl <em>Allocation Element</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.adp.impl.AllocationElementImpl
-		 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getAllocationElement()
-		 * @generated
-		 */
-		EClass ALLOCATION_ELEMENT = eINSTANCE.getAllocationElement();
-
-		/**
-		 * The meta object literal for the '<em><b>Entity</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ALLOCATION_ELEMENT__ENTITY = eINSTANCE.getAllocationElement_Entity();
-
-		/**
-		 * The meta object literal for the '<em><b>Allocation</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute ALLOCATION_ELEMENT__ALLOCATION = eINSTANCE.getAllocationElement_Allocation();
+		EAttribute INVENTORY_PROFILE__WINDOW_SIZE = eINSTANCE.getInventoryProfile_WindowSize();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.adp.impl.InventoryADPEntityRowImpl <em>Inventory ADP Entity Row</em>}' class.
@@ -4547,6 +4791,166 @@ public interface ADPPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute INVENTORY_ADP_ENTITY_ROW__RELATIVE_ENTITLEMENT = eINSTANCE.getInventoryADPEntityRow_RelativeEntitlement();
+
+		/**
+		 * The meta object literal for the '<em><b>Market Allocation Rows</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference INVENTORY_ADP_ENTITY_ROW__MARKET_ALLOCATION_ROWS = eINSTANCE.getInventoryADPEntityRow_MarketAllocationRows();
+
+		/**
+		 * The meta object literal for the '<em><b>Ports</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference INVENTORY_ADP_ENTITY_ROW__PORTS = eINSTANCE.getInventoryADPEntityRow_Ports();
+
+		/**
+		 * The meta object literal for the '<em><b>Contract Allocation Rows</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference INVENTORY_ADP_ENTITY_ROW__CONTRACT_ALLOCATION_ROWS = eINSTANCE.getInventoryADPEntityRow_ContractAllocationRows();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.adp.impl.MarketAllocationRowImpl <em>Market Allocation Row</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.adp.impl.MarketAllocationRowImpl
+		 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getMarketAllocationRow()
+		 * @generated
+		 */
+		EClass MARKET_ALLOCATION_ROW = eINSTANCE.getMarketAllocationRow();
+
+		/**
+		 * The meta object literal for the '<em><b>Market</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference MARKET_ALLOCATION_ROW__MARKET = eINSTANCE.getMarketAllocationRow_Market();
+
+		/**
+		 * The meta object literal for the '<em><b>Weight</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MARKET_ALLOCATION_ROW__WEIGHT = eINSTANCE.getMarketAllocationRow_Weight();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessels</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference MARKET_ALLOCATION_ROW__VESSELS = eINSTANCE.getMarketAllocationRow_Vessels();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.adp.impl.ContractAllocationRowImpl <em>Contract Allocation Row</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.adp.impl.ContractAllocationRowImpl
+		 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getContractAllocationRow()
+		 * @generated
+		 */
+		EClass CONTRACT_ALLOCATION_ROW = eINSTANCE.getContractAllocationRow();
+
+		/**
+		 * The meta object literal for the '<em><b>Contract</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CONTRACT_ALLOCATION_ROW__CONTRACT = eINSTANCE.getContractAllocationRow_Contract();
+
+		/**
+		 * The meta object literal for the '<em><b>Weight</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONTRACT_ALLOCATION_ROW__WEIGHT = eINSTANCE.getContractAllocationRow_Weight();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessels</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CONTRACT_ALLOCATION_ROW__VESSELS = eINSTANCE.getContractAllocationRow_Vessels();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.adp.impl.MultipleInventoryProfileImpl <em>Multiple Inventory Profile</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.adp.impl.MultipleInventoryProfileImpl
+		 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getMultipleInventoryProfile()
+		 * @generated
+		 */
+		EClass MULTIPLE_INVENTORY_PROFILE = eINSTANCE.getMultipleInventoryProfile();
+
+		/**
+		 * The meta object literal for the '<em><b>Window Size</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MULTIPLE_INVENTORY_PROFILE__WINDOW_SIZE = eINSTANCE.getMultipleInventoryProfile_WindowSize();
+
+		/**
+		 * The meta object literal for the '<em><b>Volume Flex</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MULTIPLE_INVENTORY_PROFILE__VOLUME_FLEX = eINSTANCE.getMultipleInventoryProfile_VolumeFlex();
+
+		/**
+		 * The meta object literal for the '<em><b>Inventories</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference MULTIPLE_INVENTORY_PROFILE__INVENTORIES = eINSTANCE.getMultipleInventoryProfile_Inventories();
+
+		/**
+		 * The meta object literal for the '<em><b>Full Cargo Lot Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MULTIPLE_INVENTORY_PROFILE__FULL_CARGO_LOT_VALUE = eINSTANCE.getMultipleInventoryProfile_FullCargoLotValue();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.adp.impl.InventorySubprofileImpl <em>Inventory Subprofile</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.adp.impl.InventorySubprofileImpl
+		 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getInventorySubprofile()
+		 * @generated
+		 */
+		EClass INVENTORY_SUBPROFILE = eINSTANCE.getInventorySubprofile();
+
+		/**
+		 * The meta object literal for the '<em><b>Inventory</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference INVENTORY_SUBPROFILE__INVENTORY = eINSTANCE.getInventorySubprofile_Inventory();
+
+		/**
+		 * The meta object literal for the '<em><b>Entity Table</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference INVENTORY_SUBPROFILE__ENTITY_TABLE = eINSTANCE.getInventorySubprofile_EntityTable();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.adp.IntervalType <em>Interval Type</em>}' enum.

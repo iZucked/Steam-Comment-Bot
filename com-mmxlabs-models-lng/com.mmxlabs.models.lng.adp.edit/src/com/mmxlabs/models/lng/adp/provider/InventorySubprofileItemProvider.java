@@ -3,8 +3,9 @@
 package com.mmxlabs.models.lng.adp.provider;
 
 
+import com.mmxlabs.models.lng.adp.ADPFactory;
 import com.mmxlabs.models.lng.adp.ADPPackage;
-import com.mmxlabs.models.lng.adp.RelativeEntitlementElement;
+import com.mmxlabs.models.lng.adp.InventorySubprofile;
 
 import java.util.Collection;
 import java.util.List;
@@ -14,6 +15,8 @@ import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.common.util.ResourceLocator;
 
+import org.eclipse.emf.ecore.EStructuralFeature;
+
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IChildCreationExtender;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
@@ -22,17 +25,16 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
-import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.adp.RelativeEntitlementElement} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.adp.InventorySubprofile} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class RelativeEntitlementElementItemProvider 
+public class InventorySubprofileItemProvider 
 	extends ItemProviderAdapter
 	implements
 		IEditingDomainItemProvider,
@@ -46,7 +48,7 @@ public class RelativeEntitlementElementItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public RelativeEntitlementElementItemProvider(AdapterFactory adapterFactory) {
+	public InventorySubprofileItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -61,26 +63,25 @@ public class RelativeEntitlementElementItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addEntityPropertyDescriptor(object);
-			addEntitlementPropertyDescriptor(object);
+			addInventoryPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Entity feature.
+	 * This adds a property descriptor for the Inventory feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addEntityPropertyDescriptor(Object object) {
+	protected void addInventoryPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_RelativeEntitlementElement_entity_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_RelativeEntitlementElement_entity_feature", "_UI_RelativeEntitlementElement_type"),
-				 ADPPackage.Literals.RELATIVE_ENTITLEMENT_ELEMENT__ENTITY,
+				 getString("_UI_InventorySubprofile_inventory_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_InventorySubprofile_inventory_feature", "_UI_InventorySubprofile_type"),
+				 ADPPackage.Literals.INVENTORY_SUBPROFILE__INVENTORY,
 				 true,
 				 false,
 				 true,
@@ -90,36 +91,44 @@ public class RelativeEntitlementElementItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Entitlement feature.
+	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
+	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
+	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addEntitlementPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_RelativeEntitlementElement_entitlement_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_RelativeEntitlementElement_entitlement_feature", "_UI_RelativeEntitlementElement_type"),
-				 ADPPackage.Literals.RELATIVE_ENTITLEMENT_ELEMENT__ENTITLEMENT,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
-				 null,
-				 null));
+	@Override
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
+		if (childrenFeatures == null) {
+			super.getChildrenFeatures(object);
+			childrenFeatures.add(ADPPackage.Literals.INVENTORY_SUBPROFILE__ENTITY_TABLE);
+		}
+		return childrenFeatures;
 	}
 
 	/**
-	 * This returns RelativeEntitlementElement.gif.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	protected EStructuralFeature getChildFeature(Object object, Object child) {
+		// Check the type of the specified child object and return the proper feature to use for
+		// adding (see {@link AddCommand}) it as a child.
+
+		return super.getChildFeature(object, child);
+	}
+
+	/**
+	 * This returns InventorySubprofile.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/RelativeEntitlementElement"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/InventorySubprofile"));
 	}
 
 	/**
@@ -130,8 +139,7 @@ public class RelativeEntitlementElementItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		RelativeEntitlementElement relativeEntitlementElement = (RelativeEntitlementElement)object;
-		return getString("_UI_RelativeEntitlementElement_type") + " " + relativeEntitlementElement.getEntitlement();
+		return getString("_UI_InventorySubprofile_type");
 	}
 
 
@@ -146,9 +154,9 @@ public class RelativeEntitlementElementItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(RelativeEntitlementElement.class)) {
-			case ADPPackage.RELATIVE_ENTITLEMENT_ELEMENT__ENTITLEMENT:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+		switch (notification.getFeatureID(InventorySubprofile.class)) {
+			case ADPPackage.INVENTORY_SUBPROFILE__ENTITY_TABLE:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
 		super.notifyChanged(notification);
@@ -164,6 +172,11 @@ public class RelativeEntitlementElementItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ADPPackage.Literals.INVENTORY_SUBPROFILE__ENTITY_TABLE,
+				 ADPFactory.eINSTANCE.createInventoryADPEntityRow()));
 	}
 
 	/**

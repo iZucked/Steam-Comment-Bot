@@ -12,7 +12,7 @@ import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
-
+import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 import java.util.ArrayList;
@@ -67,12 +67,11 @@ public class InventoryProfileComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_relativeEntitlementsEditor(detailComposite, topClass);
 		add_inventoryEditor(detailComposite, topClass);
 		add_generatedSlotsEditor(detailComposite, topClass);
 		add_volumeEditor(detailComposite, topClass);
-		add_initialAllocationsEditor(detailComposite, topClass);
 		add_entityTableEditor(detailComposite, topClass);
+		add_windowSizeEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the relativeEntitlements feature on InventoryProfile
@@ -86,10 +85,13 @@ public class InventoryProfileComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the inventory feature on InventoryProfile
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_inventoryEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.INVENTORY_PROFILE__INVENTORY));
+		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.INVENTORY_PROFILE__INVENTORY);
+		editor.setEditorLocked(true);
+		editor.setEditorEnabled(false);
+		detailComposite.addInlineEditor(editor);
 	}
 
 	/**
@@ -126,5 +128,14 @@ public class InventoryProfileComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_entityTableEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		// detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.INVENTORY_PROFILE__ENTITY_TABLE));
+	}
+
+	/**
+	 * Create the editor for the windowSize feature on InventoryProfile
+	 *
+	 * @generated
+	 */
+	protected void add_windowSizeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.INVENTORY_PROFILE__WINDOW_SIZE));
 	}
 }

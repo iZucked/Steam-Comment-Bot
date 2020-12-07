@@ -11,6 +11,7 @@ import com.mmxlabs.models.lng.adp.ADPPackage;
 
 import com.mmxlabs.models.lng.adp.FleetProfile;
 import com.mmxlabs.models.lng.adp.InventoryProfile;
+import com.mmxlabs.models.lng.adp.MultipleInventoryProfile;
 import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
@@ -44,6 +45,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.ADPModelImpl#getSalesContractProfiles <em>Sales Contract Profiles</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.ADPModelImpl#getFleetProfile <em>Fleet Profile</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.ADPModelImpl#getInventoryProfiles <em>Inventory Profiles</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.adp.impl.ADPModelImpl#getMultipleInventoriesProfile <em>Multiple Inventories Profile</em>}</li>
  * </ul>
  *
  * @generated
@@ -120,7 +122,7 @@ public class ADPModelImpl extends UUIDObjectImpl implements ADPModel {
 	protected FleetProfile fleetProfile;
 
 	/**
-	 * The cached value of the '{@link #getInventoryProfiles() <em>Inventory Profiles</em>}' reference list.
+	 * The cached value of the '{@link #getInventoryProfiles() <em>Inventory Profiles</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getInventoryProfiles()
@@ -128,6 +130,16 @@ public class ADPModelImpl extends UUIDObjectImpl implements ADPModel {
 	 * @ordered
 	 */
 	protected EList<InventoryProfile> inventoryProfiles;
+
+	/**
+	 * The cached value of the '{@link #getMultipleInventoriesProfile() <em>Multiple Inventories Profile</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMultipleInventoriesProfile()
+	 * @generated
+	 * @ordered
+	 */
+	protected MultipleInventoryProfile multipleInventoriesProfile;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -296,9 +308,77 @@ public class ADPModelImpl extends UUIDObjectImpl implements ADPModel {
 	@Override
 	public EList<InventoryProfile> getInventoryProfiles() {
 		if (inventoryProfiles == null) {
-			inventoryProfiles = new EObjectResolvingEList<InventoryProfile>(InventoryProfile.class, this, ADPPackage.ADP_MODEL__INVENTORY_PROFILES);
+			inventoryProfiles = new EObjectContainmentEList.Resolving<InventoryProfile>(InventoryProfile.class, this, ADPPackage.ADP_MODEL__INVENTORY_PROFILES);
 		}
 		return inventoryProfiles;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public MultipleInventoryProfile getMultipleInventoriesProfile() {
+		if (multipleInventoriesProfile != null && multipleInventoriesProfile.eIsProxy()) {
+			InternalEObject oldMultipleInventoriesProfile = (InternalEObject)multipleInventoriesProfile;
+			multipleInventoriesProfile = (MultipleInventoryProfile)eResolveProxy(oldMultipleInventoriesProfile);
+			if (multipleInventoriesProfile != oldMultipleInventoriesProfile) {
+				InternalEObject newMultipleInventoriesProfile = (InternalEObject)multipleInventoriesProfile;
+				NotificationChain msgs = oldMultipleInventoriesProfile.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ADPPackage.ADP_MODEL__MULTIPLE_INVENTORIES_PROFILE, null, null);
+				if (newMultipleInventoriesProfile.eInternalContainer() == null) {
+					msgs = newMultipleInventoriesProfile.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ADPPackage.ADP_MODEL__MULTIPLE_INVENTORIES_PROFILE, null, msgs);
+				}
+				if (msgs != null) msgs.dispatch();
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ADPPackage.ADP_MODEL__MULTIPLE_INVENTORIES_PROFILE, oldMultipleInventoriesProfile, multipleInventoriesProfile));
+			}
+		}
+		return multipleInventoriesProfile;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public MultipleInventoryProfile basicGetMultipleInventoriesProfile() {
+		return multipleInventoriesProfile;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetMultipleInventoriesProfile(MultipleInventoryProfile newMultipleInventoriesProfile, NotificationChain msgs) {
+		MultipleInventoryProfile oldMultipleInventoriesProfile = multipleInventoriesProfile;
+		multipleInventoriesProfile = newMultipleInventoriesProfile;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ADPPackage.ADP_MODEL__MULTIPLE_INVENTORIES_PROFILE, oldMultipleInventoriesProfile, newMultipleInventoriesProfile);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setMultipleInventoriesProfile(MultipleInventoryProfile newMultipleInventoriesProfile) {
+		if (newMultipleInventoriesProfile != multipleInventoriesProfile) {
+			NotificationChain msgs = null;
+			if (multipleInventoriesProfile != null)
+				msgs = ((InternalEObject)multipleInventoriesProfile).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ADPPackage.ADP_MODEL__MULTIPLE_INVENTORIES_PROFILE, null, msgs);
+			if (newMultipleInventoriesProfile != null)
+				msgs = ((InternalEObject)newMultipleInventoriesProfile).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ADPPackage.ADP_MODEL__MULTIPLE_INVENTORIES_PROFILE, null, msgs);
+			msgs = basicSetMultipleInventoriesProfile(newMultipleInventoriesProfile, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ADPPackage.ADP_MODEL__MULTIPLE_INVENTORIES_PROFILE, newMultipleInventoriesProfile, newMultipleInventoriesProfile));
 	}
 
 	/**
@@ -315,6 +395,10 @@ public class ADPModelImpl extends UUIDObjectImpl implements ADPModel {
 				return ((InternalEList<?>)getSalesContractProfiles()).basicRemove(otherEnd, msgs);
 			case ADPPackage.ADP_MODEL__FLEET_PROFILE:
 				return basicSetFleetProfile(null, msgs);
+			case ADPPackage.ADP_MODEL__INVENTORY_PROFILES:
+				return ((InternalEList<?>)getInventoryProfiles()).basicRemove(otherEnd, msgs);
+			case ADPPackage.ADP_MODEL__MULTIPLE_INVENTORIES_PROFILE:
+				return basicSetMultipleInventoriesProfile(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -340,6 +424,9 @@ public class ADPModelImpl extends UUIDObjectImpl implements ADPModel {
 				return basicGetFleetProfile();
 			case ADPPackage.ADP_MODEL__INVENTORY_PROFILES:
 				return getInventoryProfiles();
+			case ADPPackage.ADP_MODEL__MULTIPLE_INVENTORIES_PROFILE:
+				if (resolve) return getMultipleInventoriesProfile();
+				return basicGetMultipleInventoriesProfile();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -374,6 +461,9 @@ public class ADPModelImpl extends UUIDObjectImpl implements ADPModel {
 				getInventoryProfiles().clear();
 				getInventoryProfiles().addAll((Collection<? extends InventoryProfile>)newValue);
 				return;
+			case ADPPackage.ADP_MODEL__MULTIPLE_INVENTORIES_PROFILE:
+				setMultipleInventoriesProfile((MultipleInventoryProfile)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -404,6 +494,9 @@ public class ADPModelImpl extends UUIDObjectImpl implements ADPModel {
 			case ADPPackage.ADP_MODEL__INVENTORY_PROFILES:
 				getInventoryProfiles().clear();
 				return;
+			case ADPPackage.ADP_MODEL__MULTIPLE_INVENTORIES_PROFILE:
+				setMultipleInventoriesProfile((MultipleInventoryProfile)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -428,6 +521,8 @@ public class ADPModelImpl extends UUIDObjectImpl implements ADPModel {
 				return fleetProfile != null;
 			case ADPPackage.ADP_MODEL__INVENTORY_PROFILES:
 				return inventoryProfiles != null && !inventoryProfiles.isEmpty();
+			case ADPPackage.ADP_MODEL__MULTIPLE_INVENTORIES_PROFILE:
+				return multipleInventoriesProfile != null;
 		}
 		return super.eIsSet(featureID);
 	}

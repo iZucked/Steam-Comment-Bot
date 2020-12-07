@@ -5,6 +5,9 @@
 package com.mmxlabs.models.lng.adp.presentation.views;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -20,6 +23,8 @@ import java.util.Stack;
 import java.util.TreeMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -28,6 +33,7 @@ import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
@@ -63,15 +69,18 @@ import org.eclipse.ui.actions.ActionFactory;
 import com.google.common.collect.Lists;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
+import com.mmxlabs.common.time.Days;
 import com.mmxlabs.models.lng.adp.ADPFactory;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.ADPPackage;
-import com.mmxlabs.models.lng.adp.AllocationElement;
+import com.mmxlabs.models.lng.adp.ContractAllocationRow;
 import com.mmxlabs.models.lng.adp.ContractProfile;
 import com.mmxlabs.models.lng.adp.InventoryADPEntityRow;
 import com.mmxlabs.models.lng.adp.InventoryProfile;
+import com.mmxlabs.models.lng.adp.InventorySubprofile;
+import com.mmxlabs.models.lng.adp.MarketAllocationRow;
+import com.mmxlabs.models.lng.adp.MultipleInventoryProfile;
 import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
-import com.mmxlabs.models.lng.adp.RelativeEntitlementElement;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
 import com.mmxlabs.models.lng.adp.utils.ADPModelUtil;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -83,22 +92,30 @@ import com.mmxlabs.models.lng.cargo.Inventory;
 import com.mmxlabs.models.lng.cargo.InventoryCapacityRow;
 import com.mmxlabs.models.lng.cargo.InventoryEventRow;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.SchedulingTimeWindow;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.VolumeAttributeManipulator;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.CargoEditingCommands;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.CargoEditorMenuHelper;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
+import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.editors.DetailToolbarManager;
 import com.mmxlabs.models.ui.editors.EmbeddedDetailComposite;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
@@ -111,6 +128,7 @@ import com.mmxlabs.models.ui.tabular.manipulators.TextualSingleReferenceManipula
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.ecore.SafeEContentAdapter;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public class ContractPage extends ADPComposite {
 
@@ -159,7 +177,9 @@ public class ContractPage extends ADPComposite {
 					@Override
 					public String getText(final Object element) {
 						ComboViewer objSell = objSel;
-						if (element instanceof Inventory) {
+						if (element instanceof MultipleInventoryProfile) {
+							return "Multiple inventories";
+						} else if (element instanceof Inventory) {
 							final Inventory profile = (Inventory) element;
 							return String.format("%s (Inventory)", profile.getName());
 						} else if (element instanceof PurchaseContract) {
@@ -180,7 +200,7 @@ public class ContractPage extends ADPComposite {
 						final IStructuredSelection iStructuredSelection = (IStructuredSelection) selection;
 						target = (EObject) iStructuredSelection.getFirstElement();
 						
-						generateButton.setEnabled(target instanceof Contract || target instanceof Inventory);
+						generateButton.setEnabled(target instanceof Contract || target instanceof Inventory || target instanceof MultipleInventoryProfile);
 					}
 					// generateButton.setEnabled(target != null);
 					updateDetailPaneInput(target);
@@ -218,287 +238,21 @@ public class ContractPage extends ADPComposite {
 							}
 						} else if (input instanceof InventoryProfile) {
 							final InventoryProfile profile = (InventoryProfile) input;
+							int i = 0;
 							final CompoundCommand cmd = new CompoundCommand("Re-generate ADP Slots");
-							final List<RelativeEntitlementElement> relativeEntitlements = profile.getRelativeEntitlements();
-							final List<AllocationElement> initialAllocations = profile.getInitialAllocations();
-							// Map<String,BaseLegalEntity> entityMap = new HashMap<>();
-//							final Map<String, Pair<Long, Double>> entityTable = new HashMap<>();
-//							if (profile.getInventory().getName().equals("Gorgon")) {
-//								entityTable.put("CAPL/TAPL", new Pair<>(0L, 0.47333));
-//								entityTable.put("Exxon", new Pair<>(75759L, 0.25));
-//								entityTable.put("Shell", new Pair<>(38073L, 0.25));
-//								entityTable.put("OGG", new Pair<>(-61282L, 0.0125));
-//								entityTable.put("TGG", new Pair<>(1724L, 0.01));
-//								entityTable.put("JERA", new Pair<>(-26809L, 0.00417));
-//							} else if (profile.getInventory().getName().equals("Wheatstone")) {
-//								entityTable.put("CAPL/TAPL", new Pair<>(0L, 0.642905203));
-//								entityTable.put("Woodside", new Pair<>(0L, 0.131410260));
-//								entityTable.put("PEW", new Pair<>(0L, 0.078696752));
-//								entityTable.put("KUF", new Pair<>(0L, 0.136076266));
-//								entityTable.put("QEW", new Pair<>(0L, 0.01091120));
-//							} else {
-//								throw new IllegalStateException("Not Implemented Error");
-//							}
-							for (final InventoryADPEntityRow row : profile.getEntityTable()) {
-								final AllocationElement allocElem = ADPFactory.eINSTANCE.createAllocationElement();
-								allocElem.setEntity(row.getEntity());
-								allocElem.setAllocation(Integer.parseInt(row.getInitialAllocation()));
-								initialAllocations.add(allocElem);
-								final RelativeEntitlementElement reElem = ADPFactory.eINSTANCE.createRelativeEntitlementElement();
-								reElem.setEntity(row.getEntity());
-								reElem.setEntitlement(row.getRelativeEntitlement());
-								relativeEntitlements.add(reElem);
-							}
-//							for (final BaseLegalEntity entity : editorData.scenarioModel.getReferenceModel().getCommercialModel().getEntities()) {
-//								final Pair<Long, Double> pair = entityTable.get(entity.getName());
-//								if (pair != null) {
-//									final AllocationElement allocElem = ADPFactory.eINSTANCE.createAllocationElement();
-//									allocElem.setEntity(entity);
-//									allocElem.setAllocation(pair.getFirst().intValue());
-//									initialAllocations.add(allocElem);
-//									final RelativeEntitlementElement reElem = ADPFactory.eINSTANCE.createRelativeEntitlementElement();
-//									reElem.setEntity(entity);
-//									reElem.setEntitlement(pair.getSecond());
-//									relativeEntitlements.add(reElem);
-//								}
-//							}
-//							assert initialAllocations.size() == entityTable.size();
-//							assert relativeEntitlements.size() == entityTable.size();
-							
 							final Command populateModelCommand = populateModelFromInventory(editorData.getEditingDomain(), editorData.scenarioModel, editorData.adpModel, profile);
 							cmd.append(populateModelCommand);
-							editorData.getDefaultCommandHandler().handleCommand(cmd, profile, null);
+							// editorData.getDefaultCommandHandler().handleCommand(cmd, profile, null);
 							input = profile.getInventory();
+						} else if (input instanceof MultipleInventoryProfile) {
+							final MultipleInventoryProfile profile = (MultipleInventoryProfile) input;
+							final CompoundCommand cmd = new CompoundCommand("Re-generate ADP Slots");
+							final Command populateModelCommand = populateModelFromMultipleInventories(editorData.getEditingDomain(), editorData.scenarioModel, editorData.adpModel, profile);
+							cmd.append(populateModelCommand);
+							// editorData.getDefaultCommandHandler().handleCommand(cmd, profile, null);
+							input = profile;
 						}
 						updateDetailPaneInput(input);
-					}
-				});
-			}
-			
-			{
-				generateFromInventoryButton = new Button(toolbarComposite, SWT.PUSH);
-				generateFromInventoryButton.setText("Generate slots from inventory");
-				generateFromInventoryButton.setEnabled(true);
-				generateFromInventoryButton.addSelectionListener(new SelectionAdapter() {
-
-					@Override
-					public void widgetSelected(final SelectionEvent e) {
-						final LNGScenarioModel scenarioModel = editorData.getScenarioModel();
-						final List<Inventory> inventoryModels = scenarioModel.getCargoModel().getInventoryModels();
-						final LocalDate startDate = editorData.adpModel.getYearStart().atDay(1);
-						final List<LoadSlot> newCmdLoadSlots = new LinkedList<>();
-						final CompoundCommand cmd = new CompoundCommand("Generate inventory based ADP slots");
-						for (final Inventory currentInventory : inventoryModels) {
-							final List<LoadSlot> newLoadSlots = new LinkedList<>();
-							final Optional<PurchaseContract> pcFetch = ScenarioModelUtil.getCommercialModel(scenarioModel).getPurchaseContracts().stream() //
-									.filter(c -> currentInventory.getPort().equals(c.getPreferredPort())) //
-									.findFirst();
-							assert pcFetch.isPresent();
-							final PurchaseContract chosenPurchaseContract = pcFetch.get();
-						
-							final TreeMap<LocalDate, InventoryDailyEvent> insAndOuts = getInventoryInsAndOuts(currentInventory, scenarioModel);
-						
-							int totalInventoryVolume = 0;
-							// int globalLoadTrigger = 158000;
-							
-							
-							int cargoVolume = 160000;
-							BaseLegalEntity[] entities = null;
-							Map<BaseLegalEntity, Long> runningAllocation = new HashMap<>();
-							final List<Pair<BaseLegalEntity, Double>> relativeEntitlements = new ArrayList<>();
-							if (currentInventory.getName().equals("Gorgon")) {
-								BaseLegalEntity caplTapl = null;
-								BaseLegalEntity exxon = null;
-								BaseLegalEntity shell = null;
-								BaseLegalEntity ogg = null;
-								BaseLegalEntity tgg = null;
-								BaseLegalEntity jera = null;
-								for (BaseLegalEntity entity : scenarioModel.getReferenceModel().getCommercialModel().getEntities()) {
-									String entityName = entity.getName();
-									if (entityName.equals("CAPL/TAPL")) {
-										caplTapl = entity;
-										runningAllocation.put(entity, 0L);
-										relativeEntitlements.add(new Pair<>(entity, 0.47333));
-									} else if (entityName.equals("Exxon")) {
-										exxon = entity;
-										runningAllocation.put(entity, 75759L);
-										relativeEntitlements.add(new Pair<>(entity, 0.25));
-									} else if (entityName.equals("Shell")) {
-										shell = entity;
-										runningAllocation.put(entity, 38073L);
-										relativeEntitlements.add(new Pair<>(entity, 0.25));
-									} else if (entityName.equals("OGG")) {
-										ogg = entity;
-										runningAllocation.put(entity, -61282L);
-										relativeEntitlements.add(new Pair<>(entity, 0.0125));
-									} else if (entityName.equals("TGG")) {
-										tgg = entity;
-										runningAllocation.put(entity, 1724L);
-										relativeEntitlements.add(new Pair<>(entity, 0.01));
-									} else if (entityName.equals("JERA")) {
-										jera = entity;
-										runningAllocation.put(entity, -26809L);
-										relativeEntitlements.add(new Pair<>(entity, 0.00417));
-									}
-								}
-								entities = new BaseLegalEntity[]{caplTapl, exxon, shell, ogg, tgg, jera};
-							} else if (currentInventory.getName().equals("Wheatstone")) {
-								BaseLegalEntity caplTapl = null;
-								BaseLegalEntity woodside = null;
-								BaseLegalEntity pew = null;
-								BaseLegalEntity kuf = null;
-								BaseLegalEntity qew = null;
-								for (BaseLegalEntity entity : scenarioModel.getReferenceModel().getCommercialModel().getEntities()) {
-									String entityName = entity.getName();
-									if (entityName.equals("CAPL/TAPL")) {
-										caplTapl = entity;
-										runningAllocation.put(entity, 0L);
-										relativeEntitlements.add(new Pair<>(entity, 0.642905203));
-									} else if (entityName.equals("Woodside")) {
-										woodside = entity;
-										runningAllocation.put(entity, 0L);
-										relativeEntitlements.add(new Pair<>(entity, 0.131410260));
-									} else if (entityName.equals("PEW")) {
-										pew = entity;
-										runningAllocation.put(entity, 0L);
-										relativeEntitlements.add(new Pair<>(entity, 0.078696752));
-									} else if (entityName.equals("KUF")) {
-										kuf = entity;
-										runningAllocation.put(entity, 0L);
-										relativeEntitlements.add(new Pair<>(entity, 0.136076266));
-									} else if (entityName.equals("QEW")) {
-										qew = entity;
-										runningAllocation.put(entity, 0L);
-										relativeEntitlements.add(new Pair<>(entity, 0.01091120));
-									}
-								}
-								entities = new BaseLegalEntity[]{caplTapl, woodside, pew, kuf, qew};
-							}
-							assert entities != null;
-							for (BaseLegalEntity entity : entities) {
-								assert entity != null;
-							}
-							assert entities.length == relativeEntitlements.size();
-
-							while (insAndOuts.firstKey().isBefore(startDate)) {
-								final InventoryDailyEvent event = insAndOuts.remove(insAndOuts.firstKey());
-								totalInventoryVolume += event.netVolumeIn;
-							}
-							insAndOuts.firstEntry().getValue().addVolume(totalInventoryVolume);
-							Port inventoryPort = currentInventory.getPort();
-							Set<LocalDate> flaggedDates = new HashSet<>();
-							scenarioModel.getCargoModel().getLoadSlots().stream() //
-									.forEach(s -> {
-										if (s.getPort().equals(inventoryPort)) {
-											flaggedDates.add(s.getWindowStart());
-										}
-									});
-							
-							List<LoadSlot> existingLoads = scenarioModel.getCargoModel().getLoadSlots().stream() //
-									.filter(s -> s.getPort().equals(inventoryPort)) //
-									.sorted((s1, s2) -> s1.getWindowStart().compareTo(s2.getWindowStart())) //
-									.collect(Collectors.toList());
-
-							//final List<LocalDate> loadDates = new LinkedList<>();
-							
-							int runningVolume = 0;
-							
-							int idx = 0;
-							
-							Iterator<Entry<LocalDate, InventoryDailyEvent>> iterInsAndOuts = insAndOuts.entrySet().iterator();
-							Iterator<LoadSlot> iterExistingLoads = existingLoads.iterator();
-							
-							Entry<LocalDate, InventoryDailyEvent> currentEntry = null;
-							LoadSlot currentExistingSlot = null;
-							
-							if (iterExistingLoads.hasNext()) {
-								currentExistingSlot = iterExistingLoads.next();
-							}
-							
-							Stack<LoadSlot> tempSlots = new Stack<>();
-							for (final Entry<LocalDate, InventoryDailyEvent> entry : insAndOuts.entrySet()) {
-							
-								final InventoryDailyEvent dailyEvent = entry.getValue();
-								runningVolume += dailyEvent.netVolumeIn;
-								
-								for (final Pair<BaseLegalEntity, Double> p : relativeEntitlements) {
-									runningAllocation.compute(p.getFirst(), (k, v) -> {
-										Double change = dailyEvent.netVolumeIn*p.getSecond();
-										return v + change.longValue();
-									});
-								}
-								
-								final LocalDate currentDate = entry.getKey();
-								while (currentExistingSlot != null && currentExistingSlot.getWindowStart().equals(currentDate)) {
-									final BaseLegalEntity entity = currentExistingSlot.getEntity();
-									Long entityAllocation = runningAllocation.get(entity);
-									if (entityAllocation != null) {
-										runningAllocation.put(entity, entityAllocation - currentExistingSlot.getMaxQuantity());
-									}
-									currentExistingSlot = iterExistingLoads.hasNext() ? iterExistingLoads.next() : null;
-								}
-								while (runningVolume < dailyEvent.minVolume && !newLoadSlots.isEmpty()) {
-									final LoadSlot oldLoadSlot = ((LinkedList<LoadSlot>) newLoadSlots).removeLast();
-									tempSlots.add(oldLoadSlot);
-									runningVolume += oldLoadSlot.getMaxQuantity();
-									runningAllocation.compute(oldLoadSlot.getEntity(), (k, v) -> v + oldLoadSlot.getMaxQuantity());
-								}
-								int tempRunningVolume = runningVolume - cargoVolume;
-								if (tempRunningVolume > dailyEvent.minVolume && !flaggedDates.contains(currentDate)) {
-									final LoadSlot slot;
-									if (tempSlots.isEmpty()) {
-										final String nextName = currentInventory.getName()+"-"+Integer.toString(idx);
-										slot = CargoFactory.eINSTANCE.createLoadSlot();
-										slot.setPort(currentInventory.getPort());
-										slot.setVolumeLimitsUnit(VolumeUnits.M3);
-										slot.setMinQuantity(cargoVolume);
-										slot.setMaxQuantity(cargoVolume);
-										slot.setName(nextName);
-										slot.setWindowSize(3);
-										slot.setWindowSizeUnits(TimePeriod.DAYS);
-										slot.setContract(chosenPurchaseContract);
-										++idx;
-									} else {
-										slot = tempSlots.pop();
-									}
-									slot.setWindowStart(currentDate);
-									final Entry<BaseLegalEntity, Long> mullEntity = runningAllocation.entrySet().stream() //
-											.max((e1, e2) -> e1.getValue().compareTo(e2.getValue())).get();
-								
-									mullEntity.setValue(mullEntity.getValue()-cargoVolume);
-									slot.setEntity(mullEntity.getKey());
-									newLoadSlots.add(slot);
-									runningVolume = tempRunningVolume;
-								}
-							}
-							newCmdLoadSlots.addAll(newLoadSlots);
-						}
-						if (!newCmdLoadSlots.isEmpty()) {
-							cmd.append(AddCommand.create(editorData.getEditingDomain(), ScenarioModelUtil.getCargoModel(scenarioModel), CargoPackage.Literals.CARGO_MODEL__LOAD_SLOTS, newCmdLoadSlots));
-							editorData.getDefaultCommandHandler().handleCommand(cmd, null, null);
-						//	int i = 0;
-						//updateDetailPaneInput(object);
-						}
-						
-						
-//						CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
-//						final CompoundCommand cmd = new CompoundCommand("Generate inventory based ADP slots");
-//						final Bundle bundle = FrameworkUtil.getBundle(ADPModelUtil.class);
-//						final BundleContext bundleContext = bundle.getBundleContext();
-//						Collection<ServiceReference<IProfileGenerator>> serviceReferences;
-//						try {
-//							serviceReferences = bundleContext.getServiceReferences(IProfileGenerator.class, null);
-//							final List<IProfileGenerator> generators = new LinkedList<>();
-//							
-//							for (final ServiceReference<IProfileGenerator> ref : serviceReferences) {
-//								generators.add(bundleContext.getService(ref));
-//							}
-//						} catch (final UserFeedbackException ex) {
-//							MessageDialog.openError(null, "Error", ex.getMessage());
-////							Logger.error(ex.getMessage(), ex);
-//						} catch (final InvalidSyntaxException ee) {
-////							Logger.error("Invalid syntax: ", ee);
-//						}
 					}
 				});
 			}
@@ -681,10 +435,111 @@ public class ContractPage extends ADPComposite {
 	
 	private Command populateModelFromInventory(EditingDomain ed, LNGScenarioModel sm, ADPModel adpModel, InventoryProfile profile) {
 		final CompoundCommand cmd = new CompoundCommand("Generate ADP slots");
-		List<LoadSlot> slotsToRemove = profile.getGeneratedSlots();
-		if (!slotsToRemove.isEmpty()) {
-			cmd.append(DeleteCommand.create(ed, slotsToRemove));
+		
+		CargoEditingCommands cec = new CargoEditingCommands(ed, sm, ScenarioModelUtil.getCargoModel(sm), ScenarioModelUtil.getCommercialModel(sm),
+				Activator.getDefault().getModelFactoryRegistry());
+		
+//		List<LoadSlot> slotsToRemove = profile.getGeneratedSlots();
+//		if (!slotsToRemove.isEmpty()) {
+//			cmd.append(DeleteCommand.create(ed, slotsToRemove));
+//		}
+		final int loadWindow = profile.getWindowSize();
+		
+		final List<Triple<LoadSlot, DESSalesMarket, Vessel>> slotToMarketVessels = new LinkedList<>();
+		final List<Triple<LoadSlot, SalesContract, Vessel>> slotToSalesContract = new LinkedList<>();
+		final List<Triple<LoadSlot, DESSalesMarket, Vessel>> slotToFOBSaleVessels = new LinkedList<>();
+		final List<Triple<LoadSlot, DESSalesMarket, Vessel>> capltaplSlotToMarket = new LinkedList<>();
+		final Map<Vessel, LocalDate> vesselToMostRecentUseDate = new HashMap<>();
+		
+		final BaseLegalEntity capltaplEntity = ScenarioModelUtil.getCommercialModel(sm).getEntities().stream().filter(e -> e.getName().equalsIgnoreCase("capl/tapl")).findAny().get();
+		
+		final Map<BaseLegalEntity,Integer> thirdPartyVesselIndex = new HashMap<>();
+		final Map<BaseLegalEntity, List<Vessel>> thirdPartyVesselList = new HashMap<>();
+		final Map<BaseLegalEntity, List<MarketAllocationRow>> thirdPartyMarketAllocs = new HashMap<>();
+		// int capltaplContractIndex = 0;
+		SalesContract[] capltaplSalesContracts = null;
+		DESSalesMarket[] capltaplMarkets = null;
+		final Map<SalesContract, Integer> capltaplSalesContractVesselIndices = new HashMap<>();
+		
+		final List<Pair<SalesContract, Double>> capltaplSalesContractRelativeEntitlements = new LinkedList<>();
+		final Map<SalesContract, Long> capltaplSalesContractRunningAllocation = new HashMap<>();
+		final List<Pair<DESSalesMarket, Double>> capltaplMarketRelativeEntitlements = new LinkedList<>();
+		final Map<DESSalesMarket, Long> capltaplMarketRunningAllocation = new HashMap<>();
+		
+		final Map<SalesContract, List<Vessel>> capltaplContractVesselLists = new HashMap<>();
+		final Map<DESSalesMarket, List<Vessel>> capltaplMarketVesselLists = new HashMap<>();
+		final Set<Vessel> capltaplVessels = new HashSet<>();
+		final List<Pair<BaseLegalEntity, Double>> relativeEntitlements = new ArrayList<>();
+		final Map<BaseLegalEntity, Long> runningAllocation = new HashMap<>();
+		
+		LocalDate dayBeforeADPStart = adpModel.getYearStart().atDay(1).minusDays(1);
+		for (InventoryADPEntityRow row : profile.getEntityTable()) {
+			final BaseLegalEntity currentEntity = row.getEntity();
+			if (currentEntity.equals(capltaplEntity)) {
+				capltaplSalesContracts = new SalesContract[row.getContractAllocationRows().size()];
+				capltaplMarkets = new DESSalesMarket[row.getMarketAllocationRows().size()];
+				int i = 0;
+				double totalWeight = IntStream.concat(
+						row.getContractAllocationRows().stream().mapToInt(ContractAllocationRow::getWeight),
+						row.getMarketAllocationRows().stream().mapToInt(MarketAllocationRow::getWeight)
+						).sum();
+				
+				for (ContractAllocationRow contractAllocationRow : row.getContractAllocationRows()) {
+					final SalesContract currentSalesContract = contractAllocationRow.getContract();
+					capltaplSalesContracts[i] = currentSalesContract;
+					final List<Vessel> currentVessels = contractAllocationRow.getVessels();
+					currentVessels.stream().forEach(v -> vesselToMostRecentUseDate.put(v, dayBeforeADPStart));
+					capltaplVessels.addAll(currentVessels);
+					capltaplContractVesselLists.put(currentSalesContract, currentVessels);
+					capltaplSalesContractVesselIndices.put(currentSalesContract, 0);
+					final double relEntitle = contractAllocationRow.getWeight()/totalWeight;
+					capltaplSalesContractRelativeEntitlements.add(new Pair<>(currentSalesContract, relEntitle));
+					capltaplSalesContractRunningAllocation.put(currentSalesContract, 0L);
+					++i;
+				}
+				i = 0;
+				for (MarketAllocationRow marAllocationRow : row.getMarketAllocationRows()) {
+					final DESSalesMarket currentSalesMarket = marAllocationRow.getMarket();
+					capltaplMarkets[i] = currentSalesMarket;
+					final List<Vessel> currentVessels = marAllocationRow.getVessels();
+					currentVessels.stream().forEach(v -> vesselToMostRecentUseDate.put(v, dayBeforeADPStart));
+					capltaplVessels.addAll(currentVessels);
+					capltaplMarketVesselLists.put(currentSalesMarket, currentVessels);
+					final double relEntitle = marAllocationRow.getWeight()/totalWeight;
+					capltaplMarketRelativeEntitlements.add(new Pair<>(currentSalesMarket, relEntitle));
+					capltaplMarketRunningAllocation.put(currentSalesMarket, 0L);
+					++i;
+				}
+			} else {
+				thirdPartyVesselIndex.put(currentEntity, 0);
+				thirdPartyVesselList.put(currentEntity, row.getMarketAllocationRows().get(0).getVessels());
+				thirdPartyMarketAllocs.put(currentEntity, row.getMarketAllocationRows());
+				row.getMarketAllocationRows().get(0).getVessels().stream().forEach(v -> vesselToMostRecentUseDate.put(v, dayBeforeADPStart));
+			}
+			relativeEntitlements.add(new Pair<>(currentEntity, row.getRelativeEntitlement()));
+			runningAllocation.put(currentEntity, Long.parseLong(row.getInitialAllocation()));
 		}
+		
+		Set<BaseLegalEntity> nonCaplTaplVesselSharingEntities = new HashSet<>();
+		for (InventoryADPEntityRow row : profile.getEntityTable()) {
+			if (!row.getEntity().equals(capltaplEntity) && Stream.concat(row.getMarketAllocationRows().stream().flatMap(mar -> mar.getVessels().stream()), row.getContractAllocationRows().stream().flatMap(con -> con.getVessels().stream())).noneMatch(capltaplVessels::contains)){
+				nonCaplTaplVesselSharingEntities.add(row.getEntity());
+			}
+		}
+		
+		final Set<Vessel> expectedVessels = profile.getEntityTable().stream() //
+				.flatMap(row -> Stream.concat(row.getMarketAllocationRows().stream().flatMap(mar -> mar.getVessels().stream()), row.getContractAllocationRows().stream().flatMap(con -> con.getVessels().stream()))) //
+//				.flatMap(row -> row.getMarketAllocationRows().stream()) //
+//				.flatMap(mar -> mar.getVessels().stream()) //
+				.collect(Collectors.toSet());
+		final Map<Vessel, VesselAvailability> vessToVA = sm.getCargoModel().getVesselAvailabilities().stream().filter(va -> expectedVessels.contains(va.getVessel())).collect(Collectors.toMap(VesselAvailability::getVessel, Function.identity()));
+
+		for (Vessel v : expectedVessels) {
+			if (!vessToVA.containsKey(v)) {
+				System.out.println("No availability for "+ v.getName());
+			}
+		}
+		
 		final Inventory inventory = profile.getInventory();
 		final List<LoadSlot> newLoadSlots = new LinkedList<>();
 		final Optional<PurchaseContract> pcFetch = ScenarioModelUtil.getCommercialModel(sm).getPurchaseContracts().stream() //
@@ -696,14 +551,8 @@ public class ContractPage extends ADPComposite {
 		int totalInventoryVolume = 0;
 		final int cargoVolume = profile.getVolume();
 		final LocalDate startDate = adpModel.getYearStart().atDay(1);
-		Map<BaseLegalEntity, Long> runningAllocation = new HashMap<>();
-		for (AllocationElement allocationElem : profile.getInitialAllocations()) {
-			runningAllocation.put(allocationElem.getEntity(), (long) allocationElem.getAllocation());
-		}
-		List<Pair<BaseLegalEntity, Double>> relativeEntitlements = new ArrayList<>();
-		for (RelativeEntitlementElement reElem : profile.getRelativeEntitlements()) {
-			relativeEntitlements.add(new Pair<>(reElem.getEntity(), reElem.getEntitlement()));
-		}
+		
+		
 		
 		while (insAndOuts.firstKey().isBefore(startDate)) {
 			final InventoryDailyEvent event = insAndOuts.remove(insAndOuts.firstKey());
@@ -738,9 +587,18 @@ public class ContractPage extends ADPComposite {
 			final InventoryDailyEvent dailyEvent = entry.getValue();
 			runningVolume += dailyEvent.netVolumeIn;
 			for (final Pair<BaseLegalEntity, Double> p : relativeEntitlements) {
+				final Long additionalAllocation = ((Double) (dailyEvent.netVolumeIn*p.getSecond())).longValue();
 				runningAllocation.compute(p.getFirst(), (k, v) -> {
-					return v + ((Double) (dailyEvent.netVolumeIn*p.getSecond())).longValue();
+					return v + additionalAllocation;
 				});
+				if (p.getFirst().equals(capltaplEntity)) {
+					for (final Pair<SalesContract, Double> pp : capltaplSalesContractRelativeEntitlements) {
+						capltaplSalesContractRunningAllocation.compute(pp.getFirst(), (k, v) -> v+((Double) (additionalAllocation*pp.getSecond())).longValue());
+					}
+					for (final Pair<DESSalesMarket, Double> pp : capltaplMarketRelativeEntitlements) {
+						capltaplMarketRunningAllocation.compute(pp.getFirst(), (k, v)-> v+ ((Double) (additionalAllocation*pp.getSecond())).longValue());
+					}
+				}
 			}
 			final LocalDate currentDate = entry.getKey();
 			while (currentExistingSlot != null && currentExistingSlot.getWindowStart().equals(currentDate)) {
@@ -757,35 +615,339 @@ public class ContractPage extends ADPComposite {
 				runningVolume += oldLoadSlot.getMaxQuantity();
 				runningAllocation.compute(oldLoadSlot.getEntity(), (k, v) -> v + oldLoadSlot.getMaxQuantity());
 			}
-			int tempRunningVolume = runningVolume - cargoVolume;
-			if (tempRunningVolume > dailyEvent.minVolume && !flaggedDates.contains(currentDate)) {
-				final LoadSlot slot;
-				if (tempSlots.isEmpty()) {
-					final String nextName = inventory.getName() + "-" + Integer.toString(idx);
-					slot = CargoFactory.eINSTANCE.createLoadSlot();
-					slot.setPort(inventoryPort);
-					slot.setVolumeLimitsUnit(VolumeUnits.M3);
-					slot.setMinQuantity(cargoVolume);
-					slot.setMaxQuantity(cargoVolume);
-					slot.setName(nextName);
-					slot.setWindowSize(3);
-					slot.setWindowSizeUnits(TimePeriod.DAYS);
-					slot.setContract(chosenPurchaseContract);
-					++idx;
-				} else {
-					slot = tempSlots.pop();
-				}
-				slot.setWindowStart(currentDate);
-				final Entry<BaseLegalEntity, Long> mullEntity = runningAllocation.entrySet().stream() //
+			final Entry<BaseLegalEntity, Long> mullEntity = runningAllocation.entrySet().stream() //
+					.max((e1, e2) -> e1.getValue().compareTo(e2.getValue())).get();
+			if (mullEntity.getKey().equals(capltaplEntity)) {
+				
+				SalesContract currentSalesContract = null;
+				DESSalesMarket currentMarket = null;
+				Vessel currentVessel = null;
+				List<Vessel> vessList = null;
+				int allocationDrop;
+				
+				final Entry<SalesContract, Long> mullSalesContract = capltaplSalesContractRunningAllocation.entrySet().stream() //
 						.max((e1, e2) -> e1.getValue().compareTo(e2.getValue())).get();
-				mullEntity.setValue(mullEntity.getValue()-cargoVolume);
-				slot.setEntity(mullEntity.getKey());
-				newLoadSlots.add(slot);
-				runningVolume = tempRunningVolume;
+				
+				final Entry<DESSalesMarket, Long> mullMarket = capltaplMarketRunningAllocation.entrySet().stream() //
+						.max((e1, e2) -> e1.getValue().compareTo(e2.getValue())).get();
+				
+				if (mullSalesContract.getValue() > mullMarket.getValue()) {
+					currentSalesContract = mullSalesContract.getKey();
+					vessList = capltaplContractVesselLists.get(currentSalesContract);
+					
+				} else {
+					currentMarket = mullMarket.getKey();
+					vessList = capltaplMarketVesselLists.get(currentMarket);
+				}
+				
+				if (!vessList.isEmpty()) {
+					currentVessel = vessList.stream().min((v1, v2) -> vesselToMostRecentUseDate.get(v1).compareTo(vesselToMostRecentUseDate.get(v2))).get();
+					allocationDrop = (int) (currentVessel.getVesselOrDelegateCapacity()*currentVessel.getVesselOrDelegateFillCapacity());
+				} else {
+					allocationDrop = cargoVolume;
+				}
+				
+				int tempRunningVolume = runningVolume - allocationDrop;
+				if (tempRunningVolume > dailyEvent.minVolume && !flaggedDates.contains(currentDate)) {
+					final LoadSlot slot;
+					if (tempSlots.isEmpty()) {
+						final String nextName = inventory.getName() + "-" + Integer.toString(idx);
+						slot = CargoFactory.eINSTANCE.createLoadSlot();
+						slot.setPort(inventoryPort);
+						slot.setVolumeLimitsUnit(VolumeUnits.M3);
+						slot.setMinQuantity(allocationDrop-500);
+						slot.setMaxQuantity(allocationDrop);
+						slot.setName(nextName);
+						slot.setWindowSize(loadWindow);
+						slot.setWindowSizeUnits(TimePeriod.DAYS);
+						slot.setContract(chosenPurchaseContract);
+						++idx;
+					} else {
+						slot = tempSlots.pop();
+					}
+					slot.setWindowStart(currentDate);
+					mullEntity.setValue(mullEntity.getValue()-allocationDrop);
+					slot.setEntity(mullEntity.getKey());
+					newLoadSlots.add(slot);
+					runningVolume = tempRunningVolume;
+
+					if (currentSalesContract != null) {
+						slotToSalesContract.add(new Triple<>(slot, currentSalesContract, currentVessel));
+						mullSalesContract.setValue(mullSalesContract.getValue()-allocationDrop);
+					} else {
+						capltaplSlotToMarket.add(new Triple<>(slot, currentMarket, currentVessel));
+						mullMarket.setValue(mullMarket.getValue()-allocationDrop);
+					}
+					if (currentVessel != null) {
+						// capltaplSalesContractVesselIndices.compute(currentSalesContract, (k, i) -> (Integer) (i+1)%vessList.size());
+						vesselToMostRecentUseDate.put(currentVessel, currentDate);
+					}
+				}
+			} else {
+				final BaseLegalEntity ent = mullEntity.getKey();
+				Vessel currentVessel = null;
+				List<Vessel> vessList = thirdPartyVesselList.get(ent);
+				int allocationDrop;
+				if (!vessList.isEmpty()) {
+					// currentVessel = vessList.get(thirdPartyVesselIndex.get(ent));
+					currentVessel = vessList.stream().min((v1, v2) -> vesselToMostRecentUseDate.get(v1).compareTo(vesselToMostRecentUseDate.get(v2))).get();
+					allocationDrop = (int) (currentVessel.getVesselOrDelegateCapacity()*currentVessel.getVesselOrDelegateFillCapacity());
+				} else {
+					allocationDrop = cargoVolume;
+				}
+				
+				int tempRunningVolume = runningVolume - allocationDrop;
+				if (tempRunningVolume > dailyEvent.minVolume && !flaggedDates.contains(currentDate)) {
+					final LoadSlot slot;
+					if (tempSlots.isEmpty()) {
+						final String nextName = inventory.getName() + "-" + Integer.toString(idx);
+						slot = CargoFactory.eINSTANCE.createLoadSlot();
+						slot.setPort(inventoryPort);
+						slot.setVolumeLimitsUnit(VolumeUnits.M3);
+						slot.setMinQuantity(allocationDrop-500);
+						slot.setMaxQuantity(allocationDrop);
+						slot.setName(nextName);
+						slot.setWindowSize(loadWindow);
+						slot.setWindowSizeUnits(TimePeriod.DAYS);
+						slot.setContract(chosenPurchaseContract);
+						++idx;
+					} else {
+						slot = tempSlots.pop();
+					}
+					slot.setWindowStart(currentDate);
+					mullEntity.setValue(mullEntity.getValue()-allocationDrop);
+					slot.setEntity(mullEntity.getKey());
+					newLoadSlots.add(slot);
+					runningVolume = tempRunningVolume;
+					if (currentVessel != null) {
+						// thirdPartyVesselIndex.put(ent, (thirdPartyVesselIndex.get(ent)+1)%thirdPartyVesselList.get(ent).size());
+						vesselToMostRecentUseDate.put(currentVessel, currentDate);
+					}
+					if (nonCaplTaplVesselSharingEntities.contains(mullEntity.getKey())) {
+						slotToFOBSaleVessels.add(new Triple<>(slot, thirdPartyMarketAllocs.get(ent).get(0).getMarket(), currentVessel));
+					} else {
+						slotToMarketVessels.add(new Triple<>(slot, thirdPartyMarketAllocs.get(ent).get(0).getMarket(), currentVessel));
+					}
+				}
 			}
 		}
 		if (!newLoadSlots.isEmpty()) {
-			cmd.append(AddCommand.create(ed, ScenarioModelUtil.getCargoModel(sm), CargoPackage.Literals.CARGO_MODEL__LOAD_SLOTS , newLoadSlots));
+//			if (ScenarioModelUtil.getCargoModel(sm).getLoadSlots().isEmpty()) {
+//				cmd.append(SetCommand.create(ed, ScenarioModelUtil.getCargoModel(sm), CargoPackage.Literals.CARGO_MODEL__LOAD_SLOTS, newLoadSlots));
+//			} else {
+//				cmd.append(AddCommand.create(ed, ScenarioModelUtil.getCargoModel(sm), CargoPackage.Literals.CARGO_MODEL__LOAD_SLOTS , newLoadSlots));
+//			}
+			cmd.append(AddCommand.create(ed, ScenarioModelUtil.getCargoModel(sm), CargoPackage.Literals.CARGO_MODEL__LOAD_SLOTS, newLoadSlots));
+			// cmd.append(AddCommand.create(ed, profile, ADPPackage.Literals.INVENTORY_PROFILE__GENERATED_SLOTS, newLoadSlots));
+			editorData.getDefaultCommandHandler().handleCommand(cmd, profile, null);
+			
+			for (Triple<LoadSlot, DESSalesMarket, Vessel> t : capltaplSlotToMarket) {
+				final List<Command> setCommands = new LinkedList<>();
+				final List<EObject> deleteObjects = new LinkedList<>();
+				LoadSlot l = t.getFirst();
+				DESSalesMarket m = t.getSecond();
+				Vessel v = t.getThird();
+				
+				DischargeSlot dSlot = cec.createNewSpotDischarge(setCommands, ScenarioModelUtil.getCargoModel(sm), m);
+				ZonedDateTime cal = l.getSchedulingTimeWindow().getStart();
+				IScenarioDataProvider sdp = editorData.getScenarioDataProvider();
+				final int travelTime = CargoEditorMenuHelper.getTravelTime(l, dSlot, v, sdp);
+				if (travelTime == Integer.MAX_VALUE) {
+					final String message = String.format("Can not determine travel time between %s and %s. \n Travel time can not be %d hours.", l.getPort().getName(),
+							dSlot.getPort().getName(), travelTime);
+					throw new RuntimeException(message);
+				}
+				cal = cal.plusHours(travelTime);
+				cal = cal.plusHours(l.getSchedulingTimeWindow().getDuration());
+				
+				cal = cal.withDayOfMonth(1).withHour(0);
+				final LocalDate dischargeCal = cal.toLocalDate();
+				final String yearMonthString = CargoEditorMenuHelper.getKeyForDate(dischargeCal);
+				dSlot.setWindowStart(dischargeCal);
+				dSlot.setWindowStartTime(0);
+				
+				dSlot.setWindowSize(1);
+				dSlot.setWindowSizeUnits(TimePeriod.MONTHS);
+				dSlot.setRestrictedVesselsArePermissive(true);
+				dSlot.setRestrictedVesselsOverride(true);
+				dSlot.getRestrictedVessels().addAll(capltaplMarketVesselLists.get(m));
+				
+				String id = "chev-spot-sale-" + l.getName();
+				
+				dSlot.setName(id);
+				// l.setNominatedVessel(v);
+				// last parameter should be unused since cim is null
+				CargoEditingCommands.runWiringUpdate(ed, sm.getCargoModel(), setCommands, deleteObjects, l, dSlot, null, 0);
+				final CompoundCommand currentWiringCommand = new CompoundCommand("Rewire Cargoes");
+				for (final Command c : setCommands) {
+					currentWiringCommand.append(c);
+				}
+				
+				if (!deleteObjects.isEmpty()) {
+					currentWiringCommand.append(DeleteCommand.create(ed, deleteObjects));
+				}
+				if (!currentWiringCommand.isEmpty()) {
+					ed.getCommandStack().execute(currentWiringCommand);
+					if (v != null) {
+						VesselAvailability va = vessToVA.get(v);
+						if (va != null) {
+							ed.getCommandStack().execute(SetCommand.create(ed, l.getCargo(), CargoPackage.eINSTANCE.getAssignableElement_VesselAssignmentType(), va));
+						};
+					}
+				}
+			}
+			for (Triple<LoadSlot, DESSalesMarket, Vessel> t : slotToMarketVessels) {
+				final List<Command> setCommands = new LinkedList<>();
+				final List<EObject> deleteObjects = new LinkedList<>();
+				LoadSlot l = t.getFirst();
+				DESSalesMarket m = t.getSecond();
+				Vessel v = t.getThird();
+				
+				DischargeSlot dSlot = cec.createNewSpotDischarge(setCommands, ScenarioModelUtil.getCargoModel(sm), m);
+				ZonedDateTime cal = l.getSchedulingTimeWindow().getStart();
+				IScenarioDataProvider sdp = editorData.getScenarioDataProvider();
+				final int travelTime = CargoEditorMenuHelper.getTravelTime(l, dSlot, v, sdp);
+				if (travelTime == Integer.MAX_VALUE) {
+					final String message = String.format("Can not determine travel time between %s and %s. \n Travel time can not be %d hours.", l.getPort().getName(),
+							dSlot.getPort().getName(), travelTime);
+					throw new RuntimeException(message);
+				}
+				cal = cal.plusHours(travelTime);
+				cal = cal.plusHours(l.getSchedulingTimeWindow().getDuration());
+				
+				cal = cal.withDayOfMonth(1).withHour(0);
+				final LocalDate dischargeCal = cal.toLocalDate();
+				final String yearMonthString = CargoEditorMenuHelper.getKeyForDate(dischargeCal);
+				dSlot.setWindowStart(dischargeCal);
+				dSlot.setWindowStartTime(0);
+				
+				dSlot.setWindowSize(1);
+				dSlot.setWindowSizeUnits(TimePeriod.MONTHS);
+				dSlot.setRestrictedVesselsArePermissive(true);
+				dSlot.setRestrictedVesselsOverride(true);
+				dSlot.getRestrictedVessels().addAll(thirdPartyVesselList.get(l.getEntity()));
+				
+				String id = "spot-sale-" + l.getName();
+				
+				dSlot.setName(id);
+				// l.setNominatedVessel(v);
+				// last parameter should be unused since cim is null
+				CargoEditingCommands.runWiringUpdate(ed, sm.getCargoModel(), setCommands, deleteObjects, l, dSlot, null, 0);
+				final CompoundCommand currentWiringCommand = new CompoundCommand("Rewire Cargoes");
+				for (final Command c : setCommands) {
+					currentWiringCommand.append(c);
+				}
+				
+				if (!deleteObjects.isEmpty()) {
+					currentWiringCommand.append(DeleteCommand.create(ed, deleteObjects));
+				}
+				if (!currentWiringCommand.isEmpty()) {
+					ed.getCommandStack().execute(currentWiringCommand);
+					if (v != null) {
+						VesselAvailability va = vessToVA.get(v);
+						if (va != null) {
+							l.getCargo().setAllowRewiring(false);
+							ed.getCommandStack().execute(SetCommand.create(ed, l.getCargo(), CargoPackage.eINSTANCE.getAssignableElement_VesselAssignmentType(), va));
+						};
+					}
+				}
+			}
+			for (Triple<LoadSlot, DESSalesMarket, Vessel> t : slotToFOBSaleVessels) {
+				final List<Command> setCommands = new LinkedList<>();
+				final List<EObject> deleteObjects = new LinkedList<>();
+				LoadSlot l = t.getFirst();
+				DESSalesMarket m = t.getSecond();
+				Vessel v = t.getThird();
+				
+				DischargeSlot dSlot = cec.createNewDischarge(setCommands, ScenarioModelUtil.getCargoModel(sm), true);
+				dSlot.setWindowStart(l.getWindowStart());
+				dSlot.setWindowStartTime(0);
+				
+				dSlot.setWindowSize(1);
+				dSlot.setWindowSizeUnits(TimePeriod.MONTHS);
+				
+				String id = "fob-sale-" + l.getName();
+				
+				dSlot.setPriceExpression("JKM");
+				dSlot.setPort(l.getPort());
+				dSlot.setFobSaleDealType(FOBSaleDealType.SOURCE_ONLY);
+				dSlot.setEntity(l.getEntity());
+				dSlot.setNominatedVessel(v);
+				
+				dSlot.setName(id);
+				// last parameter should be unused since cim is null
+				CargoEditingCommands.runWiringUpdate(ed, sm.getCargoModel(), setCommands, deleteObjects, l, dSlot, null, 0);
+				final CompoundCommand currentWiringCommand = new CompoundCommand("Rewire Cargoes");
+				for (final Command c : setCommands) {
+					currentWiringCommand.append(c);
+				}
+				
+				if (!deleteObjects.isEmpty()) {
+					currentWiringCommand.append(DeleteCommand.create(ed, deleteObjects));
+				}
+				if (!currentWiringCommand.isEmpty()) {
+					ed.getCommandStack().execute(currentWiringCommand);
+					l.getCargo().setAllowRewiring(false);
+//					if (v != null) {
+//						VesselAvailability va = vessToVA.get(v);
+//						if (va != null) {
+//							ed.getCommandStack().execute(SetCommand.create(ed, l.getCargo(), CargoPackage.eINSTANCE.getAssignableElement_VesselAssignmentType(), va));
+//						};
+//					}
+				}
+			}
+			for (Triple<LoadSlot, SalesContract, Vessel> t : slotToSalesContract) {
+				final List<Command> setCommands = new LinkedList<>();
+				final List<EObject> deleteObjects = new LinkedList<>();
+				LoadSlot l = t.getFirst();
+				SalesContract salesContract = t.getSecond();
+				Vessel v = t.getThird();
+				//DischargeSlot dSlot = cec.createNewSpotDischarge(setCommands, ScenarioModelUtil.getCargoModel(sm), m);
+				
+				DischargeSlot dSlot = cec.createNewDischarge(setCommands, ScenarioModelUtil.getCargoModel(sm), false);
+				dSlot.setContract(salesContract);
+				dSlot.setName("chev-contract-"+l.getName());
+				dSlot.setEntity(l.getEntity());
+				dSlot.setPort(salesContract.getPreferredPort());
+				ZonedDateTime cal = l.getSchedulingTimeWindow().getStart();
+				IScenarioDataProvider sdp = editorData.getScenarioDataProvider();
+				final int travelTime = CargoEditorMenuHelper.getTravelTime(l, dSlot, v, sdp);
+				if (travelTime == Integer.MAX_VALUE) {
+					final String message = String.format("Can not determine travel time between %s and %s. \n Travel time can not be %d hours.", l.getPort().getName(),
+							dSlot.getPort().getName(), travelTime);
+					throw new RuntimeException(message);
+				}
+				cal = cal.plusHours(travelTime);
+				cal = cal.plusHours(l.getSchedulingTimeWindow().getDuration());
+
+				cal = cal.withDayOfMonth(1).withHour(0);
+				final LocalDate dischargeCal = cal.toLocalDate();
+				final String yearMonthString = CargoEditorMenuHelper.getKeyForDate(dischargeCal);
+				dSlot.setWindowStart(dischargeCal);
+				dSlot.setWindowStartTime(0);
+
+				dSlot.setWindowSize(1);
+				dSlot.setWindowSizeUnits(TimePeriod.MONTHS);
+
+				CargoEditingCommands.runWiringUpdate(ed, sm.getCargoModel(), setCommands, deleteObjects, l, dSlot, null, 0);
+				final CompoundCommand currentWiringCommand = new CompoundCommand("Rewire Cargoes");
+				for (final Command c : setCommands) {
+					currentWiringCommand.append(c);
+				}
+				if (!deleteObjects.isEmpty()) {
+					currentWiringCommand.append(DeleteCommand.create(ed, deleteObjects));
+				}
+				if (!currentWiringCommand.isEmpty()) {
+					ed.getCommandStack().execute(currentWiringCommand);
+					if (v != null) {
+						VesselAvailability va = vessToVA.get(v);
+						if (va != null) {
+							ed.getCommandStack().execute(SetCommand.create(ed, l.getCargo(), CargoPackage.eINSTANCE.getAssignableElement_VesselAssignmentType(), va));
+						};
+					}
+				}
+			}
+			cec.verifyCargoModel(ScenarioModelUtil.getCargoModel(sm));
 			//editorData.getDefaultCommandHandler().handleCommand(cmd, null, null);
 		} else if (cmd.isEmpty()) {
 			return IdentityCommand.INSTANCE;
@@ -793,6 +955,842 @@ public class ContractPage extends ADPComposite {
 		return cmd;
 	}
 
+	
+	private Command populateModelFromMultipleInventories(EditingDomain ed, LNGScenarioModel sm, ADPModel adpModel, MultipleInventoryProfile profile) {
+		final CompoundCommand cmd = new CompoundCommand("Generate ADP slots");
+		
+		CargoEditingCommands cec = new CargoEditingCommands(ed, sm, ScenarioModelUtil.getCargoModel(sm), ScenarioModelUtil.getCommercialModel(sm),
+				Activator.getDefault().getModelFactoryRegistry());
+		
+//		List<LoadSlot> slotsToRemove = profile.getGeneratedSlots();
+//		if (!slotsToRemove.isEmpty()) {
+//			cmd.append(DeleteCommand.create(ed, slotsToRemove));
+//		}
+		final int loadWindow = profile.getWindowSize();
+		final int volumeFlex = profile.getVolumeFlex();
+		
+		final boolean dynamicWindowGeneration = false;
+		final boolean woodsideDES = false;
+		
+		final int fullCargoLotValue = profile.getFullCargoLotValue();
+		
+		final List<Triple<LoadSlot, DESSalesMarket, Vessel>> slotToMarketVessels = new LinkedList<>();
+		final List<Triple<LoadSlot, SalesContract, Vessel>> slotToThirdPartySalesContract = new LinkedList<>();
+		final List<Triple<LoadSlot, SalesContract, Vessel>> slotToSalesContract = new LinkedList<>();
+		final List<Triple<LoadSlot, DESSalesMarket, Vessel>> slotToFOBSaleVessels = new LinkedList<>();
+		final List<Triple<LoadSlot, DESSalesMarket, Vessel>> capltaplSlotToMarket = new LinkedList<>();
+		final Map<Vessel, LocalDate> vesselToMostRecentUseDate = new HashMap<>();
+		
+		final BaseLegalEntity capltaplEntity = ScenarioModelUtil.getCommercialModel(sm).getEntities().stream().filter(e -> e.getName().equalsIgnoreCase("capl/tapl")).findAny().get();
+		
+//		final Map<BaseLegalEntity,Integer> thirdPartyVesselIndex = new HashMap<>();
+		final Map<BaseLegalEntity, List<Vessel>> thirdPartyVesselList = new HashMap<>();
+		final Map<BaseLegalEntity, List<SalesContract>> thirdPartySalesContractAllocs = new HashMap<>();
+		final Map<BaseLegalEntity, List<MarketAllocationRow>> thirdPartyMarketAllocs = new HashMap<>();
+		
+		final Map<Inventory, Map<BaseLegalEntity, SalesContract[]>> thirdPartySalesContracts = new HashMap<>();
+		final Map<Inventory, Map<BaseLegalEntity, DESSalesMarket[]>> thirdPartyMarkets = new HashMap<>();
+		final Map<Inventory, Map<BaseLegalEntity, List<Pair<SalesContract, Double>>>> thirdPartySalesContractRelativeEntitlements = new HashMap<>();
+		final Map<Inventory, Map<BaseLegalEntity, Map<SalesContract, Long>>> thirdPartySalesContractRunningAllocation = new HashMap<>();
+		final Map<Inventory, Map<BaseLegalEntity, List<Pair<DESSalesMarket, Double>>>> thirdPartyMarketRelativeEntitlements = new HashMap<>();
+		final Map<Inventory, Map<BaseLegalEntity, Map<DESSalesMarket, Long>>> thirdPartyMarketRunningAllocation = new HashMap<>();
+		final Map<Inventory, Map<BaseLegalEntity, Map<SalesContract, List<Vessel>>>> thirdPartySalesContractVesselLists = new HashMap<>();
+		final Map<Inventory, Map<BaseLegalEntity, Map<DESSalesMarket, List<Vessel>>>> thirdPartyMarketVesselLists = new HashMap<>();
+		
+		// int capltaplContractIndex = 0;
+		
+		
+		final Map<Inventory, SalesContract[]> capltaplSalesContracts = new HashMap<>();
+		final Map<Inventory, DESSalesMarket[]> capltaplMarkets = new HashMap<>();
+		final Map<Inventory, List<Pair<SalesContract, Double>>> capltaplSalesContractRelativeEntitlements = new HashMap<>();
+		final Map<Inventory, Map<SalesContract, Long>> capltaplSalesContractRunningAllocation = new HashMap<>();
+		final Map<Inventory, List<Pair<DESSalesMarket, Double>>> capltaplMarketRelativeEntitlements = new HashMap<>();
+		final Map<Inventory, Map<DESSalesMarket, Long>> capltaplMarketRunningAllocation = new HashMap<>();
+		
+		
+//		SalesContract[] capltaplSalesContracts = null;
+//		DESSalesMarket[] capltaplMarkets = null;
+		final Map<SalesContract, Integer> capltaplSalesContractVesselIndices = new HashMap<>();
+		
+//		final List<Pair<SalesContract, Double>> capltaplSalesContractRelativeEntitlements = new LinkedList<>();
+//		final Map<SalesContract, Long> capltaplSalesContractRunningAllocation = new HashMap<>();
+//		final List<Pair<DESSalesMarket, Double>> capltaplMarketRelativeEntitlements = new LinkedList<>();
+//		final Map<DESSalesMarket, Long> capltaplMarketRunningAllocation = new HashMap<>();
+//		
+		final Map<SalesContract, List<Vessel>> capltaplContractVesselLists = new HashMap<>();
+		final Map<DESSalesMarket, List<Vessel>> capltaplMarketVesselLists = new HashMap<>();
+		final Set<Vessel> capltaplVessels = new HashSet<>();
+		
+		final Map<Inventory, List<Pair<BaseLegalEntity, Double>>> relativeEntitlements = new HashMap<>();
+		final Map<Inventory, Map<BaseLegalEntity, Long>> runningAllocation = new HashMap<>();
+		
+//		final List<Pair<BaseLegalEntity, Double>> relativeEntitlements = new ArrayList<>();
+//		final Map<BaseLegalEntity, Long> runningAllocation = new HashMap<>();
+		
+		final Map<Inventory, Map<BaseLegalEntity, MUDContainer>> mudContainers = new HashMap<>();
+		
+		
+		LocalDate dayBeforeADPStart = adpModel.getYearStart().atDay(1).minusDays(1);
+		
+		for (InventorySubprofile subprofile : profile.getInventories()) {
+			final Inventory currentInventory = subprofile.getInventory();
+			Map<BaseLegalEntity, Map<SalesContract, List<Vessel>>> currentThirdPartyToSalesContractToVesselsList = new HashMap<>();
+			thirdPartySalesContractVesselLists.put(currentInventory, currentThirdPartyToSalesContractToVesselsList);
+			Map<BaseLegalEntity, Map<DESSalesMarket, List<Vessel>>> currentThirdPartyToMarketToVesselsList = new HashMap<>();
+			thirdPartyMarketVesselLists.put(currentInventory, currentThirdPartyToMarketToVesselsList);
+			Map<BaseLegalEntity, List<Pair<SalesContract, Double>>> currentThirdPartyToSalesContractAndRelEnt = new HashMap<>();
+			thirdPartySalesContractRelativeEntitlements.put(currentInventory, currentThirdPartyToSalesContractAndRelEnt);
+			Map<BaseLegalEntity, List<Pair<DESSalesMarket, Double>>> currentThirdPartyToMarketAndRelEnt = new HashMap<>();
+			thirdPartyMarketRelativeEntitlements.put(currentInventory, currentThirdPartyToMarketAndRelEnt);
+			Map<BaseLegalEntity, Map<SalesContract, Long>> currentThirdPartyToSalesContractToRunningAlloc = new HashMap<>();
+			thirdPartySalesContractRunningAllocation.put(currentInventory, currentThirdPartyToSalesContractToRunningAlloc);
+			Map<BaseLegalEntity, Map<DESSalesMarket, Long>> currentThirdPartyToMarketToRunningAlloc = new HashMap<>();
+			thirdPartyMarketRunningAllocation.put(currentInventory, currentThirdPartyToMarketToRunningAlloc);
+			Map<BaseLegalEntity, SalesContract[]> currentThirdPartySalesContracts = new HashMap<>();
+			thirdPartySalesContracts.put(currentInventory, currentThirdPartySalesContracts);
+			Map<BaseLegalEntity, DESSalesMarket[]> currentThirdPartyMarketContracts = new HashMap<>();
+			thirdPartyMarkets.put(currentInventory, currentThirdPartyMarketContracts);
+			
+			final Map<BaseLegalEntity, MUDContainer> currentMUDContainers = new HashMap<>();
+			mudContainers.put(currentInventory, currentMUDContainers);
+			
+			
+			final List<Pair<BaseLegalEntity, Double>> currentRelativeEntitlements = new ArrayList<>();
+			final Map<BaseLegalEntity, Long> currentRunningAllocations = new HashMap<>();
+			for (InventoryADPEntityRow row : subprofile.getEntityTable()) {
+				final BaseLegalEntity currentEntity = row.getEntity();
+				if (currentEntity.equals(capltaplEntity)) {
+					List<Pair<SalesContract, Double>> relEntitles = new LinkedList<>();
+					Map<SalesContract, Long> runningAllocs = new HashMap<>();
+					SalesContract[] currentSalesContracts = new SalesContract[row.getContractAllocationRows().size()];
+					double totalWeight = IntStream.concat(
+							row.getContractAllocationRows().stream().mapToInt(ContractAllocationRow::getWeight),
+							row.getMarketAllocationRows().stream().mapToInt(MarketAllocationRow::getWeight)
+						).sum();
+					int i = 0;
+					for (ContractAllocationRow contractAllocationRow : row.getContractAllocationRows()) {
+						final SalesContract currentSalesContract = contractAllocationRow.getContract();
+						final List<Vessel> currentVessels = contractAllocationRow.getVessels();
+						currentSalesContracts[i] = currentSalesContract;
+						currentVessels.stream().forEach(v-> vesselToMostRecentUseDate.put(v, dayBeforeADPStart));
+						capltaplVessels.addAll(currentVessels);
+						capltaplContractVesselLists.put(currentSalesContract, currentVessels);
+						final double relEntitle = contractAllocationRow.getWeight()/totalWeight;
+						relEntitles.add(new Pair<>(currentSalesContract, relEntitle));
+						runningAllocs.put(currentSalesContract, 0L);
+						i++;
+					}
+					capltaplSalesContractRelativeEntitlements.put(currentInventory, relEntitles);
+					capltaplSalesContractRunningAllocation.put(currentInventory, runningAllocs);
+					capltaplSalesContracts.put(currentInventory, currentSalesContracts);
+					
+					
+					i = 0;
+					List<Pair<DESSalesMarket, Double>> currentMarketRelEntitles = new LinkedList<>();
+					Map<DESSalesMarket, Long> currentDESRunningAllocs = new HashMap<>();
+					DESSalesMarket[] currentDESSalesMarkets = new DESSalesMarket[row.getMarketAllocationRows().size()];
+					for (MarketAllocationRow marAllocationRow : row.getMarketAllocationRows()) {
+						final DESSalesMarket currentSalesMarket = marAllocationRow.getMarket();
+						currentDESSalesMarkets[i] = currentSalesMarket;
+						final List<Vessel> currentVessels = marAllocationRow.getVessels();
+						currentVessels.stream().forEach(v -> vesselToMostRecentUseDate.put(v, dayBeforeADPStart));
+						capltaplVessels.addAll(currentVessels);
+						capltaplMarketVesselLists.put(currentSalesMarket, currentVessels);
+						final double relEntitle = marAllocationRow.getWeight()/totalWeight;
+						currentMarketRelEntitles.add(new Pair<>(currentSalesMarket, relEntitle));
+						currentDESRunningAllocs.put(currentSalesMarket, 0L);
+						i++;
+					}
+					capltaplMarketRelativeEntitlements.put(currentInventory, currentMarketRelEntitles);
+					capltaplMarketRunningAllocation.put(currentInventory, currentDESRunningAllocs);
+					capltaplMarkets.put(currentInventory, currentDESSalesMarkets);
+					
+					currentMUDContainers.put(currentEntity, new MUDContainer(row));
+				} else {
+					Map<SalesContract, List<Vessel>> currentSalesContractToVesselsList = new HashMap<>();
+					currentThirdPartyToSalesContractToVesselsList.put(currentEntity, currentSalesContractToVesselsList);
+					List<Pair<SalesContract, Double>> salesContractsRelEntitles = new LinkedList<>();
+					currentThirdPartyToSalesContractAndRelEnt.put(currentEntity, salesContractsRelEntitles);
+					Map<SalesContract, Long> runningSalesContractAllocs = new HashMap<>();
+					currentThirdPartyToSalesContractToRunningAlloc.put(currentEntity, runningSalesContractAllocs);
+					SalesContract[] currentSalesContracts = new SalesContract[row.getContractAllocationRows().size()];
+					currentThirdPartySalesContracts.put(currentEntity, currentSalesContracts);
+					double totalWeight = IntStream.concat(
+							row.getContractAllocationRows().stream().mapToInt(ContractAllocationRow::getWeight),
+							row.getMarketAllocationRows().stream().mapToInt(MarketAllocationRow::getWeight)
+						).sum();
+					int i = 0;
+					for (ContractAllocationRow contractAllocationRow : row.getContractAllocationRows()) {
+						final SalesContract currentSalesContract = contractAllocationRow.getContract();
+						final List<Vessel> currentVessels = contractAllocationRow.getVessels();
+						currentSalesContracts[i] = currentSalesContract;
+						currentVessels.stream().forEach(v -> vesselToMostRecentUseDate.put(v, dayBeforeADPStart));
+						List<Vessel> storedVessels = thirdPartyVesselList.get(currentEntity);
+						if (storedVessels == null) {
+							storedVessels = new LinkedList<>();
+							thirdPartyVesselList.put(currentEntity, storedVessels);
+						}
+						storedVessels.addAll(currentVessels);
+						currentSalesContractToVesselsList.put(currentSalesContract, currentVessels);
+						final double relEntitle = contractAllocationRow.getWeight()/totalWeight;
+						salesContractsRelEntitles.add(new Pair<>(currentSalesContract, relEntitle));
+						runningSalesContractAllocs.put(currentSalesContract, 0L);
+						i++;
+					}
+					
+					Map<DESSalesMarket, List<Vessel>> currentMarketToVesselsList = new HashMap<>();
+					currentThirdPartyToMarketToVesselsList.put(currentEntity, currentMarketToVesselsList);
+					List<Pair<DESSalesMarket, Double>> marketRelEntitles = new LinkedList<>();
+					currentThirdPartyToMarketAndRelEnt.put(currentEntity, marketRelEntitles);
+					Map<DESSalesMarket, Long> runningMarketAllocs = new HashMap<>();
+					currentThirdPartyToMarketToRunningAlloc.put(currentEntity, runningMarketAllocs);
+					DESSalesMarket[] currentMarkets = new DESSalesMarket[row.getMarketAllocationRows().size()];
+					currentThirdPartyMarketContracts.put(currentEntity, currentMarkets);
+					
+					i = 0;
+					for (MarketAllocationRow marketAllocationRow : row.getMarketAllocationRows()) {
+						final DESSalesMarket currentMarket = marketAllocationRow.getMarket();
+						final List<Vessel> currentVessels = marketAllocationRow.getVessels();
+						currentMarkets[i] = currentMarket;
+						currentVessels.stream().forEach(v -> vesselToMostRecentUseDate.put(v, dayBeforeADPStart));
+						List<Vessel> storedVessels = thirdPartyVesselList.get(currentEntity);
+						if (storedVessels == null) {
+							storedVessels = new LinkedList<>();
+							thirdPartyVesselList.put(currentEntity, storedVessels);
+						}
+						storedVessels.addAll(currentVessels);
+						currentMarketToVesselsList.put(currentMarket, currentVessels);
+						final double relEntitle = marketAllocationRow.getWeight()/totalWeight;
+						marketRelEntitles.add(new Pair<>(currentMarket, relEntitle));
+						runningMarketAllocs.put(currentMarket, 0L);
+						i++;
+					}
+					currentMUDContainers.put(currentEntity, new MUDContainer(row));
+				}
+				currentRelativeEntitlements.add(new Pair<>(currentEntity, row.getRelativeEntitlement()));
+				currentRunningAllocations.put(currentEntity, Long.parseLong(row.getInitialAllocation()));
+				
+			}
+			relativeEntitlements.put(currentInventory, currentRelativeEntitlements);
+			runningAllocation.put(currentInventory, currentRunningAllocations);
+		}
+		
+		Set<BaseLegalEntity> nonCaplTaplVesselSharingEntities = new HashSet<>();
+		for (InventorySubprofile sProfile : profile.getInventories()) {
+			for (InventoryADPEntityRow row : sProfile.getEntityTable()) {
+				if (!row.getEntity().equals(capltaplEntity) && 
+						Stream.concat(
+								row.getMarketAllocationRows().stream().flatMap(mar -> mar.getVessels().stream()), 
+								row.getContractAllocationRows().stream().flatMap(con -> con.getVessels().stream())
+							).noneMatch(capltaplVessels::contains)) {
+					nonCaplTaplVesselSharingEntities.add(row.getEntity());
+				}
+			}
+		}
+		
+//		for (InventoryADPEntityRow row : profile.getEntityTable()) {
+//			if (!row.getEntity().equals(capltaplEntity) && Stream.concat(row.getMarketAllocationRows().stream().flatMap(mar -> mar.getVessels().stream()), row.getContractAllocationRows().stream().flatMap(con -> con.getVessels().stream())).noneMatch(capltaplVessels::contains)){
+//				nonCaplTaplVesselSharingEntities.add(row.getEntity());
+//			}
+//		}
+//		
+//		final Set<Vessel> expectedVesselsa = profile.getEntityTable().stream() //
+//				.flatMap(row -> Stream.concat(row.getMarketAllocationRows().stream().flatMap(mar -> mar.getVessels().stream()), row.getContractAllocationRows().stream().flatMap(con -> con.getVessels().stream()))) //
+////				.flatMap(row -> row.getMarketAllocationRows().stream()) //
+////				.flatMap(mar -> mar.getVessels().stream()) //
+//				.collect(Collectors.toSet());
+
+
+		final Set<Vessel> expectedVessels = profile.getInventories().stream() //
+				.flatMap(sProfile -> sProfile.getEntityTable().stream() //
+						.flatMap(row -> Stream.concat(
+								row.getMarketAllocationRows().stream().flatMap(mar -> mar.getVessels().stream()), 
+								row.getContractAllocationRows().stream().flatMap(con -> con.getVessels().stream())
+						)) //
+				).collect(Collectors.toSet());
+		final Map<Vessel, VesselAvailability> vessToVA = sm.getCargoModel().getVesselAvailabilities().stream().filter(va -> expectedVessels.contains(va.getVessel())).collect(Collectors.toMap(VesselAvailability::getVessel, Function.identity()));
+		for (Vessel v : expectedVessels) {
+			if (!vessToVA.containsKey(v)) {
+				System.out.println("No availability for "+ v.getName());
+			}
+		}
+
+		final LocalDate startDate = adpModel.getYearStart().atDay(1);
+		
+		final Map<Inventory, PurchaseContract> inventoryPurchaseContracts = new HashMap<>();
+		final List<PurchaseContract> pcs = ScenarioModelUtil.getCommercialModel(sm).getPurchaseContracts();
+		for (InventorySubprofile sProfile : profile.getInventories()) {
+			inventoryPurchaseContracts.put(
+					sProfile.getInventory(), 
+					pcs.stream().filter(c -> sProfile.getInventory().getPort().equals(c.getPreferredPort())).findFirst().get()
+			);
+		}
+		final Map<Inventory, TreeMap<LocalDate, InventoryDailyEvent>> inventoryInsAndOuts = new HashMap<>();
+		for (InventorySubprofile sProfile : profile.getInventories()) {
+			inventoryInsAndOuts.put(sProfile.getInventory(), getInventoryInsAndOuts(sProfile.getInventory(), sm));
+		}
+		final int cargoVolume = 160000;
+		
+		for (InventorySubprofile sProfile : profile.getInventories()) {
+			int totalInventoryVolume = 0;
+			final Inventory currentInventory = sProfile.getInventory();
+			final TreeMap<LocalDate, InventoryDailyEvent> currentInsAndOuts = inventoryInsAndOuts.get(currentInventory);
+			while (currentInsAndOuts.firstKey().isBefore(startDate)) {
+				final InventoryDailyEvent event = currentInsAndOuts.remove(currentInsAndOuts.firstKey());
+				totalInventoryVolume += event.netVolumeIn;
+			}
+			currentInsAndOuts.firstEntry().getValue().addVolume(totalInventoryVolume);
+		}
+		
+		Map<Inventory, Set<LocalDate>> inventoryFlaggedDates = new HashMap<>();
+		
+		final LocalDate dayBeforeStart = startDate.minusDays(1);
+		for (InventorySubprofile sProfile : profile.getInventories()) {
+			final Port inventoryPort = sProfile.getInventory().getPort();
+			final Set<LocalDate> flaggedDates = new HashSet<>();
+			List<LoadSlot> existingLoads = sm.getCargoModel().getLoadSlots().stream() //
+					.filter(s -> s.getPort().equals(inventoryPort) && dayBeforeStart.isBefore(s.getWindowStart())) //
+					.sorted((s1, s2) -> s1.getWindowStart().compareTo(s2.getWindowStart())) //
+					.collect(Collectors.toList());
+			existingLoads.stream().map(LoadSlot::getWindowStart).forEach(flaggedDates::add);
+			inventoryFlaggedDates.put(sProfile.getInventory(), flaggedDates);
+		}
+
+		Map<Inventory, List<LoadSlot>> newInventoryLoadSlots = new HashMap<>();
+		for (InventorySubprofile sProfile : profile.getInventories()) {
+			newInventoryLoadSlots.put(sProfile.getInventory(), new LinkedList<>());
+		}
+		int idx = 0;
+		
+		Entry<LocalDate, InventoryDailyEvent> currentEntry = null;
+		LoadSlot currentExistingSlot = null;
+		
+		Map<Inventory, Stack<LoadSlot>> inventoryTempSlots = new HashMap<>();
+		for (InventorySubprofile sProfile : profile.getInventories()) {
+			inventoryTempSlots.put(sProfile.getInventory(), new Stack<>());
+		}
+		
+		List<Pair<Inventory, Iterator<Entry<LocalDate, InventoryDailyEvent>>>> iterSwap = new LinkedList<>();
+		for (InventorySubprofile sProfile : profile.getInventories()) {
+			iterSwap.add(new Pair<>(sProfile.getInventory(), inventoryInsAndOuts.get(sProfile.getInventory()).entrySet().iterator()));
+		}
+		
+		Map<Inventory, Integer> inventoryRunningVolume = new HashMap<>();
+		for (InventorySubprofile sProfile : profile.getInventories()) {
+			inventoryRunningVolume.put(sProfile.getInventory(), 0);
+		}
+		
+		final Map<Inventory, MULLContainer> mullMap = new HashMap<>();
+		for (final InventorySubprofile sProfile : profile.getInventories()) {
+			mullMap.put(sProfile.getInventory(), new MULLContainer(runningAllocation.get(sProfile.getInventory()), fullCargoLotValue, relativeEntitlements.get(sProfile.getInventory()), mudContainers.get(sProfile.getInventory())));
+		}
+		
+		while (iterSwap.stream().allMatch(p -> p.getSecond().hasNext())) {
+			for (Pair<Inventory, Iterator<Entry<LocalDate, InventoryDailyEvent>>> curr : iterSwap) {
+				Inventory currentInventory = curr.getFirst();
+				Iterator<Entry<LocalDate, InventoryDailyEvent>> currentIter = curr.getSecond();
+				if (!currentIter.hasNext()) {
+					continue;
+				}
+				final Entry<LocalDate, InventoryDailyEvent> entry = currentIter.next();
+				final InventoryDailyEvent dailyEvent = entry.getValue();
+				
+//				final List<Pair<BaseLegalEntity, Double>> thisRelativeEntitlements = relativeEntitlements.get(currentInventory);
+//				final Map<BaseLegalEntity, Long> thisRunningAllocation = runningAllocation.get(currentInventory);
+				
+//				final List<Pair<SalesContract, Double>> thisCapltaplSalesContractRelativeEntitlements = capltaplSalesContractRelativeEntitlements.get(currentInventory);
+//				final Map<SalesContract, Long> thisCapltaplSalesContractRunningAllocation = capltaplSalesContractRunningAllocation.get(currentInventory);
+//				final List<Pair<DESSalesMarket, Double>> thisCapltaplMarketRelativeEntitlements = capltaplMarketRelativeEntitlements.get(currentInventory);
+//				final Map<DESSalesMarket, Long> thisCapltaplMarketRunningAllocation = capltaplMarketRunningAllocation.get(currentInventory);
+				
+//				final Map<BaseLegalEntity, List<Pair<SalesContract, Double>>> thisThirdPartySalesContractRelativeEntitlements = thirdPartySalesContractRelativeEntitlements.get(currentInventory);
+//				final Map<BaseLegalEntity, Map<SalesContract, Long>> thisThirdPartySalesContractRunningAllocation = thirdPartySalesContractRunningAllocation.get(currentInventory);
+//				final Map<BaseLegalEntity, List<Pair<DESSalesMarket, Double>>> thisThirdPartyMarketRelativeEntitlements = thirdPartyMarketRelativeEntitlements.get(currentInventory);
+//				final Map<BaseLegalEntity, Map<DESSalesMarket, Long>> thisThirdPartyMarketRunningAllocation = thirdPartyMarketRunningAllocation.get(currentInventory);
+				
+				inventoryRunningVolume.compute(currentInventory, (k, vol) -> vol + dailyEvent.netVolumeIn);
+				
+				final MULLContainer currentMULLContainer = mullMap.get(currentInventory);
+				currentMULLContainer.updateRunningAllocation(dailyEvent.netVolumeIn);
+				
+//				for (final Pair<BaseLegalEntity, Double> p : thisRelativeEntitlements) {
+//					final Long additionalAllocation = ((Double) (dailyEvent.netVolumeIn*p.getSecond())).longValue();
+//					thisRunningAllocation.compute(p.getFirst(), (k, v) -> {
+//						return v + additionalAllocation;
+//					});
+//					BaseLegalEntity currentEntity = p.getFirst();
+//					if (currentEntity.equals(capltaplEntity)) {
+//						for (final Pair<SalesContract, Double> pp : thisCapltaplSalesContractRelativeEntitlements) {
+//							thisCapltaplSalesContractRunningAllocation.compute(pp.getFirst(), (k, v) -> v+((Double) (additionalAllocation*pp.getSecond())).longValue());
+//						}
+//						for (final Pair<DESSalesMarket, Double> pp : thisCapltaplMarketRelativeEntitlements) {
+//							thisCapltaplMarketRunningAllocation.compute(pp.getFirst(), (k, v)-> v+ ((Double) (additionalAllocation*pp.getSecond())).longValue());
+//						}
+//					} else {
+//						for (final Pair<SalesContract, Double> pp : thisThirdPartySalesContractRelativeEntitlements.get(currentEntity)) {
+//							thisThirdPartySalesContractRunningAllocation.get(currentEntity).compute(pp.getFirst(), (k, v) -> v+((Double) (additionalAllocation*pp.getSecond())).longValue());
+//						}
+//						for (final Pair<DESSalesMarket, Double> pp : thisThirdPartyMarketRelativeEntitlements.get(currentEntity)) {
+//							thisThirdPartyMarketRunningAllocation.get(currentEntity).compute(pp.getFirst(), (k, v) -> v+ ((Double) (additionalAllocation*pp.getSecond())).longValue());
+//						}
+//					}
+//				}
+				
+				final LocalDate currentDate = entry.getKey();
+				
+				if (currentDate.getDayOfMonth() == 1) {
+					final YearMonth currentYM = YearMonth.from(currentDate);
+					final int monthIn = inventoryInsAndOuts.get(currentInventory).entrySet().stream() //
+						.filter(p -> YearMonth.from(p.getKey()).equals(currentYM)) //
+						.mapToInt(p -> p.getValue().netVolumeIn) //
+						.sum();
+					currentMULLContainer.updateCurrentMonthAbsoluteEntitlement(monthIn);
+				}
+				
+				while (currentExistingSlot != null && currentExistingSlot.getWindowStart().equals(currentDate)) {
+					final BaseLegalEntity entity = currentExistingSlot.getEntity();
+//					final Long entityAllocation = thisRunningAllocation.get(entity);
+//					if (entityAllocation != null) {
+//						thisRunningAllocation.put(entity, entityAllocation - currentExistingSlot.getMaxQuantity());
+//					}
+					currentMULLContainer.updateEntityRunningAllocation(currentExistingSlot);
+					// currentExistingSlot = iterExistingLoads.hasNext() ? iterExistingLoads.next() : null;
+				}
+				Integer thisRunningVolume = inventoryRunningVolume.get(currentInventory);
+				final List<LoadSlot> thisNewLoadSlots = newInventoryLoadSlots.get(currentInventory);
+				final Stack<LoadSlot> thisTempSlots = inventoryTempSlots.get(currentInventory);
+				while (thisRunningVolume < dailyEvent.minVolume && !thisNewLoadSlots.isEmpty()) {
+					final LoadSlot oldLoadSlot = ((LinkedList<LoadSlot>) thisNewLoadSlots).removeLast();
+					thisTempSlots.add(oldLoadSlot);
+					thisRunningVolume += oldLoadSlot.getMaxQuantity();
+//					thisRunningAllocation.compute(oldLoadSlot.getEntity(), (k, v) -> v + oldLoadSlot.getMaxQuantity());
+					currentMULLContainer.reverseEntityLoadSlot(oldLoadSlot);
+				}
+				
+//				assert currentMULLContainer.runningAllocationEqual(thisRunningAllocation);
+				inventoryRunningVolume.put(currentInventory, thisRunningVolume);
+				
+				LocalDate expDate = LocalDate.of(2021, 9, 28);
+				if (currentInventory.getName().equalsIgnoreCase("gorgon") && currentDate.getMonthValue() == 9) {
+					int t = 0;
+				}
+				
+				final BaseLegalEntity mullEntity2 = currentMULLContainer.calculateMull(vesselToMostRecentUseDate);
+//				final Entry<BaseLegalEntity, Long> mullEntity = thisRunningAllocation.entrySet().stream() //
+//						.max((e1, e2) -> e1.getValue().compareTo(e2.getValue())).get();
+				
+//				if (!mullEntity2.equals(mullEntity.getKey())) {
+//					int i = 0;
+//				}
+				// assert mullEntity2.equals(mullEntity.getKey());
+				
+				if (mullEntity2.equals(capltaplEntity)) {
+//					SalesContract currentSalesContract = null;
+//					DESSalesMarket currentMarket = null;
+//					Vessel currentVessel = null;
+//					List<Vessel> vessList = null;
+					int allocationDrop;
+					
+					SalesContract currentSalesContract2 = null;
+					DESSalesMarket currentMarket2 = null;
+					Vessel currentVessel2 = null;
+					List<Vessel> vessList2 = null;
+					
+					final Entry<SalesContract, Long> mudSalesContract = currentMULLContainer.getMUDSalesContract(capltaplEntity);
+					final Entry<DESSalesMarket, Long> mudMarket = currentMULLContainer.getMUDMarket(capltaplEntity);
+					
+					if (mudSalesContract != null) {
+						if (mudMarket != null) {
+							if (mudSalesContract.getValue() > mudMarket.getValue()) {
+								currentSalesContract2 = mudSalesContract.getKey();
+								vessList2 = capltaplContractVesselLists.get(currentSalesContract2);
+							} else {
+								currentMarket2 = mudMarket.getKey();
+								vessList2 = capltaplMarketVesselLists.get(currentMarket2);
+							}
+						} else {
+							currentSalesContract2 = mudSalesContract.getKey();
+							vessList2 = capltaplContractVesselLists.get(currentSalesContract2);
+						}
+					} else {
+						currentMarket2 = mudMarket.getKey();
+						vessList2 = capltaplMarketVesselLists.get(currentMarket2);
+					}
+					
+//					final Entry<SalesContract, Long> mullSalesContract = thisCapltaplSalesContractRunningAllocation.entrySet().stream() //
+//							.max((e1, e2) -> e1.getValue().compareTo(e2.getValue())).get();
+//					
+//					final Entry<DESSalesMarket, Long> mullMarket = thisCapltaplMarketRunningAllocation.entrySet().stream() //
+//							.max((e1, e2) -> e1.getValue().compareTo(e2.getValue())).get();
+//					
+//					if (mullSalesContract.getValue() > mullMarket.getValue()) {
+//						currentSalesContract = mullSalesContract.getKey();
+//						vessList = capltaplContractVesselLists.get(currentSalesContract);
+//						
+//					} else {
+//						currentMarket = mullMarket.getKey();
+//						vessList = capltaplMarketVesselLists.get(currentMarket);
+//					}
+					
+//					if (!vessList.isEmpty()) {
+//						currentVessel = vessList.stream().min((v1, v2) -> vesselToMostRecentUseDate.get(v1).compareTo(vesselToMostRecentUseDate.get(v2))).get();
+//						allocationDrop = (int) (currentVessel.getVesselOrDelegateCapacity()*currentVessel.getVesselOrDelegateFillCapacity() - currentVessel.getVesselOrDelegateSafetyHeel());
+//					} else {
+//						allocationDrop = cargoVolume;
+//					}
+					
+					if (!vessList2.isEmpty()) {
+						currentVessel2 = vessList2.stream().min((v1, v2) -> vesselToMostRecentUseDate.get(v1).compareTo(vesselToMostRecentUseDate.get(v2))).get();
+						allocationDrop = (int) (currentVessel2.getVesselOrDelegateCapacity()*currentVessel2.getVesselOrDelegateFillCapacity() - currentVessel2.getVesselOrDelegateSafetyHeel());
+					} else {
+						allocationDrop = cargoVolume;
+					}
+					
+//					assert (currentSalesContract == currentSalesContract2);
+//					assert (currentMarket == currentMarket2);
+					
+					int tempRunningVolume = inventoryRunningVolume.get(currentInventory) - allocationDrop;
+					final Set<LocalDate> thisFlaggedDates = inventoryFlaggedDates.get(currentInventory);
+					if (tempRunningVolume > dailyEvent.minVolume && !thisFlaggedDates.contains(currentDate)) {
+						final LoadSlot slot;
+						if (thisTempSlots.isEmpty()) {
+							final String nextName = currentInventory.getName() + "-" + Integer.toString(idx);
+							slot = CargoFactory.eINSTANCE.createLoadSlot();
+							slot.setPort(currentInventory.getPort());
+							slot.setVolumeLimitsUnit(VolumeUnits.M3);
+							slot.setMinQuantity(allocationDrop-volumeFlex);
+							slot.setMaxQuantity(allocationDrop+volumeFlex);
+							slot.setName(nextName);
+							slot.setWindowSizeUnits(TimePeriod.DAYS);
+							slot.setContract(inventoryPurchaseContracts.get(currentInventory));
+							++idx;
+						} else {
+							slot = thisTempSlots.pop();
+						}
+						slot.setWindowStart(currentDate);
+						if (!thisNewLoadSlots.isEmpty() && dynamicWindowGeneration) {
+							LoadSlot previousLoadSlot = ((LinkedList<LoadSlot>) thisNewLoadSlots).getLast();
+							final LocalDate previousDate = previousLoadSlot.getWindowStart();
+							final long days = Days.between(previousDate, currentDate);
+							final long actualDays = days + 1;
+							final YearMonth currentYearMonth = YearMonth.from(previousDate);
+							final LocalDate endWindowDate = currentDate.plusDays(actualDays);
+							final LocalDate lastDayOfMonth = currentYearMonth.atEndOfMonth();
+							if (lastDayOfMonth.isBefore(endWindowDate)) {
+								previousLoadSlot.setWindowSize(Days.between(previousDate, lastDayOfMonth));
+							} else {
+								previousLoadSlot.setWindowSize((int) actualDays);
+							}
+						}
+						final YearMonth currentYearMonth = YearMonth.from(currentDate);
+						final LocalDate endWindowDate = currentDate.plusDays(loadWindow);
+						final LocalDate lastDayOfMonth = currentYearMonth.atEndOfMonth();
+						if (lastDayOfMonth.isBefore(endWindowDate)) {
+							slot.setWindowSize(Days.between(currentDate, lastDayOfMonth));
+						} else {
+							slot.setWindowSize(loadWindow);
+						}
+						// mullEntity.setValue(mullEntity.getValue()-allocationDrop);
+						currentMULLContainer.dropEntityAllocation(mullEntity2, allocationDrop);
+						// slot.setEntity(mullEntity.getKey());
+						slot.setEntity(mullEntity2);
+						thisNewLoadSlots.add(slot);
+						inventoryRunningVolume.put(currentInventory, tempRunningVolume);
+//						runningVolume = tempRunningVolume;
+
+						if (currentSalesContract2 != null) {
+							slotToSalesContract.add(new Triple<>(slot, currentSalesContract2, currentVessel2));
+							// mullSalesContract.setValue(mullSalesContract.getValue()-allocationDrop);
+							currentMULLContainer.dropAllocation(mullEntity2, currentSalesContract2, (long) allocationDrop);
+							
+						} else {
+							capltaplSlotToMarket.add(new Triple<>(slot, currentMarket2, currentVessel2));
+							//mullMarket.setValue(mullMarket.getValue()-allocationDrop);
+							currentMULLContainer.dropAllocation(mullEntity2, currentMarket2, (long) allocationDrop); 
+						}
+						if (currentVessel2 != null) {
+							// capltaplSalesContractVesselIndices.compute(currentSalesContract, (k, i) -> (Integer) (i+1)%vessList.size());
+							vesselToMostRecentUseDate.put(currentVessel2, currentDate);
+						}
+					}
+				} else {
+//					final BaseLegalEntity ent = mullEntity.getKey();
+					final BaseLegalEntity ent = mullEntity2;
+//					SalesContract currentSalesContract = null;
+//					DESSalesMarket currentMarket = null;
+//					Vessel currentVessel = null;
+//					List<Vessel> vessList = null;
+					int allocationDrop;
+					
+					SalesContract currentSalesContract2 = null;
+					DESSalesMarket currentMarket2 = null;
+					Vessel currentVessel2 = null;
+					List<Vessel> vessList2 = null;
+					
+//					Map<SalesContract, Long> currentSalesContractRunningAllocations = thisThirdPartySalesContractRunningAllocation.get(ent);
+//					Map<DESSalesMarket, Long> currentMarketRunningAllocations = thisThirdPartyMarketRunningAllocation.get(ent);
+					
+					final Entry<SalesContract, Long> mudSalesContract = currentMULLContainer.getMUDSalesContract(ent);
+					final Entry<DESSalesMarket, Long> mudMarket = currentMULLContainer.getMUDMarket(ent);
+					
+					if (mudSalesContract != null) {
+						if (mudMarket != null) {
+							if (mudSalesContract.getValue() > mudMarket.getValue()) {
+								currentSalesContract2 = mudSalesContract.getKey();
+								vessList2 = thirdPartySalesContractVesselLists.get(currentInventory).get(ent).get(currentSalesContract2);
+							} else {
+								currentMarket2 = mudMarket.getKey();
+								vessList2 = thirdPartyMarketVesselLists.get(currentInventory).get(ent).get(currentMarket2);
+							}
+						} else {
+							currentSalesContract2 = mudSalesContract.getKey();
+							vessList2 = thirdPartySalesContractVesselLists.get(currentInventory).get(ent).get(currentSalesContract2);
+						}
+					} else {
+						currentMarket2 = mudMarket.getKey();
+						vessList2 = thirdPartyMarketVesselLists.get(currentInventory).get(ent).get(currentMarket2);
+					}
+					
+//					if (!currentSalesContractRunningAllocations.isEmpty()) {
+//						final Entry<SalesContract, Long> mullSalesContract = currentSalesContractRunningAllocations.entrySet().stream() //
+//								.max((e1, e2) -> e1.getValue().compareTo(e2.getValue())).get();
+//						if (!currentMarketRunningAllocations.isEmpty()) {
+//							final Entry<DESSalesMarket, Long> mullMarket = currentMarketRunningAllocations.entrySet().stream() //
+//									.max((e1, e2) -> e1.getValue().compareTo(e2.getValue())).get();
+//							if (mullSalesContract.getValue() > mullMarket.getValue()) {
+//								currentSalesContract = mullSalesContract.getKey();
+//								vessList = thirdPartySalesContractVesselLists.get(currentInventory).get(ent).get(currentSalesContract);
+//							} else {
+//								currentMarket = mullMarket.getKey();
+//								vessList = thirdPartyMarketVesselLists.get(currentInventory).get(ent).get(currentMarket);
+//							}
+//						} else {
+//							currentSalesContract = mullSalesContract.getKey();
+//							vessList = thirdPartySalesContractVesselLists.get(currentInventory).get(ent).get(currentSalesContract);
+//						}
+//					} else {
+//						final Entry<DESSalesMarket, Long> mullMarket = currentMarketRunningAllocations.entrySet().stream() //
+//								.max((e1, e2) -> e1.getValue().compareTo(e2.getValue())).get();
+//						currentMarket = mullMarket.getKey();
+//						vessList = thirdPartyMarketVesselLists.get(currentInventory).get(ent).get(currentMarket);
+//					}
+					
+//					if (!vessList.isEmpty()) {
+//						currentVessel = vessList.stream().min((v1, v2) -> vesselToMostRecentUseDate.get(v1).compareTo(vesselToMostRecentUseDate.get(v2))).get();
+//						allocationDrop = (int) (currentVessel.getVesselOrDelegateCapacity()*currentVessel.getVesselOrDelegateFillCapacity() - currentVessel.getVesselOrDelegateSafetyHeel());
+//					} else {
+//						allocationDrop = cargoVolume;
+//					}
+					
+					if (!vessList2.isEmpty()) {
+						currentVessel2 = vessList2.stream().min((v1, v2) -> vesselToMostRecentUseDate.get(v1).compareTo(vesselToMostRecentUseDate.get(v2))).get();
+						allocationDrop = (int) (currentVessel2.getVesselOrDelegateCapacity()*currentVessel2.getVesselOrDelegateFillCapacity() - currentVessel2.getVesselOrDelegateSafetyHeel());
+					} else {
+						allocationDrop = cargoVolume;
+					}
+					
+//					assert (currentSalesContract == currentSalesContract2);
+//					assert (currentMarket == currentMarket2);
+					
+					int tempRunningVolume = inventoryRunningVolume.get(currentInventory) - allocationDrop;
+					final Set<LocalDate> thisFlaggedDates = inventoryFlaggedDates.get(currentInventory);
+					if (tempRunningVolume > dailyEvent.minVolume && !thisFlaggedDates.contains(currentDate)) {
+						final LoadSlot slot;
+						if (thisTempSlots.isEmpty()) {
+							final String nextName = currentInventory.getName() + "-" + Integer.toString(idx);
+							slot = CargoFactory.eINSTANCE.createLoadSlot();
+							slot.setPort(currentInventory.getPort());
+							slot.setVolumeLimitsUnit(VolumeUnits.M3);
+							slot.setMinQuantity(allocationDrop-volumeFlex);
+							slot.setMaxQuantity(allocationDrop+volumeFlex);
+							slot.setName(nextName);
+							// slot.setWindowSize(loadWindow);
+							slot.setWindowSizeUnits(TimePeriod.DAYS);
+							slot.setContract(inventoryPurchaseContracts.get(currentInventory));
+							++idx;
+						} else {
+							slot = thisTempSlots.pop();
+						}
+						slot.setWindowStart(currentDate);
+//						if (!thisNewLoadSlots.isEmpty() && dynamicWindowGeneration) {
+//							LoadSlot previousLoadSlot = ((LinkedList<LoadSlot>) thisNewLoadSlots).getLast();
+//							final long days = ChronoUnit.DAYS.between(previousLoadSlot.getWindowStart(), currentDate);
+//							previousLoadSlot.setWindowSize((int) days + 1);
+//						}
+						if (!thisNewLoadSlots.isEmpty() && dynamicWindowGeneration) {
+							LoadSlot previousLoadSlot = ((LinkedList<LoadSlot>) thisNewLoadSlots).getLast();
+							final LocalDate previousDate = previousLoadSlot.getWindowStart();
+							final long days = Days.between(previousDate, currentDate);
+							final long actualDays = days + 1;
+							final YearMonth currentYearMonth = YearMonth.from(previousDate);
+							final LocalDate endWindowDate = currentDate.plusDays(actualDays);
+							final LocalDate lastDayOfMonth = currentYearMonth.atEndOfMonth();
+							if (lastDayOfMonth.isBefore(endWindowDate)) {
+								previousLoadSlot.setWindowSize(Days.between(previousDate, lastDayOfMonth));
+							} else {
+								previousLoadSlot.setWindowSize((int) actualDays);
+							}
+						}
+						final YearMonth currentYearMonth = YearMonth.from(currentDate);
+						final LocalDate endWindowDate = currentDate.plusDays(loadWindow);
+						final LocalDate lastDayOfMonth = currentYearMonth.atEndOfMonth();
+						if (lastDayOfMonth.isBefore(endWindowDate)) {
+							slot.setWindowSize(Days.between(currentDate, lastDayOfMonth));
+						} else {
+							slot.setWindowSize(loadWindow);
+						}
+//						mullEntity.setValue(mullEntity.getValue()-allocationDrop);
+						currentMULLContainer.dropEntityAllocation(mullEntity2, allocationDrop);
+						// slot.setEntity(mullEntity.getKey());
+						slot.setEntity(mullEntity2);
+						thisNewLoadSlots.add(slot);
+						inventoryRunningVolume.put(currentInventory, tempRunningVolume);
+						if (ent.getName().equalsIgnoreCase("kuf")) {
+							int i = 0;
+						}
+						if (currentSalesContract2 != null) {
+							if (woodsideDES && mullEntity2.getName().equals("Woodside") && currentSalesContract2.getName().equals("TED1")) {
+								slot.setDESPurchase(true);
+							}
+							slotToThirdPartySalesContract.add(new Triple<>(slot, currentSalesContract2, currentVessel2));
+//							currentSalesContractRunningAllocations.compute(currentSalesContract, (k, v) -> v -allocationDrop);
+							currentMULLContainer.dropAllocation(mullEntity2, currentSalesContract2, (long) allocationDrop);
+						} else {
+							if (nonCaplTaplVesselSharingEntities.contains(mullEntity2)) {
+								slotToFOBSaleVessels.add(new Triple<>(slot, currentMarket2, currentVessel2));
+							} else {
+								slotToMarketVessels.add(new Triple<>(slot, currentMarket2, currentVessel2));
+							}
+//							currentMarketRunningAllocations.compute(currentMarket, (k, v) -> v - allocationDrop);
+							currentMULLContainer.dropAllocation(mullEntity2, currentMarket2, (long) allocationDrop);
+						}
+						
+						if (currentVessel2 != null) {
+							// thirdPartyVesselIndex.put(ent, (thirdPartyVesselIndex.get(ent)+1)%thirdPartyVesselList.get(ent).size());
+							vesselToMostRecentUseDate.put(currentVessel2, currentDate);
+						}
+//						if (nonCaplTaplVesselSharingEntities.contains(mullEntity.getKey())) {
+//							slotToFOBSaleVessels.add(new Triple<>(slot, thirdPartyMarketAllocs.get(ent).get(0).getMarket(), currentVessel));
+//						} else {
+//							slotToMarketVessels.add(new Triple<>(slot, thirdPartyMarketAllocs.get(ent).get(0).getMarket(), currentVessel));
+//						}
+					}
+				}
+//				currentMULLContainer.runningAllocationEqual(thisRunningAllocation);
+			}
+		}
+		if (newInventoryLoadSlots.values().stream().anyMatch(c-> !c.isEmpty())) {
+			
+			// final List<LoadSlot> loadSlotsToAdd = new LinkedList<>();
+			
+			final List<Command> dischargeSlotSetCommands = new LinkedList<>();
+			final List<Command> cargoSetCommands = new LinkedList<>();
+			
+			final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sm);
+			for(List<LoadSlot> newSlots : newInventoryLoadSlots.values()) {
+				if (!newSlots.isEmpty()) {
+					cmd.append(AddCommand.create(ed, cargoModel, CargoPackage.Literals.CARGO_MODEL__LOAD_SLOTS, newSlots));
+				}
+			}
+			for (Triple<LoadSlot, DESSalesMarket, Vessel> t : capltaplSlotToMarket) {
+				final LoadSlot currentLoadSlot = t.getFirst();
+				final DESSalesMarket currentMarket = t.getSecond();
+				final Vessel currentVessel = t.getThird();
+				
+				final DischargeSlot currentDischargeSlot = buildMarketDischargeSlot(cec, dischargeSlotSetCommands, cargoModel, currentMarket, currentLoadSlot, currentVessel, capltaplMarketVesselLists.get(currentMarket), "chev-spot-sale-");
+				
+				final Cargo currentCargo = CargoEditingCommands.createNewCargo(ed, cargoSetCommands, cargoModel, null, 0);
+				currentLoadSlot.setCargo(currentCargo);
+				currentDischargeSlot.setCargo(currentCargo);
+				
+				if (currentVessel != null) {
+					final VesselAvailability currentVesselVA = vessToVA.get(currentVessel);
+					if (currentVesselVA != null) {
+						currentCargo.setVesselAssignmentType(currentVesselVA);
+					}
+				}
+			}
+			for (Triple<LoadSlot, DESSalesMarket, Vessel> t : slotToMarketVessels) {
+				LoadSlot currentLoadSlot = t.getFirst();
+				DESSalesMarket currentMarket = t.getSecond();
+				Vessel currentVessel = t.getThird();
+				
+				final DischargeSlot currentDischargeSlot = buildMarketDischargeSlot(cec, dischargeSlotSetCommands, cargoModel, currentMarket, currentLoadSlot, currentVessel, thirdPartyVesselList.get(currentLoadSlot.getEntity()), "spot-sale-");
+
+				final Cargo currentCargo = CargoEditingCommands.createNewCargo(ed, cargoSetCommands, cargoModel, null, 0);
+				currentLoadSlot.setCargo(currentCargo);
+				currentDischargeSlot.setCargo(currentCargo);
+				
+				if (currentVessel != null) {
+					final VesselAvailability currentVesselVA = vessToVA.get(currentVessel);
+					if (currentVesselVA != null) {
+						currentCargo.setAllowRewiring(false);
+						currentCargo.setVesselAssignmentType(currentVesselVA);
+					}
+				}
+			}
+			for (Triple<LoadSlot, DESSalesMarket, Vessel> t : slotToFOBSaleVessels) {
+				LoadSlot currentLoadSlot = t.getFirst();
+				Vessel currentVessel = t.getThird();
+				
+				final DischargeSlot currentDischargeSlot = buildFOBSaleDischargeSlot(cec, dischargeSlotSetCommands, cargoModel, currentLoadSlot, currentVessel, "fob-sale-");
+				// last parameter should be unused since cim is null
+				
+				final Cargo currentCargo = CargoEditingCommands.createNewCargo(ed, cargoSetCommands, cargoModel, null, 0);
+				currentLoadSlot.setCargo(currentCargo);
+				currentDischargeSlot.setCargo(currentCargo);
+				currentCargo.setAllowRewiring(false);
+			}
+			for (Triple<LoadSlot, SalesContract, Vessel> t : slotToSalesContract) {
+				final LoadSlot currentLoadSlot = t.getFirst();
+				final SalesContract currentSalesContract = t.getSecond();
+				final Vessel currentVessel = t.getThird();
+				
+				final DischargeSlot currentDischargeSlot = buildDESSaleDischargeSlot(cec, dischargeSlotSetCommands, cargoModel, currentSalesContract, currentLoadSlot, currentVessel, null, "chev-contract-");
+				
+				final Cargo currentCargo = CargoEditingCommands.createNewCargo(ed, cargoSetCommands, cargoModel, null, 0);
+				currentLoadSlot.setCargo(currentCargo);
+				currentDischargeSlot.setCargo(currentCargo);
+				
+				if (currentVessel != null) {
+					final VesselAvailability currentVesselVA = vessToVA.get(currentVessel);
+					if (currentVesselVA != null) {
+						currentCargo.setVesselAssignmentType(currentVesselVA);
+					}
+				}
+			}
+			for (Triple<LoadSlot, SalesContract, Vessel> t : slotToThirdPartySalesContract) {
+				final List<Command> setCommands = new LinkedList<>();
+				final List<EObject> deleteObjects = new LinkedList<>();
+				final LoadSlot currentLoadSlot = t.getFirst();
+				final SalesContract currentSalesContract = t.getSecond();
+				final Vessel currentVessel = t.getThird();
+				
+				final DischargeSlot currentDischargeSlot = buildDESSaleDischargeSlot(cec, dischargeSlotSetCommands, cargoModel, currentSalesContract, currentLoadSlot, currentVessel, null, "third-party-contract-");
+				
+				final Cargo currentCargo = CargoEditingCommands.createNewCargo(ed, cargoSetCommands, cargoModel, null, 0);
+				currentLoadSlot.setCargo(currentCargo);
+				currentDischargeSlot.setCargo(currentCargo);
+				currentCargo.setAllowRewiring(false);
+				
+				if (currentVessel != null) {
+					final VesselAvailability currentVesselVA = vessToVA.get(currentVessel);
+					if (currentVesselVA != null) {
+						currentCargo.setVesselAssignmentType(currentVesselVA);
+					}
+				}
+			}
+			int i = 0;
+			dischargeSlotSetCommands.forEach(cmd::append);
+			cargoSetCommands.forEach(cmd::append);
+			editorData.getDefaultCommandHandler().handleCommand(cmd, profile, null);
+			cec.verifyCargoModel(ScenarioModelUtil.getCargoModel(sm));
+		} else if (cmd.isEmpty()) {
+			return IdentityCommand.INSTANCE;
+		}
+		return cmd;
+	}
+	
 	@Override
 	public void refresh() {
 		ViewerHelper.refresh(previewViewer, true);
@@ -828,7 +1826,12 @@ public class ContractPage extends ADPComposite {
 				commercialModel.eAdapters().remove(commercialModelAdapter);
 				cargoModel.eAdapters().remove(cargoModelAdapter);
 			};
-
+			
+			MultipleInventoryProfile profile = adpModel.getMultipleInventoriesProfile();
+			if (profile == null) {
+				profile = ADPFactory.eINSTANCE.createMultipleInventoryProfile();
+			}
+			objects.add(profile);
 			objects.addAll(cargoModel.getInventoryModels());
 			objects.addAll(commercialModel.getPurchaseContracts());
 			objects.addAll(commercialModel.getSalesContracts());
@@ -900,9 +1903,23 @@ public class ContractPage extends ADPComposite {
 			}
 			if (target == null) {
 				final InventoryProfile profile = ADPFactory.eINSTANCE.createInventoryProfile();
-				profile.setInventory(inventory);
 				target = profile;
+				if (target != null) {
+					final CompoundCommand cmd = new CompoundCommand("Create ADP Inventory Profile");
+					cmd.append(AddCommand.create(editorData.getEditingDomain(), editorData.adpModel, ADPPackage.eINSTANCE.getADPModel_InventoryProfiles(), Collections.singletonList(profile)));
+					editorData.getEditingDomain().getCommandStack().execute(cmd);
+				}
+				profile.setInventory(inventory);
 			}
+		} else if (object instanceof MultipleInventoryProfile) {
+			if (editorData.adpModel.getMultipleInventoriesProfile() == null) {
+				//final CompoundCommand cmd = new CompoundCommand("Create ADP Multiple Inventory Profile");
+				editorData.adpModel.setMultipleInventoriesProfile((MultipleInventoryProfile) object);
+				//cmd.append(SetCommand.create(editorData.getEditingDomain(), editorData.adpModel, ADPPackage.eINSTANCE.getADPModel_MultipleInventoriesProfile(), target));
+				// editorData.getEditingDomain().getCommandStack().execute(cmd);
+			}
+			
+			target = object;
 		}
 
 		detailComposite.setInput(target);
@@ -911,6 +1928,7 @@ public class ContractPage extends ADPComposite {
 
 	private void updatePreviewPaneInput(final EObject target) {
 		if (editorData != null && editorData.getScenarioModel() != null) {
+			ADPModel adpModel = editorData.adpModel;
 			if (previewViewer != null) {
 				if (target instanceof PurchaseContractProfile) {
 					final PurchaseContractProfile purchaseContractProfile = (PurchaseContractProfile) target;
@@ -932,7 +1950,9 @@ public class ContractPage extends ADPComposite {
 					previewViewer.setInput(o);
 				} else if (target instanceof InventoryProfile) {
 					final InventoryProfile inventoryProfile = (InventoryProfile) target;
-					previewViewer.setInput(inventoryProfile.getGeneratedSlots());
+					final List<Object> o = new LinkedList<>();
+					o.addAll(inventoryProfile.getGeneratedSlots());
+					previewViewer.setInput(o);
 				}
 			}
 		}
@@ -1110,5 +2130,109 @@ public class ContractPage extends ADPComposite {
 				inventoryDailyEvent.addVolume(volumeFunction.apply(inventoryEventRow.getReliableVolume()));
 			}
 		}
+	}
+	
+	private DischargeSlot buildCapltaplMarketDischargeSlot(CargoEditingCommands cec, List<Command> setCommands, CargoModel cargoModel, DESSalesMarket market, LoadSlot loadSlotToMatch, Vessel modelVessel, List<Vessel> vesselRestrictions) {
+		DischargeSlot dSlot = cec.createNewSpotDischarge(setCommands, cargoModel, market);
+		IScenarioDataProvider sdp = editorData.getScenarioDataProvider();
+		final int travelTime = CargoEditorMenuHelper.getTravelTime(loadSlotToMatch, dSlot, modelVessel, sdp);
+		if (travelTime == Integer.MAX_VALUE) {
+			final String message = String.format("Can not determine travel time between %s and %s. \n Travel time can not be %d hours.", loadSlotToMatch.getPort().getName(),
+					dSlot.getPort().getName(), travelTime);
+			throw new RuntimeException(message);
+		}
+		
+		final SchedulingTimeWindow loadSTW = loadSlotToMatch.getSchedulingTimeWindow();
+		final LocalDate dischargeDate = loadSTW.getStart().plusHours(travelTime + loadSTW.getDuration()).withDayOfMonth(1).withHour(0).toLocalDate();
+		dSlot.setWindowStart(dischargeDate);
+		dSlot.setWindowStartTime(0);
+		
+		dSlot.setWindowSize(1);
+		dSlot.setWindowSizeUnits(TimePeriod.MONTHS);
+		dSlot.setRestrictedVesselsArePermissive(true);
+		dSlot.setRestrictedVesselsOverride(true);
+		dSlot.getRestrictedVessels().addAll(vesselRestrictions);
+		
+		String id = "chev-spot-sale-" + loadSlotToMatch.getName();
+		
+		dSlot.setName(id);
+		return dSlot;
+	}
+	
+	private DischargeSlot buildMarketDischargeSlot(CargoEditingCommands cec, List<Command> setCommands, CargoModel cargoModel, DESSalesMarket market, LoadSlot loadSlotToMatch, Vessel modelVessel, List<Vessel> vesselRestrictions, String namePrefix) {
+		DischargeSlot dSlot = cec.createNewSpotDischarge(setCommands, cargoModel, market);
+		
+		final LocalDate dischargeDate = calculateDischargeDate(loadSlotToMatch, dSlot, modelVessel);
+		dSlot.setWindowStart(dischargeDate);
+		dSlot.setWindowStartTime(0);
+		
+		dSlot.setWindowSize(1);
+		dSlot.setWindowSizeUnits(TimePeriod.MONTHS);
+		dSlot.setRestrictedVesselsArePermissive(true);
+		dSlot.setRestrictedVesselsOverride(true);
+		dSlot.getRestrictedVessels().addAll(vesselRestrictions);
+		
+		String id = namePrefix + loadSlotToMatch.getName();
+		
+		dSlot.setName(id);
+		return dSlot;
+	}
+	
+	private DischargeSlot buildFOBSaleDischargeSlot(CargoEditingCommands cec, List<Command> setCommands, CargoModel cargoModel, LoadSlot loadSlotToMatch, Vessel assignedVessel, String namePrefix) {
+		DischargeSlot dSlot = cec.createNewDischarge(setCommands, cargoModel, true);
+		dSlot.setWindowStart(loadSlotToMatch.getWindowStart());
+		dSlot.setWindowStartTime(0);
+		
+		dSlot.setWindowSize(1);
+		dSlot.setWindowSizeUnits(TimePeriod.MONTHS);
+		
+		String id = namePrefix + loadSlotToMatch.getName();
+		
+		dSlot.setPriceExpression("JKM");
+		dSlot.setPort(loadSlotToMatch.getPort());
+		dSlot.setFobSaleDealType(FOBSaleDealType.SOURCE_ONLY);
+		dSlot.setEntity(loadSlotToMatch.getEntity());
+		dSlot.setNominatedVessel(assignedVessel);
+		
+		dSlot.setName(id);
+		return dSlot;
+	}
+	
+	private DischargeSlot buildDESSaleDischargeSlot(CargoEditingCommands cec, List<Command> setCommands, CargoModel cargoModel, SalesContract salesContract, LoadSlot loadSlotToMatch, Vessel modelVessel, List<Vessel> vesselRestrictions, String namePrefix) {
+		final DischargeSlot dSlot = cec.createNewDischarge(setCommands, cargoModel, false);
+		dSlot.setContract(salesContract);
+		dSlot.setName(namePrefix+loadSlotToMatch.getName());
+		dSlot.setEntity(loadSlotToMatch.getEntity());
+		dSlot.setPort(salesContract.getPreferredPort());
+		
+		final SchedulingTimeWindow loadSTW = loadSlotToMatch.getSchedulingTimeWindow();
+		final LocalDate dischargeDate = calculateDischargeDate(loadSlotToMatch, dSlot, modelVessel);
+		dSlot.setWindowStart(dischargeDate);
+		dSlot.setWindowStartTime(0);
+		
+		dSlot.setWindowSize(1);
+		dSlot.setWindowSizeUnits(TimePeriod.MONTHS);
+		
+		if (vesselRestrictions != null) {
+			dSlot.setRestrictedVesselsArePermissive(true);
+			dSlot.setRestrictedVesselsOverride(true);
+			dSlot.getRestrictedVessels().addAll(vesselRestrictions);
+		}
+		
+		String id = namePrefix + loadSlotToMatch.getName();
+		dSlot.setName(id);
+		return dSlot;
+	}
+	
+	private LocalDate calculateDischargeDate(LoadSlot loadSlot, DischargeSlot dischargeSlot, Vessel vessel) {
+		final IScenarioDataProvider sdp = editorData.getScenarioDataProvider();
+		final int travelTime = CargoEditorMenuHelper.getTravelTime(loadSlot, dischargeSlot, vessel, sdp);
+		if (travelTime == Integer.MAX_VALUE) {
+			final String message = String.format("Can not determine travel time between %s and %s. \n Travel time can not be %d hours.", loadSlot.getPort().getName(),
+					dischargeSlot.getPort().getName(), travelTime);
+			throw new RuntimeException(message);
+		}
+		final SchedulingTimeWindow loadSTW = loadSlot.getSchedulingTimeWindow();
+		return loadSTW.getStart().plusHours(travelTime + (long) loadSTW.getDuration()).withDayOfMonth(1).withHour(0).toLocalDate();
 	}
 }

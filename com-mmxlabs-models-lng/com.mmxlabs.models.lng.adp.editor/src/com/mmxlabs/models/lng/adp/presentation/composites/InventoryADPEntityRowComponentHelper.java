@@ -70,6 +70,9 @@ public class InventoryADPEntityRowComponentHelper extends BaseComponentHelper {
 		add_entityEditor(detailComposite, topClass);
 		add_initialAllocationEditor(detailComposite, topClass);
 		add_relativeEntitlementEditor(detailComposite, topClass);
+		add_marketAllocationRowsEditor(detailComposite, topClass);
+		add_portsEditor(detailComposite, topClass);
+		add_contractAllocationRowsEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the entity feature on InventoryADPEntityRow
@@ -94,5 +97,32 @@ public class InventoryADPEntityRowComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_relativeEntitlementEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.INVENTORY_ADP_ENTITY_ROW__RELATIVE_ENTITLEMENT));
+	}
+
+	/**
+	 * Create the editor for the marketAllocationRows feature on InventoryADPEntityRow
+	 *
+	 * @generated
+	 */
+	protected void add_marketAllocationRowsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.INVENTORY_ADP_ENTITY_ROW__MARKET_ALLOCATION_ROWS));
+	}
+
+	/**
+	 * Create the editor for the ports feature on InventoryADPEntityRow
+	 *
+	 * @generated
+	 */
+	protected void add_portsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.INVENTORY_ADP_ENTITY_ROW__PORTS));
+	}
+
+	/**
+	 * Create the editor for the contractAllocationRows feature on InventoryADPEntityRow
+	 *
+	 * @generated
+	 */
+	protected void add_contractAllocationRowsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.INVENTORY_ADP_ENTITY_ROW__CONTRACT_ALLOCATION_ROWS));
 	}
 }

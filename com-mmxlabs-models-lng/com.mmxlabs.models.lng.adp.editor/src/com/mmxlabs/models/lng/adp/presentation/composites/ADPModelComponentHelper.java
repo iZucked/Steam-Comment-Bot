@@ -75,6 +75,7 @@ public class ADPModelComponentHelper extends BaseComponentHelper {
 		add_salesContractProfilesEditor(detailComposite, topClass);
 		add_fleetProfileEditor(detailComposite, topClass);
 		add_inventoryProfilesEditor(detailComposite, topClass);
+		add_multipleInventoriesProfileEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the yearStart feature on ADPModel
@@ -128,5 +129,14 @@ public class ADPModelComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_inventoryProfilesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.ADP_MODEL__INVENTORY_PROFILES));
+	}
+
+	/**
+	 * Create the editor for the multipleInventoriesProfile feature on ADPModel
+	 *
+	 * @generated
+	 */
+	protected void add_multipleInventoriesProfileEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.ADP_MODEL__MULTIPLE_INVENTORIES_PROFILE));
 	}
 }

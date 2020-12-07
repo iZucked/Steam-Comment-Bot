@@ -2,21 +2,25 @@
  */
 package com.mmxlabs.models.lng.adp.impl;
 
-import com.mmxlabs.models.lng.adp.ADPPackage;
-import com.mmxlabs.models.lng.adp.InventoryADPEntityRow;
-
-import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
-
 import java.util.Collection;
-import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
-import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+import org.eclipse.emf.ecore.util.InternalEList;
+
+import com.mmxlabs.models.lng.adp.ADPPackage;
+import com.mmxlabs.models.lng.adp.ContractAllocationRow;
+import com.mmxlabs.models.lng.adp.InventoryADPEntityRow;
+import com.mmxlabs.models.lng.adp.MarketAllocationRow;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.port.Port;
 
 /**
  * <!-- begin-user-doc -->
@@ -29,6 +33,9 @@ import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.InventoryADPEntityRowImpl#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.InventoryADPEntityRowImpl#getInitialAllocation <em>Initial Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.InventoryADPEntityRowImpl#getRelativeEntitlement <em>Relative Entitlement</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.adp.impl.InventoryADPEntityRowImpl#getMarketAllocationRows <em>Market Allocation Rows</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.adp.impl.InventoryADPEntityRowImpl#getPorts <em>Ports</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.adp.impl.InventoryADPEntityRowImpl#getContractAllocationRows <em>Contract Allocation Rows</em>}</li>
  * </ul>
  *
  * @generated
@@ -83,6 +90,36 @@ public class InventoryADPEntityRowImpl extends EObjectImpl implements InventoryA
 	 * @ordered
 	 */
 	protected double relativeEntitlement = RELATIVE_ENTITLEMENT_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getMarketAllocationRows() <em>Market Allocation Rows</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMarketAllocationRows()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<MarketAllocationRow> marketAllocationRows;
+
+	/**
+	 * The cached value of the '{@link #getPorts() <em>Ports</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPorts()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<Port> ports;
+
+	/**
+	 * The cached value of the '{@link #getContractAllocationRows() <em>Contract Allocation Rows</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getContractAllocationRows()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<ContractAllocationRow> contractAllocationRows;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -195,6 +232,61 @@ public class InventoryADPEntityRowImpl extends EObjectImpl implements InventoryA
 	 * @generated
 	 */
 	@Override
+	public EList<MarketAllocationRow> getMarketAllocationRows() {
+		if (marketAllocationRows == null) {
+			marketAllocationRows = new EObjectContainmentEList.Resolving<MarketAllocationRow>(MarketAllocationRow.class, this, ADPPackage.INVENTORY_ADP_ENTITY_ROW__MARKET_ALLOCATION_ROWS);
+		}
+		return marketAllocationRows;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<Port> getPorts() {
+		if (ports == null) {
+			ports = new EObjectResolvingEList<Port>(Port.class, this, ADPPackage.INVENTORY_ADP_ENTITY_ROW__PORTS);
+		}
+		return ports;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<ContractAllocationRow> getContractAllocationRows() {
+		if (contractAllocationRows == null) {
+			contractAllocationRows = new EObjectContainmentEList.Resolving<ContractAllocationRow>(ContractAllocationRow.class, this, ADPPackage.INVENTORY_ADP_ENTITY_ROW__CONTRACT_ALLOCATION_ROWS);
+		}
+		return contractAllocationRows;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case ADPPackage.INVENTORY_ADP_ENTITY_ROW__MARKET_ALLOCATION_ROWS:
+				return ((InternalEList<?>)getMarketAllocationRows()).basicRemove(otherEnd, msgs);
+			case ADPPackage.INVENTORY_ADP_ENTITY_ROW__CONTRACT_ALLOCATION_ROWS:
+				return ((InternalEList<?>)getContractAllocationRows()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case ADPPackage.INVENTORY_ADP_ENTITY_ROW__ENTITY:
@@ -204,6 +296,12 @@ public class InventoryADPEntityRowImpl extends EObjectImpl implements InventoryA
 				return getInitialAllocation();
 			case ADPPackage.INVENTORY_ADP_ENTITY_ROW__RELATIVE_ENTITLEMENT:
 				return getRelativeEntitlement();
+			case ADPPackage.INVENTORY_ADP_ENTITY_ROW__MARKET_ALLOCATION_ROWS:
+				return getMarketAllocationRows();
+			case ADPPackage.INVENTORY_ADP_ENTITY_ROW__PORTS:
+				return getPorts();
+			case ADPPackage.INVENTORY_ADP_ENTITY_ROW__CONTRACT_ALLOCATION_ROWS:
+				return getContractAllocationRows();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -226,6 +324,18 @@ public class InventoryADPEntityRowImpl extends EObjectImpl implements InventoryA
 			case ADPPackage.INVENTORY_ADP_ENTITY_ROW__RELATIVE_ENTITLEMENT:
 				setRelativeEntitlement((Double)newValue);
 				return;
+			case ADPPackage.INVENTORY_ADP_ENTITY_ROW__MARKET_ALLOCATION_ROWS:
+				getMarketAllocationRows().clear();
+				getMarketAllocationRows().addAll((Collection<? extends MarketAllocationRow>)newValue);
+				return;
+			case ADPPackage.INVENTORY_ADP_ENTITY_ROW__PORTS:
+				getPorts().clear();
+				getPorts().addAll((Collection<? extends Port>)newValue);
+				return;
+			case ADPPackage.INVENTORY_ADP_ENTITY_ROW__CONTRACT_ALLOCATION_ROWS:
+				getContractAllocationRows().clear();
+				getContractAllocationRows().addAll((Collection<? extends ContractAllocationRow>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -247,6 +357,15 @@ public class InventoryADPEntityRowImpl extends EObjectImpl implements InventoryA
 			case ADPPackage.INVENTORY_ADP_ENTITY_ROW__RELATIVE_ENTITLEMENT:
 				setRelativeEntitlement(RELATIVE_ENTITLEMENT_EDEFAULT);
 				return;
+			case ADPPackage.INVENTORY_ADP_ENTITY_ROW__MARKET_ALLOCATION_ROWS:
+				getMarketAllocationRows().clear();
+				return;
+			case ADPPackage.INVENTORY_ADP_ENTITY_ROW__PORTS:
+				getPorts().clear();
+				return;
+			case ADPPackage.INVENTORY_ADP_ENTITY_ROW__CONTRACT_ALLOCATION_ROWS:
+				getContractAllocationRows().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -265,6 +384,12 @@ public class InventoryADPEntityRowImpl extends EObjectImpl implements InventoryA
 				return INITIAL_ALLOCATION_EDEFAULT == null ? initialAllocation != null : !INITIAL_ALLOCATION_EDEFAULT.equals(initialAllocation);
 			case ADPPackage.INVENTORY_ADP_ENTITY_ROW__RELATIVE_ENTITLEMENT:
 				return relativeEntitlement != RELATIVE_ENTITLEMENT_EDEFAULT;
+			case ADPPackage.INVENTORY_ADP_ENTITY_ROW__MARKET_ALLOCATION_ROWS:
+				return marketAllocationRows != null && !marketAllocationRows.isEmpty();
+			case ADPPackage.INVENTORY_ADP_ENTITY_ROW__PORTS:
+				return ports != null && !ports.isEmpty();
+			case ADPPackage.INVENTORY_ADP_ENTITY_ROW__CONTRACT_ALLOCATION_ROWS:
+				return contractAllocationRows != null && !contractAllocationRows.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

@@ -27,6 +27,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.adp.ADPModel#getSalesContractProfiles <em>Sales Contract Profiles</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.ADPModel#getFleetProfile <em>Fleet Profile</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.ADPModel#getInventoryProfiles <em>Inventory Profiles</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.adp.ADPModel#getMultipleInventoriesProfile <em>Multiple Inventories Profile</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.adp.ADPPackage#getADPModel()
@@ -145,15 +146,37 @@ public interface ADPModel extends UUIDObject {
 	void setFleetProfile(FleetProfile value);
 
 	/**
-	 * Returns the value of the '<em><b>Inventory Profiles</b></em>' reference list.
+	 * Returns the value of the '<em><b>Inventory Profiles</b></em>' containment reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.adp.InventoryProfile}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Inventory Profiles</em>' reference list.
+	 * @return the value of the '<em>Inventory Profiles</em>' containment reference list.
 	 * @see com.mmxlabs.models.lng.adp.ADPPackage#getADPModel_InventoryProfiles()
-	 * @model
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<InventoryProfile> getInventoryProfiles();
+
+	/**
+	 * Returns the value of the '<em><b>Multiple Inventories Profile</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Multiple Inventories Profile</em>' containment reference.
+	 * @see #setMultipleInventoriesProfile(MultipleInventoryProfile)
+	 * @see com.mmxlabs.models.lng.adp.ADPPackage#getADPModel_MultipleInventoriesProfile()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	MultipleInventoryProfile getMultipleInventoriesProfile();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.adp.ADPModel#getMultipleInventoriesProfile <em>Multiple Inventories Profile</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Multiple Inventories Profile</em>' containment reference.
+	 * @see #getMultipleInventoriesProfile()
+	 * @generated
+	 */
+	void setMultipleInventoriesProfile(MultipleInventoryProfile value);
 
 } // ADPModel

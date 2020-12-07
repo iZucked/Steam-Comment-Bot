@@ -24,11 +24,11 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
 /**
- * A component helper for RelativeEntitlementElement instances
+ * A component helper for ContractAllocationRow instances
  *
  * @generated
  */
-public class RelativeEntitlementElementComponentHelper extends BaseComponentHelper {
+public class ContractAllocationRowComponentHelper extends BaseComponentHelper {
 	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
 
 	/**
@@ -36,7 +36,7 @@ public class RelativeEntitlementElementComponentHelper extends BaseComponentHelp
 	 *
 	 * @generated
 	 */
-	public RelativeEntitlementElementComponentHelper() {
+	public ContractAllocationRowComponentHelper() {
 		this(Platform.getAdapterManager());
 	}
 
@@ -45,18 +45,18 @@ public class RelativeEntitlementElementComponentHelper extends BaseComponentHelp
 	 *
 	 * @generated
 	 */
-	public RelativeEntitlementElementComponentHelper(IAdapterManager adapterManager) {
+	public ContractAllocationRowComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
 	}
 	
 	/**
-	 * add editors to a composite, using RelativeEntitlementElement as the supertype
+	 * add editors to a composite, using ContractAllocationRow as the supertype
 	 *
 	 * @generated
 	 */
 	 @Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, ADPPackage.Literals.RELATIVE_ENTITLEMENT_ELEMENT);	
+		addEditorsToComposite(detailComposite, ADPPackage.Literals.CONTRACT_ALLOCATION_ROW);	
 	}
 	
 	/**
@@ -67,23 +67,32 @@ public class RelativeEntitlementElementComponentHelper extends BaseComponentHelp
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_entityEditor(detailComposite, topClass);
-		add_entitlementEditor(detailComposite, topClass);
+		add_contractEditor(detailComposite, topClass);
+		add_weightEditor(detailComposite, topClass);
+		add_vesselsEditor(detailComposite, topClass);
 	}
 	/**
-	 * Create the editor for the entity feature on RelativeEntitlementElement
+	 * Create the editor for the contract feature on ContractAllocationRow
 	 *
 	 * @generated
 	 */
-	protected void add_entityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.RELATIVE_ENTITLEMENT_ELEMENT__ENTITY));
+	protected void add_contractEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.CONTRACT_ALLOCATION_ROW__CONTRACT));
 	}
 	/**
-	 * Create the editor for the entitlement feature on RelativeEntitlementElement
+	 * Create the editor for the weight feature on ContractAllocationRow
 	 *
 	 * @generated
 	 */
-	protected void add_entitlementEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.RELATIVE_ENTITLEMENT_ELEMENT__ENTITLEMENT));
+	protected void add_weightEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.CONTRACT_ALLOCATION_ROW__WEIGHT));
+	}
+	/**
+	 * Create the editor for the vessels feature on ContractAllocationRow
+	 *
+	 * @generated
+	 */
+	protected void add_vesselsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.CONTRACT_ALLOCATION_ROW__VESSELS));
 	}
 }

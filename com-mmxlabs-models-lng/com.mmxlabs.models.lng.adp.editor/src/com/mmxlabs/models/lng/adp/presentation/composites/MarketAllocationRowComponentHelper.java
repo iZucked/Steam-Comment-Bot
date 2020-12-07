@@ -24,11 +24,11 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
 /**
- * A component helper for AllocationElement instances
+ * A component helper for MarketAllocationRow instances
  *
  * @generated
  */
-public class AllocationElementComponentHelper extends BaseComponentHelper {
+public class MarketAllocationRowComponentHelper extends BaseComponentHelper {
 	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
 
 	/**
@@ -36,7 +36,7 @@ public class AllocationElementComponentHelper extends BaseComponentHelper {
 	 *
 	 * @generated
 	 */
-	public AllocationElementComponentHelper() {
+	public MarketAllocationRowComponentHelper() {
 		this(Platform.getAdapterManager());
 	}
 
@@ -45,18 +45,18 @@ public class AllocationElementComponentHelper extends BaseComponentHelper {
 	 *
 	 * @generated
 	 */
-	public AllocationElementComponentHelper(IAdapterManager adapterManager) {
+	public MarketAllocationRowComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
 	}
 	
 	/**
-	 * add editors to a composite, using AllocationElement as the supertype
+	 * add editors to a composite, using MarketAllocationRow as the supertype
 	 *
 	 * @generated
 	 */
 	 @Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, ADPPackage.Literals.ALLOCATION_ELEMENT);	
+		addEditorsToComposite(detailComposite, ADPPackage.Literals.MARKET_ALLOCATION_ROW);	
 	}
 	
 	/**
@@ -67,23 +67,32 @@ public class AllocationElementComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_entityEditor(detailComposite, topClass);
-		add_allocationEditor(detailComposite, topClass);
+		add_marketEditor(detailComposite, topClass);
+		add_weightEditor(detailComposite, topClass);
+		add_vesselsEditor(detailComposite, topClass);
 	}
 	/**
-	 * Create the editor for the entity feature on AllocationElement
+	 * Create the editor for the market feature on MarketAllocationRow
 	 *
 	 * @generated
 	 */
-	protected void add_entityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.ALLOCATION_ELEMENT__ENTITY));
+	protected void add_marketEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.MARKET_ALLOCATION_ROW__MARKET));
 	}
 	/**
-	 * Create the editor for the allocation feature on AllocationElement
+	 * Create the editor for the weight feature on MarketAllocationRow
 	 *
 	 * @generated
 	 */
-	protected void add_allocationEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.ALLOCATION_ELEMENT__ALLOCATION));
+	protected void add_weightEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.MARKET_ALLOCATION_ROW__WEIGHT));
+	}
+	/**
+	 * Create the editor for the vessels feature on MarketAllocationRow
+	 *
+	 * @generated
+	 */
+	protected void add_vesselsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.MARKET_ALLOCATION_ROW__VESSELS));
 	}
 }

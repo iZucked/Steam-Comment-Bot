@@ -17,12 +17,11 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.adp.InventoryProfile#getRelativeEntitlements <em>Relative Entitlements</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.InventoryProfile#getInventory <em>Inventory</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.InventoryProfile#getGeneratedSlots <em>Generated Slots</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.InventoryProfile#getVolume <em>Volume</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.adp.InventoryProfile#getInitialAllocations <em>Initial Allocations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.InventoryProfile#getEntityTable <em>Entity Table</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.adp.InventoryProfile#getWindowSize <em>Window Size</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.adp.ADPPackage#getInventoryProfile()
@@ -30,18 +29,6 @@ import org.eclipse.emf.ecore.EObject;
  * @generated
  */
 public interface InventoryProfile extends EObject {
-	/**
-	 * Returns the value of the '<em><b>Relative Entitlements</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.adp.RelativeEntitlementElement}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Relative Entitlements</em>' reference list.
-	 * @see com.mmxlabs.models.lng.adp.ADPPackage#getInventoryProfile_RelativeEntitlements()
-	 * @model
-	 * @generated
-	 */
-	EList<RelativeEntitlementElement> getRelativeEntitlements();
-
 	/**
 	 * Returns the value of the '<em><b>Inventory</b></em>' reference.
 	 * <!-- begin-user-doc -->
@@ -65,13 +52,13 @@ public interface InventoryProfile extends EObject {
 	void setInventory(Inventory value);
 
 	/**
-	 * Returns the value of the '<em><b>Generated Slots</b></em>' reference list.
+	 * Returns the value of the '<em><b>Generated Slots</b></em>' containment reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.cargo.LoadSlot}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Generated Slots</em>' reference list.
+	 * @return the value of the '<em>Generated Slots</em>' containment reference list.
 	 * @see com.mmxlabs.models.lng.adp.ADPPackage#getInventoryProfile_GeneratedSlots()
-	 * @model
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<LoadSlot> getGeneratedSlots();
@@ -99,27 +86,37 @@ public interface InventoryProfile extends EObject {
 	void setVolume(int value);
 
 	/**
-	 * Returns the value of the '<em><b>Initial Allocations</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.adp.AllocationElement}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Initial Allocations</em>' reference list.
-	 * @see com.mmxlabs.models.lng.adp.ADPPackage#getInventoryProfile_InitialAllocations()
-	 * @model
-	 * @generated
-	 */
-	EList<AllocationElement> getInitialAllocations();
-
-	/**
-	 * Returns the value of the '<em><b>Entity Table</b></em>' reference list.
+	 * Returns the value of the '<em><b>Entity Table</b></em>' containment reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.adp.InventoryADPEntityRow}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Entity Table</em>' reference list.
+	 * @return the value of the '<em>Entity Table</em>' containment reference list.
 	 * @see com.mmxlabs.models.lng.adp.ADPPackage#getInventoryProfile_EntityTable()
-	 * @model
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<InventoryADPEntityRow> getEntityTable();
+
+	/**
+	 * Returns the value of the '<em><b>Window Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Window Size</em>' attribute.
+	 * @see #setWindowSize(int)
+	 * @see com.mmxlabs.models.lng.adp.ADPPackage#getInventoryProfile_WindowSize()
+	 * @model
+	 * @generated
+	 */
+	int getWindowSize();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.adp.InventoryProfile#getWindowSize <em>Window Size</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Window Size</em>' attribute.
+	 * @see #getWindowSize()
+	 * @generated
+	 */
+	void setWindowSize(int value);
 
 } // InventoryProfile

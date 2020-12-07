@@ -271,24 +271,6 @@ public interface ADPFactory extends EFactory {
 	InventoryProfile createInventoryProfile();
 
 	/**
-	 * Returns a new object of class '<em>Relative Entitlement Element</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Relative Entitlement Element</em>'.
-	 * @generated
-	 */
-	RelativeEntitlementElement createRelativeEntitlementElement();
-
-	/**
-	 * Returns a new object of class '<em>Allocation Element</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Allocation Element</em>'.
-	 * @generated
-	 */
-	AllocationElement createAllocationElement();
-
-	/**
 	 * Returns a new object of class '<em>Inventory ADP Entity Row</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -296,6 +278,42 @@ public interface ADPFactory extends EFactory {
 	 * @generated
 	 */
 	InventoryADPEntityRow createInventoryADPEntityRow();
+
+	/**
+	 * Returns a new object of class '<em>Market Allocation Row</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Market Allocation Row</em>'.
+	 * @generated
+	 */
+	MarketAllocationRow createMarketAllocationRow();
+
+	/**
+	 * Returns a new object of class '<em>Contract Allocation Row</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Contract Allocation Row</em>'.
+	 * @generated
+	 */
+	ContractAllocationRow createContractAllocationRow();
+
+	/**
+	 * Returns a new object of class '<em>Multiple Inventory Profile</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Multiple Inventory Profile</em>'.
+	 * @generated
+	 */
+	MultipleInventoryProfile createMultipleInventoryProfile();
+
+	/**
+	 * Returns a new object of class '<em>Inventory Subprofile</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Inventory Subprofile</em>'.
+	 * @generated
+	 */
+	InventorySubprofile createInventorySubprofile();
 
 	/**
 	 * Returns the package supported by this factory.
