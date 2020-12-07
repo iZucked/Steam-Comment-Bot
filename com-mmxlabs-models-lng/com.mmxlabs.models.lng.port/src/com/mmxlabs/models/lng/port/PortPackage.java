@@ -298,22 +298,13 @@ public interface PortPackage extends EPackage {
 	int PORT___MMX_ID = TypesPackage.APORT_SET_OPERATION_COUNT + 1;
 
 	/**
-	 * The operation id for the '<em>Get Temp MMXID</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORT___GET_TEMP_MMXID = TypesPackage.APORT_SET_OPERATION_COUNT + 2;
-
-	/**
 	 * The number of operations of the '<em>Port</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_OPERATION_COUNT = TypesPackage.APORT_SET_OPERATION_COUNT + 3;
+	int PORT_OPERATION_COUNT = TypesPackage.APORT_SET_OPERATION_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.RouteImpl <em>Route</em>}' class.
@@ -1033,22 +1024,13 @@ public interface PortPackage extends EPackage {
 	int LOCATION___GET_ZONE_ID = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 0;
 
 	/**
-	 * The operation id for the '<em>Get Temp MMXID</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOCATION___GET_TEMP_MMXID = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 1;
-
-	/**
 	 * The number of operations of the '<em>Location</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LOCATION_OPERATION_COUNT = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 2;
+	int LOCATION_OPERATION_COUNT = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.PortCountryGroupImpl <em>Country Group</em>}' class.
@@ -1529,16 +1511,6 @@ public interface PortPackage extends EPackage {
 	EOperation getPort__MmxID();
 
 	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.port.Port#getTempMMXID() <em>Get Temp MMXID</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Temp MMXID</em>' operation.
-	 * @see com.mmxlabs.models.lng.port.Port#getTempMMXID()
-	 * @generated
-	 */
-	EOperation getPort__GetTempMMXID();
-
-	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Port#getShortName <em>Short Name</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1906,16 +1878,6 @@ public interface PortPackage extends EPackage {
 	EOperation getLocation__GetZoneId();
 
 	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.port.Location#getTempMMXID() <em>Get Temp MMXID</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Temp MMXID</em>' operation.
-	 * @see com.mmxlabs.models.lng.port.Location#getTempMMXID()
-	 * @generated
-	 */
-	EOperation getLocation__GetTempMMXID();
-
-	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.port.PortCountryGroup <em>Country Group</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2202,14 +2164,6 @@ public interface PortPackage extends EPackage {
 		EOperation PORT___MMX_ID = eINSTANCE.getPort__MmxID();
 
 		/**
-		 * The meta object literal for the '<em><b>Get Temp MMXID</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation PORT___GET_TEMP_MMXID = eINSTANCE.getPort__GetTempMMXID();
-
-		/**
 		 * The meta object literal for the '<em><b>Short Name</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2492,14 +2446,6 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation LOCATION___GET_ZONE_ID = eINSTANCE.getLocation__GetZoneId();
-
-		/**
-		 * The meta object literal for the '<em><b>Get Temp MMXID</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation LOCATION___GET_TEMP_MMXID = eINSTANCE.getLocation__GetTempMMXID();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.port.impl.PortCountryGroupImpl <em>Country Group</em>}' class.

@@ -313,17 +313,6 @@ public class LocationImpl extends NamedObjectImpl implements Location {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	public String getTempMMXID() {
-//		todo replace getMMXID with this eOp
-		// Temp method until mmxid is working properly
-		return getName();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -473,8 +462,6 @@ public class LocationImpl extends NamedObjectImpl implements Location {
 		switch (operationID) {
 			case PortPackage.LOCATION___GET_ZONE_ID:
 				return getZoneId();
-			case PortPackage.LOCATION___GET_TEMP_MMXID:
-				return getTempMMXID();
 		}
 		return super.eInvoke(operationID, arguments);
 	}

@@ -88,8 +88,8 @@ public class ModelDistanceProvider extends EContentAdapter {
 	private String getId(Port port) {
 		Location l = port.getLocation();
 		if (l != null) {
-			if (l.getTempMMXID() != null) {
-				return l.getTempMMXID();
+			if (l.getMmxId() != null) {
+				return l.getMmxId();
 			}
 			return l.getName();
 		}
@@ -144,7 +144,7 @@ public class ModelDistanceProvider extends EContentAdapter {
 		if (to == null) {
 			return Integer.MAX_VALUE;
 		}
-		return getDistance(from.getTempMMXID(), to.getTempMMXID(), routeOption);
+		return getDistance(from.getMmxId(), to.getMmxId(), routeOption);
 	}
 
 	public int getDistance(final String from, final String to, final RouteOption routeOption) {
@@ -197,7 +197,7 @@ public class ModelDistanceProvider extends EContentAdapter {
 	}
 
 	private Pair<String, String> makePortToPortKey(final Location from, final Location to) {
-		return new Pair<>(from.getTempMMXID(), to.getTempMMXID());
+		return new Pair<>(from.getMmxId(), to.getMmxId());
 	}
 
 	public String getVersion() {
@@ -314,7 +314,7 @@ public class ModelDistanceProvider extends EContentAdapter {
 		if (to == null) {
 			return 0;
 		}
-		return getPortToPortContingencyIdleTimeInHours(from.getTempMMXID(), to.getTempMMXID());
+		return getPortToPortContingencyIdleTimeInHours(from.getMmxId(), to.getMmxId());
 	}
 
 	public int getPortToPortContingencyIdleTimeInHours(final String from, final String to) {

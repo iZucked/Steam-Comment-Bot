@@ -167,14 +167,6 @@ public interface Location extends NamedObject, OtherNamesObject {
 	 */
 	ZoneId getZoneId();
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation"
-	 * @generated
-	 */
-	String getTempMMXID();
-
 } // end of  Location
 
 // finish type fixing

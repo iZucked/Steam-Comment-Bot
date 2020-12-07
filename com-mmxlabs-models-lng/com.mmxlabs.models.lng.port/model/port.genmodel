@@ -46,7 +46,6 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Port/maxVesselSize"/>
       <genOperations ecoreOperation="port.ecore#//Port/getZoneId"/>
       <genOperations ecoreOperation="port.ecore#//Port/mmxID"/>
-      <genOperations ecoreOperation="port.ecore#//Port/getTempMMXID"/>
     </genClasses>
     <genClasses ecoreClass="port.ecore#//Route">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//Route/lines"/>
@@ -88,7 +87,6 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Location/lat"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Location/lon"/>
       <genOperations ecoreOperation="port.ecore#//Location/getZoneId"/>
-      <genOperations ecoreOperation="port.ecore#//Location/getTempMMXID"/>
     </genClasses>
     <genClasses ecoreClass="port.ecore#//PortCountryGroup"/>
     <genClasses ecoreClass="port.ecore#//EntryPoint">
