@@ -2018,32 +2018,32 @@ public class ContractPage extends ADPComposite {
 		}
 	}
 	
-	private DischargeSlot buildCapltaplMarketDischargeSlot(CargoEditingCommands cec, List<Command> setCommands, CargoModel cargoModel, DESSalesMarket market, LoadSlot loadSlotToMatch, Vessel modelVessel, List<Vessel> vesselRestrictions) {
-		DischargeSlot dSlot = cec.createNewSpotDischarge(setCommands, cargoModel, market);
-		IScenarioDataProvider sdp = editorData.getScenarioDataProvider();
-		final int travelTime = CargoEditorMenuHelper.getTravelTime(loadSlotToMatch, dSlot, modelVessel, sdp);
-		if (travelTime == Integer.MAX_VALUE) {
-			final String message = String.format("Can not determine travel time between %s and %s. \n Travel time can not be %d hours.", loadSlotToMatch.getPort().getName(),
-					dSlot.getPort().getName(), travelTime);
-			throw new RuntimeException(message);
-		}
-		
-		final SchedulingTimeWindow loadSTW = loadSlotToMatch.getSchedulingTimeWindow();
-		final LocalDate dischargeDate = loadSTW.getStart().plusHours(travelTime + loadSTW.getDuration()).withDayOfMonth(1).withHour(0).toLocalDate();
-		dSlot.setWindowStart(dischargeDate);
-		dSlot.setWindowStartTime(0);
-		
-		dSlot.setWindowSize(1);
-		dSlot.setWindowSizeUnits(TimePeriod.MONTHS);
-		dSlot.setRestrictedVesselsArePermissive(true);
-		dSlot.setRestrictedVesselsOverride(true);
-		dSlot.getRestrictedVessels().addAll(vesselRestrictions);
-		
-		String id = "chev-spot-sale-" + loadSlotToMatch.getName();
-		
-		dSlot.setName(id);
-		return dSlot;
-	}
+//	private DischargeSlot buildCapltaplMarketDischargeSlot(CargoEditingCommands cec, List<Command> setCommands, CargoModel cargoModel, DESSalesMarket market, LoadSlot loadSlotToMatch, Vessel modelVessel, List<Vessel> vesselRestrictions) {
+//		DischargeSlot dSlot = cec.createNewSpotDischarge(setCommands, cargoModel, market);
+//		IScenarioDataProvider sdp = editorData.getScenarioDataProvider();
+//		final int travelTime = CargoEditorMenuHelper.getTravelTime(loadSlotToMatch, dSlot, modelVessel, sdp);
+//		if (travelTime == Integer.MAX_VALUE) {
+//			final String message = String.format("Can not determine travel time between %s and %s. \n Travel time can not be %d hours.", loadSlotToMatch.getPort().getName(),
+//					dSlot.getPort().getName(), travelTime);
+//			throw new RuntimeException(message);
+//		}
+//		
+//		final SchedulingTimeWindow loadSTW = loadSlotToMatch.getSchedulingTimeWindow();
+//		final LocalDate dischargeDate = loadSTW.getStart().plusHours(travelTime + loadSTW.getDuration()).withDayOfMonth(1).withHour(0).toLocalDate();
+//		dSlot.setWindowStart(dischargeDate);
+//		dSlot.setWindowStartTime(0);
+//		
+//		dSlot.setWindowSize(1);
+//		dSlot.setWindowSizeUnits(TimePeriod.MONTHS);
+//		dSlot.setRestrictedVesselsArePermissive(true);
+//		dSlot.setRestrictedVesselsOverride(true);
+//		dSlot.getRestrictedVessels().addAll(vesselRestrictions);
+//		
+//		String id = "chev-spot-sale-" + loadSlotToMatch.getName();
+//		
+//		dSlot.setName(id);
+//		return dSlot;
+//	}
 	
 	private DischargeSlot buildMarketDischargeSlot(CargoEditingCommands cec, List<Command> setCommands, CargoModel cargoModel, DESSalesMarket market, LoadSlot loadSlotToMatch, Vessel modelVessel, List<Vessel> vesselRestrictions, String namePrefix) {
 		DischargeSlot dSlot = cec.createNewSpotDischarge(setCommands, cargoModel, market);
@@ -2057,6 +2057,10 @@ public class ContractPage extends ADPComposite {
 		dSlot.setRestrictedVesselsArePermissive(true);
 		dSlot.setRestrictedVesselsOverride(true);
 		dSlot.getRestrictedVessels().addAll(vesselRestrictions);
+		
+		dSlot.setRestrictedPortsArePermissive(true);
+		dSlot.setRestrictedPortsOverride(true);
+		dSlot.getRestrictedPorts().add(loadSlotToMatch.getPort());
 		
 		String id = namePrefix + loadSlotToMatch.getName();
 		
@@ -2104,6 +2108,10 @@ public class ContractPage extends ADPComposite {
 			dSlot.setRestrictedVesselsOverride(true);
 			dSlot.getRestrictedVessels().addAll(vesselRestrictions);
 		}
+		
+		dSlot.setRestrictedPortsArePermissive(true);
+		dSlot.setRestrictedPortsOverride(true);
+		dSlot.getRestrictedPorts().add(loadSlotToMatch.getPort());
 		
 		String id = namePrefix + loadSlotToMatch.getName();
 		dSlot.setName(id);
