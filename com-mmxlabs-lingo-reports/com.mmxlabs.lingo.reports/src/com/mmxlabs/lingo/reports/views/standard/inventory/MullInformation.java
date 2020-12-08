@@ -11,7 +11,10 @@ public class MullInformation {
 	public int lifted;
 	public int monthlyRE;
 	public int monthEndEntitlement;
+	public int monthlyRECF;
 	public int cargoCount;
+	public int overliftCF;
+	public int carriedEntitlement;
 	
 	public YearMonth getYM() {
 		return this.ym;
@@ -39,5 +42,13 @@ public class MullInformation {
 	
 	public int getCargoCount() {
 		return this.cargoCount;
+	}
+	
+	public int getOverliftCF() {
+		return this.overliftCF;
+	}
+	
+	public int getCarriedEntitlement() {
+		return this.carriedEntitlement;
 	}
 }

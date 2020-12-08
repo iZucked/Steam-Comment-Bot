@@ -30,10 +30,11 @@ public class MULLContainer {
 		this.globalRelativeEntitlement = globalRelativeEntitlement;
 		this.mudContainers = mudContainers;
 		this.currentMonthAbsoluteEntitlement = new HashMap<>();
+		initialAllocations.entrySet().stream().forEach(e -> this.currentMonthAbsoluteEntitlement.put(e.getKey(), e.getValue().intValue()));
 	}
 	
 	public BaseLegalEntity calculateMull(final Map<Vessel, LocalDate> vesselToMostRecentUseDate) {
-		Comparator<BaseLegalEntity> comparator = new Comparator<>() {
+		Comparator<BaseLegalEntity> comparator = new Comparator<BaseLegalEntity>() {
 
 			@Override
 			public int compare(BaseLegalEntity arg0, BaseLegalEntity arg1) {
@@ -48,61 +49,13 @@ public class MULLContainer {
 				final int afterDrop0 = beforeDrop0 - expectedAllocationDrop0;
 				final int afterDrop1 = beforeDrop1 - expectedAllocationDrop1;
 				
-//				if (allocation0 > allocation1) {
-//					// if both within remain within FCL return 0, favour anyone outside of FCL
-//					if (beforeDrop0 > fullCargoLotValue) { // 0: most entitled and > FCL
-//						return 1;
-//					} else { // 0: most entitled and <= FCL
-//						if (beforeDrop1 > fullCargoLotValue) { // 0: most entitled and < FCL, 1: > FCL
-//							return -1;
-//						} else { // 0: most entitled and <= FCL, 1: <= FCL
-//							if (afterDrop0 < -fullCargoLotValue) { // 0: most entitled and after < -FCL
-//								if (afterDrop1 < afterDrop0) { // 0: most entitled and after < -FCL, 1: after < FCL0 < -FCL
-//									return 1;
-//								} else { // 0: most entitled and after < -FCL, 1: after > FCL0
-//									return -1;
-//								}
-//							} else { // 0: most entitled and -FCL <= after <= FCL, 1: <= FCL
-//								return 1;
-//							}
-//						}
-//					}
-//				} else if (allocation1 > allocation0) {
-//					if (beforeDrop1 > fullCargoLotValue) { // 1: most entitled and > FCL
-//						return -1;
-//					} else { // 1: most entitled and <= FCL
-//						if (beforeDrop0 > fullCargoLotValue) { // 1: most entitled and < FCL, 0: > FCL
-//							return 1;
-//						} else { // 1: most entitled and <= FCL, 0: <= FCL
-//							if (afterDrop1 < -fullCargoLotValue) { // 1: most entitled and after < -FCL
-//								if (afterDrop1 < afterDrop0) { // 1: most entitled and after < -FCL, 1: after < FCL1 < -FCL
-//									return -1;
-//								} else { // 1: most entitled and after < -FCL, 0: after > FCL1
-//									return 1;
-//								}
-//							} else { // 1: most entitled and -FCL <= after <= FCL, 0: <= FCL
-//								return -1;
-//							}
-//						}
-//					}
-//				} else { // both equally entitled
-//					if (beforeDrop1 > beforeDrop0) { // 1: more monthly entitled than 0
-//						return 1;
-//					} else { // 0: more or equally monthly entitled than 1
-//						return -1;
-//					}
-//				}
-					
-				if (allocation0 > allocation1) {
-					if (afterDrop0 > fullCargoLotValue) {
-						return 1;
-					} else if (afterDrop0 < -fullCargoLotValue) {
-						return -1;
-					} else {
-						return 1;
-					}
-				} else if (allocation0 < allocation1) {
-					if (afterDrop1 < -fullCargoLotValue) {
+				final boolean belowLower0 = afterDrop0 < -fullCargoLotValue;
+				final boolean belowLower1 = afterDrop1 < -fullCargoLotValue;
+				final boolean aboveUpper0 = afterDrop0 > fullCargoLotValue;
+				final boolean aboveUpper1 = afterDrop1 > fullCargoLotValue;
+				
+				if (belowLower0) {
+					if (belowLower1) {
 						if (afterDrop0 < afterDrop1) {
 							return -1;
 						} else {
@@ -112,17 +65,78 @@ public class MULLContainer {
 						return -1;
 					}
 				} else {
-					if (afterDrop0 == afterDrop1) {
-						return 0;
-					} else if (afterDrop0 < afterDrop1) {
-						return -1;
-					} else {
+					if (belowLower1) {
 						return 1;
+					} else {
+						if (aboveUpper0) {
+							if (aboveUpper1) {
+								if (allocation0 > allocation1) {
+									return 1;
+								} else {
+									return -1;
+								}
+							} else {
+								return 1;
+							}
+						} else {
+							if (aboveUpper1) {
+								return -1;
+							} else {
+								if (beforeDrop0 > fullCargoLotValue) {
+									if (beforeDrop1 > beforeDrop0) {
+										return -1;
+									} else {
+										return 1;
+									}
+								} else {
+									if (beforeDrop1 > fullCargoLotValue) {
+										return -1;
+									} else {
+										if (allocation0 > allocation1) {
+											return 1;
+										} else {
+											return -1;
+										}
+									}
+								}
+							}
+						}
 					}
 				}
+					
+//				if (allocation0 > allocation1) {
+//					if (afterDrop0 > fullCargoLotValue) {
+//						return 1;
+//					} else if (afterDrop0 < -fullCargoLotValue) {
+//						return -1;
+//					} else {
+//						return 1;
+//					}
+//				} else if (allocation0 < allocation1) {
+//					if (afterDrop1 < -fullCargoLotValue) {
+//						if (afterDrop0 < afterDrop1) {
+//							return -1;
+//						} else {
+//							return 1;
+//						}
+//					} else {
+//						return -1;
+//					}
+//				} else {
+//					if (afterDrop0 == afterDrop1) {
+//						return 0;
+//					} else if (afterDrop0 < afterDrop1) {
+//						return -1;
+//					} else {
+//						return 1;
+//					}
+//				}
 			}
 		};
 		BaseLegalEntity mull =  globalRelativeEntitlement.stream().map(Pair::getFirst).max(comparator).get();
+		if (mull.getName().equalsIgnoreCase("ogg")) {
+			int j = 0;
+		}
 		return mull;
 //		return this.runningAllocation.entrySet().stream() //
 //				.max((e1, e2) -> e1.getValue().compareTo(e2.getValue())).get().getKey();
@@ -151,7 +165,7 @@ public class MULLContainer {
 	}
 	
 	public void dropEntityAllocation(final BaseLegalEntity entity, final int allocationDrop) {
-		this.runningAllocation.compute(entity, (k, v) -> v-allocationDrop);
+		this.runningAllocation.compute(entity, (k, v) -> v- ((long) allocationDrop));
 		this.currentMonthAbsoluteEntitlement.compute(entity, (k, v) -> v - allocationDrop);
 	}
 	
@@ -183,7 +197,8 @@ public class MULLContainer {
 	
 	public void updateCurrentMonthAbsoluteEntitlement(final int totalMonthIn) {
 		for (final Pair<BaseLegalEntity, Double> p : this.globalRelativeEntitlement) {
-			this.currentMonthAbsoluteEntitlement.put(p.getFirst(), ((Double) (totalMonthIn*p.getSecond())).intValue());
+			// this.currentMonthAbsoluteEntitlement.put(p.getFirst(), ((Double) (totalMonthIn*p.getSecond())).intValue());
+			this.currentMonthAbsoluteEntitlement.compute(p.getFirst(), (k, v) -> v + ((Double) (totalMonthIn*p.getSecond())).intValue());
 		}
 	}
 }

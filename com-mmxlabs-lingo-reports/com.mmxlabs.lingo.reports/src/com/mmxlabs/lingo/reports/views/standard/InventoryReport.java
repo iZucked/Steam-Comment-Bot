@@ -347,11 +347,12 @@ public class InventoryReport extends ViewPart {
 			{
 				createMullColumn("Month", 150, o -> String.format("%d-%d", o.getFirst().ym.getMonthValue(), o.getFirst().ym.getYear()), o -> o.getFirst().getYM());
 				createMullColumn("Entity", 150, o -> o.getFirst().entity.getName(), o -> o.getFirst().entity.getName());
-				createMullColumn("Overlift", 150, o -> generateDiffString(o, MullInformation::getOverlift), o -> generateSortValue(o, MullInformation::getOverlift));
+				// createMullColumn("Monthly Overlift", 150, o -> generateDiffString(o, MullInformation::getOverlift), o -> generateSortValue(o, MullInformation::getOverlift));
+				createMullColumn("Overlift", 150, o-> generateDiffString(o, MullInformation::getOverliftCF), o-> generateSortValue(o, MullInformation::getOverliftCF));
 				createMullColumn("Total lifted", 150, o -> generateDiffString(o, MullInformation::getLifted), o-> generateSortValue(o, MullInformation::getLifted));
-				createMullColumn("#Cargo", 150, o -> generateDiffString(o, MullInformation::getCargoCount), o -> generateSortValue(o, MullInformation::getCargoCount));
-				createMullColumn("This month RE", 150, o -> generateDiffString(o, MullInformation::getMonthlyRE), o -> generateSortValue(o, MullInformation::getMonthlyRE));
-				createMullColumn("Running entitlement", 150, o -> generateDiffString(o, MullInformation::getMonthEndEntitlement), o -> generateSortValue(o, MullInformation::getMonthEndEntitlement));
+				createMullColumn("# Cargo", 150, o -> generateDiffString(o, MullInformation::getCargoCount), o -> generateSortValue(o, MullInformation::getCargoCount));
+				createMullColumn("Monthly entitlement", 150, o -> generateDiffString(o, MullInformation::getMonthlyRE), o -> generateSortValue(o, MullInformation::getMonthlyRE));
+				createMullColumn("Carried entitlement", 150, o -> generateDiffString(o, MullInformation::getCarriedEntitlement), o -> generateSortValue(o, MullInformation::getCarriedEntitlement));
 				
 				mullItem.setControl(mullTableViewer.getControl());
 			}
@@ -457,7 +458,7 @@ public class InventoryReport extends ViewPart {
 							final Map<YearMonth, Map<BaseLegalEntity,Integer>> pinnedMonthlyRE = calculateMonthlyRE(adpStart, adpEnd, sProfile, monthlyProduction);
 							final Map<YearMonth, Map<BaseLegalEntity,Integer>> pinnedActualLift = calculateActualLift(adpStart, adpEnd, sProfile, pinnedCargoAllocations, expectedLoadPort);
 							final Map<YearMonth, Map<BaseLegalEntity,Integer>> pinnedCargoCount = calculateCargoCount(adpStart, adpEnd, sProfile, pinnedCargoAllocations, expectedLoadPort);
-							
+							final Map<BaseLegalEntity, Integer> pinnedInitialAllocation = calculateInitialAllocation(sProfile);
 							
 							for (YearMonth ym = adpStart; ym.isBefore(adpEnd); ym = ym.plusMonths(1)) {
 								for (BaseLegalEntity entity : entitiesOrdered) {
@@ -472,6 +473,7 @@ public class InventoryReport extends ViewPart {
 								}
 							}
 							calculateMonthEndEntitlement(pinnedMullList, adpStart);
+							calculateCarriedEntitlement(pinnedMullList, adpStart, pinnedInitialAllocation);
 						}
 						final ScheduleModel otherScheduleModel = otherResult.getTypedResult(ScheduleModel.class);
 						final Schedule otherSchedule = otherScheduleModel.getSchedule();
@@ -480,16 +482,19 @@ public class InventoryReport extends ViewPart {
 							final LNGScenarioModel otherLngScenarioModel = (LNGScenarioModel) otherResult.getRootObject();
 							final ADPModel otherADPModel = otherLngScenarioModel.getAdpModel();
 							
-							final Inventory otherInventory = ((LNGScenarioModel)(otherScheduleModel.eContainer())).getCargoModel().getInventoryModels().stream().filter(i -> i.getName().equals(expectedInventory.getName())).findAny().get();
+							final Inventory otherInventory = otherLngScenarioModel.getCargoModel().getInventoryModels().stream().filter(i -> i.getName().equals(expectedInventory.getName())).findAny().get();
+							
+							
 							final InventorySubprofile otherSProfile = otherADPModel.getMultipleInventoriesProfile().getInventories().stream().filter(s -> s.getInventory().equals(otherInventory)).findAny().get();
 							final Port otherInventoryLoadPort = otherInventory.getPort();
 							
 							final List<CargoAllocation> otherCargoAllocations = otherSchedule.getCargoAllocations();
+							final Map<BaseLegalEntity, Integer> otherInitialAllocation = calculateInitialAllocation(otherSProfile);
 							final Map<YearMonth, Map<BaseLegalEntity,Integer>> otherMonthlyRE = calculateMonthlyRE(adpStart, adpEnd, otherSProfile, monthlyProduction);
 							final Map<YearMonth, Map<BaseLegalEntity,Integer>> otherActualLift = calculateActualLift(adpStart, adpEnd, otherSProfile, otherCargoAllocations, otherInventoryLoadPort);
 							final Map<YearMonth, Map<BaseLegalEntity,Integer>> otherCargoCount = calculateCargoCount(adpStart, adpEnd, otherSProfile, otherCargoAllocations, otherInventoryLoadPort);
 							
-							final List<BaseLegalEntity> otherEntities = ((LNGScenarioModel)(otherScheduleModel.eContainer())).getReferenceModel().getCommercialModel().getEntities();
+							final List<BaseLegalEntity> otherEntities = otherLngScenarioModel.getReferenceModel().getCommercialModel().getEntities();
 							final Map<BaseLegalEntity,BaseLegalEntity> entityEntityMap = new HashMap<>();
 							for (BaseLegalEntity entityToKeep : entitiesOrdered) {
 								otherEntities.stream().filter(e -> entityToKeep.getName().equals(e.getName())).findAny().ifPresent(e -> entityEntityMap.put(entityToKeep, e));
@@ -505,10 +510,17 @@ public class InventoryReport extends ViewPart {
 									currRow.overlift = otherActualLift.get(ym).get(otherEntityMirrorObject) - otherMonthlyRE.get(ym).get(otherEntityMirrorObject);
 									currRow.monthlyRE = otherMonthlyRE.get(ym).get(otherEntityMirrorObject);
 									currRow.cargoCount = otherCargoCount.get(ym).get(otherEntityMirrorObject);
+									// currRow.monthlyRECF = 
 									otherMullList.add(currRow);
 								}
 							}
 							calculateMonthEndEntitlement(otherMullList, adpStart);
+							//calculateMonthlyRECF(otherMullList, adpStart, otherInitialAllocation);
+							calculateOverliftCF(otherMullList, adpStart);
+							Map<BaseLegalEntity, Integer> mappedOtherInitialAllocation = new HashMap<>();
+							entitiesOrdered.stream().forEach(e -> mappedOtherInitialAllocation.put(e, otherInitialAllocation.get(entityEntityMap.get(e))));
+							//otherInitialAllocation.entrySet().stream()
+							calculateCarriedEntitlement(otherMullList, adpStart, mappedOtherInitialAllocation);
 						}
 						
 						if (pinnedMullList.isEmpty() && !otherMullList.isEmpty()) {
@@ -539,7 +551,7 @@ public class InventoryReport extends ViewPart {
 							final Map<YearMonth, Map<BaseLegalEntity,Integer>> otherMonthlyRE = calculateMonthlyRE(adpStart, adpEnd, sProfile, monthlyProduction);
 							final Map<YearMonth, Map<BaseLegalEntity,Integer>> otherActualLift = calculateActualLift(adpStart, adpEnd, sProfile, otherCargoAllocations, expectedLoadPort);
 							final Map<YearMonth, Map<BaseLegalEntity,Integer>> otherCargoCount = calculateCargoCount(adpStart, adpEnd, sProfile, otherCargoAllocations, expectedLoadPort);
-							
+							final Map<BaseLegalEntity, Integer> initialAllocation = calculateInitialAllocation(sProfile);
 							final List<MullInformation> otherMullList = new LinkedList<>();
 							for (YearMonth ym = adpStart; ym.isBefore(adpEnd); ym = ym.plusMonths(1)) {
 								for (BaseLegalEntity entity : entitiesOrdered) {
@@ -554,6 +566,8 @@ public class InventoryReport extends ViewPart {
 								}
 							}
 							calculateMonthEndEntitlement(otherMullList, adpStart);
+							calculateOverliftCF(otherMullList, adpStart);
+							calculateCarriedEntitlement(otherMullList, adpStart, initialAllocation);
 							final Iterator<MullInformation> otherIter = otherMullList.iterator();
 							while (otherIter.hasNext()) {
 								pairedMullList.add(new Pair<>(otherIter.next(), null));
@@ -561,9 +575,11 @@ public class InventoryReport extends ViewPart {
 						}
 					}
 					
+					final Map<BaseLegalEntity, Integer> initialAllocation = calculateInitialAllocation(sProfile);
 					final Map<YearMonth, Map<BaseLegalEntity,Integer>> monthlyRE = calculateMonthlyRE(adpStart, adpEnd, sProfile, monthlyProduction);
 					final Map<YearMonth, Map<BaseLegalEntity,Integer>> actualLift = calculateActualLift(adpStart, adpEnd, sProfile, l, expectedLoadPort);
 					final Map<YearMonth, Map<BaseLegalEntity,Integer>> cargoCount = calculateCargoCount(adpStart, adpEnd, sProfile, l, expectedLoadPort);
+					
 					
 					for (YearMonth ym = adpStart; ym.isBefore(adpEnd); ym = ym.plusMonths(1)) {
 						for (BaseLegalEntity entity : entitiesOrdered) {
@@ -579,6 +595,8 @@ public class InventoryReport extends ViewPart {
 					}
 					
 					calculateMonthEndEntitlement(mullList, adpStart);
+					calculateCarriedEntitlement(mullList, adpStart, initialAllocation);
+					calculateOverliftCF(mullList, adpStart);
 					
 					int i = 0;
 					
@@ -760,6 +778,15 @@ public class InventoryReport extends ViewPart {
 								series.setBarWidth(1);
 								series.setBarColor(Display.getDefault().getSystemColor(SWT.COLOR_GREEN));
 							}
+							
+//							final List<Pair<LocalDateTime, Integer>> valls = inventoryEvents.getEvents().stream() //
+//									.filter(evt -> evt.getSlotAllocation() != null) //
+//									.filter(evt -> {
+//										LocalDateTime evt.getDate()
+//										evt.getDate().isAfter(evt.getSlotAllocation().getCargoAllocation().getSlotAllocations().get(0).getSlot().getWindowStart().plusDays(arg0))
+//									}) //
+//									.map(e -> new Pair<>(e.getDate(), Math.abs(e.getChangeQuantity()))) //
+//									.collect(Collectors.toList());
 						}
 						{
 							final List<Pair<LocalDateTime, Integer>> values = inventoryEvents.getEvents().stream() //
@@ -853,6 +880,8 @@ public class InventoryReport extends ViewPart {
 		// mullTableViewer.setInput(mullList);
 		mullTableViewer.setInput(pairedMullList);
 	}
+
+
 
 	private void addToInventoryLevelList(final List<InventoryLevel> tableLevels, final InventoryLevel lvl) {
 		// can swap with proper search through the list
@@ -1161,6 +1190,14 @@ public class InventoryReport extends ViewPart {
 		}
 	}
 	
+	private void calculateMonthlyRECF(final List<MullInformation> mullList, final YearMonth adpStart, final Map<BaseLegalEntity, Integer> initialAllocations) {
+		for (MullInformation curr : mullList) {
+			if (curr.ym.equals(adpStart)) {
+				
+			}
+		}
+	}
+	
 	private List<BaseLegalEntity> calculateEntityOrder(final InventorySubprofile sProfile) {
 		final Map<BaseLegalEntity,Double> orderVal = new HashMap<>();
 		sProfile.getEntityTable().stream().forEach(row -> orderVal.put(row.getEntity(), row.getRelativeEntitlement()));
@@ -1193,12 +1230,51 @@ public class InventoryReport extends ViewPart {
 		}
 	}
 	
+	private Map<BaseLegalEntity, Integer> calculateInitialAllocation(InventorySubprofile sProfile) {
+		Map<BaseLegalEntity, Integer> initialAllocations = new HashMap<>();
+		sProfile.getEntityTable().stream().forEach(row -> initialAllocations.put(row.getEntity(), Integer.parseInt(row.getInitialAllocation())));
+		return initialAllocations;
+	}
+	
 	private Comparable generateSortValue(final Pair<MullInformation, MullInformation> element, final Function<MullInformation, Integer> valueExtractor) {
 		final MullInformation otherVal = element.getSecond();
 		if (element.getSecond() == null) {
 			return valueExtractor.apply(element.getFirst());
 		} else {
 			return valueExtractor.apply(otherVal) - valueExtractor.apply(element.getFirst());
+		}
+	}
+	
+	private void calculateOverliftCF(final List<MullInformation> mullList, final YearMonth adpStart) {
+//		final Map<BaseLegalEntity, MullInformation> prev = new HashMap<>();
+//		for (MullInformation curr : mullList) {
+//			if (curr.ym.equals(adpStart)) {
+//				curr.monthEndEntitlement = curr.monthlyRE - curr.lifted;
+//			} else {
+//				curr.monthEndEntitlement = prev.get(curr.entity).monthEndEntitlement +curr.monthlyRE - curr.lifted;
+//			}
+//			prev.put(curr.entity, curr);
+//		}
+		final Map<BaseLegalEntity, MullInformation> prev = new HashMap<>();
+		for (MullInformation curr : mullList) {
+			if (curr.ym.equals(adpStart)) {
+				curr.overliftCF = curr.overlift;
+			} else {
+				curr.overliftCF = curr.overlift - prev.get(curr.entity).monthEndEntitlement;
+			}
+			prev.put(curr.entity, curr);
+		}
+	}
+	
+	private void calculateCarriedEntitlement(List<MullInformation> mullList, YearMonth adpStart, Map<BaseLegalEntity, Integer> initialAllocation) {
+		final Map<BaseLegalEntity, MullInformation> prev = new HashMap<>();
+		for (MullInformation curr : mullList) {
+			if (curr.ym.equals(adpStart)) {
+				curr.carriedEntitlement = initialAllocation.get(curr.getEntity());
+			} else {
+				curr.carriedEntitlement = -prev.get(curr.entity).getOverliftCF();
+			}
+			prev.put(curr.entity, curr);
 		}
 	}
 }
