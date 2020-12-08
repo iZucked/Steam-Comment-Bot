@@ -109,7 +109,7 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 		}
 
 		Pair<@NonNull CargoValueAnnotation, @NonNull Long> maxVolumePair = entityValueCalculator.evaluate(maxVolumeRecord.resourceVoyagePlan, maxVolumeAnnotation, maxVolumeRecord.vesselAvailability,
-				maxVolumeRecord.vesselStartTime, null, null);
+				null, null);
 		final long maxTransferPNL = maxVolumePair.getSecond();
 
 		AllocationRecord minVolumeRecord = maxVolumeRecord.mutableCopy();
@@ -129,8 +129,7 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 
 		setTransferVolume(minVolumeRecord, slots, minVolumeAnnotation, minTransferVolumeMMBTu, minTransferVolumeM3);
 
-		Pair<CargoValueAnnotation, Long> minVolumePair = entityValueCalculator.evaluate(minVolumeRecord.resourceVoyagePlan, minVolumeAnnotation, minVolumeRecord.vesselAvailability,
-				minVolumeRecord.vesselStartTime, null, null);
+		Pair<CargoValueAnnotation, Long> minVolumePair = entityValueCalculator.evaluate(minVolumeRecord.resourceVoyagePlan, minVolumeAnnotation, minVolumeRecord.vesselAvailability, null, null);
 
 		final long minTransferPNL = minVolumePair.getSecond();
 		// If annotating, then we need to re-evaluate with the solution so we record the
@@ -140,14 +139,12 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 		final boolean foo = counterPartyVolumeOption != (maxTransferPNL >= minTransferPNL);
 		if (foo) {
 			if (annotatedSolution != null) {
-				return entityValueCalculator
-						.evaluate(maxVolumeRecord.resourceVoyagePlan, maxVolumeAnnotation, maxVolumeRecord.vesselAvailability, maxVolumeRecord.vesselStartTime, null, annotatedSolution).getFirst();
+				return entityValueCalculator.evaluate(maxVolumeRecord.resourceVoyagePlan, maxVolumeAnnotation, maxVolumeRecord.vesselAvailability, null, annotatedSolution).getFirst();
 			}
 			return maxVolumePair.getFirst();
 		} else {
 			if (annotatedSolution != null) {
-				return entityValueCalculator
-						.evaluate(minVolumeRecord.resourceVoyagePlan, minVolumeAnnotation, minVolumeRecord.vesselAvailability, minVolumeRecord.vesselStartTime, null, annotatedSolution).getFirst();
+				return entityValueCalculator.evaluate(minVolumeRecord.resourceVoyagePlan, minVolumeAnnotation, minVolumeRecord.vesselAvailability, null, annotatedSolution).getFirst();
 			}
 			return minVolumePair.getFirst();
 		}
@@ -163,26 +160,23 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 
 		final IAllocationAnnotation minAnnotation = calculateShippedMode_MinVolumes(allocationRecord, slots, vessel);
 
-		Pair<@NonNull CargoValueAnnotation, @NonNull Long> minVolumePair = entityValueCalculator.evaluate(allocationRecord.resourceVoyagePlan, minAnnotation, allocationRecord.vesselAvailability,
-				allocationRecord.vesselStartTime, null, annotatedSolution);
+		Pair<@NonNull CargoValueAnnotation, @NonNull Long> minVolumePair = entityValueCalculator.evaluate(allocationRecord.resourceVoyagePlan, minAnnotation, allocationRecord.vesselAvailability, null,
+				annotatedSolution);
 		final long minTransferPNL = minVolumePair.getSecond();
 
 		final IAllocationAnnotation maxAnnotation = calculateShippedMode_MaxVolumes(allocationRecord, slots, vessel);
 
-		Pair<CargoValueAnnotation, Long> maxVolumePair = entityValueCalculator.evaluate(allocationRecord.resourceVoyagePlan, maxAnnotation, allocationRecord.vesselAvailability,
-				allocationRecord.vesselStartTime, null, null);
+		Pair<CargoValueAnnotation, Long> maxVolumePair = entityValueCalculator.evaluate(allocationRecord.resourceVoyagePlan, maxAnnotation, allocationRecord.vesselAvailability, null, null);
 		final long maxTransferPNL = maxVolumePair.getSecond();
 
 		if (maxTransferPNL >= minTransferPNL) {
 			if (annotatedSolution != null) {
-				return entityValueCalculator
-						.evaluate(allocationRecord.resourceVoyagePlan, maxAnnotation, allocationRecord.vesselAvailability, allocationRecord.vesselStartTime, null, annotatedSolution).getFirst();
+				return entityValueCalculator.evaluate(allocationRecord.resourceVoyagePlan, maxAnnotation, allocationRecord.vesselAvailability, null, annotatedSolution).getFirst();
 			}
 			return maxVolumePair.getFirst();
 		} else {
 			if (annotatedSolution != null) {
-				return entityValueCalculator
-						.evaluate(allocationRecord.resourceVoyagePlan, minAnnotation, allocationRecord.vesselAvailability, allocationRecord.vesselStartTime, null, annotatedSolution).getFirst();
+				return entityValueCalculator.evaluate(allocationRecord.resourceVoyagePlan, minAnnotation, allocationRecord.vesselAvailability, null, annotatedSolution).getFirst();
 			}
 			return minVolumePair.getFirst();
 		}

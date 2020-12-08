@@ -64,6 +64,11 @@
          id="com.mmxlabs.datahub.update.calendars"
          name="Update Calendars">
    </command>
+   <command
+          defaultHandler="com.mmxlabs.lngdataserver.lng.importers.merge.MergeScenarioCommandHandler"
+          id="com.mmxlabs.lngdataserver.lng.importers.merge.MergeBaseCase"
+          name="Merge into...">
+   </command>
 </extension>
  <extension
          point="org.eclipse.ui.handlers">
@@ -312,6 +317,38 @@
             commandId="com.mmxlabs.datahub.update.canalCosts"
             label="Update Canal Costs"
             style="push">
+      </command>
+   </menuContribution>
+</extension>
+<extension point="org.eclipse.ui.menus">   
+   <menuContribution
+         allPopups="false"
+         locationURI="popup:com.mmxlabs.scenario.service.ui.navigator?before=optimisation">
+      <command
+            commandId="com.mmxlabs.lngdataserver.lng.importers.merge.MergeBaseCase"
+            style="push"
+            tooltip="Merge into this scenario...">
+            <visibleWhen
+                        checkEnabled="false">
+                     <and>
+                        <with variable="selection">
+                           <iterate
+                                 ifEmpty="false">
+                              <instanceof
+                                    value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                              </instanceof>
+                           </iterate>
+                        </with>
+                        <count
+                              value="1">
+                        </count>
+                        <test
+	                        args="features:merge-tool"
+	                        forcePluginActivation="true"
+                        	property="com.mmxlabs.license.features.enablement">
+						</test>
+                     </and>
+                  </visibleWhen>
       </command>
    </menuContribution>
 </extension>

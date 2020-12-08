@@ -1,1 +1,9 @@
-[ ]
+[ {
+  "Schedule" : "3 -O- dry dock 55 -F- lateness removed -F- base",
+  "ID" : "load-cargo-22",
+  "Type" : "Load",
+  "Vessel" : "Methane Julia Louise",
+  "Lateness" : " 3d,  1h",
+  "Start by" : "10/02/11 14:00",
+  "Scheduled time" : "13/02/11 15:00"
+} ]

@@ -84,6 +84,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.service.event.EventHandler;
 
 import com.google.common.base.Objects;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.IReportContents;
@@ -125,10 +126,12 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
@@ -181,9 +184,12 @@ public class ChangeSetView extends ViewPart {
 				if (r1.eContainer() == r2.eContainer()) {
 					final ChangeSetTableGroup g = (ChangeSetTableGroup) r1.eContainer();
 					if (sortByVesselAndDate) {
-						final String r1Vessel = getEmptyIfNull(getVesselName(r1));
-						final String r2Vessel = getEmptyIfNull(getVesselName(r2));
-						final int diffVessel = r1Vessel.compareTo(r2Vessel);
+						final Pair<String, Integer> r1Vessel = getEmptyIfNull(getVesselNameAndCharterNumber(r1));
+						final Pair<String, Integer> r2Vessel = getEmptyIfNull(getVesselNameAndCharterNumber(r2));
+						
+						int diffVessel = r1Vessel.getFirst().compareTo(r2Vessel.getFirst());
+						if (diffVessel == 0)
+							diffVessel = r1Vessel.getSecond().compareTo(r2Vessel.getSecond());
 						if (diffVessel == 0) {
 							final ZonedDateTime date1 = getDate(r1);
 							final ZonedDateTime date2 = getDate(r2);
@@ -227,18 +233,18 @@ public class ChangeSetView extends ViewPart {
 			return super.compare(viewer, original_e1, original_e2);
 		}
 
-		private String getVesselName(final ChangeSetTableRow row) {
+		private Pair<String, Integer> getVesselNameAndCharterNumber(final ChangeSetTableRow row) {
 			if (row.getAfterVesselName() != null && !row.getAfterVesselName().isEmpty()) {
-				return row.getAfterVesselName();
+				return Pair.of(row.getAfterVesselName(), row.getAfterVesselCharterNumber());
 			} else if (row.getBeforeVesselName() != null && !row.getBeforeVesselName().isEmpty()) {
-				return row.getBeforeVesselName();
+				return Pair.of(row.getBeforeVesselName(), row.getBeforeVesselCharterNumber());
 			} else {
-				return "";
+				return Pair.of("",0);
 			}
 		}
 
-		private String getEmptyIfNull(final String str) {
-			return (str == null ? "" : str);
+		private Pair<String, Integer> getEmptyIfNull(final Pair<String, Integer> pair) {
+			return (pair.getFirst() == null ? Pair.of("", pair.getSecond()) : pair);
 		}
 
 		private ZonedDateTime getDate(final ChangeSetTableRow tableRow) {
@@ -380,6 +386,7 @@ public class ChangeSetView extends ViewPart {
 
 			// Reset selection
 			scenarioComparisonService.setSelectedElements(Collections.emptySet());
+			eSelectionService.setPostSelection(Collections.emptySet().toArray());
 
 			// TODO: Extract vessel columns and generate.
 
@@ -389,8 +396,8 @@ public class ChangeSetView extends ViewPart {
 			if (tableRootDefault != null) {
 				for (final ChangeSetTableGroup group : tableRootDefault.getGroups()) {
 					for (final ChangeSetTableRow csr : group.getRows()) {
-						vesselnames.add(new VesselData(csr.getBeforeVesselName(), csr.getBeforeVesselShortName(), csr.getBeforeVesselType()));
-						vesselnames.add(new VesselData(csr.getAfterVesselName(), csr.getAfterVesselShortName(), csr.getAfterVesselType()));
+						vesselnames.add(new VesselData(csr.getBeforeVesselName(), csr.getBeforeVesselShortName(), csr.getBeforeVesselType(), csr.getBeforeVesselCharterNumber()));
+						vesselnames.add(new VesselData(csr.getAfterVesselName(), csr.getAfterVesselShortName(), csr.getAfterVesselType(), csr.getAfterVesselCharterNumber()));
 					}
 				}
 			}
@@ -398,8 +405,8 @@ public class ChangeSetView extends ViewPart {
 			if (tableRootAlternative != null) {
 				for (final ChangeSetTableGroup group : tableRootAlternative.getGroups()) {
 					for (final ChangeSetTableRow csr : group.getRows()) {
-						vesselnames.add(new VesselData(csr.getBeforeVesselName(), csr.getBeforeVesselShortName(), csr.getBeforeVesselType()));
-						vesselnames.add(new VesselData(csr.getAfterVesselName(), csr.getAfterVesselShortName(), csr.getAfterVesselType()));
+						vesselnames.add(new VesselData(csr.getBeforeVesselName(), csr.getBeforeVesselShortName(), csr.getBeforeVesselType(), csr.getBeforeVesselCharterNumber()));
+						vesselnames.add(new VesselData(csr.getAfterVesselName(), csr.getAfterVesselShortName(), csr.getAfterVesselType(), csr.getAfterVesselCharterNumber()));
 					}
 				}
 			}
@@ -705,7 +712,6 @@ public class ChangeSetView extends ViewPart {
 				if (rowData == null) {
 					return;
 				}
-
 				selectedElements.add(rowData);
 				selectedElements.add(rowData.getLoadSlot());
 				selectedElements.add(rowData.getDischargeSlot());
@@ -740,6 +746,12 @@ public class ChangeSetView extends ViewPart {
 				if (eventGrouping instanceof Event) {
 					final Event event = (Event) eventGrouping;
 					selectedElements.add(event.getSequence());
+				}
+				if (eventGrouping instanceof CargoAllocation) {
+					final Sequence sequence = ((CargoAllocation) eventGrouping).getSequence();
+					if (sequence != null) {
+						selectedElements.add(((CargoAllocation) eventGrouping).getSequence());
+					}
 				}
 				// //
 				if (rowData.getOpenLoadAllocation() != null) {

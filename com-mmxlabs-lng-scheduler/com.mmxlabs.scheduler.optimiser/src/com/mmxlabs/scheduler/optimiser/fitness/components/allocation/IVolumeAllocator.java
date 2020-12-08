@@ -28,12 +28,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 public interface IVolumeAllocator {
 
 	/**
-	 * Directly create an {@link IAllocationAnnotation} from input data. Internally
-	 * this should call
-	 * {@link #createAllocationRecord(IVessel, int, VoyagePlan, List)}, delegate to
-	 * a {@link ICustomVolumeAllocator} and then invoke
-	 * {@link #allocate(AllocationRecord)}. This method is preferred over the other
-	 * two for standard volume allocation.
+	 * Directly create an {@link IAllocationAnnotation} from input data. Internally this should call {@link #createAllocationRecord(IVessel, int, VoyagePlan, List)}, delegate to a
+	 * {@link ICustomVolumeAllocator} and then invoke {@link #allocate(AllocationRecord)}. This method is preferred over the other two for standard volume allocation.
 	 * 
 	 * @param vessel
 	 * @param vesselStartTime
@@ -42,14 +38,11 @@ public interface IVolumeAllocator {
 	 * @return
 	 */
 	@Nullable
-	IAllocationAnnotation allocate(IVesselAvailability vesselAvailability, int vesselStartTime, VoyagePlan plan, IPortTimesRecord portTimesRecord,
-			final @Nullable IAnnotatedSolution annotatedSolution);
+	IAllocationAnnotation allocate(IVesselAvailability vesselAvailability, VoyagePlan plan, IPortTimesRecord portTimesRecord, final @Nullable IAnnotatedSolution annotatedSolution);
 
 	/**
-	 * Creates and returns the initial {@link AllocationRecord} instance based on
-	 * input data. This can be modified before passing to
-	 * {@link #allocate(AllocationRecord)}. This method should be called in cases
-	 * where the {@link ICustomVolumeAllocator} is not expected to be invoked.
+	 * Creates and returns the initial {@link AllocationRecord} instance based on input data. This can be modified before passing to {@link #allocate(AllocationRecord)}. This method should be called
+	 * in cases where the {@link ICustomVolumeAllocator} is not expected to be invoked.
 	 * 
 	 * @param vessel
 	 * @param vesselStartTime
@@ -57,16 +50,17 @@ public interface IVolumeAllocator {
 	 * @param arrivalTimes
 	 * @return
 	 */
-	@Nullable AllocationRecord createAllocationRecord(IVesselAvailability vesselAvailability, int vesselStartTime, VoyagePlan plan, IPortTimesRecord portTimesRecord);
+	@Nullable
+	AllocationRecord createAllocationRecord(IVesselAvailability vesselAvailability, VoyagePlan plan, IPortTimesRecord portTimesRecord);
 
 	/**
-	 * Given the {@link AllocationRecord}, perform the volume allocation to create
-	 * an {@link IAllocationAnnotation}. This method should be called in cases where
-	 * the {@link ICustomVolumeAllocator} is not expected to be invoked.
+	 * Given the {@link AllocationRecord}, perform the volume allocation to create an {@link IAllocationAnnotation}. This method should be called in cases where the {@link ICustomVolumeAllocator} is
+	 * not expected to be invoked.
 	 * 
 	 * @param allocationRecord
 	 * @return
 	 */
-	@Nullable IAllocationAnnotation allocate(AllocationRecord allocationRecord, @Nullable IAnnotatedSolution annotatedSolution);
+	@Nullable
+	IAllocationAnnotation allocate(AllocationRecord allocationRecord, @Nullable IAnnotatedSolution annotatedSolution);
 
 }

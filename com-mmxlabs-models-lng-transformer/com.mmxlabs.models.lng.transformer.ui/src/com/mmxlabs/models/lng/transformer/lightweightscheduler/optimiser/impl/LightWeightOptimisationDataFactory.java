@@ -529,7 +529,7 @@ public class LightWeightOptimisationDataFactory {
 		//"none" instead of zero and also "minimum of X slots is ..." instead of "min of X is..."
 		String utilizableStr = "none";
 		if (utilizable > 0) {
-			utilizableStr += Integer.toString(utilizable);
+			utilizableStr = Integer.toString(utilizable);
 		}
 		return "During "+monthsStr+", a "+minMaxStr+" of "+bound+" slots is required but "+utilizableStr+" of the following are used";
 	}

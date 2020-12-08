@@ -98,8 +98,8 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 	private static final double canalChoiceThreshold = 0.1; // percentage improvement required to choose a canal route
 
 	@Override
-	public @Nullable List<Pair<VoyagePlan, IPortTimesRecord>> processSchedule(final int vesselStartTime, final long[] startHeelVolumeRangeInM3, final IVesselAvailability vesselAvailability,
-			final VoyagePlan vp, final IPortTimesRecord portTimesRecord, @Nullable IAnnotatedSolution annotatedSolution) {
+	public @Nullable List<Pair<VoyagePlan, IPortTimesRecord>> processSchedule(final long[] startHeelVolumeRangeInM3, final IVesselAvailability vesselAvailability, final VoyagePlan vp,
+			final IPortTimesRecord portTimesRecord, @Nullable IAnnotatedSolution annotatedSolution) {
 
 		if (!(vesselAvailability.getVesselInstanceType() == VesselInstanceType.FLEET //
 				|| vesselAvailability.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER)) {
@@ -148,8 +148,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 
 			final ExtendedCharterOutSequence bigSequence = constructNewRawSequenceWithCharterOuts(vesselAvailability, currentSequence, gcoMarket, portTimesRecord, ballastIdx, ballastStartTime);
 
-			final VoyagePlan bigVoyagePlan = runVPOOnBigSequence(vesselAvailability.getVessel(), vp, vesselAvailability.getCharterCostCalculator(), startHeelVolumeRangeInM3, bigSequence,
-					vesselStartTime);
+			final VoyagePlan bigVoyagePlan = runVPOOnBigSequence(vesselAvailability.getVessel(), vp, vesselAvailability.getCharterCostCalculator(), startHeelVolumeRangeInM3, bigSequence);
 
 			final long remainingHeelInM3 = bigVoyagePlan.getRemainingHeelInM3();
 
@@ -177,7 +176,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 			// remaining heel may have been overwritten
 			upToCharterPlan.setRemainingHeelInM3(firstPlanRemainingHeel);
 
-			final IAllocationAnnotation preCharterAllocation = volumeAllocator.allocate(vesselAvailability, vesselStartTime, upToCharterPlan, preCharteringTimes, annotatedSolution);
+			final IAllocationAnnotation preCharterAllocation = volumeAllocator.allocate(vesselAvailability, upToCharterPlan, preCharteringTimes, annotatedSolution);
 
 			// add on delta to starting heel and remaining heel
 			if (preCharterAllocation != null) {
@@ -210,8 +209,8 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 			charterToEndPlan.setRemainingHeelInM3(secondPlanRemainingHeel);
 
 			final List<Pair<VoyagePlan, IPortTimesRecord>> charterPlans = new LinkedList<>();
-			charterPlans.add(new Pair<VoyagePlan, IPortTimesRecord>(upToCharterPlan, preCharterAllocation != null ? preCharterAllocation : preCharteringTimes));
-			charterPlans.add(new Pair<VoyagePlan, IPortTimesRecord>(charterToEndPlan, postCharteringTimes));
+			charterPlans.add(new Pair<>(upToCharterPlan, preCharterAllocation != null ? preCharterAllocation : preCharteringTimes));
+			charterPlans.add(new Pair<>(charterToEndPlan, postCharteringTimes));
 
 			return charterPlans;
 		}
@@ -516,7 +515,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 	 * @return
 	 */
 	private @Nullable VoyagePlan runVPOOnBigSequence(final IVessel vessel, final VoyagePlan originalVoyagePlan, final ICharterCostCalculator charterCostCalculator, final long[] startHeelRangeInM3,
-			final ExtendedCharterOutSequence bigSequence, final int startingTime) {
+			final ExtendedCharterOutSequence bigSequence) {
 		final int[] baseFuelPricePerMT = vesselBaseFuelCalculator.getBaseFuelPrices(vessel, bigSequence.getPortTimesRecord());
 
 		final List<@NonNull IVoyagePlanChoice> vpoChoices = new LinkedList<>();
@@ -543,7 +542,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		}
 		// Calculate our new plan
 		final VoyagePlan newVoyagePlan = voyagePlanOptimiser.optimise(null, vessel, startHeelRangeInM3, baseFuelPricePerMT, charterCostCalculator, bigSequence.getPortTimesRecord(),
-				bigSequence.getSequence(), vpoChoices, startingTime);
+				bigSequence.getSequence(), vpoChoices);
 
 		return newVoyagePlan;
 	}
@@ -558,7 +557,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		}
 		return false;
 	}
-	
+
 	private boolean checkForNonEmptyHeel(final long[] startHeelRangeInM3) {
 		boolean nonEmptyHeel = true;
 		if (startHeelRangeInM3.length == 2) {

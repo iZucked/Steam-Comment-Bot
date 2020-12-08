@@ -37,6 +37,7 @@ import javax.crypto.spec.PBEParameterSpec;
 
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
@@ -78,8 +79,8 @@ public final class KeyFileLoader {
 	private static final String OID_MMXLABS_KEYFILE_TYPE = "2.0.1.0.2";
 
 	private static final char[] ppLegacyValue = new char[] { 'U', 'n', 'i', 'c', 'o', 'r', 'n', '1', '4' };
-	
-	private static final char[] ppCurrentValue = new char[] { 'q', 'u', 'o', 'x', '1', 'E', 'e', 'w', 'u' ,'V'};
+
+	private static final char[] ppCurrentValue = new char[] { 'q', 'u', 'o', 'x', '1', 'E', 'e', 'w', 'u', 'V' };
 
 	public static URIConverter.Cipher loadCipher() throws Exception {
 
@@ -107,6 +108,11 @@ public final class KeyFileLoader {
 		if (keyFileFile == null) {
 			throw new FileNotFoundException("Unable to locate key file");
 		}
+
+		return loadCipher(keyFileFile);
+	}
+
+	public static DelegatingEMFCipher loadCipher(@NonNull File keyFileFile) throws Exception {
 
 		final DelegatingEMFCipher cipher = new DelegatingEMFCipher();
 		try {
@@ -349,10 +355,9 @@ public final class KeyFileLoader {
 	public static void main(final String[] args) throws Exception {
 		generate("c:/temp/lingo.pks");
 
-		
-//		final String source = "C:/users/sg/mmxlabs/keyfiles/p/lingo.data";
-//		final String dest = "C:/users/sg/mmxlabs/keyfiles/p/lingo.pks";
-//		convert(source, dest, ppLegacyValue);
+		// final String source = "C:/users/sg/mmxlabs/keyfiles/p/lingo.data";
+		// final String dest = "C:/users/sg/mmxlabs/keyfiles/p/lingo.pks";
+		// convert(source, dest, ppLegacyValue);
 	}
 
 	public static void generate(String out) {
@@ -371,7 +376,7 @@ public final class KeyFileLoader {
 			e1.printStackTrace();
 		}
 	}
-	
+
 	public static void convert(final String in, final String out, final char[] pw) throws Exception {
 
 		initalise(new File(out));

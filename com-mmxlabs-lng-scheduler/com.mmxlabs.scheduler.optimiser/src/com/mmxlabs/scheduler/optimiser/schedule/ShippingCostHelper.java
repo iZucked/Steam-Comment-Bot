@@ -15,12 +15,11 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
-import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.IBallastBonusContract;
 import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.impl.BallastBonusAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
-import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -90,7 +89,7 @@ public class ShippingCostHelper {
 		}
 		return planDuration;
 	}
-	
+
 	/**
 	 * Calculate revenue for the idle time method of generating charter outs
 	 * 
@@ -101,7 +100,7 @@ public class ShippingCostHelper {
 	public long getIdleTimeGeneratedCharterOutRevenue(final @NonNull VoyagePlan plan, final @NonNull IVesselAvailability vesselAvailability) {
 		long charterRevenue = 0;
 
-		for (final Object obj : plan.getSequence()) {
+		for (final IDetailsSequenceElement obj : plan.getSequence()) {
 
 			if (obj instanceof VoyageDetails) {
 				final VoyageDetails voyageDetails = (VoyageDetails) obj;
@@ -139,20 +138,20 @@ public class ShippingCostHelper {
 	 * @return
 	 */
 	public long getIdleTimeGeneratedCharterOutCosts(final @NonNull VoyagePlan plan) {
-		//int planDuration = 0;
+		// int planDuration = 0;
 		long hireCosts = 0;
 		for (final Object obj : plan.getSequence()) {
 
 			if (obj instanceof VoyageDetails) {
 				final VoyageDetails voyageDetails = (VoyageDetails) obj;
 				if (voyageDetails.getOptions().isCharterOutIdleTime()) {
-					//planDuration += voyageDetails.getIdleTime();
+					// planDuration += voyageDetails.getIdleTime();
 					hireCosts += voyageDetails.getIdleCharterCost();
 				}
 			}
 		}
-		//final long hireRatePerDay = plan.getCharterCostCalculator();
-		//final long hireCosts = hireRatePerDay * (long) planDuration / 24L;
+		// final long hireRatePerDay = plan.getCharterCostCalculator();
+		// final long hireCosts = hireRatePerDay * (long) planDuration / 24L;
 
 		return hireCosts;
 	}
@@ -214,27 +213,27 @@ public class ShippingCostHelper {
 		return 0L;
 	}
 
-	public long getShippingBallastBonusCost(final @NonNull IPortSlot portSlot, final @NonNull IVesselAvailability vesselAvailability, final int vesselEndTime) {
+	public long getShippingBallastBonusCost(final @NonNull IPortSlot portSlot, final @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime, final int vesselEndTime) {
 		if (portSlot.getPortType() == PortType.End) {
 			@Nullable
 			IBallastBonusContract ballastBonusContract = vesselAvailability.getBallastBonusContract();
 			if (ballastBonusContract == null) {
 				return 0L;
 			} else {
-				return ballastBonusContract.calculateBallastBonus(portSlot, vesselAvailability, vesselEndTime);
+				return ballastBonusContract.calculateBallastBonus(portSlot, vesselAvailability, vesselStartTime, vesselEndTime);
 			}
 		}
 		return 0L;
 	}
 
-	public void addBallastBonusAnnotation(DetailTree shippingDetails, IPortSlot portSlot, @NonNull IVesselAvailability vesselAvailability, int vesselEndTime) {
+	public void addBallastBonusAnnotation(DetailTree shippingDetails, IPortSlot portSlot, @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime, int vesselEndTime) {
 		if (portSlot.getPortType() == PortType.End) {
 			@Nullable
 			IBallastBonusContract ballastBonusContract = vesselAvailability.getBallastBonusContract();
 			if (ballastBonusContract == null) {
 				return;
 			} else {
-				BallastBonusAnnotation annotation = ballastBonusContract.annotate(portSlot, vesselAvailability, vesselEndTime);
+				BallastBonusAnnotation annotation = ballastBonusContract.annotate(portSlot, vesselAvailability, vesselStartTime, vesselEndTime);
 				shippingDetails.addChild(BallastBonusAnnotation.ANNOTATION_KEY, annotation);
 			}
 		}

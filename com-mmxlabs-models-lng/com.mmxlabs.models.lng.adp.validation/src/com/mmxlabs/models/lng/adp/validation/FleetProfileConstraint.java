@@ -117,8 +117,15 @@ public class FleetProfileConstraint extends AbstractModelMultiConstraint {
 
 					final SpotMarketsModel spotMarketsModel = ScenarioModelUtil.getSpotMarketsModel(extraContext.getScenarioDataProvider());
 
-					for (final CharterInMarket charterInMarket : spotMarketsModel.getCharterInMarkets()) {
+						for (final CharterInMarket charterInMarket : spotMarketsModel.getCharterInMarkets()) {
 						if (charterInMarket == profile.getDefaultNominalMarket()) {
+							if (charterInMarket.getSpotCharterCount() != 0) {
+								//Ensure count = 0, otherwise spot charter can be used on slot which disallows the vessel.
+								factory.copyName() //
+								.withObjectAndFeature(charterInMarket, SpotMarketsPackage.Literals.CHARTER_IN_MARKET__SPOT_CHARTER_COUNT) //
+								.withMessage("ADP vessel should have a zero count.") //
+								.make(ctx, statuses);							
+							}
 							continue;
 						}
 

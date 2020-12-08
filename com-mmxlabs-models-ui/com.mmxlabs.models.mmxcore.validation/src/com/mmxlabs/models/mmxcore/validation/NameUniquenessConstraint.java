@@ -43,7 +43,7 @@ public class NameUniquenessConstraint extends AbstractModelMultiConstraint {
 	private void validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses, final EAttribute nameAttribute,
 			@Nullable final EAttribute otherNamesAttribute) {
 		final EObject target = ctx.getTarget();
-		final Pair<EObject, EReference> containerAndFeature = new Pair<EObject, EReference>(extraContext.getContainer(target), extraContext.getContainment(target));
+		final Pair<EObject, EReference> containerAndFeature = Pair.of(extraContext.getContainer(target), extraContext.getContainment(target));
 
 		final EObject container = containerAndFeature.getFirst(); // target.eContainer();
 		if (container == null) {
@@ -78,17 +78,17 @@ public class NameUniquenessConstraint extends AbstractModelMultiConstraint {
 
 			Map<Pair<EObject, EReference>, Set<String>> badNames = (Map<Pair<EObject, EReference>, Set<String>>) ctx.getCurrentConstraintData();
 			if (badNames == null) {
-				badNames = new HashMap<Pair<EObject, EReference>, Set<String>>();
+				badNames = new HashMap<>();
 				ctx.putCurrentConstraintData(badNames);
 			}
 
 			Set<String> bad = badNames.get(containerAndFeature);
 			if (bad == null) {
-				bad = new HashSet<String>();
+				bad = new HashSet<>();
 				badNames.put(containerAndFeature, bad);
 				final List<EObject> objects = extraContext.getSiblings(target);
 
-				final Set<String> temp = new HashSet<String>();
+				final Set<String> temp = new HashSet<>();
 				for (final EObject no : objects) {
 					final String n = (String) no.eGet(nameAttribute);
 					if (n != null) {

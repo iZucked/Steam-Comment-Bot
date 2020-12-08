@@ -5,8 +5,6 @@
 package com.mmxlabs.models.lng.transformer.extensions.panamaslots;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,16 +14,11 @@ import java.util.TreeSet;
 
 import javax.inject.Inject;
 
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.CargoModel;
-import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
-import com.mmxlabs.models.lng.commercial.PurchaseContract;
-import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.port.CanalEntry;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -35,15 +28,13 @@ import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.transformer.ITransformerExtension;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
-import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
-import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.ECanalEntry;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProviderEditor;
@@ -52,7 +43,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProvider;
 /**
  * @author robert
  */
-public class PanamaSlotsTransformer implements IContractTransformer {
+public class PanamaSlotsTransformer implements ITransformerExtension {
 
 	@Inject
 	private IPanamaBookingsProviderEditor panamaBookingsProviderEditor;
@@ -127,8 +118,12 @@ public class PanamaSlotsTransformer implements IContractTransformer {
 
 		panamaBookingsProviderEditor.setBookings(panamaSlots);
 
-		panamaBookingsProviderEditor.setStrictBoundary(promptPeriodProvider.getStartOfPromptPeriod() + strictBoundaryOffsetDays * 24);
-		panamaBookingsProviderEditor.setRelaxedBoundary(promptPeriodProvider.getStartOfPromptPeriod() + relaxedBoundaryOffsetDays * 24);
+		if (strictBoundaryOffsetDays != 0) {
+			panamaBookingsProviderEditor.setStrictBoundary(promptPeriodProvider.getStartOfPromptPeriod() + strictBoundaryOffsetDays * 24);
+		}
+		if (relaxedBoundaryOffsetDays != 0) {
+			panamaBookingsProviderEditor.setRelaxedBoundary(promptPeriodProvider.getStartOfPromptPeriod() + relaxedBoundaryOffsetDays * 24);
+		}
 		panamaBookingsProviderEditor.setRelaxedBookingCountNorthbound(relaxedBookingsCountNorthbound);
 		panamaBookingsProviderEditor.setNorthboundMaxIdleDays(northBoundMaxIdleDays);
 		panamaBookingsProviderEditor.setRelaxedBookingCountSouthbound(relaxedBookingsCountSouthbound);
@@ -146,23 +141,4 @@ public class PanamaSlotsTransformer implements IContractTransformer {
 		throw new IllegalArgumentException();
 	}
 
-	@Override
-	public void slotTransformed(@NonNull final Slot modelSlot, @NonNull final IPortSlot optimiserSlot) {
-
-	}
-
-	@Override
-	public Collection<EClass> getContractEClasses() {
-		return Collections.emptySet();
-	}
-
-	@Override
-	public ISalesPriceCalculator transformSalesPriceParameters(final SalesContract salesContract, final LNGPriceCalculatorParameters priceParameters) {
-		return null;
-	}
-
-	@Override
-	public ILoadPriceCalculator transformPurchasePriceParameters(final PurchaseContract purchaseContract, final LNGPriceCalculatorParameters priceParameters) {
-		return null;
-	}
 }

@@ -249,6 +249,16 @@ public class ScheduleModelKPIUtils {
 		}
 		return totalCapacityViolationCount;
 	}
+	
+	public static int getNominalChartersCount(@NonNull final Schedule schedule) {
+
+		int totalNominalChartersCount = 0;
+		for (final Sequence seq : schedule.getSequences()) {
+			if (seq.isSetSpotIndex() && seq.getSpotIndex() == -1)
+				totalNominalChartersCount++;
+		}
+		return totalNominalChartersCount;
+	}
 
 	public static long getGroupProfitAndLoss(@Nullable final ProfitAndLossContainer profitAndLossContainer) {
 		if (profitAndLossContainer == null) {

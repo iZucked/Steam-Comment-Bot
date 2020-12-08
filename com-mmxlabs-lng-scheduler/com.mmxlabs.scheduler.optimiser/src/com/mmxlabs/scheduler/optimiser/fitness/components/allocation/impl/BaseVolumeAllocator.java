@@ -13,7 +13,6 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
-import com.mmxlabs.optimiser.optimiser.lso.parallellso.ILSOJobState;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
@@ -70,9 +69,9 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 	@Override
 	@Nullable
-	public IAllocationAnnotation allocate(final IVesselAvailability vesselAvailability, final int vesselStartTime, final VoyagePlan plan, final IPortTimesRecord portTimesRecord,
+	public IAllocationAnnotation allocate(final IVesselAvailability vesselAvailability, final VoyagePlan plan, final IPortTimesRecord portTimesRecord,
 			final @Nullable IAnnotatedSolution annotatedSolution) {
-		final AllocationRecord allocationRecord = createAllocationRecord(vesselAvailability, vesselStartTime, plan, portTimesRecord);
+		final AllocationRecord allocationRecord = createAllocationRecord(vesselAvailability, plan, portTimesRecord);
 		if (allocationRecord == null) {
 			return null;
 		}
@@ -84,7 +83,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 	@Override
 	@Nullable
-	public AllocationRecord createAllocationRecord(final IVesselAvailability vesselAvailability, final int vesselStartTime, final VoyagePlan plan, final IPortTimesRecord portTimesRecord) {
+	public AllocationRecord createAllocationRecord(final IVesselAvailability vesselAvailability, final VoyagePlan plan, final IPortTimesRecord portTimesRecord) {
 
 		final long minEndVolumeInM3 = plan.getRemainingHeelInM3();
 		// Default to min volume, but can be updated later
@@ -210,8 +209,8 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		}
 
 		// TODO: Assert start/end heel match actuals records.
-		final AllocationRecord allocationRecord = new AllocationRecord(vesselAvailability, plan, vesselStartTime, plan.getStartingHeelInM3(), plan.getLNGFuelVolume(), minEndVolumeInM3,
-				maxEndVolumeInM3, slots, portTimesRecord, returnSlot, minVolumesInM3, maxVolumesInM3, minVolumesInMMBtu, maxVolumesInMMBtu, slotCV);
+		final AllocationRecord allocationRecord = new AllocationRecord(vesselAvailability, plan, plan.getStartingHeelInM3(), plan.getLNGFuelVolume(), minEndVolumeInM3, maxEndVolumeInM3, slots,
+				portTimesRecord, returnSlot, minVolumesInM3, maxVolumesInM3, minVolumesInMMBtu, maxVolumesInMMBtu, slotCV);
 
 		for (final IPortSlot ps : allocationRecord.slots) {
 			if (fullCargoLotProvider.hasFCLRequirment(ps)) {

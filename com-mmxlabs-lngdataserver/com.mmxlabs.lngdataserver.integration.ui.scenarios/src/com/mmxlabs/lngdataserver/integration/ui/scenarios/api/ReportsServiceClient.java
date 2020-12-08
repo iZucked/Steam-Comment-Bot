@@ -39,11 +39,12 @@ public class ReportsServiceClient {
 
 	private final okhttp3.MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
 
-	public @Nullable String uploadReportData(String data, String type, String uuid, String uploadURL, String fileExtension) throws IOException {
+	public @Nullable String uploadReportData(String type, String version, String content, String uuid, String uploadURL, String fileExtension) throws IOException {
 
 		RequestBody requestBody = new MultipartBody.Builder() //
 				.setType(MultipartBody.FORM) //
-				.addFormDataPart("report", type + fileExtension, RequestBody.create(mediaType, data))//
+				.addFormDataPart("version", version) //
+				.addFormDataPart("report", type + fileExtension, RequestBody.create(mediaType, content))//
 				.build();
 
 		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(uploadURL + "/" + uuid + "/" + type);

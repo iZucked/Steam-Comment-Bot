@@ -16,6 +16,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.BaseCaseServiceClient;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.internal.BaseCaseScenarioUpdater;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.internal.BaseCaseVersionsProviderService;
+import com.mmxlabs.rcp.common.locking.WellKnownTriggers;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
@@ -90,14 +91,17 @@ public class BaseCaseScenarioService extends AbstractScenarioService {
 			baseCaseFolder.mkdirs();
 		}
 
-		// Initial model load
-		new Thread(() -> {
+		WellKnownTriggers.WORKSPACE_DATA_ENCRYPTION_CHECK.delayUntilTriggered(() -> {
 
-			getServiceModel();
-			setReady();
-			this.updater = new BaseCaseScenarioUpdater(serviceModel, baseCaseFolder, BaseCaseServiceClient.INSTANCE, versionsProviderService);
-			updater.start();
-		}).start();
+			// Initial model load
+			new Thread(() -> {
+
+				getServiceModel();
+				setReady();
+				this.updater = new BaseCaseScenarioUpdater(serviceModel, baseCaseFolder, BaseCaseServiceClient.INSTANCE, versionsProviderService);
+				updater.start();
+			}).start();
+		});
 	}
 
 	public void stop() {

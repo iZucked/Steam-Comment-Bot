@@ -10,6 +10,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.ecore.resource.URIConverter;
@@ -23,9 +25,9 @@ import com.mmxlabs.scenario.service.model.util.encryption.ScenarioEncryptionExce
  * @author Simon Goodall
  * 
  */
-class DelegatingEMFCipher implements URIConverter.Cipher {
+public class DelegatingEMFCipher implements URIConverter.Cipher {
 
-	class ByteArrayKey {
+	static class ByteArrayKey {
 		private final byte[] bytes;
 
 		public ByteArrayKey(final byte[] bytes) {
@@ -55,7 +57,20 @@ class DelegatingEMFCipher implements URIConverter.Cipher {
 	private final Map<ByteArrayKey, IKeyFile> keystore = new HashMap<>();
 	private IKeyFile defaultCipher;
 
-	public DelegatingEMFCipher() {
+	public List<byte[]> listKeys() {
+		List<byte[]> l = new LinkedList<>();
+		for (IKeyFile k : keystore.values()) {
+			l.add(Arrays.copyOf(k.getKeyUUID(), k.getKeyUUID().length));
+		}
+		return l;
+	}
+
+	public IKeyFile getKeyFile(byte[] key) {
+		return keystore.get(new ByteArrayKey(key));
+	}
+	
+	public byte[] getDefaultKey() {
+		return Arrays.copyOf(defaultCipher.getKeyUUID(), defaultCipher.getKeyUUID().length);
 	}
 
 	public void addKeyFile(final IKeyFile keyFile, final boolean makeDefault) {

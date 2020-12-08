@@ -34,9 +34,9 @@ import com.mmxlabs.scenario.service.model.util.encryption.impl.KeyFileUtil;
  * 
  */
 public final class KeyFileV2 implements IKeyFile {
-	
+
 	public static final String KEYFILE_TYPE = "v2";
-	
+
 	private static final String ENCRYPTION_KEY_ALGORITHM = "AES";
 
 	private static final String ENCRYPTION_ALGORITHM = "AES/GCM/NoPadding";

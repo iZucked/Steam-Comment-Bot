@@ -38,8 +38,9 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getUserSettings <em>User Settings</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getAnalyticsModel <em>Analytics Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getAdpModel <em>Adp Model</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getAdpModels <em>Adp Models</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getNominationsModel <em>Nominations Model</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#isLongTerm <em>Long Term</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#isAnonymised <em>Anonymised</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGScenarioModel()
@@ -335,22 +336,6 @@ public interface LNGScenarioModel extends MMXRootObject {
 	void setAdpModel(ADPModel value);
 
 	/**
-	 * Returns the value of the '<em><b>Adp Models</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.adp.ADPModel}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Adp Models</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Adp Models</em>' containment reference list.
-	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGScenarioModel_AdpModels()
-	 * @model containment="true" resolveProxies="true"
-	 * @generated
-	 */
-	EList<ADPModel> getAdpModels();
-
-	/**
 	 * Returns the value of the '<em><b>Nominations Model</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -375,5 +360,49 @@ public interface LNGScenarioModel extends MMXRootObject {
 	 * @generated
 	 */
 	void setNominationsModel(NominationsModel value);
+
+	/**
+	 * Returns the value of the '<em><b>Long Term</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Long Term</em>' attribute.
+	 * @see #setLongTerm(boolean)
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGScenarioModel_LongTerm()
+	 * @model
+	 * @generated
+	 */
+	boolean isLongTerm();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#isLongTerm <em>Long Term</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Long Term</em>' attribute.
+	 * @see #isLongTerm()
+	 * @generated
+	 */
+	void setLongTerm(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Anonymised</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Anonymised</em>' attribute.
+	 * @see #setAnonymised(boolean)
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGScenarioModel_Anonymised()
+	 * @model
+	 * @generated
+	 */
+	boolean isAnonymised();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#isAnonymised <em>Anonymised</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Anonymised</em>' attribute.
+	 * @see #isAnonymised()
+	 * @generated
+	 */
+	void setAnonymised(boolean value);
 
 } // LNGScenarioModel

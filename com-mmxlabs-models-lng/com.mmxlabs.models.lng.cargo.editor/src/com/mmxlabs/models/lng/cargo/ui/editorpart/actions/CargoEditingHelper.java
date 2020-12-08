@@ -566,21 +566,10 @@ public class CargoEditingHelper {
 	}
 
 	public void unpairCargoes(String description, @NonNull Set<Cargo> cargoes) {
-		final List<Command> setCommands = new LinkedList<>();
-		final List<EObject> deleteObjects = new LinkedList<>();
-		for (Cargo cargo : cargoes) {
-			LoadSlot loadSlot = (LoadSlot) cargo.getSortedSlots().get(0);
-			cec.runWiringUpdate(setCommands, deleteObjects, loadSlot, null);
-		}
 
 		final CompoundCommand currentWiringCommand = new CompoundCommand(description);
-		// Process set before delete
-		for (final Command c : setCommands) {
-			currentWiringCommand.append(c);
-		}
-		if (!deleteObjects.isEmpty()) {
-			currentWiringCommand.append(DeleteCommand.create(editingDomain, deleteObjects));
-		}
+
+		unpairCargoes(currentWiringCommand, cargoes);
 
 		if (currentWiringCommand.isEmpty()) {
 			return;
@@ -590,5 +579,22 @@ public class CargoEditingHelper {
 		editingDomain.getCommandStack().execute(currentWiringCommand);
 
 		verifyModel();
+	}
+
+	public void unpairCargoes(final CompoundCommand currentWiringCommand, Set<Cargo> cargoes) {
+		final List<Command> setCommands = new LinkedList<>();
+		final List<EObject> deleteObjects = new LinkedList<>();
+		for (Cargo cargo : cargoes) {
+			LoadSlot loadSlot = (LoadSlot) cargo.getSortedSlots().get(0);
+			cec.runWiringUpdate(setCommands, deleteObjects, loadSlot, null);
+		}
+
+		// Process set before delete
+		for (final Command c : setCommands) {
+			currentWiringCommand.append(c);
+		}
+		if (!deleteObjects.isEmpty()) {
+			currentWiringCommand.append(DeleteCommand.create(editingDomain, deleteObjects));
+		}
 	}
 }

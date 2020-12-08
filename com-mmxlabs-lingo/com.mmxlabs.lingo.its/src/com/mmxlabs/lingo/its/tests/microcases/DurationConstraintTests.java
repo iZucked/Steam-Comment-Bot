@@ -25,6 +25,7 @@ import com.google.inject.name.Names;
 import com.mmxlabs.common.time.Days;
 import com.mmxlabs.license.features.NonLicenseFeatures;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
@@ -226,10 +227,10 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
 
 		@NonNull
-		final Port port1 = portFinder.findPort("Sabine Pass");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
 
 		@NonNull
-		final Port port2 = portFinder.findPort("Manzanillo");
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_MANZANILLO);
 
 		// Construct the cargoes
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
@@ -333,10 +334,10 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 		vesselAvailability.setMinDuration(90);
 
 		@NonNull
-		final Port port1 = portFinder.findPort("Sabine Pass");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
 
 		@NonNull
-		final Port port2 = portFinder.findPort("Manzanillo");
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_MANZANILLO);
 
 		// Construct the cargoes
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
@@ -433,10 +434,10 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 10, 0, 0, 0));
 
 		@NonNull
-		final Port port1 = portFinder.findPort("Point Fortin");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
 
 		@NonNull
-		final Port port2 = portFinder.findPort("Colon");
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_COLON);
 
 		// Construct the cargoes
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
@@ -511,10 +512,10 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 
 		// Create cargo
 		@NonNull
-		final Port port1 = portFinder.findPort("Sabine Pass");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
 
 		@NonNull
-		final Port port2 = portFinder.findPort("Quintero");
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_QUINTERO);
 
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
 		final LocalDateTime dischargeDate = loadDate.plusDays(13);
@@ -581,10 +582,10 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 		vesselAvailability2.setEndAfter(LocalDateTime.of(2017, Month.JULY, 25, 0, 0, 0));
 
 		@NonNull
-		final Port port1 = portFinder.findPort("Sabine Pass");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
 
 		@NonNull
-		final Port port2 = portFinder.findPort("Manzanillo");
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_MANZANILLO);
 
 		// Construct the cargoes
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
@@ -637,10 +638,10 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 
 		// Construct the cargo
 		@NonNull
-		final Port port1 = portFinder.findPort("Sabine Pass");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
 
 		@NonNull
-		final Port port2 = portFinder.findPort("Manzanillo");
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_MANZANILLO);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2017, Month.JUNE, 27), port1, null, entity, "7") //
@@ -683,7 +684,7 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JULY, 10, 0, 0, 0));
 
 		@NonNull
-		final Port port1 = portFinder.findPort("Point Fortin");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
 
 		final DryDockEvent event = cargoModelBuilder.makeDryDockEvent("drydock1", LocalDateTime.of(2017, Month.JULY, 7, 0, 0, 0), LocalDateTime.of(2017, Month.JULY, 7, 0, 0, 0), port1) //
 				.withDurationInDays(1) //
@@ -841,10 +842,10 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 
 		// Construct the cargo
 		@NonNull
-		final Port port1 = portFinder.findPort("Sabine Pass");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
 
 		@NonNull
-		final Port port2 = portFinder.findPort("Manzanillo");
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_MANZANILLO);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2017, Month.JUNE, 27), port1, null, entity, "7") //
@@ -888,10 +889,10 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 
 		// Construct the cargo
 		@NonNull
-		final Port port1 = portFinder.findPort("Point Fortin");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
 
 		@NonNull
-		final Port port2 = portFinder.findPort("Colon");
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_COLON);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2017, Month.JUNE, 25), port1, null, entity, "7") //
@@ -938,8 +939,8 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 
 		vesselAvailability.setMinDuration(46);
 		vesselAvailability.setMaxDuration(139);
-		Port port_SP = portFinder.findPort("Sabine Pass");
-		Port port_HJ = portFinder.findPort("Himeji");
+		Port port_SP = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
+		Port port_HJ = portFinder.findPortById(InternalDataConstants.PORT_HIMEJI);
 
 		vesselAvailability.getEndAt().add(port_HJ);
 
@@ -1063,10 +1064,10 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 
 		// Construct the cargo
 		@NonNull
-		final Port port1 = portFinder.findPort("Sabine Pass");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
 
 		@NonNull
-		final Port port2 = portFinder.findPort("Himeji");
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_HIMEJI);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2018, Month.JANUARY, 13), port1, null, entity, "7") //
@@ -1160,10 +1161,10 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 
 		// Construct the cargo
 		@NonNull
-		final Port port1 = portFinder.findPort("Sabine Pass");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
 
 		@NonNull
-		final Port port2 = portFinder.findPort("Himeji");
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_HIMEJI);
 
 		// final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 		cargoModelBuilder.makeFOBPurchase("L1", LocalDate.of(2018, Month.JANUARY, 1), port1, null, entity, "5", 22.6) //

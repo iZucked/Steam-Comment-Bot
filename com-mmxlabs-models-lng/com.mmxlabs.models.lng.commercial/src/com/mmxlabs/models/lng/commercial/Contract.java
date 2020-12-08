@@ -453,7 +453,7 @@ public interface Contract extends UUIDObject, NamedObject {
 	 * @return the value of the '<em>Notes</em>' attribute.
 	 * @see #setNotes(String)
 	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_Notes()
-	 * @model
+	 * @model annotation="http://www.mmxlabs.com/models/validation ignore='true'"
 	 * @generated
 	 */
 	String getNotes();

@@ -1,255 +1,255 @@
 name,location.name,location.otherNames,capabilities,location.timeZone,loadDuration,dischargeDuration,cvValue,defaultStartTime,allowCooldown,defaultWindowSize,location.country,location.lat,location.lon,location.kind,kind,location.mmxId
-Bintulu,Bintulu,,LOAD,Asia/Kuala_Lumpur,24,24,22.8,7,false,7,Malaysia,0.0,0.0,Location,Port,L_MY_Bintu
-Limassol,Limassol,,DISCHARGE,Africa/Cairo,24,24,22.8,7,false,7,Cyprus,0.0,0.0,Location,Port,L_CY_Limas
-Fos - Cavaou LNG Terminal,Fos - Cavaou LNG Terminal,,DISCHARGE,Europe/Paris,24,24,22.8,7,false,7,France,0.0,0.0,Location,Port,L_FR_FosCa
-Kitakyushu,Kitakyushu,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,7,Japan,0.0,0.0,Location,Port,L_JP_Kitak
-Barcelona,Barcelona,,DISCHARGE,Europe/Madrid,24,24,22.8,7,false,7,Spain,0.0,0.0,Location,Port,L_ES_Barce
-Tangguh,Tangguh,,LOAD,Asia/Jayapura,24,24,22.8,7,false,7,Indonesia,0.0,0.0,Location,Port,L_ID_Tangg
-Chiwan,Chiwan,,DISCHARGE,Asia/Shanghai,24,24,22.8,7,false,7,China,0.0,0.0,Location,Port,L_CN_Chiwa
-Halifax,Halifax,,DISCHARGE,America/Halifax,24,24,22.8,7,false,7,Canada,0.0,0.0,Location,Port,L_CA_Halif
-Malacca,Malacca,,DISCHARGE,Asia/Kuala_Lumpur,24,24,22.8,7,false,7,Malaysia,0.0,0.0,Location,Port,L_MY_Malac
-Point Fortin,Point Fortin,,LOAD,America/Port_of_Spain,24,24,22.8,7,false,7,Trinidad and Tobago,0.0,0.0,Location,Port,L_TT_Point2
-Sao Francisco do Sul,Sao Francisco do Sul,,DISCHARGE,America/Sao_Paulo,24,24,22.8,7,false,7,Brazil,0.0,0.0,Location,Port,L_BR_SaoFr
-Kushiro,Kushiro,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,7,Japan,0.0,0.0,Location,Port,L_JP_Kushi
-Sungai Udang,Sungai Udang,,DISCHARGE,Asia/Kuala_Lumpur,24,24,22.8,7,false,7,Malaysia,0.0,0.0,Location,Port,L_MY_Sunga
-Tobata,Tobata,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,7,Japan,0.0,0.0,Location,Port,L_JP_Tobat
-Koper,Koper,,DISCHARGE,Europe/Ljubljana,24,24,22.8,7,false,7,Slovenia,0.0,0.0,Location,Port,L_SI_Koper
-Wakayama,Wakayama,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,7,Japan,0.0,0.0,Location,Port,L_JP_Wakay
-Quintero,Quintero,,DISCHARGE,America/Santiago,24,24,22.8,7,false,7,Chile,0.0,0.0,Location,Port,L_CL_Quint
-Karachi,Karachi,,DISCHARGE,Asia/Karachi,24,24,22.8,7,false,7,Pakistan,0.0,0.0,Location,Port,L_PK_Karac
-Kochi,Kochi,,DISCHARGE,Asia/Calcutta,24,24,22.8,7,false,7,India,0.0,0.0,Location,Port,L_IN_Kochi
-Sendai,Sendai,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,7,Japan,0.0,0.0,Location,Port,L_JP_Senda
-Qalhat,Qalhat,,LOAD,Asia/Qatar,24,24,22.8,7,false,7,Oman,0.0,0.0,Location,Port,L_OM_Qalha
-Incheon,Incheon,,DISCHARGE,Asia/Seoul,24,24,22.8,7,false,7,South Korea,0.0,0.0,Location,Port,L_KR_Inche
-Quebec,Quebec,,DISCHARGE,America/Toronto,24,24,22.8,7,false,7,Canada,0.0,0.0,Location,Port,L_CA_Quebe
-Rotterdam,Rotterdam,,DISCHARGE,Europe/Amsterdam,24,24,22.8,7,false,7,Netherlands,0.0,0.0,Location,Port,L_NL_Rotte
-Khor al Zubair,Khor al Zubair,,DISCHARGE,Asia/Baghdad,24,24,22.8,7,false,7,Iraq,0.0,0.0,Location,Port,L_IQ_Khora
-Marsa el Brega,Marsa el Brega,,DISCHARGE,Africa/Tripoli,24,24,22.8,7,false,7,Libya,0.0,0.0,Location,Port,L_LY_Marsa
-Okinawa,Okinawa,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,7,Japan,0.0,0.0,Location,Port,L_JP_Okina
-Falconara,Falconara,,DISCHARGE,Europe/Rome,24,24,22.8,7,false,7,Italy,0.0,0.0,Location,Port,L_IT_Falco
-Ohgishima,Ohgishima,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,7,Japan,0.0,0.0,Location,Port,L_JP_Ohgis
-Ennore,Ennore,,DISCHARGE,Asia/Kolkata,24,24,22.8,7,false,7,India,0.0,0.0,Location,Port,L_IN_Ennor
-Hadera,Hadera,,DISCHARGE,Asia/Tel_Aviv,24,24,22.8,7,false,7,Israel,0.0,0.0,Location,Port,L_IL_Hader
-Mossel Bay,Mossel Bay,,DISCHARGE,Africa/Johannesburg,24,24,22.8,7,false,7,South Africa,0.0,0.0,Location,Port,L_ZA_Mosse
-Donghae,Donghae,,DISCHARGE,Asia/Seoul,24,24,22.8,7,false,7,South Korea,0.0,0.0,Location,Port,L_KR_Dongh
-Bahrain,Bahrain,,DISCHARGE,Asia/Bahrain,24,24,22.8,7,false,7,Bahrain,0.0,0.0,Location,Port,L_BH_Bahra
-Cameron,Cameron,,DISCHARGE,America/Chicago,24,24,22.8,7,false,7,United States,0.0,0.0,Location,Port,L_US_Camer
-Shenzhen,Shenzhen,,DISCHARGE,Asia/Shanghai,24,24,22.8,7,false,7,China,0.0,0.0,Location,Port,L_CN_Shenz
-Dalian,Dalian,,DISCHARGE,Asia/Chongqing,24,24,22.8,7,false,7,China,0.0,0.0,Location,Port,L_CN_Dalia
-Zhangjiagang,Zhangjiagang,,DISCHARGE,Asia/Shanghai,24,24,22.8,7,false,7,China,0.0,0.0,Location,Port,L_CN_Zhang
-Fujairah,Fujairah,,DISCHARGE,Asia/Dubai,24,24,22.8,7,false,7,United Arab Emirates,0.0,0.0,Location,Port,L_AE_Fujai
-Punta Europa,Punta Europa,,LOAD,Africa/Malabo,24,24,22.8,7,false,7,Equatorial Guinea,0.0,0.0,Location,Port,L_GQ_Punta
-Guayama,Guayama,,DISCHARGE,America/Puerto_Rico,24,24,22.8,7,false,7,Puerto Rico,0.0,0.0,Location,Port,L_PR_Guaya
-Le Havre,Le Havre,,DISCHARGE,Europe/Paris,24,24,22.8,7,false,7,France,0.0,0.0,Location,Port,L_FR_LeHav
-Salvador,Salvador,,DISCHARGE,America/Sao_Paulo,24,24,22.8,7,false,7,Brazil,0.0,0.0,Location,Port,L_BR_Salva
-Nanao,Nanao,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,7,Japan,0.0,0.0,Location,Port,L_JP_Nanao
-Suez Canal,Suez Canal,,DISCHARGE,UNKNOWN,24,24,22.8,7,false,7,Egypt,0.0,0.0,Location,Port,L_V_SuezC
-Seria,Seria,,LOAD,Asia/Brunei,24,24,22.8,7,false,7,Brunei Darussalam,0.0,0.0,Location,Port,L_BN_Seria
-Tombak LNG Terminal,Tombak LNG Terminal,,DISCHARGE,Asia/Tehran,24,24,22.8,7,false,7,Iran,0.0,0.0,Location,Port,L_IR_Tomba
-Pointe-a-Pitre,Pointe-a-Pitre,,DISCHARGE,America/Guadeloupe,24,24,22.8,7,false,7,Guadeloupe,0.0,0.0,Location,Port,L_TT_Point
-Fort de France,Fort de France,,DISCHARGE,America/Martinique,24,24,22.8,7,false,7,Martinique,0.0,0.0,Location,Port,L_MQ_Fortd
-Pluto,Pluto,,LOAD,Australia/Perth,24,24,22.8,7,false,7,Australia,0.0,0.0,Location,Port,L_AU_Pluto
-Gioia Tauro,Gioia Tauro,,DISCHARGE,Europe/Rome,24,24,22.8,7,false,7,Italy,0.0,0.0,Location,Port,L_IT_Gioia
-Luwuk,Luwuk,,DISCHARGE,Asia/Makassar,24,24,22.8,7,false,7,Indonesia,0.0,0.0,Location,Port,L_ID_Luwuk
-Shanghai,Shanghai,,DISCHARGE,Asia/Shanghai,24,24,22.8,7,false,7,China,0.0,0.0,Location,Port,L_CN_Shang
-Rostock,Rostock,,DISCHARGE,Europe/Berlin,24,24,22.8,7,false,7,Germany,0.0,0.0,Location,Port,L_DE_Rosto
-Qinzhou,Qinzhou,,DISCHARGE,Asia/Chongqing,24,24,22.8,7,false,7,China,0.0,0.0,Location,Port,L_CN_Qinzh
-Vyborg,Vyborg,,DISCHARGE,Europe/Moscow,24,24,22.8,7,false,7,Russian Federation,0.0,0.0,Location,Port,L_RU_Vybor
-Port Qasim,Port Qasim,,DISCHARGE,Asia/Karachi,24,24,22.8,7,false,7,Pakistan,0.0,0.0,Location,Port,L_PK_PortQ
-Arun,Arun,,DISCHARGE,Asia/Jakarta,24,24,22.8,7,false,7,Indonesia,0.0,0.0,Location,Port,L_ID_Arun
-Port Moresby,Port Moresby,,LOAD,Pacific/Port_Moresby,24,24,22.8,7,false,7,Papua New Guinea,0.0,0.0,Location,Port,L_PG_PortM
-Swinoujscie,Swinoujscie,,DISCHARGE,Europe/Lisbon,24,24,22.8,7,false,7,Poland,0.0,0.0,Location,Port,L_PL_Swino
-Haikou,Haikou,,DISCHARGE,Asia/Chongqing,24,24,22.8,7,false,7,China,0.0,0.0,Location,Port,L_CN_Haiko
-Lumut,Lumut,,LOAD,Asia/Brunei,24,24,22.8,7,false,7,Brunei Darussalam,0.0,0.0,Location,Port,L_BN_Lumut
-Sabine Pass,Sabine Pass,,LOAD,America/Chicago,24,24,22.8,7,false,7,United States,0.0,0.0,Location,Port,L_US_Sabin
-Negishi,Negishi,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,7,Japan,0.0,0.0,Location,Port,L_JP_Negis
-Haldia,Haldia,,DISCHARGE,Asia/Kolkata,24,24,22.8,7,false,7,India,0.0,0.0,Location,Port,L_IN_Haldi
-Kwangyang,Kwangyang,,DISCHARGE,Asia/Pyongyang,24,24,22.8,7,false,7,South Korea,0.0,0.0,Location,Port,L_KR_Kwang
-Puerto Bahia,Puerto Bahia,,DISCHARGE,America/Bogota,24,24,22.8,7,false,7,Colombia,0.0,0.0,Location,Port,L_CO_Puert
-Montevideo,Montevideo,,DISCHARGE,America/Montevideo,24,24,22.8,7,false,7,Uruguay,0.0,0.0,Location,Port,L_UY_Monte
-Qingdao,Qingdao,,DISCHARGE,Asia/Shanghai,24,24,22.8,7,false,7,China,0.0,0.0,Location,Port,L_CN_Qingd
-Rosignano LNG,Rosignano LNG,,DISCHARGE,Europe/Rome,24,24,22.8,7,false,7,Italy,0.0,0.0,Location,Port,L_IT_Rosig
-Dragon,Dragon,,DISCHARGE,Europe/London,24,24,22.8,7,false,7,United Kingdom,0.0,0.0,Location,Port,L_GB_Drago
-Hakodate,Hakodate,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,7,Japan,0.0,0.0,Location,Port,L_JP_Hakod
-Shinminato,Shinminato,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,7,Japan,0.0,0.0,Location,Port,L_JP_Shinm
-Lake Charles,Lake Charles,,DISCHARGE,America/Chicago,24,24,22.8,7,false,7,United States,0.0,0.0,Location,Port,L_US_LakeC
-Port Esquivel,Port Esquivel,,DISCHARGE,America/Jamaica,24,24,22.8,7,false,7,Jamaica,0.0,0.0,Location,Port,L_JM_PortE
-New Plymouth,New Plymouth,,DISCHARGE,Pacific/Auckland,24,24,22.8,7,false,7,New Zealand,0.0,0.0,Location,Port,L_NZ_NewPl
-Yokohama,Yokohama,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,7,Japan,0.0,0.0,Location,Port,L_JP_Yokoh
-Coega,Coega,,DISCHARGE,Africa/Johannesburg,24,24,22.8,7,false,7,South Africa,0.0,0.0,Location,Port,L_ZA_Coega
-Niigata-Nishi,Niigata-Nishi,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,7,Japan,0.0,0.0,Location,Port,L_JP_Niiga2
-Kakinada,Kakinada,,DISCHARGE,Asia/Kolkata,24,24,22.8,7,false,7,India,0.0,0.0,Location,Port,L_IN_Kakin
-Escobar,Escobar,,DISCHARGE,America/Cordoba,24,24,22.8,7,false,7,Argentina,0.0,0.0,Location,Port,L_AR_Escob
-Qinhuangdao,Qinhuangdao,,DISCHARGE,Asia/Shanghai,24,24,22.8,7,false,7,China,0.0,0.0,Location,Port,L_CN_Qinhu
-Pampa Melchorita,Pampa Melchorita,,LOAD,America/Lima,24,24,22.8,7,false,7,Peru,0.0,0.0,Location,Port,L_PE_Pampa
-Balboa,Balboa,,DISCHARGE,America/Panama,24,24,22.8,7,false,7,Panama,0.0,0.0,Location,Port,L_CP_Balbo
-Arzew,Arzew,,DISCHARGE,Africa/Algiers,24,24,22.8,7,false,7,Algeria,0.0,0.0,Location,Port,L_DZ_Arzew
-Sodegaura,Sodegaura,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,7,Japan,0.0,0.0,Location,Port,L_JP_Sodeg
-Soyo,Soyo,,LOAD,Africa/Luanda,24,24,22.8,7,false,7,Angola,0.0,0.0,Location,Port,L_AO_Soyo
-Corpus Christi,Corpus Christi,,LOAD,America/Chicago,24,24,22.8,7,false,7,United States,0.0,0.0,Location,Port,L_US_Corpu
-Costa Azul,Costa Azul,,DISCHARGE,America/Mexico_City,24,24,22.8,7,false,7,Mexico,0.0,0.0,Location,Port,L_MX_Costa
-Huelva,Huelva,,DISCHARGE,Europe/Madrid,24,24,22.8,7,false,7,Spain,0.0,0.0,Location,Port,L_ES_Huelv
-Rio Grande,Rio Grande,,DISCHARGE,America/Monterrey,24,24,22.8,7,false,7,Brazil,0.0,0.0,Location,Port,L_BR_RioGr
-Zeebrugge,Zeebrugge,,DISCHARGE,Europe/Brussels,24,24,22.8,7,false,7,Belgium,0.0,0.0,Location,Port,L_BE_Zeebr
-Revithoussa,Revithoussa,,DISCHARGE,Europe/Athens,24,24,22.8,7,false,7,Greece,0.0,0.0,Location,Port,L_GR_Revit
-Kenai,Kenai,,DISCHARGE,America/Anchorage,24,24,22.8,7,false,7,United States,0.0,0.0,Location,Port,L_US_Kenai
-Tianjin,Tianjin,,DISCHARGE,Asia/Shanghai,24,24,22.8,7,false,7,China,0.0,0.0,Location,Port,L_CN_Tianj
-Porto Empedocle,Porto Empedocle,,DISCHARGE,Europe/Rome,24,24,22.8,7,false,7,Italy,0.0,0.0,Location,Port,L_IT_Porto
-Senboku,Senboku,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,7,Japan,0.0,0.0,Location,Port,L_JP_Senbo
-Tripoli,Tripoli,,DISCHARGE,Asia/Beirut,24,24,22.8,7,false,7,Lebanon,0.0,0.0,Location,Port,L_LB_Tripo
-Sakai,Sakai,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,7,Japan,0.0,0.0,Location,Port,L_JP_Sakai
-Lianyungang,Lianyungang,,DISCHARGE,Asia/Shanghai,24,24,22.8,7,false,7,China,0.0,0.0,Location,Port,L_CN_Liany
-Kitimat,Kitimat,,DISCHARGE,America/Vancouver,24,24,22.8,7,false,7,Canada,0.0,0.0,Location,Port,L_CA_Kitim
-Dar-es-Salaam,Dar-es-Salaam,,DISCHARGE,Africa/Freetown,24,24,22.8,7,false,7,Sierra Leone,0.0,0.0,Location,Port,L_TZ_Dar-e
-Northeast Gateway Deepwater Port,Northeast Gateway Deepwater Port,,DISCHARGE,America/Chicago,24,24,22.8,7,false,7,United States Minor Outlying Islands,0.0,0.0,Location,Port,L_UM_North
-Cartagena,Cartagena,,DISCHARGE,Europe/Madrid,24,24,22.8,7,false,7,Spain,0.0,0.0,Location,Port,L_ES_Carta
-Rosarito,Rosarito,,DISCHARGE,America/Tijuana,24,24,22.8,7,false,7,Mexico,0.0,0.0,Location,Port,L_MX_Rosar
-Klaipeda,Klaipeda,,DISCHARGE,Europe/Vilnius,24,24,22.8,7,false,7,Lithuania,0.0,0.0,Location,Port,L_LT_Klaip
-Heibei,Heibei,,DISCHARGE,Asia/Chongqing,24,24,22.8,7,false,7,China,0.0,0.0,Location,Port,L_CN_Heibe
-Paldiski,Paldiski,,DISCHARGE,Europe/Tallinn,24,24,22.8,7,false,7,Estonia,0.0,0.0,Location,Port,L_EE_Paldi
-Yangshan,Yangshan,,DISCHARGE,Asia/Shanghai,24,24,22.8,7,false,7,China,0.0,0.0,Location,Port,L_CN_Yangs
-Yangpu,Yangpu,,DISCHARGE,Asia/Chongqing,24,24,22.8,7,false,7,China,0.0,0.0,Location,Port,L_CN_Yangp
-Cai Mep,Cai Mep,,DISCHARGE,Asia/Ho_Chi_Minh,24,24,22.8,7,false,7,Vietnam,0.0,0.0,Location,Port,L_VN_CaiMe
-Otaru,Otaru,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,7,Japan,0.0,0.0,Location,Port,L_JP_Otaru
-Zhuhai,Zhuhai,,DISCHARGE,Asia/Chongqing,24,24,22.8,7,false,7,China,0.0,0.0,Location,Port,L_CN_Zhuha
-Higashi-Ogishima,Higashi-Ogishima,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,7,Japan,0.0,0.0,Location,Port,L_JP_Higas
-Fos Sur Mer,Fos Sur Mer,,DISCHARGE,Europe/Paris,24,24,22.8,7,false,7,France,0.0,0.0,Location,Port,L_FR_FosSu
-El Ferrol,El Ferrol,,DISCHARGE,Europe/Madrid,24,24,22.8,7,false,7,Spain,0.0,0.0,Location,Port,L_ES_ElFer
-Bonny,Bonny,,LOAD,Africa/Lagos,24,24,22.8,7,false,7,Nigeria,0.0,0.0,Location,Port,L_NG_Bonny
-Pecem,Pecem,,DISCHARGE,America/Fortaleza,24,24,22.8,7,false,7,Brazil,0.0,0.0,Location,Port,L_BR_Pecem
-Mombasa,Mombasa,,DISCHARGE,Africa/Nairobi,24,24,22.8,7,false,7,Kenya,0.0,0.0,Location,Port,L_KE_Momba
-Hammerfest,Hammerfest,,LOAD,Europe/Warsaw,24,24,22.8,7,false,7,Norway,0.0,0.0,Location,Port,L_NO_Hamme
-Map Ta Phut,Map Ta Phut,,DISCHARGE,Asia/Bangkok,24,24,22.8,7,false,7,Thailand,0.0,0.0,Location,Port,L_TH_MapTa
-Barrow Island,Barrow Island,,LOAD,Australia/Perth,24,24,22.8,7,false,7,Australia,0.0,0.0,Location,Port,L_AU_Barro
-Soma,Soma,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,7,Japan,0.0,0.0,Location,Port,L_JP_Soma
-Mejillones,Mejillones,,DISCHARGE,America/Santiago,24,24,22.8,7,false,7,Chile,0.0,0.0,Location,Port,L_CL_Mejil
-Canaport,Canaport,,DISCHARGE,America/Halifax,24,24,22.8,7,false,7,Canada,0.0,0.0,Location,Port,L_CA_Canap
-Guayanilla,Guayanilla,,DISCHARGE,America/Puerto_Rico,24,24,22.8,7,false,7,Puerto Rico,0.0,0.0,Location,Port,L_PR_Penue
-Hatsukaichi,Hatsukaichi,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,7,Japan,0.0,0.0,Location,Port,L_JP_Hatsu
-Pascagoula,Pascagoula,,DISCHARGE,America/Chicago,24,24,22.8,7,false,7,United States,0.0,0.0,Location,Port,L_US_Pasca
-Manzanillo,Manzanillo,,DISCHARGE,America/Mexico_City,24,24,22.8,7,false,7,Mexico,0.0,0.0,Location,Port,L_MX_Manza
-Mozambique Port,Mozambique Port,,DISCHARGE,Africa/Maputo,24,24,22.8,7,false,7,Mozambique,0.0,0.0,Location,Port,L_MZ_Mozam
-Niigata Higashi,Niigata Higashi,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,7,Japan,0.0,0.0,Location,Port,L_JP_Niiga
-Yuzhny,Yuzhny,,DISCHARGE,Europe/Kiev,24,24,22.8,7,false,7,Ukraine,0.0,0.0,Location,Port,L_UA_Yuzhn
-Jiangsu,Jiangsu,,DISCHARGE,Asia/Chongqing,24,24,22.8,7,false,7,China,0.0,0.0,Location,Port,L_CN_Jiang
-AES Andres,AES Andres,,DISCHARGE,America/Santo_Domingo,24,24,22.8,7,false,7,Dominican Republic,0.0,0.0,Location,Port,L_DO_AESAn
-Golden Pass,Golden Pass,,DISCHARGE,America/Chicago,24,24,22.8,7,false,7,United States,0.0,0.0,Location,Port,L_US_Golde
-Brownsville,Brownsville,,DISCHARGE,America/Chicago,24,24,22.8,7,false,7,United States,0.0,0.0,Location,Port,L_US_Brown
-Dahej,Dahej,,DISCHARGE,Asia/Calcutta,24,24,22.8,7,false,7,India,0.0,0.0,Location,Port,L_IN_Dahej
-Hainan,Hainan,,DISCHARGE,Asia/Chongqing,24,24,22.8,7,false,7,China,0.0,0.0,Location,Port,L_SP_Haina
-Gwangyang,Gwangyang,,DISCHARGE,Asia/Seoul,24,24,22.8,7,false,7,South Korea,0.0,0.0,Location,Port,L_KR_Gwang
-Colon,Colon,,DISCHARGE,America/Panama,24,24,22.8,7,false,7,Panama,0.0,0.0,Location,Port,L_CP_Colon
-Ningbo,Ningbo,,DISCHARGE,Asia/Chongqing,24,24,22.8,7,false,7,China,0.0,0.0,Location,Port,L_CN_Ningb
-Ashdod,Ashdod,,DISCHARGE,Asia/Jerusalem,24,24,22.8,7,false,7,Israel,0.0,0.0,Location,Port,L_IL_Ashdo
-Oita,Oita,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,7,Japan,0.0,0.0,Location,Port,L_JP_Oita
-Cape Town,Cape Town,,DISCHARGE,Africa/Johannesburg,24,24,22.8,7,false,7,South Africa,0.0,0.0,Location,Port,L_ZA_CapeT
-Bethioua,Bethioua,,DISCHARGE,Africa/Algiers,24,24,22.8,7,false,7,Algeria,0.0,0.0,Location,Port,L_DZ_Bethi
-Aqaba,Aqaba,,DISCHARGE,Asia/Amman,24,24,22.8,7,false,7,Jordan,0.0,0.0,Location,Port,L_JO_Aqaba
-Dunkirk,Dunkirk,,DISCHARGE,Europe/Paris,24,24,22.8,7,false,7,France,0.0,0.0,Location,Port,L_FR_Dunki
-Sagunto,Sagunto,,DISCHARGE,Europe/Madrid,24,24,22.8,7,false,7,Spain,0.0,0.0,Location,Port,L_ES_Sagun
-Plaquemines,Plaquemines,,DISCHARGE,America/Chicago,24,24,22.8,7,false,7,United States,0.0,0.0,Location,Port,L_US_Plaqu
-Guanabara,Guanabara,,DISCHARGE,America/Sao_Paulo,24,24,22.8,7,false,7,Brazil,0.0,0.0,Location,Port,L_BR_Guana
-Jorf Lasfar,Jorf Lasfar,,DISCHARGE,Africa/Casablanca,24,24,22.8,7,false,7,Morocco,0.0,0.0,Location,Port,L_MA_JorfL
-Acajutla,Acajutla,,DISCHARGE,America/El_Salvador,24,24,22.8,7,false,7,El Salvador,0.0,0.0,Location,Port,L_SV_Acaju
-Batangas,Batangas,,DISCHARGE,Asia/Manila,24,24,22.8,7,false,7,Philippines,0.0,0.0,Location,Port,L_PH_Batan
-Dangjin,Dangjin,,DISCHARGE,Asia/Seoul,24,24,22.8,7,false,7,South Korea,0.0,0.0,Location,Port,L_KR_Dangj
-Pipavav,Pipavav,,DISCHARGE,Asia/Kolkata,24,24,22.8,7,false,7,India,0.0,0.0,Location,Port,L_IN_Pipav
-Boryeong,Boryeong,,DISCHARGE,Asia/Seoul,24,24,22.8,7,false,7,South Korea,0.0,0.0,Location,Port,L_KR_Borye
-Lahad Datu,Lahad Datu,,DISCHARGE,Asia/Kuching,24,24,22.8,7,false,7,Malaysia,0.0,0.0,Location,Port,L_MY_Lahad
-Everett,Everett,,DISCHARGE,America/New_York,24,24,22.8,7,false,7,United States,0.0,0.0,Location,Port,L_US_Evere
-Drovyanoy,Drovyanoy,,DISCHARGE,Europe/Moscow,24,24,22.8,7,false,7,Russian Federation,0.0,0.0,Location,Port,L_RU_Drovy
-Bal Haf LNG,Bal Haf LNG,,LOAD,Asia/Aden,24,24,22.8,7,false,7,Yemen,0.0,0.0,Location,Port,L_YE_BalHa
-Isle of Grain,Isle of Grain,,DISCHARGE,Europe/London,24,24,22.8,7,false,7,United Kingdom,0.0,0.0,Location,Port,L_GB_Isleo
-Hitachi,Hitachi,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,7,Japan,0.0,0.0,Location,Port,L_JP_Hitac
-Trieste,Trieste,,DISCHARGE,Europe/Rome,24,24,22.8,7,false,7,Italy,0.0,0.0,Location,Port,L_IT_Tries
-Panigaglia,Panigaglia,,DISCHARGE,Europe/Rome,24,24,22.8,7,false,7,Italy,0.0,0.0,Location,Port,L_IT_Panig
-Cove Point,Cove Point,,DISCHARGE,America/New_York,24,24,22.8,7,false,7,United States,0.0,0.0,Location,Port,L_US_CoveP
-Gulf Gateway Deepwater Port,Gulf Gateway Deepwater Port,,DISCHARGE,America/Chicago,24,24,22.8,7,false,7,United States Minor Outlying Islands,0.0,0.0,Location,Port,L_UM_GulfG
-Tenerife,Tenerife,,DISCHARGE,Atlantic/Canary,24,24,22.8,7,false,7,Canary Is.,0.0,0.0,Location,Port,L_YI_Tener
-Kagoshima,Kagoshima,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,7,Japan,0.0,0.0,Location,Port,L_JP_Kagos
-Bilbao,Bilbao,,DISCHARGE,Europe/Madrid,24,24,22.8,7,false,7,Spain,0.0,0.0,Location,Port,L_ES_Bilba
-Mizushima,Mizushima,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,7,Japan,0.0,0.0,Location,Port,L_JP_Mizus
-Jebel Ali,Jebel Ali,,DISCHARGE,Asia/Dubai,24,24,22.8,7,false,7,United Arab Emirates,0.0,0.0,Location,Port,L_AE_Jebel
-Panama Canal,Panama Canal,,DISCHARGE,UNKNOWN,24,24,22.8,7,false,7,Panama,0.0,0.0,Location,Port,L_V_Panam
-Futtsu,Futtsu,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,7,Japan,0.0,0.0,Location,Port,L_JP_Futts
-Tokyo Bay,Tokyo Bay,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,7,Japan,0.0,0.0,Location,Port,L_JP_Tokyo
-Chittagong,Chittagong,,DISCHARGE,Asia/Dhaka,24,24,22.8,7,false,7,Bangladesh,0.0,0.0,Location,Port,L_BD_Chitt
-Neptune,Neptune,,DISCHARGE,America/New_York,24,24,22.8,7,false,7,United States Minor Outlying Islands,0.0,0.0,Location,Port,L_UM_Neptu
-Karwar - South Port,Karwar - South Port,,DISCHARGE,Asia/Kolkata,24,24,22.8,7,false,7,India,0.0,0.0,Location,Port,L_IN_Karwa
-Aliaga,Aliaga,,DISCHARGE,Europe/London,24,24,22.8,7,false,7,Turkey,0.0,0.0,Location,Port,L_TR_Aliag
-Freeport,Freeport,,DISCHARGE,America/New_York,24,24,22.8,7,false,7,United States,0.0,0.0,Location,Port,L_US_Freep
-Taranto,Taranto,,DISCHARGE,Europe/Rome,24,24,22.8,7,false,7,Italy,0.0,0.0,Location,Port,L_IT_Taran
-Chita,Chita,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,7,Japan,0.0,0.0,Location,Port,L_JP_Chita
-Coos Bay,Coos Bay,,DISCHARGE,America/Los_Angeles,24,24,22.8,7,false,7,United States,0.0,0.0,Location,Port,L_US_CoosB
-Marmara Ereglisi,Marmara Ereglisi,,DISCHARGE,Europe/Istanbul,24,24,22.8,7,false,7,Turkey,0.0,0.0,Location,Port,L_TR_Marma
-Karratha Gas Plant,Karratha Gas Plant,,DISCHARGE,Australia/Perth,24,24,22.8,7,false,7,Australia,0.0,0.0,Location,Port,L_AU_Karra
-Taichung,Taichung,,DISCHARGE,Asia/Taipei,24,24,22.8,7,false,7,Taiwan,0.0,0.0,Location,Port,L_TW_Taich
-Johore,Johore,,DISCHARGE,Asia/Kuala_Lumpur,24,24,22.8,7,false,7,Malaysia,0.0,0.0,Location,Port,L_MY_Johor
-Semarang,Semarang,,DISCHARGE,Asia/Jakarta,24,24,22.8,7,false,7,Indonesia,0.0,0.0,Location,Port,L_ID_Semar
-Fukuoko,Fukuoko,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,7,Japan,0.0,0.0,Location,Port,L_JP_Fukuo
-Panjang,Panjang,,DISCHARGE,Asia/Singapore,24,24,22.8,7,false,7,Indonesia,0.0,0.0,Location,Port,L_ID_Panja
-Guangdong,Guangdong,,DISCHARGE,Asia/Chongqing,24,24,22.8,7,false,7,China,0.0,0.0,Location,Port,L_CN_Guang
-Nagasaki,Nagasaki,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,7,Japan,0.0,0.0,Location,Port,L_JP_Nagas
-Gibraltar,Gibraltar,,DISCHARGE,Europe/Gibraltar,24,24,22.8,7,false,7,Gibraltar,0.0,0.0,Location,Port,L_GI_Gibra
-Himeji,Himeji,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,7,Japan,0.0,0.0,Location,Port,L_JP_Himej
-Jakarta,Jakarta,,DISCHARGE,Asia/Jakarta,24,24,22.8,7,false,7,Indonesia,0.0,0.0,Location,Port,L_ID_Jakar
-Darwin,Darwin,,LOAD,Australia/Darwin,24,24,22.8,7,false,7,Australia,0.0,0.0,Location,Port,L_AU_Darwi
-South Hook LNG,South Hook LNG,,DISCHARGE,Europe/London,24,24,22.8,7,false,7,United Kingdom,0.0,0.0,Location,Port,L_GB_South
-Krk Island,Krk Island,,DISCHARGE,Europe/Zagreb,24,24,22.8,7,false,7,Croatia,0.0,0.0,Location,Port,L_HR_KrkIs
-Talcahuano,Talcahuano,,DISCHARGE,America/Santiago,24,24,22.8,7,false,7,Chile,0.0,0.0,Location,Port,L_CL_Talca
-Hachinohe,Hachinohe,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,7,Japan,0.0,0.0,Location,Port,L_JP_Hachi
-Dampier,Dampier,,DISCHARGE,Australia/Perth,24,24,22.8,7,false,7,Australia,0.0,0.0,Location,Port,L_AU_Dampi
-Elba,Elba,,DISCHARGE,America/New_York,24,24,22.8,7,false,7,United States,0.0,0.0,Location,Port,L_US_Elba
-Tabangao,Tabangao,,DISCHARGE,Asia/Manila,24,24,22.8,7,false,7,Philippines,0.0,0.0,Location,Port,L_PH_Taban
-Ras Laffan,Ras Laffan,,LOAD,Asia/Qatar,24,24,22.8,7,false,7,Qatar,0.0,0.0,Location,Port,L_QA_RasLa
-Hazira,Hazira,,DISCHARGE,Asia/Calcutta,24,24,22.8,7,false,7,India,0.0,0.0,Location,Port,L_IN_Hazir
-Ho Chi Min City,Ho Chi Min City,,DISCHARGE,Asia/Ho_Chi_Minh,24,24,22.8,7,false,7,Vietnam,0.0,0.0,Location,Port,L_VN_HoChi
-Altamira,Altamira,,DISCHARGE,America/Mexico_City,24,24,22.8,7,false,7,Mexico,0.0,0.0,Location,Port,L_MX_Altam
-Shimizu,Shimizu,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,7,Japan,0.0,0.0,Location,Port,L_JP_Shimi
-Gladstone,Gladstone,,LOAD,Australia/Brisbane,24,24,22.8,7,false,7,Australia,0.0,0.0,Location,Port,L_AU_Glads
-Suez,Suez,,DISCHARGE,Africa/Cairo,24,24,22.8,7,false,7,Egypt,0.0,0.0,Location,Port,L_CP_Suez
-Gangavaram,Gangavaram,,DISCHARGE,Asia/Kolkata,24,24,22.8,7,false,7,India,0.0,0.0,Location,Port,L_IN_Ganga
-Jurong Marine Base - Singapore,Jurong Marine Base - Singapore,,DISCHARGE,Asia/Singapore,24,24,22.8,7,false,7,Singapore,0.0,0.0,Location,Port,L_SG_Juron
-Yung An,Yung An,,DISCHARGE,Asia/Taipei,24,24,22.8,7,false,7,Taiwan,0.0,0.0,Location,Port,L_TW_YungA
-Vladivostok,Vladivostok,,DISCHARGE,Asia/Vladivostok,24,24,22.8,7,false,7,Russian Federation,0.0,0.0,Location,Port,L_RU_Vladi
-Malta,Malta,,DISCHARGE,Europe/Malta,24,24,22.8,7,false,7,Malta,0.0,0.0,Location,Port,L_MT_Malta
-Osaka,Osaka,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,7,Japan,0.0,0.0,Location,Port,L_JP_Osaka
-Ambon,Ambon,,DISCHARGE,Asia/Jayapura,24,24,22.8,7,false,7,Indonesia,0.0,0.0,Location,Port,L_ID_Ambon
-Kawagoe,Kawagoe,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,7,Japan,0.0,0.0,Location,Port,L_JP_Kawag
-Sakaide,Sakaide,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,7,Japan,0.0,0.0,Location,Port,L_JP_Sakai2
-Teeside,Teeside,,DISCHARGE,Europe/London,24,24,22.8,7,false,7,United Kingdom,0.0,0.0,Location,Port,L_GB_Teesi
-Yanai,Yanai,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,7,Japan,0.0,0.0,Location,Port,L_JP_Yanai
-Ortona,Ortona,,DISCHARGE,Europe/Rome,24,24,22.8,7,false,7,Italy,0.0,0.0,Location,Port,L_IT_Orton
-Pars LNG Terminal,Pars LNG Terminal,,DISCHARGE,Asia/Tehran,24,24,22.8,7,false,7,Iran,0.0,0.0,Location,Port,L_IR_ParsL
-Mundra,Mundra,,DISCHARGE,Asia/Kolkata,24,24,22.8,7,false,7,India,0.0,0.0,Location,Port,L_IN_Mundr
-Holyhead,Holyhead,,DISCHARGE,Europe/London,24,24,22.8,7,false,7,United Kingdom,0.0,0.0,Location,Port,L_GB_Holyh
-Brass,Brass,,LOAD,Africa/Lagos,24,24,22.8,7,false,7,Nigeria,0.0,0.0,Location,Port,L_NG_Brass
-Port Said,Port Said,,DISCHARGE,Africa/Cairo,24,24,22.8,7,false,7,Egypt,0.0,0.0,Location,Port,L_CP_PortS
-Joetsu,Joetsu,,DISCHARGE,Asia/Kuching,24,24,22.8,7,false,7,Japan,0.0,0.0,Location,Port,L_JP_Joets
-Shtokman,Shtokman,,DISCHARGE,Europe/Moscow,24,24,22.8,7,false,7,Russian Federation,0.0,0.0,Location,Port,L_RU_Shtok
-Sakhalin,Sakhalin,,LOAD,Asia/Vladivostok,24,24,22.8,7,false,7,Russian Federation,0.0,0.0,Location,Port,L_RU_Sakha
-Abu Dhabi,Abu Dhabi,,DISCHARGE,Asia/Dubai,24,24,22.8,7,false,7,United Arab Emirates,0.0,0.0,Location,Port,L_AE_AbuDh
-Limerick,Limerick,,DISCHARGE,Europe/Dublin,24,24,22.8,7,false,7,Ireland,0.0,0.0,Location,Port,L_IE_Limer
-Sines,Sines,,DISCHARGE,Europe/Madrid,24,24,22.8,7,false,7,Portugal,0.0,0.0,Location,Port,L_PT_Sines
-Ain Sokhna,Ain Sokhna,,DISCHARGE,Africa/Cairo,24,24,22.8,7,false,7,Egypt,0.0,0.0,Location,Port,L_EG_AinSo
-Dabhol,Dabhol,,DISCHARGE,Asia/Calcutta,24,24,22.8,7,false,7,India,0.0,0.0,Location,Port,L_IN_Dabho
-Idku,Idku,,DISCHARGE,Asia/Kuwait,24,24,22.8,7,false,7,Egypt,0.0,0.0,Location,Port,L_EG_Idku
-Bahia Blanca,Bahia Blanca,,DISCHARGE,America/Buenos_Aires,24,24,22.8,7,false,7,Argentina,0.0,0.0,Location,Port,L_AR_Bahia
-Skikda,Skikda,,LOAD,Africa/Algiers,24,24,22.8,7,false,7,Algeria,0.0,0.0,Location,Port,L_DZ_Skikd
-Yokkaichi,Yokkaichi,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,7,Japan,0.0,0.0,Location,Port,L_JP_Yokka
-Dili,Dili,,DISCHARGE,Asia/Dili,24,24,22.8,7,false,7,East Timor,0.0,0.0,Location,Port,L_TP_Dili
-Tong Yong,Tong Yong,,DISCHARGE,Asia/Seoul,24,24,22.8,7,false,7,South Korea,0.0,0.0,Location,Port,L_KR_TongY
-Montoir,Montoir,,DISCHARGE,Europe/Paris,24,24,22.8,7,false,7,France,0.0,0.0,Location,Port,L_FR_Monto
-Kribi,Kribi,,DISCHARGE,Africa/Douala,24,24,22.8,7,false,7,Cameroon,0.0,0.0,Location,Port,L_CM_Kribi
-Damietta,Damietta,,DISCHARGE,Africa/Cairo,24,24,22.8,7,false,7,Egypt,0.0,0.0,Location,Port,L_EG_Damie
-Port Arthur,Port Arthur,,DISCHARGE,America/Chicago,24,24,22.8,7,false,7,United States,0.0,0.0,Location,Port,L_US_PortA
-Mina Al Ahmadi,Mina Al Ahmadi,,DISCHARGE,Asia/Kuwait,24,24,22.8,7,false,7,Kuwait,0.0,0.0,Location,Port,L_KW_MinaA
-Wilhelmshaven,Wilhelmshaven,,DISCHARGE,Europe/Berlin,24,24,22.8,7,false,7,Germany,0.0,0.0,Location,Port,L_DE_Wilhe
-Port Dolphin,Port Dolphin,,DISCHARGE,America/New_York,24,24,22.8,7,false,7,United States,0.0,0.0,Location,Port,L_US_PortD
-Fujian,Fujian,,DISCHARGE,Asia/Shanghai,24,24,22.8,7,false,7,China,0.0,0.0,Location,Port,L_CN_Fujia
-Samcheog,Samcheog,,DISCHARGE,Asia/Seoul,24,24,22.8,7,false,7,South Korea,0.0,0.0,Location,Port,L_KR_Samch
-Pyeongtaek,Pyeongtaek,,DISCHARGE,Asia/Seoul,24,24,22.8,7,false,7,South Korea,0.0,0.0,Location,Port,L_KR_Pyeon
-Livorno,Livorno,,DISCHARGE,Europe/Rome,24,24,22.8,7,false,7,Italy,0.0,0.0,Location,Port,L_IT_Livor
-Bontang,Bontang,,LOAD,Asia/Makassar,24,24,22.8,7,false,7,Indonesia,0.0,0.0,Location,Port,L_ID_Bonta
-Rovigo,Rovigo,,DISCHARGE,Europe/Rome,24,24,22.8,7,false,7,Italy,0.0,0.0,Location,Port,L_IT_Rovig
-Prince Rupert,Prince Rupert,,DISCHARGE,America/Vancouver,24,24,22.8,7,false,7,Canada,0.0,0.0,Location,Port,L_CA_Princ
+Bintulu,Bintulu,,LOAD,Asia/Kuala_Lumpur,24,24,22.8,7,FALSE,7,Malaysia,0,0,Location,Port,L_MY_Bintu
+Limassol,Limassol,,DISCHARGE,Africa/Cairo,24,24,22.8,7,FALSE,7,Cyprus,0,0,Location,Port,L_CY_Limas
+Fos - Cavaou LNG Terminal,Fos - Cavaou LNG Terminal,,DISCHARGE,Europe/Paris,24,24,22.8,7,FALSE,7,France,0,0,Location,Port,L_FR_FosCa
+Kitakyushu,Kitakyushu,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,FALSE,7,Japan,0,0,Location,Port,L_JP_Kitak
+Barcelona,Barcelona,,DISCHARGE,Europe/Madrid,24,24,22.8,7,FALSE,7,Spain,0,0,Location,Port,L_ES_Barce
+Tangguh,Tangguh,,LOAD,Asia/Jayapura,24,24,22.8,7,FALSE,7,Indonesia,0,0,Location,Port,L_ID_Tangg
+Chiwan,Chiwan,,DISCHARGE,Asia/Shanghai,24,24,22.8,7,FALSE,7,China,0,0,Location,Port,L_CN_Chiwa
+Halifax,Halifax,,DISCHARGE,America/Halifax,24,24,22.8,7,FALSE,7,Canada,0,0,Location,Port,L_CA_Halif
+Malacca,Malacca,,DISCHARGE,Asia/Kuala_Lumpur,24,24,22.8,7,FALSE,7,Malaysia,0,0,Location,Port,L_MY_Malac
+Point Fortin,Point Fortin,,LOAD,America/Port_of_Spain,24,24,22.8,7,FALSE,7,Trinidad and Tobago,0,0,Location,Port,L_TT_Point2
+Sao Francisco do Sul,Sao Francisco do Sul,,DISCHARGE,America/Sao_Paulo,24,24,22.8,7,FALSE,7,Brazil,0,0,Location,Port,L_BR_SaoFr
+Kushiro,Kushiro,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,FALSE,7,Japan,0,0,Location,Port,L_JP_Kushi
+Sungai Udang,Sungai Udang,,DISCHARGE,Asia/Kuala_Lumpur,24,24,22.8,7,FALSE,7,Malaysia,0,0,Location,Port,L_MY_Sunga
+Tobata,Tobata,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,FALSE,7,Japan,0,0,Location,Port,L_JP_Tobat
+Koper,Koper,,DISCHARGE,Europe/Ljubljana,24,24,22.8,7,FALSE,7,Slovenia,0,0,Location,Port,L_SI_Koper
+Wakayama,Wakayama,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,FALSE,7,Japan,0,0,Location,Port,L_JP_Wakay
+Quintero,Quintero,,DISCHARGE,America/Santiago,24,24,22.8,7,FALSE,7,Chile,0,0,Location,Port,L_CL_Quint
+Karachi,Karachi,,DISCHARGE,Asia/Karachi,24,24,22.8,7,FALSE,7,Pakistan,0,0,Location,Port,L_PK_Karac
+Kochi,Kochi,,DISCHARGE,Asia/Calcutta,24,24,22.8,7,FALSE,7,India,0,0,Location,Port,L_IN_Kochi
+Sendai,Sendai,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,FALSE,7,Japan,0,0,Location,Port,L_JP_Senda
+Qalhat,Qalhat,,LOAD,Asia/Qatar,24,24,22.8,7,FALSE,7,Oman,0,0,Location,Port,L_OM_Qalha
+Incheon,Incheon,,DISCHARGE,Asia/Seoul,24,24,22.8,7,FALSE,7,South Korea,0,0,Location,Port,L_KR_Inche
+Quebec,Quebec,,DISCHARGE,America/Toronto,24,24,22.8,7,FALSE,7,Canada,0,0,Location,Port,L_CA_Quebe
+Rotterdam,Rotterdam,,DISCHARGE,Europe/Amsterdam,24,24,22.8,7,FALSE,7,Netherlands,0,0,Location,Port,L_NL_Rotte
+Khor al Zubair,Khor al Zubair,,DISCHARGE,Asia/Baghdad,24,24,22.8,7,FALSE,7,Iraq,0,0,Location,Port,L_IQ_Khora
+Marsa el Brega,Marsa el Brega,,DISCHARGE,Africa/Tripoli,24,24,22.8,7,FALSE,7,Libya,0,0,Location,Port,L_LY_Marsa
+Okinawa,Okinawa,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,FALSE,7,Japan,0,0,Location,Port,L_JP_Okina
+Falconara,Falconara,,DISCHARGE,Europe/Rome,24,24,22.8,7,FALSE,7,Italy,0,0,Location,Port,L_IT_Falco
+Ohgishima,Ohgishima,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,FALSE,7,Japan,0,0,Location,Port,L_JP_Ohgis
+Ennore,Ennore,,DISCHARGE,Asia/Kolkata,24,24,22.8,7,FALSE,7,India,0,0,Location,Port,L_IN_Ennor
+Hadera,Hadera,,DISCHARGE,Asia/Tel_Aviv,24,24,22.8,7,FALSE,7,Israel,0,0,Location,Port,L_IL_Hader
+Mossel Bay,Mossel Bay,,DISCHARGE,Africa/Johannesburg,24,24,22.8,7,FALSE,7,South Africa,0,0,Location,Port,L_ZA_Mosse
+Donghae,Donghae,,DISCHARGE,Asia/Seoul,24,24,22.8,7,FALSE,7,South Korea,0,0,Location,Port,L_KR_Dongh
+Bahrain,Bahrain,,DISCHARGE,Asia/Bahrain,24,24,22.8,7,FALSE,7,Bahrain,0,0,Location,Port,L_BH_Bahra
+Cameron,Cameron,,DISCHARGE,America/Chicago,24,24,22.8,7,FALSE,7,United States,0,0,Location,Port,L_US_Camer
+Shenzhen,Shenzhen,,DISCHARGE,Asia/Shanghai,24,24,22.8,7,FALSE,7,China,0,0,Location,Port,L_CN_Shenz
+Dalian,Dalian,,DISCHARGE,Asia/Chongqing,24,24,22.8,7,FALSE,7,China,0,0,Location,Port,L_CN_Dalia
+Zhangjiagang,Zhangjiagang,,DISCHARGE,Asia/Shanghai,24,24,22.8,7,FALSE,7,China,0,0,Location,Port,L_CN_Zhang
+Fujairah,Fujairah,,DISCHARGE,Asia/Dubai,24,24,22.8,7,FALSE,7,United Arab Emirates,0,0,Location,Port,L_AE_Fujai
+Punta Europa,Punta Europa,,LOAD,Africa/Malabo,24,24,22.8,7,FALSE,7,Equatorial Guinea,0,0,Location,Port,L_GQ_Punta
+Guayama,Guayama,,DISCHARGE,America/Puerto_Rico,24,24,22.8,7,FALSE,7,Puerto Rico,0,0,Location,Port,L_PR_Guaya
+Le Havre,Le Havre,,DISCHARGE,Europe/Paris,24,24,22.8,7,FALSE,7,France,0,0,Location,Port,L_FR_LeHav
+Salvador,Salvador,,DISCHARGE,America/Sao_Paulo,24,24,22.8,7,FALSE,7,Brazil,0,0,Location,Port,L_BR_Salva
+Nanao,Nanao,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,FALSE,7,Japan,0,0,Location,Port,L_JP_Nanao
+Suez Canal,Suez Canal,,DISCHARGE,UNKNOWN,24,24,22.8,7,FALSE,7,Egypt,0,0,Location,Port,L_V_SuezC
+Seria,Seria,,LOAD,Asia/Brunei,24,24,22.8,7,FALSE,7,Brunei Darussalam,0,0,Location,Port,L_BN_Seria
+Tombak LNG Terminal,Tombak LNG Terminal,,DISCHARGE,Asia/Tehran,24,24,22.8,7,FALSE,7,Iran,0,0,Location,Port,L_IR_Tomba
+Pointe-a-Pitre,Pointe-a-Pitre,,DISCHARGE,America/Guadeloupe,24,24,22.8,7,FALSE,7,Guadeloupe,0,0,Location,Port,L_TT_Point
+Fort de France,Fort de France,,DISCHARGE,America/Martinique,24,24,22.8,7,FALSE,7,Martinique,0,0,Location,Port,L_MQ_Fortd
+Pluto,Pluto,,LOAD,Australia/Perth,24,24,22.8,7,FALSE,7,Australia,0,0,Location,Port,L_AU_Pluto
+Gioia Tauro,Gioia Tauro,,DISCHARGE,Europe/Rome,24,24,22.8,7,FALSE,7,Italy,0,0,Location,Port,L_IT_Gioia
+Luwuk,Luwuk,,DISCHARGE,Asia/Makassar,24,24,22.8,7,FALSE,7,Indonesia,0,0,Location,Port,L_ID_Luwuk
+Shanghai,Shanghai,,DISCHARGE,Asia/Shanghai,24,24,22.8,7,FALSE,7,China,0,0,Location,Port,L_CN_Shang
+Rostock,Rostock,,DISCHARGE,Europe/Berlin,24,24,22.8,7,FALSE,7,Germany,0,0,Location,Port,L_DE_Rosto
+Qinzhou,Qinzhou,,DISCHARGE,Asia/Chongqing,24,24,22.8,7,FALSE,7,China,0,0,Location,Port,L_CN_Qinzh
+Vyborg,Vyborg,,DISCHARGE,Europe/Moscow,24,24,22.8,7,FALSE,7,Russian Federation,0,0,Location,Port,L_RU_Vybor
+Port Qasim,Port Qasim,,DISCHARGE,Asia/Karachi,24,24,22.8,7,FALSE,7,Pakistan,0,0,Location,Port,L_PK_PortQ
+Arun,Arun,,DISCHARGE,Asia/Jakarta,24,24,22.8,7,FALSE,7,Indonesia,0,0,Location,Port,L_ID_Arun
+Port Moresby,Port Moresby,,LOAD,Pacific/Port_Moresby,24,24,22.8,7,FALSE,7,Papua New Guinea,0,0,Location,Port,L_PG_PortM
+Swinoujscie,Swinoujscie,,DISCHARGE,Europe/Lisbon,24,24,22.8,7,FALSE,7,Poland,0,0,Location,Port,L_PL_Swino
+Haikou,Haikou,,DISCHARGE,Asia/Chongqing,24,24,22.8,7,FALSE,7,China,0,0,Location,Port,L_CN_Haiko
+Lumut,Lumut,,LOAD,Asia/Brunei,24,24,22.8,7,FALSE,7,Brunei Darussalam,0,0,Location,Port,L_BN_Lumut
+Sabine Pass,Sabine Pass,,LOAD,America/Chicago,24,24,22.8,7,FALSE,7,United States,0,0,Location,Port,L_US_Sabin
+Negishi,Negishi,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,FALSE,7,Japan,0,0,Location,Port,L_JP_Negis
+Haldia,Haldia,,DISCHARGE,Asia/Kolkata,24,24,22.8,7,FALSE,7,India,0,0,Location,Port,L_IN_Haldi
+Kwangyang,Kwangyang,,DISCHARGE,Asia/Pyongyang,24,24,22.8,7,FALSE,7,South Korea,0,0,Location,Port,L_KR_Kwang
+Puerto Bahia,Puerto Bahia,,DISCHARGE,America/Bogota,24,24,22.8,7,FALSE,7,Colombia,0,0,Location,Port,L_CO_Puert
+Montevideo,Montevideo,,DISCHARGE,America/Montevideo,24,24,22.8,7,FALSE,7,Uruguay,0,0,Location,Port,L_UY_Monte
+Qingdao,Qingdao,,DISCHARGE,Asia/Shanghai,24,24,22.8,7,FALSE,7,China,0,0,Location,Port,L_CN_Qingd
+Rosignano LNG,Rosignano LNG,,DISCHARGE,Europe/Rome,24,24,22.8,7,FALSE,7,Italy,0,0,Location,Port,L_IT_Rosig
+Dragon,Dragon,,DISCHARGE,Europe/London,24,24,22.8,7,FALSE,7,United Kingdom,0,0,Location,Port,L_GB_Drago
+Hakodate,Hakodate,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,FALSE,7,Japan,0,0,Location,Port,L_JP_Hakod
+Shinminato,Shinminato,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,FALSE,7,Japan,0,0,Location,Port,L_JP_Shinm
+Lake Charles,Lake Charles,,DISCHARGE,America/Chicago,24,24,22.8,7,FALSE,7,United States,0,0,Location,Port,L_US_LakeC
+Port Esquivel,Port Esquivel,,DISCHARGE,America/Jamaica,24,24,22.8,7,FALSE,7,Jamaica,0,0,Location,Port,L_JM_PortE
+New Plymouth,New Plymouth,,DISCHARGE,Pacific/Auckland,24,24,22.8,7,FALSE,7,New Zealand,0,0,Location,Port,L_NZ_NewPl
+Yokohama,Yokohama,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,FALSE,7,Japan,0,0,Location,Port,L_JP_Yokoh
+Coega,Coega,,DISCHARGE,Africa/Johannesburg,24,24,22.8,7,FALSE,7,South Africa,0,0,Location,Port,L_ZA_Coega
+Niigata-Nishi,Niigata-Nishi,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,FALSE,7,Japan,0,0,Location,Port,L_JP_Niiga2
+Kakinada,Kakinada,,DISCHARGE,Asia/Kolkata,24,24,22.8,7,FALSE,7,India,0,0,Location,Port,L_IN_Kakin
+Escobar,Escobar,,DISCHARGE,America/Cordoba,24,24,22.8,7,FALSE,7,Argentina,0,0,Location,Port,L_AR_Escob
+Qinhuangdao,Qinhuangdao,,DISCHARGE,Asia/Shanghai,24,24,22.8,7,FALSE,7,China,0,0,Location,Port,L_CN_Qinhu
+Pampa Melchorita,Pampa Melchorita,,LOAD,America/Lima,24,24,22.8,7,FALSE,7,Peru,0,0,Location,Port,L_PE_Pampa
+Balboa,Balboa,,DISCHARGE,America/Panama,24,24,22.8,7,FALSE,7,Panama,0,0,Location,Port,L_CP_Balbo
+Arzew,Arzew,,DISCHARGE,Africa/Algiers,24,24,22.8,7,FALSE,7,Algeria,0,0,Location,Port,L_DZ_Arzew
+Sodegaura,Sodegaura,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,FALSE,7,Japan,0,0,Location,Port,L_JP_Sodeg
+Soyo,Soyo,,LOAD,Africa/Luanda,24,24,22.8,7,FALSE,7,Angola,0,0,Location,Port,L_AO_Soyo
+Corpus Christi,Corpus Christi,,LOAD,America/Chicago,24,24,22.8,7,FALSE,7,United States,0,0,Location,Port,L_US_Corpu
+Costa Azul,Costa Azul,,DISCHARGE,America/Mexico_City,24,24,22.8,7,FALSE,7,Mexico,0,0,Location,Port,L_MX_Costa
+Huelva,Huelva,,DISCHARGE,Europe/Madrid,24,24,22.8,7,FALSE,7,Spain,0,0,Location,Port,L_ES_Huelv
+Rio Grande,Rio Grande,,DISCHARGE,America/Monterrey,24,24,22.8,7,FALSE,7,Brazil,0,0,Location,Port,L_BR_RioGr
+Zeebrugge,Zeebrugge,,DISCHARGE,Europe/Brussels,24,24,22.8,7,FALSE,7,Belgium,0,0,Location,Port,L_BE_Zeebr
+Revithoussa,Revithoussa,,DISCHARGE,Europe/Athens,24,24,22.8,7,FALSE,7,Greece,0,0,Location,Port,L_GR_Revit
+Kenai,Kenai,,DISCHARGE,America/Anchorage,24,24,22.8,7,FALSE,7,United States,0,0,Location,Port,L_US_Kenai
+Tianjin,Tianjin,,DISCHARGE,Asia/Shanghai,24,24,22.8,7,FALSE,7,China,0,0,Location,Port,L_CN_Tianj
+Porto Empedocle,Porto Empedocle,,DISCHARGE,Europe/Rome,24,24,22.8,7,FALSE,7,Italy,0,0,Location,Port,L_IT_Porto
+Senboku,Senboku,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,FALSE,7,Japan,0,0,Location,Port,L_JP_Senbo
+Tripoli,Tripoli,,DISCHARGE,Asia/Beirut,24,24,22.8,7,FALSE,7,Lebanon,0,0,Location,Port,L_LB_Tripo
+Sakai,Sakai,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,FALSE,7,Japan,0,0,Location,Port,L_JP_Sakai
+Lianyungang,Lianyungang,,DISCHARGE,Asia/Shanghai,24,24,22.8,7,FALSE,7,China,0,0,Location,Port,L_CN_Liany
+Kitimat,Kitimat,,DISCHARGE,America/Vancouver,24,24,22.8,7,FALSE,7,Canada,0,0,Location,Port,L_CA_Kitim
+Dar-es-Salaam,Dar-es-Salaam,,DISCHARGE,Africa/Freetown,24,24,22.8,7,FALSE,7,Sierra Leone,0,0,Location,Port,L_TZ_Dar-e
+Northeast Gateway Deepwater Port,Northeast Gateway Deepwater Port,,DISCHARGE,America/Chicago,24,24,22.8,7,FALSE,7,United States Minor Outlying Islands,0,0,Location,Port,L_UM_North
+Cartagena,Cartagena,,DISCHARGE,Europe/Madrid,24,24,22.8,7,FALSE,7,Spain,0,0,Location,Port,L_ES_Carta
+Rosarito,Rosarito,,DISCHARGE,America/Tijuana,24,24,22.8,7,FALSE,7,Mexico,0,0,Location,Port,L_MX_Rosar
+Klaipeda,Klaipeda,,DISCHARGE,Europe/Vilnius,24,24,22.8,7,FALSE,7,Lithuania,0,0,Location,Port,L_LT_Klaip
+Heibei,Heibei,,DISCHARGE,Asia/Chongqing,24,24,22.8,7,FALSE,7,China,0,0,Location,Port,L_CN_Heibe
+Paldiski,Paldiski,,DISCHARGE,Europe/Tallinn,24,24,22.8,7,FALSE,7,Estonia,0,0,Location,Port,L_EE_Paldi
+Yangshan,Yangshan,,DISCHARGE,Asia/Shanghai,24,24,22.8,7,FALSE,7,China,0,0,Location,Port,L_CN_Yangs
+Yangpu,Yangpu,,DISCHARGE,Asia/Chongqing,24,24,22.8,7,FALSE,7,China,0,0,Location,Port,L_CN_Yangp
+Cai Mep,Cai Mep,,DISCHARGE,Asia/Ho_Chi_Minh,24,24,22.8,7,FALSE,7,Vietnam,0,0,Location,Port,L_VN_CaiMe
+Otaru,Otaru,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,FALSE,7,Japan,0,0,Location,Port,L_JP_Otaru
+Zhuhai,Zhuhai,,DISCHARGE,Asia/Chongqing,24,24,22.8,7,FALSE,7,China,0,0,Location,Port,L_CN_Zhuha
+Higashi-Ogishima,Higashi-Ogishima,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,FALSE,7,Japan,0,0,Location,Port,L_JP_Higas
+Fos Sur Mer,Fos Sur Mer,,DISCHARGE,Europe/Paris,24,24,22.8,7,FALSE,7,France,0,0,Location,Port,L_FR_FosSu
+El Ferrol,El Ferrol,,DISCHARGE,Europe/Madrid,24,24,22.8,7,FALSE,7,Spain,0,0,Location,Port,L_ES_ElFer
+Bonny,Bonny,,LOAD,Africa/Lagos,24,24,22.8,7,FALSE,7,Nigeria,0,0,Location,Port,L_NG_Bonny
+Pecem,Pecem,,DISCHARGE,America/Fortaleza,24,24,22.8,7,FALSE,7,Brazil,0,0,Location,Port,L_BR_Pecem
+Mombasa,Mombasa,,DISCHARGE,Africa/Nairobi,24,24,22.8,7,FALSE,7,Kenya,0,0,Location,Port,L_KE_Momba
+Hammerfest,Hammerfest,,LOAD,Europe/Warsaw,24,24,22.8,7,FALSE,7,Norway,0,0,Location,Port,L_NO_Hamme
+Map Ta Phut,Map Ta Phut,,DISCHARGE,Asia/Bangkok,24,24,22.8,7,FALSE,7,Thailand,0,0,Location,Port,L_TH_MapTa
+Barrow Island,Barrow Island,,LOAD,Australia/Perth,24,24,22.8,7,FALSE,7,Australia,0,0,Location,Port,L_AU_Barro
+Soma,Soma,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,FALSE,7,Japan,0,0,Location,Port,L_JP_Soma
+Mejillones,Mejillones,,DISCHARGE,America/Santiago,24,24,22.8,7,FALSE,7,Chile,0,0,Location,Port,L_CL_Mejil
+Canaport,Canaport,,DISCHARGE,America/Halifax,24,24,22.8,7,FALSE,7,Canada,0,0,Location,Port,L_CA_Canap
+Guayanilla,Guayanilla,,DISCHARGE,America/Puerto_Rico,24,24,22.8,7,FALSE,7,Puerto Rico,0,0,Location,Port,L_PR_Penue
+Hatsukaichi,Hatsukaichi,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,FALSE,7,Japan,0,0,Location,Port,L_JP_Hatsu
+Pascagoula,Pascagoula,,DISCHARGE,America/Chicago,24,24,22.8,7,FALSE,7,United States,0,0,Location,Port,L_US_Pasca
+Manzanillo,Manzanillo,,DISCHARGE,America/Mexico_City,24,24,22.8,7,FALSE,7,Mexico,0,0,Location,Port,L_MX_Manza
+Mozambique Port,Mozambique Port,,DISCHARGE,Africa/Maputo,24,24,22.8,7,FALSE,7,Mozambique,0,0,Location,Port,L_MZ_Mozam
+Niigata Higashi,Niigata Higashi,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,FALSE,7,Japan,0,0,Location,Port,L_JP_Niiga
+Yuzhny,Yuzhny,,DISCHARGE,Europe/Kiev,24,24,22.8,7,FALSE,7,Ukraine,0,0,Location,Port,L_UA_Yuzhn
+Jiangsu,Jiangsu,,DISCHARGE,Asia/Chongqing,24,24,22.8,7,FALSE,7,China,0,0,Location,Port,L_CN_Jiang
+AES Andres,AES Andres,,DISCHARGE,America/Santo_Domingo,24,24,22.8,7,FALSE,7,Dominican Republic,0,0,Location,Port,L_DO_AESAn
+Golden Pass,Golden Pass,,DISCHARGE,America/Chicago,24,24,22.8,7,FALSE,7,United States,0,0,Location,Port,L_US_Golde
+Brownsville,Brownsville,,DISCHARGE,America/Chicago,24,24,22.8,7,FALSE,7,United States,0,0,Location,Port,L_US_Brown
+Dahej,Dahej,,DISCHARGE,Asia/Calcutta,24,24,22.8,7,FALSE,7,India,0,0,Location,Port,L_IN_Dahej
+Hainan,Hainan,,DISCHARGE,Asia/Chongqing,24,24,22.8,7,FALSE,7,China,0,0,Location,Port,L_SP_Haina
+Gwangyang,Gwangyang,,DISCHARGE,Asia/Seoul,24,24,22.8,7,FALSE,7,South Korea,0,0,Location,Port,L_KR_Gwang
+Colon,Colon,,DISCHARGE,America/Panama,24,24,22.8,7,FALSE,7,Panama,0,0,Location,Port,L_CP_Colon
+Ningbo,Ningbo,,DISCHARGE,Asia/Chongqing,24,24,22.8,7,FALSE,7,China,0,0,Location,Port,L_CN_Ningb
+Ashdod,Ashdod,,DISCHARGE,Asia/Jerusalem,24,24,22.8,7,FALSE,7,Israel,0,0,Location,Port,L_IL_Ashdo
+Oita,Oita,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,FALSE,7,Japan,0,0,Location,Port,L_JP_Oita
+Cape Town,Cape Town,,DISCHARGE,Africa/Johannesburg,24,24,22.8,7,FALSE,7,South Africa,0,0,Location,Port,L_ZA_CapeT
+Bethioua,Bethioua,,DISCHARGE,Africa/Algiers,24,24,22.8,7,FALSE,7,Algeria,0,0,Location,Port,L_DZ_Bethi
+Aqaba,Aqaba,,DISCHARGE,Asia/Amman,24,24,22.8,7,FALSE,7,Jordan,0,0,Location,Port,L_JO_Aqaba
+Dunkirk,Dunkirk,,DISCHARGE,Europe/Paris,24,24,22.8,7,FALSE,7,France,0,0,Location,Port,L_FR_Dunki
+Sagunto,Sagunto,,DISCHARGE,Europe/Madrid,24,24,22.8,7,FALSE,7,Spain,0,0,Location,Port,L_ES_Sagun
+Plaquemines,Plaquemines,,DISCHARGE,America/Chicago,24,24,22.8,7,FALSE,7,United States,0,0,Location,Port,L_US_Plaqu
+Guanabara,Guanabara,,DISCHARGE,America/Sao_Paulo,24,24,22.8,7,FALSE,7,Brazil,0,0,Location,Port,L_BR_Guana
+Jorf Lasfar,Jorf Lasfar,,DISCHARGE,Africa/Casablanca,24,24,22.8,7,FALSE,7,Morocco,0,0,Location,Port,L_MA_JorfL
+Acajutla,Acajutla,,DISCHARGE,America/El_Salvador,24,24,22.8,7,FALSE,7,El Salvador,0,0,Location,Port,L_SV_Acaju
+Batangas,Batangas,,DISCHARGE,Asia/Manila,24,24,22.8,7,FALSE,7,Philippines,0,0,Location,Port,L_PH_Batan
+Dangjin,Dangjin,,DISCHARGE,Asia/Seoul,24,24,22.8,7,FALSE,7,South Korea,0,0,Location,Port,L_KR_Dangj
+Pipavav,Pipavav,,DISCHARGE,Asia/Kolkata,24,24,22.8,7,FALSE,7,India,0,0,Location,Port,L_IN_Pipav
+Boryeong,Boryeong,,DISCHARGE,Asia/Seoul,24,24,22.8,7,FALSE,7,South Korea,0,0,Location,Port,L_KR_Borye
+Lahad Datu,Lahad Datu,,DISCHARGE,Asia/Kuching,24,24,22.8,7,FALSE,7,Malaysia,0,0,Location,Port,L_MY_Lahad
+Everett,Everett,,DISCHARGE,America/New_York,24,24,22.8,7,FALSE,7,United States,0,0,Location,Port,L_US_Evere
+Drovyanoy,Drovyanoy,,DISCHARGE,Europe/Moscow,24,24,22.8,7,FALSE,7,Russian Federation,0,0,Location,Port,L_RU_Drovy
+Bal Haf LNG,Bal Haf LNG,,LOAD,Asia/Aden,24,24,22.8,7,FALSE,7,Yemen,0,0,Location,Port,L_YE_BalHa
+Isle of Grain,Isle of Grain,,DISCHARGE,Europe/London,24,24,22.8,7,FALSE,7,United Kingdom,0,0,Location,Port,L_GB_Isleo
+Hitachi,Hitachi,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,FALSE,7,Japan,0,0,Location,Port,L_JP_Hitac
+Trieste,Trieste,,DISCHARGE,Europe/Rome,24,24,22.8,7,FALSE,7,Italy,0,0,Location,Port,L_IT_Tries
+Panigaglia,Panigaglia,,DISCHARGE,Europe/Rome,24,24,22.8,7,FALSE,7,Italy,0,0,Location,Port,L_IT_Panig
+Cove Point,Cove Point,,DISCHARGE,America/New_York,24,24,22.8,7,FALSE,7,United States,0,0,Location,Port,L_US_CoveP
+Gulf Gateway Deepwater Port,Gulf Gateway Deepwater Port,,DISCHARGE,America/Chicago,24,24,22.8,7,FALSE,7,United States Minor Outlying Islands,0,0,Location,Port,L_UM_GulfG
+Tenerife,Tenerife,,DISCHARGE,Atlantic/Canary,24,24,22.8,7,FALSE,7,Canary Is.,0,0,Location,Port,L_YI_Tener
+Kagoshima,Kagoshima,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,FALSE,7,Japan,0,0,Location,Port,L_JP_Kagos
+Bilbao,Bilbao,,DISCHARGE,Europe/Madrid,24,24,22.8,7,FALSE,7,Spain,0,0,Location,Port,L_ES_Bilba
+Mizushima,Mizushima,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,FALSE,7,Japan,0,0,Location,Port,L_JP_Mizus
+Jebel Ali,Jebel Ali,,DISCHARGE,Asia/Dubai,24,24,22.8,7,FALSE,7,United Arab Emirates,0,0,Location,Port,L_AE_Jebel
+Panama Canal,Panama Canal,,DISCHARGE,UNKNOWN,24,24,22.8,7,FALSE,7,Panama,0,0,Location,Port,L_V_Panam
+Futtsu,Futtsu,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,FALSE,7,Japan,0,0,Location,Port,L_JP_Futts
+Tokyo Bay,Tokyo Bay,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,FALSE,7,Japan,0,0,Location,Port,L_JP_Tokyo
+Chittagong,Chittagong,,DISCHARGE,Asia/Dhaka,24,24,22.8,7,FALSE,7,Bangladesh,0,0,Location,Port,L_BD_Chitt
+Neptune,Neptune,,DISCHARGE,America/New_York,24,24,22.8,7,FALSE,7,United States Minor Outlying Islands,0,0,Location,Port,L_UM_Neptu
+Karwar - South Port,Karwar - South Port,,DISCHARGE,Asia/Kolkata,24,24,22.8,7,FALSE,7,India,0,0,Location,Port,L_IN_Karwa
+Aliaga,Aliaga,,DISCHARGE,Europe/London,24,24,22.8,7,FALSE,7,Turkey,0,0,Location,Port,L_TR_Aliag
+Freeport,Freeport,,DISCHARGE,America/New_York,24,24,22.8,7,FALSE,7,United States,0,0,Location,Port,L_US_Freep
+Taranto,Taranto,,DISCHARGE,Europe/Rome,24,24,22.8,7,FALSE,7,Italy,0,0,Location,Port,L_IT_Taran
+Chita,Chita,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,FALSE,7,Japan,0,0,Location,Port,L_JP_Chita
+Coos Bay,Coos Bay,,DISCHARGE,America/Los_Angeles,24,24,22.8,7,FALSE,7,United States,0,0,Location,Port,L_US_CoosB
+Marmara Ereglisi,Marmara Ereglisi,,DISCHARGE,Europe/Istanbul,24,24,22.8,7,FALSE,7,Turkey,0,0,Location,Port,L_TR_Marma
+Karratha Gas Plant,Karratha Gas Plant,,DISCHARGE,Australia/Perth,24,24,22.8,7,FALSE,7,Australia,0,0,Location,Port,L_AU_Karra
+Taichung,Taichung,,DISCHARGE,Asia/Taipei,24,24,22.8,7,FALSE,7,Taiwan,0,0,Location,Port,L_TW_Taich
+Johore,Johore,,DISCHARGE,Asia/Kuala_Lumpur,24,24,22.8,7,FALSE,7,Malaysia,0,0,Location,Port,L_MY_Johor
+Semarang,Semarang,,DISCHARGE,Asia/Jakarta,24,24,22.8,7,FALSE,7,Indonesia,0,0,Location,Port,L_ID_Semar
+Fukuoko,Fukuoko,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,FALSE,7,Japan,0,0,Location,Port,L_JP_Fukuo
+Panjang,Panjang,,DISCHARGE,Asia/Singapore,24,24,22.8,7,FALSE,7,Indonesia,0,0,Location,Port,L_ID_Panja
+Guangdong,Guangdong,,DISCHARGE,Asia/Chongqing,24,24,22.8,7,FALSE,7,China,0,0,Location,Port,L_CN_Guang
+Nagasaki,Nagasaki,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,FALSE,7,Japan,0,0,Location,Port,L_JP_Nagas
+Gibraltar,Gibraltar,,DISCHARGE,Europe/Gibraltar,24,24,22.8,7,FALSE,7,Gibraltar,0,0,Location,Port,L_GI_Gibra
+Himeji,Himeji,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,FALSE,7,Japan,0,0,Location,Port,L_JP_Himej
+Jakarta,Jakarta,,DISCHARGE,Asia/Jakarta,24,24,22.8,7,FALSE,7,Indonesia,0,0,Location,Port,L_ID_Jakar
+Darwin,Darwin,,LOAD,Australia/Darwin,24,24,22.8,7,FALSE,7,Australia,0,0,Location,Port,L_AU_Darwi
+South Hook LNG,South Hook LNG,,DISCHARGE,Europe/London,24,24,22.8,7,FALSE,7,United Kingdom,0,0,Location,Port,L_GB_South
+Krk Island,Krk Island,,DISCHARGE,Europe/Zagreb,24,24,22.8,7,FALSE,7,Croatia,0,0,Location,Port,L_HR_KrkIs
+Talcahuano,Talcahuano,,DISCHARGE,America/Santiago,24,24,22.8,7,FALSE,7,Chile,0,0,Location,Port,L_CL_Talca
+Hachinohe,Hachinohe,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,FALSE,7,Japan,0,0,Location,Port,L_JP_Hachi
+Dampier,Dampier,,DISCHARGE,Australia/Perth,24,24,22.8,7,FALSE,7,Australia,0,0,Location,Port,L_AU_Dampi
+Elba,Elba,,DISCHARGE,America/New_York,24,24,22.8,7,FALSE,7,United States,0,0,Location,Port,L_US_Elba
+Tabangao,Tabangao,,DISCHARGE,Asia/Manila,24,24,22.8,7,FALSE,7,Philippines,0,0,Location,Port,L_PH_Taban
+Ras Laffan,Ras Laffan,,LOAD,Asia/Qatar,24,24,22.8,7,FALSE,7,Qatar,0,0,Location,Port,L_QA_RasLa
+Hazira,Hazira,,DISCHARGE,Asia/Calcutta,24,24,22.8,7,FALSE,7,India,0,0,Location,Port,L_IN_Hazir
+Ho Chi Min City,Ho Chi Min City,,DISCHARGE,Asia/Ho_Chi_Minh,24,24,22.8,7,FALSE,7,Vietnam,0,0,Location,Port,L_VN_HoChi
+Altamira,Altamira,,DISCHARGE,America/Mexico_City,24,24,22.8,7,FALSE,7,Mexico,0,0,Location,Port,L_MX_Altam
+Shimizu,Shimizu,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,FALSE,7,Japan,0,0,Location,Port,L_JP_Shimi
+Gladstone,Gladstone,,LOAD,Australia/Brisbane,24,24,22.8,7,FALSE,7,Australia,0,0,Location,Port,L_AU_Glads
+Suez,Suez,,DISCHARGE,Africa/Cairo,24,24,22.8,7,FALSE,7,Egypt,0,0,Location,Port,L_CP_Suez
+Gangavaram,Gangavaram,,DISCHARGE,Asia/Kolkata,24,24,22.8,7,FALSE,7,India,0,0,Location,Port,L_IN_Ganga
+Jurong Marine Base - Singapore,Jurong Marine Base - Singapore,,DISCHARGE,Asia/Singapore,24,24,22.8,7,FALSE,7,Singapore,0,0,Location,Port,L_SG_Juron
+Yung An,Yung An,,DISCHARGE,Asia/Taipei,24,24,22.8,7,FALSE,7,Taiwan,0,0,Location,Port,L_TW_YungA
+Vladivostok,Vladivostok,,DISCHARGE,Asia/Vladivostok,24,24,22.8,7,FALSE,7,Russian Federation,0,0,Location,Port,L_RU_Vladi
+Malta,Malta,,DISCHARGE,Europe/Malta,24,24,22.8,7,FALSE,7,Malta,0,0,Location,Port,L_MT_Malta
+Osaka,Osaka,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,FALSE,7,Japan,0,0,Location,Port,L_JP_Osaka
+Ambon,Ambon,,DISCHARGE,Asia/Jayapura,24,24,22.8,7,FALSE,7,Indonesia,0,0,Location,Port,L_ID_Ambon
+Kawagoe,Kawagoe,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,FALSE,7,Japan,0,0,Location,Port,L_JP_Kawag
+Sakaide,Sakaide,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,FALSE,7,Japan,0,0,Location,Port,L_JP_Sakai2
+Teeside,Teeside,,DISCHARGE,Europe/London,24,24,22.8,7,FALSE,7,United Kingdom,0,0,Location,Port,L_GB_Teesi
+Yanai,Yanai,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,FALSE,7,Japan,0,0,Location,Port,L_JP_Yanai
+Ortona,Ortona,,DISCHARGE,Europe/Rome,24,24,22.8,7,FALSE,7,Italy,0,0,Location,Port,L_IT_Orton
+Pars LNG Terminal,Pars LNG Terminal,,DISCHARGE,Asia/Tehran,24,24,22.8,7,FALSE,7,Iran,0,0,Location,Port,L_IR_ParsL
+Mundra,Mundra,,DISCHARGE,Asia/Kolkata,24,24,22.8,7,FALSE,7,India,0,0,Location,Port,L_IN_Mundr
+Holyhead,Holyhead,,DISCHARGE,Europe/London,24,24,22.8,7,FALSE,7,United Kingdom,0,0,Location,Port,L_GB_Holyh
+Brass,Brass,,LOAD,Africa/Lagos,24,24,22.8,7,FALSE,7,Nigeria,0,0,Location,Port,L_NG_Brass
+Port Said,Port Said,,DISCHARGE,Africa/Cairo,24,24,22.8,7,FALSE,7,Egypt,0,0,Location,Port,L_CP_PortS
+Joetsu,Joetsu,,DISCHARGE,Asia/Kuching,24,24,22.8,7,FALSE,7,Japan,0,0,Location,Port,L_JP_Joets
+Shtokman,Shtokman,,DISCHARGE,Europe/Moscow,24,24,22.8,7,FALSE,7,Russian Federation,0,0,Location,Port,L_RU_Shtok
+Sakhalin,Sakhalin,,LOAD,Asia/Vladivostok,24,24,22.8,7,FALSE,7,Russian Federation,0,0,Location,Port,L_RU_Sakha
+Abu Dhabi,Abu Dhabi,,DISCHARGE,Asia/Dubai,24,24,22.8,7,FALSE,7,United Arab Emirates,0,0,Location,Port,L_AE_AbuDh
+Limerick,Limerick,,DISCHARGE,Europe/Dublin,24,24,22.8,7,FALSE,7,Ireland,0,0,Location,Port,L_IE_Limer
+Sines,Sines,,DISCHARGE,Europe/Madrid,24,24,22.8,7,FALSE,7,Portugal,0,0,Location,Port,L_PT_Sines
+Ain Sokhna,Ain Sokhna,,DISCHARGE,Africa/Cairo,24,24,22.8,7,FALSE,7,Egypt,0,0,Location,Port,L_EG_AinSo
+Dabhol,Dabhol,,DISCHARGE,Asia/Calcutta,24,24,22.8,7,FALSE,7,India,0,0,Location,Port,L_IN_Dabho
+Idku,Idku,,DISCHARGE,Asia/Kuwait,24,24,22.8,7,FALSE,7,Egypt,0,0,Location,Port,L_EG_Idku
+Bahia Blanca,Bahia Blanca,,DISCHARGE,America/Buenos_Aires,24,24,22.8,7,FALSE,7,Argentina,0,0,Location,Port,L_AR_Bahia
+Skikda,Skikda,,LOAD,Africa/Algiers,24,24,22.8,7,FALSE,7,Algeria,0,0,Location,Port,L_DZ_Skikd
+Yokkaichi,Yokkaichi,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,FALSE,7,Japan,0,0,Location,Port,L_JP_Yokka
+Dili,Dili,,DISCHARGE,Asia/Dili,24,24,22.8,7,FALSE,7,East Timor,0,0,Location,Port,L_TP_Dili
+Tong Yong,Tong Yong,,DISCHARGE,Asia/Seoul,24,24,22.8,7,FALSE,7,South Korea,0,0,Location,Port,L_KR_TongY
+Montoir,Montoir,,DISCHARGE,Europe/Paris,24,24,22.8,7,FALSE,7,France,0,0,Location,Port,L_FR_Monto
+Kribi,Kribi,,DISCHARGE,Africa/Douala,24,24,22.8,7,FALSE,7,Cameroon,0,0,Location,Port,L_CM_Kribi
+Damietta,Damietta,,DISCHARGE,Africa/Cairo,24,24,22.8,7,FALSE,7,Egypt,0,0,Location,Port,L_EG_Damie
+Port Arthur,Port Arthur,,DISCHARGE,America/Chicago,24,24,22.8,7,FALSE,7,United States,0,0,Location,Port,L_US_PortA
+Mina Al Ahmadi,Mina Al Ahmadi,,DISCHARGE,Asia/Kuwait,24,24,22.8,7,FALSE,7,Kuwait,0,0,Location,Port,L_KW_MinaA
+Wilhelmshaven,Wilhelmshaven,,DISCHARGE,Europe/Berlin,24,24,22.8,7,FALSE,7,Germany,0,0,Location,Port,L_DE_Wilhe
+Port Dolphin,Port Dolphin,,DISCHARGE,America/New_York,24,24,22.8,7,FALSE,7,United States,0,0,Location,Port,L_US_PortD
+Fujian,Fujian,,DISCHARGE,Asia/Shanghai,24,24,22.8,7,FALSE,7,China,0,0,Location,Port,L_CN_Fujia
+Samcheog,Samcheog,,DISCHARGE,Asia/Seoul,24,24,22.8,7,FALSE,7,South Korea,0,0,Location,Port,L_KR_Samch
+Pyeongtaek,Pyeongtaek,,DISCHARGE,Asia/Seoul,24,24,22.8,7,FALSE,7,South Korea,0,0,Location,Port,L_KR_Pyeon
+Livorno,Livorno,,DISCHARGE,Europe/Rome,24,24,22.8,7,FALSE,7,Italy,0,0,Location,Port,L_IT_Livor
+Bontang,Bontang,,LOAD,Asia/Makassar,24,24,22.8,7,FALSE,7,Indonesia,0,0,Location,Port,L_ID_Bonta
+Rovigo,Rovigo,,DISCHARGE,Europe/Rome,24,24,22.8,7,FALSE,7,Italy,0,0,Location,Port,L_IT_Rovig
+Prince Rupert,Prince Rupert,,DISCHARGE,America/Vancouver,24,24,22.8,7,FALSE,7,Canada,0,0,Location,Port,L_CA_Princ

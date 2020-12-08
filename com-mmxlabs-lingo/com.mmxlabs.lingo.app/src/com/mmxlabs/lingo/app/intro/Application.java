@@ -18,6 +18,7 @@ import javax.management.MBeanServer;
 import javax.management.ObjectName;
 
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.ecore.resource.URIConverter.Cipher;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.equinox.internal.p2.garbagecollector.GarbageCollector;
@@ -51,11 +52,17 @@ import com.mmxlabs.license.ssl.LicenseChecker.LicenseState;
 import com.mmxlabs.lingo.reports.customizable.CustomReportsRegistryHook;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
+import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.rcp.common.application.DelayedOpenFileProcessor;
 import com.mmxlabs.rcp.common.application.WorkbenchStateManager;
+import com.mmxlabs.rcp.common.locking.WellKnownTriggers;
 import com.mmxlabs.rcp.common.viewfactory.ReplaceableViewManager;
 import com.mmxlabs.scenario.service.model.manager.ISharedDataModelType;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
+import com.mmxlabs.scenario.service.model.util.encryption.DataStreamReencrypter;
+import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvider;
+import com.mmxlabs.scenario.service.model.util.encryption.WorkspaceReencrypter;
+import com.mmxlabs.scenario.service.model.util.encryption.impl.DelegatingEMFCipher;
 
 /**
  * This class controls all aspects of the application's execution
@@ -71,7 +78,7 @@ public class Application implements IApplication {
 	 * @see org.eclipse.equinox.app.IApplication#start(org.eclipse.equinox.app. IApplicationContext)
 	 */
 	@Override
-	public Object start(final IApplicationContext context) {
+	public Object start(final IApplicationContext context) throws Exception {
 
 		final String[] appLineArgs = Platform.getApplicationArgs();
 
@@ -117,7 +124,7 @@ public class Application implements IApplication {
 		initAccessControl();
 		WorkbenchStateManager.cleanupWorkbenchState();
 
-		UpstreamUrlProvider.INSTANCE.updateOnlineStatus(); 
+		UpstreamUrlProvider.INSTANCE.updateOnlineStatus();
 
 		// Trigger early startup prompt for Data Hub
 		if (DataHubServiceProvider.getInstance().isHubOnline()) {
@@ -126,7 +133,7 @@ public class Application implements IApplication {
 			// Re-test online status
 			UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
 		}
-		
+
 		// Check Data Hub to see if user is authorised to use LiNGO
 		final boolean datahubStartupCheck = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_DATAHUB_STARTUP_CHECK);
 		if (datahubStartupCheck) {
@@ -154,7 +161,7 @@ public class Application implements IApplication {
 			}
 		}
 
-		// Don't abort LiNGO is p2 garbage collect fails.
+		// Don't abort LiNGO if p2 garbage collect fails.
 		// For some reason this started to happen ~14 Dec 2017
 		try {
 			cleanupP2();
@@ -166,7 +173,7 @@ public class Application implements IApplication {
 
 		// Defer the background polling a little
 		UpstreamUrlProvider.INSTANCE.start();
-		
+
 		// TODO: Handle error conditions better!
 		final Location instanceLoc = Platform.getInstanceLocation();
 		try {
@@ -180,6 +187,42 @@ public class Application implements IApplication {
 
 				// Attempt to lock workspace
 				if (instanceLoc.lock()) {
+
+					if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_REENCRYPT)) {
+
+						DataStreamReencrypter.ENABLED = true;
+
+						ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, p -> {
+							if (p != null) {
+								final Cipher sharedCipher = p.getSharedCipher();
+								if (sharedCipher instanceof DelegatingEMFCipher) {
+									final DelegatingEMFCipher cipher = (DelegatingEMFCipher) sharedCipher;
+
+									final WorkspaceReencrypter reencrypter = new WorkspaceReencrypter();
+									// Add in standard paths.
+									reencrypter.addDefaultPaths();
+
+									reencrypter.migrateWorkspaceEncryption(display.getActiveShell(), cipher);
+								}
+							}
+						});
+					} else {
+
+						ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, p -> {
+							if (p != null) {
+								final Cipher sharedCipher = p.getSharedCipher();
+								if (sharedCipher instanceof DelegatingEMFCipher) {
+									final DelegatingEMFCipher cipher = (DelegatingEMFCipher) sharedCipher;
+									final WorkspaceReencrypter reencrypter = new WorkspaceReencrypter();
+
+									reencrypter.writeCurrentKeyToStateFile(cipher);
+								}
+							}
+						});
+					}
+
+					// Data file manipulation complete, allow startup to continue.
+					WellKnownTriggers.WORKSPACE_DATA_ENCRYPTION_CHECK.fireTrigger();
 
 					final int returnCode = PlatformUI.createAndRunWorkbench(display, new ApplicationWorkbenchAdvisor(processor));
 					if (returnCode == PlatformUI.RETURN_RESTART) {

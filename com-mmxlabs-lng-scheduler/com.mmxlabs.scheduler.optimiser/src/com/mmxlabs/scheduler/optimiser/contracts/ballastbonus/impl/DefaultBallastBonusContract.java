@@ -13,34 +13,34 @@ import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.IBallastBonusContr
 
 public class DefaultBallastBonusContract implements IBallastBonusContract {
 
-	private List<IBallastBonusContractRule> rules;
+	private final List<IBallastBonusContractRule> rules;
 
-	public DefaultBallastBonusContract(List<IBallastBonusContractRule> rules) {
+	public DefaultBallastBonusContract(final List<IBallastBonusContractRule> rules) {
 		this.rules = rules;
 	}
 
 	@Override
-	public long calculateBallastBonus(IPortSlot lastSlot, IVesselAvailability vesselAvailability, int time) {
-		for (IBallastBonusContractRule rule : rules) {
-			if (rule.match(lastSlot, vesselAvailability, time)) {
-				return rule.calculateBallastBonus(lastSlot, vesselAvailability, time);
+	public long calculateBallastBonus(final IPortSlot lastSlot, final IVesselAvailability vesselAvailability, final int vesselStartTime, final int vesselEndTime) {
+		for (final IBallastBonusContractRule rule : rules) {
+			if (rule.match(lastSlot, vesselAvailability, vesselStartTime, vesselEndTime)) {
+				return rule.calculateBallastBonus(lastSlot, vesselAvailability, vesselStartTime, vesselEndTime);
 			}
 		}
 		return 0L;
 	}
 
 	@Override
-	public BallastBonusAnnotation annotate(IPortSlot lastSlot, IVesselAvailability vesselAvailability, int time) {
-		return createAnnotation(lastSlot, vesselAvailability, time);
+	public BallastBonusAnnotation annotate(final IPortSlot lastSlot, final IVesselAvailability vesselAvailability, final int vesselStartTime, final int vesselEndTime) {
+		return createAnnotation(lastSlot, vesselAvailability, vesselStartTime, vesselEndTime);
 	}
 
-	private BallastBonusAnnotation createAnnotation(IPortSlot lastSlot, IVesselAvailability vesselAvailability, int time) {
-		BallastBonusAnnotation ballastBonusAnnotation = new BallastBonusAnnotation();
-		for (IBallastBonusContractRule rule : rules) {
-			if (rule.match(lastSlot, vesselAvailability, time)) {
-				ballastBonusAnnotation.ballastBonusFee = rule.calculateBallastBonus(lastSlot, vesselAvailability, time);
+	private BallastBonusAnnotation createAnnotation(final IPortSlot lastSlot, final IVesselAvailability vesselAvailability, final int vesselStartTime, final int vesselEndTime) {
+		final BallastBonusAnnotation ballastBonusAnnotation = new BallastBonusAnnotation();
+		for (final IBallastBonusContractRule rule : rules) {
+			if (rule.match(lastSlot, vesselAvailability, vesselStartTime, vesselEndTime)) {
+				ballastBonusAnnotation.ballastBonusFee = rule.calculateBallastBonus(lastSlot, vesselAvailability, vesselStartTime, vesselEndTime);
 				ballastBonusAnnotation.matchedPort = lastSlot.getPort();
-				ballastBonusAnnotation.ballastBonusRuleAnnotation = rule.annotate(lastSlot, vesselAvailability, time);
+				ballastBonusAnnotation.ballastBonusRuleAnnotation = rule.annotate(lastSlot, vesselAvailability, vesselStartTime, vesselEndTime);
 				break;
 			}
 		}

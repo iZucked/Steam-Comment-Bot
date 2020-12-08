@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer.inject.modules;
 
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Collection;
 
@@ -59,6 +60,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.impl.VoyagePlanStartDateCharter
 import com.mmxlabs.scheduler.optimiser.curves.CachingPriceIntervalProducer;
 import com.mmxlabs.scheduler.optimiser.curves.IIntegerIntervalCurve;
 import com.mmxlabs.scheduler.optimiser.curves.IPriceIntervalProducer;
+import com.mmxlabs.scheduler.optimiser.curves.IntegerIntervalCurve;
 import com.mmxlabs.scheduler.optimiser.curves.PriceIntervalProducer;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.impl.DefaultEntityValueCalculator;
@@ -108,11 +110,11 @@ public class LNGTransformerModule extends AbstractModule {
 	// auto-hedging mode. If true - use flat curve
 	private final boolean withFlatCurve;
 
-	private @NonNull UserSettings userSettings;
+	private final @NonNull UserSettings userSettings;
 
-	private @NonNull IScenarioDataProvider scenarioDataProvider;
+	private final @NonNull IScenarioDataProvider scenarioDataProvider;
 
-	private int concurrencyLevel;
+	private final int concurrencyLevel;
 
 	@NonNull
 	private final Collection<String> hints;
@@ -120,7 +122,8 @@ public class LNGTransformerModule extends AbstractModule {
 	/**
 	 * @param concurrencyLevel
 	 */
-	public LNGTransformerModule(@NonNull final IScenarioDataProvider scenarioDataProvider, @NonNull UserSettings userSettings, int concurrencyLevel, @NonNull final Collection<@NonNull String> hints) {
+	public LNGTransformerModule(@NonNull final IScenarioDataProvider scenarioDataProvider, @NonNull final UserSettings userSettings, final int concurrencyLevel,
+			@NonNull final Collection<@NonNull String> hints) {
 		this.scenarioDataProvider = scenarioDataProvider;
 		this.concurrencyLevel = concurrencyLevel;
 		this.hints = hints;
@@ -134,6 +137,8 @@ public class LNGTransformerModule extends AbstractModule {
 		this.withCharterLength = hints.contains(LNGTransformerHelper.HINT_CHARTER_LENGTH);
 		this.withFlatCurve = hints.contains(LNGTransformerHelper.HINT_GENERATED_PAPERS_PNL);
 		assert scenario != null;
+		// Temporary check to make sure the UI is correctly configured.
+		assert scenario.isLongTerm() == (userSettings.getMode() == OptimisationMode.LONG_TERM);
 	}
 
 	@Override
@@ -143,6 +148,7 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(UserSettings.class).toInstance(userSettings);
 
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.SCENARIO_TYPE_ADP)).toInstance(userSettings.getMode() == OptimisationMode.ADP);
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.SCENARIO_TYPE_LONG_TERM)).toInstance(userSettings.getMode() == OptimisationMode.LONG_TERM);
 
 		bind(boolean.class).annotatedWith(Names.named(LNGTransformerHelper.HINT_SHIPPING_ONLY)).toInstance(shippingOnly);
 		bind(boolean.class).annotatedWith(Names.named(LNGTransformerHelper.HINT_DISABLE_CACHES)).toInstance(hintEnableCache);
@@ -225,7 +231,7 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(IEntityValueCalculator.class).to(DefaultEntityValueCalculator.class);
 
 		// Default bindings for caches
-		CacheMode mode = hints.contains(LNGTransformerHelper.HINT_TESTING_IGNORE_CACHE_SETTINGS) ? CacheMode.Off : CacheMode.On;
+		final CacheMode mode = hints.contains(LNGTransformerHelper.HINT_TESTING_IGNORE_CACHE_SETTINGS) ? CacheMode.Off : CacheMode.On;
 
 		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_ArrivalTimeCache)).toInstance(mode);
 		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_PNLTrimmerCache)).toInstance(mode);
@@ -315,7 +321,7 @@ public class LNGTransformerModule extends AbstractModule {
 		return new CalendarMonthMapper() {
 
 			@Override
-			public int mapMonthToChangePoint(int months) {
+			public int mapMonthToChangePoint(final int months) {
 
 				// Convert internal time units back into UTC date/time
 				@NonNull
@@ -329,7 +335,7 @@ public class LNGTransformerModule extends AbstractModule {
 			}
 
 			@Override
-			public int mapChangePointToMonth(int hoursFromEarliestDateTime) {
+			public int mapChangePointToMonth(final int hoursFromEarliestDateTime) {
 				// Convert internal time units back into UTC date/time
 				@NonNull
 				final ZonedDateTime dateTimeZero = map.getDateFromHours(0, "Etc/UTC");
@@ -338,7 +344,7 @@ public class LNGTransformerModule extends AbstractModule {
 				@NonNull
 				final ZonedDateTime plusMonths = dateTimeZero.plusHours(hoursFromEarliestDateTime).withDayOfMonth(1);
 
-				int m = Months.between(startOfYear, plusMonths);
+				final int m = Months.between(startOfYear, plusMonths);
 
 				return m;
 			}
@@ -347,8 +353,8 @@ public class LNGTransformerModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	private SeriesParserData provideSeriesParserData(final ShiftFunctionMapper shiftMapper, CalendarMonthMapper monthMapper,
-			@Named(EARLIEST_AND_LATEST_TIMES) Pair<ZonedDateTime, ZonedDateTime> dates) {
+	private SeriesParserData provideSeriesParserData(final ShiftFunctionMapper shiftMapper, final CalendarMonthMapper monthMapper,
+			@Named(EARLIEST_AND_LATEST_TIMES) final Pair<ZonedDateTime, ZonedDateTime> dates) {
 		final SeriesParserData data = new SeriesParserData();
 		data.setShiftMapper(shiftMapper);
 		data.setCalendarMonthMapper(monthMapper);
@@ -360,31 +366,51 @@ public class LNGTransformerModule extends AbstractModule {
 	@Named(SchedulerConstants.Parser_Commodity)
 	@Singleton
 	private SeriesParser provideCommodityParser(final SeriesParserData seriesParserData) {
-		final SeriesParser parser = new SeriesParser(seriesParserData);
-		return parser;
+		return new SeriesParser(seriesParserData);
 	}
 
 	@Provides
 	@Named(SchedulerConstants.Parser_Charter)
 	@Singleton
 	private SeriesParser provideCharterParser(final SeriesParserData seriesParserData) {
-		final SeriesParser parser = new SeriesParser(seriesParserData);
-		return parser;
+		return new SeriesParser(seriesParserData);
 	}
 
 	@Provides
 	@Named(SchedulerConstants.Parser_BaseFuel)
 	@Singleton
 	private SeriesParser provideBaseFuelParser(final SeriesParserData seriesParserData) {
-		final SeriesParser parser = new SeriesParser(seriesParserData);
-		return parser;
+		return new SeriesParser(seriesParserData);
 	}
 
 	@Provides
 	@Named(SchedulerConstants.Parser_Currency)
 	@Singleton
 	private SeriesParser provideCurrencyParser(final SeriesParserData seriesParserData) {
-		final SeriesParser parser = new SeriesParser(seriesParserData);
-		return parser;
+		return new SeriesParser(seriesParserData);
+	}
+
+	@Provides
+	@Singleton
+	@Named(SchedulerConstants.MIDNIGHT_ALIGNED_INTEGER_INTERVAL_CURVE)
+	private IIntegerIntervalCurve provideDailyMidnightIIntegerIntervalCurve(@NonNull final DateAndCurveHelper dateAndCurveHelper) {
+		final IntegerIntervalCurve midnightsInUTC = new IntegerIntervalCurve();
+
+		final ZonedDateTime zdt = dateAndCurveHelper.getEarliestTime();
+		// Make sure we get midnight
+		final int hourAtZDT = dateAndCurveHelper.convertTime(zdt.withZoneSameInstant(ZoneId.of("UTC")).withHour(0));
+		final int latestTime = dateAndCurveHelper.convertTime(dateAndCurveHelper.getLatestTime());
+
+		// May be less than zero if time zero is later than midnight
+		assert (hourAtZDT <= 0);
+		// Add 23 hours to ensure the end time is still covered
+		final int upperBound = latestTime + 23;
+
+		// As this is UTC, it is safe to always add 24hrs
+		for (int i = hourAtZDT; i <= upperBound; i += 24) {
+			midnightsInUTC.add(i);
+		}
+
+		return midnightsInUTC;
 	}
 }

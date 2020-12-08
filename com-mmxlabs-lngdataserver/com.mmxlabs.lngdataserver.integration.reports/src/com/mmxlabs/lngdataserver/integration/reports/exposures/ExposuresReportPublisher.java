@@ -4,28 +4,37 @@
  */
 package com.mmxlabs.lngdataserver.integration.reports.exposures;
 
-import java.io.OutputStream;
 import java.util.List;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.SupportedReportFormats;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.DefaultReportContent;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.IReportContent;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.IReportPublisherExtension;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.UnsupportedReportException;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class ExposuresReportPublisher implements IReportPublisherExtension {
-	
+
 	@Override
-	public void publishReport(ScenarioInstance scenarioInstance, IScenarioDataProvider scenarioDataProvider, ScheduleModel scheduleModel, OutputStream outputStream) throws Exception {
+	public IReportContent publishReport(final SupportedReportFormats supportedFormats, final ScenarioInstance scenarioInstance, final IScenarioDataProvider scenarioDataProvider,
+			final ScheduleModel scheduleModel) throws Exception {
 
-		final ScenarioResult sr = new ScenarioResult(scenarioInstance, scheduleModel);
-		List<ExposuresReportModel> exposuresModels = ExposuresReportJSONGenerator.createReportData(scheduleModel, scenarioDataProvider, sr);
+		final List<String> versions = supportedFormats.getVersionsFor(getReportType());
 
-		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.writeValue(outputStream, exposuresModels);
+		if (versions.isEmpty() || versions.contains("1")) {
+			final ScenarioResult sr = new ScenarioResult(scenarioInstance, scheduleModel);
+
+			final List<ExposuresReportModel> models = ExposuresReportJSONGenerator.createReportData(scheduleModel, scenarioDataProvider, sr);
+
+			final ObjectMapper objectMapper = new ObjectMapper();
+			final String content = objectMapper.writeValueAsString(models);
+			return new DefaultReportContent(getReportType(), "1", content);
+		}
+		throw new UnsupportedReportException();
 	}
 
 	@Override
@@ -34,7 +43,7 @@ public class ExposuresReportPublisher implements IReportPublisherExtension {
 	}
 
 	@Override
-	public void publishReport(@NonNull IScenarioDataProvider scenarioDataProvider, @NonNull ScheduleModel scheduleModel, @NonNull OutputStream outputStream) throws Exception {
+	public IReportContent publishReport(final SupportedReportFormats supportedFormats, final IScenarioDataProvider scenarioDataProvider, final ScheduleModel scheduleModel) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 }

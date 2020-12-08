@@ -1,3 +1,0 @@
-name,spotCharterCount,minCharterOutDuration,charterInRate,charterOutRate,kind,vessel,vessels,enabled
-In_STEAM,5,,Charter_In,,CharterInMarket,STEAM-138,,true
-Out_STEAM,,30,,Charter_In,CharterOutMarket,,VesselGroup:STEAM-138,true

@@ -62,6 +62,8 @@ public class LNGScenarioModelItemProvider
 			addPromptPeriodStartPropertyDescriptor(object);
 			addPromptPeriodEndPropertyDescriptor(object);
 			addSchedulingEndDatePropertyDescriptor(object);
+			addLongTermPropertyDescriptor(object);
+			addAnonymisedPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -133,6 +135,50 @@ public class LNGScenarioModelItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Long Term feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addLongTermPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_LNGScenarioModel_longTerm_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_LNGScenarioModel_longTerm_feature", "_UI_LNGScenarioModel_type"),
+				 LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_LongTerm(),
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Anonymised feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addAnonymisedPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_LNGScenarioModel_anonymised_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_LNGScenarioModel_anonymised_feature", "_UI_LNGScenarioModel_type"),
+				 LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_Anonymised(),
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -151,7 +197,6 @@ public class LNGScenarioModelItemProvider
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_UserSettings());
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_AnalyticsModel());
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_AdpModel());
-			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_AdpModels());
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_NominationsModel());
 		}
 		return childrenFeatures;
@@ -210,6 +255,8 @@ public class LNGScenarioModelItemProvider
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PROMPT_PERIOD_START:
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PROMPT_PERIOD_END:
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SCHEDULING_END_DATE:
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__LONG_TERM:
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ANONYMISED:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__CARGO_MODEL:
@@ -219,7 +266,6 @@ public class LNGScenarioModelItemProvider
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__USER_SETTINGS:
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ANALYTICS_MODEL:
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ADP_MODEL:
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ADP_MODELS:
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__NOMINATIONS_MODEL:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
@@ -275,36 +321,8 @@ public class LNGScenarioModelItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_AdpModels(),
-				 ADPFactory.eINSTANCE.createADPModel()));
-
-		newChildDescriptors.add
-			(createChildParameter
 				(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_NominationsModel(),
 				 NominationsFactory.eINSTANCE.createNominationsModel()));
-	}
-
-	/**
-	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
-		Object childFeature = feature;
-		Object childObject = child;
-
-		boolean qualify =
-			childFeature == LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_AdpModel() ||
-			childFeature == LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_AdpModels();
-
-		if (qualify) {
-			return getString
-				("_UI_CreateChild_text2",
-				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
-		}
-		return super.getCreateChildText(owner, feature, child, selection);
 	}
 
 }

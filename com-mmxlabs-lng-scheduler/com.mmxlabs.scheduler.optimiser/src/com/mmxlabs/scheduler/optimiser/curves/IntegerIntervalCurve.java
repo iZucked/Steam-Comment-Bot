@@ -19,11 +19,7 @@ import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
  */
 public class IntegerIntervalCurve implements IIntegerIntervalCurve {
 
-	private final TreeSet<Integer> intervals = new TreeSet<Integer>();
-
-	public IntegerIntervalCurve() {
-
-	}
+	private final TreeSet<Integer> intervals = new TreeSet<>();
 
 	@Override
 	public void add(int point) {

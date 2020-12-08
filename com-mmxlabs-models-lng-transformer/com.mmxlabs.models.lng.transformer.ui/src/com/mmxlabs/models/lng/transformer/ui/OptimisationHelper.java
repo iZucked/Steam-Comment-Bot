@@ -150,6 +150,7 @@ public final class OptimisationHelper {
 	public static final String SWTBOT_OPTIMISATION_MODE_SHORT_TERM = SWTBOT_OPTIMISATION_MODE_PREFIX + ".SHORT_TERM";
 	public static final String SWTBOT_OPTIMISATION_MODE_ADP = SWTBOT_OPTIMISATION_MODE_PREFIX + ".ADP";
 	public static final String SWTBOT_OPTIMISATION_MODE_STRATEGIC = SWTBOT_OPTIMISATION_MODE_PREFIX + ".STRATEGIC";
+	public static final String SWTBOT_OPTIMISATION_MODE_LONG_TERM = SWTBOT_OPTIMISATION_MODE_PREFIX + ".LONG_TERM";
 
 	public static final String SWTBOT_CLEAN_SLATE_PREFIX = "swtbot.cleanslate";
 	public static final String SWTBOT_CLEAN_SLATE_ON = SWTBOT_CLEAN_SLATE_PREFIX + ".On";
@@ -210,6 +211,12 @@ public final class OptimisationHelper {
 		final UserSettings userSettings = ScenarioUtils.createDefaultUserSettings();
 		if (previousSettings == null) {
 			previousSettings = userSettings;
+		}
+
+		// Only permit LT mode for an LT scenario
+		if (scenario != null && scenario.isLongTerm()) {
+			userSettings.setMode(OptimisationMode.LONG_TERM);
+			previousSettings.setMode(OptimisationMode.LONG_TERM);
 		}
 
 		// Permit the user to override the settings object. Use the previous settings as
@@ -293,16 +300,16 @@ public final class OptimisationHelper {
 
 		return null;
 	}
-
-	public static UserSettings promptForUserSettings(final LNGScenarioModel scenario, final boolean forEvaluation, final boolean promptUser, final boolean promptOnlyIfOptionsEnabled,
-			final NameProvider nameProvider) {
-		UserSettings previousSettings = null;
-		if (scenario != null) {
-			previousSettings = scenario.getUserSettings();
-		}
-		return promptForInsertionUserSettings(scenario, forEvaluation, promptUser, promptOnlyIfOptionsEnabled, nameProvider, previousSettings);
-
-	}
+	//
+	// public static UserSettings promptForUserSettings(final LNGScenarioModel scenario, final boolean forEvaluation, final boolean promptUser, final boolean promptOnlyIfOptionsEnabled,
+	// final NameProvider nameProvider) {
+	// UserSettings previousSettings = null;
+	// if (scenario != null) {
+	// previousSettings = scenario.getUserSettings();
+	// }
+	// return promptForInsertionUserSettings(scenario, forEvaluation, promptUser, promptOnlyIfOptionsEnabled, nameProvider, previousSettings);
+	//
+	// }
 
 	public static UserSettings promptForUserSettings(final LNGScenarioModel scenario, final boolean forEvaluation, final boolean promptUser, final boolean promptOnlyIfOptionsEnabled,
 			final NameProvider nameProvider, UserSettings previousSettings) {
@@ -377,13 +384,15 @@ public final class OptimisationHelper {
 
 			// Create optimisation mode
 			{
-				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_ADP) && forADP //
+				if ((LicenseFeatures.isPermitted(KnownFeatures.FEATURE_ADP) && forADP) //
 						|| LicenseFeatures.isPermitted(KnownFeatures.FEATURE_STRATEGIC) //
+						|| (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_LONG_TERM) && scenario != null && scenario.isLongTerm())
+				//
 				) {
 					final OptionGroup group = dialog.createGroup(DataSection.General, "Mode");
 					createOptimisationModeOption(defaultSettings, editingDomain, scenario, dialog, copy, group, forADP, optionsAdded);
 				} else {
-					copy.setMode(OptimisationMode.SHORT_TERM);
+					copy.setMode(scenario.isLongTerm() ? OptimisationMode.LONG_TERM : OptimisationMode.SHORT_TERM);
 				}
 			}
 			{
@@ -436,6 +445,12 @@ public final class OptimisationHelper {
 		final UserSettings userSettings = ScenarioUtils.createDefaultUserSettings();
 		if (previousSettings == null) {
 			previousSettings = userSettings;
+		}
+
+		// Only permit LT mode for an LT scenario
+		if (scenario != null && scenario.isLongTerm()) {
+			userSettings.setMode(OptimisationMode.LONG_TERM);
+			previousSettings.setMode(OptimisationMode.LONG_TERM);
 		}
 
 		// Permit the user to override the settings object. Use the previous settings as
@@ -548,6 +563,12 @@ public final class OptimisationHelper {
 		final UserSettings userSettings = ScenarioUtils.createDefaultUserSettings();
 		if (previousSettings == null) {
 			previousSettings = userSettings;
+		}
+
+		// Only permit LT mode for an LT scenario
+		if (scenario != null && scenario.isLongTerm()) {
+			userSettings.setMode(OptimisationMode.LONG_TERM);
+			previousSettings.setMode(OptimisationMode.LONG_TERM);
 		}
 
 		// Permit the user to override the settings object. Use the previous settings as
@@ -917,7 +938,7 @@ public final class OptimisationHelper {
 		to.setBuildActionSets(from.isBuildActionSets());
 
 		to.setFloatingDaysLimit(from.getFloatingDaysLimit());
-		
+
 		to.setGeneratedPapersInPNL(from.isGeneratedPapersInPNL());
 	}
 
@@ -1424,18 +1445,23 @@ public final class OptimisationHelper {
 			final UserSettings copy, final OptionGroup group, final boolean forADP, final boolean[] optionsAdded) {
 
 		final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
-		choiceData.addChoice("Short Term", OptimisationMode.SHORT_TERM);
-
 		boolean extraChoiceAdded = false;
-		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_ADP) && forADP) {
-			choiceData.addChoice("ADP", OptimisationMode.ADP);
-			extraChoiceAdded = true;
-		}
-		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_STRATEGIC)) {
-			choiceData.addChoice("Strategic", OptimisationMode.STRATEGIC);
-			extraChoiceAdded = true;
-		}
 
+		if (scenario != null && scenario.isLongTerm()) {
+			choiceData.addChoice("Long Term", OptimisationMode.LONG_TERM);
+		} else {
+
+			choiceData.addChoice("Short Term", OptimisationMode.SHORT_TERM);
+
+			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_ADP) && forADP) {
+				choiceData.addChoice("ADP", OptimisationMode.ADP);
+				extraChoiceAdded = true;
+			}
+			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_STRATEGIC)) {
+				choiceData.addChoice("Strategic", OptimisationMode.STRATEGIC);
+				extraChoiceAdded = true;
+			}
+		}
 		choiceData.enabled = extraChoiceAdded;
 		// choiceData.enabledHook = (u -> (!u.isCleanStateOptimisation() &&
 		// !u.isAdpOptimisation()));
@@ -1472,7 +1498,7 @@ public final class OptimisationHelper {
 				if (userSettings.isCleanSlateOptimisation() && userSettings.isShippingOnly()) {
 					return ValidationStatus.error("Shipping only must be disabled if clean slate optimisation is on.");
 				}
-				
+
 				if (userSettings.getMode() == OptimisationMode.ADP || userSettings.getMode() == OptimisationMode.STRATEGIC) {
 					final String mode = (userSettings.getMode() == OptimisationMode.ADP) ? "ADP" : "strategic";
 					if (userSettings.getPeriodStartDate() != null || userSettings.getPeriodEnd() != null) {
@@ -1492,7 +1518,9 @@ public final class OptimisationHelper {
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_ADP) && forADP) {
 			createADPCleanStateOption(defaultSettings, optionsAdded, editingDomain, dialog, copy, scenarioContainsForbiddedADPEvents, adpVesselEventIssueMsg, group);
 		}
-		createNominalOnlyOption(defaultSettings, optionsAdded, editingDomain, dialog, copy, scenarioContainsForbiddedADPEvents, adpVesselEventIssueMsg, group);
+		if (!(scenario != null && scenario.isLongTerm())) {
+			createNominalOnlyOption(defaultSettings, optionsAdded, editingDomain, dialog, copy, scenarioContainsForbiddedADPEvents, adpVesselEventIssueMsg, group);
+		}
 	}
 
 	private static void createSimilarityModeOption(final UserSettings defaultSettings, final EditingDomain editingDomain, final ParameterModesDialog dialog, final UserSettings copy,

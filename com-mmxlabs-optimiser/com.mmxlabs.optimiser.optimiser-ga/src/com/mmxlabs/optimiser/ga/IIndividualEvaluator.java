@@ -27,5 +27,6 @@ public interface IIndividualEvaluator<I> {
 	/**
 	 * Clean up resources
 	 */
-	void dispose();
+	default void dispose() {
+	}
 }

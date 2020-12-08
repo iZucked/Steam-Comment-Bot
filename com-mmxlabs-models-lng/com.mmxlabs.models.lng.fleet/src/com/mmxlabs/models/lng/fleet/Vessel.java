@@ -1012,7 +1012,7 @@ public interface Vessel extends AVesselSet<Vessel> {
 	 * @return the value of the '<em>Notes</em>' attribute.
 	 * @see #setNotes(String)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_Notes()
-	 * @model
+	 * @model annotation="http://www.mmxlabs.com/models/validation ignore='true'"
 	 * @generated
 	 */
 	String getNotes();

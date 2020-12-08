@@ -55,20 +55,19 @@ public class FixedPriceContract implements ILoadPriceCalculator, ISalesPriceCalc
 
 	@Override
 	public int calculateFOBPricePerMMBTu(final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final int dischargePricePerMMBTu, final IAllocationAnnotation allocationAnnotation,
-			final IVesselAvailability vesselAvailability, final int vesselStartTime, final VoyagePlan plan, @Nullable final ProfitAndLossSequences volumeAllocatedSequences,
-			final IDetailTree annotations) {
+			final IVesselAvailability vesselAvailability, final VoyagePlan plan, @Nullable ProfitAndLossSequences profitAndLossSequences, final IDetailTree annotations) {
 		return pricePerMMBTU;
 	}
 
 	@Override
 	public int calculateDESPurchasePricePerMMBTu(final ILoadOption loadOption, final IDischargeSlot dischargeSlot, final int dischargePricePerMMBTu, final IAllocationAnnotation allocationAnnotation,
-			@Nullable final ProfitAndLossSequences volumeAllocatedSequences, final IDetailTree annotations) {
+			@Nullable ProfitAndLossSequences profitAndLossSequences, final IDetailTree annotations) {
 		return pricePerMMBTU;
 	}
 
 	@Override
 	public int calculatePriceForFOBSalePerMMBTu(final ILoadSlot loadSlot, final IDischargeOption dischargeOption, final int dischargePricePerMMBTu, final IAllocationAnnotation allocationAnnotation,
-			@Nullable final ProfitAndLossSequences volumeAllocatedSequences, final IDetailTree annotations) {
+			@Nullable ProfitAndLossSequences profitAndLossSequences, final IDetailTree annotations) {
 		return pricePerMMBTU;
 	}
 

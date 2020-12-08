@@ -78,11 +78,10 @@ public class ProfitAndLossCalculator {
 	@Inject
 	private PaperDealsCalculator paperDealsCalculator;
 
-	
 	@Inject
 	@Named(SchedulerConstants.GENERATED_PAPERS_IN_PNL)
 	private boolean generatedPapersInPNL;
-	
+
 	@Inject
 	@Named(SchedulerConstants.COMPUTE_EXPOSURES)
 	private boolean exposuresEnabled;
@@ -202,11 +201,11 @@ public class ProfitAndLossCalculator {
 			}
 			voyagePlan.setIgnoreEnd(false);
 			// Create an allocation annotation.
-			final IAllocationAnnotation allocationAnnotation = volumeAllocator.allocate(vesselAvailability, time, voyagePlan, portTimesRecord, annotatedSolution);
+			final IAllocationAnnotation allocationAnnotation = volumeAllocator.allocate(vesselAvailability, voyagePlan, portTimesRecord, annotatedSolution);
 			if (allocationAnnotation != null) {
 				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_volumeAllocationInfo, allocationAnnotation);
 				// Calculate P&L
-				final Pair<@NonNull CargoValueAnnotation, @NonNull Long> p = entityValueCalculator.evaluate(voyagePlan, allocationAnnotation, vesselAvailability, time, null, annotatedSolution);
+				final Pair<@NonNull CargoValueAnnotation, @NonNull Long> p = entityValueCalculator.evaluate(voyagePlan, allocationAnnotation, vesselAvailability, null, annotatedSolution);
 				final ICargoValueAnnotation cargoValueAnnotation = p.getFirst();
 
 				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_cargoValueAllocationInfo, cargoValueAnnotation);

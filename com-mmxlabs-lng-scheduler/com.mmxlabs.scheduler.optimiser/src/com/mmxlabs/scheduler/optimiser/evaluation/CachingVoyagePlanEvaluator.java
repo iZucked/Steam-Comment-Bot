@@ -62,7 +62,7 @@ public final class CachingVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 				.build(new CacheLoader<NonShippedVoyagePlanCacheKey, Optional<ScheduledVoyagePlanResult>>() {
 					@Override
 					public Optional<ScheduledVoyagePlanResult> load(final NonShippedVoyagePlanCacheKey record) throws Exception {
-						final ScheduledVoyagePlanResult result = delegate.evaluateNonShipped(record.resource, record.vesselAvailability, record.vesselStartTime, //
+						final ScheduledVoyagePlanResult result = delegate.evaluateNonShipped(record.resource, record.vesselAvailability, //
 								record.portTimesRecord, //
 								record.keepDetails, // Keep all the details
 								null // No annotated solution
@@ -72,6 +72,14 @@ public final class CachingVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 
 				});
 
+	}
+
+	@Override
+	public @NonNull List<@NonNull ScheduledVoyagePlanResult> evaluateRoundTrip(@NonNull IResource resource, @NonNull IVesselAvailability vesselAvailability,
+			@NonNull ICharterCostCalculator charterCostCalculator, @NonNull IPortTimesRecord portTimesRecord, boolean returnAll, boolean keepDetails, @Nullable IAnnotatedSolution annotatedSolution) {
+
+		// Default implementation of this method wraps around #evaluateShipped
+		return delegate.evaluateRoundTrip(resource, vesselAvailability, charterCostCalculator, portTimesRecord, returnAll, keepDetails, annotatedSolution);
 	}
 
 	@Override
@@ -96,14 +104,14 @@ public final class CachingVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 	}
 
 	@Override
-	public @NonNull ScheduledVoyagePlanResult evaluateNonShipped(@NonNull final IResource resource, @NonNull final IVesselAvailability vesselAvailability, final int vesselStartTime,
+	public @NonNull ScheduledVoyagePlanResult evaluateNonShipped(@NonNull final IResource resource, @NonNull final IVesselAvailability vesselAvailability,
 			@NonNull final IPortTimesRecord portTimesRecord, final boolean keepDetails, @Nullable final IAnnotatedSolution annotatedSolution) {
 
 		if (annotatedSolution != null) {
-			return delegate.evaluateNonShipped(resource, vesselAvailability, vesselStartTime, portTimesRecord, keepDetails, annotatedSolution);
+			return delegate.evaluateNonShipped(resource, vesselAvailability, portTimesRecord, keepDetails, annotatedSolution);
 		}
 
-		final NonShippedVoyagePlanCacheKey key = new NonShippedVoyagePlanCacheKey(resource, vesselAvailability, vesselStartTime, portTimesRecord, keepDetails);
+		final NonShippedVoyagePlanCacheKey key = new NonShippedVoyagePlanCacheKey(resource, vesselAvailability, portTimesRecord, keepDetails);
 
 		final Optional<ScheduledVoyagePlanResult> optional = nonShippedCache.getUnchecked(key);
 

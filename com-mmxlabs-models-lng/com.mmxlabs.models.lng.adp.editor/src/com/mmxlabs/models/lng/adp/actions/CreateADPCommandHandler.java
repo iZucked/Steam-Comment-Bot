@@ -68,7 +68,7 @@ public class CreateADPCommandHandler extends AbstractHandler {
 					try (ModelReference ref = modelRecord.aquireReferenceIfLoaded("CreateADPCommandHandler:setEnabled")) {
 						if (ref != null) {
 							final LNGScenarioModel scenarioModel = (LNGScenarioModel) ref.getInstance();
-							enabled = scenarioModel.getAdpModel() == null;
+							enabled = scenarioModel.getAdpModel() == null && !scenarioModel.isLongTerm();
 							break;
 						}
 					}
@@ -123,7 +123,7 @@ public class CreateADPCommandHandler extends AbstractHandler {
 
 		try (IScenarioDataProvider scenarioDataProvider = modelRecord.aquireScenarioDataProvider("CreateADPCommandHandler:createADPModelIfMissing")) {
 			final LNGScenarioModel scenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-			if (scenarioModel.getAdpModel() != null) {
+			if (scenarioModel.getAdpModel() != null || scenarioModel.isLongTerm()) {
 				// Do not replace
 				return;
 			}

@@ -6,7 +6,7 @@
   "Date" : "23/03/11",
   "Time" : "07:00",
   "Port" : "Damietta",
-  "Cost" : "203,604"
+  "Cost" : "201,818"
 }, {
   "Schedule" : "des-cargo",
   "Vessel" : "Methane Heather Sally",
@@ -14,8 +14,8 @@
   "ID" : "load-cargo-21",
   "Date" : "21/12/10",
   "Time" : "07:00",
-  "Port" : "Punta Europa LNG",
-  "Cost" : "222,300"
+  "Port" : "Punta Europa",
+  "Cost" : "220,350"
 }, {
   "Schedule" : "des-cargo",
   "Vessel" : "Methane Julia Louise",
@@ -23,6 +23,6 @@
   "ID" : "load-cargo-32",
   "Date" : "31/12/10",
   "Time" : "07:00",
-  "Port" : "Punta Europa LNG",
-  "Cost" : "222,300"
+  "Port" : "Punta Europa",
+  "Cost" : "220,350"
 } ]

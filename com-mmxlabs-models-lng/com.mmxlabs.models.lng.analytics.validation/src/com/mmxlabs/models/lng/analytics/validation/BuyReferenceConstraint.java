@@ -29,7 +29,7 @@ public class BuyReferenceConstraint extends AbstractModelMultiConstraint {
 			final BuyReference buyReference = (BuyReference) target;
 
 			if (buyReference.getSlot() == null) {
-				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Buy is missing existing slot."));
+				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Sandbox|Buy is missing existing slot."));
 				deco.addEObjectAndFeature(buyReference, AnalyticsPackage.eINSTANCE.getBuyReference_Slot());
 				statuses.add(deco);
 			}

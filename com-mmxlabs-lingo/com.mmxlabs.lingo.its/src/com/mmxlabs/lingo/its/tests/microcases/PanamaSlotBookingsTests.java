@@ -25,6 +25,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import com.google.inject.Injector;
 import com.mmxlabs.license.features.NonLicenseFeatures;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -145,10 +146,10 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
 
 		@NonNull
-		final Port port1 = portFinder.findPort("Sabine Pass");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
 
 		@NonNull
-		final Port port2 = portFinder.findPort("Quintero");
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_QUINTERO);
 
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
 		final LocalDateTime dischargeDate = loadDate.plusDays(13);
@@ -198,10 +199,10 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 				.build();
 
 		@NonNull
-		final Port port1 = portFinder.findPort("Sabine Pass");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
 
 		@NonNull
-		final Port port2 = portFinder.findPort("Quintero");
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_QUINTERO);
 
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
 		final LocalDateTime dischargeDate = loadDate.plusDays(13);
@@ -253,10 +254,10 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
 
 		@NonNull
-		final Port port1 = portFinder.findPort("Sabine Pass");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
 
 		@NonNull
-		final Port port2 = portFinder.findPort("Quintero");
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_QUINTERO);
 
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.AUGUST, 1, 0, 0, 0);
 		final LocalDateTime dischargeDate = loadDate.plusDays(10);
@@ -301,10 +302,10 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
 
 		@NonNull
-		final Port port1 = portFinder.findPort("Sabine Pass");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
 
 		@NonNull
-		final Port port2 = portFinder.findPort("Barcelona");
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_BARCELONA);
 
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
 		final LocalDateTime dischargeDate = loadDate.plusDays(13);
@@ -351,10 +352,10 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
 
 		@NonNull
-		final Port port1 = portFinder.findPort("Sabine Pass");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
 
 		@NonNull
-		final Port port2 = portFinder.findPort("Quintero");
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_QUINTERO);
 
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
 		final LocalDateTime dischargeDate = loadDate.plusDays(13);
@@ -398,10 +399,10 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
 
 		@NonNull
-		final Port port1 = portFinder.findPort("Sabine Pass");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
 
 		@NonNull
-		final Port port2 = portFinder.findPort("Quintero");
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_QUINTERO);
 
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
 		final LocalDateTime dischargeDate = loadDate.plusDays(13);
@@ -454,10 +455,10 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 				.build();
 
 		@NonNull
-		final Port port1 = portFinder.findPort("Sabine Pass");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
 
 		@NonNull
-		final Port port2 = portFinder.findPort("Quintero");
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_QUINTERO);
 
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
 		final LocalDateTime dischargeDate = loadDate.plusDays(13);
@@ -511,10 +512,10 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
 
 		@NonNull
-		final Port port1 = portFinder.findPort("Sabine Pass");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
 
 		@NonNull
-		final Port port2 = portFinder.findPort("Chita");
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_CHITA);
 
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
 		final LocalDateTime dischargeDate = loadDate.plusDays(25);
@@ -564,9 +565,9 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
 
 		@NonNull
-		final Port port1 = portFinder.findPort("Sabine Pass");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
 		@NonNull
-		final Port port2 = portFinder.findPort("Quintero");
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_QUINTERO);
 
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.AUGUST, 1, 0, 0, 0);
 		// journey could be made direct
@@ -616,10 +617,10 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
 
 		@NonNull
-		final Port port1 = portFinder.findPort("Sabine Pass");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
 
 		@NonNull
-		final Port port2 = portFinder.findPort("Quintero");
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_QUINTERO);
 
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
 		final LocalDateTime dischargeDate = loadDate.plusDays(10);
@@ -665,13 +666,13 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
 
 		@NonNull
-		final Port port1 = portFinder.findPort("Sabine Pass");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
 
 		@NonNull
-		final Port port2 = portFinder.findPort("Brownsville");
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_BROWNSVILLE);
 
 		@NonNull
-		final Port port3 = portFinder.findPort("Himeji");
+		final Port port3 = portFinder.findPortById(InternalDataConstants.PORT_HIMEJI);
 
 		final LocalDateTime loadDate1 = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
 		final LocalDateTime dischargeDate1 = loadDate1.plusDays(2);
@@ -756,13 +757,13 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
 
 		@NonNull
-		final Port port1 = portFinder.findPort("Sabine Pass");
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
 
 		@NonNull
-		final Port port2 = portFinder.findPort("Manzanillo");
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_MANZANILLO);
 
 		@NonNull
-		final Port portUnrelevant = portFinder.findPort("Brownsville");
+		final Port portUnrelevant = portFinder.findPortById(InternalDataConstants.PORT_BROWNSVILLE);
 
 		final boolean removed = distanceModelBuilder.setPortToPortDistance(port1, port2, RouteOption.SUEZ, Integer.MAX_VALUE, true);
 		assert removed;
@@ -841,9 +842,9 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 		vesselAvailability.getVessel().setMaxSpeed(16.0);
 
 		@NonNull
-		final Port loadPort = portFinder.findPort("Sabine Pass");
+		final Port loadPort = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
 		@NonNull
-		final Port dischargePort = portFinder.findPort("Quintero");
+		final Port dischargePort = portFinder.findPortById(InternalDataConstants.PORT_QUINTERO);
 
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JULY, 1, 0, 0, 0);
 		// journey could be made direct
@@ -923,9 +924,9 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 		vesselAvailability.getVessel().setMaxSpeed(16.0);
 
 		@NonNull
-		final Port loadPort = portFinder.findPort("Sabine Pass");
+		final Port loadPort = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
 		@NonNull
-		final Port dischargePort = portFinder.findPort("Quintero");
+		final Port dischargePort = portFinder.findPortById(InternalDataConstants.PORT_QUINTERO);
 
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JULY, 1, 0, 0, 0);
 		// journey could be made direct
@@ -1002,9 +1003,9 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 		vesselAvailability.getVessel().setMaxSpeed(16.0);
 
 		@NonNull
-		final Port loadPort = portFinder.findPort("Sabine Pass");
+		final Port loadPort = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
 		@NonNull
-		final Port dischargePort = portFinder.findPort("Quintero");
+		final Port dischargePort = portFinder.findPortById(InternalDataConstants.PORT_QUINTERO);
 
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JULY, 1, 0, 0, 0);
 		// journey could be made direct
@@ -1080,9 +1081,9 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 		vesselAvailability.setEndBy(LocalDateTime.of(2017, 7, 23, 0, 0));
 
 		@NonNull
-		final Port loadPort = portFinder.findPort("Sabine Pass");
+		final Port loadPort = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
 		@NonNull
-		final Port dischargePort = portFinder.findPort("Quintero");
+		final Port dischargePort = portFinder.findPortById(InternalDataConstants.PORT_QUINTERO);
 
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JULY, 1, 0, 0, 0);
 		// journey could be made direct
@@ -1160,10 +1161,10 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 		vesselAvailability.setEndBy(LocalDateTime.of(2017, 7, 23, 0, 0));
 
 		@NonNull
-		final Port loadPort = portFinder.findPort("Quintero");
+		final Port loadPort = portFinder.findPortById(InternalDataConstants.PORT_QUINTERO);
 		loadPort.getCapabilities().add(PortCapability.LOAD);
 		@NonNull
-		final Port dischargePort = portFinder.findPort("Sabine Pass");
+		final Port dischargePort = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
 		dischargePort.getCapabilities().add(PortCapability.DISCHARGE);
 
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JULY, 1, 0, 0, 0);
@@ -1242,10 +1243,10 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 		vesselAvailability.setEndBy(LocalDateTime.of(2017, 7, 23, 0, 0));
 
 		@NonNull
-		final Port loadPort = portFinder.findPort("Quintero");
+		final Port loadPort = portFinder.findPortById(InternalDataConstants.PORT_QUINTERO);
 		loadPort.getCapabilities().add(PortCapability.LOAD);
 		@NonNull
-		final Port dischargePort = portFinder.findPort("Sabine Pass");
+		final Port dischargePort = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
 		dischargePort.getCapabilities().add(PortCapability.DISCHARGE);
 
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JULY, 1, 0, 0, 0);
@@ -1318,9 +1319,9 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 		vesselAvailability.getVessel().setMaxSpeed(16.0);
 
 		@NonNull
-		final Port loadPort = portFinder.findPort("Sabine Pass");
+		final Port loadPort = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
 		@NonNull
-		final Port dischargePort = portFinder.findPort("Quintero");
+		final Port dischargePort = portFinder.findPortById(InternalDataConstants.PORT_QUINTERO);
 
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JULY, 1, 0, 0, 0);
 		// journey could be made direct

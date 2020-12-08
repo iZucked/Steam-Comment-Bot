@@ -14,8 +14,9 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
  */
 @NonNullByDefault
 public final class SchedulerConstants {
-	
+
 	public static final String SCENARIO_TYPE_ADP = "scenario-type-adp";
+	public static final String SCENARIO_TYPE_LONG_TERM = "scenario-type-long-term";
 
 	
 	/**
@@ -29,6 +30,9 @@ public final class SchedulerConstants {
 	public static final String Parser_Charter = "Charter";
 	public static final String Parser_Currency = "Currency";
 
+	public static final String MIDNIGHT_ALIGNED_INTEGER_INTERVAL_CURVE = "MidnightAlignedIntegerCurve";
+
+	
 	// Caching constants - used in injection framework
 	public static final String Key_VoyagePlanEvaluatorCache = "cache-voyage-plan-evaluator";
 	public static final String Key_ArrivalTimeCache = "cache-arrival-times";

@@ -238,7 +238,7 @@ public class PNLBasedWindowTrimmerUtils {
 				priceIntervalProducer.getDischargeWindowBasedOnLoad(discharge, portTimeWindowRecord));
 	}
 
-	public void computeIntervalsForSlot(final IPortSlot slot, final IVesselAvailability vesselAvailability, final int currentStartTime, final PortTimesRecord _record,
+	public void computeIntervalsForSlot(final IPortSlot slot, final IVesselAvailability vesselAvailability, final int vesselStartTime, final PortTimesRecord _record,
 			final IPortTimeWindowsRecord ptwr, final List<IPortSlot> slots, final int slotIdx, final MinTravelTimeData minTimeData, final int lastSlotArrivalTime, final Set<TimeChoice> times) {
 		final IPortSlot lastSlot = slots.get(slotIdx - 1);
 		final int elementIndex = ptwr.getIndex(lastSlot);
@@ -424,7 +424,7 @@ public class PNLBasedWindowTrimmerUtils {
 					// Then pad out start.
 					// Then finish at the end.
 					if (endRequirement.isMinDurationSet()) {
-						final int minEndTime = currentStartTime + endRequirement.getMinDurationInHours();
+						final int minEndTime = vesselStartTime + endRequirement.getMinDurationInHours();
 						if (minEndTime > twEnd) {
 							// Adjust time time windows
 							twStart = Math.max(minEndTime, twStart);
@@ -433,7 +433,7 @@ public class PNLBasedWindowTrimmerUtils {
 					}
 
 					if (endRequirement.isMaxDurationSet()) {
-						final int maxEndTime = currentStartTime + endRequirement.getMaxDurationInHours();
+						final int maxEndTime = vesselStartTime + endRequirement.getMaxDurationInHours();
 						if (maxEndTime < twEnd) {
 							// Reduce end time
 							twEnd = Math.min(maxEndTime, twEnd);

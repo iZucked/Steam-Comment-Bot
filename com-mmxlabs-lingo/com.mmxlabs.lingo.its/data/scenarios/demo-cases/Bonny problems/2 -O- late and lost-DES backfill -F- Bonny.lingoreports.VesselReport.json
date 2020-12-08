@@ -1,141 +1,141 @@
 [ {
-  "Scenario" : "2 -O- late and lost-DES backfill -F- Bonny",
-  "Vessel" : "Bluesky (145k)",
-  "Route ($)" : "80,000",
-  "LNG ($)" : "6,089,661",
+  "Ballast bonus ($)" : "0",
   "Base Fuel ($)" : "22,916",
-  "Port ($)" : "80,000",
-  "Charter ($)" : "23,774,994",
-  "Heel Revenue ($)" : "0",
-  "Ballast bonus ($)" : "0",
-  "Repositioning fee ($)" : "0",
-  "Heel Cost ($)" : "0",
-  "Sum - BOG($)" : "23,957,910",
-  "Sum ($)" : "30,047,571",
-  "Cooldown ($)" : "0",
-  "#Cargoes" : "4",
-  "Charter Out (virtual) delta (change set)" : {
-    "Days" : "0.0",
-    "Revenue" : "0"
-  }
-}, {
-  "Scenario" : "2 -O- late and lost-DES backfill -F- Bonny",
-  "Vessel" : "Charter Ship (170k)",
-  "Route ($)" : "0",
-  "LNG ($)" : "6,857,509",
-  "Base Fuel ($)" : "0",
-  "Port ($)" : "80,000",
-  "Charter ($)" : "42,037,500",
-  "Heel Revenue ($)" : "0",
-  "Ballast bonus ($)" : "0",
-  "Repositioning fee ($)" : "0",
-  "Heel Cost ($)" : "1,687,500",
-  "Sum - BOG($)" : "43,805,000",
-  "Sum ($)" : "50,662,509",
-  "Cooldown ($)" : "0",
-  "#Cargoes" : "4",
-  "Charter Out (virtual) delta (change set)" : {
-    "Days" : "0.0",
-    "Revenue" : "0"
-  }
-}, {
-  "Scenario" : "2 -O- late and lost-DES backfill -F- Bonny",
-  "Vessel" : "Methane Becki Anne (170k)",
-  "Route ($)" : "0",
-  "LNG ($)" : "7,991,946",
-  "Base Fuel ($)" : "0",
-  "Port ($)" : "140,000",
-  "Charter ($)" : "0",
-  "Heel Revenue ($)" : "0",
-  "Ballast bonus ($)" : "0",
-  "Repositioning fee ($)" : "0",
-  "Heel Cost ($)" : "0",
-  "Sum - BOG($)" : "140,000",
-  "Sum ($)" : "8,131,946",
-  "Cooldown ($)" : "0",
-  "#Cargoes" : "7",
-  "Charter Out (virtual) delta (change set)" : {
-    "Days" : "0.0",
-    "Revenue" : "0"
-  }
-}, {
-  "Scenario" : "2 -O- late and lost-DES backfill -F- Bonny",
-  "Vessel" : "Methane Heather Sally (149k)",
-  "Route ($)" : "30,000",
-  "LNG ($)" : "6,078,853",
-  "Base Fuel ($)" : "52,083",
-  "Port ($)" : "60,000",
-  "Charter ($)" : "0",
-  "Heel Revenue ($)" : "0",
-  "Ballast bonus ($)" : "0",
-  "Repositioning fee ($)" : "0",
-  "Heel Cost ($)" : "0",
-  "Sum - BOG($)" : "375,555",
-  "Sum ($)" : "6,454,408",
-  "Cooldown ($)" : "233,472",
-  "#Cargoes" : "3",
-  "Charter Out (virtual) delta (change set)" : {
-    "Days" : "0.0",
-    "Revenue" : "0"
-  }
-}, {
-  "Scenario" : "2 -O- late and lost-DES backfill -F- Bonny",
-  "Vessel" : "Methane Julia Louise (170k)",
   "Route ($)" : "80,000",
-  "LNG ($)" : "6,917,168",
-  "Base Fuel ($)" : "0",
-  "Port ($)" : "80,000",
-  "Charter ($)" : "0",
-  "Heel Revenue ($)" : "0",
-  "Ballast bonus ($)" : "0",
-  "Repositioning fee ($)" : "0",
+  "Charter ($)" : "23,774,996",
+  "Cooldown ($)" : "0",
+  "Charter Out (virtual) delta (change set)" : {
+    "Days" : "0.0",
+    "Revenue" : "0"
+  },
   "Heel Cost ($)" : "0",
+  "Heel Revenue ($)" : "0",
+  "LNG ($)" : "6,503,394",
+  "#Cargoes" : "4",
+  "Port ($)" : "80,000",
+  "Repositioning fee ($)" : "0",
+  "Scenario" : "2 -O- late and lost-DES backfill -F- Bonny",
+  "Sum ($)" : "30,461,306",
+  "Sum - BOG($)" : "23,957,912",
+  "Vessel" : "Bluesky (145k)"
+}, {
+  "Ballast bonus ($)" : "0",
+  "Base Fuel ($)" : "0",
+  "Route ($)" : "0",
+  "Charter ($)" : "42,037,500",
+  "Cooldown ($)" : "0",
+  "Charter Out (virtual) delta (change set)" : {
+    "Days" : "0.0",
+    "Revenue" : "0"
+  },
+  "Heel Cost ($)" : "1,687,500",
+  "Heel Revenue ($)" : "0",
+  "LNG ($)" : "6,860,311",
+  "#Cargoes" : "4",
+  "Port ($)" : "80,000",
+  "Repositioning fee ($)" : "0",
+  "Scenario" : "2 -O- late and lost-DES backfill -F- Bonny",
+  "Sum ($)" : "50,665,311",
+  "Sum - BOG($)" : "43,805,000",
+  "Vessel" : "Charter Ship (170k)"
+}, {
+  "Ballast bonus ($)" : "0",
+  "Base Fuel ($)" : "0",
+  "Route ($)" : "0",
+  "Charter ($)" : "0",
+  "Cooldown ($)" : "0",
+  "Charter Out (virtual) delta (change set)" : {
+    "Days" : "0.0",
+    "Revenue" : "0"
+  },
+  "Heel Cost ($)" : "0",
+  "Heel Revenue ($)" : "0",
+  "LNG ($)" : "8,161,703",
+  "#Cargoes" : "7",
+  "Port ($)" : "140,000",
+  "Repositioning fee ($)" : "0",
+  "Scenario" : "2 -O- late and lost-DES backfill -F- Bonny",
+  "Sum ($)" : "8,301,703",
+  "Sum - BOG($)" : "140,000",
+  "Vessel" : "Methane Becki Anne (170k)"
+}, {
+  "Ballast bonus ($)" : "0",
+  "Base Fuel ($)" : "52,083",
+  "Route ($)" : "30,000",
+  "Charter ($)" : "0",
+  "Cooldown ($)" : "231,424",
+  "Charter Out (virtual) delta (change set)" : {
+    "Days" : "0.0",
+    "Revenue" : "0"
+  },
+  "Heel Cost ($)" : "0",
+  "Heel Revenue ($)" : "0",
+  "LNG ($)" : "6,830,430",
+  "#Cargoes" : "3",
+  "Port ($)" : "60,000",
+  "Repositioning fee ($)" : "0",
+  "Scenario" : "2 -O- late and lost-DES backfill -F- Bonny",
+  "Sum ($)" : "7,203,937",
+  "Sum - BOG($)" : "373,507",
+  "Vessel" : "Methane Heather Sally (149k)"
+}, {
+  "Ballast bonus ($)" : "0",
+  "Base Fuel ($)" : "0",
+  "Route ($)" : "80,000",
+  "Charter ($)" : "0",
+  "Cooldown ($)" : "0",
+  "Charter Out (virtual) delta (change set)" : {
+    "Days" : "0.0",
+    "Revenue" : "0"
+  },
+  "Heel Cost ($)" : "0",
+  "Heel Revenue ($)" : "0",
+  "LNG ($)" : "7,366,213",
+  "#Cargoes" : "4",
+  "Port ($)" : "80,000",
+  "Repositioning fee ($)" : "0",
+  "Scenario" : "2 -O- late and lost-DES backfill -F- Bonny",
+  "Sum ($)" : "7,526,213",
   "Sum - BOG($)" : "160,000",
-  "Sum ($)" : "7,077,168",
-  "Cooldown ($)" : "0",
-  "#Cargoes" : "4",
-  "Charter Out (virtual) delta (change set)" : {
-    "Days" : "0.0",
-    "Revenue" : "0"
-  }
+  "Vessel" : "Methane Julia Louise (170k)"
 }, {
-  "Scenario" : "2 -O- late and lost-DES backfill -F- Bonny",
-  "Vessel" : "Methane Lydon Volney (149k)",
-  "Route ($)" : "30,000",
-  "LNG ($)" : "7,267,947",
+  "Ballast bonus ($)" : "0",
   "Base Fuel ($)" : "2,083",
-  "Port ($)" : "80,000",
+  "Route ($)" : "530,962",
   "Charter ($)" : "0",
-  "Heel Revenue ($)" : "0",
-  "Ballast bonus ($)" : "0",
-  "Repositioning fee ($)" : "0",
-  "Heel Cost ($)" : "0",
-  "Sum - BOG($)" : "112,083",
-  "Sum ($)" : "7,380,030",
   "Cooldown ($)" : "0",
-  "#Cargoes" : "4",
   "Charter Out (virtual) delta (change set)" : {
     "Days" : "0.0",
     "Revenue" : "0"
-  }
-}, {
-  "Scenario" : "2 -O- late and lost-DES backfill -F- Bonny",
-  "Vessel" : "Methane Princess (138k)",
-  "Route ($)" : "30,000",
-  "LNG ($)" : "5,514,480",
-  "Base Fuel ($)" : "0",
+  },
+  "Heel Cost ($)" : "0",
+  "Heel Revenue ($)" : "0",
+  "LNG ($)" : "7,422,727",
+  "#Cargoes" : "4",
   "Port ($)" : "80,000",
-  "Charter ($)" : "26,929,163",
-  "Heel Revenue ($)" : "0",
-  "Ballast bonus ($)" : "0",
   "Repositioning fee ($)" : "0",
-  "Heel Cost ($)" : "0",
-  "Sum - BOG($)" : "27,039,163",
-  "Sum ($)" : "32,553,643",
+  "Scenario" : "2 -O- late and lost-DES backfill -F- Bonny",
+  "Sum ($)" : "8,035,772",
+  "Sum - BOG($)" : "613,045",
+  "Vessel" : "Methane Lydon Volney (149k)"
+}, {
+  "Ballast bonus ($)" : "0",
+  "Base Fuel ($)" : "0",
+  "Route ($)" : "30,000",
+  "Charter ($)" : "26,929,162",
   "Cooldown ($)" : "0",
-  "#Cargoes" : "4",
   "Charter Out (virtual) delta (change set)" : {
     "Days" : "0.0",
     "Revenue" : "0"
-  }
+  },
+  "Heel Cost ($)" : "0",
+  "Heel Revenue ($)" : "0",
+  "LNG ($)" : "5,747,501",
+  "#Cargoes" : "4",
+  "Port ($)" : "80,000",
+  "Repositioning fee ($)" : "0",
+  "Scenario" : "2 -O- late and lost-DES backfill -F- Bonny",
+  "Sum ($)" : "32,786,663",
+  "Sum - BOG($)" : "27,039,162",
+  "Vessel" : "Methane Princess (138k)"
 } ]

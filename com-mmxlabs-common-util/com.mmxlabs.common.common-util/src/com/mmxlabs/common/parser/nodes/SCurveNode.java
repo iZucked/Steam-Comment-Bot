@@ -10,8 +10,8 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 public class SCurveNode extends AbstractMarkedUpNode {
 
 	private final MarkedUpNode base;
-	private final double lowerThan;
-	private final double higherThan;
+	private final double firstThreshold;
+	private final double secondThreshold;
 	private double a1;
 	private double b1;
 	private double a2;
@@ -19,10 +19,10 @@ public class SCurveNode extends AbstractMarkedUpNode {
 	private double a3;
 	private double b3;
 
-	public SCurveNode(final MarkedUpNode base, final double lowerThan, final double higherThan, final double a1, double b1, double a2, double b2, double a3, double b3) {
+	public SCurveNode(final MarkedUpNode base, final double firstThreshold, final double secondThreshold, final double a1, double b1, double a2, double b2, double a3, double b3) {
 		this.base = base;
-		this.lowerThan = lowerThan;
-		this.higherThan = higherThan;
+		this.firstThreshold = firstThreshold;
+		this.secondThreshold = secondThreshold;
 		this.a1 = a1;
 		this.b1 = b1;
 		this.a2 = a2;
@@ -59,11 +59,11 @@ public class SCurveNode extends AbstractMarkedUpNode {
 		return base;
 	}
 
-	public double getLowerThan() {
-		return lowerThan;
+	public double getFirstThreshold() {
+		return firstThreshold;
 	}
 
-	public double getHigherThan() {
-		return higherThan;
+	public double getSecondThreshold() {
+		return secondThreshold;
 	}
 }

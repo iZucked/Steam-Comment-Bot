@@ -1,3 +1,21 @@
 [ {
-  "Pre-booked" : "No"
+  "Schedule" : "0 base",
+  "Pre-booked" : "No",
+  "Canal" : "PANAMA",
+  "Canal Entry" : "Northside",
+  "Date" : "11/02/11",
+  "Event" : "load-cargo-48",
+  "Next Slot" : "discharge-cargo-48 15/03/11",
+  "Next Slot Port" : "Pyeongtaek",
+  "Next Slot Window Start" : "15/03/11",
+  "Next Slot Window End" : "15/03/11",
+  "Period" : "Open"
+}, {
+  "Schedule" : "0 base",
+  "Pre-booked" : "No",
+  "Canal" : "PANAMA",
+  "Canal Entry" : "Southside",
+  "Date" : "04/07/11",
+  "Event" : "discharge-cargo-60",
+  "Period" : "Open"
 } ]

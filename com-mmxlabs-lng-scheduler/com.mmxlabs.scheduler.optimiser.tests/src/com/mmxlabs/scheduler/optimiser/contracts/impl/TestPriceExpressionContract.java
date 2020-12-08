@@ -33,7 +33,6 @@ import com.mmxlabs.scheduler.optimiser.curves.IIntegerIntervalCurve;
 import com.mmxlabs.scheduler.optimiser.curves.IPriceIntervalProducer;
 import com.mmxlabs.scheduler.optimiser.curves.IntegerIntervalCurve;
 import com.mmxlabs.scheduler.optimiser.curves.PriceIntervalProducer;
-import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
@@ -122,10 +121,8 @@ public class TestPriceExpressionContract {
 		final int dischargePricePerMMBTu = 40;
 		final long dischargeVolumeInM3 = 100;
 		final long loadVolumeInM3 = 200;
-		final int vesselStartTime = 0;
 		final IVesselAvailability vesselAvailability = mock(IVesselAvailability.class);
 		final VoyagePlan plan = new VoyagePlan();
-		final ProfitAndLossSequences volumeAllocatedSequences = Mockito.mock(ProfitAndLossSequences.class);
 
 		final IDetailTree annotations = mock(IDetailTree.class);
 
@@ -138,11 +135,11 @@ public class TestPriceExpressionContract {
 		when(allocationAnnotation.getCommercialSlotVolumeInM3(loadSlotWithPricingDate)).thenReturn(loadVolumeInM3);
 		when(allocationAnnotation.getCommercialSlotVolumeInM3(dischargeSlot)).thenReturn(dischargeVolumeInM3);
 
-		final int loadPriceWithPricingDate = contract.calculateFOBPricePerMMBTu(loadSlotWithPricingDate, dischargeSlot, dischargePricePerMMBTu, allocationAnnotation, vesselAvailability,
-				vesselStartTime, plan, volumeAllocatedSequences, annotations);
+		final int loadPriceWithPricingDate = contract.calculateFOBPricePerMMBTu(loadSlotWithPricingDate, dischargeSlot, dischargePricePerMMBTu, allocationAnnotation, vesselAvailability, plan, null,
+				annotations);
 
-		final int loadPriceNoPricingDate = contract.calculateFOBPricePerMMBTu(loadSlotNoPricingDate, dischargeSlot, dischargePricePerMMBTu, allocationAnnotation, vesselAvailability, vesselStartTime,
-				plan, volumeAllocatedSequences, annotations);
+		final int loadPriceNoPricingDate = contract.calculateFOBPricePerMMBTu(loadSlotNoPricingDate, dischargeSlot, dischargePricePerMMBTu, allocationAnnotation, vesselAvailability, plan, null,
+				annotations);
 
 		verify(curve).getValueAtPoint(loadPricingDate);
 		verify(curve).getValueAtPoint(loadTime);

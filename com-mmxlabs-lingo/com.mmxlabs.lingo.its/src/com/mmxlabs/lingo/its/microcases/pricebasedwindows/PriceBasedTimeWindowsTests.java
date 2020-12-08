@@ -24,6 +24,7 @@ import com.mmxlabs.lingo.its.tests.microcases.AbstractLegacyMicroTestCase;
 import com.mmxlabs.lingo.its.tests.microcases.MicroCaseDateUtils;
 import com.mmxlabs.lingo.its.tests.microcases.MicroCaseUtils;
 import com.mmxlabs.lingo.its.tests.microcases.TimeWindowsTestsUtils;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -103,12 +104,12 @@ public class PriceBasedTimeWindowsTests extends AbstractLegacyMicroTestCase {
 
 		// Create cargo 1
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase(loadName, LocalDate.of(2016, 7, 1), portFinder.findPort("Bonny Nigeria"), null, entity, "5", 23.4) //
+				.makeFOBPurchase(loadName, LocalDate.of(2016, 7, 1), portFinder.findPortById(InternalDataConstants.PORT_BONNY), null, entity, "5", 23.4) //
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.withWindowStartTime(0) //
 				.withWindowSize(0, TimePeriod.HOURS).build() //
 				//
-				.makeDESSale(dischargeName, LocalDate.of(2016, 7, 1), portFinder.findPort("Incheon"), null, entity, "10") //
+				.makeDESSale(dischargeName, LocalDate.of(2016, 7, 1), portFinder.findPortById(InternalDataConstants.PORT_INCHEON), null, entity, "10") //
 				.withWindowStartTime(0) //
 				.withWindowSize(0, TimePeriod.HOURS).build() //
 				.build();
@@ -204,11 +205,11 @@ public class PriceBasedTimeWindowsTests extends AbstractLegacyMicroTestCase {
 
 		// Construct the cargo scenario
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase(loadName, LocalDate.of(2016, 7, 1), portFinder.findPort("Bonny Nigeria"), null, entity, "Henry_Hub", 23.4) //
+				.makeFOBPurchase(loadName, LocalDate.of(2016, 7, 1), portFinder.findPortById(InternalDataConstants.PORT_BONNY), null, entity, "Henry_Hub", 23.4) //
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.withWindowStartTime(0) //
 				.withWindowSize(5, TimePeriod.HOURS).build() //
-				.makeDESSale(dischargeName, LocalDate.of(2016, 8, 21), portFinder.findPort("Incheon"), null, entity, "Henry_Hub") //
+				.makeDESSale(dischargeName, LocalDate.of(2016, 8, 21), portFinder.findPortById(InternalDataConstants.PORT_INCHEON), null, entity, "Henry_Hub") //
 				.withWindowStartTime(0) //
 				.withWindowSize(5, TimePeriod.HOURS).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
@@ -269,11 +270,11 @@ public class PriceBasedTimeWindowsTests extends AbstractLegacyMicroTestCase {
 
 		// Construct the cargo scenario
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase(loadName, LocalDate.of(2016, 7, 1), portFinder.findPort("Bonny Nigeria"), null, entity, "Henry_Hub", 23.4) //
+				.makeFOBPurchase(loadName, LocalDate.of(2016, 7, 1), portFinder.findPortById(InternalDataConstants.PORT_BONNY), null, entity, "Henry_Hub", 23.4) //
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.withWindowStartTime(0) //
 				.withWindowSize(5, TimePeriod.HOURS).build() //
-				.makeDESSale(dischargeName, LocalDate.of(2016, 8, 21), portFinder.findPort("Incheon"), null, entity, "Henry_Hub") //
+				.makeDESSale(dischargeName, LocalDate.of(2016, 8, 21), portFinder.findPortById(InternalDataConstants.PORT_INCHEON), null, entity, "Henry_Hub") //
 				.withWindowStartTime(0) //
 				.withWindowSize(24, TimePeriod.HOURS).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
@@ -345,11 +346,11 @@ public class PriceBasedTimeWindowsTests extends AbstractLegacyMicroTestCase {
 		// Construct the cargo scenario
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase(loadName, LocalDate.of(2016, 7, 1), portFinder.findPort("Bonny Nigeria"), null, entity, "Henry_Hub", 23.4) //
+				.makeFOBPurchase(loadName, LocalDate.of(2016, 7, 1), portFinder.findPortById(InternalDataConstants.PORT_BONNY), null, entity, "Henry_Hub", 23.4) //
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.withWindowStartTime(0) //
 				.withWindowSize(5, TimePeriod.HOURS).build() //
-				.makeDESSale(dischargeName, LocalDate.of(2016, 8, 31), portFinder.findPort("Dragon LNG"), null, entity, "Henry_Hub") //
+				.makeDESSale(dischargeName, LocalDate.of(2016, 8, 31), portFinder.findPortById(InternalDataConstants.PORT_DRAGON), null, entity, "Henry_Hub") //
 				.withWindowStartTime(0) //
 				.withWindowSize(23, TimePeriod.HOURS).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
@@ -412,11 +413,11 @@ public class PriceBasedTimeWindowsTests extends AbstractLegacyMicroTestCase {
 
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase(loadName, LocalDate.of(2016, 7, 1), portFinder.findPort("Bonny Nigeria"), null, entity, "Henry_Hub", 23.4) //
+				.makeFOBPurchase(loadName, LocalDate.of(2016, 7, 1), portFinder.findPortById(InternalDataConstants.PORT_BONNY), null, entity, "Henry_Hub", 23.4) //
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.withWindowStartTime(0) //
 				.withWindowSize(5, TimePeriod.HOURS).build() //
-				.makeDESSale(dischargeName, LocalDate.of(2016, 8, 31), portFinder.findPort("Dragon LNG"), null, entity, "Henry_Hub") //
+				.makeDESSale(dischargeName, LocalDate.of(2016, 8, 31), portFinder.findPortById(InternalDataConstants.PORT_DRAGON), null, entity, "Henry_Hub") //
 				.withWindowStartTime(0) //
 				.withWindowSize(24, TimePeriod.HOURS).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
@@ -487,11 +488,11 @@ public class PriceBasedTimeWindowsTests extends AbstractLegacyMicroTestCase {
 		// Construct the cargo scenario
 		final double salesPrice = 8.87;
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase(loadName, LocalDate.of(2016, 7, 1), portFinder.findPort("Bonny Nigeria"), null, entity, "Henry_Hub", 23.4) //
+				.makeFOBPurchase(loadName, LocalDate.of(2016, 7, 1), portFinder.findPortById(InternalDataConstants.PORT_BONNY), null, entity, "Henry_Hub", 23.4) //
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.withWindowStartTime(0) //
 				.withWindowSize(5, TimePeriod.HOURS).build() //
-				.makeDESSale(dischargeName, LocalDate.of(2016, 7, 31), portFinder.findPort("Dragon LNG"), null, entity, "Henry_Hub") //
+				.makeDESSale(dischargeName, LocalDate.of(2016, 7, 31), portFinder.findPortById(InternalDataConstants.PORT_DRAGON), null, entity, "Henry_Hub") //
 				.withWindowStartTime(0) //
 				.withWindowSize(3, TimePeriod.MONTHS).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
@@ -559,11 +560,11 @@ public class PriceBasedTimeWindowsTests extends AbstractLegacyMicroTestCase {
 		// Construct the cargo scenario
 		final double salesPrice = 8.86;
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase(loadName, LocalDate.of(2016, 7, 1), portFinder.findPort("Bonny Nigeria"), null, entity, "Henry_Hub", 23.4) //
+				.makeFOBPurchase(loadName, LocalDate.of(2016, 7, 1), portFinder.findPortById(InternalDataConstants.PORT_BONNY), null, entity, "Henry_Hub", 23.4) //
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.withWindowStartTime(0) //
 				.withWindowSize(5, TimePeriod.HOURS).build() //
-				.makeDESSale(dischargeName, LocalDate.of(2016, 7, 31), portFinder.findPort("Dragon LNG"), null, entity, "Henry_Hub") //
+				.makeDESSale(dischargeName, LocalDate.of(2016, 7, 31), portFinder.findPortById(InternalDataConstants.PORT_DRAGON), null, entity, "Henry_Hub") //
 				.withWindowStartTime(0) //
 				.withWindowSize(24000, TimePeriod.HOURS).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
@@ -627,11 +628,11 @@ public class PriceBasedTimeWindowsTests extends AbstractLegacyMicroTestCase {
 		// Construct the cargo scenario
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase(loadName, LocalDate.of(2016, 7, 1), portFinder.findPort("Bonny Nigeria"), null, entity, "Henry_Hub", 23.4) //
+				.makeFOBPurchase(loadName, LocalDate.of(2016, 7, 1), portFinder.findPortById(InternalDataConstants.PORT_BONNY), null, entity, "Henry_Hub", 23.4) //
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.withWindowStartTime(0) //
 				.withWindowSize(0, TimePeriod.HOURS).build() //
-				.makeDESSale(dischargeName, LocalDate.of(2016, 8, 21), portFinder.findPort("Incheon"), null, entity, "Henry_Hub") //
+				.makeDESSale(dischargeName, LocalDate.of(2016, 8, 21), portFinder.findPortById(InternalDataConstants.PORT_INCHEON), null, entity, "Henry_Hub") //
 				.withWindowStartTime(0) //
 				.withWindowSize(0, TimePeriod.HOURS).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
@@ -705,7 +706,7 @@ public class PriceBasedTimeWindowsTests extends AbstractLegacyMicroTestCase {
 		charterInMarket.setEnabled(true);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase(loadName, LocalDate.of(2018, 9, 1), portFinder.findPort("Bonny Nigeria"), null, entity, "5", 23.4) //
+				.makeFOBPurchase(loadName, LocalDate.of(2018, 9, 1), portFinder.findPortById(InternalDataConstants.PORT_BONNY), null, entity, "5", 23.4) //
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.withWindowStartTime(0) //
 				.withVisitDuration(24) //
@@ -713,7 +714,7 @@ public class PriceBasedTimeWindowsTests extends AbstractLegacyMicroTestCase {
 				.withPricingEvent(PricingEvent.START_LOAD, null) //
 				.build() //
 				//
-				.makeDESSale(dischargeName, LocalDate.of(2018, 11, 30), portFinder.findPort("Dahej"), null, entity, "Test") //
+				.makeDESSale(dischargeName, LocalDate.of(2018, 11, 30), portFinder.findPortById(InternalDataConstants.PORT_DAHEJ), null, entity, "Test") //
 				.withVisitDuration(24) //
 				.withWindowStartTime(0) //
 				.withWindowSize(2, TimePeriod.DAYS) //

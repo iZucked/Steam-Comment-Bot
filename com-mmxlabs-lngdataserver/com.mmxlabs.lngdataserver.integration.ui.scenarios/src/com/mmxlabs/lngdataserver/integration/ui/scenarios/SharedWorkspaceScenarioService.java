@@ -30,6 +30,7 @@ import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.SharedWorkspacePat
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.SharedWorkspaceServiceClient;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.internal.SharedScenarioUpdater;
 import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.locking.WellKnownTriggers;
 import com.mmxlabs.scenario.service.manifest.Manifest;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
@@ -197,15 +198,17 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 		}
 
 		client = new SharedWorkspaceServiceClient();
+		WellKnownTriggers.WORKSPACE_DATA_ENCRYPTION_CHECK.delayUntilTriggered(() -> {
 
-		// Initial model load
-		new Thread(() -> {
+			// Initial model load
+			new Thread(() -> {
 
-			getServiceModel();
-			setReady();
-			this.updater = new SharedScenarioUpdater(serviceModel, baseCaseFolder, client);
-			updater.start();
-		}).start();
+				getServiceModel();
+				setReady();
+				this.updater = new SharedScenarioUpdater(serviceModel, baseCaseFolder, client);
+				updater.start();
+			}).start();
+		});
 	}
 
 	public void stop() {

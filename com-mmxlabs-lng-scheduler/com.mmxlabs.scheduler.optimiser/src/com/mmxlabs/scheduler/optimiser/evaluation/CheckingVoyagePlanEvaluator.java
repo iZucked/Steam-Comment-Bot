@@ -43,6 +43,13 @@ public class CheckingVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 	}
 
 	@Override
+	public @NonNull List<@NonNull ScheduledVoyagePlanResult> evaluateRoundTrip(@NonNull IResource resource, @NonNull IVesselAvailability vesselAvailability,
+			@NonNull ICharterCostCalculator charterCostCalculator, @NonNull IPortTimesRecord portTimesRecord, boolean returnAll, boolean keepDetails, @Nullable IAnnotatedSolution annotatedSolution) {
+
+		return delegate.evaluateRoundTrip(resource, vesselAvailability, charterCostCalculator, portTimesRecord, returnAll, keepDetails, annotatedSolution);
+	}
+
+	@Override
 	public @NonNull List<@NonNull ScheduledVoyagePlanResult> evaluateShipped(@NonNull IResource resource, @NonNull IVesselAvailability vesselAvailability, ICharterCostCalculator charterCostCalculator,
 			int vesselStartTime, @NonNull PreviousHeelRecord previousHeelRecord, @NonNull IPortTimesRecord portTimesRecord, boolean lastPlan, boolean returnAll, boolean keepDetails,
 			@Nullable IAnnotatedSolution annotatedSolution) {
@@ -85,12 +92,12 @@ public class CheckingVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 	}
 
 	@Override
-	public @NonNull ScheduledVoyagePlanResult evaluateNonShipped(@NonNull IResource resource, @NonNull IVesselAvailability vesselAvailability, int vesselStartTime,
-			@NonNull IPortTimesRecord portTimesRecord, boolean keepDetails, @Nullable IAnnotatedSolution annotatedSolution) {
+	public @NonNull ScheduledVoyagePlanResult evaluateNonShipped(@NonNull IResource resource, @NonNull IVesselAvailability vesselAvailability, @NonNull IPortTimesRecord portTimesRecord,
+			boolean keepDetails, @Nullable IAnnotatedSolution annotatedSolution) {
 		long a = System.currentTimeMillis();
-		final ScheduledVoyagePlanResult value_d = delegate.evaluateNonShipped(resource, vesselAvailability, vesselStartTime, portTimesRecord, keepDetails, annotatedSolution);
+		final ScheduledVoyagePlanResult value_d = delegate.evaluateNonShipped(resource, vesselAvailability, portTimesRecord, keepDetails, annotatedSolution);
 		long b = System.currentTimeMillis();
-		final ScheduledVoyagePlanResult value_r = reference.evaluateNonShipped(resource, vesselAvailability, vesselStartTime, portTimesRecord, keepDetails, annotatedSolution);
+		final ScheduledVoyagePlanResult value_r = reference.evaluateNonShipped(resource, vesselAvailability, portTimesRecord, keepDetails, annotatedSolution);
 		long c = System.currentTimeMillis();
 
 		delegateSeconds += (b - a);

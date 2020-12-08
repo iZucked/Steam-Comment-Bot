@@ -2,6 +2,7 @@
   "Schedule" : "/scenarios/sample-data/",
   "ID" : "cargo-22",
   "Type" : "Load",
+  "Vessel" : "Charter Ship",
   "Lateness" : "17d, 23h",
   "Start by" : "11/02/11 14:00",
   "Scheduled time" : "01/03/11 13:00"
@@ -9,6 +10,7 @@
   "Schedule" : "/scenarios/sample-data/",
   "ID" : "discharge-cargo-22",
   "Type" : "Discharge",
+  "Vessel" : "Charter Ship",
   "Lateness" : "10d, 19h",
   "Start by" : "07/03/11 14:00",
   "Scheduled time" : "18/03/11 09:00"

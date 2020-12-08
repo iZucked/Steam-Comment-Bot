@@ -288,35 +288,37 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 
 			failures.add(status);
 		} else {
-			ServiceHelper.withCheckedServiceConsumer(IShippingDaysRestrictionSpeedProvider.class, shippingDaysSpeedProvider -> {
+			ServiceHelper.withCheckedOptionalServiceConsumer(IShippingDaysRestrictionSpeedProvider.class, shippingDaysSpeedProvider -> {
+				if (shippingDaysSpeedProvider != null) {
+					final LNGScenarioModel scenarioModel = getScenarioModel(extraContext);
+					if (scenarioModel != null) {
+						final int travelTime;
+						if (from.isDESPurchase()) {
+							travelTime = CargoTravelTimeUtils.getDivertibleDESMinRouteTimeInHours(from, from, to, shippingDaysSpeedProvider, ScenarioModelUtil.getPortModel(scenarioModel), vessel,
+									CargoTravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, from, vessel, true),
+									extraContext.getScenarioDataProvider().getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class));
+						} else {
+							travelTime = CargoTravelTimeUtils.getDivertibleFOBMinRouteTimeInHours(to, from, to, shippingDaysSpeedProvider, ScenarioModelUtil.getPortModel(scenarioModel), vessel,
+									CargoTravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, from, vessel, true),
+									extraContext.getScenarioDataProvider().getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class));
+						}
+						int slotDur = from.getSchedulingTimeWindow().getDuration();
+						final boolean isCP = from.isWindowCounterParty();
+						if (travelTime + from.getSchedulingTimeWindow().getDuration() > windowLength) {
+							// final String message = String.format("Purchase %s is being shipped to %s but the laden leg (%s travel, %s loading) is greater than the shortest journey by %s.",
+							// from.getName(), to.getPort().getName(), TravelTimeUtils.formatShortHours(travelTime),TravelTimeUtils.formatShortHours(slotDur),
+							// TravelTimeUtils.formatHours((travelTime + slotDur) - windowLength));
+							final String message = String.format(
+									"Purchase '%s': Laden leg to %s is too long: %s " + (isCP ? "C/P window and " : "") + "loading, %s travel is %s more than the %s available.", from.getName(),
+									to.getPort().getName(), TravelTimeUtils.formatShortHours(slotDur), TravelTimeUtils.formatShortHours(travelTime),
+									TravelTimeUtils.formatShortHours((travelTime + slotDur) - windowLength), TravelTimeUtils.formatShortHours(windowLength));
+							final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
+							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.WARNING);
+							dsd.addEObjectAndFeature(cargo, CargoPackage.eINSTANCE.getCargoModel_Cargoes());
+							dsd.setTag(ValidationConstants.TAG_TRAVEL_TIME);
 
-				final LNGScenarioModel scenarioModel = getScenarioModel(extraContext);
-				if (scenarioModel != null) {
-					final int travelTime;
-					if (from.isDESPurchase()) {
-						travelTime = CargoTravelTimeUtils.getDivertibleDESMinRouteTimeInHours(from, from, to, shippingDaysSpeedProvider, ScenarioModelUtil.getPortModel(scenarioModel), vessel,
-								CargoTravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, from, vessel, true),
-								extraContext.getScenarioDataProvider().getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class));
-					} else {
-						travelTime = CargoTravelTimeUtils.getDivertibleFOBMinRouteTimeInHours(to, from, to, shippingDaysSpeedProvider, ScenarioModelUtil.getPortModel(scenarioModel), vessel,
-								CargoTravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, from, vessel, true),
-								extraContext.getScenarioDataProvider().getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class));
-					}
-					int slotDur = from.getSchedulingTimeWindow().getDuration();
-					final boolean isCP = from.isWindowCounterParty();
-					if (travelTime + from.getSchedulingTimeWindow().getDuration() > windowLength) {
-						// final String message = String.format("Purchase %s is being shipped to %s but the laden leg (%s travel, %s loading) is greater than the shortest journey by %s.",
-						// from.getName(), to.getPort().getName(), TravelTimeUtils.formatShortHours(travelTime),TravelTimeUtils.formatShortHours(slotDur),
-						// TravelTimeUtils.formatHours((travelTime + slotDur) - windowLength));
-						final String message = String.format("Purchase '%s': Laden leg to %s is too long: %s " + (isCP ? "C/P window and " : "")  + "loading, %s travel is %s more than the %s available.", from.getName(),
-								to.getPort().getName(), TravelTimeUtils.formatShortHours(slotDur), TravelTimeUtils.formatShortHours(travelTime),
-								TravelTimeUtils.formatShortHours((travelTime + slotDur) - windowLength), TravelTimeUtils.formatShortHours(windowLength));
-						final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.WARNING);
-						dsd.addEObjectAndFeature(cargo, CargoPackage.eINSTANCE.getCargoModel_Cargoes());
-						dsd.setTag(ValidationConstants.TAG_TRAVEL_TIME);
-
-						failures.add(dsd);
+							failures.add(dsd);
+						}
 					}
 				}
 			});

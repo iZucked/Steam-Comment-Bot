@@ -27,8 +27,16 @@ public class TestDataGenerator {
 		String workspace = System.getProperty("osgi.instance.area");
 
 		if (workspace != null && !workspace.isEmpty()) {
+
+			String prefix;
+			if (System.getProperty("os.name").startsWith("Windows")) {
+				prefix = "file:/";
+			} else {
+				prefix = "file:";
+			}
+
 			// Note: Currently breaks on windows. Needs a different file:/// prefix
-			final File tempFile = Files.createFile(Path.of(workspace.replaceAll("file:", ""), "testdatabundle.zip")).toFile();
+			final File tempFile = Files.createFile(Path.of(workspace.replaceAll(prefix, ""), "testdatabundle.zip")).toFile();
 			final ScenarioBuilder sb = ScenarioBuilder.initialiseBasicScenario();
 			sb.loadDefaultData();
 			sb.createDummyPricingData();

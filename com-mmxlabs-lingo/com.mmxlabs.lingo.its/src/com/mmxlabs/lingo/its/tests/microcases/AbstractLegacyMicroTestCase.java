@@ -83,7 +83,7 @@ public abstract class AbstractLegacyMicroTestCase {
 
 	@NonNull
 	public IScenarioDataProvider importReferenceData() throws Exception {
-		return importReferenceData("/referencedata/reference-data-1/");
+		return importReferenceData("/referencedata/reference-data-2/");
 	}
 
 	public static void updateDistanceData(IScenarioDataProvider scenarioDataProvider, String key) throws Exception {

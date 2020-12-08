@@ -1,2 +1,2 @@
-name,kind
-Entity,LegalEntity
+name,thirdParty,kind
+Entity,false,LegalEntity

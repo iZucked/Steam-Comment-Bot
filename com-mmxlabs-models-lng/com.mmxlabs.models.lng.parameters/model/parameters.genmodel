@@ -19,6 +19,7 @@
       <genEnumLiterals ecoreEnumLiteral="parameters.ecore#//OptimisationMode/SHORT_TERM"/>
       <genEnumLiterals ecoreEnumLiteral="parameters.ecore#//OptimisationMode/ADP"/>
       <genEnumLiterals ecoreEnumLiteral="parameters.ecore#//OptimisationMode/STRATEGIC"/>
+      <genEnumLiterals ecoreEnumLiteral="parameters.ecore#//OptimisationMode/LONG_TERM"/>
     </genEnums>
     <genClasses ecoreClass="parameters.ecore#//UserSettings">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/mode"/>

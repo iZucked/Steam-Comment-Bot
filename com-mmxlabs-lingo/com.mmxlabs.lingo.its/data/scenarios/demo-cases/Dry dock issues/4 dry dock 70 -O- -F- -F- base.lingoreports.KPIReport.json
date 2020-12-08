@@ -1,25 +1,25 @@
 [ {
   "Schedule" : "4 dry dock 70 -O- -F- -F- base",
   "KPI" : "P&L",
-  "Value" : "$80,809,558"
+  "Value" : "$76,528,839"
 }, {
   "Schedule" : "4 dry dock 70 -O- -F- -F- base",
   "KPI" : "Trading P&L",
-  "Value" : "$81,708,849"
+  "Value" : "$77,444,240"
 }, {
   "Schedule" : "4 dry dock 70 -O- -F- -F- base",
   "KPI" : "Shipping P&L",
-  "Value" : "$-899,291"
+  "Value" : "$-915,401"
 }, {
   "Schedule" : "4 dry dock 70 -O- -F- -F- base",
   "KPI" : "Shipping Cost",
-  "Value" : "$39,543,997"
+  "Value" : "$42,153,082"
 }, {
   "Schedule" : "4 dry dock 70 -O- -F- -F- base",
   "KPI" : "Lateness",
-  "Value" : "22d, 3h"
+  "Value" : "25d, 12h"
 }, {
   "Schedule" : "4 dry dock 70 -O- -F- -F- base",
   "KPI" : "Idle Time",
-  "Value" : "382d, 21h"
+  "Value" : "324d, 21h"
 } ]

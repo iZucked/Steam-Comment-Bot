@@ -55,13 +55,13 @@ public class BaseCaseConstraint extends AbstractModelMultiConstraint {
 				// Second pass, report problem slots
 				processBaseCase(baseCase, (row, slot) -> {
 					if (duplicatedLoadSlots.contains(slot)) {
-						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Base case - existing slot used multiple times."));
+						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Sandbox|Base case - existing slot used multiple times."));
 						deco.addEObjectAndFeature(row, AnalyticsPackage.Literals.BASE_CASE_ROW__BUY_OPTION);
 						statuses.add(deco);
 					}
 				}, (row, slot) -> {
 					if (duplicatdDischargeSlots.contains(slot)) {
-						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Base case -existing slot used multiple times."));
+						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Sandbox|Base case -existing slot used multiple times."));
 						deco.addEObjectAndFeature(row, AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION);
 						statuses.add(deco);
 					}

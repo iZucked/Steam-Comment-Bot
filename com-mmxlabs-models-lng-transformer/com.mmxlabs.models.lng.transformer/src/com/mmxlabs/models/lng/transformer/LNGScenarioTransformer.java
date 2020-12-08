@@ -731,7 +731,7 @@ public class LNGScenarioTransformer {
 		}
 
 		for (final Port ePort : portModel.getPorts()) {
-			final IPort port = portProvider.getPortForMMXID(ePort.getLocation().getTempMMXID());
+			final IPort port = portProvider.getPortForMMXID(ePort.mmxID());
 			assert port != null;
 
 			final CooldownPrice eCooldownPrice = portToCooldownMap.get(ePort);

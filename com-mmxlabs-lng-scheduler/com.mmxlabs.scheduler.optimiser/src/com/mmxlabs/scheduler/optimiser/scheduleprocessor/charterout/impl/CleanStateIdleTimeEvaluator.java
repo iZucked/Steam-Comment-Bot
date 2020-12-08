@@ -98,12 +98,12 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 	private final int minDays = 60;
 
 	@Override
-	public @Nullable List<Pair<VoyagePlan, IPortTimesRecord>> processSchedule(final int vesselStartTime, final long[] startHeelVolumeRangeInM3, final IVesselAvailability vesselAvailability,
-			final VoyagePlan vp, final IPortTimesRecord portTimesRecord, @Nullable IAnnotatedSolution annotatedSolution) {
-		
+	public @Nullable List<Pair<VoyagePlan, IPortTimesRecord>> processSchedule(final long[] startHeelVolumeRangeInM3, final IVesselAvailability vesselAvailability, final VoyagePlan vp,
+			final IPortTimesRecord portTimesRecord, @Nullable IAnnotatedSolution annotatedSolution) {
+
 		if (true)
 			throw new UnsupportedOperationException("This should NOT really be used at the moment");
-		
+
 		if (!(vesselAvailability.getVesselInstanceType() == VesselInstanceType.FLEET || vesselAvailability.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER)) {
 			return null;
 		}
@@ -152,8 +152,7 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 
 			final ExtendedCharterOutSequence bigSequence = constructNewRawSequenceWithCharterOuts(vesselAvailability, currentSequence, gcoMarket, portTimesRecord, ballastIdx, ballastStartTime);
 
-			final VoyagePlan bigVoyagePlan = runVPOOnBigSequence(vesselAvailability.getVessel(), vp, vesselAvailability.getCharterCostCalculator(), startHeelVolumeRangeInM3, bigSequence,
-					vesselStartTime);
+			final VoyagePlan bigVoyagePlan = runVPOOnBigSequence(vesselAvailability.getVessel(), vp, vesselAvailability.getCharterCostCalculator(), startHeelVolumeRangeInM3, bigSequence);
 
 			final long remainingHeelInM3 = bigVoyagePlan.getRemainingHeelInM3();
 
@@ -180,7 +179,7 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 			// remaining heel may have been overwritten
 			upToCharterPlan.setRemainingHeelInM3(firstPlanRemainingHeel);
 
-			final IAllocationAnnotation preCharterAllocation = volumeAllocator.get().allocate(vesselAvailability, vesselStartTime, upToCharterPlan, preCharteringTimes, annotatedSolution);
+			final IAllocationAnnotation preCharterAllocation = volumeAllocator.get().allocate(vesselAvailability, upToCharterPlan, preCharteringTimes, annotatedSolution);
 
 			// add on delta to starting heel and remaining heel
 			if (preCharterAllocation != null) {
@@ -521,7 +520,7 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 	 * @return
 	 */
 	private @Nullable VoyagePlan runVPOOnBigSequence(final IVessel vessel, final VoyagePlan originalVoyagePlan, final ICharterCostCalculator charterCostCalculator,
-			final long[] startHeelVolumeRangeInM3, final ExtendedCharterOutSequence bigSequence, int startingTime) {
+			final long[] startHeelVolumeRangeInM3, final ExtendedCharterOutSequence bigSequence) {
 		// // We will use the VPO to optimise fuel and route choices
 		// vpo.reset();
 		//
@@ -562,11 +561,11 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 		// final VoyagePlan newVoyagePlan = vpo.optimise();
 
 		final VoyagePlan newVoyagePlan = vpo.optimise(null, vessel, startHeelVolumeRangeInM3, baseFuelPricesPerMT, charterCostCalculator, bigSequence.getPortTimesRecord(), bigSequence.getSequence(),
-				vpoChoices, startingTime);
+				vpoChoices);
 
 		return newVoyagePlan;
 	}
-	
+
 	private boolean isFirstSequenceElementIsLoadSlot(final ExtendedCharterOutSequence bigSequence) {
 		final IOptionsSequenceElement foo = bigSequence.getSequence().get(0);
 		if (foo instanceof PortOptions) {
@@ -577,7 +576,7 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 		}
 		return false;
 	}
-	
+
 	private boolean checkForNonEmptyHeel(final long[] startHeelRangeInM3) {
 		boolean nonEmptyHeel = true;
 		if (startHeelRangeInM3.length == 2) {

@@ -36,8 +36,12 @@ import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.BaseCaseServiceClient;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.BasecaseServiceLockedException;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.ReportsServiceClient;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.SupportedReportFormats;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.IReportContent;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.IReportPublisherExtension;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.ReportPublisherExtensionUtil;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.ReportPublisherRegistry;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.UnsupportedReportException;
 import com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard.SharedScenarioDataUtils.DataOptions;
 import com.mmxlabs.lngdataserver.lng.importers.menus.PublishBasecaseException.Type;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
@@ -57,6 +61,7 @@ import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.manager.SimpleScenarioDataProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 
 public class ScenarioServicePublishAction {
 	private static final Logger LOG = LoggerFactory.getLogger(ScenarioServicePublishAction.class);
@@ -109,7 +114,7 @@ public class ScenarioServicePublishAction {
 					break;
 				case FAILED_NOT_PERMITTED:
 					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_FAILED_PUBLISHING, "Insufficient permissions to publish base case.");
-					break;					
+					break;
 				case FAILED_TO_MIGRATE:
 					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUBLISHING,
 							"Failed to migrate the scenario to current data model version. Unable to publish as base case.");
@@ -120,7 +125,7 @@ public class ScenarioServicePublishAction {
 				case FAILED_TO_SAVE:
 					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUBLISHING, "Failed to save the base case scenario to a temporary file. Unable to publish as base case.");
 					break;
-					
+
 				case FAILED_SERVICE_LOCKED:
 					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_FAILED_PUBLISHING, "Base case locked by locked by another user.");
 					break;
@@ -134,7 +139,7 @@ public class ScenarioServicePublishAction {
 					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUBLISHING, "Error uploading refernce data. Unable to publish as base case.");
 					break;
 				case FAILED_TO_UPLOAD_REPORT:
-					
+
 					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUBLISHING, message + " Unable to publish as base case.");
 					break;
 				case FAILED_TO_MAKE_CURRENT:
@@ -155,14 +160,14 @@ public class ScenarioServicePublishAction {
 	}
 
 	public static void publishScenario(final ScenarioInstance scenarioInstance, final String notes, final IProgressMonitor parentProgressMonitor) {
-		
+
 		// Check user permission
 		if (UserPermissionsService.INSTANCE.hubSupportsPermissions()) {
 			if (!UserPermissionsService.INSTANCE.isPermitted("basecase", "publish")) {
 				throw new PublishBasecaseException("Error publishing scenario.", Type.FAILED_NOT_PERMITTED, new RuntimeException());
 			}
 		}
-		
+
 		{ // Early locked base case service check
 			Boolean serviceLocked;
 			try {
@@ -314,7 +319,9 @@ public class ScenarioServicePublishAction {
 				e.printStackTrace();
 			}
 
-			final Iterable<IReportPublisherExtension> publishers = ReportPublisherExtensionUtil.getContextMenuExtensions();
+			final SupportedReportFormats supportedFormats = ReportPublisherRegistry.getInstance().getSupportedVersions();
+
+			final Iterable<IReportPublisherExtension> publishers = ReportPublisherExtensionUtil.getReportPublishers();
 			final ArrayList<IReportPublisherExtension> publishersList = Lists.newArrayList(publishers);
 
 			progressMonitor.subTask("Publish base case reports");
@@ -323,21 +330,19 @@ public class ScenarioServicePublishAction {
 
 				publishersMonitor.beginTask("Publish base case reports", publishersList.size());
 				for (final IReportPublisherExtension reportPublisherExtension : publishersList) {
-					try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
 
-						reportPublisherExtension.publishReport(scenarioInstance, scenarioDataProvider, ScenarioModelUtil.getScheduleModel(scenarioDataProvider), outputStream);
-						final String reportType = reportPublisherExtension.getReportType();
+					try {
+						final IReportContent reportContent = reportPublisherExtension.publishReport(supportedFormats, scenarioDataProvider, ScenarioModelUtil.getScheduleModel(scenarioDataProvider));
 
 						// Call the correct upload report endpoint
-						outputStream.toByteArray();
 						final ReportsServiceClient reportsServiceClient = new ReportsServiceClient();
 
 						try {
-							reportsServiceClient.uploadReportData(outputStream.toString(), reportType, uuid, //
+							reportsServiceClient.uploadReportData(reportContent.getReportType(), reportContent.getVersion(), reportContent.getContent(), uuid, //
 									reportPublisherExtension.getEndpointURL(), reportPublisherExtension.getFileExtension());
 						} catch (final IOException e) {
 							e.printStackTrace();
-							throw new PublishBasecaseException("Error uploading report " + reportType, Type.FAILED_TO_UPLOAD_REPORT, e);
+							throw new PublishBasecaseException("Error uploading report " + reportContent.getReportType(), Type.FAILED_TO_UPLOAD_REPORT, e);
 						}
 					} catch (final Exception e) {
 						LOG.error(e.getMessage(), e);

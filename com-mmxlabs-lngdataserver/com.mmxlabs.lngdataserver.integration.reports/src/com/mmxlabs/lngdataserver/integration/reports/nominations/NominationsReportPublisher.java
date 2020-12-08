@@ -8,7 +8,13 @@ import java.io.OutputStream;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mmxlabs.lngdataserver.integration.reports.cargocontract.CargoesPerContractJSONGenerator;
+import com.mmxlabs.lngdataserver.integration.reports.cargocontract.CargoesPerContractReportModel;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.SupportedReportFormats;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.DefaultReportContent;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.IReportContent;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.IReportPublisherExtension;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.UnsupportedReportException;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
@@ -16,12 +22,18 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 public class NominationsReportPublisher implements IReportPublisherExtension {
 
 	@Override
-	public void publishReport(final IScenarioDataProvider scenarioDataProvider, final ScheduleModel scheduleModel, final OutputStream outputStream) throws Exception {
-		final LNGScenarioModel scenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-		final List<Nominations> nominationsExportModels = NominationsJSONGenerator.createNominationsData(scenarioModel);
+	public IReportContent publishReport(final SupportedReportFormats supportedFormats, final IScenarioDataProvider scenarioDataProvider, final ScheduleModel scheduleModel) throws Exception {
 
-		final ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.writeValue(outputStream, nominationsExportModels);
+		final List<String> versions = supportedFormats.getVersionsFor(getReportType());
+
+		if (versions.isEmpty() || versions.contains("1")) {
+			final LNGScenarioModel scenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
+			final List<Nominations> models = NominationsJSONGenerator.createNominationsData(scenarioModel);
+			final ObjectMapper objectMapper = new ObjectMapper();
+			final String content = objectMapper.writeValueAsString(models);
+			return new DefaultReportContent(getReportType(), "1", content);
+		}
+		throw new UnsupportedReportException();
 	}
 
 	@Override

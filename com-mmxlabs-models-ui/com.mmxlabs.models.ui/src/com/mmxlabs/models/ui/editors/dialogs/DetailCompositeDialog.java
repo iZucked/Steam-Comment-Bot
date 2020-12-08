@@ -20,6 +20,7 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
+import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -159,54 +160,25 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 
 	private final IDialogController dialogController = new IDialogController() {
 
-		private final PairKeyedMap<EObject, EStructuralFeature, Boolean> visibilityMap = new PairKeyedMap<>();
+		private final PairKeyedMap<EObject, EStructuralFeature,Boolean>visibilityMap=new PairKeyedMap<>();
 
-		@Override
-		public void validate() {
-			DetailCompositeDialog.this.validate();
+	@Override public void validate(){DetailCompositeDialog.this.validate();
 
-			if (DetailCompositeDialog.this.selectionViewer != null) {
-				DetailCompositeDialog.this.selectionViewer.refresh();
-			}
-		}
+	if(DetailCompositeDialog.this.selectionViewer!=null){DetailCompositeDialog.this.selectionViewer.refresh();}}
 
-		@Override
-		public void rebuild(boolean pack) {
-			updateEditor();
-			if (pack) {
-				getShell().pack(false);
-			}
-		}
+	@Override public void rebuild(final boolean pack){updateEditor();if(pack){getShell().pack(false);}}
 
-		@Override
-		public void relayout() {
-			if (displayComposite != null) {
-				displayComposite.getComposite().layout(true, true);
-			}
-		}
+	@Override public void relayout(){if(displayComposite!=null){displayComposite.getComposite().layout(true,true);}}
 
-		@Override
-		public void updateEditorVisibility() {
-			// Trigger the recursive UI update
-			if (displayComposite != null) {
-				displayComposite.checkVisibility(dialogContext);
-			}
-		}
+	@Override public void updateEditorVisibility(){
+	// Trigger the recursive UI update
+	if(displayComposite!=null){displayComposite.checkVisibility(dialogContext);}}
 
-		@Override
-		public void setEditorVisibility(final EObject object, final EStructuralFeature feature, final boolean visible) {
-			visibilityMap.put(object, feature, visible);
+	@Override public void setEditorVisibility(final EObject object,final EStructuralFeature feature,final boolean visible){visibilityMap.put(object,feature,visible);
 
-		}
+	}
 
-		@Override
-		public boolean getEditorVisibility(final EObject object, final EStructuralFeature feature) {
-			if (visibilityMap.contains(object, feature)) {
-				return visibilityMap.get(object, feature).booleanValue();
-			}
-			return true;
-		}
-	};
+	@Override public boolean getEditorVisibility(final EObject object,final EStructuralFeature feature){if(visibilityMap.contains(object,feature)){return visibilityMap.get(object,feature).booleanValue();}return true;}};
 
 	private static ComposedAdapterFactory createAdapterFactory() {
 		final List<AdapterFactory> factories = new ArrayList<>();
@@ -340,7 +312,20 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 				// stack dirty.
 				command.execute();
 
-				validate();
+				boolean runValidation = true;
+				if (feature != null) {
+					final EAnnotation annotation = feature.getEAnnotation("http://www.mmxlabs.com/models/validation");
+					if (annotation != null) {
+						final String value = annotation.getDetails().get("ignore");
+						if ("true".equalsIgnoreCase(value)) {
+							runValidation = false;
+						}
+					}
+				}
+
+				if (runValidation) {
+					validate();
+				}
 
 				// Check for UI state changes after command execution
 				displayComposite.checkVisibility(dialogContext);
@@ -441,7 +426,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 			text += name != null ? "\"" + name + "\"" : "<unspecified>";
 		} else {
 			final IItemLabelProvider itemLabelProvider = (IItemLabelProvider) FACTORY.adapt(selection, IItemLabelProvider.class);
-			String providedText = itemLabelProvider.getText(selection);
+			final String providedText = itemLabelProvider.getText(selection);
 			if (providedText != null && !"".equals(providedText)) {
 				text += "\"" + providedText + "\"";
 			}
@@ -621,22 +606,18 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 
 				final Action copy = new Action("Copy") {
 
-					@Override
-					public void run() {
-						copyDialogToClipboardEditorWrapper.copyToClipboard();
-					}
-
-				};
-
-				copy.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/copy.gif"));
-
-				barManager.add(copy);
-				barManager.update(true);
-			}
-
-			dialogArea = c;
-		}
+	@Override
+	public void run() {
+		copyDialogToClipboardEditorWrapper.copyToClipboard();
 	}
+
+	};
+
+	copy.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID,"/icons/copy.gif"));
+
+	barManager.add(copy);barManager.update(true);}
+
+	dialogArea=c;}}
 
 	private Action createAddAction(final IModelFactory factory) {
 		return new Action("Create new " + factory.getLabel(), PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD)) {
@@ -911,7 +892,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 			sel.popExtraValidationContext();
 		}
 	}
-	
+
 	public int open(final IScenarioEditingLocation location, final MMXRootObject rootObject, final Collection<EObject> objects, final boolean locked) {
 		this.location = location;
 		final IScenarioEditingLocation sel = location;
@@ -922,19 +903,19 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		this.inputs.clear();
 		this.inputs.addAll(objects);
 
-		//What are these used for?
+		// What are these used for?
 		this.originalToDuplicate.clear();
 		this.duplicateToOriginal.clear();
 
 		try {
 			final int value = open();
-			
+
 			if (value == OK) {
 				final EditingDomain editingDomain = commandHandler.getEditingDomain();
 				if (returnDuplicates) {
 					final CompoundCommand adder = new CompoundCommand();
 
-					//Create's the command somehow.
+					// Create's the command somehow.
 					for (final Map.Entry<EObject, EObject> entry : originalToDuplicate.entrySet()) {
 						final EObject original = entry.getKey();
 						final EObject duplicate = entry.getValue();
@@ -953,7 +934,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 					}
 
 					Command finalCommand = adder;
-					for (IDialogPostChangeCommandProvider p : Activator.getDefault().getDialogPostChangeCommandProviders()) {
+					for (final IDialogPostChangeCommandProvider p : Activator.getDefault().getDialogPostChangeCommandProviders()) {
 						finalCommand = p.provideExtraCommand(editingDomain, finalCommand, rootObject, objects);
 					}
 
@@ -984,12 +965,12 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 					// cc.append(replaceOriginals(commandHandler.getEditingDomain(), rootObject));
 
 					Command finalCommand = cc;
-					for (IDialogPostChangeCommandProvider p : Activator.getDefault().getDialogPostChangeCommandProviders()) {
+					for (final IDialogPostChangeCommandProvider p : Activator.getDefault().getDialogPostChangeCommandProviders()) {
 						finalCommand = p.provideExtraCommand(editingDomain, finalCommand, rootObject, objects);
 					}
 
 					final boolean isExecutable = finalCommand.canExecute();
-					
+
 					if (isExecutable) {
 						executeFinalCommand(finalCommand);
 
@@ -1054,7 +1035,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 			}
 		} else {
 			if (status instanceof DetailConstraintStatusDecorator) {
-				DetailConstraintStatusDecorator decorator = (DetailConstraintStatusDecorator) status;
+				final DetailConstraintStatusDecorator decorator = (DetailConstraintStatusDecorator) status;
 				sb.append(decorator.getBaseMessage());
 			} else {
 				sb.append(status.getMessage());

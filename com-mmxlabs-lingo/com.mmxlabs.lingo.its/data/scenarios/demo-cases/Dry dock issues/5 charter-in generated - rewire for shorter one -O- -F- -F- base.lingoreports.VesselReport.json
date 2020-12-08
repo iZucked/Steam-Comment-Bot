@@ -1,141 +1,141 @@
 [ {
-  "Scenario" : "5 charter-in generated - rewire for shorter one -O- -F- -F- base",
-  "Vessel" : "Bluesky (145k)",
-  "Route ($)" : "30,000",
-  "LNG ($)" : "6,513,117",
+  "Ballast bonus ($)" : "0",
   "Base Fuel ($)" : "22,916",
-  "Port ($)" : "80,000",
-  "Charter ($)" : "23,774,995",
-  "Heel Revenue ($)" : "0",
-  "Ballast bonus ($)" : "0",
-  "Repositioning fee ($)" : "0",
-  "Heel Cost ($)" : "0",
-  "Sum - BOG($)" : "23,907,911",
-  "Sum ($)" : "30,421,028",
+  "Route ($)" : "519,542",
+  "Charter ($)" : "23,774,996",
   "Cooldown ($)" : "0",
-  "#Cargoes" : "4",
   "Charter Out (virtual) delta (change set)" : {
     "Days" : "0.0",
     "Revenue" : "0"
-  }
-}, {
-  "Scenario" : "5 charter-in generated - rewire for shorter one -O- -F- -F- base",
-  "Vessel" : "Methane Becki Anne (170k)",
-  "Route ($)" : "0",
-  "LNG ($)" : "7,111,837",
-  "Base Fuel ($)" : "52,083",
+  },
+  "Heel Cost ($)" : "0",
+  "Heel Revenue ($)" : "0",
+  "LNG ($)" : "6,672,860",
+  "#Cargoes" : "4",
   "Port ($)" : "80,000",
-  "Charter ($)" : "0",
-  "Heel Revenue ($)" : "0",
-  "Ballast bonus ($)" : "0",
   "Repositioning fee ($)" : "0",
-  "Heel Cost ($)" : "0",
-  "Sum - BOG($)" : "365,327",
-  "Sum ($)" : "7,477,164",
-  "Cooldown ($)" : "233,244",
-  "#Cargoes" : "4",
+  "Scenario" : "5 charter-in generated - rewire for shorter one -O- -F- -F- base",
+  "Sum ($)" : "31,070,314",
+  "Sum - BOG($)" : "24,397,454",
+  "Vessel" : "Bluesky (145k)"
+}, {
+  "Ballast bonus ($)" : "0",
+  "Base Fuel ($)" : "52,083",
+  "Route ($)" : "495,840",
+  "Charter ($)" : "0",
+  "Cooldown ($)" : "231,198",
   "Charter Out (virtual) delta (change set)" : {
     "Days" : "0.0",
     "Revenue" : "0"
-  }
-}, {
-  "Scenario" : "5 charter-in generated - rewire for shorter one -O- -F- -F- base",
-  "Vessel" : "Methane Heather Sally (149k)",
-  "Route ($)" : "30,000",
-  "LNG ($)" : "4,841,091",
-  "Base Fuel ($)" : "1,562,112",
-  "Port ($)" : "40,000",
-  "Charter ($)" : "0",
-  "Heel Revenue ($)" : "0",
-  "Ballast bonus ($)" : "0",
-  "Repositioning fee ($)" : "0",
+  },
   "Heel Cost ($)" : "0",
-  "Sum - BOG($)" : "1,865,584",
-  "Sum ($)" : "6,706,675",
-  "Cooldown ($)" : "233,472",
+  "Heel Revenue ($)" : "0",
+  "LNG ($)" : "7,247,608",
+  "#Cargoes" : "4",
+  "Port ($)" : "80,000",
+  "Repositioning fee ($)" : "0",
+  "Scenario" : "5 charter-in generated - rewire for shorter one -O- -F- -F- base",
+  "Sum ($)" : "8,106,729",
+  "Sum - BOG($)" : "859,121",
+  "Vessel" : "Methane Becki Anne (170k)"
+}, {
+  "Ballast bonus ($)" : "0",
+  "Base Fuel ($)" : "1,593,276",
+  "Route ($)" : "30,000",
+  "Charter ($)" : "0",
+  "Cooldown ($)" : "231,424",
+  "Charter Out (virtual) delta (change set)" : {
+    "Days" : "0.0",
+    "Revenue" : "0"
+  },
+  "Heel Cost ($)" : "0",
+  "Heel Revenue ($)" : "0",
+  "LNG ($)" : "5,007,795",
   "#Cargoes" : "2",
-  "Charter Out (virtual) delta (change set)" : {
-    "Days" : "0.0",
-    "Revenue" : "0"
-  }
-}, {
+  "Port ($)" : "40,000",
+  "Repositioning fee ($)" : "0",
   "Scenario" : "5 charter-in generated - rewire for shorter one -O- -F- -F- base",
-  "Vessel" : "Methane Julia Louise (170k)",
-  "Route ($)" : "30,000",
-  "LNG ($)" : "6,998,853",
+  "Sum ($)" : "6,902,495",
+  "Sum - BOG($)" : "1,894,700",
+  "Vessel" : "Methane Heather Sally (149k)"
+}, {
+  "Ballast bonus ($)" : "0",
   "Base Fuel ($)" : "52,083",
-  "Port ($)" : "80,000",
-  "Charter ($)" : "0",
-  "Heel Revenue ($)" : "0",
-  "Ballast bonus ($)" : "0",
-  "Repositioning fee ($)" : "0",
-  "Heel Cost ($)" : "0",
-  "Sum - BOG($)" : "395,327",
-  "Sum ($)" : "7,394,180",
-  "Cooldown ($)" : "233,244",
-  "#Cargoes" : "4",
-  "Charter Out (virtual) delta (change set)" : {
-    "Days" : "0.0",
-    "Revenue" : "0"
-  }
-}, {
-  "Scenario" : "5 charter-in generated - rewire for shorter one -O- -F- -F- base",
-  "Vessel" : "Methane Lydon Volney (149k)",
-  "Route ($)" : "30,000",
-  "LNG ($)" : "6,678,954",
-  "Base Fuel ($)" : "2,083",
-  "Port ($)" : "80,000",
-  "Charter ($)" : "0",
-  "Heel Revenue ($)" : "0",
-  "Ballast bonus ($)" : "0",
-  "Repositioning fee ($)" : "0",
-  "Heel Cost ($)" : "0",
-  "Sum - BOG($)" : "112,083",
-  "Sum ($)" : "6,791,037",
-  "Cooldown ($)" : "0",
-  "#Cargoes" : "4",
-  "Charter Out (virtual) delta (change set)" : {
-    "Days" : "0.0",
-    "Revenue" : "0"
-  }
-}, {
-  "Scenario" : "5 charter-in generated - rewire for shorter one -O- -F- -F- base",
-  "Vessel" : "Methane Princess (138k)",
   "Route ($)" : "80,000",
-  "LNG ($)" : "5,462,757",
-  "Base Fuel ($)" : "0",
-  "Port ($)" : "80,000",
-  "Charter ($)" : "24,599,995",
-  "Heel Revenue ($)" : "0",
-  "Ballast bonus ($)" : "0",
-  "Repositioning fee ($)" : "0",
+  "Charter ($)" : "0",
+  "Cooldown ($)" : "231,198",
+  "Charter Out (virtual) delta (change set)" : {
+    "Days" : "0.0",
+    "Revenue" : "0"
+  },
   "Heel Cost ($)" : "0",
-  "Sum - BOG($)" : "24,759,995",
-  "Sum ($)" : "30,222,752",
-  "Cooldown ($)" : "0",
+  "Heel Revenue ($)" : "0",
+  "LNG ($)" : "7,265,083",
   "#Cargoes" : "4",
-  "Charter Out (virtual) delta (change set)" : {
-    "Days" : "0.0",
-    "Revenue" : "0"
-  }
-}, {
-  "Scenario" : "5 charter-in generated - rewire for shorter one -O- -F- -F- base",
-  "Vessel" : "STEAM-138 - Charter_In (138k) (option 1)",
-  "Route ($)" : "0",
-  "LNG ($)" : "1,293,394",
-  "Base Fuel ($)" : "14,583",
-  "Port ($)" : "20,000",
-  "Charter ($)" : "2,908,332",
-  "Heel Revenue ($)" : "0",
-  "Ballast bonus ($)" : "0",
+  "Port ($)" : "80,000",
   "Repositioning fee ($)" : "0",
-  "Heel Cost ($)" : "0",
-  "Sum - BOG($)" : "2,942,915",
-  "Sum ($)" : "4,236,309",
+  "Scenario" : "5 charter-in generated - rewire for shorter one -O- -F- -F- base",
+  "Sum ($)" : "7,708,364",
+  "Sum - BOG($)" : "443,281",
+  "Vessel" : "Methane Julia Louise (170k)"
+}, {
+  "Ballast bonus ($)" : "0",
+  "Base Fuel ($)" : "2,083",
+  "Route ($)" : "30,000",
+  "Charter ($)" : "0",
   "Cooldown ($)" : "0",
-  "#Cargoes" : "1",
   "Charter Out (virtual) delta (change set)" : {
     "Days" : "0.0",
     "Revenue" : "0"
-  }
+  },
+  "Heel Cost ($)" : "0",
+  "Heel Revenue ($)" : "0",
+  "LNG ($)" : "6,860,376",
+  "#Cargoes" : "4",
+  "Port ($)" : "80,000",
+  "Repositioning fee ($)" : "0",
+  "Scenario" : "5 charter-in generated - rewire for shorter one -O- -F- -F- base",
+  "Sum ($)" : "6,972,459",
+  "Sum - BOG($)" : "112,083",
+  "Vessel" : "Methane Lydon Volney (149k)"
+}, {
+  "Ballast bonus ($)" : "0",
+  "Base Fuel ($)" : "0",
+  "Route ($)" : "493,280",
+  "Charter ($)" : "24,599,996",
+  "Cooldown ($)" : "0",
+  "Charter Out (virtual) delta (change set)" : {
+    "Days" : "0.0",
+    "Revenue" : "0"
+  },
+  "Heel Cost ($)" : "0",
+  "Heel Revenue ($)" : "0",
+  "LNG ($)" : "6,464,801",
+  "#Cargoes" : "4",
+  "Port ($)" : "80,000",
+  "Repositioning fee ($)" : "0",
+  "Scenario" : "5 charter-in generated - rewire for shorter one -O- -F- -F- base",
+  "Sum ($)" : "31,638,077",
+  "Sum - BOG($)" : "25,173,276",
+  "Vessel" : "Methane Princess (138k)"
+}, {
+  "Ballast bonus ($)" : "0",
+  "Base Fuel ($)" : "0",
+  "Route ($)" : "0",
+  "Charter ($)" : "2,870,833",
+  "Cooldown ($)" : "0",
+  "Charter Out (virtual) delta (change set)" : {
+    "Days" : "0.0",
+    "Revenue" : "0"
+  },
+  "Heel Cost ($)" : "0",
+  "Heel Revenue ($)" : "0",
+  "LNG ($)" : "1,292,519",
+  "#Cargoes" : "1",
+  "Port ($)" : "20,000",
+  "Repositioning fee ($)" : "0",
+  "Scenario" : "5 charter-in generated - rewire for shorter one -O- -F- -F- base",
+  "Sum ($)" : "4,183,352",
+  "Sum - BOG($)" : "2,890,833",
+  "Vessel" : "STEAM-138 - Charter_In (138k) (option 1)"
 } ]

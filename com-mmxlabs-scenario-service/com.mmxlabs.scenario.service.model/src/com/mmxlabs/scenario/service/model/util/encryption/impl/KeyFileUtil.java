@@ -34,4 +34,31 @@ public class KeyFileUtil {
 
 		return bytes;
 	}
+
+	public static String byteToString(final byte[] bytes, final String separator) {
+
+		final StringBuilder sb = new StringBuilder();
+		boolean first = true;
+		for (final byte b : bytes) {
+			if (first) {
+				first = false;
+			} else {
+				sb.append(separator);
+			}
+			sb.append(String.format("%02X", b));
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Reads header from input stream
+	 * 
+	 * @param in
+	 * @return
+	 * @throws Exception
+	 */
+	public static byte[] getKeyID(final InputStream in) throws Exception {
+		return readBytes(KeyFileUtil.UUID_LENGTH, in);
+	}
+
 }

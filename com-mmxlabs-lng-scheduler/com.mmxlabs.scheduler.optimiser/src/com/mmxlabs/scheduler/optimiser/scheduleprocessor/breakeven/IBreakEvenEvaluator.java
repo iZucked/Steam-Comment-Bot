@@ -20,7 +20,6 @@ public interface IBreakEvenEvaluator {
 	static final String MARKER = "?";
 
 	@Nullable
-	Pair<VoyagePlan, IAllocationAnnotation> processSchedule(int vesselStartTime, IVesselAvailability vesselAvailability, VoyagePlan vp, IPortTimesRecord portTimesRecord,
-			@Nullable IAnnotatedSolution annotatedSolution);
+	Pair<VoyagePlan, IAllocationAnnotation> processSchedule(IVesselAvailability vesselAvailability, VoyagePlan vp, IPortTimesRecord portTimesRecord, @Nullable IAnnotatedSolution annotatedSolution);
 
 }

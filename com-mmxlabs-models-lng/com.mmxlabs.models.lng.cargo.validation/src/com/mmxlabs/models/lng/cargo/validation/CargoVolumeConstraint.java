@@ -213,7 +213,7 @@ public class CargoVolumeConstraint extends AbstractModelMultiConstraint {
 						final Vessel vessel = loadSlot.getNominatedVessel();
 						if (vessel != null) {
 							// get the capacity directly
-							return (int) (vessel.getVesselOrDelegateCapacity() * vessel.getFillCapacity());
+							return (int) (vessel.getVesselOrDelegateCapacity() * vessel.getVesselOrDelegateFillCapacity());
 						}
 					}
 				}
@@ -229,14 +229,14 @@ public class CargoVolumeConstraint extends AbstractModelMultiConstraint {
 			final Vessel vessel = vesselAvailability.getVessel();
 			if (vessel != null) {
 				capacity = vessel.getVesselOrDelegateCapacity();
-				fillCapacity = vessel.getFillCapacity();
+				fillCapacity = vessel.getVesselOrDelegateFillCapacity();
 			}
 		} else if (vesselAssignmentType instanceof CharterInMarket) {
 			final CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
 			final Vessel vessel = charterInMarket.getVessel();
 			if (vessel != null) {
 				capacity = vessel.getVesselOrDelegateCapacity();
-				fillCapacity = vessel.getFillCapacity();
+				fillCapacity = vessel.getVesselOrDelegateFillCapacity();
 			}
 		} else if (vesselAssignmentType instanceof CharterInMarketOverride) {
 			final CharterInMarketOverride charterInMarketOverride = (CharterInMarketOverride) vesselAssignmentType;
@@ -244,7 +244,7 @@ public class CargoVolumeConstraint extends AbstractModelMultiConstraint {
 			final Vessel vessel = charterInMarket.getVessel();
 			if (vessel != null) {
 				capacity = vessel.getVesselOrDelegateCapacity();
-				fillCapacity = vessel.getFillCapacity();
+				fillCapacity = vessel.getVesselOrDelegateFillCapacity();
 			}
 		} else {
 			// Can't do much here, no capacity...

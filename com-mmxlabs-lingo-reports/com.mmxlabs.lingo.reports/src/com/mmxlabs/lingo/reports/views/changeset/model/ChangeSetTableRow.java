@@ -43,6 +43,8 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isRhsNonShipped <em>Rhs Non Shipped</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getBeforeVesselType <em>Before Vessel Type</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getAfterVesselType <em>After Vessel Type</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getBeforeVesselCharterNumber <em>Before Vessel Charter Number</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getAfterVesselCharterNumber <em>After Vessel Charter Number</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableRow()
@@ -735,5 +737,49 @@ public interface ChangeSetTableRow extends EObject {
 	 * @generated
 	 */
 	void setAfterVesselType(ChangeSetVesselType value);
+
+	/**
+	 * Returns the value of the '<em><b>Before Vessel Charter Number</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Before Vessel Charter Number</em>' attribute.
+	 * @see #setBeforeVesselCharterNumber(int)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableRow_BeforeVesselCharterNumber()
+	 * @model
+	 * @generated
+	 */
+	int getBeforeVesselCharterNumber();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getBeforeVesselCharterNumber <em>Before Vessel Charter Number</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Before Vessel Charter Number</em>' attribute.
+	 * @see #getBeforeVesselCharterNumber()
+	 * @generated
+	 */
+	void setBeforeVesselCharterNumber(int value);
+
+	/**
+	 * Returns the value of the '<em><b>After Vessel Charter Number</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>After Vessel Charter Number</em>' attribute.
+	 * @see #setAfterVesselCharterNumber(int)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableRow_AfterVesselCharterNumber()
+	 * @model
+	 * @generated
+	 */
+	int getAfterVesselCharterNumber();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getAfterVesselCharterNumber <em>After Vessel Charter Number</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>After Vessel Charter Number</em>' attribute.
+	 * @see #getAfterVesselCharterNumber()
+	 * @generated
+	 */
+	void setAfterVesselCharterNumber(int value);
 
 } // ChangeSetTableRow

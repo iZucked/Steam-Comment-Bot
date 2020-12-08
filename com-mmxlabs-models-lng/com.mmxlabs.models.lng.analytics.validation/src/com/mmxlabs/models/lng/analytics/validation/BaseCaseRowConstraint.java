@@ -57,14 +57,14 @@ public class BaseCaseRowConstraint extends AbstractModelMultiConstraint {
 			if (nonShipped == ShippingType.Shipped) {
 				if (baseCaseRow.getBuyOption() != null && baseCaseRow.getSellOption() != null) {
 					if (baseCaseRow.getShipping() == null) {
-						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Starting point - no shipping option defined."));
+						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Sandbox|Starting point - no shipping option defined."));
 						deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 						statuses.add(deco);
 					}
 					if (!(baseCaseRow.getShipping() instanceof SimpleVesselCharterOption || baseCaseRow.getShipping() instanceof RoundTripShippingOption
 							|| baseCaseRow.getShipping() instanceof FullVesselCharterOption || baseCaseRow.getShipping() instanceof ExistingVesselCharterOption
 							|| baseCaseRow.getShipping() instanceof ExistingCharterMarketOption)) {
-						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Starting point - incompatible shipping option defined."));
+						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Sandbox|Starting point - incompatible shipping option defined."));
 						deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 						statuses.add(deco);
 					}
@@ -83,41 +83,41 @@ public class BaseCaseRowConstraint extends AbstractModelMultiConstraint {
 
 				}
 			} else if (nonShipped == ShippingType.Mixed) {
-				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Starting point - incompatible slot combination."));
+				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Sandbox|Starting point: incompatible slot combination."));
 				deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__BUY_OPTION);
 				deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION);
 				statuses.add(deco);
 			}
 
 			if (baseCaseRow.getShipping() != null && baseCaseRow.getShipping().eContainer() == null) {
-				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Starting point - uncontained shipping"));
+				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Sandbox|Starting point: shipping option is not present in current scenario."));
 				deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 				statuses.add(deco);
 			}
 			if (baseCaseRow.getShipping() != null && !SandboxConstraintUtils.vesselPortRestrictionsValid(baseCaseRow.getBuyOption(), baseCaseRow.getSellOption(), baseCaseRow.getShipping())) {
 				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
-						(IConstraintStatus) ctx.createFailureStatus("Starting point - shipping option cannot visit a port in this cargo"));
+						(IConstraintStatus) ctx.createFailureStatus("Sandbox|Starting point: shipping option cannot visit a port in this cargo"));
 				deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 				statuses.add(deco);
 			}
 			if (baseCaseRow.getShipping() != null && !SandboxConstraintUtils.portRestrictionsValid(baseCaseRow.getBuyOption(), baseCaseRow.getSellOption())) {
 				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
-						(IConstraintStatus) ctx.createFailureStatus("Starting point - buy or sell does not have a compatible port in this cargo"));
+						(IConstraintStatus) ctx.createFailureStatus("Sandbox|Starting point: buy or sell does not have a compatible port in this cargo"));
 				deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 				statuses.add(deco);
 			}
 			if (baseCaseRow.getShipping() != null && !SandboxConstraintUtils.vesselRestrictionsValid(baseCaseRow.getBuyOption(), baseCaseRow.getSellOption(), baseCaseRow.getShipping())) {
-				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Starting point - load not permitted with this shipping option"));
+				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Sandbox|Starting point: load not permitted with this shipping option"));
 				deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 				statuses.add(deco);
 			}
 			if (!SandboxConstraintUtils.checkVolumeAgainstBuyAndSell(baseCaseRow.getBuyOption(), baseCaseRow.getSellOption())) {
-				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Starting point - load and discharge volumes do not match"));
+				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Sandbox|Starting point: load and discharge volumes do not match"));
 				deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 //				statuses.add(deco);
 			}
 			if (baseCaseRow.getShipping() != null && !SandboxConstraintUtils.checkVolumeAgainstVessel(baseCaseRow.getBuyOption(), baseCaseRow.getSellOption(), baseCaseRow.getShipping())) {
-				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Starting point - load and discharge volumes do not match"));
+				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Sandbox|Starting point: load and discharge volumes do not match"));
 				deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 //				statuses.add(deco);
 			}
@@ -146,7 +146,7 @@ public class BaseCaseRowConstraint extends AbstractModelMultiConstraint {
 				final int availableTime = Hours.between(windowStartDate, windowEndDate) - optionDuration;
 
 				if (travelTime > availableTime) {
-					final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Target - not enough travel time."),
+					final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Sandbox|Target: not enough travel time."),
 							IConstraintStatus.WARNING);
 					deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__BUY_OPTION);
 					deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION);

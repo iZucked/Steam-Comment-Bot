@@ -1093,7 +1093,7 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @return the value of the '<em>Notes</em>' attribute.
 	 * @see #setNotes(String)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_Notes()
-	 * @model
+	 * @model annotation="http://www.mmxlabs.com/models/validation ignore='true'"
 	 * @generated
 	 */
 	String getNotes();

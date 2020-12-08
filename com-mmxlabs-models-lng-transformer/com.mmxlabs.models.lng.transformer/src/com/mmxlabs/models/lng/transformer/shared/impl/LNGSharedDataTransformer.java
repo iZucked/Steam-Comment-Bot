@@ -52,9 +52,9 @@ public class LNGSharedDataTransformer {
 		for (final Port ePort : portModel.getPorts()) {
 			final IPort port;
 			final Location loc = ePort.getLocation();
-			port = portDistanceBuilder.createPort(ePort.getName(), loc.getTempMMXID(), loc.getLat(), loc.getLon(), loc.getTimeZone());
+			port = portDistanceBuilder.createPort(ePort.getName(), loc.getMmxId(), loc.getLat(), loc.getLon(), loc.getTimeZone());
 			portAssociation.add(ePort, port);
-			portMap.put(loc.getTempMMXID(), port);
+			portMap.put(loc.getMmxId(), port);
 		}
 
 		final LinkedHashSet<RouteOption> orderedKeys = Sets.newLinkedHashSet();
@@ -77,8 +77,8 @@ public class LNGSharedDataTransformer {
 					final int distance = modelDistanceProvider.getDistance(eFrom, eTo, routeOption);
 					if (distance != Integer.MAX_VALUE) {
 						final @NonNull ERouteOption mapRouteOption = mapRouteOption(routeOption);
-						final IPort from = portMap.get(eFrom.getLocation().getTempMMXID());
-						final IPort to = portMap.get(eTo.getLocation().getTempMMXID());
+						final IPort from = portMap.get(eFrom.getLocation().getMmxId());
+						final IPort to = portMap.get(eTo.getLocation().getMmxId());
 
 						portDistanceBuilder.setPortToPortDistance(from, to, mapRouteOption, distance);
 

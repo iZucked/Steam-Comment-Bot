@@ -856,18 +856,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	public String getTempMMXID() {
-		if (getLocation() != null) {
-			return getLocation().getTempMMXID();
-		}
-		return getName();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -1114,8 +1102,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 				return getZoneId();
 			case PortPackage.PORT___MMX_ID:
 				return mmxID();
-			case PortPackage.PORT___GET_TEMP_MMXID:
-				return getTempMMXID();
 		}
 		return super.eInvoke(operationID, arguments);
 	}

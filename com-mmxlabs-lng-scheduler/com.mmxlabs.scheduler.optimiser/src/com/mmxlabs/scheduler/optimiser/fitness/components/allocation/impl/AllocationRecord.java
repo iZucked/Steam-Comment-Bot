@@ -29,8 +29,7 @@ public class AllocationRecord {
 		 */
 		Actuals,
 		/**
-		 * Actuals data, but currently for DES deals where discharge volume is the
-		 * purchase volume.
+		 * Actuals data, but currently for DES deals where discharge volume is the purchase volume.
 		 */
 		Actuals_Transfer,
 		/**
@@ -42,8 +41,7 @@ public class AllocationRecord {
 		 */
 		Transfer,
 		/**
-		 * Custom mode, use the record max values as absolute values. Assume input data
-		 * has already been checked.
+		 * Custom mode, use the record max values as absolute values. Assume input data has already been checked.
 		 */
 		Custom
 	}
@@ -61,14 +59,12 @@ public class AllocationRecord {
 	// final long vesselCapacityInM3;
 
 	/**
-	 * The quantity of LNG which <em>must</em> be loaded for a given cargo (for
-	 * fuel)
+	 * The quantity of LNG which <em>must</em> be loaded for a given cargo (for fuel)
 	 */
 	public long requiredFuelVolumeInM3;
 
 	/**
-	 * The LNG volume which must remain at the end of the voyage (the remaining
-	 * heel)
+	 * The LNG volume which must remain at the end of the voyage (the remaining heel)
 	 */
 	public long minimumEndVolumeInM3;
 	public long maximumEndVolumeInM3;
@@ -99,8 +95,6 @@ public class AllocationRecord {
 
 	public @NonNull AllocationMode allocationMode;
 
-	public int vesselStartTime;
-
 	/**
 	 * The {@link IPortSlot} the vessel "returns" to after the loads and discharges.
 	 */
@@ -108,13 +102,12 @@ public class AllocationRecord {
 
 	public @NonNull IPortTimesRecord portTimesRecord;
 
-	public AllocationRecord(final @NonNull IVesselAvailability vesselAvailability, final @NonNull VoyagePlan resourceVoyagePlan, final int vesselStartTime, final long startVolumeInM3,
-			final long requiredFuelVolumeInM3, final long minEndVolumeInM3, final long maxEndVolumeInM3, final @NonNull List<@NonNull IPortSlot> slots, final @NonNull IPortTimesRecord portTimesRecord,
-			final IPortSlot returnSlot, final @NonNull List<@NonNull Long> minVolumesInM3, final @NonNull List<@NonNull Long> maxVolumesInM3, @NonNull final List<@NonNull Long> minVolumesInMMBtu,
+	public AllocationRecord(final @NonNull IVesselAvailability vesselAvailability, final @NonNull VoyagePlan resourceVoyagePlan, final long startVolumeInM3, final long requiredFuelVolumeInM3,
+			final long minEndVolumeInM3, final long maxEndVolumeInM3, final @NonNull List<@NonNull IPortSlot> slots, final @NonNull IPortTimesRecord portTimesRecord, final IPortSlot returnSlot,
+			final @NonNull List<@NonNull Long> minVolumesInM3, final @NonNull List<@NonNull Long> maxVolumesInM3, @NonNull final List<@NonNull Long> minVolumesInMMBtu,
 			@NonNull final List<@NonNull Long> maxVolumesInMMBtu, final @NonNull List<@NonNull Integer> slotCV) {
 		this.vesselAvailability = vesselAvailability;
 		this.resourceVoyagePlan = resourceVoyagePlan;
-		this.vesselStartTime = vesselStartTime;
 		this.startVolumeInM3 = startVolumeInM3;
 		this.requiredFuelVolumeInM3 = requiredFuelVolumeInM3;
 		this.minimumEndVolumeInM3 = minEndVolumeInM3;
@@ -133,8 +126,7 @@ public class AllocationRecord {
 	}
 
 	public @NonNull AllocationRecord mutableCopy() {
-		return new AllocationRecord(vesselAvailability, resourceVoyagePlan, vesselStartTime, startVolumeInM3, requiredFuelVolumeInM3, minimumEndVolumeInM3, maximumEndVolumeInM3, slots,
-				portTimesRecord, returnSlot, //
+		return new AllocationRecord(vesselAvailability, resourceVoyagePlan, startVolumeInM3, requiredFuelVolumeInM3, minimumEndVolumeInM3, maximumEndVolumeInM3, slots, portTimesRecord, returnSlot, //
 				new LinkedList<>(minVolumesInM3), //
 				new LinkedList<>(maxVolumesInM3), //
 				new LinkedList<>(minVolumesInMMBtu), //

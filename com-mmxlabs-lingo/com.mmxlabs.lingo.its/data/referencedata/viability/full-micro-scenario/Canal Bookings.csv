@@ -1,2 +1,2 @@
-strictdays,relaxeddays,flexibilitynorthbound,flexibilitysouthbound,northboundmaxidle,margin
-0,0,0,0,0,0
+strictdays,relaxeddays,flexibilitynorthbound,flexibilitysouthbound,northboundmaxidle,southboundmaxidle,margin
+0,0,0,0,0,0,0

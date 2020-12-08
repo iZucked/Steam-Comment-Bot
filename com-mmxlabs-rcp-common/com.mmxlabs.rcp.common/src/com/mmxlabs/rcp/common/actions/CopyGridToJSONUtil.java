@@ -82,7 +82,7 @@ public class CopyGridToJSONUtil {
 		final SimpleOrderedJSONObject rowData = new SimpleOrderedJSONObject();
 		sw.add(rowData);
 
-		final int[] columnOrder = includeAllColumns ? getAllColumns(table) : table.getColumnOrder();
+		final int[] columnOrder = table.getColumnOrder();
 		for (int i = 0; i < columnOrder.length; ++i) {
 			final int colIdx = columnOrder[i];
 			final GridColumn column = table.getColumn(colIdx);

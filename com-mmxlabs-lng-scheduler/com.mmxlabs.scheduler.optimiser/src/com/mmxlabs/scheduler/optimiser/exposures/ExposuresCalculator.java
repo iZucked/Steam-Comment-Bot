@@ -345,9 +345,9 @@ public class ExposuresCalculator {
 
 			double timesValue;
 			double foo = baseNodeData.getFirst() / (double)HighScaleFactor;
-			if (foo < scurveNode.getLowerThan()) {
+			if (foo < scurveNode.getFirstThreshold()) {
 				timesValue = scurveNode.getA1();
-			} else if (foo > scurveNode.getHigherThan()) {
+			} else if (foo > scurveNode.getSecondThreshold()) {
 				timesValue = scurveNode.getA3();
 			} else {
 				timesValue = scurveNode.getA2();

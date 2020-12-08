@@ -5,17 +5,17 @@
   "ID" : "load-cargo-21",
   "Date" : "21/12/10",
   "Time" : "07:00",
-  "Port" : "Punta Europa LNG",
-  "Cost" : "233,244"
+  "Port" : "Punta Europa",
+  "Cost" : "231,198"
 }, {
   "Schedule" : "4 dry dock 70 -O- -F- -F- base",
   "Vessel" : "Methane Heather Sally",
   "Cause ID" : "Dry Dock",
   "ID" : "load-cargo-41",
   "Date" : "21/04/11",
-  "Time" : "10:00",
-  "Port" : "Idku LNG",
-  "Cost" : "233,472"
+  "Time" : "13:00",
+  "Port" : "Idku",
+  "Cost" : "231,424"
 }, {
   "Schedule" : "4 dry dock 70 -O- -F- -F- base",
   "Vessel" : "Methane Julia Louise",
@@ -23,6 +23,6 @@
   "ID" : "load-cargo-32",
   "Date" : "31/12/10",
   "Time" : "07:00",
-  "Port" : "Punta Europa LNG",
-  "Cost" : "233,244"
+  "Port" : "Punta Europa",
+  "Cost" : "231,198"
 } ]

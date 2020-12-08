@@ -49,16 +49,8 @@ public class CargoEditorFilterUtils {
 		case FOB:
 			return cargo.getCargoType() == CargoType.FOB;
 		case NOMINAL:
-			final VesselAssignmentType cargoVesselAT = cargo.getVesselAssignmentType();
-			final CharterInMarket cargoCharterInMarket;
-			if (cargoVesselAT instanceof CharterInMarket) {
-				cargoCharterInMarket = (CharterInMarket) cargoVesselAT;
-			} else if (cargoVesselAT instanceof CharterInMarketOverride) {
-				cargoCharterInMarket = ((CharterInMarketOverride) cargoVesselAT).getCharterInMarket();
-			} else {
-				return false;
-			}
-			return cargoCharterInMarket.isNominal();
+			if (cargo.getSpotIndex() == -1)
+				return true;
 		}
 		return false;
 	}

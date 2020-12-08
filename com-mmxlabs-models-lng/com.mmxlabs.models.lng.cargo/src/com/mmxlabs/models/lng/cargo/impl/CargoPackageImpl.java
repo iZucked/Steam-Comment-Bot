@@ -3987,6 +3987,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createNumberFormatAnnotations();
 		// http://www.mmxlabs.com/models/pricing/expressionType
 		createExpressionTypeAnnotations();
+		// http://www.mmxlabs.com/models/validation
+		createValidationAnnotations();
 		// http://www.mmxlabs.com/models/ui/featureEnablement
 		createFeatureEnablementAnnotations();
 	}
@@ -4325,6 +4327,22 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		   source,
 		   new String[] {
 			   "type", "commodity"
+		   });
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://www.mmxlabs.com/models/validation</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createValidationAnnotations() {
+		String source = "http://www.mmxlabs.com/models/validation";
+		addAnnotation
+		  (getSlot_Notes(),
+		   source,
+		   new String[] {
+			   "ignore", "true"
 		   });
 	}
 

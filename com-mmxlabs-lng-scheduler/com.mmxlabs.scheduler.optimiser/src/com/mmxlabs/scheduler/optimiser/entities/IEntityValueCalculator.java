@@ -6,7 +6,6 @@ package com.mmxlabs.scheduler.optimiser.entities;
 
 import java.util.Map;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -38,7 +37,7 @@ public interface IEntityValueCalculator {
 	 * @param annotatedSolution
 	 * @return
 	 */
-	Pair<CargoValueAnnotation, Long> evaluate(VoyagePlan plan, IAllocationAnnotation currentAllocation, IVesselAvailability vesselAvailability, int vesselStartTime,
+	Pair<CargoValueAnnotation, Long> evaluate(VoyagePlan plan, IAllocationAnnotation currentAllocation, IVesselAvailability vesselAvailability,
 			@Nullable ProfitAndLossSequences volumeAllocatedSequences, @Nullable IAnnotatedSolution annotatedSolution);
 
 	/**
@@ -52,8 +51,8 @@ public interface IEntityValueCalculator {
 	 * @param annotatedSolution
 	 * @return
 	 */
-	Pair<Map<IPortSlot, HeelValueRecord>, Long> evaluateNonCargoPlan(VoyagePlan plan, IPortTimesRecord portTimesRecord, IVesselAvailability vesselAvailability, int planStartTime, int vesselStartTime,
-			@Nullable ProfitAndLossSequences volumeAllocatedSequences, int lastHeelPricePerMMBTU, Map<IPortSlot, SlotHeelVolumeRecord> heelRecords, @Nullable IAnnotatedSolution annotatedSolution);
+	Pair<Map<IPortSlot, HeelValueRecord>, Long> evaluateNonCargoPlan(VoyagePlan plan, IPortTimesRecord portTimesRecord, IVesselAvailability vesselAvailability, int vesselStartTime, int planStartTime,
+			int lastHeelPricePerMMBTU, Map<IPortSlot, SlotHeelVolumeRecord> heelRecords, @Nullable IAnnotatedSolution annotatedSolution);
 
 	/**
 	 * Evaluate an unused port slot for P&L contributions (e.g. cancellation fees). The port slot is expected to be an instanceof {@link ILoadOption} or {@link IDischargeOption}.

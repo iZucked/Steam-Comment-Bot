@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.collect.Lists;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.ScheduleElementCollector;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
@@ -145,14 +146,14 @@ public class FleetReportTransformer {
 
 		final List<EObject> interestingEvents = new LinkedList<>();
 		final Set<EObject> allEvents = new HashSet<>();
-		final Set<Vessel> seenVessels = new HashSet<>();
+		final Set<Pair<Vessel, Integer>> seenVessels = new HashSet<>();
 		for (final Sequence sequence : schedule.getSequences()) {
 			if (builder.showEvent(sequence)) {
 				final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
 				if (vesselAvailability != null) {
-					if (!seenVessels.contains(vesselAvailability.getVessel())) {
+					if (!seenVessels.contains(Pair.of(vesselAvailability.getVessel(),vesselAvailability.getCharterNumber()))) {
 						interestingEvents.add(sequence);
-						seenVessels.add(vesselAvailability.getVessel());
+						seenVessels.add(Pair.of(vesselAvailability.getVessel(),vesselAvailability.getCharterNumber()));
 					}
 				} else if (sequence.getSequenceType() == SequenceType.SPOT_VESSEL) {
 					interestingEvents.add(sequence);
@@ -184,7 +185,8 @@ public class FleetReportTransformer {
 					linkedSequences.add(sequence);
 				} else {
 					final List<Sequence> foundSequences = schedule.getSequences().stream().filter(s -> (s.getVesselAvailability() != null && s.getVesselAvailability().getVessel() != null
-							&& s.getVesselAvailability().getVessel().equals(sequence.getVesselAvailability().getVessel()))).collect(Collectors.toList());
+							&& s.getVesselAvailability().getVessel().equals(sequence.getVesselAvailability().getVessel())) //
+							&& s.getVesselAvailability().getCharterNumber() == sequence.getVesselAvailability().getCharterNumber() ).collect(Collectors.toList());
 					linkedSequences.addAll(foundSequences);
 				}
 				rows.add(row);

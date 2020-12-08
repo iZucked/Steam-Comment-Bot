@@ -321,12 +321,12 @@ public class BreakEvenModellerView extends ScenarioInstanceView implements Comma
 
 	@Override
 	protected void doDisplayScenarioInstance(@Nullable final ScenarioInstance scenarioInstance, @Nullable final MMXRootObject rootObject, @Nullable Object target) {
-		doDisplayScenarioInstance(scenarioInstance, rootObject, target);
+		doDisplayScenarioInstance2(scenarioInstance, rootObject,(BreakEvenAnalysisModel) target);
 
 		updateActions(getEditingDomain());
 	}
 
-	void doDisplayScenarioInstance(@Nullable final ScenarioInstance scenarioInstance, @Nullable final MMXRootObject rootObject, @Nullable BreakEvenAnalysisModel model) {
+	void doDisplayScenarioInstance2(@Nullable final ScenarioInstance scenarioInstance, @Nullable final MMXRootObject rootObject, @Nullable BreakEvenAnalysisModel model) {
 
 		if (errorLabel != null) {
 			errorLabel.dispose();

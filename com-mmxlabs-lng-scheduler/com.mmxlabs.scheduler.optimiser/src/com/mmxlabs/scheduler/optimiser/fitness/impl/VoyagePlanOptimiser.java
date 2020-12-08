@@ -29,21 +29,19 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
- * The {@link VoyagePlanOptimiser} performs an exhaustive search through the
- * choices in a {@link VoyagePlan}. {@link IVoyagePlanChoice} implementations
- * are provided in a set order which edit the voyage plan objects.
+ * The {@link VoyagePlanOptimiser} performs an exhaustive search through the choices in a {@link VoyagePlan}. {@link IVoyagePlanChoice} implementations are provided in a set order which edit the
+ * voyage plan objects.
  * 
  * @author Simon Goodall
  * 
  */
 public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
-	
 
 	public static class Record {
 
 		public Record(@Nullable final IResource resource, @NonNull final IVessel vessel, final long[] startHeelRangeInM3, final int[] baseFuelPricesPerMT,
-				final ICharterCostCalculator charterCostCalculator, final IPortTimesRecord portTimesRecord,
-				final List<@NonNull IOptionsSequenceElement> basicSequence, final List<@NonNull IVoyagePlanChoice> choices, final int startingTime) {
+				final ICharterCostCalculator charterCostCalculator, final IPortTimesRecord portTimesRecord, final List<@NonNull IOptionsSequenceElement> basicSequence,
+				final List<@NonNull IVoyagePlanChoice> choices) {
 			this.resource = resource;
 			this.vessel = vessel;
 			this.startHeelRangeInM3 = startHeelRangeInM3;
@@ -52,7 +50,6 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			this.portTimesRecord = portTimesRecord;
 			this.basicSequence = basicSequence;
 			this.choices = choices;
-			this.startingTime = startingTime;
 		}
 
 		public final List<@NonNull IVoyagePlanChoice> choices;
@@ -68,7 +65,6 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		public final ICharterCostCalculator charterCostCalculator;
 		public final long[] startHeelRangeInM3;
 
-		public final int startingTime;
 		public final @Nullable IResource resource; // May be null for notional voyage calculations
 	}
 
@@ -79,8 +75,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 		public @Nullable VoyagePlan bestPlan = null;
 		/**
-		 * True iff {@link #bestPlan} meets the requirement that every voyage uses less
-		 * than or equal to the available time for that voyage
+		 * True iff {@link #bestPlan} meets the requirement that every voyage uses less than or equal to the available time for that voyage
 		 */
 		public boolean bestPlanFitsInAvailableTime = false;
 	}
@@ -98,10 +93,10 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	 * @return
 	 */
 	@Override
-	public VoyagePlan optimise(final IResource resource, final IVessel vessel, final long[] startHeelRangeInM3, final int[] baseFuelPricesPerMT, final ICharterCostCalculator charterCostCalculator, final IPortTimesRecord portTimesRecord,
-			final List<@NonNull IOptionsSequenceElement> basicSequence, final List<@NonNull IVoyagePlanChoice> choices, final int startingTime) {
+	public VoyagePlan optimise(final IResource resource, final IVessel vessel, final long[] startHeelRangeInM3, final int[] baseFuelPricesPerMT, final ICharterCostCalculator charterCostCalculator,
+			final IPortTimesRecord portTimesRecord, final List<@NonNull IOptionsSequenceElement> basicSequence, final List<@NonNull IVoyagePlanChoice> choices) {
 
-		final Record record = new Record(resource, vessel, startHeelRangeInM3, baseFuelPricesPerMT, charterCostCalculator, portTimesRecord, basicSequence, choices, startingTime);
+		final Record record = new Record(resource, vessel, startHeelRangeInM3, baseFuelPricesPerMT, charterCostCalculator, portTimesRecord, basicSequence, choices);
 
 		final InternalState state = new InternalState();
 		runLoop(record, state, 0);
@@ -111,19 +106,16 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	@Override
 	public void iterate(@Nullable final IResource resource, @NonNull final IVessel vessel, final long @NonNull [] heelVolumeRangeInM3, final int @NonNull [] baseFuelPricesPerMT,
 			final ICharterCostCalculator charterCostCalculator, @NonNull final IPortTimesRecord portTimesRecord, @NonNull final List<@NonNull IOptionsSequenceElement> basicSequence,
-			@NonNull final List<@NonNull IVoyagePlanChoice> choices, final int startingTime, final Consumer<VoyagePlan> hook) {
-		final Record record = new Record(resource, vessel, heelVolumeRangeInM3, baseFuelPricesPerMT, charterCostCalculator, portTimesRecord, basicSequence, choices, startingTime);
+			@NonNull final List<@NonNull IVoyagePlanChoice> choices, final Consumer<VoyagePlan> hook) {
+		final Record record = new Record(resource, vessel, heelVolumeRangeInM3, baseFuelPricesPerMT, charterCostCalculator, portTimesRecord, basicSequence, choices);
 
 		runLoopWithHook(record, 0, hook);
 
 	}
 
 	/**
-	 * Recursive function to iterate through all the possible combinations of
-	 * {@link IVoyagePlanChoice}s. For each set of choices, calculate a
-	 * {@link VoyagePlan} and store the cheapest cost plan. The
-	 * {@link VoyageOptions} objects will be modified, but cloned into each
-	 * {@link VoyagePlan} calculated.
+	 * Recursive function to iterate through all the possible combinations of {@link IVoyagePlanChoice}s. For each set of choices, calculate a {@link VoyagePlan} and store the cheapest cost plan. The
+	 * {@link VoyageOptions} objects will be modified, but cloned into each {@link VoyagePlan} calculated.
 	 * 
 	 * @param i
 	 */
@@ -147,11 +139,8 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	}
 
 	/**
-	 * Recursive function to iterate through all the possible combinations of
-	 * {@link IVoyagePlanChoice}s. For each set of choices, calculate a
-	 * {@link VoyagePlan} and store the cheapest cost plan. The
-	 * {@link VoyageOptions} objects will be modified, but cloned into each
-	 * {@link VoyagePlan} calculated.
+	 * Recursive function to iterate through all the possible combinations of {@link IVoyagePlanChoice}s. For each set of choices, calculate a {@link VoyagePlan} and store the cheapest cost plan. The
+	 * {@link VoyageOptions} objects will be modified, but cloned into each {@link VoyagePlan} calculated.
 	 * 
 	 * @param i
 	 */
@@ -197,8 +186,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		// determine whether the plan is OK in that respect
 
 		/**
-		 * True iff the current plan ensures that every voyage fits in the available
-		 * time for that voyage.
+		 * True iff the current plan ensures that every voyage fits in the available time for that voyage.
 		 */
 		boolean currentPlanFitsInAvailableTime = true;
 		if (currentPlan == null) {
@@ -285,8 +273,8 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		final VoyagePlan currentPlan = new VoyagePlan();
 
 		// Calculate voyage plan
-		final int violationCount = voyageCalculator.calculateVoyagePlan(currentPlan, record.vessel, record.charterCostCalculator, record.startHeelRangeInM3, record.baseFuelPricesPerMT, record.portTimesRecord,
-				currentSequence.toArray(new IDetailsSequenceElement[0]));
+		final int violationCount = voyageCalculator.calculateVoyagePlan(currentPlan, record.vessel, record.charterCostCalculator, record.startHeelRangeInM3, record.baseFuelPricesPerMT,
+				record.portTimesRecord, currentSequence.toArray(new IDetailsSequenceElement[0]));
 
 		if (violationCount == Integer.MAX_VALUE) {
 			return null;

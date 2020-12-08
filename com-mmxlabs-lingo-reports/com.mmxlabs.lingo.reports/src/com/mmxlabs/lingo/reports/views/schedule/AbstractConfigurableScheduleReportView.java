@@ -121,6 +121,14 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 						getBlockManager().getBlockByID("com.mmxlabs.lingo.reports.components.columns.schedule.id") //
 				};
 
+
+				if (includeAllColumnsForITS) {
+					// Sort columns by ID
+					List<String> blockIDOrder = new ArrayList<>(getBlockManager().getBlockIDOrder());
+					Collections.sort(blockIDOrder);
+					getBlockManager().setBlockIDOrder(blockIDOrder);
+				}
+
 				// go through in reverse order as latest is set to primary sort
 				for (final ColumnBlock block : initialReverseSortOrder) {
 					if (block != null) {
@@ -132,14 +140,6 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 						}
 					}
 				}
-
-				if (includeAllColumnsForITS) {
-					// Sort columns by ID
-					List<String> blockIDOrder = new ArrayList<>(getBlockManager().getBlockIDOrder());
-					Collections.sort(blockIDOrder);
-					getBlockManager().setBlockIDOrder(blockIDOrder);
-				}
-
 			}
 
 			final CopyGridToHtmlStringUtil htmlUtil = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, includeAllColumnsForITS);

@@ -28,8 +28,16 @@ public interface IVoyagePlanEvaluator {
 			boolean returnAll, //
 			boolean keepDetails, //
 			@Nullable IAnnotatedSolution annotatedSolution);
+	
+	public List<ScheduledVoyagePlanResult> evaluateRoundTrip(IResource resource, //
+			IVesselAvailability vesselAvailability, //
+			ICharterCostCalculator charterCostCalculator, //
+			IPortTimesRecord portTimesRecord, //
+			boolean returnAll, //
+			boolean keepDetails, //
+			@Nullable IAnnotatedSolution annotatedSolution);
 
-	ScheduledVoyagePlanResult evaluateNonShipped(IResource resource, IVesselAvailability vesselAvailability, int vesselStartTime, IPortTimesRecord portTimesRecord, boolean keepDetails,
+	ScheduledVoyagePlanResult evaluateNonShipped(IResource resource, IVesselAvailability vesselAvailability, IPortTimesRecord portTimesRecord, boolean keepDetails,
 			@Nullable IAnnotatedSolution annotatedSolution);
 
 }

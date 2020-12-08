@@ -105,25 +105,29 @@ public class HeadlineReportView extends ViewPart {
 		LABEL_SHIPPING(ColumnType.LABEL, "Shipping", null, KnownFeatures.FEATURE_SHOW_TRADING_SHIPPING_SPLIT), //
 		VALUE_SHIPPING(ColumnType.VALUE, 1000000000l, KPIReportTransformer.TYPE_COST, KnownFeatures.FEATURE_SHOW_TRADING_SHIPPING_SPLIT), //
 		//
-		LABEL_UPSIDE(ColumnType.LABEL, "Upside", null, "features:report-headline-upside"), VALUE_UPSIDE(ColumnType.VALUE, 1000000000l, KPIReportTransformer.TYPE_COST,
-				"features:report-headline-upside"), //
+		LABEL_UPSIDE(ColumnType.LABEL, "Upside", null, KnownFeatures.FEATURE_HEADLINE_UPSIDE), VALUE_UPSIDE(ColumnType.VALUE, 1000000000l, KPIReportTransformer.TYPE_COST,
+				KnownFeatures.FEATURE_HEADLINE_UPSIDE), //
 		//
-		LABEL_SALES_REVENUE(ColumnType.LABEL, "Revenue", null, "features:headline-sales-revenue"), VALUE_SALES_REVENUE(ColumnType.VALUE, 1000000000l, KPIReportTransformer.TYPE_COST,
-				"features:headline-sales-revenue"), //
+		LABEL_SALES_REVENUE(ColumnType.LABEL, "Revenue", null, KnownFeatures.FEATURE_HEADLINE_SALES_REVENUE), VALUE_SALES_REVENUE(ColumnType.VALUE, 1000000000l, KPIReportTransformer.TYPE_COST,
+				KnownFeatures.FEATURE_HEADLINE_SALES_REVENUE), //
 		//
-		LABEL_EQUITY(ColumnType.LABEL, "Equity", null, "features:report-equity-book"), VALUE_EQUITY(ColumnType.VALUE, 1000000000l, KPIReportTransformer.TYPE_COST, "features:report-equity-book"), //
+		LABEL_EQUITY(ColumnType.LABEL, "Equity", null, KnownFeatures.FEATURE_HEADLINE_EQUITY_BOOK), VALUE_EQUITY(ColumnType.VALUE, 1000000000l, KPIReportTransformer.TYPE_COST, //
+				KnownFeatures.FEATURE_HEADLINE_EQUITY_BOOK), //
 		//
-		LABEL_IDLE_DAYS(ColumnType.LABEL, "Idle", null, "features:headline-idle-days"), VALUE_IDLE_DAYS(ColumnType.VALUE, 24000l, KPIReportTransformer.TYPE_TIME, "features:headline-idle-days"), //
+		LABEL_IDLE_DAYS(ColumnType.LABEL, "Idle", null, KnownFeatures.FEATURE_HEADLINE_IDLE_DAYS), VALUE_IDLE_DAYS(ColumnType.VALUE, 24000l, KPIReportTransformer.TYPE_TIME, //
+				KnownFeatures.FEATURE_HEADLINE_IDLE_DAYS), //
 		//
-		LABEL_CHARTER_LENGTH_DAYS(ColumnType.LABEL, "Charter Length", null, "features:headline-charter-length"), VALUE_CHARTER_LENGTH_DAYS(ColumnType.VALUE, 24000l, KPIReportTransformer.TYPE_TIME,
-				"features:headline-charter-length"), //
+		LABEL_CHARTER_LENGTH_DAYS(ColumnType.LABEL, "Charter Length", null, KnownFeatures.FEATURE_HEADLINE_CHARTER_LENGTH), VALUE_CHARTER_LENGTH_DAYS(ColumnType.VALUE, 24000l, KPIReportTransformer.TYPE_TIME,
+				KnownFeatures.FEATURE_HEADLINE_CHARTER_LENGTH), //
 		//
 		LABEL_GCO(ColumnType.LABEL, "Charter Out (virt)", null, KnownFeatures.FEATURE_OPTIMISATION_CHARTER_OUT_GENERATION), VALUE_GCO_DAYS(ColumnType.VALUE, 2400l, KPIReportTransformer.TYPE_TIME,
 				KnownFeatures.FEATURE_OPTIMISATION_CHARTER_OUT_GENERATION), VALUE_GCO_REVENUE(ColumnType.VALUE, 1000000000l, KPIReportTransformer.TYPE_COST,
 						KnownFeatures.FEATURE_OPTIMISATION_CHARTER_OUT_GENERATION), //
 		//
-		LABEL_PURCHASE_COST(ColumnType.LABEL, "P. Cost", null, "features:headline-purchase-cost"), VALUE_PURCHASE_COST(ColumnType.VALUE, 1000000000l, KPIReportTransformer.TYPE_COST,
-				"features:headline-purchase-cost"), //
+		LABEL_NOMINALS(ColumnType.LABEL, "Nominals", null, KnownFeatures.FEATURE_HEADLINE_NOMINALS), VALUE_NOMINALS(ColumnType.VALUE, 100l, null, KnownFeatures.FEATURE_HEADLINE_NOMINALS),
+		//
+		LABEL_PURCHASE_COST(ColumnType.LABEL, "P. Cost", null, KnownFeatures.FEATURE_HEADLINE_PURCHASE_COST), VALUE_PURCHASE_COST(ColumnType.VALUE, 1000000000l, KPIReportTransformer.TYPE_COST,
+				KnownFeatures.FEATURE_HEADLINE_PURCHASE_COST), //
 		//
 		LABEL_LATENESS(ColumnType.LABEL, "Late", null), VALUE_LATENESS(ColumnType.VALUE, 5200l, KPIReportTransformer.TYPE_TIME), //
 		//
@@ -289,6 +293,8 @@ public class HeadlineReportView extends ViewPart {
 				return d.purchaseCost;
 			case VALUE_SALES_REVENUE:
 				return d.salesRevenue;
+			case VALUE_NOMINALS:
+				return d.nominals;
 			default:
 				break;
 
@@ -437,6 +443,13 @@ public class HeadlineReportView extends ViewPart {
 						color = SWT.COLOR_BLACK;
 					} else {
 						color = (d.salesRevenue - pinD.salesRevenue) >= 0 ? SWT.COLOR_DARK_GREEN : SWT.COLOR_RED;
+					}
+					break;
+				case VALUE_NOMINALS:
+					if (pinD == null) {
+						color = SWT.COLOR_BLACK;
+					} else {
+						color = (d.nominals - pinD.nominals) > 0 ? SWT.COLOR_RED : SWT.COLOR_DARK_GREEN;
 					}
 					break;
 				default:

@@ -27,27 +27,25 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Pair;
 
 public class MachineInformation extends PreferencePage implements IWorkbenchPreferencePage {
 
+	private static final String UNKNOWN = "Unknown";
+
 	private enum MachineFeatures {
-		CPUName, CPUSpeed, NumberOfCores, NumberOfLogicalCores, NumberOfCPUS, // CPU
+		CPUName, //
+		CPUSpeed, //
+		NumberOfCores, //
+		NumberOfLogicalCores, //
+		NumberOfCPUS, // CPU
 		PhysicalMemory // Memory
-	}
-
-	private static final Logger log = LoggerFactory.getLogger(MachineInformation.class);
-
-	public MachineInformation() {
-		super();
 	}
 
 	@Override
 	public void init(final IWorkbench workbench) {
-
+		// Nothing needed here
 	}
 
 	@Override
@@ -63,7 +61,7 @@ public class MachineInformation extends PreferencePage implements IWorkbenchPref
 			lbl.setText("CPU Name");
 
 			final Text txt = new Text(c, SWT.READ_ONLY | SWT.RIGHT | SWT.WRAP);
-			txt.setText(features.getOrDefault(MachineFeatures.CPUName, "Unknown"));
+			txt.setText(features.getOrDefault(MachineFeatures.CPUName, UNKNOWN));
 			txt.setLayoutData(dataFactory.create());
 			txt.pack();
 		}
@@ -72,7 +70,7 @@ public class MachineInformation extends PreferencePage implements IWorkbenchPref
 			lbl.setText("CPU Speed");
 
 			final Text txt = new Text(c, SWT.READ_ONLY | SWT.RIGHT);
-			txt.setText(features.getOrDefault(MachineFeatures.CPUSpeed, "Unknown"));
+			txt.setText(features.getOrDefault(MachineFeatures.CPUSpeed, UNKNOWN));
 			txt.pack();
 			txt.setLayoutData(dataFactory.create());
 		}
@@ -81,7 +79,7 @@ public class MachineInformation extends PreferencePage implements IWorkbenchPref
 			lbl.setText("Number of cores:");
 
 			final Text txt = new Text(c, SWT.READ_ONLY | SWT.RIGHT);
-			txt.setText(features.getOrDefault(MachineFeatures.NumberOfCores, "Unknown"));
+			txt.setText(features.getOrDefault(MachineFeatures.NumberOfCores, UNKNOWN));
 			txt.pack();
 			txt.setLayoutData(dataFactory.create());
 		}
@@ -90,7 +88,7 @@ public class MachineInformation extends PreferencePage implements IWorkbenchPref
 			lbl.setText("Number of logical cores:");
 
 			final Text txt = new Text(c, SWT.READ_ONLY | SWT.RIGHT);
-			txt.setText(features.getOrDefault(MachineFeatures.NumberOfLogicalCores, "Unknown"));
+			txt.setText(features.getOrDefault(MachineFeatures.NumberOfLogicalCores, UNKNOWN));
 			txt.pack();
 			txt.setLayoutData(dataFactory.create());
 		}
@@ -99,7 +97,7 @@ public class MachineInformation extends PreferencePage implements IWorkbenchPref
 			lbl.setText("Physical memory:");
 
 			final Text txt = new Text(c, SWT.READ_ONLY | SWT.RIGHT);
-			txt.setText(features.getOrDefault(MachineFeatures.PhysicalMemory, "Unknown"));
+			txt.setText(features.getOrDefault(MachineFeatures.PhysicalMemory, UNKNOWN));
 			txt.pack();
 			txt.setLayoutData(dataFactory.create());
 		}
@@ -124,27 +122,28 @@ public class MachineInformation extends PreferencePage implements IWorkbenchPref
 							if (line.startsWith("DeviceID=")) {
 								physicalId = Integer.parseInt(line.substring("DeviceID=CPU".length()));
 							} else if (line.startsWith("NumberOfCores=")) {
-								features.computeIfAbsent(MachineFeatures.NumberOfCores, (v) -> new HashSet<>()).add(new Pair<Integer, String>(physicalId, line.substring("NumberOfCores=".length())));
+								features.computeIfAbsent(MachineFeatures.NumberOfCores, v -> new HashSet<>()).add(new Pair<>(physicalId, line.substring("NumberOfCores=".length())));
 							} else if (line.startsWith("NumberOfLogicalProcessors=")) {
-								features.computeIfAbsent(MachineFeatures.NumberOfLogicalCores, (v) -> new HashSet<>())
-										.add(new Pair<Integer, String>(physicalId, line.substring("NumberOfLogicalProcessors=".length())));
+								features.computeIfAbsent(MachineFeatures.NumberOfLogicalCores, v -> new HashSet<>()).add(new Pair<>(physicalId, line.substring("NumberOfLogicalProcessors=".length())));
 							} else if (line.startsWith("Name=")) {
-								features.computeIfAbsent(MachineFeatures.CPUName, (v) -> new HashSet<>()).add(new Pair<Integer, String>(physicalId, line.substring("Name=".length())));
-								features.computeIfAbsent(MachineFeatures.CPUName, (v) -> new HashSet<>()).add(new Pair<Integer, String>(physicalId, line.substring("Name=".length())));
+								features.computeIfAbsent(MachineFeatures.CPUName, v -> new HashSet<>()).add(new Pair<>(physicalId, line.substring("Name=".length())));
+								features.computeIfAbsent(MachineFeatures.CPUName, v -> new HashSet<>()).add(new Pair<>(physicalId, line.substring("Name=".length())));
 							} else if (line.startsWith("MaxClockSpeed=")) {
-								features.computeIfAbsent(MachineFeatures.CPUSpeed, (v) -> new HashSet<>()).add(new Pair<Integer, String>(physicalId, line.substring("MaxClockSpeed=".length())));
+								features.computeIfAbsent(MachineFeatures.CPUSpeed, v -> new HashSet<>()).add(new Pair<>(physicalId, line.substring("MaxClockSpeed=".length())));
 							}
 						}
 					}
 				}
 				{
-					final List<String> lines = executeCommand("wmic", "memphysical", "Get", "MaxCapacity", "/Format:List");
+					final List<String> lines = executeCommand("wmic", "memorychip", "Get", "Capacity", "/Format:List");
 					if (lines != null) {
+						long total = 0;
 						for (final String line : lines) {
-							if (line.startsWith("MaxCapacity=")) {
-								features.computeIfAbsent(MachineFeatures.PhysicalMemory, (v) -> new HashSet<>()).add(new Pair<Integer, String>(0, line.substring("MaxCapacity=".length())));
+							if (line.startsWith("Capacity=")) {
+								total += Long.parseLong(line.substring("Capacity=".length()));
 							}
 						}
+						features.computeIfAbsent(MachineFeatures.PhysicalMemory, v -> new HashSet<>()).add(Pair.of(0, String.format("%,dG", total / 1_024L / 1_024L / 1024L)));
 					}
 				}
 			} else if (osname.startsWith("Linux")) {
@@ -154,28 +153,28 @@ public class MachineInformation extends PreferencePage implements IWorkbenchPref
 					for (final String line : lines) {
 						if (line.startsWith("cpu cores")) {
 							final String value = line.substring(line.indexOf(":") + 1).trim();
-							features.computeIfAbsent(MachineFeatures.NumberOfCores, (v) -> new HashSet<>()).add(new Pair<Integer, String>(physicalId, value));
+							features.computeIfAbsent(MachineFeatures.NumberOfCores, v -> new HashSet<>()).add(new Pair<>(physicalId, value));
 						} else if (line.startsWith("siblings")) {
 							final String value = line.substring(line.indexOf(":") + 1).trim();
-							features.computeIfAbsent(MachineFeatures.NumberOfLogicalCores, (v) -> new HashSet<>()).add(new Pair<Integer, String>(physicalId, value));
+							features.computeIfAbsent(MachineFeatures.NumberOfLogicalCores, v -> new HashSet<>()).add(new Pair<>(physicalId, value));
 						} else if (line.startsWith("model name")) {
 							final String value = line.substring(line.indexOf(":") + 1).trim();
-							features.computeIfAbsent(MachineFeatures.CPUName, (v) -> new HashSet<>()).add(new Pair<Integer, String>(physicalId, value));
+							features.computeIfAbsent(MachineFeatures.CPUName, v -> new HashSet<>()).add(new Pair<>(physicalId, value));
 						} else if (line.startsWith("cpu MHz")) {
 							final String value = line.substring(line.indexOf(":") + 1).trim();
-							features.computeIfAbsent(MachineFeatures.CPUSpeed, (v) -> new HashSet<>()).add(new Pair<Integer, String>(physicalId, value));
+							features.computeIfAbsent(MachineFeatures.CPUSpeed, v -> new HashSet<>()).add(new Pair<>(physicalId, value));
 						}
 					}
 				}
 			}
 		}
 
-		final Function<Set<Pair<Integer, String>>, String> f = (v) -> v.stream() //
+		final Function<Set<Pair<Integer, String>>, String> f = v -> v.stream() //
 				.sorted((a, b) -> Integer.compare(a.getFirst(), b.getFirst())) //
-				.map(p -> p.getSecond()) //
+				.map(Pair::getSecond) //
 				.collect(Collectors.joining(", "));
 
-		return features.entrySet().stream().collect(Collectors.toMap(e -> e.getKey(), v -> f.apply(v.getValue())));
+		return features.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, v -> f.apply(v.getValue())));
 	}
 
 	private @Nullable List<String> executeCommand(final String... command) {
