@@ -997,9 +997,6 @@ public class ContractPage extends ADPComposite {
 		final Map<Inventory, Map<BaseLegalEntity, Map<SalesContract, List<Vessel>>>> thirdPartySalesContractVesselLists = new HashMap<>();
 		final Map<Inventory, Map<BaseLegalEntity, Map<DESSalesMarket, List<Vessel>>>> thirdPartyMarketVesselLists = new HashMap<>();
 		
-		// int capltaplContractIndex = 0;
-		
-		
 		final Map<Inventory, SalesContract[]> capltaplSalesContracts = new HashMap<>();
 		final Map<Inventory, DESSalesMarket[]> capltaplMarkets = new HashMap<>();
 		final Map<Inventory, List<Pair<SalesContract, Double>>> capltaplSalesContractRelativeEntitlements = new HashMap<>();
@@ -1007,16 +1004,14 @@ public class ContractPage extends ADPComposite {
 		final Map<Inventory, List<Pair<DESSalesMarket, Double>>> capltaplMarketRelativeEntitlements = new HashMap<>();
 		final Map<Inventory, Map<DESSalesMarket, Long>> capltaplMarketRunningAllocation = new HashMap<>();
 		
+		final Map<Inventory, Map<BaseLegalEntity, Map<SalesContract, Boolean>>> thirdPartyContractVesselSharing = new HashMap<>();
+		final Map<Inventory, Map<BaseLegalEntity, Map<DESSalesMarket, Boolean>>> thirdPartyMarketVesselSharing = new HashMap<>();
+		
 		
 //		SalesContract[] capltaplSalesContracts = null;
 //		DESSalesMarket[] capltaplMarkets = null;
 		final Map<SalesContract, Integer> capltaplSalesContractVesselIndices = new HashMap<>();
-		
-//		final List<Pair<SalesContract, Double>> capltaplSalesContractRelativeEntitlements = new LinkedList<>();
-//		final Map<SalesContract, Long> capltaplSalesContractRunningAllocation = new HashMap<>();
-//		final List<Pair<DESSalesMarket, Double>> capltaplMarketRelativeEntitlements = new LinkedList<>();
-//		final Map<DESSalesMarket, Long> capltaplMarketRunningAllocation = new HashMap<>();
-//		
+
 		final Map<SalesContract, List<Vessel>> capltaplContractVesselLists = new HashMap<>();
 		final Map<DESSalesMarket, List<Vessel>> capltaplMarketVesselLists = new HashMap<>();
 		final Set<Vessel> capltaplVessels = new HashSet<>();
@@ -1050,10 +1045,13 @@ public class ContractPage extends ADPComposite {
 			thirdPartySalesContracts.put(currentInventory, currentThirdPartySalesContracts);
 			Map<BaseLegalEntity, DESSalesMarket[]> currentThirdPartyMarketContracts = new HashMap<>();
 			thirdPartyMarkets.put(currentInventory, currentThirdPartyMarketContracts);
+			Map<BaseLegalEntity, Map<SalesContract, Boolean>> currentThirdPartyContractVesselSharing = new HashMap<>();
+			thirdPartyContractVesselSharing.put(currentInventory, currentThirdPartyContractVesselSharing);
+			Map<BaseLegalEntity, Map<DESSalesMarket, Boolean>> currentThirdPartyMarketVesselSharing = new HashMap<>();
+			thirdPartyMarketVesselSharing.put(currentInventory, currentThirdPartyMarketVesselSharing);
 			
 			final Map<BaseLegalEntity, MUDContainer> currentMUDContainers = new HashMap<>();
 			mudContainers.put(currentInventory, currentMUDContainers);
-			
 			
 			final List<Pair<BaseLegalEntity, Double>> currentRelativeEntitlements = new ArrayList<>();
 			final Map<BaseLegalEntity, Long> currentRunningAllocations = new HashMap<>();
@@ -1115,6 +1113,11 @@ public class ContractPage extends ADPComposite {
 					currentThirdPartyToSalesContractToRunningAlloc.put(currentEntity, runningSalesContractAllocs);
 					SalesContract[] currentSalesContracts = new SalesContract[row.getContractAllocationRows().size()];
 					currentThirdPartySalesContracts.put(currentEntity, currentSalesContracts);
+					Map<SalesContract, Boolean> currentThirdPartyEntityContractVesselSharing = new HashMap<>();
+					currentThirdPartyContractVesselSharing.put(currentEntity, currentThirdPartyEntityContractVesselSharing);
+					Map<DESSalesMarket, Boolean> currentThirdPartyEntityMarketVesselSharing = new HashMap<>();
+					currentThirdPartyMarketVesselSharing.put(currentEntity, currentThirdPartyEntityMarketVesselSharing);
+					
 					double totalWeight = IntStream.concat(
 							row.getContractAllocationRows().stream().mapToInt(ContractAllocationRow::getWeight),
 							row.getMarketAllocationRows().stream().mapToInt(MarketAllocationRow::getWeight)
@@ -1177,29 +1180,25 @@ public class ContractPage extends ADPComposite {
 		
 		Set<BaseLegalEntity> nonCaplTaplVesselSharingEntities = new HashSet<>();
 		for (InventorySubprofile sProfile : profile.getInventories()) {
+			final Inventory inventory = sProfile.getInventory();
 			for (InventoryADPEntityRow row : sProfile.getEntityTable()) {
-				if (!row.getEntity().equals(capltaplEntity) && 
-						Stream.concat(
+				final BaseLegalEntity currentEntity = row.getEntity();
+				if (!currentEntity.equals(capltaplEntity)) {
+					if (Stream.concat(
 								row.getMarketAllocationRows().stream().flatMap(mar -> mar.getVessels().stream()), 
 								row.getContractAllocationRows().stream().flatMap(con -> con.getVessels().stream())
 							).noneMatch(capltaplVessels::contains)) {
-					nonCaplTaplVesselSharingEntities.add(row.getEntity());
+						nonCaplTaplVesselSharingEntities.add(row.getEntity());
+					}
+					for (ContractAllocationRow cRow : row.getContractAllocationRows()) {
+						thirdPartyContractVesselSharing.get(inventory).get(currentEntity).put(cRow.getContract(), cRow.getVessels().stream().noneMatch(capltaplVessels::contains));
+					}
+					for (MarketAllocationRow mRow : row.getMarketAllocationRows()) {
+						thirdPartyMarketVesselSharing.get(inventory).get(currentEntity).put(mRow.getMarket(), mRow.getVessels().stream().noneMatch(capltaplVessels::contains));
+					}
 				}
 			}
 		}
-		
-//		for (InventoryADPEntityRow row : profile.getEntityTable()) {
-//			if (!row.getEntity().equals(capltaplEntity) && Stream.concat(row.getMarketAllocationRows().stream().flatMap(mar -> mar.getVessels().stream()), row.getContractAllocationRows().stream().flatMap(con -> con.getVessels().stream())).noneMatch(capltaplVessels::contains)){
-//				nonCaplTaplVesselSharingEntities.add(row.getEntity());
-//			}
-//		}
-//		
-//		final Set<Vessel> expectedVesselsa = profile.getEntityTable().stream() //
-//				.flatMap(row -> Stream.concat(row.getMarketAllocationRows().stream().flatMap(mar -> mar.getVessels().stream()), row.getContractAllocationRows().stream().flatMap(con -> con.getVessels().stream()))) //
-////				.flatMap(row -> row.getMarketAllocationRows().stream()) //
-////				.flatMap(mar -> mar.getVessels().stream()) //
-//				.collect(Collectors.toSet());
-
 
 		final Set<Vessel> expectedVessels = profile.getInventories().stream() //
 				.flatMap(sProfile -> sProfile.getEntityTable().stream() //
@@ -1216,7 +1215,7 @@ public class ContractPage extends ADPComposite {
 		}
 
 		final LocalDate startDate = adpModel.getYearStart().atDay(1);
-		
+
 		final Map<Inventory, PurchaseContract> inventoryPurchaseContracts = new HashMap<>();
 		final List<PurchaseContract> pcs = ScenarioModelUtil.getCommercialModel(sm).getPurchaseContracts();
 		for (InventorySubprofile sProfile : profile.getInventories()) {
@@ -1256,35 +1255,23 @@ public class ContractPage extends ADPComposite {
 			inventoryFlaggedDates.put(sProfile.getInventory(), flaggedDates);
 		}
 
-		Map<Inventory, List<LoadSlot>> newInventoryLoadSlots = new HashMap<>();
-		for (InventorySubprofile sProfile : profile.getInventories()) {
-			newInventoryLoadSlots.put(sProfile.getInventory(), new LinkedList<>());
-		}
-		int idx = 0;
-		
-		Entry<LocalDate, InventoryDailyEvent> currentEntry = null;
+		final Map<Inventory, List<LoadSlot>> newInventoryLoadSlots = new HashMap<>();
+		final Map<Inventory, Integer> inventorySlotCounters = new HashMap<>();
 		LoadSlot currentExistingSlot = null;
-		
-		Map<Inventory, Stack<LoadSlot>> inventoryTempSlots = new HashMap<>();
-		for (InventorySubprofile sProfile : profile.getInventories()) {
-			inventoryTempSlots.put(sProfile.getInventory(), new Stack<>());
-		}
-		
-		List<Pair<Inventory, Iterator<Entry<LocalDate, InventoryDailyEvent>>>> iterSwap = new LinkedList<>();
-		for (InventorySubprofile sProfile : profile.getInventories()) {
-			iterSwap.add(new Pair<>(sProfile.getInventory(), inventoryInsAndOuts.get(sProfile.getInventory()).entrySet().iterator()));
-		}
-		
-		Map<Inventory, Integer> inventoryRunningVolume = new HashMap<>();
-		for (InventorySubprofile sProfile : profile.getInventories()) {
-			inventoryRunningVolume.put(sProfile.getInventory(), 0);
-		}
-		
+
+		final Map<Inventory, Stack<LoadSlot>> inventoryTempSlots = new HashMap<>();
+		final List<Pair<Inventory, Iterator<Entry<LocalDate, InventoryDailyEvent>>>> iterSwap = new LinkedList<>();
+		final Map<Inventory, Integer> inventoryRunningVolume = new HashMap<>();
 		final Map<Inventory, MULLContainer> mullMap = new HashMap<>();
 		for (final InventorySubprofile sProfile : profile.getInventories()) {
+			inventoryTempSlots.put(sProfile.getInventory(), new Stack<>());
+			iterSwap.add(new Pair<>(sProfile.getInventory(), inventoryInsAndOuts.get(sProfile.getInventory()).entrySet().iterator()));
+			inventoryRunningVolume.put(sProfile.getInventory(), 0);
 			mullMap.put(sProfile.getInventory(), new MULLContainer(runningAllocation.get(sProfile.getInventory()), fullCargoLotValue, relativeEntitlements.get(sProfile.getInventory()), mudContainers.get(sProfile.getInventory())));
+			inventorySlotCounters.put(sProfile.getInventory(), 0);
+			newInventoryLoadSlots.put(sProfile.getInventory(), new LinkedList<>());
 		}
-		
+
 		while (iterSwap.stream().allMatch(p -> p.getSecond().hasNext())) {
 			for (Pair<Inventory, Iterator<Entry<LocalDate, InventoryDailyEvent>>> curr : iterSwap) {
 				Inventory currentInventory = curr.getFirst();
@@ -1294,9 +1281,8 @@ public class ContractPage extends ADPComposite {
 				}
 				final Entry<LocalDate, InventoryDailyEvent> entry = currentIter.next();
 				final InventoryDailyEvent dailyEvent = entry.getValue();
-				
+
 				inventoryRunningVolume.compute(currentInventory, (k, vol) -> vol + dailyEvent.netVolumeIn);
-				
 				final MULLContainer currentMULLContainer = mullMap.get(currentInventory);
 				currentMULLContainer.updateRunningAllocation(dailyEvent.netVolumeIn);
 				
@@ -1340,11 +1326,6 @@ public class ContractPage extends ADPComposite {
 					}
 				}
 				
-//				if (currentInventory.getName().equalsIgnoreCase("gorgon")) {
-//					System.out.println("Facility:Gorgon");
-//					System.out.println("Date:",);
-//				}
-				
 				if (mullEntity2.equals(capltaplEntity)) {
 					int allocationDrop;
 					
@@ -1386,7 +1367,8 @@ public class ContractPage extends ADPComposite {
 					if (tempRunningVolume > dailyEvent.minVolume && !thisFlaggedDates.contains(currentDate)) {
 						final LoadSlot slot;
 						if (thisTempSlots.isEmpty()) {
-							final String nextName = currentInventory.getName() + "-" + Integer.toString(idx);
+							final Integer currentInventoryCount = inventorySlotCounters.get(currentInventory);
+							final String nextName = String.format("%s-%03d", currentInventory.getName(), currentInventoryCount);
 							slot = CargoFactory.eINSTANCE.createLoadSlot();
 							slot.setPort(currentInventory.getPort());
 							slot.setVolumeLimitsUnit(VolumeUnits.M3);
@@ -1395,7 +1377,8 @@ public class ContractPage extends ADPComposite {
 							slot.setName(nextName);
 							slot.setWindowSizeUnits(TimePeriod.DAYS);
 							slot.setContract(inventoryPurchaseContracts.get(currentInventory));
-							++idx;
+							inventorySlotCounters.put(currentInventory, currentInventoryCount+1);
+							// ++idx;
 						} else {
 							slot = thisTempSlots.pop();
 						}
@@ -1481,7 +1464,8 @@ public class ContractPage extends ADPComposite {
 					if (tempRunningVolume > dailyEvent.minVolume && !thisFlaggedDates.contains(currentDate)) {
 						final LoadSlot slot;
 						if (thisTempSlots.isEmpty()) {
-							final String nextName = currentInventory.getName() + "-" + Integer.toString(idx);
+							final Integer currentInventoryCount = inventorySlotCounters.get(currentInventory);
+							final String nextName = String.format("%s-%03d", currentInventory.getName(), currentInventoryCount);
 							slot = CargoFactory.eINSTANCE.createLoadSlot();
 							slot.setPort(currentInventory.getPort());
 							slot.setVolumeLimitsUnit(VolumeUnits.M3);
@@ -1490,12 +1474,11 @@ public class ContractPage extends ADPComposite {
 							slot.setName(nextName);
 							slot.setWindowSizeUnits(TimePeriod.DAYS);
 							slot.setContract(inventoryPurchaseContracts.get(currentInventory));
-							++idx;
+							inventorySlotCounters.put(currentInventory, currentInventoryCount+1);
 						} else {
 							slot = thisTempSlots.pop();
 						}
 						slot.setWindowStart(currentDate);
-//						}
 						if (!thisNewLoadSlots.isEmpty() && dynamicWindowGeneration) {
 							LoadSlot previousLoadSlot = ((LinkedList<LoadSlot>) thisNewLoadSlots).getLast();
 							final LocalDate previousDate = previousLoadSlot.getWindowStart();
@@ -1529,10 +1512,11 @@ public class ContractPage extends ADPComposite {
 							if (woodsideDES && mullEntity2.getName().equals("Woodside") && currentSalesContract2.getName().equals("TED1")) {
 								slot.setDESPurchase(true);
 							}
+							
 							slotToThirdPartySalesContract.add(new Triple<>(slot, currentSalesContract2, currentVessel2));
 							currentMULLContainer.dropAllocation(mullEntity2, currentSalesContract2, (long) allocationDrop);
 						} else {
-							if (nonCaplTaplVesselSharingEntities.contains(mullEntity2)) {
+							if (nonCaplTaplVesselSharingEntities.contains(mullEntity2) || thirdPartyMarketVesselSharing.get(currentInventory).get(ent).get(currentMarket2)) {
 								slotToFOBSaleVessels.add(new Triple<>(slot, currentMarket2, currentVessel2));
 							} else {
 								slotToMarketVessels.add(new Triple<>(slot, currentMarket2, currentVessel2));
@@ -2017,33 +2001,6 @@ public class ContractPage extends ADPComposite {
 			}
 		}
 	}
-	
-//	private DischargeSlot buildCapltaplMarketDischargeSlot(CargoEditingCommands cec, List<Command> setCommands, CargoModel cargoModel, DESSalesMarket market, LoadSlot loadSlotToMatch, Vessel modelVessel, List<Vessel> vesselRestrictions) {
-//		DischargeSlot dSlot = cec.createNewSpotDischarge(setCommands, cargoModel, market);
-//		IScenarioDataProvider sdp = editorData.getScenarioDataProvider();
-//		final int travelTime = CargoEditorMenuHelper.getTravelTime(loadSlotToMatch, dSlot, modelVessel, sdp);
-//		if (travelTime == Integer.MAX_VALUE) {
-//			final String message = String.format("Can not determine travel time between %s and %s. \n Travel time can not be %d hours.", loadSlotToMatch.getPort().getName(),
-//					dSlot.getPort().getName(), travelTime);
-//			throw new RuntimeException(message);
-//		}
-//		
-//		final SchedulingTimeWindow loadSTW = loadSlotToMatch.getSchedulingTimeWindow();
-//		final LocalDate dischargeDate = loadSTW.getStart().plusHours(travelTime + loadSTW.getDuration()).withDayOfMonth(1).withHour(0).toLocalDate();
-//		dSlot.setWindowStart(dischargeDate);
-//		dSlot.setWindowStartTime(0);
-//		
-//		dSlot.setWindowSize(1);
-//		dSlot.setWindowSizeUnits(TimePeriod.MONTHS);
-//		dSlot.setRestrictedVesselsArePermissive(true);
-//		dSlot.setRestrictedVesselsOverride(true);
-//		dSlot.getRestrictedVessels().addAll(vesselRestrictions);
-//		
-//		String id = "chev-spot-sale-" + loadSlotToMatch.getName();
-//		
-//		dSlot.setName(id);
-//		return dSlot;
-//	}
 	
 	private DischargeSlot buildMarketDischargeSlot(CargoEditingCommands cec, List<Command> setCommands, CargoModel cargoModel, DESSalesMarket market, LoadSlot loadSlotToMatch, Vessel modelVessel, List<Vessel> vesselRestrictions, String namePrefix) {
 		DischargeSlot dSlot = cec.createNewSpotDischarge(setCommands, cargoModel, market);
