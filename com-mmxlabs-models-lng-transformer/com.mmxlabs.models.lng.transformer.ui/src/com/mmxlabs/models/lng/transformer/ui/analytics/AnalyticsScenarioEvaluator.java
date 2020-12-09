@@ -348,7 +348,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		try {
 			helper.generateWith(scenarioInstance, userSettings, scenarioDataProvider.getEditingDomain(), hints, (bridge) -> {
 				final LNGDataTransformer dataTransformer = bridge.getDataTransformer();
-				final ViabilitySanboxUnit unit = new ViabilitySanboxUnit(lngScenarioModel, dataTransformer, "viability-sandbox", userSettings, constraints, executorService,
+				final ViabilitySanboxUnit unit = new ViabilitySanboxUnit(dataTransformer, userSettings, constraints, executorService,
 						dataTransformer.getInitialSequences(), dataTransformer.getInitialResult(), dataTransformer.getHints());
 				/* Command cmd = */
 				unit.run(model, mapper, shippingMap, new NullProgressMonitor());

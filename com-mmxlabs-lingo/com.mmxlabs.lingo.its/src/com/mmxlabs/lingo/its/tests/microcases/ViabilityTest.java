@@ -88,40 +88,42 @@ public class ViabilityTest extends AbstractMicroTestCase {
 		evaluateTest(null, null, scenarioRunner -> {
 		});
 		
-		ViabilityModel model = ViabilityUtils.createModelFromScenario(lngScenarioModel, "test");
-		
-		ViabilitySandboxEvaluator.evaluate(scenarioDataProvider, null, model);
-		
-		final Map<Pair<LoadSlot,VesselAvailability>, List<ViabilityResult>> checks = getResultingModel();
-		
-		for (ViabilityRow vr : model.getRows()) {
-			final ShippingOption so = vr.getShipping();
-			Assertions.assertNotNull(so);
-			VesselAvailability va = null;
-			
-			if (so instanceof ExistingVesselCharterOption) {
-				va = ((ExistingVesselCharterOption)so).getVesselCharter();
-			}
-			
-			Assertions.assertNotNull(va);
-			
-			final BuyOption bo = vr.getBuyOption();
-			if (bo instanceof BuyReference) {
-				final BuyReference br = (BuyReference) bo;
-				final LoadSlot ls = br.getSlot();
-				Assertions.assertNotNull(ls);
-				
-				Pair<LoadSlot,VesselAvailability> one = new Pair<LoadSlot, VesselAvailability>(ls, va);
-				
-				final List<ViabilityResult> actualResults = vr.getLhsResults();
-				final List<ViabilityResult> inputResults = checks.get(one);
-				
-				if (actualResults == null || inputResults == null) {
-					continue;
+		if (lngScenarioModel != null) {
+			ViabilityModel model = ViabilityUtils.createModelFromScenario(lngScenarioModel, "test");
+
+			ViabilitySandboxEvaluator.evaluate(scenarioDataProvider, null, model);
+
+			final Map<Pair<LoadSlot,VesselAvailability>, List<ViabilityResult>> checks = getResultingModel();
+
+			for (ViabilityRow vr : model.getRows()) {
+				final ShippingOption so = vr.getShipping();
+				Assertions.assertNotNull(so);
+				VesselAvailability va = null;
+
+				if (so instanceof ExistingVesselCharterOption) {
+					va = ((ExistingVesselCharterOption)so).getVesselCharter();
 				}
-				
-				Assertions.assertTrue( actualResults.size() == inputResults.size());
-				Assertions.assertTrue( doCheck(actualResults, inputResults));
+
+				Assertions.assertNotNull(va);
+
+				final BuyOption bo = vr.getBuyOption();
+				if (bo instanceof BuyReference) {
+					final BuyReference br = (BuyReference) bo;
+					final LoadSlot ls = br.getSlot();
+					Assertions.assertNotNull(ls);
+
+					Pair<LoadSlot,VesselAvailability> one = new Pair<LoadSlot, VesselAvailability>(ls, va);
+
+					final List<ViabilityResult> actualResults = vr.getLhsResults();
+					final List<ViabilityResult> inputResults = checks.get(one);
+
+					if (actualResults == null || inputResults == null) {
+						continue;
+					}
+
+					Assertions.assertTrue( actualResults.size() == inputResults.size());
+					Assertions.assertTrue( doCheck(actualResults, inputResults));
+				}
 			}
 		}
 	}

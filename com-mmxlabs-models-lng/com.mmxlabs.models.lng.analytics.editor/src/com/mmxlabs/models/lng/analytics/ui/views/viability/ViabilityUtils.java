@@ -11,14 +11,10 @@ import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
 import com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption;
-import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
-import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.ViabilityModel;
 import com.mmxlabs.models.lng.analytics.ViabilityRow;
 import com.mmxlabs.models.lng.cargo.CargoModel;
-import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -40,15 +36,6 @@ public final class ViabilityUtils {
 			buy.setSlot(slot);
 			model.getBuys().add(buy);
 		}
-		/*
-		 * FIXME : uncomment if you want to see shorts
-		for (final DischargeSlot slot : cargoModel.getDischargeSlots()) {
-			if (slot.getCargo() == null) {
-				final SellReference sale = AnalyticsFactory.eINSTANCE.createSellReference();
-				sale.setSlot(slot);
-				model.getSells().add(sale);
-			}
-		} */
 		for (final VesselAvailability vessel : cargoModel.getVesselAvailabilities()) {
 			if (vessel != null) {
 				final ExistingVesselCharterOption v = AnalyticsFactory.eINSTANCE.createExistingVesselCharterOption();
@@ -56,6 +43,7 @@ public final class ViabilityUtils {
 				model.getShippingTemplates().add(v);
 			}
 		}
+
 		for (final CharterInMarket cim : spotModel.getCharterInMarkets()) {
 			if (cim != null) {
 				if (cim.getVessel() != null) {
@@ -64,21 +52,12 @@ public final class ViabilityUtils {
 						
 						ecmo.setCharterInMarket(cim);
 						ecmo.setSpotIndex(0);
-						//ecmo.setSpotIndex(cim.getSpotCharterCount());
 						
 						model.getShippingTemplates().add(ecmo);
 					}
 				}
 			}
 		}
-		// final SpotMarketGroup smgDP = spotModel.getDesPurchaseSpotMarket();
-		// if (smgDP != null) {
-		// for (final SpotMarket spotMarket : smgDP.getMarkets()) {
-		// if (spotMarket != null) {
-		// model.getMarkets().add(spotMarket);
-		// }
-		// }
-		// }
 		final SpotMarketGroup smgDS = spotModel.getDesSalesSpotMarket();
 		if (smgDS != null) {
 			for (final SpotMarket spotMarket : smgDS.getMarkets()) {
@@ -89,14 +68,6 @@ public final class ViabilityUtils {
 				}
 			}
 		}
-		// final SpotMarketGroup smgFP = spotModel.getFobPurchasesSpotMarket();
-		// if (smgFP != null) {
-		// for (final SpotMarket spotMarket : smgFP.getMarkets()) {
-		// if (spotMarket != null) {
-		// model.getMarkets().add(spotMarket);
-		// }
-		// }
-		// }
 		final SpotMarketGroup smgFS = spotModel.getFobSalesSpotMarket();
 		if (smgFS != null) {
 			for (final SpotMarket spotMarket : smgFS.getMarkets()) {
@@ -107,7 +78,7 @@ public final class ViabilityUtils {
 				}
 			}
 		}
-
+		
 		populateModel(model);
 		
 		return model;

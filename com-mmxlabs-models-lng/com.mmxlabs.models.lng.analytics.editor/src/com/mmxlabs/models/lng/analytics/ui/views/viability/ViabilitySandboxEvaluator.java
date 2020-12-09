@@ -8,7 +8,6 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -18,18 +17,16 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
-import com.mmxlabs.models.lng.analytics.BaseCase;
-import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.BuyMarket;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
 import com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption;
-import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.OptionalSimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.SellMarket;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
+import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.ViabilityModel;
 import com.mmxlabs.models.lng.analytics.services.IAnalyticsScenarioEvaluator;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.IMapperClass;
@@ -330,28 +327,7 @@ public class ViabilitySandboxEvaluator {
 		System.out.printf("Eval %d\n", b - a);
 
 	}
-
-	private static void filterTasks(final List<BaseCase> tasks) {
-		final Set<BaseCase> duplicates = new HashSet<>();
-		for (final BaseCase baseCase1 : tasks) {
-			DUPLICATE_TEST: for (final BaseCase baseCase2 : tasks) {
-				if (duplicates.contains(baseCase1) || duplicates.contains(baseCase2) || baseCase1 == baseCase2 || baseCase1.getBaseCase().size() != baseCase2.getBaseCase().size()) {
-					continue;
-				}
-				for (int i = 0; i < baseCase1.getBaseCase().size(); i++) {
-					final BaseCaseRow baseCase1Row = baseCase1.getBaseCase().get(i);
-					final BaseCaseRow baseCase2Row = baseCase2.getBaseCase().get(i);
-					if (baseCase1Row.getBuyOption() != baseCase2Row.getBuyOption() || baseCase1Row.getSellOption() != baseCase2Row.getSellOption()
-							|| baseCase1Row.getShipping() != baseCase2Row.getShipping()) {
-						continue DUPLICATE_TEST;
-					}
-				}
-				duplicates.add(baseCase2);
-			}
-		}
-		tasks.removeAll(duplicates);
-	}
-
+	
 	private static void singleEval(final IScenarioDataProvider scenarioDataProvider, final @Nullable ScenarioInstance scenarioInstance, final ViabilityModel model) {
 
 		final LNGScenarioModel optimiserScenario = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
