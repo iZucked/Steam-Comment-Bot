@@ -1387,14 +1387,14 @@ public class ContractPage extends ADPComposite {
 							LoadSlot previousLoadSlot = ((LinkedList<LoadSlot>) thisNewLoadSlots).getLast();
 							final LocalDate previousDate = previousLoadSlot.getWindowStart();
 							final long days = Days.between(previousDate, currentDate);
-							final long actualDays = days + 1;
+							final long actualDays = days;
 							final YearMonth currentYearMonth = YearMonth.from(previousDate);
 							final LocalDate endWindowDate = currentDate.plusDays(actualDays);
 							final LocalDate lastDayOfMonth = currentYearMonth.atEndOfMonth();
 							if (lastDayOfMonth.isBefore(endWindowDate)) {
-								previousLoadSlot.setWindowSize(Days.between(previousDate, lastDayOfMonth));
+								previousLoadSlot.setWindowSize(Math.min(Days.between(previousDate, lastDayOfMonth), loadWindow));
 							} else {
-								previousLoadSlot.setWindowSize((int) actualDays);
+								previousLoadSlot.setWindowSize(Math.min((int) actualDays, loadWindow));
 							}
 						}
 						final YearMonth currentYearMonth = YearMonth.from(currentDate);
@@ -1483,14 +1483,14 @@ public class ContractPage extends ADPComposite {
 							LoadSlot previousLoadSlot = ((LinkedList<LoadSlot>) thisNewLoadSlots).getLast();
 							final LocalDate previousDate = previousLoadSlot.getWindowStart();
 							final long days = Days.between(previousDate, currentDate);
-							final long actualDays = days + 1;
+							final long actualDays = days;
 							final YearMonth currentYearMonth = YearMonth.from(previousDate);
 							final LocalDate endWindowDate = currentDate.plusDays(actualDays);
 							final LocalDate lastDayOfMonth = currentYearMonth.atEndOfMonth();
 							if (lastDayOfMonth.isBefore(endWindowDate)) {
-								previousLoadSlot.setWindowSize(Days.between(previousDate, lastDayOfMonth));
+								previousLoadSlot.setWindowSize(Math.min(Days.between(previousDate, lastDayOfMonth), loadWindow));
 							} else {
-								previousLoadSlot.setWindowSize((int) actualDays);
+								previousLoadSlot.setWindowSize(Math.min((int) actualDays, loadWindow));
 							}
 						}
 						final YearMonth currentYearMonth = YearMonth.from(currentDate);
