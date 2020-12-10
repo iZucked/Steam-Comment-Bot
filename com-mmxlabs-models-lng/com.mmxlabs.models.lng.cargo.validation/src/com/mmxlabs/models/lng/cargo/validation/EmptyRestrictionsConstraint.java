@@ -54,50 +54,71 @@ public class EmptyRestrictionsConstraint extends AbstractModelMultiConstraint {
 		final List<Slot> restrictedSlots = slot.getRestrictedSlots();
 		final List<Contract> restrictedContracts;
 		final List<APortSet<Port>> restrictedPortSets;
+		List<Contract> restrictedContractsFSlot = new LinkedList<Contract>();
+		List<APortSet<Port>> restrictedPortSetsFSlot = new LinkedList<APortSet<Port>>();
 
 		boolean restrictedSlotsArePermissive = slot.isRestrictedSlotsArePermissive();
-		boolean restrictedContractsArePermissive = slot.getSlotOrDelegateContractRestrictionsArePermissive();
-		boolean restrictedPortsArePermissive = slot.getSlotOrDelegatePortRestrictionsArePermissive();
+		
+		boolean restrictedPortsArePermissiveSet = slot.isSetRestrictedPortsArePermissive();
+		boolean restrictedContractsArePermissiveSet = slot.isSetRestrictedContractsArePermissive();
+		
 
 
-		final Contract contract = slot.getContract();
+		final String name = slot.getName();
 
 		if (slot instanceof SpotSlot) {
 			SpotSlot spotSlot = (SpotSlot) slot;
 			SpotMarket market = spotSlot.getMarket();
 			if (market != null) {
-				restrictedContractsArePermissive = market.isRestrictedContractsArePermissive();
-				restrictedPortsArePermissive = market.isRestrictedPortsArePermissive();
+				restrictedContractsArePermissiveSet = market.isRestrictedContractsArePermissive();
+				restrictedPortsArePermissiveSet = market.isRestrictedPortsArePermissive();
 				restrictedContracts = market.getRestrictedContracts();
 				restrictedPortSets = new LinkedList<>(SetUtils.getObjects(market.getRestrictedPorts()));
 			} else {
-				restrictedContractsArePermissive = false;
-				restrictedPortsArePermissive = false;
+				restrictedContractsArePermissiveSet = false;
+				restrictedPortsArePermissiveSet = false;
 				restrictedContracts = Collections.emptyList();
 				restrictedPortSets = Collections.emptyList();
 			}
 		} else {
 			restrictedContracts = slot.getSlotOrDelegateContractRestrictions();
 			restrictedPortSets = slot.getSlotOrDelegatePortRestrictions();
+			
+			restrictedContractsFSlot = slot.getRestrictedContracts();
+			restrictedPortSetsFSlot = slot.getRestrictedPorts();
 		}
 		
-		if (restrictedContracts.isEmpty() && restrictedContractsArePermissive) {
-			final String msg = "Empty allowed contracts list.";
+		if (restrictedContracts.isEmpty() && restrictedContractsArePermissiveSet) {
+			final String msg = String.format("%s: Empty contracts restriction list.", name);
 			final DetailConstraintStatusDecorator d = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
 			d.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_RestrictedContractsArePermissive());
 			statuses.add(d);
 		}
 		
-		if (restrictedPortSets.isEmpty() && restrictedPortsArePermissive) {
-			final String msg = "Empty allowed ports list.";
+		if (restrictedPortSets.isEmpty() && restrictedPortsArePermissiveSet) {
+			final String msg = String.format("%s: Empty ports restriction list.", name);
 			final DetailConstraintStatusDecorator d = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
 			d.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_RestrictedPortsArePermissive());
 			statuses.add(d);
 		}
 		if (restrictedSlots.isEmpty() && restrictedSlotsArePermissive) {
-			final String msg = "Empty allowed slots list.";
+			final String msg = String.format("%s: Empty allowed slots list.", name);
 			final DetailConstraintStatusDecorator d = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
 			d.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_RestrictedSlotsArePermissive());
+			statuses.add(d);
+		}
+		
+		if (slot.eIsSet(CargoPackage.eINSTANCE.getSlot_RestrictedPortsArePermissive()) && restrictedPortSetsFSlot.isEmpty()) {
+			final String msg = String.format("%s: Ports restriction list should also be overriden.", name);
+			final DetailConstraintStatusDecorator d = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
+			d.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_RestrictedPorts());
+			statuses.add(d);
+		}
+		
+		if (slot.eIsSet(CargoPackage.eINSTANCE.getSlot_RestrictedContractsArePermissive()) && restrictedContractsFSlot.isEmpty()) {
+			final String msg = String.format("%s: Contracts restriction list should also be overriden.", name);
+			final DetailConstraintStatusDecorator d = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
+			d.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_RestrictedContracts());
 			statuses.add(d);
 		}
 	}
