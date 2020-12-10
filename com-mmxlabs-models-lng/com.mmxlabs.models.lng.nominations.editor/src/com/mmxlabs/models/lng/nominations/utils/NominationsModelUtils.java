@@ -230,10 +230,6 @@ public class NominationsModelUtils {
 		return "";
 	}
 
-//	public static List<AbstractNomination> getGeneratedNominationsForAllDates(@NonNull final IScenarioDataProvider sdp) {
-//		return getNominationsFRomSpecs()
-//	}
-
 	public static List<AbstractNomination> getGeneratedNominations(@NonNull final IScenarioEditingLocation jointModelEditor, final LocalDate startDate, final LocalDate endDate) {
 		return getGeneratedNominations(jointModelEditor.getScenarioDataProvider(), startDate, endDate);
 	}
