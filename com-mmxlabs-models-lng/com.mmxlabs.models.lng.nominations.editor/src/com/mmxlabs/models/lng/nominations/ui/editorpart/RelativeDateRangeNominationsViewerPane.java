@@ -683,7 +683,7 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 
 			@Override
 			public String render(final Object object) {
-				return NominationsModelUtils.getNominatedValue(getScenarioModel(), (AbstractNomination) object);
+				return NominationsModelUtils.getNominatedValue((AbstractNomination) object);
 			}
 		});
 

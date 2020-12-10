@@ -1959,15 +1959,12 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 	private String getBuyNominationValue(final Object object, final String nominationType) {
 		Slot<?> slot = getLoadSlot(object);
 		if (slot != null) {
-			String nomineeId = slot.getName();
 			IScenarioDataProvider sdp = getScenarioDataProvider(object);
-			LNGScenarioModel sm = ScenarioModelUtil.getScenarioModel(sdp);
-			if (sm != null) {
+			if (sdp != null) {
 				List<AbstractNomination> nominations = NominationsModelUtils.findNominationsForSlot(sdp, slot);
 				for (AbstractNomination nomination : nominations) {
 					if (nomination.getType() != null && nomination.getType().toLowerCase().equals(nominationType.toLowerCase())) {
-						String nominatedValue = NominationsModelUtils.getNominatedValue(sm, nomination);
-						return nominatedValue;
+						return NominationsModelUtils.getNominatedValue(nomination);
 					}
 				}
 			}
@@ -1978,20 +1975,16 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 	private String getSellNominationValue(final Object object, final String nominationType) {
 		Slot<?> slot = getDischargeSlot(object);
 		if (slot != null) {
-			String nomineeId = slot.getName();
 			IScenarioDataProvider sdp = getScenarioDataProvider(object);
-			LNGScenarioModel sm = ScenarioModelUtil.getScenarioModel(sdp);
-			if (sm != null) {
+			if (sdp != null) {
 				List<AbstractNomination> nominations = NominationsModelUtils.findNominationsForSlot(sdp, slot);
 				for (AbstractNomination nomination : nominations) {
 					if (nomination.getType() != null && nomination.getType().toLowerCase().equals(nominationType.toLowerCase())) {
-						String nominatedValue = NominationsModelUtils.getNominatedValue(sm, nomination);
-						return nominatedValue;
+						return NominationsModelUtils.getNominatedValue(nomination);
 					}
 				}
 			}
 		}
 		return "";
 	}
-
 }

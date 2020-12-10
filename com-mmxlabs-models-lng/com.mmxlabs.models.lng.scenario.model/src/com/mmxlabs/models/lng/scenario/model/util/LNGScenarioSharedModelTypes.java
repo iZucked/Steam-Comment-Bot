@@ -44,15 +44,19 @@ public final class LNGScenarioSharedModelTypes {
 	public static final ISharedDataModelType<FleetModel> VESSEL_GROUPS = ISharedDataModelType.make("lingo-vessel-groups", null);
 	public static final ISharedDataModelType<FleetModel> BUNKER_FUELS = ISharedDataModelType.make("lingo-bunker-fuels", null);
 
+	private LNGScenarioSharedModelTypes() {
+		//Only static methods here.
+	}
+	
 	public static Function<IScenarioDataProvider, Object> makeDistanceProvider() {
-		return (scenarioDataProvider) -> {
+		return scenarioDataProvider -> {
 			final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioDataProvider);
 			return new ModelDistanceProvider(portModel);
 		};
 	}
 
 	private static @Nullable Function<IScenarioDataProvider, Object> makeGeneratedNominationsProvider() {
-		return (scenarioDataProvider) -> {
+		return scenarioDataProvider -> {
 			final NominationsModel nominationsModel = ScenarioModelUtil.getNominationsModel(scenarioDataProvider);
 			final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioDataProvider);
 			final CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(scenarioDataProvider);
@@ -61,7 +65,7 @@ public final class LNGScenarioSharedModelTypes {
 	}
 
 	public static Function<IScenarioDataProvider, Object> makeMarketCurvesProvider() {
-		return (scenarioDataProvider) -> {
+		return scenarioDataProvider -> {
 			final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioDataProvider);
 			return new ModelMarketCurveProvider(pricingModel);
 		};

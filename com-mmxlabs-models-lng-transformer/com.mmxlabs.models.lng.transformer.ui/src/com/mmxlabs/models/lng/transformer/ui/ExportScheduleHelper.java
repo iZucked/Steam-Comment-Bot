@@ -5,7 +5,6 @@
 package com.mmxlabs.models.lng.transformer.ui;
 
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -65,6 +64,10 @@ public class ExportScheduleHelper {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ExportScheduleHelper.class);
 
+	private ExportScheduleHelper() {
+		//Just a static helper class, so disallow construction.
+	}
+	
 	public static @Nullable ScenarioInstance export(final ScenarioResult scenarioResult) throws Exception {
 		return export(scenarioResult, null, true, null);
 	}
