@@ -54,7 +54,6 @@ import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionChangedListener;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 import com.mmxlabs.scenario.service.ui.internal.Activator;
-import com.mmxlabs.scenario.service.ui.internal.ScenarioServiceSelectionProvider;
 
 public class ScenarioServiceNavigator extends CommonNavigator {
 
@@ -127,36 +126,10 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 	};
 
 	private final @NonNull IScenarioServiceSelectionChangedListener selectionChangedListener = new IScenarioServiceSelectionChangedListener() {
-		@Override
-		public void selected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioResult> deselected, boolean block) {
-			if (viewer != null) {
-				for (final ScenarioResult instance : deselected) {
-					RunnerHelper.runNowOrAsync(() -> viewer.refresh(instance.getScenarioInstance(), true));
-				}
-			}
-		}
 
 		@Override
-		public void deselected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioResult> deselected, boolean block) {
-			if (viewer != null) {
-				for (final ScenarioResult instance : deselected) {
-					RunnerHelper.syncExecDisplayOptional(() -> viewer.refresh(instance.getScenarioInstance(), true));
-				}
-			}
-		}
-
-		@Override
-		public void pinned(final IScenarioServiceSelectionProvider provider, final ScenarioResult oldPin, final ScenarioResult newPin, boolean block) {
-			if (oldPin != null) {
-				viewer.refresh(oldPin.getScenarioInstance(), true);
-			}
-			if (newPin != null) {
-				viewer.refresh(newPin.getScenarioInstance(), true);
-			}
-		}
-
-		@Override
-		public void selectionChanged(ScenarioResult pinned, Collection<ScenarioResult> others, boolean block) {
+		public void selectionChanged(ScenarioResult pinned, Collection<ScenarioResult> others) {
+			RunnerHelper.syncExecDisplayOptional(() -> viewer.refresh());
 
 		}
 	};
@@ -213,14 +186,13 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		checkColumn.setWidth(30);
 		checkColumn.setResizable(false);
 
-		
 		final TreeColumn statusColumn = new TreeColumn(viewer.getTree(), SWT.NONE);
 		statusColumn.setImage(statusColumnImage);
 		statusColumn.setToolTipText("In sync with base case");
 		statusColumn.setAlignment(SWT.CENTER);
 		statusColumn.setWidth(30);
 		statusColumn.setResizable(false);
-		
+
 		final Tree tree = viewer.getTree();
 		tree.addMouseListener(new MouseAdapter() {
 
@@ -243,11 +215,11 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 								final Object data = selected.getData();
 								if (data instanceof ScenarioInstance) {
 									final ScenarioInstance instance = (ScenarioInstance) data;
-									ScenarioServiceSelectionProvider scenarioServiceSelectionProvider = Activator.getDefault().getScenarioServiceSelectionProvider();
-									if (scenarioServiceSelectionProvider.getPinnedInstance() == instance) {
-										scenarioServiceSelectionProvider.setPinnedInstance((ScenarioResult) null);
+									IScenarioServiceSelectionProvider scenarioServiceSelectionProvider = Activator.getDefault().getScenarioServiceSelectionProvider();
+									if (scenarioServiceSelectionProvider.getPinned() == instance) {
+										scenarioServiceSelectionProvider.setPinned((ScenarioResult) null, false);
 									} else {
-										scenarioServiceSelectionProvider.setPinnedInstance(new ScenarioResult(instance));
+										scenarioServiceSelectionProvider.setPinned(new ScenarioResult(instance), false);
 									}
 								}
 							}
@@ -282,11 +254,11 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 								final Object data = selected.getData();
 								if (data instanceof ScenarioInstance) {
 									final ScenarioInstance instance = (ScenarioInstance) data;
-									ScenarioServiceSelectionProvider provider = Activator.getDefault().getScenarioServiceSelectionProvider();
+									IScenarioServiceSelectionProvider provider = Activator.getDefault().getScenarioServiceSelectionProvider();
 									if (provider.isSelected(instance)) {
 										provider.deselect(instance, false);
 									} else {
-										provider.select(new ScenarioResult(instance));
+										provider.select(new ScenarioResult(instance), false);
 									}
 								}
 							}
@@ -327,11 +299,11 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 						if (data instanceof ScenarioInstance) {
 							final ScenarioInstance instance = (ScenarioInstance) data;
 							if (/* !selectionModeTrackEditor || */instance != lastAutoSelection) {
-								ScenarioServiceSelectionProvider provider = Activator.getDefault().getScenarioServiceSelectionProvider();
+								IScenarioServiceSelectionProvider provider = Activator.getDefault().getScenarioServiceSelectionProvider();
 								if (provider.isSelected(instance)) {
 									provider.deselect(instance, false);
 								} else {
-									provider.select(new ScenarioResult(instance));
+									provider.select(new ScenarioResult(instance), false);
 								}
 							}
 						}

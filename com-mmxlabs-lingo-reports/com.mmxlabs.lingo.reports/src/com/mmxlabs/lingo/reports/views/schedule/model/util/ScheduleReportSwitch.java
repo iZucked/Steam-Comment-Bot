@@ -10,13 +10,6 @@ import com.mmxlabs.lingo.reports.views.schedule.model.*;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
-import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
-import com.mmxlabs.lingo.reports.views.schedule.model.DiffOptions;
-import com.mmxlabs.lingo.reports.views.schedule.model.Row;
-import com.mmxlabs.lingo.reports.views.schedule.model.RowGroup;
-import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
-import com.mmxlabs.lingo.reports.views.schedule.model.Table;
-import com.mmxlabs.lingo.reports.views.schedule.model.UserGroup;
 
 /**
  * <!-- begin-user-doc -->
@@ -75,33 +68,15 @@ public class ScheduleReportSwitch<T> extends Switch<T> {
 	@Override
 	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
-			case ScheduleReportPackage.TABLE: {
-				Table table = (Table)theEObject;
-				T result = caseTable(table);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case ScheduleReportPackage.ROW: {
 				Row row = (Row)theEObject;
 				T result = caseRow(row);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case ScheduleReportPackage.CYCLE_GROUP: {
-				CycleGroup cycleGroup = (CycleGroup)theEObject;
-				T result = caseCycleGroup(cycleGroup);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case ScheduleReportPackage.ROW_GROUP: {
 				RowGroup rowGroup = (RowGroup)theEObject;
 				T result = caseRowGroup(rowGroup);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case ScheduleReportPackage.USER_GROUP: {
-				UserGroup userGroup = (UserGroup)theEObject;
-				T result = caseUserGroup(userGroup);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -122,21 +97,6 @@ public class ScheduleReportSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Table</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Table</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseTable(Table object) {
-		return null;
-	}
-
-	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Row</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -152,21 +112,6 @@ public class ScheduleReportSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Cycle Group</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Cycle Group</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseCycleGroup(CycleGroup object) {
-		return null;
-	}
-
-	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Row Group</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -178,21 +123,6 @@ public class ScheduleReportSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseRowGroup(RowGroup object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>User Group</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>User Group</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseUserGroup(UserGroup object) {
 		return null;
 	}
 

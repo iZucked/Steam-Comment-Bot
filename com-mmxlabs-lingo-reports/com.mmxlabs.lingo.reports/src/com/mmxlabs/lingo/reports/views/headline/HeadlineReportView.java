@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lingo.reports.views.headline;
 
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -38,7 +37,7 @@ import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
-import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
+import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.views.IProvideEditorInputScenario;
 import com.mmxlabs.lingo.reports.views.headline.HeadlineReportTransformer.RowData;
 import com.mmxlabs.lingo.reports.views.standard.KPIReportTransformer;
@@ -67,7 +66,7 @@ public class HeadlineReportView extends ViewPart {
 
 	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.HorizontalKPIReportView";
 
-	private SelectedScenariosService selectedScenariosService;
+	private ScenarioComparisonService selectedScenariosService;
 
 	private GridTableViewer viewer;
 
@@ -117,8 +116,8 @@ public class HeadlineReportView extends ViewPart {
 		LABEL_IDLE_DAYS(ColumnType.LABEL, "Idle", null, KnownFeatures.FEATURE_HEADLINE_IDLE_DAYS), VALUE_IDLE_DAYS(ColumnType.VALUE, 24000l, KPIReportTransformer.TYPE_TIME, //
 				KnownFeatures.FEATURE_HEADLINE_IDLE_DAYS), //
 		//
-		LABEL_CHARTER_LENGTH_DAYS(ColumnType.LABEL, "Charter Length", null, KnownFeatures.FEATURE_HEADLINE_CHARTER_LENGTH), VALUE_CHARTER_LENGTH_DAYS(ColumnType.VALUE, 24000l, KPIReportTransformer.TYPE_TIME,
-				KnownFeatures.FEATURE_HEADLINE_CHARTER_LENGTH), //
+		LABEL_CHARTER_LENGTH_DAYS(ColumnType.LABEL, "Charter Length", null, KnownFeatures.FEATURE_HEADLINE_CHARTER_LENGTH), VALUE_CHARTER_LENGTH_DAYS(ColumnType.VALUE, 24000l,
+				KPIReportTransformer.TYPE_TIME, KnownFeatures.FEATURE_HEADLINE_CHARTER_LENGTH), //
 		//
 		LABEL_GCO(ColumnType.LABEL, "Charter Out (virt)", null, KnownFeatures.FEATURE_OPTIMISATION_CHARTER_OUT_GENERATION), VALUE_GCO_DAYS(ColumnType.VALUE, 2400l, KPIReportTransformer.TYPE_TIME,
 				KnownFeatures.FEATURE_OPTIMISATION_CHARTER_OUT_GENERATION), VALUE_GCO_REVENUE(ColumnType.VALUE, 1000000000l, KPIReportTransformer.TYPE_COST,
@@ -184,15 +183,15 @@ public class HeadlineReportView extends ViewPart {
 
 	@NonNull
 	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
-
 		private final HeadlineReportTransformer transformer = new HeadlineReportTransformer();
 
 		@Override
-		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioResult pinned, final Collection<ScenarioResult> others, final boolean block) {
+		public void selectedDataProviderChanged(@NonNull ISelectedDataProvider selectedDataProvider, boolean block) {
 			final Runnable r = () -> {
 				pinnedData = null;
 				RowData pPinnedData = null;
 				final List<Object> rowElements = new LinkedList<>();
+				ScenarioResult pinned = selectedDataProvider.getPinnedScenarioResult();
 				if (pinned != null) {
 					final ScheduleModel otherScheduleModel = pinned.getTypedResult(ScheduleModel.class);
 					if (otherScheduleModel != null) {
@@ -203,7 +202,7 @@ public class HeadlineReportView extends ViewPart {
 					}
 				}
 
-				for (final ScenarioResult other : others) {
+				for (final ScenarioResult other : selectedDataProvider.getOtherScenarioResults()) {
 					if (other != null) {
 						boolean showingOptiResult = false;
 						if (other.getResultRoot() != null && other.getResultRoot().eContainer() instanceof SolutionOption) {
@@ -216,7 +215,7 @@ public class HeadlineReportView extends ViewPart {
 								if (pPinnedData != null) {
 									rowElements.add(transformer.transform(schedule, other));
 								} else {
-									if ((HeadlineReportView.this.scheduleModel != null && schedule == HeadlineReportView.this.scheduleModel.getSchedule()) || (others.size() == 1 && pinned == null)) {
+									if ((HeadlineReportView.this.scheduleModel != null && schedule == HeadlineReportView.this.scheduleModel.getSchedule()) || (selectedDataProvider.getOtherScenarioResults().size() == 1 && pinned == null)) {
 										rowElements.add(transformer.transform(schedule, other));
 									}
 								}
@@ -466,7 +465,7 @@ public class HeadlineReportView extends ViewPart {
 	 */
 	@Override
 	public void createPartControl(final Composite parent) {
-		selectedScenariosService = getSite().getService(SelectedScenariosService.class);
+		selectedScenariosService = getSite().getService(ScenarioComparisonService.class);
 
 		{
 			final Font systemFont = Display.getDefault().getSystemFont();

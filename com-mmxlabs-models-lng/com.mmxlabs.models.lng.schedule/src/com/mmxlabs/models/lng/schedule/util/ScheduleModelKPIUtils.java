@@ -249,7 +249,7 @@ public class ScheduleModelKPIUtils {
 		}
 		return totalCapacityViolationCount;
 	}
-	
+
 	public static int getNominalChartersCount(@NonNull final Schedule schedule) {
 
 		int totalNominalChartersCount = 0;
@@ -405,7 +405,7 @@ public class ScheduleModelKPIUtils {
 	}
 
 	public static Set<CapacityViolationType> getCapacityViolations(@Nullable final EventGrouping eventGrouping) {
-		final Set<CapacityViolationType> violations = new HashSet<CapacityViolationType>();
+		final Set<CapacityViolationType> violations = new HashSet<>();
 		if (eventGrouping != null) {
 			for (final Event evt : eventGrouping.getEvents()) {
 				if (evt instanceof SlotVisit) {
@@ -584,15 +584,17 @@ public class ScheduleModelKPIUtils {
 	public enum TotalType {
 		QUANTITY_M3, QUANTITY_MMBTU, QUANTITY_MT, COST
 	}
-	
+
 	public static Integer getEventBallastBonus(final @Nullable EventGrouping grouping) {
 		int total = 0;
-		for (final Event event : grouping.getEvents()) {
-			if (event instanceof StartEvent) {
-				total += ((StartEvent) event).getRepositioningFee();
-			}
-			if (event instanceof EndEvent) {
-				total += ((EndEvent) event).getBallastBonusFee();
+		if (grouping != null) {
+			for (final Event event : grouping.getEvents()) {
+				if (event instanceof StartEvent) {
+					total += ((StartEvent) event).getRepositioningFee();
+				}
+				if (event instanceof EndEvent) {
+					total += ((EndEvent) event).getBallastBonusFee();
+				}
 			}
 		}
 		return total;

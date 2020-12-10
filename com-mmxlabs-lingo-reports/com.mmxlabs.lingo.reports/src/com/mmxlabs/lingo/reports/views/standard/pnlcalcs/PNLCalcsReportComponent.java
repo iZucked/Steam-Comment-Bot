@@ -57,7 +57,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
-import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
+import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.views.standard.econs.CargoAllocationPair;
 import com.mmxlabs.lingo.reports.views.standard.econs.DeltaPair;
 import com.mmxlabs.lingo.reports.views.standard.econs.VesselEventVisitPair;
@@ -108,7 +108,7 @@ public class PNLCalcsReportComponent implements IAdaptable /* extends ViewPart *
 	private ESelectionService selectionService;
 
 	@Inject
-	private SelectedScenariosService selectedScenariosService;
+	private ScenarioComparisonService selectedScenariosService;
 	private List<Object> selectedObjects;
 
 	private GridTableViewer viewer;
@@ -345,7 +345,7 @@ public class PNLCalcsReportComponent implements IAdaptable /* extends ViewPart *
 	}
 
 	public void toggleCompare() {
-		final ScenarioResult scenario = selectedScenariosService.getPinnedScenario();
+		final ScenarioResult scenario = selectedScenariosService.getPinned();
 
 		if (scenario != null) {
 			compareMode = true;

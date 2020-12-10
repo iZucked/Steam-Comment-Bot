@@ -102,7 +102,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		public List<ColumnManager<IndexExposureData>> getColumnManagers(@NonNull final ISelectedDataProvider selectedDataProvider) {
 
 			final ArrayList<ColumnManager<IndexExposureData>> result = new ArrayList<ColumnManager<IndexExposureData>>();
-			if (selectedDataProvider.getScenarioResults().isEmpty()) {
+			if (selectedDataProvider.getAllScenarioResults().isEmpty()) {
 				return result;
 			}
 			createGenericColumns(selectedDataProvider, result);
@@ -184,7 +184,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		protected List<String> getGenericColumnNames(final ISelectedDataProvider selectedDataProvider) {
 			final List<String> columnNames = new ArrayList<String>();
 			{
-				final ScenarioResult sr = selectedDataProvider.getScenarioResults().get(0);
+				final ScenarioResult sr = selectedDataProvider.getAllScenarioResults().get(0);
 				final IScenarioDataProvider sdp = sr.getScenarioDataProvider();
 				final PricingModel pm = ScenarioModelUtil.getPricingModel(sdp);
 
@@ -224,7 +224,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 		protected void createGenericColumns(final ISelectedDataProvider selectedDataProvider, final ArrayList<ColumnManager<IndexExposureData>> result) {
 
-			if (selectedDataProvider.getScenarioResults().size() > 1 && selectedDataProvider.getPinnedScenarioResult() == null) {
+			if (selectedDataProvider.getAllScenarioResults().size() > 1 && selectedDataProvider.getPinnedScenarioResult() == null) {
 				result.add(new ColumnManager<IndexExposureData>("Scenario") {
 
 					@Override

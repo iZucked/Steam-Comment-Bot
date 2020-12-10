@@ -130,7 +130,7 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 			public List<ColumnManager<IncomeStatementData>> getColumnManagers(@NonNull final ISelectedDataProvider selectedDataProvider) {
 				final ArrayList<ColumnManager<IncomeStatementData>> result = new ArrayList<>();
 
-				if (selectedDataProvider.getScenarioResults().size() > 1) {
+				if (selectedDataProvider.getAllScenarioResults().size() > 1) {
 					result.add(new ColumnManager<IncomeStatementData>("Scenario") {
 
 						@Override

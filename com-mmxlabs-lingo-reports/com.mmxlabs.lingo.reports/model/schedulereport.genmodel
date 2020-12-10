@@ -16,21 +16,10 @@
       <genEnumLiterals ecoreEnumLiteral="schedulereport.ecore#//ChangeType/VESSEL"/>
       <genEnumLiterals ecoreEnumLiteral="schedulereport.ecore#//ChangeType/WIRING"/>
     </genEnums>
-    <genClasses ecoreClass="schedulereport.ecore#//Table">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Table/options"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Table/rows"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Table/cycleGroups"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Table/rowGroups"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Table/scenarios"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Table/pinnedScenario"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Table/userGroups"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Table/selectedElements"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Table/compositeRows"/>
-      <genOperations ecoreOperation="schedulereport.ecore#//Table/getCompositeRow"/>
-    </genClasses>
+    <genDataTypes ecoreDataType="schedulereport.ecore#//IScenarioDataProvider"/>
     <genClasses ecoreClass="schedulereport.ecore#//Row">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedulereport.ecore#//Row/scenarioName"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedulereport.ecore#//Row/visible"/>
-      <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Row/cycleGroup"/>
       <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Row/inputEquivalents"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedulereport.ecore#//Row/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedulereport.ecore#//Row/name2"/>
@@ -46,25 +35,10 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Row/lhsLink"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Row/rhsLink"/>
       <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Row/rowGroup"/>
-      <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Row/scenario"/>
-      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference schedulereport.ecore#//Row/table"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Row/linkedSequences"/>
-    </genClasses>
-    <genClasses ecoreClass="schedulereport.ecore#//CycleGroup">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedulereport.ecore#//CycleGroup/description"/>
-      <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//CycleGroup/rows"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedulereport.ecore#//CycleGroup/index"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//CycleGroup/userGroup"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedulereport.ecore#//CycleGroup/delta"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedulereport.ecore#//CycleGroup/changeType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedulereport.ecore#//Row/scenarioDataProvider"/>
     </genClasses>
     <genClasses ecoreClass="schedulereport.ecore#//RowGroup">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//RowGroup/rows"/>
-    </genClasses>
-    <genClasses ecoreClass="schedulereport.ecore#//UserGroup">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedulereport.ecore#//UserGroup/comment"/>
-      <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//UserGroup/groups"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedulereport.ecore#//UserGroup/delta"/>
     </genClasses>
     <genClasses ecoreClass="schedulereport.ecore#//DiffOptions">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedulereport.ecore#//DiffOptions/filterSelectedElements"/>

@@ -10,7 +10,6 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EEnum;
-import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -64,133 +63,6 @@ public interface ScheduleReportPackage extends EPackage {
 	ScheduleReportPackage eINSTANCE = com.mmxlabs.lingo.reports.views.schedule.model.impl.ScheduleReportPackageImpl.init();
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.TableImpl <em>Table</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.impl.TableImpl
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.impl.ScheduleReportPackageImpl#getTable()
-	 * @generated
-	 */
-	int TABLE = 0;
-
-	/**
-	 * The feature id for the '<em><b>Options</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TABLE__OPTIONS = 0;
-
-	/**
-	 * The feature id for the '<em><b>Rows</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TABLE__ROWS = 1;
-
-	/**
-	 * The feature id for the '<em><b>Cycle Groups</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TABLE__CYCLE_GROUPS = 2;
-
-	/**
-	 * The feature id for the '<em><b>Row Groups</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TABLE__ROW_GROUPS = 3;
-
-	/**
-	 * The feature id for the '<em><b>Scenarios</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TABLE__SCENARIOS = 4;
-
-	/**
-	 * The feature id for the '<em><b>Pinned Scenario</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TABLE__PINNED_SCENARIO = 5;
-
-	/**
-	 * The feature id for the '<em><b>User Groups</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TABLE__USER_GROUPS = 6;
-
-	/**
-	 * The feature id for the '<em><b>Selected Elements</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TABLE__SELECTED_ELEMENTS = 7;
-
-	/**
-	 * The feature id for the '<em><b>Composite Rows</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TABLE__COMPOSITE_ROWS = 8;
-
-	/**
-	 * The number of structural features of the '<em>Table</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TABLE_FEATURE_COUNT = 9;
-
-	/**
-	 * The operation id for the '<em>Get Composite Row</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TABLE___GET_COMPOSITE_ROW = 0;
-
-	/**
-	 * The operation id for the '<em>Get Composite Rows With Partials</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TABLE___GET_COMPOSITE_ROWS_WITH_PARTIALS = 1;
-
-	/**
-	 * The number of operations of the '<em>Table</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TABLE_OPERATION_COUNT = 2;
-
-	/**
 	 * The meta object id for the '{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl <em>Row</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -198,7 +70,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @see com.mmxlabs.lingo.reports.views.schedule.model.impl.ScheduleReportPackageImpl#getRow()
 	 * @generated
 	 */
-	int ROW = 1;
+	int ROW = 0;
 
 	/**
 	 * The feature id for the '<em><b>Scenario Name</b></em>' attribute.
@@ -219,22 +91,13 @@ public interface ScheduleReportPackage extends EPackage {
 	int ROW__VISIBLE = 1;
 
 	/**
-	 * The feature id for the '<em><b>Cycle Group</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ROW__CYCLE_GROUP = 2;
-
-	/**
 	 * The feature id for the '<em><b>Input Equivalents</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__INPUT_EQUIVALENTS = 3;
+	int ROW__INPUT_EQUIVALENTS = 2;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -243,7 +106,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__NAME = 4;
+	int ROW__NAME = 3;
 
 	/**
 	 * The feature id for the '<em><b>Name2</b></em>' attribute.
@@ -252,7 +115,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__NAME2 = 5;
+	int ROW__NAME2 = 4;
 
 	/**
 	 * The feature id for the '<em><b>Target</b></em>' reference.
@@ -261,7 +124,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__TARGET = 6;
+	int ROW__TARGET = 5;
 
 	/**
 	 * The feature id for the '<em><b>Schedule</b></em>' reference.
@@ -270,7 +133,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__SCHEDULE = 7;
+	int ROW__SCHEDULE = 6;
 
 	/**
 	 * The feature id for the '<em><b>Sequence</b></em>' reference.
@@ -279,7 +142,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__SEQUENCE = 8;
+	int ROW__SEQUENCE = 7;
 
 	/**
 	 * The feature id for the '<em><b>Cargo Allocation</b></em>' reference.
@@ -288,7 +151,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__CARGO_ALLOCATION = 9;
+	int ROW__CARGO_ALLOCATION = 8;
 
 	/**
 	 * The feature id for the '<em><b>Load Allocation</b></em>' reference.
@@ -297,7 +160,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__LOAD_ALLOCATION = 10;
+	int ROW__LOAD_ALLOCATION = 9;
 
 	/**
 	 * The feature id for the '<em><b>Discharge Allocation</b></em>' reference.
@@ -306,7 +169,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__DISCHARGE_ALLOCATION = 11;
+	int ROW__DISCHARGE_ALLOCATION = 10;
 
 	/**
 	 * The feature id for the '<em><b>Open Load Slot Allocation</b></em>' reference.
@@ -315,7 +178,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__OPEN_LOAD_SLOT_ALLOCATION = 12;
+	int ROW__OPEN_LOAD_SLOT_ALLOCATION = 11;
 
 	/**
 	 * The feature id for the '<em><b>Open Discharge Slot Allocation</b></em>' reference.
@@ -324,7 +187,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__OPEN_DISCHARGE_SLOT_ALLOCATION = 13;
+	int ROW__OPEN_DISCHARGE_SLOT_ALLOCATION = 12;
 
 	/**
 	 * The feature id for the '<em><b>Reference</b></em>' attribute.
@@ -333,7 +196,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__REFERENCE = 14;
+	int ROW__REFERENCE = 13;
 
 	/**
 	 * The feature id for the '<em><b>Lhs Link</b></em>' reference.
@@ -342,7 +205,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__LHS_LINK = 15;
+	int ROW__LHS_LINK = 14;
 
 	/**
 	 * The feature id for the '<em><b>Rhs Link</b></em>' reference.
@@ -351,7 +214,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__RHS_LINK = 16;
+	int ROW__RHS_LINK = 15;
 
 	/**
 	 * The feature id for the '<em><b>Row Group</b></em>' reference.
@@ -360,25 +223,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__ROW_GROUP = 17;
-
-	/**
-	 * The feature id for the '<em><b>Table</b></em>' container reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ROW__TABLE = 18;
-
-	/**
-	 * The feature id for the '<em><b>Linked Sequences</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ROW__LINKED_SEQUENCES = 19;
+	int ROW__ROW_GROUP = 16;
 
 	/**
 	 * The feature id for the '<em><b>Scenario Data Provider</b></em>' attribute.
@@ -387,7 +232,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__SCENARIO_DATA_PROVIDER = 20;
+	int ROW__SCENARIO_DATA_PROVIDER = 17;
 
 	/**
 	 * The number of structural features of the '<em>Row</em>' class.
@@ -396,7 +241,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW_FEATURE_COUNT = 21;
+	int ROW_FEATURE_COUNT = 18;
 
 	/**
 	 * The number of operations of the '<em>Row</em>' class.
@@ -408,88 +253,6 @@ public interface ScheduleReportPackage extends EPackage {
 	int ROW_OPERATION_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.CycleGroupImpl <em>Cycle Group</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.impl.CycleGroupImpl
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.impl.ScheduleReportPackageImpl#getCycleGroup()
-	 * @generated
-	 */
-	int CYCLE_GROUP = 2;
-
-	/**
-	 * The feature id for the '<em><b>Description</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CYCLE_GROUP__DESCRIPTION = 0;
-
-	/**
-	 * The feature id for the '<em><b>Rows</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CYCLE_GROUP__ROWS = 1;
-
-	/**
-	 * The feature id for the '<em><b>Index</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CYCLE_GROUP__INDEX = 2;
-
-	/**
-	 * The feature id for the '<em><b>User Group</b></em>' container reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CYCLE_GROUP__USER_GROUP = 3;
-
-	/**
-	 * The feature id for the '<em><b>Delta</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CYCLE_GROUP__DELTA = 4;
-
-	/**
-	 * The feature id for the '<em><b>Change Type</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CYCLE_GROUP__CHANGE_TYPE = 5;
-
-	/**
-	 * The number of structural features of the '<em>Cycle Group</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CYCLE_GROUP_FEATURE_COUNT = 6;
-
-	/**
-	 * The number of operations of the '<em>Cycle Group</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CYCLE_GROUP_OPERATION_COUNT = 0;
-
-	/**
 	 * The meta object id for the '{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowGroupImpl <em>Row Group</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -497,7 +260,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @see com.mmxlabs.lingo.reports.views.schedule.model.impl.ScheduleReportPackageImpl#getRowGroup()
 	 * @generated
 	 */
-	int ROW_GROUP = 3;
+	int ROW_GROUP = 1;
 
 	/**
 	 * The feature id for the '<em><b>Rows</b></em>' reference list.
@@ -528,62 +291,6 @@ public interface ScheduleReportPackage extends EPackage {
 
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.UserGroupImpl <em>User Group</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.impl.UserGroupImpl
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.impl.ScheduleReportPackageImpl#getUserGroup()
-	 * @generated
-	 */
-	int USER_GROUP = 4;
-
-	/**
-	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int USER_GROUP__COMMENT = 0;
-
-	/**
-	 * The feature id for the '<em><b>Groups</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int USER_GROUP__GROUPS = 1;
-
-	/**
-	 * The feature id for the '<em><b>Delta</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int USER_GROUP__DELTA = 2;
-
-	/**
-	 * The number of structural features of the '<em>User Group</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int USER_GROUP_FEATURE_COUNT = 3;
-
-	/**
-	 * The number of operations of the '<em>User Group</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int USER_GROUP_OPERATION_COUNT = 0;
-
-
-	/**
 	 * The meta object id for the '{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.DiffOptionsImpl <em>Diff Options</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -591,7 +298,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @see com.mmxlabs.lingo.reports.views.schedule.model.impl.ScheduleReportPackageImpl#getDiffOptions()
 	 * @generated
 	 */
-	int DIFF_OPTIONS = 5;
+	int DIFF_OPTIONS = 2;
 
 	/**
 	 * The feature id for the '<em><b>Filter Selected Elements</b></em>' attribute.
@@ -638,7 +345,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @see com.mmxlabs.lingo.reports.views.schedule.model.impl.ScheduleReportPackageImpl#getCompositeRow()
 	 * @generated
 	 */
-	int COMPOSITE_ROW = 6;
+	int COMPOSITE_ROW = 3;
 
 	/**
 	 * The feature id for the '<em><b>Previous Row</b></em>' reference.
@@ -684,7 +391,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @see com.mmxlabs.lingo.reports.views.schedule.model.impl.ScheduleReportPackageImpl#getChangeType()
 	 * @generated
 	 */
-	int CHANGE_TYPE = 7;
+	int CHANGE_TYPE = 4;
 
 
 	/**
@@ -695,137 +402,8 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @see com.mmxlabs.lingo.reports.views.schedule.model.impl.ScheduleReportPackageImpl#getIScenarioDataProvider()
 	 * @generated
 	 */
-	int ISCENARIO_DATA_PROVIDER = 8;
+	int ISCENARIO_DATA_PROVIDER = 5;
 
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.lingo.reports.views.schedule.model.Table <em>Table</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Table</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.Table
-	 * @generated
-	 */
-	EClass getTable();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.lingo.reports.views.schedule.model.Table#getOptions <em>Options</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Options</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.Table#getOptions()
-	 * @see #getTable()
-	 * @generated
-	 */
-	EReference getTable_Options();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.lingo.reports.views.schedule.model.Table#getRows <em>Rows</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Rows</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.Table#getRows()
-	 * @see #getTable()
-	 * @generated
-	 */
-	EReference getTable_Rows();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.lingo.reports.views.schedule.model.Table#getCycleGroups <em>Cycle Groups</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Cycle Groups</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.Table#getCycleGroups()
-	 * @see #getTable()
-	 * @generated
-	 */
-	EReference getTable_CycleGroups();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.lingo.reports.views.schedule.model.Table#getRowGroups <em>Row Groups</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Row Groups</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.Table#getRowGroups()
-	 * @see #getTable()
-	 * @generated
-	 */
-	EReference getTable_RowGroups();
-
-	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.lingo.reports.views.schedule.model.Table#getScenarios <em>Scenarios</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Scenarios</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.Table#getScenarios()
-	 * @see #getTable()
-	 * @generated
-	 */
-	EReference getTable_Scenarios();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.schedule.model.Table#getPinnedScenario <em>Pinned Scenario</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Pinned Scenario</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.Table#getPinnedScenario()
-	 * @see #getTable()
-	 * @generated
-	 */
-	EReference getTable_PinnedScenario();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.lingo.reports.views.schedule.model.Table#getUserGroups <em>User Groups</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>User Groups</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.Table#getUserGroups()
-	 * @see #getTable()
-	 * @generated
-	 */
-	EReference getTable_UserGroups();
-
-	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.lingo.reports.views.schedule.model.Table#getSelectedElements <em>Selected Elements</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Selected Elements</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.Table#getSelectedElements()
-	 * @see #getTable()
-	 * @generated
-	 */
-	EReference getTable_SelectedElements();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.lingo.reports.views.schedule.model.Table#getCompositeRows <em>Composite Rows</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Composite Rows</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.Table#getCompositeRows()
-	 * @see #getTable()
-	 * @generated
-	 */
-	EReference getTable_CompositeRows();
-
-	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.lingo.reports.views.schedule.model.Table#getCompositeRow() <em>Get Composite Row</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Composite Row</em>' operation.
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.Table#getCompositeRow()
-	 * @generated
-	 */
-	EOperation getTable__GetCompositeRow();
-
-	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.lingo.reports.views.schedule.model.Table#getCompositeRowsWithPartials() <em>Get Composite Rows With Partials</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Composite Rows With Partials</em>' operation.
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.Table#getCompositeRowsWithPartials()
-	 * @generated
-	 */
-	EOperation getTable__GetCompositeRowsWithPartials();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.lingo.reports.views.schedule.model.Row <em>Row</em>}'.
@@ -858,17 +436,6 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getRow_Visible();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getCycleGroup <em>Cycle Group</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Cycle Group</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.Row#getCycleGroup()
-	 * @see #getRow()
-	 * @generated
-	 */
-	EReference getRow_CycleGroup();
 
 	/**
 	 * Returns the meta object for the reference list '{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getInputEquivalents <em>Input Equivalents</em>}'.
@@ -1036,28 +603,6 @@ public interface ScheduleReportPackage extends EPackage {
 	EReference getRow_RowGroup();
 
 	/**
-	 * Returns the meta object for the container reference '{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getTable <em>Table</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the container reference '<em>Table</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.Row#getTable()
-	 * @see #getRow()
-	 * @generated
-	 */
-	EReference getRow_Table();
-
-	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getLinkedSequences <em>Linked Sequences</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Linked Sequences</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.Row#getLinkedSequences()
-	 * @see #getRow()
-	 * @generated
-	 */
-	EReference getRow_LinkedSequences();
-
-	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getScenarioDataProvider <em>Scenario Data Provider</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1067,83 +612,6 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getRow_ScenarioDataProvider();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup <em>Cycle Group</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Cycle Group</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup
-	 * @generated
-	 */
-	EClass getCycleGroup();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup#getDescription <em>Description</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Description</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup#getDescription()
-	 * @see #getCycleGroup()
-	 * @generated
-	 */
-	EAttribute getCycleGroup_Description();
-
-	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup#getRows <em>Rows</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Rows</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup#getRows()
-	 * @see #getCycleGroup()
-	 * @generated
-	 */
-	EReference getCycleGroup_Rows();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup#getIndex <em>Index</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Index</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup#getIndex()
-	 * @see #getCycleGroup()
-	 * @generated
-	 */
-	EAttribute getCycleGroup_Index();
-
-	/**
-	 * Returns the meta object for the container reference '{@link com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup#getUserGroup <em>User Group</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the container reference '<em>User Group</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup#getUserGroup()
-	 * @see #getCycleGroup()
-	 * @generated
-	 */
-	EReference getCycleGroup_UserGroup();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup#getDelta <em>Delta</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Delta</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup#getDelta()
-	 * @see #getCycleGroup()
-	 * @generated
-	 */
-	EAttribute getCycleGroup_Delta();
-
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup#getChangeType <em>Change Type</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Change Type</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup#getChangeType()
-	 * @see #getCycleGroup()
-	 * @generated
-	 */
-	EAttribute getCycleGroup_ChangeType();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.lingo.reports.views.schedule.model.RowGroup <em>Row Group</em>}'.
@@ -1165,49 +633,6 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getRowGroup_Rows();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.lingo.reports.views.schedule.model.UserGroup <em>User Group</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>User Group</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.UserGroup
-	 * @generated
-	 */
-	EClass getUserGroup();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.schedule.model.UserGroup#getComment <em>Comment</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Comment</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.UserGroup#getComment()
-	 * @see #getUserGroup()
-	 * @generated
-	 */
-	EAttribute getUserGroup_Comment();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.lingo.reports.views.schedule.model.UserGroup#getGroups <em>Groups</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Groups</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.UserGroup#getGroups()
-	 * @see #getUserGroup()
-	 * @generated
-	 */
-	EReference getUserGroup_Groups();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.schedule.model.UserGroup#getDelta <em>Delta</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Delta</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.UserGroup#getDelta()
-	 * @see #getUserGroup()
-	 * @generated
-	 */
-	EAttribute getUserGroup_Delta();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.lingo.reports.views.schedule.model.DiffOptions <em>Diff Options</em>}'.
@@ -1318,104 +743,6 @@ public interface ScheduleReportPackage extends EPackage {
 	 */
 	interface Literals {
 		/**
-		 * The meta object literal for the '{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.TableImpl <em>Table</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.lingo.reports.views.schedule.model.impl.TableImpl
-		 * @see com.mmxlabs.lingo.reports.views.schedule.model.impl.ScheduleReportPackageImpl#getTable()
-		 * @generated
-		 */
-		EClass TABLE = eINSTANCE.getTable();
-
-		/**
-		 * The meta object literal for the '<em><b>Options</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference TABLE__OPTIONS = eINSTANCE.getTable_Options();
-
-		/**
-		 * The meta object literal for the '<em><b>Rows</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference TABLE__ROWS = eINSTANCE.getTable_Rows();
-
-		/**
-		 * The meta object literal for the '<em><b>Cycle Groups</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference TABLE__CYCLE_GROUPS = eINSTANCE.getTable_CycleGroups();
-
-		/**
-		 * The meta object literal for the '<em><b>Row Groups</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference TABLE__ROW_GROUPS = eINSTANCE.getTable_RowGroups();
-
-		/**
-		 * The meta object literal for the '<em><b>Scenarios</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference TABLE__SCENARIOS = eINSTANCE.getTable_Scenarios();
-
-		/**
-		 * The meta object literal for the '<em><b>Pinned Scenario</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference TABLE__PINNED_SCENARIO = eINSTANCE.getTable_PinnedScenario();
-
-		/**
-		 * The meta object literal for the '<em><b>User Groups</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference TABLE__USER_GROUPS = eINSTANCE.getTable_UserGroups();
-
-		/**
-		 * The meta object literal for the '<em><b>Selected Elements</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference TABLE__SELECTED_ELEMENTS = eINSTANCE.getTable_SelectedElements();
-
-		/**
-		 * The meta object literal for the '<em><b>Composite Rows</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference TABLE__COMPOSITE_ROWS = eINSTANCE.getTable_CompositeRows();
-
-		/**
-		 * The meta object literal for the '<em><b>Get Composite Row</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation TABLE___GET_COMPOSITE_ROW = eINSTANCE.getTable__GetCompositeRow();
-
-		/**
-		 * The meta object literal for the '<em><b>Get Composite Rows With Partials</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation TABLE___GET_COMPOSITE_ROWS_WITH_PARTIALS = eINSTANCE.getTable__GetCompositeRowsWithPartials();
-
-		/**
 		 * The meta object literal for the '{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl <em>Row</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1440,14 +767,6 @@ public interface ScheduleReportPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute ROW__VISIBLE = eINSTANCE.getRow_Visible();
-
-		/**
-		 * The meta object literal for the '<em><b>Cycle Group</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ROW__CYCLE_GROUP = eINSTANCE.getRow_CycleGroup();
 
 		/**
 		 * The meta object literal for the '<em><b>Input Equivalents</b></em>' reference list feature.
@@ -1570,87 +889,12 @@ public interface ScheduleReportPackage extends EPackage {
 		EReference ROW__ROW_GROUP = eINSTANCE.getRow_RowGroup();
 
 		/**
-		 * The meta object literal for the '<em><b>Table</b></em>' container reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ROW__TABLE = eINSTANCE.getRow_Table();
-
-		/**
-		 * The meta object literal for the '<em><b>Linked Sequences</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ROW__LINKED_SEQUENCES = eINSTANCE.getRow_LinkedSequences();
-
-		/**
 		 * The meta object literal for the '<em><b>Scenario Data Provider</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute ROW__SCENARIO_DATA_PROVIDER = eINSTANCE.getRow_ScenarioDataProvider();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.CycleGroupImpl <em>Cycle Group</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.lingo.reports.views.schedule.model.impl.CycleGroupImpl
-		 * @see com.mmxlabs.lingo.reports.views.schedule.model.impl.ScheduleReportPackageImpl#getCycleGroup()
-		 * @generated
-		 */
-		EClass CYCLE_GROUP = eINSTANCE.getCycleGroup();
-
-		/**
-		 * The meta object literal for the '<em><b>Description</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CYCLE_GROUP__DESCRIPTION = eINSTANCE.getCycleGroup_Description();
-
-		/**
-		 * The meta object literal for the '<em><b>Rows</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CYCLE_GROUP__ROWS = eINSTANCE.getCycleGroup_Rows();
-
-		/**
-		 * The meta object literal for the '<em><b>Index</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CYCLE_GROUP__INDEX = eINSTANCE.getCycleGroup_Index();
-
-		/**
-		 * The meta object literal for the '<em><b>User Group</b></em>' container reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CYCLE_GROUP__USER_GROUP = eINSTANCE.getCycleGroup_UserGroup();
-
-		/**
-		 * The meta object literal for the '<em><b>Delta</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CYCLE_GROUP__DELTA = eINSTANCE.getCycleGroup_Delta();
-
-
-		/**
-		 * The meta object literal for the '<em><b>Change Type</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CYCLE_GROUP__CHANGE_TYPE = eINSTANCE.getCycleGroup_ChangeType();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowGroupImpl <em>Row Group</em>}' class.
@@ -1669,40 +913,6 @@ public interface ScheduleReportPackage extends EPackage {
 		 * @generated
 		 */
 		EReference ROW_GROUP__ROWS = eINSTANCE.getRowGroup_Rows();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.UserGroupImpl <em>User Group</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.lingo.reports.views.schedule.model.impl.UserGroupImpl
-		 * @see com.mmxlabs.lingo.reports.views.schedule.model.impl.ScheduleReportPackageImpl#getUserGroup()
-		 * @generated
-		 */
-		EClass USER_GROUP = eINSTANCE.getUserGroup();
-
-		/**
-		 * The meta object literal for the '<em><b>Comment</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute USER_GROUP__COMMENT = eINSTANCE.getUserGroup_Comment();
-
-		/**
-		 * The meta object literal for the '<em><b>Groups</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference USER_GROUP__GROUPS = eINSTANCE.getUserGroup_Groups();
-
-		/**
-		 * The meta object literal for the '<em><b>Delta</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute USER_GROUP__DELTA = eINSTANCE.getUserGroup_Delta();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.DiffOptionsImpl <em>Diff Options</em>}' class.

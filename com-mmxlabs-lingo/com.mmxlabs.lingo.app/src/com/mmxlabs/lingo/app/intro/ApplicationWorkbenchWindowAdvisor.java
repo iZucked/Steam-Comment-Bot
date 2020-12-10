@@ -13,6 +13,7 @@ import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.rcp.common.locking.WellKnownTriggers;
 
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 
@@ -53,5 +54,12 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 			}
 		}
 		configurer.setTitle(title.toString());
+	}
+	
+	@Override
+	public void postWindowOpen() {
+		super.postWindowOpen();
+		
+		WellKnownTriggers.WORKSPACE_STARTED.fireTrigger();
 	}
 }

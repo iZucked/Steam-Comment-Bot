@@ -6,26 +6,13 @@
  */
 package com.mmxlabs.lingo.reports.views.schedule.model.impl;
 
-import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
-import org.eclipse.emf.ecore.util.EContentAdapter;
-
-import com.mmxlabs.lingo.reports.diff.utils.PNLDeltaUtils;
 import com.mmxlabs.lingo.reports.views.schedule.model.*;
-import com.mmxlabs.lingo.reports.views.schedule.model.ChangeType;
-import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
-import com.mmxlabs.lingo.reports.views.schedule.model.DiffOptions;
-import com.mmxlabs.lingo.reports.views.schedule.model.Row;
-import com.mmxlabs.lingo.reports.views.schedule.model.RowGroup;
-import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
-import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
-import com.mmxlabs.lingo.reports.views.schedule.model.Table;
-import com.mmxlabs.lingo.reports.views.schedule.model.UserGroup;
 
 /**
  * <!-- begin-user-doc -->
@@ -71,11 +58,8 @@ public class ScheduleReportFactoryImpl extends EFactoryImpl implements ScheduleR
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-			case ScheduleReportPackage.TABLE: return createTable();
 			case ScheduleReportPackage.ROW: return createRow();
-			case ScheduleReportPackage.CYCLE_GROUP: return createCycleGroup();
 			case ScheduleReportPackage.ROW_GROUP: return createRowGroup();
-			case ScheduleReportPackage.USER_GROUP: return createUserGroup();
 			case ScheduleReportPackage.DIFF_OPTIONS: return createDiffOptions();
 			case ScheduleReportPackage.COMPOSITE_ROW: return createCompositeRow();
 			default:
@@ -119,42 +103,11 @@ public class ScheduleReportFactoryImpl extends EFactoryImpl implements ScheduleR
 	 * @generated
 	 */
 	@Override
-	public Table createTable() {
-		TableImpl table = new TableImpl();
-		return table;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public Row createRow() {
 		RowImpl row = new RowImpl();
 		return row;
 	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	@Override
-	public CycleGroup createCycleGroup() {
-		final CycleGroupImpl cycleGroup = new CycleGroupImpl();
-		cycleGroup.eAdapters().add(new EContentAdapter() {
-			@Override
-			public void notifyChanged(Notification notification) {
-				super.notifyChanged(notification);
-				if (notification.getFeature() == ScheduleReportPackage.Literals.CYCLE_GROUP__ROWS) {
-					cycleGroup.setDelta(PNLDeltaUtils.getPNLDelta(cycleGroup));
-				}
-			}
-		});
-		return cycleGroup;
-	}
-
+	 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -169,28 +122,9 @@ public class ScheduleReportFactoryImpl extends EFactoryImpl implements ScheduleR
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	@Override
-	public UserGroup createUserGroup() {
-		final UserGroupImpl userGroup = new UserGroupImpl();
-		userGroup.eAdapters().add(new EContentAdapter() {
-			@Override
-			public void notifyChanged(Notification notification) {
-				super.notifyChanged(notification);
-				if (notification.getFeature() == ScheduleReportPackage.Literals.USER_GROUP__GROUPS) {
-					userGroup.setDelta(PNLDeltaUtils.getPNLDelta(userGroup));
-				}
-			}
-		});
-		return userGroup;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public DiffOptions createDiffOptions() {
 		DiffOptionsImpl diffOptions = new DiffOptionsImpl();
 		return diffOptions;
@@ -201,6 +135,7 @@ public class ScheduleReportFactoryImpl extends EFactoryImpl implements ScheduleR
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CompositeRow createCompositeRow() {
 		CompositeRowImpl compositeRow = new CompositeRowImpl();
 		return compositeRow;

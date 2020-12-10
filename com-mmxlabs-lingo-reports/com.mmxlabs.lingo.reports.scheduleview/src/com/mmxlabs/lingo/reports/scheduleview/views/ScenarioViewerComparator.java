@@ -12,7 +12,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
-import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
+import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.InventoryEvents;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -48,9 +48,9 @@ public class ScenarioViewerComparator extends ViewerComparator {
 	private Mode mode = Mode.INTERLEAVE;
 
 	@NonNull
-	private final SelectedScenariosService selectedScenariosService;
+	private final ScenarioComparisonService selectedScenariosService;
 
-	public ScenarioViewerComparator(@NonNull final SelectedScenariosService selectedScenariosService) {
+	public ScenarioViewerComparator(@NonNull final ScenarioComparisonService selectedScenariosService) {
 		this.selectedScenariosService = selectedScenariosService;
 	}
 
@@ -156,7 +156,7 @@ public class ScenarioViewerComparator extends ViewerComparator {
 					final Collection<?> collection = (Collection<?>) input;
 
 					if (collection.size() > 1) {
-						if (selectedScenariosService.getPinnedScenario() != null) {
+						if (selectedScenariosService.getPinned() != null) {
 							final ISelectedDataProvider selectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
 							if (selectedDataProvider != null) {
 
@@ -235,7 +235,7 @@ public class ScenarioViewerComparator extends ViewerComparator {
 						final Collection<?> collection = (Collection<?>) input;
 
 						if (collection.size() > 1) {
-							if (selectedScenariosService.getPinnedScenario() != null) {
+							if (selectedScenariosService.getPinned() != null) {
 								final ISelectedDataProvider selectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
 								if (selectedDataProvider != null) {
 
