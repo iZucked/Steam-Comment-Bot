@@ -37,17 +37,14 @@ public class NominationsClassImporter extends DefaultClassImporter {
 	
 	@Override
 	public Collection<EObject> importObjects(@NonNull final EClass targetClass, @NonNull final CSVReader reader, @NonNull final IMMXImportContext context) {
-		
 		final List<AbstractNomination> existingNominations = new ArrayList<AbstractNomination>();
 		if (nominationsModel != null) {
 			existingNominations.addAll(nominationsModel.getNominations());
 			
 			//We only want to import generated nominations if they have been overridden/changed in some way.
-			final LNGScenarioModel scenarioModel = (LNGScenarioModel)nominationsModel.eContainer();
-			if (scenarioModel != null) {
-				List<AbstractNomination> generatedNominations = NominationsModelUtils.generateNominationsForAllDates(scenarioModel);
-				existingNominations.addAll(generatedNominations);
-			}
+			List<AbstractNomination> generatedNominations = NominationsModelUtils.generateNominationsFromSpecs(nominationsModel);
+			existingNominations.addAll(generatedNominations);
+
 		}
 		
 		final List<EObject> result = new LinkedList<>();

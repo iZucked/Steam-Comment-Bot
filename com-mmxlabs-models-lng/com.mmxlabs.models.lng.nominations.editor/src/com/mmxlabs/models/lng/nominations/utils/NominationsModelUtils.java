@@ -42,9 +42,11 @@ import com.mmxlabs.models.lng.nominations.NominationsFactory;
 import com.mmxlabs.models.lng.nominations.NominationsModel;
 import com.mmxlabs.models.lng.nominations.Side;
 import com.mmxlabs.models.lng.nominations.presentation.composites.TimeWindowHolder;
+import com.mmxlabs.models.lng.nominations.util.GeneratedNominationsProvider;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -60,6 +62,16 @@ public class NominationsModelUtils {
 		return nominationsModel;
 	}
 
+	public static @NonNull GeneratedNominationsProvider getGeneratedNominationsProvider(IScenarioDataProvider scenarioDataProvider) {
+		if (scenarioDataProvider != null) {
+			final GeneratedNominationsProvider provider = scenarioDataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.GENERATED_NOMINATIONS, GeneratedNominationsProvider.class);
+			if (provider != null) {
+				return provider;
+			}
+		}
+		throw new IllegalStateException("Unable to get generated nominations provider");
+	}
+	
 	public static String mapName(final DatePeriodPrior units) {
 		switch (units) {
 		case DAYS_PRIOR:
@@ -71,11 +83,11 @@ public class NominationsModelUtils {
 		}
 		return units.getName();
 	}
-
-	public static AbstractNomination findNominationForSlot(final LNGScenarioModel sm, final Slot slot, final String nominationType) {
+	
+	public static AbstractNomination findNominationForSlot(final IScenarioDataProvider sdp, final Slot slot, final String nominationType) {
 		if (slot != null && slot.getName() != null) {
 			final String name = slot.getName();
-			final NominationsModel nm = sm.getNominationsModel();
+			final NominationsModel nm = ScenarioModelUtil.getNominationsModel(sdp);
 
 			// Check specific slot nominations.
 			for (final AbstractNomination nomination : nm.getNominations()) {
@@ -88,7 +100,7 @@ public class NominationsModelUtils {
 			}
 
 			// If none there, check nominations generated from specifications.
-			final List<AbstractNomination> generatedNominations = generateNominationsForAllDates(sm);
+			final List<AbstractNomination> generatedNominations = getGeneratedNominationsForAllDates(sdp);
 			for (final AbstractNomination nomination : generatedNominations) {
 				if (nomination.getSide() == Side.BUY && slot instanceof LoadSlot && Objects.equals(nomination.getNomineeId(), name) && Objects.equals(nomination.getType(), nominationType)) {
 					return nomination;
@@ -103,21 +115,21 @@ public class NominationsModelUtils {
 		return null;
 	}
 
-	public static List<AbstractNomination> findNominationsForSlot(final LNGScenarioModel sm, @Nullable final Slot<?> slot) {
+	public static List<AbstractNomination> findNominationsForSlot(final IScenarioDataProvider sdp, @Nullable final Slot<?> slot) {
 		if (slot != null && slot.getName() != null) {
 			final String name = slot.getName();
-			return findNominationsForSlot(sm, name);
+			return findNominationsForSlot(sdp, name);
 		}
 
 		// None found.
 		return Collections.emptyList();
 	}
 
-	public static List<AbstractNomination> findNominationsForSlot(final LNGScenarioModel sm, final String name) {		
+	public static List<AbstractNomination> findNominationsForSlot(final IScenarioDataProvider sdp, final String name) {		
 		if (name == null) { 
 			return Collections.emptyList();
 		}
-		final NominationsModel nm = sm.getNominationsModel();
+		final NominationsModel nm = ScenarioModelUtil.getNominationsModel(sdp);
 		final List<AbstractNomination> nominations = new ArrayList<>();
 
 		// Check specific slot nominations.
@@ -128,7 +140,7 @@ public class NominationsModelUtils {
 		}
 
 		// If none there, check nominations generated from specifications.
-		final List<AbstractNomination> generatedNominations = generateNominationsForAllDates(sm);
+		final List<AbstractNomination> generatedNominations = getGeneratedNominationsForAllDates(sdp);
 		for (final AbstractNomination nomination : generatedNominations) {
 			if (Objects.equals(nomination.getNomineeId(), name)) {
 				nominations.add(nomination);
@@ -218,17 +230,12 @@ public class NominationsModelUtils {
 		return "";
 	}
 
-	public static List<AbstractNomination> generateNominationsForAllDates(@NonNull final LNGScenarioModel scenarioModel) {
-		return generateNominations(scenarioModel, LocalDate.MIN, LocalDate.MAX);
-	}
+//	public static List<AbstractNomination> getGeneratedNominationsForAllDates(@NonNull final IScenarioDataProvider sdp) {
+//		return getNominationsFRomSpecs()
+//	}
 
-	public static List<AbstractNomination> generateNominations(@NonNull final IScenarioEditingLocation jointModelEditor, final LocalDate startDate, final LocalDate endDate) {
-		final LNGScenarioModel scenarioModel = ScenarioModelUtil.findScenarioModel(jointModelEditor.getScenarioDataProvider());
-		if (scenarioModel != null) {
-			return generateNominations(scenarioModel, startDate, endDate);
-		} else {
-			return Collections.emptyList();
-		}
+	public static List<AbstractNomination> getGeneratedNominations(@NonNull final IScenarioEditingLocation jointModelEditor, final LocalDate startDate, final LocalDate endDate) {
+		return getGeneratedNominations(jointModelEditor.getScenarioDataProvider(), startDate, endDate);
 	}
 	
 	public static NominationsModel getNominationsModel(@NonNull final IScenarioEditingLocation jointModelEditor) {
@@ -240,22 +247,42 @@ public class NominationsModelUtils {
 		return null;
 	}
 
-	private static List<AbstractNomination> generateNominations(final LNGScenarioModel scenarioModel, LocalDate startDate, LocalDate endDate) {
-
-		if (startDate == null) {
-			startDate = LocalDate.MIN;
+	private static List<AbstractNomination> getGeneratedNominations(final IScenarioDataProvider sdp, final LocalDate startDate, final LocalDate endDate) {
+		List<AbstractNomination> generatedNominations = getGeneratedNominationsForAllDates(sdp);
+		
+		if (startDate == null && endDate == null) {
+			return generatedNominations;
 		}
-		if (endDate == null) {
-			endDate = LocalDate.MAX;
+		else {
+			LNGScenarioModel scenarioModel = ScenarioModelUtil.getScenarioModel(sdp);
+			final LocalDate startDate1 = startDate == null ? LocalDate.MIN : startDate;
+			final LocalDate endDate1 = endDate == null ? LocalDate.MAX : endDate;
+			return generatedNominations.stream().filter(n -> {
+				LocalDate date = getDate(scenarioModel, n);
+				return date != null && !date.isBefore(startDate1) && !date.isAfter(endDate1); 
+			}).collect(Collectors.toList());
 		}
+	}
 
-		// Get the nominations model, if none, we have no nomination specs, so we can't
-		// generate any nominations, so return an empty list.
-		final NominationsModel nominationsModel = scenarioModel.getNominationsModel();
+	public static List<AbstractNomination> getGeneratedNominationsForAllDates(IScenarioDataProvider sdp) {
+		return getGeneratedNominationsProvider(sdp).getGeneratedNominations(nm -> generateNominationsFromSpecs(nm));
+	}
+	
+	/**
+	 * @param nominationsModel
+	 * @deprecated DO NOT USE UNLESS, instead use static List<AbstractNomination> getGeneratedNominationsForAllDates(IScenarioDataProvider sdp) 
+	 * @return
+	 */
+	public static List<AbstractNomination> generateNominationsFromSpecs(final NominationsModel nominationsModel) {
 		if (nominationsModel == null) {
 			return Collections.emptyList();
 		}
 
+		LNGScenarioModel scenarioModel = (LNGScenarioModel)nominationsModel.eContainer();
+		if (scenarioModel == null) {
+			return Collections.emptyList();
+		}
+			
 		// Get the cargo model, if none, we have no cargos/slots, so we can't generate
 		// any nominations, so return an empty list.
 		final CargoModel cargoModel = scenarioModel.getCargoModel();
@@ -277,44 +304,38 @@ public class NominationsModelUtils {
 		List<Slot<?>> slots = new ArrayList<Slot<?>>();
 		slots.addAll(cargoModel.getLoadSlots());
 		slots.addAll(cargoModel.getDischargeSlots());
-		
-		for (Slot<?> slot : slots) {
 
+		for (Slot<?> slot : slots) {
 			if (slot == null || slot instanceof SpotSlot)
 				continue;
 
-			final LocalDate date = slot.getWindowStart();
+			// Set nomination type as part of nomination id, so we know which sort of slot
+			// made this nomination.
+			Side side = null;
+			if (slot instanceof DischargeSlot) {
+				side = Side.SELL;
+			} else if (slot instanceof LoadSlot) {
+				side = Side.BUY;
+			}
+			final String nomineeId = slot.getName();
+			final Contract contract = slot.getContract();
+			String contractName = "";
+			if (contract != null && contract.getName() != null) {
+				contractName = contract.getName();
+			}
 
-			if (date != null && !date.isBefore(startDate) && !date.isAfter(endDate)) {
-
-				// Set nomination type as part of nomination id, so we know which sort of slot
-				// made this nomination.
-				Side side = null;
-				if (slot instanceof DischargeSlot) {
-					side = Side.SELL;
-				} else if (slot instanceof LoadSlot) {
-					side = Side.BUY;
+			for (final AbstractNominationSpec sp : nominationsModel.getNominationSpecs()) {
+				String refererId = "";
+				if (sp.getRefererId() != null) {
+					refererId = sp.getRefererId();
 				}
-				final String nomineeId = slot.getName();
-				final Contract contract = slot.getContract();
-				String contractName = "";
-				if (contract != null && contract.getName() != null) {
-					contractName = contract.getName();
-				}
 
-				for (final AbstractNominationSpec sp : nominationsModel.getNominationSpecs()) {
-					String refererId = "";
-					if (sp.getRefererId() != null) {
-						refererId = sp.getRefererId();
-					}
-
-					if (!Objects.equals(refererId, "") && sp.getSide() == side && Objects.equals(contractName, refererId)) {
-						AbstractNomination sn = existingSlotNominations.get(sp.getUuid() + ":" + nomineeId);
-						if (sn == null) {
-							sn = NominationsFactory.eINSTANCE.createSlotNomination();
-							populateNomination(sn, nomineeId, sp);
-							nominations.add(sn);
-						}
+				if (!Objects.equals(refererId, "") && sp.getSide() == side && Objects.equals(contractName, refererId)) {
+					AbstractNomination sn = existingSlotNominations.get(sp.getUuid() + ":" + nomineeId);
+					if (sn == null) {
+						sn = NominationsFactory.eINSTANCE.createSlotNomination();
+						populateNomination(sn, nomineeId, sp);
+						nominations.add(sn);
 					}
 				}
 			}
@@ -554,8 +575,7 @@ public class NominationsModelUtils {
 	}
 
 	public static LocalDate getNominationDate(final String nominationType, final IScenarioDataProvider scenarioDataProvider, final Slot<?> slot) {
-		final LNGScenarioModel scenarioModel = ScenarioModelUtil.findScenarioModel(scenarioDataProvider);
-		final AbstractNomination n = NominationsModelUtils.findNominationForSlot(scenarioModel, slot, nominationType);
+		final AbstractNomination n = NominationsModelUtils.findNominationForSlot(scenarioDataProvider, slot, nominationType);
 		if (n != null) {
 			return n.getDueDate();
 		} else {

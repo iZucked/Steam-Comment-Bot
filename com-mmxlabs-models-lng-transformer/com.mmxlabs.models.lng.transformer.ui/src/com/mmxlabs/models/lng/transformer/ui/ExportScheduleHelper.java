@@ -203,10 +203,10 @@ public class ExportScheduleHelper {
 		final List<AbstractNomination> nominationsToKeep = new ArrayList<>();
 
 		for (final Slot<?> slot : cargoModel.getLoadSlots()) {
-			nominationsToKeep.addAll(NominationsModelUtils.findNominationsForSlot(scenarioModel,slot));
+			nominationsToKeep.addAll(NominationsModelUtils.findNominationsForSlot(scenarioDataProvider,slot));
 		}
 		for (final Slot<?> slot : cargoModel.getDischargeSlots()) {
-			nominationsToKeep.addAll(NominationsModelUtils.findNominationsForSlot(scenarioModel,slot));
+			nominationsToKeep.addAll(NominationsModelUtils.findNominationsForSlot(scenarioDataProvider,slot));
 		}
 		nominationsModel.getNominations().retainAll(nominationsToKeep);
 

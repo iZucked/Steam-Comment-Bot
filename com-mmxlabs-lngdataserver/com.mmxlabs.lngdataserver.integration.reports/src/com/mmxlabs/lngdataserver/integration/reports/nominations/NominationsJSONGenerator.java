@@ -13,12 +13,15 @@ import com.mmxlabs.models.lng.nominations.NominationsModel;
 import com.mmxlabs.models.lng.nominations.SlotNomination;
 import com.mmxlabs.models.lng.nominations.utils.NominationsModelUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public class NominationsJSONGenerator {
 
-	public static List<Nominations> createNominationsData(final LNGScenarioModel scenarioModel) {
+	public static List<Nominations> createNominationsData(final IScenarioDataProvider scenarioDataProvider) {
 
 		final List<Nominations> result = new ArrayList<>();
+		final LNGScenarioModel scenarioModel = ScenarioModelUtil.getScenarioModel(scenarioDataProvider);
 		final CargoModel cargoModel = scenarioModel.getCargoModel();
 		final NominationsModel nominationsModel = scenarioModel.getNominationsModel();
 
@@ -31,7 +34,7 @@ public class NominationsJSONGenerator {
 		}
 
 		// Do nominations derived / lazily generated from nominations specs.
-		final List<AbstractNomination> nominationsDerivedFromSpecs = NominationsModelUtils.generateNominationsForAllDates(scenarioModel);
+		final List<AbstractNomination> nominationsDerivedFromSpecs = NominationsModelUtils.getGeneratedNominationsForAllDates(scenarioDataProvider);
 		for (final AbstractNomination n : nominationsDerivedFromSpecs) {
 			if (!n.isDone()) {
 				final Nominations r = new Nominations(scenarioModel, n);

@@ -27,8 +27,7 @@ public class NominationsReportPublisher implements IReportPublisherExtension {
 		final List<String> versions = supportedFormats.getVersionsFor(getReportType());
 
 		if (versions.isEmpty() || versions.contains("1")) {
-			final LNGScenarioModel scenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-			final List<Nominations> models = NominationsJSONGenerator.createNominationsData(scenarioModel);
+			final List<Nominations> models = NominationsJSONGenerator.createNominationsData(scenarioDataProvider);
 			final ObjectMapper objectMapper = new ObjectMapper();
 			final String content = objectMapper.writeValueAsString(models);
 			return new DefaultReportContent(getReportType(), "1", content);

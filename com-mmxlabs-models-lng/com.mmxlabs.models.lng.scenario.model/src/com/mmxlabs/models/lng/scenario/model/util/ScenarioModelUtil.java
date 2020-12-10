@@ -76,6 +76,16 @@ public final class ScenarioModelUtil {
 		}
 		return null;
 	}
+
+	@NonNull
+	public static LNGScenarioModel getScenarioModel(@NonNull final IScenarioDataProvider scenarioDataProvider) {
+		@NonNull
+		final EObject scenario = scenarioDataProvider.getScenario();
+		if (scenario instanceof LNGScenarioModel) {
+			return ((LNGScenarioModel) scenario);
+		}
+		throw new IllegalArgumentException("Invalid scenario model");
+	}
 	
 	@Nullable
 	public static LNGReferenceModel findReferenceModel(@NonNull final LNGScenarioModel scenarioModel) {
