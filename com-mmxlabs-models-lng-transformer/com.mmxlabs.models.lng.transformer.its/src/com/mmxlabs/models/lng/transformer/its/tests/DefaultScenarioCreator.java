@@ -140,7 +140,7 @@ public class DefaultScenarioCreator {
 		shippingEntity = addEntity("Shipping");
 
 		dataProvider = SimpleScenarioDataProvider.make(ModelsLNGVersionMaker.createDefaultManifest(), scenario);
-		distanceProvider = new ModelDistanceProvider(scenarioModelBuilder.getPortModelBuilder().getPortModel());
+		distanceProvider = ModelDistanceProvider.getOrCreate(scenarioModelBuilder.getPortModelBuilder().getPortModel());
 	}
 
 	public @NonNull IScenarioDataProvider getScenarioDataProvider() {

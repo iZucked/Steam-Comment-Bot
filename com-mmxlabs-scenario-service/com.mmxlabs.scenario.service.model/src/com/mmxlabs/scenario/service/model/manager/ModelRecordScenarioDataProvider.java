@@ -17,8 +17,8 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.scenario.service.manifest.Manifest;
 
 public class ModelRecordScenarioDataProvider implements IScenarioDataProvider {
-	private @NonNull final ScenarioModelRecord modelRecord;
-	private @NonNull final ModelReference modelReference;
+	private final @NonNull ScenarioModelRecord modelRecord;
+	private final @NonNull ModelReference modelReference;
 	private final Map<ISharedDataModelType<?>, ModelReference> cachedReferences = new HashMap<>();
 	private final Map<ISharedDataModelType<?>, Object> extraDataProviders = new HashMap<>();
 

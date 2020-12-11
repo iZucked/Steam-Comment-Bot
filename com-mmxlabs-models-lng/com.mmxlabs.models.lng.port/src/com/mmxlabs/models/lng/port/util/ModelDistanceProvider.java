@@ -95,7 +95,7 @@ public class ModelDistanceProvider extends EContentAdapter {
 		}
 		return port.getName();
 	}
-	
+
 	public Port getPortByMMXID(final String mmxID) {
 		if (mmxIDtoPort.isEmpty()) {
 			buildDistanceCache();
@@ -109,8 +109,21 @@ public class ModelDistanceProvider extends EContentAdapter {
 		mmxIDtoPort.clear();
 	}
 
-	public ModelDistanceProvider(final PortModel portModel) {
+	public static ModelDistanceProvider getOrCreate(PortModel portModel)
+	{
+		synchronized (portModel) {
+			for (Object o : portModel.eAdapters()) {
+				if (o instanceof ModelDistanceProvider) {
+					return (ModelDistanceProvider)o;
+				}
+			}
+			return new ModelDistanceProvider(portModel);
+		}
+	}
+
+	private ModelDistanceProvider(final PortModel portModel) {
 		this.portModel = portModel;
+		portModel.eAdapters().add(this);
 	}
 
 	public int getMinDistance(final Port from, final Port to) {

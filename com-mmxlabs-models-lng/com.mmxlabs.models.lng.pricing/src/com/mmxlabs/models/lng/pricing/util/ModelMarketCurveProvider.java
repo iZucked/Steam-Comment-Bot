@@ -65,7 +65,18 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 
 	private SoftReference<LookupData> expressionToIndexUseCache = new SoftReference<>(null);
 
-	public ModelMarketCurveProvider(final @NonNull PricingModel pricingModel) {
+	public static @NonNull ModelMarketCurveProvider getOrCreate(final @NonNull PricingModel pricingModel) {
+		synchronized (pricingModel) {
+			for (Object o : pricingModel.eAdapters()) {
+				if (o instanceof ModelMarketCurveProvider) {
+					return (ModelMarketCurveProvider) o;
+				}
+			}
+			return new ModelMarketCurveProvider(pricingModel);
+		}
+	}
+
+	private ModelMarketCurveProvider(final @NonNull PricingModel pricingModel) {
 		this.pricingModel = pricingModel;
 		pricingModel.eAdapters().add(this);
 	}
