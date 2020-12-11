@@ -239,6 +239,22 @@ public interface CargoModel extends UUIDObject {
 	 */
 	EList<DealSet> getDealSets();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model
+	 * @generated
+	 */
+	LoadSlot getLoadSlotByName(String name);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model
+	 * @generated
+	 */
+	DischargeSlot getDischargeSlotByName(String name);
+
 } // end of  CargoModel
 
 // finish type fixing

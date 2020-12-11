@@ -403,22 +403,12 @@ public class NominationsModelUtils {
 
 	public static LoadSlot findLoadSlot(@NonNull final LNGScenarioModel scenarioModel, @NonNull final String nomineeId) {
 		final CargoModel model = ScenarioModelUtil.getCargoModel(scenarioModel);
-		for (final LoadSlot s : model.getLoadSlots()) {
-			if (Objects.equals(nomineeId, s.getName())) {
-				return s;
-			}
-		}
-		return null;
+		return model.getLoadSlotByName(nomineeId);
 	}
 	
 	public static DischargeSlot findDischargeSlot(@NonNull final LNGScenarioModel scenarioModel, @NonNull final String nomineeId) {
 		final CargoModel model = ScenarioModelUtil.getCargoModel(scenarioModel);
-		for (final DischargeSlot s : model.getDischargeSlots()) {
-			if (Objects.equals(nomineeId, s.getName())) {
-				return s;
-			}
-		}
-		return null;
+		return model.getDischargeSlotByName(nomineeId);
 	}
 
 	/**

@@ -55,6 +55,12 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/charterInMarketOverrides"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/paperDeals"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/dealSets"/>
+      <genOperations ecoreOperation="cargo.ecore#//CargoModel/getLoadSlotByName">
+        <genParameters ecoreParameter="cargo.ecore#//CargoModel/getLoadSlotByName/name"/>
+      </genOperations>
+      <genOperations ecoreOperation="cargo.ecore#//CargoModel/getDischargeSlotByName">
+        <genParameters ecoreParameter="cargo.ecore#//CargoModel/getDischargeSlotByName/name"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//Cargo">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Cargo/allowRewiring"/>
