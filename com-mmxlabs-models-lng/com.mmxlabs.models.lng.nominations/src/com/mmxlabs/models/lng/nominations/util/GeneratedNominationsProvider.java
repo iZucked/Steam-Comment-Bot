@@ -11,6 +11,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.nominations.AbstractNomination;
 import com.mmxlabs.models.lng.nominations.NominationsModel;
+import com.mmxlabs.models.lng.nominations.NominationsParameters;
 
 public class GeneratedNominationsProvider extends EContentAdapter {
 
@@ -56,6 +57,10 @@ public class GeneratedNominationsProvider extends EContentAdapter {
 	public void notifyChanged(final @Nullable Notification notification) {
 		super.notifyChanged(notification);
 		if (notification != null && notification.isTouch()) {
+			return;
+		}
+		if (notification.getNotifier() instanceof NominationsParameters) {
+			//We don't care about changes to 1M,3M,All,Start,End date in Nominations view as is just filtering.
 			return;
 		}
 		clearCache();
