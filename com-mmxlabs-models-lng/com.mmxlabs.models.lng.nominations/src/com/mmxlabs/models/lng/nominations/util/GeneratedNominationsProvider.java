@@ -16,13 +16,34 @@ public class GeneratedNominationsProvider extends EContentAdapter {
 
 	private final @NonNull NominationsModel nominationsModel;
 	private SoftReference<List<AbstractNomination>> generatedNominations;
-	
-	//To get round circular references.
+
+	// To get round circular references.
 	public interface NominationsGenerator {
 		List<AbstractNomination> generateNominationsFromSpecs(@NonNull NominationsModel nominationsModel);
 	}
-	
-	public GeneratedNominationsProvider(final @NonNull NominationsModel nominationsModel, final EObject...relatedModels) {
+
+	public static GeneratedNominationsProvider getOrCreate(final @NonNull NominationsModel nominationsModel, final EObject... relatedModels) {
+		synchronized (nominationsModel) {
+			// Find existing if present...
+			for (Object o : nominationsModel.eAdapters()) {
+				if (o instanceof GeneratedNominationsProvider) {
+					GeneratedNominationsProvider provider = (GeneratedNominationsProvider) o;
+
+					// Make sure it is fully hooked up to related models.
+					for (EObject related : relatedModels) {
+						if (!related.eAdapters().contains(provider)) {
+							related.eAdapters().add(provider);
+						}
+					}
+					return provider;
+				}
+			}
+			// Else create a new one
+			return new GeneratedNominationsProvider(nominationsModel, relatedModels);
+		}
+	}
+
+	private GeneratedNominationsProvider(final @NonNull NominationsModel nominationsModel, final EObject... relatedModels) {
 		this.nominationsModel = nominationsModel;
 		this.nominationsModel.eAdapters().add(this);
 		for (EObject relatedModel : relatedModels) {
@@ -30,7 +51,7 @@ public class GeneratedNominationsProvider extends EContentAdapter {
 		}
 		this.generatedNominations = null;
 	}
-	
+
 	@Override
 	public void notifyChanged(final @Nullable Notification notification) {
 		super.notifyChanged(notification);
@@ -47,8 +68,7 @@ public class GeneratedNominationsProvider extends EContentAdapter {
 	public List<AbstractNomination> getGeneratedNominations(NominationsGenerator ng) {
 		if (this.generatedNominations == null) {
 			return regenerate(ng);
-		}
-		else {
+		} else {
 			List<AbstractNomination> nominations = this.generatedNominations.get();
 			if (nominations == null) {
 				nominations = regenerate(ng);

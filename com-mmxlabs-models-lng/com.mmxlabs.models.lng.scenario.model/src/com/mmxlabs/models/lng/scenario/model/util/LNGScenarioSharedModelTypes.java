@@ -60,7 +60,7 @@ public final class LNGScenarioSharedModelTypes {
 			final NominationsModel nominationsModel = ScenarioModelUtil.getNominationsModel(scenarioDataProvider);
 			final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioDataProvider);
 			final CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(scenarioDataProvider);
-			return new GeneratedNominationsProvider(nominationsModel, cargoModel, commercialModel);
+			return GeneratedNominationsProvider.getOrCreate(nominationsModel, cargoModel, commercialModel);
 		};
 	}
 
