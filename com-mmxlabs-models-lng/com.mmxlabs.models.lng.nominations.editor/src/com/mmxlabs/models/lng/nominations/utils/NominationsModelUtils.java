@@ -90,11 +90,13 @@ public class NominationsModelUtils {
 
 			// Check specific slot nominations.
 			for (final AbstractNomination nomination : nm.getNominations()) {
-				if (nomination.getSide() == Side.BUY && slot instanceof LoadSlot && Objects.equals(nomination.getNomineeId(), name) && Objects.equals(nomination.getType(), nominationType)) {
-					return nomination;
-				}
-				if (nomination.getSide() == Side.SELL && slot instanceof DischargeSlot && Objects.equals(nomination.getNomineeId(), name) && Objects.equals(nomination.getType(), nominationType)) {
-					return nomination;
+				if (!nomination.isDeleted()) {
+					if (nomination.getSide() == Side.BUY && slot instanceof LoadSlot && Objects.equals(nomination.getNomineeId(), name) && Objects.equals(nomination.getType(), nominationType)) {
+						return nomination;
+					}
+					if (nomination.getSide() == Side.SELL && slot instanceof DischargeSlot && Objects.equals(nomination.getNomineeId(), name) && Objects.equals(nomination.getType(), nominationType)) {
+						return nomination;
+					}
 				}
 			}
 
@@ -133,7 +135,7 @@ public class NominationsModelUtils {
 
 		// Check specific slot nominations.
 		for (final AbstractNomination nomination : nm.getNominations()) {
-			if (Objects.equals(nomination.getNomineeId(), name)) {
+			if (!nomination.isDeleted() && Objects.equals(nomination.getNomineeId(), name)) {
 				nominations.add(nomination);
 			}
 		}
