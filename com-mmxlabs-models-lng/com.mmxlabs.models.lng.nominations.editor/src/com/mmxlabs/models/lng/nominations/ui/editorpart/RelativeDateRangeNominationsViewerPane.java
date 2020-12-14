@@ -49,6 +49,7 @@ import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.viewers.ViewerFilter;
+import org.eclipse.jface.window.Window;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -868,12 +869,12 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 			if (selection instanceof IStructuredSelection) {
 				IStructuredSelection structuredSelection = (IStructuredSelection) selection;
 				
-				DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, structuredSelection);
-
-				//Add the edited slot nomination to the nominations model. 
-				if (((IStructuredSelection) selection).getFirstElement() instanceof AbstractNomination) {
-					final AbstractNomination sn = (AbstractNomination) ((IStructuredSelection) selection).getFirstElement();
-					addNomination(sn);
+				if (DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, structuredSelection) == Window.OK) {
+					//Add the edited slot nomination to the nominations model. 
+					if (((IStructuredSelection) selection).getFirstElement() instanceof AbstractNomination) {
+						final AbstractNomination sn = (AbstractNomination) ((IStructuredSelection) selection).getFirstElement();
+						addNomination(sn);
+					}
 				}
 			}
 		});
