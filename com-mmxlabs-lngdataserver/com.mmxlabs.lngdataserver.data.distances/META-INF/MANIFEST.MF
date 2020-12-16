@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Distances Data
 Bundle-SymbolicName: com.mmxlabs.lngdataserver.data.distances;singleton:=true
 Automatic-Module-Name: com.mmxlabs.lngdataserver.data.distances
-Bundle-Version: 4.10.34.RELEASE
+Bundle-Version: 4.10.35.qualifier
 Import-Package: okhttp3
 Require-Bundle: org.eclipse.osgi,
  com.google.guava,
