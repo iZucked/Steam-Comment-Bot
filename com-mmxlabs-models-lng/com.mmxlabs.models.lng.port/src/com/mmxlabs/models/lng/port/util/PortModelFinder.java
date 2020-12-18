@@ -9,6 +9,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.models.lng.port.CapabilityGroup;
 import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortCountryGroup;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteOption;
@@ -46,6 +47,15 @@ public class PortModelFinder {
 			}
 		}
 		throw new IllegalArgumentException("Unknown port " + mmxId);
+	}
+
+	@NonNull
+	public PortCountryGroup findPortCountryGroup(@NonNull final String portCountryGroupName) {
+		for (final PortCountryGroup portCountryGroup : this.portModel.getPortCountryGroups()) {
+			if (portCountryGroup.getName().equalsIgnoreCase(portCountryGroupName))
+				return portCountryGroup;
+		}
+		throw new IllegalArgumentException("Unknown port country group " + portCountryGroupName);
 	}
 
 	@NonNull
