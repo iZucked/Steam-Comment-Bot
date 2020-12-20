@@ -326,6 +326,77 @@ public class MonthlyBallastBonusContractTests extends AbstractLegacyMicroTestCas
 		});
 	}
 
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testMixedBBReturn() throws Exception {
+
+		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
+		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
+
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+
+		final VesselStateAttributes ballastAttributes = vessel.getBallastAttributes();
+		final List<FuelConsumption> fuelConsumption = ballastAttributes.getVesselOrDelegateFuelConsumption();
+		fuelConsumption.clear();
+		final FuelConsumption fc1 = FleetFactory.eINSTANCE.createFuelConsumption();
+		fc1.setSpeed(10);
+		fc1.setConsumption(50);
+		final FuelConsumption fc2 = FleetFactory.eINSTANCE.createFuelConsumption();
+		fc2.setSpeed(15);
+		fc2.setConsumption(80);
+		final FuelConsumption fc3 = FleetFactory.eINSTANCE.createFuelConsumption();
+		fc3.setSpeed(20);
+		fc3.setConsumption(100);
+
+		fuelConsumption.add(fc1);
+		fuelConsumption.add(fc2);
+		fuelConsumption.add(fc3);
+		vessel.setMaxSpeed(20);
+		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+				.withStartWindow(LocalDateTime.of(2015, 12, 2, 0, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0, 0))//
+				.withEndWindow(LocalDateTime.of(2016, 2, 6, 0, 0, 0, 0))//
+				.build();
+
+		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", 22.8)//
+				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
+				.build();
+		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 1, 5), portFinder.findPort("Sakai"), null, entity, "7").build();
+		final CapabilityGroup allDischarge = portFinder.getPortModel().getSpecialPortGroups().stream().filter(p -> p.getName().equals("All DISCHARGE Ports")).findFirst().get();
+		portFinder.getPortModel().getPorts().forEach(p -> System.out.println(p.getName()));
+		vesselAvailability.getEndAt().add(allDischarge);
+		@NonNull
+		final Cargo cargo = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
+		cargo.setVesselAssignmentType(vesselAvailability);
+		Port portSakai = portFinder.findPort("Sakai");
+		
+		YearMonth[] yms = new YearMonth[] { YearMonth.of(2015, 9), YearMonth.of(2015, 10), YearMonth.of(2015, 11) };
+		NextPortType[] nextPortTypes = new NextPortType[] { NextPortType.LOAD_PORT, NextPortType.LOAD_PORT, NextPortType.NEAREST_HUB };
+		String[] pctFuelRates = new String[] { "10", "75", "100" };
+		String[] pctCharterRates = new String[] { "25", "0", "100" };
+		final BallastBonusContract ballastBonusContract = this.createMonthlyBallastBonusContract(Lists.newLinkedList(Lists.newArrayList(portFinder.findPort("Sakai"))),
+				20.0, "20000", "100", true, false, Lists.newArrayList(portFinder.findPort("Bonny Nigeria"), portFinder.findPort("Yung An")),
+				 yms, nextPortTypes, pctFuelRates, pctCharterRates);
+		vesselAvailability.setBallastBonusContract(ballastBonusContract);
+
+		evaluateTest(null, null, scenarioRunner -> {
+
+			final @Nullable Schedule schedule = scenarioRunner.getSchedule();
+			assert schedule != null;
+
+			final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(cargo.getLoadName(), schedule);
+			Assertions.assertNotNull(cargoAllocation);
+
+			final long cargoPNL = cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
+
+			final List<SlotAllocation> slotAllocations = scenarioRunner.getSchedule().getSlotAllocations();
+			final EndEvent end = getEndEvent(vesselAvailability);
+			
+			final long endEventPNL = -62_499;
+			final long actualPnL = end.getGroupProfitAndLoss().getProfitAndLoss();
+			Assertions.assertEquals(endEventPNL, actualPnL);
+			Assertions.assertEquals(cargoPNL + endEventPNL, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
+		});
+	}
 	
 	private StartEvent getStartEvent(final VesselAvailability vesselAvailability) {
 		final Sequence sequence = lngScenarioModel.getScheduleModel().getSchedule().getSequences().stream().filter(s -> s.getVesselAvailability().equals(vesselAvailability)).findFirst().get();
