@@ -19,6 +19,7 @@ import com.mmxlabs.models.lng.commercial.BallastBonusContract;
 import com.mmxlabs.models.lng.commercial.BallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.LumpSumBallastBonusContractLine;
+import com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
@@ -155,7 +156,7 @@ public class BallastBonusCharterContractConstraint extends AbstractModelMultiCon
 			failures.add(dcsd);
 			valid = false;
 		}
-		if (line.getReturnPorts().isEmpty()) {
+		if (line.getReturnPorts().isEmpty() && !(line instanceof MonthlyBallastBonusContractLine)) {
 			// need ports
 			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
 					(IConstraintStatus) ctx.createFailureStatus(String.format("[Ballast bonus contract] return ports are needed on a notional journey")));

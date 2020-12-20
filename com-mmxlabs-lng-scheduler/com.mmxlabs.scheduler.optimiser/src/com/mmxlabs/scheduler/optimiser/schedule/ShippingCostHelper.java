@@ -11,6 +11,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.detailtree.DetailTree;
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
@@ -213,27 +214,27 @@ public class ShippingCostHelper {
 		return 0L;
 	}
 
-	public long getShippingBallastBonusCost(final @NonNull IPortSlot portSlot, final @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime, final int vesselEndTime) {
+	public long getShippingBallastBonusCost(final @NonNull IPortSlot portSlot, final @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime, final IPort firstLoadPort, final int vesselEndTime) {
 		if (portSlot.getPortType() == PortType.End) {
 			@Nullable
 			IBallastBonusContract ballastBonusContract = vesselAvailability.getBallastBonusContract();
 			if (ballastBonusContract == null) {
 				return 0L;
 			} else {
-				return ballastBonusContract.calculateBallastBonus(portSlot, vesselAvailability, vesselStartTime, vesselEndTime);
+				return ballastBonusContract.calculateBallastBonus(firstLoadPort, portSlot, vesselAvailability, vesselStartTime, vesselEndTime);
 			}
 		}
 		return 0L;
 	}
 
-	public void addBallastBonusAnnotation(DetailTree shippingDetails, IPortSlot portSlot, @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime, int vesselEndTime) {
+	public void addBallastBonusAnnotation(DetailTree shippingDetails, IPortSlot portSlot, @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime, IPort firstLoadPort, int vesselEndTime) {
 		if (portSlot.getPortType() == PortType.End) {
 			@Nullable
 			IBallastBonusContract ballastBonusContract = vesselAvailability.getBallastBonusContract();
 			if (ballastBonusContract == null) {
 				return;
 			} else {
-				BallastBonusAnnotation annotation = ballastBonusContract.annotate(portSlot, vesselAvailability, vesselStartTime, vesselEndTime);
+				BallastBonusAnnotation annotation = ballastBonusContract.annotate(firstLoadPort, portSlot, vesselAvailability, vesselStartTime, vesselEndTime);
 				shippingDetails.addChild(BallastBonusAnnotation.ANNOTATION_KEY, annotation);
 			}
 		}

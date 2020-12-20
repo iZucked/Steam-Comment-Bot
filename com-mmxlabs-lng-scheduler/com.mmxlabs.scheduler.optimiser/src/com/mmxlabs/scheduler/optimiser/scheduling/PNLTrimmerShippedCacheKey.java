@@ -12,6 +12,7 @@ import java.util.Objects;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
@@ -22,7 +23,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 public class PNLTrimmerShippedCacheKey {
 	IVesselAvailability vesselAvailability;
 	IResource resource;
-
+	IPort firstLoadPort;
+	
 	Map<IPortSlot, Collection<TimeChoice>> intervalMap;
 	IPortTimeWindowsRecord ptwr;
 	MinTravelTimeData minTimeData;
@@ -32,10 +34,11 @@ public class PNLTrimmerShippedCacheKey {
 	private final int hash;
 	private final Object vesselKey;
 
-	public PNLTrimmerShippedCacheKey(final IResource resource, final IVesselAvailability vesselAvailability, final IPortTimeWindowsRecord portTimeWindowsRecord, final boolean lastPlan,
+	public PNLTrimmerShippedCacheKey(final IResource resource, final IVesselAvailability vesselAvailability, final IPort firstLoadPort, final IPortTimeWindowsRecord portTimeWindowsRecord, final boolean lastPlan,
 			final MinTravelTimeData minTimeData, final ScheduledPlanInput spi, final Map<IPortSlot, Collection<TimeChoice>> intervalMap) {
 		this.vesselAvailability = vesselAvailability;
 		this.resource = resource;
+		this.firstLoadPort = firstLoadPort;
 		this.ptwr = portTimeWindowsRecord;
 		this.lastPlan = lastPlan;
 		this.minTimeData = minTimeData;
@@ -52,8 +55,14 @@ public class PNLTrimmerShippedCacheKey {
 		// Add return interval size (if present) to hash
 		final Collection<TimeChoice> collection = intervalMap.get(ptwr.getReturnSlot());
 		final int sz = 0;// collection == null ? 0 : collection.size();
-		this.hash = Objects.hash(vesselKey, lastPlan, portTimeWindowsRecord.getSlots(), spi.getPlanStartTime(), sz);
+		String firstLoadPortName = getPortName(firstLoadPort);
+		this.hash = Objects.hash(vesselKey, firstLoadPortName, lastPlan, portTimeWindowsRecord.getSlots(), spi.getPlanStartTime(), sz);
 		// this.hash = Objects.hash(vesselKey, portTimeWindowsRecord, lastPlan, spi.getPlanStartTime());
+	}
+
+	private String getPortName(final IPort port) {
+		String portName = port == null ? "" : port.getName();
+		return portName;
 	}
 
 	@Override
@@ -72,6 +81,7 @@ public class PNLTrimmerShippedCacheKey {
 
 			final boolean valid = this.lastPlan == other.lastPlan //
 					&& this.vesselKey == other.vesselKey //
+					&& Objects.equals(getPortName(this.firstLoadPort), getPortName(other.firstLoadPort))
 					// && this.vesselAvailability == other.vesselAvailability //
 					&& this.spi.getVesselStartTime() == other.spi.getVesselStartTime() //
 					&& this.spi.getPlanStartTime() == other.spi.getPlanStartTime() //
@@ -104,7 +114,7 @@ public class PNLTrimmerShippedCacheKey {
 		return false;
 	}
 
-	public static PNLTrimmerShippedCacheKey from(final ScheduledRecord r, final IResource resource, final IVesselAvailability vesselAvailability, final IPortTimeWindowsRecord portTimeWindowsRecord,
+	public static PNLTrimmerShippedCacheKey from(final ScheduledRecord r, final IPort firstLoad, final IResource resource, final IVesselAvailability vesselAvailability, final IPortTimeWindowsRecord portTimeWindowsRecord,
 			final boolean lastPlan, final Map<IPortSlot, Collection<TimeChoice>> intervalMap, final MinTravelTimeData minTimeData) {
 
 		final Map<IPortSlot, Collection<TimeChoice>> subMap = new HashMap<>();
@@ -117,10 +127,11 @@ public class PNLTrimmerShippedCacheKey {
 
 		final ScheduledPlanInput spi = new ScheduledPlanInput(r.sequenceStartTime, r.currentEndTime, r.previousHeelRecord);
 
-		return new PNLTrimmerShippedCacheKey(resource, vesselAvailability, portTimeWindowsRecord, lastPlan, minTimeData, spi, subMap);
+		return new PNLTrimmerShippedCacheKey(resource, vesselAvailability, firstLoad, portTimeWindowsRecord, lastPlan, minTimeData, spi, subMap);
 	}
 
-	public static PNLTrimmerShippedCacheKey forFirstRecord(final int vesselStartTime, final IResource resource, final IVesselAvailability vesselAvailability,
+	
+	public static PNLTrimmerShippedCacheKey forFirstRecord(final int vesselStartTime, final IPort firstLoad, final IResource resource, final IVesselAvailability vesselAvailability,
 			final IPortTimeWindowsRecord portTimeWindowsRecord, final boolean lastPlan, final Map<IPortSlot, Collection<TimeChoice>> intervalMap, final MinTravelTimeData minTimeData2) {
 
 		final Map<IPortSlot, Collection<TimeChoice>> subMap = new HashMap<>();
@@ -132,6 +143,6 @@ public class PNLTrimmerShippedCacheKey {
 		}
 		final ScheduledPlanInput spi = new ScheduledPlanInput(vesselStartTime, vesselStartTime, null);
 
-		return new PNLTrimmerShippedCacheKey(resource, vesselAvailability, portTimeWindowsRecord, lastPlan, minTimeData2, spi, subMap);
+		return new PNLTrimmerShippedCacheKey(resource, vesselAvailability, firstLoad, portTimeWindowsRecord, lastPlan, minTimeData2, spi, subMap);
 	}
 }

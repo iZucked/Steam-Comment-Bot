@@ -8,38 +8,38 @@ import java.time.YearMonth;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Montly Ballast Bonus Contract Line</b></em>'.
+ * A representation of the model object '<em><b>Monthly Ballast Bonus Contract Line</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.commercial.MontlyBallastBonusContractLine#getMonth <em>Month</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.MontlyBallastBonusContractLine#getBallastBonusTo <em>Ballast Bonus To</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.MontlyBallastBonusContractLine#getBallastBonusPctFuel <em>Ballast Bonus Pct Fuel</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.MontlyBallastBonusContractLine#getBallastBonusPctCharter <em>Ballast Bonus Pct Charter</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContractLine#getMonth <em>Month</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContractLine#getBallastBonusTo <em>Ballast Bonus To</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContractLine#getBallastBonusPctFuel <em>Ballast Bonus Pct Fuel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContractLine#getBallastBonusPctCharter <em>Ballast Bonus Pct Charter</em>}</li>
  * </ul>
  *
- * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getMontlyBallastBonusContractLine()
+ * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getMonthlyBallastBonusContractLine()
  * @model
  * @generated
  */
-public interface MontlyBallastBonusContractLine extends BallastBonusContractLine {
+public interface MonthlyBallastBonusContractLine extends NotionalJourneyBallastBonusContractLine {
 	/**
 	 * Returns the value of the '<em><b>Month</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Month</em>' attribute.
 	 * @see #setMonth(YearMonth)
-	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getMontlyBallastBonusContractLine_Month()
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getMonthlyBallastBonusContractLine_Month()
 	 * @model dataType="com.mmxlabs.models.datetime.YearMonth"
 	 * @generated
 	 */
 	YearMonth getMonth();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.MontlyBallastBonusContractLine#getMonth <em>Month</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContractLine#getMonth <em>Month</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Month</em>' attribute.
@@ -56,14 +56,14 @@ public interface MontlyBallastBonusContractLine extends BallastBonusContractLine
 	 * @return the value of the '<em>Ballast Bonus To</em>' attribute.
 	 * @see com.mmxlabs.models.lng.commercial.NextPortType
 	 * @see #setBallastBonusTo(NextPortType)
-	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getMontlyBallastBonusContractLine_BallastBonusTo()
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getMonthlyBallastBonusContractLine_BallastBonusTo()
 	 * @model
 	 * @generated
 	 */
 	NextPortType getBallastBonusTo();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.MontlyBallastBonusContractLine#getBallastBonusTo <em>Ballast Bonus To</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContractLine#getBallastBonusTo <em>Ballast Bonus To</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Ballast Bonus To</em>' attribute.
@@ -78,43 +78,43 @@ public interface MontlyBallastBonusContractLine extends BallastBonusContractLine
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Ballast Bonus Pct Fuel</em>' attribute.
-	 * @see #setBallastBonusPctFuel(BigDecimal)
-	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getMontlyBallastBonusContractLine_BallastBonusPctFuel()
+	 * @see #setBallastBonusPctFuel(String)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getMonthlyBallastBonusContractLine_BallastBonusPctFuel()
 	 * @model
 	 * @generated
 	 */
-	BigDecimal getBallastBonusPctFuel();
+	String getBallastBonusPctFuel();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.MontlyBallastBonusContractLine#getBallastBonusPctFuel <em>Ballast Bonus Pct Fuel</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContractLine#getBallastBonusPctFuel <em>Ballast Bonus Pct Fuel</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Ballast Bonus Pct Fuel</em>' attribute.
 	 * @see #getBallastBonusPctFuel()
 	 * @generated
 	 */
-	void setBallastBonusPctFuel(BigDecimal value);
+	void setBallastBonusPctFuel(String value);
 
 	/**
 	 * Returns the value of the '<em><b>Ballast Bonus Pct Charter</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Ballast Bonus Pct Charter</em>' attribute.
-	 * @see #setBallastBonusPctCharter(BigDecimal)
-	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getMontlyBallastBonusContractLine_BallastBonusPctCharter()
+	 * @see #setBallastBonusPctCharter(String)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getMonthlyBallastBonusContractLine_BallastBonusPctCharter()
 	 * @model
 	 * @generated
 	 */
-	BigDecimal getBallastBonusPctCharter();
+	String getBallastBonusPctCharter();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.MontlyBallastBonusContractLine#getBallastBonusPctCharter <em>Ballast Bonus Pct Charter</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContractLine#getBallastBonusPctCharter <em>Ballast Bonus Pct Charter</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Ballast Bonus Pct Charter</em>' attribute.
 	 * @see #getBallastBonusPctCharter()
 	 * @generated
 	 */
-	void setBallastBonusPctCharter(BigDecimal value);
+	void setBallastBonusPctCharter(String value);
 
-} // MontlyBallastBonusContractLine
+} // MonthlyBallastBonusContractLine

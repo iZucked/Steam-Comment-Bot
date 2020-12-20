@@ -55,7 +55,7 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 @ExtendWith(ShiroRunner.class)
 public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 
-	private static final String TEST_CHARTER_CURVE_NAME = "TestCharterCurve";
+	protected static final String TEST_CHARTER_CURVE_NAME = "TestCharterCurve";
 	
 	@Override
 	protected int getThreadCount() {
@@ -151,7 +151,7 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 		});
 	}
 
-	private CharterCurve createCharterPriceCurve() {
+	protected CharterCurve createCharterPriceCurve() {
 		return pricingModelBuilder.makeCharterDataCurve(TEST_CHARTER_CURVE_NAME, "$", "mmBtu") 
 				.addIndexPoint(YearMonth.of(2015, 12), 100000) 
 				.addIndexPoint(YearMonth.of(2016, 1), 500000) 
@@ -616,7 +616,7 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 		return (StartEvent) event;
 	}
 
-	private EndEvent getEndEvent(final VesselAvailability vesselAvailability) {
+	protected EndEvent getEndEvent(final VesselAvailability vesselAvailability) {
 		final Sequence sequence = lngScenarioModel.getScheduleModel().getSchedule().getSequences().stream().filter(s -> s.getVesselAvailability().equals(vesselAvailability)).findFirst().get();
 		final Event event = sequence.getEvents().get(sequence.getEvents().size() - 1);
 		assert event instanceof EndEvent;

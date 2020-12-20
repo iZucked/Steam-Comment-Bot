@@ -31,6 +31,7 @@ import com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract;
 import com.mmxlabs.models.lng.port.ui.editorpart.MultiplePortReferenceManipulator;
+import com.mmxlabs.models.lng.port.ui.editors.PortMultiReferenceInlineEditor;
 import com.mmxlabs.models.lng.pricing.ui.autocomplete.PriceAttributeManipulator;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -39,20 +40,34 @@ import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.BooleanAttributeManipulator;
-import com.mmxlabs.models.ui.tabular.manipulators.MultipleReferenceManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.EnumAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.YearMonthAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.renderers.WrappingColumnHeaderRenderer;
 import com.mmxlabs.models.ui.validation.IStatusProvider;
 import com.mmxlabs.rcp.common.RunnerHelper;
 
-public class BallastBonusContractTableCreator {
-	public static EObjectTableViewer createBallastBonusTable(final Composite parent, final FormToolkit toolkit, final IDialogEditingContext dialogContext, final ICommandHandler commandHandler,
+public class MonthlyBallastBonusContractTableCreator {	
+	public static EObjectTableViewer createMonthlyBallastBonusTable(final Composite parent, final FormToolkit toolkit, final IDialogEditingContext dialogContext, final ICommandHandler commandHandler,
 			final RuleBasedBallastBonusContract ruleBasedBallastBonusContract, final IStatusProvider statusProvider, final Runnable sizeChangedAction) {
+		
 		final IScenarioEditingLocation sel = dialogContext.getScenarioEditingLocation();
 		final EObjectTableViewer eViewer = new EObjectTableViewer(parent, SWT.FULL_SELECTION);
 		eViewer.setStatusProvider(statusProvider);
 		eViewer.setAutoResizeable(false);
 		eViewer.setSorter(null);
+
+		eViewer.addTypicalColumn("Month", new YearMonthAttributeManipulator(CommercialPackage.eINSTANCE.getMonthlyBallastBonusContractLine_Month(), 
+				sel.getEditingDomain()) {
+
+			@Override
+			public void runSetCommand(final Object object, final Object value) {
+				super.runSetCommand(object, value);
+
+				dialogContext.getDialogController().validate();
+				eViewer.refresh();
+			}
+		});
 		
 		eViewer.addTypicalColumn("Redelivery ports", new MultiplePortReferenceManipulator(CommercialPackage.eINSTANCE.getBallastBonusContractLine_RedeliveryPorts(), sel.getReferenceValueProviderCache(),
 				sel.getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
@@ -150,12 +165,12 @@ public class BallastBonusContractTableCreator {
 
 		});
 
-		eViewer.addTypicalColumn("Notional return ports", new MultipleReferenceManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyBallastBonusContractLine_ReturnPorts(),
-				sel.getReferenceValueProviderCache(), sel.getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
+		eViewer.addTypicalColumn("Ballast To", new EnumAttributeManipulator(CommercialPackage.eINSTANCE.getMonthlyBallastBonusContractLine_BallastBonusTo(),
+				sel.getEditingDomain()) {
 
 			@Override
 			public void runSetCommand(final Object object, final Object value) {
-				if (object instanceof NotionalJourneyBallastBonusContractLine) {
+				if (object instanceof MonthlyBallastBonusContractLine) {
 					super.runSetCommand(object, value);
 
 					dialogContext.getDialogController().validate();
@@ -165,7 +180,7 @@ public class BallastBonusContractTableCreator {
 
 			@Override
 			public boolean canEdit(final Object object) {
-				if (object instanceof NotionalJourneyBallastBonusContractLine) {
+				if (object instanceof MonthlyBallastBonusContractLine) {
 					return super.canEdit(object);
 				} else {
 					return false;
@@ -174,7 +189,7 @@ public class BallastBonusContractTableCreator {
 
 			@Override
 			public Object getValue(final Object object) {
-				if (object instanceof NotionalJourneyBallastBonusContractLine) {
+				if (object instanceof MonthlyBallastBonusContractLine) {
 					return super.getValue(object);
 				} else {
 					return null;
@@ -183,7 +198,7 @@ public class BallastBonusContractTableCreator {
 
 			@Override
 			public @Nullable String render(final Object object) {
-				if (object instanceof NotionalJourneyBallastBonusContractLine) {
+				if (object instanceof MonthlyBallastBonusContractLine) {
 					return super.render(object);
 				} else {
 					return "-";
@@ -192,6 +207,49 @@ public class BallastBonusContractTableCreator {
 
 		});
 
+		eViewer.addTypicalColumn("% Fuel",
+				new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getMonthlyBallastBonusContractLine_BallastBonusPctFuel(), sel.getEditingDomain()) {
+
+					@Override
+					public void runSetCommand(final Object object, final Object value) {
+						if (object instanceof MonthlyBallastBonusContractLine) {
+							super.runSetCommand(object, value);
+
+							dialogContext.getDialogController().validate();
+							eViewer.refresh();
+						}
+					}
+
+					@Override
+					public boolean canEdit(final Object object) {
+						if (object instanceof MonthlyBallastBonusContractLine) {
+							return super.canEdit(object);
+						} else {
+							return false;
+						}
+					}
+
+					@Override
+					public Object getValue(final Object object) {
+						if (object instanceof MonthlyBallastBonusContractLine) {
+							return super.getValue(object);
+						} else {
+							return null;
+						}
+					}
+
+					@Override
+					public @Nullable String render(final Object object) {
+						if (object instanceof MonthlyBallastBonusContractLine) {
+							return super.render(object);
+						} else {
+							return "-";
+						}
+					}
+
+				});
+
+		
 		eViewer.addTypicalColumn("Fuel Cost ($/MT)",
 				new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyBallastBonusContractLine_FuelPriceExpression(), sel.getEditingDomain()) {
 
@@ -234,6 +292,48 @@ public class BallastBonusContractTableCreator {
 
 				});
 
+		eViewer.addTypicalColumn("% Hire Cost",
+				new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getMonthlyBallastBonusContractLine_BallastBonusPctCharter(), sel.getEditingDomain()) {
+
+					@Override
+					public void runSetCommand(final Object object, final Object value) {
+						if (object instanceof MonthlyBallastBonusContractLine) {
+							super.runSetCommand(object, value);
+
+							dialogContext.getDialogController().validate();
+							eViewer.refresh();
+						}
+					}
+
+					@Override
+					public boolean canEdit(final Object object) {
+						if (object instanceof MonthlyBallastBonusContractLine) {
+							return super.canEdit(object);
+						} else {
+							return false;
+						}
+					}
+
+					@Override
+					public Object getValue(final Object object) {
+						if (object instanceof MonthlyBallastBonusContractLine) {
+							return super.getValue(object);
+						} else {
+							return null;
+						}
+					}
+
+					@Override
+					public @Nullable String render(final Object object) {
+						if (object instanceof MonthlyBallastBonusContractLine) {
+							return super.render(object);
+						} else {
+							return "-";
+						}
+					}
+
+				});
+		
 		eViewer.addTypicalColumn("Hire Cost ($/day)",
 				new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyBallastBonusContractLine_HirePriceExpression(), sel.getEditingDomain()) {
 
@@ -422,13 +522,13 @@ public class BallastBonusContractTableCreator {
 		buttonLayout.marginHeight = 0;
 		buttonLayout.marginWidth = 0;
 
-		final Button addLumpSum = toolkit.createButton(buttons, "Add lump sum rule", SWT.NONE);
-		addLumpSum.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
+		final Button addMonthlyRuleBtn = toolkit.createButton(buttons, "Add monthly rule", SWT.NONE);
+		addMonthlyRuleBtn.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
 
-		addLumpSum.addSelectionListener(new SelectionAdapter() {
+		addMonthlyRuleBtn.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				final LumpSumBallastBonusContractLine newLine = CommercialFactory.eINSTANCE.createLumpSumBallastBonusContractLine();
+				final MonthlyBallastBonusContractLine newLine = CommercialFactory.eINSTANCE.createMonthlyBallastBonusContractLine();
 				commandHandler.handleCommand(
 						AddCommand.create(commandHandler.getEditingDomain(), ruleBasedBallastBonusContract, CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES, newLine),
 						ruleBasedBallastBonusContract, CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES);
@@ -438,24 +538,6 @@ public class BallastBonusContractTableCreator {
 			}
 		});
 
-		final Button addNotional = toolkit.createButton(buttons, "Add notional journey rule", SWT.NONE);
-		addNotional.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
-
-		addNotional.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				final NotionalJourneyBallastBonusContractLine newLine = CommercialFactory.eINSTANCE.createNotionalJourneyBallastBonusContractLine();
-				commandHandler.handleCommand(
-						AddCommand.create(commandHandler.getEditingDomain(), ruleBasedBallastBonusContract, CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES, newLine),
-						ruleBasedBallastBonusContract, CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES);
-				eViewer.setSelection(new StructuredSelection(newLine));
-				
-				
-				
-				eViewer.refresh();
-				RunnerHelper.asyncExec(sizeChangedAction);
-			}
-		});
 		
 		final Button remove = toolkit.createButton(buttons, "Remove", SWT.NONE);
 		remove.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
@@ -483,5 +565,5 @@ public class BallastBonusContractTableCreator {
 		eViewer.refresh();
 		sizeChangedAction.run();
 		return eViewer;
-	}	
+	}
 }

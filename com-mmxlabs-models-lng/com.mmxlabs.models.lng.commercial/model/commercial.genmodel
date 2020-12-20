@@ -22,7 +22,7 @@
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="commercial.ecore#//NextPortType">
       <genEnumLiterals ecoreEnumLiteral="commercial.ecore#//NextPortType/Unknown"/>
       <genEnumLiterals ecoreEnumLiteral="commercial.ecore#//NextPortType/LoadPort"/>
-      <genEnumLiterals ecoreEnumLiteral="commercial.ecore#//NextPortType/NearestPort"/>
+      <genEnumLiterals ecoreEnumLiteral="commercial.ecore#//NextPortType/NearestHub"/>
     </genEnums>
     <genClasses ecoreClass="commercial.ecore#//CommercialModel">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//CommercialModel/entities"/>
@@ -147,11 +147,15 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//BallastBonusCharterContract/repositioningFee"/>
     </genClasses>
     <genClasses ecoreClass="commercial.ecore#//SimpleBallastBonusCharterContract"/>
-    <genClasses ecoreClass="commercial.ecore#//MontlyBallastBonusContractLine">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//MontlyBallastBonusContractLine/month"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//MontlyBallastBonusContractLine/ballastBonusTo"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//MontlyBallastBonusContractLine/ballastBonusPctFuel"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//MontlyBallastBonusContractLine/ballastBonusPctCharter"/>
+    <genClasses ecoreClass="commercial.ecore#//MonthlyBallastBonusContractLine">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//MonthlyBallastBonusContractLine/month"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//MonthlyBallastBonusContractLine/ballastBonusTo"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//MonthlyBallastBonusContractLine/ballastBonusPctFuel"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//MonthlyBallastBonusContractLine/ballastBonusPctCharter"/>
     </genClasses>
+    <genClasses ecoreClass="commercial.ecore#//MonthlyBallastBonusContract">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//MonthlyBallastBonusContract/hubs"/>
+    </genClasses>
+    <genClasses ecoreClass="commercial.ecore#//MonthlyBallastBonusCharterContract"/>
   </genPackages>
 </genmodel:GenModel>

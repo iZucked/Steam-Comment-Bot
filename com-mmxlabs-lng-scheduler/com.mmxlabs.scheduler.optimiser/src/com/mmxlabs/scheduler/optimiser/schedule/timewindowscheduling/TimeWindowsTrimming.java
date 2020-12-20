@@ -23,6 +23,7 @@ import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
@@ -800,12 +801,15 @@ public class TimeWindowsTrimming {
 					endTime = Math.max(endTime, dischargeTime + travelTimeData.getMinTravelTime(portTimeWindowsRecord.getIndex(discharge)));
 					portTimesRecord.setReturnSlotTime(endSlot, endTime);
 
+					if (true) {
+						throw new IllegalArgumentException("Implement load.getPort() correctly here..");
+					}
 					// Evaluate!
 					// Note: We assume the caching will take care of duplicated time sets rather
 					// than needing to manage this here.
 					List<ScheduledVoyagePlanResult> result = voyagePlanEvaluator.evaluateShipped(resource, vesselAvailability, //
 							vesselAvailability.getCharterCostCalculator(), //
-							0, previousHeelRecord, portTimesRecord.copy(), true, false, false, null);
+							0, load.getPort(), previousHeelRecord, portTimesRecord.copy(), true, false, false, null);
 
 					// Is this the best solution found so far?
 					if (bestMetrics == null || MetricType.betterThan(result.get(0).metrics, bestMetrics)) {

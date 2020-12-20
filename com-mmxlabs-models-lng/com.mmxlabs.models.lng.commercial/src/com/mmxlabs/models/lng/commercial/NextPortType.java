@@ -39,14 +39,14 @@ public enum NextPortType implements Enumerator {
 	LOAD_PORT(1, "LoadPort", "LoadPort"),
 
 	/**
-	 * The '<em><b>Nearest Port</b></em>' literal object.
+	 * The '<em><b>Nearest Hub</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #NEAREST_PORT_VALUE
+	 * @see #NEAREST_HUB_VALUE
 	 * @generated
 	 * @ordered
 	 */
-	NEAREST_PORT(2, "NearestPort", "NearestPort");
+	NEAREST_HUB(2, "NearestHub", "NearestHub");
 
 	/**
 	 * The '<em><b>Unknown</b></em>' literal value.
@@ -71,15 +71,15 @@ public enum NextPortType implements Enumerator {
 	public static final int LOAD_PORT_VALUE = 1;
 
 	/**
-	 * The '<em><b>Nearest Port</b></em>' literal value.
+	 * The '<em><b>Nearest Hub</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #NEAREST_PORT
-	 * @model name="NearestPort"
+	 * @see #NEAREST_HUB
+	 * @model name="NearestHub"
 	 * @generated
 	 * @ordered
 	 */
-	public static final int NEAREST_PORT_VALUE = 2;
+	public static final int NEAREST_HUB_VALUE = 2;
 
 	/**
 	 * An array of all the '<em><b>Next Port Type</b></em>' enumerators.
@@ -91,7 +91,7 @@ public enum NextPortType implements Enumerator {
 		new NextPortType[] {
 			UNKNOWN,
 			LOAD_PORT,
-			NEAREST_PORT,
+			NEAREST_HUB,
 		};
 
 	/**
@@ -150,7 +150,7 @@ public enum NextPortType implements Enumerator {
 		switch (value) {
 			case UNKNOWN_VALUE: return UNKNOWN;
 			case LOAD_PORT_VALUE: return LOAD_PORT;
-			case NEAREST_PORT_VALUE: return NEAREST_PORT;
+			case NEAREST_HUB_VALUE: return NEAREST_HUB;
 		}
 		return null;
 	}

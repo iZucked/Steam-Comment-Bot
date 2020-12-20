@@ -24,11 +24,11 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
 /**
- * A component helper for MontlyBallastBonusContractLine instances
+ * A component helper for MonthlyBallastBonusContractLine instances
  *
  * @generated
  */
-public class MontlyBallastBonusContractLineComponentHelper extends BaseComponentHelper {
+public class MonthlyBallastBonusContractLineComponentHelper extends BaseComponentHelper {
 	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
 
 	/**
@@ -36,7 +36,7 @@ public class MontlyBallastBonusContractLineComponentHelper extends BaseComponent
 	 *
 	 * @generated
 	 */
-	public MontlyBallastBonusContractLineComponentHelper() {
+	public MonthlyBallastBonusContractLineComponentHelper() {
 		this(Platform.getAdapterManager());
 	}
 
@@ -45,19 +45,19 @@ public class MontlyBallastBonusContractLineComponentHelper extends BaseComponent
 	 *
 	 * @generated
 	 */
-	public MontlyBallastBonusContractLineComponentHelper(IAdapterManager adapterManager) {
+	public MonthlyBallastBonusContractLineComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
-		superClassesHelpers.addAll(registry.getComponentHelpers(CommercialPackage.Literals.BALLAST_BONUS_CONTRACT_LINE));
+		superClassesHelpers.addAll(registry.getComponentHelpers(CommercialPackage.Literals.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE));
 	}
 	
 	/**
-	 * add editors to a composite, using MontlyBallastBonusContractLine as the supertype
+	 * add editors to a composite, using MonthlyBallastBonusContractLine as the supertype
 	 *
 	 * @generated
 	 */
 	 @Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, CommercialPackage.Literals.MONTLY_BALLAST_BONUS_CONTRACT_LINE);	
+		addEditorsToComposite(detailComposite, CommercialPackage.Literals.MONTHLY_BALLAST_BONUS_CONTRACT_LINE);	
 	}
 	
 	/**
@@ -74,35 +74,35 @@ public class MontlyBallastBonusContractLineComponentHelper extends BaseComponent
 		add_ballastBonusPctCharterEditor(detailComposite, topClass);
 	}
 	/**
-	 * Create the editor for the month feature on MontlyBallastBonusContractLine
+	 * Create the editor for the month feature on MonthlyBallastBonusContractLine
 	 *
 	 * @generated
 	 */
 	protected void add_monthEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.MONTLY_BALLAST_BONUS_CONTRACT_LINE__MONTH));
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.MONTHLY_BALLAST_BONUS_CONTRACT_LINE__MONTH));
 	}
 	/**
-	 * Create the editor for the ballastBonusTo feature on MontlyBallastBonusContractLine
+	 * Create the editor for the ballastBonusTo feature on MonthlyBallastBonusContractLine
 	 *
 	 * @generated
 	 */
 	protected void add_ballastBonusToEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.MONTLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_TO));
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.MONTHLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_TO));
 	}
 	/**
-	 * Create the editor for the ballastBonusPctFuel feature on MontlyBallastBonusContractLine
+	 * Create the editor for the ballastBonusPctFuel feature on MonthlyBallastBonusContractLine
 	 *
 	 * @generated
 	 */
 	protected void add_ballastBonusPctFuelEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.MONTLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_PCT_FUEL));
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.MONTHLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_PCT_FUEL));
 	}
 	/**
-	 * Create the editor for the ballastBonusPctCharter feature on MontlyBallastBonusContractLine
+	 * Create the editor for the ballastBonusPctCharter feature on MonthlyBallastBonusContractLine
 	 *
 	 * @generated
 	 */
 	protected void add_ballastBonusPctCharterEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.MONTLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_PCT_CHARTER));
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.MONTHLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_PCT_CHARTER));
 	}
 }

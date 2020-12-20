@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.cargo.ui.displaycomposites;
+package com.mmxlabs.models.lng.commercial.ui.displaycomposites;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -12,7 +12,6 @@ import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -22,22 +21,16 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.BallastBonusContract;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
-import com.mmxlabs.models.ui.editors.util.EditorUtils;
 import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite;
 
 /**
- * A display composite for the {@link VesselAvailability} editor to keep the start and end heel options in one column. Note this assumes start and end heel are the only contained children.
- * 
- * @author Simon Goodall
- * 
+ * A display composite for the {@link MonthlyBallastBonusContractTopLevelComposite} to add complex ballast bonus UI
  */
-public class VesselAvailabilityTopLevelComposite extends DefaultTopLevelComposite {
+public class MonthlyBallastBonusContractTopLevelComposite extends DefaultTopLevelComposite {
 
 	/**
 	 * {@link Composite} to contain the heel editors
@@ -45,7 +38,7 @@ public class VesselAvailabilityTopLevelComposite extends DefaultTopLevelComposit
 	private Composite right;
 	private IDisplayComposite ballastBonusComposite;
 
-	public VesselAvailabilityTopLevelComposite(final Composite parent, final int style, final IDialogEditingContext dialogContext, FormToolkit toolkit) {
+	public MonthlyBallastBonusContractTopLevelComposite(final Composite parent, final int style, final IDialogEditingContext dialogContext, FormToolkit toolkit) {
 		super(parent, style, dialogContext, toolkit);
 	}
 
@@ -57,51 +50,31 @@ public class VesselAvailabilityTopLevelComposite extends DefaultTopLevelComposit
 
 		final EClass eClass = object.eClass();
 		Composite containerComposite = toolkit.createComposite(this, SWT.NONE);
-		// This next line breaks multi-edit.
-		// containerComposite.setLayout(new FillLayout());
+		containerComposite.setLayout(new GridLayout());
+		containerComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		final Group g = new Group(containerComposite, SWT.NONE);
 		toolkit.adapt(g);
 
-		g.setText(EditorUtils.unmangle(object));
+		g.setText("Charter terms");
 		g.setLayout(new FillLayout());
-		g.setLayoutData(layoutProvider.createTopLayoutData(root, object, object));
+		g.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		g.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 
-		// topLevel = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(eClass).createSublevelComposite(g, eClass, dialogContext, toolkit);
-		topLevel = new VesselAvailabilityDetailComposite(g, SWT.NONE, toolkit);
+		topLevel = new MonthlyBallastBonusContractDetailComposite(g, SWT.NONE, toolkit);
 		topLevel.setCommandHandler(commandHandler);
 		topLevel.setEditorWrapper(editorWrapper);
 
-		// // START CUSTOM SECTION
-		// Initialise right composite
-		right = toolkit.createComposite(containerComposite);
-		// Single column
-		final GridLayout layout = GridLayoutFactory.swtDefaults() //
-				.numColumns(1) //
-				.equalWidth(true) //
-				.margins(0, 0) //
-				.extendedMargins(0, 0, 0, 0) //
-				.create();
-		right.setLayout(layout);
-		right.setLayoutData(new GridData(GridData.FILL_BOTH));
-		right.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-
 		topLevel.display(dialogContext, root, object, range, dbc);
 
-		createDefaultChildCompositeSection(dialogContext, root, object, range, dbc, eClass, right);
-		// int numChildren = createChildComposites(root, object, eClass, right);
-		// final Iterator<IDisplayComposite> children = childComposites.iterator();
-		// final Iterator<EObject> childObjectsItr = childObjects.iterator();
-		//
-		// while (childObjectsItr.hasNext()) {
-		// EObject next = childObjectsItr.next();
-		// if (!(next instanceof BallastBonusContract)) {
-		// children.next().display(dialogContext, root, next, range, dbc);
-		// }
-		// }
-		//
-		// // Overrides default layout factory so we get two columns columns
-		containerComposite.setLayout(new GridLayout(2, true));
+//		final Iterator<IDisplayComposite> children = childComposites.iterator();
+//		final Iterator<EObject> childObjectsItr = childObjects.iterator();
+//
+//		while (childObjectsItr.hasNext()) {
+//			EObject next = childObjectsItr.next();
+//			if (!(next instanceof BallastBonusContract)) {
+//				children.next().display(dialogContext, root, next, range, dbc);
+//			}
+//		}
 
 		Composite bottomComposite = toolkit.createComposite(this, SWT.NONE);
 		bottomComposite.setLayout(new FillLayout());
@@ -109,16 +82,15 @@ public class VesselAvailabilityTopLevelComposite extends DefaultTopLevelComposit
 
 		final Group g2 = new Group(bottomComposite, SWT.NONE);
 		toolkit.adapt(g2);
-		g2.setText("Ballast Bonus");
+		g2.setText("Ballast bonus");
 		g2.setLayout(new GridLayout());
 		g2.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 
-		
-		ballastBonusComposite = new BallastBonusContractDetailComposite(g2, SWT.NONE, toolkit, () -> {
-			if (!VesselAvailabilityTopLevelComposite.this.isDisposed()) {
-				VesselAvailabilityTopLevelComposite.this.layout(true, true);
+		ballastBonusComposite = new MonthlyBallastBonusCharterContractDetailComposite(g2, SWT.NONE, toolkit, () -> {
+			if (!MonthlyBallastBonusContractTopLevelComposite.this.isDisposed()) {
+				MonthlyBallastBonusContractTopLevelComposite.this.layout(true, true);
 			}
-		}, (VesselAvailability) object);
+		});
 		ballastBonusComposite.setCommandHandler(commandHandler);
 		ballastBonusComposite.display(dialogContext, root, object, range, dbc);
 
@@ -130,10 +102,11 @@ public class VesselAvailabilityTopLevelComposite extends DefaultTopLevelComposit
 		super.displayValidationStatus(status);
 		ballastBonusComposite.displayValidationStatus(status);
 	}
-
+	
 	@Override
 	protected boolean shouldDisplay(final EReference ref) {
-		return ref.isContainment() && !ref.isMany() && ref != CargoPackage.eINSTANCE.getVesselAvailability_BallastBonusContract();
+//		return ref.isContainment() && !ref.isMany() && ref != CargoPackage.eINSTANCE.getVesselAvailability_BallastBonusContract();
+		return true;
 	}
 
 }

@@ -85,7 +85,9 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE: return createNotionalJourneyBallastBonusContractLine();
 			case CommercialPackage.SIMPLE_CHARTER_CONTRACT: return createSimpleCharterContract();
 			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT: return createSimpleBallastBonusCharterContract();
-			case CommercialPackage.MONTLY_BALLAST_BONUS_CONTRACT_LINE: return createMontlyBallastBonusContractLine();
+			case CommercialPackage.MONTHLY_BALLAST_BONUS_CONTRACT_LINE: return createMonthlyBallastBonusContractLine();
+			case CommercialPackage.MONTHLY_BALLAST_BONUS_CONTRACT: return createMonthlyBallastBonusContract();
+			case CommercialPackage.MONTHLY_BALLAST_BONUS_CHARTER_CONTRACT: return createMonthlyBallastBonusCharterContract();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -300,9 +302,31 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * @generated
 	 */
 	@Override
-	public MontlyBallastBonusContractLine createMontlyBallastBonusContractLine() {
-		MontlyBallastBonusContractLineImpl montlyBallastBonusContractLine = new MontlyBallastBonusContractLineImpl();
-		return montlyBallastBonusContractLine;
+	public MonthlyBallastBonusContractLine createMonthlyBallastBonusContractLine() {
+		MonthlyBallastBonusContractLineImpl monthlyBallastBonusContractLine = new MonthlyBallastBonusContractLineImpl();
+		return monthlyBallastBonusContractLine;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public MonthlyBallastBonusContract createMonthlyBallastBonusContract() {
+		MonthlyBallastBonusContractImpl monthlyBallastBonusContract = new MonthlyBallastBonusContractImpl();
+		return monthlyBallastBonusContract;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public MonthlyBallastBonusCharterContract createMonthlyBallastBonusCharterContract() {
+		MonthlyBallastBonusCharterContractImpl monthlyBallastBonusCharterContract = new MonthlyBallastBonusCharterContractImpl();
+		return monthlyBallastBonusCharterContract;
 	}
 
 	/**

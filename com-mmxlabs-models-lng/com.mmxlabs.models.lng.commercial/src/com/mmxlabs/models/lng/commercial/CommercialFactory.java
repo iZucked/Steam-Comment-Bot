@@ -159,13 +159,31 @@ public interface CommercialFactory extends EFactory {
 	SimpleBallastBonusCharterContract createSimpleBallastBonusCharterContract();
 
 	/**
-	 * Returns a new object of class '<em>Montly Ballast Bonus Contract Line</em>'.
+	 * Returns a new object of class '<em>Monthly Ballast Bonus Contract Line</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Montly Ballast Bonus Contract Line</em>'.
+	 * @return a new object of class '<em>Monthly Ballast Bonus Contract Line</em>'.
 	 * @generated
 	 */
-	MontlyBallastBonusContractLine createMontlyBallastBonusContractLine();
+	MonthlyBallastBonusContractLine createMonthlyBallastBonusContractLine();
+
+	/**
+	 * Returns a new object of class '<em>Monthly Ballast Bonus Contract</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Monthly Ballast Bonus Contract</em>'.
+	 * @generated
+	 */
+	MonthlyBallastBonusContract createMonthlyBallastBonusContract();
+
+	/**
+	 * Returns a new object of class '<em>Monthly Ballast Bonus Charter Contract</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Monthly Ballast Bonus Charter Contract</em>'.
+	 * @generated
+	 */
+	MonthlyBallastBonusCharterContract createMonthlyBallastBonusCharterContract();
 
 	/**
 	 * Returns the package supported by this factory.

@@ -31,6 +31,7 @@ import com.mmxlabs.models.lng.commercial.BallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.CharterContract;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.LumpSumBallastBonusContractLine;
+import com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
@@ -354,7 +355,7 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 					.make(ctx));
 			valid = false;
 		}
-		if (line.getReturnPorts().isEmpty()) {
+		if (line.getReturnPorts().isEmpty() && !(line instanceof MonthlyBallastBonusContractLine)) {
 			// need ports
 			failures.add(baseFactory.copyName() //
 					.withObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL) //

@@ -11,17 +11,28 @@ import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.models.lng.commercial.BallastBonusCharterContract;
+import com.mmxlabs.models.lng.commercial.BallastBonusContract;
+import com.mmxlabs.models.lng.commercial.BallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.commercial.CharterContract;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ContractExpressionMapEntry;
+import com.mmxlabs.models.lng.commercial.DateShiftExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
+import com.mmxlabs.models.lng.commercial.LumpSumBallastBonusContractLine;
+import com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContractLine;
+import com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
+import com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
+import com.mmxlabs.models.lng.commercial.SimpleBallastBonusCharterContract;
+import com.mmxlabs.models.lng.commercial.SimpleCharterContract;
 import com.mmxlabs.models.lng.commercial.SimpleEntityBook;
 import com.mmxlabs.models.lng.commercial.SlotContractParams;
 import com.mmxlabs.models.lng.commercial.TaxRate;
@@ -183,8 +194,16 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 				return createSimpleBallastBonusCharterContractAdapter();
 			}
 			@Override
-			public Adapter caseMontlyBallastBonusContractLine(MontlyBallastBonusContractLine object) {
-				return createMontlyBallastBonusContractLineAdapter();
+			public Adapter caseMonthlyBallastBonusContractLine(MonthlyBallastBonusContractLine object) {
+				return createMonthlyBallastBonusContractLineAdapter();
+			}
+			@Override
+			public Adapter caseMonthlyBallastBonusContract(MonthlyBallastBonusContract object) {
+				return createMonthlyBallastBonusContractAdapter();
+			}
+			@Override
+			public Adapter caseMonthlyBallastBonusCharterContract(MonthlyBallastBonusCharterContract object) {
+				return createMonthlyBallastBonusCharterContractAdapter();
 			}
 			@Override
 			public Adapter caseMMXObject(MMXObject object) {
@@ -555,16 +574,44 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.MontlyBallastBonusContractLine <em>Montly Ballast Bonus Contract Line</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContractLine <em>Monthly Ballast Bonus Contract Line</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.commercial.MontlyBallastBonusContractLine
+	 * @see com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContractLine
 	 * @generated
 	 */
-	public Adapter createMontlyBallastBonusContractLineAdapter() {
+	public Adapter createMonthlyBallastBonusContractLineAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContract <em>Monthly Ballast Bonus Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContract
+	 * @generated
+	 */
+	public Adapter createMonthlyBallastBonusContractAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusCharterContract <em>Monthly Ballast Bonus Charter Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.commercial.MonthlyBallastBonusCharterContract
+	 * @generated
+	 */
+	public Adapter createMonthlyBallastBonusCharterContractAdapter() {
 		return null;
 	}
 

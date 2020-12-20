@@ -44,6 +44,7 @@ import com.mmxlabs.scheduler.optimiser.components.IHeelOptionSupplierPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IMarkToMarketOption;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -414,7 +415,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 */
 	@Override
 	public Pair<Map<IPortSlot, HeelValueRecord>, Long> evaluateNonCargoPlan(final VoyagePlan plan, final IPortTimesRecord portTimesRecord, final IVesselAvailability vesselAvailability,
-			final int vesselStartTime, final int planStartTime, final int lastHeelPricePerMMBTU, final Map<IPortSlot, SlotHeelVolumeRecord> heelRecords,
+			final int vesselStartTime, final int planStartTime, @Nullable final IPort firstLoadPort, final int lastHeelPricePerMMBTU, final Map<IPortSlot, SlotHeelVolumeRecord> heelRecords,
 			@Nullable final IAnnotatedSolution annotatedSolution) {
 		final IEntity shippingEntity = entityProvider.getEntityForVesselAvailability(vesselAvailability);
 		if (shippingEntity == null) {
@@ -462,9 +463,9 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			}
 			if (firstPortSlot.getPortType() == PortType.End) {
 				final int vesselEndTime = utcOffsetProvider.UTC(portTimesRecord.getSlotTime(firstPortSlot), firstPortSlot);
-				additionalCost += shippingCostHelper.getShippingBallastBonusCost(firstPortSlot, vesselAvailability, vesselStartTime, vesselEndTime);
+				additionalCost += shippingCostHelper.getShippingBallastBonusCost(firstPortSlot, vesselAvailability, vesselStartTime, firstLoadPort, vesselEndTime);
 				if (annotatedSolution != null) {
-					shippingCostHelper.addBallastBonusAnnotation(shippingDetails, firstPortSlot, vesselAvailability, vesselStartTime, vesselEndTime);
+					shippingCostHelper.addBallastBonusAnnotation(shippingDetails, firstPortSlot, vesselAvailability, vesselStartTime, firstLoadPort, vesselEndTime);
 				}
 			}
 

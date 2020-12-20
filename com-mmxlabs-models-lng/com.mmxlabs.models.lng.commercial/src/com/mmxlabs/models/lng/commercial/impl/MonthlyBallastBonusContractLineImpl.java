@@ -3,7 +3,7 @@
 package com.mmxlabs.models.lng.commercial.impl;
 
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.commercial.MontlyBallastBonusContractLine;
+import com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.NextPortType;
 
 import java.math.BigDecimal;
@@ -18,21 +18,21 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Montly Ballast Bonus Contract Line</b></em>'.
+ * An implementation of the model object '<em><b>Monthly Ballast Bonus Contract Line</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.MontlyBallastBonusContractLineImpl#getMonth <em>Month</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.MontlyBallastBonusContractLineImpl#getBallastBonusTo <em>Ballast Bonus To</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.MontlyBallastBonusContractLineImpl#getBallastBonusPctFuel <em>Ballast Bonus Pct Fuel</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.MontlyBallastBonusContractLineImpl#getBallastBonusPctCharter <em>Ballast Bonus Pct Charter</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.MonthlyBallastBonusContractLineImpl#getMonth <em>Month</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.MonthlyBallastBonusContractLineImpl#getBallastBonusTo <em>Ballast Bonus To</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.MonthlyBallastBonusContractLineImpl#getBallastBonusPctFuel <em>Ballast Bonus Pct Fuel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.MonthlyBallastBonusContractLineImpl#getBallastBonusPctCharter <em>Ballast Bonus Pct Charter</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class MontlyBallastBonusContractLineImpl extends BallastBonusContractLineImpl implements MontlyBallastBonusContractLine {
+public class MonthlyBallastBonusContractLineImpl extends NotionalJourneyBallastBonusContractLineImpl implements MonthlyBallastBonusContractLine {
 	/**
 	 * The default value of the '{@link #getMonth() <em>Month</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -81,7 +81,7 @@ public class MontlyBallastBonusContractLineImpl extends BallastBonusContractLine
 	 * @generated
 	 * @ordered
 	 */
-	protected static final BigDecimal BALLAST_BONUS_PCT_FUEL_EDEFAULT = null;
+	protected static final String BALLAST_BONUS_PCT_FUEL_EDEFAULT = null;
 
 	/**
 	 * The cached value of the '{@link #getBallastBonusPctFuel() <em>Ballast Bonus Pct Fuel</em>}' attribute.
@@ -91,7 +91,7 @@ public class MontlyBallastBonusContractLineImpl extends BallastBonusContractLine
 	 * @generated
 	 * @ordered
 	 */
-	protected BigDecimal ballastBonusPctFuel = BALLAST_BONUS_PCT_FUEL_EDEFAULT;
+	protected String ballastBonusPctFuel = BALLAST_BONUS_PCT_FUEL_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getBallastBonusPctCharter() <em>Ballast Bonus Pct Charter</em>}' attribute.
@@ -101,7 +101,7 @@ public class MontlyBallastBonusContractLineImpl extends BallastBonusContractLine
 	 * @generated
 	 * @ordered
 	 */
-	protected static final BigDecimal BALLAST_BONUS_PCT_CHARTER_EDEFAULT = null;
+	protected static final String BALLAST_BONUS_PCT_CHARTER_EDEFAULT = null;
 
 	/**
 	 * The cached value of the '{@link #getBallastBonusPctCharter() <em>Ballast Bonus Pct Charter</em>}' attribute.
@@ -111,14 +111,14 @@ public class MontlyBallastBonusContractLineImpl extends BallastBonusContractLine
 	 * @generated
 	 * @ordered
 	 */
-	protected BigDecimal ballastBonusPctCharter = BALLAST_BONUS_PCT_CHARTER_EDEFAULT;
+	protected String ballastBonusPctCharter = BALLAST_BONUS_PCT_CHARTER_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected MontlyBallastBonusContractLineImpl() {
+	protected MonthlyBallastBonusContractLineImpl() {
 		super();
 	}
 
@@ -129,7 +129,7 @@ public class MontlyBallastBonusContractLineImpl extends BallastBonusContractLine
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return CommercialPackage.Literals.MONTLY_BALLAST_BONUS_CONTRACT_LINE;
+		return CommercialPackage.Literals.MONTHLY_BALLAST_BONUS_CONTRACT_LINE;
 	}
 
 	/**
@@ -152,7 +152,7 @@ public class MontlyBallastBonusContractLineImpl extends BallastBonusContractLine
 		YearMonth oldMonth = month;
 		month = newMonth;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.MONTLY_BALLAST_BONUS_CONTRACT_LINE__MONTH, oldMonth, month));
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.MONTHLY_BALLAST_BONUS_CONTRACT_LINE__MONTH, oldMonth, month));
 	}
 
 	/**
@@ -175,7 +175,7 @@ public class MontlyBallastBonusContractLineImpl extends BallastBonusContractLine
 		NextPortType oldBallastBonusTo = ballastBonusTo;
 		ballastBonusTo = newBallastBonusTo == null ? BALLAST_BONUS_TO_EDEFAULT : newBallastBonusTo;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.MONTLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_TO, oldBallastBonusTo, ballastBonusTo));
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.MONTHLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_TO, oldBallastBonusTo, ballastBonusTo));
 	}
 
 	/**
@@ -184,7 +184,7 @@ public class MontlyBallastBonusContractLineImpl extends BallastBonusContractLine
 	 * @generated
 	 */
 	@Override
-	public BigDecimal getBallastBonusPctFuel() {
+	public String getBallastBonusPctFuel() {
 		return ballastBonusPctFuel;
 	}
 
@@ -194,11 +194,11 @@ public class MontlyBallastBonusContractLineImpl extends BallastBonusContractLine
 	 * @generated
 	 */
 	@Override
-	public void setBallastBonusPctFuel(BigDecimal newBallastBonusPctFuel) {
-		BigDecimal oldBallastBonusPctFuel = ballastBonusPctFuel;
+	public void setBallastBonusPctFuel(String newBallastBonusPctFuel) {
+		String oldBallastBonusPctFuel = ballastBonusPctFuel;
 		ballastBonusPctFuel = newBallastBonusPctFuel;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.MONTLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_PCT_FUEL, oldBallastBonusPctFuel, ballastBonusPctFuel));
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.MONTHLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_PCT_FUEL, oldBallastBonusPctFuel, ballastBonusPctFuel));
 	}
 
 	/**
@@ -207,7 +207,7 @@ public class MontlyBallastBonusContractLineImpl extends BallastBonusContractLine
 	 * @generated
 	 */
 	@Override
-	public BigDecimal getBallastBonusPctCharter() {
+	public String getBallastBonusPctCharter() {
 		return ballastBonusPctCharter;
 	}
 
@@ -217,11 +217,11 @@ public class MontlyBallastBonusContractLineImpl extends BallastBonusContractLine
 	 * @generated
 	 */
 	@Override
-	public void setBallastBonusPctCharter(BigDecimal newBallastBonusPctCharter) {
-		BigDecimal oldBallastBonusPctCharter = ballastBonusPctCharter;
+	public void setBallastBonusPctCharter(String newBallastBonusPctCharter) {
+		String oldBallastBonusPctCharter = ballastBonusPctCharter;
 		ballastBonusPctCharter = newBallastBonusPctCharter;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.MONTLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_PCT_CHARTER, oldBallastBonusPctCharter, ballastBonusPctCharter));
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.MONTHLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_PCT_CHARTER, oldBallastBonusPctCharter, ballastBonusPctCharter));
 	}
 
 	/**
@@ -232,13 +232,13 @@ public class MontlyBallastBonusContractLineImpl extends BallastBonusContractLine
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case CommercialPackage.MONTLY_BALLAST_BONUS_CONTRACT_LINE__MONTH:
+			case CommercialPackage.MONTHLY_BALLAST_BONUS_CONTRACT_LINE__MONTH:
 				return getMonth();
-			case CommercialPackage.MONTLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_TO:
+			case CommercialPackage.MONTHLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_TO:
 				return getBallastBonusTo();
-			case CommercialPackage.MONTLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_PCT_FUEL:
+			case CommercialPackage.MONTHLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_PCT_FUEL:
 				return getBallastBonusPctFuel();
-			case CommercialPackage.MONTLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_PCT_CHARTER:
+			case CommercialPackage.MONTHLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_PCT_CHARTER:
 				return getBallastBonusPctCharter();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -252,17 +252,17 @@ public class MontlyBallastBonusContractLineImpl extends BallastBonusContractLine
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case CommercialPackage.MONTLY_BALLAST_BONUS_CONTRACT_LINE__MONTH:
+			case CommercialPackage.MONTHLY_BALLAST_BONUS_CONTRACT_LINE__MONTH:
 				setMonth((YearMonth)newValue);
 				return;
-			case CommercialPackage.MONTLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_TO:
+			case CommercialPackage.MONTHLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_TO:
 				setBallastBonusTo((NextPortType)newValue);
 				return;
-			case CommercialPackage.MONTLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_PCT_FUEL:
-				setBallastBonusPctFuel((BigDecimal)newValue);
+			case CommercialPackage.MONTHLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_PCT_FUEL:
+				setBallastBonusPctFuel((String)newValue);
 				return;
-			case CommercialPackage.MONTLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_PCT_CHARTER:
-				setBallastBonusPctCharter((BigDecimal)newValue);
+			case CommercialPackage.MONTHLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_PCT_CHARTER:
+				setBallastBonusPctCharter((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -276,16 +276,16 @@ public class MontlyBallastBonusContractLineImpl extends BallastBonusContractLine
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case CommercialPackage.MONTLY_BALLAST_BONUS_CONTRACT_LINE__MONTH:
+			case CommercialPackage.MONTHLY_BALLAST_BONUS_CONTRACT_LINE__MONTH:
 				setMonth(MONTH_EDEFAULT);
 				return;
-			case CommercialPackage.MONTLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_TO:
+			case CommercialPackage.MONTHLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_TO:
 				setBallastBonusTo(BALLAST_BONUS_TO_EDEFAULT);
 				return;
-			case CommercialPackage.MONTLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_PCT_FUEL:
+			case CommercialPackage.MONTHLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_PCT_FUEL:
 				setBallastBonusPctFuel(BALLAST_BONUS_PCT_FUEL_EDEFAULT);
 				return;
-			case CommercialPackage.MONTLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_PCT_CHARTER:
+			case CommercialPackage.MONTHLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_PCT_CHARTER:
 				setBallastBonusPctCharter(BALLAST_BONUS_PCT_CHARTER_EDEFAULT);
 				return;
 		}
@@ -300,13 +300,13 @@ public class MontlyBallastBonusContractLineImpl extends BallastBonusContractLine
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case CommercialPackage.MONTLY_BALLAST_BONUS_CONTRACT_LINE__MONTH:
+			case CommercialPackage.MONTHLY_BALLAST_BONUS_CONTRACT_LINE__MONTH:
 				return MONTH_EDEFAULT == null ? month != null : !MONTH_EDEFAULT.equals(month);
-			case CommercialPackage.MONTLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_TO:
+			case CommercialPackage.MONTHLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_TO:
 				return ballastBonusTo != BALLAST_BONUS_TO_EDEFAULT;
-			case CommercialPackage.MONTLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_PCT_FUEL:
+			case CommercialPackage.MONTHLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_PCT_FUEL:
 				return BALLAST_BONUS_PCT_FUEL_EDEFAULT == null ? ballastBonusPctFuel != null : !BALLAST_BONUS_PCT_FUEL_EDEFAULT.equals(ballastBonusPctFuel);
-			case CommercialPackage.MONTLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_PCT_CHARTER:
+			case CommercialPackage.MONTHLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_PCT_CHARTER:
 				return BALLAST_BONUS_PCT_CHARTER_EDEFAULT == null ? ballastBonusPctCharter != null : !BALLAST_BONUS_PCT_CHARTER_EDEFAULT.equals(ballastBonusPctCharter);
 		}
 		return super.eIsSet(featureID);
@@ -334,4 +334,4 @@ public class MontlyBallastBonusContractLineImpl extends BallastBonusContractLine
 		return result.toString();
 	}
 
-} //MontlyBallastBonusContractLineImpl
+} //MonthlyBallastBonusContractLineImpl
