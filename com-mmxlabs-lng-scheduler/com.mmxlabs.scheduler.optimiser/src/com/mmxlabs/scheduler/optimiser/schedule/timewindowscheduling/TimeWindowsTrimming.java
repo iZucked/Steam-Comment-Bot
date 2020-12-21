@@ -801,15 +801,12 @@ public class TimeWindowsTrimming {
 					endTime = Math.max(endTime, dischargeTime + travelTimeData.getMinTravelTime(portTimeWindowsRecord.getIndex(discharge)));
 					portTimesRecord.setReturnSlotTime(endSlot, endTime);
 
-					if (true) {
-						throw new IllegalArgumentException("Implement load.getPort() correctly here..");
-					}
 					// Evaluate!
 					// Note: We assume the caching will take care of duplicated time sets rather
 					// than needing to manage this here.
 					List<ScheduledVoyagePlanResult> result = voyagePlanEvaluator.evaluateShipped(resource, vesselAvailability, //
 							vesselAvailability.getCharterCostCalculator(), //
-							0, load.getPort(), previousHeelRecord, portTimesRecord.copy(), true, false, false, null);
+							0, null, previousHeelRecord, portTimesRecord.copy(), true, false, false, null);
 
 					// Is this the best solution found so far?
 					if (bestMetrics == null || MetricType.betterThan(result.get(0).metrics, bestMetrics)) {
