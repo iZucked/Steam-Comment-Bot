@@ -26,6 +26,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
@@ -124,6 +125,11 @@ public class BallastBonusContractDetailComposite extends DefaultDetailComposite 
 				//Do nothing.
 			}
 		});
+		
+		if (!LicenseFeatures.isPermitted("features:monthly-ballast-bonus")) {
+			ballastBonusCombobox.setVisible(false);
+			ballastBonusCombobox.setEnabled(false);
+		}
 	}
 
 	private void changeBallastBonusType() {

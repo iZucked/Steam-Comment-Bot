@@ -185,6 +185,7 @@
           ID="com.mmxlabs.models.lng.commercial.editor.monthlyBallastBonusCharterContractFactory"
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
           label="Monthly Ballast Bonus Contract"
+          licensedFeature="features:monthly-ballast-bonus"
           targetEClass="com.mmxlabs.models.lng.commercial.CharterContract"
           outputEClass="com.mmxlabs.models.lng.commercial.MonthlyBallastBonusCharterContract">
     </factory>
