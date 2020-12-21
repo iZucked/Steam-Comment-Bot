@@ -298,7 +298,6 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="NextPortType">
-    <eLiterals name="Unknown"/>
     <eLiterals name="LoadPort" value="1"/>
     <eLiterals name="NearestHub" value="2"/>
   </eClassifiers>

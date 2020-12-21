@@ -61,7 +61,7 @@ public class MonthlyBallastBonusContractLineImpl extends NotionalJourneyBallastB
 	 * @generated
 	 * @ordered
 	 */
-	protected static final NextPortType BALLAST_BONUS_TO_EDEFAULT = NextPortType.UNKNOWN;
+	protected static final NextPortType BALLAST_BONUS_TO_EDEFAULT = NextPortType.LOAD_PORT;
 
 	/**
 	 * The cached value of the '{@link #getBallastBonusTo() <em>Ballast Bonus To</em>}' attribute.

@@ -30,6 +30,8 @@ public class VesselAvailabilityBallastBonusImporterExtraImporter implements IExt
 
 	public static final String BALLASTBONUS_KEY = "BALLASTBONUS";
 	public static final String BALLASTBONUS_DEFAULT_NAME = "Vessel Availability--Ballast Bonus";
+	private static final String BALLASTBONUSCONTAINER_KEY = "BALLASTBONUSCONTAINER";
+	private static final String BALLASTBONUSCONTAINER_DEFAULT_NAME = "Vessel Availability--Ballast Bonus Container";
 	final static Map<String, String> inputs = new LinkedHashMap<String, String>();
 
 	/** Use a special case importer: don't go via the registry. */
@@ -37,6 +39,7 @@ public class VesselAvailabilityBallastBonusImporterExtraImporter implements IExt
 
 	static {
 		inputs.put(BALLASTBONUS_KEY, BALLASTBONUS_DEFAULT_NAME);
+		inputs.put(BALLASTBONUSCONTAINER_KEY, BALLASTBONUSCONTAINER_DEFAULT_NAME);
 	}
 
 	@Override
@@ -50,11 +53,15 @@ public class VesselAvailabilityBallastBonusImporterExtraImporter implements IExt
 			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 			final CargoModel cargoModel = lngScenarioModel.getCargoModel();
 			if (cargoModel != null) {
-
 				final CSVReader reader = inputs.get(BALLASTBONUS_KEY);
 				if (reader != null) {
 					final Collection<EObject> importObjects = expressionImporter.importObjects(CommercialPackage.Literals.BALLAST_BONUS_CONTRACT_LINE, reader, context);
 				}
+				final CSVReader readerContainer = inputs.get(BALLASTBONUSCONTAINER_KEY);
+				if (readerContainer != null) {
+					final Collection<EObject> importObjects = expressionImporter.importObjects(CommercialPackage.Literals.BALLAST_BONUS_CONTRACT, readerContainer, context);
+				}
+				
 			}
 		}
 	}
@@ -66,16 +73,19 @@ public class VesselAvailabilityBallastBonusImporterExtraImporter implements IExt
 			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 			final CargoModel cargoModel = lngScenarioModel.getCargoModel();
 			if (cargoModel != null) {
+				List<BallastBonusContract> exportContainers = new ArrayList<>();
 				List<BallastBonusContractLine> exports = new ArrayList<>();
 
 				for (final VesselAvailability vesselAvailability : cargoModel.getVesselAvailabilities()) {
 					if (vesselAvailability != null) {
 						BallastBonusContract ballastBonus = vesselAvailability.getBallastBonusContract();
+						exportContainers.add(ballastBonus);
 						if (ballastBonus instanceof RuleBasedBallastBonusContract) {
 							exports.addAll(((RuleBasedBallastBonusContract) ballastBonus).getRules());
 						}
 					}
 				}
+				output.put(BALLASTBONUSCONTAINER_KEY, expressionImporter.exportObjects(exportContainers, context));
 				output.put(BALLASTBONUS_KEY, expressionImporter.exportObjects(exports, context));
 			}
 		}

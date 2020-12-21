@@ -20,7 +20,6 @@
       <genEnumLiterals ecoreEnumLiteral="commercial.ecore#//PricingEvent/END_DISCHARGE"/>
     </genEnums>
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="commercial.ecore#//NextPortType">
-      <genEnumLiterals ecoreEnumLiteral="commercial.ecore#//NextPortType/Unknown"/>
       <genEnumLiterals ecoreEnumLiteral="commercial.ecore#//NextPortType/LoadPort"/>
       <genEnumLiterals ecoreEnumLiteral="commercial.ecore#//NextPortType/NearestHub"/>
     </genEnums>

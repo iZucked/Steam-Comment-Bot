@@ -18,15 +18,6 @@ import org.eclipse.emf.common.util.Enumerator;
  * @generated
  */
 public enum NextPortType implements Enumerator {
-	/**
-	 * The '<em><b>Unknown</b></em>' literal object.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #UNKNOWN_VALUE
-	 * @generated
-	 * @ordered
-	 */
-	UNKNOWN(0, "Unknown", "Unknown"),
 
 	/**
 	 * The '<em><b>Load Port</b></em>' literal object.
@@ -47,17 +38,6 @@ public enum NextPortType implements Enumerator {
 	 * @ordered
 	 */
 	NEAREST_HUB(2, "NearestHub", "NearestHub");
-
-	/**
-	 * The '<em><b>Unknown</b></em>' literal value.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #UNKNOWN
-	 * @model name="Unknown"
-	 * @generated
-	 * @ordered
-	 */
-	public static final int UNKNOWN_VALUE = 0;
 
 	/**
 	 * The '<em><b>Load Port</b></em>' literal value.
@@ -89,7 +69,6 @@ public enum NextPortType implements Enumerator {
 	 */
 	private static final NextPortType[] VALUES_ARRAY =
 		new NextPortType[] {
-			UNKNOWN,
 			LOAD_PORT,
 			NEAREST_HUB,
 		};
@@ -148,7 +127,6 @@ public enum NextPortType implements Enumerator {
 	 */
 	public static NextPortType get(int value) {
 		switch (value) {
-			case UNKNOWN_VALUE: return UNKNOWN;
 			case LOAD_PORT_VALUE: return LOAD_PORT;
 			case NEAREST_HUB_VALUE: return NEAREST_HUB;
 		}

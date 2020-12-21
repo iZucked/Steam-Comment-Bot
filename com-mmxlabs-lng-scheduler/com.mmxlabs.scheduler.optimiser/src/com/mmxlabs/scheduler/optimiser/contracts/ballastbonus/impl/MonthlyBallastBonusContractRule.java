@@ -156,7 +156,6 @@ public class MonthlyBallastBonusContractRule extends BallastBonusContractRule im
 			notionalJourneyBallastBonusRuleAnnotation.totalHireCost = minHireCost;
 			notionalJourneyBallastBonusRuleAnnotation.route = minTravel.getFirst();
 			notionalJourneyBallastBonusRuleAnnotation.canalCost = minCanalCost;
-			System.out.println("***Min distance = "+notionalJourneyBallastBonusRuleAnnotation.distance+"Min return port = "+minReturnPort+" minfuelCost = "+minFuelCost+" minCharterCost = "+minHireCost);
 		}
 		return notionalJourneyBallastBonusRuleAnnotation;
 	}

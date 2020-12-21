@@ -1701,7 +1701,6 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		addEEnumLiteral(pricingEventEEnum, PricingEvent.END_DISCHARGE);
 
 		initEEnum(nextPortTypeEEnum, NextPortType.class, "NextPortType");
-		addEEnumLiteral(nextPortTypeEEnum, NextPortType.UNKNOWN);
 		addEEnumLiteral(nextPortTypeEEnum, NextPortType.LOAD_PORT);
 		addEEnumLiteral(nextPortTypeEEnum, NextPortType.NEAREST_HUB);
 
