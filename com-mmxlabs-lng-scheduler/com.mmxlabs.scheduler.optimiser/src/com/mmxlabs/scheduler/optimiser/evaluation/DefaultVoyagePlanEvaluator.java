@@ -23,6 +23,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterLengthEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionConsumerPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionSupplierPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -153,7 +154,7 @@ public class DefaultVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 		final PreviousHeelRecord previousHeelRecord = new PreviousHeelRecord();
 		final boolean lastPlan = true;
 
-		return evaluateShipped(resource, vesselAvailability, charterCostCalculator, vesselStartTime, previousHeelRecord, initialPortTimesRecord, lastPlan, returnAll, keepDetails, annotatedSolution);
+		return evaluateShipped(resource, vesselAvailability, charterCostCalculator, vesselStartTime, null, previousHeelRecord, initialPortTimesRecord, lastPlan, returnAll, keepDetails, annotatedSolution);
 	}
 
 	@Override
@@ -161,6 +162,7 @@ public class DefaultVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 			final IVesselAvailability vesselAvailability, //
 			final ICharterCostCalculator charterCostCalculator, //
 			final int vesselStartTime, //
+			@Nullable IPort firstLoadPort, 
 			final PreviousHeelRecord previousHeelRecord, //
 			final IPortTimesRecord initialPortTimesRecord, //
 			final boolean lastPlan, //
@@ -240,7 +242,7 @@ public class DefaultVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 				if (allocationAnnotation == null) {
 					assert vpr == null;
 					final Pair<Map<IPortSlot, HeelValueRecord>, @NonNull Long> p = entityValueCalculator.evaluateNonCargoPlan(vp, ptr, vesselAvailability, vesselStartTime, ptr.getFirstSlotTime(),
-							lastHeelPrice, heelVolumeRecords, annotatedSolution);
+							 firstLoadPort, lastHeelPrice, heelVolumeRecords, annotatedSolution);
 
 					result.lastHeelVolumeInM3 = vp.getRemainingHeelInM3();
 					metrics[MetricType.PNL.ordinal()] += p.getSecond();

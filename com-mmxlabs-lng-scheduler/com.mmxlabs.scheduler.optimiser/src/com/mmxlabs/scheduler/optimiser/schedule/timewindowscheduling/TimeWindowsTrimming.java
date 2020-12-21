@@ -23,6 +23,7 @@ import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
@@ -805,7 +806,7 @@ public class TimeWindowsTrimming {
 					// than needing to manage this here.
 					List<ScheduledVoyagePlanResult> result = voyagePlanEvaluator.evaluateShipped(resource, vesselAvailability, //
 							vesselAvailability.getCharterCostCalculator(), //
-							0, previousHeelRecord, portTimesRecord.copy(), true, false, false, null);
+							0, null, previousHeelRecord, portTimesRecord.copy(), true, false, false, null);
 
 					// Is this the best solution found so far?
 					if (bestMetrics == null || MetricType.betterThan(result.get(0).metrics, bestMetrics)) {

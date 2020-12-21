@@ -13,7 +13,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.IBallastBonusContr
 
 public class DefaultBallastBonusContract implements IBallastBonusContract {
 
-	private final List<IBallastBonusContractRule> rules;
+	protected final List<IBallastBonusContractRule> rules;
 
 	public DefaultBallastBonusContract(final List<IBallastBonusContractRule> rules) {
 		this.rules = rules;

@@ -12,7 +12,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.eclipse.emf.ecore.EClass;
-
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.ui.extensions.IModelFactoryExtension;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory;
 import com.mmxlabs.models.ui.registries.IModelFactoryRegistry;
@@ -32,7 +32,8 @@ public class ModelFactoryRegistry implements IModelFactoryRegistry {
 			final String outputEClass = extension.getOutputEClass();
 			final String replacementEReference = extension.getReplacementEReference();
 			final String replacementEClass = extension.getReplacementEClass();
-			if (extensionTarget.equals(targetClassName)) {
+			final String licensedFeature = extension.getLicensedFeature();
+			if ((licensedFeature == null || LicenseFeatures.isPermitted(licensedFeature)) && extensionTarget.equals(targetClassName)) {
 				final IModelFactory factory = extension.createInstance();
 				factory.initFromExtension(extensionID, extensionLabel, outputEClass, replacementEReference, replacementEClass);
 				result.add(factory);

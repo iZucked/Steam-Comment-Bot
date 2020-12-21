@@ -113,11 +113,12 @@ public class VesselAvailabilityTopLevelComposite extends DefaultTopLevelComposit
 		g2.setLayout(new GridLayout());
 		g2.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 
+		
 		ballastBonusComposite = new BallastBonusContractDetailComposite(g2, SWT.NONE, toolkit, () -> {
 			if (!VesselAvailabilityTopLevelComposite.this.isDisposed()) {
 				VesselAvailabilityTopLevelComposite.this.layout(true, true);
 			}
-		});
+		}, (VesselAvailability) object);
 		ballastBonusComposite.setCommandHandler(commandHandler);
 		ballastBonusComposite.display(dialogContext, root, object, range, dbc);
 

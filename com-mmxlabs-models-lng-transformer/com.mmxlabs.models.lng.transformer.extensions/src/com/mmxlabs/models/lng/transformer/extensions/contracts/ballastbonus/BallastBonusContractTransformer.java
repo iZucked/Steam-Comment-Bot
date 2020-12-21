@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.models.lng.transformer.extensions.contracts.ballastbonus;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -27,6 +30,9 @@ import com.mmxlabs.models.lng.commercial.BallastBonusContract;
 import com.mmxlabs.models.lng.commercial.BallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.LumpSumBallastBonusContractLine;
+import com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContract;
+import com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContractLine;
+import com.mmxlabs.models.lng.commercial.NextPortType;
 import com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract;
 import com.mmxlabs.models.lng.port.Port;
@@ -45,6 +51,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.IBallastBonusContr
 import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.IBallastBonusContractRule;
 import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.impl.DefaultLumpSumBallastBonusContractRule;
 import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.impl.DefaultNotionalJourneyBallastBonusContractRule;
+import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.impl.MonthlyBallastBonusContractRule;
 import com.mmxlabs.scheduler.optimiser.curves.IIntegerIntervalCurve;
 
 /**
@@ -103,6 +110,13 @@ public class BallastBonusContractTransformer implements IBallastBonusContractTra
 		if (oBallastBonusContract != null) {
 			return oBallastBonusContract;
 		}
+		
+		EList<APortSet<Port>> hubs = null;
+		if (eBallastBonusContract instanceof MonthlyBallastBonusContract) {
+			MonthlyBallastBonusContract monthlyBallastBonusContract = (MonthlyBallastBonusContract)eBallastBonusContract;
+			hubs = monthlyBallastBonusContract.getHubs();
+		}
+		
 		if (eBallastBonusContract instanceof RuleBasedBallastBonusContract) {
 			EList<BallastBonusContractLine> rules = ((RuleBasedBallastBonusContract ) eBallastBonusContract).getRules();
 			List<IBallastBonusContractRule> oRules = new LinkedList<>();
@@ -113,7 +127,43 @@ public class BallastBonusContractTransformer implements IBallastBonusContractTra
 					String priceExpression = ((LumpSumBallastBonusContractLine) ballastBonusContractLine).getPriceExpression();
 					ILongCurve lumpSumCurve = getPriceCurveFromExpression(priceExpression, charterIndices);
 					oRule = new DefaultLumpSumBallastBonusContractRule(redeliveryPorts, lumpSumCurve);
-				} else if (ballastBonusContractLine instanceof NotionalJourneyBallastBonusContractLine) {
+				} else if (ballastBonusContractLine instanceof MonthlyBallastBonusContractLine) {
+					MonthlyBallastBonusContractLine monthlyBBLine = (MonthlyBallastBonusContractLine)ballastBonusContractLine;
+					YearMonth ym = monthlyBBLine.getMonth();
+					int oStartYMInclusive = this.dateHelper.convertTime(ym);
+					YearMonth ymNext = ym.plusMonths(1);
+					int oEndYMExclusive = this.dateHelper.convertTime(ymNext);
+					
+					NextPortType ballastBonusTo = monthlyBBLine.getBallastBonusTo();
+					//Use BigDecimal to avoid loss of precision :-)
+					BigDecimal pctCharterRate = new BigDecimal(monthlyBBLine.getBallastBonusPctCharter());
+					BigDecimal pctFuelRate = new BigDecimal(monthlyBBLine.getBallastBonusPctFuel());
+					long oPctCharterRate = OptimiserUnitConvertor.convertToInternalPercentage(pctCharterRate) / 100;
+					long oPctFuelRate = OptimiserUnitConvertor.convertToInternalPercentage(pctFuelRate) / 100;
+					String priceExpression = ((NotionalJourneyBallastBonusContractLine) ballastBonusContractLine).getLumpSumPriceExpression();
+					ILongCurve lumpSumCurve = getPriceCurveFromExpression(priceExpression, charterIndices);
+					String fuelPriceExpression = ((NotionalJourneyBallastBonusContractLine) ballastBonusContractLine).getFuelPriceExpression();
+					ICurve fuelCurve = getBaseFuelPriceCurveFromExpression(fuelPriceExpression, fuelIndices);
+					String charterPriceExpression = ((NotionalJourneyBallastBonusContractLine) ballastBonusContractLine).getHirePriceExpression();
+					ILongCurve charterCurve = getPriceCurveFromExpression(charterPriceExpression, charterIndices);
+					//Set<IPort> returnPorts = transformPorts(((NotionalJourneyBallastBonusContractLine) ballastBonusContractLine).getReturnPorts());
+					int speed = OptimiserUnitConvertor.convertToInternalSpeed(((NotionalJourneyBallastBonusContractLine) ballastBonusContractLine).getSpeed());
+					boolean includeCanalTime = ((NotionalJourneyBallastBonusContractLine) ballastBonusContractLine).isIncludeCanalTime();	
+					
+					Set<IPort> returnPorts = null;
+					
+					switch (ballastBonusTo) {
+					case NEAREST_HUB:
+						returnPorts = transformPorts(hubs);
+						break;
+					case LOAD_PORT:
+						returnPorts = null;
+						break;
+					}
+					
+					oRule = new MonthlyBallastBonusContractRule(oStartYMInclusive, oEndYMExclusive, oPctCharterRate, oPctFuelRate, redeliveryPorts, lumpSumCurve, fuelCurve, charterCurve, returnPorts, ((NotionalJourneyBallastBonusContractLine) ballastBonusContractLine).isIncludeCanal(), includeCanalTime, speed);
+				}
+				else if (ballastBonusContractLine instanceof NotionalJourneyBallastBonusContractLine) {
 					String priceExpression = ((NotionalJourneyBallastBonusContractLine) ballastBonusContractLine).getLumpSumPriceExpression();
 					ILongCurve lumpSumCurve = getPriceCurveFromExpression(priceExpression, charterIndices);
 					String fuelPriceExpression = ((NotionalJourneyBallastBonusContractLine) ballastBonusContractLine).getFuelPriceExpression();
@@ -124,13 +174,20 @@ public class BallastBonusContractTransformer implements IBallastBonusContractTra
 					int speed = OptimiserUnitConvertor.convertToInternalSpeed(((NotionalJourneyBallastBonusContractLine) ballastBonusContractLine).getSpeed());
 					boolean includeCanalTime = ((NotionalJourneyBallastBonusContractLine) ballastBonusContractLine).isIncludeCanalTime();
 					oRule = new DefaultNotionalJourneyBallastBonusContractRule(redeliveryPorts, lumpSumCurve, fuelCurve, charterCurve, returnPorts, ((NotionalJourneyBallastBonusContractLine) ballastBonusContractLine).isIncludeCanal(), includeCanalTime, speed);
-				} else {
+				} 
+				else {
+					throw new IllegalArgumentException("Not implemented yet. Please contact Minimax support.");
 				}
 				assert oRule != null;
 				injector.injectMembers(oRule);
 				oRules.add(oRule);
 			}
-			oBallastBonusContract = new com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.impl.DefaultBallastBonusContract(oRules);
+			if (eBallastBonusContract instanceof MonthlyBallastBonusContract) {
+				oBallastBonusContract = new com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.impl.MonthlyBallastBonusContract(oRules);
+			}	
+			else {
+				oBallastBonusContract = new com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.impl.DefaultBallastBonusContract(oRules);
+			}
 			modelEntityMap.addModelObject(eBallastBonusContract, oBallastBonusContract);
 			return oBallastBonusContract;
 		} else {

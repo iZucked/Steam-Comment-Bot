@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
@@ -51,14 +52,16 @@ public class CheckingVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 
 	@Override
 	public @NonNull List<@NonNull ScheduledVoyagePlanResult> evaluateShipped(@NonNull IResource resource, @NonNull IVesselAvailability vesselAvailability, ICharterCostCalculator charterCostCalculator,
-			int vesselStartTime, @NonNull PreviousHeelRecord previousHeelRecord, @NonNull IPortTimesRecord portTimesRecord, boolean lastPlan, boolean returnAll, boolean keepDetails,
+			int vesselStartTime, IPort firstLoadPort, @NonNull PreviousHeelRecord previousHeelRecord, @NonNull IPortTimesRecord portTimesRecord, boolean lastPlan, boolean returnAll, boolean keepDetails,
 			@Nullable IAnnotatedSolution annotatedSolution) {
 
 		long a = System.currentTimeMillis();
-		final List<ScheduledVoyagePlanResult> value_d = delegate.evaluateShipped(resource, vesselAvailability, charterCostCalculator, vesselStartTime, previousHeelRecord, portTimesRecord, lastPlan,
+		final List<ScheduledVoyagePlanResult> value_d = delegate.evaluateShipped(resource, vesselAvailability, charterCostCalculator, vesselStartTime, 
+				firstLoadPort, previousHeelRecord, portTimesRecord, lastPlan,
 				returnAll, keepDetails, annotatedSolution);
 		long b = System.currentTimeMillis();
-		final List<ScheduledVoyagePlanResult> value_r = reference.evaluateShipped(resource, vesselAvailability, charterCostCalculator, vesselStartTime, previousHeelRecord, portTimesRecord, lastPlan,
+		final List<ScheduledVoyagePlanResult> value_r = reference.evaluateShipped(resource, vesselAvailability, charterCostCalculator, vesselStartTime,
+				firstLoadPort, previousHeelRecord, portTimesRecord, lastPlan,
 				returnAll, keepDetails, annotatedSolution);
 		long c = System.currentTimeMillis();
 

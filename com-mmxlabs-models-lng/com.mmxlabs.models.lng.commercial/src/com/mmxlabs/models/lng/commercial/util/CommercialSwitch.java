@@ -284,6 +284,35 @@ public class CommercialSwitch<@Nullable T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case CommercialPackage.MONTHLY_BALLAST_BONUS_CONTRACT_LINE: {
+				MonthlyBallastBonusContractLine monthlyBallastBonusContractLine = (MonthlyBallastBonusContractLine)theEObject;
+				T result = caseMonthlyBallastBonusContractLine(monthlyBallastBonusContractLine);
+				if (result == null) result = caseNotionalJourneyBallastBonusContractLine(monthlyBallastBonusContractLine);
+				if (result == null) result = caseBallastBonusContractLine(monthlyBallastBonusContractLine);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CommercialPackage.MONTHLY_BALLAST_BONUS_CONTRACT: {
+				MonthlyBallastBonusContract monthlyBallastBonusContract = (MonthlyBallastBonusContract)theEObject;
+				T result = caseMonthlyBallastBonusContract(monthlyBallastBonusContract);
+				if (result == null) result = caseRuleBasedBallastBonusContract(monthlyBallastBonusContract);
+				if (result == null) result = caseBallastBonusContract(monthlyBallastBonusContract);
+				if (result == null) result = caseUUIDObject(monthlyBallastBonusContract);
+				if (result == null) result = caseMMXObject(monthlyBallastBonusContract);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CommercialPackage.MONTHLY_BALLAST_BONUS_CHARTER_CONTRACT: {
+				MonthlyBallastBonusCharterContract monthlyBallastBonusCharterContract = (MonthlyBallastBonusCharterContract)theEObject;
+				T result = caseMonthlyBallastBonusCharterContract(monthlyBallastBonusCharterContract);
+				if (result == null) result = caseSimpleBallastBonusCharterContract(monthlyBallastBonusCharterContract);
+				if (result == null) result = caseBallastBonusCharterContract(monthlyBallastBonusCharterContract);
+				if (result == null) result = caseCharterContract(monthlyBallastBonusCharterContract);
+				if (result == null) result = caseNamedObject(monthlyBallastBonusCharterContract);
+				if (result == null) result = caseMMXObject(monthlyBallastBonusCharterContract);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -645,6 +674,51 @@ public class CommercialSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseSimpleBallastBonusCharterContract(SimpleBallastBonusCharterContract object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Monthly Ballast Bonus Contract Line</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Monthly Ballast Bonus Contract Line</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseMonthlyBallastBonusContractLine(MonthlyBallastBonusContractLine object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Monthly Ballast Bonus Contract</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Monthly Ballast Bonus Contract</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseMonthlyBallastBonusContract(MonthlyBallastBonusContract object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Monthly Ballast Bonus Charter Contract</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Monthly Ballast Bonus Charter Contract</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseMonthlyBallastBonusCharterContract(MonthlyBallastBonusCharterContract object) {
 		return null;
 	}
 

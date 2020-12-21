@@ -27,6 +27,7 @@ import com.mmxlabs.models.lng.commercial.BallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.LumpSumBallastBonusContractLine;
+import com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract;
 import com.mmxlabs.models.lng.port.ui.editorpart.MultiplePortReferenceManipulator;
@@ -52,7 +53,7 @@ public class BallastBonusContractTableCreator {
 		eViewer.setStatusProvider(statusProvider);
 		eViewer.setAutoResizeable(false);
 		eViewer.setSorter(null);
-
+		
 		eViewer.addTypicalColumn("Redelivery ports", new MultiplePortReferenceManipulator(CommercialPackage.eINSTANCE.getBallastBonusContractLine_RedeliveryPorts(), sel.getReferenceValueProviderCache(),
 				sel.getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
 
@@ -455,7 +456,7 @@ public class BallastBonusContractTableCreator {
 				RunnerHelper.asyncExec(sizeChangedAction);
 			}
 		});
-
+		
 		final Button remove = toolkit.createButton(buttons, "Remove", SWT.NONE);
 		remove.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
 
@@ -482,5 +483,5 @@ public class BallastBonusContractTableCreator {
 		eViewer.refresh();
 		sizeChangedAction.run();
 		return eViewer;
-	}
+	}	
 }

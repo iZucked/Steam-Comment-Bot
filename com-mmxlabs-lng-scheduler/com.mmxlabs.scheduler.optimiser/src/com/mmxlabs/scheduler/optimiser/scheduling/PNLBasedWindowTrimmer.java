@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -38,6 +39,9 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.cache.CacheMode;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -364,6 +368,7 @@ public class PNLBasedWindowTrimmer {
 			final List<ScheduledVoyagePlanResult> result = voyagePlanEvaluator.evaluateShipped(resource, vesselAvailability, //
 					vesselAvailability.getCharterCostCalculator(), //
 					spi.getVesselStartTime(), //
+					key.firstLoadPort,
 					previousHeelRecord, portTimesRecord, lastPlan, //
 					returnAll, false, // Do not keep voyage plans
 					null);
@@ -403,10 +408,12 @@ public class PNLBasedWindowTrimmer {
 
 		final List<ScheduledRecord> scheduledRecords = new LinkedList<>();
 
+		IPort firstLoad = findFirstLoadPort(intervalMap);
+		
 		if (previousStates.isEmpty()) {
 
 			for (final TimeChoice tc : intervalMap.get(portTimeWindowsRecord.getFirstSlot())) {
-				final PNLTrimmerShippedCacheKey key = PNLTrimmerShippedCacheKey.forFirstRecord(tc.time, resource, vesselAvailability, portTimeWindowsRecord, lastPlan, intervalMap, minTimeData);
+				final PNLTrimmerShippedCacheKey key = PNLTrimmerShippedCacheKey.forFirstRecord(tc.time, firstLoad, resource, vesselAvailability, portTimeWindowsRecord, lastPlan, intervalMap, minTimeData);
 				final List<Pair<ScheduledPlanInput, ScheduledVoyagePlanResult>> evaluatorResults = computeVoyagePlanResults(key);
 
 				scheduledRecords.addAll(evaluatorResults.stream().map(res -> {
@@ -432,7 +439,7 @@ public class PNLBasedWindowTrimmer {
 			}
 		} else {
 			for (final ScheduledRecord r : previousStates) {
-				final PNLTrimmerShippedCacheKey key = PNLTrimmerShippedCacheKey.from(r, resource, vesselAvailability, portTimeWindowsRecord, lastPlan, intervalMap, minTimeData);
+				final PNLTrimmerShippedCacheKey key = PNLTrimmerShippedCacheKey.from(r, firstLoad, resource, vesselAvailability, portTimeWindowsRecord, lastPlan, intervalMap, minTimeData);
 				final List<Pair<ScheduledPlanInput, ScheduledVoyagePlanResult>> evaluatorResults = computeVoyagePlanResults(key);
 
 				scheduledRecords.addAll(evaluatorResults.stream().map(res -> {
@@ -453,6 +460,15 @@ public class PNLBasedWindowTrimmer {
 		}
 
 		return scheduledRecords;
+	}
+
+	private @Nullable IPort findFirstLoadPort(Map<IPortSlot, Collection<TimeChoice>> intervalMap) {
+		for (IPortSlot slot : intervalMap.keySet()) {
+			if (slot instanceof ILoadOption) {
+				return slot.getPort();
+			}
+		}
+		return null;
 	}
 
 	public List<ScheduledVoyagePlanResult> evaluateRoundTripWithIntervals(final IResource resource, final IVesselAvailability vesselAvailability, //

@@ -11,6 +11,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
@@ -22,6 +23,7 @@ public interface IVoyagePlanEvaluator {
 			IVesselAvailability vesselAvailability, //
 			ICharterCostCalculator charterCostCalculator, //
 			int vesselStartTime, //
+			@Nullable IPort firstLoadPort,
 			PreviousHeelRecord previousHeelRecord, //
 			IPortTimesRecord portTimesRecord, //
 			boolean lastPlan, //

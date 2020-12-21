@@ -26,6 +26,8 @@ public interface IModelFactoryExtension {
 	 */
 	@MapName("replacementEClass")
 	public String getReplacementEClass();
+	@MapName("licensedFeature")
+	public String getLicensedFeature();
 	@MapName("label")
 	public String getLabel();
 	@MapName("factory")

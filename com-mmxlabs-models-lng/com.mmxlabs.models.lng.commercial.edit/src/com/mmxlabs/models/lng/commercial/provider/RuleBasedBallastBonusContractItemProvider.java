@@ -151,6 +151,11 @@ public class RuleBasedBallastBonusContractItemProvider extends UUIDObjectItemPro
 			(createChildParameter
 				(CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES,
 				 CommercialFactory.eINSTANCE.createNotionalJourneyBallastBonusContractLine()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES,
+				 CommercialFactory.eINSTANCE.createMonthlyBallastBonusContractLine()));
 	}
 
 }

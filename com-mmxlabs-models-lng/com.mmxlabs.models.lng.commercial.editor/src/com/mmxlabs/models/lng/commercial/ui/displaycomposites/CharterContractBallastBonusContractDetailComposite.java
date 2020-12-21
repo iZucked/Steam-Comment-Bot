@@ -42,22 +42,22 @@ import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
  * 
  */
 public class CharterContractBallastBonusContractDetailComposite extends DefaultDetailComposite implements IDisplayComposite {
-	private ICommandHandler commandHandler;
-	private IDialogEditingContext dialogContext;
-	private BallastBonusCharterContract oldValue = null;
-	private Composite owner = this;
+	protected ICommandHandler commandHandler;
+	protected IDialogEditingContext dialogContext;
+	protected BallastBonusCharterContract oldValue = null;
+	protected Composite owner = this;
 
-	private FormToolkit toolkit;
-	private GridData gridData;
-	private IStatus status;
+	protected FormToolkit toolkit;
+	protected GridData gridData;
+	protected IStatus status;
 
-	private DefaultStatusProvider statusProvider = new DefaultStatusProvider() {
+	protected DefaultStatusProvider statusProvider = new DefaultStatusProvider() {
 		@Override
 		public IStatus getStatus() {
 			return status;
 		}
 	};
-	private Runnable resizeAction;
+	protected Runnable resizeAction;
 
 	public CharterContractBallastBonusContractDetailComposite(final Composite parent, final int style, final FormToolkit toolkit, Runnable resizeAction) {
 		super(parent, style, toolkit);
@@ -84,6 +84,8 @@ public class CharterContractBallastBonusContractDetailComposite extends DefaultD
 		gridDataCheckbox.horizontalSpan = 2;
 		ballastCheckbox.setLayoutData(gridDataCheckbox);
 		toolkit.createLabel(ballastCheckbox, "Set ballast bonus");
+		
+		
 //		RuleBasedBallastBonusContract ruleBasedBallastBonusContract = addBallastBonus(oldValue);
 //		createBallastBonusComposite(owner, toolkit, ruleBasedBallastBonusContract);
 //		dialogContext.getDialogController().rebuild(true);
@@ -102,7 +104,7 @@ public class CharterContractBallastBonusContractDetailComposite extends DefaultD
 		}
 	}
 
-	private void createBallastBonusComposite(Composite parent, FormToolkit toolkit, RuleBasedBallastBonusContract ruleBasedBallastBonusContract) {
+	protected void createBallastBonusComposite(Composite parent, FormToolkit toolkit, RuleBasedBallastBonusContract ruleBasedBallastBonusContract) {
 
 		final EObjectTableViewer ballastBonusTable = BallastBonusContractTableCreator.createBallastBonusTable(parent, toolkit, dialogContext, commandHandler, ruleBasedBallastBonusContract,
 				statusProvider, resizeAction);
