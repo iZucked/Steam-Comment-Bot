@@ -5,11 +5,11 @@
 	<parent>
 		<groupId>com.mmxlabs.optimiser</groupId>
 		<artifactId>optimiser-parent</artifactId>
-		<version>4.10.37.RELEASE</version>
+		<version>4.10.38-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>com.mmxlabs.optimiser.optimiser-lso</artifactId>
-	<version>4.10.37.RELEASE</version>
+	<version>4.10.38-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 	<properties>
 		<sonar.junit.reportPaths>
