@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.TextStyle;
 import java.util.Collection;
+import java.util.EmptyStackException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -231,6 +232,17 @@ public class PriceExpressionUtils {
 				}
 			}
 			if (parsed == null) {
+				return ValidationResult.createErrorStatus("Unable to parse: " + hints);
+			}
+		}
+		{
+			try {
+				final IExpression<Node> parse = new RawTreeParser().parse(priceExpression);
+				parse.evaluate();
+			} catch (final EmptyStackException e) {
+				return ValidationResult.createErrorStatus("Unable to parse: the price expression has an empty argument");
+			} catch (final Exception e) {
+				final String hints = e.getMessage();
 				return ValidationResult.createErrorStatus("Unable to parse: " + hints);
 			}
 		}
