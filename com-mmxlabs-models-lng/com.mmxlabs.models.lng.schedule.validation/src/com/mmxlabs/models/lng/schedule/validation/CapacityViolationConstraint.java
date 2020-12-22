@@ -15,10 +15,15 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
+import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.types.util.ValidationConstants;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
@@ -45,7 +50,12 @@ public class CapacityViolationConstraint extends AbstractModelMultiConstraint {
 			return Status.OK_STATUS;
 		}
 
-		final String nameString = target instanceof NamedObject ? String.format("[%s] ", ((NamedObject) target).getName()) : "";
+		String nameString = target instanceof NamedObject ? String.format("[%s] ", ((NamedObject) target).getName()) : "";
+		if (nameString == "") {
+			if (target instanceof VesselEventVisit) {
+				nameString = ((VesselEventVisit) target).name();
+			}
+		}
 		final String message;
 
 		// make the right message for the violation type
@@ -66,16 +76,44 @@ public class CapacityViolationConstraint extends AbstractModelMultiConstraint {
 
 		// standard message template
 		if (simpleViolation != null) {
-			message = String.format("%sCan't meet %s in schedule.", nameString, simpleViolation);
+			message = String.format("Volume issue: %s - can't meet %s in schedule.", nameString, simpleViolation);
 		}
 		// non-standard message
 		else {
 			if (type == CapacityViolationType.FORCED_COOLDOWN) {
-				message = String.format("Cooldown is required in schedule but is not permitted at load %s", nameString);
+				if (target instanceof GeneratedCharterOut) {
+					final String marketName = ((GeneratedCharterOut) target).getCharterOutMarket().getName();
+					String vesselName = "";
+					if (target.eContainer() instanceof Sequence) {
+						final Sequence sequence = (Sequence) target.eContainer();
+						if (sequence.getVesselAvailability() != null && sequence.getVesselAvailability().getVessel() != null) {
+							vesselName = " for " + sequence.getVesselAvailability().getVessel().getName();
+						}
+					}
+					
+					message = String.format("Volume issue: [%s] cooldown is required%s in schedule but is not permitted at load", marketName, vesselName);
+				} else {
+					message = String.format("Volume issue: cooldown is required in schedule but is not permitted at load %s", nameString);
+				}
 			} else if (type == CapacityViolationType.VESSEL_CAPACITY) {
 				message = String.format("Schedule requires exceeding vessel capacity at load %s", nameString);
 			} else {
-				message = String.format("%sCapacity violation %s in schedule.", nameString, type.getName());
+				String typeDescription = type.getName();
+				switch (type) {
+				case MIN_HEEL:
+					typeDescription = "minimum heel is breached";
+					break;
+				case MAX_HEEL:
+					typeDescription = "maximum heel is breached"; 
+					break;
+				default:
+					typeDescription += " is breached";
+					break;
+				}
+				if (type == CapacityViolationType.MIN_HEEL) {
+					typeDescription = "minimum heel is breached";
+				}
+				message = String.format("Volume issue: [%s] %s in schedule", nameString, typeDescription);
 			}
 		}
 
