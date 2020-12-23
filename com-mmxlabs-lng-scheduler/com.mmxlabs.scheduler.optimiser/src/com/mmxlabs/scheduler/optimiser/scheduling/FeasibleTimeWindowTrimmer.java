@@ -622,7 +622,7 @@ public class FeasibleTimeWindowTrimmer {
 
 								PanamaPeriod panamaPeriod;
 								if (panamaBookingsProvider.getRelaxedBoundary() == 0 && panamaBookingsProvider.getStrictBoundary() == 0) {
-									panamaPeriod = PanamaPeriod.Relaxed;
+									panamaPeriod = PanamaPeriod.Beyond;
 								} else {
 									if (latestPanamaTime > panamaBookingsProvider.getRelaxedBoundary()) {
 										panamaPeriod = PanamaPeriod.Beyond;

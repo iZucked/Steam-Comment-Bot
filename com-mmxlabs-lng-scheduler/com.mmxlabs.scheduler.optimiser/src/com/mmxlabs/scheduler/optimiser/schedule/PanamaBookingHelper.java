@@ -58,7 +58,7 @@ public class PanamaBookingHelper {
 
 	public PanamaPeriod getPanamaPeriod(int estimatedCanalArrival) {
 		if (panamaBookingsProvider.getRelaxedBoundary() == 0 && panamaBookingsProvider.getStrictBoundary() == 0) {
-			return PanamaPeriod.Relaxed;
+			return PanamaPeriod.Beyond;
 		}
 		if (estimatedCanalArrival > panamaBookingsProvider.getRelaxedBoundary()) {
 			return PanamaPeriod.Beyond;
