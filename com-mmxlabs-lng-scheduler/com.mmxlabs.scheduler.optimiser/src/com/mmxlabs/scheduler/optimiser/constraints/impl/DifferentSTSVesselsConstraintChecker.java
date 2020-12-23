@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -50,12 +51,7 @@ public class DifferentSTSVesselsConstraintChecker implements IConstraintChecker 
 	}
 
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources) {
-		return checkConstraints(sequences, changedResources, null);
-	}
-
-	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, @Nullable final List<String> messages) {
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, @NonNull final List<@NonNull String> messages) {
 
 		final Collection<@NonNull IResource> loopResources;
 		if (changedResources == null) {
@@ -86,12 +82,18 @@ public class DifferentSTSVesselsConstraintChecker implements IConstraintChecker 
 				// If the STS is already in the route, then this is invalid - and it will cause the EnumeratingSequenceScheduler to fall over.
 				// Note - this check will be triggered on the second helf of the STS binding in the route
 				if (converseTransferElement != null && sequenceElements.contains(converseTransferElement)) {
+					final String message = 
+							String.format("%s: Sequence element %s the STS slot %s is already in the route!", this.name, element.getName(), converseTransferElement.getId());
+					messages.add(message);
 					return false;
 				}
 			}
 
 		}
 
+		final String message = String.format("%s: %s", this.name, "All STS slots are on different routes");
+		messages.add(message);
+		
 		return true;
 	}
 }

@@ -80,7 +80,7 @@ public class MicroTestUtils {
 
 		// Apply hard constraint checkers
 		for (final IConstraintChecker checker : constraintCheckers) {
-			if (!checker.checkConstraints(fullSequences, null)) {
+			if (!checker.checkConstraints(fullSequences, null, new ArrayList<>())) {
 				failedCheckers.add(checker);
 			}
 		}
@@ -105,8 +105,8 @@ public class MicroTestUtils {
 
 		// Apply hard constraint checkers
 		for (final IConstraintChecker checker : constraintCheckers) {
-			if (!checker.checkConstraints(fullSequences, null)) {
-				checker.checkConstraints(fullSequences, null);
+			if (!checker.checkConstraints(fullSequences, null, new ArrayList<>())) {
+				//checker.checkConstraints(fullSequences, null, new ArrayList<>());
 				failedCheckers.add(checker);
 			}
 		}

@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.moves.util;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,8 @@ import javax.inject.Named;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
@@ -46,6 +49,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.CapacityViolationType;
 
 @PerChainUnitScope
 public class EvaluationHelper {
+	protected static final Logger LOG = LoggerFactory.getLogger(EvaluationHelper.class);
 
 	@Inject
 	private List<IConstraintChecker> constraintCheckers;
@@ -106,7 +110,7 @@ public class EvaluationHelper {
 		for (final IConstraintChecker checker : constraintCheckers) {
 			if (checker instanceof IInitialSequencesConstraintChecker) {
 				final IInitialSequencesConstraintChecker initialSequencesConstraintChecker = (IInitialSequencesConstraintChecker) checker;
-				initialSequencesConstraintChecker.sequencesAccepted(currentRawSequences, currentFullSequences);
+				initialSequencesConstraintChecker.sequencesAccepted(currentRawSequences, currentFullSequences, new ArrayList<>());
 			}
 		}
 
@@ -124,6 +128,8 @@ public class EvaluationHelper {
 	}
 
 	public boolean checkConstraints(@NonNull final ISequences currentFullSequences, @Nullable final Collection<@NonNull IResource> currentChangedResources) {
+		final List<String> messages = new ArrayList<>();
+		messages.add(String.format("%s: checkConstraints", this.getClass().getName()));
 		// Apply hard constraint checkers
 		for (final IConstraintChecker checker : constraintCheckers) {
 
@@ -138,7 +144,9 @@ public class EvaluationHelper {
 				}
 			}
 
-			if (!checker.checkConstraints(currentFullSequences, currentChangedResources)) {
+			if (!checker.checkConstraints(currentFullSequences, currentChangedResources, messages)) {
+				if(!messages.isEmpty())
+					messages.stream().forEach(LOG::debug);
 				// Break out
 				return false;
 			}
@@ -153,6 +161,8 @@ public class EvaluationHelper {
 	 * @return
 	 */
 	public boolean checkConstraintsForRelaxedConstraints(@NonNull final ISequences currentFullSequences, @Nullable final Collection<@NonNull IResource> currentChangedResources) {
+		final List<String> messages = new ArrayList<>();
+		messages.add(String.format("%s: checkConstraintsForRelaxedConstraints", this.getClass().getName()));
 		// Apply hard constraint checkers
 		for (final IConstraintChecker checker : constraintCheckers) {
 
@@ -166,7 +176,9 @@ public class EvaluationHelper {
 				continue;
 			}
 
-			if (!checker.checkConstraints(currentFullSequences, currentChangedResources)) {
+			if (!checker.checkConstraints(currentFullSequences, currentChangedResources, messages)) {
+				if(!messages.isEmpty())
+					messages.stream().forEach(LOG::debug);
 				// Break out
 				return false;
 			}
@@ -175,13 +187,16 @@ public class EvaluationHelper {
 	}
 
 	public boolean doesMovePassConstraints(final @NonNull ISequences rawSequences) {
-
+		final List<String> messages = new ArrayList<>();
+		messages.add(String.format("%s: doesMovePassConstraints", this.getClass().getName()));
 		// Do normal manipulation
 		final ISequences movedFullSequences = sequenceManipulator.createManipulatedSequences(rawSequences);
 
 		// Run through the constraint checkers
 		for (final IConstraintChecker checker : constraintCheckers) {
-			if (!checker.checkConstraints(movedFullSequences, null)) {
+			if (!checker.checkConstraints(movedFullSequences, null, messages)) {
+				if(!messages.isEmpty())
+					messages.stream().forEach(LOG::debug);
 				return false;
 			}
 		}

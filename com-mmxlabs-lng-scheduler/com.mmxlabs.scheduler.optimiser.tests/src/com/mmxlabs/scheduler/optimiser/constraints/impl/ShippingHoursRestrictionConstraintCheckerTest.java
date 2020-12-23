@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
 
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
@@ -52,7 +54,7 @@ public class ShippingHoursRestrictionConstraintCheckerTest {
 		final Pair<ISequenceElement[], ShippingHoursRestrictionChecker> testData = createTester(1230, new Pair<>(661, 1227));
 		final ShippingHoursRestrictionChecker shippingHoursRestrictionChecker = testData.getSecond();
 		// Mock resource here is ok as #createTester works with any resource
-		Assertions.assertTrue(shippingHoursRestrictionChecker.checkPairwiseConstraint(testData.getFirst()[0], testData.getFirst()[1], Mockito.mock(IResource.class)));
+		Assertions.assertTrue(shippingHoursRestrictionChecker.checkPairwiseConstraint(testData.getFirst()[0], testData.getFirst()[1], Mockito.mock(IResource.class), new ArrayList<>()));
 	}
 
 	@SuppressWarnings("null")
@@ -61,7 +63,7 @@ public class ShippingHoursRestrictionConstraintCheckerTest {
 		final Pair<ISequenceElement[], ShippingHoursRestrictionChecker> testData = createTester(1220, new Pair<>(661, 1227));
 		final ShippingHoursRestrictionChecker shippingHoursRestrictionChecker = testData.getSecond();
 		// Mock resource here is ok as #createTester works with any resource
-		Assertions.assertFalse(shippingHoursRestrictionChecker.checkPairwiseConstraint(testData.getFirst()[0], testData.getFirst()[1], Mockito.mock(IResource.class)));
+		Assertions.assertFalse(shippingHoursRestrictionChecker.checkPairwiseConstraint(testData.getFirst()[0], testData.getFirst()[1], Mockito.mock(IResource.class), new ArrayList<>()));
 	}
 
 	@SuppressWarnings("null")

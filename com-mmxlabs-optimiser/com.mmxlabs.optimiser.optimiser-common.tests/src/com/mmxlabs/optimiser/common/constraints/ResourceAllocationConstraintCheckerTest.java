@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.optimiser.common.constraints;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -68,7 +69,7 @@ public class ResourceAllocationConstraintCheckerTest {
 		final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(r1, seq1, r2, seq2);
 		final Sequences sequences = new Sequences(CollectionsUtil.makeArrayList(r1, r2), map);
 
-		Assertions.assertTrue(checker.checkConstraints(sequences, null));
+		Assertions.assertTrue(checker.checkConstraints(sequences, null, new ArrayList<>()));
 	}
 
 	@Test
@@ -97,7 +98,7 @@ public class ResourceAllocationConstraintCheckerTest {
 		final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(r1, seq1, r2, seq2);
 		final Sequences sequences = new Sequences(CollectionsUtil.makeArrayList(r1, r2), map);
 
-		Assertions.assertFalse(checker.checkConstraints(sequences, null));
+		Assertions.assertFalse(checker.checkConstraints(sequences, null, new ArrayList<>()));
 	}
 
 	@Test

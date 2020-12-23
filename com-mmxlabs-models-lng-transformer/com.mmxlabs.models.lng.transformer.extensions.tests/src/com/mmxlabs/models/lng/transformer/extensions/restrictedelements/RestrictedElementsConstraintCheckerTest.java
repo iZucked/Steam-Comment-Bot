@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer.extensions.restrictedelements;
 
+import java.util.ArrayList;
 import java.util.Collections;
 
 import org.junit.jupiter.api.Assertions;
@@ -49,7 +50,7 @@ public class RestrictedElementsConstraintCheckerTest {
 		Mockito.when(restrictedElementsProvider.getRestrictedFollowerElements(element1)).thenReturn(Collections.<ISequenceElement> emptySet());
 		Mockito.when(restrictedElementsProvider.getRestrictedPrecedingElements(element2)).thenReturn(Collections.<ISequenceElement> emptySet());
 
-		Assertions.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource1));
+		Assertions.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource1, new ArrayList<>()));
 
 		Mockito.verify(restrictedElementsProvider).getRestrictedFollowerElements(element1);
 		Mockito.verify(restrictedElementsProvider).getRestrictedPrecedingElements(element2);
@@ -80,8 +81,8 @@ public class RestrictedElementsConstraintCheckerTest {
 		Mockito.when(restrictedElementsProvider.getRestrictedFollowerElements(element1)).thenReturn(Collections.<ISequenceElement> singleton(element2));
 		Mockito.when(restrictedElementsProvider.getRestrictedPrecedingElements(element2)).thenReturn(Collections.<ISequenceElement> emptySet());
 
-		Assertions.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource1));
-		Assertions.assertTrue(checker.checkPairwiseConstraint(element2, element1, resource1));
+		Assertions.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource1, new ArrayList<>()));
+		Assertions.assertTrue(checker.checkPairwiseConstraint(element2, element1, resource1, new ArrayList<>()));
 
 		Mockito.verify(restrictedElementsProvider).getRestrictedFollowerElements(element1);
 		Mockito.verify(restrictedElementsProvider).getRestrictedFollowerElements(element2);
@@ -117,8 +118,8 @@ public class RestrictedElementsConstraintCheckerTest {
 		Mockito.when(restrictedElementsProvider.getRestrictedFollowerElements(element1)).thenReturn(Collections.<ISequenceElement> emptySet());
 		Mockito.when(restrictedElementsProvider.getRestrictedPrecedingElements(element2)).thenReturn(Collections.<ISequenceElement> singleton(element1));
 
-		Assertions.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource1));
-		Assertions.assertTrue(checker.checkPairwiseConstraint(element2, element1, resource1));
+		Assertions.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource1, new ArrayList<>()));
+		Assertions.assertTrue(checker.checkPairwiseConstraint(element2, element1, resource1, new ArrayList<>()));
 
 		Mockito.verify(restrictedElementsProvider).getRestrictedFollowerElements(element1);
 		Mockito.verify(restrictedElementsProvider).getRestrictedFollowerElements(element2);
@@ -170,15 +171,15 @@ public class RestrictedElementsConstraintCheckerTest {
 		Mockito.when(portTypeProvider.getPortType(element1)).thenReturn(PortType.Discharge);
 		Mockito.when(portTypeProvider.getPortType(element2)).thenReturn(PortType.Load);
 
-		Assertions.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource1));
-		Assertions.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource2));
+		Assertions.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource1, new ArrayList<>()));
+		Assertions.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource2, new ArrayList<>()));
 
 		// First case, Load -> Discharge does apply on cargo shorts
 		Mockito.when(portTypeProvider.getPortType(element1)).thenReturn(PortType.Load);
 		Mockito.when(portTypeProvider.getPortType(element2)).thenReturn(PortType.Discharge);
 
-		Assertions.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource1));
-		Assertions.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource2));
+		Assertions.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource1, new ArrayList<>()));
+		Assertions.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource2, new ArrayList<>()));
 
 	}
 

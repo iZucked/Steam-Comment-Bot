@@ -48,7 +48,7 @@ public class VesselEventConstraintChecker implements IPairwiseConstraintChecker 
 		return name;
 	}
 
-	public boolean checkSequence(@NonNull final ISequence sequence, @NonNull final IResource resource) {
+	public boolean checkSequence(@NonNull final ISequence sequence, @NonNull final IResource resource, final List<String> messages) {
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 		if (vesselAvailability.getVesselInstanceType() != VesselInstanceType.ROUND_TRIP) {
 			return true;
@@ -56,23 +56,15 @@ public class VesselEventConstraintChecker implements IPairwiseConstraintChecker 
 
 		for (ISequenceElement element : sequence) {
 
-			if (!checkElement(element, resource)) {
+			if (!checkElement(element, resource, messages)) {
 				return false; // fail fast.
 			}
 		}
 		return true;
 	}
 
-	/*
-	 * This is a fail-fast version of the method below
-	 */
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources) {
-		return checkConstraints(sequences, changedResources, null);
-	}
-
-	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, @Nullable final List<String> messages) {
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, final List<String> messages) {
 		final Collection<@NonNull IResource> loopResources;
 		if (changedResources == null) {
 			loopResources = sequences.getResources();
@@ -82,7 +74,7 @@ public class VesselEventConstraintChecker implements IPairwiseConstraintChecker 
 
 		for (final IResource resource : loopResources) {
 			final ISequence sequence = sequences.getSequence(resource);
-			if (!checkSequence(sequence, resource)) {
+			if (!checkSequence(sequence, resource, messages)) {
 				return false;
 			}
 		}
@@ -91,16 +83,19 @@ public class VesselEventConstraintChecker implements IPairwiseConstraintChecker 
 	}
 
 	@Override
-	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
-		return checkElement(first, resource) && checkElement(second, resource);
+	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource, final List<String> messages) {
+		return checkElement(first, resource, messages) && checkElement(second, resource, messages);
 	}
 
-	protected boolean checkElement(final @NonNull ISequenceElement element, final @NonNull IResource resource) {
+	protected boolean checkElement(final @NonNull ISequenceElement element, final @NonNull IResource resource, final List<String> messages) {
 		if (portTypeProvider.getPortType(element) == PortType.DryDock || portTypeProvider.getPortType(element) == PortType.Maintenance
 				|| portTypeProvider.getPortType(element) == PortType.CharterOut) {
 
 			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-			return (vesselAvailability.getVesselInstanceType() == VesselInstanceType.FLEET || vesselAvailability.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER);
+			final boolean result = (vesselAvailability.getVesselInstanceType() == VesselInstanceType.FLEET || vesselAvailability.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER);
+			if (!result)
+				messages.add(String.format("%s : For element %s vessel availability is fleet or time charter!", this.name, element.getName()));
+			return result;
 		}
 		return true;
 	}

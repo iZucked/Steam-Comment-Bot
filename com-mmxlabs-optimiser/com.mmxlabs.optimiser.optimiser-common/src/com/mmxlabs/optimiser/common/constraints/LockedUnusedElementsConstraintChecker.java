@@ -47,12 +47,7 @@ public final class LockedUnusedElementsConstraintChecker implements IPairwiseCon
 	}
 
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources) {
-		return checkConstraints(sequences, changedResources, null);
-	}
-
-	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, @Nullable final List<String> messages) {
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, final List<String> messages) {
 		if (isInitialised()) {
 			final Collection<@NonNull IResource> loopResources;
 			if (changedResources == null) {
@@ -65,7 +60,7 @@ public final class LockedUnusedElementsConstraintChecker implements IPairwiseCon
 				assert resource != null;
 				for (final ISequenceElement element : sequences.getSequence(resource)) {
 					assert element != null;
-					if (!checkElement(element)) {
+					if (!checkElement(element, messages)) {
 						return false;
 					}
 				}
@@ -82,25 +77,28 @@ public final class LockedUnusedElementsConstraintChecker implements IPairwiseCon
 	}
 
 	@Override
-	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
+	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource, final List<String> messages) {
 		if (isInitialised()) {
-			return checkElement(first) && checkElement(second);
+			return checkElement(first, messages) && checkElement(second, messages);
 		} else {
 			return true;
 		}
 	}
 
-	private final boolean checkElement(@NonNull final ISequenceElement element) {
+	private final boolean checkElement(@NonNull final ISequenceElement element, final List<String> messages) {
 
 		if (lockedElementsProvider.isElementLocked(element)) {
-			if (checkElementUnusedInitially(element)) {
+			if (checkElementUnusedInitially(element, messages)) {
 				return false;
 			}
 		}
 		return true;
 	}
 
-	private boolean checkElementUnusedInitially(final ISequenceElement element) {
+	private boolean checkElementUnusedInitially(final ISequenceElement element, final List<String> messages) {
+		final boolean result = getInitialSequences().getUnusedElements().contains(element);
+		if (!result)
+			messages.add(String.format("%s: Element %s is not in the list of unused elements in the Initial Sequence!", this.name, element.getName()));
 		return getInitialSequences().getUnusedElements().contains(element);
 	}
 
@@ -117,12 +115,7 @@ public final class LockedUnusedElementsConstraintChecker implements IPairwiseCon
 	}
 
 	@Override
-	public String explain(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
-		return String.format("%s --> %s, %s --> %s", first.getName(), checkElement(first), second.getName(), checkElement(second));
-	}
-
-	@Override
-	public void sequencesAccepted(@NonNull final ISequences rawSequences, @NonNull final ISequences fullSequences) {
+	public void sequencesAccepted(@NonNull final ISequences rawSequences, @NonNull final ISequences fullSequences, final List<String> messages) {
 		setInitialSequences(fullSequences);
 	}
 }

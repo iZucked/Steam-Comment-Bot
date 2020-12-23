@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.optimiser.core.constraints;
 
+import java.util.List;
+
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.core.ISequences;
@@ -22,6 +24,6 @@ public interface IInitialSequencesConstraintChecker extends IConstraintChecker {
 	 * 
 	 * @param sequences
 	 */
-	void sequencesAccepted(@NonNull ISequences rawSequences, @NonNull ISequences fullSequences);
+	void sequencesAccepted(@NonNull ISequences rawSequences, @NonNull ISequences fullSequences, @NonNull List<String> messages);
 
 }

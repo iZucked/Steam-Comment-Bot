@@ -48,7 +48,7 @@ public class MaxSlotsOnSpotChartersConstraintChecker implements IConstraintCheck
 	}
 
 	@Override
-	public boolean checkConstraints(@NonNull ISequences sequences, @Nullable Collection<@NonNull IResource> changedResources) {
+	public boolean checkConstraints(@NonNull ISequences sequences, @Nullable Collection<@NonNull IResource> changedResources, List<String> messages) {
 		for (IResource resource : sequences.getResources()) {
 			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 			if (vesselAvailability.getVesselInstanceType() != VesselInstanceType.SPOT_CHARTER && vesselAvailability.getVesselInstanceType() != VesselInstanceType.ROUND_TRIP) {
@@ -61,15 +61,11 @@ public class MaxSlotsOnSpotChartersConstraintChecker implements IConstraintCheck
 				}
 			}
 			if (spots > MAX_SPOT_COUNT) {
+				messages.add(String.format("%s: More than one cargo on the round trip charter vessel %s.", this.name, vesselAvailability.getVessel().getName()));
 				return false;
 			}
 		}
 		return true;
-	}
-
-	@Override
-	public boolean checkConstraints(@NonNull ISequences sequences, @Nullable Collection<@NonNull IResource> changedResources, @Nullable List<String> messages) {
-		return checkConstraints(sequences, changedResources);
 	}
 
 }

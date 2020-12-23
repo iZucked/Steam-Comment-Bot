@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
 
+import java.util.ArrayList;
+
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -78,21 +80,21 @@ public class PortExclusionConstraintCheckerTest {
 
 		vesselProvider.setVesselAvailabilityResource(resource, vesselAvailability);
 
-		Assertions.assertTrue(checker.checkPairwiseConstraint(o1, o2, resource));
+		Assertions.assertTrue(checker.checkPairwiseConstraint(o1, o2, resource, new ArrayList<>()));
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o4));
 
-		Assertions.assertTrue(checker.checkSequence(sequence, resource));
+		Assertions.assertTrue(checker.checkSequence(sequence, resource, new ArrayList<>()));
 
 		exclusionProvider.setExcludedPorts(vessel, CollectionsUtil.makeHashSet(p3));
 		Assertions.assertFalse(exclusionProvider.hasNoExclusions());
 		Assertions.assertTrue(exclusionProvider.getExcludedPorts(vessel).contains(p3));
 
-		Assertions.assertTrue(checker.checkSequence(sequence, resource));
+		Assertions.assertTrue(checker.checkSequence(sequence, resource, new ArrayList<>()));
 		final ISequence sequence2 = new ListSequence(CollectionsUtil.makeArrayList(o1, o3, o4));
-		Assertions.assertFalse(checker.checkSequence(sequence2, resource));
+		Assertions.assertFalse(checker.checkSequence(sequence2, resource, new ArrayList<>()));
 
-		Assertions.assertTrue(checker.checkPairwiseConstraint(o1, o2, resource));
-		Assertions.assertFalse(checker.checkPairwiseConstraint(o1, o3, resource));
+		Assertions.assertTrue(checker.checkPairwiseConstraint(o1, o2, resource, new ArrayList<>()));
+		Assertions.assertFalse(checker.checkPairwiseConstraint(o1, o3, resource, new ArrayList<>()));
 
 	}
 
@@ -132,21 +134,21 @@ public class PortExclusionConstraintCheckerTest {
 		vesselProvider.setVesselAvailabilityResource(resource, vesselAvailability);
 		nominatedVesselProviderEditor.setNominatedVessel(o2, resource, nominatedVessel);
 
-		Assertions.assertTrue(checker.checkPairwiseConstraint(o1, o2, resource));
+		Assertions.assertTrue(checker.checkPairwiseConstraint(o1, o2, resource, new ArrayList<>()));
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o4));
 
-		Assertions.assertTrue(checker.checkSequence(sequence, resource));
+		Assertions.assertTrue(checker.checkSequence(sequence, resource, new ArrayList<>()));
 
 		exclusionProvider.setExcludedPorts(nominatedVessel, CollectionsUtil.makeHashSet(p3));
 		Assertions.assertFalse(exclusionProvider.hasNoExclusions());
 		Assertions.assertTrue(exclusionProvider.getExcludedPorts(nominatedVessel).contains(p3));
 
-		Assertions.assertTrue(checker.checkSequence(sequence, resource));
+		Assertions.assertTrue(checker.checkSequence(sequence, resource, new ArrayList<>()));
 		final ISequence sequence2 = new ListSequence(CollectionsUtil.makeArrayList(o1, o3, o4));
-		Assertions.assertFalse(checker.checkSequence(sequence2, resource));
+		Assertions.assertFalse(checker.checkSequence(sequence2, resource, new ArrayList<>()));
 
-		Assertions.assertTrue(checker.checkPairwiseConstraint(o1, o2, resource));
-		Assertions.assertFalse(checker.checkPairwiseConstraint(o1, o3, resource));
+		Assertions.assertTrue(checker.checkPairwiseConstraint(o1, o2, resource, new ArrayList<>()));
+		Assertions.assertFalse(checker.checkPairwiseConstraint(o1, o3, resource, new ArrayList<>()));
 
 	}
 

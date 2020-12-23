@@ -68,23 +68,18 @@ public class PanamaSlotsConstraintChecker implements IInitialSequencesConstraint
 	}
 
 	@Override
-	public boolean checkConstraints(final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources) {
-		return checkConstraints(sequences, changedResources, null);
-	}
-
-	@Override
 	public boolean checkConstraints(final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, final List<String> messages) {
 
 		// Should really be false, but action set code does not call sequencedAccepted
-		return checkConstraints(sequences, unbookedSlotsNorthbound == null);
+		return checkConstraints(sequences, unbookedSlotsNorthbound == null, messages);
 	}
 
 	@Override
-	public void sequencesAccepted(@NonNull final ISequences rawSequences, @NonNull final ISequences fullSequences) {
-		checkConstraints(fullSequences, true);
+	public void sequencesAccepted(@NonNull final ISequences rawSequences, @NonNull final ISequences fullSequences, final List<String> messages) {
+		checkConstraints(fullSequences, true, messages);
 	}
 
-	public boolean checkConstraints(final ISequences sequences, final boolean initialState) {
+	public boolean checkConstraints(final ISequences sequences, final boolean initialState, final List<String> messages) {
 
 		scheduler.setUseCanalBasedWindowTrimming(true);
 		scheduler.setUsePriceBasedWindowTrimming(false);
@@ -170,6 +165,7 @@ public class PanamaSlotsConstraintChecker implements IInitialSequencesConstraint
 			// Remove relaxed bookings
 			currentUnbookedSlotsNorthbound.removeAll(currentUnbookedSlotsNorthboundInRelaxed);
 			if (!currentUnbookedSlotsNorthbound.isEmpty()) {
+				messages.add(String.format("%s: there are some unbooked northbound slots!", this.name));
 				return false;
 			}
 			// Remove white list
@@ -177,6 +173,7 @@ public class PanamaSlotsConstraintChecker implements IInitialSequencesConstraint
 			// Remove relaxed bookings
 			currentUnbookedSlotsSouthbound.removeAll(currentUnbookedSlotsSouthboundInRelaxed);
 			if (!currentUnbookedSlotsSouthbound.isEmpty()) {
+				messages.add(String.format("%s: there are some unbooked southbound slots!", this.name));
 				return false;
 			}
 
@@ -218,7 +215,8 @@ public class PanamaSlotsConstraintChecker implements IInitialSequencesConstraint
 				final int adjustedCountSouthbound = relaxedSlotCountSouthbound - whitelistedSlotCountSouthbound; // -1
 
 				southboundIsValid = countAfterSouthbound == 0 || countAfterSouthbound <= adjustedCountSouthbound;
-
+				if(!southboundIsValid)
+					messages.add(String.format("%s: Panama booking count error!", this.name));
 //			return northboundIsValid && southboundIsValid;
 				return southboundIsValid;
 			}

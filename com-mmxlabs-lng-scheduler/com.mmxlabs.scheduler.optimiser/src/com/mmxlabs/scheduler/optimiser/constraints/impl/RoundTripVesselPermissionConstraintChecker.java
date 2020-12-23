@@ -54,11 +54,7 @@ public class RoundTripVesselPermissionConstraintChecker implements IPairwiseCons
 		return name;
 	}
 
-	public boolean checkSequence(@NonNull final ISequence sequence, @NonNull final IResource resource) {
-		return checkSequence(sequence, resource, null);
-	}
-
-	public boolean checkSequence(@NonNull final ISequence sequence, @NonNull final IResource resource, @Nullable final List<String> messages) {
+	public boolean checkSequence(@NonNull final ISequence sequence, @NonNull final IResource resource, final List<String> messages) {
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 		if (vesselAvailability.getVesselInstanceType() != VesselInstanceType.ROUND_TRIP) {
 			return true;
@@ -66,12 +62,13 @@ public class RoundTripVesselPermissionConstraintChecker implements IPairwiseCons
 
 		ISequenceElement prevElement = null;
 		for (final ISequenceElement element : sequence) {
-			if (!checkElement(element, resource)) {
+			if (!checkElement(element, resource, messages)) {
 				return false; // fail fast.
 			}
 
 			if (prevElement != null) {
 				if (!roundTripVesselPermissionProvider.isBoundPair(prevElement, element)) {
+					messages.add(String.format("%s: Sequence elements pair (%s, %s) is no a bound pair!", this.name, prevElement.getName(), element.getName()));
 					return false;
 				}
 			}
@@ -80,16 +77,8 @@ public class RoundTripVesselPermissionConstraintChecker implements IPairwiseCons
 		return true;
 	}
 
-	/*
-	 * This is a fail-fast version of the method below
-	 */
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources) {
-		return checkConstraints(sequences, changedResources, null);
-	}
-
-	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, @Nullable final List<String> messages) {
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, final List<String> messages) {
 		final Collection<@NonNull IResource> loopResources;
 		if (changedResources == null) {
 			loopResources = sequences.getResources();
@@ -100,11 +89,7 @@ public class RoundTripVesselPermissionConstraintChecker implements IPairwiseCons
 		for (final IResource resource : loopResources) {
 			final ISequence sequence = sequences.getSequence(resource);
 			if (!checkSequence(sequence, resource, messages)) {
-				if (messages == null) {
-					return false;
-				} else {
-					valid = false;
-				}
+				return false;
 			}
 		}
 
@@ -112,21 +97,24 @@ public class RoundTripVesselPermissionConstraintChecker implements IPairwiseCons
 	}
 
 	@Override
-	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
+	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource, final List<String> messages) {
 
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 		if (vesselAvailability.getVesselInstanceType() != VesselInstanceType.ROUND_TRIP) {
 			return true;
 		}
 
-		final boolean valid = checkElement(first, resource) && checkElement(second, resource);
+		final boolean valid = checkElement(first, resource, messages) && checkElement(second, resource, messages);
 		if (valid) {
-			return roundTripVesselPermissionProvider.isBoundPair(first, second);
+			final boolean result = roundTripVesselPermissionProvider.isBoundPair(first, second);
+			if (!result)
+				messages.add(String.format("%s: Sequence elements pair (%s, %s) is no a bound pair!", this.name, first.getName(), second.getName()));
+			return result;
 		}
 		return false;
 	}
 
-	protected boolean checkElement(final @NonNull ISequenceElement element, final @NonNull IResource resource) {
+	protected boolean checkElement(final @NonNull ISequenceElement element, final @NonNull IResource resource, final List<String> messages) {
 		if (portTypeProvider.getPortType(element) == PortType.Start) {
 			return true;
 		}
@@ -138,6 +126,7 @@ public class RoundTripVesselPermissionConstraintChecker implements IPairwiseCons
 		}
 		final boolean permitted = roundTripVesselPermissionProvider.isPermittedOnResource(element, resource);
 		if (!permitted) {
+			messages.add(String.format("%s: Element %s is not permitted on the resource %s!", this.name, element.getName(), resource.getName()));
 			return false;
 		}
 

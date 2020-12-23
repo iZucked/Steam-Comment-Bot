@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -76,11 +77,11 @@ public class LadenLegLimitConstraintChecker implements IPairwiseConstraintChecke
 	}
 
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences fullSequences, @Nullable final Collection<@NonNull IResource> changedResources) {
-		return checkConstraints(fullSequences, changedResources, Mode.APPLY);
+	public boolean checkConstraints(@NonNull final ISequences fullSequences, @Nullable final Collection<@NonNull IResource> changedResources, final List<String> messages) {
+		return checkConstraints(fullSequences, changedResources, Mode.APPLY, messages);
 	}
 
-	private boolean checkConstraints(@NonNull final ISequences fullSequences, @Nullable final Collection<@NonNull IResource> changedResources, Mode mode) {
+	private boolean checkConstraints(@NonNull final ISequences fullSequences, @Nullable final Collection<@NonNull IResource> changedResources, Mode mode, final List<String> messages) {
 
 		final Collection<@NonNull IResource> loopResources;
 		if (changedResources == null) {
@@ -91,14 +92,14 @@ public class LadenLegLimitConstraintChecker implements IPairwiseConstraintChecke
 
 		for (final IResource resource : loopResources) {
 			final ISequence sequence = fullSequences.getSequence(resource);
-			if (!checkSequence(sequence, resource, mode)) {
+			if (!checkSequence(sequence, resource, mode, messages)) {
 				return false;
 			}
 		}
 		return true;
 	}
 
-	private boolean checkSequence(@NonNull final ISequence sequence, @NonNull final IResource resource, Mode mode) {
+	private boolean checkSequence(@NonNull final ISequence sequence, @NonNull final IResource resource, Mode mode, final List<String> messages) {
 		final Iterator<ISequenceElement> iter = sequence.iterator();
 		ISequenceElement prev = null;
 		ISequenceElement cur = null;
@@ -110,17 +111,12 @@ public class LadenLegLimitConstraintChecker implements IPairwiseConstraintChecke
 			prev = cur;
 			cur = iter.next();
 			if (prev != null && cur != null) {
-				if (!checkPairwiseConstraint(prev, cur, resource, maxSpeed, mode)) {
+				if (!checkPairwiseConstraint(prev, cur, resource, maxSpeed, mode, messages)) {
 					return false;
 				}
 			}
 		}
 		return true;
-	}
-
-	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, @Nullable final List<String> messages) {
-		return checkConstraints(sequences, changedResources, Mode.APPLY);
 	}
 
 	/**
@@ -133,13 +129,13 @@ public class LadenLegLimitConstraintChecker implements IPairwiseConstraintChecke
 	 * @return
 	 */
 	@Override
-	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
+	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource, final List<String> messages) {
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 
-		return checkPairwiseConstraint(first, second, resource, vesselAvailability.getVessel().getMaxSpeed(), Mode.APPLY);
+		return checkPairwiseConstraint(first, second, resource, vesselAvailability.getVessel().getMaxSpeed(), Mode.APPLY, messages);
 	}
 
-	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource, final int resourceMaxSpeed, Mode mode) {
+	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource, final int resourceMaxSpeed, Mode mode, final List<String> messages) {
 
 		final IPortSlot slot1 = portSlotProvider.getPortSlot(first);
 		final IPortSlot slot2 = portSlotProvider.getPortSlot(second);
@@ -165,6 +161,8 @@ public class LadenLegLimitConstraintChecker implements IPairwiseConstraintChecke
 			if (tw2.getInclusiveStart() - tw1.getExclusiveEnd() > maxLadenDuration) {
 				// Violation! Check whitelist to see if we can ignore it.
 				if (mode == Mode.APPLY && !whitelistedSlots.contains(slot1)) {
+					messages.add(String.format("%s: Travel time from last discharge port %s (slot %s) to the next load port %s (slot %s) is longer than allowed %d hours.", 
+							this.name, slot1.getPort().getName(), slot1.getId(), slot2.getPort().getName(), slot2.getId(), maxLadenDuration));
 					return false;
 				} else if (mode == Mode.RECORD) {
 					whitelistedSlots.add(slot1);
@@ -185,8 +183,8 @@ public class LadenLegLimitConstraintChecker implements IPairwiseConstraintChecke
 	}
 
 	@Override
-	public void sequencesAccepted(@NonNull ISequences rawSequences, @NonNull ISequences fullSequences) {
+	public void sequencesAccepted(@NonNull ISequences rawSequences, @NonNull ISequences fullSequences, @NonNull final List<String> messages) {
 		whitelistedSlots.clear();
-		checkConstraints(fullSequences, null, Mode.RECORD);
+		checkConstraints(fullSequences, null, Mode.RECORD, messages);
 	}
 }

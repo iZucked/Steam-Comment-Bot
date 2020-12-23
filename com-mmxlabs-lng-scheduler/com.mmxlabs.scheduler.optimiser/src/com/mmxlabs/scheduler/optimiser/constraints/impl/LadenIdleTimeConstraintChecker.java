@@ -84,7 +84,7 @@ public class LadenIdleTimeConstraintChecker implements IPairwiseConstraintChecke
 	}
 
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources) {
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, final List<String> messages) {
 
 		final Collection<@NonNull IResource> loopResources;
 		if (changedResources == null) {
@@ -95,15 +95,14 @@ public class LadenIdleTimeConstraintChecker implements IPairwiseConstraintChecke
 
 		for (final IResource resource : loopResources) {
 			final ISequence sequence = sequences.getSequence(resource);
-			if (!checkSequence(sequence, resource)) {
-				checkSequence(sequence, resource);
+			if (!checkSequence(sequence, resource, messages)) {
 				return false;
 			}
 		}
 		return true;
 	}
 
-	private boolean checkSequence(@NonNull final ISequence sequence, @NonNull final IResource resource) {
+	private boolean checkSequence(@NonNull final ISequence sequence, @NonNull final IResource resource, final List<String> messages) {
 		final Iterator<ISequenceElement> iter = sequence.iterator();
 		ISequenceElement prev = null;
 		ISequenceElement cur = null;
@@ -115,17 +114,12 @@ public class LadenIdleTimeConstraintChecker implements IPairwiseConstraintChecke
 			prev = cur;
 			cur = iter.next();
 			if (prev != null && cur != null) {
-				if (!checkPairwiseConstraint(prev, cur, resource, maxSpeed)) {
+				if (!checkPairwiseConstraint(prev, cur, resource, maxSpeed, messages)) {
 					return false;
 				}
 			}
 		}
 		return true;
-	}
-
-	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, @Nullable final List<String> messages) {
-		return checkConstraints(sequences, changedResources);
 	}
 
 	@Override
@@ -138,13 +132,13 @@ public class LadenIdleTimeConstraintChecker implements IPairwiseConstraintChecke
 	 *            the vessel in question
 	 * @return
 	 */
-	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
+	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource, final List<String> messages) {
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 
-		return checkPairwiseConstraint(first, second, resource, vesselAvailability.getVessel().getMaxSpeed());
+		return checkPairwiseConstraint(first, second, resource, vesselAvailability.getVessel().getMaxSpeed(), messages);
 	}
 
-	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource, final int resourceMaxSpeed) {
+	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource, final int resourceMaxSpeed, final List<String> messages) {
 
 		final IPortSlot slot1 = portSlotProvider.getPortSlot(first);
 		final IPortSlot slot2 = portSlotProvider.getPortSlot(second);
@@ -172,6 +166,7 @@ public class LadenIdleTimeConstraintChecker implements IPairwiseConstraintChecke
 			Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), slot1.getPort(), slot2.getPort(), MAX_SPEED,
 					AvailableRouteChoices.OPTIMAL);
 			if (quickestTravelTime.getSecond() == Integer.MAX_VALUE) {
+				messages.add(explain(first, second, resource));
 				return false;
 			}
 
@@ -179,8 +174,10 @@ public class LadenIdleTimeConstraintChecker implements IPairwiseConstraintChecke
 
 			final int earliestArrivalTime = voyageStartTime + travelTime;
 			final int idle = Math.max(tw2.getInclusiveStart() - earliestArrivalTime, 0);
-
-			return idle <= MAX_IDLE_TIME_HOURS;
+			final boolean result = idle <= MAX_IDLE_TIME_HOURS;
+			if (!result)
+				explain(first, second, resource);
+			return result;
 		}
 		return true;
 	}

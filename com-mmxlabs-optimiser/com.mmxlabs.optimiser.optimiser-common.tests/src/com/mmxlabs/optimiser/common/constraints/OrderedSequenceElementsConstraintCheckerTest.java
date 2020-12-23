@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.optimiser.common.constraints;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -66,7 +67,7 @@ public class OrderedSequenceElementsConstraintCheckerTest {
 		final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(r, seq1);
 		final Sequences sequences = new Sequences(Collections.singletonList(r), map);
 
-		Assertions.assertTrue(checker.checkConstraints(sequences, null));
+		Assertions.assertTrue(checker.checkConstraints(sequences, null, new ArrayList<>()));
 	}
 
 	@Test
@@ -92,7 +93,7 @@ public class OrderedSequenceElementsConstraintCheckerTest {
 		final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(r, seq1);
 		final Sequences sequences = new Sequences(Collections.singletonList(r), map);
 
-		Assertions.assertFalse(checker.checkConstraints(sequences, null));
+		Assertions.assertFalse(checker.checkConstraints(sequences, null,new ArrayList<>()));
 	}
 
 	@Test
@@ -118,7 +119,7 @@ public class OrderedSequenceElementsConstraintCheckerTest {
 		final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(r, seq1);
 		final Sequences sequences = new Sequences(Collections.singletonList(r), map);
 
-		Assertions.assertFalse(checker.checkConstraints(sequences, null));
+		Assertions.assertFalse(checker.checkConstraints(sequences, null, new ArrayList<>()));
 	}
 
 	@Test
@@ -174,7 +175,7 @@ public class OrderedSequenceElementsConstraintCheckerTest {
 		final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(r, seq1);
 		final Sequences sequences = new Sequences(Collections.singletonList(r), map);
 
-		Assertions.assertFalse(checker.checkConstraints(sequences, null, null));
+		Assertions.assertFalse(checker.checkConstraints(sequences, null, new ArrayList<>()));
 	}
 
 	/**
@@ -197,7 +198,7 @@ public class OrderedSequenceElementsConstraintCheckerTest {
 		final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(r, seq1);
 		final Sequences sequences = new Sequences(Collections.singletonList(r), map);
 
-		Assertions.assertFalse(checker.checkConstraints(sequences, null, null));
+		Assertions.assertFalse(checker.checkConstraints(sequences, null, new ArrayList<>()));
 
 	}
 
@@ -221,7 +222,7 @@ public class OrderedSequenceElementsConstraintCheckerTest {
 		final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(r, seq1);
 		final Sequences sequences = new Sequences(Collections.singletonList(r), map);
 
-		Assertions.assertTrue(checker.checkConstraints(sequences, null));
+		Assertions.assertTrue(checker.checkConstraints(sequences, null, new ArrayList<>()));
 	}
 
 	private OrderedSequenceElementsConstraintChecker createChecker(final IOrderedSequenceElementsDataComponentProvider provider) {
@@ -258,21 +259,21 @@ public class OrderedSequenceElementsConstraintCheckerTest {
 			final ListSequence seq1 = new ListSequence(CollectionsUtil.makeArrayList(obj1, obj2, obj3, obj4));
 			final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(r, seq1);
 			final Sequences sequences = new Sequences(Collections.singletonList(r), map);
-			Assertions.assertTrue(checker.checkConstraints(sequences, null, null));
+			Assertions.assertTrue(checker.checkConstraints(sequences, null, new ArrayList<>()));
 		}
 		// Fail constraint as obj2 is not followed by obj3
 		{
 			final ListSequence seq1 = new ListSequence(CollectionsUtil.makeArrayList(obj1, obj2, obj4));
 			final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(r, seq1);
 			final Sequences sequences = new Sequences(Collections.singletonList(r), map);
-			Assertions.assertFalse(checker.checkConstraints(sequences, null, null));
+			Assertions.assertFalse(checker.checkConstraints(sequences, null, new ArrayList<>()));
 		}
 		// Fail constraint as obj3 does not follow obj2
 		{
 			final ListSequence seq1 = new ListSequence(CollectionsUtil.makeArrayList(obj1, obj3, obj4));
 			final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(r, seq1);
 			final Sequences sequences = new Sequences(Collections.singletonList(r), map);
-			Assertions.assertFalse(checker.checkConstraints(sequences, null, null));
+			Assertions.assertFalse(checker.checkConstraints(sequences, null, new ArrayList<>()));
 		}
 	}
 

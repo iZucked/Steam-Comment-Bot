@@ -13,6 +13,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mmxlabs.models.lng.transformer.extensions.portshipsizeconstraint.PortShipSizeConstraintChecker;
@@ -31,7 +34,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 public class CargoVesselRestrictionsMatrixProducer implements ICargoVesselRestrictionsMatrixProducer {
-	
+	private static final Logger LOG = LoggerFactory.getLogger(CargoVesselRestrictionsMatrixProducer.class);
 	/**
 	 * Set of lightweight constraints types considered by this class.
 	 */
@@ -54,7 +57,7 @@ public class CargoVesselRestrictionsMatrixProducer implements ICargoVesselRestri
 				constraintCheckers.add(constraintChecker);
 
 				// Prep with initial sequences.
-				constraintChecker.checkConstraints(initialRawSequences, null);
+				constraintChecker.checkConstraints(initialRawSequences, null, new ArrayList<>());
 			}
 		}
 	}
@@ -79,18 +82,24 @@ public class CargoVesselRestrictionsMatrixProducer implements ICargoVesselRestri
 	}
 
 	private boolean checkConstraints(List<IConstraintChecker> constraints, List<IPortSlot> cargo, IVesselAvailability vessel) {
+		final List<String> messages = new ArrayList<>();
+		messages.add(String.format("%s: checkConstraints", this.getClass().getName()));
 		for (IConstraintChecker con : constraints) {
 			if (con instanceof IResourceElementConstraintChecker) {
 				IResourceElementConstraintChecker c = (IResourceElementConstraintChecker)con;
 				for(IPortSlot slot : cargo) {
-					if (!c.checkElement(portSlotProvider.getElement(slot), vesselProvider.getResource(vessel))) {
+					if (!c.checkElement(portSlotProvider.getElement(slot), vesselProvider.getResource(vessel), messages)) {
+						if(!messages.isEmpty())
+							messages.stream().forEach(LOG::debug);
 						return false;
 					}
 				}
 			}
 			else if (cargo.size() == 2 && con instanceof IPairwiseConstraintChecker) {
 				IPairwiseConstraintChecker c = (IPairwiseConstraintChecker)con;
-				if (!c.checkPairwiseConstraint(portSlotProvider.getElement(cargo.get(0)), portSlotProvider.getElement(cargo.get(1)), vesselProvider.getResource(vessel))) {
+				if (!c.checkPairwiseConstraint(portSlotProvider.getElement(cargo.get(0)), portSlotProvider.getElement(cargo.get(1)), vesselProvider.getResource(vessel), messages)) {
+					if(!messages.isEmpty())
+						messages.stream().forEach(LOG::debug);
 					return false;
 				}
 			}

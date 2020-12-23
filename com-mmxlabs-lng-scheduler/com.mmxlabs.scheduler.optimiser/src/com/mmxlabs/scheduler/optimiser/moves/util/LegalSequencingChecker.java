@@ -86,24 +86,29 @@ public class LegalSequencingChecker {
 	public boolean allowSequence(final ISequenceElement e1, final ISequenceElement e2, final IResource resource, boolean print) {
 		// Check with hard constraints like resource allocation and ordered elements
 
-		if (!resourceAllocationChecker.checkPairwiseConstraint(e1, e2, resource)) {
+		final List<String> messages = new ArrayList<>();
+		messages.add(String.format("%s: allowSequence", this.getClass().getName()));
+		if (!resourceAllocationChecker.checkPairwiseConstraint(e1, e2, resource, messages)) {
 			// if (log.isInfoEnabled()) {
 			// log.info("Rejected: " + pairwiseChecker.getName() + ": " + pairwiseChecker.explain(e1, e2, resource));
 			// }
 			if (print)
 				System.out.println("RAC: Rejected: " + resourceAllocationChecker.getName() + ": " + resourceAllocationChecker.explain(e1, e2, resource));
+			if(!messages.isEmpty())
+				messages.stream().forEach(log::debug);
 			return false;
 		} else {
 			// System.out.println("True");
 		}
 		for (final IPairwiseConstraintChecker pairwiseChecker : pairwiseCheckers) {
-			if (!pairwiseChecker.checkPairwiseConstraint(e1, e2, resource)) {
+			if (!pairwiseChecker.checkPairwiseConstraint(e1, e2, resource, messages)) {
 				// if (log.isInfoEnabled()) {
 				// log.info("Rejected: " + pairwiseChecker.getName() + ": " + pairwiseChecker.explain(e1, e2, resource));
 				// }
-				if (print) {
+				if (print)
 					System.out.println("PW: Rejected: " + pairwiseChecker.getName() + ": " + pairwiseChecker.explain(e1, e2, resource));
-				}
+				if(!messages.isEmpty())
+					messages.stream().forEach(log::debug);
 				return false;
 			}
 		}
@@ -113,12 +118,15 @@ public class LegalSequencingChecker {
 
 	public List<String> getSequencingProblems(final ISequenceElement e1, final ISequenceElement e2, final IResource resource) {
 		final List<String> result = new ArrayList<String>();
-
+		final List<String> messages = new ArrayList<>();
+		messages.add(String.format("%s: getSequencingProblems", this.getClass().getName()));
 		for (final IPairwiseConstraintChecker pairwiseChecker : pairwiseCheckers) {
-			if (!pairwiseChecker.checkPairwiseConstraint(e1, e2, resource)) {
+			if (!pairwiseChecker.checkPairwiseConstraint(e1, e2, resource, messages)) {
 				result.add(pairwiseChecker.getName() + " says " + pairwiseChecker.explain(e1, e2, resource));
 			}
 		}
+		if(!messages.isEmpty())
+			messages.stream().forEach(log::debug);
 
 		return result;
 	}
