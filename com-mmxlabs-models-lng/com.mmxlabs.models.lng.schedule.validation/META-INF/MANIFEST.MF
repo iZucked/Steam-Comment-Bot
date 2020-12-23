@@ -2,21 +2,21 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Schedule Validation
 Bundle-SymbolicName: com.mmxlabs.models.lng.schedule.validation;singleton:=true
-Bundle-Version: 4.10.38.RELEASE
+Bundle-Version: 4.10.39.qualifier
 Bundle-Activator: com.mmxlabs.models.lng.schedule.validation.Activator
 Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  org.eclipse.core.runtime;bundle-version="3.7.0",
- com.mmxlabs.models.lng.schedule;bundle-version="[4.10.38,5.0.0)",
- com.mmxlabs.models.lng.cargo;bundle-version="[4.10.38,5.0.0)",
- com.mmxlabs.models.lng.scenario.model;bundle-version="[4.10.38,5.0.0)",
- com.mmxlabs.models.ui.validation;bundle-version="[4.10.38,5.0.0)",
+ com.mmxlabs.models.lng.schedule;bundle-version="[4.10.39,5.0.0)",
+ com.mmxlabs.models.lng.cargo;bundle-version="[4.10.39,5.0.0)",
+ com.mmxlabs.models.lng.scenario.model;bundle-version="[4.10.39,5.0.0)",
+ com.mmxlabs.models.ui.validation;bundle-version="[4.10.39,5.0.0)",
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.common.common-util,
  com.mmxlabs.models.lng.pricing.validation,
  com.mmxlabs.license.features,
- com.mmxlabs.scenario.service.model;bundle-version="[4.10.38,5.0.0)",
- com.mmxlabs.models.lng.cargo.editor;bundle-version="4.10.38"
+ com.mmxlabs.scenario.service.model;bundle-version="[4.10.39,5.0.0)",
+ com.mmxlabs.models.lng.cargo.editor;bundle-version="4.10.39"
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ActivationPolicy: lazy
 Automatic-Module-Name: com.mmxlabs.models.lng.schedule.validation
