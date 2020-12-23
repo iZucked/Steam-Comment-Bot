@@ -123,7 +123,7 @@ public class UnbookedSlotConstraint extends AbstractModelMultiConstraint {
 				if (routeOption == RouteOption.PANAMA) {
 					if (journey.getCanalBooking() == null) {
 						// No Booking!
-						if (journey.getCanalBookingPeriod() == PanamaBookingPeriod.STRICT || journey.getCanalBookingPeriod() == PanamaBookingPeriod.RELAXED) {
+						if (journey.getCanalBookingPeriod() == PanamaBookingPeriod.STRICT) {
 
 							DetailConstraintStatusFactory f = DetailConstraintStatusFactory.makeStatus() //
 									.withTag(ValidationConstants.TAG_EVALUATED_SCHEDULE) //

@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
+import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
@@ -54,6 +55,9 @@ public class CapacityViolationConstraint extends AbstractModelMultiConstraint {
 		if (nameString == "") {
 			if (target instanceof VesselEventVisit) {
 				nameString = ((VesselEventVisit) target).name();
+			}
+			if (target instanceof EndEvent) {
+				nameString = ((EndEvent) target).name();
 			}
 		}
 		final String message;
@@ -93,7 +97,7 @@ public class CapacityViolationConstraint extends AbstractModelMultiConstraint {
 					
 					message = String.format("Volume issue: [%s] cooldown is required%s in schedule but is not permitted at load", marketName, vesselName);
 				} else {
-					message = String.format("Volume issue: cooldown is required in schedule but is not permitted at load %s", nameString);
+					message = String.format("Volume issue: %s cooldown is required in schedule but is not permitted at load", nameString);
 				}
 			} else if (type == CapacityViolationType.VESSEL_CAPACITY) {
 				message = String.format("Schedule requires exceeding vessel capacity at load %s", nameString);

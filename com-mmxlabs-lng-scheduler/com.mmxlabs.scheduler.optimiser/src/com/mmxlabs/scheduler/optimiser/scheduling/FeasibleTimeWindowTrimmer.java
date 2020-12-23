@@ -621,31 +621,35 @@ public class FeasibleTimeWindowTrimmer {
 								// 3am?
 
 								PanamaPeriod panamaPeriod;
-								if (latestPanamaTime > panamaBookingsProvider.getRelaxedBoundary()) {
-									panamaPeriod = PanamaPeriod.Beyond;
-									// For windows crossing boundaries we need to ensure the northbound idle days
-									// are taken into account but are not enforced yet.
-									// The price based trimmer (which we expect to be used with panama) will refine
-									// this further later on
-									if (windowStartTime[index - 1] + toCanal <= panamaBookingsProvider.getRelaxedBoundary()) {
-										// Reclassify southbound voyages as relaxed. Northbound we leave for the price
-										// based trimmer
-										if (northbound || this.panamaBookingsHelper.isSouthboundIdleTimeRuleEnabled()) {
-											final int panamaIdleTime = getMaxIdleDays(northbound) * 24;
-											currentPortTimeWindowsRecord.setSlotNextVoyageOptions(prevPortSlot, AvailableRouteChoices.OPTIMAL, PanamaPeriod.Beyond);
-											// Notify price based trimmer of variable choice
-											currentPortTimeWindowsRecord.setSlotAdditionalPanamaDetails(p_prevPortSlot, true, panamaIdleTime);
-										} else {
-											// Voyage could start in the relaxed period, so assume relaxed.
-											panamaPeriod = PanamaPeriod.Relaxed;
-										}
-
-									} else {
-									}
-								} else if (latestPanamaTime > panamaBookingsProvider.getStrictBoundary()) {
+								if (panamaBookingsProvider.getRelaxedBoundary() == 0 && panamaBookingsProvider.getStrictBoundary() == 0) {
 									panamaPeriod = PanamaPeriod.Relaxed;
 								} else {
-									panamaPeriod = PanamaPeriod.Strict;
+									if (latestPanamaTime > panamaBookingsProvider.getRelaxedBoundary()) {
+										panamaPeriod = PanamaPeriod.Beyond;
+										// For windows crossing boundaries we need to ensure the northbound idle days
+										// are taken into account but are not enforced yet.
+										// The price based trimmer (which we expect to be used with panama) will refine
+										// this further later on
+										if (windowStartTime[index - 1] + toCanal <= panamaBookingsProvider.getRelaxedBoundary()) {
+											// Reclassify southbound voyages as relaxed. Northbound we leave for the price
+											// based trimmer
+											if (northbound || this.panamaBookingsHelper.isSouthboundIdleTimeRuleEnabled()) {
+												final int panamaIdleTime = getMaxIdleDays(northbound) * 24;
+												currentPortTimeWindowsRecord.setSlotNextVoyageOptions(prevPortSlot, AvailableRouteChoices.OPTIMAL, PanamaPeriod.Beyond);
+												// Notify price based trimmer of variable choice
+												currentPortTimeWindowsRecord.setSlotAdditionalPanamaDetails(p_prevPortSlot, true, panamaIdleTime);
+											} else {
+												// Voyage could start in the relaxed period, so assume relaxed.
+												panamaPeriod = PanamaPeriod.Relaxed;
+											}
+
+										} else {
+										}
+									} else if (latestPanamaTime > panamaBookingsProvider.getStrictBoundary()) {
+										panamaPeriod = PanamaPeriod.Relaxed;
+									} else {
+										panamaPeriod = PanamaPeriod.Strict;
+									}
 								}
 								final ECanalEntry panamaEntry = routeOptionEntry;
 								boolean bookingAllocated = false;
