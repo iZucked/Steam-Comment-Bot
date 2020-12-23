@@ -60,25 +60,17 @@ public class AllowedVesselPermissionConstraintChecker implements IPairwiseConstr
 		return name;
 	}
 
-	public boolean checkSequence(@NonNull final ISequence sequence, @NonNull final IResource resource) {
+	public boolean checkSequence(@NonNull final ISequence sequence, @NonNull final IResource resource, final List<String> messages) {
 		for (final ISequenceElement element : sequence) {
-			if (!checkElement(element, resource)) {
+			if (!checkElement(element, resource, messages)) {
 				return false; // fail fast.
 			}
 		}
 		return true;
 	}
 
-	/*
-	 * This is a fail-fast version of the method below
-	 */
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources) {
-		return checkConstraints(sequences, changedResources, null);
-	}
-
-	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, @Nullable final List<String> messages) {
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, @NonNull final List<@NonNull String> messages) {
 		final Collection<@NonNull IResource> loopResources;
 		if (changedResources == null) {
 			loopResources = sequences.getResources();
@@ -93,22 +85,24 @@ public class AllowedVesselPermissionConstraintChecker implements IPairwiseConstr
 				continue;
 			}
 			final ISequence sequence = sequences.getSequence(resource);
-			if (!checkSequence(sequence, resource)) {
+			if (!checkSequence(sequence, resource, messages)) {
 				return false;
 			}
 		}
 
+		if (valid) {
+			messages.add(String.format("%s : all sequences satisfied the constraint.", this.name));
+		}
 		return valid;
 	}
 
 	@Override
-	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
-
-		return checkElement(first, resource) && checkElement(second, resource);
+	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource, final List<String> messages) {
+		return checkElement(first, resource, messages) && checkElement(second, resource, messages);
 	}
 
 	@Override
-	public boolean checkElement(final @NonNull ISequenceElement element, final @NonNull IResource resource) {
+	public boolean checkElement(final @NonNull ISequenceElement element, final @NonNull IResource resource, final @NonNull List<@NonNull String> messages) {
 		// Skip these element types
 		if (portTypeProvider.getPortType(element) == PortType.Start) {
 			return true;
@@ -129,16 +123,22 @@ public class AllowedVesselPermissionConstraintChecker implements IPairwiseConstr
 			vessel = vesselAvailability.getVessel();
 		} else if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER || vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
 			vessel = vesselAvailability.getVessel();
+			final PortType type = portTypeProvider.getPortType(element);
 			// Vessel events should not be moved onto spot charters
-			if (portTypeProvider.getPortType(element) == PortType.DryDock //
-					|| portTypeProvider.getPortType(element) == PortType.Maintenance //
-					|| portTypeProvider.getPortType(element) == PortType.CharterOut //
+			if (type == PortType.DryDock //
+					|| type == PortType.Maintenance //
+					|| type == PortType.CharterOut //
 			) {
+				messages.add(String.format("%s : Vessel %s is a spot charter and should not have % in the schedule.", this.name, vessel.getName(), type.toString()));
 				return false;
 			}
 		} else if (vesselAvailability.getVesselInstanceType().isNonShipped()) {
 			vessel = nominatedVesselProvider.getNominatedVessel(resource);
 		}
-		return allowedVesselProvider.isPermittedOnVessel(portSlot, vessel);
+		final boolean result = allowedVesselProvider.isPermittedOnVessel(portSlot, vessel);
+		if (!result) {
+			messages.add(String.format("%s: Slot %s is not allowed on vessel %s", this.name, portSlot.getId(), vessel.getName()));
+		}
+		return result;
 	}
 }

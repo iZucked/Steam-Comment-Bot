@@ -41,12 +41,7 @@ public final class ResourceAllocationConstraintChecker implements IPairwiseConst
 	}
 
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources) {
-		return checkConstraints(sequences, changedResources, null);
-	}
-
-	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, @Nullable final List<String> messages) {
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, final List<String> messages) {
 
 		final Collection<@NonNull IResource> loopResources;
 		if (changedResources == null) {
@@ -74,15 +69,11 @@ public final class ResourceAllocationConstraintChecker implements IPairwiseConst
 	 * @param messages
 	 * @return
 	 */
-	private boolean checkSequence(@NonNull final IResource resource, @NonNull final ISequence sequence, @Nullable final List<String> messages) {
+	private boolean checkSequence(@NonNull final IResource resource, @NonNull final ISequence sequence, final List<String> messages) {
 
 		for (final ISequenceElement t : sequence) {
 			assert t != null;
-			if (!checkElement(t, resource)) {
-				if (messages != null) {
-					final String msg = String.format("Element (%s) is not permitted to be allocated to resource (%s)", t, resource);
-					messages.add(msg);
-				}
+			if (!checkElement(t, resource, messages)) {
 				return false;
 			}
 		}
@@ -97,21 +88,26 @@ public final class ResourceAllocationConstraintChecker implements IPairwiseConst
 	}
 
 	@Override
-	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
-
-		return checkElement(first, resource) && checkElement(second, resource);
+	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource, final List<String> messages) {
+		final boolean result = checkElement(first, resource, messages) && checkElement(second, resource, messages);
+		if (!result)
+			messages.add(explain(first, second, resource));
+		return result;
 	}
 
 	@Override
-	public final boolean checkElement(@NonNull final ISequenceElement element, @NonNull final IResource resource) {
+	public final boolean checkElement(@NonNull final ISequenceElement element, @NonNull final IResource resource, final List<String> messages) {
 
 		final Collection<IResource> resources = resourceAllocationConstraintDataComponentProvider.getAllowedResources(element);
-		return ((resources == null) || resources.contains(resource));
+		final boolean result = ((resources == null) || resources.contains(resource));
+		if (!result)
+			messages.add(String.format("%s: Element (%s) is not permitted to be allocated to resource (%s)", element, resource));
+		return result;
 	}
 
 	@Override
 	public String explain(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
 		final Collection<IResource> resources = resourceAllocationConstraintDataComponentProvider.getAllowedResources(first);
-		return "Resource: " + resource.getName() + ", first in " + resources + ", second in " + resourceAllocationConstraintDataComponentProvider.getAllowedResources(second);
+		return this.name + ": Resource: " + resource.getName() + ", first in " + resources + ", second in " + resourceAllocationConstraintDataComponentProvider.getAllowedResources(second);
 	}
 }

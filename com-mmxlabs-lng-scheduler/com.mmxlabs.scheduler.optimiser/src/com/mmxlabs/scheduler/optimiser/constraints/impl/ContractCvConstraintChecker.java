@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
 
+import java.util.List;
+
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Inject;
@@ -34,7 +36,7 @@ public class ContractCvConstraintChecker extends AbstractPairwiseConstraintCheck
 	}
 
 	@Override
-	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
+	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource, final List<String> messages) {
 		final PortType firstType = portTypeProvider.getPortType(first);
 		final PortType secondType = portTypeProvider.getPortType(second);
 
@@ -50,8 +52,12 @@ public class ContractCvConstraintChecker extends AbstractPairwiseConstraintCheck
 			}
 
 			final int cv = loadSlot.getCargoCVValue();
+			final boolean result = (dischargeSlot.getMinCvValue() <= cv && dischargeSlot.getMaxCvValue() >= cv);
+			if (!result) {
+				messages.add(explain(first, second, resource));
+			}
 
-			return (dischargeSlot.getMinCvValue() <= cv && dischargeSlot.getMaxCvValue() >= cv);
+			return result;
 		}
 
 		return true;

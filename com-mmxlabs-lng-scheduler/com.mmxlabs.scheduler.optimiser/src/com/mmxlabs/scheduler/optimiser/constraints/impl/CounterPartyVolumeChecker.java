@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -74,7 +75,7 @@ public class CounterPartyVolumeChecker implements IPairwiseConstraintChecker, II
 	private Set<Pair<IPortSlot, IPortSlot>> pairing = new HashSet();
 
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources) {
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, @NonNull final List<@NonNull String> messages) {
 
 		final Collection<@NonNull IResource> loopResources;
 		if (changedResources == null) {
@@ -85,14 +86,14 @@ public class CounterPartyVolumeChecker implements IPairwiseConstraintChecker, II
 
 		for (final IResource resource : loopResources) {
 			final ISequence sequence = sequences.getSequence(resource);
-			if (!checkSequence(sequence, resource)) {
+			if (!checkSequence(sequence, resource, messages)) {
 				return false;
 			}
 		}
 		return true;
 	}
 
-	private boolean checkSequence(@NonNull final ISequence sequence, @NonNull final IResource resource) {
+	private boolean checkSequence(@NonNull final ISequence sequence, @NonNull final IResource resource, final List<String> messages) {
 		final Iterator<ISequenceElement> iter = sequence.iterator();
 		ISequenceElement prev = null;
 		ISequenceElement cur = null;
@@ -101,7 +102,7 @@ public class CounterPartyVolumeChecker implements IPairwiseConstraintChecker, II
 			prev = cur;
 			cur = iter.next();
 			if (prev != null && cur != null) {
-				if (!checkPairwiseConstraint(prev, cur, resource)) {
+				if (!checkPairwiseConstraint(prev, cur, resource, messages)) {
 					return false;
 				}
 			}
@@ -109,12 +110,8 @@ public class CounterPartyVolumeChecker implements IPairwiseConstraintChecker, II
 		return true;
 	}
 
-	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, @Nullable final List<String> messages) {
-		return checkConstraints(sequences, changedResources);
-	}
-
-	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource, final boolean record) {
+	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource, final boolean record,
+			final List<String> messages) {
 
 		final IPortSlot slot1 = portSlotProvider.getPortSlot(first);
 		final IPortSlot slot2 = portSlotProvider.getPortSlot(second);
@@ -141,20 +138,33 @@ public class CounterPartyVolumeChecker implements IPairwiseConstraintChecker, II
 					// load min >= discharge min
 					final long minLoadVolume = vesselCapacityInM3 == 0 ? load.getMinLoadVolumeMMBTU()
 							: Math.min(load.getMinLoadVolumeMMBTU(), Calculator.convertM3ToMMBTu(vesselCapacityInM3, load.getCargoCVValue()));
-					final boolean minLoadLessThanMinDischarge = minLoadVolume < discharge.getMinDischargeVolumeMMBTU(load.getCargoCVValue());
+					final long minDischargeVolume = discharge.getMinDischargeVolumeMMBTU(load.getCargoCVValue());
+					final boolean minLoadLessThanMinDischarge = minLoadVolume < minDischargeVolume;
 					if (minLoadLessThanMinDischarge) {
 						if (record) {
 							pairing.add(thisPair);
 						} else {
+							messages.add(String.format(
+									"%s: Counterparty volume nomination for buy %s and sell %s. Min load volume (%d) "
+									+ "is less than min discharge volume (%d). Nominated vessel (%s) capacity is %d"
+									, this.name, load.getId(), discharge.getId(), minLoadVolume, minDischargeVolume, 
+									nominatedVessel == null? "N/A" : nominatedVessel.getName(), vesselCapacityInM3));
 							return false;
 						}
 					}
 					// load max <= discharge max
-					final boolean maxLoadGreaterThanMaxDischarge = load.getMaxLoadVolumeMMBTU() > discharge.getMaxDischargeVolumeMMBTU(load.getCargoCVValue());
+					final long maxDischargeVolume = discharge.getMaxDischargeVolumeMMBTU(load.getCargoCVValue());
+					final long maxLoadVolume = load.getMaxLoadVolumeMMBTU();
+					final boolean maxLoadGreaterThanMaxDischarge = maxLoadVolume > maxDischargeVolume;
 					if (maxLoadGreaterThanMaxDischarge) {
 						if (record) {
 							pairing.add(thisPair);
 						} else {
+							messages.add(String.format(
+									"%s: Counterparty volume nomination for buy %s and sell %s. Max load volume (%d) "
+									+ "is greater than max discharge volume (%d). Nominated vessel (%s) capacity is %d"
+									, this.name, load.getId(), discharge.getId(), maxLoadVolume, maxDischargeVolume, 
+									nominatedVessel == null? "N/A" : nominatedVessel.getName(), vesselCapacityInM3));
 							return false;
 						}
 					}
@@ -165,7 +175,7 @@ public class CounterPartyVolumeChecker implements IPairwiseConstraintChecker, II
 	}
 
 	@Override
-	public void sequencesAccepted(@NonNull ISequences rawSequences, @NonNull ISequences fullSequences) {
+	public void sequencesAccepted(@NonNull ISequences rawSequences, @NonNull ISequences fullSequences, @NonNull final List<String> messages) {
 		pairing.clear();
 		final Collection<@NonNull IResource> loopResources = rawSequences.getResources();
 
@@ -176,13 +186,13 @@ public class CounterPartyVolumeChecker implements IPairwiseConstraintChecker, II
 			}
 			final ISequence sequence = rawSequences.getSequence(resource);
 			if (sequence.size() == 4) {
-				checkPairwiseConstraint(sequence.get(1), sequence.get(2), resource, true);
+				checkPairwiseConstraint(sequence.get(1), sequence.get(2), resource, true, messages);
 			}
 		}
 	}
 
 	@Override
-	public boolean checkPairwiseConstraint(@NonNull ISequenceElement first, @NonNull ISequenceElement second, @NonNull IResource resource) {
-		return checkPairwiseConstraint(first, second, resource, false);
+	public boolean checkPairwiseConstraint(@NonNull ISequenceElement first, @NonNull ISequenceElement second, @NonNull IResource resource, @NonNull final List<@NonNull String> messages) {
+		return checkPairwiseConstraint(first, second, resource, false, messages);
 	}
 }

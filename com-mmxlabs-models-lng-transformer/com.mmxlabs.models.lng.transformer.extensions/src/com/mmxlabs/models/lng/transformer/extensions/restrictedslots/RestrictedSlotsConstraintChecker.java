@@ -39,11 +39,6 @@ public class RestrictedSlotsConstraintChecker implements IPairwiseConstraintChec
 	}
 
 	@Override
-	public boolean checkConstraints(final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources) {
-		return checkConstraints(sequences, changedResources, null);
-	}
-
-	@Override
 	public boolean checkConstraints(final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, final List<String> messages) {
 
 		final Collection<@NonNull IResource> loopResources;
@@ -58,7 +53,7 @@ public class RestrictedSlotsConstraintChecker implements IPairwiseConstraintChec
 			ISequenceElement prev = null;
 			for (final ISequenceElement current : sequence) {
 				if (prev != null) {
-					if (!checkPairwiseConstraint(prev, current, resource)) {
+					if (!checkPairwiseConstraint(prev, current, resource, messages)) {
 						return false;
 					}
 				}
@@ -75,10 +70,13 @@ public class RestrictedSlotsConstraintChecker implements IPairwiseConstraintChec
 	}
 
 	@Override
-	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
+	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource, final List<String> messages) {
 
 		final boolean result = !restrictedSlotsProvider.getRestrictedFollowerElements(first).contains(second)
 				&& !restrictedSlotsProvider.getRestrictedPrecedingElements(second).contains(first);
+		if (!result)
+			messages.add(String.format("%s: Slot on sequence element %s is not allowed to be wired to the slot on the sequence element %s!", 
+					this.name, first.getName(), second.getName()));
 		return result;
 	}
 

@@ -5,6 +5,7 @@
 package com.mmxlabs.lingo.its.tests.microcases;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.Assertions;
@@ -53,13 +54,17 @@ public class TravelTimeConstraintCheckerTest extends AbstractMicroTestCase {
 		scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(port1, port2, 1500, 2000, 2000, true);
 		vessel.setMaxSpeed(15.0);
 
-		final DryDockEvent event1 = cargoModelBuilder.makeDryDockEvent("drydock1", LocalDateTime.of(2015, 12, 1, 0, 0, 0), LocalDateTime.of(2015, 12, 1, 0, 0, 0), port1) //
+		final DryDockEvent event1 = cargoModelBuilder.makeDryDockEvent("drydock1", 
+				LocalDateTime.of(2015, 12, 1, 0, 0, 0), 
+				LocalDateTime.of(2015, 12, 1, 0, 0, 0), port1) //
 				.withDurationInDays(1) //
 				.withVesselAssignment(vesselAvailability, 1) //
 				.build();
 
 		final DryDockEvent event2 = cargoModelBuilder
-				.makeDryDockEvent("drydock2", LocalDateTime.of(2015, 12, 1, 0, 0, 0).plusHours(24 + 100), LocalDateTime.of(2015, 12, 1, 0, 0, 0).plusHours(24 + 100), port2) //
+				.makeDryDockEvent("drydock2", 
+						LocalDateTime.of(2015, 12, 1, 0, 0, 0).plusHours(24 + 100), 
+						LocalDateTime.of(2015, 12, 1, 0, 0, 0).plusHours(24 + 100), port2) //
 				.withDurationInDays(1) //
 				.withVesselAssignment(vesselAvailability, 2) //
 				.build();
@@ -70,8 +75,12 @@ public class TravelTimeConstraintCheckerTest extends AbstractMicroTestCase {
 
 			final TravelTimeConstraintChecker checker = MicroTestUtils.getChecker(scenarioToOptimiserBridge, TravelTimeConstraintChecker.class);
 			checker.setMaxLateness(0);
-			Assertions.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event1, event2), null));
-			Assertions.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event2, event1), null));
+			Assertions.assertTrue(checker.checkConstraints(
+					SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event1, event2),
+					null, new ArrayList<>()));
+			Assertions.assertFalse(checker.checkConstraints(
+					SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event2, event1),
+					null, new ArrayList<>()));
 		});
 	}
 
@@ -96,14 +105,18 @@ public class TravelTimeConstraintCheckerTest extends AbstractMicroTestCase {
 		scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(port1, port2, 1500, 2000, 2000, true);
 		vessel.setMaxSpeed(15.0);
 
-		final DryDockEvent event1 = cargoModelBuilder.makeDryDockEvent("drydock1", LocalDateTime.of(2015, 12, 1, 0, 0, 0), LocalDateTime.of(2015, 12, 1, 0, 0, 0), port1) //
+		final DryDockEvent event1 = cargoModelBuilder.makeDryDockEvent("drydock1", 
+				LocalDateTime.of(2015, 12, 1, 0, 0, 0), 
+				LocalDateTime.of(2015, 12, 1, 0, 0, 0), port1) //
 				.withDurationInDays(1) //
 				.withVesselAssignment(vesselAvailability, 1) //
 				.build();
 
 		// Will be 1 hour late
 		final DryDockEvent event2 = cargoModelBuilder
-				.makeDryDockEvent("drydock2", LocalDateTime.of(2015, 12, 1, 0, 0, 0).plusHours(24 + 99), LocalDateTime.of(2015, 12, 1, 0, 0, 0).plusHours(24 + 99), port2) //
+				.makeDryDockEvent("drydock2", 
+						LocalDateTime.of(2015, 12, 1, 0, 0, 0).plusHours(24 + 99), 
+						LocalDateTime.of(2015, 12, 1, 0, 0, 0).plusHours(24 + 99), port2) //
 				.withDurationInDays(1) //
 				.withVesselAssignment(vesselAvailability, 2) //
 				.build();
@@ -114,9 +127,13 @@ public class TravelTimeConstraintCheckerTest extends AbstractMicroTestCase {
 
 			final TravelTimeConstraintChecker checker = MicroTestUtils.getChecker(scenarioToOptimiserBridge, TravelTimeConstraintChecker.class);
 			checker.setMaxLateness(0);
-			Assertions.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event1, event2), null));
+			Assertions.assertFalse(checker.checkConstraints(
+					SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event1, event2),
+					null, new ArrayList<>()));
 			checker.setMaxLateness(1);
-			Assertions.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event1, event2), null));
+			Assertions.assertTrue(checker.checkConstraints(
+					SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event1, event2),
+					null, new ArrayList<>()));
 		});
 	}
 
@@ -144,14 +161,18 @@ public class TravelTimeConstraintCheckerTest extends AbstractMicroTestCase {
 			p.setExtraTransitTime(36);
 		}
 
-		final DryDockEvent event1 = cargoModelBuilder.makeDryDockEvent("drydock1", LocalDateTime.of(2015, 12, 1, 0, 0, 0), LocalDateTime.of(2015, 12, 1, 0, 0, 0), port1) //
+		final DryDockEvent event1 = cargoModelBuilder.makeDryDockEvent("drydock1", 
+				LocalDateTime.of(2015, 12, 1, 0, 0, 0), 
+				LocalDateTime.of(2015, 12, 1, 0, 0, 0), port1) //
 				.withDurationInDays(1) //
 				.withVesselAssignment(vesselAvailability, 1) //
 				.build();
 
 		// Will be 1 hour late
 		final DryDockEvent event2 = cargoModelBuilder
-				.makeDryDockEvent("drydock2", LocalDateTime.of(2015, 12, 1, 0, 0, 0).plusHours(24 + 36 + 99), LocalDateTime.of(2015, 12, 1, 0, 0, 0).plusHours(24 + 36 + 99), port2) //
+				.makeDryDockEvent("drydock2", 
+						LocalDateTime.of(2015, 12, 1, 0, 0, 0).plusHours(24 + 36 + 99), 
+						LocalDateTime.of(2015, 12, 1, 0, 0, 0).plusHours(24 + 36 + 99), port2) //
 				.withDurationInDays(1) //
 				.withVesselAssignment(vesselAvailability, 2) //
 				.build();
@@ -162,9 +183,11 @@ public class TravelTimeConstraintCheckerTest extends AbstractMicroTestCase {
 
 			final TravelTimeConstraintChecker checker = MicroTestUtils.getChecker(scenarioToOptimiserBridge, TravelTimeConstraintChecker.class);
 			checker.setMaxLateness(0);
-			Assertions.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event1, event2), null));
+			Assertions.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(
+					scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event1, event2), null, new ArrayList<>()));
 			checker.setMaxLateness(1);
-			Assertions.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event1, event2), null));
+			Assertions.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(
+					scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event1, event2), null, new ArrayList<>()));
 		});
 	}
 }

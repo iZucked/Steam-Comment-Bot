@@ -54,11 +54,6 @@ public class PortShipSizeConstraintChecker implements IPairwiseConstraintChecker
 	}
 
 	@Override
-	public boolean checkConstraints(final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources) {
-		return checkConstraints(sequences, changedResources, null);
-	}
-
-	@Override
 	public boolean checkConstraints(final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, final List<String> messages) {
 		final Collection<@NonNull IResource> loopResources;
 		
@@ -76,7 +71,7 @@ public class PortShipSizeConstraintChecker implements IPairwiseConstraintChecker
 			
 			final ISequence sequence = sequences.getSequence(resource);
 			for (final ISequenceElement current : sequence) {
-				if (!checkVesselElementConstraint(vessel, current)) {
+				if (!checkVesselElementConstraint(vessel, current, messages)) {
 					return false;
 				}
 			}
@@ -103,10 +98,10 @@ public class PortShipSizeConstraintChecker implements IPairwiseConstraintChecker
 		return vessel;
 	}
 	
-	private boolean checkResourceElementConstraint(@NonNull final IResource resource, @NonNull final ISequenceElement sequenceElement) {
+	private boolean checkResourceElementConstraint(@NonNull final IResource resource, @NonNull final ISequenceElement sequenceElement, List<String> messages) {
 		final IVessel vessel = getVessel(resource);
 		if (vessel != null) {
-			return checkVesselElementConstraint(vessel, sequenceElement);
+			return checkVesselElementConstraint(vessel, sequenceElement, messages);
 		}
 		else {
 			//If it a FOB or DES sequence, return true.
@@ -114,13 +109,16 @@ public class PortShipSizeConstraintChecker implements IPairwiseConstraintChecker
 		}
 	}
 	
-	private boolean checkVesselElementConstraint(@NonNull final IVessel vessel, @NonNull final ISequenceElement sequenceElement) {
-		return this.portShipSizeProvider.isCompatible(vessel, sequenceElement);
+	private boolean checkVesselElementConstraint(@NonNull final IVessel vessel, @NonNull final ISequenceElement sequenceElement, List<String> messages) {
+		final boolean result = this.portShipSizeProvider.isCompatible(vessel, sequenceElement);
+		if (!result)
+			messages.add(String.format("%s: Sequence element %s port cannot accept vessel %s due to size restriction!", this.name, sequenceElement.getName(), vessel.getName()));
+		return result;
 	}
 
 	@Override
-	public boolean checkPairwiseConstraint(@NonNull ISequenceElement first, @NonNull ISequenceElement second, @NonNull IResource resource) {
-		return checkResourceElementConstraint(resource, first) && checkResourceElementConstraint(resource, second);
+	public boolean checkPairwiseConstraint(@NonNull ISequenceElement first, @NonNull ISequenceElement second, @NonNull IResource resource, List<String> messages) {
+		return checkResourceElementConstraint(resource, first, messages) && checkResourceElementConstraint(resource, second, messages);
 	}
 
 	@Override
@@ -129,7 +127,7 @@ public class PortShipSizeConstraintChecker implements IPairwiseConstraintChecker
 	}
 
 	@Override
-	public boolean checkElement(@NonNull ISequenceElement element, @NonNull IResource resource) {
-		return checkResourceElementConstraint(resource, element);
+	public boolean checkElement(@NonNull ISequenceElement element, @NonNull IResource resource, List<String> messages) {
+		return checkResourceElementConstraint(resource, element, messages);
 	}
 }

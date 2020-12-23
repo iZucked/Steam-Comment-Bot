@@ -4,12 +4,15 @@
  */
 package com.mmxlabs.scheduler.optimiser.actionableset;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -31,7 +34,7 @@ import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.FitnessCalculator;
 
 public class ActionableSetMover {
-
+	protected static final Logger LOG = LoggerFactory.getLogger(ActionableSetMover.class);
 	@Inject
 	@NonNull
 	private ISequencesManipulator sequencesManipulator;
@@ -61,14 +64,17 @@ public class ActionableSetMover {
 		sequencesManipulator.manipulate(currentFullSequences);
 
 		failedInitialConstraintCheckers = false;
-
+		final List<String> messages = new ArrayList<>();
+		messages.add(String.format("%s: initSearchProcesses", this.getClass().getName()));
 		// Apply hard constraint checkers
 		for (final IConstraintChecker checker : constraintCheckers) {
-			if (checker.checkConstraints(currentFullSequences, null) == false) {
+			if (!checker.checkConstraints(currentFullSequences, null, messages)) {
 				failedInitialConstraintCheckers = true;
 				break;
 			}
 		}
+		if(!messages.isEmpty())
+			messages.stream().forEach(LOG::debug);
 
 		@Nullable
 		final IEvaluationState evaluationState = evaluationHelper.evaluateSequence(currentFullSequences);
@@ -124,9 +130,13 @@ public class ActionableSetMover {
 
 		final Collection<@NonNull IResource> changedResources = failedInitialConstraintCheckers ? null : move.getAffectedResources();
 
+		final List<String> messages = new ArrayList<>();
+		messages.add(String.format("%s: search", this.getClass().getName()));
 		// Apply hard constraint checkers
 		for (final IConstraintChecker checker : constraintCheckers) {
-			if (checker.checkConstraints(currentFullSequences, changedResources) == false) {
+			if (!checker.checkConstraints(currentFullSequences, changedResources, messages)) {
+				if (!messages.isEmpty())
+					messages.stream().forEach(LOG::debug);
 				return new ActionableSetJobState(rawSequences, Long.MAX_VALUE, null, ActionableSetJobState.Status.Fail, seed, note, state);
 			}
 		}

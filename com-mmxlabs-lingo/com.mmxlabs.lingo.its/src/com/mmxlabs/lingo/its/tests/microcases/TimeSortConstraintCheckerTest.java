@@ -5,6 +5,7 @@
 package com.mmxlabs.lingo.its.tests.microcases;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.Assertions;
@@ -56,8 +57,12 @@ public class TimeSortConstraintCheckerTest extends AbstractMicroTestCase {
 
 			final TimeSortConstraintChecker checker = MicroTestUtils.getChecker(scenarioToOptimiserBridge, TimeSortConstraintChecker.class);
 
-			Assertions.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event1, event2), null));
-			Assertions.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event2, event1), null));
+			Assertions.assertTrue(checker.checkConstraints(
+					SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event1, event2),
+					null, new ArrayList<>()));
+			Assertions.assertFalse(checker.checkConstraints(
+					SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event2, event1),
+					null, new ArrayList<>()));
 		});
 	}
 
@@ -71,11 +76,15 @@ public class TimeSortConstraintCheckerTest extends AbstractMicroTestCase {
 
 		@NonNull
 		final Port dischargePort = portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT);
-		final DryDockEvent event1 = cargoModelBuilder.makeDryDockEvent("drydock1", LocalDateTime.of(2015, 12, 1, 0, 0, 0), LocalDateTime.of(2015, 12, 2, 0, 0, 0), dischargePort) //
+		final DryDockEvent event1 = cargoModelBuilder.makeDryDockEvent("drydock1", 
+				LocalDateTime.of(2015, 12, 1, 0, 0, 0), 
+				LocalDateTime.of(2015, 12, 2, 0, 0, 0), dischargePort) //
 				.withDurationInDays(0) //
 				.withVesselAssignment(vesselAvailability, 1) //
 				.build();
-		final DryDockEvent event2 = cargoModelBuilder.makeDryDockEvent("drydock2", LocalDateTime.of(2015, 12, 1, 12, 0, 0), LocalDateTime.of(2015, 12, 2, 12, 0, 0), dischargePort) //
+		final DryDockEvent event2 = cargoModelBuilder.makeDryDockEvent("drydock2", 
+				LocalDateTime.of(2015, 12, 1, 12, 0, 0), 
+				LocalDateTime.of(2015, 12, 2, 12, 0, 0), dischargePort) //
 				.withDurationInDays(0) //
 				.withVesselAssignment(vesselAvailability, 2) //
 				.build();
@@ -86,8 +95,12 @@ public class TimeSortConstraintCheckerTest extends AbstractMicroTestCase {
 
 			final TimeSortConstraintChecker checker = MicroTestUtils.getChecker(scenarioToOptimiserBridge, TimeSortConstraintChecker.class);
 
-			Assertions.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event1, event2), null));
-			Assertions.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event2, event1), null));
+			Assertions.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(
+					scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event1, event2),
+					null, new ArrayList<>()));
+			Assertions.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(
+					scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event2, event1),
+					null, new ArrayList<>()));
 		});
 	}
 }

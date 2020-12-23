@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
 
+import java.util.List;
+
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Inject;
@@ -38,7 +40,7 @@ public class SpotToSpotConstraintChecker extends AbstractPairwiseConstraintCheck
 	}
 
 	@Override
-	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
+	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource, final List<String> messages) {
 		final IPortSlot firstSlot = portSlotProvider.getPortSlot(first);
 		final IPortSlot secondSlot = portSlotProvider.getPortSlot(second);
 
@@ -48,6 +50,7 @@ public class SpotToSpotConstraintChecker extends AbstractPairwiseConstraintCheck
 				return true;
 			}
 			if (spotMarketSlots.isSpotMarketSlot(first) && spotMarketSlots.isSpotMarketSlot(second)) {
+				messages.add(explain(first, second, resource));
 				return false;
 			} else {
 				return true;
@@ -64,12 +67,12 @@ public class SpotToSpotConstraintChecker extends AbstractPairwiseConstraintCheck
 		if (firstSlot instanceof ILoadOption && secondSlot instanceof IDischargeOption) {
 			// If data is actualised (i.e. the event has occurred), we do not care
 			if (actualsDataProvider.hasActuals(firstSlot) && actualsDataProvider.hasActuals(secondSlot)) {
-				return String.format("load slot %s and discharge slot %s are actualised.", firstSlot.getId(), secondSlot.getId());
+				return String.format("%s: load slot %s and discharge slot %s are actualised.", this.name, firstSlot.getId(), secondSlot.getId());
 			}
 			if (spotMarketSlots.isSpotMarketSlot(first) && spotMarketSlots.isSpotMarketSlot(second)) {
-				return String.format("load slot %s and discharge slot %s are both spot markets.", firstSlot.getId(), secondSlot.getId());
+				return String.format("%s: load slot %s and discharge slot %s are both spot markets.", this.name, firstSlot.getId(), secondSlot.getId());
 			} else {
-				return String.format("load slot %s and discharge slot %s are not both spot markets.", firstSlot.getId(), secondSlot.getId());
+				return String.format("%s: load slot %s and discharge slot %s are not both spot markets.", this.name, firstSlot.getId(), secondSlot.getId());
 			}
 		}
 

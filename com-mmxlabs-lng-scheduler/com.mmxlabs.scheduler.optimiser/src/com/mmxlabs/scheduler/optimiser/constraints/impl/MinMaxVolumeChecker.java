@@ -59,7 +59,7 @@ public class MinMaxVolumeChecker implements IPairwiseConstraintChecker {
 	}
 
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources) {
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, final List<String> messages) {
 
 		final Collection<@NonNull IResource> loopResources;
 		if (changedResources == null) {
@@ -70,14 +70,14 @@ public class MinMaxVolumeChecker implements IPairwiseConstraintChecker {
 
 		for (final IResource resource : loopResources) {
 			final ISequence sequence = sequences.getSequence(resource);
-			if (!checkSequence(sequence, resource)) {
+			if (!checkSequence(sequence, resource, messages)) {
 				return false;
 			}
 		}
 		return true;
 	}
 
-	private boolean checkSequence(@NonNull final ISequence sequence, @NonNull final IResource resource) {
+	private boolean checkSequence(@NonNull final ISequence sequence, @NonNull final IResource resource, final List<String> messages) {
 		final Iterator<ISequenceElement> iter = sequence.iterator();
 		ISequenceElement prev = null;
 		ISequenceElement cur = null;
@@ -86,7 +86,7 @@ public class MinMaxVolumeChecker implements IPairwiseConstraintChecker {
 			prev = cur;
 			cur = iter.next();
 			if (prev != null && cur != null) {
-				if (!checkPairwiseConstraint(prev, cur, resource)) {
+				if (!checkPairwiseConstraint(prev, cur, resource, messages)) {
 					return false;
 				}
 			}
@@ -94,12 +94,7 @@ public class MinMaxVolumeChecker implements IPairwiseConstraintChecker {
 		return true;
 	}
 
-	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, @Nullable final List<String> messages) {
-		return checkConstraints(sequences, changedResources);
-	}
-
-	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
+	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource, final List<String> messages) {
 
 		final IPortSlot slot1 = portSlotProvider.getPortSlot(first);
 		final IPortSlot slot2 = portSlotProvider.getPortSlot(second);
@@ -119,10 +114,12 @@ public class MinMaxVolumeChecker implements IPairwiseConstraintChecker {
 			IDischargeOption discharge = (IDischargeOption) slot2;
 			if (Math.min(load.getMinLoadVolumeMMBTU(), Calculator.convertM3ToMMBTu(vesselAvailability.getVessel().getCargoCapacity(), load.getCargoCVValue())) > discharge.getMaxDischargeVolumeMMBTU(load.getCargoCVValue())) {
 				// min > max
+				messages.add(String.format("%s: Load %s min load volume is greater than discharge %s max discharge volume", this.name, load.getId(), discharge.getId()));
 				return false;
 			}
 			if (load.getMaxLoadVolumeMMBTU() < discharge.getMinDischargeVolumeMMBTU(load.getCargoCVValue())) {
-				// max < max
+				// max < min
+				messages.add(String.format("%s: Load %s max load volume is less than discharge %s min discharge volume", this.name, load.getId(), discharge.getId()));
 				return false;
 			}
 		}

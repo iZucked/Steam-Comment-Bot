@@ -49,7 +49,7 @@ public class MinMaxSlotGroupConstraintChecker implements IPairwiseConstraintChec
 	 * Note: this does not make sense for this constraint
 	 */
 	@Override
-	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
+	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource, final List<String> messages) {
 		return true;
 	}
 
@@ -59,7 +59,7 @@ public class MinMaxSlotGroupConstraintChecker implements IPairwiseConstraintChec
 	}
 
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources) {
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, final List<String> messages) {
 		final Set<ISequenceElement> unusedSet = getUnusedSet(sequences);
 		final List<ConstraintInfo<?, ?, IDischargeOption>> allMinDischargeGroupCounts = maxSlotCountConstraintProvider.getAllMinDischargeGroupCounts();
 		final List<ConstraintInfo<?, ?, IDischargeOption>> allMaxDischargeGroupCounts = maxSlotCountConstraintProvider.getAllMaxDischargeGroupCounts();
@@ -68,31 +68,30 @@ public class MinMaxSlotGroupConstraintChecker implements IPairwiseConstraintChec
 
 		for (final ConstraintInfo<?, ?, IDischargeOption> constraintInfo : allMinDischargeGroupCounts) {
 			if (constraintInfo.getSlots().stream().filter(s -> !unusedSet.contains(portSlotProvider.getElement(s))).count() < constraintInfo.getBound()) {
+				messages.add(String.format("%s: Some slots are not within min discharge group bound", this.name));
 				return false;
 			}
 		}
 		for (final ConstraintInfo<?, ?, IDischargeOption> constraintInfo : allMaxDischargeGroupCounts) {
 			if (constraintInfo.getSlots().stream().filter(s -> !unusedSet.contains(portSlotProvider.getElement(s))).count() > constraintInfo.getBound()) {
+				messages.add(String.format("%s: Some slots are not within max discharge group bound", this.name));
 				return false;
 			}
 		}
 		for (final ConstraintInfo<?, ?, ILoadOption> constraintInfo : allMinLoadGroupCounts) {
 			if (constraintInfo.getSlots().stream().filter(s -> !unusedSet.contains(portSlotProvider.getElement(s))).count() < constraintInfo.getBound()) {
+				messages.add(String.format("%s: Some slots are not within min load group bound", this.name));
 				return false;
 			}
 		}
 		for (final ConstraintInfo<?, ?, ILoadOption> constraintInfo : allMaxLoadGroupCounts) {
 			if (constraintInfo.getSlots().stream().filter(s -> !unusedSet.contains(portSlotProvider.getElement(s))).count() > constraintInfo.getBound()) {
+				messages.add(String.format("%s: Some slots are not within max load group bound", this.name));
 				return false;
 			}
 		}
 
 		return true;
-	}
-
-	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, @Nullable final List<String> messages) {
-		return checkConstraints(sequences, changedResources);
 	}
 
 	private Set<ISequenceElement> getUnusedSet(@NonNull final ISequences sequences) {

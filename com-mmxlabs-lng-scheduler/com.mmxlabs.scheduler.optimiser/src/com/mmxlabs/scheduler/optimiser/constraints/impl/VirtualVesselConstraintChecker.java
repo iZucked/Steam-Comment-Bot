@@ -64,12 +64,7 @@ public class VirtualVesselConstraintChecker implements IPairwiseConstraintChecke
 	}
 
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources) {
-		return checkConstraints(sequences, changedResources, null);
-	}
-
-	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, @Nullable final List<String> messages) {
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, final List<String> messages) {
 
 		final Collection<@NonNull IResource> loopResources;
 		if (changedResources == null) {
@@ -80,7 +75,7 @@ public class VirtualVesselConstraintChecker implements IPairwiseConstraintChecke
 		for (final IResource resource : loopResources) {
 			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 			if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE) {
-				if (isInvalid(resource, sequences.getSequence(resource))) {
+				if (isInvalid(resource, sequences.getSequence(resource), messages)) {
 					return false;
 				}
 			}
@@ -97,7 +92,7 @@ public class VirtualVesselConstraintChecker implements IPairwiseConstraintChecke
 	 *            - a sequence which should be on a virtual vessel (vessel instance type is VIRTUAL)
 	 * @return true if there is a problem with this sequence, false if the sequence is OK.
 	 */
-	private boolean isInvalid(@NonNull final IResource resource, @NonNull final ISequence sequence) {
+	private boolean isInvalid(@NonNull final IResource resource, @NonNull final ISequence sequence, final List<String> messages) {
 		if (sequence.size() == 2) {
 			return false;
 		}
@@ -109,7 +104,7 @@ public class VirtualVesselConstraintChecker implements IPairwiseConstraintChecke
 		for (final ISequenceElement element : sequence) {
 			assert element != null;
 			if (prevElement != null) {
-				if (!checkPairwiseConstraint(prevElement, element, resource)) {
+				if (!checkPairwiseConstraint(prevElement, element, resource, messages)) {
 					return true;
 				}
 				prevElement = element;
@@ -120,15 +115,17 @@ public class VirtualVesselConstraintChecker implements IPairwiseConstraintChecke
 	}
 
 	@Override
-	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
+	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource, final List<String> messages) {
 
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 		if (vesselAvailability.getVesselInstanceType() != VesselInstanceType.FOB_SALE && vesselAvailability.getVesselInstanceType() != VesselInstanceType.DES_PURCHASE) {
 
 			if (virtualVesselSlotProvider.getVesselAvailabilityForElement(first) != null) {
+				messages.add(String.format("%s: Sequence element %s has no vessel availability!", this.name, first.getName()));
 				return false;
 			}
 			if (virtualVesselSlotProvider.getVesselAvailabilityForElement(second) != null) {
+				messages.add(String.format("%s: Sequence element %s has no vessel availability!", this.name, second.getName()));
 				return false;
 			}
 
@@ -152,24 +149,29 @@ public class VirtualVesselConstraintChecker implements IPairwiseConstraintChecke
 			// DES Purchase
 			if (firstType == PortType.Start) {
 				if (first != startElement) {
+					messages.add(String.format("%s: Sequence element %s has wrong event order!", this.name, first.getName()));
 					return false;
 				}
 				if (second != elementForVessel) {
+					messages.add(String.format("%s: Sequence element %s has wrong event order!", this.name, second.getName()));
 					return false;
 				}
 				return true;
 			}
 			if (firstType == PortType.Load) {
 				if (first != elementForVessel) {
+					messages.add(String.format("%s: Sequence element %s has wrong event order!", this.name, first.getName()));
 					return false;
 				}
 				if (secondType != PortType.Discharge) {
+					messages.add(String.format("%s: Sequence element %s has wrong event order!", this.name, second.getName()));
 					return false;
 				}
 				return true;
 			}
 			if (firstType == PortType.Discharge) {
 				if (second != endElement) {
+					messages.add(String.format("%s: Sequence element %s has wrong event order!", this.name, second.getName()));
 					return false;
 				}
 				return true;
@@ -178,31 +180,31 @@ public class VirtualVesselConstraintChecker implements IPairwiseConstraintChecke
 			// FOB Sale
 			if (firstType == PortType.Start) {
 				if (first != startElement) {
+					messages.add(String.format("%s: Sequence element %s has wrong event order!", this.name, first.getName()));
 					return false;
 				}
 				if (secondType != PortType.Load) {
+					messages.add(String.format("%s: Sequence element %s has wrong event order!", this.name, second.getName()));
 					return false;
 				}
 				return true;
 			}
 			if (firstType == PortType.Load) {
 				if (second != elementForVessel) {
+					messages.add(String.format("%s: Sequence element %s has wrong event order!", this.name, second.getName()));
 					return false;
 				}
 				return true;
 			}
 			if (firstType == PortType.Discharge) {
 				if (second != endElement) {
+					messages.add(String.format("%s: Sequence element %s has wrong event order!", this.name, second.getName()));
 					return false;
 				}
 				return true;
 			}
 		}
+		messages.add(String.format("%s: Sequence element %s has failed the constraint check!", this.name, first.getName()));
 		return false;
-	}
-
-	@Override
-	public String explain(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
-		return null;
 	}
 }

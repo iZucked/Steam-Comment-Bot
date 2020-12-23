@@ -4,10 +4,14 @@
  */
 package com.mmxlabs.optimiser.lso.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
@@ -39,6 +43,8 @@ import com.mmxlabs.optimiser.lso.logging.LSOLogger;
  * 
  */
 public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
+	
+	protected static final Logger LOG = LoggerFactory.getLogger(DefaultLocalSearchOptimiser.class);
 
 	@Inject
 	protected IPhaseOptimisationData data;
@@ -108,9 +114,11 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		// Apply sequence manipulators
 		final IModifiableSequences potentialFullSequences = getSequenceManipulator().createManipulatedSequences(currentRawSequences);
 
+		final List<String> messages = new ArrayList<>();
+		messages.add(String.format("%s: start", this.getClass().getName()));
 		// Apply hard constraint checkers
 		for (final IConstraintChecker checker : getConstraintCheckers()) {
-			if (!checker.checkConstraints(potentialFullSequences, null)) {
+			if (!checker.checkConstraints(potentialFullSequences, null, messages)) {
 				// Set break point here!
 				// checker.checkConstraints(potentialFullSequences, null);
 
@@ -118,6 +126,8 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 				break;
 			}
 		}
+		if (!messages.isEmpty())
+			messages.stream().forEach(LOG::debug);
 		setStartTime(System.currentTimeMillis());
 
 		setNumberOfIterationsCompleted(0);
@@ -307,12 +317,14 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 
 	protected boolean applyHardConstraints(final @NonNull IModifiableSequences pinnedPotentialRawSequences, final @NonNull ISequences pinnedCurrentRawSequences, final IMove move,
 			final @NonNull ISequences potentialFullSequences) {
+		final List<String> messages = new ArrayList<>();
+		messages.add(String.format("%s: applyHardConstraints", this.getClass().getName()));
 		for (final IConstraintChecker checker : getConstraintCheckers()) {
 			// For constraint checker changed resources functions, if initial solution is invalid, we want to always perform a full constraint checker set of checks until we accept a valid
 			// solution
 			final Collection<@NonNull IResource> changedResources = failedInitialConstraintCheckers ? null : move.getAffectedResources();
 
-			if (!checker.checkConstraints(potentialFullSequences, changedResources)) {
+			if (!checker.checkConstraints(potentialFullSequences, changedResources, messages)) {
 				if (loggingDataStore != null) {
 					loggingDataStore.logFailedConstraints(checker, move);
 					if (DO_SEQUENCE_LOGGING) {
@@ -322,6 +334,9 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 				// Reject Move
 				updateSequences(pinnedCurrentRawSequences, pinnedPotentialRawSequences, move.getAffectedResources());
 				// Break out
+				
+				if (!messages.isEmpty())
+					messages.stream().forEach(LOG::debug);
 				return false;
 				// continue MAIN_LOOP;
 			}
@@ -373,7 +388,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 
 		// Prime IInitialSequencesConstraintCheckers with initial state
 		for (final IInitialSequencesConstraintChecker checker : getInitialSequencesConstraintCheckers()) {
-			checker.sequencesAccepted(currentRawSequences, fullSequences);
+			checker.sequencesAccepted(currentRawSequences, fullSequences, new ArrayList<>());
 		}
 
 		final IEvaluationState evaluationState = new EvaluationState();
@@ -398,7 +413,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 
 		// Prime IInitialSequencesConstraintCheckers with initial state
 		for (final IInitialSequencesConstraintChecker checker : getInitialSequencesConstraintCheckers()) {
-			checker.sequencesAccepted(initialSequences, fullSequences);
+			checker.sequencesAccepted(initialSequences, fullSequences, new ArrayList<>());
 		}
 	}
 

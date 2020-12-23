@@ -49,11 +49,6 @@ public class RestrictedElementsConstraintChecker implements IPairwiseConstraintC
 	}
 
 	@Override
-	public boolean checkConstraints(final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources) {
-		return checkConstraints(sequences, changedResources, null);
-	}
-
-	@Override
 	public boolean checkConstraints(final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, final List<String> messages) {
 
 		final Collection<@NonNull IResource> loopResources;
@@ -68,7 +63,7 @@ public class RestrictedElementsConstraintChecker implements IPairwiseConstraintC
 			ISequenceElement prev = null;
 			for (final ISequenceElement current : sequence) {
 				if (prev != null) {
-					if (!checkPairwiseConstraint(prev, current, resource)) {
+					if (!checkPairwiseConstraint(prev, current, resource, messages)) {
 						return false;
 					}
 				}
@@ -85,7 +80,7 @@ public class RestrictedElementsConstraintChecker implements IPairwiseConstraintC
 	}
 
 	@Override
-	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
+	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource, List<String> messages) {
 
 		final VesselInstanceType instanceType = vesselProvider.getVesselAvailability(resource).getVesselInstanceType();
 		if (instanceType == VesselInstanceType.ROUND_TRIP) {
@@ -99,6 +94,8 @@ public class RestrictedElementsConstraintChecker implements IPairwiseConstraintC
 		}
 
 		final boolean result = !restrictedElementsProvider.getRestrictedFollowerElements(first).contains(second) && !restrictedElementsProvider.getRestrictedPrecedingElements(second).contains(first);
+		if (!result)
+			messages.add(String.format("%s: Sequence element %s is restricted to follow/preceed the sequence element %s!", this.name, first.getName(), second.getName()));
 		return result;
 	}
 

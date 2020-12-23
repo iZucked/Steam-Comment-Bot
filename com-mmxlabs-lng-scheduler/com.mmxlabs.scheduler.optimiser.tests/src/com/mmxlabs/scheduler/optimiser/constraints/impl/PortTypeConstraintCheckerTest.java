@@ -80,7 +80,7 @@ public class PortTypeConstraintCheckerTest {
 		final Map<IResource, ISequence> m = CollectionsUtil.makeHashMap(r, sequence);
 		final Sequences sequences = new Sequences(CollectionsUtil.makeArrayList(r), m);
 
-		Assertions.assertTrue(checker.checkConstraints(sequences, null));
+		Assertions.assertTrue(checker.checkConstraints(sequences, null, new ArrayList<>()));
 	}
 
 	@Test
@@ -117,7 +117,7 @@ public class PortTypeConstraintCheckerTest {
 		final Map<IResource, ISequence> m = CollectionsUtil.makeHashMap(r, sequence);
 		final Sequences sequences = new Sequences(CollectionsUtil.makeArrayList(r), m);
 
-		Assertions.assertFalse(checker.checkConstraints(sequences, null));
+		Assertions.assertFalse(checker.checkConstraints(sequences, null, new ArrayList<>()));
 	}
 
 	@Test

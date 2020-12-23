@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
 
+import java.util.ArrayList;
+
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
@@ -54,8 +56,8 @@ public class AllowedVesselPermissionConstraintCheckerTest {
 		final Pair<@NonNull ISequenceElement, @NonNull IPortSlot> slot1 = createSequenceElement(portSlotProvider);
 		final Pair<@NonNull ISequenceElement, @NonNull IPortSlot> slot2 = createSequenceElement(portSlotProvider);
 
-		Assertions.assertFalse(checker.checkPairwiseConstraint(slot1.getFirst(), slot2.getFirst(), resource));
-		Assertions.assertFalse(checker.checkPairwiseConstraint(slot2.getFirst(), slot1.getFirst(), resource));
+		Assertions.assertFalse(checker.checkPairwiseConstraint(slot1.getFirst(), slot2.getFirst(), resource, new ArrayList<>()));
+		Assertions.assertFalse(checker.checkPairwiseConstraint(slot2.getFirst(), slot1.getFirst(), resource, new ArrayList<>()));
 	}
 
 	private AllowedVesselPermissionConstraintChecker createChecker(final @NonNull IVesselProvider vesselProvider, final @NonNull INominatedVesselProvider nominatedVesselProvider,
