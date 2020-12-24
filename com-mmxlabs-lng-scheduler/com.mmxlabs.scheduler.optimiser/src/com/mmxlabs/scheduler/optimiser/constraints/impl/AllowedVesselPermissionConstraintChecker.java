@@ -91,7 +91,7 @@ public class AllowedVesselPermissionConstraintChecker implements IPairwiseConstr
 		}
 
 		if (valid) {
-			messages.add(String.format("%s : all sequences satisfied the constraint.", this.name));
+			messages.add(String.format("%s : all sequences satisfied the constraint!", this.name));
 		}
 		return valid;
 	}
@@ -129,7 +129,7 @@ public class AllowedVesselPermissionConstraintChecker implements IPairwiseConstr
 					|| type == PortType.Maintenance //
 					|| type == PortType.CharterOut //
 			) {
-				messages.add(String.format("%s : Vessel %s is a spot charter and should not have % in the schedule.", this.name, vessel.getName(), type.toString()));
+				messages.add(String.format("%s : Vessel %s is a spot charter and should not have %s in the schedule!", this.name, vessel != null ? vessel.getName() : "unknown vessel", type.toString()));
 				return false;
 			}
 		} else if (vesselAvailability.getVesselInstanceType().isNonShipped()) {
@@ -137,7 +137,7 @@ public class AllowedVesselPermissionConstraintChecker implements IPairwiseConstr
 		}
 		final boolean result = allowedVesselProvider.isPermittedOnVessel(portSlot, vessel);
 		if (!result) {
-			messages.add(String.format("%s: Slot %s is not allowed on vessel %s", this.name, portSlot.getId(), vessel.getName()));
+			messages.add(String.format("%s: Slot %s is not allowed on vessel %s!", this.name, portSlot.getId(), vessel != null ? vessel.getName() : "unknown vessel"));
 		}
 		return result;
 	}

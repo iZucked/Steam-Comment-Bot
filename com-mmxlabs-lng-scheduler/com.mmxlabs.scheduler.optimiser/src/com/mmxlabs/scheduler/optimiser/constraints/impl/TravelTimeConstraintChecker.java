@@ -229,7 +229,10 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 		final int earliestArrivalTime = voyageStartTime + travelTime;
 		final int latestAllowableTime = (tw2.getExclusiveEnd() == Integer.MAX_VALUE) ? Integer.MAX_VALUE : tw2.getExclusiveEnd() - 1 + maxLateness;
 
-		return earliestArrivalTime <= latestAllowableTime;
+		boolean result = earliestArrivalTime <= latestAllowableTime;
+		if (!result)
+			messages.add(String.format("%s: Earliest arrival time %d is less or equal than latest allowed time %d!", this.name, earliestArrivalTime, latestAllowableTime));
+		return result;
 	}
 
 	@Override
@@ -245,11 +248,10 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 		final int distance = distanceProvider.getDistance(ERouteOption.DIRECT, slot1.getPort(), slot2.getPort(), vesselProvider.getVesselAvailability(resource).getVessel());
 
 		if (distance == Integer.MAX_VALUE) {
-			return this.name + ": No edge connecting ports";
+			return String.format("%s: No edge connecting ports!", this.name);
 		}
-
-		return this.name + ": Excessive lateness : " + slot1.getPort().getName() + " to " + slot2.getPort().getName() + " = " + distance + ", but " + " start of first tw = " + tw1.getInclusiveStart()
-				+ " and end of second = " + tw2.getExclusiveEnd();
+		return String.format("%s: Excessive lateness : distance from %s to %s equals to %d, but start of first tw is %d and end of second tw is %d!",
+				this.name, slot1.getPort().getName(), slot2.getPort().getName(), distance, tw1.getInclusiveStart(), tw2.getExclusiveEnd());
 	}
 
 	public int getMaxLateness() {

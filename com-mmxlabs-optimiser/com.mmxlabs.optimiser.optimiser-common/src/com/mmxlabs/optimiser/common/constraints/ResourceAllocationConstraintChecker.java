@@ -101,13 +101,15 @@ public final class ResourceAllocationConstraintChecker implements IPairwiseConst
 		final Collection<IResource> resources = resourceAllocationConstraintDataComponentProvider.getAllowedResources(element);
 		final boolean result = ((resources == null) || resources.contains(resource));
 		if (!result)
-			messages.add(String.format("%s: Element (%s) is not permitted to be allocated to resource (%s)", element, resource));
+			messages.add(String.format("%s: Element (%s) is not permitted to be allocated to resource (%s)", this.name, element, resource));
 		return result;
 	}
 
 	@Override
 	public String explain(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
 		final Collection<IResource> resources = resourceAllocationConstraintDataComponentProvider.getAllowedResources(first);
-		return this.name + ": Resource: " + resource.getName() + ", first in " + resources + ", second in " + resourceAllocationConstraintDataComponentProvider.getAllowedResources(second);
+		String resourcesName = resources != null ? resources.toString() : "no allowed resources for this sequence element";
+		return String.format("%s: for sequnce element [%s] resource [%s] first in [%s] second in [%s]", this.name, first.getName(), resource.getName(), resourcesName, 
+				resourceAllocationConstraintDataComponentProvider.getAllowedResources(second));
 	}
 }
