@@ -69,9 +69,12 @@ public class LatenessConstraint extends AbstractModelMultiConstraint {
 				} else if (target instanceof EndEvent) {
 					final EndEvent event = (EndEvent) target;
 					obj = event.getSequence().getVesselAvailability();
-					String vesselName = ((VesselAvailability) obj).getVessel().getName();
-					feature = CargoPackage.Literals.VESSEL_AVAILABILITY__END_BY;
-					message = (vesselName != null? "'"+vesselName+"'" : "Vessel") + " is travelling after it is no longer available.";
+					if (obj instanceof VesselAvailability && ((VesselAvailability) obj).getVessel() != null){
+						String vesselName = ((VesselAvailability) obj).getVessel().getName();
+						feature = CargoPackage.Literals.VESSEL_AVAILABILITY__END_BY;
+						message = (vesselName != null? "'"+vesselName+"'" : "Vessel") + " is travelling after it is no longer available.";
+					} else 
+						message = "Vessel in schedule is travelling after it is no longer available";
 				} else {
 					message = "Late arrival in schedule.";
 				}
