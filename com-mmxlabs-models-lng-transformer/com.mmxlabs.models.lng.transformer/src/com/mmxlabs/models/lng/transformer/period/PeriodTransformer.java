@@ -681,7 +681,7 @@ public class PeriodTransformer {
 			}
 		}
 		// update events to remove
-		eventsToRemove.removeAll(eventsToKeep);
+		eventsToRemove.removeAll (eventsToKeep.stream().filter(VesselEventVisit.class::isInstance).map(VesselEventVisit.class::cast).map(e -> e.getVesselEvent()).collect(Collectors.toSet()));
 		return new Triple<>(cargoesToKeep, eventsToKeep, eventsToRemove);
 	}
 
@@ -1054,10 +1054,9 @@ public class PeriodTransformer {
 						continue;
 					}
 				}
-				if (assignedObject instanceof VesselEvent) {
-					if (eventsToKeep.contains(assignedObject)) {
-						continue;
-					}
+				if (eventsToKeep.stream().filter(VesselEventVisit.class::isInstance).map(VesselEventVisit.class::cast).map(e -> e.getVesselEvent()).collect(Collectors.toSet())
+						.contains(assignedObject)) {
+					continue;
 				}
 				final NonNullPair<InclusionType, Position> result = inclusionChecker.getObjectInclusionType(assignedObject, objectToPortVisitMap, periodRecord);
 				if (collectedAssignment.isSetSpotIndex()) {
