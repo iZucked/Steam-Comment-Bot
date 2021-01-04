@@ -223,25 +223,25 @@ public class LoadDischargePairValueCalculator {
 	public static List<ILoadOption> findPurchases(final IPhaseOptimisationData optimisationData, final IPortSlotProvider portSlotProvider) {
 
 		return optimisationData.getSequenceElements().stream() //
-				.map(e -> portSlotProvider.getPortSlot(e))//
-				.filter(s -> s instanceof ILoadOption) //
-				.map(s -> (ILoadOption) s)//
+				.map(portSlotProvider::getPortSlot)//
+				.filter(ILoadOption.class::isInstance) //
+				.map(ILoadOption.class::cast)//
 				.collect(Collectors.toList());
 	}
 
 	public static List<IDischargeOption> findSales(final IPhaseOptimisationData optimisationData, final IPortSlotProvider portSlotProvider) {
 
 		return optimisationData.getSequenceElements().stream() //
-				.map(e -> portSlotProvider.getPortSlot(e))//
-				.filter(s -> s instanceof IDischargeOption) //
-				.map(s -> (IDischargeOption) s)//
+				.map(portSlotProvider::getPortSlot)//
+				.filter(IDischargeOption.class::isInstance) //
+				.map(IDischargeOption.class::cast)//
 				.collect(Collectors.toList());
 	}
 	
 	public static List<IVesselAvailability> findVessels(final IPhaseOptimisationData optimisationData, final IVesselProvider vesselProvider) {
 
 		return optimisationData.getResources().stream()
-				.map(m -> vesselProvider.getVesselAvailability(m))//
+				.map(vesselProvider::getVesselAvailability)//
 				.collect(Collectors.toList());
 	}
 

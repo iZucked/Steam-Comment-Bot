@@ -12,7 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.TreeMap;
-import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -58,7 +58,7 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 
 				schedule.getInventoryLevels().add(inventoryChangeEvents);
 
-				final BiFunction<LocalDate, LocalDate, LocalDate> f_minDate = (a, b) -> {
+				final BinaryOperator<LocalDate> f_minDate = (a, b) -> {
 					if (a == null) {
 						return b;
 					}
@@ -67,7 +67,7 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 					}
 					return b;
 				};
-				final BiFunction<LocalDate, LocalDate, LocalDate> f_maxDate = (a, b) -> {
+				final BinaryOperator<LocalDate> f_maxDate = (a, b) -> {
 					if (a == null) {
 						return b;
 					}

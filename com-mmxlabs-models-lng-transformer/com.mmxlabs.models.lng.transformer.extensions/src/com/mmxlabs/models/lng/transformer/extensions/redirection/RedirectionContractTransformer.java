@@ -4,15 +4,11 @@
  */
 package com.mmxlabs.models.lng.transformer.extensions.redirection;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
-
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Key;
@@ -27,12 +23,10 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
-import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ITransformerExtension;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
-import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -42,7 +36,6 @@ import com.mmxlabs.scheduler.optimiser.builder.impl.TimeWindowMaker;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvider;
@@ -100,7 +93,7 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 		this.modelEntityMap = null;
 		this.builder = null;
 	}
- 
+
 	@Override
 	public void slotTransformed(@NonNull final Slot modelSlot, @NonNull final IPortSlot optimiserSlot) {
 		// Avoid recursion with generated slots
@@ -108,11 +101,10 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 			return;
 		}
 		if (modelSlot instanceof LoadSlot) {
-
 			final LoadSlot loadSlot = (LoadSlot) modelSlot;
 
-			if (loadSlot.getContract() instanceof PurchaseContract) {
-				final PurchaseContract purchaseContract = (PurchaseContract) loadSlot.getContract();
+			if (loadSlot.getContract() != null) {
+				final PurchaseContract purchaseContract = loadSlot.getContract();
 
 				if (redirectionPriceParamtersClass.isInstance(purchaseContract.getPriceInfo())) {
 					// TODO: Pass into
@@ -148,8 +140,8 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 
 							// Convert to FOB Purchase slot
 							alternativeSlot = builder.createLoadSlot(id, loadOption.getPort(), baseTimeWindow, minVolume, maxVolume, false, priceCalculator, cargoCVValue,
-									loadSlot.getSchedulingTimeWindow().getDuration(), false, true, false, IPortSlot.NO_PRICING_DATE, loadOption.getPricingEvent(), slotIsOptional, slotIsLocked, isSpotSlot,
-									loadOption.isVolumeSetInM3(), slotIsCancelled);
+									loadSlot.getSchedulingTimeWindow().getDuration(), false, true, false, IPortSlot.NO_PRICING_DATE, loadOption.getPricingEvent(), slotIsOptional, slotIsLocked,
+									isSpotSlot, loadOption.isVolumeSetInM3(), slotIsCancelled);
 							generatedOptions.add(alternativeSlot);
 
 							// Create a fake model object to add in here;

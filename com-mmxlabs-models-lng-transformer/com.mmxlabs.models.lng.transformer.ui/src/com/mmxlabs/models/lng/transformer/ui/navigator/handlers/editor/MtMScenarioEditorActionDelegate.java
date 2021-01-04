@@ -77,7 +77,7 @@ import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
  * 
  */
 public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, IActionDelegate2 {
-	
+
 	private static final Logger LOG = LoggerFactory.getLogger(MtMScenarioEditorActionDelegate.class);
 
 	private IEditorPart editor;
@@ -88,22 +88,20 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 		if (editor != null && editor.getEditorInput() instanceof IScenarioServiceEditorInput) {
 			final IScenarioServiceEditorInput scenarioServiceEditorInput = (IScenarioServiceEditorInput) editor.getEditorInput();
 			final ScenarioInstance instance = scenarioServiceEditorInput.getScenarioInstance();
-			
+
 			if (instance != null) {
-				final ScenarioModelRecord modelRecord =	SSDataManager.Instance.getModelRecord(instance);
+				final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
 				if (modelRecord != null) {
 					try (final IScenarioDataProvider sdp = modelRecord.aquireScenarioDataProvider("MtMScenarioEditorActionDelegate")) {
 						final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
-						
+
 						sdp.getModelReference().executeWithTryLock(true, () -> {
 							try {
 								dialog.run(true, false, m -> executeOperation(sdp, instance, m));
-							} catch (final InvocationTargetException e) {
+							} catch (final InvocationTargetException | InterruptedException e) {
 								LOG.error(e.getMessage(), e);
-							} catch (final InterruptedException e) {
-								LOG.error(e.getMessage(), e);
-							} 
-						
+							}
+
 						});
 						//
 					} catch (final Exception e) {
@@ -113,21 +111,22 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 			}
 		}
 	}
-	
+
 	private static void executeOperation(final IScenarioDataProvider sdp, final ScenarioInstance instance, final IProgressMonitor parentProgressMonitor) {
-		
+
 		parentProgressMonitor.beginTask("Perform MtM action to scenario", 1000);
 		final SubMonitor progressMonitor = SubMonitor.convert(parentProgressMonitor, 1000);
-		
+
 		progressMonitor.subTask("Prepare scenario");
-		
+
 		final LNGScenarioModel scenarioModel = ScenarioModelUtil.findScenarioModel(sdp);
-		if (scenarioModel == null) return;
+		if (scenarioModel == null)
+			return;
 		final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(scenarioModel);
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sdp);
 		final EditingDomain editingDomain = sdp.getEditingDomain();
 		progressMonitor.worked(100);
-		
+
 		if (!promptClearModels()) {
 			return;
 		} else {
@@ -139,9 +138,9 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 				});
 			}
 		}
-		
+
 		progressMonitor.worked(100);
-	
+
 		final List<Command> setCommands = new LinkedList();
 		final List<EObject> deleteObjects = new LinkedList();
 
@@ -154,7 +153,7 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 		if (model[0] == null) {
 			throw new RuntimeException("Unable to create an MTM model");
 		}
-		
+
 		progressMonitor.worked(100);
 		progressMonitor.subTask("Evaluating the MtM model");
 
@@ -169,7 +168,7 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 			progressMonitor.done();
 			executor.shutdown();
 		}
-		
+
 		progressMonitor.worked(200);
 		progressMonitor.subTask("Checking changes in MtM model");
 		final Set<String> usedDischargeIDStrings = new HashSet<>();
@@ -199,7 +198,7 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 						if (sa.getSlot() instanceof DischargeSlot) {
 							dischargeSlotAllocation = sa;
 							ds = (DischargeSlot) sa.getSlot();
-						} 
+						}
 					}
 					if (ls != null && dischargeSlotAllocation != null) {
 						discharges.putIfAbsent(ls, dischargeSlotAllocation);
@@ -210,10 +209,10 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 				}
 			}
 		}
-		
+
 		progressMonitor.worked(200);
 		progressMonitor.subTask("Looking for the best moves in the MtM model");
-		
+
 		for (final MTMRow row : model[0].getRows()) {
 			if (row.getBuyOption() != null) {
 				final BuyOption bo = row.getBuyOption();
@@ -226,7 +225,7 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 				}
 
 				double price = Double.MIN_VALUE;
-				
+
 				// getting the price of the original cargo
 				if (!discharges.isEmpty()) {
 					final SlotAllocation sa = discharges.get(loadSlot);
@@ -234,13 +233,14 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 						price = sa.getPrice();
 					}
 				}
-				
+
 				MTMResult bestResult = null;
 
 				// make sure that there's a vessel availability
 				for (final MTMResult result : row.getRhsResults()) {
-					if (result.getEarliestETA() == null) continue;
-					if (price < result.getEarliestPrice()){
+					if (result.getEarliestETA() == null)
+						continue;
+					if (price < result.getEarliestPrice()) {
 						price = result.getEarliestPrice();
 						bestResult = result;
 					}
@@ -273,7 +273,7 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 							}
 							CargoEditorMenuHelper.makeUpDischargeSlot(usedDischargeIDStrings, loadSlot, dischargeSlot, market, sdp, assignedVessel);
 						}
-						//										
+						//
 						CargoEditingCommands.runWiringUpdate(editingDomain, cargoModel, setCommands, deleteObjects, loadSlot, dischargeSlot, cim, spotIndex);
 					}
 				}
@@ -289,20 +289,21 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 				}
 
 				double price = Double.MIN_VALUE;
-				
+
 				if (!loads.isEmpty()) {
 					final SlotAllocation sa = loads.get(dischargeSlot);
 					if (sa != null) {
 						price = sa.getPrice();
 					}
 				}
-				
+
 				MTMResult bestResult = null;
 
 				// make sure that there's a vessel availability
 				for (final MTMResult result : row.getLhsResults()) {
-					if (result.getEarliestETA() == null) continue;
-					if (price < result.getEarliestPrice()){
+					if (result.getEarliestETA() == null)
+						continue;
+					if (price < result.getEarliestPrice()) {
 						price = result.getEarliestPrice();
 						bestResult = result;
 					}
@@ -324,7 +325,7 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 							}
 						}
 
-						final LoadSlot loadSlot = CargoEditingCommands.createNewSpotLoad(editingDomain, setCommands, cargoModel, !dischargeSlot.isFOBSale(), market);										
+						final LoadSlot loadSlot = CargoEditingCommands.createNewSpotLoad(editingDomain, setCommands, cargoModel, !dischargeSlot.isFOBSale(), market);
 						// making up the loadSlot
 						{
 							Vessel assignedVessel = null;
@@ -333,13 +334,13 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 							}
 							CargoEditorMenuHelper.makeUpLoadSlot(usedDischargeIDStrings, loadSlot, dischargeSlot, market, sdp, assignedVessel);
 						}
-						//										
+						//
 						CargoEditingCommands.runWiringUpdate(editingDomain, cargoModel, setCommands, deleteObjects, loadSlot, dischargeSlot, cim, spotIndex);
 					}
 				}
 			}
 		}
-		
+
 		progressMonitor.worked(100);
 		progressMonitor.subTask("Applying changes from the MtM model");
 
@@ -358,11 +359,11 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 			RunnerHelper.syncExecDisplayOptional(() -> {
 				editingDomain.getCommandStack().execute(currentWiringCommand);
 			});
-			
+
 		}
 		progressMonitor.worked(100);
 		progressMonitor.subTask("Evaluating the scenario");
-		
+
 		final OptimisationPlan optimisationPlan = OptimisationHelper.getOptimiserSettings(scenarioModel, true, null, false, false, null);
 		assert optimisationPlan != null;
 
@@ -382,7 +383,7 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 		} finally {
 			runnerBuilder.dispose();
 		}
-		
+
 		progressMonitor.done();
 	}
 
@@ -434,8 +435,8 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 	public void runWithEvent(IAction action, Event event) {
 		run(action);
 	}
-	
-	//TODO: keep updates in-line with ScheduleModelInvalidateCommandProvider
+
+	// TODO: keep updates in-line with ScheduleModelInvalidateCommandProvider
 	private static Command createClearModelsCommand(final EditingDomain domain, final LNGScenarioModel scenarioModel, final AnalyticsModel analyticsModel) {
 		final List<EObject> delete = new LinkedList<>();
 
@@ -463,7 +464,7 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 	}
 
 	private static boolean promptClearModels() {
-		boolean result[] = new boolean[1];
+		boolean[] result = new boolean[1];
 		RunnerHelper.syncExec((display) -> {
 			result[0] = MessageDialog.openConfirm(display.getActiveShell(), "Scenario edit",
 					"This change will remove all results. Press OK to continue, otherwise press cancel and fork the scenario.");

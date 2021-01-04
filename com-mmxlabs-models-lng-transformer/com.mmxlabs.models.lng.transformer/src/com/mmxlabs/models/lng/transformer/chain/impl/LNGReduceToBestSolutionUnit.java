@@ -13,8 +13,6 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.models.lng.transformer.chain.ChainBuilder;
@@ -34,8 +32,6 @@ import com.mmxlabs.optimiser.core.impl.MultiStateResult;
  *
  */
 public class LNGReduceToBestSolutionUnit {
-
-	private static final Logger LOG = LoggerFactory.getLogger(LNGReduceToBestSolutionUnit.class);
 
 	@NonNull
 	public static IChainLink chain(@NonNull final ChainBuilder chainBuilder, @NonNull final String stage, final int progressTicks) {

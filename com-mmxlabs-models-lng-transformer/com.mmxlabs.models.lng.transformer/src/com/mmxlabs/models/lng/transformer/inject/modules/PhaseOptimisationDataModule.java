@@ -29,12 +29,9 @@ public class PhaseOptimisationDataModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	public IPhaseOptimisationData provideOptimisationData(Injector injector, @Named(OptimiserConstants.SEQUENCE_TYPE_INPUT) ISequences initialSequences) throws IncompleteScenarioException {
+	public IPhaseOptimisationData provideOptimisationData(Injector injector, @Named(OptimiserConstants.SEQUENCE_TYPE_INPUT) ISequences initialSequences) {
 		final PhaseOptimisationData phaseOptimisationData = injector.getInstance(PhaseOptimisationData.class);
-		List<@NonNull ISequence> sequences = initialSequences.getResources()
-				.stream()
-				.map(r -> initialSequences.getSequence(r))
-				.collect(Collectors.toList());
+		List<@NonNull ISequence> sequences = initialSequences.getResources().stream().map(initialSequences::getSequence).collect(Collectors.toList());
 		List<ISequenceElement> l = new LinkedList<>();
 		for (ISequence sequence : sequences) {
 			for (ISequenceElement e : sequence) {
@@ -42,7 +39,7 @@ public class PhaseOptimisationDataModule extends AbstractModule {
 			}
 		}
 		l.addAll(initialSequences.getUnusedElements());
-		Collections.sort(l, (a,b) -> Integer.compare(a.getIndex(), b.getIndex()));
+		Collections.sort(l, (a, b) -> Integer.compare(a.getIndex(), b.getIndex()));
 		phaseOptimisationData.setSequenceElements(l);
 		phaseOptimisationData.setResources(initialSequences.getResources());
 		return phaseOptimisationData;
@@ -50,7 +47,7 @@ public class PhaseOptimisationDataModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
-		
+
 	}
 
 }

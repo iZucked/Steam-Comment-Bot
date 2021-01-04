@@ -161,14 +161,14 @@ public class PeriodTransformer {
 		public @Nullable ExtraDataProvider extraDataProvider;
 	}
 
-	public @NonNull PeriodTransformResult transform(@NonNull final IScenarioDataProvider wholeScenario, @NonNull Schedule schedule, @Nullable ExtraDataProvider extraDataProvider,
+	public @NonNull PeriodTransformResult transform(@NonNull final IScenarioDataProvider wholeScenario, @NonNull final Schedule schedule, @Nullable final ExtraDataProvider extraDataProvider,
 			@NonNull final UserSettings userSettings, @NonNull final IScenarioEntityMapping mapping) {
 		final PeriodRecord periodRecord = createPeriodRecord(userSettings, wholeScenario.getTypedScenario(LNGScenarioModel.class));
 		return transform(wholeScenario, schedule, extraDataProvider, periodRecord, mapping);
 	}
 
 	@NonNull
-	public PeriodRecord createPeriodRecord(@NonNull final UserSettings userSettings, LNGScenarioModel scenario) {
+	public PeriodRecord createPeriodRecord(@NonNull final UserSettings userSettings, final LNGScenarioModel scenario) {
 
 		final PeriodRecord periodRecord = new PeriodRecord();
 
@@ -202,16 +202,16 @@ public class PeriodTransformer {
 		return periodRecord;
 	}
 
-	public @NonNull PeriodTransformResult transform(@NonNull final IScenarioDataProvider wholeScenarioDataProvider, @NonNull Schedule wholeScenarioSchedule,
-			@Nullable ExtraDataProvider extraDataProvider, @NonNull final PeriodRecord periodRecord, @NonNull final IScenarioEntityMapping mapping) {
+	public @NonNull PeriodTransformResult transform(@NonNull final IScenarioDataProvider wholeScenarioDataProvider, @NonNull final Schedule wholeScenarioSchedule,
+			@Nullable final ExtraDataProvider extraDataProvider, @NonNull final PeriodRecord periodRecord, @NonNull final IScenarioEntityMapping mapping) {
 
 		// assert - passed validation
 
 		// Take a copy to manipulate.
 		final Triple<IScenarioDataProvider, ExtraDataProvider, Schedule> p = copyScenario(wholeScenarioDataProvider, wholeScenarioSchedule, extraDataProvider, mapping);
 		final IScenarioDataProvider outputDataProvider = p.getFirst();
-		LNGScenarioModel output = outputDataProvider.getTypedScenario(LNGScenarioModel.class);
-		Schedule schedule = p.getThird();
+		final LNGScenarioModel output = outputDataProvider.getTypedScenario(LNGScenarioModel.class);
+		final Schedule schedule = p.getThird();
 
 		// Do not allow the prompt period to extend past the optimisation period
 		if (periodRecord.upperBoundary != null && periodRecord.promptEnd != null) {
@@ -254,13 +254,13 @@ public class PeriodTransformer {
 				.collect(Collectors.toMap(Sequence::getVesselAvailability, s -> s.getEvents().get(s.getEvents().size() - 1)));
 
 		// Extend the vessel end date to cover late ending if present in input scenario
-		for (Sequence seq : schedule.getSequences()) {
-			VesselAvailability va = seq.getVesselAvailability();
+		for (final Sequence seq : schedule.getSequences()) {
+			final VesselAvailability va = seq.getVesselAvailability();
 			if (va != null) {
 				// Do we have an end date set?
 				if (va.isSetEndBy() && seq.getEvents().size() > 0) {
-					ZonedDateTime endDate = va.getEndByAsDateTime();
-					Event endEvent = seq.getEvents().get(seq.getEvents().size() - 1);
+					final ZonedDateTime endDate = va.getEndByAsDateTime();
+					final Event endEvent = seq.getEvents().get(seq.getEvents().size() - 1);
 					// Does the vessel end late?
 					if (endEvent.getEnd().isAfter(endDate)) {
 						// Is the required vessel end date in or before the boundary?
@@ -272,7 +272,7 @@ public class PeriodTransformer {
 									evt = evt.getPreviousEvent();
 								}
 								if (evt instanceof PortVisit) {
-									PortVisit portVisit = (PortVisit) evt;
+									final PortVisit portVisit = (PortVisit) evt;
 									if (inclusionChecker.getObjectInVesselAvailabilityRange(portVisit, va) == InclusionType.Out) {
 										// Change the vessel availability end date to match exported end date
 										va.setEndBy(endEvent.getEnd().withZoneSameInstant(ZONEID_UTC).toLocalDateTime());
@@ -325,17 +325,16 @@ public class PeriodTransformer {
 		// Filter out slots and cargoes, create new availabilities for special cases.
 		findSlotsAndCargoesToRemove(periodRecord, cargoModel, seenSlots, slotsToRemove, cargoesToRemove, slotAllocationMap, objectToPortVisitMap, lockedCargoes, lockedSlots);
 		final Triple<Set<Cargo>, Set<VesselEvent>, Set<VesselEvent>> vesselEventDependencies = findVesselEventsToRemoveAndDependencies(schedule, periodRecord, cargoModel, objectToPortVisitMap);
-		
-		
-		Set<Cargo> cargoesToKeep = vesselEventDependencies.getFirst();
-		Set<VesselEvent> vesselEventsToKeep = vesselEventDependencies.getSecond();
-		Set<VesselEvent> vesselEventsToRemove = vesselEventDependencies.getThird();
-		
+
+		final Set<Cargo> cargoesToKeep = vesselEventDependencies.getFirst();
+		final Set<VesselEvent> vesselEventsToKeep = vesselEventDependencies.getSecond();
+		final Set<VesselEvent> vesselEventsToRemove = vesselEventDependencies.getThird();
+
 		updateSlotsToRemoveWithDependencies(slotAllocationMap, slotsToRemove, cargoesToRemove, cargoesToKeep, lockedCargoes);
 
 		// Update vessel availabilities
-		updateVesselAvailabilities(periodRecord, cargoModel, spotMarketsModel, portModel, modelDistanceProvider, startConditionMap, endConditionMap, cargoesToKeep,
-				vesselEventsToKeep, objectToPortVisitMap, mapping);
+		updateVesselAvailabilities(periodRecord, cargoModel, spotMarketsModel, portModel, modelDistanceProvider, startConditionMap, endConditionMap, cargoesToKeep, vesselEventsToKeep,
+				objectToPortVisitMap, mapping);
 		checkIfRemovedSlotsAreStillNeeded(seenSlots, slotsToRemove, cargoesToRemove, newVesselAvailabilities, startConditionMap, endConditionMap, slotAllocationMap, lockedCargoes);
 
 		if (extensions != null) {
@@ -386,7 +385,7 @@ public class PeriodTransformer {
 		// Clear this date as we have fixed everything and it will conflict with rules in schedule transformer.
 		output.unsetSchedulingEndDate();
 
-		PeriodTransformResult r = new PeriodTransformResult(outputDataProvider, internalDomain, p.getSecond());
+		final PeriodTransformResult r = new PeriodTransformResult(outputDataProvider, internalDomain, p.getSecond());
 
 		return r;
 	}
@@ -639,8 +638,9 @@ public class PeriodTransformer {
 			if (event instanceof CharterOutEvent) {
 				// If in boundary, limit available vessels to assigned vessel
 
-				CharterOutEvent charterOutEvent = (CharterOutEvent) event;
+				final CharterOutEvent charterOutEvent = (CharterOutEvent) event;
 				@NonNull
+				final
 				NonNullPair<InclusionType, Position> p = inclusionChecker.getObjectInclusionType(event, scheduledEventMap, periodRecord);
 				if (p.getFirst() != InclusionType.In) {
 					charterOutEvent.getAllowedVessels().clear();
@@ -710,7 +710,7 @@ public class PeriodTransformer {
 					// lock whole cargo if both slots are outside period or if there is no vessel
 					// check slots are after start
 					boolean isBefore = false;
-					for (Slot<?> slot : cargo.getSlots()) {
+					for (final Slot<?> slot : cargo.getSlots()) {
 						if (inclusionChecker.getObjectInclusionType(slot, objectToPortVisitMap, periodRecord).getSecond() == Position.Before) {
 							isBefore = true;
 							break;
@@ -858,7 +858,7 @@ public class PeriodTransformer {
 			final Collection<@NonNull Cargo> cargoesToRemove) {
 		// <<<
 		// Delete slots and cargoes outside of range.
-		List<EObject> objectsToDelete = new LinkedList<>();
+		final List<EObject> objectsToDelete = new LinkedList<>();
 		for (final Slot<?> slot : slotsToRemove) {
 			@Nullable
 			final Slot<?> originalFromCopy = mapping.getOriginalFromCopy(slot);
@@ -884,7 +884,7 @@ public class PeriodTransformer {
 		internalDomain.getCommandStack().execute(DeleteCommand.create(internalDomain, objectsToDelete));
 	}
 
-	public void lockDownCargoDates(final Map<Slot<?>, SlotAllocation> slotAllocationMap, final Cargo cargo, final Set<Cargo> lockedCargoes, boolean doLockDates) {
+	public void lockDownCargoDates(final Map<Slot<?>, SlotAllocation> slotAllocationMap, final Cargo cargo, final Set<Cargo> lockedCargoes, final boolean doLockDates) {
 
 		final VesselAssignmentType vat = cargo.getVesselAssignmentType();
 		Vessel lockedVessel = null;
@@ -945,7 +945,7 @@ public class PeriodTransformer {
 		lockedCargoes.add(cargo);
 	}
 
-	public void lockDownSlotDates(final Map<Slot<?>, SlotAllocation> slotAllocationMap, final Slot<?> slot, final Set<Slot<?>> lockedSlots, boolean doLockDates) {
+	public void lockDownSlotDates(final Map<Slot<?>, SlotAllocation> slotAllocationMap, final Slot<?> slot, final Set<Slot<?>> lockedSlots, final boolean doLockDates) {
 		// Load and discharge window are often part of the pricing for a DES purchase or FOB sale, so if we change
 		// the window, then the price incurred might change, hence we only fix one side of the cargo and leave the
 		// window untouched.
@@ -995,7 +995,7 @@ public class PeriodTransformer {
 		if (!isInPrompt(cargo, periodRecord)) {
 			return false;
 		}
-		VesselAssignmentType vesselAssignmentType = cargo.getVesselAssignmentType();
+		final VesselAssignmentType vesselAssignmentType = cargo.getVesselAssignmentType();
 		if (vesselAssignmentType instanceof CharterInMarket) {
 			if (cargo.getSpotIndex() == NOMINAL_INDEX && LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_NO_NOMINALS_IN_PROMPT)) {
 				return true;
@@ -1004,8 +1004,8 @@ public class PeriodTransformer {
 		return false;
 	}
 
-	private boolean isInPrompt(@NonNull Cargo cargo, @NonNull PeriodRecord periodRecord) {
-		Slot<?> first = cargo.getSlots().get(0);
+	private boolean isInPrompt(@NonNull final Cargo cargo, @NonNull final PeriodRecord periodRecord) {
+		final Slot<?> first = cargo.getSlots().get(0);
 		if (periodRecord.promptEnd != null && first.getWindowStart().isBefore(periodRecord.promptEnd)) {
 			// start is within the prompt
 			return true;
@@ -1030,9 +1030,9 @@ public class PeriodTransformer {
 	}
 
 	public void updateVesselAvailabilities(@NonNull final PeriodRecord periodRecord, @NonNull final CargoModel cargoModel, @NonNull final SpotMarketsModel spotMarketsModel,
-			@NonNull final PortModel portModel, @NonNull ModelDistanceProvider modelDistanceProvider, @NonNull final Map<AssignableElement, PortVisit> startConditionMap,
+			@NonNull final PortModel portModel, @NonNull final ModelDistanceProvider modelDistanceProvider, @NonNull final Map<AssignableElement, PortVisit> startConditionMap,
 			@NonNull final Map<AssignableElement, PortVisit> endConditionMap, @NonNull final Set<Cargo> cargoesToKeep, @NonNull final Set<VesselEvent> eventsToKeep,
-			@NonNull final Map<EObject, PortVisit> objectToPortVisitMap, IScenarioEntityMapping mapping) {
+			@NonNull final Map<EObject, PortVisit> objectToPortVisitMap, final IScenarioEntityMapping mapping) {
 
 		final List<CollectedAssignment> collectedAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, portModel, spotMarketsModel, modelDistanceProvider);
 		assert collectedAssignments != null;
@@ -1041,7 +1041,7 @@ public class PeriodTransformer {
 
 	public void updateVesselAvailabilities(@NonNull final PeriodRecord periodRecord, @NonNull final List<CollectedAssignment> collectedAssignments,
 			@NonNull final Map<AssignableElement, PortVisit> startConditionMap, @NonNull final Map<AssignableElement, PortVisit> endConditionMap, @NonNull final Set<Cargo> cargoesToKeep,
-			@NonNull final Set<VesselEvent> eventsToKeep, @NonNull final Map<EObject, PortVisit> objectToPortVisitMap, IScenarioEntityMapping mapping) {
+			@NonNull final Set<VesselEvent> eventsToKeep, @NonNull final Map<EObject, PortVisit> objectToPortVisitMap, final IScenarioEntityMapping mapping) {
 
 		// Here we loop through all the collected assignments, trimming the vessel availability to anything outside of the date range.
 		// This can handle out-of-order assignments by checking to see whether or not a cargo has already been trimmed out of the date range before updating
@@ -1137,7 +1137,7 @@ public class PeriodTransformer {
 		}
 	}
 
-	public void generateObjectToPortVisitMap(@NonNull Schedule schedule, @NonNull final Map<EObject, PortVisit> objectToPortVisitMap) {
+	public void generateObjectToPortVisitMap(@NonNull final Schedule schedule, @NonNull final Map<EObject, PortVisit> objectToPortVisitMap) {
 
 		for (final Sequence sequence : schedule.getSequences()) {
 			for (final Event event : sequence.getEvents()) {
@@ -1154,7 +1154,7 @@ public class PeriodTransformer {
 		}
 	}
 
-	public void generateStartAndEndConditionsMap(@NonNull Schedule schedule, @NonNull final Map<AssignableElement, PortVisit> startConditionMap,
+	public void generateStartAndEndConditionsMap(@NonNull final Schedule schedule, @NonNull final Map<AssignableElement, PortVisit> startConditionMap,
 			@NonNull final Map<AssignableElement, PortVisit> endConditionMap) {
 		for (final Sequence sequence : schedule.getSequences()) {
 			for (final Event event : sequence.getEvents()) {
@@ -1206,7 +1206,7 @@ public class PeriodTransformer {
 			}
 			for (final Event event : sequence.getEvents()) {
 				if (event instanceof VesselEventVisit) {
-					VesselEventVisit vesselEventVisit = (VesselEventVisit) event;
+					final VesselEventVisit vesselEventVisit = (VesselEventVisit) event;
 					if (vesselEventVisit.getVesselEvent() == ve) {
 						interestingVesselEventVisit = vesselEventVisit;
 						break;
@@ -1222,12 +1222,12 @@ public class PeriodTransformer {
 			boolean foundCargo = false;
 			while (currentEvent.getPreviousEvent() != null) {
 				if (currentEvent instanceof SlotVisit) {
-					SlotVisit slotVisit = (SlotVisit) currentEvent;
+					final SlotVisit slotVisit = (SlotVisit) currentEvent;
 					previousCargoes.add(slotVisit.getSlotAllocation().getSlot().getCargo());
 					foundCargo = true;
 					break;
 				} else if (currentEvent instanceof VesselEventVisit) {
-					VesselEventVisit vesselEventVisit = (VesselEventVisit) currentEvent;
+					final VesselEventVisit vesselEventVisit = (VesselEventVisit) currentEvent;
 					previousEvents.add(vesselEventVisit.getVesselEvent());
 				}
 				currentEvent = currentEvent.getPreviousEvent();
@@ -1240,15 +1240,15 @@ public class PeriodTransformer {
 	}
 
 	@NonNull
-	public Triple<IScenarioDataProvider, ExtraDataProvider, Schedule> copyScenario(@NonNull final IScenarioDataProvider wholeScenarioDataProvider, Schedule baseSchedule,
-			@Nullable ExtraDataProvider extraDataProvider, @NonNull final IScenarioEntityMapping mapping) {
+	public Triple<IScenarioDataProvider, ExtraDataProvider, Schedule> copyScenario(@NonNull final IScenarioDataProvider wholeScenarioDataProvider, final Schedule baseSchedule,
+			@Nullable final ExtraDataProvider extraDataProvider, @NonNull final IScenarioEntityMapping mapping) {
 		final Copier copier = new Copier();
 
-		LNGScenarioModel wholeScenario = wholeScenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
+		final LNGScenarioModel wholeScenario = wholeScenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
 		final LNGScenarioModel output = (LNGScenarioModel) copier.copy(wholeScenarioDataProvider.getScenario());
 		assert output != null;
-		Schedule copyBaseSchedule = (Schedule) copier.copy(baseSchedule);
+		final Schedule copyBaseSchedule = (Schedule) copier.copy(baseSchedule);
 
 		ExtraDataProvider copyExtraDataProvider = null;
 		if (extraDataProvider != null) {
@@ -1300,9 +1300,9 @@ public class PeriodTransformer {
 		}
 		mapping.createMappings(copier);
 
-		ClonedScenarioDataProvider sdp = ClonedScenarioDataProvider.make(output, wholeScenarioDataProvider);
+		final ClonedScenarioDataProvider sdp = ClonedScenarioDataProvider.make(output, wholeScenarioDataProvider);
 		// Apply this base schedule to the scenario. This may be an alternative starting state e.g. from sandbox
-		Command updateCommand = LNGSchedulerJobUtils.derive(sdp.getEditingDomain(), sdp.getTypedScenario(MMXRootObject.class), copyBaseSchedule, ScenarioModelUtil.getCargoModel(sdp), null);
+		final Command updateCommand = LNGSchedulerJobUtils.derive(sdp.getEditingDomain(), sdp.getTypedScenario(MMXRootObject.class), copyBaseSchedule, ScenarioModelUtil.getCargoModel(sdp), null);
 		sdp.getEditingDomain().getCommandStack().execute(updateCommand);
 
 		return new Triple<>(sdp, copyExtraDataProvider, copyBaseSchedule);
@@ -1525,14 +1525,13 @@ public class PeriodTransformer {
 			throw new IllegalStateException("Unable to find latest scenario date");
 		}
 
-		trimSpotMarketCurves(periodRecord, spotMarketsModel.getDesPurchaseSpotMarket(), earliestDate, latestDate);
-		trimSpotMarketCurves(periodRecord, spotMarketsModel.getDesSalesSpotMarket(), earliestDate, latestDate);
-		trimSpotMarketCurves(periodRecord, spotMarketsModel.getFobPurchasesSpotMarket(), earliestDate, latestDate);
-		trimSpotMarketCurves(periodRecord, spotMarketsModel.getFobSalesSpotMarket(), earliestDate, latestDate);
+		trimSpotMarketCurves(spotMarketsModel.getDesPurchaseSpotMarket(), earliestDate, latestDate);
+		trimSpotMarketCurves(spotMarketsModel.getDesSalesSpotMarket(), earliestDate, latestDate);
+		trimSpotMarketCurves(spotMarketsModel.getFobPurchasesSpotMarket(), earliestDate, latestDate);
+		trimSpotMarketCurves(spotMarketsModel.getFobSalesSpotMarket(), earliestDate, latestDate);
 	}
 
-	public void trimSpotMarketCurves(@NonNull final PeriodRecord periodRecord, @Nullable final SpotMarketGroup spotMarketGroup, @NonNull final ZonedDateTime earliestDate,
-			@NonNull final ZonedDateTime latestDate) {
+	public void trimSpotMarketCurves(@Nullable final SpotMarketGroup spotMarketGroup, @NonNull final ZonedDateTime earliestDate, @NonNull final ZonedDateTime latestDate) {
 		if (spotMarketGroup != null) {
 			for (final SpotMarket spotMarket : spotMarketGroup.getMarkets()) {
 				final SpotAvailability availability = spotMarket.getAvailability();

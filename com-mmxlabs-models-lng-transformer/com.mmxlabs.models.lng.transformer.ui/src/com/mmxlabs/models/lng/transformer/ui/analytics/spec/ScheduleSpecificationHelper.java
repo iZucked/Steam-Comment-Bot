@@ -163,7 +163,6 @@ public class ScheduleSpecificationHelper {
 							}
 						}
 						RunnerHelper.syncExecDisplayOptional(() -> {
-							CommandStack commandStack1 = editingDomain.getCommandStack();
 							commandStack.execute(cmd);
 						});
 					}

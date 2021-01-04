@@ -44,6 +44,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
 
 public class SequenceHelper {
 
+	private static final String MSG_UNABLE_TO_FIND_SPOT_MARKET_VESSEL = "Unable to find spot market vessel";
+
 	public static @NonNull IModifiableSequences createSequences(@NonNull final Injector injector) {
 		final IOptimisationData optimisationData = injector.getInstance(IOptimisationData.class);
 		final ModifiableSequences sequences = new ModifiableSequences(optimisationData.getResources());
@@ -158,7 +160,7 @@ public class SequenceHelper {
 			}
 			return addSequence(sequences, injector, o_resource, o_vesselAvailability, cargoes);
 		}
-		assert false : "Unable to find spot market vessel";
+		assert false : MSG_UNABLE_TO_FIND_SPOT_MARKET_VESSEL;
 		throw new IllegalStateException();
 	}
 
@@ -181,7 +183,7 @@ public class SequenceHelper {
 			}
 			return o_resource;
 		}
-		assert false : "Unable to find spot market vessel";
+		assert false : MSG_UNABLE_TO_FIND_SPOT_MARKET_VESSEL;
 		throw new IllegalStateException();
 	}
 
@@ -205,7 +207,7 @@ public class SequenceHelper {
 			}
 			return o_vesselAvailability;
 		}
-		assert false : "Unable to find spot market vessel";
+		assert false : MSG_UNABLE_TO_FIND_SPOT_MARKET_VESSEL;
 		throw new IllegalStateException();
 	}
 
@@ -229,7 +231,7 @@ public class SequenceHelper {
 			}
 			return makeSequence(injector, o_resource, o_vesselAvailability, cargoes);
 		}
-		assert false : "Unable to find spot market vessel";
+		assert false : MSG_UNABLE_TO_FIND_SPOT_MARKET_VESSEL;
 		throw new IllegalStateException();
 	}
 
@@ -254,7 +256,7 @@ public class SequenceHelper {
 			}
 			return makeSequence(injector, o_resource, o_vesselAvailability, cargoes);
 		}
-		assert false : "Unable to find spot market vessel";
+		assert false : MSG_UNABLE_TO_FIND_SPOT_MARKET_VESSEL;
 		throw new IllegalStateException();
 	}
 

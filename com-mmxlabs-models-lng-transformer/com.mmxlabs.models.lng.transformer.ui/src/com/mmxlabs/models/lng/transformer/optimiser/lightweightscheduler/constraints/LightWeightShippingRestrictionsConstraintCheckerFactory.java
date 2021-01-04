@@ -8,8 +8,8 @@ import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightW
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightConstraintCheckerFactory;
 
 public class LightWeightShippingRestrictionsConstraintCheckerFactory implements ILightWeightConstraintCheckerFactory {
-	final String NAME = "LightWeightShippingRestrictionsConstraintChecker";
-	
+	public static final String NAME = "LightWeightShippingRestrictionsConstraintChecker";
+
 	@Override
 	public String getName() {
 		return NAME;

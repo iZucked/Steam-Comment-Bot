@@ -16,7 +16,6 @@ import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.series.CalendarMonthMapper;
 import com.mmxlabs.models.lng.adp.ADPModel;
-import com.mmxlabs.models.lng.adp.ContractProfile;
 import com.mmxlabs.models.lng.adp.FleetConstraint;
 import com.mmxlabs.models.lng.adp.FleetProfile;
 import com.mmxlabs.models.lng.adp.MaxCargoConstraint;
@@ -38,7 +37,6 @@ import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
-import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.util.MonthlyDistributionConstraint;
@@ -51,6 +49,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.util.SchedulerCalculationUtils;
  * @author Simon Goodall
  */
 public class ADPConstraintsTransformer implements ITransformerExtension {
+
+	private static final String UNSUPPORTED_INTERVAL_TYPE = "Unsupported interval type ";
 
 	@Inject
 	private IMaxSlotConstraintDataProviderEditor maxSlotConstraintEditor;
@@ -145,7 +145,7 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 						maxSlotConstraintEditor.addMinLoadSlotsPerMonthlyPeriod(contractProfile, profileConstraint, o_slots, startMonth, 2, minCargoConstraint.getMinCargoes());
 						break;
 					default:
-						throw new IllegalStateException("Unsupported interval type " + minCargoConstraint.getIntervalType());
+						throw new IllegalStateException(UNSUPPORTED_INTERVAL_TYPE + minCargoConstraint.getIntervalType());
 					}
 				} else if (profileConstraint instanceof MaxCargoConstraint) {
 					final MaxCargoConstraint maxCargoConstraint = (MaxCargoConstraint) profileConstraint;
@@ -163,7 +163,7 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 						maxSlotConstraintEditor.addMaxLoadSlotsPerMonthlyPeriod(contractProfile, profileConstraint, o_slots, startMonth, 2, maxCargoConstraint.getMaxCargoes());
 						break;
 					default:
-						throw new IllegalStateException("Unsupported interval type " + maxCargoConstraint.getIntervalType());
+						throw new IllegalStateException(UNSUPPORTED_INTERVAL_TYPE + maxCargoConstraint.getIntervalType());
 					}
 				} else if (profileConstraint instanceof PeriodDistributionProfileConstraint) {
 					PeriodDistributionProfileConstraint periodDistributionProfileConstraint = (PeriodDistributionProfileConstraint) profileConstraint;
@@ -237,7 +237,7 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 						maxSlotConstraintEditor.addMinDischargeSlotsPerMonthlyPeriod(contractProfile, profileConstraint, o_slots, startMonth, 2, minCargoConstraint.getMinCargoes());
 						break;
 					default:
-						throw new IllegalStateException("Unsupported interval type " + minCargoConstraint.getIntervalType());
+						throw new IllegalStateException(UNSUPPORTED_INTERVAL_TYPE + minCargoConstraint.getIntervalType());
 					}
 				} else if (profileConstraint instanceof MaxCargoConstraint) {
 					final MaxCargoConstraint maxCargoConstraint = (MaxCargoConstraint) profileConstraint;
@@ -255,7 +255,7 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 						maxSlotConstraintEditor.addMaxDischargeSlotsPerMonthlyPeriod(contractProfile, profileConstraint, o_slots, startMonth, 2, maxCargoConstraint.getMaxCargoes());
 						break;
 					default:
-						throw new IllegalStateException("Unsupported interval type " + maxCargoConstraint.getIntervalType());
+						throw new IllegalStateException(UNSUPPORTED_INTERVAL_TYPE + maxCargoConstraint.getIntervalType());
 					}
 				} else if (profileConstraint instanceof PeriodDistributionProfileConstraint) {
 					PeriodDistributionProfileConstraint periodDistributionProfileConstraint = (PeriodDistributionProfileConstraint) profileConstraint;

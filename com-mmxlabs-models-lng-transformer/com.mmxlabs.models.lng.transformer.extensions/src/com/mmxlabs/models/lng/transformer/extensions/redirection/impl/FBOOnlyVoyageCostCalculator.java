@@ -12,7 +12,6 @@ import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
 import com.mmxlabs.scheduler.optimiser.components.impl.ConstantHeelPriceCalculator;
@@ -121,8 +120,6 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 	public VoyagePlan calculateShippingCosts(@NonNull final IPort loadPort, @NonNull final IPort dischargePort, final int loadTime, final int loadDuration, final int dischargeTime,
 			final int dischargeDuration, final int returnTime, @NonNull final IVessel vessel, @NonNull ICharterCostCalculator charterCostCalculator, final long startHeelInM3, final int cargoCVValue,
 			@NonNull final ERouteOption route, final int[] baseFuelPricePerMT, @NonNull final ISalesPriceCalculator salesPrice) {
-
-		final VoyagePlan notionalPlan = new VoyagePlan();
 
 		final int distance = distanceProvider.getDistance(route, loadPort, dischargePort, vessel);
 		if (distance == Integer.MAX_VALUE) {

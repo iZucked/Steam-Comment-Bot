@@ -65,7 +65,7 @@ public class BallastBonusContractExtensionExporter implements IExporterExtension
 					if (annotation != null) {
 						final StartEvent profitAndLossContainer = ExporterExtensionUtils.findStartEvent(startElement, modelEntityMap, outputSchedule, annotatedSolution, vesselProvider);
 						if (profitAndLossContainer != null) {
-							profitAndLossContainer.setRepositioningFee((int) OptimiserUnitConvertor.convertToExternalFixedCost(annotation.repositioningFee));
+							profitAndLossContainer.setRepositioningFee(OptimiserUnitConvertor.convertToExternalFixedCost(annotation.repositioningFee));
 						}
 					}
 				}
@@ -79,14 +79,14 @@ public class BallastBonusContractExtensionExporter implements IExporterExtension
 						final EndEvent profitAndLossContainer = ExporterExtensionUtils.findEndEvent(endElement, modelEntityMap, outputSchedule, annotatedSolution, vesselProvider);
 						if (profitAndLossContainer != null) {
 							final BallastBonusFeeDetails details = ScheduleFactory.eINSTANCE.createBallastBonusFeeDetails();
-							details.setFee((int) OptimiserUnitConvertor.convertToExternalFixedCost(annotation.ballastBonusFee));
-							profitAndLossContainer.setBallastBonusFee((int) OptimiserUnitConvertor.convertToExternalFixedCost(annotation.ballastBonusFee));
+							details.setFee(OptimiserUnitConvertor.convertToExternalFixedCost(annotation.ballastBonusFee));
+							profitAndLossContainer.setBallastBonusFee(OptimiserUnitConvertor.convertToExternalFixedCost(annotation.ballastBonusFee));
 							if (annotation.ballastBonusRuleAnnotation != null) {
 								if (annotation.ballastBonusRuleAnnotation instanceof LumpSumBallastBonusRuleAnnotation) {
 									final LumpSumBallastBonusRuleAnnotation ruleA = (LumpSumBallastBonusRuleAnnotation) annotation.ballastBonusRuleAnnotation;
 									final LumpSumContractDetails lumpSumContractDetails = ScheduleFactory.eINSTANCE.createLumpSumContractDetails();
 									lumpSumContractDetails.setMatchedPort(annotation.matchedPort.getName());
-									lumpSumContractDetails.setLumpSum((int) OptimiserUnitConvertor.convertToExternalFixedCost(ruleA.lumpSum));
+									lumpSumContractDetails.setLumpSum(OptimiserUnitConvertor.convertToExternalFixedCost(ruleA.lumpSum));
 									details.setMatchingBallastBonusContractDetails(lumpSumContractDetails);
 								} else if (annotation.ballastBonusRuleAnnotation instanceof NotionalJourneyBallastBonusRuleAnnotation) {
 									final NotionalJourneyBallastBonusRuleAnnotation ruleA = (NotionalJourneyBallastBonusRuleAnnotation) annotation.ballastBonusRuleAnnotation;
@@ -96,7 +96,7 @@ public class BallastBonusContractExtensionExporter implements IExporterExtension
 									notionalJourneyContractDetails.setReturnPort(ruleA.returnPort.getName());
 									notionalJourneyContractDetails.setDistance(ruleA.distance);
 
-									notionalJourneyContractDetails.setLumpSum((int) OptimiserUnitConvertor.convertToExternalFixedCost(ruleA.lumpSum));
+									notionalJourneyContractDetails.setLumpSum(OptimiserUnitConvertor.convertToExternalFixedCost(ruleA.lumpSum));
 									notionalJourneyContractDetails.setFuelPrice(OptimiserUnitConvertor.convertToExternalPrice(ruleA.fuelPrice));
 									notionalJourneyContractDetails.setTotalFuelUsed(OptimiserUnitConvertor.convertToExternalVolume(ruleA.totalFuelUsed));
 									notionalJourneyContractDetails.setTotalFuelCost(OptimiserUnitConvertor.convertToExternalFixedCost(ruleA.totalFuelCost));

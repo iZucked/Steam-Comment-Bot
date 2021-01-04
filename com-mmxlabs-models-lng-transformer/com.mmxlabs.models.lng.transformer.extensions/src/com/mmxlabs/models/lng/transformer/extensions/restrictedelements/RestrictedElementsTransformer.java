@@ -66,7 +66,7 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 
 	private enum RestrictionType {
 		FOLLOWER, PRECEDENT
-	};
+	}
 
 	private final Set<ISequenceElement> allElements = new HashSet<ISequenceElement>();
 

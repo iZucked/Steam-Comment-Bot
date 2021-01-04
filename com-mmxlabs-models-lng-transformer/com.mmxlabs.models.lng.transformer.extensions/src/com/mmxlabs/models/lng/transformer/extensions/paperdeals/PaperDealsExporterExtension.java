@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.PaperPricingType;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.SettleStrategy;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -38,10 +39,8 @@ import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.export.IExporterExtension;
 import com.mmxlabs.models.lng.types.DealType;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
-import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
-import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossAnnotation;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 
@@ -56,14 +55,14 @@ public class PaperDealsExporterExtension implements IExporterExtension {
 	private IAnnotatedSolution annotatedSolution;
 	private Schedule outputSchedule;
 	private Map<String, BaseLegalEntity> entities = new HashMap<>();
-	
+
 	@Inject
 	LNGScenarioModel lngScenarioModel;
-	
+
 	@Inject
 	@Named(SchedulerConstants.COMPUTE_EXPOSURES)
 	private boolean exposuresEnabled;
-	
+
 	@Inject
 	@Named(SchedulerConstants.COMPUTE_PAPER_PNL)
 	private boolean paperPnLEnabled;
@@ -79,19 +78,22 @@ public class PaperDealsExporterExtension implements IExporterExtension {
 	public void finishExporting() {
 		if (paperPnLEnabled) {
 			final ProfitAndLossSequences profitAndLossSequences = annotatedSolution.getEvaluationState().getData(SchedulerEvaluationProcess.PROFIT_AND_LOSS_SEQUENCES, ProfitAndLossSequences.class);
-			
+
 			final Map<BasicPaperDealData, List<BasicPaperDealAllocationEntry>> paperDealEntries = profitAndLossSequences.getPaperDealRecords();
-			
-			//FIXME : hack to get the entities. Simon thinks that having a provider is much better
-			for (final BaseLegalEntity entity : ScenarioModelUtil.getCommercialModel(lngScenarioModel).getEntities()) {
+
+			// FIXME : hack to get the entities. Simon thinks that having a provider is much better
+			CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(lngScenarioModel);
+			for (final BaseLegalEntity entity : commercialModel.getEntities()) {
 				entities.put(entity.getName(), entity);
 			}
-			
+
 			outputSchedule.getPaperDealAllocations().clear();
 			outputSchedule.getGeneratedPaperDeals().clear();
-			
-			for (final BasicPaperDealData basicPaperDealData : paperDealEntries.keySet()) {
-				final List<BasicPaperDealAllocationEntry> basicPaperDealAllocationEntries = paperDealEntries.get(basicPaperDealData);
+
+			for (final var e : paperDealEntries.entrySet()) {
+				final BasicPaperDealData basicPaperDealData = e.getKey();
+				final List<BasicPaperDealAllocationEntry> basicPaperDealAllocationEntries = e.getValue();
+
 				final PaperDeal paperDeal;
 				if (!basicPaperDealData.isVirtual()) {
 					paperDeal = modelEntityMap.getModelObjectNullChecked(basicPaperDealData, PaperDeal.class);
@@ -108,12 +110,12 @@ public class PaperDealsExporterExtension implements IExporterExtension {
 					paperDeal.setPricingMonth(start);
 					paperDeal.setStartDate(basicPaperDealData.getStart());
 					paperDeal.setEndDate(basicPaperDealData.getEnd());
-					
+
 					final PaperPricingType paperPricingType;
 					SettleStrategy settleStrategy = null;
 					if ("CALENDAR".equals(basicPaperDealData.getType())) {
 						paperPricingType = PaperPricingType.CALENDAR;
-					} else if("INSTRUMENT".equals(basicPaperDealData.getType())) {
+					} else if ("INSTRUMENT".equals(basicPaperDealData.getType())) {
 						paperPricingType = PaperPricingType.INSTRUMENT;
 						final BasicInstrumentData basicInstrumentData = basicPaperDealData.getInstrument();
 						if (basicInstrumentData == null) {
@@ -143,31 +145,31 @@ public class PaperDealsExporterExtension implements IExporterExtension {
 					paperDeal.setEntity(entity);
 					paperDeal.setYear(basicPaperDealData.getYear());
 					paperDeal.setComment(basicPaperDealData.getNotes());
-					
+
 					outputSchedule.getGeneratedPaperDeals().add(paperDeal);
 				}
 				outputSchedule.getPaperDealAllocations().add(allocatePaperDeal(paperDeal, basicPaperDealAllocationEntries));
 			}
 		}
-		
+
 		modelEntityMap = null;
 		outputSchedule = null;
 		annotatedSolution = null;
 	}
-	
+
 	private PaperDealAllocation allocatePaperDeal(final PaperDeal paperDeal, final List<BasicPaperDealAllocationEntry> paperDealAllocations) {
 		final PaperDealAllocation allocation = ScheduleFactory.eINSTANCE.createPaperDealAllocation();
 		allocation.setPaperDeal(paperDeal);
-		
+
 		for (final BasicPaperDealAllocationEntry optiEntry : paperDealAllocations) {
 			final PaperDealAllocationEntry entry = ScheduleFactory.eINSTANCE.createPaperDealAllocationEntry();
 			entry.setDate(optiEntry.getDate());
 			entry.setPrice(OptimiserUnitConvertor.convertToExternalPrice(optiEntry.getPrice()));
 			entry.setQuantity(OptimiserUnitConvertor.convertToExternalVolume(optiEntry.getQuantity()));
 			entry.setValue(OptimiserUnitConvertor.convertToExternalVolume(optiEntry.getValue()));
-			
+
 			if (exposuresEnabled) {
-				for (final BasicExposureRecord record : optiEntry.getExposures()){
+				for (final BasicExposureRecord record : optiEntry.getExposures()) {
 					final ExposureDetail newDetail = ScheduleFactory.eINSTANCE.createExposureDetail();
 					final DealType dealType = record.getIndexName().equalsIgnoreCase("PHYSICAL") ? DealType.PHYSICAL : DealType.FINANCIAL;
 					newDetail.setDealType(dealType);
@@ -182,10 +184,10 @@ public class PaperDealsExporterExtension implements IExporterExtension {
 					newDetail.setDate(YearMonth.from(record.getTime()));
 					newDetail.setUnitPrice(OptimiserUnitConvertor.convertToExternalPrice(record.getUnitPrice()));
 					newDetail.setCurrencyUnit(record.getCurrencyUnit());
-	
+
 					entry.getExposures().add(newDetail);
 				}
-				
+
 				for (final ExposureDetail d : entry.getExposures()) {
 					// This is only for unit test reload validation as -0.0 != 0.0 and we cannot
 					// persist/reload -0.0
@@ -203,36 +205,36 @@ public class PaperDealsExporterExtension implements IExporterExtension {
 					}
 				}
 			}
-			
+
 			allocation.getEntries().add(entry);
 		}
 		setPandLentries(allocation);
-		
+
 		return allocation;
 	}
-	
+
 	private void setPandLentries(final PaperDealAllocation paperDealAllocation) {
-		if (paperDealAllocation instanceof ProfitAndLossContainer) {
+		if (paperDealAllocation != null) {
 			final PaperDeal paperDeal = paperDealAllocation.getPaperDeal();
 			if (paperDeal == null || paperDeal.getEntity() == null) {
 				return;
 			}
 			final BaseLegalEntity entity = paperDeal.getEntity();
-			final ProfitAndLossContainer container = (ProfitAndLossContainer) paperDealAllocation;
-			
+			final ProfitAndLossContainer container = paperDealAllocation;
+
 			int totalGroupValue = 0;
 			int totalGroupValuePreTax = 0;
 			final GroupProfitAndLoss groupProfitAndLoss = ScheduleFactory.eINSTANCE.createGroupProfitAndLoss();
 			container.setGroupProfitAndLoss(groupProfitAndLoss);
-			
+
 			final Map<BaseEntityBook, int[]> groupProfitMap = new HashMap<>();
-			
+
 			for (final PaperDealAllocationEntry entry : paperDealAllocation.getEntries()) {
-				
+
 				final BaseEntityBook entityBook = entity.getTradingBook();
-				//For the time being we assume that entire generated paper deal's allocation value is within the trading book and has no tax
-				final int groupProfit = (int)entry.getValue();
-				final int groupProfitPreTax = (int)entry.getValue();
+				// For the time being we assume that entire generated paper deal's allocation value is within the trading book and has no tax
+				final int groupProfit = (int) entry.getValue();
+				final int groupProfitPreTax = (int) entry.getValue();
 
 				if (!groupProfitMap.containsKey(entityBook)) {
 					groupProfitMap.put(entityBook, new int[2]);
@@ -240,7 +242,7 @@ public class PaperDealsExporterExtension implements IExporterExtension {
 				groupProfitMap.get(entityBook)[0] += groupProfit;
 				groupProfitMap.get(entityBook)[1] += groupProfitPreTax;
 			}
-			
+
 			for (final Map.Entry<BaseEntityBook, int[]> e : groupProfitMap.entrySet()) {
 
 				final EntityProfitAndLoss streamData = ScheduleFactory.eINSTANCE.createEntityProfitAndLoss();

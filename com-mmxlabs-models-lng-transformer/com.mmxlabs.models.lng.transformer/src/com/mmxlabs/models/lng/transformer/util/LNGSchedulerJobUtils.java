@@ -526,6 +526,7 @@ public class LNGSchedulerJobUtils {
 		// This *should* be okay, but note will skip our command handler framework.
 		if (!objectsToDelete.isEmpty()) {
 			cmd.append(new DeleteCommand(domain, objectsToDelete) {
+				@Override
 				protected Map<EObject, Collection<EStructuralFeature.Setting>> findReferences(final Collection<EObject> eObjects) {
 					return EcoreUtil.UsageCrossReferencer.findAll(eObjects, scenario);
 				}

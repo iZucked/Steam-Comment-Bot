@@ -43,8 +43,8 @@ public abstract class AbstractVoyageCostCalculator implements IVoyageCostCalcula
 
 	@Override
 	public @Nullable VoyagePlan calculateShippingCosts(@NonNull final IPort loadPort, @NonNull final IPort dischargePort, final int loadTime, final int loadDuration, final int dischargeTime,
-			final int dischargeDuration,  @NonNull final IVessel vessel, @NonNull ICharterCostCalculator charterCostCalculator, final long startHeelInM3, final int notionalBallastSpeed, final int cargoCVValue,
-			@NonNull final ERouteOption route, final int[] basePricePerMT, final int salesPricePerMMBTu) {
+			final int dischargeDuration, @NonNull final IVessel vessel, @NonNull ICharterCostCalculator charterCostCalculator, final long startHeelInM3, final int notionalBallastSpeed,
+			final int cargoCVValue, @NonNull final ERouteOption route, final int[] basePricePerMT, final int salesPricePerMMBTu) {
 		return calculateShippingCosts(loadPort, dischargePort, loadTime, loadDuration, dischargeTime, dischargeDuration, vessel, charterCostCalculator, startHeelInM3, notionalBallastSpeed,
 				cargoCVValue, route, basePricePerMT, createSalesPriceCalculator(salesPricePerMMBTu));
 	}
@@ -53,29 +53,30 @@ public abstract class AbstractVoyageCostCalculator implements IVoyageCostCalcula
 	public @Nullable VoyagePlan calculateShippingCosts(@NonNull final IPort loadPort, @NonNull final IPort dischargePort, final int loadTime, final int loadDuration, final int dischargeTime,
 			final int dischargeDuration, final int returnTime, @NonNull final IVessel vessel, @NonNull ICharterCostCalculator charterCostCalculator, final long startHeelInM3, final int cargoCVValue,
 			@NonNull final ERouteOption route, final int[] basePricePerMT, final int salesPricePerMMBTu) {
-		return calculateShippingCosts(loadPort, dischargePort, loadTime, loadDuration, dischargeTime, dischargeDuration, returnTime, vessel, charterCostCalculator, startHeelInM3, cargoCVValue,
-				route, basePricePerMT, createSalesPriceCalculator(salesPricePerMMBTu));
+		return calculateShippingCosts(loadPort, dischargePort, loadTime, loadDuration, dischargeTime, dischargeDuration, returnTime, vessel, charterCostCalculator, startHeelInM3, cargoCVValue, route,
+				basePricePerMT, createSalesPriceCalculator(salesPricePerMMBTu));
 	}
 
 	public @Nullable VoyagePlan calculateShippingCosts(@NonNull final IPort loadPort, @NonNull final IPort dischargePort, final int loadTime, final int loadDistance, final int loadDuration,
-			final int dischargeTime, final int dischargeDistance, final int dischargeDuration, final int notionalReturnTime, @NonNull final IVessel vessel, @NonNull ICharterCostCalculator charterCostCalculator, 
-			final long startHeelInM3, final int cargoCVValue, @NonNull final ERouteOption route, final int[] baseFuelPricePerMT, final int dischargePriceInMMBTU) {
+			final int dischargeTime, final int dischargeDistance, final int dischargeDuration, final int notionalReturnTime, @NonNull final IVessel vessel,
+			@NonNull ICharterCostCalculator charterCostCalculator, final long startHeelInM3, final int cargoCVValue, @NonNull final ERouteOption route, final int[] baseFuelPricePerMT,
+			final int dischargePriceInMMBTU) {
 		return calculateShippingCosts(loadPort, dischargePort, loadTime, loadDistance, loadDuration, dischargeTime, dischargeDistance, dischargeDuration, notionalReturnTime, vessel,
 				charterCostCalculator, startHeelInM3, cargoCVValue, route, baseFuelPricePerMT, createSalesPriceCalculator(dischargePriceInMMBTU));
 	}
 
 	@Nullable
 	protected abstract VoyagePlan calculateShippingCosts(@NonNull IPort loadPort, @NonNull IPort dischargePort, int loadTime, int loadDuration, int dischargeTime, int dischargeDuration,
-			int returnTime, @NonNull IVessel vessel, @NonNull ICharterCostCalculator charterCostCalculator,  long startHeelInM3, int cargoCVValue, @NonNull ERouteOption route,
-			int[] baseFuelPricePerMT, @NonNull ISalesPriceCalculator salesPrice);
+			int returnTime, @NonNull IVessel vessel, @NonNull ICharterCostCalculator charterCostCalculator, long startHeelInM3, int cargoCVValue, @NonNull ERouteOption route, int[] baseFuelPricePerMT,
+			@NonNull ISalesPriceCalculator salesPrice);
 
 	public abstract @Nullable VoyagePlan calculateShippingCosts(@NonNull final IPort loadPort, @NonNull final IPort dischargePort, final int loadTime, int loadDuration, final int dischargeTime,
 			final int dischargeDuration, @NonNull IVessel vessel, @NonNull ICharterCostCalculator charterCostCalculator, long startHeelInM3, final int notionalBallastSpeed, final int cargoCVValue,
 			@NonNull final ERouteOption route, final int[] basePricePerMT, @NonNull final ISalesPriceCalculator salesPriceCalculator);
 
-	public @Nullable abstract VoyagePlan calculateShippingCosts(@NonNull final IPort loadPort, @NonNull final IPort dischargePort, final int loadTime, final int loadDistance, final int loadDuration,
-			final int dischargeTime, final int dischargeDistance, final int dischargeDuration, final int notionalReturnTime, @NonNull final IVessel vessel, @NonNull ICharterCostCalculator charterCostCalculator, 
-			final long startHeelInM3, final int cargoCVValue, @NonNull final ERouteOption route, final int[] baseFuelPricePerMT,
+	public abstract @Nullable VoyagePlan calculateShippingCosts(@NonNull final IPort loadPort, @NonNull final IPort dischargePort, final int loadTime, final int loadDistance, final int loadDuration,
+			final int dischargeTime, final int dischargeDistance, final int dischargeDuration, final int notionalReturnTime, @NonNull final IVessel vessel,
+			@NonNull ICharterCostCalculator charterCostCalculator, final long startHeelInM3, final int cargoCVValue, @NonNull final ERouteOption route, final int[] baseFuelPricePerMT,
 			@NonNull final ISalesPriceCalculator salesPriceCalculator);
 
 	protected @NonNull VoyageDetails calculateVoyageDetails(@NonNull final VesselState vesselState, @NonNull final IVessel vessel, @NonNull final ERouteOption route, final int distance,

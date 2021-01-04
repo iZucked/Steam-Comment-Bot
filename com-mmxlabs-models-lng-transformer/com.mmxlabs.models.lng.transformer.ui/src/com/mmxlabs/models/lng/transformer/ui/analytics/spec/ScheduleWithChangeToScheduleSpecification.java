@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 import org.eclipse.emf.ecore.EObject;
 
@@ -70,13 +71,15 @@ import com.mmxlabs.rcp.common.ecore.EMFCopier;
 
 public class ScheduleWithChangeToScheduleSpecification {
 
+	private static final String PREFIX_MARKET = "market-";
+	private static final String PREFIX_SLOT = "slot-";
 	private final Function<Pair<CharterInMarket, Integer>, CharterInMarketOverride> buildMarketAvailability = (oldAvailability) -> {
 		final CharterInMarketOverride newAvailability = CargoFactory.eINSTANCE.createCharterInMarketOverride();
 		newAvailability.setCharterInMarket(oldAvailability.getFirst());
 		newAvailability.setSpotIndex(oldAvailability.getSecond());
 		return newAvailability;
 	};
-	private final Function<VesselAvailability, VesselAvailability> buildVesselAvailability = (oldAvailability) -> {
+	private final UnaryOperator<VesselAvailability> buildVesselAvailability = (oldAvailability) -> {
 		final VesselAvailability newAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
 
 		newAvailability.setStartHeel(CargoFactory.eINSTANCE.createStartHeelOptions());
@@ -302,13 +305,13 @@ public class ScheduleWithChangeToScheduleSpecification {
 					if (descriptor instanceof RealSlotDescriptor) {
 						final RealSlotDescriptor d = (RealSlotDescriptor) descriptor;
 						final SlotType slotType = d.getSlotType();
-						final String key = "slot-" + slotType + "-" + d.getSlotName();
+						final String key = PREFIX_SLOT + slotType + "-" + d.getSlotName();
 						fileObject(baseFinderFunction.apply(key), baseCargoAllocations, baseVesselEventVisits, baseOpenSlotAllocations);
 						fileObject(targetFinderFunction.apply(key), targetCargoAllocations, targetVesselEventVisits, targetOpenSlotAllocations);
 					} else if (descriptor instanceof SpotMarketSlotDescriptor) {
 						final SpotMarketSlotDescriptor d = (SpotMarketSlotDescriptor) descriptor;
 						final SlotType slotType = d.getSlotType();
-						final String key = "market-" + slotType + "-" + d.getMarketName() + String.format("%04d-%02d", d.getDate().getYear(), d.getDate().getMonthValue());
+						final String key = PREFIX_MARKET + slotType + "-" + d.getMarketName() + String.format("%04d-%02d", d.getDate().getYear(), d.getDate().getMonthValue());
 						fileObject(baseFinderFunction.apply(key), baseCargoAllocations, baseVesselEventVisits, baseOpenSlotAllocations);
 						fileObject(targetFinderFunction.apply(key), targetCargoAllocations, targetVesselEventVisits, targetOpenSlotAllocations);
 					} else {
@@ -324,7 +327,7 @@ public class ScheduleWithChangeToScheduleSpecification {
 				final OpenSlotChange openSlotChange = (OpenSlotChange) change;
 				final RealSlotDescriptor d = (RealSlotDescriptor) openSlotChange.getSlotDescriptor();
 				final SlotType slotType = d.getSlotType();
-				final String key = "slot-" + slotType + "-" + d.getSlotName();
+				final String key = PREFIX_SLOT + slotType + "-" + d.getSlotName();
 				fileObject(baseFinderFunction.apply(key), baseCargoAllocations, baseVesselEventVisits, baseOpenSlotAllocations);
 				fileObject(targetFinderFunction.apply(key), targetCargoAllocations, targetVesselEventVisits, targetOpenSlotAllocations);
 			}
@@ -345,7 +348,7 @@ public class ScheduleWithChangeToScheduleSpecification {
 		for (final OpenSlotAllocation openSlotAllocation : schedule.getOpenSlotAllocations()) {
 			final Slot slot = openSlotAllocation.getSlot();
 			final SlotType slotType = ScheduleSpecificationHelper.getSlotType(slot);
-			final String key = "slot-" + slotType + "-" + slot.getName();
+			final String key = PREFIX_SLOT + slotType + "-" + slot.getName();
 			slotMap.put(key, openSlotAllocation);
 		}
 		for (final SlotAllocation slotAllocation : schedule.getSlotAllocations()) {
@@ -353,12 +356,12 @@ public class ScheduleWithChangeToScheduleSpecification {
 			if (slot instanceof SpotSlot) {
 				final SpotSlot spotSlot = (SpotSlot) slot;
 				final SlotType slotType = ScheduleSpecificationHelper.getSlotType(slot);
-				final String key = "market-" + slotType + "-" + spotSlot.getMarket().getName() + String.format("%04d-%02d", slot.getWindowStart().getYear(), slot.getWindowStart().getMonthValue());
+				final String key = PREFIX_MARKET + slotType + "-" + spotSlot.getMarket().getName() + String.format("%04d-%02d", slot.getWindowStart().getYear(), slot.getWindowStart().getMonthValue());
 				marketSlotMap.computeIfAbsent(key, k -> new LinkedList<>()).add(slotAllocation);
 			} else {
 
 				final SlotType slotType = ScheduleSpecificationHelper.getSlotType(slot);
-				final String key = "slot-" + slotType + "-" + slot.getName();
+				final String key = PREFIX_SLOT + slotType + "-" + slot.getName();
 				slotMap.put(key, slotAllocation);
 			}
 		}
@@ -374,9 +377,9 @@ public class ScheduleWithChangeToScheduleSpecification {
 		return (key) -> {
 			if (key.startsWith("event-")) {
 				return eventMap.get(key);
-			} else if (key.startsWith("slot-")) {
+			} else if (key.startsWith(PREFIX_SLOT)) {
 				return slotMap.get(key);
-			} else if (key.startsWith("market-")) {
+			} else if (key.startsWith(PREFIX_MARKET)) {
 				// What to do here? Just ignore for now I think
 				// return marketSlotMap.get(key);
 			}

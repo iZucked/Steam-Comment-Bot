@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -24,7 +23,7 @@ public class LightWeightOptimisationData implements ILightWeightOptimisationData
 	private long[] cargoPNL;
 	private long[] vesselCapacities;
 	private long[][][] cargoToCargoCostsOnAvailability;
-	private ArrayList<Set<Integer>> cargoVesselRestrictions;
+	private List<Set<Integer>> cargoVesselRestrictions;
 	private int[][][] cargoToCargoMinTravelTimes;
 	private int[][] cargoMinTravelTimes;
 	private Map<ILoadOption, IDischargeOption> pairingsMap;
@@ -42,7 +41,7 @@ public class LightWeightOptimisationData implements ILightWeightOptimisationData
 	private CargoWindowData[] cargoWindows;
 
 	public LightWeightOptimisationData(List<List<IPortSlot>> shippedCargoes, List<List<IPortSlot>> nonShippedCargoes, List<IVesselAvailability> vessels, long[] vesselCapacities, long[] cargoPNL,
-			long[][][] cargoToCargoCostsOnAvailability, ArrayList<Set<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes,
+			long[][][] cargoToCargoCostsOnAvailability, List<Set<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes,
 			Map<ILoadOption, IDischargeOption> pairingsMap, int[] desiredVesselCargoCount, long[] desiredVesselCargoWeight, long[] cargoesVolumes, LightWeightCargoDetails[] cargoDetails,
 			long[][] cargoCharterCostPerAvailability, Set<Integer> cargoIndexes, Set<Integer> eventIndexes, ITimeWindow[] vesselStartWindows, ITimeWindow[] vesselEndWindows,
 			int[] cargoStartSlotDurations, int[] cargoEndSlotDurations, CargoWindowData[] cargoWindows) {
@@ -101,11 +100,11 @@ public class LightWeightOptimisationData implements ILightWeightOptimisationData
 	}
 
 	@Override
-	public ArrayList<Set<Integer>> getCargoVesselRestrictions() {
+	public List<Set<Integer>> getCargoVesselRestrictions() {
 		return cargoVesselRestrictions;
 	}
 
-	public void setCargoVesselRestrictions(ArrayList<Set<Integer>> cargoVesselRestrictions) {
+	public void setCargoVesselRestrictions(List<Set<Integer>> cargoVesselRestrictions) {
 		this.cargoVesselRestrictions = cargoVesselRestrictions;
 	}
 

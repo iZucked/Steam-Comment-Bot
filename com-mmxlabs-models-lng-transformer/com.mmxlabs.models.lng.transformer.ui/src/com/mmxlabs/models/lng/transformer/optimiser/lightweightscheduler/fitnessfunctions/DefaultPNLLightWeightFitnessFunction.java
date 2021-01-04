@@ -123,7 +123,7 @@ public class DefaultPNLLightWeightFitnessFunction implements ILightWeightFitness
 			}
 			details.add(new CargoTimeDetails(earliestCargoStart, earliestCargoEnd, lateness));
 		}
-		if (details.size() > 0) {
+		if (!details.isEmpty()) {
 			// add vessel end date lateness to last cargo
 			CargoTimeDetails lastCargoTimeDetails = details.get(details.size() - 1);
 			// Note: end duration is used here as it needs to be added to as lastCargoTimeDetails.end is the start of discharge 

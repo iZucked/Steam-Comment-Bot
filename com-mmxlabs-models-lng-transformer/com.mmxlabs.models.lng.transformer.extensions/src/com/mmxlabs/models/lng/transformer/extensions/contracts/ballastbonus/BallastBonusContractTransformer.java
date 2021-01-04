@@ -5,7 +5,6 @@
 package com.mmxlabs.models.lng.transformer.extensions.contracts.ballastbonus;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.Arrays;
 import java.util.Collection;

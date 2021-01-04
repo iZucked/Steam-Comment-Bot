@@ -93,7 +93,6 @@ public class LNGEvaluationModule extends AbstractModule {
 		bind(PriceBasedWindowTrimmer.class);
 		bind(PNLBasedWindowTrimmer.class).in(Singleton.class);
 		bind(PNLBasedWindowTrimmerUtils.class).in(Singleton.class);
-		;
 
 		bind(DefaultVoyagePlanEvaluator.class);
 

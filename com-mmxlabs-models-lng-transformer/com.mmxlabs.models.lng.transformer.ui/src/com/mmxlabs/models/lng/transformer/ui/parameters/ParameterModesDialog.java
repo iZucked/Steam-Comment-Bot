@@ -550,7 +550,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 							return null;
 						}
 						try {
-							return LocalDate.parse((String) value, format);
+							return LocalDate.parse(value, format);
 						} catch (final Exception e) {
 							return null;
 						}

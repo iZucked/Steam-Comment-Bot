@@ -347,7 +347,7 @@ public class PeriodExporter {
 						final ISequenceElement compeleteE = completeElementMap.get(partialE.getName());
 						toInsert.add(0, compeleteE);
 					}
-					if (toInsert.size() > 0) {
+					if (!toInsert.isEmpty()) {
 						for (final ISequenceElement e : toInsert) {
 							completeSeq.insert(completeMapping.getSecond(), e);
 						}

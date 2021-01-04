@@ -5,7 +5,7 @@
 package com.mmxlabs.models.lng.transformer.ui;
 
 import java.util.concurrent.CountDownLatch;
-import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 import java.util.function.Supplier;
 
 import org.eclipse.emf.ecore.EObject;
@@ -37,7 +37,7 @@ public class OptimisationJobRunner {
 	private static final Logger log = LoggerFactory.getLogger(OptimisationJobRunner.class);
 
 	public void run(@NonNull String taskName, @NonNull ScenarioInstance instance, @NonNull ScenarioModelRecord modelRecord,
-			@Nullable BiFunction<IScenarioDataProvider, LNGScenarioModel, Boolean> prepareCallback, @NonNull Supplier<IJobDescriptor> createJobDescriptorCallback,
+			@Nullable BiPredicate<IScenarioDataProvider, LNGScenarioModel> prepareCallback, @NonNull Supplier<IJobDescriptor> createJobDescriptorCallback,
 			@Nullable TriConsumer<IJobControl, EJobState, IScenarioDataProvider> jobCompletedCallback) {
 		final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
 
@@ -57,8 +57,8 @@ public class OptimisationJobRunner {
 					}
 				}
 				if (prepareCallback != null) {
-					Boolean b = prepareCallback.apply(scenarioDataProvider, root);
-					if (Boolean.FALSE.equals(b)) {
+					boolean b = prepareCallback.test(scenarioDataProvider, root);
+					if (!b) {
 						return;
 					}
 				}

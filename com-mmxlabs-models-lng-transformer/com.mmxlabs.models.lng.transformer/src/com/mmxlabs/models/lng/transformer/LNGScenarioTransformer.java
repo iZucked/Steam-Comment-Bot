@@ -322,7 +322,6 @@ public class LNGScenarioTransformer {
 	private IPromptPeriodProviderEditor promptPeriodProviderEditor;
 
 	@Inject
-	@NonNull
 	private ILockedCargoProviderEditor lockedCargoProviderEditor;
 
 	/**

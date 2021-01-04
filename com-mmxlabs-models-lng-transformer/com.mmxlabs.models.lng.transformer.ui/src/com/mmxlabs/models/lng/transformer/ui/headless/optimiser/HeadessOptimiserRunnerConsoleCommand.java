@@ -51,9 +51,9 @@ public class HeadessOptimiserRunnerConsoleCommand implements CommandProvider {
 		String scenarioFileName2 = "C:/temp/strategic2/StartingPoint2.lingo";
 
 		List<String> scenarios = Lists.newArrayList(scenarioFileName1, scenarioFileName2);
-//		int[] spotCounts = { 4};
-//		int[] seedCounts = {9, 12, 14 };
-//		int[] itersCounts = { 400_000 };
+		// int[] spotCounts = { 4};
+		// int[] seedCounts = {9, 12, 14 };
+		// int[] itersCounts = { 400_000 };
 		int[] spotCounts = { 2, 4, 6, 10 };
 		int[] seedCounts = { 5, 8, 10, 15 };
 		int[] itersCounts = { 400_000, 500_000, 600_000, 800_000 };
@@ -67,13 +67,13 @@ public class HeadessOptimiserRunnerConsoleCommand implements CommandProvider {
 						for (int iters : itersCounts) {
 
 							HeadlessApplicationOptions options = new HeadlessApplicationOptions();
-//					options.algorithmConfigFile = paramsFileName;
+							// options.algorithmConfigFile = paramsFileName;
 							options.scenarioFileName = scenarioFileName;
 							options.outputScenarioFileName = "required";
-//					options.outputLoggingFolder = outputPath;
+							// options.outputLoggingFolder = outputPath;
 
 							UserSettings userSettings = ScenarioUtils.createDefaultUserSettings();
-							options.setUserSettings((UserSettingsImpl) userSettings); 
+							options.setUserSettings((UserSettingsImpl) userSettings);
 							userSettings.setMode(OptimisationMode.STRATEGIC);
 							userSettings.setSimilarityMode(SimilarityMode.OFF);
 							userSettings.setWithCharterLength(true);
@@ -246,9 +246,7 @@ public class HeadessOptimiserRunnerConsoleCommand implements CommandProvider {
 
 	@Override
 	public String getHelp() {
-		StringBuffer buffer = new StringBuffer();
-		buffer.append("optimiser scenario.lingo parameters.json\n\t");
-		return buffer.toString();
+		return "optimiser scenario.lingo parameters.json\n\t";
 	}
 
 }

@@ -9,14 +9,12 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Inject;
 import com.mmxlabs.common.CollectionsUtil;
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.util.exceptions.UserFeedbackException;
 import com.mmxlabs.models.lng.transformer.optimiser.valuepair.ProfitAndLossRecorder;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
@@ -220,7 +218,6 @@ public class PairingOptimisationData<P,C> implements ProfitAndLossRecorder {
 	public void setMinDischargeGroupCount() {
 		List<ConstraintInfo<P,C,IDischargeOption>> allMinDischargeGroupCounts = maxSlotCountConstraint.getAllMinDischargeGroupCounts();
 		minDischargeGroupCount = createJSONMapFromConstraint(allMinDischargeGroupCounts);
-		;
 	}
 
 	private List<Map<String, List<Integer>>> createJSONMapFromConstraint(List<ConstraintInfo<P,C,IDischargeOption>> allMaxDischargeGroupCounts) {
@@ -253,7 +250,6 @@ public class PairingOptimisationData<P,C> implements ProfitAndLossRecorder {
 	public void setMinLoadGroupCount() {
 		List<ConstraintInfo<P,C,ILoadOption>> allMinLoadGroupCounts = maxSlotCountConstraint.getAllMinLoadGroupCounts();
 		minLoadGroupCount = createLoadJSONMapFromConstraint(allMinLoadGroupCounts);
-		;
 	}
 
 	private List<Map<String, List<Integer>>> createLoadJSONMapFromConstraint(List<ConstraintInfo<P,C,ILoadOption>> allMaxLoadGroupCounts) {

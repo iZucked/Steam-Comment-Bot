@@ -46,7 +46,7 @@ public class ToggleCharterOutEditorActionDelegate extends ActionDelegate impleme
 			if (msg.getFeature() == ParametersPackage.eINSTANCE.getUserSettings_GenerateCharterOuts()) {
 				updateState();
 			}
-		};
+		}
 	};
 
 	@Override

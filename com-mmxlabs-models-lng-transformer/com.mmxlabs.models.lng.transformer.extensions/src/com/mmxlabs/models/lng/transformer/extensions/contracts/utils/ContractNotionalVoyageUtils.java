@@ -21,7 +21,6 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.impl.WeightedAverageCharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
@@ -272,7 +271,6 @@ public class ContractNotionalVoyageUtils {
 		}
 
 		final long ladenBunkersInMT = portBaseFuelInMT[0] + voyageBaseFuelInMT[0] + portBaseFuelInMT[1];
-		final long ballastBunkersInMT = voyageBaseFuelInMT[1];
 		final long ladenBunkerCost = Calculator.costFromConsumption(ladenBunkersInMT, baseFuelCostPerMT);
 
 		final long totalPortCosts = portCosts[0] + portCosts[1];

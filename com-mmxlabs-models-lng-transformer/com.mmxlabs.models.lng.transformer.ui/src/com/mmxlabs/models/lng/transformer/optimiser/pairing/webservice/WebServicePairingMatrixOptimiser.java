@@ -10,9 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mmxlabs.common.Pair;
-import com.mmxlabs.models.lng.adp.ContractProfile;
-import com.mmxlabs.models.lng.adp.ProfileConstraint;
 import com.mmxlabs.models.lng.transformer.optimiser.pairing.IPairingMatrixOptimiser;
 import com.mmxlabs.models.lng.transformer.optimiser.pairing.PairingOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;

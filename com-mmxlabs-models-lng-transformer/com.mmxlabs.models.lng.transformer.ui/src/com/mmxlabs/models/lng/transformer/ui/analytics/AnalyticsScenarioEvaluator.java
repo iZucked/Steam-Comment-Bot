@@ -74,6 +74,7 @@ import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.VesselEventSpecification;
+import com.mmxlabs.models.lng.cargo.VesselScheduleSpecification;
 import com.mmxlabs.models.lng.parameters.Constraint;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
@@ -348,8 +349,8 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		try {
 			helper.generateWith(scenarioInstance, userSettings, scenarioDataProvider.getEditingDomain(), hints, (bridge) -> {
 				final LNGDataTransformer dataTransformer = bridge.getDataTransformer();
-				final ViabilitySanboxUnit unit = new ViabilitySanboxUnit(dataTransformer, userSettings, constraints, executorService,
-						dataTransformer.getInitialSequences(), dataTransformer.getInitialResult(), dataTransformer.getHints());
+				final ViabilitySanboxUnit unit = new ViabilitySanboxUnit(dataTransformer, userSettings, constraints, executorService, dataTransformer.getInitialSequences(),
+						dataTransformer.getInitialResult(), dataTransformer.getHints());
 				/* Command cmd = */
 				unit.run(model, mapper, shippingMap, new NullProgressMonitor());
 			});
@@ -743,7 +744,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 							try {
 								f.get();
 							} catch (final Exception e) {
-
+								// Ignore exceptions;
 							}
 						});
 					}
@@ -845,7 +846,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 						}
 					});
 			scheduleSpecification.getVesselScheduleSpecifications().stream() //
-					.map(s -> s.getVesselAllocation()) //
+					.map(VesselScheduleSpecification::getVesselAllocation) //
 					.filter(VesselAvailability.class::isInstance) //
 					.map(VesselAvailability.class::cast) //
 					.forEach(s -> {
