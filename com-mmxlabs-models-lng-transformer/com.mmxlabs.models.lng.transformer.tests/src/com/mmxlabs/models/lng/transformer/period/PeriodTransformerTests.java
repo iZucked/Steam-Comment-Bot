@@ -184,7 +184,7 @@ public class PeriodTransformerTests {
 			collectedAssignments.add(PeriodTestUtils.createCollectedAssignment(vesselAvailability1, c1));
 		}
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
-		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap, mapping);
+		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<>(), new HashSet<>(), objectToPortVisitMap, mapping);
 
 		// No change expected - vesselAvailability1
 		Assertions.assertNull(vesselAvailability1.getStartAt());
@@ -247,7 +247,7 @@ public class PeriodTransformerTests {
 			collectedAssignments.add(PeriodTestUtils.createCollectedAssignment(vesselAvailability2, c1, c2));
 		}
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
-		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap, mapping);
+		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<>(), new HashSet<>(), objectToPortVisitMap, mapping);
 
 		// Changed
 		Assertions.assertEquals(port3, vesselAvailability2.getStartAt());
@@ -309,7 +309,7 @@ public class PeriodTransformerTests {
 			collectedAssignments.add(PeriodTestUtils.createCollectedAssignment(vesselAvailability3, c1, c2));
 		}
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
-		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap, mapping);
+		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<>(), new HashSet<>(), objectToPortVisitMap, mapping);
 
 		// No change expected
 		Assertions.assertNull(vesselAvailability3.getStartAt());
@@ -396,7 +396,7 @@ public class PeriodTransformerTests {
 		}
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
-		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap, mapping);
+		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<>(), new HashSet<>(), objectToPortVisitMap, mapping);
 
 		Assertions.assertEquals(port3, vesselAvailability4.getStartAt());
 		Assertions.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.MARCH, 1, 0), vesselAvailability4.getStartAfter());
@@ -478,7 +478,7 @@ public class PeriodTransformerTests {
 		}
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
-		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap, mapping);
+		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<>(), new HashSet<>(), objectToPortVisitMap, mapping);
 
 		Assertions.assertEquals(port3, vesselAvailability5.getStartAt());
 		Assertions.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.MARCH, 1, 0), vesselAvailability5.getStartAfter());
@@ -539,7 +539,7 @@ public class PeriodTransformerTests {
 		}
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
-		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap, mapping);
+		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<>(), new HashSet<>(), objectToPortVisitMap, mapping);
 
 		// No change expected
 		Assertions.assertNull(vesselAvailability6.getStartAt());
@@ -589,7 +589,7 @@ public class PeriodTransformerTests {
 		// Need vessel event and cooldown also
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
-		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap, mapping);
+		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<>(), new HashSet<>(), objectToPortVisitMap, mapping);
 
 		// No change expected - vesselAvailability7
 		Assertions.assertNull(vesselAvailability7.getStartAt());
@@ -646,7 +646,7 @@ public class PeriodTransformerTests {
 		}
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
-		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap, mapping);
+		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<>(), new HashSet<>(), objectToPortVisitMap, mapping);
 
 		Assertions.assertNull(vesselAvailability.getStartAt());
 		Assertions.assertTrue(vesselAvailability.getEndAt().isEmpty());
@@ -702,7 +702,7 @@ public class PeriodTransformerTests {
 		}
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
-		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap, mapping);
+		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<>(), new HashSet<>(), objectToPortVisitMap, mapping);
 
 		Assertions.assertEquals(port2, vesselAvailability.getStartAt());
 		Assertions.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JUNE, 1, 0), vesselAvailability.getStartAfter());
@@ -759,7 +759,7 @@ public class PeriodTransformerTests {
 		}
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
-		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap, mapping);
+		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<>(), new HashSet<>(), objectToPortVisitMap, mapping);
 
 		Assertions.assertNull(vesselAvailability.getStartAt());
 		Assertions.assertNull(vesselAvailability.getStartAfter());
@@ -936,8 +936,8 @@ public class PeriodTransformerTests {
 		final Map<Slot<?>, SlotAllocation> slotAllocationMap = new HashMap<>();
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
-		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots, removedCargoes,
-				slotAllocationMap, objectToPortVisitMap, new HashSet<Cargo>(), new HashSet<Slot<?>>());
+		transformer.findSlotsAndCargoesToRemove(periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots, removedCargoes, slotAllocationMap, objectToPortVisitMap, new HashSet<>(),
+				new HashSet<>());
 
 		// Verify relevant slots and cargoes marked as remove
 		Assertions.assertTrue(seenSlots.contains(copyLoadSlot));
@@ -984,8 +984,8 @@ public class PeriodTransformerTests {
 		final Map<Slot<?>, SlotAllocation> slotAllocationMap = new HashMap<>();
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
-		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots, removedCargoes,
-				slotAllocationMap, objectToPortVisitMap, new HashSet<Cargo>(), new HashSet<Slot<?>>());
+		transformer.findSlotsAndCargoesToRemove(periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots, removedCargoes, slotAllocationMap, objectToPortVisitMap, new HashSet<>(),
+				new HashSet<>());
 
 		// Verify relevant slots and cargoes marked as remove
 		Assertions.assertTrue(seenSlots.contains(copyLoadSlot));
@@ -1065,8 +1065,8 @@ public class PeriodTransformerTests {
 		final Map<Slot<?>, SlotAllocation> slotAllocationMap = new HashMap<>();
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
-		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots, removedCargoes,
-				slotAllocationMap, objectToPortVisitMap, new HashSet<Cargo>(), new HashSet<Slot<?>>());
+		transformer.findSlotsAndCargoesToRemove(periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots, removedCargoes, slotAllocationMap, objectToPortVisitMap, new HashSet<>(),
+				new HashSet<>());
 
 		// Verify relevant slots and cargoes marked as remove
 		Assertions.assertTrue(seenSlots.contains(copyLoadSlot));
@@ -1192,8 +1192,8 @@ public class PeriodTransformerTests {
 		final Map<Slot<?>, SlotAllocation> slotAllocationMap = new HashMap<>();
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
-		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots, removedCargoes,
-				slotAllocationMap, objectToPortVisitMap, new HashSet<Cargo>(), new HashSet<Slot<?>>());
+		transformer.findSlotsAndCargoesToRemove(periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots, removedCargoes, slotAllocationMap, objectToPortVisitMap, new HashSet<>(),
+				new HashSet<>());
 
 		// Verify relevant slots and cargoes marked as remove
 		Assertions.assertTrue(seenSlots.contains(copyLoadSlot));
@@ -1270,8 +1270,8 @@ public class PeriodTransformerTests {
 		final Map<Slot<?>, SlotAllocation> slotAllocationMap = new HashMap<>();
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
-		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots, removedCargoes,
-				slotAllocationMap, objectToPortVisitMap, new HashSet<Cargo>(), new HashSet<Slot<?>>());
+		transformer.findSlotsAndCargoesToRemove(periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots, removedCargoes, slotAllocationMap, objectToPortVisitMap, new HashSet<Cargo>(),
+				new HashSet<>());
 
 		// Verify relevant slots and cargoes marked as remove
 		Assertions.assertTrue(seenSlots.contains(copyLoadSlot));
@@ -1328,8 +1328,8 @@ public class PeriodTransformerTests {
 		final Map<Slot<?>, SlotAllocation> slotAllocationMap = new HashMap<>();
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
-		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots, removedCargoes,
-				slotAllocationMap, objectToPortVisitMap, new HashSet<Cargo>(), new HashSet<Slot<?>>());
+		transformer.findSlotsAndCargoesToRemove(periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots, removedCargoes, slotAllocationMap, objectToPortVisitMap, new HashSet<>(),
+				new HashSet<>());
 
 		// Verify relevant slots and cargoes marked as remove
 		Assertions.assertTrue(seenSlots.contains(copyLoadSlot));
@@ -1379,8 +1379,8 @@ public class PeriodTransformerTests {
 		final Map<Slot<?>, SlotAllocation> slotAllocationMap = new HashMap<>();
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
-		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots, removedCargoes,
-				slotAllocationMap, objectToPortVisitMap, new HashSet<Cargo>(), new HashSet<Slot<?>>());
+		transformer.findSlotsAndCargoesToRemove(periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots, removedCargoes, slotAllocationMap, objectToPortVisitMap, new HashSet<>(),
+				new HashSet<>());
 
 		// Verify relevant slots and cargoes marked as remove
 		Assertions.assertTrue(seenSlots.contains(copyLoadSlot));
@@ -1431,8 +1431,8 @@ public class PeriodTransformerTests {
 		final Map<Slot<?>, SlotAllocation> slotAllocationMap = new HashMap<>();
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
-		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots, removedCargoes,
-				slotAllocationMap, objectToPortVisitMap, new HashSet<Cargo>(), new HashSet<Slot<?>>());
+		transformer.findSlotsAndCargoesToRemove(periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots, removedCargoes, slotAllocationMap, objectToPortVisitMap, new HashSet<>(),
+				new HashSet<>());
 
 		// Verify relevant slots and cargoes marked as remove
 		Assertions.assertTrue(seenSlots.contains(copyLoadSlot));
@@ -1488,8 +1488,8 @@ public class PeriodTransformerTests {
 		final Map<Slot<?>, SlotAllocation> slotAllocationMap = new HashMap<>();
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
-		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots, removedCargoes,
-				slotAllocationMap, objectToPortVisitMap, new HashSet<Cargo>(), new HashSet<Slot<?>>());
+		transformer.findSlotsAndCargoesToRemove(periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots, removedCargoes, slotAllocationMap, objectToPortVisitMap, new HashSet<>(),
+				new HashSet<>());
 
 		// Verify relevant slots and cargoes marked as remove
 		Assertions.assertTrue(seenSlots.contains(copyLoadSlot));
@@ -1551,8 +1551,8 @@ public class PeriodTransformerTests {
 		final Map<Slot<?>, SlotAllocation> slotAllocationMap = new HashMap<>();
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
-		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots, removedCargoes,
-				slotAllocationMap, objectToPortVisitMap, new HashSet<Cargo>(), new HashSet<Slot<?>>());
+		transformer.findSlotsAndCargoesToRemove(periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots, removedCargoes, slotAllocationMap, objectToPortVisitMap, new HashSet<>(),
+				new HashSet<>());
 
 		// Verify relevant slots and cargoes marked as remove
 		Assertions.assertTrue(seenSlots.contains(copyLoadSlot));
@@ -1618,7 +1618,7 @@ public class PeriodTransformerTests {
 		Mockito.when(mockSchedule.getSequences()).thenReturn(l);
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
-		Triple<Set<Cargo>, Set<Event>, Set<VesselEvent>> eventDependencies = transformer.findVesselEventsToRemoveAndDependencies(mockSchedule, periodRecord, copyScenarioModel.getCargoModel(),
+		Triple<Set<Cargo>, Set<VesselEvent>, Set<VesselEvent>> eventDependencies = transformer.findVesselEventsToRemoveAndDependencies(mockSchedule, periodRecord, copyScenarioModel.getCargoModel(),
 				objectToPortVisitMap);
 		transformer.filterVesselEvents(PeriodTestUtils.createEditingDomain(copyScenarioModel), eventDependencies.getThird(), copyScenarioModel.getCargoModel(), mapping, periodRecord, new HashMap<>());
 
@@ -1667,7 +1667,7 @@ public class PeriodTransformerTests {
 		Mockito.when(mockSchedule.getSequences()).thenReturn(l);
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
-		Triple<Set<Cargo>, Set<Event>, Set<VesselEvent>> eventDependencies = transformer.findVesselEventsToRemoveAndDependencies(mockSchedule, periodRecord, copyScenarioModel.getCargoModel(),
+		Triple<Set<Cargo>, Set<VesselEvent>, Set<VesselEvent>> eventDependencies = transformer.findVesselEventsToRemoveAndDependencies(mockSchedule, periodRecord, copyScenarioModel.getCargoModel(),
 				objectToPortVisitMap);
 		transformer.filterVesselEvents(PeriodTestUtils.createEditingDomain(copyScenarioModel), eventDependencies.getThird(), copyScenarioModel.getCargoModel(), mapping, periodRecord, new HashMap<>());
 
@@ -1715,7 +1715,7 @@ public class PeriodTransformerTests {
 		Mockito.when(mockSchedule.getSequences()).thenReturn(l);
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
-		Triple<Set<Cargo>, Set<Event>, Set<VesselEvent>> eventDependencies = transformer.findVesselEventsToRemoveAndDependencies(mockSchedule, periodRecord, copyScenarioModel.getCargoModel(),
+		Triple<Set<Cargo>, Set<VesselEvent>, Set<VesselEvent>> eventDependencies = transformer.findVesselEventsToRemoveAndDependencies(mockSchedule, periodRecord, copyScenarioModel.getCargoModel(),
 				objectToPortVisitMap);
 		transformer.filterVesselEvents(PeriodTestUtils.createEditingDomain(copyScenarioModel), eventDependencies.getThird(), copyScenarioModel.getCargoModel(), mapping, periodRecord, new HashMap<>());
 
@@ -1763,7 +1763,7 @@ public class PeriodTransformerTests {
 		Mockito.when(mockSchedule.getSequences()).thenReturn(l);
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
-		Triple<Set<Cargo>, Set<Event>, Set<VesselEvent>> eventDependencies = transformer.findVesselEventsToRemoveAndDependencies(mockSchedule, periodRecord, copyScenarioModel.getCargoModel(),
+		Triple<Set<Cargo>, Set<VesselEvent>, Set<VesselEvent>> eventDependencies = transformer.findVesselEventsToRemoveAndDependencies(mockSchedule, periodRecord, copyScenarioModel.getCargoModel(),
 				objectToPortVisitMap);
 		transformer.filterVesselEvents(PeriodTestUtils.createEditingDomain(copyScenarioModel), eventDependencies.getThird(), copyScenarioModel.getCargoModel(), mapping, periodRecord, new HashMap<>());
 
