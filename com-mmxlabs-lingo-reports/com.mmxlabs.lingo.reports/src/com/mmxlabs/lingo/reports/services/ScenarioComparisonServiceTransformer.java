@@ -450,7 +450,7 @@ public class ScenarioComparisonServiceTransformer {
 		if (isReferenceSchedule) {
 			this.referenceElements = new LinkedList<>();
 		}
-		for (final Object element : interestingElements) {
+		for (final EObject element : interestingElements) {
 
 			if (element instanceof SlotVisit) {
 				final SlotVisit slotVisit = (SlotVisit) element;

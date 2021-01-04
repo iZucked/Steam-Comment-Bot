@@ -13,7 +13,7 @@ import java.util.Set;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.models.lng.schedule.Event;
 
-public class OtherPair extends DeltaPair {
+public class OtherPair implements DeltaPair {
 	private final Event first;
 	private final Event second;
 

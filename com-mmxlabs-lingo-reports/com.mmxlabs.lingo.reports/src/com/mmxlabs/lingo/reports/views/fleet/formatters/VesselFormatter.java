@@ -5,7 +5,6 @@
 package com.mmxlabs.lingo.reports.views.fleet.formatters;
 
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
-import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.ui.tabular.BaseFormatter;
 

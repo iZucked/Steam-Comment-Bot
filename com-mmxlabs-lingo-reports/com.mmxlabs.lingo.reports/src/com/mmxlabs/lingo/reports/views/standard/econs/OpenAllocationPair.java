@@ -16,7 +16,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 
-public class OpenAllocationPair extends DeltaPair {
+public class OpenAllocationPair implements DeltaPair {
 	private final OpenSlotAllocation first;
 	private final OpenSlotAllocation second;
 

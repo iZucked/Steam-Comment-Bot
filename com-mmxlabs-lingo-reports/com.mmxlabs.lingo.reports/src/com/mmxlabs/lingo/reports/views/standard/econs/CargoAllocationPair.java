@@ -16,7 +16,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 
-public class CargoAllocationPair extends DeltaPair {
+public class CargoAllocationPair implements DeltaPair {
 	private final CargoAllocation first;
 	private final CargoAllocation second;
 

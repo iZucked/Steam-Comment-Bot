@@ -43,17 +43,17 @@ public class FuelExportHelper {
 	public static final Map<FuelUnit, com.mmxlabs.models.lng.schedule.FuelUnit> modelUnits = new EnumMap<>(FuelUnit.class);
 
 	static {
-		portFuelComponentNames.put(Fuel.BASE_FUEL, Lists.newArrayList(vc -> vc.getInPortBaseFuelInMT()));
+		portFuelComponentNames.put(Fuel.BASE_FUEL, Lists.newArrayList(IVessel::getInPortBaseFuelInMT));
 		portFuelComponentNames.put(Fuel.NBO, Lists.newArrayList(vc -> LNGFuelKeys.NBO_In_m3, vc -> LNGFuelKeys.NBO_In_mmBtu));
 
-		travelFuelComponentNames.put(Fuel.BASE_FUEL, Lists.newArrayList(vc -> vc.getTravelBaseFuelInMT(), vc -> vc.getSupplementalTravelBaseFuelInMT()));
-		travelFuelComponentNames.put(Fuel.PILOT_LIGHT, Lists.newArrayList(vc -> vc.getPilotLightFuelInMT()));
+		travelFuelComponentNames.put(Fuel.BASE_FUEL, Lists.newArrayList(IVessel::getTravelBaseFuelInMT, IVessel::getSupplementalTravelBaseFuelInMT));
+		travelFuelComponentNames.put(Fuel.PILOT_LIGHT, Lists.newArrayList(IVessel::getPilotLightFuelInMT));
 
 		travelFuelComponentNames.put(Fuel.NBO, Lists.newArrayList(vc -> LNGFuelKeys.NBO_In_m3, vc -> LNGFuelKeys.NBO_In_mmBtu));
 		travelFuelComponentNames.put(Fuel.FBO, Lists.newArrayList(vc -> LNGFuelKeys.FBO_In_m3, vc -> LNGFuelKeys.FBO_In_mmBtu));
 
-		idleFuelComponentNames.put(Fuel.BASE_FUEL, Lists.newArrayList(vc -> vc.getIdleBaseFuelInMT()));
-		idleFuelComponentNames.put(Fuel.PILOT_LIGHT, Lists.newArrayList(vc -> vc.getIdlePilotLightFuelInMT()));
+		idleFuelComponentNames.put(Fuel.BASE_FUEL, Lists.newArrayList(IVessel::getIdleBaseFuelInMT));
+		idleFuelComponentNames.put(Fuel.PILOT_LIGHT, Lists.newArrayList(IVessel::getIdlePilotLightFuelInMT));
 		idleFuelComponentNames.put(Fuel.NBO, Lists.newArrayList(vc -> LNGFuelKeys.IdleNBO_In_m3, vc -> LNGFuelKeys.IdleNBO_In_mmBtu));
 
 		displayFuelUnits.put(Fuel.PILOT_LIGHT, new FuelUnit[] { FuelUnit.MT });

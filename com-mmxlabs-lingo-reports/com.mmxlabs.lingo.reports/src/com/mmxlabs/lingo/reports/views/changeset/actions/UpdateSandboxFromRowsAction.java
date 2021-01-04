@@ -56,7 +56,6 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
 public class UpdateSandboxFromRowsAction extends Action {
 
 	private final Collection<ChangeSetTableRow> selectedRows;
-	private final String name;
 	private ScenarioResult baseScenarioResult;
 	private final OptionAnalysisModel existingModel;
 
@@ -64,7 +63,6 @@ public class UpdateSandboxFromRowsAction extends Action {
 		super(name);
 		this.selectedRows = selectedRows;
 		this.existingModel = newModel;
-		this.name = name;
 		this.baseScenarioResult = baseScenarioResult;
 	}
 
@@ -132,7 +130,7 @@ public class UpdateSandboxFromRowsAction extends Action {
 				});
 			}
 
-			final Function<VesselAvailability, ExistingVesselCharterOption> availOptionComputer = (va) -> {
+			final Function<VesselAvailability, ExistingVesselCharterOption> availOptionComputer = va -> {
 				final ExistingVesselCharterOption opt = AnalyticsFactory.eINSTANCE.createExistingVesselCharterOption();
 				opt.setVesselCharter(va);
 				cc.append(AddCommand.create(editingDomain, existingModel, AnalyticsPackage.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt));

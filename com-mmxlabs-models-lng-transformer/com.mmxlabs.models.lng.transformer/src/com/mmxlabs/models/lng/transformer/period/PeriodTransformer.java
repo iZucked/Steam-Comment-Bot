@@ -147,7 +147,6 @@ public class PeriodTransformer {
 	}
 
 	@Inject
-	@NonNull
 	private InclusionChecker inclusionChecker;
 
 	public static class PeriodTransformResult {

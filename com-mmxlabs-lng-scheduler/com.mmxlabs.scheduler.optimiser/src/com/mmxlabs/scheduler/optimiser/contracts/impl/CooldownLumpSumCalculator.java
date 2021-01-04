@@ -22,17 +22,12 @@ import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
  */
 public class CooldownLumpSumCalculator implements ICooldownCalculator {
 	@Inject
-	private @NonNull ITimeZoneToUtcOffsetProvider timeZoneToUtcOffsetProvider;
+	private ITimeZoneToUtcOffsetProvider timeZoneToUtcOffsetProvider;
 
 	private @NonNull ILongCurve expressionCurve;
 
 	public CooldownLumpSumCalculator(final @NonNull ILongCurve expressionCurve) {
 		this.expressionCurve = expressionCurve;
-	}
-
-	@Override
-	public void prepareEvaluation(final @NonNull ISequences sequences) {
-
 	}
 
 	protected long calculateUnitPriceAtUTCTime(final int localTime, final @NonNull IPort port) {

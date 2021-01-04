@@ -31,7 +31,7 @@ public class PostExportProcessorModule extends AbstractModule {
 
 	@Provides
 	private List<IPostExportProcessor> provideExporterExtensions(final Injector injector, final Iterable<IPostExportProcessorFactory> extensionFactories) {
-		final List<IPostExportProcessor> extensions = new ArrayList<IPostExportProcessor>();
+		final List<IPostExportProcessor> extensions = new ArrayList<>();
 		for (final IPostExportProcessorFactory factory : extensionFactories) {
 			final IPostExportProcessor instance = factory.createInstance();
 			injector.injectMembers(instance);

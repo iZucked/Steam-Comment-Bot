@@ -74,7 +74,7 @@ public class TotalsTransformer {
 		/**
 		 * Stores the total fuel costs for each type of fuel - this may not be the detailed output we want, I don't know
 		 */
-		final Map<Fuel, Long> totalFuelCosts = new HashMap<Fuel, Long>();
+		final Map<Fuel, Long> totalFuelCosts = new HashMap<>();
 
 		long distance = 0l;
 		long totalCost = 0l;
@@ -156,7 +156,7 @@ public class TotalsTransformer {
 		EObject object = schedule.eContainer();
 		while ((object != null) && !(object instanceof MMXRootObject)) {
 			if (object instanceof EObject) {
-				object = ((EObject) object).eContainer();
+				object = object.eContainer();
 			}
 		}
 

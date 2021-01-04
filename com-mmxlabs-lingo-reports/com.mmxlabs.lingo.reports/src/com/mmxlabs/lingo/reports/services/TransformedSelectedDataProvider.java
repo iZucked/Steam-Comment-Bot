@@ -88,7 +88,7 @@ public class TransformedSelectedDataProvider implements ISelectedDataProvider {
 		if (selectedDataProvider != null) {
 			return selectedDataProvider.getScenarioResults();
 		} else {
-			return Collections.EMPTY_LIST;
+			return Collections.emptyList();
 		}
 	}
 
