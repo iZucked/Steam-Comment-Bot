@@ -26,6 +26,7 @@ import com.mmxlabs.ganttviewer.IGanttChartToolTipProvider;
 public class GanttViewerTest {
 
 	public static class GanttLabelProvider implements IGanttChartToolTipProvider, IColorProvider {
+		private final Random r = new Random();
 
 		public GanttLabelProvider() {
 
@@ -58,7 +59,6 @@ public class GanttViewerTest {
 
 		@Override
 		public Color getBackground(final Object element) {
-			final Random r = new Random();
 			return new Color(null, r.nextInt(255), r.nextInt(255), r.nextInt(255));
 		}
 
