@@ -25,10 +25,6 @@ import com.mmxlabs.models.ui.editors.IDisplayCompositeLayoutProvider;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 
-;
-
-/**
- */
 public class EditorControlFactory {
 
 	/**

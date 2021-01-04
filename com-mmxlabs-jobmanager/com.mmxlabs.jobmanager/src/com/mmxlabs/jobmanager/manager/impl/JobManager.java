@@ -35,14 +35,14 @@ public final class JobManager implements IJobManager {
 	/**
 	 * Mapping between a {@link IJobDescriptor} and a {@link IJobControl}. A reverse mapping is expected to be present in {@link #controlToDescriptorMap}
 	 */
-	private final Map<IJobDescriptor, IJobControl> descriptorToControlMap = new HashMap<IJobDescriptor, IJobControl>();
+	private final Map<IJobDescriptor, IJobControl> descriptorToControlMap = new HashMap<>();
 
 	/**
 	 * Mapping between a {@link IJobControl} and a {@link IJobDescriptor}. A reverse mapping is expected to be present in {@link #descriptorToControlMap}
 	 */
-	private final Map<IJobControl, IJobDescriptor> controlToDescriptorMap = new HashMap<IJobControl, IJobDescriptor>();
+	private final Map<IJobControl, IJobDescriptor> controlToDescriptorMap = new HashMap<>();
 
-	private final Set<IJobManagerListener> jobManagerListeners = new HashSet<IJobManagerListener>();
+	private final Set<IJobManagerListener> jobManagerListeners = new HashSet<>();
 
 	public JobManager() {
 
@@ -115,7 +115,7 @@ public final class JobManager implements IJobManager {
 
 		// Take a copy of the set before iterating over it as it is possible
 		// that the listeners may be changed as a results of the event
-		final Set<IJobManagerListener> localJobManagerListeners = new HashSet<IJobManagerListener>(jobManagerListeners);
+		final Set<IJobManagerListener> localJobManagerListeners = new HashSet<>(jobManagerListeners);
 
 		for (final IJobManagerListener l : localJobManagerListeners) {
 			l.jobAdded(this, job, control);
@@ -129,7 +129,7 @@ public final class JobManager implements IJobManager {
 
 		// Take a copy of the set before iterating over it as it is possible
 		// that the listeners may be changed as a results of the event
-		final Set<IJobManagerListener> localJobManagerListeners = new HashSet<IJobManagerListener>(jobManagerListeners);
+		final Set<IJobManagerListener> localJobManagerListeners = new HashSet<>(jobManagerListeners);
 
 		for (final IJobManagerListener l : localJobManagerListeners) {
 			l.jobRemoved(this, job, control);

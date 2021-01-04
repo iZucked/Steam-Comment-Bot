@@ -33,9 +33,6 @@ public abstract class AbstractMigrationUnitExtension implements IMigrationUnitEx
 	}
 
 	@Override
-	public abstract void migrate(@Nullable Map<URI, PackageData> extraPackages, @NonNull DataManifest dataManifest) throws Exception;
-
-	@Override
 	public IMigrationUnit getMigrationUnit() {
 		return migrationUnit;
 	}

@@ -22,7 +22,7 @@ public class ModelFactoryRegistry implements IModelFactoryRegistry {
 	
 	@Override
 	public List<IModelFactory> getModelFactories(final EClass targetClass) {
-		final ArrayList<IModelFactory> result = new ArrayList<IModelFactory>();
+		final ArrayList<IModelFactory> result = new ArrayList<>();
 		
 		final String targetClassName = targetClass.getInstanceClass().getCanonicalName();
 		for (final IModelFactoryExtension extension : extensions) {

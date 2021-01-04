@@ -40,7 +40,7 @@ public class MMXRootObjectValueProviderCacheAdapterFactory implements IAdapterFa
 				}
 			}
 		}
-		return (T) null;
+		return null;
 	}
 
 	@Override

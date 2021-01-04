@@ -31,7 +31,6 @@ public class ShippingTypeRequirementConstraintChecker extends AbstractPairwiseCo
 	private IShippingTypeRequirementProvider shippingTypeRequirementProvider;
 
 	@Inject
-	@NonNull
 	private IVesselProvider vesselProvider;
 	
 	public ShippingTypeRequirementConstraintChecker(@NonNull final String name) {

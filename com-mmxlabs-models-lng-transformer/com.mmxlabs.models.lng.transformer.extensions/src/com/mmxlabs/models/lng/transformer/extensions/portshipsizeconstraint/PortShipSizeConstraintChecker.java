@@ -37,11 +37,9 @@ public class PortShipSizeConstraintChecker implements IPairwiseConstraintChecker
 	private IPortShipSizeProvider portShipSizeProvider;
 
 	@Inject
-	@NonNull
 	private INominatedVesselProvider nominatedVesselProvider;
 
 	@Inject
-	@NonNull
 	private IVesselProvider vesselProvider;
 	
 	public PortShipSizeConstraintChecker(final String name) {

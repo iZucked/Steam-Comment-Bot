@@ -75,7 +75,7 @@ public class CopyGridToHtmlStringUtil {
 				for (final GridItem item : table.getItems()) {
 					processTableRow(sw, numberOfColumns, item, rowOffsets);
 				}
-			} catch (final IOException e) {
+			} catch (final Exception e) {
 				// should not occur, since we use a StringWriter
 				LOG.error(e.getMessage(), e);
 			}
@@ -200,7 +200,7 @@ public class CopyGridToHtmlStringUtil {
 		return indicies;
 	}
 
-	protected void processTableRow(final StringWriter sw, final int numColumns, final GridItem item, final int[] rowOffsets) throws IOException {
+	protected void processTableRow(final StringWriter sw, final int numColumns, final GridItem item, final int[] rowOffsets) {
 		// start a row
 		sw.write("<tr>");
 
@@ -241,7 +241,7 @@ public class CopyGridToHtmlStringUtil {
 									tempFontString += "<i>";
 								} else if (fdata.getStyle() == SWT.BOLD) {
 									tempFontString += "<b>";
-								} else if (fdata.getStyle() == (SWT.BOLD+SWT.ITALIC)) {
+								} else if (fdata.getStyle() == (SWT.BOLD + SWT.ITALIC)) {
 									tempFontString += "<i><b>";
 								}
 							}
@@ -255,7 +255,8 @@ public class CopyGridToHtmlStringUtil {
 				}
 				addCell(sw, item.getText(colIdx),
 						combineAttributes(new String[] { colourString, String.format(" rowSpan='%d' ", 1 + item.getRowSpan(colIdx)), String.format(" colSpan='%d' ", 1 + item.getColumnSpan(colIdx)) },
-								getAdditionalAttributes(item, colIdx)), fontString);
+								getAdditionalAttributes(item, colIdx)),
+						fontString);
 				// Increment col idx.
 				// FIXME: Does this work correctly for sortable columns? No existing reports to test against.
 				i += item.getColumnSpan(colIdx);
@@ -314,11 +315,11 @@ public class CopyGridToHtmlStringUtil {
 	public final void addCell(final StringWriter sw, final String text, final String[] attributes) {
 		addCell(sw, text, attributes, "");
 	}
-	
+
 	public final void addCell(final StringWriter sw, final String text, final String[] attributes, final String fontAttributes) {
 		addCell(sw, "td", text, attributes, fontAttributes);
 	}
-	
+
 	public final void addCell(final StringWriter sw, final String tag, String text, final String[] attributes) {
 		addCell(sw, tag, text, attributes, "");
 	}
@@ -385,7 +386,7 @@ public class CopyGridToHtmlStringUtil {
 	public final void setShowBackgroundColours(final boolean showBackgroundColours) {
 		this.showBackgroundColours = showBackgroundColours;
 	}
-	
+
 	public final boolean isShowForegroundColours() {
 		return showForegroundColours;
 	}

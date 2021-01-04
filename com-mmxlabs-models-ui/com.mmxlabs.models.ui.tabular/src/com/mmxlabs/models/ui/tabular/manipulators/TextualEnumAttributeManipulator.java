@@ -51,20 +51,20 @@ public class TextualEnumAttributeManipulator extends BasicAttributeManipulator {
 	protected final List<String> lowerNames = new ArrayList<>();
 	protected final HashSet<Integer> disallowedValues;
 
-	final EditingDomain editingDomain;
+	protected final EditingDomain editingDomain;
 
 	private TextCellEditor editor;
-	private @Nullable
-	final Function<Enumerator, String> nameMapper;
+
+	private final @Nullable Function<Enumerator, String> nameMapper;
 
 	protected List<Pair<String, Object>> getAllowedValues(EObject object) {
-		final LinkedList<Pair<String, Object>> values = new LinkedList<Pair<String, Object>>();
+		final LinkedList<Pair<String, Object>> values = new LinkedList<>();
 		final EEnum eenum = (EEnum) ((EAttribute) field).getEAttributeType();
 		for (final EEnumLiteral literal : eenum.getELiterals()) {
 			if (disallowedValues != null && disallowedValues.contains(literal.getValue())) {
 				continue;
 			}
-			values.add(new Pair<String, Object>(getName(literal), literal.getInstance()));
+			values.add(new Pair<>(getName(literal), literal.getInstance()));
 		}
 		return values;
 	}
@@ -95,11 +95,11 @@ public class TextualEnumAttributeManipulator extends BasicAttributeManipulator {
 	 * Create a manipulator for the given field in the target object, taking values from the given valueProvider and creating set commands in the provided editingDomain.
 	 * 
 	 * @param field
-	 *            the field to set
+	 *                          the field to set
 	 * @param valueProvider
-	 *            provides the names & values for the field
+	 *                          provides the names & values for the field
 	 * @param editingDomain
-	 *            editing domain for setting
+	 *                          editing domain for setting
 	 */
 	public TextualEnumAttributeManipulator(final EAttribute field, final EditingDomain editingDomain, @Nullable Function<Enumerator, String> nameMapper) {
 		super(field, editingDomain);
@@ -113,26 +113,25 @@ public class TextualEnumAttributeManipulator extends BasicAttributeManipulator {
 	 * Create a manipulator for the given field in the target object, taking values from the given valueProvider and creating set commands in the provided editingDomain.
 	 * 
 	 * @param field
-	 *            the field to set
+	 *                             the field to set
 	 * @param valueProvider
-	 *            provides the names & values for the field
+	 *                             provides the names & values for the field
 	 * @param editingDomain
-	 *            editing domain for setting
+	 *                             editing domain for setting
 	 * @param disallowedValues
-	 * 			  enumeration values to filter out of the editor
+	 *                             enumeration values to filter out of the editor
 	 */
 	public TextualEnumAttributeManipulator(final EAttribute field, final EditingDomain editingDomain, @Nullable Function<Enumerator, String> nameMapper, int[] disallowedValues) {
 		super(field, editingDomain);
 
 		this.editingDomain = editingDomain;
 		this.nameMapper = nameMapper;
-		this.disallowedValues = new HashSet<Integer>();
+		this.disallowedValues = new HashSet<>();
 		for (final int dav : disallowedValues) {
 			this.disallowedValues.add(dav);
 		}
 	}
 
-	
 	@Override
 	public String render(final Object object) {
 		final Object superValue = super.getValue(object);

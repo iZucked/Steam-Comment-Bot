@@ -27,8 +27,8 @@ import com.mmxlabs.models.ui.tabular.renderers.TopLeftRenderer;
 
 public final class GridViewerHelper {
 
-	public static int FLAGS_NONE = 0;
-	public static int FLAGS_ROW_HOVER = 1;
+	public static final int FLAGS_NONE = 0;
+	public static final int FLAGS_ROW_HOVER = 1;
 
 	public static void configureLookAndFeel(final @NonNull GridTableViewer viewer) {
 		viewer.getGrid().setRowHeaderRenderer(new RowHeaderRenderer());

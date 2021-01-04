@@ -23,7 +23,7 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
  */
 public class ValidationStatusContentProvider implements ITreeContentProvider {
 
-	Map<Object, Object> parentsMap = new HashMap<Object, Object>();
+	Map<Object, Object> parentsMap = new HashMap<>();
 
 	@Override
 	public void dispose() {
@@ -41,7 +41,7 @@ public class ValidationStatusContentProvider implements ITreeContentProvider {
 		if (inputElement instanceof Map) {
 			@SuppressWarnings("unchecked")
 			final Map<ScenarioInstance, IStatus> map = (Map<ScenarioInstance, IStatus>) inputElement;
-			final List<Object> values = new ArrayList<Object>(map.size());
+			final List<Object> values = new ArrayList<>(map.size());
 			for (final Map.Entry<ScenarioInstance, IStatus> entry : map.entrySet()) {
 				if (entry.getValue() != null) {
 					values.add(entry);
@@ -70,7 +70,7 @@ public class ValidationStatusContentProvider implements ITreeContentProvider {
 		if (parentElement instanceof Map) {
 			@SuppressWarnings("unchecked")
 			final Map<ScenarioInstance, IStatus> map = (Map<ScenarioInstance, IStatus>) parentElement;
-			final List<Object> values = new ArrayList<Object>(map.size());
+			final List<Object> values = new ArrayList<>(map.size());
 			for (final Map.Entry<ScenarioInstance, IStatus> entry : map.entrySet()) {
 				if (entry.getValue() != null) {
 					values.add(entry);

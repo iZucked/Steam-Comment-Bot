@@ -79,10 +79,10 @@ public class PackGridHandler {
 		Grid grid = null;
 		if (part.getObject() instanceof IAdaptable) {
 			final IAdaptable adaptable = (IAdaptable) part.getObject();
-			grid = (Grid) adaptable.getAdapter(Grid.class);
+			grid = adaptable.getAdapter(Grid.class);
 		}
 		if (grid == null) {
-			grid = (Grid) adapterManager.getAdapter(part.getObject(), Grid.class);
+			grid = adapterManager.getAdapter(part.getObject(), Grid.class);
 		}
 		return grid;
 	}

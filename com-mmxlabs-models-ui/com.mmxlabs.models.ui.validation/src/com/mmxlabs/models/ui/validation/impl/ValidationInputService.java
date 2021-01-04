@@ -17,7 +17,7 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
  */
 public class ValidationInputService {
 	private static final Logger log = LoggerFactory.getLogger(ValidationInputService.class);
-	final ThreadLocal<IExtraValidationContext> extraContext = new ThreadLocal<IExtraValidationContext>();
+	final ThreadLocal<IExtraValidationContext> extraContext = new ThreadLocal<>();
 
 	public IExtraValidationContext getExtraContext() {
 		return extraContext.get();

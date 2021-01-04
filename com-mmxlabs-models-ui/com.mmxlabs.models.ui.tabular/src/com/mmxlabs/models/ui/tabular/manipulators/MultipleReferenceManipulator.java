@@ -37,7 +37,7 @@ import com.mmxlabs.rcp.common.dialogs.ListSelectionDialog;
 public class MultipleReferenceManipulator extends DialogFeatureManipulator {
 
 	/** @see PortMultiReferenceInlineEditor */
-	private final static int MAX_DISPLAY_LENGTH = 32;
+	private static final int MAX_DISPLAY_LENGTH = 32;
 	private static final int MIN_DISPLAY_NAMES = 2;
 
 	private final com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider valueProvider;
@@ -108,7 +108,7 @@ public class MultipleReferenceManipulator extends DialogFeatureManipulator {
 		final ListSelectionDialog dlg = listSelectionDialog;// , "Select values:");
 		dlg.setTitle("Value Selection");
 
-		final ArrayList<Pair<String, EObject>> selectedOptions = new ArrayList<Pair<String, EObject>>();
+		final ArrayList<Pair<String, EObject>> selectedOptions = new ArrayList<>();
 		Object value = getValue(object);
 		if (value == SetCommand.UNSET_VALUE) {
 			return null;
@@ -140,7 +140,7 @@ public class MultipleReferenceManipulator extends DialogFeatureManipulator {
 		if (dlg.open() == Window.OK) {
 			final Object[] result = dlg.getResult();
 
-			final ArrayList<EObject> resultList = new ArrayList<EObject>();
+			final ArrayList<EObject> resultList = new ArrayList<>();
 			for (final Object o : result) {
 				resultList.add(((Pair<String, EObject>) o).getSecond());
 			}
@@ -155,7 +155,7 @@ public class MultipleReferenceManipulator extends DialogFeatureManipulator {
 		if (object != null) {
 			@SuppressWarnings("unchecked")
 			final EList<EObject> values = (EList<EObject>) super.getValue(object);
-			final LinkedList<Pair<Notifier, List<Object>>> notifiers = new LinkedList<Pair<Notifier, List<Object>>>();
+			final LinkedList<Pair<Notifier, List<Object>>> notifiers = new LinkedList<>();
 			for (final EObject ref : values) {
 				for (final Pair<Notifier, List<Object>> p : valueProvider.getNotifiers((EObject) object, (EReference) field, ref)) {
 					notifiers.add(p);

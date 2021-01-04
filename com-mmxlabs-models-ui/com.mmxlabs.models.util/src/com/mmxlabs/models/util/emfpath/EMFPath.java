@@ -114,7 +114,7 @@ public class EMFPath implements IEMFPath {
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder();
-		for (final Object el : path) {
+		for (final ETypedElement el : path) {
 			if (sb.length() > 0)
 				sb.append(".");
 			if (el instanceof EOperation) {

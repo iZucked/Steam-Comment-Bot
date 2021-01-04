@@ -64,7 +64,7 @@ public class DefaultClassImporter extends AbstractClassImporter {
 	 * @param <T>
 	 */
 	public static class ImportResults {
-		final public EObject importedObject;
+		public final EObject importedObject;
 		private final LinkedList<EObject> createdExtraObjects = new LinkedList<EObject>();
 
 		public ImportResults(final EObject object, final boolean created) {

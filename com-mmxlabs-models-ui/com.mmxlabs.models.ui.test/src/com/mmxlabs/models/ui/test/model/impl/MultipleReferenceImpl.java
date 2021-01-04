@@ -76,7 +76,7 @@ public class MultipleReferenceImpl extends EObjectImpl implements MultipleRefere
 	@Override
 	public EList<SingleReference> getSingleReferences() {
 		if (singleReferences == null) {
-			singleReferences = new EObjectWithInverseResolvingEList<SingleReference>(SingleReference.class, this, ModelPackage.MULTIPLE_REFERENCE__SINGLE_REFERENCES, ModelPackage.SINGLE_REFERENCE__MULTIPLE_REFERENCE);
+			singleReferences = new EObjectWithInverseResolvingEList<>(SingleReference.class, this, ModelPackage.MULTIPLE_REFERENCE__SINGLE_REFERENCES, ModelPackage.SINGLE_REFERENCE__MULTIPLE_REFERENCE);
 		}
 		return singleReferences;
 	}

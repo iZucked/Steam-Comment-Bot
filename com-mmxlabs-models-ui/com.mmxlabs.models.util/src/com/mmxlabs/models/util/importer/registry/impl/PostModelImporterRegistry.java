@@ -21,7 +21,7 @@ public class PostModelImporterRegistry {
 	private Iterable<IPostModelImporterExtension> extensions;
 
 	public Collection<IPostModelImporter> getPostModelImporters() {
-		final List<IPostModelImporter> l = new ArrayList<IPostModelImporter>();
+		final List<IPostModelImporter> l = new ArrayList<>();
 		for (final IPostModelImporterExtension extension : extensions) {
 			l.add(extension.createInstance());
 		}

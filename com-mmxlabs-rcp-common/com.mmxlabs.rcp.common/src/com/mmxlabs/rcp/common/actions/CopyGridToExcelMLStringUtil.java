@@ -201,7 +201,7 @@ public class CopyGridToExcelMLStringUtil {
 				for (final GridItem item : table.getItems()) {
 					processTableRow(sw, styleManger, numberOfColumns, item, rowOffsets);
 				}
-			} catch (final IOException e) {
+			} catch (final Exception e) {
 				// should not occur, since we use a StringWriter
 				LOG.error(e.getMessage(), e);
 			}
@@ -343,7 +343,7 @@ public class CopyGridToExcelMLStringUtil {
 		return indicies;
 	}
 
-	private void processTableRow(final StringWriter sw, StyleManager styleManager, final int numColumns, final GridItem item, final int[] rowOffsets) throws IOException {
+	private void processTableRow(final StringWriter sw, StyleManager styleManager, final int numColumns, final GridItem item, final int[] rowOffsets) {
 		// if (true) return;
 		// start a row
 		sw.write("<Row>");

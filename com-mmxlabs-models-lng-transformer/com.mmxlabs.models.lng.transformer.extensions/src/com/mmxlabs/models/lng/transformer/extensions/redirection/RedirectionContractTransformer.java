@@ -60,9 +60,6 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 	private ModelEntityMap modelEntityMap;
 
 	@Inject
-	private DateAndCurveHelper dateHelper;
-
-	@Inject
 	private IAlternativeElementProviderEditor alternativeSequenceElementProviderEditor;
 
 	@Inject
@@ -78,7 +75,7 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 
 	private ISchedulerBuilder builder;
 
-	private transient List<ITransformerExtension> transformerExtensions = null;
+	private List<ITransformerExtension> transformerExtensions = null;
 
 	@Inject
 	private RedirectionGroupProvider redirectionGroupProvider;
@@ -103,15 +100,7 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 		this.modelEntityMap = null;
 		this.builder = null;
 	}
-
-	@Override
-	public ISalesPriceCalculator transformSalesPriceParameters(@Nullable SalesContract salesContract, @NonNull final LNGPriceCalculatorParameters sc) {
-		return null;
-	}
-
-	@Override
-	public abstract ILoadPriceCalculator transformPurchasePriceParameters(@Nullable PurchaseContract purchaseContract, @NonNull final LNGPriceCalculatorParameters pc);
-
+ 
 	@Override
 	public void slotTransformed(@NonNull final Slot modelSlot, @NonNull final IPortSlot optimiserSlot) {
 		// Avoid recursion with generated slots
@@ -267,9 +256,6 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 			}
 		}
 	}
-
-	@Override
-	public abstract Collection<EClass> getContractEClasses();
 
 	private StepwiseIntegerCurve generateExpressionCurve(final String priceExpression) {
 

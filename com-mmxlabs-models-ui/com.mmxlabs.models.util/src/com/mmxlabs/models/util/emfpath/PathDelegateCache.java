@@ -56,7 +56,7 @@ public class PathDelegateCache {
 	 * @return
 	 */
 	private synchronized ITransformer compileDelegate(final InjectableClassLoader injectableClassLoader, final List<ETypedElement> path) {
-		final List<Method> methods = new LinkedList<Method>();
+		final List<Method> methods = new LinkedList<>();
 
 		// find Methods for ESF/EOps.
 

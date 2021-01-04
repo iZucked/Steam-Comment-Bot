@@ -134,7 +134,7 @@ public class EcoreHelper {
 			if (sourceReference.isMany()) {
 				// Hmm, might be primitives -- not as reference?
 				final List<EObject> subRefs = MetamodelUtils.getValueAsTypedList(sourceContainer, sourceReference);
-				final List<EObject> newSubRefs = new ArrayList<EObject>(subRefs.size());
+				final List<EObject> newSubRefs = new ArrayList<>(subRefs.size());
 				for (final EObject subRef : subRefs) {
 					assert subRef != null;
 					final EObject newSubRef = copyIfRequired(sourceContainer, destPackage, subRef);

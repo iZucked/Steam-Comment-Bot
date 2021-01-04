@@ -39,7 +39,7 @@ public class ReferenceValueProviderFactoryRegistry extends AbstractRegistry<Pair
 
 	@Override
 	public synchronized IReferenceValueProviderFactory getValueProviderFactory(final EClass owner, final EClass type) {
-		return get(new Pair<EClass, EClass>(owner, type));
+		return get(new Pair<>(owner, type));
 	}
 	
 	@Override

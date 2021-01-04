@@ -213,7 +213,7 @@ public class GenericEMFTableDataModel {
 		final EClass rootClass = (EClass) dataModel.getEClassifier(CLASS_NAME_ROOT);
 		final EStructuralFeature rootGroups = rootClass.getEStructuralFeature(FEATURE_GROUPS);
 
-		final List<EObject> newList = new ArrayList<EObject>();
+		final List<EObject> newList = new ArrayList<>();
 		if (dataModelInstance.eIsSet(rootGroups)) {
 			final List<EObject> oldList = (List<EObject>) dataModelInstance.eGet(rootGroups);
 			newList.addAll(oldList);
@@ -243,7 +243,7 @@ public class GenericEMFTableDataModel {
 		final EStructuralFeature rootNodes = rootClass.getEStructuralFeature(FEATURE_ROWS);
 		final EStructuralFeature nodeGroup = nodeClass.getEStructuralFeature(FEATURE_GROUP);
 
-		final List<EObject> newList = new ArrayList<EObject>();
+		final List<EObject> newList = new ArrayList<>();
 		if (dataModelInstance.eIsSet(rootNodes)) {
 			@SuppressWarnings("unchecked")
 			final List<EObject> oldList = (List<EObject>) dataModelInstance.eGet(rootNodes);

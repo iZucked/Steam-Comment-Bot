@@ -67,11 +67,9 @@ public class LNGCleanStateOptimiserTransformerUnit implements ILNGStateTransform
 			@NonNull final CleanStateOptimisationStage stageSettings, final int progressTicks, @NonNull final CleanableExecutorService executorService, final int... seeds) {
 		final IChainLink link = new IChainLink() {
 
-			private SequencesContainer initialSequencesContainer;
-
 			@Override
 			public IMultiStateResult run(final SequencesContainer initialSequences, final IMultiStateResult inputState, final IProgressMonitor monitor) {
-				this.initialSequencesContainer = initialSequences;
+				final SequencesContainer initialSequencesContainer = initialSequences;
 				final LNGDataTransformer dataTransformer = chainBuilder.getDataTransformer();
 
 				final IRunnerHook runnerHook = dataTransformer.getRunnerHook();

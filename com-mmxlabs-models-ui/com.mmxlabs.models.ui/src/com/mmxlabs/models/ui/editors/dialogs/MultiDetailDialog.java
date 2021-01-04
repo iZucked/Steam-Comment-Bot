@@ -179,7 +179,7 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 			@Override
 			public ModelReference getModelReference() {
 				return commandHandler.getModelReference();
-			};
+			}
 		};
 		displayComposite.setCommandHandler(immediate);
 		displayComposite.display(dialogContext, rootObject, proxies.get(proxies.size() - 1), proxies, dbc);
@@ -534,7 +534,7 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 				@Override
 				public void processValidation(final IStatus status) {
 					proxy.processValidation(status);
-				};
+				}
 
 				@Override
 				public Control createControl(final Composite parent, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
@@ -693,7 +693,7 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 				public boolean hasLabel() {
 					return true;
 				}
-				
+
 				@Override
 				public IInlineEditor getProxy() {
 					return proxy;
@@ -704,7 +704,7 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 }
 
 class MultiFeatureAction extends AbstractMenuLockableAction {
-	public static final SetMode[] MODES = new SetMode[] { SetMode.REPLACE, SetMode.INTERSECTION, SetMode.UNION };
+	protected static final SetMode[] MODES = new SetMode[] { SetMode.REPLACE, SetMode.INTERSECTION, SetMode.UNION };
 
 	private SetMode mode = SetMode.REPLACE;
 	private final Pair<EObject, EStructuralFeature> path;

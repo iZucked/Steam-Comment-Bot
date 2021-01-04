@@ -389,7 +389,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 
 		final ExecutorService executorService = LNGScenarioChainBuilder.createExecutorService();
 		try {
-			helper.generateWith(scenarioInstance, userSettings, scenarioDataProvider.getEditingDomain(), hints, (bridge) -> {
+			helper.generateWith(scenarioInstance, userSettings, scenarioDataProvider.getEditingDomain(), hints, bridge -> {
 				final LNGDataTransformer dataTransformer = bridge.getDataTransformer();
 				final MTMSanboxUnit unit = new MTMSanboxUnit(lngScenarioModel, dataTransformer, "mtm-sandbox", userSettings, constraints, executorService, dataTransformer.getInitialSequences(),
 						dataTransformer.getInitialResult(), dataTransformer.getHints());

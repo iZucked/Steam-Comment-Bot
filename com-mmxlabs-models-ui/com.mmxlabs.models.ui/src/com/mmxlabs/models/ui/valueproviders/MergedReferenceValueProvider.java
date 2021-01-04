@@ -71,7 +71,7 @@ public class MergedReferenceValueProvider extends SimpleReferenceValueProvider {
 
 	@Override
 	protected EList<? extends EObject> getObjects() {
-		final EList<EObject> values = new BasicEList<EObject>(super.getObjects());
+		final EList<EObject> values = new BasicEList<>(super.getObjects());
 		for (final EReference reference : extraReferences) {
 			values.addAll((EList) container.eGet(reference));
 		}

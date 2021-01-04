@@ -78,7 +78,7 @@ public class ScenarioInstanceMigrator {
 		// // Get original URI's as a list
 		// final URI originalURI = scenarioService == null ? URI.createURI(subModelURI) : scenarioService.resolveURI(subModelURI);
 
-		final List<File> tmpFiles = new ArrayList<File>();
+		final List<File> tmpFiles = new ArrayList<>();
 		monitor.beginTask("Migrate scenario", 100);
 		try {
 
@@ -153,10 +153,10 @@ public class ScenarioInstanceMigrator {
 			if (migratedVersion[0] != latestScenarioVersion) {
 				throw new ScenarioMigrationException(String.format("Scenario was not migrated to latest version. Expected %d, currently %d.", latestScenarioVersion, manifest.getScenarioVersion()));
 			}
-//			if (migratedVersion[1] != latestClientVersion) {
-//				throw new ScenarioMigrationException(
-//						String.format("Scenario was not migrated to latest client version. Expected %d, currently %d.", latestClientVersion, manifest.getClientScenarioVersion()));
-//			}
+			// if (migratedVersion[1] != latestClientVersion) {
+			// throw new ScenarioMigrationException(
+			// String.format("Scenario was not migrated to latest client version. Expected %d, currently %d.", latestClientVersion, manifest.getClientScenarioVersion()));
+			// }
 
 			// Update manifest
 			{
@@ -259,29 +259,11 @@ public class ScenarioInstanceMigrator {
 	}
 
 	public void copyURIData(@NonNull final URIConverter uc, @NonNull final URI sourceURI, @NonNull final URI destURI) throws IOException {
-		InputStream is = null;
-		OutputStream os = null;
-		try {
 
-			// Get input stream from original URI
-			is = uc.createInputStream(sourceURI);
-			os = uc.createOutputStream(destURI);
-
-			ByteStreams.copy(is, os);
-		} finally {
-			if (is != null) {
-				try {
-					is.close();
-				} catch (final IOException e) {
-
-				}
-			}
-			if (os != null) {
-				try {
-					os.close();
-				} catch (final IOException e) {
-
-				}
+		// Get input stream from original URI
+		try (InputStream is = uc.createInputStream(sourceURI)) {
+			try (OutputStream os = uc.createOutputStream(destURI)) {
+				ByteStreams.copy(is, os);
 			}
 		}
 	}

@@ -90,10 +90,10 @@ public class CopyToHtmlClipboardHandler {
 		Grid grid = null;
 		if (part.getObject() instanceof IAdaptable) {
 			final IAdaptable adaptable = (IAdaptable) part.getObject();
-			grid = (Grid) adaptable.getAdapter(Grid.class);
+			grid = adaptable.getAdapter(Grid.class);
 		}
 		if (grid == null) {
-			grid = (Grid) adapterManager.getAdapter(part.getObject(), Grid.class);
+			grid = adapterManager.getAdapter(part.getObject(), Grid.class);
 		}
 		return grid;
 	}
@@ -102,10 +102,10 @@ public class CopyToHtmlClipboardHandler {
 		IAdditionalAttributeProvider additionalAttributeProvider = null;
 		if (part.getObject() instanceof IAdaptable) {
 			final IAdaptable adaptable = (IAdaptable) part.getObject();
-			additionalAttributeProvider = (IAdditionalAttributeProvider) adaptable.getAdapter(IAdditionalAttributeProvider.class);
+			additionalAttributeProvider =adaptable.getAdapter(IAdditionalAttributeProvider.class);
 		}
 		if (additionalAttributeProvider == null) {
-			additionalAttributeProvider = (IAdditionalAttributeProvider) adapterManager.getAdapter(part.getObject(), IAdditionalAttributeProvider.class);
+			additionalAttributeProvider = adapterManager.getAdapter(part.getObject(), IAdditionalAttributeProvider.class);
 		}
 		return additionalAttributeProvider;
 	}

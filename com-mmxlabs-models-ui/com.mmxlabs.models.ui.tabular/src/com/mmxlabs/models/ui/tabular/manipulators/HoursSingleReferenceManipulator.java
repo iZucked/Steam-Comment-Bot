@@ -46,7 +46,7 @@ public class HoursSingleReferenceManipulator extends BasicAttributeManipulator {
 	static {
 		hours = new ArrayList<>(24);
 		for (int i = 0; i < 24; i++) {
-			hours.add(new Pair<String, Integer>(String.format("%02d:00", i), i));
+			hours.add(new Pair<>(String.format("%02d:00", i), i));
 		}
 	}
 

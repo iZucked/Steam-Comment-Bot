@@ -114,13 +114,7 @@ public class MultiEnumInlineEditor extends UnsettableInlineEditor {
 			return setter;
 		}
 	}
-
-	@Override
-	protected boolean updateOnChangeToFeature(Object changedFeature) {
-		// TODO Auto-generated method stub
-		return super.updateOnChangeToFeature(changedFeature);
-	}
-
+ 
 	@Override
 	protected void updateValueDisplay(final Object value) {
 		final List<Enumerator> selectedValues = (List<Enumerator>) value;
@@ -130,7 +124,6 @@ public class MultiEnumInlineEditor extends UnsettableInlineEditor {
 				sb.append(", ");
 			sb.append(obj.getName());
 		}
-		// theLabel.setText(sb.toString());
 	}
 
 	protected List<Object> openDialogBox(final Control cellEditorWindow) {

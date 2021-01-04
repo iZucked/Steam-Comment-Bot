@@ -1198,13 +1198,13 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		this.visible.addAll(visibleColumnsAfter);
 
 		for (CheckboxInfoManager cbim : this.checkboxInfo) {
-			if (cbim.title.equals(this.ROWS_TITLE)) {
+			if (cbim.title.equals(ROWS_TITLE)) {
 				for (OptionInfo oi : cbim.options) {
 					if (oi.button != null) {
 						oi.button.setSelection(reportDefinition.getFilters().contains(oi.type));
 					}
 				}
-			} else if (cbim.title.equals(this.DIFF_TITLE)) {
+			} else if (cbim.title.equals(DIFF_TITLE)) {
 				for (OptionInfo oi : cbim.options) {
 					if (oi.button != null) {
 						oi.button.setSelection(reportDefinition.getDiffOptions().contains(oi.type));

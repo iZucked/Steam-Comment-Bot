@@ -103,7 +103,7 @@ public class MetamodelLoader {
 	 * Load an EPackage from the given location and register it under it's nsURI in the package registry
 	 * 
 	 * @param location
-	 *            Location to read ecore model from
+	 *                     Location to read ecore model from
 	 * @param string
 	 * @return
 	 */
@@ -132,7 +132,7 @@ public class MetamodelLoader {
 		ePackage.setEFactoryInstance(new EFactoryImpl() {
 			@Override
 			protected EObject basicCreate(EClass eClass) {
-				return eClass.getInstanceClassName() == "java.util.Map$Entry" ? new DynamicEObjectImpl.BasicEMapEntry<String, String>(eClass) : new DynamicEObjectWrapperImpl(eClass);
+				return eClass.getInstanceClassName().equals("java.util.Map$Entry") ? new DynamicEObjectImpl.BasicEMapEntry<String, String>(eClass) : new DynamicEObjectWrapperImpl(eClass);
 			}
 
 			@Override
@@ -166,7 +166,7 @@ public class MetamodelLoader {
 					} else if (eDataType.getInstanceClassName().equals("java.time.LocalDate")) {
 						return ((LocalDate) objectValue).format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
 					} else if (eDataType.getInstanceClassName().equals("java.time.Instant")) {
-						return ((Instant)objectValue).toString();
+						return ((Instant) objectValue).toString();
 					} else if (eDataType.getInstanceClassName().equals("java.time.LocalDateTime")) {
 						return ((LocalDateTime) objectValue).format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
 					} else if (eDataType.getInstanceClassName().equals("java.time.ZonedDateTime")) {
@@ -235,7 +235,7 @@ public class MetamodelLoader {
 	 * 
 	 * @param location
 	 * @param nsURI
-	 *            - ignored
+	 *                        - ignored
 	 * @param resourceURI
 	 * @return
 	 * @deprecated - Use {@link #loadEPackage(URI, String)} instead

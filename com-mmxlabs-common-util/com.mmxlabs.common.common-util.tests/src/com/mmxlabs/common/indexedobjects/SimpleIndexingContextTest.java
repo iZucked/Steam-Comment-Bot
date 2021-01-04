@@ -9,18 +9,18 @@ import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
 
-public class SimpleIndexingContextTest {
+class SimpleIndexingContextTest {
 	@Test
-	public void testObjectIndexAllocation() {
+	void testObjectIndexAllocation() {
 		final IIndexingContext index = new SimpleIndexingContext();
 		final Object o = new Object();
 		for (int i = 0; i < 10; i++) {
-			Assertions.assertTrue(index.assignIndex(o) == i);
+			Assertions.assertEquals(i, index.assignIndex(o));
 		}
 	}
 
 	@Test
-	public void testSubclassIndexAllocation() {
+	void testSubclassIndexAllocation() {
 		final IIndexingContext index = new SimpleIndexingContext();
 
 		index.registerType(A.class);

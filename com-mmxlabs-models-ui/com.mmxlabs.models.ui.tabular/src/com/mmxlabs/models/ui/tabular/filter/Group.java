@@ -18,7 +18,7 @@ import com.mmxlabs.common.Pair;
  */
 class Group implements IFilter {
 	final boolean isConjunction;
-	List<IFilter> filters = new LinkedList<IFilter>();
+	List<IFilter> filters = new LinkedList<>();
 
 	public Group(final boolean isConjunction) {
 		super();
@@ -50,7 +50,7 @@ class Group implements IFilter {
 	 */
 	@Override
 	public IFilter collapse() {
-		final List<IFilter> collapsedFilters = new LinkedList<IFilter>();
+		final List<IFilter> collapsedFilters = new LinkedList<>();
 		for (IFilter f : filters) {
 			if (f != null) {
 				f = f.collapse();

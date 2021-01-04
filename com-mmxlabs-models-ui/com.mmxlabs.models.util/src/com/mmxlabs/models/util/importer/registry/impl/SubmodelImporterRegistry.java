@@ -44,7 +44,7 @@ public class SubmodelImporterRegistry extends AbstractRegistry<EClass, ISubmodel
 	 * Return all the submodel importer instances.
 	 */
 	public Collection<ISubmodelImporter> getAllSubModelImporters() {
-		final List<ISubmodelImporter> l = new ArrayList<ISubmodelImporter>();
+		final List<ISubmodelImporter> l = new ArrayList<>();
 		for (final ISubmodelImporterExtension extension : extensions) {
 			final String id = extension.getID();
 			if (factoryExistsForID(id)) {

@@ -23,11 +23,11 @@ public class TimezoneInlineEditor extends ValueListInlineEditor {
 	}
 
 	public static List<Pair<String, Object>> getTimezones() {
-		final LinkedList<Pair<String, Object>> values = new LinkedList<Pair<String, Object>>();
+		final LinkedList<Pair<String, Object>> values = new LinkedList<>();
 
 		for (final String s : TimeZone.getAvailableIDs()) {
 			if (s.indexOf("/") != -1)
-				values.add(new Pair<String, Object>(s, s));
+				values.add(new Pair<>(s, s));
 		}
 
 		Collections.sort(values, new Comparator<Pair<String, Object>>() {
@@ -42,7 +42,6 @@ public class TimezoneInlineEditor extends ValueListInlineEditor {
 
 	@Override
 	protected Control createValueControl(final Composite parent) {
-//		final Composite composite = new Composite(parent, parent.getStyle());
 		final Composite composite = toolkit.createComposite(parent, parent.getStyle());
 		composite.setLayout(new GridLayout(2, false));
 		return super.createValueControl(composite);

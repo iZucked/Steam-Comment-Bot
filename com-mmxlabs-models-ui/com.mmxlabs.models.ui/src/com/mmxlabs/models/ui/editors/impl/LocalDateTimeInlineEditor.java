@@ -49,7 +49,7 @@ public class LocalDateTimeInlineEditor extends UnsettableInlineEditor {
 
 		formattedText.getControl().addModifyListener(e -> {
 			if (formattedText.isValid()) {
-				doSetValue((LocalDateTime) formattedText.getValue(), false);
+				doSetValue(formattedText.getValue(), false);
 			}
 		});
 		return formattedText.getControl();

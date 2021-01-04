@@ -69,7 +69,7 @@ public class EMFUtils {
 	 * 
 	 * @see #deserialiseEObject(byte[], EClass) - the inverse of this method
 	 * @param object
-	 *            an object to serialize
+	 *                   an object to serialize
 	 * @return a byte array containing a serialized form of the object
 	 */
 	public static byte[] serializeEObject(final EObject object) {
@@ -97,9 +97,9 @@ public class EMFUtils {
 	 * 
 	 * @param <T>
 	 * @param byteArray
-	 *            the serialized form of the object
+	 *                      the serialized form of the object
 	 * @param clazz
-	 *            the EClass of the object
+	 *                      the EClass of the object
 	 * @return the deserialized object
 	 */
 	@SuppressWarnings("unchecked")
@@ -305,12 +305,14 @@ public class EMFUtils {
 	 */
 	public static boolean allSameEClass(final Collection<? extends EObject> objects) {
 		final Iterator<? extends EObject> it = objects.iterator();
-		if (it.hasNext() == false)
+		if (!it.hasNext()) {
 			return true;
+		}
 		final EClass firstClass = it.next().eClass();
 		while (it.hasNext()) {
-			if (it.next().eClass() != firstClass)
+			if (it.next().eClass() != firstClass) {
 				return false;
+			}
 		}
 		return true;
 	}
@@ -350,7 +352,7 @@ public class EMFUtils {
 
 		final int uncontainedElementCount = referredToElements.size();
 
-		if (true && uncontainedElementCount > 0) {
+		if (false && uncontainedElementCount > 0) {
 			// For debugging.
 			final Map<EObject, Collection<Setting>> findAll = EcoreUtil.UsageCrossReferencer.findAll(referredToElements, root);
 			for (final EObject obj : referredToElements) {

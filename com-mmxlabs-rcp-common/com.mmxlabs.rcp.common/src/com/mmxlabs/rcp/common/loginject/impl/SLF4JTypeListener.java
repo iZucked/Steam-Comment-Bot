@@ -19,7 +19,7 @@ public class SLF4JTypeListener implements TypeListener {
 		for (Field field : typeLiteral.getRawType().getDeclaredFields()) {
 			// TODO: Add in other types of Logger
 			if (field.getType() == Logger.class && field.isAnnotationPresent(Log.class)) {
-				typeEncounter.register(new SLF4JMembersInjector<T>(field));
+				typeEncounter.register(new SLF4JMembersInjector<>(field));
 			}
 		}
 	}

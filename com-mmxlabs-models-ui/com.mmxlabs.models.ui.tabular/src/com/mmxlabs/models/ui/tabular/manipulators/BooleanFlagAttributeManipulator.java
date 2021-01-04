@@ -8,9 +8,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CheckboxCellEditor;
-import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
 /**
@@ -54,7 +52,7 @@ public class BooleanFlagAttributeManipulator extends BasicAttributeManipulator {
 
 		Object object2 = super.getValue(object);
 		if (object2 instanceof Boolean) {
-			return (Boolean) object2;
+			return object2;
 		}
 
 		return false;
