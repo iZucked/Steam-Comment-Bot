@@ -85,10 +85,10 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		numberOfMovesTried = 0;
 		numberOfMovesAccepted = 0;
 
-		final ModifiableSequences currentRawSequences = new ModifiableSequences(inputRawSequences);
+		final ModifiableSequences lCurrentRawSequences = new ModifiableSequences(inputRawSequences);
 
-		final ModifiableSequences potentialRawSequences = new ModifiableSequences(currentRawSequences.getResources());
-		updateSequences(currentRawSequences, potentialRawSequences, currentRawSequences.getResources());
+		final ModifiableSequences lPotentialRawSequences = new ModifiableSequences(lCurrentRawSequences.getResources());
+		updateSequences(lCurrentRawSequences, lPotentialRawSequences, lCurrentRawSequences.getResources());
 
 		// Evaluate initial sequences
 		setInitialSequences(initialRawSequences);
@@ -99,7 +99,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		evaluateInputSequences(inputRawSequences);
 
 		// Set initial sequences
-		updateSequencesLookup(potentialRawSequences, null);
+		updateSequencesLookup(lPotentialRawSequences, null);
 
 		final IAnnotatedSolution annotatedBestSolution = getFitnessEvaluator().getBestAnnotatedSolution();
 		if (annotatedBestSolution == null) {
@@ -112,7 +112,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		// For constraint checker changed resources functions, if initial solution is invalid, we want to always perform a full constraint checker set of checks.
 		this.failedInitialConstraintCheckers = false;
 		// Apply sequence manipulators
-		final IModifiableSequences potentialFullSequences = getSequenceManipulator().createManipulatedSequences(currentRawSequences);
+		final IModifiableSequences potentialFullSequences = getSequenceManipulator().createManipulatedSequences(lCurrentRawSequences);
 
 		final List<String> messages = new ArrayList<>();
 		messages.add(String.format("%s: start", this.getClass().getName()));
@@ -132,8 +132,8 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 
 		setNumberOfIterationsCompleted(0);
 
-		this.currentRawSequences = currentRawSequences;
-		this.potentialRawSequences = potentialRawSequences;
+		this.currentRawSequences = lCurrentRawSequences;
+		this.potentialRawSequences = lPotentialRawSequences;
 
 		initProgressLog();
 

@@ -77,7 +77,7 @@ public final class FitnessFunctionRegistry implements IFitnessFunctionRegistry {
 	@NonNull
 	public Set<IFitnessCoreFactory> getFitnessCoreFactories(@NonNull final Collection<String> names) {
 
-		final Set<IFitnessCoreFactory> factories = new HashSet<IFitnessCoreFactory>(names.size());
+		final Set<IFitnessCoreFactory> factories = new HashSet<>(names.size());
 
 		for (final String name : names) {
 

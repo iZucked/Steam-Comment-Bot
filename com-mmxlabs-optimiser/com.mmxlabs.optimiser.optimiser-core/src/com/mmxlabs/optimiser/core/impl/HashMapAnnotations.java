@@ -22,13 +22,13 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
  * 
  */
 public class HashMapAnnotations implements IElementAnnotationsMap {
-	private final Map<ISequenceElement, Map<String, IElementAnnotation>> contents = new HashMap<ISequenceElement, Map<String, IElementAnnotation>>();
+	private final Map<ISequenceElement, Map<String, IElementAnnotation>> contents = new HashMap<>();
 
 	@Override
 	public void setAnnotation(@NonNull final ISequenceElement element, @NonNull final String key, @NonNull final IElementAnnotation value) {
 		Map<String, IElementAnnotation> inner = contents.get(element);
 		if (inner == null) {
-			inner = new HashMap<String, IElementAnnotation>();
+			inner = new HashMap<>();
 		}
 		inner.put(key, value);
 		contents.put(element, inner);
@@ -49,7 +49,7 @@ public class HashMapAnnotations implements IElementAnnotationsMap {
 	@NonNull
 	public Iterable<String> getAnnotationNames(@NonNull final ISequenceElement element) {
 		final Map<String, IElementAnnotation> inner = contents.get(element);
-		final LinkedList<String> results = new LinkedList<String>();
+		final LinkedList<String> results = new LinkedList<>();
 
 		if (inner != null) {
 			results.addAll(inner.keySet());

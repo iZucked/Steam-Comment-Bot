@@ -60,7 +60,7 @@ public final class ConstraintCheckerRegistry implements IConstraintCheckerRegist
 	@NonNull
 	public Set<@NonNull IConstraintCheckerFactory> getConstraintCheckerFactories(@NonNull final Collection<String> names) {
 
-		final Set<IConstraintCheckerFactory> factories = new HashSet<IConstraintCheckerFactory>(names.size());
+		final Set<IConstraintCheckerFactory> factories = new HashSet<>(names.size());
 
 		for (final String name : names) {
 

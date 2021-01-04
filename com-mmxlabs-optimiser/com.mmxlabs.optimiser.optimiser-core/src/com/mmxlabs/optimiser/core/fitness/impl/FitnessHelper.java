@@ -79,7 +79,7 @@ public final class FitnessHelper implements IFitnessHelper {
 	@NonNull
 	@Override
 	public Set<IFitnessCore> getFitnessCores(@NonNull final Collection<IFitnessComponent> fitnessComponents) {
-		final Set<IFitnessCore> fitnessCores = new HashSet<IFitnessCore>();
+		final Set<IFitnessCore> fitnessCores = new HashSet<>();
 		for (final IFitnessComponent component : fitnessComponents) {
 			fitnessCores.add(component.getFitnessCore());
 		}

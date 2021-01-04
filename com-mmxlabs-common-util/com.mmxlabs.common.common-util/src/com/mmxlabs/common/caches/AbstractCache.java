@@ -44,7 +44,7 @@ public abstract class AbstractCache<K, V> {
 	protected final void query() {
 		queries++;
 		if (queries == SAMPLE) {
-//			 System.out.println(this.toString());
+			// System.out.println(this.toString())
 			queries = hits = 0;
 		}
 	}

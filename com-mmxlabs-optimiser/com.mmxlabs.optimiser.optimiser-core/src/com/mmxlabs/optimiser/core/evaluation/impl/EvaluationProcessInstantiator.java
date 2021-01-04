@@ -31,7 +31,7 @@ public final class EvaluationProcessInstantiator implements IEvaluationProcessIn
 	public List<IEvaluationProcess> instantiateEvaluationProcesses(@NonNull final IEvaluationProcessRegistry registry, @NonNull final IPhaseOptimisationData optimisationData) {
 
 		final Collection<IEvaluationProcessFactory> factories = registry.getEvaluationProcessFactories();
-		final List<IEvaluationProcess> checkers = new ArrayList<IEvaluationProcess>(factories.size());
+		final List<IEvaluationProcess> checkers = new ArrayList<>(factories.size());
 		for (final IEvaluationProcessFactory factory : factories) {
 			final IEvaluationProcess checker = factory.instantiate();
 
@@ -45,10 +45,10 @@ public final class EvaluationProcessInstantiator implements IEvaluationProcessIn
 	public List<IEvaluationProcess> instantiateEvaluationProcesses(@NonNull final IEvaluationProcessRegistry registry, @NonNull final List<String> evaluationProcessNames,
 			@NonNull final IPhaseOptimisationData optimisationData) {
 
-		final List<IEvaluationProcess> evaluationProcesses = new ArrayList<IEvaluationProcess>(evaluationProcessNames.size());
+		final List<IEvaluationProcess> evaluationProcesses = new ArrayList<>(evaluationProcessNames.size());
 
 		// Mapping between constraint checker name and instance
-		final Map<String, IEvaluationProcess> evaluationProcessMap = new HashMap<String, IEvaluationProcess>();
+		final Map<String, IEvaluationProcess> evaluationProcessMap = new HashMap<>();
 
 		// Get Collection of relevant factories.
 		final Collection<IEvaluationProcessFactory> factories = registry.getEvaluationProcessFactories(evaluationProcessNames);

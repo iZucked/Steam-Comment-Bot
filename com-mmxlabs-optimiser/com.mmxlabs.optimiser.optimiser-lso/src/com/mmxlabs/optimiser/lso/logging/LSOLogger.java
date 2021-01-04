@@ -89,15 +89,15 @@ public class LSOLogger implements ILoggingDataStore {
 	}
 
 	public Map<String, Integer> getProgressKeysMap() {
-		Map<String, Integer> progressKeys = new HashMap<>();
-		progressKeys.put("number-accepted-moves", 0);
-		progressKeys.put("number-rejected-moves", 1);
-		progressKeys.put("number-failed-evaluations", 2);
-		progressKeys.put("number-failed-validate", 3);
-		progressKeys.put("best-fitness", 4);
-		progressKeys.put("current-fitness", 5);
-		progressKeys.put("time", 6);
-		return progressKeys;
+		Map<String, Integer> lProgressKeys = new HashMap<>();
+		lProgressKeys.put("number-accepted-moves", 0);
+		lProgressKeys.put("number-rejected-moves", 1);
+		lProgressKeys.put("number-failed-evaluations", 2);
+		lProgressKeys.put("number-failed-validate", 3);
+		lProgressKeys.put("best-fitness", 4);
+		lProgressKeys.put("current-fitness", 5);
+		lProgressKeys.put("time", 6);
+		return lProgressKeys;
 	}
 
 	public List<String> getProgressKeys() {

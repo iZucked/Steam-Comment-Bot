@@ -22,8 +22,8 @@ public final class OrderedSequenceElementsDataComponentProvider implements IOrde
 	private final Map<ISequenceElement, ISequenceElement> previousElements;
 
 	public OrderedSequenceElementsDataComponentProvider() {
-		this.nextElements = new HashMap<ISequenceElement, ISequenceElement>();
-		this.previousElements = new HashMap<ISequenceElement, ISequenceElement>();
+		this.nextElements = new HashMap<>();
+		this.previousElements = new HashMap<>();
 	}
 
 	@Override

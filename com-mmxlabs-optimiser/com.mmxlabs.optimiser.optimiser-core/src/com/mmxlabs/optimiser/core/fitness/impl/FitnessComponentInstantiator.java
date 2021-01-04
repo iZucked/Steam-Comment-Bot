@@ -37,7 +37,7 @@ public final class FitnessComponentInstantiator implements IFitnessComponentInst
 	@NonNull
 	public List<IFitnessComponent> instantiateFitnesses(@NonNull final IFitnessFunctionRegistry registry) {
 
-		final List<IFitnessComponent> components = new ArrayList<IFitnessComponent>();
+		final List<IFitnessComponent> components = new ArrayList<>();
 
 		final Collection<IFitnessCoreFactory> factories = registry.getFitnessCoreFactories();
 		for (final IFitnessCoreFactory factory : factories) {
@@ -57,13 +57,13 @@ public final class FitnessComponentInstantiator implements IFitnessComponentInst
 	@NonNull
 	public List<IFitnessComponent> instantiateFitnesses(@NonNull final IFitnessFunctionRegistry registry, @NonNull final List<String> componentNames) {
 
-		final List<IFitnessComponent> components = new ArrayList<IFitnessComponent>(componentNames.size());
+		final List<IFitnessComponent> components = new ArrayList<>(componentNames.size());
 
 		// Copy component names into Set for quick lookup.
-		final Set<String> componentNamesSet = new HashSet<String>(componentNames);
+		final Set<String> componentNamesSet = new HashSet<>(componentNames);
 
 		// Mapping between component name and component instance
-		final Map<String, IFitnessComponent> fitnessComponentsMap = new HashMap<String, IFitnessComponent>();
+		final Map<String, IFitnessComponent> fitnessComponentsMap = new HashMap<>();
 
 		// Process factories finding cores which contain a referenced component.
 		// Once found, instantiate cores and add the components to the map.
@@ -88,13 +88,9 @@ public final class FitnessComponentInstantiator implements IFitnessComponentInst
 
 		// Generate the ordered list of fitness components.
 		for (final String name : componentNames) {
-
-			final IFitnessComponent component;
 			if (fitnessComponentsMap.containsKey(name)) {
-				component = fitnessComponentsMap.get(name);
+				final IFitnessComponent component = fitnessComponentsMap.get(name);
 				components.add(component);
-			} else {
-				component = null;
 			}
 		}
 

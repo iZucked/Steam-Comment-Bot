@@ -26,7 +26,7 @@ public final class EvaluationProcessRegistry implements IEvaluationProcessRegist
 	private final Map<String, IEvaluationProcessFactory> factoriesByName;
 
 	public EvaluationProcessRegistry() {
-		this.factoriesByName = new HashMap<String, IEvaluationProcessFactory>();
+		this.factoriesByName = new HashMap<>();
 	}
 
 	@Override
@@ -61,7 +61,7 @@ public final class EvaluationProcessRegistry implements IEvaluationProcessRegist
 	@NonNull
 	public Set<IEvaluationProcessFactory> getEvaluationProcessFactories(@NonNull final Collection<String> names) {
 
-		final Set<IEvaluationProcessFactory> factories = new HashSet<IEvaluationProcessFactory>(names.size());
+		final Set<IEvaluationProcessFactory> factories = new HashSet<>(names.size());
 
 		for (final String name : names) {
 

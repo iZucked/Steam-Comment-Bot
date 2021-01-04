@@ -87,18 +87,17 @@ public final class LockedUnusedElementsConstraintChecker implements IPairwiseCon
 
 	private final boolean checkElement(@NonNull final ISequenceElement element, final List<String> messages) {
 
-		if (lockedElementsProvider.isElementLocked(element)) {
-			if (checkElementUnusedInitially(element, messages)) {
-				return false;
-			}
+		if (lockedElementsProvider.isElementLocked(element) && checkElementUnusedInitially(element, messages)) {
+			return false;
 		}
 		return true;
 	}
 
 	private boolean checkElementUnusedInitially(final ISequenceElement element, final List<String> messages) {
 		final boolean result = getInitialSequences().getUnusedElements().contains(element);
-		if (!result)
+		if (!result) {
 			messages.add(String.format("%s: Element %s is not in the list of unused elements in the Initial Sequence!", this.name, element.getName()));
+		}
 		return getInitialSequences().getUnusedElements().contains(element);
 	}
 

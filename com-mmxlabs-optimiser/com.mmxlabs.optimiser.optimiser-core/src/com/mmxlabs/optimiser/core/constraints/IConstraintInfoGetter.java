@@ -7,7 +7,6 @@ package com.mmxlabs.optimiser.core.constraints;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
