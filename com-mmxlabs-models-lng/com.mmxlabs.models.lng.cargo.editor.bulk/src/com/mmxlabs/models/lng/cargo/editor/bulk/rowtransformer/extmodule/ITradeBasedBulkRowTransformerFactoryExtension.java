@@ -12,8 +12,6 @@ package com.mmxlabs.models.lng.cargo.editor.bulk.rowtransformer.extmodule;
 import org.ops4j.peaberry.eclipse.ExtensionBean;
 import org.ops4j.peaberry.eclipse.MapName;
 
-import com.mmxlabs.models.lng.cargo.editor.bulk.views.ITradesBasedRowModelTransformerFactory;
-import com.mmxlabs.models.lng.cargo.editor.bulk.views.ITradesColumnFactory;
 import com.mmxlabs.models.lng.cargo.editor.bulk.views.ITradesRowTransformerFactory;
 
 @ExtensionBean("com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedRowTransformerFactory")

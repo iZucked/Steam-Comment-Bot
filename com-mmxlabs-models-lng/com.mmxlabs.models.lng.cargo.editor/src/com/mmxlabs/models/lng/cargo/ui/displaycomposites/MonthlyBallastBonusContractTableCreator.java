@@ -31,7 +31,6 @@ import com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract;
 import com.mmxlabs.models.lng.port.ui.editorpart.MultiplePortReferenceManipulator;
-import com.mmxlabs.models.lng.port.ui.editors.PortMultiReferenceInlineEditor;
 import com.mmxlabs.models.lng.pricing.ui.autocomplete.PriceAttributeManipulator;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;

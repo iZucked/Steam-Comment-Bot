@@ -6,7 +6,6 @@
  */
 package com.mmxlabs.models.lng.analytics;
 
-import com.mmxlabs.scenario.service.ui.dnd.IChangeSource;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EObject;

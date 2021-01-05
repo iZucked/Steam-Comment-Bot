@@ -7,8 +7,6 @@ package com.mmxlabs.optimiser.core.fitness.impl;
 import java.util.Collection;
 import java.util.List;
 
-import javax.swing.text.html.HTMLDocument.RunElement;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

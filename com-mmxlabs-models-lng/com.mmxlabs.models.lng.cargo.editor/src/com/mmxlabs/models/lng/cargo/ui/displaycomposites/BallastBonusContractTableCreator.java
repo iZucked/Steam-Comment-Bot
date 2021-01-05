@@ -27,7 +27,6 @@ import com.mmxlabs.models.lng.commercial.BallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.LumpSumBallastBonusContractLine;
-import com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract;
 import com.mmxlabs.models.lng.port.ui.editorpart.MultiplePortReferenceManipulator;

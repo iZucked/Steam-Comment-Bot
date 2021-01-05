@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.entities;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**

@@ -13,7 +13,6 @@ import org.mockito.Mockito;
 
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 
 public class ConstraintCheckerInstantiatorTest {

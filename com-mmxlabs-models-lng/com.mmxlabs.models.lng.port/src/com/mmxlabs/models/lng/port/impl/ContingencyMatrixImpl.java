@@ -10,8 +10,6 @@ import com.mmxlabs.models.lng.port.ContingencyMatrix;
 import com.mmxlabs.models.lng.port.ContingencyMatrixEntry;
 import com.mmxlabs.models.lng.port.PortPackage;
 
-import com.mmxlabs.models.lng.types.TimePeriod;
-
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;

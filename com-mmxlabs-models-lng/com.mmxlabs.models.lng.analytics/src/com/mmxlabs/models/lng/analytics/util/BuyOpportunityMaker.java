@@ -5,30 +5,15 @@
 package com.mmxlabs.models.lng.analytics.util;
 
 import java.time.LocalDate;
-import java.time.YearMonth;
 import java.util.function.Consumer;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.eclipse.jdt.annotation.Nullable;
-
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
-import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.VolumeMode;
-import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
-import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
-import com.mmxlabs.models.lng.commercial.SalesContract;
-import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
-import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
-import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
-import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
-import com.mmxlabs.models.lng.types.AVesselSet;
-import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 
 public class BuyOpportunityMaker {

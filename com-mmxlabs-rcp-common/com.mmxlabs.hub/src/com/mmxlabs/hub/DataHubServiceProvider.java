@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;

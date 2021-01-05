@@ -8,8 +8,6 @@ package com.mmxlabs.models.lng.scenario.model;
 
 import java.time.LocalDate;
 
-import org.eclipse.emf.common.util.EList;
-
 import com.mmxlabs.models.lng.actuals.ActualsModel;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;

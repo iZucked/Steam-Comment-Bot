@@ -10,7 +10,6 @@ import java.util.List;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.nominations.AbstractNomination;
 import com.mmxlabs.models.lng.nominations.NominationsModel;
-import com.mmxlabs.models.lng.nominations.SlotNomination;
 import com.mmxlabs.models.lng.nominations.utils.NominationsModelUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 

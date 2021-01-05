@@ -67,7 +67,6 @@ import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import org.eclipse.emf.common.util.URI;
 
 /**
  * <!-- begin-user-doc -->

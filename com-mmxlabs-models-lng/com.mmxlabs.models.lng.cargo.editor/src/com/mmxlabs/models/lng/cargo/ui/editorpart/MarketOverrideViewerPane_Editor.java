@@ -9,10 +9,6 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.jface.viewers.IColorProvider;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
@@ -20,18 +16,11 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.port.ui.editorpart.MultiplePortReferenceManipulator;
-import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
-import com.mmxlabs.models.ui.tabular.manipulators.BooleanAttributeManipulator;
-import com.mmxlabs.models.ui.tabular.manipulators.LocalDateTimeAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.ReadOnlyManipulatorWrapper;
-import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 public class MarketOverrideViewerPane_Editor extends ScenarioTableViewerPane {

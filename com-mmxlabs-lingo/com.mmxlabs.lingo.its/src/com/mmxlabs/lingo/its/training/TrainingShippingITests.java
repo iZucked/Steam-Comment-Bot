@@ -22,7 +22,6 @@ import com.mmxlabs.lingo.its.tests.TestMode;
 import com.mmxlabs.lingo.its.tests.TestingModes;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
-import com.mmxlabs.lingo.its.tests.microcases.MicroCaseUtils;
 import com.mmxlabs.lingo.its.verifier.OptimiserDataMapper;
 import com.mmxlabs.lingo.its.verifier.OptimiserResultVerifier;
 import com.mmxlabs.lingo.its.verifier.SolutionData;

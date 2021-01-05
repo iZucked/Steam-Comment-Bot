@@ -4,22 +4,11 @@
  */
 package com.mmxlabs.models.lng.migration.units;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
 import com.mmxlabs.models.migration.MigrationModelRecord;
-import com.mmxlabs.models.migration.utils.EObjectWrapper;
-import com.mmxlabs.models.migration.utils.MetamodelUtils;
 
 public class MigrateToV101 extends AbstractMigrationUnit {
 

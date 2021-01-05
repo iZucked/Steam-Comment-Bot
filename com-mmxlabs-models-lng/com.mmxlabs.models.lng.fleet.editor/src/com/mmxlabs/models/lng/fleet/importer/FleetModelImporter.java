@@ -12,8 +12,6 @@ import javax.inject.Inject;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
-
 import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.common.csv.IDeferment;
 import com.mmxlabs.common.csv.IImportContext;

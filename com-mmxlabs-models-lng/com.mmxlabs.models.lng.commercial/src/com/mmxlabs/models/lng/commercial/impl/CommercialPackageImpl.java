@@ -47,7 +47,6 @@ import com.mmxlabs.models.lng.commercial.SlotContractParams;
 import com.mmxlabs.models.lng.commercial.TaxRate;
 import com.mmxlabs.models.lng.commercial.VolumeParams;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;

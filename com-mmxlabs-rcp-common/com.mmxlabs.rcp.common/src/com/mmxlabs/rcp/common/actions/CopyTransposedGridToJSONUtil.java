@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.rcp.common.actions;
 
-import java.io.IOException;
-
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;

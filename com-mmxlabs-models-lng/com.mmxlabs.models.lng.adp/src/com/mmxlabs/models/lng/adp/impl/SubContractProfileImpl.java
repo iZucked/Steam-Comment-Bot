@@ -9,7 +9,6 @@ package com.mmxlabs.models.lng.adp.impl;
 import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.CustomSubProfileAttributes;
 import com.mmxlabs.models.lng.adp.DistributionModel;
-import com.mmxlabs.models.lng.adp.LNGVolumeUnit;
 import com.mmxlabs.models.lng.adp.SubContractProfile;
 
 import com.mmxlabs.models.lng.adp.SubProfileConstraint;
@@ -20,7 +19,6 @@ import com.mmxlabs.models.lng.commercial.ContractType;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.TimePeriod;
-import com.mmxlabs.models.lng.types.VolumeUnits;
 import java.util.Collection;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -32,7 +30,6 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 /**

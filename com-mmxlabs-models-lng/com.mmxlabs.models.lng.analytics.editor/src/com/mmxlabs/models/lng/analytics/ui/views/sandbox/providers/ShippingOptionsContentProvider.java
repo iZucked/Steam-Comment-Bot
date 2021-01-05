@@ -10,7 +10,6 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 import com.mmxlabs.models.lng.analytics.AbstractAnalysisModel;
-import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 
 public class ShippingOptionsContentProvider implements ITreeContentProvider {

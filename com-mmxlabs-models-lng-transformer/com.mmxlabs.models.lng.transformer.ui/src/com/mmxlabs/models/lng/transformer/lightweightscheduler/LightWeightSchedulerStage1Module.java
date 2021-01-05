@@ -26,7 +26,6 @@ import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ICargoV
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.impl.CargoVesselRestrictionsMatrixProducer;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.impl.LightWeightConstraintCheckerRegistry;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.impl.LightWeightFitnessFunctionRegistry;
-import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.impl.LightWeightOptimiserHelper;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.impl.SimpleCargoToCargoCostCalculator;
 import com.mmxlabs.models.lng.transformer.optimiser.common.AbstractOptimiserHelper;
 import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.constraints.LightWeightShippingRestrictionsConstraintCheckerFactory;

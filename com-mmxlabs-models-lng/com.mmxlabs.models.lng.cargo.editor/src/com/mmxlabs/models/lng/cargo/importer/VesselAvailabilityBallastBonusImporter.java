@@ -16,7 +16,6 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.BallastBonusContract;
 import com.mmxlabs.models.lng.commercial.BallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
-import com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContract;
 import com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract;
 import com.mmxlabs.models.lng.fleet.FleetPackage;

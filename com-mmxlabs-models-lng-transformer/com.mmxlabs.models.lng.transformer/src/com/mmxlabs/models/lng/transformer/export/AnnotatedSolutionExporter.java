@@ -83,7 +83,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * A utility class for turning an annotated solution into some EMF

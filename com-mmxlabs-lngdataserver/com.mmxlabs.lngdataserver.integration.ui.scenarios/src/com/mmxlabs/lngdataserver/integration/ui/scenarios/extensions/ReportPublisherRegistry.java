@@ -4,14 +4,10 @@
  */
 package com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.IDataHubStateChangeListener;
 import com.mmxlabs.hub.common.http.HttpClientUtil;
-import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.SupportFormat;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.SupportedReportFormats;
 
 import okhttp3.OkHttpClient;

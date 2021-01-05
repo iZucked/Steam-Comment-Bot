@@ -7,7 +7,6 @@
 package com.mmxlabs.models.lng.adp;
 
 import com.mmxlabs.models.mmxcore.MMXObject;
-import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->

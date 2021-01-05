@@ -7,7 +7,6 @@
 package com.mmxlabs.models.lng.commercial.impl;
 
 import com.mmxlabs.models.lng.commercial.BallastBonusContract;
-import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.SimpleBallastBonusCharterContract;
 

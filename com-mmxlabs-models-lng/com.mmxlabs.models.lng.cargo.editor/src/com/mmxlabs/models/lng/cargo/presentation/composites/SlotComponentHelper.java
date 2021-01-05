@@ -18,7 +18,6 @@ import com.mmxlabs.models.lng.cargo.ui.inlineeditors.RestrictionsOverridePortMul
 import com.mmxlabs.models.lng.cargo.ui.inlineeditors.VolumeInlineEditor;
 import com.mmxlabs.models.lng.fleet.ui.inlineeditors.TextualVesselReferenceInlineEditor;
 import com.mmxlabs.models.lng.port.ui.editorpart.TextualPortReferenceInlineEditor;
-import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;

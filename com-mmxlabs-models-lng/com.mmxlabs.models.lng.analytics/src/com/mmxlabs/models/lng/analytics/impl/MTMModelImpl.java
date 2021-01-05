@@ -9,8 +9,6 @@ package com.mmxlabs.models.lng.analytics.impl;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.MTMModel;
 import com.mmxlabs.models.lng.analytics.MTMRow;
-import com.mmxlabs.models.lng.analytics.ViabilityRow;
-
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 

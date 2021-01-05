@@ -58,7 +58,4 @@ public class LocalDateAttributeManipulator extends BasicAttributeManipulator {
 			return null;
 		}
 	}
-	
- 
-
 }

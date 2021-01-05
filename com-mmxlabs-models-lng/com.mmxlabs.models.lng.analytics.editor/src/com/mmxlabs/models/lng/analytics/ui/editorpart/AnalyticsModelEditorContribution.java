@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.lng.analytics.ui.editorpart;
 
-import java.lang.ref.WeakReference;
-
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;

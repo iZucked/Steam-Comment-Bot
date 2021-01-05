@@ -18,7 +18,6 @@ import java.util.zip.ZipOutputStream;
 import org.junit.jupiter.api.Assertions;
 
 import com.google.common.io.ByteStreams;
-import com.google.common.io.Files;
 import com.mmxlabs.scenario.service.model.util.encryption.impl.DelegatingEMFCipher;
 import com.mmxlabs.scenario.service.model.util.encryption.impl.KeyFileUtil;
 

@@ -11,7 +11,6 @@ import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.detailtree.IDetailTree;
 import com.mmxlabs.common.detailtree.impl.TotalCostDetailElement;
 import com.mmxlabs.common.detailtree.impl.UnitPriceDetailElement;
-import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.Calculator;

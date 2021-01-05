@@ -10,8 +10,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
-
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.CargoByQuarterDistributionModel;
@@ -22,7 +20,6 @@ import com.mmxlabs.models.lng.adp.ext.ISlotTemplateFactory;
 import com.mmxlabs.models.lng.adp.utils.ADPModelUtil;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
-import com.mmxlabs.models.lng.types.TimePeriod;
 
 public class CargoByQuarterGenerator implements IProfileGenerator {
 

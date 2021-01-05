@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -25,7 +24,6 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.common.csv.IImportProblem;
 import com.mmxlabs.models.lng.scenario.importWizards.DefaultImportHooksProvider;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
-import com.mmxlabs.models.lng.scenario.wizards.BulkImportPage.FieldChoice;
 import com.mmxlabs.models.lng.ui.actions.ImportAction;
 import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;

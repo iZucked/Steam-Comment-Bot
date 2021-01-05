@@ -16,7 +16,6 @@ import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.lingo.its.tests.microcases.MicroTestUtils;
-import com.mmxlabs.lngdataserver.data.distances.DataConstants;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.fleet.Vessel;

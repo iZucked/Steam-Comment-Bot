@@ -9,11 +9,9 @@ package com.mmxlabs.models.lng.analytics.ui.views.viability;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.TextStyle;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 

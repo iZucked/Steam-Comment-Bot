@@ -11,8 +11,6 @@ import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.ui.IElementFactory;
 import org.eclipse.ui.IMemento;
-import org.eclipse.ui.internal.part.NullEditorInput;
-
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.editing.ScenarioServiceEditorInput;

@@ -28,7 +28,6 @@ import com.mmxlabs.models.lng.commercial.BallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.LumpSumBallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract;
-import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.RouteOption;

@@ -19,7 +19,6 @@ import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.models.lng.adp.ext.ISlotTemplateFactory;
 import com.mmxlabs.models.lng.adp.ext.impl.AbstractSlotTemplateFactory;
-import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.parameters.OptimisationMode;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
@@ -29,7 +28,6 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
-import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.fitness.components.NonOptionalSlotFitnessCoreFactory;
 
 @ExtendWith(value = ShiroRunner.class)

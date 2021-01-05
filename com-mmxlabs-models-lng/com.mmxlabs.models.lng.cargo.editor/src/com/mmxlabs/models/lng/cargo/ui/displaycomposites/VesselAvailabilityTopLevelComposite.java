@@ -5,8 +5,6 @@
 package com.mmxlabs.models.lng.cargo.ui.displaycomposites;
 
 import java.util.Collection;
-import java.util.Iterator;
-
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EClass;
@@ -24,7 +22,6 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.commercial.BallastBonusContract;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;

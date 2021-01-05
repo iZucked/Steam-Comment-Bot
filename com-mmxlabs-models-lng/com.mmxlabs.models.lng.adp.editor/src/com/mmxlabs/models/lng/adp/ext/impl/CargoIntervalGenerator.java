@@ -21,7 +21,6 @@ import com.mmxlabs.models.lng.adp.ext.ISlotTemplateFactory;
 import com.mmxlabs.models.lng.adp.utils.ADPModelUtil;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
-import com.mmxlabs.models.lng.types.TimePeriod;
 
 public class CargoIntervalGenerator implements IProfileGenerator {
 

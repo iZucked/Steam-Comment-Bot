@@ -14,7 +14,6 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.commercial.BallastBonusCharterContract;
-import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CharterContract;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.validation.internal.Activator;

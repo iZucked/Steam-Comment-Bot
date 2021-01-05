@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;

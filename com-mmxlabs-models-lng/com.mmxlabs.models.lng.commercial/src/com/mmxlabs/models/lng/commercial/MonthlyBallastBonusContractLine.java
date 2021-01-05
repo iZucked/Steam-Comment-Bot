@@ -6,8 +6,6 @@
  */
 package com.mmxlabs.models.lng.commercial;
 
-import java.math.BigDecimal;
-
 import java.time.YearMonth;
 
 /**

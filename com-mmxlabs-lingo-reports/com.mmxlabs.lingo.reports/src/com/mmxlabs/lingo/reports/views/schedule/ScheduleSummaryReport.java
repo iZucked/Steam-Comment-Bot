@@ -7,9 +7,7 @@ package com.mmxlabs.lingo.reports.views.schedule;
 import java.util.UUID;
 
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.IActionBars;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

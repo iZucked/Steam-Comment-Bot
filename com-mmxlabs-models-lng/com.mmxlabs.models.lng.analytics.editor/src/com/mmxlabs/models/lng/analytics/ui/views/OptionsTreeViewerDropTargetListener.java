@@ -7,7 +7,6 @@ package com.mmxlabs.models.lng.analytics.ui.views;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.IStructuredSelection;

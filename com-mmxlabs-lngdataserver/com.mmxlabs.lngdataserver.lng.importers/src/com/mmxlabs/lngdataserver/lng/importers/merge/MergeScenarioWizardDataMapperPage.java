@@ -35,10 +35,6 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.rcp.common.json.EMFJacksonModule;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
-import com.mmxlabs.scenario.service.model.manager.SSDataManager;
-import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 public class MergeScenarioWizardDataMapperPage extends WizardPage implements IScenarioDependent {
 	

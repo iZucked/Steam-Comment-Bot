@@ -13,10 +13,8 @@ import java.util.Random;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
-import com.mmxlabs.optimiser.common.scenario.PhaseOptimisationData;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IOptimiserProgressMonitor;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
@@ -26,9 +24,7 @@ import com.mmxlabs.optimiser.core.constraints.impl.EvaluatedStateConstraintCheck
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationProcessInstantiator;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
-import com.mmxlabs.optimiser.core.fitness.IFitnessHelper;
 import com.mmxlabs.optimiser.core.fitness.impl.FitnessComponentInstantiator;
-import com.mmxlabs.optimiser.core.fitness.impl.FitnessHelper;
 import com.mmxlabs.optimiser.core.impl.NullSequencesManipulator;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;

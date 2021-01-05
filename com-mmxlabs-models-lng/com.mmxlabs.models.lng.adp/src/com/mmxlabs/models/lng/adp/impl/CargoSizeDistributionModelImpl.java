@@ -9,11 +9,8 @@ package com.mmxlabs.models.lng.adp.impl;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.EObjectImpl;
 import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.CargoSizeDistributionModel;
-import com.mmxlabs.models.lng.adp.LNGVolumeUnit;
-import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 
 /**
  * <!-- begin-user-doc -->

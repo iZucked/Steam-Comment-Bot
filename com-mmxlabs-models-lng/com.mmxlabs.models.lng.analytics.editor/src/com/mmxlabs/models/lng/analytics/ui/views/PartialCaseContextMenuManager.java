@@ -23,7 +23,6 @@ import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridItem;
-import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.events.MenuDetectEvent;
 import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.graphics.Point;

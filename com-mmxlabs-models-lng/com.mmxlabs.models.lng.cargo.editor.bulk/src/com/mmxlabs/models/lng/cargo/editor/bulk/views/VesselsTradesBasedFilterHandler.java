@@ -23,10 +23,7 @@ import com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart.ColumnFilters;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorAction;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
-import com.mmxlabs.models.lng.schedule.CargoAllocation;
-import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
-import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 

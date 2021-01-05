@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -28,7 +27,6 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.common.csv.IImportProblem;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.lng.cargo.CargoModel;
-import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.scenario.wizards.BulkImportPage.FieldChoice;

@@ -11,7 +11,6 @@ import com.mmxlabs.models.lng.parameters.OptimisationMode;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 
-import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 

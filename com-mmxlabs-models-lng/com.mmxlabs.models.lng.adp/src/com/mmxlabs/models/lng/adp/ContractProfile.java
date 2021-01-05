@@ -9,8 +9,6 @@ package com.mmxlabs.models.lng.adp;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
 
-import com.mmxlabs.models.lng.types.VolumeUnits;
-
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 

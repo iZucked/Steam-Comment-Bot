@@ -16,7 +16,6 @@ import com.mmxlabs.models.lng.pricing.HolidayCalendar;
 import com.mmxlabs.models.lng.pricing.MarketIndex;
 import com.mmxlabs.models.lng.pricing.PricingCalendar;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
-import com.mmxlabs.models.lng.pricing.SettleStrategy;
 import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
 
 /**

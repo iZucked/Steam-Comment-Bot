@@ -6,7 +6,6 @@
  */
 package com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor;
 
-import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;

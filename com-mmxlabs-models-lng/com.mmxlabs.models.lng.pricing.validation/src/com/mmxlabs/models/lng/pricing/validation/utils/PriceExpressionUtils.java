@@ -53,7 +53,6 @@ import com.mmxlabs.models.lng.pricing.util.ModelMarketCurveProvider;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 import com.mmxlabs.models.lng.pricing.validation.internal.Activator;
-import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils.ValidationResult;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusFactory;

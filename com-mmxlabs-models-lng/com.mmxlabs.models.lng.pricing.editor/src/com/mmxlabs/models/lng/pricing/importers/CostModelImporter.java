@@ -17,7 +17,6 @@ import org.eclipse.emf.ecore.EcorePackage;
 import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.common.csv.IDeferment;
 import com.mmxlabs.common.csv.IImportContext;
-import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;

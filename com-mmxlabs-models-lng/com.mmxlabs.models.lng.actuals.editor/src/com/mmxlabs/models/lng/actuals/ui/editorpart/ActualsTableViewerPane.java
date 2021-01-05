@@ -55,7 +55,6 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
@@ -80,9 +79,7 @@ import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
-import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
-import com.mmxlabs.models.ui.editors.dialogs.MultiDetailDialog;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerValidationSupport;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
@@ -96,7 +93,6 @@ import com.mmxlabs.models.util.emfpath.EMFPath;
 import com.mmxlabs.rcp.common.actions.CopyToClipboardActionFactory;
 import com.mmxlabs.rcp.common.actions.PackGridTreeColumnsAction;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
-import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 
 /**
  * Tabular editor displaying cargoes and slots with a custom wiring editor. This implementation is "stupid" in that any changes to the data cause a full update. This has the disadvantage of loosing

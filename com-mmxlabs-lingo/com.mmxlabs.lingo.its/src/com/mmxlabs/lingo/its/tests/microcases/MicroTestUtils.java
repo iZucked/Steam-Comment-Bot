@@ -42,7 +42,6 @@ import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGEvaluationTransformerUnit;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGLSOOptimiserTransformerUnit;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
-import com.mmxlabs.models.lng.transformer.inject.modules.InitialPhaseOptimisationDataModule;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
@@ -53,10 +52,8 @@ import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
-import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
-import com.mmxlabs.scheduler.optimiser.manipulators.SequencesManipulatorModule;
 import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
 
 public class MicroTestUtils {

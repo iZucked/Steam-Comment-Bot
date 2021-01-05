@@ -22,8 +22,6 @@ import com.mmxlabs.models.lng.port.ContingencyMatrix;
 import com.mmxlabs.models.lng.port.ContingencyMatrixEntry;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortPackage;
-import com.mmxlabs.models.lng.port.Route;
-import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.impl.NumberAttributeImporter;
 import com.mmxlabs.models.util.importer.impl.SetReference;

@@ -6,23 +6,12 @@
  */
 package com.mmxlabs.models.lng.nominations.impl;
 
-import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.nominations.AbstractNomination;
 import com.mmxlabs.models.lng.nominations.NominationsPackage;
-import com.mmxlabs.models.lng.types.TimePeriod;
-import com.mmxlabs.models.mmxcore.MMXObject.DelegateInformation;
-
 import java.time.LocalDate;
-import java.util.Collections;
-
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 /**

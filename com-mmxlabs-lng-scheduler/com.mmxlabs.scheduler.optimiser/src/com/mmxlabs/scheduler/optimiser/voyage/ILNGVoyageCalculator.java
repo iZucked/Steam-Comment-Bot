@@ -6,11 +6,7 @@ package com.mmxlabs.scheduler.optimiser.voyage;
 
 import java.util.List;
 
-import org.eclipse.jdt.annotation.NonNull;
-
-import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;

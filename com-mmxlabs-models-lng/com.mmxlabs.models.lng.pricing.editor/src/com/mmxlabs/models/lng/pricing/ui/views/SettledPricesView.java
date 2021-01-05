@@ -13,11 +13,8 @@ import org.eclipse.jface.viewers.StructuredSelection;
 
 import com.mmxlabs.models.lng.pricing.DatePoint;
 import com.mmxlabs.models.lng.pricing.DatePointContainer;
-import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
-import com.mmxlabs.models.lng.pricing.ui.editorpart.PortCostPane;
 import com.mmxlabs.models.lng.pricing.ui.editorpart.SettledPricesPane;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.ui.views.ScenarioTableViewerView;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;

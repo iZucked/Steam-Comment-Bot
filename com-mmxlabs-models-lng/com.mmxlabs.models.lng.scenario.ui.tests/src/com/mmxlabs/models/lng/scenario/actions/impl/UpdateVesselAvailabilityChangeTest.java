@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.scenario.actions.impl;
 
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
@@ -16,11 +15,9 @@ import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.provider.FleetItemProviderAdapterFactory;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
-import com.mmxlabs.models.lng.types.APortSet;
 
 public class UpdateVesselAvailabilityChangeTest {
 

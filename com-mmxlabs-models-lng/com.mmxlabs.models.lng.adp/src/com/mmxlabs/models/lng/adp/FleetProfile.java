@@ -6,10 +6,6 @@
  */
 package com.mmxlabs.models.lng.adp;
 
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
-
-import com.mmxlabs.models.lng.cargo.VesselEvent;
-import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import org.eclipse.emf.common.util.EList;
 

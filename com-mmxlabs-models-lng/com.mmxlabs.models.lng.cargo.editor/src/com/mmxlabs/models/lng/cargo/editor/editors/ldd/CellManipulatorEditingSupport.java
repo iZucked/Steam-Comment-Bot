@@ -9,7 +9,6 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.models.ui.tabular.ICellManipulator;

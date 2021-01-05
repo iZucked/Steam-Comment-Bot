@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lingo.its.tests;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.function.Consumer;
 

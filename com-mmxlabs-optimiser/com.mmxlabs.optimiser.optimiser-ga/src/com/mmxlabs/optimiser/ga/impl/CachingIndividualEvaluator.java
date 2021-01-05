@@ -5,8 +5,6 @@
 package com.mmxlabs.optimiser.ga.impl;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
-
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.caches.AbstractCache;
 import com.mmxlabs.common.caches.AbstractCache.IKeyEvaluator;

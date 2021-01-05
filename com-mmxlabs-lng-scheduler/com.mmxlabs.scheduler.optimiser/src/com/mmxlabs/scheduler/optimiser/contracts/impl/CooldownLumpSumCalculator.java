@@ -9,7 +9,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.google.inject.Inject;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.ILongCurve;
-import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;

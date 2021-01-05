@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.contracts;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.mmxlabs.optimiser.core.ISequences;

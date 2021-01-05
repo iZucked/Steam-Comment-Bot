@@ -9,7 +9,6 @@ package com.mmxlabs.models.lng.adp.presentation.composites;
 import com.mmxlabs.models.lng.adp.ADPPackage;
 
 import com.mmxlabs.models.ui.BaseComponentHelper;
-import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 

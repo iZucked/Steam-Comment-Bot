@@ -19,20 +19,12 @@ import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
-import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
-import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
-import com.mmxlabs.models.lng.commercial.util.CommercialModelFinder;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.util.FleetModelBuilder;
-import com.mmxlabs.models.lng.fleet.util.FleetModelFinder;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
-import com.mmxlabs.models.lng.port.util.PortModelFinder;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelBuilder;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelFinder;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
@@ -40,7 +32,6 @@ import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
-import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 /**
  * Some test cases around period optimisation with vessel events (specifically charter out events which can move between vessels). Original period transformer locks down all vessel events.

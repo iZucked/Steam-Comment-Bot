@@ -12,8 +12,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import com.mmxlabs.models.lng.scenario.importWizards.BulkImportWizard;
-import com.mmxlabs.models.lng.scenario.wizards.BulkImportPage.FieldChoice;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
 public class ImportInventoryHandler extends AbstractHandler {

@@ -6,10 +6,8 @@ package com.mmxlabs.lingo.reports.preferences;
 
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.preference.ComboFieldEditor;
-import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IntegerFieldEditor;
-import org.eclipse.jface.preference.ListEditor;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;

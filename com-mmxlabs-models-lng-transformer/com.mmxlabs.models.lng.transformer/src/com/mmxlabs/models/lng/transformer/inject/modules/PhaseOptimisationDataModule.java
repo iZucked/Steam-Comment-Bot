@@ -17,7 +17,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
-import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
 import com.mmxlabs.optimiser.common.scenario.PhaseOptimisationData;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;

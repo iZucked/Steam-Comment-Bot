@@ -15,8 +15,6 @@ import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.VesselEventOption;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
-import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
-
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 import java.util.Collection;
 

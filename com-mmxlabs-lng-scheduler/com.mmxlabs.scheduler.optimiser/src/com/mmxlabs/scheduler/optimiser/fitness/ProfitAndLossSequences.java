@@ -16,7 +16,6 @@ import com.mmxlabs.common.paperdeals.BasicPaperDealData;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * @author hinton, modified by FM

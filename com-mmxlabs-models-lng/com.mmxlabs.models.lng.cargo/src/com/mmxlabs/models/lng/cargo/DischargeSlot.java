@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.cargo;
 
-import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
 import com.mmxlabs.models.lng.types.FOBSaleDealType;

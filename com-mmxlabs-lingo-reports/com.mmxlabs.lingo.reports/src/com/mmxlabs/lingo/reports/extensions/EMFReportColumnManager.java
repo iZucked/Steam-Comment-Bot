@@ -13,7 +13,6 @@ import org.eclipse.emf.ecore.ETypedElement;
 
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.columngeneration.BlockColumnFactoryDisplayNameChanger;
-import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlockManager;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnType;
 import com.mmxlabs.models.ui.tabular.columngeneration.EmfBlockColumnFactory;

@@ -53,7 +53,6 @@ import com.mmxlabs.models.ui.tabular.columngeneration.SimpleEmfBlockColumnFactor
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.BooleanAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.BooleanFlagAttributeManipulator;
-import com.mmxlabs.models.ui.tabular.manipulators.EnumAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.HoursSingleReferenceManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.LocalDateAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.MultipleReferenceManipulator;

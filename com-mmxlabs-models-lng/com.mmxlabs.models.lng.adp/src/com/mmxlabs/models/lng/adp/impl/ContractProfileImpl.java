@@ -8,15 +8,11 @@ package com.mmxlabs.models.lng.adp.impl;
 
 import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.ContractProfile;
-import com.mmxlabs.models.lng.adp.DistributionModel;
-
 import com.mmxlabs.models.lng.adp.ProfileConstraint;
 import com.mmxlabs.models.lng.adp.LNGVolumeUnit;
 import com.mmxlabs.models.lng.adp.SubContractProfile;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
-
-import com.mmxlabs.models.lng.types.VolumeUnits;
 
 import java.util.Collection;
 import org.eclipse.emf.common.notify.Notification;

@@ -25,7 +25,6 @@ import com.mmxlabs.lingo.its.tests.TestingModes;
 import com.mmxlabs.lingo.its.tests.microcases.MicroTestUtils;
 import com.mmxlabs.lingo.its.tests.microcases.adp.AbstractADPAndLightWeightTests;
 import com.mmxlabs.lingo.its.tests.microcases.adp.OptimisationEMFTestUtils;
-import com.mmxlabs.lingo.its.tests.microcases.adp.TrainingCaseConstants;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.adp.IntervalType;
 import com.mmxlabs.models.lng.adp.LNGVolumeUnit;

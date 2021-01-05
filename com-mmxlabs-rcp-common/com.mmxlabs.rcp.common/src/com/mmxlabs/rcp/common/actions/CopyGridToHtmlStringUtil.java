@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.rcp.common.actions;
 
-import java.io.IOException;
 import java.io.StringWriter;
 import java.util.HashSet;
 import java.util.Set;

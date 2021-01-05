@@ -17,7 +17,6 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
-import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
 import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
 
 /**

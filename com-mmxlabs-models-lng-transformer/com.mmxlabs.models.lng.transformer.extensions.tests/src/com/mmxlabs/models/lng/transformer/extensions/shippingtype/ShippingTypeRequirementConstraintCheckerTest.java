@@ -20,8 +20,6 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVesselEditor;
 
 public class ShippingTypeRequirementConstraintCheckerTest {
 	public void testPurchaseConstraints(CargoDeliveryType cargoType, CargoDeliveryType requiredType) {

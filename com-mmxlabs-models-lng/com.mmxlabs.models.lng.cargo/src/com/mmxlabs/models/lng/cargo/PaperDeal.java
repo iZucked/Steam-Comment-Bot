@@ -12,7 +12,6 @@ import com.mmxlabs.models.mmxcore.NamedObject;
 import java.time.LocalDate;
 
 import java.time.YearMonth;
-import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->

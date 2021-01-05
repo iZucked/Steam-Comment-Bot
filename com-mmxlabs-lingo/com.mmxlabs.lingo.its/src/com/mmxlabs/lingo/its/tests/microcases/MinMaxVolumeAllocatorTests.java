@@ -18,7 +18,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
-import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -31,7 +30,6 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.lng.schedule.util.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
-import com.mmxlabs.models.lng.transformer.its.RequireFeature;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.types.DESPurchaseDealType;
 import com.mmxlabs.models.lng.types.FOBSaleDealType;

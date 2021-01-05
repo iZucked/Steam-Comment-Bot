@@ -5,7 +5,6 @@
 package com.mmxlabs.lingo.reports.views.standard;
 
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -34,7 +33,6 @@ import org.eclipse.ui.actions.ActionFactory;
 import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.components.AbstractReportView;
 import com.mmxlabs.lingo.reports.internal.Activator;
-import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.TransformedSelectedDataProvider;
 import com.mmxlabs.lingo.reports.views.formatters.Formatters;
 import com.mmxlabs.lingo.reports.views.standard.CanalBookingsReportTransformer.RowData;
@@ -52,7 +50,6 @@ import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.IComparableProvider;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
-import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.rcp.common.actions.CopyGridToJSONUtil;
 import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;

@@ -10,8 +10,6 @@ import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.NextPortType;
 
-import java.math.BigDecimal;
-
 import java.time.YearMonth;
 
 import org.eclipse.emf.common.notify.Notification;

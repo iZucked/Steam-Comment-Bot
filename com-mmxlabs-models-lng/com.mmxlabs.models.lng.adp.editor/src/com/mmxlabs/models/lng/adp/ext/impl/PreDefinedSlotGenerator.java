@@ -8,8 +8,6 @@ import java.time.YearMonth;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
-
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.ContractProfile;
 import com.mmxlabs.models.lng.adp.PreDefinedDate;
@@ -20,7 +18,6 @@ import com.mmxlabs.models.lng.adp.ext.ISlotTemplateFactory;
 import com.mmxlabs.models.lng.adp.utils.ADPModelUtil;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
-import com.mmxlabs.models.lng.commercial.PurchaseContract;
 
 public class PreDefinedSlotGenerator implements IProfileGenerator {
 

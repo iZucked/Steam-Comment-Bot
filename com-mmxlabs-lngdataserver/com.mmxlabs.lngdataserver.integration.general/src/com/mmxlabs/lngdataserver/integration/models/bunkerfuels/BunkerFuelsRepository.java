@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.lngdataserver.integration.models.bunkerfuels;
 
-import java.io.IOException;
-
 import com.mmxlabs.lngdataserver.integration.repo.generic.AbstractGenericDataRepository;
 
 public class BunkerFuelsRepository extends AbstractGenericDataRepository<BunkerFuelsVersion> {

@@ -13,8 +13,6 @@ import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 
-import java.time.LocalDate;
-
 import java.time.LocalDateTime;
 import org.eclipse.emf.common.notify.Notification;
 

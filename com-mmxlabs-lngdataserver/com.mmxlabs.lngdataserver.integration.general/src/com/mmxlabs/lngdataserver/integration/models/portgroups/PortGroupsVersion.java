@@ -5,7 +5,6 @@
 package com.mmxlabs.lngdataserver.integration.models.portgroups;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 

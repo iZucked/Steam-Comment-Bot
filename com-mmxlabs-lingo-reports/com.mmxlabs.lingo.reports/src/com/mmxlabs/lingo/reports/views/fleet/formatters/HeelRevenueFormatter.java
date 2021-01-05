@@ -11,8 +11,6 @@ import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Sequence;
-import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
-import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils.ShippingCostType;
 
 public class HeelRevenueFormatter extends CostFormatter {
 

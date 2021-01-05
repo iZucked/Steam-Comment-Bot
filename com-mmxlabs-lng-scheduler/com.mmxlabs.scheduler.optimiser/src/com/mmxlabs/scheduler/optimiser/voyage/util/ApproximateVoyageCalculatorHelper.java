@@ -8,7 +8,6 @@ import com.mmxlabs.scheduler.optimiser.Calculator;
 //import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
-import com.mmxlabs.scheduler.optimiser.voyage.FuelKey;
 
 public class ApproximateVoyageCalculatorHelper {
 	public static final class ApproximateFuelCostLegData {

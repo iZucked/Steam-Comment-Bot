@@ -7,13 +7,9 @@ package com.mmxlabs.models.lng.cargo.editor.bulk.views;
 import java.util.Set;
 
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.viewers.Viewer;
-
 import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Row;
 import com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart.ColumnFilters;
 import com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart.BulkTradesTablePane;
-import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
-import com.mmxlabs.models.ui.EMFViewerPane;
 
 public class DefaultTradesBasedFilterHandler implements ITradesBasedFilterHandler {
 

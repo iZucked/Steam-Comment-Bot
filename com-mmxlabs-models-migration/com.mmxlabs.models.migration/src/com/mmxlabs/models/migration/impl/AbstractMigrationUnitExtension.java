@@ -4,16 +4,10 @@
  */
 package com.mmxlabs.models.migration.impl;
 
-import java.util.Map;
-
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.models.migration.DataManifest;
 import com.mmxlabs.models.migration.IMigrationUnit;
 import com.mmxlabs.models.migration.IMigrationUnitExtension;
-import com.mmxlabs.models.migration.PackageData;
 
 /**
  * Abstract class handling the wrapping calls to a {@link IMigrationUnit}. The {@link #migrate(java.util.List, org.eclipse.emf.ecore.resource.URIConverter, java.util.Map)} still needs to be

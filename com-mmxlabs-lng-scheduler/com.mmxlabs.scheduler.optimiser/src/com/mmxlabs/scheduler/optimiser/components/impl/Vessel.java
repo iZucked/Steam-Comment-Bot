@@ -10,8 +10,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.NonNullByDefault;
-
 import com.google.common.collect.Lists;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;

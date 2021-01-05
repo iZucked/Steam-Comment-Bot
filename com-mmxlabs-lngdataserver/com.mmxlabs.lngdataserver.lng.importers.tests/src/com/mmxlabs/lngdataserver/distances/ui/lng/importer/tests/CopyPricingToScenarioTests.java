@@ -51,7 +51,6 @@ import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.YearMonthPoint;
 import com.mmxlabs.models.lng.pricing.provider.PricingItemProviderAdapterFactory;
 import com.mmxlabs.models.mmxcore.MMXCoreFactory;
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 public class CopyPricingToScenarioTests {
 

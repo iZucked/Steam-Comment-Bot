@@ -5,8 +5,6 @@
 package com.mmxlabs.models.lng.commercial.ui.displaycomposites;
 
 import java.util.Collection;
-import java.util.Iterator;
-
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -30,7 +28,6 @@ import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
 import com.mmxlabs.models.ui.impl.DefaultDisplayCompositeLayoutProvider;
 import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite;
-import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite.ChildCompositeContainer;
 
 public class BaseLegalEntityTopLevelComposite extends DefaultTopLevelComposite {
 

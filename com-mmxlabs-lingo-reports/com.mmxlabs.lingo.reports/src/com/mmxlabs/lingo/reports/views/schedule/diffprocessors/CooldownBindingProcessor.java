@@ -4,22 +4,15 @@
  */
 package com.mmxlabs.lingo.reports.views.schedule.diffprocessors;
 
-import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.jdt.annotation.NonNull;
-
-import com.mmxlabs.common.NonNullPair;
-import com.mmxlabs.common.time.Hours;
-import com.mmxlabs.common.time.TimeUtils;
 import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
-import com.mmxlabs.lingo.reports.views.schedule.model.UserGroup;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.PortVisit;

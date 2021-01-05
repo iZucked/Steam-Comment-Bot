@@ -6,15 +6,6 @@
  */
 package com.mmxlabs.models.lng.analytics;
 
-import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
-import com.mmxlabs.models.lng.cargo.Slot;
-
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
-import org.eclipse.emf.common.util.EList;
-
-import org.eclipse.emf.ecore.EObject;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Result</b></em>'.

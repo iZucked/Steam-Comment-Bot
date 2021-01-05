@@ -10,7 +10,6 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
-import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 
 /**
  * Optional elements DCP which tells you which elements are required to be in sequences and which elements can be left out

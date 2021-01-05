@@ -10,9 +10,7 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
-import com.mmxlabs.models.lng.nominations.DatePeriodPrior;
 import com.mmxlabs.models.lng.nominations.Side;
-import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.IInlineEditorFactory;
 import com.mmxlabs.models.ui.editors.impl.EENumInlineEditor;

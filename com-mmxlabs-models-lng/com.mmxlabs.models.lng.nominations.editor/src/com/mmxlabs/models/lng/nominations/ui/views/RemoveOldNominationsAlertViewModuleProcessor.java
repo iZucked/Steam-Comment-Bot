@@ -9,7 +9,6 @@ import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.rcp.common.application.E4ModelHelper;
 
 public class RemoveOldNominationsAlertViewModuleProcessor {

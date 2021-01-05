@@ -12,7 +12,6 @@ import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
 
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.AtoBviaCLookupRecord;
-import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.Entry;
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.LocationsVersion;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 

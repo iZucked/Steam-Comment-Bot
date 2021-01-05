@@ -17,7 +17,6 @@ import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
-import com.mmxlabs.scenario.service.ui.dnd.IChangeSource;
 
 /**
  * <!-- begin-user-doc -->

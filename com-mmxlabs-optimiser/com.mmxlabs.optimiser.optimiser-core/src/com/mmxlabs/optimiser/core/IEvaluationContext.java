@@ -10,7 +10,6 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
-import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 
 /**
  * Interface defining an evaluation context. This ties together static optimisation data and initial state.

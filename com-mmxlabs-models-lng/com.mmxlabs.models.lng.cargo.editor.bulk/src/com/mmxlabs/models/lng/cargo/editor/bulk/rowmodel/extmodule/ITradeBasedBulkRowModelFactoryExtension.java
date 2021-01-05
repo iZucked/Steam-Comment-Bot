@@ -13,7 +13,6 @@ import org.ops4j.peaberry.eclipse.ExtensionBean;
 import org.ops4j.peaberry.eclipse.MapName;
 
 import com.mmxlabs.models.lng.cargo.editor.bulk.views.ITradesBasedRowModelTransformerFactory;
-import com.mmxlabs.models.lng.cargo.editor.bulk.views.ITradesColumnFactory;
 
 @ExtensionBean("com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedRowModelTransformerFactory")
 public interface ITradeBasedBulkRowModelFactoryExtension {
