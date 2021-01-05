@@ -132,7 +132,7 @@ public class MetamodelLoader {
 		ePackage.setEFactoryInstance(new EFactoryImpl() {
 			@Override
 			protected EObject basicCreate(EClass eClass) {
-				return eClass.getInstanceClassName().equals("java.util.Map$Entry") ? new DynamicEObjectImpl.BasicEMapEntry<String, String>(eClass) : new DynamicEObjectWrapperImpl(eClass);
+				return "java.util.Map$Entry".equals(eClass.getInstanceClassName()) ? new DynamicEObjectImpl.BasicEMapEntry<String, String>(eClass) : new DynamicEObjectWrapperImpl(eClass);
 			}
 
 			@Override
