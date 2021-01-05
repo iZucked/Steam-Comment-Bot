@@ -52,7 +52,7 @@
                <target
                      class="SpotMarket">
                </target>
-            </constraint>       
+            </constraint>
             <constraint
                   class="com.mmxlabs.models.lng.spotmarkets.validation.NullReferenceConstraint"
                   id="com.mmxlabs.models.lng.spotmarkets.validation.NullReferenceConstraint"

@@ -124,7 +124,7 @@
                   lang="java"
                   mode="Batch"
                   name="Contract Restrictions Constraint"
-                  severity="WARNING"
+                  severity="ERROR"
                   statusCode="1">
                <message>
                   {0}

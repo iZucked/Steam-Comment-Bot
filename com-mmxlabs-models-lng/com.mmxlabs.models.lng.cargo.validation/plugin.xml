@@ -512,22 +512,6 @@
                </target>
             </constraint>
             <constraint
-                  class="com.mmxlabs.models.lng.cargo.validation.EmptyVesselRestrictionsConstraint"
-                  id="com.mmxlabs.models.lng.cargo.validation.EmptyVesselRestrictionsConstraint"
-                  isEnabledByDefault="true"
-                  lang="java"
-                  mode="Batch"
-                  name="Empty Vessel Restrictions Constraint"
-                  severity="WARNING"
-                  statusCode="1">
-               <message>
-                  {0}
-               </message>
-               <target
-                     class="Slot">
-               </target>
-            </constraint>
-            <constraint
                   class="com.mmxlabs.models.lng.cargo.validation.CargoSlotOrderConstraint"
                   id="com.mmxlabs.models.lng.cargo.validation.CargoSlotOrderConstraint"
                   isEnabledByDefault="true"
