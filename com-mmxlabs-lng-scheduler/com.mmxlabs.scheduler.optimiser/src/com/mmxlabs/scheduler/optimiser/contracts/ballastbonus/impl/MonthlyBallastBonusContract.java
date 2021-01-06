@@ -66,7 +66,7 @@ public class MonthlyBallastBonusContract extends DefaultBallastBonusContract {
 		final BallastBonusAnnotation ballastBonusAnnotation = new BallastBonusAnnotation();
 		IBallastBonusContractRule rule = getMatchingRule(firstLoadPort, lastSlot, vesselAvailability, vesselStartTime, vesselEndTime);
 		if (rule == null) {
-			throw new UserFeedbackException("Missing matching monthly ballast bonus contract.");
+			throw new UserFeedbackException("Missing matching monthly ballast bonus contract rule.");
 		}
 		ballastBonusAnnotation.ballastBonusFee = rule.calculateBallastBonus(firstLoadPort, lastSlot, vesselAvailability, vesselStartTime, vesselEndTime);
 		ballastBonusAnnotation.matchedPort = lastSlot.getPort();
