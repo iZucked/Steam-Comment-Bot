@@ -22,10 +22,12 @@ import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.util.SetUtils;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -38,7 +40,7 @@ public class EmptyRestrictionsConstraint extends AbstractModelMultiConstraint {
 		final EObject target = ctx.getTarget();
 		if (target instanceof Slot) {
 			final Slot slot = (Slot) target;
-			checkSlot(ctx, slot, statuses);
+			checkSlot(ctx, slot, statuses, extraContext.getRootObject());
 		}
 
 		return Activator.PLUGIN_ID;
@@ -53,10 +55,9 @@ public class EmptyRestrictionsConstraint extends AbstractModelMultiConstraint {
 	 * @param cargoName
 	 * @param statuses
 	 */
-	private void checkSlot(final IValidationContext ctx, final Slot slot, final List<IStatus> statuses) {
+	private void checkSlot(final IValidationContext ctx, final Slot slot, final List<IStatus> statuses, final MMXRootObject rootObject) {
 
-		if (slot.eContainer() instanceof CargoModel) 
-		{
+		if (slot.eContainer() == null || slot.eContainer() instanceof CargoModel){
 			final List<Slot> restrictedSlots = slot.getRestrictedSlots();
 			List<Contract> restrictedContracts = slot.getRestrictedContracts();
 			List<APortSet<Port>> restrictedPortSets = slot.getRestrictedPorts();
@@ -80,17 +81,19 @@ public class EmptyRestrictionsConstraint extends AbstractModelMultiConstraint {
 					restrictedPortSets = new LinkedList<>(SetUtils.getObjects(market.getRestrictedPorts()));
 					restrictedVesselsSets = new LinkedList<>(SetUtils.getObjects(market.getRestrictedVessels()));
 
-					if (slot.eIsSet(CargoPackage.eINSTANCE.getSlot_RestrictedPortsArePermissive())) {
-						addFail(CargoPackage.eINSTANCE.getSlot_RestrictedPortsArePermissive(), 
-								String.format("%s: Spot market slot's port restrictions should not be changed!.", name), slot, ctx, statuses);
-					}
-					if (slot.eIsSet(CargoPackage.eINSTANCE.getSlot_RestrictedContractsArePermissive())) {
-						addFail(CargoPackage.eINSTANCE.getSlot_RestrictedContractsArePermissive(),
-								String.format("%s: Spot market slot's contracts restrictions should not be changed!.", name), slot, ctx, statuses);
-					}
-					if (slot.eIsSet(CargoPackage.eINSTANCE.getSlot_RestrictedVesselsArePermissive())) {
-						addFail(CargoPackage.eINSTANCE.getSlot_RestrictedVesselsArePermissive(),
-								String.format("%s: Spot market slot's vessels restrictions should not be changed!.", name), slot, ctx, statuses);
+					if (rootObject instanceof LNGScenarioModel && ((LNGScenarioModel) rootObject).getAdpModel() == null) {
+						if (slot.eIsSet(CargoPackage.eINSTANCE.getSlot_RestrictedPortsArePermissive())) {
+							addFail(CargoPackage.eINSTANCE.getSlot_RestrictedPortsArePermissive(), 
+									String.format("%s: Spot market slot's port restrictions should not be changed!.", name), slot, ctx, statuses);
+						}
+						if (slot.eIsSet(CargoPackage.eINSTANCE.getSlot_RestrictedContractsArePermissive())) {
+							addFail(CargoPackage.eINSTANCE.getSlot_RestrictedContractsArePermissive(),
+									String.format("%s: Spot market slot's contracts restrictions should not be changed!.", name), slot, ctx, statuses);
+						}
+						if (slot.eIsSet(CargoPackage.eINSTANCE.getSlot_RestrictedVesselsArePermissive())) {
+							addFail(CargoPackage.eINSTANCE.getSlot_RestrictedVesselsArePermissive(),
+									String.format("%s: Spot market slot's vessels restrictions should not be changed!.", name), slot, ctx, statuses);
+						}
 					}
 				} else {
 					restrictedContracts = Collections.emptyList();
