@@ -10,4 +10,10 @@
 	</parent>
 	<artifactId>com.mmxlabs.lngdataserver.lng.importers.tests</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
+	
+	<properties>
+		<sonar.sources></sonar.sources>
+		<sonar.tests>src</sonar.tests>
+	</properties>
+	
 </project>

@@ -14,6 +14,8 @@
 
 	<properties>
 		<sonar.exclusions>file:**/*.java</sonar.exclusions>
+		<sonar.sources></sonar.sources>
+		<sonar.tests>src</sonar.tests>
 	</properties>
 
 	<build>

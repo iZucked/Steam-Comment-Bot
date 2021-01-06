@@ -11,6 +11,11 @@
 	<artifactId>com.mmxlabs.models.lng.assignment.validation.tests</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
 	<version>4.10.40-SNAPSHOT</version>
+	
+	<properties>
+		<sonar.sources></sonar.sources>
+		<sonar.tests>src</sonar.tests>
+	</properties>
 
 	<build>
 

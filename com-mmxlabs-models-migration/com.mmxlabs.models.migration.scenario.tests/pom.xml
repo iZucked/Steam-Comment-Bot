@@ -12,6 +12,11 @@
 	<artifactId>com.mmxlabs.models.migration.scenario.tests</artifactId>
 	<version>4.10.40-SNAPSHOT</version>
 	<packaging>eclipse-test-plugin</packaging>
+
+	<properties>
+		<sonar.sources></sonar.sources>
+		<sonar.tests>src</sonar.tests>
+	</properties>	
 	
 	<build>
 		<plugins>
