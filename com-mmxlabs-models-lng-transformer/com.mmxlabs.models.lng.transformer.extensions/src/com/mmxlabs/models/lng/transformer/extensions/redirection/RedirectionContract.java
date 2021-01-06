@@ -11,7 +11,6 @@ import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.detailtree.IDetailTree;
 import com.mmxlabs.common.detailtree.impl.TotalCostDetailElement;
 import com.mmxlabs.common.detailtree.impl.UnitPriceDetailElement;
-import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.Calculator;
@@ -118,11 +117,9 @@ public class RedirectionContract implements ILoadPriceCalculator {
 		final int dischargeTime = allocationAnnotation.getSlotTime(dischargeSlot);
 
 		final int marketPurchasePricePerMMBTu = purchasePriceCurve.getValueAtPoint(timeZoneToUtcOffsetProvider.UTC(loadTime, loadSlot));
-		final int cargoCVValue = loadSlot.getCargoCVValue();
 
 		final ISequenceElement loadElement = portSlotProvider.getElement(loadSlot);
 		final ISequenceElement dischargeElement = portSlotProvider.getElement(dischargeSlot);
-		final ITimeWindow baseTimeWindow = shippingHoursRestrictionProvider.getBaseTime(loadElement);
 
 		if (baseSalesMarketPort.equals(dischargeSlot.getPort())) {
 			return marketPurchasePricePerMMBTu;
@@ -133,7 +130,6 @@ public class RedirectionContract implements ILoadPriceCalculator {
 			final int originalLoadTime = shippingHoursRestrictionProvider.getBaseTime(loadElement).getInclusiveStart();
 
 			long baseShippingCosts = Long.MAX_VALUE;
-			ERouteOption baseRoute = null;
 
 			IDetailTree baseRouteAnnotation = null;
 			IDetailTree currentRouteAnnotation = null;
@@ -170,7 +166,6 @@ public class RedirectionContract implements ILoadPriceCalculator {
 
 				if (costs < baseShippingCosts) {
 					baseShippingCosts = costs;
-					baseRoute = route;
 				}
 			}
 
@@ -249,8 +244,6 @@ public class RedirectionContract implements ILoadPriceCalculator {
 		final int cargoCVValue = loadOption.getCargoCVValue();
 
 		final ISequenceElement loadElement = portSlotProvider.getElement(loadOption);
-		final ISequenceElement dischargeElement = portSlotProvider.getElement(dischargeOption);
-		final ITimeWindow baseTimeWindow = shippingHoursRestrictionProvider.getBaseTime(loadElement);
 		final IVessel vessel = nominatedVesselProvider.getNominatedVessel(loadElement);
 		assert vessel != null;
 		if (baseSalesMarketPort.equals(dischargeOption.getPort())) {

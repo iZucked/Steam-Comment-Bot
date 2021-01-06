@@ -63,8 +63,8 @@ public final class SelectionHelper {
 			final List<?> l = ((IStructuredSelection) selection) //
 					.toList();
 			return l.stream() //
-					.filter(e -> cls.isInstance(e)) //
-					.map(e -> cls.cast(e)) //
+					.filter(cls::isInstance) //
+					.map(cls::cast) //
 					.collect(Collectors.toList());
 		}
 		return null;

@@ -11,7 +11,6 @@ import com.mmxlabs.models.lng.adp.ADPFactory;
 import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.SubContractProfile;
 
-import com.mmxlabs.models.lng.cargo.CargoFactory;
 import java.util.Collection;
 import java.util.List;
 

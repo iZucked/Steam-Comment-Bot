@@ -4,12 +4,9 @@
  */
 package com.mmxlabs.lngdataserver.integration.reports.nominations;
 
-import java.io.OutputStream;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mmxlabs.lngdataserver.integration.reports.cargocontract.CargoesPerContractJSONGenerator;
-import com.mmxlabs.lngdataserver.integration.reports.cargocontract.CargoesPerContractReportModel;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.SupportedReportFormats;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.DefaultReportContent;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.IReportContent;

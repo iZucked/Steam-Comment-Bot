@@ -8,7 +8,7 @@ import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightW
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightFitnessFunctionFactory;
 
 public class DefaultPNLLightWeightFitnessFunctionFactory implements ILightWeightFitnessFunctionFactory {
-	public final String NAME = "DefaultPNLLightWeightFitnessFunction";
+	public static final String NAME = "DefaultPNLLightWeightFitnessFunction";
 
 	@Override
 	public ILightWeightFitnessFunction createFitnessFunction() {

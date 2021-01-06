@@ -11,7 +11,6 @@ import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 
-import com.mmxlabs.models.mmxcore.provider.NamedObjectItemProvider;
 import java.util.Collection;
 import java.util.List;
 

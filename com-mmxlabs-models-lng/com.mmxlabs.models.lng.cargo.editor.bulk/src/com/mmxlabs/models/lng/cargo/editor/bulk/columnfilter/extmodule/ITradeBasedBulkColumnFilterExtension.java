@@ -13,7 +13,6 @@ import org.ops4j.peaberry.eclipse.ExtensionBean;
 import org.ops4j.peaberry.eclipse.MapName;
 
 import com.mmxlabs.models.lng.cargo.editor.bulk.views.ITradesBasedFilterHandler;
-import com.mmxlabs.models.lng.cargo.editor.bulk.views.ITradesRowTransformerFactory;
 
 @ExtensionBean("com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedMenuFilter")
 public interface ITradeBasedBulkColumnFilterExtension {

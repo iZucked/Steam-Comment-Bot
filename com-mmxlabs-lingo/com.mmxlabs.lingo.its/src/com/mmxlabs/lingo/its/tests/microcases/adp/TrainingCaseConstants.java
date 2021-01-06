@@ -5,9 +5,6 @@
 package com.mmxlabs.lingo.its.tests.microcases.adp;
 
 import java.io.InputStream;
-import java.net.MalformedURLException;
-
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.mmxlabs.lingo.its.training.TrainingShippingITests;

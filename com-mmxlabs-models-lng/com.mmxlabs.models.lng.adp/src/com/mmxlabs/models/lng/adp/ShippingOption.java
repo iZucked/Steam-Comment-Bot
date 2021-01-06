@@ -10,8 +10,6 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 
-import org.eclipse.emf.ecore.EObject;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Shipping Option</b></em>'.

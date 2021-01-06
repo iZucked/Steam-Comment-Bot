@@ -9,11 +9,9 @@ package com.mmxlabs.models.lng.analytics.ui.views.viability;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.TextStyle;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -259,17 +257,18 @@ public class MainTableCompoment {
 		if (result.getEarliestETA() != null) {
 			if (result.getEarliestETA().getDayOfYear() == result.getLatestETA().getDayOfYear() && 
 					result.getEarliestETA().getYear() == result.getLatestETA().getYear()) {
-				r = String.format("%s– %s", //
+				r = String.format("%s– %s @%s", //
 						formatDate(result.getEarliestETA()), //
-						formatVolume(result.getEarliestVolume()));
+						formatVolume(result.getEarliestVolume()),
+						formatPrice(result.getEarliestPrice()));
 			} else {
-				r = String.format("%s– %s\n%s– %s", //
+				r = String.format("%s– %s @%s\n%s– %s @%s", //
 					formatDate(result.getEarliestETA()), //
 					formatVolume(result.getEarliestVolume()),//
-					//priceFormat(result.getEarliestPrice()), //
+					formatPrice(result.getEarliestPrice()), //
 					formatDate(result.getLatestETA()), //
-					formatVolume(result.getLatestVolume())//
-					//priceFormat(result.getLatestPrice()) //
+					formatVolume(result.getLatestVolume()),//
+					formatPrice(result.getLatestPrice()) //
 					);
 			}
 		}

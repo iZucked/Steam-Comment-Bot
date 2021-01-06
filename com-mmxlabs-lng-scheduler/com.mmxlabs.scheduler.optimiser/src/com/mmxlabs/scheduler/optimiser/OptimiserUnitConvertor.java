@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser;
 
+import java.math.BigDecimal;
+
 /**
  * A utility class to convert to/from internal/external optimiser units. The optimiser uses integer arithmetic internally and so external floating point numbers need to be scaled appropriately for use
  * within the optimiser and values being extracted back out will need the reverse conversion.
@@ -165,5 +167,9 @@ public final class OptimiserUnitConvertor {
 
 	public static long convertToInternalPercentage(final double percentage) {
 		return (long) (percentage * ((double) Calculator.HighScaleFactor));
+	}
+
+	public static long convertToInternalPercentage(BigDecimal pct) {
+		return pct.multiply(BigDecimal.valueOf(Calculator.HighScaleFactor)).longValue();
 	}
 }

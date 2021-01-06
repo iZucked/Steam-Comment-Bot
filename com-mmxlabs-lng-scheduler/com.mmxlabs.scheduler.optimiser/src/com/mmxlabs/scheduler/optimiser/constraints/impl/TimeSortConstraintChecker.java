@@ -19,7 +19,6 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
-import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -61,13 +60,7 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 	}
 
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources) {
-
-		return checkConstraints(sequences, changedResources, null);
-	}
-
-	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, @Nullable final List<String> messages) {
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, final List<String> messages) {
 
 		final Collection<@NonNull IResource> loopResources;
 		if (changedResources == null) {
@@ -98,7 +91,7 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 	 * @param messages
 	 * @return
 	 */
-	public final boolean checkSequence(@NonNull final ISequence sequence, @Nullable final List<String> messages, @NonNull final VesselInstanceType instanceType) {
+	public final boolean checkSequence(@NonNull final ISequence sequence, final List<String> messages, @NonNull final VesselInstanceType instanceType) {
 
 		ITimeWindow lastTimeWindow = null;
 		PortType lastType = null;
@@ -113,7 +106,7 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 				if (lastTimeWindow != null && tw != null) {
 					if (tw.getExclusiveEnd() <= lastTimeWindow.getInclusiveStart()) {
 						if (messages != null) {
-							messages.add("Current time window is before previous time window");
+							messages.add(this.name + ": Current time window is before previous time window");
 						}
 						return false;
 					}
@@ -128,7 +121,7 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 	}
 
 	@Override
-	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
+	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource, final List<String> messages) {
 		final VesselInstanceType instanceType = vesselProvider.getVesselAvailability(resource).getVesselInstanceType();
 		if (instanceType == VesselInstanceType.ROUND_TRIP) {
 			// Cargo pairs are independent of each other, so only check real load->discharge state and ignore rest
@@ -145,6 +138,7 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 		final ITimeWindow secondTimeWindow = secondSlot.getTimeWindow();
 		if (firstTimeWindow != null && secondTimeWindow != null) {
 			if (secondTimeWindow.getExclusiveEnd() <= firstTimeWindow.getInclusiveStart()) {
+				messages.add(explain(first, second, resource));
 				return false;
 			}
 		}
@@ -160,7 +154,7 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 		final ITimeWindow secondTimeWindow = secondSlot.getTimeWindow();
 		if (firstTimeWindow != null && secondTimeWindow != null) {
 			if (secondTimeWindow.getExclusiveEnd() <= firstTimeWindow.getInclusiveStart()) {
-				return "Current time window is before previous time window";
+				return this.name + ": Current time window is before previous time window";
 			}
 		}
 

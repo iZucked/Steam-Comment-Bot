@@ -19,7 +19,7 @@ import org.eclipse.swt.widgets.Group;
  */
 public class RadioSelectionGroup extends Composite {
 	int selectedIndex = -1;
-	final ArrayList<Button> buttons = new ArrayList<Button>();
+	final ArrayList<Button> buttons = new ArrayList<>();
 	
 	final Group group;
 	final int[] values;

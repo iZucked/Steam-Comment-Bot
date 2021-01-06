@@ -8,12 +8,9 @@ package com.mmxlabs.models.lng.adp.impl;
 
 import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.CargoByQuarterDistributionModel;
-import com.mmxlabs.models.lng.adp.LNGVolumeUnit;
-import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 /**
  * <!-- begin-user-doc -->

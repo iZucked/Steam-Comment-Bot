@@ -5,8 +5,6 @@
 package com.mmxlabs.models.lng.analytics.presentation.displaycomposites;
 
 import java.util.Collection;
-import java.util.Iterator;
-
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -19,7 +17,6 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
-import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
 import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite;

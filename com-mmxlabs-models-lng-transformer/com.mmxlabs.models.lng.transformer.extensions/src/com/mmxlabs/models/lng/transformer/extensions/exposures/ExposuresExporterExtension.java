@@ -29,7 +29,6 @@ import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.evaluation.VoyagePlanRecord;
 import com.mmxlabs.scheduler.optimiser.exposures.OptimiserExposureRecords;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
-import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 
 /**
  * EMF export side for basic trading optimiser information. Model may need reworking, so this isn't exactly final.

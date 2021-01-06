@@ -16,7 +16,6 @@ public interface ITimeWindow {
 
 	int getInclusiveStart();
 
-	// TODO: Should the end be inclusive or exclusive?
 	int getExclusiveEnd();
 
 	int getExclusiveEndFlex();

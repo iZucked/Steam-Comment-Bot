@@ -34,23 +34,12 @@ public abstract class AbstractPairwiseConstraintChecker implements IPairwiseCons
 		return name;
 	}
 
-	public boolean checkSequence(@NonNull final ISequence sequence, @NonNull final IResource resource) {
-		return checkSequence(sequence, resource, null);
-	}
-
-	public boolean checkSequence(@NonNull final ISequence sequence, @NonNull final IResource resource, @Nullable final List<String> messages) {
+	public boolean checkSequence(@NonNull final ISequence sequence, @NonNull final IResource resource, @NonNull final List<@NonNull String> messages) {
 		boolean valid = true;
 		ISequenceElement prev = null;
 		for (final ISequenceElement current : sequence) {
-			if (prev != null) {
-				if (!checkPairwiseConstraint(prev, current, resource)) {
-					if (messages == null) {
-						return false;
-					} else {
-						valid = false;
-						messages.add(explain(prev, current, resource));
-					}
-				}
+			if (prev != null && !checkPairwiseConstraint(prev, current, resource, messages)) {
+				return false;
 			}
 			prev = current;
 		}
@@ -58,12 +47,7 @@ public abstract class AbstractPairwiseConstraintChecker implements IPairwiseCons
 	}
 
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources) {
-		return checkConstraints(sequences, changedResources, null);
-	}
-
-	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, @Nullable final List<String> messages) {
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, @NonNull final List<@NonNull String> messages) {
 		boolean valid = true;
 
 		final Collection<@NonNull IResource> loopResources;
@@ -82,6 +66,11 @@ public abstract class AbstractPairwiseConstraintChecker implements IPairwiseCons
 					valid = false;
 				}
 			}
+		}
+		
+		if (valid) {
+			final String message = String.format("%s: %s", this.name, "all sequences have passed the constraint.");
+			messages.add(message);
 		}
 
 		return valid;

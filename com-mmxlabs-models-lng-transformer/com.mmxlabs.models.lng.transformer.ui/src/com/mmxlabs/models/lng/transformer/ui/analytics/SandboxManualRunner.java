@@ -166,7 +166,6 @@ public class SandboxManualRunner {
 				templateBaseCase.getBaseCase().add(bcr);
 			}
 
-			final long a = System.currentTimeMillis();
 			final List<BaseCase> tasks = new LinkedList<>();
 			recursiveTaskCreator(0, combinations, model, templateBaseCase, tasks);
 			filterTasks(tasks);

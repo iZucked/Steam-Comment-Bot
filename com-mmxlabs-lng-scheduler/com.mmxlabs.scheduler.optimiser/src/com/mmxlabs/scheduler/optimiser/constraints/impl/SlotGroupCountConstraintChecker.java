@@ -17,7 +17,6 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IReducingConstraintChecker;
-import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.providers.ISlotGroupCountProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.SlotGroup;
@@ -83,7 +82,7 @@ public class SlotGroupCountConstraintChecker implements IReducingConstraintCheck
 	}
 
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, @Nullable final List<String> messages) {
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, final List<String> messages) {
 
 		// // Reset counters;
 		// for (final SlotGroupTracker tracker : trackers.values()) {
@@ -149,10 +148,5 @@ public class SlotGroupCountConstraintChecker implements IReducingConstraintCheck
 		// for (final SlotGroupTracker tracker : trackers.values()) {
 		// tracker.permittedCount = Math.max(Math.max(tracker.constrainedCount, tracker.currentCount), tracker.permittedCount);
 		// }
-	}
-
-	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources) {
-		return checkConstraints(sequences, changedResources, null);
 	}
 }

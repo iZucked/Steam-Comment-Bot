@@ -6,7 +6,6 @@ package com.mmxlabs.scheduler.optimiser.fitness.components.allocation;
 
 import java.util.List;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 

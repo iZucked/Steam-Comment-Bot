@@ -120,7 +120,7 @@ public class ModelRootImpl extends EObjectImpl implements ModelRoot {
 	@Override
 	public EList<SimpleObject> getSimpleObjects() {
 		if (simpleObjects == null) {
-			simpleObjects = new EObjectContainmentEList<SimpleObject>(SimpleObject.class, this, ModelPackage.MODEL_ROOT__SIMPLE_OBJECTS);
+			simpleObjects = new EObjectContainmentEList<>(SimpleObject.class, this, ModelPackage.MODEL_ROOT__SIMPLE_OBJECTS);
 		}
 		return simpleObjects;
 	}
@@ -133,7 +133,7 @@ public class ModelRootImpl extends EObjectImpl implements ModelRoot {
 	@Override
 	public EList<SingleReference> getSingleReferences() {
 		if (singleReferences == null) {
-			singleReferences = new EObjectContainmentWithInverseEList<SingleReference>(SingleReference.class, this, ModelPackage.MODEL_ROOT__SINGLE_REFERENCES, ModelPackage.SINGLE_REFERENCE__MODEL_ROOT);
+			singleReferences = new EObjectContainmentWithInverseEList<>(SingleReference.class, this, ModelPackage.MODEL_ROOT__SINGLE_REFERENCES, ModelPackage.SINGLE_REFERENCE__MODEL_ROOT);
 		}
 		return singleReferences;
 	}
@@ -146,7 +146,7 @@ public class ModelRootImpl extends EObjectImpl implements ModelRoot {
 	@Override
 	public EList<MultipleReference> getMultipleReferences() {
 		if (multipleReferences == null) {
-			multipleReferences = new EObjectContainmentWithInverseEList<MultipleReference>(MultipleReference.class, this, ModelPackage.MODEL_ROOT__MULTIPLE_REFERENCES, ModelPackage.MULTIPLE_REFERENCE__MODEL_ROOT);
+			multipleReferences = new EObjectContainmentWithInverseEList<>(MultipleReference.class, this, ModelPackage.MODEL_ROOT__MULTIPLE_REFERENCES, ModelPackage.MULTIPLE_REFERENCE__MODEL_ROOT);
 		}
 		return multipleReferences;
 	}
@@ -159,7 +159,7 @@ public class ModelRootImpl extends EObjectImpl implements ModelRoot {
 	@Override
 	public EList<SingleContainmentReference> getSingleContainmentReferences() {
 		if (singleContainmentReferences == null) {
-			singleContainmentReferences = new EObjectContainmentEList<SingleContainmentReference>(SingleContainmentReference.class, this, ModelPackage.MODEL_ROOT__SINGLE_CONTAINMENT_REFERENCES);
+			singleContainmentReferences = new EObjectContainmentEList<>(SingleContainmentReference.class, this, ModelPackage.MODEL_ROOT__SINGLE_CONTAINMENT_REFERENCES);
 		}
 		return singleContainmentReferences;
 	}
@@ -172,7 +172,7 @@ public class ModelRootImpl extends EObjectImpl implements ModelRoot {
 	@Override
 	public EList<MultipleContainmentReference> getMultipleContainmentReferences() {
 		if (multipleContainmentReferences == null) {
-			multipleContainmentReferences = new EObjectContainmentEList<MultipleContainmentReference>(MultipleContainmentReference.class, this, ModelPackage.MODEL_ROOT__MULTIPLE_CONTAINMENT_REFERENCES);
+			multipleContainmentReferences = new EObjectContainmentEList<>(MultipleContainmentReference.class, this, ModelPackage.MODEL_ROOT__MULTIPLE_CONTAINMENT_REFERENCES);
 		}
 		return multipleContainmentReferences;
 	}

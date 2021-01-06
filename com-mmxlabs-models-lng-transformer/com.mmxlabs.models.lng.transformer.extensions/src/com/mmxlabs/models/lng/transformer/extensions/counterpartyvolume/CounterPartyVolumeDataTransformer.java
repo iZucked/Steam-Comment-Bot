@@ -5,14 +5,11 @@
 package com.mmxlabs.models.lng.transformer.extensions.counterpartyvolume;
 
 import javax.inject.Inject;
-import javax.inject.Named;
-
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.transformer.contracts.ISlotTransformer;
-import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.providers.ICounterPartyVolumeProviderEditor;
 

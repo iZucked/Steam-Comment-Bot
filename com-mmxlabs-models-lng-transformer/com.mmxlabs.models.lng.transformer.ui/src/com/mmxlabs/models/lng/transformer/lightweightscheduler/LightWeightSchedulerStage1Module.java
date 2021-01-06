@@ -26,8 +26,8 @@ import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ICargoV
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.impl.CargoVesselRestrictionsMatrixProducer;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.impl.LightWeightConstraintCheckerRegistry;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.impl.LightWeightFitnessFunctionRegistry;
-import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.impl.LightWeightOptimiserHelper;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.impl.SimpleCargoToCargoCostCalculator;
+import com.mmxlabs.models.lng.transformer.optimiser.common.AbstractOptimiserHelper;
 import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.constraints.LightWeightShippingRestrictionsConstraintCheckerFactory;
 import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.fitnessfunctions.DefaultPNLLightWeightFitnessFunctionFactory;
 import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.fitnessfunctions.VesselCargoCountLightWeightFitnessFunctionFactory;
@@ -64,7 +64,7 @@ public class LightWeightSchedulerStage1Module extends AbstractModule {
 	@Named(LIGHTWEIGHT_VESSELS)
 	private List<@NonNull IVesselAvailability> getVessels(@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL) ISequences initialSequences, IVesselProvider vesselProvider) {
 		return initialSequences.getResources().stream().sorted((a, b) -> a.getName().compareTo(b.getName())) //
-				.map(v -> vesselProvider.getVesselAvailability(v)).filter(v -> LightWeightOptimiserHelper.isShippedVessel(v)).collect(Collectors.toList());
+				.map(vesselProvider::getVesselAvailability).filter(AbstractOptimiserHelper::isShippedVessel).collect(Collectors.toList());
 	}
 
 	@Provides
@@ -81,13 +81,11 @@ public class LightWeightSchedulerStage1Module extends AbstractModule {
 
 	@Provides
 	@Named(LIGHTWEIGHT_DESIRED_VESSEL_CARGO_WEIGHT)
-	private long[] getDesiredNumberSlotsWeightingPerVessel(@Named(LIGHTWEIGHT_VESSELS) List<@NonNull IVesselAvailability> vessels,
-			IVesselSlotCountFitnessProvider vesselSlotCountFitnessProvider) {
+	private long[] getDesiredNumberSlotsWeightingPerVessel(@Named(LIGHTWEIGHT_VESSELS) List<@NonNull IVesselAvailability> vessels, IVesselSlotCountFitnessProvider vesselSlotCountFitnessProvider) {
 		long[] vesselReward = new long[vessels.size()];
 		if (vesselSlotCountFitnessProvider != null) {
 			for (int i = 0; i < vessels.size(); i++) {
-				vesselReward[i] = vesselSlotCountFitnessProvider.getWeightForVessel(vessels.get(i))
-						* Calculator.ScaleFactor; // note: scaling is done here for LWO, different scaling in LSO
+				vesselReward[i] = vesselSlotCountFitnessProvider.getWeightForVessel(vessels.get(i)) * Calculator.ScaleFactor; // note: scaling is done here for LWO, different scaling in LSO
 			}
 		}
 		return vesselReward;

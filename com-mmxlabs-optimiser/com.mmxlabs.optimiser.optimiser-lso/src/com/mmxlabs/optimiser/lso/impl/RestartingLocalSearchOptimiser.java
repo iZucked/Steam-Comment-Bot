@@ -4,19 +4,24 @@
  */
 package com.mmxlabs.optimiser.lso.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
+import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IReducingConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
-import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess.Phase;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
@@ -30,6 +35,7 @@ import com.mmxlabs.optimiser.lso.IRestartingOptimiser;
  * 
  */
 public class RestartingLocalSearchOptimiser extends DefaultLocalSearchOptimiser implements IRestartingOptimiser {
+	protected static final Logger LOG = LoggerFactory.getLogger(RestartingLocalSearchOptimiser.class);
 
 	public static final String RESTART_ITERATIONS_THRESHOLD = "restartIterationsThreshold";
 	private int maxRestarts;
@@ -43,6 +49,8 @@ public class RestartingLocalSearchOptimiser extends DefaultLocalSearchOptimiser 
 	protected int step(final int percentage, @NonNull final ModifiableSequences pinnedPotentialRawSequences, @NonNull final ModifiableSequences pinnedCurrentRawSequences) {
 
 		final int iterationsThisStep = Math.min(Math.max(1, (getNumberOfIterations() * percentage) / 100), getNumberOfIterations() - getNumberOfIterationsCompleted());
+		final List<String> messages = new ArrayList<>();
+		messages.add(String.format("%s: step", this.getClass().getName()));
 		MAIN_LOOP: for (int i = 0; i < iterationsThisStep; i++) {
 			stepIteration();
 			setNumberOfMovesTried(getNumberOfMovesTried() + 1);
@@ -90,10 +98,10 @@ public class RestartingLocalSearchOptimiser extends DefaultLocalSearchOptimiser 
 			// Apply sequence manipulators
 			final IModifiableSequences potentialFullSequences = new ModifiableSequences(pinnedPotentialRawSequences);
 			getSequenceManipulator().manipulate(potentialFullSequences);
-
+			
 			// Apply hard constraint checkers
 			for (final IConstraintChecker checker : getConstraintCheckers()) {
-				if (!checker.checkConstraints(potentialFullSequences, move.getAffectedResources())) {
+				if (!checker.checkConstraints(potentialFullSequences, move.getAffectedResources(), messages)) {
 					if (loggingDataStore != null) {
 						loggingDataStore.logFailedConstraints(checker, move);
 						if (DO_SEQUENCE_LOGGING) {
@@ -186,6 +194,9 @@ public class RestartingLocalSearchOptimiser extends DefaultLocalSearchOptimiser 
 				updateSequences(pinnedCurrentRawSequences, pinnedPotentialRawSequences, move.getAffectedResources());
 			}
 		}
+		
+		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
+			messages.stream().forEach(LOG::debug);
 
 		updateProgressLogs();
 		setNumberOfIterationsCompleted(getNumberOfMovesTried());

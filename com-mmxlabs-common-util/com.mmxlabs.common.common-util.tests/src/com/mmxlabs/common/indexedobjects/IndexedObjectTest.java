@@ -10,27 +10,27 @@ import org.junit.jupiter.api.Test;
 import com.mmxlabs.common.indexedobjects.impl.IndexedObject;
 import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
 
-public class IndexedObjectTest {
+class IndexedObjectTest {
 	@Test
-	public void testIndexedObject() {
+	void testIndexedObject() {
 		final IIndexingContext context = new SimpleIndexingContext();
 		final IndexedObject o1 = new IndexedObject(context);
 		final IndexedObject o2 = new IndexedObject(context);
 
-		Assertions.assertFalse(o1.getIndex() == o2.getIndex());
-		Assertions.assertEquals(o1.getIndex(), 0);
-		Assertions.assertEquals(o2.getIndex(), 1);
+		Assertions.assertNotEquals(o1.getIndex(), o2.getIndex());
+		Assertions.assertEquals(0, o1.getIndex());
+		Assertions.assertEquals(1, o2.getIndex());
 	}
 
 	@Test
-	public void testIndexedSubclasses() {
+	void testIndexedSubclasses() {
 		final IIndexingContext context = new SimpleIndexingContext();
 		context.registerType(A.class);
 		final A a = new A(context);
 		final B b = new B(context);
 		final A a1 = new A(context);
-		Assertions.assertTrue(a.getIndex() == b.getIndex());
-		Assertions.assertFalse(a.getIndex() == a1.getIndex());
+		Assertions.assertEquals(a.getIndex(), b.getIndex());
+		Assertions.assertNotEquals(a.getIndex(), a1.getIndex());
 	}
 
 	static class A extends IndexedObject {

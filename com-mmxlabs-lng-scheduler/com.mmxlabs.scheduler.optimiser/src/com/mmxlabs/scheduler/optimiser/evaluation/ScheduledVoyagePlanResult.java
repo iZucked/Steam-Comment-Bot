@@ -5,12 +5,8 @@
 package com.mmxlabs.scheduler.optimiser.evaluation;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
-
-import com.google.common.collect.Lists;
 import com.mmxlabs.scheduler.optimiser.moves.util.MetricType;
 
 public class ScheduledVoyagePlanResult {

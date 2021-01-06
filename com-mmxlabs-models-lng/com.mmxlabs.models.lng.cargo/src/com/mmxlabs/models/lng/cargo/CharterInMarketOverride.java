@@ -16,7 +16,6 @@ import com.mmxlabs.models.mmxcore.MMXObject;
 import java.time.LocalDateTime;
 
 import java.time.ZonedDateTime;
-import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->

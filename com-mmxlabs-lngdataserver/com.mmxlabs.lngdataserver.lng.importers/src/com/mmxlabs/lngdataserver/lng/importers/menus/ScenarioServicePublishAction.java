@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lngdataserver.lng.importers.menus;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -41,7 +40,6 @@ import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.IReportCont
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.IReportPublisherExtension;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.ReportPublisherExtensionUtil;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.ReportPublisherRegistry;
-import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.UnsupportedReportException;
 import com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard.SharedScenarioDataUtils.DataOptions;
 import com.mmxlabs.lngdataserver.lng.importers.menus.PublishBasecaseException.Type;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
@@ -61,7 +59,6 @@ import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.manager.SimpleScenarioDataProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 
 public class ScenarioServicePublishAction {
 	private static final Logger LOG = LoggerFactory.getLogger(ScenarioServicePublishAction.class);

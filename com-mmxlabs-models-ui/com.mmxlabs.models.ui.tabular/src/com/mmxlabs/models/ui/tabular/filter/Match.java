@@ -162,7 +162,7 @@ class Match implements IFilter {
 		return lowerInput.contains(lowerValue);
 	}
 
-	private final static DateFormatSymbols dateFormatSymbols = new DateFormatSymbols();
+	private static final DateFormatSymbols dateFormatSymbols = new DateFormatSymbols();
 
 	/**
 	 * @param value2

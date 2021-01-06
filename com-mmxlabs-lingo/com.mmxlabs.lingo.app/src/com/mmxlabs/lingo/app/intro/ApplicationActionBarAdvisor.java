@@ -49,7 +49,6 @@ import org.eclipse.ui.menus.CommandContributionItemParameter;
 
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.license.ssl.LicenseChecker;
 import com.mmxlabs.lingo.reports.customizable.CustomReportsRegistry;
 /**
  * 

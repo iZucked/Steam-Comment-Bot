@@ -33,7 +33,6 @@ public class CommandUtilTest {
 
 		EClass refClass1 = EcoreFactory.eINSTANCE.createEClass();
 		EClass refClass2 = EcoreFactory.eINSTANCE.createEClass();
-		EClass refClass3 = EcoreFactory.eINSTANCE.createEClass();
 
 		sample.getESuperTypes().add(refClass1);
 
@@ -41,7 +40,7 @@ public class CommandUtilTest {
 		Assertions.assertNotNull(cmd);
 
 		cmd.execute();
-		assert(sample.getESuperTypes().size() == sample.getESuperTypes().stream().distinct().count());
+		assert (sample.getESuperTypes().size() == sample.getESuperTypes().stream().distinct().count());
 		Assertions.assertEquals(2, sample.getESuperTypes().size());
 
 	}

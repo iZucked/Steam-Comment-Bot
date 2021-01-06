@@ -26,11 +26,10 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 public abstract class AbstractScenarioServiceListenerHandler implements IScenarioService {
 	@NonNullByDefault
 	protected enum ScenarioServiceEvent {
-//		POST_LOAD,
 		PRE_DELETE, PRE_UNLOAD,
 	}
 
-	private final Set<IScenarioServiceListener> scenarioServiceListeners = new HashSet<IScenarioServiceListener>();
+	private final Set<IScenarioServiceListener> scenarioServiceListeners = new HashSet<>();
 
 	@Override
 	public void addScenarioServiceListener(@NonNull IScenarioServiceListener listener) {
@@ -49,7 +48,7 @@ public abstract class AbstractScenarioServiceListenerHandler implements IScenari
 			return;
 		}
 
-		final List<IScenarioServiceListener> listeners = new ArrayList<IScenarioServiceListener>(scenarioServiceListeners);
+		final List<IScenarioServiceListener> listeners = new ArrayList<>(scenarioServiceListeners);
 		switch (event) {
 		case PRE_DELETE:
 			for (final IScenarioServiceListener l : listeners) {

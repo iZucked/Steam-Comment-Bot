@@ -62,22 +62,22 @@ public class FilterField implements ModifyListener, DisposeListener, KeyListener
 
 		contribution = new ActionContributionItem(
 
-		new Action() {
-			{
-				setChecked(false);
-				setText("Filter table");
-				try {
-					setImageDescriptor(ImageDescriptor.createFromURL(new URL("platform:/plugin/com.mmxlabs.models.ui.tabular/icons/filter.gif")));
-				} catch (final MalformedURLException ex) {
+				new Action() {
+					{
+						setChecked(false);
+						setText("Filter table");
+						try {
+							setImageDescriptor(ImageDescriptor.createFromURL(new URL("platform:/plugin/com.mmxlabs.models.ui.tabular/icons/filter.gif")));
+						} catch (final MalformedURLException ex) {
+						}
+					}
+
+					@Override
+					public void run() {
+						toggleVisibility();
+					}
+
 				}
-			}
-
-			@Override
-			public void run() {
-				toggleVisibility();
-			}
-
-		}
 
 		);
 	}
@@ -151,7 +151,7 @@ public class FilterField implements ModifyListener, DisposeListener, KeyListener
 		text.setVisible(!text.getVisible());
 		layoutData.exclude = !layoutData.exclude;
 		text.getParent().layout(true);
-		if (text.isVisible() == false) {
+		if (!text.isVisible()) {
 			if (filterSupport != null) {
 				filterSupport.setFilterString("");
 			}

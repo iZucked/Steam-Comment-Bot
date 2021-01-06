@@ -221,6 +221,11 @@ public class SimpleBallastBonusCharterContractItemProvider extends NamedObjectIt
 			(createChildParameter
 				(CommercialPackage.Literals.BALLAST_BONUS_CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT,
 				 CommercialFactory.eINSTANCE.createRuleBasedBallastBonusContract()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CommercialPackage.Literals.BALLAST_BONUS_CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT,
+				 CommercialFactory.eINSTANCE.createMonthlyBallastBonusContract()));
 	}
 
 }

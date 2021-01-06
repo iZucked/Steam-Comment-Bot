@@ -6,11 +6,17 @@
 	<parent>
 		<artifactId>com.mmxlabs.models.lng.parent</artifactId>
 		<groupId>com.mmxlabs.models.lng</groupId>
-		<version>4.10.32-SNAPSHOT</version>
+		<version>4.10.40-SNAPSHOT</version>
 	</parent>
 	<artifactId>com.mmxlabs.models.lng.port.validation.tests</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
-	<version>4.10.32-SNAPSHOT</version>
+	<version>4.10.40-SNAPSHOT</version>
+
+	
+	<properties>
+		<sonar.sources></sonar.sources>
+		<sonar.tests>src</sonar.tests>
+	</properties>
 
 	<build>
 

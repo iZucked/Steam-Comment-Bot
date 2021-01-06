@@ -279,7 +279,7 @@ public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 
 		// Prime IInitialSequencesConstraintCheckers with initial state
 		for (final IInitialSequencesConstraintChecker checker : getInitialSequencesConstraintCheckers()) {
-			checker.sequencesAccepted(currentRawSequences, fullSequences);
+			checker.sequencesAccepted(currentRawSequences, fullSequences, new ArrayList<>());
 		}
 
 		final IEvaluationState evaluationState = new EvaluationState();

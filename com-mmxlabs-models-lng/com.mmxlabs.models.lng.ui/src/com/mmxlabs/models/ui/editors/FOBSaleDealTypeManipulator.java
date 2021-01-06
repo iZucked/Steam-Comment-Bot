@@ -4,19 +4,14 @@
  */
 package com.mmxlabs.models.ui.editors;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.models.lng.types.DESPurchaseDealType;
 import com.mmxlabs.models.lng.types.FOBSaleDealType;
-import com.mmxlabs.models.ui.editors.impl.EENumInlineEditor;
 import com.mmxlabs.models.ui.tabular.manipulators.ValueListAttributeManipulator;
 
 public class FOBSaleDealTypeManipulator extends ValueListAttributeManipulator<FOBSaleDealType> {

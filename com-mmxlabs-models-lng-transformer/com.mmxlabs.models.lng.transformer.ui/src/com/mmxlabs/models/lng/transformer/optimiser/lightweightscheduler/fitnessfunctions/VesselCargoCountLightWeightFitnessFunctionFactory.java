@@ -8,7 +8,7 @@ import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightW
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightFitnessFunctionFactory;
 
 public class VesselCargoCountLightWeightFitnessFunctionFactory implements ILightWeightFitnessFunctionFactory {
-	public final String NAME = "VesselCargoCountLightWeightFitnessFunction";
+	public static final String NAME = "VesselCargoCountLightWeightFitnessFunction";
 	
 	@Override
 	public ILightWeightFitnessFunction createFitnessFunction() {

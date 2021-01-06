@@ -4,12 +4,18 @@
 	<parent>
 		<groupId>com.mmxlabs.optimiser</groupId>
 		<artifactId>optimiser-parent</artifactId>
-		<version>4.10.32-SNAPSHOT</version>
+		<version>4.10.40-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>com.mmxlabs.optimiser.optimiser-ga.tests</artifactId>
-	<version>4.10.32-SNAPSHOT</version>
+	<version>4.10.40-SNAPSHOT</version>
 	<packaging>eclipse-test-plugin</packaging>
+	
+		
+	<properties>
+		<sonar.sources></sonar.sources>
+		<sonar.tests>src</sonar.tests>
+	</properties>
 	
 	<build>
 

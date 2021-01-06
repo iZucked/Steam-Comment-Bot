@@ -63,47 +63,32 @@ public class GoogleTimezoneProvider implements ITimezoneProvider {
 
 	@Override
 	public TimeZone findTimeZone(final float latitude, final float longitude) {
-		InputStream requestStream = null;
-		InputStreamReader in = null;
 		try {
 			final URL requestURL = new URL(buildQueryURL(latitude, longitude));
-			requestStream = requestURL.openStream();
-			in = new InputStreamReader(requestStream);
-			final Object result = JSONValue.parse(in);
-			if (result instanceof JSONObject) {
-				final JSONObject jsonObject = (JSONObject) result;
-				if (jsonObject.containsKey(status)) {
-					final String statusString = (String) jsonObject.get(status);
-					if (STATUS_OK.equals(statusString)) {
+			try (InputStream requestStream = requestURL.openStream()) {
+				try (InputStreamReader in = new InputStreamReader(requestStream)) {
+					final Object result = JSONValue.parse(in);
+					if (result instanceof JSONObject) {
+						final JSONObject jsonObject = (JSONObject) result;
+						if (jsonObject.containsKey(status)) {
+							final String statusString = (String) jsonObject.get(status);
+							if (STATUS_OK.equals(statusString)) {
 
-						if (jsonObject.containsKey(timeZoneId)) {
-							final String timeZoneID = (String) jsonObject.get(timeZoneId);
+								if (jsonObject.containsKey(timeZoneId)) {
+									final String timeZoneID = (String) jsonObject.get(timeZoneId);
 
-							return TimeZone.getTimeZone(timeZoneID);
+									return TimeZone.getTimeZone(timeZoneID);
+								}
+							} else {
+								throw new TimezoneProviderException(statusString);
+							}
 						}
-					} else {
-						throw new TimezoneProviderException(statusString);
 					}
 				}
 			}
 		} catch (final Exception e) {
 			// Wrap up and re-throw
 			throw new RuntimeException(e);
-		} finally {
-			if (in != null) {
-				try {
-					in.close();
-				} catch (final IOException e) {
-					// Ignore
-				}
-			}
-			if (requestStream != null) {
-				try {
-					requestStream.close();
-				} catch (final IOException e) {
-					// Ignore
-				}
-			}
 		}
 		return null;
 	}
@@ -117,8 +102,7 @@ public class GoogleTimezoneProvider implements ITimezoneProvider {
 	 */
 	private String buildQueryURL(final float lat, final float lon) {
 		final long timestamp = System.currentTimeMillis() / 1000L;
-		final String str = String.format("https://maps.googleapis.com/maps/api/timezone/json?location=%f,%f&timestamp=%d&sensor=false", lat, lon, timestamp);
-		return str;
+		return String.format("https://maps.googleapis.com/maps/api/timezone/json?location=%f,%f&timestamp=%d&sensor=false", lat, lon, timestamp);
 	}
 
 }

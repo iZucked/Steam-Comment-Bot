@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.contracts;
 
-import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
@@ -17,6 +17,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
  * @author hinton
  * 
  */
+@NonNullByDefault
 public interface ICooldownCalculator extends ICalculator {
 	/**
 	 * This method will be called once before any of the slots in the argument are evaluated using {@link #calculateCooldownUnitPrice(ILoadSlot, int)}, to allow for shared pre-computation.
@@ -26,14 +27,16 @@ public interface ICooldownCalculator extends ICalculator {
 	 * @param sequences
 	 * @param scheduledSequences
 	 */
-	public void prepareEvaluation(@NonNull ISequences sequences);
+	default void prepareEvaluation(ISequences sequences) {
+
+	}
 
 	/**
 	 * Calculate the total cost of a cooldown operation. Note: time is passed in local time and converted to UTC.
 	 * 
 	 * @param time
 	 * @param port
-	 *            {@link IPort} for local to UTC conversion
+	 *                 {@link IPort} for local to UTC conversion
 	 */
-	public long calculateCooldownCost(@NonNull IVessel vessel, @NonNull IPort port, int cv, int localTime);
+	long calculateCooldownCost(IVessel vessel, IPort port, int cv, int localTime);
 }

@@ -12,8 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -52,27 +51,22 @@ import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
 
+@NonNullByDefault
 public class ScheduleSpecificationTransformer {
-	private static final Logger log = LoggerFactory.getLogger(ScheduleSpecificationTransformer.class);
 
 	@Inject
-	@NonNull
 	private IVesselProvider vesselProvider;
 
 	@Inject
-	@NonNull
 	private IPortSlotProvider portSlotProvider;
 
 	@Inject
-	@NonNull
 	private IStartEndRequirementProvider startEndRequirementProvider;
 
 	@Inject
-	@NonNull
 	private IVirtualVesselSlotProvider virtualVesselSlotProvider;
 
-	@NonNull
-	public ISequences createSequences(@NonNull final ScheduleSpecification scheduleSpecification, final LNGDataTransformer dataTransformer, boolean includeSpotSlots) {
+	public ISequences createSequences(final ScheduleSpecification scheduleSpecification, final LNGDataTransformer dataTransformer, boolean includeSpotSlots) {
 
 		@NonNull
 		final ModelEntityMap mem = dataTransformer.getModelEntityMap();
@@ -80,9 +74,7 @@ public class ScheduleSpecificationTransformer {
 		return createSequences(scheduleSpecification, mem, optimisationData, dataTransformer.getInjector(), includeSpotSlots);
 	}
 
-	@NonNull
-	public ISequences createSequences(@NonNull final ScheduleSpecification scheduleSpecification, final ModelEntityMap mem, IOptimisationData optimisationData, Injector injector,
-			boolean includeSpotSlots) {
+	public ISequences createSequences(final ScheduleSpecification scheduleSpecification, final ModelEntityMap mem, IOptimisationData optimisationData, Injector injector, boolean includeSpotSlots) {
 
 		final Set<ISequenceElement> usedElements = new HashSet<>();
 
@@ -104,7 +96,6 @@ public class ScheduleSpecificationTransformer {
 				final CharterInMarket e_charterInMarket = (CharterInMarket) vesselAllocation;
 				final int spotIndex = vesselSpecificiation.getSpotIndex();
 				final ISpotCharterInMarket o_market = mem.getOptimiserObjectNullChecked(e_charterInMarket, ISpotCharterInMarket.class);
-				final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
 				for (final IResource o_resource : optimisationData.getResources()) {
 					final IVesselAvailability o_vesselAvailability = vesselProvider.getVesselAvailability(o_resource);
 					final ISpotCharterInMarket spotCharterInMarket = o_vesselAvailability.getSpotCharterInMarket();
@@ -161,14 +152,6 @@ public class ScheduleSpecificationTransformer {
 
 			orderedResources.add(resource);
 			sequences.put(resource, new ListModifiableSequence(elements));
-
-			for (final ISequenceElement e : elements) {
-				if (!usedElements.add(e)) {
-					final int ii = 0;
-				}
-
-			}
-
 		}
 
 		for (final NonShippedCargoSpecification nonShippedCargoSpecification : scheduleSpecification.getNonShippedCargoSpecifications()) {
@@ -185,13 +168,6 @@ public class ScheduleSpecificationTransformer {
 				if (o_vesselAvailability != null) {
 					resource = vesselProvider.getResource(o_vesselAvailability);
 				}
-			}
-
-			for (final ISequenceElement e : elements) {
-				if (!usedElements.add(e)) {
-					final int ii = 0;
-				}
-
 			}
 
 			assert resource != null;

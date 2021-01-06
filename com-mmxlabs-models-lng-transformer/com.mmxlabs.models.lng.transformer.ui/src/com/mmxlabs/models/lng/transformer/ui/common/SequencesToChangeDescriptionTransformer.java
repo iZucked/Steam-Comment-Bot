@@ -67,7 +67,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 public class SequencesToChangeDescriptionTransformer {
-	private @NonNull final LNGDataTransformer dataTransformer;
+	private final @NonNull LNGDataTransformer dataTransformer;
 	private Function<ISequences, ChangeDescription> generateChangeDescription;
 
 	public SequencesToChangeDescriptionTransformer(final LNGDataTransformer dataTransformer) {

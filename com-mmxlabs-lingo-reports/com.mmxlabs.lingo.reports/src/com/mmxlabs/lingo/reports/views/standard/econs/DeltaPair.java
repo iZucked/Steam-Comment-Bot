@@ -4,16 +4,16 @@
  */
 package com.mmxlabs.lingo.reports.views.standard.econs;
 
-public abstract class DeltaPair {
-	public Object first() {
+public interface DeltaPair {
+	default Object first() {
 		return null;
 	}
 
-	public Object second() {
+	default Object second() {
 		return null;
 	}
 
-	public String getName() {
+	default String getName() {
 		return null;
 	}
 }

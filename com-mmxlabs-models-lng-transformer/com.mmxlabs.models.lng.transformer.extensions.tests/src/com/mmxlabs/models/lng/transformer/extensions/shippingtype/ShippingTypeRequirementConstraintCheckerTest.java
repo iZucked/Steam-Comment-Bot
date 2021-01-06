@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.transformer.extensions.shippingtype;
 
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -18,8 +20,6 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVesselEditor;
 
 public class ShippingTypeRequirementConstraintCheckerTest {
 	public void testPurchaseConstraints(CargoDeliveryType cargoType, CargoDeliveryType requiredType) {
@@ -46,7 +46,7 @@ public class ShippingTypeRequirementConstraintCheckerTest {
 		Mockito.when(shippingTypeRequirementProviderEditor.getPurchaseSlotRequiredDeliveryType(element2)).thenReturn(CargoDeliveryType.ANY);
 
 		boolean expectedResult = (requiredType == CargoDeliveryType.ANY || requiredType == cargoType);
-		Assertions.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource1) == expectedResult);
+		Assertions.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource1, new ArrayList<>()) == expectedResult);
 
 		Mockito.verify(shippingTypeRequirementProviderEditor).getSalesSlotRequiredDeliveryType(element2);
 		
@@ -80,7 +80,7 @@ public class ShippingTypeRequirementConstraintCheckerTest {
 		Mockito.when(shippingTypeRequirementProviderEditor.getPurchaseSlotRequiredDeliveryType(element1)).thenReturn(requiredType);
 
 		boolean expectedResult = (requiredType == CargoDeliveryType.ANY || requiredType == cargoType);
-		Assertions.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource1) == expectedResult);
+		Assertions.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource1, new ArrayList<>()) == expectedResult);
 
 		Mockito.verify(shippingTypeRequirementProviderEditor).getPurchaseSlotRequiredDeliveryType(element1);
 

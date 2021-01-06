@@ -13,7 +13,6 @@ import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.util.ModelMarketCurveProvider;
-import com.mmxlabs.scenario.service.manifest.Manifest;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ISharedDataModelType;
 
@@ -38,16 +37,10 @@ public final class LNGScenarioSharedModelTypes {
 	public static final ISharedDataModelType<FleetModel> BUNKER_FUELS = ISharedDataModelType.make("lingo-bunker-fuels", null);
 
 	public static Function<IScenarioDataProvider, Object> makeDistanceProvider() {
-		return (scenarioDataProvider) -> {
-			final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioDataProvider);
-			return new ModelDistanceProvider(portModel);
-		};
+		return sdp -> ModelDistanceProvider.getOrCreate(ScenarioModelUtil.getPortModel(sdp));
 	}
 
 	public static Function<IScenarioDataProvider, Object> makeMarketCurvesProvider() {
-		return (scenarioDataProvider) -> {
-			final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioDataProvider);
-			return new ModelMarketCurveProvider(pricingModel);
-		};
+		return sdp -> ModelMarketCurveProvider.getOrCreate(ScenarioModelUtil.getPricingModel(sdp));
 	}
 }

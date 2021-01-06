@@ -56,6 +56,9 @@ import org.eclipse.swt.widgets.Text;
 
 public class GanttTester {
 
+private    final Random r = new Random();
+
+	
     private GanttChart          _ganttChart;
     private GanttComposite      _ganttComposite;
 
@@ -1060,7 +1063,6 @@ public class GanttTester {
 			}
         });
 
-        final Random r = new Random();
 
         GanttSection parent = null;
         int sectionCount = 1;
@@ -1698,7 +1700,6 @@ public class GanttTester {
 
             public void handleEvent(final Event event) {
                 final Calendar cal = _ganttComposite.getDate();
-                final Random r = new Random();
                 int add = r.nextInt(10) + 1;
                 if (r.nextInt(2) == 1) {
                     add = -add;

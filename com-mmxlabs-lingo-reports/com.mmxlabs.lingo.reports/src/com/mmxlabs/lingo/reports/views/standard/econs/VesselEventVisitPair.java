@@ -16,7 +16,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 
-public class VesselEventVisitPair extends DeltaPair {
+public class VesselEventVisitPair implements DeltaPair {
 	private final VesselEventVisit first;
 	private final VesselEventVisit second;
 

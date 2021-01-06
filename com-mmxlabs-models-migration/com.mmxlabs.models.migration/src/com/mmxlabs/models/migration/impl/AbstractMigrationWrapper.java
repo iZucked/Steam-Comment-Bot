@@ -43,7 +43,7 @@ public abstract class AbstractMigrationWrapper implements IMigrationUnitExtensio
 
 	@Override
 	public void migrate(@Nullable final Map<URI, PackageData> extraPackagesOrig, final @NonNull DataManifest dataManifest) throws Exception {
-		final Map<URI, PackageData> extraPackages = new HashMap<URI, PackageData>(extraPackagesOrig);
+		final Map<URI, PackageData> extraPackages = new HashMap<>(extraPackagesOrig);
 
 		populateExtraPackages(extraPackages);
 

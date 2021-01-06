@@ -18,7 +18,6 @@ import com.mmxlabs.models.lng.nominations.DatePeriodPrior;
 import com.mmxlabs.models.lng.nominations.NominationsPackage;
 import com.mmxlabs.models.lng.nominations.Side;
 import com.mmxlabs.models.lng.nominations.utils.NominationsModelUtils;
-import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.BooleanFlagAttributeManipulator;

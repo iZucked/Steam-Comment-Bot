@@ -9,8 +9,6 @@ import java.util.Random;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 public class SeriesUtil {
 	public static final int[] mergeChangePoints(final int[] a, final int[] b) {
 		int ia = 0;

@@ -43,11 +43,6 @@ public class LocalDateAttributeManipulator extends BasicAttributeManipulator {
 	}
 	
 	@Override
-	public Object getValue(Object object) {
-		return super.getValue(object);
-	}
-
-	@Override
 	public String renderSetValue(final Object owner, final Object object) {
 		final LocalDateTextFormatter formatter = new LocalDateTextFormatter();
 		formatter.setValue(object);
@@ -63,7 +58,4 @@ public class LocalDateAttributeManipulator extends BasicAttributeManipulator {
 			return null;
 		}
 	}
-	
- 
-
 }

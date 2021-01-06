@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.lngdataserver.lng.io.financial;
 
-import org.eclipse.emf.ecore.util.EcoreUtil;
-
 import com.mmxlabs.lngdataserver.integration.models.financial.settled.SettledPriceCurve;
 import com.mmxlabs.lngdataserver.integration.models.financial.settled.SettledPriceEntry;
 import com.mmxlabs.lngdataserver.integration.models.financial.settled.SettledPricesVersion;

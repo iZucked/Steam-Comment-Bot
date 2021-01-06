@@ -35,7 +35,6 @@ import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
 import com.mmxlabs.models.ui.impl.DefaultDisplayCompositeLayoutProvider;
 import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite;
-import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite.ChildCompositeContainer;
 
 /**
  * A display composite for the cargo editor; because the slots are not contained in the cargo any more we need some special-case editing behaviour.

@@ -208,7 +208,7 @@ public class GroupedValidationStatusContentProvider implements ITreeContentProvi
 		public ValidationGroup group;
 		public String desc;
 
-	};
+	}
 
 	private static ValidationGroup urgentGroup = new ValidationGroup("Urgent", Short.MIN_VALUE);
 	private static ValidationGroup defaultGroup = new ValidationGroup("General", (short) 0);

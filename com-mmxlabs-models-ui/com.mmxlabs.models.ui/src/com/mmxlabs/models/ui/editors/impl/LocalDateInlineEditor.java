@@ -53,7 +53,7 @@ public class LocalDateInlineEditor extends UnsettableInlineEditor {
 			@Override
 			public void modifyText(final ModifyEvent e) {
 				if (formattedText.isValid()) {
-					doSetValue((LocalDate) formattedText.getValue(), false);
+					doSetValue(formattedText.getValue(), false);
 				}
 			}
 		});

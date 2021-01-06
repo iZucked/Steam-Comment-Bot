@@ -15,8 +15,6 @@ public class MessagePage extends WizardPage {
 
 	private Text messageTextControl;
 
-	private Composite container;
-
 	private String message;
 
 	public MessagePage(String title, String message) {
@@ -30,7 +28,7 @@ public class MessagePage extends WizardPage {
 
 	public void createControl(final Composite parent) {
 
-		container = new Composite(parent, SWT.NONE);
+		Composite container = new Composite(parent, SWT.NONE);
 
 		final GridLayout layout = new GridLayout(1, true);
 		container.setLayout(layout);

@@ -8,7 +8,6 @@ package com.mmxlabs.models.lng.pricing;
 
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.mmxcore.NamedObject;
-import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->

@@ -5,8 +5,6 @@
 package com.mmxlabs.lingo.its.tests.reports;
 
 import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.function.Consumer;

@@ -29,7 +29,7 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 public class ReferenceValueProviderCache implements IReferenceValueProviderProvider {
 	private final IReferenceValueProviderFactoryRegistry registry;
 	private MMXRootObject rootObject;
-	private final HashMap<Pair<EClass, EReference>, IReferenceValueProvider> cache = new HashMap<Pair<EClass, EReference>, IReferenceValueProvider>();
+	private final HashMap<Pair<EClass, EReference>, IReferenceValueProvider> cache = new HashMap<>();
 
 	private static final Logger log = LoggerFactory.getLogger(ReferenceValueProviderCache.class);
 
@@ -49,7 +49,7 @@ public class ReferenceValueProviderCache implements IReferenceValueProviderProvi
 	 */
 	@Override
 	public synchronized IReferenceValueProvider getReferenceValueProvider(final EClass owner, final EReference reference) {
-		final Pair<EClass, EReference> p = new Pair<EClass, EReference>(owner, reference);
+		final Pair<EClass, EReference> p = new Pair<>(owner, reference);
 		if (cache.containsKey(p)) {
 			return cache.get(p);
 		}

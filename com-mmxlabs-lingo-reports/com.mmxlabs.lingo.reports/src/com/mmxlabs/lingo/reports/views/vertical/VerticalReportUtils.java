@@ -37,10 +37,10 @@ public final class VerticalReportUtils {
 
 	public enum SlotType {
 		PURCHASE, SALE, BOTH
-	};
+	}
 
 	public static List<Event> eventsFromSequences(final Sequence... sequences) {
-		final List<Event> result = new ArrayList<Event>();
+		final List<Event> result = new ArrayList<>();
 		if (sequences != null) {
 			for (final Sequence seq : sequences) {
 				if (seq != null) {
@@ -233,7 +233,7 @@ public final class VerticalReportUtils {
 				for (final Event evt : data.longLoads.getEvents()) {
 					if (evt instanceof SlotVisit) {
 						final SlotVisit slotVisit = (SlotVisit) evt;
-						final Slot slot = slotVisit.getSlotAllocation().getSlot();
+						final Slot<?> slot = slotVisit.getSlotAllocation().getSlot();
 						if (matcher.apply(slot)) {
 							events.add(slotVisit);
 						}
@@ -246,7 +246,7 @@ public final class VerticalReportUtils {
 				for (final Event evt : seq.getEvents()) {
 					if (evt instanceof SlotVisit) {
 						final SlotVisit slotVisit = (SlotVisit) evt;
-						final Slot slot = slotVisit.getSlotAllocation().getSlot();
+						final Slot<?> slot = slotVisit.getSlotAllocation().getSlot();
 						boolean checkSlot = false;
 						checkSlot |= (slot instanceof LoadSlot) && (slotType == SlotType.PURCHASE || slotType == SlotType.BOTH);
 						checkSlot |= (slot instanceof DischargeSlot) && (slotType == SlotType.SALE || slotType == SlotType.BOTH);
@@ -265,7 +265,7 @@ public final class VerticalReportUtils {
 
 	public static List<Event> getCanalBookings(final ScheduleSequenceData data) {
 		final @NonNull ModelDistanceProvider modelDistanceProvider = data.scenarioDataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
-		final List<Event> events = new LinkedList<Event>();
+		final List<Event> events = new LinkedList<>();
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(data.model);
 		final CanalBookings canalBookings = cargoModel.getCanalBookings();
 		if (canalBookings != null) {
@@ -281,7 +281,7 @@ public final class VerticalReportUtils {
 
 	public static List<Event> getCanalBookingsNorthEntrance(final ScheduleSequenceData data) {
 		final @NonNull ModelDistanceProvider modelDistanceProvider = data.scenarioDataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
-		final List<Event> events = new LinkedList<Event>();
+		final List<Event> events = new LinkedList<>();
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(data.model);
 		final CanalBookings canalBookings = cargoModel.getCanalBookings();
 		if (canalBookings != null) {
@@ -299,7 +299,7 @@ public final class VerticalReportUtils {
 
 	public static List<Event> getCanalBookingsForSouthEntrance(final ScheduleSequenceData data) {
 		final @NonNull ModelDistanceProvider modelDistanceProvider = data.scenarioDataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
-		final List<Event> events = new LinkedList<Event>();
+		final List<Event> events = new LinkedList<>();
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(data.model);
 		final CanalBookings canalBookings = cargoModel.getCanalBookings();
 		if (canalBookings != null) {

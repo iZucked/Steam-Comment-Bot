@@ -72,6 +72,10 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public class ChangeModelToScheduleSpecification {
 
+	private static final String PREFIX_SLOT = "slot-";
+
+	private static final String PREFIX_MARKET = "market-";
+	
 	private final Function<String, EObject> finderFunction;
 	private final LNGScenarioModel lngScenarioModel;
 	private @Nullable final IAssignableElementDateProviderFactory assignableElementDateProviderFactory;
@@ -103,11 +107,11 @@ public class ChangeModelToScheduleSpecification {
 			if (slot instanceof SpotSlot) {
 				final SpotSlot spotSlot = (SpotSlot) slot;
 				final SlotType slotType = ScheduleSpecificationHelper.getSlotType(slot);
-				final String key = "market-" + slotType + "-" + spotSlot.getMarket().getName() + String.format("%04d-%02d", slot.getWindowStart().getYear(), slot.getWindowStart().getMonthValue());
+				final String key = PREFIX_MARKET + slotType + "-" + spotSlot.getMarket().getName() + String.format("%04d-%02d", slot.getWindowStart().getYear(), slot.getWindowStart().getMonthValue());
 				marketSlotMap.computeIfAbsent(key, k -> new LinkedList<>()).add(slot);
 			} else {
 				final SlotType slotType = ScheduleSpecificationHelper.getSlotType(slot);
-				final String key = "slot-" + slotType + "-" + slot.getName();
+				final String key = PREFIX_SLOT + slotType + "-" + slot.getName();
 				slotMap.put(key, slot);
 			}
 		}
@@ -115,11 +119,11 @@ public class ChangeModelToScheduleSpecification {
 			if (slot instanceof SpotSlot) {
 				final SpotSlot spotSlot = (SpotSlot) slot;
 				final SlotType slotType = ScheduleSpecificationHelper.getSlotType(slot);
-				final String key = "market-" + slotType + "-" + spotSlot.getMarket().getName() + String.format("%04d-%02d", slot.getWindowStart().getYear(), slot.getWindowStart().getMonthValue());
+				final String key = PREFIX_MARKET + slotType + "-" + spotSlot.getMarket().getName() + String.format("%04d-%02d", slot.getWindowStart().getYear(), slot.getWindowStart().getMonthValue());
 				marketSlotMap.computeIfAbsent(key, k -> new LinkedList<>()).add(slot);
 			} else {
 				final SlotType slotType = ScheduleSpecificationHelper.getSlotType(slot);
-				final String key = "slot-" + slotType + "-" + slot.getName();
+				final String key = PREFIX_SLOT + slotType + "-" + slot.getName();
 				slotMap.put(key, slot);
 			}
 		}
@@ -130,9 +134,9 @@ public class ChangeModelToScheduleSpecification {
 		return (key) -> {
 			if (key.startsWith("event-")) {
 				return eventMap.get(key);
-			} else if (key.startsWith("slot-")) {
+			} else if (key.startsWith(PREFIX_SLOT)) {
 				return slotMap.get(key);
-			} else if (key.startsWith("market-")) {
+			} else if (key.startsWith(PREFIX_MARKET)) {
 				// What to do here? Just ignore for now I think
 				// return marketSlotMap.get(key);
 			}
@@ -244,7 +248,7 @@ public class ChangeModelToScheduleSpecification {
 					if (descriptor instanceof RealSlotDescriptor) {
 						final RealSlotDescriptor d = (RealSlotDescriptor) descriptor;
 						final SlotType slotType = d.getSlotType();
-						final String key = "slot-" + slotType + "-" + d.getSlotName();
+						final String key = PREFIX_SLOT + slotType + "-" + d.getSlotName();
 						slot = (Slot) finderFunction.apply(key);
 						if (slot == null) {
 							throw new RuntimeException("Slot not found: " + d.getSlotName());
@@ -252,7 +256,7 @@ public class ChangeModelToScheduleSpecification {
 					} else if (descriptor instanceof SpotMarketSlotDescriptor) {
 						final SpotMarketSlotDescriptor d = (SpotMarketSlotDescriptor) descriptor;
 						final SlotType slotType = d.getSlotType();
-						final String key = "market-" + slotType + "-" + d.getMarketName() + String.format("%04d-%02d", d.getDate().getYear(), d.getDate().getMonthValue());
+						final String key = PREFIX_MARKET + slotType + "-" + d.getMarketName() + String.format("%04d-%02d", d.getDate().getYear(), d.getDate().getMonthValue());
 						slot = (Slot) finderFunction.apply(key);
 
 						if (slot == null) {
@@ -365,7 +369,7 @@ public class ChangeModelToScheduleSpecification {
 				if (descriptor instanceof RealSlotDescriptor) {
 					final RealSlotDescriptor d = (RealSlotDescriptor) descriptor;
 					final SlotType slotType = d.getSlotType();
-					final String key = "slot-" + slotType + "-" + d.getSlotName();
+					final String key = PREFIX_SLOT + slotType + "-" + d.getSlotName();
 					final Slot slot = (Slot) finderFunction.apply(key);
 					if (slot == null) {
 						throw new RuntimeException("Slot not found: " + d.getSlotName());

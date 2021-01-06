@@ -11,12 +11,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.CharterOutOpportunity;
-import com.mmxlabs.models.lng.analytics.SellOpportunity;
-import com.mmxlabs.models.lng.analytics.VolumeMode;
-import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
-import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.types.VolumeUnits;
 
 public class CharterOutOpportunityMaker {
 	@NonNull

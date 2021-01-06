@@ -94,7 +94,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 		public boolean canFollow(final SequenceChunk chunk1, final SequenceChunk chunk2, final IResource resource) {
 			final ISequenceElement tail1 = chunk1.last();
 			final ISequenceElement head2 = chunk2.first();
-			return checker.allowSequence(tail1, head2, resource, false);
+			return checker.allowSequence(tail1, head2, resource);
 		}
 
 		public boolean canInsert(final SequenceChunk before, final SequenceChunk added, final SequenceChunk after, final IResource resource) {
@@ -215,7 +215,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 						continue;
 					}
 					// Use constraint checkers to determine valid sequence
-					if (checker.allowSequence(element1, element2, false)) {
+					if (checker.allowSequence(element1, element2)) {
 						after1.add(element2);
 					}
 				}
@@ -290,7 +290,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 			for (final IResource resource : resources) {
 				boolean ok = true;
 				for (int c = 0; c < (chunk.size() - 1); c++) {
-					if (!checker.allowSequence(chunk.get(c), chunk.get(c + 1), resource, false)) {
+					if (!checker.allowSequence(chunk.get(c), chunk.get(c + 1), resource)) {
 						ok = false;
 						break;
 					}

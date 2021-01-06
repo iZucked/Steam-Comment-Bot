@@ -52,7 +52,7 @@ public class BallastBonusContractTableCreator {
 		eViewer.setStatusProvider(statusProvider);
 		eViewer.setAutoResizeable(false);
 		eViewer.setSorter(null);
-
+		
 		eViewer.addTypicalColumn("Redelivery ports", new MultiplePortReferenceManipulator(CommercialPackage.eINSTANCE.getBallastBonusContractLine_RedeliveryPorts(), sel.getReferenceValueProviderCache(),
 				sel.getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
 
@@ -455,7 +455,7 @@ public class BallastBonusContractTableCreator {
 				RunnerHelper.asyncExec(sizeChangedAction);
 			}
 		});
-
+		
 		final Button remove = toolkit.createButton(buttons, "Remove", SWT.NONE);
 		remove.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
 
@@ -482,5 +482,5 @@ public class BallastBonusContractTableCreator {
 		eViewer.refresh();
 		sizeChangedAction.run();
 		return eViewer;
-	}
+	}	
 }

@@ -7,7 +7,6 @@ package com.mmxlabs.models.lng.migration.units;
 import java.util.List;
 import java.util.function.Consumer;
 
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;

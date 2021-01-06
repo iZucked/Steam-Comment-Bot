@@ -3,19 +3,14 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.spotmarkets.impl;
-import com.mmxlabs.models.lng.fleet.Vessel;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
-import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
-import com.mmxlabs.models.lng.types.AVesselSet;
-import java.util.Collection;
 
 /**
  * <!-- begin-user-doc -->

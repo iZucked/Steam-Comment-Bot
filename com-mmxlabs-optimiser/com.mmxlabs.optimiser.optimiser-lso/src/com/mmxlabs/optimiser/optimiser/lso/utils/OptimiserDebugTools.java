@@ -14,6 +14,9 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 
 public class OptimiserDebugTools {
 
+	private OptimiserDebugTools() {
+	}
+
 	public static void checkLDOnSequence(IModifiableSequences currentRawSequences, String resourceName, String loadName, String DischargeName) {
 		List<@NonNull IResource> resources = currentRawSequences.getResources();
 		for (IResource resource : resources) {
@@ -23,13 +26,14 @@ public class OptimiserDebugTools {
 				}
 				int i = 0;
 				for (ISequenceElement sequenceElement : currentRawSequences.getSequence(resource)) {
-					if (sequenceElement.getName().contains(loadName) && i < currentRawSequences.getSequence(resource).size() - 1 && currentRawSequences.getSequence(resource).get(i+1).getName().contains(DischargeName)) {
+					if (sequenceElement.getName().contains(loadName) && i < currentRawSequences.getSequence(resource).size() - 1
+							&& currentRawSequences.getSequence(resource).get(i + 1).getName().contains(DischargeName)) {
 						// debug checkpoint
 					}
 					i++;
 				}
 			}
-			
+
 		}
 	}
 }

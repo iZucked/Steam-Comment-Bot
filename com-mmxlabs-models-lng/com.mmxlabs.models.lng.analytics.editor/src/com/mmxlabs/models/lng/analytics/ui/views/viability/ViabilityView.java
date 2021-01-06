@@ -104,9 +104,13 @@ public class ViabilityView extends ScenarioInstanceView implements CommandStackL
 
 		final RunnableAction go = new RunnableAction("Generate", IAction.AS_PUSH_BUTTON, () -> BusyIndicator.showWhile(Display.getDefault(), () -> {
 			try {
-				final LNGScenarioModel scenarioModel = (LNGScenarioModel) getRootObject();
-				final ScenarioInstance scenarioInstance = getScenarioInstance();
+				LNGScenarioModel foo = (LNGScenarioModel) getRootObject();
 				final IScenarioDataProvider sdp = getScenarioDataProvider();
+				if (foo == null) {
+					foo = ScenarioModelUtil.findScenarioModel(sdp);
+				}
+				final LNGScenarioModel scenarioModel = foo;
+				final ScenarioInstance scenarioInstance = getScenarioInstance();
 				if (scenarioModel == null) {
 					return;
 				}
@@ -119,10 +123,6 @@ public class ViabilityView extends ScenarioInstanceView implements CommandStackL
 						RunnerHelper.asyncExec(() -> {
 							final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(sdp);
 							final EditingDomain editingDomain = sdp.getEditingDomain();
-							// clearing the viability model before the evaluation of the new one
-							// SG - No need for this?
-							// editingDomain.getCommandStack()
-							// .execute(SetCommand.create(editingDomain, analyticsModel, AnalyticsPackage.eINSTANCE.getAnalyticsModel_ViabilityModel(), SetCommand.UNSET_VALUE));
 
 							final CompoundCommand cmd = new CompoundCommand("Create viability matrix");
 							cmd.append(SetCommand.create(editingDomain, analyticsModel, AnalyticsPackage.eINSTANCE.getAnalyticsModel_ViabilityModel(), model));

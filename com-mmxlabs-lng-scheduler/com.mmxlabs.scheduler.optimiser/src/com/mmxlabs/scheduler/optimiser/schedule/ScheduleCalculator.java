@@ -24,6 +24,8 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -170,6 +172,8 @@ public class ScheduleCalculator {
 
 		ScheduledVoyagePlanResult lastResult = null;
 
+		IPort firstLoadPort = getFirstLoadPort(records);
+		
 		for (int idx = 0; idx < records.size(); idx++) {
 
 			final IPortTimesRecord portTimeWindowsRecord = records.get(idx);
@@ -185,6 +189,7 @@ public class ScheduleCalculator {
 			final List<ScheduledVoyagePlanResult> results = voyagePlanEvaluator.evaluateShipped(resource, vesselAvailability, //
 					vesselAvailability.getCharterCostCalculator(), //
 					vesselStartTime, //
+					firstLoadPort,
 					previousHeelRecord, portTimeWindowsRecord, //
 					lastPlan, //
 					false, // Return best
@@ -200,6 +205,17 @@ public class ScheduleCalculator {
 		}
 
 		return new VolumeAllocatedSequence(resource, sequence, vesselStartTime, voyagePlans);
+	}
+
+	private @Nullable IPort getFirstLoadPort(@Nullable List<IPortTimesRecord> records) {
+		if (records != null) {
+			for (var rec : records) {
+				if (rec.getFirstSlot() instanceof ILoadOption) {
+					return rec.getFirstSlot().getPort();
+				}
+			}
+		}
+		return null;
 	}
 
 	/**

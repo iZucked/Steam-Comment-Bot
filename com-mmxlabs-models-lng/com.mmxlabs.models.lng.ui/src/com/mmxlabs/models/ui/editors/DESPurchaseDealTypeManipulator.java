@@ -8,7 +8,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
 import com.mmxlabs.common.Pair;

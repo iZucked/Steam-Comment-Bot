@@ -30,7 +30,7 @@ public class MultiAttributeInlineEditor extends DialogFeatureManipulator {
 	private Function<Object, String> labelProvider;
 	private Supplier<List<Object>> valuesSupplier;
 
-	private final static int MAX_DISPLAY_LENGTH = 32;
+	private static final int MAX_DISPLAY_LENGTH = 32;
 	private static final int MIN_DISPLAY_NAMES = 2;
 
 	public MultiAttributeInlineEditor(final EStructuralFeature feature, EditingDomain editingDomain, Function<Object, String> labelProvider, Supplier<List<Object>> valuesSupplier) {
@@ -76,7 +76,7 @@ public class MultiAttributeInlineEditor extends DialogFeatureManipulator {
 	@SuppressWarnings("unchecked")
 	@Override
 	protected Object openDialogBox(final Control cellEditorWindow, final Object object) {
-		
+
 		final List<Pair<String, Object>> options = new LinkedList<>();
 
 		for (Object o : valuesSupplier.get()) {

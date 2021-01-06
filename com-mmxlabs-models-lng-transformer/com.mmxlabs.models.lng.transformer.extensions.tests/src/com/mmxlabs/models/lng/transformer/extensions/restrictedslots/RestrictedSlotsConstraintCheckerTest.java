@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer.extensions.restrictedslots;
 
+import java.util.ArrayList;
 import java.util.Collections;
 
 import org.junit.jupiter.api.Assertions;
@@ -34,7 +35,7 @@ public class RestrictedSlotsConstraintCheckerTest {
 		Mockito.when(restrictedElementsProvider.getRestrictedFollowerElements(element1)).thenReturn(Collections.<ISequenceElement> emptySet());
 		Mockito.when(restrictedElementsProvider.getRestrictedPrecedingElements(element2)).thenReturn(Collections.<ISequenceElement> emptySet());
 
-		Assertions.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource1));
+		Assertions.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource1, new ArrayList<>()));
 	}
 
 	@Test
@@ -52,8 +53,8 @@ public class RestrictedSlotsConstraintCheckerTest {
 		Mockito.when(restrictedElementsProvider.getRestrictedFollowerElements(element1)).thenReturn(Collections.<ISequenceElement> singleton(element2));
 		Mockito.when(restrictedElementsProvider.getRestrictedPrecedingElements(element2)).thenReturn(Collections.<ISequenceElement> emptySet());
 
-		Assertions.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource1));
-		Assertions.assertTrue(checker.checkPairwiseConstraint(element2, element1, resource1));
+		Assertions.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource1, new ArrayList<>()));
+		Assertions.assertTrue(checker.checkPairwiseConstraint(element2, element1, resource1, new ArrayList<>()));
 	}
 
 	@Test
@@ -73,8 +74,8 @@ public class RestrictedSlotsConstraintCheckerTest {
 		Mockito.when(restrictedElementsProvider.getRestrictedFollowerElements(element1)).thenReturn(Collections.<ISequenceElement> emptySet());
 		Mockito.when(restrictedElementsProvider.getRestrictedPrecedingElements(element2)).thenReturn(Collections.<ISequenceElement> singleton(element1));
 
-		Assertions.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource1));
-		Assertions.assertTrue(checker.checkPairwiseConstraint(element2, element1, resource1));
+		Assertions.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource1, new ArrayList<>()));
+		Assertions.assertTrue(checker.checkPairwiseConstraint(element2, element1, resource1, new ArrayList<>()));
 	}
 
 

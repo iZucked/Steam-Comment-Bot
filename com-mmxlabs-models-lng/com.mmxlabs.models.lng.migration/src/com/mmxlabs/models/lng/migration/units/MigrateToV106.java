@@ -9,7 +9,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
 import com.mmxlabs.models.migration.MigrationModelRecord;
-import com.mmxlabs.models.migration.utils.EObjectWrapper;
 
 public class MigrateToV106 extends AbstractMigrationUnit {
 

@@ -8,11 +8,7 @@ package com.mmxlabs.models.lng.cargo;
 
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.mmxcore.NamedObject;
-import java.time.LocalDate;
-
 import org.eclipse.emf.common.util.EList;
-
-import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->

@@ -8,8 +8,6 @@ package com.mmxlabs.models.lng.pricing;
 
 import com.mmxlabs.models.mmxcore.NamedObject;
 
-import org.eclipse.emf.common.util.EList;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Market Index</b></em>'.

@@ -6,9 +6,7 @@ package com.mmxlabs.models.lng.analytics.ui.views;
 
 import org.eclipse.core.runtime.IAdapterFactory;
 
-import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
-import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
 import com.mmxlabs.scenario.service.model.util.IScenarioFragmentOpenHandler;
 
 public class SandboxScenarioAdapterFactory implements IAdapterFactory {

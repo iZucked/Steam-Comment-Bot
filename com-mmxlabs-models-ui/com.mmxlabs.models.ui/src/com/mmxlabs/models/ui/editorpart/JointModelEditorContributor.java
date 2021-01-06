@@ -9,8 +9,6 @@ import org.eclipse.emf.edit.ui.action.RedoAction;
 import org.eclipse.emf.edit.ui.action.UndoAction;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.ICoolBarManager;
-import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorActionBarContributor;
@@ -90,20 +88,6 @@ public class JointModelEditorContributor extends MultiPageEditorActionBarContrib
 	}
 
 	@Override
-	public void contributeToMenu(final IMenuManager menuManager) {
-		super.contributeToMenu(menuManager);
-	}
-
-	@Override
-	public void contributeToStatusLine(final IStatusLineManager statusLineManager) {
-
-		// statusLineManager.add(applyContributionItem);
-		// statusLineManager.add(cancelContributionItem);
-
-		super.contributeToStatusLine(statusLineManager);
-	}
-
-	@Override
 	public void contributeToToolBar(final IToolBarManager toolBarManager) {
 		// Editor actions go here
 		toolBarManager.add(new GroupMarker("autoevaluategroup"));
@@ -114,10 +98,10 @@ public class JointModelEditorContributor extends MultiPageEditorActionBarContrib
 		toolBarManager.add(new GroupMarker("additions-end"));
 		super.contributeToToolBar(toolBarManager);
 	}
-	
+
 	@Override
 	public void contributeToCoolBar(ICoolBarManager coolBarManager) {
-//		coolBarManager.add(new GroupMarker("additions"));
+		// coolBarManager.add(new GroupMarker("additions"));
 		coolBarManager.add(new GroupMarker("autoevaluategroup"));
 		coolBarManager.add(new GroupMarker("forkgroup"));
 		coolBarManager.add(new GroupMarker("evaluategroup2"));

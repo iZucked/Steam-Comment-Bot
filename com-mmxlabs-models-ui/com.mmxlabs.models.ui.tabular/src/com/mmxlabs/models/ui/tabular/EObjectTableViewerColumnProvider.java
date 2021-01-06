@@ -169,9 +169,4 @@ public class EObjectTableViewerColumnProvider extends ColumnLabelProvider implem
 		}
 		return null;
 	}
-	
-	@Override
-	public void dispose() {
-		super.dispose();
-	}
 }

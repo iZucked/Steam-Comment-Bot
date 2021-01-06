@@ -8,8 +8,6 @@ package com.mmxlabs.models.lng.schedule;
 
 import com.mmxlabs.models.lng.cargo.InventoryEventRow;
 
-import java.time.LocalDate;
-
 import java.time.LocalDateTime;
 import org.eclipse.emf.ecore.EObject;
 

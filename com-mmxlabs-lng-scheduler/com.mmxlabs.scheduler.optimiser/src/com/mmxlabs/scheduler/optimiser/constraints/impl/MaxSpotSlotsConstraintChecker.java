@@ -42,7 +42,7 @@ public class MaxSpotSlotsConstraintChecker implements IConstraintChecker {
 	}
 
 	@Override
-	public boolean checkConstraints(@NonNull ISequences sequences, @Nullable Collection<@NonNull IResource> changedResources) {
+	public boolean checkConstraints(@NonNull ISequences sequences, @Nullable Collection<@NonNull IResource> changedResources, List<String> messages) {
 		int spots = 0;
 		for (IResource resource : sequences.getResources()) {
 			for (ISequenceElement element : sequences.getSequence(resource)) {
@@ -52,15 +52,11 @@ public class MaxSpotSlotsConstraintChecker implements IConstraintChecker {
 			}
 		}
 		if (spots > MAX_SPOT_COUNT) {
+			messages.add(String.format("%s: It seems that there are spot loads wired to spot discharges. Spot count %d.", this.name, spots));
 			return false;
 		} else {
 			return true;
 		}
-	}
-
-	@Override
-	public boolean checkConstraints(@NonNull ISequences sequences, @Nullable Collection<@NonNull IResource> changedResources, @Nullable List<String> messages) {
-		return checkConstraints(sequences, changedResources);
 	}
 
 }

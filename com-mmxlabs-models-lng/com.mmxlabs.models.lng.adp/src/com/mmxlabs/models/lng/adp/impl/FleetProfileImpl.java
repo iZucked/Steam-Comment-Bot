@@ -10,10 +10,6 @@ import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.FleetConstraint;
 import com.mmxlabs.models.lng.adp.FleetProfile;
 
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
-
-import com.mmxlabs.models.lng.cargo.VesselEvent;
-import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import java.util.Collection;
 

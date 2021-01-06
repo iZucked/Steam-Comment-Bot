@@ -172,7 +172,7 @@ public class FleetReportTransformer {
 		if (isReferenceSchedule) {
 			this.referenceElements = new LinkedList<>();
 		}
-		for (final Object element : interestingElements) {
+		for (final EObject element : interestingElements) {
 
 			if (element instanceof Sequence) {
 				final Sequence sequence = (Sequence) element;

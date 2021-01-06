@@ -53,7 +53,7 @@ public class YearMonthInlineEditor extends UnsettableInlineEditor {
 			@Override
 			public void modifyText(final ModifyEvent e) {
 				if (formattedText.isValid()) {
-					doSetValue((YearMonth) formattedText.getValue(), false);
+					doSetValue(formattedText.getValue(), false);
 				}
 			}
 		});

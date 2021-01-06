@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.inject.Named;
 
@@ -19,7 +18,6 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.Triple;
 import com.mmxlabs.common.calendars.BasicPricingCalendar;
 import com.mmxlabs.common.calendars.BasicPricingCalendarEntry;
 import com.mmxlabs.common.curves.BasicCommodityCurveData;
@@ -44,39 +42,40 @@ public class PaperDealsCalculator {
 
 	@Inject
 	IPaperDealDataProviderEditor paperDealDataProvider;
-	
+
 	@Inject
-	@Named("Commodity")
+	@Named(SchedulerConstants.Parser_Commodity)
 	private SeriesParser commodityIndices;
-	
+
 	@Inject
 	private IExposureDataProvider exposureDataProvider;
 
 	@Inject
 	@NonNull
 	private IInternalDateProvider dateProvider;
-	
+
 	@Inject
 	@Named(SchedulerConstants.COMPUTE_EXPOSURES)
 	private boolean exposuresEnabled;
-	
+
 	@Inject
 	@Named(SchedulerConstants.COMPUTE_PAPER_PNL)
 	private boolean paperPnLEnabled;
-	
+
 	@Inject
 	@Named(SchedulerConstants.RE_HEDGE_WITH_PAPERS)
 	private boolean reHedgeWithPapers;
-	
+
 	/**
 	 * Get the collection of paper deals allocation and create a map Map<Pair<Market index name, Month>, Volume> hedges
+	 * 
 	 * @param paperDealAllocations
 	 * @return Map<Pair<String, YearMonth>, Long>
 	 */
-	private Map<Pair<String, YearMonth>, Long> getHedges(final Map<BasicPaperDealData, List<BasicPaperDealAllocationEntry>> paperDealAllocations){
+	private Map<Pair<String, YearMonth>, Long> getHedges(final Map<BasicPaperDealData, List<BasicPaperDealAllocationEntry>> paperDealAllocations) {
 		final Map<Pair<String, YearMonth>, Long> hedges = new HashMap<>();
-		
-		if (reHedgeWithPapers && paperPnLEnabled && exposuresEnabled) {
+
+		if (reHedgeWithPapers) {
 			final PaperDealsLookupData lookupData = paperDealDataProvider.getPaperDealsLookupData();
 			for (final BasicPaperDealData basicPaperDealData : paperDealAllocations.keySet()) {
 				for (final BasicPaperDealAllocationEntry entry : paperDealAllocations.get(basicPaperDealData)) {
@@ -91,18 +90,20 @@ public class PaperDealsCalculator {
 		}
 		return hedges;
 	}
-	
+
 	/**
 	 * Get the list of exposures and create a map of Map<Pair<Market index name, Month>, Volume> exposures
-	 * @param List<OptimiserExposureRecords> exposureRecords
+	 * 
+	 * @param List<OptimiserExposureRecords>
+	 *                                           exposureRecords
 	 * @return Map<Pair<String, YearMonth>, Long>
 	 */
 	private Map<Pair<String, YearMonth>, Long> getExposures(final List<OptimiserExposureRecords> exposureRecords) {
 		final Map<Pair<String, YearMonth>, Long> exposures = new HashMap<>();
-		
+
 		if (exposuresEnabled) {
 			final PaperDealsLookupData lookupData = paperDealDataProvider.getPaperDealsLookupData();
-			for(final OptimiserExposureRecords records : exposureRecords) {
+			for (final OptimiserExposureRecords records : exposureRecords) {
 				for (final BasicExposureRecord record : records.records) {
 					if (record.getIndexName().equalsIgnoreCase("Physical"))
 						continue;
@@ -115,10 +116,12 @@ public class PaperDealsCalculator {
 		}
 		return exposures;
 	}
-	
+
 	/**
 	 * Get the map of exposures per IPortSlot and create a map of Map<Pair<Market index name, Month>, Volume> exposures
-	 * @param Map<IPortSlot, OptimiserExposureRecords> exposureRecords
+	 * 
+	 * @param Map<IPortSlot,
+	 *                           OptimiserExposureRecords> exposureRecords
 	 * @return Map<Pair<String, YearMonth>, Long>
 	 */
 	private Map<Pair<String, YearMonth>, Long> getExposures(Map<IPortSlot, OptimiserExposureRecords> exposureRecords) {
@@ -127,15 +130,16 @@ public class PaperDealsCalculator {
 			exposureRecordsList.add(exposureRecords.get(portSlot));
 		}
 		return getExposures(exposureRecordsList);
-	} 
-	
+	}
+
 	/**
 	 * Create a delta map of hedges and exposures Map<Pair<Market Index Name, Month>, Volume>
+	 * 
 	 * @return Map<Pair<String, YearMonth>, Long>
 	 */
-	private Map<Pair<String, YearMonth>, Long> getDeltaExposuresMap(final Map<Pair<String, YearMonth>, Long> exposures, final Map<Pair<String, YearMonth>, Long> hedges){
+	private Map<Pair<String, YearMonth>, Long> getDeltaExposuresMap(final Map<Pair<String, YearMonth>, Long> exposures, final Map<Pair<String, YearMonth>, Long> hedges) {
 		final Map<Pair<String, YearMonth>, Long> delta = new HashMap<>(exposures);
-		if (reHedgeWithPapers && paperPnLEnabled && exposuresEnabled) {
+		if (reHedgeWithPapers) {
 			final PaperDealsLookupData lookupData = paperDealDataProvider.getPaperDealsLookupData();
 			for (final Pair<String, YearMonth> hedgePair : hedges.keySet()) {
 				delta.merge(hedgePair, hedges.get(hedgePair), Long::sum);
@@ -143,17 +147,18 @@ public class PaperDealsCalculator {
 		}
 		return delta;
 	}
-	
+
 	// 50 mmBtu
 	private final long threshold = 50_000;
-	
+
 	/**
 	 * Generate paper deals for delta map
+	 * 
 	 * @return
 	 */
-	private List<BasicPaperDealData> generateHedges(final Map<Pair<String, YearMonth>, Long> delta){
+	private List<BasicPaperDealData> generateHedges(final Map<Pair<String, YearMonth>, Long> delta) {
 		final List<BasicPaperDealData> results = new LinkedList<>();
-		if (reHedgeWithPapers && paperPnLEnabled && exposuresEnabled) {
+		if (reHedgeWithPapers) {
 			final PaperDealsLookupData lookupData = paperDealDataProvider.getPaperDealsLookupData();
 			final ExposuresLookupData exposuresLookupData = exposureDataProvider.getExposuresLookupData();
 			for (final Pair<String, YearMonth> deltaPair : delta.keySet()) {
@@ -161,14 +166,14 @@ public class PaperDealsCalculator {
 				if (exposure != 0 && (exposure > threshold || exposure < -threshold)) {
 					final YearMonth month = deltaPair.getSecond();
 					final String indexName = deltaPair.getFirst();
-					//No hedging for physical positions
+					// No hedging for physical positions
 					if (month == null)
 						continue;
 					if (indexName == null || indexName.equalsIgnoreCase("Physical"))
 						continue;
-					
+
 					final Map<String, String> hedgeCurves = lookupData.hedgeCurves.get(indexName.toLowerCase());
-					//No hedging curves
+					// No hedging curves
 					if (hedgeCurves == null || hedgeCurves.isEmpty())
 						throw new IllegalStateException(String.format("No hedging curves for %s found. Check your market index!", indexName));
 					String curveName = indexName;
@@ -190,21 +195,21 @@ public class PaperDealsCalculator {
 					if (flatCurve == null) {
 						throw new IllegalStateException(String.format("No flat curve found to hedge %s. Check your market index!", flatCurve));
 					}
-					
+
 					final LocalDate start = LocalDate.of(month.getYear(), month.getMonthValue(), 1);
 					final LocalDate end = LocalDate.of(month.getYear(), month.getMonthValue(), month.lengthOfMonth());
 					final int startTime = dateProvider.convertTime(start);
 					final ISeries series = commodityIndices.getSeries(flatCurve);
 					double price = series.evaluate(startTime).doubleValue();
 					final int paperUnitPrice = OptimiserUnitConvertor.convertToInternalPrice(price);
-					
+
 					final BasicInstrumentData instrument = null;
 					final String type = "PERIOD_AVG";
 					final String entity = "";
-					
+
 					final int year = month.getYear();
 					final String note = "Auto generated paper deal";
-					
+
 					final BasicCommodityCurveData curveData = exposuresLookupData.commodityMap.get(flatCurve.toLowerCase());
 					long quantity = (isBuy ? -1 : 1) * exposure;
 					if (curveData.getVolumeUnit() != null || !curveData.getVolumeUnit().isEmpty() || !("mmbtu".equalsIgnoreCase(curveData.getVolumeUnit()))) {
@@ -221,62 +226,61 @@ public class PaperDealsCalculator {
 				}
 			}
 		}
-		
+
 		return results;
 	}
-	
+
 	public Map<BasicPaperDealData, List<BasicPaperDealAllocationEntry>> processPaperDeals(final Map<IPortSlot, OptimiserExposureRecords> exposuresMap) {
-		
-		final Map<BasicPaperDealData, List<BasicPaperDealAllocationEntry>> paperDealsMap = processOriginalPaperDeals();
-		final Map<Pair<String, YearMonth>, Long> hedges = getHedges(paperDealsMap);
-		final Map<Pair<String, YearMonth>, Long> exposures = getExposures(exposuresMap);
-		final Map<Pair<String, YearMonth>, Long> delta = getDeltaExposuresMap(exposures, hedges);
-		final List<BasicPaperDealData> generatedHedges = generateHedges(delta);
-		final Map<BasicPaperDealData, List<BasicPaperDealAllocationEntry>> generatedPaperDealsMap = processPaperDeals(generatedHedges);
-		paperDealsMap.putAll(generatedPaperDealsMap);
-		return paperDealsMap;
+		if (paperPnLEnabled) {
+			final Map<BasicPaperDealData, List<BasicPaperDealAllocationEntry>> paperDealsMap = processOriginalPaperDeals();
+			if (exposuresEnabled) {
+				final Map<Pair<String, YearMonth>, Long> hedges = getHedges(paperDealsMap);
+				final Map<Pair<String, YearMonth>, Long> exposures = getExposures(exposuresMap);
+				final Map<Pair<String, YearMonth>, Long> delta = getDeltaExposuresMap(exposures, hedges);
+				final List<BasicPaperDealData> generatedHedges = generateHedges(delta);
+				final Map<BasicPaperDealData, List<BasicPaperDealAllocationEntry>> generatedPaperDealsMap = processPaperDeals(generatedHedges);
+				paperDealsMap.putAll(generatedPaperDealsMap);
+			}
+			return paperDealsMap;
+		}
+		return new HashMap<>();
 	}
-	
+
 	private Map<BasicPaperDealData, List<BasicPaperDealAllocationEntry>> processPaperDeals(final List<BasicPaperDealData> paperDeals) {
 		final Map<BasicPaperDealData, List<BasicPaperDealAllocationEntry>> paperDealRecords = new HashMap<>();
-		
-		if (paperPnLEnabled) {
-			final PaperDealsLookupData lookupData = paperDealDataProvider.getPaperDealsLookupData();
-			
-			for (final BasicPaperDealData basicPaperDealData : paperDeals) {
-				final Object object = paperDealRecords.put(basicPaperDealData, calculateAllocations(basicPaperDealData, lookupData, true));
-				assert object == null;
-			}
+
+		final PaperDealsLookupData lookupData = paperDealDataProvider.getPaperDealsLookupData();
+
+		for (final BasicPaperDealData basicPaperDealData : paperDeals) {
+			final Object object = paperDealRecords.put(basicPaperDealData, calculateAllocations(basicPaperDealData, lookupData, true));
+			assert object == null;
 		}
 		return paperDealRecords;
 	}
-	
+
 	private Map<BasicPaperDealData, List<BasicPaperDealAllocationEntry>> processOriginalPaperDeals() {
 		final Map<BasicPaperDealData, List<BasicPaperDealAllocationEntry>> paperDealRecords = new HashMap<>();
-		
-		if (paperPnLEnabled) {
-			final PaperDealsLookupData lookupData = paperDealDataProvider.getPaperDealsLookupData();
-			
-			for (final BasicPaperDealData basicPaperDealData : lookupData.paperDeals) {
-				final Object object = paperDealRecords.put(basicPaperDealData, calculateAllocations(basicPaperDealData, lookupData, false));
-				assert object == null;
-			}
+
+		final PaperDealsLookupData lookupData = paperDealDataProvider.getPaperDealsLookupData();
+
+		for (final BasicPaperDealData basicPaperDealData : lookupData.paperDeals) {
+			final Object object = paperDealRecords.put(basicPaperDealData, calculateAllocations(basicPaperDealData, lookupData, false));
+			assert object == null;
 		}
 		return paperDealRecords;
 	}
-	
-	private List<BasicPaperDealAllocationEntry> calculateAllocations(final BasicPaperDealData basicPaperDealData, final PaperDealsLookupData lookupData,
-			final boolean generated){
+
+	private List<BasicPaperDealAllocationEntry> calculateAllocations(final BasicPaperDealData basicPaperDealData, final PaperDealsLookupData lookupData, final boolean generated) {
 		final List<BasicPaperDealAllocationEntry> result = new LinkedList<>();
 		final String curveName = basicPaperDealData.getIndexName();
 		final Map<LocalDate, Double> settledPrices = lookupData.settledPrices.get(curveName);
 		final ISeries series = commodityIndices.getSeries(curveName);
 		final ExposuresLookupData exposuresLookupData = exposureDataProvider.getExposuresLookupData();
 		final BasicCommodityCurveData curveData = exposuresLookupData.commodityMap.get(curveName);
-		
+
 		LocalDate start = basicPaperDealData.getStart();
 		LocalDate end = basicPaperDealData.getEnd();
-		
+
 		final YearMonth month = YearMonth.from(start);
 		if ("CALENDAR".equals(basicPaperDealData.getType())) {
 			BasicPricingCalendar basicPricingCalendar = null;
@@ -304,8 +308,8 @@ public class PaperDealsCalculator {
 				return result;
 			}
 			final YearMonth originalMonth = month;
-			final YearMonth startMonth = originalMonth.plusMonths(-1 * basicInstrumentData.getSettleStartMonthsPrior());
-			
+			final YearMonth startMonth = originalMonth.plusMonths(-1L * basicInstrumentData.getSettleStartMonthsPrior());
+
 			int settlingPeriodDurationInDays = 0;
 
 			switch (basicInstrumentData.getSettlePeriodUnit()) {
@@ -327,14 +331,13 @@ public class PaperDealsCalculator {
 				startDay = 1;
 			}
 			start = getNonWeekendStart(startMonth, startDay);
-			end = start.plusDays(settlingPeriodDurationInDays - 1);
+			end = start.plusDays(settlingPeriodDurationInDays - 1L);
 		}
 		return settlePaper(basicPaperDealData, settledPrices, series, curveData, start, end, exposuresLookupData, generated);
 	}
-	
-	private List<BasicPaperDealAllocationEntry> settlePaper(final BasicPaperDealData basicPaperDealData,  final Map<LocalDate, Double> settledPrices, //
-			final ISeries series, final BasicCommodityCurveData curveData, final LocalDate extStart, final LocalDate extEnd, final ExposuresLookupData exposuresLookupData,
-			final boolean generated) {
+
+	private List<BasicPaperDealAllocationEntry> settlePaper(final BasicPaperDealData basicPaperDealData, final Map<LocalDate, Double> settledPrices, //
+			final ISeries series, final BasicCommodityCurveData curveData, final LocalDate extStart, final LocalDate extEnd, final ExposuresLookupData exposuresLookupData, final boolean generated) {
 		final List<BasicPaperDealAllocationEntry> result = new LinkedList<>();
 		final boolean isBuy = basicPaperDealData.isBuy();
 		LocalDate start = extStart;
@@ -369,14 +372,14 @@ public class PaperDealsCalculator {
 				}
 
 				final int internalPrice = OptimiserUnitConvertor.convertToInternalPrice(price);
-				final long quantity = (isBuy ? 1 : -1) * basicPaperDealData.getPaperVolume() / days;
+				final long quantity = days == 0 ? 0 : ((isBuy ? 1 : -1) * basicPaperDealData.getPaperVolume() / days);
 				long value;
 				if (generated) {
-					value = (quantity * (basicPaperDealData.getPaperUnitPrice() - internalPrice)) /1_000_000;
+					value = (quantity * (basicPaperDealData.getPaperUnitPrice() - internalPrice)) / 1_000_000;
 				} else {
-					value = (quantity * (internalPrice - basicPaperDealData.getPaperUnitPrice())) /1_000_000;
+					value = (quantity * (internalPrice - basicPaperDealData.getPaperUnitPrice())) / 1_000_000;
 				}
-				
+
 				final BasicPaperDealAllocationEntry entry = new BasicPaperDealAllocationEntry(start, quantity, internalPrice, value, settled);
 
 				if (!settled && exposuresEnabled) {
@@ -388,7 +391,6 @@ public class PaperDealsCalculator {
 					exposure.setTime(start);
 					exposure.setUnitPrice(internalPrice);
 					exposure.setVolumeNative(quantity);
-					
 
 					// Is the record unit in mmBtu? Then either it always was mmBtu OR we have
 					// converted the native units to mmBtu
@@ -408,28 +410,28 @@ public class PaperDealsCalculator {
 						}
 						exposure.setVolumeMMBTU(mmbtuVolume);
 					}
-					
-					final long nativeValue = (exposure.getVolumeNative() * exposure.getUnitPrice())/1_000_000;
+
+					final long nativeValue = (exposure.getVolumeNative() * exposure.getUnitPrice()) / 1_000_000;
 					exposure.setVolumeValueNative(nativeValue);
 					entry.getExposures().add(exposure);
 				}
-				
+
 				result.add(entry);
 			}
 			start = start.plusDays(1);
 		}
 		return result;
 	}
-	
+
 	private @NonNull LocalDate getNonWeekendStart(final YearMonth startMonth, int startDay) {
 
 		LocalDate result = LocalDate.of(startMonth.getYear(), startMonth.getMonthValue(), startDay);
 		boolean isWeekend = result.getDayOfWeek() == DayOfWeek.SATURDAY || result.getDayOfWeek() == DayOfWeek.SUNDAY;
-		while(isWeekend) {
+		while (isWeekend) {
 			result = result.plusDays(1);
 			isWeekend = result.getDayOfWeek() == DayOfWeek.SATURDAY || result.getDayOfWeek() == DayOfWeek.SUNDAY;
 		}
 		return result;
 	}
-	
+
 }

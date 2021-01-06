@@ -10,7 +10,6 @@ import java.time.Year;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
-import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.analytics.MTMRow;

@@ -33,14 +33,6 @@ public interface IConstraintChecker {
 	String getName();
 
 	/**
-	 * Check the {@link ISequences} object for constraint violations. Returns true if all constraints are satisfied. Returns false on a constraint violation.
-	 * 
-	 * @param sequences
-	 * @return Returns true if all constraints are satisfied.
-	 */
-	boolean checkConstraints(@NonNull ISequences fullSequences, @Nullable Collection<@NonNull IResource> changedResources);
-
-	/**
 	 * Check the {@link ISequences} object for constraint violations. Returns true if all constraints are satisfied. Returns false on a constraint violation. This version of {@link #checkConstraints}
 	 * takes an input list which may be used to store informative messages about any constraint violations.
 	 * 
@@ -49,7 +41,7 @@ public interface IConstraintChecker {
 	 *            List which may be used to store constraint violation messages.
 	 * @return Returns true if all constraints are satisfied.
 	 */
-	boolean checkConstraints(@NonNull ISequences fullSequences, @Nullable Collection<@NonNull IResource> changedResources, @Nullable List<String> messages);
+	boolean checkConstraints(@NonNull ISequences fullSequences, @Nullable Collection<@NonNull IResource> changedResources, @NonNull List<@NonNull String> messages);
 
 	/**
 	 * Provide the {@link IConstraintChecker} with the {@link IOptimisationData} object, where it can obtain it's source data.

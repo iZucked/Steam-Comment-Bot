@@ -108,7 +108,7 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 			this.setButton = new Button(sub, SWT.CHECK) {
 				@Override
 				protected void checkSubclass() {
-				};
+				}
 
 				@Override
 				public void setVisible(final boolean visible) {
@@ -306,11 +306,6 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 		if (inner != null) {
 			setControlEnabled(inner, innerEnabled);
 		}
-	}
-
-	@Override
-	public void setEditorEnabled(final boolean enabled) {
-		super.setEditorEnabled(enabled);
 	}
 
 	@Override

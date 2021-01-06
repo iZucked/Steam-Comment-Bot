@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.lingo.reports.views.changeset;
 
-import java.util.Set;
-
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridCellRenderer;
 import org.eclipse.nebula.widgets.grid.GridColumn;
@@ -25,13 +23,8 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.graphics.TextLayout;
 
-import com.mmxlabs.lingo.reports.views.changeset.ChangeSetKPIUtil.ResultType;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
-import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
-import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
-import com.mmxlabs.models.lng.schedule.CapacityViolationType;
-import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 
 /**
  * Modified version of org.eclipse.nebula.widgets.grid.internal.DefaultCellRenderer

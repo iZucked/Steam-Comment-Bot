@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.lingo.reports.views.portrotation;
 
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.Notifier;
@@ -13,7 +11,6 @@ import org.eclipse.emf.ecore.EObject;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
-import com.mmxlabs.lingo.reports.views.formatters.AsDateTimeFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.CostFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.Formatters;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;

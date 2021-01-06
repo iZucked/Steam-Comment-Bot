@@ -51,13 +51,7 @@ public class CargoRestrictedSlotConstraint extends AbstractModelMultiConstraint 
 							failures.add(failure);
 						}
 					}
-				} else if (permissive){
-					final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) 
-							ctx.createFailureStatus(String.format("'%s': Permitted slots list is empty.",slot.getName())));
-					failure.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__RESTRICTED_SLOTS);
-					failures.add(failure);
 				}
-				
 			}
 		}
 

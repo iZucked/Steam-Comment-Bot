@@ -10,7 +10,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.scenario.service.manifest.Manifest;
-import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public interface IWrappedCommandProvider {
 

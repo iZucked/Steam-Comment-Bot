@@ -13,21 +13,14 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 
-import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.VolumeAttributeManipulator;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.ui.manipulators.ContractTypeEnumAttributeManipulator;
-import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
-import com.mmxlabs.models.ui.tabular.manipulators.BooleanAttributeManipulator;
-import com.mmxlabs.models.ui.tabular.manipulators.DateTimeAttributeManipulator;
-import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
-import com.mmxlabs.models.ui.tabular.manipulators.TextualEnumAttributeManipulator;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 public class ContractEditorPane extends ScenarioTableViewerPane {

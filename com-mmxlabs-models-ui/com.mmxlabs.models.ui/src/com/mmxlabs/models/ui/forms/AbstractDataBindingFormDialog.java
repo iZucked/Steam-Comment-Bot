@@ -166,12 +166,12 @@ public abstract class AbstractDataBindingFormDialog extends FormDialog {
 		if (currentStatus != null && currentStatus.getSeverity() != IStatus.OK) {
 			final int type = convertType(currentStatus.getSeverity());
 
-			final List<IMessage> list = new ArrayList<IMessage>();
+			final List<IMessage> list = new ArrayList<>();
 			final Iterator<?> it = ctx.getValidationStatusProviders().iterator();
 
 			while (it.hasNext()) {
 				final ValidationStatusProvider validationStatusProvider = (ValidationStatusProvider) it.next();
-				final IStatus status = (IStatus) validationStatusProvider.getValidationStatus().getValue();
+				final IStatus status = validationStatusProvider.getValidationStatus().getValue();
 
 				if (!status.isOK()) {
 					list.add(new IMessage() {

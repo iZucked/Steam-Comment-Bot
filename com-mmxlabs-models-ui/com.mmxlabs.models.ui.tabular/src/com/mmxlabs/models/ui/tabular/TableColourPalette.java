@@ -26,7 +26,7 @@ public final class TableColourPalette {
 	private static TableColourPalette instance;
 	private static Map<String, TableColourPalette> namedInstances = new HashMap<>();
 
-	public synchronized static TableColourPalette getInstance() {
+	public static synchronized TableColourPalette getInstance() {
 		if (instance == null) {
 			instance = new TableColourPalette();
 		}

@@ -55,13 +55,6 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public abstract class AbstractVerticalReportVisualiser {
 
-	// public static RGB Black = new RGB(0, 0, 0);
-	// public static RGB Grey = new RGB(168, 168, 168);
-	// public static RGB Header_Grey = new RGB(228, 228, 228);
-	// public static RGB Light_Grey = new RGB(240, 240, 240);
-	// public static RGB Light_Orange = new RGB(255, 197, 168);
-	// public static RGB Orange = new RGB(255, 168, 64);
-
 	protected final Map<Pair<EObject, EAttribute>, LocalDateTime> dateCacheA = new HashMap<>();
 	protected final Map<Triple<EObject, Date, EAttribute>, LocalDateTime> dateCacheB = new HashMap<>();
 
@@ -81,18 +74,6 @@ public abstract class AbstractVerticalReportVisualiser {
 	}
 
 	public Color getColorFor(final LocalDate date, final SlotVisit visit) {
-		// final SlotAllocation allocation = visit.getSlotAllocation();
-		// final boolean isWindow = VerticalReportUtils.isDayOutsideActualVisit(date, visit);
-
-		// if (allocation != null) {
-		// final Slot slot = allocation.getSlot();
-		// if (slot != null) {
-		// final Cargo cargo = slot.getCargo();
-		// // if (cargo != null && cargo.isAllowRewiring() == false) {
-		// // return isWindow ? getColour(Light_Grey) : getColour(Grey);
-		// // }
-		// }
-		// }
 		return /* isWindow ? getColour(Light_Orange) : */getSlotColour(visit);
 	}
 
@@ -132,8 +113,9 @@ public abstract class AbstractVerticalReportVisualiser {
 		if (event instanceof Idle) {
 			if (((Idle) event).isLaden()) {
 				return colourPalette.getColourFor(ColourPaletteItems.Voyage_Laden_Idle, ColourElements.Background);
-			} else
+			} else {
 				return colourPalette.getColourFor(ColourPaletteItems.Voyage_Ballast_Idle, ColourElements.Background);
+			}
 		}
 
 		return null;
@@ -144,7 +126,7 @@ public abstract class AbstractVerticalReportVisualiser {
 		return null;
 	}
 
-	abstract public Color getEventForegroundColor(LocalDate element, Event event);
+	public abstract Color getEventForegroundColor(LocalDate element, Event event);
 
 	public String getEventText(final LocalDate date, final Event event) {
 		if (date == null || event == null) {
@@ -181,7 +163,7 @@ public abstract class AbstractVerticalReportVisualiser {
 
 			final SlotAllocation allocation = visit.getSlotAllocation();
 			if (allocation != null) {
-				final Slot slot = allocation.getSlot();
+				final Slot<?> slot = allocation.getSlot();
 				if (slot != null) {
 					result += " " + slot.getName();
 				}

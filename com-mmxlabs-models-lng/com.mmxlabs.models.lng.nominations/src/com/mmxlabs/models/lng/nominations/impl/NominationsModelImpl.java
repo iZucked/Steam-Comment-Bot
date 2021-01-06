@@ -6,7 +6,6 @@
  */
 package com.mmxlabs.models.lng.nominations.impl;
 
-import com.mmxlabs.models.lng.nominations.AbstractAuditItem;
 import com.mmxlabs.models.lng.nominations.AbstractNomination;
 import com.mmxlabs.models.lng.nominations.AbstractNominationSpec;
 import java.util.Collection;
@@ -18,16 +17,11 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
-import com.mmxlabs.models.lng.nominations.ContractNomination;
-import com.mmxlabs.models.lng.nominations.ContractNominationSpec;
 import com.mmxlabs.models.lng.nominations.NominationsModel;
 import com.mmxlabs.models.lng.nominations.NominationsPackage;
 import com.mmxlabs.models.lng.nominations.NominationsParameters;
-import com.mmxlabs.models.lng.nominations.SlotNomination;
-import com.mmxlabs.models.lng.nominations.SlotNominationSpec;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
 /**

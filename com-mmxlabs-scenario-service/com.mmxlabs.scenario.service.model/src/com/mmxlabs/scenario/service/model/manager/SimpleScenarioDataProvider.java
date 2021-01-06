@@ -21,13 +21,20 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.mmxlabs.scenario.service.manifest.Manifest;
 
+/**
+ * A {@link IScenarioDataProvider} implementation intended for use with scenarios created programatically rather than loaded from a .lingo file. Typically will be used in tests or on a temporary to
+ * construct a new scenario before copying into a .lingo file. There is no support for ModelReferences/ModelRecords. Closing this sdp will clean up associated data.
+ * 
+ * @author Simon Goodall
+ *
+ */
 @NonNullByDefault
 public class SimpleScenarioDataProvider implements IScenarioDataProvider {
 
-	private @NonNull final Manifest manifest;
-	private @NonNull final EObject rootModel;
-	private @NonNull final EditingDomain editingDomain;
-	private @NonNull final CommandStack commandStack;
+	private final @NonNull Manifest manifest;
+	private final @NonNull EObject rootModel;
+	private final @NonNull EditingDomain editingDomain;
+	private final @NonNull CommandStack commandStack;
 
 	private final Map<ISharedDataModelType<?>, EObject> extraData = new HashMap<>();
 	private final Map<ISharedDataModelType<?>, Object> extraDataProviders = new HashMap<>();

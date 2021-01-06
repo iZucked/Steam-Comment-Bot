@@ -22,8 +22,8 @@ public class PermissiveRestrictiveInlineEditor extends ValueListInlineEditor {
 
 	private static List<Pair<String, Object>> getDefaultValues() {
 		ArrayList<Pair<String, Object>> result = new ArrayList<>();
-		result.add(new Pair<String, Object>("Restrictive", Boolean.FALSE));
-		result.add(new Pair<String, Object>("Permissive", Boolean.TRUE));
+		result.add(new Pair<>("Disallow", Boolean.FALSE));
+		result.add(new Pair<>("Allow", Boolean.TRUE));
 		return result;
 	}
 }

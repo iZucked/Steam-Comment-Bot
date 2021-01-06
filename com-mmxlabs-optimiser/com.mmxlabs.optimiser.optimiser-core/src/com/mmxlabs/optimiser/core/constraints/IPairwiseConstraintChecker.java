@@ -4,7 +4,9 @@
  */
 package com.mmxlabs.optimiser.core.constraints;
 
-import org.eclipse.jdt.annotation.NonNull;
+import java.util.List;
+
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.core.IResource;
@@ -19,6 +21,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
  * @author hinton
  * 
  */
+@NonNullByDefault
 public interface IPairwiseConstraintChecker extends IConstraintChecker {
 	/**
 	 * Return whether or not {@code second} can immediately follow {@code first} in a sequence served by {@code resource}.
@@ -28,7 +31,7 @@ public interface IPairwiseConstraintChecker extends IConstraintChecker {
 	 * @param resource
 	 * @return
 	 */
-	boolean checkPairwiseConstraint(@NonNull ISequenceElement first, @NonNull ISequenceElement second, @NonNull IResource resource);
+	boolean checkPairwiseConstraint(ISequenceElement first,  ISequenceElement second,  IResource resource,  List<String> messages);
 
 	/**
 	 * Return a string explaining why these two items cannot follow one another
@@ -39,7 +42,7 @@ public interface IPairwiseConstraintChecker extends IConstraintChecker {
 	 * @return
 	 */
 
-	default @Nullable String explain(@NonNull ISequenceElement first, @NonNull ISequenceElement second, @NonNull IResource resource) {
+	default @Nullable String explain(ISequenceElement first,  ISequenceElement second,  IResource resource) {
 		return null;
 	}
 }

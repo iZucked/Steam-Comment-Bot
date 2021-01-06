@@ -13,7 +13,11 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.lso.multiobjective.impl.NonDominatedSolution;
 
 public class MultiObjectiveUtils {
-	
+
+	private MultiObjectiveUtils() {
+
+	}
+
 	public static boolean isDominated(List<NonDominatedSolution> archive, long[] thisFitness) {
 		List<ISequences> dominated = new LinkedList<>();
 		boolean add = true;
@@ -44,7 +48,7 @@ public class MultiObjectiveUtils {
 		}
 		return isDominated(archive, epsilonUpdatedFitness);
 	}
-	
+
 	private static boolean allObjectivesLower(long[] thisFitness, long[] otherFitness) {
 		for (int i = 0; i < thisFitness.length; i++) {
 			if (otherFitness[i] <= thisFitness[i]) {
@@ -71,7 +75,7 @@ public class MultiObjectiveUtils {
 		}
 		return false;
 	}
-	
+
 	public static List<NonDominatedSolution> filterArchive(List<NonDominatedSolution> archive, int objectiveIndex, long[] epsilon) {
 		if (archive.size() < 2) {
 			return archive;
@@ -87,11 +91,10 @@ public class MultiObjectiveUtils {
 		Collections.reverse(sortedNewArchive);
 		return sortedNewArchive;
 	}
-	
+
 	private static List<NonDominatedSolution> getSortedArchive(List<NonDominatedSolution> archive, int objectiveIndex) {
-		List<NonDominatedSolution> sortedValues = archive.stream().sorted((a, b) -> -1*Long.compare(a.getFitnesses()[objectiveIndex], b.getFitnesses()[objectiveIndex])).collect(Collectors.toList());
+		List<NonDominatedSolution> sortedValues = archive.stream().sorted((a, b) -> -1 * Long.compare(a.getFitnesses()[objectiveIndex], b.getFitnesses()[objectiveIndex])).collect(Collectors.toList());
 		return sortedValues;
 	}
-
 
 }

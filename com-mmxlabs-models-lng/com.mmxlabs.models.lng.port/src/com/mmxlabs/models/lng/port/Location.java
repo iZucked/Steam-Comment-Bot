@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.port;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.OtherNamesObject;
 import java.time.ZoneId;
-import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->

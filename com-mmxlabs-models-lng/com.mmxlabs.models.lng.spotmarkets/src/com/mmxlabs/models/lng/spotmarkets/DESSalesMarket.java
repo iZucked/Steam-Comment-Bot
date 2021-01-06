@@ -3,10 +3,7 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.spotmarkets;
-import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.types.AVesselSet;
-import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->

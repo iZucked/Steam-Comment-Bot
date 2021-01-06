@@ -34,7 +34,7 @@ public class ConstraintCheckerInstantiatorModule extends AbstractModule {
 		final ConstraintCheckerInstantiator constraintCheckerInstantiator = new ConstraintCheckerInstantiator();
 		final List<IConstraintChecker> constraintCheckers = constraintCheckerInstantiator.instantiateConstraintCheckers(constraintCheckerRegistry, enabledConstraintNames, optimisationData);
 
-		final List<IConstraintChecker> result = new ArrayList<IConstraintChecker>(constraintCheckers.size());
+		final List<IConstraintChecker> result = new ArrayList<>(constraintCheckers.size());
 		for (final IConstraintChecker checker : constraintCheckers) {
 			if (checker != null) {
 				result.add(checker);
@@ -46,7 +46,7 @@ public class ConstraintCheckerInstantiatorModule extends AbstractModule {
 
 	@Provides
 	private List<IPairwiseConstraintChecker> providePairwiseConstraintCheckers(final List<IConstraintChecker> contraintCheckers) {
-		final ArrayList<IPairwiseConstraintChecker> pairwiseCheckers = new ArrayList<IPairwiseConstraintChecker>();
+		final ArrayList<IPairwiseConstraintChecker> pairwiseCheckers = new ArrayList<>();
 		for (final IConstraintChecker checker : contraintCheckers) {
 			if (checker instanceof IPairwiseConstraintChecker) {
 				pairwiseCheckers.add((IPairwiseConstraintChecker) checker);

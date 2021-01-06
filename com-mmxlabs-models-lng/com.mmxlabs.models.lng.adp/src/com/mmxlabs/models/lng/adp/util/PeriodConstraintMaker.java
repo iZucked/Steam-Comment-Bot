@@ -7,14 +7,9 @@ package com.mmxlabs.models.lng.adp.util;
 import java.time.YearMonth;
 
 import com.mmxlabs.models.lng.adp.ADPFactory;
-import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.ContractProfile;
-import com.mmxlabs.models.lng.adp.FleetConstraint;
-import com.mmxlabs.models.lng.adp.IntervalType;
 import com.mmxlabs.models.lng.adp.PeriodDistribution;
 import com.mmxlabs.models.lng.adp.PeriodDistributionProfileConstraint;
-import com.mmxlabs.models.lng.adp.TargetCargoesOnVesselConstraint;
-import com.mmxlabs.models.lng.fleet.Vessel;
 
 public class PeriodConstraintMaker<T> {
 	private ContractProfile<?, ?> contractProfile;

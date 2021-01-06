@@ -128,9 +128,7 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 	@Override
 	public <U extends Container> @NonNull U executeAdd(@NonNull final Container viewInstance, @NonNull final Supplier<@NonNull U> factory) {
 		final @NonNull U child = factory.get();
-		RunnerHelper.syncExec(() -> {
-			viewInstance.getElements().add(child);
-		});
+		RunnerHelper.syncExec(() -> viewInstance.getElements().add(child));
 		return child;
 	}
 

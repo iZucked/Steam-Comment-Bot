@@ -56,9 +56,9 @@ public class EvaluationSettingsOverrideModule extends JsonConfiguredModule {
 	private @NonNull LatenessComponentParameters parseLatenessComponentParameters(JsonNode node) {
 		LatenessComponentParameters result = new LatenessComponentParameters();
 		
-		LatenessComponentParameters.Interval[] intervals = ILatenessComponentParameters.Interval.values();
+		ILatenessComponentParameters.Interval[] intervals = ILatenessComponentParameters.Interval.values();
 		
-		for (LatenessComponentParameters.Interval interval: intervals) {
+		for (ILatenessComponentParameters.Interval interval: intervals) {
 			String name = interval.toString();
 			
 			result.setHighWeight(interval, node.get(name).get("highWeight").asInt());

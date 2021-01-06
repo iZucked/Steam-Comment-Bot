@@ -56,9 +56,11 @@ public class Range extends Composite {
 	 */
 	private int maximumSeparation = Integer.MAX_VALUE;
 
-	private int lowerValue, upperValue;
+	private int lowerValue;
+	private int upperValue;
 
-	private final Spinner minSpinner, maxSpinner;
+	private final Spinner minSpinner;
+	private final Spinner maxSpinner;
 
 	private SelectionListener selectionListener = null;
 
@@ -73,7 +75,6 @@ public class Range extends Composite {
 					} else if (e.widget == maxSpinner) {
 						setUpperValue(maxSpinner.getSelection());
 					}
-
 				}
 
 				@Override
@@ -201,7 +202,7 @@ public class Range extends Composite {
 	 * Triggers notifies any {@link SelectionListener}s that are attached
 	 * 
 	 * @param lowerValue
-	 *            new lower value
+	 *                       new lower value
 	 */
 	public void setLowerValue(final int lowerValue) {
 		minSpinner.removeSelectionListener(getSelectionListener());
@@ -234,7 +235,7 @@ public class Range extends Composite {
 	 * Triggers notifies any {@link SelectionListener}s that are attached
 	 * 
 	 * @param upperValue
-	 *            new upper value
+	 *                       new upper value
 	 */
 	public void setUpperValue(final int upperValue) {
 		minSpinner.removeSelectionListener(getSelectionListener());

@@ -33,7 +33,6 @@ import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
-import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.chain.impl.InitialSequencesModule;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
@@ -44,7 +43,6 @@ import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
 import com.mmxlabs.scheduler.optimiser.moves.util.impl.FollowersAndPrecedersProviderImpl;
@@ -73,14 +71,12 @@ public class PairingOptimiserUnit {
 
 	private @NonNull CleanableExecutorService executorService;
 
-	private IVesselAvailability nominalMarketAvailability;
-
 	private LNGScenarioModel initialScenario;
 
 	@SuppressWarnings("null")
 	public PairingOptimiserUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final String phase, @NonNull final UserSettings userSettings,
 			@NonNull final ConstraintAndFitnessSettings constainAndFitnessSettings, @NonNull final CleanableExecutorService executorService, @NonNull final ISequences initialSequences,
-			LNGScenarioModel initialScenario, @NonNull final IMultiStateResult inputState, @NonNull final Collection<String> hints) {
+			final LNGScenarioModel initialScenario, @NonNull final IMultiStateResult inputState, @NonNull final Collection<String> hints) {
 		this.dataTransformer = dataTransformer;
 		this.phase = phase;
 		this.executorService = executorService;
@@ -99,10 +95,10 @@ public class PairingOptimiserUnit {
 			@Override
 			protected void configure() {
 				bind(IFollowersAndPreceders.class).to(FollowersAndPrecedersProviderImpl.class).in(Singleton.class);
-				HashSetLongTermSlotsEditor longTermSlotEditor = new HashSetLongTermSlotsEditor();
+				final HashSetLongTermSlotsEditor longTermSlotEditor = new HashSetLongTermSlotsEditor();
 				bind(ILongTermSlotsProvider.class).toInstance(longTermSlotEditor);
 				bind(ILongTermSlotsProviderEditor.class).toInstance(longTermSlotEditor);
-				GoogleORToolsPairingMatrixOptimiser matrixOptimiser = new GoogleORToolsPairingMatrixOptimiser();
+				final GoogleORToolsPairingMatrixOptimiser matrixOptimiser = new GoogleORToolsPairingMatrixOptimiser();
 				bind(IPairingMatrixOptimiser.class).toInstance(matrixOptimiser);
 			}
 
@@ -128,16 +124,15 @@ public class PairingOptimiserUnit {
 	public IMultiStateResult run(@NonNull final IProgressMonitor monitor) {
 		try {
 
-			@NonNull
-			ModelEntityMap modelEntityMap = dataTransformer.getModelEntityMap();
-			ILongTermSlotsProviderEditor longTermSlotsProviderEditor = injector.getInstance(ILongTermSlotsProviderEditor.class);
-			IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
-			Collection<IPortSlot> allPortSlots = SequencesToPortSlotsUtils.getAllPortSlots(dataTransformer.getOptimisationData().getSequenceElements(), portSlotProvider);
-			allPortSlots.forEach(e -> longTermSlotsProviderEditor.addLongTermSlot(e));
+			final ILongTermSlotsProviderEditor longTermSlotsProviderEditor = injector.getInstance(ILongTermSlotsProviderEditor.class);
+			final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
+			
+			final Collection<IPortSlot> allPortSlots = SequencesToPortSlotsUtils.getAllPortSlots(dataTransformer.getOptimisationData().getSequenceElements(), portSlotProvider);
+			allPortSlots.forEach(longTermSlotsProviderEditor::addLongTermSlot);
 			addLongTermOptimiserEvents(longTermSlotsProviderEditor, allPortSlots);
 
 			monitor.beginTask("Generate solutions", 100);
-			CharterInMarket charterInMarket = initialScenario.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().get(0);
+			final CharterInMarket charterInMarket = initialScenario.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().get(0);
 			final List<Future<Pair<ISequences, Long>>> futures = new LinkedList<>();
 			try {
 
@@ -166,8 +161,8 @@ public class PairingOptimiserUnit {
 				}
 
 				Collections.sort(results, (a, b) -> {
-					long al = a.getSecond();
-					long bl = b.getSecond();
+					final long al = a.getSecond();
+					final long bl = b.getSecond();
 					if (al > bl) {
 						return -1;
 					} else if (al < bl) {
@@ -191,8 +186,8 @@ public class PairingOptimiserUnit {
 		}
 	}
 
-	private void addLongTermOptimiserEvents(ILongTermSlotsProviderEditor longTermSlotsProviderEditor, Collection<IPortSlot> allPortSlots) {
-		Set<PortType> eventsPortType = Sets.newHashSet(PortType.DryDock, PortType.Maintenance, PortType.CharterOut);
+	private void addLongTermOptimiserEvents(final ILongTermSlotsProviderEditor longTermSlotsProviderEditor, final Collection<IPortSlot> allPortSlots) {
+		final Set<PortType> eventsPortType = Sets.newHashSet(PortType.DryDock, PortType.Maintenance, PortType.CharterOut);
 		allPortSlots.forEach(e -> {
 			if (eventsPortType.contains(e.getPortType())) {
 				if (e instanceof IVesselEventPortSlot) {

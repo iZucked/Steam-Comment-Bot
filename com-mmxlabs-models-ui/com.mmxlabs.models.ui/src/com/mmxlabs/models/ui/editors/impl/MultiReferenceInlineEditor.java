@@ -188,7 +188,7 @@ public class MultiReferenceInlineEditor extends UnsettableInlineEditor {
 		});
 		dlg.setTitle("Value Selection");
 
-		final ArrayList<Pair<String, EObject>> selectedOptions = new ArrayList<Pair<String, EObject>>();
+		final ArrayList<Pair<String, EObject>> selectedOptions = new ArrayList<>();
 		final Collection<EObject> sel = (Collection<EObject>) getValue();
 		if (sel != null) {
 			for (final Pair<String, EObject> p : options) {
@@ -212,7 +212,7 @@ public class MultiReferenceInlineEditor extends UnsettableInlineEditor {
 		if (dlg.open() == Window.OK) {
 			final Object[] result = dlg.getResult();
 
-			final ArrayList<EObject> resultList = new ArrayList<EObject>();
+			final ArrayList<EObject> resultList = new ArrayList<>();
 			for (final Object o : result) {
 				resultList.add(((Pair<String, EObject>) o).getSecond());
 			}

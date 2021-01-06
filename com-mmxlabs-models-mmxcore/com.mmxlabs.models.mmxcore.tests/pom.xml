@@ -11,4 +11,9 @@
 
 	<artifactId>com.mmxlabs.models.mmxcore.tests</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
+	
+	<properties>
+		<sonar.sources></sonar.sources>
+		<sonar.tests>src</sonar.tests>
+	</properties>	
 </project>

@@ -11,8 +11,6 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.inject.Injector;
 import com.google.inject.Module;
@@ -30,8 +28,6 @@ import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.NoNominalInPromptTransformer;
 
 public class LNGNoNominalInPromptTransformerUnit implements ILNGStateTransformerUnit {
-
-	private static final Logger LOG = LoggerFactory.getLogger(LNGNoNominalInPromptTransformerUnit.class);
 
 	@NonNull
 	public static IChainLink chain(@NonNull final ChainBuilder chainBuilder, @NonNull final UserSettings userSettings, final int progressTicks) {

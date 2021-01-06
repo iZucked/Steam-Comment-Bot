@@ -22,8 +22,8 @@ public class YesNoInlineEditor extends ValueListInlineEditor {
 
 	private static List<Pair<String, Object>> getDefaultValues() {
 		ArrayList<Pair<String, Object>> result = new ArrayList<>();
-		result.add(new Pair<String, Object>("No", Boolean.FALSE));
-		result.add(new Pair<String, Object>("Yes", Boolean.TRUE));
+		result.add(new Pair<>("No", Boolean.FALSE));
+		result.add(new Pair<>("Yes", Boolean.TRUE));
 		return result;
 	}
 }

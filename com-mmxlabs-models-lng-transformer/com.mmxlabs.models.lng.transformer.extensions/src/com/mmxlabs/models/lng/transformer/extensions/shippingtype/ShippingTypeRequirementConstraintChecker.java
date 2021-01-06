@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.transformer.extensions.shippingtype;
 
+import java.util.List;
+
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Inject;
@@ -29,7 +31,6 @@ public class ShippingTypeRequirementConstraintChecker extends AbstractPairwiseCo
 	private IShippingTypeRequirementProvider shippingTypeRequirementProvider;
 
 	@Inject
-	@NonNull
 	private IVesselProvider vesselProvider;
 	
 	public ShippingTypeRequirementConstraintChecker(@NonNull final String name) {
@@ -37,12 +38,13 @@ public class ShippingTypeRequirementConstraintChecker extends AbstractPairwiseCo
 	}
 
 	@Override
-	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
+	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource, final List<String> messages) {
 		CargoDeliveryType shippingType = getCargoDeliveryType(resource);
 
 		final CargoDeliveryType requiredSalesSlotShippingType = shippingTypeRequirementProvider.getSalesSlotRequiredDeliveryType(second);
 		if (requiredSalesSlotShippingType != null && requiredSalesSlotShippingType != CargoDeliveryType.ANY) {
 			if (requiredSalesSlotShippingType != shippingType) {
+				messages.add(explain(first, second, resource));
 				return false;
 			}
 		}
@@ -50,6 +52,7 @@ public class ShippingTypeRequirementConstraintChecker extends AbstractPairwiseCo
 		final CargoDeliveryType requiredPurchaseSlotShippingType = shippingTypeRequirementProvider.getPurchaseSlotRequiredDeliveryType(first);
 		if (requiredPurchaseSlotShippingType != null && requiredPurchaseSlotShippingType != CargoDeliveryType.ANY) {
 			if (requiredPurchaseSlotShippingType != shippingType) {
+				messages.add(explain(first, second, resource));
 				return false;
 			}
 		}

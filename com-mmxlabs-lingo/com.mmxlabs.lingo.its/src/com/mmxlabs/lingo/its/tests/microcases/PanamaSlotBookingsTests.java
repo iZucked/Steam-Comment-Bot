@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -169,14 +170,14 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 				injector.injectMembers(checker);
 
 				// Set blank sequences as initial state
-				checker.sequencesAccepted(SequenceHelper.createSequences(dataTransformer.getInjector()), SequenceHelper.createSequences(dataTransformer.getInjector()));
+				checker.sequencesAccepted(SequenceHelper.createSequences(dataTransformer.getInjector()), SequenceHelper.createSequences(dataTransformer.getInjector()), new ArrayList<>());
 
 				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 				@NonNull
 				final IModifiableSequences manipulatedSequences = sequencesManipulator
 						.createManipulatedSequences(SequenceHelper.createSequences(dataTransformer.getInjector(), vesselAvailability, cargo));
-				checker.checkConstraints(SequenceHelper.createSequences(dataTransformer.getInjector()), null);
-				assertTrue(checker.checkConstraints(manipulatedSequences, null));
+				checker.checkConstraints(SequenceHelper.createSequences(dataTransformer.getInjector()), null, new ArrayList<>());
+				assertTrue(checker.checkConstraints(manipulatedSequences, null, new ArrayList<>()));
 			}
 		});
 	}
@@ -892,8 +893,8 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 				final PanamaSlotsConstraintChecker checker = new PanamaSlotsConstraintChecker(PanamaSlotsConstraintCheckerFactory.NAME);//
 				injector.injectMembers(checker);
 
-				checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector()), null);
-				assertFalse(checker.checkConstraints(manipulatedSequences, null));
+				checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector()), null, new ArrayList<>());
+				assertFalse(checker.checkConstraints(manipulatedSequences, null, new ArrayList<>()));
 			}
 		});
 	}
@@ -974,8 +975,8 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 				final PanamaSlotsConstraintChecker checker = new PanamaSlotsConstraintChecker(PanamaSlotsConstraintCheckerFactory.NAME);//
 				injector.injectMembers(checker);
 
-				checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector()), null);
-				assertTrue(checker.checkConstraints(manipulatedSequences, null));
+				checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector()), null, new ArrayList<>());
+				assertTrue(checker.checkConstraints(manipulatedSequences, null, new ArrayList<>()));
 			}
 		});
 	}
@@ -1053,8 +1054,8 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 				final PanamaSlotsConstraintChecker checker = new PanamaSlotsConstraintChecker(PanamaSlotsConstraintCheckerFactory.NAME);//
 				injector.injectMembers(checker);
 
-				checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector()), null);
-				assertFalse(checker.checkConstraints(manipulatedSequences, null));
+				checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector()), null, new ArrayList<>());
+				assertFalse(checker.checkConstraints(manipulatedSequences, null, new ArrayList<>()));
 			}
 		});
 	}
@@ -1131,8 +1132,8 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 				final PanamaSlotsConstraintChecker checker = new PanamaSlotsConstraintChecker(PanamaSlotsConstraintCheckerFactory.NAME);//
 				injector.injectMembers(checker);
 
-				checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector()), null);
-				assertTrue(checker.checkConstraints(manipulatedSequences, null));
+				checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector()), null, new ArrayList<>());
+				assertTrue(checker.checkConstraints(manipulatedSequences, null, new ArrayList<>()));
 			}
 		});
 	}
@@ -1216,8 +1217,8 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 				final PanamaSlotsConstraintChecker checker = new PanamaSlotsConstraintChecker(PanamaSlotsConstraintCheckerFactory.NAME);//
 				injector.injectMembers(checker);
 
-				checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector()), null);
-				assertFalse(checker.checkConstraints(manipulatedSequences, null));
+				checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector()), null, new ArrayList<>());
+				assertFalse(checker.checkConstraints(manipulatedSequences, null, new ArrayList<>()));
 			}
 		});
 	}
@@ -1369,8 +1370,8 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 				final PanamaSlotsConstraintChecker checker = new PanamaSlotsConstraintChecker(PanamaSlotsConstraintCheckerFactory.NAME);//
 				injector.injectMembers(checker);
 
-				checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector()), null);
-				assertTrue(checker.checkConstraints(manipulatedSequences, null));
+				checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector()), null, new ArrayList<>());
+				assertTrue(checker.checkConstraints(manipulatedSequences, null, new ArrayList<>()));
 			}
 		});
 	}

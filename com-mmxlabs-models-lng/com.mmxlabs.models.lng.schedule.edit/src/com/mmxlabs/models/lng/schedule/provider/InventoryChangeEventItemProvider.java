@@ -10,8 +10,6 @@ package com.mmxlabs.models.lng.schedule.provider;
 import com.mmxlabs.models.lng.schedule.InventoryChangeEvent;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 
-import java.time.LocalDate;
-
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;

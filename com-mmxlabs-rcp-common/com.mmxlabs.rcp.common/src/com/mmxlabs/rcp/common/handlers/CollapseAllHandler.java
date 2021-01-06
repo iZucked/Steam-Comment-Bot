@@ -67,10 +67,10 @@ public class CollapseAllHandler {
 		AbstractTreeViewer viewer = null;
 		if (part.getObject() instanceof IAdaptable) {
 			final IAdaptable adaptable = (IAdaptable) part.getObject();
-			viewer = (AbstractTreeViewer) adaptable.getAdapter(AbstractTreeViewer.class);
+			viewer = adaptable.getAdapter(AbstractTreeViewer.class);
 		}
 		if (viewer == null) {
-			viewer = (AbstractTreeViewer) adapterManager.getAdapter(part.getObject(), AbstractTreeViewer.class);
+			viewer = adapterManager.getAdapter(part.getObject(), AbstractTreeViewer.class);
 		}
 		return viewer;
 	}

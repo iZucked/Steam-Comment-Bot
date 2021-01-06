@@ -63,7 +63,7 @@ public class YearMonthTextFormatterTest extends AbstractSWTBotTest {
 				Assert.assertNotNull(value);
 				if (value instanceof YearMonth) {
 					final YearMonth mDate = (YearMonth) value;
-					Assert.assertEquals(1 + month, mDate.getMonthValue());
+					Assert.assertEquals(1L + month, mDate.getMonthValue());
 					Assert.assertEquals(year, mDate.getYear());
 				} else {
 					Assert.fail("Unexpected result");

@@ -29,7 +29,7 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
  */
 public class SlotVolumeConstraint extends AbstractModelMultiConstraint {
 
-	public static int SENSIBLE_M3 = 300_000;
+	public static final int SENSIBLE_M3 = 300_000;
 
 	/*
 	 * (non-Javadoc)

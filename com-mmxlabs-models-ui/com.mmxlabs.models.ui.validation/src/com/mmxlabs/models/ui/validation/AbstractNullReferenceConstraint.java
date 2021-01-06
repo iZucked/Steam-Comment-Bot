@@ -21,12 +21,12 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 public abstract class AbstractNullReferenceConstraint extends AbstractModelConstraint {
 	private static final HashMap<EClass, Set<EReference>> cacheByClass = new HashMap<EClass, Set<EReference>>();
 	private final List<EReference> checkedReferences;
-	
+
 	public AbstractNullReferenceConstraint() {
 		checkedReferences = createCheckedReferences();
 	}
-	
-	abstract protected List<EReference> createCheckedReferences(); 
+
+	protected abstract List<EReference> createCheckedReferences();
 
 	private static synchronized Set<EReference> getReferencesToCheck(final EClass targetClass, final List<EReference> checkedReferences) {
 		Set<EReference> result = cacheByClass.get(targetClass);
@@ -69,4 +69,5 @@ public abstract class AbstractNullReferenceConstraint extends AbstractModelConst
 			}
 			return dcsd;
 		}
-	}}
+	}
+}

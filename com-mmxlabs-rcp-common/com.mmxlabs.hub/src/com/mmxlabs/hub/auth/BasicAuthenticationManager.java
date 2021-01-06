@@ -19,7 +19,7 @@ import okhttp3.Response;
 
 public class BasicAuthenticationManager extends AbstractAuthenticationManager {
 
-	public static BasicAuthenticationManager instance = null;
+	private static BasicAuthenticationManager instance = null;
 
 	private BasicAuthenticationManager() {
 	}

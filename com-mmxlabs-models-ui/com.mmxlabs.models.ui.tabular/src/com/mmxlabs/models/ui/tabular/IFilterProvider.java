@@ -4,12 +4,7 @@
  */
 package com.mmxlabs.models.ui.tabular;
 
-import java.util.List;
-
-import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.jdt.annotation.Nullable;
-
-import com.mmxlabs.common.Pair;
 
 /**
  * Implementors are used by {@link EObjectEditorViewerPane} to render (as text) and sort columns. Rendering and sorting are together because they are typically operations decided by the type of the

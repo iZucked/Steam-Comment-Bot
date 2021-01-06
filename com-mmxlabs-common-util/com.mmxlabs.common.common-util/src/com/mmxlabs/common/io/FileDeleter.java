@@ -27,8 +27,12 @@ import org.eclipse.jdt.annotation.NonNull;
  */
 public final class FileDeleter {
 
+	private FileDeleter() {
+
+	}
+
 	public static final @NonNull String LICENSE_FEATURE__SECURE_DELETE = "features:secure-delete";
-	
+
 	/**
 	 * Overwrite the contents of the file a few times with zeros, ones and random data before deleting.
 	 * 
@@ -109,6 +113,7 @@ public final class FileDeleter {
 				Files.delete(file.toPath());
 				break;
 			} catch (Exception e) {
+				// Ignore
 			}
 		}
 		// If we reached the limit, then the file still exists. Invoke delete one more time to propogate the exception.

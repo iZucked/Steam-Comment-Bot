@@ -4,9 +4,14 @@
 	<parent>
 		<artifactId>com.mmxlabs.jobmanager.parent</artifactId>
 		<groupId>com.mmxlabs.jobmanager</groupId>
-		<version>4.10.32-SNAPSHOT</version>
+		<version>4.10.40-SNAPSHOT</version>
 	</parent>
 	<artifactId>com.mmxlabs.jobmanager.tests</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
 	<name>Jobmanager Tests</name>
+	
+	<properties>
+		<sonar.sources></sonar.sources>
+		<sonar.tests>src</sonar.tests>
+	</properties>	
 </project>

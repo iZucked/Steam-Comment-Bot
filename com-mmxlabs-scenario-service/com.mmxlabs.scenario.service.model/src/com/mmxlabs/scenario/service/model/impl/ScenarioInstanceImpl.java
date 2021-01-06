@@ -7,7 +7,6 @@ package com.mmxlabs.scenario.service.model.impl;
 import com.mmxlabs.scenario.service.manifest.Manifest;
 
 import org.eclipse.emf.common.notify.Adapter;
-import org.eclipse.emf.common.notify.impl.BasicNotifierImpl.EAdapterList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 

@@ -7,12 +7,9 @@ package com.mmxlabs.rcp.common.dialogs;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -24,7 +21,6 @@ import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
@@ -262,7 +258,7 @@ public class ListSelectionDialog extends Dialog {
 	 */
 	public CellLabelProvider addColumn(final String title, final ColumnLabelProvider columnLabelProvider) {
 		final CellLabelProvider result = wrapColumnLabelProvider(columnLabelProvider, columns.isEmpty());
-		this.columns.add(new Pair<String, CellLabelProvider>(title, result));
+		this.columns.add(new Pair<>(title, result));
 		return result;
 	}
 

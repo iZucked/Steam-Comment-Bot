@@ -32,7 +32,7 @@ import com.mmxlabs.rcp.common.internal.Activator;
  */
 public class DelayedOpenFileProcessor implements Listener {
 
-	private final Queue<String> filesToOpen = new ConcurrentLinkedQueue<String>();
+	private final Queue<String> filesToOpen = new ConcurrentLinkedQueue<>();
 
 	public DelayedOpenFileProcessor(final Display display) {
 		display.addListener(SWT.OpenDocument, this);

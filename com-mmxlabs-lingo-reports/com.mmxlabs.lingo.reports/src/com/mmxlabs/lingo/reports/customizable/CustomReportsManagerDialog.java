@@ -75,11 +75,11 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	private static final String DIFF_TITLE = "In diff mode";
 
 	private static final String ROWS_TITLE = "Show rows for";
-	
+
 	private static int RESET_ID = IDialogConstants.CLIENT_ID + 1;
-	
+
 	private static int SAVE_ID = RESET_ID + 1;
-	
+
 	private static int PUBLISH_ID = SAVE_ID + 1;
 
 	/** The list contains columns that are currently visible in viewer */
@@ -93,10 +93,9 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	private List<CustomReportDefinition> teamReportDefinitions;
 
 	enum StoreType {
-		User,
-		Team
+		User, Team
 	};
-	
+
 	class Change {
 		StoreType storeType;
 		CustomReportDefinition report;
@@ -106,15 +105,15 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	};
 
 	private HashMap<String, Change> uuidToChangedReports = new HashMap<>();
-	
+
 	private StoreType currentStoreType;
-	
+
 	private CustomReportDefinition current;
-	
+
 	private CustomReportDefinition currentBeforeChanges;
-	
+
 	private Button userButton, teamButton;
-	
+
 	private TableViewer visibleViewer, nonVisibleViewer, customReportsViewer;
 
 	private Button upButton, downButton;
@@ -122,32 +121,32 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	private Button toVisibleBtt, toNonVisibleBtt;
 
 	private Button newBtn, saveBtn, publishBtn, deleteBtn, copyBtn, renameBtn, discardBtn;
-	
+
 	private Button refreshBtn;
-	
+
 	private Label widthLabel;
 	private Text widthText;
 
 	private Point tableLabelSize;
 
 	final ScheduleBasedReportBuilder builder = new ScheduleBasedReportBuilder();
-	
+
 	final List<CheckboxInfoManager> checkboxInfo = new ArrayList<>();
-	
+
 	final Image nonVisibleIcon = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/read_obj_disabled.gif").createImage();
 	final Image visibleIcon = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/read_obj.gif").createImage();
 
 	boolean changesMade = false;
 
 	boolean modeChanged = false;
-	
+
 	private final Comparator<ColumnBlock> comparator = new Comparator<>() {
 		@Override
 		public int compare(final ColumnBlock arg0, final ColumnBlock arg1) {
 			return getColumnIndex(arg0) - getColumnIndex(arg1);
 		}
 	};
-	
+
 	public CustomReportsManagerDialog(final Shell parentShell) {
 		super(parentShell);
 		initData();
@@ -157,50 +156,50 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		nonVisibleIcon.dispose();
 		visibleIcon.dispose();
 	}
-	
+
 	@Override
 	public int open() {
 		int retCode = CANCEL;
 		try {
 			retCode = super.open();
-			
-			//Could possible happen if the click on X in the top right corner.
+
+			// Could possible happen if the click on X in the top right corner.
 			if (this.unsavedOrUnpublishedChanges()) {
-				int savePublishNow = MessageDialog.open(MessageDialog.QUESTION_WITH_CANCEL, getShell(), 
-						"Warning", "Some changes have been made to user reports without changes or team reports without publishing. Save and/or publish these now?", SWT.NONE, "Save/Publish", "Cancel");
+				int savePublishNow = MessageDialog.open(MessageDialog.QUESTION_WITH_CANCEL, getShell(), "Warning",
+						"Some changes have been made to user reports without changes or team reports without publishing. Save and/or publish these now?", SWT.NONE, "Save/Publish", "Cancel");
 				if (savePublishNow == 0) {
 					this.savedOrPublishAnyChanges();
 				}
 			}
-			
+
 			if (retCode == OK && this.changesMade) {
-				int restartNow = MessageDialog.open(MessageDialog.QUESTION_WITH_CANCEL, getShell(), 
-						"Warning", "LiNGO must be restarted to update views menus. Restart now?", SWT.NONE, "Restart now", "Later");
+				int restartNow = MessageDialog.open(MessageDialog.QUESTION_WITH_CANCEL, getShell(), "Warning", "LiNGO must be restarted to update views menus. Restart now?", SWT.NONE, "Restart now",
+						"Later");
 				if (restartNow == 0) {
 					Workbench.getInstance().restart();
 				}
 			}
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			logger.error("Problem opening CustomReportsManagerDialog", ex);
 		}
 		return retCode;
 	}
-	
+
+	@Override
 	protected void okPressed() {
 		if (!this.checkForUnsavedUnpublishedChanges()) {
-			//Discard changes and exit the dialog.
+			// Discard changes and exit the dialog.
 			super.okPressed();
 		}
 	}
-	
+
 	void initData() {
 		this.loadDefaults();
-		
+
 		this.userReportDefinitions = CustomReportsRegistry.getInstance().readUserCustomReportDefinitions();
 
 		this.teamReportDefinitions = CustomReportsRegistry.getInstance().readTeamCustomReportDefinitions();
-		
+
 		addDialogCheckBoxes();
 	}
 
@@ -209,17 +208,17 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		super.configureShell(shell);
 		shell.setText("Reports Manager");
 	}
-	
+
 	@Override
 	protected void createButtonsForButtonBar(final Composite parent) {
 		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
 	}
-	
+
 	protected void addDialogCheckBoxes() {
 		this.addCheckBoxInfo(ROWS_TITLE, builder.ROW_FILTER_ALL, () -> builder.getRowFilterInfo());
 		this.addCheckBoxInfo(DIFF_TITLE, builder.DIFF_FILTER_ALL, () -> builder.getDiffFilterInfo());
 	}
-	
+
 	@Override
 	protected Control createDialogArea(final Composite parent) {
 		final Composite dialogArea = (Composite) super.createDialogArea(parent);
@@ -248,9 +247,9 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		createCustomReportsTable(composite);
-		
+
 		createNewSavePublishDeleteButtons(composite);
-		
+
 		createInvisibleTable(composite);
 		createMoveButtons(composite);
 		createVisibleTable(composite);
@@ -259,20 +258,19 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		for (final CheckboxInfoManager manager : checkboxInfo) {
 			createCheckBoxes(composite, manager);
 		}
-		// createWidthArea(composite);
+
 		final Object element = visibleViewer.getElementAt(0);
-		if (element != null)
+		if (element != null) {
 			visibleViewer.setSelection(new StructuredSelection(element));
+		}
 		visibleViewer.getTable().setFocus();
-	
-		
+
 		if (this.userButton.getSelection()) {
 			activateUserMode();
-		}
-		else {
+		} else {
 			activateTeamMode();
 		}
-	
+
 		return composite;
 	}
 
@@ -327,7 +325,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		layout.marginHeight = 0;
 		bttArea.setLayout(layout);
 		bttArea.setLayoutData(new GridData(SWT.NONE, SWT.CENTER, false, true));
-		
+
 		newBtn = new Button(bttArea, SWT.PUSH);
 		newBtn.setText("New");
 		newBtn.addListener(SWT.Selection, new Listener() {
@@ -350,7 +348,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		});
 		setButtonLayoutData(copyBtn);
 		copyBtn.setEnabled(false);
-		
+
 		renameBtn = new Button(bttArea, SWT.PUSH);
 		renameBtn.setText("Rename");
 		renameBtn.addListener(SWT.Selection, new Listener() {
@@ -372,63 +370,43 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		});
 		setButtonLayoutData(discardBtn);
 		discardBtn.setEnabled(false);
-		
+
 		deleteBtn = new Button(bttArea, SWT.PUSH);
 		deleteBtn.setText("Delete");
-		deleteBtn.addListener(SWT.Selection, new Listener() {
-			@Override
-			public void handleEvent(final Event event) {
-				handleDeleteBtn(event);
-			}
-		});
+		deleteBtn.addListener(SWT.Selection, CustomReportsManagerDialog.this::handleDeleteBtn);
 		setButtonLayoutData(deleteBtn);
 		deleteBtn.setEnabled(false);
 
-		//This button doesn't do anything, just placed to create a button sized gap between buttons.
+		// This button doesn't do anything, just placed to create a button sized gap between buttons.
 		Button spacerBtn = new Button(bttArea, SWT.PUSH);
 		setButtonLayoutData(spacerBtn);
 		spacerBtn.setVisible(false);
-		
+
 		saveBtn = new Button(bttArea, SWT.PUSH);
 		saveBtn.setText("Save");
-		saveBtn.addListener(SWT.Selection, new Listener() {
-			@Override
-			public void handleEvent(final Event event) {
-				handleSaveBtn(event);
-			}
-		});
+		saveBtn.addListener(SWT.Selection, CustomReportsManagerDialog.this::handleSaveBtn);
 		setButtonLayoutData(saveBtn);
 		saveBtn.setEnabled(false);
 
 		publishBtn = new Button(bttArea, SWT.PUSH);
 		publishBtn.setText("Publish");
-		publishBtn.addListener(SWT.Selection, new Listener() {
-			@Override
-			public void handleEvent(final Event event) {
-				handlePublishBtn(event);
-			}
-		});
+		publishBtn.addListener(SWT.Selection,  CustomReportsManagerDialog.this::handlePublishBtn);
 		setButtonLayoutData(publishBtn);
-		publishBtn.setEnabled(false);	
-	
+		publishBtn.setEnabled(false);
+
 		refreshBtn = new Button(bttArea, SWT.PUSH);
 		refreshBtn.setText("Refresh");
-		refreshBtn.addListener(SWT.Selection, new Listener() {
-			@Override
-			public void handleEvent(final Event event) {
-				handleRefreshBtn(event);
-			}
-		});
+		refreshBtn.addListener(SWT.Selection,  CustomReportsManagerDialog.this::handleRefreshBtn);
 		setButtonLayoutData(refreshBtn);
 		refreshBtn.setEnabled(true);
-		
+
 		return bttArea;
 	}
-	
+
 	protected void handleRefreshBtn(Event event) {
 		if (this.teamButton.getSelection()) {
-			
-			//Check for changes first.
+
+			// Check for changes first.
 			if (!this.checkForUnsavedUnpublishedChanges()) {
 				try {
 					CustomReportsRegistry.getInstance().refreshTeamReports();
@@ -438,7 +416,8 @@ public class CustomReportsManagerDialog extends TrayDialog {
 				}
 				try {
 					Thread.sleep(1000);
-				} catch (InterruptedException e) {}
+				} catch (InterruptedException e) {
+				}
 
 				this.teamReportDefinitions = CustomReportsRegistry.getInstance().readTeamCustomReportDefinitions();
 				updateReports(false);
@@ -451,48 +430,45 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	}
 
 	private void displayErrorDialog(String errorMessage) {
-		MessageDialog.openError(getShell(), "Error", errorMessage);	
+		MessageDialog.openError(getShell(), "Error", errorMessage);
 	}
-	
+
 	private void discardCurrentlySelectedChanges() {
 		Change change = this.uuidToChangedReports.get(this.current.getUuid());
 		String uuidDiscarded = this.current.getUuid();
 		boolean newReport = (change != null && change.newReport);
 		if (newReport) {
-			//Remove newly created, but unsaved report.
+			// Remove newly created, but unsaved report.
 			deleteReport(this.currentStoreType, this.current);
-		}
-		else {
-			//Undo any changes to the visible / hidden columns by reloading the currently selected report definition.
+		} else {
+			// Undo any changes to the visible / hidden columns by reloading the currently selected report definition.
 			if (this.currentStoreType == StoreType.User) {
 				int index = this.userReportDefinitions.indexOf(this.current);
 				this.userReportDefinitions.set(index, this.currentBeforeChanges);
-			}
-			else if (this.currentStoreType == StoreType.Team) {
+			} else if (this.currentStoreType == StoreType.Team) {
 				int index = this.teamReportDefinitions.indexOf(this.current);
-				this.teamReportDefinitions.set(index, this.currentBeforeChanges);			
-			}
-			else {
+				this.teamReportDefinitions.set(index, this.currentBeforeChanges);
+			} else {
 				logger.error("Unimplemented mode in protected void CustomReportsManagerDialog.handleDiscardBtn(Event event)");
 			}
 			this.current = this.currentBeforeChanges;
-			this.currentBeforeChanges = (CustomReportDefinition)this.current.clone();
+			this.currentBeforeChanges = (CustomReportDefinition) this.current.clone();
 			updateViewWithReportDefinition(this.current);
 		}
-		
-		//Have to make some changes to be able to discard again.
+
+		// Have to make some changes to be able to discard again.
 		this.discardBtn.setEnabled(false);
 		this.saveBtn.setEnabled(false);
 		this.publishBtn.setEnabled(false);
-		
-		//Changes undone, so not pending anymore - clear the discarded change only (as could be two changes
-		//e.g. in the case where new report, copy without saving both.
+
+		// Changes undone, so not pending anymore - clear the discarded change only (as could be two changes
+		// e.g. in the case where new report, copy without saving both.
 		this.uuidToChangedReports.remove(uuidDiscarded);
-		
-		//Below is only set if changes saved or published already, in which case
-		//we do not want to un-set it as we want LiNGO restarted in that case to
-		//reflect changes in the relevant reports.
-		//this.changesMade = false;
+
+		// Below is only set if changes saved or published already, in which case
+		// we do not want to un-set it as we want LiNGO restarted in that case to
+		// reflect changes in the relevant reports.
+		// this.changesMade = false;
 	}
 
 	private void deleteReport(StoreType storeType, CustomReportDefinition toDelete) {
@@ -512,15 +488,14 @@ public class CustomReportsManagerDialog extends TrayDialog {
 					CustomReportsRegistry.getInstance().deleteTeamReport(toDelete);
 					CustomReportsRegistry.getInstance().removeFromDatahub(toDelete);
 					this.teamReportDefinitions.remove(toDelete);
-				}
-				catch (Exception ex) {
-					final String errorMessage = "Error connecting to datahub whilst attempting to remove report \""+toDelete.getName()+"\" from team folder. Please check error log for more details.";
+				} catch (Exception ex) {
+					final String errorMessage = "Error connecting to datahub whilst attempting to remove report \"" + toDelete.getName()
+							+ "\" from team folder. Please check error log for more details.";
 					displayErrorDialog(errorMessage);
 					logger.error(errorMessage, ex);
 				}
-			}
-			else {
-				//New report.
+			} else {
+				// New report.
 				CustomReportsRegistry.getInstance().deleteTeamReport(toDelete);
 				this.teamReportDefinitions.remove(toDelete);
 			}
@@ -536,33 +511,30 @@ public class CustomReportsManagerDialog extends TrayDialog {
 			changesMade = true;
 		}
 	}
-	
+
 	void handleRenameBtn(Event event) {
 		if (this.current != null) {
-			final InputDialog dialog = new InputDialog(this.getShell(), "Rename the currently selected report", "Choose a new name for the report.", 
-					this.current.getName(), getReportNameValidator());
-		
+			final InputDialog dialog = new InputDialog(this.getShell(), "Rename the currently selected report", "Choose a new name for the report.", this.current.getName(), getReportNameValidator());
+
 			if (dialog.open() == Window.OK) {
 				final String name = dialog.getValue();
 				this.current.setName(name);
 				if (this.currentStoreType == StoreType.User) {
 					CustomReportsRegistry.getInstance().writeToJSON(this.current);
 					this.changesMade = true;
-				}
-				else {
+				} else {
 					try {
 						CustomReportsRegistry.getInstance().publishReport(this.current);
 						this.changesMade = true;
 					} catch (Exception e) {
-						String errorMsg = "Problem publishing renamed report \""+this.current.getName()+"\" to DataHub.";
+						String errorMsg = "Problem publishing renamed report \"" + this.current.getName() + "\" to DataHub.";
 						logger.error(errorMsg, e);
 						displayErrorDialog(errorMsg);
-					}					
+					}
 				}
 				this.updateViewWithReportDefinition(this.current);
 			}
-		}
-		else {
+		} else {
 			logger.error("No report currently selected to rename.");
 		}
 	}
@@ -571,24 +543,24 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		List<String> existingNames = getExistingReportNames();
 		return new CustomReportNameValidator(existingNames);
 	}
-	
+
 	private List<String> getExistingReportNames() {
 		List<String> existingNames = new ArrayList<>();
 		this.getUserReportDefinitions().stream().forEach(r -> existingNames.add(r.getName().toLowerCase()));
 		this.getTeamReportDefinitions().stream().forEach(r -> existingNames.add(r.getName().toLowerCase()));
 		return existingNames;
 	}
-	
+
 	protected void handleDeleteBtn(Event event) {
 		if (this.current != null) {
-			if (!MessageDialog.openQuestion(getShell(), "Are you sure?", "Are you sure you want to delete the report \""+current.getName()+"\"")) {
+			if (!MessageDialog.openQuestion(getShell(), "Are you sure?", "Are you sure you want to delete the report \"" + current.getName() + "\"")) {
 				return;
 			}
 		}
-		
+
 		IStructuredSelection selected = this.customReportsViewer.getStructuredSelection();
 		if (selected != null && selected.size() == 1) {
-			CustomReportDefinition toDelete = (CustomReportDefinition)selected.getFirstElement();
+			CustomReportDefinition toDelete = (CustomReportDefinition) selected.getFirstElement();
 			StoreType storeType = userButton.getSelection() ? StoreType.User : StoreType.Team;
 			this.deleteReport(storeType, toDelete);
 			this.uuidToChangedReports.remove(current.getUuid());
@@ -604,209 +576,203 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		}
 		return null;
 	}
-	
-	
+
 	protected void handlePublishBtn(Event event) {
 		IStructuredSelection selected = this.customReportsViewer.getStructuredSelection();
 		if (selected != null && selected.size() == 1) {
-			//Update view with latest.
-			CustomReportDefinition rd = (CustomReportDefinition)selected.getFirstElement();
+			// Update view with latest.
+			CustomReportDefinition rd = (CustomReportDefinition) selected.getFirstElement();
 			updateReportDefinitionWithChangesFromDialog(rd);
-			
-			//Add to team case.
+
+			// Add to team case.
 			if (this.currentStoreType == StoreType.User) {
 				Change change = this.uuidToChangedReports.get(rd.getUuid());
 				if (change != null && !change.saved) {
-					boolean save = MessageDialog.open(MessageDialog.QUESTION, this.getShell(), "Save before publish?", "Report "+rd.getName()+" has unsaved changed. Save before publishing?", SWT.NONE);
-					
+					boolean save = MessageDialog.open(MessageDialog.QUESTION, this.getShell(), "Save before publish?", "Report " + rd.getName() + " has unsaved changed. Save before publishing?",
+							SWT.NONE);
+
 					if (save) {
-						//Save down, before publishing for user report.
+						// Save down, before publishing for user report.
 						CustomReportsRegistry.getInstance().writeToJSON(rd);
 						change.saved = true;
 						this.changesMade = true;
 						this.saveBtn.setEnabled(false);
 					}
 				}
-				
-				//Check if report with that name already exists and if so prompt the user if they want to overwrite it or cancel.
+
+				// Check if report with that name already exists and if so prompt the user if they want to overwrite it or cancel.
 				CustomReportDefinition existingReport = this.checkForTeamReport(rd.getName());
 				if (existingReport == null) {
 
-					//If we are adding a user report to team, we need to clone it and create a new UUID as per PS, so
-					//that team version appears separately from user version.
+					// If we are adding a user report to team, we need to clone it and create a new UUID as per PS, so
+					// that team version appears separately from user version.
 					CustomReportDefinition copy = new CustomReportDefinition();
-					copy.setUuid(ScheduleSummaryReport.UUID_PREFIX+UUID.randomUUID().toString());
+					copy.setUuid(ScheduleSummaryReport.UUID_PREFIX + UUID.randomUUID().toString());
 					copy.setName(rd.getName());
-					copy.setType("ScheduleSummaryReport");							
+					copy.setType("ScheduleSummaryReport");
 					updateReportDefinitionWithChangesFromDialog(copy);
 
 					rd = copy;
-				}
-				else {
-					//If it is already a team report, ask the user if they want to overwrite it with their new one.
-					int overwrite = MessageDialog.open(MessageDialog.QUESTION_WITH_CANCEL, getShell(), "Overwrite existing team report?", 
-							"There is an existing team report "+existingReport.getName()+". Do you want to overwrite this?", SWT.NONE, "Overwrite", "Cancel");
-					
+				} else {
+					// If it is already a team report, ask the user if they want to overwrite it with their new one.
+					int overwrite = MessageDialog.open(MessageDialog.QUESTION_WITH_CANCEL, getShell(), "Overwrite existing team report?",
+							"There is an existing team report " + existingReport.getName() + ". Do you want to overwrite this?", SWT.NONE, "Overwrite", "Cancel");
+
 					if (overwrite == 0) {
 						updateReportDefinitionWithChangesFromDialog(existingReport);
 						rd = existingReport;
-					}
-					else {
-						//Cancel and do nothing.
+					} else {
+						// Cancel and do nothing.
 						return;
 					}
 				}
 			}
 			try {
-				
+
 				CustomReportsRegistry.getInstance().publishReport(rd);
 
-				//Add to team case.
+				// Add to team case.
 				if (this.currentStoreType == StoreType.User) {
 					this.addChangedReport(rd);
 					this.uuidToChangedReports.get(rd.getUuid()).storeType = StoreType.Team;
 				}
-					
-				//Make sure we refresh team reports if team reports selected.
+
+				// Make sure we refresh team reports if team reports selected.
 				this.changesMade = true;
 				Change change = this.uuidToChangedReports.get(rd.getUuid());
 				if (change != null) {
-					//If team report or it has already been saved, then set disable discard button again.
-					if (this.teamButton.getSelection() || change.saved)  {
+					// If team report or it has already been saved, then set disable discard button again.
+					if (this.teamButton.getSelection() || change.saved) {
 						this.discardBtn.setEnabled(false);
 					}
 					this.uuidToChangedReports.get(rd.getUuid()).published = true;
 					this.uuidToChangedReports.get(rd.getUuid()).newReport = false;
 				}
 				this.publishBtn.setEnabled(false);
-				
-			} catch(Exception e) {
-				String errorMsg = "Problem publishing report \""+rd.getName()+"\" to DataHub.";
+
+			} catch (Exception e) {
+				String errorMsg = "Problem publishing report \"" + rd.getName() + "\" to DataHub.";
 				logger.error(errorMsg, e);
 				displayErrorDialog(errorMsg);
-			} 	
+			}
 		}
 	}
 
 	private String getUserCopyName(String currentReportName) {
 		int copyNo = 0;
-		
+
 		String copyName = currentReportName + " (User Copy)";
 		boolean copyNameFound = false;
-		
-		//Check user folder for name.
+
+		// Check user folder for name.
 		while (!copyNameFound) {
 			copyNameFound = true;
 			for (CustomReportDefinition crd : this.userReportDefinitions) {
 				if (crd.getName().equalsIgnoreCase(copyName)) {
 					copyNo++;
-					copyName = currentReportName + " (User Copy "+Integer.toString(copyNo)+")";
+					copyName = currentReportName + " (User Copy " + Integer.toString(copyNo) + ")";
 					copyNameFound = false;
 					break;
 				}
 			}
 		}
-		
+
 		return copyName;
 	}
-	
+
 	private void handleSaveBtn(Event event) {
 		IStructuredSelection selected = this.customReportsViewer.getStructuredSelection();
 		if (selected != null && selected.size() == 1) {
-			
-			CustomReportDefinition toSave = (CustomReportDefinition)selected.getFirstElement();
-					
-			//If we are copying from team folder, clone and change UUID.
+
+			CustomReportDefinition toSave = (CustomReportDefinition) selected.getFirstElement();
+
+			// If we are copying from team folder, clone and change UUID.
 			if (teamButton.getSelection()) {
-				//Create report definition object with defaults and save.
+				// Create report definition object with defaults and save.
 				CustomReportDefinition copy = new CustomReportDefinition();
-				
-				copy.setUuid(ScheduleSummaryReport.UUID_PREFIX+UUID.randomUUID().toString());
+
+				copy.setUuid(ScheduleSummaryReport.UUID_PREFIX + UUID.randomUUID().toString());
 				String copyName = getUserCopyName(toSave.getName());
 				copy.setName(copyName);
 				copy.setType("ScheduleSummaryReport");
-							
+
 				updateReportDefinitionWithChangesFromDialog(copy);
 				this.addChangedReport(copy);
 				this.uuidToChangedReports.get(copy.getUuid()).newReport = true;
 				this.uuidToChangedReports.get(copy.getUuid()).storeType = StoreType.User;
 				this.userReportDefinitions.add(copy);
 				toSave = copy;
-			}
-			else {
-				//Update view with latest.
+			} else {
+				// Update view with latest.
 				updateReportDefinitionWithChangesFromDialog(toSave);
 			}
-			
+
 			CustomReportsRegistry.getInstance().writeToJSON(toSave);
 			changesMade = true;
 			this.discardBtn.setEnabled(false);
-			//Prevent discard beyond saved state.
-			this.currentBeforeChanges = (CustomReportDefinition)this.current.clone();
-			this.uuidToChangedReports.get(toSave.getUuid()).saved = true;		
+			// Prevent discard beyond saved state.
+			this.currentBeforeChanges = (CustomReportDefinition) this.current.clone();
+			this.uuidToChangedReports.get(toSave.getUuid()).saved = true;
 			this.uuidToChangedReports.get(toSave.getUuid()).newReport = false;
-			
+
 			this.saveBtn.setEnabled(false);
 		}
 	}
-	
-	private void handleNewBtn(Event event) {	
+
+	private void handleNewBtn(Event event) {
 		createNewViewDefinition(false, "New custom report view");
 	}
 
-	private void handleCopyBtn(Event event) {	
+	private void handleCopyBtn(Event event) {
 		String nameHint = null;
 		if (this.current != null) {
 			nameHint = this.current.getName() + " (Copy)";
 		}
 		createNewViewDefinition(true, "Copy custom report view", nameHint);
 	}
-	
+
 	private void createNewViewDefinition(boolean initialiseWithSelectedReport, String title) {
 		createNewViewDefinition(false, "New custom report view", null);
 	}
-	
+
 	private void createNewViewDefinition(boolean initialiseWithSelectedReport, String title, String nameHint) {
 		if (nameHint == null) {
-			nameHint =  "<Enter a new view name>";
+			nameHint = "<Enter a new view name>";
 		}
-		final InputDialog dialog = new InputDialog(this.getShell(), title, "Choose name for the new custom report.", nameHint,
-				getReportNameValidator());
-	
+		final InputDialog dialog = new InputDialog(this.getShell(), title, "Choose name for the new custom report.", nameHint, getReportNameValidator());
+
 		if (dialog.open() == Window.OK) {
 			final String name = dialog.getValue();
 
-			//Create report definition object with defaults and save.
+			// Create report definition object with defaults and save.
 			CustomReportDefinition reportDefinition = new CustomReportDefinition();
-			
-			reportDefinition.setUuid(ScheduleSummaryReport.UUID_PREFIX+UUID.randomUUID().toString());
+
+			reportDefinition.setUuid(ScheduleSummaryReport.UUID_PREFIX + UUID.randomUUID().toString());
 			reportDefinition.setName(name);
 			reportDefinition.setType("ScheduleSummaryReport");
-			
+
 			if (!initialiseWithSelectedReport) {
 				this.loadDefaults();
 			}
-			
+
 			updateReportDefinitionWithChangesFromDialog(reportDefinition);
 			this.addChangedReport(reportDefinition);
 			this.uuidToChangedReports.get(reportDefinition.getUuid()).newReport = true;
-			
-			//Add to report definitions list and select it.
+
+			// Add to report definitions list and select it.
 			if (this.userButton.getSelection()) {
 				this.userReportDefinitions.add(reportDefinition);
 				this.customReportsViewer.setInput(this.userReportDefinitions);
-			}
-			else if (this.teamButton.getSelection()) {
+			} else if (this.teamButton.getSelection()) {
 				this.teamReportDefinitions.add(reportDefinition);
-				this.customReportsViewer.setInput(this.teamReportDefinitions);				
-			}
-			else {
+				this.customReportsViewer.setInput(this.teamReportDefinitions);
+			} else {
 				logger.error("Mode not fully implemented for: private void CustomReportsManagerDialog.createNewViewDefinition(boolean initialiseWithSelectedReport, String title)");
 			}
 			this.customReportsViewer.setSelection(new StructuredSelection(reportDefinition));
 		}
 	}
-	
+
 	private void addChangedReport(CustomReportDefinition rd) {
 		Change change = new Change();
 		change.report = rd;
@@ -815,7 +781,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		change.storeType = this.userButton.getSelection() ? StoreType.User : StoreType.Team;
 		this.uuidToChangedReports.put(rd.getUuid(), change);
 	}
-	
+
 	private boolean unsavedOrUnpublishedChanges() {
 		for (String uuid : this.uuidToChangedReports.keySet()) {
 			if (unsavedOrUnpublishedChanges(uuid)) {
@@ -836,10 +802,10 @@ public class CustomReportsManagerDialog extends TrayDialog {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	private void savedOrPublishAnyChanges() {
 		for (String uuid : this.uuidToChangedReports.keySet()) {
 			Change change = this.uuidToChangedReports.get(uuid);
@@ -851,16 +817,16 @@ public class CustomReportsManagerDialog extends TrayDialog {
 				try {
 					CustomReportsRegistry.getInstance().publishReport(change.report);
 				} catch (Exception e) {
-					String errorMsg = "Problem publishing report \""+change.report.getName()+"\" to DataHub.";
+					String errorMsg = "Problem publishing report \"" + change.report.getName() + "\" to DataHub.";
 					logger.error(errorMsg, e);
-					displayErrorDialog(errorMsg);				
+					displayErrorDialog(errorMsg);
 				}
-				//FIXME: As per SG, do not restart LiNGO, as upload may not have completed in time.
-				//If we crack how to do dynamic update of views menus, this would resolve this.
+				// FIXME: As per SG, do not restart LiNGO, as upload may not have completed in time.
+				// If we crack how to do dynamic update of views menus, this would resolve this.
 			}
 		}
 	}
-	
+
 	private void updateReportDefinitionWithChangesFromDialog(CustomReportDefinition reportDefinition) {
 		reportDefinition.getColumns().clear();
 		for (ColumnBlock cb : getVisible()) {
@@ -874,8 +840,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 						reportDefinition.getFilters().add(oi.type);
 					}
 				}
-			}
-			else if (cbim.title.equals(DIFF_TITLE)) {
+			} else if (cbim.title.equals(DIFF_TITLE)) {
 				reportDefinition.getDiffOptions().clear();
 				for (OptionInfo oi : cbim.options) {
 					if (oi.button.getSelection()) {
@@ -885,7 +850,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 			}
 		}
 	}
-	
+
 	/**
 	 * The Up and Down button to change column ordering.
 	 * 
@@ -964,7 +929,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		widthText.setLayoutData(gridData);
 		return widthText;
 	}
-	
+
 	/**
 	 * Creates the table that lists out custom reports in the viewer
 	 * 
@@ -978,7 +943,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		gridLayout.marginHeight = 0;
 		composite.setLayout(gridLayout);
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
+
 		this.userButton = new Button(composite, SWT.RADIO);
 		this.userButton.setText("User reports");
 		this.userButton.setSelection(true);
@@ -991,8 +956,8 @@ public class CustomReportsManagerDialog extends TrayDialog {
 
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
-				
-			}	
+
+			}
 		});
 		tableLabelSize = userButton.computeSize(SWT.DEFAULT, SWT.DEFAULT);
 
@@ -1008,16 +973,16 @@ public class CustomReportsManagerDialog extends TrayDialog {
 
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
-				
+
 			}
 		});
-			
+
 		if (!CustomReportsRegistry.getInstance().hasTeamReportsCapability()) {
-			//Hide the team reports view if hub does not support or user does not have permissions.
+			// Hide the team reports view if hub does not support or user does not have permissions.
 			this.userButton.setVisible(false);
 			this.teamButton.setVisible(false);
 		}
-		
+
 		final Table table = new Table(composite, SWT.BORDER | SWT.SINGLE);
 
 		final GridData data = new GridData(SWT.FILL, SWT.FILL, true, true);
@@ -1075,8 +1040,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		this.modeChanged = true;
 		if (CustomReportsRegistry.getInstance().hasTeamReportsPublishPermission()) {
 			this.newBtn.setEnabled(true);
-		}
-		else {
+		} else {
 			this.newBtn.setEnabled(false);
 		}
 		this.saveBtn.setEnabled(false);
@@ -1090,16 +1054,17 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		this.refreshBtn.setVisible(true);
 		disableEditingControls();
 	}
-	
+
 	/**
 	 * Update the reports view
-	 * @param userReports - true, if we want to display user's own reports, false, to display team reports
+	 * 
+	 * @param userReports
+	 *                        - true, if we want to display user's own reports, false, to display team reports
 	 */
 	protected void updateReports(boolean userReports) {
 		if (userReports) {
 			customReportsViewer.setInput(getUserReportDefinitions());
-		}
-		else {
+		} else {
 			this.teamReportDefinitions = CustomReportsRegistry.getInstance().readTeamCustomReportDefinitions();
 			customReportsViewer.setInput(getTeamReportDefinitions());
 		}
@@ -1107,20 +1072,20 @@ public class CustomReportsManagerDialog extends TrayDialog {
 
 	private void handleCustomReportSelection(ISelection selection) {
 		final List<CustomReportDefinition> selectedReports = ((IStructuredSelection) selection).toList();
-		
-		//It is possible in some cases when moving from team to user reports to select more than 1 report, but we are
-		//only interested in the case when 1 report has been selected and the list box itself should in most cases
-		//enforce this SINGLE selection property also.
+
+		// It is possible in some cases when moving from team to user reports to select more than 1 report, but we are
+		// only interested in the case when 1 report has been selected and the list box itself should in most cases
+		// enforce this SINGLE selection property also.
 		if (selectedReports.size() == 1 && (selectedReports.get(0) != this.current || modeChanged)) {
-			//Check for unsaved changes to previously selected report.
+			// Check for unsaved changes to previously selected report.
 			if (selectedReports.size() == 1 && selectedReports.get(0) != this.current && !checkForUnsavedUnpublishedChanges()) {
 				this.currentStoreType = this.userButton.getSelection() ? StoreType.User : StoreType.Team;
 				this.current = selectedReports.get(0);
-				this.currentBeforeChanges = (CustomReportDefinition)this.current.clone();
+				this.currentBeforeChanges = (CustomReportDefinition) this.current.clone();
 				updateViewWithReportDefinition(selectedReports.get(0));
 			}
-			
-			//Determine if report needs save or publish action
+
+			// Determine if report needs save or publish action
 			boolean needsSaving = false;
 			boolean needsPublishing = false;
 			final Change currentChange = uuidToChangedReports.get(current.uuid);
@@ -1132,44 +1097,42 @@ public class CustomReportsManagerDialog extends TrayDialog {
 					needsPublishing = true;
 				}
 			}
-				
-			//Only enable publish/write access, if in user mode or if user has team reports publish permission.
+
+			// Only enable publish/write access, if in user mode or if user has team reports publish permission.
 			if (this.userButton.getSelection()) {
-				//User reports mode.
+				// User reports mode.
 				this.saveBtn.setEnabled(needsSaving);
 				this.deleteBtn.setEnabled(true);
 				this.copyBtn.setEnabled(true);
-				this.renameBtn.setEnabled(true);		
+				this.renameBtn.setEnabled(true);
 				if (CustomReportsRegistry.getInstance().hasTeamReportsPublishPermission()) {
 					this.publishBtn.setEnabled(true);
 				}
-			}
-			else {
-				//Team reports mode.
+			} else {
+				// Team reports mode.
 				if (CustomReportsRegistry.getInstance().hasTeamReportsDeletePermission()) {
 					this.deleteBtn.setEnabled(true);
 				}
-				if (CustomReportsRegistry.getInstance().hasTeamReportsReadPermission() &&
-				    CustomReportsRegistry.getInstance().hasTeamReportsPublishPermission()) {
+				if (CustomReportsRegistry.getInstance().hasTeamReportsReadPermission() && CustomReportsRegistry.getInstance().hasTeamReportsPublishPermission()) {
 					this.copyBtn.setEnabled(true);
-					//always allow to copy to user
+					// always allow to copy to user
 					this.saveBtn.setEnabled(true);
 				}
 				if (CustomReportsRegistry.getInstance().hasTeamReportsPublishPermission()) {
-					this.renameBtn.setEnabled(true);	
-					//only publish if report is unpublished
+					this.renameBtn.setEnabled(true);
+					// only publish if report is unpublished
 					this.publishBtn.setEnabled(needsPublishing);
-				}					
+				}
 			}
-			
-			//Remember we have dealt with the change from user reports to team reports.
+
+			// Remember we have dealt with the change from user reports to team reports.
 			modeChanged = false;
-		}	
+		}
 	}
 
 	/**
-	 * Check if there are any unsaved/unpublished changes and ask the user what to do and do it.
-	 * Side effects: either discards the changes or selected the previously selected report.
+	 * Check if there are any unsaved/unpublished changes and ask the user what to do and do it. Side effects: either discards the changes or selected the previously selected report.
+	 * 
 	 * @return true, if we went back, false, if we discarded the previously selected report's changes or there were no unsaved/unpublished changes.
 	 */
 	private boolean checkForUnsavedUnpublishedChanges() {
@@ -1177,40 +1140,39 @@ public class CustomReportsManagerDialog extends TrayDialog {
 			if (this.unsavedOrUnpublishedChanges(this.current.getUuid())) {
 				String reportName = this.current.getName();
 				String unSavedOrUnPublished = this.userButton.getSelection() ? " unsaved " : " un-published ";
-				int discardChanges = MessageDialog.open(MessageDialog.QUESTION_WITH_CANCEL, getShell(), 
-						"Warning", "You have"+unSavedOrUnPublished+"changes to \""+reportName+"\". Discard these changes or go back?", SWT.NONE, "Discard", "Back");
+				int discardChanges = MessageDialog.open(MessageDialog.QUESTION_WITH_CANCEL, getShell(), "Warning",
+						"You have" + unSavedOrUnPublished + "changes to \"" + reportName + "\". Discard these changes or go back?", SWT.NONE, "Discard", "Back");
 				if (discardChanges == 0) {
-					//Discards the previously selected report selection changes.
+					// Discards the previously selected report selection changes.
 					this.discardCurrentlySelectedChanges();
-				}
-				else {
+				} else {
 					if (this.userButton.getSelection() && this.currentStoreType == StoreType.Team) {
-						//Back to the correct view.
+						// Back to the correct view.
 						this.userButton.setSelection(false);
 						this.teamButton.setSelection(true);
 						activateTeamMode();
 						this.customReportsViewer.setInput(this.getTeamReportDefinitions());
 					}
-					
+
 					if (this.teamButton.getSelection() && this.currentStoreType == StoreType.User) {
-						//Back to the correct view.
+						// Back to the correct view.
 						this.userButton.setSelection(true);
 						this.teamButton.setSelection(false);
 						activateUserMode();
 						this.customReportsViewer.setInput(this.getUserReportDefinitions());
 					}
-					
-					//Go back to the previously selected report.
+
+					// Go back to the previously selected report.
 					this.customReportsViewer.setSelection(new StructuredSelection(this.current));
-					
-					//And ignore this new selection.
+
+					// And ignore this new selection.
 					return true;
 				}
 			}
 		}
 		return false;
 	}
-	
+
 	private void updateViewWithReportDefinition(CustomReportDefinition reportDefinition) {
 		HashMap<String, ColumnBlock> blockIdToColumnBlock = new HashMap<>();
 		for (ColumnBlock cb : visible) {
@@ -1223,46 +1185,45 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		hiddenColumnsAfter.addAll(visible);
 		hiddenColumnsAfter.addAll(nonVisible);
 		hiddenColumnsAfter.removeIf(k -> reportDefinition.getColumns().contains(k.blockID));
-		
+
 		List<ColumnBlock> visibleColumnsAfter = new ArrayList<>();
 		for (String blockId : reportDefinition.getColumns()) {
 			visibleColumnsAfter.add(blockIdToColumnBlock.get(blockId));
 		}
-		
+
 		this.nonVisible.clear();
 		this.nonVisible.addAll(hiddenColumnsAfter);
-		
+
 		this.visible.clear();
 		this.visible.addAll(visibleColumnsAfter);
-		
+
 		for (CheckboxInfoManager cbim : this.checkboxInfo) {
-			if (cbim.title.equals(this.ROWS_TITLE)) {
+			if (cbim.title.equals(ROWS_TITLE)) {
 				for (OptionInfo oi : cbim.options) {
 					if (oi.button != null) {
 						oi.button.setSelection(reportDefinition.getFilters().contains(oi.type));
 					}
 				}
-			}
-			else if (cbim.title.equals(this.DIFF_TITLE)) {
+			} else if (cbim.title.equals(DIFF_TITLE)) {
 				for (OptionInfo oi : cbim.options) {
 					if (oi.button != null) {
 						oi.button.setSelection(reportDefinition.getDiffOptions().contains(oi.type));
 					}
-				}				
+				}
 			}
 		}
-		
+
 		this.refreshViewers();
 	}
-	
+
 	public List<CustomReportDefinition> getUserReportDefinitions() {
 		return this.userReportDefinitions;
 	}
-	
+
 	public List<CustomReportDefinition> getTeamReportDefinitions() {
 		return this.teamReportDefinitions;
 	}
-	
+
 	/**
 	 * Creates the table that lists out visible columns in the viewer
 	 * 
@@ -1310,11 +1271,11 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		visibleViewer.setInput(getVisible());
 		return table;
 	}
-	
+
 	List<ColumnBlock> getVisible() {
 		return this.visible;
 	}
-	
+
 	/**
 	 * Internal helper to @see {@link ColumnConfigurationDialog#getColumnInfoProvider()}
 	 */
@@ -1329,19 +1290,19 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		IColumnInfoProvider columnInfoProvider = new ColumnConfigurationDialog.ColumnInfoAdapter() {
 			@Override
 			public int getColumnIndex(final Object columnObj) {
-				ColumnBlock cb = (ColumnBlock)columnObj;
+				ColumnBlock cb = (ColumnBlock) columnObj;
 				return current.getColumns().indexOf(cb.blockID);
 			}
 
 			@Override
 			public boolean isColumnVisible(final Object columnObj) {
-				ColumnBlock cb = (ColumnBlock)columnObj;
+				ColumnBlock cb = (ColumnBlock) columnObj;
 				return current.getColumns().contains(cb.blockID);
 			}
 		};
 		return columnInfoProvider;
 	};
-	
+
 	/**
 	 * Internal helper to @see {@link ColumnConfigurationDialog#getColumnUpdater()}
 	 */
@@ -1357,29 +1318,25 @@ public class CustomReportsManagerDialog extends TrayDialog {
 
 			@Override
 			public void setColumnVisible(final Object columnObj, final boolean visible) {
-				//((ColumnBlock) columnObj).setUserVisible(visible);
+				// ((ColumnBlock) columnObj).setUserVisible(visible);
 			}
 
 			@Override
 			public void swapColumnPositions(final Object columnObj1, final Object columnObj2) {
-				//getBlockManager().swapBlockOrder((ColumnBlock) columnObj1, (ColumnBlock) columnObj2);
+				// getBlockManager().swapBlockOrder((ColumnBlock) columnObj1, (ColumnBlock) columnObj2);
 			}
 
 			@Override
 			public Object[] resetColumnStates() {
-				/*// Hide everything
-				for (final String blockId : getBlockManager().getBlockIDOrder()) {
-					getBlockManager().getBlockByID(blockId).setUserVisible(false);
-				}
-				// Apply the initial state
-				setInitialState();
-				// Return!
-				return getBlockManager().getBlocksInVisibleOrder().toArray();*/
+				/*
+				 * // Hide everything for (final String blockId : getBlockManager().getBlockIDOrder()) { getBlockManager().getBlockByID(blockId).setUserVisible(false); } // Apply the initial state
+				 * setInitialState(); // Return! return getBlockManager().getBlocksInVisibleOrder().toArray();
+				 */
 				return new Object[0];
 			}
 		};
 	}
-	
+
 	/**
 	 * Creates the table that lists out non-visible columns in the viewer
 	 * 
@@ -1442,10 +1399,10 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	}
 
 	protected void handleToVisibleButton(Event event) {
-		
+
 		if (this.current != null) {
 			final IStructuredSelection selection = (IStructuredSelection) nonVisibleViewer.getSelection();
-			final List<ColumnBlock> selVCols = (List<ColumnBlock>)selection.toList();
+			final List<ColumnBlock> selVCols = (List<ColumnBlock>) selection.toList();
 			this.nonVisible.removeAll(selVCols);
 			this.visible.addAll(selVCols);
 			Collections.sort(this.visible, comparator);
@@ -1459,7 +1416,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 
 			handleVisibleSelection(selection);
 			handleNonVisibleSelection(nonVisibleViewer.getSelection());
-			
+
 			onReportModified();
 		}
 	}
@@ -1470,15 +1427,17 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	 * @param selection
 	 */
 	void handleVisibleSelection(final ISelection selection) {
+		assert selection != null;
 		final List<?> selVCols = ((IStructuredSelection) selection).toList();
 		final List<ColumnBlock> allVCols = getVisible();
-		toNonVisibleBtt.setEnabled(selVCols.size() > 0 && allVCols.size() > selVCols.size() && this.current != null);
-		if (selection != null && selection.isEmpty() == false) {
+		toNonVisibleBtt.setEnabled(!selVCols.isEmpty() && allVCols.size() > selVCols.size() && this.current != null);
+		if (!selection.isEmpty()) {
 			nonVisibleViewer.setSelection(null);
 		}
 
 		final IColumnInfoProvider infoProvider = doGetColumnInfoProvider();
-		boolean moveDown = !selVCols.isEmpty(), moveUp = !selVCols.isEmpty();
+		boolean moveDown = !selVCols.isEmpty();
+		boolean moveUp = !selVCols.isEmpty();
 		final Iterator<?> iterator = selVCols.iterator();
 		while (iterator.hasNext()) {
 			final Object columnObj = iterator.next();
@@ -1504,7 +1463,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		upButton.setEnabled(moveUp && this.current != null);
 		downButton.setEnabled(moveDown && this.current != null);
 	}
-	
+
 	/**
 	 * Handles a selection change in the viewer that lists out the non-visible columns
 	 * 
@@ -1517,12 +1476,12 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		}
 		toVisibleBtt.setEnabled(nvKeys.length > 0 && this.current != null);
 	}
-	
+
 	/**
 	 * Applies to visible columns, and handles the changes in the order of columns
 	 * 
 	 * @param e
-	 *            event from the button click
+	 *              event from the button click
 	 */
 	void handleDownButton(final Event e) {
 		if (this.current != null) {
@@ -1530,7 +1489,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 			final Object[] selVCols = selection.toArray();
 			final List<ColumnBlock> allVCols = getVisible();
 			for (int i = selVCols.length - 1; i >= 0; i--) {
-				final ColumnBlock colObj = (ColumnBlock)selVCols[i];
+				final ColumnBlock colObj = (ColumnBlock) selVCols[i];
 				final int visibleIndex = allVCols.indexOf(colObj);
 				allVCols.remove(visibleIndex);
 				allVCols.add(visibleIndex + 1, colObj);
@@ -1547,7 +1506,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	 * Applies to visible columns, and handles the changes in the order of columns
 	 * 
 	 * @param e
-	 *            event from the button click
+	 *              event from the button click
 	 */
 	void handleUpButton(final Event e) {
 		if (this.current != null) {
@@ -1555,7 +1514,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 			final Object[] selVCols = selection.toArray();
 			final List<ColumnBlock> allVCols = getVisible();
 			for (int i = 0; i < selVCols.length; i++) {
-				final ColumnBlock colObj = (ColumnBlock)selVCols[i];
+				final ColumnBlock colObj = (ColumnBlock) selVCols[i];
 				final int visibleIndex = allVCols.indexOf(colObj);
 				allVCols.remove(visibleIndex);
 				allVCols.add(visibleIndex - 1, colObj);
@@ -1574,15 +1533,15 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		this.saveBtn.setEnabled(true);
 		this.publishBtn.setEnabled(true);
 	}
-	
+
 	/**
 	 * Moves selected columns from visible to non-visible state
 	 * 
 	 * @param e
-	 *            event from the button click
+	 *              event from the button click
 	 */
 	protected void handleToNonVisibleButton(final Event e) {
-		
+
 		if (this.current != null) {
 			final IStructuredSelection selection = (IStructuredSelection) visibleViewer.getSelection();
 			final List<ColumnBlock> selVCols = selection.toList();
@@ -1607,7 +1566,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	List<ColumnBlock> getNonVisible() {
 		return this.nonVisible;
 	}
-	
+
 	/**
 	 * Creates buttons for moving columns from non-visible to visible and vice-versa
 	 * 
@@ -1668,12 +1627,11 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	private boolean isVisible(ColumnBlock block) {
 		if (this.current != null) {
 			return this.current.getColumns().contains(block.blockID);
-		}
-		else {
+		} else {
 			return CustomReportsRegistry.getInstance().isBlockVisible(block);
 		}
 	}
-	
+
 	private void loadDefaults() {
 		List<ColumnBlock> defaultColumns = CustomReportsRegistry.getInstance().getColumnDefinitions();
 		this.visible.clear();
@@ -1682,12 +1640,11 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		for (ColumnBlock block : defaultColumns) {
 			if (isVisible(block)) {
 				this.visible.add(block);
-			}
-			else {
+			} else {
 				this.nonVisible.add(block);
 			}
 		}
-		
+
 		builder.setDiffFilter(CustomReportsRegistry.getInstance().getDefaults().getDiffOptions().toArray(new String[0]));
 		builder.setRowFilter(CustomReportsRegistry.getInstance().getDefaults().getRowFilters().toArray(new String[0]));
 	}
@@ -1701,7 +1658,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		}
 		return CustomReportsRegistry.getInstance().getBlockIndex(columnObj);
 	}
-	
+
 	protected void performDefaults() {
 		loadDefaults();
 		refreshViewers();
@@ -1721,7 +1678,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 			customReportsViewer.refresh();
 		}
 	}
-	
+
 	IBaseLabelProvider doGetLabelProvider() {
 		return getLabelProvider();
 	}
@@ -1756,7 +1713,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		return new ColumnLabelProvider() {
 			@Override
 			public String getText(final Object element) {
-				return ((CustomReportDefinition)element).getName();
+				return ((CustomReportDefinition) element).getName();
 			}
 
 			@Override
@@ -1766,20 +1723,20 @@ public class CustomReportsManagerDialog extends TrayDialog {
 
 			@Override
 			public String getToolTipText(final Object element) {
-				return ((CustomReportDefinition)element).getName();
+				return ((CustomReportDefinition) element).getName();
 			}
 		};
 	}
-	
+
 	public void addCheckBoxInfo(final String title, final OptionInfo[] options, final Supplier<Set<String>> store) {
 		checkboxInfo.add(new CheckboxInfoManager(title, options, store));
 	}
-	
+
 	class CheckboxInfoManager {
 		final String title;
 		final OptionInfo[] options;
 		final Supplier<Set<String>> store;
-	
+
 		public CheckboxInfoManager(final String title, final OptionInfo[] options, final Supplier<Set<String>> store) {
 			this.title = title;
 			this.options = options;
@@ -1792,7 +1749,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		this.addChangedReport(this.current);
 		onReportModified();
 	}
-	
+
 	protected void refreshCheckboxes() {
 		for (final CheckboxInfoManager manager : checkboxInfo) {
 			final Set<String> store = manager.store.get();

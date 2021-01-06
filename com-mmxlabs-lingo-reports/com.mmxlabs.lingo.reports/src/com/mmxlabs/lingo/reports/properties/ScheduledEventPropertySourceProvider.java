@@ -9,8 +9,6 @@ import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.TimeZone;
-
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.ui.views.properties.IPropertySource;

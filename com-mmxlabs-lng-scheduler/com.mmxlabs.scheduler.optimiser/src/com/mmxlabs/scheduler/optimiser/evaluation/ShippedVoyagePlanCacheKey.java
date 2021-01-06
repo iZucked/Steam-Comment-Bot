@@ -13,6 +13,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
@@ -33,6 +34,7 @@ public final class ShippedVoyagePlanCacheKey {
 	public final Object vesselKey;
 	public final ICharterCostCalculator charterCostCalculator;
 	public final int vesselStartTime;
+	public final @Nullable IPort firstLoadPort;
 	public final PreviousHeelRecord previousHeelRecord;
 	public final IPortTimesRecord portTimesRecord;
 	public final boolean lastPlan;
@@ -52,7 +54,7 @@ public final class ShippedVoyagePlanCacheKey {
 	public final IVesselAvailability vesselAvailability;
 
 	public ShippedVoyagePlanCacheKey(final IResource resource, final IVesselAvailability vesselAvailability, ICharterCostCalculator charterCostCalculator, final int vesselStartTime,
-			final PreviousHeelRecord previousHeelRecord, final IPortTimesRecord portTimesRecord, boolean lastPlan, boolean keepDetails) {
+			@Nullable final IPort firstLoadPort, final PreviousHeelRecord previousHeelRecord, final IPortTimesRecord portTimesRecord, boolean lastPlan, boolean keepDetails) {
 
 		// Spot market vessels are equivalent
 		ISpotCharterInMarket spotCharterInMarket = vesselAvailability.getSpotCharterInMarket();
@@ -61,9 +63,10 @@ public final class ShippedVoyagePlanCacheKey {
 		} else {
 			this.vesselKey = vesselAvailability;
 		}
-
+		
 		this.charterCostCalculator = charterCostCalculator;
 		this.vesselStartTime = vesselStartTime;
+		this.firstLoadPort = firstLoadPort;
 		this.previousHeelRecord = previousHeelRecord;
 		this.portTimesRecord = portTimesRecord;
 		this.lastPlan = lastPlan;
@@ -87,6 +90,7 @@ public final class ShippedVoyagePlanCacheKey {
 		this.hash = Objects.hash(lastPlan, keepDetails, //
 				vesselKey, // Vessel
 				// charterCostCalculator, // Charter costs
+				getPortName(firstLoadPort),
 				previousHeelRecord.heelVolumeInM3, effectiveLastHeelCV, effectiveLastHeelPricePerMMBTU, // Heel record info
 				slotsIds, //
 				slotTimes, // Slot times.
@@ -96,6 +100,11 @@ public final class ShippedVoyagePlanCacheKey {
 		this.vesselAvailability = vesselAvailability;
 	}
 
+	private String getPortName(@Nullable final IPort port) {
+		String portName = port == null ? "" : port.getName();
+		return portName;
+	}
+	
 	@Override
 	public final int hashCode() {
 
@@ -112,6 +121,7 @@ public final class ShippedVoyagePlanCacheKey {
 		if (obj instanceof ShippedVoyagePlanCacheKey) {
 			final ShippedVoyagePlanCacheKey other = (ShippedVoyagePlanCacheKey) obj;
 			final boolean partA = keepDetails == other.keepDetails //
+					&& Objects.equals(getPortName(firstLoadPort), getPortName(other.firstLoadPort))
 					&& lastPlan == other.lastPlan //
 					&& previousHeelRecord.heelVolumeInM3 == other.previousHeelRecord.heelVolumeInM3 //
 					&& effectiveLastHeelCV == other.effectiveLastHeelCV //

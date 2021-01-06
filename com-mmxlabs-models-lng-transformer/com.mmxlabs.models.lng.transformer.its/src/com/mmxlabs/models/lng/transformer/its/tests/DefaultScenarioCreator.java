@@ -14,7 +14,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.jupiter.api.Assertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -140,7 +139,7 @@ public class DefaultScenarioCreator {
 		shippingEntity = addEntity("Shipping");
 
 		dataProvider = SimpleScenarioDataProvider.make(ModelsLNGVersionMaker.createDefaultManifest(), scenario);
-		distanceProvider = new ModelDistanceProvider(scenarioModelBuilder.getPortModelBuilder().getPortModel());
+		distanceProvider = ModelDistanceProvider.getOrCreate(scenarioModelBuilder.getPortModelBuilder().getPortModel());
 	}
 
 	public @NonNull IScenarioDataProvider getScenarioDataProvider() {

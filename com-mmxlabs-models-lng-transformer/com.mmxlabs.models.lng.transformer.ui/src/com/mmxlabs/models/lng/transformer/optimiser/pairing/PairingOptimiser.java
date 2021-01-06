@@ -18,6 +18,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
+import com.mmxlabs.models.lng.transformer.optimiser.common.AbstractOptimiserHelper;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
@@ -101,12 +102,12 @@ public class PairingOptimiser {
 
 		if (DEBUG) {
 			// print pairings for debug
-			PairingOptimiserHelper.printPairings(loads, pairingsMatrix, optimiserRecorder);
+			AbstractOptimiserHelper.printPairings(loads, pairingsMatrix, optimiserRecorder);
 		}
 
 		// (5) Export the pairings matrix to the raw sequences
 		ModifiableSequences rawSequences = new ModifiableSequences(dataTransformer.getInitialSequences());
-		IResource nominal = PairingOptimiserHelper.getNominal(rawSequences, charterInMarket, vesselProvider);
+		IResource nominal = AbstractOptimiserHelper.getNominal(rawSequences, charterInMarket, vesselProvider);
 		if (nominal == null) {
 			throw new IllegalStateException();
 		}
@@ -122,7 +123,7 @@ public class PairingOptimiser {
 	 * @param nominal
 	 */
 	private void updateSequences(@NonNull IModifiableSequences rawSequences, @NonNull List<ILoadOption> loads, @NonNull Map<ILoadOption, IDischargeOption> pairingsMap, @NonNull IResource nominal) {
-		PairingOptimiserHelper.moveElementsToUnusedList(rawSequences, portSlotProvider);
+		AbstractOptimiserHelper.moveElementsToUnusedList(rawSequences, portSlotProvider);
 		IModifiableSequence modifiableSequence = rawSequences.getModifiableSequence(nominal);
 		int insertIndex = 0;
 		for (int i = 0; i < modifiableSequence.size(); i++) {
@@ -145,17 +146,17 @@ public class PairingOptimiser {
 				unusedElements.remove(portSlotProvider.getElement(dischargeOption));
 			} else if (loadOption instanceof ILoadSlot && dischargeOption instanceof IDischargeOption) {
 				// Fob Sale
-				IResource resource = PairingOptimiserHelper.getVirtualResource(dischargeOption, portSlotProvider, virtualVesselSlotProvider, vesselProvider);
+				IResource resource = AbstractOptimiserHelper.getVirtualResource(dischargeOption, portSlotProvider, virtualVesselSlotProvider, vesselProvider);
 				if (resource != null) {
 					IModifiableSequence fobSale = rawSequences.getModifiableSequence(resource);
-					PairingOptimiserHelper.insertCargo(unusedElements, loadOption, dischargeOption, fobSale, portSlotProvider);
+					AbstractOptimiserHelper.insertCargo(unusedElements, loadOption, dischargeOption, fobSale, portSlotProvider);
 				}
 			} else if (loadOption instanceof ILoadOption && dischargeOption instanceof IDischargeSlot) {
 				// DES purchase
-				IResource resource = PairingOptimiserHelper.getVirtualResource(loadOption, portSlotProvider, virtualVesselSlotProvider, vesselProvider);
+				IResource resource = AbstractOptimiserHelper.getVirtualResource(loadOption, portSlotProvider, virtualVesselSlotProvider, vesselProvider);
 				if (resource != null) {
 					IModifiableSequence desPurchase = rawSequences.getModifiableSequence(resource);
-					PairingOptimiserHelper.insertCargo(unusedElements, loadOption, dischargeOption, desPurchase, portSlotProvider);
+					AbstractOptimiserHelper.insertCargo(unusedElements, loadOption, dischargeOption, desPurchase, portSlotProvider);
 				}
 			}
 		}

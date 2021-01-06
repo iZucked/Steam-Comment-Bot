@@ -18,7 +18,6 @@ import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
-import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
 /**

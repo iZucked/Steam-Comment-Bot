@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer.extensions.portshipsize;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -59,7 +60,7 @@ public class PortShipSizeConstraintCheckerTest {
 		Mockito.when(portShipSizeProvider.isCompatible(vessel1, element1)).thenReturn(true);
 		Mockito.when(portShipSizeProvider.isCompatible(vessel1, element2)).thenReturn(true);
 		
-		Assertions.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource1));
+		Assertions.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource1, new ArrayList<>()));
 
 		Mockito.verify(portShipSizeProvider).isCompatible(vessel1, element1);
 		Mockito.verify(portShipSizeProvider).isCompatible(vessel1, element2);
@@ -91,7 +92,7 @@ public class PortShipSizeConstraintCheckerTest {
 		Mockito.when(portShipSizeProvider.isCompatible(vessel1, element1)).thenReturn(false);
 		Mockito.when(portShipSizeProvider.isCompatible(vessel1, element2)).thenReturn(false);
 		
-		Assertions.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource1));
+		Assertions.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource1, new ArrayList<>()));
 	}
 		
 	@Test
@@ -123,7 +124,7 @@ public class PortShipSizeConstraintCheckerTest {
 		final ISequences sequences = new Sequences(Collections.singletonList(resource1), CollectionsUtil.makeHashMap(resource1, sequence));
 		Collection<@NonNull IResource> changedResources = Set.of(resource1);
 		
-		Assertions.assertTrue(checker.checkConstraints(sequences, changedResources));
+		Assertions.assertTrue(checker.checkConstraints(sequences, changedResources, new ArrayList<>()));
 	}
 	
 	@Test
@@ -155,7 +156,7 @@ public class PortShipSizeConstraintCheckerTest {
 		final ISequences sequences = new Sequences(Collections.singletonList(resource1), CollectionsUtil.makeHashMap(resource1, sequence));
 		Collection<@NonNull IResource> changedResources = Set.of(resource1);
 		
-		Assertions.assertFalse(checker.checkConstraints(sequences, changedResources));
+		Assertions.assertFalse(checker.checkConstraints(sequences, changedResources, new ArrayList<>()));
 	}
 	
 	private PortShipSizeConstraintChecker createChecker(final String name, final IPortShipSizeProvider portShipSizeProvider, 

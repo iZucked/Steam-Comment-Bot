@@ -5,15 +5,11 @@
 package com.mmxlabs.models.lng.cargo.editor.bulk.views;
 
 import java.util.Arrays;
-import java.util.Collections;
-
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.StructuredSelection;
 
-import com.mmxlabs.models.lng.cargo.CargoFactory;
-import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.CargoBulkEditorFactory;
 import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Table;
 import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.CargoBulkEditorPackage;
@@ -21,7 +17,6 @@ import com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart.BulkTradesTablePan
 import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.ui.views.ScenarioTableViewerView;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 

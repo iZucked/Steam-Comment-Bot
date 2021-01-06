@@ -62,9 +62,9 @@ public class NewListSelectionDialog extends Dialog {
 	private final ILabelProvider labelProvider;
 	private final SimpleGroupedElementProvider contentProvider;
 	private final Object input;
-	private final List<Pair<String, CellLabelProvider>> columns = new LinkedList<Pair<String, CellLabelProvider>>();
-	private final HashSet<Object> allSelectedElements = new HashSet<Object>();
-	private final HashSet<Object> filteredElements = new HashSet<Object>();
+	private final List<Pair<String, CellLabelProvider>> columns = new LinkedList<>();
+	private final HashSet<Object> allSelectedElements = new HashSet<>();
+	private final HashSet<Object> filteredElements = new HashSet<>();
 	private Object[] dialogResult;
 
 	// TODO: use eclipse TreeNode and TreeNodeContentProvider classes?
@@ -77,7 +77,7 @@ public class NewListSelectionDialog extends Dialog {
 		TreeNode(final TreeNode parent, final Object data) {
 			this.parent = parent;
 			this.data = data;
-			this.children = new ArrayList<TreeNode>();
+			this.children = new ArrayList<>();
 		}
 
 		/**
@@ -109,7 +109,7 @@ public class NewListSelectionDialog extends Dialog {
 
 	private class LookupTreeContentProvider implements ITreeContentProvider {
 		protected TreeNode tree;
-		final Map<Object, TreeNode> lookup = new HashMap<Object, TreeNode>(); // we associate viewer objects with TreeNodes
+		final Map<Object, TreeNode> lookup = new HashMap<>(); // we associate viewer objects with TreeNodes
 
 		public void associateNodes(final TreeNode node, final Map<Object, TreeNode> map) {
 			map.put(node.data, node);
@@ -162,7 +162,7 @@ public class NewListSelectionDialog extends Dialog {
 		public boolean hasChildren(final Object element) {
 			final TreeNode node = lookup.get(element);
 			if (node != null) {
-				return node.children.size() > 0;
+				return !node.children.isEmpty();
 			}
 			return false;
 		}
@@ -171,13 +171,13 @@ public class NewListSelectionDialog extends Dialog {
 
 	private class SimpleGroupedElementProvider extends LookupTreeContentProvider {
 		final IStructuredContentProvider delegate;
-		final List<ILabelProvider> groupings = new LinkedList<ILabelProvider>();
+		final List<ILabelProvider> groupings = new LinkedList<>();
 
 		/**
 		 * 
 		 * @param provider
 		 * @param groupings
-		 *            The groups, at each hierarchical level, to display contents under.
+		 *                      The groups, at each hierarchical level, to display contents under.
 		 */
 		SimpleGroupedElementProvider(final IStructuredContentProvider provider) {
 			delegate = provider;
@@ -211,7 +211,7 @@ public class NewListSelectionDialog extends Dialog {
 		 * Given a label provider, categorises the children by label and then replaces the node's children with a list of categories (each a TreeNode with its own list of children).
 		 */
 		void expandNode(final TreeNode node, final ILabelProvider labeller) {
-			final Map<String, TreeNode> groups = new TreeMap<String, TreeNode>();
+			final Map<String, TreeNode> groups = new TreeMap<>();
 
 			// attach each Object to a labelled node (creating one if it doesn't already exist)
 			for (final TreeNode child : node.children) {
@@ -226,7 +226,7 @@ public class NewListSelectionDialog extends Dialog {
 				child.parent = groupNode;
 			}
 			// replace the node's children with a list of labelled nodes
-			node.children = new ArrayList<TreeNode>(groups.values());
+			node.children = new ArrayList<>(groups.values());
 		}
 
 		/**
@@ -277,7 +277,7 @@ public class NewListSelectionDialog extends Dialog {
 		lr.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
 		final Text tr = new Text(inner, SWT.BORDER | SWT.SEARCH | SWT.ICON_SEARCH | SWT.ICON_CANCEL);
 
-		final List<String> filters = new ArrayList<String>();
+		final List<String> filters = new ArrayList<>();
 
 		tr.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 		tr.addModifyListener(new ModifyListener() {
@@ -315,27 +315,29 @@ public class NewListSelectionDialog extends Dialog {
 			@Override
 			public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
 				filteredElements.remove(element);
-				if (filters.isEmpty())
+				if (filters.isEmpty()) {
 					return true;
-				if (contentProvider.hasChildren(element))
+				}
+				if (contentProvider.hasChildren(element)) {
 					return true;
+				}
 				final String t = labelProvider.getText(element).toLowerCase();
 
 				for (final String f : filters) {
-					if (t.contains(f))
+					if (t.contains(f)) {
 						return true;
+					}
 				}
 				filteredElements.add(element);
 				return false;
 			}
 		});
 
-		if (columns.size() > 0) {
+		if (!columns.isEmpty()) {
 			for (final Pair<String, CellLabelProvider> column : columns) {
 				final TreeViewerColumn tvc = new TreeViewerColumn(viewer, SWT.NONE);
 				tvc.getColumn().setText(column.getFirst());
 				tvc.setLabelProvider(column.getSecond());
-				// tvc.getColumn().pack();
 			}
 			viewer.getTree().setHeaderVisible(true);
 			viewer.getTree().setLinesVisible(true);
@@ -343,9 +345,7 @@ public class NewListSelectionDialog extends Dialog {
 
 		inner.setLayoutData(new GridData(GridData.FILL_BOTH));
 		viewer.setInput(input);
-		/*
-		 * viewer.setCheckedElements(contentProvider.getViewerElements(initialSelection));
-		 */
+		 
 		viewer.addCheckStateListener(new ICheckStateListener() {
 			@Override
 			public void checkStateChanged(final CheckStateChangedEvent event) {
@@ -380,7 +380,7 @@ public class NewListSelectionDialog extends Dialog {
 				final Pair<String, ?> p0 = (Pair<String, ?>) arg0;
 				final Pair<String, ?> p1 = (Pair<String, ?>) arg1;
 
-				return ((String) p0.getFirst()).compareTo((String) p1.getFirst());
+				return ((String) p0.getFirst()).compareTo(p1.getFirst());
 			}
 		};
 		Arrays.sort(dialogResult, c);
@@ -415,8 +415,7 @@ public class NewListSelectionDialog extends Dialog {
 	 * @param columnLabelProvider
 	 */
 	public void addColumn(final String title, final ColumnLabelProvider columnLabelProvider) {
-		this.columns.add(new Pair<String, CellLabelProvider>(title, columnLabelProvider));
-		// this.columns.add(new Pair<String, CellLabelProvider>(title, contentProvider.wrapColumnLabelProvider(columnLabelProvider, columns.isEmpty())));
+		this.columns.add(new Pair<>(title, columnLabelProvider));
 	}
 
 	public String getTitle() {

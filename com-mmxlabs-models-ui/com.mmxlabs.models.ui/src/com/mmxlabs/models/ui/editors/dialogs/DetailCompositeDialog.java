@@ -102,7 +102,8 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 	/**
 	 * The back and forward buttons
 	 */
-	private Button backButton, nextButton;
+	private Button backButton;
+	private Button nextButton;
 
 	/**
 	 * The index in {@link #inputs} of the displayed object
@@ -160,25 +161,54 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 
 	private final IDialogController dialogController = new IDialogController() {
 
-		private final PairKeyedMap<EObject, EStructuralFeature,Boolean>visibilityMap=new PairKeyedMap<>();
+		private final PairKeyedMap<EObject, EStructuralFeature, Boolean> visibilityMap = new PairKeyedMap<>();
 
-	@Override public void validate(){DetailCompositeDialog.this.validate();
+		@Override
+		public void validate() {
+			DetailCompositeDialog.this.validate();
 
-	if(DetailCompositeDialog.this.selectionViewer!=null){DetailCompositeDialog.this.selectionViewer.refresh();}}
+			if (DetailCompositeDialog.this.selectionViewer != null) {
+				DetailCompositeDialog.this.selectionViewer.refresh();
+			}
+		}
 
-	@Override public void rebuild(final boolean pack){updateEditor();if(pack){getShell().pack(false);}}
+		@Override
+		public void rebuild(final boolean pack) {
+			updateEditor();
+			if (pack) {
+				getShell().pack(false);
+			}
+		}
 
-	@Override public void relayout(){if(displayComposite!=null){displayComposite.getComposite().layout(true,true);}}
+		@Override
+		public void relayout() {
+			if (displayComposite != null) {
+				displayComposite.getComposite().layout(true, true);
+			}
+		}
 
-	@Override public void updateEditorVisibility(){
-	// Trigger the recursive UI update
-	if(displayComposite!=null){displayComposite.checkVisibility(dialogContext);}}
+		@Override
+		public void updateEditorVisibility() {
+			// Trigger the recursive UI update
+			if (displayComposite != null) {
+				displayComposite.checkVisibility(dialogContext);
+			}
+		}
 
-	@Override public void setEditorVisibility(final EObject object,final EStructuralFeature feature,final boolean visible){visibilityMap.put(object,feature,visible);
+		@Override
+		public void setEditorVisibility(final EObject object, final EStructuralFeature feature, final boolean visible) {
+			visibilityMap.put(object, feature, visible);
 
-	}
+		}
 
-	@Override public boolean getEditorVisibility(final EObject object,final EStructuralFeature feature){if(visibilityMap.contains(object,feature)){return visibilityMap.get(object,feature).booleanValue();}return true;}};
+		@Override
+		public boolean getEditorVisibility(final EObject object, final EStructuralFeature feature) {
+			if (visibilityMap.contains(object, feature)) {
+				return visibilityMap.get(object, feature).booleanValue();
+			}
+			return true;
+		}
+	};
 
 	private static ComposedAdapterFactory createAdapterFactory() {
 		final List<AdapterFactory> factories = new ArrayList<>();
@@ -285,7 +315,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 	 * Construct a new detail composite dialog, with style.
 	 * 
 	 * @param style
-	 *            - turns style bits on or off (since "&"ed with current); e.g. "~SWT.MAX" removes min/max button.
+	 *                  - turns style bits on or off (since "&"ed with current); e.g. "~SWT.MAX" removes min/max button.
 	 */
 	public DetailCompositeDialog(final Shell parentShell, final ICommandHandler commandHandler, final int style) {
 		this(parentShell, commandHandler);
@@ -347,7 +377,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 			@Override
 			public ModelReference getModelReference() {
 				return commandHandler.getModelReference();
-			};
+			}
 		};
 	}
 
@@ -606,18 +636,22 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 
 				final Action copy = new Action("Copy") {
 
-	@Override
-	public void run() {
-		copyDialogToClipboardEditorWrapper.copyToClipboard();
+					@Override
+					public void run() {
+						copyDialogToClipboardEditorWrapper.copyToClipboard();
+					}
+
+				};
+
+				copy.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/copy.gif"));
+
+				barManager.add(copy);
+				barManager.update(true);
+			}
+
+			dialogArea = c;
+		}
 	}
-
-	};
-
-	copy.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID,"/icons/copy.gif"));
-
-	barManager.add(copy);barManager.update(true);}
-
-	dialogArea=c;}}
 
 	private Action createAddAction(final IModelFactory factory) {
 		return new Action("Create new " + factory.getLabel(), PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD)) {

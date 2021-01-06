@@ -42,7 +42,7 @@ public class Activator extends AbstractUIPlugin {
 		super.start(context);
 		plugin = this;
 
-		jobManagerServiceTracker = new ServiceTracker<IEclipseJobManager, IEclipseJobManager>(context, IEclipseJobManager.class.getName(), null);
+		jobManagerServiceTracker = new ServiceTracker<>(context, IEclipseJobManager.class.getName(), null);
 		jobManagerServiceTracker.open();
 
 	}

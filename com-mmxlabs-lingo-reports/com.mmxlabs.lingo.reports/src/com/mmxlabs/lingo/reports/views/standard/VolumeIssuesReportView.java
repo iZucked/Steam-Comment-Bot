@@ -48,7 +48,6 @@ import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnHandler;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnType;
 import com.mmxlabs.models.ui.tabular.generic.GenericEMFTableDataModel;
-import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.rcp.common.actions.CopyGridToJSONUtil;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
@@ -61,29 +60,27 @@ public class VolumeIssuesReportView extends EMFReportView {
 
 	private EPackage tableDataModel;
 
-	private final String NODE_OWNER = "owner";
-	private final String ATTRIBUTE_SCENARIO_NAME = "scenarioName";
-	private final String ATTRIBUTE_PINNED = "pinned";
-	private final String ATTRIBUTE_QUANTITY = "quantity";
-	private final String ATTRIBUTE_TYPE = "type";
+	private static final String NODE_OWNER = "owner";
+	private static final String ATTRIBUTE_SCENARIO_NAME = "scenarioName";
+	private static final String ATTRIBUTE_PINNED = "pinned";
+	private static final String ATTRIBUTE_QUANTITY = "quantity";
+	private static final String ATTRIBUTE_TYPE = "type";
 
-	private EAttribute attrib_Row_Type;
-	private EAttribute attrib_Row_Quantity;
-	private EAttribute attrib_Row_ScenarioName;
-	private EAttribute attrib_Row_Pinned;
-	private EReference ref_Row_Owner;
+	private EAttribute attribRowType;
+	private EAttribute attribRowQuantity;
+	private EAttribute attribRowScenarioName;
+	private EAttribute attribRowPinned;
+	private EReference refRowOwner;
 
 	protected class PinnedScheduleFormatter extends BaseFormatter implements IImageProvider {
 
 		@Override
-		public Image getImage(Object element) {
+		public Image getImage(final Object element) {
 			if (element instanceof EObject) {
 				final EObject eObject = (EObject) element;
-				Boolean pinned = (Boolean) eObject.eGet(attrib_Row_Pinned);
-				if (Boolean.TRUE.equals(pinned)) {
-					if (pinImage != null && !pinImage.isDisposed()) {
-						return pinImage;
-					}
+				final Boolean pinned = (Boolean) eObject.eGet(attribRowPinned);
+				if (Boolean.TRUE.equals(pinned) && pinImage != null && !pinImage.isDisposed()) {
+					return pinImage;
 				}
 			}
 
@@ -94,7 +91,7 @@ public class VolumeIssuesReportView extends EMFReportView {
 		public String render(final Object object) {
 			if (object instanceof EObject) {
 				final EObject eObject = (EObject) object;
-				return (String) eObject.eGet(attrib_Row_ScenarioName);
+				return (String) eObject.eGet(attribRowScenarioName);
 			}
 			return null;
 		}
@@ -110,9 +107,9 @@ public class VolumeIssuesReportView extends EMFReportView {
 
 		final SchedulePackage sp = SchedulePackage.eINSTANCE;
 
-		addColumn("id", "ID", ColumnType.NORMAL, Formatters.objectFormatter, ref_Row_Owner, sp.getEvent__Name());
+		addColumn("id", "ID", ColumnType.NORMAL, Formatters.objectFormatter, refRowOwner, sp.getEvent__Name());
 
-		addColumn("type", "Type", ColumnType.NORMAL, Formatters.objectFormatter, ref_Row_Owner, sp.getEvent__Type());
+		addColumn("type", "Type", ColumnType.NORMAL, Formatters.objectFormatter, refRowOwner, sp.getEvent__Type());
 
 		addColumn("violation", "Issue", ColumnType.NORMAL, new BaseFormatter() {
 			@Override
@@ -146,8 +143,8 @@ public class VolumeIssuesReportView extends EMFReportView {
 
 				return super.render(object);
 			}
-		}, attrib_Row_Type);
-		addColumn("qty", "Quantity (m³)", ColumnType.NORMAL, Formatters.objectFormatter, attrib_Row_Quantity);
+		}, attribRowType);
+		addColumn("qty", "Quantity (m³)", ColumnType.NORMAL, Formatters.objectFormatter, attribRowQuantity);
 
 		getBlockManager().makeAllBlocksVisible();
 
@@ -171,7 +168,7 @@ public class VolumeIssuesReportView extends EMFReportView {
 		for (final Object obj : result) {
 			if (obj instanceof EObject) {
 				final EObject row = (EObject) obj;
-				final Event event = (Event) row.eGet(ref_Row_Owner);
+				final Event event = (Event) row.eGet(refRowOwner);
 				setInputEquivalents(row, expandEvent(event));
 			}
 		}
@@ -179,7 +176,7 @@ public class VolumeIssuesReportView extends EMFReportView {
 
 	private Collection<Object> expandEvent(final Event event) {
 
-		final Set<Object> objects = new HashSet<Object>();
+		final Set<Object> objects = new HashSet<>();
 		objects.add(event);
 		if (event instanceof SlotVisit) {
 			final SlotVisit slotVisit = (SlotVisit) event;
@@ -191,7 +188,6 @@ public class VolumeIssuesReportView extends EMFReportView {
 					objects.add(sa.getSlotVisit());
 				}
 				objects.add(cargoAllocation);
-				// objects.add(cargoAllocation.getInputCargo());
 			} else {
 				objects.add(slotAllocation);
 			}
@@ -216,7 +212,7 @@ public class VolumeIssuesReportView extends EMFReportView {
 			private EObject dataModelInstance;
 
 			@Override
-			public void beginCollecting(boolean pinDiffMode) {
+			public void beginCollecting(final boolean pinDiffMode) {
 				super.beginCollecting(pinDiffMode);
 				VolumeIssuesReportView.this.clearPinModeData();
 
@@ -224,9 +220,9 @@ public class VolumeIssuesReportView extends EMFReportView {
 			}
 
 			@Override
-			protected Collection<? extends Object> collectElements(final ScenarioResult scenarioResult, LNGScenarioModel scenarioModel, final Schedule schedule, final boolean pinned) {
-				String scenarioName = scenarioResult.getModelRecord().getName();
-				final List<EObject> rows = new LinkedList<EObject>();
+			protected Collection<? extends Object> collectElements(final ScenarioResult scenarioResult, final LNGScenarioModel scenarioModel, final Schedule schedule, final boolean pinned) {
+				final String scenarioName = scenarioResult.getModelRecord().getName();
+				final List<EObject> rows = new LinkedList<>();
 
 				for (final Sequence sequence : schedule.getSequences()) {
 					for (final Event event : sequence.getEvents()) {
@@ -264,8 +260,8 @@ public class VolumeIssuesReportView extends EMFReportView {
 	@Override
 	public String getElementKey(EObject element) {
 
-		if (element.eIsSet(ref_Row_Owner)) {
-			element = (EObject) element.eGet(ref_Row_Owner);
+		if (element.eIsSet(refRowOwner)) {
+			element = (EObject) element.eGet(refRowOwner);
 		}
 
 		if (element instanceof Event) {
@@ -276,10 +272,10 @@ public class VolumeIssuesReportView extends EMFReportView {
 
 	@Override
 	protected List<?> adaptSelectionFromWidget(final List<?> selection) {
-		final List<Object> adaptedSelection = new ArrayList<Object>(selection.size());
+		final List<Object> adaptedSelection = new ArrayList<>(selection.size());
 		for (final Object obj : selection) {
 			if (obj instanceof EObject) {
-				adaptedSelection.add(((EObject) obj).eGet(ref_Row_Owner));
+				adaptedSelection.add(((EObject) obj).eGet(refRowOwner));
 			}
 		}
 
@@ -290,21 +286,21 @@ public class VolumeIssuesReportView extends EMFReportView {
 		tableDataModel = GenericEMFTableDataModel.createEPackage(NODE_OWNER);
 
 		final EClass rowClass = GenericEMFTableDataModel.getRowClass(tableDataModel);
-		attrib_Row_Type = GenericEMFTableDataModel.createRowAttribute(rowClass, SchedulePackage.Literals.CAPACITY_VIOLATION_TYPE, ATTRIBUTE_TYPE);
-		attrib_Row_Quantity = GenericEMFTableDataModel.createRowAttribute(rowClass, EcorePackage.eINSTANCE.getELong(), ATTRIBUTE_QUANTITY);
-		attrib_Row_ScenarioName = GenericEMFTableDataModel.createRowAttribute(rowClass, EcorePackage.eINSTANCE.getEString(), ATTRIBUTE_SCENARIO_NAME);
-		attrib_Row_Pinned = GenericEMFTableDataModel.createRowAttribute(rowClass, EcorePackage.eINSTANCE.getEBoolean(), ATTRIBUTE_PINNED);
+		attribRowType = GenericEMFTableDataModel.createRowAttribute(rowClass, SchedulePackage.Literals.CAPACITY_VIOLATION_TYPE, ATTRIBUTE_TYPE);
+		attribRowQuantity = GenericEMFTableDataModel.createRowAttribute(rowClass, EcorePackage.eINSTANCE.getELong(), ATTRIBUTE_QUANTITY);
+		attribRowScenarioName = GenericEMFTableDataModel.createRowAttribute(rowClass, EcorePackage.eINSTANCE.getEString(), ATTRIBUTE_SCENARIO_NAME);
+		attribRowPinned = GenericEMFTableDataModel.createRowAttribute(rowClass, EcorePackage.eINSTANCE.getEBoolean(), ATTRIBUTE_PINNED);
 
-		ref_Row_Owner = (EReference) GenericEMFTableDataModel.getRowFeature(tableDataModel, NODE_OWNER);
+		refRowOwner = (EReference) GenericEMFTableDataModel.getRowFeature(tableDataModel, NODE_OWNER);
 	}
 
-	private EObject createRow(final EObject dataModelInstance, final EObject owner, String scenarioName, boolean pinned, final CapacityViolationType type, final long qty) {
+	private EObject createRow(final EObject dataModelInstance, final EObject owner, final String scenarioName, final boolean pinned, final CapacityViolationType type, final long qty) {
 		final EObject row = GenericEMFTableDataModel.createRow(tableDataModel, dataModelInstance, null);
-		row.eSet(ref_Row_Owner, owner);
-		row.eSet(attrib_Row_Type, type);
-		row.eSet(attrib_Row_Quantity, qty);
-		row.eSet(attrib_Row_ScenarioName, scenarioName);
-		row.eSet(attrib_Row_Pinned, pinned);
+		row.eSet(refRowOwner, owner);
+		row.eSet(attribRowType, type);
+		row.eSet(attribRowQuantity, qty);
+		row.eSet(attribRowScenarioName, scenarioName);
+		row.eSet(attribRowPinned, pinned);
 
 		return row;
 	}

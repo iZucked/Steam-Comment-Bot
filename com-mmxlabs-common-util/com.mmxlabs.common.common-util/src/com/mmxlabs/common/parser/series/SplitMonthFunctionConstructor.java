@@ -4,12 +4,10 @@
  */
 package com.mmxlabs.common.parser.series;
 
-import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.functions.SplitMonthSeries;
 

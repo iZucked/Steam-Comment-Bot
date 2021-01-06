@@ -62,7 +62,6 @@ public class LNGEvaluationTransformerUnit implements ILNGStateTransformerUnit {
 	@NonNull
 	private final IMultiStateResult inputState;
 
-	@SuppressWarnings("null")
 	public LNGEvaluationTransformerUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull ISequences initialSequences, @NonNull final ISequences inputSequences,
 			/* Evaluation Parameters */ @NonNull final Collection<String> hints) {
 		this.dataTransformer = dataTransformer;

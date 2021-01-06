@@ -13,7 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 import java.util.function.Supplier;
 
 import org.eclipse.core.databinding.observable.value.IObservableValue;
@@ -273,7 +273,7 @@ public final class OptimisationHelper {
 		final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
 
 		final OptimisationPlan[] planRef = new OptimisationPlan[1];
-		final BiFunction<IScenarioDataProvider, LNGScenarioModel, Boolean> prepareCallback = (ref, root) -> {
+		final BiPredicate<IScenarioDataProvider, LNGScenarioModel> prepareCallback = (ref, root) -> {
 			final OptimisationPlan optimisationPlan = getOptimiserSettings(root, !optimising, parameterMode, promptForOptimiserSettings, promptOnlyIfOptionsEnabled, nameProvider);
 
 			if (optimisationPlan == null) {

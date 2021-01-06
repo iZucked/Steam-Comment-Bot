@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
 
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -47,8 +49,8 @@ public class RoundTripVesselPermissionConstraintCheckerTest {
 		final IPortSlot portSlot2 = Mockito.mock(IPortSlot.class);
 		final ISequenceElement element2 = Mockito.mock(ISequenceElement.class);
 
-		Assertions.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource));
-		Assertions.assertFalse(checker.checkPairwiseConstraint(element2, element1, resource));
+		Assertions.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource, new ArrayList<>()));
+		Assertions.assertFalse(checker.checkPairwiseConstraint(element2, element1, resource, new ArrayList<>()));
 	}
 
 	@Test
@@ -87,11 +89,11 @@ public class RoundTripVesselPermissionConstraintCheckerTest {
 		Mockito.when(roundTripProvider.isPermittedOnResource(element2, resource1)).thenReturn(true);
 		Mockito.when(roundTripProvider.isBoundPair(element1, element2)).thenReturn(true);
 
-		Assertions.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource1));
-		Assertions.assertFalse(checker.checkPairwiseConstraint(element2, element1, resource1));
+		Assertions.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource1, new ArrayList<>()));
+		Assertions.assertFalse(checker.checkPairwiseConstraint(element2, element1, resource1, new ArrayList<>()));
 
-		Assertions.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource2));
-		Assertions.assertFalse(checker.checkPairwiseConstraint(element2, element1, resource2));
+		Assertions.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource2, new ArrayList<>()));
+		Assertions.assertFalse(checker.checkPairwiseConstraint(element2, element1, resource2, new ArrayList<>()));
 	}
 
 	@Test
@@ -122,8 +124,8 @@ public class RoundTripVesselPermissionConstraintCheckerTest {
 			}
 			Mockito.when(vesselAvailability.getVesselInstanceType()).thenReturn(vesselInstanceType);
 
-			Assertions.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource));
-			Assertions.assertTrue(checker.checkPairwiseConstraint(element2, element1, resource));
+			Assertions.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource, new ArrayList<>()));
+			Assertions.assertTrue(checker.checkPairwiseConstraint(element2, element1, resource, new ArrayList<>()));
 		}
 	}
 	@Test
@@ -156,8 +158,8 @@ public class RoundTripVesselPermissionConstraintCheckerTest {
 		Mockito.when(roundTripProvider.isPermittedOnResource(element2, resource)).thenReturn(true);
 		Mockito.when(roundTripProvider.isBoundPair(element1, element2)).thenReturn(false);
 
-		Assertions.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource));
-		Assertions.assertFalse(checker.checkPairwiseConstraint(element2, element1, resource));
+		Assertions.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource, new ArrayList<>()));
+		Assertions.assertFalse(checker.checkPairwiseConstraint(element2, element1, resource, new ArrayList<>()));
 	}
 	@Test
 	public void testBothPermittedOnRoundTrip() {
@@ -189,9 +191,9 @@ public class RoundTripVesselPermissionConstraintCheckerTest {
 		Mockito.when(roundTripProvider.isPermittedOnResource(element2, resource)).thenReturn(true);
 		Mockito.when(roundTripProvider.isBoundPair(element1, element2)).thenReturn(true);
 
-		Assertions.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource));
+		Assertions.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource, new ArrayList<>()));
 		// Only one way pairing
-		Assertions.assertFalse(checker.checkPairwiseConstraint(element2, element1, resource));
+		Assertions.assertFalse(checker.checkPairwiseConstraint(element2, element1, resource, new ArrayList<>()));
 	}
 
 	@Test
@@ -224,8 +226,8 @@ public class RoundTripVesselPermissionConstraintCheckerTest {
 		Mockito.when(roundTripProvider.isPermittedOnResource(portSlot2, vesselAvailability)).thenReturn(false);
 		Mockito.when(roundTripProvider.isPermittedOnResource(element2, resource)).thenReturn(false);
 
-		Assertions.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource));
-		Assertions.assertFalse(checker.checkPairwiseConstraint(element2, element1, resource));
+		Assertions.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource, new ArrayList<>()));
+		Assertions.assertFalse(checker.checkPairwiseConstraint(element2, element1, resource, new ArrayList<>()));
 
 		// Again, swap flags
 
@@ -235,8 +237,8 @@ public class RoundTripVesselPermissionConstraintCheckerTest {
 		Mockito.when(roundTripProvider.isPermittedOnResource(portSlot2, vesselAvailability)).thenReturn(true);
 		Mockito.when(roundTripProvider.isPermittedOnResource(element2, resource)).thenReturn(true);
 
-		Assertions.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource));
-		Assertions.assertFalse(checker.checkPairwiseConstraint(element2, element1, resource));
+		Assertions.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource, new ArrayList<>()));
+		Assertions.assertFalse(checker.checkPairwiseConstraint(element2, element1, resource, new ArrayList<>()));
 	}
 
 	@Test
@@ -270,7 +272,7 @@ public class RoundTripVesselPermissionConstraintCheckerTest {
 		Mockito.when(roundTripProvider.isPermittedOnResource(element1, resource)).thenReturn(true);
 		Mockito.when(roundTripProvider.isPermittedOnResource(element2, resource)).thenReturn(false);
 
-		Assertions.assertFalse(checker.checkSequence(sequence, resource));
+		Assertions.assertFalse(checker.checkSequence(sequence, resource, new ArrayList<>()));
 	}
 
 	@Test
@@ -305,7 +307,7 @@ public class RoundTripVesselPermissionConstraintCheckerTest {
 		Mockito.when(roundTripProvider.isPermittedOnResource(element2, resource)).thenReturn(true);
 		Mockito.when(roundTripProvider.isBoundPair(element1, element2)).thenReturn(true);
 
-		Assertions.assertTrue(checker.checkSequence(sequence, resource));
+		Assertions.assertTrue(checker.checkSequence(sequence, resource, new ArrayList<>()));
 	}
 
 	private RoundTripVesselPermissionConstraintChecker createChecker(final IVesselProvider vesselProvider, final IRoundTripVesselPermissionProvider roundTripProvider,

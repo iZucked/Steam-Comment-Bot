@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
-import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.fasterxml.jackson.core.JsonParser.Feature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;

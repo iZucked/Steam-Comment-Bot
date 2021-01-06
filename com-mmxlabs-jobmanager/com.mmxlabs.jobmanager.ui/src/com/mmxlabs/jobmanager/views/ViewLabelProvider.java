@@ -25,7 +25,7 @@ class ViewLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 	private final Shell shell;
 	private final IEclipseJobManager jobManager;
-	private final Map<Object, Image> imageCache = new HashMap<Object, Image>();
+	private final Map<Object, Image> imageCache = new HashMap<>();
 
 	public ViewLabelProvider(final Shell shell, final IEclipseJobManager jobManager) {
 		this.shell = shell;

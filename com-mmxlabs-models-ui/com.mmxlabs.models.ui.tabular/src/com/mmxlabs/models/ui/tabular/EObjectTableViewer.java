@@ -263,7 +263,7 @@ public class EObjectTableViewer extends GridTreeViewer {
 		column.setEditingSupport(new EditingSupport(viewer) {
 			@Override
 			protected boolean canEdit(final Object element) {
-				return (lockedForEditing == false) && (manipulator != null) && manipulator.canEdit(path.get((EObject) element));
+				return (!lockedForEditing) && (manipulator != null) && manipulator.canEdit(path.get((EObject) element));
 			}
 
 			@Override

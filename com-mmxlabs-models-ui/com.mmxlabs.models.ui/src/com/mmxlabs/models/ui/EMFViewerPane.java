@@ -57,7 +57,7 @@ import org.eclipse.ui.IWorkbenchPart;
 public abstract class EMFViewerPane implements IPropertyListener, Listener {
 	protected IWorkbenchPage page;
 	protected IWorkbenchPart part;
-	protected Collection<Object> buddies = new ArrayList<Object>();
+	protected Collection<Object> buddies = new ArrayList<>();
 	protected Viewer viewer;
 	protected Composite container;
 	boolean isActive;
@@ -133,7 +133,7 @@ public abstract class EMFViewerPane implements IPropertyListener, Listener {
 		page.addPartListener(partListener);
 	}
 
-	abstract public Viewer createViewer(Composite parent);
+	public abstract Viewer createViewer(Composite parent);
 
 	public Collection<Object> getBudies() {
 		return buddies;
@@ -252,10 +252,6 @@ public abstract class EMFViewerPane implements IPropertyListener, Listener {
 			if (parent.getParent() != null) {
 				parent.getParent().layout();
 			}
-		}
-		@Override
-		public void dispose() {
-			super.dispose();
 		}
 	}
 
@@ -404,9 +400,9 @@ public abstract class EMFViewerPane implements IPropertyListener, Listener {
 	 * Indicates that a property has changed.
 	 * 
 	 * @param source
-	 *            the object whose property has changed
+	 *                   the object whose property has changed
 	 * @param propID
-	 *            the ID of the property which has changed; property IDs are generally defined as constants on the source class
+	 *                   the ID of the property which has changed; property IDs are generally defined as constants on the source class
 	 */
 	@Override
 	public void propertyChanged(Object source, int propID) {
@@ -546,25 +542,25 @@ public abstract class EMFViewerPane implements IPropertyListener, Listener {
  * This class manages the common workbench colors.
  */
 class WorkbenchColors {
-	static private boolean init = false;
-	static private Map<Object, Color> colorMap;
-	static private Color[] activeGradient;
-	static private int[] activePercentages;
-	final static private String CLR_GRAD_START = "clrGradStart";
-	final static private String CLR_GRAD_MID = "clrGradMid";
-	final static private String CLR_GRAD_END = "clrGradEnd";
+	private static boolean init = false;
+	private static Map<Object, Color> colorMap;
+	private static Color[] activeGradient;
+	private static int[] activePercentages;
+	private static final String CLR_GRAD_START = "clrGradStart";
+	private static final String CLR_GRAD_MID = "clrGradMid";
+	private static final String CLR_GRAD_END = "clrGradEnd";
 
 	/**
 	 * Returns the active gradient.
 	 */
-	static public Color[] getActiveGradient() {
+	public static Color[] getActiveGradient() {
 		return activeGradient;
 	}
 
 	/**
 	 * Returns the active gradient start color.
 	 */
-	static public Color getActiveGradientStart() {
+	public static Color getActiveGradientStart() {
 		Color clr = colorMap.get(CLR_GRAD_START);
 		return clr;
 	}
@@ -572,7 +568,7 @@ class WorkbenchColors {
 	/**
 	 * Returns the active gradient end color.
 	 */
-	static public Color getActiveGradientEnd() {
+	public static Color getActiveGradientEnd() {
 		Color clr = colorMap.get(CLR_GRAD_END);
 		return clr;
 	}
@@ -580,14 +576,14 @@ class WorkbenchColors {
 	/**
 	 * Returns the active gradient percents.
 	 */
-	static public int[] getActiveGradientPercents() {
+	public static int[] getActiveGradientPercents() {
 		return activePercentages;
 	}
 
 	/**
 	 * Returns a color identified by an RGB value.
 	 */
-	static public Color getColor(RGB rgbValue) {
+	public static Color getColor(RGB rgbValue) {
 		Color clr = colorMap.get(rgbValue);
 		if (clr == null) {
 			Display disp = Display.getDefault();
@@ -600,7 +596,7 @@ class WorkbenchColors {
 	/**
 	 * Returns a system color identified by a SWT constant.
 	 */
-	static public Color getSystemColor(int swtId) {
+	public static Color getSystemColor(int swtId) {
 		Integer bigInt = swtId;
 		Color clr = colorMap.get(bigInt);
 		if (clr == null) {
@@ -614,9 +610,10 @@ class WorkbenchColors {
 	/**
 	 * Disposes of the colors.
 	 */
-	static public void shutdown() {
-		if (!init)
+	public static void shutdown() {
+		if (!init) {
 			return;
+		}
 
 		for (Color color : colorMap.values()) {
 			color.dispose();
@@ -627,13 +624,13 @@ class WorkbenchColors {
 	/**
 	 * Initializes the colors.
 	 */
-	static public void startup() {
-		if (init)
+	public static void startup() {
+		if (init) {
 			return;
-
+		}
 		init = true;
 		Display disp = Display.getDefault();
-		colorMap = new HashMap<Object, Color>(10);
+		colorMap = new HashMap<>(10);
 
 		// Define gradient (blue to widget background color)
 		Color clr1 = disp.getSystemColor(SWT.COLOR_TITLE_BACKGROUND);

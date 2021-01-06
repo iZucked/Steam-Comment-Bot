@@ -178,12 +178,7 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 	}
 
 	private final IScenarioComparisonServiceListener scenarioComparisonServiceListener = new IScenarioComparisonServiceListener() {
-		//
-		// private final Map<Object, ScenarioResult> _elementToInstanceMap = new
-		// HashMap<>();
-		// private final Map<Object, LNGScenarioModel> _elementToModelMap = new
-		// HashMap<>();
-
+	 
 		@Override
 		public void compareDataUpdate(@NonNull final ISelectedDataProvider selectedDataProvider, @NonNull final ScenarioResult pin, @NonNull final ScenarioResult other, @NonNull final Table table,
 				@NonNull final List<LNGScenarioModel> rootObjects, @NonNull final Map<EObject, Set<EObject>> equivalancesMap) {

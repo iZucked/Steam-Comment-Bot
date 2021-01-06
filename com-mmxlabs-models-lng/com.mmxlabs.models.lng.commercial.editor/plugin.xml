@@ -99,6 +99,12 @@
        inheritable="true"
        modelClass="com.mmxlabs.models.lng.commercial.SimpleBallastBonusCharterContract">
  </componentHelper>
+ <componentHelper
+       helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.MonthlyBallastBonusCharterContractComponentHelper"
+       id="com.mmxlabs.models.lng.commercial.presentation.composites.MonthlyBallastBonusCharterContractComponentHelper"
+       inheritable="true"
+       modelClass="com.mmxlabs.models.lng.commercial.MonthlyBallastBonusCharterContract">
+ </componentHelper>
 	</extension>
  <extension
        point="com.mmxlabs.models.ui.valueproviders">
@@ -175,6 +181,14 @@
           targetEClass="com.mmxlabs.models.lng.commercial.CharterContract"
           outputEClass="com.mmxlabs.models.lng.commercial.SimpleBallastBonusCharterContract">
     </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.commercial.editor.monthlyBallastBonusCharterContractFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Monthly Ballast Bonus Contract"
+          licensedFeature="features:monthly-ballast-bonus"
+          targetEClass="com.mmxlabs.models.lng.commercial.CharterContract"
+          outputEClass="com.mmxlabs.models.lng.commercial.MonthlyBallastBonusCharterContract">
+    </factory>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.displaycompositefactories">
@@ -196,7 +210,12 @@
           id="com.mmxlabs.models.lng.commercial.ui.displaycomposites.SimpleBallastBonusContractCompositeFactory"
           inheritable="true">
     </displayCompositeFactory>
-
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.commercial.MonthlyBallastBonusCharterContract"
+          factory="com.mmxlabs.models.lng.commercial.ui.displaycomposites.MonthlyBallastBonusContractCompositeFactory"
+          id="com.mmxlabs.models.lng.commercial.ui.displaycomposites.MonthlyBallastBonusContractCompositeFactory"
+          inheritable="true">
+    </displayCompositeFactory>
  </extension>
 
  <extension
@@ -285,6 +304,14 @@
             attributeImporterClass="com.mmxlabs.models.util.importer.impl.DefaultAttributeImporter">
          <dataType
                attributeTypeName="PricingEvent"
+               attributeTypeURI="http://www.mmxlabs.com/models/lng/commercial/1/">
+         </dataType>
+      </attributeImporter>
+      <attributeImporter
+            ID="com.mmxlabs.models.lng.commercial.NextPortType.importer"
+            attributeImporterClass="com.mmxlabs.models.util.importer.impl.DefaultAttributeImporter">
+         <dataType
+               attributeTypeName="NextPortType"
                attributeTypeURI="http://www.mmxlabs.com/models/lng/commercial/1/">
          </dataType>
       </attributeImporter>

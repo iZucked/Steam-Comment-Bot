@@ -8,8 +8,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.emf.ecore.EObject;
@@ -17,23 +15,10 @@ import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
-import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.pricing.DataIndex;
-import com.mmxlabs.models.lng.pricing.IndexPoint;
-import com.mmxlabs.models.lng.pricing.PricingPackage;
-import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
-import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
-import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
-import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
-import com.mmxlabs.models.lng.spotmarkets.SpotAvailability;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
-import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
-import com.mmxlabs.models.lng.spotmarkets.SpotType;
 import com.mmxlabs.models.lng.spotmarkets.validation.internal.Activator;
-import com.mmxlabs.models.lng.types.PortCapability;
-import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 

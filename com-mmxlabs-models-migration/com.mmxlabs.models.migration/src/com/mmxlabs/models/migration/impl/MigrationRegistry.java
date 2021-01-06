@@ -180,7 +180,7 @@ public class MigrationRegistry implements IMigrationRegistry {
 		}
 
 		// Search through the map finding a set of IMigrationUnits to transform between the desired versions.
-		final List<IMigrationUnit> chain = new ArrayList<IMigrationUnit>(Math.min(1, Math.abs(toScenarioVersion - fromScenarioVersion) + Math.abs(toClientVersion - fromClientVersion)));
+		final List<IMigrationUnit> chain = new ArrayList<>(Math.min(1, Math.abs(toScenarioVersion - fromScenarioVersion) + Math.abs(toClientVersion - fromClientVersion)));
 		final Map<Integer, List<IMigrationUnit>> scenarioFroms = fromVersionMap.get(scenarioContext);
 		final Map<Integer, List<IClientMigrationUnit>> clientFroms = clientFromVersionMap.get(clientContext);
 
@@ -273,7 +273,7 @@ public class MigrationRegistry implements IMigrationRegistry {
 			throw new IllegalStateException("Context already registered: " + context);
 		}
 		contexts.put(context, latestVersion);
-		fromVersionMap.put(context, new HashMap<Integer, List<IMigrationUnit>>());
+		fromVersionMap.put(context, new HashMap<>());
 	}
 
 	/**
@@ -309,7 +309,7 @@ public class MigrationRegistry implements IMigrationRegistry {
 		if (migrationUnitExtensionsMap.containsKey(unitID)) {
 			extensions = migrationUnitExtensionsMap.get(unitID);
 		} else {
-			extensions = new LinkedList<IMigrationUnitExtension>();
+			extensions = new LinkedList<>();
 			migrationUnitExtensionsMap.put(unitID, extensions);
 		}
 		extensions.add(unitExtension);
@@ -348,7 +348,7 @@ public class MigrationRegistry implements IMigrationRegistry {
 			throw new IllegalStateException("Client Context already registered: " + context);
 		}
 		clientContexts.put(context, latestVersion);
-		clientFromVersionMap.put(context, new HashMap<Integer, List<IClientMigrationUnit>>());
+		clientFromVersionMap.put(context, new HashMap<>());
 	}
 
 	/**

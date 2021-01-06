@@ -21,11 +21,8 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.contracts.ISlotTransformer;
 import com.mmxlabs.optimiser.core.ISequenceElement;
-import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 
@@ -39,7 +36,6 @@ public class RestrictedSlotsTransformer implements ISlotTransformer {
 	@Inject
 	private IPortSlotProvider portSlotProvider;
 
-	private LNGScenarioModel rootObject;
 	private final Map<Slot, Collection<ISequenceElement>> slotMap = new HashMap<>();
 
 	private final List<LoadSlot> loadSlots = new LinkedList<>();
@@ -47,7 +43,7 @@ public class RestrictedSlotsTransformer implements ISlotTransformer {
 
 	private enum RestrictionType {
 		FOLLOWER, PRECEDENT
-	};
+	}
 
 	private final Set<ISequenceElement> allElements = new HashSet<ISequenceElement>();
 
@@ -63,13 +59,13 @@ public class RestrictedSlotsTransformer implements ISlotTransformer {
 	 * Registers restrictions on which elements can follow or precede one another, using a restrictedElementsProviderEditor.
 	 * 
 	 * @param object
-	 *            The contract with the restricted elements attached.
+	 *                     The contract with the restricted elements attached.
 	 * @param elements
-	 *            The list of elements which are prohibited (or permitted).
+	 *                     The list of elements which are prohibited (or permitted).
 	 * @param map
-	 *            A map indicating which ISequenceElements are associated with each element (e.g. Contract or Port) from the elements list
+	 *                     A map indicating which ISequenceElements are associated with each element (e.g. Contract or Port) from the elements list
 	 * @param type
-	 *            Whether the restriction prevents elements preceding, or following, the ISequenceElement associated with the contract.
+	 *                     Whether the restriction prevents elements preceding, or following, the ISequenceElement associated with the contract.
 	 */
 	private void registerRestrictedElements(final EObject object, final List<? extends EObject> elements, final boolean isPermissive, final RestrictionType type) {
 		// get the ISequenceElements associated with the source
@@ -112,13 +108,6 @@ public class RestrictedSlotsTransformer implements ISlotTransformer {
 		}
 	}
 
-	/**
-	 */
-	@Override
-	public void startTransforming(final LNGScenarioModel rootObject, final ModelEntityMap modelEntityMap, final ISchedulerBuilder builder) {
-		this.rootObject = rootObject;
-	}
-
 	@Override
 	public void finishTransforming() {
 
@@ -140,14 +129,12 @@ public class RestrictedSlotsTransformer implements ISlotTransformer {
 		for (final DischargeSlot slot : dischargeSlots) {
 			applyRestrictions.accept(slot, RestrictionType.PRECEDENT);
 		}
-
-		rootObject = null;
 		slotMap.clear();
 		allElements.clear();
 	}
 
 	@Override
-	public void slotTransformed(@NonNull final Slot modelSlot, @NonNull final IPortSlot optimiserSlot) {
+	public void slotTransformed(@NonNull final Slot<?> modelSlot, @NonNull final IPortSlot optimiserSlot) {
 		final ISequenceElement sequenceElement = portSlotProvider.getElement(optimiserSlot);
 
 		// Record spot slots as not all of them are attached to the model

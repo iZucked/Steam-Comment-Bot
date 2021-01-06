@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer.optimiser.valuepair;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -73,15 +74,19 @@ public class LoadDischargePairValueCalculator {
 	@Inject
 	public void injectConstraintChecker(@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL) final ISequences initialRawSequences, final List<IConstraintChecker> injectedConstraintCheckers) {
 		this.constraintCheckers = new LinkedList<>();
+		final List<String> messages = new ArrayList<>();
+		messages.add(String.format("%s: injectConstraintChecker", this.getClass().getName()));
 		for (final IConstraintChecker checker : injectedConstraintCheckers) {
 			if (checker instanceof IPairwiseConstraintChecker) {
 				final IPairwiseConstraintChecker constraintChecker = (IPairwiseConstraintChecker) checker;
 				constraintCheckers.add(constraintChecker);
 
 				// Prep with initial sequences.
-				constraintChecker.checkConstraints(initialRawSequences, null);
+				constraintChecker.checkConstraints(initialRawSequences, null, messages);
 			}
 		}
+		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
+			messages.stream().forEach(LOG::debug);
 		modifyConstraintCheckers(constraintCheckers);
 	}
 
@@ -105,9 +110,12 @@ public class LoadDischargePairValueCalculator {
 		if (!(load instanceof ILoadSlot) && !(discharge instanceof IDischargeSlot)) {
 			return false;
 		}
+		final List<String> messages = new ArrayList<>();
+		messages.add(String.format("%s: isValidPair", this.getClass().getName()));
 		for (final IPairwiseConstraintChecker checker : constraintCheckers) {
-			if (!checker.checkPairwiseConstraint(portSlotProvider.getElement(load), portSlotProvider.getElement(discharge), vesselProvider.getResource(vessel))) {
-				//checker.checkPairwiseConstraint(portSlotProvider.getElement(load), portSlotProvider.getElement(discharge), vesselProvider.getResource(vessel));
+			if (!checker.checkPairwiseConstraint(portSlotProvider.getElement(load), portSlotProvider.getElement(discharge), vesselProvider.getResource(vessel), messages)) {
+				if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
+					messages.stream().forEach(LOG::debug);
 				return false;
 			}
 		}
@@ -131,11 +139,15 @@ public class LoadDischargePairValueCalculator {
 		if (!(load instanceof ILoadSlot) && !(discharge instanceof IDischargeSlot)) {
 			return false;
 		}
+		final List<String> messages = new ArrayList<>();
+		messages.add(String.format("%s: isValidPair", this.getClass().getName()));
 		for (final IVesselAvailability v : vessels) {
 			if (v == vessel) continue;
 			boolean isValid = true;
 			for (final IPairwiseConstraintChecker checker : constraintCheckers) {
-				if (!checker.checkPairwiseConstraint(portSlotProvider.getElement(load), portSlotProvider.getElement(discharge), vesselProvider.getResource(v))) {
+				if (!checker.checkPairwiseConstraint(portSlotProvider.getElement(load), portSlotProvider.getElement(discharge), vesselProvider.getResource(v), messages)) {
+					if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
+						messages.stream().forEach(LOG::debug);
 					//checker.checkPairwiseConstraint(portSlotProvider.getElement(load), portSlotProvider.getElement(discharge), vesselProvider.getResource(v));
 					isValid = false;//return false;
 				}
@@ -211,25 +223,25 @@ public class LoadDischargePairValueCalculator {
 	public static List<ILoadOption> findPurchases(final IPhaseOptimisationData optimisationData, final IPortSlotProvider portSlotProvider) {
 
 		return optimisationData.getSequenceElements().stream() //
-				.map(e -> portSlotProvider.getPortSlot(e))//
-				.filter(s -> s instanceof ILoadOption) //
-				.map(s -> (ILoadOption) s)//
+				.map(portSlotProvider::getPortSlot)//
+				.filter(ILoadOption.class::isInstance) //
+				.map(ILoadOption.class::cast)//
 				.collect(Collectors.toList());
 	}
 
 	public static List<IDischargeOption> findSales(final IPhaseOptimisationData optimisationData, final IPortSlotProvider portSlotProvider) {
 
 		return optimisationData.getSequenceElements().stream() //
-				.map(e -> portSlotProvider.getPortSlot(e))//
-				.filter(s -> s instanceof IDischargeOption) //
-				.map(s -> (IDischargeOption) s)//
+				.map(portSlotProvider::getPortSlot)//
+				.filter(IDischargeOption.class::isInstance) //
+				.map(IDischargeOption.class::cast)//
 				.collect(Collectors.toList());
 	}
 	
 	public static List<IVesselAvailability> findVessels(final IPhaseOptimisationData optimisationData, final IVesselProvider vesselProvider) {
 
 		return optimisationData.getResources().stream()
-				.map(m -> vesselProvider.getVesselAvailability(m))//
+				.map(vesselProvider::getVesselAvailability)//
 				.collect(Collectors.toList());
 	}
 

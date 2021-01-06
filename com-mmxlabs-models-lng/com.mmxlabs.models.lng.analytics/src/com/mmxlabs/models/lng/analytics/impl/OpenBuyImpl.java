@@ -11,7 +11,6 @@ import com.mmxlabs.models.lng.analytics.OpenBuy;
 
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 /**
  * <!-- begin-user-doc -->

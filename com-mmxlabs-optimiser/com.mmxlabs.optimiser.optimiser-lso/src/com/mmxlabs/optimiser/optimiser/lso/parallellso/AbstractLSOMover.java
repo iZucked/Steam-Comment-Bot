@@ -4,12 +4,15 @@
  */
 package com.mmxlabs.optimiser.optimiser.lso.parallellso;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -31,6 +34,8 @@ import com.mmxlabs.optimiser.lso.IFitnessCombiner;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 
 public abstract class AbstractLSOMover {
+	protected static final Logger LOG = LoggerFactory.getLogger(AbstractLSOMover.class);
+	
 	@Inject
 	@NonNull
 	protected ISequencesManipulator sequencesManipulator;
@@ -66,9 +71,11 @@ public abstract class AbstractLSOMover {
 		final IModifiableSequences potentialFullSequences = new ModifiableSequences(initialRawSequences);
 		sequencesManipulator.manipulate(potentialFullSequences);
 
+		final List<String> messages = new ArrayList<>();
+		messages.add(String.format("%s: initSearchProcesses", this.getClass().getName()));
 		// Apply hard constraint checkers
 		for (final IConstraintChecker checker : constraintCheckers) {
-			if (!checker.checkConstraints(potentialFullSequences, null)) {
+			if (!checker.checkConstraints(potentialFullSequences, null, messages)) {
 			}
 		}
 		final IEvaluationState evaluationState = new EvaluationState();
@@ -84,6 +91,8 @@ public abstract class AbstractLSOMover {
 			}
 		}
 
+		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
+			messages.stream().forEach(LOG::debug);
 		// now evaluate
 		long fitness = evaluateSequencesInTurn(potentialFullSequences, evaluationState, potentialFullSequences.getResources());
 

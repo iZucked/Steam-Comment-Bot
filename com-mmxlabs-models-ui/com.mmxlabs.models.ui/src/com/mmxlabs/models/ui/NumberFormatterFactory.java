@@ -54,7 +54,7 @@ public class NumberFormatterFactory {
 			}
 			return super.format(p);
 
-		};
+		}
 
 		@Override
 		public Object getValue() {
@@ -82,7 +82,7 @@ public class NumberFormatterFactory {
 				return "-";
 			}
 			return super.getDisplayString();
-		};
+		}
 	}
 
 	public static class ExtendedLongFormatter extends LongFormatter {
@@ -117,7 +117,7 @@ public class NumberFormatterFactory {
 			}
 			return super.format(p);
 
-		};
+		}
 
 		@Override
 		public Object getValue() {
@@ -145,7 +145,7 @@ public class NumberFormatterFactory {
 				return "-";
 			}
 			return super.getDisplayString();
-		};
+		}
 	}
 
 	public static class ExtendedFloatFormatter extends FloatFormatter {
@@ -180,7 +180,7 @@ public class NumberFormatterFactory {
 			}
 			return super.format(p);
 
-		};
+		}
 
 		@Override
 		public Object getValue() {
@@ -208,7 +208,7 @@ public class NumberFormatterFactory {
 				return "-";
 			}
 			return super.getDisplayString();
-		};
+		}
 	}
 
 	public static class ExtendedDoubleFormatter extends DoubleFormatter {
@@ -243,7 +243,7 @@ public class NumberFormatterFactory {
 			}
 			return super.format(p);
 
-		};
+		}
 
 		@Override
 		public Object getValue() {
@@ -271,6 +271,6 @@ public class NumberFormatterFactory {
 				return "-";
 			}
 			return super.getDisplayString();
-		};
+		}
 	}
 }

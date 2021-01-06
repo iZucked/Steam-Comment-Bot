@@ -27,7 +27,6 @@ import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 
-import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.util.CommercialAdapterFactory;
 
@@ -433,6 +432,75 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContractLine} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MonthlyBallastBonusContractLineItemProvider monthlyBallastBonusContractLineItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContractLine}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMonthlyBallastBonusContractLineAdapter() {
+		if (monthlyBallastBonusContractLineItemProvider == null) {
+			monthlyBallastBonusContractLineItemProvider = new MonthlyBallastBonusContractLineItemProvider(this);
+		}
+
+		return monthlyBallastBonusContractLineItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContract} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MonthlyBallastBonusContractItemProvider monthlyBallastBonusContractItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContract}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMonthlyBallastBonusContractAdapter() {
+		if (monthlyBallastBonusContractItemProvider == null) {
+			monthlyBallastBonusContractItemProvider = new MonthlyBallastBonusContractItemProvider(this);
+		}
+
+		return monthlyBallastBonusContractItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusCharterContract} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MonthlyBallastBonusCharterContractItemProvider monthlyBallastBonusCharterContractItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusCharterContract}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMonthlyBallastBonusCharterContractAdapter() {
+		if (monthlyBallastBonusCharterContractItemProvider == null) {
+			monthlyBallastBonusCharterContractItemProvider = new MonthlyBallastBonusCharterContractItemProvider(this);
+		}
+
+		return monthlyBallastBonusCharterContractItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -573,6 +641,9 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 		if (notionalJourneyBallastBonusContractLineItemProvider != null) notionalJourneyBallastBonusContractLineItemProvider.dispose();
 		if (simpleCharterContractItemProvider != null) simpleCharterContractItemProvider.dispose();
 		if (simpleBallastBonusCharterContractItemProvider != null) simpleBallastBonusCharterContractItemProvider.dispose();
+		if (monthlyBallastBonusContractLineItemProvider != null) monthlyBallastBonusContractLineItemProvider.dispose();
+		if (monthlyBallastBonusContractItemProvider != null) monthlyBallastBonusContractItemProvider.dispose();
+		if (monthlyBallastBonusCharterContractItemProvider != null) monthlyBallastBonusCharterContractItemProvider.dispose();
 	}
 
 }

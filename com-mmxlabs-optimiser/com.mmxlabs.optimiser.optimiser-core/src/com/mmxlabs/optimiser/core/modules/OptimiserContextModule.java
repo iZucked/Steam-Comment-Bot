@@ -32,7 +32,6 @@ public class OptimiserContextModule extends AbstractModule {
 	}
 
 	@Provides
-
 	private IOptimisationContext createOptimisationContext(@NonNull @Named(OptimiserConstants.SEQUENCE_TYPE_INPUT) final ISequences sequences,
 
 			@NonNull final IFitnessFunctionRegistry fitnessFunctionRegistry, @NonNull final IConstraintCheckerRegistry constraintCheckerRegistry,
@@ -49,15 +48,9 @@ public class OptimiserContextModule extends AbstractModule {
 		checkers.retainAll(constraintCheckerRegistry.getConstraintCheckerNames());
 
 		// Enable all processes
-		// final List<String> evaluationProcesses = getEnabledEvaluationProcessNames();
-		// log.debug("Available evaluation processes: " + evaluationProcesses);
-		// evaluationProcesses.retainAll(evaluationProcessRegistry.getEvaluationProcessNames());
 		final List<String> evaluationProcesses = new ArrayList<>(evaluationProcessRegistry.getEvaluationProcessNames());
 
 		// Enable all evaluation state constraint checkers
-		// final List<String> evaluationProcesses = getEnabledEvaluationProcessNames();
-		// log.debug("Available evaluation processes: " + evaluationProcesses);
-		// evaluationProcesses.retainAll(evaluationProcessRegistry.getEvaluationProcessNames());
 		final List<String> evaluationStateConstraintCheckers = new ArrayList<>(evaluatedStateConstraintCheckerRegistry.getConstraintCheckerNames());
 
 		return new OptimisationContext(sequences, components, fitnessFunctionRegistry, checkers, constraintCheckerRegistry, evaluationProcesses, evaluationProcessRegistry,
@@ -70,11 +63,7 @@ public class OptimiserContextModule extends AbstractModule {
 			@NonNull final IEvaluationProcessRegistry evaluationProcessRegistry) {
 
 		// Enable all processes
-		// final List<String> evaluationProcesses = getEnabledEvaluationProcessNames();
-		// log.debug("Available evaluation processes: " + evaluationProcesses);
-		// evaluationProcesses.retainAll(evaluationProcessRegistry.getEvaluationProcessNames());
-
-		final List<String> evaluationProcesses = new ArrayList<String>(evaluationProcessRegistry.getEvaluationProcessNames());
+		final List<String> evaluationProcesses = new ArrayList<>(evaluationProcessRegistry.getEvaluationProcessNames());
 
 		return new EvaluationContext(data, sequences, evaluationProcesses, evaluationProcessRegistry);
 	}

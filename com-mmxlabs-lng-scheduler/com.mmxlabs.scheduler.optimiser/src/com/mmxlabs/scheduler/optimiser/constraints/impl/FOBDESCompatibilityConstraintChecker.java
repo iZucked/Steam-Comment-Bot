@@ -57,13 +57,13 @@ public class FOBDESCompatibilityConstraintChecker implements IPairwiseConstraint
 		return name;
 	}
 
-	public boolean checkSequence(@NonNull final ISequence sequence, @NonNull final IResource resource) {
+	public boolean checkSequence(@NonNull final ISequence sequence, @NonNull final IResource resource, final List<String> messages) {
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE) {
 
 			for (ISequenceElement element : sequence) {
 
-				if (!checkElement(element, resource)) {
+				if (!checkElement(element, resource, messages)) {
 					return false; // fail fast.
 				}
 			}
@@ -71,16 +71,8 @@ public class FOBDESCompatibilityConstraintChecker implements IPairwiseConstraint
 		return true;
 	}
 
-	/*
-	 * This is a fail-fast version of the method below
-	 */
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources) {
-		return checkConstraints(sequences, changedResources, null);
-	}
-
-	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, @Nullable final List<String> messages) {
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, final List<String> messages) {
 		final Collection<@NonNull IResource> loopResources;
 		if (changedResources == null) {
 			loopResources = sequences.getResources();
@@ -90,7 +82,7 @@ public class FOBDESCompatibilityConstraintChecker implements IPairwiseConstraint
 		boolean valid = true;
 		for (final IResource resource : loopResources) {
 			final ISequence sequence = sequences.getSequence(resource);
-			if (!checkSequence(sequence, resource)) {
+			if (!checkSequence(sequence, resource, messages)) {
 				return false;
 			}
 		}
@@ -99,23 +91,26 @@ public class FOBDESCompatibilityConstraintChecker implements IPairwiseConstraint
 	}
 
 	@Override
-	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
+	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource, final List<String> messages) {
 
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE) {
-			return checkElement(first, resource) && checkElement(second, resource);
+			return checkElement(first, resource, messages) && checkElement(second, resource, messages);
 		}
 		return true;
 
 	}
 
-	protected boolean checkElement(final @NonNull ISequenceElement element, final @NonNull IResource resource) {
+	protected boolean checkElement(final @NonNull ISequenceElement element, final @NonNull IResource resource, final List<String> messages) {
 		if (portTypeProvider.getPortType(element) == PortType.Start) {
 			return true;
 		}
 		if (portTypeProvider.getPortType(element) == PortType.End) {
 			return true;
 		}
-		return fobDesCompatibilityProvider.isPermittedOnResource(element, resource);
+		final boolean result = fobDesCompatibilityProvider.isPermittedOnResource(element, resource);
+		if (!result)
+			messages.add(String.format("%s: Element %s is not permitted on resource %s", this.name, element.getName(), resource.getName()));
+		return result;
 	}
 }

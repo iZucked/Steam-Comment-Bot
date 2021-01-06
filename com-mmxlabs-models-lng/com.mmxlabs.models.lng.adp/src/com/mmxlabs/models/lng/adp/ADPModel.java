@@ -10,7 +10,6 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
 import java.time.YearMonth;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->

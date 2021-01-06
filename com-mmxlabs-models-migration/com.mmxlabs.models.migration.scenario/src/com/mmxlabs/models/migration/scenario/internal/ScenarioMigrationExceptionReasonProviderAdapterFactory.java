@@ -67,7 +67,7 @@ public class ScenarioMigrationExceptionReasonProviderAdapterFactory implements I
 			};
 		}
 
-		return (T) null;
+		return null;
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })

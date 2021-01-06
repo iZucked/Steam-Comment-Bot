@@ -161,6 +161,27 @@ public class SpotMarketConstraint extends AbstractModelConstraint {
 					failures.add(dsd);
 				}
 			}
+			
+			if (spotMarket.getRestrictedPorts().isEmpty() && spotMarket.isRestrictedPortsArePermissive()) {
+				final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format(
+						"Spot market %s has an empty list of allowed ports.", spotMarket.getName())));
+				status.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getSpotMarket_RestrictedPorts());
+				failures.add(status);
+			}
+			
+			if (spotMarket.getRestrictedContracts().isEmpty() && spotMarket.isRestrictedContractsArePermissive()) {
+				final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format(
+						"Spot market %s has an empty list of allowed contracts.", spotMarket.getName())));
+				status.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getSpotMarket_RestrictedContracts());
+				failures.add(status);
+			}
+			
+			if (spotMarket.getRestrictedVessels().isEmpty() && spotMarket.isRestrictedVesselsArePermissive()) {
+				final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format(
+						"Spot market %s has an empty list of allowed vessels.", spotMarket.getName())));
+				status.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getSpotMarket_RestrictedVessels());
+				failures.add(status);
+			}
 		}
 
 		if (failures.isEmpty()) {

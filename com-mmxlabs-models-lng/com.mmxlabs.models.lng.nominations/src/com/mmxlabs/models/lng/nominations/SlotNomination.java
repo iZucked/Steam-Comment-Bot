@@ -6,8 +6,6 @@
  */
 package com.mmxlabs.models.lng.nominations;
 
-import java.time.LocalDate;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Slot Nomination</b></em>'.

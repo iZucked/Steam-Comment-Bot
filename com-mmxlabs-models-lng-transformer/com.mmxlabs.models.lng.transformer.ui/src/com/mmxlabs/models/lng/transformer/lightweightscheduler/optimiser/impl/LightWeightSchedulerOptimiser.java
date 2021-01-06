@@ -240,10 +240,7 @@ public class LightWeightSchedulerOptimiser {
 					.collect(Collectors.joining("-"));
 			writer.println(seqString);
 			writer.close();
-		} catch (final FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (final UnsupportedEncodingException e) {
+		} catch (final FileNotFoundException | UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

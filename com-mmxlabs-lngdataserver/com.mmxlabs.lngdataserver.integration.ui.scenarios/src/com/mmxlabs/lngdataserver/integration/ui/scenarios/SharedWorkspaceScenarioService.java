@@ -24,7 +24,6 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.hub.common.http.IProgressListener;
 import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.SharedWorkspacePathUtils;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.SharedWorkspaceServiceClient;

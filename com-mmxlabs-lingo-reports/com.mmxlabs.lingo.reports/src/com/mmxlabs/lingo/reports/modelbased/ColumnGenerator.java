@@ -29,7 +29,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Widget;
 
 import com.google.common.collect.Sets;
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.lingo.reports.modelbased.annotations.ColumnName;
 import com.mmxlabs.lingo.reports.modelbased.annotations.ColumnSortFunction;

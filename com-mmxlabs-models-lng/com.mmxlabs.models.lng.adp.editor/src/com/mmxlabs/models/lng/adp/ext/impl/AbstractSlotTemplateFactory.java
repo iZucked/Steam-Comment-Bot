@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.adp.ext.impl;
 
 import java.time.YearMonth;
 
-import com.mmxlabs.common.util.exceptions.UserFeedbackException;
 import com.mmxlabs.models.lng.adp.ContractProfile;
 import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;

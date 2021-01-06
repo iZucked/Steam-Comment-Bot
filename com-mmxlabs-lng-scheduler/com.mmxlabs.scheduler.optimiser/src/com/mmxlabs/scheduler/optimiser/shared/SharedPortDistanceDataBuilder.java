@@ -39,11 +39,9 @@ public final class SharedPortDistanceDataBuilder {
 	private final IIndexingContext indexingContext = new CheckingIndexingContext();
 
 	@Inject
-	@NonNull
 	private IPortProviderEditor portProvider;
 
 	@Inject
-	@NonNull
 	private IDistanceMatrixEditor portDistanceProvider;
 
 	public SharedPortDistanceDataBuilder() {
@@ -61,11 +59,7 @@ public final class SharedPortDistanceDataBuilder {
 			setPortToPortDistance(ANYWHERE, ANYWHERE, route, 0);
 		}
 	}
-
-	public void setRouteWaypointPort(@NonNull final ERouteOption routeOption, @NonNull final IPort mergedPort, @NonNull final IPort entryPortA, @NonNull final IPort entryPortB) {
-
-	}
-
+ 
 	@NonNull
 	public IPort createPort(final @NonNull String name, final @NonNull String mmxId, final @NonNull String timezoneId) {
 

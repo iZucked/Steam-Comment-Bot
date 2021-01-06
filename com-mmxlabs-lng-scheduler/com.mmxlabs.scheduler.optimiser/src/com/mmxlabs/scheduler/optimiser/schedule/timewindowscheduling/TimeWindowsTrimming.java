@@ -805,7 +805,7 @@ public class TimeWindowsTrimming {
 					// than needing to manage this here.
 					List<ScheduledVoyagePlanResult> result = voyagePlanEvaluator.evaluateShipped(resource, vesselAvailability, //
 							vesselAvailability.getCharterCostCalculator(), //
-							0, previousHeelRecord, portTimesRecord.copy(), true, false, false, null);
+							0, null, previousHeelRecord, portTimesRecord.copy(), true, false, false, null);
 
 					// Is this the best solution found so far?
 					if (bestMetrics == null || MetricType.betterThan(result.get(0).metrics, bestMetrics)) {

@@ -7,8 +7,6 @@ package com.mmxlabs.models.lng.nominations.presentation.composites;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.time.temporal.ChronoField;
-import java.util.Hashtable;
-
 import org.eclipse.nebula.widgets.formattedtext.AbstractFormatter;
 import org.eclipse.nebula.widgets.formattedtext.ITextFormatter;
 import org.eclipse.swt.SWT;

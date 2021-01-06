@@ -4,7 +4,9 @@
  */
 package com.mmxlabs.optimiser.optimiser.lso.parallellso;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Random;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -13,6 +15,7 @@ import com.google.inject.Inject;
 import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
@@ -50,13 +53,16 @@ public class SimpleMultiObjectiveLSOMover extends AbstractLSOMover {
 		// Apply sequence manipulators
 		final IModifiableSequences potentialFullSequences = new ModifiableSequences(rawSequences);
 		sequencesManipulator.manipulate(potentialFullSequences);
-
+		final List<String> messages = new ArrayList<>();
+		messages.add(String.format("%s: search", this.getClass().getName()));
 		// Apply hard constraint checkers
 		for (final IConstraintChecker checker : constraintCheckers) {
 			// For constraint checker changed resources functions, if initial solution is invalid, we want to always perform a full constraint checker set of checks until we accept a valid
 			// solution
 			final Collection<@NonNull IResource> changedResources = failedInitialConstraintCheckers ? null : move.getAffectedResources();
-			if (!checker.checkConstraints(potentialFullSequences, changedResources)) {
+			if (!checker.checkConstraints(potentialFullSequences, changedResources, messages)) {
+				if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
+					messages.stream().forEach(LOG::debug);
 				// Break out
 				return new MultiObjectiveJobState(rawSequences, null, null, LSOJobStatus.ConstraintFail, null, seed, move, checker);
 			}

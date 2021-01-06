@@ -27,8 +27,6 @@ import com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard.SharedScenarioDa
 import com.mmxlabs.models.lng.scenario.importWizards.canalcosts.ImportCanalCostsWizard;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
-import com.mmxlabs.scenario.service.model.manager.SSDataManager;
-import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
 public class CanalCostsUpdateCommandHandler extends AbstractHandler {

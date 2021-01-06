@@ -62,7 +62,7 @@ public final class ArrayIndexMap<T extends IIndexedObject, U> implements IIndexM
 	public final U maybeGet(final T key) {
 		final int index = key.getIndex();
 		if ((index >= contents.length) || !isSet[index]) {
-			return (U) null;
+			return null;
 		} else {
 			return contents[index];
 		}

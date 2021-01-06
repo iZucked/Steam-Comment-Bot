@@ -6,8 +6,6 @@
  */
 package com.mmxlabs.models.lng.port;
 
-import com.mmxlabs.models.lng.types.TimePeriod;
-
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EObject;

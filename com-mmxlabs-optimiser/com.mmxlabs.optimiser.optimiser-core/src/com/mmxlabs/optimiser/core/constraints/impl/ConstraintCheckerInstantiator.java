@@ -31,7 +31,7 @@ public final class ConstraintCheckerInstantiator implements IConstraintCheckerIn
 	public List<IConstraintChecker> instantiateConstraintCheckers(@NonNull final IConstraintCheckerRegistry registry, @NonNull final IPhaseOptimisationData optimisationData) {
 
 		final Collection<IConstraintCheckerFactory> factories = registry.getConstraintCheckerFactories();
-		final List<IConstraintChecker> checkers = new ArrayList<IConstraintChecker>(factories.size());
+		final List<IConstraintChecker> checkers = new ArrayList<>(factories.size());
 		for (final IConstraintCheckerFactory factory : factories) {
 			final IConstraintChecker checker = factory.instantiate();
 
@@ -46,10 +46,10 @@ public final class ConstraintCheckerInstantiator implements IConstraintCheckerIn
 	public List<IConstraintChecker> instantiateConstraintCheckers(@NonNull final IConstraintCheckerRegistry registry, @NonNull final List<String> constraintNames,
 			@NonNull final IPhaseOptimisationData optimisationData) {
 
-		final List<IConstraintChecker> checkers = new ArrayList<IConstraintChecker>(constraintNames.size());
+		final List<IConstraintChecker> checkers = new ArrayList<>(constraintNames.size());
 
 		// Mapping between constraint checker name and instance
-		final Map<String, IConstraintChecker> constraintCheckerMap = new HashMap<String, IConstraintChecker>();
+		final Map<String, IConstraintChecker> constraintCheckerMap = new HashMap<>();
 
 		// Get Collection of relevant factories.
 		final Collection<IConstraintCheckerFactory> factories = registry.getConstraintCheckerFactories(constraintNames);

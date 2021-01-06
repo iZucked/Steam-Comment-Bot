@@ -38,7 +38,7 @@ public class ForkScenarioCommandHandler extends AbstractHandler {
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IWorkbenchPage activePage = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage();
 
-		final Exception exceptions[] = new Exception[1];
+		final Exception[] exceptions = new Exception[1];
 
 		BusyIndicator.showWhile(HandlerUtil.getActiveShellChecked(event).getDisplay(), new Runnable() {
 

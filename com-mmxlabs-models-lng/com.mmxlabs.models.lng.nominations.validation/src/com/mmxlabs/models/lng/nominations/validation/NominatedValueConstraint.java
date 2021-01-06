@@ -5,7 +5,6 @@
 package com.mmxlabs.models.lng.nominations.validation;
 
 import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;

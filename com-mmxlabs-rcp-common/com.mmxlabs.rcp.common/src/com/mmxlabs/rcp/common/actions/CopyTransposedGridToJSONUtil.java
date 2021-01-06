@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.rcp.common.actions;
 
-import java.io.IOException;
-
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
@@ -51,7 +49,7 @@ public class CopyTransposedGridToJSONUtil {
 			final JSONArray sw = new JSONArray();
 			try {
 				processTableRow(sw);
-			} catch (final IOException e) {
+			} catch (final Exception e) {
 				// should not occur, since we use a StringWriter
 				LOG.error(e.getMessage(), e);
 			}
@@ -75,7 +73,7 @@ public class CopyTransposedGridToJSONUtil {
 		return indicies;
 	}
 
-	protected void processTableRow(final JSONArray parentArray) throws IOException {
+	protected void processTableRow(final JSONArray parentArray) {
 
 		final int[] columnOrder = includeAllColumns ? getAllColumns(table) : table.getColumnOrder();
 		for (int i = 0; i < columnOrder.length; ++i) {

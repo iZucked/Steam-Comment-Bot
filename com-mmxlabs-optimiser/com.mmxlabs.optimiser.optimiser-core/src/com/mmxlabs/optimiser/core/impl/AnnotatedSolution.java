@@ -68,7 +68,7 @@ public final class AnnotatedSolution implements IAnnotatedSolution {
 
 	@Override
 	public List<String> getGeneralAnnotationKeys() {
-		final List<String> keys = new LinkedList<String>(generalAnnotations.keySet());
+		final List<String> keys = new LinkedList<>(generalAnnotations.keySet());
 		Collections.sort(keys);
 		return keys;
 	}

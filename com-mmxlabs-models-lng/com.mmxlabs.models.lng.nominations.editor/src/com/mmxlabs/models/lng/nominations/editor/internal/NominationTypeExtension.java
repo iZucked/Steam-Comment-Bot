@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.lng.nominations.editor.internal;
 
-import java.util.List;
-
 import org.eclipse.jdt.annotation.NonNull;
 import org.ops4j.peaberry.eclipse.ExtensionBean;
 import org.ops4j.peaberry.eclipse.MapName;

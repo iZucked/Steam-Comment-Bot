@@ -14,7 +14,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.PeriodDistribution;
 import com.mmxlabs.models.lng.adp.PeriodDistributionProfileConstraint;
 import com.mmxlabs.models.mmxcore.MMXRootObject;

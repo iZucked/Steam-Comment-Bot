@@ -65,7 +65,7 @@ public class LocalDateTextFormatterTest extends AbstractSWTBotTest {
 					if (value instanceof LocalDate) {
 						final LocalDate mDate = (LocalDate) value;
 						Assert.assertEquals(day, mDate.getDayOfMonth());
-						Assert.assertEquals(1 + month, mDate.getMonthValue());
+						Assert.assertEquals(1L + month, mDate.getMonthValue());
 						Assert.assertEquals(year, mDate.getYear());
 					} else {
 						Assert.fail("Unexpected result");

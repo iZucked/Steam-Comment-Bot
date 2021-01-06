@@ -288,34 +288,27 @@ public class LNGScenarioTransformer {
 	private List<ITransformerExtension> transformerExtensions;
 
 	@Inject
-	@NonNull
 	private ISchedulerBuilder builder;
 
 	@Inject
-	@NonNull
 	private ILoadPriceCalculatorProviderEditor loadPriceCalculatorProvider;
 
 	@Inject
 	private IntegerIntervalCurveHelper integerIntervalCurveHelper;
 
 	@Inject
-	@NonNull
 	private IShipToShipBindingProviderEditor shipToShipBindingProvider;
 
 	@Inject
-	@NonNull
 	private Injector injector;
 
 	@Inject
-	@NonNull
 	private IPortProvider portProvider;
 
 	@Inject
-	@NonNull
 	private IDistanceProviderEditor distanceProviderEditor;
 
 	@Inject
-	@NonNull
 	private TimeZoneToUtcOffsetProvider timeZoneToUtcOffsetProvider;
 
 	@Inject(optional = true)
@@ -323,15 +316,12 @@ public class LNGScenarioTransformer {
 	private IShippingDaysRestrictionSpeedProvider shippingDaysRestrictionSpeedProvider;
 
 	@Inject
-	@NonNull
 	private IBaseFuelCurveProviderEditor baseFuelCurveProvider;
 
 	@Inject
-	@NonNull
 	private IPromptPeriodProviderEditor promptPeriodProviderEditor;
 
 	@Inject
-	@NonNull
 	private ILockedCargoProviderEditor lockedCargoProviderEditor;
 
 	/**
@@ -390,15 +380,10 @@ public class LNGScenarioTransformer {
 	private final Map<SpotMarket, TreeMap<String, Collection<Slot<?>>>> existingSpotCount = new HashMap<>();
 
 	@Inject
-	@NonNull
 	private ISpotMarketSlotsProviderEditor spotMarketSlotsProviderEditor;
 
 	@Inject
-	@NonNull
 	private IPortSlotProvider portSlotProvider;
-
-	// @NonNull
-	// private final OptimiserSettings optimiserParameters;
 
 	@Inject
 	@Named(LNGTransformerHelper.HINT_SHIPPING_ONLY)
@@ -417,15 +402,12 @@ public class LNGScenarioTransformer {
 	private boolean portfolioBreakevenFlag;
 
 	@Inject
-	@NonNull
 	private IPortVisitDurationProviderEditor portVisitDurationProviderEditor;
 
 	@Inject
-	@NonNull
 	private IMiscCostsProviderEditor miscCostsProviderEditor;
 
 	@Inject
-	@NonNull
 	private ICancellationFeeProviderEditor cancellationFeeProviderEditor;
 
 	@Inject
@@ -537,11 +519,7 @@ public class LNGScenarioTransformer {
 	 * @throws IncompleteScenarioException
 	 */
 	@NonNull
-	public IOptimisationData createOptimisationData(@NonNull final ModelEntityMap modelEntityMap) throws IncompleteScenarioException {
-
-		// set earliest and latest times into modelEntityMap
-		// modelEntityMap.setEarliestDate(dateHelper.getEarliestTime());
-		// modelEntityMap.setLatestDate(dateHelper.getLatestTime());
+	public IOptimisationData createOptimisationData(@NonNull final ModelEntityMap modelEntityMap) {
 
 		timeZoneToUtcOffsetProvider.setTimeZeroInMillis(Instant.from(dateHelper.getEarliestTime()).toEpochMilli());
 
@@ -937,7 +915,6 @@ public class LNGScenarioTransformer {
 		return null;
 	}
 
-	@SuppressWarnings("rawtypes")
 	private void registerIndex(final String name, @NonNull final AbstractYearMonthCurve curve, @NonNull final SeriesParser indices) {
 		assert name != null;
 		if (curve.isSetExpression()) {
@@ -1855,7 +1832,7 @@ public class LNGScenarioTransformer {
 			}
 		}
 
-		final boolean isVolumeLimitInM3 = loadSlot.getSlotOrDelegateVolumeLimitsUnit() == com.mmxlabs.models.lng.types.VolumeUnits.M3 ? true : false;
+		final boolean isVolumeLimitInM3 = loadSlot.getSlotOrDelegateVolumeLimitsUnit() == com.mmxlabs.models.lng.types.VolumeUnits.M3;
 
 		final boolean slotLocked = loadSlot.isLocked() || shippingOnly && loadSlot.getCargo() == null;
 		final boolean slotCancelled = loadSlot.isCancelled();
@@ -2109,7 +2086,7 @@ public class LNGScenarioTransformer {
 								}
 								usedIDStrings.add(internalID);
 
-								final boolean isVolumeLimitInM3 = desPurchaseMarket.getVolumeLimitsUnit() == com.mmxlabs.models.lng.types.VolumeUnits.M3 ? true : false;
+								final boolean isVolumeLimitInM3 = desPurchaseMarket.getVolumeLimitsUnit() == com.mmxlabs.models.lng.types.VolumeUnits.M3;
 
 								final ILoadOption desPurchaseSlot = builder.createDESPurchaseLoadSlot(internalID, null, twUTCPlus,
 										OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity()), OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()),
@@ -2449,7 +2426,7 @@ public class LNGScenarioTransformer {
 								final long minVolume = OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity());
 								final long maxVolume = OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity());
 
-								final boolean isVolumeLimitInM3 = desSalesMarket.getVolumeLimitsUnit() == com.mmxlabs.models.lng.types.VolumeUnits.M3 ? true : false;
+								final boolean isVolumeLimitInM3 = desSalesMarket.getVolumeLimitsUnit() == com.mmxlabs.models.lng.types.VolumeUnits.M3;
 
 								final IDischargeOption desSalesSlot = builder.createDischargeSlot(internalID, notionalIPort, tw, minVolume, maxVolume, 0, Long.MAX_VALUE, priceCalculator,
 										desSlot.getSchedulingTimeWindow().getDuration(), pricingDate, transformPricingEvent(market.getPricingEvent()), true, false, true, isVolumeLimitInM3, false);
@@ -2579,7 +2556,7 @@ public class LNGScenarioTransformer {
 								}
 								usedIDStrings.add(internalID);
 
-								final boolean isVolumeLimitInM3 = fobPurchaseMarket.getVolumeLimitsUnit() == com.mmxlabs.models.lng.types.VolumeUnits.M3 ? true : false;
+								final boolean isVolumeLimitInM3 = fobPurchaseMarket.getVolumeLimitsUnit() == com.mmxlabs.models.lng.types.VolumeUnits.M3;
 
 								// Create a fake model object to add in here;
 								final SpotLoadSlot fobSlot = CargoFactory.eINSTANCE.createSpotLoadSlot();

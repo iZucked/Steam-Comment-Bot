@@ -14,7 +14,6 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.providers.IExtraIdleTimeProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 @NonNullByDefault
 public class DefaultExtraIdleTimeProviderEditor implements IExtraIdleTimeProviderEditor {

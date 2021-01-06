@@ -27,7 +27,7 @@ public class LoggingActivator extends AbstractUIPlugin {
 		this.context = context;
 
 		// create a tracker and track the log service
-		logServiceTracker = new ServiceTracker<ExtendedLogService, ExtendedLogService>(context, ExtendedLogService.class.getName(), null);
+		logServiceTracker = new ServiceTracker<>(context, ExtendedLogService.class.getName(), null);
 		logServiceTracker.open();
 	}
 

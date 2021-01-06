@@ -6,7 +6,6 @@ package com.mmxlabs.scheduler.optimiser.voyage;
 
 import java.util.List;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 

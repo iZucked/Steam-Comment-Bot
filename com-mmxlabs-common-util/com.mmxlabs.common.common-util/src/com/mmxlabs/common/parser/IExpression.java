@@ -4,11 +4,7 @@
  */
 package com.mmxlabs.common.parser;
 
-import java.time.ZonedDateTime;
-
 import org.eclipse.jdt.annotation.NonNull;
-
-import com.mmxlabs.common.Pair;
 
 public interface IExpression<T> {
 	@NonNull

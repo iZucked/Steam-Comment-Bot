@@ -16,5 +16,4 @@ public class Constants {
 	 * clipboard returns a constant date rather than the current date.
 	 */
 	public static final String PROPERTY_RUNNING_ITS = "com.mmxlabs.running.its";
-
 }

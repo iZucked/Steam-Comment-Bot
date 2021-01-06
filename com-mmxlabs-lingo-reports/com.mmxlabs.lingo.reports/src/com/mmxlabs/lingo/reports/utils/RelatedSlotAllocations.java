@@ -26,10 +26,11 @@ public class RelatedSlotAllocations {
 
 	public Set<Slot<?>> getRelatedSetFor(final CargoAllocation cargoAllocation, final boolean buys) {
 		final List<SlotAllocation> slotAllocations = cargoAllocation.getSlotAllocations();
-		for (final SlotAllocation slotAllocation : slotAllocations) {
-			return getRelatedSetFor(slotAllocation, buys);
+		if (!slotAllocations.isEmpty()) {
+			return getRelatedSetFor(slotAllocations.get(0), buys);
 		}
 		return ASet.of();
+
 	}
 
 	public Set<Slot<?>> getRelatedSetFor(final SlotAllocation slotAllocation, final boolean buys) {

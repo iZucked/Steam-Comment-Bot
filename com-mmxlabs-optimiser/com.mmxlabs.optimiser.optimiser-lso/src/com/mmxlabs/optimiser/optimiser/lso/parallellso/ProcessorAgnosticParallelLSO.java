@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.optimiser.optimiser.lso.parallellso;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,6 +12,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -38,6 +41,7 @@ import com.mmxlabs.optimiser.lso.logging.LSOLogger;
 import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
 
 public class ProcessorAgnosticParallelLSO extends LocalSearchOptimiser {
+	protected static final Logger LOG = LoggerFactory.getLogger(ProcessorAgnosticParallelLSO.class);
 
 	public static final String PARALLEL_LSO_BATCH_SIZE = "MMX_PARALLEL_LSO_BATCH_SIZE";
 	protected IPhaseOptimisationData data;
@@ -99,14 +103,18 @@ public class ProcessorAgnosticParallelLSO extends LocalSearchOptimiser {
 		this.failedInitialConstraintCheckers = false;
 		// Apply sequence manipulators
 		final IModifiableSequences potentialFullSequences = getSequenceManipulator().createManipulatedSequences(currentRawSequences);
-
+		
+		final List<String> messages = new ArrayList<>();
+		messages.add(String.format("%s: start", this.getClass().getName()));
 		// Apply hard constraint checkers
 		for (final IConstraintChecker checker : getConstraintCheckers()) {
-			if (!checker.checkConstraints(potentialFullSequences, null)) {
+			if (!checker.checkConstraints(potentialFullSequences, null, messages)) {
 				failedInitialConstraintCheckers = true;
 				break;
 			}
 		}
+		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
+			messages.stream().forEach(LOG::debug);
 
 		final IAnnotatedSolution annotatedBestSolution = getFitnessEvaluator().getBestAnnotatedSolution();
 		if (annotatedBestSolution == null) {
@@ -276,7 +284,7 @@ public class ProcessorAgnosticParallelLSO extends LocalSearchOptimiser {
 
 		// Prime IInitialSequencesConstraintCheckers with initial state
 		for (final IInitialSequencesConstraintChecker checker : getInitialSequencesConstraintCheckers()) {
-			checker.sequencesAccepted(initialSequences, fullSequences);
+			checker.sequencesAccepted(initialSequences, fullSequences, new ArrayList<>());
 		}
 	}
 
@@ -292,7 +300,7 @@ public class ProcessorAgnosticParallelLSO extends LocalSearchOptimiser {
 
 		// Prime IInitialSequencesConstraintCheckers with initial state
 		for (final IInitialSequencesConstraintChecker checker : getInitialSequencesConstraintCheckers()) {
-			checker.sequencesAccepted(currentRawSequences, fullSequences);
+			checker.sequencesAccepted(currentRawSequences, fullSequences, new ArrayList<>());
 		}
 
 		final IEvaluationState evaluationState = new EvaluationState();

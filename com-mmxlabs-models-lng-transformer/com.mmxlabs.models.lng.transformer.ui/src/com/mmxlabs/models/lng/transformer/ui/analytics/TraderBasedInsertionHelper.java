@@ -45,9 +45,9 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 // TODO: 
 public class TraderBasedInsertionHelper {
-	final ScheduleSpecificationHelper scheduleSpecificationHelper;
+	private final ScheduleSpecificationHelper scheduleSpecificationHelper;
 	private final IScenarioDataProvider scenarioDataProvider;
-	private @NonNull final LNGDataTransformer dataTransformer;
+	private final @NonNull LNGDataTransformer dataTransformer;
 	private SequencesToChangeDescriptionTransformer sequencesToChangeDescriptionTransformer;
 
 	public TraderBasedInsertionHelper(final IScenarioDataProvider scenarioDataProvider, final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge) {

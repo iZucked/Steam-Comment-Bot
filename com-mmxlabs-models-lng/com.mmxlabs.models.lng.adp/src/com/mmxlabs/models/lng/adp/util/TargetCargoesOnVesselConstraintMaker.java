@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.adp.util;
 
 import com.mmxlabs.models.lng.adp.ADPFactory;
 import com.mmxlabs.models.lng.adp.ADPModel;
-import com.mmxlabs.models.lng.adp.FleetConstraint;
 import com.mmxlabs.models.lng.adp.IntervalType;
 import com.mmxlabs.models.lng.adp.TargetCargoesOnVesselConstraint;
 import com.mmxlabs.models.lng.fleet.Vessel;

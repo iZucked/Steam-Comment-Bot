@@ -50,35 +50,26 @@ import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 
 	@NonNull
-	public static IChainLink chain(final ChainBuilder chainBuilder, @NonNull final String phase, @NonNull final UserSettings userSettings, @NonNull ActionPlanOptimisationStage stageSettings,
+	public static IChainLink chain(final ChainBuilder chainBuilder, @NonNull final String phase, @NonNull final UserSettings userSettings, @NonNull final ActionPlanOptimisationStage stageSettings,
 			final int progressTicks) {
 		return chain(chainBuilder, phase, userSettings, stageSettings, null, progressTicks);
 	}
 
 	@NonNull
-	public static IChainLink chain(final ChainBuilder chainBuilder, @NonNull final String phase, @NonNull final UserSettings userSettings, @NonNull ActionPlanOptimisationStage stageSettings,
+	public static IChainLink chain(final ChainBuilder chainBuilder, @NonNull final String phase, @NonNull final UserSettings userSettings, @NonNull final ActionPlanOptimisationStage stageSettings,
 			@Nullable final CleanableExecutorService executorService, final int progressTicks) {
 		final IChainLink link = new IChainLink() {
 
-			private LNGActionSetTransformerUnit t;
-
-			// @Override
-			// public IMultiStateResult run() {
-			// if (t == null) {
-			// throw new IllegalStateException("#init has not been called");
-			// }
-			// }
-
 			@Override
-			public IMultiStateResult run(SequencesContainer initialSequences, final IMultiStateResult inputState, final IProgressMonitor monitor) {
+			public IMultiStateResult run(final SequencesContainer initialSequences, final IMultiStateResult inputState, final IProgressMonitor monitor) {
 				final LNGDataTransformer dt = chainBuilder.getDataTransformer();
 
 				@NonNull
-				Collection<@NonNull String> hints = new HashSet<>(dt.getHints());
+				final Collection<@NonNull String> hints = new HashSet<>(dt.getHints());
 				LNGTransformerHelper.updatHintsFromUserSettings(userSettings, hints);
 				hints.remove(LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR);
 
-				t = new LNGActionSetTransformerUnit(dt, phase, userSettings, stageSettings, executorService, initialSequences.getSequences(), inputState, hints);
+				final LNGActionSetTransformerUnit t = new LNGActionSetTransformerUnit(dt, phase, userSettings, stageSettings, executorService, initialSequences.getSequences(), inputState, hints);
 				return t.run(monitor);
 			}
 
@@ -100,16 +91,15 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 	}
 
 	@NonNull
-	public static IChainLink chainFake(final ChainBuilder chainBuilder, @NonNull final String phase, @NonNull final UserSettings userSettings, @NonNull ActionPlanOptimisationStage stageSettings,
+	public static IChainLink chainFake(final ChainBuilder chainBuilder, @NonNull final String phase, @NonNull final UserSettings userSettings, @NonNull final ActionPlanOptimisationStage stageSettings,
 			@Nullable final CleanableExecutorService executorService, final int progressTicks) {
 		final IChainLink link = new IChainLink() {
 
-			private LNGActionSetTransformerUnit t;
-
 			@Override
-			public IMultiStateResult run(SequencesContainer initialSequences, final IMultiStateResult inputState, final IProgressMonitor monitor) {
+			public IMultiStateResult run(final SequencesContainer initialSequences, final IMultiStateResult inputState, final IProgressMonitor monitor) {
 				final LNGDataTransformer dt = chainBuilder.getDataTransformer();
-				t = new LNGActionSetTransformerUnit(dt, phase, userSettings, stageSettings, executorService, initialSequences.getSequences(), inputState, dt.getHints());
+				final LNGActionSetTransformerUnit t = new LNGActionSetTransformerUnit(dt, phase, userSettings, stageSettings, executorService, initialSequences.getSequences(), inputState,
+						dt.getHints());
 				t.run(monitor);
 				return inputState;
 			}
@@ -139,8 +129,8 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 
 	@SuppressWarnings("null")
 	public LNGActionSetTransformerUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final String phase, @NonNull final UserSettings userSettings,
-			@NonNull ActionPlanOptimisationStage stageSettings, @Nullable final CleanableExecutorService executorService, @NonNull ISequences initialSequences, @NonNull final IMultiStateResult inputState,
-			@NonNull final Collection<String> hints) {
+			@NonNull final ActionPlanOptimisationStage stageSettings, @Nullable final CleanableExecutorService executorService, @NonNull final ISequences initialSequences,
+			@NonNull final IMultiStateResult inputState, @NonNull final Collection<String> hints) {
 		this.dataTransformer = dataTransformer;
 		this.phase = phase;
 

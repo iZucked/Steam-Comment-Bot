@@ -22,7 +22,7 @@ import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory
 public class EcoreComposedAdapterFactory {
 	private static ComposedAdapterFactory instance;
 
-	public final static ComposedAdapterFactory getAdapterFactory() {
+	public static final ComposedAdapterFactory getAdapterFactory() {
 		if (instance == null) {
 			instance = createNewAdapterFactory();
 		}
@@ -33,8 +33,8 @@ public class EcoreComposedAdapterFactory {
 		return new ComposedAdapterFactory(createFactoryList());
 	}
 
-	public final static List<AdapterFactory> createFactoryList() {
-		final List<AdapterFactory> factories = new ArrayList<AdapterFactory>();
+	public static final List<AdapterFactory> createFactoryList() {
+		final List<AdapterFactory> factories = new ArrayList<>();
 		factories.add(new ResourceItemProviderAdapterFactory());
 		factories.add(new ReflectiveItemProviderAdapterFactory());
 		return factories;

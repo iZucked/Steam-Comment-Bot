@@ -167,14 +167,6 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 		return valueProvider != null ? valueProvider.getAllowedValues(input, feature) : Collections.<Pair<String, EObject>> emptyList();
 	}
 
-	/**
-	 */
-	@Override
-	protected void updateDisplay(final Object target) {
-
-		super.updateDisplay(target);//getValue());
-	}
-
 	@Override
 	protected void updateValueDisplay(final Object value) {
 		if (combo == null || combo.isDisposed()) {

@@ -7,9 +7,6 @@ package com.mmxlabs.models.lng.transformer.optimiser.pairing;
 import java.util.List;
 import java.util.Map;
 
-import com.mmxlabs.common.Pair;
-import com.mmxlabs.models.lng.adp.ContractProfile;
-import com.mmxlabs.models.lng.adp.ProfileConstraint;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.providers.ConstraintInfo;

@@ -9,8 +9,6 @@ package com.mmxlabs.models.lng.analytics;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import org.eclipse.emf.common.util.EList;
 
-import org.eclipse.emf.ecore.EObject;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Break Even Analysis Model</b></em>'.

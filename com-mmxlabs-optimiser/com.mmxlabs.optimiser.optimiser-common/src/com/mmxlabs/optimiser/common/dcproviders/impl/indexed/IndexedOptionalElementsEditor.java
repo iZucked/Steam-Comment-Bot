@@ -50,10 +50,10 @@ public class IndexedOptionalElementsEditor implements IOptionalElementsProviderE
 			optionalElements.clear(element);
 		}
 
-		while (optionalList.remove(element)) {
-		}
-		while (softRequiredList.remove(element)) {
-		}
+		while (optionalList.remove(element))
+			;
+		while (softRequiredList.remove(element))
+			;
 		if (isOptional) {
 			optionalList.add(element);
 		}

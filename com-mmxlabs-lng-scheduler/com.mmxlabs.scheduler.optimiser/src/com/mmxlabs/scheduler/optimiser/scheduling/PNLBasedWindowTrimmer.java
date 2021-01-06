@@ -11,7 +11,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.BiConsumer;
@@ -19,10 +18,10 @@ import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
-import com.google.common.cache.CacheStats;
 import com.google.common.cache.LoadingCache;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
@@ -38,6 +37,8 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.cache.CacheMode;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -47,7 +48,6 @@ import com.mmxlabs.scheduler.optimiser.evaluation.ScheduledVoyagePlanResult;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider.RouteOptionDirection;
-import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -364,6 +364,7 @@ public class PNLBasedWindowTrimmer {
 			final List<ScheduledVoyagePlanResult> result = voyagePlanEvaluator.evaluateShipped(resource, vesselAvailability, //
 					vesselAvailability.getCharterCostCalculator(), //
 					spi.getVesselStartTime(), //
+					key.firstLoadPort,
 					previousHeelRecord, portTimesRecord, lastPlan, //
 					returnAll, false, // Do not keep voyage plans
 					null);
@@ -403,10 +404,12 @@ public class PNLBasedWindowTrimmer {
 
 		final List<ScheduledRecord> scheduledRecords = new LinkedList<>();
 
+		IPort firstLoad = findFirstLoadPort(intervalMap);
+		
 		if (previousStates.isEmpty()) {
 
 			for (final TimeChoice tc : intervalMap.get(portTimeWindowsRecord.getFirstSlot())) {
-				final PNLTrimmerShippedCacheKey key = PNLTrimmerShippedCacheKey.forFirstRecord(tc.time, resource, vesselAvailability, portTimeWindowsRecord, lastPlan, intervalMap, minTimeData);
+				final PNLTrimmerShippedCacheKey key = PNLTrimmerShippedCacheKey.forFirstRecord(tc.time, firstLoad, resource, vesselAvailability, portTimeWindowsRecord, lastPlan, intervalMap, minTimeData);
 				final List<Pair<ScheduledPlanInput, ScheduledVoyagePlanResult>> evaluatorResults = computeVoyagePlanResults(key);
 
 				scheduledRecords.addAll(evaluatorResults.stream().map(res -> {
@@ -432,7 +435,7 @@ public class PNLBasedWindowTrimmer {
 			}
 		} else {
 			for (final ScheduledRecord r : previousStates) {
-				final PNLTrimmerShippedCacheKey key = PNLTrimmerShippedCacheKey.from(r, resource, vesselAvailability, portTimeWindowsRecord, lastPlan, intervalMap, minTimeData);
+				final PNLTrimmerShippedCacheKey key = PNLTrimmerShippedCacheKey.from(r, firstLoad, resource, vesselAvailability, portTimeWindowsRecord, lastPlan, intervalMap, minTimeData);
 				final List<Pair<ScheduledPlanInput, ScheduledVoyagePlanResult>> evaluatorResults = computeVoyagePlanResults(key);
 
 				scheduledRecords.addAll(evaluatorResults.stream().map(res -> {
@@ -453,6 +456,15 @@ public class PNLBasedWindowTrimmer {
 		}
 
 		return scheduledRecords;
+	}
+
+	private @Nullable IPort findFirstLoadPort(Map<IPortSlot, Collection<TimeChoice>> intervalMap) {
+		for (IPortSlot slot : intervalMap.keySet()) {
+			if (slot instanceof ILoadOption) {
+				return slot.getPort();
+			}
+		}
+		return null;
 	}
 
 	public List<ScheduledVoyagePlanResult> evaluateRoundTripWithIntervals(final IResource resource, final IVesselAvailability vesselAvailability, //

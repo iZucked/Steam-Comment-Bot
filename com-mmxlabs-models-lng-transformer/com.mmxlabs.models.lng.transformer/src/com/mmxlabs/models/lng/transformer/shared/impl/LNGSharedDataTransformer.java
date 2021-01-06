@@ -16,8 +16,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.google.common.collect.Sets;
 import com.google.inject.Inject;
 import com.mmxlabs.common.Association;
-import com.mmxlabs.license.features.KnownFeatures;
-import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;

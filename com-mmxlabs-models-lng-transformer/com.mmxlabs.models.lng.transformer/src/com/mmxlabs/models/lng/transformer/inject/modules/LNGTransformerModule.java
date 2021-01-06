@@ -283,8 +283,7 @@ public class LNGTransformerModule extends AbstractModule {
 	private ITimeWindowSchedulingCanalDistanceProvider provideTimeWindowSchedulingCanalDistanceProvider(@NonNull final Injector injector) {
 		final TimeWindowSchedulingCanalDistanceProvider delegate = new TimeWindowSchedulingCanalDistanceProvider();
 		injector.injectMembers(delegate);
-		final CachingTimeWindowSchedulingCanalDistanceProvider cachingTimeWindowSchedulingCanalDistanceProvider = new CachingTimeWindowSchedulingCanalDistanceProvider(delegate);
-		return cachingTimeWindowSchedulingCanalDistanceProvider;
+		return new CachingTimeWindowSchedulingCanalDistanceProvider(delegate);
 	}
 
 	@Provides

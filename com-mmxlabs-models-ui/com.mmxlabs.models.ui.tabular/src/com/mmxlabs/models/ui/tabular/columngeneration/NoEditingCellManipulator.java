@@ -11,7 +11,7 @@ import com.mmxlabs.models.ui.tabular.ICellManipulator;
 
 public final class NoEditingCellManipulator implements ICellManipulator {
 
-	public static NoEditingCellManipulator INSTANCE = new NoEditingCellManipulator();
+	public static final NoEditingCellManipulator INSTANCE = new NoEditingCellManipulator();
 
 	private NoEditingCellManipulator() {
 

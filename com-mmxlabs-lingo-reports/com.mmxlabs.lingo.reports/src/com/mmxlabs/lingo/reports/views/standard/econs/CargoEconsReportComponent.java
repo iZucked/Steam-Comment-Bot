@@ -8,13 +8,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -54,9 +55,10 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.PropertySheet;
 
-import com.google.common.base.Objects;
+import com.google.common.base.Functions;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.IReportContents;
+import com.mmxlabs.lingo.reports.ReportContents;
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
@@ -81,7 +83,6 @@ import com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry;
 import com.mmxlabs.models.lng.schedule.Purge;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
-import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
@@ -143,7 +144,7 @@ public class CargoEconsReportComponent implements IAdaptable {
 
 	private GridViewerColumn dummyDataCol;
 
-	private Image createImage(String path) {
+	private Image createImage(final String path) {
 		final ImageDescriptor imageDescriptor = Activator.Implementation.getImageDescriptor(path);
 		return imageDescriptor.createImage();
 	}
@@ -152,8 +153,8 @@ public class CargoEconsReportComponent implements IAdaptable {
 		return new CellLabelProvider() {
 
 			@Override
-			public void update(ViewerCell cell) {
-				Object element = cell.getElement();
+			public void update(final ViewerCell cell) {
+				final Object element = cell.getElement();
 
 				if (element == null) {
 					return;
@@ -163,7 +164,7 @@ public class CargoEconsReportComponent implements IAdaptable {
 					return;
 				}
 
-				CargoEconsReportRow row = (CargoEconsReportRow) cell.getElement();
+				final CargoEconsReportRow row = (CargoEconsReportRow) cell.getElement();
 				cell.setText(row.name);
 			}
 		};
@@ -291,7 +292,7 @@ public class CargoEconsReportComponent implements IAdaptable {
 			if (element instanceof CargoEconsReportRow) {
 				final CargoEconsReportRow row = (CargoEconsReportRow) element;
 				if (row.formatter instanceof IImageProvider) {
-					IImageProvider ip = (IImageProvider) row.formatter;
+					final IImageProvider ip = (IImageProvider) row.formatter;
 					return ip.getImage(columnElement);
 				}
 			}
@@ -303,7 +304,7 @@ public class CargoEconsReportComponent implements IAdaptable {
 			if (element instanceof CargoEconsReportRow) {
 				final CargoEconsReportRow row = (CargoEconsReportRow) element;
 				if (row.includeUnits) {
-					String value = row.formatter.render(columnElement);
+					final String value = row.formatter.render(columnElement);
 					if (value != null) {
 						return row.prefixUnit + value + row.suffixUnit;
 					}
@@ -359,7 +360,7 @@ public class CargoEconsReportComponent implements IAdaptable {
 		onlyDiffMode = !onlyDiffMode;
 	}
 
-	public void toggleCompare() {
+	public void detectCompareMode() {
 		final ScenarioResult scenario = selectedScenariosService.getPinnedScenario();
 
 		if (scenario != null) {
@@ -376,160 +377,161 @@ public class CargoEconsReportComponent implements IAdaptable {
 	 * @return
 	 */
 	private Collection<Object> processSelection(final IWorkbenchPart part, final ISelection selection) {
-		final Collection<Object> validObjects = new LinkedHashSet<>();
+		// If selection came from an editor, then we will return a model reference.
+		final ModelReference ref = getPartInstanceReference(part);
+		try {
+			Schedule schedule = null;
 
-		if (selection instanceof IStructuredSelection) {
-			final Iterator<?> itr = ((IStructuredSelection) selection).iterator();
-			while (itr.hasNext()) {
-				Object obj = itr.next();
-				if (obj instanceof Event) {
-					obj = ScheduleModelUtils.getSegmentStart((Event) obj);
-				}
-				if (obj instanceof StartEvent) {
-					validObjects.add(obj);
-				} else if (obj instanceof EndEvent) {
-					validObjects.add(obj);
-				} else if (obj instanceof GeneratedCharterOut) {
-					validObjects.add(obj);
-				} else if (obj instanceof CharterLengthEvent) {
-					validObjects.add(obj);
-				} else if (obj instanceof VesselEventVisit) {
-					validObjects.add(obj);
-				} else if (obj instanceof CargoAllocation) {
-					validObjects.add(obj);
-				} else if (obj instanceof OpenSlotAllocation) {
-					validObjects.add(obj);
-				} else if (obj instanceof SlotAllocation) {
-					final SlotAllocation slotAllocation = (SlotAllocation) obj;
-					if (slotAllocation.getCargoAllocation() != null) {
-						validObjects.add(slotAllocation.getCargoAllocation());
-					}
-					if (slotAllocation.getMarketAllocation() != null) {
-						validObjects.add(slotAllocation.getMarketAllocation());
-					}
-				} else if (obj instanceof SlotVisit) {
-					validObjects.add((((SlotVisit) obj).getSlotAllocation().getCargoAllocation()));
-				} else if (obj instanceof Cargo || obj instanceof Slot || obj instanceof VesselEvent) {
-					Cargo cargo = null;
-					Slot<?> slot = null;
-					VesselEvent event = null;
-					if (obj instanceof VesselEvent) {
-						event = (VesselEvent) obj;
-					} else if (obj instanceof Cargo) {
-						cargo = (Cargo) obj;
-					} else {
-						// Must be a slot
-						assert obj instanceof Slot;
-						if (obj instanceof LoadSlot) {
-							cargo = ((LoadSlot) obj).getCargo();
-							slot = (LoadSlot) obj;
-						} else if (obj instanceof DischargeSlot) {
-							cargo = ((DischargeSlot) obj).getCargo();
-							slot = (DischargeSlot) obj;
-						}
-					}
-
-					if (cargo != null) {
-
-						final Cargo pCargo = cargo;
-						getValidObject(part, (lngScenarioModel) -> {
-							final ScheduleModel scheduleModel = lngScenarioModel.getScheduleModel();
-							if (scheduleModel != null) {
-								final Schedule schedule = scheduleModel.getSchedule();
-								if (schedule != null) {
-									for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
-										if (ScheduleModelUtils.matchingSlots(pCargo, cargoAllocation)) {
-											validObjects.add(cargoAllocation);
-											break;
-										}
-									}
-								}
-							}
-						});
-					} else if (slot != null) {
-						final Slot<?> pSlot = slot;
-
-						getValidObject(part, (lngScenarioModel) -> {
-							final ScheduleModel scheduleModel = lngScenarioModel.getScheduleModel();
-							if (scheduleModel != null) {
-								final Schedule schedule = scheduleModel.getSchedule();
-								if (schedule != null) {
-									for (final OpenSlotAllocation openSlotAllocation : schedule.getOpenSlotAllocations()) {
-										if (pSlot == openSlotAllocation.getSlot()) {
-											validObjects.add(openSlotAllocation);
-											break;
-										}
-									}
-									for (final MarketAllocation marketAllocation : schedule.getMarketAllocations()) {
-										if (pSlot == marketAllocation.getSlot()) {
-											validObjects.add(marketAllocation);
-											break;
-										}
-									}
-									for (final OpenSlotAllocation openSlotAllocation : schedule.getOpenSlotAllocations()) {
-										if (pSlot == openSlotAllocation.getSlot()) {
-											validObjects.add(openSlotAllocation);
-											break;
-										}
-									}
-								}
-							}
-						});
-					} else if (event != null) {
-						final VesselEvent pEvent = event;
-
-						getValidObject(part, (lngScenarioModel) -> {
-							final ScheduleModel scheduleModel = lngScenarioModel.getScheduleModel();
-							if (scheduleModel != null) {
-								final Schedule schedule = scheduleModel.getSchedule();
-								if (schedule != null) {
-									LOOP: for (final Sequence sequence : schedule.getSequences()) {
-										for (final Event evt : sequence.getEvents()) {
-											if (evt instanceof VesselEventVisit) {
-												final VesselEventVisit vesselEventVisit = (VesselEventVisit) evt;
-												if (vesselEventVisit.getVesselEvent() == pEvent) {
-													validObjects.add(vesselEventVisit);
-													break LOOP;
-												}
-											}
-										}
-									}
-								}
-							}
-						});
-					}
-				} else if (obj instanceof Purge) {
-					validObjects.add(obj);
-
-				} else if (obj instanceof PaperDeal) {
-					final PaperDeal paperDeal = (PaperDeal) obj;
-					getValidObject(part, (lngScenarioModel) -> {
-						final ScheduleModel scheduleModel = lngScenarioModel.getScheduleModel();
-						if (scheduleModel != null) {
-							final Schedule schedule = scheduleModel.getSchedule();
-							for (final PaperDealAllocation pda : schedule.getPaperDealAllocations()) {
-								if (Objects.equal(paperDeal, pda.getPaperDeal())) {
-									validObjects.add(pda);
-									break;
-								}
-							}
-						}
-					});
-				} else if (obj instanceof PaperDealAllocation) {
-					validObjects.add(obj);
-				} else if (obj instanceof PaperDealAllocationEntry) {
-					EObject objContainer = ((PaperDealAllocationEntry) obj).eContainer();
-					if (objContainer instanceof PaperDealAllocation) {
-						validObjects.add(objContainer);
+			if (ref != null) {
+				final EObject instance = ref.getInstance();
+				if (instance instanceof LNGScenarioModel) {
+					final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) instance;
+					final ScheduleModel scheduleModel = lngScenarioModel.getScheduleModel();
+					if (scheduleModel != null) {
+						schedule = scheduleModel.getSchedule();
 					}
 				}
 			}
 
-			// Remove invalid items
-			validObjects.remove(null);
-		}
-		return validObjects;
+			// Lazily computed caches (if coming from editor selection)
+			Map<PaperDeal, PaperDealAllocation> paperDealMap = null;
+			Map<VesselEvent, VesselEventVisit> vesselEventMap = null;
+			Map<Collection<Slot<?>>, CargoAllocation> cargoMap = null;
 
+			final Collection<Object> validObjects = new LinkedHashSet<>();
+
+			if (selection instanceof IStructuredSelection) {
+				final Iterator<?> itr = ((IStructuredSelection) selection).iterator();
+				while (itr.hasNext()) {
+					Object obj = itr.next();
+					if (obj instanceof Event) {
+						obj = ScheduleModelUtils.getSegmentStart((Event) obj);
+					}
+					if (obj instanceof StartEvent) {
+						validObjects.add(obj);
+					} else if (obj instanceof EndEvent) {
+						validObjects.add(obj);
+					} else if (obj instanceof GeneratedCharterOut) {
+						validObjects.add(obj);
+					} else if (obj instanceof CharterLengthEvent) {
+						validObjects.add(obj);
+					} else if (obj instanceof VesselEventVisit) {
+						validObjects.add(obj);
+					} else if (obj instanceof CargoAllocation) {
+						validObjects.add(obj);
+					} else if (obj instanceof OpenSlotAllocation) {
+						validObjects.add(obj);
+					} else if (obj instanceof SlotAllocation) {
+						final SlotAllocation slotAllocation = (SlotAllocation) obj;
+						if (slotAllocation.getCargoAllocation() != null) {
+							validObjects.add(slotAllocation.getCargoAllocation());
+						}
+						if (slotAllocation.getMarketAllocation() != null) {
+							validObjects.add(slotAllocation.getMarketAllocation());
+						}
+					} else if (obj instanceof SlotVisit) {
+						validObjects.add((((SlotVisit) obj).getSlotAllocation().getCargoAllocation()));
+					} else if (obj instanceof Cargo || obj instanceof Slot || obj instanceof VesselEvent) {
+						Cargo cargo = null;
+						Slot<?> slot = null;
+						VesselEvent event = null;
+						if (obj instanceof VesselEvent) {
+							event = (VesselEvent) obj;
+						} else if (obj instanceof Cargo) {
+							cargo = (Cargo) obj;
+						} else {
+							// Must be a slot
+							assert obj instanceof Slot;
+							if (obj instanceof LoadSlot) {
+								cargo = ((LoadSlot) obj).getCargo();
+								slot = (LoadSlot) obj;
+							} else if (obj instanceof DischargeSlot) {
+								cargo = ((DischargeSlot) obj).getCargo();
+								slot = (DischargeSlot) obj;
+							}
+						}
+
+						if (cargo != null && schedule != null) {
+
+							if (cargoMap == null) {
+
+								cargoMap = new HashMap<>();
+								for (final CargoAllocation ca : schedule.getCargoAllocations()) {
+									final Set<Slot<?>> key = new HashSet<>();
+									for (final SlotAllocation sa : ca.getSlotAllocations()) {
+										final Slot<?> s = sa.getSlot();
+										if (s != null) {
+											key.add(s);
+										}
+									}
+									cargoMap.put(key, ca);
+								}
+							}
+							final CargoAllocation cargoAllocation = cargoMap.get(new HashSet<>(cargo.getSlots()));
+							if (cargoAllocation != null) {
+								validObjects.add(cargoAllocation);
+							}
+						} else if (slot != null && schedule != null) {
+							for (final MarketAllocation marketAllocation : schedule.getMarketAllocations()) {
+								if (slot == marketAllocation.getSlot()) {
+									validObjects.add(marketAllocation);
+									break;
+								}
+							}
+							for (final OpenSlotAllocation openSlotAllocation : schedule.getOpenSlotAllocations()) {
+								if (slot == openSlotAllocation.getSlot()) {
+									validObjects.add(openSlotAllocation);
+									break;
+								}
+							}
+						} else if (event != null && schedule != null) {
+
+							if (vesselEventMap == null) {
+								vesselEventMap = schedule.getSequences().stream().flatMap(s -> s.getEvents().stream()) //
+										.filter(VesselEventVisit.class::isInstance) //
+										.map(VesselEventVisit.class::cast) //
+										.collect(Collectors.toMap(VesselEventVisit::getVesselEvent, Functions.identity()));
+							}
+							final VesselEventVisit vesselEventVisit = vesselEventMap.get(event);
+							if (vesselEventVisit != null) {
+								validObjects.add(vesselEventVisit);
+							}
+
+						} else if (obj instanceof Purge) {
+							validObjects.add(obj);
+						} else if (obj instanceof PaperDeal) {
+							final PaperDeal paperDeal = (PaperDeal) obj;
+							if (schedule != null) {
+								if (paperDealMap == null) {
+									paperDealMap = schedule.getPaperDealAllocations().stream() //
+											.collect(Collectors.toMap(PaperDealAllocation::getPaperDeal, Functions.identity()));
+								}
+
+								final PaperDealAllocation pda = paperDealMap.get(paperDeal);
+								if (pda != null) {
+									validObjects.add(pda);
+								}
+
+							}
+						} else if (obj instanceof PaperDealAllocation) {
+							validObjects.add(obj);
+						} else if (obj instanceof PaperDealAllocationEntry) {
+							final EObject objContainer = ((PaperDealAllocationEntry) obj).eContainer();
+							if (objContainer instanceof PaperDealAllocation) {
+								validObjects.add(objContainer);
+							}
+						}
+					}
+				}
+				// Remove invalid items
+				validObjects.remove(null);
+			}
+			return validObjects;
+		} finally {
+			if (ref != null) {
+				ref.close();
+			}
+		}
 	}
 
 	public GridTableViewer getViewer() {
@@ -634,21 +636,6 @@ public class CargoEconsReportComponent implements IAdaptable {
 		ViewerHelper.refresh(getViewer(), false);
 	}
 
-	private void getValidObject(final IWorkbenchPart part, final Consumer<LNGScenarioModel> objectFinder) {
-		final ModelReference ref = getPartInstanceReference(part);
-		if (ref != null) {
-			try {
-				final EObject instance = ref.getInstance();
-				if (instance instanceof LNGScenarioModel) {
-					final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) instance;
-					objectFinder.accept(lngScenarioModel);
-				}
-			} finally {
-				ref.close();
-			}
-		}
-	}
-
 	private @Nullable ModelReference getPartInstanceReference(final IWorkbenchPart part) {
 		if (part instanceof IEditorPart) {
 			final IEditorPart editorPart = (IEditorPart) part;
@@ -670,30 +657,21 @@ public class CargoEconsReportComponent implements IAdaptable {
 	public <T> T getAdapter(final Class<T> adapter) {
 
 		if (GridTableViewer.class.isAssignableFrom(adapter)) {
-			return (T) viewer;
+			return adapter.cast(viewer);
 		}
 		if (Grid.class.isAssignableFrom(adapter)) {
-			return (T) viewer.getGrid();
+			return adapter.cast(viewer.getGrid());
 		}
 
 		if (IReportContents.class.isAssignableFrom(adapter)) {
 			dummyDataCol.getColumn().dispose();
 			if (IReportContents.class.isAssignableFrom(adapter)) {
-
 				final CopyTransposedGridToJSONUtil jsonUtil = new CopyTransposedGridToJSONUtil(viewer.getGrid(), true);
 				final String jsonContents = jsonUtil.convert();
-				return (T) new IReportContents() {
-
-					@Override
-					public String getJSONContents() {
-						return jsonContents;
-					}
-				};
-
+				return adapter.cast(ReportContents.makeJSON(jsonContents));
 			}
-
 		}
-		return null;
+		return adapter.cast(null);
 	}
 
 	public Map<String, GridColumnGroup> createColumnGroups(final Collection<Object> objects) {
@@ -730,7 +708,7 @@ public class CargoEconsReportComponent implements IAdaptable {
 			if (object instanceof OpenSlotAllocation) {
 				name = ((OpenSlotAllocation) object).getSlot().getName();
 			}
-			
+
 			if (object instanceof PaperDealAllocation) {
 				name = ((PaperDealAllocation) object).getPaperDeal().getName();
 			}
@@ -750,7 +728,7 @@ public class CargoEconsReportComponent implements IAdaptable {
 
 	public void rebuild() {
 		final List<Object> validObjects = new ArrayList<>(getSelectedObject());
-		toggleCompare();
+		detectCompareMode();
 		// Dispose old data columns - clone list to try to avoid concurrent modification exceptions
 		final List<GridViewerColumn> oldColumns = new ArrayList<>(dataColumns);
 		dataColumns.clear();
@@ -800,10 +778,9 @@ public class CargoEconsReportComponent implements IAdaptable {
 		});
 		Collections.sort(rows, (a, b) -> a.order - b.order);
 
-		viewer.setInput(rows);
 		if (compareMode) {
 
-			ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
+			final ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
 
 			final List<DeltaPair> aggregateList = new ArrayList<>();
 
@@ -855,7 +832,7 @@ public class CargoEconsReportComponent implements IAdaptable {
 			validObjects.clear();
 			validObjects.addAll(sortedObjects);
 
-			long numberOfdiffColumn = aggregateList.size();
+			final long numberOfdiffColumn = aggregateList.size();
 
 			// Only create aggregate if more than two element
 			// The cargo/vesselEvent and its partial pair
@@ -1045,7 +1022,7 @@ public class CargoEconsReportComponent implements IAdaptable {
 				}
 			} else if (selectedObject instanceof PaperDealAllocation) {
 				final PaperDealAllocation paperDealAllocation = (PaperDealAllocation) selectedObject;
-				
+
 				final GridColumnGroup gridColumnGroup = gridColumnGroupsMap.get(paperDealAllocation.getPaperDeal().getName());
 				final GridColumn gc = new GridColumn(gridColumnGroup, SWT.NONE);
 				final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
@@ -1066,8 +1043,9 @@ public class CargoEconsReportComponent implements IAdaptable {
 				}
 			}
 		}
-		// Trigger view refresh
-		ViewerHelper.refresh(viewer, true);
+
+		// Update view data
+		viewer.setInput(rows);
 	}
 
 	private void createCenteringGroupRenderer(final GridColumnGroup gcg) {
@@ -1075,7 +1053,7 @@ public class CargoEconsReportComponent implements IAdaptable {
 		gcg.setHeaderRenderer(renderer);
 	}
 
-	public void setCopyPasteMode(boolean copyPasteMode) {
+	public void setCopyPasteMode(final boolean copyPasteMode) {
 		setIncludedUnit(!copyPasteMode);
 		options.alwaysShowRawValue = copyPasteMode;
 	}
@@ -1084,7 +1062,7 @@ public class CargoEconsReportComponent implements IAdaptable {
 		return options.showPnLCalcs;
 	}
 
-	public void setShowPnLCalcs(boolean showPnLCalcs) {
+	public void setShowPnLCalcs(final boolean showPnLCalcs) {
 		this.options.showPnLCalcs = showPnLCalcs;
 	}
 }

@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.lingo.its.verifier;
 
-import java.util.function.Supplier;
-
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 

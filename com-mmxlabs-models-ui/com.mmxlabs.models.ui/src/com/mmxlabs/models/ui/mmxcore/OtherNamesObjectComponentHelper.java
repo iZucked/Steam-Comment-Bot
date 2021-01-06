@@ -43,7 +43,7 @@ public class OtherNamesObjectComponentHelper extends BaseComponentHelper {
 							return;
 						final String valueString = "" + value;
 						final String[] values = valueString.split(newLine);
-						final List<String> valueList = new ArrayList<String>(values.length);
+						final List<String> valueList = new ArrayList<>(values.length);
 						for (final String s : values) {
 							final String s2 = s.trim();
 							if (s2.isEmpty())

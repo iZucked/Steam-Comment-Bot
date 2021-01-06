@@ -5,9 +5,6 @@
 package com.mmxlabs.models.lng.port.validation;
 
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
@@ -15,9 +12,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusFactory;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;

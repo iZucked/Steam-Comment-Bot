@@ -18,6 +18,7 @@ import com.mmxlabs.optimiser.common.events.OptimisationPhaseEndEvent;
 import com.mmxlabs.optimiser.common.events.OptimisationPhaseStartEvent;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
@@ -48,7 +49,9 @@ public final class CachingVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 
 					@Override
 					public Optional<List<ScheduledVoyagePlanResult>> load(final ShippedVoyagePlanCacheKey record) throws Exception {
-						final List<ScheduledVoyagePlanResult> result = delegate.evaluateShipped(record.resource, record.vesselAvailability, record.charterCostCalculator, record.vesselStartTime, //
+						final List<ScheduledVoyagePlanResult> result = delegate.evaluateShipped(record.resource, record.vesselAvailability, 
+								record.charterCostCalculator, record.vesselStartTime, //
+								record.firstLoadPort,
 								record.previousHeelRecord, record.portTimesRecord, record.lastPlan, //
 								false, // Just return the best options
 								record.keepDetails, // Keep all the details
@@ -84,14 +87,14 @@ public final class CachingVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 
 	@Override
 	public List<ScheduledVoyagePlanResult> evaluateShipped(@NonNull final IResource resource, @NonNull final IVesselAvailability vesselAvailability, ICharterCostCalculator charterCostCalculator,
-			final int vesselStartTime, @NonNull final PreviousHeelRecord previousHeelRecord, @NonNull final IPortTimesRecord portTimesRecord, final boolean lastPlan, final boolean returnAll,
+			final int vesselStartTime, final IPort firstLoadPort, @NonNull final PreviousHeelRecord previousHeelRecord, @NonNull final IPortTimesRecord portTimesRecord, final boolean lastPlan, final boolean returnAll,
 			final boolean keepDetails, @Nullable final IAnnotatedSolution annotatedSolution) {
 
 		if (annotatedSolution != null) {
-			return delegate.evaluateShipped(resource, vesselAvailability, charterCostCalculator, vesselStartTime, previousHeelRecord, portTimesRecord, lastPlan, returnAll, keepDetails,
+			return delegate.evaluateShipped(resource, vesselAvailability, charterCostCalculator, vesselStartTime, firstLoadPort, previousHeelRecord, portTimesRecord, lastPlan, returnAll, keepDetails,
 					annotatedSolution);
 		}
-		final ShippedVoyagePlanCacheKey key = new ShippedVoyagePlanCacheKey(resource, vesselAvailability, charterCostCalculator, vesselStartTime, previousHeelRecord, portTimesRecord, lastPlan,
+		final ShippedVoyagePlanCacheKey key = new ShippedVoyagePlanCacheKey(resource, vesselAvailability, charterCostCalculator, vesselStartTime, firstLoadPort, previousHeelRecord, portTimesRecord, lastPlan,
 				keepDetails);
 
 		final Optional<List<ScheduledVoyagePlanResult>> optional = shippedCache.getUnchecked(key);

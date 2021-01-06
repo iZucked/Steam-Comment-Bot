@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.lngdataserver.lng.io.vesselgroups;
 
-import org.eclipse.emf.ecore.util.EcoreUtil;
-
 import com.mmxlabs.lngdataserver.integration.models.vesselgroups.VesselGroupDefinition;
 import com.mmxlabs.lngdataserver.integration.models.vesselgroups.VesselGroupsVersion;
 import com.mmxlabs.lngdataserver.integration.models.vesselgroups.VesselTypeConstants;

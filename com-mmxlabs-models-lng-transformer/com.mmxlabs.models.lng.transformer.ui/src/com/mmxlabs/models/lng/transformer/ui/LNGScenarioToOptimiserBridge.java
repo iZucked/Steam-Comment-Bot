@@ -321,7 +321,7 @@ public class LNGScenarioToOptimiserBridge {
 		// Copy base
 		final LNGScenarioModel copiedOriginalScenario = (LNGScenarioModel) copier.copy(originalScenarioDataProvider.getScenario());
 		// Copy uncontained slots before the schedule
-		extraSlots.forEach(s -> copier.copy(s));
+		extraSlots.forEach(copier::copy);
 		// Finally copy the schedule
 		final Schedule copiedSchedule = (Schedule) copier.copy(child_schedule);
 

@@ -22,7 +22,7 @@ import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
  */
 public final class CompositeJobControlFactory implements IJobControlFactory {
 
-	private final List<IJobControlFactory> jobControlFactories = new LinkedList<IJobControlFactory>();
+	private final List<IJobControlFactory> jobControlFactories = new LinkedList<>();
 
 	/**
 	 * Construct an empty {@link CompositeJobControlFactory}. {@link IJobControlFactory} should be registered by calling {@link #addJobControlFactory(IJobControlFactory)}.

@@ -78,8 +78,8 @@ public class MultiLineImporter extends DefaultClassImporter {
 
 	protected Collection<Map<String, String>> multiExportObject(final EObject object, final IMMXExportContext context) {
 
-		final Collection<Map<String, String>> result = new LinkedList<Map<String, String>>();
-		final Map<String, String> row = new LinkedHashMap<String, String>();
+		final Collection<Map<String, String>> result = new LinkedList<>();
+		final Map<String, String> row = new LinkedHashMap<>();
 
 		for (final EAttribute attribute : object.eClass().getEAllAttributes()) {
 			if (shouldExportFeature(attribute)) {
@@ -154,7 +154,7 @@ public class MultiLineImporter extends DefaultClassImporter {
 					@SuppressWarnings("unchecked")
 					final List<? extends EObject> values = (List<? extends EObject>) object.eGet(reference);
 					for (EObject o : values) {
-						final LinkedHashMap<String, String> newRow = new LinkedHashMap<String, String>();
+						final LinkedHashMap<String, String> newRow = new LinkedHashMap<>();
 						newRow.putAll(row);
 
 					}
@@ -299,7 +299,7 @@ public class MultiLineImporter extends DefaultClassImporter {
 		final String indexField = getIndexField(parent, eClass);
 
 		if (indexField != null) {
-			Pair<EObject, String> cacheKey = new Pair<EObject, String>(parent, row.get(indexField));
+			Pair<EObject, String> cacheKey = new Pair<>(parent, row.get(indexField));
 			result = objectMap.get(cacheKey);
 		}
 
@@ -312,7 +312,7 @@ public class MultiLineImporter extends DefaultClassImporter {
 		final String indexField = getIndexField(parent, eClass);
 
 		if (indexField != null) {
-			final Pair<EObject, String> cacheKey = new Pair<EObject, String>(parent, row.get(indexField));
+			final Pair<EObject, String> cacheKey = new Pair<>(parent, row.get(indexField));
 			objectMap.put(cacheKey, result);
 		}
 

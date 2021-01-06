@@ -7,8 +7,8 @@ package com.mmxlabs.models.lng.transformer.config;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.json.JSONObject;
@@ -20,7 +20,6 @@ import com.mmxlabs.models.lng.parameters.AnnealingSettings;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.optimiser.lso.logging.LSOLogger;
-import com.mmxlabs.optimiser.lso.logging.LSOLogger.LoggingParameters;
 
 /**
  * This class represents configuration options for the optimiser that are deserialised from 
@@ -82,7 +81,7 @@ public class OptimiserConfigurationOptions {
 		rawNumThreads = n;
 	}
 	
-	public static OptimiserConfigurationOptions readFromFile(String jsonFilename, HashMap<String, String> customInfo) {
+	public static OptimiserConfigurationOptions readFromFile(String jsonFilename, Map<String, String> customInfo) {
 		try {
 			String inputJSONX = new String(Files.readAllBytes(Paths.get(jsonFilename)));
 			
