@@ -26,6 +26,7 @@ import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IResourceElementConstraintChecker;
+import com.mmxlabs.rcp.common.Constants;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.AllowedVesselPermissionConstraintChecker;
@@ -89,7 +90,7 @@ public class CargoVesselRestrictionsMatrixProducer implements ICargoVesselRestri
 				IResourceElementConstraintChecker c = (IResourceElementConstraintChecker)con;
 				for(IPortSlot slot : cargo) {
 					if (!c.checkElement(portSlotProvider.getElement(slot), vesselProvider.getResource(vessel), messages)) {
-						if(!messages.isEmpty())
+						if (Constants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
 							messages.stream().forEach(LOG::debug);
 						return false;
 					}
@@ -98,7 +99,7 @@ public class CargoVesselRestrictionsMatrixProducer implements ICargoVesselRestri
 			else if (cargo.size() == 2 && con instanceof IPairwiseConstraintChecker) {
 				IPairwiseConstraintChecker c = (IPairwiseConstraintChecker)con;
 				if (!c.checkPairwiseConstraint(portSlotProvider.getElement(cargo.get(0)), portSlotProvider.getElement(cargo.get(1)), vesselProvider.getResource(vessel), messages)) {
-					if(!messages.isEmpty())
+					if (Constants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
 						messages.stream().forEach(LOG::debug);
 					return false;
 				}

@@ -23,6 +23,7 @@ import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 import com.mmxlabs.optimiser.lso.INullMove;
+import com.mmxlabs.rcp.common.Constants;
 
 public class LSOMover extends AbstractLSOMover {
 
@@ -54,7 +55,7 @@ public class LSOMover extends AbstractLSOMover {
 			// solution
 			final Collection<@NonNull IResource> changedResources = failedInitialConstraintCheckers ? null : move.getAffectedResources();
 			if (!checker.checkConstraints(potentialFullSequences, changedResources, messages)) {
-				if(!messages.isEmpty())
+				if (Constants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
 					messages.stream().forEach(LOG::debug);
 				return new LSOJobState(rawSequences, null, Long.MAX_VALUE, LSOJobStatus.ConstraintFail, null, seed, move, checker);
 			}

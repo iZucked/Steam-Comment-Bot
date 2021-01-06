@@ -157,7 +157,7 @@ public class ParallelFollowersAndPrecedersProviderImpl implements IFollowersAndP
 						spotResource = spotElementMap.get(e2);
 					}
 
-					final boolean allowForwardSequence = spotResource == null ? checker.allowSequence(e1, e2, false) : checker.allowSequence(e1, e2, spotResource, false);
+					final boolean allowForwardSequence = spotResource == null ? checker.allowSequence(e1, e2) : checker.allowSequence(e1, e2, spotResource);
 					if (allowForwardSequence) {
 						if (expectFalse) {
 							int ii = 0;
@@ -165,7 +165,7 @@ public class ParallelFollowersAndPrecedersProviderImpl implements IFollowersAndP
 						followers.add(e2);
 					}
 
-					final boolean allowReverseSequence = spotResource == null ? checker.allowSequence(e2, e1, false) : checker.allowSequence(e2, e1, spotResource, false);
+					final boolean allowReverseSequence = spotResource == null ? checker.allowSequence(e2, e1) : checker.allowSequence(e2, e1, spotResource);
 					if (allowReverseSequence) {
 						if (expectFalse) {
 							int ii = 0;

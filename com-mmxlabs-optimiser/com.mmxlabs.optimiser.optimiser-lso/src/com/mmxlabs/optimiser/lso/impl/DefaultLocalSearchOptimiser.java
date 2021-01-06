@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.rcp.common.Constants;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
@@ -126,7 +127,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 				break;
 			}
 		}
-		if (!messages.isEmpty())
+		if (Constants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
 			messages.stream().forEach(LOG::debug);
 		setStartTime(System.currentTimeMillis());
 
@@ -335,7 +336,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 				updateSequences(pinnedCurrentRawSequences, pinnedPotentialRawSequences, move.getAffectedResources());
 				// Break out
 				
-				if (!messages.isEmpty())
+				if (Constants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
 					messages.stream().forEach(LOG::debug);
 				return false;
 				// continue MAIN_LOOP;

@@ -32,6 +32,7 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessHelper;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.lso.IFitnessCombiner;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
+import com.mmxlabs.rcp.common.Constants;
 
 public abstract class AbstractLSOMover {
 	protected static final Logger LOG = LoggerFactory.getLogger(AbstractLSOMover.class);
@@ -91,7 +92,7 @@ public abstract class AbstractLSOMover {
 			}
 		}
 
-		if(!messages.isEmpty())
+		if (Constants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
 			messages.stream().forEach(LOG::debug);
 		// now evaluate
 		long fitness = evaluateSequencesInTurn(potentialFullSequences, evaluationState, potentialFullSequences.getResources());

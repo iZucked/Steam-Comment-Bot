@@ -20,6 +20,7 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
+import com.mmxlabs.rcp.common.Constants;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintChecker;
 
 /**
@@ -83,31 +84,19 @@ public class LegalSequencingChecker {
 	 * @param e2
 	 * @return
 	 */
-	public boolean allowSequence(final ISequenceElement e1, final ISequenceElement e2, final IResource resource, boolean print) {
+	public boolean allowSequence(final ISequenceElement e1, final ISequenceElement e2, final IResource resource) {
 		// Check with hard constraints like resource allocation and ordered elements
 
 		final List<String> messages = new ArrayList<>();
 		messages.add(String.format("%s: allowSequence", this.getClass().getName()));
 		if (!resourceAllocationChecker.checkPairwiseConstraint(e1, e2, resource, messages)) {
-			// if (log.isInfoEnabled()) {
-			// log.info("Rejected: " + pairwiseChecker.getName() + ": " + pairwiseChecker.explain(e1, e2, resource));
-			// }
-			if (print)
-				System.out.println("RAC: Rejected: " + resourceAllocationChecker.getName() + ": " + resourceAllocationChecker.explain(e1, e2, resource));
-			if(!messages.isEmpty())
+			if (Constants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
 				messages.stream().forEach(log::debug);
 			return false;
-		} else {
-			// System.out.println("True");
 		}
 		for (final IPairwiseConstraintChecker pairwiseChecker : pairwiseCheckers) {
 			if (!pairwiseChecker.checkPairwiseConstraint(e1, e2, resource, messages)) {
-				// if (log.isInfoEnabled()) {
-				// log.info("Rejected: " + pairwiseChecker.getName() + ": " + pairwiseChecker.explain(e1, e2, resource));
-				// }
-				if (print)
-					System.out.println("PW: Rejected: " + pairwiseChecker.getName() + ": " + pairwiseChecker.explain(e1, e2, resource));
-				if(!messages.isEmpty())
+				if (Constants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
 					messages.stream().forEach(log::debug);
 				return false;
 			}
@@ -125,15 +114,15 @@ public class LegalSequencingChecker {
 				result.add(pairwiseChecker.getName() + " says " + pairwiseChecker.explain(e1, e2, resource));
 			}
 		}
-		if(!messages.isEmpty())
+		if (Constants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
 			messages.stream().forEach(log::debug);
 
 		return result;
 	}
 
-	public boolean allowSequence(final ISequenceElement e1, final ISequenceElement e2, boolean print) {
+	public boolean allowSequence(final ISequenceElement e1, final ISequenceElement e2) {
 		for (final IResource r : resources) {
-			if (allowSequence(e1, e2, r, print)) {
+			if (allowSequence(e1, e2, r)) {
 				return true;
 			}
 		}

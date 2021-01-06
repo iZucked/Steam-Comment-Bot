@@ -24,4 +24,5 @@ Require-Bundle: com.mmxlabs.optimiser.optimiser-core;bundle-version="[4.10.40,5.
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  org.apache.commons.math;bundle-version="2.1.0",
  com.mmxlabs.optimiser.optimiser-common;bundle-version="[4.10.40,5.0.0)",
- com.googlecode.json-simple;bundle-version="1.1.1"
+ com.googlecode.json-simple;bundle-version="1.1.1",
+ com.mmxlabs.rcp.common

@@ -26,6 +26,7 @@ import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.optimiser.lso.INullMove;
 import com.mmxlabs.optimiser.lso.IRestartingOptimiser;
+import com.mmxlabs.rcp.common.Constants;
 
 /**
  * A reheating local search optimiser.
@@ -194,7 +195,7 @@ public class RestartingLocalSearchOptimiser extends DefaultLocalSearchOptimiser 
 			}
 		}
 		
-		if(!messages.isEmpty())
+		if (Constants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
 			messages.stream().forEach(LOG::debug);
 
 		updateProgressLogs();
