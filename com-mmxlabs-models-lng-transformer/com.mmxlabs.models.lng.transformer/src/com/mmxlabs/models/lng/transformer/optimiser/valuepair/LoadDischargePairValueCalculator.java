@@ -33,7 +33,6 @@ import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
-import com.mmxlabs.rcp.common.Constants;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
@@ -86,7 +85,7 @@ public class LoadDischargePairValueCalculator {
 				constraintChecker.checkConstraints(initialRawSequences, null, messages);
 			}
 		}
-		if (Constants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
+		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
 			messages.stream().forEach(LOG::debug);
 		modifyConstraintCheckers(constraintCheckers);
 	}
@@ -115,7 +114,7 @@ public class LoadDischargePairValueCalculator {
 		messages.add(String.format("%s: isValidPair", this.getClass().getName()));
 		for (final IPairwiseConstraintChecker checker : constraintCheckers) {
 			if (!checker.checkPairwiseConstraint(portSlotProvider.getElement(load), portSlotProvider.getElement(discharge), vesselProvider.getResource(vessel), messages)) {
-				if (Constants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
+				if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
 					messages.stream().forEach(LOG::debug);
 				return false;
 			}
@@ -147,7 +146,7 @@ public class LoadDischargePairValueCalculator {
 			boolean isValid = true;
 			for (final IPairwiseConstraintChecker checker : constraintCheckers) {
 				if (!checker.checkPairwiseConstraint(portSlotProvider.getElement(load), portSlotProvider.getElement(discharge), vesselProvider.getResource(v), messages)) {
-					if (Constants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
+					if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
 						messages.stream().forEach(LOG::debug);
 					//checker.checkPairwiseConstraint(portSlotProvider.getElement(load), portSlotProvider.getElement(discharge), vesselProvider.getResource(v));
 					isValid = false;//return false;

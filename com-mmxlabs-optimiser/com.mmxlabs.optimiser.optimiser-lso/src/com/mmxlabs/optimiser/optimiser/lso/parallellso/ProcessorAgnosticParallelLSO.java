@@ -39,7 +39,6 @@ import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.logging.ILoggingProvider;
 import com.mmxlabs.optimiser.lso.logging.LSOLogger;
 import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
-import com.mmxlabs.rcp.common.Constants;
 
 public class ProcessorAgnosticParallelLSO extends LocalSearchOptimiser {
 	protected static final Logger LOG = LoggerFactory.getLogger(ProcessorAgnosticParallelLSO.class);
@@ -114,7 +113,7 @@ public class ProcessorAgnosticParallelLSO extends LocalSearchOptimiser {
 				break;
 			}
 		}
-		if (Constants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
+		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
 			messages.stream().forEach(LOG::debug);
 
 		final IAnnotatedSolution annotatedBestSolution = getFitnessEvaluator().getBestAnnotatedSolution();

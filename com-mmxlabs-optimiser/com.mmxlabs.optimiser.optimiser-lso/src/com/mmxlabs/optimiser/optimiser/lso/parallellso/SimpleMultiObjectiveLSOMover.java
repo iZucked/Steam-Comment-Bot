@@ -15,6 +15,7 @@ import com.google.inject.Inject;
 import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
@@ -25,7 +26,6 @@ import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 import com.mmxlabs.optimiser.lso.INullMove;
-import com.mmxlabs.rcp.common.Constants;
 
 public class SimpleMultiObjectiveLSOMover extends AbstractLSOMover {
 
@@ -61,7 +61,7 @@ public class SimpleMultiObjectiveLSOMover extends AbstractLSOMover {
 			// solution
 			final Collection<@NonNull IResource> changedResources = failedInitialConstraintCheckers ? null : move.getAffectedResources();
 			if (!checker.checkConstraints(potentialFullSequences, changedResources, messages)) {
-				if (Constants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
+				if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
 					messages.stream().forEach(LOG::debug);
 				// Break out
 				return new MultiObjectiveJobState(rawSequences, null, null, LSOJobStatus.ConstraintFail, null, seed, move, checker);

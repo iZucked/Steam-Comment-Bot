@@ -25,6 +25,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
+import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IInitialSequencesConstraintChecker;
@@ -34,7 +35,6 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScope;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
-import com.mmxlabs.rcp.common.Constants;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.CapacityEvaluatedStateChecker;
@@ -146,7 +146,7 @@ public class EvaluationHelper {
 			}
 
 			if (!checker.checkConstraints(currentFullSequences, currentChangedResources, messages)) {
-				if (Constants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
+				if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
 					messages.stream().forEach(LOG::debug);
 				// Break out
 				return false;
@@ -178,7 +178,7 @@ public class EvaluationHelper {
 			}
 
 			if (!checker.checkConstraints(currentFullSequences, currentChangedResources, messages)) {
-				if (Constants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
+				if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
 					messages.stream().forEach(LOG::debug);
 				// Break out
 				return false;
@@ -196,7 +196,7 @@ public class EvaluationHelper {
 		// Run through the constraint checkers
 		for (final IConstraintChecker checker : constraintCheckers) {
 			if (!checker.checkConstraints(movedFullSequences, null, messages)) {
-				if (Constants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
+				if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
 					messages.stream().forEach(LOG::debug);
 				return false;
 			}

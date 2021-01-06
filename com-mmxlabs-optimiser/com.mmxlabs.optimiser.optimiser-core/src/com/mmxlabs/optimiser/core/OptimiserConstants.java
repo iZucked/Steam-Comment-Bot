@@ -29,4 +29,6 @@ public class OptimiserConstants {
 	public static final String G_AI_iterations = "general-info-iters";
 
 	public static final String LOGGING_DATA_STORE = "logging-data-store";
+	
+	public static final boolean SHOW_CONSTRAINTS_FAIL_MESSAGES = false;
 }

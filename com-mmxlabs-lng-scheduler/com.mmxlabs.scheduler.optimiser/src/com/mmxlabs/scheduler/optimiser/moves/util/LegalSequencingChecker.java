@@ -16,11 +16,11 @@ import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintChec
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
+import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
-import com.mmxlabs.rcp.common.Constants;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintChecker;
 
 /**
@@ -90,13 +90,13 @@ public class LegalSequencingChecker {
 		final List<String> messages = new ArrayList<>();
 		messages.add(String.format("%s: allowSequence", this.getClass().getName()));
 		if (!resourceAllocationChecker.checkPairwiseConstraint(e1, e2, resource, messages)) {
-			if (Constants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
+			if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
 				messages.stream().forEach(log::debug);
 			return false;
 		}
 		for (final IPairwiseConstraintChecker pairwiseChecker : pairwiseCheckers) {
 			if (!pairwiseChecker.checkPairwiseConstraint(e1, e2, resource, messages)) {
-				if (Constants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
+				if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
 					messages.stream().forEach(log::debug);
 				return false;
 			}
@@ -114,7 +114,7 @@ public class LegalSequencingChecker {
 				result.add(pairwiseChecker.getName() + " says " + pairwiseChecker.explain(e1, e2, resource));
 			}
 		}
-		if (Constants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
+		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
 			messages.stream().forEach(log::debug);
 
 		return result;

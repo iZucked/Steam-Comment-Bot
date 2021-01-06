@@ -26,7 +26,6 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.optimiser.lso.INullMove;
-import com.mmxlabs.rcp.common.Constants;
 import com.mmxlabs.scheduler.optimiser.lso.guided.GuideMoveGeneratorOptions;
 import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveGenerator.MoveResult;
@@ -74,7 +73,7 @@ public class ActionableSetMover {
 				break;
 			}
 		}
-		if (Constants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
+		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
 			messages.stream().forEach(LOG::debug);
 
 		@Nullable
@@ -136,7 +135,7 @@ public class ActionableSetMover {
 		// Apply hard constraint checkers
 		for (final IConstraintChecker checker : constraintCheckers) {
 			if (!checker.checkConstraints(currentFullSequences, changedResources, messages)) {
-				if (Constants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
+				if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
 					messages.stream().forEach(LOG::debug);
 				return new ActionableSetJobState(rawSequences, Long.MAX_VALUE, null, ActionableSetJobState.Status.Fail, seed, note, state);
 			}

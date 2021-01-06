@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.rcp.common.Constants;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
@@ -31,8 +30,8 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess.Phase;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
-import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.optimiser.core.moves.IMove;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.optimiser.lso.INullMove;
 import com.mmxlabs.optimiser.lso.logging.ILoggingProvider;
 import com.mmxlabs.optimiser.lso.logging.LSOLogger;
@@ -127,7 +126,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 				break;
 			}
 		}
-		if (Constants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
+		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
 			messages.stream().forEach(LOG::debug);
 		setStartTime(System.currentTimeMillis());
 
@@ -336,7 +335,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 				updateSequences(pinnedCurrentRawSequences, pinnedPotentialRawSequences, move.getAffectedResources());
 				// Break out
 				
-				if (Constants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
+				if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
 					messages.stream().forEach(LOG::debug);
 				return false;
 				// continue MAIN_LOOP;
