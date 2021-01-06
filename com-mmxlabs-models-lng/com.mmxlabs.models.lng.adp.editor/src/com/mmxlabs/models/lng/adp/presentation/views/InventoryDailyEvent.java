@@ -6,23 +6,11 @@ package com.mmxlabs.models.lng.adp.presentation.views;
 
 import java.time.LocalDate;
 
-class InventoryDailyEvent {
-	LocalDate date;
-	int netVolumeIn = 0;
-	int minVolume = 0;
-	int maxVolume = 0;
-	
-	public InventoryDailyEvent() {
-	}
+class InventoryDailyEvent extends InventoryEvent {
+	public final LocalDate date;
 	
 	public InventoryDailyEvent(LocalDate date, int netVolumeIn, int minVolume, int maxVolume) {
+		super(netVolumeIn, minVolume, maxVolume);
 		this.date = date;
-		this.netVolumeIn = netVolumeIn;
-		this.minVolume = minVolume;
-		this.maxVolume = maxVolume;
-	}
-	
-	public void addVolume(int volume) {
-		netVolumeIn += volume;
 	}
 }

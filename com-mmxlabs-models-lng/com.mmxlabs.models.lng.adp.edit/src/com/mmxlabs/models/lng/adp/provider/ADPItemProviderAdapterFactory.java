@@ -693,141 +693,118 @@ public class ADPItemProviderAdapterFactory extends ADPAdapterFactory implements 
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.InventoryProfile} instances.
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.MullEntityRow} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected InventoryProfileItemProvider inventoryProfileItemProvider;
+	protected MullEntityRowItemProvider mullEntityRowItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.adp.InventoryProfile}.
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.adp.MullEntityRow}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createInventoryProfileAdapter() {
-		if (inventoryProfileItemProvider == null) {
-			inventoryProfileItemProvider = new InventoryProfileItemProvider(this);
+	public Adapter createMullEntityRowAdapter() {
+		if (mullEntityRowItemProvider == null) {
+			mullEntityRowItemProvider = new MullEntityRowItemProvider(this);
 		}
 
-		return inventoryProfileItemProvider;
+		return mullEntityRowItemProvider;
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.InventoryADPEntityRow} instances.
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.DESSalesMarketAllocationRow} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected InventoryADPEntityRowItemProvider inventoryADPEntityRowItemProvider;
+	protected DESSalesMarketAllocationRowItemProvider desSalesMarketAllocationRowItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.adp.InventoryADPEntityRow}.
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.adp.DESSalesMarketAllocationRow}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createInventoryADPEntityRowAdapter() {
-		if (inventoryADPEntityRowItemProvider == null) {
-			inventoryADPEntityRowItemProvider = new InventoryADPEntityRowItemProvider(this);
+	public Adapter createDESSalesMarketAllocationRowAdapter() {
+		if (desSalesMarketAllocationRowItemProvider == null) {
+			desSalesMarketAllocationRowItemProvider = new DESSalesMarketAllocationRowItemProvider(this);
 		}
 
-		return inventoryADPEntityRowItemProvider;
+		return desSalesMarketAllocationRowItemProvider;
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.MarketAllocationRow} instances.
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.SalesContractAllocationRow} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected MarketAllocationRowItemProvider marketAllocationRowItemProvider;
+	protected SalesContractAllocationRowItemProvider salesContractAllocationRowItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.adp.MarketAllocationRow}.
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.adp.SalesContractAllocationRow}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createMarketAllocationRowAdapter() {
-		if (marketAllocationRowItemProvider == null) {
-			marketAllocationRowItemProvider = new MarketAllocationRowItemProvider(this);
+	public Adapter createSalesContractAllocationRowAdapter() {
+		if (salesContractAllocationRowItemProvider == null) {
+			salesContractAllocationRowItemProvider = new SalesContractAllocationRowItemProvider(this);
 		}
 
-		return marketAllocationRowItemProvider;
+		return salesContractAllocationRowItemProvider;
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.ContractAllocationRow} instances.
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.MullProfile} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ContractAllocationRowItemProvider contractAllocationRowItemProvider;
+	protected MullProfileItemProvider mullProfileItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.adp.ContractAllocationRow}.
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.adp.MullProfile}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createContractAllocationRowAdapter() {
-		if (contractAllocationRowItemProvider == null) {
-			contractAllocationRowItemProvider = new ContractAllocationRowItemProvider(this);
+	public Adapter createMullProfileAdapter() {
+		if (mullProfileItemProvider == null) {
+			mullProfileItemProvider = new MullProfileItemProvider(this);
 		}
 
-		return contractAllocationRowItemProvider;
+		return mullProfileItemProvider;
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.MultipleInventoryProfile} instances.
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.MullSubprofile} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected MultipleInventoryProfileItemProvider multipleInventoryProfileItemProvider;
+	protected MullSubprofileItemProvider mullSubprofileItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.adp.MultipleInventoryProfile}.
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.adp.MullSubprofile}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createMultipleInventoryProfileAdapter() {
-		if (multipleInventoryProfileItemProvider == null) {
-			multipleInventoryProfileItemProvider = new MultipleInventoryProfileItemProvider(this);
+	public Adapter createMullSubprofileAdapter() {
+		if (mullSubprofileItemProvider == null) {
+			mullSubprofileItemProvider = new MullSubprofileItemProvider(this);
 		}
 
-		return multipleInventoryProfileItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.InventorySubprofile} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected InventorySubprofileItemProvider inventorySubprofileItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.adp.InventorySubprofile}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createInventorySubprofileAdapter() {
-		if (inventorySubprofileItemProvider == null) {
-			inventorySubprofileItemProvider = new InventorySubprofileItemProvider(this);
-		}
-
-		return inventorySubprofileItemProvider;
+		return mullSubprofileItemProvider;
 	}
 
 	/**
@@ -982,12 +959,11 @@ public class ADPItemProviderAdapterFactory extends ADPAdapterFactory implements 
 		if (periodDistributionProfileConstraintItemProvider != null) periodDistributionProfileConstraintItemProvider.dispose();
 		if (periodDistributionItemProvider != null) periodDistributionItemProvider.dispose();
 		if (targetCargoesOnVesselConstraintItemProvider != null) targetCargoesOnVesselConstraintItemProvider.dispose();
-		if (inventoryProfileItemProvider != null) inventoryProfileItemProvider.dispose();
-		if (inventoryADPEntityRowItemProvider != null) inventoryADPEntityRowItemProvider.dispose();
-		if (marketAllocationRowItemProvider != null) marketAllocationRowItemProvider.dispose();
-		if (contractAllocationRowItemProvider != null) contractAllocationRowItemProvider.dispose();
-		if (multipleInventoryProfileItemProvider != null) multipleInventoryProfileItemProvider.dispose();
-		if (inventorySubprofileItemProvider != null) inventorySubprofileItemProvider.dispose();
+		if (mullEntityRowItemProvider != null) mullEntityRowItemProvider.dispose();
+		if (desSalesMarketAllocationRowItemProvider != null) desSalesMarketAllocationRowItemProvider.dispose();
+		if (salesContractAllocationRowItemProvider != null) salesContractAllocationRowItemProvider.dispose();
+		if (mullProfileItemProvider != null) mullProfileItemProvider.dispose();
+		if (mullSubprofileItemProvider != null) mullSubprofileItemProvider.dispose();
 	}
 
 }

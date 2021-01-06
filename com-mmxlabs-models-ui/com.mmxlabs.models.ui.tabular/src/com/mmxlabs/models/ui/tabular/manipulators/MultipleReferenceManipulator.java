@@ -26,15 +26,10 @@ import org.eclipse.swt.widgets.Control;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.models.lng.adp.InventoryADPEntityRow;
-import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.ui.editors.util.CommandUtil;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
-import com.mmxlabs.models.ui.valueproviders.SimpleReferenceValueProvider;
 import com.mmxlabs.rcp.common.dialogs.ListSelectionDialog;
-import com.mmxlabs.scenario.service.model.ScenarioModel;
 
 /**
  * @author hinton
@@ -90,40 +85,17 @@ public class MultipleReferenceManipulator extends DialogFeatureManipulator {
 		if (Equality.isEqual(currentValue, value)) {
 			return;
 		}
-		Optional<Vessel> ova, ovb;
-		List<Optional<Vessel>> ll = new LinkedList<>();
-		if (object instanceof InventoryADPEntityRow) {
-			InventoryADPEntityRow row = (InventoryADPEntityRow) object;
-			EObject oo = row.eContainer().eContainer().eContainer();
-			LNGScenarioModel sm = (LNGScenarioModel) oo;
-			String expectedVessel = "Abadi";
-			ova = sm.getReferenceModel().getFleetModel().getVessels().stream().filter(v->v.getName().equalsIgnoreCase(expectedVessel)).findAny();
-			ll.add(ova);
-			int i = 0;
-		}
 		editingDomain.getCommandStack().execute(CommandUtil.createMultipleAttributeSetter(editingDomain, (EObject) object, field, (Collection<?>) value));
-		if (object instanceof InventoryADPEntityRow) {
-			InventoryADPEntityRow row = (InventoryADPEntityRow) object;
-			EObject oo = row.eContainer().eContainer().eContainer();
-			LNGScenarioModel sm = (LNGScenarioModel) oo;
-			String expectedVessel = "Abadi";
-			ovb = sm.getReferenceModel().getFleetModel().getVessels().stream().filter(v->v.getName().equalsIgnoreCase(expectedVessel)).findAny();
-			ll.add(ovb);
-			int i = 0;
-		}
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	protected Object openDialogBox(final Control cellEditorWindow, final Object object) {
 		final List<Pair<String, EObject>> options = valueProvider.getAllowedValues((EObject) object, field);
-		Optional<Pair<String, EObject>> a = options.stream().filter(p -> p.getFirst().equalsIgnoreCase("abadi")).findAny();
-//		options.get(0).getFirst().equalsIgnoreCase(anotherString)
 
 		if ((options.size() > 0) && (options.get(0).getSecond() == null)) {
 			options.remove(0);
 		}
-		Optional<Pair<String, EObject>> b = options.stream().filter(p -> p.getFirst().equalsIgnoreCase("lng barka")).findAny();
 
 		final ListSelectionDialog listSelectionDialog = new ListSelectionDialog(cellEditorWindow.getShell(), options.toArray(), new ArrayContentProvider(),
 

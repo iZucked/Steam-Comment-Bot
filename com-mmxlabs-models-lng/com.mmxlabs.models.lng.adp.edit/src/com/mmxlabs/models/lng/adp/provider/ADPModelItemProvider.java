@@ -66,8 +66,6 @@ public class ADPModelItemProvider
 
 			addYearStartPropertyDescriptor(object);
 			addYearEndPropertyDescriptor(object);
-			addInventoryProfilesPropertyDescriptor(object);
-			addMultipleInventoriesProfilePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -117,50 +115,6 @@ public class ADPModelItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Inventory Profiles feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addInventoryProfilesPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_ADPModel_inventoryProfiles_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_ADPModel_inventoryProfiles_feature", "_UI_ADPModel_type"),
-				 ADPPackage.Literals.ADP_MODEL__INVENTORY_PROFILES,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Multiple Inventories Profile feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addMultipleInventoriesProfilePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_ADPModel_multipleInventoriesProfile_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_ADPModel_multipleInventoriesProfile_feature", "_UI_ADPModel_type"),
-				 ADPPackage.Literals.ADP_MODEL__MULTIPLE_INVENTORIES_PROFILE,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -175,6 +129,7 @@ public class ADPModelItemProvider
 			childrenFeatures.add(ADPPackage.Literals.ADP_MODEL__PURCHASE_CONTRACT_PROFILES);
 			childrenFeatures.add(ADPPackage.Literals.ADP_MODEL__SALES_CONTRACT_PROFILES);
 			childrenFeatures.add(ADPPackage.Literals.ADP_MODEL__FLEET_PROFILE);
+			childrenFeatures.add(ADPPackage.Literals.ADP_MODEL__MULL_PROFILE);
 		}
 		return childrenFeatures;
 	}
@@ -237,6 +192,7 @@ public class ADPModelItemProvider
 			case ADPPackage.ADP_MODEL__PURCHASE_CONTRACT_PROFILES:
 			case ADPPackage.ADP_MODEL__SALES_CONTRACT_PROFILES:
 			case ADPPackage.ADP_MODEL__FLEET_PROFILE:
+			case ADPPackage.ADP_MODEL__MULL_PROFILE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -268,6 +224,11 @@ public class ADPModelItemProvider
 			(createChildParameter
 				(ADPPackage.Literals.ADP_MODEL__FLEET_PROFILE,
 				 ADPFactory.eINSTANCE.createFleetProfile()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ADPPackage.Literals.ADP_MODEL__MULL_PROFILE,
+				 ADPFactory.eINSTANCE.createMullProfile()));
 	}
 
 }

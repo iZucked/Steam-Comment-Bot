@@ -202,28 +202,28 @@ public class ADPAdapterFactory extends AdapterFactoryImpl {
 				return createTargetCargoesOnVesselConstraintAdapter();
 			}
 			@Override
-			public Adapter caseInventoryProfile(InventoryProfile object) {
-				return createInventoryProfileAdapter();
+			public Adapter caseMullEntityRow(MullEntityRow object) {
+				return createMullEntityRowAdapter();
 			}
 			@Override
-			public Adapter caseInventoryADPEntityRow(InventoryADPEntityRow object) {
-				return createInventoryADPEntityRowAdapter();
+			public Adapter caseDESSalesMarketAllocationRow(DESSalesMarketAllocationRow object) {
+				return createDESSalesMarketAllocationRowAdapter();
 			}
 			@Override
-			public Adapter caseMarketAllocationRow(MarketAllocationRow object) {
-				return createMarketAllocationRowAdapter();
+			public Adapter caseSalesContractAllocationRow(SalesContractAllocationRow object) {
+				return createSalesContractAllocationRowAdapter();
 			}
 			@Override
-			public Adapter caseContractAllocationRow(ContractAllocationRow object) {
-				return createContractAllocationRowAdapter();
+			public Adapter caseMullProfile(MullProfile object) {
+				return createMullProfileAdapter();
 			}
 			@Override
-			public Adapter caseMultipleInventoryProfile(MultipleInventoryProfile object) {
-				return createMultipleInventoryProfileAdapter();
+			public Adapter caseMullSubprofile(MullSubprofile object) {
+				return createMullSubprofileAdapter();
 			}
 			@Override
-			public Adapter caseInventorySubprofile(InventorySubprofile object) {
-				return createInventorySubprofileAdapter();
+			public Adapter caseMullAllocationRow(MullAllocationRow object) {
+				return createMullAllocationRowAdapter();
 			}
 			@Override
 			public Adapter caseMMXObject(MMXObject object) {
@@ -688,86 +688,86 @@ public class ADPAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.InventoryProfile <em>Inventory Profile</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.MullEntityRow <em>Mull Entity Row</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.adp.InventoryProfile
+	 * @see com.mmxlabs.models.lng.adp.MullEntityRow
 	 * @generated
 	 */
-	public Adapter createInventoryProfileAdapter() {
+	public Adapter createMullEntityRowAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.InventoryADPEntityRow <em>Inventory ADP Entity Row</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.DESSalesMarketAllocationRow <em>DES Sales Market Allocation Row</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.adp.InventoryADPEntityRow
+	 * @see com.mmxlabs.models.lng.adp.DESSalesMarketAllocationRow
 	 * @generated
 	 */
-	public Adapter createInventoryADPEntityRowAdapter() {
+	public Adapter createDESSalesMarketAllocationRowAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.MarketAllocationRow <em>Market Allocation Row</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.SalesContractAllocationRow <em>Sales Contract Allocation Row</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.adp.MarketAllocationRow
+	 * @see com.mmxlabs.models.lng.adp.SalesContractAllocationRow
 	 * @generated
 	 */
-	public Adapter createMarketAllocationRowAdapter() {
+	public Adapter createSalesContractAllocationRowAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.ContractAllocationRow <em>Contract Allocation Row</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.MullProfile <em>Mull Profile</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.adp.ContractAllocationRow
+	 * @see com.mmxlabs.models.lng.adp.MullProfile
 	 * @generated
 	 */
-	public Adapter createContractAllocationRowAdapter() {
+	public Adapter createMullProfileAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.MultipleInventoryProfile <em>Multiple Inventory Profile</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.MullSubprofile <em>Mull Subprofile</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.adp.MultipleInventoryProfile
+	 * @see com.mmxlabs.models.lng.adp.MullSubprofile
 	 * @generated
 	 */
-	public Adapter createMultipleInventoryProfileAdapter() {
+	public Adapter createMullSubprofileAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.InventorySubprofile <em>Inventory Subprofile</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.MullAllocationRow <em>Mull Allocation Row</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.adp.InventorySubprofile
+	 * @see com.mmxlabs.models.lng.adp.MullAllocationRow
 	 * @generated
 	 */
-	public Adapter createInventorySubprofileAdapter() {
+	public Adapter createMullAllocationRowAdapter() {
 		return null;
 	}
 

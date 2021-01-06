@@ -300,39 +300,41 @@ public class ADPSwitch<@Nullable T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case ADPPackage.INVENTORY_PROFILE: {
-				InventoryProfile inventoryProfile = (InventoryProfile)theEObject;
-				T1 result = caseInventoryProfile(inventoryProfile);
+			case ADPPackage.MULL_ENTITY_ROW: {
+				MullEntityRow mullEntityRow = (MullEntityRow)theEObject;
+				T1 result = caseMullEntityRow(mullEntityRow);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case ADPPackage.INVENTORY_ADP_ENTITY_ROW: {
-				InventoryADPEntityRow inventoryADPEntityRow = (InventoryADPEntityRow)theEObject;
-				T1 result = caseInventoryADPEntityRow(inventoryADPEntityRow);
+			case ADPPackage.DES_SALES_MARKET_ALLOCATION_ROW: {
+				DESSalesMarketAllocationRow desSalesMarketAllocationRow = (DESSalesMarketAllocationRow)theEObject;
+				T1 result = caseDESSalesMarketAllocationRow(desSalesMarketAllocationRow);
+				if (result == null) result = caseMullAllocationRow(desSalesMarketAllocationRow);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case ADPPackage.MARKET_ALLOCATION_ROW: {
-				MarketAllocationRow marketAllocationRow = (MarketAllocationRow)theEObject;
-				T1 result = caseMarketAllocationRow(marketAllocationRow);
+			case ADPPackage.SALES_CONTRACT_ALLOCATION_ROW: {
+				SalesContractAllocationRow salesContractAllocationRow = (SalesContractAllocationRow)theEObject;
+				T1 result = caseSalesContractAllocationRow(salesContractAllocationRow);
+				if (result == null) result = caseMullAllocationRow(salesContractAllocationRow);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case ADPPackage.CONTRACT_ALLOCATION_ROW: {
-				ContractAllocationRow contractAllocationRow = (ContractAllocationRow)theEObject;
-				T1 result = caseContractAllocationRow(contractAllocationRow);
+			case ADPPackage.MULL_PROFILE: {
+				MullProfile mullProfile = (MullProfile)theEObject;
+				T1 result = caseMullProfile(mullProfile);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case ADPPackage.MULTIPLE_INVENTORY_PROFILE: {
-				MultipleInventoryProfile multipleInventoryProfile = (MultipleInventoryProfile)theEObject;
-				T1 result = caseMultipleInventoryProfile(multipleInventoryProfile);
+			case ADPPackage.MULL_SUBPROFILE: {
+				MullSubprofile mullSubprofile = (MullSubprofile)theEObject;
+				T1 result = caseMullSubprofile(mullSubprofile);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case ADPPackage.INVENTORY_SUBPROFILE: {
-				InventorySubprofile inventorySubprofile = (InventorySubprofile)theEObject;
-				T1 result = caseInventorySubprofile(inventorySubprofile);
+			case ADPPackage.MULL_ALLOCATION_ROW: {
+				MullAllocationRow mullAllocationRow = (MullAllocationRow)theEObject;
+				T1 result = caseMullAllocationRow(mullAllocationRow);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -806,92 +808,92 @@ public class ADPSwitch<@Nullable T1> extends Switch<T1> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Inventory Profile</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Mull Entity Row</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Inventory Profile</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Mull Entity Row</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T1 caseInventoryProfile(InventoryProfile object) {
+	public T1 caseMullEntityRow(MullEntityRow object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Inventory ADP Entity Row</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>DES Sales Market Allocation Row</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Inventory ADP Entity Row</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>DES Sales Market Allocation Row</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T1 caseInventoryADPEntityRow(InventoryADPEntityRow object) {
+	public T1 caseDESSalesMarketAllocationRow(DESSalesMarketAllocationRow object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Market Allocation Row</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Sales Contract Allocation Row</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Market Allocation Row</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Sales Contract Allocation Row</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T1 caseMarketAllocationRow(MarketAllocationRow object) {
+	public T1 caseSalesContractAllocationRow(SalesContractAllocationRow object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Contract Allocation Row</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Mull Profile</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Contract Allocation Row</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Mull Profile</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T1 caseContractAllocationRow(ContractAllocationRow object) {
+	public T1 caseMullProfile(MullProfile object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Multiple Inventory Profile</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Mull Subprofile</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Multiple Inventory Profile</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Mull Subprofile</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T1 caseMultipleInventoryProfile(MultipleInventoryProfile object) {
+	public T1 caseMullSubprofile(MullSubprofile object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Inventory Subprofile</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Mull Allocation Row</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Inventory Subprofile</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Mull Allocation Row</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T1 caseInventorySubprofile(InventorySubprofile object) {
+	public T1 caseMullAllocationRow(MullAllocationRow object) {
 		return null;
 	}
 

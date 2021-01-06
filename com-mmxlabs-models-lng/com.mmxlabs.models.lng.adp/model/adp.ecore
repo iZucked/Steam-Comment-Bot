@@ -10,10 +10,8 @@
         upperBound="-1" eType="#//SalesContractProfile" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="fleetProfile" eType="#//FleetProfile"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="inventoryProfiles" upperBound="-1"
-        eType="#//InventoryProfile" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="multipleInventoriesProfile"
-        eType="#//MultipleInventoryProfile" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mullProfile" eType="#//MullProfile"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FleetProfile">
     <eStructuralFeatures xsi:type="ecore:EReference" name="constraints" upperBound="-1"
@@ -212,49 +210,38 @@
         defaultValueLiteral="YEARLY"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="weight" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="InventoryProfile">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="inventory" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//Inventory"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="generatedSlots" upperBound="-1"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//LoadSlot"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volume" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="entityTable" upperBound="-1"
-        eType="#//InventoryADPEntityRow" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="windowSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="InventoryADPEntityRow">
+  <eClassifiers xsi:type="ecore:EClass" name="MullEntityRow">
     <eStructuralFeatures xsi:type="ecore:EReference" name="entity" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BaseLegalEntity"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="initialAllocation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="relativeEntitlement" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="marketAllocationRows" upperBound="-1"
-        eType="#//MarketAllocationRow" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="desSalesMarketAllocationRows"
+        upperBound="-1" eType="#//DESSalesMarketAllocationRow" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="ports" upperBound="-1"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="contractAllocationRows"
-        upperBound="-1" eType="#//ContractAllocationRow" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="salesContractAllocationRows"
+        upperBound="-1" eType="#//SalesContractAllocationRow" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="MarketAllocationRow">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="market" eType="ecore:EClass ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.ecore#//DESSalesMarket"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="weight" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="vessels" upperBound="-1"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DESSalesMarketAllocationRow" eSuperTypes="#//MullAllocationRow">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="desSalesMarket" eType="ecore:EClass ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.ecore#//DESSalesMarket"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ContractAllocationRow">
+  <eClassifiers xsi:type="ecore:EClass" name="SalesContractAllocationRow" eSuperTypes="#//MullAllocationRow">
     <eStructuralFeatures xsi:type="ecore:EReference" name="contract" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//SalesContract"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="weight" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="vessels" upperBound="-1"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="MultipleInventoryProfile">
+  <eClassifiers xsi:type="ecore:EClass" name="MullProfile">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="windowSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeFlex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="inventories" upperBound="-1"
-        eType="#//InventorySubprofile" containment="true"/>
+        eType="#//MullSubprofile" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="fullCargoLotValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="InventorySubprofile">
+  <eClassifiers xsi:type="ecore:EClass" name="MullSubprofile">
     <eStructuralFeatures xsi:type="ecore:EReference" name="inventory" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//Inventory"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="entityTable" upperBound="-1"
-        eType="#//InventoryADPEntityRow" containment="true"/>
+        eType="#//MullEntityRow" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MullAllocationRow" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="weight" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vessels" upperBound="-1"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>
   </eClassifiers>
 </ecore:EPackage>

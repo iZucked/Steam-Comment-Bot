@@ -1,119 +1,76 @@
 package com.mmxlabs.models.lng.adp.presentation.views;
 
-import java.time.LocalDate;
-import java.util.HashMap;
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.stream.IntStream;
 
-import com.mmxlabs.common.Pair;
-import com.mmxlabs.models.lng.adp.ContractAllocationRow;
-import com.mmxlabs.models.lng.adp.InventoryADPEntityRow;
-import com.mmxlabs.models.lng.adp.MarketAllocationRow;
-import com.mmxlabs.models.lng.commercial.SalesContract;
+import com.mmxlabs.models.lng.adp.DESSalesMarketAllocationRow;
+import com.mmxlabs.models.lng.adp.MullEntityRow;
+import com.mmxlabs.models.lng.adp.SalesContractAllocationRow;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
+
 
 public class MUDContainer {
+	private final BaseLegalEntity entity;
+	private long runningAllocation;
+	private final double relativeEntitlement;
+	private int currentMonthAbsoluteEntitlement;
+	private final List<AllocationTracker> allocationTrackers = new LinkedList<>();
 	
-	private List<Pair<SalesContract, Double>> salesContractRelativeEntitlements;
-	private List<Pair<DESSalesMarket, Double>> marketRelativeEntitlements;
-	
-	private Map<SalesContract, Long> salesContractRunningAllocation;
-	private Map<DESSalesMarket, Long> marketRunningAllocation;
-	private Map<SalesContract, List<Vessel>> salesContractVesselLists;
-	private Map<DESSalesMarket, List<Vessel>> marketVesselLists;
-	
-	public MUDContainer(final InventoryADPEntityRow entityRow) {
+	public MUDContainer(final MullEntityRow entityRow, final double allEntitiesWeight) {
+		this.relativeEntitlement = entityRow.getRelativeEntitlement()/allEntitiesWeight;
+		this.runningAllocation = Long.parseLong(entityRow.getInitialAllocation());
+		this.currentMonthAbsoluteEntitlement = (int) this.runningAllocation;
+		this.entity = entityRow.getEntity();
 		double totalWeight = IntStream.concat(
-				entityRow.getContractAllocationRows().stream().mapToInt(ContractAllocationRow::getWeight),
-				entityRow.getMarketAllocationRows().stream().mapToInt(MarketAllocationRow::getWeight)
+				entityRow.getSalesContractAllocationRows().stream().mapToInt(SalesContractAllocationRow::getWeight),
+				entityRow.getDesSalesMarketAllocationRows().stream().mapToInt(DESSalesMarketAllocationRow::getWeight)
 			).sum();
 		
-		this.salesContractRelativeEntitlements = new LinkedList<>();
-		this.salesContractRunningAllocation = new HashMap<>();
-		this.salesContractVesselLists = new HashMap<>();
-		for (final ContractAllocationRow contractAllocationRow : entityRow.getContractAllocationRows()) {
-			final SalesContract currentSalesContract = contractAllocationRow.getContract();
-			final List<Vessel> currentVessels = contractAllocationRow.getVessels();
-			final double relEntitle = contractAllocationRow.getWeight()/totalWeight;
-			this.salesContractRelativeEntitlements.add(new Pair<>(currentSalesContract, relEntitle));
-			this.salesContractRunningAllocation.put(currentSalesContract, 0L);
-			this.salesContractVesselLists.put(currentSalesContract, currentVessels);
-		}
-		this.marketRelativeEntitlements = new LinkedList<>();
-		this.marketRunningAllocation = new HashMap<>();
-		this.marketVesselLists = new HashMap<>();
-		for (final MarketAllocationRow marketAllocationRow : entityRow.getMarketAllocationRows()) {
-			final DESSalesMarket currentMarket = marketAllocationRow.getMarket();
-			final List<Vessel> currentVessels = marketAllocationRow.getVessels();
-			final double relEntitle = marketAllocationRow.getWeight()/totalWeight;
-			this.marketRelativeEntitlements.add(new Pair<>(currentMarket, relEntitle));
-			this.marketRunningAllocation.put(currentMarket, 0L);
-			this.marketVesselLists.put(currentMarket, currentVessels);
-		}
+		entityRow.getSalesContractAllocationRows().forEach(row -> allocationTrackers.add(new SalesContractTracker(row, totalWeight)));
+		entityRow.getDesSalesMarketAllocationRows().forEach(row -> allocationTrackers.add(new DESMarketTracker(row, totalWeight)));
+	}
+	
+	public BaseLegalEntity getEntity() {
+		return this.entity;
 	}
 	
 	public void updateRunningAllocation(final Long additionalAllocation) {
-		for (final Pair<SalesContract, Double> p : this.salesContractRelativeEntitlements) {
-			this.salesContractRunningAllocation.compute(p.getFirst(), (k, v) -> v + ((Double) (additionalAllocation*p.getSecond())).longValue());
-		}
-		for (final Pair<DESSalesMarket, Double> p : this.marketRelativeEntitlements) {
-			this.marketRunningAllocation.compute(p.getFirst(), (k, v) -> v + ((Double) (additionalAllocation*p.getSecond())).longValue());
-		}
+		final long localAbsoluteEntitlement = ((Double) (this.relativeEntitlement*additionalAllocation)).longValue();
+		this.runningAllocation += localAbsoluteEntitlement;
+		this.allocationTrackers.forEach(tracker -> tracker.updateRunningAllocation(localAbsoluteEntitlement));
 	}
 	
-	public Entry<SalesContract, Long> calculateMUDSalesContract() {
-		if (this.salesContractRelativeEntitlements.isEmpty()) {
-			return null;
-		}
-		return this.salesContractRunningAllocation.entrySet().stream() //
-				.max((e1, e2) -> e1.getValue().compareTo(e2.getValue())).get();
+	public void updateCurrentMonthAbsoluteEntitlement(final int monthInToShare) {
+		this.currentMonthAbsoluteEntitlement += ((Double) (monthInToShare*this.relativeEntitlement)).intValue();
 	}
 	
-	public Entry<DESSalesMarket, Long> calculateMUDMarket() {
-		if (this.marketRelativeEntitlements.isEmpty()) {
-			return null;
-		}
-		return this.marketRunningAllocation.entrySet().stream() //
-				.max((e1, e2) -> e1.getValue().compareTo(e2.getValue())).get();
+	public AllocationTracker calculateMUDAllocationTracker() {
+		return this.allocationTrackers.stream().max((t1, t2) -> Long.compare(t1.getRunningAllocation(), t2.getRunningAllocation())).get();
 	}
 	
-	public void dropAllocation(final SalesContract salesContract, final Long allocationDrop) {
-		this.salesContractRunningAllocation.compute(salesContract, (k, v) -> v - allocationDrop);
+	public void dropAllocation(final long allocationDrop) {
+		this.runningAllocation -= allocationDrop;
+		this.currentMonthAbsoluteEntitlement -= (int) allocationDrop;
 	}
 	
-	public void dropAllocation(final DESSalesMarket market, final Long allocationDrop) {
-		this.marketRunningAllocation.compute(market, (k, v) -> v - allocationDrop);
+	public int calculateExpectedAllocationDrop(final Map<Vessel, LocalDateTime> vesselToMostRecentUseDateTime, final int defaultAllocationDrop, final int loadDuration) {
+		final AllocationTracker mudTracker = this.calculateMUDAllocationTracker();
+		return mudTracker.calculateExpectedAllocationDrop(vesselToMostRecentUseDateTime, defaultAllocationDrop, loadDuration);
 	}
 	
-	public int calculateExpectedAllocationDrop(final Map<Vessel, LocalDate> vesselToMostRecentUseDate) {
-		final Entry<SalesContract, Long> mudSalesContract = this.calculateMUDSalesContract();
-		final Entry<DESSalesMarket, Long> mudMarket = this.calculateMUDMarket();
-		Vessel expectedVessel;
-		if (mudSalesContract != null) {
-			if (mudMarket != null) {
-				if (mudSalesContract.getValue() > mudMarket.getValue()) {
-					expectedVessel = this.salesContractVesselLists.get(mudSalesContract.getKey()).stream() //
-							.min((v1, v2) -> vesselToMostRecentUseDate.get(v1).compareTo(vesselToMostRecentUseDate.get(v2)))
-							.get();
-				} else {
-					expectedVessel = this.marketVesselLists.get(mudMarket.getKey()).stream() //
-							.min((v1, v2) -> vesselToMostRecentUseDate.get(v1).compareTo(vesselToMostRecentUseDate.get(v2)))
-							.get();
-				}
-			} else {
-				expectedVessel = this.salesContractVesselLists.get(mudSalesContract.getKey()).stream() //
-						.min((v1, v2) -> vesselToMostRecentUseDate.get(v1).compareTo(vesselToMostRecentUseDate.get(v2)))
-						.get();
-			}
-		} else {
-			expectedVessel = this.marketVesselLists.get(mudMarket.getKey()).stream() //
-					.min((v1, v2) -> vesselToMostRecentUseDate.get(v1).compareTo(vesselToMostRecentUseDate.get(v2)))
-					.get();
-		}
-		return (int) (expectedVessel.getVesselOrDelegateCapacity()*expectedVessel.getVesselOrDelegateFillCapacity() - expectedVessel.getVesselOrDelegateSafetyHeel());
+	public List<AllocationTracker> getAllocationTrackers() {
+		return this.allocationTrackers;
+	}
+	
+	public long getRunningAllocation() {
+		return this.runningAllocation;
+	}
+	
+	public int getCurrentMonthAbsoluteEntitlement() {
+		return this.currentMonthAbsoluteEntitlement;
 	}
 }

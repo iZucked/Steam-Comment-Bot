@@ -262,58 +262,49 @@ public interface ADPFactory extends EFactory {
 	TargetCargoesOnVesselConstraint createTargetCargoesOnVesselConstraint();
 
 	/**
-	 * Returns a new object of class '<em>Inventory Profile</em>'.
+	 * Returns a new object of class '<em>Mull Entity Row</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Inventory Profile</em>'.
+	 * @return a new object of class '<em>Mull Entity Row</em>'.
 	 * @generated
 	 */
-	InventoryProfile createInventoryProfile();
+	MullEntityRow createMullEntityRow();
 
 	/**
-	 * Returns a new object of class '<em>Inventory ADP Entity Row</em>'.
+	 * Returns a new object of class '<em>DES Sales Market Allocation Row</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Inventory ADP Entity Row</em>'.
+	 * @return a new object of class '<em>DES Sales Market Allocation Row</em>'.
 	 * @generated
 	 */
-	InventoryADPEntityRow createInventoryADPEntityRow();
+	DESSalesMarketAllocationRow createDESSalesMarketAllocationRow();
 
 	/**
-	 * Returns a new object of class '<em>Market Allocation Row</em>'.
+	 * Returns a new object of class '<em>Sales Contract Allocation Row</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Market Allocation Row</em>'.
+	 * @return a new object of class '<em>Sales Contract Allocation Row</em>'.
 	 * @generated
 	 */
-	MarketAllocationRow createMarketAllocationRow();
+	SalesContractAllocationRow createSalesContractAllocationRow();
 
 	/**
-	 * Returns a new object of class '<em>Contract Allocation Row</em>'.
+	 * Returns a new object of class '<em>Mull Profile</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Contract Allocation Row</em>'.
+	 * @return a new object of class '<em>Mull Profile</em>'.
 	 * @generated
 	 */
-	ContractAllocationRow createContractAllocationRow();
+	MullProfile createMullProfile();
 
 	/**
-	 * Returns a new object of class '<em>Multiple Inventory Profile</em>'.
+	 * Returns a new object of class '<em>Mull Subprofile</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Multiple Inventory Profile</em>'.
+	 * @return a new object of class '<em>Mull Subprofile</em>'.
 	 * @generated
 	 */
-	MultipleInventoryProfile createMultipleInventoryProfile();
-
-	/**
-	 * Returns a new object of class '<em>Inventory Subprofile</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Inventory Subprofile</em>'.
-	 * @generated
-	 */
-	InventorySubprofile createInventorySubprofile();
+	MullSubprofile createMullSubprofile();
 
 	/**
 	 * Returns the package supported by this factory.

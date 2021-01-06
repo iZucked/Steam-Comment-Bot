@@ -136,16 +136,10 @@
          modelClass="com.mmxlabs.models.lng.adp.PeriodDistributionProfileConstraint">
    </componentHelper>
    <componentHelper
-         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.InventoryProfileComponentHelper"
-         id="com.mmxlabs.models.lng.adp.presentation.composites.InventoryProfileComponentHelper"
+         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.MullProfileComponentHelper"
+         id="com.mmxlabs.models.lng.adp.presentation.composites.MullProfileComponentHelper"
          inheritable="true"
-         modelClass="com.mmxlabs.models.lng.adp.InventoryProfile">
-   </componentHelper>
-   <componentHelper
-         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.MultipleInventoryProfileComponentHelper"
-         id="com.mmxlabs.models.lng.adp.presentation.composites.MultipleInventoryProfileComponentHelper"
-         inheritable="true"
-         modelClass="com.mmxlabs.models.lng.adp.MultipleInventoryProfile">
+         modelClass="com.mmxlabs.models.lng.adp.MullProfile">
    </componentHelper>
 </extension>
 <extension
@@ -156,24 +150,10 @@
          id="com.mmxlabs.models.lng.adp.presentation.composites.ContractProfileTopLevelCompositeFactory"
          inheritable="true">
    </displayCompositeFactory>
-   <!--
    <displayCompositeFactory
-         eClass="com.mmxlabs.models.lng.adp.InventoryProfile"
-         factory="com.mmxlabs.models.lng.adp.presentation.composites.InventoryProfileTopLevelCompositeFactory"
-         id="com.mmxlabs.models.lng.adp.presentation.composites.InventoryProfileTopLevelCompositeFactory"
-         inheritable="true">
-   </displayCompositeFactory>
-   -->
-   <displayCompositeFactory
-         eClass="com.mmxlabs.models.lng.adp.MultipleInventoryProfile"
-         factory="com.mmxlabs.models.lng.adp.presentation.composites.MultipleInventoryProfileDetailCompositeFactory"
-         id="com.mmxlabs.models.lng.adp.presentation.composites.MultipleInventoryProfileDetailCompositeFactory"
-         inheritable="true">
-   </displayCompositeFactory>
-   <displayCompositeFactory
-         eClass="com.mmxlabs.models.lng.adp.InventoryProfile"
-         factory="com.mmxlabs.models.lng.adp.presentation.composites.InventoryProfileDetailCompositeFactory"
-         id="com.mmxlabs.models.lng.adp.presentation.composites.InventoryProfileDetailCompositeFactory"
+         eClass="com.mmxlabs.models.lng.adp.MullProfile"
+         factory="com.mmxlabs.models.lng.adp.presentation.composites.MullProfileDetailCompositeFactory"
+         id="com.mmxlabs.models.lng.adp.presentation.composites.MullProfileDetailCompositeFactory"
          inheritable="true">
    </displayCompositeFactory>
    <displayCompositeFactory

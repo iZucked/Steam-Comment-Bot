@@ -89,12 +89,11 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 			case ADPPackage.PERIOD_DISTRIBUTION_PROFILE_CONSTRAINT: return createPeriodDistributionProfileConstraint();
 			case ADPPackage.PERIOD_DISTRIBUTION: return createPeriodDistribution();
 			case ADPPackage.TARGET_CARGOES_ON_VESSEL_CONSTRAINT: return createTargetCargoesOnVesselConstraint();
-			case ADPPackage.INVENTORY_PROFILE: return createInventoryProfile();
-			case ADPPackage.INVENTORY_ADP_ENTITY_ROW: return createInventoryADPEntityRow();
-			case ADPPackage.MARKET_ALLOCATION_ROW: return createMarketAllocationRow();
-			case ADPPackage.CONTRACT_ALLOCATION_ROW: return createContractAllocationRow();
-			case ADPPackage.MULTIPLE_INVENTORY_PROFILE: return createMultipleInventoryProfile();
-			case ADPPackage.INVENTORY_SUBPROFILE: return createInventorySubprofile();
+			case ADPPackage.MULL_ENTITY_ROW: return createMullEntityRow();
+			case ADPPackage.DES_SALES_MARKET_ALLOCATION_ROW: return createDESSalesMarketAllocationRow();
+			case ADPPackage.SALES_CONTRACT_ALLOCATION_ROW: return createSalesContractAllocationRow();
+			case ADPPackage.MULL_PROFILE: return createMullProfile();
+			case ADPPackage.MULL_SUBPROFILE: return createMullSubprofile();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -426,9 +425,9 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 	 * @generated
 	 */
 	@Override
-	public InventoryProfile createInventoryProfile() {
-		InventoryProfileImpl inventoryProfile = new InventoryProfileImpl();
-		return inventoryProfile;
+	public MullEntityRow createMullEntityRow() {
+		MullEntityRowImpl mullEntityRow = new MullEntityRowImpl();
+		return mullEntityRow;
 	}
 
 	/**
@@ -437,9 +436,9 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 	 * @generated
 	 */
 	@Override
-	public InventoryADPEntityRow createInventoryADPEntityRow() {
-		InventoryADPEntityRowImpl inventoryADPEntityRow = new InventoryADPEntityRowImpl();
-		return inventoryADPEntityRow;
+	public DESSalesMarketAllocationRow createDESSalesMarketAllocationRow() {
+		DESSalesMarketAllocationRowImpl desSalesMarketAllocationRow = new DESSalesMarketAllocationRowImpl();
+		return desSalesMarketAllocationRow;
 	}
 
 	/**
@@ -448,9 +447,9 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 	 * @generated
 	 */
 	@Override
-	public MarketAllocationRow createMarketAllocationRow() {
-		MarketAllocationRowImpl marketAllocationRow = new MarketAllocationRowImpl();
-		return marketAllocationRow;
+	public SalesContractAllocationRow createSalesContractAllocationRow() {
+		SalesContractAllocationRowImpl salesContractAllocationRow = new SalesContractAllocationRowImpl();
+		return salesContractAllocationRow;
 	}
 
 	/**
@@ -459,9 +458,9 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 	 * @generated
 	 */
 	@Override
-	public ContractAllocationRow createContractAllocationRow() {
-		ContractAllocationRowImpl contractAllocationRow = new ContractAllocationRowImpl();
-		return contractAllocationRow;
+	public MullProfile createMullProfile() {
+		MullProfileImpl mullProfile = new MullProfileImpl();
+		return mullProfile;
 	}
 
 	/**
@@ -470,20 +469,9 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 	 * @generated
 	 */
 	@Override
-	public MultipleInventoryProfile createMultipleInventoryProfile() {
-		MultipleInventoryProfileImpl multipleInventoryProfile = new MultipleInventoryProfileImpl();
-		return multipleInventoryProfile;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public InventorySubprofile createInventorySubprofile() {
-		InventorySubprofileImpl inventorySubprofile = new InventorySubprofileImpl();
-		return inventorySubprofile;
+	public MullSubprofile createMullSubprofile() {
+		MullSubprofileImpl mullSubprofile = new MullSubprofileImpl();
+		return mullSubprofile;
 	}
 
 	/**
