@@ -61,7 +61,7 @@ public class PortExclusionConstraintChecker implements IPairwiseConstraintChecke
 		return name;
 	}
 
-	public boolean checkSequence(@NonNull final ISequence sequence, @NonNull final IResource resource, @Nullable final List<String> messages) {
+	public boolean checkSequence(@NonNull final ISequence sequence, @NonNull final IResource resource, @NonNull final List<String> messages) {
 		if (portExclusionProvider.hasNoExclusions()) {
 			return true;
 		}
