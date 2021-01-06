@@ -10,26 +10,27 @@ import java.io.IOException;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 
+@NonNullByDefault
 public class ModelReference implements Closeable {
 
-	private final @NonNull ModelRecord record;
-	private final @NonNull InstanceData data;
-	private final @NonNull String referenceID;
+	private final ModelRecord record;
+	private final InstanceData data;
+	private final String referenceID;
 	private boolean valid = true;
 
 	private boolean shared;
 
-	public ModelReference(final @NonNull ModelRecord record, final @NonNull String referenceID, @NonNull final InstanceData data) {
+	public ModelReference(final ModelRecord record, final String referenceID, final InstanceData data) {
 		this.record = record;
 		this.referenceID = referenceID;
 		this.data = data;
 	}
 
-	public static ModelReference createSharedReference(final @NonNull ModelRecord record, final @NonNull String referenceID, @NonNull final InstanceData data) {
+	public static ModelReference createSharedReference(final ModelRecord record, final String referenceID, final InstanceData data) {
 		final ModelReference ref = new ModelReference(record, referenceID, data);
 		ref.setShared(true);
 		return ref;
@@ -39,7 +40,7 @@ public class ModelReference implements Closeable {
 		this.shared = shared;
 	}
 
-	public @NonNull EObject getInstance() {
+	public EObject getInstance() {
 		if (valid) {
 			final EObject obj = data.getInstance();
 			assert obj != null;
@@ -60,7 +61,7 @@ public class ModelReference implements Closeable {
 		}
 	}
 
-	public @NonNull EditingDomain getEditingDomain() {
+	public EditingDomain getEditingDomain() {
 		if (valid) {
 			final EditingDomain obj = data.getEditingDomain();
 			assert obj != null;
@@ -69,7 +70,7 @@ public class ModelReference implements Closeable {
 		throw new IllegalStateException();
 	}
 
-	public @NonNull CommandStack getCommandStack() {
+	public CommandStack getCommandStack() {
 		if (valid) {
 			final CommandStack obj = data.getCommandStack();
 			assert obj != null;
@@ -78,7 +79,7 @@ public class ModelReference implements Closeable {
 		throw new IllegalStateException();
 	}
 
-	public @NonNull ScenarioLock getLock() {
+	public ScenarioLock getLock() {
 		return data.getLock();
 	}
 

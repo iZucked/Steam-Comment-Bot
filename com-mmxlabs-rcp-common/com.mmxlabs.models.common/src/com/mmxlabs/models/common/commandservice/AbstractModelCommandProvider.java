@@ -12,12 +12,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public abstract class AbstractModelCommandProvider<T> implements IModelCommandProvider {
 
-	private final ThreadLocal<AtomicInteger> provisionStack = new ThreadLocal<AtomicInteger>();
-	private final ThreadLocal<T> provisionContext = new ThreadLocal<T>();
-
-	public AbstractModelCommandProvider() {
-		super();
-	}
+	private final ThreadLocal<AtomicInteger> provisionStack = new ThreadLocal<>();
+	private final ThreadLocal<T> provisionContext = new ThreadLocal<>();
 
 	protected void setContext(final T context) {
 		provisionContext.set(context);
@@ -38,14 +34,15 @@ public abstract class AbstractModelCommandProvider<T> implements IModelCommandPr
 		}
 		int andIncrement = provisionStack.get().getAndIncrement();
 		if (andIncrement == 0) {
-			provisionContext.set((T) null);
+			provisionContext.remove();
 		}
 	}
 
 	@Override
 	public void endCommandProvision() {
 		if (provisionStack.get().decrementAndGet() == 0) {
-			provisionContext.set((T) null);
+			provisionContext.remove();
+			provisionStack.remove();
 		}
 	}
 
