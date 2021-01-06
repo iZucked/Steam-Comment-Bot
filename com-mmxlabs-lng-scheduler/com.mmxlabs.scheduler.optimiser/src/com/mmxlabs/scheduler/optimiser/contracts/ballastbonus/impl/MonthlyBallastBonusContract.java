@@ -6,6 +6,7 @@ package com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.impl;
 
 import java.util.List;
 
+import com.mmxlabs.common.util.exceptions.UserFeedbackException;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
@@ -45,7 +46,7 @@ public class MonthlyBallastBonusContract extends DefaultBallastBonusContract {
 			if (rule instanceof MonthlyBallastBonusContractRule) {
 				MonthlyBallastBonusContractRule mmRule = (MonthlyBallastBonusContractRule)rule;
 				if (mmRule.matchWithoutDates(lastSlot, vesselAvailability, vesselEndTime, vesselEndTime)) {
-					if (vesselStartTime > mmRule.getMonthStartInclusive() && (latestRule == null || mmRule.getMonthStartInclusive() > latestRule.getMonthStartInclusive())) {
+					if (vesselStartTime >= mmRule.getMonthStartInclusive() && (latestRule == null || mmRule.getMonthStartInclusive() >= latestRule.getMonthStartInclusive())) {
 						latestRule = mmRule;
 					}
 				}
@@ -64,6 +65,9 @@ public class MonthlyBallastBonusContract extends DefaultBallastBonusContract {
 	private BallastBonusAnnotation createAnnotation(final IPort firstLoadPort, final IPortSlot lastSlot, final IVesselAvailability vesselAvailability, final int vesselStartTime, final int vesselEndTime) {
 		final BallastBonusAnnotation ballastBonusAnnotation = new BallastBonusAnnotation();
 		IBallastBonusContractRule rule = getMatchingRule(firstLoadPort, lastSlot, vesselAvailability, vesselStartTime, vesselEndTime);
+		if (rule == null) {
+			throw new UserFeedbackException("Missing matching monthly ballast bonus contract.");
+		}
 		ballastBonusAnnotation.ballastBonusFee = rule.calculateBallastBonus(firstLoadPort, lastSlot, vesselAvailability, vesselStartTime, vesselEndTime);
 		ballastBonusAnnotation.matchedPort = lastSlot.getPort();
 		ballastBonusAnnotation.ballastBonusRuleAnnotation = rule.annotate(firstLoadPort, lastSlot, vesselAvailability, vesselStartTime, vesselEndTime);
