@@ -87,14 +87,14 @@ public class LNGMultiObjectiveOptimiserTransformerUnit implements ILNGStateTrans
 
 			@Override
 			public IMultiStateResult run(final SequencesContainer initialSequences, final IMultiStateResult inputState, final IProgressMonitor monitor) {
-				final LNGDataTransformer dataTransformer = chainBuilder.getDataTransformer();
-				dataTransformer.getLifecyleManager().startPhase(stage);
+				final LNGDataTransformer lDataTransformer = chainBuilder.getDataTransformer();
+				lDataTransformer.getLifecyleManager().startPhase(stage);
 
-				final IRunnerHook runnerHook = dataTransformer.getRunnerHook();
+				final IRunnerHook runnerHook = lDataTransformer.getRunnerHook();
 				if (runnerHook != null) {
 					runnerHook.beginStage(stage);
 
-					final ISequences preloadedResult = runnerHook.getPrestoredSequences(stage, dataTransformer);
+					final ISequences preloadedResult = runnerHook.getPrestoredSequences(stage, lDataTransformer);
 					if (preloadedResult != null) {
 						monitor.beginTask("", 1);
 						try {
@@ -102,7 +102,7 @@ public class LNGMultiObjectiveOptimiserTransformerUnit implements ILNGStateTrans
 							return new MultiStateResult(preloadedResult, new HashMap<>());
 						} finally {
 							runnerHook.endStage(stage);
-							dataTransformer.getLifecyleManager().endPhase(stage);
+							lDataTransformer.getLifecyleManager().endPhase(stage);
 
 							monitor.done();
 						}
@@ -110,7 +110,7 @@ public class LNGMultiObjectiveOptimiserTransformerUnit implements ILNGStateTrans
 				}
 
 				@NonNull
-				final Collection<@NonNull String> hints = new HashSet<>(dataTransformer.getHints());
+				final Collection<@NonNull String> hints = new HashSet<>(lDataTransformer.getHints());
 				LNGTransformerHelper.updatHintsFromUserSettings(userSettings, hints);
 				hints.remove(LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR);
 
@@ -123,7 +123,7 @@ public class LNGMultiObjectiveOptimiserTransformerUnit implements ILNGStateTrans
 
 						final int jobId = i;
 						results.add(executorService.submit(() -> {
-							final LNGMultiObjectiveOptimiserTransformerUnit t = new LNGMultiObjectiveOptimiserTransformerUnit(dataTransformer, stage, jobId, userSettings, copyStageSettings,
+							final LNGMultiObjectiveOptimiserTransformerUnit t = new LNGMultiObjectiveOptimiserTransformerUnit(lDataTransformer, stage, jobId, userSettings, copyStageSettings,
 									initialSequences.getSequences(), inputState.getBestSolution().getFirst(), hints);
 							return t.run(new SubProgressMonitor(monitor, 100));
 						}));
@@ -203,7 +203,7 @@ public class LNGMultiObjectiveOptimiserTransformerUnit implements ILNGStateTrans
 					}
 
 					if (runnerHook != null) {
-						runnerHook.reportSequences(stage, output.get(0).getFirst(), dataTransformer);
+						runnerHook.reportSequences(stage, output.get(0).getFirst(), lDataTransformer);
 					}
 
 					return new MultiStateResult(output.get(0), output);
@@ -211,7 +211,7 @@ public class LNGMultiObjectiveOptimiserTransformerUnit implements ILNGStateTrans
 					if (runnerHook != null) {
 						runnerHook.endStage(stage);
 					}
-					dataTransformer.getLifecyleManager().endPhase(stage);
+					lDataTransformer.getLifecyleManager().endPhase(stage);
 
 					monitor.done();
 				}
@@ -233,14 +233,14 @@ public class LNGMultiObjectiveOptimiserTransformerUnit implements ILNGStateTrans
 
 			@Override
 			public IMultiStateResult run(final SequencesContainer initialSequences, final IMultiStateResult inputState, final IProgressMonitor monitor) {
-				final LNGDataTransformer dataTransformer = chainBuilder.getDataTransformer();
-				dataTransformer.getLifecyleManager().startPhase(stage);
+				final LNGDataTransformer lDataTransformer = chainBuilder.getDataTransformer();
+				lDataTransformer.getLifecyleManager().startPhase(stage);
 
-				final IRunnerHook runnerHook = dataTransformer.getRunnerHook();
+				final IRunnerHook runnerHook = lDataTransformer.getRunnerHook();
 				if (runnerHook != null) {
 					runnerHook.beginStage(stage);
 
-					final ISequences preloadedResult = runnerHook.getPrestoredSequences(stage, dataTransformer);
+					final ISequences preloadedResult = runnerHook.getPrestoredSequences(stage, lDataTransformer);
 					if (preloadedResult != null) {
 						monitor.beginTask("", 1);
 						try {
@@ -248,7 +248,7 @@ public class LNGMultiObjectiveOptimiserTransformerUnit implements ILNGStateTrans
 							return new MultiStateResult(preloadedResult, new HashMap<>());
 						} finally {
 							runnerHook.endStage(stage);
-							dataTransformer.getLifecyleManager().endPhase(stage);
+							lDataTransformer.getLifecyleManager().endPhase(stage);
 
 							monitor.done();
 						}
@@ -256,7 +256,7 @@ public class LNGMultiObjectiveOptimiserTransformerUnit implements ILNGStateTrans
 				}
 
 				@NonNull
-				final Collection<@NonNull String> hints = new HashSet<>(dataTransformer.getHints());
+				final Collection<@NonNull String> hints = new HashSet<>(lDataTransformer.getHints());
 				LNGTransformerHelper.updatHintsFromUserSettings(userSettings, hints);
 				hints.remove(LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR);
 
@@ -270,7 +270,7 @@ public class LNGMultiObjectiveOptimiserTransformerUnit implements ILNGStateTrans
 
 						final int jobId = i;
 						results.add(executorService.submit(() -> {
-							final LNGMultiObjectiveOptimiserTransformerUnit t = new LNGMultiObjectiveOptimiserTransformerUnit(dataTransformer, stage, jobId, userSettings, copyStageSettings,
+							final LNGMultiObjectiveOptimiserTransformerUnit t = new LNGMultiObjectiveOptimiserTransformerUnit(lDataTransformer, stage, jobId, userSettings, copyStageSettings,
 									initialSequences.getSequences(), inputState.getBestSolution().getFirst(), hints);
 							t.run(new SubProgressMonitor(monitor, 100));
 							return inputState;
@@ -356,7 +356,7 @@ public class LNGMultiObjectiveOptimiserTransformerUnit implements ILNGStateTrans
 					if (runnerHook != null) {
 						runnerHook.endStage(stage);
 					}
-					dataTransformer.getLifecyleManager().endPhase(stage);
+					lDataTransformer.getLifecyleManager().endPhase(stage);
 
 					monitor.done();
 				}
@@ -533,7 +533,7 @@ public class LNGMultiObjectiveOptimiserTransformerUnit implements ILNGStateTrans
 						.collect(Collectors.toList());
 
 				if (bestRawSequences != null && bestSolution != null) {
-					return new MultiStateResult(new NonNullPair<ISequences, Map<String, Object>>(bestRawSequences, new HashMap<>()), solutions);
+					return new MultiStateResult(new NonNullPair<>(bestRawSequences, new HashMap<>()), solutions);
 				} else {
 					throw new RuntimeException("Unable to optimise");
 				}

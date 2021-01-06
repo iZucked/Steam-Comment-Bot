@@ -25,7 +25,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProvider;
 public class LookupManager implements ILookupManager {
 
 	@Inject
-	@NonNull
 	private IAlternativeElementProvider alternativeElementProvider;
 
 	/**
