@@ -54,7 +54,7 @@ public class BaseCaseServiceClient {
 	private boolean lockedByMe = false;
 	private String lockedBy = null;
 
-	public static BaseCaseServiceClient INSTANCE = new BaseCaseServiceClient();
+	public static final BaseCaseServiceClient INSTANCE = new BaseCaseServiceClient();
 
 	private BaseCaseServiceClient() {
 

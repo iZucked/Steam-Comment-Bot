@@ -23,7 +23,7 @@ public class MultiLineTextFieldEditor extends FieldEditor {
 	private static final String ERROR_MESSAGE = "Multiline.error.message"; //$NON-NLS-1$
 	public static final int VALIDATE_ON_KEY_STROKE = 0;
 	public static final int VALIDATE_ON_FOCUS_LOST = 1;
-	public static int UNLIMITED = -1;
+	public static final int UNLIMITED = -1;
 
 	private boolean isValid;
 	private String oldValue;
