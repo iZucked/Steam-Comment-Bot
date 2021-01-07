@@ -87,7 +87,7 @@ public class SingleReferenceManipulator extends BasicAttributeManipulator {
 			return;
 		}
 		final EObject newValue = valueList.get((Integer) value);
-		super.runSetCommand(object, newValue);
+		runSetCommand(object, newValue);
 	}
 
 	@Override

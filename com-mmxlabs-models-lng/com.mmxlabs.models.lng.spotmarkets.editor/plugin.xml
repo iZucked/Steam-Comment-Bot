@@ -178,6 +178,11 @@
           ownerEClass="com.mmxlabs.models.lng.spotmarkets.SpotMarket"
           referenceEClass="com.mmxlabs.models.lng.commercial.Contract">
     </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.spotmarkets.editor.valueproviders.DESSalesMarketValueProviderFactory"
+          id="com.mmxlabs.models.lng.spotmarkets.editor.valueproviders.DESSalesMarketValueProviderFactory"
+          referenceEClass="com.mmxlabs.models.lng.spotmarkets.DESSalesMarket">
+    </valueProvider>
  </extension>
    <extension point="org.eclipse.ui.editors">
       <!-- @generated spotmarkets -->

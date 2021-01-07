@@ -89,6 +89,11 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 			case ADPPackage.PERIOD_DISTRIBUTION_PROFILE_CONSTRAINT: return createPeriodDistributionProfileConstraint();
 			case ADPPackage.PERIOD_DISTRIBUTION: return createPeriodDistribution();
 			case ADPPackage.TARGET_CARGOES_ON_VESSEL_CONSTRAINT: return createTargetCargoesOnVesselConstraint();
+			case ADPPackage.MULL_ENTITY_ROW: return createMullEntityRow();
+			case ADPPackage.DES_SALES_MARKET_ALLOCATION_ROW: return createDESSalesMarketAllocationRow();
+			case ADPPackage.SALES_CONTRACT_ALLOCATION_ROW: return createSalesContractAllocationRow();
+			case ADPPackage.MULL_PROFILE: return createMullProfile();
+			case ADPPackage.MULL_SUBPROFILE: return createMullSubprofile();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -412,6 +417,61 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 	public TargetCargoesOnVesselConstraint createTargetCargoesOnVesselConstraint() {
 		TargetCargoesOnVesselConstraintImpl targetCargoesOnVesselConstraint = new TargetCargoesOnVesselConstraintImpl();
 		return targetCargoesOnVesselConstraint;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public MullEntityRow createMullEntityRow() {
+		MullEntityRowImpl mullEntityRow = new MullEntityRowImpl();
+		return mullEntityRow;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public DESSalesMarketAllocationRow createDESSalesMarketAllocationRow() {
+		DESSalesMarketAllocationRowImpl desSalesMarketAllocationRow = new DESSalesMarketAllocationRowImpl();
+		return desSalesMarketAllocationRow;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public SalesContractAllocationRow createSalesContractAllocationRow() {
+		SalesContractAllocationRowImpl salesContractAllocationRow = new SalesContractAllocationRowImpl();
+		return salesContractAllocationRow;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public MullProfile createMullProfile() {
+		MullProfileImpl mullProfile = new MullProfileImpl();
+		return mullProfile;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public MullSubprofile createMullSubprofile() {
+		MullSubprofileImpl mullSubprofile = new MullSubprofileImpl();
+		return mullSubprofile;
 	}
 
 	/**

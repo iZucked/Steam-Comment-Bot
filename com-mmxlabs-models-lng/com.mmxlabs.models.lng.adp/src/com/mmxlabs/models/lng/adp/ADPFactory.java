@@ -262,6 +262,51 @@ public interface ADPFactory extends EFactory {
 	TargetCargoesOnVesselConstraint createTargetCargoesOnVesselConstraint();
 
 	/**
+	 * Returns a new object of class '<em>Mull Entity Row</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Mull Entity Row</em>'.
+	 * @generated
+	 */
+	MullEntityRow createMullEntityRow();
+
+	/**
+	 * Returns a new object of class '<em>DES Sales Market Allocation Row</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>DES Sales Market Allocation Row</em>'.
+	 * @generated
+	 */
+	DESSalesMarketAllocationRow createDESSalesMarketAllocationRow();
+
+	/**
+	 * Returns a new object of class '<em>Sales Contract Allocation Row</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Sales Contract Allocation Row</em>'.
+	 * @generated
+	 */
+	SalesContractAllocationRow createSalesContractAllocationRow();
+
+	/**
+	 * Returns a new object of class '<em>Mull Profile</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Mull Profile</em>'.
+	 * @generated
+	 */
+	MullProfile createMullProfile();
+
+	/**
+	 * Returns a new object of class '<em>Mull Subprofile</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Mull Subprofile</em>'.
+	 * @generated
+	 */
+	MullSubprofile createMullSubprofile();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

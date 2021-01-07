@@ -135,6 +135,12 @@
          inheritable="true"
          modelClass="com.mmxlabs.models.lng.adp.PeriodDistributionProfileConstraint">
    </componentHelper>
+   <componentHelper
+         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.MullProfileComponentHelper"
+         id="com.mmxlabs.models.lng.adp.presentation.composites.MullProfileComponentHelper"
+         inheritable="true"
+         modelClass="com.mmxlabs.models.lng.adp.MullProfile">
+   </componentHelper>
 </extension>
 <extension
       point="com.mmxlabs.models.ui.displaycompositefactories">
@@ -142,6 +148,12 @@
          eClass="com.mmxlabs.models.lng.adp.ContractProfile"
          factory="com.mmxlabs.models.lng.adp.presentation.composites.ContractProfileTopLevelCompositeFactory"
          id="com.mmxlabs.models.lng.adp.presentation.composites.ContractProfileTopLevelCompositeFactory"
+         inheritable="true">
+   </displayCompositeFactory>
+   <displayCompositeFactory
+         eClass="com.mmxlabs.models.lng.adp.MullProfile"
+         factory="com.mmxlabs.models.lng.adp.presentation.composites.MullProfileDetailCompositeFactory"
+         id="com.mmxlabs.models.lng.adp.presentation.composites.MullProfileDetailCompositeFactory"
          inheritable="true">
    </displayCompositeFactory>
    <displayCompositeFactory
