@@ -75,6 +75,8 @@ import org.swtchart.LineStyle;
 import org.swtchart.Range;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
@@ -228,7 +230,10 @@ public class InventoryReport extends ViewPart {
 		colorOrange = new Color(PlatformUI.getWorkbench().getDisplay(), new RGB(255, 200, 15));
 		colorLightGrey = new Color(PlatformUI.getWorkbench().getDisplay(), new RGB(230, 230, 230));
 		filterField = new FilterField(parent);
-		mullDailyFilterField = new FilterField(parent);
+		
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
+			mullDailyFilterField = new FilterField(parent);
+		}
 
 		selectedScenariosService = getSite().getService(SelectedScenariosService.class);
 		parent.setLayout(new GridLayout(1, true));
@@ -321,99 +326,99 @@ public class InventoryReport extends ViewPart {
 		copyAction.setEnabled(folder.getSelectionIndex() == 1);
 
 		
-		final CTabItem mullItem = new CTabItem(folder, SWT.NONE);
-
-		mullItem.setText("MULL Monthly");
-		{
-			mullTableViewer = new GridTableViewer(folder, SWT.V_SCROLL | SWT.H_SCROLL);
-			
-			this.filterSupport = new EObjectTableViewerFilterSupport(mullTableViewer, mullTableViewer.getGrid());
-			this.sortingSupport = new EObjectTableViewerSortingSupport();
-			mullTableViewer.setComparator(sortingSupport.createViewerComparer());
-			
-			mullTableViewer.addFilter(filterSupport.createViewerFilter());
-			filterField.setFilterSupport(filterSupport);
-			
-			getViewSite().getActionBars().getToolBarManager().add(filterField.getContribution());
-			
-			
-			mullTableViewer.setContentProvider(new ArrayContentProvider());
-			mullTableViewer.getControl().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
-			
-			GridViewerHelper.configureLookAndFeel(mullTableViewer);
-			mullTableViewer.getGrid().setTreeLinesVisible(true);
-			mullTableViewer.getGrid().setHeaderVisible(true);
-			
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
+			final CTabItem mullItem = new CTabItem(folder, SWT.NONE);
+			mullItem.setText("MULL Monthly");
 			{
-				createMullColumn("Month", 150, o -> String.format("%d-%d", o.getFirst().ym.getMonthValue(), o.getFirst().ym.getYear()), o -> o.getFirst().getYM());
-				createMullColumn("Entity", 150, o -> o.getFirst().entity.getName(), o -> o.getFirst().entity.getName());
-				createMullColumn("Overlift", 150, o-> generateDiffString(o, MullInformation::getOverliftCF), o-> generateSortValue(o, MullInformation::getOverliftCF));
-				createMullColumn("Total lifted", 150, o -> generateDiffString(o, MullInformation::getLifted), o-> generateSortValue(o, MullInformation::getLifted));
-				createMullColumn("# Cargo", 150, o -> generateDiffString(o, MullInformation::getCargoCount), o -> generateSortValue(o, MullInformation::getCargoCount));
-				createMullColumn("Monthly entitlement", 150, o -> generateDiffString(o, MullInformation::getMonthlyRE), o -> generateSortValue(o, MullInformation::getMonthlyRE));
-				createMullColumn("Carried entitlement", 150, o -> generateDiffString(o, MullInformation::getCarriedEntitlement), o -> generateSortValue(o, MullInformation::getCarriedEntitlement));
+				mullTableViewer = new GridTableViewer(folder, SWT.V_SCROLL | SWT.H_SCROLL);
 				
-				mullItem.setControl(mullTableViewer.getControl());
+				this.filterSupport = new EObjectTableViewerFilterSupport(mullTableViewer, mullTableViewer.getGrid());
+				this.sortingSupport = new EObjectTableViewerSortingSupport();
+				mullTableViewer.setComparator(sortingSupport.createViewerComparer());
+				
+				mullTableViewer.addFilter(filterSupport.createViewerFilter());
+				filterField.setFilterSupport(filterSupport);
+				
+				getViewSite().getActionBars().getToolBarManager().add(filterField.getContribution());
+				
+				
+				mullTableViewer.setContentProvider(new ArrayContentProvider());
+				mullTableViewer.getControl().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
+				
+				GridViewerHelper.configureLookAndFeel(mullTableViewer);
+				mullTableViewer.getGrid().setTreeLinesVisible(true);
+				mullTableViewer.getGrid().setHeaderVisible(true);
+				
+				{
+					createMullColumn("Month", 150, o -> String.format("%d-%d", o.getFirst().ym.getMonthValue(), o.getFirst().ym.getYear()), o -> o.getFirst().getYM());
+					createMullColumn("Entity", 150, o -> o.getFirst().entity.getName(), o -> o.getFirst().entity.getName());
+					createMullColumn("Overlift", 150, o-> generateDiffString(o, MullInformation::getOverliftCF), o-> generateSortValue(o, MullInformation::getOverliftCF));
+					createMullColumn("Total lifted", 150, o -> generateDiffString(o, MullInformation::getLifted), o-> generateSortValue(o, MullInformation::getLifted));
+					createMullColumn("# Cargo", 150, o -> generateDiffString(o, MullInformation::getCargoCount), o -> generateSortValue(o, MullInformation::getCargoCount));
+					createMullColumn("Monthly entitlement", 150, o -> generateDiffString(o, MullInformation::getMonthlyRE), o -> generateSortValue(o, MullInformation::getMonthlyRE));
+					createMullColumn("Carried entitlement", 150, o -> generateDiffString(o, MullInformation::getCarriedEntitlement), o -> generateSortValue(o, MullInformation::getCarriedEntitlement));
+					
+					mullItem.setControl(mullTableViewer.getControl());
+				}
 			}
-		}
-		
-		packAction2 = PackActionFactory.createPackColumnsAction(mullTableViewer);
-		getViewSite().getActionBars().getToolBarManager().add(packAction2);
-		packAction2.setEnabled(folder.getSelectionIndex() == 2);
-		
-		copyAction2 = CopyToClipboardActionFactory.createCopyToClipboardAction(mullTableViewer);
-		getViewSite().getActionBars().getToolBarManager().add(copyAction2);
-		copyAction2.setEnabled(folder.getSelectionIndex() == 2);
-		
-		final CTabItem mullDailyItem = new CTabItem(folder, SWT.NONE);
-
-		mullDailyItem.setText("MULL Daily");
-		{
-			mullDailyTableViewer = new GridTableViewer(folder, SWT.V_SCROLL | SWT.H_SCROLL);
-
-			this.mullDailyFilterSupport = new EObjectTableViewerFilterSupport(mullDailyTableViewer, mullDailyTableViewer.getGrid());
-			this.mullDailySortingSupport = new EObjectTableViewerSortingSupport();
-			mullDailyTableViewer.setComparator(mullDailySortingSupport.createViewerComparer());
 			
-			mullDailyTableViewer.addFilter(mullDailyFilterSupport.createViewerFilter());
-			mullDailyFilterField.setFilterSupport(mullDailyFilterSupport);
+			packAction2 = PackActionFactory.createPackColumnsAction(mullTableViewer);
+			getViewSite().getActionBars().getToolBarManager().add(packAction2);
+			packAction2.setEnabled(folder.getSelectionIndex() == 2);
 			
-			mullDailyTableViewer.setContentProvider(new ArrayContentProvider());
-			mullDailyTableViewer.getControl().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
+			copyAction2 = CopyToClipboardActionFactory.createCopyToClipboardAction(mullTableViewer);
+			getViewSite().getActionBars().getToolBarManager().add(copyAction2);
+			copyAction2.setEnabled(folder.getSelectionIndex() == 2);
+			
+			final CTabItem mullDailyItem = new CTabItem(folder, SWT.NONE);
 
-			GridViewerHelper.configureLookAndFeel(mullDailyTableViewer);
-			mullDailyTableViewer.getGrid().setTreeLinesVisible(true);
-			mullDailyTableViewer.getGrid().setHeaderVisible(true);		
+			mullDailyItem.setText("MULL Daily");
 			{
-				createMullDailyColumn("Date", 150, o -> {
-					LocalDate date = o.getFirst().date;
-					return String.format("%01d-%01d-%d", date.getDayOfMonth(), date.getMonthValue(), date.getYear());
-				}, o -> o.getFirst().date);
-				createMullDailyColumn("Entity", 150, o -> o.getFirst().entity.getName(), o -> o.getFirst().entity.getName());
-				createMullDailyColumn("Production allocation", 150, o -> generateDailyDiffString(o, MullDailyInformation::getAllocatedEntitlement), o -> generateDailySortValue(o, MullDailyInformation::getAllocatedEntitlement));
-				createMullDailyColumn("Running entitlement", 150, o -> generateDailyDiffString(o, MullDailyInformation::getActualEntitlement), o -> generateDailySortValue(o, MullDailyInformation::getActualEntitlement));
-				mullDailyItem.setControl(mullDailyTableViewer.getControl());
+				mullDailyTableViewer = new GridTableViewer(folder, SWT.V_SCROLL | SWT.H_SCROLL);
+
+				this.mullDailyFilterSupport = new EObjectTableViewerFilterSupport(mullDailyTableViewer, mullDailyTableViewer.getGrid());
+				this.mullDailySortingSupport = new EObjectTableViewerSortingSupport();
+				mullDailyTableViewer.setComparator(mullDailySortingSupport.createViewerComparer());
+				
+				mullDailyTableViewer.addFilter(mullDailyFilterSupport.createViewerFilter());
+				mullDailyFilterField.setFilterSupport(mullDailyFilterSupport);
+				
+				mullDailyTableViewer.setContentProvider(new ArrayContentProvider());
+				mullDailyTableViewer.getControl().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
+
+				GridViewerHelper.configureLookAndFeel(mullDailyTableViewer);
+				mullDailyTableViewer.getGrid().setTreeLinesVisible(true);
+				mullDailyTableViewer.getGrid().setHeaderVisible(true);		
+				{
+					createMullDailyColumn("Date", 150, o -> {
+						LocalDate date = o.getFirst().date;
+						return String.format("%01d-%01d-%d", date.getDayOfMonth(), date.getMonthValue(), date.getYear());
+					}, o -> o.getFirst().date);
+					createMullDailyColumn("Entity", 150, o -> o.getFirst().entity.getName(), o -> o.getFirst().entity.getName());
+					createMullDailyColumn("Production allocation", 150, o -> generateDailyDiffString(o, MullDailyInformation::getAllocatedEntitlement), o -> generateDailySortValue(o, MullDailyInformation::getAllocatedEntitlement));
+					createMullDailyColumn("Running entitlement", 150, o -> generateDailyDiffString(o, MullDailyInformation::getActualEntitlement), o -> generateDailySortValue(o, MullDailyInformation::getActualEntitlement));
+					mullDailyItem.setControl(mullDailyTableViewer.getControl());
+				}
+			}
+			
+			final CTabItem chartItem2 = new CTabItem(folder, SWT.NONE);
+			chartItem2.setText("MULL Chart");
+			{
+				chartViewer2 = new Chart(folder, SWT.NONE);
+				chartViewer2.setLayoutData(GridDataFactory.fillDefaults().grab(true, true));
+				chartViewer2.getTitle().setVisible(false);
+				chartItem2.setControl(chartViewer2);
+			}
+			
+			final CTabItem chartItem3 = new CTabItem(folder, SWT.NONE);
+			chartItem3.setText("# Cargo Chart");
+			{
+				chartViewer3 = new Chart(folder, SWT.NONE);
+				chartViewer3.setLayoutData(GridDataFactory.fillDefaults().grab(true, true));
+				chartViewer3.getTitle().setVisible(false);
+				chartItem3.setControl(chartViewer3);
 			}
 		}
-		
-		final CTabItem chartItem2 = new CTabItem(folder, SWT.NONE);
-		chartItem2.setText("MULL Chart");
-		{
-			chartViewer2 = new Chart(folder, SWT.NONE);
-			chartViewer2.setLayoutData(GridDataFactory.fillDefaults().grab(true, true));
-			chartViewer2.getTitle().setVisible(false);
-			chartItem2.setControl(chartViewer2);
-		}
-		
-		final CTabItem chartItem3 = new CTabItem(folder, SWT.NONE);
-		chartItem3.setText("# Cargo Chart");
-		{
-			chartViewer3 = new Chart(folder, SWT.NONE);
-			chartViewer3.setLayoutData(GridDataFactory.fillDefaults().grab(true, true));
-			chartViewer3.getTitle().setVisible(false);
-			chartItem3.setControl(chartViewer3);
-		}
-		
 		// Adding an event broker for the snap-to-date event todayHandler
 		IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
 		this.todayHandler = event -> snapTo((LocalDate) event.getProperty(IEventBroker.DATA));
@@ -424,8 +429,10 @@ public class InventoryReport extends ViewPart {
 			public void widgetSelected(SelectionEvent e) {
 				copyAction.setEnabled(folder.getSelectionIndex() == 1);
 				packAction.setEnabled(folder.getSelectionIndex() == 1);
-				copyAction2.setEnabled(folder.getSelectionIndex() == 2);
-				packAction2.setEnabled(folder.getSelectionIndex() == 2);
+				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
+					copyAction2.setEnabled(folder.getSelectionIndex() == 2);
+					packAction2.setEnabled(folder.getSelectionIndex() == 2);
+				}
 			}
 		});
 		getViewSite().getActionBars().getToolBarManager().update(true);
@@ -502,265 +509,266 @@ public class InventoryReport extends ViewPart {
 				final Schedule schedule = scheduleModel.getSchedule();
 				if (schedule != null) {
 					
-					assert inventoryModels.size() == 1;
-					final Inventory expectedInventory = inventoryModels.iterator().next();
-					final Port expectedLoadPort = expectedInventory.getPort();
-					final LNGScenarioModel lngScenarioToDisplay = (LNGScenarioModel) toDisplay.getRootObject();
-					
-					final ADPModel adpModel = lngScenarioToDisplay.getAdpModel();
-					final YearMonth adpStart = adpModel.getYearStart();
-					final YearMonth adpEnd = adpModel.getYearEnd();
-					LocalDate startDate = adpStart.atDay(1);
-					
-					TreeMap<LocalDate, InventoryDailyEvent> insAndOuts = getInventoryInsAndOuts(expectedInventory, lngScenarioToDisplay);
-					
-					int totalInventoryVolume = 0;
-					while (insAndOuts.firstKey().isBefore(startDate)) {
-						final InventoryDailyEvent event = insAndOuts.remove(insAndOuts.firstKey());
-						totalInventoryVolume += event.netVolumeIn;
-					}
-					insAndOuts.firstEntry().getValue().addVolume(totalInventoryVolume);
+					if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
+						assert inventoryModels.size() == 1;
+						final Inventory expectedInventory = inventoryModels.iterator().next();
+						final Port expectedLoadPort = expectedInventory.getPort();
+						final LNGScenarioModel lngScenarioToDisplay = (LNGScenarioModel) toDisplay.getRootObject();
+						
+						final ADPModel adpModel = lngScenarioToDisplay.getAdpModel();
+						final YearMonth adpStart = adpModel.getYearStart();
+						final YearMonth adpEnd = adpModel.getYearEnd();
+						LocalDate startDate = adpStart.atDay(1);
+						
+						TreeMap<LocalDate, InventoryDailyEvent> insAndOuts = getInventoryInsAndOuts(expectedInventory, lngScenarioToDisplay);
+						
+						int totalInventoryVolume = 0;
+						while (insAndOuts.firstKey().isBefore(startDate)) {
+							final InventoryDailyEvent event = insAndOuts.remove(insAndOuts.firstKey());
+							totalInventoryVolume += event.netVolumeIn;
+						}
+						insAndOuts.firstEntry().getValue().addVolume(totalInventoryVolume);
 
-					final Map<YearMonth, Integer> monthlyProduction = calculateMonthlyProduction(expectedInventory, adpStart);
-					
-					final MullSubprofile sProfile = adpModel.getMullProfile().getInventories().stream().filter(s -> s.getInventory().equals(expectedInventory)).findAny().get();
-					final List<BaseLegalEntity> entitiesOrdered = calculateEntityOrder(sProfile);
-					
-					final List<Pair<BaseLegalEntity, Double>> relativeEntitlements = sProfile.getEntityTable().stream() //
-							.map(row -> new Pair<BaseLegalEntity, Double>(row.getEntity(), row.getRelativeEntitlement())) //
-							.collect(Collectors.toList());
-					
-					if (pinnedResult != null) {
-						final ScheduleModel pinnedScheduleModel = pinnedResult.getTypedResult(ScheduleModel.class);
-						final Schedule pinnedSchedule = pinnedScheduleModel.getSchedule();
-						final LNGScenarioModel pinnedLNGScenarioModel = (LNGScenarioModel) pinnedResult.getRootObject();
-						final List<MullInformation> pinnedMullList = new LinkedList<>();
-						final List<MullDailyInformation> pinnedMullDailyList = new LinkedList<>();
-						if (pinnedSchedule != null) {
-							final List<CargoAllocation> pinnedCargoAllocations = pinnedSchedule.getCargoAllocations();
-							
-							fillMullInformationList(adpStart, adpEnd, entitiesOrdered, sProfile, monthlyProduction, expectedLoadPort, pinnedCargoAllocations, pinnedMullList, pinnedLNGScenarioModel);
-							
-							final List<CargoAllocation> sortedPinnedCargoAllocations = pinnedCargoAllocations.stream() //
-									.filter(c->c.getSlotAllocations().get(0).getPort().equals(expectedLoadPort)) //
-									.sorted((c1, c2) -> c1.getSlotAllocations().get(0).getSlotVisit().getStart().toLocalDate().compareTo(c2.getSlotAllocations().get(0).getSlotVisit().getStart().toLocalDate())) //
-									.collect(Collectors.toList());
-							final Map<BaseLegalEntity, Integer> initialAllocation = calculateInitialAllocation(sProfile);
-							
-							final Map<BaseLegalEntity, BaseLegalEntity> entityEntityMap = buildEntityEntityMap(pinnedLNGScenarioModel, entitiesOrdered);
-							final Map<BaseLegalEntity, BaseLegalEntity> reverseEntityEntityMap = new HashMap<>();
-							for (final Entry<BaseLegalEntity, BaseLegalEntity> entry : entityEntityMap.entrySet()) {
-								reverseEntityEntityMap.put(entry.getValue(), entry.getKey());
-							}
-							final Map<LocalDate, Map<BaseLegalEntity, Integer>> pinnedAllocatedEntitlement = calculateDailyAllocatedEntitlement(insAndOuts, relativeEntitlements, entityEntityMap, reverseEntityEntityMap);
-							final List<BaseLegalEntity> otherEntities = sProfile.getEntityTable().stream().map(MullEntityRow::getEntity).collect(Collectors.toList());
-							final Map<LocalDate, Map<BaseLegalEntity, Integer>> pinnedActualEntitlement = calculateDailyActualEntitlement(otherEntities, sortedPinnedCargoAllocations, insAndOuts, pinnedAllocatedEntitlement, initialAllocation);
-							insAndOuts.entrySet().stream() //
-									.forEach(e -> {
-										for (BaseLegalEntity entity : entitiesOrdered) {
-											final MullDailyInformation currRow = new MullDailyInformation();
-											currRow.date = e.getKey();
-											currRow.entity = entity;
-											currRow.allocatedEntitlement = pinnedAllocatedEntitlement.get(currRow.getDate()).get(entity);
-											currRow.actualEntitlement = pinnedActualEntitlement.get(currRow.getDate()).get(entity);
-											pinnedMullDailyList.add(currRow);
-										}
-									});
-						}
-						final ScheduleModel otherScheduleModel = otherResult.getTypedResult(ScheduleModel.class);
-						final Schedule otherSchedule = otherScheduleModel.getSchedule();
-						final List<MullInformation> otherMullList = new LinkedList<>();
-						final List<MullDailyInformation> otherMullDailyList = new LinkedList<>();
-						if (otherSchedule != null) {
-							final LNGScenarioModel otherLngScenarioModel = (LNGScenarioModel) otherResult.getRootObject();
-							final ADPModel otherADPModel = otherLngScenarioModel.getAdpModel();
-							final Inventory otherInventory = otherLngScenarioModel.getCargoModel().getInventoryModels().stream().filter(i -> i.getName().equals(expectedInventory.getName())).findAny().get();
-							
-							final MullSubprofile otherSProfile = otherADPModel.getMullProfile().getInventories().stream().filter(s -> s.getInventory().equals(otherInventory)).findAny().get();
-							final Port otherInventoryLoadPort = otherInventory.getPort();
-							
-							final List<CargoAllocation> otherCargoAllocations = otherSchedule.getCargoAllocations();
-							
-							fillMullInformationList(adpStart, adpEnd, entitiesOrdered, otherSProfile, monthlyProduction, otherInventoryLoadPort, otherCargoAllocations, otherMullList, otherLngScenarioModel);
-							
-							final List<CargoAllocation> sortedOtherCargoAllocations = otherCargoAllocations.stream() //
-									.filter(c->c.getSlotAllocations().get(0).getPort().equals(otherInventoryLoadPort)) //
-									.sorted((c1, c2) -> c1.getSlotAllocations().get(0).getSlotVisit().getStart().toLocalDate().compareTo(c2.getSlotAllocations().get(0).getSlotVisit().getStart().toLocalDate())) //
-									.collect(Collectors.toList());
-							
-							final Map<BaseLegalEntity, Integer> initialAllocation = calculateInitialAllocation(otherSProfile);
-							
-							final Map<BaseLegalEntity, BaseLegalEntity> entityEntityMap = buildEntityEntityMap(otherLngScenarioModel, entitiesOrdered);
-							final Map<BaseLegalEntity, BaseLegalEntity> reverseEntityEntityMap = new HashMap<>();
-							for (final Entry<BaseLegalEntity, BaseLegalEntity> entry : entityEntityMap.entrySet()) {
-								reverseEntityEntityMap.put(entry.getValue(), entry.getKey());
-							}
-							final Map<LocalDate, Map<BaseLegalEntity, Integer>> otherAllocatedEntitlement = calculateDailyAllocatedEntitlement(insAndOuts, relativeEntitlements, entityEntityMap, reverseEntityEntityMap);
-							final List<BaseLegalEntity> otherEntities = otherSProfile.getEntityTable().stream().map(MullEntityRow::getEntity).collect(Collectors.toList());
-							final Map<LocalDate, Map<BaseLegalEntity, Integer>> otherActualEntitlement = calculateDailyActualEntitlement(otherEntities, sortedOtherCargoAllocations, insAndOuts, otherAllocatedEntitlement, initialAllocation);
-							boolean grey = false;
-							for (final Entry<LocalDate, InventoryDailyEvent> e : insAndOuts.entrySet()) {
-								for (BaseLegalEntity entity : entitiesOrdered) {
-									final MullDailyInformation currRow = new MullDailyInformation();
-									currRow.date = e.getKey();
-									currRow.entity = entity;
-									currRow.allocatedEntitlement = otherAllocatedEntitlement.get(currRow.getDate()).get(entityEntityMap.get(entity));
-									currRow.actualEntitlement = otherActualEntitlement.get(currRow.getDate()).get(entityEntityMap.get(entity));
-									currRow.grey = grey;
-									otherMullDailyList.add(currRow);
+						final Map<YearMonth, Integer> monthlyProduction = calculateMonthlyProduction(expectedInventory, adpStart);
+						
+						final MullSubprofile sProfile = adpModel.getMullProfile().getInventories().stream().filter(s -> s.getInventory().equals(expectedInventory)).findAny().get();
+						final List<BaseLegalEntity> entitiesOrdered = calculateEntityOrder(sProfile);
+						
+						final List<Pair<BaseLegalEntity, Double>> relativeEntitlements = sProfile.getEntityTable().stream() //
+								.map(row -> new Pair<BaseLegalEntity, Double>(row.getEntity(), row.getRelativeEntitlement())) //
+								.collect(Collectors.toList());
+						
+						if (pinnedResult != null) {
+							final ScheduleModel pinnedScheduleModel = pinnedResult.getTypedResult(ScheduleModel.class);
+							final Schedule pinnedSchedule = pinnedScheduleModel.getSchedule();
+							final LNGScenarioModel pinnedLNGScenarioModel = (LNGScenarioModel) pinnedResult.getRootObject();
+							final List<MullInformation> pinnedMullList = new LinkedList<>();
+							final List<MullDailyInformation> pinnedMullDailyList = new LinkedList<>();
+							if (pinnedSchedule != null) {
+								final List<CargoAllocation> pinnedCargoAllocations = pinnedSchedule.getCargoAllocations();
+								
+								fillMullInformationList(adpStart, adpEnd, entitiesOrdered, sProfile, monthlyProduction, expectedLoadPort, pinnedCargoAllocations, pinnedMullList, pinnedLNGScenarioModel);
+								
+								final List<CargoAllocation> sortedPinnedCargoAllocations = pinnedCargoAllocations.stream() //
+										.filter(c->c.getSlotAllocations().get(0).getPort().equals(expectedLoadPort)) //
+										.sorted((c1, c2) -> c1.getSlotAllocations().get(0).getSlotVisit().getStart().toLocalDate().compareTo(c2.getSlotAllocations().get(0).getSlotVisit().getStart().toLocalDate())) //
+										.collect(Collectors.toList());
+								final Map<BaseLegalEntity, Integer> initialAllocation = calculateInitialAllocation(sProfile);
+								
+								final Map<BaseLegalEntity, BaseLegalEntity> entityEntityMap = buildEntityEntityMap(pinnedLNGScenarioModel, entitiesOrdered);
+								final Map<BaseLegalEntity, BaseLegalEntity> reverseEntityEntityMap = new HashMap<>();
+								for (final Entry<BaseLegalEntity, BaseLegalEntity> entry : entityEntityMap.entrySet()) {
+									reverseEntityEntityMap.put(entry.getValue(), entry.getKey());
 								}
-								grey = !grey;
+								final Map<LocalDate, Map<BaseLegalEntity, Integer>> pinnedAllocatedEntitlement = calculateDailyAllocatedEntitlement(insAndOuts, relativeEntitlements, entityEntityMap, reverseEntityEntityMap);
+								final List<BaseLegalEntity> otherEntities = sProfile.getEntityTable().stream().map(MullEntityRow::getEntity).collect(Collectors.toList());
+								final Map<LocalDate, Map<BaseLegalEntity, Integer>> pinnedActualEntitlement = calculateDailyActualEntitlement(otherEntities, sortedPinnedCargoAllocations, insAndOuts, pinnedAllocatedEntitlement, initialAllocation);
+								insAndOuts.entrySet().stream() //
+										.forEach(e -> {
+											for (BaseLegalEntity entity : entitiesOrdered) {
+												final MullDailyInformation currRow = new MullDailyInformation();
+												currRow.date = e.getKey();
+												currRow.entity = entity;
+												currRow.allocatedEntitlement = pinnedAllocatedEntitlement.get(currRow.getDate()).get(entity);
+												currRow.actualEntitlement = pinnedActualEntitlement.get(currRow.getDate()).get(entity);
+												pinnedMullDailyList.add(currRow);
+											}
+										});
 							}
-						}
-						
-						if (pinnedMullList.isEmpty() && !otherMullList.isEmpty()) {
-							final Iterator<MullInformation> otherIter = otherMullList.iterator();
-							while (otherIter.hasNext()) {
-								pairedMullList.add(new Pair<>(otherIter.next(), null));
-							}
-						} else if (!pinnedMullList.isEmpty() && otherMullList.isEmpty()) {
-							final Iterator<MullInformation> pinnedIter = pinnedMullList.iterator();
-							while (pinnedIter.hasNext()) {
-								pairedMullList.add(new Pair<>(pinnedIter.next(), null));
-							}
-						} else if (!pinnedMullList.isEmpty() && !otherMullList.isEmpty()) {
-							final Iterator<MullInformation> pinnedIter = pinnedMullList.iterator();
-							final Iterator<MullInformation> otherIter = otherMullList.iterator();
-							while (pinnedIter.hasNext() && otherIter.hasNext()) {
-								final MullInformation currPin = pinnedIter.next();
-								final MullInformation currOth = otherIter.next();
-								pairedMullList.add(new Pair<>(currPin, currOth));
-							}
-							assert !pinnedIter.hasNext() && !otherIter.hasNext();
-						}
-						
-						if (pinnedMullDailyList.isEmpty() && !otherMullDailyList.isEmpty()) {
-							final Iterator<MullDailyInformation> otherIter = otherMullDailyList.iterator();
-							while (otherIter.hasNext()) {
-								pairedDailyMullList.add(new Pair<>(otherIter.next(), null));
-							}
-						} else if (!pinnedMullDailyList.isEmpty() && otherMullDailyList.isEmpty()) {
-							final Iterator<MullDailyInformation> pinnedIter = pinnedMullDailyList.iterator();
-							while (pinnedIter.hasNext()) {
-								pairedDailyMullList.add(new Pair<>(pinnedIter.next(), null));
-							}
-						} else if (!pinnedMullDailyList.isEmpty() && !otherMullDailyList.isEmpty()) {
-							final Iterator<MullDailyInformation> pinnedIter = pinnedMullDailyList.iterator();
-							final Iterator<MullDailyInformation> otherIter = otherMullDailyList.iterator();
-							while (pinnedIter.hasNext() && otherIter.hasNext()) {
-								final MullDailyInformation currPin = pinnedIter.next();
-								final MullDailyInformation currOth = otherIter.next();
-								pairedDailyMullList.add(new Pair<>(currPin, currOth));
-							}
-							assert !pinnedIter.hasNext() && !otherIter.hasNext();
-						}
-						
-					} else if (otherResult != null) {
-						final ScheduleModel otherScheduleModel = otherResult.getTypedResult(ScheduleModel.class);
-						final Schedule otherSchedule = otherScheduleModel.getSchedule();
-						if (otherSchedule != null) {
-							final List<CargoAllocation> otherCargoAllocations = otherSchedule.getCargoAllocations();
+							final ScheduleModel otherScheduleModel = otherResult.getTypedResult(ScheduleModel.class);
+							final Schedule otherSchedule = otherScheduleModel.getSchedule();
 							final List<MullInformation> otherMullList = new LinkedList<>();
 							final List<MullDailyInformation> otherMullDailyList = new LinkedList<>();
-							
-							fillMullInformationList(adpStart, adpEnd, entitiesOrdered, sProfile, monthlyProduction, expectedLoadPort, otherCargoAllocations, otherMullList, lngScenarioToDisplay);
-							final Map<BaseLegalEntity, Integer> initialAllocation = calculateInitialAllocation(sProfile);
-							final List<CargoAllocation> sortedOtherCargoAllocations = otherCargoAllocations.stream() //
-									.filter(c->c.getSlotAllocations().get(0).getPort().equals(expectedLoadPort)) //
-									.sorted((c1, c2) -> c1.getSlotAllocations().get(0).getSlotVisit().getStart().toLocalDate().compareTo(c2.getSlotAllocations().get(0).getSlotVisit().getStart().toLocalDate())) //
-									.collect(Collectors.toList());
-							
-							final Map<BaseLegalEntity, BaseLegalEntity> entityEntityMap = buildEntityEntityMap(lngScenarioToDisplay, entitiesOrdered);
-							final Map<BaseLegalEntity, BaseLegalEntity> reverseEntityEntityMap = new HashMap<>();
-							for (final Entry<BaseLegalEntity, BaseLegalEntity> entry : entityEntityMap.entrySet()) {
-								reverseEntityEntityMap.put(entry.getValue(), entry.getKey());
-							}
-							final Map<LocalDate, Map<BaseLegalEntity, Integer>> otherAllocatedEntitlement = calculateDailyAllocatedEntitlement(insAndOuts, relativeEntitlements, entityEntityMap, reverseEntityEntityMap);
-							final Map<LocalDate, Map<BaseLegalEntity, Integer>> otherActualEntitlement = calculateDailyActualEntitlement(entitiesOrdered, sortedOtherCargoAllocations, insAndOuts, otherAllocatedEntitlement, initialAllocation);
-							boolean grey = false;
-							for (final Entry<LocalDate, InventoryDailyEvent> e : insAndOuts.entrySet()) {
-								for (BaseLegalEntity entity : entitiesOrdered) {
-									final MullDailyInformation currRow = new MullDailyInformation();
-									currRow.date = e.getKey();
-									currRow.entity = entity;
-									currRow.allocatedEntitlement = otherAllocatedEntitlement.get(currRow.getDate()).get(entity);
-									currRow.actualEntitlement = otherActualEntitlement.get(currRow.getDate()).get(entity);
-									currRow.grey = grey;
-									otherMullDailyList.add(currRow);
+							if (otherSchedule != null) {
+								final LNGScenarioModel otherLngScenarioModel = (LNGScenarioModel) otherResult.getRootObject();
+								final ADPModel otherADPModel = otherLngScenarioModel.getAdpModel();
+								final Inventory otherInventory = otherLngScenarioModel.getCargoModel().getInventoryModels().stream().filter(i -> i.getName().equals(expectedInventory.getName())).findAny().get();
+								
+								final MullSubprofile otherSProfile = otherADPModel.getMullProfile().getInventories().stream().filter(s -> s.getInventory().equals(otherInventory)).findAny().get();
+								final Port otherInventoryLoadPort = otherInventory.getPort();
+								
+								final List<CargoAllocation> otherCargoAllocations = otherSchedule.getCargoAllocations();
+								
+								fillMullInformationList(adpStart, adpEnd, entitiesOrdered, otherSProfile, monthlyProduction, otherInventoryLoadPort, otherCargoAllocations, otherMullList, otherLngScenarioModel);
+								
+								final List<CargoAllocation> sortedOtherCargoAllocations = otherCargoAllocations.stream() //
+										.filter(c->c.getSlotAllocations().get(0).getPort().equals(otherInventoryLoadPort)) //
+										.sorted((c1, c2) -> c1.getSlotAllocations().get(0).getSlotVisit().getStart().toLocalDate().compareTo(c2.getSlotAllocations().get(0).getSlotVisit().getStart().toLocalDate())) //
+										.collect(Collectors.toList());
+								
+								final Map<BaseLegalEntity, Integer> initialAllocation = calculateInitialAllocation(otherSProfile);
+								
+								final Map<BaseLegalEntity, BaseLegalEntity> entityEntityMap = buildEntityEntityMap(otherLngScenarioModel, entitiesOrdered);
+								final Map<BaseLegalEntity, BaseLegalEntity> reverseEntityEntityMap = new HashMap<>();
+								for (final Entry<BaseLegalEntity, BaseLegalEntity> entry : entityEntityMap.entrySet()) {
+									reverseEntityEntityMap.put(entry.getValue(), entry.getKey());
 								}
-								grey = !grey;
+								final Map<LocalDate, Map<BaseLegalEntity, Integer>> otherAllocatedEntitlement = calculateDailyAllocatedEntitlement(insAndOuts, relativeEntitlements, entityEntityMap, reverseEntityEntityMap);
+								final List<BaseLegalEntity> otherEntities = otherSProfile.getEntityTable().stream().map(MullEntityRow::getEntity).collect(Collectors.toList());
+								final Map<LocalDate, Map<BaseLegalEntity, Integer>> otherActualEntitlement = calculateDailyActualEntitlement(otherEntities, sortedOtherCargoAllocations, insAndOuts, otherAllocatedEntitlement, initialAllocation);
+								boolean grey = false;
+								for (final Entry<LocalDate, InventoryDailyEvent> e : insAndOuts.entrySet()) {
+									for (BaseLegalEntity entity : entitiesOrdered) {
+										final MullDailyInformation currRow = new MullDailyInformation();
+										currRow.date = e.getKey();
+										currRow.entity = entity;
+										currRow.allocatedEntitlement = otherAllocatedEntitlement.get(currRow.getDate()).get(entityEntityMap.get(entity));
+										currRow.actualEntitlement = otherActualEntitlement.get(currRow.getDate()).get(entityEntityMap.get(entity));
+										currRow.grey = grey;
+										otherMullDailyList.add(currRow);
+									}
+									grey = !grey;
+								}
 							}
-							final Iterator<MullInformation> otherIter = otherMullList.iterator();
-							while (otherIter.hasNext()) {
-								pairedMullList.add(new Pair<>(otherIter.next(), null));
-							}
-							final Iterator<MullDailyInformation> otherDailyIter = otherMullDailyList.iterator();
-							while (otherDailyIter.hasNext()) {
-								pairedDailyMullList.add(new Pair<>(otherDailyIter.next(), null));
-							}
-						}
-					}
-					
-					Map<BaseLegalEntity, List<Pair<Integer, Integer>>> barSeries = new HashMap<>();
-					for (BaseLegalEntity entity : entitiesOrdered) {
-						barSeries.put(entity, new LinkedList<>());
-					}
-					Map<BaseLegalEntity, List<Pair<Integer, Integer>>> cargoCountBarSeries = new HashMap<>();
-					for (BaseLegalEntity entity : entitiesOrdered) {
-						cargoCountBarSeries.put(entity, new LinkedList<>());
-					}
-					int i = 0;
-					int spacing = 15;
-					Iterator<Pair<MullInformation, MullInformation>> iterMullList = pairedMullList.iterator();
-					while (iterMullList.hasNext()) {
-						for (final BaseLegalEntity entity : entitiesOrdered) {
-							final MullInformation currMull = iterMullList.next().getFirst();
-							barSeries.get(entity).add(new Pair<>(i, currMull.overliftCF));
-							i += 2;
-						}
-						i += spacing;
-					}
-					
-					i = 0;
-					spacing = 15;
-					iterMullList = pairedMullList.iterator();
-					while (iterMullList.hasNext()) {
-						for (final BaseLegalEntity entity : entitiesOrdered) {
-							final MullInformation currMull = iterMullList.next().getFirst();
-							cargoCountBarSeries.get(entity).add(new Pair<>(i, currMull.cargoCount));
-							i += 2;
-						}
-						i += spacing;
-					}
-					
-					List<Integer> colours = new LinkedList<>();
-					colours.add(SWT.COLOR_BLUE);
-					colours.add(SWT.COLOR_GREEN);
-					colours.add(SWT.COLOR_RED);
-					colours.add(SWT.COLOR_CYAN);
-					colours.add(SWT.COLOR_GRAY);
-					colours.add(SWT.COLOR_MAGENTA);
-					
-					Iterator<Integer> colIter = colours.iterator();
-					{
-						for (BaseLegalEntity entity : entitiesOrdered) {
-							final Integer currCol = colIter.next();
-							final IBarSeries series = createMULLBarSeries(seriesSet2, entity.getName(), barSeries.get(entity));
-							series.setBarWidth(20);
-							series.setBarColor(Display.getDefault().getSystemColor(currCol));
 							
+							if (pinnedMullList.isEmpty() && !otherMullList.isEmpty()) {
+								final Iterator<MullInformation> otherIter = otherMullList.iterator();
+								while (otherIter.hasNext()) {
+									pairedMullList.add(new Pair<>(otherIter.next(), null));
+								}
+							} else if (!pinnedMullList.isEmpty() && otherMullList.isEmpty()) {
+								final Iterator<MullInformation> pinnedIter = pinnedMullList.iterator();
+								while (pinnedIter.hasNext()) {
+									pairedMullList.add(new Pair<>(pinnedIter.next(), null));
+								}
+							} else if (!pinnedMullList.isEmpty() && !otherMullList.isEmpty()) {
+								final Iterator<MullInformation> pinnedIter = pinnedMullList.iterator();
+								final Iterator<MullInformation> otherIter = otherMullList.iterator();
+								while (pinnedIter.hasNext() && otherIter.hasNext()) {
+									final MullInformation currPin = pinnedIter.next();
+									final MullInformation currOth = otherIter.next();
+									pairedMullList.add(new Pair<>(currPin, currOth));
+								}
+								assert !pinnedIter.hasNext() && !otherIter.hasNext();
+							}
+							
+							if (pinnedMullDailyList.isEmpty() && !otherMullDailyList.isEmpty()) {
+								final Iterator<MullDailyInformation> otherIter = otherMullDailyList.iterator();
+								while (otherIter.hasNext()) {
+									pairedDailyMullList.add(new Pair<>(otherIter.next(), null));
+								}
+							} else if (!pinnedMullDailyList.isEmpty() && otherMullDailyList.isEmpty()) {
+								final Iterator<MullDailyInformation> pinnedIter = pinnedMullDailyList.iterator();
+								while (pinnedIter.hasNext()) {
+									pairedDailyMullList.add(new Pair<>(pinnedIter.next(), null));
+								}
+							} else if (!pinnedMullDailyList.isEmpty() && !otherMullDailyList.isEmpty()) {
+								final Iterator<MullDailyInformation> pinnedIter = pinnedMullDailyList.iterator();
+								final Iterator<MullDailyInformation> otherIter = otherMullDailyList.iterator();
+								while (pinnedIter.hasNext() && otherIter.hasNext()) {
+									final MullDailyInformation currPin = pinnedIter.next();
+									final MullDailyInformation currOth = otherIter.next();
+									pairedDailyMullList.add(new Pair<>(currPin, currOth));
+								}
+								assert !pinnedIter.hasNext() && !otherIter.hasNext();
+							}
+							
+						} else if (otherResult != null) {
+							final ScheduleModel otherScheduleModel = otherResult.getTypedResult(ScheduleModel.class);
+							final Schedule otherSchedule = otherScheduleModel.getSchedule();
+							if (otherSchedule != null) {
+								final List<CargoAllocation> otherCargoAllocations = otherSchedule.getCargoAllocations();
+								final List<MullInformation> otherMullList = new LinkedList<>();
+								final List<MullDailyInformation> otherMullDailyList = new LinkedList<>();
+								
+								fillMullInformationList(adpStart, adpEnd, entitiesOrdered, sProfile, monthlyProduction, expectedLoadPort, otherCargoAllocations, otherMullList, lngScenarioToDisplay);
+								final Map<BaseLegalEntity, Integer> initialAllocation = calculateInitialAllocation(sProfile);
+								final List<CargoAllocation> sortedOtherCargoAllocations = otherCargoAllocations.stream() //
+										.filter(c->c.getSlotAllocations().get(0).getPort().equals(expectedLoadPort)) //
+										.sorted((c1, c2) -> c1.getSlotAllocations().get(0).getSlotVisit().getStart().toLocalDate().compareTo(c2.getSlotAllocations().get(0).getSlotVisit().getStart().toLocalDate())) //
+										.collect(Collectors.toList());
+								
+								final Map<BaseLegalEntity, BaseLegalEntity> entityEntityMap = buildEntityEntityMap(lngScenarioToDisplay, entitiesOrdered);
+								final Map<BaseLegalEntity, BaseLegalEntity> reverseEntityEntityMap = new HashMap<>();
+								for (final Entry<BaseLegalEntity, BaseLegalEntity> entry : entityEntityMap.entrySet()) {
+									reverseEntityEntityMap.put(entry.getValue(), entry.getKey());
+								}
+								final Map<LocalDate, Map<BaseLegalEntity, Integer>> otherAllocatedEntitlement = calculateDailyAllocatedEntitlement(insAndOuts, relativeEntitlements, entityEntityMap, reverseEntityEntityMap);
+								final Map<LocalDate, Map<BaseLegalEntity, Integer>> otherActualEntitlement = calculateDailyActualEntitlement(entitiesOrdered, sortedOtherCargoAllocations, insAndOuts, otherAllocatedEntitlement, initialAllocation);
+								boolean grey = false;
+								for (final Entry<LocalDate, InventoryDailyEvent> e : insAndOuts.entrySet()) {
+									for (BaseLegalEntity entity : entitiesOrdered) {
+										final MullDailyInformation currRow = new MullDailyInformation();
+										currRow.date = e.getKey();
+										currRow.entity = entity;
+										currRow.allocatedEntitlement = otherAllocatedEntitlement.get(currRow.getDate()).get(entity);
+										currRow.actualEntitlement = otherActualEntitlement.get(currRow.getDate()).get(entity);
+										currRow.grey = grey;
+										otherMullDailyList.add(currRow);
+									}
+									grey = !grey;
+								}
+								final Iterator<MullInformation> otherIter = otherMullList.iterator();
+								while (otherIter.hasNext()) {
+									pairedMullList.add(new Pair<>(otherIter.next(), null));
+								}
+								final Iterator<MullDailyInformation> otherDailyIter = otherMullDailyList.iterator();
+								while (otherDailyIter.hasNext()) {
+									pairedDailyMullList.add(new Pair<>(otherDailyIter.next(), null));
+								}
+							}
 						}
-					}
-					Iterator<Integer> colIter2 = colours.iterator();
-					{
+						
+						Map<BaseLegalEntity, List<Pair<Integer, Integer>>> barSeries = new HashMap<>();
 						for (BaseLegalEntity entity : entitiesOrdered) {
-							final Integer currCol = colIter2.next();
-							final IBarSeries series = createCargoCountBarSeries(seriesSet3, entity.getName(), cargoCountBarSeries.get(entity));
-							series.setBarWidth(20);
-							series.setBarColor(Display.getDefault().getSystemColor(currCol));
+							barSeries.put(entity, new LinkedList<>());
+						}
+						Map<BaseLegalEntity, List<Pair<Integer, Integer>>> cargoCountBarSeries = new HashMap<>();
+						for (BaseLegalEntity entity : entitiesOrdered) {
+							cargoCountBarSeries.put(entity, new LinkedList<>());
+						}
+						int i = 0;
+						int spacing = 15;
+						Iterator<Pair<MullInformation, MullInformation>> iterMullList = pairedMullList.iterator();
+						while (iterMullList.hasNext()) {
+							for (final BaseLegalEntity entity : entitiesOrdered) {
+								final MullInformation currMull = iterMullList.next().getFirst();
+								barSeries.get(entity).add(new Pair<>(i, currMull.overliftCF));
+								i += 2;
+							}
+							i += spacing;
+						}
+						
+						i = 0;
+						spacing = 15;
+						iterMullList = pairedMullList.iterator();
+						while (iterMullList.hasNext()) {
+							for (final BaseLegalEntity entity : entitiesOrdered) {
+								final MullInformation currMull = iterMullList.next().getFirst();
+								cargoCountBarSeries.get(entity).add(new Pair<>(i, currMull.cargoCount));
+								i += 2;
+							}
+							i += spacing;
+						}
+						
+						List<Integer> colours = new LinkedList<>();
+						colours.add(SWT.COLOR_BLUE);
+						colours.add(SWT.COLOR_GREEN);
+						colours.add(SWT.COLOR_RED);
+						colours.add(SWT.COLOR_CYAN);
+						colours.add(SWT.COLOR_GRAY);
+						colours.add(SWT.COLOR_MAGENTA);
+						
+						Iterator<Integer> colIter = colours.iterator();
+						{
+							for (BaseLegalEntity entity : entitiesOrdered) {
+								final Integer currCol = colIter.next();
+								final IBarSeries series = createMULLBarSeries(seriesSet2, entity.getName(), barSeries.get(entity));
+								series.setBarWidth(20);
+								series.setBarColor(Display.getDefault().getSystemColor(currCol));
+								
+							}
+						}
+						Iterator<Integer> colIter2 = colours.iterator();
+						{
+							for (BaseLegalEntity entity : entitiesOrdered) {
+								final Integer currCol = colIter2.next();
+								final IBarSeries series = createCargoCountBarSeries(seriesSet3, entity.getName(), cargoCountBarSeries.get(entity));
+								series.setBarWidth(20);
+								series.setBarColor(Display.getDefault().getSystemColor(currCol));
+							}
 						}
 					}
-					
 					for (final InventoryEvents inventoryEvents : schedule.getInventoryLevels()) {
 						final Inventory inventory = inventoryEvents.getFacility();
 						boolean cargoIn = inventory.getFacilityType() != InventoryFacilityType.UPSTREAM;
@@ -1051,43 +1059,45 @@ public class InventoryReport extends ViewPart {
 
 		chartViewer.redraw();
 		
-		final IAxisSet axisSet2 = chartViewer2.getAxisSet();
-		
-		axisSet2.getXAxis(0).getTick().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-		axisSet2.getXAxis(0).getTitle().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-		axisSet2.getXAxis(0).getTitle().setText("Lifters");
-		// axisSet2.getXAxis(0).getTick().setTickMarkStepHint(6);
-		// axisSet2.getXAxis(0).
-		
-		axisSet2.getYAxis(0).getTick().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-		axisSet2.getYAxis(0).getTitle().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-		axisSet2.getYAxis(0).getTitle().setText("Overlift");
-		
-		axisSet2.getXAxis(0).getTick().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-		
-		axisSet2.adjustRange();
-		
-		chartViewer2.updateLayout();
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
+			final IAxisSet axisSet2 = chartViewer2.getAxisSet();
+			
+			axisSet2.getXAxis(0).getTick().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+			axisSet2.getXAxis(0).getTitle().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+			axisSet2.getXAxis(0).getTitle().setText("Lifters");
+			// axisSet2.getXAxis(0).getTick().setTickMarkStepHint(6);
+			// axisSet2.getXAxis(0).
+			
+			axisSet2.getYAxis(0).getTick().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+			axisSet2.getYAxis(0).getTitle().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+			axisSet2.getYAxis(0).getTitle().setText("Overlift");
+			
+			axisSet2.getXAxis(0).getTick().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+			
+			axisSet2.adjustRange();
+			
+			chartViewer2.updateLayout();
 
-		chartViewer2.redraw();
-		
-		final IAxisSet axisSet3 = chartViewer3.getAxisSet();
-		
-		axisSet3.getXAxis(0).getTick().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-		axisSet3.getXAxis(0).getTitle().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-		axisSet3.getXAxis(0).getTitle().setText("Month");
-		
-		axisSet3.getYAxis(0).getTick().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-		axisSet3.getYAxis(0).getTitle().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-		axisSet3.getYAxis(0).getTitle().setText("# Cargoes Lifted");
-		
-		axisSet3.getXAxis(0).getTick().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-		
-		axisSet3.adjustRange();
-		
-		chartViewer3.updateLayout();
+			chartViewer2.redraw();
+			
+			final IAxisSet axisSet3 = chartViewer3.getAxisSet();
+			
+			axisSet3.getXAxis(0).getTick().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+			axisSet3.getXAxis(0).getTitle().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+			axisSet3.getXAxis(0).getTitle().setText("Month");
+			
+			axisSet3.getYAxis(0).getTick().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+			axisSet3.getYAxis(0).getTitle().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+			axisSet3.getYAxis(0).getTitle().setText("# Cargoes Lifted");
+			
+			axisSet3.getXAxis(0).getTick().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+			
+			axisSet3.adjustRange();
+			
+			chartViewer3.updateLayout();
 
-		chartViewer3.redraw();
+			chartViewer3.redraw();
+		}
 
 		int total = 0;
 		if (firstInventoryData.isPresent()) {
@@ -1115,8 +1125,10 @@ public class InventoryReport extends ViewPart {
 		}
 
 		tableViewer.setInput(tableLevels);
-		mullTableViewer.setInput(pairedMullList);
-		mullDailyTableViewer.setInput(pairedDailyMullList);
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
+			mullTableViewer.setInput(pairedMullList);
+			mullDailyTableViewer.setInput(pairedDailyMullList);
+		}
 	}
 
 	private Map<LocalDate, Map<BaseLegalEntity, Integer>> calculateDailyAllocatedEntitlement(TreeMap<LocalDate, InventoryDailyEvent> insAndOuts,
