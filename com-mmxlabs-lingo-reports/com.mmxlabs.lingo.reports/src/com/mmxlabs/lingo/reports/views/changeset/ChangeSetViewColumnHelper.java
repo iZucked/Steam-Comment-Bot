@@ -93,6 +93,7 @@ import com.mmxlabs.models.ui.tabular.renderers.ColumnGroupHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.WrappingColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public class ChangeSetViewColumnHelper {
 
@@ -1562,8 +1563,8 @@ public class ChangeSetViewColumnHelper {
 			public String getToolTipText(final Object element) {
 				if (element instanceof ChangeSetTableRow) {
 					final ChangeSetTableRow cstr = (ChangeSetTableRow)element;
-					final LNGScenarioModel sm = getScenarioModel(cstr);
-					return getNominationBreaksDetail(sm, cstr);
+					final IScenarioDataProvider sdp = getScenarioDataProvider(cstr);
+					return getNominationBreaksDetail(sdp, cstr);
 				}
 				return super.getToolTipText(element);
 			}
@@ -1577,40 +1578,38 @@ public class ChangeSetViewColumnHelper {
 
 				if (element instanceof ChangeSetTableGroup) {
 					final ChangeSetTableGroup cstg = (ChangeSetTableGroup)element;
-					cell.setText(getNominationBreaksCountString(getScenarioModel(cstg), cstg));	
+					cell.setText(getNominationBreaksCountString(getScenarioDataProvider(cstg), cstg));	
 				}
 				if (element instanceof ChangeSetTableRow) {	
 					final ChangeSetTableRow cstr = (ChangeSetTableRow)element;
-					cell.setText(getNominationBreaks(getScenarioModel(cstr), cstr));
+					cell.setText(getNominationBreaks(getScenarioDataProvider(cstr), cstr));
 				}
 			}
 		};		
 	}
 	
-	private LNGScenarioModel getScenarioModel(final ChangeSetTableRow change) {
+	private IScenarioDataProvider getScenarioDataProvider(final ChangeSetTableRow change) {
 		if (change.eContainer() instanceof ChangeSetTableGroup) {
-			final LNGScenarioModel sm = getScenarioModel((ChangeSetTableGroup)change.eContainer());
-			return sm;
+			return getScenarioDataProvider((ChangeSetTableGroup)change.eContainer());
 		}
 		else {
 			return null;
 		}
 	}
 
-	private LNGScenarioModel getScenarioModel(final ChangeSetTableGroup change) {
-		if (change.getBaseScenario() != null && change.getBaseScenario().getTypedRoot(LNGScenarioModel.class) != null) {
-			final LNGScenarioModel sm = (LNGScenarioModel)change.getBaseScenario().getTypedRoot(LNGScenarioModel.class);
-			return sm;
+	private IScenarioDataProvider getScenarioDataProvider(final ChangeSetTableGroup change) {
+		if (change.getBaseScenario() != null && change.getBaseScenario().getScenarioDataProvider() != null) {
+			return change.getBaseScenario().getScenarioDataProvider();
 		}
 		else {
 			return null;
 		}
 	}
 
-	private String getNominationBreaksCountString(final LNGScenarioModel sm, final ChangeSetTableGroup change) {
+	private String getNominationBreaksCountString(final IScenarioDataProvider sdp, final ChangeSetTableGroup change) {
 		int cnt = 0;
 		for (final ChangeSetTableRow row : change.getRows()) {
-			cnt += getNominationBreakCount(sm, row);
+			cnt += getNominationBreakCount(sdp, row);
 		}
 		if (cnt > 0) {
 			return Integer.toString(cnt);
@@ -1620,8 +1619,8 @@ public class ChangeSetViewColumnHelper {
 		}
 	}
 	
-	private String getNominationBreaks(final LNGScenarioModel sm, final ChangeSetTableRow change) {
-		final int cnt = getNominationBreakCount(sm, change);
+	private String getNominationBreaks(final IScenarioDataProvider sdp, final ChangeSetTableRow change) {
+		final int cnt = getNominationBreakCount(sdp, change);
 		if (cnt > 0) {
 			return Integer.toString(cnt);
 		}
@@ -1630,10 +1629,10 @@ public class ChangeSetViewColumnHelper {
 		}
 	}
 
-	private String getNominationBreaksDetail(final LNGScenarioModel sm, final ChangeSetTableRow change) {
+	private String getNominationBreaksDetail(final IScenarioDataProvider sdp, final ChangeSetTableRow change) {
 		final StringBuilder sb = new StringBuilder();
-		addNominations(sm, change.getLhsName(), change.getLhsBefore(), change.getLhsAfter(), sb);
-		addNominations(sm, change.getRhsName(), change.getRhsBefore(), change.getRhsAfter(), sb);
+		addNominations(sdp, change.getLhsName(), change.getLhsBefore(), change.getLhsAfter(), sb);
+		addNominations(sdp, change.getRhsName(), change.getRhsBefore(), change.getRhsAfter(), sb);
 		if (sb.length() == 0) {
 			return null;
 		}
@@ -1642,8 +1641,8 @@ public class ChangeSetViewColumnHelper {
 		}
 	}
 
-	private void addNominations(final LNGScenarioModel sm, final String slotName, final ChangeSetRowData before, final ChangeSetRowData after, final StringBuilder sb) {
-		final List<AbstractNomination> noms = this.getAffectedNominations(sm, slotName, before, after);	
+	private void addNominations(final IScenarioDataProvider sdp, final String slotName, final ChangeSetRowData before, final ChangeSetRowData after, final StringBuilder sb) {
+		final List<AbstractNomination> noms = this.getAffectedNominations(sdp, slotName, before, after);	
 		if (!noms.isEmpty()) {
 			if (sb.length() > 0) {
 				sb.append("\n");
@@ -1658,24 +1657,24 @@ public class ChangeSetViewColumnHelper {
 		}
 	}
 		
-	private int getNominationBreakCount(final LNGScenarioModel sm, final ChangeSetTableRow change) {
+	private int getNominationBreakCount(final IScenarioDataProvider sdp, final ChangeSetTableRow change) {
 		int cnt = 0;
-		cnt += getAffectedNominations(sm, change).size();
+		cnt += getAffectedNominations(sdp, change).size();
 		return cnt;
 	}
 
-	private List<AbstractNomination> getAffectedNominations(final LNGScenarioModel sm, final ChangeSetTableRow change) {
-		final List<AbstractNomination> lhsNoms = getAffectedNominations(sm, change.getLhsName(), change.getLhsBefore(), change.getLhsAfter());
-		final List<AbstractNomination> rhsNoms = getAffectedNominations(sm, change.getRhsName(), change.getRhsBefore(), change.getRhsAfter());
+	private List<AbstractNomination> getAffectedNominations(final IScenarioDataProvider sdp, final ChangeSetTableRow change) {
+		final List<AbstractNomination> lhsNoms = getAffectedNominations(sdp, change.getLhsName(), change.getLhsBefore(), change.getLhsAfter());
+		final List<AbstractNomination> rhsNoms = getAffectedNominations(sdp, change.getRhsName(), change.getRhsBefore(), change.getRhsAfter());
 		final List<AbstractNomination> affectedNoms = new ArrayList<AbstractNomination>(lhsNoms.size() + rhsNoms.size());
 		affectedNoms.addAll(lhsNoms);
 		affectedNoms.addAll(rhsNoms);
 		return affectedNoms;
 	}
 	
-	private List<AbstractNomination> getAffectedNominations(final LNGScenarioModel sm, final String slotName, final ChangeSetRowData before, final ChangeSetRowData after) {
-		if (sm != null) {
-			List<AbstractNomination> noms = NominationsModelUtils.findNominationsForSlot(sm, slotName);
+	private List<AbstractNomination> getAffectedNominations(final IScenarioDataProvider sdp, final String slotName, final ChangeSetRowData before, final ChangeSetRowData after) {
+		if (sdp != null) {
+			List<AbstractNomination> noms = NominationsModelUtils.findNominationsForSlot(sdp, slotName);
 			noms = filterAffectedNominations(noms, before, after);		
 			return noms;
 		}

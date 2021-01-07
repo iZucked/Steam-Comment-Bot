@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.TreeSet;
 import java.util.function.Function;
 
@@ -40,6 +42,8 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
+import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -49,8 +53,10 @@ import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.viewers.ViewerFilter;
+import org.eclipse.jface.window.Window;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -63,6 +69,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -96,10 +103,14 @@ import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsViewerPane implements ISelectionListener {
 
-	private final static org.slf4j.@NonNull Logger logger =  LoggerFactory.getLogger(RelativeDateRangeNominationsViewerPane.class);
+	private static final @NonNull Logger logger =  LoggerFactory.getLogger(RelativeDateRangeNominationsViewerPane.class);
+	
+	private final static int doubleClickInterval = (Integer)java.awt.Toolkit.getDefaultToolkit().getDesktopProperty("awt.multiClickInterval");
 	
 	private final Set<String> nominationTypeFilter = new TreeSet<>();
-
+	
+	private Timer doubleClickDoneTimer = null;
+	
 	private class FilterMenuAction extends DefaultMenuCreatorAction {
 
 		public FilterMenuAction(final String label) {
@@ -303,7 +314,7 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 					final LocalDate endDate = getEndDate();
 					final Object[] result;
 
-					elements.addAll(NominationsModelUtils.generateNominations(jointModelEditor, startDate, endDate));
+					elements.addAll(NominationsModelUtils.getGeneratedNominations(jointModelEditor, startDate, endDate));
 					if (RelativeDateRangeNominationsViewerPane.this.viewSelected && !RelativeDateRangeNominationsViewerPane.this.selectedSlots.isEmpty()) {
 						result = elements.stream().filter(n -> n.getNomineeId() != null && isSelectedSlot(n.getNomineeId())).toArray();
 					}
@@ -368,9 +379,6 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 		}
 	}
 		
-	
-	
-	
 	private static final String PLUGIN_ID = "com.mmxlabs.models.lng.nominations.editor";
 	
 	@NonNull 
@@ -653,15 +661,41 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 		final GridViewerColumn gcvDone = addTypicalColumn("Done", new BooleanFlagAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNomination_Done(), jointModelEditor.getEditingDomain()) {
 			@Override
 			public void doSetValue(Object object, Object value) {
-				final AbstractNomination nomination = (AbstractNomination)object;
-				if (nomination.eContainer() == null) {
-					addNomination(nomination);	
-				}
-				RelativeDateRangeNominationsViewerPane.this.previousNominations.add(nomination.getUuid());
+				//Create timer on the display thread.
+				doubleClickDoneTimer = new Timer();
+				doubleClickDoneTimer.schedule(new TimerTask() {
+					@Override
+					public void run() {
+						Display.getDefault().syncExec(new Runnable() {
+							//Setting of EMF stuff must be done on the display thread.
+							@Override
+							public void run() {
+								//Cancel and destroy timer on the display thread.
+								doubleClickDoneTimer.cancel();
+								doubleClickDoneTimer = null;
+								final AbstractNomination nomination = (AbstractNomination)object;
+								if (nomination.eContainer() == null) {
+									addNomination(nomination);	
+								}
+								RelativeDateRangeNominationsViewerPane.this.previousNominations.add(nomination.getUuid());
+								superDoSetValue(object, value);
+							}
+						});
+					}
+				}, RelativeDateRangeNominationsViewerPane.this.doubleClickInterval);
+			}
+			
+			public void superDoSetValue(Object object, Object value) {
 				super.doSetValue(object, value);
 			}
+			
+			@Override
+			public boolean canEdit(final Object object) {
+				return true;
+			}			
 		});
 		gcvDone.getColumn().setAlignment(SWT.CENTER);	
+		
 		addTypicalColumn("Remark", new StringAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNominationSpec_Remark(), jointModelEditor.getEditingDomain()) {
 			@Override
 			public boolean canEdit(final Object object) {
@@ -682,7 +716,7 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 
 			@Override
 			public String render(final Object object) {
-				return NominationsModelUtils.getNominatedValue(getScenarioModel(), (AbstractNomination) object);
+				return NominationsModelUtils.getNominatedValue((AbstractNomination) object);
 			}
 		});
 
@@ -863,16 +897,29 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 	@Override
 	protected void enableOpenListener() {
 		scenarioViewer.addOpenListener(event -> {
+			long currentTimeMillis = System.currentTimeMillis();
 			final ISelection selection = ((NominationsScenarioTableViewer)scenarioViewer).getOriginalSelection();
 			if (selection instanceof IStructuredSelection) {
 				IStructuredSelection structuredSelection = (IStructuredSelection) selection;
-				
-				DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, structuredSelection);
-
-				//Add the edited slot nomination to the nominations model. 
 				if (((IStructuredSelection) selection).getFirstElement() instanceof AbstractNomination) {
 					final AbstractNomination sn = (AbstractNomination) ((IStructuredSelection) selection).getFirstElement();
-					addNomination(sn);
+					//If double click event detected within 0.5 seconds done click change, then:
+//					if (this.lastDoneChange.get(sn) >= currentTimeMillis-500) {
+//						//Undo the done change by first click.
+//						doneManipulator.doSetValue(sn, !sn.isDone());
+//					}
+					//Cancel if timer is running.
+					if (doubleClickDoneTimer != null) {
+						doubleClickDoneTimer.cancel();
+						doubleClickDoneTimer = null;
+					}
+				}
+				if (DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, structuredSelection) == Window.OK) {
+					//Add the edited slot nomination to the nominations model. 
+					if (((IStructuredSelection) selection).getFirstElement() instanceof AbstractNomination) {
+						final AbstractNomination sn = (AbstractNomination) ((IStructuredSelection) selection).getFirstElement();
+						addNomination(sn);
+					}
 				}
 			}
 		});

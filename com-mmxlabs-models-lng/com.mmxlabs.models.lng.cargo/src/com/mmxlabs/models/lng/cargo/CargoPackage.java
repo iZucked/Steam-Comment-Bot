@@ -276,13 +276,31 @@ public interface CargoPackage extends EPackage {
 	int CARGO_MODEL___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
 
 	/**
+	 * The operation id for the '<em>Get Load Slot By Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_MODEL___GET_LOAD_SLOT_BY_NAME__STRING = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Get Discharge Slot By Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_MODEL___GET_DISCHARGE_SLOT_BY_NAME__STRING = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 1;
+
+	/**
 	 * The number of operations of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_MODEL_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 0;
+	int CARGO_MODEL_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.SpotSlot <em>Spot Slot</em>}' class.
@@ -8520,6 +8538,26 @@ public interface CargoPackage extends EPackage {
 	EReference getCargoModel_DealSets();
 
 	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.CargoModel#getLoadSlotByName(java.lang.String) <em>Get Load Slot By Name</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Load Slot By Name</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getLoadSlotByName(java.lang.String)
+	 * @generated
+	 */
+	EOperation getCargoModel__GetLoadSlotByName__String();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.CargoModel#getDischargeSlotByName(java.lang.String) <em>Get Discharge Slot By Name</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Discharge Slot By Name</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getDischargeSlotByName(java.lang.String)
+	 * @generated
+	 */
+	EOperation getCargoModel__GetDischargeSlotByName__String();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.SpotSlot <em>Spot Slot</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -11151,6 +11189,22 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CARGO_MODEL__DEAL_SETS = eINSTANCE.getCargoModel_DealSets();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Load Slot By Name</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CARGO_MODEL___GET_LOAD_SLOT_BY_NAME__STRING = eINSTANCE.getCargoModel__GetLoadSlotByName__String();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Discharge Slot By Name</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CARGO_MODEL___GET_DISCHARGE_SLOT_BY_NAME__STRING = eINSTANCE.getCargoModel__GetDischargeSlotByName__String();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.SpotSlot <em>Spot Slot</em>}' class.

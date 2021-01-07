@@ -184,9 +184,7 @@ public class NominatedValueInlineEditor extends UnsettableInlineEditor {
 		//Should always be a nomination..
 		if (target instanceof AbstractNomination) {
 			//Convert from JSON string to java String value.
-			AbstractNomination nomination = (AbstractNomination) target;
-			String nominationType = nomination.getType();
-			String jsonString = NominationsModelUtils.getNominatedValueJSONString(nominationType, object);
+			String jsonString = NominationsModelUtils.getNominatedValueJSONString(object);
 			doSetValue(jsonString, false);	
 		}
 	}
