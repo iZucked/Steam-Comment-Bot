@@ -64,6 +64,10 @@ public class ExportScheduleHelper {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ExportScheduleHelper.class);
 
+	private ExportScheduleHelper() {
+		//Just a static helper class, so disallow construction.
+	}
+	
 	public static @Nullable ScenarioInstance export(final ScenarioResult scenarioResult) throws Exception {
 		return export(scenarioResult, null, true, null);
 	}
@@ -202,10 +206,10 @@ public class ExportScheduleHelper {
 		final List<AbstractNomination> nominationsToKeep = new ArrayList<>();
 
 		for (final Slot<?> slot : cargoModel.getLoadSlots()) {
-			nominationsToKeep.addAll(NominationsModelUtils.findNominationsForSlot(scenarioModel,slot));
+			nominationsToKeep.addAll(NominationsModelUtils.findNominationsForSlot(scenarioDataProvider,slot));
 		}
 		for (final Slot<?> slot : cargoModel.getDischargeSlots()) {
-			nominationsToKeep.addAll(NominationsModelUtils.findNominationsForSlot(scenarioModel,slot));
+			nominationsToKeep.addAll(NominationsModelUtils.findNominationsForSlot(scenarioDataProvider,slot));
 		}
 		nominationsModel.getNominations().retainAll(nominationsToKeep);
 

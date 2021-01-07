@@ -1496,6 +1496,26 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
+	public EOperation getCargoModel__GetLoadSlotByName__String() {
+		return cargoModelEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EOperation getCargoModel__GetDischargeSlotByName__String() {
+		return cargoModelEClass.getEOperations().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getSpotSlot() {
 		return spotSlotEClass;
 	}
@@ -3172,6 +3192,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEReference(cargoModelEClass, CARGO_MODEL__CHARTER_IN_MARKET_OVERRIDES);
 		createEReference(cargoModelEClass, CARGO_MODEL__PAPER_DEALS);
 		createEReference(cargoModelEClass, CARGO_MODEL__DEAL_SETS);
+		createEOperation(cargoModelEClass, CARGO_MODEL___GET_LOAD_SLOT_BY_NAME__STRING);
+		createEOperation(cargoModelEClass, CARGO_MODEL___GET_DISCHARGE_SLOT_BY_NAME__STRING);
 
 		cargoEClass = createEClass(CARGO);
 		createEAttribute(cargoEClass, CARGO__ALLOW_REWIRING);
@@ -3572,6 +3594,12 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEReference(getCargoModel_PaperDeals(), this.getPaperDeal(), null, "paperDeals", null, 0, -1, CargoModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCargoModel_DealSets(), this.getDealSet(), null, "dealSets", null, 0, -1, CargoModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		EOperation op = initEOperation(getCargoModel__GetLoadSlotByName__String(), this.getLoadSlot(), "getLoadSlotByName", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, ecorePackage.getEString(), "name", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		op = initEOperation(getCargoModel__GetDischargeSlotByName__String(), this.getDischargeSlot(), "getDischargeSlotByName", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, ecorePackage.getEString(), "name", 0, 1, IS_UNIQUE, IS_ORDERED);
+
 		initEClass(cargoEClass, Cargo.class, "Cargo", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCargo_AllowRewiring(), ecorePackage.getEBoolean(), "allowRewiring", "false", 1, 1, Cargo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		g1 = createEGenericType(this.getSlot());
@@ -3581,7 +3609,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 		initEOperation(getCargo__GetCargoType(), this.getCargoType(), "getCargoType", 1, 1, IS_UNIQUE, IS_ORDERED);
 
-		EOperation op = initEOperation(getCargo__GetSortedSlots(), null, "getSortedSlots", 0, -1, IS_UNIQUE, IS_ORDERED);
+		op = initEOperation(getCargo__GetSortedSlots(), null, "getSortedSlots", 0, -1, IS_UNIQUE, IS_ORDERED);
 		g1 = createEGenericType(this.getSlot());
 		g2 = createEGenericType();
 		g1.getETypeArguments().add(g2);

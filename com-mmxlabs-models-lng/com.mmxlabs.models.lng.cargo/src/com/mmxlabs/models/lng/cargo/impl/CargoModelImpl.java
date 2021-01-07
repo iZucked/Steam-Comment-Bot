@@ -3,8 +3,10 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.impl;
-import com.mmxlabs.models.lng.cargo.CanalBookings;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -12,9 +14,11 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
+import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoGroup;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -175,13 +179,33 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	 */
 	protected EList<DealSet> dealSets;
 
+	
+	private Map< String, LoadSlot> lookupLoadSlotCache;
+	private Map< String, DischargeSlot> lookupDischargeSlotCache;
+	
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	protected CargoModelImpl() {
 		super();
+		eAdapters().add(new EContentAdapter() {
+			@Override
+			public void notifyChanged(Notification notification) {
+				super.notifyChanged(notification);
+				
+				if (notification.isTouch()) {
+					return;
+				}
+				if (lookupLoadSlotCache != null && notification.getNotifier() instanceof LoadSlot || notification.getFeature() == CargoPackage.Literals.CARGO_MODEL__LOAD_SLOTS) {
+					lookupLoadSlotCache = null;
+				}
+				if (lookupDischargeSlotCache != null && notification.getNotifier() instanceof DischargeSlot || notification.getFeature() == CargoPackage.Literals.CARGO_MODEL__DISCHARGE_SLOTS) {
+					lookupDischargeSlotCache = null;
+				}
+			}
+		});
 	}
 
 	/**
@@ -408,6 +432,50 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public LoadSlot getLoadSlotByName(String name) {
+		Map<String, LoadSlot> pLookupLoadSlotCache = lookupLoadSlotCache;
+		if (pLookupLoadSlotCache == null) {
+			synchronized (this) {
+				if (lookupLoadSlotCache == null) {
+					pLookupLoadSlotCache = new HashMap<>();
+					for (LoadSlot s : getLoadSlots()) {
+						pLookupLoadSlotCache.put(s.getName(), s);
+					}
+					lookupLoadSlotCache = pLookupLoadSlotCache;
+				}
+			}
+		}
+		return pLookupLoadSlotCache.get(name);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public DischargeSlot getDischargeSlotByName(String name) {
+		Map<String, DischargeSlot> pLookupDischargeSlotCache = lookupDischargeSlotCache;
+		if (pLookupDischargeSlotCache == null) {
+			synchronized (this) {
+				if (lookupDischargeSlotCache == null) {
+					pLookupDischargeSlotCache = new HashMap<>();
+					for (DischargeSlot s : getDischargeSlots()) {
+						pLookupDischargeSlotCache.put(s.getName(), s);
+					}
+					lookupDischargeSlotCache = pLookupDischargeSlotCache;
+				}
+			}
+		}
+		return pLookupDischargeSlotCache.get(name);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -620,6 +688,22 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 				return dealSets != null && !dealSets.isEmpty();
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case CargoPackage.CARGO_MODEL___GET_LOAD_SLOT_BY_NAME__STRING:
+				return getLoadSlotByName((String)arguments.get(0));
+			case CargoPackage.CARGO_MODEL___GET_DISCHARGE_SLOT_BY_NAME__STRING:
+				return getDischargeSlotByName((String)arguments.get(0));
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 } // end of CargoModelImpl

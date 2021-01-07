@@ -41,8 +41,7 @@ public final class ScenarioModelRecord extends ModelRecord {
 
 	private String name;
 
-	@NonNull
-	private IStatus validationStatus = Status.OK_STATUS;
+	private @NonNull IStatus validationStatus = Status.OK_STATUS;
 
 	private final @NonNull ConcurrentLinkedQueue<com.mmxlabs.scenario.service.model.manager.IScenarioValidationListener> validationListeners = new ConcurrentLinkedQueue<>();
 
@@ -91,6 +90,7 @@ public final class ScenarioModelRecord extends ModelRecord {
 		validationListeners.remove(l);
 	}
 
+	@Override
 	public void dispose() {
 		super.dispose();
 		// Right now we are asserting that we have been cleaned-up properly

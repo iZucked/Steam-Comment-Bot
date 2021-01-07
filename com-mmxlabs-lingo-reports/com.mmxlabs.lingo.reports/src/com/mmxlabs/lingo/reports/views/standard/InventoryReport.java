@@ -509,7 +509,6 @@ public class InventoryReport extends ViewPart {
 			if (scheduleModel != null) {
 				final Schedule schedule = scheduleModel.getSchedule();
 				if (schedule != null) {
-					
 					if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION) && inventoryModels.size() == 1) {
 						final Inventory expectedInventory = inventoryModels.iterator().next();
 						final Port expectedLoadPort = expectedInventory.getPort();
