@@ -692,6 +692,121 @@ public class ADPItemProviderAdapterFactory extends ADPAdapterFactory implements 
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.MullEntityRow} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MullEntityRowItemProvider mullEntityRowItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.adp.MullEntityRow}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMullEntityRowAdapter() {
+		if (mullEntityRowItemProvider == null) {
+			mullEntityRowItemProvider = new MullEntityRowItemProvider(this);
+		}
+
+		return mullEntityRowItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.DESSalesMarketAllocationRow} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected DESSalesMarketAllocationRowItemProvider desSalesMarketAllocationRowItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.adp.DESSalesMarketAllocationRow}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createDESSalesMarketAllocationRowAdapter() {
+		if (desSalesMarketAllocationRowItemProvider == null) {
+			desSalesMarketAllocationRowItemProvider = new DESSalesMarketAllocationRowItemProvider(this);
+		}
+
+		return desSalesMarketAllocationRowItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.SalesContractAllocationRow} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SalesContractAllocationRowItemProvider salesContractAllocationRowItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.adp.SalesContractAllocationRow}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSalesContractAllocationRowAdapter() {
+		if (salesContractAllocationRowItemProvider == null) {
+			salesContractAllocationRowItemProvider = new SalesContractAllocationRowItemProvider(this);
+		}
+
+		return salesContractAllocationRowItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.MullProfile} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MullProfileItemProvider mullProfileItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.adp.MullProfile}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMullProfileAdapter() {
+		if (mullProfileItemProvider == null) {
+			mullProfileItemProvider = new MullProfileItemProvider(this);
+		}
+
+		return mullProfileItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.MullSubprofile} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MullSubprofileItemProvider mullSubprofileItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.adp.MullSubprofile}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMullSubprofileAdapter() {
+		if (mullSubprofileItemProvider == null) {
+			mullSubprofileItemProvider = new MullSubprofileItemProvider(this);
+		}
+
+		return mullSubprofileItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -843,6 +958,11 @@ public class ADPItemProviderAdapterFactory extends ADPAdapterFactory implements 
 		if (periodDistributionProfileConstraintItemProvider != null) periodDistributionProfileConstraintItemProvider.dispose();
 		if (periodDistributionItemProvider != null) periodDistributionItemProvider.dispose();
 		if (targetCargoesOnVesselConstraintItemProvider != null) targetCargoesOnVesselConstraintItemProvider.dispose();
+		if (mullEntityRowItemProvider != null) mullEntityRowItemProvider.dispose();
+		if (desSalesMarketAllocationRowItemProvider != null) desSalesMarketAllocationRowItemProvider.dispose();
+		if (salesContractAllocationRowItemProvider != null) salesContractAllocationRowItemProvider.dispose();
+		if (mullProfileItemProvider != null) mullProfileItemProvider.dispose();
+		if (mullSubprofileItemProvider != null) mullSubprofileItemProvider.dispose();
 	}
 
 }

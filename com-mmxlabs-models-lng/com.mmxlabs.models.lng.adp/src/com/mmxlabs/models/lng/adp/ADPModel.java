@@ -25,6 +25,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.adp.ADPModel#getPurchaseContractProfiles <em>Purchase Contract Profiles</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.ADPModel#getSalesContractProfiles <em>Sales Contract Profiles</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.ADPModel#getFleetProfile <em>Fleet Profile</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.adp.ADPModel#getMullProfile <em>Mull Profile</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.adp.ADPPackage#getADPModel()
@@ -141,5 +142,27 @@ public interface ADPModel extends UUIDObject {
 	 * @generated
 	 */
 	void setFleetProfile(FleetProfile value);
+
+	/**
+	 * Returns the value of the '<em><b>Mull Profile</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Mull Profile</em>' containment reference.
+	 * @see #setMullProfile(MullProfile)
+	 * @see com.mmxlabs.models.lng.adp.ADPPackage#getADPModel_MullProfile()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	MullProfile getMullProfile();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.adp.ADPModel#getMullProfile <em>Mull Profile</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Mull Profile</em>' containment reference.
+	 * @see #getMullProfile()
+	 * @generated
+	 */
+	void setMullProfile(MullProfile value);
 
 } // ADPModel

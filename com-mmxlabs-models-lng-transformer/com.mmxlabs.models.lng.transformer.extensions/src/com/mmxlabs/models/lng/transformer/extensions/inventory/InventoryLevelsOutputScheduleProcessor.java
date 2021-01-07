@@ -132,7 +132,7 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 				}
 
 				// Start of the inventory data
-				final LocalDate startOfInventoryData = minDate;
+//				final LocalDate startOfInventoryData = minDate;
 
 				for (final InventoryEventRow r : facility.getOfftakes()) {
 
@@ -317,13 +317,15 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 				// Sort before storing
 				events.sort((a, b) -> a.getDate().compareTo(b.getDate()));
 
-				final LocalDate latestLoadFinal = latestLoad;
+//				final LocalDate latestLoadFinal = latestLoad;
 
 				// Filter InventoryChangeEvent given the effective bounds of the inventory scenario
-				final List<InventoryChangeEvent> res = events.stream().filter(x -> {
-					final LocalDate eventDate = x.getDate().toLocalDate();
-					return eventDate.isAfter(startOfInventoryData) && (latestLoadFinal == null || !eventDate.isAfter(latestLoadFinal));
-				}).collect(Collectors.toList());
+//				final List<InventoryChangeEvent> res = events.stream().filter(x -> {
+//					final LocalDate eventDate = x.getDate().toLocalDate();
+//					return !eventDate.isBefore(startOfInventoryData) && (latestLoadFinal == null || !eventDate.isAfter(latestLoadFinal));
+//				}).collect(Collectors.toList());
+				
+				final List<InventoryChangeEvent> res = events.stream().collect(Collectors.toList());
 
 				inventoryChangeEvents.getEvents().addAll(res);
 			}

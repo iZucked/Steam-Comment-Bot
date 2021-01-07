@@ -6,26 +6,25 @@
  */
 package com.mmxlabs.models.lng.adp.impl;
 
-import com.mmxlabs.models.lng.adp.ADPModel;
-import com.mmxlabs.models.lng.adp.ADPPackage;
-
-import com.mmxlabs.models.lng.adp.FleetProfile;
-import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
-import com.mmxlabs.models.lng.adp.SalesContractProfile;
-import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 import java.time.YearMonth;
-
 import java.util.Collection;
-import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
+
+import com.mmxlabs.models.lng.adp.ADPModel;
+import com.mmxlabs.models.lng.adp.ADPPackage;
+import com.mmxlabs.models.lng.adp.FleetProfile;
+import com.mmxlabs.models.lng.adp.MullProfile;
+import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
+import com.mmxlabs.models.lng.adp.SalesContractProfile;
+import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -40,6 +39,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.ADPModelImpl#getPurchaseContractProfiles <em>Purchase Contract Profiles</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.ADPModelImpl#getSalesContractProfiles <em>Sales Contract Profiles</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.ADPModelImpl#getFleetProfile <em>Fleet Profile</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.adp.impl.ADPModelImpl#getMullProfile <em>Mull Profile</em>}</li>
  * </ul>
  *
  * @generated
@@ -114,6 +114,16 @@ public class ADPModelImpl extends UUIDObjectImpl implements ADPModel {
 	 * @ordered
 	 */
 	protected FleetProfile fleetProfile;
+
+	/**
+	 * The cached value of the '{@link #getMullProfile() <em>Mull Profile</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMullProfile()
+	 * @generated
+	 * @ordered
+	 */
+	protected MullProfile mullProfile;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -280,6 +290,74 @@ public class ADPModelImpl extends UUIDObjectImpl implements ADPModel {
 	 * @generated
 	 */
 	@Override
+	public MullProfile getMullProfile() {
+		if (mullProfile != null && mullProfile.eIsProxy()) {
+			InternalEObject oldMullProfile = (InternalEObject)mullProfile;
+			mullProfile = (MullProfile)eResolveProxy(oldMullProfile);
+			if (mullProfile != oldMullProfile) {
+				InternalEObject newMullProfile = (InternalEObject)mullProfile;
+				NotificationChain msgs = oldMullProfile.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ADPPackage.ADP_MODEL__MULL_PROFILE, null, null);
+				if (newMullProfile.eInternalContainer() == null) {
+					msgs = newMullProfile.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ADPPackage.ADP_MODEL__MULL_PROFILE, null, msgs);
+				}
+				if (msgs != null) msgs.dispatch();
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ADPPackage.ADP_MODEL__MULL_PROFILE, oldMullProfile, mullProfile));
+			}
+		}
+		return mullProfile;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public MullProfile basicGetMullProfile() {
+		return mullProfile;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetMullProfile(MullProfile newMullProfile, NotificationChain msgs) {
+		MullProfile oldMullProfile = mullProfile;
+		mullProfile = newMullProfile;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ADPPackage.ADP_MODEL__MULL_PROFILE, oldMullProfile, newMullProfile);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setMullProfile(MullProfile newMullProfile) {
+		if (newMullProfile != mullProfile) {
+			NotificationChain msgs = null;
+			if (mullProfile != null)
+				msgs = ((InternalEObject)mullProfile).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ADPPackage.ADP_MODEL__MULL_PROFILE, null, msgs);
+			if (newMullProfile != null)
+				msgs = ((InternalEObject)newMullProfile).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ADPPackage.ADP_MODEL__MULL_PROFILE, null, msgs);
+			msgs = basicSetMullProfile(newMullProfile, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ADPPackage.ADP_MODEL__MULL_PROFILE, newMullProfile, newMullProfile));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case ADPPackage.ADP_MODEL__PURCHASE_CONTRACT_PROFILES:
@@ -288,6 +366,8 @@ public class ADPModelImpl extends UUIDObjectImpl implements ADPModel {
 				return ((InternalEList<?>)getSalesContractProfiles()).basicRemove(otherEnd, msgs);
 			case ADPPackage.ADP_MODEL__FLEET_PROFILE:
 				return basicSetFleetProfile(null, msgs);
+			case ADPPackage.ADP_MODEL__MULL_PROFILE:
+				return basicSetMullProfile(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -311,6 +391,9 @@ public class ADPModelImpl extends UUIDObjectImpl implements ADPModel {
 			case ADPPackage.ADP_MODEL__FLEET_PROFILE:
 				if (resolve) return getFleetProfile();
 				return basicGetFleetProfile();
+			case ADPPackage.ADP_MODEL__MULL_PROFILE:
+				if (resolve) return getMullProfile();
+				return basicGetMullProfile();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -341,6 +424,9 @@ public class ADPModelImpl extends UUIDObjectImpl implements ADPModel {
 			case ADPPackage.ADP_MODEL__FLEET_PROFILE:
 				setFleetProfile((FleetProfile)newValue);
 				return;
+			case ADPPackage.ADP_MODEL__MULL_PROFILE:
+				setMullProfile((MullProfile)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -368,6 +454,9 @@ public class ADPModelImpl extends UUIDObjectImpl implements ADPModel {
 			case ADPPackage.ADP_MODEL__FLEET_PROFILE:
 				setFleetProfile((FleetProfile)null);
 				return;
+			case ADPPackage.ADP_MODEL__MULL_PROFILE:
+				setMullProfile((MullProfile)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -390,6 +479,8 @@ public class ADPModelImpl extends UUIDObjectImpl implements ADPModel {
 				return salesContractProfiles != null && !salesContractProfiles.isEmpty();
 			case ADPPackage.ADP_MODEL__FLEET_PROFILE:
 				return fleetProfile != null;
+			case ADPPackage.ADP_MODEL__MULL_PROFILE:
+				return mullProfile != null;
 		}
 		return super.eIsSet(featureID);
 	}

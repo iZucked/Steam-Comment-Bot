@@ -202,6 +202,30 @@ public class ADPAdapterFactory extends AdapterFactoryImpl {
 				return createTargetCargoesOnVesselConstraintAdapter();
 			}
 			@Override
+			public Adapter caseMullEntityRow(MullEntityRow object) {
+				return createMullEntityRowAdapter();
+			}
+			@Override
+			public Adapter caseDESSalesMarketAllocationRow(DESSalesMarketAllocationRow object) {
+				return createDESSalesMarketAllocationRowAdapter();
+			}
+			@Override
+			public Adapter caseSalesContractAllocationRow(SalesContractAllocationRow object) {
+				return createSalesContractAllocationRowAdapter();
+			}
+			@Override
+			public Adapter caseMullProfile(MullProfile object) {
+				return createMullProfileAdapter();
+			}
+			@Override
+			public Adapter caseMullSubprofile(MullSubprofile object) {
+				return createMullSubprofileAdapter();
+			}
+			@Override
+			public Adapter caseMullAllocationRow(MullAllocationRow object) {
+				return createMullAllocationRowAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -660,6 +684,90 @@ public class ADPAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createTargetCargoesOnVesselConstraintAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.MullEntityRow <em>Mull Entity Row</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.adp.MullEntityRow
+	 * @generated
+	 */
+	public Adapter createMullEntityRowAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.DESSalesMarketAllocationRow <em>DES Sales Market Allocation Row</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.adp.DESSalesMarketAllocationRow
+	 * @generated
+	 */
+	public Adapter createDESSalesMarketAllocationRowAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.SalesContractAllocationRow <em>Sales Contract Allocation Row</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.adp.SalesContractAllocationRow
+	 * @generated
+	 */
+	public Adapter createSalesContractAllocationRowAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.MullProfile <em>Mull Profile</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.adp.MullProfile
+	 * @generated
+	 */
+	public Adapter createMullProfileAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.MullSubprofile <em>Mull Subprofile</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.adp.MullSubprofile
+	 * @generated
+	 */
+	public Adapter createMullSubprofileAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.MullAllocationRow <em>Mull Allocation Row</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.adp.MullAllocationRow
+	 * @generated
+	 */
+	public Adapter createMullAllocationRowAdapter() {
 		return null;
 	}
 

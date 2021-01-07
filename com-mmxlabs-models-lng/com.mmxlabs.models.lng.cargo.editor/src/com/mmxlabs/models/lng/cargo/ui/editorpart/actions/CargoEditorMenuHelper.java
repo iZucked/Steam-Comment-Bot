@@ -1472,7 +1472,6 @@ public class CargoEditorMenuHelper {
 						dischargeSlot = cec.createNewSpotDischarge(setCommands, cargoModel, market);
 						makeUpDischargeSlot(usedDischargeIDStrings, loadSlot, dischargeSlot, market, scenarioEditingLocation.getScenarioDataProvider(), getAssignedVessel(loadSlot));
 					}
-
 				} else {
 					dischargeSlot = (DischargeSlot) source;
 					if (market == null) {

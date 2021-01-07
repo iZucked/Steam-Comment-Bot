@@ -61,6 +61,8 @@ public final class KnownFeatures {
 	public static final String FEATURE_EXPOSURES = "features:exposures";
 
 	public static final String FEATURE_INVENTORY_MODEL = "features:inventory-model";
+	
+	public static final String FEATURE_MULL_SLOT_GENERATION = "features:mull-slot-generation";
 
 	public static final String FEATURE_PAPER_DEALS = "features:paperdeals";
 
