@@ -13,7 +13,6 @@ import com.mmxlabs.common.detailtree.DetailTree;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.IBallastBonusContract;
@@ -41,7 +40,7 @@ public class ShippingCostHelper {
 		return plan.getBaseFuelCost() + plan.getCooldownCost();
 	}
 
-	public long getPortCosts(final @NonNull IVessel vessel, final @NonNull VoyagePlan plan) {
+	public long getPortCosts(final @NonNull VoyagePlan plan) {
 
 		long portCosts = 0;
 		final Object[] sequence = plan.getSequence();
@@ -98,7 +97,7 @@ public class ShippingCostHelper {
 	 * @param vesselAvailability
 	 * @return
 	 */
-	public long getIdleTimeGeneratedCharterOutRevenue(final @NonNull VoyagePlan plan, final @NonNull IVesselAvailability vesselAvailability) {
+	public long getIdleTimeGeneratedCharterOutRevenue(final @NonNull VoyagePlan plan) {
 		long charterRevenue = 0;
 
 		for (final IDetailsSequenceElement obj : plan.getSequence()) {
@@ -121,7 +120,7 @@ public class ShippingCostHelper {
 	 * @return
 	 */
 	public boolean hasIdleTimeGeneratedCharterOut(final @NonNull VoyagePlan plan) {
-		for (final Object obj : plan.getSequence()) {
+		for (final IDetailsSequenceElement obj : plan.getSequence()) {
 			if (obj instanceof VoyageDetails) {
 				final VoyageDetails voyageDetails = (VoyageDetails) obj;
 				if (voyageDetails.getOptions().isCharterOutIdleTime()) {
@@ -141,7 +140,7 @@ public class ShippingCostHelper {
 	public long getIdleTimeGeneratedCharterOutCosts(final @NonNull VoyagePlan plan) {
 		// int planDuration = 0;
 		long hireCosts = 0;
-		for (final Object obj : plan.getSequence()) {
+		for (final IDetailsSequenceElement obj : plan.getSequence()) {
 
 			if (obj instanceof VoyageDetails) {
 				final VoyageDetails voyageDetails = (VoyageDetails) obj;
@@ -190,8 +189,7 @@ public class ShippingCostHelper {
 			if (obj instanceof PortDetails) {
 
 				final PortDetails portDetails = (PortDetails) obj;
-				@NonNull
-				final IPortSlot slot = portDetails.getOptions().getPortSlot();
+				final @NonNull IPortSlot slot = portDetails.getOptions().getPortSlot();
 				if (actualsDataProvider.hasActuals(slot)) {
 					capacityCosts += actualsDataProvider.getCapacityCosts(slot);
 					crewBonusCosts += actualsDataProvider.getCrewBonusCosts(slot);
@@ -201,7 +199,7 @@ public class ShippingCostHelper {
 		}
 
 		final long shippingCosts = getRouteExtraCosts(plan) + getFuelCosts(plan);
-		final long portCosts = getPortCosts(vesselAvailability.getVessel(), plan);
+		final long portCosts = getPortCosts(plan);
 		final long hireCosts = includeCharterInCosts ? plan.getCharterCost() : 0L;
 
 		return shippingCosts + portCosts + hireCosts + capacityCosts + crewBonusCosts + insuranceCosts;
@@ -214,7 +212,8 @@ public class ShippingCostHelper {
 		return 0L;
 	}
 
-	public long getShippingBallastBonusCost(final @NonNull IPortSlot portSlot, final @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime, final IPort firstLoadPort, final int vesselEndTime) {
+	public long getShippingBallastBonusCost(final @NonNull IPortSlot portSlot, final @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime, final IPort firstLoadPort,
+			final int vesselEndTime) {
 		if (portSlot.getPortType() == PortType.End) {
 			@Nullable
 			IBallastBonusContract ballastBonusContract = vesselAvailability.getBallastBonusContract();
@@ -227,10 +226,10 @@ public class ShippingCostHelper {
 		return 0L;
 	}
 
-	public void addBallastBonusAnnotation(DetailTree shippingDetails, IPortSlot portSlot, @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime, IPort firstLoadPort, int vesselEndTime) {
+	public void addBallastBonusAnnotation(DetailTree shippingDetails, IPortSlot portSlot, @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime, IPort firstLoadPort,
+			int vesselEndTime) {
 		if (portSlot.getPortType() == PortType.End) {
-			@Nullable
-			IBallastBonusContract ballastBonusContract = vesselAvailability.getBallastBonusContract();
+			final @Nullable IBallastBonusContract ballastBonusContract = vesselAvailability.getBallastBonusContract();
 			if (ballastBonusContract == null) {
 				return;
 			} else {
@@ -247,7 +246,7 @@ public class ShippingCostHelper {
 		}
 
 		final long shippingCosts = getRouteExtraCosts(plan) + getFuelCosts(plan);
-		final long portCosts = getPortCosts(vesselAvailability.getVessel(), plan);
+		final long portCosts = getPortCosts(plan);
 		final long hireCosts = includeCharterInCosts ? plan.getCharterCost() : 0L;
 		final long shippingDays = includeCharterInCosts ? getDurationInDays(plan) : 0L;
 

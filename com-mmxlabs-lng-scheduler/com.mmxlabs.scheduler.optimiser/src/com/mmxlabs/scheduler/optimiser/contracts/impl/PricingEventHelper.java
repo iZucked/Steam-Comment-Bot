@@ -76,6 +76,8 @@ public final class PricingEventHelper {
 	public int getDischargePricingDateFromEventType(@NonNull final PricingEventType pricingEvent, @NonNull final IDischargeOption dischargeOption, @NonNull final IPortTimesRecord portTimesRecord) {
 		int pricingDate;
 		final ILoadOption loadOption = findFirstLoadOption(portTimesRecord);
+		assert loadOption != null;
+		
 		final IPort timingPortForLoad = getLoadTimingPort(loadOption, dischargeOption);
 		final IPort timingPortForDischarge = getDischargeTimingPort(loadOption, dischargeOption);
 		switch (pricingEvent) {

@@ -278,6 +278,7 @@ public class StochasticActionSetUtils {
 		final Map<JobState, Map<JobState, int[]>> distances = distancesAndClosest.getFirst();
 		final LinkedList<JobState> sortedJobStates = new LinkedList<>(jobStates);
 		Collections.sort(sortedJobStates, new Comparator<JobState>() {
+
 			@Override
 			public int compare(final JobState o1, final JobState o2) {
 				if (distances.get(forComparing).get(o1)[0] == distances.get(forComparing).get(o2)[0]) {
@@ -285,7 +286,7 @@ public class StochasticActionSetUtils {
 				} else {
 					return (Integer.compare(distances.get(forComparing).get(o1)[0], distances.get(forComparing).get(o2)[0]));
 				}
-			};
+			}
 		});
 		return sortedJobStates.subList(Math.max(0, sortedJobStates.size() - 3), sortedJobStates.size());
 	}

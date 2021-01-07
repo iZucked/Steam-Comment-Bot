@@ -11,14 +11,14 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 
 @NonNullByDefault
 public class OperatorNode extends AbstractMarkedUpNode {
-	List<MarkedUpNode> children = new ArrayList<>(2);
+	private List<MarkedUpNode> children = new ArrayList<>(2);
 	private String operator;
 
 	public OperatorNode(String operator) {
 		this.operator = operator;
-
 	}
 
+	@Override
 	public List<MarkedUpNode> getChildren() {
 		return children;
 	}

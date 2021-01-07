@@ -592,7 +592,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		}
 
 		final long shippingCosts = shippingCostHelper.getRouteExtraCosts(plan) + shippingCostHelper.getFuelCosts(plan);
-		final long portCosts = shippingCostHelper.getPortCosts(vesselAvailability.getVessel(), plan);
+		final long portCosts = shippingCostHelper.getPortCosts(plan);
 		final long hireCosts = shippingCostHelper.getHireCosts(plan);
 
 		final long totalShippingCosts = shippingCosts + portCosts + hireCosts + capacityCosts + crewBonusCosts + insuranceCosts;

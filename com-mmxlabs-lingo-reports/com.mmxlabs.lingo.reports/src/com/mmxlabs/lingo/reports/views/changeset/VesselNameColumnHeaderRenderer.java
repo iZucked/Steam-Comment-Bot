@@ -96,7 +96,7 @@ public class VesselNameColumnHeaderRenderer extends GridHeaderRenderer {
 
 		boolean flat = true;
 
-		boolean drawSelected = ((isMouseDown() && isHover()));
+		boolean drawSelected = isMouseDown() && isHover();
 
 		gc.setBackground(TableColourPalette.getInstance().getColourFor(TableItems.ColumnHeaders, ColourElements.Background));
 
@@ -112,26 +112,20 @@ public class VesselNameColumnHeaderRenderer extends GridHeaderRenderer {
 		}
 
 		int x = leftMargin;
-		int y = bottomMargin;
+		int y;
 
 		if (column.getImage() != null) {
-
-			if (column.getHeaderControl() == null) {
-				y = getBounds().y + pushedDrawingOffset + getBounds().height - bottomMargin - column.getImage().getBounds().height;
-			}
-
 			x += column.getImage().getBounds().width + imageSpacing;
 		}
 
 		int width = getBounds().width - x;
-		int height = getBounds().height - y;
 
 		if (column.getSort() == SWT.NONE) {
 			width -= rightMargin;
 		} else {
 			width -= arrowMargin + arrowRenderer.getSize().x + arrowMargin;
 		}
-		
+
 		gc.setForeground(TableColourPalette.getInstance().getColourFor(TableItems.ColumnHeaders, ColourElements.Foreground));
 
 		if (column.getHeaderControl() == null) {
@@ -149,7 +143,7 @@ public class VesselNameColumnHeaderRenderer extends GridHeaderRenderer {
 		if (!isWordWrap()) {
 
 			Transform t = new Transform(gc.getDevice());
-			t.translate(getBounds().x + x + pushedDrawingOffset, y + pushedDrawingOffset);
+			t.translate((getBounds().x + x + pushedDrawingOffset), (y + pushedDrawingOffset));
 			t.rotate(-90.0f);
 			gc.setTransform(t);
 			gc.drawString(columnName, 0, 0, true);
@@ -163,7 +157,7 @@ public class VesselNameColumnHeaderRenderer extends GridHeaderRenderer {
 				column.getParent().recalculateHeader();
 			}
 			Transform t = new Transform(gc.getDevice());
-			t.translate(getBounds().x + x + pushedDrawingOffset, y + pushedDrawingOffset);
+			t.translate((getBounds().x + x + pushedDrawingOffset), (y + pushedDrawingOffset));
 			t.rotate(-90.0f);
 			gc.setTransform(t);
 
@@ -193,11 +187,7 @@ public class VesselNameColumnHeaderRenderer extends GridHeaderRenderer {
 
 		if (!flat) {
 
-			if (drawSelected) {
-				gc.setForeground(TableColourPalette.getInstance().getColourFor(TableItems.LineBorders, ColourElements.Background));
-			} else {
-				gc.setForeground(TableColourPalette.getInstance().getColourFor(TableItems.LineBorders, ColourElements.Background));
-			}
+			gc.setForeground(TableColourPalette.getInstance().getColourFor(TableItems.LineBorders, ColourElements.Background));
 
 			gc.drawLine(getBounds().x, getBounds().y, getBounds().x + getBounds().width - 1, getBounds().y);
 			gc.drawLine(getBounds().x, getBounds().y, getBounds().x, getBounds().y + getBounds().height - 1);
@@ -208,11 +198,7 @@ public class VesselNameColumnHeaderRenderer extends GridHeaderRenderer {
 				gc.drawLine(getBounds().x + 1, getBounds().y + 1, getBounds().x + 1, getBounds().y + getBounds().height - 2);
 			}
 
-			if (drawSelected) {
-				gc.setForeground(TableColourPalette.getInstance().getColourFor(TableItems.LineBorders, ColourElements.Background));
-			} else {
-				gc.setForeground(TableColourPalette.getInstance().getColourFor(TableItems.LineBorders, ColourElements.Background));
-			}
+			gc.setForeground(TableColourPalette.getInstance().getColourFor(TableItems.LineBorders, ColourElements.Background));
 			gc.drawLine(getBounds().x + getBounds().width - 1, getBounds().y, getBounds().x + getBounds().width - 1, getBounds().y + getBounds().height - 1);
 			gc.drawLine(getBounds().x, getBounds().y + getBounds().height - 1, getBounds().x + getBounds().width - 1, getBounds().y + getBounds().height - 1);
 
@@ -264,7 +250,7 @@ public class VesselNameColumnHeaderRenderer extends GridHeaderRenderer {
 		int y = getBounds().height - bottomMargin;
 
 		Rectangle bounds = new Rectangle(x, y, 0, 0);
-		
+
 		String columnName = getShortString(column.getText());
 		Point p = gc.stringExtent(columnName);
 

@@ -44,7 +44,7 @@ public final class ChangeSetFinderJob implements Callable<Collection<JobState>> 
 			optimiser.setDepthRange(depthStart, depthEnd);
 			try {
 				final int localDepth = state.mode == JobStateMode.LIMITED ? 2 : BagMover.DEPTH_START;
-				return optimiser.search(new Sequences(state.rawSequences), similarityState, new LinkedList<Change>(state.changesAsList), new LinkedList<ChangeSet>(state.changeSetsAsList), localDepth,
+				return optimiser.search(new Sequences(state.rawSequences), similarityState, new LinkedList<>(state.changesAsList), new LinkedList<>(state.changeSetsAsList), localDepth,
 						BagMover.MOVE_TYPE_NONE, state.metric, jobStore, null, state.getDifferencesList(), new BreakdownSearchData(new BreakdownSearchStatistics(), new Random(seed)), null);
 			} catch (final Throwable e) {
 				e.printStackTrace();

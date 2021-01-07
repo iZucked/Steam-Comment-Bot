@@ -5,7 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.peaberry;
 
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -24,8 +24,7 @@ import com.google.inject.util.Modules;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService.ModuleType;
 
 /**
- * Utility class to make simple {@link IOptimiserInjectorService}
- * implementations.
+ * Utility class to make simple {@link IOptimiserInjectorService} implementations.
  * 
  * 
  * 
@@ -35,8 +34,8 @@ import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService.Module
 @NonNullByDefault
 public class OptimiserInjectorServiceMaker {
 
-	private final Map<ModuleType, List<Function<Collection<@NonNull String>, Module>>> moduleMap = new HashMap<>();
-	private final Map<ModuleType, List<Function<Collection<@NonNull String>, Module>>> moduleOverrideMap = new HashMap<>();
+	private final Map<ModuleType, List<Function<Collection<@NonNull String>, Module>>> moduleMap = new EnumMap<>(ModuleType.class);
+	private final Map<ModuleType, List<Function<Collection<@NonNull String>, Module>>> moduleOverrideMap = new EnumMap<>(ModuleType.class);
 
 	public static OptimiserInjectorServiceMaker begin() {
 		return new OptimiserInjectorServiceMaker();
@@ -48,23 +47,23 @@ public class OptimiserInjectorServiceMaker {
 	}
 
 	/**
-     * Create a new module to bind the instance type
-     * 
-     * @param moduleType
-     * @param clz
-     * @param object
-     * @return
-     */
-    public <T> OptimiserInjectorServiceMaker withModuleOverrideBind(final ModuleType moduleType, final Class<T> clz, final @NonNull Class<? extends T> object) {
-        moduleOverrideMap.computeIfAbsent(moduleType, t -> new LinkedList<>()).add(hints -> new AbstractModule() {
-            @Override
-            protected void configure() {
-                bind(clz).to(object);
-            }
-        });
-        return this;
-    }
-	
+	 * Create a new module to bind the instance type
+	 * 
+	 * @param moduleType
+	 * @param clz
+	 * @param object
+	 * @return
+	 */
+	public <T> OptimiserInjectorServiceMaker withModuleOverrideBind(final ModuleType moduleType, final Class<T> clz, final @NonNull Class<? extends T> object) {
+		moduleOverrideMap.computeIfAbsent(moduleType, t -> new LinkedList<>()).add(hints -> new AbstractModule() {
+			@Override
+			protected void configure() {
+				bind(clz).to(object);
+			}
+		});
+		return this;
+	}
+
 	/**
 	 * Create a new module to bind the instance type
 	 * 
@@ -246,8 +245,6 @@ public class OptimiserInjectorServiceMaker {
 
 		if (optimiserInjectorService == null) {
 			return local;
-		} else if (local == null) {
-			return optimiserInjectorService;
 		}
 
 		return new IOptimiserInjectorService() {

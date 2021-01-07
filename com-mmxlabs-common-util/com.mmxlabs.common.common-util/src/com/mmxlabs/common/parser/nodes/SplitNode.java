@@ -11,13 +11,14 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 
 @NonNullByDefault
 public class SplitNode extends AbstractMarkedUpNode {
-	List<MarkedUpNode> children = new ArrayList<>(2);
+	private List<MarkedUpNode> children = new ArrayList<>(2);
 	private int splitPointInDays;
 
 	public SplitNode(int splitPointInDays) {
 		this.splitPointInDays = splitPointInDays;
 	}
 
+	@Override
 	public List<MarkedUpNode> getChildren() {
 		return children;
 	}

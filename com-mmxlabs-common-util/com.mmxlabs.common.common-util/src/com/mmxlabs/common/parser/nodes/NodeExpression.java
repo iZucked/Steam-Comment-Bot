@@ -12,7 +12,7 @@ import com.mmxlabs.common.parser.IExpression;
  * IExpression class for parser to produce raw tree objects
  */
 public final class NodeExpression implements IExpression<Node> {
-	final @NonNull Node node;
+	private final @NonNull Node node;
 
 	public NodeExpression(final @NonNull Node node) {
 		this.node = node;

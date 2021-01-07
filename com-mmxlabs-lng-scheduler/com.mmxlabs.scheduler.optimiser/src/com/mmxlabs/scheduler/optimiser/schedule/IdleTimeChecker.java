@@ -28,9 +28,10 @@ import com.mmxlabs.scheduler.optimiser.voyage.util.LDCargoDetailsWrapper;
  *
  */
 public class IdleTimeChecker {
-	public final static String GA_IDLE_TIME_HOURS_LOW = "info-idle-time-hours-low";
-	public final static String GA_IDLE_TIME_HOURS_HIGH = "info-idle-time-hours-high";
-	public final static String GA_IDLE_TIME_HOURS_END = "info-idle-time-hours-end";
+	public static final String GA_IDLE_TIME_HOURS_LOW = "info-idle-time-hours-low";
+	public static final String GA_IDLE_TIME_HOURS_HIGH = "info-idle-time-hours-high";
+	public static final String GA_IDLE_TIME_HOURS_END = "info-idle-time-hours-end";
+
 	@Inject
 	private IExcessIdleTimeComponentParameters idleTimeComponentParameters;
 
@@ -86,8 +87,8 @@ public class IdleTimeChecker {
 			if (!isEnd) {
 				final int lowHours = Math.min(idleTimeComponentParameters.getThreshold(Interval.HIGH) - idleTimeComponentParameters.getThreshold(Interval.LOW), violatingHours);
 				final int highHours = violatingHours - lowHours;
-				final long penaltyLow = lowHours * idleTimeComponentParameters.getWeight(Interval.LOW);
-				final long penaltyHigh = highHours * idleTimeComponentParameters.getWeight(Interval.HIGH);
+				final long penaltyLow = (long) lowHours * (long) idleTimeComponentParameters.getWeight(Interval.LOW);
+				final long penaltyHigh = (long) highHours * (long) idleTimeComponentParameters.getWeight(Interval.HIGH);
 				if (annotatedSolution != null) {
 					Integer gaLow = annotatedSolution.getGeneralAnnotation(GA_IDLE_TIME_HOURS_LOW, Integer.class);
 					Integer gaHigh = annotatedSolution.getGeneralAnnotation(GA_IDLE_TIME_HOURS_HIGH, Integer.class);
@@ -112,7 +113,7 @@ public class IdleTimeChecker {
 					gaEnd += violatingHours;
 					annotatedSolution.setGeneralAnnotation(GA_IDLE_TIME_HOURS_END, gaEnd);
 				}
-				return violatingHours * idleTimeComponentParameters.getEndWeight();
+				return (long) violatingHours * (long) idleTimeComponentParameters.getEndWeight();
 			}
 		} else {
 			return 0L;

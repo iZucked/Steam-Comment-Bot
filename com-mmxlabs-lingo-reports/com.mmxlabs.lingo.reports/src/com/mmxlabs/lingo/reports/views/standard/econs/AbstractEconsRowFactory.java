@@ -257,7 +257,7 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 		return createBasicFormatter(options, rowType, Integer.class, new Function<Integer, String>() {
 			@Override
 			public String apply(Integer days) {
-				return Formatters.formatAsDays(DurationMode.DAYS_HOURS_HUMAN, days * 24);
+				return Formatters.formatAsDays(DurationMode.DAYS_HOURS_HUMAN, days * 24L);
 			}
 		}, transformer);
 	}

@@ -92,7 +92,6 @@ public class BagOptimiser {
 	protected IOptimisationContext optimisationContext;
 
 	@Inject
-	@NonNull
 	private List<IFitnessComponent> fitnessComponents;
 
 	@Inject
@@ -107,7 +106,6 @@ public class BagOptimiser {
 	private CleanableExecutorService executorService;
 
 	@Inject
-	@NonNull
 	private IPortTypeProvider portTypeProvider;
 
 	@Inject
@@ -115,13 +113,11 @@ public class BagOptimiser {
 
 	@Inject
 	@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL)
-	@NonNull
 	private ISequences initialRawSequences;
 
 	@Inject
 	protected Injector injector;
 
-	@NonNull
 	@Inject
 	@Named(ACTION_PLAN__MAIN_MOVER)
 	protected EvaluationHelper evaluationHelper;
@@ -355,11 +351,11 @@ public class BagOptimiser {
 				 */
 				if (finalPopulation.size() == 0 && allLimitedStates.size() > 0) {
 					final JobState bestSolution = reduceAndSortStatesTotalPNL(allLimitedStates).get(0);
-					final ChangeSet changeSet = new ChangeSet(new LinkedList<Change>());
+					final ChangeSet changeSet = new ChangeSet(new LinkedList<>());
 					changeSet.setRawSequences(targetRawSequences);
 					final List<ChangeSet> finalSolutionChangeSets = new LinkedList<>(bestSolution.changeSetsAsList);
 					finalSolutionChangeSets.add(changeSet);
-					final JobState finalSolution = new JobState(targetRawSequences, finalSolutionChangeSets, Collections.<Change>emptyList(), new LinkedList<Difference>());
+					final JobState finalSolution = new JobState(targetRawSequences, finalSolutionChangeSets, Collections.<Change>emptyList(), new LinkedList<>());
 					finalSolution.mode = JobStateMode.LEAF;
 					finalPopulation.add(finalSolution);
 					actionSetOptimisationData.numberOfLeafs = finalPopulation.size();
@@ -426,7 +422,7 @@ public class BagOptimiser {
 		final Map<String, Object> extraAnnotations = new HashMap<>();
 		extraAnnotations.put(OptimiserConstants.G_AI_fitnessComponents, currentFitnesses);
 
-		return new NonNullPair<ISequences, Map<String, Object>>(rawSequences, extraAnnotations);
+		return new NonNullPair<>(rawSequences, extraAnnotations);
 	}
 
 	private void logLimiteds(final List<JobState> allLimitedStates) {
@@ -506,7 +502,7 @@ public class BagOptimiser {
 			actionSetOptimisationData.numberOfLeafs = finalPopulation.size();
 		} else {
 			int rootIndex = 0;
-			List<JobState> states = new LinkedList<JobState>();
+			List<JobState> states = new LinkedList<>();
 			for (int i = 0; i < normalSearchSize; i++) {
 				states.add(new JobState(root));
 			}
@@ -613,7 +609,7 @@ public class BagOptimiser {
 			final Collection<JobState> promisingLimitedStates, final Collection<JobState> allLimitedStates, final List<List<JobState>> savedPopulations, final List<JobState> population)
 			throws InterruptedException, ExecutionException {
 		int rootIndex = 0;
-		List<JobState> states = new LinkedList<JobState>(population);
+		List<JobState> states = new LinkedList<>(population);
 		while (!foundLeaf(states) && states.size() != 0) {
 			checkIfCancelled(progressMonitor);
 			if (DEBUG) {
@@ -768,7 +764,7 @@ public class BagOptimiser {
 	}
 
 	private Collection<JobState> expandNode(final JobState node, final int initialIterations, final SimilarityState targetSimilarityState) {
-		List<JobState> states = new LinkedList<JobState>();
+		List<JobState> states = new LinkedList<>();
 		for (int i = 0; i < initialIterations; i++) {
 			states.add(new JobState(node));
 		}
@@ -910,7 +906,7 @@ public class BagOptimiser {
 
 	private List<JobState> reduceStates(final Collection<JobState> states) {
 		final List<JobState> reducedStates = new LinkedList<>();
-		final HashSet<Pair<Long, Long>> seenList = new HashSet<Pair<Long, Long>>();
+		final HashSet<Pair<Long, Long>> seenList = new HashSet<>();
 		for (final JobState js : states) {
 			long pnl = 0L;
 			long changes = 0L;
@@ -918,9 +914,9 @@ public class BagOptimiser {
 				pnl += cs.metricDelta[MetricType.PNL.ordinal()];
 				changes += cs.changesList.size();
 			}
-			if (!seenList.contains(new Pair<Long, Long>(pnl, changes))) {
+			if (!seenList.contains(new Pair<>(pnl, changes))) {
 				reducedStates.add(js);
-				seenList.add(new Pair<Long, Long>(pnl, changes));
+				seenList.add(new Pair<>(pnl, changes));
 			}
 		}
 		return reducedStates;
@@ -1275,7 +1271,7 @@ public class BagOptimiser {
 			}
 		}
 
-		final Deque<ISequenceElement> unusedElements = new LinkedList<ISequenceElement>(rawSequences.getUnusedElements());
+		final Deque<ISequenceElement> unusedElements = new LinkedList<>(rawSequences.getUnusedElements());
 		while (unusedElements.size() > 0) {
 			final ISequenceElement element = unusedElements.pop();
 			assert element != null;
