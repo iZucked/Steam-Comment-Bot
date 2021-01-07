@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
+ * All rights reserved.
+ */
 package com.mmxlabs.models.lng.spotmarkets.editor.valueproviders;
 
 import org.eclipse.emf.ecore.EClass;
