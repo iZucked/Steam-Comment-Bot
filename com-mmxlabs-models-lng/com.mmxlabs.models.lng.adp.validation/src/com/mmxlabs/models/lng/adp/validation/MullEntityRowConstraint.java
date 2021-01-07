@@ -52,6 +52,14 @@ public class MullEntityRowConstraint extends AbstractModelMultiConstraint {
 				.withMessage("Reference entitlement must be greater than zero") //
 				.make(ctx, statuses);
 			}
+			
+			if (mullEntityRow.getSalesContractAllocationRows().isEmpty() && mullEntityRow.getDesSalesMarketAllocationRows().isEmpty()) {
+				factory.copyName() //
+				.withObjectAndFeature(mullEntityRow, ADPPackage.Literals.MULL_ENTITY_ROW__SALES_CONTRACT_ALLOCATION_ROWS) //
+				.withObjectAndFeature(mullEntityRow, ADPPackage.Literals.MULL_ENTITY_ROW__DES_SALES_MARKET_ALLOCATION_ROWS) //
+				.withMessage("Entity allocation must have sales contract or DES sales market allocations") //
+				.make(ctx, statuses);
+			}
 		}
 	}
 }

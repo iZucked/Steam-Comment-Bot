@@ -19,7 +19,9 @@ public class RollingLoadWindow {
 
 	public RollingLoadWindow(final int loadDuration, final Iterator<Entry<LocalDateTime, InventoryDateTimeEvent>> entries) {
 		this.loadDuration = loadDuration;
-		assert loadDuration > 0;
+		if (loadDuration <= 0) {
+			throw new IllegalStateException("Load duration cannot be zero");
+		}
 		this.remainingLoadHours = 0;
 		int i;
 		for (i = 0; i < this.loadDuration; i++) {

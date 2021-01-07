@@ -1,6 +1,5 @@
 package com.mmxlabs.models.lng.adp.presentation.views;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.YearMonth;
@@ -13,7 +12,6 @@ import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.common.time.Days;
 import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -48,15 +46,9 @@ public class CargoBlueprint {
 		this.windowStart = windowStart;
 		this.allocatedVolume = allocatedVolume;
 		this.entity = entity;
-		
-//		final YearMonth currentYearMonth = YearMonth.from(windowStart);
-//		final LocalDate endWindowDate = windowStart.toLocalDate().plusDays(windowSize);
 		final LocalDateTime endWindowDateTime = windowStart.plusHours(windowSizeHours);
-//		final LocalDate lastDayOfMonth = YearMonth.from(windowStart).atEndOfMonth();
 		final LocalDateTime lastDateTimeOfMonth = LocalDateTime.of(YearMonth.from(windowStart).atEndOfMonth(), LocalTime.of(23, 00));
 		this.windowSizeHours = lastDateTimeOfMonth.isBefore(endWindowDateTime) ? Hours.between(windowStart,lastDateTimeOfMonth) : windowSizeHours;
-//		this.windowSize = lastDayOfMonth.isBefore(endWindowDate) ? Math.min(Days.between(windowStart.toLocalDate(), lastDayOfMonth), windowSize) : windowSize;
-		
 		this.dischargeAllocation = allocationTracker;
 	}
 	

@@ -30,6 +30,8 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.LongAccumulator;
 import java.util.function.Function;
+import java.util.function.IntUnaryOperator;
+import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -145,8 +147,8 @@ public class InventoryReport extends ViewPart {
 	private ScenarioResult pinnedResult;
 	private ScenarioResult otherResult;
 	
-	private Color color_Orange;
-	private Color color_light_grey;
+	private Color colorOrange;
+	private Color colorLightGrey;
 	private final Color colourRed = new Color(Display.getDefault(), 255, 36, 0);
 
 	private EventHandler todayHandler;
@@ -223,8 +225,8 @@ public class InventoryReport extends ViewPart {
 	@Override
 	public void createPartControl(final Composite parent) {
 
-		color_Orange = new Color(PlatformUI.getWorkbench().getDisplay(), new RGB(255, 200, 15));
-		color_light_grey = new Color(PlatformUI.getWorkbench().getDisplay(), new RGB(230, 230, 230));
+		colorOrange = new Color(PlatformUI.getWorkbench().getDisplay(), new RGB(255, 200, 15));
+		colorLightGrey = new Color(PlatformUI.getWorkbench().getDisplay(), new RGB(230, 230, 230));
 		filterField = new FilterField(parent);
 		mullDailyFilterField = new FilterField(parent);
 
@@ -286,7 +288,6 @@ public class InventoryReport extends ViewPart {
 			final DateTimeFormatter formatter = DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter();
 			{
 				createColumn("Date", 150, o -> "" + o.date.format(formatter));
-				// createColumn("Type", 150, o -> o.type);
 				createColumn("Total Feed In", 150, o -> String.format("%,d", o.feedIn));
 				createColumn("Forecast low", 150, o -> String.format("%,d", o.volumeLow));
 				createColumn("Forecast high", 150, o -> String.format("%,d", o.volumeHigh));
@@ -346,7 +347,6 @@ public class InventoryReport extends ViewPart {
 			{
 				createMullColumn("Month", 150, o -> String.format("%d-%d", o.getFirst().ym.getMonthValue(), o.getFirst().ym.getYear()), o -> o.getFirst().getYM());
 				createMullColumn("Entity", 150, o -> o.getFirst().entity.getName(), o -> o.getFirst().entity.getName());
-				// createMullColumn("Monthly Overlift", 150, o -> generateDiffString(o, MullInformation::getOverlift), o -> generateSortValue(o, MullInformation::getOverlift));
 				createMullColumn("Overlift", 150, o-> generateDiffString(o, MullInformation::getOverliftCF), o-> generateSortValue(o, MullInformation::getOverliftCF));
 				createMullColumn("Total lifted", 150, o -> generateDiffString(o, MullInformation::getLifted), o-> generateSortValue(o, MullInformation::getLifted));
 				createMullColumn("# Cargo", 150, o -> generateDiffString(o, MullInformation::getCargoCount), o -> generateSortValue(o, MullInformation::getCargoCount));
@@ -377,8 +377,6 @@ public class InventoryReport extends ViewPart {
 			
 			mullDailyTableViewer.addFilter(mullDailyFilterSupport.createViewerFilter());
 			mullDailyFilterField.setFilterSupport(mullDailyFilterSupport);
-			
-			// getViewSite().getActionBars().getToolBarManager().add(mullDailyFilterField.getContribution());
 			
 			mullDailyTableViewer.setContentProvider(new ArrayContentProvider());
 			mullDailyTableViewer.getControl().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
@@ -443,8 +441,8 @@ public class InventoryReport extends ViewPart {
 
 	@Override
 	public void dispose() {
-		if (color_Orange != null) {
-			color_Orange.dispose();
+		if (colorOrange != null) {
+			colorOrange.dispose();
 		}
 		selectedScenariosService.removeListener(selectedScenariosServiceListener);
 		if (this.todayHandler != null) {
@@ -491,7 +489,6 @@ public class InventoryReport extends ViewPart {
 	
 
 		final List<InventoryLevel> tableLevels = new LinkedList<>();
-//		final List<MullInformation> mullList = new LinkedList<>();
 		
 		final List<Pair<MullInformation,MullInformation>> pairedMullList = new LinkedList<>();
 		final List<Pair<MullDailyInformation, MullDailyInformation>> pairedDailyMullList = new LinkedList<>();
@@ -500,15 +497,10 @@ public class InventoryReport extends ViewPart {
 
 		if (toDisplay != null) {
 			
-			// this.mullDailyTableViewer.
-			// mullDailyTableViewer.
-			
 			final ScheduleModel scheduleModel = toDisplay.getTypedResult(ScheduleModel.class);
 			if (scheduleModel != null) {
 				final Schedule schedule = scheduleModel.getSchedule();
 				if (schedule != null) {
-					// List<>
-					List<CargoAllocation> l = schedule.getCargoAllocations();
 					
 					assert inventoryModels.size() == 1;
 					final Inventory expectedInventory = inventoryModels.iterator().next();
@@ -865,17 +857,10 @@ public class InventoryReport extends ViewPart {
 										}) //
 										.collect(Collectors.toList());
 								
-								final List<Pair<LocalDateTime, Integer>> tankViolations = hourlyInventoryLevels.stream().filter(p->p.getSecond() < 24000).collect(Collectors.toList());
-								final List<LocalDateTime> tankViolationTimes = tankViolations.stream().map(Pair::getFirst).collect(Collectors.toList());
-								
 								final ILineSeries seriesHourly = createSmoothLineSeries(seriesSet, "Inventory", hourlyInventoryLevels);
 								//seriesHourly.setSymbolSize(1);
 								seriesHourly.setSymbolType(PlotSymbolType.NONE);
 								seriesHourly.setLineColor(Display.getDefault().getSystemColor(SWT.COLOR_BLUE));
-								
-//								final ILineSeries series = createSmoothLineSeries(seriesSet, "Inventory", inventoryLevels);
-//								series.setSymbolSize(1);
-//								series.setLineColor(Display.getDefault().getSystemColor(SWT.COLOR_CYAN));
 
 								minDate = inventoryLevels.get(0).getFirst().toLocalDate();
 								maxDate = inventoryLevels.get(inventoryLevels.size() - 1).getFirst().toLocalDate();
@@ -943,7 +928,6 @@ public class InventoryReport extends ViewPart {
 											lvl.volumeLow = e.getEvent().getVolumeLow();
 											lvl.volumeHigh = e.getEvent().getVolumeHigh();
 										}
-										InventoryChangeEvent first = firstInventoryDataFinal.get();
 
 										// FM
 										setInventoryLevelFeed(lvl);
@@ -1013,7 +997,7 @@ public class InventoryReport extends ViewPart {
 
 								final IBarSeries series = createDaySizedBarSeries(seriesSet, "Open", values);
 								series.setBarWidth(1);
-								series.setBarColor(color_Orange);
+								series.setBarColor(colorOrange);
 							}
 						}
 						{
@@ -1027,7 +1011,7 @@ public class InventoryReport extends ViewPart {
 
 									final IBarSeries series = createDaySizedBarSeries(seriesSet, "3rd-party", values);
 									series.setBarWidth(2);
-									series.setBarColor(color_Orange);
+									series.setBarColor(colorOrange);
 								}
 							}
 						}
@@ -1131,7 +1115,6 @@ public class InventoryReport extends ViewPart {
 		}
 
 		tableViewer.setInput(tableLevels);
-		// mullTableViewer.setInput(mullList);
 		mullTableViewer.setInput(pairedMullList);
 		mullDailyTableViewer.setInput(pairedDailyMullList);
 	}
@@ -1320,7 +1303,7 @@ public class InventoryReport extends ViewPart {
 				final String cellText = labelProvider.apply(element);
 				cell.setText(cellText);
 				if (element.getFirst().grey) {
-					cell.setBackground(color_light_grey);
+					cell.setBackground(colorLightGrey);
 				}
 			}
 		});
@@ -1344,9 +1327,7 @@ public class InventoryReport extends ViewPart {
 		column.getColumn().setData(EObjectTableViewer.COLUMN_FILTER, filterProvider);
 		
 		this.mullDailySortingSupport.addSortableColumn(mullDailyTableViewer, column, column.getColumn());
-		final IComparableProvider sortingProvider = (m) -> {
-			return sortingFetcher.apply((Pair<MullDailyInformation, MullDailyInformation>) m);
-		};
+		final IComparableProvider sortingProvider = m -> sortingFetcher.apply((Pair<MullDailyInformation, MullDailyInformation>) m);
 		
 		column.getColumn().setData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER, sortingProvider);
 		return column;
@@ -1365,19 +1346,10 @@ public class InventoryReport extends ViewPart {
 				final String cellText = labelProvider.apply(element);
 				cell.setText(cellText);
 				if (element.getFirst().ym.getMonthValue() % 2 == 1) {
-					cell.setBackground(color_light_grey);
+					cell.setBackground(colorLightGrey);
 				}
-				if (!title.equals("Month") && !title.equals("Entity") && element.getSecond() != null) {
-					if (cellText.length() > 0) {
-						if (cellText.equals("0")) {
-							// cell.setForeground(colourRed);
-						} else {
-							cell.setForeground(colourRed);
-//							if (cellText.substring(1).contains("-")) {
-//								cell.setForeground(colourRed);
-//							}
-						}
-					}
+				if (!title.equals("Month") && !title.equals("Entity") && element.getSecond() != null && cellText.length() > 0 && !cellText.equals("0")) {
+					cell.setForeground(colourRed);
 				}
 			}
 		});
@@ -1401,9 +1373,7 @@ public class InventoryReport extends ViewPart {
 		column.getColumn().setData(EObjectTableViewer.COLUMN_FILTER, filterProvider);
 		
 		this.sortingSupport.addSortableColumn(mullTableViewer, column, column.getColumn());
-		final IComparableProvider sortingProvider = (m) -> {
-			return sortingFetcher.apply((Pair<MullInformation, MullInformation>) m);
-		};
+		final IComparableProvider sortingProvider = m -> sortingFetcher.apply((Pair<MullInformation, MullInformation>) m);
 		
 		column.getColumn().setData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER, sortingProvider);
 		return column;
@@ -1481,13 +1451,7 @@ public class InventoryReport extends ViewPart {
 			final YearMonth ymm = ym;
 			sProfile.getEntityTable().stream().forEach(row -> {
 				if (ymm.equals(adpStart)) {
-					
-					int calc1 = ((Double) (row.getRelativeEntitlement()*thisTotalProd)).intValue();
-					int initVal = (Integer.parseInt(row.getInitialAllocation()));
-					int t = calc1 + initVal;
-					int v = (Integer.parseInt(row.getInitialAllocation()) + ((int) (row.getRelativeEntitlement()*thisTotalProd)));
-					currMap.put(row.getEntity(), (int) (Integer.parseInt(row.getInitialAllocation()) + ((int) (row.getRelativeEntitlement()*thisTotalProd))));
-					int j = 0;
+					currMap.put(row.getEntity(),  Integer.parseInt(row.getInitialAllocation()) + (int) (row.getRelativeEntitlement()*thisTotalProd));
 				} else {
 					currMap.put(row.getEntity(), (int) (row.getRelativeEntitlement()*thisTotalProd));
 				}
@@ -1546,14 +1510,6 @@ public class InventoryReport extends ViewPart {
 		}
 	}
 	
-	private void calculateMonthlyRECF(final List<MullInformation> mullList, final YearMonth adpStart, final Map<BaseLegalEntity, Integer> initialAllocations) {
-		for (MullInformation curr : mullList) {
-			if (curr.ym.equals(adpStart)) {
-				
-			}
-		}
-	}
-	
 	private List<BaseLegalEntity> calculateEntityOrder(final MullSubprofile sProfile) {
 		final Map<BaseLegalEntity,Double> orderVal = new HashMap<>();
 		sProfile.getEntityTable().stream().forEach(row -> orderVal.put(row.getEntity(), row.getRelativeEntitlement()));
@@ -1563,46 +1519,34 @@ public class InventoryReport extends ViewPart {
 				.collect(Collectors.toList());
 	}
 	
-	private String generateDailyDiffString(final Pair<MullDailyInformation, MullDailyInformation> element, final Function<MullDailyInformation, Integer> valueExtractor) {
+	private String generateDailyDiffString(final Pair<MullDailyInformation, MullDailyInformation> element, final ToIntFunction<MullDailyInformation> valueExtractor) {
 		final MullDailyInformation pinned = element.getFirst();
 		final MullDailyInformation other = element.getSecond();
-		final int pinnedVal = valueExtractor.apply(pinned);
+		final int pinnedVal = valueExtractor.applyAsInt(pinned);
 		if (other != null) {
-			final int otherVal = valueExtractor.apply(other);
+			final int otherVal = valueExtractor.applyAsInt(other);
 			if (pinnedVal == otherVal) {
 				return "0";
-				//return String.format("%,d", pinnedVal);
 			} else {
 				int difference = otherVal - pinnedVal;
 				return String.format("%,d", difference);
-//				if (difference > 0) {
-//					return String.format("%,d + %,d", pinnedVal, difference);
-//				} else {
-//					return String.format("%,d - %,d", pinnedVal, -1*difference);
-//				}
 			}
 		} else {
 			return String.format("%,d", pinnedVal);
 		}
 	}
 	
-	private String generateDiffString(final Pair<MullInformation, MullInformation> element, final Function<MullInformation, Integer> valueExtractor) {
+	private String generateDiffString(final Pair<MullInformation, MullInformation> element, final ToIntFunction<MullInformation> valueExtractor) {
 		final MullInformation pinned = element.getFirst();
 		final MullInformation other = element.getSecond();
-		final int pinnedVal = valueExtractor.apply(pinned);
+		final int pinnedVal = valueExtractor.applyAsInt(pinned);
 		if (other != null) {
-			final int otherVal = valueExtractor.apply(other);
+			final int otherVal = valueExtractor.applyAsInt(other);
 			if (pinnedVal == otherVal) {
 				return "0";
-				//return String.format("%,d", pinnedVal);
 			} else {
 				int difference = otherVal - pinnedVal;
 				return String.format("%,d", difference);
-//				if (difference > 0) {
-//					return String.format("%,d + %,d", pinnedVal, difference);
-//				} else {
-//					return String.format("%,d - %,d", pinnedVal, -1*difference);
-//				}
 			}
 		} else {
 			return String.format("%,d", pinnedVal);
@@ -1615,34 +1559,25 @@ public class InventoryReport extends ViewPart {
 		return initialAllocations;
 	}
 	
-	private Comparable generateSortValue(final Pair<MullInformation, MullInformation> element, final Function<MullInformation, Integer> valueExtractor) {
+	private Comparable generateSortValue(final Pair<MullInformation, MullInformation> element, final ToIntFunction<MullInformation> valueExtractor) {
 		final MullInformation otherVal = element.getSecond();
 		if (element.getSecond() == null) {
-			return valueExtractor.apply(element.getFirst());
+			return valueExtractor.applyAsInt(element.getFirst());
 		} else {
-			return valueExtractor.apply(otherVal) - valueExtractor.apply(element.getFirst());
+			return valueExtractor.applyAsInt(otherVal) - valueExtractor.applyAsInt(element.getFirst());
 		}
 	}
 	
-	private Comparable generateDailySortValue(final Pair<MullDailyInformation, MullDailyInformation> element, final Function<MullDailyInformation, Integer> valueExtractor) {
+	private Comparable generateDailySortValue(final Pair<MullDailyInformation, MullDailyInformation> element, final ToIntFunction<MullDailyInformation> valueExtractor) {
 		final MullDailyInformation otherVal = element.getSecond();
 		if (otherVal == null) {
-			return valueExtractor.apply(element.getFirst());
+			return valueExtractor.applyAsInt(element.getFirst());
 		} else {
-			return valueExtractor.apply(otherVal) - valueExtractor.apply(element.getFirst());
+			return valueExtractor.applyAsInt(otherVal) - valueExtractor.applyAsInt(element.getFirst());
 		}
 	}
 	
 	private void calculateOverliftCF(final List<MullInformation> mullList, final YearMonth adpStart) {
-//		final Map<BaseLegalEntity, MullInformation> prev = new HashMap<>();
-//		for (MullInformation curr : mullList) {
-//			if (curr.ym.equals(adpStart)) {
-//				curr.monthEndEntitlement = curr.monthlyRE - curr.lifted;
-//			} else {
-//				curr.monthEndEntitlement = prev.get(curr.entity).monthEndEntitlement +curr.monthlyRE - curr.lifted;
-//			}
-//			prev.put(curr.entity, curr);
-//		}
 		final Map<BaseLegalEntity, MullInformation> prev = new HashMap<>();
 		for (MullInformation curr : mullList) {
 			if (curr.ym.equals(adpStart)) {
@@ -1679,32 +1614,12 @@ public class InventoryReport extends ViewPart {
 		TreeMap<LocalDate, InventoryDailyEvent> insAndOuts = new TreeMap<>();
 		
 		// add all feeds to map
-		List<InventoryEventRow> feeds = inventory.getFeeds();
-//		int feedSize = feeds.size();
-		addNetVolumes(inventory.getFeeds(), capcityTreeMap, insAndOuts, Function.identity());
-		List<InventoryEventRow> offtakes = inventory.getOfftakes();
+		addNetVolumes(inventory.getFeeds(), capcityTreeMap, insAndOuts, IntUnaryOperator.identity());
 		addNetVolumes(inventory.getOfftakes(), capcityTreeMap, insAndOuts, a -> -a);
-//		Port inventoryPort = inventory.getPort();
-//		scenarioModel.getCargoModel().getLoadSlots().forEach(s -> {
-//			if (inventoryPort.equals(s.getPort())) {
-//				InventoryDailyEvent inventoryDailyEvent = insAndOuts.get(s.getWindowStart());
-//				if (inventoryDailyEvent == null) {
-//					inventoryDailyEvent = new InventoryDailyEvent();
-//					inventoryDailyEvent.date = s.getWindowStart();
-//					InventoryCapacityRow capacityRow = capcityTreeMap.get(s.getWindowStart()) == null //
-//							? capcityTreeMap.lowerEntry(s.getWindowStart()).getValue() //
-//							: capcityTreeMap.get(s.getWindowStart());
-//					inventoryDailyEvent.minVolume = capacityRow.getMinVolume();
-//					inventoryDailyEvent.maxVolume = capacityRow.getMaxVolume();
-//					insAndOuts.put(s.getWindowStart(), inventoryDailyEvent);
-//				}
-//				inventoryDailyEvent.addVolume(-s.getMaxQuantity());
-//			}
-//		});
 		return insAndOuts;
 	}
 	
-	private void addNetVolumes(List<InventoryEventRow> events, TreeMap<LocalDate, InventoryCapacityRow> capcityTreeMap, TreeMap<LocalDate, InventoryDailyEvent> insAndOuts, Function<Integer, Integer> volumeFunction) {
+	private void addNetVolumes(List<InventoryEventRow> events, TreeMap<LocalDate, InventoryCapacityRow> capcityTreeMap, TreeMap<LocalDate, InventoryDailyEvent> insAndOuts, IntUnaryOperator volumeFunction) {
 		for (InventoryEventRow inventoryEventRow : events) {
 			if (inventoryEventRow.getStartDate() != null) {
 				InventoryDailyEvent inventoryDailyEvent = insAndOuts.get(inventoryEventRow.getStartDate());
@@ -1718,7 +1633,7 @@ public class InventoryReport extends ViewPart {
 					inventoryDailyEvent.maxVolume = capacityRow.getMaxVolume();
 					insAndOuts.put(inventoryEventRow.getStartDate(), inventoryDailyEvent);
 				}
-				inventoryDailyEvent.addVolume(volumeFunction.apply(inventoryEventRow.getReliableVolume()));
+				inventoryDailyEvent.addVolume(volumeFunction.applyAsInt(inventoryEventRow.getReliableVolume()));
 			}
 		}
 	}
@@ -1794,8 +1709,6 @@ public class InventoryReport extends ViewPart {
 				for (final BaseLegalEntity ee : entities) {
 					currMap.put(ee, currAlloc.get(ee) + initialAllocations.get(ee));
 				}
-				
-				// entities.stream().forEach(ee -> currMap.put(ee, currAlloc.get(ee) + initialAllocations.get(ee)));
 				while (currentCargoAlloc != null && currentCargoAlloc.getSlotAllocations().get(0).getSlotVisit().getStart().toLocalDate().equals(e.getKey())) {
 					BaseLegalEntity currEnt = currentCargoAlloc.getSlotAllocations().get(0).getSlot().getEntity();
 					int transferred = currentCargoAlloc.getSlotAllocations().get(0).getPhysicalVolumeTransferred();
@@ -1814,7 +1727,6 @@ public class InventoryReport extends ViewPart {
 			for (BaseLegalEntity ee : entities) {
 				currMap.put(ee, currAlloc.get(ee) + prevMap.get(ee));
 			}
-			// entities.stream().forEach(ee -> currMap.put(ee,  currAlloc.get(ee) + prevMap.get(ee)));
 			while (currentCargoAlloc != null && currentCargoAlloc.getSlotAllocations().get(0).getSlotVisit().getStart().toLocalDate().equals(e.getKey())) {
 				BaseLegalEntity currEnt = currentCargoAlloc.getSlotAllocations().get(0).getSlot().getEntity();
 				int transferred = currentCargoAlloc.getSlotAllocations().get(0).getPhysicalVolumeTransferred();

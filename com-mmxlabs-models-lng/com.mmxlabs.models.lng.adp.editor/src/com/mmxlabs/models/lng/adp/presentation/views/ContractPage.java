@@ -155,12 +155,8 @@ public class ContractPage extends ADPComposite {
 			{
 				final Label lbl = new Label(toolbarComposite, SWT.NONE);
 				lbl.setText("Contract");
-				
-				
 				objectSelector = new ComboViewer(toolbarComposite, SWT.DROP_DOWN);
-				
 				objectSelector.getControl().setLayoutData(GridDataFactory.swtDefaults().hint(150, SWT.DEFAULT).create());
-				final ArrayContentProvider a = new ArrayContentProvider();
 				objectSelector.setContentProvider(new ArrayContentProvider());
 				objectSelector.setLabelProvider(new LabelProvider() {
 
@@ -185,10 +181,9 @@ public class ContractPage extends ADPComposite {
 					if (selection instanceof IStructuredSelection) {
 						final IStructuredSelection iStructuredSelection = (IStructuredSelection) selection;
 						target = (EObject) iStructuredSelection.getFirstElement();
-						
 						generateButton.setEnabled(target instanceof Contract || target instanceof Inventory || target instanceof MullProfile);
 					}
-					// generateButton.setEnabled(target != null);
+					generateButton.setEnabled(target != null);
 					updateDetailPaneInput(target);
 				});
 			}
@@ -227,7 +222,6 @@ public class ContractPage extends ADPComposite {
 							final CompoundCommand cmd = new CompoundCommand("Re-generate ADP Slots");
 							final Command populateModelCommand = populateModelFromMultipleInventories(editorData.getEditingDomain(), editorData.scenarioModel, editorData.adpModel, profile);
 							cmd.append(populateModelCommand);
-							// input = profile;
 						}
 						updateDetailPaneInput(input);
 					}
@@ -428,17 +422,14 @@ public class ContractPage extends ADPComposite {
 		
 		final int loadWindowHours = loadWindow*24;
 		
-//		final boolean dynamicWindowGeneration = true;
-		
 		final Map<Vessel, LocalDateTime> vesselToMostRecentUseDateTime = new HashMap<>();
 
 		final Set<BaseLegalEntity> firstPartyEntities = ScenarioModelUtil.getCommercialModel(sm).getEntities().stream() //
 				.filter(e -> !e.isThirdParty()) //
 				.collect(Collectors.toSet());
 		
-		
 		final LocalDate dayBeforeADPStart = adpModel.getYearStart().atDay(1).minusDays(1);
-		final LocalDateTime dateTimeBeforeADPStart = LocalDateTime.of(dayBeforeADPStart, LocalTime.of(0, 0));
+		final LocalDateTime dateTimeBeforeADPStart = dayBeforeADPStart.atStartOfDay();
 		
 		final Map<Inventory, MULLContainer> mullContainers = new HashMap<>();
 		
@@ -474,17 +465,8 @@ public class ContractPage extends ADPComposite {
 						)) //
 				).collect(Collectors.toSet());
 		final Map<Vessel, VesselAvailability> vessToVA = sm.getCargoModel().getVesselAvailabilities().stream().filter(va -> expectedVessels.contains(va.getVessel())).collect(Collectors.toMap(VesselAvailability::getVessel, Function.identity()));
-		for (Vessel v : expectedVessels) {
-			if (!vessToVA.containsKey(v)) {
-				System.out.println("No availability for "+ v.getName());
-			}
-		}
 
 		final LocalDate startDate = adpModel.getYearStart().atDay(1);
-		final Map<Inventory, TreeMap<LocalDate, InventoryDailyEvent>> inventoryInsAndOuts = new HashMap<>();
-		for (final MullSubprofile sProfile : profile.getInventories()) {
-			inventoryInsAndOuts.put(sProfile.getInventory(), getInventoryInsAndOuts(sProfile.getInventory(), sm));
-		}
 		
 		final Map<Inventory, TreeMap<LocalDateTime, InventoryDateTimeEvent>> inventoryHourlyInsAndOuts = new HashMap<>();
 		for (final MullSubprofile sProfile : profile.getInventories()) {
@@ -492,18 +474,7 @@ public class ContractPage extends ADPComposite {
 			inventoryHourlyInsAndOuts.put(inventory, getInventoryInsAndOutsHourly(inventory, sm));
 		}
 		
-		for (final MullSubprofile sProfile : profile.getInventories()) {
-			int totalInventoryVolume = 0;
-			final Inventory currentInventory = sProfile.getInventory();
-			final TreeMap<LocalDate, InventoryDailyEvent> currentInsAndOuts = inventoryInsAndOuts.get(currentInventory);
-			while (currentInsAndOuts.firstKey().isBefore(startDate)) {
-				final InventoryDailyEvent event = currentInsAndOuts.remove(currentInsAndOuts.firstKey());
-				totalInventoryVolume += event.getNetVolumeIn();
-			}
-			currentInsAndOuts.firstEntry().getValue().addVolume(totalInventoryVolume);
-		}
-		
-		final LocalDateTime startDateTime = LocalDateTime.of(startDate, LocalTime.of(0, 0));
+		final LocalDateTime startDateTime = startDate.atStartOfDay();
 		for (final MullSubprofile sProfile : profile.getInventories()) {
 			int totalInventoryVolume = 0;
 			final Inventory currentInventory = sProfile.getInventory();
@@ -544,7 +515,7 @@ public class ContractPage extends ADPComposite {
 			final Iterator<Entry<LocalDateTime, InventoryDateTimeEvent>> hourlyIter = inventoryHourlyInsAndOuts.get(inventory).entrySet().iterator();
 			newIterSwap.add(Pair.of(inventory, hourlyIter));
 			inventoryPurchaseContracts.put(
-					sProfile.getInventory(), 
+					sProfile.getInventory(),
 					pcs.stream().filter(c -> sProfile.getInventory().getPort().equals(c.getPreferredPort())).findFirst().get()
 			);
 			inventoryRunningVolume.put(sProfile.getInventory(), 0);
@@ -621,79 +592,6 @@ public class ContractPage extends ADPComposite {
 				break;
 			}
 		}
-
-//		while (iterSwap.stream().allMatch(p -> p.getSecond().hasNext())) {
-//			for (Pair<Inventory, Iterator<Entry<LocalDate, InventoryDailyEvent>>> curr : iterSwap) {
-//				final Inventory currentInventory = curr.getFirst();
-//				
-//				final Iterator<Entry<LocalDate, InventoryDailyEvent>> currentIter = curr.getSecond();
-//				if (!currentIter.hasNext()) {
-//					continue;
-//				}
-//				final Entry<LocalDate, InventoryDailyEvent> entry = currentIter.next();
-//				final InventoryDailyEvent dailyEvent = entry.getValue();
-//			
-//				inventoryRunningVolume.compute(currentInventory, (k, vol) -> vol + dailyEvent.getNetVolumeIn());
-//				
-//				final MULLContainer newMULLContainer = mullContainers.get(currentInventory);
-//				newMULLContainer.updateRunningAllocation2(dailyEvent.getNetVolumeIn());
-//				
-//				final LocalDate currentDate = entry.getKey();
-//				
-//				if (currentDate.getDayOfMonth() == 1) {
-//					final YearMonth currentYM = YearMonth.from(currentDate);
-//					final int monthIn = inventoryInsAndOuts.get(currentInventory).entrySet().stream() //
-//						.filter(p -> YearMonth.from(p.getKey()).equals(currentYM)) //
-//						.mapToInt(p -> p.getValue().getNetVolumeIn()) //
-//						.sum();
-//					newMULLContainer.updateCurrentMonthAbsoluteEntitlement2(monthIn);
-//				}
-//				
-////				while (currentExistingSlot != null && currentExistingSlot.getWindowStart().equals(currentDate)) {
-////					currentMULLContainer.updateEntityRunningAllocation(currentExistingSlot);
-////				}
-//				
-//				
-////				Integer thisRunningVolume = inventoryRunningVolume.get(currentInventory);
-////				final Stack<LoadSlot> thisTempSlots = inventoryTempSlots.get(currentInventory);
-////				while (thisRunningVolume < dailyEvent.minVolume && !thisNewLoadSlots.isEmpty()) {
-////					final LoadSlot oldLoadSlot = ((LinkedList<LoadSlot>) thisNewLoadSlots).removeLast();
-////					thisTempSlots.add(oldLoadSlot);
-////					thisRunningVolume += oldLoadSlot.getMaxQuantity();
-////					currentMULLContainer.reverseEntityLoadSlot(oldLoadSlot);
-////				}
-////				inventoryRunningVolume.put(currentInventory, thisRunningVolume);
-//
-//				final MUDContainer mullMUDContainer = newMULLContainer.calculateMULL2(vesselToMostRecentUseDate, cargoVolume);
-//				final AllocationTracker mudAllocationTracker = mullMUDContainer.calculateMUDAllocationTracker();
-//				final List<Vessel> mudVesselRestrictions = mudAllocationTracker.getVessels();
-//				final Vessel assignedVessel;
-//				final int currentAllocationDrop;
-//				if (!mudVesselRestrictions.isEmpty()) {
-//					assignedVessel = mudVesselRestrictions.stream().min((v1, v2) -> vesselToMostRecentUseDate.get(v1).compareTo(vesselToMostRecentUseDate.get(v2))).get();
-//					currentAllocationDrop = (int) (assignedVessel.getVesselOrDelegateCapacity()*assignedVessel.getVesselOrDelegateFillCapacity() - assignedVessel.getVesselOrDelegateSafetyHeel());
-//				} else {
-//					assignedVessel = null;
-//					currentAllocationDrop = cargoVolume;
-//				}
-//				
-//				int tempRunningVolume2 = inventoryRunningVolume.get(currentInventory) - currentAllocationDrop;
-//				final Set<LocalDate> currentFlaggedDates = inventoryFlaggedDates.get(currentInventory);
-//				if (tempRunningVolume2 > dailyEvent.minVolume && !currentFlaggedDates.contains(currentDate)) {
-//					final int nextLoadCount = inventorySlotCounters.get(currentInventory);
-//					final CargoBlueprint currentCargoBlueprint = new CargoBlueprint(currentInventory, inventoryPurchaseContracts.get(currentInventory), nextLoadCount, assignedVessel, currentDate, loadWindow, mudAllocationTracker, currentAllocationDrop, mullMUDContainer.getEntity());
-//					mullMUDContainer.dropAllocation(currentAllocationDrop);
-//					mudAllocationTracker.dropAllocation(currentAllocationDrop);
-//					if (assignedVessel != null) {
-//						vesselToMostRecentUseDate.put(assignedVessel, currentDate);
-//					}
-//					final LinkedList<CargoBlueprint> thisNewCargoBlueprints = cargoBlueprintsToGenerate.get(currentInventory);
-//					thisNewCargoBlueprints.add(currentCargoBlueprint);
-//					inventorySlotCounters.put(currentInventory, nextLoadCount+1);
-//					inventoryRunningVolume.put(currentInventory, tempRunningVolume2);
-//				}
-//			}
-//		}
 
 		if (cargoBlueprintsToGenerate.values().stream().anyMatch(c -> !c.isEmpty())) {
 			final IScenarioDataProvider sdp = editorData.getScenarioDataProvider();
@@ -825,7 +723,6 @@ public class ContractPage extends ADPComposite {
 
 	private void updatePreviewPaneInput(final EObject target) {
 		if (editorData != null && editorData.getScenarioModel() != null) {
-			ADPModel adpModel = editorData.adpModel;
 			if (previewViewer != null) {
 				if (target instanceof PurchaseContractProfile) {
 					final PurchaseContractProfile purchaseContractProfile = (PurchaseContractProfile) target;
@@ -965,43 +862,6 @@ public class ContractPage extends ADPComposite {
 		objectSelector.setSelection(new StructuredSelection(p.getContract()));
 	}
 	
-	// Returns a tree map where each key value pair represents the date of some activity and the sum total of gas moved
-	private TreeMap<LocalDate, InventoryDailyEvent> getInventoryInsAndOuts(Inventory inventory, LNGScenarioModel scenarioModel) {
-		List<InventoryCapacityRow> capacities = inventory.getCapacities();
-		
-		TreeMap<LocalDate, InventoryCapacityRow> capcityTreeMap = 
-				capacities.stream()
-				.collect(Collectors.toMap(InventoryCapacityRow::getDate,
-							c -> c,
-							(oldValue, newValue) -> newValue,
-							TreeMap::new));
-		
-		TreeMap<LocalDate, InventoryDailyEvent> insAndOuts = new TreeMap<>();
-		
-		// add all feeds to map
-		addNetVolumes(inventory.getFeeds(), capcityTreeMap, insAndOuts, Function.identity());
-		addNetVolumes(inventory.getOfftakes(), capcityTreeMap, insAndOuts, a -> -a);
-		Port inventoryPort = inventory.getPort();
-		scenarioModel.getCargoModel().getLoadSlots().forEach(s -> {
-			if (inventoryPort.equals(s.getPort())) {
-				InventoryDailyEvent inventoryDailyEvent = insAndOuts.get(s.getWindowStart());
-				if (inventoryDailyEvent == null) {
-					// inventoryDailyEvent = new InventoryDailyEvent();
-					final LocalDate date = s.getWindowStart();
-					InventoryCapacityRow capacityRow = capcityTreeMap.get(s.getWindowStart()) == null //
-							? capcityTreeMap.lowerEntry(s.getWindowStart()).getValue() //
-							: capcityTreeMap.get(s.getWindowStart());
-					final int minVolume = capacityRow.getMinVolume();
-					final int maxVolume = capacityRow.getMaxVolume();
-					inventoryDailyEvent = new InventoryDailyEvent(date, 0, minVolume, maxVolume);
-					insAndOuts.put(s.getWindowStart(), inventoryDailyEvent);
-				}
-				inventoryDailyEvent.addVolume(-s.getMaxQuantity());
-			}
-		});
-		return insAndOuts;
-	}
-	
 	private TreeMap<LocalDateTime, InventoryDateTimeEvent> getInventoryInsAndOutsHourly(final Inventory inventory, final LNGScenarioModel scenarioModel) {
 		final List<InventoryCapacityRow> capacities = inventory.getCapacities();
 		final TreeMap<LocalDate, InventoryCapacityRow> capacityTreeMap = capacities.stream() //
@@ -1011,7 +871,7 @@ public class ContractPage extends ADPComposite {
 						(oldVal, newVal) -> newVal,
 						TreeMap::new));
 		final TreeMap<LocalDateTime, InventoryDateTimeEvent> insAndOuts = new TreeMap<>();
-		addHourlyNetVolumes(inventory.getFeeds(), capacityTreeMap, insAndOuts, Function.identity());
+		addHourlyNetVolumes(inventory.getFeeds(), capacityTreeMap, insAndOuts, IntUnaryOperator.identity());
 		addHourlyNetVolumes(inventory.getOfftakes(), capacityTreeMap, insAndOuts, a -> -a);
 		
 		final Port inventoryPort = inventory.getPort();
@@ -1031,7 +891,7 @@ public class ContractPage extends ADPComposite {
 					);
 					addSingleVolume(capacityTreeMap, insAndOuts, loadStartDateTime, -firstLift);
 					final LocalDateTime endLoad = loadStartDateTime.plusHours(currentDuration);
-					for (LocalDateTime dateTimeCounter = loadStartDateTime.plusHours(1L); dateTimeCounter.isBefore(endLoad); loadStartDateTime.plusHours(1L)) {
+					for (LocalDateTime dateTimeCounter = loadStartDateTime.plusHours(1L); dateTimeCounter.isBefore(endLoad); dateTimeCounter = loadStartDateTime.plusHours(1L)) {
 						addSingleVolume(capacityTreeMap, insAndOuts, dateTimeCounter, -hourlyLift);
 					}
 				});
@@ -1040,7 +900,7 @@ public class ContractPage extends ADPComposite {
 		return insAndOuts;
 	}
 
-	private void addHourlyNetVolumes(final List<InventoryEventRow> events, final TreeMap<LocalDate, InventoryCapacityRow> capacityTreeMap, final TreeMap<LocalDateTime, InventoryDateTimeEvent> insAndOuts, final Function<Integer,Integer> volumeFunction) {
+	private void addHourlyNetVolumes(final List<InventoryEventRow> events, final TreeMap<LocalDate, InventoryCapacityRow> capacityTreeMap, final TreeMap<LocalDateTime, InventoryDateTimeEvent> insAndOuts, final IntUnaryOperator volumeFunction) {
 		for (final InventoryEventRow inventoryEventRow : events) {
 			final LocalDate eventStart = inventoryEventRow.getStartDate();
 			if (eventStart != null) {
@@ -1071,7 +931,7 @@ public class ContractPage extends ADPComposite {
 		}
 	}
 
-	private void addSingleVolume(final TreeMap<LocalDate, InventoryCapacityRow> capacityTreeMap, final TreeMap<LocalDateTime, InventoryDateTimeEvent> insAndOuts, final Function<Integer,Integer> volumeFunction, final LocalDateTime expectedDateTime, final int absoluteVolume) {
+	private void addSingleVolume(final TreeMap<LocalDate, InventoryCapacityRow> capacityTreeMap, final TreeMap<LocalDateTime, InventoryDateTimeEvent> insAndOuts, final IntUnaryOperator volumeFunction, final LocalDateTime expectedDateTime, final int absoluteVolume) {
 		InventoryDateTimeEvent inventoryDateTimeEvent = insAndOuts.get(expectedDateTime);
 		if (inventoryDateTimeEvent == null) {
 			InventoryCapacityRow capacityRow = capacityTreeMap.get(expectedDateTime.toLocalDate());
@@ -1080,10 +940,10 @@ public class ContractPage extends ADPComposite {
 			}
 			final int minVolume = capacityRow.getMinVolume();
 			final int maxVolume = capacityRow.getMaxVolume();
-			inventoryDateTimeEvent = new InventoryDateTimeEvent(expectedDateTime, volumeFunction.apply(absoluteVolume), minVolume, maxVolume);
+			inventoryDateTimeEvent = new InventoryDateTimeEvent(expectedDateTime, volumeFunction.applyAsInt(absoluteVolume), minVolume, maxVolume);
 			insAndOuts.put(expectedDateTime, inventoryDateTimeEvent);
 		} else {
-			inventoryDateTimeEvent.addVolume(volumeFunction.apply(absoluteVolume));
+			inventoryDateTimeEvent.addVolume(volumeFunction.applyAsInt(absoluteVolume));
 		}
 	}
 
@@ -1100,25 +960,6 @@ public class ContractPage extends ADPComposite {
 			insAndOuts.put(expectedDateTime, inventoryDateTimeEvent);
 		} else {
 			inventoryDateTimeEvent.addVolume(volume);
-		}
-	}
-
-	private void addNetVolumes(List<InventoryEventRow> events, TreeMap<LocalDate, InventoryCapacityRow> capcityTreeMap, TreeMap<LocalDate, InventoryDailyEvent> insAndOuts, Function<Integer, Integer> volumeFunction) {
-		for (InventoryEventRow inventoryEventRow : events) {
-			if (inventoryEventRow.getStartDate() != null) {
-				InventoryDailyEvent inventoryDailyEvent = insAndOuts.get(inventoryEventRow.getStartDate());
-				if (inventoryDailyEvent == null) {
-					final LocalDate date = inventoryEventRow.getStartDate();
-					InventoryCapacityRow capacityRow = capcityTreeMap.get(date) == null //
-							? capcityTreeMap.lowerEntry(date).getValue() //
-							: capcityTreeMap.get(date);
-					final int minVolume = capacityRow.getMinVolume();
-					final int maxVolume = capacityRow.getMaxVolume();
-					inventoryDailyEvent = new InventoryDailyEvent(date, 0, minVolume, maxVolume);
-					insAndOuts.put(inventoryEventRow.getStartDate(), inventoryDailyEvent);
-				}
-				inventoryDailyEvent.addVolume(volumeFunction.apply(inventoryEventRow.getReliableVolume()));
-			}
 		}
 	}
 }
