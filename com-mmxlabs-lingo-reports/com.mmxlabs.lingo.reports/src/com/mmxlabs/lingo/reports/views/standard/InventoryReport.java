@@ -85,6 +85,7 @@ import com.mmxlabs.lingo.reports.views.standard.inventory.MullDailyInformation;
 import com.mmxlabs.lingo.reports.views.standard.inventory.MullInformation;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.MullEntityRow;
+import com.mmxlabs.models.lng.adp.MullProfile;
 import com.mmxlabs.models.lng.adp.MullSubprofile;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -509,263 +510,272 @@ public class InventoryReport extends ViewPart {
 				final Schedule schedule = scheduleModel.getSchedule();
 				if (schedule != null) {
 					
-					if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
-						assert inventoryModels.size() == 1;
+					if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION) && inventoryModels.size() == 1) {
 						final Inventory expectedInventory = inventoryModels.iterator().next();
 						final Port expectedLoadPort = expectedInventory.getPort();
 						final LNGScenarioModel lngScenarioToDisplay = (LNGScenarioModel) toDisplay.getRootObject();
 						
 						final ADPModel adpModel = lngScenarioToDisplay.getAdpModel();
-						final YearMonth adpStart = adpModel.getYearStart();
-						final YearMonth adpEnd = adpModel.getYearEnd();
-						LocalDate startDate = adpStart.atDay(1);
-						
-						TreeMap<LocalDate, InventoryDailyEvent> insAndOuts = getInventoryInsAndOuts(expectedInventory, lngScenarioToDisplay);
-						
-						int totalInventoryVolume = 0;
-						while (insAndOuts.firstKey().isBefore(startDate)) {
-							final InventoryDailyEvent event = insAndOuts.remove(insAndOuts.firstKey());
-							totalInventoryVolume += event.netVolumeIn;
-						}
-						insAndOuts.firstEntry().getValue().addVolume(totalInventoryVolume);
+						if (adpModel != null) {
+							final MullProfile mullProfile = adpModel.getMullProfile();
+							if (mullProfile != null) {
+								final YearMonth adpStart = adpModel.getYearStart();
+								final YearMonth adpEnd = adpModel.getYearEnd();
+								LocalDate startDate = adpStart.atDay(1);
+								
+								TreeMap<LocalDate, InventoryDailyEvent> insAndOuts = getInventoryInsAndOuts(expectedInventory, lngScenarioToDisplay);
+								
+								int totalInventoryVolume = 0;
+								while (insAndOuts.firstKey().isBefore(startDate)) {
+									final InventoryDailyEvent event = insAndOuts.remove(insAndOuts.firstKey());
+									totalInventoryVolume += event.netVolumeIn;
+								}
+								insAndOuts.firstEntry().getValue().addVolume(totalInventoryVolume);
 
-						final Map<YearMonth, Integer> monthlyProduction = calculateMonthlyProduction(expectedInventory, adpStart);
-						
-						final MullSubprofile sProfile = adpModel.getMullProfile().getInventories().stream().filter(s -> s.getInventory().equals(expectedInventory)).findAny().get();
-						final List<BaseLegalEntity> entitiesOrdered = calculateEntityOrder(sProfile);
-						
-						final List<Pair<BaseLegalEntity, Double>> relativeEntitlements = sProfile.getEntityTable().stream() //
-								.map(row -> new Pair<BaseLegalEntity, Double>(row.getEntity(), row.getRelativeEntitlement())) //
-								.collect(Collectors.toList());
-						
-						if (pinnedResult != null) {
-							final ScheduleModel pinnedScheduleModel = pinnedResult.getTypedResult(ScheduleModel.class);
-							final Schedule pinnedSchedule = pinnedScheduleModel.getSchedule();
-							final LNGScenarioModel pinnedLNGScenarioModel = (LNGScenarioModel) pinnedResult.getRootObject();
-							final List<MullInformation> pinnedMullList = new LinkedList<>();
-							final List<MullDailyInformation> pinnedMullDailyList = new LinkedList<>();
-							if (pinnedSchedule != null) {
-								final List<CargoAllocation> pinnedCargoAllocations = pinnedSchedule.getCargoAllocations();
+								final Map<YearMonth, Integer> monthlyProduction = calculateMonthlyProduction(expectedInventory, adpStart);
 								
-								fillMullInformationList(adpStart, adpEnd, entitiesOrdered, sProfile, monthlyProduction, expectedLoadPort, pinnedCargoAllocations, pinnedMullList, pinnedLNGScenarioModel);
-								
-								final List<CargoAllocation> sortedPinnedCargoAllocations = pinnedCargoAllocations.stream() //
-										.filter(c->c.getSlotAllocations().get(0).getPort().equals(expectedLoadPort)) //
-										.sorted((c1, c2) -> c1.getSlotAllocations().get(0).getSlotVisit().getStart().toLocalDate().compareTo(c2.getSlotAllocations().get(0).getSlotVisit().getStart().toLocalDate())) //
-										.collect(Collectors.toList());
-								final Map<BaseLegalEntity, Integer> initialAllocation = calculateInitialAllocation(sProfile);
-								
-								final Map<BaseLegalEntity, BaseLegalEntity> entityEntityMap = buildEntityEntityMap(pinnedLNGScenarioModel, entitiesOrdered);
-								final Map<BaseLegalEntity, BaseLegalEntity> reverseEntityEntityMap = new HashMap<>();
-								for (final Entry<BaseLegalEntity, BaseLegalEntity> entry : entityEntityMap.entrySet()) {
-									reverseEntityEntityMap.put(entry.getValue(), entry.getKey());
-								}
-								final Map<LocalDate, Map<BaseLegalEntity, Integer>> pinnedAllocatedEntitlement = calculateDailyAllocatedEntitlement(insAndOuts, relativeEntitlements, entityEntityMap, reverseEntityEntityMap);
-								final List<BaseLegalEntity> otherEntities = sProfile.getEntityTable().stream().map(MullEntityRow::getEntity).collect(Collectors.toList());
-								final Map<LocalDate, Map<BaseLegalEntity, Integer>> pinnedActualEntitlement = calculateDailyActualEntitlement(otherEntities, sortedPinnedCargoAllocations, insAndOuts, pinnedAllocatedEntitlement, initialAllocation);
-								insAndOuts.entrySet().stream() //
-										.forEach(e -> {
-											for (BaseLegalEntity entity : entitiesOrdered) {
-												final MullDailyInformation currRow = new MullDailyInformation();
-												currRow.date = e.getKey();
-												currRow.entity = entity;
-												currRow.allocatedEntitlement = pinnedAllocatedEntitlement.get(currRow.getDate()).get(entity);
-												currRow.actualEntitlement = pinnedActualEntitlement.get(currRow.getDate()).get(entity);
-												pinnedMullDailyList.add(currRow);
+								final Optional<MullSubprofile> sProfileOpt = mullProfile.getInventories().stream().filter(s -> s.getInventory() != null && s.getInventory().equals(expectedInventory)).findAny();
+								if (sProfileOpt.isPresent()) {
+									final MullSubprofile sProfile = sProfileOpt.get();
+									if (!sProfile.getEntityTable().isEmpty() && isValidMullSubProfile(sProfile)) {
+										final List<BaseLegalEntity> entitiesOrdered = calculateEntityOrder(sProfile);
+										
+										final List<Pair<BaseLegalEntity, Double>> relativeEntitlements = sProfile.getEntityTable().stream() //
+												.map(row -> new Pair<BaseLegalEntity, Double>(row.getEntity(), row.getRelativeEntitlement())) //
+												.collect(Collectors.toList());
+										
+										if (pinnedResult != null) {
+											final ScheduleModel pinnedScheduleModel = pinnedResult.getTypedResult(ScheduleModel.class);
+											final Schedule pinnedSchedule = pinnedScheduleModel.getSchedule();
+											final LNGScenarioModel pinnedLNGScenarioModel = (LNGScenarioModel) pinnedResult.getRootObject();
+											final List<MullInformation> pinnedMullList = new LinkedList<>();
+											final List<MullDailyInformation> pinnedMullDailyList = new LinkedList<>();
+											if (pinnedSchedule != null) {
+												final List<CargoAllocation> pinnedCargoAllocations = pinnedSchedule.getCargoAllocations();
+												
+												fillMullInformationList(adpStart, adpEnd, entitiesOrdered, sProfile, monthlyProduction, expectedLoadPort, pinnedCargoAllocations, pinnedMullList, pinnedLNGScenarioModel);
+												
+												final List<CargoAllocation> sortedPinnedCargoAllocations = pinnedCargoAllocations.stream() //
+														.filter(c->c.getSlotAllocations().get(0).getPort().equals(expectedLoadPort)) //
+														.sorted((c1, c2) -> c1.getSlotAllocations().get(0).getSlotVisit().getStart().toLocalDate().compareTo(c2.getSlotAllocations().get(0).getSlotVisit().getStart().toLocalDate())) //
+														.collect(Collectors.toList());
+												final Map<BaseLegalEntity, Integer> initialAllocation = calculateInitialAllocation(sProfile);
+												
+												final Map<BaseLegalEntity, BaseLegalEntity> entityEntityMap = buildEntityEntityMap(pinnedLNGScenarioModel, entitiesOrdered);
+												final Map<BaseLegalEntity, BaseLegalEntity> reverseEntityEntityMap = new HashMap<>();
+												for (final Entry<BaseLegalEntity, BaseLegalEntity> entry : entityEntityMap.entrySet()) {
+													reverseEntityEntityMap.put(entry.getValue(), entry.getKey());
+												}
+												final Map<LocalDate, Map<BaseLegalEntity, Integer>> pinnedAllocatedEntitlement = calculateDailyAllocatedEntitlement(insAndOuts, relativeEntitlements, entityEntityMap, reverseEntityEntityMap);
+												final List<BaseLegalEntity> otherEntities = sProfile.getEntityTable().stream().map(MullEntityRow::getEntity).collect(Collectors.toList());
+												final Map<LocalDate, Map<BaseLegalEntity, Integer>> pinnedActualEntitlement = calculateDailyActualEntitlement(otherEntities, sortedPinnedCargoAllocations, insAndOuts, pinnedAllocatedEntitlement, initialAllocation);
+												insAndOuts.entrySet().stream() //
+														.forEach(e -> {
+															for (BaseLegalEntity entity : entitiesOrdered) {
+																final MullDailyInformation currRow = new MullDailyInformation();
+																currRow.date = e.getKey();
+																currRow.entity = entity;
+																currRow.allocatedEntitlement = pinnedAllocatedEntitlement.get(currRow.getDate()).get(entity);
+																currRow.actualEntitlement = pinnedActualEntitlement.get(currRow.getDate()).get(entity);
+																pinnedMullDailyList.add(currRow);
+															}
+														});
 											}
-										});
-							}
-							final ScheduleModel otherScheduleModel = otherResult.getTypedResult(ScheduleModel.class);
-							final Schedule otherSchedule = otherScheduleModel.getSchedule();
-							final List<MullInformation> otherMullList = new LinkedList<>();
-							final List<MullDailyInformation> otherMullDailyList = new LinkedList<>();
-							if (otherSchedule != null) {
-								final LNGScenarioModel otherLngScenarioModel = (LNGScenarioModel) otherResult.getRootObject();
-								final ADPModel otherADPModel = otherLngScenarioModel.getAdpModel();
-								final Inventory otherInventory = otherLngScenarioModel.getCargoModel().getInventoryModels().stream().filter(i -> i.getName().equals(expectedInventory.getName())).findAny().get();
-								
-								final MullSubprofile otherSProfile = otherADPModel.getMullProfile().getInventories().stream().filter(s -> s.getInventory().equals(otherInventory)).findAny().get();
-								final Port otherInventoryLoadPort = otherInventory.getPort();
-								
-								final List<CargoAllocation> otherCargoAllocations = otherSchedule.getCargoAllocations();
-								
-								fillMullInformationList(adpStart, adpEnd, entitiesOrdered, otherSProfile, monthlyProduction, otherInventoryLoadPort, otherCargoAllocations, otherMullList, otherLngScenarioModel);
-								
-								final List<CargoAllocation> sortedOtherCargoAllocations = otherCargoAllocations.stream() //
-										.filter(c->c.getSlotAllocations().get(0).getPort().equals(otherInventoryLoadPort)) //
-										.sorted((c1, c2) -> c1.getSlotAllocations().get(0).getSlotVisit().getStart().toLocalDate().compareTo(c2.getSlotAllocations().get(0).getSlotVisit().getStart().toLocalDate())) //
-										.collect(Collectors.toList());
-								
-								final Map<BaseLegalEntity, Integer> initialAllocation = calculateInitialAllocation(otherSProfile);
-								
-								final Map<BaseLegalEntity, BaseLegalEntity> entityEntityMap = buildEntityEntityMap(otherLngScenarioModel, entitiesOrdered);
-								final Map<BaseLegalEntity, BaseLegalEntity> reverseEntityEntityMap = new HashMap<>();
-								for (final Entry<BaseLegalEntity, BaseLegalEntity> entry : entityEntityMap.entrySet()) {
-									reverseEntityEntityMap.put(entry.getValue(), entry.getKey());
-								}
-								final Map<LocalDate, Map<BaseLegalEntity, Integer>> otherAllocatedEntitlement = calculateDailyAllocatedEntitlement(insAndOuts, relativeEntitlements, entityEntityMap, reverseEntityEntityMap);
-								final List<BaseLegalEntity> otherEntities = otherSProfile.getEntityTable().stream().map(MullEntityRow::getEntity).collect(Collectors.toList());
-								final Map<LocalDate, Map<BaseLegalEntity, Integer>> otherActualEntitlement = calculateDailyActualEntitlement(otherEntities, sortedOtherCargoAllocations, insAndOuts, otherAllocatedEntitlement, initialAllocation);
-								boolean grey = false;
-								for (final Entry<LocalDate, InventoryDailyEvent> e : insAndOuts.entrySet()) {
-									for (BaseLegalEntity entity : entitiesOrdered) {
-										final MullDailyInformation currRow = new MullDailyInformation();
-										currRow.date = e.getKey();
-										currRow.entity = entity;
-										currRow.allocatedEntitlement = otherAllocatedEntitlement.get(currRow.getDate()).get(entityEntityMap.get(entity));
-										currRow.actualEntitlement = otherActualEntitlement.get(currRow.getDate()).get(entityEntityMap.get(entity));
-										currRow.grey = grey;
-										otherMullDailyList.add(currRow);
+											final ScheduleModel otherScheduleModel = otherResult.getTypedResult(ScheduleModel.class);
+											final Schedule otherSchedule = otherScheduleModel.getSchedule();
+											final List<MullInformation> otherMullList = new LinkedList<>();
+											final List<MullDailyInformation> otherMullDailyList = new LinkedList<>();
+											if (otherSchedule != null) {
+												final LNGScenarioModel otherLngScenarioModel = (LNGScenarioModel) otherResult.getRootObject();
+												final ADPModel otherADPModel = otherLngScenarioModel.getAdpModel();
+												final Inventory otherInventory = otherLngScenarioModel.getCargoModel().getInventoryModels().stream().filter(i -> i.getName().equals(expectedInventory.getName())).findAny().get();
+												
+												final MullSubprofile otherSProfile = otherADPModel.getMullProfile().getInventories().stream().filter(s -> s.getInventory().equals(otherInventory)).findAny().get();
+												final Port otherInventoryLoadPort = otherInventory.getPort();
+												
+												final List<CargoAllocation> otherCargoAllocations = otherSchedule.getCargoAllocations();
+												
+												fillMullInformationList(adpStart, adpEnd, entitiesOrdered, otherSProfile, monthlyProduction, otherInventoryLoadPort, otherCargoAllocations, otherMullList, otherLngScenarioModel);
+												
+												final List<CargoAllocation> sortedOtherCargoAllocations = otherCargoAllocations.stream() //
+														.filter(c->c.getSlotAllocations().get(0).getPort().equals(otherInventoryLoadPort)) //
+														.sorted((c1, c2) -> c1.getSlotAllocations().get(0).getSlotVisit().getStart().toLocalDate().compareTo(c2.getSlotAllocations().get(0).getSlotVisit().getStart().toLocalDate())) //
+														.collect(Collectors.toList());
+												
+												final Map<BaseLegalEntity, Integer> initialAllocation = calculateInitialAllocation(otherSProfile);
+												
+												final Map<BaseLegalEntity, BaseLegalEntity> entityEntityMap = buildEntityEntityMap(otherLngScenarioModel, entitiesOrdered);
+												final Map<BaseLegalEntity, BaseLegalEntity> reverseEntityEntityMap = new HashMap<>();
+												for (final Entry<BaseLegalEntity, BaseLegalEntity> entry : entityEntityMap.entrySet()) {
+													reverseEntityEntityMap.put(entry.getValue(), entry.getKey());
+												}
+												final Map<LocalDate, Map<BaseLegalEntity, Integer>> otherAllocatedEntitlement = calculateDailyAllocatedEntitlement(insAndOuts, relativeEntitlements, entityEntityMap, reverseEntityEntityMap);
+												final List<BaseLegalEntity> otherEntities = otherSProfile.getEntityTable().stream().map(MullEntityRow::getEntity).collect(Collectors.toList());
+												final Map<LocalDate, Map<BaseLegalEntity, Integer>> otherActualEntitlement = calculateDailyActualEntitlement(otherEntities, sortedOtherCargoAllocations, insAndOuts, otherAllocatedEntitlement, initialAllocation);
+												boolean grey = false;
+												for (final Entry<LocalDate, InventoryDailyEvent> e : insAndOuts.entrySet()) {
+													for (BaseLegalEntity entity : entitiesOrdered) {
+														final MullDailyInformation currRow = new MullDailyInformation();
+														currRow.date = e.getKey();
+														currRow.entity = entity;
+														currRow.allocatedEntitlement = otherAllocatedEntitlement.get(currRow.getDate()).get(entityEntityMap.get(entity));
+														currRow.actualEntitlement = otherActualEntitlement.get(currRow.getDate()).get(entityEntityMap.get(entity));
+														currRow.grey = grey;
+														otherMullDailyList.add(currRow);
+													}
+													grey = !grey;
+												}
+											}
+											
+											if (pinnedMullList.isEmpty() && !otherMullList.isEmpty()) {
+												final Iterator<MullInformation> otherIter = otherMullList.iterator();
+												while (otherIter.hasNext()) {
+													pairedMullList.add(new Pair<>(otherIter.next(), null));
+												}
+											} else if (!pinnedMullList.isEmpty() && otherMullList.isEmpty()) {
+												final Iterator<MullInformation> pinnedIter = pinnedMullList.iterator();
+												while (pinnedIter.hasNext()) {
+													pairedMullList.add(new Pair<>(pinnedIter.next(), null));
+												}
+											} else if (!pinnedMullList.isEmpty() && !otherMullList.isEmpty()) {
+												final Iterator<MullInformation> pinnedIter = pinnedMullList.iterator();
+												final Iterator<MullInformation> otherIter = otherMullList.iterator();
+												while (pinnedIter.hasNext() && otherIter.hasNext()) {
+													final MullInformation currPin = pinnedIter.next();
+													final MullInformation currOth = otherIter.next();
+													pairedMullList.add(new Pair<>(currPin, currOth));
+												}
+												assert !pinnedIter.hasNext() && !otherIter.hasNext();
+											}
+											
+											if (pinnedMullDailyList.isEmpty() && !otherMullDailyList.isEmpty()) {
+												final Iterator<MullDailyInformation> otherIter = otherMullDailyList.iterator();
+												while (otherIter.hasNext()) {
+													pairedDailyMullList.add(new Pair<>(otherIter.next(), null));
+												}
+											} else if (!pinnedMullDailyList.isEmpty() && otherMullDailyList.isEmpty()) {
+												final Iterator<MullDailyInformation> pinnedIter = pinnedMullDailyList.iterator();
+												while (pinnedIter.hasNext()) {
+													pairedDailyMullList.add(new Pair<>(pinnedIter.next(), null));
+												}
+											} else if (!pinnedMullDailyList.isEmpty() && !otherMullDailyList.isEmpty()) {
+												final Iterator<MullDailyInformation> pinnedIter = pinnedMullDailyList.iterator();
+												final Iterator<MullDailyInformation> otherIter = otherMullDailyList.iterator();
+												while (pinnedIter.hasNext() && otherIter.hasNext()) {
+													final MullDailyInformation currPin = pinnedIter.next();
+													final MullDailyInformation currOth = otherIter.next();
+													pairedDailyMullList.add(new Pair<>(currPin, currOth));
+												}
+												assert !pinnedIter.hasNext() && !otherIter.hasNext();
+											}
+											
+										} else if (otherResult != null) {
+											final ScheduleModel otherScheduleModel = otherResult.getTypedResult(ScheduleModel.class);
+											final Schedule otherSchedule = otherScheduleModel.getSchedule();
+											if (otherSchedule != null) {
+												final List<CargoAllocation> otherCargoAllocations = otherSchedule.getCargoAllocations();
+												final List<MullInformation> otherMullList = new LinkedList<>();
+												final List<MullDailyInformation> otherMullDailyList = new LinkedList<>();
+												
+												fillMullInformationList(adpStart, adpEnd, entitiesOrdered, sProfile, monthlyProduction, expectedLoadPort, otherCargoAllocations, otherMullList, lngScenarioToDisplay);
+												final Map<BaseLegalEntity, Integer> initialAllocation = calculateInitialAllocation(sProfile);
+												final List<CargoAllocation> sortedOtherCargoAllocations = otherCargoAllocations.stream() //
+														.filter(c->c.getSlotAllocations().get(0).getPort().equals(expectedLoadPort)) //
+														.sorted((c1, c2) -> c1.getSlotAllocations().get(0).getSlotVisit().getStart().toLocalDate().compareTo(c2.getSlotAllocations().get(0).getSlotVisit().getStart().toLocalDate())) //
+														.collect(Collectors.toList());
+												
+												final Map<BaseLegalEntity, BaseLegalEntity> entityEntityMap = buildEntityEntityMap(lngScenarioToDisplay, entitiesOrdered);
+												final Map<BaseLegalEntity, BaseLegalEntity> reverseEntityEntityMap = new HashMap<>();
+												for (final Entry<BaseLegalEntity, BaseLegalEntity> entry : entityEntityMap.entrySet()) {
+													reverseEntityEntityMap.put(entry.getValue(), entry.getKey());
+												}
+												final Map<LocalDate, Map<BaseLegalEntity, Integer>> otherAllocatedEntitlement = calculateDailyAllocatedEntitlement(insAndOuts, relativeEntitlements, entityEntityMap, reverseEntityEntityMap);
+												final Map<LocalDate, Map<BaseLegalEntity, Integer>> otherActualEntitlement = calculateDailyActualEntitlement(entitiesOrdered, sortedOtherCargoAllocations, insAndOuts, otherAllocatedEntitlement, initialAllocation);
+												boolean grey = false;
+												for (final Entry<LocalDate, InventoryDailyEvent> e : insAndOuts.entrySet()) {
+													for (BaseLegalEntity entity : entitiesOrdered) {
+														final MullDailyInformation currRow = new MullDailyInformation();
+														currRow.date = e.getKey();
+														currRow.entity = entity;
+														currRow.allocatedEntitlement = otherAllocatedEntitlement.get(currRow.getDate()).get(entity);
+														currRow.actualEntitlement = otherActualEntitlement.get(currRow.getDate()).get(entity);
+														currRow.grey = grey;
+														otherMullDailyList.add(currRow);
+													}
+													grey = !grey;
+												}
+												final Iterator<MullInformation> otherIter = otherMullList.iterator();
+												while (otherIter.hasNext()) {
+													pairedMullList.add(new Pair<>(otherIter.next(), null));
+												}
+												final Iterator<MullDailyInformation> otherDailyIter = otherMullDailyList.iterator();
+												while (otherDailyIter.hasNext()) {
+													pairedDailyMullList.add(new Pair<>(otherDailyIter.next(), null));
+												}
+											}
+										}
+										
+										Map<BaseLegalEntity, List<Pair<Integer, Integer>>> barSeries = new HashMap<>();
+										for (BaseLegalEntity entity : entitiesOrdered) {
+											barSeries.put(entity, new LinkedList<>());
+										}
+										Map<BaseLegalEntity, List<Pair<Integer, Integer>>> cargoCountBarSeries = new HashMap<>();
+										for (BaseLegalEntity entity : entitiesOrdered) {
+											cargoCountBarSeries.put(entity, new LinkedList<>());
+										}
+										int i = 0;
+										int spacing = 15;
+										Iterator<Pair<MullInformation, MullInformation>> iterMullList = pairedMullList.iterator();
+										while (iterMullList.hasNext()) {
+											for (final BaseLegalEntity entity : entitiesOrdered) {
+												final MullInformation currMull = iterMullList.next().getFirst();
+												barSeries.get(entity).add(new Pair<>(i, currMull.overliftCF));
+												i += 2;
+											}
+											i += spacing;
+										}
+										
+										i = 0;
+										spacing = 15;
+										iterMullList = pairedMullList.iterator();
+										while (iterMullList.hasNext()) {
+											for (final BaseLegalEntity entity : entitiesOrdered) {
+												final MullInformation currMull = iterMullList.next().getFirst();
+												cargoCountBarSeries.get(entity).add(new Pair<>(i, currMull.cargoCount));
+												i += 2;
+											}
+											i += spacing;
+										}
+										
+										List<Integer> colours = new LinkedList<>();
+										colours.add(SWT.COLOR_BLUE);
+										colours.add(SWT.COLOR_GREEN);
+										colours.add(SWT.COLOR_RED);
+										colours.add(SWT.COLOR_CYAN);
+										colours.add(SWT.COLOR_GRAY);
+										colours.add(SWT.COLOR_MAGENTA);
+										
+										Iterator<Integer> colIter = colours.iterator();
+										{
+											for (BaseLegalEntity entity : entitiesOrdered) {
+												final Integer currCol = colIter.next();
+												final IBarSeries series = createMULLBarSeries(seriesSet2, entity.getName(), barSeries.get(entity));
+												series.setBarWidth(20);
+												series.setBarColor(Display.getDefault().getSystemColor(currCol));
+												
+											}
+										}
+										Iterator<Integer> colIter2 = colours.iterator();
+										{
+											for (BaseLegalEntity entity : entitiesOrdered) {
+												final Integer currCol = colIter2.next();
+												final IBarSeries series = createCargoCountBarSeries(seriesSet3, entity.getName(), cargoCountBarSeries.get(entity));
+												series.setBarWidth(20);
+												series.setBarColor(Display.getDefault().getSystemColor(currCol));
+											}
+										}
 									}
-									grey = !grey;
 								}
-							}
-							
-							if (pinnedMullList.isEmpty() && !otherMullList.isEmpty()) {
-								final Iterator<MullInformation> otherIter = otherMullList.iterator();
-								while (otherIter.hasNext()) {
-									pairedMullList.add(new Pair<>(otherIter.next(), null));
-								}
-							} else if (!pinnedMullList.isEmpty() && otherMullList.isEmpty()) {
-								final Iterator<MullInformation> pinnedIter = pinnedMullList.iterator();
-								while (pinnedIter.hasNext()) {
-									pairedMullList.add(new Pair<>(pinnedIter.next(), null));
-								}
-							} else if (!pinnedMullList.isEmpty() && !otherMullList.isEmpty()) {
-								final Iterator<MullInformation> pinnedIter = pinnedMullList.iterator();
-								final Iterator<MullInformation> otherIter = otherMullList.iterator();
-								while (pinnedIter.hasNext() && otherIter.hasNext()) {
-									final MullInformation currPin = pinnedIter.next();
-									final MullInformation currOth = otherIter.next();
-									pairedMullList.add(new Pair<>(currPin, currOth));
-								}
-								assert !pinnedIter.hasNext() && !otherIter.hasNext();
-							}
-							
-							if (pinnedMullDailyList.isEmpty() && !otherMullDailyList.isEmpty()) {
-								final Iterator<MullDailyInformation> otherIter = otherMullDailyList.iterator();
-								while (otherIter.hasNext()) {
-									pairedDailyMullList.add(new Pair<>(otherIter.next(), null));
-								}
-							} else if (!pinnedMullDailyList.isEmpty() && otherMullDailyList.isEmpty()) {
-								final Iterator<MullDailyInformation> pinnedIter = pinnedMullDailyList.iterator();
-								while (pinnedIter.hasNext()) {
-									pairedDailyMullList.add(new Pair<>(pinnedIter.next(), null));
-								}
-							} else if (!pinnedMullDailyList.isEmpty() && !otherMullDailyList.isEmpty()) {
-								final Iterator<MullDailyInformation> pinnedIter = pinnedMullDailyList.iterator();
-								final Iterator<MullDailyInformation> otherIter = otherMullDailyList.iterator();
-								while (pinnedIter.hasNext() && otherIter.hasNext()) {
-									final MullDailyInformation currPin = pinnedIter.next();
-									final MullDailyInformation currOth = otherIter.next();
-									pairedDailyMullList.add(new Pair<>(currPin, currOth));
-								}
-								assert !pinnedIter.hasNext() && !otherIter.hasNext();
-							}
-							
-						} else if (otherResult != null) {
-							final ScheduleModel otherScheduleModel = otherResult.getTypedResult(ScheduleModel.class);
-							final Schedule otherSchedule = otherScheduleModel.getSchedule();
-							if (otherSchedule != null) {
-								final List<CargoAllocation> otherCargoAllocations = otherSchedule.getCargoAllocations();
-								final List<MullInformation> otherMullList = new LinkedList<>();
-								final List<MullDailyInformation> otherMullDailyList = new LinkedList<>();
-								
-								fillMullInformationList(adpStart, adpEnd, entitiesOrdered, sProfile, monthlyProduction, expectedLoadPort, otherCargoAllocations, otherMullList, lngScenarioToDisplay);
-								final Map<BaseLegalEntity, Integer> initialAllocation = calculateInitialAllocation(sProfile);
-								final List<CargoAllocation> sortedOtherCargoAllocations = otherCargoAllocations.stream() //
-										.filter(c->c.getSlotAllocations().get(0).getPort().equals(expectedLoadPort)) //
-										.sorted((c1, c2) -> c1.getSlotAllocations().get(0).getSlotVisit().getStart().toLocalDate().compareTo(c2.getSlotAllocations().get(0).getSlotVisit().getStart().toLocalDate())) //
-										.collect(Collectors.toList());
-								
-								final Map<BaseLegalEntity, BaseLegalEntity> entityEntityMap = buildEntityEntityMap(lngScenarioToDisplay, entitiesOrdered);
-								final Map<BaseLegalEntity, BaseLegalEntity> reverseEntityEntityMap = new HashMap<>();
-								for (final Entry<BaseLegalEntity, BaseLegalEntity> entry : entityEntityMap.entrySet()) {
-									reverseEntityEntityMap.put(entry.getValue(), entry.getKey());
-								}
-								final Map<LocalDate, Map<BaseLegalEntity, Integer>> otherAllocatedEntitlement = calculateDailyAllocatedEntitlement(insAndOuts, relativeEntitlements, entityEntityMap, reverseEntityEntityMap);
-								final Map<LocalDate, Map<BaseLegalEntity, Integer>> otherActualEntitlement = calculateDailyActualEntitlement(entitiesOrdered, sortedOtherCargoAllocations, insAndOuts, otherAllocatedEntitlement, initialAllocation);
-								boolean grey = false;
-								for (final Entry<LocalDate, InventoryDailyEvent> e : insAndOuts.entrySet()) {
-									for (BaseLegalEntity entity : entitiesOrdered) {
-										final MullDailyInformation currRow = new MullDailyInformation();
-										currRow.date = e.getKey();
-										currRow.entity = entity;
-										currRow.allocatedEntitlement = otherAllocatedEntitlement.get(currRow.getDate()).get(entity);
-										currRow.actualEntitlement = otherActualEntitlement.get(currRow.getDate()).get(entity);
-										currRow.grey = grey;
-										otherMullDailyList.add(currRow);
-									}
-									grey = !grey;
-								}
-								final Iterator<MullInformation> otherIter = otherMullList.iterator();
-								while (otherIter.hasNext()) {
-									pairedMullList.add(new Pair<>(otherIter.next(), null));
-								}
-								final Iterator<MullDailyInformation> otherDailyIter = otherMullDailyList.iterator();
-								while (otherDailyIter.hasNext()) {
-									pairedDailyMullList.add(new Pair<>(otherDailyIter.next(), null));
-								}
-							}
-						}
-						
-						Map<BaseLegalEntity, List<Pair<Integer, Integer>>> barSeries = new HashMap<>();
-						for (BaseLegalEntity entity : entitiesOrdered) {
-							barSeries.put(entity, new LinkedList<>());
-						}
-						Map<BaseLegalEntity, List<Pair<Integer, Integer>>> cargoCountBarSeries = new HashMap<>();
-						for (BaseLegalEntity entity : entitiesOrdered) {
-							cargoCountBarSeries.put(entity, new LinkedList<>());
-						}
-						int i = 0;
-						int spacing = 15;
-						Iterator<Pair<MullInformation, MullInformation>> iterMullList = pairedMullList.iterator();
-						while (iterMullList.hasNext()) {
-							for (final BaseLegalEntity entity : entitiesOrdered) {
-								final MullInformation currMull = iterMullList.next().getFirst();
-								barSeries.get(entity).add(new Pair<>(i, currMull.overliftCF));
-								i += 2;
-							}
-							i += spacing;
-						}
-						
-						i = 0;
-						spacing = 15;
-						iterMullList = pairedMullList.iterator();
-						while (iterMullList.hasNext()) {
-							for (final BaseLegalEntity entity : entitiesOrdered) {
-								final MullInformation currMull = iterMullList.next().getFirst();
-								cargoCountBarSeries.get(entity).add(new Pair<>(i, currMull.cargoCount));
-								i += 2;
-							}
-							i += spacing;
-						}
-						
-						List<Integer> colours = new LinkedList<>();
-						colours.add(SWT.COLOR_BLUE);
-						colours.add(SWT.COLOR_GREEN);
-						colours.add(SWT.COLOR_RED);
-						colours.add(SWT.COLOR_CYAN);
-						colours.add(SWT.COLOR_GRAY);
-						colours.add(SWT.COLOR_MAGENTA);
-						
-						Iterator<Integer> colIter = colours.iterator();
-						{
-							for (BaseLegalEntity entity : entitiesOrdered) {
-								final Integer currCol = colIter.next();
-								final IBarSeries series = createMULLBarSeries(seriesSet2, entity.getName(), barSeries.get(entity));
-								series.setBarWidth(20);
-								series.setBarColor(Display.getDefault().getSystemColor(currCol));
-								
-							}
-						}
-						Iterator<Integer> colIter2 = colours.iterator();
-						{
-							for (BaseLegalEntity entity : entitiesOrdered) {
-								final Integer currCol = colIter2.next();
-								final IBarSeries series = createCargoCountBarSeries(seriesSet3, entity.getName(), cargoCountBarSeries.get(entity));
-								series.setBarWidth(20);
-								series.setBarColor(Display.getDefault().getSystemColor(currCol));
 							}
 						}
 					}
@@ -1423,6 +1433,20 @@ public class InventoryReport extends ViewPart {
 		}
 	}
 	
+	private boolean isValidMullSubProfile(final MullSubprofile subProfile) {
+		return subProfile.getEntityTable().stream().allMatch(
+				row -> {
+					if (row.getEntity() == null)
+						return false;
+					if (row.getInitialAllocation() == null || !row.getInitialAllocation().matches("-?\\d+"))
+						return false;
+					if (row.getRelativeEntitlement() <= 0.0)
+						return false;
+					return true;
+				}
+		);
+	}
+	
 	private Map<YearMonth, Integer> calculateMonthlyProduction(final Inventory inventory, final YearMonth adpStart) {
 		final Map<YearMonth, Integer> monthlyProduction = new HashMap<>();
 		inventory.getFeeds().stream().forEach(row -> {
@@ -1457,7 +1481,11 @@ public class InventoryReport extends ViewPart {
 	private Map<YearMonth, Map<BaseLegalEntity, Integer>> calculateMonthlyRE(final YearMonth adpStart, final YearMonth adpEnd, final MullSubprofile sProfile, final Map<YearMonth, Integer> monthlyProduction) {
 		final Map<YearMonth, Map<BaseLegalEntity, Integer>> monthlyRE = new HashMap<>();
 		for (YearMonth ym = adpStart; ym.isBefore(adpEnd); ym = ym.plusMonths(1)) {
-			final Integer thisTotalProd = monthlyProduction.get(ym);
+			Integer totalProdTemp = monthlyProduction.get(ym);
+			if (totalProdTemp == null) {
+				totalProdTemp = 0;
+			}
+			final int thisTotalProd = totalProdTemp;
 			final Map<BaseLegalEntity, Integer> currMap = new HashMap<>();
 			monthlyRE.put(ym, currMap);
 			final YearMonth ymm = ym;
