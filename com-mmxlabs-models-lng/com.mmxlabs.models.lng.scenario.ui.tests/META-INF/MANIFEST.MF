@@ -4,7 +4,7 @@ Bundle-Name: Scenario UI Tests
 Fragment-Host: com.mmxlabs.models.lng.scenario.ui
 Bundle-SymbolicName: com.mmxlabs.models.lng.scenario.ui.tests
 Automatic-Module-Name: com.mmxlabs.models.lng.scenario.ui.tests
-Bundle-Version: 4.10.40.qualifier
+Bundle-Version: 4.12.1.RELEASE
 Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  org.mockito.mockito-core;bundle-version="2.24.0",
