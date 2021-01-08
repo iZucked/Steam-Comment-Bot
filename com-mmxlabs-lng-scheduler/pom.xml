@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mmxlabs.scheduler</groupId>
 	<artifactId>com.mmxlabs.scheduler.parent</artifactId>
-	<version>4.12.2-SNAPSHOT</version>
+	<version>4.12.3-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Scheduler - Parent</name>
@@ -13,7 +13,7 @@
 	<parent>
 		<groupId>com.mmxlabs.lingo.master</groupId>
 		<artifactId>com.mmxlabs.lingo.master.parent</artifactId>
-		<version>4.12.2-SNAPSHOT</version>
+		<version>4.12.3-SNAPSHOT</version>
 	</parent>
 
 	<modules>
