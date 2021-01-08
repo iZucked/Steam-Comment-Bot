@@ -96,6 +96,7 @@ public class ScheduleSpecificationTransformer {
 				final CharterInMarket e_charterInMarket = (CharterInMarket) vesselAllocation;
 				final int spotIndex = vesselSpecificiation.getSpotIndex();
 				final ISpotCharterInMarket o_market = mem.getOptimiserObjectNullChecked(e_charterInMarket, ISpotCharterInMarket.class);
+				final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
 				for (final IResource o_resource : optimisationData.getResources()) {
 					final IVesselAvailability o_vesselAvailability = vesselProvider.getVesselAvailability(o_resource);
 					final ISpotCharterInMarket spotCharterInMarket = o_vesselAvailability.getSpotCharterInMarket();
@@ -152,6 +153,14 @@ public class ScheduleSpecificationTransformer {
 
 			orderedResources.add(resource);
 			sequences.put(resource, new ListModifiableSequence(elements));
+
+			for (final ISequenceElement e : elements) {
+				if (!usedElements.add(e)) {
+					final int ii = 0;
+				}
+
+			}
+
 		}
 
 		for (final NonShippedCargoSpecification nonShippedCargoSpecification : scheduleSpecification.getNonShippedCargoSpecifications()) {
@@ -168,6 +177,13 @@ public class ScheduleSpecificationTransformer {
 				if (o_vesselAvailability != null) {
 					resource = vesselProvider.getResource(o_vesselAvailability);
 				}
+			}
+
+			for (final ISequenceElement e : elements) {
+				if (!usedElements.add(e)) {
+					final int ii = 0;
+				}
+
 			}
 
 			assert resource != null;
