@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: com.mmxlabs.lingo.reports;singleton:=true
 Automatic-Module-Name: com.mmxlabs.lingo.reports
-Bundle-Version: 4.12.3.qualifier
+Bundle-Version: 4.12.3.RELEASE
 Bundle-ClassPath: .
 Bundle-Activator: com.mmxlabs.lingo.reports.internal.Activator$Implementation
 Bundle-Vendor: %providerName
