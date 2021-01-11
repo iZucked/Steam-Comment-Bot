@@ -601,7 +601,7 @@ public class FeasibleTimeWindowTrimmer {
 
 								final int toCanal = visitDuration[index - 1] + panamaBookingsHelper.getTravelTimeToCanal(vessel, prevPortSlot.getPort(), true);
 								final int fromEntryPoint = panamaBookingsHelper.getTravelTimeFromCanalEntry(vessel, routeOptionEntry, portSlot.getPort());
-
+									
 								final boolean northbound = distanceProvider.getRouteOptionDirection(prevPortSlot.getPort(), ERouteOption.PANAMA) == IDistanceProvider.RouteOptionDirection.NORTHBOUND;
 
 								int endTime = windowEndTime[index];
@@ -854,6 +854,7 @@ public class FeasibleTimeWindowTrimmer {
 									final int toCanal = visitDuration[index] + panamaBookingsHelper.getTravelTimeToCanal(vessel, prevPortSlot.getPort(), true);
 
 									final int fromEntryPoint = panamaBookingsHelper.getTravelTimeFromCanalEntry(vessel, panamaEntry, thisPortSlot.getPort());
+									
 									final int endTime = windowEndTime[index + 1];
 
 									if (endTime != Integer.MAX_VALUE && fromEntryPoint != Integer.MAX_VALUE) {

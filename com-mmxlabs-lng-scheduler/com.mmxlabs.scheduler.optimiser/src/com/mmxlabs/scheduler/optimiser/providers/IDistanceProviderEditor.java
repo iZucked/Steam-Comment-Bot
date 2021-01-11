@@ -12,4 +12,6 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 public interface IDistanceProviderEditor extends IDistanceProvider {
 
 	void setEntryPointsForRouteOption(ERouteOption route, IPort northEntrance, IPort southEntrance);
+
+	void setCanalDistance(ERouteOption route, int distance);
 }
