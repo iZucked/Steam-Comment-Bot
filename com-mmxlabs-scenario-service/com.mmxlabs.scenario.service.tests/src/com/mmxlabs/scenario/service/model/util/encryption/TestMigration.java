@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.junit.experimental.categories.Category;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -54,7 +55,7 @@ public class TestMigration {
 		MoreFiles.deleteRecursively(workspace.toPath(), RecursiveDeleteOption.ALLOW_INSECURE);
 	}
 
-	@RepeatedTest(10)
+	@RepeatedTest(3)
 	public void test() throws Exception {
 
 		List<GDEntry> dataFiles = new LinkedList<>();
