@@ -132,6 +132,15 @@ public class CargoMaker {
 		return slotMaker.withMarketDESSale(name, market, windowStart, port);
 	}
 
+	public CargoMakerSlotMaker makeMarketDESSale(@NonNull final String name, @NonNull final DESSalesMarket market, @NonNull final YearMonth windowStart) {
+		final CargoMakerSlotMaker slotMaker = new CargoMakerSlotMaker(cargoModelBuilder);
+		final Port port = market.getNotionalPort();
+		if (port == null) {
+			throw new IllegalArgumentException();
+		}
+		return slotMaker.withMarketDESSale(name, market, windowStart, port);
+	}
+
 	public CargoMakerSlotMaker makeMarketFOBSale(@NonNull final String name, @NonNull final FOBSalesMarket market, @NonNull final YearMonth windowStart, @NonNull final Port port) {
 		final CargoMakerSlotMaker slotMaker = new CargoMakerSlotMaker(cargoModelBuilder);
 		return slotMaker.withMarketFOBSale(name, market, windowStart, port);

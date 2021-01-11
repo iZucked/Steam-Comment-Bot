@@ -154,13 +154,12 @@ public class ScheduleSpecificationTransformer {
 			orderedResources.add(resource);
 			sequences.put(resource, new ListModifiableSequence(elements));
 
+			// Important code
 			for (final ISequenceElement e : elements) {
 				if (!usedElements.add(e)) {
 					final int ii = 0;
 				}
-
 			}
-
 		}
 
 		for (final NonShippedCargoSpecification nonShippedCargoSpecification : scheduleSpecification.getNonShippedCargoSpecifications()) {
@@ -179,11 +178,11 @@ public class ScheduleSpecificationTransformer {
 				}
 			}
 
+			// Important code
 			for (final ISequenceElement e : elements) {
 				if (!usedElements.add(e)) {
 					final int ii = 0;
 				}
-
 			}
 
 			assert resource != null;

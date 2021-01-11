@@ -30,6 +30,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.util.CargoEditorFilterUtils.CargoFilterOption;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
@@ -41,9 +42,11 @@ import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.transformer.its.RequireFeature;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
+import com.mmxlabs.models.lng.transformer.util.ScheduleSpecificationTransformer;
 import com.mmxlabs.models.lng.types.DESPurchaseDealType;
 import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
@@ -238,8 +241,7 @@ public class SandboxTests extends AbstractSandboxTestCase {
 	}
 
 	/**
-	 * Test case to check whether we can schedule a cargo OR a vessel event (but not
-	 * both).
+	 * Test case to check whether we can schedule a cargo OR a vessel event (but not both).
 	 */
 	@Test
 	public void testEventOrCargoCase() {
@@ -321,8 +323,7 @@ public class SandboxTests extends AbstractSandboxTestCase {
 	}
 
 	/**
-	 * Regression test: Sandbox optioniser fails as sandbox DES purchase is
-	 * transformed twice.
+	 * Regression test: Sandbox optioniser fails as sandbox DES purchase is transformed twice.
 	 */
 	@Test
 	public void testDESPurchaseOptioniserInPeriod() {
@@ -580,31 +581,30 @@ public class SandboxTests extends AbstractSandboxTestCase {
 
 		Assertions.assertTrue(ds1Solution && ds2Solution);
 	}
-	
+
 	/**
 	 * Simple Spot buy to spot sell.
 	 */
 	@Test
 	public void testSpotToSpot() {
 		final SandboxModelBuilder sandboxBuilder = SandboxModelBuilder.createSandbox(ScenarioModelUtil.getAnalyticsModel(scenarioDataProvider));
-		
 
 		sandboxBuilder.setPortfolioMode(false);
 		sandboxBuilder.setPortfolioBreakevenMode(false);
 		sandboxBuilder.setManualSandboxMode();
-		
+
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
-		
+
 		final ShippingOption shipping = sandboxBuilder.createRoundtripOption(vessel, importDefaultEntity(), "30000");
 
 		final Port pFuttsu = portFinder.findPortById(InternalDataConstants.PORT_FUTTSU);
 		final Port pDarwin = portFinder.findPortById(InternalDataConstants.PORT_DARWIN);
-		
+
 		final SpotMarket fobPurchaseAustralia = spotMarketsModelBuilder.makeFOBPurchaseMarket("FOB Purchase Australia", //
 				pDarwin, importDefaultEntity(), "5", 23.3).build();
 		final SpotMarket desSaleJapan = spotMarketsModelBuilder.makeDESSaleMarket("DES Sale Japan", //
 				pFuttsu, importDefaultEntity(), "10").build();
-		
+
 		final BuyMarket buyMarket1 = sandboxBuilder.createBuyMarketOption(fobPurchaseAustralia);
 		final SellMarket sellMarket1 = sandboxBuilder.createSellMarketOption(desSaleJapan);
 
@@ -626,4 +626,103 @@ public class SandboxTests extends AbstractSandboxTestCase {
 		Assertions.assertEquals(0, result.getExtraVesselAvailabilities().size());
 		Assertions.assertEquals(0, result.getExtraVesselEvents().size());
 	}
+
+	/**
+	 * Based on fogbugz 5137 where a bug was introduced in the {@link ScheduleSpecificationTransformer} and the sandbox failed to evaluate.
+	 */
+	@Test
+	public void testPortfolioWithUnusedOptions() {
+
+		// Create the portfolio case first, then create the sandbox after
+		final Vessel referenceVessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
+		final Vessel vessel1 = fleetModelBuilder.createVessel("Vessel1", referenceVessel);
+		final Vessel vessel2 = fleetModelBuilder.createVessel("Vessel2", referenceVessel);
+
+		VesselAvailability charter1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity).build();
+		VesselAvailability charter2 = cargoModelBuilder.makeVesselAvailability(vessel2, entity).build();
+
+		DESSalesMarket desJKTC = spotMarketsModelBuilder.makeDESSaleMarket("JKTC", portFinder.findPortById(InternalDataConstants.PORT_INCHEON), entity, "7").build();
+		DESSalesMarket desUK = spotMarketsModelBuilder.makeDESSaleMarket("UK", portFinder.findPortById(InternalDataConstants.PORT_ISLE_OF_GRAIN), entity, "7").build();
+
+		cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2021, 5, 4), portFinder.findPortById(InternalDataConstants.PORT_CAMERON), null, entity, "5") //
+				.build() //
+				//
+				.makeMarketDESSale("D1", desJKTC, YearMonth.of(2021, 6)) //
+				.build() //
+				//
+				.withVesselAssignment(charter1, 1) //
+				.build();
+
+		cargoModelBuilder.makeFOBPurchase("L2", LocalDate.of(2021, 5, 9), portFinder.findPortById(InternalDataConstants.PORT_CAMERON), null, entity, "5", null) //
+				.build();
+
+		cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L3", LocalDate.of(2021, 7, 1), portFinder.findPortById(InternalDataConstants.PORT_CAMERON), null, entity, "5") //
+				.build() //
+				//
+				.makeMarketDESSale("D3", desJKTC, YearMonth.of(2021, 7)) //
+				.build() //
+				//
+				.withVesselAssignment(charter1, 2) //
+				.build();
+
+		cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L4", LocalDate.of(2021, 8, 8), portFinder.findPortById(InternalDataConstants.PORT_CAMERON), null, entity, "5") //
+				.build() //
+				//
+				.makeMarketDESSale("D4", desJKTC, YearMonth.of(2021, 8)) //
+				.build() //
+				//
+				.withVesselAssignment(charter1, 2) //
+				.build();
+
+		final SandboxModelBuilder sandboxBuilder = SandboxModelBuilder.createSandbox(ScenarioModelUtil.getAnalyticsModel(scenarioDataProvider));
+
+		sandboxBuilder.setPortfolioMode(true);
+		sandboxBuilder.setPortfolioBreakevenMode(false);
+		sandboxBuilder.setManualSandboxMode();
+
+		// Create options
+
+		// Buy options
+		final BuyOption option2 = sandboxBuilder.createBuyReference(cargoModelFinder.findLoadSlot("L2"));
+		final BuyOption option3 = sandboxBuilder.createBuyReference(cargoModelFinder.findLoadSlot("L3"));
+		final BuyOption option4 = sandboxBuilder.createBuyReference(cargoModelFinder.findLoadSlot("L4"));
+
+		// Sell Options
+		final SellMarket sellMarket1 = sandboxBuilder.createSellMarketOption(desUK);
+		final SellMarket sellMarket2 = sandboxBuilder.createSellMarketOption(desUK);
+		final SellMarket sellMarket3 = sandboxBuilder.createSellMarketOption(desJKTC);
+
+		// Shipping options
+		final ShippingOption shipping1 = sandboxBuilder.createExistingCharter(charter1);
+		final ShippingOption shipping2 = sandboxBuilder.createExistingCharter(charter2);
+
+		// Create starting point
+		sandboxBuilder.createBaseCaseRow(option2, sellMarket1, shipping1);
+		sandboxBuilder.createBaseCaseRow(option4, sellMarket2, shipping1);
+
+		// Create options
+		sandboxBuilder.createPartialCaseRow(option2, sellMarket1, shipping1);
+		sandboxBuilder.createPartialCaseRow(option4, sellMarket2, shipping2);
+		sandboxBuilder.createPartialCaseRow(option3, sellMarket3, shipping1);
+
+		evaluateSandbox(sandboxBuilder.getOptionAnalysisModel());
+
+		final AbstractSolutionSet result = sandboxBuilder.getOptionAnalysisModel().getResults();
+		Assertions.assertNotNull(result);
+
+		// Check expected results size
+		Assertions.assertNotNull(result.getBaseOption());
+		Assertions.assertEquals(0, result.getOptions().size());
+
+		// Check expected extra data items
+		Assertions.assertEquals(0, result.getExtraSlots().size());
+		Assertions.assertEquals(0, result.getExtraCharterInMarkets().size());
+		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
+		Assertions.assertEquals(0, result.getExtraVesselAvailabilities().size());
+		Assertions.assertEquals(0, result.getExtraVesselEvents().size());
+	}
+
 }
