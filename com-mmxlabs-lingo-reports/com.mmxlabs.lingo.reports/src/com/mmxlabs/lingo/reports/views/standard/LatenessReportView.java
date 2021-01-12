@@ -19,11 +19,13 @@ import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.ScheduledEventCollector;
 import com.mmxlabs.lingo.reports.components.EMFReportView;
 import com.mmxlabs.lingo.reports.views.formatters.Formatters;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
@@ -57,7 +59,14 @@ public class LatenessReportView extends EMFReportView {
 			public String render(final Object object) {
 
 				if (object instanceof Event) {
-					return ScheduleModelUtils.getVessel(((Event) object).getSequence()).getName();
+					final Event event = (Event) object;
+					final Sequence sequence = event.getSequence();
+					if (sequence != null) {
+						final Vessel vessel = ScheduleModelUtils.getVessel(sequence);
+						if (vessel != null) {
+							return vessel.getName();
+						}
+					}
 				}
 				return "";
 			}
@@ -66,7 +75,14 @@ public class LatenessReportView extends EMFReportView {
 			public Comparable<?> getComparable(final Object object) {
 
 				if (object instanceof Event) {
-					return ScheduleModelUtils.getVessel(((Event) object).getSequence()).getName();
+					final Event event = (Event) object;
+					final Sequence sequence = event.getSequence();
+					if (sequence != null) {
+						final Vessel vessel = ScheduleModelUtils.getVessel(sequence);
+						if (vessel != null) {
+							return vessel.getName();
+						}
+					}
 				}
 
 				return super.getComparable(object);
@@ -196,7 +212,7 @@ public class LatenessReportView extends EMFReportView {
 			}
 
 			@Override
-			protected Collection<? extends Object> collectElements(final ScenarioResult scenarioInstance, LNGScenarioModel scenarioModel, final Schedule schedule, final boolean pinned) {
+			protected Collection<? extends Object> collectElements(final ScenarioResult scenarioInstance, final LNGScenarioModel scenarioModel, final Schedule schedule, final boolean pinned) {
 
 				final Collection<? extends Object> collectedElements = super.collectElements(scenarioInstance, scenarioModel, schedule, pinned);
 				final List<EObject> elements = new ArrayList<>(collectedElements.size());
