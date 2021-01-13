@@ -1268,7 +1268,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		event.setRepositioning(repositioning);
 		event.setBallastBonus(ballastBonus);
 
-		if (event.getStartPort() != event.getEndPort()) {
+		if (true || event.getStartPort() != event.getEndPort()) {
 			final List<@NonNull ISequenceElement> eventSequenceElements = new LinkedList<>();
 			final List<@NonNull IPortSlot> eventPortSlots = new LinkedList<>();
 

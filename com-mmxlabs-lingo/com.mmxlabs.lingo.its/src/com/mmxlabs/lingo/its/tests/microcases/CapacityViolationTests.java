@@ -865,7 +865,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 		cargoModelBuilder.makeCharterOutEvent("DD", LocalDateTime.of(2017, 3, 7, 0, 0, 0), LocalDateTime.of(2017, 3, 7, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 				.withDurationInDays(10) //
 				.withRequiredHeelOptions(500, 500, EVesselTankState.MUST_BE_COLD, "6") //
-				.withAvailableHeelOptions(1000, 7000, 22.8, "7.5") //
+				.withAvailableHeelOptions(1000, 7000, 22.4, "7.5") //
 				.withVesselAssignment(vesselAvailability1, 1) //
 				.build();
 
@@ -915,29 +915,47 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 					Assertions.assertEquals(-500 * 22.8 * 5 * 1000, vpr.getProfitAndLoss(), 0.0001);
 
 				}
+				//Charter out part
 				{
 					final VoyagePlanRecord vpr = seq.getVoyagePlanRecords().get(1);
+					{
+						final IPortSlot charterOutPortSlot = vpr.getPortTimesRecord().getFirstSlot();
+						final List<@NonNull CapacityViolationType> charterOutViolations = vpr.getCapacityViolations(charterOutPortSlot);
+						Assertions.assertTrue(charterOutViolations.isEmpty());
+					}
+					// "Magic" charter out start port to charter out end port voyage
+					{
+						final IPortSlot charterOutPortSlot = vpr.getPortTimesRecord().getFirstSlot();
 
-					final IPortSlot charterOutPortSlot = vpr.getPortTimesRecord().getFirstSlot();
-					final List<@NonNull CapacityViolationType> charterOutViolations = vpr.getCapacityViolations(charterOutPortSlot);
-					Assertions.assertTrue(charterOutViolations.isEmpty());
+						final HeelRecord heelRecord = vpr.getHeelVolumeRecords().get(charterOutPortSlot).portHeelRecord;
+						Assertions.assertNotNull(heelRecord);
+						Assertions.assertEquals(500_000, heelRecord.getHeelAtStartInM3());
+						Assertions.assertEquals(500_000, heelRecord.getHeelAtEndInM3());
 
-					final HeelRecord heelRecord = vpr.getHeelVolumeRecords().get(charterOutPortSlot).portHeelRecord;
-					Assertions.assertNotNull(heelRecord);
-					Assertions.assertEquals(500_000, heelRecord.getHeelAtStartInM3());
-					// Includes boil-off
-					Assertions.assertEquals(6_100_000, heelRecord.getHeelAtEndInM3());
+						final HeelValueRecord heelValueRecord = vpr.getHeelValueRecord(charterOutPortSlot);
+						Assertions.assertNotNull(heelValueRecord);
+						Assertions.assertEquals(500 * 22.8 * 6.0 * 1000.0, heelValueRecord.getHeelRevenue(), 0.0001);
+						Assertions.assertEquals(0, heelValueRecord.getHeelCost(), 0.0001);
+					}
+					// Charter out to end event voyage
+					{
+						final VoyagePlanRecord vpr1 = seq.getVoyagePlanRecords().get(2);
 
-					final HeelValueRecord heelValueRecord = vpr.getHeelValueRecord(charterOutPortSlot);
-					Assertions.assertNotNull(heelValueRecord);
-					Assertions.assertEquals(500 * 22.8 * 6 * 1000.0, heelValueRecord.getHeelRevenue(), 0.0001);
-					Assertions.assertEquals(6100.0 * 22.8 * 7.5 * 1000.0, heelValueRecord.getHeelCost(), 0.0001);
+						final IPortSlot charterOutPortSlot = vpr1.getPortTimesRecord().getFirstSlot();
 
-					// P&L is just heel cost and hire cost is zero
-					Assertions.assertEquals(-6100 * 22.8 * 7.5 * 1000 + 500 * 22.8 * 6 * 1000, vpr.getProfitAndLoss(), 0.0001);
+						final HeelRecord heelRecord = vpr1.getHeelVolumeRecords().get(charterOutPortSlot).portHeelRecord;
+						Assertions.assertNotNull(heelRecord);
+						Assertions.assertEquals(500_000, heelRecord.getHeelAtStartInM3());
+						Assertions.assertEquals(6_100_000, heelRecord.getHeelAtEndInM3());
+
+						final HeelValueRecord heelValueRecord = vpr1.getHeelValueRecord(charterOutPortSlot);
+						Assertions.assertNotNull(heelValueRecord);
+						Assertions.assertEquals(0, heelValueRecord.getHeelRevenue(), 0.0001);
+						Assertions.assertEquals(6_100 * 22.4 * 7.5 * 1000.0, heelValueRecord.getHeelCost(), 0.0001);
+					}
 				}
 				{
-					final VoyagePlanRecord vpr = seq.getVoyagePlanRecords().get(2);
+					final VoyagePlanRecord vpr = seq.getVoyagePlanRecords().get(3);
 
 					final IPortSlot endPortSlot = vpr.getPortTimesRecord().getFirstSlot();
 					final List<@NonNull CapacityViolationType> endPortViolations = vpr.getCapacityViolations(endPortSlot);
@@ -951,10 +969,10 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 					final HeelValueRecord heelValueRecord = vpr.getHeelValueRecord(endPortSlot);
 					Assertions.assertNotNull(heelValueRecord);
 					Assertions.assertEquals(0, heelValueRecord.getHeelCost());
-					Assertions.assertEquals(1000.0 * 22.8 * 10.0 * 1000.0, heelValueRecord.getHeelRevenue(), 0.0001);
+					Assertions.assertEquals(1000.0 * 22.4 * 10.0 * 1000.0, heelValueRecord.getHeelRevenue(), 0.0001);
 
 					// P&L is just heel cost and hire cost is zero
-					Assertions.assertEquals(1000 * 22.8 * 10 * 1000.0, vpr.getProfitAndLoss(), 0.0001);
+					Assertions.assertEquals(1000 * 22.4 * 10 * 1000.0, vpr.getProfitAndLoss(), 0.0001);
 				}
 
 			});
@@ -1386,7 +1404,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 		cargoModelBuilder.makeCharterOutEvent("DD", LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 				.withDurationInDays(10) //
 				.withRequiredHeelOptions(500, 500, EVesselTankState.MUST_BE_COLD, "6") //
-				.withAvailableHeelOptions(1000, 1000, 22.8, "7.5") //
+				.withAvailableHeelOptions(1000, 1000, 22.4, "7.5") //
 				.withVesselAssignment(vesselAvailability1, 1) //
 				.build();
 
@@ -1471,7 +1489,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 						final HeelValueRecord heelValueRecord = vpr1.getHeelValueRecord(charterOutPortSlot);
 						Assertions.assertNotNull(heelValueRecord);
 						Assertions.assertEquals(0, heelValueRecord.getHeelRevenue(), 0.0001);
-						Assertions.assertEquals(1_000 * 22.8 * 7.5 * 1000.0, heelValueRecord.getHeelCost(), 0.0001);
+						Assertions.assertEquals(1_000 * 22.4 * 7.5 * 1000.0, heelValueRecord.getHeelCost(), 0.0001);
 					}
 				}
 				// End event
@@ -1517,7 +1535,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 		cargoModelBuilder.makeCharterOutEvent("DD", LocalDateTime.of(2017, 3, 7, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 				.withRelocatePort(portFinder.findPortById(InternalDataConstants.PORT_ISLE_OF_GRAIN)).withDurationInDays(10) //
 				.withRequiredHeelOptions(500, 500, EVesselTankState.MUST_BE_COLD, "6") //
-				.withAvailableHeelOptions(1000, 7000, 22.8, "7.5") //
+				.withAvailableHeelOptions(1000, 7000, 22.4, "7.5") //
 				.withVesselAssignment(vesselAvailability1, 1) //
 				.build();
 
@@ -1613,7 +1631,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 
 						final HeelValueRecord heelValueRecord = vpr.getHeelValueRecord(charterOutPortSlot3);
 						Assertions.assertNotNull(heelValueRecord);
-						Assertions.assertEquals(7.5 * 22.8 * 6100 * 1000, heelValueRecord.getHeelCost(), 0.0001);
+						Assertions.assertEquals(7.5 * 22.4 * 6100 * 1000, heelValueRecord.getHeelCost(), 0.0001);
 						Assertions.assertEquals(0, heelValueRecord.getHeelRevenue());
 					}
 
@@ -1632,7 +1650,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 					final HeelValueRecord heelValueRecord = vpr.getHeelValueRecord(endPortSlot);
 					Assertions.assertNotNull(heelValueRecord);
 					Assertions.assertEquals(0, heelValueRecord.getHeelCost(), 0.0001);
-					Assertions.assertEquals(10 * 22.8 * 1000 * 1000, heelValueRecord.getHeelRevenue(), 0.0001);
+					Assertions.assertEquals(10 * 22.4 * 1000 * 1000, heelValueRecord.getHeelRevenue(), 0.0001);
 				}
 
 			});
