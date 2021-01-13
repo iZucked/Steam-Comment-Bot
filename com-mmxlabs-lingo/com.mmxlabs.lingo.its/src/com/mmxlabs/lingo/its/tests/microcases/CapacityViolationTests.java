@@ -98,7 +98,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 		@Override
 		public @Nullable List<@NonNull Module> requestModuleOverrides(@NonNull final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
 			if (moduleType == ModuleType.Module_LNGTransformerModule) {
-				return Collections.<@NonNull Module>singletonList(new AbstractModule() {
+				return Collections.<@NonNull Module> singletonList(new AbstractModule() {
 					@Override
 					protected void configure() {
 						if (minMaxVolumeAllocator)
@@ -1415,6 +1415,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 
 				final VolumeAllocatedSequence seq = volumeAllocatedSequences.getScheduledSequenceForResource(resource);
 
+				// Start event 
 				{
 					final VoyagePlanRecord vpr = seq.getVoyagePlanRecords().get(0);
 
@@ -1433,26 +1434,49 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 					Assertions.assertEquals(0, heelValueRecord.getHeelRevenue());
 
 				}
+				// Charter out (2 plans)
 				{
+					
 					final VoyagePlanRecord vpr = seq.getVoyagePlanRecords().get(1);
+					{
+						final IPortSlot charterOutPortSlot = vpr.getPortTimesRecord().getFirstSlot();
+						final List<@NonNull CapacityViolationType> charterOutViolations = vpr.getCapacityViolations(charterOutPortSlot);
+						Assertions.assertTrue(charterOutViolations.isEmpty());
+					}
+					// "Magic" charter out start port to charter out end port voyage
+					{
+						final IPortSlot charterOutPortSlot = vpr.getPortTimesRecord().getFirstSlot();
 
-					final IPortSlot charterOutPortSlot = vpr.getPortTimesRecord().getFirstSlot();
-					final List<@NonNull CapacityViolationType> charterOutViolations = vpr.getCapacityViolations(charterOutPortSlot);
-					Assertions.assertTrue(charterOutViolations.isEmpty());
+						final HeelRecord heelRecord = vpr.getHeelVolumeRecords().get(charterOutPortSlot).portHeelRecord;
+						Assertions.assertNotNull(heelRecord);
+						Assertions.assertEquals(500_000, heelRecord.getHeelAtStartInM3());
+						Assertions.assertEquals(500_000, heelRecord.getHeelAtEndInM3());
 
-					final HeelRecord heelRecord = vpr.getHeelVolumeRecords().get(charterOutPortSlot).portHeelRecord;
-					Assertions.assertNotNull(heelRecord);
-					Assertions.assertEquals(500_000, heelRecord.getHeelAtStartInM3());
-					Assertions.assertEquals(1_000_000, heelRecord.getHeelAtEndInM3());
+						final HeelValueRecord heelValueRecord = vpr.getHeelValueRecord(charterOutPortSlot);
+						Assertions.assertNotNull(heelValueRecord);
+						Assertions.assertEquals(500 * 22.8 * 6.0 * 1000.0, heelValueRecord.getHeelRevenue(), 0.0001);
+						Assertions.assertEquals(0, heelValueRecord.getHeelCost(), 0.0001);
+					}
+					// Charter out to end event voyage
+					{
+						final VoyagePlanRecord vpr1 = seq.getVoyagePlanRecords().get(2);
 
-					final HeelValueRecord heelValueRecord = vpr.getHeelValueRecord(charterOutPortSlot);
-					Assertions.assertNotNull(heelValueRecord);
-					Assertions.assertEquals(500 * 22.8 * 6.0 * 1000.0, heelValueRecord.getHeelRevenue(), 0.0001);
-					Assertions.assertEquals(1_000 * 22.8 * 7.5 * 1000.0, heelValueRecord.getHeelCost(), 0.0001);
+						final IPortSlot charterOutPortSlot = vpr1.getPortTimesRecord().getFirstSlot();
 
+						final HeelRecord heelRecord = vpr1.getHeelVolumeRecords().get(charterOutPortSlot).portHeelRecord;
+						Assertions.assertNotNull(heelRecord);
+						Assertions.assertEquals(500_000, heelRecord.getHeelAtStartInM3());
+						Assertions.assertEquals(1_000_000, heelRecord.getHeelAtEndInM3());
+
+						final HeelValueRecord heelValueRecord = vpr1.getHeelValueRecord(charterOutPortSlot);
+						Assertions.assertNotNull(heelValueRecord);
+						Assertions.assertEquals(0, heelValueRecord.getHeelRevenue(), 0.0001);
+						Assertions.assertEquals(1_000 * 22.8 * 7.5 * 1000.0, heelValueRecord.getHeelCost(), 0.0001);
+					}
 				}
+				// End event
 				{
-					final VoyagePlanRecord vpr = seq.getVoyagePlanRecords().get(2);
+					final VoyagePlanRecord vpr = seq.getVoyagePlanRecords().get(3);
 
 					final IPortSlot endPortSlot = vpr.getPortTimesRecord().getFirstSlot();
 					final List<@NonNull CapacityViolationType> endPortViolations = vpr.getCapacityViolations(endPortSlot);
@@ -1746,7 +1770,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 					Assertions.assertEquals(8_124_748, heelRecord.getHeelAtStartInM3());
 					// Includes boil-off
 					Assertions.assertEquals(8_124_748, heelRecord.getHeelAtEndInM3());
-					
+
 					final HeelValueRecord heelValueRecord = vpr.getHeelValueRecord(gcoSlot);
 					Assertions.assertNotNull(heelValueRecord);
 					Assertions.assertEquals(8_124.748 * 22.5 * 7.0, heelValueRecord.getHeelCost() / 1000L, 1.0);
@@ -1905,7 +1929,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 					Assertions.assertEquals(8_124_748, heelRecord.getHeelAtStartInM3());
 					// Includes boil-off
 					Assertions.assertEquals(8_124_748, heelRecord.getHeelAtEndInM3());
-					
+
 					final HeelValueRecord heelValueRecord = vpr.getHeelValueRecord(gcoSlot);
 					Assertions.assertNotNull(heelValueRecord);
 					Assertions.assertEquals(8_124.748 * 22.5 * 7.0, heelValueRecord.getHeelCost() / 1000L, 1.0);
@@ -2346,9 +2370,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 	}
 
 	/**
-	 * If we have a min/max load/discharge violation on a nominal cargo in the
-	 * prompt, we will often remove this from the initial solution. Make sure we can
-	 * place it back on the fleet. 8
+	 * If we have a min/max load/discharge violation on a nominal cargo in the prompt, we will often remove this from the initial solution. Make sure we can place it back on the fleet. 8
 	 * 
 	 * @throws Exception
 	 */
