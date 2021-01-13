@@ -72,17 +72,17 @@ public class MergeScenarioWizard extends Wizard implements IExportWizard {
 		
 		//Spot markets.
 		fobBuySpotMarketsMapperPage = new MergeScenarioWizardDataMapperPage("Map FOB buy spot markets to target", 
-				s -> ScenarioModelUtil.getSpotMarketsModel(s).getFobPurchasesSpotMarket().getMarkets(), s -> ScenarioModelUtil.getSpotMarketsModel(s), 
-				SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__FOB_PURCHASES_SPOT_MARKET);
+				s -> ScenarioModelUtil.getSpotMarketsModel(s).getFobPurchasesSpotMarket().getMarkets(), s -> ScenarioModelUtil.getSpotMarketsModel(s).getFobPurchasesSpotMarket(), 
+				SpotMarketsPackage.Literals.SPOT_MARKET_GROUP__MARKETS);
 		fobSellSpotMarketsMapperPage = new MergeScenarioWizardDataMapperPage("Map FOB sell spot markets to target", 
-				s -> ScenarioModelUtil.getSpotMarketsModel(s).getFobSalesSpotMarket().getMarkets(), s -> ScenarioModelUtil.getSpotMarketsModel(s), 
-				SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__FOB_SALES_SPOT_MARKET);
+				s -> ScenarioModelUtil.getSpotMarketsModel(s).getFobSalesSpotMarket().getMarkets(), s -> ScenarioModelUtil.getSpotMarketsModel(s).getFobSalesSpotMarket(), 
+				SpotMarketsPackage.Literals.SPOT_MARKET_GROUP__MARKETS);
 		desBuySpotMarketsMapperPage = new MergeScenarioWizardDataMapperPage("Map DES buy spot markets to target", 
-				s -> ScenarioModelUtil.getSpotMarketsModel(s).getDesPurchaseSpotMarket().getMarkets(), s -> ScenarioModelUtil.getSpotMarketsModel(s), 
-				SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__DES_PURCHASE_SPOT_MARKET);
+				s -> ScenarioModelUtil.getSpotMarketsModel(s).getDesPurchaseSpotMarket().getMarkets(), s -> ScenarioModelUtil.getSpotMarketsModel(s).getDesPurchaseSpotMarket(), 
+				SpotMarketsPackage.Literals.SPOT_MARKET_GROUP__MARKETS);
 		desSellSpotMarketsMapperPage = new MergeScenarioWizardDataMapperPage("Map DES sell spot markets to target", 
-				s -> ScenarioModelUtil.getSpotMarketsModel(s).getDesSalesSpotMarket().getMarkets(), s -> ScenarioModelUtil.getSpotMarketsModel(s), 
-				SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__DES_SALES_SPOT_MARKET);
+				s -> ScenarioModelUtil.getSpotMarketsModel(s).getDesSalesSpotMarket().getMarkets(), s -> ScenarioModelUtil.getSpotMarketsModel(s).getDesSalesSpotMarket(), 
+				SpotMarketsPackage.Literals.SPOT_MARKET_GROUP__MARKETS);
 		
 		//Charter markets.
 		charterInMarketMapperPage = new MergeScenarioWizardDataMapperPage("Map charter in markets to target",  
