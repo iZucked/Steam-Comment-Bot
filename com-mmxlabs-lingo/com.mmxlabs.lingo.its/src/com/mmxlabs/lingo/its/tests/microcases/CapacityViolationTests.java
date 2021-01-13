@@ -39,9 +39,12 @@ import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotAllocationType;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutMarket;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
@@ -52,6 +55,7 @@ import com.mmxlabs.models.lng.transformer.ui.SequenceHelper;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
@@ -870,6 +874,24 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 				.build();
 
 		optimiseWithLSOTest(scenarioRunner -> {
+			
+			// Check schedule
+			{
+				final Schedule schedule = scenarioRunner.getSchedule();
+				Assertions.assertNotNull(schedule);
+				Assertions.assertNotNull(schedule.getSequences());
+				Assertions.assertEquals(1, schedule.getSequences().size());
+				final Sequence seq = schedule.getSequences().get(0);
+				Assertions.assertEquals(5, seq.getEvents().size());
+				final Event e = seq.getEvents().get(2);
+				Assertions.assertTrue(e instanceof VesselEventVisit);
+				final VesselEventVisit vev = (VesselEventVisit) e;
+				Assertions.assertEquals(500, vev.getHeelAtStart());
+				Assertions.assertEquals(6_100, vev.getHeelAtEnd());
+				
+				Assertions.assertEquals(1_024_800, vev.getHeelCost());
+				Assertions.assertEquals(68_400, vev.getHeelRevenue());
+			}
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 			// Check spot index has been updated
@@ -1410,6 +1432,23 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 
 		optimiseWithLSOTest(scenarioRunner -> {
 
+			{
+				final Schedule schedule = scenarioRunner.getSchedule();
+				Assertions.assertNotNull(schedule);
+				Assertions.assertNotNull(schedule.getSequences());
+				Assertions.assertEquals(1, schedule.getSequences().size());
+				final Sequence seq = schedule.getSequences().get(0);
+				Assertions.assertEquals(6, seq.getEvents().size());
+				final Event e = seq.getEvents().get(2);
+				Assertions.assertTrue(e instanceof VesselEventVisit);
+				final VesselEventVisit vev = (VesselEventVisit) e;
+				Assertions.assertEquals(500, vev.getHeelAtStart());
+				Assertions.assertEquals(1_000, vev.getHeelAtEnd());
+				
+				Assertions.assertEquals(168_000, vev.getHeelCost());
+				Assertions.assertEquals(68_400, vev.getHeelRevenue());
+			}
+			
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 			// Check spot index has been updated
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
@@ -1542,6 +1581,23 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 		optimiseWithLSOTest(scenarioRunner -> {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+			// Check EMF side
+			{
+				final Schedule schedule = scenarioRunner.getSchedule();
+				Assertions.assertNotNull(schedule);
+				Assertions.assertNotNull(schedule.getSequences());
+				Assertions.assertEquals(1, schedule.getSequences().size());
+				final Sequence seq = schedule.getSequences().get(0);
+				Assertions.assertEquals(5, seq.getEvents().size());
+				final Event e = seq.getEvents().get(2);
+				Assertions.assertTrue(e instanceof VesselEventVisit);
+				final VesselEventVisit vev = (VesselEventVisit) e;
+				Assertions.assertEquals(500, vev.getHeelAtStart());
+				Assertions.assertEquals(6_100, vev.getHeelAtEnd());
+				
+				Assertions.assertEquals(1_024_800, vev.getHeelCost());
+				Assertions.assertEquals(68_400, vev.getHeelRevenue());
+			}
 			// Check spot index has been updated
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
