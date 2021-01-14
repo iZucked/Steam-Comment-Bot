@@ -97,20 +97,22 @@ public class HttpClientUtil {
 		try {
 
 			final Pair<KeyStore, char[]> keyStorePair = LicenseChecker.loadLocalKeystore();
-			final KeyStore keyStore = keyStorePair.getFirst();
+			if (keyStorePair != null) {
+				final KeyStore keyStore = keyStorePair.getFirst();
 
-			final SSLContext sslContext = SSLContext.getInstance("TLS");
+				final SSLContext sslContext = SSLContext.getInstance("TLS");
 
-			final TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-			trustManagerFactory.init(keyStore);
+				final TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+				trustManagerFactory.init(keyStore);
 
-			final KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-			keyManagerFactory.init(keyStore, keyStorePair.getSecond());
-			sslContext.init(keyManagerFactory.getKeyManagers(), trustManagerFactory.getTrustManagers(), new SecureRandom());
+				final KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+				keyManagerFactory.init(keyStore, keyStorePair.getSecond());
+				sslContext.init(keyManagerFactory.getKeyManagers(), trustManagerFactory.getTrustManagers(), new SecureRandom());
 
-			final TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
-			// All examples show first entry to be the X509 one...
-			builder.sslSocketFactory(sslContext.getSocketFactory(), (X509TrustManager) trustManagers[0]);
+				final TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
+				// All examples show first entry to be the X509 one...
+				builder.sslSocketFactory(sslContext.getSocketFactory(), (X509TrustManager) trustManagers[0]);
+			}
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
@@ -322,10 +324,8 @@ public class HttpClientUtil {
 	 * Method to extract the selected protocol and cipher for the request.
 	 * 
 	 * @param url
-	 * @param selectedTlsVersion
-	 *            Output - expected length = 1
-	 * @param selectedCipher
-	 *            Output - expected length = 1
+	 * @param selectedTlsVersion Output - expected length = 1
+	 * @param selectedCipher     Output - expected length = 1
 	 * @return
 	 */
 	public static boolean getSelectedProtocolAndVersion(final String url, final TlsVersion[] selectedTlsVersion, final CipherSuite[] selectedCipher) {
