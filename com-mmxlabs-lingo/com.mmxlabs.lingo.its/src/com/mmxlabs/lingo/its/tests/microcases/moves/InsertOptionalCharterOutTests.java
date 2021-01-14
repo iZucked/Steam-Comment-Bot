@@ -113,10 +113,10 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 			// Check expectations
 			// Empty vessel
 			Assertions.assertNotNull(result.getSequence(resource1), "Sequence is null");
-			Assertions.assertEquals(3, result.getSequence(resource1).size());
+			Assertions.assertEquals(5, result.getSequence(resource1).size());
 			Assertions.assertEquals(0, result.getUnusedElements().size());
 
-			Assertions.assertEquals("charter_out_test_solo", result.getSequence(resource1).get(1).getName());
+			Assertions.assertEquals("start-charter_out_test_solo", result.getSequence(resource1).get(1).getName());
 		});
 	}
 
@@ -185,9 +185,9 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 			// 3 event: start, charter out, end
 			Assertions.assertNotNull(result.getSequence(0), "Sequence is null");
 			Assertions.assertEquals(2, result.getSequence(resource1).size());
-			Assertions.assertEquals(1, result.getUnusedElements().size());
+			Assertions.assertEquals(3, result.getUnusedElements().size());
 
-			Assertions.assertEquals("charter_out_test_solo", result.getUnusedElements().get(0).getName());
+			Assertions.assertEquals("start-charter_out_test_solo", result.getUnusedElements().get(0).getName());
 		});
 	}
 
