@@ -4,8 +4,10 @@
  */
 package com.mmxlabs.models.lng.transformer.extensions.tradingexporter;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -46,6 +48,7 @@ import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEven
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.SequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -83,6 +86,7 @@ public class TradingExporterExtension implements IExporterExtension {
 	public void finishExporting() {
 		final Set<ISequenceElement> allElements = annotatedSolution.getEvaluationState().getData(SchedulerEvaluationProcess.ALL_ELEMENTS, Set.class);
 		if (allElements != null) {
+			IProfitAndLossAnnotation previousPNL = null;
 			for (final ISequenceElement element : allElements) {
 				{
 					final IProfitAndLossAnnotation profitAndLoss = annotatedSolution.getElementAnnotations().getAnnotation(element, SchedulerConstants.AI_profitAndLoss,
@@ -165,6 +169,8 @@ public class TradingExporterExtension implements IExporterExtension {
 									setPandLentries(profitAndLoss, gco);
 								}
 							} else {
+								
+
 								final com.mmxlabs.models.lng.cargo.VesselEvent modelEvent = modelEntityMap.getModelObject(slot, com.mmxlabs.models.lng.cargo.VesselEvent.class);
 								VesselEventVisit visit = null;
 								//
@@ -179,7 +185,18 @@ public class TradingExporterExtension implements IExporterExtension {
 									}
 								}
 								if (visit != null) {
-									setPandLentries(profitAndLoss, visit);
+									
+									IVesselEventPortSlot veps = (IVesselEventPortSlot) slot;
+									final List<IProfitAndLossAnnotation> pnlAnnotations = new ArrayList<>(3);
+									for (final ISequenceElement se : veps.getEventSequenceElements()) {
+										final IProfitAndLossAnnotation pnl = annotatedSolution.getElementAnnotations().getAnnotation(se, SchedulerConstants.AI_profitAndLoss,
+												IProfitAndLossAnnotation.class);
+										if (pnl != null) {
+											pnlAnnotations.add(pnl);
+										}
+									}
+									setPandLentries(pnlAnnotations, visit);
+									
 								}
 							}
 						} else if (slot instanceof StartPortSlot) {
@@ -213,6 +230,12 @@ public class TradingExporterExtension implements IExporterExtension {
 	private StartEvent findStartEvent(final IVesselProvider vesselProvider, final ISequenceElement element) {
 		return ExporterExtensionUtils.findStartEvent(element, modelEntityMap, outputSchedule, annotatedSolution, vesselProvider);
 	}
+	
+	private void setPandLentries(final Collection<IProfitAndLossAnnotation> profitAndLossCollection, final ProfitAndLossContainer container) {
+		for (final IProfitAndLossAnnotation profitAndLoss : profitAndLossCollection) {
+			setPandLentries(profitAndLoss, container);
+		}
+	}
 
 	private void setPandLentries(final IProfitAndLossAnnotation profitAndLoss, final ProfitAndLossContainer container) {
 
@@ -225,7 +248,13 @@ public class TradingExporterExtension implements IExporterExtension {
 
 		int totalGroupValue = 0;
 		int totalGroupValuePreTax = 0;
-		final GroupProfitAndLoss groupProfitAndLoss = ScheduleFactory.eINSTANCE.createGroupProfitAndLoss();
+		final boolean gpnlExists = container.getGroupProfitAndLoss() != null;
+		final GroupProfitAndLoss groupProfitAndLoss;
+		if (!gpnlExists) {
+			groupProfitAndLoss = ScheduleFactory.eINSTANCE.createGroupProfitAndLoss();
+		} else {
+			groupProfitAndLoss = container.getGroupProfitAndLoss();
+		}
 		container.setGroupProfitAndLoss(groupProfitAndLoss);
 
 		final Collection<IProfitAndLossEntry> entries = profitAndLoss.getEntries();
@@ -248,19 +277,30 @@ public class TradingExporterExtension implements IExporterExtension {
 		}
 		// Now create output data on the unique set.
 		for (final Map.Entry<BaseEntityBook, int[]> e : groupProfitMap.entrySet()) {
-
-			final EntityProfitAndLoss streamData = ScheduleFactory.eINSTANCE.createEntityProfitAndLoss();
-			streamData.setEntity((BaseLegalEntity) e.getKey().eContainer());
-			streamData.setEntityBook(e.getKey());
-			final int groupValue = e.getValue()[0];
-			final int groupValuePreTax = e.getValue()[1];
-
-			streamData.setProfitAndLoss(groupValue);
-			streamData.setProfitAndLossPreTax(groupValuePreTax);
-			totalGroupValue += groupValue;
-			totalGroupValuePreTax += groupValuePreTax;
-
-			groupProfitAndLoss.getEntityProfitAndLosses().add(streamData);
+			if (gpnlExists) {
+				for (final EntityProfitAndLoss ePNL : groupProfitAndLoss.getEntityProfitAndLosses()) {
+					if (ePNL.getEntity().equals(e.getKey().eContainer()) && ePNL.getEntityBook().equals(e.getKey())) {
+						ePNL.setProfitAndLoss(ePNL.getProfitAndLoss() + e.getValue()[0]);
+						ePNL.setProfitAndLossPreTax(ePNL.getProfitAndLossPreTax() + e.getValue()[1]);
+					}
+				}
+			} else {
+				final EntityProfitAndLoss streamData = ScheduleFactory.eINSTANCE.createEntityProfitAndLoss();
+				streamData.setEntity((BaseLegalEntity) e.getKey().eContainer());
+				streamData.setEntityBook(e.getKey());
+				final int groupValue = e.getValue()[0];
+				final int groupValuePreTax = e.getValue()[1];
+	
+				streamData.setProfitAndLoss(groupValue);
+				streamData.setProfitAndLossPreTax(groupValuePreTax);
+	
+				groupProfitAndLoss.getEntityProfitAndLosses().add(streamData);
+			}
+		}
+		
+		for (final EntityProfitAndLoss ePNL : groupProfitAndLoss.getEntityProfitAndLosses()) {
+			totalGroupValue += ePNL.getProfitAndLoss();
+			totalGroupValuePreTax += ePNL.getProfitAndLossPreTax();
 		}
 
 		groupProfitAndLoss.setProfitAndLoss(totalGroupValue);
