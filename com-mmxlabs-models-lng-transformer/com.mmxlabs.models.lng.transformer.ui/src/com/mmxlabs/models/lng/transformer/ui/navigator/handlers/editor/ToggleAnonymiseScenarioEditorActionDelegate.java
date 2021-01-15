@@ -244,6 +244,8 @@ public class ToggleAnonymiseScenarioEditorActionDelegate extends ActionDelegate 
 	}
 	
 	private static String getNewName(final List<AnonymisationRecord> records, final String oldName, final AnonymisationRecordType type) {
+		if (oldName == null || type == null || records == null || records.isEmpty())
+			return "";
 		final List<AnonymisationRecord> filtered = records.stream().filter(r -> r.oldName.equalsIgnoreCase(oldName) && r.type.equals(type)).collect(Collectors.toList());
 		if (!filtered.isEmpty()) {
 			return filtered.get(0).newName;
@@ -252,6 +254,8 @@ public class ToggleAnonymiseScenarioEditorActionDelegate extends ActionDelegate 
 	}
 	
 	private static String getOldName(final List<AnonymisationRecord> records, final String newName, final AnonymisationRecordType type) {
+		if (newName == null || type == null || records == null || records.isEmpty())
+			return "";
 		final List<AnonymisationRecord> filtered = records.stream().filter(r -> r.newName.equalsIgnoreCase(newName) && r.type.equals(type)).collect(Collectors.toList());
 		if (!filtered.isEmpty()) {
 			return filtered.get(0).oldName;
