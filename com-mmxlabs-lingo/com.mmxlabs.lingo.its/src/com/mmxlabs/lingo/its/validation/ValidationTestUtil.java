@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * All rights reserved.
+ */
 package com.mmxlabs.lingo.its.validation;
 
 import java.util.Collection;
