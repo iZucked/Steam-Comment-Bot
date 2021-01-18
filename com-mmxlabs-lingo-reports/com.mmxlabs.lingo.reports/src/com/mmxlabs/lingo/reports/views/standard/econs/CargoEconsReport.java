@@ -520,7 +520,8 @@ public class CargoEconsReport extends ViewPart {
 			Map<Collection<Slot<?>>, CargoAllocation> cargoMap = null;
 
 			for (final Object obj : selectedObjects) {
-				if (obj instanceof Cargo || obj instanceof Slot || obj instanceof VesselEvent || obj instanceof PaperDeal) {
+				if (obj != null && (obj instanceof Cargo || obj instanceof Slot || obj instanceof VesselEvent || obj instanceof PaperDeal)) {
+					final Schedule schedule = ScenarioModelUtil.findScenarioModel((EObject) obj).getScheduleModel().getSchedule();
 					Cargo cargo = null;
 					Slot<?> slot = null;
 					VesselEvent event = null;
@@ -528,6 +529,18 @@ public class CargoEconsReport extends ViewPart {
 						event = (VesselEvent) obj;
 					} else if (obj instanceof Cargo) {
 						cargo = (Cargo) obj;
+					}  else if (obj instanceof PaperDeal) {
+						final PaperDeal paperDeal = (PaperDeal) obj;
+						if (schedule != null) {
+							if (paperDealMap == null) {
+								paperDealMap = schedule.getPaperDealAllocations().stream() //
+										.collect(Collectors.toMap(PaperDealAllocation::getPaperDeal, Functions.identity()));
+							}
+							final PaperDealAllocation pda = paperDealMap.get(paperDeal);
+							if (pda != null) {
+								validObjects.add(pda);
+							}
+						}
 					} else {
 						// Must be a slot
 						assert obj instanceof Slot;
@@ -539,7 +552,7 @@ public class CargoEconsReport extends ViewPart {
 							slot = (DischargeSlot) obj;
 						}
 					}
-					final Schedule schedule = ScenarioModelUtil.findScenarioModel((EObject) obj).getScheduleModel().getSchedule();
+					
 
 					if (cargo != null && schedule != null) {
 						if (cargoMap == null) {
@@ -582,19 +595,6 @@ public class CargoEconsReport extends ViewPart {
 						final VesselEventVisit vesselEventVisit = vesselEventMap.get(event);
 						if (vesselEventVisit != null) {
 							validObjects.add(vesselEventVisit);
-						}
-					} else if (obj instanceof PaperDeal) {
-						final PaperDeal paperDeal = (PaperDeal) obj;
-						if (schedule != null) {
-							if (paperDealMap == null) {
-								paperDealMap = schedule.getPaperDealAllocations().stream() //
-										.collect(Collectors.toMap(PaperDealAllocation::getPaperDeal, Functions.identity()));
-							}
-
-							final PaperDealAllocation pda = paperDealMap.get(paperDeal);
-							if (pda != null) {
-								validObjects.add(pda);
-							}
 						}
 					}
 				}
