@@ -10,7 +10,7 @@
 <unit id="org.eclipse.platform.sdk" version="0.0.0"/>
 <unit id="org.eclipse.sdk.ide" version="0.0.0"/>
 <unit id="org.eclipse.swt.tools.feature.feature.group" version="0.0.0"/>
-<repository id="mmxlabs-releases" location="http://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/org.eclipse.updates.201912/R-4.14-201912100610/org.eclipse.updates.201912-R-4.14-201912100610.zip-unzip/"/>
+<repository location="http://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/org.eclipse.updates.201912/R-4.14-201912100610/org.eclipse.updates.201912-R-4.14-201912100610.zip-unzip/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.ecf.core.feature.feature.group" version="0.0.0"/>
@@ -38,7 +38,7 @@
 <unit id="org.eclipse.swtbot.forms.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.swtbot.ide.feature.group" version="0.0.0"/>
 <unit id="com.google.guava" version="27.1.0.v20190517-1946"/>
-<repository id="mmxlabs-releases" location="http://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/org.eclipse.201912/201912181000/org.eclipse.201912-201912181000.zip-unzip/"/>
+<repository location="http://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/org.eclipse.201912/201912181000/org.eclipse.201912-201912181000.zip-unzip/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="ch.qos.logback.classic" version="0.0.0"/>
@@ -100,12 +100,12 @@
 	<unit id="org.junit.vintage.engine" version="0.0.0"/>
 	<unit id="com.sun.jna" version="4.5.1.v20190425-1842"/>	
 	<unit id="com.sun.jna.platform" version="4.5.1.v20190425-1842"/>
-<repository id="mmxlabs-releases" location="http://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/orbit/orbit-buildrepo/R20191126223242/orbit-buildrepo-R20191126223242.zip-unzip/"/>
+<repository location="http://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/orbit/orbit-buildrepo/R20191126223242/orbit-buildrepo-R20191126223242.zip-unzip/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.nebula.widgets.formattedtext" version="0.0.0"/>
 <unit id="org.eclipse.nebula.widgets.grid" version="0.0.0"/>
-<repository id="mmxlabs-releases" location="http://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/com/mmxlabs/nebula/widgets/p2/repository/com.mmxlabs.nebula.widgets.p2/1.1.1/com.mmxlabs.nebula.widgets.p2-1.1.1-p2-repo.zip-unzip/"/>
+<repository location="http://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/com/mmxlabs/nebula/widgets/p2/repository/com.mmxlabs.nebula.widgets.p2/1.1.1/com.mmxlabs.nebula.widgets.p2-1.1.1-p2-repo.zip-unzip/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.fasterxml.jackson.core.jackson-annotations" version="2.10.0"/>
@@ -139,15 +139,15 @@
 <unit id="com.google.guava" version="25.1.0.jre"/>
 <unit id="org.apache.servicemix.bundles.poi" version="0.0.0"/>
 <unit id="org.apache.servicemix.bundles.xmlbeans" version="0.0.0"/>
-<repository id="mmxlabs-releases" location="http://nexus.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/p2/repository/mmxlabs-external/1.0.31/mmxlabs-external-1.0.31-p2-repo.zip-unzip/"/>
+<repository location="http://nexus.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/p2/repository/mmxlabs-external/1.0.31/mmxlabs-external-1.0.31-p2-repo.zip-unzip/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.mmxlabs.models.datetime.feature.feature.group" version="0.0.0"/>
-<repository id="mmxlabs-releases" location="http://nexus.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/models/datetime/com.mmxlabs.models.datetime.p2/2.1.6.RELEASE/com.mmxlabs.models.datetime.p2-2.1.6.RELEASE.zip-unzip"/>
+<repository location="http://nexus.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/models/datetime/com.mmxlabs.models.datetime.p2/2.1.6.RELEASE/com.mmxlabs.models.datetime.p2-2.1.6.RELEASE.zip-unzip"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.google.ortools.feature.feature.group" version="0.0.0"/>
-<repository id="mmxlabs-releases" location="http://nexus.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/google/ortools/com.google.ortools.p2/7.5.7466.jdk11v2/com.google.ortools.p2-7.5.7466.jdk11v2.zip-unzip"/>
+<repository location="http://nexus.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/google/ortools/com.google.ortools.p2/7.5.7466.jdk11v2/com.google.ortools.p2-7.5.7466.jdk11v2.zip-unzip"/>
 </location>
 </locations>
 </target>

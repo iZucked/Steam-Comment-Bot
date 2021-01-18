@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2020
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2021
  * All rights reserved.
  */
 package com.mmxlabs.common.parser.nodes;
@@ -8,10 +8,10 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 
 @NonNullByDefault
 public class ShiftNode extends AbstractMarkedUpNode {
-	private MarkedUpNode shiftedNode;
-	private int months;
+	private final MarkedUpNode shiftedNode;
+	private final int months;
 
-	public ShiftNode(MarkedUpNode shiftedNode, int months) {
+	public ShiftNode(final MarkedUpNode shiftedNode, final int months) {
 		this.shiftedNode = shiftedNode;
 		this.months = months;
 	}

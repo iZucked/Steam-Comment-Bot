@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2020
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2021
  * All rights reserved.
  */
 package com.mmxlabs.models.ui.validation;
@@ -34,6 +34,7 @@ public class DetailConstraintStatusFactory {
 	private @Nullable String name;
 	private @Nullable String prefix;
 	private @Nullable ValidationGroup tag;
+	private @Nullable Object constraintKey;
 
 	private DetailConstraintStatusFactory() {
 
@@ -83,6 +84,11 @@ public class DetailConstraintStatusFactory {
 	public DetailConstraintStatusFactory withPrefix(@Nullable final String prefix) {
 		this.prefix = prefix;
 
+		return this;
+	}
+	
+	public DetailConstraintStatusFactory withConstraintKey(@Nullable final Object key) {
+		this.constraintKey = constraintKey;
 		return this;
 	}
 
@@ -138,6 +144,10 @@ public class DetailConstraintStatusFactory {
 			decorator.setTag(tag);
 		}
 
+		if (constraintKey != null) {
+			decorator.setConstraintKey(constraintKey);
+		}
+		
 		return decorator;
 	}
 

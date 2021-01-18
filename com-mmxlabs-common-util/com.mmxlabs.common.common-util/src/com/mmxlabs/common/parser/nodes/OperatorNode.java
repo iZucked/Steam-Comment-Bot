@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2020
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2021
  * All rights reserved.
  */
 package com.mmxlabs.common.parser.nodes;
@@ -11,14 +11,14 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 
 @NonNullByDefault
 public class OperatorNode extends AbstractMarkedUpNode {
-	List<MarkedUpNode> children = new ArrayList<>(2);
+	private List<MarkedUpNode> children = new ArrayList<>(2);
 	private String operator;
 
 	public OperatorNode(String operator) {
 		this.operator = operator;
-
 	}
 
+	@Override
 	public List<MarkedUpNode> getChildren() {
 		return children;
 	}

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2020
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2021
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.analytics;
@@ -40,6 +40,7 @@ import com.mmxlabs.models.lng.analytics.VesselEventOption;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.BaseCaseToScheduleSpecification;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.ExistingBaseCaseToScheduleSpecification;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.IMapperClass;
+import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
 import com.mmxlabs.models.lng.cargo.ScheduleSpecification;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -316,7 +317,7 @@ public class SandboxManualRunner {
 				}
 				if (row.getVesselEventOption() != null) {
 					if (row.getBuyOption() != null) {
-						
+
 						final BaseCaseRow extra = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
 						BuyOption buyOption = row.getBuyOption();
 						if (buyOption instanceof BuyMarket) {
@@ -345,8 +346,7 @@ public class SandboxManualRunner {
 				if (row.getSellOption() != null && !seenItems.add(row.getSellOption())) {
 					return;
 				}
-				if ((row.getBuyOption() instanceof OpenBuy && row.getSellOption() instanceof OpenSell)
-						|| (row.getBuyOption() instanceof BuyMarket && row.getSellOption() instanceof SellMarket)) {
+				if ((row.getBuyOption() instanceof OpenBuy && row.getSellOption() instanceof OpenSell) || (row.getBuyOption() instanceof BuyMarket && row.getSellOption() instanceof SellMarket)) {
 					return;
 				}
 				// Replace open options with null reference for eval code.
@@ -377,8 +377,12 @@ public class SandboxManualRunner {
 	 */
 	private static void filterShipping(final BaseCase copy) {
 		for (final BaseCaseRow baseCaseRow : copy.getBaseCase()) {
-			if (baseCaseRow.getBuyOption() != null && ((baseCaseRow.getBuyOption() instanceof BuyReference && ((BuyReference) baseCaseRow.getBuyOption()).getSlot().isDESPurchase())
-					|| (baseCaseRow.getBuyOption() instanceof BuyOpportunity && ((BuyOpportunity) baseCaseRow.getBuyOption()).isDesPurchase()))) {
+			final BuyOption buyOption = baseCaseRow.getBuyOption();
+			if (buyOption != null && AnalyticsBuilder.isDESPurchase().test(buyOption)) {
+				baseCaseRow.setShipping(null);
+			}
+			final SellOption sellOption = baseCaseRow.getSellOption();
+			if (sellOption != null && AnalyticsBuilder.isFOBSale().test(sellOption)) {
 				baseCaseRow.setShipping(null);
 			}
 		}

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2020
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2021
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.contracts.impl;
@@ -76,6 +76,8 @@ public final class PricingEventHelper {
 	public int getDischargePricingDateFromEventType(@NonNull final PricingEventType pricingEvent, @NonNull final IDischargeOption dischargeOption, @NonNull final IPortTimesRecord portTimesRecord) {
 		int pricingDate;
 		final ILoadOption loadOption = findFirstLoadOption(portTimesRecord);
+		assert loadOption != null;
+		
 		final IPort timingPortForLoad = getLoadTimingPort(loadOption, dischargeOption);
 		final IPort timingPortForDischarge = getDischargeTimingPort(loadOption, dischargeOption);
 		switch (pricingEvent) {

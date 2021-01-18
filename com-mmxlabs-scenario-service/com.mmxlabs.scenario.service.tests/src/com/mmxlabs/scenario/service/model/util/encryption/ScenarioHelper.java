@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2020
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2021
  * All rights reserved.
  */
 package com.mmxlabs.scenario.service.model.util.encryption;
@@ -125,7 +125,7 @@ public class ScenarioHelper {
 					sb.append(String.format("%02X ", b));
 				}
 				String key = sb.toString();
-				System.out.println("Check  " + key);
+				// System.out.println("Check  " + key);
 				nextEntry = zis.getNextEntry();
 
 			}

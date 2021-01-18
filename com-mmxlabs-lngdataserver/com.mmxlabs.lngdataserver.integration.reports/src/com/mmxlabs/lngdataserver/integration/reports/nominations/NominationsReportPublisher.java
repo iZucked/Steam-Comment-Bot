@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2020
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2021
  * All rights reserved.
  */
 package com.mmxlabs.lngdataserver.integration.reports.nominations;
@@ -12,7 +12,6 @@ import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.DefaultRepo
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.IReportContent;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.IReportPublisherExtension;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.UnsupportedReportException;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
@@ -24,11 +23,12 @@ public class NominationsReportPublisher implements IReportPublisherExtension {
 		final List<String> versions = supportedFormats.getVersionsFor(getReportType());
 
 		if (versions.isEmpty() || versions.contains("1")) {
-			final LNGScenarioModel scenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-			final List<Nominations> models = NominationsJSONGenerator.createNominationsData(scenarioModel);
+			final List<Nominations> models = NominationsJSONGenerator.createNominationsData(scenarioDataProvider);
 			final ObjectMapper objectMapper = new ObjectMapper();
 			final String content = objectMapper.writeValueAsString(models);
-			return new DefaultReportContent(getReportType(), "1", content);
+			if (content != null) {
+				return new DefaultReportContent(getReportType(), "1", content);
+			}
 		}
 		throw new UnsupportedReportException();
 	}

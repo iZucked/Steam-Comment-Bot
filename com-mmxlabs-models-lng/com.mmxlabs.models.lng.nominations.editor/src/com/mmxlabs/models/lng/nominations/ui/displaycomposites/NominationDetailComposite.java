@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2020
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2021
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.nominations.ui.displaycomposites;
@@ -10,6 +10,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.mmxlabs.models.lng.nominations.AbstractNomination;
+import com.mmxlabs.models.lng.nominations.presentation.composites.NominatedValueInlineEditor;
 import com.mmxlabs.models.lng.nominations.presentation.composites.NomineeDateInlineEditor;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
@@ -34,6 +36,17 @@ public class NominationDetailComposite extends NominationSpecsDetailComposite im
 						label.setToolTipText("Date when nominee event happens.");
 						editor.setLabel(null);
 					}	
+				}
+				if (editor instanceof NominatedValueInlineEditor) {
+					final Label label = editor.getLabel();
+					if (label != null) {
+						if (value instanceof AbstractNomination) {
+							AbstractNomination n = (AbstractNomination)value;
+							if (n.getType().toLowerCase().contains("window")) {
+								label.setToolTipText("Window nominated values should be in format DD/MM/YYYY +XX[d,h,m] where XX is window size, d = days, h = hours, m = months.");
+							}
+						}
+					}
 				}
 				return data;
 			}

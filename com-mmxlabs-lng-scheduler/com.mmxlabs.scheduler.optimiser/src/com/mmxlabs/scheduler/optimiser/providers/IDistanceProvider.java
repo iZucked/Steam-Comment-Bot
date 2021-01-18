@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2020
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2021
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.providers;
@@ -55,7 +55,7 @@ public interface IDistanceProvider extends IDataComponentProvider {
 	 * @return
 	 */
 	int getDistance(@NonNull ERouteOption route, @NonNull IPort from, @NonNull IPort to, IVessel vessel);
-
+		  
 	/**
 	 * Returns the distance assuming the route is open. May return {@link Integer#MAX_VALUE} if there is no distance
 	 * 
@@ -78,6 +78,19 @@ public interface IDistanceProvider extends IDataComponentProvider {
 	 */
 	int getTravelTime(@NonNull ERouteOption route, @NonNull IVessel vessel, @NonNull IPort from, @NonNull IPort to, int speed);
 
+	/**
+	 * Returns the travel time via canal between the given ports on the given route at the specified speed. 
+	 * This takes into account route additional transit times.
+	 *
+	 * @param route
+	 * @param vessel
+	 * @param from
+	 * @param to
+	 * @param speed
+	 * @return
+	 */
+	int getTravelTimeViaCanal(@NonNull final ERouteOption route, @NonNull final IVessel vessel, @NonNull final IPort from, @NonNull final IPort to, final int speed);
+	
 	@NonNull
 	Pair<@NonNull ERouteOption, @NonNull Integer> getQuickestTravelTime(@NonNull IVessel vessel, @NonNull IPort from, @NonNull IPort to, int speed, AvailableRouteChoices availableRouteChoices);
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2020
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2021
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo;
@@ -238,6 +238,22 @@ public interface CargoModel extends UUIDObject {
 	 * @generated
 	 */
 	EList<DealSet> getDealSets();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model
+	 * @generated
+	 */
+	LoadSlot getLoadSlotByName(String name);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model
+	 * @generated
+	 */
+	DischargeSlot getDischargeSlotByName(String name);
 
 } // end of  CargoModel
 

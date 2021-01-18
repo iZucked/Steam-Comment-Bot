@@ -585,6 +585,8 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 	protected @NonNull IndexExposureData createDiffData(final IndexExposureData pinData, final IndexExposureData otherData) {
 
 		final IndexExposureData modelData = pinData != null ? pinData : otherData;
+		assert modelData != null;
+		
 		final Map<String, Double> exposuresByMonth = new HashMap<>();
 
 		Collection<String> k = new LinkedHashSet<>();

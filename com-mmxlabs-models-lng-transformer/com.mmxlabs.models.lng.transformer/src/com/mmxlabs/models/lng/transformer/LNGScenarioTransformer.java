@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2020
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2021
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer;
@@ -878,6 +878,8 @@ public class LNGScenarioTransformer {
 
 		buildRouteEntryPoints(portModel, portAssociation);
 
+		buildCanalDistances(portModel);
+		
 		// freeze any frozen assignments
 		freezeAssignmentModel(builder, modelEntityMap);
 
@@ -3818,8 +3820,15 @@ public class LNGScenarioTransformer {
 				final Port southPort = r.getSouthEntrance().getPort();
 				if (northPort != null && southPort != null) {
 					distanceProviderEditor.setEntryPointsForRouteOption(mapRouteOption(r), portAssociation.lookupNullChecked(northPort), portAssociation.lookupNullChecked(southPort));
+					distanceProviderEditor.setCanalDistance(mapRouteOption(r), (int)r.getDistance());
 				}
 			}
 		});
+	}
+	
+	private void buildCanalDistances(final PortModel portModel) {
+		portModel.getRoutes().forEach(r -> {
+			distanceProviderEditor.setCanalDistance(mapRouteOption(r), (int)r.getDistance());
+			});
 	}
 }

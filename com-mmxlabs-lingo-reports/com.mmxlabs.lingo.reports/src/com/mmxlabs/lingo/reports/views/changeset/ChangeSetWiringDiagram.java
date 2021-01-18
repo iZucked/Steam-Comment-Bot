@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2020
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2021
  * All rights reserved.
  */
 /**
@@ -58,11 +58,8 @@ public class ChangeSetWiringDiagram implements PaintListener {
 	static final Color Grey = new Color(Display.getCurrent(), new RGB(200, 200, 200));
 
 	static final Color InvalidTerminalColour = Display.getDefault().getSystemColor(SWT.COLOR_RED);
-	private final Color InvalidWireColour = Display.getDefault().getSystemColor(SWT.COLOR_DARK_RED);
 
 	static final Color ValidTerminalColour = Light_Green;
-	private final Color RewirableColour = Grey;// Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
-	private final Color FixedWireColour = Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
 
 	private int terminalSize = 11;
 	private int pathWidth = 2;
@@ -276,7 +273,7 @@ public class ChangeSetWiringDiagram implements PaintListener {
 		} else {
 			x = ca.x + ca.width - 2 * terminalSize - extraRadius / 2;
 		}
-		int y = (int) (midpoint - (terminalSize) / 2 - 1 - extraRadius / 2);
+		int y = (int) (midpoint) - terminalSize / 2 - 1 - extraRadius / 2;
 		graphics.setForeground(outlineColour);
 		graphics.setBackground(fillColour);
 		graphics.fillOval(x, y, terminalSize + extraRadius, terminalSize + extraRadius);
@@ -349,7 +346,7 @@ public class ChangeSetWiringDiagram implements PaintListener {
 		}
 
 		// Convert to
-		final List<Float> data = new ArrayList<Float>(heights.length);
+		final List<Float> data = new ArrayList<>(heights.length);
 		for (final int h : heights) {
 			data.add((float) h);
 		}

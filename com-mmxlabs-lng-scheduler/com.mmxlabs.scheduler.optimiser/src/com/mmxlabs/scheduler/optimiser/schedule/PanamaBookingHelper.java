@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2020
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2021
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.schedule;
@@ -51,7 +51,7 @@ public class PanamaBookingHelper {
 		}
 
 		int vesselMaxSpeed = vessel.getMaxSpeed();
-		final int fromEntryPoint = distanceProvider.getTravelTime(ERouteOption.PANAMA, vessel, routeOptionEntryPort, destinationPort, vesselMaxSpeed);
+		final int fromEntryPoint = distanceProvider.getTravelTimeViaCanal(ERouteOption.PANAMA, vessel, routeOptionEntryPort, destinationPort, vesselMaxSpeed);
 
 		return fromEntryPoint;
 	}

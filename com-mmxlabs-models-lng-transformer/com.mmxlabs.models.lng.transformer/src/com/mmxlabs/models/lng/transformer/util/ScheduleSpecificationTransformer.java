@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2020
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2021
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.util;
@@ -96,6 +96,7 @@ public class ScheduleSpecificationTransformer {
 				final CharterInMarket e_charterInMarket = (CharterInMarket) vesselAllocation;
 				final int spotIndex = vesselSpecificiation.getSpotIndex();
 				final ISpotCharterInMarket o_market = mem.getOptimiserObjectNullChecked(e_charterInMarket, ISpotCharterInMarket.class);
+				final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
 				for (final IResource o_resource : optimisationData.getResources()) {
 					final IVesselAvailability o_vesselAvailability = vesselProvider.getVesselAvailability(o_resource);
 					final ISpotCharterInMarket spotCharterInMarket = o_vesselAvailability.getSpotCharterInMarket();
@@ -152,6 +153,13 @@ public class ScheduleSpecificationTransformer {
 
 			orderedResources.add(resource);
 			sequences.put(resource, new ListModifiableSequence(elements));
+
+			// Important code
+			for (final ISequenceElement e : elements) {
+				if (!usedElements.add(e)) {
+					final int ii = 0;
+				}
+			}
 		}
 
 		for (final NonShippedCargoSpecification nonShippedCargoSpecification : scheduleSpecification.getNonShippedCargoSpecifications()) {
@@ -167,6 +175,13 @@ public class ScheduleSpecificationTransformer {
 				final IVesselAvailability o_vesselAvailability = virtualVesselSlotProvider.getVesselAvailabilityForElement(e);
 				if (o_vesselAvailability != null) {
 					resource = vesselProvider.getResource(o_vesselAvailability);
+				}
+			}
+
+			// Important code
+			for (final ISequenceElement e : elements) {
+				if (!usedElements.add(e)) {
+					final int ii = 0;
 				}
 			}
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2020
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2021
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.export;
@@ -541,6 +541,7 @@ public class AnnotatedSolutionExporter {
 		boolean exportingRedirectedCharterOut = false;
 		PortDetails redirectedCharterOutStart = null;
 		CharterLengthEvent charterLengthEvent = null;
+		VoyagePlanRecord previous = null;
 
 		while (vpi.hasNextObject()) {
 
@@ -569,6 +570,7 @@ public class AnnotatedSolutionExporter {
 				}
 				if (exportingRedirectedCharterOut) {
 					// Not found the end yet, continue.
+					previous = vpr;
 					continue;
 				}
 
@@ -601,9 +603,11 @@ public class AnnotatedSolutionExporter {
 						if (heelRecord != null) {
 							event.setHeelAtStart(OptimiserUnitConvertor.convertToExternalVolume(heelRecord.getHeelAtStartInM3()));
 						}
-						final HeelValueRecord heelValueRecord = vpr.getHeelValueRecord(currentPortSlot);
+						final HeelValueRecord heelValueRecord = previous != null ? previous.getHeelValueRecord(startSlot)
+								: vpr.getHeelValueRecord(startSlot);
 
 						if (heelValueRecord != null) {
+							event.setHeelRevenueUnitPrice(OptimiserUnitConvertor.convertToExternalPrice(heelValueRecord.getRevenueUnitPrice()));
 							event.setHeelRevenue(OptimiserUnitConvertor.convertToExternalFixedCost(heelValueRecord.getHeelRevenue()));
 						}
 
@@ -717,6 +721,8 @@ public class AnnotatedSolutionExporter {
 
 				}
 			}
+			if (!isRoundTripSequence)
+				previous = vpr;
 		}
 
 		if (!events.isEmpty()) {

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2020
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2021
  * All rights reserved.
  */
 package com.mmxlabs.lngdataserver.lng.importers.merge;
@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.rcp.common.RunnerHelper;
@@ -29,6 +30,11 @@ public class MergeScenarioWizard extends Wizard implements IExportWizard {
 	private static final Logger log = LoggerFactory.getLogger(MergeScenarioWizard.class);
 
 	private MergeScenarioWizardSourceSelectorPage sourceSelectorPage;
+	private MergeScenarioWizardDataMapperPage entitiesMapperPage;
+	private MergeScenarioWizardDataMapperPage baseFuelCurvesMapperPage;
+	private MergeScenarioWizardDataMapperPage charteringCurvesMapperPage;
+	private MergeScenarioWizardDataMapperPage commodityCurvesMapperPage;
+	private MergeScenarioWizardDataMapperPage currencyCurvesMapperPage;
 	private MergeScenarioWizardDataMapperPage purchaseContractMapperPage;
 	private MergeScenarioWizardDataMapperPage salesContractMapperPage;
 	private MergeScenarioWizardDataMapperPage vesselMapperPage;
@@ -54,6 +60,25 @@ public class MergeScenarioWizard extends Wizard implements IExportWizard {
 		setWindowTitle("Scenario merge wizard");
 		sourceSelectorPage = new MergeScenarioWizardSourceSelectorPage(selection);
 
+		//Entities
+		entitiesMapperPage = new MergeScenarioWizardDataMapperPage("Map entities to target", 
+				s -> ScenarioModelUtil.getCommercialModel(s).getEntities(), s -> ScenarioModelUtil.getCommercialModel(s),
+				CommercialPackage.Literals.COMMERCIAL_MODEL__ENTITIES);
+		
+		//Curves
+		baseFuelCurvesMapperPage = new MergeScenarioWizardDataMapperPage("Map base fuel curves to target",
+				s -> ScenarioModelUtil.getPricingModel(s).getBunkerFuelCurves(), s -> ScenarioModelUtil.getPricingModel(s),
+				PricingPackage.Literals.PRICING_MODEL__BUNKER_FUEL_CURVES);
+		charteringCurvesMapperPage = new MergeScenarioWizardDataMapperPage("Map chartering curves to target",
+				s -> ScenarioModelUtil.getPricingModel(s).getCharterCurves(), s -> ScenarioModelUtil.getPricingModel(s),
+				PricingPackage.Literals.PRICING_MODEL__CHARTER_CURVES);
+		commodityCurvesMapperPage = new MergeScenarioWizardDataMapperPage("Map commodity curves to target",
+				s -> ScenarioModelUtil.getPricingModel(s).getCommodityCurves(), s -> ScenarioModelUtil.getPricingModel(s),
+				PricingPackage.Literals.PRICING_MODEL__COMMODITY_CURVES);
+		currencyCurvesMapperPage = new MergeScenarioWizardDataMapperPage("Map currency curves to target",
+				s -> ScenarioModelUtil.getPricingModel(s).getCurrencyCurves(), s -> ScenarioModelUtil.getPricingModel(s),
+				PricingPackage.Literals.PRICING_MODEL__CURRENCY_CURVES);
+		
 		//Contracts.
 		purchaseContractMapperPage = new MergeScenarioWizardDataMapperPage("Map purchase contracts of cargoes to target", 
 				s ->  ScenarioModelUtil.getCommercialModel(s).getPurchaseContracts(), s ->  ScenarioModelUtil.getCommercialModel(s), 
@@ -72,17 +97,17 @@ public class MergeScenarioWizard extends Wizard implements IExportWizard {
 		
 		//Spot markets.
 		fobBuySpotMarketsMapperPage = new MergeScenarioWizardDataMapperPage("Map FOB buy spot markets to target", 
-				s -> ScenarioModelUtil.getSpotMarketsModel(s).getFobPurchasesSpotMarket().getMarkets(), s -> ScenarioModelUtil.getSpotMarketsModel(s), 
-				SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__FOB_PURCHASES_SPOT_MARKET);
+				s -> ScenarioModelUtil.getSpotMarketsModel(s).getFobPurchasesSpotMarket().getMarkets(), s -> ScenarioModelUtil.getSpotMarketsModel(s).getFobPurchasesSpotMarket(), 
+				SpotMarketsPackage.Literals.SPOT_MARKET_GROUP__MARKETS);
 		fobSellSpotMarketsMapperPage = new MergeScenarioWizardDataMapperPage("Map FOB sell spot markets to target", 
-				s -> ScenarioModelUtil.getSpotMarketsModel(s).getFobSalesSpotMarket().getMarkets(), s -> ScenarioModelUtil.getSpotMarketsModel(s), 
-				SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__FOB_SALES_SPOT_MARKET);
+				s -> ScenarioModelUtil.getSpotMarketsModel(s).getFobSalesSpotMarket().getMarkets(), s -> ScenarioModelUtil.getSpotMarketsModel(s).getFobSalesSpotMarket(), 
+				SpotMarketsPackage.Literals.SPOT_MARKET_GROUP__MARKETS);
 		desBuySpotMarketsMapperPage = new MergeScenarioWizardDataMapperPage("Map DES buy spot markets to target", 
-				s -> ScenarioModelUtil.getSpotMarketsModel(s).getDesPurchaseSpotMarket().getMarkets(), s -> ScenarioModelUtil.getSpotMarketsModel(s), 
-				SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__DES_PURCHASE_SPOT_MARKET);
+				s -> ScenarioModelUtil.getSpotMarketsModel(s).getDesPurchaseSpotMarket().getMarkets(), s -> ScenarioModelUtil.getSpotMarketsModel(s).getDesPurchaseSpotMarket(), 
+				SpotMarketsPackage.Literals.SPOT_MARKET_GROUP__MARKETS);
 		desSellSpotMarketsMapperPage = new MergeScenarioWizardDataMapperPage("Map DES sell spot markets to target", 
-				s -> ScenarioModelUtil.getSpotMarketsModel(s).getDesSalesSpotMarket().getMarkets(), s -> ScenarioModelUtil.getSpotMarketsModel(s), 
-				SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__DES_SALES_SPOT_MARKET);
+				s -> ScenarioModelUtil.getSpotMarketsModel(s).getDesSalesSpotMarket().getMarkets(), s -> ScenarioModelUtil.getSpotMarketsModel(s).getDesSalesSpotMarket(), 
+				SpotMarketsPackage.Literals.SPOT_MARKET_GROUP__MARKETS);
 		
 		//Charter markets.
 		charterInMarketMapperPage = new MergeScenarioWizardDataMapperPage("Map charter in markets to target",  
@@ -102,14 +127,21 @@ public class MergeScenarioWizard extends Wizard implements IExportWizard {
 	@Override
 	public void addPages() {
 		super.addPages();
-		
+			
 		addPage(sourceSelectorPage);
-				
+		
+		addPage(entitiesMapperPage);
+		
+		addPage(baseFuelCurvesMapperPage);
+		addPage(charteringCurvesMapperPage);
+		addPage(commodityCurvesMapperPage);
+		addPage(currencyCurvesMapperPage);
+		
 		addPage(purchaseContractMapperPage);
 		addPage(salesContractMapperPage);
 		
 		addPage(vesselMapperPage);
-		addPage(this.vesselCharterMapperPage);
+		addPage(vesselCharterMapperPage);
 		
 		addPage(fobBuySpotMarketsMapperPage);
 		addPage(fobSellSpotMarketsMapperPage);

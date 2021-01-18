@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2020
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2021
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.moves.util;
@@ -51,7 +51,7 @@ public class LegalSequencingChecker {
 	 */
 	private static List<IPairwiseConstraintChecker> createPairwiseCheckers(final IOptimisationContext context) {
 
-		final ArrayList<IPairwiseConstraintChecker> pairwiseCheckers = new ArrayList<IPairwiseConstraintChecker>();
+		final ArrayList<IPairwiseConstraintChecker> pairwiseCheckers = new ArrayList<>();
 
 		for (final IConstraintCheckerFactory factory : context.getConstraintCheckerRegistry().getConstraintCheckerFactories(context.getConstraintCheckers())) {
 			final IConstraintChecker checker = factory.instantiate();
@@ -106,7 +106,7 @@ public class LegalSequencingChecker {
 	}
 
 	public List<String> getSequencingProblems(final ISequenceElement e1, final ISequenceElement e2, final IResource resource) {
-		final List<String> result = new ArrayList<String>();
+		final List<String> result = new ArrayList<>();
 		final List<String> messages = new ArrayList<>();
 		messages.add(String.format("%s: getSequencingProblems", this.getClass().getName()));
 		for (final IPairwiseConstraintChecker pairwiseChecker : pairwiseCheckers) {

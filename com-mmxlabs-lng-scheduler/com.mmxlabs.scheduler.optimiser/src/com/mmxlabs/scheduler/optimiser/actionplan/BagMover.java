@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2020
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2021
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.actionplan;
@@ -200,7 +200,7 @@ public class BagMover {
 					changes.clear();
 					changeSets.add(cs);
 
-					final JobState jobState = new JobState(new Sequences(currentRawSequences), changeSets, new LinkedList<Change>(), differencesList, searchData);
+					final JobState jobState = new JobState(new Sequences(currentRawSequences), changeSets, new LinkedList<>(), differencesList, searchData);
 					for (final MetricType type : MetricType.values()) {
 						final long thisValue = thisMetrics[type.ordinal()];
 						final long currentValue = currentMetrics[type.ordinal()];
@@ -855,7 +855,7 @@ public class BagMover {
 						currentSequence.remove(load);
 						currentSequence.remove(discharge);
 
-						final List<ISequenceElement> searchElements = targetElements == null ? new LinkedList<ISequenceElement>() : new LinkedList<>(targetElements);
+						final List<ISequenceElement> searchElements = targetElements == null ? new LinkedList<>() : new LinkedList<>(targetElements);
 						// Tell next level to focus on the load
 						if (!searchElements.contains(load)) {
 							searchElements.add(load);
@@ -910,7 +910,7 @@ public class BagMover {
 						currentSequence.remove(load);
 						currentSequence.remove(discharge);
 
-						final List<ISequenceElement> searchElements = targetElements == null ? new LinkedList<ISequenceElement>() : new LinkedList<>(targetElements);
+						final List<ISequenceElement> searchElements = targetElements == null ? new LinkedList<>() : new LinkedList<>(targetElements);
 						// Tell next level to focus on the load
 						if (!searchElements.contains(load)) {
 							searchElements.add(load);
@@ -938,7 +938,7 @@ public class BagMover {
 		} else {
 			// assume vessel event?
 		}
-		return new LinkedList<JobState>();
+		return new LinkedList<>();
 	}
 
 	private void updateDifferencesListAfterElementsRemoval(final SimilarityState similarityState, final List<Difference> differencesList, final ISequenceElement load,
@@ -1122,7 +1122,7 @@ public class BagMover {
 	}
 
 	public Pair<Integer, Integer> getDepthRange() {
-		return new Pair<Integer, Integer>(depthStart, depthEnd);
+		return new Pair<>(depthStart, depthEnd);
 	}
 
 	private boolean isElementUnused(@NonNull final ISequences currentSequences, @NonNull final ISequenceElement element) {
@@ -1143,7 +1143,7 @@ public class BagMover {
 		IPortSlot currPortSlot = null;
 		ITimeWindow currTimeWindow = null;
 		final ITimeWindow insertingLoadTimeWindow = getTW(portSlotProvider.getPortSlot(insertingLoad), resource);
-		final LinkedHashSet<Integer> validPoints = new LinkedHashSet<Integer>();
+		final LinkedHashSet<Integer> validPoints = new LinkedHashSet<>();
 
 		// First pass - add in all valid positions.
 		for (int j = 1; j < sequence.size(); ++j) {

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2020
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2021
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.scheduling;
@@ -459,12 +459,15 @@ public class PNLBasedWindowTrimmer {
 	}
 
 	private @Nullable IPort findFirstLoadPort(Map<IPortSlot, Collection<TimeChoice>> intervalMap) {
+		int earliestT = Integer.MAX_VALUE;
+		IPort earliestLoadPort = null;
 		for (IPortSlot slot : intervalMap.keySet()) {
-			if (slot instanceof ILoadOption) {
-				return slot.getPort();
+			if (slot instanceof ILoadOption && slot.getTimeWindow().getInclusiveStart() < earliestT) {
+				earliestT = slot.getTimeWindow().getInclusiveStart();
+				earliestLoadPort = slot.getPort();
 			}
 		}
-		return null;
+		return earliestLoadPort;
 	}
 
 	public List<ScheduledVoyagePlanResult> evaluateRoundTripWithIntervals(final IResource resource, final IVesselAvailability vesselAvailability, //

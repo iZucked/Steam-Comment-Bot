@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2020
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2021
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.schedule;
@@ -48,6 +48,7 @@ import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -1866,11 +1867,11 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 		}
 	}
 	
-	private LNGScenarioModel getLNGScenarioModel(final Object object) {
+	private IScenarioDataProvider getScenarioDataProvider(final Object object) {
 		if (object instanceof Row) {
 			final Row row = (Row) object;
-			if (row.getScenarioDataProvider() != null && row.getScenarioDataProvider().getTypedScenario(LNGScenarioModel.class) != null) {
-				return row.getScenarioDataProvider().getTypedScenario(LNGScenarioModel.class);
+			if (row.getScenarioDataProvider() != null) {
+				return row.getScenarioDataProvider();
 			}
 		}
 		return null;
@@ -1926,14 +1927,12 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 	private String getBuyNominationValue(final Object object, final String nominationType) {
 		Slot<?> slot = getLoadSlot(object);
 		if (slot != null) {
-			String nomineeId = slot.getName();
-			LNGScenarioModel sm = getLNGScenarioModel(object);
-			if (sm != null) {
-				List<AbstractNomination> nominations = NominationsModelUtils.findNominationsForSlot(sm, slot);
+			IScenarioDataProvider sdp = getScenarioDataProvider(object);
+			if (sdp != null) {
+				List<AbstractNomination> nominations = NominationsModelUtils.findNominationsForSlot(sdp, slot);
 				for (AbstractNomination nomination : nominations) {
 					if (nomination.getType() != null && nomination.getType().toLowerCase().equals(nominationType.toLowerCase())) {
-						String nominatedValue = NominationsModelUtils.getNominatedValue(sm, nomination);
-						return nominatedValue;
+						return NominationsModelUtils.getNominatedValue(nomination);
 					}
 				}
 			}
@@ -1944,19 +1943,16 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 	private String getSellNominationValue(final Object object, final String nominationType) {
 		Slot<?> slot = getDischargeSlot(object);
 		if (slot != null) {
-			String nomineeId = slot.getName();
-			LNGScenarioModel sm = getLNGScenarioModel(object);
-			if (sm != null) {
-				List<AbstractNomination> nominations = NominationsModelUtils.findNominationsForSlot(sm, slot);
+			IScenarioDataProvider sdp = getScenarioDataProvider(object);
+			if (sdp != null) {
+				List<AbstractNomination> nominations = NominationsModelUtils.findNominationsForSlot(sdp, slot);
 				for (AbstractNomination nomination : nominations) {
 					if (nomination.getType() != null && nomination.getType().toLowerCase().equals(nominationType.toLowerCase())) {
-						String nominatedValue = NominationsModelUtils.getNominatedValue(sm, nomination);
-						return nominatedValue;
+						return NominationsModelUtils.getNominatedValue(nomination);
 					}
 				}
 			}
 		}
 		return "";
 	}
-
 }

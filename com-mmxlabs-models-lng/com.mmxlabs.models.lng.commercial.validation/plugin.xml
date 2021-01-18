@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2020
+    Copyright (C) Minimax Labs Ltd., 2010 - 2021
     All rights reserved.
 
 -->
@@ -201,6 +201,22 @@
                   lang="java"
                   mode="Batch"
                   name="CharterContract"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="CharterContract">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.commercial.validation.MonthlyCharterContractConstraint"
+                  id="com.mmxlabs.models.lng.commercial.validation.MonthlyCharterContractConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="MonthlyCharterContract"
                   severity="ERROR"
                   statusCode="1">
                <message>

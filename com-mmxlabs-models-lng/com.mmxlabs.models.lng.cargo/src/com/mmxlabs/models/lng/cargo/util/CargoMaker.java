@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2020
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2021
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.util;
@@ -129,6 +129,15 @@ public class CargoMaker {
 
 	public CargoMakerSlotMaker makeMarketDESSale(@NonNull final String name, @NonNull final DESSalesMarket market, @NonNull final YearMonth windowStart, @NonNull final Port port) {
 		final CargoMakerSlotMaker slotMaker = new CargoMakerSlotMaker(cargoModelBuilder);
+		return slotMaker.withMarketDESSale(name, market, windowStart, port);
+	}
+
+	public CargoMakerSlotMaker makeMarketDESSale(@NonNull final String name, @NonNull final DESSalesMarket market, @NonNull final YearMonth windowStart) {
+		final CargoMakerSlotMaker slotMaker = new CargoMakerSlotMaker(cargoModelBuilder);
+		final Port port = market.getNotionalPort();
+		if (port == null) {
+			throw new IllegalArgumentException();
+		}
 		return slotMaker.withMarketDESSale(name, market, windowStart, port);
 	}
 

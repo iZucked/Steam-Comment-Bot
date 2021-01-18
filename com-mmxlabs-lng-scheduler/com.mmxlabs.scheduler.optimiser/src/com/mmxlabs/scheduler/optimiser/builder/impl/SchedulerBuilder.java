@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2020
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2021
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.builder.impl;
@@ -1268,7 +1268,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		event.setRepositioning(repositioning);
 		event.setBallastBonus(ballastBonus);
 
-		if (event.getStartPort() != event.getEndPort()) {
+		if (true || event.getStartPort() != event.getEndPort()) {
 			final List<@NonNull ISequenceElement> eventSequenceElements = new LinkedList<>();
 			final List<@NonNull IPortSlot> eventPortSlots = new LinkedList<>();
 
