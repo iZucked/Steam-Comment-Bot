@@ -109,8 +109,6 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
-import com.mmxlabs.models.lng.schedule.CharterAvailableFromEvent;
-import com.mmxlabs.models.lng.schedule.CharterAvailableToEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -229,10 +227,13 @@ public class SchedulerView extends ViewPart implements
 		viewer = new GanttChartViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | GanttFlags.H_SCROLL_FIXED_RANGE, settings, colourManager) {
 
 			@Override
-			protected void setSelectionToWidget(@SuppressWarnings("rawtypes") final List l, final boolean reveal) {
+			protected void setSelectionToWidget(@SuppressWarnings("rawtypes") final List providedSelection, final boolean reveal) {
+
+				// Take a copy of the array so we can modify it later if it was empty
+				final List<Object> l = new LinkedList<>(providedSelection);
+				final boolean emptyInput = providedSelection.isEmpty();
 
 				if (showConnections) {
-
 					ganttChart.getGanttComposite().getGanttConnections().clear();
 
 					final BiPredicate<SlotAllocation, SlotAllocation> differentSequenceChecker = (r1, r2) -> {
@@ -269,6 +270,12 @@ public class SchedulerView extends ViewPart implements
 											if (oldEvent != null && newEvent != null) {
 												ganttChart.getGanttComposite().addConnection(oldEvent, newEvent, lineColour);
 											}
+
+											// If the selection was initially empty, then add in all objects from the ChangeSetTableRow
+											if (emptyInput) {
+												l.add(oldAllocation.getSlotVisit());
+												l.add(newAllocation.getSlotVisit());
+											}
 										}
 									}
 								}
@@ -285,6 +292,12 @@ public class SchedulerView extends ViewPart implements
 											if (oldEvent != null && newEvent != null) {
 												ganttChart.getGanttComposite().addConnection(oldEvent, newEvent, lineColour);
 											}
+
+											// If the selection was initially empty, then add in all objects from the ChangeSetTableRow
+											if (emptyInput) {
+												l.add(oldAllocation.getSlotVisit());
+												l.add(newAllocation.getSlotVisit());
+											}
 										}
 									}
 								}
@@ -292,23 +305,24 @@ public class SchedulerView extends ViewPart implements
 						}
 					}
 				}
+
+				// Apply alpha.
+				// - Fade out objects which are not selected.
+				// - Fade out pinned scenario objects more.
+
 				final ArrayList<GanttEvent> selectedEvents;
 				final Set<GanttSection> selectedSections = new HashSet<>();
 				if (l != null) {
 					// Use the internalMap to obtain the list of events we are selecting
 					selectedEvents = new ArrayList<>(l.size());
-					if (!l.isEmpty()) {
+					if (!l.isEmpty() && currentSelectedDataProvider != null && currentSelectedDataProvider.getSelectedChangeSetRows() != null) {
 						for (final Object ge : ganttChart.getGanttComposite().getEvents()) {
 							final GanttEvent ganttEvent = (GanttEvent) ge;
-							ganttEvent.setStatusAlpha(130);
 							final Event evt = (Event) ganttEvent.getData();
-							if (false) {
-								// Change alpha for pinned elements
-								if (currentSelectedDataProvider != null) {
-									if (currentSelectedDataProvider.isPinnedObject(evt)) {
-										ganttEvent.setStatusAlpha(50);
-									}
-								}
+							ganttEvent.setStatusAlpha(130);
+							// Change alpha for pinned elements
+							if (currentSelectedDataProvider.isPinnedObject(evt)) {
+								ganttEvent.setStatusAlpha(50);
 							}
 						}
 					}
@@ -341,6 +355,7 @@ public class SchedulerView extends ViewPart implements
 					// Clear selection
 					selectedEvents = new ArrayList<>(0);
 				}
+				// Work out which rows to show when filtering
 				if (scenarioComparisonService != null && scenarioComparisonService.getDiffOptions().isFilterSelectedSequences()) {
 					final Iterator<GanttSection> itr = new ArrayList<>(ganttChart.getGanttComposite().getGanttSections()).iterator();
 					while (itr.hasNext()) {
@@ -414,7 +429,7 @@ public class SchedulerView extends ViewPart implements
 
 						if (result != null) {
 
-							ADPModel adpModel = ScenarioModelUtil.getADPModel(result.getScenarioDataProvider());
+							final ADPModel adpModel = ScenarioModelUtil.getADPModel(result.getScenarioDataProvider());
 							if (adpModel != null) {
 								// Cannot use sandbox with ADP
 								return;
@@ -448,76 +463,15 @@ public class SchedulerView extends ViewPart implements
 			}
 
 			@Override
-			public Object[] getElements(final Object inputElement) {
-				final Object[] result = super.getElements(inputElement);
-				return result;
-			}
-
-			public int getEventHeight(final Object element) {
-				if (element instanceof CharterAvailableFromEvent) {
-					return 20;
-				} else if (element instanceof CharterAvailableToEvent) {
-					return 20;
-				}
-				return -1;
-
-			};
-
-			@Override
 			public Object[] getChildren(final Object parent) {
 
-				Object[] result = super.getChildren(parent);
-				// if (parent instanceof Sequence && numberOfSchedules > 1 && currentlyPinned) {
-				// final List<EObject> objects = new LinkedList<>();
-				// for (final Map.Entry<String, List<EObject>> e : allObjectsByKey.entrySet()) {
-				// EObject ref = null;
-				// final LinkedHashSet<EObject> objectsToAdd = new LinkedHashSet<>();
-				//
-				// // Find ref...
-				// for (final EObject ca : e.getValue()) {
-				// if (pinnedObjects.contains(ca)) {
-				// ref = ca;
-				// break;
-				// }
-				// }
-				//
-				// if (ref == null) {
-				// // No ref found, so add all
-				// objectsToAdd.addAll(e.getValue());
-				// } else {
-				// for (final EObject ca : e.getValue()) {
-				// if (ca == ref) {
-				// continue;
-				// }
-				// if (e.getValue().size() != numberOfSchedules) {
-				// // Different number of elements, so add all!
-				// // This means something has been removed/added
-				// objectsToAdd.addAll(e.getValue());
-				// } else if (isElementDifferent(ref, ca)) {
-				// // There is a data difference, so add
-				// objectsToAdd.addAll(e.getValue());
-				// }
-				// }
-				// }
-				// for (final EObject eObj : objectsToAdd) {
-				// if (eObj.eContainer() == parent) {
-				// objects.add(eObj);
-				//
-				// }
-				// }
-				//
-				// }
-				// result = objects.toArray();
-				// }
+				final Object[] result = super.getChildren(parent);
 				if (result != null) {
 					for (final Object event : result) {
 						if (event instanceof SlotVisit) {
 							final SlotVisit slotVisit = (SlotVisit) event;
-							setInputEquivalents(event, Arrays.asList(new Object[] { slotVisit.getSlotAllocation(), slotVisit.getSlotAllocation().getSlot(),
-									slotVisit.getSlotAllocation().getCargoAllocation() /* , slotVisit.getSlotAllocation().getCargoAllocation().getInputCargo() */ }));
-
-							// } else if (event instanceof Idle) {
-							// setInputEquivalents(event, Arrays.asList(new Object[] { ((Idle) event).getSlotAllocation().getCargoAllocation() }));
+							setInputEquivalents(event,
+									Arrays.asList(new Object[] { slotVisit.getSlotAllocation(), slotVisit.getSlotAllocation().getSlot(), slotVisit.getSlotAllocation().getCargoAllocation() }));
 
 						} else if (event instanceof CargoAllocation) {
 							final CargoAllocation allocation = (CargoAllocation) event;
@@ -528,7 +482,6 @@ public class SchedulerView extends ViewPart implements
 								equivalents.add(sa.getSlot());
 							}
 							equivalents.addAll(allocation.getEvents());
-							// equivalents.add(allocation.getInputCargo());
 
 							setInputEquivalents(allocation, equivalents);
 
@@ -1060,7 +1013,7 @@ public class SchedulerView extends ViewPart implements
 	 * @param selectedObjects
 	 * @return
 	 */
-	private List<Object> expandSelection(final List<Object> selectedObjects) {
+	private List<Object> expandSelection(final Collection<Object> selectedObjects) {
 		final Set<Object> newSelection = new HashSet<>(selectedObjects.size());
 		for (final Object o : selectedObjects) {
 			newSelection.add(o);
@@ -1143,12 +1096,12 @@ public class SchedulerView extends ViewPart implements
 
 	@NonNull
 	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
-		public void selectedDataProviderChanged(ISelectedDataProvider selectedDataProvider, boolean block) {
+		public void selectedDataProviderChanged(final ISelectedDataProvider selectedDataProvider, final boolean block) {
 
 			RunnerHelper.exec(() -> {
 				SchedulerView.this.currentSelectedDataProvider = selectedDataProvider;
 
-				ScenarioResult pinned = selectedDataProvider.getPinnedScenarioResult();
+				final ScenarioResult pinned = selectedDataProvider.getPinnedScenarioResult();
 
 				final List<Object> rowElements = new LinkedList<>();
 				final IScenarioInstanceElementCollector elementCollector = getElementCollector();
@@ -1162,6 +1115,9 @@ public class SchedulerView extends ViewPart implements
 				}
 				elementCollector.endCollecting();
 				ViewerHelper.setInput(viewer, true, rowElements);
+
+				// selectedObjects)
+				selectedObjectChanged(null, new StructuredSelection(expandSelection(selectedDataProvider.getSelectedObjects())));
 
 				viewer.getGanttChart().getGanttComposite().setTodaySupplier(null);
 				if (pinned != null) {
@@ -1205,7 +1161,7 @@ public class SchedulerView extends ViewPart implements
 		}
 
 		@Override
-		public void selectedObjectChanged(@Nullable MPart source, @NonNull ISelection selection) {
+		public void selectedObjectChanged(@Nullable final MPart source, @NonNull ISelection selection) {
 
 			// public void selectionChanged(final MPart part, final Object selectedObject)
 			// {
