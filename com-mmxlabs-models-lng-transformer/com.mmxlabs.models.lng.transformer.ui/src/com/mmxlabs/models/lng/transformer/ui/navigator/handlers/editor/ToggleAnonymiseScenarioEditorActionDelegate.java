@@ -32,7 +32,6 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
@@ -150,6 +149,7 @@ public class ToggleAnonymiseScenarioEditorActionDelegate extends ActionDelegate 
 			final Shell shell = PlatformUI.getWorkbench().getDisplay().getActiveShell();
 			final MessageDialog dialog = new MessageDialog(shell, "Anonymisation", null, "Default naming generation will be applied!", 0, 0, "OK","Cancel") ;
 			dialog.create();
+			// TODO: change to IDialog.Cancel
 			if (dialog.open() == 1) {
 				return;
 			}
@@ -190,25 +190,23 @@ public class ToggleAnonymiseScenarioEditorActionDelegate extends ActionDelegate 
 		final Set<Slot<?>> usedSlots = new HashSet();
 		for (final Cargo c : cargoModel.getCargoes()) {
 			for(final Slot<?> s : c.getSlots()) {
-				if (!(s instanceof SpotSlot)) {
-					if (s instanceof LoadSlot) {
-						renameCommand.append(renameFunction.apply(new RFEntry(editingDomain, records, s, s.getName(), MMXCorePackage.Literals.NAMED_OBJECT__NAME, BuyID, AnonymisationRecordType.BuyID)));
-						usedSlots.add(s);
-					} else {
-						renameCommand.append(renameFunction.apply(new RFEntry(editingDomain, records, s, s.getName(), MMXCorePackage.Literals.NAMED_OBJECT__NAME, SellID, AnonymisationRecordType.SellID)));
-						usedSlots.add(s);
-					}
+				if (s instanceof LoadSlot) {
+					renameCommand.append(renameFunction.apply(new RFEntry(editingDomain, records, s, s.getName(), MMXCorePackage.Literals.NAMED_OBJECT__NAME, BuyID, AnonymisationRecordType.BuyID)));
+					usedSlots.add(s);
+				} else {
+					renameCommand.append(renameFunction.apply(new RFEntry(editingDomain, records, s, s.getName(), MMXCorePackage.Literals.NAMED_OBJECT__NAME, SellID, AnonymisationRecordType.SellID)));
+					usedSlots.add(s);
 				}
 			}
 		}
 		for (final Slot<?> s : cargoModel.getLoadSlots()) {
-			if (!(s instanceof SpotSlot) && !(usedSlots.contains(s))) {
+			if (!(usedSlots.contains(s))) {
 				renameCommand.append(renameFunction.apply(new RFEntry(editingDomain, records, s, s.getName(), MMXCorePackage.Literals.NAMED_OBJECT__NAME, BuyID, AnonymisationRecordType.BuyID)));
 				usedSlots.add(s);
 			}
 		}
 		for (final Slot<?> s : cargoModel.getDischargeSlots()) {
-			if (!(s instanceof SpotSlot) && !(usedSlots.contains(s))) {
+			if (!(usedSlots.contains(s))) {
 				renameCommand.append(renameFunction.apply(new RFEntry(editingDomain, records, s, s.getName(), MMXCorePackage.Literals.NAMED_OBJECT__NAME, SellID, AnonymisationRecordType.SellID)));
 				usedSlots.add(s);
 			}
@@ -237,7 +235,7 @@ public class ToggleAnonymiseScenarioEditorActionDelegate extends ActionDelegate 
 	
 	private static Command renameBW(RFEntry entry) {
 		String name = getOldName(entry.records, entry.name, entry.type);
-		if (!name.isEmpty()) {
+		if (!name.isEmpty() || entry.type == AnonymisationRecordType.VesselShortID) {
 			return SetCommand.create(entry.editingDomain, entry.renamee, entry.feature, name);
 		}
 		return null;
@@ -246,7 +244,7 @@ public class ToggleAnonymiseScenarioEditorActionDelegate extends ActionDelegate 
 	private static String getNewName(final List<AnonymisationRecord> records, final String oldName, final AnonymisationRecordType type) {
 		if (oldName == null || type == null || records == null || records.isEmpty())
 			return "";
-		final List<AnonymisationRecord> filtered = records.stream().filter(r -> r.oldName.equalsIgnoreCase(oldName) && r.type.equals(type)).collect(Collectors.toList());
+		final List<AnonymisationRecord> filtered = records.stream().filter(r -> r.type == type && oldName.equalsIgnoreCase(r.oldName)).collect(Collectors.toList());
 		if (!filtered.isEmpty()) {
 			return filtered.get(0).newName;
 		}
@@ -256,7 +254,7 @@ public class ToggleAnonymiseScenarioEditorActionDelegate extends ActionDelegate 
 	private static String getOldName(final List<AnonymisationRecord> records, final String newName, final AnonymisationRecordType type) {
 		if (newName == null || type == null || records == null || records.isEmpty())
 			return "";
-		final List<AnonymisationRecord> filtered = records.stream().filter(r -> r.newName.equalsIgnoreCase(newName) && r.type.equals(type)).collect(Collectors.toList());
+		final List<AnonymisationRecord> filtered = records.stream().filter(r -> r.type == type && newName.equalsIgnoreCase(r.newName)).collect(Collectors.toList());
 		if (!filtered.isEmpty()) {
 			return filtered.get(0).oldName;
 		}
