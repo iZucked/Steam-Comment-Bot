@@ -23,10 +23,13 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IEndEventScheduler;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -36,6 +39,8 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.schedule.ICustomNonShippedScheduler;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PanamaPeriod;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimesRecord;
 
 /**
@@ -196,7 +201,8 @@ public class PortTimesRecordMaker {
 
 	/**
 	 * Returns a list of voyage plans based on breaking up a sequence of vessel real or virtual destinations into single conceptual cargo voyages.
-	 * 
+	 * (used by the price scheduler)
+	 * Works out the earliest arrival time within the trimmed window based on distances/travel time and previous arrivals.
 	 * @param resource
 	 * @param sequence
 	 * @param list
@@ -223,101 +229,8 @@ public class PortTimesRecordMaker {
 
 		// If non-null, set the return slot time to the next calculated slot and time.
 		PortTimesRecord recordToUpdateReturnTime = null;
-
-		final Runnable recordUpdate = () -> {
-			final IPortTimesRecord firstRecord = portTimesRecords.get(0);
-			final IPortTimeWindowsRecord portTimeWindowsRecord = trimmedWindows.get(0);
-			final IPortTimeWindowsRecord portTimeWindowsRecordLast = trimmedWindows.get(trimmedWindows.size() - 1);
-			final IPortSlot from = firstRecord.getFirstSlot();
-			final IPortSlot to = firstRecord.getSlots().size() > 1 ? firstRecord.getSlots().get(1) : firstRecord.getReturnSlot();
-			if (to != null) {
-				final int time = firstRecord.getSlotTime(to);
-				final int minTravelTime = travelTimeData.getMinTravelTime(0);
-				final int ideal = time - minTravelTime;
-
-				final ITimeWindow window = portTimeWindowsRecord.getSlotFeasibleTimeWindow(from);
-				if (ideal < time) {
-					// Earlier than current feasible time, so ignore
-				}
-				if (ideal >= window.getExclusiveEnd()) {
-					// Later than window end, so use window end
-					firstRecord.setSlotTime(from, window.getExclusiveEnd() - 1);
-				} else {
-					// Still within window, so set to this time.
-					firstRecord.setSlotTime(from, ideal);
-				}
-				final int newStartTime = firstRecord.getSlotTime(from);
-				/**
-				 * Min requirement padding In case we don't meet the minimal duration but still have some time left after the end or before the start
-				 **/
-				final IEndRequirement endReq = vesselAvailability.getEndRequirement();
-				if (endReq.isMinDurationSet()) {
-					final IPortTimesRecord lastRecord = portTimesRecords.get(portTimesRecords.size() - 1);
-					final IPortSlot lastPort = lastRecord.getFirstSlot();
-					if (lastPort != null && lastPort.getPortType() == PortType.End) {
-
-						// Get delta and remaining hours to fill
-						int endTime = lastRecord.getSlotTime(lastPort);
-						final int minDeltaInHours = endTime - newStartTime;
-						final int minDurationInHours = endReq.getMinDurationInHours();
-						int remainingHours = minDurationInHours - minDeltaInHours;
-
-						// Updated end time used to set previous record return time
-						int newEndTime = endTime;
-
-						if (minDeltaInHours < minDurationInHours) {
-							// Add padding to end event if possible
-							final ITimeWindow windowEnd = portTimeWindowsRecordLast.getSlotFeasibleTimeWindow(lastPort);
-							final int endLeftOver = windowEnd.getExclusiveEnd() - endTime - 1;
-							if (endLeftOver > 0) {
-								// Can we take care of the remaining time in one go ?
-								if (endLeftOver > remainingHours) {
-									newEndTime = endTime + remainingHours;
-									lastRecord.setSlotTime(lastPort, newEndTime);
-									remainingHours = 0;
-								} else {
-									remainingHours -= endLeftOver;
-									newEndTime = endTime + endLeftOver;
-									lastRecord.setSlotTime(lastPort, newEndTime);
-								}
-							}
-
-							// Add padding to start event if possible
-							if (remainingHours > 0) {
-								final ITimeWindow windowStart = portTimeWindowsRecord.getSlotFeasibleTimeWindow(from);
-								final int startLeftOver = newStartTime - windowStart.getInclusiveStart();
-								if (startLeftOver > 0) {
-									// Can we take care of the remaining time in one go ?
-									if (startLeftOver > remainingHours) {
-										firstRecord.setSlotTime(from, newStartTime - remainingHours);
-										remainingHours = 0;
-									} else {
-										// Set new end time
-										firstRecord.setSlotTime(from, newStartTime - startLeftOver);
-										remainingHours -= startLeftOver;
-									}
-								}
-							}
-
-							// Do we still have some time to pad at the end
-							// (Will trigger window/time requirement violation)
-							if (remainingHours > 0) {
-								// Get the updated endTime
-								endTime = lastRecord.getSlotTime(lastPort);
-								newEndTime = endTime + minDeltaInHours;
-								lastRecord.setSlotTime(lastPort, newEndTime);
-							}
-
-							if (portTimesRecords.size() > 1 && !isRoundTripSequence) {
-								final IPortTimesRecord lastRecord2 = portTimesRecords.get(portTimesRecords.size() - 2);
-								lastRecord2.setSlotTime(lastPort, newEndTime);
-							}
-						}
-					}
-				}
-			}
-		};
-
+		IPortTimeWindowsRecord prevTWR = null;
+		
 		boolean updateFirstRecordStartTime = false;
 		for (final IPortTimeWindowsRecord record : trimmedWindows) {
 			// Create and add record to the list.
@@ -344,12 +257,16 @@ public class PortTimesRecordMaker {
 
 				if (recordToUpdateReturnTime != null) {
 					recordToUpdateReturnTime.setReturnSlotTime(slot, arrivalTime);
-					recordToUpdateReturnTime = null;
+					//Make sure we do after return time updated.
+					if (prevTWR != null) {
+						this.updatePortTimesRecordWithPanamaRestrictions(vesselAvailability.getVessel(), prevTWR, recordToUpdateReturnTime);
+						recordToUpdateReturnTime = null;
+					}
 				}
 			}
 
 			if (updateFirstRecordStartTime) {
-				recordUpdate.run();
+				updateRecord(isRoundTripSequence, vesselAvailability, portTimesRecords, trimmedWindows, travelTimeData);
 				updateFirstRecordStartTime = false;
 			} else if (portTimesRecords.size() == 1 && !isRoundTripSequence) {
 				updateFirstRecordStartTime = true;
@@ -408,7 +325,7 @@ public class PortTimesRecordMaker {
 					// event.
 					if (updateFirstRecordStartTime) {
 						portTimesRecord.setReturnSlotTime(returnSlot, arrivalTime);
-						recordUpdate.run();
+						updateRecord(isRoundTripSequence, vesselAvailability, portTimesRecords, trimmedWindows, travelTimeData);
 						updateFirstRecordStartTime = false;
 					}
 
@@ -419,20 +336,115 @@ public class PortTimesRecordMaker {
 
 					// We need to update the start time after the end event is scheduled, to make
 					// the min/max duration adjustments
-					recordUpdate.run();
+					updateRecord(isRoundTripSequence, vesselAvailability, portTimesRecords, trimmedWindows, travelTimeData);
 				} else {
 					recordToUpdateReturnTime = portTimesRecord;
+					prevTWR = record;
 				}
 			}
 		}
-
+		
 		return portTimesRecords;
 	}
 
+	private void updateRecord(boolean isRoundTripSequence, final IVesselAvailability vesselAvailability, final List<@NonNull IPortTimesRecord> portTimesRecords, final List<IPortTimeWindowsRecord> trimmedWindows, final MinTravelTimeData travelTimeData) {
+		final IPortTimesRecord firstRecord = portTimesRecords.get(0);
+		final IPortTimeWindowsRecord portTimeWindowsRecord = trimmedWindows.get(0);
+		final IPortTimeWindowsRecord portTimeWindowsRecordLast = trimmedWindows.get(trimmedWindows.size() - 1);
+		final IPortSlot from = firstRecord.getFirstSlot();
+		final IPortSlot to = firstRecord.getSlots().size() > 1 ? firstRecord.getSlots().get(1) : firstRecord.getReturnSlot();
+		if (to != null) {
+			final int time = firstRecord.getSlotTime(to);
+			final int minTravelTime = travelTimeData.getMinTravelTime(0);
+			final int ideal = time - minTravelTime;
+
+			final ITimeWindow window = portTimeWindowsRecord.getSlotFeasibleTimeWindow(from);
+			if (ideal < time) {
+				// Earlier than current feasible time, so ignore
+			}
+			if (ideal >= window.getExclusiveEnd()) {
+				// Later than window end, so use window end
+				firstRecord.setSlotTime(from, window.getExclusiveEnd() - 1);
+			} else {
+				// Still within window, so set to this time.
+				firstRecord.setSlotTime(from, ideal);
+			}
+			final int newStartTime = firstRecord.getSlotTime(from);
+			/**
+			 * Min requirement padding In case we don't meet the minimal duration but still have some time left after the end or before the start
+			 **/
+			final IEndRequirement endReq = vesselAvailability.getEndRequirement();
+			if (endReq.isMinDurationSet()) {
+				final IPortTimesRecord lastRecord = portTimesRecords.get(portTimesRecords.size() - 1);
+				final IPortSlot lastPort = lastRecord.getFirstSlot();
+				if (lastPort != null && lastPort.getPortType() == PortType.End) {
+
+					// Get delta and remaining hours to fill
+					int endTime = lastRecord.getSlotTime(lastPort);
+					final int minDeltaInHours = endTime - newStartTime;
+					final int minDurationInHours = endReq.getMinDurationInHours();
+					int remainingHours = minDurationInHours - minDeltaInHours;
+
+					// Updated end time used to set previous record return time
+					int newEndTime = endTime;
+
+					if (minDeltaInHours < minDurationInHours) {
+						// Add padding to end event if possible
+						final ITimeWindow windowEnd = portTimeWindowsRecordLast.getSlotFeasibleTimeWindow(lastPort);
+						final int endLeftOver = windowEnd.getExclusiveEnd() - endTime - 1;
+						if (endLeftOver > 0) {
+							// Can we take care of the remaining time in one go ?
+							if (endLeftOver > remainingHours) {
+								newEndTime = endTime + remainingHours;
+								lastRecord.setSlotTime(lastPort, newEndTime);
+								remainingHours = 0;
+							} else {
+								remainingHours -= endLeftOver;
+								newEndTime = endTime + endLeftOver;
+								lastRecord.setSlotTime(lastPort, newEndTime);
+							}
+						}
+
+						// Add padding to start event if possible
+						if (remainingHours > 0) {
+							final ITimeWindow windowStart = portTimeWindowsRecord.getSlotFeasibleTimeWindow(from);
+							final int startLeftOver = newStartTime - windowStart.getInclusiveStart();
+							if (startLeftOver > 0) {
+								// Can we take care of the remaining time in one go ?
+								if (startLeftOver > remainingHours) {
+									firstRecord.setSlotTime(from, newStartTime - remainingHours);
+									remainingHours = 0;
+								} else {
+									// Set new end time
+									firstRecord.setSlotTime(from, newStartTime - startLeftOver);
+									remainingHours -= startLeftOver;
+								}
+							}
+						}
+
+						// Do we still have some time to pad at the end
+						// (Will trigger window/time requirement violation)
+						if (remainingHours > 0) {
+							// Get the updated endTime
+							endTime = lastRecord.getSlotTime(lastPort);
+							newEndTime = endTime + minDeltaInHours;
+							lastRecord.setSlotTime(lastPort, newEndTime);
+						}
+
+						if (portTimesRecords.size() > 1 && !isRoundTripSequence) {
+							final IPortTimesRecord lastRecord2 = portTimesRecords.get(portTimesRecords.size() - 2);
+							lastRecord2.setSlotTime(lastPort, newEndTime);
+						}
+					}
+				}
+			}
+		}
+	}
+	
 	/**
 	 * Returns a list of voyage plans based on breaking up a sequence of vessel real or virtual destinations into single conceptual cargo voyages. This variant assumes there is a
 	 * IPortTimeWindowsRecord for the end event and the window start is the correct time to use.
-	 * 
+	 * Used by the PNL time windows scheduler and assumes window start is the arrival time.
 	 * @param resource
 	 * @param sequence
 	 * @param list
@@ -464,8 +476,8 @@ public class PortTimesRecordMaker {
 				portTimesRecord.setSlotNextVoyageOptions(slot, record.getSlotNextVoyageOptions(slot), record.getSlotNextVoyagePanamaPeriod(slot));
 
 				final int visitDuration = record.getSlotDuration(slot);
-				final int extraIdleTime = record.getSlotExtraIdleTime(slot);
-
+				final int extraIdleTime = record.getSlotExtraIdleTime(slot); //contingency matrix.
+				
 				// Pick based on earliest time
 				final int arrivalTime = record.getSlotFeasibleTimeWindow(slot).getInclusiveStart();
 
@@ -501,9 +513,49 @@ public class PortTimesRecordMaker {
 					recordToUpdateReturnTime = portTimesRecord;
 				}
 			}
+			//HERE TO FILTER OUT INVALID RECORDS WRT PANAMA IDLE TIME RULE AND DO NOT APPLY TO ROUDNTRIP/NOMINAL CARGOES.
 		}
 
 		return portTimesRecords;
 	}
 
+	private void updatePortTimesRecordWithPanamaRestrictions(IVessel vessel, IPortTimeWindowsRecord portTimeWindowsRecord, PortTimesRecord recordCopy) {
+		List<IPortSlot> allSlots = new LinkedList<>(recordCopy.getSlots());
+		//returnSlot was null in recordCopy so get from PortTimeWindowsRecord instead, as seems more reliable.
+		if (recordCopy.getReturnSlot() != null) {
+			allSlots.add(recordCopy.getReturnSlot());
+		}
+		if (allSlots.size() > 1) {
+			for (int i = 1; i < allSlots.size(); ++i) {
+				IPortSlot from = allSlots.get(i-1);
+				IPortSlot to = allSlots.get(i);
+				
+				// Only check optimal mode?
+				if (recordCopy.getSlotNextVoyageOptions(from) != AvailableRouteChoices.OPTIMAL) {
+					continue;
+				}
+				// Could also do;
+				if (!portTimeWindowsRecord.getSlotIsNextVoyageConstrainedPanama(from)) {
+					continue;
+				}
+
+				int startTime = recordCopy.getSlotTime(from);
+				int departureTime = startTime + recordCopy.getSlotDuration(from);
+				int arrivalTime =  recordCopy.getSlotTime(to);
+				int availableTravelTime = arrivalTime - departureTime;
+
+				//Calculate if time to go via Panama or not including any additional idle time required for waiting for a slot if no booking.
+				int panamaTime = distanceProvider.getTravelTime(ERouteOption.PANAMA, vessel, from.getPort(), to.getPort(), vessel.getMaxSpeed());
+				int additionalPanamaTime = portTimeWindowsRecord.getSlotAdditionalPanamaIdleHours(from);
+				panamaTime += additionalPanamaTime;
+				
+				// We can re-calculate the panama period type here too with toCanalTime and fromCanalTim
+				if (panamaTime > availableTravelTime ) {
+					// It has all gone wrong if we hit this assert
+					assert recordCopy.getSlotNextVoyageOptions(from) != AvailableRouteChoices.PANAMA_ONLY;
+					recordCopy.setSlotNextVoyageOptions(from, AvailableRouteChoices.EXCLUDE_PANAMA, PanamaPeriod.Relaxed);
+				}
+			}
+		}
+	}
 }
