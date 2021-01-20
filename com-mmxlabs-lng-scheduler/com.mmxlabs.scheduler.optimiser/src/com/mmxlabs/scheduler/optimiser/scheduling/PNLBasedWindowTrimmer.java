@@ -531,6 +531,8 @@ public class PNLBasedWindowTrimmer {
 
 		if (slotIdx == terminateIdx) {
 			// 3. Termination state
+			PortTimesRecord recordCopy = record.copy();
+			PortTimesRecordMaker.updatePortTimesRecordWithPanamaRestrictions(distanceProvider, vesselAvailability.getVessel(), ptwr, recordCopy);
 			evaluator.accept(spi, record.copy());
 		} else {
 			final int vesselStartTime = spi.getVesselStartTime();

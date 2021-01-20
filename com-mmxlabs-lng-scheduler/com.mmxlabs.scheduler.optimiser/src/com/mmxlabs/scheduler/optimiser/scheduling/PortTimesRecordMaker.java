@@ -259,7 +259,7 @@ public class PortTimesRecordMaker {
 					recordToUpdateReturnTime.setReturnSlotTime(slot, arrivalTime);
 					//Make sure we do after return time updated.
 					if (prevTWR != null) {
-						this.updatePortTimesRecordWithPanamaRestrictions(vesselAvailability.getVessel(), prevTWR, recordToUpdateReturnTime);
+						this.updatePortTimesRecordWithPanamaRestrictions(distanceProvider, vesselAvailability.getVessel(), prevTWR, recordToUpdateReturnTime);
 						recordToUpdateReturnTime = null;
 					}
 				}
@@ -465,7 +465,8 @@ public class PortTimesRecordMaker {
 
 		// If non-null, set the return slot time to the next calculated slot and time.
 		PortTimesRecord recordToUpdateReturnTime = null;
-
+		IPortTimeWindowsRecord prevRecord = null;
+		
 		for (final IPortTimeWindowsRecord record : trimmedWindows) {
 			// Create and add record to the list.
 			final PortTimesRecord portTimesRecord = new PortTimesRecord();
@@ -489,6 +490,9 @@ public class PortTimesRecordMaker {
 				// What is the next travel time?
 				if (recordToUpdateReturnTime != null) {
 					recordToUpdateReturnTime.setReturnSlotTime(slot, arrivalTime);
+					if (prevRecord != null) {
+						this.updatePortTimesRecordWithPanamaRestrictions(distanceProvider, vesselAvailability.getVessel(), prevRecord, recordToUpdateReturnTime);
+					}
 					recordToUpdateReturnTime = null;
 				}
 			}
@@ -511,6 +515,7 @@ public class PortTimesRecordMaker {
 					portTimesRecord.setReturnSlotTime(returnSlot, roundTripReturnArrivalTime);
 				} else {
 					recordToUpdateReturnTime = portTimesRecord;
+					prevRecord = record;
 				}
 			}
 			//HERE TO FILTER OUT INVALID RECORDS WRT PANAMA IDLE TIME RULE AND DO NOT APPLY TO ROUDNTRIP/NOMINAL CARGOES.
@@ -519,7 +524,7 @@ public class PortTimesRecordMaker {
 		return portTimesRecords;
 	}
 
-	private void updatePortTimesRecordWithPanamaRestrictions(IVessel vessel, IPortTimeWindowsRecord portTimeWindowsRecord, PortTimesRecord recordCopy) {
+	public static void updatePortTimesRecordWithPanamaRestrictions(IDistanceProvider distanceProvider, IVessel vessel, IPortTimeWindowsRecord portTimeWindowsRecord, PortTimesRecord recordCopy) {
 		List<IPortSlot> allSlots = new LinkedList<>(recordCopy.getSlots());
 		//returnSlot was null in recordCopy so get from PortTimeWindowsRecord instead, as seems more reliable.
 		if (recordCopy.getReturnSlot() != null) {
