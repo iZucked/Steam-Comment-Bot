@@ -195,6 +195,14 @@ public class ScenarioComparisonService implements IScenarioServiceSelectionProvi
 	}
 
 	private synchronized void scheduleRebuildCompare(final ScenarioResult pinned, final Collection<ScenarioResult> others, final ISelection selection, final boolean block) {
+
+		// If we have too many other scenarios, then deselect *all* the others. We could pick an arbitrary one,
+		// but that could lead to inconsistent UI behaviour
+
+		if (pinned != null && others.size() > 1) {
+			others.clear();
+		}
+
 		final int value = counter.incrementAndGet();
 		if (PlatformUI.isWorkbenchRunning()) {
 			RunnerHelper.exec(() -> doRebuildCompare(value, pinned, others, selection, block), block);
