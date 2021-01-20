@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.its.tests;
 
+import java.awt.print.Paper;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
@@ -33,8 +34,10 @@ import com.mmxlabs.common.util.CheckedConsumer;
 import com.mmxlabs.lingo.its.tests.AbstractReportTester.ReportType;
 import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.IReportContentsGenerator;
+import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
@@ -146,6 +149,15 @@ public class ReportTester {
 					if (elementID.equals(cargoAllocation.getName())) {
 						target = cargoAllocation;
 						break;
+					}
+				}
+				if (target == null) {
+					for (final PaperDealAllocation pda : schedule.getPaperDealAllocations()) {
+						final PaperDeal pd = pda.getPaperDeal();
+						if (pd != null && elementID.equals(pd.getName())){
+							target = pd;
+							break;
+						}
 					}
 				}
 			}
