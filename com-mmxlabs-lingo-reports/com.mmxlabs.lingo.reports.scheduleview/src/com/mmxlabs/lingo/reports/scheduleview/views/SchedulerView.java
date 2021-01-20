@@ -584,7 +584,7 @@ public class SchedulerView extends ViewPart implements
 			@Override
 			public boolean useAlphaDrawing() {
 				return true;
-			};
+			}
 
 			@Override
 			public Color getTextColor() {
@@ -1116,7 +1116,6 @@ public class SchedulerView extends ViewPart implements
 				elementCollector.endCollecting();
 				ViewerHelper.setInput(viewer, true, rowElements);
 
-				// selectedObjects)
 				selectedObjectChanged(null, new StructuredSelection(expandSelection(selectedDataProvider.getSelectedObjects())));
 
 				viewer.getGanttChart().getGanttComposite().setTodaySupplier(null);
@@ -1163,21 +1162,6 @@ public class SchedulerView extends ViewPart implements
 		@Override
 		public void selectedObjectChanged(@Nullable final MPart source, @NonNull ISelection selection) {
 
-			// public void selectionChanged(final MPart part, final Object selectedObject)
-			// {
-			// {
-			// final IWorkbenchPart view = SelectionHelper.getE3Part(part);
-			//
-			// if (view == this) {
-			// return;
-			// }
-			// if (view instanceof PropertySheet) {
-			// return;
-			// }
-			// }
-
-			// ISelection selection = SelectionHelper.adaptSelection(selectedObject);
-
 			if (selection instanceof IStructuredSelection) {
 				final IStructuredSelection sel = (IStructuredSelection) selection;
 				List<Object> objects = new ArrayList<>(sel.toList().size());
@@ -1202,9 +1186,6 @@ public class SchedulerView extends ViewPart implements
 			ViewerHelper.setSelection(viewer, true, selection);
 
 		}
-
-		// ViewerHelper.refresh(viewer, true);
-		// }
 	};
 
 	private RunnableAction toggleLegend;
