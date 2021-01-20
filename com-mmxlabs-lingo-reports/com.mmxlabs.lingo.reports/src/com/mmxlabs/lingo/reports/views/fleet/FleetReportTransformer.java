@@ -182,11 +182,13 @@ public class FleetReportTransformer {
 		for (final ScenarioResult other : others) {
 			final ScenarioResult scenarioResult = other;
 			final Schedule schedule = scenarioResult.getTypedResult(ScheduleModel.class).getSchedule();
-			for (final Sequence sequence : schedule.getSequences()) {
-				if (builder.showEvent(sequence)) {
-					final Row row = createRow(scenarioResult, schedule, sequence);
-					rows.add(row);
-					addInputEquivalents(row, sequence);
+			if (schedule != null) {
+				for (final Sequence sequence : schedule.getSequences()) {
+					if (builder.showEvent(sequence)) {
+						final Row row = createRow(scenarioResult, schedule, sequence);
+						rows.add(row);
+						addInputEquivalents(row, sequence);
+					}
 				}
 			}
 		}
