@@ -153,6 +153,7 @@ public class FilterField implements ModifyListener, DisposeListener, KeyListener
 		text.getParent().layout(true);
 		if (!text.isVisible()) {
 			if (filterSupport != null) {
+				text.setText("");
 				filterSupport.setFilterString("");
 			}
 		} else {

@@ -247,21 +247,6 @@
          <menuContribution
                allPopups="false"
                locationURI="menu:data?after=additions">
-            <!--
-            <command
-                  commandId="com.mmxlabs.models.lng.scenario.ui.import.inventory"
-                  label="Inventory"
-                  style="push">
-               <visibleWhen
-                     checkEnabled="false">
-                  <test
-                        args="features:inventory-model"
-                        forcePluginActivation="true"
-                        property="com.mmxlabs.license.features.enablement">
-                  </test>
-               </visibleWhen>
-            </command>
-            !-->
             <command
                   commandId="EmptyCleanUpCommand"
                   label="Clean-up:"
@@ -356,6 +341,19 @@
                      checkEnabled="false">
                   <test
                         args="features:paperdeals"
+                        forcePluginActivation="true"
+                        property="com.mmxlabs.license.features.enablement">
+                  </test>
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.ui.import.inventory"
+                  label="Inventory"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <test
+                        args="features:inventory-model"
                         forcePluginActivation="true"
                         property="com.mmxlabs.license.features.enablement">
                   </test>
@@ -499,13 +497,11 @@
                  id="com.mmxlabs.models.lng.scenario.import.wizards.currency"
                  name="Bulk import currency curves from CSV">
            </command>
-           <!--
            <command
                  defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.inventory.ImportInventoryHandler"
                  id="com.mmxlabs.models.lng.scenario.ui.import.inventory"
                  name="Import inventory">
            </command>
-          !-->
            <command
                  defaultHandler="com.mmxlabs.models.lng.scenario.actions.RollForwardHandler"
                  description="Update the start of the scenario by removing old data and freezing near-term data."

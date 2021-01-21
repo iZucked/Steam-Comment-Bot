@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.csv.CSVReader;
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -111,7 +112,7 @@ public class InventoryExtraImporter implements IExtraModelImporter {
 		final Map<String, List<InventoryEventRow>> offtakes = new HashMap<>();
 		final Map<String, List<InventoryCapacityRow>> capacities = new HashMap<>();
 
-		final DefaultClassImporter importer = new DefaultClassImporter();
+		final InventoryImporter importer = new InventoryImporter();
 
 		Map<String, String> row;
 		while ((row = reader.readRow(true)) != null) {
@@ -143,7 +144,34 @@ public class InventoryExtraImporter implements IExtraModelImporter {
 		}
 
 		return results;
-
+	}
+	
+	public Map<String, Map<String, List<InventoryEventRow>>> doImportInventoryEvents(@NonNull final CSVReader reader, @NonNull final IMMXImportContext context) throws IOException {
+		if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_INVENTORY_MODEL)) {
+			return null;
+		}
+		
+		final Map<String, Map<String, List<InventoryEventRow>>> results = new HashMap<>();
+		
+		final InventoryImporter importer = new InventoryImporter();
+		Map<String, String> row;
+		while ((row = reader.readRow(true)) != null) {
+			final ImportResults importObject = importer.importObject(null, EcorePackage.eINSTANCE.getEObject(), row, context);
+			final String inventory = row.get(KEY_INVENTORY_NAME);
+			final String type = row.get(KEY_TYPE);
+			if (KEY_FLOW_TYPE_FEED.equalsIgnoreCase(type) || KEY_FLOW_TYPE_OFFTAKE.equalsIgnoreCase(type)) {
+				results //
+					.computeIfAbsent(inventory, k -> {
+						final Map<String, List<InventoryEventRow>> newMap = new HashMap<>();
+						newMap.put(KEY_FLOW_TYPE_FEED, new LinkedList<>());
+						newMap.put(KEY_FLOW_TYPE_OFFTAKE, new LinkedList<>());
+						return newMap;
+					}) //
+					.get(type) //
+					.add((InventoryEventRow) importObject.importedObject);
+			}
+		}
+		return results;
 	}
 
 	@Override
