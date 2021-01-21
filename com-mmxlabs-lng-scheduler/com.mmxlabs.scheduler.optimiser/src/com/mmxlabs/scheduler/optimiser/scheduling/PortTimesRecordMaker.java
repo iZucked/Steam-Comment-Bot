@@ -259,9 +259,10 @@ public class PortTimesRecordMaker {
 					recordToUpdateReturnTime.setReturnSlotTime(slot, arrivalTime);
 					//Make sure we do after return time updated.
 					if (prevTWR != null) {
-						this.updatePortTimesRecordWithPanamaRestrictions(distanceProvider, vesselAvailability.getVessel(), prevTWR, recordToUpdateReturnTime);
-						recordToUpdateReturnTime = null;
+						updatePortTimesRecordWithPanamaRestrictions(distanceProvider, vesselAvailability.getVessel(), prevTWR, recordToUpdateReturnTime);
 					}
+					
+					recordToUpdateReturnTime = null;
 				}
 			}
 
@@ -342,6 +343,11 @@ public class PortTimesRecordMaker {
 					prevTWR = record;
 				}
 			}
+		}
+		
+		//In case something changes and the end event has a journey on it in the future.
+		if (recordToUpdateReturnTime != null && prevTWR != null) {
+			updatePortTimesRecordWithPanamaRestrictions(distanceProvider, vesselAvailability.getVessel(), prevTWR, recordToUpdateReturnTime);
 		}
 		
 		return portTimesRecords;
@@ -491,7 +497,7 @@ public class PortTimesRecordMaker {
 				if (recordToUpdateReturnTime != null) {
 					recordToUpdateReturnTime.setReturnSlotTime(slot, arrivalTime);
 					if (prevRecord != null) {
-						this.updatePortTimesRecordWithPanamaRestrictions(distanceProvider, vesselAvailability.getVessel(), prevRecord, recordToUpdateReturnTime);
+						updatePortTimesRecordWithPanamaRestrictions(distanceProvider, vesselAvailability.getVessel(), prevRecord, recordToUpdateReturnTime);
 					}
 					recordToUpdateReturnTime = null;
 				}
@@ -519,6 +525,11 @@ public class PortTimesRecordMaker {
 				}
 			}
 			//HERE TO FILTER OUT INVALID RECORDS WRT PANAMA IDLE TIME RULE AND DO NOT APPLY TO ROUDNTRIP/NOMINAL CARGOES.
+		}
+		
+		//In case something changes and the end event has a journey on it in the future.
+		if (recordToUpdateReturnTime != null && prevRecord != null) {
+			updatePortTimesRecordWithPanamaRestrictions(distanceProvider, vesselAvailability.getVessel(), prevRecord, recordToUpdateReturnTime);
 		}
 
 		return portTimesRecords;
