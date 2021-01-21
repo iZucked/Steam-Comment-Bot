@@ -27,9 +27,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.google.inject.Inject;
+import com.mmxlabs.common.Equality;
 import com.mmxlabs.models.lng.adp.ADPFactory;
 import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.DESSalesMarketAllocationRow;
@@ -37,6 +40,7 @@ import com.mmxlabs.models.lng.adp.MullEntityRow;
 import com.mmxlabs.models.lng.adp.MullProfile;
 import com.mmxlabs.models.lng.adp.MullSubprofile;
 import com.mmxlabs.models.lng.adp.SalesContractAllocationRow;
+import com.mmxlabs.models.lng.adp.utils.IMullRelativeEntitlementImportCommandProvider;
 import com.mmxlabs.models.lng.cargo.Inventory;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -49,12 +53,14 @@ import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IInlineEditorWrapper;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
+import com.mmxlabs.models.ui.editors.util.CommandUtil;
 import com.mmxlabs.models.ui.impl.DefaultDetailComposite;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.MultipleReferenceManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
+import com.mmxlabs.rcp.common.actions.RunnableAction;
 
 public class MullProfileDetailComposite extends Composite implements IDisplayComposite {
 
@@ -66,6 +72,8 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 	private MullProfile oldValue = null;
 	private MullSubprofile oldSubprofile = null;
 	
+	@Inject
+	private IMullRelativeEntitlementImportCommandProvider mullRelativeEntitlementImportCommandProvider;
 	
 	private final Composite inventoryTableComposite;
 	private ICommandHandler commandHandler;
@@ -127,7 +135,7 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 		setLayout(new GridLayout(1, false));
 		delegate = new DefaultDetailComposite(this, style, toolkit);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.widthHint = 400;
+		gd.widthHint = 800;
 		delegate.getComposite().setLayoutData(gd);
 		inventoryTableComposite = toolkit.createComposite(this, style);
 		inventoryTableComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -137,6 +145,8 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 		this.entityTableViewer = getEntityTableViewer(inventoryTableComposite, toolkit);
 		this.contractViewer = getContractTableViewer(inventoryTableComposite, toolkit);
 		this.marketViewer = getMarketTableViewer(inventoryTableComposite, toolkit);
+		final IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		this.mullRelativeEntitlementImportCommandProvider = activeWorkbenchWindow.getService(IMullRelativeEntitlementImportCommandProvider.class);
 	}
 
 	@Override
@@ -199,6 +209,8 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 		
 		final DetailToolbarManager buttonManager = new DetailToolbarManager(inventoryTableGroup, SWT.TOP);
 		buttonManager.getToolbarManager().getControl().setBackground(systemWhite);
+		
+		
 		
 		addInventorySubprofileRow = new Action("Add") {
 			@Override
@@ -324,14 +336,27 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 			public void run() {
 				final MullEntityRow newLine = ADPFactory.eINSTANCE.createMullEntityRow();
 				commandHandler.handleCommand(AddCommand.create(commandHandler.getEditingDomain(), oldSubprofile, ADPPackage.Literals.MULL_SUBPROFILE__ENTITY_TABLE, newLine), oldSubprofile, ADPPackage.Literals.MULL_SUBPROFILE__ENTITY_TABLE);
-				if (viewer != null) {
-					viewer.setSelection(new StructuredSelection(newLine));
-					viewer.refresh();
+				if (entityTableViewer != null) {
+					entityTableViewer.setSelection(new StructuredSelection(newLine));
+					entityTableViewer.refresh();
 				}
 			}
 		};
 		addEntityRow.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
 		buttonManager.getToolbarManager().add(addEntityRow);
+		
+		final Action importMullEntitiesAction = new Action("Import from CSV") {
+			@Override
+			public void run() {
+				mullRelativeEntitlementImportCommandProvider.run(oldSubprofile, dialogContext.getScenarioEditingLocation().getScenarioInstance());
+				if (entityTableViewer != null) {
+					entityTableViewer.setSelection(null);
+					entityTableViewer.refresh();
+				}
+			}
+		};
+		importMullEntitiesAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
+		buttonManager.getToolbarManager().add(importMullEntitiesAction);
 		
 		deleteEntityRow = new Action("Delete") {
 			@Override
@@ -543,12 +568,12 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 			}
 		});
 		eViewer.addTypicalColumn("Vessels", new MultipleReferenceManipulator(ADPPackage.eINSTANCE.getMullAllocationRow_Vessels(), sel.getReferenceValueProviderCache(), sel.getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
-			@Override
-			public void runSetCommand(Object object, Object value) {
-				super.runSetCommand(object, value);
-				dialogContext.getDialogController().validate();
-				eViewer.refresh();
-			}
+//			@Override
+//			public void runSetCommand(Object object, Object value) {
+//				super.runSetCommand(object, value);
+//				dialogContext.getDialogController().validate();
+//				eViewer.refresh();
+//			}
 		});
 		
 		eViewer.setStatusProvider(statusProvider);
@@ -653,21 +678,29 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 				eViewer.refresh();
 			}
 		});
-		eViewer.addTypicalColumn("ACQ", new NumericAttributeManipulator(ADPPackage.eINSTANCE.getMullAllocationRow_Weight(), sel.getEditingDomain()) {
+		eViewer.addTypicalColumn("ACQ", new NumericAttributeManipulator(ADPPackage.eINSTANCE.getMullAllocationRow_Weight(), sel.getEditingDomain()) 
+		{
 			@Override
 			public void runSetCommand(Object object, Object value) {
 				super.runSetCommand(object, value);
-				dialogContext.getDialogController().validate();
-				eViewer.refresh();
+//				dialogContext.getDialogController().validate();
+//				eViewer.refresh();
 			}
-		});
+		}
+		);
+
 		eViewer.addTypicalColumn("Vessels", new MultipleReferenceManipulator(ADPPackage.eINSTANCE.getMullAllocationRow_Vessels(), sel.getReferenceValueProviderCache(), sel.getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
 			@Override
-			public void runSetCommand(Object object, Object value) {
-				super.runSetCommand(object, value);
-				dialogContext.getDialogController().validate();
-				eViewer.refresh();
+			public void doSetValue(final Object object, final Object value) {
+				super.doSetValue(object, value);
 			}
+			
+//			@Override
+//			public void runSetCommand(Object object, Object value) {
+//				super.runSetCommand(object, value);
+//				dialogContext.getDialogController().validate();
+//				eViewer.refresh();
+//			}
 		});
 		
 		eViewer.setStatusProvider(statusProvider);

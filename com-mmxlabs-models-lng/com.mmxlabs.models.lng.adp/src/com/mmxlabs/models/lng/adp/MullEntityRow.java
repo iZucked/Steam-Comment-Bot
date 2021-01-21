@@ -83,7 +83,7 @@ public interface MullEntityRow extends EObject {
 	 * @return the value of the '<em>Relative Entitlement</em>' attribute.
 	 * @see #setRelativeEntitlement(double)
 	 * @see com.mmxlabs.models.lng.adp.ADPPackage#getMullEntityRow_RelativeEntitlement()
-	 * @model
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='###.########'"
 	 * @generated
 	 */
 	double getRelativeEntitlement();

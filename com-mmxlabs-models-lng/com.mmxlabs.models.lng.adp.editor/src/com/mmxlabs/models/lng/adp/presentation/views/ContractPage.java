@@ -725,6 +725,7 @@ public class ContractPage extends ADPComposite {
 		if (editorData != null && editorData.getScenarioModel() != null) {
 			if (previewViewer != null) {
 				if (target instanceof PurchaseContractProfile) {
+					rhsScrolledComposite.setVisible(true);
 					final PurchaseContractProfile purchaseContractProfile = (PurchaseContractProfile) target;
 					final List<Object> o = new LinkedList<>();
 					for (LoadSlot s : editorData.getScenarioModel().getCargoModel().getLoadSlots()) {
@@ -734,6 +735,7 @@ public class ContractPage extends ADPComposite {
 					}
 					previewViewer.setInput(o);
 				} else if (target instanceof SalesContractProfile) {
+					rhsScrolledComposite.setVisible(true);
 					final SalesContractProfile salesContractProfile = (SalesContractProfile) target;
 					final List<Object> o = new LinkedList<>();
 					for (DischargeSlot s : editorData.getScenarioModel().getCargoModel().getDischargeSlots()) {
@@ -742,6 +744,8 @@ public class ContractPage extends ADPComposite {
 						}
 					}
 					previewViewer.setInput(o);
+				} else if (target instanceof MullProfile) {
+					rhsScrolledComposite.setVisible(false);
 				}
 			}
 		}
@@ -759,6 +763,15 @@ public class ContractPage extends ADPComposite {
 					|| msg.getFeature() == CommercialPackage.Literals.COMMERCIAL_MODEL__SALES_CONTRACTS) {
 				final CommercialModel commercialModel = (CommercialModel) msg.getNotifier();
 				final List<Object> objects = new LinkedList<>();
+				
+				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_INVENTORY_MODEL) && LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
+					MullProfile profile = editorData.adpModel.getMullProfile();
+					if (profile == null) {
+						profile = ADPFactory.eINSTANCE.createMullProfile();
+					}
+					objects.add(profile);
+				}
+				
 				objects.addAll(commercialModel.getPurchaseContracts());
 				objects.addAll(commercialModel.getSalesContracts());
 
@@ -774,6 +787,7 @@ public class ContractPage extends ADPComposite {
 						} else {
 							objectSelector.setSelection(new StructuredSelection(objects.get(0)));
 						}
+						objectSelector.refresh(true);
 					}
 				});
 			} else if (msg.getNotifier() instanceof Contract) {
