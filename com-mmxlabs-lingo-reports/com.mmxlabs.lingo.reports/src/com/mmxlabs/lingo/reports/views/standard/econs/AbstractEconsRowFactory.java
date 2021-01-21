@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2020
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2021
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.standard.econs;
@@ -257,7 +257,7 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 		return createBasicFormatter(options, rowType, Integer.class, new Function<Integer, String>() {
 			@Override
 			public String apply(Integer days) {
-				return Formatters.formatAsDays(DurationMode.DAYS_HOURS_HUMAN, days * 24);
+				return Formatters.formatAsDays(DurationMode.DAYS_HOURS_HUMAN, days * 24L);
 			}
 		}, transformer);
 	}

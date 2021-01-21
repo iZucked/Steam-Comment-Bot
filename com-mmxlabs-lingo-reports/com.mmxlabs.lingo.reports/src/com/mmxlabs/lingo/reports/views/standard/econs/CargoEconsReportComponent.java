@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2020
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2021
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.standard.econs;
@@ -499,27 +499,27 @@ public class CargoEconsReportComponent implements IAdaptable {
 
 						} else if (obj instanceof Purge) {
 							validObjects.add(obj);
-						} else if (obj instanceof PaperDeal) {
-							final PaperDeal paperDeal = (PaperDeal) obj;
-							if (schedule != null) {
-								if (paperDealMap == null) {
-									paperDealMap = schedule.getPaperDealAllocations().stream() //
-											.collect(Collectors.toMap(PaperDealAllocation::getPaperDeal, Functions.identity()));
-								}
-
-								final PaperDealAllocation pda = paperDealMap.get(paperDeal);
-								if (pda != null) {
-									validObjects.add(pda);
-								}
-
+						}
+					} else if (obj instanceof PaperDeal) {
+						final PaperDeal paperDeal = (PaperDeal) obj;
+						if (schedule != null) {
+							if (paperDealMap == null) {
+								paperDealMap = schedule.getPaperDealAllocations().stream() //
+										.collect(Collectors.toMap(PaperDealAllocation::getPaperDeal, Functions.identity()));
 							}
-						} else if (obj instanceof PaperDealAllocation) {
-							validObjects.add(obj);
-						} else if (obj instanceof PaperDealAllocationEntry) {
-							final EObject objContainer = ((PaperDealAllocationEntry) obj).eContainer();
-							if (objContainer instanceof PaperDealAllocation) {
-								validObjects.add(objContainer);
+
+							final PaperDealAllocation pda = paperDealMap.get(paperDeal);
+							if (pda != null) {
+								validObjects.add(pda);
 							}
+
+						}
+					} else if (obj instanceof PaperDealAllocation) {
+						validObjects.add(obj);
+					} else if (obj instanceof PaperDealAllocationEntry) {
+						final EObject objContainer = ((PaperDealAllocationEntry) obj).eContainer();
+						if (objContainer instanceof PaperDealAllocation) {
+							validObjects.add(objContainer);
 						}
 					}
 				}

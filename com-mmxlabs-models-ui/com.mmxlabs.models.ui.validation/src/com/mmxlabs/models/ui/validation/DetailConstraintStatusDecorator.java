@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2020
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2021
  * All rights reserved.
  */
 package com.mmxlabs.models.ui.validation;
@@ -19,7 +19,9 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 /**
- * Implementation of {@link IDetailConstraintStatus} wrapping a {@link IConstraintStatus} instance and adding in the extra methods for the {@link IDetailConstraintStatus} interface
+ * Implementation of {@link IDetailConstraintStatus} wrapping a
+ * {@link IConstraintStatus} instance and adding in the extra methods for the
+ * {@link IDetailConstraintStatus} interface
  * 
  * @author Simon Goodall
  * 
@@ -32,6 +34,7 @@ public class DetailConstraintStatusDecorator implements IDetailConstraintStatus 
 	private @Nullable String name;
 	private @Nullable String baseMessage;
 	private @Nullable ValidationGroup tag;
+	private @Nullable Object constraintKey;
 
 	public DetailConstraintStatusDecorator(final IConstraintStatus status) {
 		this(status, status.getSeverity());
@@ -150,11 +153,25 @@ public class DetailConstraintStatusDecorator implements IDetailConstraintStatus 
 	}
 
 	/**
-	 * An arbitrary object tag to "classify" validation messages for types which can be located in multiple places.
+	 * An arbitrary object tag to "classify" validation messages for types which can
+	 * be located in multiple places.
 	 * 
 	 * @return
 	 */
 	public @Nullable ValidationGroup getTag() {
 		return tag;
+	}
+
+	/**
+	 * An unique key used to identify the constraint code branch. 
+	 * 
+	 * @return
+	 */
+	public @Nullable Object getConstraintKey() {
+		return constraintKey;
+	}
+
+	public void setConstraintKey(Object constraintKey) {
+		this.constraintKey = constraintKey;
 	}
 }

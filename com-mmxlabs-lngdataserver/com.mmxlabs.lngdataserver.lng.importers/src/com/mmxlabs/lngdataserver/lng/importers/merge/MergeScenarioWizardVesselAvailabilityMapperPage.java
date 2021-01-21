@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2020
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2021
  * All rights reserved.
  */
 package com.mmxlabs.lngdataserver.lng.importers.merge;
@@ -52,7 +52,9 @@ public class MergeScenarioWizardVesselAvailabilityMapperPage extends MergeScenar
 		ModelGetter mg = this.getModelGetter();
 		EStructuralFeature feature = this.getFeature();
 		mergeHelper.merge(cmd, mapping, eO -> getName(eO), mg, feature);
-		mergeHelper.updateVesselAvailabilityStartEndDates(cmd);
+		if (checkBox.getSelection()) {
+			mergeHelper.updateVesselAvailabilityStartEndDates(cmd);
+		}
 	}
 
 	private Pair<EObjectListGetter, List<MergeMapping>> getMergeMappings() {

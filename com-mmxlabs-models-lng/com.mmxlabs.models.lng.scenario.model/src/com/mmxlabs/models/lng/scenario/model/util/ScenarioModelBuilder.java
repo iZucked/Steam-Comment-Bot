@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2020
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2021
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.scenario.model.util;
@@ -66,7 +66,8 @@ public final class ScenarioModelBuilder {
 		rootObject.setScheduleModel(ScheduleFactory.eINSTANCE.createScheduleModel());
 		rootObject.setAnalyticsModel(AnalyticsFactory.eINSTANCE.createAnalyticsModel());
 		rootObject.setNominationsModel(NominationsFactory.eINSTANCE.createNominationsModel());
-
+		rootObject.getNominationsModel().setNominationParameters(NominationsFactory.eINSTANCE.createNominationsParameters());
+		
 		final LNGReferenceModel referenceModel = LNGScenarioFactory.eINSTANCE.createLNGReferenceModel();
 		referenceModel.setPortModel(PortFactory.eINSTANCE.createPortModel());
 		referenceModel.setFleetModel(FleetFactory.eINSTANCE.createFleetModel());

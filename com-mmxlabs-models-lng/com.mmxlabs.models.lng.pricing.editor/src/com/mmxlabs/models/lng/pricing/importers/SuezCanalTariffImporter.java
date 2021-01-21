@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2020
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2021
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.importers;
@@ -42,6 +42,7 @@ public class SuezCanalTariffImporter extends DefaultClassImporter {
 	@Override
 	public ImportResults importObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IMMXImportContext context) {
 
+		// Double.parseDouble is not intelligent enough to ignore ","
 		if (row.containsKey(TUG_COST_KEY) && !row.get(TUG_COST_KEY).isEmpty()) {
 			return parseField(row, context, TUG_COST_KEY, "tug cost", PricingPackage.Literals.SUEZ_CANAL_TARIFF__TUG_COST, valueString -> Double.parseDouble(valueString));
 		}
@@ -78,10 +79,10 @@ public class SuezCanalTariffImporter extends DefaultClassImporter {
 		exportObjects.addAll(exportObjects(tariff.getBands(), context));
 		exportObjects.addAll(exportObjects(tariff.getTugBands(), context));
 
-		exportObjects.add(CollectionsUtil.<String, String> makeHashMap(TUG_COST_KEY, String.format("%0,1f", tariff.getTugCost())));
-		exportObjects.add(CollectionsUtil.<String, String> makeHashMap(FIXED_COST_KEY, String.format("%0,1f", tariff.getFixedCosts())));
-		exportObjects.add(CollectionsUtil.<String, String> makeHashMap(DISCOUNT_FACTOR_KEY, String.format("%0,1f", tariff.getDiscountFactor())));
-		exportObjects.add(CollectionsUtil.<String, String> makeHashMap(SDR_TO_USD_KEY, tariff.getSdrToUSD()));
+		exportObjects.add(CollectionsUtil.<String, String>makeHashMap(TUG_COST_KEY, String.format("%.2f", tariff.getTugCost())));
+		exportObjects.add(CollectionsUtil.<String, String>makeHashMap(FIXED_COST_KEY, String.format("%.2f", tariff.getFixedCosts())));
+		exportObjects.add(CollectionsUtil.<String, String>makeHashMap(DISCOUNT_FACTOR_KEY, String.format("%.2f", tariff.getDiscountFactor())));
+		exportObjects.add(CollectionsUtil.<String, String>makeHashMap(SDR_TO_USD_KEY, tariff.getSdrToUSD()));
 
 		return exportObjects;
 

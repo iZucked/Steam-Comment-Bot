@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2020
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2021
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.validation;
@@ -35,6 +35,8 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
  */
 public class SlotNameUniquenessConstraint extends AbstractModelMultiConstraint {
 
+	public static final String KEY_SLOT_NAME_UNIQUENESS = SlotNameUniquenessConstraint.class.getCanonicalName();
+	
 	private Collection<Type> getSlotTypes(final Slot slot) {
 		if (slot instanceof LoadSlot) {
 			final LoadSlot loadSlot = (LoadSlot) slot;
@@ -76,7 +78,7 @@ public class SlotNameUniquenessConstraint extends AbstractModelMultiConstraint {
 
 				Map<Type, Set<String>> badNames = (Map<Type, Set<String>>) ctx.getCurrentConstraintData();
 				if (badNames == null) {
-					badNames = new HashMap<Type, Set<String>>();
+					badNames = new HashMap<>();
 					ctx.putCurrentConstraintData(badNames);
 				}
 
@@ -117,6 +119,7 @@ public class SlotNameUniquenessConstraint extends AbstractModelMultiConstraint {
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
 								(IConstraintStatus) ctx.createFailureStatus(target.eClass().getName() + " has non-unique name " + name));
 						dsd.addEObjectAndFeature(target, MMXCorePackage.Literals.NAMED_OBJECT__NAME);
+						dsd.setConstraintKey(KEY_SLOT_NAME_UNIQUENESS);
 						statuses.add(dsd);
 						break;
 					}

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2020
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2021
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.scheduling;
@@ -531,7 +531,9 @@ public class PNLBasedWindowTrimmer {
 
 		if (slotIdx == terminateIdx) {
 			// 3. Termination state
-			evaluator.accept(spi, record.copy());
+			PortTimesRecord recordCopy = record.copy();
+			PortTimesRecordMaker.updatePortTimesRecordWithPanamaRestrictions(distanceProvider, vesselAvailability.getVessel(), ptwr, recordCopy);
+			evaluator.accept(spi, recordCopy);
 		} else {
 			final int vesselStartTime = spi.getVesselStartTime();
 			if (slotIdx == returnSlotIdx) {
