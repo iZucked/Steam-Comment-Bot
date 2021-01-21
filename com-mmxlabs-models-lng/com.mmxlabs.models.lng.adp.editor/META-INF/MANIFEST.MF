@@ -11,6 +11,7 @@ Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: com.mmxlabs.models.lng.adp.ext,
  com.mmxlabs.models.lng.adp.ext.impl,
+ com.mmxlabs.models.lng.adp.importer,
  com.mmxlabs.models.lng.adp.presentation,
  com.mmxlabs.models.lng.adp.utils
 Require-Bundle: org.eclipse.core.runtime,
@@ -51,7 +52,6 @@ Require-Bundle: org.eclipse.core.runtime,
  com.mmxlabs.models.lng.cargo.editor,
  com.mmxlabs.models.lng.port.editor,
  com.mmxlabs.models.util,
- com.mmxlabs.models.lng.scenario.ui,
  com.mmxlabs.models.ui.validation,
  com.mmxlabs.optimiser.optimiser-core,
  org.eclipse.core.expressions,
