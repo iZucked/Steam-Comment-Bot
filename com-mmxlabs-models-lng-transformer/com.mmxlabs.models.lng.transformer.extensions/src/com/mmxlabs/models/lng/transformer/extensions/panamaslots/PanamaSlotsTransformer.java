@@ -102,6 +102,8 @@ public class PanamaSlotsTransformer implements ITransformerExtension {
 
 			Port port = modelDistanceProvider.getCanalPort(RouteOption.PANAMA, eBooking.getCanalEntrance());
 
+			//No need to worry about change of daylight savings for Panama ports, so using atStartOfDay should be ok:
+			//"In Central America, the countries from Guatemala to Costa Rica use Central Standard Time UTC−06:00 year-round, but Panama uses Eastern Standard Time (UTC−05:00) year-round."
 			final int date = dateAndCurveHelper.convertTime(eBooking.getBookingDate().atStartOfDay(port.getZoneId()).plusHours(CanalBookingSlot.BOOKING_HOURS_OFFSET));
 			
 			final IRouteOptionBooking oBooking;
