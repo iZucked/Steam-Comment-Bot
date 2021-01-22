@@ -165,7 +165,7 @@ public class JourneyEventExporter {
 					journey.setLatestPossibleCanalDateTime(latestCanalEntry.toLocalDateTime());
 				}
 
-				// set canal arrival
+				// set canal arrival - 1st leg of panama journey.
 				int toCanal = distanceProvider.getTravelTime(ERouteOption.DIRECT, //
 						options.getVessel(), //
 						options.getFromPortSlot().getPort(), //
