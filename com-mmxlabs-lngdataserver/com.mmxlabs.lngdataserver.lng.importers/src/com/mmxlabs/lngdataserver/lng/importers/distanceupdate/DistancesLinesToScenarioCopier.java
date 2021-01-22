@@ -110,6 +110,7 @@ public class DistancesLinesToScenarioCopier {
 
 			{
 				final Map<Pair<String, String>, AtoBviaCLookupRecord> recordsMap = records.stream() // .
+						.filter(AtoBviaCLookupRecord::isAntiPiracy) //
 						.collect(Collectors.toMap(r -> Pair.of(r.getFrom(), r.getTo()), r -> r));
 
 				final Map<Pair<String, String>, AtoBviaCLookupRecord> manualRecordsMap = manualRecords == null ? new HashMap<>()
