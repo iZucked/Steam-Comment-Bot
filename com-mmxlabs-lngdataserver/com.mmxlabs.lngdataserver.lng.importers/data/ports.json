@@ -3,7 +3,6 @@
   "locations": [
 {
   "mmxId" : "L_DZ_Bethi",
-  "virtual" : false,
   "name" : "Bethioua",
   "geographicPoint" : {
     "lat" : 35.8216667175293,
@@ -14,7 +13,6 @@
   "upstreamID" : "DZ0004"
 }, {
   "mmxId" : "L_AO_Soyo",
-  "virtual" : false,
   "name" : "Soyo",
   "aliases" : [ "Angola" ],
   "geographicPoint" : {
@@ -26,7 +24,6 @@
   "upstreamID" : "AO0061"
 }, {
   "mmxId" : "L_YI_Tener",
-  "virtual" : false,
   "name" : "Tenerife",
   "aliases" : [ "Tenerife", "Santa Cruz de Tenerife" ],
   "geographicPoint" : {
@@ -38,7 +35,6 @@
   "upstreamID" : "YI0016"
 }, {
   "mmxId" : "L_CN_Ningb",
-  "virtual" : false,
   "name" : "Ningbo",
   "aliases" : [ "Ningbo" ],
   "geographicPoint" : {
@@ -50,7 +46,6 @@
   "upstreamID" : "CN0101"
 }, {
   "mmxId" : "L_CN_BeiHa",
-  "virtual" : false,
   "name" : "Bei Hai",
   "aliases" : [ "Beihai" ],
   "geographicPoint" : {
@@ -62,7 +57,6 @@
   "upstreamID" : "CN0009"
 }, {
   "mmxId" : "L_CN_Zhous",
-  "virtual" : false,
   "name" : "Zhoushan",
   "aliases" : [ "Ting Hai" ],
   "geographicPoint" : {
@@ -74,7 +68,6 @@
   "upstreamID" : "CN0188"
 }, {
   "mmxId" : "L_HR_KrkIs",
-  "virtual" : false,
   "name" : "Krk Island",
   "geographicPoint" : {
     "lat" : 45.32666778564453,
@@ -85,7 +78,6 @@
   "upstreamID" : "HR0036"
 }, {
   "mmxId" : "L_FR_FosCa",
-  "virtual" : false,
   "name" : "Fos",
   "aliases" : [ "Fos - Cavaou" ],
   "geographicPoint" : {
@@ -97,7 +89,6 @@
   "upstreamID" : "FR0248"
 }, {
   "mmxId" : "L_ID_Jakar",
-  "virtual" : false,
   "name" : "Jakarta",
   "aliases" : [ "Jakarta" ],
   "geographicPoint" : {
@@ -109,7 +100,6 @@
   "upstreamID" : "ID0076"
 }, {
   "mmxId" : "L_JP_Higas",
-  "virtual" : false,
   "name" : "Higashi-Ogishima",
   "aliases" : [ "Higashi-Ogishima", "H-Ogishima", "H-Ohgishima" ],
   "geographicPoint" : {
@@ -121,7 +111,6 @@
   "upstreamID" : "JP0116"
 }, {
   "mmxId" : "L_JP_Joets",
-  "virtual" : false,
   "name" : "Joetsu",
   "geographicPoint" : {
     "lat" : 37.19335174560547,
@@ -132,7 +121,6 @@
   "upstreamID" : "JP0197"
 }, {
   "mmxId" : "L_JP_Naoet",
-  "virtual" : false,
   "name" : "Naoetsu",
   "geographicPoint" : {
     "lat" : 37.19335174560547,
@@ -143,7 +131,6 @@
   "upstreamID" : "JP0197"
 }, {
   "mmxId" : "L_JP_Senbo",
-  "virtual" : false,
   "name" : "Senboku",
   "geographicPoint" : {
     "lat" : 34.55666732788086,
@@ -154,7 +141,6 @@
   "upstreamID" : "JP0254"
 }, {
   "mmxId" : "L_NG_Bonny",
-  "virtual" : false,
   "name" : "Bonny",
   "aliases" : [ "Bonny Island", "Lagos" ],
   "geographicPoint" : {
@@ -166,7 +152,6 @@
   "upstreamID" : "NG0009"
 }, {
   "mmxId" : "L_PH_Taban",
-  "virtual" : false,
   "name" : "Tabangao",
   "geographicPoint" : {
     "lat" : 13.721290588378906,
@@ -177,7 +162,6 @@
   "upstreamID" : "PH0018"
 }, {
   "mmxId" : "L_KR_Gwang",
-  "virtual" : false,
   "name" : "Gwangyang",
   "geographicPoint" : {
     "lat" : 34.88333511352539,
@@ -188,7 +172,6 @@
   "upstreamID" : "KR0046"
 }, {
   "mmxId" : "L_KR_Pyeon",
-  "virtual" : false,
   "name" : "Pyeongtaek",
   "aliases" : [ "Pyeong Taek" ],
   "geographicPoint" : {
@@ -200,7 +183,6 @@
   "upstreamID" : "KR0079"
 }, {
   "mmxId" : "L_KR_Samch",
-  "virtual" : false,
   "name" : "Samcheog",
   "aliases" : [ "Samchok", "Samcheok" ],
   "geographicPoint" : {
@@ -212,7 +194,6 @@
   "upstreamID" : "KR0033"
 }, {
   "mmxId" : "L_ES_ElFer",
-  "virtual" : false,
   "name" : "El Ferrol",
   "aliases" : [ "El Ferrol", "Ferol", "La Coruna", "Reganose", "Reganosa", "Murgardos", "Ferrol" ],
   "geographicPoint" : {
@@ -224,7 +205,6 @@
   "upstreamID" : "ES0061"
 }, {
   "mmxId" : "L_DZ_Arzew",
-  "virtual" : false,
   "name" : "Arzew",
   "geographicPoint" : {
     "lat" : 35.849998474121094,
@@ -235,7 +215,6 @@
   "upstreamID" : "DZ0003"
 }, {
   "mmxId" : "L_DZ_Skikd",
-  "virtual" : false,
   "name" : "Skikda",
   "aliases" : [ "Sonatrach" ],
   "geographicPoint" : {
@@ -247,7 +226,6 @@
   "upstreamID" : "DZ0033"
 }, {
   "mmxId" : "L_AR_Bahia",
-  "virtual" : false,
   "name" : "Bahia Blanca",
   "geographicPoint" : {
     "lat" : -38.788333892822266,
@@ -258,7 +236,6 @@
   "upstreamID" : "AR0129"
 }, {
   "mmxId" : "L_AR_Escob",
-  "virtual" : false,
   "name" : "Escobar",
   "geographicPoint" : {
     "lat" : -34.23666763305664,
@@ -269,7 +246,6 @@
   "upstreamID" : "AR0130"
 }, {
   "mmxId" : "L_AU_Barro",
-  "virtual" : false,
   "name" : "Barrow Island",
   "aliases" : [ "Gorgon" ],
   "geographicPoint" : {
@@ -281,7 +257,6 @@
   "upstreamID" : "AU0021"
 }, {
   "mmxId" : "L_AU_Dampi",
-  "virtual" : false,
   "name" : "Dampier",
   "geographicPoint" : {
     "lat" : -20.648332595825195,
@@ -292,7 +267,6 @@
   "upstreamID" : "AU0089"
 }, {
   "mmxId" : "L_AU_Darwi",
-  "virtual" : false,
   "name" : "Darwin",
   "aliases" : [ "Wickham Point" ],
   "geographicPoint" : {
@@ -304,7 +278,6 @@
   "upstreamID" : "AU0329"
 }, {
   "mmxId" : "L_AU_Glads",
-  "virtual" : false,
   "name" : "Gladstone",
   "geographicPoint" : {
     "lat" : -23.805665969848633,
@@ -315,7 +288,6 @@
   "upstreamID" : "AU0421"
 }, {
   "mmxId" : "L_AU_Karra",
-  "virtual" : false,
   "name" : "Karratha",
   "aliases" : [ "Withnell Bay" ],
   "geographicPoint" : {
@@ -327,7 +299,6 @@
   "upstreamID" : "AU0311"
 }, {
   "mmxId" : "L_AU_Pluto",
-  "virtual" : false,
   "name" : "Pluto",
   "geographicPoint" : {
     "lat" : -20.60416603088379,
@@ -338,7 +309,6 @@
   "upstreamID" : "AU0420"
 }, {
   "mmxId" : "L_BH_Bahra",
-  "virtual" : false,
   "name" : "Bahrain",
   "geographicPoint" : {
     "lat" : 26.16666603088379,
@@ -349,7 +319,6 @@
   "upstreamID" : "BH0003"
 }, {
   "mmxId" : "L_BD_Chitt",
-  "virtual" : false,
   "name" : "Chittagong",
   "geographicPoint" : {
     "lat" : 22.308332443237305,
@@ -360,7 +329,6 @@
   "upstreamID" : "BD0003"
 }, {
   "mmxId" : "L_BE_Zeebr",
-  "virtual" : false,
   "name" : "Zeebrugge",
   "aliases" : [ "Fluxys" ],
   "geographicPoint" : {
@@ -372,7 +340,6 @@
   "upstreamID" : "BE0033"
 }, {
   "mmxId" : "L_BR_Guana",
-  "virtual" : false,
   "name" : "Guanabara",
   "aliases" : [ "Petrobras Guanabara" ],
   "geographicPoint" : {
@@ -384,7 +351,6 @@
   "upstreamID" : "BR0240"
 }, {
   "mmxId" : "L_BR_Pecem",
-  "virtual" : false,
   "name" : "Pecem",
   "aliases" : [ "Petrobras Pecem" ],
   "geographicPoint" : {
@@ -396,7 +362,6 @@
   "upstreamID" : "BR0166"
 }, {
   "mmxId" : "L_BR_Salva",
-  "virtual" : false,
   "name" : "Salvador",
   "aliases" : [ "Bahia" ],
   "geographicPoint" : {
@@ -408,7 +373,6 @@
   "upstreamID" : "BR0130"
 }, {
   "mmxId" : "L_BR_SaoFr",
-  "virtual" : false,
   "name" : "Sao Francisco do Sul",
   "geographicPoint" : {
     "lat" : -26.235666275024414,
@@ -419,7 +383,6 @@
   "upstreamID" : "BR0134"
 }, {
   "mmxId" : "L_BN_Lumut",
-  "virtual" : false,
   "name" : "Lumut",
   "aliases" : [ "Brunei" ],
   "geographicPoint" : {
@@ -431,7 +394,6 @@
   "upstreamID" : "BN0003"
 }, {
   "mmxId" : "L_BN_Seria",
-  "virtual" : false,
   "name" : "Seria",
   "geographicPoint" : {
     "lat" : 4.714999675750732,
@@ -442,7 +404,6 @@
   "upstreamID" : "BN0005"
 }, {
   "mmxId" : "L_CM_Kribi",
-  "virtual" : false,
   "name" : "Kribi",
   "geographicPoint" : {
     "lat" : 2.941666603088379,
@@ -453,7 +414,6 @@
   "upstreamID" : "CM0009"
 }, {
   "mmxId" : "L_CA_Canap",
-  "virtual" : false,
   "name" : "Canaport",
   "aliases" : [ "Saint John" ],
   "geographicPoint" : {
@@ -465,7 +425,6 @@
   "upstreamID" : "CA0712"
 }, {
   "mmxId" : "L_CA_Halif",
-  "virtual" : false,
   "name" : "Halifax",
   "geographicPoint" : {
     "lat" : 44.63666534423828,
@@ -476,7 +435,6 @@
   "upstreamID" : "CA0201"
 }, {
   "mmxId" : "L_CA_Kitim",
-  "virtual" : false,
   "name" : "Kitimat",
   "geographicPoint" : {
     "lat" : 53.98833465576172,
@@ -487,7 +445,6 @@
   "upstreamID" : "CA0250"
 }, {
   "mmxId" : "L_CA_Princ",
-  "virtual" : false,
   "name" : "Prince Rupert",
   "geographicPoint" : {
     "lat" : 54.3216667175293,
@@ -498,7 +455,6 @@
   "upstreamID" : "CA0422"
 }, {
   "mmxId" : "L_CA_Quebe",
-  "virtual" : false,
   "name" : "Quebec",
   "geographicPoint" : {
     "lat" : 46.82666778564453,
@@ -509,7 +465,6 @@
   "upstreamID" : "CA0427"
 }, {
   "mmxId" : "L_CL_Mejil",
-  "virtual" : false,
   "name" : "Mejillones",
   "geographicPoint" : {
     "lat" : -23.08333396911621,
@@ -520,7 +475,6 @@
   "upstreamID" : "CL0043"
 }, {
   "mmxId" : "L_CL_Quint",
-  "virtual" : false,
   "name" : "Quintero",
   "geographicPoint" : {
     "lat" : -32.747501373291016,
@@ -531,7 +485,6 @@
   "upstreamID" : "CL0068"
 }, {
   "mmxId" : "L_CL_Talca",
-  "virtual" : false,
   "name" : "Talcahuano",
   "geographicPoint" : {
     "lat" : -36.70500183105469,
@@ -542,7 +495,6 @@
   "upstreamID" : "CL0074"
 }, {
   "mmxId" : "L_CN_Chiwa",
-  "virtual" : false,
   "name" : "Chiwan",
   "geographicPoint" : {
     "lat" : 22.461666107177734,
@@ -553,7 +505,6 @@
   "upstreamID" : "CN0025"
 }, {
   "mmxId" : "L_CN_Dalia",
-  "virtual" : false,
   "name" : "Dalian",
   "geographicPoint" : {
     "lat" : 38.9561653137207,
@@ -564,7 +515,6 @@
   "upstreamID" : "CN0609"
 }, {
   "mmxId" : "L_CN_Fujia",
-  "virtual" : false,
   "name" : "Fujian",
   "aliases" : [ "Xiuyu" ],
   "geographicPoint" : {
@@ -576,7 +526,6 @@
   "upstreamID" : "CN0587"
 }, {
   "mmxId" : "L_CN_Guang",
-  "virtual" : false,
   "name" : "Guangdong",
   "aliases" : [ "Dapeng" ],
   "geographicPoint" : {
@@ -588,7 +537,6 @@
   "upstreamID" : "CN0204"
 }, {
   "mmxId" : "L_CN_Yuedo",
-  "virtual" : false,
   "name" : "Yuedong",
   "geographicPoint" : {
     "lat" : 22.574167251586914,
@@ -599,7 +547,6 @@
   "upstreamID" : "CN0204"
 }, {
   "mmxId" : "L_CN_Haiko",
-  "virtual" : false,
   "name" : "Haikou",
   "geographicPoint" : {
     "lat" : 20.02666664123535,
@@ -610,7 +557,6 @@
   "upstreamID" : "CN0036"
 }, {
   "mmxId" : "L_SP_Haina",
-  "virtual" : false,
   "name" : "Hainan",
   "aliases" : [ "Hainan Strait" ],
   "geographicPoint" : {
@@ -622,7 +568,6 @@
   "upstreamID" : "SP5012"
 }, {
   "mmxId" : "L_CN_Heibe",
-  "virtual" : false,
   "name" : "Heibei",
   "geographicPoint" : {
     "lat" : 38.91666793823242,
@@ -633,7 +578,6 @@
   "upstreamID" : "CN0637"
 }, {
   "mmxId" : "L_CN_Caofe",
-  "virtual" : false,
   "name" : "Caofeidian",
   "aliases" : [ "Cao Fei Dian" ],
   "geographicPoint" : {
@@ -645,7 +589,6 @@
   "upstreamID" : "CN0637"
 }, {
   "mmxId" : "L_CN_Tangs",
-  "virtual" : false,
   "name" : "Tangshan",
   "geographicPoint" : {
     "lat" : 38.91666793823242,
@@ -656,7 +599,6 @@
   "upstreamID" : "CN0637"
 }, {
   "mmxId" : "L_CN_Jiang",
-  "virtual" : false,
   "name" : "Jiangsu",
   "aliases" : [ "Nantong", "Rudong" ],
   "geographicPoint" : {
@@ -668,7 +610,6 @@
   "upstreamID" : "CN0606"
 }, {
   "mmxId" : "L_CN_Liany",
-  "virtual" : false,
   "name" : "Lianyungang",
   "geographicPoint" : {
     "lat" : 34.75,
@@ -679,7 +620,6 @@
   "upstreamID" : "CN0073"
 }, {
   "mmxId" : "L_CN_Qingd",
-  "virtual" : false,
   "name" : "Qingdao",
   "aliases" : [ "Tsingtao" ],
   "geographicPoint" : {
@@ -691,7 +631,6 @@
   "upstreamID" : "CN0148"
 }, {
   "mmxId" : "L_CN_Qinhu",
-  "virtual" : false,
   "name" : "Qinhuangdao",
   "geographicPoint" : {
     "lat" : 39.904998779296875,
@@ -702,7 +641,6 @@
   "upstreamID" : "CN0109"
 }, {
   "mmxId" : "L_CN_Qinzh",
-  "virtual" : false,
   "name" : "Qinzhou",
   "geographicPoint" : {
     "lat" : 21.71666717529297,
@@ -713,7 +651,6 @@
   "upstreamID" : "CN0110"
 }, {
   "mmxId" : "L_CN_Shang",
-  "virtual" : false,
   "name" : "Shanghai",
   "geographicPoint" : {
     "lat" : 31.258333206176758,
@@ -724,7 +661,6 @@
   "upstreamID" : "CN0116"
 }, {
   "mmxId" : "L_CN_Shenz",
-  "virtual" : false,
   "name" : "Shenzhen",
   "geographicPoint" : {
     "lat" : 22.443429946899414,
@@ -735,7 +671,6 @@
   "upstreamID" : "CN0122"
 }, {
   "mmxId" : "L_CN_Tianj",
-  "virtual" : false,
   "name" : "Tianjin (CNOOC)",
   "aliases" : [ "Tianjin Lingang" ],
   "geographicPoint" : {
@@ -747,7 +682,6 @@
   "upstreamID" : "CN0594"
 }, {
   "mmxId" : "L_CN_Tianj2",
-  "virtual" : false,
   "name" : "Tianjin (Sinopec)",
   "geographicPoint" : {
     "lat" : 38.938331604003906,
@@ -758,7 +692,6 @@
   "upstreamID" : "CN0594"
 }, {
   "mmxId" : "L_CN_Yangp",
-  "virtual" : false,
   "name" : "Yangpu",
   "geographicPoint" : {
     "lat" : 19.72016716003418,
@@ -769,7 +702,6 @@
   "upstreamID" : "CN0621"
 }, {
   "mmxId" : "L_CN_Yangs",
-  "virtual" : false,
   "name" : "Yangshan",
   "aliases" : [ "Yangshan Deep Water Port" ],
   "geographicPoint" : {
@@ -781,7 +713,6 @@
   "upstreamID" : "CN0540"
 }, {
   "mmxId" : "L_CN_Zhang",
-  "virtual" : false,
   "name" : "Zhangjiagang",
   "geographicPoint" : {
     "lat" : 31.969999313354492,
@@ -792,7 +723,6 @@
   "upstreamID" : "CN0182"
 }, {
   "mmxId" : "L_CN_Zhuha",
-  "virtual" : false,
   "name" : "Zhuhai",
   "geographicPoint" : {
     "lat" : 22.239166259765625,
@@ -803,7 +733,6 @@
   "upstreamID" : "CN0189"
 }, {
   "mmxId" : "L_CO_Puert",
-  "virtual" : false,
   "name" : "Puerto Bahia",
   "aliases" : [ "Puerto Bahia" ],
   "geographicPoint" : {
@@ -815,7 +744,6 @@
   "upstreamID" : "CO0051"
 }, {
   "mmxId" : "L_CY_Limas",
-  "virtual" : false,
   "name" : "Limassol",
   "geographicPoint" : {
     "lat" : 34.64833450317383,
@@ -826,7 +754,6 @@
   "upstreamID" : "CY0014"
 }, {
   "mmxId" : "L_DO_AESAn",
-  "virtual" : false,
   "name" : "AES Andres",
   "aliases" : [ "Caucedo", "Dominican Republic", "Andres" ],
   "geographicPoint" : {
@@ -838,7 +765,6 @@
   "upstreamID" : "DO0027"
 }, {
   "mmxId" : "L_TP_Dili",
-  "virtual" : false,
   "name" : "Dili",
   "geographicPoint" : {
     "lat" : -8.550833702087402,
@@ -849,7 +775,6 @@
   "upstreamID" : "TP0001"
 }, {
   "mmxId" : "L_EG_AinSo",
-  "virtual" : false,
   "name" : "Ain Sokhna",
   "aliases" : [ "Ain Sukhna", "Sokhna" ],
   "geographicPoint" : {
@@ -861,7 +786,6 @@
   "upstreamID" : "EG0006"
 }, {
   "mmxId" : "L_EG_Damie",
-  "virtual" : false,
   "name" : "Damietta",
   "aliases" : [ "SEGAS" ],
   "geographicPoint" : {
@@ -873,7 +797,6 @@
   "upstreamID" : "EG0016"
 }, {
   "mmxId" : "L_EG_Idku",
-  "virtual" : false,
   "name" : "Idku",
   "geographicPoint" : {
     "lat" : 31.3700008392334,
@@ -884,7 +807,6 @@
   "upstreamID" : "EG0096"
 }, {
   "mmxId" : "L_CP_Suez",
-  "virtual" : false,
   "name" : "Suez",
   "geographicPoint" : {
     "lat" : 29.834999084472656,
@@ -895,7 +817,6 @@
   "upstreamID" : "CP3200"
 }, {
   "mmxId" : "L_SV_Acaju",
-  "virtual" : false,
   "name" : "Acajutla",
   "geographicPoint" : {
     "lat" : 13.563333511352539,
@@ -906,7 +827,6 @@
   "upstreamID" : "SV0001"
 }, {
   "mmxId" : "L_GQ_Punta",
-  "virtual" : false,
   "name" : "Punta Europa",
   "aliases" : [ "Bioko Island" ],
   "geographicPoint" : {
@@ -918,7 +838,6 @@
   "upstreamID" : "GQ0044"
 }, {
   "mmxId" : "L_EE_Paldi",
-  "virtual" : false,
   "name" : "Paldiski",
   "aliases" : [ "Paldiski South Harbour" ],
   "geographicPoint" : {
@@ -930,7 +849,6 @@
   "upstreamID" : "EE0019"
 }, {
   "mmxId" : "L_FR_Dunki",
-  "virtual" : false,
   "name" : "Dunkirk",
   "aliases" : [ "Dunkirk, France" ],
   "geographicPoint" : {
@@ -942,7 +860,6 @@
   "upstreamID" : "FR0299"
 }, {
   "mmxId" : "L_FR_FosSu",
-  "virtual" : false,
   "name" : "Fos Sur Mer",
   "aliases" : [ "Fos" ],
   "geographicPoint" : {
@@ -954,7 +871,6 @@
   "upstreamID" : "FR0245"
 }, {
   "mmxId" : "L_FR_LeHav",
-  "virtual" : false,
   "name" : "Le Havre",
   "geographicPoint" : {
     "lat" : 49.4716682434082,
@@ -965,7 +881,6 @@
   "upstreamID" : "FR0090"
 }, {
   "mmxId" : "L_FR_Monto",
-  "virtual" : false,
   "name" : "Montoir",
   "aliases" : [ "Montoir De Bretagne" ],
   "geographicPoint" : {
@@ -977,7 +892,6 @@
   "upstreamID" : "FR0134"
 }, {
   "mmxId" : "L_DE_Rosto",
-  "virtual" : false,
   "name" : "Rostock",
   "geographicPoint" : {
     "lat" : 54.15833282470703,
@@ -988,7 +902,6 @@
   "upstreamID" : "DE0091"
 }, {
   "mmxId" : "L_DE_Wilhe",
-  "virtual" : false,
   "name" : "Wilhelmshaven",
   "geographicPoint" : {
     "lat" : 53.53333282470703,
@@ -999,7 +912,6 @@
   "upstreamID" : "DE0117"
 }, {
   "mmxId" : "L_GI_Gibra",
-  "virtual" : false,
   "name" : "Gibraltar",
   "aliases" : [ "Gibraltar" ],
   "geographicPoint" : {
@@ -1011,7 +923,6 @@
   "upstreamID" : "GI0003"
 }, {
   "mmxId" : "L_GR_Revit",
-  "virtual" : false,
   "name" : "Revithoussa",
   "geographicPoint" : {
     "lat" : 37.95833206176758,
@@ -1022,7 +933,6 @@
   "upstreamID" : "GR0235"
 }, {
   "mmxId" : "L_TT_Point",
-  "virtual" : false,
   "name" : "Pointe-a-Pitre",
   "aliases" : [ "Pointe-a-Pitre a", "Pointe" ],
   "geographicPoint" : {
@@ -1034,7 +944,6 @@
   "upstreamID" : "GP0005"
 }, {
   "mmxId" : "L_IN_Dabho",
-  "virtual" : false,
   "name" : "Dabhol",
   "geographicPoint" : {
     "lat" : 17.52666664123535,
@@ -1045,7 +954,6 @@
   "upstreamID" : "IN0189"
 }, {
   "mmxId" : "L_IN_Dahej",
-  "virtual" : false,
   "name" : "Dahej",
   "geographicPoint" : {
     "lat" : 21.672515869140625,
@@ -1056,7 +964,6 @@
   "upstreamID" : "IN0201"
 }, {
   "mmxId" : "L_IN_Ennor",
-  "virtual" : false,
   "name" : "Ennore",
   "geographicPoint" : {
     "lat" : 13.261666297912598,
@@ -1067,7 +974,6 @@
   "upstreamID" : "IN0044"
 }, {
   "mmxId" : "L_IN_Ganga",
-  "virtual" : false,
   "name" : "Gangavaram",
   "geographicPoint" : {
     "lat" : 17.623332977294922,
@@ -1078,7 +984,6 @@
   "upstreamID" : "IN0171"
 }, {
   "mmxId" : "L_IN_Haldi",
-  "virtual" : false,
   "name" : "Haldia",
   "aliases" : [ "Offshore Haldia No.1 (TA)" ],
   "geographicPoint" : {
@@ -1090,7 +995,6 @@
   "upstreamID" : "IN0047"
 }, {
   "mmxId" : "L_IN_Hazir",
-  "virtual" : false,
   "name" : "Hazira",
   "geographicPoint" : {
     "lat" : 21.14666748046875,
@@ -1101,7 +1005,6 @@
   "upstreamID" : "IN0048"
 }, {
   "mmxId" : "L_IN_Kakin",
-  "virtual" : false,
   "name" : "Kakinada",
   "geographicPoint" : {
     "lat" : 16.97333335876465,
@@ -1112,7 +1015,6 @@
   "upstreamID" : "IN0057"
 }, {
   "mmxId" : "L_IN_Karwa",
-  "virtual" : false,
   "name" : "Karwar - South Port",
   "aliases" : [ "Karwar - South Port South", "Karwar" ],
   "geographicPoint" : {
@@ -1124,7 +1026,6 @@
   "upstreamID" : "IN0185"
 }, {
   "mmxId" : "L_IN_Kochi",
-  "virtual" : false,
   "name" : "Kochi",
   "aliases" : [ "Cochin" ],
   "geographicPoint" : {
@@ -1136,7 +1037,6 @@
   "upstreamID" : "IN0202"
 }, {
   "mmxId" : "L_IN_Mundr",
-  "virtual" : false,
   "name" : "Mundra",
   "geographicPoint" : {
     "lat" : 22.726667404174805,
@@ -1147,7 +1047,6 @@
   "upstreamID" : "IN0093"
 }, {
   "mmxId" : "L_IN_Pipav",
-  "virtual" : false,
   "name" : "Pipavav",
   "geographicPoint" : {
     "lat" : 20.91583251953125,
@@ -1158,7 +1057,6 @@
   "upstreamID" : "IN0110"
 }, {
   "mmxId" : "L_ID_Ambon",
-  "virtual" : false,
   "name" : "Ambon",
   "geographicPoint" : {
     "lat" : -3.691666603088379,
@@ -1169,7 +1067,6 @@
   "upstreamID" : "ID0008"
 }, {
   "mmxId" : "L_ID_Arun",
-  "virtual" : false,
   "name" : "Arun",
   "aliases" : [ "Blanglacang", "Blang Lacang" ],
   "geographicPoint" : {
@@ -1181,7 +1078,6 @@
   "upstreamID" : "ID0431"
 }, {
   "mmxId" : "L_ID_Bonta",
-  "virtual" : false,
   "name" : "Bontang",
   "aliases" : [ "Badak" ],
   "geographicPoint" : {
@@ -1193,7 +1089,6 @@
   "upstreamID" : "ID0054"
 }, {
   "mmxId" : "L_ID_Luwuk",
-  "virtual" : false,
   "name" : "Luwuk",
   "geographicPoint" : {
     "lat" : -0.9483333230018616,
@@ -1204,7 +1099,6 @@
   "upstreamID" : "ID0154"
 }, {
   "mmxId" : "L_ID_Semar",
-  "virtual" : false,
   "name" : "Semarang",
   "geographicPoint" : {
     "lat" : -6.947133333333333,
@@ -1215,7 +1109,6 @@
   "upstreamID" : "ID0260"
 }, {
   "mmxId" : "L_ID_Tangg",
-  "virtual" : false,
   "name" : "Tangguh",
   "aliases" : [ "Tannguh" ],
   "geographicPoint" : {
@@ -1227,7 +1120,6 @@
   "upstreamID" : "ID0352"
 }, {
   "mmxId" : "L_IQ_Khora",
-  "virtual" : false,
   "name" : "Khor al Zubair",
   "geographicPoint" : {
     "lat" : 30.196516036987305,
@@ -1238,7 +1130,6 @@
   "upstreamID" : "IQ0006"
 }, {
   "mmxId" : "L_IR_ParsL",
-  "virtual" : false,
   "name" : "Pars",
   "geographicPoint" : {
     "lat" : 27.516666412353516,
@@ -1249,7 +1140,6 @@
   "upstreamID" : "IR0003"
 }, {
   "mmxId" : "L_IR_Tomba",
-  "virtual" : false,
   "name" : "Tombak",
   "aliases" : [ "Iran" ],
   "geographicPoint" : {
@@ -1261,7 +1151,6 @@
   "upstreamID" : "IR0082"
 }, {
   "mmxId" : "L_IE_Limer",
-  "virtual" : false,
   "name" : "Limerick",
   "geographicPoint" : {
     "lat" : 52.6591682434082,
@@ -1272,7 +1161,6 @@
   "upstreamID" : "IE0057"
 }, {
   "mmxId" : "L_IL_Ashdo",
-  "virtual" : false,
   "name" : "Ashdod",
   "geographicPoint" : {
     "lat" : 31.8266658782959,
@@ -1283,7 +1171,6 @@
   "upstreamID" : "IL0013"
 }, {
   "mmxId" : "L_IL_Hader",
-  "virtual" : false,
   "name" : "Hadera",
   "geographicPoint" : {
     "lat" : 32.46666717529297,
@@ -1294,7 +1181,6 @@
   "upstreamID" : "IL0014"
 }, {
   "mmxId" : "L_IT_Falco",
-  "virtual" : false,
   "name" : "Falconara",
   "geographicPoint" : {
     "lat" : 43.650001525878906,
@@ -1305,7 +1191,6 @@
   "upstreamID" : "IT0053"
 }, {
   "mmxId" : "L_IT_Gioia",
-  "virtual" : false,
   "name" : "Gioia Tauro",
   "geographicPoint" : {
     "lat" : 38.44166564941406,
@@ -1316,7 +1201,6 @@
   "upstreamID" : "IT0070"
 }, {
   "mmxId" : "L_IT_Livor",
-  "virtual" : false,
   "name" : "Livorno",
   "geographicPoint" : {
     "lat" : 43.63333511352539,
@@ -1327,7 +1211,6 @@
   "upstreamID" : "IT0276"
 }, {
   "mmxId" : "L_IT_Orton",
-  "virtual" : false,
   "name" : "Ortona",
   "geographicPoint" : {
     "lat" : 42.35333251953125,
@@ -1338,7 +1221,6 @@
   "upstreamID" : "IT0110"
 }, {
   "mmxId" : "L_IT_Panig",
-  "virtual" : false,
   "name" : "Panigaglia",
   "aliases" : [ "La Spezia" ],
   "geographicPoint" : {
@@ -1350,7 +1232,6 @@
   "upstreamID" : "IT0270"
 }, {
   "mmxId" : "L_IT_Porto",
-  "virtual" : false,
   "name" : "Porto Empedocle",
   "geographicPoint" : {
     "lat" : 37.28166580200195,
@@ -1361,7 +1242,6 @@
   "upstreamID" : "IT0133"
 }, {
   "mmxId" : "L_IT_Rosig",
-  "virtual" : false,
   "name" : "Rosignano",
   "geographicPoint" : {
     "lat" : 43.358333587646484,
@@ -1372,7 +1252,6 @@
   "upstreamID" : "IT0263"
 }, {
   "mmxId" : "L_IT_Rovig",
-  "virtual" : false,
   "name" : "Rovigo",
   "geographicPoint" : {
     "lat" : 45.09166717529297,
@@ -1383,7 +1262,6 @@
   "upstreamID" : "IT0265"
 }, {
   "mmxId" : "L_IT_Tries",
-  "virtual" : false,
   "name" : "Trieste",
   "geographicPoint" : {
     "lat" : 45.63166809082031,
@@ -1394,7 +1272,6 @@
   "upstreamID" : "IT0204"
 }, {
   "mmxId" : "L_JM_PortE",
-  "virtual" : false,
   "name" : "Port Esquivel",
   "geographicPoint" : {
     "lat" : 17.88833236694336,
@@ -1405,7 +1282,6 @@
   "upstreamID" : "JM0013"
 }, {
   "mmxId" : "L_JP_Chita",
-  "virtual" : false,
   "name" : "Chita",
   "geographicPoint" : {
     "lat" : 34.9716682434082,
@@ -1416,7 +1292,6 @@
   "upstreamID" : "JP0021"
 }, {
   "mmxId" : "L_JP_Fukuo",
-  "virtual" : false,
   "name" : "Fukuoko",
   "aliases" : [ "Kumamoto" ],
   "geographicPoint" : {
@@ -1428,7 +1303,6 @@
   "upstreamID" : "JP0358"
 }, {
   "mmxId" : "L_JP_Futts",
-  "virtual" : false,
   "name" : "Futtsu",
   "geographicPoint" : {
     "lat" : 35.34166717529297,
@@ -1439,7 +1313,6 @@
   "upstreamID" : "JP0360"
 }, {
   "mmxId" : "L_JP_Hachi",
-  "virtual" : false,
   "name" : "Hachinohe",
   "geographicPoint" : {
     "lat" : 40.551666259765625,
@@ -1450,7 +1323,6 @@
   "upstreamID" : "JP0043"
 }, {
   "mmxId" : "L_JP_Hakod",
-  "virtual" : false,
   "name" : "Hakodate",
   "geographicPoint" : {
     "lat" : 41.788333892822266,
@@ -1461,7 +1333,6 @@
   "upstreamID" : "JP0047"
 }, {
   "mmxId" : "L_JP_Hatsu",
-  "virtual" : false,
   "name" : "Hatsukaichi",
   "geographicPoint" : {
     "lat" : 34.34166717529297,
@@ -1472,7 +1343,6 @@
   "upstreamID" : "JP0361"
 }, {
   "mmxId" : "L_JP_Himej",
-  "virtual" : false,
   "name" : "Himeji",
   "geographicPoint" : {
     "lat" : 34.76416778564453,
@@ -1483,7 +1353,6 @@
   "upstreamID" : "JP0063"
 }, {
   "mmxId" : "L_JP_Hitac",
-  "virtual" : false,
   "name" : "Hitachi",
   "geographicPoint" : {
     "lat" : 36.484033333333336,
@@ -1494,7 +1363,6 @@
   "upstreamID" : "JP0451"
 }, {
   "mmxId" : "L_JP_Kagos",
-  "virtual" : false,
   "name" : "Kagoshima",
   "geographicPoint" : {
     "lat" : 31.483333587646484,
@@ -1505,7 +1373,6 @@
   "upstreamID" : "JP0365"
 }, {
   "mmxId" : "L_JP_Kawag",
-  "virtual" : false,
   "name" : "Kawagoe",
   "geographicPoint" : {
     "lat" : 34.996665954589844,
@@ -1516,7 +1383,6 @@
   "upstreamID" : "JP0366"
 }, {
   "mmxId" : "L_JP_Kitak",
-  "virtual" : false,
   "name" : "Kitakyushu",
   "geographicPoint" : {
     "lat" : 33.90999984741211,
@@ -1527,7 +1393,6 @@
   "upstreamID" : "JP0340"
 }, {
   "mmxId" : "L_JP_Kushi",
-  "virtual" : false,
   "name" : "Kushiro",
   "geographicPoint" : {
     "lat" : 42.99166488647461,
@@ -1538,7 +1403,6 @@
   "upstreamID" : "JP0143"
 }, {
   "mmxId" : "L_JP_Mizus",
-  "virtual" : false,
   "name" : "Mizushima",
   "geographicPoint" : {
     "lat" : 34.49333190917969,
@@ -1549,7 +1413,6 @@
   "upstreamID" : "JP0174"
 }, {
   "mmxId" : "L_JP_Nagas",
-  "virtual" : false,
   "name" : "Nagasaki",
   "geographicPoint" : {
     "lat" : 32.73833465576172,
@@ -1560,7 +1423,6 @@
   "upstreamID" : "JP0188"
 }, {
   "mmxId" : "L_JP_Nanao",
-  "virtual" : false,
   "name" : "Nanao",
   "geographicPoint" : {
     "lat" : 37.0716667175293,
@@ -1571,7 +1433,6 @@
   "upstreamID" : "JP0196"
 }, {
   "mmxId" : "L_JP_Negis",
-  "virtual" : false,
   "name" : "Negishi",
   "geographicPoint" : {
     "lat" : 35.399166107177734,
@@ -1582,7 +1443,6 @@
   "upstreamID" : "JP0200"
 }, {
   "mmxId" : "L_JP_Niiga",
-  "virtual" : false,
   "name" : "Niigata Higashi",
   "aliases" : [ "Niigata-Higashi" ],
   "geographicPoint" : {
@@ -1594,7 +1454,6 @@
   "upstreamID" : "JP0203"
 }, {
   "mmxId" : "L_JP_Niiga2",
-  "virtual" : false,
   "name" : "Niigata-Nishi",
   "aliases" : [ "Niigata Nishi" ],
   "geographicPoint" : {
@@ -1606,7 +1465,6 @@
   "upstreamID" : "JP0204"
 }, {
   "mmxId" : "L_JP_Ohgis",
-  "virtual" : false,
   "name" : "Ohgishima",
   "aliases" : [ "Ogishima", "Ogishima Tokyo Gas" ],
   "geographicPoint" : {
@@ -1618,7 +1476,6 @@
   "upstreamID" : "JP0215"
 }, {
   "mmxId" : "L_JP_Oita",
-  "virtual" : false,
   "name" : "Oita",
   "aliases" : [ "Ohita" ],
   "geographicPoint" : {
@@ -1630,7 +1487,6 @@
   "upstreamID" : "JP0219"
 }, {
   "mmxId" : "L_JP_Okina",
-  "virtual" : false,
   "name" : "Okinawa",
   "aliases" : [ "Yoshinaura" ],
   "geographicPoint" : {
@@ -1642,7 +1498,6 @@
   "upstreamID" : "JP0369"
 }, {
   "mmxId" : "L_JP_Osaka",
-  "virtual" : false,
   "name" : "Osaka",
   "aliases" : [ "Osaka" ],
   "geographicPoint" : {
@@ -1654,7 +1509,6 @@
   "upstreamID" : "JP0238"
 }, {
   "mmxId" : "L_JP_Otaru",
-  "virtual" : false,
   "name" : "Otaru",
   "aliases" : [ "Ishikariwanshinko", "Ishikariwan-Shinko Ishikariwan", "Ishikariwan", "Ishikariwan-Shinko" ],
   "geographicPoint" : {
@@ -1666,7 +1520,6 @@
   "upstreamID" : "JP0240"
 }, {
   "mmxId" : "L_JP_Sakai",
-  "virtual" : false,
   "name" : "Sakai",
   "geographicPoint" : {
     "lat" : 34.564998626708984,
@@ -1677,7 +1530,6 @@
   "upstreamID" : "JP0427"
 }, {
   "mmxId" : "L_JP_Sakai2",
-  "virtual" : false,
   "name" : "Sakaide",
   "geographicPoint" : {
     "lat" : 34.36249923706055,
@@ -1688,7 +1540,6 @@
   "upstreamID" : "JP0255"
 }, {
   "mmxId" : "L_JP_Senda",
-  "virtual" : false,
   "name" : "Sendai",
   "geographicPoint" : {
     "lat" : 38.27000045776367,
@@ -1699,7 +1550,6 @@
   "upstreamID" : "JP0264"
 }, {
   "mmxId" : "L_JP_Shimi",
-  "virtual" : false,
   "name" : "Shimizu",
   "aliases" : [ "Shimizu, (Honshu), Japan", "Sodeshi" ],
   "geographicPoint" : {
@@ -1711,7 +1561,6 @@
   "upstreamID" : "JP0274"
 }, {
   "mmxId" : "L_JP_Shinm",
-  "virtual" : false,
   "name" : "Shinminato",
   "aliases" : [ "Shin-minato" ],
   "geographicPoint" : {
@@ -1723,7 +1572,6 @@
   "upstreamID" : "JP0368"
 }, {
   "mmxId" : "L_JP_Sodeg",
-  "virtual" : false,
   "name" : "Sodegaura",
   "geographicPoint" : {
     "lat" : 35.473331451416016,
@@ -1734,7 +1582,6 @@
   "upstreamID" : "JP0362"
 }, {
   "mmxId" : "L_JP_Soma",
-  "virtual" : false,
   "name" : "Soma",
   "geographicPoint" : {
     "lat" : 37.84166717529297,
@@ -1745,7 +1592,6 @@
   "upstreamID" : "JP0285"
 }, {
   "mmxId" : "L_JP_Tobat",
-  "virtual" : false,
   "name" : "Tobata",
   "geographicPoint" : {
     "lat" : 33.91999816894531,
@@ -1756,7 +1602,6 @@
   "upstreamID" : "JP0305"
 }, {
   "mmxId" : "L_JP_Tokyo",
-  "virtual" : false,
   "name" : "Tokyo Bay",
   "aliases" : [ "Tokyo" ],
   "geographicPoint" : {
@@ -1768,7 +1613,6 @@
   "upstreamID" : "JP0310"
 }, {
   "mmxId" : "L_JP_Wakay",
-  "virtual" : false,
   "name" : "Wakayama",
   "geographicPoint" : {
     "lat" : 34.209999084472656,
@@ -1779,7 +1623,6 @@
   "upstreamID" : "JP0341"
 }, {
   "mmxId" : "L_JP_Yanai",
-  "virtual" : false,
   "name" : "Yanai",
   "geographicPoint" : {
     "lat" : 33.95000076293945,
@@ -1790,7 +1633,6 @@
   "upstreamID" : "JP0363"
 }, {
   "mmxId" : "L_JP_Yokka",
-  "virtual" : false,
   "name" : "Yokkaichi",
   "geographicPoint" : {
     "lat" : 34.970001220703125,
@@ -1801,7 +1643,6 @@
   "upstreamID" : "JP0367"
 }, {
   "mmxId" : "L_JP_Yokoh",
-  "virtual" : false,
   "name" : "Yokohama",
   "aliases" : [ "Yokohama" ],
   "geographicPoint" : {
@@ -1813,7 +1654,6 @@
   "upstreamID" : "JP0352"
 }, {
   "mmxId" : "L_JO_Aqaba",
-  "virtual" : false,
   "name" : "Aqaba",
   "geographicPoint" : {
     "lat" : 29.50666618347168,
@@ -1824,7 +1664,6 @@
   "upstreamID" : "JO0001"
 }, {
   "mmxId" : "L_KE_Momba",
-  "virtual" : false,
   "name" : "Mombasa",
   "geographicPoint" : {
     "lat" : -4.049999713897705,
@@ -1835,7 +1674,6 @@
   "upstreamID" : "KE0006"
 }, {
   "mmxId" : "L_KR_Kwang",
-  "virtual" : false,
   "name" : "Kwangyang",
   "geographicPoint" : {
     "lat" : 34.88333511352539,
@@ -1846,7 +1684,6 @@
   "upstreamID" : "KR0046"
 }, {
   "mmxId" : "L_KW_MinaA",
-  "virtual" : false,
   "name" : "Mina Al Ahmadi",
   "aliases" : [ "Mina Al-Ahmadi", "Mina Al-Ahmadi, Kuwait" ],
   "geographicPoint" : {
@@ -1858,7 +1695,6 @@
   "upstreamID" : "KW0009"
 }, {
   "mmxId" : "L_LB_Tripo",
-  "virtual" : false,
   "name" : "Tripoli",
   "aliases" : [ "Tripoli, Lebanon" ],
   "geographicPoint" : {
@@ -1870,7 +1706,6 @@
   "upstreamID" : "LB0010"
 }, {
   "mmxId" : "L_LY_Marsa",
-  "virtual" : false,
   "name" : "Marsa el Brega",
   "aliases" : [ "Marsa El Brega", "Marsa Brega" ],
   "geographicPoint" : {
@@ -1882,7 +1717,6 @@
   "upstreamID" : "LY0020"
 }, {
   "mmxId" : "L_LT_Klaip",
-  "virtual" : false,
   "name" : "Klaipeda",
   "geographicPoint" : {
     "lat" : 55.664516666666664,
@@ -1893,7 +1727,6 @@
   "upstreamID" : "LT0004"
 }, {
   "mmxId" : "L_MY_Bintu",
-  "virtual" : false,
   "name" : "Bintulu",
   "aliases" : [ "Malaysia" ],
   "geographicPoint" : {
@@ -1905,7 +1738,6 @@
   "upstreamID" : "MY0010"
 }, {
   "mmxId" : "L_MY_Johor",
-  "virtual" : false,
   "name" : "Johore",
   "geographicPoint" : {
     "lat" : 1.4574999809265137,
@@ -1916,7 +1748,6 @@
   "upstreamID" : "MY0129"
 }, {
   "mmxId" : "L_MY_Malac",
-  "virtual" : false,
   "name" : "Malacca",
   "geographicPoint" : {
     "lat" : 2.18833327293396,
@@ -1927,7 +1758,6 @@
   "upstreamID" : "MY0056"
 }, {
   "mmxId" : "L_MY_Sunga",
-  "virtual" : false,
   "name" : "Sungai Udang",
   "geographicPoint" : {
     "lat" : 2.2430832386016846,
@@ -1938,7 +1768,6 @@
   "upstreamID" : "MY0097"
 }, {
   "mmxId" : "L_MT_Malta",
-  "virtual" : false,
   "name" : "Malta",
   "geographicPoint" : {
     "lat" : 35.900001525878906,
@@ -1949,7 +1778,6 @@
   "upstreamID" : "MT0001"
 }, {
   "mmxId" : "L_MQ_Fortd",
-  "virtual" : false,
   "name" : "Fort de France",
   "geographicPoint" : {
     "lat" : 14.598333358764648,
@@ -1960,7 +1788,6 @@
   "upstreamID" : "MQ0002"
 }, {
   "mmxId" : "L_MX_Altam",
-  "virtual" : false,
   "name" : "Altamira",
   "aliases" : [ "Altamira, Mexico" ],
   "geographicPoint" : {
@@ -1972,7 +1799,6 @@
   "upstreamID" : "MX0002"
 }, {
   "mmxId" : "L_MX_Costa",
-  "virtual" : false,
   "name" : "Costa Azul",
   "geographicPoint" : {
     "lat" : 31.987667083740234,
@@ -1983,7 +1809,6 @@
   "upstreamID" : "MX0105"
 }, {
   "mmxId" : "L_MX_Manza",
-  "virtual" : false,
   "name" : "Manzanillo",
   "aliases" : [ "Manzanillo, Mexico" ],
   "geographicPoint" : {
@@ -1995,7 +1820,6 @@
   "upstreamID" : "MX0039"
 }, {
   "mmxId" : "L_MX_Rosar",
-  "virtual" : false,
   "name" : "Rosarito",
   "geographicPoint" : {
     "lat" : 32.3466682434082,
@@ -2006,7 +1830,6 @@
   "upstreamID" : "MX0062"
 }, {
   "mmxId" : "L_MA_JorfL",
-  "virtual" : false,
   "name" : "Jorf Lasfar",
   "geographicPoint" : {
     "lat" : 33.128334045410156,
@@ -2017,7 +1840,6 @@
   "upstreamID" : "MA0021"
 }, {
   "mmxId" : "L_MZ_Mozam",
-  "virtual" : false,
   "name" : "Mozambique Port",
   "geographicPoint" : {
     "lat" : -15.040833473205566,
@@ -2028,7 +1850,6 @@
   "upstreamID" : "MZ0018"
 }, {
   "mmxId" : "L_NL_Rotte",
-  "virtual" : false,
   "name" : "Rotterdam",
   "aliases" : [ "Maasvlakte", "Gate" ],
   "geographicPoint" : {
@@ -2040,7 +1861,6 @@
   "upstreamID" : "NL0051"
 }, {
   "mmxId" : "L_NZ_NewPl",
-  "virtual" : false,
   "name" : "New Plymouth",
   "geographicPoint" : {
     "lat" : -39.05500030517578,
@@ -2051,7 +1871,6 @@
   "upstreamID" : "NZ0052"
 }, {
   "mmxId" : "L_NG_Brass",
-  "virtual" : false,
   "name" : "Brass",
   "geographicPoint" : {
     "lat" : 4.0933332443237305,
@@ -2062,7 +1881,6 @@
   "upstreamID" : "NG0013"
 }, {
   "mmxId" : "L_NO_Hamme",
-  "virtual" : false,
   "name" : "Hammerfest",
   "aliases" : [ "Hammerfest", "Melkoya Island" ],
   "geographicPoint" : {
@@ -2074,7 +1892,6 @@
   "upstreamID" : "NO0278"
 }, {
   "mmxId" : "L_OM_Qalha",
-  "virtual" : false,
   "name" : "Qalhat",
   "aliases" : [ "Sur", "Oman" ],
   "geographicPoint" : {
@@ -2086,7 +1903,6 @@
   "upstreamID" : "OM0018"
 }, {
   "mmxId" : "L_PK_Karac",
-  "virtual" : false,
   "name" : "Karachi",
   "geographicPoint" : {
     "lat" : 24.81166648864746,
@@ -2097,7 +1913,6 @@
   "upstreamID" : "PK0004"
 }, {
   "mmxId" : "L_PK_PortQ",
-  "virtual" : false,
   "name" : "Port Qasim",
   "aliases" : [ "Port Qasim" ],
   "geographicPoint" : {
@@ -2110,7 +1925,6 @@
   "fallbackUpstreamId" : "PK0004"
 }, {
   "mmxId" : "L_CP_Colon",
-  "virtual" : false,
   "name" : "Colon",
   "aliases" : [ "Colon,Panama", "Colon, Panama" ],
   "geographicPoint" : {
@@ -2122,7 +1936,6 @@
   "upstreamID" : "CP1500"
 }, {
   "mmxId" : "L_PG_PortM",
-  "virtual" : false,
   "name" : "Port Moresby",
   "aliases" : [ "Port Moresby" ],
   "geographicPoint" : {
@@ -2134,7 +1947,6 @@
   "upstreamID" : "PG0049"
 }, {
   "mmxId" : "L_PE_Pampa",
-  "virtual" : false,
   "name" : "Pampa Melchorita",
   "aliases" : [ "Peru", "P.Melchorita" ],
   "geographicPoint" : {
@@ -2146,7 +1958,6 @@
   "upstreamID" : "PE0045"
 }, {
   "mmxId" : "L_PH_Batan",
-  "virtual" : false,
   "name" : "Batangas",
   "geographicPoint" : {
     "lat" : 13.721290588378906,
@@ -2157,7 +1968,6 @@
   "upstreamID" : "PH0018"
 }, {
   "mmxId" : "L_PL_Swino",
-  "virtual" : false,
   "name" : "Swinoujscie",
   "geographicPoint" : {
     "lat" : 53.89500045776367,
@@ -2168,7 +1978,6 @@
   "upstreamID" : "PL0021"
 }, {
   "mmxId" : "L_PT_Sines",
-  "virtual" : false,
   "name" : "Sines",
   "geographicPoint" : {
     "lat" : 37.935665130615234,
@@ -2179,7 +1988,6 @@
   "upstreamID" : "PT0044"
 }, {
   "mmxId" : "L_PR_Penue",
-  "virtual" : false,
   "name" : "Guayanilla",
   "aliases" : [ "Guayama", "EcoElectrica", "Penuelas" ],
   "geographicPoint" : {
@@ -2191,7 +1999,6 @@
   "upstreamID" : "PR0029"
 }, {
   "mmxId" : "L_QA_RasLa",
-  "virtual" : false,
   "name" : "Ras Laffan",
   "aliases" : [ "Ras Laffan (Rich)", "Ras Laffan (Lean)" ],
   "geographicPoint" : {
@@ -2203,7 +2010,6 @@
   "upstreamID" : "QA0009"
 }, {
   "mmxId" : "L_IT_Taran",
-  "virtual" : false,
   "name" : "Taranto",
   "geographicPoint" : {
     "lat" : 40.45166778564453,
@@ -2214,7 +2020,6 @@
   "upstreamID" : "IT0194"
 }, {
   "mmxId" : "L_RU_Drovy",
-  "virtual" : false,
   "name" : "Drovyanoy",
   "geographicPoint" : {
     "lat" : 72.4000015258789,
@@ -2225,7 +2030,6 @@
   "upstreamID" : "RU0242"
 }, {
   "mmxId" : "L_RU_Sakha",
-  "virtual" : false,
   "name" : "Sakhalin",
   "aliases" : [ "Prigorodnoye", "Sakhalin-2", "Sakhalin II" ],
   "geographicPoint" : {
@@ -2237,7 +2041,6 @@
   "upstreamID" : "RU0293"
 }, {
   "mmxId" : "L_RU_Shtok",
-  "virtual" : false,
   "name" : "Shtokman",
   "aliases" : [ "Murmansk" ],
   "geographicPoint" : {
@@ -2249,7 +2052,6 @@
   "upstreamID" : "RU0102"
 }, {
   "mmxId" : "L_RU_Vladi",
-  "virtual" : false,
   "name" : "Vladivostok",
   "geographicPoint" : {
     "lat" : 43.108333587646484,
@@ -2260,7 +2062,6 @@
   "upstreamID" : "RU0218"
 }, {
   "mmxId" : "L_RU_Vybor",
-  "virtual" : false,
   "name" : "Vyborg",
   "geographicPoint" : {
     "lat" : 60.7066650390625,
@@ -2271,7 +2072,6 @@
   "upstreamID" : "RU0225"
 }, {
   "mmxId" : "L_TZ_Dar-e",
-  "virtual" : false,
   "name" : "Dar-es-Salaam",
   "geographicPoint" : {
     "lat" : -6.842979907989502,
@@ -2282,7 +2082,6 @@
   "upstreamID" : "TZ0002"
 }, {
   "mmxId" : "L_SG_Juron",
-  "virtual" : false,
   "name" : "Singapore",
   "aliases" : [ "Jurong Marine Base - Singapore Base", "Jurong Marine Base", "Jurong Island, Singapore" ],
   "geographicPoint" : {
@@ -2294,7 +2093,6 @@
   "upstreamID" : "SG0048"
 }, {
   "mmxId" : "L_ID_Panja",
-  "virtual" : false,
   "name" : "Panjang",
   "geographicPoint" : {
     "lat" : -5.46999979019165,
@@ -2305,7 +2103,6 @@
   "upstreamID" : "ID0199"
 }, {
   "mmxId" : "L_SI_Koper",
-  "virtual" : false,
   "name" : "Koper",
   "geographicPoint" : {
     "lat" : 45.55833435058594,
@@ -2316,7 +2113,6 @@
   "upstreamID" : "SI0002"
 }, {
   "mmxId" : "L_ZA_CapeT",
-  "virtual" : false,
   "name" : "Cape Town",
   "geographicPoint" : {
     "lat" : -33.90999984741211,
@@ -2327,7 +2123,6 @@
   "upstreamID" : "ZA0006"
 }, {
   "mmxId" : "L_ZA_Coega",
-  "virtual" : false,
   "name" : "Coega",
   "geographicPoint" : {
     "lat" : -33.8033332824707,
@@ -2338,7 +2133,6 @@
   "upstreamID" : "ZA0026"
 }, {
   "mmxId" : "L_ZA_Mosse",
-  "virtual" : false,
   "name" : "Mossel Bay",
   "geographicPoint" : {
     "lat" : -34.1775016784668,
@@ -2349,7 +2143,6 @@
   "upstreamID" : "ZA0013"
 }, {
   "mmxId" : "L_KR_Dangj",
-  "virtual" : false,
   "name" : "Dangjin",
   "geographicPoint" : {
     "lat" : 36.915000915527344,
@@ -2360,7 +2153,6 @@
   "upstreamID" : "KR0042"
 }, {
   "mmxId" : "L_KR_Dongh",
-  "virtual" : false,
   "name" : "Donghae",
   "geographicPoint" : {
     "lat" : 37.494998931884766,
@@ -2371,7 +2163,6 @@
   "upstreamID" : "KR0033"
 }, {
   "mmxId" : "L_KR_Inche",
-  "virtual" : false,
   "name" : "Incheon",
   "aliases" : [ "Inchon", "Inchon - Soraepogu" ],
   "geographicPoint" : {
@@ -2383,7 +2174,6 @@
   "upstreamID" : "KR0012"
 }, {
   "mmxId" : "L_KR_TongY",
-  "virtual" : false,
   "name" : "Tong Yong",
   "aliases" : [ "Tongyeong" ],
   "geographicPoint" : {
@@ -2395,7 +2185,6 @@
   "upstreamID" : "KR0041"
 }, {
   "mmxId" : "L_ES_Barce",
-  "virtual" : false,
   "name" : "Barcelona",
   "geographicPoint" : {
     "lat" : 41.342498779296875,
@@ -2406,7 +2195,6 @@
   "upstreamID" : "ES0200"
 }, {
   "mmxId" : "L_ES_Bilba",
-  "virtual" : false,
   "name" : "Bilbao",
   "geographicPoint" : {
     "lat" : 43.3650016784668,
@@ -2417,7 +2205,6 @@
   "upstreamID" : "ES0168"
 }, {
   "mmxId" : "L_ES_Carta",
-  "virtual" : false,
   "name" : "Cartagena",
   "geographicPoint" : {
     "lat" : 37.573333740234375,
@@ -2428,7 +2215,6 @@
   "upstreamID" : "ES0201"
 }, {
   "mmxId" : "L_ES_Huelv",
-  "virtual" : false,
   "name" : "Huelva",
   "geographicPoint" : {
     "lat" : 37.16666793823242,
@@ -2439,7 +2225,6 @@
   "upstreamID" : "ES0073"
 }, {
   "mmxId" : "L_ES_Sagun",
-  "virtual" : false,
   "name" : "Sagunto",
   "geographicPoint" : {
     "lat" : 39.637001037597656,
@@ -2450,7 +2235,6 @@
   "upstreamID" : "ES0199"
 }, {
   "mmxId" : "L_TW_Taich",
-  "virtual" : false,
   "name" : "Taichung",
   "geographicPoint" : {
     "lat" : 24.28333282470703,
@@ -2461,7 +2245,6 @@
   "upstreamID" : "TW0022"
 }, {
   "mmxId" : "L_TW_YungA",
-  "virtual" : false,
   "name" : "Yung An",
   "aliases" : [ "Yung-An" ],
   "geographicPoint" : {
@@ -2473,7 +2256,6 @@
   "upstreamID" : "TW0024"
 }, {
   "mmxId" : "L_TH_MapTa",
-  "virtual" : false,
   "name" : "Map Ta Phut",
   "geographicPoint" : {
     "lat" : 12.65666675567627,
@@ -2484,7 +2266,6 @@
   "upstreamID" : "TH0017"
 }, {
   "mmxId" : "L_TT_Point2",
-  "virtual" : false,
   "name" : "Point Fortin",
   "geographicPoint" : {
     "lat" : 10.193333625793457,
@@ -2495,7 +2276,6 @@
   "upstreamID" : "TT0008"
 }, {
   "mmxId" : "L_TR_Aliag",
-  "virtual" : false,
   "name" : "Aliaga",
   "geographicPoint" : {
     "lat" : 38.82500076293945,
@@ -2506,7 +2286,6 @@
   "upstreamID" : "TR0183"
 }, {
   "mmxId" : "L_TR_Marma",
-  "virtual" : false,
   "name" : "Marmara Ereglisi",
   "aliases" : [ "Ereglisi", "Marmara" ],
   "geographicPoint" : {
@@ -2518,7 +2297,6 @@
   "upstreamID" : "TR0098"
 }, {
   "mmxId" : "L_GB_Drago",
-  "virtual" : false,
   "name" : "Dragon",
   "geographicPoint" : {
     "lat" : 51.69933319091797,
@@ -2529,7 +2307,6 @@
   "upstreamID" : "GB0753"
 }, {
   "mmxId" : "L_GB_Holyh",
-  "virtual" : false,
   "name" : "Holyhead",
   "geographicPoint" : {
     "lat" : 53.32666778564453,
@@ -2540,7 +2317,6 @@
   "upstreamID" : "GB0220"
 }, {
   "mmxId" : "L_GB_South",
-  "virtual" : false,
   "name" : "South Hook",
   "aliases" : [ "Milford Haven", "Swansea" ],
   "geographicPoint" : {
@@ -2552,7 +2328,6 @@
   "upstreamID" : "GB0752"
 }, {
   "mmxId" : "L_GB_Teesi",
-  "virtual" : false,
   "name" : "Teeside",
   "aliases" : [ "Excelerate", "Teesport" ],
   "geographicPoint" : {
@@ -2564,7 +2339,6 @@
   "upstreamID" : "GB0755"
 }, {
   "mmxId" : "L_GB_Isleo",
-  "virtual" : false,
   "name" : "Isle of Grain",
   "geographicPoint" : {
     "lat" : 51.43000030517578,
@@ -2575,7 +2349,6 @@
   "upstreamID" : "GB0244"
 }, {
   "mmxId" : "L_US_Brown",
-  "virtual" : false,
   "name" : "Brownsville",
   "geographicPoint" : {
     "lat" : 25.959999084472656,
@@ -2586,7 +2359,6 @@
   "upstreamID" : "US0104"
 }, {
   "mmxId" : "L_US_Camer",
-  "virtual" : false,
   "name" : "Cameron",
   "geographicPoint" : {
     "lat" : 30.038333892822266,
@@ -2597,7 +2369,6 @@
   "upstreamID" : "US1232"
 }, {
   "mmxId" : "L_US_CoosB",
-  "virtual" : false,
   "name" : "Coos Bay",
   "geographicPoint" : {
     "lat" : 43.37666702270508,
@@ -2608,7 +2379,6 @@
   "upstreamID" : "US0185"
 }, {
   "mmxId" : "L_US_Corpu",
-  "virtual" : false,
   "name" : "Corpus Christi",
   "geographicPoint" : {
     "lat" : 27.81333351135254,
@@ -2619,7 +2389,6 @@
   "upstreamID" : "US0190"
 }, {
   "mmxId" : "L_US_Pasca",
-  "virtual" : false,
   "name" : "Pascagoula",
   "aliases" : [ "Gulf LNG Terminal" ],
   "geographicPoint" : {
@@ -2631,7 +2400,6 @@
   "upstreamID" : "US0566"
 }, {
   "mmxId" : "L_US_Plaqu",
-  "virtual" : false,
   "name" : "Plaquemines",
   "geographicPoint" : {
     "lat" : 29.477062225341797,
@@ -2642,7 +2410,6 @@
   "upstreamID" : "US0645"
 }, {
   "mmxId" : "L_US_PortA",
-  "virtual" : false,
   "name" : "Port Arthur",
   "aliases" : [ "Port Arthur, Texas, U.S.A." ],
   "geographicPoint" : {
@@ -2654,7 +2421,6 @@
   "upstreamID" : "US0613"
 }, {
   "mmxId" : "L_US_PortD",
-  "virtual" : false,
   "name" : "Port Dolphin",
   "aliases" : [ "Tampa" ],
   "geographicPoint" : {
@@ -2666,7 +2432,6 @@
   "upstreamID" : "US0799"
 }, {
   "mmxId" : "L_BR_RioGr",
-  "virtual" : false,
   "name" : "Rio Grande",
   "geographicPoint" : {
     "lat" : -32.079166412353516,
@@ -2677,7 +2442,6 @@
   "upstreamID" : "BR0124"
 }, {
   "mmxId" : "L_US_CoveP",
-  "virtual" : false,
   "name" : "Cove Point",
   "aliases" : [ "Dominion Cove Point" ],
   "geographicPoint" : {
@@ -2689,7 +2453,6 @@
   "upstreamID" : "US0976"
 }, {
   "mmxId" : "L_US_Elba",
-  "virtual" : false,
   "name" : "Elba",
   "aliases" : [ "Elba Island", "Savanah", "Savannah", "Southern LNG" ],
   "geographicPoint" : {
@@ -2701,7 +2464,6 @@
   "upstreamID" : "US0977"
 }, {
   "mmxId" : "L_US_Evere",
-  "virtual" : false,
   "name" : "Everett",
   "geographicPoint" : {
     "lat" : 42.38833236694336,
@@ -2712,7 +2474,6 @@
   "upstreamID" : "US0243"
 }, {
   "mmxId" : "L_US_Freep",
-  "virtual" : false,
   "name" : "Freeport",
   "geographicPoint" : {
     "lat" : 28.939167022705078,
@@ -2723,7 +2484,6 @@
   "upstreamID" : "US1245"
 }, {
   "mmxId" : "L_US_Golde",
-  "virtual" : false,
   "name" : "Golden Pass",
   "geographicPoint" : {
     "lat" : 29.764999389648438,
@@ -2734,7 +2494,6 @@
   "upstreamID" : "US1235"
 }, {
   "mmxId" : "L_US_Kenai",
-  "virtual" : false,
   "name" : "Kenai",
   "aliases" : [ "Nikiski" ],
   "geographicPoint" : {
@@ -2746,7 +2505,6 @@
   "upstreamID" : "US1220"
 }, {
   "mmxId" : "L_US_LakeC",
-  "virtual" : false,
   "name" : "Lake Charles",
   "aliases" : [ "Trunkline LNG" ],
   "geographicPoint" : {
@@ -2758,7 +2516,6 @@
   "upstreamID" : "US0978"
 }, {
   "mmxId" : "L_US_Sabin",
-  "virtual" : false,
   "name" : "Sabine Pass",
   "geographicPoint" : {
     "lat" : 29.74250030517578,
@@ -2769,7 +2526,6 @@
   "upstreamID" : "US1238"
 }, {
   "mmxId" : "L_UM_GulfG",
-  "virtual" : false,
   "name" : "Gulf Gateway",
   "aliases" : [ "Gulf Gateway Deepwater Port" ],
   "geographicPoint" : {
@@ -2781,7 +2537,6 @@
   "upstreamID" : "UM0024"
 }, {
   "mmxId" : "L_UM_Neptu",
-  "virtual" : false,
   "name" : "Neptune",
   "aliases" : [ "Neptune Deepwater Port" ],
   "geographicPoint" : {
@@ -2793,7 +2548,6 @@
   "upstreamID" : "UM0042"
 }, {
   "mmxId" : "L_UM_North",
-  "virtual" : false,
   "name" : "Northeast Gateway",
   "aliases" : [ "Northeast Gateway Deepwater Port", "North East Gateway" ],
   "geographicPoint" : {
@@ -2805,7 +2559,6 @@
   "upstreamID" : "UM0043"
 }, {
   "mmxId" : "L_UA_Yuzhn",
-  "virtual" : false,
   "name" : "Yuzhny",
   "geographicPoint" : {
     "lat" : 46.6150016784668,
@@ -2816,7 +2569,6 @@
   "upstreamID" : "UA0039"
 }, {
   "mmxId" : "L_AE_AbuDh",
-  "virtual" : false,
   "name" : "Das Island",
   "aliases" : [ "Abu Dhabi", "ADGAS" ],
   "geographicPoint" : {
@@ -2828,7 +2580,6 @@
   "upstreamID" : "AE0010"
 }, {
   "mmxId" : "L_AE_Fujai",
-  "virtual" : false,
   "name" : "Fujairah",
   "geographicPoint" : {
     "lat" : 25.18000030517578,
@@ -2839,7 +2590,6 @@
   "upstreamID" : "AE0014"
 }, {
   "mmxId" : "L_AE_Jebel",
-  "virtual" : false,
   "name" : "Jebel Ali",
   "aliases" : [ "Dubai" ],
   "geographicPoint" : {
@@ -2851,7 +2601,6 @@
   "upstreamID" : "AE0084"
 }, {
   "mmxId" : "L_UY_Monte",
-  "virtual" : false,
   "name" : "Montevideo",
   "geographicPoint" : {
     "lat" : -34.90083312988281,
@@ -2862,7 +2611,6 @@
   "upstreamID" : "UY0011"
 }, {
   "mmxId" : "L_VN_CaiMe",
-  "virtual" : false,
   "name" : "Cai Mep",
   "geographicPoint" : {
     "lat" : 10.53166675567627,
@@ -2873,7 +2621,6 @@
   "upstreamID" : "VN0090"
 }, {
   "mmxId" : "L_VN_HoChi",
-  "virtual" : false,
   "name" : "Ho Chi Min City",
   "aliases" : [ "Ho Chi Min City (formerly Saigon)" ],
   "geographicPoint" : {
@@ -2885,7 +2632,6 @@
   "upstreamID" : "VN0099"
 }, {
   "mmxId" : "L_YE_BalHa",
-  "virtual" : false,
   "name" : "Bal Haf",
   "aliases" : [ "Balhaf", "Yemen" ],
   "geographicPoint" : {
@@ -2897,7 +2643,6 @@
   "upstreamID" : "YE0035"
 }, {
   "mmxId" : "L_CP_PortS",
-  "virtual" : false,
   "name" : "Port Said",
   "geographicPoint" : {
     "lat" : 31.420000076293945,
@@ -2908,7 +2653,6 @@
   "upstreamID" : "CP2800"
 }, {
   "mmxId" : "L_CP_Balbo",
-  "virtual" : false,
   "name" : "Balboa",
   "geographicPoint" : {
     "lat" : 8.96500015258789,
@@ -2919,7 +2663,6 @@
   "upstreamID" : "CP1550"
 }, {
   "mmxId" : "L_MY_Lahad",
-  "virtual" : false,
   "name" : "Lahad Datu",
   "geographicPoint" : {
     "lat" : 5.019999980926514,
@@ -2930,7 +2673,6 @@
   "upstreamID" : "MY0048"
 }, {
   "mmxId" : "L_PR_Guaya",
-  "virtual" : false,
   "name" : "Guayama",
   "aliases" : [ "Aguirre" ],
   "geographicPoint" : {
@@ -2942,7 +2684,6 @@
   "upstreamID" : "PR0007"
 }, {
   "mmxId" : "L_KR_Borye",
-  "virtual" : false,
   "name" : "Boryeong",
   "notes" : "This is currenty Gunsan, but should really be Ko Jung (KR0058)",
   "geographicPoint" : {
@@ -2954,7 +2695,6 @@
   "upstreamID" : "KR0010"
 }, {
   "mmxId" : "L_AU_Onslo",
-  "virtual" : false,
   "name" : "Onslow",
   "aliases" : [ "Wheatstone" ],
   "geographicPoint" : {
@@ -2966,7 +2706,6 @@
   "upstreamID" : "AU0197"
 }, {
   "mmxId" : "L_JP_Hibik",
-  "virtual" : false,
   "name" : "Hibiki",
   "aliases" : [ "Hibikinada" ],
   "geographicPoint" : {
@@ -2978,7 +2717,6 @@
   "upstreamID" : "JP0055"
 }, {
   "mmxId" : "L_AU_Prelu",
-  "virtual" : false,
   "name" : "Prelude FLNG",
   "geographicPoint" : {
     "lat" : -13.786333084106445,
@@ -2989,7 +2727,6 @@
   "upstreamID" : "AU0436"
 }, {
   "mmxId" : "L_AU_Ichth",
-  "virtual" : false,
   "name" : "Ichthys",
   "geographicPoint" : {
     "lat" : -12.491666793823242,
@@ -3000,7 +2737,6 @@
   "upstreamID" : "AU0329"
 }, {
   "mmxId" : "L_AU_Bladi",
-  "virtual" : false,
   "name" : "Bladin Point",
   "geographicPoint" : {
     "lat" : -12.491666793823242,
