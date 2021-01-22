@@ -102,7 +102,8 @@ public class PanamaSlotsTransformer implements ITransformerExtension {
 
 			Port port = modelDistanceProvider.getCanalPort(RouteOption.PANAMA, eBooking.getCanalEntrance());
 
-			final int date = dateAndCurveHelper.convertTime(eBooking.getBookingDate().atStartOfDay(port.getZoneId()));
+			final int date = dateAndCurveHelper.convertTime(eBooking.getBookingDate().atStartOfDay(port.getZoneId()).plusHours(CanalBookingSlot.BOOKING_HOURS_OFFSET));
+			
 			final IRouteOptionBooking oBooking;
 			@NonNull
 			ECanalEntry oCanalEntrance = mapCanalEntry(eBooking.getCanalEntrance());

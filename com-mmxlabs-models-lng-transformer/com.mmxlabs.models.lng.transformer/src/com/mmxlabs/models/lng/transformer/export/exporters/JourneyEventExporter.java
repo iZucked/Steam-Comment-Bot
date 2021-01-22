@@ -135,7 +135,7 @@ public class JourneyEventExporter {
 						voyageDetails.getOptions().getVessel(), //
 						canalEntry, //
 						voyageDetails.getOptions().getToPortSlot().getPort(), //
-						voyageDetails.getOptions().getVessel().getMaxSpeed()) + // Add transit time
+						voyageDetails.getOptions().getVessel().getMaxSpeed()) + // Add transit time (includes panama margin, it seems).
 						routeCostProvider.getRouteTransitTime(voyageDetails.getOptions().getRoute(), voyageDetails.getOptions().getVessel());
 
 				final ZonedDateTime endTime = modelEntityMap.getDateFromHours(currentTime + options.getAvailableTime(), canalEntry);
@@ -153,6 +153,7 @@ public class JourneyEventExporter {
 				boolean southBound = distanceProvider.getRouteOptionDirection(options.getFromPortSlot().getPort(), ERouteOption.PANAMA) == RouteOptionDirection.SOUTHBOUND;
 				ZonedDateTime latestCanalEntry;
 				if (southBound && !PanamaBookingHelper.isSouthboundIdleTimeRuleEnabled()) {
+					//Old southbound rule code.
 					latestCanalEntry = endTime.minusHours(fromCanalEntry).minusHours(marginHours);
 					journey.setLatestPossibleCanalDateTime(latestCanalEntry.toLocalDateTime());
 					if (latestCanalEntry.toLocalDateTime().getHour() > CanalBookingSlot.BOOKING_HOURS_OFFSET && journey.getRouteOption() == RouteOption.PANAMA) {
@@ -171,7 +172,8 @@ public class JourneyEventExporter {
 						canalEntry, //
 						toCanalSpeed);
 
-				if (southBound) {
+				if (southBound && !PanamaBookingHelper.isSouthboundIdleTimeRuleEnabled()) {
+					//Old southbound code.
 					toCanal = toCanal + marginHours;
 				}
 
