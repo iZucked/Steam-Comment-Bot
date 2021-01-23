@@ -172,10 +172,8 @@ public class JourneyEventExporter {
 						canalEntry, //
 						toCanalSpeed);
 
-				if (southBound && !PanamaBookingHelper.isSouthboundIdleTimeRuleEnabled()) {
-					//Old southbound code.
-					toCanal = toCanal + marginHours;
-				}
+				//We should take into account margin hours for both Northbound and Southbound journeys.
+				toCanal = toCanal + marginHours;
 
 				estimatedArrival = modelEntityMap.getDateFromHours(currentTime + toCanal, canalEntry);
 				journey.setCanalArrivalTime(estimatedArrival.toLocalDateTime());
@@ -213,7 +211,7 @@ public class JourneyEventExporter {
 				journey.setCanalDateTime(journey.getCanalArrivalTime());
 				if (estimatedArrival != null && estimatedArrival.getHour() > CanalBookingSlot.BOOKING_HOURS_OFFSET && journey.getRouteOption() == RouteOption.PANAMA) {
 					// slot can't be reached that day, set arrival to next day
-					journey.setCanalDateTime(estimatedArrival.toLocalDateTime());
+					journey.setCanalDateTime(estimatedArrival.plusDays(1).toLocalDateTime());
 				}
 			}
 		}
