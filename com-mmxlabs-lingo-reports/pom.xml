@@ -6,12 +6,12 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mmxlabs.lingo.reports</groupId>
 	<artifactId>com.mmxlabs.lingo.reports.parent</artifactId>
-	<version>4.12.7.RELEASE</version>
+	<version>4.12.8-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<parent>
 		<groupId>com.mmxlabs.lingo.master</groupId>
 		<artifactId>com.mmxlabs.lingo.master.parent</artifactId>
-		<version>4.12.7.RELEASE</version>
+		<version>4.12.8-SNAPSHOT</version>
 	</parent>
 
 	<modules>
