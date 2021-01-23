@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Migration Tests
 Bundle-SymbolicName: com.mmxlabs.models.migration.tests
-Bundle-Version: 4.12.6.qualifier
+Bundle-Version: 4.12.7.qualifier
 Bundle-Vendor: Minimax Labs Ltd.
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Fragment-Host: com.mmxlabs.models.migration
