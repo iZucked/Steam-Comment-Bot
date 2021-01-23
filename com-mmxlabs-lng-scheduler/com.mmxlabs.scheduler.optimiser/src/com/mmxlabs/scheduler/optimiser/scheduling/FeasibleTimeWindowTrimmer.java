@@ -33,6 +33,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.RoundTripCargoEnd;
+import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.util.SequenceEvaluationUtils;
 import com.mmxlabs.scheduler.optimiser.providers.ECanalEntry;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
@@ -654,10 +655,9 @@ public class FeasibleTimeWindowTrimmer {
 								final ECanalEntry panamaEntry = routeOptionEntry;
 								boolean bookingAllocated = false;
 								if (pass == 0) {
-									// Only check for actual bookings once
-
-									final Optional<IRouteOptionBooking> potentialBooking = currentBookings.assignedBookings.computeIfAbsent(panamaEntry, k -> new ArrayList<>()).stream().filter(e -> {
-										return e.getPortSlot().isPresent() && e.getPortSlot().get().equals(p_prevPortSlot);
+									// Only check for actual bookings once	
+									Optional<IRouteOptionBooking> potentialBooking = currentBookings.assignedBookings.computeIfAbsent(panamaEntry, k -> new ArrayList<>()).stream().filter(e -> {
+										return e.getPortSlot().isPresent() && e.getPortSlot().get().equals(p_prevPortSlot instanceof StartPortSlot ? thisPortSlot : p_prevPortSlot);
 									}).findFirst();
 
 									if (potentialBooking.isPresent()
