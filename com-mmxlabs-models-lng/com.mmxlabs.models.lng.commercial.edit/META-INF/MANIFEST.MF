@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: com.mmxlabs.models.lng.commercial.edit;singleton:=true
 Automatic-Module-Name: com.mmxlabs.models.lng.commercial.edit
-Bundle-Version: 4.12.7.qualifier
+Bundle-Version: 4.12.7.RELEASE
 Bundle-ClassPath: .
 Bundle-Activator: com.mmxlabs.models.lng.commercial.provider.CommercialEditPlugin$Implementation
 Bundle-Vendor: %providerName
