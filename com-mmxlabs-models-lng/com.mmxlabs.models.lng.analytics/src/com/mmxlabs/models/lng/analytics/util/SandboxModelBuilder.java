@@ -75,15 +75,15 @@ public class SandboxModelBuilder {
 	}
 
 	public void setManualSandboxMode() {
-		optionAnalysisModel.setMode(0);
+		optionAnalysisModel.setMode(SandboxModeConstants.MODE_DERIVE);
 	}
 
 	public void setOptimiseSandboxMode() {
-		optionAnalysisModel.setMode(1);
+		optionAnalysisModel.setMode(SandboxModeConstants.MODE_OPTIMISE);
 	}
 
 	public void setOptioniseSandboxMode() {
-		optionAnalysisModel.setMode(2);
+		optionAnalysisModel.setMode(SandboxModeConstants.MODE_OPTIONISE);
 	}
 
 	public BuyReference createBuyReference(final LoadSlot slot) {

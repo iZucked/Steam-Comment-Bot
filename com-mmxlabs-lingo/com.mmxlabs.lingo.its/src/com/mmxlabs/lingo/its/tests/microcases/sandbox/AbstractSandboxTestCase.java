@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Assertions;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.services.IAnalyticsScenarioEvaluator;
+import com.mmxlabs.models.lng.analytics.util.SandboxModeConstants;
 import com.mmxlabs.rcp.common.ServiceHelper;
 
 public abstract class AbstractSandboxTestCase extends AbstractMicroTestCase {
@@ -19,13 +20,13 @@ public abstract class AbstractSandboxTestCase extends AbstractMicroTestCase {
 
 		Consumer<IAnalyticsScenarioEvaluator> func = null;
 		switch (model.getMode()) {
-		case 0:
+		case SandboxModeConstants.MODE_DERIVE:
 			func = evaluator -> evaluator.runSandboxOptions(scenarioDataProvider, null, model, model::setResults, false);
 			break;
-		case 1:
+		case SandboxModeConstants.MODE_OPTIMISE:
 			func = evaluator -> evaluator.runSandboxOptimisation(scenarioDataProvider, null, model, model::setResults, false);
 			break;
-		case 2:
+		case SandboxModeConstants.MODE_OPTIONISE:
 			func = evaluator -> evaluator.runSandboxInsertion(scenarioDataProvider, null, model, model::setResults, false);
 			break;
 		}
