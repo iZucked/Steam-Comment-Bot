@@ -169,7 +169,7 @@ public class ShippingOptionsComponent extends AbstractSandboxComponent<Object, A
 						}));
 					}
 					if (portfolioMode && LicenseFeatures.isPermitted(KnownFeatures.FEATURE_SANDBOX_CHARTER_INS)) {
-						helper.addAction(new RunnableAction("Existing Charter In", () -> {
+						helper.addAction(new RunnableAction("Existing Market Charter", () -> {
 							final ExistingCharterMarketOption opt = AnalyticsFactory.eINSTANCE.createExistingCharterMarketOption();
 							final CharterInMarket market = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
 							opt.setCharterInMarket(market);
