@@ -23,7 +23,9 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
@@ -657,7 +659,7 @@ public class FeasibleTimeWindowTrimmer {
 								if (pass == 0) {
 									// Only check for actual bookings once	
 									Optional<IRouteOptionBooking> potentialBooking = currentBookings.assignedBookings.computeIfAbsent(panamaEntry, k -> new ArrayList<>()).stream().filter(e -> {
-										return e.getPortSlot().isPresent() && e.getPortSlot().get().equals(p_prevPortSlot instanceof StartPortSlot ? thisPortSlot : p_prevPortSlot);
+										return e.getPortSlot().isPresent() && e.getPortSlot().get().equals(getMatchingPanamaSlot(thisPortSlot, p_prevPortSlot));
 									}).findFirst();
 
 									if (potentialBooking.isPresent()
@@ -940,6 +942,21 @@ public class FeasibleTimeWindowTrimmer {
 			}
 		}
 
+	}
+
+	protected IPortSlot getMatchingPanamaSlot(final IPortSlot thisPortSlot, final IPortSlot prevPortSlot) {
+		//If we have a slot id, for the previous slot, then use that for matching the booking.
+		if (prevPortSlot instanceof ILoadOption || prevPortSlot instanceof IDischargeOption) {
+			return prevPortSlot;
+		}
+		else {
+			//Otherwise:
+			//If previous slot type does not, have a slot id, e.g. StartEvent, CharterOut, DryDock etc, allow current/next slot id to be used instead.
+			//..we should consider allowing bookings to just be assigned directly to vessels, since this more correctly models the actual business
+			//case and has the additional benefit of allowing the optimiser more freedom to switch cargoes in/out of the schedule using an existing
+			//Panama booking.
+			return thisPortSlot;
+		}
 	}
 
 	private int getMaxIdleDays(boolean northbound) {
