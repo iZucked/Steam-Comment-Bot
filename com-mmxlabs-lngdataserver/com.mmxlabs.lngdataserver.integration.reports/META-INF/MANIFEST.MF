@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Dataserver: LiNGO - Hub Reports integration
 Bundle-SymbolicName: com.mmxlabs.lngdataserver.integration.reports;singleton:=true
 Automatic-Module-Name: com.mmxlabs.lngdataserver.integration.reports
-Bundle-Version: 4.12.9.qualifier
+Bundle-Version: 4.12.9.RELEASE
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
