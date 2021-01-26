@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
+import com.mmxlabs.models.lng.analytics.util.SandboxModeConstants;
 import com.mmxlabs.models.lng.analytics.validation.internal.Activator;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -36,6 +37,13 @@ public class OptionAnalysisModelConstraint extends AbstractModelMultiConstraint 
 		final EObject target = ctx.getTarget();
 		if (target instanceof OptionAnalysisModel) {
 			final OptionAnalysisModel model = (OptionAnalysisModel) target;
+
+			if (!model.getBaseCase().isKeepExistingScenario() && model.getMode() == SandboxModeConstants.MODE_OPTIMISE) {
+				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Optimise mode needs portfolio link enabled"));
+				deco.addEObjectAndFeature(model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL);
+				deco.addEObjectAndFeature(model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__MODE);
+				statuses.add(deco);
+			}
 
 			// Check for duplicated existing slots.
 			{

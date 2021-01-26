@@ -2104,6 +2104,12 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		   new String[] {
 			   "formatString", "##,##0"
 		   });
+		addAnnotation
+		  (getMullEntityRow_RelativeEntitlement(),
+		   source,
+		   new String[] {
+			   "formatString", "###.########"
+		   });
 	}
 
 	/**

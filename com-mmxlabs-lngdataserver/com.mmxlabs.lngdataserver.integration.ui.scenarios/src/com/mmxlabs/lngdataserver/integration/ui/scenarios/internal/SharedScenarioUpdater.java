@@ -31,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Charsets;
+import com.google.common.base.Objects;
 import com.google.common.io.Files;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.hub.DataHubServiceProvider;
@@ -152,7 +153,8 @@ public class SharedScenarioUpdater {
 					// now we take it over
 					if (parent instanceof Folder) {
 						final Folder folder = (Folder) parent;
-						RunnerHelper.syncExecDisplayOptional(() -> folder.setManaged(true));
+						// Move display code into task executor to avoid deadlock
+						taskExecutor.execute(() -> RunnerHelper.syncExecDisplayOptional(() -> folder.setManaged(true)));
 					}
 				} else {
 					final Folder f = ScenarioServiceFactory.eINSTANCE.createFolder();
@@ -215,7 +217,15 @@ public class SharedScenarioUpdater {
 			final ScenarioInstance instance = mapping.computeIfAbsent(record.uuid, u -> loadScenarioFrom(f, record, name));
 			if (instance != null) {
 				RunnerHelper.syncExecDisplayOptional(() -> {
+					// We could already be in a container, so lets remove it first...
+					if (instance.eContainer() != null) {
+						((Container) instance.eContainer()).getElements().remove(instance);
+					}
+
+					// ... because this can trigger a rename request back to the hub due to the adapter in SharedWorkspaceServiceClient ...
 					instance.setName(name);
+
+					// ... then re-add it to the new (or existing) parent.
 					parent.getElements().add(instance);
 				});
 			}

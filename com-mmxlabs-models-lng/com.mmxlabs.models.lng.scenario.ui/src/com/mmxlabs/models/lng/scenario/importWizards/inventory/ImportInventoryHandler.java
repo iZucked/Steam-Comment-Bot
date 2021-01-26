@@ -38,7 +38,7 @@ public class ImportInventoryHandler extends AbstractHandler {
 	}
 
 	public String getTitle() {
-		return "Import inventory";
+		return "Import inventory feeds and offtakes";
 	}
 
 }
