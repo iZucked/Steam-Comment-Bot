@@ -23,33 +23,27 @@ import com.mmxlabs.models.ui.editors.impl.ValueListInlineEditor;
 
 /**
  */
-public class SpotIndexInlineEditor extends ValueListInlineEditor {
+public class ADPSpotIndexInlineEditor extends ValueListInlineEditor {
 	private static @NonNull List<Pair<String, Object>> defaultValues = getDefaultValues();
 
-	public SpotIndexInlineEditor(final EAttribute feature) {
+	public ADPSpotIndexInlineEditor(final EAttribute feature) {
 		super(feature, defaultValues);
 	}
 
 	@Override
 	protected void updateDisplay(Object value) {
-		List<Pair<String, Object>> values = getDefaultValues();
-
-		if (input instanceof ShippingOption) {
-			final ShippingOption assignableElement = (ShippingOption) input;
-			final VesselAssignmentType vesselAssignmentType = assignableElement.getVesselAssignmentType();
-			if (vesselAssignmentType instanceof CharterInMarket) {
-				final CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
-				values = getValues(charterInMarket, assignableElement.getSpotIndex());
-			}
-		}
-		updateCombo(values);
-
+		generateValuesAndUpdateCombo(input);
 		super.updateDisplay(value);
 	}
 
 	@Override
 	public void display(final IDialogEditingContext dialogContext, final MMXRootObject rootObject, final EObject input, final Collection<EObject> range) {
 
+		generateValuesAndUpdateCombo(input);
+		super.display(dialogContext, rootObject, input, range);
+	}
+
+	private void generateValuesAndUpdateCombo(final EObject input) {
 		List<Pair<String, Object>> values = getDefaultValues();
 
 		if (input instanceof ShippingOption) {
@@ -61,8 +55,6 @@ public class SpotIndexInlineEditor extends ValueListInlineEditor {
 			}
 		}
 		updateCombo(values);
-
-		super.display(dialogContext, rootObject, input, range);
 	}
 
 	private static @NonNull List<Pair<String, Object>> getDefaultValues() {
